@@ -5,8 +5,10 @@
 -->
 <!DOCTYPE schemas SYSTEM "fenix-renderers-schemas.dtd" [
 	<!ENTITY acquisition SYSTEM "acquisition-schemas.xml">
+	<!ENTITY organization SYSTEM "organization-schemas.xml">
 ]>
 
 <schemas>
 	&acquisition;
+	&organization;
 </schemas>

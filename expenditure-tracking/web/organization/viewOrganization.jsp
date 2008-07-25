@@ -15,3 +15,59 @@
 		<bean:message key="link.organization.create.new.unit" bundle="ORGANIZATION_RESOURCES"/>
 	</html:link>
 </logic:present>
+<br/>
+<br/>
+<logic:present name="unit">
+	<logic:present name="unit" property="parentUnit">
+		<html:link action="/organization.do?method=viewOrganization" paramId="unitOid" paramName="unit" paramProperty="parentUnit.OID">
+			<bean:write name="unit" property="parentUnit.name"/>
+		</html:link>
+		<logic:notEmpty name="unit" property="parentUnit.costCenter">
+			( <bean:write name="unit" property="parentUnit.costCenter"/> )
+		</logic:notEmpty>
+		<html:link action="/organization.do?method=editUnit" paramId="unitOid" paramName="unit" paramProperty="parentUnit.OID">
+			<bean:message key="link.edit" bundle="EXPENDITURE_RESOURCES"/>
+		</html:link>
+		<html:link action="/organization.do?method=deleteUnit" paramId="unitOid" paramName="unit" paramProperty="parentUnit.OID">
+			<bean:message key="link.delete" bundle="EXPENDITURE_RESOURCES"/>
+		</html:link>
+		<br/>	
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	</logic:present>
+	<html:link action="/organization.do?method=viewOrganization" paramId="unitOid" paramName="unit" paramProperty="OID">
+		<bean:write name="unit" property="name"/>
+	</html:link>
+	<logic:notEmpty name="unit" property="costCenter">
+		( <bean:write name="unit" property="costCenter"/> )
+	</logic:notEmpty>
+	<html:link action="/organization.do?method=editUnit" paramId="unitOid" paramName="unit" paramProperty="OID">
+		<bean:message key="link.edit" bundle="EXPENDITURE_RESOURCES"/>
+	</html:link>
+	<html:link action="/organization.do?method=deleteUnit" paramId="unitOid" paramName="unit" paramProperty="OID">
+		<bean:message key="link.delete" bundle="EXPENDITURE_RESOURCES"/>
+	</html:link>
+	<br/>	
+</logic:present>
+<logic:present name="units">
+	<logic:iterate id="u" name="units">
+		<logic:present name="unit">
+			<logic:present name="unit" property="parentUnit">
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			</logic:present>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		</logic:present>
+		<html:link action="/organization.do?method=viewOrganization" paramId="unitOid" paramName="u" paramProperty="OID">
+			<bean:write name="u" property="name"/>
+		</html:link>
+		<logic:notEmpty name="u" property="costCenter">
+			( <bean:write name="u" property="costCenter"/> )
+		</logic:notEmpty>
+		<html:link action="/organization.do?method=editUnit" paramId="unitOid" paramName="u" paramProperty="OID">
+			<bean:message key="link.edit" bundle="EXPENDITURE_RESOURCES"/>
+		</html:link>
+		<html:link action="/organization.do?method=deleteUnit" paramId="unitOid" paramName="u" paramProperty="OID">
+			<bean:message key="link.delete" bundle="EXPENDITURE_RESOURCES"/>
+		</html:link>
+		<br/>
+	</logic:iterate>
+</logic:present>
