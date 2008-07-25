@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- TODO: make this a public id or at least obsolute 
+     Currently there is a semi-hack built in the RendererPlugin to accept this format.
+-->
+<!DOCTYPE schemas SYSTEM "fenix-renderers-schemas.dtd" [
+	<!ENTITY acquisition SYSTEM "acquisition-schemas.xml">
+]>
+
+<schemas>
+	&acquisition;
+</schemas>

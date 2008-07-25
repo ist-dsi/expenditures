@@ -1,0 +1,79 @@
+<schema name="editAcquisitionRequestInformation"
+		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestInformation"
+		bundle="ACQUISITION_RESOURCES">
+	<slot name="fiscalIdentificationCode" key="label.service.provider.fiscalIdentificationCode" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="costCenter" key="label.cost.center" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="project" key="label.project" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="subproject" key="label.subproject" bundle="ACQUISITION_RESOURCES"/>
+</schema>
+
+<schema name="viewAcquisitionRequestInformation"
+		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestInformation"
+		bundle="ACQUISITION_RESOURCES">
+	<slot name="acquisitionProcess.acquisitionProcessState.localizedName" key="label.acquisition.process.state" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="fiscalIdentificationCode" key="label.service.provider.fiscalIdentificationCode" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="costCenter" key="label.cost.center" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="project" key="label.project" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="subproject" key="label.subproject" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="totalItemValue" key="label.total.item.value" bundle="ACQUISITION_RESOURCES"/>
+</schema>
+
+<schema name="viewAcquisitionProcessInList"
+		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess"
+		bundle="ACQUISITION_RESOURCES">
+	<slot name="acquisitionProcessState.localizedName" key="label.acquisition.process.state" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="acquisitionRequest.acquisitionRequestInformation.fiscalIdentificationCode" key="label.service.provider.fiscalIdentificationCode" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="acquisitionRequest.acquisitionRequestInformation.costCenter" key="label.cost.center" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="acquisitionRequest.acquisitionRequestInformation.project" key="label.project" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="acquisitionRequest.acquisitionRequestInformation.subproject" key="label.subproject" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="acquisitionRequest.acquisitionRequestInformation.totalItemValue" key="label.total.item.value" bundle="ACQUISITION_RESOURCES"/>
+</schema>
+
+<schema name="addAcquisitionProposalDocument"
+		type="pt.ist.expenditureTrackingSystem.presentationTier.actions.acquisitions.AcquisitionProcessAction$AcquisitionProposalDocumentForm"
+		bundle="ACQUISITION_RESOURCES">
+	<slot name="inputStream" key="label.input.stream"	bundle="ACQUISITION_RESOURCES">
+		<property name="fileNameSlot" value="filename" />
+		<property name="size" value="30"/>
+	</slot>
+</schema>
+
+<schema name="editAcquisitionRequestItem"
+		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem"
+		bundle="ACQUISITION_RESOURCES">
+	<slot name="proposalReference" key="label.acquisition.request.item.proposalReference" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="quantity" key="label.acquisition.request.item.quantity" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="unitValue" key="label.acquisition.request.item.unitValue" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="salesCode" key="label.acquisition.request.item.salesCode" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="description" key="label.acquisition.request.item.description" bundle="ACQUISITION_RESOURCES"/>
+</schema>
+
+<schema name="viewAcquisitionRequestItem"
+		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem"
+		bundle="ACQUISITION_RESOURCES">
+	<slot name="proposalReference" key="label.acquisition.request.item.proposalReference" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="quantity" key="label.acquisition.request.item.quantity" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="unitValue" key="label.acquisition.request.item.unitValue" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="salesCode" key="label.acquisition.request.item.salesCode" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="description" key="label.acquisition.request.item.description" bundle="ACQUISITION_RESOURCES"/>
+</schema>
+
+<schema name="viewAcquisitionRequestItemInList"
+		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem"
+		bundle="ACQUISITION_RESOURCES">
+	<slot name="proposalReference" key="label.acquisition.request.item.proposalReference" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="quantity" key="label.acquisition.request.item.quantity" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="unitValue" key="label.acquisition.request.item.unitValue" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="salesCode" key="label.acquisition.request.item.salesCode" bundle="ACQUISITION_RESOURCES"/>
+</schema>
+
+<schema name="searchAcquisitionProcess"
+		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.SearchAcquisitionProcess"
+		bundle="ACQUISITION_RESOURCES">
+	<slot name="requester" key="label.requester" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="acquisitionProcessState" key="label.acquisition.process.state" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="fiscalIdentificationCode" key="label.service.provider.fiscalIdentificationCode" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="costCenter" key="label.cost.center" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="project" key="label.project" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="subproject" key="label.subproject" bundle="ACQUISITION_RESOURCES"/>
+</schema>

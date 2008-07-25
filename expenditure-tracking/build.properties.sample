@@ -1,0 +1,8 @@
+db.alias=//localhost:3306/expenditures?useUnicode=true&amp;characterEncoding=latin1&amp;clobCharacterEncoding=latin1&amp;zeroDateTimeBehavior=convertToNull&amp;statementInterceptors=net.sourceforge.fenixedu.persistenceTier.statementInterceptors.FenixStatementInterceptor
+db.user=root
+db.pass=
+app.name=expenditures
+error.if.changing.deleted.object=true
+language=pt
+location=PT
+variant=

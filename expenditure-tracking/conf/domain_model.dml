@@ -1,0 +1,177 @@
+package pt.ist.expenditureTrackingSystem.domain;
+
+
+valueType org.joda.time.DateTime as DateTime;
+valueType pt.ist.expenditureTrackingSystem.domain.util.ByteArray as ByteArray;
+valueType pt.ist.expenditureTrackingSystem.domain.util.MonitaryValue as MonitaryValue;
+enum pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessState as AcquisitionProcessState;
+enum pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationType as AuthorizationType;
+
+
+class ExpenditureTrackingSystem {
+}
+
+
+class acquisitions.AcquisitionProcess {
+	AcquisitionProcessState acquisitionProcessState;
+}
+
+class acquisitions.AcquisitionRequest {
+}
+
+class acquisitions.AcquisitionRequestInformation {
+	DateTime since;
+	String requester;
+	String fiscalIdentificationCode;
+	String costCenter;
+	String project;
+	String subproject;	
+}
+
+class acquisitions.AcquisitionRequestItem {
+	String description;
+	Integer quantity;
+	//MonitaryValue unitValue;
+	BigDecimal unitValue;
+	String proposalReference;
+	String salesCode;              // CVP
+}
+
+class authorizations.Authorization {
+	AuthorizationType authorizationType;
+	Boolean canDelegate;
+}
+
+	class authorizations.DelegatedAuthorization extends authorizations.Authorization {
+	}
+
+class File {
+	String filename;
+	ByteArray content;
+}
+
+	class acquisitions.AcquisitionProposalDocument extends File {
+	}
+
+class organization.Person {
+	String name;
+	String username;
+}
+
+class organization.Unit {
+	String name;
+	String costCenter;
+}
+
+
+relation ExpenditureTrackingSystemAcquisitionProcess {
+	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
+	acquisitions.AcquisitionProcess playsRole acquisitionProcesses {
+		multiplicity *;
+	}
+}
+
+relation ExpenditureTrackingSystemAcquisitionRequest {
+	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
+	acquisitions.AcquisitionRequest playsRole acquisitionRequests {
+		multiplicity *;
+	}
+}
+
+relation AcquisitionProcessAcquisitionRequest {
+	acquisitions.AcquisitionProcess playsRole acquisitionProcess;
+	acquisitions.AcquisitionRequest playsRole acquisitionRequest;
+}
+
+relation ExpenditureTrackingSystemAcquisitionRequestInformation {
+	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
+	acquisitions.AcquisitionRequestInformation playsRole acquisitionRequestInformations {
+		multiplicity *;
+	}
+}
+
+relation AcquisitionRequestAcquisitionRequestInformation {
+	acquisitions.AcquisitionRequest playsRole acquisitionRequest;
+	acquisitions.AcquisitionRequestInformation playsRole acquisitionRequestInformations {
+		multiplicity *;
+	}
+}
+
+relation ExpenditureTrackingSystemAcquisitionRequestItem {
+	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
+	acquisitions.AcquisitionRequestItem playsRole acquisitionRequestItems {
+		multiplicity *;
+	}
+}
+
+relation AcquisitionRequestInformationAcquisitionRequestItem {
+	acquisitions.AcquisitionRequestInformation playsRole acquisitionRequestInformations {
+		multiplicity *;
+	}
+	acquisitions.AcquisitionRequestItem playsRole acquisitionRequestItems {
+		multiplicity *;
+	}
+}
+
+relation ExpenditureTrackingSystemFile {
+	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
+	File playsRole files {
+		multiplicity *;
+	}
+}
+
+relation AcquisitionRequestInformationAcquisitionRequest {
+	acquisitions.AcquisitionRequestInformation playsRole acquisitionRequestInformations {
+		multiplicity *;
+	}
+	acquisitions.AcquisitionProposalDocument playsRole acquisitionProposalDocument;
+}
+
+relation ExpenditureTrackingSystemPerson {
+	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
+	organization.Person playsRole people {
+		multiplicity *;
+	}
+}
+
+relation ExpenditureTrackingSystemUnit {
+	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
+	organization.Unit playsRole units {
+		multiplicity *;
+	}
+}
+
+relation ExpenditureTrackingSystemTopLevelUnits {
+	ExpenditureTrackingSystem playsRole expenditureTrackingSystemFromTopLevelUnit;
+	organization.Unit playsRole topLevelUnits {
+		multiplicity *;
+	}
+}
+
+relation UnitUnit {
+	organization.Unit playsRole parentUnit;
+	organization.Unit playsRole subUnits {
+		multiplicity *;
+	}
+}
+
+relation ExpenditureTrackingSystemAuthorization {
+	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
+	authorizations.Authorization playsRole authorizations {
+		multiplicity *;
+	}
+}
+
+relation UnitAuthorization {
+	organization.Unit playsRole unit;
+	authorizations.Authorization playsRole authorizations {
+		multiplicity *;
+	}
+}
+
+relation PersonAuthorization {
+	organization.Person playsRole person;
+	authorizations.Authorization playsRole authorizations {
+		multiplicity *;
+	}
+}
