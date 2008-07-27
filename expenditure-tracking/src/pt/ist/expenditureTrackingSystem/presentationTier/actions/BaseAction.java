@@ -49,6 +49,15 @@ public abstract class BaseAction extends DispatchAction {
 
     public <T extends Object> T getRenderedObject() {
 	final IViewState viewState = RenderUtils.getViewState();
+	return (T) getRenderedObject(viewState);
+    }
+
+    public <T extends Object> T getRenderedObject(final String id) {
+	final IViewState viewState = RenderUtils.getViewState(id);
+	return (T) getRenderedObject(viewState);
+    }
+
+    public <T extends Object> T getRenderedObject(final IViewState viewState) {
 	if (viewState != null) {
 	    MetaObject metaObject = viewState.getMetaObject();
 	    if (metaObject != null) {

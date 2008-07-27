@@ -4,3 +4,24 @@
 	<slot name="name" key="label.organization.name" bundle="ORGANIZATION_RESOURCES"/>
 	<slot name="costCenter" key="label.organization.cost.center" bundle="ORGANIZATION_RESOURCES"/>
 </schema>
+
+<schema name="searchUsers"
+		type="pt.ist.expenditureTrackingSystem.domain.organization.SearchUsers"
+		bundle="ORGANIZATION_RESOURCES">
+	<slot name="username" key="label.person.username" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="name" key="label.person.name" bundle="ORGANIZATION_RESOURCES"/>
+</schema>
+
+<schema name="viewPeopleInList"
+		type="pt.ist.expenditureTrackingSystem.domain.organization.Person"
+		bundle="ORGANIZATION_RESOURCES">
+	<slot name="username" key="label.person.username" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="name" key="label.person.name" bundle="ORGANIZATION_RESOURCES"/>
+</schema>
+
+<schema name="editPerson"
+		type="pt.ist.expenditureTrackingSystem.domain.organization.Person"
+		bundle="ORGANIZATION_RESOURCES">
+	<slot name="username" key="label.person.username" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="name" key="label.person.name" bundle="ORGANIZATION_RESOURCES"/>
+</schema>

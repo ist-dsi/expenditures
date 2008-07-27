@@ -1,13 +1,12 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
-import java.io.Serializable;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Set;
 
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.Search;
 
-public class SearchAcquisitionProcess implements Serializable {
+public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
 
     private String requester;
     private AcquisitionProcessState acquisitionProcessState;
@@ -16,18 +15,14 @@ public class SearchAcquisitionProcess implements Serializable {
     private String project;
     private String subproject;	
 
-    private class SearchResult extends HashSet<AcquisitionProcess> {
+    private class SearchResult extends SearchResultSet<AcquisitionProcess> {
 
 	public SearchResult(Collection<? extends AcquisitionProcess> c) {
 	    super(c);
 	}
 
 	@Override
-	public boolean add(final AcquisitionProcess acquisitionProcess) {
-	    return matchesSearchCriteria(acquisitionProcess) && super.add(acquisitionProcess);
-	}
-
-	private boolean matchesSearchCriteria(final AcquisitionProcess acquisitionProcess) {
+	protected boolean matchesSearchCriteria(final AcquisitionProcess acquisitionProcess) {
 	    final AcquisitionRequest acquisitionRequest = acquisitionProcess.getAcquisitionRequest();
 	    return matchCriteria(acquisitionProcessState, acquisitionProcess.getAcquisitionProcessState())
 	    		&& matchesSearchCriteria(acquisitionRequest);
@@ -50,18 +45,11 @@ public class SearchAcquisitionProcess implements Serializable {
 	    return criteria == null || criteria == value;
 	}
 
-	private boolean matchCriteria(final String criteria, final String value) {
-	    return criteria == null || criteria.length() == 0 || criteria.equals(value);
-	}
-
     }
 
+    @Override
     public Set<AcquisitionProcess> search() {
 	return new SearchResult(ExpenditureTrackingSystem.getInstance().getAcquisitionProcessesSet());
-    }
-
-    public Set<AcquisitionProcess> getResult() {
-	return search();
     }
 
     public String getRequester() {

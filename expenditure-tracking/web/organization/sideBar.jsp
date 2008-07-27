@@ -3,9 +3,13 @@
 
 <ul>
 	<li>
-		...
+		<html:link action="/organization.do?method=viewOrganization">
+			<bean:message key="link.view.organization" bundle="EXPENDITURE_RESOURCES"/>
+		</html:link>
 	</li>
 	<li>
-		...
+		<html:link action="/organization.do?method=searchUsers">
+			<bean:message key="link.search.users" bundle="ORGANIZATION_RESOURCES"/>
+		</html:link>
 	</li>
 </ul>

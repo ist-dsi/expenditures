@@ -10,6 +10,8 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.organization.Person;
+import pt.ist.expenditureTrackingSystem.domain.organization.SearchUsers;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.presentationTier.Context;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.BaseAction;
@@ -20,7 +22,9 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 @Mapping( path="/organization" )
 @Forwards( {
     @Forward(name="view.organization", path="/organization/viewOrganization.jsp"),
-    @Forward(name="edit.unit", path="/organization/editUnit.jsp")
+    @Forward(name="edit.unit", path="/organization/editUnit.jsp"),
+    @Forward(name="search.users", path="/organization/searchUsers.jsp"),
+    @Forward(name="edit.person", path="/organization/editPerson.jsp")
 } )
 public class OrganizationAction extends BaseAction {
 
@@ -45,7 +49,6 @@ public class OrganizationAction extends BaseAction {
 	return mapping.findForward("view.organization");
     }
 
-    //<html:link action="/organization.do?method=createNewUnit" paramId="unitOid" paramName="unit" paramProperty="OID">
     public final ActionForward createNewUnit(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
 	final Unit unit = getDomainObject(request, "unitOid");
@@ -70,6 +73,41 @@ public class OrganizationAction extends BaseAction {
 	final Unit parentUnit = unit.getParentUnit();
 	unit.delete();
 	return viewOrganization(mapping, request, parentUnit);
+    }
+
+    public final ActionForward searchUsers(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+	SearchUsers searchUsers = getRenderedObject("searchUsers");
+	if (searchUsers == null) {
+	    searchUsers = new SearchUsers();
+	}
+	request.setAttribute("searchUsers", searchUsers);
+	return mapping.findForward("search.users");
+    }
+
+    public final ActionForward createPerson(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+	final Person person = Person.createPerson();
+	return editPerson(mapping, request, person);
+    }
+
+    public final ActionForward editPerson(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+	final Person person = getDomainObject(request, "personOid");
+	return editPerson(mapping, request, person);
+    }
+
+    public final ActionForward editPerson(final ActionMapping mapping, final HttpServletRequest request,
+	    final Person person) throws Exception {
+	request.setAttribute("person", person);
+	return mapping.findForward("edit.person");
+    }
+
+    public final ActionForward deletePerson(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+	final Person person = getDomainObject(request, "personOid");
+	person.delete();
+	return searchUsers(mapping, form, request, response);
     }
 
 }
