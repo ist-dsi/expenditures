@@ -30,16 +30,10 @@
 	<fr:layout name="tabular">
 		<fr:property name="classes" value="tstyle1"/>
 
-		<fr:property name="link(edit)" value="/organization.do?method=editPerson"/>
-		<fr:property name="bundle(edit)" value="EXPENDITURE_RESOURCES"/>
-		<fr:property name="key(edit)" value="link.edit"/>
-		<fr:property name="param(edit)" value="OID/personOid"/>
-		<fr:property name="order(edit)" value="1"/>
-
-		<fr:property name="link(delete)" value="/organization.do?method=deletePerson"/>
-		<fr:property name="bundle(delete)" value="EXPENDITURE_RESOURCES"/>
-		<fr:property name="key(delete)" value="link.delete"/>
-		<fr:property name="param(delete)" value="OID/personOid"/>
-		<fr:property name="order(delete)" value="1"/>
+		<fr:property name="link(view)" value="/organization.do?method=viewPerson"/>
+		<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
+		<fr:property name="key(view)" value="link.view"/>
+		<fr:property name="param(view)" value="OID/personOid"/>
+		<fr:property name="order(view)" value="1"/>
 	</fr:layout>
 </fr:view>

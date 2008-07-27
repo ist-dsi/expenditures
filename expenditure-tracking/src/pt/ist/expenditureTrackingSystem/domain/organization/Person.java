@@ -1,6 +1,7 @@
 package pt.ist.expenditureTrackingSystem.domain.organization;
 
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.pstm.Transaction;
 
@@ -20,6 +21,11 @@ public class Person extends Person_Base {
     public void delete() {
 	removeExpenditureTrackingSystem();
 	Transaction.deleteObject(this);
+    }
+
+    @Service
+    public Authorization createAuthorization() {
+	return new Authorization(this);
     }
     
 }

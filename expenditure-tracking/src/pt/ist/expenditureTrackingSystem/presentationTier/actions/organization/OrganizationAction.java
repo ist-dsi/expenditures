@@ -10,6 +10,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.SearchUsers;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
@@ -24,7 +25,9 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
     @Forward(name="view.organization", path="/organization/viewOrganization.jsp"),
     @Forward(name="edit.unit", path="/organization/editUnit.jsp"),
     @Forward(name="search.users", path="/organization/searchUsers.jsp"),
-    @Forward(name="edit.person", path="/organization/editPerson.jsp")
+    @Forward(name="view.person", path="/organization/viewPerson.jsp"),
+    @Forward(name="edit.person", path="/organization/editPerson.jsp"),
+    @Forward(name="change.authorization.unit", path="/organization/changeAuthorizationUnit.jsp")
 } )
 public class OrganizationAction extends BaseAction {
 
@@ -108,6 +111,59 @@ public class OrganizationAction extends BaseAction {
 	final Person person = getDomainObject(request, "personOid");
 	person.delete();
 	return searchUsers(mapping, form, request, response);
+    }
+
+    public final ActionForward viewPerson(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+	final Person person = getDomainObject(request, "personOid");
+	return viewPerson(mapping, request, person);
+    }
+
+    public final ActionForward viewPerson(final ActionMapping mapping, final HttpServletRequest request,
+	    final Person person) throws Exception {
+	request.setAttribute("person", person);
+	return mapping.findForward("view.person");
+    }
+
+    public final ActionForward attributeAuthorization(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+	final Person person = getDomainObject(request, "personOid");
+	final Authorization authorization = person.createAuthorization();
+	request.setAttribute("authorization", authorization);
+	return expandAuthorizationUnit(mapping, request, authorization, null);
+    }
+
+    public final ActionForward expandAuthorizationUnit(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+	final Authorization authorization = getDomainObject(request, "authorizationOid");
+	final Unit unit = getDomainObject(request, "unitOid");
+	return expandAuthorizationUnit(mapping, request, authorization, unit);
+    }
+
+    public final ActionForward expandAuthorizationUnit(final ActionMapping mapping, final HttpServletRequest request,
+	    final Authorization authorization, final Unit unit) throws Exception {
+	request.setAttribute("authorization", authorization);
+	request.setAttribute("unit", unit);
+	final Set<Unit> units = unit == null ? ExpenditureTrackingSystem.getInstance().getTopLevelUnitsSet() : unit.getSubUnitsSet();
+	request.setAttribute("units", units);
+	return mapping.findForward("change.authorization.unit");
+    }
+
+    public final ActionForward changeAuthorizationUnit(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+	final Authorization authorization = getDomainObject(request, "authorizationOid");
+	final Unit unit = getDomainObject(request, "unitOid");
+	authorization.changeUnit(unit);
+	final Person person = authorization.getPerson();
+	return viewPerson(mapping, request, person);
+    }
+
+    public final ActionForward deleteAuthorization(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+	final Authorization authorization = getDomainObject(request, "authorizationOid");
+	final Person person = authorization.getPerson();
+	authorization.delete();
+	return viewPerson(mapping, request, person);
     }
 
 }
