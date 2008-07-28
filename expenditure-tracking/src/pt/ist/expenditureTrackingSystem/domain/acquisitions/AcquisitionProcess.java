@@ -1,5 +1,7 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
+import org.joda.time.DateTime;
+
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.pstm.Transaction;
@@ -51,6 +53,18 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 
     public boolean isPendingApproval() {
 	return getAcquisitionProcessState() == AcquisitionProcessState.SUBMITTED_FOR_APPROVAL;
+    }
+
+    @Override
+    public void setFundAllocationId(final String fundAllocationId) {
+	super.setFundAllocationId(fundAllocationId);
+	setAcquisitionProcessState(AcquisitionProcessState.FUNDS_ALLOCATED);
+    }
+
+    @Override
+    public void setFundAllocationExpirationDate(final DateTime fundAllocationExpirationDate) {
+	super.setFundAllocationExpirationDate(fundAllocationExpirationDate);
+	setAcquisitionProcessState(AcquisitionProcessState.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER);
     }
 
 }

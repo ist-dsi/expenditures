@@ -33,7 +33,9 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
     @Forward(name="search.acquisition.process", path="/acquisitions/searchAcquisitionProcess.jsp"),
     @Forward(name="add.acquisition.proposal.document", path="/acquisitions/addAcquisitionProposalDocument.jsp"),
     @Forward(name="view.acquisition.request.item", path="/acquisitions/viewAcquisitionRequestItem.jsp"),
-    @Forward(name="edit.acquisition.request.item", path="/acquisitions/editAcquisitionRequestItem.jsp")
+    @Forward(name="edit.acquisition.request.item", path="/acquisitions/editAcquisitionRequestItem.jsp"),
+    @Forward(name="allocate.funds", path="/acquisitions/allocateFunds.jsp"),
+    @Forward(name="allocate.funds.to.service.provider", path="/acquisitions/allocateFundsToServiceProvider.jsp")
 } )
 public class AcquisitionProcessAction extends BaseAction {
 
@@ -202,6 +204,20 @@ public class AcquisitionProcessAction extends BaseAction {
 	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
 	acquisitionProcess.approve();
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
+    }
+
+    public final ActionForward allocateFunds(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
+	request.setAttribute("acquisitionProcess", acquisitionProcess);
+	return mapping.findForward("allocate.funds");
+    }
+
+    public final ActionForward allocateFundsToServiceProvider(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
+	request.setAttribute("acquisitionProcess", acquisitionProcess);
+	return mapping.findForward("allocate.funds.to.service.provider");
     }
 
 }

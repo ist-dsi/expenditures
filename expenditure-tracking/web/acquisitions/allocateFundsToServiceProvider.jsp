@@ -5,22 +5,6 @@
 
 <h2><bean:message key="label.view.acquisition.process" bundle="EXPENDITURE_RESOURCES"/></h2>
 <br />
-<html:link action="/acquisitionProcess.do?method=submitForApproval" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
-	<bean:message key="link.submit.for.approval" bundle="ACQUISITION_RESOURCES"/>
-</html:link>
-<br />
-<html:link action="/acquisitionProcess.do?method=approve" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
-	<bean:message key="link.approve" bundle="ACQUISITION_RESOURCES"/>
-</html:link>
-<br />
-<html:link action="/acquisitionProcess.do?method=allocateFunds" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
-	<bean:message key="link.allocate.funds" bundle="ACQUISITION_RESOURCES"/>
-</html:link>
-<br />
-<html:link action="/acquisitionProcess.do?method=allocateFundsToServiceProvider" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
-	<bean:message key="link.allocate.funds.to.service.provider" bundle="ACQUISITION_RESOURCES"/>
-</html:link>
-<br />
 <br/>
 <fr:view name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestInformation"
 		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestInformation"
@@ -30,13 +14,6 @@
 		<fr:property name="columnClasses" value=",,tdclear tderror1"/>
 	</fr:layout>
 </fr:view>
-<br/>
-<html:link action="/acquisitionProcess.do?method=editAcquisitionRequestInformation" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
-	<bean:message key="link.edit" bundle="EXPENDITURE_RESOURCES"/>
-</html:link>
-<html:link action="/acquisitionProcess.do?method=deleteAcquisitionProcess" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
-	<bean:message key="link.delete" bundle="EXPENDITURE_RESOURCES"/>
-</html:link>
 <br/>
 <br/>
 <bean:message key="label.acquisition.proposal.document" bundle="ACQUISITION_RESOURCES"/>
@@ -48,16 +25,6 @@
 <logic:notPresent name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestInformation.acquisitionProposalDocument">
 	--
 </logic:notPresent>
-<br/>
-<br/>
-<html:link action="/acquisitionProcess.do?method=prepareAddAcquisitionProposalDocument" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
-	<bean:message key="link.add.acquisition.proposal.document" bundle="ACQUISITION_RESOURCES"/>
-</html:link>
-<br/>
-<br/>
-<html:link action="/acquisitionProcess.do?method=createNewAcquisitionRequestItem" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
-	<bean:message key="link.create.new.acquisition.request.item" bundle="ACQUISITION_RESOURCES"/>
-</html:link>
 <br/>
 <br/>
 <logic:present name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestInformation.acquisitionRequestItemsSet">
@@ -74,3 +41,15 @@
 		</fr:layout>
 	</fr:view>
 </logic:present>
+<br/>
+<br/>
+<bean:define id="urlView">/acquisitionProcess.do?method=viewAcquisitionProcess&amp;acquisitionProcessOid=<bean:write name="acquisitionProcess" property="OID"/></bean:define>
+<fr:edit id="acquisitionProcess"
+		name="acquisitionProcess"
+		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess"
+		schema="allocateFundsToServiceProvider"
+		action="<%= urlView %>">
+	<fr:layout name="tabular">
+		<fr:destination name="cancel" path="<%= urlView %>" />
+	</fr:layout>
+</fr:edit>

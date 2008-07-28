@@ -77,3 +77,15 @@
 	<slot name="project" key="label.project" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="subproject" key="label.subproject" bundle="ACQUISITION_RESOURCES"/>
 </schema>
+
+<schema name="allocateFunds"
+		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess"
+		bundle="ACQUISITION_RESOURCES">
+	<slot name="fundAllocationId" key="label.fund.allocation.identification" bundle="ACQUISITION_RESOURCES"/>
+</schema>
+
+<schema name="allocateFundsToServiceProvider"
+		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess"
+		bundle="ACQUISITION_RESOURCES">
+	<slot name="fundAllocationExpirationDate" key="label.fund.allocation.expiration.date" bundle="ACQUISITION_RESOURCES"/>
+</schema>
