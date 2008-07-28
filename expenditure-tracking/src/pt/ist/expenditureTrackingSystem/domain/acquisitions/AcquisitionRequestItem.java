@@ -24,7 +24,12 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
     public BigDecimal getTotalItemValue() {
 	final BigDecimal unitValue = getUnitValue();
 	final Integer quantity = getQuantity();
-	return unitValue.multiply(new BigDecimal(quantity.intValue()));
+	return multiply(unitValue, quantity);
+    }
+
+    private BigDecimal multiply(final BigDecimal unitValue, final Integer quantity) {
+	return unitValue == null || quantity == null ? BigDecimal.ZERO
+		: unitValue.multiply(new BigDecimal(quantity.intValue()));
     }
 
     @Service
