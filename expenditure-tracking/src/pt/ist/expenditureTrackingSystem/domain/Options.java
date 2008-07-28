@@ -8,6 +8,8 @@ public class Options extends Options_Base {
 	super();
 	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());	
 	setPerson(person);
+	setDisplayAuthorizationPending(Boolean.FALSE);
+	setRecurseAuthorizationPendingUnits(Boolean.FALSE);
     }
 
 }
