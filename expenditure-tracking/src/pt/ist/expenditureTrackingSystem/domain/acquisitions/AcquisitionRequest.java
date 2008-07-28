@@ -1,6 +1,5 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
-import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Set;
 
