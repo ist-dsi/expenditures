@@ -49,7 +49,7 @@ public class AcquisitionRequestInformation extends AcquisitionRequestInformation
     }
 
     public BigDecimal getTotalItemValue() {
-	BigDecimal result = new BigDecimal(0);
+	BigDecimal result = BigDecimal.ZERO;
 	for (final AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
 	    result = result.add(acquisitionRequestItem.getTotalItemValue());
 	}
