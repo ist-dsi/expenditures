@@ -16,6 +16,7 @@
 	</form>
 <% } else { %>
 	<form class="login">
+		<html:link action="/customize.do?method=showOptions"><bean:message key="label.preferences" bundle="EXPENDITURE_RESOURCES"/></html:link>
 		<bean:message key="label.logged.is.as" bundle="EXPENDITURE_RESOURCES"/> <%= user.getUsername() %>
 		<html:link action="/authenticationAction.do?method=logout"><bean:message key="label.logout" bundle="EXPENDITURE_RESOURCES"/></html:link>
 	</form>

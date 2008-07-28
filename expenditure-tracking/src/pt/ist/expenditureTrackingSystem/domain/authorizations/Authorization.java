@@ -1,6 +1,9 @@
 package pt.ist.expenditureTrackingSystem.domain.authorizations;
 
+import java.util.Set;
+
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.fenixWebFramework.services.Service;
@@ -29,6 +32,11 @@ public class Authorization extends Authorization_Base {
     @Service
     public void changeUnit(final Unit unit) {
 	setUnit(unit);
+    }
+
+    public void findAcquisitionProcessesPendingAuthorization(final Set<AcquisitionProcess> result, final boolean recurseSubUnits) {
+	final Unit unit = getUnit();
+	unit.findAcquisitionProcessesPendingAuthorization(result, recurseSubUnits);
     }
 
 }

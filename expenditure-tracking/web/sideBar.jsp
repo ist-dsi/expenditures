@@ -1,3 +1,4 @@
+<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@page import="pt.ist.expenditureTrackingSystem.presentationTier.Context"%>
 
 <%
@@ -5,7 +6,23 @@
 	final String module = context == null ? null : context.getModule();
 	if (module == null) {
 %>
-		No module selected.
+	<ul>
+		<li>
+			<html:link action="/home.do?method=firstPage">
+				Anúncios
+			</html:link>
+		</li>
+		<li>
+			<html:link action="/home.do?method=firstPage">
+				Estatísticas
+			</html:link>
+		</li>
+		<li>
+			<html:link action="/home.do?method=firstPage">
+				Documentação
+			</html:link>
+		</li>
+	</ul>
 <%
 	} else {
 	    final String sideBar = "/" + module + "/sideBar.jsp";

@@ -2,21 +2,30 @@ package pt.ist.expenditureTrackingSystem.applicationTier;
 
 import java.io.Serializable;
 
+import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.fenixWebFramework.security.UserView;
+import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixWebFramework.util.DomainReference;
 
 public class Authenticate {
 
     public static class User implements pt.ist.fenixWebFramework.security.User, Serializable {
 
-	private final String username;
+	private final DomainReference<Person> personReference;
 
 	private User(final String username) {
-	    this.username = username;
+	    final Person person = findByUsername(username);
+	    personReference = new DomainReference<Person>(person);
+	}
+
+	private Person findByUsername(final String username) {
+	    final Person person = Person.findByUsername(username);
+	    return person == null ? new Person(username) : person;
 	}
 
 	@Override
 	public String getUsername() {
-	    return username;
+	    return getPerson().getUsername();
 	}
 
 	@Override
@@ -27,16 +36,20 @@ public class Authenticate {
 
 	@Override
 	public boolean equals(Object obj) {
-	    return obj instanceof User && username.equals(((User) obj).username);
+	    return obj instanceof User && getUsername().equals(((User) obj).getUsername());
 	}
 
 	@Override
 	public int hashCode() {
-	    return username.hashCode();
+	    return getUsername().hashCode();
 	}
 
+	public Person getPerson() {
+	    return personReference == null ? null : personReference.getObject();
+	}
     }
 
+    @Service
     public static User authenticate(final String username, final String password) {
 	final User user = new User(username);
 	UserView.setUser(user);

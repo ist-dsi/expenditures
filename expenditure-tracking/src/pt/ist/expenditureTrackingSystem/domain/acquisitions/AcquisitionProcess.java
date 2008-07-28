@@ -49,4 +49,8 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 	Transaction.deleteObject(this);
     }
 
+    public boolean isPendingApproval() {
+	return getAcquisitionProcessState() == AcquisitionProcessState.SUBMITTED_FOR_APPROVAL;
+    }
+
 }

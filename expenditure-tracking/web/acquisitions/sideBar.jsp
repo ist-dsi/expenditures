@@ -14,9 +14,3 @@
 		</html:link>
 	</li>
 </ul>
-<p>Number existing processes:
-	<%
-		final ExpenditureTrackingSystem expenditureTrackingSystem = ExpenditureTrackingSystem.getInstance();
-	%>
-	<%= "" + expenditureTrackingSystem.getAcquisitionProcessesCount() %>
-</p>

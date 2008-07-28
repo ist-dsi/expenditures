@@ -1,6 +1,10 @@
 package pt.ist.expenditureTrackingSystem.domain.organization;
 
+import java.util.Set;
+
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessState;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.pstm.Transaction;
@@ -34,6 +38,22 @@ public class Unit extends Unit_Base {
 	removeParentUnit();
 	removeExpenditureTrackingSystem();
 	Transaction.deleteObject(this);
+    }
+
+    public void findAcquisitionProcessesPendingAuthorization(final Set<AcquisitionProcess> result, final boolean recurseSubUnits) {
+	final String costCenter = getCostCenter();
+	for (final AcquisitionProcess acquisitionProcess : ExpenditureTrackingSystem.getInstance().getAcquisitionProcessesSet()) {
+	    if (costCenter.equals(acquisitionProcess.getAcquisitionRequest().getAcquisitionRequestInformation().getCostCenter())) {
+		if (acquisitionProcess.isPendingApproval()) {
+		    result.add(acquisitionProcess);
+		}
+	    }
+	}
+	if (recurseSubUnits) {
+	    for (final Unit unit : getSubUnitsSet()) {
+		unit.findAcquisitionProcessesPendingAuthorization(result, recurseSubUnits);
+	    }
+	}
     }
     
 }

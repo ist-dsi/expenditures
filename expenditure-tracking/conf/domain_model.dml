@@ -53,6 +53,11 @@ class File {
 	class acquisitions.AcquisitionProposalDocument extends File {
 	}
 
+class Options {
+	Boolean displayAuthorizationPending;
+	Boolean recurseAuthorizationPendingUnits;
+}
+
 class organization.Person {
 	String name;
 	String username;
@@ -175,4 +180,16 @@ relation PersonAuthorization {
 	authorizations.Authorization playsRole authorizations {
 		multiplicity *;
 	}
+}
+
+relation ExpenditureTrackingSystemOptions {
+	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
+	Options playsRole options {
+		multiplicity *;
+	}
+}
+
+relation PersonOptions {
+	organization.Person playsRole person;
+	Options playsRole options;
 }
