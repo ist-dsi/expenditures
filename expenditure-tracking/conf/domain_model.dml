@@ -6,7 +6,7 @@ valueType pt.ist.expenditureTrackingSystem.domain.util.ByteArray as ByteArray;
 valueType pt.ist.expenditureTrackingSystem.domain.util.MonitaryValue as MonitaryValue;
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessState as AcquisitionProcessState;
 enum pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationType as AuthorizationType;
-
+enum pt.ist.expenditureTrackingSystem.domain.RoleType as RoleType;
 
 class ExpenditureTrackingSystem {
 }
@@ -71,6 +71,9 @@ class organization.Unit {
 	String costCenter;
 }
 
+class Role {
+	RoleType roleType;
+}
 
 relation ExpenditureTrackingSystemAcquisitionProcess {
 	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
@@ -195,3 +198,19 @@ relation PersonOptions {
 	organization.Person playsRole person;
 	Options playsRole options;
 }
+
+relation ExpenditureTrackingSystemRole {
+	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
+	Role playsRole roles {
+		multiplicity *;
+	}
+}
+
+relation PersonRole {
+	organization.Person playsRole person {
+		multiplicity *;
+	}
+	Role playsRole roles {
+		multiplicity *;
+	}
+} 

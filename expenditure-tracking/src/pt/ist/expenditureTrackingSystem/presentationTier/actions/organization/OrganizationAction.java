@@ -10,6 +10,8 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.Role;
+import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.SearchUsers;
@@ -20,15 +22,13 @@ import pt.ist.fenixWebFramework.struts.annotations.Forward;
 import pt.ist.fenixWebFramework.struts.annotations.Forwards;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
-@Mapping( path="/organization" )
-@Forwards( {
-    @Forward(name="view.organization", path="/organization/viewOrganization.jsp"),
-    @Forward(name="edit.unit", path="/organization/editUnit.jsp"),
-    @Forward(name="search.users", path="/organization/searchUsers.jsp"),
-    @Forward(name="view.person", path="/organization/viewPerson.jsp"),
-    @Forward(name="edit.person", path="/organization/editPerson.jsp"),
-    @Forward(name="change.authorization.unit", path="/organization/changeAuthorizationUnit.jsp")
-} )
+@Mapping(path = "/organization")
+@Forwards( { @Forward(name = "view.organization", path = "/organization/viewOrganization.jsp"),
+	@Forward(name = "edit.unit", path = "/organization/editUnit.jsp"),
+	@Forward(name = "search.users", path = "/organization/searchUsers.jsp"),
+	@Forward(name = "view.person", path = "/organization/viewPerson.jsp"),
+	@Forward(name = "edit.person", path = "/organization/editPerson.jsp"),
+	@Forward(name = "change.authorization.unit", path = "/organization/changeAuthorizationUnit.jsp") })
 public class OrganizationAction extends BaseAction {
 
     private static final Context CONTEXT = new Context("organization");
@@ -39,21 +39,21 @@ public class OrganizationAction extends BaseAction {
     }
 
     public final ActionForward viewOrganization(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+	    final HttpServletRequest request, final HttpServletResponse response) {
 	final Unit unit = getDomainObject(request, "unitOid");
 	return viewOrganization(mapping, request, unit);
     }
 
-    public final ActionForward viewOrganization(final ActionMapping mapping, final HttpServletRequest request,
-	    final Unit unit) throws Exception {
+    public final ActionForward viewOrganization(final ActionMapping mapping, final HttpServletRequest request, final Unit unit) {
 	request.setAttribute("unit", unit);
-	final Set<Unit> units = unit == null ? ExpenditureTrackingSystem.getInstance().getTopLevelUnitsSet() : unit.getSubUnitsSet();
+	final Set<Unit> units = unit == null ? ExpenditureTrackingSystem.getInstance().getTopLevelUnitsSet() : unit
+		.getSubUnitsSet();
 	request.setAttribute("units", units);
 	return mapping.findForward("view.organization");
     }
 
     public final ActionForward createNewUnit(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+	    final HttpServletRequest request, final HttpServletResponse response) {
 	final Unit unit = getDomainObject(request, "unitOid");
 	final Unit newUnit = Unit.createNewUnit(unit);
 	return editUnit(mapping, request, newUnit);
@@ -64,22 +64,22 @@ public class OrganizationAction extends BaseAction {
 	return mapping.findForward("edit.unit");
     }
 
-    public final ActionForward editUnit(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+    public final ActionForward editUnit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
 	final Unit unit = getDomainObject(request, "unitOid");
 	return editUnit(mapping, request, unit);
     }
 
-    public final ActionForward deleteUnit(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+    public final ActionForward deleteUnit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
 	final Unit unit = getDomainObject(request, "unitOid");
 	final Unit parentUnit = unit.getParentUnit();
 	unit.delete();
 	return viewOrganization(mapping, request, parentUnit);
     }
 
-    public final ActionForward searchUsers(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+    public final ActionForward searchUsers(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
 	SearchUsers searchUsers = getRenderedObject("searchUsers");
 	if (searchUsers == null) {
 	    searchUsers = new SearchUsers();
@@ -88,45 +88,65 @@ public class OrganizationAction extends BaseAction {
 	return mapping.findForward("search.users");
     }
 
-    public final ActionForward createPerson(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+    public final ActionForward createPerson(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
 	final Person person = Person.createPerson();
 	return editPerson(mapping, request, person);
     }
 
-    public final ActionForward editPerson(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+    public final ActionForward editPerson(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
 	final Person person = getDomainObject(request, "personOid");
 	return editPerson(mapping, request, person);
     }
 
-    public final ActionForward editPerson(final ActionMapping mapping, final HttpServletRequest request,
-	    final Person person) throws Exception {
+    public final ActionForward editPerson(final ActionMapping mapping, final HttpServletRequest request, final Person person) {
 	request.setAttribute("person", person);
 	return mapping.findForward("edit.person");
     }
 
-    public final ActionForward deletePerson(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+    public final ActionForward deletePerson(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
 	final Person person = getDomainObject(request, "personOid");
 	person.delete();
 	return searchUsers(mapping, form, request, response);
     }
 
-    public final ActionForward viewPerson(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+    public final ActionForward addRole(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	final Person person = getDomainObject(request, "personOid");
+	final Role role = getRole(request);
+	person.addRoles(role);
+	return viewPerson(mapping, request, person);
+    }
+
+    public final ActionForward removeRole(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	final Person person = getDomainObject(request, "personOid");
+	final Role role = getRole(request);
+	person.removeRoles(role);
+	return viewPerson(mapping, request, person);
+    }
+
+    private Role getRole(HttpServletRequest request) {
+	String role = request.getParameter("role");
+	return role == null ? null : Role.getRole(RoleType.valueOf(role));
+    }
+
+    public final ActionForward viewPerson(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
 	final Person person = getDomainObject(request, "personOid");
 	return viewPerson(mapping, request, person);
     }
 
-    public final ActionForward viewPerson(final ActionMapping mapping, final HttpServletRequest request,
-	    final Person person) throws Exception {
+    public final ActionForward viewPerson(final ActionMapping mapping, final HttpServletRequest request, final Person person) {
 	request.setAttribute("person", person);
+	request.setAttribute("availableRoles", RoleType.values());
 	return mapping.findForward("view.person");
     }
 
     public final ActionForward attributeAuthorization(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+	    final HttpServletRequest request, final HttpServletResponse response) {
 	final Person person = getDomainObject(request, "personOid");
 	final Authorization authorization = person.createAuthorization();
 	request.setAttribute("authorization", authorization);
@@ -134,23 +154,24 @@ public class OrganizationAction extends BaseAction {
     }
 
     public final ActionForward expandAuthorizationUnit(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+	    final HttpServletRequest request, final HttpServletResponse response) {
 	final Authorization authorization = getDomainObject(request, "authorizationOid");
 	final Unit unit = getDomainObject(request, "unitOid");
 	return expandAuthorizationUnit(mapping, request, authorization, unit);
     }
 
     public final ActionForward expandAuthorizationUnit(final ActionMapping mapping, final HttpServletRequest request,
-	    final Authorization authorization, final Unit unit) throws Exception {
+	    final Authorization authorization, final Unit unit) {
 	request.setAttribute("authorization", authorization);
 	request.setAttribute("unit", unit);
-	final Set<Unit> units = unit == null ? ExpenditureTrackingSystem.getInstance().getTopLevelUnitsSet() : unit.getSubUnitsSet();
+	final Set<Unit> units = unit == null ? ExpenditureTrackingSystem.getInstance().getTopLevelUnitsSet() : unit
+		.getSubUnitsSet();
 	request.setAttribute("units", units);
 	return mapping.findForward("change.authorization.unit");
     }
 
     public final ActionForward changeAuthorizationUnit(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+	    final HttpServletRequest request, final HttpServletResponse response) {
 	final Authorization authorization = getDomainObject(request, "authorizationOid");
 	final Unit unit = getDomainObject(request, "unitOid");
 	authorization.changeUnit(unit);
@@ -159,7 +180,7 @@ public class OrganizationAction extends BaseAction {
     }
 
     public final ActionForward deleteAuthorization(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+	    final HttpServletRequest request, final HttpServletResponse response) {
 	final Authorization authorization = getDomainObject(request, "authorizationOid");
 	final Person person = authorization.getPerson();
 	authorization.delete();

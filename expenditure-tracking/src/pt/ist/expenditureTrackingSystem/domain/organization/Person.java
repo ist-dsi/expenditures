@@ -5,6 +5,8 @@ import java.util.Set;
 
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.Options;
+import pt.ist.expenditureTrackingSystem.domain.Role;
+import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.fenixWebFramework.services.Service;
@@ -60,4 +62,26 @@ public class Person extends Person_Base {
 	return result;
     }
     
+    public boolean hasRoleType(RoleType type) {
+	for (Role role : getRolesSet()) {
+	    if (role.getRoleType().equals(type)) {
+		return true;
+	    }
+	}
+	return false;
+    }
+    
+    @Service
+    @Override
+    public void addRoles(Role role) {
+	if (!hasRoles(role)) {
+	    super.addRoles(role);
+	}
+    }
+    
+    @Service
+    @Override
+    public void removeRoles(Role roles) {
+        super.removeRoles(roles);
+    }
 }

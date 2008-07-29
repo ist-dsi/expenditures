@@ -31,6 +31,7 @@
 		bundle="ORGANIZATION_RESOURCES">
 	<slot name="username" key="label.person.username" bundle="ORGANIZATION_RESOURCES"/>
 	<slot name="name" key="label.person.name" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="roles" layout="values-comma" key="label.person.roles" bundle="ORGANIZATION_RESOURCES"/>
 </schema>
 
 <schema name="viewAuthorizations"

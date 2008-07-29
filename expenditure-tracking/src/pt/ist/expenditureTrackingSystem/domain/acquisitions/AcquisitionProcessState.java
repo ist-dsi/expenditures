@@ -14,7 +14,7 @@ public enum AcquisitionProcessState {
 
     public String getLocalizedName() {
 	final ResourceBundle resourceBundle = ResourceBundle.getBundle("resources.EnumerationResources", Language.getLocale());
-	return resourceBundle.getString(name());
+	return resourceBundle.getString(getClass().getSimpleName() + "." + name());
     }
 
 }
