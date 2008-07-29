@@ -11,13 +11,13 @@
 		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestInformation"
 		bundle="ACQUISITION_RESOURCES">
 	<slot name="acquisitionProcess.acquisitionProcessState.localizedName" key="label.acquisition.process.state" bundle="ACQUISITION_RESOURCES"/>
-	<slot name="acquisitionProcess.fundAllocationId" key="label.fund.allocation.identification" bundle="ACQUISITION_RESOURCES"/>
-	<slot name="acquisitionProcess.fundAllocationExpirationDate" key="label.fund.allocation.expiration.date" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="fiscalIdentificationCode" key="label.service.provider.fiscalIdentificationCode" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="costCenter" key="label.cost.center" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="project" key="label.project" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="subproject" key="label.subproject" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="totalItemValue" key="label.total.item.value" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="acquisitionProcess.fundAllocationId" key="label.fund.allocation.identification" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="acquisitionProcess.fundAllocationExpirationDate" key="label.fund.allocation.expiration.date" bundle="ACQUISITION_RESOURCES"/>
 </schema>
 
 <schema name="viewAcquisitionProcessInList"
