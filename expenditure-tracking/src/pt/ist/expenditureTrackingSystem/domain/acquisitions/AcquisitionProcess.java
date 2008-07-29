@@ -7,6 +7,7 @@ import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
+import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.fenixWebFramework.security.UserView;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.pstm.Transaction;
@@ -23,7 +24,7 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
     public static boolean isCreateNewAcquisitionProcessAvailable() {
 	return UserView.getUser() != null;
     }
-    
+
     @Service
     public static AcquisitionProcess createNewAcquisitionProcess() {
 	if (!isCreateNewAcquisitionProcessAvailable()) {
@@ -35,7 +36,8 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 
     public boolean isAcquisitionProposalDocumentAvailable() {
 	User user = UserView.getUser();
-	return user != null && isProcessInState(AcquisitionProcessState.IN_GENESIS) && user.getUsername().equalsIgnoreCase(getRequestor());
+	return user != null && isProcessInState(AcquisitionProcessState.IN_GENESIS)
+		&& user.getUsername().equalsIgnoreCase(getRequestor());
     }
 
     @Service
@@ -49,7 +51,8 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 
     public boolean isCreateAcquisitionRequestItemAvailable() {
 	User user = UserView.getUser();
-	return user != null && isProcessInState(AcquisitionProcessState.IN_GENESIS) && user.getUsername().equalsIgnoreCase(getRequestor());
+	return user != null && isProcessInState(AcquisitionProcessState.IN_GENESIS)
+		&& user.getUsername().equalsIgnoreCase(getRequestor());
     }
 
     @Service
@@ -63,7 +66,8 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 
     public boolean isSubmitForApprovalAvailable() {
 	User user = UserView.getUser();
-	return user != null && isProcessInState(AcquisitionProcessState.IN_GENESIS) && user.getUsername().equalsIgnoreCase(getRequestor());
+	return user != null && isProcessInState(AcquisitionProcessState.IN_GENESIS)
+		&& user.getUsername().equalsIgnoreCase(getRequestor());
     }
 
     @Service
@@ -77,7 +81,7 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
     public String getRequestor() {
 	return getAcquisitionRequest().getAcquisitionRequestInformation().getRequester();
     }
-    
+
     public boolean isApproveAvailable() {
 	User user = UserView.getUser();
 	if (!isPendingApproval() || user == null) {
@@ -102,6 +106,12 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 	setAcquisitionProcessState(AcquisitionProcessState.APPROVED);
     }
 
+    public boolean isDeleteAvailable() {
+	User user = UserView.getUser();
+	return user != null && getRequestor().equalsIgnoreCase(user.getUsername())
+		&& isProcessInState(AcquisitionProcessState.IN_GENESIS);
+    }
+
     @Service
     public void delete() {
 	final AcquisitionRequest acquisitionRequest = getAcquisitionRequest();
@@ -110,12 +120,12 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 	Transaction.deleteObject(this);
     }
 
-
     public boolean isFundAllocationIdAvailable() {
 	User user = UserView.getUser();
-	return user != null &&  user.getPerson().hasRoleType(RoleType.ACCOUNTABILITY) && isProcessInState(AcquisitionProcessState.APPROVED);
+	return user != null && user.getPerson().hasRoleType(RoleType.ACCOUNTABILITY)
+		&& isProcessInState(AcquisitionProcessState.APPROVED);
     }
-    
+
     @Override
     public void setFundAllocationId(final String fundAllocationId) {
 	if (!isFundAllocationIdAvailable()) {
@@ -127,9 +137,10 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 
     public boolean isFundAllocationExpirationDateAvailable() {
 	User user = UserView.getUser();
-	return user != null && user.getPerson().hasRoleType(RoleType.ACQUISITION_CENTRAL) && isProcessInState(AcquisitionProcessState.FUNDS_ALLOCATED);
+	return user != null && user.getPerson().hasRoleType(RoleType.ACQUISITION_CENTRAL)
+		&& isProcessInState(AcquisitionProcessState.FUNDS_ALLOCATED);
     }
-    
+
     @Override
     public void setFundAllocationExpirationDate(final DateTime fundAllocationExpirationDate) {
 	if (!isFundAllocationExpirationDateAvailable()) {
@@ -145,5 +156,11 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 
     private boolean isProcessInState(AcquisitionProcessState state) {
 	return getAcquisitionProcessState().equals(state);
+    }
+
+    public boolean isPersonAbleToExecuteActivities() {
+	return isAcquisitionProposalDocumentAvailable() || isCreateAcquisitionRequestItemAvailable()
+		|| isSubmitForApprovalAvailable() || isApproveAvailable() || isDeleteAvailable() || isFundAllocationIdAvailable()
+		|| isFundAllocationExpirationDateAvailable();
     }
 }

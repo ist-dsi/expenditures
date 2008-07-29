@@ -1,6 +1,5 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
-<%@page import="pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem"%>
 
 <ul>
 	<li>
@@ -13,4 +12,10 @@
 			<bean:message key="link.search.aquisition.process" bundle="EXPENDITURE_RESOURCES"/>
 		</html:link>
 	</li>
+	<li>
+		<html:link action="/acquisitionProcess.do?method=showPendingProcesses">
+			<bean:message key="link.show.aquisition.pending.processes" bundle="EXPENDITURE_RESOURCES"/>
+		</html:link>
+	</li>
+	
 </ul>

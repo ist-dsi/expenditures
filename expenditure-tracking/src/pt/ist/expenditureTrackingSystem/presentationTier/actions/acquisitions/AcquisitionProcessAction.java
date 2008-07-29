@@ -1,8 +1,11 @@
 package pt.ist.expenditureTrackingSystem.presentationTier.actions.acquisitions;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,6 +15,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProposalDocument;
@@ -26,17 +30,16 @@ import pt.ist.fenixWebFramework.struts.annotations.Forward;
 import pt.ist.fenixWebFramework.struts.annotations.Forwards;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
-@Mapping( path="/acquisitionProcess" )
-@Forwards( {
-    @Forward(name="edit.request.acquisition", path="/acquisitions/editAcquisitionRequestInformatio.jsp"),
-    @Forward(name="view.acquisition.process", path="/acquisitions/viewAcquisitionProcess.jsp"),
-    @Forward(name="search.acquisition.process", path="/acquisitions/searchAcquisitionProcess.jsp"),
-    @Forward(name="add.acquisition.proposal.document", path="/acquisitions/addAcquisitionProposalDocument.jsp"),
-    @Forward(name="view.acquisition.request.item", path="/acquisitions/viewAcquisitionRequestItem.jsp"),
-    @Forward(name="edit.acquisition.request.item", path="/acquisitions/editAcquisitionRequestItem.jsp"),
-    @Forward(name="allocate.funds", path="/acquisitions/allocateFunds.jsp"),
-    @Forward(name="allocate.funds.to.service.provider", path="/acquisitions/allocateFundsToServiceProvider.jsp")
-} )
+@Mapping(path = "/acquisitionProcess")
+@Forwards( { @Forward(name = "edit.request.acquisition", path = "/acquisitions/editAcquisitionRequestInformatio.jsp"),
+	@Forward(name = "view.acquisition.process", path = "/acquisitions/viewAcquisitionProcess.jsp"),
+	@Forward(name = "search.acquisition.process", path = "/acquisitions/searchAcquisitionProcess.jsp"),
+	@Forward(name = "add.acquisition.proposal.document", path = "/acquisitions/addAcquisitionProposalDocument.jsp"),
+	@Forward(name = "view.acquisition.request.item", path = "/acquisitions/viewAcquisitionRequestItem.jsp"),
+	@Forward(name = "edit.acquisition.request.item", path = "/acquisitions/editAcquisitionRequestItem.jsp"),
+	@Forward(name = "allocate.funds", path = "/acquisitions/allocateFunds.jsp"),
+	@Forward(name = "allocate.funds.to.service.provider", path = "/acquisitions/allocateFundsToServiceProvider.jsp"),
+	@Forward(name = "view.active.processes", path = "/acquisitions/viewActiveProcesses.jsp")})
 public class AcquisitionProcessAction extends BaseAction {
 
     private static final Context CONTEXT = new Context("acquisitions");
@@ -56,32 +59,35 @@ public class AcquisitionProcessAction extends BaseAction {
 	public InputStream getInputStream() {
 	    return inputStream;
 	}
+
 	public void setInputStream(InputStream inputStream) {
 	    this.inputStream = inputStream;
 	}
+
 	public String getFilename() {
 	    return filename;
 	}
+
 	public void setFilename(String filename) {
 	    this.filename = filename;
 	}
     }
 
     public final ActionForward createNewAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+	    final HttpServletRequest request, final HttpServletResponse response) {
 	final AcquisitionProcess acquisitionProcess = AcquisitionProcess.createNewAcquisitionProcess();
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
 	return editAcquisitionRequestInformation(mapping, request, acquisitionProcess);
     }
 
     public final ActionForward editAcquisitionRequestInformation(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+	    final HttpServletRequest request, final HttpServletResponse response) {
 	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
 	return editAcquisitionRequestInformation(mapping, request, acquisitionProcess);
     }
 
     protected final ActionForward editAcquisitionRequestInformation(final ActionMapping mapping,
-	    final HttpServletRequest request, final AcquisitionProcess acquisitionProcess) throws Exception {
+	    final HttpServletRequest request, final AcquisitionProcess acquisitionProcess) {
 	final AcquisitionRequest acquisitionRequest = acquisitionProcess.getAcquisitionRequest();
 	final AcquisitionRequestInformation acquisitionRequestInformation = acquisitionRequest.getAcquisitionRequestInformation();
 	request.setAttribute("acquisitionRequestInformation", acquisitionRequestInformation);
@@ -89,26 +95,26 @@ public class AcquisitionProcessAction extends BaseAction {
     }
 
     public final ActionForward viewAcquisitionProcess(final ActionMapping mapping, final HttpServletRequest request,
-	    final AcquisitionProcess acquisitionProcess) throws Exception {
+	    final AcquisitionProcess acquisitionProcess) {
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
 	return mapping.findForward("view.acquisition.process");
     }
 
     public final ActionForward viewAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+	    final HttpServletRequest request, final HttpServletResponse response) {
 	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
 
     public final ActionForward deleteAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+	    final HttpServletRequest request, final HttpServletResponse response) {
 	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
 	acquisitionProcess.delete();
 	return searchAcquisitionProcess(mapping, form, request, response);
     }
 
     public final ActionForward searchAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+	    final HttpServletRequest request, final HttpServletResponse response) {
 	SearchAcquisitionProcess searchAcquisitionProcess = getRenderedObject();
 	if (searchAcquisitionProcess == null) {
 	    searchAcquisitionProcess = new SearchAcquisitionProcess();
@@ -123,7 +129,7 @@ public class AcquisitionProcessAction extends BaseAction {
     }
 
     public final ActionForward prepareAddAcquisitionProposalDocument(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+	    final HttpServletRequest request, final HttpServletResponse response) {
 	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
 	final AcquisitionProposalDocumentForm acquisitionProposalDocumentForm = new AcquisitionProposalDocumentForm();
@@ -132,7 +138,7 @@ public class AcquisitionProcessAction extends BaseAction {
     }
 
     public final ActionForward addAcquisitionProposalDocument(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+	    final HttpServletRequest request, final HttpServletResponse response) {
 	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
 	final AcquisitionProposalDocumentForm acquisitionProposalDocumentForm = getRenderedObject();
@@ -143,7 +149,7 @@ public class AcquisitionProcessAction extends BaseAction {
     }
 
     public final ActionForward downloadAcquisitionProposalDocument(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+	    final HttpServletRequest request, final HttpServletResponse response) throws IOException {
 	final OutputStream outputStream = response.getOutputStream();
 	final AcquisitionProposalDocument acquisitionProposalDocument = getDomainObject(request, "acquisitionProposalDocumentOid");
 	if (acquisitionProposalDocument != null && acquisitionProposalDocument.getContent() != null) {
@@ -157,14 +163,14 @@ public class AcquisitionProcessAction extends BaseAction {
     }
 
     public final ActionForward createNewAcquisitionRequestItem(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+	    final HttpServletRequest request, final HttpServletResponse response) {
 	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
 	final AcquisitionRequestItem acquisitionRequestItem = acquisitionProcess.createAcquisitionRequestItem();
 	return editAcquisitionRequestItem(mapping, request, acquisitionRequestItem);
     }
 
-    protected final ActionForward editAcquisitionRequestItem(final ActionMapping mapping,
-	    final HttpServletRequest request, final AcquisitionRequestItem acquisitionRequestItem) throws Exception {
+    protected final ActionForward editAcquisitionRequestItem(final ActionMapping mapping, final HttpServletRequest request,
+	    final AcquisitionRequestItem acquisitionRequestItem) {
 	final AcquisitionProcess acquisitionProcess = acquisitionRequestItem.getAcquisitionProcess();
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
 	request.setAttribute("acquisitionRequestItem", acquisitionRequestItem);
@@ -172,20 +178,20 @@ public class AcquisitionProcessAction extends BaseAction {
     }
 
     public final ActionForward editAcquisitionRequestItem(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+	    final HttpServletRequest request, final HttpServletResponse response) {
 	final AcquisitionRequestItem acquisitionRequestItem = getDomainObject(request, "acquisitionRequestItemOid");
 	return editAcquisitionRequestItem(mapping, request, acquisitionRequestItem);
     }
 
     public final ActionForward viewAcquisitionRequestItem(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+	    final HttpServletRequest request, final HttpServletResponse response) {
 	final AcquisitionRequestItem acquisitionRequestItem = getDomainObject(request, "acquisitionRequestItemOid");
 	request.setAttribute("acquisitionRequestItem", acquisitionRequestItem);
 	return mapping.findForward("view.acquisition.request.item");
     }
 
     public final ActionForward deleteAcquisitionRequestItem(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+	    final HttpServletRequest request, final HttpServletResponse response) {
 	final AcquisitionRequestItem acquisitionRequestItem = getDomainObject(request, "acquisitionRequestItemOid");
 	final AcquisitionProcess acquisitionProcess = acquisitionRequestItem.getAcquisitionProcess();
 	acquisitionRequestItem.delete();
@@ -193,31 +199,46 @@ public class AcquisitionProcessAction extends BaseAction {
     }
 
     public final ActionForward submitForApproval(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+	    final HttpServletRequest request, final HttpServletResponse response) {
 	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
 	acquisitionProcess.submitForApproval();
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
 
-    public final ActionForward approve(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+    public final ActionForward approve(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
 	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
 	acquisitionProcess.approve();
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
 
     public final ActionForward allocateFunds(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+	    final HttpServletRequest request, final HttpServletResponse response) {
 	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
 	return mapping.findForward("allocate.funds");
     }
 
     public final ActionForward allocateFundsToServiceProvider(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+	    final HttpServletRequest request, final HttpServletResponse response) {
 	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
 	return mapping.findForward("allocate.funds.to.service.provider");
+    }
+
+    public final ActionForward showPendingProcesses(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+
+	List<AcquisitionProcess> processes = new ArrayList<AcquisitionProcess>();
+	
+	for (AcquisitionProcess process : ExpenditureTrackingSystem.getInstance().getAcquisitionProcesses()) {
+	    if (process.isPersonAbleToExecuteActivities()) {
+		processes.add(process);
+	    }
+	}
+	request.setAttribute("activeProcesses", processes);
+	
+	return mapping.findForward("view.active.processes");
     }
 
 }

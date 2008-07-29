@@ -46,9 +46,13 @@
 <html:link action="/acquisitionProcess.do?method=editAcquisitionRequestInformation" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
 	<bean:message key="link.edit" bundle="EXPENDITURE_RESOURCES"/>
 </html:link>
-<html:link action="/acquisitionProcess.do?method=deleteAcquisitionProcess" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
-	<bean:message key="link.delete" bundle="EXPENDITURE_RESOURCES"/>
-</html:link>
+
+<logic:equal name="acquisitionProcess" property="deleteAvailable" value="true">
+	<html:link action="/acquisitionProcess.do?method=deleteAcquisitionProcess" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
+		<bean:message key="link.delete" bundle="EXPENDITURE_RESOURCES"/>
+	</html:link>
+</logic:equal>
+
 <br/>
 <br/>
 <bean:message key="label.acquisition.proposal.document" bundle="ACQUISITION_RESOURCES"/>

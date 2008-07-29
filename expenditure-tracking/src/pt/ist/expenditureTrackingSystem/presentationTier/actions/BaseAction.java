@@ -12,10 +12,13 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 
+import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
+import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.presentationTier.Context;
 import pt.ist.fenixWebFramework.renderers.components.state.IViewState;
 import pt.ist.fenixWebFramework.renderers.model.MetaObject;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
+import pt.ist.fenixWebFramework.security.UserView;
 import pt.ist.fenixframework.DomainObject;
 import pt.ist.fenixframework.pstm.Transaction;
 import pt.utl.ist.fenix.tools.util.FileUtils;
@@ -36,6 +39,11 @@ public abstract class BaseAction extends DispatchAction {
 	return super.execute(mapping, form, request, response);
     }
 
+    public Person getLoggedPerson() {
+	User user = UserView.getUser();
+	return user.getPerson();
+    }
+    
     public <T> T getAttribute(final HttpServletRequest request, final String attributeName) {
 	final T t = (T) request.getAttribute(attributeName);
 	return t == null ? (T) request.getParameter(attributeName) : t;
