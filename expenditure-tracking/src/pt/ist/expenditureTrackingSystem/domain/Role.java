@@ -4,10 +4,10 @@ import pt.ist.fenixWebFramework.services.Service;
 
 public class Role extends Role_Base {
     
-    public  Role(RoleType type) {
+    public Role(RoleType type) {
         super();
         setRoleType(type);
-        this.setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
+        setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
     }
 
     @Service

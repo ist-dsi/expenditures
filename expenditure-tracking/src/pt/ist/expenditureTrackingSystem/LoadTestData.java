@@ -111,15 +111,4 @@ public class LoadTestData {
 	fenixUnit.unit = unit;
     }
 
-    private static void connectUnit(final FenixUnit fenixUnit, final FenixUnitMap fenixUnitMap) {
-	final Unit unit = fenixUnit.unit;
-	final Unit parentUnit = fenixUnit.getParentUnit(fenixUnitMap);
-	unit.setParentUnit(parentUnit);
-	if (parentUnit == null) {
-	    unit.setExpenditureTrackingSystemFromTopLevelUnit(null);    
-	} else {
-	    unit.setExpenditureTrackingSystemFromTopLevelUnit(unit.getExpenditureTrackingSystem());
-	}
-    }
-
 }
