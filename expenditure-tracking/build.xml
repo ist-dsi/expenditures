@@ -61,6 +61,16 @@
 		</fileset>
 	</path>
 
+	<path id="run.class.path">
+		<pathelement path="${build.home.webinf.classes}"/>
+        <fileset dir="${lib}">
+   		    <include name="*.jar"/>
+   		</fileset>
+		<fileset dir="${build.home.webinf.libs}">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
+
 	<target name="check-dml-file" description="Checks if the dml file is still up to date">
 		<uptodate property="dml.skip-compile" targetfile="${build.home.webinf.classes}/domain_model.dml" srcfile="${config}/domain_model.dml"/>
 	</target>
@@ -135,6 +145,12 @@
 			</lib>
 			<classes dir="${build.home.webinf.classes}"/>
 		</war>
+	</target>
+
+	<target name="loadTestData" depends="compile">
+		<java classname="pt.ist.expenditureTrackingSystem.LoadTestData" fork="true">
+			<classpath refid="run.class.path"/>
+		</java>
 	</target>
 
 </project>
