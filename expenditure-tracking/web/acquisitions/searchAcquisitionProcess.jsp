@@ -5,7 +5,7 @@
 
 <h2><bean:message key="label.search.aquisition.process" bundle="EXPENDITURE_RESOURCES"/></h2>
 <br/>
-<fr:edit id="searchAcquisitionProcess"
+<fr:edit action="/acquisitionProcess.do?method=searchAcquisitionProcess"  id="searchAcquisitionProcess"
 		name="searchAcquisitionProcess"
 		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.SearchAcquisitionProcess"
 		schema="searchAcquisitionProcess">

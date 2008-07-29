@@ -7,18 +7,11 @@ import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.pstm.Transaction;
 
 public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
-    
-    public AcquisitionRequestItem(final AcquisitionRequestInformation acquisitionRequestInformation) {
+
+    public AcquisitionRequestItem(final AcquisitionRequest acquisitionRequest) {
 	super();
 	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
-	addAcquisitionRequestInformations(acquisitionRequestInformation);
-    }
-
-    public AcquisitionProcess getAcquisitionProcess() {
-	for (final AcquisitionRequestInformation acquisitionRequestInformation : getAcquisitionRequestInformationsSet()) {
-	    return acquisitionRequestInformation.getAcquisitionProcess();
-	}
-	return null;
+	setAcquisitionRequest(acquisitionRequest);
     }
 
     public BigDecimal getTotalItemValue() {
@@ -28,17 +21,14 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
     }
 
     private BigDecimal multiply(final BigDecimal unitValue, final Integer quantity) {
-	return unitValue == null || quantity == null ? BigDecimal.ZERO
-		: unitValue.multiply(new BigDecimal(quantity.intValue()));
+	return unitValue == null || quantity == null ? BigDecimal.ZERO : unitValue.multiply(new BigDecimal(quantity.intValue()));
     }
 
     @Service
     public void delete() {
-	for (final AcquisitionRequestInformation acquisitionRequestInformation : getAcquisitionRequestInformationsSet()) {
-	    removeAcquisitionRequestInformations(acquisitionRequestInformation);
-	}
+	removeAcquisitionRequest();
 	removeExpenditureTrackingSystem();
 	Transaction.deleteObject(this);
     }
-    
+
 }

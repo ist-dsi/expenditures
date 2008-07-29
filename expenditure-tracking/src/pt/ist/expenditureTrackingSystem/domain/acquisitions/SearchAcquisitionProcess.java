@@ -9,11 +9,11 @@ import pt.ist.expenditureTrackingSystem.domain.Search;
 public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
 
     private String requester;
-    private AcquisitionProcessState acquisitionProcessState;
+    private AcquisitionProcessStateType acquisitionProcessStateType;
     private String fiscalIdentificationCode;
     private String costCenter;
     private String project;
-    private String subproject;	
+    private String subproject;
 
     private class SearchResult extends SearchResultSet<AcquisitionProcess> {
 
@@ -24,24 +24,19 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
 	@Override
 	protected boolean matchesSearchCriteria(final AcquisitionProcess acquisitionProcess) {
 	    final AcquisitionRequest acquisitionRequest = acquisitionProcess.getAcquisitionRequest();
-	    return matchCriteria(acquisitionProcessState, acquisitionProcess.getAcquisitionProcessState())
-	    		&& matchesSearchCriteria(acquisitionRequest);
+	    return matchCriteria(acquisitionProcessStateType, acquisitionProcess.getAcquisitionProcessStateType())
+		    && matchesSearchCriteria(acquisitionRequest);
 	}
 
 	private boolean matchesSearchCriteria(final AcquisitionRequest acquisitionRequest) {
-	    final AcquisitionRequestInformation acquisitionRequestInformation = acquisitionRequest.getAcquisitionRequestInformation();
-	    return matchesSearchCriteria(acquisitionRequestInformation);
+	    return matchCriteria(requester, acquisitionRequest.getRequester().getUsername())
+		    && matchCriteria(fiscalIdentificationCode, acquisitionRequest.getSupplier().getFiscalIdentificationCode())
+		    && matchCriteria(costCenter, acquisitionRequest.getCostCenter())
+		    && matchCriteria(project, acquisitionRequest.getProject())
+		    && matchCriteria(subproject, acquisitionRequest.getSubproject());
 	}
 
-	private boolean matchesSearchCriteria(final AcquisitionRequestInformation acquisitionRequestInformation) {
-	    return matchCriteria(requester, acquisitionRequestInformation.getRequester())
-	    		&& matchCriteria(fiscalIdentificationCode, acquisitionRequestInformation.getFiscalIdentificationCode())
-	    		&& matchCriteria(costCenter, acquisitionRequestInformation.getCostCenter())
-	    		&& matchCriteria(project, acquisitionRequestInformation.getProject())
-	    		&& matchCriteria(subproject, acquisitionRequestInformation.getSubproject());
-	}
-
-	private boolean matchCriteria(final AcquisitionProcessState criteria, final AcquisitionProcessState value) {
+	private boolean matchCriteria(final AcquisitionProcessStateType criteria, final AcquisitionProcessStateType value) {
 	    return criteria == null || criteria == value;
 	}
 
@@ -53,51 +48,51 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
     }
 
     public String getRequester() {
-        return requester;
+	return requester;
     }
 
     public void setRequester(String requester) {
-        this.requester = requester;
+	this.requester = requester;
     }
 
-    public AcquisitionProcessState getAcquisitionProcessState() {
-        return acquisitionProcessState;
+    public AcquisitionProcessStateType getAcquisitionProcessState() {
+	return acquisitionProcessStateType;
     }
 
-    public void setAcquisitionProcessState(AcquisitionProcessState acquisitionProcessState) {
-        this.acquisitionProcessState = acquisitionProcessState;
+    public void setAcquisitionProcessState(AcquisitionProcessStateType acquisitionProcessStateType) {
+	this.acquisitionProcessStateType = acquisitionProcessStateType;
     }
 
     public String getFiscalIdentificationCode() {
-        return fiscalIdentificationCode;
+	return fiscalIdentificationCode;
     }
 
     public void setFiscalIdentificationCode(String fiscalIdentificationCode) {
-        this.fiscalIdentificationCode = fiscalIdentificationCode;
+	this.fiscalIdentificationCode = fiscalIdentificationCode;
     }
 
     public String getCostCenter() {
-        return costCenter;
+	return costCenter;
     }
 
     public void setCostCenter(String costCenter) {
-        this.costCenter = costCenter;
+	this.costCenter = costCenter;
     }
 
     public String getProject() {
-        return project;
+	return project;
     }
 
     public void setProject(String project) {
-        this.project = project;
+	this.project = project;
     }
 
     public String getSubproject() {
-        return subproject;
+	return subproject;
     }
 
     public void setSubproject(String subproject) {
-        this.subproject = subproject;
+	this.subproject = subproject;
     }
 
 }

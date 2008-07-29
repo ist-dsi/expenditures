@@ -4,8 +4,9 @@ package pt.ist.expenditureTrackingSystem.domain;
 valueType org.joda.time.DateTime as DateTime;
 valueType pt.ist.expenditureTrackingSystem.domain.util.ByteArray as ByteArray;
 valueType pt.ist.expenditureTrackingSystem.domain.util.MonitaryValue as MonitaryValue;
-enum pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessState as AcquisitionProcessState;
+enum pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType as AcquisitionProcessStateType;
 enum pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationType as AuthorizationType;
+/*valueType pt.ist.expenditureTrackingSystem.domain.util.Address as Address;*/
 enum pt.ist.expenditureTrackingSystem.domain.RoleType as RoleType;
 
 class ExpenditureTrackingSystem {
@@ -13,18 +14,16 @@ class ExpenditureTrackingSystem {
 
 
 class acquisitions.AcquisitionProcess {
-	AcquisitionProcessState acquisitionProcessState;
 	String fundAllocationId;
 	DateTime fundAllocationExpirationDate;
 }
 
-class acquisitions.AcquisitionRequest {
+class acquisitions.AcquisitionProcessState {
+	AcquisitionProcessStateType acquisitionProcessStateType;
+	DateTime whenDateTime;
 }
 
-class acquisitions.AcquisitionRequestInformation {
-	DateTime since;
-	String requester;
-	String fiscalIdentificationCode;
+class acquisitions.AcquisitionRequest {
 	String costCenter;
 	String project;
 	String subproject;	
@@ -71,6 +70,15 @@ class organization.Unit {
 	String costCenter;
 }
 
+class organization.Supplier {
+	String name;
+	String fiscalIdentificationCode;
+	String address;
+	String phone;
+	String fax;
+	String eMail;
+}
+
 class Role {
 	RoleType roleType;
 }
@@ -94,20 +102,6 @@ relation AcquisitionProcessAcquisitionRequest {
 	acquisitions.AcquisitionRequest playsRole acquisitionRequest;
 }
 
-relation ExpenditureTrackingSystemAcquisitionRequestInformation {
-	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
-	acquisitions.AcquisitionRequestInformation playsRole acquisitionRequestInformations {
-		multiplicity *;
-	}
-}
-
-relation AcquisitionRequestAcquisitionRequestInformation {
-	acquisitions.AcquisitionRequest playsRole acquisitionRequest;
-	acquisitions.AcquisitionRequestInformation playsRole acquisitionRequestInformations {
-		multiplicity *;
-	}
-}
-
 relation ExpenditureTrackingSystemAcquisitionRequestItem {
 	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
 	acquisitions.AcquisitionRequestItem playsRole acquisitionRequestItems {
@@ -115,10 +109,8 @@ relation ExpenditureTrackingSystemAcquisitionRequestItem {
 	}
 }
 
-relation AcquisitionRequestInformationAcquisitionRequestItem {
-	acquisitions.AcquisitionRequestInformation playsRole acquisitionRequestInformations {
-		multiplicity *;
-	}
+relation AcquisitionRequestAcquisitionRequestItem {
+	acquisitions.AcquisitionRequest playsRole acquisitionRequest;
 	acquisitions.AcquisitionRequestItem playsRole acquisitionRequestItems {
 		multiplicity *;
 	}
@@ -131,10 +123,8 @@ relation ExpenditureTrackingSystemFile {
 	}
 }
 
-relation AcquisitionRequestInformationAcquisitionRequest {
-	acquisitions.AcquisitionRequestInformation playsRole acquisitionRequestInformations {
-		multiplicity *;
-	}
+relation AcquisitionRequestAcquisitionProposalDocument {
+	acquisitions.AcquisitionRequest playsRole acquisitionRequest ;
 	acquisitions.AcquisitionProposalDocument playsRole acquisitionProposalDocument;
 }
 
@@ -194,6 +184,13 @@ relation ExpenditureTrackingSystemOptions {
 	}
 }
 
+relation ExpenditureTrackingSystemSuppliers {
+	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
+	organization.Supplier playsRole suppliers {
+		multiplicity *;
+	}
+}
+
 relation PersonOptions {
 	organization.Person playsRole person;
 	Options playsRole options;
@@ -214,3 +211,38 @@ relation PersonRole {
 		multiplicity *;
 	}
 } 
+
+relation AcquisitionRequestSupplier {
+	acquisitions.AcquisitionRequest playsRole acquisitionRequests {
+		multiplicity *;
+	}
+	organization.Supplier playsRole supplier;
+}
+
+relation AcquisitionRequestRequester {
+	organization.Person playsRole requester;
+	acquisitions.AcquisitionRequest playsRole acquisitionRequests {
+		multiplicity *;
+	}
+}
+
+relation AcquisitionProcessStatePerson {
+	organization.Person playsRole who;
+	acquisitions.AcquisitionProcessState playsRole acquisitionProcessStates {
+		multiplicity *;
+	}
+}
+
+relation AcquisitionProcessStateAcquisitionProcess {
+	acquisitions.AcquisitionProcess playsRole acquisitionProcess;
+	acquisitions.AcquisitionProcessState playsRole acquisitionProcessStates {
+		multiplicity *;
+	}
+}
+
+relation ExpenditureTrackingSystemAcquisitionProcessState {
+	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
+	acquisitions.AcquisitionProcessState playsRole acquisitionProcessStates {
+		multiplicity *;
+	}
+}

@@ -33,17 +33,21 @@
 <br />
 </logic:equal>
 
+<html:link action="/acquisitionProcess.do?method=prepareCreateAcquisitionRequest" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
+	<bean:message key="link.create.acquisition.request" bundle="ACQUISITION_RESOURCES"/>
+</html:link>
+<br />
 <br/>
-<fr:view name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestInformation"
-		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestInformation"
-		schema="viewAcquisitionRequestInformation">
+<fr:view name="acquisitionProcess" property="acquisitionRequest"
+		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest"
+		schema="viewAcquisitionRequest">
 	<fr:layout name="tabular">
 		<fr:property name="classes" value="tstyle5 thmiddle thlight mtop05"/>
 		<fr:property name="columnClasses" value=",,tdclear tderror1"/>
 	</fr:layout>
 </fr:view>
 <br/>
-<html:link action="/acquisitionProcess.do?method=editAcquisitionRequestInformation" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
+<html:link action="/acquisitionProcess.do?method=editAcquisitionRequest" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
 	<bean:message key="link.edit" bundle="EXPENDITURE_RESOURCES"/>
 </html:link>
 
@@ -56,12 +60,12 @@
 <br/>
 <br/>
 <bean:message key="label.acquisition.proposal.document" bundle="ACQUISITION_RESOURCES"/>
-<logic:present name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestInformation.acquisitionProposalDocument">
-	<html:link action="/acquisitionProcess.do?method=downloadAcquisitionProposalDocument" paramId="acquisitionProposalDocumentOid" paramName="acquisitionProcess" paramProperty="acquisitionRequest.acquisitionRequestInformation.acquisitionProposalDocument.OID">
-		<bean:write name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestInformation.acquisitionProposalDocument.filename"/>
+<logic:present name="acquisitionProcess" property="acquisitionRequest.acquisitionProposalDocument">
+	<html:link action="/acquisitionProcess.do?method=downloadAcquisitionProposalDocument" paramId="acquisitionProposalDocumentOid" paramName="acquisitionProcess" paramProperty="acquisitionRequest.acquisitionProposalDocument.OID">
+		<bean:write name="acquisitionProcess" property="acquisitionRequest.acquisitionProposalDocument.filename"/>
 	</html:link>	
 </logic:present>
-<logic:notPresent name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestInformation.acquisitionProposalDocument">
+<logic:notPresent name="acquisitionProcess" property="acquisitionRequest.acquisitionProposalDocument">
 	--
 </logic:notPresent>
 <br/>
@@ -80,8 +84,8 @@
 </logic:equal>
 <br/>
 <br/>
-<logic:present name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestInformation.acquisitionRequestItemsSet">
-	<fr:view name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestInformation.acquisitionRequestItemsSet"
+<logic:present name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestItemsSet">
+	<fr:view name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestItemsSet"
 			schema="viewAcquisitionRequestItemInList">
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="tstyle1"/>

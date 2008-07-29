@@ -43,13 +43,3 @@
 </logic:present>
 <br/>
 <br/>
-<bean:define id="urlView">/acquisitionProcess.do?method=viewAcquisitionProcess&amp;acquisitionProcessOid=<bean:write name="acquisitionProcess" property="OID"/></bean:define>
-<fr:edit id="acquisitionProcess"
-		name="acquisitionProcess"
-		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess"
-		schema="allocateFunds"
-		action="<%= urlView %>">
-	<fr:layout name="tabular">
-		<fr:destination name="cancel" path="<%= urlView %>" />
-	</fr:layout>
-</fr:edit>

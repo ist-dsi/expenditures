@@ -7,16 +7,16 @@
 <br />
 
 <bean:define id="acquisitionProcess"
-		name="acquisitionRequestInformation"
-		property="acquisitionRequest.acquisitionProcess"
+		name="acquisitionRequest"
+		property="acquisitionProcess"
 		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess"
 		/>
 <bean:define id="urlView">/acquisitionProcess.do?method=viewAcquisitionProcess&amp;acquisitionProcessOid=<%= acquisitionProcess.getOID() %></bean:define>
-<bean:define id="urlEdit">/acquisitionProcess.do?method=editAcquisitionRequestInformation&amp;acquisitionProcessOid=<%= acquisitionProcess.getOID() %></bean:define>
-<fr:edit id="acquisitionRequestInformation"
-		name="acquisitionRequestInformation"
-		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestInformation"
-		schema="editAcquisitionRequestInformation"
+<bean:define id="urlEdit">/acquisitionProcess.do?method=editAcquisitionRequest&amp;acquisitionProcessOid=<%= acquisitionProcess.getOID() %></bean:define>
+<fr:edit id="acquisitionRequest"
+		name="acquisitionRequest"
+		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest"
+		schema="editAcquisitionRequest"
 		action="<%= urlView %>">
 	<fr:layout name="tabular">
 		<fr:destination name="invalid" path="<%= urlEdit %>" />
