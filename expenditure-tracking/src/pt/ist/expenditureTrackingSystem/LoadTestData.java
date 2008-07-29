@@ -2,9 +2,13 @@ package pt.ist.expenditureTrackingSystem;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import pt.ist.expenditureTrackingSystem._development.PropertiesManager;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
+import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.fenixWebFramework.FenixWebFramework;
 import pt.ist.fenixWebFramework.services.Service;
@@ -49,12 +53,6 @@ public class LoadTestData {
 	    costCenterCode = costCenterString.equals("null") ? null : costCenterString;
 
 	    name = line.substring(iTab3 + 1);
-
-	    System.out.println(oid);
-	    System.out.println(parent);
-	    System.out.println(costCenterCode);
-	    System.out.println(name);
-	    System.out.println();
 	}
 
 	public Unit getParentUnit(final FenixUnitMap fenixUnitMap) {
@@ -91,16 +89,67 @@ public class LoadTestData {
 
     }
 
+    private static class FenixPerson {
+
+	private String username;
+	private String name;
+	private Set<Long> unitOids = new HashSet<Long>();
+
+	public FenixPerson(final String line) {
+	    final String[] parts = line.split("\t");
+	    username = parts[0];
+	    name = parts[1];
+	    for (int i = 2; i < parts.length; i++) {
+		final String unitOid = parts[i];
+		unitOids.add(Long.valueOf(unitOid));
+	    }
+	}
+
+    }
+
+    private static class FenixPeopleSet extends ArrayList<FenixPerson> {
+
+	public FenixPeopleSet(final String contents) {
+	    for (final String line : contents.split("\n")) {
+		final FenixPerson fenixPerson = new FenixPerson(line);
+		add(fenixPerson);
+	    }
+	}
+
+    }
+
     private static void loadData() throws IOException {
-	final String contents = FileUtils.readFile("units.txt");
-	final FenixUnitMap fenixUnitMap = new FenixUnitMap(contents);
+	final String unitContents = FileUtils.readFile("units.txt");
+	final FenixUnitMap fenixUnitMap = new FenixUnitMap(unitContents);
 	createUnits(fenixUnitMap);
+	final String peopleContents = FileUtils.readFile("people.txt");
+	final FenixPeopleSet fenixPeopleSet = new FenixPeopleSet(peopleContents);
+	createPeople(fenixPeopleSet, fenixUnitMap);
     }
 
     @Service
     private static void createUnits(final FenixUnitMap fenixUnitMap) {
 	for (final FenixUnit fenixUnit : fenixUnitMap) {
 	    createUnit(fenixUnit, fenixUnitMap);
+	}
+    }
+
+    @Service
+    private static void createPeople(final FenixPeopleSet fenixPeopleSet, final FenixUnitMap fenixUnitMap) {
+	for (final FenixPerson fenixPerson : fenixPeopleSet) {
+	    final Person person = Person.createPerson();
+	    person.setUsername(fenixPerson.username);
+	    person.setName(fenixPerson.name);
+	    if (!fenixPerson.unitOids.isEmpty()) {
+		person.getOptions().setDisplayAuthorizationPending(Boolean.TRUE);
+		person.getOptions().setRecurseAuthorizationPendingUnits(Boolean.TRUE);
+	    }
+	    for (final Long oid : fenixPerson.unitOids) {
+		final FenixUnit fenixUnit = fenixUnitMap.get(oid);
+		final Authorization authorization = new Authorization(person);
+		authorization.setUnit(fenixUnit.unit);
+		authorization.setCanDelegate(Boolean.TRUE);
+	    }
 	}
     }
 

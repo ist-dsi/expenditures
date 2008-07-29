@@ -1,6 +1,7 @@
 package pt.ist.expenditureTrackingSystem.domain.organization;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Set;
 
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
@@ -27,7 +28,9 @@ public class SearchUsers extends Search<Person> {
 
     @Override
     public Set<Person> search() {
-	return new SearchResult(ExpenditureTrackingSystem.getInstance().getPeopleSet());
+	final Set<Person> people = username != null || name != null ?
+		ExpenditureTrackingSystem.getInstance().getPeopleSet() : Collections.EMPTY_SET;
+	return new SearchResult(people);
     }
 
     public String getUsername() {

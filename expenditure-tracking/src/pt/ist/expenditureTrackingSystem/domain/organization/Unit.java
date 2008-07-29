@@ -42,10 +42,12 @@ public class Unit extends Unit_Base {
 
     public void findAcquisitionProcessesPendingAuthorization(final Set<AcquisitionProcess> result, final boolean recurseSubUnits) {
 	final String costCenter = getCostCenter();
-	for (final AcquisitionProcess acquisitionProcess : ExpenditureTrackingSystem.getInstance().getAcquisitionProcessesSet()) {
-	    if (costCenter.equals(acquisitionProcess.getAcquisitionRequest().getAcquisitionRequestInformation().getCostCenter())) {
-		if (acquisitionProcess.isPendingApproval()) {
-		    result.add(acquisitionProcess);
+	if (costCenter != null) {
+	    for (final AcquisitionProcess acquisitionProcess : ExpenditureTrackingSystem.getInstance().getAcquisitionProcessesSet()) {
+		if (costCenter.equals(acquisitionProcess.getAcquisitionRequest().getAcquisitionRequestInformation().getCostCenter())) {
+		    if (acquisitionProcess.isPendingApproval()) {
+			result.add(acquisitionProcess);
+		    }
 		}
 	    }
 	}
