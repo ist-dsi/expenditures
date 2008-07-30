@@ -9,34 +9,37 @@
 	<html:link action="/acquisitionProcess.do?method=submitForApproval" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
 		<bean:message key="link.submit.for.approval" bundle="ACQUISITION_RESOURCES"/>
 	</html:link>
+	<br />
 </logic:equal>
-<br />
 
 <logic:equal name="acquisitionProcess" property="approveAvailable" value="true">
-<html:link action="/acquisitionProcess.do?method=approve" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
-	<bean:message key="link.approve" bundle="ACQUISITION_RESOURCES"/>
-</html:link>
+	<html:link action="/acquisitionProcess.do?method=approve" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
+		<bean:message key="link.approve" bundle="ACQUISITION_RESOURCES"/>
+	</html:link>
+	<br />
 </logic:equal>
-<br />
 
 <logic:equal name="acquisitionProcess" property="fundAllocationIdAvailable" value="true">
-<html:link action="/acquisitionProcess.do?method=allocateFunds" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
-	<bean:message key="link.allocate.funds" bundle="ACQUISITION_RESOURCES"/>
-</html:link>
-<br />
+	<html:link action="/acquisitionProcess.do?method=allocateFunds" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
+		<bean:message key="link.allocate.funds" bundle="ACQUISITION_RESOURCES"/>
+	</html:link>
+	<br />
 </logic:equal>
 
 <logic:equal name="acquisitionProcess" property="fundAllocationExpirationDateAvailable" value="true">
-<html:link action="/acquisitionProcess.do?method=allocateFundsToServiceProvider" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
-	<bean:message key="link.allocate.funds.to.service.provider" bundle="ACQUISITION_RESOURCES"/>
-</html:link>
-<br />
+	<html:link action="/acquisitionProcess.do?method=allocateFundsToServiceProvider" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
+		<bean:message key="link.allocate.funds.to.service.provider" bundle="ACQUISITION_RESOURCES"/>
+	</html:link>
+	<br />
 </logic:equal>
 
-<html:link action="/acquisitionProcess.do?method=prepareCreateAcquisitionRequest" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
-	<bean:message key="link.create.acquisition.request" bundle="ACQUISITION_RESOURCES"/>
-</html:link>
-<br />
+<logic:equal name="acquisitionProcess" property="acquisitionProcessed" value="true">
+</logic:equal>
+	<html:link action="/acquisitionProcess.do?method=receiveInvoice" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
+		<bean:message key="link.receive.invoice" bundle="ACQUISITION_RESOURCES"/>
+	</html:link>
+	<br />
+
 <br/>
 <fr:view name="acquisitionProcess" property="acquisitionRequest"
 		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest"

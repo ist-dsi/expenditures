@@ -9,6 +9,7 @@ enum pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationType as
 /*valueType pt.ist.expenditureTrackingSystem.domain.util.Address as Address;*/
 enum pt.ist.expenditureTrackingSystem.domain.RoleType as RoleType;
 
+
 class ExpenditureTrackingSystem {
 }
 
@@ -26,7 +27,7 @@ class acquisitions.AcquisitionProcessState {
 class acquisitions.AcquisitionRequest {
 	String costCenter;
 	String project;
-	String subproject;	
+	String subproject;
 }
 
 class acquisitions.AcquisitionRequestItem {
@@ -52,6 +53,11 @@ class File {
 }
 
 	class acquisitions.AcquisitionProposalDocument extends File {
+	}
+
+	class acquisitions.Invoice extends File {
+		String invoiceNumber;
+		DateTime invoiceDate;
 	}
 
 class Options {
@@ -124,8 +130,13 @@ relation ExpenditureTrackingSystemFile {
 }
 
 relation AcquisitionRequestAcquisitionProposalDocument {
-	acquisitions.AcquisitionRequest playsRole acquisitionRequest ;
+	acquisitions.AcquisitionRequest playsRole acquisitionRequest;
 	acquisitions.AcquisitionProposalDocument playsRole acquisitionProposalDocument;
+}
+
+relation AcquisitionRequestInvoice {
+	acquisitions.AcquisitionRequest playsRole acquisitionRequest;
+	acquisitions.Invoice playsRole invoice;
 }
 
 relation ExpenditureTrackingSystemPerson {

@@ -161,8 +161,7 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
     }
 
     protected AcquisitionProcessState getLastAcquisitionProcessState() {
-	List<AcquisitionProcessState> processStates = new ArrayList<AcquisitionProcessState>(getAcquisitionProcessStates());
-	return Collections.max(processStates, AcquisitionProcessState.COMPARATOR_BY_WHEN);
+	return Collections.max(getAcquisitionProcessStates(), AcquisitionProcessState.COMPARATOR_BY_WHEN);
     }
 
     protected AcquisitionProcessStateType getLastAcquisitionProcessStateType() {
@@ -186,4 +185,9 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 		|| isSubmitForApprovalAvailable() || isApproveAvailable() || isDeleteAvailable() || isFundAllocationIdAvailable()
 		|| isFundAllocationExpirationDateAvailable();
     }
+
+    public boolean isAcquisitionProcessed() {
+	return isProcessInState(AcquisitionProcessStateType.ACQUISITION_PROCESSED);
+    }
+
 }

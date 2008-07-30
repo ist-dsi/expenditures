@@ -1,9 +1,7 @@
 package pt.ist.expenditureTrackingSystem.presentationTier.actions.acquisitions;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.joda.time.DateTime;
 
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
@@ -24,6 +23,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestIt
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.SearchAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.presentationTier.Context;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.BaseAction;
+import pt.ist.expenditureTrackingSystem.presentationTier.util.FileUploadBean;
 import pt.ist.fenixWebFramework.security.UserView;
 import pt.ist.fenixWebFramework.struts.annotations.Forward;
 import pt.ist.fenixWebFramework.struts.annotations.Forwards;
@@ -39,7 +39,9 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "allocate.funds", path = "/acquisitions/allocateFunds.jsp"),
 	@Forward(name = "allocate.funds.to.service.provider", path = "/acquisitions/allocateFundsToServiceProvider.jsp"),
 	@Forward(name = "prepare.create.acquisition.request", path = "/acquisitions/createAcquisitionRequest.jsp"),
-	@Forward(name = "view.active.processes", path = "/acquisitions/viewActiveProcesses.jsp")})
+	@Forward(name = "view.active.processes", path = "/acquisitions/viewActiveProcesses.jsp"),
+	@Forward(name = "receive.invoice", path = "/acquisitions/receiveInvoice.jsp")
+})
 public class AcquisitionProcessAction extends BaseAction {
 
     private static final Context CONTEXT = new Context("acquisitions");
@@ -49,27 +51,24 @@ public class AcquisitionProcessAction extends BaseAction {
 	return CONTEXT;
     }
 
-    public static class AcquisitionProposalDocumentForm implements Serializable {
-	private transient InputStream inputStream;
-	private String filename;
+    public static class AcquisitionProposalDocumentForm extends FileUploadBean {
+    }
 
-	public AcquisitionProposalDocumentForm() {
+    public static class ReceiveInvoiceForm extends FileUploadBean {
+	private String invoiceNumber;
+	private DateTime invoiceDate;
+
+	public String getInvoiceNumber() {
+	    return invoiceNumber;
 	}
-
-	public InputStream getInputStream() {
-	    return inputStream;
+	public void setInvoiceNumber(String invoiceNumber) {
+	    this.invoiceNumber = invoiceNumber;
 	}
-
-	public void setInputStream(InputStream inputStream) {
-	    this.inputStream = inputStream;
+	public DateTime getInvoiceDate() {
+	    return invoiceDate;
 	}
-
-	public String getFilename() {
-	    return filename;
-	}
-
-	public void setFilename(String filename) {
-	    this.filename = filename;
+	public void setInvoiceDate(DateTime invoiceDate) {
+	    this.invoiceDate = invoiceDate;
 	}
     }
 
@@ -245,6 +244,15 @@ public class AcquisitionProcessAction extends BaseAction {
 	request.setAttribute("activeProcesses", processes);
 	
 	return mapping.findForward("view.active.processes");
+    }    
+
+    public final ActionForward receiveInvoice(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
+	request.setAttribute("acquisitionProcess", acquisitionProcess);
+	final ReceiveInvoiceForm receiveInvoiceForm = new ReceiveInvoiceForm();
+	request.setAttribute("receiveInvoiceForm", receiveInvoiceForm);
+	return mapping.findForward("receive.invoice");
     }    
 
 }
