@@ -265,7 +265,7 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
     
     public boolean isPayAcquisitionAvailable() {
 	User user = UserView.getUser();
-	return user.getPerson().hasRoleType(RoleType.ACQUISITION_CENTRAL) && isProcessInState(AcquisitionProcessStateType.INVOICE_CONFIRMED);
+	return user != null && user.getPerson().hasRoleType(RoleType.ACQUISITION_CENTRAL) && isProcessInState(AcquisitionProcessStateType.INVOICE_CONFIRMED);
     }
     
     @Service
@@ -278,7 +278,7 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
     
     public boolean isAlocateFundsPermanentlyAvailable() {
 	User user = UserView.getUser();
-	return user.getPerson().hasRoleType(RoleType.ACCOUNTABILITY) && isProcessInState(AcquisitionProcessStateType.ACQUISITION_PAYED);
+	return user != null && user.getPerson().hasRoleType(RoleType.ACCOUNTABILITY) && isProcessInState(AcquisitionProcessStateType.ACQUISITION_PAYED);
     }
     
     @Service
