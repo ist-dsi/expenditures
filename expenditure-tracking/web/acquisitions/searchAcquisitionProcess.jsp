@@ -10,25 +10,16 @@
 		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.SearchAcquisitionProcess"
 		schema="searchAcquisitionProcess">
 	<fr:layout name="tabular">
+		<fr:property name="classes" value="form"/>
 	</fr:layout>
 </fr:edit>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
+
+
 <bean:define id="acquisitionProcesses" name="searchAcquisitionProcess" property="result"/>
 <fr:view name="acquisitionProcesses"
 		schema="viewAcquisitionProcessInList">
 	<fr:layout name="tabular">
-		<fr:property name="classes" value="tstyle1"/>
+		<fr:property name="classes" value="tstyle2 mtop2"/>
 
 		<fr:property name="link(view)" value="/acquisitionProcess.do?method=viewAcquisitionProcess"/>
 		<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>

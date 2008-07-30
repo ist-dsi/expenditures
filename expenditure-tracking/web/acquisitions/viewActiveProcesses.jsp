@@ -5,13 +5,13 @@
 
 
 <logic:empty name="activeProcesses">
-	<em><bean:message key="label.no.processes.that.user.can.operate" bundle="EXPENDITURE_RESOURCES"/>.</em>
+	<p><em><bean:message key="label.no.processes.that.user.can.operate" bundle="EXPENDITURE_RESOURCES"/>.</em></p>
 </logic:empty>
 
 
 <fr:view name="activeProcesses" schema="viewAcquisitionProcessInList">
 	<fr:layout name="tabular">
-			
+		<fr:property name="classes" value="tstyle2"/>
 		<fr:property name="link(view)" value="/acquisitionProcess.do?method=viewAcquisitionProcess"/>
 		<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
 		<fr:property name="key(view)" value="link.view"/>

@@ -2,12 +2,13 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 
+<%-- 
 <logic:present name="acquisitionProcess">
 	<p>
 		<jsp:include page="availableOperationsMenu.jsp"/>
 	</p>
 </logic:present>
-<p>
+--%>
 	<ul>
 		<li>
 			<html:link action="/acquisitionProcess.do?method=createNewAcquisitionProcess">
@@ -25,4 +26,3 @@
 			</html:link>
 		</li>	
 	</ul>
-</p>

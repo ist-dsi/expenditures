@@ -3,8 +3,6 @@
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
 <h2><bean:message key="label.view.acquisition.process" bundle="EXPENDITURE_RESOURCES"/></h2>
-<br />
-<br />
 
 <bean:define id="acquisitionProcess"
 		name="acquisitionProcess"
@@ -19,7 +17,8 @@
 		schema="addAcquisitionProposalDocument"
 		action="<%= urlAdd %>">
 	<fr:layout name="tabular">
+		<fr:property name="classes" value="form"/>
+	</fr:layout>
 		<fr:destination name="invalid" path="<%= urlPrepareAdd %>" />
 		<fr:destination name="cancel" path="<%= urlView %>" />
-	</fr:layout>
 </fr:edit>

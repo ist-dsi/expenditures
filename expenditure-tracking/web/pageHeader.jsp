@@ -16,8 +16,8 @@
 </logic:notPresent>
 <logic:present name="USER_SESSION_ATTRIBUTE">
 	<form class="login">
-		<html:link action="/customize.do?method=showOptions"><bean:message key="label.preferences" bundle="EXPENDITURE_RESOURCES"/></html:link>
-		<bean:message key="label.logged.is.as" bundle="EXPENDITURE_RESOURCES"/> <bean:write name="USER_SESSION_ATTRIBUTE" property="username"/>
+		<html:link action="/customize.do?method=showOptions"><bean:message key="label.preferences" bundle="EXPENDITURE_RESOURCES"/></html:link> | 
+		<bean:message key="label.logged.is.as" bundle="EXPENDITURE_RESOURCES"/> <bean:write name="USER_SESSION_ATTRIBUTE" property="username"/> | 
 		<html:link action="/authenticationAction.do?method=logout"><bean:message key="label.logout" bundle="EXPENDITURE_RESOURCES"/></html:link>
 	</form>
 </logic:present>
