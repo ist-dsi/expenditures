@@ -10,6 +10,7 @@ import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
+import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.fenixWebFramework.security.UserView;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.pstm.Transaction;
@@ -127,9 +128,7 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
     }
 
     public boolean isFundAllocationIdAvailable() {
-	User user = UserView.getUser();
-	return user != null && user.getPerson().hasRoleType(RoleType.ACCOUNTABILITY)
-		&& isProcessInState(AcquisitionProcessStateType.APPROVED);
+	return userHasRole(RoleType.ACCOUNTABILITY) && isProcessInState(AcquisitionProcessStateType.APPROVED);
     }
 
     @Override
@@ -141,10 +140,13 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 	new AcquisitionProcessState(this, AcquisitionProcessStateType.FUNDS_ALLOCATED);
     }
 
+    protected boolean userHasRole(final RoleType roleType) {
+	final User user = UserView.getUser();
+	return user != null && user.getPerson().hasRoleType(roleType);
+    }
+
     public boolean isFundAllocationExpirationDateAvailable() {
-	User user = UserView.getUser();
-	return user != null && user.getPerson().hasRoleType(RoleType.ACQUISITION_CENTRAL)
-		&& isProcessInState(AcquisitionProcessStateType.FUNDS_ALLOCATED);
+	return userHasRole(RoleType.ACQUISITION_CENTRAL) && isProcessInState(AcquisitionProcessStateType.FUNDS_ALLOCATED);
     }
 
     @Override
@@ -167,9 +169,7 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
     }
 
     public boolean isCreateAcquisitionRequestAvailable() {
-	User user = UserView.getUser();
-	return user != null && user.getPerson().hasRoleType(RoleType.ACQUISITION_CENTRAL)
-		&& isProcessInState(AcquisitionProcessStateType.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER);
+	return userHasRole(RoleType.ACQUISITION_CENTRAL) && isProcessInState(AcquisitionProcessStateType.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER);
     }
 
     @Service
@@ -231,8 +231,7 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
     }
 
     public boolean isReceiveInvoiceAvailable() {
-	final User user = UserView.getUser();
-	return isAcquisitionProcessed() && user.getPerson().hasRoleType(RoleType.ACCOUNTABILITY);
+	return isAcquisitionProcessed() && userHasRole(RoleType.ACCOUNTABILITY);
     }
 
     @Service
@@ -264,8 +263,7 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
     
     
     public boolean isPayAcquisitionAvailable() {
-	User user = UserView.getUser();
-	return user != null && user.getPerson().hasRoleType(RoleType.ACQUISITION_CENTRAL) && isProcessInState(AcquisitionProcessStateType.INVOICE_CONFIRMED);
+	return userHasRole(RoleType.ACQUISITION_CENTRAL) && isProcessInState(AcquisitionProcessStateType.INVOICE_CONFIRMED);
     }
     
     @Service
@@ -275,10 +273,9 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 	}
 	new AcquisitionProcessState(this,AcquisitionProcessStateType.ACQUISITION_PAYED);
     }
-    
+
     public boolean isAlocateFundsPermanentlyAvailable() {
-	User user = UserView.getUser();
-	return user != null && user.getPerson().hasRoleType(RoleType.ACCOUNTABILITY) && isProcessInState(AcquisitionProcessStateType.ACQUISITION_PAYED);
+	return userHasRole(RoleType.ACCOUNTABILITY) && isProcessInState(AcquisitionProcessStateType.ACQUISITION_PAYED);
     }
     
     @Service
@@ -287,6 +284,24 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 	    throw new DomainException("error.acquisitionProcess.invalid.state.to.run.alocateFundsPermanently");
 	}
 	new AcquisitionProcessState(this,AcquisitionProcessStateType.FUNDS_ALLOCATED_PERMANENTLY);
+    }
+
+    public Unit getUnit() {
+	final AcquisitionRequest acquisitionRequest = getAcquisitionRequest();
+	return Unit.findUnitByCostCenter(acquisitionRequest.getCostCenter());
+    }
+
+    public boolean isAllowedToViewCostCenterExpenditures() {
+	try {
+	return getUnit() != null && isResponsibleForUnit() || userHasRole(RoleType.ACCOUNTABILITY);
+	} catch (Exception e) {
+	    e.printStackTrace();
+	    throw new Error(e);
+	}
+    }
+
+    public boolean isAllowedToViewSupplierExpenditures() {
+	return userHasRole(RoleType.ACQUISITION_CENTRAL);
     }
 
 }

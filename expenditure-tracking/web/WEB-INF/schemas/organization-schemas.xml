@@ -40,3 +40,4 @@
 	<slot name="unit.name" key="label.organization.name" bundle="ORGANIZATION_RESOURCES"/>
 	<slot name="unit.costCenter" key="label.organization.cost.center" bundle="ORGANIZATION_RESOURCES"/>
 </schema>
+

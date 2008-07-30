@@ -12,6 +12,18 @@
 <div class="infoop1" style="width: 360px">
 	<jsp:include page="availableOperationsMenu.jsp"/>
 </div>
+<br/>
+
+<logic:equal name="acquisitionProcess" property="allowedToViewCostCenterExpenditures" value="true">
+	<bean:message key="label.unit.total.allocated" bundle="ORGANIZATION_RESOURCES"/>
+	<bean:write name="acquisitionProcess" property="unit.totalAllocated"/>
+	<br/>
+</logic:equal>
+<logic:equal name="acquisitionProcess" property="allowedToViewSupplierExpenditures" value="true">
+	<bean:message key="label.supplier.total.allocated" bundle="ORGANIZATION_RESOURCES"/>
+	<bean:write name="acquisitionProcess" property="acquisitionRequest.supplier.totalAllocated"/>
+	<br/>
+</logic:equal>
 
 <div class="infoop2" style="width: 360px">
 	<fr:view name="acquisitionProcess" property="acquisitionRequest"
