@@ -10,7 +10,10 @@ public enum AcquisitionProcessStateType {
     SUBMITTED_FOR_APPROVAL,
     APPROVED,
     FUNDS_ALLOCATED,
-    FUNDS_ALLOCATED_TO_SERVICE_PROVIDER;
+    FUNDS_ALLOCATED_TO_SERVICE_PROVIDER,
+    ACQUISITION_PROCESSED,
+    INVOICE_RECEIVED,
+    INVOICE_CONFIRMED;
 
     public String getLocalizedName() {
 	final ResourceBundle resourceBundle = ResourceBundle.getBundle("resources.EnumerationResources", Language.getLocale());
