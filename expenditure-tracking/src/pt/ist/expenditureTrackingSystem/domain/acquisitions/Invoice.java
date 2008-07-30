@@ -9,5 +9,9 @@ public class Invoice extends Invoice_Base {
 	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
 	setAcquisitionRequest(acquisitionRequest);
     }
+
+    public boolean isInvoiceReceived() {
+	return getInvoiceNumber() != null && getInvoiceNumber().length() > 0 && getInvoiceDate() != null;
+    }
     
 }

@@ -83,9 +83,9 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 	return getAcquisitionRequest().getRequester();
     }
 
-    public boolean isApproveAvailable() {
+    public boolean isResponsibleForUnit() {
 	User user = UserView.getUser();
-	if (!isPendingApproval() || user == null) {
+	if (user == null) {
 	    return false;
 	}
 
@@ -97,6 +97,11 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 	    }
 	}
 	return false;
+	
+    }
+
+    public boolean isApproveAvailable() {
+	return isPendingApproval() && isResponsibleForUnit();
     }
 
     @Service
@@ -187,13 +192,24 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
     }
 
     public boolean isPersonAbleToExecuteActivities() {
-	return isAcquisitionProposalDocumentAvailable() || isCreateAcquisitionRequestItemAvailable()
-		|| isSubmitForApprovalAvailable() || isApproveAvailable() || isDeleteAvailable() || isFundAllocationIdAvailable()
-		|| isFundAllocationExpirationDateAvailable();
+	return isAcquisitionProposalDocumentAvailable()
+		|| isCreateAcquisitionRequestItemAvailable()
+		|| isSubmitForApprovalAvailable()
+		|| isApproveAvailable()
+		|| isDeleteAvailable()
+		|| isFundAllocationIdAvailable()
+		|| isFundAllocationExpirationDateAvailable()
+		|| isReceiveInvoiceAvailable()
+		|| isConfirmInvoiceAvailable();
     }
 
     public boolean isAcquisitionProcessed() {
 	return isProcessInState(AcquisitionProcessStateType.ACQUISITION_PROCESSED);
+    }
+
+    public boolean isReceiveInvoiceAvailable() {
+	final User user = UserView.getUser();
+	return isAcquisitionProcessed() && user.getPerson().hasRoleType(RoleType.ACCOUNTABILITY);
     }
 
     @Service
@@ -204,6 +220,23 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 	final AcquisitionRequest acquisitionRequest = getAcquisitionRequest();
 	acquisitionRequest.receiveInvoice(filename, bytes, invoiceNumber, invoiceDate);
 	new AcquisitionProcessState(this, AcquisitionProcessStateType.INVOICE_RECEIVED);
+    }
+
+    public boolean isInvoiceReceived() {
+	final AcquisitionRequest acquisitionRequest = getAcquisitionRequest();
+	return isProcessInState(AcquisitionProcessStateType.INVOICE_RECEIVED) && acquisitionRequest.isInvoiceReceived();
+    }
+
+    public boolean isConfirmInvoiceAvailable() {
+	return isInvoiceReceived() && isResponsibleForUnit();
+    }
+
+    @Service
+    public void confirmInvoice() {
+	if (!isInvoiceReceived()) {
+	    throw new DomainException("error.acquisitionProcess.invalid.state.to.run.confirmInvoice");
+	}
+	new AcquisitionProcessState(this, AcquisitionProcessStateType.INVOICE_CONFIRMED);
     }
 
 }

@@ -1,7 +1,6 @@
 package pt.ist.expenditureTrackingSystem.presentationTier.actions.acquisitions;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -149,16 +148,8 @@ public class AcquisitionProcessAction extends BaseAction {
 
     public final ActionForward downloadAcquisitionProposalDocument(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) throws IOException {
-	final OutputStream outputStream = response.getOutputStream();
 	final AcquisitionProposalDocument acquisitionProposalDocument = getDomainObject(request, "acquisitionProposalDocumentOid");
-	if (acquisitionProposalDocument != null && acquisitionProposalDocument.getContent() != null) {
-	    response.setContentType("application/unknown");
-	    response.setHeader("Content-disposition", "attachment; filename=" + acquisitionProposalDocument.getFilename());
-	    outputStream.write(acquisitionProposalDocument.getContent().getBytes());
-	}
-	outputStream.flush();
-	outputStream.close();
-	return null;
+	return download(response, acquisitionProposalDocument);
     }
 
     public final ActionForward createNewAcquisitionRequestItem(final ActionMapping mapping, final ActionForm form,
@@ -275,5 +266,18 @@ public class AcquisitionProcessAction extends BaseAction {
 		receiveInvoiceForm.getInvoiceNumber(), receiveInvoiceForm.getInvoiceDate());
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }    
+
+    public final ActionForward downloadInvoice(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) throws IOException {
+	final Invoice invoice = getDomainObject(request, "invoiceOid");
+	return download(response, invoice);
+    }
+
+    public final ActionForward confirmInvoice(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
+	acquisitionProcess.confirmInvoice();
+	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
+    }
 
 }

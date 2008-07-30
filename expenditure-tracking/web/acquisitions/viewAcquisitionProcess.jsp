@@ -77,18 +77,25 @@
 			</html:link>
 		</li>
 		</logic:equal>
-	 </ul>
 	 </logic:equal>
 	 <logic:equal name="acquisitionProcess" property="personAbleToExecuteActivities" value="false">
 	 	<br/><em><bean:message key="label.no.operations.available.at.the.moment" bundle="EXPENDITURE_RESOURCES"/></em>
-	 </logic:equal>	
-	 <logic:equal name="acquisitionProcess" property="acquisitionProcessed" value="true">
+	 </logic:equal>
+	<logic:equal name="acquisitionProcess" property="receiveInvoiceAvailable" value="true">
 		<li>
 			<html:link action="/acquisitionProcess.do?method=receiveInvoice" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
 				<bean:message key="link.receive.invoice" bundle="ACQUISITION_RESOURCES"/>
 			</html:link>
 		</li>
 	</logic:equal>
+	<logic:equal name="acquisitionProcess" property="confirmInvoiceAvailable" value="true">
+		<li>
+			<html:link action="/acquisitionProcess.do?method=confirmInvoice" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
+				<bean:message key="link.confirm.invoice" bundle="ACQUISITION_RESOURCES"/>
+			</html:link>
+		</li>
+	</logic:equal>
+	</ul>
 </div>
 
 <br/>
@@ -115,8 +122,6 @@
 
 <br/>
 <br/>
-<br/>
-<br/>
 <logic:present name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestItemsSet">
 	<fr:view name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestItemsSet"
 			schema="viewAcquisitionRequestItemInList">
@@ -131,3 +136,20 @@
 		</fr:layout>
 	</fr:view>
 </logic:present>
+<br/>
+
+<bean:message key="label.invoice" bundle="ACQUISITION_RESOURCES"/>:
+
+<logic:present name="acquisitionProcess" property="acquisitionRequest.invoice">
+	<logic:present name="acquisitionProcess" property="acquisitionRequest.invoice.content">
+		<html:link action="/acquisitionProcess.do?method=downloadInvoice" paramId="invoiceOid" paramName="acquisitionProcess" paramProperty="acquisitionRequest.invoice.OID">
+			<bean:write name="acquisitionProcess" property="acquisitionRequest.invoice.filename"/>
+		</html:link>
+	</logic:present>	
+	<logic:notPresent name="acquisitionProcess" property="acquisitionRequest.invoice">
+		<em><bean:message key="label.document.not.available" bundle="ACQUISITION_RESOURCES"/></em>
+	</logic:notPresent>
+</logic:present>
+<logic:notPresent name="acquisitionProcess" property="acquisitionRequest.invoice">
+	<em><bean:message key="label.document.not.available" bundle="ACQUISITION_RESOURCES"/></em>
+</logic:notPresent>

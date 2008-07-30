@@ -3,6 +3,7 @@ package pt.ist.expenditureTrackingSystem.presentationTier.actions;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,6 +14,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
+import pt.ist.expenditureTrackingSystem.domain.File;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.presentationTier.Context;
 import pt.ist.expenditureTrackingSystem.presentationTier.util.FileUploadBean;
@@ -40,33 +42,33 @@ public abstract class BaseAction extends DispatchAction {
 	return super.execute(mapping, form, request, response);
     }
 
-    public Person getLoggedPerson() {
+    protected Person getLoggedPerson() {
 	User user = UserView.getUser();
 	return user.getPerson();
     }
     
-    public <T> T getAttribute(final HttpServletRequest request, final String attributeName) {
+    protected <T> T getAttribute(final HttpServletRequest request, final String attributeName) {
 	final T t = (T) request.getAttribute(attributeName);
 	return t == null ? (T) request.getParameter(attributeName) : t;
     }
 
-    public <T extends DomainObject> T getDomainObject(final HttpServletRequest request, final String attributeName) {
+    protected <T extends DomainObject> T getDomainObject(final HttpServletRequest request, final String attributeName) {
 	final String parameter = request.getParameter(attributeName);
 	final Long oid = parameter != null ? Long.valueOf(parameter) : (Long) request.getAttribute(attributeName);
 	return oid == null ? null : (T) Transaction.getObjectForOID(oid.longValue());
     }
 
-    public <T extends Object> T getRenderedObject() {
+    protected <T extends Object> T getRenderedObject() {
 	final IViewState viewState = RenderUtils.getViewState();
 	return (T) getRenderedObject(viewState);
     }
 
-    public <T extends Object> T getRenderedObject(final String id) {
+    protected <T extends Object> T getRenderedObject(final String id) {
 	final IViewState viewState = RenderUtils.getViewState(id);
 	return (T) getRenderedObject(viewState);
     }
 
-    public <T extends Object> T getRenderedObject(final IViewState viewState) {
+    protected <T extends Object> T getRenderedObject(final IViewState viewState) {
 	if (viewState != null) {
 	    MetaObject metaObject = viewState.getMetaObject();
 	    if (metaObject != null) {
@@ -76,12 +78,12 @@ public abstract class BaseAction extends DispatchAction {
 	return null;
     }
 
-    public byte[] consumeInputStream(final FileUploadBean fileUploadBean) {
+    protected byte[] consumeInputStream(final FileUploadBean fileUploadBean) {
 	final InputStream inputStream = fileUploadBean.getInputStream();
 	return consumeInputStream(inputStream);
     }
 
-    public byte[] consumeInputStream(final InputStream inputStream) {
+    protected byte[] consumeInputStream(final InputStream inputStream) {
 	byte[] result = null;
 	if (inputStream != null) {
 	    final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -104,6 +106,22 @@ public abstract class BaseAction extends DispatchAction {
 	    }
 	}
 	return result;
+    }
+
+    protected ActionForward download(final HttpServletResponse response, final String filename, final byte[] bytes) throws IOException {
+	final OutputStream outputStream = response.getOutputStream();
+	response.setContentType("application/unknown");
+	response.setHeader("Content-disposition", "attachment; filename=" + filename);
+	if (bytes != null) {
+	    outputStream.write(bytes);
+	}
+	outputStream.flush();
+	outputStream.close();
+	return null;
+    }
+
+    protected ActionForward download(final HttpServletResponse response, final File file) throws IOException {
+	return file != null && file.getContent() != null ? download(response, file.getFilename(), file.getContent().getBytes()) : null;
     }
 
 }
