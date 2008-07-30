@@ -28,6 +28,8 @@ class acquisitions.AcquisitionRequest {
 	String costCenter;
 	String project;
 	String subproject;
+	String recipient;
+	String receptionAddress;
 }
 
 class acquisitions.AcquisitionRequestItem {

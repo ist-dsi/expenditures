@@ -73,7 +73,7 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	return result;
     }
 
- public void receiveInvoice(final String filename, final byte[] bytes, final String invoiceNumber, final DateTime invoiceDate) {
+    public void receiveInvoice(final String filename, final byte[] bytes, final String invoiceNumber, final DateTime invoiceDate) {
 	final Invoice invoice = hasInvoice() ? getInvoice() : new Invoice(this);
 	invoice.setFilename(filename);
 	invoice.setContent(new ByteArray(bytes));
@@ -90,14 +90,23 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	final Invoice invoice = getInvoice();
 	return invoice == null ? null : invoice.getInvoiceDate();
     }
-    
+
     public boolean isFilled() {
-	return StringUtils.isNotEmpty(getCostCenter()) && hasAcquisitionProposalDocument() && getAcquisitionRequestItemsCount() > 0;
+	return StringUtils.isNotEmpty(getCostCenter()) && hasAcquisitionProposalDocument()
+		&& getAcquisitionRequestItemsCount() > 0;
     }
 
     public boolean isInvoiceReceived() {
 	final Invoice invoice = getInvoice();
 	return invoice != null && invoice.isInvoiceReceived();
+    }
+
+    @Override
+    public String getRecipient() {
+	if (super.getRecipient() == null) {
+	    return getRequester().getName();
+	}
+	return super.getRecipient();
     }
 
 }
