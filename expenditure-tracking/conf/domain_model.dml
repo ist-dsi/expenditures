@@ -48,6 +48,7 @@ class authorizations.Authorization {
 	}
 
 class File {
+	String ojbConcreteClass;
 	String filename;
 	ByteArray content;
 }
