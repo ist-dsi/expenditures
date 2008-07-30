@@ -3,6 +3,7 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 import java.math.BigDecimal;
 
 import org.apache.commons.lang.StringUtils;
+import org.joda.time.DateTime;
 
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
