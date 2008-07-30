@@ -156,15 +156,35 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 	new AcquisitionProcessState(this, AcquisitionProcessStateType.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER);
     }
 
-    
     public boolean isEditRequestItemAvailable() {
 	User user = UserView.getUser();
 	return user != null && user.getPerson().equals(getRequestor())
 		&& isProcessInState(AcquisitionProcessStateType.IN_GENESIS);
     }
-    
+
     public boolean isPendingApproval() {
 	return isProcessInState(AcquisitionProcessStateType.SUBMITTED_FOR_APPROVAL);
+    }
+
+    public boolean isCreateAcquisitionRequestAvailable() {
+	User user = UserView.getUser();
+	return user != null && user.getPerson().hasRoleType(RoleType.ACQUISITION_CENTRAL)
+		&& isProcessInState(AcquisitionProcessStateType.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER);
+    }
+
+    @Service
+    public AcquisitionRequestDocument createAcquisitionRequest() {
+	if (getAcquisitionRequest().getAcquisitionRequestDocument() != null) {
+	    return getAcquisitionRequest().getAcquisitionRequestDocument();
+	}
+
+	if (!isCreateAcquisitionRequestAvailable()) {
+	    throw new DomainException("error.acquisitionProcess.invalid.state.to.run.createAcquisitionRequest");
+	}
+
+	AcquisitionRequestDocument acquisitionRequestDocument = new AcquisitionRequestDocument(getAcquisitionRequest());
+	new AcquisitionProcessState(this, AcquisitionProcessStateType.ACQUISITION_PROCESSED);
+	return acquisitionRequestDocument;
     }
 
     private boolean isProcessInState(AcquisitionProcessStateType state) {
@@ -192,14 +212,9 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
     }
 
     public boolean isPersonAbleToExecuteActivities() {
-	return isAcquisitionProposalDocumentAvailable()
-		|| isCreateAcquisitionRequestItemAvailable()
-		|| isSubmitForApprovalAvailable()
-		|| isApproveAvailable()
-		|| isDeleteAvailable()
-		|| isFundAllocationIdAvailable()
-		|| isFundAllocationExpirationDateAvailable()
-		|| isReceiveInvoiceAvailable()
+	return isAcquisitionProposalDocumentAvailable() || isCreateAcquisitionRequestItemAvailable()
+		|| isSubmitForApprovalAvailable() || isApproveAvailable() || isDeleteAvailable() || isFundAllocationIdAvailable()
+		|| isFundAllocationExpirationDateAvailable() || isCreateAcquisitionRequestAvailable()|| isReceiveInvoiceAvailable()
 		|| isConfirmInvoiceAvailable();
     }
 

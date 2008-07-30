@@ -75,6 +75,16 @@
 	<slot name="salesCode" key="label.acquisition.request.item.salesCode" bundle="ACQUISITION_RESOURCES"/>
 </schema>
 
+<schema name="viewAcquisitionRequestItemInListFull"
+		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem"
+		bundle="ACQUISITION_RESOURCES">
+	<slot name="proposalReference" key="label.acquisition.request.item.proposalReference" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="quantity" key="label.acquisition.request.item.quantity" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="unitValue" key="label.acquisition.request.item.unitValue" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="salesCode" key="label.acquisition.request.item.salesCode" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="description" key="label.acquisition.request.item.description" bundle="ACQUISITION_RESOURCES"/>	
+</schema>
+
 <schema name="searchAcquisitionProcess"
 		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.SearchAcquisitionProcess"
 		bundle="ACQUISITION_RESOURCES">
@@ -114,3 +124,19 @@
 		<property name="size" value="30"/>
 	</slot>
 </schema>
+
+<schema name="viewAcquisitionRequester"
+		type="pt.ist.expenditureTrackingSystem.domain.organization.Person"
+		bundle="ACQUISITION_RESOURCES">
+	<slot name="username" key="label.person.username" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="name" key="label.organization.name" bundle="ORGANIZATION_RESOURCES"/>
+</schema>
+
+<schema name="viewAcquisitionSupplier"
+		type="pt.ist.expenditureTrackingSystem.domain.organization.Supplier"
+		bundle="ACQUISITION_RESOURCES">
+	<slot name="name" key="label.supplier.name" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="fiscalIdentificationCode" key="label.service.provider.fiscalIdentificationCode" />
+	<slot name="address" key="label.supplier.address" bundle="ORGANIZATION_RESOURCES"/>	
+</schema>
+

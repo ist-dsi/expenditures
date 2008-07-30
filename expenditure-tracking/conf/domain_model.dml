@@ -60,6 +60,11 @@ class File {
 		String invoiceNumber;
 		DateTime invoiceDate;
 	}
+	
+	class acquisitions.AcquisitionRequestDocument extends File {
+		Integer requestNumber;
+	}
+	
 
 class Options {
 	Boolean displayAuthorizationPending;
@@ -133,6 +138,11 @@ relation ExpenditureTrackingSystemFile {
 relation AcquisitionRequestAcquisitionProposalDocument {
 	acquisitions.AcquisitionRequest playsRole acquisitionRequest;
 	acquisitions.AcquisitionProposalDocument playsRole acquisitionProposalDocument;
+}
+
+relation AcquisitionRequestAcquisitionRequestDocument {
+	acquisitions.AcquisitionRequest playsRole acquisitionRequest ;
+	acquisitions.AcquisitionRequestDocument playsRole acquisitionRequestDocument;
 }
 
 relation AcquisitionRequestInvoice {

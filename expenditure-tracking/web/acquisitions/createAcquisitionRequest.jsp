@@ -6,9 +6,10 @@
 <h2><bean:message key="label.view.acquisition.process" bundle="EXPENDITURE_RESOURCES"/></h2>
 <br />
 <br/>
-<fr:view name="acquisitionProcess" property="acquisitionRequest"
-		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest"
-		schema="viewAcquisitionRequest">
+<bean:message key="label.acquisition.requester" bundle="ACQUISITION_RESOURCES"/>
+<fr:view name="acquisitionProcess" property="acquisitionRequest.requester"
+		type="pt.ist.expenditureTrackingSystem.domain.organization.Person"
+		schema="viewAcquisitionRequester">
 	<fr:layout name="tabular">
 		<fr:property name="classes" value="tstyle5 thmiddle thlight mtop05"/>
 		<fr:property name="columnClasses" value=",,tdclear tderror1"/>
@@ -16,30 +17,37 @@
 </fr:view>
 <br/>
 <br/>
-<bean:message key="label.acquisition.proposal.document" bundle="ACQUISITION_RESOURCES"/>
-<logic:present name="acquisitionProcess" property="acquisitionRequest.acquisitionProposalDocument">
-	<html:link action="/acquisitionProcess.do?method=downloadAcquisitionProposalDocument" paramId="acquisitionProposalDocumentOid" paramName="acquisitionProcess" paramProperty="acquisitionRequest.acquisitionProposalDocument.OID">
-		<bean:write name="acquisitionProcess" property="acquisitionRequest.acquisitionProposalDocument.filename"/>
-	</html:link>	
-</logic:present>
-<logic:notPresent name="acquisitionProcess" property="acquisitionRequest.acquisitionProposalDocument">
-	--
-</logic:notPresent>
+<bean:message key="label.acquisition.supplier" bundle="ACQUISITION_RESOURCES"/>
+<fr:view name="acquisitionProcess" property="acquisitionRequest.supplier"
+		type="pt.ist.expenditureTrackingSystem.domain.organization.Supplier"
+		schema="viewAcquisitionSupplier">
+	<fr:layout name="tabular">
+		<fr:property name="classes" value="tstyle5 thmiddle thlight mtop05"/>
+		<fr:property name="columnClasses" value=",,tdclear tderror1"/>
+	</fr:layout>
+</fr:view>
+
 <br/>
 <br/>
 <logic:present name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestItemsSet">
 	<fr:view name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestItemsSet"
-			schema="viewAcquisitionRequestItemInList">
+			schema="viewAcquisitionRequestItemInListFull">
 		<fr:layout name="tabular">
-			<fr:property name="classes" value="tstyle1"/>
-
-			<fr:property name="link(view)" value="/acquisitionProcess.do?method=viewAcquisitionRequestItem"/>
-			<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
-			<fr:property name="key(view)" value="link.view"/>
-			<fr:property name="param(view)" value="OID/acquisitionRequestItemOid"/>
-			<fr:property name="order(view)" value="1"/>
 		</fr:layout>
 	</fr:view>
 </logic:present>
 <br/>
 <br/>
+
+<html:link action="/acquisitionProcess.do?method=createAcquisitionRequestDocument" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
+	<bean:message key="link.create.acquisition.request.document" bundle="ACQUISITION_RESOURCES"/>
+</html:link>
+	
+<bean:define id="acquisitionProcessOid" name="acquisitionProcess" property="OID"/>
+<br/>
+<br/>
+<fr:form action='<%= "/acquisitionProcess.do?method=viewAcquisitionProcess&acquisitionProcessOid=" +  acquisitionProcessOid %>'>
+	<html:submit>
+		<bean:message key="button.back" bundle="ACQUISITION_RESOURCES"/>
+	</html:submit>
+</fr:form>

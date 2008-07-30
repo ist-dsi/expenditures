@@ -11,11 +11,14 @@
 	<property name="src" location="src"/>
 	<property name="src_gen" location="src_gen"/>
 	<property name="web" location="web"/>
+	<property name="reports" location="reports"/>	
 
 	<!-- Web Directories -->
 	<property name="build.home.webinf" value="${web}/WEB-INF"/>
 	<property name="build.home.webinf.classes" value="${build.home.webinf}/classes"/>
 	<property name="build.home.webinf.libs" value="${build.home.webinf}/lib"/>
+	
+	<property name="build.home.reports" value="${build.home.webinf.classes}/reports"/>
 
 	<!-- Directories for deploy -->
 	<property name="deploy.home" location="deploy"/>
@@ -132,6 +135,7 @@
 			<arg value="-d"/>
 			<arg value="${build.home.webinf.classes}/domain_model.dml"/>
 		</java>
+		<antcall target="compile-reports"/>		
 	</target>
 
 	<target name="war" depends="compile" description="Generates a web archive of the application.">
@@ -153,5 +157,21 @@
 			<classpath refid="run.class.path"/>
 		</java>
 	</target>
+	
+	<target name="compile-reports" >
+		<mkdir dir="${build.home.reports}"/>
+		<taskdef name="jrc" 
+		      classname="net.sf.jasperreports.ant.JRAntCompileTask">
+			<classpath refid="class.path.ref"/>
+		</taskdef>
+		<jrc destdir="${build.home.reports}" srcdir="${reports}">
+			<classpath refid="class.path.ref"/>
+			<classpath>
+				<pathelement path="${build.home.webinf.classes};"/>
+			</classpath>
+			<include name="**/*.jrxml"/>
+		</jrc>
+	</target>
+
 
 </project>

@@ -42,13 +42,6 @@
 				</html:link>
 			</li>
 		</logic:equal>	 
-		<logic:equal name="acquisitionProcess" property="acquisitionProcessed" value="true">
-			<li>
-				<html:link action="/acquisitionProcess.do?method=receiveInvoice" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
-					<bean:message key="link.receive.invoice" bundle="ACQUISITION_RESOURCES"/>
-				</html:link>
-			</li>
-		</logic:equal>
 		<logic:equal name="acquisitionProcess" property="deleteAvailable" value="true">
 			<li>
 				<html:link action="/acquisitionProcess.do?method=deleteAcquisitionProcess" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
@@ -77,6 +70,11 @@
 			</html:link>
 		</li>
 		</logic:equal>
+		<logic:equal name="acquisitionProcess" property="createAcquisitionRequestAvailable" value="true">
+			<html:link action="/acquisitionProcess.do?method=prepareCreateAcquisitionRequest" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
+				<bean:message key="link.create.acquisition.request" bundle="ACQUISITION_RESOURCES"/>
+			</html:link>
+		</logic:equal>
 	 </logic:equal>
 	 <logic:equal name="acquisitionProcess" property="personAbleToExecuteActivities" value="false">
 	 	<br/><em><bean:message key="label.no.operations.available.at.the.moment" bundle="EXPENDITURE_RESOURCES"/></em>
@@ -98,7 +96,7 @@
 	</ul>
 </div>
 
-<br/>
+
 <br/>
 <fr:view name="acquisitionProcess" property="acquisitionRequest"
 		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest"
@@ -110,13 +108,38 @@
 <br/>
 
 <bean:message key="label.acquisition.proposal.document" bundle="ACQUISITION_RESOURCES"/>:
-
 <logic:present name="acquisitionProcess" property="acquisitionRequest.acquisitionProposalDocument">
 	<html:link action="/acquisitionProcess.do?method=downloadAcquisitionProposalDocument" paramId="acquisitionProposalDocumentOid" paramName="acquisitionProcess" paramProperty="acquisitionRequest.acquisitionProposalDocument.OID">
 		<bean:write name="acquisitionProcess" property="acquisitionRequest.acquisitionProposalDocument.filename"/>
 	</html:link>	
 </logic:present>
 <logic:notPresent name="acquisitionProcess" property="acquisitionRequest.acquisitionProposalDocument">
+	<em><bean:message key="label.document.not.available" bundle="ACQUISITION_RESOURCES"/></em>
+</logic:notPresent>
+
+<br/>
+<bean:message key="label.acquisition.request.document" bundle="ACQUISITION_RESOURCES"/>:
+<logic:present name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestDocument">
+	<html:link action="/acquisitionProcess.do?method=downloadAcquisitionRequestDocument" paramId="acquisitionRequestDocumentOid" paramName="acquisitionProcess" paramProperty="acquisitionRequest.acquisitionRequestDocument.OID">
+		<bean:write name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestDocument.filename"/>
+	</html:link>	
+</logic:present>
+<logic:notPresent name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestDocument">
+	<em><bean:message key="label.document.not.available" bundle="ACQUISITION_RESOURCES"/></em>
+</logic:notPresent>
+<br/>
+<bean:message key="label.invoice" bundle="ACQUISITION_RESOURCES"/>:
+<logic:present name="acquisitionProcess" property="acquisitionRequest.invoice">
+	<logic:present name="acquisitionProcess" property="acquisitionRequest.invoice.content">
+		<html:link action="/acquisitionProcess.do?method=downloadInvoice" paramId="invoiceOid" paramName="acquisitionProcess" paramProperty="acquisitionRequest.invoice.OID">
+			<bean:write name="acquisitionProcess" property="acquisitionRequest.invoice.filename"/>
+		</html:link>
+	</logic:present>	
+	<logic:notPresent name="acquisitionProcess" property="acquisitionRequest.invoice">
+		<em><bean:message key="label.document.not.available" bundle="ACQUISITION_RESOURCES"/></em>
+	</logic:notPresent>
+</logic:present>
+<logic:notPresent name="acquisitionProcess" property="acquisitionRequest.invoice">
 	<em><bean:message key="label.document.not.available" bundle="ACQUISITION_RESOURCES"/></em>
 </logic:notPresent>
 
@@ -138,18 +161,3 @@
 </logic:present>
 <br/>
 
-<bean:message key="label.invoice" bundle="ACQUISITION_RESOURCES"/>:
-
-<logic:present name="acquisitionProcess" property="acquisitionRequest.invoice">
-	<logic:present name="acquisitionProcess" property="acquisitionRequest.invoice.content">
-		<html:link action="/acquisitionProcess.do?method=downloadInvoice" paramId="invoiceOid" paramName="acquisitionProcess" paramProperty="acquisitionRequest.invoice.OID">
-			<bean:write name="acquisitionProcess" property="acquisitionRequest.invoice.filename"/>
-		</html:link>
-	</logic:present>	
-	<logic:notPresent name="acquisitionProcess" property="acquisitionRequest.invoice">
-		<em><bean:message key="label.document.not.available" bundle="ACQUISITION_RESOURCES"/></em>
-	</logic:notPresent>
-</logic:present>
-<logic:notPresent name="acquisitionProcess" property="acquisitionRequest.invoice">
-	<em><bean:message key="label.document.not.available" bundle="ACQUISITION_RESOURCES"/></em>
-</logic:notPresent>

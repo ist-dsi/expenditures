@@ -4,8 +4,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import net.sf.jasperreports.engine.JRException;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -18,6 +21,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProposalDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Invoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.SearchAcquisitionProcess;
@@ -39,9 +43,8 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "allocate.funds", path = "/acquisitions/allocateFunds.jsp"),
 	@Forward(name = "allocate.funds.to.service.provider", path = "/acquisitions/allocateFundsToServiceProvider.jsp"),
 	@Forward(name = "prepare.create.acquisition.request", path = "/acquisitions/createAcquisitionRequest.jsp"),
-	@Forward(name = "view.active.processes", path = "/acquisitions/viewActiveProcesses.jsp"),
-	@Forward(name = "receive.invoice", path = "/acquisitions/receiveInvoice.jsp")
-})
+	@Forward(name = "receive.invoice", path = "/acquisitions/receiveInvoice.jsp"),
+	@Forward(name = "view.active.processes", path = "/acquisitions/viewActiveProcesses.jsp") })
 public class AcquisitionProcessAction extends BaseAction {
 
     private static final Context CONTEXT = new Context("acquisitions");
@@ -61,12 +64,15 @@ public class AcquisitionProcessAction extends BaseAction {
 	public String getInvoiceNumber() {
 	    return invoiceNumber;
 	}
+
 	public void setInvoiceNumber(String invoiceNumber) {
 	    this.invoiceNumber = invoiceNumber;
 	}
+
 	public DateTime getInvoiceDate() {
 	    return invoiceDate;
 	}
+
 	public void setInvoiceDate(DateTime invoiceDate) {
 	    this.invoiceDate = invoiceDate;
 	}
@@ -152,6 +158,12 @@ public class AcquisitionProcessAction extends BaseAction {
 	return download(response, acquisitionProposalDocument);
     }
 
+    public final ActionForward downloadAcquisitionRequestDocument(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) throws IOException {
+	final AcquisitionRequestDocument acquisitionRequestDocument = getDomainObject(request, "acquisitionRequestDocumentOid");
+	return download(response, acquisitionRequestDocument);
+    }
+
     public final ActionForward createNewAcquisitionRequestItem(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
@@ -222,21 +234,44 @@ public class AcquisitionProcessAction extends BaseAction {
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
 	return mapping.findForward("prepare.create.acquisition.request");
     }
-    
+
     public final ActionForward showPendingProcesses(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 
 	List<AcquisitionProcess> processes = new ArrayList<AcquisitionProcess>();
-	
+
 	for (AcquisitionProcess process : ExpenditureTrackingSystem.getInstance().getAcquisitionProcesses()) {
 	    if (process.isPersonAbleToExecuteActivities()) {
 		processes.add(process);
 	    }
 	}
 	request.setAttribute("activeProcesses", processes);
-	
+
 	return mapping.findForward("view.active.processes");
-    }    
+    }
+
+    public ActionForward createAcquisitionRequestDocument(ActionMapping mapping, ActionForm actionForm,
+	    HttpServletRequest request, HttpServletResponse response) throws JRException, IOException {
+	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
+
+	AcquisitionRequestDocument acquisitionRequestDocument = acquisitionProcess.createAcquisitionRequest();
+	byte[] data = acquisitionRequestDocument.getContent().getBytes();
+
+	response.setContentLength(data.length);
+	response.setContentType("application/pdf");
+	response.addHeader("Content-Disposition", "attachment; filename=" + acquisitionRequestDocument.getFilename());
+
+	final ServletOutputStream writer = response.getOutputStream();
+	writer.write(data);
+	writer.flush();
+	writer.close();
+
+	response.flushBuffer();
+
+	ActionForward findForward = mapping.findForward("prepare.create.acquisition.request");
+	findForward.setRedirect(true);
+	return findForward;
+    }
 
     public final ActionForward receiveInvoice(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
@@ -254,18 +289,18 @@ public class AcquisitionProcessAction extends BaseAction {
 	}
 	request.setAttribute("receiveInvoiceForm", receiveInvoiceForm);
 	return mapping.findForward("receive.invoice");
-    }    
+    }
 
-    public final ActionForward saveInvoice(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
+    public final ActionForward saveInvoice(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
 	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
 	final ReceiveInvoiceForm receiveInvoiceForm = getRenderedObject();
 	final byte[] bytes = consumeInputStream(receiveInvoiceForm);
-	acquisitionProcess.receiveInvoice(receiveInvoiceForm.getFilename(), bytes,
-		receiveInvoiceForm.getInvoiceNumber(), receiveInvoiceForm.getInvoiceDate());
+	acquisitionProcess.receiveInvoice(receiveInvoiceForm.getFilename(), bytes, receiveInvoiceForm.getInvoiceNumber(),
+		receiveInvoiceForm.getInvoiceDate());
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
-    }    
+    }
 
     public final ActionForward downloadInvoice(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) throws IOException {
