@@ -92,7 +92,7 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     }
     
     public boolean isFilled() {
-	return StringUtils.isNotEmpty(getCostCenter()) && StringUtils.isNotEmpty(getProject()) && StringUtils.isNotEmpty(getSubproject()) && hasAcquisitionProposalDocument() && getAcquisitionRequestItemsCount() > 0;
+	return StringUtils.isNotEmpty(getCostCenter()) && hasAcquisitionProposalDocument() && getAcquisitionRequestItemsCount() > 0;
     }
 
     public boolean isInvoiceReceived() {
