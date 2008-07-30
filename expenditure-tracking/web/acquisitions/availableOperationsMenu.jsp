@@ -81,6 +81,20 @@
 				</html:link>
 			</li>
 		</logic:equal>
+			<logic:equal name="acquisitionProcess" property="payAcquisitionAvailable" value="true">
+		<li>
+			<html:link action="/acquisitionProcess.do?method=payAcquisition" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
+				<bean:message key="link.pay.acquision" bundle="ACQUISITION_RESOURCES"/>
+			</html:link>
+		</li>
+	</logic:equal>
+		<logic:equal name="acquisitionProcess" property="alocateFundsPermanentlyAvailable" value="true">
+		<li>
+			<html:link action="/acquisitionProcess.do?method=alocateFundsPermanently" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
+				<bean:message key="link.allocate.funds.permanently" bundle="ACQUISITION_RESOURCES"/>
+			</html:link>
+		</li>
+	</logic:equal>
 	</ul>
 </logic:equal>
 <logic:equal name="acquisitionProcess" property="personAbleToExecuteActivities" value="false">

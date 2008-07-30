@@ -212,10 +212,18 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
     }
 
     public boolean isPersonAbleToExecuteActivities() {
-	return isAcquisitionProposalDocumentAvailable() || isCreateAcquisitionRequestItemAvailable()
-		|| isSubmitForApprovalAvailable() || isApproveAvailable() || isDeleteAvailable() || isFundAllocationIdAvailable()
-		|| isFundAllocationExpirationDateAvailable() || isCreateAcquisitionRequestAvailable()|| isReceiveInvoiceAvailable()
-		|| isConfirmInvoiceAvailable();
+	return isAcquisitionProposalDocumentAvailable()
+		|| isCreateAcquisitionRequestItemAvailable()
+		|| isSubmitForApprovalAvailable()
+		|| isApproveAvailable()
+		|| isDeleteAvailable()
+		|| isFundAllocationIdAvailable()
+		|| isFundAllocationExpirationDateAvailable()
+		|| isCreateAcquisitionRequestAvailable()
+		|| isReceiveInvoiceAvailable()
+		|| isConfirmInvoiceAvailable()
+		|| isPayAcquisitionAvailable()
+		|| isAlocateFundsPermanentlyAvailable();
     }
 
     public boolean isAcquisitionProcessed() {
@@ -252,6 +260,33 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 	    throw new DomainException("error.acquisitionProcess.invalid.state.to.run.confirmInvoice");
 	}
 	new AcquisitionProcessState(this, AcquisitionProcessStateType.INVOICE_CONFIRMED);
+    }
+    
+    
+    public boolean isPayAcquisitionAvailable() {
+	User user = UserView.getUser();
+	return user.getPerson().hasRoleType(RoleType.ACQUISITION_CENTRAL) && isProcessInState(AcquisitionProcessStateType.INVOICE_CONFIRMED);
+    }
+    
+    @Service
+    public void payAcquisition() {
+	if (!isPayAcquisitionAvailable()) {
+	    throw new DomainException("error.acquisitionProcess.invalid.state.to.run.alocateFundsPermanently");
+	}
+	new AcquisitionProcessState(this,AcquisitionProcessStateType.ACQUISITION_PAYED);
+    }
+    
+    public boolean isAlocateFundsPermanentlyAvailable() {
+	User user = UserView.getUser();
+	return user.getPerson().hasRoleType(RoleType.ACCOUNTABILITY) && isProcessInState(AcquisitionProcessStateType.ACQUISITION_PAYED);
+    }
+    
+    @Service
+    public void alocateFundsPermanently() {
+	if (!isAlocateFundsPermanentlyAvailable()) {
+	    throw new DomainException("error.acquisitionProcess.invalid.state.to.run.alocateFundsPermanently");
+	}
+	new AcquisitionProcessState(this,AcquisitionProcessStateType.FUNDS_ALLOCATED_PERMANENTLY);
     }
 
 }

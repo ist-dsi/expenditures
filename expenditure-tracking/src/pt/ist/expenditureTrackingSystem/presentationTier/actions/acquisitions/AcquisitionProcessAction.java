@@ -314,5 +314,22 @@ public class AcquisitionProcessAction extends BaseAction {
 	acquisitionProcess.confirmInvoice();
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
+    
+    
+    public final ActionForward payAcquisition(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	
+	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
+	acquisitionProcess.payAcquisition();
+	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
+    }
+    
+    public final ActionForward alocateFundsPermanently(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	
+	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
+	acquisitionProcess.alocateFundsPermanently();
+	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
+    }
 
 }
