@@ -2,7 +2,7 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import java.math.BigDecimal;
 
-import org.joda.time.DateTime;
+import org.apache.commons.lang.StringUtils;
 
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
@@ -72,7 +72,7 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	return result;
     }
 
-    public void receiveInvoice(final String filename, final byte[] bytes, final String invoiceNumber, final DateTime invoiceDate) {
+ public void receiveInvoice(final String filename, final byte[] bytes, final String invoiceNumber, final DateTime invoiceDate) {
 	final Invoice invoice = hasInvoice() ? getInvoice() : new Invoice(this);
 	invoice.setFilename(filename);
 	invoice.setContent(new ByteArray(bytes));
@@ -88,6 +88,10 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     public DateTime getInvoiceDate() {
 	final Invoice invoice = getInvoice();
 	return invoice == null ? null : invoice.getInvoiceDate();
+    }
+    
+    public boolean isFilled() {
+	return StringUtils.isNotEmpty(getCostCenter()) && StringUtils.isNotEmpty(getProject()) && StringUtils.isNotEmpty(getSubproject()) && hasAcquisitionProposalDocument() && getAcquisitionRequestItemsCount() > 0;
     }
 
 }

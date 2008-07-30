@@ -9,6 +9,7 @@ import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
+import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.fenixWebFramework.security.UserView;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.pstm.Transaction;
@@ -37,7 +38,7 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
     public boolean isAcquisitionProposalDocumentAvailable() {
 	User user = UserView.getUser();
 	return user != null && isProcessInState(AcquisitionProcessStateType.IN_GENESIS)
-		&& user.getUsername().equalsIgnoreCase(getRequestor());
+		&& user.getPerson().equals(getRequestor());
     }
 
     @Service
@@ -52,7 +53,7 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
     public boolean isCreateAcquisitionRequestItemAvailable() {
 	User user = UserView.getUser();
 	return user != null && isProcessInState(AcquisitionProcessStateType.IN_GENESIS)
-		&& user.getUsername().equalsIgnoreCase(getRequestor());
+		&& user.getPerson().equals(getRequestor());
     }
 
     @Service
@@ -67,7 +68,7 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
     public boolean isSubmitForApprovalAvailable() {
 	User user = UserView.getUser();
 	return user != null && isProcessInState(AcquisitionProcessStateType.IN_GENESIS)
-		&& user.getUsername().equalsIgnoreCase(getRequestor());
+		&& user.getPerson().equals(getRequestor()) && getAcquisitionRequest().isFilled();
     }
 
     @Service
@@ -78,8 +79,8 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 	new AcquisitionProcessState(this, AcquisitionProcessStateType.SUBMITTED_FOR_APPROVAL);
     }
 
-    public String getRequestor() {
-	return getAcquisitionRequest().getRequester().getUsername();
+    public Person getRequestor() {
+	return getAcquisitionRequest().getRequester();
     }
 
     public boolean isApproveAvailable() {
@@ -108,7 +109,7 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 
     public boolean isDeleteAvailable() {
 	User user = UserView.getUser();
-	return user != null && getRequestor().equalsIgnoreCase(user.getUsername())
+	return user != null && user.getPerson().equals(getRequestor())
 		&& isProcessInState(AcquisitionProcessStateType.IN_GENESIS);
     }
 
@@ -150,6 +151,13 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 	new AcquisitionProcessState(this, AcquisitionProcessStateType.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER);
     }
 
+    
+    public boolean isEditRequestItemAvailable() {
+	User user = UserView.getUser();
+	return user != null && user.getPerson().equals(getRequestor())
+		&& isProcessInState(AcquisitionProcessStateType.IN_GENESIS);
+    }
+    
     public boolean isPendingApproval() {
 	return isProcessInState(AcquisitionProcessStateType.SUBMITTED_FOR_APPROVAL);
     }
