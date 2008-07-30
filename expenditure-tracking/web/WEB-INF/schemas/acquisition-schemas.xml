@@ -17,7 +17,13 @@
 	<slot name="subproject" key="label.subproject" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="totalItemValue" key="label.total.item.value" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="acquisitionProcess.fundAllocationId" key="label.fund.allocation.identification" bundle="ACQUISITION_RESOURCES"/>
-	<slot name="acquisitionProcess.fundAllocationExpirationDate" key="label.fund.allocation.expiration.date" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="acquisitionProcess.fundAllocationExpirationDate" key="label.fund.allocation.expiration.date" bundle="ACQUISITION_RESOURCES">
+		<property name="format" value="${year}-${monthOfYear,02d}-${dayOfMonth,02d}"/>
+	</slot>
+	<slot name="invoiceNumber" key="label.invoice.number" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="invoiceDate" key="label.invoice.date" bundle="ACQUISITION_RESOURCES">
+		<property name="format" value="${year}-${monthOfYear,02d}-${dayOfMonth,02d}"/>
+	</slot>
 </schema>
 
 <schema name="viewAcquisitionProcessInList"
@@ -89,5 +95,22 @@
 <schema name="allocateFundsToServiceProvider"
 		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess"
 		bundle="ACQUISITION_RESOURCES">
-	<slot name="fundAllocationExpirationDate" key="label.fund.allocation.expiration.date" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="fundAllocationExpirationDate" key="label.fund.allocation.expiration.date" bundle="ACQUISITION_RESOURCES">
+		<property name="dateFormat" value="yyyy-MM-dd"/>
+		<property name="dateFormatText" value="yyyy-MM-dd"/>
+	</slot>
+</schema>
+
+<schema name="receiveInvoiceForm"
+		type="pt.ist.expenditureTrackingSystem.presentationTier.actions.acquisitions.AcquisitionProcessAction$ReceiveInvoiceForm"
+		bundle="ACQUISITION_RESOURCES">
+	<slot name="invoiceNumber" key="label.invoice.number" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="invoiceDate" key="label.invoice.date" bundle="ACQUISITION_RESOURCES">
+		<property name="dateFormat" value="yyyy-MM-dd"/>
+		<property name="dateFormatText" value="yyyy-MM-dd"/>
+	</slot>
+	<slot name="inputStream" key="label.input.stream"	bundle="ACQUISITION_RESOURCES">
+		<property name="fileNameSlot" value="filename" />
+		<property name="size" value="30"/>
+	</slot>
 </schema>

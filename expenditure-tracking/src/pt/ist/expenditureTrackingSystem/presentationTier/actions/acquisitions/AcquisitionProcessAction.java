@@ -20,6 +20,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessSt
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProposalDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.Invoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.SearchAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.presentationTier.Context;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.BaseAction;
@@ -141,7 +142,7 @@ public class AcquisitionProcessAction extends BaseAction {
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
 	final AcquisitionProposalDocumentForm acquisitionProposalDocumentForm = getRenderedObject();
 	final String filename = acquisitionProposalDocumentForm.getFilename();
-	final byte[] bytes = consumeInputStream(acquisitionProposalDocumentForm.getInputStream());
+	final byte[] bytes = consumeInputStream(acquisitionProposalDocumentForm);
 	acquisitionProcess.addAcquisitionProposalDocument(filename, bytes);
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
@@ -250,9 +251,29 @@ public class AcquisitionProcessAction extends BaseAction {
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
-	final ReceiveInvoiceForm receiveInvoiceForm = new ReceiveInvoiceForm();
+	ReceiveInvoiceForm receiveInvoiceForm = getRenderedObject();
+	if (receiveInvoiceForm == null) {
+	    receiveInvoiceForm = new ReceiveInvoiceForm();
+	    final AcquisitionRequest acquisitionRequest = acquisitionProcess.getAcquisitionRequest();
+	    if (acquisitionRequest.hasInvoice()) {
+		final Invoice invoice = acquisitionRequest.getInvoice();
+		receiveInvoiceForm.setInvoiceNumber(invoice.getInvoiceNumber());
+		receiveInvoiceForm.setInvoiceDate(invoice.getInvoiceDate());
+	    }
+	}
 	request.setAttribute("receiveInvoiceForm", receiveInvoiceForm);
 	return mapping.findForward("receive.invoice");
+    }    
+
+    public final ActionForward saveInvoice(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
+	request.setAttribute("acquisitionProcess", acquisitionProcess);
+	final ReceiveInvoiceForm receiveInvoiceForm = getRenderedObject();
+	final byte[] bytes = consumeInputStream(receiveInvoiceForm);
+	acquisitionProcess.receiveInvoice(receiveInvoiceForm.getFilename(), bytes,
+		receiveInvoiceForm.getInvoiceNumber(), receiveInvoiceForm.getInvoiceDate());
+	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }    
 
 }

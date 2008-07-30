@@ -15,6 +15,7 @@ import org.apache.struts.actions.DispatchAction;
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.presentationTier.Context;
+import pt.ist.expenditureTrackingSystem.presentationTier.util.FileUploadBean;
 import pt.ist.fenixWebFramework.renderers.components.state.IViewState;
 import pt.ist.fenixWebFramework.renderers.model.MetaObject;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
@@ -73,6 +74,11 @@ public abstract class BaseAction extends DispatchAction {
 	    }
 	}
 	return null;
+    }
+
+    public byte[] consumeInputStream(final FileUploadBean fileUploadBean) {
+	final InputStream inputStream = fileUploadBean.getInputStream();
+	return consumeInputStream(inputStream);
     }
 
     public byte[] consumeInputStream(final InputStream inputStream) {

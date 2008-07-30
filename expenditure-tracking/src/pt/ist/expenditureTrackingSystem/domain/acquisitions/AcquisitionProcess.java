@@ -1,8 +1,6 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 import org.joda.time.DateTime;
 
@@ -188,6 +186,16 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 
     public boolean isAcquisitionProcessed() {
 	return isProcessInState(AcquisitionProcessStateType.ACQUISITION_PROCESSED);
+    }
+
+    @Service
+    public void receiveInvoice(final String filename, final byte[] bytes, final String invoiceNumber, final DateTime invoiceDate) {
+	if (!isAcquisitionProcessed()) {
+	    throw new DomainException("error.acquisitionProcess.invalid.state.to.run.setReceiveInvoice");
+	}
+	final AcquisitionRequest acquisitionRequest = getAcquisitionRequest();
+	acquisitionRequest.receiveInvoice(filename, bytes, invoiceNumber, invoiceDate);
+	new AcquisitionProcessState(this, AcquisitionProcessStateType.INVOICE_RECEIVED);
     }
 
 }

@@ -44,11 +44,12 @@
 <br/>
 <br/>
 <bean:define id="urlView">/acquisitionProcess.do?method=viewAcquisitionProcess&amp;acquisitionProcessOid=<bean:write name="acquisitionProcess" property="OID"/></bean:define>
-<fr:edit id="acquisitionProcess"
-		name="acquisitionProcess"
-		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess"
-		schema="allocateFunds"
-		action="<%= urlView %>">
+<bean:define id="urlSave">/acquisitionProcess.do?method=saveInvoice&amp;acquisitionProcessOid=<bean:write name="acquisitionProcess" property="OID"/></bean:define>
+<fr:edit id="receiveInvoiceForm"
+		name="receiveInvoiceForm"
+		type="pt.ist.expenditureTrackingSystem.presentationTier.actions.acquisitions.AcquisitionProcessAction$ReceiveInvoiceForm"
+		schema="receiveInvoiceForm"
+		action="<%= urlSave %>">
 	<fr:layout name="tabular">
 		<fr:destination name="cancel" path="<%= urlView %>" />
 	</fr:layout>

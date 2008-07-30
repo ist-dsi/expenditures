@@ -34,11 +34,11 @@
 </logic:equal>
 
 <logic:equal name="acquisitionProcess" property="acquisitionProcessed" value="true">
-</logic:equal>
 	<html:link action="/acquisitionProcess.do?method=receiveInvoice" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
 		<bean:message key="link.receive.invoice" bundle="ACQUISITION_RESOURCES"/>
 	</html:link>
 	<br />
+</logic:equal>
 
 <br/>
 <fr:view name="acquisitionProcess" property="acquisitionRequest"
