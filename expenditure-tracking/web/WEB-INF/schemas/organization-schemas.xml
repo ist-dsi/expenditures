@@ -41,3 +41,41 @@
 	<slot name="unit.costCenter" key="label.organization.cost.center" bundle="ORGANIZATION_RESOURCES"/>
 </schema>
 
+<schema name="searchSuppliers"
+		type="pt.ist.expenditureTrackingSystem.domain.organization.SearchSuppliers"
+		bundle="ORGANIZATION_RESOURCES">
+	<slot name="fiscalCode" key="label.supplier.fiscalCode" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="name" key="label.supplier.name" bundle="ORGANIZATION_RESOURCES"/>
+</schema>
+
+<schema name="viewSuppliersInList"
+		type="pt.ist.expenditureTrackingSystem.domain.organization.Supplier"
+		bundle="ORGANIZATION_RESOURCES">
+	<slot name="fiscalIdentificationCode" key="label.supplier.fiscalCode" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="name" key="label.supplier.name" bundle="ORGANIZATION_RESOURCES"/>
+</schema>
+
+<schema name="viewSupplier"
+		type="pt.ist.expenditureTrackingSystem.domain.organization.Supplier"
+		bundle="ORGANIZATION_RESOURCES">
+	<slot name="fiscalIdentificationCode" key="label.supplier.fiscalCode" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="name" key="label.supplier.name" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="address" key="label.supplier.address" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="phone" key="label.supplier.phone" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="fax" key="label.supplier.fax" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="email" key="label.supplier.email" bundle="ORGANIZATION_RESOURCES"/>	
+</schema>
+
+<schema name="createSupplier"
+		type="pt.ist.expenditureTrackingSystem.domain.dto.CreateSupplierBean"
+		bundle="ORGANIZATION_RESOURCES">
+	<slot name="fiscalIdentificationCode" key="label.supplier.fiscalCode" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="name" key="label.supplier.name" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="address" key="label.supplier.address" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="phone" key="label.supplier.phone" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="fax" key="label.supplier.fax" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="email" key="label.supplier.email" bundle="ORGANIZATION_RESOURCES"/>	
+</schema>
+
+
+

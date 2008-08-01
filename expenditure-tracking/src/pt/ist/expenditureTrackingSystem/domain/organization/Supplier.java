@@ -8,6 +8,9 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
+import pt.ist.expenditureTrackingSystem.domain.dto.CreateSupplierBean;
+import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.pstm.Transaction;
 
 public class Supplier extends Supplier_Base {
 
@@ -24,13 +27,25 @@ public class Supplier extends Supplier_Base {
 	setFiscalIdentificationCode(fiscalCode);
     }
 
-    public Supplier(String name, String fiscalCode, String address, String phone, String fax, String eMail) {
+    public Supplier(String name, String fiscalCode, String address, String phone, String fax, String email) {
 	this(fiscalCode);
 	setName(name);
 	setAddress(address);
 	setPhone(phone);
 	setFax(fax);
-	setEMail(eMail);
+	setEmail(email);
+    }
+
+    @Service
+    public void delete() {
+	if (checkIfCanBeDeleted()) {
+	    removeExpenditureTrackingSystem();
+	    Transaction.deleteObject(this);
+	}
+    }
+
+    private boolean checkIfCanBeDeleted() {
+	return !hasAnyAcquisitionRequests();
     }
 
     public static Supplier readSupplierByFiscalIdentificationCode(String fiscalIdentificationCode) {
@@ -47,12 +62,19 @@ public class Supplier extends Supplier_Base {
 	for (final AcquisitionRequest acquisitionRequest : getAcquisitionRequestsSet()) {
 	    final AcquisitionProcess acquisitionProcess = acquisitionRequest.getAcquisitionProcess();
 	    final AcquisitionProcessState acquisitionProcessState = acquisitionProcess.getAcquisitionProcessState();
-	    final AcquisitionProcessStateType acquisitionProcessStateType = acquisitionProcessState.get$acquisitionProcessStateType();
+	    final AcquisitionProcessStateType acquisitionProcessStateType = acquisitionProcessState
+		    .get$acquisitionProcessStateType();
 	    if (acquisitionProcessStateType.compareTo(AcquisitionProcessStateType.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER) >= 0) {
 		result = result.add(acquisitionRequest.getTotalItemValue());
 	    }
 	}
-	return result;	
+	return result;
+    }
+
+    @Service
+    public static Supplier createNewSupplier(CreateSupplierBean createSupplierBean) {
+	return new Supplier(createSupplierBean.getName(), createSupplierBean.getFiscalIdentificationCode(), createSupplierBean
+		.getAddress(), createSupplierBean.getPhone(), createSupplierBean.getFax(), createSupplierBean.getEmail());
     }
 
 }

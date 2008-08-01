@@ -90,7 +90,7 @@ class organization.Supplier {
 	String address;
 	String phone;
 	String fax;
-	String eMail;
+	String email;
 }
 
 class Role {
