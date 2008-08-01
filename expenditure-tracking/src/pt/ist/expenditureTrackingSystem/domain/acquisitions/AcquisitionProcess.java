@@ -9,6 +9,7 @@ import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
+import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.fenixWebFramework.security.UserView;
@@ -24,16 +25,26 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 	new AcquisitionRequest(this);
     }
 
+    protected AcquisitionProcess(String fiscalCode, String costCenter, String project, String subproject, String recipient,
+	    String receptionAddress) {
+	super();
+	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
+	new AcquisitionProcessState(this, AcquisitionProcessStateType.IN_GENESIS);
+	new AcquisitionRequest(this, fiscalCode, costCenter, project, subproject, recipient, receptionAddress);
+    }
+
     public static boolean isCreateNewAcquisitionProcessAvailable() {
 	return UserView.getUser() != null;
     }
 
     @Service
-    public static AcquisitionProcess createNewAcquisitionProcess() {
+    public static AcquisitionProcess createNewAcquisitionProcess(final CreateAcquisitionProcessBean createAcquisitionProcessBean) {
 	if (!isCreateNewAcquisitionProcessAvailable()) {
 	    throw new DomainException("error.acquisitionProcess.invalid.state.to.run.createNewAcquisitionProcess");
 	}
-	return new AcquisitionProcess();
+	return new AcquisitionProcess(createAcquisitionProcessBean.getFiscalIdentificationCode(), createAcquisitionProcessBean
+		.getCostCenter(), createAcquisitionProcessBean.getProject(), createAcquisitionProcessBean.getSubproject(),
+		createAcquisitionProcessBean.getRecipient(), createAcquisitionProcessBean.getReceptionAddress());
     }
 
     public boolean isAcquisitionProposalDocumentAvailable() {
@@ -98,7 +109,7 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 	    }
 	}
 	return false;
-	
+
     }
 
     public boolean isApproveAvailable() {
@@ -169,7 +180,8 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
     }
 
     public boolean isCreateAcquisitionRequestAvailable() {
-	return userHasRole(RoleType.ACQUISITION_CENTRAL) && isProcessInState(AcquisitionProcessStateType.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER);
+	return userHasRole(RoleType.ACQUISITION_CENTRAL)
+		&& isProcessInState(AcquisitionProcessStateType.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER);
     }
 
     @Service
@@ -212,17 +224,10 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
     }
 
     public boolean isPersonAbleToExecuteActivities() {
-	return isAcquisitionProposalDocumentAvailable()
-		|| isCreateAcquisitionRequestItemAvailable()
-		|| isSubmitForApprovalAvailable()
-		|| isApproveAvailable()
-		|| isDeleteAvailable()
-		|| isFundAllocationIdAvailable()
-		|| isFundAllocationExpirationDateAvailable()
-		|| isCreateAcquisitionRequestAvailable()
-		|| isReceiveInvoiceAvailable()
-		|| isConfirmInvoiceAvailable()
-		|| isPayAcquisitionAvailable()
+	return isAcquisitionProposalDocumentAvailable() || isCreateAcquisitionRequestItemAvailable()
+		|| isSubmitForApprovalAvailable() || isApproveAvailable() || isDeleteAvailable() || isFundAllocationIdAvailable()
+		|| isFundAllocationExpirationDateAvailable() || isCreateAcquisitionRequestAvailable()
+		|| isReceiveInvoiceAvailable() || isConfirmInvoiceAvailable() || isPayAcquisitionAvailable()
 		|| isAlocateFundsPermanentlyAvailable();
     }
 
@@ -260,30 +265,29 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 	}
 	new AcquisitionProcessState(this, AcquisitionProcessStateType.INVOICE_CONFIRMED);
     }
-    
-    
+
     public boolean isPayAcquisitionAvailable() {
 	return userHasRole(RoleType.ACQUISITION_CENTRAL) && isProcessInState(AcquisitionProcessStateType.INVOICE_CONFIRMED);
     }
-    
+
     @Service
     public void payAcquisition() {
 	if (!isPayAcquisitionAvailable()) {
 	    throw new DomainException("error.acquisitionProcess.invalid.state.to.run.alocateFundsPermanently");
 	}
-	new AcquisitionProcessState(this,AcquisitionProcessStateType.ACQUISITION_PAYED);
+	new AcquisitionProcessState(this, AcquisitionProcessStateType.ACQUISITION_PAYED);
     }
 
     public boolean isAlocateFundsPermanentlyAvailable() {
 	return userHasRole(RoleType.ACCOUNTABILITY) && isProcessInState(AcquisitionProcessStateType.ACQUISITION_PAYED);
     }
-    
+
     @Service
     public void alocateFundsPermanently() {
 	if (!isAlocateFundsPermanentlyAvailable()) {
 	    throw new DomainException("error.acquisitionProcess.invalid.state.to.run.alocateFundsPermanently");
 	}
-	new AcquisitionProcessState(this,AcquisitionProcessStateType.FUNDS_ALLOCATED_PERMANENTLY);
+	new AcquisitionProcessState(this, AcquisitionProcessStateType.FUNDS_ALLOCATED_PERMANENTLY);
     }
 
     public Unit getUnit() {
@@ -293,7 +297,7 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 
     public boolean isAllowedToViewCostCenterExpenditures() {
 	try {
-	return getUnit() != null && isResponsibleForUnit() || userHasRole(RoleType.ACCOUNTABILITY);
+	    return getUnit() != null && isResponsibleForUnit() || userHasRole(RoleType.ACCOUNTABILITY);
 	} catch (Exception e) {
 	    e.printStackTrace();
 	    throw new Error(e);

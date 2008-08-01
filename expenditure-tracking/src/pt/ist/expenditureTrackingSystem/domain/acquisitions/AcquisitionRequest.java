@@ -27,6 +27,17 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	setRequester(user.getPerson());
     }
 
+    AcquisitionRequest(AcquisitionProcess acquisitionProcess, String fiscalCode, String costCenter, String project,
+	    String subproject, String recipient, String receptionAddress) {
+	this(acquisitionProcess);
+	setFiscalIdentificationCode(fiscalCode);
+	setCostCenter(costCenter);
+	setProject(project);
+	setSubproject(subproject);
+	setRecipient(recipient);
+	setReceptionAddress(receptionAddress);
+    }
+
     public void addAcquisitionProposalDocument(final String filename, final byte[] bytes) {
 	AcquisitionProposalDocument acquisitionProposalDocument = getAcquisitionProposalDocument();
 	if (acquisitionProposalDocument == null) {

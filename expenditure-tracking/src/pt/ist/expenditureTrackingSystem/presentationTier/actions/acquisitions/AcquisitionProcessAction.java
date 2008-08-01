@@ -25,6 +25,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestDo
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Invoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.SearchAcquisitionProcess;
+import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean;
 import pt.ist.expenditureTrackingSystem.presentationTier.Context;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.BaseAction;
 import pt.ist.expenditureTrackingSystem.presentationTier.util.FileUploadBean;
@@ -35,6 +36,7 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
 @Mapping(path = "/acquisitionProcess")
 @Forwards( { @Forward(name = "edit.request.acquisition", path = "/acquisitions/editAcquisitionRequest.jsp"),
+	@Forward(name = "create.acquisition.process", path = "/acquisitions/createAcquisitionProcess.jsp"),
 	@Forward(name = "view.acquisition.process", path = "/acquisitions/viewAcquisitionProcess.jsp"),
 	@Forward(name = "search.acquisition.process", path = "/acquisitions/searchAcquisitionProcess.jsp"),
 	@Forward(name = "add.acquisition.proposal.document", path = "/acquisitions/addAcquisitionProposalDocument.jsp"),
@@ -78,11 +80,25 @@ public class AcquisitionProcessAction extends BaseAction {
 	}
     }
 
+    public final ActionForward prepareCreateAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final CreateAcquisitionProcessBean acquisitionProcessBean = new CreateAcquisitionProcessBean();
+	User user = UserView.getUser();
+	if (user != null && user.getPerson() != null) {
+	    acquisitionProcessBean.setRecipient(user.getPerson().getName());
+	}
+	request.setAttribute("acquisitionProcessBean", acquisitionProcessBean);
+	return mapping.findForward("create.acquisition.process");
+    }
+
     public final ActionForward createNewAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
-	final AcquisitionProcess acquisitionProcess = AcquisitionProcess.createNewAcquisitionProcess();
+	CreateAcquisitionProcessBean createAcquisitionProcessBean = getRenderedObject();
+
+	final AcquisitionProcess acquisitionProcess = AcquisitionProcess
+		.createNewAcquisitionProcess(createAcquisitionProcessBean);
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
-	return editAcquisitionRequest(mapping, request, acquisitionProcess);
+	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
 
     public final ActionForward editAcquisitionRequest(final ActionMapping mapping, final ActionForm form,
@@ -314,19 +330,18 @@ public class AcquisitionProcessAction extends BaseAction {
 	acquisitionProcess.confirmInvoice();
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
-    
-    
+
     public final ActionForward payAcquisition(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
-	
+
 	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
 	acquisitionProcess.payAcquisition();
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
-    
+
     public final ActionForward alocateFundsPermanently(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
-	
+
 	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
 	acquisitionProcess.alocateFundsPermanently();
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);

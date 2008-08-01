@@ -11,7 +11,7 @@
 --%>
 	<ul>
 		<li>
-			<html:link action="/acquisitionProcess.do?method=createNewAcquisitionProcess">
+			<html:link action="/acquisitionProcess.do?method=prepareCreateAcquisitionProcess">
 				<bean:message key="link.create.aquisition.process" bundle="EXPENDITURE_RESOURCES"/>
 			</html:link>
 		</li>

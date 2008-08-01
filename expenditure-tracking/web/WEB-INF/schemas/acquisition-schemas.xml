@@ -1,3 +1,14 @@
+<schema name="createAcquisitionRequest"
+		type="pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean"
+		bundle="ACQUISITION_RESOURCES">
+	<slot name="fiscalIdentificationCode" key="label.service.provider.fiscalIdentificationCode" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="costCenter" key="label.cost.center" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="project" key="label.project" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="subproject" key="label.subproject" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="recipient" key="label.recipient" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="receptionAddress" key="label.receptionAddress" bundle="ACQUISITION_RESOURCES"/>
+</schema>
+
 <schema name="editAcquisitionRequest"
 		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest"
 		bundle="ACQUISITION_RESOURCES">
