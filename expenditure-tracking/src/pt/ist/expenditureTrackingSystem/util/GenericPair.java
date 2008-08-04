@@ -1,7 +1,7 @@
 /**
  * 
  */
-package net.sourceforge.fenixedu.dataTransferObject;
+package pt.ist.expenditureTrackingSystem.util;
 
 import java.io.Serializable;
 
