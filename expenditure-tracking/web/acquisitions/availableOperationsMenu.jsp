@@ -50,7 +50,7 @@
 		</logic:equal>
 		<logic:equal name="acquisitionProcess" property="createAcquisitionRequestItemAvailable" value="true">
 			<li>
-				<html:link action="/acquisitionProcess.do?method=createNewAcquisitionRequestItem" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
+				<html:link action="/acquisitionProcess.do?method=prepareCreateNewAcquisitionRequestItem" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
 					<bean:message key="link.create.new.acquisition.request.item" bundle="ACQUISITION_RESOURCES"/>
 				</html:link>
 			</li>
