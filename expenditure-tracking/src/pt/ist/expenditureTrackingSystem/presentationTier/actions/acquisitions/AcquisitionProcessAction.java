@@ -26,6 +26,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestIt
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Invoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.SearchAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean;
+import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionRequestItemBean;
 import pt.ist.expenditureTrackingSystem.presentationTier.Context;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.BaseAction;
 import pt.ist.expenditureTrackingSystem.presentationTier.util.FileUploadBean;
@@ -41,6 +42,7 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "search.acquisition.process", path = "/acquisitions/searchAcquisitionProcess.jsp"),
 	@Forward(name = "add.acquisition.proposal.document", path = "/acquisitions/addAcquisitionProposalDocument.jsp"),
 	@Forward(name = "view.acquisition.request.item", path = "/acquisitions/viewAcquisitionRequestItem.jsp"),
+	@Forward(name = "create.acquisition.request.item", path = "/acquisitions/createAcquisitionRequestItem.jsp"),
 	@Forward(name = "edit.acquisition.request.item", path = "/acquisitions/editAcquisitionRequestItem.jsp"),
 	@Forward(name = "allocate.funds", path = "/acquisitions/allocateFunds.jsp"),
 	@Forward(name = "allocate.funds.to.service.provider", path = "/acquisitions/allocateFundsToServiceProvider.jsp"),
@@ -180,11 +182,21 @@ public class AcquisitionProcessAction extends BaseAction {
 	return download(response, acquisitionRequestDocument);
     }
 
+    public final ActionForward prepareCreateNewAcquisitionRequestItem(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
+	request.setAttribute("bean", new CreateAcquisitionRequestItemBean(acquisitionProcess.getAcquisitionRequest()));
+	request.setAttribute("acquisitionProcess", acquisitionProcess);
+	return mapping.findForward("create.acquisition.request.item");
+    }
+
     public final ActionForward createNewAcquisitionRequestItem(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
-	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
-	final AcquisitionRequestItem acquisitionRequestItem = acquisitionProcess.createAcquisitionRequestItem();
-	return editAcquisitionRequestItem(mapping, request, acquisitionRequestItem);
+	final CreateAcquisitionRequestItemBean requestItemBean = getRenderedObject();
+
+	AcquisitionRequestItem acquisitionRequestItem = requestItemBean.getAcquisitionRequest().getAcquisitionProcess()
+		.createAcquisitionRequestItem(requestItemBean);
+	return viewAcquisitionProcess(mapping, request, acquisitionRequestItem.getAcquisitionRequest().getAcquisitionProcess());
     }
 
     protected final ActionForward editAcquisitionRequestItem(final ActionMapping mapping, final HttpServletRequest request,
