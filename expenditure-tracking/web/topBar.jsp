@@ -10,7 +10,7 @@
 		</html:link>
 	</li>
 	<li>
-		<html:link action="/acquisitionProcess.do?method=searchAcquisitionProcess">
+		<html:link action="/acquisitionProcess.do?method=showPendingProcesses">
 			<span>
 				<bean:message key="link.aquisition.processes" bundle="EXPENDITURE_RESOURCES"/>
 			</span>
