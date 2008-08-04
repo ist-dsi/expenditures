@@ -14,6 +14,7 @@ import pt.ist.expenditureTrackingSystem.domain.Role;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateSupplierBean;
+import pt.ist.expenditureTrackingSystem.domain.dto.CreateUnitBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.SearchSuppliers;
 import pt.ist.expenditureTrackingSystem.domain.organization.SearchUsers;
@@ -27,6 +28,7 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
 @Mapping(path = "/organization")
 @Forwards( { @Forward(name = "view.organization", path = "/organization/viewOrganization.jsp"),
+	@Forward(name = "create.unit", path = "/organization/createUnit.jsp"),
 	@Forward(name = "edit.unit", path = "/organization/editUnit.jsp"),
 	@Forward(name = "search.users", path = "/organization/searchUsers.jsp"),
 	@Forward(name = "manage.suppliers", path = "/organization/manageSuppliers.jsp"),
@@ -59,11 +61,18 @@ public class OrganizationAction extends BaseAction {
 	return mapping.findForward("view.organization");
     }
 
-    public final ActionForward createNewUnit(final ActionMapping mapping, final ActionForm form,
+    public final ActionForward prepareCreateUnit(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final Unit unit = getDomainObject(request, "unitOid");
-	final Unit newUnit = Unit.createNewUnit(unit);
-	return editUnit(mapping, request, newUnit);
+	request.setAttribute("bean", new CreateUnitBean(unit));
+	return mapping.findForward("create.unit");
+    }
+
+    public final ActionForward createNewUnit(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	CreateUnitBean createUnitBean = getRenderedObject();
+	final Unit newUnit = Unit.createNewUnit(createUnitBean);
+	return viewOrganization(mapping, request, newUnit);
     }
 
     private ActionForward editUnit(ActionMapping mapping, HttpServletRequest request, Unit unit) {

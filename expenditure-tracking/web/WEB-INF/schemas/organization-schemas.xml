@@ -1,3 +1,10 @@
+<schema name="createUnit"
+		type="pt.ist.expenditureTrackingSystem.domain.dto.CreateUnitBean"
+		bundle="ORGANIZATION_RESOURCES">
+	<slot name="name" key="label.organization.name" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="costCenter" key="label.organization.cost.center" bundle="ORGANIZATION_RESOURCES"/>
+</schema>
+
 <schema name="editUnit"
 		type="pt.ist.expenditureTrackingSystem.domain.organization.Unit"
 		bundle="ORGANIZATION_RESOURCES">

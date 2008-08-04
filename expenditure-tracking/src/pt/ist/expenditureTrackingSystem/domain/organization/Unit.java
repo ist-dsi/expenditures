@@ -9,6 +9,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessSt
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
+import pt.ist.expenditureTrackingSystem.domain.dto.CreateUnitBean;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.pstm.Transaction;
 
@@ -24,9 +25,15 @@ public class Unit extends Unit_Base {
 	setParentUnit(parentUnit);
     }
 
+    public Unit(final Unit parentUnit, final String name, final String costCenter) {
+	this(parentUnit);
+	setName(name);
+	setCostCenter(costCenter);
+    }
+
     @Service
-    public static Unit createNewUnit(final Unit unit) {
-	return new Unit(unit);
+    public static Unit createNewUnit(final CreateUnitBean createUnitBean) {
+	return new Unit(createUnitBean.getParentUnit(), createUnitBean.getName(), createUnitBean.getCostCenter());
     }
 
     @Service
@@ -46,13 +53,14 @@ public class Unit extends Unit_Base {
     public void findAcquisitionProcessesPendingAuthorization(final Set<AcquisitionProcess> result, final boolean recurseSubUnits) {
 	final String costCenter = getCostCenter();
 	if (costCenter != null) {
-	for (final AcquisitionProcess acquisitionProcess : ExpenditureTrackingSystem.getInstance().getAcquisitionProcessesSet()) {
-	    if (costCenter.equals(acquisitionProcess.getAcquisitionRequest().getCostCenter())) {
-		if (acquisitionProcess.isPendingApproval()) {
-		    result.add(acquisitionProcess);
+	    for (final AcquisitionProcess acquisitionProcess : ExpenditureTrackingSystem.getInstance()
+		    .getAcquisitionProcessesSet()) {
+		if (costCenter.equals(acquisitionProcess.getAcquisitionRequest().getCostCenter())) {
+		    if (acquisitionProcess.isPendingApproval()) {
+			result.add(acquisitionProcess);
+		    }
 		}
 	    }
-	}
 	}
 	if (recurseSubUnits) {
 	    for (final Unit unit : getSubUnitsSet()) {
@@ -65,11 +73,13 @@ public class Unit extends Unit_Base {
 	BigDecimal result = BigDecimal.ZERO;
 	final String costCenter = getCostCenter();
 	if (costCenter != null) {
-	    for (final AcquisitionRequest acquisitionRequest : ExpenditureTrackingSystem.getInstance().getAcquisitionRequestsSet()) {
+	    for (final AcquisitionRequest acquisitionRequest : ExpenditureTrackingSystem.getInstance()
+		    .getAcquisitionRequestsSet()) {
 		if (costCenter.equals(acquisitionRequest.getCostCenter())) {
 		    final AcquisitionProcess acquisitionProcess = acquisitionRequest.getAcquisitionProcess();
 		    final AcquisitionProcessState acquisitionProcessState = acquisitionProcess.getAcquisitionProcessState();
-		    final AcquisitionProcessStateType acquisitionProcessStateType = acquisitionProcessState.get$acquisitionProcessStateType();
+		    final AcquisitionProcessStateType acquisitionProcessStateType = acquisitionProcessState
+			    .get$acquisitionProcessStateType();
 		    if (acquisitionProcessStateType.compareTo(AcquisitionProcessStateType.FUNDS_ALLOCATED) >= 0) {
 			result = result.add(acquisitionRequest.getTotalItemValue());
 		    }
