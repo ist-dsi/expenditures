@@ -10,6 +10,7 @@ import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean;
+import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionRequestItemBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.fenixWebFramework.security.UserView;
@@ -69,12 +70,12 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
     }
 
     @Service
-    public AcquisitionRequestItem createAcquisitionRequestItem() {
+    public AcquisitionRequestItem createAcquisitionRequestItem(CreateAcquisitionRequestItemBean acquisitionRequestItemBean) {
 	if (!isCreateAcquisitionRequestItemAvailable()) {
 	    throw new DomainException("error.acquisitionProcess.invalid.state.to.run.createAcquisitionRequestItem");
 	}
 	final AcquisitionRequest acquisitionRequest = getAcquisitionRequest();
-	return acquisitionRequest.createAcquisitionRequestItem();
+	return acquisitionRequest.createAcquisitionRequestItem(acquisitionRequestItemBean);
     }
 
     public boolean isSubmitForApprovalAvailable() {

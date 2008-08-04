@@ -14,6 +14,16 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	setAcquisitionRequest(acquisitionRequest);
     }
 
+    public AcquisitionRequestItem(final AcquisitionRequest acquisitionRequest, final String description, final Integer quantity,
+	    final BigDecimal unitValue, final String proposalReference, String salesCode) {
+	this(acquisitionRequest);
+	setDescription(description);
+	setQuantity(quantity);
+	setUnitValue(unitValue);
+	setProposalReference(proposalReference);
+	setSalesCode(salesCode);
+    }
+
     public BigDecimal getTotalItemValue() {
 	final BigDecimal unitValue = getUnitValue();
 	final Integer quantity = getQuantity();

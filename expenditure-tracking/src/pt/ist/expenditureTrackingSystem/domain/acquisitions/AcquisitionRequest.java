@@ -8,6 +8,7 @@ import org.joda.time.DateTime;
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionRequestItemBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.util.ByteArray;
 import pt.ist.fenixWebFramework.security.UserView;
@@ -48,8 +49,9 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	acquisitionProposalDocument.setContent(new ByteArray(bytes));
     }
 
-    public AcquisitionRequestItem createAcquisitionRequestItem() {
-	return new AcquisitionRequestItem(this);
+    public AcquisitionRequestItem createAcquisitionRequestItem(CreateAcquisitionRequestItemBean requestItemBean) {
+	return new AcquisitionRequestItem(this, requestItemBean.getDescription(), requestItemBean.getQuantity(), requestItemBean
+		.getUnitValue(), requestItemBean.getProposalReference(), requestItemBean.getSalesCode());
     }
 
     public void delete() {
