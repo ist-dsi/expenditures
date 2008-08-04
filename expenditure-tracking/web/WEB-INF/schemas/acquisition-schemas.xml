@@ -23,6 +23,7 @@
 <schema name="viewAcquisitionRequest"
 		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest"
 		bundle="ACQUISITION_RESOURCES">
+	<slot name="acquisitionProcess.requestor.name" key="label.acquisition.requestor" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="acquisitionProcess.acquisitionProcessState.localizedName" key="label.acquisition.process.state" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="fiscalIdentificationCode" key="label.service.provider.fiscalIdentificationCode" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="costCenter" key="label.cost.center" bundle="ACQUISITION_RESOURCES"/>
@@ -163,3 +164,12 @@
 	<slot name="address" key="label.supplier.address" bundle="ORGANIZATION_RESOURCES"/>	
 </schema>
 
+<schema name="viewOperationLog"
+		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.OperationLog"
+		bundle="ACQUISITION_RESOURCES">
+		<slot name="executor.name" key="label.person.name"/>
+		<slot name="activity.class" key="label.operation" layout="label">
+			<property name="bundle" value="ACQUISITION_RESOURCES"/>
+		</slot>
+		<slot name="whenOperationWasRan" key="label.execution.date"/>
+</schema>

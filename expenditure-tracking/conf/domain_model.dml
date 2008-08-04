@@ -13,7 +13,6 @@ enum pt.ist.expenditureTrackingSystem.domain.RoleType as RoleType;
 class ExpenditureTrackingSystem {
 }
 
-
 class acquisitions.AcquisitionProcess {
 	String fundAllocationId;
 	DateTime fundAllocationExpirationDate;
@@ -39,6 +38,12 @@ class acquisitions.AcquisitionRequestItem {
 	BigDecimal unitValue;
 	String proposalReference;
 	String salesCode;              // CVP
+}
+
+class acquisitions.OperationLog {
+	DateTime whenOperationWasRan;
+	String operation;
+	AcquisitionProcessStateType state;
 }
 
 class authorizations.Authorization {
@@ -269,4 +274,25 @@ relation ExpenditureTrackingSystemAcquisitionProcessState {
 	acquisitions.AcquisitionProcessState playsRole acquisitionProcessStates {
 		multiplicity *;
 	}
+}
+
+relation ExpenditureTrackingSystemOperationLog {
+	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
+	acquisitions.OperationLog playsRole operationLogs {
+		multiplicity *;
+	}
+}
+
+relation OperationLogPerson {
+	acquisitions.OperationLog playsRole operationLogs {
+		multiplicity *;
+	}
+	organization.Person playsRole executor;
+}
+
+relation OperationLogProcess {
+	acquisitions.OperationLog playsRole operationLogs {
+		multiplicity *;
+	}
+	acquisitions.AcquisitionProcess playsRole acquisitionProcess;
 }

@@ -17,12 +17,12 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.CreateAcq
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.DeleteAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.FundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.FundAllocationExpirationDate;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.PayAcquisition;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.ReceiveInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.SubmitForApproval;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean;
-import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionRequestItemBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.fenixWebFramework.security.UserView;
@@ -31,10 +31,10 @@ import pt.ist.fenixframework.pstm.Transaction;
 
 public class AcquisitionProcess extends AcquisitionProcess_Base {
 
-    private static List<AbstractActivity<AcquisitionProcess>> activities;
+    private static List<GenericAcquisitionProcessActivity> activities;
 
     static {
-	activities = new ArrayList<AbstractActivity<AcquisitionProcess>>();
+	activities = new ArrayList<GenericAcquisitionProcessActivity>();
 	activities.add(new AddAcquisitionProposalDocument());
 	activities.add(new AllocateFundsPermanently());
 	activities.add(new ApproveAcquisitionProcess());
@@ -50,7 +50,7 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 
     protected AcquisitionProcess() {
 	super();
-	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
+	this.setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
 	new AcquisitionProcessState(this, AcquisitionProcessStateType.IN_GENESIS);
 	new AcquisitionRequest(this);
     }
@@ -188,12 +188,22 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 	return userHasRole(RoleType.ACQUISITION_CENTRAL);
     }
 
-    public AbstractActivity<AcquisitionProcess> getActivityByName(String activityName) {
-	for (AbstractActivity<AcquisitionProcess> activity : activities) {
+    public GenericAcquisitionProcessActivity getActivityByName(String activityName) {
+	for (GenericAcquisitionProcessActivity activity : activities) {
 	    if (activity.getName().equals(activityName)) {
 		return activity;
 	    }
 	}
 	return null;
+    }
+
+    public List<OperationLog> getOperationLogsInState(AcquisitionProcessStateType state) {
+	List<OperationLog> logs = new ArrayList<OperationLog>();
+	for (OperationLog log : getOperationLogsSet()) {
+	    if (log.getState() == state) {
+		logs.add(log);
+	    }
+	}
+	return logs;
     }
 }

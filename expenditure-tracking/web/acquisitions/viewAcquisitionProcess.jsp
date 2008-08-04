@@ -5,7 +5,13 @@
 
 <bean:define id="currentState" name="acquisitionProcess" property="acquisitionProcessStateType"/>
 
-<fr:view name="acquisitionProcess" layout="process-state"/> 
+<fr:view name="acquisitionProcess"> 
+	<fr:layout name="process-state">
+		<fr:property name="stateParameterName" value="state"/>
+		<fr:property name="url" value="/viewLogs.do?method=viewOperationLog&acquisitionProcessOid=${OID}"/>
+		<fr:property name="contextRelative" value="true"/>
+	</fr:layout>
+</fr:view>
 <%-- 
 <img src="<%= request.getContextPath() + "/CSS/processImages/" + currentState.toString() + ".png"%>" style="float: right"/>
 --%>

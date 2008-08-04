@@ -1,8 +1,8 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AbstractActivity;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
 
-public class ConfirmInvoice extends AbstractActivity<AcquisitionProcess> {
+public class ConfirmInvoice extends GenericAcquisitionProcessActivity {
 
     @Override
     protected boolean isAccessible(AcquisitionProcess process) {

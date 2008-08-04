@@ -5,7 +5,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.fenixWebFramework.security.UserView;
 
-public class DeleteAcquisitionProcess extends AbstractActivity<AcquisitionProcess> {
+public class DeleteAcquisitionProcess extends GenericAcquisitionProcessActivity {
 
     @Override
     protected boolean isAccessible(AcquisitionProcess process) {

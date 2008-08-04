@@ -7,7 +7,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionRequestItemBean;
 import pt.ist.fenixWebFramework.security.UserView;
 
-public class CreateAcquisitionRequestItem extends AbstractActivity<AcquisitionProcess>{
+public class CreateAcquisitionRequestItem extends GenericAcquisitionProcessActivity {
 
     @Override
     protected boolean isAccessible(AcquisitionProcess process) {

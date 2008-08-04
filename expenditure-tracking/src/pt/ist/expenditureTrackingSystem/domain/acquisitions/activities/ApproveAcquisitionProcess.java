@@ -4,7 +4,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 
-public class ApproveAcquisitionProcess extends AbstractActivity<AcquisitionProcess>{
+public class ApproveAcquisitionProcess extends GenericAcquisitionProcessActivity{
 
     @Override
     protected boolean isAccessible(AcquisitionProcess process) {

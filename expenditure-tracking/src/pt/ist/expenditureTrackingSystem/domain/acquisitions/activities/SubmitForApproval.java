@@ -6,7 +6,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessSt
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.fenixWebFramework.security.UserView;
 
-public class SubmitForApproval extends AbstractActivity<AcquisitionProcess> {
+public class SubmitForApproval extends GenericAcquisitionProcessActivity {
 
     @Override
     protected boolean isAccessible(AcquisitionProcess process) {

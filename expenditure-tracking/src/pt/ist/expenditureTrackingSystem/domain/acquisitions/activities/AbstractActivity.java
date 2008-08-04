@@ -15,6 +15,9 @@ public abstract class AbstractActivity<T> {
 
     protected abstract void process(T process, Object... objects);
 
+    protected abstract void logExecution(T process, String operationName, User user);
+    
+    
     public final void execute(T process) {
 	execute(process, Collections.EMPTY_LIST);
     }
@@ -22,6 +25,7 @@ public abstract class AbstractActivity<T> {
     @Service
     public final void execute(T process, Object... args) {
 	checkConditionsFor(process);
+	logExecution(process, getName(), getUser());
 	process(process, args);
     }
 
@@ -43,7 +47,13 @@ public abstract class AbstractActivity<T> {
 	return user != null && user.getPerson().hasRoleType(roleType);
     }
 
+    protected User getUser() {
+	return UserView.getUser();
+    }
+    
     public String getName() {
 	return getClass().getSimpleName();
     }
+    
+    
 }
