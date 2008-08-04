@@ -59,6 +59,16 @@
 	</slot>
 </schema>
 
+<schema name="createAcquisitionRequestItem"
+		type="pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionRequestItemBean"
+		bundle="ACQUISITION_RESOURCES">
+	<slot name="proposalReference" key="label.acquisition.request.item.proposalReference" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="quantity" key="label.acquisition.request.item.quantity" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="unitValue" key="label.acquisition.request.item.unitValue" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="salesCode" key="label.acquisition.request.item.salesCode" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="description" key="label.acquisition.request.item.description" bundle="ACQUISITION_RESOURCES"/>
+</schema>
+
 <schema name="editAcquisitionRequestItem"
 		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem"
 		bundle="ACQUISITION_RESOURCES">
