@@ -5,7 +5,7 @@
 
 <h2><bean:message key="label.search.users" bundle="ORGANIZATION_RESOURCES"/></h2>
 <br/>
-<html:link action="/organization.do?method=createPerson">
+<html:link action="/organization.do?method=prepareCreatePerson">
 	<bean:message key="link.create.person" bundle="ORGANIZATION_RESOURCES"/>
 </html:link>
 <br/>

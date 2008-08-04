@@ -9,15 +9,16 @@ import pt.ist.expenditureTrackingSystem.domain.Role;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
+import pt.ist.expenditureTrackingSystem.domain.dto.CreatePersonBean;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.pstm.Transaction;
 
 public class Person extends Person_Base {
-    
+
     public Person() {
-        super();
-        setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
-        new Options(this);
+	super();
+	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
+	new Options(this);
     }
 
     public Person(final String username) {
@@ -26,8 +27,15 @@ public class Person extends Person_Base {
     }
 
     @Service
-    public static Person createPerson() {
+    public static Person createEmptyPerson() {
 	return new Person();
+    }
+
+    @Service
+    public static Person createPerson(CreatePersonBean createPersonBean) {
+	final Person person = new Person(createPersonBean.getUsername());
+	person.setName(createPersonBean.getName());
+	return person;
     }
 
     @Service
@@ -61,7 +69,7 @@ public class Person extends Person_Base {
 	}
 	return result;
     }
-    
+
     public boolean hasRoleType(RoleType type) {
 	for (Role role : getRolesSet()) {
 	    if (role.getRoleType().equals(type)) {
@@ -70,7 +78,7 @@ public class Person extends Person_Base {
 	}
 	return false;
     }
-    
+
     @Service
     @Override
     public void addRoles(Role role) {
@@ -78,10 +86,11 @@ public class Person extends Person_Base {
 	    super.addRoles(role);
 	}
     }
-    
+
     @Service
     @Override
     public void removeRoles(Role roles) {
-        super.removeRoles(roles);
+	super.removeRoles(roles);
     }
+
 }

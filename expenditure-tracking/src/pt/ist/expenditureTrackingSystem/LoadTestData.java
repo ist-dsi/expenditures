@@ -19,7 +19,7 @@ public class LoadTestData {
     public static void init() {
 	String domainModelPath = "web/WEB-INF/classes/domain_model.dml";
 	FenixWebFramework.initialize(PropertiesManager.getFenixFrameworkConfig(domainModelPath));
-	ExpenditureTrackingSystem.initialize(FenixWebFramework.getConfig());	
+	ExpenditureTrackingSystem.initialize(FenixWebFramework.getConfig());
     }
 
     public static void main(String[] args) {
@@ -137,7 +137,7 @@ public class LoadTestData {
     @Service
     private static void createPeople(final FenixPeopleSet fenixPeopleSet, final FenixUnitMap fenixUnitMap) {
 	for (final FenixPerson fenixPerson : fenixPeopleSet) {
-	    final Person person = Person.createPerson();
+	    final Person person = Person.createEmptyPerson();
 	    person.setUsername(fenixPerson.username);
 	    person.setName(fenixPerson.name);
 	    if (!fenixPerson.unitOids.isEmpty()) {

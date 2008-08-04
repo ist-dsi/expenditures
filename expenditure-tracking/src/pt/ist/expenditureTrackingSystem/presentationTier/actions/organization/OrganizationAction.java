@@ -13,6 +13,7 @@ import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.Role;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
+import pt.ist.expenditureTrackingSystem.domain.dto.CreatePersonBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateSupplierBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateUnitBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
@@ -33,6 +34,7 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "search.users", path = "/organization/searchUsers.jsp"),
 	@Forward(name = "manage.suppliers", path = "/organization/manageSuppliers.jsp"),
 	@Forward(name = "view.person", path = "/organization/viewPerson.jsp"),
+	@Forward(name = "create.person", path = "/organization/createPerson.jsp"),
 	@Forward(name = "edit.person", path = "/organization/editPerson.jsp"),
 	@Forward(name = "view.supplier", path = "/organization/viewSupplier.jsp"),
 	@Forward(name = "create.supplier", path = "/organization/createSupplier.jsp"),
@@ -104,10 +106,18 @@ public class OrganizationAction extends BaseAction {
 	return mapping.findForward("search.users");
     }
 
+    public final ActionForward prepareCreatePerson(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final CreatePersonBean createPersonBean = new CreatePersonBean();
+	request.setAttribute("bean", createPersonBean);
+	return mapping.findForward("create.person");
+    }
+
     public final ActionForward createPerson(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) {
-	final Person person = Person.createPerson();
-	return editPerson(mapping, request, person);
+	final CreatePersonBean createPersonBean = getRenderedObject();
+	Person person = Person.createPerson(createPersonBean);
+	return viewPerson(mapping, request, person);
     }
 
     public final ActionForward editPerson(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
