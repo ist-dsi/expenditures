@@ -1,13 +1,25 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
+import java.util.ArrayList;
 import java.util.Collections;
-
-import org.joda.time.DateTime;
+import java.util.List;
 
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AbstractActivity;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AddAcquisitionProposalDocument;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AllocateFundsPermanently;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.ApproveAcquisitionProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.CreateAcquisitionRequest;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.CreateAcquisitionRequestItem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.DeleteAcquisitionProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.FundAllocation;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.FundAllocationExpirationDate;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.PayAcquisition;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.ReceiveInvoice;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.SubmitForApproval;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionRequestItemBean;
@@ -18,6 +30,23 @@ import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.pstm.Transaction;
 
 public class AcquisitionProcess extends AcquisitionProcess_Base {
+
+    private static List<AbstractActivity<AcquisitionProcess>> activities;
+
+    static {
+	activities = new ArrayList<AbstractActivity<AcquisitionProcess>>();
+	activities.add(new AddAcquisitionProposalDocument());
+	activities.add(new AllocateFundsPermanently());
+	activities.add(new ApproveAcquisitionProcess());
+	activities.add(new CreateAcquisitionRequest());
+	activities.add(new CreateAcquisitionRequestItem());
+	activities.add(new DeleteAcquisitionProcess());
+	activities.add(new FundAllocation());
+	activities.add(new FundAllocationExpirationDate());
+	activities.add(new PayAcquisition());
+	activities.add(new ReceiveInvoice());
+	activities.add(new SubmitForApproval());
+    }
 
     protected AcquisitionProcess() {
 	super();
@@ -48,50 +77,6 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 		createAcquisitionProcessBean.getRecipient(), createAcquisitionProcessBean.getReceptionAddress());
     }
 
-    public boolean isAcquisitionProposalDocumentAvailable() {
-	User user = UserView.getUser();
-	return user != null && isProcessInState(AcquisitionProcessStateType.IN_GENESIS)
-		&& user.getPerson().equals(getRequestor());
-    }
-
-    @Service
-    public void addAcquisitionProposalDocument(final String filename, final byte[] bytes) {
-	if (!isAcquisitionProposalDocumentAvailable()) {
-	    throw new DomainException("error.acquisitionProcess.invalid.state.to.run.addAcquisitionProposalDocument");
-	}
-	final AcquisitionRequest acquisitionRequest = getAcquisitionRequest();
-	acquisitionRequest.addAcquisitionProposalDocument(filename, bytes);
-    }
-
-    public boolean isCreateAcquisitionRequestItemAvailable() {
-	User user = UserView.getUser();
-	return user != null && isProcessInState(AcquisitionProcessStateType.IN_GENESIS)
-		&& user.getPerson().equals(getRequestor());
-    }
-
-    @Service
-    public AcquisitionRequestItem createAcquisitionRequestItem(CreateAcquisitionRequestItemBean acquisitionRequestItemBean) {
-	if (!isCreateAcquisitionRequestItemAvailable()) {
-	    throw new DomainException("error.acquisitionProcess.invalid.state.to.run.createAcquisitionRequestItem");
-	}
-	final AcquisitionRequest acquisitionRequest = getAcquisitionRequest();
-	return acquisitionRequest.createAcquisitionRequestItem(acquisitionRequestItemBean);
-    }
-
-    public boolean isSubmitForApprovalAvailable() {
-	User user = UserView.getUser();
-	return user != null && isProcessInState(AcquisitionProcessStateType.IN_GENESIS)
-		&& user.getPerson().equals(getRequestor()) && getAcquisitionRequest().isFilled();
-    }
-
-    @Service
-    public void submitForApproval() {
-	if (!isSubmitForApprovalAvailable()) {
-	    throw new DomainException("error.acquisitionProcess.invalid.state.to.run.submitForApproval");
-	}
-	new AcquisitionProcessState(this, AcquisitionProcessStateType.SUBMITTED_FOR_APPROVAL);
-    }
-
     public Person getRequestor() {
 	return getAcquisitionRequest().getRequester();
     }
@@ -113,61 +98,11 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 
     }
 
-    public boolean isApproveAvailable() {
-	return isPendingApproval() && isResponsibleForUnit();
-    }
-
-    @Service
-    public void approve() {
-	if (!isApproveAvailable()) {
-	    throw new DomainException("error.acquisitionProcess.invalid.state.to.run.approve");
-	}
-	new AcquisitionProcessState(this, AcquisitionProcessStateType.APPROVED);
-    }
-
-    public boolean isDeleteAvailable() {
-	User user = UserView.getUser();
-	return user != null && user.getPerson().equals(getRequestor())
-		&& isProcessInState(AcquisitionProcessStateType.IN_GENESIS);
-    }
-
-    @Service
     public void delete() {
 	final AcquisitionRequest acquisitionRequest = getAcquisitionRequest();
 	acquisitionRequest.delete();
 	removeExpenditureTrackingSystem();
 	Transaction.deleteObject(this);
-    }
-
-    public boolean isFundAllocationIdAvailable() {
-	return userHasRole(RoleType.ACCOUNTABILITY) && isProcessInState(AcquisitionProcessStateType.APPROVED);
-    }
-
-    @Override
-    public void setFundAllocationId(final String fundAllocationId) {
-	if (!isFundAllocationIdAvailable()) {
-	    throw new DomainException("error.acquisitionProcess.invalid.state.to.run.setFundAllocationId");
-	}
-	super.setFundAllocationId(fundAllocationId);
-	new AcquisitionProcessState(this, AcquisitionProcessStateType.FUNDS_ALLOCATED);
-    }
-
-    protected boolean userHasRole(final RoleType roleType) {
-	final User user = UserView.getUser();
-	return user != null && user.getPerson().hasRoleType(roleType);
-    }
-
-    public boolean isFundAllocationExpirationDateAvailable() {
-	return userHasRole(RoleType.ACQUISITION_CENTRAL) && isProcessInState(AcquisitionProcessStateType.FUNDS_ALLOCATED);
-    }
-
-    @Override
-    public void setFundAllocationExpirationDate(final DateTime fundAllocationExpirationDate) {
-	if (!isFundAllocationExpirationDateAvailable()) {
-	    throw new DomainException("error.acquisitionProcess.invalid.state.to.run.setFundAllocationExpirationDate");
-	}
-	super.setFundAllocationExpirationDate(fundAllocationExpirationDate);
-	new AcquisitionProcessState(this, AcquisitionProcessStateType.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER);
     }
 
     public boolean isEditRequestItemAvailable() {
@@ -180,27 +115,7 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 	return isProcessInState(AcquisitionProcessStateType.SUBMITTED_FOR_APPROVAL);
     }
 
-    public boolean isCreateAcquisitionRequestAvailable() {
-	return userHasRole(RoleType.ACQUISITION_CENTRAL)
-		&& isProcessInState(AcquisitionProcessStateType.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER);
-    }
-
-    @Service
-    public AcquisitionRequestDocument createAcquisitionRequest() {
-	if (getAcquisitionRequest().getAcquisitionRequestDocument() != null) {
-	    return getAcquisitionRequest().getAcquisitionRequestDocument();
-	}
-
-	if (!isCreateAcquisitionRequestAvailable()) {
-	    throw new DomainException("error.acquisitionProcess.invalid.state.to.run.createAcquisitionRequest");
-	}
-
-	AcquisitionRequestDocument acquisitionRequestDocument = new AcquisitionRequestDocument(getAcquisitionRequest());
-	new AcquisitionProcessState(this, AcquisitionProcessStateType.ACQUISITION_PROCESSED);
-	return acquisitionRequestDocument;
-    }
-
-    private boolean isProcessInState(AcquisitionProcessStateType state) {
+    public boolean isProcessInState(AcquisitionProcessStateType state) {
 	return getLastAcquisitionProcessStateType().equals(state);
     }
 
@@ -220,75 +135,34 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 	return getLastAcquisitionProcessStateType();
     }
 
-    private boolean isProcessInState(AcquisitionProcessState state) {
-	return getAcquisitionProcessState().equals(state);
+    public List<AbstractActivity<AcquisitionProcess>> getActiveActivities() {
+	List<AbstractActivity<AcquisitionProcess>> activitiesResult = new ArrayList<AbstractActivity<AcquisitionProcess>>();
+
+	for (AbstractActivity<AcquisitionProcess> activity : activities) {
+	    if (activity.isActive(this)) {
+		activitiesResult.add(activity);
+	    }
+	}
+
+	return activitiesResult;
     }
 
     public boolean isPersonAbleToExecuteActivities() {
-	return isAcquisitionProposalDocumentAvailable() || isCreateAcquisitionRequestItemAvailable()
-		|| isSubmitForApprovalAvailable() || isApproveAvailable() || isDeleteAvailable() || isFundAllocationIdAvailable()
-		|| isFundAllocationExpirationDateAvailable() || isCreateAcquisitionRequestAvailable()
-		|| isReceiveInvoiceAvailable() || isConfirmInvoiceAvailable() || isPayAcquisitionAvailable()
-		|| isAlocateFundsPermanentlyAvailable();
+	for (AbstractActivity<AcquisitionProcess> activity : activities) {
+	    if (activity.isActive(this)) {
+		return true;
+	    }
+	}
+	return false;
     }
 
     public boolean isAcquisitionProcessed() {
 	return isProcessInState(AcquisitionProcessStateType.ACQUISITION_PROCESSED);
     }
 
-    public boolean isReceiveInvoiceAvailable() {
-	return isAcquisitionProcessed() && userHasRole(RoleType.ACCOUNTABILITY);
-    }
-
-    @Service
-    public void receiveInvoice(final String filename, final byte[] bytes, final String invoiceNumber, final DateTime invoiceDate) {
-	if (!isAcquisitionProcessed()) {
-	    throw new DomainException("error.acquisitionProcess.invalid.state.to.run.setReceiveInvoice");
-	}
-	final AcquisitionRequest acquisitionRequest = getAcquisitionRequest();
-	acquisitionRequest.receiveInvoice(filename, bytes, invoiceNumber, invoiceDate);
-	new AcquisitionProcessState(this, AcquisitionProcessStateType.INVOICE_RECEIVED);
-    }
-
     public boolean isInvoiceReceived() {
 	final AcquisitionRequest acquisitionRequest = getAcquisitionRequest();
 	return isProcessInState(AcquisitionProcessStateType.INVOICE_RECEIVED) && acquisitionRequest.isInvoiceReceived();
-    }
-
-    public boolean isConfirmInvoiceAvailable() {
-	return isInvoiceReceived() && isResponsibleForUnit();
-    }
-
-    @Service
-    public void confirmInvoice() {
-	if (!isInvoiceReceived()) {
-	    throw new DomainException("error.acquisitionProcess.invalid.state.to.run.confirmInvoice");
-	}
-	new AcquisitionProcessState(this, AcquisitionProcessStateType.INVOICE_CONFIRMED);
-    }
-
-    public boolean isPayAcquisitionAvailable() {
-	return userHasRole(RoleType.ACQUISITION_CENTRAL) && isProcessInState(AcquisitionProcessStateType.INVOICE_CONFIRMED);
-    }
-
-    @Service
-    public void payAcquisition() {
-	if (!isPayAcquisitionAvailable()) {
-	    throw new DomainException("error.acquisitionProcess.invalid.state.to.run.alocateFundsPermanently");
-	}
-	new AcquisitionProcessState(this, AcquisitionProcessStateType.ACQUISITION_PAYED);
-    }
-
-    public boolean isAlocateFundsPermanentlyAvailable() {
-	return userHasRole(RoleType.ACCOUNTABILITY) && isProcessInState(AcquisitionProcessStateType.ACQUISITION_PAYED);
-    }
-
-    @Service
-    public void alocateFundsPermanently() {
-	if (!isAlocateFundsPermanentlyAvailable()) {
-	    throw new DomainException("error.acquisitionProcess.invalid.state.to.run.alocateFundsPermanently");
-	}
-	new AcquisitionProcessState(this, AcquisitionProcessStateType.FUNDS_ALLOCATED_PERMANENTLY);
     }
 
     public Unit getUnit() {
@@ -305,8 +179,21 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 	}
     }
 
+    protected boolean userHasRole(final RoleType roleType) {
+	final User user = UserView.getUser();
+	return user != null && user.getPerson().hasRoleType(roleType);
+    }
+
     public boolean isAllowedToViewSupplierExpenditures() {
 	return userHasRole(RoleType.ACQUISITION_CENTRAL);
     }
 
+    public AbstractActivity<AcquisitionProcess> getActivityByName(String activityName) {
+	for (AbstractActivity<AcquisitionProcess> activity : activities) {
+	    if (activity.getName().equals(activityName)) {
+		return activity;
+	    }
+	}
+	return null;
+    }
 }

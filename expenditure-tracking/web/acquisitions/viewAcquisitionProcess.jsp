@@ -5,14 +5,34 @@
 
 <bean:define id="currentState" name="acquisitionProcess" property="acquisitionProcessStateType"/>
 
+<fr:view name="acquisitionProcess" layout="process-state"/> 
+<%-- 
 <img src="<%= request.getContextPath() + "/CSS/processImages/" + currentState.toString() + ".png"%>" style="float: right"/>
-
+--%>
+ 
 <h2><bean:message key="label.view.acquisition.process" bundle="EXPENDITURE_RESOURCES"/></h2>
 
 <div class="infoop1" style="width: 360px">
-	<jsp:include page="availableOperationsMenu.jsp"/>
+	<ul>
+	<logic:iterate id="activity" name="acquisitionProcess" property="activeActivities">
+		<bean:define id="activityName" name="activity" property="class.simpleName"/> 
+		<li>
+			<html:link page="<%= "/acquisitionProcess.do?method=execute" + activityName %>" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
+				<fr:view name="activity" property="class">
+					<fr:layout name="label">
+						<fr:property name="bundle" value="ACQUISITION_RESOURCES"/>
+					</fr:layout>
+				</fr:view>
+			</html:link>
+		</li>
+	</logic:iterate>
+	</ul>
+	<logic:empty name="acquisitionProcess" property="activeActivities">
+		<em>
+			<bean:message key="label.no.operations.available.at.the.moment" bundle="EXPENDITURE_RESOURCES"/>
+		</em>
+	</logic:empty>
 </div>
-<br/>
 
 <logic:equal name="acquisitionProcess" property="allowedToViewCostCenterExpenditures" value="true">
 	<bean:message key="label.unit.total.allocated" bundle="ORGANIZATION_RESOURCES"/>

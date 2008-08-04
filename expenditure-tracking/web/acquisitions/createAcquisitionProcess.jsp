@@ -13,4 +13,5 @@
 	<fr:layout name="tabular">
 		<fr:property name="classes" value="form"/>
 	</fr:layout>
+	<fr:destination name="cancel" path="/acquisitionProcess.do?method=showPendingProcesses"/>
 </fr:edit>

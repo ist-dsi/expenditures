@@ -25,6 +25,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestDo
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Invoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.SearchAcquisitionProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionRequestItemBean;
 import pt.ist.expenditureTrackingSystem.presentationTier.Context;
@@ -52,6 +53,7 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 public class AcquisitionProcessAction extends BaseAction {
 
     private static final Context CONTEXT = new Context("acquisitions");
+    private AbstractActivity<AcquisitionProcess> ActivityByName;
 
     @Override
     protected Context getContextModule() {
@@ -128,10 +130,10 @@ public class AcquisitionProcessAction extends BaseAction {
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
 
-    public final ActionForward deleteAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
+    public final ActionForward executeDeleteAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
-	acquisitionProcess.delete();
+	genericActivityExecution("DeleteAcquisitionProcess", acquisitionProcess);
 	return searchAcquisitionProcess(mapping, form, request, response);
     }
 
@@ -150,7 +152,7 @@ public class AcquisitionProcessAction extends BaseAction {
 	return mapping.findForward("search.acquisition.process");
     }
 
-    public final ActionForward prepareAddAcquisitionProposalDocument(final ActionMapping mapping, final ActionForm form,
+    public final ActionForward executeAddAcquisitionProposalDocument(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
@@ -166,7 +168,7 @@ public class AcquisitionProcessAction extends BaseAction {
 	final AcquisitionProposalDocumentForm acquisitionProposalDocumentForm = getRenderedObject();
 	final String filename = acquisitionProposalDocumentForm.getFilename();
 	final byte[] bytes = consumeInputStream(acquisitionProposalDocumentForm);
-	acquisitionProcess.addAcquisitionProposalDocument(filename, bytes);
+	acquisitionProcess.getActivityByName("AddAcquisitionProposalDocument").execute(acquisitionProcess, filename, bytes);
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
 
@@ -182,7 +184,7 @@ public class AcquisitionProcessAction extends BaseAction {
 	return download(response, acquisitionRequestDocument);
     }
 
-    public final ActionForward prepareCreateNewAcquisitionRequestItem(final ActionMapping mapping, final ActionForm form,
+    public final ActionForward executeCreateAcquisitionRequestItem(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
 	request.setAttribute("bean", new CreateAcquisitionRequestItemBean(acquisitionProcess.getAcquisitionRequest()));
@@ -194,9 +196,10 @@ public class AcquisitionProcessAction extends BaseAction {
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final CreateAcquisitionRequestItemBean requestItemBean = getRenderedObject();
 
-	AcquisitionRequestItem acquisitionRequestItem = requestItemBean.getAcquisitionRequest().getAcquisitionProcess()
-		.createAcquisitionRequestItem(requestItemBean);
-	return viewAcquisitionProcess(mapping, request, acquisitionRequestItem.getAcquisitionRequest().getAcquisitionProcess());
+	AcquisitionProcess acquisitionProcess = requestItemBean.getAcquisitionRequest().getAcquisitionProcess();
+	AbstractActivity<AcquisitionProcess> activity = acquisitionProcess.getActivityByName("CreateAcquisitionRequestItem");
+	activity.execute(acquisitionProcess, requestItemBean);
+	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
 
     protected final ActionForward editAcquisitionRequestItem(final ActionMapping mapping, final HttpServletRequest request,
@@ -228,17 +231,17 @@ public class AcquisitionProcessAction extends BaseAction {
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
 
-    public final ActionForward submitForApproval(final ActionMapping mapping, final ActionForm form,
+    public final ActionForward executeSubmitForApproval(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
-	acquisitionProcess.submitForApproval();
+	genericActivityExecution("SubmitForApproval", acquisitionProcess);
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
 
-    public final ActionForward approve(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
+    public final ActionForward executeApproveAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
 	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
-	acquisitionProcess.approve();
+	genericActivityExecution("ApproveAcquisitionProcess", acquisitionProcess);
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
 
@@ -256,7 +259,7 @@ public class AcquisitionProcessAction extends BaseAction {
 	return mapping.findForward("allocate.funds.to.service.provider");
     }
 
-    public final ActionForward prepareCreateAcquisitionRequest(final ActionMapping mapping, final ActionForm form,
+    public final ActionForward executeCreateAcquisitionRequest(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
@@ -282,7 +285,18 @@ public class AcquisitionProcessAction extends BaseAction {
 	    HttpServletRequest request, HttpServletResponse response) throws JRException, IOException {
 	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
 
-	AcquisitionRequestDocument acquisitionRequestDocument = acquisitionProcess.createAcquisitionRequest();
+	AcquisitionRequest acquisitionRequest = acquisitionProcess.getAcquisitionRequest();
+
+	AcquisitionRequestDocument acquisitionRequestDocument = acquisitionRequest != null ? acquisitionRequest
+		.getAcquisitionRequestDocument() : null;
+
+	if (acquisitionRequestDocument == null) {
+	    AbstractActivity<AcquisitionProcess> createAquisitionRequest = acquisitionProcess
+		    .getActivityByName("CreateAcquisitionRequest");
+	    createAquisitionRequest.execute(acquisitionProcess);
+	    acquisitionRequestDocument = acquisitionRequest.getAcquisitionRequestDocument();
+	}
+
 	byte[] data = acquisitionRequestDocument.getContent().getBytes();
 
 	response.setContentLength(data.length);
@@ -301,7 +315,7 @@ public class AcquisitionProcessAction extends BaseAction {
 	return findForward;
     }
 
-    public final ActionForward receiveInvoice(final ActionMapping mapping, final ActionForm form,
+    public final ActionForward executeReceiveInvoice(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
@@ -325,8 +339,9 @@ public class AcquisitionProcessAction extends BaseAction {
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
 	final ReceiveInvoiceForm receiveInvoiceForm = getRenderedObject();
 	final byte[] bytes = consumeInputStream(receiveInvoiceForm);
-	acquisitionProcess.receiveInvoice(receiveInvoiceForm.getFilename(), bytes, receiveInvoiceForm.getInvoiceNumber(),
-		receiveInvoiceForm.getInvoiceDate());
+	AbstractActivity<AcquisitionProcess> receiveInvoice = acquisitionProcess.getActivityByName("ReceiveInvoice");
+	receiveInvoice.execute(acquisitionProcess, receiveInvoiceForm.getFilename(), bytes,
+		receiveInvoiceForm.getInvoiceNumber(), receiveInvoiceForm.getInvoiceDate());
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
 
@@ -336,27 +351,31 @@ public class AcquisitionProcessAction extends BaseAction {
 	return download(response, invoice);
     }
 
-    public final ActionForward confirmInvoice(final ActionMapping mapping, final ActionForm form,
+    public final ActionForward executeConfirmInvoice(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
-	acquisitionProcess.confirmInvoice();
+	genericActivityExecution("ConfirmInvoice", acquisitionProcess);
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
 
-    public final ActionForward payAcquisition(final ActionMapping mapping, final ActionForm form,
+    public final ActionForward executePayAcquisition(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 
 	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
-	acquisitionProcess.payAcquisition();
+	genericActivityExecution("PayAcquisition", acquisitionProcess);
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
 
-    public final ActionForward alocateFundsPermanently(final ActionMapping mapping, final ActionForm form,
+    public final ActionForward executeAllocateFundsPermanently(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 
 	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
-	acquisitionProcess.alocateFundsPermanently();
+	genericActivityExecution("AllocateFundsPermanently", acquisitionProcess);
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
 
+    protected void genericActivityExecution(String activityName, AcquisitionProcess process) {
+	AbstractActivity<AcquisitionProcess> acquitivity = process.getActivityByName(activityName);
+	acquitivity.execute(process);
+    }
 }

@@ -355,3 +355,45 @@ margin: 1em 0;
 .documents p {
 margin: 0.25em 0 !important;
 }
+
+
+
+div.flow {
+width: 110px;
+float: right;
+}
+div.wrapper {
+padding-right: 120px;
+}
+div.box {
+border: 1px solid #aaa;
+background: #fafafa;
+padding: 5px 5px;
+text-align: center;
+}
+div.box {
+border: 2px solid #ccc;
+background: #fafafa;
+padding: 5px 5px;
+text-align: center;
+}
+div.arrow {
+background: url(arrow01.gif) bottom center no-repeat;
+height: 20px;
+width: auto;
+}
+div.yellow {
+border: 2px solid #dfca61;
+background: #fdfbf4;
+/*color: #a68b08;*/
+}
+div.red {
+border: 2px solid #d5866c;
+background: #fcf6f4;
+/*color: #a68b08;*/
+}
+div.green {
+border: 2px solid #88c688;
+background: #f7fbf7;
+/*color: #a68b08;*/
+}
