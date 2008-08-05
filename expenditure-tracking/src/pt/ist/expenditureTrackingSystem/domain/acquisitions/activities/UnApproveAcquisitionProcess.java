@@ -1,15 +1,14 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.activities;
 
-import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 
-public class FundAllocation extends GenericAcquisitionProcessActivity {
+public class UnApproveAcquisitionProcess extends GenericAcquisitionProcessActivity{
 
     @Override
     protected boolean isAccessible(AcquisitionProcess process) {
-	return userHasRole(RoleType.ACCOUNTABILITY);
+	return process.isResponsibleForUnit();
     }
 
     @Override
@@ -19,9 +18,7 @@ public class FundAllocation extends GenericAcquisitionProcessActivity {
 
     @Override
     protected void process(AcquisitionProcess process, Object... objects) {
-	String fundAllocationId = (String) objects[0];
-	process.setFundAllocationId(fundAllocationId);
-	new AcquisitionProcessState(process, AcquisitionProcessStateType.FUNDS_ALLOCATED);
+	new AcquisitionProcessState(process, AcquisitionProcessStateType.SUBMITTED_FOR_APPROVAL);
     }
 
 }

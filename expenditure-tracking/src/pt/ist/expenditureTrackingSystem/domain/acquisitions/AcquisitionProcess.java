@@ -19,7 +19,9 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.FundAlloc
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.PayAcquisition;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.ReceiveInvoice;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.RejectAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.SubmitForApproval;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.UnApproveAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
@@ -38,6 +40,8 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 	activities.add(new AddAcquisitionProposalDocument());
 	activities.add(new AllocateFundsPermanently());
 	activities.add(new ApproveAcquisitionProcess());
+	activities.add(new UnApproveAcquisitionProcess());
+	activities.add(new RejectAcquisitionProcess());
 	activities.add(new CreateAcquisitionRequest());
 	activities.add(new CreateAcquisitionRequestItem());
 	activities.add(new DeleteAcquisitionProcess());
@@ -111,6 +115,10 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 
     public boolean isPendingApproval() {
 	return isProcessInState(AcquisitionProcessStateType.SUBMITTED_FOR_APPROVAL);
+    }
+
+    public boolean isApproved() {
+	return isProcessInState(AcquisitionProcessStateType.APPROVED);
     }
 
     public boolean isProcessInState(AcquisitionProcessStateType state) {

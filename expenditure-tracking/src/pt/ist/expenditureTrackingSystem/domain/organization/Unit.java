@@ -71,6 +71,7 @@ public class Unit extends Unit_Base {
 
     public BigDecimal getTotalAllocated() {
 	BigDecimal result = BigDecimal.ZERO;
+	try {
 	final String costCenter = getCostCenter();
 	if (costCenter != null) {
 	    for (final AcquisitionRequest acquisitionRequest : ExpenditureTrackingSystem.getInstance()
@@ -88,6 +89,9 @@ public class Unit extends Unit_Base {
 	}
 	for (final Unit unit : getSubUnitsSet()) {
 	    result = result.add(unit.getTotalAllocated());
+	}
+	} catch (Exception ex) {
+	    ex.printStackTrace();
 	}
 	return result;
     }
