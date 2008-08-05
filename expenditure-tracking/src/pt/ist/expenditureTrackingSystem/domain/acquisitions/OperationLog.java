@@ -3,25 +3,23 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 import org.joda.time.DateTime;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
-import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
+import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 
 public class OperationLog extends OperationLog_Base {
 
     public OperationLog(AcquisitionProcess process, Person person, String operation, AcquisitionProcessStateType state,
 	    DateTime when) {
 	super();
-	super.setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
-	super.setAcquisitionProcess(process);
-	super.setOperation(operation);
-	super.setExecutor(person);
+	init(process, person, operation, when);
 	super.setState(state);
-	super.setWhenOperationWasRan(when);
     }
 
+    @Override
     public GenericAcquisitionProcessActivity getActivity() {
-	return getAcquisitionProcess().getActivityByName(getOperation());
+	AcquisitionProcess process = (AcquisitionProcess) getProcess();
+	return process.getActivityByName(getOperation());
     }
     
     @Override
@@ -30,7 +28,7 @@ public class OperationLog extends OperationLog_Base {
     }
 
     @Override
-    public void setAcquisitionProcess(AcquisitionProcess acquisitionProcess) {
+    public void setProcess(GenericProcess process) {
 	throw new DomainException("error.unable.to.change.process");
     }
 
@@ -48,4 +46,5 @@ public class OperationLog extends OperationLog_Base {
     public void setState(AcquisitionProcessStateType state) {
 	throw new DomainException("error.unable.to.change.when.state");
     }
+    
 }

@@ -28,6 +28,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.SearchAcquisitionPro
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionRequestItemBean;
+import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 import pt.ist.expenditureTrackingSystem.presentationTier.Context;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.BaseAction;
 import pt.ist.expenditureTrackingSystem.presentationTier.util.FileUploadBean;
@@ -271,9 +272,9 @@ public class AcquisitionProcessAction extends BaseAction {
 
 	List<AcquisitionProcess> processes = new ArrayList<AcquisitionProcess>();
 
-	for (AcquisitionProcess process : ExpenditureTrackingSystem.getInstance().getAcquisitionProcesses()) {
+	for (AcquisitionProcess process : GenericProcess.getAllProcesses(AcquisitionProcess.class)) {
 	    if (process.isPersonAbleToExecuteActivities()) {
-		processes.add(process);
+		processes.add((AcquisitionProcess)process);
 	    }
 	}
 	request.setAttribute("activeProcesses", processes);

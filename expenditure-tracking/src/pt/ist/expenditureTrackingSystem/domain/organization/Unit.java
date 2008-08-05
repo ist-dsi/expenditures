@@ -10,6 +10,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessSt
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateUnitBean;
+import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.pstm.Transaction;
 
@@ -53,8 +54,7 @@ public class Unit extends Unit_Base {
     public void findAcquisitionProcessesPendingAuthorization(final Set<AcquisitionProcess> result, final boolean recurseSubUnits) {
 	final String costCenter = getCostCenter();
 	if (costCenter != null) {
-	    for (final AcquisitionProcess acquisitionProcess : ExpenditureTrackingSystem.getInstance()
-		    .getAcquisitionProcessesSet()) {
+	    for (final AcquisitionProcess acquisitionProcess : GenericProcess.getAllProcesses(AcquisitionProcess.class)) {
 		if (costCenter.equals(acquisitionProcess.getAcquisitionRequest().getCostCenter())) {
 		    if (acquisitionProcess.isPendingApproval()) {
 			result.add(acquisitionProcess);

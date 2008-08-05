@@ -6,7 +6,6 @@ import java.util.List;
 
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
-import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AddAcquisitionProposalDocument;
@@ -25,6 +24,7 @@ import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
+import pt.ist.expenditureTrackingSystem.domain.processes.GenericLog;
 import pt.ist.fenixWebFramework.security.UserView;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.pstm.Transaction;
@@ -50,7 +50,6 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 
     protected AcquisitionProcess() {
 	super();
-	this.setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
 	new AcquisitionProcessState(this, AcquisitionProcessStateType.IN_GENESIS);
 	new AcquisitionRequest(this);
     }
@@ -58,7 +57,6 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
     protected AcquisitionProcess(String fiscalCode, String costCenter, String project, String subproject, String recipient,
 	    String receptionAddress) {
 	super();
-	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
 	new AcquisitionProcessState(this, AcquisitionProcessStateType.IN_GENESIS);
 	new AcquisitionRequest(this, fiscalCode, costCenter, project, subproject, recipient, receptionAddress);
     }
@@ -188,6 +186,7 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 	return userHasRole(RoleType.ACQUISITION_CENTRAL);
     }
 
+    @Override
     public GenericAcquisitionProcessActivity getActivityByName(String activityName) {
 	for (GenericAcquisitionProcessActivity activity : activities) {
 	    if (activity.getName().equals(activityName)) {
@@ -199,11 +198,20 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 
     public List<OperationLog> getOperationLogsInState(AcquisitionProcessStateType state) {
 	List<OperationLog> logs = new ArrayList<OperationLog>();
-	for (OperationLog log : getOperationLogsSet()) {
+	for (OperationLog log : getOperationLogs()) {
 	    if (log.getState() == state) {
 		logs.add(log);
 	    }
 	}
 	return logs;
     }
+    
+    public List<OperationLog> getOperationLogs() {
+	List<OperationLog> logs = new ArrayList<OperationLog>();
+	for (GenericLog log : super.getExecutionLogs()) {
+	    logs.add((OperationLog)log);
+	}
+	return logs;
+    }
+    
 }

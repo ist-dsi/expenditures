@@ -5,6 +5,7 @@ import java.util.Set;
 
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.Search;
+import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 
 public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
 
@@ -44,7 +45,7 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
 
     @Override
     public Set<AcquisitionProcess> search() {
-	return new SearchResult(ExpenditureTrackingSystem.getInstance().getAcquisitionProcessesSet());
+	return new SearchResult(GenericProcess.getAllProcesses(AcquisitionProcess.class));
     }
 
     public String getRequester() {

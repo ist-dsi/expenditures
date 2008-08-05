@@ -2,12 +2,16 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.activities;
 
 import java.util.Collections;
 
+import org.joda.time.DateTime;
+
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
+import pt.ist.expenditureTrackingSystem.domain.processes.GenericLog;
+import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 import pt.ist.fenixWebFramework.security.UserView;
 import pt.ist.fenixWebFramework.services.Service;
 
-public abstract class AbstractActivity<T> {
+public abstract class AbstractActivity<T extends GenericProcess> {
 
     protected abstract boolean isAvailable(T process);
 
@@ -15,8 +19,9 @@ public abstract class AbstractActivity<T> {
 
     protected abstract void process(T process, Object... objects);
 
-    protected abstract void logExecution(T process, String operationName, User user);
-    
+    protected  void logExecution(T process, String operationName, User user) {
+	new GenericLog(process, user.getPerson(), operationName, new DateTime());
+    }
     
     public final void execute(T process) {
 	execute(process, Collections.EMPTY_LIST);

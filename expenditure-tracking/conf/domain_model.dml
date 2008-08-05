@@ -13,7 +13,11 @@ enum pt.ist.expenditureTrackingSystem.domain.RoleType as RoleType;
 class ExpenditureTrackingSystem {
 }
 
-class acquisitions.AcquisitionProcess {
+class processes.GenericProcess {
+	String ojbConcreteClass;
+}
+
+class acquisitions.AcquisitionProcess extends processes.GenericProcess {
 	String fundAllocationId;
 	DateTime fundAllocationExpirationDate;
 }
@@ -40,9 +44,13 @@ class acquisitions.AcquisitionRequestItem {
 	String salesCode;              // CVP
 }
 
-class acquisitions.OperationLog {
+class processes.GenericLog {
+	String ojbConcreteClass;
 	DateTime whenOperationWasRan;
 	String operation;
+}
+
+class acquisitions.OperationLog extends processes.GenericLog {
 	AcquisitionProcessStateType state;
 }
 
@@ -102,9 +110,9 @@ class Role {
 	RoleType roleType;
 }
 
-relation ExpenditureTrackingSystemAcquisitionProcess {
+relation ExpenditureTrackingSystemGenericProcess {
 	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
-	acquisitions.AcquisitionProcess playsRole acquisitionProcesses {
+	processes.GenericProcess playsRole processes {
 		multiplicity *;
 	}
 }
@@ -276,23 +284,24 @@ relation ExpenditureTrackingSystemAcquisitionProcessState {
 	}
 }
 
-relation ExpenditureTrackingSystemOperationLog {
+relation ExpenditureTrackingSystemGenericLog {
 	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
-	acquisitions.OperationLog playsRole operationLogs {
+	processes.GenericLog playsRole logs {
 		multiplicity *;
 	}
 }
 
-relation OperationLogPerson {
-	acquisitions.OperationLog playsRole operationLogs {
+relation GenericLogUser {
+	processes.GenericLog playsRole executionLogs {
 		multiplicity *;
 	}
 	organization.Person playsRole executor;
 }
 
-relation OperationLogProcess {
-	acquisitions.OperationLog playsRole operationLogs {
+relation GenericLogProcess {
+	processes.GenericLog playsRole executionLogs {
 		multiplicity *;
 	}
-	acquisitions.AcquisitionProcess playsRole acquisitionProcess;
+	processes.GenericProcess playsRole process;
 }
+
