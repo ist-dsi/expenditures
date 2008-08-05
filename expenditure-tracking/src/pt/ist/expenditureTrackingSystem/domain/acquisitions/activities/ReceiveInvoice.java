@@ -12,7 +12,7 @@ public class ReceiveInvoice extends GenericAcquisitionProcessActivity {
 
     @Override
     protected boolean isAccessible(AcquisitionProcess process) {
-	return userHasRole(RoleType.ACCOUNTABILITY);
+	return userHasRole(RoleType.ACQUISITION_CENTRAL);
     }
 
     @Override
