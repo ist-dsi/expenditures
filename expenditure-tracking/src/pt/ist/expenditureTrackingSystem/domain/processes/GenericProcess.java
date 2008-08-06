@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AbstractActivity;
 
 public abstract class GenericProcess extends GenericProcess_Base {
     

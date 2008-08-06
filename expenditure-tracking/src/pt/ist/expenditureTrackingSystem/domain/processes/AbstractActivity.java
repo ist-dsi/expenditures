@@ -1,13 +1,9 @@
-package pt.ist.expenditureTrackingSystem.domain.acquisitions.activities;
-
-import java.util.Collections;
+package pt.ist.expenditureTrackingSystem.domain.processes;
 
 import org.joda.time.DateTime;
 
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
-import pt.ist.expenditureTrackingSystem.domain.processes.GenericLog;
-import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 import pt.ist.fenixWebFramework.security.UserView;
 import pt.ist.fenixWebFramework.services.Service;
 

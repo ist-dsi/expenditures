@@ -3,7 +3,6 @@ package pt.ist.expenditureTrackingSystem.domain.processes;
 import org.joda.time.DateTime;
 
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
 public class GenericLog extends GenericLog_Base {

@@ -5,6 +5,7 @@ import org.joda.time.DateTime;
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.OperationLog;
+import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 
 public abstract class GenericAcquisitionProcessActivity extends AbstractActivity<AcquisitionProcess> {
 
