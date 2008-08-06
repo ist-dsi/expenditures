@@ -39,28 +39,32 @@ public class AcquisitionProcessStateRenderer extends OutputRenderer {
 		int i = 0;
 		AcquisitionProcessStateType[] types = AcquisitionProcessStateType.values();
 		for (AcquisitionProcessStateType stateType : types) {
-		    flowChartContainer.addChild(generateBox(process, stateType, currentState));
-		    if (++i < types.length) {
-			HtmlBlockContainer arrowContainer = new HtmlBlockContainer();
-			arrowContainer.setClasses(getArrowClasses());
-			flowChartContainer.addChild(arrowContainer);
+		    if (stateType.showFor(currentState)) {
+			flowChartContainer.addChild(generateBox(process, stateType, currentState));
+			if (stateType.hasNextState()) {
+			    HtmlBlockContainer arrowContainer = new HtmlBlockContainer();
+			    arrowContainer.setClasses(getArrowClasses());
+			    flowChartContainer.addChild(arrowContainer);
+			}
 		    }
 		}
 		return flowChartContainer;
 	    }
 
 	    private HtmlComponent generateBox(AcquisitionProcess process, AcquisitionProcessStateType stateType,
-		    AcquisitionProcessStateType currentState) {
+		    AcquisitionProcessStateType currentStateType) {
 		HtmlBlockContainer container = new HtmlBlockContainer();
-		if (stateType == currentState) {
-		    container.setClasses(getBoxClasses() + " " + getCurrentStateClass());
-		} else {
-		    if (stateType.ordinal() < currentState.ordinal()) {
-			container.setClasses(getBoxClasses() + " " + getCompletedStateClass());
-		    } else {
-			container.setClasses(getBoxClasses());
-		    }
+
+		String classes = getBoxClasses();
+	    	if (stateType.isBlocked(currentStateType)) {
+	    	    classes += " " + getFailedStateClass();
+	    	} else if (stateType.isInProgress(currentStateType)) {
+		    classes += " " + getCurrentStateClass();
+		} else if (stateType.isCompleted(currentStateType)) {
+		    classes += " " + getCompletedStateClass();
 		}
+		container.setClasses(classes);
+
 		container.addChild(getBody(process, stateType));
 		return container;
 	    }

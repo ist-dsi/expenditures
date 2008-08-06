@@ -6,31 +6,104 @@ import pt.utl.ist.fenix.tools.util.i18n.Language;
 
 public enum AcquisitionProcessStateType {
 
-    IN_GENESIS,
-    SUBMITTED_FOR_APPROVAL,
+    IN_GENESIS {
+
+	@Override
+	public boolean showFor(final AcquisitionProcessStateType currentStateType) {
+	    return true;
+	}
+
+	@Override
+	public boolean isInProgress(final AcquisitionProcessStateType currentStateType) {
+	    return currentStateType == this;
+	}
+
+	@Override
+	public boolean isCompleted(final AcquisitionProcessStateType currentStateType) {
+	    return currentStateType.ordinal() > ordinal();
+	}
+
+    },
+    SUBMITTED_FOR_APPROVAL {
+
+	@Override
+	public boolean showFor(final AcquisitionProcessStateType currentStateType) {
+	    return true;
+	}
+
+	@Override
+	public boolean isInProgress(final AcquisitionProcessStateType currentStateType) {
+	    return false;
+	}
+
+    },
     APPROVED,
-    REJECTED (false),
-    FUNDS_ALLOCATED,
+    FUNDS_ALLOCATED {
+
+	@Override
+	public boolean isInProgress(final AcquisitionProcessStateType currentStateType) {
+	    return currentStateType == APPROVED;
+	}
+
+    },
     FUNDS_ALLOCATED_TO_SERVICE_PROVIDER,
     ACQUISITION_PROCESSED,
     INVOICE_RECEIVED,
     INVOICE_CONFIRMED,
     ACQUISITION_PAYED,
-    FUNDS_ALLOCATED_PERMANENTLY;
+    FUNDS_ALLOCATED_PERMANENTLY {
 
-    private final boolean isVisible;
+	@Override
+	public boolean hasNextState() {
+	    return false;
+	}
 
-    private AcquisitionProcessStateType(final boolean isVisible) {
-	this.isVisible = isVisible;
-    }
+    },
+    REJECTED {
+
+	@Override
+	public boolean showFor(final AcquisitionProcessStateType currentStateType) {
+	    return currentStateType == this;
+	}
+
+	@Override
+	public boolean hasNextState() {
+	    return false;
+	}
+
+	@Override
+	public boolean isBlocked(final AcquisitionProcessStateType currentStateType) {
+	    return true;
+	}
+
+    };
 
     private AcquisitionProcessStateType() {
-	this(true);
     }
 
     public String getLocalizedName() {
 	final ResourceBundle resourceBundle = ResourceBundle.getBundle("resources.EnumerationResources", Language.getLocale());
-	return resourceBundle.getString(getClass().getSimpleName() + "." + name());
+	return resourceBundle.getString(AcquisitionProcessStateType.class.getSimpleName() + "." + name());
+    }
+
+    public boolean showFor(final AcquisitionProcessStateType currentStateType) {
+	return currentStateType != REJECTED;
+    }
+
+    public boolean hasNextState() {
+	return true;
+    }
+
+    public boolean isInProgress(final AcquisitionProcessStateType currentStateType) {
+	return currentStateType.ordinal() == ordinal() - 1;
+    }
+
+    public boolean isCompleted(final AcquisitionProcessStateType currentStateType) {
+	return currentStateType.ordinal() >= ordinal();
+    }
+
+    public boolean isBlocked(final AcquisitionProcessStateType currentStateType) {
+	return false;
     }
 
 }
