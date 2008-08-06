@@ -28,11 +28,7 @@ public class ExceptionHandlerFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException,
 	    ServletException {
-	System.out.println("entrei");
 	HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-	System.out.println(httpServletRequest.getRequestURI());
-	System.out.println(httpServletRequest.getRequestURL());
-	System.out.println(httpServletRequest.getParameterMap().toString());
 	try {
 	    filterChain.doFilter(request, response);
 	} catch (ServletException servletException) {
