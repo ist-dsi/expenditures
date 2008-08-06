@@ -36,10 +36,9 @@ import pt.ist.fenixframework.pstm.Transaction;
 
 public class AcquisitionProcess extends AcquisitionProcess_Base {
 
-    private static List<GenericAcquisitionProcessActivity> activities;
+    private static List<GenericAcquisitionProcessActivity> activities = new ArrayList<GenericAcquisitionProcessActivity>();
 
     static {
-	activities = new ArrayList<GenericAcquisitionProcessActivity>();
 	activities.add(new AddAcquisitionProposalDocument());
 	activities.add(new AllocateFundsPermanently());
 	activities.add(new ApproveAcquisitionProcess());
