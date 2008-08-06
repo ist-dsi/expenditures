@@ -2,7 +2,6 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import java.math.BigDecimal;
 
-import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
@@ -28,11 +27,10 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	setRequester(user.getPerson());
     }
 
-    AcquisitionRequest(AcquisitionProcess acquisitionProcess, String fiscalCode, String costCenter, String project,
+    AcquisitionRequest(AcquisitionProcess acquisitionProcess, String fiscalCode, String project,
 	    String subproject, String recipient, String receptionAddress) {
 	this(acquisitionProcess);
 	setFiscalIdentificationCode(fiscalCode);
-	setCostCenter(costCenter);
 	setProject(project);
 	setSubproject(subproject);
 	setRecipient(recipient);
@@ -105,8 +103,7 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     }
 
     public boolean isFilled() {
-	return StringUtils.isNotEmpty(getCostCenter()) && hasAcquisitionProposalDocument()
-		&& getAcquisitionRequestItemsCount() > 0;
+	return hasAcquisitionProposalDocument() && getAcquisitionRequestItemsCount() > 0;
     }
 
     public boolean isInvoiceReceived() {
@@ -122,4 +119,7 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	return super.getRecipient();
     }
 
+    public String getCostCenter() {
+	return getRequestingUnit().getCostCenter();
+    }
 }

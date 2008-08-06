@@ -9,6 +9,7 @@ import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AddAcquisitionProposalDocument;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AddPayingUnit;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AllocateFundsPermanently;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.ApproveAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.CreateAcquisitionRequest;
@@ -20,6 +21,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAc
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.PayAcquisition;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.ReceiveInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.RejectAcquisitionProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.RemovePayingUnit;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.SubmitForApproval;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.UnApproveAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
@@ -42,6 +44,8 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 	activities.add(new ApproveAcquisitionProcess());
 	activities.add(new UnApproveAcquisitionProcess());
 	activities.add(new RejectAcquisitionProcess());
+	activities.add(new AddPayingUnit());
+	activities.add(new RemovePayingUnit());
 	activities.add(new CreateAcquisitionRequest());
 	activities.add(new CreateAcquisitionRequestItem());
 	activities.add(new DeleteAcquisitionProcess());
@@ -58,11 +62,11 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 	new AcquisitionRequest(this);
     }
 
-    protected AcquisitionProcess(String fiscalCode, String costCenter, String project, String subproject, String recipient,
+    protected AcquisitionProcess(String fiscalCode,  String project, String subproject, String recipient,
 	    String receptionAddress) {
 	super();
 	new AcquisitionProcessState(this, AcquisitionProcessStateType.IN_GENESIS);
-	new AcquisitionRequest(this, fiscalCode, costCenter, project, subproject, recipient, receptionAddress);
+	new AcquisitionRequest(this, fiscalCode,  project, subproject, recipient, receptionAddress);
     }
 
     public static boolean isCreateNewAcquisitionProcessAvailable() {
@@ -74,25 +78,40 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 	if (!isCreateNewAcquisitionProcessAvailable()) {
 	    throw new DomainException("error.acquisitionProcess.invalid.state.to.run.createNewAcquisitionProcess");
 	}
-	return new AcquisitionProcess(createAcquisitionProcessBean.getFiscalIdentificationCode(), createAcquisitionProcessBean
-		.getCostCenter(), createAcquisitionProcessBean.getProject(), createAcquisitionProcessBean.getSubproject(),
-		createAcquisitionProcessBean.getRecipient(), createAcquisitionProcessBean.getReceptionAddress());
+	AcquisitionProcess process = new AcquisitionProcess(createAcquisitionProcessBean.getFiscalIdentificationCode(),
+		createAcquisitionProcessBean.getProject(),
+		createAcquisitionProcessBean.getSubproject(), createAcquisitionProcessBean.getRecipient(),
+		createAcquisitionProcessBean.getReceptionAddress());
+	process.getAcquisitionRequest().setRequestingUnit(createAcquisitionProcessBean.getRequestingUnit());
+	if (createAcquisitionProcessBean.isRequestUnitPayingUnit()) {
+	    process.getAcquisitionRequest().addPayingUnits(createAcquisitionProcessBean.getRequestingUnit());
+	}
+
+	return process;
     }
 
     public Person getRequestor() {
 	return getAcquisitionRequest().getRequester();
     }
 
+    public Unit getRequestingUnit() {
+	return getAcquisitionRequest().getRequestingUnit();
+    }
+    
+    public List<Unit> getPayingUnits() {
+	return getAcquisitionRequest().getPayingUnits();
+    }
+    
     public boolean isResponsibleForUnit() {
 	User user = UserView.getUser();
 	if (user == null) {
 	    return false;
 	}
 
-	String costCenter = getAcquisitionRequest().getCostCenter();
+	List<Unit> payingUnits = getPayingUnits();
 
 	for (Authorization authorization : user.getPerson().getAuthorizations()) {
-	    if (authorization.getUnit().getCostCenter().equals((costCenter))) {
+	    if (payingUnits.contains(authorization.getUnit())) {
 		return true;
 	    }
 	}
@@ -172,8 +191,7 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
     }
 
     public Unit getUnit() {
-	final AcquisitionRequest acquisitionRequest = getAcquisitionRequest();
-	return Unit.findUnitByCostCenter(acquisitionRequest.getCostCenter());
+	return getRequestingUnit();
     }
 
     public boolean isAllowedToViewCostCenterExpenditures() {
@@ -213,13 +231,13 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 	}
 	return logs;
     }
-    
+
     public List<OperationLog> getOperationLogs() {
 	List<OperationLog> logs = new ArrayList<OperationLog>();
 	for (GenericLog log : super.getExecutionLogs()) {
-	    logs.add((OperationLog)log);
+	    logs.add((OperationLog) log);
 	}
 	return logs;
     }
-    
+
 }

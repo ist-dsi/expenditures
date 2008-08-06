@@ -2,22 +2,23 @@ package pt.ist.expenditureTrackingSystem.domain.dto;
 
 import java.io.Serializable;
 
+import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
+import pt.ist.fenixWebFramework.util.DomainReference;
+
 public class CreateAcquisitionProcessBean implements Serializable {
-    String costCenter;
-    String project;
-    String subproject;
-    String recipient;
-    String receptionAddress;
-    String fiscalIdentificationCode;
 
-    public String getCostCenter() {
-	return costCenter;
+    private String project;
+    private String subproject;
+    private String recipient;
+    private String receptionAddress;
+    private String fiscalIdentificationCode;
+    private DomainReference<Unit> requestingUnit;
+    private boolean requestUnitPayingUnit; 
+    
+    public CreateAcquisitionProcessBean() {
+	setRequestingUnit(null);
     }
-
-    public void setCostCenter(String costCenter) {
-	this.costCenter = costCenter;
-    }
-
+    
     public String getProject() {
 	return project;
     }
@@ -56,6 +57,22 @@ public class CreateAcquisitionProcessBean implements Serializable {
 
     public void setFiscalIdentificationCode(String fiscalIdentificationCode) {
 	this.fiscalIdentificationCode = fiscalIdentificationCode;
+    }
+
+    public Unit getRequestingUnit() {
+	return requestingUnit.getObject();
+    }
+
+    public void setRequestingUnit(Unit requestingUnit) {
+	this.requestingUnit = new DomainReference<Unit>(requestingUnit);
+    }
+
+    public boolean isRequestUnitPayingUnit() {
+        return requestUnitPayingUnit;
+    }
+
+    public void setRequestUnitPayingUnit(boolean requestUnitPayingUnit) {
+        this.requestUnitPayingUnit = requestUnitPayingUnit;
     }
 
 }

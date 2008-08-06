@@ -21,9 +21,18 @@ public class ProcessAction extends BaseAction {
 	acquitivity.execute(genericProcess);
     }
 
+    protected void genericActivityExecution(final GenericProcess genericProcess, final String activityName, Object... args) {
+	AbstractActivity<GenericProcess> acquitivity = genericProcess.getActivityByName(activityName);
+	acquitivity.execute(genericProcess,args);
+    }
+    
     protected void genericActivityExecution(final HttpServletRequest request, final String activityName) {
 	final GenericProcess genericProcess = getProcess(request);
 	genericActivityExecution(genericProcess, activityName);
     }
 
+    protected void genericActivityExecution(final HttpServletRequest request, final String activityName, final Object... args) {
+	final GenericProcess genericProcess = getProcess(request);
+	genericActivityExecution(genericProcess, activityName, args);
+    }
 }

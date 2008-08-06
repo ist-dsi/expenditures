@@ -55,11 +55,8 @@ public class Unit extends Unit_Base {
 	final String costCenter = getCostCenter();
 	if (costCenter != null) {
 	    for (final AcquisitionProcess acquisitionProcess : GenericProcess.getAllProcesses(AcquisitionProcess.class)) {
-		if (costCenter.equals(acquisitionProcess.getAcquisitionRequest().getCostCenter())) {
-		    if (acquisitionProcess.isPendingApproval()) {
-			result.add(acquisitionProcess);
-		    }
-		}
+		if (acquisitionProcess.getPayingUnits().contains(this) && acquisitionProcess.isPendingApproval())
+		    result.add(acquisitionProcess);
 	    }
 	}
 	if (recurseSubUnits) {
@@ -71,27 +68,19 @@ public class Unit extends Unit_Base {
 
     public BigDecimal getTotalAllocated() {
 	BigDecimal result = BigDecimal.ZERO;
-	try {
-	final String costCenter = getCostCenter();
-	if (costCenter != null) {
-	    for (final AcquisitionRequest acquisitionRequest : ExpenditureTrackingSystem.getInstance()
-		    .getAcquisitionRequestsSet()) {
-		if (costCenter.equals(acquisitionRequest.getCostCenter())) {
-		    final AcquisitionProcess acquisitionProcess = acquisitionRequest.getAcquisitionProcess();
-		    final AcquisitionProcessState acquisitionProcessState = acquisitionProcess.getAcquisitionProcessState();
-		    final AcquisitionProcessStateType acquisitionProcessStateType = acquisitionProcessState
-			    .get$acquisitionProcessStateType();
-		    if (acquisitionProcessStateType.compareTo(AcquisitionProcessStateType.FUNDS_ALLOCATED) >= 0) {
-			result = result.add(acquisitionRequest.getTotalItemValue());
-		    }
+	for (final AcquisitionRequest acquisitionRequest : ExpenditureTrackingSystem.getInstance().getAcquisitionRequestsSet()) {
+	    if (acquisitionRequest.getAcquisitionProcess().getRequestingUnit() == this) {
+		final AcquisitionProcess acquisitionProcess = acquisitionRequest.getAcquisitionProcess();
+		final AcquisitionProcessState acquisitionProcessState = acquisitionProcess.getAcquisitionProcessState();
+		final AcquisitionProcessStateType acquisitionProcessStateType = acquisitionProcessState
+			.get$acquisitionProcessStateType();
+		if (acquisitionProcessStateType.compareTo(AcquisitionProcessStateType.FUNDS_ALLOCATED) >= 0) {
+		    result = result.add(acquisitionRequest.getTotalItemValue());
 		}
 	    }
 	}
 	for (final Unit unit : getSubUnitsSet()) {
-	    result = result.add(unit.getTotalAllocated());
-	}
-	} catch (Exception ex) {
-	    ex.printStackTrace();
+		    result = result.add(unit.getTotalAllocated());
 	}
 	return result;
     }

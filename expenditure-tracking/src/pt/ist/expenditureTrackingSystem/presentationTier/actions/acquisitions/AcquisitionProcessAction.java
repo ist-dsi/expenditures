@@ -26,6 +26,8 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.SearchAcquisitionPro
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionRequestItemBean;
+import pt.ist.expenditureTrackingSystem.domain.dto.DomainObjectBean;
+import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 import pt.ist.expenditureTrackingSystem.presentationTier.Context;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.ProcessAction;
@@ -48,8 +50,12 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "allocate.funds.to.service.provider", path = "/acquisitions/allocateFundsToServiceProvider.jsp"),
 	@Forward(name = "prepare.create.acquisition.request", path = "/acquisitions/createAcquisitionRequest.jsp"),
 	@Forward(name = "receive.invoice", path = "/acquisitions/receiveInvoice.jsp"),
-	@Forward(name = "view.active.processes", path = "/acquisitions/viewActiveProcesses.jsp") })
-public class AcquisitionProcessAction extends ProcessAction {
+	@Forward(name = "view.active.processes", path = "/acquisitions/viewActiveProcesses.jsp"), 
+	@Forward(name ="select.unit.to.add", path="/acquisitions/selectUnitToAdd.jsp"),
+	@Forward(name ="remove.paying.units", path="/acquisitions/removePayingUnits.jsp")	
+})
+
+	public class AcquisitionProcessAction extends ProcessAction {
 
     private static final Context CONTEXT = new Context("acquisitions");
     private AbstractActivity<AcquisitionProcess> ActivityByName;
@@ -337,7 +343,7 @@ public class AcquisitionProcessAction extends ProcessAction {
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	return executeActivityAndViewProcess(mapping, form, request, response, "ConfirmInvoice");
     }
-
+    
     public ActionForward executePayAcquisition(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	return executeActivityAndViewProcess(mapping, form, request, response, "PayAcquisition");
@@ -353,6 +359,40 @@ public class AcquisitionProcessAction extends ProcessAction {
 	return executeActivityAndViewProcess(mapping, form, request, response, "UnApproveAcquisitionProcess");
     }
 
+    public ActionForward executeAddPayingUnit(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
+	request.setAttribute("acquisitionProcess", acquisitionProcess);
+	request.setAttribute("domainObjectBean", new DomainObjectBean<Unit>());
+	return mapping.findForward("select.unit.to.add");
+    }
+    
+    public ActionForward addPayingUnit(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	
+	DomainObjectBean<Unit> bean = getRenderedObject("unitToAdd");
+	List<Unit> units =  new ArrayList<Unit> ();
+	units.add(bean.getDomainObject());
+	return executeActivityAndViewProcess(mapping, form, request, response, "AddPayingUnit",units);
+    }
+    
+    public ActionForward executeRemovePayingUnit(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
+	request.setAttribute("acquisitionProcess", acquisitionProcess);
+	request.setAttribute("payingUnits", acquisitionProcess.getPayingUnits());
+	return mapping.findForward("remove.paying.units");
+    }
+    
+    public ActionForward removePayingUnit(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	
+	final Unit payingUnit = getDomainObject(request, "unitOID");
+	List<Unit> units = new ArrayList<Unit>();
+	units.add(payingUnit);
+	return executeActivityAndViewProcess(mapping, form, request, response, "RemovePayingUnit", units);
+    }
+    
     public ActionForward executeRejectAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	return executeActivityAndViewProcess(mapping, form, request, response, "RejectAcquisitionProcess");
@@ -364,4 +404,9 @@ public class AcquisitionProcessAction extends ProcessAction {
 	return viewAcquisitionProcess(mapping, form, request, response);
     }
 
+    public ActionForward executeActivityAndViewProcess(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response, final String activityName, Object... args) {
+	genericActivityExecution(request, activityName, args);
+	return viewAcquisitionProcess(mapping, form, request, response);
+    }
 }

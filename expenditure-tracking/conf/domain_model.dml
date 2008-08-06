@@ -28,7 +28,6 @@ class acquisitions.AcquisitionProcessState {
 }
 
 class acquisitions.AcquisitionRequest {
-	String costCenter;
 	String project;
 	String subproject;
 	String recipient;
@@ -306,3 +305,18 @@ relation GenericLogProcess {
 	processes.GenericProcess playsRole process;
 }
 
+relation AcquisitionRequestRequestingUnit {
+	acquisitions.AcquisitionRequest playsRole requests {
+		multiplicity *;
+	}
+	organization.Unit playsRole requestingUnit;
+}
+
+relation AcquisitionRequestPayingUnit {
+	acquisitions.AcquisitionRequest playsRole fundedRequests {
+		multiplicity *;
+	}
+	organization.Unit playsRole payingUnits {
+		multiplicity *;
+	}
+}
