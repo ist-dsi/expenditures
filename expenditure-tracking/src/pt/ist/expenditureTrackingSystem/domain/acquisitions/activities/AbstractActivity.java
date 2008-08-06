@@ -23,10 +23,6 @@ public abstract class AbstractActivity<T extends GenericProcess> {
 	new GenericLog(process, user.getPerson(), operationName, new DateTime());
     }
     
-    public final void execute(T process) {
-	execute(process, Collections.EMPTY_LIST);
-    }
-
     @Service
     public final void execute(T process, Object... args) {
 	checkConditionsFor(process);
