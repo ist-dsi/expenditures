@@ -5,11 +5,9 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 import net.sf.jasperreports.engine.JRException;
-
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.File;
-import pt.ist.expenditureTrackingSystem.domain.util.ByteArray;
 import pt.ist.expenditureTrackingSystem.util.ReportUtils;
 import pt.ist.fenixframework.pstm.Transaction;
 
@@ -24,17 +22,18 @@ public class AcquisitionRequestDocument extends AcquisitionRequestDocument_Base 
 	this();
 	setAcquisitionRequest(acquisitionRequest);
 
-	Map<String, Object> paramMap = new HashMap<String, Object>();
+	final Map<String, Object> paramMap = new HashMap<String, Object>();
 	paramMap.put("acquisitionRequest", acquisitionRequest);
 	paramMap.put("requestNumber", getRequestNumber());
+	final ResourceBundle resourceBundle = ResourceBundle.getBundle("resources/AcquisitionResources");
 	try {
-	    byte[] byteArray = ReportUtils.exportToPdfFileAsByteArray("acquisitionRequestDocument", paramMap, ResourceBundle
-		    .getBundle("resources/AcquisitionResources"), acquisitionRequest.getAcquisitionRequestItemsSet());
-	    setContent(new ByteArray(byteArray));
-	    setFilename(getRequestNumber() + ".pdf");
+	    byte[] byteArray = ReportUtils.exportToPdfFileAsByteArray("acquisitionRequestDocument", paramMap,
+		    resourceBundle, acquisitionRequest.getAcquisitionRequestItemsSet());
+	    setContent(byteArray);
 	} catch (JRException e) {
 	    throw new DomainException("error.creating.acquisition.request.document");
 	}
+	setFilename(getRequestNumber() + EXTENSION_PDF);
     }
 
     public void delete() {
@@ -55,6 +54,11 @@ public class AcquisitionRequestDocument extends AcquisitionRequestDocument_Base 
 	    }
 	}
 	return ++requestNumber;
+    }
+
+    @Override
+    protected String guessContentType(String filename) {
+	return CONTENT_TYPE_PDF;
     }
 
 }
