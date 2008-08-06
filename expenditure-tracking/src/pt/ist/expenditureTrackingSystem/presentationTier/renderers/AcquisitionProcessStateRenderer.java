@@ -72,7 +72,7 @@ public class AcquisitionProcessStateRenderer extends OutputRenderer {
 		    link.setBody(component);
 		    link.setModuleRelative(isModuleRelative());
 		    link.setContextRelative(isContextRelative());
-		    StringBuffer url = new StringBuffer(RenderUtils.getFormattedProperties(getUrl(), process));
+		    StringBuilder url = new StringBuilder(RenderUtils.getFormattedProperties(getUrl(), process));
 		    url.append("&");
 		    url.append(getStateParameterName());
 		    url.append("=");
