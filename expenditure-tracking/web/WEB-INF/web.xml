@@ -120,12 +120,24 @@
         <servlet-class>pt.ist.expenditureTrackingSystem.presentationTier.servlets.ActionServletWrapper</servlet-class>
         <load-on-startup>2</load-on-startup>
     </servlet>
+    <servlet>
+        <servlet-name>AutoCompleteServlet</servlet-name>
+        <servlet-class>pt.ist.expenditureTrackingSystem.presentationTier.servlets.ajax.ExpendituresAutoCompleteServlet</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+    
     
     <!-- Servlet Mapping -->
     <servlet-mapping>
         <servlet-name>action</servlet-name>
         <url-pattern>*.do</url-pattern>
     </servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>AutoCompleteServlet</servlet-name>
+		<url-pattern>/ajax/AutoCompleteServlet</url-pattern>
+	</servlet-mapping>
+    
+    
 
 	<session-config>
 			<session-timeout>120</session-timeout>

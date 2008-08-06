@@ -195,6 +195,7 @@ Documentation:
         <property name="autoCompleteItemsStyleClass" value="autoCompleteItems"/>
         <property name="autoCompleteStyleClass" value="autoComplete"/>
         <property name="minChars" value="3"/>
+        <property name="valueField" value="OID"/>
     </renderer>
         
     <!--@ The default layout for a collection. -->
