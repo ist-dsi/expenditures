@@ -106,18 +106,21 @@
 
 
 <logic:present name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestItemsSet">
-	<fr:view name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestItemsSet"
-			schema="viewAcquisitionRequestItemInList">
-		<fr:layout name="tabular">
-			<fr:property name="classes" value="tstyle2"/>
 
-			<fr:property name="link(view)" value="/acquisitionProcess.do?method=viewAcquisitionRequestItem"/>
-			<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
-			<fr:property name="key(view)" value="link.view"/>
-			<fr:property name="param(view)" value="OID/acquisitionRequestItemOid"/>
-			<fr:property name="order(view)" value="1"/>
-		</fr:layout>
-	</fr:view>
+	<bean:size id="totalItems" name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestItemsSet"/>
+	<logic:iterate id="acquisitionRequestItem" name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestItemsSet" indexId="index">
+		<bean:define id="currentIndex" value="<%= String.valueOf(index + 1) %>"/>
+		<strong><bean:message key="label.view.acquisition.request.item" bundle="ACQUISITION_RESOURCES"/></strong> (  <fr:view name="currentIndex"/> / <fr:view name="totalItems"/> )
+		<div class="infoop2" style="width: 360px">
+			<fr:view name="acquisitionRequestItem"
+					type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem"
+					schema="viewAcquisitionRequestItem">
+				<fr:layout name="tabular">
+					<fr:property name="classes" value="tstyle1"/>
+				</fr:layout>
+			</fr:view>
+		</div>
+	</logic:iterate>
 </logic:present>
 
 

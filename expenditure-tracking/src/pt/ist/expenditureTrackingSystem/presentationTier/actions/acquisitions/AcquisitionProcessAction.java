@@ -24,8 +24,8 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestIt
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Invoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.SearchAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AbstractActivity;
+import pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean;
-import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionRequestItemBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.DomainObjectBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
@@ -43,7 +43,6 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "view.acquisition.process", path = "/acquisitions/viewAcquisitionProcess.jsp"),
 	@Forward(name = "search.acquisition.process", path = "/acquisitions/searchAcquisitionProcess.jsp"),
 	@Forward(name = "add.acquisition.proposal.document", path = "/acquisitions/addAcquisitionProposalDocument.jsp"),
-	@Forward(name = "view.acquisition.request.item", path = "/acquisitions/viewAcquisitionRequestItem.jsp"),
 	@Forward(name = "create.acquisition.request.item", path = "/acquisitions/createAcquisitionRequestItem.jsp"),
 	@Forward(name = "edit.acquisition.request.item", path = "/acquisitions/editAcquisitionRequestItem.jsp"),
 	@Forward(name = "allocate.funds", path = "/acquisitions/allocateFunds.jsp"),
@@ -52,7 +51,11 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "receive.invoice", path = "/acquisitions/receiveInvoice.jsp"),
 	@Forward(name = "view.active.processes", path = "/acquisitions/viewActiveProcesses.jsp"),
 	@Forward(name = "select.unit.to.add", path = "/acquisitions/selectUnitToAdd.jsp"),
-	@Forward(name = "remove.paying.units", path = "/acquisitions/removePayingUnits.jsp") })
+	@Forward(name = "remove.paying.units", path = "/acquisitions/removePayingUnits.jsp"),
+	@Forward(name = "delete.request.item", path = "/acquisitions/deleteRequestItems.jsp"), 
+	@Forward(name = "edit.request.items", path = "/acquisitions/editRequestItems.jsp"),
+	@Forward(name = "edit.request.item", path = "/acquisitions/editRequestItem.jsp")
+})
 public class AcquisitionProcessAction extends ProcessAction {
 
     private static final Context CONTEXT = new Context("acquisitions");
@@ -135,7 +138,8 @@ public class AcquisitionProcessAction extends ProcessAction {
 
     public ActionForward executeDeleteAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
-	return executeActivityAndViewProcess(mapping, form, request, response, "DeleteAcquisitionProcess");
+	genericActivityExecution(request, "DeleteAcquisitionProcess");
+	return showPendingProcesses(mapping, form, request, response);
     }
 
     public ActionForward searchAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
@@ -188,14 +192,14 @@ public class AcquisitionProcessAction extends ProcessAction {
     public ActionForward executeCreateAcquisitionRequestItem(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
-	request.setAttribute("bean", new CreateAcquisitionRequestItemBean(acquisitionProcess.getAcquisitionRequest()));
+	request.setAttribute("bean", new AcquisitionRequestItemBean(acquisitionProcess.getAcquisitionRequest()));
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
 	return mapping.findForward("create.acquisition.request.item");
     }
 
     public ActionForward createNewAcquisitionRequestItem(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
-	final CreateAcquisitionRequestItemBean requestItemBean = getRenderedObject();
+	final AcquisitionRequestItemBean requestItemBean = getRenderedObject();
 
 	AcquisitionProcess acquisitionProcess = requestItemBean.getAcquisitionRequest().getAcquisitionProcess();
 	AbstractActivity<AcquisitionProcess> activity = acquisitionProcess.getActivityByName("CreateAcquisitionRequestItem");
@@ -209,27 +213,6 @@ public class AcquisitionProcessAction extends ProcessAction {
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
 	request.setAttribute("acquisitionRequestItem", acquisitionRequestItem);
 	return mapping.findForward("edit.acquisition.request.item");
-    }
-
-    public ActionForward editAcquisitionRequestItem(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-	final AcquisitionRequestItem acquisitionRequestItem = getDomainObject(request, "acquisitionRequestItemOid");
-	return editAcquisitionRequestItem(mapping, request, acquisitionRequestItem);
-    }
-
-    public ActionForward viewAcquisitionRequestItem(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-	final AcquisitionRequestItem acquisitionRequestItem = getDomainObject(request, "acquisitionRequestItemOid");
-	request.setAttribute("acquisitionRequestItem", acquisitionRequestItem);
-	return mapping.findForward("view.acquisition.request.item");
-    }
-
-    public ActionForward deleteAcquisitionRequestItem(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-	final AcquisitionRequestItem acquisitionRequestItem = getDomainObject(request, "acquisitionRequestItemOid");
-	final AcquisitionProcess acquisitionProcess = acquisitionRequestItem.getAcquisitionRequest().getAcquisitionProcess();
-	acquisitionRequestItem.delete();
-	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
 
     public ActionForward executeSubmitForApproval(final ActionMapping mapping, final ActionForm form,
@@ -394,6 +377,52 @@ public class AcquisitionProcessAction extends ProcessAction {
     public ActionForward executeRejectAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	return executeActivityAndViewProcess(mapping, form, request, response, "RejectAcquisitionProcess");
+    }
+
+    public ActionForward executeDeleteAcquisitionRequestItem(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+
+	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
+	request.setAttribute("acquisitionProcess", acquisitionProcess);
+	return mapping.findForward("delete.request.item");
+    }
+
+    public ActionForward deleteAcquisitionRequestItem(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+
+	final AcquisitionRequestItem item = getDomainObject(request, "acquisitionRequestItemOid");
+	AcquisitionProcess acquisitionProcess = item.getAcquisitionRequest().getAcquisitionProcess();
+	request.setAttribute("acquisitionProcess", acquisitionProcess);
+	genericActivityExecution(acquisitionProcess, "DeleteAcquisitionRequestItem", item);
+	return acquisitionProcess.getAcquisitionRequest().getAcquisitionRequestItemsCount() > 0 ? mapping
+		.findForward("delete.request.item") : viewAcquisitionProcess(mapping, request, acquisitionProcess);
+    }
+
+    public ActionForward executeEditAcquisitionRequestItem(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+
+	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
+	request.setAttribute("acquisitionProcess", acquisitionProcess);
+	return mapping.findForward("edit.request.items");
+    }
+
+    public ActionForward editAcquisitionRequestItem(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+
+	final AcquisitionRequestItem acquisitionRequestItem = getDomainObject(request, "acquisitionRequestItemOid");
+	AcquisitionRequestItemBean itemBean = new AcquisitionRequestItemBean(acquisitionRequestItem);
+	request.setAttribute("itemBean", itemBean);
+	return mapping.findForward("edit.request.item");
+    }
+
+    public ActionForward executeAcquisitionRequestItemEdition(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+
+	final AcquisitionRequestItemBean requestItemBean = getRenderedObject("itemBean");
+	genericActivityExecution(requestItemBean.getAcquisitionRequest().getAcquisitionProcess(), "EditAcquisitionRequestItem",
+		requestItemBean.getItem(), requestItemBean.getDescription(), requestItemBean.getQuantity(), requestItemBean
+			.getUnitValue(), requestItemBean.getProposalReference(), requestItemBean.getSalesCode());
+	return executeEditAcquisitionRequestItem(mapping, form, request, response);
     }
 
     public ActionForward executeActivityAndViewProcess(final ActionMapping mapping, final ActionForm form,

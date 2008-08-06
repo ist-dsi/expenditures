@@ -15,6 +15,8 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.ApproveAc
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.CreateAcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.CreateAcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.DeleteAcquisitionProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.DeleteAcquisitionRequestItem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.EditAcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.FundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.FundAllocationExpirationDate;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
@@ -54,6 +56,8 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 	activities.add(new PayAcquisition());
 	activities.add(new ReceiveInvoice());
 	activities.add(new SubmitForApproval());
+	activities.add(new DeleteAcquisitionRequestItem());
+	activities.add(new EditAcquisitionRequestItem());
     }
 
     protected AcquisitionProcess(final Person requester) {

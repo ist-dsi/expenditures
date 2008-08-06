@@ -34,6 +34,14 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	return unitValue == null || quantity == null ? BigDecimal.ZERO : unitValue.multiply(new BigDecimal(quantity.intValue()));
     }
 
+    public void edit(String description, Integer quantity, BigDecimal unitValue, String proposalReference, String salesCode) {
+	setDescription(description);
+	setQuantity(quantity);
+	setUnitValue(unitValue);
+	setProposalReference(proposalReference);
+	setSalesCode(salesCode);
+    }
+    
     @Service
     public void delete() {
 	removeAcquisitionRequest();

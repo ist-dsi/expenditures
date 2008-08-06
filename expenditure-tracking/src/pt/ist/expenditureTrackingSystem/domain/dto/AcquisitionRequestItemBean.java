@@ -4,22 +4,34 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
 import pt.ist.fenixWebFramework.util.DomainReference;
 
-public class CreateAcquisitionRequestItemBean implements Serializable {
+public class AcquisitionRequestItemBean implements Serializable {
     private String description;
     private Integer quantity;
     private BigDecimal unitValue;
     private String proposalReference;
     private String salesCode;
     private DomainReference<AcquisitionRequest> acquisitionRequest;
-
-    public CreateAcquisitionRequestItemBean(final AcquisitionRequest acquisitionRequest) {
+    private DomainReference<AcquisitionRequestItem> item;
+    
+    public AcquisitionRequestItemBean(final AcquisitionRequest acquisitionRequest) {
 	setAcquisitionRequest(acquisitionRequest);
     }
 
+    public AcquisitionRequestItemBean(AcquisitionRequestItem acquisitionRequestItem) {
+	this(acquisitionRequestItem.getAcquisitionRequest());
+	setDescription(acquisitionRequestItem.getDescription());
+	setQuantity(acquisitionRequestItem.getQuantity());
+	setUnitValue(acquisitionRequestItem.getUnitValue());
+	setProposalReference(acquisitionRequestItem.getProposalReference());
+	setSalesCode(acquisitionRequestItem.getSalesCode());
+	setItem(acquisitionRequestItem);
+    }
+
     public void setAcquisitionRequest(final AcquisitionRequest acquisitionRequest) {
-	this.acquisitionRequest = acquisitionRequest != null ? new DomainReference<AcquisitionRequest>(acquisitionRequest) : null;
+	this.acquisitionRequest = new DomainReference<AcquisitionRequest>(acquisitionRequest);
     }
 
     public AcquisitionRequest getAcquisitionRequest() {
@@ -64,6 +76,14 @@ public class CreateAcquisitionRequestItemBean implements Serializable {
 
     public void setSalesCode(String salesCode) {
 	this.salesCode = salesCode;
+    }
+
+    public AcquisitionRequestItem getItem() {
+        return item.getObject();
+    }
+
+    public void setItem(AcquisitionRequestItem item) {
+        this.item = new DomainReference<AcquisitionRequestItem>(item);
     }
 
 }

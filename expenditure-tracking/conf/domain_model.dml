@@ -43,6 +43,11 @@ class acquisitions.AcquisitionRequestItem {
 	String salesCode;              // CVP
 }
 
+class acquisitions.UnitItem {
+	Boolean itemApproved;
+	BigDecimal shareValue;
+}
+
 class processes.GenericLog {
 	String ojbConcreteClass;
 	DateTime whenOperationWasRan;
@@ -317,6 +322,20 @@ relation AcquisitionRequestPayingUnit {
 		multiplicity *;
 	}
 	organization.Unit playsRole payingUnits {
+		multiplicity *;
+	}
+}
+
+relation UnitItemUnit {
+	organization.Unit playsRole unit;
+	acquisitions.UnitItem playsRole unitItems {
+		multiplicity *;
+	}
+}
+
+relation ItemUnitItem {
+	acquisitions.AcquisitionRequestItem playsRole item;
+	acquisitions.UnitItem playsRole unitItems {
 		multiplicity *;
 	}
 }

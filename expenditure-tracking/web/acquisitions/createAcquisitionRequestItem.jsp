@@ -14,7 +14,6 @@
 <bean:define id="urlView">/acquisitionProcess.do?method=viewAcquisitionProcess&acquisitionProcessOid=<%= acquisitionProcess.getOID() %></bean:define>
 <fr:edit id="acquisitionRequestItem"
 		name="bean"
-		type="pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionRequestItemBean"
 		schema="createAcquisitionRequestItem"
 		action="/acquisitionProcess.do?method=createNewAcquisitionRequestItem">
 	<fr:layout name="tabular">

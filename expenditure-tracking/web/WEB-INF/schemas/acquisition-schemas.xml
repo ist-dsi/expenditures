@@ -71,7 +71,7 @@
 </schema>
 
 <schema name="createAcquisitionRequestItem"
-		type="pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionRequestItemBean"
+		type="pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean"
 		bundle="ACQUISITION_RESOURCES">
 	<slot name="proposalReference" key="label.acquisition.request.item.proposalReference" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 	<slot name="quantity" key="label.acquisition.request.item.quantity" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
@@ -192,4 +192,12 @@
 			<property name="providerClass" value="pt.ist.expenditureTrackingSystem.presentationTier.renderers.providers.DumbUnitProvider"/>
 			<property name="format" value="${name}"/>
 		</slot>
+</schema>
+
+<schema name="itemDescription"
+		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem"
+		bundle="ACQUISITION_RESOURCES">
+	<slot name="description" key="label.acquisition.request.item.description" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="proposalReference" key="label.acquisition.request.item.proposalReference" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="quantity" key="label.acquisition.request.item.quantity" bundle="ACQUISITION_RESOURCES"/>
 </schema>

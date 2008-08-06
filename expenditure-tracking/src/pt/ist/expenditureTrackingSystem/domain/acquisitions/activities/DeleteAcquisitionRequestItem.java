@@ -3,11 +3,10 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.activities;
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
-import pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
 import pt.ist.fenixWebFramework.security.UserView;
 
-public class CreateAcquisitionRequestItem extends GenericAcquisitionProcessActivity {
+public class DeleteAcquisitionRequestItem extends GenericAcquisitionProcessActivity {
 
     @Override
     protected boolean isAccessible(AcquisitionProcess process) {
@@ -17,14 +16,13 @@ public class CreateAcquisitionRequestItem extends GenericAcquisitionProcessActiv
 
     @Override
     protected boolean isAvailable(AcquisitionProcess process) {
-	return process.isProcessInState(AcquisitionProcessStateType.IN_GENESIS);
+	return process.isProcessInState(AcquisitionProcessStateType.IN_GENESIS) && process.getAcquisitionRequest().getAcquisitionRequestItemsCount() > 0;
     }
 
     @Override
     protected void process(AcquisitionProcess process, Object... objects) {
-	final AcquisitionRequest acquisitionRequest = process.getAcquisitionRequest();
-	AcquisitionRequestItemBean bean = (AcquisitionRequestItemBean) objects[0];
-	acquisitionRequest.createAcquisitionRequestItem(bean);
+	AcquisitionRequestItem item = (AcquisitionRequestItem) objects[0];
+	item.delete();
     }
 
 }
