@@ -66,6 +66,7 @@ class File {
 	String ojbConcreteClass;
 	String filename;
 	ByteArray content;
+	String contentType;
 }
 
 	class acquisitions.AcquisitionProposalDocument extends File {

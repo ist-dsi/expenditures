@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -291,18 +290,7 @@ public class AcquisitionProcessAction extends ProcessAction {
 	    acquisitionRequestDocument = acquisitionRequest.getAcquisitionRequestDocument();
 	}
 
-	byte[] data = acquisitionRequestDocument.getContent().getBytes();
-
-	response.setContentLength(data.length);
-	response.setContentType("application/pdf");
-	response.addHeader("Content-Disposition", "attachment; filename=" + acquisitionRequestDocument.getFilename());
-
-	final ServletOutputStream writer = response.getOutputStream();
-	writer.write(data);
-	writer.flush();
-	writer.close();
-
-	response.flushBuffer();
+	download(response, acquisitionRequestDocument);
 
 	ActionForward findForward = mapping.findForward("prepare.create.acquisition.request");
 	findForward.setRedirect(true);
