@@ -242,7 +242,7 @@ public class AcquisitionProcessAction extends ProcessAction {
 	return executeActivityAndViewProcess(mapping, form, request, response, "ApproveAcquisitionProcess");
     }
 
-    public ActionForward allocateFunds(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+    public ActionForward executeFundAllocation(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) {
 	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
