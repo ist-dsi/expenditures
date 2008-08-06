@@ -1,7 +1,12 @@
 <schema name="createAcquisitionRequest"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean"
 		bundle="ACQUISITION_RESOURCES">
-	<slot name="fiscalIdentificationCode" key="label.service.provider.fiscalIdentificationCode" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="supplier" layout="autoComplete" >
+        <property name="labelField" value="name"/>
+		<property name="format" value="${fiscalIdentificationCode} - ${name}"/>
+		<property name="minChars" value="1"/>		
+		<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.NIFSupplierAutoCompleteProvider"/>
+	</slot>
 	<slot name="project" key="label.project" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="subproject" key="label.subproject" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="recipient" key="label.recipient" bundle="ACQUISITION_RESOURCES"/>
@@ -10,7 +15,7 @@
 		<property name="providerClass" value="pt.ist.expenditureTrackingSystem.presentationTier.renderers.providers.DumbUnitProvider"/>
 		<property name="format" value="${name}"/>
 	</slot>
-	<slot name="requestUnitPayingUnit" key="label.requestUnitPayingUnit" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="requestUnitPayingUnit" key="label.requestUnitPayingUnit" bundle="ACQUISITION_RESOURCES"/>	
 </schema>
 
 <schema name="editAcquisitionRequest"

@@ -2,6 +2,8 @@ package pt.ist.expenditureTrackingSystem.domain.dto;
 
 import java.io.Serializable;
 
+import pt.ist.expenditureTrackingSystem.domain.organization.Person;
+import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.fenixWebFramework.util.DomainReference;
 
@@ -11,14 +13,16 @@ public class CreateAcquisitionProcessBean implements Serializable {
     private String subproject;
     private String recipient;
     private String receptionAddress;
-    private String fiscalIdentificationCode;
     private DomainReference<Unit> requestingUnit;
-    private boolean requestUnitPayingUnit; 
-    
+    private boolean requestUnitPayingUnit;
+    private DomainReference<Supplier> supplier;
+    private DomainReference<Person> requester;
+
     public CreateAcquisitionProcessBean() {
 	setRequestingUnit(null);
+	setSupplier(null);
     }
-    
+
     public String getProject() {
 	return project;
     }
@@ -51,14 +55,6 @@ public class CreateAcquisitionProcessBean implements Serializable {
 	this.receptionAddress = receptionAddress;
     }
 
-    public String getFiscalIdentificationCode() {
-	return fiscalIdentificationCode;
-    }
-
-    public void setFiscalIdentificationCode(String fiscalIdentificationCode) {
-	this.fiscalIdentificationCode = fiscalIdentificationCode;
-    }
-
     public Unit getRequestingUnit() {
 	return requestingUnit.getObject();
     }
@@ -68,11 +64,27 @@ public class CreateAcquisitionProcessBean implements Serializable {
     }
 
     public boolean isRequestUnitPayingUnit() {
-        return requestUnitPayingUnit;
+	return requestUnitPayingUnit;
     }
 
     public void setRequestUnitPayingUnit(boolean requestUnitPayingUnit) {
-        this.requestUnitPayingUnit = requestUnitPayingUnit;
+	this.requestUnitPayingUnit = requestUnitPayingUnit;
+    }
+
+    public void setSupplier(Supplier supplier) {
+	this.supplier = new DomainReference<Supplier>(supplier);
+    }
+
+    public Supplier getSupplier() {
+	return supplier.getObject();
+    }
+
+    public void setRequester(Person requester) {
+	this.requester = new DomainReference<Person>(requester);
+    }
+
+    public Person getRequester() {
+	return requester.getObject();
     }
 
 }

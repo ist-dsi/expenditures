@@ -4,33 +4,37 @@ import java.math.BigDecimal;
 
 import org.joda.time.DateTime;
 
-import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionRequestItemBean;
+import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.util.ByteArray;
-import pt.ist.fenixWebFramework.security.UserView;
 import pt.ist.fenixframework.pstm.Transaction;
 
 public class AcquisitionRequest extends AcquisitionRequest_Base {
 
-    AcquisitionRequest(final AcquisitionProcess acquisitionProcess) {
+    AcquisitionRequest(final AcquisitionProcess acquisitionProcess, final Person person) {
 	super();
+	checkParameters(acquisitionProcess, person);
 	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
 	setAcquisitionProcess(acquisitionProcess);
-
-	final User user = UserView.getUser();
-	if (user == null || user.getPerson() == null) {
-	    throw new DomainException("error.anonymous.creation.of.acquisition.request.information.not.allowed");
-	}
-	setRequester(user.getPerson());
+	setRequester(person);
     }
 
-    AcquisitionRequest(AcquisitionProcess acquisitionProcess, String fiscalCode, String project,
-	    String subproject, String recipient, String receptionAddress) {
-	this(acquisitionProcess);
-	setFiscalIdentificationCode(fiscalCode);
+    private void checkParameters(AcquisitionProcess acquisitionProcess, Person person) {
+	if (acquisitionProcess == null) {
+	    throw new DomainException("error.acquisition.request.wrong.acquisition.process");
+	}
+	if (person == null) {
+	    throw new DomainException("error.anonymous.creation.of.acquisition.request.information.not.allowed");
+	}
+    }
+
+    AcquisitionRequest(AcquisitionProcess acquisitionProcess, Supplier supplier, String project, String subproject,
+	    String recipient, String receptionAddress, Person person) {
+	this(acquisitionProcess, person);
+	setSupplier(supplier);
 	setProject(project);
 	setSubproject(subproject);
 	setRecipient(recipient);

@@ -50,12 +50,10 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "allocate.funds.to.service.provider", path = "/acquisitions/allocateFundsToServiceProvider.jsp"),
 	@Forward(name = "prepare.create.acquisition.request", path = "/acquisitions/createAcquisitionRequest.jsp"),
 	@Forward(name = "receive.invoice", path = "/acquisitions/receiveInvoice.jsp"),
-	@Forward(name = "view.active.processes", path = "/acquisitions/viewActiveProcesses.jsp"), 
-	@Forward(name ="select.unit.to.add", path="/acquisitions/selectUnitToAdd.jsp"),
-	@Forward(name ="remove.paying.units", path="/acquisitions/removePayingUnits.jsp")	
-})
-
-	public class AcquisitionProcessAction extends ProcessAction {
+	@Forward(name = "view.active.processes", path = "/acquisitions/viewActiveProcesses.jsp"),
+	@Forward(name = "select.unit.to.add", path = "/acquisitions/selectUnitToAdd.jsp"),
+	@Forward(name = "remove.paying.units", path = "/acquisitions/removePayingUnits.jsp") })
+public class AcquisitionProcessAction extends ProcessAction {
 
     private static final Context CONTEXT = new Context("acquisitions");
     private AbstractActivity<AcquisitionProcess> ActivityByName;
@@ -103,7 +101,8 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
     public ActionForward createNewAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	CreateAcquisitionProcessBean createAcquisitionProcessBean = getRenderedObject();
-
+	User user = UserView.getUser();
+	createAcquisitionProcessBean.setRequester(user != null ? user.getPerson() : null);
 	final AcquisitionProcess acquisitionProcess = AcquisitionProcess
 		.createNewAcquisitionProcess(createAcquisitionProcessBean);
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
@@ -244,8 +243,8 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	return executeActivityAndViewProcess(mapping, form, request, response, "ApproveAcquisitionProcess");
     }
 
-    public ActionForward allocateFunds(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
+    public ActionForward allocateFunds(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
 	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
 	return mapping.findForward("allocate.funds");
@@ -272,7 +271,7 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
 	for (AcquisitionProcess process : GenericProcess.getAllProcesses(AcquisitionProcess.class)) {
 	    if (process.isPersonAbleToExecuteActivities()) {
-		processes.add((AcquisitionProcess)process);
+		processes.add((AcquisitionProcess) process);
 	    }
 	}
 	request.setAttribute("activeProcesses", processes);
@@ -333,8 +332,8 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
 
-    public ActionForward downloadInvoice(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws IOException {
+    public ActionForward downloadInvoice(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) throws IOException {
 	final Invoice invoice = getDomainObject(request, "invoiceOid");
 	return download(response, invoice);
     }
@@ -343,7 +342,7 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	return executeActivityAndViewProcess(mapping, form, request, response, "ConfirmInvoice");
     }
-    
+
     public ActionForward executePayAcquisition(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	return executeActivityAndViewProcess(mapping, form, request, response, "PayAcquisition");
@@ -366,16 +365,16 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	request.setAttribute("domainObjectBean", new DomainObjectBean<Unit>());
 	return mapping.findForward("select.unit.to.add");
     }
-    
-    public ActionForward addPayingUnit(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-	
+
+    public ActionForward addPayingUnit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+
 	DomainObjectBean<Unit> bean = getRenderedObject("unitToAdd");
-	List<Unit> units =  new ArrayList<Unit> ();
+	List<Unit> units = new ArrayList<Unit>();
 	units.add(bean.getDomainObject());
-	return executeActivityAndViewProcess(mapping, form, request, response, "AddPayingUnit",units);
+	return executeActivityAndViewProcess(mapping, form, request, response, "AddPayingUnit", units);
     }
-    
+
     public ActionForward executeRemovePayingUnit(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
@@ -383,16 +382,16 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	request.setAttribute("payingUnits", acquisitionProcess.getPayingUnits());
 	return mapping.findForward("remove.paying.units");
     }
-    
-    public ActionForward removePayingUnit(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-	
+
+    public ActionForward removePayingUnit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+
 	final Unit payingUnit = getDomainObject(request, "unitOID");
 	List<Unit> units = new ArrayList<Unit>();
 	units.add(payingUnit);
 	return executeActivityAndViewProcess(mapping, form, request, response, "RemovePayingUnit", units);
     }
-    
+
     public ActionForward executeRejectAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	return executeActivityAndViewProcess(mapping, form, request, response, "RejectAcquisitionProcess");

@@ -27,6 +27,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.UnApprove
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
+import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericLog;
 import pt.ist.fenixWebFramework.security.UserView;
@@ -56,17 +57,17 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 	activities.add(new SubmitForApproval());
     }
 
-    protected AcquisitionProcess() {
+    protected AcquisitionProcess(final Person requester) {
 	super();
 	new AcquisitionProcessState(this, AcquisitionProcessStateType.IN_GENESIS);
-	new AcquisitionRequest(this);
+	new AcquisitionRequest(this, requester);
     }
 
-    protected AcquisitionProcess(String fiscalCode,  String project, String subproject, String recipient,
-	    String receptionAddress) {
+    protected AcquisitionProcess(Supplier supplier, String project, String subproject, String recipient, String receptionAddress,
+	    Person person) {
 	super();
 	new AcquisitionProcessState(this, AcquisitionProcessStateType.IN_GENESIS);
-	new AcquisitionRequest(this, fiscalCode,  project, subproject, recipient, receptionAddress);
+	new AcquisitionRequest(this, supplier, project, subproject, recipient, receptionAddress, person);
     }
 
     public static boolean isCreateNewAcquisitionProcessAvailable() {
@@ -78,10 +79,10 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 	if (!isCreateNewAcquisitionProcessAvailable()) {
 	    throw new DomainException("error.acquisitionProcess.invalid.state.to.run.createNewAcquisitionProcess");
 	}
-	AcquisitionProcess process = new AcquisitionProcess(createAcquisitionProcessBean.getFiscalIdentificationCode(),
-		createAcquisitionProcessBean.getProject(),
-		createAcquisitionProcessBean.getSubproject(), createAcquisitionProcessBean.getRecipient(),
-		createAcquisitionProcessBean.getReceptionAddress());
+	AcquisitionProcess process = new AcquisitionProcess(createAcquisitionProcessBean.getSupplier(),
+		createAcquisitionProcessBean.getProject(), createAcquisitionProcessBean.getSubproject(),
+		createAcquisitionProcessBean.getRecipient(), createAcquisitionProcessBean.getReceptionAddress(),
+		createAcquisitionProcessBean.getRequester());
 	process.getAcquisitionRequest().setRequestingUnit(createAcquisitionProcessBean.getRequestingUnit());
 	if (createAcquisitionProcessBean.isRequestUnitPayingUnit()) {
 	    process.getAcquisitionRequest().addPayingUnits(createAcquisitionProcessBean.getRequestingUnit());
@@ -97,11 +98,11 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
     public Unit getRequestingUnit() {
 	return getAcquisitionRequest().getRequestingUnit();
     }
-    
+
     public List<Unit> getPayingUnits() {
 	return getAcquisitionRequest().getPayingUnits();
     }
-    
+
     public boolean isResponsibleForUnit() {
 	User user = UserView.getUser();
 	if (user == null) {
