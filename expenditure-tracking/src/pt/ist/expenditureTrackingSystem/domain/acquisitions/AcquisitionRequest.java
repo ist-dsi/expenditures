@@ -146,4 +146,14 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	}
 	return true;
     }
+    
+    @Override
+    public void removePayingUnits(Unit payingUnit) {
+	for (AcquisitionRequestItem item : getAcquisitionRequestItems()) {
+	    if (item.getUnitItemFor(payingUnit) != null) {
+		throw new DomainException("error.cannot.remove.paying.unit.that.already.has.items.assigned.remove.them.first");
+	    }
+	}
+	super.removePayingUnits(payingUnit);
+    }
 }
