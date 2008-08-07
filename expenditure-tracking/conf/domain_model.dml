@@ -6,7 +6,7 @@ valueType pt.ist.expenditureTrackingSystem.domain.util.ByteArray as ByteArray;
 valueType pt.ist.expenditureTrackingSystem.domain.util.MonitaryValue as MonitaryValue;
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType as AcquisitionProcessStateType;
 enum pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationType as AuthorizationType;
-/*valueType pt.ist.expenditureTrackingSystem.domain.util.Address as Address;*/
+valueType pt.ist.expenditureTrackingSystem.domain.util.Address as Address;
 enum pt.ist.expenditureTrackingSystem.domain.RoleType as RoleType;
 
 
@@ -105,7 +105,7 @@ class organization.Unit {
 class organization.Supplier {
 	String name;
 	String fiscalIdentificationCode;
-	String address;
+	Address address;
 	String phone;
 	String fax;
 	String email;

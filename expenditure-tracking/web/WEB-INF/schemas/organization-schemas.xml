@@ -74,7 +74,7 @@
 		bundle="ORGANIZATION_RESOURCES">
 	<slot name="fiscalIdentificationCode" key="label.supplier.fiscalCode" bundle="ORGANIZATION_RESOURCES"/>
 	<slot name="name" key="label.supplier.name" bundle="ORGANIZATION_RESOURCES"/>
-	<slot name="address" key="label.supplier.address" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="address" layout="address" key="label.supplier.address" bundle="ORGANIZATION_RESOURCES"/>
 	<slot name="phone" key="label.supplier.phone" bundle="ORGANIZATION_RESOURCES"/>
 	<slot name="fax" key="label.supplier.fax" bundle="ORGANIZATION_RESOURCES"/>
 	<slot name="email" key="label.supplier.email" bundle="ORGANIZATION_RESOURCES"/>	
@@ -85,10 +85,10 @@
 		bundle="ORGANIZATION_RESOURCES">
 	<slot name="fiscalIdentificationCode" key="label.supplier.fiscalCode" bundle="ORGANIZATION_RESOURCES"/>
 	<slot name="name" key="label.supplier.name" bundle="ORGANIZATION_RESOURCES"/>
-	<slot name="address" key="label.supplier.address" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="address" layout="address-input" key="label.supplier.address" bundle="ORGANIZATION_RESOURCES"/>
 	<slot name="phone" key="label.supplier.phone" bundle="ORGANIZATION_RESOURCES"/>
 	<slot name="fax" key="label.supplier.fax" bundle="ORGANIZATION_RESOURCES"/>
-	<slot name="email" key="label.supplier.email" bundle="ORGANIZATION_RESOURCES"/>	
+	<slot name="email" key="label.supplier.email" bundle="ORGANIZATION_RESOURCES"/>
 </schema>
 
 

@@ -2,14 +2,19 @@ package pt.ist.expenditureTrackingSystem.domain.dto;
 
 import java.io.Serializable;
 
+import org.joda.time.DateTime;
+
+import pt.ist.expenditureTrackingSystem.domain.util.Address;
+
 public class CreateSupplierBean implements Serializable {
 
-    String name;
-    String fiscalIdentificationCode;
-    String address;
-    String phone;
-    String fax;
-    String email;
+    private String name;
+    private String fiscalIdentificationCode;
+    private Address address;
+    private String phone;
+    private String fax;
+    private String email;
+    private DateTime dateTime;
 
     public CreateSupplierBean() {
 
@@ -31,11 +36,11 @@ public class CreateSupplierBean implements Serializable {
 	this.fiscalIdentificationCode = fiscalIdentificationCode;
     }
 
-    public String getAddress() {
+    public Address getAddress() {
 	return address;
     }
 
-    public void setAddress(String address) {
+    public void setAddress(Address address) {
 	this.address = address;
     }
 
@@ -61,6 +66,14 @@ public class CreateSupplierBean implements Serializable {
 
     public void setEmail(String email) {
 	this.email = email;
+    }
+
+    public void setDateTime(DateTime dateTime) {
+	this.dateTime = dateTime;
+    }
+
+    public DateTime getDateTime() {
+	return dateTime;
     }
 
 }

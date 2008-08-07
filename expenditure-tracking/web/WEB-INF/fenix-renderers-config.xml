@@ -551,5 +551,17 @@ Documentation:
 	    	<property name="failedStateClass" value="red"/>
 	    	<property name="currentStateClass" value="yellow"/>
 	</renderer>
+	
+	<renderer mode="input" layout="address-input" type="pt.ist.expenditureTrackingSystem.domain.util.Address" class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.AddressInputRenderer">
+		<property name="bundle" value="ORGANIZATION_RESOURCES"/>
+		<property name="line1Key" value="label.line1"/>
+		<property name="line2Key" value="label.line2"/>
+		<property name="locationKey" value="label.location"/>
+		<property name="postalCodeKey" value="label.postalCode"/>
+		<property name="countryKey" value="label.country"/>
+	</renderer>
+	<renderer  layout="address" type="pt.ist.expenditureTrackingSystem.domain.util.Address" class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.AddressRenderer">
+	</renderer>
+
 
 </renderers-config>

@@ -171,7 +171,7 @@
 					<textElement>
 						<font/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$P{acquisitionRequest}.getSupplier().getAddress()]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{acquisitionRequest}.getSupplier().getAddress().getLine1()]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement

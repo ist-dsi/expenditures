@@ -7,4 +7,5 @@ public class SQL2JavaConverters {
     public static FieldConversion JavaByteArray2SqlByteArrayFieldConversion = new JavaByteArray2SqlByteArrayFieldConversion();
     public static FieldConversion JavaMonitaryValue2SqlMonitaryValueFieldConversion = new JavaMonitaryValue2SqlMonitaryValueFieldConversion();
     public static FieldConversion BigDecimalConverter = new BigDecimalConverter();
+    public static FieldConversion AddressConverter = new AddressConverter();
 }

@@ -9,6 +9,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessSt
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateSupplierBean;
+import pt.ist.expenditureTrackingSystem.domain.util.Address;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.pstm.Transaction;
 
@@ -27,7 +28,7 @@ public class Supplier extends Supplier_Base {
 	setFiscalIdentificationCode(fiscalCode);
     }
 
-    public Supplier(String name, String fiscalCode, String address, String phone, String fax, String email) {
+    public Supplier(String name, String fiscalCode, Address address, String phone, String fax, String email) {
 	this(fiscalCode);
 	setName(name);
 	setAddress(address);
