@@ -1,6 +1,8 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
@@ -88,5 +90,13 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 
     public void createUnitItem(Unit unit, BigDecimal shareValue) {
 	new UnitItem(unit,this,shareValue,Boolean.FALSE);
+    }
+    
+    public List<Unit> getPayingUnits() {
+	List<Unit> payingUnits = new ArrayList<Unit> ();
+	for (UnitItem unitItem : getUnitItems()) {
+	    payingUnits.add(unitItem.getUnit());
+	}
+	return payingUnits;
     }
 }

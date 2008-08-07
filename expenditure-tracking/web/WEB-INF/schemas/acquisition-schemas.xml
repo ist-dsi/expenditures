@@ -11,9 +11,11 @@
 	<slot name="subproject" key="label.subproject" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="recipient" key="label.recipient" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="receptionAddress" key="label.receptionAddress" bundle="ACQUISITION_RESOURCES"/>
-	<slot name="requestingUnit" key="label.requestingUnit" bundle="ACQUISITION_RESOURCES" layout="menu-select">
-		<property name="providerClass" value="pt.ist.expenditureTrackingSystem.presentationTier.renderers.providers.DumbUnitProvider"/>
+	<slot name="requestingUnit" layout="autoComplete" key="label.requestingUnit" bundle="ACQUISITION_RESOURCES">
+        <property name="labelField" value="name"/>
 		<property name="format" value="${name}"/>
+		<property name="minChars" value="3"/>		
+		<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.UnitNameAutoCompleteProvider"/>
 	</slot>
 	<slot name="requestUnitPayingUnit" key="label.requestUnitPayingUnit" bundle="ACQUISITION_RESOURCES"/>	
 </schema>
@@ -30,6 +32,11 @@
 		bundle="ACQUISITION_RESOURCES">
 	<slot name="acquisitionProcess.requestor.name" key="label.acquisition.requestor" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="acquisitionProcess.requestingUnit.name" key="label.acquisition.requesting.unit" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="acquisitionProcess.payingUnits" layout="separator-list" key="label.payingUnits" bundle="ACQUISITION_RESOURCES">
+		<property name="eachSchema" value="unitName"/>
+		<property name="eachLayout" value="values"/>
+		<property name="separator" value=","/>
+	</slot>
 	<slot name="acquisitionProcess.acquisitionProcessState.localizedName" key="label.acquisition.process.state" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="fiscalIdentificationCode" key="label.service.provider.fiscalIdentificationCode" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="costCenter" key="label.cost.center" bundle="ACQUISITION_RESOURCES"/>
@@ -94,6 +101,11 @@
 	<slot name="unitValue" key="label.acquisition.request.item.unitValue" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="totalItemValue" key="label.acquisition.request.item.totalValue" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="totalAssignedValue" key="label.acquisition.request.item.assignedValue" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="payingUnits" layout="separator-list" key="label.payingUnits" bundle="ACQUISITION_RESOURCES">
+		<property name="eachSchema" value="unitName"/>
+		<property name="eachLayout" value="values"/>
+		<property name="separator" value=","/>
+	</slot>
 	<slot name="salesCode" key="label.acquisition.request.item.salesCode" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="description" key="label.acquisition.request.item.description" bundle="ACQUISITION_RESOURCES"/>
 </schema>
@@ -186,10 +198,13 @@
 <schema name="select.unit.from.domain.object.bean"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.DomainObjectBean"
 		bundle="ACQUISITION_RESOURCES">
-		<slot name="domainObject" key="label.payingUnit" layout="menu-select">
-			<property name="providerClass" value="pt.ist.expenditureTrackingSystem.presentationTier.renderers.providers.DumbUnitProvider"/>
-			<property name="format" value="${name}"/>
-		</slot>
+	<slot name="domainObject" layout="autoComplete" key="label.payingUnit" bundle="ACQUISITION_RESOURCES">
+        <property name="labelField" value="name"/>
+		<property name="format" value="${name}"/>
+		<property name="minChars" value="3"/>	
+		<property name="size" value="50"/>	
+		<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.UnitNameAutoCompleteProvider"/>
+	</slot>
 </schema>
 
 <schema name="itemDescription"
