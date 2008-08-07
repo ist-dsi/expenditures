@@ -46,9 +46,11 @@
 	<br/>
 </logic:equal>
 <logic:equal name="acquisitionProcess" property="allowedToViewSupplierExpenditures" value="true">
-	<bean:message key="label.supplier.total.allocated" bundle="ORGANIZATION_RESOURCES"/>
-	<bean:write name="acquisitionProcess" property="acquisitionRequest.supplier.totalAllocated"/>
-	<br/>
+	<logic:present name="acquisitionProcess" property="acquisitionRequest.supplier">
+		<bean:message key="label.supplier.total.allocated" bundle="ORGANIZATION_RESOURCES"/>
+		<bean:write name="acquisitionProcess" property="acquisitionRequest.supplier.totalAllocated"/>
+		<br/>
+	</logic:present>
 </logic:equal>
 
 <div class="infoop2" style="width: 360px">

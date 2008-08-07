@@ -3,8 +3,9 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 import java.util.Collection;
 import java.util.Set;
 
-import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.Search;
+import pt.ist.expenditureTrackingSystem.domain.organization.Person;
+import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 
 public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
@@ -30,8 +31,12 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
 	}
 
 	private boolean matchesSearchCriteria(final AcquisitionRequest acquisitionRequest) {
-	    return matchCriteria(requester, acquisitionRequest.getRequester().getUsername())
-		    && matchCriteria(fiscalIdentificationCode, acquisitionRequest.getSupplier().getFiscalIdentificationCode())
+	    final Person person = acquisitionRequest.getRequester();
+	    final String unsername = person == null ? null : person.getUsername();
+	    final Supplier supplier = acquisitionRequest.getSupplier();
+	    final String fiscalIdentificationCode = supplier == null ? null : supplier.getFiscalIdentificationCode();
+	    return matchCriteria(requester, unsername)
+		    && matchCriteria(fiscalIdentificationCode, fiscalIdentificationCode)
 		    && matchCriteria(costCenter, acquisitionRequest.getCostCenter())
 		    && matchCriteria(project, acquisitionRequest.getProject())
 		    && matchCriteria(subproject, acquisitionRequest.getSubproject());
@@ -45,7 +50,12 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
 
     @Override
     public Set<AcquisitionProcess> search() {
+	try {
 	return new SearchResult(GenericProcess.getAllProcesses(AcquisitionProcess.class));
+	} catch (Exception ex) {
+	    ex.printStackTrace();
+	    throw new Error(ex);
+	}
     }
 
     public String getRequester() {
