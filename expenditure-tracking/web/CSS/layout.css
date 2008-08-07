@@ -397,3 +397,20 @@ border: 2px solid #88c688;
 background: #f7fbf7;
 /*color: #a68b08;*/
 }
+
+/***** AUTO_COMPLETE *****/
+div.autoComplete { 
+      position:absolute; 
+      width:250px; 
+      background-color:white; 
+      border:1px solid #888; 
+      margin:0px; 
+      padding:0px; 
+    } 
+ul.autoCompleteItems  { 
+      list-style-type: none; 
+      margin:0px;
+      padding:0px;
+  } 
+ 
+ul.autoCompleteItems li.selected { background-color:  #cef; }
