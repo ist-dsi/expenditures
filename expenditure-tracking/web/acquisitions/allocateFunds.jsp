@@ -39,12 +39,13 @@
 	</fr:view>
 </logic:present>
 
+<bean:define id="urlActivity">/acquisitionProcess.do?method=allocateFunds&amp;acquisitionProcessOid=<bean:write name="acquisitionProcess" property="OID"/></bean:define>
 <bean:define id="urlView">/acquisitionProcess.do?method=viewAcquisitionProcess&amp;acquisitionProcessOid=<bean:write name="acquisitionProcess" property="OID"/></bean:define>
-<fr:edit id="acquisitionProcess"
-		name="acquisitionProcess"
-		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess"
+<fr:edit id="fundAllocationBean"
+		name="fundAllocationBean"
+		type="pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean"
 		schema="allocateFunds"
-		action="<%= urlView %>">
+		action="<%= urlActivity %>">
 	<fr:layout name="tabular">
 		<fr:property name="classes" value="form"/>
 	</fr:layout>

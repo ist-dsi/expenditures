@@ -26,6 +26,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.SearchAcquisitionPro
 import pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.DomainObjectBean;
+import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
@@ -229,7 +230,17 @@ public class AcquisitionProcessAction extends ProcessAction {
 	    final HttpServletResponse response) {
 	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
+	final FundAllocationBean fundAllocationBean = new FundAllocationBean();
+	request.setAttribute("fundAllocationBean", fundAllocationBean);
 	return mapping.findForward("allocate.funds");
+    }
+
+    public ActionForward allocateFunds(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
+	final FundAllocationBean fundAllocationBean = getRenderedObject();
+	genericActivityExecution(acquisitionProcess, "FundAllocation", fundAllocationBean);
+	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
 
     public ActionForward allocateFundsToServiceProvider(final ActionMapping mapping, final ActionForm form,

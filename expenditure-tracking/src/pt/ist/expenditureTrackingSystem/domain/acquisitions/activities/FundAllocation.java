@@ -4,6 +4,7 @@ import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
+import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean;
 
 public class FundAllocation extends GenericAcquisitionProcessActivity {
 
@@ -19,7 +20,8 @@ public class FundAllocation extends GenericAcquisitionProcessActivity {
 
     @Override
     protected void process(AcquisitionProcess process, Object... objects) {
-	String fundAllocationId = (String) objects[0];
+	final FundAllocationBean fundAllocationBean = (FundAllocationBean) objects[0];
+	final String fundAllocationId = fundAllocationBean.getFundAllocationId();
 	process.setFundAllocationId(fundAllocationId);
 	new AcquisitionProcessState(process, AcquisitionProcessStateType.FUNDS_ALLOCATED);
     }

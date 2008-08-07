@@ -131,7 +131,7 @@
 </schema>
 
 <schema name="allocateFunds"
-		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess"
+		type="pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean"
 		bundle="ACQUISITION_RESOURCES">
 	<slot name="fundAllocationId" key="label.fund.allocation.identification" bundle="ACQUISITION_RESOURCES"/>
 </schema>
