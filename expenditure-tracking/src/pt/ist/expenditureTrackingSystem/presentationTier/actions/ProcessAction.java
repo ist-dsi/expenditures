@@ -2,7 +2,7 @@ package pt.ist.expenditureTrackingSystem.presentationTier.actions;
 
 import javax.servlet.http.HttpServletRequest;
 
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AbstractActivity;
+import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 
 public class ProcessAction extends BaseAction {
