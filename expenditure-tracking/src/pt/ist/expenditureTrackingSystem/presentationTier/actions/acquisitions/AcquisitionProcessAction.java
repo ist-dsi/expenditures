@@ -52,7 +52,7 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "prepare.create.acquisition.request", path = "/acquisitions/createAcquisitionRequest.jsp"),
 	@Forward(name = "receive.invoice", path = "/acquisitions/receiveInvoice.jsp"),
 	@Forward(name = "view.active.processes", path = "/acquisitions/viewActiveProcesses.jsp"),
-	@Forward(name = "select.unit.to.add", path = "/acquisitions/selectUnitToAdd.jsp"),
+	@Forward(name = "select.unit.to.add", path = "/acquisitions/selectPayingUnitToAdd.jsp"),
 	@Forward(name = "remove.paying.units", path = "/acquisitions/removePayingUnits.jsp"),
 	@Forward(name = "edit.request.item", path = "/acquisitions/editRequestItem.jsp"),
 	@Forward(name = "assign.unit.item", path = "/acquisitions/assignUnitItem.jsp") })
@@ -386,7 +386,8 @@ public class AcquisitionProcessAction extends ProcessAction {
 	final Unit payingUnit = getDomainObject(request, "unitOID");
 	List<Unit> units = new ArrayList<Unit>();
 	units.add(payingUnit);
-	return executeActivityAndViewProcess(mapping, form, request, response, "RemovePayingUnit", units);
+	genericActivityExecution(request, "RemovePayingUnit", units);
+	return executeRemovePayingUnit(mapping, form, request, response);
     }
 
     public ActionForward executeRejectAcquisitionProcess(final ActionMapping mapping, final ActionForm form,

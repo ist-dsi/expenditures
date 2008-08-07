@@ -3,10 +3,23 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
-<logic:iterate id="unit" name="payingUnits">
-	<bean:define id="unitOID" name="unit" property="OID"/>
-	<bean:define id="processOID" name="acquisitionProcess" property="OID"/>
-	<html:link page="<%= "/acquisitionProcess.do?method=removePayingUnit&unitOID=" + unitOID + "&acquisitionProcessOid=" + processOID %>">
-		<fr:view name="unit" property="name"/>
-	</html:link>
-</logic:iterate>
+
+<ul>
+	<li>
+		<html:link page="/acquisitionProcess.do?method=viewAcquisitionProcess" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
+			<bean:message key="link.back" bundle="EXPENDITURE_RESOURCES"/>
+		</html:link>
+	</li>
+</ul>
+
+<bean:define id="processOID" name="acquisitionProcess" property="OID"/>
+<fr:view name="payingUnits" schema="unitName">
+	<fr:layout name="tabular">
+		<fr:property name="classes" value="tstyle2"/>
+		<fr:property name="link(delete)" value="<%= "/acquisitionProcess.do?method=removePayingUnit&acquisitionProcessOid=" + processOID %>"/>
+		<fr:property name="bundle(delete)" value="EXPENDITURE_RESOURCES"/>
+		<fr:property name="key(delete)" value="link.delete"/>
+		<fr:property name="param(delete)" value="OID/unitOID"/>
+		<fr:property name="order(delete)" value="1"/>
+	</fr:layout>
+</fr:view>

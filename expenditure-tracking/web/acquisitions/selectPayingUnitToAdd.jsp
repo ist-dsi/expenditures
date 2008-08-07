@@ -5,5 +5,6 @@
 
 <bean:define id="processOID" name="acquisitionProcess" property="OID"/>
 <fr:edit id="unitToAdd" name="domainObjectBean" schema="select.unit.from.domain.object.bean" 
-action="<%="/acquisitionProcess.do?method=addPayingUnit&acquisitionProcessOid=" + processOID%>"
-/>
+action="<%="/acquisitionProcess.do?method=addPayingUnit&acquisitionProcessOid=" + processOID%>">
+	<fr:destination name="cancel" path="<%= "/acquisitionProcess.do?method=viewAcquisitionProcess&acquisitionProcessOid=" + processOID %>"/>
+</fr:edit>

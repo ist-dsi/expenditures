@@ -207,3 +207,10 @@
 	<slot name="assigned" key="label.pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AssignPayingUnitToItem" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="shareValue" key="label.shareValue" bundle="ACQUISITION_RESOURCES"/>
 </schema>
+
+<schema name="unitName"
+		type="pt.ist.expenditureTrackingSystem.domain.organization.Unit"
+		bundle="ACQUISITION_RESOURCES">
+	<slot name="name" key="label.payingUnit" bundle="ACQUISITION_RESOURCES"/>
+</schema>
+
