@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
+import pt.ist.fenixframework.pstm.Transaction;
 
 public class UnitItem extends UnitItem_Base {
 
@@ -34,6 +35,11 @@ public class UnitItem extends UnitItem_Base {
 	if (currentAssignedValue.add(shareValue).compareTo(item.getTotalItemValue()) > 0) {
 	    throw new DomainException("error.assigned.value.bigger.than.total.amount");
 	}
-
+    }
+    
+    public void delete() {
+	removeUnit();
+	removeItem();
+	Transaction.deleteObject(this);
     }
 }
