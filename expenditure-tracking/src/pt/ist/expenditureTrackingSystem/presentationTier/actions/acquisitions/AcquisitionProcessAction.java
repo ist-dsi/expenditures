@@ -29,7 +29,6 @@ import pt.ist.expenditureTrackingSystem.domain.dto.DomainObjectBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationExpirationDateBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.UnitItemBean;
-import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
@@ -55,7 +54,6 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "view.active.processes", path = "/acquisitions/viewActiveProcesses.jsp"),
 	@Forward(name = "select.unit.to.add", path = "/acquisitions/selectUnitToAdd.jsp"),
 	@Forward(name = "remove.paying.units", path = "/acquisitions/removePayingUnits.jsp"),
-	@Forward(name = "delete.request.item", path = "/acquisitions/deleteRequestItems.jsp"),
 	@Forward(name = "edit.request.item", path = "/acquisitions/editRequestItem.jsp"),
 	@Forward(name = "assign.unit.item", path = "/acquisitions/assignUnitItem.jsp") })
 public class AcquisitionProcessAction extends ProcessAction {
@@ -403,8 +401,7 @@ public class AcquisitionProcessAction extends ProcessAction {
 	AcquisitionProcess acquisitionProcess = item.getAcquisitionRequest().getAcquisitionProcess();
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
 	genericActivityExecution(acquisitionProcess, "DeleteAcquisitionRequestItem", item);
-	return acquisitionProcess.getAcquisitionRequest().getAcquisitionRequestItemsCount() > 0 ? mapping
-		.findForward("delete.request.item") : viewAcquisitionProcess(mapping, request, acquisitionProcess);
+	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
 
     public ActionForward executeEditAcquisitionRequestItem(final ActionMapping mapping, final ActionForm form,
