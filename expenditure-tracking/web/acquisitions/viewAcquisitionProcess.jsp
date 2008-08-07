@@ -115,11 +115,11 @@
 		<strong><bean:message key="label.view.acquisition.request.item" bundle="ACQUISITION_RESOURCES"/></strong> (  <fr:view name="currentIndex"/> / <fr:view name="totalItems"/> )
 		<bean:define id="itemOID" name="acquisitionRequestItem" property="OID"/>
 		
-	<div class="infoop1" style="width: 360px">
-	<ul>
-	<logic:iterate id="activity" name="acquisitionProcess" property="activeActivitiesForItem">
+
+
+	<logic:iterate id="activity" name="acquisitionProcess" property="activeActivitiesForItem" indexId="index">
+		<logic:greaterThan name="index" value="0"> | </logic:greaterThan>
 		<bean:define id="activityName" name="activity" property="class.simpleName"/> 
-		<li>
 			<html:link page="<%= "/acquisitionProcess.do?method=execute" + activityName + "&acquisitionRequestItemOid=" + itemOID%>" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
 				<fr:view name="activity" property="class">
 					<fr:layout name="label">
@@ -127,16 +127,15 @@
 					</fr:layout>
 				</fr:view>
 			</html:link>
-		</li>
 	</logic:iterate>
-	</ul>
-	<logic:empty name="acquisitionProcess" property="activeActivities">
-		<em>
-			<bean:message key="label.no.operations.available.at.the.moment" bundle="EXPENDITURE_RESOURCES"/>
-		</em>
-	</logic:empty>
-</div>
+
+		<logic:equal name="acquisitionRequestItem" property="valueFullyAttributedToUnits" value="false">
 		
+			<div class="warn">
+					Ainda não está totalmente atribuído
+			</div>
+		
+		</logic:equal>
 		<div class="infoop2" style="width: 360px">
 			<fr:view name="acquisitionRequestItem"
 					schema="viewAcquisitionRequestItem">

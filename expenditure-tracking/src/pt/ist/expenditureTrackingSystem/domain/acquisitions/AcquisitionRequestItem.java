@@ -2,9 +2,11 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import java.math.BigDecimal;
 
+import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.DomainObject;
 import pt.ist.fenixframework.pstm.Transaction;
 
 public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
@@ -31,6 +33,14 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	return multiply(unitValue, quantity);
     }
 
+    public BigDecimal getTotalAssignedValue() {
+	BigDecimal sum = BigDecimal.ZERO;
+	for (UnitItem unitItem : getUnitItems()) {
+	    sum = sum.add(unitItem.getShareValue());
+	}
+	return sum;
+    }
+    
     private BigDecimal multiply(final BigDecimal unitValue, final Integer quantity) {
 	return unitValue == null || quantity == null ? BigDecimal.ZERO : unitValue.multiply(new BigDecimal(quantity.intValue()));
     }
@@ -67,5 +77,17 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	}
 	return null;
     }
+    
+    public boolean isValueFullyAttributedToUnits() {
+	BigDecimal totalValue = BigDecimal.ZERO;
+	for (UnitItem unitItem : getUnitItems()) {
+	    totalValue = totalValue.add(unitItem.getShareValue());
+	}
+	
+	return totalValue.equals(getTotalItemValue());
+    }
 
+    public void createUnitItem(Unit unit, BigDecimal shareValue) {
+	new UnitItem(unit,this,shareValue,Boolean.FALSE);
+    }
 }

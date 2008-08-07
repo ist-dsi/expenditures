@@ -6,7 +6,6 @@ import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.UnitItem;
 import pt.ist.expenditureTrackingSystem.domain.dto.UnitItemBean;
 
 public class AssignPayingUnitToItem extends GenericAcquisitionProcessActivity {
@@ -30,7 +29,7 @@ public class AssignPayingUnitToItem extends GenericAcquisitionProcessActivity {
 	item.getUnitItems().clear();
 	for (UnitItemBean bean : beans) {
 	    if (bean.getAssigned()) {
-		new UnitItem(bean.getUnit(), item, bean.getShareValue(), Boolean.FALSE);
+		item.createUnitItem(bean.getUnit(), bean.getShareValue());
 	    }
 	}
     }

@@ -137,4 +137,13 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     public String getCostCenter() {
 	return getRequestingUnit().getCostCenter();
     }
+    
+    public boolean isEveryItemFullyAttributedToPayingUnits() {
+	for (AcquisitionRequestItem item : getAcquisitionRequestItems()) {
+	    if (!item.isValueFullyAttributedToUnits()) {
+		return false;
+	    }
+	}
+	return true;
+    }
 }
