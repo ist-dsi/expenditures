@@ -27,6 +27,7 @@ import pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.DomainObjectBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean;
+import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationExpirationDateBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
@@ -243,11 +244,21 @@ public class AcquisitionProcessAction extends ProcessAction {
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
 
+    public ActionForward executeFundAllocationExpirationDate(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
+	request.setAttribute("acquisitionProcess", acquisitionProcess);
+	final FundAllocationExpirationDateBean fundAllocationExpirationDateBean = new FundAllocationExpirationDateBean();
+	request.setAttribute("fundAllocationExpirationDateBean", fundAllocationExpirationDateBean);
+	return mapping.findForward("allocate.funds.to.service.provider");
+    }
+
     public ActionForward allocateFundsToServiceProvider(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
-	request.setAttribute("acquisitionProcess", acquisitionProcess);
-	return mapping.findForward("allocate.funds.to.service.provider");
+	final FundAllocationExpirationDateBean fundAllocationExpirationDateBean = getRenderedObject();
+	genericActivityExecution(acquisitionProcess, "FundAllocationExpirationDate", fundAllocationExpirationDateBean);
+	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
 
     public ActionForward executeCreateAcquisitionRequest(final ActionMapping mapping, final ActionForm form,

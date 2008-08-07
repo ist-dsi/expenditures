@@ -6,6 +6,7 @@ import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
+import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationExpirationDateBean;
 
 public class FundAllocationExpirationDate extends GenericAcquisitionProcessActivity {
 
@@ -21,8 +22,9 @@ public class FundAllocationExpirationDate extends GenericAcquisitionProcessActiv
 
     @Override
     protected void process(AcquisitionProcess process, Object... objects) {
-	DateTime dateTime = (DateTime) objects[0];
-	process.setFundAllocationExpirationDate(dateTime);
+	final FundAllocationExpirationDateBean fundAllocationExpirationDateBean = (FundAllocationExpirationDateBean) objects[0];
+	final DateTime fundAllocationExpirationDate = fundAllocationExpirationDateBean.getFundAllocationExpirationDate();
+	process.setFundAllocationExpirationDate(fundAllocationExpirationDate);
 	new AcquisitionProcessState(process, AcquisitionProcessStateType.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER);
 
     }

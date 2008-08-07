@@ -137,11 +137,11 @@
 </schema>
 
 <schema name="allocateFundsToServiceProvider"
-		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess"
+		type="pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationExpirationDateBean"
 		bundle="ACQUISITION_RESOURCES">
 	<slot name="fundAllocationExpirationDate" key="label.fund.allocation.expiration.date" bundle="ACQUISITION_RESOURCES">
-		<property name="dateFormat" value="yyyy-MM-dd"/>
-		<property name="dateFormatText" value="yyyy-MM-dd"/>
+		<property name="dateFormat" value="dd-MM-yyyy"/>
+		<property name="dateFormatText" value="dd-MM-yyyy"/>
 	</slot>
 </schema>
 
@@ -150,8 +150,8 @@
 		bundle="ACQUISITION_RESOURCES">
 	<slot name="invoiceNumber" key="label.invoice.number" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="invoiceDate" key="label.invoice.date" bundle="ACQUISITION_RESOURCES">
-		<property name="dateFormat" value="yyyy-MM-dd"/>
-		<property name="dateFormatText" value="yyyy-MM-dd"/>
+		<property name="dateFormat" value="dd-MM-yyyy"/>
+		<property name="dateFormatText" value="dd-MM-yyyy"/>
 	</slot>
 	<slot name="inputStream" key="label.input.stream"	bundle="ACQUISITION_RESOURCES">
 		<property name="fileNameSlot" value="filename" />
