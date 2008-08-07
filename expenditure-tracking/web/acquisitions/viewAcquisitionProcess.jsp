@@ -20,7 +20,7 @@
 
 <div class="infoop1" style="width: 360px">
 	<ul>
-	<logic:iterate id="activity" name="acquisitionProcess" property="activeActivities">
+	<logic:iterate id="activity" name="acquisitionProcess" property="activeActivitiesForRequest">
 		<bean:define id="activityName" name="activity" property="class.simpleName"/> 
 		<li>
 			<html:link page="<%= "/acquisitionProcess.do?method=execute" + activityName %>" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
@@ -113,9 +113,32 @@
 	<logic:iterate id="acquisitionRequestItem" name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestItemsSet" indexId="index">
 		<bean:define id="currentIndex" value="<%= String.valueOf(index + 1) %>"/>
 		<strong><bean:message key="label.view.acquisition.request.item" bundle="ACQUISITION_RESOURCES"/></strong> (  <fr:view name="currentIndex"/> / <fr:view name="totalItems"/> )
+		<bean:define id="itemOID" name="acquisitionRequestItem" property="OID"/>
+		
+	<div class="infoop1" style="width: 360px">
+	<ul>
+	<logic:iterate id="activity" name="acquisitionProcess" property="activeActivitiesForItem">
+		<bean:define id="activityName" name="activity" property="class.simpleName"/> 
+		<li>
+			<html:link page="<%= "/acquisitionProcess.do?method=execute" + activityName + "&acquisitionRequestItemOid=" + itemOID%>" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
+				<fr:view name="activity" property="class">
+					<fr:layout name="label">
+						<fr:property name="bundle" value="ACQUISITION_RESOURCES"/>
+					</fr:layout>
+				</fr:view>
+			</html:link>
+		</li>
+	</logic:iterate>
+	</ul>
+	<logic:empty name="acquisitionProcess" property="activeActivities">
+		<em>
+			<bean:message key="label.no.operations.available.at.the.moment" bundle="EXPENDITURE_RESOURCES"/>
+		</em>
+	</logic:empty>
+</div>
+		
 		<div class="infoop2" style="width: 360px">
 			<fr:view name="acquisitionRequestItem"
-					type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem"
 					schema="viewAcquisitionRequestItem">
 				<fr:layout name="tabular">
 					<fr:property name="classes" value="tstyle1"/>

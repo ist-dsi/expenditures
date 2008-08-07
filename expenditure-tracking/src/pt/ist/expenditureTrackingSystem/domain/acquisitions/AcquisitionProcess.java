@@ -2,7 +2,9 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
@@ -11,10 +13,12 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AddAcquis
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AddPayingUnit;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AllocateFundsPermanently;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.ApproveAcquisitionProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AssignPayingUnitToItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.CreateAcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.CreateAcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.DeleteAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.DeleteAcquisitionRequestItem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.EditAcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.EditAcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.FundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.FundAllocationExpirationDate;
@@ -38,26 +42,41 @@ import pt.ist.fenixframework.pstm.Transaction;
 
 public class AcquisitionProcess extends AcquisitionProcess_Base {
 
-    private static List<GenericAcquisitionProcessActivity> activities = new ArrayList<GenericAcquisitionProcessActivity>();
+    private static Map<ActivityScope, List<GenericAcquisitionProcessActivity>> activities = new HashMap<ActivityScope, List<GenericAcquisitionProcessActivity>>();
+
+    public enum ActivityScope {
+	REQUEST_INFORMATION, REQUEST_ITEM;
+    }
 
     static {
-	activities.add(new AddAcquisitionProposalDocument());
-	activities.add(new AllocateFundsPermanently());
-	activities.add(new ApproveAcquisitionProcess());
-	activities.add(new UnApproveAcquisitionProcess());
-	activities.add(new RejectAcquisitionProcess());
-	activities.add(new AddPayingUnit());
-	activities.add(new RemovePayingUnit());
-	activities.add(new CreateAcquisitionRequest());
-	activities.add(new CreateAcquisitionRequestItem());
-	activities.add(new DeleteAcquisitionProcess());
-	activities.add(new FundAllocation());
-	activities.add(new FundAllocationExpirationDate());
-	activities.add(new PayAcquisition());
-	activities.add(new ReceiveInvoice());
-	activities.add(new SubmitForApproval());
-	activities.add(new DeleteAcquisitionRequestItem());
-	activities.add(new EditAcquisitionRequestItem());
+	List<GenericAcquisitionProcessActivity> requestInformationActivities = new ArrayList<GenericAcquisitionProcessActivity>();
+	List<GenericAcquisitionProcessActivity> requestItemActivities = new ArrayList<GenericAcquisitionProcessActivity>();
+
+	requestInformationActivities.add(new AddAcquisitionProposalDocument());
+	requestInformationActivities.add(new AllocateFundsPermanently());
+	requestInformationActivities.add(new ApproveAcquisitionProcess());
+	requestInformationActivities.add(new UnApproveAcquisitionProcess());
+	requestInformationActivities.add(new RejectAcquisitionProcess());
+	requestInformationActivities.add(new AddPayingUnit());
+	requestInformationActivities.add(new RemovePayingUnit());
+	requestInformationActivities.add(new CreateAcquisitionRequest());
+	requestInformationActivities.add(new CreateAcquisitionRequestItem());
+	requestInformationActivities.add(new DeleteAcquisitionProcess());
+	requestInformationActivities.add(new FundAllocation());
+	requestInformationActivities.add(new FundAllocationExpirationDate());
+	requestInformationActivities.add(new PayAcquisition());
+	requestInformationActivities.add(new ReceiveInvoice());
+	requestInformationActivities.add(new SubmitForApproval());
+	requestInformationActivities.add(new EditAcquisitionRequest());
+	
+	
+	requestItemActivities.add(new DeleteAcquisitionRequestItem());
+	requestItemActivities.add(new EditAcquisitionRequestItem());
+	requestItemActivities.add(new AssignPayingUnitToItem());
+
+	activities.put(ActivityScope.REQUEST_INFORMATION, requestInformationActivities);
+	activities.put(ActivityScope.REQUEST_ITEM, requestItemActivities);
+
     }
 
     protected AcquisitionProcess(final Person requester) {
@@ -164,22 +183,38 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 	return getLastAcquisitionProcessStateType();
     }
 
-    public List<AbstractActivity<AcquisitionProcess>> getActiveActivities() {
-	List<AbstractActivity<AcquisitionProcess>> activitiesResult = new ArrayList<AbstractActivity<AcquisitionProcess>>();
-
-	for (AbstractActivity<AcquisitionProcess> activity : activities) {
+    public List<GenericAcquisitionProcessActivity> getActiveActivitiesForItem() {
+	return getActiveActivities(ActivityScope.REQUEST_ITEM);
+    }
+    
+    public List<GenericAcquisitionProcessActivity> getActiveActivitiesForRequest() {
+	return getActiveActivities(ActivityScope.REQUEST_INFORMATION);
+    }
+    
+    public List<GenericAcquisitionProcessActivity> getActiveActivities(ActivityScope scope) {
+	List<GenericAcquisitionProcessActivity> activitiesResult = new ArrayList<GenericAcquisitionProcessActivity>();
+	for (GenericAcquisitionProcessActivity activity : activities.get(scope)) {
 	    if (activity.isActive(this)) {
 		activitiesResult.add(activity);
 	    }
 	}
+	return activitiesResult;
+    }
 
+    public List<GenericAcquisitionProcessActivity> getActiveActivities() {
+	List<GenericAcquisitionProcessActivity> activitiesResult = new ArrayList<GenericAcquisitionProcessActivity>();
+	for (ActivityScope scope : activities.keySet()) {
+	    activitiesResult.addAll(getActiveActivities(scope));
+	}
 	return activitiesResult;
     }
 
     public boolean isPersonAbleToExecuteActivities() {
-	for (AbstractActivity<AcquisitionProcess> activity : activities) {
-	    if (activity.isActive(this)) {
-		return true;
+	for (ActivityScope scope : activities.keySet()) {
+	    for (AbstractActivity<AcquisitionProcess> activity : activities.get(scope)) {
+		if (activity.isActive(this)) {
+		    return true;
+		}
 	    }
 	}
 	return false;
@@ -218,9 +253,12 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 
     @Override
     public GenericAcquisitionProcessActivity getActivityByName(String activityName) {
-	for (GenericAcquisitionProcessActivity activity : activities) {
-	    if (activity.getName().equals(activityName)) {
-		return activity;
+
+	for (ActivityScope scope : activities.keySet()) {
+	    for (GenericAcquisitionProcessActivity activity : activities.get(scope)) {
+		if (activity.getName().equals(activityName)) {
+		    return activity;
+		}
 	    }
 	}
 	return null;

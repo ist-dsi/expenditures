@@ -9,6 +9,7 @@ import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
+import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.util.ByteArray;
 import pt.ist.fenixframework.pstm.Transaction;
 
@@ -39,6 +40,16 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	setSubproject(subproject);
 	setRecipient(recipient);
 	setReceptionAddress(receptionAddress);
+    }
+
+    public void edit(Supplier supplier, String project, String subproject, Unit requestingUnit, Boolean isRequestingUnitPayingUnit) {
+	setSupplier(supplier);
+	setProject(project);
+	setSubproject(subproject);
+	setRequestingUnit(requestingUnit);
+	if (isRequestingUnitPayingUnit) {
+	    addPayingUnits(requestingUnit);
+	}
     }
 
     public void addAcquisitionProposalDocument(final String filename, final byte[] bytes) {

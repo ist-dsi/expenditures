@@ -2,6 +2,7 @@ package pt.ist.expenditureTrackingSystem.domain.dto;
 
 import java.io.Serializable;
 
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
@@ -21,6 +22,15 @@ public class CreateAcquisitionProcessBean implements Serializable {
     public CreateAcquisitionProcessBean() {
 	setRequestingUnit(null);
 	setSupplier(null);
+    }
+
+    public CreateAcquisitionProcessBean(AcquisitionRequest acquisitionRequest) {
+	setProject(acquisitionRequest.getProject());
+	setSubproject(acquisitionRequest.getSubproject());
+	setRecipient(acquisitionRequest.getRecipient());
+	setReceptionAddress(acquisitionRequest.getReceptionAddress());
+	setRequestingUnit(acquisitionRequest.getRequestingUnit());
+	setSupplier(acquisitionRequest.getSupplier());
     }
 
     public String getProject() {

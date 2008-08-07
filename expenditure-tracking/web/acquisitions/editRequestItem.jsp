@@ -10,5 +10,5 @@
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="tstyle3"/>
 		</fr:layout>
-		<fr:destination name="cancel" path="<%= "/acquisitionProcess.do?method=executeEditAcquisitionRequestItem&acquisitionProcessOid="  + processOID %>"/>
+		<fr:destination name="cancel" path="<%= "/acquisitionProcess.do?method=viewAcquisitionProcess&acquisitionProcessOid="  + processOID %>"/>
 </fr:edit>

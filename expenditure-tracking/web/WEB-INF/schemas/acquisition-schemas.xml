@@ -19,14 +19,10 @@
 </schema>
 
 <schema name="editAcquisitionRequest"
-		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest"
-		bundle="ACQUISITION_RESOURCES">
-	<slot name="fiscalIdentificationCode" key="label.service.provider.fiscalIdentificationCode" bundle="ACQUISITION_RESOURCES"/>
-	<slot name="costCenter" key="label.cost.center" bundle="ACQUISITION_RESOURCES"/>
-	<slot name="project" key="label.project" bundle="ACQUISITION_RESOURCES"/>
-	<slot name="subproject" key="label.subproject" bundle="ACQUISITION_RESOURCES"/>
-	<slot name="recipient" key="label.recipient" bundle="ACQUISITION_RESOURCES"/>
-	<slot name="receptionAddress" key="label.receptionAddress" bundle="ACQUISITION_RESOURCES"/>
+		type="pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean"
+		bundle="ACQUISITION_RESOURCES" extends="createAcquisitionRequest">
+	<remove name="recipient"/>
+	<remove name="receptionAddress"/>
 </schema>
 
 <schema name="viewAcquisitionRequest"
@@ -96,6 +92,7 @@
 	<slot name="proposalReference" key="label.acquisition.request.item.proposalReference" bundle="ACQUISITION_RESOURCES" />
 	<slot name="quantity" key="label.acquisition.request.item.quantity" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="unitValue" key="label.acquisition.request.item.unitValue" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="totalItemValue" key="label.acquisition.request.item.totalValue" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="salesCode" key="label.acquisition.request.item.salesCode" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="description" key="label.acquisition.request.item.description" bundle="ACQUISITION_RESOURCES"/>
 </schema>
@@ -200,4 +197,12 @@
 	<slot name="description" key="label.acquisition.request.item.description" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="proposalReference" key="label.acquisition.request.item.proposalReference" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="quantity" key="label.acquisition.request.item.quantity" bundle="ACQUISITION_RESOURCES"/>
+</schema>
+
+<schema name="unit.item.bean.edition"
+		type="pt.ist.expenditureTrackingSystem.domain.dto.UnitItemBean"
+		bundle="ACQUISITION_RESOURCES">
+	<slot name="unit.name" key="label.payingUnit" bundle="ACQUISITION_RESOURCES" read-only="true"/>
+	<slot name="assigned" key="label.pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AssignPayingUnitToItem" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="shareValue" key="label.shareValue" bundle="ACQUISITION_RESOURCES"/>
 </schema>
