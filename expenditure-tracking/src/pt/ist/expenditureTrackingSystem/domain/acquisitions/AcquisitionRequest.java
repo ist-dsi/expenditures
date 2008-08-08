@@ -166,6 +166,12 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	}
     }
 
+    public void unapproveBy(Person person) {
+	for (AcquisitionRequestItem item : getAcquisitionRequestItems()) {
+	    item.unapprovedBy(person);
+	}
+    }
+
     public boolean isApprovedByAllResponsibles() {
 	for (AcquisitionRequestItem item : getAcquisitionRequestItems()) {
 	    if (!item.isApproved()) {
@@ -183,4 +189,5 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	}
 	return false;
     }
+
 }

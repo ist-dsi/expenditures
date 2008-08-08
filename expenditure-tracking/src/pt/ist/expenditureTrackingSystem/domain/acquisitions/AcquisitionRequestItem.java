@@ -96,7 +96,7 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	    totalValue = totalValue.add(unitItem.getShareValue());
 	}
 
-	return totalValue.equals(getTotalItemValue());
+	return totalValue.compareTo(getTotalItemValue()) == 0;
     }
 
     public void createUnitItem(Unit unit, BigDecimal shareValue) {
@@ -111,12 +111,20 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	return payingUnits;
     }
 
-    public void approvedBy(Person person) {
+    private void modifyApprovingStateFor(Person person, Boolean value) {
 	for (UnitItem unitItem : getUnitItems()) {
 	    if (unitItem.getUnit().isResponsible(person)) {
-		unitItem.setItemApproved(Boolean.TRUE);
+		unitItem.setItemApproved(value);
 	    }
 	}
+    }
+    
+    public void approvedBy(Person person) {
+	modifyApprovingStateFor(person, Boolean.TRUE);
+    }
+
+    public void unapprovedBy(Person person) {
+	modifyApprovingStateFor(person, Boolean.FALSE);
     }
 
     public boolean isApproved() {
@@ -136,4 +144,5 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	}
 	return false;
     }
+
 }
