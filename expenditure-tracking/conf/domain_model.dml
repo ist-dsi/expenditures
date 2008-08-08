@@ -39,6 +39,7 @@ class acquisitions.AcquisitionRequestItem {
 	Integer quantity;
 	//MonitaryValue unitValue;
 	BigDecimal unitValue;
+	BigDecimal vatValue;
 	String proposalReference;
 	String salesCode;              // CVP
 }

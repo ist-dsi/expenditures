@@ -11,6 +11,7 @@ public class AcquisitionRequestItemBean implements Serializable {
     private String description;
     private Integer quantity;
     private BigDecimal unitValue;
+    private BigDecimal vatValue;
     private String proposalReference;
     private String salesCode;
     private DomainReference<AcquisitionRequest> acquisitionRequest;
@@ -27,6 +28,7 @@ public class AcquisitionRequestItemBean implements Serializable {
 	setUnitValue(acquisitionRequestItem.getUnitValue());
 	setProposalReference(acquisitionRequestItem.getProposalReference());
 	setSalesCode(acquisitionRequestItem.getSalesCode());
+	setVatValue(acquisitionRequestItem.getVatValue());
 	setItem(acquisitionRequestItem);
     }
 
@@ -84,6 +86,14 @@ public class AcquisitionRequestItemBean implements Serializable {
 
     public void setItem(AcquisitionRequestItem item) {
         this.item = new DomainReference<AcquisitionRequestItem>(item);
+    }
+
+    public BigDecimal getVatValue() {
+        return vatValue;
+    }
+
+    public void setVatValue(BigDecimal vatValue) {
+        this.vatValue = vatValue;
     }
 
 }

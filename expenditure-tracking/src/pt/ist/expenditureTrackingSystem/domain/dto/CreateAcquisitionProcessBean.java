@@ -31,6 +31,9 @@ public class CreateAcquisitionProcessBean implements Serializable {
 	setReceptionAddress(acquisitionRequest.getReceptionAddress());
 	setRequestingUnit(acquisitionRequest.getRequestingUnit());
 	setSupplier(acquisitionRequest.getSupplier());
+	if (acquisitionRequest.getPayingUnits().contains(acquisitionRequest.getRequestingUnit())) {
+	    setRequestUnitPayingUnit(true);
+	}
     }
 
     public String getProject() {

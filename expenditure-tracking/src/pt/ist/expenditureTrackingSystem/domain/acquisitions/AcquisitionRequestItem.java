@@ -18,11 +18,12 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
     }
 
     public AcquisitionRequestItem(final AcquisitionRequest acquisitionRequest, final String description, final Integer quantity,
-	    final BigDecimal unitValue, final String proposalReference, String salesCode) {
+	    final BigDecimal unitValue, final BigDecimal vatValue, final String proposalReference, String salesCode) {
 	this(acquisitionRequest);
 	setDescription(description);
 	setQuantity(quantity);
 	setUnitValue(unitValue);
+	setVatValue(vatValue);
 	setProposalReference(proposalReference);
 	setSalesCode(salesCode);
     }
@@ -33,6 +34,12 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	return multiply(unitValue, quantity);
     }
 
+    public BigDecimal getTotalItemValueWithVat() {
+	BigDecimal totalValue = getTotalItemValue();
+	BigDecimal vatValue = totalValue.multiply(getVatValue().divide(new BigDecimal(100)));
+	return totalValue.add(vatValue);
+    }
+    
     public BigDecimal getTotalAssignedValue() {
 	BigDecimal sum = BigDecimal.ZERO;
 	for (UnitItem unitItem : getUnitItems()) {
@@ -45,12 +52,13 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	return unitValue == null || quantity == null ? BigDecimal.ZERO : unitValue.multiply(new BigDecimal(quantity.intValue()));
     }
 
-    public void edit(String description, Integer quantity, BigDecimal unitValue, String proposalReference, String salesCode) {
+    public void edit(String description, Integer quantity, BigDecimal unitValue, BigDecimal vatValue, String proposalReference, String salesCode) {
 	setDescription(description);
 	setQuantity(quantity);
 	setUnitValue(unitValue);
 	setProposalReference(proposalReference);
 	setSalesCode(salesCode);
+	setVatValue(vatValue);
     }
     
     @Service

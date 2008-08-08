@@ -420,7 +420,7 @@ public class AcquisitionProcessAction extends ProcessAction {
 	final AcquisitionRequestItemBean requestItemBean = getRenderedObject("itemBean");
 	genericActivityExecution(requestItemBean.getAcquisitionRequest().getAcquisitionProcess(), "EditAcquisitionRequestItem",
 		requestItemBean.getItem(), requestItemBean.getDescription(), requestItemBean.getQuantity(), requestItemBean
-			.getUnitValue(), requestItemBean.getProposalReference(), requestItemBean.getSalesCode());
+			.getUnitValue(), requestItemBean.getVatValue(), requestItemBean.getProposalReference(), requestItemBean.getSalesCode());
 	return viewAcquisitionProcess(mapping, request, requestItemBean.getAcquisitionRequest().getAcquisitionProcess());
     }
 

@@ -37,6 +37,16 @@ public class UnitItem extends UnitItem_Base {
 	}
     }
     
+    public BigDecimal getVatValue() {
+	return getItem().getVatValue();
+    }
+    
+    public BigDecimal getShareValueWithVat() {
+	BigDecimal shareValue = getShareValue();
+	BigDecimal vatValue = shareValue.multiply(getVatValue().divide(new BigDecimal(100)));
+	return shareValue.add(vatValue);
+    }
+    
     public void delete() {
 	removeUnit();
 	removeItem();

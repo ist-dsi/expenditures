@@ -29,9 +29,10 @@ public class EditAcquisitionRequestItem extends GenericAcquisitionProcessActivit
 	String description = (String) objects[1];
 	Integer quantity = (Integer) objects[2];
 	BigDecimal unitValue = (BigDecimal) objects[3];
-	String proposalReference = (String) objects[4];
-	String salesCode = (String) objects[5];
-	item.edit(description, quantity, unitValue, proposalReference, salesCode);
+	BigDecimal vatValue = (BigDecimal) objects[4];
+	String proposalReference = (String) objects[5];
+	String salesCode = (String) objects[6];
+	item.edit(description, quantity, unitValue, vatValue, proposalReference, salesCode);
 
     }
 }

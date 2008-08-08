@@ -79,18 +79,9 @@
 	<slot name="proposalReference" key="label.acquisition.request.item.proposalReference" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 	<slot name="quantity" key="label.acquisition.request.item.quantity" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 	<slot name="unitValue" key="label.acquisition.request.item.unitValue" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="vatValue" key="label.acquisition.request.item.vatValue" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 	<slot name="salesCode" key="label.acquisition.request.item.salesCode" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 	<slot name="description" key="label.acquisition.request.item.description" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-</schema>
-
-<schema name="editAcquisitionRequestItem"
-		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem"
-		bundle="ACQUISITION_RESOURCES">
-	<slot name="proposalReference" key="label.acquisition.request.item.proposalReference" bundle="ACQUISITION_RESOURCES"/>
-	<slot name="quantity" key="label.acquisition.request.item.quantity" bundle="ACQUISITION_RESOURCES"/>
-	<slot name="unitValue" key="label.acquisition.request.item.unitValue" bundle="ACQUISITION_RESOURCES"/>
-	<slot name="salesCode" key="label.acquisition.request.item.salesCode" bundle="ACQUISITION_RESOURCES"/>
-	<slot name="description" key="label.acquisition.request.item.description" bundle="ACQUISITION_RESOURCES"/>
 </schema>
 
 <schema name="viewAcquisitionRequestItem"
@@ -99,6 +90,7 @@
 	<slot name="proposalReference" key="label.acquisition.request.item.proposalReference" bundle="ACQUISITION_RESOURCES" />
 	<slot name="quantity" key="label.acquisition.request.item.quantity" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="unitValue" key="label.acquisition.request.item.unitValue" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="vatValue" key="label.acquisition.request.item.vatValue" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 	<slot name="totalItemValue" key="label.acquisition.request.item.totalValue" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="totalAssignedValue" key="label.acquisition.request.item.assignedValue" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="payingUnits" layout="separator-list" key="label.payingUnits" bundle="ACQUISITION_RESOURCES">

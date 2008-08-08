@@ -64,7 +64,7 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 
     public AcquisitionRequestItem createAcquisitionRequestItem(AcquisitionRequestItemBean requestItemBean) {
 	return new AcquisitionRequestItem(this, requestItemBean.getDescription(), requestItemBean.getQuantity(), requestItemBean
-		.getUnitValue(), requestItemBean.getProposalReference(), requestItemBean.getSalesCode());
+		.getUnitValue(), requestItemBean.getVatValue(), requestItemBean.getProposalReference(), requestItemBean.getSalesCode());
     }
 
     public void delete() {
