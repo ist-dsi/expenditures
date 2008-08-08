@@ -4,6 +4,10 @@
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
 
+<h2>
+	<bean:message key="label.pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AssignPayingUnitToItem" bundle="ACQUISITION_RESOURCES"/>
+</h2>
+
 <bean:define id="processOID" name="acquisitionProcess" property="OID"/>
 
 <bean:define id="acquisitionRequestItemOid" name="acquisitionRequestItem" property="OID"/>
@@ -17,7 +21,46 @@
 	</fr:view>
 </div>
 
-<fr:edit id="unitItemBeans" name="unitItemBeans" schema="unit.item.bean.edition" action="<%="/acquisitionProcess.do?method=executeAssignPayingUnitToItemCreation&acquisitionProcessOid=" + processOID + "&acquisitionRequestItemOid=" + acquisitionRequestItemOid%>">
-	<fr:layout name="tabular"/>
-	<fr:destination name="cancel" path="<%= "/acquisitionProcess.do?method=viewAcquisitionProcess&acquisitionProcessOid="  + processOID %>"/>
-</fr:edit>
+<div class="dinline forminline">
+	<fr:form action="<%="/acquisitionProcess.do?acquisitionProcessOid=" + processOID + "&acquisitionRequestItemOid=" + acquisitionRequestItemOid%>">
+		<html:hidden  property="method" value="executeAssignPayingUnitToItemCreation"/>
+		
+		<fr:edit id="unitItemBeans" name="unitItemBeans" visible="false"/>
+			
+		<table class="tstyle3">
+				<tr>
+					<th>
+						<strong><bean:message key="label.payingUnit" bundle="ACQUISITION_RESOURCES"/></strong>
+					</th>
+					<th>
+						<strong><bean:message key="label.payingUnit" bundle="ACQUISITION_RESOURCES"/></strong>
+					</th>				
+					<th>
+						<strong><bean:message key="label.shareValue" bundle="ACQUISITION_RESOURCES"/></strong>
+					</th>
+				</tr>
+				<logic:iterate id="unitItemBean" name="unitItemBeans" indexId="id">
+						<tr>
+							<td>
+								<fr:view name="unitItemBean" property="unit.name"/>
+							</td>
+							<td>
+								<fr:edit  id="<%= "assigned" + id %>" name="unitItemBean" slot="assigned"/>
+							</td>
+							<td>
+								<fr:edit id="<%= "shareValue" + id %>" name="unitItemBean" slot="shareValue"/>
+							</td>
+						</tr>
+				</logic:iterate>
+		</table>
+		
+		<p>
+		<a href="javascript:document.forms[1].method.value='calculateShareValuePostBack'; document.forms[1].submit();"> <bean:message key="label.auto.distribute" bundle="ACQUISITION_RESOURCES"/> </a>
+		</p>
+		<br/>
+		<html:submit styleClass="inputbutton"><bean:message key="renderers.form.submit.name" bundle="RENDERER_RESOURCES"/> </html:submit>
+	</fr:form>
+	<fr:form action="<%="/acquisitionProcess.do?method=viewAcquisitionProcess&acquisitionProcessOid=" + processOID + "&acquisitionRequestItemOid=" + acquisitionRequestItemOid%>">
+		<html:submit styleClass="inputbutton"><bean:message key="renderers.form.cancel.name" bundle="RENDERER_RESOURCES"/> </html:submit>
+	</fr:form>
+</div>
