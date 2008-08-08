@@ -108,4 +108,13 @@ public class Unit extends Unit_Base {
 	return null;
     }
 
+    public boolean isResponsible(Person person) {
+	for (Authorization authorization : person.getAuthorizations()) {
+	    if (authorization.getUnit() == this) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
 }

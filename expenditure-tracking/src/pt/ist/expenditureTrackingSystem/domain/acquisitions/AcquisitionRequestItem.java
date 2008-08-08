@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.pstm.Transaction;
@@ -39,7 +40,7 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	BigDecimal vatValue = totalValue.multiply(getVatValue().divide(new BigDecimal(100)));
 	return totalValue.add(vatValue);
     }
-    
+
     public BigDecimal getTotalAssignedValue() {
 	BigDecimal sum = BigDecimal.ZERO;
 	for (UnitItem unitItem : getUnitItems()) {
@@ -47,12 +48,13 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	}
 	return sum;
     }
-    
+
     private BigDecimal multiply(final BigDecimal unitValue, final Integer quantity) {
 	return unitValue == null || quantity == null ? BigDecimal.ZERO : unitValue.multiply(new BigDecimal(quantity.intValue()));
     }
 
-    public void edit(String description, Integer quantity, BigDecimal unitValue, BigDecimal vatValue, String proposalReference, String salesCode) {
+    public void edit(String description, Integer quantity, BigDecimal unitValue, BigDecimal vatValue, String proposalReference,
+	    String salesCode) {
 	setDescription(description);
 	setQuantity(quantity);
 	setUnitValue(unitValue);
@@ -60,12 +62,13 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	setSalesCode(salesCode);
 	setVatValue(vatValue);
     }
-    
+
     @Service
     public void delete() {
 	removeAcquisitionRequest();
 	removeExpenditureTrackingSystem();
-	for (;!getUnitItems().isEmpty();getUnitItems().get(0).delete());
+	for (; !getUnitItems().isEmpty(); getUnitItems().get(0).delete())
+	    ;
 	Transaction.deleteObject(this);
     }
 
@@ -77,7 +80,7 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	}
 	return false;
     }
-    
+
     public UnitItem getUnitItemFor(Unit unit) {
 	for (UnitItem unitItem : getUnitItems()) {
 	    if (unitItem.getUnit() == unit) {
@@ -86,25 +89,51 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	}
 	return null;
     }
-    
+
     public boolean isValueFullyAttributedToUnits() {
 	BigDecimal totalValue = BigDecimal.ZERO;
 	for (UnitItem unitItem : getUnitItems()) {
 	    totalValue = totalValue.add(unitItem.getShareValue());
 	}
-	
+
 	return totalValue.equals(getTotalItemValue());
     }
 
     public void createUnitItem(Unit unit, BigDecimal shareValue) {
-	new UnitItem(unit,this,shareValue,Boolean.FALSE);
+	new UnitItem(unit, this, shareValue, Boolean.FALSE);
     }
-    
+
     public List<Unit> getPayingUnits() {
-	List<Unit> payingUnits = new ArrayList<Unit> ();
+	List<Unit> payingUnits = new ArrayList<Unit>();
 	for (UnitItem unitItem : getUnitItems()) {
 	    payingUnits.add(unitItem.getUnit());
 	}
 	return payingUnits;
+    }
+
+    public void approvedBy(Person person) {
+	for (UnitItem unitItem : getUnitItems()) {
+	    if (unitItem.getUnit().isResponsible(person)) {
+		unitItem.setItemApproved(Boolean.TRUE);
+	    }
+	}
+    }
+
+    public boolean isApproved() {
+	for (UnitItem unitItem : getUnitItems()) {
+	    if (!unitItem.getItemApproved()) {
+		return false;
+	    }
+	}
+	return true;
+    }
+
+    public boolean hasBeenApprovedBy(Person person) {
+	for (UnitItem unitItem : getUnitItems()) {
+	    if (unitItem.getUnit().isResponsible(person) && unitItem.getItemApproved()) {
+		return true;
+	    }
+	}
+	return false;
     }
 }

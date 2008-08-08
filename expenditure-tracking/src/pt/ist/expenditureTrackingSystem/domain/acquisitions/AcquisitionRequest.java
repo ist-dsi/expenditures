@@ -1,11 +1,14 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.joda.time.DateTime;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
@@ -155,5 +158,29 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	    }
 	}
 	super.removePayingUnits(payingUnit);
+    }
+
+    public void approvedBy(Person person) {
+	for (AcquisitionRequestItem item : getAcquisitionRequestItems()) {
+	    item.approvedBy(person);
+	}
+    }
+
+    public boolean isApprovedByAllResponsibles() {
+	for (AcquisitionRequestItem item : getAcquisitionRequestItems()) {
+	    if (!item.isApproved()) {
+		return false;
+	    }
+	}
+	return true;
+    }
+
+    public boolean hasBeenApprovedBy(Person person) {
+	for (AcquisitionRequestItem item : getAcquisitionRequestItems()) {
+	    if (item.hasBeenApprovedBy(person)) {
+		return true;
+	    }
+	}
+	return false;
     }
 }
