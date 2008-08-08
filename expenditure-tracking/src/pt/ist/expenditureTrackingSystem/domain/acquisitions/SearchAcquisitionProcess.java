@@ -14,8 +14,6 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
     private AcquisitionProcessStateType acquisitionProcessStateType;
     private String fiscalIdentificationCode;
     private String costCenter;
-    private String project;
-    private String subproject;
 
     private class SearchResult extends SearchResultSet<AcquisitionProcess> {
 
@@ -35,11 +33,8 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
 	    final String unsername = person == null ? null : person.getUsername();
 	    final Supplier supplier = acquisitionRequest.getSupplier();
 	    final String fiscalIdentificationCode = supplier == null ? null : supplier.getFiscalIdentificationCode();
-	    return matchCriteria(requester, unsername)
-		    && matchCriteria(fiscalIdentificationCode, fiscalIdentificationCode)
-		    && matchCriteria(costCenter, acquisitionRequest.getCostCenter())
-		    && matchCriteria(project, acquisitionRequest.getProject())
-		    && matchCriteria(subproject, acquisitionRequest.getSubproject());
+	    return matchCriteria(requester, unsername) && matchCriteria(fiscalIdentificationCode, fiscalIdentificationCode)
+		    && matchCriteria(costCenter, acquisitionRequest.getCostCenter());
 	}
 
 	private boolean matchCriteria(final AcquisitionProcessStateType criteria, final AcquisitionProcessStateType value) {
@@ -51,7 +46,7 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
     @Override
     public Set<AcquisitionProcess> search() {
 	try {
-	return new SearchResult(GenericProcess.getAllProcesses(AcquisitionProcess.class));
+	    return new SearchResult(GenericProcess.getAllProcesses(AcquisitionProcess.class));
 	} catch (Exception ex) {
 	    ex.printStackTrace();
 	    throw new Error(ex);
@@ -88,22 +83,6 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
 
     public void setCostCenter(String costCenter) {
 	this.costCenter = costCenter;
-    }
-
-    public String getProject() {
-	return project;
-    }
-
-    public void setProject(String project) {
-	this.project = project;
-    }
-
-    public String getSubproject() {
-	return subproject;
-    }
-
-    public void setSubproject(String subproject) {
-	this.subproject = subproject;
     }
 
 }

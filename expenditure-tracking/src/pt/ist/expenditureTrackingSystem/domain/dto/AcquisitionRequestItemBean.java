@@ -5,6 +5,8 @@ import java.math.BigDecimal;
 
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
+import pt.ist.expenditureTrackingSystem.domain.organization.DeliveryInfo;
+import pt.ist.expenditureTrackingSystem.domain.util.Address;
 import pt.ist.fenixWebFramework.util.DomainReference;
 
 public class AcquisitionRequestItemBean implements Serializable {
@@ -16,9 +18,18 @@ public class AcquisitionRequestItemBean implements Serializable {
     private String salesCode;
     private DomainReference<AcquisitionRequest> acquisitionRequest;
     private DomainReference<AcquisitionRequestItem> item;
-    
+    private String recipient;
+    private Address address;
+    private DeliveryInfo deliveryInfo;
+    private CreateItemSchemaType createItemSchemaType;
+
     public AcquisitionRequestItemBean(final AcquisitionRequest acquisitionRequest) {
 	setAcquisitionRequest(acquisitionRequest);
+	if (acquisitionRequest.getRequester().getDeliveryInfosSet().isEmpty()) {
+	    setCreateItemSchemaType(CreateItemSchemaType.NEW_DELIVERY_INFO);
+	} else {
+	    setCreateItemSchemaType(CreateItemSchemaType.EXISTING_DELIVERY_INFO);
+	}
     }
 
     public AcquisitionRequestItemBean(AcquisitionRequestItem acquisitionRequestItem) {
@@ -30,6 +41,9 @@ public class AcquisitionRequestItemBean implements Serializable {
 	setSalesCode(acquisitionRequestItem.getSalesCode());
 	setVatValue(acquisitionRequestItem.getVatValue());
 	setItem(acquisitionRequestItem);
+	setRecipient(acquisitionRequestItem.getRecipient());
+	setAddress(address);
+	setCreateItemSchemaType(CreateItemSchemaType.NEW_DELIVERY_INFO);
     }
 
     public void setAcquisitionRequest(final AcquisitionRequest acquisitionRequest) {
@@ -81,11 +95,47 @@ public class AcquisitionRequestItemBean implements Serializable {
     }
 
     public AcquisitionRequestItem getItem() {
-        return item.getObject();
+	return item.getObject();
     }
 
     public void setItem(AcquisitionRequestItem item) {
-        this.item = new DomainReference<AcquisitionRequestItem>(item);
+	this.item = new DomainReference<AcquisitionRequestItem>(item);
+    }
+
+    public Address getAddress() {
+	return address;
+    }
+
+    public void setAddress(Address address) {
+	this.address = address;
+    }
+
+    public CreateItemSchemaType getCreateItemSchemaType() {
+	return createItemSchemaType;
+    }
+
+    public void setCreateItemSchemaType(CreateItemSchemaType createItemSchemaType) {
+	this.createItemSchemaType = createItemSchemaType;
+    }
+
+    public String getRecipient() {
+	return recipient;
+    }
+
+    public void setRecipient(String recipient) {
+	this.recipient = recipient;
+    }
+
+    public DeliveryInfo getDeliveryInfo() {
+	return deliveryInfo;
+    }
+
+    public void setDeliveryInfo(DeliveryInfo deliveryInfo) {
+	this.deliveryInfo = deliveryInfo;
+    }
+
+    private static enum CreateItemSchemaType {
+	NEW_DELIVERY_INFO, EXISTING_DELIVERY_INFO;
     }
 
     public BigDecimal getVatValue() {

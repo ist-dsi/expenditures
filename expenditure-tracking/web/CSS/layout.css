@@ -414,3 +414,17 @@ ul.autoCompleteItems  {
   } 
  
 ul.autoCompleteItems li.selected { background-color:  #cef; }
+
+
+/* lists */
+ul.liinline {
+margin: 0;
+padding: 0;
+}
+ul.liinline li {
+display: inline;
+margin: 0;
+padding: 0 0.25em;
+}
+
+.nobullet { list-style: none; }

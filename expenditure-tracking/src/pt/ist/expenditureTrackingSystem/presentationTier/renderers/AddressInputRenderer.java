@@ -1,5 +1,7 @@
 package pt.ist.expenditureTrackingSystem.presentationTier.renderers;
 
+import org.apache.commons.lang.StringUtils;
+
 import pt.ist.expenditureTrackingSystem.domain.util.Address;
 import pt.ist.fenixWebFramework.renderers.InputRenderer;
 import pt.ist.fenixWebFramework.renderers.components.HtmlBlockContainer;
@@ -170,7 +172,19 @@ public class AddressInputRenderer extends InputRenderer {
 	@Override
 	public Object convert(Class type, Object value) {
 	    String[] values = (String[]) value;
-	    return new Address(values[0], values[1], values[3], values[2], values[4]);
+	    if (hasAnyValue(values)) {
+		return new Address(values[0], values[1], values[3], values[2], values[4]);
+	    }
+	    return null;
+	}
+
+	private boolean hasAnyValue(String[] values) {
+	    for (String string : values) {
+		if (!StringUtils.isEmpty(string)) {
+		    return true;
+		}
+	    }
+	    return false;
 	}
     }
 

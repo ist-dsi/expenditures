@@ -7,10 +7,6 @@
 		<property name="minChars" value="1"/>		
 		<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.NIFSupplierAutoCompleteProvider"/>
 	</slot>
-	<slot name="project" key="label.project" bundle="ACQUISITION_RESOURCES"/>
-	<slot name="subproject" key="label.subproject" bundle="ACQUISITION_RESOURCES"/>
-	<slot name="recipient" key="label.recipient" bundle="ACQUISITION_RESOURCES"/>
-	<slot name="receptionAddress" key="label.receptionAddress" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="requestingUnit" layout="autoComplete" key="label.requestingUnit" bundle="ACQUISITION_RESOURCES">
         <property name="labelField" value="name"/>
 		<property name="format" value="${name}"/>
@@ -23,8 +19,6 @@
 <schema name="editAcquisitionRequest"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean"
 		bundle="ACQUISITION_RESOURCES" extends="createAcquisitionRequest">
-	<remove name="recipient"/>
-	<remove name="receptionAddress"/>
 </schema>
 
 <schema name="viewAcquisitionRequest"
@@ -40,8 +34,6 @@
 	<slot name="acquisitionProcess.acquisitionProcessState.localizedName" key="label.acquisition.process.state" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="fiscalIdentificationCode" key="label.service.provider.fiscalIdentificationCode" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="costCenter" key="label.cost.center" bundle="ACQUISITION_RESOURCES"/>
-	<slot name="project" key="label.project" bundle="ACQUISITION_RESOURCES"/>
-	<slot name="subproject" key="label.subproject" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="totalItemValue" key="label.total.item.value" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="acquisitionProcess.fundAllocationId" key="label.fund.allocation.identification" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="acquisitionProcess.fundAllocationExpirationDate" key="label.fund.allocation.expiration.date" bundle="ACQUISITION_RESOURCES">
@@ -59,8 +51,6 @@
 	<slot name="acquisitionProcessState.localizedName" key="label.acquisition.process.state" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="acquisitionRequest.fiscalIdentificationCode" key="label.service.provider.fiscalIdentificationCode" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="acquisitionRequest.costCenter" key="label.cost.center" bundle="ACQUISITION_RESOURCES"/>
-	<slot name="acquisitionRequest.project" key="label.project" bundle="ACQUISITION_RESOURCES"/>
-	<slot name="acquisitionRequest.subproject" key="label.subproject" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="acquisitionRequest.totalItemValue" key="label.total.item.value" bundle="ACQUISITION_RESOURCES"/>
 </schema>
 
@@ -73,7 +63,22 @@
 	</slot>
 </schema>
 
-<schema name="createAcquisitionRequestItem"
+<schema name="createAcquisitionRequestItem_NEW_DELIVERY_INFO"
+		type="pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean"
+		bundle="ACQUISITION_RESOURCES">
+	<slot name="proposalReference" key="label.acquisition.request.item.proposalReference" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="quantity" key="label.acquisition.request.item.quantity" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="unitValue" key="label.acquisition.request.item.unitValue" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="salesCode" key="label.acquisition.request.item.salesCode" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="description" key="label.acquisition.request.item.description" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="createItemSchemaType" layout="radio-postback" key="label.acquisition.request.item.deliveryInfo" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="classes" value="liinline nobullet"/>
+	</slot>
+	<slot name="recipient" key="label.recipient" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>		
+	<slot name="address" layout="address-input" key="label.receptionAddress" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+</schema>
+
+<schema name="createAcquisitionRequestItem_EXISTING_DELIVERY_INFO"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean"
 		bundle="ACQUISITION_RESOURCES">
 	<slot name="proposalReference" key="label.acquisition.request.item.proposalReference" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
@@ -82,6 +87,13 @@
 	<slot name="vatValue" key="label.acquisition.request.item.vatValue" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 	<slot name="salesCode" key="label.acquisition.request.item.salesCode" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 	<slot name="description" key="label.acquisition.request.item.description" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="createItemSchemaType" layout="radio-postback" key="label.acquisition.request.item.deliveryInfo" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="classes" value="liinline nobullet"/>
+	</slot>	
+	<slot name="deliveryInfo" layout="menu-select" key="label.acquisition.request.item.deliveryInfo" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="providerClass" value="pt.ist.expenditureTrackingSystem.presentationTier.renderers.dataProvider.DeliveryInfoProvider"/>
+		<property name="format" value="${recipient} - ${address.line1}, ${address.line2}, ${address.postalCode}, ${address.location}, ${address.country}"/>
+	</slot>
 </schema>
 
 <schema name="viewAcquisitionRequestItem"
@@ -128,8 +140,6 @@
 	<slot name="acquisitionProcessState" key="label.acquisition.process.state" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="fiscalIdentificationCode" key="label.service.provider.fiscalIdentificationCode" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="costCenter" key="label.cost.center" bundle="ACQUISITION_RESOURCES"/>
-	<slot name="project" key="label.project" bundle="ACQUISITION_RESOURCES"/>
-	<slot name="subproject" key="label.subproject" bundle="ACQUISITION_RESOURCES"/>
 </schema>
 
 <schema name="allocateFunds"

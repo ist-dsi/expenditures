@@ -10,6 +10,7 @@ import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreatePersonBean;
+import pt.ist.expenditureTrackingSystem.domain.util.Address;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.pstm.Transaction;
 
@@ -91,6 +92,10 @@ public class Person extends Person_Base {
     @Override
     public void removeRoles(Role roles) {
 	super.removeRoles(roles);
+    }
+
+    public void createNewDeliveryInfo(String recipient, Address address) {
+	new DeliveryInfo(this, recipient, address);
     }
 
 }

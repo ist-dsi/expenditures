@@ -28,10 +28,6 @@ class acquisitions.AcquisitionProcessState {
 }
 
 class acquisitions.AcquisitionRequest {
-	String project;
-	String subproject;
-	String recipient;
-	String receptionAddress;
 }
 
 class acquisitions.AcquisitionRequestItem {
@@ -42,6 +38,8 @@ class acquisitions.AcquisitionRequestItem {
 	BigDecimal vatValue;
 	String proposalReference;
 	String salesCode;              // CVP
+	String recipient;
+	Address address;
 }
 
 class acquisitions.UnitItem {
@@ -96,6 +94,11 @@ class organization.Person {
 	String name;
 	String username;
 	String password;
+}
+
+class organization.DeliveryInfo {
+	String recipient;
+	Address address;
 }
 
 class organization.Unit {
@@ -337,6 +340,20 @@ relation UnitItemUnit {
 relation ItemUnitItem {
 	acquisitions.AcquisitionRequestItem playsRole item;
 	acquisitions.UnitItem playsRole unitItems {
+		multiplicity *;
+	}
+}
+
+relation PersonDeliveryInfo {
+	organization.Person playsRole person;
+	organization.DeliveryInfo playsRole deliveryInfos {
+		multiplicity *;
+	}
+}
+
+relation ExpenditureTrackingSystemDeliveryInfo {
+	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
+	organization.DeliveryInfo playsRole deliveryInfos {
 		multiplicity *;
 	}
 }

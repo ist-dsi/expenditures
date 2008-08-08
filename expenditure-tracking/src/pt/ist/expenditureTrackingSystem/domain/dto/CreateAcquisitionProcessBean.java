@@ -10,10 +10,6 @@ import pt.ist.fenixWebFramework.util.DomainReference;
 
 public class CreateAcquisitionProcessBean implements Serializable {
 
-    private String project;
-    private String subproject;
-    private String recipient;
-    private String receptionAddress;
     private DomainReference<Unit> requestingUnit;
     private boolean requestUnitPayingUnit;
     private DomainReference<Supplier> supplier;
@@ -25,47 +21,11 @@ public class CreateAcquisitionProcessBean implements Serializable {
     }
 
     public CreateAcquisitionProcessBean(AcquisitionRequest acquisitionRequest) {
-	setProject(acquisitionRequest.getProject());
-	setSubproject(acquisitionRequest.getSubproject());
-	setRecipient(acquisitionRequest.getRecipient());
-	setReceptionAddress(acquisitionRequest.getReceptionAddress());
 	setRequestingUnit(acquisitionRequest.getRequestingUnit());
 	setSupplier(acquisitionRequest.getSupplier());
 	if (acquisitionRequest.getPayingUnits().contains(acquisitionRequest.getRequestingUnit())) {
 	    setRequestUnitPayingUnit(true);
 	}
-    }
-
-    public String getProject() {
-	return project;
-    }
-
-    public void setProject(String project) {
-	this.project = project;
-    }
-
-    public String getSubproject() {
-	return subproject;
-    }
-
-    public void setSubproject(String subproject) {
-	this.subproject = subproject;
-    }
-
-    public String getRecipient() {
-	return recipient;
-    }
-
-    public void setRecipient(String recipient) {
-	this.recipient = recipient;
-    }
-
-    public String getReceptionAddress() {
-	return receptionAddress;
-    }
-
-    public void setReceptionAddress(String receptionAddress) {
-	this.receptionAddress = receptionAddress;
     }
 
     public Unit getRequestingUnit() {

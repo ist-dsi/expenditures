@@ -7,6 +7,7 @@ import java.util.List;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
+import pt.ist.expenditureTrackingSystem.domain.util.Address;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.pstm.Transaction;
 
@@ -19,7 +20,7 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
     }
 
     public AcquisitionRequestItem(final AcquisitionRequest acquisitionRequest, final String description, final Integer quantity,
-	    final BigDecimal unitValue, final BigDecimal vatValue, final String proposalReference, String salesCode) {
+	    final BigDecimal unitValue, final BigDecimal vatValue, final String proposalReference, String salesCode, String recipient, Address address) {
 	this(acquisitionRequest);
 	setDescription(description);
 	setQuantity(quantity);
@@ -27,6 +28,8 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	setVatValue(vatValue);
 	setProposalReference(proposalReference);
 	setSalesCode(salesCode);
+	setRecipient(recipient);
+	setAddress(address);
     }
 
     public BigDecimal getTotalItemValue() {

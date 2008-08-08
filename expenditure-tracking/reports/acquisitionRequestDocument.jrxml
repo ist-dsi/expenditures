@@ -223,7 +223,7 @@
 					<textElement>
 						<font/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$P{acquisitionRequest}.getRecipient()]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA["TODO"]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -236,7 +236,7 @@
 					<textElement>
 						<font/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$P{acquisitionRequest}.getReceptionAddress()]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA["TODO"]]></textFieldExpression>
 				</textField>
 			</band>
 		</title>

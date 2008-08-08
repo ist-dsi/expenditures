@@ -22,16 +22,14 @@ public class EditAcquisitionRequest extends GenericAcquisitionProcessActivity {
 
     @Override
     protected void process(AcquisitionProcess process, Object... objects) {
-	
+
 	Supplier supplier = (Supplier) objects[0];
-	String project = (String) objects[1];
-	String subproject = (String) objects[2];
 	Unit requestingUnit = (Unit) objects[3];
 	Boolean isRequestingUnitPayingUnit = (Boolean) objects[4];
-	    
+
 	AcquisitionRequest acquisitionRequest = process.getAcquisitionRequest();
-	acquisitionRequest.edit(supplier, project, subproject, requestingUnit, isRequestingUnitPayingUnit);
-		
+	acquisitionRequest.edit(supplier, requestingUnit, isRequestingUnitPayingUnit);
+
     }
 
 }

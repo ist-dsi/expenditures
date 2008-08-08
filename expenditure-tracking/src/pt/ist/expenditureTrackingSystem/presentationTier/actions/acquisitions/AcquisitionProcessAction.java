@@ -94,10 +94,6 @@ public class AcquisitionProcessAction extends ProcessAction {
     public ActionForward prepareCreateAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final CreateAcquisitionProcessBean acquisitionProcessBean = new CreateAcquisitionProcessBean();
-	User user = UserView.getUser();
-	if (user != null && user.getPerson() != null) {
-	    acquisitionProcessBean.setRecipient(user.getPerson().getName());
-	}
 	request.setAttribute("acquisitionProcessBean", acquisitionProcessBean);
 	return mapping.findForward("create.acquisition.process");
     }
@@ -127,7 +123,7 @@ public class AcquisitionProcessAction extends ProcessAction {
 
 	CreateAcquisitionProcessBean bean = getRenderedObject("acquisitionRequestBean");
 	return executeActivityAndViewProcess(mapping, form, request, response, "EditAcquisitionRequest", bean.getSupplier(), bean
-		.getProject(), bean.getSubproject(), bean.getRequestingUnit(), bean.isRequestUnitPayingUnit());
+		.getRequestingUnit(), bean.isRequestUnitPayingUnit());
     }
 
     public ActionForward viewAcquisitionProcess(final ActionMapping mapping, final HttpServletRequest request,
@@ -505,4 +501,15 @@ public class AcquisitionProcessAction extends ProcessAction {
 	return viewAcquisitionProcess(mapping, form, request, response);
     }
 
+    public ActionForward createItemPostBack(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	AcquisitionRequestItemBean acquisitionRequestItemBean = getRenderedObject("acquisitionRequestItem");
+	RenderUtils.invalidateViewState();
+	acquisitionRequestItemBean.setDeliveryInfo(null);
+	acquisitionRequestItemBean.setRecipient(null);
+	acquisitionRequestItemBean.setAddress(null);
+	request.setAttribute("bean", acquisitionRequestItemBean);
+	request.setAttribute("acquisitionProcess", acquisitionRequestItemBean.getAcquisitionRequest().getAcquisitionProcess());
+	return mapping.findForward("create.acquisition.request.item");
+    }
 }

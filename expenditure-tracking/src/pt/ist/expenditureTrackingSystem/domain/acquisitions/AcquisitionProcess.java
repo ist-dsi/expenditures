@@ -68,8 +68,7 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 	requestInformationActivities.add(new ReceiveInvoice());
 	requestInformationActivities.add(new SubmitForApproval());
 	requestInformationActivities.add(new EditAcquisitionRequest());
-	
-	
+
 	requestItemActivities.add(new DeleteAcquisitionRequestItem());
 	requestItemActivities.add(new EditAcquisitionRequestItem());
 	requestItemActivities.add(new AssignPayingUnitToItem());
@@ -85,11 +84,10 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 	new AcquisitionRequest(this, requester);
     }
 
-    protected AcquisitionProcess(Supplier supplier, String project, String subproject, String recipient, String receptionAddress,
-	    Person person) {
+    protected AcquisitionProcess(Supplier supplier, Person person) {
 	super();
 	new AcquisitionProcessState(this, AcquisitionProcessStateType.IN_GENESIS);
-	new AcquisitionRequest(this, supplier, project, subproject, recipient, receptionAddress, person);
+	new AcquisitionRequest(this, supplier, person);
     }
 
     public static boolean isCreateNewAcquisitionProcessAvailable() {
@@ -102,8 +100,6 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 	    throw new DomainException("error.acquisitionProcess.invalid.state.to.run.createNewAcquisitionProcess");
 	}
 	AcquisitionProcess process = new AcquisitionProcess(createAcquisitionProcessBean.getSupplier(),
-		createAcquisitionProcessBean.getProject(), createAcquisitionProcessBean.getSubproject(),
-		createAcquisitionProcessBean.getRecipient(), createAcquisitionProcessBean.getReceptionAddress(),
 		createAcquisitionProcessBean.getRequester());
 	process.getAcquisitionRequest().setRequestingUnit(createAcquisitionProcessBean.getRequestingUnit());
 	if (createAcquisitionProcessBean.isRequestUnitPayingUnit()) {
@@ -186,11 +182,11 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
     public List<GenericAcquisitionProcessActivity> getActiveActivitiesForItem() {
 	return getActiveActivities(ActivityScope.REQUEST_ITEM);
     }
-    
+
     public List<GenericAcquisitionProcessActivity> getActiveActivitiesForRequest() {
 	return getActiveActivities(ActivityScope.REQUEST_INFORMATION);
     }
-    
+
     public List<GenericAcquisitionProcessActivity> getActiveActivities(ActivityScope scope) {
 	List<GenericAcquisitionProcessActivity> activitiesResult = new ArrayList<GenericAcquisitionProcessActivity>();
 	for (GenericAcquisitionProcessActivity activity : activities.get(scope)) {

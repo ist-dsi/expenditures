@@ -13,6 +13,7 @@ import pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
+import pt.ist.expenditureTrackingSystem.domain.util.Address;
 import pt.ist.expenditureTrackingSystem.domain.util.ByteArray;
 import pt.ist.fenixframework.pstm.Transaction;
 
@@ -35,20 +36,13 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	}
     }
 
-    AcquisitionRequest(AcquisitionProcess acquisitionProcess, Supplier supplier, String project, String subproject,
-	    String recipient, String receptionAddress, Person person) {
+    AcquisitionRequest(AcquisitionProcess acquisitionProcess, Supplier supplier, Person person) {
 	this(acquisitionProcess, person);
 	setSupplier(supplier);
-	setProject(project);
-	setSubproject(subproject);
-	setRecipient(recipient);
-	setReceptionAddress(receptionAddress);
     }
 
-    public void edit(Supplier supplier, String project, String subproject, Unit requestingUnit, Boolean isRequestingUnitPayingUnit) {
+    public void edit(Supplier supplier, Unit requestingUnit, Boolean isRequestingUnitPayingUnit) {
 	setSupplier(supplier);
-	setProject(project);
-	setSubproject(subproject);
 	setRequestingUnit(requestingUnit);
 	if (isRequestingUnitPayingUnit) {
 	    addPayingUnits(requestingUnit);
@@ -66,8 +60,19 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     }
 
     public AcquisitionRequestItem createAcquisitionRequestItem(AcquisitionRequestItemBean requestItemBean) {
+	String recipient;
+	Address address;
+	if (requestItemBean.getDeliveryInfo() != null) {
+	    recipient = requestItemBean.getDeliveryInfo().getRecipient();
+	    address = requestItemBean.getDeliveryInfo().getAddress();
+	} else {
+	    recipient = requestItemBean.getRecipient();
+	    address = requestItemBean.getAddress();
+	    requestItemBean.getAcquisitionRequest().getRequester().createNewDeliveryInfo(recipient, address);
+	}
+
 	return new AcquisitionRequestItem(this, requestItemBean.getDescription(), requestItemBean.getQuantity(), requestItemBean
-		.getUnitValue(), requestItemBean.getVatValue(), requestItemBean.getProposalReference(), requestItemBean.getSalesCode());
+		.getUnitValue(), requestItemBean.getVatValue(), requestItemBean.getProposalReference(), requestItemBean.getSalesCode(), recipient, address);
     }
 
     public void delete() {
@@ -129,18 +134,10 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	return invoice != null && invoice.isInvoiceReceived();
     }
 
-    @Override
-    public String getRecipient() {
-	if (super.getRecipient() == null) {
-	    return getRequester().getName();
-	}
-	return super.getRecipient();
-    }
-
     public String getCostCenter() {
 	return getRequestingUnit().getCostCenter();
     }
-    
+
     public boolean isEveryItemFullyAttributedToPayingUnits() {
 	for (AcquisitionRequestItem item : getAcquisitionRequestItems()) {
 	    if (!item.isValueFullyAttributedToUnits()) {
@@ -149,7 +146,7 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	}
 	return true;
     }
-    
+
     @Override
     public void removePayingUnits(Unit payingUnit) {
 	for (AcquisitionRequestItem item : getAcquisitionRequestItems()) {

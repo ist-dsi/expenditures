@@ -6,6 +6,10 @@
 <h2><bean:message key="label.create.acquisition.request.item" bundle="ACQUISITION_RESOURCES"/></h2>
 
 
+<bean:define id="schemaType"
+		name="bean"
+		property="createItemSchemaType"/>
+
 <bean:define id="acquisitionProcess"
 		name="acquisitionProcess"
 		property="acquisitionRequest.acquisitionProcess"
@@ -14,10 +18,11 @@
 <bean:define id="urlView">/acquisitionProcess.do?method=viewAcquisitionProcess&acquisitionProcessOid=<%= acquisitionProcess.getOID() %></bean:define>
 <fr:edit id="acquisitionRequestItem"
 		name="bean"
-		schema="createAcquisitionRequestItem"
+		schema="<%= "createAcquisitionRequestItem_" + schemaType.toString()%>"
 		action="/acquisitionProcess.do?method=createNewAcquisitionRequestItem">
 	<fr:layout name="tabular">
 		<fr:property name="classes" value="form"/>
 	</fr:layout>
 	<fr:destination name="cancel" path="<%= urlView %>" />
+	<fr:destination name="postBack" path="/acquisitionProcess.do?method=createItemPostBack" />
 </fr:edit>
