@@ -20,11 +20,13 @@ public class AcquisitionRequestItemBean implements Serializable {
     private DomainReference<AcquisitionRequestItem> item;
     private String recipient;
     private Address address;
-    private DeliveryInfo deliveryInfo;
+    private DomainReference<DeliveryInfo> deliveryInfo;
     private CreateItemSchemaType createItemSchemaType;
 
     public AcquisitionRequestItemBean(final AcquisitionRequest acquisitionRequest) {
 	setAcquisitionRequest(acquisitionRequest);
+	setDeliveryInfo(null);
+	setItem(null);
 	if (acquisitionRequest.getRequester().getDeliveryInfosSet().isEmpty()) {
 	    setCreateItemSchemaType(CreateItemSchemaType.NEW_DELIVERY_INFO);
 	} else {
@@ -42,8 +44,10 @@ public class AcquisitionRequestItemBean implements Serializable {
 	setVatValue(acquisitionRequestItem.getVatValue());
 	setItem(acquisitionRequestItem);
 	setRecipient(acquisitionRequestItem.getRecipient());
-	setAddress(address);
-	setCreateItemSchemaType(CreateItemSchemaType.NEW_DELIVERY_INFO);
+	setAddress(acquisitionRequestItem.getAddress());
+	setDeliveryInfo(acquisitionRequestItem.getAcquisitionRequest().getRequester().getDeliveryInfoByRecipientAndAddress(
+		acquisitionRequestItem.getRecipient(), acquisitionRequestItem.getAddress()));
+	setCreateItemSchemaType(CreateItemSchemaType.EXISTING_DELIVERY_INFO);
     }
 
     public void setAcquisitionRequest(final AcquisitionRequest acquisitionRequest) {
@@ -127,23 +131,23 @@ public class AcquisitionRequestItemBean implements Serializable {
     }
 
     public DeliveryInfo getDeliveryInfo() {
-	return deliveryInfo;
+	return deliveryInfo.getObject();
     }
 
     public void setDeliveryInfo(DeliveryInfo deliveryInfo) {
-	this.deliveryInfo = deliveryInfo;
+	this.deliveryInfo = new DomainReference<DeliveryInfo>(deliveryInfo);
     }
 
-    private static enum CreateItemSchemaType {
+    public static enum CreateItemSchemaType {
 	NEW_DELIVERY_INFO, EXISTING_DELIVERY_INFO;
     }
 
     public BigDecimal getVatValue() {
-        return vatValue;
+	return vatValue;
     }
 
     public void setVatValue(BigDecimal vatValue) {
-        this.vatValue = vatValue;
+	this.vatValue = vatValue;
     }
 
 }

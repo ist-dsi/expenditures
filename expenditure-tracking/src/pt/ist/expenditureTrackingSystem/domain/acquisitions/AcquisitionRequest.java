@@ -1,19 +1,15 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.joda.time.DateTime;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
-import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
-import pt.ist.expenditureTrackingSystem.domain.util.Address;
 import pt.ist.expenditureTrackingSystem.domain.util.ByteArray;
 import pt.ist.fenixframework.pstm.Transaction;
 
@@ -60,19 +56,8 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     }
 
     public AcquisitionRequestItem createAcquisitionRequestItem(AcquisitionRequestItemBean requestItemBean) {
-	String recipient;
-	Address address;
-	if (requestItemBean.getDeliveryInfo() != null) {
-	    recipient = requestItemBean.getDeliveryInfo().getRecipient();
-	    address = requestItemBean.getDeliveryInfo().getAddress();
-	} else {
-	    recipient = requestItemBean.getRecipient();
-	    address = requestItemBean.getAddress();
-	    requestItemBean.getAcquisitionRequest().getRequester().createNewDeliveryInfo(recipient, address);
-	}
 
-	return new AcquisitionRequestItem(this, requestItemBean.getDescription(), requestItemBean.getQuantity(), requestItemBean
-		.getUnitValue(), requestItemBean.getVatValue(), requestItemBean.getProposalReference(), requestItemBean.getSalesCode(), recipient, address);
+	return new AcquisitionRequestItem(requestItemBean);
     }
 
     public void delete() {

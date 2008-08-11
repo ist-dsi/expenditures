@@ -1,8 +1,10 @@
 package pt.ist.expenditureTrackingSystem.domain.util;
 
+import java.io.Serializable;
+
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 
-public class Address {
+public class Address implements Serializable {
 
     private String line1;
     private String line2;
@@ -68,5 +70,17 @@ public class Address {
 	    throw new DomainException("error.address.country.cannot.be.empty");
 	}
 	this.country = country;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+	return false;
+    }
+
+    public boolean equals(final Address address) {
+	return getLine1().equals(address.getLine1())
+		&& ((getLine2() == null && address.getLine2() == null) || (getLine2() != null && address.getLine2() != null && getLine2()
+			.equals(address.getLine2()))) && getPostalCode().equals(address.getPostalCode())
+		&& getLocation().equals(address.getLocation()) && getCountry().equals(address.getCountry());
     }
 }

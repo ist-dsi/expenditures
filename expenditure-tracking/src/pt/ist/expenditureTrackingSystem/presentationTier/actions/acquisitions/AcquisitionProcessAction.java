@@ -30,6 +30,7 @@ import pt.ist.expenditureTrackingSystem.domain.dto.DomainObjectBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationExpirationDateBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.UnitItemBean;
+import pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean.CreateItemSchemaType;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
@@ -417,11 +418,9 @@ public class AcquisitionProcessAction extends ProcessAction {
     public ActionForward executeAcquisitionRequestItemEdition(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 
-	final AcquisitionRequestItemBean requestItemBean = getRenderedObject("itemBean");
+	final AcquisitionRequestItemBean requestItemBean = getRenderedObject("acquisitionRequestItem");
 	genericActivityExecution(requestItemBean.getAcquisitionRequest().getAcquisitionProcess(), "EditAcquisitionRequestItem",
-		requestItemBean.getItem(), requestItemBean.getDescription(), requestItemBean.getQuantity(), requestItemBean
-			.getUnitValue(), requestItemBean.getVatValue(), requestItemBean.getProposalReference(), requestItemBean
-			.getSalesCode());
+		requestItemBean);
 	return viewAcquisitionProcess(mapping, request, requestItemBean.getAcquisitionRequest().getAcquisitionProcess());
     }
 
@@ -505,9 +504,18 @@ public class AcquisitionProcessAction extends ProcessAction {
 	    final HttpServletResponse response) {
 	AcquisitionRequestItemBean acquisitionRequestItemBean = getRenderedObject("acquisitionRequestItem");
 	RenderUtils.invalidateViewState();
-	acquisitionRequestItemBean.setDeliveryInfo(null);
 	acquisitionRequestItemBean.setRecipient(null);
 	acquisitionRequestItemBean.setAddress(null);
+
+	if (acquisitionRequestItemBean.getItem() != null
+		&& acquisitionRequestItemBean.getCreateItemSchemaType().equals(CreateItemSchemaType.EXISTING_DELIVERY_INFO)) {
+	    acquisitionRequestItemBean.setDeliveryInfo(acquisitionRequestItemBean.getAcquisitionRequest().getRequester()
+		    .getDeliveryInfoByRecipientAndAddress(acquisitionRequestItemBean.getItem().getRecipient(),
+			    acquisitionRequestItemBean.getItem().getAddress()));
+	} else {
+	    acquisitionRequestItemBean.setDeliveryInfo(null);
+	}
+
 	request.setAttribute("bean", acquisitionRequestItemBean);
 	request.setAttribute("acquisitionProcess", acquisitionRequestItemBean.getAcquisitionRequest().getAcquisitionProcess());
 	return mapping.findForward("create.acquisition.request.item");

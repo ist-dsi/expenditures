@@ -3,12 +3,18 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
+<bean:define id="schemaType"
+		name="itemBean"
+		property="createItemSchemaType"/>
 
 <bean:define id="processOID" name="itemBean" property="acquisitionRequest.acquisitionProcess.OID"/>
-<fr:edit id="itemBean" name="itemBean" schema="createAcquisitionRequestItem" 
+<bean:define id="itemOID" name="itemBean" property="item.OID"/>
+<fr:edit id="acquisitionRequestItem" name="itemBean" schema="<%= "createAcquisitionRequestItem_" + schemaType.toString()%>" 
 	action="<%= "/acquisitionProcess.do?method=executeAcquisitionRequestItemEdition&acquisitionProcessOid="  + processOID %>">
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="tstyle3"/>
 		</fr:layout>
 		<fr:destination name="cancel" path="<%= "/acquisitionProcess.do?method=viewAcquisitionProcess&acquisitionProcessOid="  + processOID %>"/>
+		<fr:destination name="invalid" path="<%= "/acquisitionProcess.do?method=executeEditAcquisitionRequestItem&acquisitionRequestItemOid=" + itemOID + "&acquisitionProcessOid=" + processOID %>"/>
+		<fr:destination name="postBack" path="/acquisitionProcess.do?method=createItemPostBack" />
 </fr:edit>

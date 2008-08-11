@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean;
+import pt.ist.expenditureTrackingSystem.domain.organization.DeliveryInfo;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.util.Address;
@@ -19,8 +21,8 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	setAcquisitionRequest(acquisitionRequest);
     }
 
-    public AcquisitionRequestItem(final AcquisitionRequest acquisitionRequest, final String description, final Integer quantity,
-	    final BigDecimal unitValue, final BigDecimal vatValue, final String proposalReference, String salesCode, String recipient, Address address) {
+    private AcquisitionRequestItem(final AcquisitionRequest acquisitionRequest, final String description, final Integer quantity,
+	    final BigDecimal unitValue, final BigDecimal vatValue, final String proposalReference, String salesCode) {
 	this(acquisitionRequest);
 	setDescription(description);
 	setQuantity(quantity);
@@ -28,6 +30,36 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	setVatValue(vatValue);
 	setProposalReference(proposalReference);
 	setSalesCode(salesCode);
+    }
+
+    public AcquisitionRequestItem(final AcquisitionRequestItemBean acquisitionRequestItemBean) {
+	this(acquisitionRequestItemBean.getAcquisitionRequest(), acquisitionRequestItemBean.getDescription(),
+		acquisitionRequestItemBean.getQuantity(), acquisitionRequestItemBean.getUnitValue(), acquisitionRequestItemBean
+			.getVatValue(), acquisitionRequestItemBean.getProposalReference(), acquisitionRequestItemBean
+			.getSalesCode());
+	setDeliveryInfo(acquisitionRequestItemBean);
+    }
+
+    protected void setDeliveryInfo(AcquisitionRequestItemBean acquisitionRequestItemBean) {
+	String recipient;
+	Address address;
+	if (acquisitionRequestItemBean.getDeliveryInfo() != null) {
+	    recipient = acquisitionRequestItemBean.getDeliveryInfo().getRecipient();
+	    address = acquisitionRequestItemBean.getDeliveryInfo().getAddress();
+	} else {
+	    recipient = acquisitionRequestItemBean.getRecipient();
+	    address = acquisitionRequestItemBean.getAddress();
+	    acquisitionRequestItemBean.getAcquisitionRequest().getRequester().createNewDeliveryInfo(recipient, address);
+	}
+	setRecipient(recipient);
+	setAddress(address);
+
+    }
+
+    public AcquisitionRequestItem(final AcquisitionRequest acquisitionRequest, final String description, final Integer quantity,
+	    final BigDecimal unitValue, final BigDecimal vatValue, final String proposalReference, String salesCode,
+	    String recipient, Address address) {
+	this(acquisitionRequest, description, quantity, unitValue, vatValue, proposalReference, salesCode);
 	setRecipient(recipient);
 	setAddress(address);
     }
@@ -57,13 +89,26 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
     }
 
     public void edit(String description, Integer quantity, BigDecimal unitValue, BigDecimal vatValue, String proposalReference,
-	    String salesCode) {
+	    String salesCode, DeliveryInfo deliveryInfo) {
 	setDescription(description);
 	setQuantity(quantity);
 	setUnitValue(unitValue);
 	setProposalReference(proposalReference);
 	setSalesCode(salesCode);
 	setVatValue(vatValue);
+	setRecipient(deliveryInfo.getRecipient());
+	setAddress(deliveryInfo.getAddress());
+    }
+
+    public void edit(AcquisitionRequestItemBean acquisitionRequestItemBean) {
+	setDescription(acquisitionRequestItemBean.getDescription());
+	setQuantity(acquisitionRequestItemBean.getQuantity());
+	setUnitValue(acquisitionRequestItemBean.getUnitValue());
+	setProposalReference(acquisitionRequestItemBean.getProposalReference());
+	setSalesCode(acquisitionRequestItemBean.getSalesCode());
+	setVatValue(acquisitionRequestItemBean.getVatValue());
+	setDeliveryInfo(acquisitionRequestItemBean);
+
     }
 
     @Service
@@ -121,7 +166,7 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	    }
 	}
     }
-    
+
     public void approvedBy(Person person) {
 	modifyApprovingStateFor(person, Boolean.TRUE);
     }

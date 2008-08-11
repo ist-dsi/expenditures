@@ -1,11 +1,9 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.activities;
 
-import java.math.BigDecimal;
-
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
+import pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean;
 import pt.ist.fenixWebFramework.security.UserView;
 
 public class EditAcquisitionRequestItem extends GenericAcquisitionProcessActivity {
@@ -24,15 +22,9 @@ public class EditAcquisitionRequestItem extends GenericAcquisitionProcessActivit
 
     @Override
     protected void process(AcquisitionProcess process, Object... objects) {
+	AcquisitionRequestItemBean acquisitionRequestItemBean = (AcquisitionRequestItemBean) objects[0];
 
-	AcquisitionRequestItem item = (AcquisitionRequestItem) objects[0];
-	String description = (String) objects[1];
-	Integer quantity = (Integer) objects[2];
-	BigDecimal unitValue = (BigDecimal) objects[3];
-	BigDecimal vatValue = (BigDecimal) objects[4];
-	String proposalReference = (String) objects[5];
-	String salesCode = (String) objects[6];
-	item.edit(description, quantity, unitValue, vatValue, proposalReference, salesCode);
+	acquisitionRequestItemBean.getItem().edit(acquisitionRequestItemBean);
 
     }
 }

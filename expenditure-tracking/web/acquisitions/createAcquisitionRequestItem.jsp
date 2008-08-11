@@ -24,5 +24,6 @@
 		<fr:property name="classes" value="form"/>
 	</fr:layout>
 	<fr:destination name="cancel" path="<%= urlView %>" />
+	<fr:destination name="invalid" path="<%= "/acquisitionProcess.do?method=executeCreateAcquisitionRequestItem&acquisitionProcessOid=" + acquisitionProcess.getOID() %>"/>
 	<fr:destination name="postBack" path="/acquisitionProcess.do?method=createItemPostBack" />
 </fr:edit>

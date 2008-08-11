@@ -98,4 +98,13 @@ public class Person extends Person_Base {
 	new DeliveryInfo(this, recipient, address);
     }
 
+    public DeliveryInfo getDeliveryInfoByRecipientAndAddress(String recipient, Address address) {
+	for (DeliveryInfo deliveryInfo : getDeliveryInfosSet()) {
+	    if (deliveryInfo.getRecipient().equals(recipient) && deliveryInfo.getAddress().equals(address)) {
+		return deliveryInfo;
+	    }
+	}
+	return null;
+    }
+
 }
