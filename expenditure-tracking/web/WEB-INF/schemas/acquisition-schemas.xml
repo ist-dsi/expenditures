@@ -69,6 +69,7 @@
 	<slot name="proposalReference" key="label.acquisition.request.item.proposalReference" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 	<slot name="quantity" key="label.acquisition.request.item.quantity" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 	<slot name="unitValue" key="label.acquisition.request.item.unitValue" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="vatValue" key="label.acquisition.request.item.vatValue" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>	
 	<slot name="salesCode" key="label.acquisition.request.item.salesCode" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 	<slot name="description" key="label.acquisition.request.item.description" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 	<slot name="createItemSchemaType" layout="radio-postback" key="label.acquisition.request.item.deliveryInfo" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
