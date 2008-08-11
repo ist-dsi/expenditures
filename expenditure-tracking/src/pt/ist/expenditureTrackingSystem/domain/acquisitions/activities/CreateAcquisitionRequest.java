@@ -15,8 +15,7 @@ public class CreateAcquisitionRequest extends GenericAcquisitionProcessActivity 
 
     @Override
     protected boolean isAvailable(AcquisitionProcess process) {
-	return process.isProcessInState(AcquisitionProcessStateType.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER)
-		&& process.getAcquisitionRequest().getAcquisitionRequestDocument() != null;
+	return process.isProcessInState(AcquisitionProcessStateType.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER);
     }
 
     @Override
