@@ -450,7 +450,7 @@ public class AcquisitionProcessAction extends ProcessAction {
 	try {
 	    genericActivityExecution(acquisitionProcess, "AssignPayingUnitToItem", item, beans);
 	} catch (DomainException e) {
-	    addMessage(e.getMessage(), "ACQUISITION_RESOURCES");
+	    addMessage(e.getMessage(), getBundle());
 	    return executeAssignPayingUnitToItem(mapping, form, request, response);
 	}
 
