@@ -2,7 +2,7 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
-
+<%@ taglib uri="/WEB-INF/messages.tld" prefix="messages" %>
 
 <h2>
 	<bean:message key="label.pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AssignPayingUnitToItem" bundle="ACQUISITION_RESOURCES"/>
@@ -20,6 +20,12 @@
 		</fr:layout>
 	</fr:view>
 </div>
+
+<messages:hasMessages>
+	<div class="infoop4" style="width: 360px">
+		<messages:showMessages/>
+	</div>
+</messages:hasMessages>
 
 <div class="dinline forminline">
 	<fr:form action="<%="/acquisitionProcess.do?acquisitionProcessOid=" + processOID + "&acquisitionRequestItemOid=" + acquisitionRequestItemOid%>">

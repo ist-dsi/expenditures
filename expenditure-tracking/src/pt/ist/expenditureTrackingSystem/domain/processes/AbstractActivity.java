@@ -15,10 +15,10 @@ public abstract class AbstractActivity<T extends GenericProcess> {
 
     protected abstract void process(T process, Object... objects);
 
-    protected  void logExecution(T process, String operationName, User user) {
+    protected void logExecution(T process, String operationName, User user) {
 	new GenericLog(process, user.getPerson(), operationName, new DateTime());
     }
-    
+
     @Service
     public final void execute(T process, Object... args) {
 	checkConditionsFor(process);
@@ -29,16 +29,16 @@ public abstract class AbstractActivity<T extends GenericProcess> {
     public boolean isActive(T process) {
 	return isAccessible(process) && isAvailable(process);
     }
-    
+
     private void checkConditionsFor(T process) {
 	if (!isAccessible(process)) {
-	    throw new RuntimeException("error." + process.getClass().getSimpleName() + ".not.accessible");
+	    throw new ActivityException("error.not.accessible", getLocalizedName());
 	}
 	if (!isAvailable(process)) {
-	    throw new RuntimeException("error." + process.getClass().getSimpleName() + ".activity.not.available");
+	    throw new ActivityException("error.activity.not.available", getLocalizedName());
 	}
     }
-    
+
     protected boolean userHasRole(final RoleType roleType) {
 	final User user = UserView.getUser();
 	return user != null && user.getPerson().hasRoleType(roleType);
@@ -47,10 +47,12 @@ public abstract class AbstractActivity<T extends GenericProcess> {
     protected User getUser() {
 	return UserView.getUser();
     }
-    
+
     public String getName() {
 	return getClass().getSimpleName();
     }
-    
-    
+
+    public String getLocalizedName() {
+	return getName();
+    }
 }

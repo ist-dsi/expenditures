@@ -2,6 +2,7 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
+<%@ taglib uri="/WEB-INF/messages.tld" prefix="messages" %>
 
 <bean:define id="currentState" name="acquisitionProcess" property="acquisitionProcessStateType"/>
 
@@ -17,6 +18,12 @@
 --%>
  
 <h2><bean:message key="label.view.acquisition.process" bundle="EXPENDITURE_RESOURCES"/></h2>
+
+<messages:hasMessages>
+	<div class="infoop4" style="width: 360px">
+		<messages:showMessages/>
+	</div>
+</messages:hasMessages>
 
 <div class="infoop1" style="width: 360px">
 	<ul>
@@ -131,8 +138,8 @@
 
 		<logic:equal name="acquisitionRequestItem" property="valueFullyAttributedToUnits" value="false">
 		
-			<div class="warn">
-					Ainda não está totalmente atribuído
+			<div class="infoop4" style="width: 360px">
+					<strong><bean:message key="label.attention" bundle="EXPENDITURE_RESOURCES"/></strong>: <bean:message key="label.item.not.fully.attributed" bundle="ACQUISITION_RESOURCES"/>
 			</div>
 		
 		</logic:equal>

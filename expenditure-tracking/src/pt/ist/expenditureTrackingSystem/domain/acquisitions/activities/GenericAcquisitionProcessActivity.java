@@ -6,6 +6,7 @@ import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.OperationLog;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
+import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 
 public abstract class GenericAcquisitionProcessActivity extends AbstractActivity<AcquisitionProcess> {
 
@@ -14,4 +15,8 @@ public abstract class GenericAcquisitionProcessActivity extends AbstractActivity
 	new OperationLog(process, user.getPerson(), operationName, process.getAcquisitionProcessStateType(), new DateTime());
     }
 
+    @Override
+    public String getLocalizedName() {
+	return RenderUtils.getResourceString("ACQUISITION_RESOURCES", "label." + getClass().getName());
+    }
 }

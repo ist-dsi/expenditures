@@ -17,6 +17,7 @@ import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.File;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.presentationTier.Context;
+import pt.ist.expenditureTrackingSystem.presentationTier.messageHandling.MessageHandler;
 import pt.ist.expenditureTrackingSystem.presentationTier.util.FileUploadBean;
 import pt.ist.fenixWebFramework.renderers.components.state.IViewState;
 import pt.ist.fenixWebFramework.renderers.model.MetaObject;
@@ -30,6 +31,8 @@ public abstract class BaseAction extends DispatchAction {
 
     private static final Context CONTEXT = new Context(null);
 
+    private MessageHandler messageHandler = null;
+    
     protected Context getContextModule() {
 	return CONTEXT;
     }
@@ -39,7 +42,10 @@ public abstract class BaseAction extends DispatchAction {
 	    final HttpServletResponse response) throws Exception {
 	final Context context = getContextModule();
 	context.setAsActive();
+	messageHandler = new MessageHandler();
+	request.setAttribute(MessageHandler.MESSAGE_HANDLER_NAME, messageHandler);
 	return super.execute(mapping, form, request, response);
+	
     }
 
     protected Person getLoggedPerson() {
@@ -128,4 +134,8 @@ public abstract class BaseAction extends DispatchAction {
 		: null;
     }
 
+    
+    public void addMessage(String key, String bundle, String... args) {
+	messageHandler.saveMessage(bundle, key,args);
+    }
 }

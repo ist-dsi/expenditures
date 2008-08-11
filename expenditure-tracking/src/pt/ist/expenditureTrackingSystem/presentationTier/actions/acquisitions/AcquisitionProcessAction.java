@@ -16,6 +16,7 @@ import org.apache.struts.action.ActionMapping;
 import org.joda.time.DateTime;
 
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
+import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProposalDocument;
@@ -446,7 +447,12 @@ public class AcquisitionProcessAction extends ProcessAction {
 	final AcquisitionRequestItem item = getDomainObject(request, "acquisitionRequestItemOid");
 
 	List<UnitItemBean> beans = getRenderedObject("unitItemBeans");
-	genericActivityExecution(acquisitionProcess, "AssignPayingUnitToItem", item, beans);
+	try {
+	    genericActivityExecution(acquisitionProcess, "AssignPayingUnitToItem", item, beans);
+	} catch (DomainException e) {
+	    addMessage(e.getMessage(), "ACQUISITION_RESOURCES");
+	    return executeAssignPayingUnitToItem(mapping, form, request, response);
+	}
 
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
@@ -469,6 +475,7 @@ public class AcquisitionProcessAction extends ProcessAction {
 	    try {
 		shareValue = item.getTotalItemValue().divide(new BigDecimal(assigned));
 	    } catch (ArithmeticException e) {
+		addMessage("label.unable.to.split.value", "ACQUISITION_RESOURCES");
 		shareValue = null;
 	    }
 
@@ -496,6 +503,7 @@ public class AcquisitionProcessAction extends ProcessAction {
 
     public ActionForward executeActivityAndViewProcess(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response, final String activityName, Object... args) {
+
 	genericActivityExecution(request, activityName, args);
 	return viewAcquisitionProcess(mapping, form, request, response);
     }
@@ -519,5 +527,10 @@ public class AcquisitionProcessAction extends ProcessAction {
 	request.setAttribute("bean", acquisitionRequestItemBean);
 	request.setAttribute("acquisitionProcess", acquisitionRequestItemBean.getAcquisitionRequest().getAcquisitionProcess());
 	return mapping.findForward("create.acquisition.request.item");
+    }
+
+    @Override
+    protected String getBundle() {
+	return "ACQUISITION_RESOURCES";
     }
 }
