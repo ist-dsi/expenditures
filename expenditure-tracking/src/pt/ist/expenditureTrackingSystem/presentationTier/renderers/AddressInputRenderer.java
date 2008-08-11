@@ -1,5 +1,9 @@
 package pt.ist.expenditureTrackingSystem.presentationTier.renderers;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 
 import pt.ist.expenditureTrackingSystem.domain.util.Address;
@@ -147,18 +151,45 @@ public class AddressInputRenderer extends InputRenderer {
 		htmlMultipleHiddenField.setChainValidator(htmlChainValidator);
 		new HtmlValidator(htmlChainValidator) {
 
+		    List<String> errorMessages = new ArrayList<String>();
+
 		    @Override
 		    public void performValidation() {
 			String[] values = getComponent().getValues();
-			if (values[0] == null || values[2] == null || values[3] == null || values[4] == null
-				|| values[0].isEmpty() || values[2].isEmpty() || values[3].isEmpty() || values[4].isEmpty()) {
-			    setValid(false);
-			    setMessage("error.");
-			    // setKey(true);
+			if (values[0] == null || values[0].isEmpty()) {
+			    errorMessages.add("error.line1.cannot.be.empty");
 			}
+			if (values[2] == null || values[2].isEmpty()) {
+			    errorMessages.add("error.location.cannot.be.empty");
+			}
+			if (values[3] == null || values[3].isEmpty()) {
+			    errorMessages.add("error.postalCode.cannot.be.empty");
+			}
+			if (values[4] == null || values[4].isEmpty()) {
+			    errorMessages.add("error.country.cannot.be.empty");
+			}
+
+			if (!errorMessages.isEmpty()) {
+			    setValid(false);
+			}
+
+		    }
+
+		    @Override
+		    public String getErrorMessage() {
+			StringBuilder builder = new StringBuilder();
+			for (Iterator<String> iter = errorMessages.iterator(); iter.hasNext();) {
+			    String errorMessage = iter.next();
+			    builder.append(getResourceMessage(errorMessage));
+			    if (iter.hasNext()) {
+				builder.append(", ");
+			    }
+			}
+			return builder.toString();
 		    }
 
 		};
+
 		container.addChild(table);
 
 		return container;
