@@ -166,7 +166,7 @@
 		<property name="dateFormat" value="dd-MM-yyyy"/>
 		<property name="dateFormatText" value="dd-MM-yyyy"/>
 	</slot>
-	<slot name="inputStream" key="label.input.stream"	bundle="ACQUISITION_RESOURCES">
+	<slot name="inputStream" key="label.invoice.file" bundle="ACQUISITION_RESOURCES">
 		<property name="fileNameSlot" value="filename" />
 		<property name="size" value="30"/>
 	</slot>
