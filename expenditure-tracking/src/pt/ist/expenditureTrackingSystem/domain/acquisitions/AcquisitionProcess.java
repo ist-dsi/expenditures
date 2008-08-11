@@ -278,4 +278,26 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 	return logs;
     }
 
+    public boolean isAvailableForPerson(Person person) {
+	return person.hasRoleType(RoleType.ACCOUNTABILITY) 
+	|| person.hasRoleType(RoleType.ACQUISITION_CENTRAL) 
+	|| getRequestor() == person 
+	|| getRequestingUnit().isResponsible(person)
+	|| isResponsibleForAtLeastOnePayingUnit(person); 
+    }
+    
+    public boolean isResponsibleForAtLeastOnePayingUnit(Person person) {
+	for (Unit unit : getPayingUnits()) {
+	    if (unit.isResponsible(person)) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
+    public boolean isAvailableForCurrentUser() {
+	User user = UserView.getUser();
+	return user != null && isAvailableForPerson(user.getPerson());
+    }
+
 }

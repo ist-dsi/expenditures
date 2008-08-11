@@ -25,7 +25,7 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
 	protected boolean matchesSearchCriteria(final AcquisitionProcess acquisitionProcess) {
 	    final AcquisitionRequest acquisitionRequest = acquisitionProcess.getAcquisitionRequest();
 	    return matchCriteria(acquisitionProcessStateType, acquisitionProcess.getAcquisitionProcessStateType())
-		    && matchesSearchCriteria(acquisitionRequest);
+		    && matchesSearchCriteria(acquisitionRequest) && acquisitionProcess.isAvailableForCurrentUser();
 	}
 
 	private boolean matchesSearchCriteria(final AcquisitionRequest acquisitionRequest) {
