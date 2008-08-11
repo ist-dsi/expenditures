@@ -20,12 +20,12 @@
 <h2><bean:message key="label.view.acquisition.process" bundle="EXPENDITURE_RESOURCES"/></h2>
 
 <messages:hasMessages>
-	<div class="infoop4" style="width: 360px">
+	<div class="infoop4" style="width: 460px">
 		<messages:showMessages/>
 	</div>
 </messages:hasMessages>
 
-<div class="infoop1" style="width: 360px">
+<div class="infoop1" style="width: 460px">
 	<ul>
 	<logic:iterate id="activity" name="acquisitionProcess" property="activeActivitiesForRequest">
 		<bean:define id="activityName" name="activity" property="class.simpleName"/> 
@@ -60,7 +60,7 @@
 	</logic:present>
 </logic:equal>
 
-<div class="infoop2" style="width: 360px">
+<div class="infoop2" style="width: 460px">
 	<fr:view name="acquisitionProcess" property="acquisitionRequest"
 			type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest"
 			schema="viewAcquisitionRequest">
@@ -138,12 +138,12 @@
 
 		<logic:equal name="acquisitionRequestItem" property="valueFullyAttributedToUnits" value="false">
 		
-			<div class="infoop4" style="width: 360px">
+			<div class="infoop4" style="width: 460px">
 					<strong><bean:message key="label.attention" bundle="EXPENDITURE_RESOURCES"/></strong>: <bean:message key="label.item.not.fully.attributed" bundle="ACQUISITION_RESOURCES"/>
 			</div>
 		
 		</logic:equal>
-		<div class="infoop2" style="width: 360px">
+		<div class="infoop2" style="width: 460px">
 			<fr:view name="acquisitionRequestItem"
 					schema="viewAcquisitionRequestItem">
 				<fr:layout name="tabular">

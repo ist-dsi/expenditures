@@ -12,7 +12,7 @@
 
 <bean:define id="acquisitionRequestItemOid" name="acquisitionRequestItem" property="OID"/>
 
-<div class="infoop2" style="width: 360px">
+<div class="infoop2" style="width: 500px">
 	<fr:view name="acquisitionRequestItem"
 			schema="viewAcquisitionRequestItem">
 		<fr:layout name="tabular">
@@ -22,7 +22,7 @@
 </div>
 
 <messages:hasMessages>
-	<div class="infoop4" style="width: 360px">
+	<div class="infoop4" style="width: 500px">
 		<messages:showMessages/>
 	</div>
 </messages:hasMessages>
