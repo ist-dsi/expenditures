@@ -33,7 +33,7 @@
 		
 		<fr:edit id="unitItemBeans" name="unitItemBeans" visible="false"/>
 			
-		<table class="tstyle3">
+		<table class="tstyle3 dinline">
 				<tr>
 					<th>
 						<strong><bean:message key="label.payingUnit" bundle="ACQUISITION_RESOURCES"/></strong>
@@ -59,13 +59,15 @@
 						</tr>
 				</logic:iterate>
 		</table>
-		
+
 		<p>
 		<a href="javascript:document.forms[1].method.value='calculateShareValuePostBack'; document.forms[1].submit();"> <bean:message key="label.auto.distribute" bundle="ACQUISITION_RESOURCES"/> </a>
 		</p>
 		<br/>
-		<html:submit styleClass="inputbutton"><bean:message key="renderers.form.submit.name" bundle="RENDERER_RESOURCES"/> </html:submit>
+		
+			<html:submit styleClass="inputbutton"><bean:message key="renderers.form.submit.name" bundle="RENDERER_RESOURCES"/> </html:submit>
 	</fr:form>
+
 	<fr:form action="<%="/acquisitionProcess.do?method=viewAcquisitionProcess&acquisitionProcessOid=" + processOID + "&acquisitionRequestItemOid=" + acquisitionRequestItemOid%>">
 		<html:submit styleClass="inputbutton"><bean:message key="renderers.form.cancel.name" bundle="RENDERER_RESOURCES"/> </html:submit>
 	</fr:form>

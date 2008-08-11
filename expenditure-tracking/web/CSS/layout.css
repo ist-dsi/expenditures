@@ -436,3 +436,7 @@ padding: 0 0.25em;
 }
 
 .nobullet { list-style: none; }
+
+
+.dinline { display: inline; }
+.forminline form { display: inline !important; }
