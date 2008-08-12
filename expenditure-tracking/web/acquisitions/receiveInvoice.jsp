@@ -50,6 +50,7 @@
 		schema="receiveInvoiceForm"
 		action="<%= urlSave %>">
 	<fr:layout name="tabular">
-		<fr:destination name="cancel" path="<%= urlView %>" />
+		<fr:property name="classes" value="tstyle3"/>
 	</fr:layout>
+		<fr:destination name="cancel" path="<%= urlView %>" />
 </fr:edit>

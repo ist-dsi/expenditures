@@ -13,7 +13,6 @@
 <bean:define id="urlAdd">/acquisitionProcess.do?method=addAcquisitionProposalDocument&amp;acquisitionProcessOid=<%= acquisitionProcess.getOID() %></bean:define>
 <fr:edit id="acquisitionProposalDocumentForm"
 		name="acquisitionProposalDocumentForm"
-		type="pt.ist.expenditureTrackingSystem.presentationTier.actions.acquisitions.AcquisitionProcessAction$AcquisitionProposalDocumentForm"
 		schema="addAcquisitionProposalDocument"
 		action="<%= urlAdd %>">
 	<fr:layout name="tabular">
