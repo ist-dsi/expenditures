@@ -184,7 +184,7 @@
 		bundle="ACQUISITION_RESOURCES">
 	<slot name="name" key="label.supplier.name" bundle="ORGANIZATION_RESOURCES"/>
 	<slot name="fiscalIdentificationCode" key="label.service.provider.fiscalIdentificationCode" />
-	<slot name="address" key="label.supplier.address" bundle="ORGANIZATION_RESOURCES"/>	
+	<slot name="address" layout="address" key="label.supplier.address" bundle="ORGANIZATION_RESOURCES" />	
 </schema>
 
 <schema name="viewOperationLog"

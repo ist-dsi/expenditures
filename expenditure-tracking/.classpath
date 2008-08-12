@@ -3,6 +3,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="src_gen"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/javassist.jar"/>
 	<classpathentry kind="lib" path="lib/servlet-api-2.3.jar"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/antlr.jar"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/asm-2.0.jar"/>
@@ -21,9 +22,11 @@
 	<classpathentry kind="lib" path="web/WEB-INF/lib/db-ojb-1.0.0.jar"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/dml.jar"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/fenix-framework.jar"/>
-	<classpathentry kind="lib" path="web/WEB-INF/lib/fenix-renderers.jar"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/fenix-tools.jar"/>
-	<classpathentry kind="lib" path="web/WEB-INF/lib/fenix-web-framework.jar"/>
+	<classpathentry kind="lib" path="web/WEB-INF/lib/fenix-web-framework.jar" sourcepath="/fenix-web-framework"/>
+	<classpathentry kind="lib" path="web/WEB-INF/lib/htmlentities.jar"/>
+	<classpathentry kind="lib" path="web/WEB-INF/lib/itext-2.0.2.jar"/>
+	<classpathentry kind="lib" path="web/WEB-INF/lib/jasperreports-3.0.0.jar"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/jdom-1.0.jar"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/joda-time-1.5.2.jar"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/joda-time-jsptags-1.0.jar"/>
@@ -33,10 +36,7 @@
 	<classpathentry kind="lib" path="web/WEB-INF/lib/struts.jar"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/taglibs-datetime.jar"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/taglibs-string.jar"/>
-	<classpathentry kind="lib" path="web/WEB-INF/lib/xercesImpl.jar"/>
-	<classpathentry kind="lib" path="web/WEB-INF/lib/htmlentities.jar"/>
-	<classpathentry kind="lib" path="web/WEB-INF/lib/itext-2.0.2.jar"/>
-	<classpathentry kind="lib" path="web/WEB-INF/lib/jasperreports-3.0.0.jar"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/Tidy.jar"/>
+	<classpathentry kind="lib" path="web/WEB-INF/lib/xercesImpl.jar"/>
 	<classpathentry kind="output" path="web/WEB-INF/classes"/>
 </classpath>

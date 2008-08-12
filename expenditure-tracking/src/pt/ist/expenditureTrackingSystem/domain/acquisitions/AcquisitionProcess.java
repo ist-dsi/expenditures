@@ -14,6 +14,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AddPaying
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AllocateFundsPermanently;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.ApproveAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AssignPayingUnitToItem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.ConfirmInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.CreateAcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.CreateAcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.DeleteAcquisitionProcess;
@@ -66,6 +67,7 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 	requestInformationActivities.add(new FundAllocationExpirationDate());
 	requestInformationActivities.add(new PayAcquisition());
 	requestInformationActivities.add(new ReceiveInvoice());
+	requestInformationActivities.add(new ConfirmInvoice());
 	requestInformationActivities.add(new SubmitForApproval());
 	requestInformationActivities.add(new EditAcquisitionRequest());
 

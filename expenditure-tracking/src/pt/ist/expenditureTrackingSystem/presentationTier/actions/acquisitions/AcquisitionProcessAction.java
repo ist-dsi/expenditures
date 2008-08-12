@@ -296,9 +296,7 @@ public class AcquisitionProcessAction extends ProcessAction {
 
 	download(response, acquisitionRequestDocument);
 
-	ActionForward findForward = mapping.findForward("prepare.create.acquisition.request");
-	findForward.setRedirect(true);
-	return findForward;
+	return null;
     }
 
     public ActionForward executeReceiveInvoice(final ActionMapping mapping, final ActionForm form,
