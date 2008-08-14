@@ -50,14 +50,12 @@ public enum AcquisitionProcessStateType {
     ACQUISITION_PROCESSED,
     INVOICE_RECEIVED,
     INVOICE_CONFIRMED,
-    ACQUISITION_PAYED,
-    FUNDS_ALLOCATED_PERMANENTLY {
-
+    FUNDS_ALLOCATED_PERMANENTLY,
+    ACQUISITION_PAYED {
 	@Override
 	public boolean hasNextState() {
 	    return false;
 	}
-
     },
     REJECTED {
 

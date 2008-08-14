@@ -14,7 +14,7 @@ public class PayAcquisition extends GenericAcquisitionProcessActivity {
 
     @Override
     protected boolean isAvailable(AcquisitionProcess process) {
-	return process.isProcessInState(AcquisitionProcessStateType.INVOICE_CONFIRMED);
+	return process.isProcessInState(AcquisitionProcessStateType.FUNDS_ALLOCATED_PERMANENTLY);
     }
 
     @Override
