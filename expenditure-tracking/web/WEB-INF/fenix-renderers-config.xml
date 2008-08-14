@@ -542,7 +542,9 @@ Documentation:
 	</renderer>
 	
 	<renderer type="java.lang.String" layout="slot-as-label" class="pt.ist.fenixWebFramework.renderers.SlotAsLabelRenderer"/>
-	
+
+	<renderer type="pt.ist.expenditureTrackingSystem.domain.util.Money" class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.MoneyRenderer"/>
+		
 	<renderer type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess" layout="process-state" class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.AcquisitionProcessStateRenderer">
 	    	<property name="classes" value="flow"/>
 	    	<property name="boxClasses" value="box"/>
@@ -563,5 +565,6 @@ Documentation:
 	<renderer  layout="address" type="pt.ist.expenditureTrackingSystem.domain.util.Address" class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.AddressRenderer">
 	</renderer>
 
-
+	<renderer mode="input" type="pt.ist.expenditureTrackingSystem.domain.util.Money" class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.MoneyInputRenderer" />
+	
 </renderers-config>
