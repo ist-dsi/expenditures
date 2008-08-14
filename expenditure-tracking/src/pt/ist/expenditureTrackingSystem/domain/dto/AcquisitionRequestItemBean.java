@@ -24,6 +24,10 @@ public class AcquisitionRequestItemBean implements Serializable {
     private DomainReference<DeliveryInfo> deliveryInfo;
     private CreateItemSchemaType createItemSchemaType;
 
+    private Integer realQuantity;
+    private Money realUnitValue;
+    private Money shipment; 
+    
     public AcquisitionRequestItemBean(final AcquisitionRequest acquisitionRequest) {
 	setAcquisitionRequest(acquisitionRequest);
 	setDeliveryInfo(null);
@@ -49,6 +53,9 @@ public class AcquisitionRequestItemBean implements Serializable {
 	setDeliveryInfo(acquisitionRequestItem.getAcquisitionRequest().getRequester().getDeliveryInfoByRecipientAndAddress(
 		acquisitionRequestItem.getRecipient(), acquisitionRequestItem.getAddress()));
 	setCreateItemSchemaType(CreateItemSchemaType.EXISTING_DELIVERY_INFO);
+	setRealQuantity(acquisitionRequestItem.getQuantity());
+	setRealUnitValue(acquisitionRequestItem.getUnitValue());
+	setShipment(Money.ZERO);
     }
 
     public void setAcquisitionRequest(final AcquisitionRequest acquisitionRequest) {
@@ -149,6 +156,30 @@ public class AcquisitionRequestItemBean implements Serializable {
 
     public void setVatValue(BigDecimal vatValue) {
 	this.vatValue = vatValue;
+    }
+
+    public Integer getRealQuantity() {
+        return realQuantity;
+    }
+
+    public void setRealQuantity(Integer realQuantity) {
+        this.realQuantity = realQuantity;
+    }
+
+    public Money getRealUnitValue() {
+        return realUnitValue;
+    }
+
+    public void setRealUnitValue(Money realUnitValue) {
+        this.realUnitValue = realUnitValue;
+    }
+
+    public Money getShipment() {
+        return shipment;
+    }
+
+    public void setShipment(Money shippement) {
+        this.shipment = shippement;
     }
 
 }

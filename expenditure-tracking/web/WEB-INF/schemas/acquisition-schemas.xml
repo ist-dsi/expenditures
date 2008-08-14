@@ -232,3 +232,10 @@
 	<slot name="name" key="label.payingUnit" bundle="ACQUISITION_RESOURCES"/>
 </schema>
 
+
+<schema name="editSchemaRealValues" type="pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean"
+		bundle="ACQUISITION_RESOURCES">
+	<slot name="realQuantity" key="label.acquisition.request.item.realQuantity" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="realUnitValue" key="label.acquisition.request.item.realUnitValue" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="shipment" key="label.acquisition.request.item.ShipmentValue" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>	
+</schema>

@@ -39,6 +39,10 @@ class acquisitions.AcquisitionRequestItem {
 	String salesCode;              // CVP
 	String recipient;
 	Address address;
+	
+	Integer realQuantity;
+	Money realUnitValue;
+	Money shipmentValue;
 }
 
 class acquisitions.UnitItem {

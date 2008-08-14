@@ -104,7 +104,12 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 
     }
 
-    @Service
+    public void editRealValues(AcquisitionRequestItemBean acquisitionRequestItemBean) {
+	setRealQuantity(acquisitionRequestItemBean.getRealQuantity());
+	setRealUnitValue(acquisitionRequestItemBean.getRealUnitValue());
+	setShipmentValue(acquisitionRequestItemBean.getShipment());
+    }
+    
     public void delete() {
 	removeAcquisitionRequest();
 	removeExpenditureTrackingSystem();
@@ -219,4 +224,5 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	}
 	return false;
     }
+    
 }
