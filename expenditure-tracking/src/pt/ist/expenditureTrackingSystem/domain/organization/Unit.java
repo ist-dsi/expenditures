@@ -1,6 +1,5 @@
 package pt.ist.expenditureTrackingSystem.domain.organization;
 
-import java.math.BigDecimal;
 import java.util.Set;
 
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
@@ -11,6 +10,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateUnitBean;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
+import pt.ist.expenditureTrackingSystem.domain.util.Money;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.pstm.Transaction;
 
@@ -66,8 +66,8 @@ public class Unit extends Unit_Base {
 	}
     }
 
-    public BigDecimal getTotalAllocated() {
-	BigDecimal result = BigDecimal.ZERO;
+    public Money getTotalAllocated() {
+	Money result = Money.ZERO;
 	for (final AcquisitionRequest acquisitionRequest : ExpenditureTrackingSystem.getInstance().getAcquisitionRequestsSet()) {
 	    if (acquisitionRequest.getAcquisitionProcess().getRequestingUnit() == this) {
 		final AcquisitionProcess acquisitionProcess = acquisitionRequest.getAcquisitionProcess();
@@ -80,7 +80,7 @@ public class Unit extends Unit_Base {
 	    }
 	}
 	for (final Unit unit : getSubUnitsSet()) {
-		    result = result.add(unit.getTotalAllocated());
+	    result = result.add(unit.getTotalAllocated());
 	}
 	return result;
     }

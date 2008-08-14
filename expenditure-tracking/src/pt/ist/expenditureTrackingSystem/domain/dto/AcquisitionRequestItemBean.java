@@ -7,12 +7,13 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.organization.DeliveryInfo;
 import pt.ist.expenditureTrackingSystem.domain.util.Address;
+import pt.ist.expenditureTrackingSystem.domain.util.Money;
 import pt.ist.fenixWebFramework.util.DomainReference;
 
 public class AcquisitionRequestItemBean implements Serializable {
     private String description;
     private Integer quantity;
-    private BigDecimal unitValue;
+    private Money unitValue;
     private BigDecimal vatValue;
     private String proposalReference;
     private String salesCode;
@@ -74,11 +75,11 @@ public class AcquisitionRequestItemBean implements Serializable {
 	this.quantity = quantity;
     }
 
-    public BigDecimal getUnitValue() {
+    public Money getUnitValue() {
 	return unitValue;
     }
 
-    public void setUnitValue(BigDecimal unitValue) {
+    public void setUnitValue(Money unitValue) {
 	this.unitValue = unitValue;
     }
 

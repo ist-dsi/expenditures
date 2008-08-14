@@ -29,7 +29,7 @@
 	<field name="proposalReference" class="java.lang.String"/>
 	<field name="description" class="java.lang.String"/>
 	<field name="quantity" class="java.lang.Integer"/>
-	<field name="unitValue" class="java.math.BigDecimal"/>
+	<field name="unitValue" class="pt.ist.expenditureTrackingSystem.domain.util.Money"/>
 
 		<background>
 			<band height="0"  isSplitAllowed="true" >
@@ -363,7 +363,7 @@
 					<textElement>
 						<font/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{unitValue}.toPlainString()]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{unitValue}.getValue().toPlainString()]]></textFieldExpression>
 				</textField>
 			</band>
 		</detail>
@@ -412,7 +412,7 @@
 					<textElement>
 						<font/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$P{acquisitionRequest}.getTotalItemValue().toPlainString()]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{acquisitionRequest}.getTotalItemValue().getValue().toPlainString()]]></textFieldExpression>
 				</textField>
 			</band>
 		</summary>

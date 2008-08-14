@@ -1,7 +1,6 @@
 package pt.ist.expenditureTrackingSystem.presentationTier.actions.acquisitions;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +34,7 @@ import pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean.Cr
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
+import pt.ist.expenditureTrackingSystem.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.presentationTier.Context;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.ProcessAction;
 import pt.ist.expenditureTrackingSystem.presentationTier.util.FileUploadBean;
@@ -470,17 +470,13 @@ public class AcquisitionProcessAction extends ProcessAction {
 	    }
 	}
 	if (assigned != 0) {
-	    BigDecimal shareValue;
-	    try {
-		shareValue = item.getTotalItemValue().divide(new BigDecimal(assigned));
-	    } catch (ArithmeticException e) {
-		addMessage("label.unable.to.split.value", "ACQUISITION_RESOURCES");
-		shareValue = null;
-	    }
+	    Money[] shareValues;
+	    shareValues = item.getTotalItemValue().allocate(assigned);
 
+	    int i = 0;
 	    for (UnitItemBean bean : beans) {
 		if (bean.getAssigned()) {
-		    bean.setShareValue(shareValue);
+		    bean.setShareValue(shareValues[i++]);
 		} else {
 		    bean.setShareValue(null);
 		}

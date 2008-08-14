@@ -1,7 +1,5 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
-import java.math.BigDecimal;
-
 import org.joda.time.DateTime;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
@@ -11,6 +9,7 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.util.ByteArray;
+import pt.ist.expenditureTrackingSystem.domain.util.Money;
 import pt.ist.fenixframework.pstm.Transaction;
 
 public class AcquisitionRequest extends AcquisitionRequest_Base {
@@ -84,8 +83,8 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	setSupplier(supplier);
     }
 
-    public BigDecimal getTotalItemValue() {
-	BigDecimal result = BigDecimal.ZERO;
+    public Money getTotalItemValue() {
+	Money result = Money.ZERO;
 	for (final AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
 	    result = result.add(acquisitionRequestItem.getTotalItemValue());
 	}

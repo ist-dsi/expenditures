@@ -1,7 +1,5 @@
 package pt.ist.expenditureTrackingSystem.domain.organization;
 
-import java.math.BigDecimal;
-
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
@@ -10,6 +8,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessSt
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateSupplierBean;
 import pt.ist.expenditureTrackingSystem.domain.util.Address;
+import pt.ist.expenditureTrackingSystem.domain.util.Money;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.pstm.Transaction;
 
@@ -58,8 +57,8 @@ public class Supplier extends Supplier_Base {
 	return null;
     }
 
-    public BigDecimal getTotalAllocated() {
-	BigDecimal result = BigDecimal.ZERO;
+    public Money getTotalAllocated() {
+	Money result = Money.ZERO;
 	for (final AcquisitionRequest acquisitionRequest : getAcquisitionRequestsSet()) {
 	    final AcquisitionProcess acquisitionProcess = acquisitionRequest.getAcquisitionProcess();
 	    final AcquisitionProcessState acquisitionProcessState = acquisitionProcess.getAcquisitionProcessState();

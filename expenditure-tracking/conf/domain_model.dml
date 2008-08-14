@@ -3,7 +3,7 @@ package pt.ist.expenditureTrackingSystem.domain;
 
 valueType org.joda.time.DateTime as DateTime;
 valueType pt.ist.expenditureTrackingSystem.domain.util.ByteArray as ByteArray;
-valueType pt.ist.expenditureTrackingSystem.domain.util.MonitaryValue as MonitaryValue;
+valueType pt.ist.expenditureTrackingSystem.domain.util.Money as Money;
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType as AcquisitionProcessStateType;
 enum pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationType as AuthorizationType;
 valueType pt.ist.expenditureTrackingSystem.domain.util.Address as Address;
@@ -33,8 +33,7 @@ class acquisitions.AcquisitionRequest {
 class acquisitions.AcquisitionRequestItem {
 	String description;
 	Integer quantity;
-	//MonitaryValue unitValue;
-	BigDecimal unitValue;
+	Money unitValue;
 	BigDecimal vatValue;
 	String proposalReference;
 	String salesCode;              // CVP
@@ -45,7 +44,7 @@ class acquisitions.AcquisitionRequestItem {
 class acquisitions.UnitItem {
 	Boolean itemApproved;
 	Boolean invoiceConfirmed;
-	BigDecimal shareValue;
+	Money shareValue;
 }
 
 class processes.GenericLog {

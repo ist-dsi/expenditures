@@ -4,11 +4,12 @@ import java.math.BigDecimal;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
+import pt.ist.expenditureTrackingSystem.domain.util.Money;
 import pt.ist.fenixframework.pstm.Transaction;
 
 public class UnitItem extends UnitItem_Base {
 
-    public UnitItem(Unit unit, AcquisitionRequestItem item, BigDecimal shareValue, Boolean isApproved) {
+    public UnitItem(Unit unit, AcquisitionRequestItem item, Money shareValue, Boolean isApproved) {
 
 	checkParameters(unit, item, shareValue, isApproved);
 
@@ -19,33 +20,31 @@ public class UnitItem extends UnitItem_Base {
 	setInvoiceConfirmed(Boolean.FALSE);
     }
 
-    private void checkParameters(Unit unit, AcquisitionRequestItem item, BigDecimal shareValue, Boolean isApproved) {
+    private void checkParameters(Unit unit, AcquisitionRequestItem item, Money shareValue, Boolean isApproved) {
 	if (unit == null || item == null || shareValue == null || isApproved == null) {
 	    throw new DomainException("error.parameters.cannot.be.null");
 	}
-	
-	if (shareValue.equals(BigDecimal.ZERO)) {
+
+	if (shareValue.isZero()) {
 	    throw new DomainException("error.share.value.cannot.be.zero");
 	}
-	
-	if(shareValue.compareTo(BigDecimal.ZERO) < 0) {
+
+	if (shareValue.isNegative()) {
 	    throw new DomainException("error.share.value.cannot.be.negative");
 	}
-	
-	BigDecimal currentAssignedValue = item.getTotalAssignedValue();
-	if (currentAssignedValue.add(shareValue).compareTo(item.getTotalItemValue()) > 0) {
+
+	Money currentAssignedValue = item.getTotalAssignedValue();
+	if (currentAssignedValue.add(shareValue).isGreaterThan(item.getTotalAssignedValue())) {
 	    throw new DomainException("error.assigned.value.bigger.than.total.amount");
 	}
     }
-    
+
     public BigDecimal getVatValue() {
 	return getItem().getVatValue();
     }
-    
-    public BigDecimal getShareValueWithVat() {
-	BigDecimal shareValue = getShareValue();
-	BigDecimal vatValue = shareValue.multiply(getVatValue().divide(new BigDecimal(100)));
-	return shareValue.add(vatValue);
+
+    public Money getShareValueWithVat() {
+	return getShareValue().addPercentage(getVatValue());
     }
     
     public void delete() {

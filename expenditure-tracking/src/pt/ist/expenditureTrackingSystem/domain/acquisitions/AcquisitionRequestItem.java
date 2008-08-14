@@ -10,6 +10,7 @@ import pt.ist.expenditureTrackingSystem.domain.organization.DeliveryInfo;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.util.Address;
+import pt.ist.expenditureTrackingSystem.domain.util.Money;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.pstm.Transaction;
 
@@ -22,7 +23,7 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
     }
 
     private AcquisitionRequestItem(final AcquisitionRequest acquisitionRequest, final String description, final Integer quantity,
-	    final BigDecimal unitValue, final BigDecimal vatValue, final String proposalReference, String salesCode) {
+	    final Money unitValue, final BigDecimal vatValue, final String proposalReference, String salesCode) {
 	this(acquisitionRequest);
 	setDescription(description);
 	setQuantity(quantity);
@@ -57,38 +58,30 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
     }
 
     public AcquisitionRequestItem(final AcquisitionRequest acquisitionRequest, final String description, final Integer quantity,
-	    final BigDecimal unitValue, final BigDecimal vatValue, final String proposalReference, String salesCode,
-	    String recipient, Address address) {
+	    final Money unitValue, final BigDecimal vatValue, final String proposalReference, String salesCode, String recipient,
+	    Address address) {
 	this(acquisitionRequest, description, quantity, unitValue, vatValue, proposalReference, salesCode);
 	setRecipient(recipient);
 	setAddress(address);
     }
 
-    public BigDecimal getTotalItemValue() {
-	final BigDecimal unitValue = getUnitValue();
-	final Integer quantity = getQuantity();
-	return multiply(unitValue, quantity);
+    public Money getTotalItemValue() {
+	return getUnitValue().multiply(getQuantity());
     }
 
-    public BigDecimal getTotalItemValueWithVat() {
-	BigDecimal totalValue = getTotalItemValue();
-	BigDecimal vatValue = totalValue.multiply(getVatValue().divide(new BigDecimal(100)));
-	return totalValue.add(vatValue);
+    public Money getTotalItemValueWithVat() {
+	return getTotalItemValue().addPercentage(getVatValue());
     }
 
-    public BigDecimal getTotalAssignedValue() {
-	BigDecimal sum = BigDecimal.ZERO;
+    public Money getTotalAssignedValue() {
+	Money sum = Money.ZERO;
 	for (UnitItem unitItem : getUnitItems()) {
 	    sum = sum.add(unitItem.getShareValue());
 	}
 	return sum;
     }
 
-    private BigDecimal multiply(final BigDecimal unitValue, final Integer quantity) {
-	return unitValue == null || quantity == null ? BigDecimal.ZERO : unitValue.multiply(new BigDecimal(quantity.intValue()));
-    }
-
-    public void edit(String description, Integer quantity, BigDecimal unitValue, BigDecimal vatValue, String proposalReference,
+    public void edit(String description, Integer quantity, Money unitValue, BigDecimal vatValue, String proposalReference,
 	    String salesCode, DeliveryInfo deliveryInfo) {
 	setDescription(description);
 	setQuantity(quantity);
@@ -139,15 +132,15 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
     }
 
     public boolean isValueFullyAttributedToUnits() {
-	BigDecimal totalValue = BigDecimal.ZERO;
+	Money totalValue = Money.ZERO;
 	for (UnitItem unitItem : getUnitItems()) {
 	    totalValue = totalValue.add(unitItem.getShareValue());
 	}
 
-	return totalValue.compareTo(getTotalItemValue()) == 0;
+	return totalValue.equals(getTotalItemValue());
     }
 
-    public void createUnitItem(Unit unit, BigDecimal shareValue) {
+    public void createUnitItem(Unit unit, Money shareValue) {
 	new UnitItem(unit, this, shareValue, Boolean.FALSE);
     }
 
