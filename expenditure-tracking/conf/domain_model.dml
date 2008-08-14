@@ -44,6 +44,7 @@ class acquisitions.AcquisitionRequestItem {
 
 class acquisitions.UnitItem {
 	Boolean itemApproved;
+	Boolean invoiceConfirmed;
 	BigDecimal shareValue;
 }
 

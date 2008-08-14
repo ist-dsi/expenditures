@@ -337,7 +337,8 @@ public class AcquisitionProcessAction extends ProcessAction {
 
     public ActionForward executeConfirmInvoice(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
-	return executeActivityAndViewProcess(mapping, form, request, response, "ConfirmInvoice");
+	User user = UserView.getUser();
+	return executeActivityAndViewProcess(mapping, form, request, response, "ConfirmInvoice", user.getPerson());
     }
 
     public ActionForward executePayAcquisition(final ActionMapping mapping, final ActionForm form,

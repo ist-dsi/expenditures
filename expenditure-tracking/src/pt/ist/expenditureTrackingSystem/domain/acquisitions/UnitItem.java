@@ -16,6 +16,7 @@ public class UnitItem extends UnitItem_Base {
 	setItem(item);
 	setShareValue(shareValue);
 	setItemApproved(isApproved);
+	setInvoiceConfirmed(Boolean.FALSE);
     }
 
     private void checkParameters(Unit unit, AcquisitionRequestItem item, BigDecimal shareValue, Boolean isApproved) {

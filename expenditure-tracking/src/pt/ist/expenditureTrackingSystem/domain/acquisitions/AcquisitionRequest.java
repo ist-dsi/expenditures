@@ -172,4 +172,33 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	return false;
     }
 
+    public boolean isInvoiceConfirmedBy(Person person) {
+	for (AcquisitionRequestItem item : getAcquisitionRequestItems()) {
+	    if (item.isInvoiceConfirmedBy(person)) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
+    public void confirmInvoiceFor(Person person) {
+	for (AcquisitionRequestItem item : getAcquisitionRequestItems()) {
+	    item.confirmInvoiceBy(person);
+	}
+    }
+
+    public void unconfirmInvoiceFor(Person person) {
+	for (AcquisitionRequestItem item : getAcquisitionRequestItems()) {
+	    item.unconfirmInvoiceBy(person);
+	}
+    }
+
+    public boolean isInvoiceConfirmedBy() {
+	for (AcquisitionRequestItem item : getAcquisitionRequestItems()) {
+	    if (!item.isInvoiceConfirmed()) {
+		return false;
+	    }
+	}
+	return true;
+    }
 }

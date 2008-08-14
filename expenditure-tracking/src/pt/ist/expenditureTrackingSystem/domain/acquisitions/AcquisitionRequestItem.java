@@ -175,9 +175,34 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	modifyApprovingStateFor(person, Boolean.FALSE);
     }
 
+    private void modifyInvoiceState(Person person, Boolean value) {
+	for (UnitItem unitItem : getUnitItems()) {
+	    if (unitItem.getUnit().isResponsible(person)) {
+		unitItem.setInvoiceConfirmed(value);
+	    }
+	}
+    }
+
+    public void confirmInvoiceBy(Person person) {
+	modifyInvoiceState(person, Boolean.TRUE);
+    }
+
+    public void unconfirmInvoiceBy(Person person) {
+	modifyInvoiceState(person, Boolean.FALSE);
+    }
+
     public boolean isApproved() {
 	for (UnitItem unitItem : getUnitItems()) {
 	    if (!unitItem.getItemApproved()) {
+		return false;
+	    }
+	}
+	return true;
+    }
+
+    public boolean isInvoiceConfirmed() {
+	for (UnitItem unitItem : getUnitItems()) {
+	    if (!unitItem.getInvoiceConfirmed()) {
 		return false;
 	    }
 	}
@@ -193,4 +218,12 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	return false;
     }
 
+    public boolean isInvoiceConfirmedBy(Person person) {
+	for (UnitItem unitItem : getUnitItems()) {
+	    if (unitItem.getUnit().isResponsible(person) && unitItem.getInvoiceConfirmed()) {
+		return true;
+	    }
+	}
+	return false;
+    }
 }
