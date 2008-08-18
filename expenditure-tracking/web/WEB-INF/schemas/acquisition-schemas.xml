@@ -102,10 +102,19 @@
 		bundle="ACQUISITION_RESOURCES">
 	<slot name="proposalReference" key="label.acquisition.request.item.proposalReference" bundle="ACQUISITION_RESOURCES" />
 	<slot name="quantity" key="label.acquisition.request.item.quantity" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="realQuantity" key="label.acquisition.request.item.realQuantity" bundle="ACQUISITION_RESOURCES" layout="null-as-label">
+		<property name="subLayout" value="default"/>
+	</slot>
 	<slot name="unitValue" key="label.acquisition.request.item.unitValue" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="realUnitValue" key="label.acquisition.request.item.realUnitValue" bundle="ACQUISITION_RESOURCES" layout="null-as-label">
+		<property name="subLayout" value="default"/>
+	</slot>
 	<slot name="vatValue" key="label.acquisition.request.item.vatValue" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 	<slot name="totalItemValue" key="label.acquisition.request.item.totalValue" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="totalAssignedValue" key="label.acquisition.request.item.assignedValue" bundle="ACQUISITION_RESOURCES"/>
+	.<slot name="shipmentValue" key="label.acquisition.request.item.ShipmentValue" bundle="ACQUISITION_RESOURCES" layout="null-as-label">
+		<property name="subLayout" value="default"/>
+	</slot>
 	<slot name="payingUnits" layout="separator-list" key="label.payingUnits" bundle="ACQUISITION_RESOURCES">
 		<property name="eachSchema" value="unitName"/>
 		<property name="eachLayout" value="values"/>
