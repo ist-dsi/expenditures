@@ -248,3 +248,10 @@
 	<slot name="realUnitValue" key="label.acquisition.request.item.realUnitValue" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 	<slot name="shipment" key="label.acquisition.request.item.ShipmentValue" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>	
 </schema>
+
+<schema name="editSchemaRealShareValues" type="pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean"
+		bundle="ACQUISITION_RESOURCES">
+	<slot name="unit.name" read-only="true"/>
+	<slot name="shareValue" read-only="true"/>
+	<slot name="realShareValue" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+</schema>

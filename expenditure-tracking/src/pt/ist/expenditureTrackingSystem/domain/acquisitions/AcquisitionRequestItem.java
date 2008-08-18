@@ -72,7 +72,7 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
     public Money getTotalRealValue() {
 	return getRealUnitValue().multiply(getRealQuantity());
     }
-    
+
     public Money getTotalItemValueWithVat() {
 	return getTotalItemValue().addPercentage(getVatValue());
     }
@@ -81,6 +81,16 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	Money sum = Money.ZERO;
 	for (UnitItem unitItem : getUnitItems()) {
 	    sum = sum.add(unitItem.getShareValue());
+	}
+	return sum;
+    }
+
+    public Money getTotalRealAssignedValue() {
+	Money sum = Money.ZERO;
+	for (UnitItem unitItem : getUnitItems()) {
+	    if (unitItem.getRealShareValue() != null) {
+		sum = sum.add(unitItem.getRealShareValue());
+	    }
 	}
 	return sum;
     }
@@ -113,7 +123,7 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	setRealUnitValue(acquisitionRequestItemBean.getRealUnitValue());
 	setShipmentValue(acquisitionRequestItemBean.getShipment());
     }
-    
+
     public void delete() {
 	removeAcquisitionRequest();
 	removeExpenditureTrackingSystem();
@@ -140,11 +150,10 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	return null;
     }
 
-    
     public boolean isFilledWithRealValues() {
-	return getRealQuantity() !=  null && getRealUnitValue() != null && getShipmentValue() != null;
+	return getRealQuantity() != null && getRealUnitValue() != null && getShipmentValue() != null;
     }
-    
+
     public boolean isValueFullyAttributedToUnits() {
 	Money totalValue = Money.ZERO;
 	for (UnitItem unitItem : getUnitItems()) {
@@ -233,5 +242,13 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	}
 	return false;
     }
-    
+
+    public void clearRealShareValues() {
+	for (UnitItem unitItem : getUnitItems()) {
+	    if (unitItem.getRealShareValue() != null) {
+		unitItem.setRealShareValue(null);
+	    }
+	}
+    }
+
 }

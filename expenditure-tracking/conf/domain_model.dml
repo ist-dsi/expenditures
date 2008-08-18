@@ -49,6 +49,7 @@ class acquisitions.UnitItem {
 	Boolean itemApproved;
 	Boolean invoiceConfirmed;
 	Money shareValue;
+	Money realShareValue;
 }
 
 class processes.GenericLog {

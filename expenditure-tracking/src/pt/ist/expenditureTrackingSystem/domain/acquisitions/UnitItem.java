@@ -46,10 +46,23 @@ public class UnitItem extends UnitItem_Base {
     public Money getShareValueWithVat() {
 	return getShareValue().addPercentage(getVatValue());
     }
-    
+
     public void delete() {
 	removeUnit();
 	removeItem();
 	Transaction.deleteObject(this);
+    }
+
+    @Override
+    public void setRealShareValue(Money realShareValue) {
+	if (realShareValue != null) {
+	    Money totalAmount = getItem().getTotalRealValue();
+	    Money currentAssignedValue = getItem().getTotalRealAssignedValue();
+
+	    if (currentAssignedValue.add(realShareValue).isGreaterThan(totalAmount)) {
+		throw new DomainException("error.cannot.assign.more.than.total.amount");
+	    }
+	}
+	super.setRealShareValue(realShareValue);
     }
 }

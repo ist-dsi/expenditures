@@ -13,9 +13,17 @@ public class UnitItemBean implements Serializable {
     private DomainReference<Unit> unit;
     private DomainReference<AcquisitionRequestItem> item;
     private Money shareValue;
+    private Money realShareValue;
     private Boolean approved;
     private Boolean assigned;
 
+    public UnitItemBean(UnitItem unitItem) {
+	setUnit(unitItem.getUnit());
+	setItem(unitItem.getItem());
+	setShareValue(unitItem.getShareValue());
+	setRealShareValue(unitItem.getRealShareValue());
+    }
+    
     public UnitItemBean(Unit unit, AcquisitionRequestItem item) {
 	setItem(item);
 	setUnit(unit);
@@ -67,5 +75,13 @@ public class UnitItemBean implements Serializable {
 
     public void setAssigned(Boolean assigned) {
 	this.assigned = assigned;
+    }
+
+    public Money getRealShareValue() {
+        return realShareValue;
+    }
+
+    public void setRealShareValue(Money realShareValue) {
+        this.realShareValue = realShareValue;
     }
 }
