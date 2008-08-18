@@ -9,6 +9,7 @@ public class CreateUnitBean implements Serializable {
     private DomainReference<Unit> parentUnit;
     private String name;
     private String costCenter;
+    private String projectCode;
 
     public CreateUnitBean(Unit parentUnit) {
 	setParentUnit(parentUnit);
@@ -36,6 +37,14 @@ public class CreateUnitBean implements Serializable {
 
     public void setCostCenter(String costCenter) {
 	this.costCenter = costCenter;
+    }
+
+    public String getProjectCode() {
+        return projectCode;
+    }
+
+    public void setProjectCode(String projectCode) {
+        this.projectCode = projectCode;
     }
 
 }

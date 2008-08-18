@@ -9,32 +9,42 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessSt
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateUnitBean;
-import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 import pt.ist.expenditureTrackingSystem.domain.util.Money;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.pstm.Transaction;
 
 public class Unit extends Unit_Base {
 
-    public Unit(final Unit parentUnit) {
+    public Unit() {
 	super();
+	setOjbConcreteClass(getClass().getName());
 	final ExpenditureTrackingSystem expenditureTrackingSystem = ExpenditureTrackingSystem.getInstance();
 	setExpenditureTrackingSystem(expenditureTrackingSystem);
-	if (parentUnit == null) {
-	    setExpenditureTrackingSystemFromTopLevelUnit(expenditureTrackingSystem);
-	}
+    }
+
+    public Unit(final Unit parentUnit, final String name) {
+	this();
+	setName(name);
 	setParentUnit(parentUnit);
     }
 
-    public Unit(final Unit parentUnit, final String name, final String costCenter) {
-	this(parentUnit);
-	setName(name);
-	setCostCenter(costCenter);
+    @Override
+    public void setParentUnit(final Unit parentUnit) {
+	if (parentUnit == null) {
+	    setExpenditureTrackingSystemFromTopLevelUnit(ExpenditureTrackingSystem.getInstance());
+	}
+	super.setParentUnit(parentUnit);
     }
 
     @Service
     public static Unit createNewUnit(final CreateUnitBean createUnitBean) {
-	return new Unit(createUnitBean.getParentUnit(), createUnitBean.getName(), createUnitBean.getCostCenter());
+	if (createUnitBean.getCostCenter() != null) {
+	    return new CostCenter(createUnitBean.getParentUnit(), createUnitBean.getName(), createUnitBean.getCostCenter());
+	}
+	if (createUnitBean.getProjectCode() != null) {
+	    return new Project(createUnitBean.getParentUnit(), createUnitBean.getName(), createUnitBean.getProjectCode());
+	}
+	return new Unit(createUnitBean.getParentUnit(), createUnitBean.getName());
     }
 
     @Service
@@ -52,13 +62,6 @@ public class Unit extends Unit_Base {
     }
 
     public void findAcquisitionProcessesPendingAuthorization(final Set<AcquisitionProcess> result, final boolean recurseSubUnits) {
-	final String costCenter = getCostCenter();
-	if (costCenter != null) {
-	    for (final AcquisitionProcess acquisitionProcess : GenericProcess.getAllProcesses(AcquisitionProcess.class)) {
-		if (acquisitionProcess.getPayingUnits().contains(this) && acquisitionProcess.isPendingApproval())
-		    result.add(acquisitionProcess);
-	    }
-	}
 	if (recurseSubUnits) {
 	    for (final Unit unit : getSubUnitsSet()) {
 		unit.findAcquisitionProcessesPendingAuthorization(result, recurseSubUnits);
@@ -96,9 +99,6 @@ public class Unit extends Unit_Base {
     }
 
     protected Unit findByCostCenter(final String costCenter) {
-	if (getCostCenter() != null && getCostCenter().equals(costCenter)) {
-	    return this;
-	}
 	for (final Unit unit : getSubUnitsSet()) {
 	    final Unit result = unit.findByCostCenter(costCenter);
 	    if (result != null) {

@@ -107,9 +107,17 @@ class organization.DeliveryInfo {
 }
 
 class organization.Unit {
+	String ojbConcreteClass;
 	String name;
-	String costCenter;
 }
+
+	class organization.Project extends organization.Unit {
+		String projectCode;
+	}
+
+	class organization.CostCenter extends organization.Unit {
+		String costCenter;
+	}
 
 class organization.Supplier {
 	String name;

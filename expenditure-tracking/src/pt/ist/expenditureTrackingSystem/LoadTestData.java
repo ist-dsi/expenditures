@@ -8,6 +8,8 @@ import java.util.Set;
 import pt.ist.expenditureTrackingSystem._development.PropertiesManager;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
+import pt.ist.expenditureTrackingSystem.domain.dto.CreateUnitBean;
+import pt.ist.expenditureTrackingSystem.domain.organization.CostCenter;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.fenixWebFramework.FenixWebFramework;
@@ -94,6 +96,7 @@ public class LoadTestData {
 	private String username;
 	private String name;
 	private Set<Long> unitOids = new HashSet<Long>();
+	private Person person;
 
 	public FenixPerson(final String line) {
 	    final String[] parts = line.split("\t");
@@ -122,9 +125,13 @@ public class LoadTestData {
 	final String unitContents = FileUtils.readFile("units.txt");
 	final FenixUnitMap fenixUnitMap = new FenixUnitMap(unitContents);
 	createUnits(fenixUnitMap);
+
 	final String peopleContents = FileUtils.readFile("people.txt");
 	final FenixPeopleSet fenixPeopleSet = new FenixPeopleSet(peopleContents);
 	createPeople(fenixPeopleSet, fenixUnitMap);
+
+	final String projectContents = FileUtils.readFile("projects.txt");
+	createProjects(projectContents, fenixPeopleSet);
     }
 
     @Service
@@ -144,6 +151,7 @@ public class LoadTestData {
 		person.getOptions().setDisplayAuthorizationPending(Boolean.TRUE);
 		person.getOptions().setRecurseAuthorizationPendingUnits(Boolean.TRUE);
 	    }
+	    fenixPerson.person = person;
 	    for (final Long oid : fenixPerson.unitOids) {
 		final FenixUnit fenixUnit = fenixUnitMap.get(oid);
 		final Authorization authorization = new Authorization(person);
@@ -154,10 +162,80 @@ public class LoadTestData {
     }
 
     private static void createUnit(final FenixUnit fenixUnit, final FenixUnitMap fenixUnitMap) {
-	final Unit unit = new Unit(fenixUnit.getParentUnit(fenixUnitMap));
-	unit.setCostCenter(fenixUnit.costCenterCode);
-	unit.setName(fenixUnit.name);
+	final CreateUnitBean createUnitBean = new CreateUnitBean(fenixUnit.getParentUnit(fenixUnitMap));
+	createUnitBean.setCostCenter(fenixUnit.costCenterCode);
+	createUnitBean.setName(fenixUnit.name);
+	final Unit unit = Unit.createNewUnit(createUnitBean);
 	fenixUnit.unit = unit;
+    }
+
+    @Service
+    private static void createProjects(final String contents, final FenixPeopleSet fenixPeopleSet) {
+	for (final String line : contents.split("\n")) {
+	    final String[] parts = line.split("\t");
+	    final String projectCodeString = parts[0];
+	    final String costCenterString = parts[1];
+	    final String responsibleString = parts[2].trim();
+	    final String title = parts[3];
+
+	    final Unit costCenter = findCostCenter(costCenterString);
+	    if (costCenter != null) {
+		final Person responsible = findPerson(responsibleString, fenixPeopleSet);
+
+		final CreateUnitBean createUnitBean = new CreateUnitBean(costCenter);
+		createUnitBean.setProjectCode(projectCodeString);
+		createUnitBean.setName(title);
+		final Unit unit = Unit.createNewUnit(createUnitBean);
+
+		if (responsible != null) {
+		    final Authorization authorization = new Authorization(responsible);
+		    authorization.setUnit(unit);
+		    authorization.setCanDelegate(Boolean.FALSE);
+		}
+	    }
+	}
+	for (final String costCenterString : notFoundCostCenters) {
+	    System.out.println("Unable to find unit with cost center: [" + costCenterString + "]");
+	}
+    }
+
+    private static final Set<String> cdCostCenters = new HashSet<String>();
+    static {
+	cdCostCenters.add("9999");
+    }
+
+    private static final Set<String> notFoundCostCenters = new HashSet<String>();
+
+    private static Unit findCostCenter(final String costCenterString) {
+	final String costCenter = cdCostCenters.contains(costCenterString) ? "0003" : costCenterString;
+	final Integer cc = Integer.valueOf(costCenter);
+	final String ccString = cc.toString();
+	//final Unit unit = Unit.findUnitByCostCenter(cc.toString());
+	Unit unit = null;
+	for (final Unit ounit : ExpenditureTrackingSystem.getInstance().getUnitsSet()) {
+	    if (ounit instanceof CostCenter) {
+		final CostCenter ccUnit = (CostCenter) ounit;		
+		if (ccString.equals(ccUnit.getCostCenter())) {
+		    unit = ounit;
+		}
+	    }
+	}
+	if (unit == null) {
+	    notFoundCostCenters.add(costCenterString);
+	}
+	return unit;
+    }
+
+    private static Person findPerson(final String responsibleString, final FenixPeopleSet fenixPeopleSet) {
+	if (!responsibleString.isEmpty()) {
+	    for (final FenixPerson fenixPerson : fenixPeopleSet) {
+		final String username = fenixPerson.username;
+		if (username.startsWith("ist") && responsibleString.equals(username.substring(4))) {
+		    return fenixPerson.person;
+		}
+	    }
+	}
+	return null;
     }
 
 }

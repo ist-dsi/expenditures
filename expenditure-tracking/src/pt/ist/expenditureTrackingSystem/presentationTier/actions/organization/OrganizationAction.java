@@ -59,6 +59,8 @@ public class OrganizationAction extends BaseAction {
 	request.setAttribute("unit", unit);
 	final Set<Unit> units = unit == null ? ExpenditureTrackingSystem.getInstance().getTopLevelUnitsSet() : unit
 		.getSubUnitsSet();
+	System.out.println("Unit: " + unit);
+	System.out.println("Units: " + units.size());
 	request.setAttribute("units", units);
 	return mapping.findForward("view.organization");
     }
