@@ -93,19 +93,19 @@ public class Money implements Serializable, Comparable<Money> {
     }
 
     public boolean isLessThan(final Money money) {
-	return this.compareTo(money) > 0;
-    }
-
-    public boolean isGreaterThan(final Money money) {
 	return this.compareTo(money) < 0;
     }
 
+    public boolean isGreaterThan(final Money money) {
+	return this.compareTo(money) > 0;
+    }
+
     public boolean isLessThanOrEqual(final Money money) {
-	return this.compareTo(money) >= 0;
+	return this.compareTo(money) <= 0;
     }
 
     public boolean isGreaterThanOrEqual(final Money money) {
-	return this.compareTo(money) <= 0;
+	return this.compareTo(money) >= 0;
     }
 
     protected void checkCurreny(Money money) {
