@@ -91,6 +91,14 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	return result;
     }
 
+    public Money getRealTotalValue() {
+	Money result = Money.ZERO;
+	for (final AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
+	    result = result.add(acquisitionRequestItem.getTotalRealValue());
+	}
+	return result;
+    }
+
     public void receiveInvoice(final String filename, final byte[] bytes, final String invoiceNumber, final DateTime invoiceDate) {
 	final Invoice invoice = hasInvoice() ? getInvoice() : new Invoice(this);
 	invoice.setFilename(filename);

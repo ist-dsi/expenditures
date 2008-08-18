@@ -38,6 +38,7 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericLog;
+import pt.ist.expenditureTrackingSystem.domain.util.Money;
 import pt.ist.fenixWebFramework.security.UserView;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.pstm.Transaction;
@@ -302,6 +303,13 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
     public boolean isAvailableForCurrentUser() {
 	User user = UserView.getUser();
 	return user != null && isAvailableForPerson(user.getPerson());
+    }
+
+    public boolean isRealValueEqualOrLessThanFundAllocation() {
+	Money allocatedMoney = this.getAcquisitionRequest().getTotalItemValue();
+	Money realMoney = this.getAcquisitionRequest().getRealTotalValue();
+	
+	return realMoney.isLessThanOrEqual(allocatedMoney);
     }
 
 }

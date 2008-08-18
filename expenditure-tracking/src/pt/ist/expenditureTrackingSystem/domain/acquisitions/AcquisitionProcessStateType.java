@@ -37,8 +37,7 @@ public enum AcquisitionProcessStateType {
 	}
 
     },
-    APPROVED,
-    FUNDS_ALLOCATED {
+    APPROVED, FUNDS_ALLOCATED {
 
 	@Override
 	public boolean isInProgress(final AcquisitionProcessStateType currentStateType) {
@@ -46,12 +45,7 @@ public enum AcquisitionProcessStateType {
 	}
 
     },
-    FUNDS_ALLOCATED_TO_SERVICE_PROVIDER,
-    ACQUISITION_PROCESSED,
-    INVOICE_RECEIVED,
-    INVOICE_CONFIRMED,
-    FUNDS_ALLOCATED_PERMANENTLY,
-    ACQUISITION_PAYED {
+    FUNDS_ALLOCATED_TO_SERVICE_PROVIDER, ACQUISITION_PROCESSED, INVOICE_RECEIVED, INVOICE_CONFIRMED, FUNDS_ALLOCATED_PERMANENTLY, ACQUISITION_PAYED {
 	@Override
 	public boolean hasNextState() {
 	    return false;
@@ -103,5 +97,4 @@ public enum AcquisitionProcessStateType {
     public boolean isBlocked(final AcquisitionProcessStateType currentStateType) {
 	return false;
     }
-
 }

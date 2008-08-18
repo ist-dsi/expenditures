@@ -53,9 +53,9 @@ public class AcquisitionRequestItemBean implements Serializable {
 	setDeliveryInfo(acquisitionRequestItem.getAcquisitionRequest().getRequester().getDeliveryInfoByRecipientAndAddress(
 		acquisitionRequestItem.getRecipient(), acquisitionRequestItem.getAddress()));
 	setCreateItemSchemaType(CreateItemSchemaType.EXISTING_DELIVERY_INFO);
-	setRealQuantity(acquisitionRequestItem.getQuantity());
-	setRealUnitValue(acquisitionRequestItem.getUnitValue());
-	setShipment(Money.ZERO);
+	setRealQuantity(acquisitionRequestItem.getRealQuantity() != null ? acquisitionRequestItem.getRealQuantity() : acquisitionRequestItem.getQuantity());
+	setRealUnitValue(acquisitionRequestItem.getRealUnitValue() != null ? acquisitionRequestItem.getRealUnitValue()  : acquisitionRequestItem.getUnitValue());
+	setShipment(acquisitionRequestItem.getShipmentValue() != null ? acquisitionRequestItem.getShipmentValue() : Money.ZERO);
     }
 
     public void setAcquisitionRequest(final AcquisitionRequest acquisitionRequest) {

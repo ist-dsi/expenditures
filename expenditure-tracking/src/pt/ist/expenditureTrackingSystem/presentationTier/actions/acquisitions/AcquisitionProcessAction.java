@@ -349,7 +349,13 @@ public class AcquisitionProcessAction extends ProcessAction {
 
     public ActionForward executeAllocateFundsPermanently(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
-	return executeActivityAndViewProcess(mapping, form, request, response, "AllocateFundsPermanently");
+	AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
+	try {
+	    genericActivityExecution(acquisitionProcess, "AllocateFundsPermanently");
+	} catch (DomainException e) {
+	    addMessage(e.getMessage(), getBundle());
+	}
+	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
 
     public ActionForward executeUnApproveAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
@@ -437,8 +443,8 @@ public class AcquisitionProcessAction extends ProcessAction {
     public ActionForward executeAcquisitionRequestItemRealValuesEdition(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final AcquisitionRequestItemBean requestItemBean = getRenderedObject("acquisitionRequestItem");
-	genericActivityExecution(requestItemBean.getAcquisitionRequest().getAcquisitionProcess(), "EditAcquisitionRequestItemRealValues",
-		requestItemBean);
+	genericActivityExecution(requestItemBean.getAcquisitionRequest().getAcquisitionProcess(),
+		"EditAcquisitionRequestItemRealValues", requestItemBean);
 	return viewAcquisitionProcess(mapping, request, requestItemBean.getAcquisitionRequest().getAcquisitionProcess());
     }
 

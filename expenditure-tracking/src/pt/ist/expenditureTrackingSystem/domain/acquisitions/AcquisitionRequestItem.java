@@ -69,6 +69,10 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	return getUnitValue().multiply(getQuantity());
     }
 
+    public Money getTotalRealValue() {
+	return getRealUnitValue().multiply(getRealQuantity());
+    }
+    
     public Money getTotalItemValueWithVat() {
 	return getTotalItemValue().addPercentage(getVatValue());
     }
@@ -136,6 +140,11 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	return null;
     }
 
+    
+    public boolean isFilledWithRealValues() {
+	return getRealQuantity() !=  null && getRealUnitValue() != null && getShipmentValue() != null;
+    }
+    
     public boolean isValueFullyAttributedToUnits() {
 	Money totalValue = Money.ZERO;
 	for (UnitItem unitItem : getUnitItems()) {
