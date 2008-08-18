@@ -27,9 +27,11 @@ public class Supplier extends Supplier_Base {
 	setFiscalIdentificationCode(fiscalCode);
     }
 
-    public Supplier(String name, String fiscalCode, Address address, String phone, String fax, String email) {
+    public Supplier(String name, String abbreviatedName, String fiscalCode, Address address, String phone, String fax,
+	    String email) {
 	this(fiscalCode);
 	setName(name);
+	setAbbreviatedName(abbreviatedName);
 	setAddress(address);
 	setPhone(phone);
 	setFax(fax);
@@ -73,8 +75,9 @@ public class Supplier extends Supplier_Base {
 
     @Service
     public static Supplier createNewSupplier(CreateSupplierBean createSupplierBean) {
-	return new Supplier(createSupplierBean.getName(), createSupplierBean.getFiscalIdentificationCode(), createSupplierBean
-		.getAddress(), createSupplierBean.getPhone(), createSupplierBean.getFax(), createSupplierBean.getEmail());
+	return new Supplier(createSupplierBean.getName(), createSupplierBean.getAbbreviatedName(), createSupplierBean
+		.getFiscalIdentificationCode(), createSupplierBean.getAddress(), createSupplierBean.getPhone(),
+		createSupplierBean.getFax(), createSupplierBean.getEmail());
     }
 
 }

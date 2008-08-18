@@ -112,6 +112,7 @@ class organization.Unit {
 
 class organization.Supplier {
 	String name;
+	String abbreviatedName;
 	String fiscalIdentificationCode;
 	Address address;
 	String phone;

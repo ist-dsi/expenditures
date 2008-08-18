@@ -9,6 +9,7 @@ import pt.ist.expenditureTrackingSystem.domain.util.Address;
 public class CreateSupplierBean implements Serializable {
 
     private String name;
+    private String abbreviatedName;
     private String fiscalIdentificationCode;
     private Address address;
     private String phone;
@@ -26,6 +27,14 @@ public class CreateSupplierBean implements Serializable {
 
     public void setName(String name) {
 	this.name = name;
+    }
+
+    public void setAbbreviatedName(String abbreviatedName) {
+	this.abbreviatedName = abbreviatedName;
+    }
+
+    public String getAbbreviatedName() {
+	return abbreviatedName;
     }
 
     public String getFiscalIdentificationCode() {
