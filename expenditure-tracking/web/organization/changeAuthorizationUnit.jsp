@@ -23,9 +23,6 @@
 <logic:present name="unit">
 	<logic:present name="unit" property="parentUnit">
 		<bean:write name="unit" property="parentUnit.name"/>
-		<logic:notEmpty name="unit" property="parentUnit.costCenter">
-			( <bean:write name="unit" property="parentUnit.costCenter"/> )
-		</logic:notEmpty>
 		<html:link action="<%= urlExpand %>" paramId="unitOid" paramName="unit" paramProperty="parentUnit.OID">
 			<bean:message key="link.expand" bundle="EXPENDITURE_RESOURCES"/>
 		</html:link>
@@ -36,9 +33,6 @@
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	</logic:present>
 	<bean:write name="unit" property="name"/>
-	<logic:notEmpty name="unit" property="costCenter">
-		( <bean:write name="unit" property="costCenter"/> )
-	</logic:notEmpty>
 	<html:link action="<%= urlExpand %>" paramId="unitOid" paramName="unit" paramProperty="OID">
 		<bean:message key="link.expand" bundle="EXPENDITURE_RESOURCES"/>
 	</html:link>
@@ -56,9 +50,6 @@
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		</logic:present>
 		<bean:write name="u" property="name"/>
-		<logic:notEmpty name="u" property="costCenter">
-			( <bean:write name="u" property="costCenter"/> )
-		</logic:notEmpty>
 		<html:link action="<%= urlExpand %>" paramId="unitOid" paramName="u" paramProperty="OID">
 			<bean:message key="link.expand" bundle="EXPENDITURE_RESOURCES"/>
 		</html:link>
