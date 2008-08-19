@@ -13,6 +13,8 @@ import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateUnitBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.CostCenter;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
+import pt.ist.expenditureTrackingSystem.domain.organization.Project;
+import pt.ist.expenditureTrackingSystem.domain.organization.SubProject;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.fenixWebFramework.FenixWebFramework;
 import pt.ist.fenixWebFramework.services.Service;
@@ -135,6 +137,9 @@ public class LoadTestData {
 	final String projectContents = FileUtils.readFile("projects.txt");
 	createProjects(projectContents, fenixPeopleSet);
 
+	final String subProjectContents = FileUtils.readFile("subProjects.txt");
+	createSubProjects(subProjectContents);	
+
 	final String cpvReferences = FileUtils.readFile("cpv.csv");
 	createCPVCodes(cpvReferences);
     }
@@ -193,7 +198,7 @@ public class LoadTestData {
 	    final String projectCodeString = parts[0];
 	    final String costCenterString = parts[1];
 	    final String responsibleString = parts[2].trim();
-	    final String title = parts[3];
+	    final String acronimo = parts[3].trim();
 
 	    final Unit costCenter = findCostCenter(costCenterString);
 	    if (costCenter != null) {
@@ -201,7 +206,7 @@ public class LoadTestData {
 
 		final CreateUnitBean createUnitBean = new CreateUnitBean(costCenter);
 		createUnitBean.setProjectCode(projectCodeString);
-		createUnitBean.setName(title);
+		createUnitBean.setName(acronimo);
 		final Unit unit = Unit.createNewUnit(createUnitBean);
 
 		if (responsible != null) {
@@ -214,6 +219,35 @@ public class LoadTestData {
 	for (final String costCenterString : notFoundCostCenters) {
 	    System.out.println("Unable to find unit with cost center: [" + costCenterString + "]");
 	}
+    }
+
+    @Service
+    private static void createSubProjects(final String contents) {
+	for (final String line : contents.split("\n")) {
+	    final String[] parts = line.split("\t");
+	    final String projectCode = parts[0];
+	    final String institution = parts[1].trim();
+	    final String description = parts[2].trim();
+
+	    final Project project = findProject(projectCode);
+	    if (project == null) {
+		System.out.println("No project found for: " + projectCode);
+	    } else {
+		new SubProject(project, institution + " - " + description);
+	    }
+	}
+    }
+
+    private static Project findProject(final String projectCode) {
+	for (final Unit unit : ExpenditureTrackingSystem.getInstance().getUnitsSet()) {
+	    if (unit instanceof Project) {
+		final Project project = (Project) unit;
+		if (projectCode.equals(project.getProjectCode())) {
+		    return project;
+		}
+	    }
+	}
+	return null;
     }
 
     private static final Set<String> cdCostCenters = new HashSet<String>();

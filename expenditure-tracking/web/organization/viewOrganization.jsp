@@ -25,12 +25,12 @@
 		<bean:write name="unit" property="parentUnit.class.name"/>
 		<logic:equal name="unit" property="parentUnit.class.name" value="pt.ist.expenditureTrackingSystem.domain.organization.CostCenter">
 			<logic:notEmpty name="unit" property="parentUnit.costCenter">
-				( <bean:write name="unit" property="parentUnit.costCenter"/> )
+				(cc <bean:write name="unit" property="parentUnit.costCenter"/> )
 			</logic:notEmpty>
 		</logic:equal>
 		<logic:equal name="unit" property="parentUnit.class.name" value="pt.ist.expenditureTrackingSystem.domain.organization.Project">
 			<logic:notEmpty name="unit" property="parentUnit.projectCode">
-				( <bean:write name="unit" property="parentUnit.projectCode"/> )
+				(p <bean:write name="unit" property="parentUnit.projectCode"/> )
 			</logic:notEmpty>
 		</logic:equal>
 		<html:link action="/organization.do?method=editUnit" paramId="unitOid" paramName="unit" paramProperty="parentUnit.OID">
@@ -47,12 +47,12 @@
 	</html:link>
 	<logic:equal name="unit" property="class.name" value="pt.ist.expenditureTrackingSystem.domain.organization.CostCenter">
 		<logic:notEmpty name="unit" property="costCenter">
-			( <bean:write name="unit" property="costCenter"/> )
+			(cc <bean:write name="unit" property="costCenter"/> )
 		</logic:notEmpty>
 	</logic:equal>
 	<logic:equal name="unit" property="class.name" value="pt.ist.expenditureTrackingSystem.domain.organization.Project">
 		<logic:notEmpty name="unit" property="projectCode">
-			( <bean:write name="unit" property="projectCode"/> )
+			(p <bean:write name="unit" property="projectCode"/> )
 		</logic:notEmpty>
 	</logic:equal>
 	<html:link action="/organization.do?method=editUnit" paramId="unitOid" paramName="unit" paramProperty="OID">
@@ -76,12 +76,12 @@
 		</html:link>
 		<logic:equal name="u" property="class.name" value="pt.ist.expenditureTrackingSystem.domain.organization.CostCenter">
 			<logic:notEmpty name="u" property="costCenter">
-				( <bean:write name="u" property="costCenter"/> )
+				(cc <bean:write name="u" property="costCenter"/> )
 			</logic:notEmpty>
 		</logic:equal>
 		<logic:equal name="u" property="class.name" value="pt.ist.expenditureTrackingSystem.domain.organization.Project">
 			<logic:notEmpty name="u" property="projectCode">
-				( <bean:write name="u" property="projectCode"/> )
+				(p <bean:write name="u" property="projectCode"/> )
 			</logic:notEmpty>
 		</logic:equal>
 		<html:link action="/organization.do?method=editUnit" paramId="unitOid" paramName="u" paramProperty="OID">

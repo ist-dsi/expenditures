@@ -35,7 +35,11 @@ public class UnitAutoCompleteProvider implements AutoCompleteProvider {
 		    final Project project = (Project) unit;
 		    final String unitCode = project.getProjectCode();
 		    if (unitCode != null && code == Integer.parseInt(unitCode)) {
-			addAllSubUnits(units, unit);
+			if (unit.hasAnySubUnits()) {
+			    addAllSubUnits(units, unit);
+			} else {
+			    units.add(unit);
+			}
 		    }
 		}
 	    }
@@ -59,7 +63,6 @@ public class UnitAutoCompleteProvider implements AutoCompleteProvider {
     }
 
     private void addAllSubUnits(final List<Unit> units, final Unit unit) {
-	units.add(unit);
 	for (final Unit subUnit : unit.getSubUnitsSet()) {
 	    addAllSubUnits(units, subUnit);
 	}
