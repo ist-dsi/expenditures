@@ -6,7 +6,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import pt.ist.expenditureTrackingSystem._development.PropertiesManager;
+import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateUnitBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.CostCenter;
@@ -132,6 +134,21 @@ public class LoadTestData {
 
 	final String projectContents = FileUtils.readFile("projects.txt");
 	createProjects(projectContents, fenixPeopleSet);
+
+	final String cpvReferences = FileUtils.readFile("cpv.csv");
+	createCPVCodes(cpvReferences);
+    }
+
+    @Service
+    private static void createCPVCodes(String cpvReferences) {
+	for (final String line : cpvReferences.split("\n")) {
+	    String[] lineArgs = line.split("\\|");
+	   try {
+	    new CPVReference(lineArgs[0].replace("\"", ""), lineArgs[1].replace("\"", ""));
+	   }catch(DomainException e) {
+	       // do not worry
+	   }
+	}
     }
 
     @Service
@@ -210,11 +227,11 @@ public class LoadTestData {
 	final String costCenter = cdCostCenters.contains(costCenterString) ? "0003" : costCenterString;
 	final Integer cc = Integer.valueOf(costCenter);
 	final String ccString = cc.toString();
-	//final Unit unit = Unit.findUnitByCostCenter(cc.toString());
+	// final Unit unit = Unit.findUnitByCostCenter(cc.toString());
 	Unit unit = null;
 	for (final Unit ounit : ExpenditureTrackingSystem.getInstance().getUnitsSet()) {
 	    if (ounit instanceof CostCenter) {
-		final CostCenter ccUnit = (CostCenter) ounit;		
+		final CostCenter ccUnit = (CostCenter) ounit;
 		if (ccString.equals(ccUnit.getCostCenter())) {
 		    unit = ounit;
 		}

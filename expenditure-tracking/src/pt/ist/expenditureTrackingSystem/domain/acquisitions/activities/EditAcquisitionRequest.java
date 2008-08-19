@@ -24,8 +24,8 @@ public class EditAcquisitionRequest extends GenericAcquisitionProcessActivity {
     protected void process(AcquisitionProcess process, Object... objects) {
 
 	Supplier supplier = (Supplier) objects[0];
-	Unit requestingUnit = (Unit) objects[3];
-	Boolean isRequestingUnitPayingUnit = (Boolean) objects[4];
+	Unit requestingUnit = (Unit) objects[1];
+	Boolean isRequestingUnitPayingUnit = (Boolean) objects[2];
 
 	AcquisitionRequest acquisitionRequest = process.getAcquisitionRequest();
 	acquisitionRequest.edit(supplier, requestingUnit, isRequestingUnitPayingUnit);

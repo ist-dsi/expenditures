@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.organization.DeliveryInfo;
 import pt.ist.expenditureTrackingSystem.domain.util.Address;
 import pt.ist.expenditureTrackingSystem.domain.util.Money;
@@ -23,7 +24,8 @@ public class AcquisitionRequestItemBean implements Serializable {
     private Address address;
     private DomainReference<DeliveryInfo> deliveryInfo;
     private CreateItemSchemaType createItemSchemaType;
-
+    private DomainReference<CPVReference> cPVReference;
+    
     private Integer realQuantity;
     private Money realUnitValue;
     private Money shipment; 
@@ -32,6 +34,7 @@ public class AcquisitionRequestItemBean implements Serializable {
 	setAcquisitionRequest(acquisitionRequest);
 	setDeliveryInfo(null);
 	setItem(null);
+	setCPVReference(null);
 	if (acquisitionRequest.getRequester().getDeliveryInfosSet().isEmpty()) {
 	    setCreateItemSchemaType(CreateItemSchemaType.NEW_DELIVERY_INFO);
 	} else {
@@ -50,6 +53,7 @@ public class AcquisitionRequestItemBean implements Serializable {
 	setItem(acquisitionRequestItem);
 	setRecipient(acquisitionRequestItem.getRecipient());
 	setAddress(acquisitionRequestItem.getAddress());
+	setCPVReference(acquisitionRequestItem.getCPVReference());
 	setDeliveryInfo(acquisitionRequestItem.getAcquisitionRequest().getRequester().getDeliveryInfoByRecipientAndAddress(
 		acquisitionRequestItem.getRecipient(), acquisitionRequestItem.getAddress()));
 	setCreateItemSchemaType(CreateItemSchemaType.EXISTING_DELIVERY_INFO);
@@ -180,6 +184,14 @@ public class AcquisitionRequestItemBean implements Serializable {
 
     public void setShipment(Money shippement) {
         this.shipment = shippement;
+    }
+
+    public CPVReference getCPVReference() {
+        return cPVReference.getObject();
+    }
+
+    public void setCPVReference(CPVReference reference) {
+        cPVReference = new DomainReference<CPVReference>(reference);
     }
 
 }

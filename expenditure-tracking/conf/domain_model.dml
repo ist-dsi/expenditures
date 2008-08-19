@@ -45,6 +45,11 @@ class acquisitions.AcquisitionRequestItem {
 	Money shipmentValue;
 }
 
+class acquisitions.CPVReference {
+	String code;
+	String description;
+}
+
 class acquisitions.UnitItem {
 	Boolean itemApproved;
 	Boolean invoiceConfirmed;
@@ -371,6 +376,19 @@ relation PersonDeliveryInfo {
 relation ExpenditureTrackingSystemDeliveryInfo {
 	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
 	organization.DeliveryInfo playsRole deliveryInfos {
+		multiplicity *;
+	}
+}
+relation ExpenditureTrackingSystemCPVReference {
+	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
+	acquisitions.CPVReference playsRole cPVReferences {
+		multiplicity *;
+	}
+}
+
+relation AcquisitionRequestItemCPVReference {
+	acquisitions.CPVReference playsRole cPVReference;
+	acquisitions.AcquisitionRequestItem playsRole acquisitionRequestItems {
 		multiplicity *;
 	}
 }

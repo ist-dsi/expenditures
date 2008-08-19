@@ -23,21 +23,20 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
     }
 
     private AcquisitionRequestItem(final AcquisitionRequest acquisitionRequest, final String description, final Integer quantity,
-	    final Money unitValue, final BigDecimal vatValue, final String proposalReference, String salesCode) {
+	    final Money unitValue, final BigDecimal vatValue, final String proposalReference, CPVReference reference) {
 	this(acquisitionRequest);
 	setDescription(description);
 	setQuantity(quantity);
 	setUnitValue(unitValue);
 	setVatValue(vatValue);
 	setProposalReference(proposalReference);
-	setSalesCode(salesCode);
+	setCPVReference(reference);
     }
 
     public AcquisitionRequestItem(final AcquisitionRequestItemBean acquisitionRequestItemBean) {
 	this(acquisitionRequestItemBean.getAcquisitionRequest(), acquisitionRequestItemBean.getDescription(),
 		acquisitionRequestItemBean.getQuantity(), acquisitionRequestItemBean.getUnitValue(), acquisitionRequestItemBean
-			.getVatValue(), acquisitionRequestItemBean.getProposalReference(), acquisitionRequestItemBean
-			.getSalesCode());
+			.getVatValue(), acquisitionRequestItemBean.getProposalReference(), acquisitionRequestItemBean.getCPVReference());
 	setDeliveryInfo(acquisitionRequestItemBean);
     }
 
@@ -58,9 +57,9 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
     }
 
     public AcquisitionRequestItem(final AcquisitionRequest acquisitionRequest, final String description, final Integer quantity,
-	    final Money unitValue, final BigDecimal vatValue, final String proposalReference, String salesCode, String recipient,
+	    final Money unitValue, final BigDecimal vatValue, final String proposalReference, CPVReference reference, String recipient,
 	    Address address) {
-	this(acquisitionRequest, description, quantity, unitValue, vatValue, proposalReference, salesCode);
+	this(acquisitionRequest, description, quantity, unitValue, vatValue, proposalReference, reference);
 	setRecipient(recipient);
 	setAddress(address);
     }
@@ -120,6 +119,7 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	setSalesCode(acquisitionRequestItemBean.getSalesCode());
 	setVatValue(acquisitionRequestItemBean.getVatValue());
 	setDeliveryInfo(acquisitionRequestItemBean);
+	setCPVReference(acquisitionRequestItemBean.getCPVReference());
 
     }
 
