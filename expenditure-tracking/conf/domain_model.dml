@@ -111,12 +111,15 @@ class organization.Unit {
 	String name;
 }
 
+	class organization.CostCenter extends organization.Unit {
+		String costCenter;
+	}
+
 	class organization.Project extends organization.Unit {
 		String projectCode;
 	}
 
-	class organization.CostCenter extends organization.Unit {
-		String costCenter;
+	class organization.SubProject extends organization.Unit {
 	}
 
 class organization.Supplier {

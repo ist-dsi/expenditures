@@ -34,4 +34,9 @@ public class CostCenter extends CostCenter_Base {
 	return super.findByCostCenter(costCenter);
     }
 
+    @Override
+    public String getPresentationName() {
+	return super.getPresentationName() + " (cc. " + getCostCenter() + ")";
+    }
+
 }

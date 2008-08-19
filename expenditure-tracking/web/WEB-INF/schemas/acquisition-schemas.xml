@@ -10,9 +10,9 @@
 	</slot>
 	<slot name="requestingUnit" layout="autoComplete" key="label.requestingUnit" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator">
         <property name="labelField" value="name"/>
-		<property name="format" value="${name}"/>
+		<property name="format" value="${presentationName}"/>
 		<property name="minChars" value="3"/>		
-		<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.UnitNameAutoCompleteProvider" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+		<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.UnitAutoCompleteProvider" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 		<property name="size" value="40"/>
 	</slot>
 	<slot name="requestUnitPayingUnit" key="label.requestUnitPayingUnit" bundle="ACQUISITION_RESOURCES"/>	
@@ -27,7 +27,7 @@
 		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest"
 		bundle="ACQUISITION_RESOURCES">
 	<slot name="acquisitionProcess.requestor.name" key="label.acquisition.requestor" bundle="ACQUISITION_RESOURCES"/>
-	<slot name="acquisitionProcess.requestingUnit.name" key="label.acquisition.requesting.unit" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="acquisitionProcess.requestingUnit.presentationName" key="label.acquisition.requesting.unit" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="acquisitionProcess.payingUnits" layout="separator-list" key="label.payingUnits" bundle="ACQUISITION_RESOURCES">
 		<property name="eachSchema" value="unitName"/>
 		<property name="eachLayout" value="values"/>
@@ -127,7 +127,7 @@
 <schema name="viewUnitItem"
 		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.UnitItem"
 		bundle="ACQUISITION_RESOURCES">
-	<slot name="unit.name"/>
+	<slot name="unit.presentationName"/>
 	<slot name="shareValue"/>
 </schema>
 
@@ -219,10 +219,10 @@
 		bundle="ACQUISITION_RESOURCES">
 	<slot name="domainObject" layout="autoComplete" key="label.payingUnit" bundle="ACQUISITION_RESOURCES">
         <property name="labelField" value="name"/>
-		<property name="format" value="${name}"/>
+		<property name="format" value="${presentationName}"/>
 		<property name="minChars" value="3"/>	
 		<property name="size" value="50"/>	
-		<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.UnitNameAutoCompleteProvider"/>
+		<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.UnitAutoCompleteProvider"/>
 	</slot>
 </schema>
 
@@ -237,7 +237,7 @@
 <schema name="unit.item.bean.edition"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.UnitItemBean"
 		bundle="ACQUISITION_RESOURCES">
-	<slot name="unit.name" key="label.payingUnit" bundle="ACQUISITION_RESOURCES" read-only="true"/>
+	<slot name="unit.presentationName" key="label.payingUnit" bundle="ACQUISITION_RESOURCES" read-only="true"/>
 	<slot name="assigned" key="label.pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AssignPayingUnitToItem" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="shareValue" key="label.shareValue" bundle="ACQUISITION_RESOURCES"/>
 </schema>
@@ -245,7 +245,7 @@
 <schema name="unitName"
 		type="pt.ist.expenditureTrackingSystem.domain.organization.Unit"
 		bundle="ACQUISITION_RESOURCES">
-	<slot name="name" key="label.payingUnit" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="presentationName" key="label.payingUnit" bundle="ACQUISITION_RESOURCES"/>
 </schema>
 
 
@@ -258,7 +258,7 @@
 
 <schema name="editSchemaRealShareValues" type="pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean"
 		bundle="ACQUISITION_RESOURCES">
-	<slot name="unit.name" read-only="true" key="label.payingUnit"/>
+	<slot name="unit.presentationName" read-only="true" key="label.payingUnit"/>
 	<slot name="item.totalItemValue" read-only="true" key="label.acquisition.request.item.totalValue"/>
 	<slot name="shareValue" read-only="true" key="label.allocated.share.value"/>
 	<slot name="item.totalRealValue" read-only="true" key="label.acquisition.request.item.totalRealValue"/>

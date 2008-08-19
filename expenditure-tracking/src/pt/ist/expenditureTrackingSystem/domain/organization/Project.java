@@ -6,7 +6,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 
 public class Project extends Project_Base {
-    
+
     public Project(final Unit parentUnit, final String name, final String projectCode) {
         super();
     	setName(name);
@@ -24,6 +24,11 @@ public class Project extends Project_Base {
 	    }
 	}
 	super.findAcquisitionProcessesPendingAuthorization(result, recurseSubUnits);
+    }
+
+    @Override
+    public String getPresentationName() {
+	return super.getPresentationName() + " (p. " + getProjectCode() + ")";
     }
 
 }

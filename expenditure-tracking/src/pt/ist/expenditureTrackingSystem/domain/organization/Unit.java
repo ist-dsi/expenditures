@@ -1,5 +1,6 @@
 package pt.ist.expenditureTrackingSystem.domain.organization;
 
+import java.util.Comparator;
 import java.util.Set;
 
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
@@ -14,6 +15,15 @@ import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.pstm.Transaction;
 
 public class Unit extends Unit_Base {
+
+    public static final Comparator<Unit> COMPARATOR_BY_PRESENTATION_NAME = new Comparator<Unit>() {
+
+	@Override
+	public int compare(final Unit unit1, Unit unit2) {
+	    return unit1.getPresentationName().compareTo(unit2.getPresentationName());
+	}
+	
+    };
 
     public Unit() {
 	super();
@@ -115,6 +125,10 @@ public class Unit extends Unit_Base {
 	    }
 	}
 	return false;
+    }
+
+    public String getPresentationName() {
+	return getName();
     }
 
 }
