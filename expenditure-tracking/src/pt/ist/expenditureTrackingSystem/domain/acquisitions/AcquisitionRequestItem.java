@@ -171,7 +171,9 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
     public boolean isRealValueFullyAttributedToUnits() {
 	Money totalValue = Money.ZERO;
 	for (UnitItem unitItem : getUnitItems()) {
-	    totalValue = totalValue.add(unitItem.getRealShareValue());
+	    if (unitItem.getRealShareValue() != null) {
+		totalValue = totalValue.add(unitItem.getRealShareValue());
+	    }
 	}
 
 	return totalValue.equals(getTotalRealValue());

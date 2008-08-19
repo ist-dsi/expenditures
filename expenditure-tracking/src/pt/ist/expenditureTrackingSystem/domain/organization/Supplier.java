@@ -62,13 +62,7 @@ public class Supplier extends Supplier_Base {
     public Money getTotalAllocated() {
 	Money result = Money.ZERO;
 	for (final AcquisitionRequest acquisitionRequest : getAcquisitionRequestsSet()) {
-	    final AcquisitionProcess acquisitionProcess = acquisitionRequest.getAcquisitionProcess();
-	    final AcquisitionProcessState acquisitionProcessState = acquisitionProcess.getAcquisitionProcessState();
-	    final AcquisitionProcessStateType acquisitionProcessStateType = acquisitionProcessState
-		    .get$acquisitionProcessStateType();
-	    if (acquisitionProcessStateType.compareTo(AcquisitionProcessStateType.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER) >= 0) {
-		result = result.add(acquisitionRequest.getTotalItemValue());
-	    }
+	    result = result.add(acquisitionRequest.getValueAllocated());
 	}
 	return result;
     }

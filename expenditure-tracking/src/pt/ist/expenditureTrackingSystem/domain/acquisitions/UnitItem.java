@@ -65,9 +65,4 @@ public class UnitItem extends UnitItem_Base {
 	}
 	super.setRealShareValue(realShareValue);
     }
-    
-    @Override
-    public Money getRealShareValue() {
-	return super.getRealShareValue() != null ? super.getRealShareValue() : Money.ZERO;
-    }
 }
