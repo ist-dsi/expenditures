@@ -126,9 +126,9 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	return invoice != null && invoice.isInvoiceReceived();
     }
 
-    public String getCostCenter() {
-	return getRequestingUnit().getCostCenter();
-    }
+//    public String getCostCenter() {
+//	return getRequestingUnit().getCostCenter();
+//    }
 
     public boolean isEveryItemFullyAttributedToPayingUnits() {
 	for (AcquisitionRequestItem item : getAcquisitionRequestItems()) {
@@ -139,6 +139,15 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	return true;
     }
 
+    public boolean isEveryItemFullyAttributeInRealValues() {
+	for (AcquisitionRequestItem item : getAcquisitionRequestItems()) {
+	    if (!item.isRealValueFullyAttributedToUnits()) {
+		return false;
+	    }
+	}
+	return true;
+    }
+    
     @Override
     public void removePayingUnits(Unit payingUnit) {
 	for (AcquisitionRequestItem item : getAcquisitionRequestItems()) {

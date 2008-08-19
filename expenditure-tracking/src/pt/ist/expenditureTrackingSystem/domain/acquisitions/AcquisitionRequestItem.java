@@ -69,8 +69,13 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	return getUnitValue().multiply(getQuantity());
     }
 
+    @Override
+    public Money getShipmentValue() {
+	return super.getShipmentValue() == null ? Money.ZERO : super.getShipmentValue();
+    }
+
     public Money getTotalRealValue() {
-	return getRealUnitValue().multiply(getRealQuantity());
+	return getRealUnitValue().multiply(getRealQuantity()).add(getShipmentValue());
     }
 
     public Money getTotalItemValueWithVat() {
@@ -161,6 +166,15 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	}
 
 	return totalValue.equals(getTotalItemValue());
+    }
+
+    public boolean isRealValueFullyAttributedToUnits() {
+	Money totalValue = Money.ZERO;
+	for (UnitItem unitItem : getUnitItems()) {
+	    totalValue = totalValue.add(unitItem.getRealShareValue());
+	}
+
+	return totalValue.equals(getTotalRealValue());
     }
 
     public void createUnitItem(Unit unit, Money shareValue) {

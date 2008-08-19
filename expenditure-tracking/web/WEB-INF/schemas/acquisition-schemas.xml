@@ -33,7 +33,6 @@
 	</slot>
 	<slot name="acquisitionProcess.acquisitionProcessState.localizedName" key="label.acquisition.process.state" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="fiscalIdentificationCode" key="label.service.provider.fiscalIdentificationCode" bundle="ACQUISITION_RESOURCES"/>
-	<slot name="costCenter" key="label.cost.center" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="totalItemValue" key="label.total.item.value" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="acquisitionProcess.fundAllocationId" key="label.fund.allocation.identification" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="acquisitionProcess.fundAllocationExpirationDate" key="label.fund.allocation.expiration.date" bundle="ACQUISITION_RESOURCES">
@@ -50,7 +49,6 @@
 		bundle="ACQUISITION_RESOURCES">
 	<slot name="acquisitionProcessState.localizedName" key="label.acquisition.process.state" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="acquisitionRequest.fiscalIdentificationCode" key="label.service.provider.fiscalIdentificationCode" bundle="ACQUISITION_RESOURCES"/>
-	<slot name="acquisitionRequest.costCenter" key="label.cost.center" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="acquisitionRequest.totalItemValue" key="label.total.item.value" bundle="ACQUISITION_RESOURCES"/>
 </schema>
 
@@ -115,14 +113,22 @@
 	.<slot name="shipmentValue" key="label.acquisition.request.item.ShipmentValue" bundle="ACQUISITION_RESOURCES" layout="null-as-label">
 		<property name="subLayout" value="default"/>
 	</slot>
-	<slot name="payingUnits" layout="separator-list" key="label.payingUnits" bundle="ACQUISITION_RESOURCES">
-		<property name="eachSchema" value="unitName"/>
+	<slot name="unitItems" key="label.payingUnits" bundle="ACQUISITION_RESOURCES">
+		<property name="classes" value="nobullet"/>
+		<property name="eachSchema" value="viewUnitItem"/>
 		<property name="eachLayout" value="values"/>
-		<property name="separator" value=","/>
 	</slot>
 	<slot name="salesCode" key="label.acquisition.request.item.salesCode" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="description" key="label.acquisition.request.item.description" bundle="ACQUISITION_RESOURCES"/>
 </schema>
+
+<schema name="viewUnitItem"
+		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.UnitItem"
+		bundle="ACQUISITION_RESOURCES">
+	<slot name="unit.name"/>
+	<slot name="shareValue"/>
+</schema>
+
 
 <schema name="viewAcquisitionRequestItemInList"
 		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem"
@@ -149,7 +155,6 @@
 	<slot name="requester" key="label.requester" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="acquisitionProcessState" key="label.acquisition.process.state" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="fiscalIdentificationCode" key="label.service.provider.fiscalIdentificationCode" bundle="ACQUISITION_RESOURCES"/>
-	<slot name="costCenter" key="label.cost.center" bundle="ACQUISITION_RESOURCES"/>
 </schema>
 
 <schema name="allocateFunds"
@@ -251,7 +256,9 @@
 
 <schema name="editSchemaRealShareValues" type="pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean"
 		bundle="ACQUISITION_RESOURCES">
-	<slot name="unit.name" read-only="true"/>
-	<slot name="shareValue" read-only="true"/>
-	<slot name="realShareValue" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="unit.name" read-only="true" key="label.payingUnit"/>
+	<slot name="item.totalItemValue" read-only="true" key="label.acquisition.request.item.totalValue"/>
+	<slot name="shareValue" read-only="true" key="label.allocated.share.value"/>
+	<slot name="item.totalRealValue" read-only="true" key="label.acquisition.request.item.totalRealValue"/>
+	<slot name="realShareValue" key="label.real.allocation" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 </schema>

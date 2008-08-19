@@ -16,7 +16,9 @@ public class AllocateFundsPermanently extends GenericAcquisitionProcessActivity 
 
     @Override
     protected boolean isAvailable(AcquisitionProcess process) {
-	return process.isProcessInState(AcquisitionProcessStateType.INVOICE_CONFIRMED)  && allItemsAreFilledWithRealValues(process); 
+	return process.isProcessInState(AcquisitionProcessStateType.INVOICE_CONFIRMED)
+		&& allItemsAreFilledWithRealValues(process)
+		&& process.getAcquisitionRequest().isEveryItemFullyAttributeInRealValues();
     }
 
     private boolean allItemsAreFilledWithRealValues(AcquisitionProcess process) {

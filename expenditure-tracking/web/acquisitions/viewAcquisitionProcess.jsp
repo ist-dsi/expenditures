@@ -144,12 +144,21 @@
 			</div>
 		</logic:equal>
 		<logic:equal  name="acquisitionProcess" property="acquisitionProcessState.acquisitionProcessStateType"  value="INVOICE_CONFIRMED">		
+		
 			<logic:equal name="acquisitionRequestItem" property="filledWithRealValues" value="false">
 				<div class="infoop4" style="width: 460px">
 						<strong><bean:message key="label.attention" bundle="EXPENDITURE_RESOURCES"/></strong>: <bean:message key="label.item.real.values.not.filled" bundle="ACQUISITION_RESOURCES"/>
 				</div>
 			</logic:equal>
+			<logic:equal name="acquisitionRequestItem" property="filledWithRealValues" value="true">
+				<logic:equal name="acquisitionRequestItem" property="realValueFullyAttributedToUnits" value="false">
+					<div class="infoop4" style="width: 460px">
+								<strong><bean:message key="label.attention" bundle="EXPENDITURE_RESOURCES"/></strong>: <bean:message key="label.item.real.values.not.assigned" bundle="ACQUISITION_RESOURCES"/>
+					</div>
+				</logic:equal>
+			</logic:equal>
 		</logic:equal>
+		
 		<div class="infoop2" style="width: 460px">
 			<fr:view name="acquisitionRequestItem"
 					schema="viewAcquisitionRequestItem">
