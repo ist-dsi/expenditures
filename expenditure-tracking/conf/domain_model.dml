@@ -28,6 +28,7 @@ class acquisitions.AcquisitionProcessState {
 }
 
 class acquisitions.AcquisitionRequest {
+	String paymentReference;
 }
 
 class acquisitions.AcquisitionRequestItem {

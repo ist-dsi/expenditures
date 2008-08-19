@@ -19,6 +19,7 @@ public class PayAcquisition extends GenericAcquisitionProcessActivity {
 
     @Override
     protected void process(AcquisitionProcess process, Object... objects) {
+	process.getAcquisitionRequest().setPaymentReference((String)objects[0]);
 	new AcquisitionProcessState(process, AcquisitionProcessStateType.ACQUISITION_PAYED);
     }
 

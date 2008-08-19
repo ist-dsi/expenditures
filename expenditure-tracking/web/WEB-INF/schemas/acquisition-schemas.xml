@@ -44,6 +44,9 @@
 	<slot name="invoiceDate" key="label.invoice.date" bundle="ACQUISITION_RESOURCES">
 		<property name="format" value="${year}-${monthOfYear,02d}-${dayOfMonth,02d}"/>
 	</slot>
+	<slot name="paymentReference" key="label.acquisitionProcess.paymentReference" bundle="ACQUISITION_RESOURCES" layout="null-as-label">
+		<property name="subLayout" value="default"/>
+	</slot>
 </schema>
 
 <schema name="viewAcquisitionProcessInList"
