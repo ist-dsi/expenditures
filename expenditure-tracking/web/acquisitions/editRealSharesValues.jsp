@@ -16,7 +16,7 @@
 			<strong><bean:message key="label.attention" bundle="EXPENDITURE_RESOURCES"/></strong>: <bean:message key="label.must.define.real.values.first" bundle="ACQUISITION_RESOURCES"/>
 	</div>
 	
-	<html:link page="<%= "/acquisitionProcess.do?method=viewAcquisitionProcess&acquisitionProcessOid="  + processOID %>"><bean:message key="label.back" bundle="EXPENDITURE_RESOURCES"/></html:link>
+	<html:link page="<%= "/acquisitionProcess.do?method=viewAcquisitionProcess&acquisitionProcessOid="  + processOID %>"><bean:message key="link.back" bundle="EXPENDITURE_RESOURCES"/></html:link>
 </logic:equal>
 			
 <logic:equal name="item" property="filledWithRealValues" value="true">
