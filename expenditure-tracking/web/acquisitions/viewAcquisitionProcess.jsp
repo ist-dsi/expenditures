@@ -40,7 +40,7 @@
 		</li>
 	</logic:iterate>
 	</ul>
-	<logic:empty name="acquisitionProcess" property="activeActivities">
+	<logic:empty name="acquisitionProcess" property="activeActivitiesForRequest">
 		<em>
 			<bean:message key="label.no.operations.available.at.the.moment" bundle="EXPENDITURE_RESOURCES"/>
 		</em>
