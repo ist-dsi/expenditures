@@ -11,8 +11,10 @@
 		<fr:property name="stateParameterName" value="state"/>
 		<fr:property name="url" value="/viewLogs.do?method=viewOperationLog&acquisitionProcessOid=${OID}"/>
 		<fr:property name="contextRelative" value="true"/>
+		<fr:property name="currentStateClass" value=""/>
 	</fr:layout>
 </fr:view>
+
 <%-- 
 <img src="<%= request.getContextPath() + "/CSS/processImages/" + currentState.toString() + ".png"%>" style="float: right"/>
 --%>
@@ -40,27 +42,28 @@
 		</li>
 	</logic:iterate>
 	</ul>
-	<logic:empty name="acquisitionProcess" property="activeActivitiesForRequest">
-		<em>
-			<bean:message key="label.no.operations.available.at.the.moment" bundle="EXPENDITURE_RESOURCES"/>
+	<logic:empty name="acquisitionProcess" property="activeActivitiesForRequest">		<em>
+			<bean:message key="label.no.operations.available.at.the.moment" bundle="EXPENDITURE_RESOURCES"/>.
 		</em>
 	</logic:empty>
 </div>
 
-<logic:equal name="acquisitionProcess" property="allowedToViewCostCenterExpenditures" value="true">
-	<p>
-	<bean:message key="label.unit.total.allocated" bundle="ORGANIZATION_RESOURCES"/>:
-	<fr:view name="acquisitionProcess" property="unit.totalAllocated"/>
-	</p>
-</logic:equal>
-<logic:equal name="acquisitionProcess" property="allowedToViewSupplierExpenditures" value="true">
-	<logic:present name="acquisitionProcess" property="acquisitionRequest.supplier">
+<div class="expenditures">
+	<logic:equal name="acquisitionProcess" property="allowedToViewCostCenterExpenditures" value="true">
 		<p>
-		<bean:message key="label.supplier.total.allocated" bundle="ORGANIZATION_RESOURCES"/>:
-		<fr:view name="acquisitionProcess" property="acquisitionRequest.supplier.totalAllocated"/>
+		<bean:message key="label.unit.total.allocated" bundle="ORGANIZATION_RESOURCES"/>:
+		<fr:view name="acquisitionProcess" property="unit.totalAllocated"/>
 		</p>
-	</logic:present>
-</logic:equal>
+	</logic:equal>
+	<logic:equal name="acquisitionProcess" property="allowedToViewSupplierExpenditures" value="true">
+		<logic:present name="acquisitionProcess" property="acquisitionRequest.supplier">
+			<p>
+			<bean:message key="label.supplier.total.allocated" bundle="ORGANIZATION_RESOURCES"/>:
+			<fr:view name="acquisitionProcess" property="acquisitionRequest.supplier.totalAllocated"/>
+			</p>
+		</logic:present>
+	</logic:equal>
+</div>
 
 <div class="infoop2" style="width: 460px">
 	<fr:view name="acquisitionProcess" property="acquisitionRequest"
@@ -120,6 +123,7 @@
 
 	<bean:size id="totalItems" name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestItemsSet"/>
 	<logic:iterate id="acquisitionRequestItem" name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestItemsSet" indexId="index">
+		<div class="item">
 		<bean:define id="currentIndex" value="<%= String.valueOf(index + 1) %>"/>
 		<strong><bean:message key="label.view.acquisition.request.item" bundle="ACQUISITION_RESOURCES"/></strong> (  <fr:view name="currentIndex"/> / <fr:view name="totalItems"/> )
 		<bean:define id="itemOID" name="acquisitionRequestItem" property="OID"/>
@@ -166,6 +170,7 @@
 					<fr:property name="classes" value="tstyle1"/>
 				</fr:layout>
 			</fr:view>
+		</div>
 		</div>
 	</logic:iterate>
 </logic:present>

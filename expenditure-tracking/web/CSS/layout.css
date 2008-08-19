@@ -43,14 +43,11 @@ background-color: #FFFFFF;
 
 a {
 color: #6DA6E2;
-background-color: #FFFFFF;
 text-decoration: none;
 font-weight: bold;
 }
 
 a:hover {
-background-color: #FFFFFF;
-color: inherit;
 font-weight: bold;
 text-decoration: underline;
 }
@@ -245,7 +242,7 @@ border-bottom: 0px dotted #FFFFFF;
 
 table.form {
 border-collapse: collapse;
-margin: 1em 0;
+margin: 1em 0 1.5em 0;
 }
 table.form th {
 text-align: left;
@@ -263,6 +260,7 @@ padding-left: 10px;
 
 
 .mbottom0 { margin-bottom: 0em !important; }
+.mbottom025 { margin-bottom: 0.25em !important; }
 .mbottom05 { margin-bottom: 0.5em !important; }
 .mbottom1 { margin-bottom: 1em !important; }
 .mbottom15 { margin-bottom: 1.5em !important; }
@@ -278,9 +276,12 @@ padding-left: 10px;
 
 div.infoop1 {
 border: 1px dotted #aaa;
-padding: 5px 10px;
+padding: 15px 10px;
 background: #fff;
 margin: 1em 0;
+}
+div.infoop1 ul {
+margin: 0;
 }
 
 div.infoop2 {
@@ -298,9 +299,9 @@ margin: 1em 0;
 }
 
 div.infoop4 {
-border: 1px solid #bbb;
+border: 1px solid #e2d380;
 padding: 5px 10px;
-background: #faf5de;
+background: #f8f4d7;
 margin: 1em 0;
 }
 
@@ -312,6 +313,7 @@ table.tstyle1 th {
 text-align: left;
 font-weight: normal;
 padding: 2px 0;
+white-space: nowrap;
 }
 table.tstyle1 td {
 text-align: left;
@@ -340,7 +342,7 @@ border: 1px solid #ccc;
 
 table.tstyle3 {
 border-collapse: collapse;
-margin: 1em 0;
+margin: 1em 0 1.5em 0;
 }
 table.tstyle3 th {
 text-align: left;
@@ -358,16 +360,19 @@ padding-left: 20px;
 }
 
 .documents {
-margin: 1em 0;
+margin: 1.5em 0;
 }
 .documents p {
 margin: 0.25em 0 !important;
+background: url(../images/doc.gif) left center no-repeat;
+padding: 0 0 0 14px;
+}
+.documents em {
 }
 
 
-
 div.flow {
-width: 110px;
+width: 130px;
 float: right;
 }
 div.wrapper {
@@ -378,6 +383,7 @@ border: 1px solid #aaa;
 background: #fafafa;
 padding: 5px 5px;
 text-align: center;
+overflow: hidden;
 }
 div.box {
 border: 2px solid #ccc;
@@ -405,6 +411,30 @@ border: 2px solid #88c688;
 background: #f7fbf7;
 /*color: #a68b08;*/
 }
+div.box a {
+color: #555;
+font-weight: normal;
+background: none;
+text-decoration: none;
+/*border-bottom: 1px solid #aaa;*/
+}
+div.box a:hover {
+text-decoration: none;
+}
+
+div.expenditures {
+margin: 1.25em 0;	
+}
+div.expenditures p {
+margin: 0.25em 0 !important;
+}
+
+div.item {
+margin-top: 1.5em;
+}
+div.item strong {
+}
+
 
 /***** AUTO_COMPLETE *****/
 div.autoComplete { 
@@ -424,6 +454,9 @@ ul.autoCompleteItems  {
 ul.autoCompleteItems li.selected { background-color:  #cef; }
 
 
+
+
+
 /* lists */
 ul.liinline {
 margin: 0;
@@ -434,9 +467,6 @@ display: inline;
 margin: 0;
 padding: 0 0.25em;
 }
-
 .nobullet { list-style: none; }
-
-
 .dinline { display: inline; }
 .forminline form { display: inline !important; }

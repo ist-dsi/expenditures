@@ -4,7 +4,6 @@
 
 <h2><bean:message key="label.create.acquisition.request" bundle="EXPENDITURE_RESOURCES"/></h2>
 
-
 <fr:edit id="acquisitionProcessBean"
 		name="acquisitionProcessBean"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean"
