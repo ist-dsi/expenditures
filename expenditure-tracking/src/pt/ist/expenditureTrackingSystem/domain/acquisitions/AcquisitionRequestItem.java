@@ -100,12 +100,12 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
     }
 
     public void edit(String description, Integer quantity, Money unitValue, BigDecimal vatValue, String proposalReference,
-	    String salesCode, DeliveryInfo deliveryInfo) {
+	    CPVReference reference, DeliveryInfo deliveryInfo) {
 	setDescription(description);
 	setQuantity(quantity);
 	setUnitValue(unitValue);
+	setCPVReference(reference);
 	setProposalReference(proposalReference);
-	setSalesCode(salesCode);
 	setVatValue(vatValue);
 	setRecipient(deliveryInfo.getRecipient());
 	setAddress(deliveryInfo.getAddress());
@@ -116,7 +116,6 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	setQuantity(acquisitionRequestItemBean.getQuantity());
 	setUnitValue(acquisitionRequestItemBean.getUnitValue());
 	setProposalReference(acquisitionRequestItemBean.getProposalReference());
-	setSalesCode(acquisitionRequestItemBean.getSalesCode());
 	setVatValue(acquisitionRequestItemBean.getVatValue());
 	setDeliveryInfo(acquisitionRequestItemBean);
 	setCPVReference(acquisitionRequestItemBean.getCPVReference());

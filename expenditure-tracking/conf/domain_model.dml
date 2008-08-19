@@ -36,7 +36,6 @@ class acquisitions.AcquisitionRequestItem {
 	Money unitValue;
 	BigDecimal vatValue;
 	String proposalReference;
-	String salesCode;              // CVP
 	String recipient;
 	Address address;
 	
