@@ -154,10 +154,11 @@
 
 	<target name="loadTestData" depends="compile">
 		<java classname="pt.ist.expenditureTrackingSystem.LoadTestData" fork="true">
+			<jvmarg value="-Dfile.encoding=iso8859-1"/>
 			<classpath refid="run.class.path"/>
 		</java>
 	</target>
-	
+				
 	<target name="compile-reports" >
 		<mkdir dir="${build.home.reports}"/>
 		<taskdef name="jrc" 
