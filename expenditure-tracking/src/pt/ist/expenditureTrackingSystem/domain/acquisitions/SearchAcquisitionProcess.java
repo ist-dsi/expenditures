@@ -33,8 +33,8 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
 	    final String unsername = person == null ? null : person.getUsername();
 	    final Supplier supplier = acquisitionRequest.getSupplier();
 	    final String fiscalIdentificationCode = supplier == null ? null : supplier.getFiscalIdentificationCode();
-	    return matchCriteria(requester, unsername) && matchCriteria(fiscalIdentificationCode, fiscalIdentificationCode)
-		    && matchCriteria(costCenter, acquisitionRequest.getCostCenter());
+	    return matchCriteria(requester, unsername) && matchCriteria(fiscalIdentificationCode, fiscalIdentificationCode);
+		    //&& matchCriteria(costCenter, acquisitionRequest.getCostCenter());
 	}
 
 	private boolean matchCriteria(final AcquisitionProcessStateType criteria, final AcquisitionProcessStateType value) {
