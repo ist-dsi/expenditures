@@ -18,6 +18,7 @@ import pt.ist.expenditureTrackingSystem.domain.File;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.presentationTier.Context;
 import pt.ist.expenditureTrackingSystem.presentationTier.messageHandling.MessageHandler;
+import pt.ist.expenditureTrackingSystem.presentationTier.messageHandling.MessageHandler.MessageType;
 import pt.ist.expenditureTrackingSystem.presentationTier.util.FileUploadBean;
 import pt.ist.fenixWebFramework.renderers.components.state.IViewState;
 import pt.ist.fenixWebFramework.renderers.model.MetaObject;
@@ -32,7 +33,7 @@ public abstract class BaseAction extends DispatchAction {
     private static final Context CONTEXT = new Context(null);
 
     private MessageHandler messageHandler = null;
-    
+
     protected Context getContextModule() {
 	return CONTEXT;
     }
@@ -45,14 +46,14 @@ public abstract class BaseAction extends DispatchAction {
 	messageHandler = new MessageHandler();
 	request.setAttribute(MessageHandler.MESSAGE_HANDLER_NAME, messageHandler);
 	return super.execute(mapping, form, request, response);
-	
+
     }
 
     protected Person getLoggedPerson() {
 	User user = UserView.getUser();
 	return user.getPerson();
     }
-    
+
     protected <T> T getAttribute(final HttpServletRequest request, final String attributeName) {
 	final T t = (T) request.getAttribute(attributeName);
 	return t == null ? (T) request.getParameter(attributeName) : t;
@@ -125,17 +126,19 @@ public abstract class BaseAction extends DispatchAction {
 	}
 	outputStream.flush();
 	outputStream.close();
-	return null;	
+	return null;
     }
 
     protected ActionForward download(final HttpServletResponse response, final File file) throws IOException {
-	return file != null && file.getContent() != null
-		? download(response, file.getFilename(), file.getContent().getBytes(), file.getContentType())
-		: null;
+	return file != null && file.getContent() != null ? download(response, file.getFilename(), file.getContent().getBytes(),
+		file.getContentType()) : null;
     }
 
-    
     public void addMessage(String key, String bundle, String... args) {
-	messageHandler.saveMessage(bundle, key,args);
+	messageHandler.saveMessage(bundle, key, MessageType.WARN, args);
+    }
+
+    public void addErrorMessage(String key, String bundle, String... args) {
+	messageHandler.saveMessage(bundle, key, MessageType.ERROR, args);
     }
 }

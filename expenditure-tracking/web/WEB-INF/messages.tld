@@ -22,6 +22,11 @@
 	<description>
 	   Renderers body if and only if there are error messages present
 	</description>
+   <attribute>
+	  	<name>type</name>
+	 	<required>false</required>
+	 	<rtexprvalue>true</rtexprvalue>
+   </attribute>	
 </tag>
     
  <tag>
@@ -31,6 +36,11 @@
 	<description>
 	   Shows existing error messages
 	</description>
+	<attribute>
+	  	<name>type</name>
+	 	<required>false</required>
+	 	<rtexprvalue>true</rtexprvalue>
+   </attribute>	
 </tag>
   
 </taglib>

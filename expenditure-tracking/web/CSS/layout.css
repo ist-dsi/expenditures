@@ -323,6 +323,14 @@ background: #f8f4d7;
 margin: 1em 0;
 }
 
+div.error1 {
+border: 1px solid #e2d380;
+padding: 5px 10px;
+background: #ffeadd;
+margin: 1em 0;
+color: #c00;
+}
+
 
 table.tstyle1 {
 border-collapse: collapse;
