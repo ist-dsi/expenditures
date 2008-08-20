@@ -64,6 +64,7 @@ public class UnitAutoCompleteProvider implements AutoCompleteProvider {
 
     private void addAllSubUnits(final List<Unit> units, final Unit unit) {
 	for (final Unit subUnit : unit.getSubUnitsSet()) {
+	    units.add(subUnit);
 	    addAllSubUnits(units, subUnit);
 	}
     }

@@ -22,7 +22,6 @@
 		<html:link action="/organization.do?method=viewOrganization" paramId="unitOid" paramName="unit" paramProperty="parentUnit.OID">
 			<bean:write name="unit" property="parentUnit.name"/>
 		</html:link>
-		<bean:write name="unit" property="parentUnit.class.name"/>
 		<logic:equal name="unit" property="parentUnit.class.name" value="pt.ist.expenditureTrackingSystem.domain.organization.CostCenter">
 			<logic:notEmpty name="unit" property="parentUnit.costCenter">
 				(cc <bean:write name="unit" property="parentUnit.costCenter"/> )
@@ -31,6 +30,11 @@
 		<logic:equal name="unit" property="parentUnit.class.name" value="pt.ist.expenditureTrackingSystem.domain.organization.Project">
 			<logic:notEmpty name="unit" property="parentUnit.projectCode">
 				(p <bean:write name="unit" property="parentUnit.projectCode"/> )
+			</logic:notEmpty>
+		</logic:equal>
+		<logic:equal name="unit" property="parentUnit.class.name" value="pt.ist.expenditureTrackingSystem.domain.organization.SubProject">
+			<logic:notEmpty name="unit" property="parentUnit.projectCode">
+				(sp)
 			</logic:notEmpty>
 		</logic:equal>
 		<html:link action="/organization.do?method=editUnit" paramId="unitOid" paramName="unit" paramProperty="parentUnit.OID">
@@ -54,6 +58,9 @@
 		<logic:notEmpty name="unit" property="projectCode">
 			(p <bean:write name="unit" property="projectCode"/> )
 		</logic:notEmpty>
+	</logic:equal>
+	<logic:equal name="unit" property="class.name" value="pt.ist.expenditureTrackingSystem.domain.organization.SubProject">
+		(sp)
 	</logic:equal>
 	<html:link action="/organization.do?method=editUnit" paramId="unitOid" paramName="unit" paramProperty="OID">
 		<bean:message key="link.edit" bundle="EXPENDITURE_RESOURCES"/>
@@ -83,6 +90,9 @@
 			<logic:notEmpty name="u" property="projectCode">
 				(p <bean:write name="u" property="projectCode"/> )
 			</logic:notEmpty>
+		</logic:equal>
+		<logic:equal name="u" property="class.name" value="pt.ist.expenditureTrackingSystem.domain.organization.SubProject">
+			(sp)
 		</logic:equal>
 		<html:link action="/organization.do?method=editUnit" paramId="unitOid" paramName="u" paramProperty="OID">
 			<bean:message key="link.edit" bundle="EXPENDITURE_RESOURCES"/>
