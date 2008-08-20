@@ -18,6 +18,20 @@
 <br/>
 <br/>
 <logic:present name="unit">
+
+	<logic:notEmpty name="unit" property="authorizations">
+			<bean:message key="label.unit.responsible" bundle="ORGANIZATION_RESOURCES"/>:
+				<fr:view name="unit" property="authorizations" schema="viewAuthorization">
+					<fr:layout name="tabular">
+						<fr:property name="classes" value="tstyle2"/>
+					</fr:layout>
+				</fr:view>	
+	</logic:notEmpty>
+	
+	<logic:empty name="unit" property="authorizations">
+		<p><em><bean:message key="label.no.authorizations.for.unit" bundle="ORGANIZATION_RESOURCES"/></em></p>
+	</logic:empty>
+	
 	<logic:present name="unit" property="parentUnit">
 		<html:link action="/organization.do?method=viewOrganization" paramId="unitOid" paramName="unit" paramProperty="parentUnit.OID">
 			<bean:write name="unit" property="parentUnit.name"/>

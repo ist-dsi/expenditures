@@ -255,3 +255,12 @@
 	<slot name="item.totalRealValue" read-only="true" key="label.acquisition.request.item.totalRealValue"/>
 	<slot name="realShareValue" key="label.real.allocation" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 </schema>
+
+<schema name="viewAuthorization" type="pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization"
+		bundle="ACQUISITION_RESOURCES">
+		<slot name="person.name" key="label.person.name"/>
+		<slot name="class" layout="label" key="label.authorizationType"  bundle="ORGANIZATION_RESOURCES">
+			<property name="bundle" value="EXPENDITURE_RESOURCES"/>
+		</slot>
+		<slot name="canDelegate" key="label.can.delegate" bundle="ORGANIZATION_RESOURCES"/>
+</schema>
