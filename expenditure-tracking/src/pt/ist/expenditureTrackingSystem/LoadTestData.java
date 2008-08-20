@@ -133,10 +133,12 @@ public class LoadTestData {
 	final String peopleContents = FileUtils.readFile("people.txt");
 	final FenixPeopleSet fenixPeopleSet = new FenixPeopleSet(peopleContents);
 	createPeople(fenixPeopleSet, fenixUnitMap);
-
+	
 	final String projectContents = FileUtils.readFile("projects.txt");
 	createProjects(projectContents, fenixPeopleSet);
-
+	
+	LoadSuppliersData.loadData();
+	
 	final String subProjectContents = FileUtils.readFile("subProjects.txt");
 	createSubProjects(subProjectContents);	
 
@@ -155,6 +157,7 @@ public class LoadTestData {
 	   }
 	}
     }
+
 
     @Service
     private static void createUnits(final FenixUnitMap fenixUnitMap) {

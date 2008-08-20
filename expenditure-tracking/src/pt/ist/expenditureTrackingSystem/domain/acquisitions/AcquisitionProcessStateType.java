@@ -5,7 +5,6 @@ import java.util.ResourceBundle;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 
 public enum AcquisitionProcessStateType {
-
     IN_GENESIS {
 
 	@Override
@@ -97,4 +96,5 @@ public enum AcquisitionProcessStateType {
     public boolean isBlocked(final AcquisitionProcessStateType currentStateType) {
 	return false;
     }
+
 }

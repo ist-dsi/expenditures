@@ -5,7 +5,7 @@ margin-bottom: 30px;
 }
 
 #container {
-width: 850px;
+width: 950px;
 margin: 0 auto;
 font-family: Verdana, Arial, Helvetica, sans-serif;
 font-size: 11px;
@@ -15,7 +15,7 @@ background-color: #FFFFFF;
 }
 
 #container2 {
-width: 846px;
+width: 946px;
 margin: 0 auto;
 font-family: Verdana, Arial, Helvetica, sans-serif;
 font-size: 11px;
@@ -106,7 +106,7 @@ font-size: 11px;
 
 /**************** header styles ****************/
 #header {
-width: 750px;
+width: 850px;
 border: 0px;
 padding-bottom: 0;
 padding-top: 10px;button
@@ -121,7 +121,7 @@ color: #999999;
 /**************** menu styles ****************/
 #tabs10 {
 float: left;
-width: 850px;
+width: 950px;
 font-size: 93%;
 padding-bottom: 1px;
 border-bottom: 4px solid #2763A5;
@@ -163,7 +163,7 @@ background-position: 100% -42px;
 
 /**************** content styles ****************/
 #content {
-width: 650px;
+width: 750px;
 padding-left: 10px;
 padding-right: 0;
 padding-top: 10px;
@@ -208,7 +208,7 @@ padding-bottom: 6px;
 padding-left: 2px;
 padding-right: 2px;
 clear: both;
-width: 847px;
+width: 947px;
 background-color: #2763A5;
 }
 

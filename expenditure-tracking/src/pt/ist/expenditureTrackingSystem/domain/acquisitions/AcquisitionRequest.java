@@ -1,7 +1,6 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import org.joda.time.DateTime;
-import org.joda.time.base.AbstractInstant;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
@@ -220,13 +219,15 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     }
 
     public Money getValueAllocated() {
-	AcquisitionProcessStateType acquisitionProcessStateType = getAcquisitionProcess().getAcquisitionProcessStateType();
-
-	if (acquisitionProcessStateType.compareTo(AcquisitionProcessStateType.FUNDS_ALLOCATED_PERMANENTLY) >= 0) {
-	    return getRealTotalValue();
-	} else if (acquisitionProcessStateType.compareTo(AcquisitionProcessStateType.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER) >= 0) {
-	    return getTotalItemValue();
+	if (!getAcquisitionProcess().isRejected()) {
+	    AcquisitionProcessStateType acquisitionProcessStateType = getAcquisitionProcess().getAcquisitionProcessStateType();
+	    if (acquisitionProcessStateType.compareTo(AcquisitionProcessStateType.FUNDS_ALLOCATED_PERMANENTLY) >= 0) {
+		return getRealTotalValue();
+	    } else if (acquisitionProcessStateType.compareTo(AcquisitionProcessStateType.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER) >= 0) {
+		return getTotalItemValue();
+	    }
 	}
 	return Money.ZERO;
     }
+
 }

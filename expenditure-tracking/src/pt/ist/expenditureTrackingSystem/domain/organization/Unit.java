@@ -5,8 +5,6 @@ import java.util.Set;
 
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessState;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateUnitBean;
@@ -83,13 +81,7 @@ public class Unit extends Unit_Base {
 	Money result = Money.ZERO;
 	for (final AcquisitionRequest acquisitionRequest : ExpenditureTrackingSystem.getInstance().getAcquisitionRequestsSet()) {
 	    if (acquisitionRequest.getAcquisitionProcess().getRequestingUnit() == this) {
-		final AcquisitionProcess acquisitionProcess = acquisitionRequest.getAcquisitionProcess();
-		final AcquisitionProcessState acquisitionProcessState = acquisitionProcess.getAcquisitionProcessState();
-		final AcquisitionProcessStateType acquisitionProcessStateType = acquisitionProcessState
-			.get$acquisitionProcessStateType();
-		if (acquisitionProcessStateType.compareTo(AcquisitionProcessStateType.FUNDS_ALLOCATED) >= 0) {
-		    result = result.add(acquisitionRequest.getTotalItemValue());
-		}
+		result.add(acquisitionRequest.getValueAllocated());
 	    }
 	}
 	for (final Unit unit : getSubUnitsSet()) {

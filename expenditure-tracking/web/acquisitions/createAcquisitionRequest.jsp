@@ -31,7 +31,7 @@
 	<logic:iterate id="acquisitionRequestItem" name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestItemsSet" indexId="index">
 		<bean:define id="currentIndex" value="<%= String.valueOf(index + 1) %>"/>
 		<p class="mtop15"><strong><bean:message key="label.view.acquisition.request.item" bundle="ACQUISITION_RESOURCES"/></strong> (<fr:view name="currentIndex"/>/<fr:view name="totalItems"/>)</p>
-		<div class="infoop2" style="width: 460px">
+		<div class="infoop2" style="width: 560px">
 			<fr:view name="acquisitionRequestItem"
 					schema="viewAcquisitionRequestItem">
 				<fr:layout name="tabular">

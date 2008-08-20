@@ -286,13 +286,11 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
     }
 
     public boolean isAvailableForPerson(Person person) {
-	return person.hasRoleType(RoleType.ACCOUNTABILITY) 
-	|| person.hasRoleType(RoleType.ACQUISITION_CENTRAL) 
-	|| getRequestor() == person 
-	|| getRequestingUnit().isResponsible(person)
-	|| isResponsibleForAtLeastOnePayingUnit(person); 
+	return person.hasRoleType(RoleType.ACCOUNTABILITY) || person.hasRoleType(RoleType.ACQUISITION_CENTRAL)
+		|| getRequestor() == person || getRequestingUnit().isResponsible(person)
+		|| isResponsibleForAtLeastOnePayingUnit(person);
     }
-    
+
     public boolean isResponsibleForAtLeastOnePayingUnit(Person person) {
 	for (Unit unit : getPayingUnits()) {
 	    if (unit.isResponsible(person)) {
@@ -310,8 +308,12 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
     public boolean isRealValueEqualOrLessThanFundAllocation() {
 	Money allocatedMoney = this.getAcquisitionRequest().getTotalItemValue();
 	Money realMoney = this.getAcquisitionRequest().getRealTotalValue();
-	
+
 	return realMoney.isLessThanOrEqual(allocatedMoney);
+    }
+
+    public boolean isRejected() {
+	return isProcessInState(AcquisitionProcessStateType.REJECTED);
     }
 
 }
