@@ -128,21 +128,24 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 	return getAcquisitionRequest().getPayingUnits();
     }
 
-    public boolean isResponsibleForUnit() {
-	User user = UserView.getUser();
-	if (user == null) {
-	    return false;
-	}
-
+    public boolean isResponsibleForUnit(Person person) {
 	List<Unit> payingUnits = getPayingUnits();
 
-	for (Authorization authorization : user.getPerson().getAuthorizations()) {
+	for (Authorization authorization : person.getAuthorizations()) {
 	    if (payingUnits.contains(authorization.getUnit())) {
 		return true;
 	    }
 	}
 	return false;
 
+    }
+
+    public boolean isResponsibleForUnit() {
+	User user = UserView.getUser();
+	if (user == null) {
+	    return false;
+	}
+	return isResponsibleForUnit(user.getPerson();
     }
 
     public void delete() {

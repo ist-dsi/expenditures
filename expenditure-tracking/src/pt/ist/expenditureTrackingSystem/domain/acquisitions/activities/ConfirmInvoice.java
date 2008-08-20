@@ -12,7 +12,7 @@ public class ConfirmInvoice extends GenericAcquisitionProcessActivity {
     @Override
     protected boolean isAccessible(AcquisitionProcess process) {
 	User user = UserView.getUser();
-	return user != null && process.isResponsibleForUnit()
+	return user != null && process.isResponsibleForUnit(user.getPerson())
 		&& !process.getAcquisitionRequest().isInvoiceConfirmedBy(user.getPerson());
     }
 

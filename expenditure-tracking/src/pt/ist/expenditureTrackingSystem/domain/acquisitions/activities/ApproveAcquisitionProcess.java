@@ -11,7 +11,7 @@ public class ApproveAcquisitionProcess extends GenericAcquisitionProcessActivity
     @Override
     protected boolean isAccessible(AcquisitionProcess process) {
 	User user = getUser();
-	return process.isResponsibleForUnit() && user != null && !process.getAcquisitionRequest().hasBeenApprovedBy(user.getPerson());
+	return user != null && process.isResponsibleForUnit(user.getPerson()) && !process.getAcquisitionRequest().hasBeenApprovedBy(user.getPerson());
     }
 
     @Override

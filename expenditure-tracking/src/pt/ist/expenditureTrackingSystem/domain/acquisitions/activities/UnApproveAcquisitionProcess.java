@@ -11,7 +11,8 @@ public class UnApproveAcquisitionProcess extends GenericAcquisitionProcessActivi
 
     @Override
     protected boolean isAccessible(AcquisitionProcess process) {
-	return process.isResponsibleForUnit();
+	User user = UserView.getUser();
+	return user != null && process.isResponsibleForUnit(user.getPerson());
     }
 
     @Override
