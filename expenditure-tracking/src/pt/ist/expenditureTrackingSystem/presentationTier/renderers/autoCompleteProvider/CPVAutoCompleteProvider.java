@@ -13,9 +13,9 @@ public class CPVAutoCompleteProvider implements AutoCompleteProvider {
     public Collection getSearchResults(Map<String, String> argsMap, String value, int maxCount) {
 	List<CPVReference> result = new ArrayList<CPVReference>();
 	
-	String[] values = value.split(" ");
+	String[] values = value.toLowerCase().split(" ");
 	for (final CPVReference cpvCode : ExpenditureTrackingSystem.getInstance().getCPVReferences()) {
-	    if (cpvCode.getCode().startsWith(value) || match(cpvCode.getDescription(), values)) {
+	    if (cpvCode.getCode().startsWith(value) || match(cpvCode.getDescription().toLowerCase(), values)) {
 		result.add(cpvCode);
 	    }
 	}
