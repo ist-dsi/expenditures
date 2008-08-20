@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.DeliveryInfo;
@@ -11,7 +12,6 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.util.Address;
 import pt.ist.expenditureTrackingSystem.domain.util.Money;
-import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.pstm.Transaction;
 
 public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
@@ -25,6 +25,9 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
     private AcquisitionRequestItem(final AcquisitionRequest acquisitionRequest, final String description, final Integer quantity,
 	    final Money unitValue, final BigDecimal vatValue, final String proposalReference, CPVReference reference) {
 	this(acquisitionRequest);
+	if (!checkSupplierFundAllocation(acquisitionRequest, quantity, unitValue)) {
+	    throw new DomainException("error.supplier.fund.allocation.not.allowed");
+	}
 	setDescription(description);
 	setQuantity(quantity);
 	setUnitValue(unitValue);
@@ -33,10 +36,16 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	setCPVReference(reference);
     }
 
+    private boolean checkSupplierFundAllocation(AcquisitionRequest acquisitionRequest, Integer quantity, Money unitValue) {
+	Money totalValue = unitValue.multiply(quantity.longValue());
+	return acquisitionRequest.getSupplier().isFundAllocationAllowed(totalValue);
+    }
+
     public AcquisitionRequestItem(final AcquisitionRequestItemBean acquisitionRequestItemBean) {
 	this(acquisitionRequestItemBean.getAcquisitionRequest(), acquisitionRequestItemBean.getDescription(),
 		acquisitionRequestItemBean.getQuantity(), acquisitionRequestItemBean.getUnitValue(), acquisitionRequestItemBean
-			.getVatValue(), acquisitionRequestItemBean.getProposalReference(), acquisitionRequestItemBean.getCPVReference());
+			.getVatValue(), acquisitionRequestItemBean.getProposalReference(), acquisitionRequestItemBean
+			.getCPVReference());
 	setDeliveryInfo(acquisitionRequestItemBean);
     }
 
@@ -57,8 +66,8 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
     }
 
     public AcquisitionRequestItem(final AcquisitionRequest acquisitionRequest, final String description, final Integer quantity,
-	    final Money unitValue, final BigDecimal vatValue, final String proposalReference, CPVReference reference, String recipient,
-	    Address address) {
+	    final Money unitValue, final BigDecimal vatValue, final String proposalReference, CPVReference reference,
+	    String recipient, Address address) {
 	this(acquisitionRequest, description, quantity, unitValue, vatValue, proposalReference, reference);
 	setRecipient(recipient);
 	setAddress(address);

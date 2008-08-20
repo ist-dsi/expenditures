@@ -64,7 +64,7 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "edit.request.item.real.values", path = "/acquisitions/editRequestItemRealValues.jsp"),
 	@Forward(name = "assign.unit.item", path = "/acquisitions/assignUnitItem.jsp"),
 	@Forward(name = "edit.real.shares.values", path = "/acquisitions/editRealSharesValues.jsp"),
-	@Forward(name = "execute.payment", path = "/acquisitions/executePayment.jsp")})
+	@Forward(name = "execute.payment", path = "/acquisitions/executePayment.jsp") })
 public class AcquisitionProcessAction extends ProcessAction {
 
     private static final Context CONTEXT = new Context("acquisitions");
@@ -212,7 +212,11 @@ public class AcquisitionProcessAction extends ProcessAction {
 
 	AcquisitionProcess acquisitionProcess = requestItemBean.getAcquisitionRequest().getAcquisitionProcess();
 	AbstractActivity<AcquisitionProcess> activity = acquisitionProcess.getActivityByName("CreateAcquisitionRequestItem");
-	activity.execute(acquisitionProcess, requestItemBean);
+	try {
+	    activity.execute(acquisitionProcess, requestItemBean);
+	} catch (DomainException de) {
+	    addErrorMessage(de.getMessage(), getBundle());
+	}
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
 

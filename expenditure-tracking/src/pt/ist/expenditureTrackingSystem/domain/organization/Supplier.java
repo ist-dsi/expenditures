@@ -2,9 +2,6 @@ package pt.ist.expenditureTrackingSystem.domain.organization;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessState;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateSupplierBean;
 import pt.ist.expenditureTrackingSystem.domain.util.Address;
@@ -72,6 +69,12 @@ public class Supplier extends Supplier_Base {
 	return new Supplier(createSupplierBean.getName(), createSupplierBean.getAbbreviatedName(), createSupplierBean
 		.getFiscalIdentificationCode(), createSupplierBean.getAddress(), createSupplierBean.getPhone(),
 		createSupplierBean.getFax(), createSupplierBean.getEmail());
+    }
+
+    public boolean isFundAllocationAllowed(final Money value) {
+	final Money totalAllocated = getTotalAllocated();
+	final Money totalValue = totalAllocated.add(value);
+	return totalValue.isLessThanOrEqual(new Money("75000"));
     }
 
 }
