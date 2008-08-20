@@ -145,7 +145,7 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 	if (user == null) {
 	    return false;
 	}
-	return isResponsibleForUnit(user.getPerson();
+	return isResponsibleForUnit(user.getPerson());
     }
 
     public void delete() {
