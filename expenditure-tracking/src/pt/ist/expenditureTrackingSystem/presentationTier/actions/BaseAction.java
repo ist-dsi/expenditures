@@ -51,7 +51,7 @@ public abstract class BaseAction extends DispatchAction {
 
     protected Person getLoggedPerson() {
 	User user = UserView.getUser();
-	return user.getPerson();
+	return user != null ? user.getPerson() : null;
     }
 
     protected <T> T getAttribute(final HttpServletRequest request, final String attributeName) {
@@ -141,4 +141,5 @@ public abstract class BaseAction extends DispatchAction {
     public void addErrorMessage(String key, String bundle, String... args) {
 	messageHandler.saveMessage(bundle, key, MessageType.ERROR, args);
     }
+    
 }
