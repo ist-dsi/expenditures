@@ -26,8 +26,6 @@
 
 			<div id="content">
 			  	<tiles:insert attribute="body" ignore="true"/>
-			  	<br/>
-			  	<br/>
 			</div>
 
 			<div id="footer">

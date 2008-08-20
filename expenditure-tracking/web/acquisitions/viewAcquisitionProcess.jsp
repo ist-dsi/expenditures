@@ -15,10 +15,8 @@
 	</fr:layout>
 </fr:view>
 
-<%-- 
-<img src="<%= request.getContextPath() + "/CSS/processImages/" + currentState.toString() + ".png"%>" style="float: right"/>
---%>
- 
+<div class="wrapper">
+
 <h2><bean:message key="label.view.acquisition.process" bundle="EXPENDITURE_RESOURCES"/></h2>
 
 <messages:hasMessages>
@@ -174,4 +172,4 @@
 	</logic:iterate>
 </logic:present>
 
-
+</div>

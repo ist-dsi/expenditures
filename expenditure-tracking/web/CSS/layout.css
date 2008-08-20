@@ -85,7 +85,6 @@ font-size: 11px;
 
 /**************** header styles ****************/
 #header {
-width: 850px;
 border: 0px;
 padding-bottom: 0;
 padding-top: 10px;button
@@ -100,7 +99,6 @@ color: #999999;
 /**************** menu styles ****************/
 #tabs10 {
 float: left;
-width: 950px;
 font-size: 93%;
 padding-bottom: 1px;
 border-bottom: 4px solid #2763A5;
@@ -141,36 +139,39 @@ background-position: 100% -42px;
 }
 
 /**************** content styles ****************/
+#header { width: 850px; }
+#tabs10 { width: 850px; }
+#container { width: 850px; }
+#container2 { width: 850px; }
+#content { width: 655px; }
+div.wrapper { padding-right: 150px; }
+#footer { width: 850px; }
 
 #container {
-width: 950px;
 margin: 0 auto;
 font-family: Verdana, Arial, Helvetica, sans-serif;
 font-size: 11px;
 line-height: 1.6em;
 color: #555;
-background-color: #FFFFFF;
 }
 
 #container2 {
-width: 946px;
 margin: 0 auto;
 font-family: Verdana, Arial, Helvetica, sans-serif;
 font-size: 11px;
 line-height: 1.6em;
 color: #555;
-background-color: #FFFFFF;
 padding-bottom: 10px;
 }
 
 #content {
-width: 750px;
 padding-left: 10px;
 padding-right: 0;
 padding-top: 10px;
-padding-bottom: 10px;
+padding-bottom: 40px;
 float: left;
 }
+
 #content form{
 float: none;
 }
@@ -209,7 +210,6 @@ padding-bottom: 6px;
 padding-left: 2px;
 padding-right: 2px;
 clear: both;
-width: 947px;
 background-color: #2763A5;
 }
 
@@ -396,9 +396,6 @@ padding: 0 0 0 14px;
 div.flow {
 width: 130px;
 float: right;
-}
-div.wrapper {
-padding-right: 120px;
 }
 div.box {
 border: 1px solid #aaa;
