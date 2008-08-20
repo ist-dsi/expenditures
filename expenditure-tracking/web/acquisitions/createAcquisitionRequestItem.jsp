@@ -22,6 +22,7 @@
 		action="/acquisitionProcess.do?method=createNewAcquisitionRequestItem">
 	<fr:layout name="tabular">
 		<fr:property name="classes" value="form"/>
+		<fr:property name="columnClasses" value=",,tderror"/>
 	</fr:layout>
 	<fr:destination name="cancel" path="<%= urlView %>" />
 	<fr:destination name="invalid" path="<%= "/acquisitionProcess.do?method=executeCreateAcquisitionRequestItem&acquisitionProcessOid=" + acquisitionProcess.getOID() %>"/>

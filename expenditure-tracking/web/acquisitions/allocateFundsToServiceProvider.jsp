@@ -5,7 +5,7 @@
 
 <h2><bean:message key="label.view.acquisition.process" bundle="EXPENDITURE_RESOURCES"/></h2>
 
-<div class="infoop2" style="width: 560px">
+<div class="infoop2">
 	<fr:view name="acquisitionProcess" property="acquisitionRequest"
 			type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest"
 			schema="viewAcquisitionRequest">
@@ -32,7 +32,7 @@
 		<bean:define id="currentIndex" value="<%= String.valueOf(index + 1) %>"/>
 		<strong><bean:message key="label.view.acquisition.request.item" bundle="ACQUISITION_RESOURCES"/></strong> (  <fr:view name="currentIndex"/> / <fr:view name="totalItems"/> )
 
-		<div class="infoop2" style="width: 560px">
+		<div class="infoop2">
 			<fr:view name="acquisitionRequestItem"
 					schema="viewAcquisitionRequestItem">
 				<fr:layout name="tabular">

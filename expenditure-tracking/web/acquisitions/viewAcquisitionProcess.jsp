@@ -22,12 +22,12 @@
 <h2><bean:message key="label.view.acquisition.process" bundle="EXPENDITURE_RESOURCES"/></h2>
 
 <messages:hasMessages>
-	<div class="infoop4" style="width: 560px">
+	<div class="infoop4">
 		<messages:showMessages/>
 	</div>
 </messages:hasMessages>
 
-<div class="infoop1" style="width: 560px">
+<div class="infoop1">
 	<ul>
 	<logic:iterate id="activity" name="acquisitionProcess" property="activeActivitiesForRequest">
 		<bean:define id="activityName" name="activity" property="class.simpleName"/> 
@@ -42,11 +42,13 @@
 		</li>
 	</logic:iterate>
 	</ul>
-	<logic:empty name="acquisitionProcess" property="activeActivitiesForRequest">		<em>
+	<logic:empty name="acquisitionProcess" property="activeActivitiesForRequest">
+		<em>
 			<bean:message key="label.no.operations.available.at.the.moment" bundle="EXPENDITURE_RESOURCES"/>.
 		</em>
 	</logic:empty>
 </div>
+
 
 <div class="expenditures">
 	<logic:equal name="acquisitionProcess" property="allowedToViewCostCenterExpenditures" value="true">
@@ -65,7 +67,8 @@
 	</logic:equal>
 </div>
 
-<div class="infoop2" style="width: 560px">
+
+<div class="infoop2">
 	<fr:view name="acquisitionProcess" property="acquisitionRequest"
 			type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest"
 			schema="viewAcquisitionRequest">
@@ -87,7 +90,6 @@
 			<em><bean:message key="label.document.not.available" bundle="ACQUISITION_RESOURCES"/></em>
 		</logic:notPresent>
 	</p>
-	
 	<p>
 		<bean:message key="label.acquisition.request.document" bundle="ACQUISITION_RESOURCES"/>:
 		<logic:present name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestDocument">
@@ -99,7 +101,6 @@
 			<em><bean:message key="label.document.not.available" bundle="ACQUISITION_RESOURCES"/></em>
 		</logic:notPresent>
 	</p>
-	
 	<p>
 		<bean:message key="label.invoice" bundle="ACQUISITION_RESOURCES"/>:
 		<logic:present name="acquisitionProcess" property="acquisitionRequest.invoice">
@@ -124,53 +125,51 @@
 	<bean:size id="totalItems" name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestItemsSet"/>
 	<logic:iterate id="acquisitionRequestItem" name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestItemsSet" indexId="index">
 		<div class="item">
-		<bean:define id="currentIndex" value="<%= String.valueOf(index + 1) %>"/>
-		<strong><bean:message key="label.view.acquisition.request.item" bundle="ACQUISITION_RESOURCES"/></strong> (  <fr:view name="currentIndex"/> / <fr:view name="totalItems"/> )
-		<bean:define id="itemOID" name="acquisitionRequestItem" property="OID"/>
-		
+			<bean:define id="currentIndex" value="<%= String.valueOf(index + 1) %>"/>
+			<strong><bean:message key="label.view.acquisition.request.item" bundle="ACQUISITION_RESOURCES"/></strong> (<fr:view name="currentIndex"/>/<fr:view name="totalItems"/>)
+			<bean:define id="itemOID" name="acquisitionRequestItem" property="OID"/>
+			
+			<logic:iterate id="activity" name="acquisitionProcess" property="activeActivitiesForItem" indexId="index">
+				<logic:greaterThan name="index" value="0"> | </logic:greaterThan>
+				<bean:define id="activityName" name="activity" property="class.simpleName"/> 
+					<html:link page="<%= "/acquisitionProcess.do?method=execute" + activityName + "&acquisitionRequestItemOid=" + itemOID%>" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
+						<fr:view name="activity" property="class">
+							<fr:layout name="label">
+								<fr:property name="bundle" value="ACQUISITION_RESOURCES"/>
+							</fr:layout>
+						</fr:view>
+					</html:link>
+			</logic:iterate>
 
-
-	<logic:iterate id="activity" name="acquisitionProcess" property="activeActivitiesForItem" indexId="index">
-		<logic:greaterThan name="index" value="0"> | </logic:greaterThan>
-		<bean:define id="activityName" name="activity" property="class.simpleName"/> 
-			<html:link page="<%= "/acquisitionProcess.do?method=execute" + activityName + "&acquisitionRequestItemOid=" + itemOID%>" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
-				<fr:view name="activity" property="class">
-					<fr:layout name="label">
-						<fr:property name="bundle" value="ACQUISITION_RESOURCES"/>
-					</fr:layout>
-				</fr:view>
-			</html:link>
-	</logic:iterate>
-
-		<logic:equal name="acquisitionRequestItem" property="valueFullyAttributedToUnits" value="false">
-			<div class="infoop4" style="width: 560px">
+			<logic:equal name="acquisitionRequestItem" property="valueFullyAttributedToUnits" value="false">
+				<div class="infoop4">
 					<strong><bean:message key="label.attention" bundle="EXPENDITURE_RESOURCES"/></strong>: <bean:message key="label.item.not.fully.attributed" bundle="ACQUISITION_RESOURCES"/>
-			</div>
-		</logic:equal>
-		<logic:equal  name="acquisitionProcess" property="acquisitionProcessState.acquisitionProcessStateType"  value="INVOICE_CONFIRMED">		
-		
-			<logic:equal name="acquisitionRequestItem" property="filledWithRealValues" value="false">
-				<div class="infoop4" style="width: 560px">
-						<strong><bean:message key="label.attention" bundle="EXPENDITURE_RESOURCES"/></strong>: <bean:message key="label.item.real.values.not.filled" bundle="ACQUISITION_RESOURCES"/>
 				</div>
 			</logic:equal>
-			<logic:equal name="acquisitionRequestItem" property="filledWithRealValues" value="true">
-				<logic:equal name="acquisitionRequestItem" property="realValueFullyAttributedToUnits" value="false">
-					<div class="infoop4" style="width: 560px">
-								<strong><bean:message key="label.attention" bundle="EXPENDITURE_RESOURCES"/></strong>: <bean:message key="label.item.real.values.not.assigned" bundle="ACQUISITION_RESOURCES"/>
+			
+			<logic:equal  name="acquisitionProcess" property="acquisitionProcessState.acquisitionProcessStateType"  value="INVOICE_CONFIRMED">		
+				<logic:equal name="acquisitionRequestItem" property="filledWithRealValues" value="false">
+					<div class="infoop4">
+						<strong><bean:message key="label.attention" bundle="EXPENDITURE_RESOURCES"/></strong>: <bean:message key="label.item.real.values.not.filled" bundle="ACQUISITION_RESOURCES"/>
 					</div>
 				</logic:equal>
+				<logic:equal name="acquisitionRequestItem" property="filledWithRealValues" value="true">
+					<logic:equal name="acquisitionRequestItem" property="realValueFullyAttributedToUnits" value="false">
+						<div class="infoop4">
+							<strong><bean:message key="label.attention" bundle="EXPENDITURE_RESOURCES"/></strong>: <bean:message key="label.item.real.values.not.assigned" bundle="ACQUISITION_RESOURCES"/>
+						</div>
+					</logic:equal>
+				</logic:equal>
 			</logic:equal>
-		</logic:equal>
 		
-		<div class="infoop2" style="width: 560px">
-			<fr:view name="acquisitionRequestItem"
-					schema="viewAcquisitionRequestItem">
-				<fr:layout name="tabular">
-					<fr:property name="classes" value="tstyle1"/>
-				</fr:layout>
-			</fr:view>
-		</div>
+			<div class="infoop2">
+				<fr:view name="acquisitionRequestItem"
+						schema="viewAcquisitionRequestItem">
+					<fr:layout name="tabular">
+						<fr:property name="classes" value="tstyle1"/>
+					</fr:layout>
+				</fr:view>
+			</div>
 		</div>
 	</logic:iterate>
 </logic:present>

@@ -12,7 +12,7 @@
 
 
 <logic:equal name="item" property="filledWithRealValues" value="false">
-	<div class="infoop4" style="width: 560px">
+	<div class="infoop4">
 			<strong><bean:message key="label.attention" bundle="EXPENDITURE_RESOURCES"/></strong>: <bean:message key="label.must.define.real.values.first" bundle="ACQUISITION_RESOURCES"/>
 	</div>
 	
