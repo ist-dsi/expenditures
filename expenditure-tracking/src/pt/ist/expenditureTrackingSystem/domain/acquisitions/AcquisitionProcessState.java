@@ -13,7 +13,6 @@ import pt.ist.fenixWebFramework.security.UserView;
 public class AcquisitionProcessState extends AcquisitionProcessState_Base {
 
     public static final Comparator<AcquisitionProcessState> COMPARATOR_BY_WHEN = new Comparator<AcquisitionProcessState>() {
-	@Override
 	public int compare(AcquisitionProcessState o1, AcquisitionProcessState o2) {
 	    return o1.getWhenDateTime().compareTo(o2.getWhenDateTime());
 	}

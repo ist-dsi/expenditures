@@ -10,7 +10,6 @@ public class AddressConverter implements FieldConversion {
     final String CHARACTER = ":";
     final String SEPARATOR = CHARACTER + CHARACTER;
 
-    @Override
     public Object javaToSql(Object source) throws ConversionException {
 	if (source instanceof Address) {
 	    final Address address = (Address) source;
@@ -34,7 +33,6 @@ public class AddressConverter implements FieldConversion {
 	return field != null ? field.replaceAll(CHARACTER, "\\\\" + CHARACTER + "\\\\") : "";
     }
 
-    @Override
     public Object sqlToJava(Object source) throws ConversionException {
 	if (source instanceof String) {
 	    final String stringAddress = (String) source;

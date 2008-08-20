@@ -132,7 +132,7 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 	List<Unit> payingUnits = getPayingUnits();
 
 	for (Authorization authorization : person.getAuthorizations()) {
-	    if (payingUnits.contains(authorization.getUnit())) {
+	    if (authorization.isValid() && payingUnits.contains(authorization.getUnit())) {
 		return true;
 	    }
 	}

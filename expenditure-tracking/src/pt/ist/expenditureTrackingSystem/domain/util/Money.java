@@ -151,7 +151,6 @@ public class Money implements Serializable, Comparable<Money> {
 	return value;
     }
 
-    @Override
     public int compareTo(Money money) {
 	checkCurreny(money);
 	return getValue().compareTo(money.getValue());

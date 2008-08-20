@@ -23,12 +23,10 @@ public class Authenticate {
 	    return person == null ? new Person(username) : person;
 	}
 
-	@Override
 	public String getUsername() {
 	    return getPerson().getUsername();
 	}
 
-	@Override
 	public boolean hasRole(final String arg0) {
 	    // TODO Auto-generated method stub
 	    return false;
