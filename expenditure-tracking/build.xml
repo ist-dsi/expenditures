@@ -153,7 +153,7 @@
 	</target>
 
 	<target name="loadTestData" depends="compile">
-		<java classname="pt.ist.expenditureTrackingSystem.LoadTestData" fork="true">
+		<java classname="pt.ist.expenditureTrackingSystem.LoadTestData" fork="true" maxmemory="1024m">
 			<jvmarg value="-Dfile.encoding=iso8859-1"/>
 			<classpath refid="run.class.path"/>
 		</java>
