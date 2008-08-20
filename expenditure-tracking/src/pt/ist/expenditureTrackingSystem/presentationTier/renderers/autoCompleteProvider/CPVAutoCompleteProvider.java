@@ -13,11 +13,22 @@ public class CPVAutoCompleteProvider implements AutoCompleteProvider {
     public Collection getSearchResults(Map<String, String> argsMap, String value, int maxCount) {
 	List<CPVReference> result = new ArrayList<CPVReference>();
 	for (final CPVReference cpvCode : ExpenditureTrackingSystem.getInstance().getCPVReferences()) {
-	    if (cpvCode.getCode().startsWith(value)) {
+	    if (cpvCode.getCode().startsWith(value) || match(cpvCode.getDescription(), value)) {
 		result.add(cpvCode);
 	    }
 	}
 	return result;
+    }
+
+    private boolean match(String description, String input) {
+	String[] inputParts = input.split(" ");
+	
+	for (final String namePart : inputParts) {
+	    if (description.indexOf(namePart) == -1) {
+		return false;
+	    }
+	}
+	return true;
     }
 
 }
