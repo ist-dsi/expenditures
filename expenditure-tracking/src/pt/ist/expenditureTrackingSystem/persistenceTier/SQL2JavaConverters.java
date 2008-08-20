@@ -8,4 +8,5 @@ public class SQL2JavaConverters {
     public static FieldConversion JavaMoney2SqlMoneyFieldConversion = new JavaMoney2SqlMoneyFieldConversion();
     public static FieldConversion BigDecimalConverter = new BigDecimalConverter();
     public static FieldConversion AddressConverter = new AddressConverter();
+    public static FieldConversion LocalDate2SqlFieldConverter = new LocalDate2SqlFieldConverter();
 }

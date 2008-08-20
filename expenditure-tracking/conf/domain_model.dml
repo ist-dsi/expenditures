@@ -2,6 +2,7 @@ package pt.ist.expenditureTrackingSystem.domain;
 
 
 valueType org.joda.time.DateTime as DateTime;
+valueType org.joda.time.LocalDate as LocalDate;
 valueType pt.ist.expenditureTrackingSystem.domain.util.ByteArray as ByteArray;
 valueType pt.ist.expenditureTrackingSystem.domain.util.Money as Money;
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType as AcquisitionProcessStateType;
@@ -68,9 +69,12 @@ class acquisitions.OperationLog extends processes.GenericLog {
 }
 
 class authorizations.Authorization {
+	String ojbConcreteClass;
 	AuthorizationType authorizationType;
 	Boolean canDelegate;
-}
+	LocalDate startDate;
+	LocalDate endDate;
+}	
 
 	class authorizations.DelegatedAuthorization extends authorizations.Authorization {
 	}
@@ -391,4 +395,11 @@ relation AcquisitionRequestItemCPVReference {
 	acquisitions.AcquisitionRequestItem playsRole acquisitionRequestItems {
 		multiplicity *;
 	}
+}
+
+relation DelegatedAuthorizationAuthorization {
+	authorizations.DelegatedAuthorization playsRole delegatedAuthorizations {
+		multiplicity *;
+	}	
+	authorizations.Authorization playsRole authorization; 
 }

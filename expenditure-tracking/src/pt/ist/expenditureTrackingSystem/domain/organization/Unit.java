@@ -3,6 +3,7 @@ package pt.ist.expenditureTrackingSystem.domain.organization;
 import java.util.Comparator;
 import java.util.Set;
 
+import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
@@ -16,7 +17,6 @@ public class Unit extends Unit_Base {
 
     public static final Comparator<Unit> COMPARATOR_BY_PRESENTATION_NAME = new Comparator<Unit>() {
 
-	@Override
 	public int compare(final Unit unit1, Unit unit2) {
 	    return unit1.getPresentationName().compareTo(unit2.getPresentationName());
 	}
@@ -57,11 +57,11 @@ public class Unit extends Unit_Base {
 
     @Service
     public void delete() {
+	if (!getAuthorizationsSet().isEmpty()) {
+	    throw new DomainException("error.cannot.delete.units.which.have.or.had.authorizations");
+	}
 	for (final Unit unit : getSubUnitsSet()) {
 	    unit.delete();
-	}
-	for (final Authorization authorizations : getAuthorizationsSet()) {
-	    authorizations.delete();
 	}
 	removeExpenditureTrackingSystemFromTopLevelUnit();
 	removeParentUnit();

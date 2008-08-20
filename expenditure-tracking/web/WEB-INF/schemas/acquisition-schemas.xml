@@ -259,8 +259,23 @@
 <schema name="viewAuthorization" type="pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization"
 		bundle="ACQUISITION_RESOURCES">
 		<slot name="person.name" key="label.person.name"/>
+		<slot name="unit.name" key="label.unit" bundle="ORGANIZATION_RESOURCES"/>
 		<slot name="class" layout="label" key="label.authorizationType"  bundle="ORGANIZATION_RESOURCES">
 			<property name="bundle" value="EXPENDITURE_RESOURCES"/>
+		</slot>
+		<slot name="canDelegate" key="label.can.delegate" bundle="ORGANIZATION_RESOURCES"/>
+		<slot name="startDate"/>
+		<slot name="endDate"/>
+</schema>
+
+<schema name="delegateAuthorization" type="pt.ist.expenditureTrackingSystem.domain.dto.AuthorizationBean"
+		bundle="ACQUISITION_RESOURCES">
+		<slot name="person" key="label.person.name" layout="autoComplete">
+			<property name="labelField" value="name"/>
+			<property name="format" value="${name} (${username})"/>
+			<property name="minChars" value="1"/>		
+			<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.PersonNameAutoComplete"/>
+			<property name="size" value="40"/>
 		</slot>
 		<slot name="canDelegate" key="label.can.delegate" bundle="ORGANIZATION_RESOURCES"/>
 </schema>
