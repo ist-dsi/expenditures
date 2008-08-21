@@ -3,6 +3,10 @@
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 
+<h2>
+	<bean:message key="label.authorizations" bundle="EXPENDITURE_RESOURCES"/>
+</h2>
+
 <logic:present name="person">
 				<fr:view name="person" property="authorizations" schema="viewAuthorization">
 					<fr:layout name="tabular">

@@ -264,8 +264,12 @@
 			<property name="bundle" value="EXPENDITURE_RESOURCES"/>
 		</slot>
 		<slot name="canDelegate" key="label.can.delegate" bundle="ORGANIZATION_RESOURCES"/>
-		<slot name="startDate"/>
-		<slot name="endDate"/>
+		<slot name="startDate" key="label.startDate" bundle="EXPENDITURE_RESOURCES" layout="null-as-label">
+			<property name="subLayout" value="default"/>
+		</slot>
+		<slot name="endDate" key="label.endDate" bundle="EXPENDITURE_RESOURCES" layout="null-as-label">
+			<property name="subLayout" value="default"/>
+		</slot>
 </schema>
 
 <schema name="delegateAuthorization" type="pt.ist.expenditureTrackingSystem.domain.dto.AuthorizationBean"

@@ -4,6 +4,10 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/messages.tld" prefix="messages" %>
 
+<h2>
+	<bean:message key="label.delegate.authorization" bundle="EXPENDITURE_RESOURCES"/>
+</h2>
+
 <messages:hasMessages type="WARN">
 	<div class="infoop4">
 		<messages:showMessages type="WARN"/>
