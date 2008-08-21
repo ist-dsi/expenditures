@@ -147,7 +147,7 @@
 
 			<logic:equal name="acquisitionRequestItem" property="valueFullyAttributedToUnits" value="false">
 				<div class="infoop4">
-					<strong><bean:message key="label.attention" bundle="EXPENDITURE_RESOURCES"/></strong>: <bean:message key="label.item.not.fully.attributed" bundle="ACQUISITION_RESOURCES"/>
+					<strong><bean:message key="label.attention" bundle="EXPENDITURE_RESOURCES"/>:</strong> <bean:message key="label.item.not.fully.attributed" bundle="ACQUISITION_RESOURCES"/>
 				</div>
 			</logic:equal>
 			

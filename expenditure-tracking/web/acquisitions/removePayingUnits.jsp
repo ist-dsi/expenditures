@@ -5,13 +5,13 @@
 
 <h2><bean:message key="label.pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.RemovePayingUnit" bundle="ACQUISITION_RESOURCES"/></h2>
 
-<ul>
-	<li>
-		<html:link page="/acquisitionProcess.do?method=viewAcquisitionProcess" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
-			<bean:message key="link.back" bundle="EXPENDITURE_RESOURCES"/>
-		</html:link>
-	</li>
-</ul>
+
+<p>
+	<html:link page="/acquisitionProcess.do?method=viewAcquisitionProcess" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
+		<bean:message key="link.back" bundle="EXPENDITURE_RESOURCES"/>
+	</html:link>
+</p>
+
 
 <bean:define id="processOID" name="acquisitionProcess" property="OID"/>
 <fr:view name="payingUnits" schema="unitName">
@@ -19,7 +19,7 @@
 		<fr:property name="classes" value="tstyle2"/>
 		<fr:property name="link(delete)" value="<%= "/acquisitionProcess.do?method=removePayingUnit&acquisitionProcessOid=" + processOID %>"/>
 		<fr:property name="bundle(delete)" value="EXPENDITURE_RESOURCES"/>
-		<fr:property name="key(delete)" value="link.delete"/>
+		<fr:property name="key(delete)" value="link.remove"/>
 		<fr:property name="param(delete)" value="OID/unitOID"/>
 		<fr:property name="order(delete)" value="1"/>
 	</fr:layout>

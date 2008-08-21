@@ -282,6 +282,7 @@ background-color: #ffeadd;
 .mbottom05 { margin-bottom: 0.5em !important; }
 .mbottom1 { margin-bottom: 1em !important; }
 .mbottom15 { margin-bottom: 1.5em !important; }
+.mbottom2 { margin-bottom: 2em !important; }
 .mtop0 { margin-top: 0em !important; }
 .mtop05 { margin-top: 0.5em !important; }
 .mtop1 { margin-top: 1em !important; }
@@ -340,13 +341,17 @@ text-align: left;
 font-weight: normal;
 padding: 2px 0;
 white-space: nowrap;
+vertical-align: top;
 }
 table.tstyle1 td {
 text-align: left;
 padding: 2px 0;
 padding-left: 10px;
 }
-
+table.tstyle1 ul {
+margin: 0;
+padding: 0;
+}
 table.tstyle2 {
 border-collapse: collapse;
 margin: 1em 0;
@@ -368,7 +373,7 @@ border: 1px solid #ccc;
 
 table.tstyle3 {
 border-collapse: collapse;
-margin: 1em 0 1.5em 0;
+margin: 1em 0 2em 0;
 }
 table.tstyle3 th {
 text-align: left;
@@ -384,10 +389,25 @@ border-bottom: 1px solid #ddd;
 padding: 5px 0;
 padding-left: 20px;
 }
-
-table tr td.tdleft {
-text-align: left !important;
+/* tstyle4 > like tstyle3 but for horizontal display */
+table.tstyle4 {
+border-collapse: collapse;
+margin: 1em 0 1em 0;
 }
+table.tstyle4 th {
+text-align: left;
+border-top: 1px solid #ddd;
+border-bottom: 1px solid #ddd;
+font-weight: normal;
+padding: 5px 10px 5px 0;
+}
+table.tstyle4 td {
+text-align: left;
+border-top: 1px solid #ddd;
+border-bottom: 1px solid #ddd;
+padding: 5px 15px 5px 0;
+}
+
 
 .documents {
 margin: 1em 0;
@@ -497,3 +517,11 @@ padding: 0 0.25em;
 .nobullet { list-style: none; }
 .dinline { display: inline; }
 .forminline form { display: inline !important; }
+
+
+
+table.payingunits { margin: 0; }
+table.payingunits th { display: none; }
+table.payingunits td { padding: 0 10px 0 0 !important; }
+.nowrap { white-space: nowrap; }
+.vatop { vertical-align: top; }

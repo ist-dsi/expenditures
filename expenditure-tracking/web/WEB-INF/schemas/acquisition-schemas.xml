@@ -124,10 +124,9 @@
 	.<slot name="shipmentValue" key="label.acquisition.request.item.ShipmentValue" bundle="ACQUISITION_RESOURCES" layout="null-as-label">
 		<property name="subLayout" value="default"/>
 	</slot>
-	<slot name="unitItems" key="label.payingUnits" bundle="ACQUISITION_RESOURCES">
-		<property name="classes" value="nobullet"/>
-		<property name="eachSchema" value="viewUnitItem"/>
-		<property name="eachLayout" value="values"/>
+	<slot name="unitItems" key="label.payingUnits" bundle="ACQUISITION_RESOURCES" layout="tabular" schema="viewUnitItem">
+		<property name="classes" value="payingunits"/>
+		<property name="columnClasses" value=",nowrap vatop,"/>
 	</slot>
 	<slot name="CPVReference" key="label.acquisition.request.item.salesCode" bundle="ACQUISITION_RESOURCES" layout="format">
 		<property name="format" value="${code} - ${description}"/>

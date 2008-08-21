@@ -33,7 +33,7 @@
 		
 		<fr:edit id="unitItemBeans" name="unitItemBeans" visible="false"/>
 			
-		<table class="tstyle3 tdleft">
+		<table class="tstyle4">
 			<tr>
 				<th>
 					<strong><bean:message key="label.payingUnit" bundle="ACQUISITION_RESOURCES"/></strong>
@@ -60,7 +60,7 @@
 			</logic:iterate>
 		</table>
 
-		<p>
+		<p class="mtop05 mbottom2">
 			<a href="javascript:document.forms[1].method.value='calculateShareValuePostBack'; document.forms[1].submit();"> <bean:message key="label.auto.distribute" bundle="ACQUISITION_RESOURCES"/> </a>
 		</p>
 		
