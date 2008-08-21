@@ -12,7 +12,6 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.fenixWebFramework.security.UserView;
 import pt.ist.fenixWebFramework.services.Service;
-import pt.ist.fenixframework.pstm.Transaction;
 
 public class Authorization extends Authorization_Base {
 
@@ -47,7 +46,7 @@ public class Authorization extends Authorization_Base {
     public Boolean getCanDelegate() {
 	return super.getCanDelegate() && isValid();
     }
-    
+
     @Service
     public void revoke() {
 	if (!isCurrentUserAbleToRevoke()) {
@@ -59,8 +58,22 @@ public class Authorization extends Authorization_Base {
 	}
     }
 
+    @Override
+    public void setEndDate(LocalDate endDate) {
+
+	super.setEndDate(endDate);
+
+	if (endDate != null && (super.getEndDate() == null || super.getEndDate().isAfter(endDate))) {
+	    for (Authorization delegatedAuthorization : getDelegatedAuthorizations()) {
+		if (delegatedAuthorization.getEndDate() == null || delegatedAuthorization.getEndDate().isAfter(endDate)) {
+		    delegatedAuthorization.setEndDate(endDate);
+		}
+	    }
+	}
+    }
+
     public boolean isValid() {
-	return getEndDate() == null;
+	return getEndDate() == null || getEndDate().isAfter(new LocalDate());
     }
 
     public boolean isCurrentUserAbleToRevoke() {

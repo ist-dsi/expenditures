@@ -273,7 +273,7 @@
 
 <schema name="delegateAuthorization" type="pt.ist.expenditureTrackingSystem.domain.dto.AuthorizationBean"
 		bundle="ACQUISITION_RESOURCES">
-		<slot name="person" key="label.person.name" layout="autoComplete">
+		<slot name="person" key="label.person.name" layout="autoComplete" validator="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator">
 			<property name="labelField" value="name"/>
 			<property name="format" value="${name} (${username})"/>
 			<property name="minChars" value="1"/>		
@@ -281,4 +281,5 @@
 			<property name="size" value="40"/>
 		</slot>
 		<slot name="canDelegate" key="label.can.delegate" bundle="ORGANIZATION_RESOURCES"/>
+		<slot name="endDate" key="label.endDate" bundle="EXPENDITURE_RESOURCES"/>
 </schema>

@@ -53,7 +53,7 @@ public class AuthorizationAction extends BaseAction {
 	    AuthorizationBean bean = new AuthorizationBean(authorization);
 	    request.setAttribute("bean", bean);
 	} else {
-	    addErrorMessage("label.unable.to.delegate.that.action", "EXPENDITURE_RESOURCE");
+	    addErrorMessage("label.unable.to.delegate.that.action", "EXPENDITURE_RESOURCES");
 	}
 
 	return mapping.findForward("delegate.authorization");
@@ -64,9 +64,9 @@ public class AuthorizationAction extends BaseAction {
 
 	AuthorizationBean bean = getRenderedObject("bean");
 	try {
-	    DelegatedAuthorization.delegate(bean.getAuthorization(), bean.getPerson(), bean.getCanDelegate());
+	    DelegatedAuthorization.delegate(bean.getAuthorization(), bean.getPerson(), bean.getCanDelegate(), bean.getEndDate());
 	} catch (DomainException e) {
-	    addErrorMessage(e.getMessage(), "EXPENDITURE_RESOURCE");
+	    addErrorMessage(e.getMessage(), "EXPENDITURE_RESOURCES");
 	    request.setAttribute("bean", bean);
 	    return mapping.findForward("delegate.authorization");
 	}
