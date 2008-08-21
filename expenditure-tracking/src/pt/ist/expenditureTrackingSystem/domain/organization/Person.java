@@ -25,6 +25,7 @@ public class Person extends Person_Base {
     public Person(final String username) {
 	this();
 	setUsername(username);
+	setName(username);
     }
 
     @Service
