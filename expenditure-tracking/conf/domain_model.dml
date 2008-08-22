@@ -91,7 +91,7 @@ class File {
 
 	class acquisitions.Invoice extends File {
 		String invoiceNumber;
-		DateTime invoiceDate;
+		LocalDate invoiceDate;
 	}
 	
 	class acquisitions.AcquisitionRequestDocument extends File {

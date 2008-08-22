@@ -1,6 +1,6 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.activities;
 
-import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
@@ -28,7 +28,7 @@ public class ReceiveInvoice extends GenericAcquisitionProcessActivity {
 	String filename = (String) objects[0];
 	byte[] bytes = (byte[]) objects[1];
 	String invoiceNumber = (String) objects[2];
-	DateTime invoiceDate = (DateTime) objects[3];
+	LocalDate invoiceDate = (LocalDate) objects[3];
 	
 	acquisitionRequest.receiveInvoice(filename, bytes, invoiceNumber, invoiceDate);
 	new AcquisitionProcessState(process, AcquisitionProcessStateType.INVOICE_RECEIVED);

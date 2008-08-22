@@ -1,6 +1,6 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
-import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
@@ -99,7 +99,7 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	return result;
     }
 
-    public void receiveInvoice(final String filename, final byte[] bytes, final String invoiceNumber, final DateTime invoiceDate) {
+    public void receiveInvoice(final String filename, final byte[] bytes, final String invoiceNumber, final LocalDate invoiceDate) {
 	final Invoice invoice = hasInvoice() ? getInvoice() : new Invoice(this);
 	invoice.setFilename(filename);
 	invoice.setContent(new ByteArray(bytes));
@@ -112,7 +112,7 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	return invoice == null ? null : invoice.getInvoiceNumber();
     }
 
-    public DateTime getInvoiceDate() {
+    public LocalDate getInvoiceDate() {
 	final Invoice invoice = getInvoice();
 	return invoice == null ? null : invoice.getInvoiceDate();
     }

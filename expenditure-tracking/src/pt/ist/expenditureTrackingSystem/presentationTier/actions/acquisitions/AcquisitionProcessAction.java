@@ -12,7 +12,7 @@ import net.sf.jasperreports.engine.JRException;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
@@ -79,7 +79,7 @@ public class AcquisitionProcessAction extends ProcessAction {
 
     public static class ReceiveInvoiceForm extends FileUploadBean {
 	private String invoiceNumber;
-	private DateTime invoiceDate;
+	private LocalDate invoiceDate;
 
 	public String getInvoiceNumber() {
 	    return invoiceNumber;
@@ -89,11 +89,11 @@ public class AcquisitionProcessAction extends ProcessAction {
 	    this.invoiceNumber = invoiceNumber;
 	}
 
-	public DateTime getInvoiceDate() {
+	public LocalDate getInvoiceDate() {
 	    return invoiceDate;
 	}
 
-	public void setInvoiceDate(DateTime invoiceDate) {
+	public void setInvoiceDate(LocalDate invoiceDate) {
 	    this.invoiceDate = invoiceDate;
 	}
     }
