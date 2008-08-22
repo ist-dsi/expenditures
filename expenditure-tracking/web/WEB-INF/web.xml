@@ -54,6 +54,14 @@
             <param-value>true</param-value> 
         </init-param>
     </filter>
+    <filter>
+	    <filter-name>RequestChecksumFilter</filter-name>
+	    <filter-class>pt.ist.expenditureTrackingSystem.presentationTier.servlets.filters.contentRewrite.RequestChecksumFilter</filter-class>
+	</filter>
+   	<filter>
+	    <filter-name>RequestRewriteFilter</filter-name>
+	    <filter-class>pt.ist.fenixWebFramework.servlets.filters.contentRewrite.RequestRewriterFilter</filter-class>
+	</filter>
 
 	<!-- Filter Mapping -->
     <filter-mapping>
@@ -104,7 +112,15 @@
 	    <filter-name>CASFilter</filter-name>
 	    <url-pattern>/login.do</url-pattern>
     </filter-mapping>
- 
+    <filter-mapping>
+	    <filter-name>RequestChecksumFilter</filter-name>
+	    <url-pattern>*.do</url-pattern>
+    </filter-mapping>
+ 	<filter-mapping>
+	    <filter-name>RequestRewriteFilter</filter-name>
+	    <url-pattern>*.do</url-pattern>
+    </filter-mapping>
+    
     <!-- Listeners -->
 	<servlet>
         <servlet-name>StartupServlet</servlet-name>

@@ -67,6 +67,11 @@ float:right;
 font-size: 10px;
 }
 
+div.login {
+float:right;
+font-size: 10px;
+}
+
 input {
 background-color: #FFFFFF;
 color: #999999;

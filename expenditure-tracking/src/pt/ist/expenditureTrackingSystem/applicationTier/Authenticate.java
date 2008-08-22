@@ -12,7 +12,9 @@ public class Authenticate {
     public static class User implements pt.ist.fenixWebFramework.security.User, Serializable {
 
 	private final DomainReference<Person> personReference;
-
+	
+	private transient String privateConstantForDigestCalculation;
+	
 	private User(final String username) {
 	    final Person person = findByUsername(username);
 	    personReference = new DomainReference<Person>(person);
@@ -44,6 +46,15 @@ public class Authenticate {
 
 	public Person getPerson() {
 	    return personReference == null ? null : personReference.getObject();
+	}
+
+	// TODO do an accurate and secure method here
+	public String getPrivateConstantForDigestCalculation() {
+	    if (privateConstantForDigestCalculation == null) {
+		final Person person = getPerson();
+		privateConstantForDigestCalculation = person.getUsername() + person.getPassword();
+	    }
+	    return privateConstantForDigestCalculation;
 	}
     }
 

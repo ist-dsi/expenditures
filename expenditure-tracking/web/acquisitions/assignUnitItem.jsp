@@ -61,7 +61,7 @@
 		</table>
 
 		<p class="mtop05 mbottom2">
-			<a href="javascript:document.forms[1].method.value='calculateShareValuePostBack'; document.forms[1].submit();"> <bean:message key="label.auto.distribute" bundle="ACQUISITION_RESOURCES"/> </a>
+			<a href="javascript:document.forms[0].method.value='calculateShareValuePostBack'; document.forms[0].submit();"> <bean:message key="label.auto.distribute" bundle="ACQUISITION_RESOURCES"/> </a>
 		</p>
 		
 			<html:submit styleClass="inputbutton"><bean:message key="renderers.form.submit.name" bundle="RENDERER_RESOURCES"/> </html:submit>
