@@ -67,7 +67,7 @@
 					<textElement>
 						<font/>
 					</textElement>
-				<text><![CDATA[Requisição nº - ]]></text>
+				<text><![CDATA[RequisiÃ§Ã£o nÂº - ]]></text>
 				</staticText>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -119,7 +119,7 @@
 					<textElement>
 						<font/>
 					</textElement>
-				<text><![CDATA[Número Fiscal:]]></text>
+				<text><![CDATA[NÃºmero Fiscal:]]></text>
 				</staticText>
 				<staticText>
 					<reportElement
@@ -257,7 +257,7 @@
 					<textElement>
 						<font/>
 					</textElement>
-				<text><![CDATA[Referência]]></text>
+				<text><![CDATA[ReferÃªncia]]></text>
 				</staticText>
 				<staticText>
 					<reportElement
@@ -270,7 +270,7 @@
 					<textElement>
 						<font/>
 					</textElement>
-				<text><![CDATA[Descrição]]></text>
+				<text><![CDATA[DescriÃ§Ã£o]]></text>
 				</staticText>
 				<staticText>
 					<reportElement
@@ -296,7 +296,7 @@
 					<textElement>
 						<font/>
 					</textElement>
-				<text><![CDATA[Valor Unitário]]></text>
+				<text><![CDATA[Valor UnitÃ¡rio]]></text>
 				</staticText>
 				<line direction="TopDown">
 					<reportElement

@@ -1,3 +1,4 @@
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@page import="pt.ist.expenditureTrackingSystem.presentationTier.Context"%>
 
@@ -9,17 +10,17 @@
 	<ul>
 		<li>
 			<html:link action="/home.do?method=firstPage">
-				Anúncios
+				AnÃºncios
 			</html:link>
 		</li>
 		<li>
 			<html:link action="/home.do?method=firstPage">
-				Estatísticas
+				EstatÃ­sticas
 			</html:link>
 		</li>
 		<li>
 			<html:link action="/home.do?method=firstPage">
-				Documentação
+				DocumentaÃ§Ã£o
 			</html:link>
 		</li>
 	</ul>

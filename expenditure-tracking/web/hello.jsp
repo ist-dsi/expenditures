@@ -1,20 +1,21 @@
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
 <logic:notPresent name="user">
-	<h2>Anúncios</h2>
+	<h2>AnÃºncios</h2>
 	<p>
 		...
 	</p>
 
-	<h2>Estatísticas</h2>
+	<h2>EstatÃ­sticas</h2>
 	<p>
 		...
 	</p>
 
-	<h2>Documentação</h2>
+	<h2>DocumentaÃ§Ã£o</h2>
 	<p>
 		...
 	</p>
