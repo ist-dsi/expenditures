@@ -100,8 +100,21 @@
 		bundle="ACQUISITION_RESOURCES">
 	<slot name="deliveryInfo" layout="menu-select" key="label.acquisition.request.item.deliveryInfo" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
 		<property name="providerClass" value="pt.ist.expenditureTrackingSystem.presentationTier.renderers.dataProvider.DeliveryInfoProvider"/>
-		<property name="format" value="${recipient} - ${address.line1}, ${address.line2}, ${address.postalCode}, ${address.location}, ${address.country}"/>
+		<property name="eachLayout" value="nonNullValues-commaSeparated"/>
+		<property name="eachSchema" value="showDeliveryInfo"/> 
 	</slot>
+</schema>
+
+	
+<schema name="showDeliveryInfo" 
+		type="pt.ist.expenditureTrackingSystem.domain.organization.DeliveryInfo"
+		bundle="ACQUISITION_RESOURCES">
+	<slot name="recipient"/>
+	<slot name="address.line1"/>
+	<slot name="address.line2"/>
+	<slot name="address.postalCode"/>
+	<slot name="address.location"/>
+	<slot name="address.country"/>
 </schema>
 
 <schema name="viewAcquisitionRequestItem"

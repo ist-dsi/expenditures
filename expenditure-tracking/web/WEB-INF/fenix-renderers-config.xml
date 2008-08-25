@@ -89,6 +89,10 @@ Documentation:
 	<!--@ Same thing as values renderer but does not displays slots with null values -->
     <renderer type="java.lang.Object" layout="nonNullValues" class="pt.ist.fenixWebFramework.rendererExtensions.NonNullValuesRenderer"/>
 
+	<renderer type="java.lang.Object" layout="nonNullValues-commaSeparated" class="pt.ist.fenixWebFramework.rendererExtensions.NonNullValuesRenderer">
+		<property name="htmlSeparator" value=", "/>
+	</renderer>
+	
     <!--@ The format offers other way of presenting objects inline. The <tt>format</tt> property accepts a special
           syntax that allows you to choose how the information is presented. Read the renderer documentation for
           more details. -->
