@@ -5,6 +5,12 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
          version="2.4">
 	<distributable/>
+	<locale-encoding-mapping-list>
+		<locale-encoding-mapping>
+			<locale>pt</locale>
+			<encoding>UTF-8</encoding>
+		</locale-encoding-mapping>
+	</locale-encoding-mapping-list>
 
 	<filter>
 	    <filter-name>MultipartFilter</filter-name>
@@ -16,6 +22,14 @@
 		<init-param>
 			<param-name>uploadThresholdSize</param-name>
 			<param-value>1m</param-value>
+		</init-param>
+	</filter>
+	<filter>
+		<filter-name>CharsetEncoding</filter-name>
+		<filter-class>pt.ist.expenditureTrackingSystem.presentationTier.servlets.filters.CharsetEncodingFilter</filter-class>
+		<init-param>
+			<param-name>defaultCharset</param-name>
+			<param-value>UTF-8</param-value>
 		</init-param>
 	</filter>
 	<filter>
@@ -64,6 +78,10 @@
 	</filter>
 
 	<!-- Filter Mapping -->
+	<filter-mapping>
+        <filter-name>CharsetEncoding</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
     <filter-mapping>
         <filter-name>PathAccessControlFilter</filter-name>
         <url-pattern>/*</url-pattern>
