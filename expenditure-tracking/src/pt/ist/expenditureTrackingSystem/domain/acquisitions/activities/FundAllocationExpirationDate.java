@@ -1,6 +1,6 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.activities;
 
-import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
@@ -23,7 +23,7 @@ public class FundAllocationExpirationDate extends GenericAcquisitionProcessActiv
     @Override
     protected void process(AcquisitionProcess process, Object... objects) {
 	final FundAllocationExpirationDateBean fundAllocationExpirationDateBean = (FundAllocationExpirationDateBean) objects[0];
-	final DateTime fundAllocationExpirationDate = fundAllocationExpirationDateBean.getFundAllocationExpirationDate();
+	final LocalDate fundAllocationExpirationDate = fundAllocationExpirationDateBean.getFundAllocationExpirationDate();
 	process.setFundAllocationExpirationDate(fundAllocationExpirationDate);
 	new AcquisitionProcessState(process, AcquisitionProcessStateType.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER);
 

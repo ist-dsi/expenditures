@@ -2,17 +2,17 @@ package pt.ist.expenditureTrackingSystem.domain.dto;
 
 import java.io.Serializable;
 
-import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 public class FundAllocationExpirationDateBean implements Serializable {
 
-    private DateTime fundAllocationExpirationDate;
+    private LocalDate fundAllocationExpirationDate;
 
-    public DateTime getFundAllocationExpirationDate() {
+    public LocalDate getFundAllocationExpirationDate() {
         return fundAllocationExpirationDate;
     }
 
-    public void setFundAllocationExpirationDate(DateTime fundAllocationExpirationDate) {
+    public void setFundAllocationExpirationDate(LocalDate fundAllocationExpirationDate) {
         this.fundAllocationExpirationDate = fundAllocationExpirationDate;
     }
 

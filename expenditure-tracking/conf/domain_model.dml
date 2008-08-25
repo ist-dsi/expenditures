@@ -20,7 +20,7 @@ class processes.GenericProcess {
 
 class acquisitions.AcquisitionProcess extends processes.GenericProcess {
 	String fundAllocationId;
-	DateTime fundAllocationExpirationDate;
+	LocalDate fundAllocationExpirationDate;
 }
 
 class acquisitions.AcquisitionProcessState {
