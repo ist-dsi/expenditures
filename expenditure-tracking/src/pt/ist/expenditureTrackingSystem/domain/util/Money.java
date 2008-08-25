@@ -3,6 +3,7 @@ package pt.ist.expenditureTrackingSystem.domain.util;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.NumberFormat;
 import java.util.Currency;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
@@ -170,4 +171,13 @@ public class Money implements Serializable, Comparable<Money> {
 	return getValue().compareTo(money.getValue()) == 0 && getCurrency().equals(money.getCurrency());
     }
 
+    private NumberFormat getCurrencyFormat() {
+	NumberFormat numberFormat = NumberFormat.getCurrencyInstance(Language.getLocale());
+	numberFormat.setCurrency(getCurrency());
+	return numberFormat;
+    }
+
+    public String toFormatString() {
+	return getCurrencyFormat().format(getValue().doubleValue());
+    }
 }

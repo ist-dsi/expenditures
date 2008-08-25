@@ -46,6 +46,8 @@ import pt.ist.fenixframework.pstm.Transaction;
 
 public class AcquisitionProcess extends AcquisitionProcess_Base {
 
+    private static Money PROCESS_VALUE_LIMIT = new Money("5000");
+
     private static Map<ActivityScope, List<GenericAcquisitionProcessActivity>> activities = new HashMap<ActivityScope, List<GenericAcquisitionProcessActivity>>();
 
     public enum ActivityScope {
@@ -317,6 +319,10 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 
     public boolean isRejected() {
 	return isProcessInState(AcquisitionProcessStateType.REJECTED);
+    }
+
+    public Money getAcquisitionRequestValueLimit() {
+	return PROCESS_VALUE_LIMIT;
     }
 
 }

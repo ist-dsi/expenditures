@@ -11,6 +11,8 @@ import pt.ist.fenixframework.pstm.Transaction;
 
 public class Supplier extends Supplier_Base {
 
+    private static Money SUPPLIER_LIMIT = new Money("75000");
+
     private Supplier() {
 	super();
 	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
@@ -74,7 +76,7 @@ public class Supplier extends Supplier_Base {
     public boolean isFundAllocationAllowed(final Money value) {
 	final Money totalAllocated = getTotalAllocated();
 	final Money totalValue = totalAllocated.add(value);
-	return totalValue.isLessThanOrEqual(new Money("75000"));
+	return totalValue.isLessThanOrEqual(SUPPLIER_LIMIT);
     }
 
 }

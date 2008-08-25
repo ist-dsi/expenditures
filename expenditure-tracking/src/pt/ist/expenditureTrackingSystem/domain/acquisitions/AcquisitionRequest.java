@@ -230,4 +230,10 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	return Money.ZERO;
     }
 
+    public boolean isValueAllowed(Money value) {
+	Money totalItemValue = getTotalItemValue();
+	Money totalValue = totalItemValue.add(value);
+	return totalValue.isLessThanOrEqual(getAcquisitionProcess().getAcquisitionRequestValueLimit());
+    }
+
 }

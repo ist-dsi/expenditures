@@ -3,9 +3,15 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
+<%@ taglib uri="/WEB-INF/messages.tld" prefix="messages" %>
 
 <h2><bean:message key="label.create.acquisition.request.item" bundle="ACQUISITION_RESOURCES"/></h2>
 
+<messages:hasMessages type="ERROR">
+	<div class="error1">
+		<messages:showMessages type="ERROR"/>
+	</div>
+</messages:hasMessages>
 
 <bean:define id="schemaType"
 		name="bean"

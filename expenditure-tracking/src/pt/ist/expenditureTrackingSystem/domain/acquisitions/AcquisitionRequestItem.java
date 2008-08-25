@@ -16,18 +16,17 @@ import pt.ist.fenixframework.pstm.Transaction;
 
 public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 
-    public AcquisitionRequestItem(final AcquisitionRequest acquisitionRequest) {
+    protected AcquisitionRequestItem() {
 	super();
 	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
-	setAcquisitionRequest(acquisitionRequest);
     }
 
     private AcquisitionRequestItem(final AcquisitionRequest acquisitionRequest, final String description, final Integer quantity,
 	    final Money unitValue, final BigDecimal vatValue, final String proposalReference, CPVReference reference) {
-	this(acquisitionRequest);
-	if (!checkSupplierFundAllocation(acquisitionRequest, quantity, unitValue)) {
-	    throw new DomainException("error.supplier.fund.allocation.not.allowed");
-	}
+
+	checkLimits(acquisitionRequest, quantity, unitValue);
+
+	setAcquisitionRequest(acquisitionRequest);
 	setDescription(description);
 	setQuantity(quantity);
 	setUnitValue(unitValue);
@@ -36,8 +35,23 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	setCPVReference(reference);
     }
 
-    private boolean checkSupplierFundAllocation(AcquisitionRequest acquisitionRequest, Integer quantity, Money unitValue) {
+    private void checkLimits(AcquisitionRequest acquisitionRequest, Integer quantity, Money unitValue) {
 	Money totalValue = unitValue.multiply(quantity.longValue());
+	if (!checkAcquisitionRequestValueLimit(acquisitionRequest, totalValue)) {
+	    throw new DomainException("error.acquisition.request.total.value.exceeded", acquisitionRequest
+		    .getAcquisitionProcess().getAcquisitionRequestValueLimit().toFormatString());
+	}
+
+	if (!checkSupplierFundAllocation(acquisitionRequest, totalValue)) {
+	    throw new DomainException("error.supplier.fund.allocation.not.allowed");
+	}
+    }
+
+    private boolean checkAcquisitionRequestValueLimit(AcquisitionRequest acquisitionRequest, Money totalValue) {
+	return acquisitionRequest.isValueAllowed(totalValue);
+    }
+
+    private boolean checkSupplierFundAllocation(AcquisitionRequest acquisitionRequest, Money totalValue) {
 	return acquisitionRequest.getSupplier().isFundAllocationAllowed(totalValue);
     }
 

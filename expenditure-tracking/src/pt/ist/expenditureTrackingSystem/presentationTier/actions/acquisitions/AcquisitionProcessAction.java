@@ -201,6 +201,11 @@ public class AcquisitionProcessAction extends ProcessAction {
     public ActionForward executeCreateAcquisitionRequestItem(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
+	return executeCreateAcquisitionRequestItem(mapping, request, acquisitionProcess);
+    }
+
+    private ActionForward executeCreateAcquisitionRequestItem(final ActionMapping mapping, final HttpServletRequest request,
+	    AcquisitionProcess acquisitionProcess) {
 	request.setAttribute("bean", new AcquisitionRequestItemBean(acquisitionProcess.getAcquisitionRequest()));
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
 	return mapping.findForward("create.acquisition.request.item");
@@ -214,8 +219,9 @@ public class AcquisitionProcessAction extends ProcessAction {
 	AbstractActivity<AcquisitionProcess> activity = acquisitionProcess.getActivityByName("CreateAcquisitionRequestItem");
 	try {
 	    activity.execute(acquisitionProcess, requestItemBean);
-	} catch (DomainException de) {
-	    addErrorMessage(de.getMessage(), getBundle());
+	} catch (DomainException e) {
+	    addErrorMessage(e.getMessage(), getBundle(), e.getArgs());
+	    return executeCreateAcquisitionRequestItem(mapping, request, acquisitionProcess);
 	}
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
