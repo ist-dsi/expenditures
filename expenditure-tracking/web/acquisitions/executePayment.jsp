@@ -7,4 +7,24 @@
 
 <bean:define id="processOID" name="process" property="OID"/>
 
-Payment Info: <fr:edit id="reference" name="bean" slot="string" action="<%= "/acquisitionProcess.do?method=executePayAcquisitionAction&amp;acquisitionProcessOid=" + processOID %>"/> 
+<h2><bean:message key="label.pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.PayAcquisition" bundle="ACQUISITION_RESOURCES"/></h2>
+
+<fr:form action="<%= "/acquisitionProcess.do?method=executePayAcquisitionAction&amp;acquisitionProcessOid=" + processOID %>">
+	<table>
+		<tr>
+			<td>
+				<bean:message key="label.payment.identification" bundle="ACQUISITION_RESOURCES"/>: 
+			</td>
+			<td>	
+				<fr:edit id="reference" name="bean" slot="string" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+					<html:submit styleClass="inputbutton"><bean:message key="renderers.form.submit.name" bundle="RENDERER_RESOURCES"/></html:submit>
+			</td>
+			<td>
+			</td>
+		</tr>
+	</table> 
+</fr:form>
