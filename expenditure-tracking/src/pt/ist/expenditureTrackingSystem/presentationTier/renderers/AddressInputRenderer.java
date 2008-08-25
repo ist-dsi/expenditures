@@ -12,6 +12,7 @@ import pt.ist.fenixWebFramework.renderers.components.HtmlBlockContainer;
 import pt.ist.fenixWebFramework.renderers.components.HtmlComponent;
 import pt.ist.fenixWebFramework.renderers.components.HtmlMultipleHiddenField;
 import pt.ist.fenixWebFramework.renderers.components.HtmlTable;
+import pt.ist.fenixWebFramework.renderers.components.HtmlTableCell;
 import pt.ist.fenixWebFramework.renderers.components.HtmlTableRow;
 import pt.ist.fenixWebFramework.renderers.components.HtmlText;
 import pt.ist.fenixWebFramework.renderers.components.HtmlTextInput;
@@ -100,6 +101,8 @@ public class AddressInputRenderer extends InputRenderer {
 
 		HtmlBlockContainer container = new HtmlBlockContainer();
 
+		final HtmlTableCell[] errorCells = new HtmlTableCell[5];
+		
 		HtmlMultipleHiddenField htmlMultipleHiddenField = new HtmlMultipleHiddenField();
 		MetaSlotKey key = (MetaSlotKey) getInputContext().getMetaObject().getKey();
 		htmlMultipleHiddenField.setTargetSlot(key);
@@ -114,35 +117,40 @@ public class AddressInputRenderer extends InputRenderer {
 		line1.setName(key.toString() + "_line1");
 		line1.setValue(address != null ? address.getLine1() : null);
 		row.createCell().setBody(line1);
-
+		errorCells[0] = row.createCell();
+		
 		HtmlTextInput line2 = new HtmlTextInput();
 		HtmlTableRow row2 = table.createRow();
 		row2.createCell().setBody(new HtmlText(RenderUtils.getResourceString(bundle, line2Key) + ":"));
 		line2.setName(key.toString() + "_line2");
 		line2.setValue(address != null ? address.getLine2() : null);
 		row2.createCell().setBody(line2);
-
+		errorCells[1] = row2.createCell(); 
+		
 		HtmlTextInput location = new HtmlTextInput();
 		HtmlTableRow row3 = table.createRow();
 		row3.createCell().setBody(new HtmlText(RenderUtils.getResourceString(bundle, locationKey) + ":"));
 		location.setName(key.toString() + "_location");
 		location.setValue(address != null ? address.getLocation() : null);
 		row3.createCell().setBody(location);
-
+		errorCells[2] = row3.createCell();
+ 		
 		HtmlTextInput postalCode = new HtmlTextInput();
 		HtmlTableRow row4 = table.createRow();
 		row4.createCell().setBody(new HtmlText(RenderUtils.getResourceString(bundle, postalCodeKey) + ":"));
 		postalCode.setName(key.toString() + "_postalCode");
 		postalCode.setValue(address != null ? address.getPostalCode() : null);
 		row4.createCell().setBody(postalCode);
-
+		errorCells[3] = row4.createCell();
+		
 		HtmlTextInput country = new HtmlTextInput();
 		HtmlTableRow row5 = table.createRow();
 		row5.createCell().setBody(new HtmlText(RenderUtils.getResourceString(bundle, countryKey) + ":"));
 		country.setName(key.toString() + "_country");
 		country.setValue(address != null ? address.getCountry() : null);
 		row5.createCell().setBody(country);
-
+		errorCells[4] = row5.createCell();
+		
 		htmlMultipleHiddenField.setConverter(new AddressConverter());
 		country
 			.setController(new AddressController(line1, line2, location, postalCode, country, htmlMultipleHiddenField));
@@ -157,15 +165,19 @@ public class AddressInputRenderer extends InputRenderer {
 		    public void performValidation() {
 			String[] values = getComponent().getValues();
 			if (values[0] == null || values[0].isEmpty()) {
+			    errorCells[0].setBody(new HtmlText("error.line1.cannot.be.empty"));
 			    errorMessages.add("error.line1.cannot.be.empty");
 			}
 			if (values[2] == null || values[2].isEmpty()) {
+			    errorCells[2].setBody(new HtmlText("error.location.cannot.be.empty"));
 			    errorMessages.add("error.location.cannot.be.empty");
 			}
 			if (values[3] == null || values[3].isEmpty()) {
+			    errorCells[3].setBody(new HtmlText("error.postalCode.cannot.be.empty"));
 			    errorMessages.add("error.postalCode.cannot.be.empty");
 			}
 			if (values[4] == null || values[4].isEmpty()) {
+			    errorCells[4].setBody(new HtmlText("error.country.cannot.be.empty"));
 			    errorMessages.add("error.country.cannot.be.empty");
 			}
 
@@ -173,19 +185,6 @@ public class AddressInputRenderer extends InputRenderer {
 			    setValid(false);
 			}
 
-		    }
-
-		    @Override
-		    public String getErrorMessage() {
-			StringBuilder builder = new StringBuilder();
-			for (Iterator<String> iter = errorMessages.iterator(); iter.hasNext();) {
-			    String errorMessage = iter.next();
-			    builder.append(getResourceMessage(errorMessage));
-			    if (iter.hasNext()) {
-				builder.append(", ");
-			    }
-			}
-			return builder.toString();
 		    }
 
 		};
