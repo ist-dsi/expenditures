@@ -569,6 +569,7 @@ Documentation:
 		<property name="locationKey" value="label.location"/>
 		<property name="postalCodeKey" value="label.postalCode"/>
 		<property name="countryKey" value="label.country"/>
+		<property name="errorClasses" value="tderror"/>
 	</renderer>
 	<renderer  layout="address" type="pt.ist.expenditureTrackingSystem.domain.util.Address" class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.AddressRenderer">
 	</renderer>

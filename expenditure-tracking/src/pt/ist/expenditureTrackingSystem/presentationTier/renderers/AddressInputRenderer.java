@@ -1,7 +1,6 @@
 package pt.ist.expenditureTrackingSystem.presentationTier.renderers;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -10,6 +9,7 @@ import pt.ist.expenditureTrackingSystem.domain.util.Address;
 import pt.ist.fenixWebFramework.renderers.InputRenderer;
 import pt.ist.fenixWebFramework.renderers.components.HtmlBlockContainer;
 import pt.ist.fenixWebFramework.renderers.components.HtmlComponent;
+import pt.ist.fenixWebFramework.renderers.components.HtmlInlineContainer;
 import pt.ist.fenixWebFramework.renderers.components.HtmlMultipleHiddenField;
 import pt.ist.fenixWebFramework.renderers.components.HtmlTable;
 import pt.ist.fenixWebFramework.renderers.components.HtmlTableCell;
@@ -34,6 +34,7 @@ public class AddressInputRenderer extends InputRenderer {
     private String locationKey;
     private String countryKey;
     private String classes;
+    private String errorClasses;
 
     public String getClasses() {
 	return classes;
@@ -41,6 +42,14 @@ public class AddressInputRenderer extends InputRenderer {
 
     public void setClasses(String classes) {
 	this.classes = classes;
+    }
+
+    public void setErrorClasses(String errorClasses) {
+	this.errorClasses = errorClasses;
+    }
+
+    public String getErrorClasses() {
+	return errorClasses;
     }
 
     public String getBundle() {
@@ -102,7 +111,7 @@ public class AddressInputRenderer extends InputRenderer {
 		HtmlBlockContainer container = new HtmlBlockContainer();
 
 		final HtmlTableCell[] errorCells = new HtmlTableCell[5];
-		
+
 		HtmlMultipleHiddenField htmlMultipleHiddenField = new HtmlMultipleHiddenField();
 		MetaSlotKey key = (MetaSlotKey) getInputContext().getMetaObject().getKey();
 		htmlMultipleHiddenField.setTargetSlot(key);
@@ -117,40 +126,50 @@ public class AddressInputRenderer extends InputRenderer {
 		line1.setName(key.toString() + "_line1");
 		line1.setValue(address != null ? address.getLine1() : null);
 		row.createCell().setBody(line1);
-		errorCells[0] = row.createCell();
-		
+		HtmlTableCell errorCell1 = row.createCell();
+		errorCell1.setClasses(getErrorClasses());
+		errorCells[0] = errorCell1;
+
 		HtmlTextInput line2 = new HtmlTextInput();
 		HtmlTableRow row2 = table.createRow();
 		row2.createCell().setBody(new HtmlText(RenderUtils.getResourceString(bundle, line2Key) + ":"));
 		line2.setName(key.toString() + "_line2");
 		line2.setValue(address != null ? address.getLine2() : null);
 		row2.createCell().setBody(line2);
-		errorCells[1] = row2.createCell(); 
-		
+		HtmlTableCell errorCell2 = row2.createCell();
+		errorCell2.setClasses(getErrorClasses());
+		errorCells[1] = errorCell2;
+
 		HtmlTextInput location = new HtmlTextInput();
 		HtmlTableRow row3 = table.createRow();
 		row3.createCell().setBody(new HtmlText(RenderUtils.getResourceString(bundle, locationKey) + ":"));
 		location.setName(key.toString() + "_location");
 		location.setValue(address != null ? address.getLocation() : null);
 		row3.createCell().setBody(location);
-		errorCells[2] = row3.createCell();
- 		
+		HtmlTableCell errorCell3 = row3.createCell();
+		errorCell3.setClasses(getErrorClasses());
+		errorCells[2] = errorCell3;
+
 		HtmlTextInput postalCode = new HtmlTextInput();
 		HtmlTableRow row4 = table.createRow();
 		row4.createCell().setBody(new HtmlText(RenderUtils.getResourceString(bundle, postalCodeKey) + ":"));
 		postalCode.setName(key.toString() + "_postalCode");
 		postalCode.setValue(address != null ? address.getPostalCode() : null);
 		row4.createCell().setBody(postalCode);
-		errorCells[3] = row4.createCell();
-		
+		HtmlTableCell errorCell4 = row4.createCell();
+		errorCell4.setClasses(getErrorClasses());
+		errorCells[3] = errorCell4;
+
 		HtmlTextInput country = new HtmlTextInput();
 		HtmlTableRow row5 = table.createRow();
 		row5.createCell().setBody(new HtmlText(RenderUtils.getResourceString(bundle, countryKey) + ":"));
 		country.setName(key.toString() + "_country");
 		country.setValue(address != null ? address.getCountry() : null);
 		row5.createCell().setBody(country);
-		errorCells[4] = row5.createCell();
-		
+		HtmlTableCell errorCell5 = row5.createCell();
+		errorCell5.setClasses(getErrorClasses());
+		errorCells[4] = errorCell5;
+
 		htmlMultipleHiddenField.setConverter(new AddressConverter());
 		country
 			.setController(new AddressController(line1, line2, location, postalCode, country, htmlMultipleHiddenField));
@@ -165,19 +184,27 @@ public class AddressInputRenderer extends InputRenderer {
 		    public void performValidation() {
 			String[] values = getComponent().getValues();
 			if (values[0] == null || values[0].isEmpty()) {
-			    errorCells[0].setBody(new HtmlText("error.line1.cannot.be.empty"));
+			    HtmlInlineContainer htmlInlineContainer1 = new HtmlInlineContainer();
+			    htmlInlineContainer1.addChild(new HtmlText(getResourceMessage("error.line1.cannot.be.empty")));
+			    errorCells[0].setBody(htmlInlineContainer1);
 			    errorMessages.add("error.line1.cannot.be.empty");
 			}
 			if (values[2] == null || values[2].isEmpty()) {
-			    errorCells[2].setBody(new HtmlText("error.location.cannot.be.empty"));
+			    HtmlInlineContainer htmlInlineContainer2 = new HtmlInlineContainer();
+			    htmlInlineContainer2.addChild(new HtmlText(getResourceMessage("error.location.cannot.be.empty")));
+			    errorCells[2].setBody(htmlInlineContainer2);
 			    errorMessages.add("error.location.cannot.be.empty");
 			}
 			if (values[3] == null || values[3].isEmpty()) {
-			    errorCells[3].setBody(new HtmlText("error.postalCode.cannot.be.empty"));
+			    HtmlInlineContainer htmlInlineContainer3 = new HtmlInlineContainer();
+			    htmlInlineContainer3.addChild(new HtmlText(getResourceMessage("error.postalCode.cannot.be.empty")));
+			    errorCells[3].setBody(htmlInlineContainer3);
 			    errorMessages.add("error.postalCode.cannot.be.empty");
 			}
 			if (values[4] == null || values[4].isEmpty()) {
-			    errorCells[4].setBody(new HtmlText("error.country.cannot.be.empty"));
+			    HtmlInlineContainer htmlInlineContainer4 = new HtmlInlineContainer();
+			    htmlInlineContainer4.addChild(new HtmlText(getResourceMessage("error.country.cannot.be.empty")));
+			    errorCells[4].setBody(htmlInlineContainer4);
 			    errorMessages.add("error.country.cannot.be.empty");
 			}
 
