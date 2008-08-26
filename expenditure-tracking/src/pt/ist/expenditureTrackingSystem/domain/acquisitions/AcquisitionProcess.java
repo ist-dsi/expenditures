@@ -24,7 +24,6 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.CreateAcq
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.DeleteAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.DeleteAcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.DistributeRealValuesForPayingUnits;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.EditAcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.EditAcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.EditAcquisitionRequestItemRealValues;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.FixInvoice;
@@ -87,7 +86,6 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 	requestInformationActivities.add(new ConfirmInvoice());
 	requestInformationActivities.add(new SubmitForApproval());
 	requestInformationActivities.add(new UnSubmitForApproval());
-	requestInformationActivities.add(new EditAcquisitionRequest());
 
 	requestItemActivities.add(new DeleteAcquisitionRequestItem());
 	requestItemActivities.add(new EditAcquisitionRequestItem());

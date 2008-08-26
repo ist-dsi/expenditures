@@ -115,24 +115,7 @@ public class AcquisitionProcessAction extends ProcessAction {
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
-
-    public ActionForward executeEditAcquisitionRequest(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
-	CreateAcquisitionProcessBean bean = new CreateAcquisitionProcessBean(acquisitionProcess.getAcquisitionRequest());
-	request.setAttribute("acquisitionProcess", acquisitionProcess);
-	request.setAttribute("acquisitionRequestBean", bean);
-	return mapping.findForward("edit.request.acquisition");
-    }
-
-    public ActionForward editAcquisitionRequest(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-
-	CreateAcquisitionProcessBean bean = getRenderedObject("acquisitionRequestBean");
-	return executeActivityAndViewProcess(mapping, form, request, response, "EditAcquisitionRequest", bean.getSupplier(), bean
-		.getRequestingUnit(), bean.isRequestUnitPayingUnit());
-    }
-
+    
     public ActionForward viewAcquisitionProcess(final ActionMapping mapping, final HttpServletRequest request,
 	    final AcquisitionProcess acquisitionProcess) {
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
