@@ -13,6 +13,7 @@
 	</html:link>
 </p>
 
+<jsp:include page="../commons/defaultErrorDisplay.jsp"/>
 
 <bean:define id="processOID" name="acquisitionProcess" property="OID"/>
 <fr:view name="payingUnits" schema="unitName">

@@ -379,7 +379,7 @@ public class AcquisitionProcessAction extends ProcessAction {
 	try {
 	    genericActivityExecution(acquisitionProcess, "AllocateFundsPermanently");
 	} catch (DomainException e) {
-	    addMessage(e.getMessage(), getBundle());
+	    addErrorMessage(e.getMessage(), getBundle());
 	}
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
@@ -420,7 +420,11 @@ public class AcquisitionProcessAction extends ProcessAction {
 	final Unit payingUnit = getDomainObject(request, "unitOID");
 	List<Unit> units = new ArrayList<Unit>();
 	units.add(payingUnit);
-	genericActivityExecution(request, "RemovePayingUnit", units);
+	try {
+	    genericActivityExecution(request, "RemovePayingUnit", units);
+	} catch (DomainException e) {
+	    addErrorMessage(e.getMessage(), getBundle());
+	}
 	return executeRemovePayingUnit(mapping, form, request, response);
     }
 
@@ -499,7 +503,7 @@ public class AcquisitionProcessAction extends ProcessAction {
 	    return executeActivityAndViewProcess(mapping, form, request, response, "DistributeRealValuesForPayingUnits", beans,
 		    item);
 	} catch (DomainException e) {
-	    addMessage(e.getMessage(), getBundle());
+	    addErrorMessage(e.getMessage(), getBundle());
 	    request.setAttribute("item", item);
 	    request.setAttribute("beans", beans);
 	    return mapping.findForward("edit.real.shares.values");
@@ -531,7 +535,7 @@ public class AcquisitionProcessAction extends ProcessAction {
 	try {
 	    genericActivityExecution(acquisitionProcess, "AssignPayingUnitToItem", item, beans);
 	} catch (DomainException e) {
-	    addMessage(e.getMessage(), getBundle());
+	    addErrorMessage(e.getMessage(), getBundle());
 	    return executeAssignPayingUnitToItem(mapping, form, request, response);
 	}
 

@@ -7,11 +7,7 @@
 
 <h2><bean:message key="label.create.acquisition.request.item" bundle="ACQUISITION_RESOURCES"/></h2>
 
-<messages:hasMessages type="ERROR">
-	<div class="error1">
-		<messages:showMessages type="ERROR"/>
-	</div>
-</messages:hasMessages>
+<jsp:include page="../commons/defaultErrorDisplay.jsp"/>
 
 <bean:define id="schemaType"
 		name="bean"

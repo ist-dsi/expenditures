@@ -22,11 +22,7 @@
 	</fr:view>
 </div>
 
-<messages:hasMessages>
-	<div class="infoop4" style="width: 500px">
-		<messages:showMessages/>
-	</div>
-</messages:hasMessages>
+<jsp:include page="../commons/defaultErrorDisplay.jsp"/>
 
 <div class="dinline forminline">
 	<fr:form action="<%="/acquisitionProcess.do?acquisitionProcessOid=" + processOID + "&acquisitionRequestItemOid=" + acquisitionRequestItemOid%>">

@@ -22,11 +22,7 @@
 			
 <logic:equal name="item" property="filledWithRealValues" value="true">
 	
-	<messages:hasMessages>
-		<div class="infoop4" style="width: 500px">
-			<messages:showMessages/>
-		</div>
-	</messages:hasMessages>
+<jsp:include page="../commons/defaultErrorDisplay.jsp"/>
 	
 	<fr:edit id="beans" name="beans" schema="editSchemaRealShareValues" 
 		action="<%= "/acquisitionProcess.do?method=executeDistributeRealValuesForPayingUnitsEdition&acquisitionProcessOid="  + processOID + "&acquisitionRequestItemOid=" + itemOID%>">
