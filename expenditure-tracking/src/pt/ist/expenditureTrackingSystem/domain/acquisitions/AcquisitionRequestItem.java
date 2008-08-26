@@ -91,13 +91,9 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	return getUnitValue().multiply(getQuantity());
     }
 
-    @Override
-    public Money getShipmentValue() {
-	return super.getShipmentValue() == null ? Money.ZERO : super.getShipmentValue();
-    }
-
     public Money getTotalRealValue() {
-	return getRealUnitValue().multiply(getRealQuantity()).add(getShipmentValue());
+	Money totalRealValue = getRealUnitValue().multiply(getRealQuantity()); 
+	return getShipmentValue() == null ? totalRealValue : totalRealValue.add(getShipmentValue());
     }
 
     public Money getTotalItemValueWithVat() {
