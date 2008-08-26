@@ -13,7 +13,7 @@
 
 <bean:define id="acquisitionRequestItemOid" name="acquisitionRequestItem" property="OID"/>
 
-<div class="infoop2" style="width: 500px">
+<div class="infoop2">
 	<fr:view name="acquisitionRequestItem"
 			schema="viewAcquisitionRequestItem">
 		<fr:layout name="tabular">

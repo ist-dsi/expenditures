@@ -350,4 +350,12 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 	
 	return logs.isEmpty() ? null : logs.get(0).getWhenOperationWasRan();
     }
+    
+    public boolean isAllocatedToSupplier() {
+	return getAcquisitionProcessStateType().compareTo(AcquisitionProcessStateType.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER) >= 0;
+    }
+    
+    public boolean isAllocatedToUnit() {
+	return getAcquisitionProcessStateType().compareTo(AcquisitionProcessStateType.FUNDS_ALLOCATED) >= 0;
+    }
 }

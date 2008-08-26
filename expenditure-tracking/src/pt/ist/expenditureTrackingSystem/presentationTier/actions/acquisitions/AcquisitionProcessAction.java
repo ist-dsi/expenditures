@@ -476,8 +476,13 @@ public class AcquisitionProcessAction extends ProcessAction {
 	    final HttpServletRequest request, final HttpServletResponse response) {
 
 	final AcquisitionRequestItemBean requestItemBean = getRenderedObject("acquisitionRequestItem");
+	try {
 	genericActivityExecution(requestItemBean.getAcquisitionRequest().getAcquisitionProcess(), "EditAcquisitionRequestItem",
 		requestItemBean);
+	} catch(DomainException e) {
+	    addErrorMessage(e.getMessage(), getBundle(),e.getArgs());
+	    return executeEditAcquisitionRequestItem(mapping, form, request, response);
+	}
 	return viewAcquisitionProcess(mapping, request, requestItemBean.getAcquisitionRequest().getAcquisitionProcess());
     }
 

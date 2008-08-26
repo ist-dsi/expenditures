@@ -221,11 +221,8 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     public Money getValueAllocated() {
 	if (getAcquisitionProcess().isActive()) {
 	    AcquisitionProcessStateType acquisitionProcessStateType = getAcquisitionProcess().getAcquisitionProcessStateType();
-	    if (acquisitionProcessStateType.compareTo(AcquisitionProcessStateType.FUNDS_ALLOCATED_PERMANENTLY) >= 0) {
-		return getRealTotalValue();
-	    } else if (acquisitionProcessStateType.compareTo(AcquisitionProcessStateType.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER) >= 0) {
-		return getTotalItemValue();
-	    }
+	    return (acquisitionProcessStateType.compareTo(AcquisitionProcessStateType.FUNDS_ALLOCATED_PERMANENTLY) >= 0) ? getRealTotalValue()
+		    : getTotalItemValue();
 	}
 	return Money.ZERO;
     }
@@ -235,5 +232,5 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	Money totalValue = totalItemValue.add(value);
 	return totalValue.isLessThanOrEqual(getAcquisitionProcess().getAcquisitionRequestValueLimit());
     }
-
+   
 }

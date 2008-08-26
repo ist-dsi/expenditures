@@ -120,6 +120,9 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 
     public void edit(String description, Integer quantity, Money unitValue, BigDecimal vatValue, String proposalReference,
 	    CPVReference reference, DeliveryInfo deliveryInfo) {
+	
+	checkLimits(getAcquisitionRequest(), quantity, unitValue);
+	
 	setDescription(description);
 	setQuantity(quantity);
 	setUnitValue(unitValue);
@@ -131,6 +134,9 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
     }
 
     public void edit(AcquisitionRequestItemBean acquisitionRequestItemBean) {
+	
+	checkLimits(getAcquisitionRequest(), acquisitionRequestItemBean.getQuantity(), acquisitionRequestItemBean.getUnitValue());
+	
 	setDescription(acquisitionRequestItemBean.getDescription());
 	setQuantity(acquisitionRequestItemBean.getQuantity());
 	setUnitValue(acquisitionRequestItemBean.getUnitValue());

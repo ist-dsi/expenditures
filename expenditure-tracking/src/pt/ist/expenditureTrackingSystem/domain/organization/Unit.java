@@ -80,7 +80,8 @@ public class Unit extends Unit_Base {
     public Money getTotalAllocated() {
 	Money result = Money.ZERO;
 	for (final AcquisitionRequest acquisitionRequest : ExpenditureTrackingSystem.getInstance().getAcquisitionRequestsSet()) {
-	    if (acquisitionRequest.getAcquisitionProcess().getRequestingUnit() == this) {
+	    AcquisitionProcess acquisitionProcess = acquisitionRequest.getAcquisitionProcess();
+	    if (acquisitionProcess.getRequestingUnit() == this && acquisitionProcess.isAllocatedToUnit()) {
 		result = result.add(acquisitionRequest.getValueAllocated());
 	    }
 	}

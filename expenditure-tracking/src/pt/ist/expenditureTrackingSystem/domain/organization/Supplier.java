@@ -61,7 +61,9 @@ public class Supplier extends Supplier_Base {
     public Money getTotalAllocated() {
 	Money result = Money.ZERO;
 	for (final AcquisitionRequest acquisitionRequest : getAcquisitionRequestsSet()) {
-	    result = result.add(acquisitionRequest.getValueAllocated());
+	    if (acquisitionRequest.getAcquisitionProcess().isAllocatedToSupplier()) {
+		result = result.add(acquisitionRequest.getValueAllocated());
+	    }
 	}
 	return result;
     }

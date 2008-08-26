@@ -58,7 +58,7 @@ public class AcquisitionProcessStateRenderer extends OutputRenderer {
 		String classes = getBoxClasses();
 	    	if (stateType.isBlocked(currentStateType)) {
 	    	    classes += " " + getFailedStateClass();
-	    	} else if (stateType.isInProgress(currentStateType)) {
+	    	} else if (stateType.isCurrent(currentStateType)) {
 		    classes += " " + getCurrentStateClass();
 		} else if (stateType.isCompleted(currentStateType)) {
 		    classes += " " + getCompletedStateClass();
