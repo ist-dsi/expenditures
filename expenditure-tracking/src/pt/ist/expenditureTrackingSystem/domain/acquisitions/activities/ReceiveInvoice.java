@@ -17,21 +17,24 @@ public class ReceiveInvoice extends GenericAcquisitionProcessActivity {
 
     @Override
     protected boolean isAvailable(AcquisitionProcess process) {
-	return process.isAcquisitionProcessed(); 
+	return process.isProcessInState(AcquisitionProcessStateType.ACQUISITION_PROCESSED);
     }
 
     @Override
     protected void process(AcquisitionProcess process, Object... objects) {
-	
+	processInvoiceData(process, objects);
+	new AcquisitionProcessState(process, AcquisitionProcessStateType.INVOICE_RECEIVED);
+    }
+
+    protected void processInvoiceData(AcquisitionProcess process, Object... objects) {
 	final AcquisitionRequest acquisitionRequest = process.getAcquisitionRequest();
 
 	String filename = (String) objects[0];
 	byte[] bytes = (byte[]) objects[1];
 	String invoiceNumber = (String) objects[2];
 	LocalDate invoiceDate = (LocalDate) objects[3];
-	
+
 	acquisitionRequest.receiveInvoice(filename, bytes, invoiceNumber, invoiceDate);
-	new AcquisitionProcessState(process, AcquisitionProcessStateType.INVOICE_RECEIVED);
     }
 
 }

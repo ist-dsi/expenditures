@@ -48,7 +48,7 @@
 </p>
 
 <bean:define id="urlView">/acquisitionProcess.do?method=viewAcquisitionProcess&amp;acquisitionProcessOid=<bean:write name="acquisitionProcess" property="OID"/></bean:define>
-<bean:define id="urlSave">/acquisitionProcess.do?method=saveInvoice&amp;acquisitionProcessOid=<bean:write name="acquisitionProcess" property="OID"/></bean:define>
+<bean:define id="urlSave">/acquisitionProcess.do?method=<%= request.getAttribute("invoiceActivity").toString() %>&amp;acquisitionProcessOid=<bean:write name="acquisitionProcess" property="OID"/></bean:define>
 <fr:edit id="receiveInvoiceForm"
 		name="receiveInvoiceForm"
 		schema="receiveInvoiceForm"

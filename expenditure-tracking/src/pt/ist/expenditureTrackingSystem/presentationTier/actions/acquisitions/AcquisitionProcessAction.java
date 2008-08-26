@@ -316,6 +316,17 @@ public class AcquisitionProcessAction extends ProcessAction {
 
     public ActionForward executeReceiveInvoice(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
+	request.setAttribute("invoiceActivity", "saveInvoice");
+	return executeInvoiceActivity(mapping, request);
+    }
+
+    public ActionForward executeFixInvoice(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	request.setAttribute("invoiceActivity", "updateInvoice");
+	return executeInvoiceActivity(mapping, request);
+    }
+
+    private ActionForward executeInvoiceActivity(final ActionMapping mapping, final HttpServletRequest request) {
 	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
 	ReceiveInvoiceForm receiveInvoiceForm = getRenderedObject();
@@ -334,11 +345,20 @@ public class AcquisitionProcessAction extends ProcessAction {
 
     public ActionForward saveInvoice(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) {
+	return processInvoiceData(mapping, request, "ReceiveInvoice");
+    }
+
+    public ActionForward updateInvoice(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	return processInvoiceData(mapping, request, "FixInvoice");
+    }
+
+    private ActionForward processInvoiceData(final ActionMapping mapping, final HttpServletRequest request, String activity) {
 	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
 	final ReceiveInvoiceForm receiveInvoiceForm = getRenderedObject();
 	final byte[] bytes = consumeInputStream(receiveInvoiceForm);
-	AbstractActivity<AcquisitionProcess> receiveInvoice = acquisitionProcess.getActivityByName("ReceiveInvoice");
+	AbstractActivity<AcquisitionProcess> receiveInvoice = acquisitionProcess.getActivityByName(activity);
 	receiveInvoice.execute(acquisitionProcess, receiveInvoiceForm.getFilename(), bytes,
 		receiveInvoiceForm.getInvoiceNumber(), receiveInvoiceForm.getInvoiceDate());
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
@@ -421,7 +441,7 @@ public class AcquisitionProcessAction extends ProcessAction {
 	List<Unit> units = new ArrayList<Unit>();
 	units.add(payingUnit);
 	try {
-	    genericActivityExecution(request, "RemovePayingUnit", units);
+	genericActivityExecution(request, "RemovePayingUnit", units);
 	} catch (DomainException e) {
 	    addErrorMessage(e.getMessage(), getBundle());
 	}
@@ -614,4 +634,30 @@ public class AcquisitionProcessAction extends ProcessAction {
     protected String getBundle() {
 	return "ACQUISITION_RESOURCES";
     }
+
+    public ActionForward executeUnSubmitForApproval(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	return executeActivityAndViewProcess(mapping, form, request, response, "UnSubmitForApproval");
+    }
+
+    public ActionForward executeRemoveFundAllocation(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	return executeActivityAndViewProcess(mapping, form, request, response, "RemoveFundAllocation");
+    }
+
+    public ActionForward executeRemoveFundAllocationExpirationDate(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	return executeActivityAndViewProcess(mapping, form, request, response, "RemoveFundAllocationExpirationDate");
+    }
+
+    public ActionForward executeCancelAcquisitionRequest(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	return executeActivityAndViewProcess(mapping, form, request, response, "CancelAcquisitionRequest");
+    }
+
+    public ActionForward executeCancelRemoveFundAllocationExpirationDate(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	return executeActivityAndViewProcess(mapping, form, request, response, "CancelRemoveFundAllocationExpirationDate");
+    }
+
 }

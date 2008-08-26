@@ -219,7 +219,7 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     }
 
     public Money getValueAllocated() {
-	if (!getAcquisitionProcess().isRejected()) {
+	if (getAcquisitionProcess().isActive()) {
 	    AcquisitionProcessStateType acquisitionProcessStateType = getAcquisitionProcess().getAcquisitionProcessStateType();
 	    if (acquisitionProcessStateType.compareTo(AcquisitionProcessStateType.FUNDS_ALLOCATED_PERMANENTLY) >= 0) {
 		return getRealTotalValue();

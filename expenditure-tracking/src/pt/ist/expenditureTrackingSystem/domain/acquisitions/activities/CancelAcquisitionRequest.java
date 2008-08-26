@@ -4,26 +4,22 @@ import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
-import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean;
 
-public class FundAllocation extends GenericAcquisitionProcessActivity {
+public class CancelAcquisitionRequest extends GenericAcquisitionProcessActivity {
 
     @Override
     protected boolean isAccessible(AcquisitionProcess process) {
-	return userHasRole(RoleType.ACCOUNTABILITY);
+	return userHasRole(RoleType.ACQUISITION_CENTRAL);
     }
 
     @Override
     protected boolean isAvailable(AcquisitionProcess process) {
-	return process.isApproved() && !process.isProcessInState(AcquisitionProcessStateType.CANCELED);
+	return process.isProcessInState(AcquisitionProcessStateType.ACQUISITION_PROCESSED);
     }
 
     @Override
     protected void process(AcquisitionProcess process, Object... objects) {
-	final FundAllocationBean fundAllocationBean = (FundAllocationBean) objects[0];
-	final String fundAllocationId = fundAllocationBean.getFundAllocationId();
-	process.setFundAllocationId(fundAllocationId);
-	new AcquisitionProcessState(process, AcquisitionProcessStateType.FUNDS_ALLOCATED);
+	new AcquisitionProcessState(process, AcquisitionProcessStateType.CANCELED);
     }
 
 }

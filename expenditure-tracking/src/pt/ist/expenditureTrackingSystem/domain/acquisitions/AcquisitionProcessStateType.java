@@ -5,6 +5,7 @@ import java.util.ResourceBundle;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 
 public enum AcquisitionProcessStateType {
+    
     IN_GENESIS {
 
 	@Override
@@ -13,7 +14,7 @@ public enum AcquisitionProcessStateType {
 	}
 
 	@Override
-	public boolean isInProgress(final AcquisitionProcessStateType currentStateType) {
+	public boolean isCurrent(final AcquisitionProcessStateType currentStateType) {
 	    return currentStateType == this;
 	}
 
@@ -23,6 +24,7 @@ public enum AcquisitionProcessStateType {
 	}
 
     },
+    
     SUBMITTED_FOR_APPROVAL {
 
 	@Override
@@ -31,26 +33,59 @@ public enum AcquisitionProcessStateType {
 	}
 
 	@Override
-	public boolean isInProgress(final AcquisitionProcessStateType currentStateType) {
+	public boolean isCurrent(final AcquisitionProcessStateType currentStateType) {
 	    return false;
 	}
 
     },
-    APPROVED, FUNDS_ALLOCATED {
+    
+    APPROVED, 
+    
+    FUNDS_ALLOCATED {
 
 	@Override
-	public boolean isInProgress(final AcquisitionProcessStateType currentStateType) {
+	public boolean isCurrent(final AcquisitionProcessStateType currentStateType) {
 	    return currentStateType == APPROVED;
 	}
 
     },
-    FUNDS_ALLOCATED_TO_SERVICE_PROVIDER, ACQUISITION_PROCESSED, INVOICE_RECEIVED, INVOICE_CONFIRMED, FUNDS_ALLOCATED_PERMANENTLY, ACQUISITION_PAYED {
+    
+    FUNDS_ALLOCATED_TO_SERVICE_PROVIDER, 
+    
+    ACQUISITION_PROCESSED, 
+    
+    INVOICE_RECEIVED, 
+    
+    INVOICE_CONFIRMED, 
+    
+    FUNDS_ALLOCATED_PERMANENTLY, 
+    
+    ACQUISITION_PAYED {
+
 	@Override
 	public boolean hasNextState() {
 	    return false;
 	}
     },
     REJECTED {
+
+	@Override
+	public boolean showFor(final AcquisitionProcessStateType currentStateType) {
+	    return currentStateType == this;
+	}
+
+	@Override
+	public boolean hasNextState() {
+	    return false;
+	}
+
+	@Override
+	public boolean isBlocked(final AcquisitionProcessStateType currentStateType) {
+	    return true;
+	}
+
+    },
+    CANCELED {
 
 	@Override
 	public boolean showFor(final AcquisitionProcessStateType currentStateType) {
@@ -78,14 +113,14 @@ public enum AcquisitionProcessStateType {
     }
 
     public boolean showFor(final AcquisitionProcessStateType currentStateType) {
-	return currentStateType != REJECTED;
+	return currentStateType.isActive();
     }
 
     public boolean hasNextState() {
 	return true;
     }
 
-    public boolean isInProgress(final AcquisitionProcessStateType currentStateType) {
+    public boolean isCurrent(final AcquisitionProcessStateType currentStateType) {
 	return currentStateType.ordinal() == ordinal() - 1;
     }
 
@@ -95,6 +130,10 @@ public enum AcquisitionProcessStateType {
 
     public boolean isBlocked(final AcquisitionProcessStateType currentStateType) {
 	return false;
+    }
+    
+    public boolean isActive() {
+	return (this != REJECTED && this != CANCELED); 
     }
 
 }

@@ -17,6 +17,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AddPaying
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AllocateFundsPermanently;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.ApproveAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AssignPayingUnitToItem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.CancelAcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.ConfirmInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.CreateAcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.CreateAcquisitionRequestItem;
@@ -26,15 +27,19 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.Distribut
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.EditAcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.EditAcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.EditAcquisitionRequestItemRealValues;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.FixInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.FundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.FundAllocationExpirationDate;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.PayAcquisition;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.ReceiveInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.RejectAcquisitionProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.RemoveFundAllocation;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.RemoveFundAllocationExpirationDate;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.RemovePayingUnit;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.SubmitForApproval;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.UnApproveAcquisitionProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.UnSubmitForApproval;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
@@ -72,11 +77,16 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 	requestInformationActivities.add(new CreateAcquisitionRequestItem());
 	requestInformationActivities.add(new DeleteAcquisitionProcess());
 	requestInformationActivities.add(new FundAllocation());
+	requestInformationActivities.add(new RemoveFundAllocation());
 	requestInformationActivities.add(new FundAllocationExpirationDate());
+	requestInformationActivities.add(new RemoveFundAllocationExpirationDate());
+	requestInformationActivities.add(new CancelAcquisitionRequest());
 	requestInformationActivities.add(new PayAcquisition());
 	requestInformationActivities.add(new ReceiveInvoice());
+	requestInformationActivities.add(new FixInvoice());
 	requestInformationActivities.add(new ConfirmInvoice());
 	requestInformationActivities.add(new SubmitForApproval());
+	requestInformationActivities.add(new UnSubmitForApproval());
 	requestInformationActivities.add(new EditAcquisitionRequest());
 
 	requestItemActivities.add(new DeleteAcquisitionRequestItem());
@@ -320,8 +330,8 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 	return realMoney.isLessThanOrEqual(allocatedMoney);
     }
 
-    public boolean isRejected() {
-	return isProcessInState(AcquisitionProcessStateType.REJECTED);
+    public boolean isActive() {
+	return getLastAcquisitionProcessStateType().isActive();
     }
 
     public Money getAcquisitionRequestValueLimit() {
