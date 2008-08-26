@@ -2,9 +2,12 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.joda.time.DateTime;
 
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
@@ -325,4 +328,16 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 	return PROCESS_VALUE_LIMIT;
     }
 
+    public DateTime getDateFromLastActivity() {
+	List<GenericLog> logs = getExecutionLogs();
+	Collections.sort(logs, new Comparator<GenericLog>() {
+
+	    public int compare(GenericLog log1, GenericLog log2) {
+		return -1 * log1.getWhenOperationWasRan().compareTo(log2.getWhenOperationWasRan());
+	    }
+
+	});
+	
+	return logs.isEmpty() ? null : logs.get(0).getWhenOperationWasRan();
+    }
 }
