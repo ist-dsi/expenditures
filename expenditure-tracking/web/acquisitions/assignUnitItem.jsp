@@ -9,9 +9,14 @@
 	<bean:message key="label.pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AssignPayingUnitToItem" bundle="ACQUISITION_RESOURCES"/>
 </h2>
 
-<bean:define id="processOID" name="acquisitionProcess" property="OID"/>
+<script type="text/javascript" src="<%= request.getContextPath() + "/javaScript/calculator.js" %>"></script> 
 
+<bean:define id="processOID" name="acquisitionProcess" property="OID"/>
 <bean:define id="acquisitionRequestItemOid" name="acquisitionRequestItem" property="OID"/>
+
+<bean:define id="outOfLabel">
+	<bean:message key="label.out.of" bundle="ACQUISITION_RESOURCES"/>
+</bean:define>
 
 <div class="infoop2">
 	<fr:view name="acquisitionRequestItem"
@@ -21,7 +26,7 @@
 		</fr:layout>
 	</fr:view>
 </div>
-
+<bean:define id="maxValue" name="acquisitionRequestItem" property="totalItemValue.value"/>
 <jsp:include page="../commons/defaultErrorDisplay.jsp"/>
 
 <div class="dinline forminline">
@@ -29,6 +34,7 @@
 		<html:hidden  property="method" value="executeAssignPayingUnitToItemCreation"/>
 		
 		<fr:edit id="unitItemBeans" name="unitItemBeans" visible="false"/>
+		<bean:size id="maxElements" name="unitItemBeans"/>
 			
 		<table class="tstyle4">
 			<tr>
@@ -43,11 +49,11 @@
 				</th>
 			</tr>
 			<logic:iterate id="unitItemBean" name="unitItemBeans" indexId="id">
-					<tr>
+					<tr id="<%= "tr" + id %>" onKeyUp="<%= "javascript:calculate(" + maxElements + ", 'sum', '" + maxValue + "', '" + outOfLabel+ "')" %>">
 						<td>
 							<fr:view name="unitItemBean" property="unit.name"/>
 						</td>
-						<td>
+						<td onclick="<%= "javascript:calculate(" + maxElements + ", 'sum', '" + maxValue + "', '" + outOfLabel+ "')" %>">
 							<fr:edit  id="<%= "assigned" + id %>" name="unitItemBean" slot="assigned"/>
 						</td>
 						<td>
@@ -55,8 +61,25 @@
 						</td>
 					</tr>
 			</logic:iterate>
+					<tr>
+					<td>
+					</td>
+					<td>
+						<strong><bean:message key="label.acquisition.request.item.totalValue" bundle="ACQUISITION_RESOURCES"/></strong>:
+					</td>
+					<td>
+						<span id="sum">
+								
+						</span> 
+					</td>
+					</tr>
 		</table>
-
+		
+		<script type="text/javascript">
+			<%= "calculate(" + maxElements + ", 'sum', '" + maxValue + "', '" + outOfLabel+ "')" %>
+		</script>
+		
+		
 		<p class="mtop05 mbottom2">
 			<a href="javascript:document.forms[0].method.value='calculateShareValuePostBack'; document.forms[0].submit();"> <bean:message key="label.auto.distribute" bundle="ACQUISITION_RESOURCES"/> </a>
 		</p>
