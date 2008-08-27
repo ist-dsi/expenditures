@@ -30,6 +30,18 @@
 	</logic:notPresent>
 </p>
 
+<bean:define id="urlView">/acquisitionProcess.do?method=viewAcquisitionProcess&amp;acquisitionProcessOid=<bean:write name="acquisitionProcess" property="OID"/></bean:define>
+<bean:define id="urlSave">/acquisitionProcess.do?method=<%= request.getAttribute("invoiceActivity").toString() %>&amp;acquisitionProcessOid=<bean:write name="acquisitionProcess" property="OID"/></bean:define>
+<fr:edit id="receiveInvoiceForm"
+		name="receiveInvoiceForm"
+		schema="receiveInvoiceForm"
+		action="<%= urlSave %>">
+	<fr:layout name="tabular">
+		<fr:property name="classes" value="form"/>
+		<fr:property name="columnClasses" value=",,tderror"/>
+	</fr:layout>
+		<fr:destination name="cancel" path="<%= urlView %>" />
+</fr:edit>
 
 <p>
 	<bean:size id="totalItems" name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestItemsSet"/>
@@ -47,14 +59,3 @@
 	</logic:iterate>
 </p>
 
-<bean:define id="urlView">/acquisitionProcess.do?method=viewAcquisitionProcess&amp;acquisitionProcessOid=<bean:write name="acquisitionProcess" property="OID"/></bean:define>
-<bean:define id="urlSave">/acquisitionProcess.do?method=<%= request.getAttribute("invoiceActivity").toString() %>&amp;acquisitionProcessOid=<bean:write name="acquisitionProcess" property="OID"/></bean:define>
-<fr:edit id="receiveInvoiceForm"
-		name="receiveInvoiceForm"
-		schema="receiveInvoiceForm"
-		action="<%= urlSave %>">
-	<fr:layout name="tabular">
-		<fr:property name="classes" value="tstyle3"/>
-	</fr:layout>
-		<fr:destination name="cancel" path="<%= urlView %>" />
-</fr:edit>

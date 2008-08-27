@@ -182,15 +182,18 @@
 <schema name="allocateFunds"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean"
 		bundle="ACQUISITION_RESOURCES">
-	<slot name="fundAllocationId" key="label.fund.allocation.identification" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="fundAllocationId" key="label.fund.allocation.identification" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 </schema>
 
 <schema name="allocateFundsToServiceProvider"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationExpirationDateBean"
 		bundle="ACQUISITION_RESOURCES">
-	<slot name="fundAllocationExpirationDate" key="label.fund.allocation.expiration.date" bundle="ACQUISITION_RESOURCES">
+	<slot name="fundAllocationExpirationDate" key="label.fund.allocation.expiration.date" bundle="ACQUISITION_RESOURCES" >
+		<property name="format" value="dd-MM-yyyy"/>
+	<validator class="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<validator class="pt.ist.fenixWebFramework.renderers.validators.DateValidator">
 		<property name="dateFormat" value="dd-MM-yyyy"/>
-		<property name="dateFormatText" value="dd-MM-yyyy"/>
+	</validator>
 	</slot>
 </schema>
 
@@ -198,9 +201,12 @@
 		type="pt.ist.expenditureTrackingSystem.presentationTier.actions.acquisitions.AcquisitionProcessAction$ReceiveInvoiceForm"
 		bundle="ACQUISITION_RESOURCES">
 	<slot name="invoiceNumber" key="label.invoice.number" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-	<slot name="invoiceDate" key="label.invoice.date" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
-		<property name="dateFormat" value="dd-MM-yyyy"/>
-		<property name="dateFormatText" value="dd-MM-yyyy"/>
+	<slot name="invoiceDate" key="label.invoice.date" bundle="ACQUISITION_RESOURCES">
+		<property name="format" value="dd-MM-yyyy"/>
+		<validator class="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+		<validator class="pt.ist.fenixWebFramework.renderers.validators.DateValidator">
+			<property name="dateFormat" value="dd-MM-yyyy"/>
+		</validator>
 	</slot>
 	<slot name="inputStream" key="label.invoice.file" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
 		<property name="fileNameSlot" value="filename" />
@@ -273,6 +279,7 @@
 		bundle="ACQUISITION_RESOURCES">
 	<slot name="realQuantity" key="label.acquisition.request.item.realQuantity" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 	<slot name="realUnitValue" key="label.acquisition.request.item.realUnitValue" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="realVatValue" key="label.acquisition.request.item.realVatValue" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 	<slot name="shipment" key="label.acquisition.request.item.ShipmentValue" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>	
 </schema>
 

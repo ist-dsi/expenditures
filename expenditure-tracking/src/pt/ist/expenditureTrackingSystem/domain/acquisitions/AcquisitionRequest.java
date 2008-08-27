@@ -105,6 +105,21 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	invoice.setContent(new ByteArray(bytes));
 	invoice.setInvoiceNumber(invoiceNumber);
 	invoice.setInvoiceDate(invoiceDate);
+	copyEstimateValuesToRealValues();
+    }
+
+    private void copyEstimateValuesToRealValues() {
+	for (AcquisitionRequestItem item : getAcquisitionRequestItems()) {
+	    item.setRealQuantity(item.getQuantity());
+	    item.setRealUnitValue(item.getUnitValue());
+	    item.setRealVatValue(item.getVatValue());
+	    item.setShipmentValue(item.getAdditionalCostValue());
+	    
+	    for (UnitItem unitItem : item.getUnitItems()) {
+		unitItem.setRealShareValue(unitItem.getShareValue());
+	    }
+	}
+	
     }
 
     public String getInvoiceNumber() {
@@ -188,6 +203,15 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	return false;
     }
 
+    public boolean hasAtLeastOneConfirmation() {
+	for (AcquisitionRequestItem item : getAcquisitionRequestItems()) {
+	    if (item.hasAtLeastOneInvoiceConfirmation()) {
+		return true;
+	    }
+	}
+	return false;
+    }
+    
     public boolean isInvoiceConfirmedBy(Person person) {
 	for (AcquisitionRequestItem item : getAcquisitionRequestItems()) {
 	    if (item.isInvoiceConfirmedBy(person)) {

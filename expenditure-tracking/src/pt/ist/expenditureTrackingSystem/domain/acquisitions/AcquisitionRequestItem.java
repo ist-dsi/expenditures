@@ -96,12 +96,16 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
     }
 
     public Money getTotalRealValue() {
-	Money totalRealValue = getRealUnitValue().multiply(getRealQuantity()); 
+	Money totalRealValue = getRealUnitValue().multiply(getRealQuantity());
 	return getShipmentValue() == null ? totalRealValue : totalRealValue.add(getShipmentValue());
     }
 
     public Money getTotalItemValueWithVat() {
 	return getTotalItemValue().addPercentage(getVatValue());
+    }
+
+    public Money getTotalRealValueWithVat() {
+	return getTotalItemValueWithVat().addPercentage(getRealVatValue());
     }
 
     public Money getTotalAssignedValue() {
@@ -124,9 +128,9 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 
     public void edit(String description, Integer quantity, Money unitValue, BigDecimal vatValue, String proposalReference,
 	    CPVReference reference, DeliveryInfo deliveryInfo) {
-	
+
 	checkLimits(getAcquisitionRequest(), quantity, unitValue);
-	
+
 	setDescription(description);
 	setQuantity(quantity);
 	setUnitValue(unitValue);
@@ -138,9 +142,9 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
     }
 
     public void edit(AcquisitionRequestItemBean acquisitionRequestItemBean) {
-	
+
 	checkLimits(getAcquisitionRequest(), acquisitionRequestItemBean.getQuantity(), acquisitionRequestItemBean.getUnitValue());
-	
+
 	setDescription(acquisitionRequestItemBean.getDescription());
 	setQuantity(acquisitionRequestItemBean.getQuantity());
 	setUnitValue(acquisitionRequestItemBean.getUnitValue());
@@ -282,6 +286,15 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
     public boolean isInvoiceConfirmedBy(Person person) {
 	for (UnitItem unitItem : getUnitItems()) {
 	    if (unitItem.getUnit().isResponsible(person) && unitItem.getInvoiceConfirmed()) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
+    public boolean hasAtLeastOneInvoiceConfirmation() {
+	for (UnitItem unitItem : getUnitItems()) {
+	    if (unitItem.getInvoiceConfirmed()) {
 		return true;
 	    }
 	}

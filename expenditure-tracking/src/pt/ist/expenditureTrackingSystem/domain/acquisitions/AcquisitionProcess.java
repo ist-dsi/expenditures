@@ -65,26 +65,32 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 	List<GenericAcquisitionProcessActivity> requestInformationActivities = new ArrayList<GenericAcquisitionProcessActivity>();
 	List<GenericAcquisitionProcessActivity> requestItemActivities = new ArrayList<GenericAcquisitionProcessActivity>();
 
+	requestInformationActivities.add(new CreateAcquisitionRequest());
+
 	requestInformationActivities.add(new AddAcquisitionProposalDocument());
-	requestInformationActivities.add(new AllocateFundsPermanently());
-	requestInformationActivities.add(new ApproveAcquisitionProcess());
-	requestInformationActivities.add(new UnApproveAcquisitionProcess());
-	requestInformationActivities.add(new RejectAcquisitionProcess());
+	requestInformationActivities.add(new CreateAcquisitionRequestItem());
 	requestInformationActivities.add(new AddPayingUnit());
 	requestInformationActivities.add(new RemovePayingUnit());
-	requestInformationActivities.add(new CreateAcquisitionRequest());
-	requestInformationActivities.add(new CreateAcquisitionRequestItem());
 	requestInformationActivities.add(new DeleteAcquisitionProcess());
+	requestInformationActivities.add(new SubmitForApproval());
+
+	requestInformationActivities.add(new ApproveAcquisitionProcess());
+	requestInformationActivities.add(new RejectAcquisitionProcess());
+
+	requestInformationActivities.add(new AllocateFundsPermanently());
+	requestInformationActivities.add(new UnApproveAcquisitionProcess());
+	
+	
 	requestInformationActivities.add(new FundAllocation());
 	requestInformationActivities.add(new RemoveFundAllocation());
 	requestInformationActivities.add(new FundAllocationExpirationDate());
 	requestInformationActivities.add(new RemoveFundAllocationExpirationDate());
 	requestInformationActivities.add(new CancelAcquisitionRequest());
+	
 	requestInformationActivities.add(new PayAcquisition());
 	requestInformationActivities.add(new ReceiveInvoice());
 	requestInformationActivities.add(new FixInvoice());
 	requestInformationActivities.add(new ConfirmInvoice());
-	requestInformationActivities.add(new SubmitForApproval());
 	requestInformationActivities.add(new UnSubmitForApproval());
 
 	requestItemActivities.add(new DeleteAcquisitionRequestItem());

@@ -33,7 +33,7 @@ public class AcquisitionRequestDocument extends AcquisitionRequestDocument_Base 
 	} catch (JRException e) {
 	    throw new DomainException("error.creating.acquisition.request.document");
 	}
-	setFilename(getRequestNumber() + EXTENSION_PDF);
+	setFilename(getRequestNumber() + "." + EXTENSION_PDF);
     }
 
     public void delete() {

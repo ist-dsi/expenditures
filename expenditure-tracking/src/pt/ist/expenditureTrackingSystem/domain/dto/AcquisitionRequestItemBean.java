@@ -25,11 +25,12 @@ public class AcquisitionRequestItemBean implements Serializable {
     private DomainReference<DeliveryInfo> deliveryInfo;
     private CreateItemSchemaType createItemSchemaType;
     private DomainReference<CPVReference> cPVReference;
-    
+
     private Integer realQuantity;
     private Money realUnitValue;
-    private Money shipment; 
-    
+    private Money shipment;
+    private BigDecimal realVatValue;
+
     public AcquisitionRequestItemBean(final AcquisitionRequest acquisitionRequest) {
 	setAcquisitionRequest(acquisitionRequest);
 	setDeliveryInfo(null);
@@ -57,9 +58,13 @@ public class AcquisitionRequestItemBean implements Serializable {
 	setDeliveryInfo(acquisitionRequestItem.getAcquisitionRequest().getRequester().getDeliveryInfoByRecipientAndAddress(
 		acquisitionRequestItem.getRecipient(), acquisitionRequestItem.getAddress()));
 	setCreateItemSchemaType(CreateItemSchemaType.EXISTING_DELIVERY_INFO);
-	setRealQuantity(acquisitionRequestItem.getRealQuantity() != null ? acquisitionRequestItem.getRealQuantity() : acquisitionRequestItem.getQuantity());
-	setRealUnitValue(acquisitionRequestItem.getRealUnitValue() != null ? acquisitionRequestItem.getRealUnitValue()  : acquisitionRequestItem.getUnitValue());
+	setRealQuantity(acquisitionRequestItem.getRealQuantity() != null ? acquisitionRequestItem.getRealQuantity()
+		: acquisitionRequestItem.getQuantity());
+	setRealUnitValue(acquisitionRequestItem.getRealUnitValue() != null ? acquisitionRequestItem.getRealUnitValue()
+		: acquisitionRequestItem.getUnitValue());
 	setShipment(acquisitionRequestItem.getShipmentValue() != null ? acquisitionRequestItem.getShipmentValue() : Money.ZERO);
+	setRealVatValue(acquisitionRequestItem.getRealVatValue() != null ? acquisitionRequestItem.getRealVatValue()
+		: acquisitionRequestItem.getVatValue());
     }
 
     public void setAcquisitionRequest(final AcquisitionRequest acquisitionRequest) {
@@ -163,35 +168,43 @@ public class AcquisitionRequestItemBean implements Serializable {
     }
 
     public Integer getRealQuantity() {
-        return realQuantity;
+	return realQuantity;
     }
 
     public void setRealQuantity(Integer realQuantity) {
-        this.realQuantity = realQuantity;
+	this.realQuantity = realQuantity;
     }
 
     public Money getRealUnitValue() {
-        return realUnitValue;
+	return realUnitValue;
     }
 
     public void setRealUnitValue(Money realUnitValue) {
-        this.realUnitValue = realUnitValue;
+	this.realUnitValue = realUnitValue;
     }
 
     public Money getShipment() {
-        return shipment;
+	return shipment;
     }
 
     public void setShipment(Money shippement) {
-        this.shipment = shippement;
+	this.shipment = shippement;
     }
 
     public CPVReference getCPVReference() {
-        return cPVReference.getObject();
+	return cPVReference.getObject();
     }
 
     public void setCPVReference(CPVReference reference) {
-        cPVReference = new DomainReference<CPVReference>(reference);
+	cPVReference = new DomainReference<CPVReference>(reference);
+    }
+
+    public BigDecimal getRealVatValue() {
+	return realVatValue;
+    }
+
+    public void setRealVatValue(BigDecimal realVatValue) {
+	this.realVatValue = realVatValue;
     }
 
 }

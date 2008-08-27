@@ -43,6 +43,7 @@ class acquisitions.AcquisitionRequestItem {
 	Address address;
 	
 	Integer realQuantity;
+	BigDecimal realVatValue;
 	Money realUnitValue;
 	Money shipmentValue;
 }

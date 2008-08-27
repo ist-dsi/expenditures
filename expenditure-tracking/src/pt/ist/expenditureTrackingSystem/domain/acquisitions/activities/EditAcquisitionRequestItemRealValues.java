@@ -9,12 +9,12 @@ public class EditAcquisitionRequestItemRealValues extends GenericAcquisitionProc
 
     @Override
     protected boolean isAccessible(AcquisitionProcess process) {
-	return userHasRole(RoleType.ACCOUNTABILITY);
+	return userHasRole(RoleType.ACQUISITION_CENTRAL);
     }
 
     @Override
     protected boolean isAvailable(AcquisitionProcess process) {
-	return process.isProcessInState(AcquisitionProcessStateType.INVOICE_CONFIRMED);
+	return process.isProcessInState(AcquisitionProcessStateType.INVOICE_RECEIVED) && !process.getAcquisitionRequest().hasAtLeastOneConfirmation();
     }
 
     @Override
