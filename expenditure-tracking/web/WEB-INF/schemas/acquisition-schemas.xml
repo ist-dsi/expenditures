@@ -82,6 +82,7 @@
 	<slot name="quantity" key="label.acquisition.request.item.quantity" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 	<slot name="unitValue" key="label.acquisition.request.item.unitValue" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 	<slot name="vatValue" key="label.acquisition.request.item.vatValue" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>	
+	<slot name="additionalCostValue" key="label.acquisition.request.item.additionalCostValue" bundle="ACQUISITION_RESOURCES" />	
 	<slot name="CPVReference" layout="autoComplete" key="label.acquisition.request.item.salesCode" bundle="ACQUISITION_RESOURCES">
 	    <property name="labelField" value="code"/>
 		<property name="format" value="${code} - ${description}"/>
@@ -147,6 +148,7 @@
 		<property name="subLayout" value="default"/>
 	</slot>
 	<slot name="vatValue" key="label.acquisition.request.item.vatValue" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="additionalCostValue" key="label.acquisition.request.item.additionalCostValue" bundle="ACQUISITION_RESOURCES" layout="null-as-label" />
 	<slot name="totalItemValue" key="label.acquisition.request.item.totalValue" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="totalAssignedValue" key="label.acquisition.request.item.assignedValue" bundle="ACQUISITION_RESOURCES"/>
 	.<slot name="shipmentValue" key="label.acquisition.request.item.ShipmentValue" bundle="ACQUISITION_RESOURCES" layout="null-as-label">

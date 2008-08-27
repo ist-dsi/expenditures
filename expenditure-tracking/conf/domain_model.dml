@@ -37,6 +37,7 @@ class acquisitions.AcquisitionRequestItem {
 	Integer quantity;
 	Money unitValue;
 	BigDecimal vatValue;
+	Money additionalCostValue;
 	String proposalReference;
 	String recipient;
 	Address address;

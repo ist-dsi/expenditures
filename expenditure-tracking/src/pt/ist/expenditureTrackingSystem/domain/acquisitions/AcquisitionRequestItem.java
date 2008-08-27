@@ -60,6 +60,7 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 		acquisitionRequestItemBean.getQuantity(), acquisitionRequestItemBean.getUnitValue(), acquisitionRequestItemBean
 			.getVatValue(), acquisitionRequestItemBean.getProposalReference(), acquisitionRequestItemBean
 			.getCPVReference());
+	setAdditionalCostValue(acquisitionRequestItemBean.getAdditionalCostValue());
 	setDeliveryInfo(acquisitionRequestItemBean);
     }
 
@@ -76,19 +77,22 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	}
 	setRecipient(recipient);
 	setAddress(address);
-
     }
 
     public AcquisitionRequestItem(final AcquisitionRequest acquisitionRequest, final String description, final Integer quantity,
-	    final Money unitValue, final BigDecimal vatValue, final String proposalReference, CPVReference reference,
+	    final Money unitValue, final BigDecimal vatValue, final Money additionalCostValue, final String proposalReference, CPVReference reference,
 	    String recipient, Address address) {
 	this(acquisitionRequest, description, quantity, unitValue, vatValue, proposalReference, reference);
 	setRecipient(recipient);
 	setAddress(address);
+	setAdditionalCostValue(additionalCostValue);
     }
 
     public Money getTotalItemValue() {
-	return getUnitValue().multiply(getQuantity());
+	if (getAdditionalCostValue() == null) {
+	    return getUnitValue().multiply(getQuantity());
+	}
+	return getUnitValue().multiply(getQuantity()).add(getAdditionalCostValue());
     }
 
     public Money getTotalRealValue() {
@@ -142,6 +146,7 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	setUnitValue(acquisitionRequestItemBean.getUnitValue());
 	setProposalReference(acquisitionRequestItemBean.getProposalReference());
 	setVatValue(acquisitionRequestItemBean.getVatValue());
+	setAdditionalCostValue(acquisitionRequestItemBean.getAdditionalCostValue());
 	setDeliveryInfo(acquisitionRequestItemBean);
 	setCPVReference(acquisitionRequestItemBean.getCPVReference());
 
