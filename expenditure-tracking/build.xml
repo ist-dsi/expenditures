@@ -38,6 +38,7 @@
 		<delete dir="${build.home.webinf.classes}"/>
 		<delete dir="${deploy.home}"/>
 		<delete dir="${src_gen}"/>
+		<delete file=".actionAnnotationLog"/>
 	</target>
 
 	<target name="prepare" description="Create necessary dirs">
@@ -109,11 +110,12 @@
 				encoding="${encoding}"
 				nowarn="false"
 				failonerror="true">
-			<compilerarg line="-processor pt.ist.fenixWebFramework.services.ServiceAnnotationProcessor"/>
+			<compilerarg line="-processor pt.ist.fenixWebFramework.services.ServiceAnnotationProcessor,pt.ist.fenixWebFramework.struts.annotations.ActionAnnotationProcessor"/>
 			<classpath refid="class.path.ref"/>
 			<src path="${src}"/>
 			<src path="${src_gen}"/>
 		</javac>
+		<copy file=".actionAnnotationLog" todir="${build.home.webinf.classes}" overwrite="true"/>
 		<java classname="pt.ist.fenixWebFramework.services.ServiceAnnotationInjector" failonerror="true">
 			<classpath refid="class.path.ref"/>
 			<classpath>
