@@ -5,7 +5,7 @@
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
 <h2><bean:message key="label.search.aquisition.process" bundle="EXPENDITURE_RESOURCES"/></h2>
-<br/>
+
 <fr:edit action="/acquisitionProcess.do?method=searchAcquisitionProcess"  id="searchAcquisitionProcess"
 		name="searchAcquisitionProcess"
 		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.SearchAcquisitionProcess"
