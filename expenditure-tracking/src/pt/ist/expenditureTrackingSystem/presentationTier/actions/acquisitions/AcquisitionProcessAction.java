@@ -2,13 +2,18 @@ package pt.ist.expenditureTrackingSystem.presentationTier.actions.acquisitions;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.sf.jasperreports.engine.JRException;
 
+import org.apache.commons.beanutils.BeanComparator;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -33,6 +38,7 @@ import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationExpirationDateB
 import pt.ist.expenditureTrackingSystem.domain.dto.UnitItemBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.VariantBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean.CreateItemSchemaType;
+import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
@@ -58,6 +64,8 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "prepare.create.acquisition.request", path = "/acquisitions/createAcquisitionRequest.jsp"),
 	@Forward(name = "receive.invoice", path = "/acquisitions/receiveInvoice.jsp"),
 	@Forward(name = "view.active.processes", path = "/acquisitions/viewActiveProcesses.jsp"),
+	@Forward(name = "view.my.processes", path = "/acquisitions/viewMyProcesses.jsp"),
+
 	@Forward(name = "select.unit.to.add", path = "/acquisitions/selectPayingUnitToAdd.jsp"),
 	@Forward(name = "remove.paying.units", path = "/acquisitions/removePayingUnits.jsp"),
 	@Forward(name = "edit.request.item", path = "/acquisitions/editRequestItem.jsp"),
@@ -115,7 +123,7 @@ public class AcquisitionProcessAction extends ProcessAction {
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
-    
+
     public ActionForward viewAcquisitionProcess(final ActionMapping mapping, final HttpServletRequest request,
 	    final AcquisitionProcess acquisitionProcess) {
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
@@ -276,6 +284,24 @@ public class AcquisitionProcessAction extends ProcessAction {
 	return mapping.findForward("view.active.processes");
     }
 
+    public ActionForward showMyProcesses(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+
+	Person person = getLoggedPerson();
+	List<AcquisitionProcess> processes = person.getAcquisitionProcesses();
+	Collections.sort(processes, new Comparator<AcquisitionProcess>() {
+
+	    public int compare(AcquisitionProcess p1, AcquisitionProcess p2) {
+		return -1 * p1.getDateFromLastActivity().compareTo(p2.getDateFromLastActivity());
+	    }
+
+	});
+
+	request.setAttribute("processes", processes);
+
+	return mapping.findForward("view.my.processes");
+    }
+
     public ActionForward createAcquisitionRequestDocument(ActionMapping mapping, ActionForm actionForm,
 	    HttpServletRequest request, HttpServletResponse response) throws JRException, IOException {
 	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
@@ -424,7 +450,7 @@ public class AcquisitionProcessAction extends ProcessAction {
 	List<Unit> units = new ArrayList<Unit>();
 	units.add(payingUnit);
 	try {
-	genericActivityExecution(request, "RemovePayingUnit", units);
+	    genericActivityExecution(request, "RemovePayingUnit", units);
 	} catch (DomainException e) {
 	    addErrorMessage(e.getMessage(), getBundle());
 	}
@@ -460,10 +486,10 @@ public class AcquisitionProcessAction extends ProcessAction {
 
 	final AcquisitionRequestItemBean requestItemBean = getRenderedObject("acquisitionRequestItem");
 	try {
-	genericActivityExecution(requestItemBean.getAcquisitionRequest().getAcquisitionProcess(), "EditAcquisitionRequestItem",
-		requestItemBean);
-	} catch(DomainException e) {
-	    addErrorMessage(e.getMessage(), getBundle(),e.getArgs());
+	    genericActivityExecution(requestItemBean.getAcquisitionRequest().getAcquisitionProcess(),
+		    "EditAcquisitionRequestItem", requestItemBean);
+	} catch (DomainException e) {
+	    addErrorMessage(e.getMessage(), getBundle(), e.getArgs());
 	    return executeEditAcquisitionRequestItem(mapping, form, request, response);
 	}
 	return viewAcquisitionProcess(mapping, request, requestItemBean.getAcquisitionRequest().getAcquisitionProcess());

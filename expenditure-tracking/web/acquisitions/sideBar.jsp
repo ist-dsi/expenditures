@@ -23,4 +23,9 @@
 			<bean:message key="link.show.aquisition.pending.processes" bundle="EXPENDITURE_RESOURCES"/>
 		</html:link>
 	</li>	
+	<li>
+		<html:link action="/acquisitionProcess.do?method=showMyProcesses">
+			<bean:message key="label.my.processes" bundle="EXPENDITURE_RESOURCES"/>
+		</html:link>
+	</li>	
 </ul>

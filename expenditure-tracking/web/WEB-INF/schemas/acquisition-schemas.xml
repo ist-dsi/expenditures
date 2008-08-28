@@ -60,8 +60,8 @@
 <schema name="viewAcquisitionProcessInList"
 		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess"
 		bundle="ACQUISITION_RESOURCES">
-	<slot name="acquisitionRequest.requester.name" key="label.acquisition.requester" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="acquisitionProcessState.localizedName" key="label.acquisition.process.state" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="acquisitionRequest.requester.name" key="label.acquisition.requester" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="dateFromLastActivity" key="label.inactive.since" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="acquisitionRequest.fiscalIdentificationCode" key="label.service.provider.fiscalIdentificationCode" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="acquisitionRequest.totalItemValue" key="label.total.item.value" bundle="ACQUISITION_RESOURCES"/>

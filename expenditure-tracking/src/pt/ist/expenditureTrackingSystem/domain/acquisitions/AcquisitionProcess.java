@@ -362,4 +362,8 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
     public boolean isAllocatedToUnit() {
 	return getAcquisitionProcessStateType().compareTo(AcquisitionProcessStateType.FUNDS_ALLOCATED) >= 0;
     }
+    
+    public boolean isPayed() {
+	return isProcessInState(AcquisitionProcessStateType.ACQUISITION_PAYED);
+    }
 }

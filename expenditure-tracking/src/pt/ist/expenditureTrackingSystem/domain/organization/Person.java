@@ -1,6 +1,8 @@
 package pt.ist.expenditureTrackingSystem.domain.organization;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
@@ -8,6 +10,7 @@ import pt.ist.expenditureTrackingSystem.domain.Options;
 import pt.ist.expenditureTrackingSystem.domain.Role;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreatePersonBean;
 import pt.ist.expenditureTrackingSystem.domain.util.Address;
@@ -108,4 +111,11 @@ public class Person extends Person_Base {
 	return null;
     }
 
+    public List<AcquisitionProcess> getAcquisitionProcesses() {
+	List<AcquisitionProcess> processes = new ArrayList<AcquisitionProcess>();
+	for (AcquisitionRequest request : getAcquisitionRequestsSet()) {
+	    processes.add(request.getAcquisitionProcess());
+	}
+	return processes;
+    }
 }
