@@ -59,7 +59,7 @@
 <schema name="viewPayingUnitWithTotalAmount"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.PayingUnitTotalBean"
 		bundle="ACQUISITION_RESOURCES">
-		<slot name="payingUnit.name" key="link.approve"/>
+		<slot name="payingUnit.presentationName" key="link.approve"/>
 		<slot name="amount" key="link.approve"/>
 </schema>
 

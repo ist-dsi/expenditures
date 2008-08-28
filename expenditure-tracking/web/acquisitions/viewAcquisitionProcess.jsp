@@ -165,9 +165,112 @@
 					</fr:layout>
 				</fr:view>
 			</div>
+	
+				<style>
+						table.asd th {
+						white-space: nowrap;
+						width: 1%;
+						}
+			</style>
 			
+			<div class="infoop2">
+				
+				<table class="tstyle1 asd">
+	
+					<tr>
+						<th><bean:message key="label.acquisition.request.item.proposalReference" bundle="ACQUISITION_RESOURCES"/>:</th>
+						<td><fr:view name="acquisitionRequestItem" property="proposalReference"/></td>
+						<th></th>
+						<td></td>
+					</tr>
+					<tr>
+						<th><bean:message key="label.acquisition.request.item.quantity" bundle="ACQUISITION_RESOURCES"/>:</th>
+				
+						<td><fr:view name="acquisitionRequestItem" property="quantity"/></td>
+						<th><bean:message key="label.acquisition.request.item.realQuantity" bundle="ACQUISITION_RESOURCES"/>:</th>
+						<td><fr:view name="acquisitionRequestItem" property="realQuantity" type="java.lang.Integer">
+									<fr:layout name="null-as-label">
+										<fr:property name="subLayout" value="default"/>
+									</fr:layout>
+								</fr:view>
+						</td>
+					</tr>
+					<tr>
+						<th><bean:message key="label.acquisition.request.item.unitValue" bundle="ACQUISITION_RESOURCES"/>:</th>
+						<td><fr:view name="acquisitionRequestItem" property="unitValue"/></td>
+
+						<th><bean:message key="label.acquisition.request.item.realUnitValue" bundle="ACQUISITION_RESOURCES"/>:</th>
+						<td><fr:view name="acquisitionRequestItem" property="realUnitValue" type="pt.ist.expenditureTrackingSystem.domain.util.Money">
+									<fr:layout name="null-as-label">
+										<fr:property name="subLayout" value="default"/>
+									</fr:layout>
+								</fr:view></td>
+					</tr>
+					<tr>
+						<th><bean:message key="label.acquisition.request.item.vatValue" bundle="ACQUISITION_RESOURCES"/></th>
+						<td><fr:view name="acquisitionRequestItem" property="vatValue"/></td>
+						<th><bean:message key="label.acquisition.request.item.realVatValue" bundle="ACQUISITION_RESOURCES"/>:</th>
+				
+						<td><fr:view name="acquisitionRequestItem" property="realVatValue" type="java.lang.String">
+									<fr:layout name="null-as-label">
+										<fr:property name="subLayout" value="default"/>
+									</fr:layout>
+								</fr:view>
+						</td>
+					</tr>
+					<tr>
+						<th><bean:message key="label.acquisition.request.item.totalValue" bundle="ACQUISITION_RESOURCES"/>:</th>
+						<td colspan="3"><span><fr:view name="acquisitionRequestItem" property="totalItemValue"/></span></td>
+					</tr>
+					<tr>
+				
+						<th><bean:message key="label.acquisition.request.item.assignedValue" bundle="ACQUISITION_RESOURCES"/>:</th>
+						<td colspan="3"><span><fr:view name="acquisitionRequestItem" property="totalAssignedValue"/></span></td>
+					</tr>
+					<tr>
+						<th><bean:message key="label.acquisition.request.item.ShipmentValue" bundle="ACQUISITION_RESOURCES"/>:</th>
+						<td><fr:view name="acquisitionRequestItem" property="shipmentValue" type="pt.ist.expenditureTrackingSystem.domain.util.Money">
+									<fr:layout name="null-as-label">
+										<fr:property name="subLayout" value="default"/>
+									</fr:layout>
+								</fr:view>
+							</td>
+					</tr>
+				
+					<tr>
+						<th><bean:message key="label.payingUnits" bundle="ACQUISITION_RESOURCES"/>:</th>
+						<td colspan="3">
+								<fr:view name="acquisitionRequestItem" property="unitItems" schema="viewUnitItem">
+									<fr:layout name="tabular">
+												<fr:property name="classes" value="payingunits"/>
+												<fr:property name="columnClasses" value=",nowrap vatop,"/>
+												<fr:property name="sortBy" value="unit.presentationName"/>
+									</fr:layout>
+								</fr:view>
+						</td>
+					</tr>
+					<tr>
+						<th><bean:message key="label.acquisition.request.item.salesCode" bundle="ACQUISITION_RESOURCES"/>:</th>
+						<td colspan="3">
+						<fr:view name="acquisitionRequestItem" property="CPVReference">
+							<fr:layout name="format">
+								<fr:property name="format" value="${code} - ${description}"/>
+							</fr:layout>
+						</fr:view>
+					</tr>
+				
+					<tr>
+						<th><bean:message key="label.acquisition.request.item.description" bundle="ACQUISITION_RESOURCES"/>:</th>
+						<td colspan="3"><fr:view name="acquisitionRequestItem" property="description"/></td>
+					</tr>
+	</table>
+				
+			</div>
+					
 		</div>
 	</logic:iterate>
+	
+	
 </logic:present>
 
 </div>
