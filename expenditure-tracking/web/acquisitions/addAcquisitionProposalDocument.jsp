@@ -10,7 +10,7 @@
 		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess"
 		/>
 <bean:define id="urlView">/acquisitionProcess.do?method=viewAcquisitionProcess&amp;acquisitionProcessOid=<%= acquisitionProcess.getOID() %></bean:define>
-<bean:define id="urlPrepareAdd">/acquisitionProcess.do?method=prepareAddAcquisitionProposalDocument&amp;acquisitionProcessOid=<%= acquisitionProcess.getOID() %></bean:define>
+<bean:define id="urlPrepareAdd">/acquisitionProcess.do?method=executeAddAcquisitionProposalDocument&amp;acquisitionProcessOid=<%= acquisitionProcess.getOID() %></bean:define>
 <bean:define id="urlAdd">/acquisitionProcess.do?method=addAcquisitionProposalDocument&amp;acquisitionProcessOid=<%= acquisitionProcess.getOID() %></bean:define>
 <fr:edit id="acquisitionProposalDocumentForm"
 		name="acquisitionProposalDocumentForm"
@@ -18,6 +18,7 @@
 		action="<%= urlAdd %>">
 	<fr:layout name="tabular">
 		<fr:property name="classes" value="form"/>
+		<fr:property name="columnClasses" value=",,tderror"/>
 	</fr:layout>
 		<fr:destination name="invalid" path="<%= urlPrepareAdd %>" />
 		<fr:destination name="cancel" path="<%= urlView %>" />

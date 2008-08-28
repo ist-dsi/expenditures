@@ -38,10 +38,9 @@
 		bundle="ACQUISITION_RESOURCES">
 	<slot name="acquisitionProcess.requestor.name" key="label.acquisition.requestor" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="acquisitionProcess.requestingUnit.presentationName" key="label.acquisition.requesting.unit" bundle="ACQUISITION_RESOURCES"/>
-	<slot name="acquisitionProcess.payingUnits" layout="separator-list" key="label.payingUnits" bundle="ACQUISITION_RESOURCES">
-		<property name="eachSchema" value="unitName"/>
-		<property name="eachLayout" value="values"/>
-		<property name="separator" value=","/>
+	<slot name="totalAmountsForEachPayingUnit" key="label.payingUnits" bundle="ACQUISITION_RESOURCES" layout="tabular" schema="viewPayingUnitWithTotalAmount">
+		<property name="classes" value="payingunits"/>
+		<property name="columnClasses" value=",nowrap vatop,"/>
 	</slot>
 	<slot name="acquisitionProcess.acquisitionProcessState.localizedName" key="label.acquisition.process.state" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="fiscalIdentificationCode" key="label.service.provider.fiscalIdentificationCode" bundle="ACQUISITION_RESOURCES"/>
@@ -57,14 +56,25 @@
 	</slot>
 </schema>
 
+<schema name="viewPayingUnitWithTotalAmount"
+		type="pt.ist.expenditureTrackingSystem.domain.dto.PayingUnitTotalBean"
+		bundle="ACQUISITION_RESOURCES">
+		<slot name="payingUnit.name" key="link.approve"/>
+		<slot name="amount" key="link.approve"/>
+</schema>
+
 <schema name="viewAcquisitionProcessInList"
 		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess"
 		bundle="ACQUISITION_RESOURCES">
 	<slot name="acquisitionProcessState.localizedName" key="label.acquisition.process.state" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="acquisitionRequest.requester.name" key="label.acquisition.requester" bundle="ACQUISITION_RESOURCES"/>
-	<slot name="dateFromLastActivity" key="label.inactive.since" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="dateFromLastActivity" key="label.inactive.since" bundle="ACQUISITION_RESOURCES">
+		<property name="classes" value="nowrap"/>
+	</slot> 
 	<slot name="acquisitionRequest.fiscalIdentificationCode" key="label.service.provider.fiscalIdentificationCode" bundle="ACQUISITION_RESOURCES"/>
-	<slot name="acquisitionRequest.totalItemValue" key="label.total.item.value" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="acquisitionRequest.totalItemValue" key="label.total.item.value" bundle="ACQUISITION_RESOURCES">
+		<property name="classes" value="nowrap"/>
+	</slot>
 </schema>
 
 <schema name="addAcquisitionProposalDocument"

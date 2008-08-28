@@ -3,7 +3,7 @@
 				for(i=0; i<maxElements;i++) {
 					element = document.getElementById('tr' + i);
 					if (element != null) {
-						checked = element.cells[1].getElementsByTagName("input")[0].checked;
+						checked = element.cells[0].getElementsByTagName("input")[0].checked;
 						value = element.cells[2].getElementsByTagName("input")[0].value;
 						if (checked && value.match('\\d+')) {
 							sum += parseFloat(value);

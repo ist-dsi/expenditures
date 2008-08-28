@@ -6,7 +6,7 @@
 <%@ taglib uri="/WEB-INF/messages.tld" prefix="messages" %>
 
 <bean:define id="currentState" name="acquisitionProcess" property="acquisitionProcessStateType"/>
-
+ 
 <fr:view name="acquisitionProcess"> 
 	<fr:layout name="process-state">
 		<fr:property name="stateParameterName" value="state"/>
@@ -114,7 +114,7 @@
 	</p>
 </div>
 
-
+ 
 <logic:present name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestItemsSet">
 
 	<bean:size id="totalItems" name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestItemsSet"/>
@@ -165,8 +165,11 @@
 					</fr:layout>
 				</fr:view>
 			</div>
+			
 		</div>
 	</logic:iterate>
 </logic:present>
 
 </div>
+
+

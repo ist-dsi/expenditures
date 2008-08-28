@@ -1,10 +1,14 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.joda.time.LocalDate;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean;
+import pt.ist.expenditureTrackingSystem.domain.dto.PayingUnitTotalBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
@@ -257,4 +261,11 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	return totalValue.isLessThanOrEqual(getAcquisitionProcess().getAcquisitionRequestValueLimit());
     }
    
+    public List<PayingUnitTotalBean> getTotalAmountsForEachPayingUnit() {
+	List<PayingUnitTotalBean> beans = new ArrayList<PayingUnitTotalBean>();
+	for (Unit payingUnit : getPayingUnits()) {
+	    beans.add(new PayingUnitTotalBean(payingUnit,this));
+	}
+	return beans;
+    }
 }

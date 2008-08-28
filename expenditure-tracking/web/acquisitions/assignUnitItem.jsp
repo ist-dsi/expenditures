@@ -39,22 +39,22 @@
 		<table class="tstyle4">
 			<tr>
 				<th>
-					<strong><bean:message key="label.payingUnit" bundle="ACQUISITION_RESOURCES"/></strong>
-				</th>
+
+				</th>				
 				<th>
 					<strong><bean:message key="label.payingUnit" bundle="ACQUISITION_RESOURCES"/></strong>
-				</th>				
+				</th>
 				<th>
 					<strong><bean:message key="label.shareValue" bundle="ACQUISITION_RESOURCES"/></strong>
 				</th>
 			</tr>
 			<logic:iterate id="unitItemBean" name="unitItemBeans" indexId="id">
 					<tr id="<%= "tr" + id %>" onKeyUp="<%= "javascript:calculate(" + maxElements + ", 'sum', '" + maxValue + "', '" + outOfLabel+ "')" %>">
-						<td>
-							<fr:view name="unitItemBean" property="unit.name"/>
-						</td>
 						<td onclick="<%= "javascript:calculate(" + maxElements + ", 'sum', '" + maxValue + "', '" + outOfLabel+ "')" %>">
 							<fr:edit  id="<%= "assigned" + id %>" name="unitItemBean" slot="assigned"/>
+						</td>
+						<td>
+							<fr:view name="unitItemBean" property="unit.name"/>
 						</td>
 						<td>
 							<fr:edit id="<%= "shareValue" + id %>" name="unitItemBean" slot="shareValue"/>
@@ -65,7 +65,7 @@
 					<td>
 					</td>
 					<td>
-						<strong><bean:message key="label.acquisition.request.item.totalValue" bundle="ACQUISITION_RESOURCES"/></strong>:
+						<strong><bean:message key="label.total" bundle="EXPENDITURE_RESOURCES"/></strong>:
 					</td>
 					<td>
 						<span id="sum">

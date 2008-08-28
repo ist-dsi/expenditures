@@ -288,16 +288,7 @@ public class AcquisitionProcessAction extends ProcessAction {
 	    final HttpServletResponse response) {
 
 	Person person = getLoggedPerson();
-	List<AcquisitionProcess> processes = person.getAcquisitionProcesses();
-	Collections.sort(processes, new Comparator<AcquisitionProcess>() {
-
-	    public int compare(AcquisitionProcess p1, AcquisitionProcess p2) {
-		return -1 * p1.getDateFromLastActivity().compareTo(p2.getDateFromLastActivity());
-	    }
-
-	});
-
-	request.setAttribute("processes", processes);
+	request.setAttribute("processes", person.getAcquisitionProcesses());
 
 	return mapping.findForward("view.my.processes");
     }
