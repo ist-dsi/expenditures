@@ -56,11 +56,11 @@ public class Money implements Serializable, Comparable<Money> {
     }
 
     public Money addPercentage(final BigDecimal percentage) {
-	return newMoney(percentage.add(valuePercentage(percentage)));
+	return newMoney(getValue().add(valuePercentage(percentage)));
     }
 
     public Money subtractPercentage(final BigDecimal percentage) {
-	return newMoney(percentage.subtract(valuePercentage(percentage)));
+	return newMoney(getValue().subtract(valuePercentage(percentage)));
     }
 
     public Money add(final Money money) {
