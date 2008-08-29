@@ -12,15 +12,17 @@
 				<bean:message key="link.create.requestForProposal.process" bundle="EXPENDITURE_RESOURCES"/>
 			</html:link>
 		</li>
+		<!-- 
+		<li>
+			<html:link action="/requestForProposalProcess.do?method=searchRequestForProposalProcess">
+				<bean:message key="link.search.requestForProposal.process" bundle="EXPENDITURE_RESOURCES"/>
+			</html:link>
+		</li>
+		-->
+		<li>
+			<html:link action="/requestForProposalProcess.do?method=showPendingRequests">
+				<bean:message key="link.show.requestForProposal.pending.processes" bundle="EXPENDITURE_RESOURCES"/>
+			</html:link>
+		</li>
 	</logic:present>
-	<li>
-		<html:link action="/requestForProposalProcess.do?method=searchRequestForProposalProcess">
-			<bean:message key="link.search.requestForProposal.process" bundle="EXPENDITURE_RESOURCES"/>
-		</html:link>
-	</li>
-	<li>
-		<html:link action="/requestForProposalProcess.do?method=showPendingRequests">
-			<bean:message key="link.show.requestForProposal.pending.processes" bundle="EXPENDITURE_RESOURCES"/>
-		</html:link>
-	</li>	
 </ul>

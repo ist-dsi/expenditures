@@ -3,8 +3,8 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
-<!-- requests/createRequestProcess -->
-requests/createRequestProcess
+<!-- requests/createRequestProcess.jsp -->
+requests/createRequestProcess.jsp
 
 <h2><bean:message key="label.create.requestForProposal" bundle="EXPENDITURE_RESOURCES"/></h2>
 

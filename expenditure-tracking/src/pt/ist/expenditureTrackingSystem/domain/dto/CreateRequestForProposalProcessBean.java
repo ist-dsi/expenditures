@@ -4,6 +4,8 @@ import org.joda.time.LocalDate;
 
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
+import pt.ist.expenditureTrackingSystem.domain.requests.RequestForProposal;
+import pt.ist.expenditureTrackingSystem.domain.requests.RequestForProposalProcess;
 import pt.ist.expenditureTrackingSystem.presentationTier.util.FileUploadBean;
 import pt.ist.fenixWebFramework.util.DomainReference;
 
@@ -21,6 +23,15 @@ public class CreateRequestForProposalProcessBean extends FileUploadBean {
 	setRequester(null);
     }
     
+    public CreateRequestForProposalProcessBean(RequestForProposalProcess process) {
+	RequestForProposal proposal = process.getRequestForProposal();
+	setTitle(proposal.getTitle());
+	setDescription(proposal.getDescription());
+	setRequestingUnit(proposal.getRequestingUnit());
+	setPublishDate(proposal.getPublishDate());
+	setExpireDate(proposal.getExpireDate());
+    }
+
     public String getTitle() {
 	return title;
     }

@@ -5,8 +5,8 @@
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 <%@ taglib uri="/WEB-INF/messages.tld" prefix="messages" %>
 
-<!-- requests/viewRequestProcess -->
-requests/viewRequestProcess
+<!-- requests/viewRequestProcess.jsp -->
+requests/viewRequestProcess.jsp
 
 <bean:define id="currentState" name="requestForProposalProcess" property="requestForProposalProcessStateType"/>
 

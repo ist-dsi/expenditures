@@ -9,7 +9,7 @@
 %>
 	<ul>
 		<li>
-			<html:link action="/home.do?method=firstPage">
+			<html:link action="/home.do?method=showActiveRequestsForProposal">
 				Anúncios
 			</html:link>
 		</li>
