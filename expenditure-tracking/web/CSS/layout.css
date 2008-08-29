@@ -345,8 +345,9 @@ table.tstyle1 th {
 text-align: left;
 font-weight: normal;
 padding: 2px 0;
-white-space: nowrap;
 vertical-align: top;
+white-space: nowrap;
+width: 1%;
 }
 table.tstyle1 td {
 text-align: left;
@@ -530,3 +531,9 @@ table.payingunits th { display: none; }
 table.payingunits td { padding: 0 10px 0 0 !important; }
 .nowrap { white-space: nowrap; }
 .vatop { vertical-align: top; }
+
+td.rejected span { background: #fdc; }
+td.active span { background: #fff; }
+td.inactive span { background: #cec; }
+
+

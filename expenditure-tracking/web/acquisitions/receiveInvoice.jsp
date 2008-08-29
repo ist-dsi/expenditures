@@ -48,14 +48,8 @@
 	<logic:iterate id="acquisitionRequestItem" name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestItemsSet" indexId="index">
 		<bean:define id="currentIndex" value="<%= String.valueOf(index + 1) %>"/>
 		<p><strong><bean:message key="label.view.acquisition.request.item" bundle="ACQUISITION_RESOURCES"/></strong> (<fr:view name="currentIndex"/>/<fr:view name="totalItems"/>)</p>
-		<div class="infoop2">
-			<fr:view name="acquisitionRequestItem"
-					schema="viewAcquisitionRequestItem">
-				<fr:layout name="tabular">
-					<fr:property name="classes" value="tstyle1"/>
-				</fr:layout>
-			</fr:view>
-		</div>
+		<bean:define id="acquisitionRequestItem" name="acquisitionRequestItem" toScope="request"/>
+		<jsp:include page="./acquisitionItemDisplay.jsp" flush="false"/>
 	</logic:iterate>
 </p>
 

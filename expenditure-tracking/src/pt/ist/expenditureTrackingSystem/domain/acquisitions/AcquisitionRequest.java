@@ -117,7 +117,7 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	    item.setRealQuantity(item.getQuantity());
 	    item.setRealUnitValue(item.getUnitValue());
 	    item.setRealVatValue(item.getVatValue());
-	    item.setShipmentValue(item.getAdditionalCostValue());
+	    item.setRealAdditionalCostValue(item.getAdditionalCostValue());
 	    
 	    for (UnitItem unitItem : item.getUnitItems()) {
 		unitItem.setRealShareValue(unitItem.getShareValue());

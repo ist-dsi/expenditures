@@ -2,6 +2,8 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
@@ -80,8 +82,8 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
     }
 
     public AcquisitionRequestItem(final AcquisitionRequest acquisitionRequest, final String description, final Integer quantity,
-	    final Money unitValue, final BigDecimal vatValue, final Money additionalCostValue, final String proposalReference, CPVReference reference,
-	    String recipient, Address address) {
+	    final Money unitValue, final BigDecimal vatValue, final Money additionalCostValue, final String proposalReference,
+	    CPVReference reference, String recipient, Address address) {
 	this(acquisitionRequest, description, quantity, unitValue, vatValue, proposalReference, reference);
 	setRecipient(recipient);
 	setAddress(address);
@@ -96,8 +98,11 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
     }
 
     public Money getTotalRealValue() {
+	if (getRealUnitValue() == null || getRealQuantity() == null) {
+	    return null;
+	}
 	Money totalRealValue = getRealUnitValue().multiply(getRealQuantity());
-	return getShipmentValue() == null ? totalRealValue : totalRealValue.add(getShipmentValue());
+	return getRealAdditionalCostValue() == null ? totalRealValue : totalRealValue.add(getRealAdditionalCostValue());
     }
 
     public Money getTotalItemValueWithVat() {
@@ -159,7 +164,7 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
     public void editRealValues(AcquisitionRequestItemBean acquisitionRequestItemBean) {
 	setRealQuantity(acquisitionRequestItemBean.getRealQuantity());
 	setRealUnitValue(acquisitionRequestItemBean.getRealUnitValue());
-	setShipmentValue(acquisitionRequestItemBean.getShipment());
+	setRealAdditionalCostValue(acquisitionRequestItemBean.getShipment());
     }
 
     public void delete() {
@@ -189,7 +194,7 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
     }
 
     public boolean isFilledWithRealValues() {
-	return getRealQuantity() != null && getRealUnitValue() != null && getShipmentValue() != null;
+	return getRealQuantity() != null && getRealUnitValue() != null && (getAdditionalCostValue() == null || getRealAdditionalCostValue() != null);
     }
 
     public boolean isValueFullyAttributedToUnits() {
@@ -309,4 +314,16 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	}
     }
 
+    public List<UnitItem> getSortedUnitItems() {
+	List<UnitItem> unitItems = new ArrayList<UnitItem>(getUnitItems());
+	Collections.sort(unitItems, new Comparator<UnitItem>() {
+
+	    public int compare(UnitItem unitItem1, UnitItem unitItem2) {
+		return unitItem1.getUnit().getPresentationName().compareTo(unitItem2.getUnit().getPresentationName());
+	    }
+	    
+	});
+	
+	return unitItems;
+    }
 }

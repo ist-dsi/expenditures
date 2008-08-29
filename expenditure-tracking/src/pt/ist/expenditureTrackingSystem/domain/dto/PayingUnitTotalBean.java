@@ -21,7 +21,9 @@ public class PayingUnitTotalBean implements Serializable {
 	Money amount = Money.ZERO;
 	for (AcquisitionRequestItem item : request.getAcquisitionRequestItems()) {
 	    UnitItem unitItem = item.getUnitItemFor(payingUnit);
-	    if (unitItem != null && unitItem.getShareValue() != null) {
+	    if (unitItem != null && unitItem.getRealShareValue() != null) {
+		amount = amount.add(unitItem.getRealShareValue());
+	    }else if (unitItem != null && unitItem.getShareValue() != null) {
 		amount = amount.add(unitItem.getShareValue());
 	    }
 	}

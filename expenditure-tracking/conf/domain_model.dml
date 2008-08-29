@@ -45,7 +45,7 @@ class acquisitions.AcquisitionRequestItem {
 	Integer realQuantity;
 	BigDecimal realVatValue;
 	Money realUnitValue;
-	Money shipmentValue;
+	Money realAdditionalCostValue;
 }
 
 class acquisitions.CPVReference {

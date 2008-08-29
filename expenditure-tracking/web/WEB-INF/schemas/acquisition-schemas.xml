@@ -45,12 +45,18 @@
 	<slot name="acquisitionProcess.acquisitionProcessState.localizedName" key="label.acquisition.process.state" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="fiscalIdentificationCode" key="label.service.provider.fiscalIdentificationCode" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="totalItemValue" key="label.total.item.value" bundle="ACQUISITION_RESOURCES"/>
-	<slot name="acquisitionProcess.fundAllocationId" key="label.fund.allocation.identification" bundle="ACQUISITION_RESOURCES"/>
-	<slot name="acquisitionProcess.fundAllocationExpirationDate" key="label.fund.allocation.expiration.date" bundle="ACQUISITION_RESOURCES">
-		<property name="format" value="${year}-${monthOfYear,02d}-${dayOfMonth,02d}"/>
+	<slot name="acquisitionProcess.fundAllocationId" key="label.fund.allocation.identification" bundle="ACQUISITION_RESOURCES" layout="null-as-label">
+		<property name="subLayout" value="default"/>
 	</slot>
-	<slot name="invoiceNumber" key="label.invoice.number" bundle="ACQUISITION_RESOURCES"/>
-	<slot name="invoiceDate" key="label.invoice.date" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="acquisitionProcess.fundAllocationExpirationDate" key="label.fund.allocation.expiration.date" bundle="ACQUISITION_RESOURCES" layout="null-as-label">
+		<property name="subLayout" value="default"/>
+	</slot>
+	<slot name="invoiceNumber" key="label.invoice.number" bundle="ACQUISITION_RESOURCES" layout="null-as-label">
+		<property name="subLayout" value="default"/>
+	</slot>
+	<slot name="invoiceDate" key="label.invoice.date" bundle="ACQUISITION_RESOURCES" layout="null-as-label">
+		<property name="subLayout" value="default"/>
+	</slot>
 	<slot name="paymentReference" key="label.acquisitionProcess.paymentReference" bundle="ACQUISITION_RESOURCES" layout="null-as-label">
 		<property name="subLayout" value="default"/>
 	</slot>
@@ -161,7 +167,7 @@
 	<slot name="additionalCostValue" key="label.acquisition.request.item.additionalCostValue" bundle="ACQUISITION_RESOURCES" layout="null-as-label" />
 	<slot name="totalItemValue" key="label.acquisition.request.item.totalValue" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="totalAssignedValue" key="label.acquisition.request.item.assignedValue" bundle="ACQUISITION_RESOURCES"/>
-	.<slot name="shipmentValue" key="label.acquisition.request.item.ShipmentValue" bundle="ACQUISITION_RESOURCES" layout="null-as-label">
+	.<slot name="realAdditionalCostValue" key="label.acquisition.request.item.realAdditionalCostValue" bundle="ACQUISITION_RESOURCES" layout="null-as-label">
 		<property name="subLayout" value="default"/>
 	</slot>
 	<slot name="unitItems" key="label.payingUnits" bundle="ACQUISITION_RESOURCES" layout="tabular" schema="viewUnitItem">
@@ -178,7 +184,7 @@
 		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.UnitItem"
 		bundle="ACQUISITION_RESOURCES">
 	<slot name="unit.presentationName"/>
-	<slot name="shareValue"/>
+	<slot name="realShareValue"/>
 </schema>
 
 <schema name="searchAcquisitionProcess"
@@ -290,7 +296,7 @@
 	<slot name="realQuantity" key="label.acquisition.request.item.realQuantity" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 	<slot name="realUnitValue" key="label.acquisition.request.item.realUnitValue" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 	<slot name="realVatValue" key="label.acquisition.request.item.realVatValue" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-	<slot name="shipment" key="label.acquisition.request.item.ShipmentValue" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>	
+	<slot name="shipment" key="label.acquisition.request.item.realAdditionalCostValue" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>	
 </schema>
 
 <schema name="editSchemaRealShareValues" type="pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean"

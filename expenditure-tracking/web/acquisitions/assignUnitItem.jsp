@@ -18,14 +18,9 @@
 	<bean:message key="label.out.of" bundle="ACQUISITION_RESOURCES"/>
 </bean:define>
 
-<div class="infoop2">
-	<fr:view name="acquisitionRequestItem"
-			schema="viewAcquisitionRequestItem">
-		<fr:layout name="tabular">
-			<fr:property name="classes" value="tstyle1"/>
-		</fr:layout>
-	</fr:view>
-</div>
+<bean:define id="acquisitionRequestItem" name="acquisitionRequestItem" toScope="request"/>
+<jsp:include page="./acquisitionItemDisplay.jsp" flush="false"/>
+
 <bean:define id="maxValue" name="acquisitionRequestItem" property="totalItemValue.value"/>
 <jsp:include page="../commons/defaultErrorDisplay.jsp"/>
 

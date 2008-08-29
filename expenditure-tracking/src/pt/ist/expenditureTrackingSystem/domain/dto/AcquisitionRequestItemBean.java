@@ -62,7 +62,7 @@ public class AcquisitionRequestItemBean implements Serializable {
 		: acquisitionRequestItem.getQuantity());
 	setRealUnitValue(acquisitionRequestItem.getRealUnitValue() != null ? acquisitionRequestItem.getRealUnitValue()
 		: acquisitionRequestItem.getUnitValue());
-	setShipment(acquisitionRequestItem.getShipmentValue() != null ? acquisitionRequestItem.getShipmentValue() : Money.ZERO);
+	setShipment(acquisitionRequestItem.getRealAdditionalCostValue() != null ? acquisitionRequestItem.getRealAdditionalCostValue() : Money.ZERO);
 	setRealVatValue(acquisitionRequestItem.getRealVatValue() != null ? acquisitionRequestItem.getRealVatValue()
 		: acquisitionRequestItem.getVatValue());
     }
