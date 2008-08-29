@@ -261,6 +261,15 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	modifyInvoiceState(person, Boolean.FALSE);
     }
 
+    public boolean hasAtLeastOneResponsibleApproval() {
+	for (UnitItem unitItem : getUnitItems()) {
+	    if (unitItem.getItemApproved()) {
+		return true;
+	    }
+	}
+	return false;
+    }
+    
     public boolean isApproved() {
 	for (UnitItem unitItem : getUnitItems()) {
 	    if (!unitItem.getItemApproved()) {

@@ -189,6 +189,15 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	}
     }
 
+    public boolean isApprovedByAtLeastOneResponsible() {
+	for (AcquisitionRequestItem item : getAcquisitionRequestItems()) {
+	    if (item.hasAtLeastOneResponsibleApproval()) {
+		return true;
+	    }
+	}
+	return false;
+    }
+    
     public boolean isApprovedByAllResponsibles() {
 	for (AcquisitionRequestItem item : getAcquisitionRequestItems()) {
 	    if (!item.isApproved()) {
