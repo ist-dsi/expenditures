@@ -1,6 +1,8 @@
 package pt.ist.expenditureTrackingSystem.applicationTier;
 
 import java.io.Serializable;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.fenixWebFramework.security.UserView;
@@ -9,12 +11,27 @@ import pt.ist.fenixWebFramework.util.DomainReference;
 
 public class Authenticate {
 
+    static final String randomValue;
+
+    static {
+	SecureRandom random = null;
+
+	try {
+	    random = SecureRandom.getInstance("SHA1PRNG");
+	} catch (NoSuchAlgorithmException e) {
+	    e.printStackTrace();
+	}
+
+	random.setSeed(System.currentTimeMillis());
+	randomValue = String.valueOf(random.nextLong());
+    }
+
     public static class User implements pt.ist.fenixWebFramework.security.User, Serializable {
 
 	private final DomainReference<Person> personReference;
-	
+
 	private transient String privateConstantForDigestCalculation;
-	
+
 	private User(final String username) {
 	    final Person person = findByUsername(username);
 	    personReference = new DomainReference<Person>(person);
@@ -52,7 +69,7 @@ public class Authenticate {
 	public String getPrivateConstantForDigestCalculation() {
 	    if (privateConstantForDigestCalculation == null) {
 		final Person person = getPerson();
-		privateConstantForDigestCalculation = person.getUsername() + person.getPassword();
+		privateConstantForDigestCalculation = person.getUsername() + person.getPassword() + randomValue;
 	    }
 	    return privateConstantForDigestCalculation;
 	}
