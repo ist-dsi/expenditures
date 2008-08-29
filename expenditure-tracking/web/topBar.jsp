@@ -11,6 +11,13 @@
 		</html:link>
 	</li>
 	<li>
+		<html:link action="/requestForProposalProcess.do?method=showPendingRequests">
+			<span>
+				<bean:message key="link.request.for.proposal" bundle="EXPENDITURE_RESOURCES"/>
+			</span>
+		</html:link>
+	</li>
+	<li>
 		<html:link action="/acquisitionProcess.do?method=showPendingProcesses">
 			<span>
 				<bean:message key="link.aquisition.processes" bundle="EXPENDITURE_RESOURCES"/>

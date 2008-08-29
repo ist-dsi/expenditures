@@ -2,12 +2,9 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.joda.time.DateTime;
 
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
@@ -79,14 +76,13 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 
 	requestInformationActivities.add(new AllocateFundsPermanently());
 	requestInformationActivities.add(new UnApproveAcquisitionProcess());
-	
-	
+
 	requestInformationActivities.add(new FundAllocation());
 	requestInformationActivities.add(new RemoveFundAllocation());
 	requestInformationActivities.add(new FundAllocationExpirationDate());
 	requestInformationActivities.add(new RemoveFundAllocationExpirationDate());
 	requestInformationActivities.add(new CancelAcquisitionRequest());
-	
+
 	requestInformationActivities.add(new PayAcquisition());
 	requestInformationActivities.add(new ReceiveInvoice());
 	requestInformationActivities.add(new FixInvoice());
@@ -116,13 +112,9 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 	new AcquisitionRequest(this, supplier, person);
     }
 
-    public static boolean isCreateNewAcquisitionProcessAvailable() {
-	return UserView.getUser() != null;
-    }
-
     @Service
     public static AcquisitionProcess createNewAcquisitionProcess(final CreateAcquisitionProcessBean createAcquisitionProcessBean) {
-	if (!isCreateNewAcquisitionProcessAvailable()) {
+	if (!isCreateNewProcessAvailable()) {
 	    throw new DomainException("error.acquisitionProcess.invalid.state.to.run.createNewAcquisitionProcess");
 	}
 	AcquisitionProcess process = new AcquisitionProcess(createAcquisitionProcessBean.getSupplier(),
@@ -342,23 +334,10 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 	return PROCESS_VALUE_LIMIT;
     }
 
-    public DateTime getDateFromLastActivity() {
-	List<GenericLog> logs = getExecutionLogs();
-	Collections.sort(logs, new Comparator<GenericLog>() {
-
-	    public int compare(GenericLog log1, GenericLog log2) {
-		return -1 * log1.getWhenOperationWasRan().compareTo(log2.getWhenOperationWasRan());
-	    }
-
-	});
-	
-	return logs.isEmpty() ? null : logs.get(0).getWhenOperationWasRan();
-    }
-    
     public boolean isAllocatedToSupplier() {
 	return getAcquisitionProcessStateType().compareTo(AcquisitionProcessStateType.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER) >= 0;
     }
-    
+
     public boolean isAllocatedToUnit() {
 	return getAcquisitionProcessStateType().compareTo(AcquisitionProcessStateType.FUNDS_ALLOCATED) >= 0;
     }

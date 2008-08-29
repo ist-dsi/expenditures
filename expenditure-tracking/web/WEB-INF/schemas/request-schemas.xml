@@ -1,0 +1,42 @@
+<schema name="viewRequestForProposalProcessInList" bundle="REQUEST_RESOURCES" 
+		type="pt.ist.expenditureTrackingSystem.domain.requests.RequestForProposalProcess"> 
+	<slot name="requestForProposal.requester.name" key="label.requestForProposal.requester" bundle="REQUEST_RESOURCES"/>
+	<slot name="requestForProposalProcessStateType.localizedName" key="label.requestForProposal.process.state" bundle="REQUEST_RESOURCES"/>
+	<slot name="requestForProposal.expireDate" key="label.requestForProposal.expire.date" bundle="REQUEST_RESOURCES"/>
+</schema>
+
+<schema name="requestForProposalBean" bundle="REQUEST_RESOURCES"
+		type="pt.ist.expenditureTrackingSystem.domain.dto.CreateRequestForProposalProcessBean">
+
+	<slot name="title" key="label.requestForProposal.title" bundle="REQUEST_RESOURCES"/>
+	<slot name="description" key="label.requestForProposal.description" bundle="REQUEST_RESOURCES"/>
+	<slot name="requestingUnit" layout="autoComplete" key="label.requestingUnit" bundle="ACQUISITION_RESOURCES">
+        <property name="labelField" value="presentationName"/>
+		<property name="format" value="${presentationName}"/>
+		<property name="minChars" value="3"/>		
+		<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.UnitAutoCompleteProvider" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+		<property name="size" value="40"/>
+		<validator class="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator">
+			<property name="message" value="label.please.select.one.unit"/>
+			<property name="bundle" value="ACQUISITION_RESOURCES"/>
+			<property name="key" value="true"/>
+		</validator>
+	</slot>
+	<slot name="publishDate" key="label.requestForProposal.publish.date" bundle="REQUEST_RESOURCES" >
+		<property name="format" value="dd-MM-yyyy"/>
+		<validator class="pt.ist.fenixWebFramework.renderers.validators.DateValidator">
+			<property name="dateFormat" value="dd-MM-yyyy"/>
+		</validator>
+	</slot>
+	<slot name="expireDate" key="label.requestForProposal.expire.date" bundle="REQUEST_RESOURCES" >
+		<property name="format" value="dd-MM-yyyy"/>
+		<validator class="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+		<validator class="pt.ist.fenixWebFramework.renderers.validators.DateValidator">
+			<property name="dateFormat" value="dd-MM-yyyy"/>
+		</validator>
+	</slot>
+	<slot name="inputStream" key="label.requestForProposal.file" bundle="ACQUISITION_RESOURCES" >
+		<property name="fileNameSlot" value="filename" />
+		<property name="size" value="30"/>
+	</slot>
+</schema>

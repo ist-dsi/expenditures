@@ -9,23 +9,40 @@ enum pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStat
 enum pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationType as AuthorizationType;
 valueType pt.ist.expenditureTrackingSystem.domain.util.Address as Address;
 enum pt.ist.expenditureTrackingSystem.domain.RoleType as RoleType;
+enum pt.ist.expenditureTrackingSystem.domain.requests.RequestForProposalProcessStateType as RequestForProposalProcessStateType;
 
 
 class ExpenditureTrackingSystem {
+}
+
+class requests.RequestForProposalProcessState {
+	RequestForProposalProcessStateType requestForProposalProcessStateType;
+	DateTime whenDateTime;
+}
+	
+class acquisitions.AcquisitionProcessState {
+	AcquisitionProcessStateType acquisitionProcessStateType;
+	DateTime whenDateTime;
 }
 
 class processes.GenericProcess {
 	String ojbConcreteClass;
 }
 
-class acquisitions.AcquisitionProcess extends processes.GenericProcess {
-	String fundAllocationId;
-	LocalDate fundAllocationExpirationDate;
-}
+	class acquisitions.AcquisitionProcess extends processes.GenericProcess {
+		String fundAllocationId;
+		LocalDate fundAllocationExpirationDate;
+	}
 
-class acquisitions.AcquisitionProcessState {
-	AcquisitionProcessStateType acquisitionProcessStateType;
-	DateTime whenDateTime;
+	class requests.RequestForProposalProcess extends processes.GenericProcess {
+	}
+	
+
+class requests.RequestForProposal {
+	String title;
+	String description;
+	LocalDate publishDate;
+	LocalDate expireDate;
 }
 
 class acquisitions.AcquisitionRequest {
@@ -70,6 +87,10 @@ class acquisitions.OperationLog extends processes.GenericLog {
 	AcquisitionProcessStateType state;
 }
 
+class requests.OperationLog extends processes.GenericLog {
+	RequestForProposalProcessStateType state;
+}
+
 class authorizations.Authorization {
 	String ojbConcreteClass;
 	AuthorizationType authorizationType;
@@ -88,6 +109,12 @@ class File {
 	String contentType;
 }
 
+	class requests.RequestForProposalDocument extends File {
+	}
+
+	class requests.SupplierProposalDocument extends File {
+	}
+	
 	class acquisitions.AcquisitionProposalDocument extends File {
 	}
 
@@ -161,9 +188,21 @@ relation ExpenditureTrackingSystemAcquisitionRequest {
 	}
 }
 
+relation ExpenditureTrackingSystemRequestForProposal {
+	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
+	requests.RequestForProposal playsRole requestsForProposal {
+		multiplicity *;
+	}
+}
+
 relation AcquisitionProcessAcquisitionRequest {
 	acquisitions.AcquisitionProcess playsRole acquisitionProcess;
 	acquisitions.AcquisitionRequest playsRole acquisitionRequest;
+}
+
+relation RequestForProposalProcessRequestForProposal {
+	requests.RequestForProposalProcess playsRole requestForProposalProcess;
+	requests.RequestForProposal playsRole requestForProposal;
 }
 
 relation ExpenditureTrackingSystemAcquisitionRequestItem {
@@ -183,6 +222,25 @@ relation AcquisitionRequestAcquisitionRequestItem {
 relation ExpenditureTrackingSystemFile {
 	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
 	File playsRole files {
+		multiplicity *;
+	}
+}
+
+relation RequestForProposalSupplierProposalDocument {
+	requests.RequestForProposal playsRole requestForProposal;
+	requests.SupplierProposalDocument playsRole supplierProposals {
+		multiplicity *;
+	}
+}
+
+relation RequestForProposalRequestForProposalDocument {
+	requests.RequestForProposal playsRole requestForProposal;
+	requests.RequestForProposalDocument playsRole requestForProposalDocument;
+}
+
+relation SupplierSupplierProposalDocument {
+	organization.Supplier playsRole supplier;
+	requests.SupplierProposalDocument playsRole proposals {
 		multiplicity *;
 	}
 }
@@ -300,9 +358,23 @@ relation AcquisitionRequestRequester {
 	}
 }
 
+relation RequestForProposalRequester {
+	organization.Person playsRole requester;
+	requests.RequestForProposal playsRole requestsForProposal {
+		multiplicity *;
+	}
+}
+
 relation AcquisitionProcessStatePerson {
 	organization.Person playsRole who;
 	acquisitions.AcquisitionProcessState playsRole acquisitionProcessStates {
+		multiplicity *;
+	}
+}
+
+relation RequestForProposalProcessStatePerson {
+	organization.Person playsRole who;
+	requests.RequestForProposalProcessState playsRole requestForProposalProcessStates {
 		multiplicity *;
 	}
 }
@@ -314,9 +386,23 @@ relation AcquisitionProcessStateAcquisitionProcess {
 	}
 }
 
+relation RequestForProposalProcessStateRequestForProposalProcess {
+	requests.RequestForProposalProcess playsRole requestForProposalProcess;
+	requests.RequestForProposalProcessState playsRole requestForProposalProcessStates {
+		multiplicity *;
+	}
+}
+
 relation ExpenditureTrackingSystemAcquisitionProcessState {
 	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
 	acquisitions.AcquisitionProcessState playsRole acquisitionProcessStates {
+		multiplicity *;
+	}
+}
+
+relation ExpenditureTrackingSystemRequestForProposalProcessState {
+	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
+	requests.RequestForProposalProcessState playsRole requestForProposalProcessStates {
 		multiplicity *;
 	}
 }
@@ -340,6 +426,13 @@ relation GenericLogProcess {
 		multiplicity *;
 	}
 	processes.GenericProcess playsRole process;
+}
+
+relation RequestForProposalRequestingUnit {
+	organization.Unit playsRole requestingUnit;
+	requests.RequestForProposal playsRole requestsForProposal {
+		multiplicity *;
+	}
 }
 
 relation AcquisitionRequestRequestingUnit {

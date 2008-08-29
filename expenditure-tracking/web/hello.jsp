@@ -5,6 +5,7 @@
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
 <logic:notPresent name="user">
+
 	<h2>Anúncios</h2>
 	<p>
 		...
