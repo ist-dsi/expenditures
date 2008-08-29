@@ -1,5 +1,7 @@
 package pt.ist.expenditureTrackingSystem.domain.requests;
 
+import org.joda.time.LocalDate;
+
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateRequestForProposalProcessBean;
@@ -14,6 +16,7 @@ public class RequestForProposal extends RequestForProposal_Base {
 	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
 	setRequestForProposalProcess(requestProcess);
 	setRequester(person);
+	setPublishDate(new LocalDate());
 	setRequestingUnit(requestingUnit);
     }
 

@@ -1,5 +1,6 @@
 package pt.ist.expenditureTrackingSystem.presentationTier.actions.requests;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +17,9 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestIt
 import pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateRequestForProposalProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
+import pt.ist.expenditureTrackingSystem.domain.requests.RequestForProposalDocument;
 import pt.ist.expenditureTrackingSystem.domain.requests.RequestForProposalProcess;
+import pt.ist.expenditureTrackingSystem.domain.requests.SearchRequestProposal;
 import pt.ist.expenditureTrackingSystem.presentationTier.Context;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.ProcessAction;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.acquisitions.AcquisitionProcessAction.AcquisitionProposalDocumentForm;
@@ -29,9 +32,10 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 @Forwards( { @Forward(name = "view.active.requests", path = "/requests/viewActiveRequests.jsp"),
 	@Forward(name = "create.request.process", path = "/requests/createRequestProcess.jsp"),
 	@Forward(name = "view.request.process", path = "/requests/viewRequestProcess.jsp"),
+	@Forward(name = "search.proposal.process", path = "/requests/searchProposalProcess.jsp"),
 	@Forward(name = "edit.request.process", path = "/requests/editRequestProcess.jsp"),
-	@Forward(name = "choose.supplier.proposal", path = "/requests/chooseSupplierProposal.jsp")
-})
+	@Forward(name = "choose.supplier.proposal", path = "/requests/chooseSupplierProposal.jsp")}
+)
 public class RequestForProposalProcessAction extends ProcessAction {
 
     private static final Context CONTEXT = new Context("requests");
@@ -89,6 +93,12 @@ public class RequestForProposalProcessAction extends ProcessAction {
 	return mapping.findForward("view.request.process");
     }
 
+    public ActionForward downloadRequestForProposalDocument(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) throws IOException  {
+	RequestForProposalDocument document = getDomainObject(request, "requestForProposalDocumentOid");
+	return download(response, document);
+    }
+    
     // -------------------------------------------------- PROCESS ACTIVITIES - PROCESS ACTIVITIES - PROCESS ACTIVITIES BEGIN
     protected ActionForward executeActivityAndViewProcess(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response, final String activityName) {
@@ -107,7 +117,7 @@ public class RequestForProposalProcessAction extends ProcessAction {
 	return executeActivityAndViewProcess(mapping, form, request, response, "RejectRequestForProposal");
     }
 
-    public ActionForward executeCancelRequestForProposal(final ActionMapping mapping, final ActionForm form,
+     public ActionForward executeCancelRequestForProposal(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	return executeActivityAndViewProcess(mapping, form, request, response, "CancelRequestForProposal");
     }
@@ -144,9 +154,21 @@ public class RequestForProposalProcessAction extends ProcessAction {
 	return viewRequestForProposalProcess(mapping, request, process);
     }
 
+    // ---------------------------------------------------- PROCESS ACTIVITIES - PROCESS ACTIVITIES - PROCESS ACTIVITIES END
+
+    public ActionForward searchRequestProposalProcess(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	
+	SearchRequestProposal searchProposalProcess = getRenderedObject("searchProposalRequestProcess");
+	if (searchProposalProcess == null) {
+	    searchProposalProcess = new SearchRequestProposal();
+	}
+	request.setAttribute("searchRequestProposalProcess", searchProposalProcess);
+	return mapping.findForward("search.proposal.process");
+    }
+
     @Override
     protected GenericProcess getProcess(final HttpServletRequest request) {
 	return getProcess(request, "requestForProposalProcessOid");
     }
-    // ---------------------------------------------------- PROCESS ACTIVITIES - PROCESS ACTIVITIES - PROCESS ACTIVITIES END
 }

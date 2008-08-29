@@ -82,7 +82,7 @@
 			</html:link>	
 		</logic:present>
 		<logic:notPresent name="acquisitionProcess" property="acquisitionRequest.acquisitionProposalDocument">
-			<em><bean:message key="label.document.not.available" bundle="ACQUISITION_RESOURCES"/></em>
+			<em><bean:message key="label.document.not.available" bundle="EXPENDITURE_RESOURCES"/></em>
 		</logic:notPresent>
 	</p>
 	<p>
@@ -93,7 +93,7 @@
 			</html:link>	
 		</logic:present>
 		<logic:notPresent name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestDocument">
-			<em><bean:message key="label.document.not.available" bundle="ACQUISITION_RESOURCES"/></em>
+			<em><bean:message key="label.document.not.available" bundle="EXPENDITURE_RESOURCES"/></em>
 		</logic:notPresent>
 	</p>
 	<p>
@@ -105,11 +105,11 @@
 				</html:link>
 			</logic:present>	
 			<logic:notPresent name="acquisitionProcess" property="acquisitionRequest.invoice">
-				<em><bean:message key="label.document.not.available" bundle="ACQUISITION_RESOURCES"/></em>
+				<em><bean:message key="label.document.not.available" bundle="EXPENDITURE_RESOURCES"/></em>
 			</logic:notPresent>
 		</logic:present>
 		<logic:notPresent name="acquisitionProcess" property="acquisitionRequest.invoice">
-			<em><bean:message key="label.document.not.available" bundle="ACQUISITION_RESOURCES"/></em>
+			<em><bean:message key="label.document.not.available" bundle="EXPENDITURE_RESOURCES"/></em>
 		</logic:notPresent>
 	</p>
 </div>

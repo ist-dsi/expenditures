@@ -12,7 +12,6 @@
 				<bean:message key="link.create.aquisition.process" bundle="EXPENDITURE_RESOURCES"/>
 			</html:link>
 		</li>
-	</logic:present>
 	<li>
 		<html:link action="/acquisitionProcess.do?method=searchAcquisitionProcess">
 			<bean:message key="link.search.aquisition.process" bundle="EXPENDITURE_RESOURCES"/>
@@ -28,4 +27,5 @@
 			<bean:message key="label.my.processes" bundle="EXPENDITURE_RESOURCES"/>
 		</html:link>
 	</li>	
+	</logic:present>
 </ul>

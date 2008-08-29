@@ -8,15 +8,13 @@ import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.domain.processes.ActivityException;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 
-public class ProcessAction extends BaseAction {
+public abstract class ProcessAction extends BaseAction {
+
+    protected abstract GenericProcess getProcess(final HttpServletRequest request);
 
     protected GenericProcess getProcess(final HttpServletRequest request, final String attributeName) {
 	final GenericProcess genericProcess = getDomainObject(request, attributeName);
 	return genericProcess;
-    }
-
-    protected GenericProcess getProcess(final HttpServletRequest request) {
-	return getProcess(request, "acquisitionProcessOid");
     }
 
     protected void genericActivityExecution(final GenericProcess genericProcess, final String activityName) {

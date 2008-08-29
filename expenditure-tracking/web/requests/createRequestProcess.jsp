@@ -8,13 +8,28 @@ requests/createRequestProcess.jsp
 
 <h2><bean:message key="label.create.requestForProposal" bundle="EXPENDITURE_RESOURCES"/></h2>
 
-<fr:edit id="requestForProposalBean"
-		name="requestForProposalBean"
-		schema="requestForProposalBean"
-		action="/requestForProposalProcess.do?method=createNewRequestForProposalProcess">
-	<fr:layout name="tabular">
-		<fr:property name="classes" value="form"/>
-		<fr:property name="columnClasses" value=",,tderror"/>
-	</fr:layout>
-	<fr:destination name="cancel" path="/requestForProposalProcess.do?method=showPendingRequests"/>
-</fr:edit>
+<div class="dinline forminline">
+	<fr:form action="/requestForProposalProcess.do?method=createNewRequestForProposalProcess">
+		<fr:edit id="requestForProposalBean"
+				name="requestForProposalBean"
+				schema="requestForProposalBean">
+				
+			<fr:layout name="tabular">
+				<fr:property name="classes" value=""/>
+				<fr:property name="columnClasses" value=",,tderror"/>
+				<fr:property name="requiredMarkShown" value="true"/>
+			</fr:layout>
+			<fr:destination name="cancel" path="/requestForProposalProcess.do?method=showPendingRequests"/>
+		</fr:edit>
+		<p>
+		<em><bean:message key="label.fieldsWith" bundle="EXPENDITURE_RESOURCES"/><span class="required">*</span><bean:message key="label.areRequired" bundle="EXPENDITURE_RESOURCES"/></em>
+		</p>
+		<html:submit styleClass="inputbutton"><bean:message key="renderers.form.submit.name" bundle="RENDERER_RESOURCES"/></html:submit>
+	</fr:form>
+	
+
+	<fr:form action="/requestForProposalProcess.do?method=showPendingRequests">
+		<html:submit styleClass="inputbutton"><bean:message key="renderers.form.cancel.name" bundle="RENDERER_RESOURCES"/></html:submit>
+	</fr:form>
+
+</div>

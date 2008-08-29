@@ -520,7 +520,7 @@ display: inline;
 margin: 0;
 padding: 0 0.25em;
 }
-.nobullet { list-style: none; }
+.nobullet { list-style: none; }0
 .dinline { display: inline; }
 .forminline form { display: inline !important; }
 

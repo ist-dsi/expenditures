@@ -106,6 +106,11 @@ public class AcquisitionProcessAction extends ProcessAction {
 	}
     }
 
+    @Override
+    protected GenericProcess getProcess(final HttpServletRequest request) {
+	return getProcess(request, "acquisitionProcessOid");
+    }
+
     public ActionForward prepareCreateAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final CreateAcquisitionProcessBean acquisitionProcessBean = new CreateAcquisitionProcessBean();
