@@ -15,9 +15,7 @@
 		</div>
 
 		<div id="tabs10">
-  			<ul>
-  				<tiles:insert attribute="topBar"/>
-  			</ul>
+			<tiles:insert attribute="topBar"/>
 		</div>
 
 		<div id="container2">
