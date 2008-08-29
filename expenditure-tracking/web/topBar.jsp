@@ -8,6 +8,7 @@
 			<span>
 				<bean:message key="link.home" bundle="EXPENDITURE_RESOURCES"/>
 			</span>
+			<div class="lic1"></div><div class="lic2"></div>
 		</html:link>
 	</li>
 	<li>
@@ -15,6 +16,7 @@
 			<span>
 				<bean:message key="link.request.for.proposal" bundle="EXPENDITURE_RESOURCES"/>
 			</span>
+			<div class="lic1"></div><div class="lic2"></div>
 		</html:link>
 	</li>
 	<li>
@@ -22,6 +24,7 @@
 			<span>
 				<bean:message key="link.aquisition.processes" bundle="EXPENDITURE_RESOURCES"/>
 			</span>
+			<div class="lic1"></div><div class="lic2"></div>
 		</html:link>
 	</li>
 	<li>
@@ -29,6 +32,7 @@
 			<span>
 				<bean:message key="link.view.organization" bundle="EXPENDITURE_RESOURCES"/>
 			</span>
+			<div class="lic1"></div><div class="lic2"></div>
 		</html:link>
 	</li>
 	<li>
@@ -36,6 +40,9 @@
 			<span>
 				<bean:message key="label.authorizations" bundle="EXPENDITURE_RESOURCES"/>
 			</span>
+			<div class="lic1"></div><div class="lic2"></div>
 		</html:link>
 	</li>
+	<div class="c1"></div>
+	<div class="c2"></div>
 </ul>

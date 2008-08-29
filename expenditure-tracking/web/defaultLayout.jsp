@@ -27,10 +27,11 @@
 			  	<tiles:insert attribute="body" ignore="true"/>
 			</div>
 
-			<div id="footer">
-				<tiles:insert attribute="footer"/>
-			</div>
 		</div>
+
+	<div id="footer">
+		<tiles:insert attribute="footer"/>
+	</div>
 
 	</div>
 </body>

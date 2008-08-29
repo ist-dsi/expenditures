@@ -22,5 +22,10 @@
 		<html:link action="/authenticationAction.do?method=logout"><bean:message key="label.logout" bundle="EXPENDITURE_RESOURCES"/></html:link>
 	</div>
 </logic:present>
+
+<img src="<%= request.getContextPath() + "/images/logo03.gif" %>"/>
+
+<!-- 
 <h1><bean:message key="label.application.name" bundle="EXPENDITURE_RESOURCES"/></h1>
 <p><bean:message key="label.application.description" bundle="EXPENDITURE_RESOURCES"/></p>
+-->

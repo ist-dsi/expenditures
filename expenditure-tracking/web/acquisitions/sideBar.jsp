@@ -6,6 +6,10 @@
 <%@page import="pt.ist.fenixWebFramework.servlets.filters.SetUserViewFilter"%>
 
 <ul>
+	<li class="header">
+		<strong>Processos de Aquisição</strong>
+		<div class="lic1"></div><div class="lic2"></div>
+	</li>
 	<logic:present name="<%= SetUserViewFilter.USER_SESSION_ATTRIBUTE %>" property="person">
 		<li>
 			<html:link action="/acquisitionProcess.do?method=prepareCreateAcquisitionProcess">
