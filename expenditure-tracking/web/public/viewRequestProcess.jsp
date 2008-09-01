@@ -6,51 +6,13 @@
 <%@ taglib uri="/WEB-INF/messages.tld" prefix="messages" %>
 
 <!-- requests/viewRequestProcess.jsp -->
-requests/viewRequestProcess.jsp
-
-<%@page import="pt.ist.fenixWebFramework.servlets.filters.SetUserViewFilter"%>
-
-<bean:define id="currentState" name="requestForProposalProcess" property="requestForProposalProcessStateType"/>
-
-<%--
-<fr:view name="requestForProposalProcess"> 
-	<fr:layout name="process-state">
-		<fr:property name="stateParameterName" value="state"/>
-		<fr:property name="url" value="/viewLogs.do?method=viewOperationLog&acquisitionProcessOid=${OID}"/>
-		<fr:property name="contextRelative" value="true"/>
-		<fr:property name="currentStateClass" value=""/>
-	</fr:layout>
-</fr:view>
---%>
+public/viewRequestProcess.jsp
 
 <div class="wrapper">
 
-<h2><bean:message key="label.view.requestForProposal.process" bundle="EXPENDITURE_RESOURCES"/></h2>
+<h2><bean:message key="title.view.requestForProposal.detail" bundle="EXPENDITURE_RESOURCES"/></h2>
 
 <jsp:include page="../commons/defaultErrorDisplay.jsp"/>
-
-<div class="infoop1">
-	<ul>
-	<logic:iterate id="activity" name="requestForProposalProcess" property="activeActivitiesForRequest">
-		<bean:define id="activityName" name="activity" property="class.simpleName"/> 
-		<li>
-			<html:link page="<%= "/requestForProposalProcess.do?method=execute" + activityName %>" paramId="requestForProposalProcessOid" paramName="requestForProposalProcess" paramProperty="OID">
-				<fr:view name="activity" property="class">
-					<fr:layout name="label">
-						<fr:property name="bundle" value="REQUEST_RESOURCES"/>
-					</fr:layout>
-				</fr:view>
-			</html:link>
-		</li>
-	</logic:iterate>
-	</ul>
-	<logic:empty name="requestForProposalProcess" property="activeActivitiesForRequest">
-		<em>
-			<bean:message key="label.no.operations.available.at.the.moment" bundle="EXPENDITURE_RESOURCES"/>.
-		</em>
-	</logic:empty>
-</div>
-
 
 <div class="infoop2">
 <fr:view name="requestForProposalProcess" property="requestForProposal" schema="viewRequestForProposal">

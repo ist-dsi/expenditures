@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.joda.time.LocalDate;
 
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
@@ -22,7 +21,8 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
 @Mapping(path = "/home")
 @Forwards( { @Forward(name = "page.hello", path = "/hello.jsp"),
-	@Forward(name = "view.requests", path = "/viewRequestsForProposal.jsp") })
+	@Forward(name = "view.requests", path = "public/viewRequestsForProposal.jsp"),
+	@Forward(name = "view.request.process", path = "public/viewRequestProcess.jsp") })
 public class HomeAction extends BaseAction {
 
     public final ActionForward firstPage(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -49,6 +49,13 @@ public class HomeAction extends BaseAction {
 	}
 	request.setAttribute("activeRequests", requests);
 	return mapping.findForward("view.requests");
+    }
+
+    public ActionForward viewRequestForProposalProcess(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+
+	request.setAttribute("requestForProposalProcess", getDomainObject(request, "requestForProposalProcessOid"));
+	return mapping.findForward("view.request.process");
     }
 
 }

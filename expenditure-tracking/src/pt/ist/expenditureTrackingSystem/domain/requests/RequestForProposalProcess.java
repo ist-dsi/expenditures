@@ -18,6 +18,7 @@ import pt.ist.expenditureTrackingSystem.domain.requests.activities.ChooseSupplie
 import pt.ist.expenditureTrackingSystem.domain.requests.activities.EditRequestForProposal;
 import pt.ist.expenditureTrackingSystem.domain.requests.activities.GenericRequestForProposalProcessActivity;
 import pt.ist.expenditureTrackingSystem.domain.requests.activities.RejectRequestForProposal;
+import pt.ist.expenditureTrackingSystem.domain.requests.activities.SubmitRequestForApproval;
 import pt.ist.fenixWebFramework.services.Service;
 
 public class RequestForProposalProcess extends RequestForProposalProcess_Base {
@@ -25,6 +26,7 @@ public class RequestForProposalProcess extends RequestForProposalProcess_Base {
     private static List<GenericRequestForProposalProcessActivity> activities = new ArrayList<GenericRequestForProposalProcessActivity>();
 
     static {
+	activities.add(new SubmitRequestForApproval());
 	activities.add(new ApproveRequestForProposal());
 	activities.add(new RejectRequestForProposal());
 	activities.add(new EditRequestForProposal());
@@ -34,7 +36,7 @@ public class RequestForProposalProcess extends RequestForProposalProcess_Base {
 
     protected RequestForProposalProcess(CreateRequestForProposalProcessBean requestBean, final byte[] proposalDocument) {
 	super();
-	new RequestForProposalProcessState(this, RequestForProposalProcessStateType.SUBMITTED_FOR_APPROVAL);
+	new RequestForProposalProcessState(this, RequestForProposalProcessStateType.IN_GENESIS);
 	createRequestForProposal(requestBean, proposalDocument);
     }
 

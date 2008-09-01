@@ -20,6 +20,12 @@
 	<slot name="requestForProposal.requester.name" key="label.requestForProposal.requester" bundle="REQUEST_RESOURCES"/>
 </schema>
 
+<schema name="viewRequestsForProposal.public" bundle="REQUEST_RESOURCES" 
+		type="pt.ist.expenditureTrackingSystem.domain.requests.RequestForProposalProcess"> 
+	<slot name="requestForProposal.expireDate" key="label.requestForProposal.expire.date" bundle="REQUEST_RESOURCES"/>
+	<slot name="requestForProposal.title" key="label.requestForProposal.title" bundle="REQUEST_RESOURCES"/>
+</schema>
+
 <schema name="requestForProposalBean" bundle="REQUEST_RESOURCES"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.CreateRequestForProposalProcessBean">
 

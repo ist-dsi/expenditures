@@ -3,9 +3,10 @@ package pt.ist.expenditureTrackingSystem.domain.requests.activities;
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateRequestForProposalProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.requests.RequestForProposalProcess;
+import pt.ist.expenditureTrackingSystem.domain.requests.RequestForProposalProcessState;
 import pt.ist.expenditureTrackingSystem.domain.requests.RequestForProposalProcessStateType;
 
-public class EditRequestForProposal extends GenericRequestForProposalProcessActivity {
+public class SubmitRequestForApproval extends GenericRequestForProposalProcessActivity {
 
     @Override
     protected boolean isAccessible(RequestForProposalProcess process) {
@@ -20,7 +21,7 @@ public class EditRequestForProposal extends GenericRequestForProposalProcessActi
 
     @Override
     protected void process(RequestForProposalProcess process, Object... objects) {
-	process.getRequestForProposal().edit((CreateRequestForProposalProcessBean) objects[0], (byte[]) objects[1]);
+	new RequestForProposalProcessState(process, RequestForProposalProcessStateType.SUBMITTED_FOR_APPROVAL);
     }
 
 }

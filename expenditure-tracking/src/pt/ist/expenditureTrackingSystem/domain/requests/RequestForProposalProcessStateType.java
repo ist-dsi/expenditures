@@ -6,6 +6,7 @@ import pt.utl.ist.fenix.tools.util.i18n.Language;
 
 public enum RequestForProposalProcessStateType {
 
+    IN_GENESIS,
     SUBMITTED_FOR_APPROVAL, 
     APPROVED, 
     REJECTED, 

@@ -107,6 +107,11 @@ public class RequestForProposalProcessAction extends ProcessAction {
 	"requestForProposalProcessOid"));
     }
 
+    public ActionForward executeSubmitRequestForApproval(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	return executeActivityAndViewProcess(mapping, form, request, response, "SubmitRequestForApproval");
+    }
+    
     public ActionForward executeApproveRequestForProposal(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	return executeActivityAndViewProcess(mapping, form, request, response, "ApproveRequestForProposal");
