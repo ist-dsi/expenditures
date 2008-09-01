@@ -8,31 +8,34 @@
 </head>
 
 <body>
-	<div id="container">
 
-		<div id="header">
-			<tiles:insert attribute="pageHeader" ignore="true"/>
+<div id="container">
+
+	<div id="header">
+		<tiles:insert attribute="pageHeader" ignore="true"/>
+	</div>
+
+	<div id="tabs10">
+		<tiles:insert attribute="topBar"/>
+	</div>
+
+	<div id="container2">
+
+		<div id="sidebar">
+			<tiles:insert attribute="sideBar"/>
 		</div>
 
-		<div id="tabs10">
-			<tiles:insert attribute="topBar"/>
-		</div>
+		<div id="content">
+		  	<tiles:insert attribute="body" ignore="true"/>
+		</div> <!-- content -->
 
-		<div id="container2">
-			<div id="sidebar">
-				<tiles:insert attribute="sideBar"/>
-			</div>
-
-			<div id="content">
-			  	<tiles:insert attribute="body" ignore="true"/>
-			</div>
-
-		</div>
+	</div> <!-- container2 -->
 
 	<div id="footer">
 		<tiles:insert attribute="footer"/>
 	</div>
 
-	</div>
+</div> <!-- container -->
+
 </body>
 </html:html>

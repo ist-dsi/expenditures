@@ -5,6 +5,11 @@ margin-bottom: 30px;
 background: #f5f5f5;
 }
 
+div, p, form {
+margin: 0;
+padding: 0;
+}
+
 h1 {
 font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
 font-weight: normal;
@@ -14,10 +19,11 @@ margin-bottom: 30px;
 }
 
 h2 {
-color: #00638d;
 color: #555;
 font-size: 18px;
 font-family: Arial, Helvetica, sans-serif;
+margin: 0;
+padding: 0.75em 0 0.75em 0;
 }
 
 a {
@@ -109,6 +115,10 @@ color: #999999;
 #header img {
 padding: 10px 15px;
 }
+#header form {
+color: #fff;
+padding-right: 0.5em;
+}
 
 /**************** menu styles ****************/
 #tabs10 {
@@ -148,12 +158,6 @@ color: #FFF;
 #tabs10 a span {
 float: none;
 }
-#tabs10 a:hover {
-background-position: 0% -42px;
-}
-#tabs10 a:hover span {
-background-position: 100% -42px;
-}
 #tabs10 ul li div.lic1 {
 background: url(../images/tab_corner1_01.gif) no-repeat;
 width: 5px;
@@ -171,12 +175,13 @@ position: absolute;
 top: 0;
 right: 0;
 }
+
 #tabs10 div.c1 {
 background: url(../images/corner1_02.gif) no-repeat;
 width: 7px;
 height: 7px;
 position: absolute;
-bottom: 0;
+bottom: -5px;
 left: 0;
 }
 #tabs10 div.c2 {
@@ -184,9 +189,12 @@ background: url(../images/corner2_02.gif) no-repeat;
 width: 7px;
 height: 7px;
 position: absolute;
-bottom: 0;
+bottom: -5px;
 right: 0;
 }
+#tabs10 div.c1[class] { bottom: 0; } /* all except <= ie6 */
+#tabs10 div.c2[class] { bottom: 0; } /* all except <= ie6 */
+
 /**************** content styles ****************/
 #header { width: 850px; }
 #tabs10 { width: 850px; }
@@ -203,7 +211,7 @@ font-size: 11px;
 line-height: 1.6em;
 color: #555;
 background: #fff;
-padding: 0 15px 15px 15px;
+padding: 0 15px;
 border-left: 1px solid #eee;
 border-right: 1px solid #eee;
 border-bottom: 1px solid #eee;
@@ -218,8 +226,6 @@ color: #555;
 padding: 0 15px;
 }
 #container2 a {
-color: #e2a96d;
-color: #c99054;
 color: #d17647;
 }
 
@@ -227,7 +233,7 @@ color: #d17647;
 padding-left: 10px;
 padding-right: 0;
 padding-top: 10px;
-padding-bottom: 40px;
+padding-bottom: 2em;
 float: left;
 }
 
@@ -247,18 +253,20 @@ margin: 1em 0;
 /**************** sidebar styles ****************/
 #sidebar {
 width: 175px;
-padding-right: 10px;
-padding-top: 10px;
 float: left;
+margin: 1em 0 0 0;
+padding: 0 10px 2em 0;
 }
 
 #sidebar ul {
 list-style: none;
 padding: 1px 0 0 0;
+margin: 1em 0 0 0;
 }
 #sidebar ul li {
 padding: 5px 0 5px 0;
-border-bottom: 1px dotted #aaa;
+/*border-bottom: 1px dotted #aaa;*/
+background: url(../images/dotted01.gif) bottom left repeat-x;
 }
 #sidebar ul li.header {
 /*
@@ -277,10 +285,11 @@ color: #5d9aba;
 }
 /**************** footer styles ****************/
 #footer {
-margin: 15px 0 0 0;
+margin: 0 0 15px 0;
 padding: 10px 0;
 clear: both;
 background: #15587a;
+position: relative;
 }
 
 #footer p {
@@ -305,8 +314,41 @@ border-bottom: 0px dotted #FFFFFF;
 }
 
 
+#footer div.c1 {
+background: url(../images/corner1_02.gif) no-repeat;
+width: 7px;
+height: 7px;
+position: absolute;
+bottom: -6px;
+left: 0;
+}
+#footer div.c2 {
+background: url(../images/corner2_02.gif) no-repeat;
+width: 7px;
+height: 7px;
+position: absolute;
+bottom: -6px;
+right: 0;
+}
+#footer div.c1[class] { bottom: 0px; } /* all except <= ie6 */
+#footer div.c2[class] { bottom: 0px; } /* all except <= ie6 */
 
-
+#footer div.c3 {
+background: url(../images/corner3_02.gif) no-repeat;
+width: 7px;
+height: 7px;
+position: absolute;
+top: 0px;
+left: 0;
+}
+#footer div.c4 {
+background: url(../images/corner4_02.gif) no-repeat;
+width: 7px;
+height: 7px;
+position: absolute;
+top: 0px;
+right: 0;
+}
 
 /**************** misc styles ****************/
 
@@ -371,10 +413,12 @@ margin: 1em 0;
 }
 div.infoop1 ul {
 margin: 0;
+padding: 0;
+padding-left: 2em;
 }
 
 div.infoop2 {
-border: 1px solid #ccc;
+border: 1px solid #ddd;
 padding: 5px 10px;
 background: #f5f5f5;
 margin: 1em 0;
@@ -415,7 +459,7 @@ vertical-align: top;
 }
 table.tstyle1 td {
 text-align: left;
-padding: 2px 0;
+padding: 0.2em 0;
 padding-left: 10px;
 }
 table.tstyle1 ul {
@@ -484,7 +528,7 @@ margin: 1em 0;
 }
 .documents p {
 margin: 0.25em 0 !important;
-background: url(../images/doc.gif) left center no-repeat;
+background: url(../images/images/doc.gif) left center no-repeat;
 padding: 0 0 0 14px;
 }
 .documents em {
