@@ -40,7 +40,7 @@
 <br/>
 <br/>
 <html:link action="/organization.do?method=attributeAuthorization" paramId="personOid" paramName="person" paramProperty="OID">
-	<bean:message key="authorization.link.grant" bundle="ORGANIZATION_RESOURCES"/>
+	<bean:message key="authorizations.link.grant" bundle="EXPENDITURE_RESOURCES"/>
 </html:link>
 <br/>
 <br/>

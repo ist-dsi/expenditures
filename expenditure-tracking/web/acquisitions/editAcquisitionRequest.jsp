@@ -3,7 +3,7 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
-<h2><bean:message key="label.edit.acquisition.request" bundle="EXPENDITURE_RESOURCES"/></h2>
+<h2><bean:message key="acquisitionProcess.title.editAcquisitionRequest" bundle="ACQUISITION_RESOURCES"/></h2>
 
 <bean:define id="acquisitionProcessOID " name="acquisitionProcess" property="OID" />
 

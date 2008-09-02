@@ -14,10 +14,10 @@
 
 <logic:equal name="item" property="filledWithRealValues" value="false">
 	<div class="infoop4">
-			<strong><bean:message key="label.attention" bundle="EXPENDITURE_RESOURCES"/></strong>: <bean:message key="acquisitionRequestItem.message.warn.mustDefineRealValuesFirst" bundle="ACQUISITION_RESOURCES"/>
+			<strong><bean:message key="messages.info.attention" bundle="EXPENDITURE_RESOURCES"/></strong>: <bean:message key="acquisitionRequestItem.message.warn.mustDefineRealValuesFirst" bundle="ACQUISITION_RESOURCES"/>
 	</div>
 	
-	<html:link page="<%= "/acquisitionProcess.do?method=viewAcquisitionProcess&acquisitionProcessOid="  + processOID %>"><bean:message key="link.back" bundle="EXPENDITURE_RESOURCES"/></html:link>
+	<html:link page="<%= "/acquisitionProcess.do?method=viewAcquisitionProcess&acquisitionProcessOid="  + processOID %>">« <bean:message key="link.back" bundle="EXPENDITURE_RESOURCES"/></html:link>
 </logic:equal>
 			
 <logic:equal name="item" property="filledWithRealValues" value="true">

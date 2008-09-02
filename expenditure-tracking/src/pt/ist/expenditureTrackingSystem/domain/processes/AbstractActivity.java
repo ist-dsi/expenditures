@@ -32,10 +32,10 @@ public abstract class AbstractActivity<T extends GenericProcess> {
 
     private void checkConditionsFor(T process) {
 	if (!isAccessible(process)) {
-	    throw new ActivityException("error.not.accessible", getLocalizedName());
+	    throw new ActivityException("activities.messages.exception.notAccessible", getLocalizedName());
 	}
 	if (!isAvailable(process)) {
-	    throw new ActivityException("error.activity.not.available", getLocalizedName());
+	    throw new ActivityException("activities.messages.exception.notAvailable", getLocalizedName());
 	}
     }
 

@@ -6,7 +6,7 @@
 <%@ taglib uri="/WEB-INF/messages.tld" prefix="messages" %>
 
 <h2>
-	<bean:message key="label.delegate.authorization" bundle="EXPENDITURE_RESOURCES"/>
+	<bean:message key="authorizations.title.delegate" bundle="EXPENDITURE_RESOURCES"/>
 </h2>
 
 <jsp:include page="../commons/defaultErrorDisplay.jsp"/>

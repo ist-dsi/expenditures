@@ -101,7 +101,7 @@
 								</logic:notEmpty>
 
 								<logic:empty name="acquisitionRequestItem" property="unitItems">
-									<em><bean:message key="label.not.defined" bundle="EXPENDITURE_RESOURCES"/>
+									<em><bean:message key="label.notDefined" bundle="EXPENDITURE_RESOURCES"/>
 								</logic:empty>
 								
 						</td>

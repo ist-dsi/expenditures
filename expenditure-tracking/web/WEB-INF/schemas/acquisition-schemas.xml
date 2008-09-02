@@ -315,11 +315,11 @@
 		<slot name="class" layout="label" key="label.authorizations.type"  bundle="EXPENDITURE_RESOURCES">
 			<property name="bundle" value="EXPENDITURE_RESOURCES"/>
 		</slot>
-		<slot name="canDelegate" key="authorizations.label.canDelegate" bundle="ORGANIZATION_RESOURCES"/>
-		<slot name="startDate" key="label.startDate" bundle="EXPENDITURE_RESOURCES" layout="null-as-label">
+		<slot name="canDelegate" key="authorizations.label.canDelegate" bundle="EXPENDITURE_RESOURCES"/>
+		<slot name="startDate" key="authorizations.label.startDate" bundle="EXPENDITURE_RESOURCES" layout="null-as-label">
 			<property name="subLayout" value="default"/>
 		</slot>
-		<slot name="endDate" key="label.endDate" bundle="EXPENDITURE_RESOURCES" layout="null-as-label">
+		<slot name="endDate" key="authorizations.label.endDate" bundle="EXPENDITURE_RESOURCES" layout="null-as-label">
 			<property name="subLayout" value="default"/>
 		</slot>
 </schema>
@@ -339,5 +339,5 @@
 			</validator>
 		</slot>
 		<slot name="canDelegate" key="authorizations.label.canDelegate" bundle="ORGANIZATION_RESOURCES"/>
-		<slot name="endDate" key="label.endDate" bundle="EXPENDITURE_RESOURCES"/>
+		<slot name="endDate" key="authorizations.label.endDate" bundle="EXPENDITURE_RESOURCES"/>
 </schema>

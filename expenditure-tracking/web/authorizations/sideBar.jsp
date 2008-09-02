@@ -11,7 +11,7 @@
 		<ul>
 			<li>
 				<html:link page="/authorizations.do?method=viewAuthorizations">
-					<bean:message key="link.view.authorizations" bundle="EXPENDITURE_RESOURCES"/>
+					<bean:message key="authorizations.link.view" bundle="EXPENDITURE_RESOURCES"/>
 				</html:link>
 			</li>
 		</ul>

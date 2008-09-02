@@ -1,6 +1,6 @@
 <schema name="editOptions"
 		type="pt.ist.expenditureTrackingSystem.domain.Options"
 		bundle="EXPENDITURE_RESOURCES">
-	<slot name="displayAuthorizationPending" key="label.display.authorization.pending" bundle="EXPENDITURE_RESOURCES"/>
-	<slot name="recurseAuthorizationPendingUnits" key="label.recurse.authorization.pending.units" bundle="EXPENDITURE_RESOURCES"/>
+	<slot name="displayAuthorizationPending" key="options.label.displayPendingAuthorizations" bundle="EXPENDITURE_RESOURCES"/>
+	<slot name="recurseAuthorizationPendingUnits" key="options.label.recurseIntoUnits" bundle="EXPENDITURE_RESOURCES"/>
 </schema>

@@ -4,7 +4,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
-<h2><bean:message key="label.search.aquisition.process" bundle="EXPENDITURE_RESOURCES"/></h2>
+<h2><bean:message key="process.label.searchProcesses" bundle="EXPENDITURE_RESOURCES"/></h2>
 
 <fr:edit action="/acquisitionProcess.do?method=searchAcquisitionProcess"  id="searchAcquisitionProcess"
 		name="searchAcquisitionProcess"
@@ -34,5 +34,5 @@
 </logic:notEmpty>
 
 <logic:empty name="acquisitionProcesses">
-	<p><em><bean:message key="label.search.result.empty" bundle="EXPENDITURE_RESOURCES"/></em></p>
+	<p><em><bean:message key="process.label.searchResultEmpty" bundle="EXPENDITURE_RESOURCES"/></em></p>
 </logic:empty>

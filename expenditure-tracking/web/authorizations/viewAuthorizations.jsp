@@ -5,7 +5,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 
 <h2>
-	<bean:message key="label.authorizations" bundle="EXPENDITURE_RESOURCES"/>
+	<bean:message key="authorizations.title" bundle="EXPENDITURE_RESOURCES"/>
 </h2>
 
 <logic:present name="person">
@@ -15,11 +15,11 @@
 						<fr:property name="linkFormat(delegate)" value="/authorizations.do?method=delegateAuthorization&authorizationOID=${OID}"/>
 						<fr:property name="visibleIf(delegate)" value="canDelegate"/>
 						<fr:property name="bundle(delegate)" value="EXPENDITURE_RESOURCES"/>
-						<fr:property name="key(delegate)" value="label.delegate.authorization"/>
+						<fr:property name="key(delegate)" value="authorizations.link.delegate"/>
 
 						<fr:property name="linkFormat(details)" value="/authorizations.do?method=viewAuthorizationDetails&authorizationOID=${OID}"/>
 						<fr:property name="bundle(details)" value="EXPENDITURE_RESOURCES"/>
-						<fr:property name="key(details)" value="label.details.authorization"/>
+						<fr:property name="key(details)" value="authorizations.link.details"/>
 					</fr:layout>
 				</fr:view>	
 </logic:present>

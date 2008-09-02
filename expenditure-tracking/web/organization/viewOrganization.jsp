@@ -21,7 +21,7 @@
 <logic:present name="unit">
 
 	<logic:notEmpty name="unit" property="authorizations">
-			<bean:message key="authorizations.label.responsibles" bundle="ORGANIZATION_RESOURCES"/>:
+			<bean:message key="authorizations.label.responsibles" bundle="EXPENDITURE_RESOURCES"/>:
 				<fr:view name="unit" property="authorizations" schema="viewAuthorization">
 					<fr:layout name="tabular">
 						<fr:property name="classes" value="tstyle2"/>
@@ -30,7 +30,7 @@
 	</logic:notEmpty>
 	
 	<logic:empty name="unit" property="authorizations">
-		<p><em><bean:message key="authorizations.label.noResponsiblesDefinedForUnit" bundle="ORGANIZATION_RESOURCES"/></em></p>
+		<p><em><bean:message key="authorizations.label.noResponsiblesDefinedForUnit" bundle="EXPENDITURE_RESOURCES"/></em></p>
 	</logic:empty>
 	
 	<logic:present name="unit" property="parentUnit">

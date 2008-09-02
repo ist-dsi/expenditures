@@ -24,7 +24,7 @@
 <logic:present name="user">
 	<bean:define id="person" name="user" property="person"></bean:define>
 	<logic:equal name="person" property="options.displayAuthorizationPending" value="true">
-		<h2><bean:message key="label.acquisition.processes.pending.authorization" bundle="EXPENDITURE_RESOURCES"/></h2>
+		<h2><bean:message key="title.pendingAuthorizations" bundle="EXPENDITURE_RESOURCES"/></h2>
 		<logic:present name="pendingAuthorizationAcquisitionProcesses">
 			<fr:view name="pendingAuthorizationAcquisitionProcesses"
 					schema="viewAcquisitionProcessInList">

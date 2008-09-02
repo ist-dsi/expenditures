@@ -18,7 +18,7 @@
 
 <div class="wrapper">
 
-<h2><bean:message key="label.view.acquisition.process" bundle="EXPENDITURE_RESOURCES"/></h2>
+<h2><bean:message key="acquisitionProcess.title.viewAcquisitionRequest" bundle="ACQUISITION_RESOURCES"/></h2>
 
 <jsp:include page="../commons/defaultErrorDisplay.jsp"/>
 
@@ -39,7 +39,7 @@
 	</ul>
 	<logic:empty name="acquisitionProcess" property="activeActivitiesForRequest">
 		<em>
-			<bean:message key="label.no.operations.available.at.the.moment" bundle="EXPENDITURE_RESOURCES"/>.
+			<bean:message key="messages.info.noOperatesAvailabeATM" bundle="EXPENDITURE_RESOURCES"/>.
 		</em>
 	</logic:empty>
 </div>
@@ -82,7 +82,7 @@
 			</html:link>	
 		</logic:present>
 		<logic:notPresent name="acquisitionProcess" property="acquisitionRequest.acquisitionProposalDocument">
-			<em><bean:message key="label.document.not.available" bundle="EXPENDITURE_RESOURCES"/></em>
+			<em><bean:message key="document.message.info.notAvailable" bundle="EXPENDITURE_RESOURCES"/></em>
 		</logic:notPresent>
 	</p>
 	<p>
@@ -93,7 +93,7 @@
 			</html:link>	
 		</logic:present>
 		<logic:notPresent name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestDocument">
-			<em><bean:message key="label.document.not.available" bundle="EXPENDITURE_RESOURCES"/></em>
+			<em><bean:message key="document.message.info.notAvailable" bundle="EXPENDITURE_RESOURCES"/></em>
 		</logic:notPresent>
 	</p>
 	<p>
@@ -105,11 +105,11 @@
 				</html:link>
 			</logic:present>	
 			<logic:notPresent name="acquisitionProcess" property="acquisitionRequest.invoice">
-				<em><bean:message key="label.document.not.available" bundle="EXPENDITURE_RESOURCES"/></em>
+				<em><bean:message key="document.message.info.notAvailable" bundle="EXPENDITURE_RESOURCES"/></em>
 			</logic:notPresent>
 		</logic:present>
 		<logic:notPresent name="acquisitionProcess" property="acquisitionRequest.invoice">
-			<em><bean:message key="label.document.not.available" bundle="EXPENDITURE_RESOURCES"/></em>
+			<em><bean:message key="document.message.info.notAvailable" bundle="EXPENDITURE_RESOURCES"/></em>
 		</logic:notPresent>
 	</p>
 </div>
@@ -138,14 +138,14 @@
 
 			<logic:equal name="acquisitionRequestItem" property="valueFullyAttributedToUnits" value="false">
 				<div class="infoop4">
-					<strong><bean:message key="label.attention" bundle="EXPENDITURE_RESOURCES"/>:</strong> <bean:message key="acquisitionRequestItem.message.info.valueNotFullyAttributed" bundle="ACQUISITION_RESOURCES"/>
+					<strong><bean:message key="messages.info.attention" bundle="EXPENDITURE_RESOURCES"/>:</strong> <bean:message key="acquisitionRequestItem.message.info.valueNotFullyAttributed" bundle="ACQUISITION_RESOURCES"/>
 				</div>
 			</logic:equal>
 			
 			<logic:equal  name="acquisitionProcess" property="acquisitionProcessState.acquisitionProcessStateType"  value="INVOICE_CONFIRMED">		
 				<logic:equal name="acquisitionRequestItem" property="filledWithRealValues" value="false">
 					<div class="infoop4">
-						<strong><bean:message key="label.attention" bundle="EXPENDITURE_RESOURCES"/></strong>: <bean:message key="acquisitionRequestItem.message.info.valuesNotFilled" bundle="ACQUISITION_RESOURCES"/>
+						<strong><bean:message key="messages.info.attention" bundle="EXPENDITURE_RESOURCES"/></strong>: <bean:message key="acquisitionRequestItem.message.info.valuesNotFilled" bundle="ACQUISITION_RESOURCES"/>
 					</div>
 				</logic:equal>
 			</logic:equal>

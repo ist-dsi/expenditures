@@ -46,7 +46,7 @@ requests/viewRequestProcess.jsp
 	</ul>
 	<logic:empty name="requestForProposalProcess" property="activeActivitiesForRequest">
 		<em>
-			<bean:message key="label.no.operations.available.at.the.moment" bundle="EXPENDITURE_RESOURCES"/>.
+			<bean:message key="messages.info.noOperatesAvailabeATM" bundle="EXPENDITURE_RESOURCES"/>.
 		</em>
 	</logic:empty>
 </div>
@@ -69,7 +69,7 @@ requests/viewRequestProcess.jsp
 			</html:link>	
 		</logic:present>
 		<logic:notPresent name="requestForProposalProcess" property="requestForProposal.requestForProposalDocument">
-			<em><bean:message key="label.document.not.available" bundle="EXPENDITURE_RESOURCES"/></em>
+			<em><bean:message key="document.message.info.notAvailable" bundle="EXPENDITURE_RESOURCES"/></em>
 		</logic:notPresent>
 	</p>
 </div>

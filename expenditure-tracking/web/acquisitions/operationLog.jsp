@@ -4,12 +4,12 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
-<h2><bean:message key="label.view.logs.process" bundle="EXPENDITURE_RESOURCES"/></h2>
+<h2><bean:message key="process.logs.title.viewLogs" bundle="EXPENDITURE_RESOURCES"/></h2>
 
 <p class="mtop05">
-	<html:link action="/acquisitionProcess.do?method=viewAcquisitionProcess" paramId="acquisitionProcessOid" paramName="process" paramProperty="OID">
-		<bean:message key="link.back" bundle="EXPENDITURE_RESOURCES"/>
-	</html:link>
+		<html:link action="/acquisitionProcess.do?method=viewAcquisitionProcess" paramId="acquisitionProcessOid" paramName="process" paramProperty="OID">
+			«  <bean:message key="link.back" bundle="EXPENDITURE_RESOURCES"/>
+		</html:link>
 </p>
 
 

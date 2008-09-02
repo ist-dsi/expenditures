@@ -9,7 +9,7 @@
 
 <p>
 	<html:link page="/acquisitionProcess.do?method=viewAcquisitionProcess" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
-		<bean:message key="link.back" bundle="EXPENDITURE_RESOURCES"/>
+		« <bean:message key="link.back" bundle="EXPENDITURE_RESOURCES"/>
 	</html:link>
 </p>
 

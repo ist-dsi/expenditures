@@ -9,7 +9,7 @@ requests/viewActiveRequests.jsp
 <h2> <bean:message key="label.pending.requestForProposal.processes" bundle="EXPENDITURE_RESOURCES"/></h2>
 
 <logic:empty name="activeRequests">
-	<p><em><bean:message key="label.no.processes.that.user.can.operate" bundle="EXPENDITURE_RESOURCES"/>.</em></p>
+	<p><em><bean:message key="process.messages.info.noProcessesToOperate" bundle="EXPENDITURE_RESOURCES"/>.</em></p>
 </logic:empty>
 
 <fr:view name="activeRequests" schema="viewRequestForProposalProcessInList">

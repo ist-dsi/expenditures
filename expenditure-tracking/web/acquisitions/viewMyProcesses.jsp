@@ -6,11 +6,11 @@
 
 
 <h2>
-	<bean:message key="label.my.process.full" bundle="EXPENDITURE_RESOURCES"/>
+	<bean:message key="process.title.myProcesses" bundle="EXPENDITURE_RESOURCES"/>
 </h2>
 
 <logic:empty name="processes">
-	<p><em><bean:message key="label.no.processes" bundle="EXPENDITURE_RESOURCES"/>.</em></p>
+	<p><em><bean:message key="process.messages.info.noProcesses" bundle="EXPENDITURE_RESOURCES"/>.</em></p>
 </logic:empty>
 
 <fr:view name="processes" schema="viewAcquisitionProcessInList">

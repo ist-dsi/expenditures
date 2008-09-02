@@ -18,13 +18,13 @@
 <bean:define id="url" name="backUrl"/>
 
 <h2>
-	<bean:message key="label.authorizationDetails" bundle="EXPENDITURE_RESOURCES"/>
+	<bean:message key="authorizations.title.details" bundle="EXPENDITURE_RESOURCES"/>
 </h2>
 
 	<ul>
 		<li>
 			<html:link page="<%= url.toString() %>">
-				<bean:message key="link.back" bundle="EXPENDITURE_RESOURCES"/>
+				« <bean:message key="link.back" bundle="EXPENDITURE_RESOURCES"/>
 			</html:link>
 		</li>
 	</ul>
@@ -37,7 +37,7 @@
 </fr:view>	
 
 <logic:notEmpty name="authorization" property="delegatedAuthorizations">
-	<strong><bean:message key="label.delegationList" bundle="EXPENDITURE_RESOURCES"/></strong>:
+	<strong><bean:message key="authorizations.label.delegationList" bundle="EXPENDITURE_RESOURCES"/></strong>:
 	
 	<fr:view name="authorization" property="delegatedAuthorizations" schema="viewAuthorization">
 			<fr:layout name="tabular">
@@ -45,14 +45,14 @@
 						<fr:property name="linkFormat(revoke)" value="/authorizations.do?method=revokeAuthorization&revokeAuthorizationOID=${OID}&authorizationOID=${authorization.OID}" />
 						<fr:property name="visibleIf(revoke)" value="currentUserAbleToRevoke"/>
 						<fr:property name="bundle(revoke)" value="EXPENDITURE_RESOURCES"/>
-						<fr:property name="key(revoke)" value="label.revoke.authorization"/>
+						<fr:property name="key(revoke)" value="authorizations.link.revoke"/>
 						<fr:property name="linkFormat(details)" value="/authorizations.do?method=viewAuthorizationDetails&authorizationOID=${OID}"/>
 						<fr:property name="bundle(details)" value="EXPENDITURE_RESOURCES"/>
-						<fr:property name="key(details)" value="label.details.authorization"/>
+						<fr:property name="key(details)" value="authorizations.link.details"/>
 			</fr:layout>
 	</fr:view>
 </logic:notEmpty>
 
 <logic:empty name="authorization" property="delegatedAuthorizations"> 
-	<em><bean:message key="label.noDelegations" bundle="EXPENDITURE_RESOURCES"/></em>
+	<em><bean:message key="authorizations.message.info.noDelegations" bundle="EXPENDITURE_RESOURCES"/></em>
 </logic:empty>

@@ -31,7 +31,7 @@ public/viewRequestProcess.jsp
 			</html:link>	
 		</logic:present>
 		<logic:notPresent name="requestForProposalProcess" property="requestForProposal.requestForProposalDocument">
-			<em><bean:message key="label.document.not.available" bundle="EXPENDITURE_RESOURCES"/></em>
+			<em><bean:message key="document.message.info.notAvailable" bundle="EXPENDITURE_RESOURCES"/></em>
 		</logic:notPresent>
 	</p>
 </div>
