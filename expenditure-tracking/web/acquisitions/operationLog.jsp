@@ -6,20 +6,22 @@
 
 <h2><bean:message key="label.view.logs.process" bundle="EXPENDITURE_RESOURCES"/></h2>
 
-<ul>
-	<li>
-		<html:link action="/acquisitionProcess.do?method=viewAcquisitionProcess" paramId="acquisitionProcessOid" paramName="process" paramProperty="OID">
-			<bean:message key="link.back" bundle="EXPENDITURE_RESOURCES"/>
-		</html:link>
-	</li>
-</ul>
+<p class="mtop05">
+	<html:link action="/acquisitionProcess.do?method=viewAcquisitionProcess" paramId="acquisitionProcessOid" paramName="process" paramProperty="OID">
+		<bean:message key="link.back" bundle="EXPENDITURE_RESOURCES"/>
+	</html:link>
+</p>
 
-<bean:message key="process.logs.label.forState" bundle="EXPENDITURE_RESOURCES"/> <strong><bean:message key="<%= "AcquisitionProcessStateType." + request.getParameter("state") %>" bundle="ENUMERATION_RESOURCES"/></strong>
 
-<p>
+<h4 class="mbottom05"><bean:message key="process.logs.label.forState" bundle="EXPENDITURE_RESOURCES"/> <bean:message key="<%= "AcquisitionProcessStateType." + request.getParameter("state") %>" bundle="ENUMERATION_RESOURCES"/></h4>
+
+
 <logic:empty name="operationLogs">
-	<em><bean:message key="process.logs.info.noLogsAvailable" bundle="EXPENDITURE_RESOURCES"/>.</em>
+	<p>
+		<em><bean:message key="process.logs.info.noLogsAvailable" bundle="EXPENDITURE_RESOURCES"/>.</em>
+	</p>
 </logic:empty>
+
 
 <fr:view name="operationLogs" schema="viewOperationLog">
 	<fr:layout name="tabular">
@@ -27,5 +29,5 @@
 		<fr:property name="sortBy" value="whenOperationWasRan"/>
 	</fr:layout>
 </fr:view>
-</p>
+
 

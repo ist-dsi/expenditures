@@ -5,13 +5,35 @@
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
 <h2><bean:message key="link.view.organization" bundle="EXPENDITURE_RESOURCES"/></h2>
+<<<<<<< .mine
+
+<ul>
+<logic:notPresent name="unit">
+	<li>
+		<html:link action="/organization.do?method=prepareCreateUnit">
+			<bean:message key="link.organization.create.new.unit" bundle="ORGANIZATION_RESOURCES"/>
+		</html:link>
+	</li>
+=======
 <br />
 <logic:notPresent name="unit">
 	<html:link action="/organization.do?method=prepareCreateUnit">
 		<bean:message key="unit.link.create" bundle="ORGANIZATION_RESOURCES"/>
 	</html:link>
+>>>>>>> .r233
 </logic:notPresent>
 <logic:present name="unit">
+	<li>
+		<html:link action="/organization.do?method=prepareCreateUnit" paramId="unitOid" paramName="unit" paramProperty="OID">
+			<bean:message key="link.organization.create.new.unit" bundle="ORGANIZATION_RESOURCES"/>
+		</html:link>
+	</li>
+</logic:present>
+</ul>
+
+<logic:present name="unit">
+<<<<<<< .mine
+=======
 	<html:link action="/organization.do?method=prepareCreateUnit" paramId="unitOid" paramName="unit" paramProperty="OID">
 		<bean:message key="unit.link.create" bundle="ORGANIZATION_RESOURCES"/>
 	</html:link>
@@ -19,12 +41,13 @@
 <br/>
 <br/>
 <logic:present name="unit">
+>>>>>>> .r233
 
 	<logic:notEmpty name="unit" property="authorizations">
 			<bean:message key="authorizations.label.responsibles" bundle="ORGANIZATION_RESOURCES"/>:
 				<fr:view name="unit" property="authorizations" schema="viewAuthorization">
 					<fr:layout name="tabular">
-						<fr:property name="classes" value="tstyle2"/>
+						<fr:property name="classes" value="tstyle1"/>
 					</fr:layout>
 				</fr:view>	
 	</logic:notEmpty>
@@ -61,6 +84,7 @@
 		<br/>	
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	</logic:present>
+	
 	<html:link action="/organization.do?method=viewOrganization" paramId="unitOid" paramName="unit" paramProperty="OID">
 		<bean:write name="unit" property="name"/>
 	</html:link>
@@ -85,6 +109,7 @@
 	</html:link>
 	<br/>	
 </logic:present>
+
 <logic:present name="units">
 	<logic:iterate id="u" name="units">
 		<logic:present name="unit">

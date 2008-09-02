@@ -57,16 +57,14 @@
 					</tr>
 			</logic:iterate>
 					<tr>
-					<td>
-					</td>
-					<td>
-						<strong><bean:message key="label.total" bundle="EXPENDITURE_RESOURCES"/></strong>:
-					</td>
-					<td>
-						<span id="sum">
-								
-						</span> 
-					</td>
+						<td colspan="2" class="aright">
+							<strong><bean:message key="label.total" bundle="EXPENDITURE_RESOURCES"/></strong>
+						</td>
+						<td>
+							<span id="sum">
+									
+							</span> 
+						</td>
 					</tr>
 		</table>
 		

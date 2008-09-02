@@ -23,7 +23,7 @@ color: #555;
 font-size: 18px;
 font-family: Arial, Helvetica, sans-serif;
 margin: 0;
-padding: 0.75em 0 0.75em 0;
+padding: 0.75em 0 0.5em 0;
 }
 
 a {
@@ -71,7 +71,6 @@ font-size: 10Fpx;
 form.login {
 float:right;
 font-size: 10px;
-color: #fff;
 }
 
 div.login {
@@ -86,18 +85,20 @@ color: #9fd8ff;
 }
 
 input {
-color: #999999;
+color: #555;
 border: 1px solid #2763A5;
 font-size: 11px;
 padding: 3px;
 }
 
 .inputbutton {
-padding: 2px;
-background-color: #6DA6E2;
+padding: 3px 4px;
+background: #6DA6E2;
+background: #e89267;
 color: #fff;
 border: 1px solid #2763A5;
-font-size: 11px;
+border: 1px solid #ab4f20;
+font-weight: bold;
 }
 
 /**************** header styles ****************/
@@ -383,13 +384,17 @@ table.form tr td.tderror {
 border-top: none !important;
 border-bottom: none !important;
 color: #c00;
-white-space: nowrap;
+/*white-space: nowrap;*/
 }
 table.form tr td.tderror span {
 background-color: #ffeadd;
 }
-
-
+span.required {
+color: #c20;
+}
+.aleft { text-align: left !important; }
+.aright { text-align: right !important; }
+.smalltxt { font-size: 0.95em; }
 .mbottom0 { margin-bottom: 0em !important; }
 .mbottom025 { margin-bottom: 0.25em !important; }
 .mbottom05 { margin-bottom: 0.5em !important; }
@@ -405,6 +410,9 @@ background-color: #ffeadd;
 .mvert05 { margin-top: 0.5em !important; margin-bottom: 0.5em !important; }
 .mvert1 { margin-top: 1em !important; margin-bottom: 1em !important; }
 .mvert15 { margin-top: 1.5em !important; margin-bottom: 1.5em !important; }
+
+span.valid { color: #0a0; font-weight: bold; }
+span.invalid { color: #a00; font-weight: bold; }
 
 div.infoop1 {
 border: 1px dotted #aaa;
@@ -433,9 +441,9 @@ margin: 1em 0;
 }
 
 div.infoop4 {
-border: 1px solid #e2d380;
+border: 1px solid #f0ce6f;
 padding: 5px 10px;
-background: #f8f4d7;
+background: #fbf2cf;
 margin: 1em 0;
 }
 
@@ -529,7 +537,7 @@ margin: 1em 0;
 }
 .documents p {
 margin: 0.25em 0 !important;
-background: url(../images/images/doc.gif) left center no-repeat;
+background: url(../images/doc.gif) left 5px no-repeat;
 padding: 0 0 0 14px;
 }
 .documents em {
@@ -570,8 +578,8 @@ background: #fcf6f4;
 /*color: #a68b08;*/
 }
 div.green {
-border: 2px solid #88c688;
-background: #f7fbf7;
+border: 2px solid #92c688;
+background: #f8fbf7;
 /*color: #a68b08;*/
 }
 div.box a {
@@ -600,20 +608,21 @@ div.item strong {
 
 
 /***** AUTO_COMPLETE *****/
-div.autoComplete { 
-      position:absolute; 
-      width:250px; 
-      background-color:white; 
-      border:1px solid #888; 
-      margin:0px; 
-      padding:0px; 
-    } 
-ul.autoCompleteItems  { 
-      list-style-type: none; 
-      margin:0px;
-      padding:0px;
-  } 
- 
+div.autoComplete {
+position:absolute;
+width:250px;
+background: #fff;
+border:1px solid #888;
+margin:0px;
+padding:0px;
+z-index: 10;
+}
+ul.autoCompleteItems  {
+list-style-type: none;
+margin:0px;
+padding:0px;
+}
+
 ul.autoCompleteItems li.selected { background-color:  #cef; }
 
 

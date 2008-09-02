@@ -5,14 +5,15 @@
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
 <h2><bean:message key="label.preferences" bundle="EXPENDITURE_RESOURCES"/></h2>
-<br />
-<h3><bean:message key="label.configuration.home" bundle="EXPENDITURE_RESOURCES"/></h3>
-<br />
+
+<h4 class="mvert05"><bean:message key="label.configuration.home" bundle="EXPENDITURE_RESOURCES"/></h4>
+
 <fr:edit id="options"
 		name="options"
 		type="pt.ist.expenditureTrackingSystem.domain.Options"
 		schema="editOptions"
 		action="/home.do?method=firstPage">
 	<fr:layout name="tabular">
+		<fr:property name="classes" value="form"/>
 	</fr:layout>
 </fr:edit>

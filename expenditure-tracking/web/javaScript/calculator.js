@@ -13,10 +13,10 @@
 				sumValue ="";
 				maxValueFloat = parseFloat(maxValue); 
 				if (sum > maxValueFloat) {
-					sumValue = '<font color="red">' + sum + '</font>';
+					sumValue = '<span class="invalid">' + sum + '</span>';
 				}
 				else if (sum == maxValueFloat) {
-					sumValue = '<font color="green">' + sum + '</font>';
+					sumValue = '<span class="valid">' + sum + '</span>';
 				}
 				else {
 					sumValue = sum;
