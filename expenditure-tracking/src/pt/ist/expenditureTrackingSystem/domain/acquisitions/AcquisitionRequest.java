@@ -171,7 +171,7 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     public void removePayingUnits(Unit payingUnit) {
 	for (AcquisitionRequestItem item : getAcquisitionRequestItems()) {
 	    if (item.getUnitItemFor(payingUnit) != null) {
-		throw new DomainException("error.cannot.remove.paying.unit.that.already.has.items.assigned.remove.them.first");
+		throw new DomainException("acquisitionProcess.message.exception.cannotRemovePayingUnit.alreadyAssignedToItems");
 	    }
 	}
 	super.removePayingUnits(payingUnit);

@@ -4,7 +4,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
-<h2><bean:message key="link.edit.unit" bundle="ORGANIZATION_RESOURCES"/></h2>
+<h2><bean:message key="unit.link.edit" bundle="ORGANIZATION_RESOURCES"/></h2>
 <br />
 <bean:define id="unit"
 		name="unit"

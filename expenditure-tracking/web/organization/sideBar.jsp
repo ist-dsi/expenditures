@@ -10,12 +10,12 @@
 	</li>
 	<li>
 		<html:link action="/organization.do?method=searchUsers">
-			<bean:message key="link.search.users" bundle="ORGANIZATION_RESOURCES"/>
+			<bean:message key="search.link.users" bundle="EXPENDITURE_RESOURCES"/>
 		</html:link>
 	</li>
 	<li>
 		<html:link action="/organization.do?method=manageSuppliers">
-			<bean:message key="link.manage.suppliers" bundle="ORGANIZATION_RESOURCES"/>
+			<bean:message key="supplier.link.manage" bundle="ORGANIZATION_RESOURCES"/>
 		</html:link>
 	</li>	
 </ul>

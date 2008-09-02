@@ -134,4 +134,7 @@ public class RequestForProposalProcess extends RequestForProposalProcess_Base {
 	return !hasNotExpired() && getRequestForProposal().hasAnySupplierProposals();
     }
 
+    public boolean isVisible(Person person) {
+	return getLastRequestForProposalProcessStateType().equals(RequestForProposalProcessStateType.APPROVED) || getRequestForProposal().getRequester() == person;
+    }
 }

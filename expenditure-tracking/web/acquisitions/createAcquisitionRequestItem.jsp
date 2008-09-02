@@ -5,7 +5,7 @@
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 <%@ taglib uri="/WEB-INF/messages.tld" prefix="messages" %>
 
-<h2><bean:message key="label.create.acquisition.request.item" bundle="ACQUISITION_RESOURCES"/></h2>
+<h2><bean:message key="acquisitionRequestItem.title.create" bundle="ACQUISITION_RESOURCES"/></h2>
 
 <jsp:include page="../commons/defaultErrorDisplay.jsp"/>
 

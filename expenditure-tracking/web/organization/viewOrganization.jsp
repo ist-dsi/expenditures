@@ -8,12 +8,12 @@
 <br />
 <logic:notPresent name="unit">
 	<html:link action="/organization.do?method=prepareCreateUnit">
-		<bean:message key="link.organization.create.new.unit" bundle="ORGANIZATION_RESOURCES"/>
+		<bean:message key="unit.link.create" bundle="ORGANIZATION_RESOURCES"/>
 	</html:link>
 </logic:notPresent>
 <logic:present name="unit">
 	<html:link action="/organization.do?method=prepareCreateUnit" paramId="unitOid" paramName="unit" paramProperty="OID">
-		<bean:message key="link.organization.create.new.unit" bundle="ORGANIZATION_RESOURCES"/>
+		<bean:message key="unit.link.create" bundle="ORGANIZATION_RESOURCES"/>
 	</html:link>
 </logic:present>
 <br/>
@@ -21,7 +21,7 @@
 <logic:present name="unit">
 
 	<logic:notEmpty name="unit" property="authorizations">
-			<bean:message key="label.unit.responsible" bundle="ORGANIZATION_RESOURCES"/>:
+			<bean:message key="authorizations.label.responsibles" bundle="ORGANIZATION_RESOURCES"/>:
 				<fr:view name="unit" property="authorizations" schema="viewAuthorization">
 					<fr:layout name="tabular">
 						<fr:property name="classes" value="tstyle2"/>
@@ -30,7 +30,7 @@
 	</logic:notEmpty>
 	
 	<logic:empty name="unit" property="authorizations">
-		<p><em><bean:message key="label.no.authorizations.for.unit" bundle="ORGANIZATION_RESOURCES"/></em></p>
+		<p><em><bean:message key="authorizations.label.noResponsiblesDefinedForUnit" bundle="ORGANIZATION_RESOURCES"/></em></p>
 	</logic:empty>
 	
 	<logic:present name="unit" property="parentUnit">

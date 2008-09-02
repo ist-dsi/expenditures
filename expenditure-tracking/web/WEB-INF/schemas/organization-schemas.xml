@@ -1,96 +1,96 @@
 <schema name="createUnit"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.CreateUnitBean"
 		bundle="ORGANIZATION_RESOURCES">
-	<slot name="name" key="label.organization.name" bundle="ORGANIZATION_RESOURCES"/>
-	<slot name="costCenter" key="label.organization.cost.center" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="name" key="unit.label.name" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="costCenter" key="unit.label.costCenter" bundle="ORGANIZATION_RESOURCES"/>
 </schema>
 
 <schema name="editUnit"
 		type="pt.ist.expenditureTrackingSystem.domain.organization.Unit"
 		bundle="ORGANIZATION_RESOURCES">
-	<slot name="name" key="label.organization.name" bundle="ORGANIZATION_RESOURCES"/>
-	<slot name="costCenter" key="label.organization.cost.center" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="name" key="unit.label.name" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="costCenter" key="unit.label.costCenter" bundle="ORGANIZATION_RESOURCES"/>
 </schema>
 
 <schema name="searchUsers"
 		type="pt.ist.expenditureTrackingSystem.domain.organization.SearchUsers"
 		bundle="ORGANIZATION_RESOURCES">
 	<slot name="username" key="label.person.username" bundle="ORGANIZATION_RESOURCES"/>
-	<slot name="name" key="label.person.name" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="name" key="person.label.name" bundle="ORGANIZATION_RESOURCES"/>
 </schema>
 
 <schema name="viewPeopleInList"
 		type="pt.ist.expenditureTrackingSystem.domain.organization.Person"
 		bundle="ORGANIZATION_RESOURCES">
 	<slot name="username" key="label.person.username" bundle="ORGANIZATION_RESOURCES"/>
-	<slot name="name" key="label.person.name" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="name" key="person.label.name" bundle="ORGANIZATION_RESOURCES"/>
 </schema>
 
 <schema name="createPerson"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.CreatePersonBean"
 		bundle="ORGANIZATION_RESOURCES">
 	<slot name="username" key="label.person.username" bundle="ORGANIZATION_RESOURCES"/>
-	<slot name="name" key="label.person.name" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="name" key="person.label.name" bundle="ORGANIZATION_RESOURCES"/>
 </schema>
 
 <schema name="editPerson"
 		type="pt.ist.expenditureTrackingSystem.domain.organization.Person"
 		bundle="ORGANIZATION_RESOURCES">
 	<slot name="username" key="label.person.username" bundle="ORGANIZATION_RESOURCES"/>
-	<slot name="name" key="label.person.name" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="name" key="person.label.name" bundle="ORGANIZATION_RESOURCES"/>
 </schema>
 
 <schema name="viewPerson"
 		type="pt.ist.expenditureTrackingSystem.domain.organization.Person"
 		bundle="ORGANIZATION_RESOURCES">
 	<slot name="username" key="label.person.username" bundle="ORGANIZATION_RESOURCES"/>
-	<slot name="name" key="label.person.name" bundle="ORGANIZATION_RESOURCES"/>
-	<slot name="roles" layout="values-comma" key="label.person.roles" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="name" key="person.label.name" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="roles" layout="values-comma" key="role.label.roles" bundle="ORGANIZATION_RESOURCES"/>
 </schema>
 
 <schema name="viewAuthorizations"
 		type="pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization"
 		bundle="ORGANIZATION_RESOURCES">
-	<slot name="unit.name" key="label.organization.name" bundle="ORGANIZATION_RESOURCES"/>
-	<slot name="unit.costCenter" key="label.organization.cost.center" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="unit.name" key="unit.label.name" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="unit.costCenter" key="unit.label.costCenter" bundle="ORGANIZATION_RESOURCES"/>
 </schema>
 
 <schema name="searchSuppliers"
 		type="pt.ist.expenditureTrackingSystem.domain.organization.SearchSuppliers"
 		bundle="ORGANIZATION_RESOURCES">
-	<slot name="fiscalCode" key="label.supplier.fiscalCode" bundle="ORGANIZATION_RESOURCES"/>
-	<slot name="name" key="label.supplier.name" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="fiscalCode" key="supplier.label.fiscalCode" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="name" key="supplier.label.name" bundle="ORGANIZATION_RESOURCES"/>
 </schema>
 
 <schema name="viewSuppliersInList"
 		type="pt.ist.expenditureTrackingSystem.domain.organization.Supplier"
 		bundle="ORGANIZATION_RESOURCES">
-	<slot name="fiscalIdentificationCode" key="label.supplier.fiscalCode" bundle="ORGANIZATION_RESOURCES"/>
-	<slot name="name" key="label.supplier.name" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="fiscalIdentificationCode" key="supplier.label.fiscalCode" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="name" key="supplier.label.name" bundle="ORGANIZATION_RESOURCES"/>
 </schema>
 
 <schema name="viewSupplier"
 		type="pt.ist.expenditureTrackingSystem.domain.organization.Supplier"
 		bundle="ORGANIZATION_RESOURCES">
 	<slot name="fiscalIdentificationCode" key="label.supplier.fiscalCode" bundle="ORGANIZATION_RESOURCES"/>
-	<slot name="name" key="label.supplier.name" bundle="ORGANIZATION_RESOURCES"/>
-	<slot name="abbreviatedName" key="label.supplier.abbreviatedName" bundle="ORGANIZATION_RESOURCES"/>
-	<slot name="address" layout="address" key="label.supplier.address" bundle="ORGANIZATION_RESOURCES"/>
-	<slot name="phone" key="label.supplier.phone" bundle="ORGANIZATION_RESOURCES"/>
-	<slot name="fax" key="label.supplier.fax" bundle="ORGANIZATION_RESOURCES"/>
-	<slot name="email" key="label.supplier.email" bundle="ORGANIZATION_RESOURCES"/>	
+	<slot name="name" key="supplier.label.name" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="abbreviatedName" key="supplier.label.abbreviatedName" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="address" layout="address" key="supplier.label.address" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="phone" key="supplier.label.phone" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="fax" key="supplier.label.fax" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="email" key="supplier.label.email" bundle="ORGANIZATION_RESOURCES"/>	
 </schema>
 
 <schema name="createSupplier"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.CreateSupplierBean"
 		bundle="ORGANIZATION_RESOURCES">
 	<slot name="fiscalIdentificationCode" key="label.supplier.fiscalCode" bundle="ORGANIZATION_RESOURCES"/>
-	<slot name="name" key="label.supplier.name" bundle="ORGANIZATION_RESOURCES"/>
-	<slot name="abbreviatedName" key="label.supplier.abbreviatedName" bundle="ORGANIZATION_RESOURCES"/>	
-	<slot name="address" layout="address-input" key="label.supplier.address" bundle="ORGANIZATION_RESOURCES"/>
-	<slot name="phone" key="label.supplier.phone" bundle="ORGANIZATION_RESOURCES"/>
-	<slot name="fax" key="label.supplier.fax" bundle="ORGANIZATION_RESOURCES"/>
-	<slot name="email" key="label.supplier.email" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="name" key="supplier.label.name" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="abbreviatedName" key="supplier.label.abbreviatedName" bundle="ORGANIZATION_RESOURCES"/>	
+	<slot name="address" layout="address-input" key="supplier.label.address" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="phone" key="supplier.label.phone" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="fax" key="supplier.label.fax" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="email" key="supplier.label.email" bundle="ORGANIZATION_RESOURCES"/>
 </schema>
 
 

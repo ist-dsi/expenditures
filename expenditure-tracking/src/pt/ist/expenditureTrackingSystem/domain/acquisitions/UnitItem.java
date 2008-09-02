@@ -22,7 +22,7 @@ public class UnitItem extends UnitItem_Base {
 
     private void checkParameters(Unit unit, AcquisitionRequestItem item, Money shareValue, Boolean isApproved) {
 	if (unit == null || item == null || shareValue == null || isApproved == null) {
-	    throw new DomainException("error.parameters.cannot.be.null");
+	    throw new DomainException("unitItem.message.exception.parametersCannotBeNull");
 	}
 
 	if (shareValue.isZero()) {
@@ -35,7 +35,7 @@ public class UnitItem extends UnitItem_Base {
 
 	Money currentAssignedValue = item.getTotalAssignedValue();
 	if (currentAssignedValue.add(shareValue).isGreaterThan(item.getTotalItemValue())) {
-	    throw new DomainException("error.assigned.value.bigger.than.total.amount");
+	    throw new DomainException("unitItem.message.exception.assignedValuedBiggerThanTotal");
 	}
     }
 
@@ -60,7 +60,7 @@ public class UnitItem extends UnitItem_Base {
 	    Money currentAssignedValue = getItem().getTotalRealAssignedValue();
 
 	    if (currentAssignedValue.add(realShareValue).isGreaterThan(totalAmount)) {
-		throw new DomainException("error.cannot.assign.more.than.total.amount");
+		throw new DomainException("unitItem.message.exception.cannotASsignMoreThanTotalAmount");
 	    }
 	}
 	super.setRealShareValue(realShareValue);

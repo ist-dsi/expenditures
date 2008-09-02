@@ -15,7 +15,7 @@
 <bean:define id="acquisitionRequestItemOid" name="acquisitionRequestItem" property="OID"/>
 
 <bean:define id="outOfLabel">
-	<bean:message key="label.out.of" bundle="ACQUISITION_RESOURCES"/>
+	<bean:message key="acquisitionRequestItem.label.outOf" bundle="ACQUISITION_RESOURCES"/>
 </bean:define>
 
 <bean:define id="acquisitionRequestItem" name="acquisitionRequestItem" toScope="request"/>
@@ -37,10 +37,10 @@
 
 				</th>				
 				<th>
-					<strong><bean:message key="label.payingUnit" bundle="ACQUISITION_RESOURCES"/></strong>
+					<strong><bean:message key="acquisitionProcess.label.payingUnit" bundle="ACQUISITION_RESOURCES"/></strong>
 				</th>
 				<th>
-					<strong><bean:message key="label.shareValue" bundle="ACQUISITION_RESOURCES"/></strong>
+					<strong><bean:message key="unitItem.label.shareValue" bundle="ACQUISITION_RESOURCES"/></strong>
 				</th>
 			</tr>
 			<logic:iterate id="unitItemBean" name="unitItemBeans" indexId="id">
@@ -76,7 +76,7 @@
 		
 		
 		<p class="mtop05 mbottom2">
-			<a href="javascript:document.forms[0].method.value='calculateShareValuePostBack'; document.forms[0].submit();"> <bean:message key="label.auto.distribute" bundle="ACQUISITION_RESOURCES"/> </a>
+			<a href="javascript:document.forms[0].method.value='calculateShareValuePostBack'; document.forms[0].submit();"> <bean:message key="acquisitionRequestItem.link.autoDistribute" bundle="ACQUISITION_RESOURCES"/> </a>
 		</p>
 		
 			<html:submit styleClass="inputbutton"><bean:message key="renderers.form.submit.name" bundle="RENDERER_RESOURCES"/> </html:submit>

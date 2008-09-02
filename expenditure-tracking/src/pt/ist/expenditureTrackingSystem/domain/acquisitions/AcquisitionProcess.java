@@ -115,7 +115,7 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
     @Service
     public static AcquisitionProcess createNewAcquisitionProcess(final CreateAcquisitionProcessBean createAcquisitionProcessBean) {
 	if (!isCreateNewProcessAvailable()) {
-	    throw new DomainException("error.acquisitionProcess.invalid.state.to.run.createNewAcquisitionProcess");
+	    throw new DomainException("acquisitionProcess.message.exception.invalidStateToRun.create");
 	}
 	AcquisitionProcess process = new AcquisitionProcess(createAcquisitionProcessBean.getSupplier(),
 		createAcquisitionProcessBean.getRequester());

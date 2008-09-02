@@ -4,10 +4,10 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
-<h2><bean:message key="label.search.users" bundle="ORGANIZATION_RESOURCES"/></h2>
+<h2><bean:message key="search.label.users" bundle="EXPENDITURE_RESOURCES"/></h2>
 <br/>
 <html:link action="/organization.do?method=prepareCreatePerson">
-	<bean:message key="link.create.person" bundle="ORGANIZATION_RESOURCES"/>
+	<bean:message key="person.link.create" bundle="ORGANIZATION_RESOURCES"/>
 </html:link>
 <br/>
 <br/>

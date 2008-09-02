@@ -167,6 +167,7 @@ public class RequestForProposalProcessAction extends ProcessAction {
 	SearchRequestProposal searchProposalProcess = getRenderedObject("searchProposalRequestProcess");
 	if (searchProposalProcess == null) {
 	    searchProposalProcess = new SearchRequestProposal();
+	    searchProposalProcess.setRequestor(getLoggedPerson().getName());
 	}
 	request.setAttribute("searchRequestProposalProcess", searchProposalProcess);
 	return mapping.findForward("search.proposal.process");

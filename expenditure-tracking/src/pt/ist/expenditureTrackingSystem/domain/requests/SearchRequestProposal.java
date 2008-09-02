@@ -6,14 +6,18 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.LocalDate;
 
+import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.Search;
+import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
+import pt.ist.fenixWebFramework.security.UserView;
 
 public class SearchRequestProposal extends Search<RequestForProposalProcess> {
 
     private LocalDate publishDate;
     private LocalDate expireDate;
     private String requestor;
+    private String title;
 
     private class SearchRequestProposalResult extends SearchResultSet<RequestForProposalProcess> {
 
@@ -25,14 +29,31 @@ public class SearchRequestProposal extends Search<RequestForProposalProcess> {
 	protected boolean matchesSearchCriteria(final RequestForProposalProcess requestProcess) {
 	    RequestForProposal proposal = requestProcess.getRequestForProposal();
 
-	    return matchCriteria(proposal.getPublishDate(), proposal.getExpireDate(), proposal.getRequester().getName());
+	    User user = UserView.getUser();
+	    Person person = user != null ? user.getPerson() : null;
+	    return proposal.getRequestForProposalProcess().isVisible(person)
+		    && matchCriteria(proposal.getPublishDate(), proposal.getExpireDate(), proposal.getRequester().getName(),
+			    proposal.getTitle());
 	}
 
-	private boolean matchCriteria(LocalDate publishDate, LocalDate expireDate, String name) {
+	private boolean matchCriteria(LocalDate publishDate, LocalDate expireDate, String name, String title) {
 	    return (getPublishDate() == null || getPublishDate().isBefore(publishDate))
 		    && (getExpireDate() == null || getExpireDate().isAfter(expireDate))
-		    && (StringUtils.isEmpty(getRequestor()) || getRequestor().equalsIgnoreCase(name));
+		    && (getTitle() == null || isMatch(title.toLowerCase(), getTitle().toLowerCase()))
+		    && (StringUtils.isEmpty(getRequestor()) || isMatch(name.toLowerCase(), getRequestor().toLowerCase()));
 	}
+
+	private boolean isMatch(String fullName, String inputName) {
+	    String[] inputNameArray = inputName.split(" ");
+
+	    for (String inputString : inputNameArray) {
+		if (fullName.indexOf(inputString) < 0) {
+		    return false;
+		}
+	    }
+	    return true;
+	}
+
     }
 
     @Override
@@ -62,6 +83,14 @@ public class SearchRequestProposal extends Search<RequestForProposalProcess> {
 
     public void setRequestor(String requestor) {
 	this.requestor = requestor;
+    }
+
+    public String getTitle() {
+	return title;
+    }
+
+    public void setTitle(String title) {
+	this.title = title;
     }
 
 }

@@ -6,7 +6,7 @@
 
 
 <h2>
-	<bean:message key="label.my.processes" bundle="EXPENDITURE_RESOURCES"/>
+	<bean:message key="label.my.process.full" bundle="EXPENDITURE_RESOURCES"/>
 </h2>
 
 <logic:empty name="processes">

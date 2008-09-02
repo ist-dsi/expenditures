@@ -13,7 +13,7 @@
 	<table>
 		<tr>
 			<td>
-				<bean:message key="label.payment.identification" bundle="ACQUISITION_RESOURCES"/>: 
+				<bean:message key="acquisitionProcess.label.paymentInfo" bundle="ACQUISITION_RESOURCES"/>: 
 			</td>
 			<td>	
 				<fr:edit id="reference" name="bean" slot="string" />

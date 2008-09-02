@@ -4,7 +4,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
-<h2><bean:message key="label.view.person" bundle="ORGANIZATION_RESOURCES"/></h2>
+<h2><bean:message key="person.label.view" bundle="ORGANIZATION_RESOURCES"/></h2>
 <br />
 <fr:view name="person"
 		type="pt.ist.expenditureTrackingSystem.domain.organization.Person"
@@ -19,11 +19,11 @@
 		<span>
 			<fr:view name="role"/>: 
 			<html:link action="<%= "/organization.do?method=addRole&role=" + role %>" paramId="personOid" paramName="person" paramProperty="OID">
-				<bean:message key="label.add.role" bundle="ORGANIZATION_RESOURCES"/>
+				<bean:message key="role.label.add" bundle="ORGANIZATION_RESOURCES"/>
 			</html:link>
 			|
 			<html:link action="<%= "/organization.do?method=removeRole&role=" + role %>" paramId="personOid" paramName="person" paramProperty="OID">
-				<bean:message key="label.remove.role" bundle="ORGANIZATION_RESOURCES"/>
+				<bean:message key="role.label.remove" bundle="ORGANIZATION_RESOURCES"/>
 			</html:link>
 		</span>
 	</p>
@@ -40,7 +40,7 @@
 <br/>
 <br/>
 <html:link action="/organization.do?method=attributeAuthorization" paramId="personOid" paramName="person" paramProperty="OID">
-	<bean:message key="link.attribute.authorization" bundle="ORGANIZATION_RESOURCES"/>
+	<bean:message key="authorization.link.grant" bundle="ORGANIZATION_RESOURCES"/>
 </html:link>
 <br/>
 <br/>

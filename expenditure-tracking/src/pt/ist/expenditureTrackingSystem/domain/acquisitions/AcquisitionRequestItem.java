@@ -40,12 +40,12 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
     private void checkLimits(AcquisitionRequest acquisitionRequest, Integer quantity, Money unitValue) {
 	Money totalValue = unitValue.multiply(quantity.longValue());
 	if (!checkAcquisitionRequestValueLimit(acquisitionRequest, totalValue)) {
-	    throw new DomainException("error.acquisition.request.total.value.exceeded", acquisitionRequest
+	    throw new DomainException("acquisitionRequestItem.message.exception.totalValueExceed", acquisitionRequest
 		    .getAcquisitionProcess().getAcquisitionRequestValueLimit().toFormatString());
 	}
 
 	if (!checkSupplierFundAllocation(acquisitionRequest, totalValue)) {
-	    throw new DomainException("error.supplier.fund.allocation.not.allowed");
+	    throw new DomainException("acquisitionRequestItem.message.exception.fundAllocationNotAllowed");
 	}
     }
 

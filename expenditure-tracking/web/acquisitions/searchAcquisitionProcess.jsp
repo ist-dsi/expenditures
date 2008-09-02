@@ -17,15 +17,22 @@
 
 
 <bean:define id="acquisitionProcesses" name="searchAcquisitionProcess" property="result"/>
-<fr:view name="acquisitionProcesses"
-		schema="viewAcquisitionProcessInList">
-	<fr:layout name="tabular">
-		<fr:property name="classes" value="tstyle2 mtop2"/>
 
-		<fr:property name="link(view)" value="/acquisitionProcess.do?method=viewAcquisitionProcess"/>
-		<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
-		<fr:property name="key(view)" value="link.view"/>
-		<fr:property name="param(view)" value="OID/acquisitionProcessOid"/>
-		<fr:property name="order(view)" value="1"/>
-	</fr:layout>
-</fr:view>
+<logic:notEmpty name="acquisitionProcesses">
+	<fr:view name="acquisitionProcesses"
+			schema="viewAcquisitionProcessInList">
+		<fr:layout name="tabular">
+			<fr:property name="classes" value="tstyle2 mtop2"/>
+	
+			<fr:property name="link(view)" value="/acquisitionProcess.do?method=viewAcquisitionProcess"/>
+			<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
+			<fr:property name="key(view)" value="link.view"/>
+			<fr:property name="param(view)" value="OID/acquisitionProcessOid"/>
+			<fr:property name="order(view)" value="1"/>
+		</fr:layout>
+	</fr:view>
+</logic:notEmpty>
+
+<logic:empty name="acquisitionProcesses">
+	<p><em><bean:message key="label.search.result.empty" bundle="EXPENDITURE_RESOURCES"/></em></p>
+</logic:empty>

@@ -16,16 +16,23 @@
 </fr:edit>
 
 
-<bean:define id="acquisitionProcesses" name="searchRequestProposalProcess" property="result"/>
-<fr:view name="acquisitionProcesses"
-		schema="viewRequestProcessInList">
-	<fr:layout name="tabular">
-		<fr:property name="classes" value="tstyle2 mtop2"/>
+<bean:define id="process" name="searchRequestProposalProcess" property="result"/>
 
-		<fr:property name="link(view)" value="/requestForProposalProcess.do?method=viewRequestForProposalProcess"/>
-		<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
-		<fr:property name="key(view)" value="link.view"/>
-		<fr:property name="param(view)" value="OID/requestForProposalProcessOid"/>
-		<fr:property name="order(view)" value="1"/>
-	</fr:layout>
-</fr:view>
+<logic:notEmpty name="process">
+	<fr:view name="process"
+			schema="viewRequestProcessInList">
+		<fr:layout name="tabular">
+			<fr:property name="classes" value="tstyle2 mtop2"/>
+	
+			<fr:property name="link(view)" value="/requestForProposalProcess.do?method=viewRequestForProposalProcess"/>
+			<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
+			<fr:property name="key(view)" value="link.view"/>
+			<fr:property name="param(view)" value="OID/requestForProposalProcessOid"/>
+			<fr:property name="order(view)" value="1"/>
+		</fr:layout>
+	</fr:view>
+</logic:notEmpty>
+
+<logic:empty name="process">
+	<p><em><bean:message key="label.search.result.empty" bundle="EXPENDITURE_RESOURCES"/></em></p>
+</logic:empty>

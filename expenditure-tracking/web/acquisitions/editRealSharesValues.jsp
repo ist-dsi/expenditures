@@ -5,7 +5,7 @@
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 <%@ taglib uri="/WEB-INF/messages.tld" prefix="messages" %>
 
-<h2><bean:message key="label.edit.acquisition.request.real.values" bundle="ACQUISITION_RESOURCES"/></h2>
+<h2><bean:message key="acquisitionRequestItem.title.editRealValues" bundle="ACQUISITION_RESOURCES"/></h2>
 
 <bean:define id="processOID" name="item" property="acquisitionRequest.acquisitionProcess.OID"/>
 
@@ -14,7 +14,7 @@
 
 <logic:equal name="item" property="filledWithRealValues" value="false">
 	<div class="infoop4">
-			<strong><bean:message key="label.attention" bundle="EXPENDITURE_RESOURCES"/></strong>: <bean:message key="label.must.define.real.values.first" bundle="ACQUISITION_RESOURCES"/>
+			<strong><bean:message key="label.attention" bundle="EXPENDITURE_RESOURCES"/></strong>: <bean:message key="acquisitionRequestItem.message.warn.mustDefineRealValuesFirst" bundle="ACQUISITION_RESOURCES"/>
 	</div>
 	
 	<html:link page="<%= "/acquisitionProcess.do?method=viewAcquisitionProcess&acquisitionProcessOid="  + processOID %>"><bean:message key="link.back" bundle="EXPENDITURE_RESOURCES"/></html:link>

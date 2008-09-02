@@ -4,7 +4,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
-<h2><bean:message key="label.receive.invoice" bundle="ACQUISITION_RESOURCES"/></h2>
+<h2><bean:message key="acquisitionProcess.title.invoice.receive" bundle="ACQUISITION_RESOURCES"/></h2>
 
 <div class="infoop2">
 	<fr:view name="acquisitionProcess" property="acquisitionRequest"
@@ -19,7 +19,7 @@
 
 
 <p>
-	<bean:message key="label.acquisition.proposal.document" bundle="ACQUISITION_RESOURCES"/>: 
+	<bean:message key="acquisitionProcess.label.proposalDocument" bundle="ACQUISITION_RESOURCES"/>: 
 	<logic:present name="acquisitionProcess" property="acquisitionRequest.acquisitionProposalDocument">
 		<html:link action="/acquisitionProcess.do?method=downloadAcquisitionProposalDocument" paramId="acquisitionProposalDocumentOid" paramName="acquisitionProcess" paramProperty="acquisitionRequest.acquisitionProposalDocument.OID">
 			<bean:write name="acquisitionProcess" property="acquisitionRequest.acquisitionProposalDocument.filename"/>
@@ -47,7 +47,7 @@
 	<bean:size id="totalItems" name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestItemsSet"/>
 	<logic:iterate id="acquisitionRequestItem" name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestItemsSet" indexId="index">
 		<bean:define id="currentIndex" value="<%= String.valueOf(index + 1) %>"/>
-		<p><strong><bean:message key="label.view.acquisition.request.item" bundle="ACQUISITION_RESOURCES"/></strong> (<fr:view name="currentIndex"/>/<fr:view name="totalItems"/>)</p>
+		<p><strong><bean:message key="acquisitionRequestItem.label.item" bundle="ACQUISITION_RESOURCES"/></strong> (<fr:view name="currentIndex"/>/<fr:view name="totalItems"/>)</p>
 		<bean:define id="acquisitionRequestItem" name="acquisitionRequestItem" toScope="request"/>
 		<jsp:include page="./acquisitionItemDisplay.jsp" flush="false"/>
 	</logic:iterate>

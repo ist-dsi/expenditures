@@ -33,7 +33,7 @@ public class AllocateFundsPermanently extends GenericAcquisitionProcessActivity 
     @Override
     protected void process(AcquisitionProcess process, Object... objects) {
 	if (!process.isRealValueEqualOrLessThanFundAllocation()) {
-	    throw new DomainException("error.real.values.cannot.go.over.the.fund.allocation");
+	    throw new DomainException("activities.message.exception.valuesCannotGoOverFundAllocation");
 	}
 	new AcquisitionProcessState(process, AcquisitionProcessStateType.FUNDS_ALLOCATED_PERMANENTLY);
     }

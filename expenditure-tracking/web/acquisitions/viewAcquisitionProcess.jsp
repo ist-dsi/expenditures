@@ -48,14 +48,14 @@
 <div class="expenditures">
 	<logic:equal name="acquisitionProcess" property="allowedToViewCostCenterExpenditures" value="true">
 		<p>
-		<bean:message key="label.unit.total.allocated" bundle="ORGANIZATION_RESOURCES"/>:
+		<bean:message key="unit.message.info.totalAllocated" bundle="ORGANIZATION_RESOURCES"/>:
 		<fr:view name="acquisitionProcess" property="unit.totalAllocated"/>
 		</p>
 	</logic:equal>
 	<logic:equal name="acquisitionProcess" property="allowedToViewSupplierExpenditures" value="true">
 		<logic:present name="acquisitionProcess" property="acquisitionRequest.supplier">
 			<p>
-			<bean:message key="label.supplier.total.allocated" bundle="ORGANIZATION_RESOURCES"/>:
+			<bean:message key="supplier.message.info.totalAllocated" bundle="ORGANIZATION_RESOURCES"/>:
 			<fr:view name="acquisitionProcess" property="acquisitionRequest.supplier.totalAllocated"/>
 			</p>
 		</logic:present>
@@ -75,7 +75,7 @@
 
 <div class="documents">
 	<p>
-		<bean:message key="label.acquisition.proposal.document" bundle="ACQUISITION_RESOURCES"/>:
+		<bean:message key="acquisitionProcess.label.proposalDocument" bundle="ACQUISITION_RESOURCES"/>:
 		<logic:present name="acquisitionProcess" property="acquisitionRequest.acquisitionProposalDocument">
 			<html:link action="/acquisitionProcess.do?method=downloadAcquisitionProposalDocument" paramId="acquisitionProposalDocumentOid" paramName="acquisitionProcess" paramProperty="acquisitionRequest.acquisitionProposalDocument.OID">
 				<bean:write name="acquisitionProcess" property="acquisitionRequest.acquisitionProposalDocument.filename"/>
@@ -86,7 +86,7 @@
 		</logic:notPresent>
 	</p>
 	<p>
-		<bean:message key="label.acquisition.request.document" bundle="ACQUISITION_RESOURCES"/>:
+		<bean:message key="acquisitionProcess.label.requestDocument" bundle="ACQUISITION_RESOURCES"/>:
 		<logic:present name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestDocument">
 			<html:link action="/acquisitionProcess.do?method=downloadAcquisitionRequestDocument" paramId="acquisitionRequestDocumentOid" paramName="acquisitionProcess" paramProperty="acquisitionRequest.acquisitionRequestDocument.OID">
 				<bean:write name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestDocument.filename"/>
@@ -97,7 +97,7 @@
 		</logic:notPresent>
 	</p>
 	<p>
-		<bean:message key="label.invoice" bundle="ACQUISITION_RESOURCES"/>:
+		<bean:message key="acquisitionProcess.label.invoice" bundle="ACQUISITION_RESOURCES"/>:
 		<logic:present name="acquisitionProcess" property="acquisitionRequest.invoice">
 			<logic:present name="acquisitionProcess" property="acquisitionRequest.invoice.content">
 				<html:link action="/acquisitionProcess.do?method=downloadInvoice" paramId="invoiceOid" paramName="acquisitionProcess" paramProperty="acquisitionRequest.invoice.OID">
@@ -121,7 +121,7 @@
 	<logic:iterate id="acquisitionRequestItem" name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestItemsSet" indexId="index">
 		<div class="item">
 			<bean:define id="currentIndex" value="<%= String.valueOf(index + 1) %>"/>
-			<strong><bean:message key="label.view.acquisition.request.item" bundle="ACQUISITION_RESOURCES"/></strong> (<fr:view name="currentIndex"/>/<fr:view name="totalItems"/>)
+			<strong><bean:message key="acquisitionRequestItem.label.item" bundle="ACQUISITION_RESOURCES"/></strong> (<fr:view name="currentIndex"/>/<fr:view name="totalItems"/>)
 			<bean:define id="itemOID" name="acquisitionRequestItem" property="OID"/>
 			
 			<logic:iterate id="activity" name="acquisitionProcess" property="activeActivitiesForItem" indexId="index">
@@ -138,22 +138,15 @@
 
 			<logic:equal name="acquisitionRequestItem" property="valueFullyAttributedToUnits" value="false">
 				<div class="infoop4">
-					<strong><bean:message key="label.attention" bundle="EXPENDITURE_RESOURCES"/>:</strong> <bean:message key="label.item.not.fully.attributed" bundle="ACQUISITION_RESOURCES"/>
+					<strong><bean:message key="label.attention" bundle="EXPENDITURE_RESOURCES"/>:</strong> <bean:message key="acquisitionRequestItem.message.info.valueNotFullyAttributed" bundle="ACQUISITION_RESOURCES"/>
 				</div>
 			</logic:equal>
 			
 			<logic:equal  name="acquisitionProcess" property="acquisitionProcessState.acquisitionProcessStateType"  value="INVOICE_CONFIRMED">		
 				<logic:equal name="acquisitionRequestItem" property="filledWithRealValues" value="false">
 					<div class="infoop4">
-						<strong><bean:message key="label.attention" bundle="EXPENDITURE_RESOURCES"/></strong>: <bean:message key="label.item.real.values.not.filled" bundle="ACQUISITION_RESOURCES"/>
+						<strong><bean:message key="label.attention" bundle="EXPENDITURE_RESOURCES"/></strong>: <bean:message key="acquisitionRequestItem.message.info.valuesNotFilled" bundle="ACQUISITION_RESOURCES"/>
 					</div>
-				</logic:equal>
-				<logic:equal name="acquisitionRequestItem" property="filledWithRealValues" value="true">
-					<logic:equal name="acquisitionRequestItem" property="realValueFullyAttributedToUnits" value="false">
-						<div class="infoop4">
-							<strong><bean:message key="label.attention" bundle="EXPENDITURE_RESOURCES"/></strong>: <bean:message key="label.item.real.values.not.assigned" bundle="ACQUISITION_RESOURCES"/>
-						</div>
-					</logic:equal>
 				</logic:equal>
 			</logic:equal>
 		

@@ -31,7 +31,7 @@ public class AcquisitionRequestDocument extends AcquisitionRequestDocument_Base 
 		    resourceBundle, acquisitionRequest.getAcquisitionRequestItemsSet());
 	    setContent(byteArray);
 	} catch (JRException e) {
-	    throw new DomainException("error.creating.acquisition.request.document");
+	    throw new DomainException("acquisitionRequestDocument.message.exception.failedCreation");
 	}
 	setFilename(getRequestNumber() + "." + EXTENSION_PDF);
     }

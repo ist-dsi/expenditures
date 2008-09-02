@@ -14,11 +14,11 @@
 	</li>
 </ul>
 
-<bean:message key="label.logs.for.state" bundle="ACQUISITION_RESOURCES"/> <strong><bean:message key="<%= "AcquisitionProcessStateType." + request.getParameter("state") %>" bundle="ENUMERATION_RESOURCES"/></strong>
+<bean:message key="process.logs.label.forState" bundle="EXPENDITURE_RESOURCES"/> <strong><bean:message key="<%= "AcquisitionProcessStateType." + request.getParameter("state") %>" bundle="ENUMERATION_RESOURCES"/></strong>
 
 <p>
 <logic:empty name="operationLogs">
-	<em><bean:message key="label.no.logs.available" bundle="ACQUISITION_RESOURCES"/>.</em>
+	<em><bean:message key="process.logs.info.noLogsAvailable" bundle="EXPENDITURE_RESOURCES"/>.</em>
 </logic:empty>
 
 <fr:view name="operationLogs" schema="viewOperationLog">

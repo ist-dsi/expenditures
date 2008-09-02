@@ -4,7 +4,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
-<h2><bean:message key="label.create.supplier" bundle="ORGANIZATION_RESOURCES"/></h2>
+<h2><bean:message key="supplier.title.create" bundle="ORGANIZATION_RESOURCES"/></h2>
 <br/>
 <fr:edit action="/organization.do?method=createSupplier" name="bean" id="createBean"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.CreateSupplierBean"
