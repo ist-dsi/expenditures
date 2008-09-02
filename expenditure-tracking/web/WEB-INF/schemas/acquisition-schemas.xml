@@ -123,7 +123,7 @@
 <schema name="createAcquisitionRequestItem_NEW_DELIVERY_INFO" extends="createAcquisitionRequestItem.Base"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean"
 		bundle="ACQUISITION_RESOURCES">
-	<slot name="recipient" key="label.recipient" bundle="EXPENDITURES_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+	<slot name="recipient" key="label.recipient" bundle="EXPENDITURE_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
 		<property name="size" value="60"/>
 	</slot>	
 	<slot name="address" layout="address-input" key="label.receptionAddress" bundle="EXPENDITURE_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>

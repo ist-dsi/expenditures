@@ -1,6 +1,6 @@
 <schema name="viewRequestForProposal" bundle="REQUEST_RESOURCES" 
 		type="pt.ist.expenditureTrackingSystem.domain.requests.RequestForProposal"> 
-	<slot name="requester.name" key="label.requester" bundle="EXPENDITURES_RESOURCES"/> 
+	<slot name="requester.name" key="label.requester" bundle="EXPENDITURE_RESOURCES"/> 
 	<slot name="title" key="label.title" bundle="EXPENDITURE_RESOURCES"/>
 	<slot name="expireDate" key="label.expireDate" bundle="REQUEST_RESOURCES"/>
 	<slot name="description" key="label.description" bundle="EXPENDITURE_RESOURCES"/>
