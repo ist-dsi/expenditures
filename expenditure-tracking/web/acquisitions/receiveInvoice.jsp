@@ -37,13 +37,13 @@
 		schema="receiveInvoiceForm"
 		action="<%= urlSave %>">
 	<fr:layout name="tabular">
-		<fr:property name="classes" value="form"/>
+		<fr:property name="classes" value="form mtop05"/>
 		<fr:property name="columnClasses" value=",,tderror"/>
 	</fr:layout>
 		<fr:destination name="cancel" path="<%= urlView %>" />
 </fr:edit>
 
-<p>
+<div class="item">
 	<bean:size id="totalItems" name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestItemsSet"/>
 	<logic:iterate id="acquisitionRequestItem" name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestItemsSet" indexId="index">
 		<bean:define id="currentIndex" value="<%= String.valueOf(index + 1) %>"/>
@@ -51,5 +51,5 @@
 		<bean:define id="acquisitionRequestItem" name="acquisitionRequestItem" toScope="request"/>
 		<jsp:include page="./acquisitionItemDisplay.jsp" flush="false"/>
 	</logic:iterate>
-</p>
+</div>
 

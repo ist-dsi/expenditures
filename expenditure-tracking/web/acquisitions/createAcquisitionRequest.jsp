@@ -38,7 +38,7 @@
 	</logic:iterate>
 </logic:present>
 
-<p>
+<p class="mvert15">
 	<html:link action="/acquisitionProcess.do?method=createAcquisitionRequestDocument" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
 		<bean:message key="acquisitionProcess.link.createRequestDocument" bundle="ACQUISITION_RESOURCES"/>
 	</html:link>
@@ -48,6 +48,6 @@
 
 <fr:form action='<%= "/acquisitionProcess.do?method=viewAcquisitionProcess&acquisitionProcessOid=" +  acquisitionProcessOid %>'>
 	<html:submit styleClass="inputbutton">
-		<bean:message key="button.back" bundle="EXPENDITURE_RESOURCES"/>
+		« <bean:message key="button.back" bundle="EXPENDITURE_RESOURCES"/>
 	</html:submit>
 </fr:form>

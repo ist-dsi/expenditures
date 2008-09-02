@@ -114,7 +114,7 @@
 	</p>
 </div>
 
- 
+
 <logic:present name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestItemsSet">
 
 	<bean:size id="totalItems" name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestItemsSet"/>

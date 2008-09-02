@@ -2,7 +2,7 @@
 body {
 margin-top: 0px;	  
 margin-bottom: 30px;
-background: #f5f5f5;
+background: #f0f0f0;
 }
 
 div, p, form {
@@ -383,11 +383,11 @@ border: none;
 table.form tr td.tderror {
 border-top: none !important;
 border-bottom: none !important;
-color: #c00;
+color: #cc2200;
 /*white-space: nowrap;*/
 }
 table.form tr td.tderror span {
-background-color: #ffeadd;
+background-color: #fff0dd;
 }
 span.required {
 color: #c20;
@@ -448,13 +448,27 @@ margin: 1em 0;
 }
 
 div.error1 {
-border: 1px solid #e2d380;
-padding: 5px 10px;
-background: #ffeadd;
+margin: 0.75em 0;
+}
+div.error1 span {
+padding: 5px 5px 5px 25px;
+background: #ffeddd;
 margin: 1em 0;
-color: #c00;
+color: #cc1500;
+background: #ffeddd url(../images/error01.gif) 3px center no-repeat;
 }
 
+
+div.warning1 {
+margin: 0.75em 0;
+}
+div.warning1 span {
+padding: 5px 5px 5px 25px;
+background: #fbf2cf;
+margin: 1em 0;
+color: #8c6a0b;
+background: #fbf2cf url(../images/warning01.gif) 3px center no-repeat;
+}
 
 table.tstyle1 {
 border-collapse: collapse;

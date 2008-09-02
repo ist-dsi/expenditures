@@ -12,7 +12,6 @@
 <bean:define id="schemaType"
 		name="itemBean"
 		property="createItemSchemaType"/>
-
 <bean:define id="processOID" name="itemBean" property="acquisitionRequest.acquisitionProcess.OID"/>
 <bean:define id="itemOID" name="itemBean" property="item.OID"/>
 <fr:edit id="acquisitionRequestItem" name="itemBean" schema="<%= "createAcquisitionRequestItem_" + schemaType.toString()%>" 
