@@ -12,7 +12,7 @@
 		<bean:message key="login.label.username" bundle="EXPENDITURE_RESOURCES"/>: <input type="text" name="username" size="10"/>
 		<bean:message key="login.label.password" bundle="EXPENDITURE_RESOURCES"/>: <input type="password" name="password" size="10"/>
 		<bean:define id="loginLabel"><bean:message key="login.label.performLogin" bundle="EXPENDITURE_RESOURCES"/></bean:define>
-		<input class=" inputbutton" type="submit" name="Submit" value="<%= loginLabel %>"/>
+		<input class="inputbuttonlogin" type="submit" name="Submit" value="<%= loginLabel %>"/>
 	</form>
 </logic:notPresent>
 <logic:present name="USER_SESSION_ATTRIBUTE">

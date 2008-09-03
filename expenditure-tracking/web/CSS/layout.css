@@ -100,6 +100,13 @@ border: 1px solid #2763A5;
 border: 1px solid #ab4f20;
 font-weight: bold;
 }
+.inputbuttonlogin {
+padding: 3px 4px;
+background: #e89267;
+color: #fff;
+border: 1px solid #ab4f20;
+font-weight: bold;
+}
 
 /**************** header styles ****************/
 #header {
@@ -476,7 +483,7 @@ border-collapse: collapse;
 table.tstyle1 th {
 text-align: left;
 font-weight: normal;
-padding: 2px 0;
+padding: 0.2em 0;
 white-space: nowrap;
 vertical-align: top;
 }

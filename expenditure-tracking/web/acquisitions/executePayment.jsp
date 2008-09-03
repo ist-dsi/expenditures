@@ -10,7 +10,8 @@
 <h2><bean:message key="label.pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.PayAcquisition" bundle="ACQUISITION_RESOURCES"/></h2>
 
 <fr:form action="<%= "/acquisitionProcess.do?method=executePayAcquisitionAction&amp;acquisitionProcessOid=" + processOID %>">
-	<table>
+
+	<table class="form mbottom05">
 		<tr>
 			<td>
 				<bean:message key="acquisitionProcess.label.paymentInfo" bundle="ACQUISITION_RESOURCES"/>: 
@@ -19,12 +20,10 @@
 				<fr:edit id="reference" name="bean" slot="string" />
 			</td>
 		</tr>
-		<tr>
-			<td>
-					<html:submit styleClass="inputbutton"><bean:message key="renderers.form.submit.name" bundle="RENDERER_RESOURCES"/></html:submit>
-			</td>
-			<td>
-			</td>
-		</tr>
-	</table> 
+	</table>
+	
+	<p>
+		<html:submit styleClass="inputbutton"><bean:message key="renderers.form.submit.name" bundle="RENDERER_RESOURCES"/></html:submit>
+	</p>
+
 </fr:form>

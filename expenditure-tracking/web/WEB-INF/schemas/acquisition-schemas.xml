@@ -233,7 +233,6 @@
 <schema name="viewAcquisitionRequester"
 		type="pt.ist.expenditureTrackingSystem.domain.organization.Person"
 		bundle="ACQUISITION_RESOURCES">
-	<slot name="username" key="label.person.username" bundle="ORGANIZATION_RESOURCES"/>
 	<slot name="name" key="unit.label.name" bundle="ORGANIZATION_RESOURCES"/>
 </schema>
 
@@ -304,7 +303,7 @@
 	<slot name="unit.presentationName" read-only="true" key="acquisitionProcess.label.payingUnit"/>
 	<slot name="item.totalItemValue" read-only="true" key="acquisitionRequestItem.label.totalValue"/>
 	<slot name="shareValue" read-only="true" key="acquisitionProcess.label.allocatedShareValue"/>
-	<slot name="item.totalRealValue" read-only="true" key="label.acquisition.request.item.totalRealValue"/>
+	<slot name="item.totalRealValue" read-only="true" key="acquisitionRequestItem.label.totalRealValue"/>
 	<slot name="realShareValue" key="acquisitionProcess.label.realAllocatin" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 </schema>
 
