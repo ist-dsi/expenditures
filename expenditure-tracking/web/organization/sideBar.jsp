@@ -5,7 +5,7 @@
 <ul>
 	<li>
 		<html:link action="/organization.do?method=viewOrganization">
-			<bean:message key="link.view.organization" bundle="EXPENDITURE_RESOURCES"/>
+			<bean:message key="link.viewOrganization" bundle="EXPENDITURE_RESOURCES"/>
 		</html:link>
 	</li>
 	<li>

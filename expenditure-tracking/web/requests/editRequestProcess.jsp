@@ -6,7 +6,7 @@
 <!-- requests/editRequestProcess.jsp -->
 requests/editRequestProcess.jsp
 
-<h2><bean:message key="label.edit.requestForProposal" bundle="EXPENDITURE_RESOURCES"/></h2>
+<h2><bean:message key="process.requestForProposal.title.edit" bundle="EXPENDITURE_RESOURCES"/></h2>
 
 <bean:define id="processOID" name="requestForProposalProcessOid"/>
 <fr:edit id="requestForProposalProcessBean"

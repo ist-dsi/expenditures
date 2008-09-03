@@ -6,7 +6,7 @@
 
 <!-- requests/viewActiveProcesses.jsp -->
 requests/viewActiveRequests.jsp
-<h2> <bean:message key="label.pending.requestForProposal.processes" bundle="EXPENDITURE_RESOURCES"/></h2>
+<h2> <bean:message key="process.requestForProposal.title.pending" bundle="EXPENDITURE_RESOURCES"/></h2>
 
 <logic:empty name="activeRequests">
 	<p><em><bean:message key="process.messages.info.noProcessesToOperate" bundle="EXPENDITURE_RESOURCES"/>.</em></p>

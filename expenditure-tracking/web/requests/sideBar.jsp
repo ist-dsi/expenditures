@@ -9,19 +9,19 @@
 	<logic:present name="<%= SetUserViewFilter.USER_SESSION_ATTRIBUTE %>" property="person">
 		<li>
 			<html:link action="/requestForProposalProcess.do?method=prepareCreateRequestForProposalProcess">
-				<bean:message key="link.create.requestForProposal.process" bundle="EXPENDITURE_RESOURCES"/>
+				<bean:message key="process.requestForProposal.link.create" bundle="EXPENDITURE_RESOURCES"/>
 			</html:link>
 		</li>
 		 
 		<li>
 			<html:link action="/requestForProposalProcess.do?method=searchRequestProposalProcess">
-				<bean:message key="link.search.requestForProposal.process" bundle="EXPENDITURE_RESOURCES"/>
+				<bean:message key="process.requestForProposal.link.search" bundle="EXPENDITURE_RESOURCES"/>
 			</html:link>
 		</li>
 		
 		<li>
 			<html:link action="/requestForProposalProcess.do?method=showPendingRequests">
-				<bean:message key="link.show.requestForProposal.pending.processes" bundle="EXPENDITURE_RESOURCES"/>
+				<bean:message key="process.requestForProposal.link.pending" bundle="EXPENDITURE_RESOURCES"/>
 			</html:link>
 		</li>
 	</logic:present>

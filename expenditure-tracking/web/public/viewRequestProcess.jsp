@@ -10,7 +10,7 @@ public/viewRequestProcess.jsp
 
 <div class="wrapper">
 
-<h2><bean:message key="title.view.requestForProposal.detail" bundle="EXPENDITURE_RESOURCES"/></h2>
+<h2><bean:message key="process.requestForProposal.title.details" bundle="EXPENDITURE_RESOURCES"/></h2>
 
 <jsp:include page="../commons/defaultErrorDisplay.jsp"/>
 

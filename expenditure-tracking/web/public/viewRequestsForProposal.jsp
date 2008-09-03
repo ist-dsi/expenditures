@@ -9,7 +9,7 @@ public/viewRequestsForProposal.jsp
 
 <div class="wrapper">
 
-<h2><bean:message key="title.view.requestForProposal" bundle="EXPENDITURE_RESOURCES"/></h2>
+<h2><bean:message key="process.requestForProposal.title.openRequests" bundle="EXPENDITURE_RESOURCES"/></h2>
 
 
 <logic:empty name="activeRequests">

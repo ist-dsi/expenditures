@@ -25,7 +25,7 @@ requests/viewRequestProcess.jsp
 
 <div class="wrapper">
 
-<h2><bean:message key="label.view.requestForProposal.process" bundle="EXPENDITURE_RESOURCES"/></h2>
+<h2><bean:message key="process.requestForProposal.title.view" bundle="EXPENDITURE_RESOURCES"/></h2>
 
 <jsp:include page="../commons/defaultErrorDisplay.jsp"/>
 

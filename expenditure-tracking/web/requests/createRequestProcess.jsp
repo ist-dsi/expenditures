@@ -5,7 +5,7 @@
 
 <!-- requests/createRequestProcess.jsp -->
 
-<h2><bean:message key="label.create.requestForProposal" bundle="EXPENDITURE_RESOURCES"/></h2>
+<h2><bean:message key="process.requestForProposal.title.create" bundle="EXPENDITURE_RESOURCES"/></h2>
 
 <p>
 	<em class="smalltxt"><bean:message key="messages.info.fieldsWith" bundle="EXPENDITURE_RESOURCES"/> <span class="required">*</span> <bean:message key="messages.info.areRequired" bundle="EXPENDITURE_RESOURCES"/>.</em>

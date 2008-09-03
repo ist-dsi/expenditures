@@ -31,7 +31,7 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	    throw new DomainException("error.acquisition.request.wrong.acquisition.process");
 	}
 	if (person == null) {
-	    throw new DomainException("error.anonymous.creation.of.acquisition.request.information.not.allowed");
+	    throw new DomainException("acquisitionProcess.message.exception.anonymousNotAllowedToCreate");
 	}
     }
 
