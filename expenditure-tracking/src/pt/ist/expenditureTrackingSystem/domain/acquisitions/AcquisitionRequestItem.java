@@ -165,6 +165,7 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	setRealQuantity(acquisitionRequestItemBean.getRealQuantity());
 	setRealUnitValue(acquisitionRequestItemBean.getRealUnitValue());
 	setRealAdditionalCostValue(acquisitionRequestItemBean.getShipment());
+	setRealVatValue(acquisitionRequestItemBean.getRealVatValue());
     }
 
     public void delete() {
