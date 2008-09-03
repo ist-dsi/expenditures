@@ -62,7 +62,7 @@ requests/viewRequestProcess.jsp
 
 <div class="documents">
 	<p>
-		<bean:message key="label.requestForProposal.document" bundle="REQUEST_RESOURCES"/>:
+		<bean:message key="label.proposalDocument" bundle="REQUEST_RESOURCES"/>:
 		<logic:present name="requestForProposalProcess" property="requestForProposal.requestForProposalDocument">
 			<html:link action="/requestForProposalProcess.do?method=downloadRequestForProposalDocument" paramId="requestForProposalDocumentOid" paramName="requestForProposalProcess" paramProperty="requestForProposal.requestForProposalDocument.OID">
 				<bean:write name="requestForProposalProcess" property="requestForProposal.requestForProposalDocument.filename"/>

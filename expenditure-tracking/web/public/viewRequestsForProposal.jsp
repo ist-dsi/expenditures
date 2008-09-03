@@ -19,28 +19,20 @@ public/viewRequestsForProposal.jsp
 <table>
 	<logic:iterate id="requestProcess" name="activeRequests" indexId="Id">
 		<tr>
-			<th>expire date</th>
+			<th><bean:message key="label.expireDate" bundle="REQUEST_RESOURCES"/></th>
 			<td><fr:view name="requestProcess" property="requestForProposal.expireDate"/></td>
 		</tr>
 		<tr>
-			<th>title</th>
+			<th><bean:message key="label.title" bundle="REQUEST_RESOURCES"/></th>
 			<td><fr:view name="requestProcess" property="requestForProposal.title"/></td>
 		</tr>
 		<tr>
 			<th></th>
 			<td>
 				<html:link page="<%= "/home.do?method=viewRequestForProposalProcess" %>" paramId="requestForProposalProcessOid" paramName="requestProcess" paramProperty="OID">
-				ver mais
+				<bean:message key="link.view" bundle="EXPENDITURE_RESOURCES"/>
 				</html:link>
 			</td>
-		</tr>
-		<tr>
-			<th></th>
-			<td></td>
-		</tr>
-		<tr>
-			<th></th>
-			<td></td>
 		</tr>
 	</logic:iterate>
 </table>
