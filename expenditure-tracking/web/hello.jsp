@@ -4,23 +4,6 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
-<logic:notPresent name="user">
-
-	<h2>Anúncios</h2>
-	<p>
-		...
-	</p>
-
-	<h2>Estatísticas</h2>
-	<p>
-		...
-	</p>
-
-	<h2>Documentação</h2>
-	<p>
-		...
-	</p>
-</logic:notPresent>
 <logic:present name="user">
 	<bean:define id="person" name="user" property="person"></bean:define>
 	<logic:equal name="person" property="options.displayAuthorizationPending" value="true">

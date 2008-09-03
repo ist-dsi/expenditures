@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
+<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@page import="pt.ist.expenditureTrackingSystem.presentationTier.Context"%>
 
 <%
@@ -10,17 +11,7 @@
 	<ul>
 		<li>
 			<html:link action="/home.do?method=showActiveRequestsForProposal">
-				Anúncios
-			</html:link>
-		</li>
-		<li>
-			<html:link action="/home.do?method=firstPage">
-				Estatísticas
-			</html:link>
-		</li>
-		<li>
-			<html:link action="/home.do?method=firstPage">
-				Documentação
+				<bean:message key="link.sideBar.home.publicAnnouncements" bundle="EXPENDITURE_RESOURCES"/>
 			</html:link>
 		</li>
 	</ul>

@@ -34,6 +34,9 @@ public class HomeAction extends BaseAction {
 		    .findAcquisitionProcessesPendingAuthorization();
 	    request.setAttribute("pendingAuthorizationAcquisitionProcesses", pendingAuthorizationAcquisitionProcesses);
 	}
+	else {
+	    return showActiveRequestsForProposal(mapping, form, request, response);
+	}
 	request.setAttribute("user", user);
 	return mapping.findForward("page.hello");
     }
