@@ -81,8 +81,8 @@ public class Unit extends Unit_Base {
 	Money result = Money.ZERO;
 	for (final AcquisitionRequest acquisitionRequest : ExpenditureTrackingSystem.getInstance().getAcquisitionRequestsSet()) {
 	    AcquisitionProcess acquisitionProcess = acquisitionRequest.getAcquisitionProcess();
-	    if (acquisitionProcess.getRequestingUnit() == this && acquisitionProcess.isAllocatedToUnit()) {
-		result = result.add(acquisitionRequest.getValueAllocated());
+	    if (acquisitionProcess.isAllocatedToUnit(this)) {
+		result = result.add(acquisitionRequest.getAcquisitionProcess().getAmountAllocatedToUnit(this));
 	    }
 	}
 	for (final Unit unit : getSubUnitsSet()) {

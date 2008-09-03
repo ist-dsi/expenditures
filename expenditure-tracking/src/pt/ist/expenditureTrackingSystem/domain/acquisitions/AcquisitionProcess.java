@@ -38,6 +38,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.UnApprove
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.UnSubmitForApproval;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean;
+import pt.ist.expenditureTrackingSystem.domain.dto.PayingUnitTotalBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
@@ -344,5 +345,20 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
     
     public boolean isPayed() {
 	return isProcessInState(AcquisitionProcessStateType.ACQUISITION_PAYED);
+    }
+    
+    public boolean isAllocatedToUnit(Unit unit) {
+	return isAllocatedToUnit() && getPayingUnits().contains(unit);
+    }
+    
+    public Money getAmountAllocatedToUnit(Unit unit) {
+	Money money = Money.ZERO;
+	for (PayingUnitTotalBean bean : getAcquisitionRequest().getTotalAmountsForEachPayingUnit()) {
+	    if (bean.getPayingUnit() == unit) {
+		money = bean.getAmount();
+		break;
+	    }
+	}
+	return money;
     }
 }

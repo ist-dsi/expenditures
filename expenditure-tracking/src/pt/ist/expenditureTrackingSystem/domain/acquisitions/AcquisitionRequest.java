@@ -277,4 +277,5 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	}
 	return beans;
     }
+
 }
