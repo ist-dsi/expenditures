@@ -22,7 +22,7 @@
 		<fr:property name="key(view)" value="link.view"/>
 		<fr:property name="param(view)" value="OID/acquisitionProcessOid"/>
 		<fr:property name="order(view)" value="1"/>
-		<fr:property name="sortBy" value="dateFromLastActivity, asc"/>
+		<fr:property name="sortBy" value="dateFromLastActivity=asc"/>
 		
 		<fr:property name="conditionalColumnClass(rejectedState)" value="rejected"/>
 		<fr:property name="column(rejectedState)" value="0"/>

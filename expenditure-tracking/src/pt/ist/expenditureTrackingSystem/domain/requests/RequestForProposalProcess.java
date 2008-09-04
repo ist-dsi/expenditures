@@ -34,7 +34,7 @@ public class RequestForProposalProcess extends RequestForProposalProcess_Base {
 	activities.add(new ChooseSupplierProposal());
     }
 
-    protected RequestForProposalProcess(CreateRequestForProposalProcessBean requestBean, final byte[] proposalDocument) {
+    protected RequestForProposalProcess(CreateRequestForProposalProcessBean requestBean, byte[] proposalDocument) {
 	super();
 	new RequestForProposalProcessState(this, RequestForProposalProcessStateType.IN_GENESIS);
 	createRequestForProposal(requestBean, proposalDocument);
@@ -53,7 +53,7 @@ public class RequestForProposalProcess extends RequestForProposalProcess_Base {
 	    throw new DomainException("error.requestForProposalProcess.invalid.state.to.run.createNewRequestForProposalProcess");
 	}
 
-	return new RequestForProposalProcess(requestBean, null);
+	return new RequestForProposalProcess(requestBean, requestForProposalDocument);
     }
 
     @Override

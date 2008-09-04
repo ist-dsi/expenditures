@@ -20,7 +20,7 @@ requests/viewActiveRequests.jsp
 		<fr:property name="key(view)" value="link.view"/>
 		<fr:property name="param(view)" value="OID/requestForProposalProcessOid"/>
 		<fr:property name="order(view)" value="1"/>
-		<fr:property name="sortBy" value="requestForProposal.expireDate, asc"/>
+		<fr:property name="sortBy" value="requestForProposal.expireDate=asc"/>
 	</fr:layout>
 </fr:view>
 

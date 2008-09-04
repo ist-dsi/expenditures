@@ -2,8 +2,6 @@ package pt.ist.expenditureTrackingSystem.domain.requests.activities;
 
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.requests.RequestForProposalProcess;
-import pt.ist.expenditureTrackingSystem.domain.requests.RequestForProposalProcessState;
-import pt.ist.expenditureTrackingSystem.domain.requests.RequestForProposalProcessStateType;
 
 public class ChooseSupplierProposal extends GenericRequestForProposalProcessActivity {
 
