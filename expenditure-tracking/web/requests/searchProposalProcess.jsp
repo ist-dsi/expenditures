@@ -23,7 +23,7 @@
 			schema="viewRequestProcessInList">
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="tstyle2 mtop2"/>
-	
+			<fr:property name="columnClasses" value=",aleft,,,"/>
 			<fr:property name="link(view)" value="/requestForProposalProcess.do?method=viewRequestForProposalProcess"/>
 			<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
 			<fr:property name="key(view)" value="link.view"/>
