@@ -54,12 +54,12 @@ public class AcquisitionProcessStateRenderer extends OutputRenderer {
 		} else {
 
 		    List<OperationLog> logs = process.getOperationLogs();
-
 		    int i = logs.size() - 1;
-		    flowChartContainer.addChild(generateBox(process, logs.get(i--).getState(), currentState));
 
-		    AcquisitionProcessStateType currentType = null;
+		    AcquisitionProcessStateType currentType = logs.get(i--).getState();
 		    AcquisitionProcessStateType newStateType = null;
+		    
+		    flowChartContainer.addChild(generateBox(process, currentType, currentState));
 		    while (i >= 0) {
 			newStateType = logs.get(i).getState();
 			if (currentType != newStateType) {
