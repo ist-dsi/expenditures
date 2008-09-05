@@ -3,17 +3,20 @@ package pt.ist.expenditureTrackingSystem.domain;
 
 valueType org.joda.time.DateTime as DateTime;
 valueType org.joda.time.LocalDate as LocalDate;
+
+valueType pt.ist.expenditureTrackingSystem.domain.util.Address as Address;
 valueType pt.ist.expenditureTrackingSystem.domain.util.ByteArray as ByteArray;
 valueType pt.ist.expenditureTrackingSystem.domain.util.Money as Money;
+
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType as AcquisitionProcessStateType;
 enum pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationType as AuthorizationType;
-valueType pt.ist.expenditureTrackingSystem.domain.util.Address as Address;
-enum pt.ist.expenditureTrackingSystem.domain.RoleType as RoleType;
 enum pt.ist.expenditureTrackingSystem.domain.requests.RequestForProposalProcessStateType as RequestForProposalProcessStateType;
+enum pt.ist.expenditureTrackingSystem.domain.RoleType as RoleType;
 
 
 class ExpenditureTrackingSystem {
 }
+
 
 class requests.RequestForProposalProcessState {
 	RequestForProposalProcessStateType requestForProposalProcessStateType;
@@ -173,6 +176,7 @@ class organization.Supplier {
 class Role {
 	RoleType roleType;
 }
+
 
 relation ExpenditureTrackingSystemGenericProcess {
 	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
