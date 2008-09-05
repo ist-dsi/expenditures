@@ -18,34 +18,14 @@ class ExpenditureTrackingSystem {
 }
 
 
-class requests.RequestForProposalProcessState {
-	RequestForProposalProcessStateType requestForProposalProcessStateType;
-	DateTime whenDateTime;
+class acquisitions.CPVReference {
+	String code;
+	String description;
 }
-	
+
 class acquisitions.AcquisitionProcessState {
 	AcquisitionProcessStateType acquisitionProcessStateType;
 	DateTime whenDateTime;
-}
-
-class processes.GenericProcess {
-	String ojbConcreteClass;
-}
-
-	class acquisitions.AcquisitionProcess extends processes.GenericProcess {
-		String fundAllocationId;
-		LocalDate fundAllocationExpirationDate;
-	}
-
-	class requests.RequestForProposalProcess extends processes.GenericProcess {
-	}
-	
-
-class requests.RequestForProposal {
-	String title;
-	String description;
-	LocalDate publishDate;
-	LocalDate expireDate;
 }
 
 class acquisitions.AcquisitionRequest {
@@ -68,30 +48,11 @@ class acquisitions.AcquisitionRequestItem {
 	Money realAdditionalCostValue;
 }
 
-class acquisitions.CPVReference {
-	String code;
-	String description;
-}
-
 class acquisitions.UnitItem {
 	Boolean itemApproved;
 	Boolean invoiceConfirmed;
 	Money shareValue;
 	Money realShareValue;
-}
-
-class processes.GenericLog {
-	String ojbConcreteClass;
-	DateTime whenOperationWasRan;
-	String operation;
-}
-
-class acquisitions.OperationLog extends processes.GenericLog {
-	AcquisitionProcessStateType state;
-}
-
-class requests.OperationLog extends processes.GenericLog {
-	RequestForProposalProcessStateType state;
 }
 
 class authorizations.Authorization {
@@ -105,6 +66,20 @@ class authorizations.Authorization {
 	class authorizations.DelegatedAuthorization extends authorizations.Authorization {
 	}
 
+class processes.GenericLog {
+	String ojbConcreteClass;
+	DateTime whenOperationWasRan;
+	String operation;
+}
+
+	class acquisitions.OperationLog extends processes.GenericLog {
+		AcquisitionProcessStateType state;
+	}
+
+	class requests.OperationLog extends processes.GenericLog {
+		RequestForProposalProcessStateType state;
+	}
+
 class File {
 	String ojbConcreteClass;
 	String filename;
@@ -112,24 +87,23 @@ class File {
 	String contentType;
 }
 
-	class requests.RequestForProposalDocument extends File {
+	class acquisitions.AcquisitionProposalDocument extends File {
 	}
 
-	class requests.SupplierProposalDocument extends File {
-	}
-	
-	class acquisitions.AcquisitionProposalDocument extends File {
+	class acquisitions.AcquisitionRequestDocument extends File {
+		Integer requestNumber;
 	}
 
 	class acquisitions.Invoice extends File {
 		String invoiceNumber;
 		LocalDate invoiceDate;
+	}	
+
+	class requests.RequestForProposalDocument extends File {
 	}
-	
-	class acquisitions.AcquisitionRequestDocument extends File {
-		Integer requestNumber;
+
+	class requests.SupplierProposalDocument extends File {
 	}
-	
 
 class Options {
 	Boolean displayAuthorizationPending;
@@ -145,6 +119,16 @@ class organization.Person {
 class organization.DeliveryInfo {
 	String recipient;
 	Address address;
+}
+
+class organization.Supplier {
+	String name;
+	String abbreviatedName;
+	String fiscalIdentificationCode;
+	Address address;
+	String phone;
+	String fax;
+	String email;
 }
 
 class organization.Unit {
@@ -163,15 +147,29 @@ class organization.Unit {
 	class organization.SubProject extends organization.Unit {
 	}
 
-class organization.Supplier {
-	String name;
-	String abbreviatedName;
-	String fiscalIdentificationCode;
-	Address address;
-	String phone;
-	String fax;
-	String email;
+class processes.GenericProcess {
+	String ojbConcreteClass;
 }
+
+	class acquisitions.AcquisitionProcess extends processes.GenericProcess {
+		String fundAllocationId;
+		LocalDate fundAllocationExpirationDate;
+	}
+
+	class requests.RequestForProposalProcess extends processes.GenericProcess {
+	}
+
+class requests.RequestForProposal {
+	String title;
+	String description;
+	LocalDate publishDate;
+	LocalDate expireDate;
+}
+
+class requests.RequestForProposalProcessState {
+	RequestForProposalProcessStateType requestForProposalProcessStateType;
+	DateTime whenDateTime;
+}	
 
 class Role {
 	RoleType roleType;
