@@ -9,6 +9,7 @@ valueType pt.ist.expenditureTrackingSystem.domain.util.ByteArray as ByteArray;
 valueType pt.ist.expenditureTrackingSystem.domain.util.Money as Money;
 
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType as AcquisitionProcessStateType;
+enum pt.ist.expenditureTrackingSystem.domain.acquisitions.AfterTheFactAcquisitionType as AfterTheFactAcquisitionType;
 enum pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationType as AuthorizationType;
 enum pt.ist.expenditureTrackingSystem.domain.requests.RequestForProposalProcessStateType as RequestForProposalProcessStateType;
 enum pt.ist.expenditureTrackingSystem.domain.RoleType as RoleType;
@@ -28,9 +29,19 @@ class acquisitions.AcquisitionProcessState {
 	DateTime whenDateTime;
 }
 
-class acquisitions.AcquisitionRequest {
-	String paymentReference;
+class acquisitions.Acquisition {
+	String ojbConcreteClass;
 }
+
+	class acquisitions.AcquisitionAfterTheFact extends acquisitions.Acquisition {
+		AfterTheFactAcquisitionType afterTheFactAcquisitionType;
+		Money value;
+		BigDecimal vatValue;
+	}
+
+	class acquisitions.AcquisitionRequest extends acquisitions.Acquisition {
+		String paymentReference;
+	}
 
 class acquisitions.AcquisitionRequestItem {
 	String description;
@@ -159,6 +170,9 @@ class processes.GenericProcess {
 		LocalDate fundAllocationExpirationDate;
 	}
 
+	class acquisitions.AfterTheFactAcquisitionProcess extends processes.GenericProcess {
+	}
+
 	class requests.RequestForProposalProcess extends processes.GenericProcess {
 	}
 
@@ -186,9 +200,9 @@ relation ExpenditureTrackingSystemGenericProcess {
 	}
 }
 
-relation ExpenditureTrackingSystemAcquisitionRequest {
+relation ExpenditureTrackingSystemAcquisition {
 	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
-	acquisitions.AcquisitionRequest playsRole acquisitionRequests {
+	acquisitions.Acquisition playsRole acquisitions {
 		multiplicity *;
 	}
 }
@@ -260,8 +274,8 @@ relation AcquisitionRequestAcquisitionRequestDocument {
 	acquisitions.AcquisitionRequestDocument playsRole acquisitionRequestDocument;
 }
 
-relation AcquisitionRequestInvoice {
-	acquisitions.AcquisitionRequest playsRole acquisitionRequest;
+relation AcquisitionInvoice {
+	acquisitions.Acquisition playsRole acquisition;
 	acquisitions.Invoice playsRole invoice;
 }
 
@@ -515,4 +529,16 @@ relation DelegatedAuthorizationAuthorization {
 		multiplicity *;
 	}	
 	authorizations.Authorization playsRole authorization; 
+}
+
+relation AfterTheFactAcquisitionProcessAcquisitionAfterTheFact {
+	acquisitions.AfterTheFactAcquisitionProcess playsRole afterTheFactAcquisitionProcess;
+	acquisitions.AcquisitionAfterTheFact playsRole acquisitionAfterTheFact;
+}
+
+relation AcquisitionAfterTheFactSupplier {
+	acquisitions.AcquisitionAfterTheFact playsRole acquisitionsAfterTheFact {
+		multiplicity *;
+	}
+	organization.Supplier playsRole supplier;
 }

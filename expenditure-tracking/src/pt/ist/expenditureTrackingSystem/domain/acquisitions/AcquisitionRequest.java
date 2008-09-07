@@ -16,7 +16,6 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.util.ByteArray;
 import pt.ist.expenditureTrackingSystem.domain.util.Money;
-import pt.ist.fenixframework.pstm.Transaction;
 
 public class AcquisitionRequest extends AcquisitionRequest_Base {
 
@@ -65,6 +64,7 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	return new AcquisitionRequestItem(requestItemBean);
     }
 
+    @Override
     public void delete() {
 	for (AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
 	    acquisitionRequestItem.delete();
@@ -76,8 +76,7 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	removeRequester();
 	removeSupplier();
 	removeAcquisitionProcess();
-	removeExpenditureTrackingSystem();
-	Transaction.deleteObject(this);
+	super.delete();
     }
 
     public String getFiscalIdentificationCode() {
@@ -174,12 +173,9 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	return result;
     }
 
+    @Override
     public void receiveInvoice(final String filename, final byte[] bytes, final String invoiceNumber, final LocalDate invoiceDate) {
-	final Invoice invoice = hasInvoice() ? getInvoice() : new Invoice(this);
-	invoice.setFilename(filename);
-	invoice.setContent(new ByteArray(bytes));
-	invoice.setInvoiceNumber(invoiceNumber);
-	invoice.setInvoiceDate(invoiceDate);
+	super.receiveInvoice(filename, bytes, invoiceNumber, invoiceDate);
 	copyEstimateValuesToRealValues();
     }
 
@@ -197,28 +193,9 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 
     }
 
-    public String getInvoiceNumber() {
-	final Invoice invoice = getInvoice();
-	return invoice == null ? null : invoice.getInvoiceNumber();
-    }
-
-    public LocalDate getInvoiceDate() {
-	final Invoice invoice = getInvoice();
-	return invoice == null ? null : invoice.getInvoiceDate();
-    }
-
     public boolean isFilled() {
 	return hasAcquisitionProposalDocument() && getAcquisitionRequestItemsCount() > 0;
     }
-
-    public boolean isInvoiceReceived() {
-	final Invoice invoice = getInvoice();
-	return invoice != null && invoice.isInvoiceReceived();
-    }
-
-    // public String getCostCenter() {
-    // return getRequestingUnit().getCostCenter();
-    // }
 
     public boolean isEveryItemFullyAttributedToPayingUnits() {
 	for (AcquisitionRequestItem item : getAcquisitionRequestItems()) {
