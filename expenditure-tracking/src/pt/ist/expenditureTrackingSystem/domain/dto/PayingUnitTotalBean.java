@@ -3,47 +3,35 @@ package pt.ist.expenditureTrackingSystem.domain.dto;
 import java.io.Serializable;
 
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.UnitItem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.util.Money;
 import pt.ist.fenixWebFramework.util.DomainReference;
 
 public class PayingUnitTotalBean implements Serializable {
 
-    DomainReference<Unit> payingUnit;
-    DomainReference<AcquisitionRequest> request;
+    DomainReference<Financer> financer;
     Money amount;
 
-    public PayingUnitTotalBean(Unit payingUnit, AcquisitionRequest request) {
-	setPayingUnit(payingUnit);
-	setRequest(request);
-	Money amount = Money.ZERO;
-	for (AcquisitionRequestItem item : request.getAcquisitionRequestItems()) {
-	    UnitItem unitItem = item.getUnitItemFor(payingUnit);
-	    if (unitItem != null && unitItem.getRealShareValue() != null) {
-		amount = amount.add(unitItem.getRealShareValue());
-	    }else if (unitItem != null && unitItem.getShareValue() != null) {
-		amount = amount.add(unitItem.getShareValue());
-	    }
-	}
-	setAmount(amount);
+    public PayingUnitTotalBean(Financer financer) {
+	setFinancer(financer);
+	setAmount(financer.getAmountAllocated());
     }
 
     public Unit getPayingUnit() {
-	return payingUnit.getObject();
+	return getFinancer().getUnit();
     }
 
-    public void setPayingUnit(Unit payingUnit) {
-	this.payingUnit = new DomainReference<Unit>(payingUnit);
+    public Financer getFinancer() {
+	return financer.getObject();
+    }
+
+    public void setFinancer(Financer financer) {
+	this.financer = new DomainReference<Financer>(financer);
     }
 
     public AcquisitionRequest getRequest() {
-	return request.getObject();
-    }
-
-    public void setRequest(AcquisitionRequest request) {
-	this.request = new DomainReference<AcquisitionRequest>(request);
+	return getFinancer().getFundedRequest();
     }
 
     public Money getAmount() {
@@ -60,7 +48,7 @@ public class PayingUnitTotalBean implements Serializable {
 		&& ((PayingUnitTotalBean) obj).getRequest() == getRequest()
 		&& ((PayingUnitTotalBean) obj).getAmount().equals(getAmount());
     }
-    
+
     @Override
     public int hashCode() {
 	return getPayingUnit().hashCode() + getRequest().hashCode();

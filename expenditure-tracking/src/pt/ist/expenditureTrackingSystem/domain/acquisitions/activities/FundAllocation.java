@@ -1,5 +1,7 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.activities;
 
+import java.util.List;
+
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessState;
@@ -20,9 +22,10 @@ public class FundAllocation extends GenericAcquisitionProcessActivity {
 
     @Override
     protected void process(AcquisitionProcess process, Object... objects) {
-	final FundAllocationBean fundAllocationBean = (FundAllocationBean) objects[0];
-	final String fundAllocationId = fundAllocationBean.getFundAllocationId();
-	process.setFundAllocationId(fundAllocationId);
+	final List<FundAllocationBean> fundAllocationBeans = (List<FundAllocationBean>) objects[0];
+	for (FundAllocationBean fundAllocationBean : fundAllocationBeans) {
+	    fundAllocationBean.getFinancer().setFundAllocationId(fundAllocationBean.getFundAllocationId());
+	}
 	new AcquisitionProcessState(process, AcquisitionProcessStateType.FUNDS_ALLOCATED);
     }
 

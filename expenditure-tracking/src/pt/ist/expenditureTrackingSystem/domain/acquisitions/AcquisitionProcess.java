@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
@@ -38,7 +39,6 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.UnApprove
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.UnSubmitForApproval;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean;
-import pt.ist.expenditureTrackingSystem.domain.dto.PayingUnitTotalBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
@@ -122,7 +122,8 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 		createAcquisitionProcessBean.getRequester());
 	process.getAcquisitionRequest().setRequestingUnit(createAcquisitionProcessBean.getRequestingUnit());
 	if (createAcquisitionProcessBean.isRequestUnitPayingUnit()) {
-	    process.getAcquisitionRequest().addPayingUnits(createAcquisitionProcessBean.getRequestingUnit());
+	    process.getAcquisitionRequest().addFinancers(
+		    new Financer(process.getAcquisitionRequest(), createAcquisitionProcessBean.getRequestingUnit()));
 	}
 
 	return process;
@@ -137,7 +138,11 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
     }
 
     public List<Unit> getPayingUnits() {
-	return getAcquisitionRequest().getPayingUnits();
+	List<Unit> res = new ArrayList<Unit>();
+	for (Financer financer : getAcquisitionRequest().getFinancers()) {
+	    res.add(financer.getUnit());
+	}
+	return res;
     }
 
     public boolean isResponsibleForUnit(Person person) {
@@ -342,23 +347,20 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
     public boolean isAllocatedToUnit() {
 	return getAcquisitionProcessStateType().compareTo(AcquisitionProcessStateType.FUNDS_ALLOCATED) >= 0;
     }
-    
+
     public boolean isPayed() {
 	return isProcessInState(AcquisitionProcessStateType.ACQUISITION_PAYED);
     }
-    
+
     public boolean isAllocatedToUnit(Unit unit) {
 	return isAllocatedToUnit() && getPayingUnits().contains(unit);
     }
-    
+
     public Money getAmountAllocatedToUnit(Unit unit) {
-	Money money = Money.ZERO;
-	for (PayingUnitTotalBean bean : getAcquisitionRequest().getTotalAmountsForEachPayingUnit()) {
-	    if (bean.getPayingUnit() == unit) {
-		money = bean.getAmount();
-		break;
-	    }
-	}
-	return money;
+	return getAcquisitionRequest().getAmountAllocatedToUnit(unit);
+    }
+
+    public Set<Financer> getFinancersWithFundsAllocated() {
+	return getAcquisitionRequest().getFinancersWithFundsAllocated();
     }
 }

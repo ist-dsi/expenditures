@@ -90,19 +90,40 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	setAdditionalCostValue(additionalCostValue);
     }
 
-    public Money getTotalItemValue() {
+    public Money getTotalItemValueWithAdditionalCosts() {
 	if (getAdditionalCostValue() == null) {
-	    return getUnitValue().multiply(getQuantity());
+	    return getTotalItemValue();
 	}
-	return getUnitValue().multiply(getQuantity()).add(getAdditionalCostValue());
+	return getTotalItemValue().add(getAdditionalCostValue());
+    }
+
+    public Money getTotalItemValueWithAdditionalCostsAndVat() {
+	return getAdditionalCostValue() != null ? getTotalItemValueWithVat().add(getAdditionalCostValue())
+		: getTotalItemValueWithVat();
+    }
+
+    public Money getTotalItemValue() {
+	return getUnitValue().multiply(getQuantity());
     }
 
     public Money getTotalRealValue() {
 	if (getRealUnitValue() == null || getRealQuantity() == null) {
 	    return null;
 	}
-	Money totalRealValue = getRealUnitValue().multiply(getRealQuantity());
+	return getRealUnitValue().multiply(getRealQuantity());
+    }
+
+    public Money getTotalRealValueWithAdditionalCosts() {
+	if (getRealUnitValue() == null || getRealQuantity() == null) {
+	    return null;
+	}
+	Money totalRealValue = getTotalRealValue();
 	return getRealAdditionalCostValue() == null ? totalRealValue : totalRealValue.add(getRealAdditionalCostValue());
+    }
+
+    public Money getTotalRealValueWithAdditionalCostsAndVat() {
+	return getRealAdditionalCostValue() != null ? (getTotalRealVatValue() != null ? getTotalRealValueWithVat().add(
+		getRealAdditionalCostValue()) : null) : getTotalRealValueWithVat();
     }
 
     public Money getTotalItemValueWithVat() {
@@ -110,7 +131,7 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
     }
 
     public Money getTotalRealValueWithVat() {
-	return getTotalItemValueWithVat().addPercentage(getRealVatValue());
+	return getTotalRealValue() != null ? getTotalRealValue().addPercentage(getRealVatValue()) : null;
     }
 
     public Money getTotalAssignedValue() {
@@ -195,7 +216,8 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
     }
 
     public boolean isFilledWithRealValues() {
-	return getRealQuantity() != null && getRealUnitValue() != null && (getAdditionalCostValue() == null || getRealAdditionalCostValue() != null);
+	return getRealQuantity() != null && getRealUnitValue() != null
+		&& (getAdditionalCostValue() == null || getRealAdditionalCostValue() != null);
     }
 
     public boolean isValueFullyAttributedToUnits() {
@@ -204,7 +226,7 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	    totalValue = totalValue.add(unitItem.getShareValue());
 	}
 
-	return totalValue.equals(getTotalItemValue());
+	return totalValue.equals(getTotalItemValueWithAdditionalCostsAndVat());
     }
 
     public boolean isRealValueFullyAttributedToUnits() {
@@ -215,11 +237,15 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	    }
 	}
 
-	return totalValue.equals(getTotalRealValue());
+	return totalValue.equals(getTotalRealValueWithAdditionalCostsAndVat());
+    }
+
+    public void createUnitItem(Financer financer, Money shareValue) {
+	new UnitItem(financer, this, shareValue, Boolean.FALSE);
     }
 
     public void createUnitItem(Unit unit, Money shareValue) {
-	new UnitItem(unit, this, shareValue, Boolean.FALSE);
+	createUnitItem(getAcquisitionRequest().addPayingUnit(unit), shareValue);
     }
 
     public List<Unit> getPayingUnits() {
@@ -270,7 +296,7 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	}
 	return false;
     }
-    
+
     public boolean isApproved() {
 	for (UnitItem unitItem : getUnitItems()) {
 	    if (!unitItem.getItemApproved()) {
@@ -331,9 +357,17 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	    public int compare(UnitItem unitItem1, UnitItem unitItem2) {
 		return unitItem1.getUnit().getPresentationName().compareTo(unitItem2.getUnit().getPresentationName());
 	    }
-	    
+
 	});
-	
+
 	return unitItems;
+    }
+
+    public Money getTotalVatValue() {
+	return getTotalItemValue().percentage(getVatValue());
+    }
+
+    public Money getTotalRealVatValue() {
+	return getTotalRealValue() != null ? getTotalRealValue().percentage(getRealVatValue()) : null;
     }
 }

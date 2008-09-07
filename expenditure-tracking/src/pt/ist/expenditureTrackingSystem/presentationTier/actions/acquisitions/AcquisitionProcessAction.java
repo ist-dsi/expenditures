@@ -22,6 +22,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProposalD
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Invoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.SearchAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.UnitItem;
@@ -67,6 +68,7 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "edit.request.item.real.values", path = "/acquisitions/editRequestItemRealValues.jsp"),
 	@Forward(name = "assign.unit.item", path = "/acquisitions/assignUnitItem.jsp"),
 	@Forward(name = "edit.real.shares.values", path = "/acquisitions/editRealSharesValues.jsp"),
+	@Forward(name = "edit.supplier.address", path = "/acquisitions/editSupplierAddress.jsp"),
 	@Forward(name = "execute.payment", path = "/acquisitions/executePayment.jsp") })
 public class AcquisitionProcessAction extends ProcessAction {
 
@@ -232,16 +234,19 @@ public class AcquisitionProcessAction extends ProcessAction {
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
-	final FundAllocationBean fundAllocationBean = new FundAllocationBean();
-	request.setAttribute("fundAllocationBean", fundAllocationBean);
+	List<FundAllocationBean> fundAllocationBeans = new ArrayList<FundAllocationBean>();
+	for (Financer financer : acquisitionProcess.getFinancersWithFundsAllocated()) {
+	    fundAllocationBeans.add(new FundAllocationBean(financer));
+	}
+	request.setAttribute("fundAllocationBeans", fundAllocationBeans);
 	return mapping.findForward("allocate.funds");
     }
 
     public ActionForward allocateFunds(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) {
 	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
-	final FundAllocationBean fundAllocationBean = getRenderedObject();
-	genericActivityExecution(acquisitionProcess, "FundAllocation", fundAllocationBean);
+	final List<FundAllocationBean> fundAllocationBeans = getRenderedObject();
+	genericActivityExecution(acquisitionProcess, "FundAllocation", fundAllocationBeans);
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
 
@@ -582,7 +587,7 @@ public class AcquisitionProcessAction extends ProcessAction {
 	}
 	if (assigned != 0) {
 	    Money[] shareValues;
-	    shareValues = item.getTotalItemValue().allocate(assigned);
+	    shareValues = item.getTotalItemValueWithAdditionalCostsAndVat().allocate(assigned);
 
 	    int i = 0;
 	    for (UnitItemBean bean : beans) {
@@ -665,4 +670,11 @@ public class AcquisitionProcessAction extends ProcessAction {
 	return executeActivityAndViewProcess(mapping, form, request, response, "CancelRemoveFundAllocationExpirationDate");
     }
 
+    public ActionForward editSupplierAddress(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
+	request.setAttribute("acquisitionProcess", acquisitionProcess);
+
+	return mapping.findForward("edit.supplier.address");
+    }
 }

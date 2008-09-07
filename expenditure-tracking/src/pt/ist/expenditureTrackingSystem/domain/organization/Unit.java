@@ -20,7 +20,7 @@ public class Unit extends Unit_Base {
 	public int compare(final Unit unit1, Unit unit2) {
 	    return unit1.getPresentationName().compareTo(unit2.getPresentationName());
 	}
-	
+
     };
 
     public Unit() {
@@ -60,6 +60,10 @@ public class Unit extends Unit_Base {
 	if (!getAuthorizationsSet().isEmpty()) {
 	    throw new DomainException("error.cannot.delete.units.which.have.or.had.authorizations");
 	}
+	if (hasAnyFinancedItems()) {
+	    throw new DomainException("error.cannot.delete.units.which.have.or.had.financedItems");
+	}
+
 	for (final Unit unit : getSubUnitsSet()) {
 	    unit.delete();
 	}

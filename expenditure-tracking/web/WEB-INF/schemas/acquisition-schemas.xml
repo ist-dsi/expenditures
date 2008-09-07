@@ -45,6 +45,9 @@
 	<slot name="acquisitionProcess.acquisitionProcessState.localizedName" key="label.processState" bundle="EXPENDITURE_RESOURCES"/>
 	<slot name="fiscalIdentificationCode" key="supplier.label.fiscalCode" bundle="ORGANIZATION_RESOURCES"/>
 	<slot name="totalItemValue" key="acquisitionRequestItem.label.totalValue" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="totalVatValue" key="acquisitionRequestItem.label.vat" bundle="ACQUISITION_RESOURCES"/>	
+	<slot name="totalAdditionalCostsValue" key="acquisitionRequestItem.label.additionalCosts" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="totalItemValueWithAdditionalCostsAndVat" key="acquisitionRequestItem.label.totalValueWithAdditionalCostsAndVat" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="acquisitionProcess.fundAllocationId" key="acquisitionProcess.label.fundAllocation.identification" bundle="ACQUISITION_RESOURCES" layout="null-as-label">
 		<property name="subLayout" value="default"/>
 	</slot>
@@ -339,4 +342,9 @@
 		</slot>
 		<slot name="canDelegate" key="authorizations.label.canDelegate" bundle="ORGANIZATION_RESOURCES"/>
 		<slot name="endDate" key="authorizations.label.endDate" bundle="EXPENDITURE_RESOURCES"/>
+</schema>
+
+<schema name="editFinancerFundAllocationId" type="pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean" bundle="ACQUISITION_RESOURCES">
+	<slot name="financer.unit.presentationName" key="unit.label.unit" read-only="true" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="fundAllocationId" key="financer.label.fundAllocation.identification" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 </schema>

@@ -26,7 +26,9 @@ public class AssignPayingUnitToItem extends GenericAcquisitionProcessActivity {
 	AcquisitionRequestItem item = (AcquisitionRequestItem) objects[0];
 	List<UnitItemBean> beans = (List<UnitItemBean>) objects[1];
 
-	item.getUnitItems().clear();
+	for (; !item.getUnitItems().isEmpty(); item.getUnitItems().get(0).delete())
+	    ;
+
 	for (UnitItemBean bean : beans) {
 	    if (bean.getAssigned()) {
 		item.createUnitItem(bean.getUnit(), bean.getShareValue());

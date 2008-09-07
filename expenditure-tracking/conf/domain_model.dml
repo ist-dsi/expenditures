@@ -55,6 +55,10 @@ class acquisitions.UnitItem {
 	Money realShareValue;
 }
 
+class acquisitions.Financer {
+	String fundAllocationId;
+}
+
 class authorizations.Authorization {
 	String ojbConcreteClass;
 	AuthorizationType authorizationType;
@@ -152,7 +156,6 @@ class processes.GenericProcess {
 }
 
 	class acquisitions.AcquisitionProcess extends processes.GenericProcess {
-		String fundAllocationId;
 		LocalDate fundAllocationExpirationDate;
 	}
 
@@ -444,20 +447,25 @@ relation AcquisitionRequestRequestingUnit {
 	organization.Unit playsRole requestingUnit;
 }
 
-relation AcquisitionRequestPayingUnit {
-	acquisitions.AcquisitionRequest playsRole fundedRequests {
-		multiplicity *;
-	}
-	organization.Unit playsRole payingUnits {
+relation AcquisitionRequestFinancer {
+	acquisitions.AcquisitionRequest playsRole fundedRequest;
+	acquisitions.Financer playsRole financers {
 		multiplicity *;
 	}
 }
 
-relation UnitItemUnit {
-	organization.Unit playsRole unit;
+relation UnitItemFinancer {
+	acquisitions.Financer playsRole financer;
 	acquisitions.UnitItem playsRole unitItems {
 		multiplicity *;
 	}
+}
+
+relation UnitFinancer {
+	acquisitions.Financer playsRole financedItems{
+		multiplicity *;
+	}
+	organization.Unit playsRole unit;
 }
 
 relation ItemUnitItem {
@@ -474,12 +482,20 @@ relation PersonDeliveryInfo {
 	}
 }
 
+relation ExpenditureTrackingSystemFinancer {
+	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
+	acquisitions.Financer playsRole financers {
+		multiplicity *;
+	}
+}
+
 relation ExpenditureTrackingSystemDeliveryInfo {
 	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
 	organization.DeliveryInfo playsRole deliveryInfos {
 		multiplicity *;
 	}
 }
+
 relation ExpenditureTrackingSystemCPVReference {
 	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
 	acquisitions.CPVReference playsRole cPVReferences {

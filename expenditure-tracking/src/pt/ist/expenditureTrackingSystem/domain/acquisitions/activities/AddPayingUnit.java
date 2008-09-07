@@ -8,7 +8,6 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessSt
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 
-
 public class AddPayingUnit extends GenericAcquisitionProcessActivity {
 
     @Override
@@ -27,9 +26,7 @@ public class AddPayingUnit extends GenericAcquisitionProcessActivity {
 	List<Unit> units = (List<Unit>) objects[0];
 	AcquisitionRequest request = process.getAcquisitionRequest();
 	for (Unit unit : units) {
-	    if (!request.hasPayingUnits(unit)) {
-		request.addPayingUnits(unit);
-	    }
+	    request.addPayingUnit(unit);
 	}
 
     }

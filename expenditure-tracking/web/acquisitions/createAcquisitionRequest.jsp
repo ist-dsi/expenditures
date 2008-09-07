@@ -25,6 +25,8 @@
 		<fr:property name="classes" value="tstyle1"/>
 	</fr:layout>
 </fr:view>
+<bean:define id="acquisitionProcessOID" name="acquisitionProcess" property="OID"/>
+<html:link action="/acquisitionProcess.do?method=editSupplierAddress" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID"><bean:message key="acquisitionRequestDocument.link.editSupplierAddress" bundle="ACQUISITION_RESOURCES"/></html:link>
 </div>
 
 <logic:present name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestItemsSet">

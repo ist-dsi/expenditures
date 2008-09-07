@@ -12,6 +12,7 @@
 	<property name="src_gen" location="src_gen"/>
 	<property name="web" location="web"/>
 	<property name="reports" location="reports"/>	
+	<property name="reports.images" location="reports/images"/>
 
 	<!-- Web Directories -->
 	<property name="build.home.webinf" value="${web}/WEB-INF"/>
@@ -19,6 +20,7 @@
 	<property name="build.home.webinf.libs" value="${build.home.webinf}/lib"/>
 	
 	<property name="build.home.reports" value="${build.home.webinf.classes}/reports"/>
+	<property name="build.home.reports.images" value="${build.home.webinf.classes}/images"/>
 
 	<!-- Directories for deploy -->
 	<property name="deploy.home" location="deploy"/>
@@ -169,6 +171,7 @@
 
 	<target name="compile-reports" >
 		<mkdir dir="${build.home.reports}"/>
+		<mkdir dir="${build.home.reports.images}"/>
 		<taskdef name="jrc" 
 		      classname="net.sf.jasperreports.ant.JRAntCompileTask">
 			<classpath refid="class.path.ref"/>
@@ -180,6 +183,9 @@
 			</classpath>
 			<include name="**/*.jrxml"/>
 		</jrc>
+		<copy todir="${build.home.reports.images}/">
+			<fileset dir="${reports.images}"/>
+		</copy>
 	</target>
 
 </project>

@@ -33,16 +33,13 @@
 
 <bean:define id="urlActivity">/acquisitionProcess.do?method=allocateFunds&amp;acquisitionProcessOid=<bean:write name="acquisitionProcess" property="OID"/></bean:define>
 <bean:define id="urlView">/acquisitionProcess.do?method=viewAcquisitionProcess&amp;acquisitionProcessOid=<bean:write name="acquisitionProcess" property="OID"/></bean:define>
-<fr:edit id="fundAllocationBean"
-		name="fundAllocationBean"
-		type="pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean"
-		schema="allocateFunds"
-		action="<%= urlActivity %>">
-	<fr:layout name="tabular">
-		<fr:property name="classes" value="form mtop05"/>
-		<fr:property name="columnClasses" value=",,tderror"/>
+<fr:edit action="<%= urlActivity %>" 
+		id="financerFundAllocationId" 
+		schema="editFinancerFundAllocationId" 
+		name="fundAllocationBeans" >
+	<fr:layout name="tabular-editable">
 	</fr:layout>
-		<fr:destination name="cancel" path="<%= urlView %>" />
+	<fr:destination name="cancel" path="<%= urlView %>" />
 </fr:edit>
 
 <div class="item">

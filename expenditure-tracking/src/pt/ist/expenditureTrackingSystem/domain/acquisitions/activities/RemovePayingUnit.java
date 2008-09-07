@@ -21,13 +21,12 @@ public class RemovePayingUnit extends GenericAcquisitionProcessActivity {
 	return process.isProcessInState(AcquisitionProcessStateType.IN_GENESIS);
     }
 
-
     @Override
     protected void process(AcquisitionProcess process, Object... objects) {
 	List<Unit> units = (List<Unit>) objects[0];
 	AcquisitionRequest request = process.getAcquisitionRequest();
 	for (Unit unit : units) {
-		request.removePayingUnits(unit);
+	    request.removePayingUnit(unit);
 	}
     }
 

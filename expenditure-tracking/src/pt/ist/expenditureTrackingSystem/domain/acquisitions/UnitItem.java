@@ -9,19 +9,19 @@ import pt.ist.fenixframework.pstm.Transaction;
 
 public class UnitItem extends UnitItem_Base {
 
-    public UnitItem(Unit unit, AcquisitionRequestItem item, Money shareValue, Boolean isApproved) {
+    public UnitItem(Financer financer, AcquisitionRequestItem item, Money shareValue, Boolean isApproved) {
 
-	checkParameters(unit, item, shareValue, isApproved);
+	checkParameters(financer, item, shareValue, isApproved);
 
-	setUnit(unit);
+	setFinancer(financer);
 	setItem(item);
 	setShareValue(shareValue);
 	setItemApproved(isApproved);
 	setInvoiceConfirmed(Boolean.FALSE);
     }
 
-    private void checkParameters(Unit unit, AcquisitionRequestItem item, Money shareValue, Boolean isApproved) {
-	if (unit == null || item == null || shareValue == null || isApproved == null) {
+    private void checkParameters(Financer financer, AcquisitionRequestItem item, Money shareValue, Boolean isApproved) {
+	if (financer == null || item == null || shareValue == null || isApproved == null) {
 	    throw new DomainException("unitItem.message.exception.parametersCannotBeNull");
 	}
 
@@ -34,7 +34,7 @@ public class UnitItem extends UnitItem_Base {
 	}
 
 	Money currentAssignedValue = item.getTotalAssignedValue();
-	if (currentAssignedValue.add(shareValue).isGreaterThan(item.getTotalItemValue())) {
+	if (currentAssignedValue.add(shareValue).isGreaterThan(item.getTotalItemValueWithAdditionalCostsAndVat())) {
 	    throw new DomainException("unitItem.message.exception.assignedValuedBiggerThanTotal");
 	}
     }
@@ -48,7 +48,7 @@ public class UnitItem extends UnitItem_Base {
     }
 
     public void delete() {
-	removeUnit();
+	removeFinancer();
 	removeItem();
 	Transaction.deleteObject(this);
     }
@@ -56,7 +56,7 @@ public class UnitItem extends UnitItem_Base {
     @Override
     public void setRealShareValue(Money realShareValue) {
 	if (realShareValue != null) {
-	    Money totalAmount = getItem().getTotalRealValue();
+	    Money totalAmount = getItem().getTotalRealValueWithAdditionalCostsAndVat();
 	    Money currentAssignedValue = getItem().getTotalRealAssignedValue();
 
 	    if (currentAssignedValue.add(realShareValue).isGreaterThan(totalAmount)) {
@@ -64,5 +64,9 @@ public class UnitItem extends UnitItem_Base {
 	    }
 	}
 	super.setRealShareValue(realShareValue);
+    }
+
+    public Unit getUnit() {
+	return getFinancer().getUnit();
     }
 }
