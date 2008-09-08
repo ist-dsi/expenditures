@@ -17,7 +17,8 @@ public class FundAllocation extends GenericAcquisitionProcessActivity {
 
     @Override
     protected boolean isAvailable(AcquisitionProcess process) {
-	return process.isApproved() && !process.isProcessInState(AcquisitionProcessStateType.CANCELED);
+	return process.isProcessInState(AcquisitionProcessStateType.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER)
+		&& !process.isProcessInState(AcquisitionProcessStateType.CANCELED);
     }
 
     @Override

@@ -380,4 +380,28 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	}
 	return true;
     }
+
+    public void submittedForFundsAllocation(Person person) {
+	for (AcquisitionRequestItem item : getAcquisitionRequestItems()) {
+	    item.submittedForFundsAllocation(person);
+	}
+    }
+
+    public boolean isSubmittedForFundsAllocationByAllResponsibles() {
+	for (AcquisitionRequestItem item : getAcquisitionRequestItems()) {
+	    if (!item.isSubmittedForFundsAllocation()) {
+		return false;
+	    }
+	}
+	return true;
+    }
+
+    public boolean hasBeenSubmittedForFundsAllocationBy(Person person) {
+	for (AcquisitionRequestItem item : getAcquisitionRequestItems()) {
+	    if (item.hasBeenSubmittedForFundsAllocationBy(person)) {
+		return true;
+	    }
+	}
+	return false;
+    }
 }

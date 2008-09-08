@@ -230,6 +230,12 @@ public class AcquisitionProcessAction extends ProcessAction {
 	return executeActivityAndViewProcess(mapping, form, request, response, "ApproveAcquisitionProcess", user.getPerson());
     }
 
+    public ActionForward executeSubmitForFundAllocation(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	User user = UserView.getUser();
+	return executeActivityAndViewProcess(mapping, form, request, response, "SubmitForFundAllocation", user.getPerson());
+    }
+
     public ActionForward executeFundAllocation(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");

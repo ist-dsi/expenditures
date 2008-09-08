@@ -35,6 +35,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.RemoveFun
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.RemoveFundAllocationExpirationDate;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.RemovePayingUnit;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.SubmitForApproval;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.SubmitForFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.UnApproveAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.UnSubmitForApproval;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
@@ -72,6 +73,9 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 	requestInformationActivities.add(new DeleteAcquisitionProcess());
 	requestInformationActivities.add(new SubmitForApproval());
 
+	requestInformationActivities.add(new SubmitForFundAllocation());
+	requestInformationActivities.add(new FundAllocationExpirationDate());
+
 	requestInformationActivities.add(new ApproveAcquisitionProcess());
 	requestInformationActivities.add(new RejectAcquisitionProcess());
 
@@ -80,7 +84,6 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 
 	requestInformationActivities.add(new FundAllocation());
 	requestInformationActivities.add(new RemoveFundAllocation());
-	requestInformationActivities.add(new FundAllocationExpirationDate());
 	requestInformationActivities.add(new RemoveFundAllocationExpirationDate());
 	requestInformationActivities.add(new CancelAcquisitionRequest());
 

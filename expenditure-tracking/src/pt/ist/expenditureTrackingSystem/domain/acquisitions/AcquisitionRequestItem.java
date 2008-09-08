@@ -241,7 +241,7 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
     }
 
     public void createUnitItem(Financer financer, Money shareValue) {
-	new UnitItem(financer, this, shareValue, Boolean.FALSE);
+	new UnitItem(financer, this, shareValue, Boolean.FALSE, Boolean.FALSE);
     }
 
     public void createUnitItem(Unit unit, Money shareValue) {
@@ -369,5 +369,35 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 
     public Money getTotalRealVatValue() {
 	return getTotalRealValue() != null ? getTotalRealValue().percentage(getRealVatValue()) : null;
+    }
+
+    public void submittedForFundsAllocation(Person person) {
+	modifySubmittedForFundsAllocationStateFor(person, Boolean.TRUE);
+    }
+
+    private void modifySubmittedForFundsAllocationStateFor(Person person, Boolean value) {
+	for (UnitItem unitItem : getUnitItems()) {
+	    if (unitItem.getUnit().isResponsible(person)) {
+		unitItem.setSubmitedForFundsAllocation(value);
+	    }
+	}
+    }
+
+    public boolean isSubmittedForFundsAllocation() {
+	for (UnitItem unitItem : getUnitItems()) {
+	    if (!unitItem.getSubmitedForFundsAllocation()) {
+		return false;
+	    }
+	}
+	return true;
+    }
+
+    public boolean hasBeenSubmittedForFundsAllocationBy(Person person) {
+	for (UnitItem unitItem : getUnitItems()) {
+	    if (unitItem.getUnit().isResponsible(person) && unitItem.getSubmitedForFundsAllocation()) {
+		return true;
+	    }
+	}
+	return false;
     }
 }

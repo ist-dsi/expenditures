@@ -38,6 +38,7 @@
 		schema="editFinancerFundAllocationId" 
 		name="fundAllocationBeans" >
 	<fr:layout name="tabular-editable">
+		<fr:property name="classes" value="tstyle2"/>
 	</fr:layout>
 	<fr:destination name="cancel" path="<%= urlView %>" />
 </fr:edit>

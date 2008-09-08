@@ -9,7 +9,8 @@ import pt.ist.fenixframework.pstm.Transaction;
 
 public class UnitItem extends UnitItem_Base {
 
-    public UnitItem(Financer financer, AcquisitionRequestItem item, Money shareValue, Boolean isApproved) {
+    public UnitItem(Financer financer, AcquisitionRequestItem item, Money shareValue, Boolean isApproved,
+	    Boolean isSubmitedForFundsAllocation) {
 
 	checkParameters(financer, item, shareValue, isApproved);
 
@@ -17,6 +18,7 @@ public class UnitItem extends UnitItem_Base {
 	setItem(item);
 	setShareValue(shareValue);
 	setItemApproved(isApproved);
+	setSubmitedForFundsAllocation(isSubmitedForFundsAllocation);
 	setInvoiceConfirmed(Boolean.FALSE);
     }
 

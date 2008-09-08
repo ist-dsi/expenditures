@@ -60,6 +60,7 @@ class acquisitions.AcquisitionRequestItem {
 }
 
 class acquisitions.UnitItem {
+	Boolean submitedForFundsAllocation;
 	Boolean itemApproved;
 	Boolean invoiceConfirmed;
 	Money shareValue;

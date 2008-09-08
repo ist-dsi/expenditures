@@ -5,7 +5,7 @@ import java.util.ResourceBundle;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 
 public enum AcquisitionProcessStateType {
-    
+
     IN_GENESIS {
 
 	@Override
@@ -24,7 +24,7 @@ public enum AcquisitionProcessStateType {
 	}
 
     },
-    
+
     SUBMITTED_FOR_APPROVAL {
 
 	@Override
@@ -38,9 +38,11 @@ public enum AcquisitionProcessStateType {
 	}
 
     },
-    
-    APPROVED, 
-    
+
+    SUBMITTED_FOR_FUNDS_ALLOCATION,
+
+    FUNDS_ALLOCATED_TO_SERVICE_PROVIDER,
+
     FUNDS_ALLOCATED {
 
 	@Override
@@ -49,17 +51,17 @@ public enum AcquisitionProcessStateType {
 	}
 
     },
-    
-    FUNDS_ALLOCATED_TO_SERVICE_PROVIDER, 
-    
-    ACQUISITION_PROCESSED, 
-    
-    INVOICE_RECEIVED, 
-    
-    INVOICE_CONFIRMED, 
-    
-    FUNDS_ALLOCATED_PERMANENTLY, 
-    
+
+    APPROVED,
+
+    ACQUISITION_PROCESSED,
+
+    INVOICE_RECEIVED,
+
+    INVOICE_CONFIRMED,
+
+    FUNDS_ALLOCATED_PERMANENTLY,
+
     ACQUISITION_PAYED {
 
 	@Override
@@ -131,9 +133,9 @@ public enum AcquisitionProcessStateType {
     public boolean isBlocked(final AcquisitionProcessStateType currentStateType) {
 	return false;
     }
-    
+
     public boolean isActive() {
-	return (this != REJECTED && this != CANCELED); 
+	return (this != REJECTED && this != CANCELED);
     }
 
 }

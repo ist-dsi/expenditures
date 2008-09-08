@@ -6,26 +6,27 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessSt
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
-public class ApproveAcquisitionProcess extends GenericAcquisitionProcessActivity {
+public class SubmitForFundAllocation extends GenericAcquisitionProcessActivity {
 
     @Override
     protected boolean isAccessible(AcquisitionProcess process) {
 	User user = getUser();
 	return user != null && process.isResponsibleForUnit(user.getPerson())
-		&& !process.getAcquisitionRequest().hasBeenApprovedBy(user.getPerson());
+		&& !process.getAcquisitionRequest().hasBeenSubmittedForFundsAllocationBy(user.getPerson());
     }
 
     @Override
     protected boolean isAvailable(AcquisitionProcess process) {
-	return process.isProcessInState(AcquisitionProcessStateType.FUNDS_ALLOCATED);
+	return process.isPendingApproval();
     }
 
     @Override
     protected void process(AcquisitionProcess process, Object... objects) {
 	Person person = (Person) objects[0];
-	process.getAcquisitionRequest().approvedBy(person);
-	if (process.getAcquisitionRequest().isApprovedByAllResponsibles()) {
-	    new AcquisitionProcessState(process, AcquisitionProcessStateType.APPROVED);
+	process.getAcquisitionRequest().submittedForFundsAllocation(person);
+	if (process.getAcquisitionRequest().isSubmittedForFundsAllocationByAllResponsibles()) {
+	    new AcquisitionProcessState(process, AcquisitionProcessStateType.SUBMITTED_FOR_FUNDS_ALLOCATION);
+	    new FundAllocationExpirationDate().execute(process, new Object[] {});
 	}
     }
 
