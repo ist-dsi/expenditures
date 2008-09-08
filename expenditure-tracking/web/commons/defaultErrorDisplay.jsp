@@ -9,6 +9,6 @@
 
 <messages:hasMessages type="ERROR">
 	<div class="error1">
-		<messages:showMessages type="ERROR"/>
+		<span><messages:showMessages type="ERROR"/></span>
 	</div>
 </messages:hasMessages>
