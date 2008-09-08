@@ -46,12 +46,6 @@
 
 
 <div class="expenditures">
-	<logic:equal name="acquisitionProcess" property="allowedToViewCostCenterExpenditures" value="true">
-		<p>
-		<bean:message key="unit.message.info.totalAllocated" bundle="ORGANIZATION_RESOURCES"/>:
-		<fr:view name="acquisitionProcess" property="unit.totalAllocated"/>
-		</p>
-	</logic:equal>
 	<logic:equal name="acquisitionProcess" property="allowedToViewSupplierExpenditures" value="true">
 		<logic:present name="acquisitionProcess" property="acquisitionRequest.supplier">
 			<p>
