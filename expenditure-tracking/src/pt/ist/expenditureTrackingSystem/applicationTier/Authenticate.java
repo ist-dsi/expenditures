@@ -9,7 +9,7 @@ import pt.ist.fenixWebFramework.security.UserView;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixWebFramework.util.DomainReference;
 
-public class Authenticate {
+public class Authenticate implements Serializable {
 
     static final String randomValue;
 

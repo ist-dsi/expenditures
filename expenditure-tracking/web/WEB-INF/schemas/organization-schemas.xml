@@ -108,4 +108,8 @@
 		type="pt.ist.expenditureTrackingSystem.domain.organization.Supplier"
 		bundle="ORGANIZATION_RESOURCES">
 	<slot name="totalAllocated" key="supplier.message.info.totalAllocated" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="totalAllocatedByAcquisitionProcesses" key="supplier.message.info.totalAllocatedByAcquisitionProcesses" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="totalAllocatedByWorkingCapitals" key="supplier.message.info.totalAllocatedByWorkingCapitals" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="totalAllocatedByRefunds" key="supplier.message.info.totalAllocatedByRefunds" bundle="ORGANIZATION_RESOURCES"/>	
+	<slot name="totalAllocatedByPurchases" key="supplier.message.info.totalAllocatedByPurchases" bundle="ORGANIZATION_RESOURCES"/>
 </schema>

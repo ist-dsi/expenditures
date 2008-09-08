@@ -4,6 +4,7 @@ import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionAfterTheFact;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AfterTheFactAcquisitionType;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateSupplierBean;
 import pt.ist.expenditureTrackingSystem.domain.util.Address;
 import pt.ist.expenditureTrackingSystem.domain.util.Money;
@@ -70,6 +71,38 @@ public class Supplier extends Supplier_Base {
 	    result = result.add(acquisitionAfterTheFact.getValue());
 	}
 	return result;
+    }
+
+    public Money getTotalAllocatedByAcquisitionProcesses() {
+	Money result = Money.ZERO;
+	for (final AcquisitionRequest acquisitionRequest : getAcquisitionRequestsSet()) {
+	    if (acquisitionRequest.getAcquisitionProcess().isAllocatedToSupplier()) {
+		result = result.add(acquisitionRequest.getValueAllocated());
+	    }
+	}
+	return result;
+    }
+
+    public Money getTotalAllocatedByAfterTheFactAcquisitions(final AfterTheFactAcquisitionType afterTheFactAcquisitionType) {
+	Money result = Money.ZERO;
+	for (final AcquisitionAfterTheFact acquisitionAfterTheFact : getAcquisitionsAfterTheFactSet()) {
+	    if (acquisitionAfterTheFact.getAfterTheFactAcquisitionType() == afterTheFactAcquisitionType) {
+		result = result.add(acquisitionAfterTheFact.getValue());
+	    }
+	}
+	return result;
+    }
+
+    public Money getTotalAllocatedByPurchases() {
+	return getTotalAllocatedByAfterTheFactAcquisitions(AfterTheFactAcquisitionType.PURCHASE);
+    }
+
+    public Money getTotalAllocatedByWorkingCapitals() {
+	return getTotalAllocatedByAfterTheFactAcquisitions(AfterTheFactAcquisitionType.WORKING_CAPITAL);
+    }
+
+    public Money getTotalAllocatedByRefunds() {
+	return getTotalAllocatedByAfterTheFactAcquisitions(AfterTheFactAcquisitionType.REFUND);
     }
 
     @Service
