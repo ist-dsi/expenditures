@@ -2,6 +2,7 @@ package pt.ist.expenditureTrackingSystem.domain.organization;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionAfterTheFact;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateSupplierBean;
 import pt.ist.expenditureTrackingSystem.domain.util.Address;
@@ -64,6 +65,9 @@ public class Supplier extends Supplier_Base {
 	    if (acquisitionRequest.getAcquisitionProcess().isAllocatedToSupplier()) {
 		result = result.add(acquisitionRequest.getValueAllocated());
 	    }
+	}
+	for (final AcquisitionAfterTheFact acquisitionAfterTheFact : getAcquisitionsAfterTheFactSet()) {
+	    result = result.add(acquisitionAfterTheFact.getValue());
 	}
 	return result;
     }

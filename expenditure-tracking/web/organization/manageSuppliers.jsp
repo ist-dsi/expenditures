@@ -11,29 +11,41 @@
 </html:link>
 <br/>
 <br/>
-<fr:edit id="searchSuppliers" action="/organization.do?method=manageSuppliers"
-		name="searchSuppliers"
-		type="pt.ist.expenditureTrackingSystem.domain.organization.SearchSuppliers"
-		schema="searchSuppliers">
+<fr:edit id="supplierBean" action="/organization.do?method=manageSuppliers"
+		name="supplierBean"
+		type="pt.ist.expenditureTrackingSystem.domain.dto.SupplierBean"
+		schema="supplierBean">
 	<fr:layout name="tabular">
+		<fr:property name="classes" value="form"/>
+		<fr:property name="columnClasses" value=",,tderror"/>
 	</fr:layout>
+	<fr:destination name="cancel" path="/organization.do?method=manageSuppliers"/>
 </fr:edit>
 <br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<fr:view name="searchSuppliers" property="result"
-		schema="viewSuppliersInList">
-	<fr:layout name="tabular">
-		<fr:property name="classes" value="tstyle1"/>
-
-		<fr:property name="link(view)" value="/organization.do?method=viewSupplier"/>
-		<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
-		<fr:property name="key(view)" value="link.view"/>
-		<fr:property name="param(view)" value="OID/supplierOid"/>
-		<fr:property name="order(view)" value="1"/>
-	</fr:layout>
-</fr:view>
+<logic:present name="supplierBean" property="supplier">
+	<div class="infoop2">
+		<fr:view name="supplierBean" property="supplier"
+				type="pt.ist.expenditureTrackingSystem.domain.organization.Supplier"
+				schema="viewSupplier">
+			<fr:layout name="tabular">
+			</fr:layout>
+		</fr:view>
+	</div>
+	<bean:define id="supplierOID" name="supplierBean" property="supplier.OID"/>
+	<html:link action='<%= "/organization.do?method=prepareEditSupplier&supplierOid=" + supplierOID%>'>
+		<bean:message key="supplier.link.edit" bundle="ORGANIZATION_RESOURCES"/>
+	</html:link>
+	<html:link action='<%= "/organization.do?method=deleteSupplier&supplierOid=" + supplierOID%>'>
+		<bean:message key="supplier.link.delete" bundle="ORGANIZATION_RESOURCES"/>
+	</html:link>
+	<br/>
+	<br/>
+	<div class="infoop2">
+		<fr:view name="supplierBean" property="supplier"
+				type="pt.ist.expenditureTrackingSystem.domain.organization.Supplier"
+				schema="viewSupplierAcquisitionInformation">
+			<fr:layout name="tabular">
+			</fr:layout>
+		</fr:view>
+	</div>
+</logic:present>

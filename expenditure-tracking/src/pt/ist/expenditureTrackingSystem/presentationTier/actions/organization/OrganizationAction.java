@@ -16,8 +16,8 @@ import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreatePersonBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateSupplierBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateUnitBean;
+import pt.ist.expenditureTrackingSystem.domain.dto.SupplierBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
-import pt.ist.expenditureTrackingSystem.domain.organization.SearchSuppliers;
 import pt.ist.expenditureTrackingSystem.domain.organization.SearchUsers;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
@@ -215,12 +215,18 @@ public class OrganizationAction extends BaseAction {
 
     public final ActionForward manageSuppliers(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
-	SearchSuppliers searchSuppliers = getRenderedObject();
-	if (searchSuppliers == null) {
-	    searchSuppliers = new SearchSuppliers();
+	SupplierBean supplierBean = getRenderedObject();
+	if (supplierBean == null) {
+	    supplierBean = new SupplierBean();
 	}
 
-	request.setAttribute("searchSuppliers", searchSuppliers);
+	request.setAttribute("supplierBean", supplierBean);
+	return mapping.findForward("manage.suppliers");
+    }
+
+    public final ActionForward manageSuppliers(final ActionMapping mapping, final HttpServletRequest request, 
+	    final SupplierBean supplierBean) {
+	request.setAttribute("supplierBean", supplierBean);
 	return mapping.findForward("manage.suppliers");
     }
 
@@ -248,10 +254,9 @@ public class OrganizationAction extends BaseAction {
     public final ActionForward createSupplier(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final CreateSupplierBean createSupplierBean = getRenderedObject();
-
 	final Supplier supplier = Supplier.createNewSupplier(createSupplierBean);
-	request.setAttribute("supplier", supplier);
-	return mapping.findForward("view.supplier");
+	final SupplierBean supplierBean = new SupplierBean(supplier);
+	return manageSuppliers(mapping, request, supplierBean);
     }
 
     public final ActionForward prepareEditSupplier(final ActionMapping mapping, final ActionForm form,
@@ -265,8 +270,8 @@ public class OrganizationAction extends BaseAction {
     public final ActionForward editSupplier(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) {
 	final Supplier supplier = getRenderedObject();
-
-	return viewSupplier(mapping, form, request, response, supplier);
+	final SupplierBean supplierBean = new SupplierBean(supplier);
+	return manageSuppliers(mapping, request, supplierBean);
     }
 
     public final ActionForward deleteSupplier(final ActionMapping mapping, final ActionForm form,

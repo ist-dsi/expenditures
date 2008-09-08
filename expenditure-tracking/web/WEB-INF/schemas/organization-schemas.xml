@@ -55,18 +55,21 @@
 	<slot name="unit.costCenter" key="unit.label.costCenter" bundle="ORGANIZATION_RESOURCES"/>
 </schema>
 
-<schema name="searchSuppliers"
-		type="pt.ist.expenditureTrackingSystem.domain.organization.SearchSuppliers"
+<schema name="supplierBean"
+		type="pt.ist.expenditureTrackingSystem.domain.dto.SupplierBean"
 		bundle="ORGANIZATION_RESOURCES">
-	<slot name="fiscalCode" key="supplier.label.fiscalCode" bundle="ORGANIZATION_RESOURCES"/>
-	<slot name="name" key="supplier.label.name" bundle="ORGANIZATION_RESOURCES"/>
-</schema>
-
-<schema name="viewSuppliersInList"
-		type="pt.ist.expenditureTrackingSystem.domain.organization.Supplier"
-		bundle="ORGANIZATION_RESOURCES">
-	<slot name="fiscalIdentificationCode" key="supplier.label.fiscalCode" bundle="ORGANIZATION_RESOURCES"/>
-	<slot name="name" key="supplier.label.name" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="supplier" layout="autoComplete" key="label.supplier" bundle="EXPENDITURE_RESOURCES">
+        <property name="labelField" value="name"/>
+		<property name="format" value="${fiscalIdentificationCode} - ${name}"/>
+		<property name="minChars" value="1"/>		
+		<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.NIFSupplierAutoCompleteProvider"/>
+		<property name="size" value="40"/>
+		<validator class="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator">
+			<property name="message" value="label.pleaseSelectOne.supplier"/>
+			<property name="bundle" value="EXPENDITURE_RESOURCES"/>
+			<property name="key" value="true"/>
+		</validator>
+	</slot>
 </schema>
 
 <schema name="viewSupplier"
@@ -101,4 +104,8 @@
 	<slot name="address" layout="address-input" key="supplier.label.address" bundle="ORGANIZATION_RESOURCES"/>
 </schema>
 
-
+<schema name="viewSupplierAcquisitionInformation"
+		type="pt.ist.expenditureTrackingSystem.domain.organization.Supplier"
+		bundle="ORGANIZATION_RESOURCES">
+	<slot name="totalAllocated" key="supplier.message.info.totalAllocated" bundle="ORGANIZATION_RESOURCES"/>
+</schema>
