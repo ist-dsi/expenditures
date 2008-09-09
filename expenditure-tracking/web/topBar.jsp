@@ -12,7 +12,7 @@
 				<span>
 					<bean:message key="link.topBar.home" bundle="EXPENDITURE_RESOURCES"/>
 				</span>
-				<div class="lic1"></div><div class="lic2"></div>
+				<div class="lic1"></div>
 			</html:link>
 		</li>
 		<li>
@@ -20,7 +20,7 @@
 				<span>
 					<bean:message key="link.topBar.requestForProposal" bundle="EXPENDITURE_RESOURCES"/>
 				</span>
-				<div class="lic1"></div><div class="lic2"></div>
+				<div class="lic1"></div>
 			</html:link>
 		</li>
 		<li>
@@ -28,7 +28,7 @@
 				<span>
 					<bean:message key="link.topBar.acquisitionProcesses" bundle="EXPENDITURE_RESOURCES"/>
 				</span>
-				<div class="lic1"></div><div class="lic2"></div>
+				<div class="lic1"></div>
 			</html:link>
 		</li>
 		<li>
@@ -36,7 +36,7 @@
 				<span>
 					<bean:message key="link.topBar.organization" bundle="EXPENDITURE_RESOURCES"/>
 				</span>
-				<div class="lic1"></div><div class="lic2"></div>
+				<div class="lic1"></div>
 			</html:link>
 		</li>
 		<li>
@@ -44,10 +44,11 @@
 				<span>
 					<bean:message key="link.topBar.authorizations" bundle="EXPENDITURE_RESOURCES"/>
 				</span>
-				<div class="lic1"></div><div class="lic2"></div>
+				<div class="lic1"></div>
 			</html:link>
 		</li>
-		<div class="c1"></div>
-		<div class="c2"></div>
 	</ul>
 </logic:present>
+
+<div class="c1"></div>
+<div class="c2"></div>

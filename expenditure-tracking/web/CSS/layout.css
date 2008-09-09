@@ -155,7 +155,7 @@ float: left;
 margin: 0 0 0 2px;
 text-decoration: none;
 background: #b4d5e6;
-background: #6eb6da;
+background: #6eb6da url(../images/tab_corner2_01.gif) top right no-repeat !important;
 position: relative;
 }
 #tabs10 a span {
@@ -176,14 +176,6 @@ top: 0;
 left: 0;
 }
 
-#tabs10 ul li div.lic2 {
-background: url(../images/tab_corner2_01.gif) no-repeat;
-width: 5px;
-height: 5px;
-position: absolute;
-top: 0;
-right: 0;
-}
 
 #tabs10 div.c1 {
 background: url(../images/corner1_02.gif) no-repeat;
@@ -224,7 +216,27 @@ padding: 0 15px;
 border-left: 1px solid #eee;
 border-right: 1px solid #eee;
 border-bottom: 1px solid #eee;
+position: relative;
 }
+
+/*
+#container div.cont_c1 {
+width: 7px;
+height: 7px;
+background: url(../images/body_corner1_01.gif) no-repeat;
+position: absolute;
+bottom: 0;
+left: 0;
+}
+#container div.cont_c2 {
+width: 7px;
+height: 7px;
+background: url(../images/body_corner2_01.gif) no-repeat;
+position: absolute;
+bottom: 0;
+right: 0;
+}
+*/
 
 #container2 {
 margin: 0 auto;

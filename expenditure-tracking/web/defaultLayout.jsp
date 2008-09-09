@@ -35,6 +35,9 @@
 		<tiles:insert attribute="footer"/>
 	</div>
 
+	<div class="cont_c1"></div>
+	<div class="cont_c2"></div>
+
 </div> <!-- container -->
 
 </body>
