@@ -14,46 +14,48 @@
 </fr:view>
 <br/>
 
-<logic:iterate id="role" name="availableRoles"> 
-	<p>
-		<span>
-			<fr:view name="role"/>: 
-			<html:link action="<%= "/organization.do?method=addRole&role=" + role %>" paramId="personOid" paramName="person" paramProperty="OID">
-				<bean:message key="role.label.add" bundle="ORGANIZATION_RESOURCES"/>
-			</html:link>
-			|
-			<html:link action="<%= "/organization.do?method=removeRole&role=" + role %>" paramId="personOid" paramName="person" paramProperty="OID">
-				<bean:message key="role.label.remove" bundle="ORGANIZATION_RESOURCES"/>
-			</html:link>
-		</span>
-	</p>
-</logic:iterate>
+<logic:present role="MANAGER">
+	<logic:iterate id="role" name="availableRoles"> 
+		<p>
+			<span>
+				<fr:view name="role"/>: 
+				<html:link action="<%= "/organization.do?method=addRole&role=" + role %>" paramId="personOid" paramName="person" paramProperty="OID">
+					<bean:message key="role.label.add" bundle="ORGANIZATION_RESOURCES"/>
+				</html:link>
+				|
+				<html:link action="<%= "/organization.do?method=removeRole&role=" + role %>" paramId="personOid" paramName="person" paramProperty="OID">
+					<bean:message key="role.label.remove" bundle="ORGANIZATION_RESOURCES"/>
+				</html:link>
+			</span>
+		</p>
+	</logic:iterate>
 
+	<html:link action="/organization.do?method=editPerson" paramId="personOid" paramName="person" paramProperty="OID">
+		<bean:message key="link.edit" bundle="EXPENDITURE_RESOURCES"/>
+	</html:link>
+	<html:link action="/organization.do?method=deletePerson" paramId="personOid" paramName="person" paramProperty="OID">
+		<bean:message key="link.delete" bundle="EXPENDITURE_RESOURCES"/>
+	</html:link>
+</logic:present>
+<logic:present role="MANAGER,ACQUISITION_CENTRAL_MANAGER">
+	<br/>
+	<br/>
+	<html:link action="/organization.do?method=attributeAuthorization" paramId="personOid" paramName="person" paramProperty="OID">
+		<bean:message key="authorizations.link.grant" bundle="EXPENDITURE_RESOURCES"/>
+	</html:link>
+	<br/>
+	<br/>
+	<bean:define id="authorizations" name="person" property="authorizations"/>
+	<fr:view name="authorizations"
+			schema="viewAuthorizations">
+		<fr:layout name="tabular">
+			<fr:property name="classes" value="tstyle1"/>
 
-
-<html:link action="/organization.do?method=editPerson" paramId="personOid" paramName="person" paramProperty="OID">
-	<bean:message key="link.edit" bundle="EXPENDITURE_RESOURCES"/>
-</html:link>
-<html:link action="/organization.do?method=deletePerson" paramId="personOid" paramName="person" paramProperty="OID">
-	<bean:message key="link.delete" bundle="EXPENDITURE_RESOURCES"/>
-</html:link>
-<br/>
-<br/>
-<html:link action="/organization.do?method=attributeAuthorization" paramId="personOid" paramName="person" paramProperty="OID">
-	<bean:message key="authorizations.link.grant" bundle="EXPENDITURE_RESOURCES"/>
-</html:link>
-<br/>
-<br/>
-<bean:define id="authorizations" name="person" property="authorizations"/>
-<fr:view name="authorizations"
-		schema="viewAuthorizations">
-	<fr:layout name="tabular">
-		<fr:property name="classes" value="tstyle1"/>
-
-		<fr:property name="link(delete)" value="/organization.do?method=deleteAuthorization"/>
-		<fr:property name="bundle(delete)" value="EXPENDITURE_RESOURCES"/>
-		<fr:property name="key(delete)" value="link.delete"/>
-		<fr:property name="param(delete)" value="OID/authorizationOid"/>
-		<fr:property name="order(delete)" value="1"/>
-	</fr:layout>
-</fr:view>
+			<fr:property name="link(delete)" value="/organization.do?method=deleteAuthorization"/>
+			<fr:property name="bundle(delete)" value="EXPENDITURE_RESOURCES"/>
+			<fr:property name="key(delete)" value="link.delete"/>
+			<fr:property name="param(delete)" value="OID/authorizationOid"/>
+			<fr:property name="order(delete)" value="1"/>
+		</fr:layout>
+	</fr:view>
+</logic:present>

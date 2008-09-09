@@ -6,11 +6,6 @@
 
 <h2><bean:message key="search.label.users" bundle="EXPENDITURE_RESOURCES"/></h2>
 <br/>
-<html:link action="/organization.do?method=prepareCreatePerson">
-	<bean:message key="person.link.create" bundle="ORGANIZATION_RESOURCES"/>
-</html:link>
-<br/>
-<br/>
 <fr:edit id="searchUsers"
 		name="searchUsers"
 		type="pt.ist.expenditureTrackingSystem.domain.organization.SearchUsers"
@@ -18,7 +13,12 @@
 	<fr:layout name="tabular">
 	</fr:layout>
 </fr:edit>
-<br/>
+<logic:present role="MANAGER">
+	<br/>
+	<html:link action="/organization.do?method=prepareCreatePerson">
+		<bean:message key="person.link.create" bundle="ORGANIZATION_RESOURCES"/>
+	</html:link>
+</logic:present>
 <br/>
 <bean:define id="people" name="searchUsers" property="result"/>
 <fr:view name="people"

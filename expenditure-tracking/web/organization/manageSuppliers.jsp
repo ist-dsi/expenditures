@@ -6,11 +6,6 @@
 
 <h2><bean:message key="supplier.title.manage" bundle="ORGANIZATION_RESOURCES"/></h2>
 <br/>
-<html:link action="/organization.do?method=prepareCreateSupplier">
-	<bean:message key="supplier.link.create" bundle="ORGANIZATION_RESOURCES"/>
-</html:link>
-<br/>
-<br/>
 <fr:edit id="supplierBean" action="/organization.do?method=manageSuppliers"
 		name="supplierBean"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.SupplierBean"
@@ -21,6 +16,12 @@
 	</fr:layout>
 	<fr:destination name="cancel" path="/organization.do?method=manageSuppliers"/>
 </fr:edit>
+<logic:present role="MANAGER">
+	<br/>
+	<html:link action="/organization.do?method=prepareCreateSupplier">
+		<bean:message key="supplier.link.create" bundle="ORGANIZATION_RESOURCES"/>
+	</html:link>
+</logic:present>
 <br/>
 <logic:present name="supplierBean" property="supplier">
 	<div class="infoop2">
@@ -32,13 +33,17 @@
 		</fr:view>
 	</div>
 	<bean:define id="supplierOID" name="supplierBean" property="supplier.OID"/>
-	<html:link action='<%= "/organization.do?method=prepareEditSupplier&supplierOid=" + supplierOID%>'>
-		<bean:message key="supplier.link.edit" bundle="ORGANIZATION_RESOURCES"/>
-	</html:link>
-	<html:link action='<%= "/organization.do?method=deleteSupplier&supplierOid=" + supplierOID%>'>
-		<bean:message key="supplier.link.delete" bundle="ORGANIZATION_RESOURCES"/>
-	</html:link>
-	<br/>
+	<logic:present role="MANAGER,ACQUISITION_CENTRAL_MANAGER,ACQUISITION_CENTRAL">
+		<html:link action='<%= "/organization.do?method=prepareEditSupplier&supplierOid=" + supplierOID%>'>
+			<bean:message key="supplier.link.edit" bundle="ORGANIZATION_RESOURCES"/>
+		</html:link>
+		<logic:present role="MANAGER">
+			<html:link action='<%= "/organization.do?method=deleteSupplier&supplierOid=" + supplierOID%>'>
+				<bean:message key="supplier.link.delete" bundle="ORGANIZATION_RESOURCES"/>
+			</html:link>
+		</logic:present>
+		<br/>
+	</logic:present>
 	<br/>
 	<div class="infoop2">
 		<fr:view name="supplierBean" property="supplier"
@@ -48,20 +53,22 @@
 			</fr:layout>
 		</fr:view>
 	</div>
-	<br/>
-	<bean:define id="aquisitions" name="supplierBean" property="supplier.acquisitionsAfterTheFactSet"/>
-	<fr:view name="aquisitions"
-			schema="acquisitionAfterTheFact">
-		<fr:layout name="tabular">
-			<fr:property name="classes" value="tstyle2"/>
-			<fr:property name="columnClasses" value="aleft,,,,aright,"/>
-			<fr:property name="sortBy" value="invoiceDate,invoiceNumber=asc"/>
+	<logic:present role="MANAGER,ACQUISITION_CENTRAL_MANAGER,ACQUISITION_CENTRAL">
+		<br/>
+		<bean:define id="aquisitions" name="supplierBean" property="supplier.acquisitionsAfterTheFactSet"/>
+		<fr:view name="aquisitions"
+				schema="acquisitionAfterTheFact">
+			<fr:layout name="tabular">
+				<fr:property name="classes" value="tstyle2"/>
+				<fr:property name="columnClasses" value="aleft,,,,aright,"/>
+				<fr:property name="sortBy" value="invoiceDate,invoiceNumber=asc"/>
 
-			<fr:property name="link(view)" value="/afterTheFactAcquisitionProcess.do?method=viewAfterTheFactAcquisitionProcess"/>
-			<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
-			<fr:property name="key(view)" value="link.view"/>
-			<fr:property name="param(view)" value="OID/acquisitionAfterTheFactOid"/>
-			<fr:property name="order(view)" value="1"/>
-		</fr:layout>
-	</fr:view>
+				<fr:property name="link(view)" value="/afterTheFactAcquisitionProcess.do?method=viewAfterTheFactAcquisitionProcess"/>
+				<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
+				<fr:property name="key(view)" value="link.view"/>
+				<fr:property name="param(view)" value="OID/acquisitionAfterTheFactOid"/>
+				<fr:property name="order(view)" value="1"/>
+			</fr:layout>
+		</fr:view>
+	</logic:present>
 </logic:present>

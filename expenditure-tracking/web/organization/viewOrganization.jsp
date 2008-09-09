@@ -5,17 +5,21 @@
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
 <h2><bean:message key="title.viewOrganization" bundle="EXPENDITURE_RESOURCES"/></h2>
-<br />
-<logic:notPresent name="unit">
-	<html:link action="/organization.do?method=prepareCreateUnit">
-		<bean:message key="unit.link.create" bundle="ORGANIZATION_RESOURCES"/>
-	</html:link>
-</logic:notPresent>
-<logic:present name="unit">
-	<html:link action="/organization.do?method=prepareCreateUnit" paramId="unitOid" paramName="unit" paramProperty="OID">
-		<bean:message key="unit.link.create" bundle="ORGANIZATION_RESOURCES"/>
-	</html:link>
+
+<logic:present role="MANAGER">
+	<br />
+	<logic:notPresent name="unit">
+		<html:link action="/organization.do?method=prepareCreateUnit">
+			<bean:message key="unit.link.create" bundle="ORGANIZATION_RESOURCES"/>
+		</html:link>
+	</logic:notPresent>
+	<logic:present name="unit">
+		<html:link action="/organization.do?method=prepareCreateUnit" paramId="unitOid" paramName="unit" paramProperty="OID">
+			<bean:message key="unit.link.create" bundle="ORGANIZATION_RESOURCES"/>
+		</html:link>
+	</logic:present>
 </logic:present>
+
 <br/>
 <br/>
 <logic:present name="unit">
@@ -52,12 +56,14 @@
 				(sp)
 			</logic:notEmpty>
 		</logic:equal>
-		<html:link action="/organization.do?method=editUnit" paramId="unitOid" paramName="unit" paramProperty="parentUnit.OID">
-			<bean:message key="link.edit" bundle="EXPENDITURE_RESOURCES"/>
-		</html:link>
-		<html:link action="/organization.do?method=deleteUnit" paramId="unitOid" paramName="unit" paramProperty="parentUnit.OID">
-			<bean:message key="link.delete" bundle="EXPENDITURE_RESOURCES"/>
-		</html:link>
+		<logic:present role="MANAGER">
+			<html:link action="/organization.do?method=editUnit" paramId="unitOid" paramName="unit" paramProperty="parentUnit.OID">
+				<bean:message key="link.edit" bundle="EXPENDITURE_RESOURCES"/>
+			</html:link>
+			<html:link action="/organization.do?method=deleteUnit" paramId="unitOid" paramName="unit" paramProperty="parentUnit.OID">
+				<bean:message key="link.delete" bundle="EXPENDITURE_RESOURCES"/>
+			</html:link>
+		</logic:present>
 		<br/>	
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	</logic:present>
@@ -77,12 +83,14 @@
 	<logic:equal name="unit" property="class.name" value="pt.ist.expenditureTrackingSystem.domain.organization.SubProject">
 		(sp)
 	</logic:equal>
-	<html:link action="/organization.do?method=editUnit" paramId="unitOid" paramName="unit" paramProperty="OID">
-		<bean:message key="link.edit" bundle="EXPENDITURE_RESOURCES"/>
-	</html:link>
-	<html:link action="/organization.do?method=deleteUnit" paramId="unitOid" paramName="unit" paramProperty="OID">
-		<bean:message key="link.delete" bundle="EXPENDITURE_RESOURCES"/>
-	</html:link>
+	<logic:present role="MANAGER">
+		<html:link action="/organization.do?method=editUnit" paramId="unitOid" paramName="unit" paramProperty="OID">
+			<bean:message key="link.edit" bundle="EXPENDITURE_RESOURCES"/>
+		</html:link>
+		<html:link action="/organization.do?method=deleteUnit" paramId="unitOid" paramName="unit" paramProperty="OID">
+			<bean:message key="link.delete" bundle="EXPENDITURE_RESOURCES"/>
+		</html:link>
+	</logic:present>
 	<br/>	
 </logic:present>
 <logic:present name="units">
@@ -109,12 +117,14 @@
 		<logic:equal name="u" property="class.name" value="pt.ist.expenditureTrackingSystem.domain.organization.SubProject">
 			(sp)
 		</logic:equal>
-		<html:link action="/organization.do?method=editUnit" paramId="unitOid" paramName="u" paramProperty="OID">
-			<bean:message key="link.edit" bundle="EXPENDITURE_RESOURCES"/>
-		</html:link>
-		<html:link action="/organization.do?method=deleteUnit" paramId="unitOid" paramName="u" paramProperty="OID">
-			<bean:message key="link.delete" bundle="EXPENDITURE_RESOURCES"/>
-		</html:link>
+		<logic:present role="MANAGER">
+			<html:link action="/organization.do?method=editUnit" paramId="unitOid" paramName="u" paramProperty="OID">
+				<bean:message key="link.edit" bundle="EXPENDITURE_RESOURCES"/>
+			</html:link>
+			<html:link action="/organization.do?method=deleteUnit" paramId="unitOid" paramName="u" paramProperty="OID">
+				<bean:message key="link.delete" bundle="EXPENDITURE_RESOURCES"/>
+			</html:link>
+		</logic:present>
 		<br/>
 	</logic:iterate>
 </logic:present>
