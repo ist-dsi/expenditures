@@ -30,6 +30,16 @@
 </div>
 
 <div class="infoop2">
+	<fr:view name="afterTheFactAcquisitionProcess" property="acquisitionAfterTheFact.supplier"
+			type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionAfterTheFact"
+			schema="viewSupplierShort">
+		<fr:layout name="tabular">
+			<fr:property name="classes" value="tstyle1"/>
+		</fr:layout>
+	</fr:view>
+</div>
+
+<div class="infoop2">
 	<fr:view name="afterTheFactAcquisitionProcess" property="acquisitionAfterTheFact"
 			type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionAfterTheFact"
 			schema="viewAcquisitionAfterTheFact">

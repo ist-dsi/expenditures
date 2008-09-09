@@ -57,6 +57,13 @@ public class AfterTheFactAcquisitionProcessAction extends ProcessAction {
 	return viewAfterTheFactAcquisitionProcess(mapping, request, afterTheFactAcquisitionProcess);
     }
 
+    public ActionForward viewAfterTheFactAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final AcquisitionAfterTheFact acquisitionAfterTheFact = getDomainObject(request, "acquisitionAfterTheFactOid");
+	final AfterTheFactAcquisitionProcess afterTheFactAcquisitionProcess = acquisitionAfterTheFact.getAfterTheFactAcquisitionProcess();
+	return viewAfterTheFactAcquisitionProcess(mapping, request, afterTheFactAcquisitionProcess);
+    }
+    
     private ActionForward viewAfterTheFactAcquisitionProcess(ActionMapping mapping, HttpServletRequest request,
 	    AfterTheFactAcquisitionProcess afterTheFactAcquisitionProcess) {
 	request.setAttribute("afterTheFactAcquisitionProcess", afterTheFactAcquisitionProcess);

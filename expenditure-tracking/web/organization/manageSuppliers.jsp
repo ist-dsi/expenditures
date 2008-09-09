@@ -48,4 +48,20 @@
 			</fr:layout>
 		</fr:view>
 	</div>
+	<br/>
+	<bean:define id="aquisitions" name="supplierBean" property="supplier.acquisitionsAfterTheFactSet"/>
+	<fr:view name="aquisitions"
+			schema="acquisitionAfterTheFact">
+		<fr:layout name="tabular">
+			<fr:property name="classes" value="tstyle2"/>
+			<fr:property name="columnClasses" value="aleft,,,,aright,"/>
+			<fr:property name="sortBy" value="invoiceDate,invoiceNumber=asc"/>
+
+			<fr:property name="link(view)" value="/afterTheFactAcquisitionProcess.do?method=viewAfterTheFactAcquisitionProcess"/>
+			<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
+			<fr:property name="key(view)" value="link.view"/>
+			<fr:property name="param(view)" value="OID/acquisitionAfterTheFactOid"/>
+			<fr:property name="order(view)" value="1"/>
+		</fr:layout>
+	</fr:view>
 </logic:present>

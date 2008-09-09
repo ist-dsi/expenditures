@@ -113,3 +113,21 @@
 	<slot name="totalAllocatedByRefunds" key="supplier.message.info.totalAllocatedByRefunds" bundle="ORGANIZATION_RESOURCES"/>	
 	<slot name="totalAllocatedByPurchases" key="supplier.message.info.totalAllocatedByPurchases" bundle="ORGANIZATION_RESOURCES"/>
 </schema>
+
+<schema name="acquisitionAfterTheFact"
+		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionAfterTheFact"
+		bundle="EXPENDITURE_RESOURCES">
+	<slot name="afterTheFactAcquisitionType" key="label.afterTheFactAcquisitionType" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="invoiceDate" key="acquisitionProcess.label.invoice.date" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="invoiceNumber" key="acquisitionProcess.label.invoice.number" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="value" key="label.value" bundle="EXPENDITURE_RESOURCES"/>
+	<slot name="vatValue" key="label.vatValue" bundle="EXPENDITURE_RESOURCES"/>	
+</schema>
+
+<schema name="viewSupplierShort"
+		type="pt.ist.expenditureTrackingSystem.domain.organization.Supplier"
+		bundle="ORGANIZATION_RESOURCES">
+	<slot name="fiscalIdentificationCode" key="supplier.label.fiscalCode" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="name" key="supplier.label.name" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="abbreviatedName" key="supplier.label.abbreviatedName" bundle="ORGANIZATION_RESOURCES"/>
+</schema>
