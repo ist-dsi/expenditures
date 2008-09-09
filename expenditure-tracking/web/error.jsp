@@ -4,6 +4,7 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <html:html xhtml="true">
 <head>
+	<tiles:insert page="head.jsp"/>
 </head>
 
 <body>
@@ -11,9 +12,11 @@
 <div id="container">
 
 	<div id="header">
+		<tiles:insert page="pageHeader.jsp"/>
 	</div>
 
 	<div id="tabs10">
+		<tiles:insert page="topBar.jsp"/>
 	</div>
 
 	<div id="container2">
@@ -22,12 +25,15 @@
 		</div>
 
 		<div id="content">
-		  	Ocorreu um erro
+			<h2>
+		  		Ocorreu um erro !
+		  	</h2>
 		</div> <!-- content -->
 
 	</div> <!-- container2 -->
 
 	<div id="footer">
+		<tiles:insert page="footer.jsp"/>
 	</div>
 
 	<div class="cont_c1"></div>
