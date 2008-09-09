@@ -6,6 +6,7 @@ public class RequestChecksumFilter extends pt.ist.fenixWebFramework.servlets.fil
 
     @Override
     protected boolean shoudFilterReques(HttpServletRequest httpServletRequest) {
-      return !httpServletRequest.getRequestURI().endsWith("/home.do");
+      return !httpServletRequest.getRequestURI().endsWith("/home.do")
+      		&& !httpServletRequest.getRequestURI().endsWith("/isAlive.do");
     }
 }
