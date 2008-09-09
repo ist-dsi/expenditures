@@ -15,6 +15,7 @@
 				<div class="lic1"></div>
 			</html:link>
 		</li>
+		<logic:present role="MANAGER">
 		<li>
 			<html:link action="/requestForProposalProcess.do?method=showPendingRequests">
 				<span>
@@ -23,6 +24,7 @@
 				<div class="lic1"></div>
 			</html:link>
 		</li>
+		</logic:present>
 		<li>
 			<html:link action="/acquisitionProcess.do?method=showPendingProcesses">
 				<span>
