@@ -9,3 +9,7 @@ variant=
 app.context=expenditures
 filter.request.with.digest=true
 digest.tampering.url=http://localhost:8080/expenditrues
+cas.enable=true
+cas.loginUrl=https://login.ist.utl.pt/login?service=
+cas.ValidateUrl=https://login.ist.utl.pt/serviceValidate
+cas.logoutUrl=https://login.ist.utl.pt/logout

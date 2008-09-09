@@ -15,35 +15,36 @@
 <schema name="searchUsers"
 		type="pt.ist.expenditureTrackingSystem.domain.organization.SearchUsers"
 		bundle="ORGANIZATION_RESOURCES">
-	<slot name="username" key="label.person.username" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="username" key="person.label.username" bundle="ORGANIZATION_RESOURCES"/>
 	<slot name="name" key="person.label.name" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="roleType" key="role.label.roleType" bundle="ORGANIZATION_RESOURCES"/>
 </schema>
 
 <schema name="viewPeopleInList"
 		type="pt.ist.expenditureTrackingSystem.domain.organization.Person"
 		bundle="ORGANIZATION_RESOURCES">
-	<slot name="username" key="label.person.username" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="username" key="person.label.username" bundle="ORGANIZATION_RESOURCES"/>
 	<slot name="name" key="person.label.name" bundle="ORGANIZATION_RESOURCES"/>
 </schema>
 
 <schema name="createPerson"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.CreatePersonBean"
 		bundle="ORGANIZATION_RESOURCES">
-	<slot name="username" key="label.person.username" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="username" key="person.label.username" bundle="ORGANIZATION_RESOURCES"/>
 	<slot name="name" key="person.label.name" bundle="ORGANIZATION_RESOURCES"/>
 </schema>
 
 <schema name="editPerson"
 		type="pt.ist.expenditureTrackingSystem.domain.organization.Person"
 		bundle="ORGANIZATION_RESOURCES">
-	<slot name="username" key="label.person.username" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="username" key="person.label.username" bundle="ORGANIZATION_RESOURCES"/>
 	<slot name="name" key="person.label.name" bundle="ORGANIZATION_RESOURCES"/>
 </schema>
 
 <schema name="viewPerson"
 		type="pt.ist.expenditureTrackingSystem.domain.organization.Person"
 		bundle="ORGANIZATION_RESOURCES">
-	<slot name="username" key="label.person.username" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="username" key="person.label.username" bundle="ORGANIZATION_RESOURCES"/>
 	<slot name="name" key="person.label.name" bundle="ORGANIZATION_RESOURCES"/>
 	<slot name="roles" layout="values-comma" key="role.label.roles" bundle="ORGANIZATION_RESOURCES"/>
 </schema>

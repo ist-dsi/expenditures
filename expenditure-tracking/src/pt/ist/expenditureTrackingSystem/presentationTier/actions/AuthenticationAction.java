@@ -20,21 +20,29 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 @Forwards( { @Forward(name="forward", path="/home.do?method=firstPage", redirect=true) } )
 public class AuthenticationAction extends BaseAction {
 
+    public static void login(final HttpServletRequest request, final String username, final String password) {
+	final User user = Authenticate.authenticate(username, password);
+	final HttpSession httpSession = request.getSession();
+	httpSession.setAttribute(SetUserViewFilter.USER_SESSION_ATTRIBUTE, user);
+    }
+
+    public static void logout(final HttpServletRequest request) {
+	UserView.setUser(null);
+	final HttpSession httpSession = request.getSession();
+	httpSession.removeAttribute(SetUserViewFilter.USER_SESSION_ATTRIBUTE);
+    }
+
     public final ActionForward login(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request, final HttpServletResponse response)
     		throws Exception {
 	final String username = getAttribute(request, "username");
 	final String password = getAttribute(request, "password");
-	final User user = Authenticate.authenticate(username, password);
-	final HttpSession httpSession = request.getSession();
-	httpSession.setAttribute(SetUserViewFilter.USER_SESSION_ATTRIBUTE, user);	
+	login(request, username, password);	
 	return mapping.findForward("forward");
     }
 
     public final ActionForward logout(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request, final HttpServletResponse response)
 		throws Exception {
-	UserView.setUser(null);
-	final HttpSession httpSession = request.getSession();
-	httpSession.removeAttribute(SetUserViewFilter.USER_SESSION_ATTRIBUTE);
+	logout(request);
 	return mapping.findForward("forward");
     }
 

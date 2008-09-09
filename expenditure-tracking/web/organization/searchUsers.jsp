@@ -20,16 +20,13 @@
 </fr:edit>
 <br/>
 <br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
 <bean:define id="people" name="searchUsers" property="result"/>
 <fr:view name="people"
 		schema="viewPeopleInList">
 	<fr:layout name="tabular">
-		<fr:property name="classes" value="tstyle1"/>
+		<fr:property name="classes" value="tstyle2"/>
+		<fr:property name="columnClasses" value="aleft,,,,aright,"/>
+		<fr:property name="sortBy" value="name=asc"/>
 
 		<fr:property name="link(view)" value="/organization.do?method=viewPerson"/>
 		<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>

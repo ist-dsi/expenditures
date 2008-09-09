@@ -5,12 +5,14 @@ import java.util.Collections;
 import java.util.Set;
 
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.Search;
 
 public class SearchUsers extends Search<Person> {
 
     private String username;
     private String name;
+    private RoleType roleType;
 
     protected  class SearchResult extends SearchResultSet<Person> {
 
@@ -21,14 +23,19 @@ public class SearchUsers extends Search<Person> {
 	@Override
 	protected boolean matchesSearchCriteria(final Person person) {
 	    return matchCriteria(username, person.getUsername())
-	    		&& matchCriteria(name, person.getName());
+	    		&& matchCriteria(name, person.getName())
+	    		&& matchCriteria(roleType, person);
 	}
-	
+
+	private boolean matchCriteria(final RoleType roleType, final Person person) {
+	    return roleType == null || person.hasRoleType(roleType);
+	}
+
     }
 
     @Override
     public Set<Person> search() {
-	final Set<Person> people = username != null || name != null ?
+	final Set<Person> people = username != null || name != null || roleType != null ?
 		ExpenditureTrackingSystem.getInstance().getPeopleSet() : Collections.EMPTY_SET;
 	return new SearchResult(people);
     }
@@ -47,6 +54,14 @@ public class SearchUsers extends Search<Person> {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public RoleType getRoleType() {
+        return roleType;
+    }
+
+    public void setRoleType(RoleType roleType) {
+        this.roleType = roleType;
     }
 
 }

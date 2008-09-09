@@ -38,5 +38,6 @@
 	<classpathentry kind="lib" path="web/WEB-INF/lib/taglibs-string.jar"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/Tidy.jar"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/xercesImpl.jar"/>
+	<classpathentry kind="lib" path="web/WEB-INF/lib/casclient.jar"/>
 	<classpathentry kind="output" path="web/WEB-INF/classes"/>
 </classpath>
