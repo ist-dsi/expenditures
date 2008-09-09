@@ -7,8 +7,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AddAcquisitionProposalDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AddPayingUnit;
@@ -40,6 +44,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.UnApprove
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.UnSubmitForApproval;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean;
+import pt.ist.expenditureTrackingSystem.domain.dto.CreateAnnouncementBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
@@ -48,6 +53,7 @@ import pt.ist.expenditureTrackingSystem.domain.processes.GenericLog;
 import pt.ist.expenditureTrackingSystem.domain.util.Money;
 import pt.ist.fenixWebFramework.security.UserView;
 import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixWebFramework.util.DomainReference;
 import pt.ist.fenixframework.pstm.Transaction;
 
 public class AcquisitionProcess extends AcquisitionProcess_Base {
@@ -365,5 +371,12 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 
     public Set<Financer> getFinancersWithFundsAllocated() {
 	return getAcquisitionRequest().getFinancersWithFundsAllocated();
+    }
+
+    //TODO remove this when using activity for creating announcement 
+    @Service
+    public static Announcement createAnnouncement(Person publisher, CreateAnnouncementBean announcementBean) {
+	announcementBean.setBuyingUnit(ExpenditureTrackingSystem.getInstance().getTopLevelUnitsSet().iterator().next());
+	return new Announcement(publisher, announcementBean);
     }
 }

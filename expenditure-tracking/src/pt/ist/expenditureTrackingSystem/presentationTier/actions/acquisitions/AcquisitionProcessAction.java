@@ -22,12 +22,14 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProposalD
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.Announcement;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Invoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.SearchAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.UnitItem;
 import pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean;
+import pt.ist.expenditureTrackingSystem.domain.dto.CreateAnnouncementBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.DomainObjectBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationExpirationDateBean;
@@ -69,7 +71,10 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "assign.unit.item", path = "/acquisitions/assignUnitItem.jsp"),
 	@Forward(name = "edit.real.shares.values", path = "/acquisitions/editRealSharesValues.jsp"),
 	@Forward(name = "edit.supplier.address", path = "/acquisitions/editSupplierAddress.jsp"),
-	@Forward(name = "execute.payment", path = "/acquisitions/executePayment.jsp") })
+	@Forward(name = "execute.payment", path = "/acquisitions/executePayment.jsp"),
+	
+	@Forward(name = "create.annoucement", path = "announcements/createAnnouncement.jsp"),
+	@Forward(name = "view.announcement", path = "announcements/viewAnnouncement.jsp")})
 public class AcquisitionProcessAction extends ProcessAction {
 
     private static final Context CONTEXT = new Context("acquisitions");
@@ -682,5 +687,20 @@ public class AcquisitionProcessAction extends ProcessAction {
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
 
 	return mapping.findForward("edit.supplier.address");
+    }
+
+    public ActionForward prepareCreateAnnouncement(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+
+	request.setAttribute("announcementBean", new CreateAnnouncementBean());
+	return mapping.findForward("create.annoucement");
+    }
+    
+    public ActionForward createAnnouncement(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	User user = UserView.getUser();
+	Announcement announcement = AcquisitionProcess.createAnnouncement(user.getPerson(), (CreateAnnouncementBean) getRenderedObject());
+	request.setAttribute("announcement", announcement);
+	return mapping.findForward("view.announcement");
     }
 }

@@ -7,7 +7,6 @@ valueType org.joda.time.LocalDate as LocalDate;
 valueType pt.ist.expenditureTrackingSystem.domain.util.Address as Address;
 valueType pt.ist.expenditureTrackingSystem.domain.util.ByteArray as ByteArray;
 valueType pt.ist.expenditureTrackingSystem.domain.util.Money as Money;
-
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType as AcquisitionProcessStateType;
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.AfterTheFactAcquisitionType as AfterTheFactAcquisitionType;
 enum pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationType as AuthorizationType;
@@ -23,7 +22,7 @@ class acquisitions.CPVReference {
 	String code;
 	String description;
 }
-
+	
 class acquisitions.AcquisitionProcessState {
 	AcquisitionProcessStateType acquisitionProcessStateType;
 	DateTime whenDateTime;
@@ -40,8 +39,17 @@ class acquisitions.Acquisition {
 	}
 
 	class acquisitions.AcquisitionRequest extends acquisitions.Acquisition {
-		String paymentReference;
-	}
+	String paymentReference;
+}
+
+class acquisitions.Announcement {
+	String description;
+	Money totalPrice;
+	Integer executionDays;
+	String executionAddress;
+	String choiceCriteria;
+	DateTime creationDate;
+}
 
 class acquisitions.AcquisitionRequestItem {
 	String description;
@@ -88,13 +96,13 @@ class processes.GenericLog {
 	String operation;
 }
 
-	class acquisitions.OperationLog extends processes.GenericLog {
-		AcquisitionProcessStateType state;
-	}
+class acquisitions.OperationLog extends processes.GenericLog {
+	AcquisitionProcessStateType state;
+}
 
-	class requests.OperationLog extends processes.GenericLog {
-		RequestForProposalProcessStateType state;
-	}
+class requests.OperationLog extends processes.GenericLog {
+	RequestForProposalProcessStateType state;
+}
 
 class File {
 	String ojbConcreteClass;
@@ -109,15 +117,15 @@ class File {
 	class acquisitions.AcquisitionRequestDocument extends File {
 		Integer requestNumber;
 	}
-
+	
 	class acquisitions.Invoice extends File {
 		String invoiceNumber;
 		LocalDate invoiceDate;
-	}	
-
+	}
+	
 	class requests.RequestForProposalDocument extends File {
 	}
-
+	
 	class requests.SupplierProposalDocument extends File {
 	}
 
@@ -187,12 +195,11 @@ class requests.RequestForProposal {
 class requests.RequestForProposalProcessState {
 	RequestForProposalProcessStateType requestForProposalProcessStateType;
 	DateTime whenDateTime;
-}	
+}
 
 class Role {
 	RoleType roleType;
 }
-
 
 relation ExpenditureTrackingSystemGenericProcess {
 	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
@@ -510,7 +517,6 @@ relation ExpenditureTrackingSystemDeliveryInfo {
 		multiplicity *;
 	}
 }
-
 relation ExpenditureTrackingSystemCPVReference {
 	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
 	acquisitions.CPVReference playsRole cPVReferences {
@@ -531,7 +537,6 @@ relation DelegatedAuthorizationAuthorization {
 	}	
 	authorizations.Authorization playsRole authorization; 
 }
-
 relation AfterTheFactAcquisitionProcessAcquisitionAfterTheFact {
 	acquisitions.AfterTheFactAcquisitionProcess playsRole afterTheFactAcquisitionProcess;
 	acquisitions.AcquisitionAfterTheFact playsRole acquisitionAfterTheFact;
@@ -542,4 +547,35 @@ relation AcquisitionAfterTheFactSupplier {
 		multiplicity *;
 	}
 	organization.Supplier playsRole supplier;
+}
+
+relation ExpenditureTrackingSystemAnnouncement {
+	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
+	acquisitions.Announcement playsRole announcements {
+		multiplicity *;
+	}
+}
+
+relation AnnoucementBuyingUnit {
+	acquisitions.Announcement playsRole announcement;
+	organization.Unit playsRole buyingUnit;
+}
+
+relation AnnouncementSupplier {
+	acquisitions.Announcement playsRole announcements {
+		multiplicity *;
+	}
+	organization.Supplier playsRole supplier;
+}
+
+relation AnnouncementPublisher {
+	organization.Person playsRole publisher;
+	acquisitions.Announcement playsRole announcements {
+		multiplicity *;
+	}
+}
+
+relation AnnouncementAcquisition {
+	acquisitions.Announcement playsRole announcement;
+	acquisitions.Acquisition playsRole acquisition;
 }

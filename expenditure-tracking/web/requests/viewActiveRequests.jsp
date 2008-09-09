@@ -5,7 +5,7 @@
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
 <!-- requests/viewActiveProcesses.jsp -->
-requests/viewActiveRequests.jsp
+
 <h2> <bean:message key="process.requestForProposal.title.pending" bundle="EXPENDITURE_RESOURCES"/></h2>
 
 <logic:empty name="activeRequests">

@@ -11,6 +11,11 @@
 	<ul>
 		<li>
 			<html:link action="/home.do?method=showActiveRequestsForProposal">
+				<bean:message key="link.sideBar.home.publicRequestsForProposal" bundle="EXPENDITURE_RESOURCES"/>
+			</html:link>
+		</li>
+		<li>
+			<html:link action="/home.do?method=showAcquisitionAnnouncements">
 				<bean:message key="link.sideBar.home.publicAnnouncements" bundle="EXPENDITURE_RESOURCES"/>
 			</html:link>
 		</li>

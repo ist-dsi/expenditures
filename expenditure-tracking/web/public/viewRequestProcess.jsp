@@ -5,8 +5,7 @@
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 <%@ taglib uri="/WEB-INF/messages.tld" prefix="messages" %>
 
-<!-- requests/viewRequestProcess.jsp -->
-public/viewRequestProcess.jsp
+<!-- public/viewRequestProcess.jsp -->
 
 <div class="wrapper">
 

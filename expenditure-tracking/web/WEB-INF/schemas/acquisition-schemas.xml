@@ -382,3 +382,57 @@
 	<slot name="financer.unit.presentationName" key="unit.label.unit" read-only="true" bundle="ORGANIZATION_RESOURCES"/>
 	<slot name="fundAllocationId" key="financer.label.fundAllocation.identification" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 </schema>
+
+<!-- announcement work in progress begin: it will be moved to it's own process -->
+
+<schema name="createAnnouncement" type="pt.ist.expenditureTrackingSystem.domain.dto.CreateAnnouncementBean" bundle="EXPENDITURE_RESOURCES">
+	<slot name="supplier" key="process.announcement.label.supplier" layout="autoComplete" bundle="EXPENDITURE_RESOURCES">
+        <property name="labelField" value="name"/>
+		<property name="format" value="${fiscalIdentificationCode} - ${name}"/>
+		<property name="minChars" value="1"/>		
+		<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.NIFSupplierAutoCompleteProvider"/>
+		<property name="size" value="40"/>
+		<validator class="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator">
+			<property name="message" value="label.pleaseSelectOne.supplier"/>
+			<property name="bundle" value="EXPENDITURE_RESOURCES"/>
+			<property name="key" value="true"/>
+		</validator>
+	</slot>
+	<slot name="description" key="process.announcement.label.description" bundle="EXPENDITURE_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" layout="longText">
+		<property name="columns" value="45"/>
+		<property name="rows" value="4"/>
+	</slot>
+	<slot name="executionDays" key="process.announcement.label.executionDays" bundle="EXPENDITURE_RESOURCES">
+		<validator class="pt.ist.fenixWebFramework.renderers.validators.NumberValidator" />
+		<validator class="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+	</slot>
+	<slot name="executionAddress" key="process.announcement.label.executionAddress" bundle="EXPENDITURE_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="choiceCriteria" key="process.announcement.label.choiceCriteria" bundle="EXPENDITURE_RESOURCES"  layout="longText">
+		<property name="columns" value="45"/>
+		<property name="rows" value="4"/>
+	</slot>
+</schema>
+
+<schema name="viewAnnouncement" type="pt.ist.expenditureTrackingSystem.domain.dto.CreateAnnouncementBean" >
+	<slot name="buyingUnit.name" key="process.announcement.label.buyingUnit" bundle="EXPENDITURE_RESOURCES" />
+	<slot name="supplier.name" key="process.announcement.label.supplier" bundle="EXPENDITURE_RESOURCES" />
+	<slot name="description" key="process.announcement.label.description" bundle="EXPENDITURE_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" layout="longText">
+		<property name="columns" value="45"/>
+		<property name="rows" value="6"/>
+	</slot>
+	<slot name="executionDays" key="process.announcement.label.executionDays" bundle="EXPENDITURE_RESOURCES">
+		<validator class="pt.ist.fenixWebFramework.renderers.validators.NumberValidator" />
+		<validator class="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+	</slot>
+	<slot name="executionAddress" key="process.announcement.label.executionAddress" bundle="EXPENDITURE_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="choiceCriteria" key="process.announcement.label.choiceCriteria" bundle="EXPENDITURE_RESOURCES" layout="longText">
+		<property name="columns" value="45"/>
+		<property name="rows" value="4"/>
+	</slot>
+</schema>
+
+<schema name="viewAnnouncement.publish" type="pt.ist.expenditureTrackingSystem.domain.dto.CreateAnnouncementBean" bundle="EXPENDITURE_RESOURCES">
+	<slot name="creationDate" key="label.publishDate" bundle="EXPENDITURE_RESOURCES" />
+</schema>
+
+<!-- announcement work in progress end -->
