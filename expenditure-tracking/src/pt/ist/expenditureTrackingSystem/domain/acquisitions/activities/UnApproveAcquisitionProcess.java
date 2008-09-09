@@ -19,7 +19,7 @@ public class UnApproveAcquisitionProcess extends GenericAcquisitionProcessActivi
     protected boolean isAvailable(AcquisitionProcess process) {
 	User user = UserView.getUser();
 	return process.isApproved()
-		|| (user != null && process.isProcessInState(AcquisitionProcessStateType.SUBMITTED_FOR_APPROVAL) && process
+		|| (user != null && process.isProcessInState(AcquisitionProcessStateType.FUNDS_ALLOCATED) && process
 			.getAcquisitionRequest().hasBeenApprovedBy(user.getPerson()));
     }
 
@@ -29,9 +29,9 @@ public class UnApproveAcquisitionProcess extends GenericAcquisitionProcessActivi
 	User user = UserView.getUser();
 	Person person = user.getPerson();
 	process.getAcquisitionRequest().unapproveBy(person);
-	
+
 	if (process.isApproved()) {
-	    new AcquisitionProcessState(process, AcquisitionProcessStateType.SUBMITTED_FOR_APPROVAL);
+	    new AcquisitionProcessState(process, AcquisitionProcessStateType.FUNDS_ALLOCATED);
 	}
     }
 

@@ -40,16 +40,23 @@
 	</logic:iterate>
 </logic:present>
 
+<%-- 
 <p class="mvert15">
 	<html:link action="/acquisitionProcess.do?method=createAcquisitionRequestDocument" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
 		<bean:message key="acquisitionProcess.link.createRequestDocument" bundle="ACQUISITION_RESOURCES"/>
 	</html:link>
 </p>
-	
-<bean:define id="acquisitionProcessOid" name="acquisitionProcess" property="OID"/>
+--%>
+<bean:define id="urlAdd">/acquisitionProcess.do?method=addAcquisitionRequestDocument&amp;acquisitionProcessOid=<%= acquisitionProcessOID %></bean:define>
+<bean:define id="urlView">/acquisitionProcess.do?method=viewAcquisitionProcess&amp;acquisitionProcessOid=<%= acquisitionProcessOID %></bean:define>
 
-<fr:form action='<%= "/acquisitionProcess.do?method=viewAcquisitionProcess&acquisitionProcessOid=" +  acquisitionProcessOid %>'>
-	<html:submit styleClass="inputbutton">
-		« <bean:message key="button.back" bundle="EXPENDITURE_RESOURCES"/>
-	</html:submit>
-</fr:form>
+<fr:edit id="acquisitionRequestDocument"
+		name="uploadFile"
+		schema="addAcquisitionRequestDocument" action="<%= urlAdd %>">
+	<fr:layout name="tabular">
+		<fr:property name="classes" value="form"/>
+		<fr:property name="columnClasses" value=",,tderror"/>
+	</fr:layout>
+	<fr:destination name="cancel" path="<%= urlView %>" />
+</fr:edit>
+

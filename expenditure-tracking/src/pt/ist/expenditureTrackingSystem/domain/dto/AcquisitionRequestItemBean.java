@@ -21,6 +21,8 @@ public class AcquisitionRequestItemBean implements Serializable {
     private DomainReference<AcquisitionRequest> acquisitionRequest;
     private DomainReference<AcquisitionRequestItem> item;
     private String recipient;
+    private String phone;
+    private String email;
     private Address address;
     private DomainReference<DeliveryInfo> deliveryInfo;
     private CreateItemSchemaType createItemSchemaType;
@@ -53,6 +55,8 @@ public class AcquisitionRequestItemBean implements Serializable {
 	setAdditionalCostValue(acquisitionRequestItem.getAdditionalCostValue());
 	setItem(acquisitionRequestItem);
 	setRecipient(acquisitionRequestItem.getRecipient());
+	setPhone(acquisitionRequestItem.getRecipientPhone());
+	setEmail(acquisitionRequestItem.getRecipientEmail());
 	setAddress(acquisitionRequestItem.getAddress());
 	setCPVReference(acquisitionRequestItem.getCPVReference());
 	setDeliveryInfo(acquisitionRequestItem.getAcquisitionRequest().getRequester().getDeliveryInfoByRecipientAndAddress(
@@ -62,7 +66,8 @@ public class AcquisitionRequestItemBean implements Serializable {
 		: acquisitionRequestItem.getQuantity());
 	setRealUnitValue(acquisitionRequestItem.getRealUnitValue() != null ? acquisitionRequestItem.getRealUnitValue()
 		: acquisitionRequestItem.getUnitValue());
-	setShipment(acquisitionRequestItem.getRealAdditionalCostValue() != null ? acquisitionRequestItem.getRealAdditionalCostValue() : Money.ZERO);
+	setShipment(acquisitionRequestItem.getRealAdditionalCostValue() != null ? acquisitionRequestItem
+		.getRealAdditionalCostValue() : Money.ZERO);
 	setRealVatValue(acquisitionRequestItem.getRealVatValue() != null ? acquisitionRequestItem.getRealVatValue()
 		: acquisitionRequestItem.getVatValue());
     }
@@ -92,11 +97,11 @@ public class AcquisitionRequestItemBean implements Serializable {
     }
 
     public Money getAdditionalCostValue() {
-        return additionalCostValue;
+	return additionalCostValue;
     }
 
     public void setAdditionalCostValue(Money additionalCostValue) {
-        this.additionalCostValue = additionalCostValue;
+	this.additionalCostValue = additionalCostValue;
     }
 
     public Money getUnitValue() {
@@ -205,6 +210,22 @@ public class AcquisitionRequestItemBean implements Serializable {
 
     public void setRealVatValue(BigDecimal realVatValue) {
 	this.realVatValue = realVatValue;
+    }
+
+    public void setPhone(String phone) {
+	this.phone = phone;
+    }
+
+    public String getPhone() {
+	return phone;
+    }
+
+    public void setEmail(String email) {
+	this.email = email;
+    }
+
+    public String getEmail() {
+	return email;
     }
 
 }

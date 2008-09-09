@@ -59,6 +59,8 @@ class acquisitions.AcquisitionRequestItem {
 	Money additionalCostValue;
 	String proposalReference;
 	String recipient;
+	String recipientPhone;
+	String recipientEmail;
 	Address address;
 	
 	Integer realQuantity;
@@ -143,6 +145,8 @@ class organization.Person {
 class organization.DeliveryInfo {
 	String recipient;
 	Address address;
+	String phone;
+	String email;
 }
 
 class organization.Supplier {

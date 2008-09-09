@@ -43,14 +43,7 @@ public enum AcquisitionProcessStateType {
 
     FUNDS_ALLOCATED_TO_SERVICE_PROVIDER,
 
-    FUNDS_ALLOCATED {
-
-	@Override
-	public boolean isCurrent(final AcquisitionProcessStateType currentStateType) {
-	    return currentStateType == APPROVED;
-	}
-
-    },
+    FUNDS_ALLOCATED,
 
     APPROVED,
 

@@ -130,6 +130,12 @@
 		<property name="size" value="60"/>
 	</slot>	
 	<slot name="address" layout="address-input" key="label.receptionAddress" bundle="EXPENDITURE_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="phone" key="label.phone" bundle="EXPENDITURE_RESOURCES">
+		<property name="size" value="20"/>
+	</slot>
+	<slot name="email" key="label.email" bundle="EXPENDITURE_RESOURCES">
+		<property name="size" value="60"/>
+	</slot>				
 </schema>
 
 <schema name="createAcquisitionRequestItem_EXISTING_DELIVERY_INFO" extends="createAcquisitionRequestItem.Base"
@@ -433,6 +439,16 @@
 
 <schema name="viewAnnouncement.publish" type="pt.ist.expenditureTrackingSystem.domain.dto.CreateAnnouncementBean" bundle="EXPENDITURE_RESOURCES">
 	<slot name="creationDate" key="label.publishDate" bundle="EXPENDITURE_RESOURCES" />
+</schema>
+
+<schema name="addAcquisitionRequestDocument"
+		type="pt.ist.expenditureTrackingSystem.presentationTier.util.FileUploadBean"
+		bundle="ACQUISITION_RESOURCES">
+	<slot name="inputStream" key="acquisitionProcess.label.acquisitionRequestDocument"	
+			bundle="ACQUISITION_RESOURCES" >
+		<property name="fileNameSlot" value="filename" />
+		<property name="size" value="30"/>
+	</slot>
 </schema>
 
 <!-- announcement work in progress end -->

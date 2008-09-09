@@ -2,10 +2,10 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.activities;
 
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestDocument;
 
-public class CreateAcquisitionRequest extends GenericAcquisitionProcessActivity {
+public class SendAcquisitionRequestToSupplier extends GenericAcquisitionProcessActivity {
 
     @Override
     protected boolean isAccessible(AcquisitionProcess process) {
@@ -14,16 +14,13 @@ public class CreateAcquisitionRequest extends GenericAcquisitionProcessActivity 
 
     @Override
     protected boolean isAvailable(AcquisitionProcess process) {
-	return process.isProcessInState(AcquisitionProcessStateType.APPROVED);
+	return process.isProcessInState(AcquisitionProcessStateType.APPROVED)
+		&& process.getAcquisitionRequest().hasAcquisitionRequestDocument();
     }
 
     @Override
     protected void process(AcquisitionProcess process, Object... objects) {
-	if (objects.length == 2 && (objects[0] instanceof byte[])) {
-	    new AcquisitionRequestDocument(process.getAcquisitionRequest(), (byte[]) objects[0], (String) objects[1]);
-	} else {
-	    new AcquisitionRequestDocument(process.getAcquisitionRequest());
-	}
+	new AcquisitionProcessState(process, AcquisitionProcessStateType.ACQUISITION_PROCESSED);
     }
 
 }

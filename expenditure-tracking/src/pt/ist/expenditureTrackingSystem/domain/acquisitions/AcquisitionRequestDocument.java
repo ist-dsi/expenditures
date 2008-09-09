@@ -18,8 +18,22 @@ public class AcquisitionRequestDocument extends AcquisitionRequestDocument_Base 
 	setRequestNumber(readNextRequestNumber());
     }
 
+    public AcquisitionRequestDocument(final AcquisitionRequest acquisitionRequest, final byte[] contents, final String fileName) {
+	this();
+	if (acquisitionRequest.hasAcquisitionRequestDocument()) {
+	    acquisitionRequest.getAcquisitionRequestDocument().delete();
+	}
+
+	setAcquisitionRequest(acquisitionRequest);
+	setContent(contents);
+	setFilename(fileName);
+    }
+
     public AcquisitionRequestDocument(final AcquisitionRequest acquisitionRequest) {
 	this();
+	if (acquisitionRequest.hasAcquisitionRequestDocument()) {
+	    acquisitionRequest.getAcquisitionRequestDocument().delete();
+	}
 	setAcquisitionRequest(acquisitionRequest);
 
 	final Map<String, Object> paramMap = new HashMap<String, Object>();
@@ -27,8 +41,8 @@ public class AcquisitionRequestDocument extends AcquisitionRequestDocument_Base 
 	paramMap.put("requestNumber", getRequestNumber());
 	final ResourceBundle resourceBundle = ResourceBundle.getBundle("resources/AcquisitionResources");
 	try {
-	    byte[] byteArray = ReportUtils.exportToPdfFileAsByteArray("acquisitionRequestDocument", paramMap,
-		    resourceBundle, acquisitionRequest.getAcquisitionRequestItemsSet());
+	    byte[] byteArray = ReportUtils.exportToPdfFileAsByteArray("acquisitionRequestDocument", paramMap, resourceBundle,
+		    acquisitionRequest.getAcquisitionRequestItemsSet());
 	    setContent(byteArray);
 	} catch (JRException e) {
 	    throw new DomainException("acquisitionRequestDocument.message.exception.failedCreation");

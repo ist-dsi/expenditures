@@ -98,8 +98,8 @@ public class Person extends Person_Base {
 	super.removeRoles(roles);
     }
 
-    public void createNewDeliveryInfo(String recipient, Address address) {
-	new DeliveryInfo(this, recipient, address);
+    public void createNewDeliveryInfo(String recipient, Address address, String phone, String email) {
+	new DeliveryInfo(this, recipient, address, phone, email);
     }
 
     public DeliveryInfo getDeliveryInfoByRecipientAndAddress(String recipient, Address address) {

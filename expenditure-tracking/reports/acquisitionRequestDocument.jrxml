@@ -39,16 +39,7 @@
 			</band>
 		</background>
 		<title>
-			<band height="300"  isSplitAllowed="true" >
-				<rectangle radius="10" >
-					<reportElement
-						x="36"
-						y="217"
-						width="344"
-						height="66"
-						key="rectangle-2"/>
-					<graphicElement stretchType="NoStretch"/>
-				</rectangle>
+			<band height="250"  isSplitAllowed="true" >
 				<rectangle radius="10" >
 					<reportElement
 						mode="Transparent"
@@ -111,71 +102,6 @@
 						<font/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$P{acquisitionRequest}.getSupplier().getAddress().getLine1()]]></textFieldExpression>
-				</textField>
-				<staticText>
-					<reportElement
-						x="42"
-						y="223"
-						width="80"
-						height="13"
-						key="staticText-11"/>
-					<box></box>
-					<textElement>
-						<font/>
-					</textElement>
-				<text><![CDATA[Entrega:]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						x="65"
-						y="242"
-						width="87"
-						height="16"
-						key="staticText-12"/>
-					<box></box>
-					<textElement>
-						<font/>
-					</textElement>
-				<text><![CDATA[Nome:]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						x="65"
-						y="263"
-						width="86"
-						height="16"
-						key="staticText-13"/>
-					<box></box>
-					<textElement>
-						<font/>
-					</textElement>
-				<text><![CDATA[Local:]]></text>
-				</staticText>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="165"
-						y="242"
-						width="181"
-						height="16"
-						key="textField-10"/>
-					<box></box>
-					<textElement>
-						<font/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA["TODO"]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="165"
-						y="263"
-						width="181"
-						height="16"
-						key="textField-11"/>
-					<box></box>
-					<textElement>
-						<font/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA["TODO"]]></textFieldExpression>
 				</textField>
 				<image  evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -247,9 +173,9 @@
 			<band height="30"  isSplitAllowed="true" >
 				<staticText>
 					<reportElement
-						x="12"
+						x="0"
 						y="7"
-						width="65"
+						width="54"
 						height="16"
 						key="staticText-6"/>
 					<box></box>
@@ -260,7 +186,7 @@
 				</staticText>
 				<staticText>
 					<reportElement
-						x="89"
+						x="57"
 						y="7"
 						width="211"
 						height="16"
@@ -273,9 +199,9 @@
 				</staticText>
 				<staticText>
 					<reportElement
-						x="310"
+						x="316"
 						y="7"
-						width="49"
+						width="43"
 						height="16"
 						key="staticText-8"/>
 					<box></box>
@@ -299,9 +225,9 @@
 				</staticText>
 				<line direction="TopDown">
 					<reportElement
-						x="12"
+						x="0"
 						y="27"
-						width="515"
+						width="527"
 						height="0"
 						key="line-1"/>
 					<graphicElement stretchType="NoStretch">
@@ -334,13 +260,26 @@
 					</textElement>
 				<text><![CDATA[Total]]></text>
 				</staticText>
+				<staticText>
+					<reportElement
+						x="270"
+						y="7"
+						width="43"
+						height="16"
+						key="staticText-19"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font/>
+					</textElement>
+				<text><![CDATA[Entrega]]></text>
+				</staticText>
 			</band>
 		</columnHeader>
 		<detail>
 			<band height="40"  isSplitAllowed="true" >
 				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="88"
+						x="57"
 						y="12"
 						width="211"
 						height="18"
@@ -353,9 +292,9 @@
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="12"
+						x="0"
 						y="12"
-						width="65"
+						width="54"
 						height="18"
 						key="textField-6"/>
 					<box></box>
@@ -366,9 +305,9 @@
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="310"
+						x="316"
 						y="12"
-						width="49"
+						width="43"
 						height="18"
 						key="textField-7"/>
 					<box></box>
@@ -416,6 +355,19 @@
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{totalItemValueWithVat}.toFormatString()]]></textFieldExpression>
 				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="270"
+						y="12"
+						width="43"
+						height="18"
+						key="textField-20"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{quantity}.toString()]]></textFieldExpression>
+				</textField>
 			</band>
 		</detail>
 		<columnFooter>
@@ -430,9 +382,9 @@
 			<band height="200"  isSplitAllowed="true" >
 				<line direction="TopDown">
 					<reportElement
-						x="12"
+						x="0"
 						y="8"
-						width="515"
+						width="527"
 						height="0"
 						key="line-2"/>
 					<graphicElement stretchType="NoStretch">
@@ -442,7 +394,7 @@
 				<staticText>
 					<reportElement
 						x="369"
-						y="111"
+						y="130"
 						width="44"
 						height="16"
 						key="staticText-10"/>
@@ -455,7 +407,7 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="458"
-						y="111"
+						y="130"
 						width="77"
 						height="16"
 						key="textField-9"/>
@@ -463,33 +415,7 @@
 					<textElement>
 						<font/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$P{acquisitionRequest}.getTotalItemValue().getValue().toPlainString()]]></textFieldExpression>
-				</textField>
-				<staticText>
-					<reportElement
-						x="369"
-						y="130"
-						width="44"
-						height="16"
-						key="staticText-16"/>
-					<box></box>
-					<textElement textAlignment="Right">
-						<font pdfFontName="Helvetica-Oblique" isItalic="true"/>
-					</textElement>
-				<text><![CDATA[Taxa IVA]]></text>
-				</staticText>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="458"
-						y="130"
-						width="77"
-						height="16"
-						key="textField-14"/>
-					<box></box>
-					<textElement>
-						<font/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$P{acquisitionRequest}.getTotalItemValue().getValue().toPlainString()]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{acquisitionRequest}.getTotalItemValue().toFormatString()]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement
@@ -515,7 +441,7 @@
 					<textElement>
 						<font/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$P{acquisitionRequest}.getTotalItemValue().getValue().toPlainString()]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{acquisitionRequest}.getTotalVatValue().toFormatString()]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement
@@ -541,7 +467,7 @@
 					<textElement>
 						<font/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$P{acquisitionRequest}.getTotalItemValue().getValue().toPlainString()]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{acquisitionRequest}.getTotalItemValueWithVat().toFormatString()]]></textFieldExpression>
 				</textField>
 			</band>
 		</summary>

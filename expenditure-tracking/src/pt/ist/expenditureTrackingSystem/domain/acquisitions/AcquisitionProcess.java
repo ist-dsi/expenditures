@@ -38,6 +38,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.RejectAcq
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.RemoveFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.RemoveFundAllocationExpirationDate;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.RemovePayingUnit;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.SendAcquisitionRequestToSupplier;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.SubmitForApproval;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.SubmitForFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.UnApproveAcquisitionProcess;
@@ -71,6 +72,7 @@ public class AcquisitionProcess extends AcquisitionProcess_Base {
 	List<GenericAcquisitionProcessActivity> requestItemActivities = new ArrayList<GenericAcquisitionProcessActivity>();
 
 	requestInformationActivities.add(new CreateAcquisitionRequest());
+	requestInformationActivities.add(new SendAcquisitionRequestToSupplier());
 
 	requestInformationActivities.add(new AddAcquisitionProposalDocument());
 	requestInformationActivities.add(new CreateAcquisitionRequestItem());

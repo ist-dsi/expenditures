@@ -72,9 +72,9 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "edit.real.shares.values", path = "/acquisitions/editRealSharesValues.jsp"),
 	@Forward(name = "edit.supplier.address", path = "/acquisitions/editSupplierAddress.jsp"),
 	@Forward(name = "execute.payment", path = "/acquisitions/executePayment.jsp"),
-	
+
 	@Forward(name = "create.annoucement", path = "announcements/createAnnouncement.jsp"),
-	@Forward(name = "view.announcement", path = "announcements/viewAnnouncement.jsp")})
+	@Forward(name = "view.announcement", path = "announcements/viewAnnouncement.jsp") })
 public class AcquisitionProcessAction extends ProcessAction {
 
     private static final Context CONTEXT = new Context("acquisitions");
@@ -282,6 +282,7 @@ public class AcquisitionProcessAction extends ProcessAction {
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
+	request.setAttribute("uploadFile", new FileUploadBean());
 	return mapping.findForward("prepare.create.acquisition.request");
     }
 
@@ -315,19 +316,28 @@ public class AcquisitionProcessAction extends ProcessAction {
 
 	AcquisitionRequest acquisitionRequest = acquisitionProcess.getAcquisitionRequest();
 
-	AcquisitionRequestDocument acquisitionRequestDocument = acquisitionRequest != null ? acquisitionRequest
-		.getAcquisitionRequestDocument() : null;
-
-	if (acquisitionRequestDocument == null) {
-	    AbstractActivity<AcquisitionProcess> createAquisitionRequest = acquisitionProcess
-		    .getActivityByName("CreateAcquisitionRequest");
-	    createAquisitionRequest.execute(acquisitionProcess);
-	    acquisitionRequestDocument = acquisitionRequest.getAcquisitionRequestDocument();
-	}
+	AbstractActivity<AcquisitionProcess> createAquisitionRequest = acquisitionProcess
+		.getActivityByName("CreateAcquisitionRequest");
+	createAquisitionRequest.execute(acquisitionProcess);
+	AcquisitionRequestDocument acquisitionRequestDocument = acquisitionRequest.getAcquisitionRequestDocument();
 
 	download(response, acquisitionRequestDocument);
 
 	return null;
+    }
+
+    public ActionForward addAcquisitionRequestDocument(ActionMapping mapping, ActionForm actionForm, HttpServletRequest request,
+	    HttpServletResponse response) {
+	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
+	FileUploadBean fileUploadBean = getRenderedObject("acquisitionRequestDocument");
+	RenderUtils.invalidateViewState();
+
+	AbstractActivity<AcquisitionProcess> createAquisitionRequest = acquisitionProcess
+		.getActivityByName("CreateAcquisitionRequest");
+	byte[] content = consumeInputStream(fileUploadBean);
+	createAquisitionRequest.execute(acquisitionProcess, content, fileUploadBean.getFilename());
+
+	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
 
     public ActionForward executeReceiveInvoice(final ActionMapping mapping, final ActionForm form,
@@ -695,12 +705,18 @@ public class AcquisitionProcessAction extends ProcessAction {
 	request.setAttribute("announcementBean", new CreateAnnouncementBean());
 	return mapping.findForward("create.annoucement");
     }
-    
-    public ActionForward createAnnouncement(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
+
+    public ActionForward createAnnouncement(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
 	User user = UserView.getUser();
-	Announcement announcement = AcquisitionProcess.createAnnouncement(user.getPerson(), (CreateAnnouncementBean) getRenderedObject());
+	Announcement announcement = AcquisitionProcess.createAnnouncement(user.getPerson(),
+		(CreateAnnouncementBean) getRenderedObject());
 	request.setAttribute("announcement", announcement);
 	return mapping.findForward("view.announcement");
+    }
+
+    public ActionForward executeSendAcquisitionRequestToSupplier(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	return executeActivityAndViewProcess(mapping, form, request, response, "SendAcquisitionRequestToSupplier");
     }
 }

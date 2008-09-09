@@ -11,11 +11,13 @@ public class DeliveryInfo extends DeliveryInfo_Base {
 	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
     }
 
-    public DeliveryInfo(Person person, String recipient, Address address) {
-	checkParameters(person,recipient,address);
+    public DeliveryInfo(Person person, String recipient, Address address, String phone, String email) {
+	checkParameters(person, recipient, address);
 	setPerson(person);
 	setRecipient(recipient);
 	setAddress(address);
+	setPhone(phone);
+	setEmail(email);
     }
 
     private void checkParameters(Person person, String recipient, Address address) {

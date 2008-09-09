@@ -404,4 +404,11 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	}
 	return false;
     }
+
+    public void unSubmitForFundsAllocation() {
+	for (AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
+	    acquisitionRequestItem.unSubmitForFundsAllocation();
+	}
+
+    }
 }

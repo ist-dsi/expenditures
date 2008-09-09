@@ -68,14 +68,21 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 
     protected void setDeliveryInfo(AcquisitionRequestItemBean acquisitionRequestItemBean) {
 	String recipient;
+	String phone;
+	String email;
 	Address address;
 	if (acquisitionRequestItemBean.getDeliveryInfo() != null) {
 	    recipient = acquisitionRequestItemBean.getDeliveryInfo().getRecipient();
 	    address = acquisitionRequestItemBean.getDeliveryInfo().getAddress();
+	    phone = acquisitionRequestItemBean.getDeliveryInfo().getPhone();
+	    email = acquisitionRequestItemBean.getDeliveryInfo().getEmail();
 	} else {
 	    recipient = acquisitionRequestItemBean.getRecipient();
 	    address = acquisitionRequestItemBean.getAddress();
-	    acquisitionRequestItemBean.getAcquisitionRequest().getRequester().createNewDeliveryInfo(recipient, address);
+	    phone = acquisitionRequestItemBean.getPhone();
+	    email = acquisitionRequestItemBean.getEmail();
+	    acquisitionRequestItemBean.getAcquisitionRequest().getRequester().createNewDeliveryInfo(recipient, address, phone,
+		    email);
 	}
 	setRecipient(recipient);
 	setAddress(address);
@@ -399,5 +406,11 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	    }
 	}
 	return false;
+    }
+
+    public void unSubmitForFundsAllocation() {
+	for (UnitItem unitItem : getUnitItems()) {
+	    unitItem.setSubmitedForFundsAllocation(false);
+	}
     }
 }
