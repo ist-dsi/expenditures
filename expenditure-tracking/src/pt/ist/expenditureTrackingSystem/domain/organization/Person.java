@@ -50,8 +50,8 @@ public class Person extends Person_Base {
     }
 
     @Service
-    public Authorization createAuthorization() {
-	return new Authorization(this);
+    public Authorization createAuthorization(final Unit unit) {
+	return new Authorization(this, unit);
     }
 
     public static Person findByUsername(final String username) {

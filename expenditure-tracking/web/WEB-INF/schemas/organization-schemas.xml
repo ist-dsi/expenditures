@@ -44,7 +44,6 @@
 <schema name="viewPerson"
 		type="pt.ist.expenditureTrackingSystem.domain.organization.Person"
 		bundle="ORGANIZATION_RESOURCES">
-	<slot name="username" key="person.label.username" bundle="ORGANIZATION_RESOURCES"/>
 	<slot name="name" key="person.label.name" bundle="ORGANIZATION_RESOURCES"/>
 	<slot name="roles" layout="values-comma" key="role.label.roles" bundle="ORGANIZATION_RESOURCES"/>
 </schema>
@@ -52,8 +51,44 @@
 <schema name="viewAuthorizations"
 		type="pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization"
 		bundle="ORGANIZATION_RESOURCES">
-	<slot name="unit.name" key="unit.label.name" bundle="ORGANIZATION_RESOURCES"/>
-	<slot name="unit.costCenter" key="unit.label.costCenter" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="unit.presentationName" key="label.unit" bundle="EXPENDITURE_RESOURCES"/>
+	<slot name="startDate" key="authorizations.label.startDate" bundle="EXPENDITURE_RESOURCES" layout="null-as-label"/>
+	<slot name="endDate" key="authorizations.label.endDate" bundle="EXPENDITURE_RESOURCES" layout="null-as-label"/>
+</schema>
+
+<schema name="viewAuthorization" type="pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization"
+		bundle="ACQUISITION_RESOURCES">
+	<slot name="person.name" key="person.label.name" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="unit.name" key="label.unit" bundle="EXPENDITURE_RESOURCES"/>
+	<slot name="startDate" key="authorizations.label.startDate" bundle="EXPENDITURE_RESOURCES" layout="null-as-label">
+		<property name="subLayout" value="default"/>
+	</slot>
+	<slot name="endDate" key="authorizations.label.endDate" bundle="EXPENDITURE_RESOURCES" layout="null-as-label">
+		<property name="subLayout" value="default"/>
+	</slot>
+	<slot name="class" layout="label" key="label.authorizations.type"  bundle="EXPENDITURE_RESOURCES">
+		<property name="bundle" value="EXPENDITURE_RESOURCES"/>
+	</slot>
+	<slot name="canDelegate" key="authorizations.label.canDelegate" bundle="EXPENDITURE_RESOURCES"/>
+</schema>
+
+<schema name="editAuthorization" type="pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization"
+		bundle="ACQUISITION_RESOURCES">
+	<slot name="startDate" key="authorizations.label.startDate" bundle="EXPENDITURE_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="subLayout" value="default"/>
+	</slot>
+	<slot name="endDate" key="authorizations.label.endDate" bundle="EXPENDITURE_RESOURCES">
+		<property name="subLayout" value="default"/>
+	</slot>
+	<slot name="canDelegate" key="authorizations.label.canDelegate" bundle="EXPENDITURE_RESOURCES"/>
+</schema>
+
+<schema name="viewDelegatedAuthorizations"
+		type="pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization"
+		bundle="ORGANIZATION_RESOURCES">
+	<slot name="person.name" key="person.label.name" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="startDate" key="authorizations.label.startDate" bundle="EXPENDITURE_RESOURCES" layout="null-as-label"/>
+	<slot name="endDate" key="authorizations.label.endDate" bundle="EXPENDITURE_RESOURCES" layout="null-as-label"/>
 </schema>
 
 <schema name="supplierBean"
@@ -163,4 +198,10 @@
 	<slot name="type" key="unit.label.type" bundle="ORGANIZATION_RESOURCES"/>
 	<slot name="shortIdentifier" key="unit.label.shortIdentifier" bundle="ORGANIZATION_RESOURCES"/>
 	<slot name="name" key="unit.label.name" bundle="ORGANIZATION_RESOURCES"/>
+</schema>
+
+<schema name="role"
+		type="pt.ist.expenditureTrackingSystem.domain.RoleType"
+		bundle="ORGANIZATION_RESOURCES">
+	<slot name="name" key="role.label.roleType" bundle="ORGANIZATION_RESOURCES"/>
 </schema>

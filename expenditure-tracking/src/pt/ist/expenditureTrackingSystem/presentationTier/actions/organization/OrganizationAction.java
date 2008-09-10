@@ -9,6 +9,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.Role;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
@@ -24,6 +25,7 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.presentationTier.Context;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.BaseAction;
+import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 import pt.ist.fenixWebFramework.struts.annotations.Forward;
 import pt.ist.fenixWebFramework.struts.annotations.Forwards;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
@@ -35,6 +37,8 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "search.users", path = "/organization/searchUsers.jsp"),
 	@Forward(name = "manage.suppliers", path = "/organization/manageSuppliers.jsp"),
 	@Forward(name = "view.person", path = "/organization/viewPerson.jsp"),
+	@Forward(name = "view.authorization", path = "/organization/viewAuthorization.jsp"),
+	@Forward(name = "edit.authorization", path = "/organization/editAuthorization.jsp"),
 	@Forward(name = "create.person", path = "/organization/createPerson.jsp"),
 	@Forward(name = "edit.person", path = "/organization/editPerson.jsp"),
 	@Forward(name = "view.supplier", path = "/organization/viewSupplier.jsp"),
@@ -177,24 +181,45 @@ public class OrganizationAction extends BaseAction {
 	return mapping.findForward("view.person");
     }
 
+    public final ActionForward editAuthorization(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	final Authorization authorization = getDomainObject(request, "authorizationOid");
+	request.setAttribute("authorization", authorization);
+	return mapping.findForward("edit.authorization");
+    }
+
+    public final ActionForward viewAuthorization(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	final Authorization authorization = getDomainObject(request, "authorizationOid");
+	request.setAttribute("authorization", authorization);
+	return mapping.findForward("view.authorization");
+    }
+
     public final ActionForward attributeAuthorization(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final Person person = getDomainObject(request, "personOid");
-	final Authorization authorization = person.createAuthorization();
-	request.setAttribute("authorization", authorization);
-	return expandAuthorizationUnit(mapping, request, authorization, null);
+	request.setAttribute("person", person);
+	RenderUtils.invalidateViewState();
+	final UnitBean unitBean = new UnitBean();
+	request.setAttribute("unitBean", unitBean);
+	return expandAuthorizationUnit(mapping, request, person, null);
     }
 
     public final ActionForward expandAuthorizationUnit(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
-	final Authorization authorization = getDomainObject(request, "authorizationOid");
-	final Unit unit = getDomainObject(request, "unitOid");
-	return expandAuthorizationUnit(mapping, request, authorization, unit);
+	final UnitBean unitBean = getRenderedObject();
+	final Person person = getDomainObject(request, "personOid");
+	if (unitBean == null || unitBean.getUnit() == null) {
+	    final Unit unit = getDomainObject(request, "unitOid");
+	    return expandAuthorizationUnit(mapping, request, person, unit);
+	} else {
+	    return expandAuthorizationUnit(mapping, request, person, unitBean.getUnit());
+	}
     }
 
     public final ActionForward expandAuthorizationUnit(final ActionMapping mapping, final HttpServletRequest request,
-	    final Authorization authorization, final Unit unit) {
-	request.setAttribute("authorization", authorization);
+	    final Person person, final Unit unit) {
+	request.setAttribute("person", person);
 	request.setAttribute("unit", unit);
 	final Set<Unit> units = unit == null ? ExpenditureTrackingSystem.getInstance().getTopLevelUnitsSet() : unit
 		.getSubUnitsSet();
@@ -204,10 +229,9 @@ public class OrganizationAction extends BaseAction {
 
     public final ActionForward changeAuthorizationUnit(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
-	final Authorization authorization = getDomainObject(request, "authorizationOid");
+	final Person person = getDomainObject(request, "personOid");
 	final Unit unit = getDomainObject(request, "unitOid");
-	authorization.changeUnit(unit);
-	final Person person = authorization.getPerson();
+	person.createAuthorization(unit);
 	return viewPerson(mapping, request, person);
     }
 
@@ -285,6 +309,20 @@ public class OrganizationAction extends BaseAction {
 	final Supplier supplier = getDomainObject(request, "supplierOid");
 	supplier.delete();
 	return manageSuppliers(mapping, form, request, response);
+    }
+
+    public ActionForward revokeAuthorization(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+
+	final Authorization authorization = getDomainObject(request, "authorizationOid");
+	
+	try {
+	    authorization.revoke();
+	} catch (DomainException e) {
+	    addErrorMessage(e.getMessage(), "EXPENDITURE_RESOURCES");
+	}
+
+	return viewAuthorization(mapping, form, request, response);
     }
 
 }

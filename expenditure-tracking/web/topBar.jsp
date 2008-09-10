@@ -3,9 +3,7 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 
-<%@page import="pt.ist.fenixWebFramework.servlets.filters.SetUserViewFilter"%>
-
-<logic:present name="<%= SetUserViewFilter.USER_SESSION_ATTRIBUTE %>" property="person">
+<logic:present name="USER_SESSION_ATTRIBUTE" property="person">
 	<ul>
 		<li>
 			<html:link action="/home.do?method=firstPage">

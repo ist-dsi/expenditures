@@ -316,22 +316,6 @@
 	<slot name="realShareValue" key="acquisitionProcess.label.realAllocatin" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 </schema>
 
-<schema name="viewAuthorization" type="pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization"
-		bundle="ACQUISITION_RESOURCES">
-		<slot name="person.name" key="person.label.name"/>
-		<slot name="unit.name" key="label.unit" bundle="EXPENDITURE_RESOURCES"/>
-		<slot name="class" layout="label" key="label.authorizations.type"  bundle="EXPENDITURE_RESOURCES">
-			<property name="bundle" value="EXPENDITURE_RESOURCES"/>
-		</slot>
-		<slot name="canDelegate" key="authorizations.label.canDelegate" bundle="EXPENDITURE_RESOURCES"/>
-		<slot name="startDate" key="authorizations.label.startDate" bundle="EXPENDITURE_RESOURCES" layout="null-as-label">
-			<property name="subLayout" value="default"/>
-		</slot>
-		<slot name="endDate" key="authorizations.label.endDate" bundle="EXPENDITURE_RESOURCES" layout="null-as-label">
-			<property name="subLayout" value="default"/>
-		</slot>
-</schema>
-
 <schema name="delegateAuthorization" type="pt.ist.expenditureTrackingSystem.domain.dto.AuthorizationBean"
 		bundle="ACQUISITION_RESOURCES">
 		<slot name="person" key="person.label.name" layout="autoComplete">

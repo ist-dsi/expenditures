@@ -29,11 +29,13 @@ public class ExceptionHandlerFilter implements Filter {
 	try {
 	    filterChain.doFilter(request, response);
 	} catch (ServletException servletException) {
+	    servletException.printStackTrace();
 	    StringWriter out = new StringWriter();
 	    servletException.getRootCause().printStackTrace(new PrintWriter(out));
 	    request.setAttribute("error", out.toString());
 	    httpServletRequest.getRequestDispatcher("/error.jsp").forward(request, response);
 	} catch (Exception exception) {
+	    exception.printStackTrace();
 	    StringWriter out = new StringWriter();
 	    exception.printStackTrace(new PrintWriter(out));
 	    request.setAttribute("error", out.toString());

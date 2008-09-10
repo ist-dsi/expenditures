@@ -22,9 +22,10 @@ public class Authorization extends Authorization_Base {
 	setStartDate(new LocalDate());
     }
 
-    public Authorization(final Person person) {
+    public Authorization(final Person person, final Unit unit) {
 	this();
 	setPerson(person);
+	setUnit(unit);
 	setCanDelegate(Boolean.FALSE);
     }
 

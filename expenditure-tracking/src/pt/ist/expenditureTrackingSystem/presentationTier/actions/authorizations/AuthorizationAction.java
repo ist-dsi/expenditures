@@ -21,7 +21,7 @@ import pt.ist.fenixWebFramework.struts.annotations.Forwards;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
 @Mapping(path = "/authorizations")
-@Forwards( { @Forward(name = "view.authorizations", path = "/authorizations/viewAuthorizations.jsp"),
+@Forwards( { @Forward(name = "view.authorizations", path = "/organization.do?method=viewAuthorization"),
 	@Forward(name = "delegate.authorization", path = "/authorizations/delegateAuthorization.jsp"),
 	@Forward(name = "authorization.details", path = "/authorizations/authorizationDetails.jsp") })
 public class AuthorizationAction extends BaseAction {
@@ -83,7 +83,7 @@ public class AuthorizationAction extends BaseAction {
     public ActionForward revokeAuthorization(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 
-	DelegatedAuthorization authorizationToRevoke = getDomainObject(request, "revokeAuthorizationOID");
+	DelegatedAuthorization authorizationToRevoke = getDomainObject(request, "authorizationOid");
 	
 	try {
 	    authorizationToRevoke.revoke();
