@@ -8,7 +8,7 @@ location=PT
 variant=
 app.context=expenditures
 filter.request.with.digest=true
-digest.tampering.url=http://localhost:8080/expenditrues
+digest.tampering.url=http://localhost:8080/expenditures
 cas.enable=true
 cas.loginUrl=https://login.ist.utl.pt/login?service=
 cas.ValidateUrl=https://login.ist.utl.pt/serviceValidate
