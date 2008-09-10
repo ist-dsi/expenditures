@@ -39,14 +39,6 @@
 				<div class="lic1"></div>
 			</html:link>
 		</li>
-		<li>
-			<html:link action="/authorizations.do?method=viewAuthorizations">
-				<span>
-					<bean:message key="link.topBar.authorizations" bundle="EXPENDITURE_RESOURCES"/>
-				</span>
-				<div class="lic1"></div>
-			</html:link>
-		</li>
 	</ul>
 </logic:present>
 

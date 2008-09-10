@@ -318,7 +318,7 @@
 
 <schema name="delegateAuthorization" type="pt.ist.expenditureTrackingSystem.domain.dto.AuthorizationBean"
 		bundle="ACQUISITION_RESOURCES">
-		<slot name="person" key="person.label.name" layout="autoComplete">
+		<slot name="person" key="person.label.name" layout="autoComplete" bundle="ORGANIZATION_RESOURCES">
 			<property name="labelField" value="name"/>
 			<property name="format" value="${name} (${username})"/>
 			<property name="minChars" value="1"/>		
@@ -330,7 +330,7 @@
 				<property name="key" value="true"/>
 			</validator>
 		</slot>
-		<slot name="canDelegate" key="authorizations.label.canDelegate" bundle="ORGANIZATION_RESOURCES"/>
+		<slot name="canDelegate" key="authorizations.label.canDelegate" bundle="EXPENDITURE_RESOURCES"/>
 		<slot name="endDate" key="authorizations.label.endDate" bundle="EXPENDITURE_RESOURCES"/>
 </schema>
 

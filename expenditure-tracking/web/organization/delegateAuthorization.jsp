@@ -11,11 +11,13 @@
 
 <jsp:include page="../commons/defaultErrorDisplay.jsp"/>
 
+<bean:define id="urlCreate">/organization.do?method=createDelegation&amp;authorizationOid=<bean:write name="authorization" property="OID"/></bean:define>
+<bean:define id="urlCancel">/organization.do?method=viewAuthorization&amp;authorizationOid=<bean:write name="authorization" property="OID"/></bean:define>
 <logic:present name="bean">
-	<fr:edit id="bean" name="bean" schema="delegateAuthorization" action="/authorizations.do?method=createDelegation">
+	<fr:edit id="bean" name="bean" schema="delegateAuthorization" action="<%= urlCreate %>">
 		<fr:layout>
 			<fr:property name="classes" value="tstyle3"/>
 		</fr:layout>
-		<fr:destination name="cancel" path="/authorizations.do?method=viewAuthorizations"/> 
+		<fr:destination name="cancel" path="<%= urlCancel %>"/> 
 	</fr:edit>
 </logic:present>

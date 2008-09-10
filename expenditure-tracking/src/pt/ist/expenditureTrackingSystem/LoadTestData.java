@@ -179,8 +179,7 @@ public class LoadTestData {
 	    fenixPerson.person = person;
 	    for (final Long oid : fenixPerson.unitOids) {
 		final FenixUnit fenixUnit = fenixUnitMap.get(oid);
-		final Authorization authorization = new Authorization(person);
-		authorization.setUnit(fenixUnit.unit);
+		final Authorization authorization = new Authorization(person, fenixUnit.unit);
 		authorization.setCanDelegate(Boolean.TRUE);
 	    }
 	}
@@ -213,8 +212,7 @@ public class LoadTestData {
 		final Unit unit = Unit.createNewUnit(createUnitBean);
 
 		if (responsible != null) {
-		    final Authorization authorization = new Authorization(responsible);
-		    authorization.setUnit(unit);
+		    final Authorization authorization = new Authorization(responsible, unit);
 		    authorization.setCanDelegate(Boolean.FALSE);
 		}
 	    }

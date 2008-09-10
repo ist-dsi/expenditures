@@ -14,6 +14,8 @@ import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.Role;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
+import pt.ist.expenditureTrackingSystem.domain.authorizations.DelegatedAuthorization;
+import pt.ist.expenditureTrackingSystem.domain.dto.AuthorizationBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreatePersonBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateSupplierBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateUnitBean;
@@ -39,6 +41,7 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "view.person", path = "/organization/viewPerson.jsp"),
 	@Forward(name = "view.authorization", path = "/organization/viewAuthorization.jsp"),
 	@Forward(name = "edit.authorization", path = "/organization/editAuthorization.jsp"),
+	@Forward(name = "delegate.authorization", path = "/organization/delegateAuthorization.jsp"),
 	@Forward(name = "create.person", path = "/organization/createPerson.jsp"),
 	@Forward(name = "edit.person", path = "/organization/editPerson.jsp"),
 	@Forward(name = "view.supplier", path = "/organization/viewSupplier.jsp"),
@@ -323,6 +326,39 @@ public class OrganizationAction extends BaseAction {
 	}
 
 	return viewAuthorization(mapping, form, request, response);
+    }
+
+    public ActionForward delegateAuthorization(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+
+	Authorization authorization = getDomainObject(request, "authorizationOid");
+	request.setAttribute("authorization", authorization);
+	Person person = getLoggedPerson();
+
+	if (authorization.getPerson() == person && authorization.getCanDelegate()) {
+	    AuthorizationBean bean = new AuthorizationBean(authorization);
+	    request.setAttribute("bean", bean);
+	} else {
+	    addErrorMessage("label.unable.to.delegate.that.action", "EXPENDITURE_RESOURCES");
+	}
+
+	return mapping.findForward("delegate.authorization");
+    }
+
+    public ActionForward createDelegation(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+
+	final AuthorizationBean bean = getRenderedObject("bean");
+	try {
+	    DelegatedAuthorization.delegate(bean.getAuthorization(), bean.getPerson(), bean.getCanDelegate(), bean.getEndDate());
+	} catch (DomainException e) {
+	    addErrorMessage(e.getMessage(), "EXPENDITURE_RESOURCES");
+	    request.setAttribute("bean", bean);
+	    return mapping.findForward("delegate.authorization");
+	}
+	RenderUtils.invalidateViewState();
+	request.setAttribute("authorization", bean.getAuthorization());
+	return mapping.findForward("view.authorization");
     }
 
 }
