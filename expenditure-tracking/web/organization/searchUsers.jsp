@@ -11,6 +11,8 @@
 		type="pt.ist.expenditureTrackingSystem.domain.organization.SearchUsers"
 		schema="searchUsers">
 	<fr:layout name="tabular">
+		<fr:property name="classes" value="form"/>
+		<fr:property name="columnClasses" value=",,tderror"/>
 	</fr:layout>
 </fr:edit>
 <logic:present role="MANAGER">
