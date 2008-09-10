@@ -6,7 +6,6 @@
 
 <!-- public/viewAnnouncements.jsp -->
 
-<div class="wrapper">
 
 <h2><bean:message key="process.announcement.title" bundle="EXPENDITURE_RESOURCES"/></h2>
 

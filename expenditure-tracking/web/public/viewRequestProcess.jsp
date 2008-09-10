@@ -7,7 +7,7 @@
 
 <!-- public/viewRequestProcess.jsp -->
 
-<div class="wrapper">
+
 
 <h2><bean:message key="process.requestForProposal.title.details" bundle="EXPENDITURE_RESOURCES"/></h2>
 
@@ -35,4 +35,3 @@
 	</p>
 </div>
 
-</div>

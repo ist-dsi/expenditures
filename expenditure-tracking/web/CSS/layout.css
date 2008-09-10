@@ -113,7 +113,6 @@ font-weight: bold;
 border: 0px;
 padding-bottom: 0;
 padding-top: 10px;
-clear: both;
 background: #15587a;
 }
 #header p { 
@@ -131,17 +130,17 @@ padding-right: 0.5em;
 
 /**************** menu styles ****************/
 #tabs10 {
-position:relative;
-float: left;
+position: relative;
+height: 3.7em;
 font-size: 93%;
-/*border-bottom: 4px solid #2763A5;*/
-line-height: normal;
 background: #15587a;
 text-transform: uppercase;
 }
 #tabs10 ul {
+position: absolute;
+bottom: 0;
 margin: 0;
-padding: 12px 10px 0 50px;
+padding: 0 10px 0 50px;
 list-style: none;
 }
 #tabs10 ul li {
