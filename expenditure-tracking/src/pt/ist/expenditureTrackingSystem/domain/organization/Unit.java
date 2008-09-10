@@ -1,6 +1,7 @@
 package pt.ist.expenditureTrackingSystem.domain.organization;
 
 import java.util.Comparator;
+import java.util.ResourceBundle;
 import java.util.Set;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
@@ -13,6 +14,7 @@ import pt.ist.expenditureTrackingSystem.domain.dto.CreateUnitBean;
 import pt.ist.expenditureTrackingSystem.domain.util.Money;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.pstm.Transaction;
+import pt.utl.ist.fenix.tools.util.i18n.Language;
 
 public class Unit extends Unit_Base {
 
@@ -130,6 +132,14 @@ public class Unit extends Unit_Base {
 
     public String getPresentationName() {
 	return getName();
+    }
+
+    public String getType() {
+	return ResourceBundle.getBundle("resources/OrganizationResources", Language.getLocale()).getString("label." + getClass().getSimpleName());
+    }
+
+    public String getShortIdentifier() {
+	return "";
     }
 
 }

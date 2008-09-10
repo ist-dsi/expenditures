@@ -132,3 +132,35 @@
 	<slot name="name" key="supplier.label.name" bundle="ORGANIZATION_RESOURCES"/>
 	<slot name="abbreviatedName" key="supplier.label.abbreviatedName" bundle="ORGANIZATION_RESOURCES"/>
 </schema>
+
+<schema name="unitBean"
+		type="pt.ist.expenditureTrackingSystem.domain.dto.UnitBean"
+		bundle="ORGANIZATION_RESOURCES">
+	<slot name="unit" layout="autoComplete" key="label.unit" bundle="EXPENDITURE_RESOURCES">
+        <property name="labelField" value="presentationName"/>
+		<property name="format" value="${presentationName}"/>
+		<property name="minChars" value="3"/>		
+		<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.UnitAutoCompleteProvider" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+		<property name="size" value="40"/>
+		<validator class="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator">
+			<property name="message" value="label.pleaseSelectOne.unit"/>
+			<property name="bundle" value="EXPENDITURE_RESOURCES"/>
+			<property name="key" value="true"/>
+		</validator>
+	</slot>
+</schema>
+
+<schema name="unit"
+		type="pt.ist.expenditureTrackingSystem.domain.organization.Unit"
+		bundle="ORGANIZATION_RESOURCES">
+	<slot name="type" key="unit.label.type" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="presentationName" key="unit.label.name" bundle="ORGANIZATION_RESOURCES"/>
+</schema>
+
+<schema name="unitList"
+		type="pt.ist.expenditureTrackingSystem.domain.organization.Unit"
+		bundle="ORGANIZATION_RESOURCES">
+	<slot name="type" key="unit.label.type" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="shortIdentifier" key="unit.label.shortIdentifier" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="name" key="unit.label.name" bundle="ORGANIZATION_RESOURCES"/>
+</schema>

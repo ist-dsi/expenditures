@@ -31,4 +31,9 @@ public class Project extends Project_Base {
 	return super.getPresentationName() + " (p. " + getProjectCode() + ")";
     }
 
+    @Override
+    public String getShortIdentifier() {
+	return getProjectCode();
+    }
+
 }

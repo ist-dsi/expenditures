@@ -17,6 +17,7 @@ import pt.ist.expenditureTrackingSystem.domain.dto.CreatePersonBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateSupplierBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateUnitBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.SupplierBean;
+import pt.ist.expenditureTrackingSystem.domain.dto.UnitBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.SearchUsers;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
@@ -51,7 +52,12 @@ public class OrganizationAction extends BaseAction {
 
     public final ActionForward viewOrganization(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
-	final Unit unit = getDomainObject(request, "unitOid");
+	UnitBean unitBean = getRenderedObject();
+	if (unitBean == null) {
+	    unitBean = new UnitBean();
+	}
+	final Unit unit = unitBean.getUnit() == null ? (Unit) getDomainObject(request, "unitOid") : unitBean.getUnit();
+	request.setAttribute("unitBean", unitBean);
 	return viewOrganization(mapping, request, unit);
     }
 

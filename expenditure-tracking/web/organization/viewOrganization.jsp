@@ -6,6 +6,17 @@
 
 <h2><bean:message key="title.viewOrganization" bundle="EXPENDITURE_RESOURCES"/></h2>
 
+<br/>
+<fr:edit id="unitBean"
+		name="unitBean"
+		type="pt.ist.expenditureTrackingSystem.domain.dto.UnitBean"
+		schema="unitBean">
+	<fr:layout name="tabular">
+		<fr:property name="classes" value="form"/>
+		<fr:property name="columnClasses" value=",,tderror"/>
+	</fr:layout>
+</fr:edit>
+
 <logic:present role="MANAGER">
 	<br />
 	<logic:notPresent name="unit">
@@ -23,66 +34,12 @@
 <br/>
 <br/>
 <logic:present name="unit">
-
-	<logic:notEmpty name="unit" property="authorizations">
-			<bean:message key="authorizations.label.responsibles" bundle="EXPENDITURE_RESOURCES"/>:
-				<fr:view name="unit" property="authorizations" schema="viewAuthorization">
-					<fr:layout name="tabular">
-						<fr:property name="classes" value="tstyle2"/>
-					</fr:layout>
-				</fr:view>	
-	</logic:notEmpty>
-	
-	<logic:empty name="unit" property="authorizations">
-		<p><em><bean:message key="authorizations.label.noResponsiblesDefinedForUnit" bundle="EXPENDITURE_RESOURCES"/></em></p>
-	</logic:empty>
-	
-	<logic:present name="unit" property="parentUnit">
-		<html:link action="/organization.do?method=viewOrganization" paramId="unitOid" paramName="unit" paramProperty="parentUnit.OID">
-			<bean:write name="unit" property="parentUnit.name"/>
-		</html:link>
-		<logic:equal name="unit" property="parentUnit.class.name" value="pt.ist.expenditureTrackingSystem.domain.organization.CostCenter">
-			<logic:notEmpty name="unit" property="parentUnit.costCenter">
-				(cc <bean:write name="unit" property="parentUnit.costCenter"/> )
-			</logic:notEmpty>
-		</logic:equal>
-		<logic:equal name="unit" property="parentUnit.class.name" value="pt.ist.expenditureTrackingSystem.domain.organization.Project">
-			<logic:notEmpty name="unit" property="parentUnit.projectCode">
-				(p <bean:write name="unit" property="parentUnit.projectCode"/> )
-			</logic:notEmpty>
-		</logic:equal>
-		<logic:equal name="unit" property="parentUnit.class.name" value="pt.ist.expenditureTrackingSystem.domain.organization.SubProject">
-			<logic:notEmpty name="unit" property="parentUnit.projectCode">
-				(sp)
-			</logic:notEmpty>
-		</logic:equal>
-		<logic:present role="MANAGER">
-			<html:link action="/organization.do?method=editUnit" paramId="unitOid" paramName="unit" paramProperty="parentUnit.OID">
-				<bean:message key="link.edit" bundle="EXPENDITURE_RESOURCES"/>
-			</html:link>
-			<html:link action="/organization.do?method=deleteUnit" paramId="unitOid" paramName="unit" paramProperty="parentUnit.OID">
-				<bean:message key="link.delete" bundle="EXPENDITURE_RESOURCES"/>
-			</html:link>
-		</logic:present>
-		<br/>	
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	</logic:present>
-	<html:link action="/organization.do?method=viewOrganization" paramId="unitOid" paramName="unit" paramProperty="OID">
-		<bean:write name="unit" property="name"/>
-	</html:link>
-	<logic:equal name="unit" property="class.name" value="pt.ist.expenditureTrackingSystem.domain.organization.CostCenter">
-		<logic:notEmpty name="unit" property="costCenter">
-			(cc <bean:write name="unit" property="costCenter"/> )
-		</logic:notEmpty>
-	</logic:equal>
-	<logic:equal name="unit" property="class.name" value="pt.ist.expenditureTrackingSystem.domain.organization.Project">
-		<logic:notEmpty name="unit" property="projectCode">
-			(p <bean:write name="unit" property="projectCode"/> )
-		</logic:notEmpty>
-	</logic:equal>
-	<logic:equal name="unit" property="class.name" value="pt.ist.expenditureTrackingSystem.domain.organization.SubProject">
-		(sp)
-	</logic:equal>
+	<fr:view name="unit" schema="unit">
+		<fr:layout name="tabular">
+			<fr:property name="classes" value="tstyle2"/>
+			<fr:property name="columnClasses" value="aleft,,,,aright,"/>
+		</fr:layout>
+	</fr:view>
 	<logic:present role="MANAGER">
 		<html:link action="/organization.do?method=editUnit" paramId="unitOid" paramName="unit" paramProperty="OID">
 			<bean:message key="link.edit" bundle="EXPENDITURE_RESOURCES"/>
@@ -90,41 +47,50 @@
 		<html:link action="/organization.do?method=deleteUnit" paramId="unitOid" paramName="unit" paramProperty="OID">
 			<bean:message key="link.delete" bundle="EXPENDITURE_RESOURCES"/>
 		</html:link>
-	</logic:present>
-	<br/>	
-</logic:present>
-<logic:present name="units">
-	<logic:iterate id="u" name="units">
-		<logic:present name="unit">
-			<logic:present name="unit" property="parentUnit">
-				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			</logic:present>
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		</logic:present>
-		<html:link action="/organization.do?method=viewOrganization" paramId="unitOid" paramName="u" paramProperty="OID">
-			<bean:write name="u" property="name"/>
-		</html:link>
-		<logic:equal name="u" property="class.name" value="pt.ist.expenditureTrackingSystem.domain.organization.CostCenter">
-			<logic:notEmpty name="u" property="costCenter">
-				(cc <bean:write name="u" property="costCenter"/> )
-			</logic:notEmpty>
-		</logic:equal>
-		<logic:equal name="u" property="class.name" value="pt.ist.expenditureTrackingSystem.domain.organization.Project">
-			<logic:notEmpty name="u" property="projectCode">
-				(p <bean:write name="u" property="projectCode"/> )
-			</logic:notEmpty>
-		</logic:equal>
-		<logic:equal name="u" property="class.name" value="pt.ist.expenditureTrackingSystem.domain.organization.SubProject">
-			(sp)
-		</logic:equal>
-		<logic:present role="MANAGER">
-			<html:link action="/organization.do?method=editUnit" paramId="unitOid" paramName="u" paramProperty="OID">
-				<bean:message key="link.edit" bundle="EXPENDITURE_RESOURCES"/>
-			</html:link>
-			<html:link action="/organization.do?method=deleteUnit" paramId="unitOid" paramName="u" paramProperty="OID">
-				<bean:message key="link.delete" bundle="EXPENDITURE_RESOURCES"/>
-			</html:link>
-		</logic:present>
 		<br/>
-	</logic:iterate>
+		<br/>
+	</logic:present>
+
+	<logic:notEmpty name="unit" property="authorizations">
+		<h3><bean:message key="authorizations.label.responsibles" bundle="EXPENDITURE_RESOURCES"/>:</h3>
+		<fr:view name="unit" property="authorizations" schema="viewAuthorization">
+			<fr:layout name="tabular">
+				<fr:property name="classes" value="tstyle2"/>
+			</fr:layout>
+		</fr:view>	
+	</logic:notEmpty>	
+	<logic:empty name="unit" property="authorizations">
+		<p><em><bean:message key="authorizations.label.noResponsiblesDefinedForUnit" bundle="EXPENDITURE_RESOURCES"/></em></p>
+	</logic:empty>
+
+	<logic:present name="unit" property="parentUnit">
+		<br/>
+		<h3>Unidade Superior: </h3>
+		<bean:define id="unitToDisplay" toScope="request" name="unit" property="parentUnit"/>
+		<jsp:include page="unitLine.jsp" flush="false"/>
+	</logic:present>
+
+</logic:present>
+
+<logic:present name="units">
+	<logic:notEmpty name="units">
+		<logic:present name="unit">
+			<br/>
+			<h3>SubUnidades</h3>
+		</logic:present>
+		<fr:view name="units"
+				schema="unitList">
+			<fr:layout name="tabular">
+				<fr:property name="classes" value="tstyle2"/>
+				<fr:property name="columnClasses" value="aleft,,,,aright,"/>
+				<fr:property name="sortBy" value="name=asc"/>
+
+				<fr:property name="link(view)" value="/organization.do?method=viewOrganization"/>
+				<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
+				<fr:property name="key(view)" value="link.view"/>
+				<fr:property name="param(view)" value="OID/unitOid"/>
+				<fr:property name="order(view)" value="1"/>
+			</fr:layout>
+		</fr:view>
+	</logic:notEmpty>
 </logic:present>

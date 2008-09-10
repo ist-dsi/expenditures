@@ -39,4 +39,9 @@ public class CostCenter extends CostCenter_Base {
 	return super.getPresentationName() + " (cc. " + getCostCenter() + ")";
     }
 
+    @Override
+    public String getShortIdentifier() {
+	return getCostCenter();
+    }
+
 }
