@@ -719,4 +719,9 @@ public class AcquisitionProcessAction extends ProcessAction {
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	return executeActivityAndViewProcess(mapping, form, request, response, "SendAcquisitionRequestToSupplier");
     }
+
+    public ActionForward executeSubmitForConfirmInvoice(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	return executeActivityAndViewProcess(mapping, form, request, response, "SubmitForConfirmInvoice");
+    }
 }

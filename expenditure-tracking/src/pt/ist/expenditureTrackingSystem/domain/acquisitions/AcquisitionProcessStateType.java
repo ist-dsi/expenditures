@@ -51,6 +51,8 @@ public enum AcquisitionProcessStateType {
 
     INVOICE_RECEIVED,
 
+    SUBMITTED_FOR_CONFIRM_INVOICE,
+
     INVOICE_CONFIRMED,
 
     FUNDS_ALLOCATED_PERMANENTLY,

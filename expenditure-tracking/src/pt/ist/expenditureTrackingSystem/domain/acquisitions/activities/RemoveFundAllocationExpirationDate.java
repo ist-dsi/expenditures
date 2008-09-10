@@ -9,7 +9,7 @@ public class RemoveFundAllocationExpirationDate extends GenericAcquisitionProces
 
     @Override
     protected boolean isAccessible(AcquisitionProcess process) {
-	return userHasRole(RoleType.ACQUISITION_CENTRAL);
+	return userHasRole(RoleType.ACCOUNTABILITY);
     }
 
     @Override

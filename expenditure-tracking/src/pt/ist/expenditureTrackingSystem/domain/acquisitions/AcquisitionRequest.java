@@ -411,4 +411,34 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	}
 
     }
+
+    public boolean checkRealValues() {
+	return isRealTotalValueEqualsRealShareValue() && isRealUnitShareValueLessThanUnitShareValue()
+		&& isRealValueLessThanTotalValue();
+    }
+
+    public Money getTotalRealShareValue() {
+	Money res = Money.ZERO;
+	for (Financer financer : getFinancersSet()) {
+	    res = res.add(financer.getRealShareValue());
+	}
+	return res;
+    }
+
+    public boolean isRealValueLessThanTotalValue() {
+	return getRealTotalValue().isLessThanOrEqual(getTotalItemValue());
+    }
+
+    public boolean isRealUnitShareValueLessThanUnitShareValue() {
+	for (Financer financer : getFinancersSet()) {
+	    if (!financer.isRealUnitShareValueLessThanUnitShareValue()) {
+		return false;
+	    }
+	}
+	return true;
+    }
+
+    public boolean isRealTotalValueEqualsRealShareValue() {
+	return getRealTotalValueWithAdditionalCostsAndVat().equals(getTotalRealShareValue());
+    }
 }

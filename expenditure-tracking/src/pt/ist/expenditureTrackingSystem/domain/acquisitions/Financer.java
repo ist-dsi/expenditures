@@ -53,4 +53,24 @@ public class Financer extends Financer_Base {
 	}
 	return amount;
     }
+
+    public Money getRealShareValue() {
+	Money amount = Money.ZERO;
+	for (UnitItem unitItem : getUnitItemsSet()) {
+	    amount = amount.add(unitItem.getRealShareValue());
+	}
+	return amount;
+    }
+
+    public Money getShareValue() {
+	Money amount = Money.ZERO;
+	for (UnitItem unitItem : getUnitItemsSet()) {
+	    amount = amount.add(unitItem.getShareValue());
+	}
+	return amount;
+    }
+
+    public boolean isRealUnitShareValueLessThanUnitShareValue() {
+	return getRealShareValue().isLessThanOrEqual(getShareValue());
+    }
 }

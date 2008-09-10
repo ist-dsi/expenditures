@@ -70,9 +70,4 @@ public class AcquisitionRequestDocument extends AcquisitionRequestDocument_Base 
 	return ++requestNumber;
     }
 
-    @Override
-    protected String guessContentType(String filename) {
-	return CONTENT_TYPE_PDF;
-    }
-
 }
