@@ -50,7 +50,7 @@
 			</html:link>
 		</li>
 	</ul>
-
-	<div class="c1"></div>
-	<div class="c2"></div>
 </logic:present>
+
+<div class="c1"></div>
+<div class="c2"></div>
