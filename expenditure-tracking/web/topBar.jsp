@@ -16,14 +16,14 @@
 			</html:link>
 		</li>
 		<logic:present role="MANAGER">
-		<li>
-			<html:link action="/requestForProposalProcess.do?method=showPendingRequests">
-				<span>
-					<bean:message key="link.topBar.requestForProposal" bundle="EXPENDITURE_RESOURCES"/>
-				</span>
-				<div class="lic1"></div>
-			</html:link>
-		</li>
+			<li>
+				<html:link action="/requestForProposalProcess.do?method=showPendingRequests">
+					<span>
+						<bean:message key="link.topBar.requestForProposal" bundle="EXPENDITURE_RESOURCES"/>
+					</span>
+					<div class="lic1"></div>
+				</html:link>
+			</li>
 		</logic:present>
 		<li>
 			<html:link action="/acquisitionProcess.do?method=showPendingProcesses">
