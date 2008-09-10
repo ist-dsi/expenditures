@@ -4,3 +4,13 @@
 	<slot name="displayAuthorizationPending" key="options.label.displayPendingAuthorizations" bundle="EXPENDITURE_RESOURCES"/>
 	<slot name="recurseAuthorizationPendingUnits" key="options.label.recurseIntoUnits" bundle="EXPENDITURE_RESOURCES"/>
 </schema>
+
+<schema name="interfaceOptionsCssUpload"
+		type="pt.ist.expenditureTrackingSystem.presentationTier.util.FileUploadBean"
+		bundle="EXPENDITURE_RESOURCES">
+	<slot name="inputStream" key="options.label.css.upload" bundle="EXPENDITURE_RESOURCES"
+			validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="fileNameSlot" value="filename" />
+		<property name="size" value="30"/>
+	</slot>
+</schema>

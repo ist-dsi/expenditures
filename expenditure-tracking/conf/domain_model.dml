@@ -124,6 +124,9 @@ class File {
 		String invoiceNumber;
 		LocalDate invoiceDate;
 	}
+
+	class CascadingStyleSheet extends File {
+	}
 	
 	class requests.RequestForProposalDocument extends File {
 	}
@@ -582,4 +585,9 @@ relation AnnouncementPublisher {
 relation AnnouncementAcquisition {
 	acquisitions.Announcement playsRole announcement;
 	acquisitions.Acquisition playsRole acquisition;
+}
+
+relation OptionsCascadingStyleSheet {
+	Options playsRole options;
+	CascadingStyleSheet playsRole cascadingStyleSheet;
 }

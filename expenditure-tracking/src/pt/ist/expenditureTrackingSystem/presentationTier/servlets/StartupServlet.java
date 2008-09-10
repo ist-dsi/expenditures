@@ -16,8 +16,14 @@ public class StartupServlet extends HttpServlet {
 	String domainModelPath = getServletContext().getRealPath(getInitParameter("domainmodel"));
 	FenixWebFramework.initialize(PropertiesManager.getFenixFrameworkConfig(domainModelPath));
 	ExpenditureTrackingSystem.initialize(FenixWebFramework.getConfig());
-	final String managerUsername = PropertiesManager.getProperty("manager.usernames");
-	Authenticate.init(managerUsername);
+	final String managerUsernames = PropertiesManager.getProperty("manager.usernames");
+	Authenticate.initManagerRole(managerUsernames);
+	final String acquisitionCentralUsernames = PropertiesManager.getProperty("acquisitionCentral.usernames");
+	Authenticate.initAcquisitionCentralRole(acquisitionCentralUsernames);
+	final String acquisitionCentralAdministratorUsernames = PropertiesManager.getProperty("acquisitionCentralAdministrator.usernames");
+	Authenticate.initAcquisitionCentralAdministratorRole(acquisitionCentralAdministratorUsernames);
+	final String accountingUsernames = PropertiesManager.getProperty("acounting.usernames");
+	Authenticate.initAccountingRole(accountingUsernames);
     }
 
 }

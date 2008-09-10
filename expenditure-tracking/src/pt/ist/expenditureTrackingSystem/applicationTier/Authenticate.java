@@ -32,11 +32,36 @@ public class Authenticate implements Serializable {
 
     private static final Set<String> managerUsernames = new HashSet<String>();
 
-    public static void init(final String managerUsernameStrings) {
+    public static void initManagerRole(final String managerUsernameStrings) {
 	for (final String username : managerUsernameStrings.split(",")) {
 	    managerUsernames.add(username.trim());
 	}
     }
+
+    private static final Set<String> acquisitionCentralUsernames = new HashSet<String>();
+
+    public static void initAcquisitionCentralRole(final String managerUsernameStrings) {
+	for (final String username : managerUsernameStrings.split(",")) {
+	    acquisitionCentralUsernames.add(username.trim());
+	}
+    }
+
+    private static final Set<String> acquisitionCentralAdministratorUsernames = new HashSet<String>();
+
+    public static void initAcquisitionCentralAdministratorRole(final String managerUsernameStrings) {
+	for (final String username : managerUsernameStrings.split(",")) {
+	    acquisitionCentralAdministratorUsernames.add(username.trim());
+	}
+    }
+
+    private static final Set<String> accountingUsernames = new HashSet<String>();
+
+    public static void initAccountingRole(final String accountingUsernamesStrings) {
+	for (final String username : accountingUsernamesStrings.split(",")) {
+	    accountingUsernames.add(username.trim());
+	}
+    }
+
 
     public static class User implements pt.ist.fenixWebFramework.security.User, Serializable {
 
@@ -94,13 +119,26 @@ public class Authenticate implements Serializable {
 	UserView.setUser(user);
 
 	if (managerUsernames.contains(username)) {
-	    final Person person = user.getPerson();
-	    if (!person.hasRoleType(RoleType.MANAGER)) {
-		person.addRoles(Role.getRole(RoleType.MANAGER));
-	    }
+	    addRoleType(user, RoleType.MANAGER);
+	}
+	if (acquisitionCentralUsernames.contains(username)) {
+	    addRoleType(user, RoleType.ACQUISITION_CENTRAL);	    
+	}
+	if (acquisitionCentralAdministratorUsernames.contains(username)) {
+	    addRoleType(user, RoleType.ACQUISITION_CENTRAL_MANAGER);	    
+	}
+	if (accountingUsernames.contains(username)) {
+	    addRoleType(user, RoleType.ACCOUNTABILITY);	    
 	}
 
 	return user;
+    }
+
+    protected static void addRoleType(final User user, final RoleType roleType) {
+	final Person person = user.getPerson();
+	if (!person.hasRoleType(roleType)) {
+	    person.addRoles(Role.getRole(roleType));
+	}
     }
 
 }

@@ -26,7 +26,7 @@
 </logic:notPresent>
 <logic:present name="USER_SESSION_ATTRIBUTE">
 	<div class="login">
-		<html:link action="/customize.do?method=showOptions"><bean:message key="link.preferences" bundle="EXPENDITURE_RESOURCES"/></html:link> | 
+		<html:link action="/customize.do?method=showNotificationOptions"><bean:message key="link.preferences" bundle="EXPENDITURE_RESOURCES"/></html:link> | 
 		<bean:message key="login.label.loggedInAs" bundle="EXPENDITURE_RESOURCES"/>: <bean:write name="USER_SESSION_ATTRIBUTE" property="username"/> |
 		<% if (isCasEnabled) {%>
 			<html:link href="<%= FenixWebFramework.getConfig().getCasLogoutUrl() %>"><bean:message key="login.label.logout" bundle="EXPENDITURE_RESOURCES"/></html:link>

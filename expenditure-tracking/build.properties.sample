@@ -14,3 +14,6 @@ cas.loginUrl=https://login.ist.utl.pt/login?service=
 cas.ValidateUrl=https://login.ist.utl.pt/serviceValidate
 cas.logoutUrl=https://login.ist.utl.pt/logout
 manager.usernames=ist24439, ist24520
+acquisitionCentral.usernames=
+acquisitionCentralAdministrator.usernames=
+acounting.usernames=

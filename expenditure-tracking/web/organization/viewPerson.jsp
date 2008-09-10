@@ -10,6 +10,8 @@
 		type="pt.ist.expenditureTrackingSystem.domain.organization.Person"
 		schema="viewPerson">
 	<fr:layout name="tabular">
+		<fr:property name="classes" value="form"/>
+		<fr:property name="columnClasses" value=",,tderror"/>
 	</fr:layout>
 </fr:view>
 <br/>
