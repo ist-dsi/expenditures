@@ -46,4 +46,11 @@ public class AuthenticationAction extends BaseAction {
 	return mapping.findForward("forward");
     }
 
+    public final ActionForward logoutEmptyPage(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request, final HttpServletResponse response)
+	throws Exception {
+	logout(request);
+	response.getOutputStream().close();
+	return null;
+    }
+
 }
