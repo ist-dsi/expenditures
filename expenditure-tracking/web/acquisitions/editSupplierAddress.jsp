@@ -10,7 +10,7 @@
 <p class="mtop15"><strong><bean:message key="label.supplier" bundle="EXPENDITURE_RESOURCES"/></strong></p>
 <div class="infoop2" style="width: 380px">
 <bean:define id="acquisitionProcessOID" name="acquisitionProcess" property="OID"/>
-<bean:define id="url" value="<%= "/acquisitionProcess.do?method=executeCreateAcquisitionRequest&amp;acquisitionProcessOid=" + acquisitionProcessOID %>"/>
+<bean:define id="url" value='<%= "/acquisitionProcess.do?method=executeCreateAcquisitionRequest&amp;acquisitionProcessOid=" + acquisitionProcessOID %>'/>
 <fr:edit action="<%= url %>" name="acquisitionProcess" property="acquisitionRequest.supplier"
 		schema="editSupplierAddress">
 	<fr:layout name="tabular">

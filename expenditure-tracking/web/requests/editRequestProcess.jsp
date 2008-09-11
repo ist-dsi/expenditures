@@ -12,10 +12,10 @@ requests/editRequestProcess.jsp
 <fr:edit id="requestForProposalProcessBean"
 		name="requestForProposalProcessBean"
 		schema="requestForProposalBean.edit"
-		action="<%= "/requestForProposalProcess.do?method=editRequestForProposal&requestForProposalProcessOid=" + processOID %>" >
+		action='<%= "/requestForProposalProcess.do?method=editRequestForProposal&requestForProposalProcessOid=" + processOID %>' >
 	<fr:layout name="tabular">
 		<fr:property name="classes" value="form"/>
 		<fr:property name="columnClasses" value=",,tderror"/>
 	</fr:layout>
-	<fr:destination name="cancel" path="<%= "/requestForProposalProcess.do?method=viewRequestForProposalProcess&requestForProposalProcessOid=" + processOID %>"/>
+	<fr:destination name="cancel" path='<%= "/requestForProposalProcess.do?method=viewRequestForProposalProcess&requestForProposalProcessOid=" + processOID %>'/>
 </fr:edit>

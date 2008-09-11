@@ -36,6 +36,6 @@
 	</div>
 </logic:present>
 
-<img src="<%= contextPath + "/images/logo03.gif" %>"/>
+<img src='<%= contextPath + "/images/logo03.gif" %>'/>
 
 

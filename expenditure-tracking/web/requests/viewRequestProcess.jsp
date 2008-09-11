@@ -34,7 +34,7 @@ requests/viewRequestProcess.jsp
 	<logic:iterate id="activity" name="requestForProposalProcess" property="activeActivitiesForRequest">
 		<bean:define id="activityName" name="activity" property="class.simpleName"/> 
 		<li>
-			<html:link page="<%= "/requestForProposalProcess.do?method=execute" + activityName %>" paramId="requestForProposalProcessOid" paramName="requestForProposalProcess" paramProperty="OID">
+			<html:link page='<%= "/requestForProposalProcess.do?method=execute" + activityName %>' paramId="requestForProposalProcessOid" paramName="requestForProposalProcess" paramProperty="OID">
 				<fr:view name="activity" property="class">
 					<fr:layout name="label">
 						<fr:property name="bundle" value="REQUEST_RESOURCES"/>

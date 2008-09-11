@@ -10,9 +10,9 @@
 
 <fr:edit id="acquisitionRequestBean" name="acquisitionRequestBean"
 		schema="editAcquisitionRequest"
-		action="<%= "/acquisitionProcess.do?method=editAcquisitionRequest&amp;acquisitionProcessOid=" + acquisitionProcessOID  %>">
+		action='<%= "/acquisitionProcess.do?method=editAcquisitionRequest&amp;acquisitionProcessOid=" + acquisitionProcessOID  %>'>
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="form"/>
 		</fr:layout>
-		<fr:destination name="cancel" path="<%= "/acquisitionProcess.do?method=viewAcquisitionProcess&amp;acquisitionProcessOid=" + acquisitionProcessOID %>" />
+		<fr:destination name="cancel" path='<%= "/acquisitionProcess.do?method=viewAcquisitionProcess&amp;acquisitionProcessOid=" + acquisitionProcessOID %>' />
 </fr:edit>

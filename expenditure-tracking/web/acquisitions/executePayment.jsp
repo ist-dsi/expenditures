@@ -9,7 +9,7 @@
 
 <h2><bean:message key="label.pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.PayAcquisition" bundle="ACQUISITION_RESOURCES"/></h2>
 
-<fr:form action="<%= "/acquisitionProcess.do?method=executePayAcquisitionAction&amp;acquisitionProcessOid=" + processOID %>">
+<fr:form action='<%= "/acquisitionProcess.do?method=executePayAcquisitionAction&amp;acquisitionProcessOid=" + processOID %>'>
 
 	<table class="form mbottom05">
 		<tr>

@@ -32,7 +32,7 @@
 			</tr>
 			<tr>
 				<td colspan="2">
-					<html:link page="<%= "/home.do?method=viewAnnouncement" %>" paramId="announcementOid" paramName="announcement" paramProperty="OID">
+					<html:link page="/home.do?method=viewAnnouncement" paramId="announcementOid" paramName="announcement" paramProperty="OID">
 					<bean:message key="link.viewMore" bundle="EXPENDITURE_RESOURCES"/>
 					</html:link>
 				</td>

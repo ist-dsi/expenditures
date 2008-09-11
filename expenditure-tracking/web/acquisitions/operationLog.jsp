@@ -13,7 +13,7 @@
 </p>
 
 
-<h4 class="mbottom05"><bean:message key="process.logs.label.forState" bundle="EXPENDITURE_RESOURCES"/> <bean:message key="<%= "AcquisitionProcessStateType." + request.getParameter("state") %>" bundle="ENUMERATION_RESOURCES"/></h4>
+<h4 class="mbottom05"><bean:message key="process.logs.label.forState" bundle="EXPENDITURE_RESOURCES"/> <bean:message key='<%= "AcquisitionProcessStateType." + request.getParameter("state") %>' bundle="ENUMERATION_RESOURCES"/></h4>
 
 
 <logic:empty name="operationLogs">

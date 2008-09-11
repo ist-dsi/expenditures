@@ -10,9 +10,9 @@
 <bean:define id="processOID" name="itemBean" property="acquisitionRequest.acquisitionProcess.OID"/>
 <bean:define id="itemOID" name="itemBean" property="item.OID"/>
 <fr:edit id="acquisitionRequestItem" name="itemBean" schema="editSchemaRealValues" 
-	action="<%= "/acquisitionProcess.do?method=executeAcquisitionRequestItemRealValuesEdition&acquisitionProcessOid="  + processOID %>">
+	action='<%= "/acquisitionProcess.do?method=executeAcquisitionRequestItemRealValuesEdition&acquisitionProcessOid="  + processOID %>'>
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="tstyle3"/>
 		</fr:layout>
-		<fr:destination name="cancel" path="<%= "/acquisitionProcess.do?method=viewAcquisitionProcess&acquisitionProcessOid="  + processOID %>"/>
+		<fr:destination name="cancel" path='<%= "/acquisitionProcess.do?method=viewAcquisitionProcess&acquisitionProcessOid="  + processOID %>'/>
 </fr:edit>

@@ -27,7 +27,7 @@
 	<logic:iterate id="activity" name="acquisitionProcess" property="activeActivitiesForRequest">
 		<bean:define id="activityName" name="activity" property="class.simpleName"/> 
 		<li>
-			<html:link page="<%= "/acquisitionProcess.do?method=execute" + activityName %>" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
+			<html:link page='<%= "/acquisitionProcess.do?method=execute" + activityName %>' paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
 				<fr:view name="activity" property="class">
 					<fr:layout name="label">
 						<fr:property name="bundle" value="ACQUISITION_RESOURCES"/>
@@ -140,7 +140,7 @@
 			<logic:iterate id="activity" name="acquisitionProcess" property="activeActivitiesForItem" indexId="index">
 				<logic:greaterThan name="index" value="0"> | </logic:greaterThan>
 				<bean:define id="activityName" name="activity" property="class.simpleName"/> 
-					<html:link page="<%= "/acquisitionProcess.do?method=execute" + activityName + "&acquisitionRequestItemOid=" + itemOID%>" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
+					<html:link page='<%= "/acquisitionProcess.do?method=execute" + activityName + "&acquisitionRequestItemOid=" + itemOID%>' paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
 						<fr:view name="activity" property="class">
 							<fr:layout name="label">
 								<fr:property name="bundle" value="ACQUISITION_RESOURCES"/>

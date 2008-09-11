@@ -44,11 +44,11 @@
 		<p>
 			<span>
 				<fr:view name="role"/>: 
-				<html:link action="<%= "/organization.do?method=addRole&role=" + role %>" paramId="personOid" paramName="person" paramProperty="OID">
+				<html:link action='<%= "/organization.do?method=addRole&role=" + role %>' paramId="personOid" paramName="person" paramProperty="OID">
 					<bean:message key="role.label.add" bundle="ORGANIZATION_RESOURCES"/>
 				</html:link>
 				|
-				<html:link action="<%= "/organization.do?method=removeRole&role=" + role %>" paramId="personOid" paramName="person" paramProperty="OID">
+				<html:link action='<%= "/organization.do?method=removeRole&role=" + role %>' paramId="personOid" paramName="person" paramProperty="OID">
 					<bean:message key="role.label.remove" bundle="ORGANIZATION_RESOURCES"/>
 				</html:link>
 			</span>

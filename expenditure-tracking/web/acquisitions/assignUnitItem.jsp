@@ -9,7 +9,7 @@
 	<bean:message key="label.pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AssignPayingUnitToItem" bundle="ACQUISITION_RESOURCES"/>
 </h2>
 
-<script type="text/javascript" src="<%= request.getContextPath() + "/javaScript/calculator.js" %>"></script> 
+<script type="text/javascript" src='<%= request.getContextPath() + "/javaScript/calculator.js" %>'></script> 
 
 <bean:define id="processOID" name="acquisitionProcess" property="OID"/>
 <bean:define id="acquisitionRequestItemOid" name="acquisitionRequestItem" property="OID"/>
@@ -25,7 +25,7 @@
 <jsp:include page="../commons/defaultErrorDisplay.jsp"/>
 
 <div class="dinline forminline">
-	<fr:form action="<%="/acquisitionProcess.do?acquisitionProcessOid=" + processOID + "&acquisitionRequestItemOid=" + acquisitionRequestItemOid%>">
+	<fr:form action='<%="/acquisitionProcess.do?acquisitionProcessOid=" + processOID + "&acquisitionRequestItemOid=" + acquisitionRequestItemOid%>'>
 		<html:hidden  property="method" value="executeAssignPayingUnitToItemCreation"/>
 		
 		<fr:edit id="unitItemBeans" name="unitItemBeans" visible="false"/>
@@ -44,15 +44,15 @@
 				</th>
 			</tr>
 			<logic:iterate id="unitItemBean" name="unitItemBeans" indexId="id">
-					<tr id="<%= "tr" + id %>" onKeyUp="<%= "javascript:calculate(" + maxElements + ", 'sum', '" + maxValue + "', '" + outOfLabel+ "')" %>">
-						<td onclick="<%= "javascript:calculate(" + maxElements + ", 'sum', '" + maxValue + "', '" + outOfLabel+ "')" %>">
-							<fr:edit  id="<%= "assigned" + id %>" name="unitItemBean" slot="assigned"/>
+					<tr id='<%= "tr" + id %>' onKeyUp='<%= "javascript:calculate(" + maxElements + ", 'sum', '" + maxValue + "', '" + outOfLabel+ "')" %>'>
+						<td onclick='<%= "javascript:calculate(" + maxElements + ", 'sum', '" + maxValue + "', '" + outOfLabel+ "')" %>'>
+							<fr:edit  id='<%= "assigned" + id %>' name="unitItemBean" slot="assigned"/>
 						</td>
 						<td>
 							<fr:view name="unitItemBean" property="unit.name"/>
 						</td>
 						<td>
-							<fr:edit id="<%= "shareValue" + id %>" name="unitItemBean" slot="shareValue"/>
+							<fr:edit id='<%= "shareValue" + id %>' name="unitItemBean" slot="shareValue"/>
 						</td>
 					</tr>
 			</logic:iterate>
@@ -80,7 +80,7 @@
 			<html:submit styleClass="inputbutton"><bean:message key="renderers.form.submit.name" bundle="RENDERER_RESOURCES"/> </html:submit>
 	</fr:form>
 
-	<fr:form action="<%="/acquisitionProcess.do?method=viewAcquisitionProcess&acquisitionProcessOid=" + processOID + "&acquisitionRequestItemOid=" + acquisitionRequestItemOid%>">
+	<fr:form action='<%="/acquisitionProcess.do?method=viewAcquisitionProcess&acquisitionProcessOid=" + processOID + "&acquisitionRequestItemOid=" + acquisitionRequestItemOid%>'>
 		<html:submit styleClass="inputbutton"><bean:message key="renderers.form.cancel.name" bundle="RENDERER_RESOURCES"/> </html:submit>
 	</fr:form>
 </div>
