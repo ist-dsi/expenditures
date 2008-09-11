@@ -143,7 +143,7 @@
 	</target>
 
 	<target name="war" depends="compile" description="Generates a web archive of the application.">
-		<war destfile="${deploy.home}/myWebApp.war" webxml="${build.home.webinf}/web.xml">
+		<war destfile="${deploy.home}/${war.name}.war" webxml="${build.home.webinf}/web.xml">
 			<fileset dir="${web}">
 				<exclude name="WEB-INF/web.xml"/>
 				<exclude name="WEB-INF/classes/**"/>
