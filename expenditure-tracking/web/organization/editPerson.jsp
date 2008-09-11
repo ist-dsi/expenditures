@@ -6,11 +6,12 @@
 
 <h2><bean:message key="person.label.edit" bundle="ORGANIZATION_RESOURCES"/></h2>
 <br />
+<bean:define id="url">/organization.do?method=viewPerson&amp;personOid=<bean:write name="person" property="OID"/></bean:define>
 <fr:edit id="person"
 		name="person"
 		type="pt.ist.expenditureTrackingSystem.domain.organization.Person"
 		schema="editPerson"
-		action="/organization.do?method=searchUsers">
+		action="<%= url %>">
 	<fr:layout name="tabular">
 	</fr:layout>
 </fr:edit>
