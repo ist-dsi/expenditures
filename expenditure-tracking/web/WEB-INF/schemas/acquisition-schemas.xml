@@ -48,9 +48,6 @@
 	<slot name="totalVatValue" key="acquisitionRequestItem.label.vat" bundle="ACQUISITION_RESOURCES"/>	
 	<slot name="totalAdditionalCostsValue" key="acquisitionRequestItem.label.additionalCosts" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="totalItemValueWithAdditionalCostsAndVat" key="acquisitionRequestItem.label.totalValueWithAdditionalCostsAndVat" bundle="ACQUISITION_RESOURCES"/>
-	<slot name="acquisitionProcess.fundAllocationId" key="acquisitionProcess.label.fundAllocation.identification" bundle="ACQUISITION_RESOURCES" layout="null-as-label">
-		<property name="subLayout" value="default"/>
-	</slot>
 	<slot name="acquisitionProcess.fundAllocationExpirationDate" key="acquisitionProcess.label.fundAllocation.expirationDate" bundle="ACQUISITION_RESOURCES" layout="null-as-label">
 		<property name="subLayout" value="default"/>
 	</slot>
