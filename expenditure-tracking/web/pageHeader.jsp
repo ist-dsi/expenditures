@@ -11,7 +11,9 @@
 <logic:notPresent name="USER_SESSION_ATTRIBUTE">
 	<% if (isCasEnabled) {%>
 		<div class="login">
-			<bean:define id="loginUrl"><%= FenixWebFramework.getConfig().getCasLoginUrl() %>https://cidhcp132.ist.utl.pt:8443<%= contextPath %>/</bean:define>
+			<bean:define id="loginUrl"><%= FenixWebFramework.getConfig().getCasLoginUrl()
+				+ request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+				+ contextPath %>/</bean:define>
 			<html:link href="<%= loginUrl %>"><bean:message key="login.label.login" bundle="EXPENDITURE_RESOURCES"/></html:link>
 		</div>
 	<% } else { %>
