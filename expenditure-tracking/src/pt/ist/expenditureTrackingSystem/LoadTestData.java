@@ -133,14 +133,14 @@ public class LoadTestData {
 	final String peopleContents = FileUtils.readFile("people.txt");
 	final FenixPeopleSet fenixPeopleSet = new FenixPeopleSet(peopleContents);
 	createPeople(fenixPeopleSet, fenixUnitMap);
-	
+
 	final String projectContents = FileUtils.readFile("projects.txt");
 	createProjects(projectContents, fenixPeopleSet);
-	
+
 	LoadSuppliersData.loadData();
-	
+
 	final String subProjectContents = FileUtils.readFile("subProjects.txt");
-	createSubProjects(subProjectContents);	
+	createSubProjects(subProjectContents);
 
 	final String cpvReferences = FileUtils.readFile("cpv.csv");
 	createCPVCodes(cpvReferences);
@@ -150,14 +150,13 @@ public class LoadTestData {
     private static void createCPVCodes(String cpvReferences) {
 	for (final String line : cpvReferences.split("\n")) {
 	    String[] lineArgs = line.split("\\|");
-	   try {
-	    new CPVReference(lineArgs[0].replace("\"", ""), lineArgs[1].replace("\"", ""));
-	   }catch(DomainException e) {
-	       // do not worry
-	   }
+	    try {
+		new CPVReference(lineArgs[0].replace("\"", ""), lineArgs[1].replace("\"", ""));
+	    } catch (DomainException e) {
+		// do not worry
+	    }
 	}
     }
-
 
     @Service
     private static void createUnits(final FenixUnitMap fenixUnitMap) {
@@ -177,11 +176,12 @@ public class LoadTestData {
 		person.getOptions().setRecurseAuthorizationPendingUnits(Boolean.TRUE);
 	    }
 	    fenixPerson.person = person;
-	    for (final Long oid : fenixPerson.unitOids) {
-		final FenixUnit fenixUnit = fenixUnitMap.get(oid);
-		final Authorization authorization = new Authorization(person, fenixUnit.unit);
-		authorization.setCanDelegate(Boolean.TRUE);
-	    }
+	    /*
+	     * for (final Long oid : fenixPerson.unitOids) { final FenixUnit
+	     * fenixUnit = fenixUnitMap.get(oid); final Authorization
+	     * authorization = new Authorization(person, fenixUnit.unit);
+	     * authorization.setCanDelegate(Boolean.TRUE); }
+	     */
 	}
     }
 
