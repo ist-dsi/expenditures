@@ -242,7 +242,7 @@ public class OrganizationAction extends BaseAction {
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final Authorization authorization = getDomainObject(request, "authorizationOid");
 	final Person person = authorization.getPerson();
-	authorization.revoke();
+	authorization.delete();
 	return viewPerson(mapping, request, person);
     }
 

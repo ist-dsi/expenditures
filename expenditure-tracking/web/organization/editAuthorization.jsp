@@ -6,6 +6,13 @@
 
 <h2><bean:message key="authorizations.title.details" bundle="EXPENDITURE_RESOURCES"/></h2>
 
+<fr:view name="authorization" schema="viewAuthorizationBeingEdited">
+	<fr:layout name="tabular">
+		<fr:property name="classes" value="form"/>
+		<fr:property name="columnClasses" value=",,tderror"/>
+	</fr:layout>
+</fr:view>
+
 <bean:define id="url" type="java.lang.String">/organization.do?method=viewAuthorization&amp;authorizationOid=<bean:write name="authorization" property="OID"/></bean:define>
 <fr:edit name="authorization" schema="editAuthorization"
 		action="<%= url %>">

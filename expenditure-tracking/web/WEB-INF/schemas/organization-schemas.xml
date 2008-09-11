@@ -60,16 +60,25 @@
 		bundle="ACQUISITION_RESOURCES">
 	<slot name="person.name" key="person.label.name" bundle="ORGANIZATION_RESOURCES"/>
 	<slot name="unit.name" key="label.unit" bundle="EXPENDITURE_RESOURCES"/>
+	<slot name="class" layout="label" key="label.authorizations.type"  bundle="EXPENDITURE_RESOURCES">
+		<property name="bundle" value="EXPENDITURE_RESOURCES"/>
+	</slot>
 	<slot name="startDate" key="authorizations.label.startDate" bundle="EXPENDITURE_RESOURCES" layout="null-as-label">
 		<property name="subLayout" value="default"/>
 	</slot>
 	<slot name="endDate" key="authorizations.label.endDate" bundle="EXPENDITURE_RESOURCES" layout="null-as-label">
 		<property name="subLayout" value="default"/>
 	</slot>
+	<slot name="canDelegate" key="authorizations.label.canDelegate" bundle="EXPENDITURE_RESOURCES"/>
+</schema>
+
+<schema name="viewAuthorizationBeingEdited" type="pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization"
+		bundle="ACQUISITION_RESOURCES">
+	<slot name="person.name" key="person.label.name" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="unit.name" key="label.unit" bundle="EXPENDITURE_RESOURCES"/>
 	<slot name="class" layout="label" key="label.authorizations.type"  bundle="EXPENDITURE_RESOURCES">
 		<property name="bundle" value="EXPENDITURE_RESOURCES"/>
 	</slot>
-	<slot name="canDelegate" key="authorizations.label.canDelegate" bundle="EXPENDITURE_RESOURCES"/>
 </schema>
 
 <schema name="editAuthorization" type="pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization"

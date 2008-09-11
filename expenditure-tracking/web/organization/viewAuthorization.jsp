@@ -17,7 +17,7 @@
 		<logic:equal name="USER_SESSION_ATTRIBUTE" property="person.OID" value="<%= personFromAuthorizationOid.toString() %>">
 			<logic:equal name="authorization" property="canDelegate" value="true">
 				<li>
-					<html:link action="/organization.do?method=delegateAuthorization" paramId="authorizationOID" paramName="authorization" paramProperty="OID">
+					<html:link action="/organization.do?method=delegateAuthorization" paramId="authorizationOid" paramName="authorization" paramProperty="OID">
 						<bean:message key="authorizations.link.delegate" bundle="EXPENDITURE_RESOURCES"/>
 					</html:link>
 				</li>

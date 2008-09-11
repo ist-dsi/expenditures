@@ -12,6 +12,7 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.fenixWebFramework.security.UserView;
 import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.pstm.Transaction;
 
 public class Authorization extends Authorization_Base {
 
@@ -80,6 +81,17 @@ public class Authorization extends Authorization_Base {
     public boolean isCurrentUserAbleToRevoke() {
 	User user = UserView.getUser();
 	return user != null && isValid() && isPersonAbleToRevokeDelegatedAuthorization(user.getPerson());
+    }
+
+    @Service
+    public void delete() {
+	for (final DelegatedAuthorization delegatedAuthorization : getDelegatedAuthorizationsSet()) {
+	    delegatedAuthorization.delete();
+	}
+	removePerson();
+	removeUnit();
+	removeExpenditureTrackingSystem();
+	Transaction.deleteObject(this);
     }
 
 }

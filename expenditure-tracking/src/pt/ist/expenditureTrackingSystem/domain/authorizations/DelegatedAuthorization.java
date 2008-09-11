@@ -45,4 +45,10 @@ public class DelegatedAuthorization extends DelegatedAuthorization_Base {
 	return getDelegatingPerson() == person || getAuthorization().isPersonAbleToRevokeDelegatedAuthorization(person);
     }
 
+    @Override
+    public void delete() {
+	removeAuthorization();
+	super.delete();
+    }
+
 }
