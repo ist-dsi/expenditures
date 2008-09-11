@@ -212,8 +212,8 @@ public class LoadTestData {
 		final Unit unit = Unit.createNewUnit(createUnitBean);
 
 		if (responsible != null) {
-		    final Authorization authorization = new Authorization(responsible, unit);
-		    authorization.setCanDelegate(Boolean.FALSE);
+//		    final Authorization authorization = new Authorization(responsible, unit);
+//		    authorization.setCanDelegate(Boolean.FALSE);
 		}
 	    }
 	}
