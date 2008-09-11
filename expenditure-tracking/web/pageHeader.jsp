@@ -11,10 +11,8 @@
 <logic:notPresent name="USER_SESSION_ATTRIBUTE">
 	<% if (isCasEnabled) {%>
 		<div class="login">
-			<% final String portString = request.getServerPort() == 80 || request.getServerPort() == 443 ? "" : Integer.toString(request.getServerPort()); %>
-			<bean:define id="loginUrl"><%= FenixWebFramework.getConfig().getCasLoginUrl()
-				+ request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
-				+ contextPath %>/</bean:define>
+			<% final String portString = request.getServerPort() == 80 || request.getServerPort() == 443 ? "" : ":" + request.getServerPort(); %>
+			<bean:define id="loginUrl"><%= FenixWebFramework.getConfig().getCasLoginUrl() + request.getScheme() + "://" + request.getServerName() + portString + contextPath %>/</bean:define>
 			<html:link href="<%= loginUrl %>"><bean:message key="login.label.login" bundle="EXPENDITURE_RESOURCES"/></html:link>
 		</div>
 	<% } else { %>
