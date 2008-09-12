@@ -119,7 +119,7 @@ public abstract class BaseAction extends DispatchAction {
 	    final String contentType) throws IOException {
 	final OutputStream outputStream = response.getOutputStream();
 	response.setContentType(contentType);
-	response.setHeader("Content-disposition", "attachment; filename=" + filename);
+	response.setHeader("Content-disposition", "attachment; filename=" + filename.replace(" ", "_"));
 	response.setContentLength(bytes.length);
 	if (bytes != null) {
 	    outputStream.write(bytes);
