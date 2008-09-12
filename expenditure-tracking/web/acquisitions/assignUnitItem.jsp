@@ -9,7 +9,7 @@
 	<bean:message key="label.pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AssignPayingUnitToItem" bundle="ACQUISITION_RESOURCES"/>
 </h2>
 
-<script type="text/javascript" src='<%= request.getContextPath() + "/javaScript/calculator.js" %>'></script> 
+<script type="text/javascript" src="<%= request.getContextPath() + "/javaScript/calculator.js" %>"></script> 
 
 <bean:define id="processOID" name="acquisitionProcess" property="OID"/>
 <bean:define id="acquisitionRequestItemOid" name="acquisitionRequestItem" property="OID"/>
@@ -44,8 +44,8 @@
 				</th>
 			</tr>
 			<logic:iterate id="unitItemBean" name="unitItemBeans" indexId="id">
-					<tr id='<%= "tr" + id %>' onKeyUp='<%= "javascript:calculate(" + maxElements + ", 'sum', '" + maxValue + "', '" + outOfLabel+ "')" %>'>
-						<td onclick='<%= "javascript:calculate(" + maxElements + ", 'sum', '" + maxValue + "', '" + outOfLabel+ "')" %>'>
+					<tr id='<%= "tr" + id %>' onKeyUp="<%= "javascript:calculate('" + maxElements + "', 'sum', '" + maxValue + "', '" + outOfLabel+ "');" %> ">
+						<td onClick="<%= "javascript:calculate('" + maxElements + "', 'sum', '" + maxValue + "', '" + outOfLabel+ "');" %> " >
 							<fr:edit  id='<%= "assigned" + id %>' name="unitItemBean" slot="assigned"/>
 						</td>
 						<td>
@@ -68,8 +68,9 @@
 					</tr>
 		</table>
 		
+		
 		<script type="text/javascript">
-			<%= "calculate(" + maxElements + ", 'sum', '" + maxValue + "', '" + outOfLabel+ "')" %>
+			 <%= "calculate('" + maxElements + "', 'sum', '" + maxValue + "', '" + outOfLabel+ "');" %> 
 		</script>
 		
 		
