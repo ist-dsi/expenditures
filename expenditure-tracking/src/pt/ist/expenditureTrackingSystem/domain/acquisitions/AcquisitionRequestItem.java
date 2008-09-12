@@ -64,6 +64,14 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 			.getCPVReference());
 	setAdditionalCostValue(acquisitionRequestItemBean.getAdditionalCostValue());
 	setDeliveryInfo(acquisitionRequestItemBean);
+
+	createUnitItem();
+    }
+
+    private void createUnitItem() {
+	if (getAcquisitionRequest().getFinancersCount() == 1) {
+	    createUnitItem(getAcquisitionRequest().getFinancers().iterator().next(), getTotalItemValueWithAdditionalCostsAndVat());
+	}
     }
 
     protected void setDeliveryInfo(AcquisitionRequestItemBean acquisitionRequestItemBean) {
