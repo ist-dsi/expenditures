@@ -3,8 +3,9 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
-<h2><bean:message key="afterTheFactAcquisitionProcess.title.createAfterTheFactAcquisitionProcess" bundle="ACQUISITION_RESOURCES"/></h2>
+<h2><bean:message key="afterTheFactAcquisitionProcess.title.viewAfterTheFactAcquisitionProcess" bundle="ACQUISITION_RESOURCES"/></h2>
 
+<bean:define id="urlCancel">/afterTheFactAcquisitionProcess.do?method=viewAfterTheFactAcquisitionProcess&amp;acquisitionAfterTheFactOid=<bean:write name="afterTheFactAcquisitionProcessBean" property="afterTheFactAcquisitionProcess.acquisitionAfterTheFact.OID"/></bean:define>
 <fr:edit id="afterTheFactAcquisitionProcessBean"
 		name="afterTheFactAcquisitionProcessBean"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.AfterTheFactAcquisitionProcessBean"
@@ -14,5 +15,5 @@
 		<fr:property name="classes" value="form"/>
 		<fr:property name="columnClasses" value=",,tderror"/>
 	</fr:layout>
-	<fr:destination name="cancel" path="/acquisitionProcess.do?method=showPendingProcesses"/>
+	<fr:destination name="cancel" path="<%= urlCancel %>"/>
 </fr:edit>

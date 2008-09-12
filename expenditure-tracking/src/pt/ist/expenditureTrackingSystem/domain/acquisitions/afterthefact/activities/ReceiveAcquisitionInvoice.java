@@ -16,7 +16,8 @@ public class ReceiveAcquisitionInvoice extends AbstractActivity<AfterTheFactAcqu
     protected boolean isAccessible(final AfterTheFactAcquisitionProcess process) {
 	final User user = UserView.getUser();
 	final Person person = user == null ? null : user.getPerson();
-	return person != null && person.hasRoleType(RoleType.ACQUISITION_CENTRAL);
+	return person != null && (person.hasRoleType(RoleType.ACQUISITION_CENTRAL)
+		|| person.hasRoleType(RoleType.ACQUISITION_CENTRAL_MANAGER));
     }
 
     @Override

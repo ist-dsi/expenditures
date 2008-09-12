@@ -3,7 +3,7 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
-<h2><bean:message key="afterTheFactAcquisitionProcess.title.createAfterTheFactAcquisitionProcess" bundle="ACQUISITION_RESOURCES"/></h2>
+<h2><bean:message key="link.sideBar.afterTheFactAcquisitionProcess.create" bundle="EXPENDITURE_RESOURCES"/></h2>
 
 <fr:edit id="afterTheFactAcquisitionProcessBean"
 		name="afterTheFactAcquisitionProcessBean"
