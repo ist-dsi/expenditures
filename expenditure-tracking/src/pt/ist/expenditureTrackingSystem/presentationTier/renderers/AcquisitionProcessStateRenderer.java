@@ -6,6 +6,8 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.OperationLog;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
+import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
+import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 import pt.ist.fenixWebFramework.renderers.OutputRenderer;
 import pt.ist.fenixWebFramework.renderers.components.HtmlBlockContainer;
 import pt.ist.fenixWebFramework.renderers.components.HtmlComponent;
@@ -82,8 +84,8 @@ public class AcquisitionProcessStateRenderer extends OutputRenderer {
 		return flowChartContainer;
 	    }
 
-	    private void generateActivityBox(HtmlBlockContainer flowChartContainer, GenericAcquisitionProcessActivity activity) {
-		flowChartContainer.addChild(generateBox(activity.getLocalizedName()));
+	    private void generateActivityBox(HtmlBlockContainer flowChartContainer, AbstractActivity<GenericProcess> abstractActivity) {
+		flowChartContainer.addChild(generateBox(abstractActivity.getLocalizedName()));
 	    }
 
 	    private void generateStateBox(AcquisitionProcess process, AcquisitionProcessStateType currentState,

@@ -8,7 +8,7 @@ valueType pt.ist.expenditureTrackingSystem.domain.util.Address as Address;
 valueType pt.ist.expenditureTrackingSystem.domain.util.ByteArray as ByteArray;
 valueType pt.ist.expenditureTrackingSystem.domain.util.Money as Money;
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType as AcquisitionProcessStateType;
-enum pt.ist.expenditureTrackingSystem.domain.acquisitions.AfterTheFactAcquisitionType as AfterTheFactAcquisitionType;
+enum pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionType as AfterTheFactAcquisitionType;
 enum pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationType as AuthorizationType;
 enum pt.ist.expenditureTrackingSystem.domain.requests.RequestForProposalProcessStateType as RequestForProposalProcessStateType;
 enum pt.ist.expenditureTrackingSystem.domain.RoleType as RoleType;
@@ -22,17 +22,27 @@ class acquisitions.CPVReference {
 	String code;
 	String description;
 }
-	
-class acquisitions.AcquisitionProcessState {
-	AcquisitionProcessStateType acquisitionProcessStateType;
+
+class ProcessState {
+	String ojbConcreteClass;
 	DateTime whenDateTime;
 }
+	
+	class acquisitions.AcquisitionProcessState extends ProcessState {
+		AcquisitionProcessStateType acquisitionProcessStateType;
+	}
+
+	class requests.RequestForProposalProcessState extends ProcessState {
+		RequestForProposalProcessStateType requestForProposalProcessStateType;
+	}
+
+
 
 class acquisitions.Acquisition {
 	String ojbConcreteClass;
 }
 
-	class acquisitions.AcquisitionAfterTheFact extends acquisitions.Acquisition {
+	class acquisitions.afterthefact.AcquisitionAfterTheFact extends acquisitions.Acquisition {
 		AfterTheFactAcquisitionType afterTheFactAcquisitionType;
 		Money value;
 		BigDecimal vatValue;
@@ -42,7 +52,7 @@ class acquisitions.Acquisition {
 	String paymentReference;
 }
 
-class acquisitions.Announcement {
+class announcements.Announcement {
 	String description;
 	Money totalPrice;
 	Integer executionDays;
@@ -98,13 +108,13 @@ class processes.GenericLog {
 	String operation;
 }
 
-class acquisitions.OperationLog extends processes.GenericLog {
-	AcquisitionProcessStateType state;
-}
-
-class requests.OperationLog extends processes.GenericLog {
-	RequestForProposalProcessStateType state;
-}
+	class acquisitions.OperationLog extends processes.GenericLog {
+		AcquisitionProcessStateType state;
+	}
+	
+	class requests.OperationLog extends processes.GenericLog {
+		RequestForProposalProcessStateType state;
+	}
 
 class File {
 	String ojbConcreteClass;
@@ -124,7 +134,7 @@ class File {
 		String invoiceNumber;
 		LocalDate invoiceDate;
 	}
-
+	
 	class CascadingStyleSheet extends File {
 	}
 	
@@ -186,22 +196,27 @@ class processes.GenericProcess {
 		LocalDate fundAllocationExpirationDate;
 	}
 
-	class acquisitions.AfterTheFactAcquisitionProcess extends processes.GenericProcess {
+		class acquisitions.afterthefact.AfterTheFactAcquisitionProcess extends acquisitions.AcquisitionProcess {
+		}
+
+		class acquisitions.simplified.SimplifiedProcedureProcess extends acquisitions.AcquisitionProcess {
+		}
+
+		class acquisitions.direct.DirectContractProcess extends acquisitions.AcquisitionProcess {
+		}
+
+	class announcements.AnnouncementProcess extends processes.GenericProcess {
 	}
 
 	class requests.RequestForProposalProcess extends processes.GenericProcess {
 	}
+	
 
 class requests.RequestForProposal {
 	String title;
 	String description;
 	LocalDate publishDate;
 	LocalDate expireDate;
-}
-
-class requests.RequestForProposalProcessState {
-	RequestForProposalProcessStateType requestForProposalProcessStateType;
-	DateTime whenDateTime;
 }
 
 class Role {
@@ -399,44 +414,23 @@ relation RequestForProposalRequester {
 	}
 }
 
-relation AcquisitionProcessStatePerson {
+relation ProcessStatePerson {
 	organization.Person playsRole who;
-	acquisitions.AcquisitionProcessState playsRole acquisitionProcessStates {
+	ProcessState playsRole processStates {
 		multiplicity *;
 	}
 }
 
-relation RequestForProposalProcessStatePerson {
-	organization.Person playsRole who;
-	requests.RequestForProposalProcessState playsRole requestForProposalProcessStates {
+relation GenericProcessProcessState {
+	processes.GenericProcess playsRole process;
+	ProcessState playsRole processStates {
 		multiplicity *;
 	}
 }
 
-relation AcquisitionProcessStateAcquisitionProcess {
-	acquisitions.AcquisitionProcess playsRole acquisitionProcess;
-	acquisitions.AcquisitionProcessState playsRole acquisitionProcessStates {
-		multiplicity *;
-	}
-}
-
-relation RequestForProposalProcessStateRequestForProposalProcess {
-	requests.RequestForProposalProcess playsRole requestForProposalProcess;
-	requests.RequestForProposalProcessState playsRole requestForProposalProcessStates {
-		multiplicity *;
-	}
-}
-
-relation ExpenditureTrackingSystemAcquisitionProcessState {
+relation ExpenditureTrackingSystemProcessState {
 	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
-	acquisitions.AcquisitionProcessState playsRole acquisitionProcessStates {
-		multiplicity *;
-	}
-}
-
-relation ExpenditureTrackingSystemRequestForProposalProcessState {
-	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
-	requests.RequestForProposalProcessState playsRole requestForProposalProcessStates {
+	ProcessState playsRole processStates {
 		multiplicity *;
 	}
 }
@@ -545,12 +539,12 @@ relation DelegatedAuthorizationAuthorization {
 	authorizations.Authorization playsRole authorization; 
 }
 relation AfterTheFactAcquisitionProcessAcquisitionAfterTheFact {
-	acquisitions.AfterTheFactAcquisitionProcess playsRole afterTheFactAcquisitionProcess;
-	acquisitions.AcquisitionAfterTheFact playsRole acquisitionAfterTheFact;
+	acquisitions.afterthefact.AfterTheFactAcquisitionProcess playsRole afterTheFactAcquisitionProcess;
+	acquisitions.afterthefact.AcquisitionAfterTheFact playsRole acquisitionAfterTheFact;
 }
 
 relation AcquisitionAfterTheFactSupplier {
-	acquisitions.AcquisitionAfterTheFact playsRole acquisitionsAfterTheFact {
+	acquisitions.afterthefact.AcquisitionAfterTheFact playsRole acquisitionsAfterTheFact {
 		multiplicity *;
 	}
 	organization.Supplier playsRole supplier;
@@ -558,18 +552,18 @@ relation AcquisitionAfterTheFactSupplier {
 
 relation ExpenditureTrackingSystemAnnouncement {
 	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
-	acquisitions.Announcement playsRole announcements {
+	announcements.Announcement playsRole announcements {
 		multiplicity *;
 	}
 }
 
 relation AnnoucementBuyingUnit {
-	acquisitions.Announcement playsRole announcement;
+	announcements.Announcement playsRole announcement;
 	organization.Unit playsRole buyingUnit;
 }
 
 relation AnnouncementSupplier {
-	acquisitions.Announcement playsRole announcements {
+	announcements.Announcement playsRole announcements {
 		multiplicity *;
 	}
 	organization.Supplier playsRole supplier;
@@ -577,16 +571,15 @@ relation AnnouncementSupplier {
 
 relation AnnouncementPublisher {
 	organization.Person playsRole publisher;
-	acquisitions.Announcement playsRole announcements {
+	announcements.Announcement playsRole announcements {
 		multiplicity *;
 	}
 }
 
 relation AnnouncementAcquisition {
-	acquisitions.Announcement playsRole announcement;
+	announcements.Announcement playsRole announcement;
 	acquisitions.Acquisition playsRole acquisition;
 }
-
 relation OptionsCascadingStyleSheet {
 	Options playsRole options;
 	CascadingStyleSheet playsRole cascadingStyleSheet;

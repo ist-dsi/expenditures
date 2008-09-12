@@ -1,7 +1,5 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
-import java.util.Comparator;
-
 import org.joda.time.DateTime;
 
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
@@ -11,12 +9,6 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.fenixWebFramework.security.UserView;
 
 public class AcquisitionProcessState extends AcquisitionProcessState_Base {
-
-    public static final Comparator<AcquisitionProcessState> COMPARATOR_BY_WHEN = new Comparator<AcquisitionProcessState>() {
-	public int compare(AcquisitionProcessState o1, AcquisitionProcessState o2) {
-	    return o1.getWhenDateTime().compareTo(o2.getWhenDateTime());
-	}
-    };
 
     protected AcquisitionProcessState() {
 	super();
@@ -29,7 +21,7 @@ public class AcquisitionProcessState extends AcquisitionProcessState_Base {
 	final User user = UserView.getUser();
 	final Person person = user.getPerson();
 	checkArguments(acquisitionProcess, acquisitionProcessStateType, person);
-	setAcquisitionProcess(acquisitionProcess);
+	setProcess(acquisitionProcess);
 	setAcquisitionProcessStateType(acquisitionProcessStateType);
 	setWho(person);
 	setWhenDateTime(new DateTime());

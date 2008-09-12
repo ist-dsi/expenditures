@@ -8,7 +8,7 @@
 
 <div class="infoop2">
 	<fr:view name="afterTheFactAcquisitionProcess" property="acquisitionAfterTheFact"
-			type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionAfterTheFact"
+			type="pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AcquisitionAfterTheFact"
 			schema="viewAcquisitionAfterTheFact">
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="tstyle1"/>

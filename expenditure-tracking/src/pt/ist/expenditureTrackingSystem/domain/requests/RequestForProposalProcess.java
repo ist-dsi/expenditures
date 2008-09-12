@@ -7,6 +7,7 @@ import java.util.List;
 import org.joda.time.LocalDate;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
+import pt.ist.expenditureTrackingSystem.domain.ProcessState;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateRequestForProposalProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
@@ -86,7 +87,7 @@ public class RequestForProposalProcess extends RequestForProposalProcess_Base {
     }
 
     protected RequestForProposalProcessState getLastRequestForProposalProcessState() {
-	return Collections.max(getRequestForProposalProcessStates(), RequestForProposalProcessState.COMPARATOR_BY_WHEN);
+	return (RequestForProposalProcessState) Collections.max(getProcessStates(), ProcessState.COMPARATOR_BY_WHEN);
     }
 
     protected RequestForProposalProcessStateType getLastRequestForProposalProcessStateType() {

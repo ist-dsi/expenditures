@@ -3,9 +3,9 @@ package pt.ist.expenditureTrackingSystem.domain.dto;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionAfterTheFact;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AfterTheFactAcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AfterTheFactAcquisitionType;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AcquisitionAfterTheFact;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionType;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.util.Money;
 import pt.ist.fenixWebFramework.util.DomainReference;

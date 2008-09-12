@@ -19,7 +19,7 @@ import pt.ist.expenditureTrackingSystem.domain.util.Money;
 
 public class AcquisitionRequest extends AcquisitionRequest_Base {
 
-    AcquisitionRequest(final AcquisitionProcess acquisitionProcess, final Person person) {
+    public AcquisitionRequest(final AcquisitionProcess acquisitionProcess, final Person person) {
 	super();
 	checkParameters(acquisitionProcess, person);
 	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
@@ -36,7 +36,7 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	}
     }
 
-    AcquisitionRequest(AcquisitionProcess acquisitionProcess, Supplier supplier, Person person) {
+    public AcquisitionRequest(AcquisitionProcess acquisitionProcess, Supplier supplier, Person person) {
 	this(acquisitionProcess, person);
 	setSupplier(supplier);
     }

@@ -84,7 +84,7 @@
 </schema>
 
 <schema name="addAcquisitionProposalDocument"
-		type="pt.ist.expenditureTrackingSystem.presentationTier.actions.acquisitions.AcquisitionProcessAction$AcquisitionProposalDocumentForm"
+		type="pt.ist.expenditureTrackingSystem.presentationTier.actions.acquisitions.SimplifiedProcedureProcessAction$AcquisitionProposalDocumentForm"
 		bundle="ACQUISITION_RESOURCES">
 	<slot name="inputStream" key="acquisitionProcess.label.proposalDocument"	bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
 		<property name="fileNameSlot" value="filename" />
@@ -220,7 +220,7 @@
 </schema>
 
 <schema name="receiveInvoiceForm"
-		type="pt.ist.expenditureTrackingSystem.presentationTier.actions.acquisitions.AcquisitionProcessAction$ReceiveInvoiceForm"
+		type="pt.ist.expenditureTrackingSystem.presentationTier.actions.acquisitions.SimplifiedProcedureProcessAction$ReceiveInvoiceForm"
 		bundle="ACQUISITION_RESOURCES">
 	<slot name="invoiceNumber" key="acquisitionProcess.label.invoice.number" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 	<slot name="invoiceDate" key="acquisitionProcess.label.invoice.date" bundle="ACQUISITION_RESOURCES">
@@ -352,7 +352,7 @@
 </schema>
 
 <schema name="viewAcquisitionAfterTheFact"
-		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionAfterTheFact"
+		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AcquisitionAfterTheFact"
 		bundle="EXPENDITURE_RESOURCES">
 	<slot name="afterTheFactAcquisitionType" key="label.afterTheFactAcquisitionType" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 	<slot name="invoiceDate" key="acquisitionProcess.label.invoice.date" bundle="ACQUISITION_RESOURCES" layout="null-as-label">

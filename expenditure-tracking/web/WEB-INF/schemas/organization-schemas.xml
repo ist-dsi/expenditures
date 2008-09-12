@@ -160,7 +160,7 @@
 </schema>
 
 <schema name="acquisitionAfterTheFact"
-		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionAfterTheFact"
+		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AcquisitionAfterTheFact"
 		bundle="EXPENDITURE_RESOURCES">
 	<slot name="afterTheFactAcquisitionType" key="label.afterTheFactAcquisitionType" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="invoiceDate" key="acquisitionProcess.label.invoice.date" bundle="ACQUISITION_RESOURCES"/>
@@ -208,7 +208,6 @@
 	<slot name="shortIdentifier" key="unit.label.shortIdentifier" bundle="ORGANIZATION_RESOURCES"/>
 	<slot name="name" key="unit.label.name" bundle="ORGANIZATION_RESOURCES"/>
 </schema>
-
 <schema name="role"
 		type="pt.ist.expenditureTrackingSystem.domain.RoleType"
 		bundle="ORGANIZATION_RESOURCES">

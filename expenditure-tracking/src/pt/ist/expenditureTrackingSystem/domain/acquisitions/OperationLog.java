@@ -3,8 +3,8 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 import org.joda.time.DateTime;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
+import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 
 public class OperationLog extends OperationLog_Base {
@@ -17,11 +17,11 @@ public class OperationLog extends OperationLog_Base {
     }
 
     @Override
-    public GenericAcquisitionProcessActivity getActivity() {
+    public <T extends GenericProcess> AbstractActivity<T> getActivity() {
 	AcquisitionProcess process = (AcquisitionProcess) getProcess();
 	return process.getActivityByName(getOperation());
     }
-    
+
     @Override
     public void setOperation(String operation) {
 	throw new DomainException("error.unable.to.change.operation");
@@ -36,7 +36,7 @@ public class OperationLog extends OperationLog_Base {
     public void setExecutor(Person executor) {
 	throw new DomainException("error.unable.to.change.executor");
     }
-    
+
     @Override
     public void setWhenOperationWasRan(DateTime when) {
 	throw new DomainException("error.unable.to.change.when.operation.was.executed");
@@ -46,5 +46,5 @@ public class OperationLog extends OperationLog_Base {
     public void setState(AcquisitionProcessStateType state) {
 	throw new DomainException("error.unable.to.change.when.state");
     }
-    
+
 }

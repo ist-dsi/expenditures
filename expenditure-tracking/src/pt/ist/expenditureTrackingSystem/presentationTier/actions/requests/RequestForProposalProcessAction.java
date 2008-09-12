@@ -22,7 +22,7 @@ import pt.ist.expenditureTrackingSystem.domain.requests.RequestForProposalProces
 import pt.ist.expenditureTrackingSystem.domain.requests.SearchRequestProposal;
 import pt.ist.expenditureTrackingSystem.presentationTier.Context;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.ProcessAction;
-import pt.ist.expenditureTrackingSystem.presentationTier.actions.acquisitions.AcquisitionProcessAction.AcquisitionProposalDocumentForm;
+import pt.ist.expenditureTrackingSystem.presentationTier.actions.acquisitions.SimplifiedProcedureProcessAction.AcquisitionProposalDocumentForm;
 import pt.ist.fenixWebFramework.security.UserView;
 import pt.ist.fenixWebFramework.struts.annotations.Forward;
 import pt.ist.fenixWebFramework.struts.annotations.Forwards;
