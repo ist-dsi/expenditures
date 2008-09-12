@@ -36,16 +36,17 @@
 </div>
 
 
-<bean:define id="urlView">/afterTheFactAcquisitionProcess.do?method=viewAcquisitionProcess&amp;afterTheFactAcquisitionProcessOid=<bean:write name="afterTheFactAcquisitionProcess" property="OID"/></bean:define>
+<bean:define id="urlView">/afterTheFactAcquisitionProcess.do?method=viewAfterTheFactAcquisitionProcess&amp;acquisitionAfterTheFactOid=<bean:write name="afterTheFactAcquisitionProcess" property="acquisitionAfterTheFact.OID"/></bean:define>
 <bean:define id="urlSave">/afterTheFactAcquisitionProcess.do?method=receiveAcquisitionInvoice&amp;afterTheFactAcquisitionProcessOid=<bean:write name="afterTheFactAcquisitionProcess" property="OID"/></bean:define>
-<fr:edit id="receiveInvoiceForm"
-		name="receiveInvoiceForm"
-		schema="receiveInvoiceForm"
-		action="<%= urlSave %>">
-	<fr:layout name="tabular">
-		<fr:property name="classes" value="form mtop05"/>
-		<fr:property name="columnClasses" value=",,tderror"/>
-	</fr:layout>
-		<fr:destination name="cancel" path="<%= urlView %>" />
-</fr:edit>
-
+<%= urlView %>
+<fr:form action="<%= urlSave %>" encoding="multipart/form-data">
+	<fr:edit id="receiveInvoiceForm"
+			name="receiveInvoiceForm"
+			schema="receiveInvoiceForm">
+		<fr:layout name="tabular">
+			<fr:property name="classes" value="form mtop05"/>
+			<fr:property name="columnClasses" value=",,tderror"/>
+		</fr:layout>
+	</fr:edit>
+	<html:submit styleClass="inputbutton"><bean:message key="renderers.form.submit.name" bundle="RENDERER_RESOURCES"/> </html:submit>
+</fr:form>

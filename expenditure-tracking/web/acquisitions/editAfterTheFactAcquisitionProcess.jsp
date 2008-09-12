@@ -6,14 +6,17 @@
 <h2><bean:message key="afterTheFactAcquisitionProcess.title.viewAfterTheFactAcquisitionProcess" bundle="ACQUISITION_RESOURCES"/></h2>
 
 <bean:define id="urlCancel">/afterTheFactAcquisitionProcess.do?method=viewAfterTheFactAcquisitionProcess&amp;acquisitionAfterTheFactOid=<bean:write name="afterTheFactAcquisitionProcessBean" property="afterTheFactAcquisitionProcess.acquisitionAfterTheFact.OID"/></bean:define>
-<fr:edit id="afterTheFactAcquisitionProcessBean"
-		name="afterTheFactAcquisitionProcessBean"
-		type="pt.ist.expenditureTrackingSystem.domain.dto.AfterTheFactAcquisitionProcessBean"
-		schema="afterTheFactAcquisitionProcessBean"
-		action="/afterTheFactAcquisitionProcess.do?method=editAfterTheFactAcquisitionProcess">
-	<fr:layout name="tabular">
-		<fr:property name="classes" value="form"/>
-		<fr:property name="columnClasses" value=",,tderror"/>
-	</fr:layout>
+<fr:form action="/afterTheFactAcquisitionProcess.do?method=editAfterTheFactAcquisitionProcess">
 	<fr:destination name="cancel" path="<%= urlCancel %>"/>
-</fr:edit>
+	<fr:edit id="afterTheFactAcquisitionProcessBean"
+			name="afterTheFactAcquisitionProcessBean"
+			type="pt.ist.expenditureTrackingSystem.domain.dto.AfterTheFactAcquisitionProcessBean"
+			schema="afterTheFactAcquisitionProcessBean">
+		<fr:layout name="tabular">
+			<fr:property name="classes" value="form"/>
+			<fr:property name="columnClasses" value=",,tderror"/>
+		</fr:layout>
+	</fr:edit>
+	<html:submit styleClass="inputbutton"><bean:message key="renderers.form.submit.name" bundle="RENDERER_RESOURCES"/> </html:submit>
+	<html:cancel styleClass="inputbutton"><bean:message key="renderers.form.cancel.name" bundle="RENDERER_RESOURCES"/> </html:cancel>
+</fr:form>
