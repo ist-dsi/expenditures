@@ -18,3 +18,11 @@ acquisitionCentral.usernames=
 acquisitionCentralAdministrator.usernames=
 acounting.usernames=
 war.name=compras.ist.utl.pt
+
+#----------------------------------------------------------------
+# WebServices - External Services Urls
+#----------------------------------------------------------------
+# webServices.external.urls: comma seperated values of wsdl valid urls.
+#							 Example: http://localhost:8080/contentCiapl/services/InstitutionalEmailManagement?wsdl
+
+webServices.external.urls=

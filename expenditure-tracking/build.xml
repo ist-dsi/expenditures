@@ -22,6 +22,11 @@
 	<property name="build.home.reports" value="${build.home.webinf.classes}/reports"/>
 	<property name="build.home.reports.images" value="${build.home.webinf.classes}/images"/>
 
+	<!-- WebServices(xfire) Directories -->
+		<property name="xfire" location="${config}/xfire" />
+		<property name="xfire.stubsTempDir" value="${basedir}/stubsTempDir" />
+		<property name="xfire.stubsTempDir.classes" value="${basedir}/stubsTempDir/classes" />
+	
 	<!-- Directories for deploy -->
 	<property name="deploy.home" location="deploy"/>
 
@@ -104,7 +109,7 @@
 		</java>
 	</target>
 
-	<target name="compile" description="Compiles code" depends="prepare, generate">
+	<target name="compile" description="Compiles code" depends="prepare, generate, generateStubs">
 		<javac destdir="${build.home.webinf.classes}"
 				debug="${compile.debug}"
 				optimize="${compile.optimize}"
@@ -186,6 +191,32 @@
 		<copy todir="${build.home.reports.images}/">
 			<fileset dir="${reports.images}"/>
 		</copy>
+	</target>
+
+	<target name="generateStubs" depends="prepare">
+		<mkdir dir="${xfire.stubsTempDir}" />
+		<mkdir dir="${xfire.stubsTempDir.classes}" />
+		<taskdef name="wsgen" classname="org.codehaus.xfire.gen.WsGenTask" classpathref="class.path.ref" />
+		<taskdef name="for" classname="net.sf.antcontrib.logic.ForTask" classpathref="class.path.ref" />
+		<for param="url" list="${webServices.external.urls}">
+			<sequential>
+				<wsgen outputDirectory="${xfire.stubsTempDir}" wsdl="@{url}" package="net.sourceforge.fenixedu.webServices.generatedStubs" overwrite="true" />
+			</sequential>
+		</for>
+		<javac srcdir="${xfire.stubsTempDir}" destdir="${xfire.stubsTempDir.classes}" 
+			   debug="${compile.debug}" 
+			   optimize="${compile.optimize}" 
+			   deprecation="${compile.deprecation}" 
+			   encoding="${encoding}" 
+			   nowarn="true">
+			<classpath refid="class.path.ref" />
+			<exclude name="${xfire.stubsTempDir}/*.xml" />
+		</javac>
+		<delete file="${lib}/expenditures-stubs.jar" />
+		<jar destfile="${lib}/expenditures-stubs.jar">
+			<fileset dir="${xfire.stubsTempDir.classes}" />
+		</jar>
+		<delete dir="${xfire.stubsTempDir}" />
 	</target>
 
 </project>
