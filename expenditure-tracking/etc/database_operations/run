@@ -40,3 +40,4 @@ function executeWithTempFile() {
 	echo
 }
 
+execute "Update existing db structure." updates.sql
