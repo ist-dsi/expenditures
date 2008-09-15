@@ -5,14 +5,18 @@
 
 <h2><bean:message key="acquisitionProcess.title.createAcquisitionRequest" bundle="ACQUISITION_RESOURCES"/></h2>
 
-<fr:edit id="acquisitionProcessBean"
-		name="acquisitionProcessBean"
-		type="pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean"
-		schema="createAcquisitionRequest"
-		action="/acquisitionProcess.do?method=createNewAcquisitionProcess">
-	<fr:layout name="tabular">
-		<fr:property name="classes" value="form"/>
-		<fr:property name="columnClasses" value=",,tderror"/>
-	</fr:layout>
+<fr:form action="/acquisitionProcess.do?method=createNewAcquisitionProcess">
+	<fr:edit id="acquisitionProcessBean"
+			name="acquisitionProcessBean"
+			type="pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean"
+			schema="createAcquisitionRequest">
+		<fr:layout name="tabular">
+			<fr:property name="classes" value="form"/>
+			<fr:property name="columnClasses" value=",,tderror"/>
+		</fr:layout>
+		<fr:destination name="cancel" path="/acquisitionProcess.do?method=showPendingProcesses"/>
+	</fr:edit>
 	<fr:destination name="cancel" path="/acquisitionProcess.do?method=showPendingProcesses"/>
-</fr:edit>
+	<html:submit>Criar</html:submit>
+	<html:cancel>Cancelar</html:cancel>
+</fr:form>
