@@ -2,6 +2,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="/WEB-INF/struts-tiles.tld" prefix="tiles" %>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
+<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <html:html xhtml="true">
 <head>
 	<tiles:insert page="head.jsp"/>
@@ -9,37 +10,29 @@
 
 <body>
 
-<div id="container">
-
-	<div id="header">
-		<tiles:insert page="pageHeader.jsp"/>
+<div class="errorcontainer">
+	<div class="errorlogo">
+		<img src="images/logo03.gif"/>
+		<div class="c1"></div>
+		<div class="c2"></div>
 	</div>
 
-	<div id="tabs10">
-		<tiles:insert page="topBar.jsp"/>
+	<div class="errortxt">
+		<h2>
+			<span><bean:message key="messages.exception.errorOccured" bundle="EXPENDITURE_RESOURCES"/></span>
+		</h2>
+		<p class="mbottom05" style="border-top: 1px solid #ccc; padding-top: 1em; color: #555;"><strong><bean:message key="messages.exception.contacts" bundle="EXPENDITURE_RESOURCES"/></strong></p>
+		<ul>
+			<li><bean:message key="messages.exception.processDoubt" bundle="EXPENDITURE_RESOURCES"/></li>
+			<li><bean:message key="messages.exception.technicalContact" bundle="EXPENDITURE_RESOURCES"/></li>
+		</ul>
+		<%--
+		<p class="mbottom05">Problemas técnicos ou informáticos: <a href="mailto:compras-informatica@ist.utl.pt">compras-informatica@ist.utl.pt</a></p>
+		<p class="mbottom05">Dúvidas sobre processos de compras: <a href="mailto:compras-informatica@ist.utl.pt">compras-processos@ist.utl.pt</a></p>
+		--%>
+		<p class="mtop15"><bean:message key="messages.exception.backToHomepage" bundle="EXPENDITURE_RESOURCES"/></p>
 	</div>
-
-	<div id="container2">
-
-		<div id="sidebar">
-		</div>
-
-		<div id="content">
-			<h2>
-		  		Ocorreu um erro !
-		  	</h2>
-		</div> <!-- content -->
-
-	</div> <!-- container2 -->
-
-	<div id="footer">
-		<tiles:insert page="footer.jsp"/>
-	</div>
-
-	<div class="cont_c1"></div>
-	<div class="cont_c2"></div>
-
-</div> <!-- container -->
+</div>
 
 </body>
 </html:html>

@@ -5,9 +5,9 @@
 <%@page import="pt.ist.expenditureTrackingSystem.domain.RoleType"%>
 
 
-<ul>
-	<logic:present name="USER_SESSION_ATTRIBUTE" property="person">
+<logic:present name="USER_SESSION_ATTRIBUTE" property="person">
 
+	<ul>
 		<li class="header">
 			<strong><bean:message key="link.sideBar.simplifiedProcedure" bundle="EXPENDITURE_RESOURCES"/></strong>
 			<div class="lic1"></div><div class="lic2"></div>
@@ -32,13 +32,11 @@
 				<bean:message key="link.sideBar.acquisitionProcess.myProcesses" bundle="EXPENDITURE_RESOURCES"/>
 			</html:link>
 		</li>
+	</ul>
 
-	
-		<li class="header">
-			<strong><bean:message key="link.sideBar.directContract" bundle="EXPENDITURE_RESOURCES"/></strong>
-			<div class="lic1"></div><div class="lic2"></div>
-		</li>
-		<%--
+
+	<%--
+	<ul>
 		<li>
 			<html:link action="/acquisitionProcess.do?method=prepareCreateAcquisitionProcess">
 				<bean:message key="link.sideBar.acquisitionProcess.create" bundle="EXPENDITURE_RESOURCES"/>
@@ -59,25 +57,38 @@
 				<bean:message key="link.sideBar.acquisitionProcess.myProcesses" bundle="EXPENDITURE_RESOURCES"/>
 			</html:link>
 		</li>
-		--%>
-		<logic:present role="ACQUISITION_CENTRAL_MANAGER">
+	</ul>
+	--%>
+	
+	<logic:present role="ACQUISITION_CENTRAL_MANAGER">
+		<ul>
+			<li class="header">
+				<strong><bean:message key="link.sideBar.directContract" bundle="EXPENDITURE_RESOURCES"/></strong>
+				<div class="lic1"></div><div class="lic2"></div>
+			</li>
 			<li>
 				<html:link action="/acquisitionProcess.do?method=prepareCreateAnnouncement">
 					<bean:message key="link.sideBar.acquisitionProcess.createAnnouncement" bundle="EXPENDITURE_RESOURCES"/>
 				</html:link>
 			</li>
-		</logic:present>
-
-		<li class="header">
-			<strong><bean:message key="link.sideBar.other.operations" bundle="EXPENDITURE_RESOURCES"/></strong>
-			<div class="lic1"></div><div class="lic2"></div>
-		</li>
-		<logic:present role="ACQUISITION_CENTRAL,ACQUISITION_CENTRAL_MANAGER">
+		</ul>
+	</logic:present>
+	
+	
+	<logic:present role="ACQUISITION_CENTRAL,ACQUISITION_CENTRAL_MANAGER">
+		<ul>
+			<li class="header">
+				<strong><bean:message key="link.sideBar.other.operations" bundle="EXPENDITURE_RESOURCES"/></strong>
+				<div class="lic1"></div><div class="lic2"></div>
+			</li>
 			<li>
 				<html:link action="/afterTheFactAcquisitionProcess.do?method=prepareCreateAfterTheFactAcquisitionProcess">
 					<bean:message key="link.sideBar.afterTheFactAcquisitionProcess.create" bundle="EXPENDITURE_RESOURCES"/>
 				</html:link>
 			</li>
-		</logic:present>
+		</ul>
 	</logic:present>
-</ul>
+
+
+</logic:present>
+
