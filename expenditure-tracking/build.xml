@@ -212,8 +212,8 @@
 			<classpath refid="class.path.ref" />
 			<exclude name="${xfire.stubsTempDir}/*.xml" />
 		</javac>
-		<delete file="${lib}/expenditures-stubs.jar" />
-		<jar destfile="${lib}/expenditures-stubs.jar">
+		<delete file="${build.home.webinf.libs}/expenditures-stubs.jar" />
+		<jar destfile="${build.home.webinf.libs}/expenditures-stubs.jar">
 			<fileset dir="${xfire.stubsTempDir.classes}" />
 		</jar>
 		<delete dir="${xfire.stubsTempDir}" />
