@@ -4,29 +4,42 @@ import org.joda.time.LocalDate;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
+import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
+import pt.ist.expenditureTrackingSystem.domain.util.Money;
 import pt.ist.fenixWebFramework.services.Service;
 
 public class DelegatedAuthorization extends DelegatedAuthorization_Base {
 
-    DelegatedAuthorization(Person delegatedPerson, Authorization authorization, Boolean canDelegate, LocalDate endDate) {
+    DelegatedAuthorization(Person delegatedPerson, Unit unit, Authorization authorization, Boolean canDelegate,
+	    LocalDate endDate, Money maxAmount) {
 	super();
-	checkParameters(authorization, delegatedPerson, canDelegate, endDate);
+	checkParameters(authorization, delegatedPerson, unit, canDelegate, endDate, maxAmount);
 	setPerson(delegatedPerson);
 	setAuthorization(authorization);
 	setCanDelegate(canDelegate);
-	setUnit(authorization.getUnit());
+	setUnit(unit);
 	setStartDate(new LocalDate());
 	setEndDate(endDate);
+	setMaxAmount(maxAmount);
     }
 
-    private void checkParameters(Authorization authorization, Person delegatedPerson, Boolean canDelegate, LocalDate endDate) {
-	if (authorization == null || delegatedPerson == null || canDelegate == null) {
+    private void checkParameters(Authorization authorization, Person delegatedPerson, Unit unit, Boolean canDelegate,
+	    LocalDate endDate, Money maxAmount) {
+	if (authorization == null || delegatedPerson == null || canDelegate == null || unit == null) {
 	    throw new DomainException("error.authorization.person.and.delegation.are.required");
 	}
 
 	if (authorization.getEndDate() != null
 		&& ((endDate != null && endDate.isAfter(authorization.getEndDate()) || (authorization.getEndDate() != null && endDate == null)))) {
 	    throw new DomainException("error.authorization.cannot.be.delegated.after.your.end.date");
+	}
+
+	if (!unit.isSubUnit(authorization.getUnit())) {
+	    throw new DomainException("error.unit.is.not.subunit.of.authorization.unit");
+	}
+
+	if (maxAmount == null || maxAmount.isGreaterThan(authorization.getMaxAmount())) {
+	    throw new DomainException("error.maxAmount.cannot.be.greater.than.authorization.maxAmount");
 	}
 
     }
@@ -36,8 +49,9 @@ public class DelegatedAuthorization extends DelegatedAuthorization_Base {
     }
 
     @Service
-    public static void delegate(Authorization authorization, Person person, Boolean canDelegate, LocalDate endDate) {
-	new DelegatedAuthorization(person, authorization, canDelegate, endDate);
+    public static void delegate(Authorization authorization, Person person, Unit unit, Boolean canDelegate, LocalDate endDate,
+	    Money maxAmount) {
+	new DelegatedAuthorization(person, unit, authorization, canDelegate, endDate, maxAmount);
     }
 
     @Override

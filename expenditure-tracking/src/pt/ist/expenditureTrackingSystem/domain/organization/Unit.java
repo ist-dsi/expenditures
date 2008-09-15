@@ -122,8 +122,8 @@ public class Unit extends Unit_Base {
     }
 
     public boolean isResponsible(Person person) {
-	for (Authorization authorization : person.getAuthorizations()) {
-	    if (authorization.getUnit() == this) {
+	for (Authorization authorization : person.getValidAuthorizations()) {
+	    if (isSubUnit(authorization.getUnit())) {
 		return true;
 	    }
 	}
@@ -135,11 +135,27 @@ public class Unit extends Unit_Base {
     }
 
     public String getType() {
-	return ResourceBundle.getBundle("resources/OrganizationResources", Language.getLocale()).getString("label." + getClass().getSimpleName());
+	return ResourceBundle.getBundle("resources/OrganizationResources", Language.getLocale()).getString(
+		"label." + getClass().getSimpleName());
     }
 
     public String getShortIdentifier() {
 	return "";
+    }
+
+    public boolean isSubUnit(final Unit unit) {
+	if (unit == null) {
+	    return false;
+	}
+
+	if (this == unit) {
+	    return true;
+	}
+
+	if (hasParentUnit()) {
+	    return getParentUnit().isSubUnit(unit);
+	}
+	return false;
     }
 
 }

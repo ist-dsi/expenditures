@@ -97,6 +97,8 @@ class authorizations.Authorization {
 	Boolean canDelegate;
 	LocalDate startDate;
 	LocalDate endDate;
+	Money maxAmount;
+	
 }	
 
 	class authorizations.DelegatedAuthorization extends authorizations.Authorization {

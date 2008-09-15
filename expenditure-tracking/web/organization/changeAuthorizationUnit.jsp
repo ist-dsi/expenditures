@@ -26,7 +26,7 @@
 	</fr:layout>
 </fr:edit>
 <br/>
-<bean:define id="urlSelect" type="java.lang.String">/organization.do?method=changeAuthorizationUnit&amp;personOid=<bean:write name="person" property="OID"/></bean:define>
+<bean:define id="urlSelect" type="java.lang.String">/organization.do?method=prepareCreateAuthorizationUnit&amp;personOid=<bean:write name="person" property="OID"/></bean:define>
 <html:link action="<%= urlExpand %>">
 	<bean:message key="link.top" bundle="EXPENDITURE_RESOURCES"/>
 </html:link>

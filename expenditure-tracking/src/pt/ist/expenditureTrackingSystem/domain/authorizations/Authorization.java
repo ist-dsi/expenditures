@@ -8,8 +8,10 @@ import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
+import pt.ist.expenditureTrackingSystem.domain.dto.AuthorizationBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
+import pt.ist.expenditureTrackingSystem.domain.util.Money;
 import pt.ist.fenixWebFramework.security.UserView;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.pstm.Transaction;
@@ -21,6 +23,7 @@ public class Authorization extends Authorization_Base {
 	setOjbConcreteClass(getClass().getName());
 	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
 	setStartDate(new LocalDate());
+	setMaxAmount(Money.ZERO);
     }
 
     public Authorization(final Person person, final Unit unit) {
@@ -28,6 +31,14 @@ public class Authorization extends Authorization_Base {
 	setPerson(person);
 	setUnit(unit);
 	setCanDelegate(Boolean.FALSE);
+    }
+
+    public Authorization(final AuthorizationBean authorizationBean) {
+	this(authorizationBean.getPerson(), authorizationBean.getUnit());
+	setStartDate(authorizationBean.getStartDate());
+	setEndDate(authorizationBean.getEndDate());
+	setCanDelegate(authorizationBean.getCanDelegate());
+	setMaxAmount(authorizationBean.getMaxAmount() != null ? authorizationBean.getMaxAmount() : Money.ZERO);
     }
 
     @Service

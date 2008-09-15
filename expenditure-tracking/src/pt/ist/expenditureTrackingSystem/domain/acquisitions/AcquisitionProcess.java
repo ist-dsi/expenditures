@@ -171,15 +171,16 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
     }
 
     public boolean isResponsibleForUnit(Person person) {
-	List<Unit> payingUnits = getPayingUnits();
-
-	for (Authorization authorization : person.getAuthorizations()) {
-	    if (authorization.isValid() && payingUnits.contains(authorization.getUnit())) {
-		return true;
+	Set<Authorization> validAuthorizations = person.getValidAuthorizations();
+	for (Unit unit : getPayingUnits()) {
+	    for (Authorization authorization : validAuthorizations) {
+		if (unit.isSubUnit(authorization.getUnit())) {
+		    return true;
+		}
 	    }
 	}
-	return false;
 
+	return false;
     }
 
     public boolean isResponsibleForUnit() {
@@ -210,6 +211,18 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 
     public boolean checkRealValues() {
 	return getAcquisitionRequest().checkRealValues();
+    }
+
+    public boolean isResponsibleForUnit(Person person, Money amount) {
+	Set<Authorization> validAuthorizations = person.getValidAuthorizations();
+	for (Unit unit : getPayingUnits()) {
+	    for (Authorization authorization : validAuthorizations) {
+		if (authorization.getMaxAmount().isGreaterThanOrEqual(amount) && unit.isSubUnit(authorization.getUnit())) {
+		    return true;
+		}
+	    }
+	}
+	return false;
     }
 
 }

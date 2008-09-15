@@ -12,6 +12,7 @@ import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
+import pt.ist.expenditureTrackingSystem.domain.dto.AuthorizationBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreatePersonBean;
 import pt.ist.expenditureTrackingSystem.domain.util.Address;
 import pt.ist.fenixWebFramework.services.Service;
@@ -52,6 +53,11 @@ public class Person extends Person_Base {
     @Service
     public Authorization createAuthorization(final Unit unit) {
 	return new Authorization(this, unit);
+    }
+
+    @Service
+    public Authorization createAuthorization(final AuthorizationBean authorizationBean) {
+	return new Authorization(authorizationBean);
     }
 
     public static Person findByUsername(final String username) {
@@ -117,5 +123,15 @@ public class Person extends Person_Base {
 	    processes.add(request.getAcquisitionProcess());
 	}
 	return processes;
+    }
+
+    public Set<Authorization> getValidAuthorizations() {
+	final Set<Authorization> res = new HashSet<Authorization>();
+	for (Authorization authorization : getAuthorizationsSet()) {
+	    if (authorization.isValid()) {
+		res.add(authorization);
+	    }
+	}
+	return res;
     }
 }

@@ -58,42 +58,25 @@
 <br/>
 <h3>Unidades do qual é responsável</h3>
 <bean:define id="authorizations" name="person" property="authorizations"/>
-<logic:present role="MANAGER,ACQUISITION_CENTRAL_MANAGER">
-	<logic:notEmpty name="authorizations">
-		<fr:view name="authorizations"
-				schema="viewAuthorizations">
-			<fr:layout name="tabular">
-				<fr:property name="classes" value="tstyle1"/>
-				<fr:property name="classes" value="tstyle2"/>
-				<fr:property name="columnClasses" value="aleft,,,,aright,"/>
+<logic:notEmpty name="authorizations">
+	<fr:view name="authorizations"
+			schema="viewAuthorizations">
+		<fr:layout name="tabular">
+			<fr:property name="classes" value="tstyle1"/>
+			<fr:property name="classes" value="tstyle2"/>
+			<fr:property name="columnClasses" value="aleft,,,,aright,"/>
 
-				<fr:property name="link(view)" value="/organization.do?method=viewAuthorization"/>
-				<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
-				<fr:property name="key(view)" value="link.view"/>
-				<fr:property name="param(view)" value="OID/authorizationOid"/>
-				<fr:property name="order(view)" value="1"/>
-			</fr:layout>
-		</fr:view>
-	</logic:notEmpty>
-	<logic:empty name="authorizations">
-		<em>Não tem autorizações atribuidas</em>
-		<br/>
-		<br/>
-	</logic:empty>
-</logic:present>
-<logic:notPresent role="MANAGER,ACQUISITION_CENTRAL_MANAGER">
-	<logic:notEmpty name="authorizations">
-		<fr:view name="authorizations"
-				schema="viewAuthorizations">
-			<fr:layout name="tabular">
-				<fr:property name="classes" value="tstyle1"/>
-				<fr:property name="classes" value="tstyle2"/>
-				<fr:property name="columnClasses" value="aleft,,,,aright,"/>
-			</fr:layout>
-		</fr:view>
-	</logic:notEmpty>
-	<logic:empty name="authorizations">
-		<em>Não tem autorizações atribuidas</em>
-	</logic:empty>
-</logic:notPresent>
+			<fr:property name="link(view)" value="/organization.do?method=viewAuthorization"/>
+			<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
+			<fr:property name="key(view)" value="link.view"/>
+			<fr:property name="param(view)" value="OID/authorizationOid"/>
+			<fr:property name="order(view)" value="1"/>
+		</fr:layout>
+	</fr:view>
+</logic:notEmpty>
+<logic:empty name="authorizations">
+	<em>Não tem autorizações atribuidas</em>
+	<br/>
+	<br/>
+</logic:empty>
 

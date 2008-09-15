@@ -47,6 +47,8 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "view.supplier", path = "/organization/viewSupplier.jsp"),
 	@Forward(name = "create.supplier", path = "/organization/createSupplier.jsp"),
 	@Forward(name = "edit.supplier", path = "/organization/editSupplier.jsp"),
+	@Forward(name = "create.authorization.unit", path = "/organization/createAuthorizationUnit.jsp"),
+	@Forward(name = "delegate.choose.unit", path = "/organization/delegateChooseUnit.jsp"),
 	@Forward(name = "change.authorization.unit", path = "/organization/changeAuthorizationUnit.jsp") })
 public class OrganizationAction extends BaseAction {
 
@@ -184,15 +186,15 @@ public class OrganizationAction extends BaseAction {
 	return mapping.findForward("view.person");
     }
 
-    public final ActionForward editAuthorization(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
+    public final ActionForward editAuthorization(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
 	final Authorization authorization = getDomainObject(request, "authorizationOid");
 	request.setAttribute("authorization", authorization);
 	return mapping.findForward("edit.authorization");
     }
 
-    public final ActionForward viewAuthorization(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
+    public final ActionForward viewAuthorization(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
 	final Authorization authorization = getDomainObject(request, "authorizationOid");
 	request.setAttribute("authorization", authorization);
 	return mapping.findForward("view.authorization");
@@ -227,6 +229,8 @@ public class OrganizationAction extends BaseAction {
 	final Set<Unit> units = unit == null ? ExpenditureTrackingSystem.getInstance().getTopLevelUnitsSet() : unit
 		.getSubUnitsSet();
 	request.setAttribute("units", units);
+	final UnitBean unitBean = new UnitBean();
+	request.setAttribute("unitBean", unitBean);
 	return mapping.findForward("change.authorization.unit");
     }
 
@@ -236,6 +240,24 @@ public class OrganizationAction extends BaseAction {
 	final Unit unit = getDomainObject(request, "unitOid");
 	person.createAuthorization(unit);
 	return viewPerson(mapping, request, person);
+    }
+
+    public final ActionForward prepareCreateAuthorizationUnit(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final Person person = getDomainObject(request, "personOid");
+	final Unit unit = getDomainObject(request, "unitOid");
+	final AuthorizationBean authorizationBean = new AuthorizationBean(person, unit);
+	request.setAttribute("authorizationBean", authorizationBean);
+	request.setAttribute("person", person);
+	request.setAttribute("unit", unit);
+	return mapping.findForward("create.authorization.unit");
+    }
+
+    public final ActionForward createAuthorizationUnit(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final AuthorizationBean authorizationBean = getRenderedObject();
+	authorizationBean.getPerson().createAuthorization(authorizationBean);
+	return viewPerson(mapping, request, authorizationBean.getPerson());
     }
 
     public final ActionForward deleteAuthorization(final ActionMapping mapping, final ActionForm form,
@@ -257,7 +279,7 @@ public class OrganizationAction extends BaseAction {
 	return mapping.findForward("manage.suppliers");
     }
 
-    public final ActionForward manageSuppliers(final ActionMapping mapping, final HttpServletRequest request, 
+    public final ActionForward manageSuppliers(final ActionMapping mapping, final HttpServletRequest request,
 	    final SupplierBean supplierBean) {
 	request.setAttribute("supplierBean", supplierBean);
 	return mapping.findForward("manage.suppliers");
@@ -318,7 +340,7 @@ public class OrganizationAction extends BaseAction {
 	    final HttpServletRequest request, final HttpServletResponse response) {
 
 	final Authorization authorization = getDomainObject(request, "authorizationOid");
-	
+
 	try {
 	    authorization.revoke();
 	} catch (DomainException e) {
@@ -332,11 +354,13 @@ public class OrganizationAction extends BaseAction {
 	    final HttpServletRequest request, final HttpServletResponse response) {
 
 	Authorization authorization = getDomainObject(request, "authorizationOid");
+	Unit unit = getDomainObject(request, "unitOid");
 	request.setAttribute("authorization", authorization);
 	Person person = getLoggedPerson();
 
 	if (authorization.getPerson() == person && authorization.getCanDelegate()) {
 	    AuthorizationBean bean = new AuthorizationBean(authorization);
+	    bean.setUnit(unit);
 	    request.setAttribute("bean", bean);
 	} else {
 	    addErrorMessage("label.unable.to.delegate.that.action", "EXPENDITURE_RESOURCES");
@@ -345,12 +369,26 @@ public class OrganizationAction extends BaseAction {
 	return mapping.findForward("delegate.authorization");
     }
 
+    public ActionForward chooseDelegationUnit(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final Authorization authorization = getDomainObject(request, "authorizationOid");
+	request.setAttribute("authorization", authorization);
+	Unit unit = getDomainObject(request, "unitOid");
+	if (unit == null) {
+	    unit = authorization.getUnit();
+	}
+	request.setAttribute("unit", unit);
+	request.setAttribute("units", unit.getSubUnitsSet());
+	return mapping.findForward("delegate.choose.unit");
+    }
+
     public ActionForward createDelegation(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) {
 
 	final AuthorizationBean bean = getRenderedObject("bean");
 	try {
-	    DelegatedAuthorization.delegate(bean.getAuthorization(), bean.getPerson(), bean.getCanDelegate(), bean.getEndDate());
+	    DelegatedAuthorization.delegate(bean.getAuthorization(), bean.getPerson(), bean.getUnit(), bean.getCanDelegate(),
+		    bean.getEndDate(), bean.getMaxAmount());
 	} catch (DomainException e) {
 	    addErrorMessage(e.getMessage(), "EXPENDITURE_RESOURCES");
 	    request.setAttribute("bean", bean);

@@ -318,24 +318,6 @@
 	<slot name="realShareValue" key="acquisitionProcess.label.realAllocatin" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 </schema>
 
-<schema name="delegateAuthorization" type="pt.ist.expenditureTrackingSystem.domain.dto.AuthorizationBean"
-		bundle="ACQUISITION_RESOURCES">
-		<slot name="person" key="person.label.name" layout="autoComplete" bundle="ORGANIZATION_RESOURCES">
-			<property name="labelField" value="name"/>
-			<property name="format" value="${name} (${username})"/>
-			<property name="minChars" value="1"/>		
-			<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.PersonNameAutoComplete"/>
-			<property name="size" value="40"/>
-			<validator class="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator">
-				<property name="message" value="label.pleaseSelectOne.person"/>
-				<property name="bundle" value="EXPENDITURE_RESOURCES"/>
-				<property name="key" value="true"/>
-			</validator>
-		</slot>
-		<slot name="canDelegate" key="authorizations.label.canDelegate" bundle="EXPENDITURE_RESOURCES"/>
-		<slot name="endDate" key="authorizations.label.endDate" bundle="EXPENDITURE_RESOURCES"/>
-</schema>
-
 <schema name="afterTheFactAcquisitionProcessBean"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.AfterTheFactAcquisitionProcessBean"
 		bundle="EXPENDITURE_RESOURCES">
