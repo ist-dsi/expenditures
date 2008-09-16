@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Set;
 
 import pt.ist.expenditureTrackingSystem.domain.Search;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
@@ -46,7 +47,7 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
     @Override
     public Set<AcquisitionProcess> search() {
 	try {
-	    return new SearchResult(GenericProcess.getAllProcesses(AcquisitionProcess.class));
+	    return new SearchResult(GenericProcess.getAllProcesses(SimplifiedProcedureProcess.class));
 	} catch (Exception ex) {
 	    ex.printStackTrace();
 	    throw new Error(ex);
