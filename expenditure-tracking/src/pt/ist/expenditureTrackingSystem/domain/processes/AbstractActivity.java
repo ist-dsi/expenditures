@@ -24,6 +24,10 @@ public abstract class AbstractActivity<T extends GenericProcess> {
 	checkConditionsFor(process);
 	logExecution(process, getName(), getUser());
 	process(process, args);
+	notifyUsers(process);
+    }
+
+    protected void notifyUsers(T process) {
     }
 
     public boolean isActive(T process) {

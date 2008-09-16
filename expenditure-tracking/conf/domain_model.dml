@@ -150,6 +150,7 @@ class File {
 class Options {
 	Boolean displayAuthorizationPending;
 	Boolean recurseAuthorizationPendingUnits;
+	Boolean receiveNotificationsByEmail;
 }
 
 class organization.Person {

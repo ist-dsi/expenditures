@@ -3,6 +3,7 @@
 		bundle="EXPENDITURE_RESOURCES">
 	<slot name="displayAuthorizationPending" key="options.label.displayPendingAuthorizations" bundle="EXPENDITURE_RESOURCES"/>
 	<slot name="recurseAuthorizationPendingUnits" key="options.label.recurseIntoUnits" bundle="EXPENDITURE_RESOURCES"/>
+	<slot name="receiveNotificationsByEmail" key="options.label.receiveNotificationsByEmail" bundle="EXPENDITURE_RESOURCES"/>
 </schema>
 
 <schema name="interfaceOptionsCssUpload"

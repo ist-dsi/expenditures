@@ -17,7 +17,8 @@ public class SubmitForApproval extends GenericAcquisitionProcessActivity {
 
     @Override
     protected boolean isAvailable(AcquisitionProcess process) {
-	return process.isProcessInState(AcquisitionProcessStateType.IN_GENESIS) && process.getAcquisitionRequest().isFilled() && process.getAcquisitionRequest().isEveryItemFullyAttributedToPayingUnits();
+	return process.isProcessInState(AcquisitionProcessStateType.IN_GENESIS) && process.getAcquisitionRequest().isFilled()
+		&& process.getAcquisitionRequest().isEveryItemFullyAttributedToPayingUnits();
     }
 
     @Override
@@ -25,4 +26,8 @@ public class SubmitForApproval extends GenericAcquisitionProcessActivity {
 	new AcquisitionProcessState(process, AcquisitionProcessStateType.SUBMITTED_FOR_APPROVAL);
     }
 
+    @Override
+    protected void notifyUsers(AcquisitionProcess process) {
+	notifyUnitsResponsibles(process);
+    }
 }
