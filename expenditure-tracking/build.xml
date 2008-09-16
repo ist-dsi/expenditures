@@ -109,7 +109,7 @@
 		</java>
 	</target>
 
-	<target name="compile" description="Compiles code" depends="prepare, generate, generateStubs">
+	<target name="compile" description="Compiles code" depends="prepare, generate">
 		<javac destdir="${build.home.webinf.classes}"
 				debug="${compile.debug}"
 				optimize="${compile.optimize}"
