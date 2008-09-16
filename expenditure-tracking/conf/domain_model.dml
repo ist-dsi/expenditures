@@ -89,6 +89,7 @@ class acquisitions.UnitItem {
 
 class acquisitions.Financer {
 	String fundAllocationId;
+	String effectiveFundAllocationId;
 }
 
 class authorizations.Authorization {
@@ -196,6 +197,7 @@ class processes.GenericProcess {
 
 	class acquisitions.AcquisitionProcess extends processes.GenericProcess {
 		LocalDate fundAllocationExpirationDate;
+		Integer acquisitionProcessNumber;
 	}
 
 		class acquisitions.afterthefact.AfterTheFactAcquisitionProcess extends acquisitions.AcquisitionProcess {
@@ -212,6 +214,11 @@ class processes.GenericProcess {
 
 	class requests.RequestForProposalProcess extends processes.GenericProcess {
 	}
+	
+class acquisitions.AcquisitionProcessYear {
+	Integer year;
+	Integer counter;
+}
 	
 
 class requests.RequestForProposal {
@@ -585,4 +592,18 @@ relation AnnouncementAcquisition {
 relation OptionsCascadingStyleSheet {
 	Options playsRole options;
 	CascadingStyleSheet playsRole cascadingStyleSheet;
+}
+
+relation ExpenditureTrackingSystemAcquisitionProcessYear {
+	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
+	acquisitions.AcquisitionProcessYear playsRole acquisitionProcessYears {
+		multiplicity *;
+	}
+}
+
+relation AcqusitionProcessAcquisitionProcessYear {
+	acquisitions.AcquisitionProcess playsRole acquisitionProcesses {
+		multiplicity *;
+	} 
+	acquisitions.AcquisitionProcessYear playsRole acquisitionProcessYear;
 }

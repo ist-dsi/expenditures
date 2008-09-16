@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import org.joda.time.LocalDate;
+
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
@@ -25,6 +27,10 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 	super();
 	setOjbConcreteClass(getClass().getName());
 	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
+	AcquisitionProcessYear acquisitionProcessYear = AcquisitionProcessYear.getAcquisitionProcessYearByYear(new LocalDate()
+		.getYear());
+	setAcquisitionProcessYear(acquisitionProcessYear);
+	setAcquisitionProcessNumber(acquisitionProcessYear.nextAcquisitionProcessYearNumber());
     }
 
     public void delete() {
@@ -223,6 +229,10 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 	    }
 	}
 	return false;
+    }
+
+    public String getAcquisitionProcessId() {
+	return getAcquisitionProcessYear().getYear() + "/" + getAcquisitionProcessNumber();
     }
 
 }

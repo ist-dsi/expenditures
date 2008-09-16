@@ -441,4 +441,8 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     public boolean isRealTotalValueEqualsRealShareValue() {
 	return getRealTotalValueWithAdditionalCostsAndVat().equals(getTotalRealShareValue());
     }
+
+    public String getAcquisitionProcessId() {
+	return getAcquisitionProcess().getAcquisitionProcessId();
+    }
 }
