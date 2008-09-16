@@ -24,15 +24,19 @@
 		/>
 <bean:define id="urlView">/acquisitionProcess.do?method=viewAcquisitionProcess&acquisitionProcessOid=<%= acquisitionProcess.getOID() %></bean:define>
 
-<fr:edit id="acquisitionRequestItem"
-		name="bean"
-		schema='<%= "createAcquisitionRequestItem_" + schemaType.toString()%>'
-		action="/acquisitionProcess.do?method=createNewAcquisitionRequestItem">
-	<fr:layout name="tabular">
-		<fr:property name="classes" value="form"/>
-		<fr:property name="columnClasses" value=",,tderror"/>
-	</fr:layout>
-	<fr:destination name="cancel" path="<%= urlView %>" />
-	<fr:destination name="invalid" path='<%= "/acquisitionProcess.do?method=executeCreateAcquisitionRequestItem&acquisitionProcessOid=" + acquisitionProcess.getOID() %>'/>
-	<fr:destination name="postBack" path="/acquisitionProcess.do?method=createItemPostBack" />
-</fr:edit>
+
+<fr:form action="/acquisitionProcess.do?method=createNewAcquisitionRequestItem">
+	<fr:edit id="acquisitionRequestItem"
+			name="bean"
+			schema='<%= "createAcquisitionRequestItem_" + schemaType.toString()%>'>
+		<fr:layout name="tabular">
+			<fr:property name="classes" value="form"/>
+			<fr:property name="columnClasses" value=",,tderror"/>
+		</fr:layout>
+		<fr:destination name="cancel" path="<%= urlView %>" />
+		<fr:destination name="invalid" path='<%= "/acquisitionProcess.do?method=executeCreateAcquisitionRequestItem&acquisitionProcessOid=" + acquisitionProcess.getOID() %>'/>
+		<fr:destination name="postBack" path="/acquisitionProcess.do?method=createItemPostBack" />
+	</fr:edit>
+	<html:submit styleClass="inputbutton"><bean:message key="button.create" bundle="EXPENDITURE_RESOURCES"/></html:submit>
+	<html:cancel styleClass="inputbutton"><bean:message key="button.cancel" bundle="EXPENDITURE_RESOURCES"/></html:cancel>
+</fr:form>

@@ -9,6 +9,7 @@
 	<bean:message key="acquisitionProcess.message.note" bundle="ACQUISITION_RESOURCES"/>
 </div>
 
+
 <fr:form action="/acquisitionProcess.do?method=createNewAcquisitionProcess">
 	<fr:edit id="acquisitionProcessBean"
 			name="acquisitionProcessBean"
@@ -20,7 +21,6 @@
 		</fr:layout>
 		<fr:destination name="cancel" path="/acquisitionProcess.do?method=showPendingProcesses"/>
 	</fr:edit>
-	<fr:destination name="cancel" path="/acquisitionProcess.do?method=showPendingProcesses"/>
 	<html:submit styleClass="inputbutton"><bean:message key="button.create" bundle="EXPENDITURE_RESOURCES"/></html:submit>
 	<html:cancel styleClass="inputbutton"><bean:message key="button.cancel" bundle="EXPENDITURE_RESOURCES"/></html:cancel>
 </fr:form>

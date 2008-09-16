@@ -11,12 +11,10 @@
 
 <bean:define id="itemOID" name="item" property="OID"/>
 
-
 <logic:equal name="item" property="filledWithRealValues" value="false">
 	<div class="infoop4">
 			<strong><bean:message key="messages.info.attention" bundle="EXPENDITURE_RESOURCES"/></strong>: <bean:message key="acquisitionRequestItem.message.warn.mustDefineRealValuesFirst" bundle="ACQUISITION_RESOURCES"/>
 	</div>
-	
 	<html:link page='<%= "/acquisitionProcess.do?method=viewAcquisitionProcess&acquisitionProcessOid="  + processOID %>'>« <bean:message key="link.back" bundle="EXPENDITURE_RESOURCES"/></html:link>
 </logic:equal>
 			
@@ -27,8 +25,10 @@
 	<fr:edit id="beans" name="beans" schema="editSchemaRealShareValues" 
 		action='<%= "/acquisitionProcess.do?method=executeDistributeRealValuesForPayingUnitsEdition&acquisitionProcessOid="  + processOID + "&acquisitionRequestItemOid=" + itemOID%>'>
 			<fr:layout name="tabular">
-				<fr:property name="classes" value="tstyle3"/>
+				<fr:property name="classes" value="form"/>
+				<fr:property name="columnClasses" value=",,tderror"/>
 			</fr:layout>
 			<fr:destination name="cancel" path='<%= "/acquisitionProcess.do?method=viewAcquisitionProcess&acquisitionProcessOid="  + processOID %>'/>
 	</fr:edit>
+	
 </logic:equal>

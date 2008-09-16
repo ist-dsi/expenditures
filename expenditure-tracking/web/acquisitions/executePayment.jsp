@@ -7,7 +7,7 @@
 
 <bean:define id="processOID" name="process" property="OID"/>
 
-<h2><bean:message key="label.pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.PayAcquisition" bundle="ACQUISITION_RESOURCES"/></h2>
+<h2><bean:message key="label.pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.PayAcquisition" bundle="ACQUISITION_RESOURCES"/></h2>
 
 <fr:form action='<%= "/acquisitionProcess.do?method=executePayAcquisitionAction&amp;acquisitionProcessOid=" + processOID %>'>
 

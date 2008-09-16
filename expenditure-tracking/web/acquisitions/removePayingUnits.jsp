@@ -4,7 +4,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
-<h2><bean:message key="label.pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.RemovePayingUnit" bundle="ACQUISITION_RESOURCES"/></h2>
+<h2><bean:message key="label.pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RemovePayingUnit" bundle="ACQUISITION_RESOURCES"/></h2>
 
 
 <p>

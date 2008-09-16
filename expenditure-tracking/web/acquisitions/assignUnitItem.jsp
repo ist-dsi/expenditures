@@ -6,7 +6,7 @@
 <%@ taglib uri="/WEB-INF/messages.tld" prefix="messages" %>
 
 <h2>
-	<bean:message key="label.pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AssignPayingUnitToItem" bundle="ACQUISITION_RESOURCES"/>
+	<bean:message key="label.pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.AssignPayingUnitToItem" bundle="ACQUISITION_RESOURCES"/>
 </h2>
 
 <script type="text/javascript" src="<%= request.getContextPath() + "/javaScript/calculator.js" %>"></script> 
@@ -78,7 +78,7 @@
 			<a href="javascript:document.forms[0].method.value='calculateShareValuePostBack'; document.forms[0].submit();"> <bean:message key="acquisitionRequestItem.link.autoDistribute" bundle="ACQUISITION_RESOURCES"/> </a>
 		</p>
 		
-			<html:submit styleClass="inputbutton"><bean:message key="renderers.form.submit.name" bundle="RENDERER_RESOURCES"/> </html:submit>
+			<html:submit styleClass="inputbutton"><bean:message key="button.atribute" bundle="EXPENDITURE_RESOURCES"/> </html:submit>
 	</fr:form>
 
 	<fr:form action='<%="/acquisitionProcess.do?method=viewAcquisitionProcess&acquisitionProcessOid=" + processOID + "&acquisitionRequestItemOid=" + acquisitionRequestItemOid%>'>
