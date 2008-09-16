@@ -37,6 +37,13 @@ font-weight: bold;
 text-decoration: underline;
 }
 
+a.bluelink {
+color: #41a7da !important;
+font-weight: normal;
+text-decoration: none;
+}
+
+/***********************************************/	
 /**************** images styles ****************/		
 a img{
 border: none;
@@ -62,6 +69,7 @@ float: right;
 margin: 0 0 5px 12px;
 }
 
+/***********************************************/	
 /**************** form styles ****************/
 form {
 float: left;
@@ -86,9 +94,9 @@ color: #9fd8ff;
 
 input {
 color: #555;
-border: 1px solid #2763A5;
+/*border: 1px solid #2763A5;*/
 font-size: 11px;
-padding: 3px;
+padding: 2px;
 }
 
 .inputbutton {
@@ -108,6 +116,7 @@ border: 1px solid #ab4f20;
 font-weight: bold;
 }
 
+/***********************************************/	
 /**************** header styles ****************/
 #header {
 border: 0px;
@@ -128,6 +137,7 @@ color: #fff;
 padding-right: 0.5em;
 }
 
+/***********************************************/	
 /**************** menu styles ****************/
 #tabs10 {
 position: relative;
@@ -195,6 +205,7 @@ right: 0;
 #tabs10 div.c1[class] { bottom: 0; } /* all except <= ie6 */
 #tabs10 div.c2[class] { bottom: 0; } /* all except <= ie6 */
 
+/***********************************************/	
 /**************** content styles ****************/
 #header { width: 850px; }
 #tabs10 { width: 850px; }
@@ -268,8 +279,7 @@ float: none;
 margin: 1em 0;
 }
 
-
-
+/***********************************************/	
 /**************** sidebar styles ****************/
 #sidebar {
 width: 175px;
@@ -303,6 +313,9 @@ color: #5d9aba;
 #sidebar ul li a:hover {
 /*color: #6DA6E2;*/
 }
+
+
+/***********************************************/	
 /**************** footer styles ****************/
 #footer {
 margin: 0 0 15px 0;
@@ -370,8 +383,9 @@ top: 0px;
 right: 0;
 }
 
-/**************** misc styles ****************/
 
+/***********************************************/	
+/**************** misc styles ****************/
 
 table.form {
 border-collapse: collapse;
@@ -428,6 +442,9 @@ color: #c20;
 .mvert05 { margin-top: 0.5em !important; margin-bottom: 0.5em !important; }
 .mvert1 { margin-top: 1em !important; margin-bottom: 1em !important; }
 .mvert15 { margin-top: 1.5em !important; margin-bottom: 1.5em !important; }
+.aleft { text-align: left; }
+.acenter { text-align: center; }
+.aright { text-align: right; }
 
 span.valid { color: #0a0; font-weight: bold; }
 span.invalid { color: #a00; font-weight: bold; }
@@ -562,7 +579,17 @@ border-top: 1px solid #ddd;
 border-bottom: 1px solid #ddd;
 padding: 5px 15px 5px 0;
 }
-
+/*
+table td.action {
+padding: 6px 6px;
+}
+table td.action a {
+border: 1px solid #edcc88;
+background: #fdf2dd;
+padding: 2px 8px;
+text-decoration: none !important;
+}
+*/
 
 .documents {
 margin: 1em 0;
@@ -682,3 +709,52 @@ table.payingunits th { display: none; }
 table.payingunits td { padding: 0 10px 0 0 !important; }
 .nowrap { white-space: nowrap; }
 .vatop { vertical-align: top; }
+
+
+
+
+/***********************************************/
+/******************* error *********************/
+
+div.errorcontainer {
+width: 32em;
+margin: 0px auto;
+background: #fff;
+padding: 0 0.5em;
+}
+div.errorlogo {
+padding: 1em;
+background: #15587a;
+position: relative;
+}
+div.errorcontainer h2 {
+color: #555;
+}
+div.errorcontainer h2 span {
+/*background: #feb;*/
+/*padding: 4px;*/
+}
+div.errortxt {
+padding: 0 1em 2em 1em;
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 11px;
+line-height: 1.6em;
+}
+
+div.errorlogo div.c1 {
+background: url(../images/corner1_02.gif) no-repeat;
+width: 7px;
+height: 7px;
+position: absolute;
+bottom: 0;
+left: 0;
+}
+div.errorlogo div.c2 {
+background: url(../images/corner2_02.gif) no-repeat;
+width: 7px;
+height: 7px;
+position: absolute;
+bottom: 0;
+right: 0;
+}
+

@@ -9,6 +9,10 @@
 
 <jsp:include page="../commons/defaultErrorDisplay.jsp"/>
 
+<div class="infoop2">
+	<bean:message key="acquisitionRequestItem.message.info.help" bundle="ACQUISITION_RESOURCES"/>
+</div>
+
 <bean:define id="schemaType"
 		name="bean"
 		property="createItemSchemaType"/>
@@ -19,6 +23,7 @@
 		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess"
 		/>
 <bean:define id="urlView">/acquisitionProcess.do?method=viewAcquisitionProcess&acquisitionProcessOid=<%= acquisitionProcess.getOID() %></bean:define>
+
 <fr:edit id="acquisitionRequestItem"
 		name="bean"
 		schema='<%= "createAcquisitionRequestItem_" + schemaType.toString()%>'
