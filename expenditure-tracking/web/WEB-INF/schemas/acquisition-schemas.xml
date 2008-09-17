@@ -209,7 +209,7 @@
 <schema name="allocateFundsToServiceProvider"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationExpirationDateBean"
 		bundle="ACQUISITION_RESOURCES">
-	<slot name="fundAllocationExpirationDate" key="acquisitionProcess.label.fundAllocation.expirationDate" bundle="ACQUISITION_RESOURCES" >
+	<slot name="fundAllocationExpirationDate" key="acquisitionProcess.label.fundAllocation.expirationDate" bundle="ACQUISITION_RESOURCES" layout="picker">
 		<property name="format" value="dd-MM-yyyy"/>
 	<validator class="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 	<validator class="pt.ist.fenixWebFramework.renderers.validators.DateValidator">
@@ -222,7 +222,7 @@
 		type="pt.ist.expenditureTrackingSystem.presentationTier.actions.acquisitions.SimplifiedProcedureProcessAction$ReceiveInvoiceForm"
 		bundle="ACQUISITION_RESOURCES">
 	<slot name="invoiceNumber" key="acquisitionProcess.label.invoice.number" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-	<slot name="invoiceDate" key="acquisitionProcess.label.invoice.date" bundle="ACQUISITION_RESOURCES">
+	<slot name="invoiceDate" layout="picker" key="acquisitionProcess.label.invoice.date" bundle="ACQUISITION_RESOURCES">
 		<property name="format" value="dd-MM-yyyy"/>
 		<validator class="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 		<validator class="pt.ist.fenixWebFramework.renderers.validators.DateValidator">

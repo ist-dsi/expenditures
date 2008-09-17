@@ -378,6 +378,7 @@ Documentation:
     <renderer mode="input" type="org.joda.time.DateTime" class="pt.ist.fenixWebFramework.rendererExtensions.DateTimeInputRenderer"/>
     <renderer mode="input" layout="picker" type="java.util.Date" class="pt.ist.fenixWebFramework.rendererExtensions.DateInputRendererWithPicker"/>
     <renderer mode="input" layout="picker" type="org.joda.time.DateTime" class="pt.ist.fenixWebFramework.rendererExtensions.DateTimeInputRendererWithPicker"/>
+	<renderer mode="input" layout="picker" type="org.joda.time.LocalDate" class="pt.ist.fenixWebFramework.rendererExtensions.LocalDateInputRendererWithPicker"/>
 
 	<!--@ The layout year-month allows you to insert a joda time partial given a month and a year -->
 	<renderer mode="input" type="org.joda.time.Partial" layout="year-month" class="pt.ist.fenixWebFramework.rendererExtensions.PartialInputRenderer">

@@ -42,7 +42,7 @@
 	</fr:layout>
 		<fr:destination name="cancel" path="<%= urlView %>" />
 </fr:edit>
-
+ 
 <div class="item">
 	<bean:size id="totalItems" name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestItemsSet"/>
 	<logic:iterate id="acquisitionRequestItem" name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestItemsSet" indexId="index">

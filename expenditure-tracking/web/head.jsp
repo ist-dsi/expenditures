@@ -9,6 +9,8 @@
 <logic:notPresent name="USER_SESSION_ATTRIBUTE">
 	<link rel="stylesheet" type="text/css" href="<%= contextPath %>/CSS/layout.css" media="screen">
 </logic:notPresent>
+<link rel="stylesheet" type="text/css" href="<%= contextPath %>/CSS/calendar.css" media="screen">
+
 <logic:present name="USER_SESSION_ATTRIBUTE">
 	<logic:present name="USER_SESSION_ATTRIBUTE" property="person.options.cascadingStyleSheet">
 		<link rel="stylesheet" type="text/css" href="<%= contextPath %>/CSS/user/layout.css" media="screen">
