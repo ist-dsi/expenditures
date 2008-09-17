@@ -30,6 +30,7 @@ public class AuthenticationAction extends BaseAction {
 	UserView.setUser(null);
 	final HttpSession httpSession = request.getSession();
 	httpSession.removeAttribute(SetUserViewFilter.USER_SESSION_ATTRIBUTE);
+	httpSession.invalidate();
     }
 
     public final ActionForward login(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request, final HttpServletResponse response)
