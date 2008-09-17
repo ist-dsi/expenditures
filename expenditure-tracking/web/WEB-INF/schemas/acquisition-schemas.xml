@@ -309,15 +309,6 @@
 	<slot name="shipment" key="acquisitionRequestItem.label.realAdditionalCostValue" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>	
 </schema>
 
-<schema name="editSchemaRealShareValues" type="pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean"
-		bundle="ACQUISITION_RESOURCES">
-	<slot name="unit.presentationName" read-only="true" key="acquisitionProcess.label.payingUnit"/>
-	<slot name="item.totalItemValueWithAdditionalCostsAndVat" read-only="true" key="acquisitionRequestItem.label.totalValue"/>
-	<slot name="shareValue" read-only="true" key="acquisitionProcess.label.allocatedShareValue"/>
-	<slot name="item.totalRealValueWithAdditionalCostsAndVat" read-only="true" key="acquisitionRequestItem.label.totalRealValue"/>
-	<slot name="realShareValue" key="acquisitionProcess.label.realAllocatin" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-</schema>
-
 <schema name="afterTheFactAcquisitionProcessBean"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.AfterTheFactAcquisitionProcessBean"
 		bundle="EXPENDITURE_RESOURCES">
