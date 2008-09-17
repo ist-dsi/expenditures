@@ -36,6 +36,12 @@ public class AddressInputRenderer extends InputRenderer {
     private String classes;
     private String errorClasses;
 
+    private String line1Size;
+    private String line2Size;
+    private String postalCodeSize;
+    private String locationSize;
+    private String countrySize;
+
     public String getClasses() {
 	return classes;
     }
@@ -100,6 +106,46 @@ public class AddressInputRenderer extends InputRenderer {
 	this.countryKey = countryKey;
     }
 
+    public String getLine1Size() {
+	return line1Size;
+    }
+
+    public void setLine1Size(String line1Size) {
+	this.line1Size = line1Size;
+    }
+
+    public String getLine2Size() {
+	return line2Size;
+    }
+
+    public void setLine2Size(String line2Size) {
+	this.line2Size = line2Size;
+    }
+
+    public String getPostalCodeSize() {
+	return postalCodeSize;
+    }
+
+    public void setPostalCodeSize(String postalCodeSize) {
+	this.postalCodeSize = postalCodeSize;
+    }
+
+    public String getLocationSize() {
+	return locationSize;
+    }
+
+    public void setLocationSize(String locationSize) {
+	this.locationSize = locationSize;
+    }
+
+    public String getCountrySize() {
+	return countrySize;
+    }
+
+    public void setCountrySize(String countrySize) {
+	this.countrySize = countrySize;
+    }
+
     @Override
     protected Layout getLayout(Object arg0, Class arg1) {
 	return new Layout() {
@@ -123,6 +169,7 @@ public class AddressInputRenderer extends InputRenderer {
 		HtmlTableRow row = table.createRow();
 		row.createCell().setBody(new HtmlText(RenderUtils.getResourceString(bundle, line1Key) + ":"));
 		HtmlTextInput line1 = new HtmlTextInput();
+		line1.setSize(getLine1Size());
 		line1.setName(key.toString() + "_line1");
 		line1.setValue(address != null ? address.getLine1() : null);
 		row.createCell().setBody(line1);
@@ -131,6 +178,7 @@ public class AddressInputRenderer extends InputRenderer {
 		errorCells[0] = errorCell1;
 
 		HtmlTextInput line2 = new HtmlTextInput();
+		line2.setSize(getLine2Size());
 		HtmlTableRow row2 = table.createRow();
 		row2.createCell().setBody(new HtmlText(RenderUtils.getResourceString(bundle, line2Key) + ":"));
 		line2.setName(key.toString() + "_line2");
@@ -141,6 +189,7 @@ public class AddressInputRenderer extends InputRenderer {
 		errorCells[1] = errorCell2;
 
 		HtmlTextInput location = new HtmlTextInput();
+		location.setSize(getLocationSize());
 		HtmlTableRow row3 = table.createRow();
 		row3.createCell().setBody(new HtmlText(RenderUtils.getResourceString(bundle, locationKey) + ":"));
 		location.setName(key.toString() + "_location");
@@ -151,6 +200,7 @@ public class AddressInputRenderer extends InputRenderer {
 		errorCells[2] = errorCell3;
 
 		HtmlTextInput postalCode = new HtmlTextInput();
+		postalCode.setSize(getPostalCodeSize());
 		HtmlTableRow row4 = table.createRow();
 		row4.createCell().setBody(new HtmlText(RenderUtils.getResourceString(bundle, postalCodeKey) + ":"));
 		postalCode.setName(key.toString() + "_postalCode");
@@ -161,6 +211,7 @@ public class AddressInputRenderer extends InputRenderer {
 		errorCells[3] = errorCell4;
 
 		HtmlTextInput country = new HtmlTextInput();
+		country.setSize(getCountrySize());
 		HtmlTableRow row5 = table.createRow();
 		row5.createCell().setBody(new HtmlText(RenderUtils.getResourceString(bundle, countryKey) + ":"));
 		country.setName(key.toString() + "_country");

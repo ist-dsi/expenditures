@@ -571,6 +571,11 @@ Documentation:
 		<property name="postalCodeKey" value="address.label.postalCode"/>
 		<property name="countryKey" value="address.label.country"/>
 		<property name="errorClasses" value="tderror"/>
+		<property name="line1Size" value="40"/>
+		<property name="line2Size" value="40"/>
+		<property name="postalCodeSize" value="15"/>
+		<property name="locationSize" value="25"/>
+		<property name="countrySize" value="25"/>
 	</renderer>
 	<renderer  layout="address" type="pt.ist.expenditureTrackingSystem.domain.util.Address" class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.AddressRenderer">
 	</renderer>
