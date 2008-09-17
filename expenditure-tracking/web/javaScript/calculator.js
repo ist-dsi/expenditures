@@ -14,6 +14,7 @@
 					}
 				}
 			}
+			sum = Math.round(sum*100)/100;
 			if (sum > maxValueFloat) {
 				sumValue = "<span class=\"invalid\">" + sum + "</span>";
 			}
