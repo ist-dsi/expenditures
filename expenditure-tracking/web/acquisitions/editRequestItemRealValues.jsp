@@ -9,11 +9,79 @@
 
 <bean:define id="processOID" name="itemBean" property="acquisitionRequest.acquisitionProcess.OID"/>
 <bean:define id="itemOID" name="itemBean" property="item.OID"/>
-<fr:edit id="acquisitionRequestItem" name="itemBean" schema="editSchemaRealValues" 
-	action='<%= "/acquisitionProcess.do?method=executeAcquisitionRequestItemRealValuesEdition&acquisitionProcessOid="  + processOID %>'>
-			<fr:layout name="tabular">
-				<fr:property name="classes" value="form"/>
-				<fr:property name="columnClasses" value=",,tderror"/>
-			</fr:layout>
-		<fr:destination name="cancel" path='<%= "/acquisitionProcess.do?method=viewAcquisitionProcess&acquisitionProcessOid="  + processOID %>'/>
-</fr:edit>
+
+<div class="infoop2">
+	<fr:view name="itemBean" property="acquisitionRequest"
+			type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest"
+			schema="viewAcquisitionRequest">
+		<fr:layout name="tabular">
+			<fr:property name="classes" value="tstyle1"/>
+		</fr:layout>
+	</fr:view>
+</div>
+
+
+<div class="dinline forminline">
+<fr:form action='<%= "/acquisitionProcess.do?method=executeAcquisitionRequestItemRealValuesEdition&acquisitionProcessOid="  + processOID %>'>
+	<fr:edit id="acquisitionRequestItem" name="itemBean" visible="false"/>
+			<table class="form">
+				<tr>
+					<th>
+					</th>
+					<th>
+					<strong><bean:message key="acquisitionRequestItem.label.effectiveValue" bundle="ACQUISITION_RESOURCES"/></strong>
+					</th>
+					<th>
+						<strong><bean:message key="acquisitionRequestItem.label.estimatedValue" bundle="ACQUISITION_RESOURCES"/></strong>
+					</th>
+				</tr>
+				<tr>
+					<th><bean:message key="acquisitionRequestItem.label.quantity" bundle="ACQUISITION_RESOURCES"/>
+					</th>
+					<td>
+						<fr:view name="itemBean" property="quantity"/>
+					</td>
+					<td>
+						<fr:edit name="itemBean" slot="realQuantity" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+					</td>
+				</tr>
+				<tr>
+					<th><bean:message key="acquisitionRequestItem.label.unitValue" bundle="ACQUISITION_RESOURCES"/>
+					</th>
+					<td>
+						<fr:view name="itemBean" property="unitValue"/>
+					</td>
+					<td>
+						<fr:edit name="itemBean" slot="realUnitValue" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+					</td>
+				</tr>
+				<tr>
+					<th><bean:message key="acquisitionRequestItem.label.vatValue" bundle="ACQUISITION_RESOURCES"/>
+					</th>
+					<td>
+						<fr:view name="itemBean" property="vatValue"/>
+					</td>
+					<td>
+						<fr:edit name="itemBean" slot="realVatValue" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+					</td>
+				</tr>
+				<tr>
+					<th><bean:message key="acquisitionRequestItem.label.additionalCosts" bundle="ACQUISITION_RESOURCES"/>
+					</th>
+					<td>
+						<fr:view name="itemBean" property="additionalCostValue"/>
+					</td>
+					<td>
+						<fr:edit name="itemBean" slot="shipment" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+					</td>
+				</tr>
+			</table>
+			<html:submit styleClass="inputbutton"><bean:message key="renderers.form.submit.name" bundle="RENDERER_RESOURCES"/> </html:submit>
+	</fr:form>
+
+	<fr:form action='<%="/acquisitionProcess.do?method=viewAcquisitionProcess&acquisitionProcessOid=" + processOID + "&acquisitionRequestItemOid=" + itemOID%>'>
+		<html:submit styleClass="inputbutton"><bean:message key="renderers.form.cancel.name" bundle="RENDERER_RESOURCES"/> </html:submit>
+	</fr:form>
+</div>
+
+ 
