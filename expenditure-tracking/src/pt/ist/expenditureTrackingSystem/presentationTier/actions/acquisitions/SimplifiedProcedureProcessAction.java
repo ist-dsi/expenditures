@@ -58,6 +58,7 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "create.acquisition.request.item", path = "/acquisitions/createAcquisitionRequestItem.jsp"),
 	@Forward(name = "reject.acquisition.process", path = "/acquisitions/rejectAcquisitionProcess.jsp"),
 	@Forward(name = "allocate.funds", path = "/acquisitions/allocateFunds.jsp"),
+	@Forward(name = "allocate.effective.funds", path = "/acquisitions/allocateEffectiveFunds.jsp"),
 	@Forward(name = "allocate.funds.to.service.provider", path = "/acquisitions/allocateFundsToServiceProvider.jsp"),
 	@Forward(name = "prepare.create.acquisition.request", path = "/acquisitions/createAcquisitionRequest.jsp"),
 	@Forward(name = "receive.invoice", path = "/acquisitions/receiveInvoice.jsp"),
@@ -414,12 +415,25 @@ public class SimplifiedProcedureProcessAction extends ProcessAction {
 
     public ActionForward executeAllocateFundsPermanently(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
-	SimplifiedProcedureProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
-	try {
-	    genericActivityExecution(acquisitionProcess, "AllocateFundsPermanently");
-	} catch (DomainException e) {
-	    addErrorMessage(e.getMessage(), getBundle());
+	final SimplifiedProcedureProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
+	request.setAttribute("acquisitionProcess", acquisitionProcess);
+	List<FundAllocationBean> fundAllocationBeans = new ArrayList<FundAllocationBean>();
+	for (Financer financer : acquisitionProcess.getFinancersWithFundsAllocated()) {
+	    FundAllocationBean fundAllocationBean = new FundAllocationBean(financer);
+	    fundAllocationBean.setFundAllocationId(financer.getFundAllocationId());
+	    fundAllocationBean.setEffectiveFundAllocationId(financer.getFundAllocationId());
+	    fundAllocationBeans.add(fundAllocationBean);
 	}
+	request.setAttribute("fundAllocationBeans", fundAllocationBeans);
+
+	return mapping.findForward("allocate.effective.funds");
+    }
+
+    public ActionForward allocateFundsPermanently(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final SimplifiedProcedureProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
+	final List<FundAllocationBean> fundAllocationBeans = getRenderedObject();
+	genericActivityExecution(acquisitionProcess, "AllocateFundsPermanently", fundAllocationBeans);
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
 
