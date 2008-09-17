@@ -1,5 +1,6 @@
 package pt.ist.expenditureTrackingSystem.domain.processes;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -32,7 +33,8 @@ public abstract class GenericProcess extends GenericProcess_Base {
     public abstract <T extends GenericProcess> AbstractActivity<T> getActivityByName(String name);
 
     public DateTime getDateFromLastActivity() {
-	List<GenericLog> logs = getExecutionLogs();
+	List<GenericLog> logs = new ArrayList<GenericLog> ();
+	logs.addAll(getExecutionLogs());
 	Collections.sort(logs, new Comparator<GenericLog>() {
 
 	    public int compare(GenericLog log1, GenericLog log2) {
