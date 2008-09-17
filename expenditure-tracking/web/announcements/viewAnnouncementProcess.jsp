@@ -14,12 +14,12 @@
 <jsp:include page="../commons/defaultErrorDisplay.jsp"/>
 
 <div class="infoop2">
-<fr:view name="announcement" schema="viewAnnouncement">
+<fr:view name="announcementProcess" schema="viewAnnouncement" property="announcement">
 	<fr:layout name="tabular">
 		<fr:property name="classes" value="tstyle1"/>
 	</fr:layout>
 </fr:view>
-<fr:view name="announcement" schema="viewAnnouncement.publish">
+<fr:view name="announcementProcess" schema="viewAnnouncement.publish" property="announcement">
 	<fr:layout name="tabular" />
 </fr:view>
 </div>

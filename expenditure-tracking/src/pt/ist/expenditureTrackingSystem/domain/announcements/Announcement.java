@@ -4,6 +4,7 @@ import org.joda.time.DateTime;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateAnnouncementBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
@@ -14,17 +15,18 @@ public class Announcement extends Announcement_Base {
 	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
     }
 
-    public Announcement(Person publisher, CreateAnnouncementBean announcementBean) {
+    public Announcement(AnnouncementProcess announcementProcess, Person publisher, CreateAnnouncementBean announcementBean) {
 	this();
-	checkArguments(publisher);
+	checkArguments(announcementProcess, publisher);
+	setAnnouncementProcess(announcementProcess);
 	setPublisher(publisher);
 	setCreationDate(new DateTime());
 	edit(announcementBean);
     }
 
     // TODO finish when creating process
-    private void checkArguments(Person publisher) {
-	if (publisher == null) {
+    private void checkArguments(AnnouncementProcess announcementProcess, Person publisher) {
+	if (announcementProcess == null || publisher == null) {
 	    throw new DomainException("error.wrong.Announcement.arguments");
 	}
     }

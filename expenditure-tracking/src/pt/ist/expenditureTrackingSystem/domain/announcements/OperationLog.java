@@ -1,25 +1,25 @@
-package pt.ist.expenditureTrackingSystem.domain.requests;
+package pt.ist.expenditureTrackingSystem.domain.announcements;
 
 import org.joda.time.DateTime;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
+import pt.ist.expenditureTrackingSystem.domain.announcements.activities.GenericAnnouncementProcessActivity;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
-import pt.ist.expenditureTrackingSystem.domain.requests.activities.GenericRequestForProposalProcessActivity;
 
 public class OperationLog extends OperationLog_Base {
 
-    public OperationLog(RequestForProposalProcess process, Person person, String operation,
-	    RequestForProposalProcessStateType state, DateTime when) {
+    public OperationLog(AnnouncementProcess process, Person person, String operation, AnnouncementProcessStateType state,
+	    DateTime when) {
 	super();
 	init(process, person, operation, when);
 	super.setState(state);
     }
 
     @Override
-    public <T extends GenericProcess> AbstractActivity<T> getActivity() {
-	RequestForProposalProcess process = (RequestForProposalProcess) getProcess();
+    public AbstractActivity<GenericProcess> getActivity() {
+	AnnouncementProcess process = (AnnouncementProcess) getProcess();
 	return process.getActivityByName(getOperation());
     }
 
@@ -44,7 +44,7 @@ public class OperationLog extends OperationLog_Base {
     }
 
     @Override
-    public void setState(RequestForProposalProcessStateType state) {
+    public void setState(AnnouncementProcessStateType state) {
 	throw new DomainException("error.unable.to.change.when.state");
     }
 

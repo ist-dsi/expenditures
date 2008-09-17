@@ -9,6 +9,7 @@ valueType pt.ist.expenditureTrackingSystem.domain.util.ByteArray as ByteArray;
 valueType pt.ist.expenditureTrackingSystem.domain.util.Money as Money;
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType as AcquisitionProcessStateType;
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionType as AfterTheFactAcquisitionType;
+enum pt.ist.expenditureTrackingSystem.domain.announcements.AnnouncementProcessStateType as AnnouncementProcessStateType;
 enum pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationType as AuthorizationType;
 enum pt.ist.expenditureTrackingSystem.domain.requests.RequestForProposalProcessStateType as RequestForProposalProcessStateType;
 enum pt.ist.expenditureTrackingSystem.domain.RoleType as RoleType;
@@ -26,6 +27,7 @@ class acquisitions.CPVReference {
 class ProcessState {
 	String ojbConcreteClass;
 	DateTime whenDateTime;
+	String justification;
 }
 	
 	class acquisitions.AcquisitionProcessState extends ProcessState {
@@ -34,6 +36,10 @@ class ProcessState {
 
 	class requests.RequestForProposalProcessState extends ProcessState {
 		RequestForProposalProcessStateType requestForProposalProcessStateType;
+	}
+
+	class announcement.AnnouncementProcessState extends ProcessState {
+		AnnouncementProcessStateType announcementProcessStateType;
 	}
 
 
@@ -117,6 +123,10 @@ class processes.GenericLog {
 	
 	class requests.OperationLog extends processes.GenericLog {
 		RequestForProposalProcessStateType state;
+	}
+	
+	class announcements.OperationLog extends processes.GenericLog {
+		AnnouncementProcessStateType state;
 	}
 
 class File {
@@ -220,7 +230,6 @@ class acquisitions.AcquisitionProcessYear {
 	Integer year;
 	Integer counter;
 }
-	
 
 class requests.RequestForProposal {
 	String title;
@@ -262,6 +271,11 @@ relation AcquisitionProcessAcquisitionRequest {
 relation RequestForProposalProcessRequestForProposal {
 	requests.RequestForProposalProcess playsRole requestForProposalProcess;
 	requests.RequestForProposal playsRole requestForProposal;
+}
+
+relation AnnouncementProcessAnnouncement {
+	announcements.AnnouncementProcess playsRole announcementProcess;
+	announcements.Announcement playsRole announcement;
 }
 
 relation ExpenditureTrackingSystemAcquisitionRequestItem {
@@ -594,7 +608,6 @@ relation OptionsCascadingStyleSheet {
 	Options playsRole options;
 	CascadingStyleSheet playsRole cascadingStyleSheet;
 }
-
 relation ExpenditureTrackingSystemAcquisitionProcessYear {
 	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
 	acquisitions.AcquisitionProcessYear playsRole acquisitionProcessYears {

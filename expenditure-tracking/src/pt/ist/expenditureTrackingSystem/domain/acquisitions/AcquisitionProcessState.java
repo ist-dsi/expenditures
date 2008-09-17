@@ -1,12 +1,10 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
-import org.joda.time.DateTime;
+import org.apache.commons.lang.StringUtils;
 
-import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
-import pt.ist.fenixWebFramework.security.UserView;
 
 public class AcquisitionProcessState extends AcquisitionProcessState_Base {
 
@@ -15,23 +13,27 @@ public class AcquisitionProcessState extends AcquisitionProcessState_Base {
 	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
     }
 
-    public AcquisitionProcessState(final AcquisitionProcess acquisitionProcess,
-	    final AcquisitionProcessStateType acquisitionProcessStateType) {
+    public AcquisitionProcessState(final AcquisitionProcess process, final AcquisitionProcessStateType processStateType) {
 	this();
-	final User user = UserView.getUser();
-	final Person person = user.getPerson();
-	checkArguments(acquisitionProcess, acquisitionProcessStateType, person);
-	setProcess(acquisitionProcess);
-	setAcquisitionProcessStateType(acquisitionProcessStateType);
-	setWho(person);
-	setWhenDateTime(new DateTime());
+	final Person person = getPerson();
+	checkArguments(process, processStateType, person);
+	super.initFields(process, person);
+	setAcquisitionProcessStateType(processStateType);
     }
 
+    public AcquisitionProcessState(final AcquisitionProcess process, final AcquisitionProcessStateType processStateType, final String justification) {
+	this(process, processStateType);
+	if (!StringUtils.isEmpty(justification)) {
+	    setJustification(justification);
+	}
+    }
+    
     private void checkArguments(AcquisitionProcess acquisitionProcess, AcquisitionProcessStateType acquisitionProcessStateType,
 	    Person person) {
-	if (acquisitionProcess == null || acquisitionProcessStateType == null || person == null) {
+	if (acquisitionProcessStateType == null) {
 	    throw new DomainException("error.wrong.AcquisitionProcessState.arguments");
 	}
+	super.checkArguments(acquisitionProcess, person);
     }
 
     public String getLocalizedName() {

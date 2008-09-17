@@ -34,45 +34,36 @@
 		</li>
 	</ul>
 
-
-	<%--
-	<ul>
-		<li>
-			<html:link action="/acquisitionProcess.do?method=prepareCreateAcquisitionProcess">
-				<bean:message key="link.sideBar.acquisitionProcess.create" bundle="EXPENDITURE_RESOURCES"/>
-			</html:link>
-		</li>
-		<li>
-			<html:link action="/acquisitionProcess.do?method=searchAcquisitionProcess">
-				<bean:message key="link.sideBar.acquisitionProcess.search" bundle="EXPENDITURE_RESOURCES"/>
-			</html:link>
-		</li>
-		<li>
-			<html:link action="/acquisitionProcess.do?method=showPendingProcesses">
-				<bean:message key="link.sideBar.acquisitionProcess.pendingProcesses" bundle="EXPENDITURE_RESOURCES"/>
-			</html:link>
-		</li>	
-		<li>
-			<html:link action="/acquisitionProcess.do?method=showMyProcesses">
-				<bean:message key="link.sideBar.acquisitionProcess.myProcesses" bundle="EXPENDITURE_RESOURCES"/>
-			</html:link>
-		</li>
-	</ul>
-	--%>
-	
+<!--
 	<logic:present role="ACQUISITION_CENTRAL_MANAGER">
 		<ul>
 			<li class="header">
 				<strong><bean:message key="link.sideBar.directContract" bundle="EXPENDITURE_RESOURCES"/></strong>
 				<div class="lic1"></div><div class="lic2"></div>
 			</li>
-			<li>
-				<html:link action="/acquisitionProcess.do?method=prepareCreateAnnouncement">
-					<bean:message key="link.sideBar.acquisitionProcess.createAnnouncement" bundle="EXPENDITURE_RESOURCES"/>
-				</html:link>
-			</li>
+				<li>
+					<html:link action="/acquisitionProcess.do?method=prepareCreateAcquisitionProcess">
+						<bean:message key="link.sideBar.acquisitionProcess.create" bundle="EXPENDITURE_RESOURCES"/>
+					</html:link>
+				</li>
+				<li>
+					<html:link action="/acquisitionProcess.do?method=searchAcquisitionProcess">
+						<bean:message key="link.sideBar.acquisitionProcess.search" bundle="EXPENDITURE_RESOURCES"/>
+					</html:link>
+				</li>
+				<li>
+					<html:link action="/acquisitionProcess.do?method=showPendingProcesses">
+						<bean:message key="link.sideBar.acquisitionProcess.pendingProcesses" bundle="EXPENDITURE_RESOURCES"/>
+					</html:link>
+				</li>	
+				<li>
+					<html:link action="/acquisitionProcess.do?method=showMyProcesses">
+						<bean:message key="link.sideBar.acquisitionProcess.myProcesses" bundle="EXPENDITURE_RESOURCES"/>
+					</html:link>
+				</li>
 		</ul>
 	</logic:present>
+-->
 	
 	
 	<logic:present role="ACQUISITION_CENTRAL,ACQUISITION_CENTRAL_MANAGER">

@@ -24,6 +24,14 @@
 			</li>
 		</logic:present>
 		<li>
+			<html:link action="/announcementProcess.do?method=showPendingProcesses">
+				<span>
+					<bean:message key="link.topBar.announcements" bundle="EXPENDITURE_RESOURCES"/>
+				</span>
+				<div class="lic1"></div>
+			</html:link>
+		</li>
+		<li>
 			<html:link action="/acquisitionProcess.do?method=showPendingProcesses">
 				<span>
 					<bean:message key="link.topBar.acquisitionProcesses" bundle="EXPENDITURE_RESOURCES"/>

@@ -35,11 +35,4 @@ public class DirectContractProcess extends DirectContractProcess_Base {
 	return null;
     }
 
-    // TODO remove this when using activity for creating announcement
-    @Service
-    public static Announcement createAnnouncement(Person publisher, CreateAnnouncementBean announcementBean) {
-	announcementBean.setBuyingUnit(ExpenditureTrackingSystem.getInstance().getTopLevelUnitsSet().iterator().next());
-	return new Announcement(publisher, announcementBean);
-    }
-
 }

@@ -11,10 +11,10 @@
 		name="announcementBean"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.CreateAnnouncementBean"
 		schema="createAnnouncement"
-		action="/acquisitionProcess.do?method=createAnnouncement">
+		action="/announcementProcess.do?method=createNewAnnouncementProcess">
 	<fr:layout name="tabular">
 		<fr:property name="classes" value="form"/>
 		<fr:property name="columnClasses" value=",,tderror"/>
 	</fr:layout>
-	<fr:destination name="cancel" path="/acquisitionProcess.do?method=showPendingProcesses"/>
+	<fr:destination name="cancel" path="/announcementProcess.do?method=showPendingProcesses"/>
 </fr:edit>

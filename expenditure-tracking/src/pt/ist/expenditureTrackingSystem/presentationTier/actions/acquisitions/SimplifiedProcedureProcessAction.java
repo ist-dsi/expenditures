@@ -26,15 +26,13 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Invoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.SearchAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.UnitItem;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.direct.DirectContractProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
-import pt.ist.expenditureTrackingSystem.domain.announcements.Announcement;
 import pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean;
-import pt.ist.expenditureTrackingSystem.domain.dto.CreateAnnouncementBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.DomainObjectBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationExpirationDateBean;
+import pt.ist.expenditureTrackingSystem.domain.dto.ProcessStateBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.UnitItemBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.VariantBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean.CreateItemSchemaType;
@@ -59,6 +57,7 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "search.acquisition.process", path = "/acquisitions/searchAcquisitionProcess.jsp"),
 	@Forward(name = "add.acquisition.proposal.document", path = "/acquisitions/addAcquisitionProposalDocument.jsp"),
 	@Forward(name = "create.acquisition.request.item", path = "/acquisitions/createAcquisitionRequestItem.jsp"),
+	@Forward(name = "reject.acquisition.process", path = "/acquisitions/rejectAcquisitionProcess.jsp"),
 	@Forward(name = "allocate.funds", path = "/acquisitions/allocateFunds.jsp"),
 	@Forward(name = "allocate.funds.to.service.provider", path = "/acquisitions/allocateFundsToServiceProvider.jsp"),
 	@Forward(name = "prepare.create.acquisition.request", path = "/acquisitions/createAcquisitionRequest.jsp"),
@@ -73,10 +72,7 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "assign.unit.item", path = "/acquisitions/assignUnitItem.jsp"),
 	@Forward(name = "edit.real.shares.values", path = "/acquisitions/editRealSharesValues.jsp"),
 	@Forward(name = "edit.supplier.address", path = "/acquisitions/editSupplierAddress.jsp"),
-	@Forward(name = "execute.payment", path = "/acquisitions/executePayment.jsp"),
-
-	@Forward(name = "create.annoucement", path = "announcements/createAnnouncement.jsp"),
-	@Forward(name = "view.announcement", path = "announcements/viewAnnouncement.jsp") })
+	@Forward(name = "execute.payment", path = "/acquisitions/executePayment.jsp") })
 public class SimplifiedProcedureProcessAction extends ProcessAction {
 
     private static final Context CONTEXT = new Context("acquisitions");
@@ -479,7 +475,24 @@ public class SimplifiedProcedureProcessAction extends ProcessAction {
 
     public ActionForward executeRejectAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
-	return executeActivityAndViewProcess(mapping, form, request, response, "RejectAcquisitionProcess");
+
+	final SimplifiedProcedureProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
+	request.setAttribute("acquisitionProcess", acquisitionProcess);
+	request.setAttribute("stateBean", new ProcessStateBean());
+	return mapping.findForward("reject.acquisition.process");
+    }
+
+    public ActionForward rejectAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+
+	final ProcessStateBean stateBean = getRenderedObject();
+	try {
+	    genericActivityExecution(request, "RejectAcquisitionProcess", stateBean.getJustification());
+	} catch (DomainException e) {
+	    addErrorMessage(e.getMessage(), getBundle());
+	}
+	return viewAcquisitionProcess(mapping, request, (SimplifiedProcedureProcess) getDomainObject(request,
+		"acquisitionProcessOid"));
     }
 
     public ActionForward executeDeleteAcquisitionRequestItem(final ActionMapping mapping, final ActionForm form,
@@ -705,22 +718,6 @@ public class SimplifiedProcedureProcessAction extends ProcessAction {
 	return mapping.findForward("edit.supplier.address");
     }
 
-    public ActionForward prepareCreateAnnouncement(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-
-	request.setAttribute("announcementBean", new CreateAnnouncementBean());
-	return mapping.findForward("create.annoucement");
-    }
-
-    public ActionForward createAnnouncement(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
-	User user = UserView.getUser();
-	Announcement announcement = DirectContractProcess.createAnnouncement(user.getPerson(),
-		(CreateAnnouncementBean) getRenderedObject());
-	request.setAttribute("announcement", announcement);
-	return mapping.findForward("view.announcement");
-    }
-
     public ActionForward executeSendAcquisitionRequestToSupplier(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	return executeActivityAndViewProcess(mapping, form, request, response, "SendAcquisitionRequestToSupplier");
@@ -730,4 +727,5 @@ public class SimplifiedProcedureProcessAction extends ProcessAction {
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	return executeActivityAndViewProcess(mapping, form, request, response, "SubmitForConfirmInvoice");
     }
+
 }

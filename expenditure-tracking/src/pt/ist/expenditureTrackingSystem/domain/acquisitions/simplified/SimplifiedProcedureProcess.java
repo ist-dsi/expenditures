@@ -54,15 +54,15 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 
     private static Money PROCESS_VALUE_LIMIT = new Money("5000");
 
-    private static Map<ActivityScope, List<GenericAcquisitionProcessActivity>> activities = new HashMap<ActivityScope, List<GenericAcquisitionProcessActivity>>();
+    private static Map<ActivityScope, List<AbstractActivity>> activities = new HashMap<ActivityScope, List<AbstractActivity>>();
 
     public enum ActivityScope {
 	REQUEST_INFORMATION, REQUEST_ITEM;
     }
 
     static {
-	List<GenericAcquisitionProcessActivity> requestInformationActivities = new ArrayList<GenericAcquisitionProcessActivity>();
-	List<GenericAcquisitionProcessActivity> requestItemActivities = new ArrayList<GenericAcquisitionProcessActivity>();
+	List<AbstractActivity> requestInformationActivities = new ArrayList<AbstractActivity>();
+	List<AbstractActivity> requestItemActivities = new ArrayList<AbstractActivity>();
 
 	requestInformationActivities.add(new CreateAcquisitionRequest());
 	requestInformationActivities.add(new SendAcquisitionRequestToSupplier());
@@ -141,17 +141,17 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 		&& isProcessInState(AcquisitionProcessStateType.IN_GENESIS);
     }
 
-    public List<GenericAcquisitionProcessActivity> getActiveActivitiesForItem() {
+    public List<AbstractActivity> getActiveActivitiesForItem() {
 	return getActiveActivities(ActivityScope.REQUEST_ITEM);
     }
 
-    public List<GenericAcquisitionProcessActivity> getActiveActivitiesForRequest() {
+    public List<AbstractActivity> getActiveActivitiesForRequest() {
 	return getActiveActivities(ActivityScope.REQUEST_INFORMATION);
     }
 
-    public List<GenericAcquisitionProcessActivity> getActiveActivities(ActivityScope scope) {
-	List<GenericAcquisitionProcessActivity> activitiesResult = new ArrayList<GenericAcquisitionProcessActivity>();
-	for (GenericAcquisitionProcessActivity activity : activities.get(scope)) {
+    public List<AbstractActivity> getActiveActivities(ActivityScope scope) {
+	List<AbstractActivity> activitiesResult = new ArrayList<AbstractActivity>();
+	for (AbstractActivity activity : activities.get(scope)) {
 	    if (activity.isActive(this)) {
 		activitiesResult.add(activity);
 	    }
@@ -159,8 +159,8 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	return activitiesResult;
     }
 
-    public List<GenericAcquisitionProcessActivity> getActiveActivities() {
-	List<GenericAcquisitionProcessActivity> activitiesResult = new ArrayList<GenericAcquisitionProcessActivity>();
+    public List<AbstractActivity> getActiveActivities() {
+	List<AbstractActivity> activitiesResult = new ArrayList<AbstractActivity>();
 	for (ActivityScope scope : activities.keySet()) {
 	    activitiesResult.addAll(getActiveActivities(scope));
 	}
@@ -179,10 +179,10 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
     }
 
     @Override
-    public GenericAcquisitionProcessActivity getActivityByName(String activityName) {
+    public AbstractActivity getActivityByName(String activityName) {
 
 	for (ActivityScope scope : activities.keySet()) {
-	    for (GenericAcquisitionProcessActivity activity : activities.get(scope)) {
+	    for (AbstractActivity activity : activities.get(scope)) {
 		if (activity.getName().equals(activityName)) {
 		    return activity;
 		}

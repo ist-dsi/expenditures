@@ -1,12 +1,8 @@
 package pt.ist.expenditureTrackingSystem.domain.requests;
 
-import org.joda.time.DateTime;
-
-import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
-import pt.ist.fenixWebFramework.security.UserView;
 
 public class RequestForProposalProcessState extends RequestForProposalProcessState_Base {
 
@@ -15,23 +11,21 @@ public class RequestForProposalProcessState extends RequestForProposalProcessSta
 	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
     }
 
-    public RequestForProposalProcessState(final RequestForProposalProcess requestForProposalProcess,
-	    final RequestForProposalProcessStateType requestForProposalProcessStateType) {
+    public RequestForProposalProcessState(final RequestForProposalProcess process,
+	    final RequestForProposalProcessStateType processStateType) {
 	this();
-	final User user = UserView.getUser();
-	final Person person = user.getPerson();
-	checkArguments(requestForProposalProcess, requestForProposalProcessStateType, person);
-	setProcess(requestForProposalProcess);
-	setRequestForProposalProcessStateType(requestForProposalProcessStateType);
-	setWho(person);
-	setWhenDateTime(new DateTime());
+	final Person person = getPerson();
+	checkArguments(process, processStateType, person);
+	super.initFields(process, person);
+	setRequestForProposalProcessStateType(processStateType);
     }
 
     private void checkArguments(RequestForProposalProcess requestForProposalProcess,
 	    RequestForProposalProcessStateType requestForProposalProcessStateType, Person person) {
-	if (requestForProposalProcess == null || requestForProposalProcessStateType == null || person == null) {
+	if (requestForProposalProcessStateType == null) {
 	    throw new DomainException("error.wrong.RequestForProposalProcessState.arguments");
 	}
+	super.checkArguments(requestForProposalProcess, person);
     }
 
     public String getLocalizedName() {

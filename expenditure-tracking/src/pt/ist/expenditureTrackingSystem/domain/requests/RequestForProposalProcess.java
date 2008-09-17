@@ -13,18 +13,18 @@ import pt.ist.expenditureTrackingSystem.domain.dto.CreateRequestForProposalProce
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
+import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 import pt.ist.expenditureTrackingSystem.domain.requests.activities.ApproveRequestForProposal;
 import pt.ist.expenditureTrackingSystem.domain.requests.activities.CancelRequestForProposal;
 import pt.ist.expenditureTrackingSystem.domain.requests.activities.ChooseSupplierProposal;
 import pt.ist.expenditureTrackingSystem.domain.requests.activities.EditRequestForProposal;
-import pt.ist.expenditureTrackingSystem.domain.requests.activities.GenericRequestForProposalProcessActivity;
 import pt.ist.expenditureTrackingSystem.domain.requests.activities.RejectRequestForProposal;
 import pt.ist.expenditureTrackingSystem.domain.requests.activities.SubmitRequestForApproval;
 import pt.ist.fenixWebFramework.services.Service;
 
 public class RequestForProposalProcess extends RequestForProposalProcess_Base {
 
-    private static List<GenericRequestForProposalProcessActivity> activities = new ArrayList<GenericRequestForProposalProcessActivity>();
+    private static List<AbstractActivity> activities = new ArrayList<AbstractActivity>();
 
     static {
 	activities.add(new SubmitRequestForApproval());
@@ -58,9 +58,9 @@ public class RequestForProposalProcess extends RequestForProposalProcess_Base {
     }
 
     @Override
-    public GenericRequestForProposalProcessActivity getActivityByName(String activityName) {
+    public <T extends GenericProcess> AbstractActivity<T> getActivityByName(String activityName) {
 
-	for (GenericRequestForProposalProcessActivity activity : activities) {
+	for (AbstractActivity activity : activities) {
 	    if (activity.getName().equals(activityName)) {
 		return activity;
 	    }
@@ -68,9 +68,9 @@ public class RequestForProposalProcess extends RequestForProposalProcess_Base {
 	return null;
     }
 
-    public List<GenericRequestForProposalProcessActivity> getActiveActivitiesForRequest() {
-	List<GenericRequestForProposalProcessActivity> activitiesResult = new ArrayList<GenericRequestForProposalProcessActivity>();
-	for (GenericRequestForProposalProcessActivity activity : activities) {
+    public List<AbstractActivity> getActiveActivitiesForRequest() {
+	List<AbstractActivity> activitiesResult = new ArrayList<AbstractActivity>();
+	for (AbstractActivity activity : activities) {
 	    if (activity.isActive(this)) {
 		activitiesResult.add(activity);
 	    }
@@ -130,12 +130,13 @@ public class RequestForProposalProcess extends RequestForProposalProcess_Base {
 	return isProcessInState(RequestForProposalProcessStateType.APPROVED)
 		&& !getRequestForProposal().getExpireDate().isBefore(new LocalDate());
     }
-    
+
     public boolean canAdvanceToAcquisition() {
 	return !hasNotExpired() && getRequestForProposal().hasAnySupplierProposals();
     }
 
     public boolean isVisible(Person person) {
-	return getLastRequestForProposalProcessStateType().equals(RequestForProposalProcessStateType.APPROVED) || getRequestForProposal().getRequester() == person;
+	return getLastRequestForProposalProcessStateType().equals(RequestForProposalProcessStateType.APPROVED)
+		|| getRequestForProposal().getRequester() == person;
     }
 }

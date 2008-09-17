@@ -5,13 +5,15 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
+import pt.ist.expenditureTrackingSystem.domain.dto.ProcessStateBean;
 
-public class RejectAcquisitionProcess extends GenericAcquisitionProcessActivity{
+public class RejectAcquisitionProcess extends GenericAcquisitionProcessActivity {
 
     @Override
     protected boolean isAccessible(AcquisitionProcess process) {
 	User user = getUser();
-	return user != null && process.isResponsibleForUnit(user.getPerson()) && !process.getAcquisitionRequest().hasBeenApprovedBy(user.getPerson());
+	return user != null && process.isResponsibleForUnit(user.getPerson())
+		&& !process.getAcquisitionRequest().hasBeenApprovedBy(user.getPerson());
     }
 
     @Override
@@ -21,7 +23,7 @@ public class RejectAcquisitionProcess extends GenericAcquisitionProcessActivity{
 
     @Override
     protected void process(AcquisitionProcess process, Object... objects) {
-	new AcquisitionProcessState(process, AcquisitionProcessStateType.REJECTED);
+	new AcquisitionProcessState(process, AcquisitionProcessStateType.REJECTED, (String) objects[0]);
     }
 
 }
