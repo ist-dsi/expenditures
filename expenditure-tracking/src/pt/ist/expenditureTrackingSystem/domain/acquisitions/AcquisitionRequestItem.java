@@ -9,6 +9,7 @@ import java.util.List;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean;
+import pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean.CreateItemSchemaType;
 import pt.ist.expenditureTrackingSystem.domain.organization.DeliveryInfo;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
@@ -79,7 +80,7 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	String phone;
 	String email;
 	Address address;
-	if (acquisitionRequestItemBean.getDeliveryInfo() != null) {
+	if (CreateItemSchemaType.EXISTING_DELIVERY_INFO.equals(acquisitionRequestItemBean.getCreateItemSchemaType())) {
 	    recipient = acquisitionRequestItemBean.getDeliveryInfo().getRecipient();
 	    address = acquisitionRequestItemBean.getDeliveryInfo().getAddress();
 	    phone = acquisitionRequestItemBean.getDeliveryInfo().getPhone();

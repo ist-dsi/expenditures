@@ -22,5 +22,5 @@
 		</fr:layout>
 		<fr:destination name="cancel" path='<%= "/acquisitionProcess.do?method=viewAcquisitionProcess&acquisitionProcessOid="  + processOID %>'/>
 		<fr:destination name="invalid" path='<%= "/acquisitionProcess.do?method=executeEditAcquisitionRequestItem&acquisitionRequestItemOid=" + itemOID + "&acquisitionProcessOid=" + processOID %>'/>
-		<fr:destination name="postBack" path="/acquisitionProcess.do?method=createItemPostBack" />
+		<fr:destination name="postBack" path='<%= "/acquisitionProcess.do?method=executeEditAcquisitionRequestItemPostBack&acquisitionRequestItemOid=" + itemOID + "&acquisitionProcessOid=" + processOID %>'/>
 </fr:edit>

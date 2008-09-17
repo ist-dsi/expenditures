@@ -506,6 +506,15 @@ public class SimplifiedProcedureProcessAction extends ProcessAction {
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
 
+    public ActionForward executeEditAcquisitionRequestItemPostBack(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+
+	AcquisitionRequestItemBean itemBean = getRenderedObject("acquisitionRequestItem");
+	request.setAttribute("itemBean", itemBean);
+	RenderUtils.invalidateViewState("acquisitionRequestItem");
+	return mapping.findForward("edit.request.item");
+    }
+
     public ActionForward executeEditAcquisitionRequestItem(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 
