@@ -11,6 +11,7 @@ public class Options extends Options_Base {
 	setPerson(person);
 	setDisplayAuthorizationPending(Boolean.FALSE);
 	setRecurseAuthorizationPendingUnits(Boolean.FALSE);
+	setReceiveNotificationsByEmail(Boolean.FALSE);
     }
 
     @Service
