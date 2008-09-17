@@ -195,6 +195,7 @@
 <schema name="searchAcquisitionProcess"
 		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.SearchAcquisitionProcess"
 		bundle="ACQUISITION_RESOURCES">
+	<slot name="processId" key="label.acquisitionProcessId" bundle="EXPENDITURE_RESOURCES"/>
 	<slot name="requester" key="label.requester" bundle="EXPENDITURE_RESOURCES"/>
 	<slot name="acquisitionProcessState" key="label.processState" bundle="EXPENDITURE_RESOURCES"/>
 	<slot name="fiscalIdentificationCode" key="supplier.label.fiscalCode" bundle="ORGANIZATION_RESOURCES"/>

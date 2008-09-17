@@ -1,6 +1,7 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Set;
 
 import pt.ist.expenditureTrackingSystem.domain.Search;
@@ -11,6 +12,7 @@ import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 
 public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
 
+    private String processId;
     private String requester;
     private AcquisitionProcessStateType acquisitionProcessStateType;
     private String fiscalIdentificationCode;
@@ -34,7 +36,10 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
 	    final String unsername = person == null ? null : person.getUsername();
 	    final Supplier supplier = acquisitionRequest.getSupplier();
 	    final String fiscalIdentificationCode = supplier == null ? null : supplier.getFiscalIdentificationCode();
-	    return matchCriteria(requester, unsername) && matchCriteria(fiscalIdentificationCode, fiscalIdentificationCode);
+	    final String identification = acquisitionRequest.getAcquisitionProcessId();
+	    return matchCriteria(processId, identification)
+	    		&& matchCriteria(requester, unsername)
+	    		&& matchCriteria(fiscalIdentificationCode, fiscalIdentificationCode);
 		    //&& matchCriteria(costCenter, acquisitionRequest.getCostCenter());
 	}
 
@@ -47,11 +52,25 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
     @Override
     public Set<AcquisitionProcess> search() {
 	try {
-	    return new SearchResult(GenericProcess.getAllProcesses(SimplifiedProcedureProcess.class));
+	    return hasAnyCriteria() ?
+		    new SearchResult(GenericProcess.getAllProcesses(SimplifiedProcedureProcess.class)) :
+		    Collections.EMPTY_SET;
 	} catch (Exception ex) {
 	    ex.printStackTrace();
 	    throw new Error(ex);
 	}
+    }
+
+    protected boolean hasCriteria(final String string) {
+	return string != null && !string.isEmpty();
+    }
+
+    protected boolean hasAnyCriteria() {
+	return hasCriteria(processId)
+		|| hasCriteria(requester)
+		|| acquisitionProcessStateType != null
+		|| hasCriteria(fiscalIdentificationCode)
+		|| hasCriteria(costCenter);
     }
 
     public String getRequester() {
@@ -84,6 +103,14 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
 
     public void setCostCenter(String costCenter) {
 	this.costCenter = costCenter;
+    }
+
+    public String getProcessId() {
+        return processId;
+    }
+
+    public void setProcessId(String processId) {
+        this.processId = processId;
     }
 
 }

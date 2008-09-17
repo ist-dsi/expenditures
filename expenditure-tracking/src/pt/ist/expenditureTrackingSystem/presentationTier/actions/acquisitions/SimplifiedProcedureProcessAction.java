@@ -17,7 +17,6 @@ import org.joda.time.LocalDate;
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProposalDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestDocument;
@@ -152,11 +151,6 @@ public class SimplifiedProcedureProcessAction extends ProcessAction {
 	SearchAcquisitionProcess searchAcquisitionProcess = getRenderedObject();
 	if (searchAcquisitionProcess == null) {
 	    searchAcquisitionProcess = new SearchAcquisitionProcess();
-	    final User user = UserView.getUser();
-	    if (user != null) {
-		searchAcquisitionProcess.setRequester(user.getUsername());
-	    }
-	    searchAcquisitionProcess.setAcquisitionProcessState(AcquisitionProcessStateType.IN_GENESIS);
 	}
 	request.setAttribute("searchAcquisitionProcess", searchAcquisitionProcess);
 	return mapping.findForward("search.acquisition.process");
