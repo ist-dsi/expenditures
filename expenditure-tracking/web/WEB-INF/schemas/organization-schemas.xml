@@ -167,6 +167,7 @@
 <schema name="acquisitionAfterTheFact"
 		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AcquisitionAfterTheFact"
 		bundle="EXPENDITURE_RESOURCES">
+	<slot name="acquisitionProcessId" key="label.acquisitionProcessId" bundle="EXPENDITURE_RESOURCES"/>		
 	<slot name="afterTheFactAcquisitionType" key="label.afterTheFactAcquisitionType" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="invoiceDate" key="acquisitionProcess.label.invoice.date" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="invoiceNumber" key="acquisitionProcess.label.invoice.number" bundle="ACQUISITION_RESOURCES"/>

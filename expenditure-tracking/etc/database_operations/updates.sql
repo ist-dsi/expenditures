@@ -25,3 +25,14 @@ create table ACQUISITION_PROCESS_YEAR (
   index (KEY_EXPENDITURE_TRACKING_SYSTEM)
 ) type=InnoDB ;
 
+
+
+
+
+
+
+-- Inserted at 2008-09-17T11:26:31.546+01:00
+
+alter table OPTIONS add column RECEIVE_NOTIFICATIONS_BY_EMAIL tinyint(1);
+
+

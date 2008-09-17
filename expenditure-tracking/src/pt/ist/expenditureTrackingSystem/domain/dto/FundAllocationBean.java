@@ -9,6 +9,7 @@ public class FundAllocationBean implements Serializable {
 
     private DomainReference<Financer> financer;
     private String fundAllocationId;
+    private String effectiveFundAllocationId;
 
     public FundAllocationBean(final Financer financer) {
 	setFinancer(financer);
@@ -28,6 +29,14 @@ public class FundAllocationBean implements Serializable {
 
     public void setFundAllocationId(final String fundAllocationId) {
 	this.fundAllocationId = fundAllocationId;
+    }
+
+    public void setEffectiveFundAllocationId(String effectiveFundAllocationId) {
+	this.effectiveFundAllocationId = effectiveFundAllocationId;
+    }
+
+    public String getEffectiveFundAllocationId() {
+	return effectiveFundAllocationId;
     }
 
 }

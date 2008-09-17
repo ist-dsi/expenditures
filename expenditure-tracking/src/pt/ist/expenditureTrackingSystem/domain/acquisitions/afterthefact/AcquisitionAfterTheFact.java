@@ -3,7 +3,7 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact;
 import pt.ist.expenditureTrackingSystem.domain.dto.AfterTheFactAcquisitionProcessBean;
 
 public class AcquisitionAfterTheFact extends AcquisitionAfterTheFact_Base {
-    
+
     public AcquisitionAfterTheFact(final AfterTheFactAcquisitionProcess afterTheFactAcquisitionProcess) {
 	super();
 	setAfterTheFactAcquisitionProcess(afterTheFactAcquisitionProcess);
@@ -21,5 +21,8 @@ public class AcquisitionAfterTheFact extends AcquisitionAfterTheFact_Base {
 	removeSupplier();
 	super.delete();
     }
-    
+
+    public String getAcquisitionProcessId() {
+	return getAfterTheFactAcquisitionProcess().getAcquisitionProcessId();
+    }
 }

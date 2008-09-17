@@ -81,8 +81,8 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
     }
 
     public boolean isRealValueEqualOrLessThanFundAllocation() {
-	Money allocatedMoney = this.getAcquisitionRequest().getTotalItemValue();
-	Money realMoney = this.getAcquisitionRequest().getRealTotalValue();
+	Money allocatedMoney = this.getAcquisitionRequest().getTotalItemValueWithAdditionalCostsAndVat();
+	Money realMoney = this.getAcquisitionRequest().getRealTotalValueWithAdditionalCostsAndVat();
 	return realMoney.isLessThanOrEqual(allocatedMoney);
     }
 

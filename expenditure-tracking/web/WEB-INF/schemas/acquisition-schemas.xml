@@ -356,6 +356,12 @@
 	<slot name="fundAllocationId" key="financer.label.fundAllocation.identification" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 </schema>
 
+<schema name="editFinancerEffectiveFundAllocationId" type="pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean" bundle="ACQUISITION_RESOURCES">
+	<slot name="financer.unit.presentationName" key="unit.label.unit" read-only="true" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="fundAllocationId" read-only="true" key="financer.label.fundAllocation.identification" />
+	<slot name="effectiveFundAllocationId" key="financer.label.effectiveFundAllocation.identification" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+</schema>
+
 <schema name="addAcquisitionRequestDocument"
 		type="pt.ist.expenditureTrackingSystem.presentationTier.util.FileUploadBean"
 		bundle="ACQUISITION_RESOURCES">
