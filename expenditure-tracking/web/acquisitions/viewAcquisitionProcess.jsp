@@ -67,15 +67,15 @@
 	</fr:view>
 </div>
 
-<div>
+<logic:notEmpty name="acquisitionProcess" property="acquisitionRequest.totalAmountsForEachPayingUnit">
 	<fr:view name="acquisitionProcess" property="acquisitionRequest.totalAmountsForEachPayingUnit"
 			schema="viewPayingUnitWithTotalAmount">
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="tstyle5"/>
-			<fr:property name="columnClasses" value="aleft"/>
+			<fr:property name="columnClasses" value="aleft,nowrap,,"/>
 		</fr:layout>
 	</fr:view>
-</div>
+</logic:notEmpty>
 
 
 <div class="documents">

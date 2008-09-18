@@ -26,11 +26,10 @@
 			<li><bean:message key="messages.exception.processDoubt" bundle="EXPENDITURE_RESOURCES"/></li>
 			<li><bean:message key="messages.exception.technicalContact" bundle="EXPENDITURE_RESOURCES"/></li>
 		</ul>
-		<%--
-		<p class="mbottom05">Problemas técnicos ou informáticos: <a href="mailto:compras-informatica@ist.utl.pt">compras-informatica@ist.utl.pt</a></p>
-		<p class="mbottom05">Dúvidas sobre processos de compras: <a href="mailto:compras-informatica@ist.utl.pt">compras-processos@ist.utl.pt</a></p>
-		--%>
-		<p class="mtop15"><bean:message key="messages.exception.backToHomepage" bundle="EXPENDITURE_RESOURCES"/></p>
+		<p class="mtop15">
+			<bean:message key="messages.exception.backToHomepage" bundle="EXPENDITURE_RESOURCES"/>
+			<a href="<%= request.getContextPath() %>"><bean:message key="messages.exception.backToHomepageLink" bundle="EXPENDITURE_RESOURCES"/></a>
+		</p>
 	</div>
 </div>
 

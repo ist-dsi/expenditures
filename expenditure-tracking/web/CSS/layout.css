@@ -635,20 +635,25 @@ padding: 5px 15px 5px 0;
 table.tstyle5 {
 border-collapse: collapse;
 margin: 0.5em 0 0.5em 0;
+border: 1px solid #ddd;
+border-top: 4px solid #eee;
+border-bottom: 4px solid #eee;
 }
 table.tstyle5 th {
 text-align: center;
-border-top: 4px solid #eee;
+border-top: 1px solid #ddd;
 border-bottom: 1px solid #ddd;
 font-weight: normal;
 padding: 0.2em;
+background: #fafafa;
 }
 table.tstyle5 td {
 text-align: center;
 border-top: 1px solid #ddd;
 border-bottom: 1px solid #ddd;
-padding: 0.2em;
+padding: 0.2em 0.4em;
 vertical-align: top;
+
 }
 tr.lastline td {
 border-bottom: 4px solid #eee;
