@@ -67,6 +67,15 @@
 	</fr:view>
 </div>
 
+<div>
+	<fr:view name="acquisitionProcess" property="acquisitionRequest.totalAmountsForEachPayingUnit"
+			schema="viewPayingUnitWithTotalAmount">
+		<fr:layout name="tabular">
+			<fr:property name="classes" value="tstyle5"/>
+			<fr:property name="columnClasses" value="aleft"/>
+		</fr:layout>
+	</fr:view>
+</div>
 
 
 <div class="documents">

@@ -39,10 +39,6 @@
 	<slot name="acquisitionProcessId" key="label.acquisitionProcessId" bundle="EXPENDITURE_RESOURCES"/>
 	<slot name="acquisitionProcess.requestor.name" key="label.requesterName" bundle="EXPENDITURE_RESOURCES"/>
 	<slot name="acquisitionProcess.requestingUnit.presentationName" key="acquisitionProcess.label.requestingUnit" bundle="ACQUISITION_RESOURCES"/>
-	<slot name="totalAmountsForEachPayingUnit" key="acquisitionProcess.label.payingUnits" bundle="ACQUISITION_RESOURCES" layout="tabular" schema="viewPayingUnitWithTotalAmount">
-		<property name="classes" value="payingunits"/>
-		<property name="columnClasses" value=",nowrap vatop,"/>
-	</slot>
 	<slot name="acquisitionProcess.acquisitionProcessState.localizedName" key="label.processState" bundle="EXPENDITURE_RESOURCES"/>
 	<slot name="fiscalIdentificationCode" key="supplier.label.fiscalCode" bundle="ORGANIZATION_RESOURCES"/>
 	<slot name="totalItemValue" key="acquisitionRequestItem.label.totalValue" bundle="ACQUISITION_RESOURCES"/>
@@ -66,8 +62,16 @@
 <schema name="viewPayingUnitWithTotalAmount"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.PayingUnitTotalBean"
 		bundle="ACQUISITION_RESOURCES">
-		<slot name="payingUnit.presentationName"/>
-		<slot name="amount"/>
+	<slot name="payingUnit.presentationName" key="acquisitionProcess.label.payingUnits" layout="null-as-label">
+		<property name="subLayout" value="default"/>
+	</slot>
+	<slot name="amount" key="financer.label.value"/>
+	<slot name="financer.fundAllocationId" key="financer.label.fundAllocation.identification" layout="null-as-label">
+		<property name="subLayout" value="default"/>
+	</slot>
+	<slot name="financer.effectiveFundAllocationId" key="financer.label.effectiveFundAllocation.identification" layout="null-as-label">
+		<property name="subLayout" value="default"/>
+	</slot>
 </schema>
 
 <schema name="viewAcquisitionProcessInList"
