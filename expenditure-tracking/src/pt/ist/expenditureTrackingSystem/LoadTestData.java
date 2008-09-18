@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Stack;
 
 import pt.ist.expenditureTrackingSystem._development.PropertiesManager;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
@@ -112,19 +113,24 @@ public class LoadTestData {
     private static class CdUnitMap extends ArrayList<CdUnit> {
 
 	private CdUnitMap(final String contents) {
-	    final CdUnit topUnit = add(null, "\tInstituto Superior Técnico");
-	    CdUnit previous = topUnit;
-	    boolean isCC = false;
+	    final Stack<CdUnit> stack = new Stack<CdUnit>();
+	    stack.push(add(null, "\tInstituto Superior Técnico"));
+
+	    boolean previousIsCC = false;
 	    for (final String line : contents.split("\n")) {
-		final CdUnit cdUnit = add(previous, line);
+		final CdUnit cdUnit = add(stack.peek(), line);
 		if (cdUnit.costCenterCode == null) {
-		    previous = cdUnit;
-		    if (isCC) {
-			cdUnit.parentUnit = topUnit;
+		    if (previousIsCC && !stack.peek().name.equals("Taguspark")) {
+			stack.pop();
+			if (cdUnit.name.startsWith("COORDENA") && cdUnit.name.endsWith("O DE LICENCIATURA")) {
+			    stack.pop();
+			}
 		    }
-		    isCC = false;
+		    cdUnit.parentUnit = stack.peek();
+		    stack.push(cdUnit);
+		    previousIsCC = false;
 		} else {
-		    isCC = true;
+		    previousIsCC = true;
 		}
 	    }
 	}
