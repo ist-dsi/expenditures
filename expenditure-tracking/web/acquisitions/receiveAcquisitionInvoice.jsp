@@ -38,7 +38,8 @@
 
 <bean:define id="urlView">/afterTheFactAcquisitionProcess.do?method=viewAfterTheFactAcquisitionProcess&amp;acquisitionAfterTheFactOid=<bean:write name="afterTheFactAcquisitionProcess" property="acquisitionAfterTheFact.OID"/></bean:define>
 <bean:define id="urlSave">/afterTheFactAcquisitionProcess.do?method=receiveAcquisitionInvoice&amp;afterTheFactAcquisitionProcessOid=<bean:write name="afterTheFactAcquisitionProcess" property="OID"/></bean:define>
-<%= urlView %>
+
+
 <fr:form action="<%= urlSave %>" encoding="multipart/form-data">
 	<fr:edit id="receiveInvoiceForm"
 			name="receiveInvoiceForm"
