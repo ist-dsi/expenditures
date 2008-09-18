@@ -176,7 +176,18 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     @Override
     public void receiveInvoice(final String filename, final byte[] bytes, final String invoiceNumber, final LocalDate invoiceDate) {
 	super.receiveInvoice(filename, bytes, invoiceNumber, invoiceDate);
-	copyEstimateValuesToRealValues();
+	if (!isRealCostAvailableForAtLeastOneItem()) {
+	    copyEstimateValuesToRealValues();
+	}
+    }
+
+    public boolean isRealCostAvailableForAtLeastOneItem() {
+	for (AcquisitionRequestItem item : getAcquisitionRequestItems()) {
+	    if (item.getRealQuantity() != null && item.getRealUnitValue() != null) {
+		return true;
+	    }
+	}
+	return false;
     }
 
     private void copyEstimateValuesToRealValues() {
