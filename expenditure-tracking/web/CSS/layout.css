@@ -423,6 +423,44 @@ color: #cc2200;
 table.form tr td.tderror span {
 background-color: #fff0dd;
 }
+
+
+table.formhorizontal {
+border-collapse: collapse;
+margin: 1em 0 1.5em 0;
+}
+table.formhorizontal th {
+text-align: center;
+border-top: 1px solid #ddd;
+border-bottom: 1px solid #ddd;
+padding: 5px;
+white-space: nowrap;
+font-weight: normal;
+vertical-align: top;
+}
+table.formhorizontal td {
+text-align: left;
+border-top: 1px solid #ddd;
+border-bottom: 1px solid #ddd;
+padding: 5px;
+padding-left: 10px;
+vertical-align: top;
+}
+table.formhorizontal table th {
+border: none;
+}
+table.formhorizontal table td {
+border: none;
+}
+table.formhorizontal tr td.tderror {
+border-top: none !important;
+border-bottom: none !important;
+color: #cc2200;
+/*white-space: nowrap;*/
+}
+
+
+
 span.required {
 color: #c20;
 }
@@ -457,9 +495,9 @@ width: 150px;
 .mvert05 { margin-top: 0.5em !important; margin-bottom: 0.5em !important; }
 .mvert1 { margin-top: 1em !important; margin-bottom: 1em !important; }
 .mvert15 { margin-top: 1.5em !important; margin-bottom: 1.5em !important; }
-.aleft { text-align: left; }
-.acenter { text-align: center; }
-.aright { text-align: right; }
+.aleft { text-align: left !important; }
+.acenter { text-align: center !important; }
+.aright { text-align: right !important; }
 
 span.valid { color: #0a0; font-weight: bold; }
 span.invalid { color: #a00; font-weight: bold; }
@@ -499,13 +537,11 @@ margin: 1em 0;
 
 div.error1 {
 margin: 0.75em 0;
+padding: 0.4em 0.4em 0.4em 2.5em;
+background: #ffeddd url(../images/error01.gif) 0.5em 0.5em no-repeat;
 }
 div.error1 span {
-padding: 5px 5px 5px 25px;
-background: #ffeddd;
-margin: 1em 0;
 color: #cc1500;
-background: #ffeddd url(../images/error01.gif) 3px center no-repeat;
 }
 
 
@@ -645,7 +681,7 @@ text-align: center;
 overflow: hidden;
 }
 div.box {
-border: 2px solid #ccc;
+border: 1px solid #ddd;
 background: #fafafa;
 padding: 5px 5px;
 text-align: center;
