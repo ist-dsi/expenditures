@@ -9,7 +9,6 @@ import pt.ist.expenditureTrackingSystem._development.PropertiesManager;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
-import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateUnitBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.CostCenter;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
@@ -95,6 +94,49 @@ public class LoadTestData {
 
     }
 
+    private static class CdUnit {
+	private CdUnit parentUnit;
+	private final String costCenterCode;
+	private final String name;
+	private Unit unit;
+
+	private CdUnit(final CdUnit parent, final String line) {
+	    final String[] parts = line.split("\t");
+	    final String ccPart = parts[0].trim();
+	    costCenterCode = ccPart.isEmpty() ? null : ccPart;
+	    name = parts[1].trim();
+	    parentUnit = parent;
+	}
+    }
+
+    private static class CdUnitMap extends ArrayList<CdUnit> {
+
+	private CdUnitMap(final String contents) {
+	    final CdUnit topUnit = add(null, "\tInstituto Superior Técnico");
+	    CdUnit previous = topUnit;
+	    boolean isCC = false;
+	    for (final String line : contents.split("\n")) {
+		final CdUnit cdUnit = add(previous, line);
+		if (cdUnit.costCenterCode == null) {
+		    previous = cdUnit;
+		    if (isCC) {
+			cdUnit.parentUnit = topUnit;
+		    }
+		    isCC = false;
+		} else {
+		    isCC = true;
+		}
+	    }
+	}
+
+	private CdUnit add(final CdUnit parent, final String line) {
+	    final CdUnit cdUnit = new CdUnit(parent, line);
+	    add(cdUnit);
+	    return cdUnit;
+	}
+
+    }
+
     private static class FenixPerson {
 
 	private String username;
@@ -126,13 +168,17 @@ public class LoadTestData {
     }
 
     private static void loadData() throws IOException {
-	final String unitContents = FileUtils.readFile("units.txt");
-	final FenixUnitMap fenixUnitMap = new FenixUnitMap(unitContents);
-	createUnits(fenixUnitMap);
+//	final String unitContents = FileUtils.readFile("units.txt");
+//	final FenixUnitMap fenixUnitMap = new FenixUnitMap(unitContents);
+//	createUnits(fenixUnitMap);
+
+	final String activeCostCenterContents = FileUtils.readFile("activeCostCenters.csv");
+	final CdUnitMap cdUnitMap = new CdUnitMap(activeCostCenterContents);
+	createUnits(cdUnitMap);
 
 	final String peopleContents = FileUtils.readFile("people.txt");
 	final FenixPeopleSet fenixPeopleSet = new FenixPeopleSet(peopleContents);
-	createPeople(fenixPeopleSet, fenixUnitMap);
+	createPeople(fenixPeopleSet /*, fenixUnitMap */);
 
 	final String projectContents = FileUtils.readFile("projects.txt");
 	createProjects(projectContents, fenixPeopleSet);
@@ -145,6 +191,7 @@ public class LoadTestData {
 	final String cpvReferences = FileUtils.readFile("cpv.csv");
 	createCPVCodes(cpvReferences);
     }
+
 
     @Service
     private static void createCPVCodes(String cpvReferences) {
@@ -166,7 +213,15 @@ public class LoadTestData {
     }
 
     @Service
-    private static void createPeople(final FenixPeopleSet fenixPeopleSet, final FenixUnitMap fenixUnitMap) {
+    private static void createUnits(final CdUnitMap cdUnitMap) {
+	for (final CdUnit cdUnit : cdUnitMap) {
+	    createUnit(cdUnit);
+	}
+    }
+
+
+    @Service
+    private static void createPeople(final FenixPeopleSet fenixPeopleSet /*, final FenixUnitMap fenixUnitMap*/) {
 	for (final FenixPerson fenixPerson : fenixPeopleSet) {
 	    final Person person = Person.createEmptyPerson();
 	    person.setUsername(fenixPerson.username);
@@ -189,8 +244,15 @@ public class LoadTestData {
 	final CreateUnitBean createUnitBean = new CreateUnitBean(fenixUnit.getParentUnit(fenixUnitMap));
 	createUnitBean.setCostCenter(fenixUnit.costCenterCode);
 	createUnitBean.setName(fenixUnit.name);
-	final Unit unit = Unit.createNewUnit(createUnitBean);
-	fenixUnit.unit = unit;
+	fenixUnit.unit = Unit.createNewUnit(createUnitBean);
+    }
+
+    private static void createUnit(final CdUnit cdUnit) {
+	final Unit parentUnit = cdUnit.parentUnit == null ? null : cdUnit.parentUnit.unit;
+	final CreateUnitBean createUnitBean = new CreateUnitBean(parentUnit);
+	createUnitBean.setCostCenter(cdUnit.costCenterCode);
+	createUnitBean.setName(cdUnit.name);
+	cdUnit.unit = Unit.createNewUnit(createUnitBean);
     }
 
     @Service
@@ -254,6 +316,7 @@ public class LoadTestData {
     private static final Set<String> cdCostCenters = new HashSet<String>();
     static {
 	cdCostCenters.add("9999");
+	cdCostCenters.add("0003");
     }
 
     private static final Set<String> notFoundCostCenters = new HashSet<String>();
@@ -267,7 +330,7 @@ public class LoadTestData {
 	for (final Unit ounit : ExpenditureTrackingSystem.getInstance().getUnitsSet()) {
 	    if (ounit instanceof CostCenter) {
 		final CostCenter ccUnit = (CostCenter) ounit;
-		if (ccString.equals(ccUnit.getCostCenter())) {
+		if (Integer.parseInt(ccString) == Integer.parseInt(ccUnit.getCostCenter())) {
 		    unit = ounit;
 		}
 	    }
