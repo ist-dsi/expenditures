@@ -30,14 +30,27 @@
 	</div>
 </logic:present>
 
-<fr:view name="person"
-		type="pt.ist.expenditureTrackingSystem.domain.organization.Person"
-		schema="viewPerson">
-	<fr:layout name="tabular">
-		<fr:property name="classes" value="form"/>
-		<fr:property name="columnClasses" value=",,tderror"/>
-	</fr:layout>
-</fr:view>
+<table class="mvert1 tdtop">
+	<tbody>
+		<tr>
+			<td>
+				<fr:view name="person"
+						type="pt.ist.expenditureTrackingSystem.domain.organization.Person"
+						schema="viewPerson">
+					<fr:layout name="tabular">
+						<fr:property name="classes" value="form"/>
+						<fr:property name="columnClasses" value=",,tderror"/>
+					</fr:layout>
+				</fr:view>
+			</td>
+			<td>
+				<html:img src="https://fenix.ist.utl.pt/publico/viewHomepage.do?method=retrieveByUUID&amp;contentContextPath_PATH=/"
+					paramId="uuid" paramName="person" paramProperty="username"
+					align="middle" styleClass="float: right; border: 1px solid #aaa; padding: 3px;" />
+			</td>
+		</tr>
+	</tbody>
+</table>
 
 <logic:present role="MANAGER">
 	<logic:iterate id="role" name="availableRoles">
