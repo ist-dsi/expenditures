@@ -4,8 +4,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
-<h2><bean:message key="acquisitionRequestItem.title.editRealValues" bundle="ACQUISITION_RESOURCES"/></h2>
-
+<h2><bean:message key="acquisitionRequestItem.title.insertRealValues" bundle="ACQUISITION_RESOURCES"/></h2>
 
 <bean:define id="processOID" name="itemBean" property="acquisitionRequest.acquisitionProcess.OID"/>
 <bean:define id="itemOID" name="itemBean" property="item.OID"/>
@@ -24,21 +23,19 @@
 <div class="dinline forminline">
 <fr:form action='<%= "/acquisitionProcess.do?method=executeAcquisitionRequestItemRealValuesEdition&acquisitionProcessOid="  + processOID %>'>
 	<fr:edit id="acquisitionRequestItem" name="itemBean" visible="false"/>
-			<table class="form">
+			<table class="formhorizontal">
 				<tr>
+					<th></th>
 					<th>
-					</th>
-					<th>
-					<strong><bean:message key="acquisitionRequestItem.label.effectiveValue" bundle="ACQUISITION_RESOURCES"/></strong>
+						<strong><bean:message key="acquisitionRequestItem.label.effectiveValue" bundle="ACQUISITION_RESOURCES"/></strong>
 					</th>
 					<th>
 						<strong><bean:message key="acquisitionRequestItem.label.estimatedValue" bundle="ACQUISITION_RESOURCES"/></strong>
 					</th>
 				</tr>
 				<tr>
-					<th><bean:message key="acquisitionRequestItem.label.quantity" bundle="ACQUISITION_RESOURCES"/>
-					</th>
-					<td>
+					<td><bean:message key="acquisitionRequestItem.label.quantity" bundle="ACQUISITION_RESOURCES"/>:</td>
+					<td class="aright">
 						<fr:view name="itemBean" property="quantity"/>
 					</td>
 					<td>
@@ -46,9 +43,8 @@
 					</td>
 				</tr>
 				<tr>
-					<th><bean:message key="acquisitionRequestItem.label.unitValue" bundle="ACQUISITION_RESOURCES"/>
-					</th>
-					<td>
+					<td><bean:message key="acquisitionRequestItem.label.unitValue" bundle="ACQUISITION_RESOURCES"/>:</td>
+					<td class="aright">
 						<fr:view name="itemBean" property="unitValue"/>
 					</td>
 					<td>
@@ -56,9 +52,8 @@
 					</td>
 				</tr>
 				<tr>
-					<th><bean:message key="acquisitionRequestItem.label.vatValue" bundle="ACQUISITION_RESOURCES"/>
-					</th>
-					<td>
+					<td><bean:message key="acquisitionRequestItem.label.vatValue" bundle="ACQUISITION_RESOURCES"/>:</td>
+					<td class="aright">
 						<fr:view name="itemBean" property="vatValue"/>
 					</td>
 					<td>
@@ -66,9 +61,8 @@
 					</td>
 				</tr>
 				<tr>
-					<th><bean:message key="acquisitionRequestItem.label.additionalCosts" bundle="ACQUISITION_RESOURCES"/>
-					</th>
-					<td>
+					<td><bean:message key="acquisitionRequestItem.label.additionalCosts" bundle="ACQUISITION_RESOURCES"/>:</td>
+					<td class="aright">
 						<fr:view name="itemBean" property="additionalCostValue"/>
 					</td>
 					<td>

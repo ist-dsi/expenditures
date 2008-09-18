@@ -188,7 +188,7 @@
 		<property name="size" value="20"/>
 	</slot>
 	<slot name="email" key="label.email" bundle="EXPENDITURE_RESOURCES">
-		<property name="size" value="60"/>
+		<property name="size" value="40"/>
 	</slot>				
 </schema>
 
