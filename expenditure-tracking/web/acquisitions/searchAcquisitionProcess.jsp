@@ -6,14 +6,17 @@
 
 <h2><bean:message key="process.label.searchProcesses" bundle="EXPENDITURE_RESOURCES"/></h2>
 
-<fr:edit action="/acquisitionProcess.do?method=searchAcquisitionProcess"  id="searchAcquisitionProcess"
-		name="searchAcquisitionProcess"
-		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.SearchAcquisitionProcess"
-		schema="searchAcquisitionProcess">
-	<fr:layout name="tabular">
-		<fr:property name="classes" value="form"/>
-	</fr:layout>
-</fr:edit>
+<fr:form action="/acquisitionProcess.do?method=searchAcquisitionProcess" >
+	<fr:edit id="searchAcquisitionProcess"
+			name="searchAcquisitionProcess"
+			type="pt.ist.expenditureTrackingSystem.domain.acquisitions.SearchAcquisitionProcess"
+			schema="searchAcquisitionProcess">
+		<fr:layout name="tabular">
+			<fr:property name="classes" value="form"/>
+		</fr:layout>
+	</fr:edit>
+		<html:submit styleClass="inputbutton"><bean:message key="renderers.form.submit.name" bundle="RENDERER_RESOURCES"/> </html:submit>
+</fr:form>
 
 
 <bean:define id="acquisitionProcesses" name="searchAcquisitionProcess" property="result"/>
