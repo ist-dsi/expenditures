@@ -6,6 +6,8 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessSt
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
 import pt.ist.fenixWebFramework.security.UserView;
+import pt.ist.fenixWebFramework.services.Command;
+import pt.ist.fenixWebFramework.services.ServiceManager;
 
 public class SubmitForApproval extends GenericAcquisitionProcessActivity {
 
@@ -27,7 +29,11 @@ public class SubmitForApproval extends GenericAcquisitionProcessActivity {
     }
 
     @Override
-    protected void notifyUsers(AcquisitionProcess process) {
-	notifyUnitsResponsibles(process);
+    protected void notifyUsers(final AcquisitionProcess process) {
+	ServiceManager.registerAfterCommitCommand(new Command() {
+	    public void execute() {
+		notifyUnitsResponsibles(process);
+	    }
+	});
     }
 }
