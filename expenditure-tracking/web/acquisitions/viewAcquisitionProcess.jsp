@@ -67,6 +67,8 @@
 	</fr:view>
 </div>
 
+
+
 <div class="documents">
 	<p>
 		<bean:message key="acquisitionProcess.label.proposalDocument" bundle="ACQUISITION_RESOURCES"/>:

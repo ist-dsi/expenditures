@@ -33,8 +33,8 @@
 		<property name="size" value="60"/>
 	</slot>
 	<slot name="description" key="label.description" bundle="EXPENDITURE_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" layout="longText">
-		<property name="columns" value="50"/>
-		<property name="rows" value="11"/>
+		<property name="columns" value="45"/>
+		<property name="rows" value="10"/>
 	</slot>
 	<slot name="requestingUnit" layout="autoComplete" key="acquisitionProcess.label.requestingUnit" bundle="ACQUISITION_RESOURCES">
         <property name="labelField" value="presentationName"/>

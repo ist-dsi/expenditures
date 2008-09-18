@@ -398,6 +398,7 @@ border-bottom: 1px solid #ddd;
 padding: 5px 0;
 white-space: nowrap;
 font-weight: normal;
+vertical-align: top;
 }
 table.form td {
 text-align: left;
@@ -405,6 +406,7 @@ border-top: 1px solid #ddd;
 border-bottom: 1px solid #ddd;
 padding: 5px 0;
 padding-left: 10px;
+vertical-align: top;
 }
 table.form table th {
 border: none;
@@ -579,17 +581,31 @@ border-top: 1px solid #ddd;
 border-bottom: 1px solid #ddd;
 padding: 5px 15px 5px 0;
 }
-/*
-table td.action {
-padding: 6px 6px;
+
+
+table.tstyle5 {
+border-collapse: collapse;
+margin: 0.5em 0 0.5em 0;
 }
-table td.action a {
-border: 1px solid #edcc88;
-background: #fdf2dd;
-padding: 2px 8px;
-text-decoration: none !important;
+table.tstyle5 th {
+text-align: center;
+border-top: 4px solid #eee;
+border-bottom: 1px solid #ddd;
+font-weight: normal;
+padding: 0.2em;
 }
-*/
+table.tstyle5 td {
+text-align: center;
+border-top: 1px solid #ddd;
+border-bottom: 1px solid #ddd;
+padding: 0.2em;
+vertical-align: top;
+}
+tr.lastline td {
+border-bottom: 4px solid #eee;
+}
+
+
 
 .documents {
 margin: 1em 0;
@@ -705,8 +721,13 @@ padding: 0 0.25em;
 
 
 table.payingunits { margin: 0; }
-table.payingunits th { display: none; }
-table.payingunits td { padding: 0 10px 0 0 !important; }
+table.payingunits th {
+display: none;
+border: 1p 
+}
+table.payingunits td {
+padding: 0 10px 0 0 !important;
+}
 .nowrap { white-space: nowrap; }
 .vatop { vertical-align: top; }
 

@@ -18,8 +18,11 @@
 		<fr:property name="classes" value="tstyle1"/>
 	</fr:layout>
 </fr:view>
+
 <fr:view name="announcement" schema="viewAnnouncement.publish">
-	<fr:layout name="tabular" />
+	<fr:layout name="tabular">
+		<fr:property name="classes" value="tstyle1"/>
+	</fr:layout>
 </fr:view>
 </div>
 
