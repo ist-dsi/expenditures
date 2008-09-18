@@ -17,6 +17,7 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.domain.processes.ActivityException;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
+import pt.utl.ist.fenix.tools.util.i18n.Language;
 
 public abstract class GenericAcquisitionProcessActivity extends AbstractActivity<AcquisitionProcess> {
 
@@ -32,7 +33,7 @@ public abstract class GenericAcquisitionProcessActivity extends AbstractActivity
 
     protected void notifyAcquisitionRequester(AcquisitionProcess process) {
 	Person person = process.getRequestor();
-	ResourceBundle bundle = ResourceBundle.getBundle("resources/ExpenditureResources");
+	ResourceBundle bundle = ResourceBundle.getBundle("resources/ExpenditureResources", Language.getLocale());
 	if (person.getOptions().getReceiveNotificationsByEmail()) {
 	    try {
 		EmailSender.sendEmail(person.getUsername(), bundle.getString("process.label.notifyTopic"), bundle
@@ -55,7 +56,7 @@ public abstract class GenericAcquisitionProcessActivity extends AbstractActivity
 	    }
 	}
 
-	ResourceBundle bundle = ResourceBundle.getBundle("resources/ExpenditureResources");
+	ResourceBundle bundle = ResourceBundle.getBundle("resources/ExpenditureResources", Language.getLocale());
 
 	try {
 	    for (Person person : people) {
