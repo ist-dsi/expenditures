@@ -40,3 +40,8 @@ function executeWithTempFile() {
 	echo
 }
 
+execute "Update existing db structure." updates.sql
+execute "Adding RECEIVE_NOTIFICATION_BY_EMAIL to OPTIONS" addFieldToOptions.sql
+execute "Adding Announcement Process Fields" addAnnouncementProcessFields.sql
+execute "Adding Process State Fields" addFieldToProcessState.sql
+execute "Adding Acquisition Process Id Values" addAquisitionProcessIdValues.sql
