@@ -12,6 +12,11 @@ public class Context {
 	contextVar.set(context);
     }
 
+    public static boolean isPresent(final String module) {
+	final Context context = getContext();
+	return context != null && context.contains(module);
+    }
+
     private final String module;
 
     public Context(final String module) {
@@ -24,6 +29,10 @@ public class Context {
 
     public String getModule() {
         return module;
+    }
+
+    public boolean contains(final String module) {
+	return this.module == module || (this.module != null && this.module.equals(module));
     }
 
 }

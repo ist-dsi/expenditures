@@ -3,9 +3,19 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 
+<%@page import="pt.ist.expenditureTrackingSystem.presentationTier.Context"%>
 <logic:present name="USER_SESSION_ATTRIBUTE" property="person">
+
+	<%
+		final String homeClass = Context.isPresent(null) ? "" : "";
+		final String proposalsClass = Context.isPresent("requests") ? "" : "";
+		final String announcementsClass = Context.isPresent("announcements") ? "" : "";
+		final String processesClass = Context.isPresent("acquisitions") ? "" : "";
+		final String organizationClass = Context.isPresent("organization") ? "" : "";
+	%>
+
 	<ul>
-		<li>
+		<li class="<%= homeClass %>">
 			<html:link action="/home.do?method=firstPage">
 				<span>
 					<bean:message key="link.topBar.home" bundle="EXPENDITURE_RESOURCES"/>
@@ -14,7 +24,7 @@
 			</html:link>
 		</li>
 		<logic:present role="MANAGER">
-			<li>
+			<li class="<%= proposalsClass %>">
 				<html:link action="/requestForProposalProcess.do?method=showPendingRequests">
 					<span>
 						<bean:message key="link.topBar.requestForProposal" bundle="EXPENDITURE_RESOURCES"/>
@@ -23,7 +33,7 @@
 				</html:link>
 			</li>
 		</logic:present>
-		<li>
+		<li class="<%= announcementsClass %>">
 			<html:link action="/announcementProcess.do?method=showPendingProcesses">
 				<span>
 					<bean:message key="link.topBar.announcements" bundle="EXPENDITURE_RESOURCES"/>
@@ -31,7 +41,7 @@
 				<div class="lic1"></div>
 			</html:link>
 		</li>
-		<li>
+		<li class="<%= processesClass %>">
 			<html:link action="/acquisitionProcess.do?method=showPendingProcesses">
 				<span>
 					<bean:message key="link.topBar.acquisitionProcesses" bundle="EXPENDITURE_RESOURCES"/>
@@ -39,7 +49,7 @@
 				<div class="lic1"></div>
 			</html:link>
 		</li>
-		<li>
+		<li class="<%= organizationClass %>">
 			<html:link action="/organization.do?method=viewPerson" paramId="personOid" paramName="USER_SESSION_ATTRIBUTE" paramProperty="person.OID">
 				<span>
 					<bean:message key="link.topBar.organization" bundle="EXPENDITURE_RESOURCES"/>
