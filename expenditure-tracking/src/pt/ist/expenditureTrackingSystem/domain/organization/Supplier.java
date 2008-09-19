@@ -118,4 +118,8 @@ public class Supplier extends Supplier_Base {
 	return totalValue.isLessThanOrEqual(SUPPLIER_LIMIT);
     }
 
+    public String getPresentationName() {
+	return getFiscalIdentificationCode() + " - " + getName();
+    }
+
 }

@@ -2,8 +2,8 @@
 		type="pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean"
 		bundle="ACQUISITION_RESOURCES">
 	<slot name="supplier" layout="autoComplete" key="label.supplier" bundle="EXPENDITURE_RESOURCES">
-        <property name="labelField" value="name"/>
-		<property name="format" value="${fiscalIdentificationCode} - ${name}"/>
+        <property name="labelField" value="presentationName"/>
+		<property name="format" value="${presentationName}"/>
 		<property name="minChars" value="1"/>		
 		<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.NIFSupplierAutoCompleteProvider"/>
 		<property name="size" value="40"/>
@@ -40,7 +40,7 @@
 	<slot name="acquisitionProcess.requestor.name" key="label.requesterName" bundle="EXPENDITURE_RESOURCES"/>
 	<slot name="acquisitionProcess.requestingUnit.presentationName" key="acquisitionProcess.label.requestingUnit" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="acquisitionProcess.acquisitionProcessState.localizedName" key="label.processState" bundle="EXPENDITURE_RESOURCES"/>
-	<slot name="fiscalIdentificationCode" key="supplier.label.fiscalCode" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="supplier.presentationName" key="label.supplier" bundle="EXPENDITURE_RESOURCES"/>
 	<slot name="totalItemValue" key="acquisitionRequestItem.label.totalValue" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="totalVatValue" key="acquisitionRequestItem.label.vat" bundle="ACQUISITION_RESOURCES"/>	
 	<slot name="totalAdditionalCostsValue" key="acquisitionRequestItem.label.additionalCosts" bundle="ACQUISITION_RESOURCES"/>
@@ -66,7 +66,7 @@
 	<slot name="acquisitionProcess.requestor.name" key="label.requesterName" bundle="EXPENDITURE_RESOURCES"/>
 	<slot name="acquisitionProcess.requestingUnit.presentationName" key="acquisitionProcess.label.requestingUnit" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="acquisitionProcess.acquisitionProcessState.localizedName" key="label.processState" bundle="EXPENDITURE_RESOURCES"/>
-	<slot name="fiscalIdentificationCode" key="supplier.label.fiscalCode" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="supplier.presentationName" key="label.supplier" bundle="EXPENDITURE_RESOURCES"/>
 	<slot name="realTotalValue" key="acquisitionRequestItem.label.totalValue" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="realTotalVatValue" key="acquisitionRequestItem.label.vat" bundle="ACQUISITION_RESOURCES"/>	
 	<slot name="realTotalAdditionalCostsValue" key="acquisitionRequestItem.label.additionalCosts" bundle="ACQUISITION_RESOURCES"/>
@@ -404,8 +404,8 @@
 		bundle="EXPENDITURE_RESOURCES">
 	<slot name="afterTheFactAcquisitionType" key="label.afterTheFactAcquisitionType" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 	<slot name="supplier" layout="autoComplete" key="label.supplier" bundle="EXPENDITURE_RESOURCES">
-        <property name="labelField" value="name"/>
-		<property name="format" value="${fiscalIdentificationCode} - ${name}"/>
+        <property name="labelField" value="presentationName"/>
+		<property name="format" value="${presentationName}"/>
 		<property name="minChars" value="1"/>		
 		<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.NIFSupplierAutoCompleteProvider"/>
 		<property name="size" value="50"/>
