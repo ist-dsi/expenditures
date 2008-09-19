@@ -36,17 +36,23 @@
 			</html:link>
 		</li>
 	</logic:iterate>
+		<li>
+			<html:link page="/viewLogs.do?method=viewOperationLog&amp;module=acquisitions" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
+				<bean:message key="label.log.view" bundle="ACQUISITION_RESOURCES"/>
+			</html:link>
+		</li>
+
 	</ul>
 	<logic:empty name="acquisitionProcess" property="activeActivitiesForRequest">
-		<em>
-			<bean:message key="messages.info.noOperatesAvailabeATM" bundle="EXPENDITURE_RESOURCES"/>.
-		</em>
+		<p>
+			<em>
+				<bean:message key="messages.info.noOperatesAvailabeATM" bundle="EXPENDITURE_RESOURCES"/>.
+			</em>
+		</p>
 	</logic:empty>
 </div>
 
-<html:link page="/viewLogs.do?method=viewOperationLog&amp;module=acquisitions" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
-	<bean:message key="label.log.view" bundle="ACQUISITION_RESOURCES"/>
-</html:link>
+
 
 <div class="expenditures">
 	<logic:equal name="acquisitionProcess" property="allowedToViewSupplierExpenditures" value="true">

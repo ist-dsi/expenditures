@@ -184,6 +184,14 @@ position: absolute;
 top: 0;
 left: 0;
 }
+#tabs10 ul li.selected {
+}
+#tabs10 ul li.selected a {
+background: #a1cfe7 url(../images/tab_corner2_02.gif) top right no-repeat !important;
+}
+#tabs10 ul li.selected div.lic1 {
+background: url(../images/tab_corner1_02.gif) top right no-repeat !important;
+}
 
 
 #tabs10 div.c1 {

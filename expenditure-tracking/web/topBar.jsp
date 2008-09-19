@@ -7,11 +7,11 @@
 <logic:present name="USER_SESSION_ATTRIBUTE" property="person">
 
 	<%
-		final String homeClass = Context.isPresent(null) ? "" : "";
-		final String proposalsClass = Context.isPresent("requests") ? "" : "";
-		final String announcementsClass = Context.isPresent("announcements") ? "" : "";
-		final String processesClass = Context.isPresent("acquisitions") ? "" : "";
-		final String organizationClass = Context.isPresent("organization") ? "" : "";
+		final String homeClass = Context.isPresent(null) ? "selected" : "";
+		final String proposalsClass = Context.isPresent("requests") ? "selected" : "";
+		final String announcementsClass = Context.isPresent("announcements") ? "selected" : "";
+		final String processesClass = Context.isPresent("acquisitions") ? "selected" : "";
+		final String organizationClass = Context.isPresent("organization") ? "selected" : "";
 	%>
 
 	<ul>
