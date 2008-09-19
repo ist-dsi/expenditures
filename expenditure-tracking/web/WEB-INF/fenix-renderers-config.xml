@@ -549,11 +549,7 @@ Documentation:
 	
 	<renderer type="java.lang.String" layout="slot-as-label" class="pt.ist.fenixWebFramework.renderers.SlotAsLabelRenderer"/>
 
-	<renderer type="pt.ist.expenditureTrackingSystem.domain.util.Money" class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.MoneyRenderer">
-		<property name="format" value="######0.00"/>
-		<property name="currencyBundle" value="RENDERER_RESOURCES"/>
-		<property name="escapeCurrencyLabel" value="false"/>
-	</renderer>
+	<renderer type="pt.ist.expenditureTrackingSystem.domain.util.Money" class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.MoneyRenderer"/>
 		
 	<renderer type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess" layout="process-state" class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.AcquisitionProcessStateRenderer">
 	    	<property name="classes" value="flow"/>
