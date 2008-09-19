@@ -6,14 +6,17 @@
 
 <h2><bean:message key="process.label.searchProcesses" bundle="EXPENDITURE_RESOURCES"/></h2>
 
-<fr:edit action="/requestForProposalProcess.do?method=searchRequestProposalProcess"  id="searchProposalRequestProcess"
-		name="searchRequestProposalProcess"
-		schema="searchProposalRequestProcess">
-	<fr:layout name="tabular">
-		<fr:property name="classes" value="form"/>
-		<fr:property name="columnClasses" value=",,tderror"/>
-	</fr:layout>
-</fr:edit>
+<fr:form action="/requestForProposalProcess.do?method=searchRequestProposalProcess">
+	<fr:edit action="/requestForProposalProcess.do?method=searchRequestProposalProcess"  id="searchProposalRequestProcess"
+			name="searchRequestProposalProcess"
+			schema="searchProposalRequestProcess">
+		<fr:layout name="tabular">
+			<fr:property name="classes" value="form"/>
+			<fr:property name="columnClasses" value=",,tderror"/>
+		</fr:layout>
+	</fr:edit>
+	<html:submit styleClass="inputbutton"><bean:message key="renderers.form.submit.name" bundle="RENDERER_RESOURCES"/> </html:submit>
+</fr:form>
 
 
 <bean:define id="process" name="searchRequestProposalProcess" property="result"/>

@@ -63,13 +63,13 @@
 
 <schema name="searchProposalRequestProcess" bundle="REQUEST_RESOURCES" 
 		type="pt.ist.expenditureTrackingSystem.domain.requests.SearchRequestProposal"> 
-	<slot name="publishDate" key="label.publishDate" bundle="REQUEST_RESOURCES">
+	<slot name="publishDate" key="label.publishDate" bundle="REQUEST_RESOURCES" layout="picker">
 		<property name="format" value="dd-MM-yyyy"/>
 		<validator class="pt.ist.fenixWebFramework.renderers.validators.DateValidator">
 			<property name="dateFormat" value="dd-MM-yyyy"/>
 		</validator>
 	</slot> 
-	<slot name="expireDate" key="label.expireDate" bundle="REQUEST_RESOURCES">
+	<slot name="expireDate" key="label.expireDate" bundle="REQUEST_RESOURCES" layout="picker">
 		<property name="format" value="dd-MM-yyyy"/>
 		<validator class="pt.ist.fenixWebFramework.renderers.validators.DateValidator">
 			<property name="dateFormat" value="dd-MM-yyyy"/>
