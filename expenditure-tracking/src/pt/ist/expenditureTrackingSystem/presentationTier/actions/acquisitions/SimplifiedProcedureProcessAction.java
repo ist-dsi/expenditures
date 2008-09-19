@@ -78,7 +78,7 @@ public class SimplifiedProcedureProcessAction extends ProcessAction {
     private static final Context CONTEXT = new Context("acquisitions");
 
     @Override
-    protected Context getContextModule() {
+    protected Context getContextModule(final HttpServletRequest request) {
 	return CONTEXT;
     }
 

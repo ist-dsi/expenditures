@@ -22,7 +22,7 @@ public abstract class AbstractActivity<T extends GenericProcess> {
     @Service
     public final void execute(T process, Object... args) {
 	checkConditionsFor(process);
-	logExecution(process, getName(), getUser());
+	logExecution(process, getClass().getName(), getUser());
 	process(process, args);
 	notifyUsers(process);
     }

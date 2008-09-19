@@ -9,6 +9,7 @@ import org.apache.struts.action.ActionMapping;
 
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
+import pt.ist.expenditureTrackingSystem.presentationTier.Context;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.BaseAction;
 import pt.ist.fenixWebFramework.struts.annotations.Forward;
 import pt.ist.fenixWebFramework.struts.annotations.Forwards;
@@ -18,17 +19,25 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 @Forwards( { @Forward(name = "view.operation.logs", path = "/acquisitions/operationLog.jsp") })
 public class ViewLogsAction extends BaseAction {
 
+    @Override
+    protected Context getContextModule(final HttpServletRequest request) {
+	final String module = request.getParameter("module");
+	return new Context(module);
+    }
+
     public ActionForward viewOperationLog(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 
-	AcquisitionProcess process = getDomainObject(request, "acquisitionProcessOid");
-	String state = request.getParameter("state");
-	AcquisitionProcessStateType stateType = state != null ? AcquisitionProcessStateType.valueOf(state) : null;
-    
-	if (stateType != null) {
-	    request.setAttribute("operationLogs",process.getOperationLogsInState(stateType));
+	final AcquisitionProcess process = getDomainObject(request, "acquisitionProcessOid");
+	final String state = request.getParameter("state");
+	final AcquisitionProcessStateType stateType = state != null ? AcquisitionProcessStateType.valueOf(state) : null;
+
+	if (stateType == null) {
+	    request.setAttribute("operationLogs", process.getExecutionLogsSet());
+	} else {
+	    request.setAttribute("operationLogs", process.getOperationLogsInState(stateType));
 	}
-	
+
 	request.setAttribute("process", process);
 	return mapping.findForward("view.operation.logs");
     }

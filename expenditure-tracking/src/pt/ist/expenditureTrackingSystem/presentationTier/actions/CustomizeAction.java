@@ -28,7 +28,7 @@ public class CustomizeAction extends BaseAction {
     private static final Context CONTEXT = new Context("options");
 
     @Override
-    protected Context getContextModule() {
+    protected Context getContextModule(final HttpServletRequest request) {
 	return CONTEXT;
     }
 

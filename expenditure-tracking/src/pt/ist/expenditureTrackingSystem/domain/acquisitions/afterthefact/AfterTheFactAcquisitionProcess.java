@@ -3,6 +3,9 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.joda.time.DateTime;
+
+import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.activities.DeleteAfterTheFactAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.activities.EditAfterTheFactAcquisition;
@@ -10,7 +13,9 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.activit
 import pt.ist.expenditureTrackingSystem.domain.dto.AfterTheFactAcquisitionProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
+import pt.ist.expenditureTrackingSystem.domain.processes.GenericLog;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
+import pt.ist.fenixWebFramework.security.UserView;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.pstm.Transaction;
 
@@ -34,6 +39,8 @@ public class AfterTheFactAcquisitionProcess extends AfterTheFactAcquisitionProce
 	    AfterTheFactAcquisitionProcessBean afterTheFactAcquisitionProcessBean) {
 	final AfterTheFactAcquisitionProcess afterTheFactAcquisitionProcess = new AfterTheFactAcquisitionProcess();
 	afterTheFactAcquisitionProcess.edit(afterTheFactAcquisitionProcessBean);
+	final User user = UserView.getUser();
+	new GenericLog(afterTheFactAcquisitionProcess, user.getPerson(), afterTheFactAcquisitionProcess.getClass().getName() + ".Create", new DateTime());
 	return afterTheFactAcquisitionProcess;
     }
 

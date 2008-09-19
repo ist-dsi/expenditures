@@ -29,6 +29,10 @@
 	</logic:empty>
 </div>
 
+<html:link page="/viewLogs.do?method=viewOperationLog&amp;module=acquisitions" paramId="acquisitionProcessOid" paramName="afterTheFactAcquisitionProcess" paramProperty="OID">
+	<bean:message key="label.log.view" bundle="ACQUISITION_RESOURCES"/>
+</html:link>
+
 <div class="infoop2">
 	<fr:view name="afterTheFactAcquisitionProcess" property="acquisitionAfterTheFact.supplier"
 			type="pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AcquisitionAfterTheFact"

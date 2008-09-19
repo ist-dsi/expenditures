@@ -39,5 +39,13 @@
 	<classpathentry kind="lib" path="web/WEB-INF/lib/Tidy.jar"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/xercesImpl.jar"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/casclient.jar"/>
+	<classpathentry kind="lib" path="web/WEB-INF/lib/ant-contrib-1.0b3.jar"/>
+	<classpathentry kind="lib" path="web/WEB-INF/lib/commons-httpclient-3.0.jar"/>
+	<classpathentry kind="lib" path="web/WEB-INF/lib/expenditures-stubs.jar"/>
+	<classpathentry kind="lib" path="web/WEB-INF/lib/jaxb-impl-2.0.1.jar"/>
+	<classpathentry kind="lib" path="web/WEB-INF/lib/jaxb-xjc-2.0.1.jar"/>
+	<classpathentry kind="lib" path="web/WEB-INF/lib/wsdl4j-1.5.2.jar"/>
+	<classpathentry kind="lib" path="web/WEB-INF/lib/xfire-all-1.2.2.jar"/>
+	<classpathentry kind="lib" path="web/WEB-INF/lib/XmlSchema-1.1.jar"/>
 	<classpathentry kind="output" path="web/WEB-INF/classes"/>
 </classpath>

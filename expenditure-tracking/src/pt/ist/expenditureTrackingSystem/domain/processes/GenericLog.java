@@ -9,6 +9,8 @@ public class GenericLog extends GenericLog_Base {
 
     protected GenericLog() {
 	super();
+	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
+	setOjbConcreteClass(getClass().getName());
     }
 
     public GenericLog(GenericProcess process, Person person, String operation, DateTime when) {
@@ -17,7 +19,6 @@ public class GenericLog extends GenericLog_Base {
     }
 
     protected void init(GenericProcess process, Person person, String operation, DateTime when) {
-	super.setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
 	super.setProcess(process);
 	super.setOperation(operation);
 	super.setExecutor(person);

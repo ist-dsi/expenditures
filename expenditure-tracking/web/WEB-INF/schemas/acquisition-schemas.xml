@@ -316,7 +316,7 @@
 		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.OperationLog"
 		bundle="EXPENDITURE_RESOURCES">
 		<slot name="executor.name" key="process.logs.label.personName"/>
-		<slot name="activity.class" key="process.logs.label.operation" layout="label">
+		<slot name="operation" key="process.logs.label.operation" layout="label">
 			<property name="bundle" value="ACQUISITION_RESOURCES"/>
 		</slot>
 		<slot name="whenOperationWasRan" key="process.logs.label.executionDate"/>
@@ -394,6 +394,7 @@
 <schema name="viewAcquisitionAfterTheFact"
 		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AcquisitionAfterTheFact"
 		bundle="EXPENDITURE_RESOURCES">
+	<slot name="acquisitionProcessId" key="label.acquisitionProcessId" bundle="EXPENDITURE_RESOURCES"/>
 	<slot name="afterTheFactAcquisitionType" key="label.afterTheFactAcquisitionType" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 	<slot name="invoiceDate" key="acquisitionProcess.label.invoice.date" bundle="ACQUISITION_RESOURCES" layout="null-as-label">
 		<property name="subLayout" value="default"/>

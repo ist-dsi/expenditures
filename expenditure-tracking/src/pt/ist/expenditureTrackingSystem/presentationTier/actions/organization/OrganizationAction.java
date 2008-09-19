@@ -55,7 +55,7 @@ public class OrganizationAction extends BaseAction {
     private static final Context CONTEXT = new Context("organization");
 
     @Override
-    protected Context getContextModule() {
+    protected Context getContextModule(final HttpServletRequest request) {
 	return CONTEXT;
     }
 

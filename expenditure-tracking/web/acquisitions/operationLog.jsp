@@ -7,13 +7,21 @@
 <h2><bean:message key="process.logs.title.viewLogs" bundle="EXPENDITURE_RESOURCES"/></h2>
 
 <p class="mtop05">
+	<logic:equal name="process" property="class.name" value="pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionProcess">
+		<html:link action="/afterTheFactAcquisitionProcess.do?method=viewAfterTheFactAcquisitionProcess" paramId="acquisitionAfterTheFactOid" paramName="process" paramProperty="acquisitionAfterTheFact.OID">
+			«  <bean:message key="link.back" bundle="EXPENDITURE_RESOURCES"/>
+		</html:link>
+	</logic:equal>
+	<logic:equal name="process" property="class.name" value="pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess">
 		<html:link action="/acquisitionProcess.do?method=viewAcquisitionProcess" paramId="acquisitionProcessOid" paramName="process" paramProperty="OID">
 			«  <bean:message key="link.back" bundle="EXPENDITURE_RESOURCES"/>
 		</html:link>
+	</logic:equal>
 </p>
 
-
-<h4 class="mbottom05"><bean:message key="process.logs.label.forState" bundle="EXPENDITURE_RESOURCES"/> <bean:message key='<%= "AcquisitionProcessStateType." + request.getParameter("state") %>' bundle="ENUMERATION_RESOURCES"/></h4>
+<logic:present name="state">
+	<h4 class="mbottom05"><bean:message key="process.logs.label.forState" bundle="EXPENDITURE_RESOURCES"/> <bean:message key='<%= "AcquisitionProcessStateType." + request.getParameter("state") %>' bundle="ENUMERATION_RESOURCES"/></h4>
+</logic:present>
 
 
 <logic:empty name="operationLogs">

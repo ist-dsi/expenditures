@@ -34,14 +34,14 @@ public abstract class BaseAction extends DispatchAction {
 
     private MessageHandler messageHandler = null;
 
-    protected Context getContextModule() {
+    protected Context getContextModule(final HttpServletRequest request) {
 	return CONTEXT;
     }
 
     @Override
     public ActionForward execute(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) throws Exception {
-	final Context context = getContextModule();
+	final Context context = getContextModule(request);
 	context.setAsActive();
 	messageHandler = new MessageHandler();
 	request.setAttribute(MessageHandler.MESSAGE_HANDLER_NAME, messageHandler);
