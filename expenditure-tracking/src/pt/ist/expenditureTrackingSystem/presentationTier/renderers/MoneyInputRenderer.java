@@ -39,7 +39,7 @@ public class MoneyInputRenderer extends InputRenderer {
 	public Object convert(Class type, Object value) {
 	    String moneyValue = (String) value;
 	    if (!StringUtils.isEmpty(moneyValue)) {
-		return new Money(moneyValue);
+		return new Money(moneyValue.replace(",", "."));
 	    }
 	    return null;
 	}
