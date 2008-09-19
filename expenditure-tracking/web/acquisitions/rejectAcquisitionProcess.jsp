@@ -9,15 +9,8 @@
 
 <bean:define id="acquisitionProcess" name="acquisitionProcess" type="pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess" />
 
-<div class="infoop2">
-	<fr:view name="acquisitionProcess" property="acquisitionRequest"
-			type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest"
-			schema="viewAcquisitionRequest">
-		<fr:layout name="tabular">
-			<fr:property name="classes" value="tstyle1"/>
-		</fr:layout>
-	</fr:view>
-</div>
+<bean:define id="acquisitionProcess" name="acquisitionProcess" toScope="request"/>
+<jsp:include page="viewAcquisitionRequest.jsp" flush="true"/>
 
 <bean:define id="urlView">/acquisitionProcess.do?method=viewAcquisitionProcess&amp;acquisitionProcessOid=<%= acquisitionProcess.getOID() %></bean:define>
 <bean:define id="urlAdd">/acquisitionProcess.do?method=rejectAcquisitionProcess&amp;acquisitionProcessOid=<%= acquisitionProcess.getOID() %></bean:define>

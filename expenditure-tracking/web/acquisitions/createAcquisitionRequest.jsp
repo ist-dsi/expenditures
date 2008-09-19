@@ -7,15 +7,8 @@
 <h2><bean:message key="acquisitionProcess.title.createRequestDocument" bundle="ACQUISITION_RESOURCES"/></h2>
 
 <p class="mtop15"><strong><bean:message key="label.requester" bundle="EXPENDITURE_RESOURCES"/></strong></p>
-<div class="infoop2" style="width: 360px">
-<fr:view name="acquisitionProcess" property="acquisitionRequest.requester"
-		type="pt.ist.expenditureTrackingSystem.domain.organization.Person"
-		schema="viewAcquisitionRequester">
-	<fr:layout name="tabular">
-		<fr:property name="classes" value="tstyle1"/>
-	</fr:layout>
-</fr:view>
-</div>
+<bean:define id="acquisitionProcess" name="acquisitionProcess" toScope="request"/>
+<jsp:include page="viewAcquisitionRequest.jsp" flush="true"/>
 
 <p class="mtop15"><strong><bean:message key="label.supplier" bundle="EXPENDITURE_RESOURCES"/></strong></p>
 <div class="infoop2" style="width: 360px">

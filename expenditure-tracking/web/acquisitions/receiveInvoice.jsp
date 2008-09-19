@@ -6,16 +6,8 @@
 
 <h2><bean:message key="acquisitionProcess.title.invoice.receive" bundle="ACQUISITION_RESOURCES"/></h2>
 
-<div class="infoop2">
-	<fr:view name="acquisitionProcess" property="acquisitionRequest"
-			type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest"
-			schema="viewAcquisitionRequest">
-		<fr:layout name="tabular">
-			<fr:property name="classes" value="tstyle1 thmiddle thlight mtop05"/>
-			<fr:property name="columnClasses" value=",,tdclear tderror1"/>
-		</fr:layout>
-	</fr:view>
-</div>
+<bean:define id="acquisitionProcess" name="acquisitionProcess" toScope="request"/>
+<jsp:include page="viewAcquisitionRequest.jsp" flush="true"/>
 
 
 <p>

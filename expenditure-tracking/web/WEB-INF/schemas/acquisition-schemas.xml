@@ -59,6 +59,34 @@
 	</slot>
 </schema>
 
+<schema name="viewAcquisitionRequest.withRealValues"
+		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest"
+		bundle="ACQUISITION_RESOURCES">
+	<slot name="acquisitionProcessId" key="label.acquisitionProcessId" bundle="EXPENDITURE_RESOURCES"/>
+	<slot name="acquisitionProcess.requestor.name" key="label.requesterName" bundle="EXPENDITURE_RESOURCES"/>
+	<slot name="acquisitionProcess.requestingUnit.presentationName" key="acquisitionProcess.label.requestingUnit" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="acquisitionProcess.acquisitionProcessState.localizedName" key="label.processState" bundle="EXPENDITURE_RESOURCES"/>
+	<slot name="fiscalIdentificationCode" key="supplier.label.fiscalCode" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="realTotalValue" key="acquisitionRequestItem.label.totalValue" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="realTotalVatValue" key="acquisitionRequestItem.label.vat" bundle="ACQUISITION_RESOURCES"/>	
+	<slot name="realTotalAdditionalCostsValue" key="acquisitionRequestItem.label.additionalCosts" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="realTotalValueWithAdditionalCostsAndVat" key="acquisitionRequestItem.label.totalValueWithAdditionalCostsAndVat" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="acquisitionProcess.fundAllocationExpirationDate" key="acquisitionProcess.label.fundAllocation.expirationDate" bundle="ACQUISITION_RESOURCES" layout="null-as-label">
+		<property name="subLayout" value="default"/>
+	</slot>
+	<slot name="invoiceNumber" key="acquisitionProcess.label.invoice.number" bundle="ACQUISITION_RESOURCES" layout="null-as-label">
+		<property name="subLayout" value="default"/>
+	</slot>
+	<slot name="invoiceDate" key="acquisitionProcess.label.invoice.date" bundle="ACQUISITION_RESOURCES" layout="null-as-label">
+		<property name="subLayout" value="default"/>
+	</slot>
+	<slot name="paymentReference" key="acquisitionRequestItem.label.paymentReference" bundle="ACQUISITION_RESOURCES" layout="null-as-label">
+		<property name="subLayout" value="default"/>
+	</slot>
+</schema>
+
+
+
 <schema name="viewPayingUnitWithTotalAmount"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.PayingUnitTotalBean"
 		bundle="ACQUISITION_RESOURCES">

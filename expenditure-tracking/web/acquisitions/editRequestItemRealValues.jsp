@@ -9,15 +9,8 @@
 <bean:define id="processOID" name="itemBean" property="acquisitionRequest.acquisitionProcess.OID"/>
 <bean:define id="itemOID" name="itemBean" property="item.OID"/>
 
-<div class="infoop2">
-	<fr:view name="itemBean" property="acquisitionRequest"
-			type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest"
-			schema="viewAcquisitionRequest">
-		<fr:layout name="tabular">
-			<fr:property name="classes" value="tstyle1"/>
-		</fr:layout>
-	</fr:view>
-</div>
+<bean:define id="acquisitionProcess" name="itemBean" property="acquisitionRequest.acquisitionProcess" toScope="request"/>
+<jsp:include page="viewAcquisitionRequest.jsp" flush="true"/>
 
 
 <div class="dinline forminline">
@@ -27,10 +20,10 @@
 				<tr>
 					<th></th>
 					<th>
-						<strong><bean:message key="acquisitionRequestItem.label.effectiveValue" bundle="ACQUISITION_RESOURCES"/></strong>
+						<strong><bean:message key="acquisitionRequestItem.label.estimatedValue" bundle="ACQUISITION_RESOURCES"/></strong>
 					</th>
 					<th>
-						<strong><bean:message key="acquisitionRequestItem.label.estimatedValue" bundle="ACQUISITION_RESOURCES"/></strong>
+						<strong><bean:message key="acquisitionRequestItem.label.effectiveValue" bundle="ACQUISITION_RESOURCES"/></strong>
 					</th>
 				</tr>
 				<tr>
