@@ -3,8 +3,11 @@ package pt.ist.expenditureTrackingSystem.applicationTier;
 import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import pt.ist.expenditureTrackingSystem.domain.Role;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
@@ -30,38 +33,23 @@ public class Authenticate implements Serializable {
 	randomValue = String.valueOf(random.nextLong());
     }
 
-    private static final Set<String> managerUsernames = new HashSet<String>();
+    private static final Map<RoleType, Set<String>> roleUsernamesMap = new HashMap<RoleType, Set<String>>();
 
-    public static void initManagerRole(final String managerUsernameStrings) {
-	for (final String username : managerUsernameStrings.split(",")) {
-	    managerUsernames.add(username.trim());
+    private static Set<String> getUsernames(final RoleType roleType) {
+	Set<String> usernames = roleUsernamesMap.get(roleType);
+	if (usernames == null) {
+	    usernames = new HashSet<String>();
+	    roleUsernamesMap.put(roleType, usernames);		    
 	}
+	return usernames;
     }
 
-    private static final Set<String> acquisitionCentralUsernames = new HashSet<String>();
-
-    public static void initAcquisitionCentralRole(final String managerUsernameStrings) {
-	for (final String username : managerUsernameStrings.split(",")) {
-	    acquisitionCentralUsernames.add(username.trim());
+    public static synchronized void initRole(final RoleType roleType, final String usernameStrings) {
+	final Set<String> usernames = getUsernames(roleType);
+	for (final String username : usernameStrings.split(",")) {
+	    usernames.add(username.trim());
 	}
     }
-
-    private static final Set<String> acquisitionCentralAdministratorUsernames = new HashSet<String>();
-
-    public static void initAcquisitionCentralAdministratorRole(final String managerUsernameStrings) {
-	for (final String username : managerUsernameStrings.split(",")) {
-	    acquisitionCentralAdministratorUsernames.add(username.trim());
-	}
-    }
-
-    private static final Set<String> accountingUsernames = new HashSet<String>();
-
-    public static void initAccountingRole(final String accountingUsernamesStrings) {
-	for (final String username : accountingUsernamesStrings.split(",")) {
-	    accountingUsernames.add(username.trim());
-	}
-    }
-
 
     public static class User implements pt.ist.fenixWebFramework.security.User, Serializable {
 
@@ -118,24 +106,17 @@ public class Authenticate implements Serializable {
 	final User user = new User(username);
 	UserView.setUser(user);
 
-	if (managerUsernames.contains(username)) {
-	    addRoleType(user, RoleType.MANAGER);
-	}
-	if (acquisitionCentralUsernames.contains(username)) {
-	    addRoleType(user, RoleType.ACQUISITION_CENTRAL);	    
-	}
-	if (acquisitionCentralAdministratorUsernames.contains(username)) {
-	    addRoleType(user, RoleType.ACQUISITION_CENTRAL_MANAGER);	    
-	}
-	if (accountingUsernames.contains(username)) {
-	    addRoleType(user, RoleType.ACCOUNTABILITY);	    
+	final Person person = user.getPerson();
+	for (final Entry<RoleType, Set<String>> entry : roleUsernamesMap.entrySet()) {
+	    if (entry.getValue().contains(username)) {
+		addRoleType(person, entry.getKey());
+	    }
 	}
 
 	return user;
     }
 
-    protected static void addRoleType(final User user, final RoleType roleType) {
-	final Person person = user.getPerson();
+    protected static void addRoleType(final Person person, final RoleType roleType) {
 	if (!person.hasRoleType(roleType)) {
 	    person.addRoles(Role.getRole(roleType));
 	}
