@@ -30,7 +30,7 @@
 	</div>
 </logic:present>
 
-<table class="mvert1 tdtop">
+<table class="mvert1 tdtop" width="100%">
 	<tbody>
 		<tr>
 			<td>
@@ -43,8 +43,8 @@
 					</fr:layout>
 				</fr:view>
 			</td>
-			<td>
-				<html:img src="https://fenix.ist.utl.pt/publico/viewHomepage.do?method=retrieveByUUID&amp;contentContextPath_PATH=/"
+			<td align="right">
+				<html:img src="https://fenix.ist.utl.pt/publico/viewHomepage.do?method=retrieveByUUID&amp;contentContextPath_PATH=/homepage"
 					paramId="uuid" paramName="person" paramProperty="username"
 					align="middle" styleClass="float: right; border: 1px solid #aaa; padding: 3px;" />
 			</td>
