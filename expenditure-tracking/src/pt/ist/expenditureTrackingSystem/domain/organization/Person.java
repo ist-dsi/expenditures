@@ -11,6 +11,8 @@ import pt.ist.expenditureTrackingSystem.domain.Role;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
+import pt.ist.expenditureTrackingSystem.domain.announcements.Announcement;
+import pt.ist.expenditureTrackingSystem.domain.announcements.AnnouncementProcess;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.AuthorizationBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreatePersonBean;
@@ -125,6 +127,14 @@ public class Person extends Person_Base {
 	return processes;
     }
 
+    public List<AnnouncementProcess> getAnnouncementProcesses() {
+	List<AnnouncementProcess> processes = new ArrayList<AnnouncementProcess>();
+	for (Announcement announcement : getAnnouncements()) {
+	    processes.add(announcement.getAnnouncementProcess());
+	}
+	return processes;
+    }
+
     public Set<Authorization> getValidAuthorizations() {
 	final Set<Authorization> res = new HashSet<Authorization>();
 	for (Authorization authorization : getAuthorizationsSet()) {
@@ -134,4 +144,5 @@ public class Person extends Person_Base {
 	}
 	return res;
     }
+
 }

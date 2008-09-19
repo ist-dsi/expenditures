@@ -9,12 +9,13 @@
 
 <fr:edit id="announcementBean"
 		name="announcementBean"
-		type="pt.ist.expenditureTrackingSystem.domain.dto.CreateAnnouncementBean"
+		type="pt.ist.expenditureTrackingSystem.domain.dto.AnnouncementBean"
 		schema="createAnnouncement"
 		action="/announcementProcess.do?method=createNewAnnouncementProcess">
 	<fr:layout name="tabular">
 		<fr:property name="classes" value="form"/>
 		<fr:property name="columnClasses" value=",,tderror"/>
+		<fr:property name="optionalMarkShown" value="true"/>
 	</fr:layout>
 	<fr:destination name="cancel" path="/announcementProcess.do?method=showPendingProcesses"/>
 </fr:edit>

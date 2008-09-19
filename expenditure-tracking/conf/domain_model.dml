@@ -582,8 +582,17 @@ relation ExpenditureTrackingSystemAnnouncement {
 }
 
 relation AnnoucementBuyingUnit {
-	announcements.Announcement playsRole announcement;
 	organization.Unit playsRole buyingUnit;
+	announcements.Announcement playsRole buyAnnouncements {
+		multiplicity *;
+	}
+}
+
+relation AnnoucementRequestingUnit {
+	organization.Unit playsRole requestingUnit;
+	announcements.Announcement playsRole requestAnnouncements {
+		multiplicity *;
+	}
 }
 
 relation AnnouncementSupplier {

@@ -5,18 +5,18 @@
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 <%@ taglib uri="/WEB-INF/messages.tld" prefix="messages" %>
 
-<!-- public/viewAnnouncement.jsp -->
+<!-- announcement/viewAnnouncement.jsp -->
 
-
-<h2><bean:message key="process.announcement.title.detail" bundle="EXPENDITURE_RESOURCES"/></h2>
+<div class="wrapper">
 
 <jsp:include page="../commons/defaultErrorDisplay.jsp"/>
 
 <div class="infoop2">
-<fr:view name="announcement" schema="viewAnnouncementDetails.public">
-	<fr:layout name="tabular">
-		<fr:property name="classes" value="tstyle1"/>
-	</fr:layout>
-</fr:view>
+	<fr:view name="announcementProcess" schema="viewAnnouncementDetails" property="announcement">
+		<fr:layout name="tabular">
+			<fr:property name="classes" value="tstyle1"/>
+		</fr:layout>
+	</fr:view>
 </div>
 
+</div>

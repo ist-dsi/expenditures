@@ -2,18 +2,19 @@ package pt.ist.expenditureTrackingSystem.domain.announcements;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessState;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.announcement.AnnouncementProcessState;
-import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean;
-import pt.ist.expenditureTrackingSystem.domain.dto.CreateAnnouncementBean;
+import pt.ist.expenditureTrackingSystem.domain.announcements.activities.ApproveAnnouncementProcess;
+import pt.ist.expenditureTrackingSystem.domain.announcements.activities.CancelAnnouncementProcess;
+import pt.ist.expenditureTrackingSystem.domain.announcements.activities.CloseAnnouncementProcess;
+import pt.ist.expenditureTrackingSystem.domain.announcements.activities.EditAnnouncementForApproval;
+import pt.ist.expenditureTrackingSystem.domain.announcements.activities.RejectAnnouncementProcess;
+import pt.ist.expenditureTrackingSystem.domain.announcements.activities.SubmitAnnouncementForApproval;
+import pt.ist.expenditureTrackingSystem.domain.dto.AnnouncementBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
@@ -24,12 +25,12 @@ public class AnnouncementProcess extends AnnouncementProcess_Base {
     private static ArrayList<AbstractActivity> activities = new ArrayList<AbstractActivity>();
 
     static {
-	// activities.add(new CreateAnnouncement());
-	// activities.add(new EditAnnouncement());
-	// activities.add(new SubmitForApproval());
-	// activities.add(new ApproveAnnouncement());
-	// activities.add(new RejectAnnouncement());
-	// activities.add(new CloseAnnouncement());
+	activities.add(new EditAnnouncementForApproval());
+	activities.add(new SubmitAnnouncementForApproval());
+	activities.add(new ApproveAnnouncementProcess());
+	activities.add(new RejectAnnouncementProcess());
+	activities.add(new CancelAnnouncementProcess());
+	activities.add(new CloseAnnouncementProcess());
     }
 
     @Override
@@ -44,18 +45,18 @@ public class AnnouncementProcess extends AnnouncementProcess_Base {
     }
 
     public boolean isProcessInState(AnnouncementProcessStateType state) {
-	return getLastAnnouncementProcessStateType().equals(state);
+	return getAnnouncementProcessStateType().equals(state);
     }
 
-    public AnnouncementProcessStateType getAnnouncementProcessStateType() {
-	return getLastAnnouncementProcessStateType();
+    public AnnouncementProcessStateType getAnnouncementProcessState() {
+	return getAnnouncementProcessStateType();
     }
 
     protected AnnouncementProcessState getLastAnnouncementProcessState() {
 	return (AnnouncementProcessState) Collections.max(getProcessStates(), ProcessState.COMPARATOR_BY_WHEN);
     }
 
-    protected AnnouncementProcessStateType getLastAnnouncementProcessStateType() {
+    public AnnouncementProcessStateType getAnnouncementProcessStateType() {
 	return getLastAnnouncementProcessState().getAnnouncementProcessStateType();
     }
 
@@ -67,25 +68,38 @@ public class AnnouncementProcess extends AnnouncementProcess_Base {
 	}
 	return false;
     }
-    
 
-    // TODO remove this when using activity for creating announcement
     @Service
-    public static AnnouncementProcess createNewAnnouncementProcess(Person publisher, CreateAnnouncementBean announcementBean) {
+    public static AnnouncementProcess createNewAnnouncementProcess(Person publisher, AnnouncementBean announcementBean) {
 	if (!isCreateNewProcessAvailable()) {
 	    throw new DomainException("announcementProcess.message.exception.invalidStateToRun.create");
 	}
-	
+
 	announcementBean.setBuyingUnit(ExpenditureTrackingSystem.getInstance().getTopLevelUnitsSet().iterator().next());
 	return new AnnouncementProcess(publisher, announcementBean);
     }
-    
-    private AnnouncementProcess(final Person publisher, CreateAnnouncementBean announcementBean) {
+
+    private AnnouncementProcess(final Person publisher, AnnouncementBean announcementBean) {
 	super();
 	new AnnouncementProcessState(this, AnnouncementProcessStateType.IN_GENESIS);
 	new Announcement(this, publisher, announcementBean);
     }
 
+    public List<AbstractActivity> getActiveActivities() {
+	List<AbstractActivity> activitiesResult = new ArrayList<AbstractActivity>();
+	for (AbstractActivity activity : activities) {
+	    if (activity.isActive(this)) {
+		activitiesResult.add(activity);
+	    }
+	}
+	return activitiesResult;
+    }
 
+    public String getRejectionJustification() {
+	if (getLastAnnouncementProcessState().getAnnouncementProcessStateType().equals(AnnouncementProcessStateType.REJECTED)) {
+	    return getLastAnnouncementProcessState().getJustification();
+	}
+	return null;
+    }
 
 }

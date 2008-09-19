@@ -13,6 +13,8 @@ import org.apache.struts.action.ActionMapping;
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
+import pt.ist.expenditureTrackingSystem.domain.announcements.Announcement;
+import pt.ist.expenditureTrackingSystem.domain.announcements.AnnouncementProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.requests.RequestForProposalProcess;
 import pt.ist.fenixWebFramework.security.UserView;
@@ -66,7 +68,13 @@ public class HomeAction extends BaseAction {
     public final ActionForward showAcquisitionAnnouncements(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
 
-	request.setAttribute("announcements", ExpenditureTrackingSystem.getInstance().getAnnouncements());
+	ArrayList<Announcement> approvedList = new ArrayList<Announcement>();
+	for (Announcement announcement : ExpenditureTrackingSystem.getInstance().getAnnouncements()) {
+	    if (announcement.getAnnouncementProcess().isProcessInState(AnnouncementProcessStateType.APPROVED)) {
+		approvedList.add(announcement);
+	    }
+	}
+	request.setAttribute("announcements", approvedList);
 	return mapping.findForward("view.announcements");
     }
 

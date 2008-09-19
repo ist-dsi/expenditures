@@ -24,6 +24,12 @@ public class AnnouncementProcessState extends AnnouncementProcessState_Base {
 	setAnnouncementProcessStateType(processStateType);
     }
 
+    public AnnouncementProcessState(final AnnouncementProcess process,
+	    final AnnouncementProcessStateType processStateType, String justification) {
+	this(process, processStateType);
+	setJustification(justification);
+    }
+
     protected Person getPerson() {
 	final User user = UserView.getUser();
 	final Person person = user.getPerson();

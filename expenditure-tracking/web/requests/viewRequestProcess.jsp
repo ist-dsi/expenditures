@@ -6,9 +6,6 @@
 <%@ taglib uri="/WEB-INF/messages.tld" prefix="messages" %>
 
 <!-- requests/viewRequestProcess.jsp -->
-requests/viewRequestProcess.jsp
-
-<%@page import="pt.ist.fenixWebFramework.servlets.filters.SetUserViewFilter"%>
 
 <bean:define id="currentState" name="requestForProposalProcess" property="requestForProposalProcessStateType"/>
 

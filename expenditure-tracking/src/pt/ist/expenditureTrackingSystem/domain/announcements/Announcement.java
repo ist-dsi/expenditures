@@ -1,11 +1,10 @@
 package pt.ist.expenditureTrackingSystem.domain.announcements;
 
-import org.joda.time.DateTime;
+import org.apache.commons.lang.StringUtils;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.dto.CreateAnnouncementBean;
+import pt.ist.expenditureTrackingSystem.domain.dto.AnnouncementBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
 public class Announcement extends Announcement_Base {
@@ -15,31 +14,66 @@ public class Announcement extends Announcement_Base {
 	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
     }
 
-    public Announcement(AnnouncementProcess announcementProcess, Person publisher, CreateAnnouncementBean announcementBean) {
+    public Announcement(AnnouncementProcess announcementProcess, Person publisher, AnnouncementBean announcementBean) {
 	this();
 	checkArguments(announcementProcess, publisher);
 	setAnnouncementProcess(announcementProcess);
 	setPublisher(publisher);
-	setCreationDate(new DateTime());
 	edit(announcementBean);
     }
 
-    // TODO finish when creating process
     private void checkArguments(AnnouncementProcess announcementProcess, Person publisher) {
 	if (announcementProcess == null || publisher == null) {
 	    throw new DomainException("error.wrong.Announcement.arguments");
 	}
     }
 
-    private void edit(CreateAnnouncementBean b) {
-	setDescription(b.getDescription());
-	setTotalPrice(b.getTotalPrice());
-	setExecutionDays(b.getExecutionDays());
-	setExecutionAddress(b.getExecutionAddress());
-	setChoiceCriteria(b.getChoiceCriteria());
-	setBuyingUnit(b.getBuyingUnit());
-	setSupplier(b.getSupplier());
-	setAcquisition(b.getAcqusition());
+    public void edit(AnnouncementBean announcementBean) {
+	checkArguments(announcementBean);
+	setDescription(announcementBean.getDescription());
+	setTotalPrice(announcementBean.getTotalPrice());
+	setExecutionDays(announcementBean.getExecutionDays());
+	setExecutionAddress(announcementBean.getExecutionAddress());
+	setChoiceCriteria(announcementBean.getChoiceCriteria());
+	setSupplier(announcementBean.getSupplier());
+	setAcquisition(announcementBean.getAcqusition());
+	setRequestingUnit(announcementBean.getRequestingUnit());
+	if (announcementBean.getBuyingUnit() != null) {
+	    setBuyingUnit(announcementBean.getBuyingUnit());
+	}
+    }
+
+    private void checkArguments(AnnouncementBean bean) {
+	if (StringUtils.isEmpty(bean.getDescription())) {
+	    throw new DomainException("error.wrong.Announcement.arguments.description");
+	}
+	if (bean.getTotalPrice() == null) {
+	    throw new DomainException("error.wrong.Announcement.arguments.description.totalPrice");
+	}
+	if (bean.getExecutionDays() == null) {
+	    throw new DomainException("error.wrong.Announcement.arguments.description.executionDays");
+	}
+	if (StringUtils.isEmpty(bean.getExecutionAddress())) {
+	    throw new DomainException("error.wrong.Announcement.arguments.executionAddress");
+	}
+	if (bean.getBuyingUnit() == null) {
+	    throw new DomainException("error.wrong.Announcement.arguments.buyingUnit");
+	}
+	if (bean.getSupplier() == null) {
+	    throw new DomainException("error.wrong.Announcement.arguments.supplier");
+	}
+    }
+
+    public boolean isFilled() {
+	return hasBuyingUnit() && hasSupplier() && !StringUtils.isEmpty(getDescription()) && getTotalPrice() != null
+		&& getExecutionDays() != null && !StringUtils.isEmpty(getExecutionAddress());
+    }
+    
+    public String getRequestingUnitName() {
+	if (hasRequestingUnit()) {
+	    return getRequestingUnit().getName();
+	}
+	return null;
     }
 
 }
