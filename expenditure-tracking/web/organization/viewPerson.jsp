@@ -17,12 +17,12 @@
 			<logic:present role="MANAGER">
 				<li>
 					<html:link action="/organization.do?method=editPerson" paramId="personOid" paramName="person" paramProperty="OID">
-						<bean:message key="link.edit" bundle="EXPENDITURE_RESOURCES"/>
+						<bean:message key="user.link.editUser" bundle="ORGANIZATION_RESOURCES"/>
 					</html:link>
 				</li>
 				<li>
 					<html:link action="/organization.do?method=deletePerson" paramId="personOid" paramName="person" paramProperty="OID">
-						<bean:message key="link.delete" bundle="EXPENDITURE_RESOURCES"/>
+						<bean:message key="user.link.removeUser" bundle="ORGANIZATION_RESOURCES"/>
 					</html:link>
 				</li>
 			</logic:present>
@@ -30,31 +30,32 @@
 	</div>
 </logic:present>
 
-<table class="mvert1 tdtop" width="100%">
-	<tbody>
+
+<div class="infoop2">
+	<table style="width: 100%;">
 		<tr>
-			<td>
+			<td style="vertical-align: top;">
 				<fr:view name="person"
 						type="pt.ist.expenditureTrackingSystem.domain.organization.Person"
 						schema="viewPerson">
 					<fr:layout name="tabular">
-						<fr:property name="classes" value="form"/>
+						<fr:property name="classes" value="tstyle1"/>
 						<fr:property name="columnClasses" value=",,tderror"/>
 					</fr:layout>
 				</fr:view>
 			</td>
-			<td align="right">
+			<td style="texta-align: right;">
 				<html:img src="https://fenix.ist.utl.pt/publico/viewHomepage.do?method=retrieveByUUID&amp;contentContextPath_PATH=/homepage"
 					paramId="uuid" paramName="person" paramProperty="username"
 					align="middle" styleClass="float: right; border: 1px solid #aaa; padding: 3px;" />
 			</td>
 		</tr>
-	</tbody>
-</table>
+	</table>
+</div>
 
 <logic:present role="MANAGER">
 	<logic:iterate id="role" name="availableRoles">
-		<p>
+		<p class="mvert05">
 			<span>
 				<fr:view name="role"/>: 
 				<html:link action='<%= "/organization.do?method=addRole&role=" + role %>' paramId="personOid" paramName="person" paramProperty="OID">
@@ -68,14 +69,14 @@
 		</p>
 	</logic:iterate>
 </logic:present>
-<br/>
-<h3>Unidades do qual é responsável</h3>
+
+
+<h3 class="mtop2 mbottom05">Unidades do qual é responsável</h3>
 <bean:define id="authorizations" name="person" property="authorizations"/>
 <logic:notEmpty name="authorizations">
 	<fr:view name="authorizations"
 			schema="viewAuthorizations">
 		<fr:layout name="tabular">
-			<fr:property name="classes" value="tstyle1"/>
 			<fr:property name="classes" value="tstyle2"/>
 			<fr:property name="columnClasses" value="aleft,,,,aright,"/>
 

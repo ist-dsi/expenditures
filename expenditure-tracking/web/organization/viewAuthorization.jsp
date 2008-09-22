@@ -33,28 +33,28 @@
 		<logic:present role="MANAGER">
 			<li>
 				<html:link action="/organization.do?method=editAuthorization" paramId="authorizationOid" paramName="authorization" paramProperty="OID">
-					<bean:message key="link.edit" bundle="EXPENDITURE_RESOURCES"/>
+					<bean:message key="authorizations.link.edit" bundle="EXPENDITURE_RESOURCES"/>
 				</html:link>
 			</li>
 			<li>
 				<html:link action="/organization.do?method=deleteAuthorization" paramId="authorizationOid" paramName="authorization" paramProperty="OID">
-					<bean:message key="link.delete" bundle="EXPENDITURE_RESOURCES"/>
+					<bean:message key="authorizations.link.remove" bundle="EXPENDITURE_RESOURCES"/>
 				</html:link>
 			</li>
 		</logic:present>
 	</ul>
 </div>
 
-<fr:view name="authorization" schema="viewAuthorization">
-	<fr:layout name="tabular">
-		<fr:property name="classes" value="form"/>
-		<fr:property name="columnClasses" value=",,tderror"/>
-	</fr:layout>
-</fr:view>
-<br/>
-<br/>
+<div class="infoop2">
+	<fr:view name="authorization" schema="viewAuthorization">
+		<fr:layout name="tabular">
+			<fr:property name="classes" value="tstyle1"/>
+			<fr:property name="columnClasses" value=",,tderror"/>
+		</fr:layout>
+	</fr:view>
+</div>
 
-<strong><bean:message key="authorizations.label.delegationList" bundle="EXPENDITURE_RESOURCES"/></strong>:
+<p class="mtop15 mbottom05"><strong><bean:message key="authorizations.label.delegationList" bundle="EXPENDITURE_RESOURCES"/></strong></p>
 <logic:notEmpty name="authorization" property="delegatedAuthorizations">
 	<fr:view name="authorization" property="delegatedAuthorizations" schema="viewDelegatedAuthorizations">
 		<fr:layout name="tabular">
@@ -68,8 +68,9 @@
 		</fr:layout>
 	</fr:view>
 </logic:notEmpty>
+
 <logic:empty name="authorization" property="delegatedAuthorizations">
-	<p> 
-		<em><bean:message key="authorizations.message.info.noDelegations" bundle="EXPENDITURE_RESOURCES"/></em>
+	<p class="mvert05"> 
+		<em><bean:message key="authorizations.message.info.noDelegations" bundle="EXPENDITURE_RESOURCES"/>.</em>
 	</p>
 </logic:empty>

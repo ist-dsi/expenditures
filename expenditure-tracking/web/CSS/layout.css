@@ -231,9 +231,9 @@ line-height: 1.6em;
 color: #555;
 background: #fff;
 padding: 0 15px;
-border-left: 1px solid #eee;
-border-right: 1px solid #eee;
-border-bottom: 1px solid #eee;
+border-left: 2px solid #eee;
+border-right: 2px solid #eee;
+border-bottom: 2px solid #eee;
 position: relative;
 }
 
@@ -687,17 +687,11 @@ width: 130px;
 float: right;
 }
 div.box {
-border: 1px solid #aaa;
+border: 2px solid #ddd;
 background: #fafafa;
 padding: 5px 5px;
 text-align: center;
 overflow: hidden;
-}
-div.box {
-border: 1px solid #ddd;
-background: #fafafa;
-padding: 5px 5px;
-text-align: center;
 }
 div.arrow {
 background: url(arrow01.gif) bottom center no-repeat;

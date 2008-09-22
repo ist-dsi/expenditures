@@ -5,7 +5,7 @@
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
 <h2><bean:message key="search.label.users" bundle="EXPENDITURE_RESOURCES"/></h2>
-<br/>
+
 <fr:edit id="searchUsers"
 		name="searchUsers"
 		type="pt.ist.expenditureTrackingSystem.domain.organization.SearchUsers"
@@ -15,13 +15,15 @@
 		<fr:property name="columnClasses" value=",,tderror"/>
 	</fr:layout>
 </fr:edit>
+
 <logic:present role="MANAGER">
-	<br/>
-	<html:link action="/organization.do?method=prepareCreatePerson">
-		<bean:message key="person.link.create" bundle="ORGANIZATION_RESOURCES"/>
-	</html:link>
+	<p class="mtop15">
+		<html:link action="/organization.do?method=prepareCreatePerson">
+			<bean:message key="person.link.create" bundle="ORGANIZATION_RESOURCES"/>
+		</html:link>
+	</p>
 </logic:present>
-<br/>
+
 <bean:define id="people" name="searchUsers" property="result"/>
 <fr:view name="people"
 		schema="viewPeopleInList">

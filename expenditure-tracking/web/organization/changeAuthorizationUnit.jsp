@@ -5,15 +5,17 @@
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
 <h2><bean:message key="authorizations.title.grant" bundle="ORGANIZATION_RESOURCES"/></h2>
-<br />
-<fr:view name="person"
-		type="pt.ist.expenditureTrackingSystem.domain.organization.Person"
-		schema="viewPerson">
-	<fr:layout name="tabular">
-		<fr:property name="classes" value="form"/>
-		<fr:property name="columnClasses" value=",,tderror"/>
-	</fr:layout>
-</fr:view>
+
+<div class="infoop2">
+	<fr:view name="person"
+			type="pt.ist.expenditureTrackingSystem.domain.organization.Person"
+			schema="viewPerson">
+		<fr:layout name="tabular">
+			<fr:property name="classes" value="tstyle1"/>
+		</fr:layout>
+	</fr:view>
+</div>
+
 <bean:define id="urlExpand" type="java.lang.String">/organization.do?method=expandAuthorizationUnit&amp;personOid=<bean:write name="person" property="OID"/></bean:define>
 <fr:edit id="unitBean"
 		name="unitBean"
@@ -25,12 +27,16 @@
 		<fr:property name="columnClasses" value=",,tderror"/>
 	</fr:layout>
 </fr:edit>
-<br/>
+
+
 <bean:define id="urlSelect" type="java.lang.String">/organization.do?method=prepareCreateAuthorizationUnit&amp;personOid=<bean:write name="person" property="OID"/></bean:define>
-<html:link action="<%= urlExpand %>">
-	<bean:message key="link.top" bundle="EXPENDITURE_RESOURCES"/>
-</html:link>
-<br/>
+<p>
+	<html:link action="<%= urlExpand %>">
+		<bean:message key="link.top" bundle="EXPENDITURE_RESOURCES"/>
+	</html:link>
+</p>
+
+
 <logic:present name="unit">
 	<logic:present name="unit" property="parentUnit">
 		<bean:write name="unit" property="parentUnit.name"/>

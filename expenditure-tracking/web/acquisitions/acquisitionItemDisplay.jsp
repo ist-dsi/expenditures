@@ -16,7 +16,7 @@
 		
 		<tr>
 			<th><bean:message key="acquisitionRequestItem.label.quantity" bundle="ACQUISITION_RESOURCES"/>:</th>
-			<td><fr:view name="acquisitionRequestItem" property="quantity"/></td>
+			<td class="nowrap"><fr:view name="acquisitionRequestItem" property="quantity"/></td>
 			<th style="padding-left: 1em;"><bean:message key="acquisitionRequestItem.label.realQuantity" bundle="ACQUISITION_RESOURCES"/>:</th>
 			<td><fr:view name="acquisitionRequestItem" property="realQuantity" type="java.lang.Integer">
 						<fr:layout name="null-as-label">
@@ -28,9 +28,9 @@
 		
 		<tr>
 			<th><bean:message key="acquisitionRequestItem.label.unitValue" bundle="ACQUISITION_RESOURCES"/>:</th>
-			<td><fr:view name="acquisitionRequestItem" property="unitValue"/></td>
+			<td class="nowrap"><fr:view name="acquisitionRequestItem" property="unitValue"/></td>
 			<th style="padding-left: 1em;"><bean:message key="acquisitionRequestItem.label.realUnitValue" bundle="ACQUISITION_RESOURCES"/>:</th>
-			<td>
+			<td class="nowrap">
 				<fr:view name="acquisitionRequestItem" property="realUnitValue" type="pt.ist.expenditureTrackingSystem.domain.util.Money">
 					<fr:layout name="null-as-label">
 						<fr:property name="subLayout" value="default"/>
@@ -41,9 +41,9 @@
 		
 		<tr>
 			<th><bean:message key="acquisitionRequestItem.label.totalValue" bundle="ACQUISITION_RESOURCES"/>:</th>
-			<td><span><fr:view name="acquisitionRequestItem" property="totalItemValue"/></span></td>
+			<td class="nowrap"><span><fr:view name="acquisitionRequestItem" property="totalItemValue"/></span></td>
 			<th style="padding-left: 1em;"><bean:message key="acquisitionRequestItem.label.totalRealValue" bundle="ACQUISITION_RESOURCES"/>:</th>
-			<td>
+			<td class="nowrap">
 				<span>
 					<fr:view name="acquisitionRequestItem" property="totalRealValue" type="pt.ist.expenditureTrackingSystem.domain.util.Money">
 						<fr:layout name="null-as-label">
@@ -56,9 +56,9 @@
 
 		<tr>
 			<th><bean:message key="acquisitionRequestItem.label.vatValue" bundle="ACQUISITION_RESOURCES"/></th>
-			<td><fr:view name="acquisitionRequestItem" property="vatValue"/></td>
+			<td class="nowrap"><fr:view name="acquisitionRequestItem" property="vatValue"/></td>
 			<th style="padding-left: 1em;"><bean:message key="acquisitionRequestItem.label.realVatValue" bundle="ACQUISITION_RESOURCES"/>:</th>
-			<td>
+			<td class="nowrap">
 				<fr:view name="acquisitionRequestItem" property="realVatValue" type="java.lang.String">
 					<fr:layout name="null-as-label">
 						<fr:property name="subLayout" value="default"/>
@@ -69,9 +69,9 @@
 
 		<tr>
 			<th><bean:message key="acquisitionRequestItem.label.vat" bundle="ACQUISITION_RESOURCES"/></th>
-			<td><fr:view name="acquisitionRequestItem" property="totalVatValue"/></td>
+			<td class="nowrap"><fr:view name="acquisitionRequestItem" property="totalVatValue"/></td>
 			<th style="padding-left: 1em;"><bean:message key="acquisitionRequestItem.label.realVat" bundle="ACQUISITION_RESOURCES"/>:</th>
-			<td>
+			<td class="nowrap">
 				<fr:view name="acquisitionRequestItem" property="totalRealVatValue" type="pt.ist.expenditureTrackingSystem.domain.util.Money">
 					<fr:layout name="null-as-label">
 						<fr:property name="subLayout" value="default"/>
@@ -82,7 +82,7 @@
 		
 		<tr>
 			<th><bean:message key="acquisitionRequestItem.label.additionalCostValue" bundle="ACQUISITION_RESOURCES"/>:</th>
-			<td>
+			<td class="nowrap">
 				<fr:view name="acquisitionRequestItem" property="additionalCostValue" type="pt.ist.expenditureTrackingSystem.domain.util.Money">
 					<fr:layout name="null-as-label">
 						<fr:property name="subLayout" value="default"/>
@@ -90,7 +90,7 @@
 				</fr:view>
 			</td>
 			<th style="padding-left: 1em;"><bean:message key="acquisitionRequestItem.label.realAdditionalCostValue" bundle="ACQUISITION_RESOURCES"/>:</th>
-			<td>
+			<td class="nowrap">
 				<fr:view name="acquisitionRequestItem" property="realAdditionalCostValue" type="pt.ist.expenditureTrackingSystem.domain.util.Money">
 					<fr:layout name="null-as-label">
 						<fr:property name="subLayout" value="default"/>
@@ -101,9 +101,9 @@
 		
 		<tr>
 			<th><bean:message key="acquisitionRequestItem.label.totalValueWithAdditionalCostsAndVat" bundle="ACQUISITION_RESOURCES"/>:</th>
-			<td><span><fr:view name="acquisitionRequestItem" property="totalItemValueWithAdditionalCostsAndVat"/></span></td>
+			<td class="nowrap"><span><fr:view name="acquisitionRequestItem" property="totalItemValueWithAdditionalCostsAndVat"/></span></td>
 			<th style="padding-left: 1em;"><bean:message key="acquisitionRequestItem.label.totalRealValueWithAdditionalCostsAndVat" bundle="ACQUISITION_RESOURCES"/>:</th>
-			<td>
+			<td class="nowrap">
 				<span>
 					<fr:view name="acquisitionRequestItem" property="totalRealValueWithAdditionalCostsAndVat" type="pt.ist.expenditureTrackingSystem.domain.util.Money">
 						<fr:layout name="null-as-label">

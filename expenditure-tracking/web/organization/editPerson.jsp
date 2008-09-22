@@ -5,7 +5,7 @@
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
 <h2><bean:message key="person.label.edit" bundle="ORGANIZATION_RESOURCES"/></h2>
-<br />
+
 <bean:define id="url">/organization.do?method=viewPerson&amp;personOid=<bean:write name="person" property="OID"/></bean:define>
 <fr:edit id="person"
 		name="person"
@@ -13,5 +13,7 @@
 		schema="editPerson"
 		action="<%= url %>">
 	<fr:layout name="tabular">
+		<fr:property name="classes" value="form"/>
+		<fr:property name="columnClasses" value=",,tderror"/>
 	</fr:layout>
 </fr:edit>

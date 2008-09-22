@@ -11,12 +11,12 @@
 	<bean:define id="schemaForRequest" value="viewAcquisitionRequest.withRealValues" toScope="request"/>	
 </logic:equal>
 	
-	<div class="infoop2">
-		<fr:view name="acquisitionProcess" property="acquisitionRequest"
-				type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest"
-				schema="<%= schemaForRequest %>">
-			<fr:layout name="tabular">
-				<fr:property name="classes" value="tstyle1"/>
-			</fr:layout>
-		</fr:view>
-	</div>
+<div class="infoop2">
+	<fr:view name="acquisitionProcess" property="acquisitionRequest"
+			type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest"
+			schema="<%= schemaForRequest %>">
+		<fr:layout name="tabular">
+			<fr:property name="classes" value="tstyle1"/>
+		</fr:layout>
+	</fr:view>
+</div>

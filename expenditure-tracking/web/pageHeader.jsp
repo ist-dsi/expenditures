@@ -34,6 +34,7 @@
 		<% } else { %>
 			<html:link action="/authenticationAction.do?method=logout"><bean:message key="login.label.logout" bundle="EXPENDITURE_RESOURCES"/></html:link>
 		<% } %>
+		| <a href="https://193.136.132.88/Qualidade/Aquisicoes" target="_blank"><bean:message key="link.help" bundle="EXPENDITURE_RESOURCES"/></a>
 	</div>
 </logic:present>
 
