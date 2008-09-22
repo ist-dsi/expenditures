@@ -6,7 +6,6 @@
 
 <h2><bean:message key="title.viewOrganization" bundle="EXPENDITURE_RESOURCES"/></h2>
 
-<br/>
 <fr:edit id="unitBean"
 		name="unitBean"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.UnitBean"
@@ -17,45 +16,51 @@
 	</fr:layout>
 </fr:edit>
 
+
 <logic:present role="MANAGER">
-	<br />
 	<logic:notPresent name="unit">
-		<html:link action="/organization.do?method=prepareCreateUnit">
-			<bean:message key="unit.link.create" bundle="ORGANIZATION_RESOURCES"/>
-		</html:link>
+		<p>
+			<html:link action="/organization.do?method=prepareCreateUnit">
+				<bean:message key="unit.link.create" bundle="ORGANIZATION_RESOURCES"/>
+			</html:link>
+		</p>
 	</logic:notPresent>
 	<logic:present name="unit">
-		<html:link action="/organization.do?method=prepareCreateUnit" paramId="unitOid" paramName="unit" paramProperty="OID">
-			<bean:message key="unit.link.create" bundle="ORGANIZATION_RESOURCES"/>
-		</html:link>
+		<p>
+			<html:link action="/organization.do?method=prepareCreateUnit" paramId="unitOid" paramName="unit" paramProperty="OID">
+				<bean:message key="unit.link.create" bundle="ORGANIZATION_RESOURCES"/>
+			</html:link>
+		</p>
 	</logic:present>
 </logic:present>
 
-<br/>
-<br/>
+
 <logic:present name="unit">
-	<fr:view name="unit" schema="unit">
-		<fr:layout name="tabular">
-			<fr:property name="classes" value="tstyle2"/>
-			<fr:property name="columnClasses" value="aleft,,,,aright,"/>
-		</fr:layout>
-	</fr:view>
+	<div class="infoop2">
+		<fr:view name="unit" schema="unit">
+			<fr:layout name="tabular">
+				<fr:property name="classes" value="tstyle1"/>
+				<fr:property name="columnClasses" value="aleft,,,,aright,"/>
+			</fr:layout>
+		</fr:view>
+	</div>
+	
 	<logic:present role="MANAGER">
-		<html:link action="/organization.do?method=editUnit" paramId="unitOid" paramName="unit" paramProperty="OID">
-			<bean:message key="link.edit" bundle="EXPENDITURE_RESOURCES"/>
-		</html:link>
-		<html:link action="/organization.do?method=deleteUnit" paramId="unitOid" paramName="unit" paramProperty="OID">
-			<bean:message key="link.delete" bundle="EXPENDITURE_RESOURCES"/>
-		</html:link>
-		<br/>
-		<br/>
+		<p class="mtop05">
+			<html:link action="/organization.do?method=editUnit" paramId="unitOid" paramName="unit" paramProperty="OID">
+				<bean:message key="link.edit" bundle="EXPENDITURE_RESOURCES"/>
+			</html:link> | 
+			<html:link action="/organization.do?method=deleteUnit" paramId="unitOid" paramName="unit" paramProperty="OID">
+				<bean:message key="link.delete" bundle="EXPENDITURE_RESOURCES"/>
+			</html:link>
+		</p>
 	</logic:present>
 
 	<logic:notEmpty name="unit" property="authorizations">
-		<h3><bean:message key="authorizations.label.responsibles" bundle="EXPENDITURE_RESOURCES"/>:</h3>
+		<h3 class="mtop15 mbottom05"><bean:message key="authorizations.label.responsibles" bundle="EXPENDITURE_RESOURCES"/></h3>
 		<fr:view name="unit" property="authorizations" schema="viewAuthorization">
 			<fr:layout name="tabular">
-				<fr:property name="classes" value="tstyle2"/>
+				<fr:property name="classes" value="tstyle2 mtop05"/>
 			</fr:layout>
 		</fr:view>	
 	</logic:notEmpty>	
@@ -64,27 +69,24 @@
 	</logic:empty>
 
 	<logic:present name="unit" property="parentUnit">
-		<br/>
-		<h3>Unidade Superior: </h3>
+		<h3 class="mtop15 mbottom05">Unidade Superior</h3>
 		<bean:define id="unitToDisplay" toScope="request" name="unit" property="parentUnit"/>
 		<jsp:include page="unitLine.jsp" flush="false"/>
 	</logic:present>
-
 </logic:present>
+
 
 <logic:present name="units">
 	<logic:notEmpty name="units">
 		<logic:present name="unit">
-			<br/>
-			<h3>SubUnidades</h3>
+			<h3 class="mtop15 mbottom05">SubUnidades</h3>
 		</logic:present>
 		<fr:view name="units"
 				schema="unitList">
 			<fr:layout name="tabular">
-				<fr:property name="classes" value="tstyle2"/>
+				<fr:property name="classes" value="tstyle2 mtop05"/>
 				<fr:property name="columnClasses" value="aleft,,,,aright,"/>
 				<fr:property name="sortBy" value="name=asc"/>
-
 				<fr:property name="link(view)" value="/organization.do?method=viewOrganization"/>
 				<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
 				<fr:property name="key(view)" value="link.view"/>

@@ -5,13 +5,15 @@
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
 <h2><bean:message key="unit.label.create" bundle="ORGANIZATION_RESOURCES"/></h2>
-<br />
+
 <fr:edit id="bean"
 		name="bean"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.CreateUnitBean"
 		schema="createUnit"
 		action="/organization.do?method=createNewUnit">
 	<fr:layout name="tabular">
+		<fr:property name="classes" value="form"/>
+		<fr:property name="columnClasses" value=",,tderror"/>
 	</fr:layout>
 	<fr:destination name="cancel" path="/organization.do?method=viewOrganization" />
 </fr:edit>

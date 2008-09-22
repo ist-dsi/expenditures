@@ -5,7 +5,7 @@
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
 <h2><bean:message key="unit.link.edit" bundle="ORGANIZATION_RESOURCES"/></h2>
-<br />
+
 <bean:define id="unit"
 		name="unit"
 		type="pt.ist.expenditureTrackingSystem.domain.organization.Unit"
@@ -17,5 +17,7 @@
 		schema="editUnit"
 		action="<%= urlView %>">
 	<fr:layout name="tabular">
+		<fr:property name="classes" value="form"/>
+		<fr:property name="columnClasses" value=",,tderror"/>
 	</fr:layout>
 </fr:edit>

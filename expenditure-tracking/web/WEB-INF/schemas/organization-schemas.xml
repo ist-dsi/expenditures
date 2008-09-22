@@ -1,14 +1,18 @@
 <schema name="createUnit"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.CreateUnitBean"
 		bundle="ORGANIZATION_RESOURCES">
-	<slot name="name" key="unit.label.name" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="name" key="unit.label.name" bundle="ORGANIZATION_RESOURCES">
+		<property name="size" value="40"/>
+	</slot>
 	<slot name="costCenter" key="unit.label.costCenter" bundle="ORGANIZATION_RESOURCES"/>
 </schema>
 
 <schema name="editUnit"
 		type="pt.ist.expenditureTrackingSystem.domain.organization.Unit"
 		bundle="ORGANIZATION_RESOURCES">
-	<slot name="name" key="unit.label.name" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="name" key="unit.label.name" bundle="ORGANIZATION_RESOURCES">
+		<property name="size" value="40"/>
+	</slot>
 	<slot name="costCenter" key="unit.label.costCenter" bundle="ORGANIZATION_RESOURCES"/>
 </schema>
 

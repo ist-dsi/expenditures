@@ -31,7 +31,6 @@
 		<fr:property name="classes" value="tstyle2"/>
 		<fr:property name="columnClasses" value="aleft,,,,aright,"/>
 		<fr:property name="sortBy" value="name=asc"/>
-
 		<fr:property name="link(view)" value="/organization.do?method=viewPerson"/>
 		<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
 		<fr:property name="key(view)" value="link.view"/>
