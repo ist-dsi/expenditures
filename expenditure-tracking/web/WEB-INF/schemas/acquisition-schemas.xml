@@ -157,7 +157,7 @@
 	<slot name="recipient" key="label.recipient" bundle="EXPENDITURE_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
 		<property name="size" value="60"/>
 	</slot>	
-	<slot name="address" layout="address-input" key="label.receptionAddress" bundle="EXPENDITURE_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="address" key="label.receptionAddress" bundle="EXPENDITURE_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 	<slot name="phone" key="label.phone" bundle="EXPENDITURE_RESOURCES">
 		<property name="size" value="20"/>
 	</slot>
@@ -211,7 +211,7 @@
 	<slot name="recipient" key="label.recipient" bundle="EXPENDITURE_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
 		<property name="size" value="60"/>
 	</slot>	
-	<slot name="address" layout="address-input" key="label.receptionAddress" bundle="EXPENDITURE_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="address" key="label.receptionAddress" bundle="EXPENDITURE_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 	<slot name="phone" key="label.phone" bundle="EXPENDITURE_RESOURCES">
 		<property name="size" value="20"/>
 	</slot>
@@ -337,7 +337,7 @@
 		bundle="ORGANIZATION_RESOURCES">
 	<slot name="name" key="supplier.label.name"/>
 	<slot name="fiscalIdentificationCode" key="supplier.label.fiscalCode" />
-	<slot name="address" layout="address" key="supplier.label.address"/>	
+	<slot name="address" key="supplier.label.address"/>	
 </schema>
 
 <schema name="viewOperationLog"
