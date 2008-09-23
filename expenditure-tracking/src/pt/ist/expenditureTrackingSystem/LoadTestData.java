@@ -2,7 +2,9 @@ package pt.ist.expenditureTrackingSystem;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
@@ -10,17 +12,22 @@ import pt.ist.expenditureTrackingSystem._development.PropertiesManager;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
+import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateUnitBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.CostCenter;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Project;
 import pt.ist.expenditureTrackingSystem.domain.organization.SubProject;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
+import pt.ist.expenditureTrackingSystem.domain.util.Money;
 import pt.ist.fenixWebFramework.FenixWebFramework;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.utl.ist.fenix.tools.util.FileUtils;
 
 public class LoadTestData {
+
+    private static Set<Integer> projectResponsibles = new HashSet<Integer>();
+    private static Map<String, String> teachers = new HashMap<String, String>();
 
     public static void init() {
 	String domainModelPath = "web/WEB-INF/classes/domain_model.dml";
@@ -174,19 +181,21 @@ public class LoadTestData {
     }
 
     private static void loadData() throws IOException {
-//	final String unitContents = FileUtils.readFile("units.txt");
-//	final FenixUnitMap fenixUnitMap = new FenixUnitMap(unitContents);
-//	createUnits(fenixUnitMap);
+	// final String unitContents = FileUtils.readFile("units.txt");
+	// final FenixUnitMap fenixUnitMap = new FenixUnitMap(unitContents);
+	// createUnits(fenixUnitMap);
 
+	loadTeachers();
 	final String activeCostCenterContents = FileUtils.readFile("activeCostCenters.csv");
 	final CdUnitMap cdUnitMap = new CdUnitMap(activeCostCenterContents);
 	createUnits(cdUnitMap);
 
 	final String peopleContents = FileUtils.readFile("people.txt");
 	final FenixPeopleSet fenixPeopleSet = new FenixPeopleSet(peopleContents);
-	createPeople(fenixPeopleSet /*, fenixUnitMap */);
+	createPeople(fenixPeopleSet /* , fenixUnitMap */);
 
 	final String projectContents = FileUtils.readFile("projects.txt");
+	loadProjectResponsiblesSet();
 	createProjects(projectContents, fenixPeopleSet);
 
 	LoadSuppliersData.loadData();
@@ -194,10 +203,81 @@ public class LoadTestData {
 	final String subProjectContents = FileUtils.readFile("subProjects.txt");
 	createSubProjects(subProjectContents);
 
+	createUnidadesInvestigacaoAuthorizations();
+	createDepartamentosAuthorizations();
+
 	final String cpvReferences = FileUtils.readFile("cpv.csv");
 	createCPVCodes(cpvReferences);
     }
 
+    private static void loadTeachers() throws IOException {
+	final String contents = FileUtils.readFile("teacher.csv");
+	for (String line : contents.split("\n")) {
+	    String[] split = line.split("\t");
+	    if (split.length == 2 && split[1] != null && !split[1].isEmpty()) {
+		teachers.put(split[0], split[1]);
+	    }
+	}
+    }
+
+    @Service
+    private static void createDepartamentosAuthorizations() throws IOException {
+	System.out.println("Responsaveis Departamento");
+	String contents = FileUtils.readFile("responsaveisDepartamento.csv");
+	for (String line : contents.split("\n")) {
+	    String[] split = line.split("\t");
+	    Unit unit = findUnitByName(split[0]);
+	    String nMec = split[2];
+	    String user = findISTUsername(nMec);
+	    if (unit != null) {
+		Person person = Person.findByUsername(user);
+		if (person != null) {
+		    Authorization authorization = new Authorization(person, unit);
+		    authorization.setMaxAmount(new Money("12470"));
+		} else {
+		    System.out.println("Unable to find person with userName: [" + user + "]");
+		}
+	    } else {
+		System.out.println("Unable to find unit with name: [" + split[0] + "]");
+	    }
+	}
+	System.out.println("*******************");
+    }
+
+    @Service
+    private static void createUnidadesInvestigacaoAuthorizations() throws IOException {
+	System.out.println("Unidades Investigacao");
+	String contents = FileUtils.readFile("responsaveisUnidadesInvestigacao.csv");
+	for (String line : contents.split("\n")) {
+	    String[] split = line.split("\t");
+	    String nMec = split[3];
+	    String user = findISTUsername(nMec);
+	    Person person = Person.findByUsername(user);
+	    if (person != null) {
+		String costCenterNumber = split[0];
+		if (costCenterNumber != null && !costCenterNumber.isEmpty()) {
+		    Unit costCenter = Unit.findUnitByCostCenter(costCenterNumber);
+		    if (costCenter != null) {
+			Authorization authorization = new Authorization(person, costCenter);
+			authorization.setMaxAmount(new Money("12470"));
+		    } else {
+			System.out.println("Unable to find unit with cost center: [" + costCenterNumber + "]");
+		    }
+		}
+	    } else {
+		System.out.println("Unable to find person with userName: [" + user + "]");
+	    }
+	}
+	System.out.println("*******************");
+    }
+
+    private static void loadProjectResponsiblesSet() throws IOException {
+	String contents = FileUtils.readFile("responsaveisProjectos.csv");
+	for (String line : contents.split("\n")) {
+	    String[] split = line.split("\t");
+	    projectResponsibles.add(Integer.valueOf(split[0]));
+	}
+    }
 
     @Service
     private static void createCPVCodes(String cpvReferences) {
@@ -225,9 +305,13 @@ public class LoadTestData {
 	}
     }
 
-
     @Service
-    private static void createPeople(final FenixPeopleSet fenixPeopleSet /*, final FenixUnitMap fenixUnitMap*/) {
+    private static void createPeople(final FenixPeopleSet fenixPeopleSet /*
+									  * ,
+									  * final
+									  * FenixUnitMap
+									  * fenixUnitMap
+									  */) {
 	for (final FenixPerson fenixPerson : fenixPeopleSet) {
 	    final Person person = Person.createEmptyPerson();
 	    person.setUsername(fenixPerson.username);
@@ -237,12 +321,12 @@ public class LoadTestData {
 		person.getOptions().setRecurseAuthorizationPendingUnits(Boolean.TRUE);
 	    }
 	    fenixPerson.person = person;
-	    /*
-	     * for (final Long oid : fenixPerson.unitOids) { final FenixUnit
-	     * fenixUnit = fenixUnitMap.get(oid); final Authorization
-	     * authorization = new Authorization(person, fenixUnit.unit);
-	     * authorization.setCanDelegate(Boolean.TRUE); }
-	     */
+	    for (final Long oid : fenixPerson.unitOids) {
+		// final FenixUnit fenixUnit = fenixUnitMap.get(oid);
+		// final Authorization authorization = new Authorization(person,
+		// fenixUnit.unit);
+		// authorization.setCanDelegate(Boolean.TRUE);
+	    }
 	}
     }
 
@@ -280,8 +364,13 @@ public class LoadTestData {
 		final Unit unit = Unit.createNewUnit(createUnitBean);
 
 		if (responsible != null) {
-//		    final Authorization authorization = new Authorization(responsible, unit);
-//		    authorization.setCanDelegate(Boolean.FALSE);
+		    if (projectResponsibles.contains(Integer.valueOf(responsibleString))) {
+			final Authorization authorization = new Authorization(responsible, unit);
+			authorization.setMaxAmount(new Money("12470"));
+		    } else {
+			System.out.println("[" + responsibleString + "] for project [" + acronimo
+				+ "] is not in project responsibles list");
+		    }
 		}
 	    }
 	}
@@ -347,13 +436,48 @@ public class LoadTestData {
 	return unit;
     }
 
+    private static String findISTUsername(String nMec) {
+	String username = teachers.get(nMec);
+	if (username == null) {
+	    System.out.println("Can't find username for " + nMec);
+	    throw new RuntimeException();
+	}
+	return username;
+    }
+
     private static Person findPerson(final String responsibleString, final FenixPeopleSet fenixPeopleSet) {
 	if (!responsibleString.isEmpty()) {
+	    String user = findISTUsername(responsibleString);
 	    for (final FenixPerson fenixPerson : fenixPeopleSet) {
 		final String username = fenixPerson.username;
-		if (username.startsWith("ist") && responsibleString.equals(username.substring(4))) {
+		if (username.startsWith("ist") && user.equals(username)) {
 		    return fenixPerson.person;
 		}
+	    }
+	}
+	return null;
+    }
+
+    private static Unit findUnitByName(final Unit unit, final String name) {
+	if (unit.getName().equals(name)) {
+	    return unit;
+	}
+
+	for (Unit unit2 : unit.getSubUnitsSet()) {
+	    Unit unit3 = findUnitByName(unit2, name);
+	    if (unit3 != null) {
+		return unit3;
+	    }
+	}
+
+	return null;
+    }
+
+    private static Unit findUnitByName(final String name) {
+	for (Unit topLevelUnit : ExpenditureTrackingSystem.getInstance().getTopLevelUnitsSet()) {
+	    Unit unit = findUnitByName(topLevelUnit, name);
+	    if (unit != null) {
+		return unit;
 	    }
 	}
 	return null;
