@@ -89,8 +89,8 @@
 	</fr:view>
 </logic:notEmpty>
 <logic:empty name="authorizations">
-	<em>Não tem autorizações atribuidas</em>
-	<br/>
-	<br/>
+	<p>
+		<em>Não tem autorizações atribuidas</em>
+	</p>
 </logic:empty>
 

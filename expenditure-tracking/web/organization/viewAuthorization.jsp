@@ -58,8 +58,7 @@
 <logic:notEmpty name="authorization" property="delegatedAuthorizations">
 	<fr:view name="authorization" property="delegatedAuthorizations" schema="viewDelegatedAuthorizations">
 		<fr:layout name="tabular">
-			<fr:property name="classes" value="tstyle2"/>
-
+			<fr:property name="classes" value="tstyle2 mtop05"/>
 			<fr:property name="link(view)" value="/organization.do?method=viewAuthorization"/>
 			<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
 			<fr:property name="key(view)" value="link.view"/>
