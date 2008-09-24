@@ -98,7 +98,7 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	}
 	return result;
     }
-    
+
     public Money getRealTotalVatValue() {
 	Money result = Money.ZERO;
 	for (final AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
@@ -106,7 +106,6 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	}
 	return result;
     }
-    
 
     public Money getTotalAdditionalCostsValue() {
 	Money result = Money.ZERO;
@@ -116,8 +115,9 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	    }
 	}
 	return result;
-    
+
     }
+
     public Money getRealTotalAdditionalCostsValue() {
 	Money result = Money.ZERO;
 	for (final AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
@@ -127,7 +127,7 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	}
 	return result;
     }
-    
+
     public Money getTotalItemValue() {
 	Money result = Money.ZERO;
 	for (final AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
@@ -398,6 +398,13 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     public void resetFundAllocationId() {
 	for (Financer financer : getFinancersSet()) {
 	    financer.setFundAllocationId(null);
+	}
+
+    }
+
+    public void resetEffectiveFundAllocationId() {
+	for (Financer financer : getFinancersSet()) {
+	    financer.setEffectiveFundAllocationId(null);
 	}
 
     }

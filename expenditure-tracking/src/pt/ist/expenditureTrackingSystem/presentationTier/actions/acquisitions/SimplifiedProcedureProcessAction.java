@@ -712,6 +712,11 @@ public class SimplifiedProcedureProcessAction extends ProcessAction {
 	return executeActivityAndViewProcess(mapping, form, request, response, "RemoveFundAllocation");
     }
 
+    public ActionForward executeRemoveFundsPermanentlyAllocated(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	return executeActivityAndViewProcess(mapping, form, request, response, "RemoveFundsPermanentlyAllocated");
+    }
+
     public ActionForward executeRemoveFundAllocationExpirationDate(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	return executeActivityAndViewProcess(mapping, form, request, response, "RemoveFundAllocationExpirationDate");
