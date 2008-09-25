@@ -40,3 +40,5 @@ function executeWithTempFile() {
 	echo
 }
 
+execute "Add Field to annoucement" addFieldToAnnouncement.sql
+execute "Add NIB Field" addNIBField.sql
