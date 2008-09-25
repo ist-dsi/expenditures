@@ -7,6 +7,14 @@
 	<slot name="costCenter" key="unit.label.costCenter" bundle="ORGANIZATION_RESOURCES"/>
 </schema>
 
+<schema name="createAccountingUnit"
+		type="pt.ist.expenditureTrackingSystem.domain.dto.AccountingUnitBean"
+		bundle="ORGANIZATION_RESOURCES">
+	<slot name="name" key="unit.label.name" bundle="ORGANIZATION_RESOURCES">
+		<property name="size" value="40"/>
+	</slot>
+</schema>
+
 <schema name="editUnit"
 		type="pt.ist.expenditureTrackingSystem.domain.organization.Unit"
 		bundle="ORGANIZATION_RESOURCES">
@@ -232,6 +240,13 @@
 	<slot name="shortIdentifier" key="unit.label.shortIdentifier" bundle="ORGANIZATION_RESOURCES"/>
 	<slot name="name" key="unit.label.name" bundle="ORGANIZATION_RESOURCES"/>
 </schema>
+
+<schema name="accountingUnits"
+		type="pt.ist.expenditureTrackingSystem.domain.organization.Unit"
+		bundle="ORGANIZATION_RESOURCES">
+	<slot name="name" key="unit.label.name" bundle="ORGANIZATION_RESOURCES"/>
+</schema>
+
 <schema name="role"
 		type="pt.ist.expenditureTrackingSystem.domain.RoleType"
 		bundle="ORGANIZATION_RESOURCES">

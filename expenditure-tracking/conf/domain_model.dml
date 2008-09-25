@@ -130,6 +130,10 @@ class Options {
 	Boolean receiveNotificationsByEmail;
 }
 
+class organization.AccountingUnit {
+	String name;
+}
+
 class organization.Person {
 	String name;
 	String username;
@@ -613,10 +617,12 @@ relation AnnouncementAcquisition {
 	announcements.Announcement playsRole announcement;
 	acquisitions.Acquisition playsRole acquisition;
 }
+
 relation OptionsCascadingStyleSheet {
 	Options playsRole options;
 	CascadingStyleSheet playsRole cascadingStyleSheet;
 }
+
 relation ExpenditureTrackingSystemAcquisitionProcessYear {
 	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
 	acquisitions.AcquisitionProcessYear playsRole acquisitionProcessYears {
@@ -629,4 +635,20 @@ relation AcqusitionProcessAcquisitionProcessYear {
 		multiplicity *;
 	} 
 	acquisitions.AcquisitionProcessYear playsRole acquisitionProcessYear;
+}
+
+relation ExpenditureTrackingSystemAccountingUnit {
+	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
+	organization.AccountingUnit playsRole accountingUnits {
+		multiplicity *;
+	}
+}
+
+relation PersonAccountingUnit {
+	organization.Person playsRole people {
+		multiplicity *;
+	}
+	organization.AccountingUnit playsRole accountingUnits {
+		multiplicity *;
+	}
 }

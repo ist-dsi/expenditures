@@ -69,20 +69,18 @@
 	</logic:empty>
 
 	<logic:present name="unit" property="parentUnit">
-		<h3 class="mtop15 mbottom05">Unidade Superior</h3>
+		<h3 class="mtop15 mbottom05"><bean:message key="unit.title.superior.unit" bundle="ORGANIZATION_RESOURCES"/></h3>
 		<bean:define id="unitToDisplay" toScope="request" name="unit" property="parentUnit"/>
 		<jsp:include page="unitLine.jsp" flush="false"/>
 	</logic:present>
 </logic:present>
 
-
 <logic:present name="units">
 	<logic:notEmpty name="units">
 		<logic:present name="unit">
-			<h3 class="mtop15 mbottom05">SubUnidades</h3>
+			<h3 class="mtop15 mbottom05"><bean:message key="unit.title.subunit" bundle="ORGANIZATION_RESOURCES"/></h3>
 		</logic:present>
-		<fr:view name="units"
-				schema="unitList">
+		<fr:view name="units" schema="unitList">
 			<fr:layout name="tabular">
 				<fr:property name="classes" value="tstyle2 mtop05"/>
 				<fr:property name="columnClasses" value="aleft,,,,aright,"/>
@@ -96,3 +94,30 @@
 		</fr:view>
 	</logic:notEmpty>
 </logic:present>
+
+<h3><bean:message key="accountingUnit.title" bundle="ORGANIZATION_RESOURCES"/></h3>
+<p>
+	<html:link action="/organization.do?method=prepareCreateAccountingUnit">
+		<bean:message key="unit.link.create.accounting.unit" bundle="ORGANIZATION_RESOURCES"/>
+	</html:link>
+</p>
+<logic:present name="accountingUnits">
+	<logic:empty name="accountingUnits">
+		<bean:message key="accountingUnit.message.none.defined" bundle="ORGANIZATION_RESOURCES"/>
+	</logic:empty>
+	<logic:notEmpty name="accountingUnits">
+		<fr:view name="accountingUnits" schema="accountingUnits">
+			<fr:layout name="tabular">
+				<fr:property name="classes" value="tstyle2 mtop05"/>
+				<fr:property name="columnClasses" value="aleft,,,,aright,"/>
+				<fr:property name="sortBy" value="name=asc"/>
+				<fr:property name="link(view)" value="/organization.do?method=viewAccountingUnit"/>
+				<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
+				<fr:property name="key(view)" value="link.view"/>
+				<fr:property name="param(view)" value="OID/accountingUnitOid"/>
+				<fr:property name="order(view)" value="1"/>
+			</fr:layout>
+		</fr:view>
+	</logic:notEmpty>
+</logic:present>
+

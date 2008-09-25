@@ -15,12 +15,14 @@ import pt.ist.expenditureTrackingSystem.domain.Role;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.DelegatedAuthorization;
+import pt.ist.expenditureTrackingSystem.domain.dto.AccountingUnitBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.AuthorizationBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreatePersonBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateSupplierBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateUnitBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.SupplierBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.UnitBean;
+import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.SearchUsers;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
@@ -35,6 +37,7 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 @Mapping(path = "/organization")
 @Forwards( { @Forward(name = "view.organization", path = "/organization/viewOrganization.jsp"),
 	@Forward(name = "create.unit", path = "/organization/createUnit.jsp"),
+	@Forward(name = "create.accounting.unit", path = "/organization/createAccountingUnit.jsp"),
 	@Forward(name = "edit.unit", path = "/organization/editUnit.jsp"),
 	@Forward(name = "search.users", path = "/organization/searchUsers.jsp"),
 	@Forward(name = "manage.suppliers", path = "/organization/manageSuppliers.jsp"),
@@ -49,7 +52,10 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "edit.supplier", path = "/organization/editSupplier.jsp"),
 	@Forward(name = "create.authorization.unit", path = "/organization/createAuthorizationUnit.jsp"),
 	@Forward(name = "delegate.choose.unit", path = "/organization/delegateChooseUnit.jsp"),
-	@Forward(name = "change.authorization.unit", path = "/organization/changeAuthorizationUnit.jsp") })
+	@Forward(name = "change.authorization.unit", path = "/organization/changeAuthorizationUnit.jsp"),
+	@Forward(name = "select.accounting.unit.to.add.member", path = "/organization/selectAccountingUnitToAddMember.jsp"),
+	@Forward(name = "view.accounting.unit", path = "/organization/viewAccountingUnit.jsp")
+	})
 public class OrganizationAction extends BaseAction {
 
     private static final Context CONTEXT = new Context("organization");
@@ -71,9 +77,15 @@ public class OrganizationAction extends BaseAction {
     }
 
     public final ActionForward viewOrganization(final ActionMapping mapping, final HttpServletRequest request, final Unit unit) {
-	request.setAttribute("unit", unit);
-	final Set<Unit> units = unit == null ? ExpenditureTrackingSystem.getInstance().getTopLevelUnitsSet() : unit
-		.getSubUnitsSet();
+	final Set<Unit> units;
+	if (unit == null) {
+	    final ExpenditureTrackingSystem expenditureTrackingSystem = ExpenditureTrackingSystem.getInstance();
+	    units = expenditureTrackingSystem.getTopLevelUnitsSet();
+	    request.setAttribute("accountingUnits", expenditureTrackingSystem.getAccountingUnitsSet());
+	} else {
+	    request.setAttribute("unit", unit);
+	    units = unit.getSubUnitsSet();
+	}
 	request.setAttribute("units", units);
 	return mapping.findForward("view.organization");
     }
@@ -90,6 +102,20 @@ public class OrganizationAction extends BaseAction {
 	CreateUnitBean createUnitBean = getRenderedObject();
 	final Unit newUnit = Unit.createNewUnit(createUnitBean);
 	return viewOrganization(mapping, request, newUnit);
+    }
+
+    public final ActionForward prepareCreateAccountingUnit(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	request.setAttribute("accountingUnitBean", new AccountingUnitBean());
+	return mapping.findForward("create.accounting.unit");
+    }
+
+    public final ActionForward createNewAccountingUnit(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final AccountingUnitBean accountingUnitBean = getRenderedObject();
+	AccountingUnit.createNewAccountingUnit(accountingUnitBean);
+	request.setAttribute("unitBean", new UnitBean());
+	return viewOrganization(mapping, request, null);
     }
 
     private ActionForward editUnit(ActionMapping mapping, HttpServletRequest request, Unit unit) {
@@ -208,6 +234,23 @@ public class OrganizationAction extends BaseAction {
 	final UnitBean unitBean = new UnitBean();
 	request.setAttribute("unitBean", unitBean);
 	return expandAuthorizationUnit(mapping, request, person, null);
+    }
+
+    public final ActionForward prepareAddToAccountingUnit(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final Person person = getDomainObject(request, "personOid");
+	request.setAttribute("person", person);
+	final Set<AccountingUnit> accountingUnits = ExpenditureTrackingSystem.getInstance().getAccountingUnitsSet();
+	request.setAttribute("accountingUnits", accountingUnits);
+	return mapping.findForward("select.accounting.unit.to.add.member");
+    }
+
+    public final ActionForward addToAccountingUnit(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final Person person = getDomainObject(request, "personOid");
+	final AccountingUnit accountingUnit = getDomainObject(request, "accountingUnitOid");
+	accountingUnit.addPeople(person);
+	return viewPerson(mapping, request, person);
     }
 
     public final ActionForward expandAuthorizationUnit(final ActionMapping mapping, final ActionForm form,
@@ -397,6 +440,21 @@ public class OrganizationAction extends BaseAction {
 	RenderUtils.invalidateViewState();
 	request.setAttribute("authorization", bean.getAuthorization());
 	return mapping.findForward("view.authorization");
+    }
+
+    public ActionForward removePersonFromAccountingUnit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	final AccountingUnit accountingUnit = getDomainObject(request, "accountingUnitOid");
+	final Person person = getDomainObject(request, "personOid");
+	accountingUnit.removePeople(person);
+	return viewPerson(mapping, request, person);
+    }
+
+    public ActionForward viewAccountingUnit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	final AccountingUnit accountingUnit = getDomainObject(request, "accountingUnitOid");
+	request.setAttribute("accountingUnit", accountingUnit);
+	return mapping.findForward("view.accounting.unit");
     }
 
 }

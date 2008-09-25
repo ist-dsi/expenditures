@@ -6,14 +6,23 @@
 
 <h2><bean:message key="user.label.view" bundle="ORGANIZATION_RESOURCES"/> <bean:write name="person" property="username"/></h2>
 
-<logic:present role="MANAGER,ACQUISITION_CENTRAL_MANAGER">
+<logic:present role="MANAGER,ACQUISITION_CENTRAL_MANAGER,ACCOUNTING_MANAGER">
 	<div class="infoop1">
 		<ul>
-			<li>
-				<html:link action="/organization.do?method=attributeAuthorization" paramId="personOid" paramName="person" paramProperty="OID">
-					<bean:message key="authorizations.link.grant" bundle="EXPENDITURE_RESOURCES"/>
-				</html:link>
-			</li>
+			<logic:present role="MANAGER,ACQUISITION_CENTRAL_MANAGER">
+				<li>
+					<html:link action="/organization.do?method=attributeAuthorization" paramId="personOid" paramName="person" paramProperty="OID">
+						<bean:message key="authorizations.link.grant" bundle="EXPENDITURE_RESOURCES"/>
+					</html:link>
+				</li>
+			</logic:present>
+			<logic:present role="MANAGER,ACCOUNTING_MANAGER">
+				<li>
+					<html:link action="/organization.do?method=prepareAddToAccountingUnit" paramId="personOid" paramName="person" paramProperty="OID">
+						<bean:message key="accountingUnit.link.add.member" bundle="EXPENDITURE_RESOURCES"/>
+					</html:link>
+				</li>
+			</logic:present>
 			<logic:present role="MANAGER">
 				<li>
 					<html:link action="/organization.do?method=editPerson" paramId="personOid" paramName="person" paramProperty="OID">
@@ -71,7 +80,7 @@
 </logic:present>
 
 
-<h3 class="mtop2 mbottom05">Unidades do qual é responsável</h3>
+<h3 class="mtop2 mbottom05"><bean:message key="authorizations.label.person.responsible" bundle="ORGANIZATION_RESOURCES"/></h3>
 <bean:define id="authorizations" name="person" property="authorizations"/>
 <logic:notEmpty name="authorizations">
 	<fr:view name="authorizations"
@@ -90,7 +99,36 @@
 </logic:notEmpty>
 <logic:empty name="authorizations">
 	<p>
-		<em>Não tem autorizações atribuidas</em>
+		<em><bean:message key="authorizations.label.person.none" bundle="ORGANIZATION_RESOURCES"/></em>
 	</p>
 </logic:empty>
 
+
+<h3 class="mtop2 mbottom05"><bean:message key="accountingUnit.list.for.person" bundle="ORGANIZATION_RESOURCES"/></h3>
+<bean:define id="removeUrl">/organization.do?method=removePersonFromAccountingUnit&amp;personOid=<bean:write name="person" property="OID"/></bean:define>
+<logic:notEmpty name="person" property="accountingUnits">
+	<fr:view name="person" property="accountingUnits"
+			schema="accountingUnits">
+		<fr:layout name="tabular">
+			<fr:property name="classes" value="tstyle2"/>
+			<fr:property name="columnClasses" value="aleft,,,,aright,"/>
+
+			<fr:property name="link(view)" value="/organization.do?method=viewAccountingUnit"/>
+			<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
+			<fr:property name="key(view)" value="link.view"/>
+			<fr:property name="param(view)" value="OID/accountingUnitOid"/>
+			<fr:property name="order(view)" value="1"/>
+
+			<fr:property name="link(remove)" value="<%= removeUrl %>"/>
+			<fr:property name="bundle(remove)" value="EXPENDITURE_RESOURCES"/>
+			<fr:property name="key(remove)" value="link.remove"/>
+			<fr:property name="param(remove)" value="OID/accountingUnitOid"/>
+			<fr:property name="order(remove)" value="2"/>
+		</fr:layout>
+	</fr:view>
+</logic:notEmpty>
+<logic:empty name="person" property="accountingUnits">
+	<p>
+		<em><bean:message key="accountingUnit.message.person.not.associated" bundle="ORGANIZATION_RESOURCES"/></em>
+	</p>
+</logic:empty>
