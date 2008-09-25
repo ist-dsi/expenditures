@@ -15,6 +15,7 @@ public class CreateSupplierBean implements Serializable {
     private String phone;
     private String fax;
     private String email;
+    private String nib;
     private DateTime dateTime;
 
     public CreateSupplierBean() {
@@ -83,6 +84,14 @@ public class CreateSupplierBean implements Serializable {
 
     public DateTime getDateTime() {
 	return dateTime;
+    }
+
+    public void setNib(String nib) {
+	this.nib = nib;
+    }
+
+    public String getNib() {
+	return nib;
     }
 
 }

@@ -19,7 +19,7 @@
 	</fr:layout>
 </fr:view>
 <bean:define id="acquisitionProcessOID" name="acquisitionProcess" property="OID"/>
-<html:link action="/acquisitionProcess.do?method=editSupplierAddress" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID"><bean:message key="acquisitionRequestDocument.link.editSupplierAddress" bundle="ACQUISITION_RESOURCES"/></html:link>
+<html:link action="/acquisitionProcess.do?method=editSupplierAddress" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID"><bean:message key="supplier.link.edit" bundle="ORGANIZATION_RESOURCES"/></html:link>
 </div>
 
 <logic:present name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestItemsSet">
@@ -33,13 +33,13 @@
 	</logic:iterate>
 </logic:present>
 
-<%-- 
+
 <p class="mvert15">
 	<html:link action="/acquisitionProcess.do?method=createAcquisitionRequestDocument" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
 		<bean:message key="acquisitionProcess.link.createRequestDocument" bundle="ACQUISITION_RESOURCES"/>
 	</html:link>
 </p>
---%>
+
 <bean:define id="urlAdd">/acquisitionProcess.do?method=addAcquisitionRequestDocument&amp;acquisitionProcessOid=<%= acquisitionProcessOID %></bean:define>
 <bean:define id="urlView">/acquisitionProcess.do?method=viewAcquisitionProcess&amp;acquisitionProcessOid=<%= acquisitionProcessOID %></bean:define>
 

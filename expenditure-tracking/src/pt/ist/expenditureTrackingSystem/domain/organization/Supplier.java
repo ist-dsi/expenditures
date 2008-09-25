@@ -29,7 +29,7 @@ public class Supplier extends Supplier_Base {
     }
 
     public Supplier(String name, String abbreviatedName, String fiscalCode, Address address, String phone, String fax,
-	    String email) {
+	    String email, String nib) {
 	this(fiscalCode);
 	setName(name);
 	setAbbreviatedName(abbreviatedName);
@@ -37,6 +37,7 @@ public class Supplier extends Supplier_Base {
 	setPhone(phone);
 	setFax(fax);
 	setEmail(email);
+	setNib(nib);
     }
 
     @Service
@@ -109,7 +110,7 @@ public class Supplier extends Supplier_Base {
     public static Supplier createNewSupplier(CreateSupplierBean createSupplierBean) {
 	return new Supplier(createSupplierBean.getName(), createSupplierBean.getAbbreviatedName(), createSupplierBean
 		.getFiscalIdentificationCode(), createSupplierBean.getAddress(), createSupplierBean.getPhone(),
-		createSupplierBean.getFax(), createSupplierBean.getEmail());
+		createSupplierBean.getFax(), createSupplierBean.getEmail(), createSupplierBean.getNib());
     }
 
     public boolean isFundAllocationAllowed(final Money value) {

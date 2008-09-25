@@ -151,6 +151,7 @@ class organization.Supplier {
 	String phone;
 	String fax;
 	String email;
+	String nib;
 }
 
 class organization.Unit {

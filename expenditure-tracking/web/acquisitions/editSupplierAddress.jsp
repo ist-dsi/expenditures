@@ -4,7 +4,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
-<h2><bean:message key="acquisitionRequestDocument.title.editSupplierAddress" bundle="ACQUISITION_RESOURCES"/></h2>
+<h2><bean:message key="supplier.title.edit" bundle="ORGANIZATION_RESOURCES"/></h2>
 
 <p class="mbottom05"><strong><bean:message key="label.supplier" bundle="EXPENDITURE_RESOURCES"/></strong></p>
 
@@ -12,7 +12,7 @@
 <bean:define id="url" value='<%= "/acquisitionProcess.do?method=executeCreateAcquisitionRequest&amp;acquisitionProcessOid=" + acquisitionProcessOID %>'/>
 
 <fr:edit action="<%= url %>" name="acquisitionProcess" property="acquisitionRequest.supplier"
-		schema="editSupplierAddress">
+		schema="editSupplier">
 	<fr:layout name="tabular">
 		<fr:property name="classes" value="form"/>
 		<fr:property name="columnClasses" value=",,tderror"/>

@@ -132,6 +132,20 @@
 	<slot name="fiscalIdentificationCode" key="supplier.label.fiscalCode" bundle="ORGANIZATION_RESOURCES"/>
 	<slot name="name" key="supplier.label.name" bundle="ORGANIZATION_RESOURCES"/>
 	<slot name="abbreviatedName" key="supplier.label.abbreviatedName" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="nib" key="supplier.label.nib" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="address" key="supplier.label.address" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="phone" key="supplier.label.phone" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="fax" key="supplier.label.fax" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="email" key="supplier.label.email" bundle="ORGANIZATION_RESOURCES"/>	
+</schema>
+
+<schema name="editSupplier"
+		type="pt.ist.expenditureTrackingSystem.domain.organization.Supplier"
+		bundle="ORGANIZATION_RESOURCES">
+	<slot name="fiscalIdentificationCode" key="supplier.label.fiscalCode" bundle="ORGANIZATION_RESOURCES" read-only="true"/>
+	<slot name="name" key="supplier.label.name" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="abbreviatedName" key="supplier.label.abbreviatedName" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="nib" key="supplier.label.nib" bundle="ORGANIZATION_RESOURCES"/>
 	<slot name="address" key="supplier.label.address" bundle="ORGANIZATION_RESOURCES"/>
 	<slot name="phone" key="supplier.label.phone" bundle="ORGANIZATION_RESOURCES"/>
 	<slot name="fax" key="supplier.label.fax" bundle="ORGANIZATION_RESOURCES"/>
@@ -143,7 +157,8 @@
 		bundle="ORGANIZATION_RESOURCES">
 	<slot name="fiscalIdentificationCode" key="supplier.label.fiscalCode" bundle="ORGANIZATION_RESOURCES"/>
 	<slot name="name" key="supplier.label.name" bundle="ORGANIZATION_RESOURCES"/>
-	<slot name="abbreviatedName" key="supplier.label.abbreviatedName" bundle="ORGANIZATION_RESOURCES"/>	
+	<slot name="abbreviatedName" key="supplier.label.abbreviatedName" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="nib" key="supplier.label.nib" bundle="ORGANIZATION_RESOURCES"/>
 	<slot name="address" key="supplier.label.address" bundle="ORGANIZATION_RESOURCES"/>
 	<slot name="phone" key="supplier.label.phone" bundle="ORGANIZATION_RESOURCES"/>
 	<slot name="fax" key="supplier.label.fax" bundle="ORGANIZATION_RESOURCES"/>

@@ -71,7 +71,7 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "edit.request.item.real.values", path = "/acquisitions/editRequestItemRealValues.jsp"),
 	@Forward(name = "assign.unit.item", path = "/acquisitions/assignUnitItem.jsp"),
 	@Forward(name = "edit.real.shares.values", path = "/acquisitions/editRealSharesValues.jsp"),
-	@Forward(name = "edit.supplier.address", path = "/acquisitions/editSupplierAddress.jsp"),
+	@Forward(name = "edit.supplier", path = "/acquisitions/editSupplierAddress.jsp"),
 	@Forward(name = "execute.payment", path = "/acquisitions/executePayment.jsp") })
 public class SimplifiedProcedureProcessAction extends ProcessAction {
 
@@ -737,7 +737,7 @@ public class SimplifiedProcedureProcessAction extends ProcessAction {
 	AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
 
-	return mapping.findForward("edit.supplier.address");
+	return mapping.findForward("edit.supplier");
     }
 
     public ActionForward executeSendAcquisitionRequestToSupplier(final ActionMapping mapping, final ActionForm form,

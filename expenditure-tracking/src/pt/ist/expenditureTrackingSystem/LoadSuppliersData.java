@@ -44,11 +44,11 @@ public class LoadSuppliersData {
 	    FenixSupplierContacts fenixSupplierContacts = fenixContactsMap.get(fenixSupplier.getSupplierID());
 	    if (fenixSupplierContacts == null) {
 		new Supplier(fenixSupplier.getName(), fenixSupplier.getAbbreviatedName(), fenixSupplier
-			.getFiscalIdentificationCode(), null, null, null, null);
+			.getFiscalIdentificationCode(), null, null, null, null, null);
 	    } else {
 		new Supplier(fenixSupplier.getName(), fenixSupplier.getAbbreviatedName(), fenixSupplier
 			.getFiscalIdentificationCode(), getAddress(fenixSupplierContacts), fenixSupplierContacts.getTelefone(),
-			fenixSupplierContacts.getFax(), fenixSupplierContacts.getEmail());
+			fenixSupplierContacts.getFax(), fenixSupplierContacts.getEmail(), null);
 	    }
 	}
 

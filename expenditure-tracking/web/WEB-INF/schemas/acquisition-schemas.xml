@@ -337,6 +337,7 @@
 		bundle="ORGANIZATION_RESOURCES">
 	<slot name="name" key="supplier.label.name"/>
 	<slot name="fiscalIdentificationCode" key="supplier.label.fiscalCode" />
+	<slot name="nib" key="supplier.label.nib" bundle="ORGANIZATION_RESOURCES"/>	
 	<slot name="address" key="supplier.label.address"/>	
 </schema>
 
