@@ -79,9 +79,15 @@ class acquisitions.UnitItem {
 }
 
 class acquisitions.Financer {
+	String ojbConcreteClass;
 	String fundAllocationId;
 	String effectiveFundAllocationId;
 }
+
+	class acquisitions.ProjectFinancer extends acquisitions.Financer {
+		String projectFundAllocationId;
+		String effectiveProjectFundAllocationId;
+	}
 
 class authorizations.Authorization {
 	String ojbConcreteClass;
@@ -651,4 +657,11 @@ relation PersonAccountingUnit {
 	organization.AccountingUnit playsRole accountingUnits {
 		multiplicity *;
 	}
+}
+
+relation UnitAccountingUnit {
+	organization.Unit playsRole units {
+		multiplicity *;
+	}
+	organization.AccountingUnit playsRole accountingUnit;
 }

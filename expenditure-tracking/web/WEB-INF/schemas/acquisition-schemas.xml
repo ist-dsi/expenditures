@@ -94,12 +94,8 @@
 		<property name="subLayout" value="default"/>
 	</slot>
 	<slot name="amount" key="financer.label.value"/>
-	<slot name="financer.fundAllocationId" key="financer.label.fundAllocation.identification" layout="null-as-label">
-		<property name="subLayout" value="default"/>
-	</slot>
-	<slot name="financer.effectiveFundAllocationId" key="financer.label.effectiveFundAllocation.identification" layout="null-as-label">
-		<property name="subLayout" value="default"/>
-	</slot>
+	<slot name="financer.fundAllocationIds" key="financer.label.fundAllocation.identification" layout="null-as-label"/>
+	<slot name="financer.effectiveFundAllocationIds" key="financer.label.effectiveFundAllocation.identification" layout="null-as-label"/>
 </schema>
 
 <schema name="viewAcquisitionProcessInList"

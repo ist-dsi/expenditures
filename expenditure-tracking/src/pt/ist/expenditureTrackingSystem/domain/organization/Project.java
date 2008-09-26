@@ -3,6 +3,9 @@ package pt.ist.expenditureTrackingSystem.domain.organization;
 import java.util.Set;
 
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.ProjectFinancer;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 
 public class Project extends Project_Base {
@@ -34,6 +37,11 @@ public class Project extends Project_Base {
     @Override
     public String getShortIdentifier() {
 	return getProjectCode();
+    }
+
+    @Override
+    public Financer finance(final AcquisitionRequest acquisitionRequest) {
+	return new ProjectFinancer(acquisitionRequest, this);
     }
 
 }

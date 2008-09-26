@@ -75,9 +75,19 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
     public abstract <T extends GenericProcess> AbstractActivity<T> getActivityByName(String activityName);
 
     public boolean isAvailableForPerson(Person person) {
-	return person.hasRoleType(RoleType.ACCOUNTABILITY) || person.hasRoleType(RoleType.ACQUISITION_CENTRAL)
+	return person.hasRoleType(RoleType.ACQUISITION_CENTRAL)
 		|| getRequestor() == person || getRequestingUnit().isResponsible(person)
-		|| isResponsibleForAtLeastOnePayingUnit(person);
+		|| isResponsibleForAtLeastOnePayingUnit(person) || isAccountingEmployee(person);
+    }
+
+    public boolean isAccountingEmployee(final Person person) {
+	final AcquisitionRequest acquisitionRequest = getAcquisitionRequest();
+	return acquisitionRequest.isAccountingEmployee(person);
+    }
+
+    public boolean isAccountingEmployee() {
+	final User user = UserView.getUser();
+	return user != null && isAccountingEmployee(user.getPerson());
     }
 
     public boolean isRealValueEqualOrLessThanFundAllocation() {
@@ -199,7 +209,7 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 
     public boolean isAllowedToViewCostCenterExpenditures() {
 	try {
-	    return getUnit() != null && isResponsibleForUnit() || userHasRole(RoleType.ACCOUNTABILITY);
+	    return getUnit() != null && isResponsibleForUnit() || userHasRole(RoleType.ACCOUNTING_MANAGER) || isAccountingEmployee();
 	} catch (Exception e) {
 	    e.printStackTrace();
 	    throw new Error(e);

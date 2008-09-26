@@ -3,6 +3,8 @@ package pt.ist.expenditureTrackingSystem.domain.organization;
 import java.util.Set;
 
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 
 public class CostCenter extends CostCenter_Base {
@@ -42,6 +44,17 @@ public class CostCenter extends CostCenter_Base {
     @Override
     public String getShortIdentifier() {
 	return getCostCenter();
+    }
+
+    @Override
+    public boolean isAccountingEmployee(final Person person) {
+	final AccountingUnit accountingUnit = getAccountingUnit();
+	return accountingUnit != null && accountingUnit.hasPeople(person);
+    }
+
+    @Override
+    public Financer finance(final AcquisitionRequest acquisitionRequest) {
+	return new Financer(acquisitionRequest, this);
     }
 
 }

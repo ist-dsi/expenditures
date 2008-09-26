@@ -11,3 +11,18 @@ create table ACCOUNTING_UNIT (
   index (KEY_EXPENDITURE_TRACKING_SYSTEM)
 ) type=InnoDB ;
 
+
+-- Inserted at 2008-09-26T15:20:50.486+01:00
+
+alter table FINANCER add column EFFECTIVE_PROJECT_FUND_ALLOCATION_ID text;
+alter table FINANCER add column PROJECT_FUND_ALLOCATION_ID text;
+alter table UNIT add column KEY_ACCOUNTING_UNIT int(11);
+alter table UNIT add index (KEY_ACCOUNTING_UNIT);
+
+
+-- Inserted at 2008-09-26T16:16:11.744+01:00
+
+alter table FINANCER add column OJB_CONCRETE_CLASS text;
+
+
+

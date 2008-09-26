@@ -9,6 +9,7 @@ import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Acquisition;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateUnitBean;
 import pt.ist.expenditureTrackingSystem.domain.util.Money;
@@ -156,6 +157,15 @@ public class Unit extends Unit_Base {
 	    return getParentUnit().isSubUnit(unit);
 	}
 	return false;
+    }
+
+    public boolean isAccountingEmployee(final Person person) {
+	final Unit parentUnit = getParentUnit();
+	return parentUnit != null && parentUnit.isAccountingEmployee(person);
+    }
+
+    public Financer finance(final AcquisitionRequest acquisitionRequest) {
+	throw new Error("Units with no accounting cannot finance any acquisitions.");
     }
 
 }

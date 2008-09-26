@@ -45,7 +45,7 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	setSupplier(supplier);
 	setRequestingUnit(requestingUnit);
 	if (isRequestingUnitPayingUnit) {
-	    addFinancers(new Financer(this, requestingUnit));
+	    addFinancers(requestingUnit.finance(this));
 	}
     }
 
@@ -358,9 +358,9 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	}
     }
 
-    public Financer addPayingUnit(Unit unit) {
+    public Financer addPayingUnit(final Unit unit) {
 	Financer financer = getFinancer(unit);
-	return financer != null ? financer : new Financer(this, unit);
+	return financer != null ? financer : unit.finance(this);
     }
 
     public Financer getFinancer(Unit unit) {
@@ -481,5 +481,14 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 
     public String getAcquisitionProcessId() {
 	return getAcquisitionProcess().getAcquisitionProcessId();
+    }
+
+    public boolean isAccountingEmployee(final Person person) {
+	for (final Financer financer : getFinancersSet()) {
+	    if (financer.isAccountingEmployee(person)) {
+		return true;
+	    }
+	}
+	return false;
     }
 }

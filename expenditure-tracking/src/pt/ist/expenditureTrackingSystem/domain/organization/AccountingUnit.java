@@ -30,4 +30,10 @@ public class AccountingUnit extends AccountingUnit_Base {
         super.removePeople(people);
     }
 
+    @Service
+    @Override
+    public void addUnits(final Unit unit) {
+        super.addUnits(unit);
+    }
+
 }

@@ -11,7 +11,6 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.AddAcquisitionProposalDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.AddPayingUnit;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.AllocateFundsPermanently;
@@ -45,6 +44,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activitie
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
+import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.domain.util.Money;
 import pt.ist.fenixWebFramework.security.UserView;
@@ -129,8 +129,8 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 		createAcquisitionProcessBean.getRequester());
 	process.getAcquisitionRequest().setRequestingUnit(createAcquisitionProcessBean.getRequestingUnit());
 	if (createAcquisitionProcessBean.isRequestUnitPayingUnit()) {
-	    process.getAcquisitionRequest().addFinancers(
-		    new Financer(process.getAcquisitionRequest(), createAcquisitionProcessBean.getRequestingUnit()));
+	    final Unit unit = createAcquisitionProcessBean.getRequestingUnit();
+	    process.getAcquisitionRequest().addFinancers(unit.finance(process.getAcquisitionRequest()));
 	}
 
 	return process;

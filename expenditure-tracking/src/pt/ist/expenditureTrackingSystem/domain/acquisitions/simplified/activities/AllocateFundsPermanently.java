@@ -3,7 +3,6 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activiti
 import java.util.List;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
-import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
@@ -15,7 +14,7 @@ public class AllocateFundsPermanently extends GenericAcquisitionProcessActivity 
 
     @Override
     protected boolean isAccessible(AcquisitionProcess process) {
-	return userHasRole(RoleType.ACCOUNTABILITY);
+	return process.isAccountingEmployee();
     }
 
     @Override

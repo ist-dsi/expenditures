@@ -54,7 +54,8 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "delegate.choose.unit", path = "/organization/delegateChooseUnit.jsp"),
 	@Forward(name = "change.authorization.unit", path = "/organization/changeAuthorizationUnit.jsp"),
 	@Forward(name = "select.accounting.unit.to.add.member", path = "/organization/selectAccountingUnitToAddMember.jsp"),
-	@Forward(name = "view.accounting.unit", path = "/organization/viewAccountingUnit.jsp")
+	@Forward(name = "view.accounting.unit", path = "/organization/viewAccountingUnit.jsp"),
+	@Forward(name = "add.unit.to.accounting.unit", path = "/organization/addUnitToAccountingUnit.jsp")
 	})
 public class OrganizationAction extends BaseAction {
 
@@ -454,6 +455,51 @@ public class OrganizationAction extends BaseAction {
 	    final HttpServletResponse response) {
 	final AccountingUnit accountingUnit = getDomainObject(request, "accountingUnitOid");
 	request.setAttribute("accountingUnit", accountingUnit);
+	return mapping.findForward("view.accounting.unit");
+    }
+
+    public ActionForward prepareAddUnitToAccountingUnit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	final AccountingUnit accountingUnit = getDomainObject(request, "accountingUnitOid");
+	request.setAttribute("accountingUnit", accountingUnit);
+
+	UnitBean unitBean = getRenderedObject();
+	if (unitBean == null || unitBean.getUnit() == null) {
+	    final Unit unit = getDomainObject(request, "unitOid");
+	    if (unit != null) {
+		unitBean = new UnitBean(unit);
+	    }
+	}
+	if (unitBean == null) {
+	    unitBean = new UnitBean();
+	}
+	request.setAttribute("unitBean", unitBean);
+
+	final Set<Unit> units = unitBean.getUnit() == null ? ExpenditureTrackingSystem.getInstance().getTopLevelUnitsSet()
+		: unitBean.getUnit().getSubUnitsSet();
+	request.setAttribute("units", units);
+
+	RenderUtils.invalidateViewState();
+
+	return mapping.findForward("add.unit.to.accounting.unit");
+    }
+
+    public ActionForward addUnitToAccountingUnit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	final AccountingUnit accountingUnit = getDomainObject(request, "accountingUnitOid");
+	request.setAttribute("accountingUnit", accountingUnit);
+
+	final Unit unit;
+	final UnitBean unitBean = getRenderedObject();
+	if (unitBean == null) {
+	    unit = getDomainObject(request, "unitOid");
+	} else {
+	    RenderUtils.invalidateViewState();
+	    unit = unitBean.getUnit();
+	}
+
+	accountingUnit.addUnits(unit);
+
 	return mapping.findForward("view.accounting.unit");
     }
 
