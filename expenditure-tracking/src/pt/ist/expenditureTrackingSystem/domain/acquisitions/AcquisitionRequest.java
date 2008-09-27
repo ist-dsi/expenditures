@@ -395,6 +395,16 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	return res;
     }
 
+    public Set<Financer> getProjectFinancersWithFundsAllocated() {
+	Set<Financer> res = new HashSet<Financer>();
+	for (Financer financer : getFinancers()) {
+	    if (financer instanceof ProjectFinancer && financer.getAmountAllocated().isPositive()) {
+		res.add(financer);
+	    }
+	}
+	return res;
+    }
+
     public void resetFundAllocationId() {
 	for (Financer financer : getFinancersSet()) {
 	    financer.setFundAllocationId(null);
@@ -491,4 +501,23 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	}
 	return false;
     }
+
+    public boolean isProjectAccountingEmployee(final Person person) {
+	for (final Financer financer : getFinancersSet()) {
+	    if (financer.isProjectAccountingEmployee(person)) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
+    public boolean hasAllocatedFundsForAllProjectFinancers() {
+	for (final Financer financer : getFinancersSet()) {
+	    if (!financer.hasAllocatedFundsForAllProject()) {
+		return false;
+	    }
+	}
+	return true;
+    }
+
 }

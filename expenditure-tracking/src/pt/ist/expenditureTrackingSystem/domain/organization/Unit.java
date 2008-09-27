@@ -168,4 +168,8 @@ public class Unit extends Unit_Base {
 	throw new Error("Units with no accounting cannot finance any acquisitions.");
     }
 
+    public boolean isProjectAccountingEmployee(Person person) {
+	throw new Error("Units with no accounting cannot finance any acquisitions.");
+    }
+
 }

@@ -34,4 +34,9 @@ public class ProjectFinancer extends ProjectFinancer_Base {
 	return financerString + " " + getAllocationIds(getEffectiveProjectFundAllocationId(), "financer.label.allocation.id.prefix.mgp");
     }
 
+    @Override
+    public boolean hasAllocatedFundsForAllProject() {
+	return getProjectFundAllocationId() != null && !getProjectFundAllocationId().isEmpty();
+    }
+
 }

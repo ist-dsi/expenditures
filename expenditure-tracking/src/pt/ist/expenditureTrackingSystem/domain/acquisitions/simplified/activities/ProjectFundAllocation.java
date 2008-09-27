@@ -3,32 +3,32 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activiti
 import java.util.List;
 
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.ProjectFinancer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
 import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean;
 
-public class FundAllocation extends GenericAcquisitionProcessActivity {
+public class ProjectFundAllocation extends GenericAcquisitionProcessActivity {
 
     @Override
     protected boolean isAccessible(AcquisitionProcess process) {
-	return process.isAccountingEmployee();
+	return process.isProjectAccountingEmployee();
     }
 
     @Override
     protected boolean isAvailable(AcquisitionProcess process) {
 	return process.isProcessInState(AcquisitionProcessStateType.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER)
 		&& !process.isProcessInState(AcquisitionProcessStateType.CANCELED)
-		&& process.hasAllocatedFundsForAllProjectFinancers();
+		&& !process.hasAllocatedFundsForAllProjectFinancers();
     }
 
     @Override
     protected void process(AcquisitionProcess process, Object... objects) {
 	final List<FundAllocationBean> fundAllocationBeans = (List<FundAllocationBean>) objects[0];
 	for (FundAllocationBean fundAllocationBean : fundAllocationBeans) {
-	    fundAllocationBean.getFinancer().setFundAllocationId(fundAllocationBean.getFundAllocationId());
+	    final ProjectFinancer projectFinancer = (ProjectFinancer) fundAllocationBean.getFinancer();
+	    projectFinancer.setProjectFundAllocationId(fundAllocationBean.getFundAllocationId());
 	}
-	new AcquisitionProcessState(process, AcquisitionProcessStateType.FUNDS_ALLOCATED);
     }
 
 }

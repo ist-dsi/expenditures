@@ -23,6 +23,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestDo
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Invoice;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.ProjectFinancer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.SearchAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.UnitItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
@@ -57,6 +58,7 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "add.acquisition.proposal.document", path = "/acquisitions/addAcquisitionProposalDocument.jsp"),
 	@Forward(name = "create.acquisition.request.item", path = "/acquisitions/createAcquisitionRequestItem.jsp"),
 	@Forward(name = "reject.acquisition.process", path = "/acquisitions/rejectAcquisitionProcess.jsp"),
+	@Forward(name = "allocate.project.funds", path = "/acquisitions/allocateProjectFunds.jsp"),
 	@Forward(name = "allocate.funds", path = "/acquisitions/allocateFunds.jsp"),
 	@Forward(name = "allocate.effective.funds", path = "/acquisitions/allocateEffectiveFunds.jsp"),
 	@Forward(name = "allocate.funds.to.service.provider", path = "/acquisitions/allocateFundsToServiceProvider.jsp"),
@@ -233,6 +235,26 @@ public class SimplifiedProcedureProcessAction extends ProcessAction {
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	User user = UserView.getUser();
 	return executeActivityAndViewProcess(mapping, form, request, response, "SubmitForFundAllocation", user.getPerson());
+    }
+
+    public ActionForward executeProjectFundAllocation(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final SimplifiedProcedureProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
+	request.setAttribute("acquisitionProcess", acquisitionProcess);
+	List<FundAllocationBean> fundAllocationBeans = new ArrayList<FundAllocationBean>();
+	for (Financer financer : acquisitionProcess.getProjectFinancersWithFundsAllocated()) {
+	    fundAllocationBeans.add(new FundAllocationBean(financer));
+	}
+	request.setAttribute("fundAllocationBeans", fundAllocationBeans);
+	return mapping.findForward("allocate.project.funds");
+    }
+
+    public ActionForward allocateProjectFunds(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	final SimplifiedProcedureProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
+	final List<FundAllocationBean> fundAllocationBeans = getRenderedObject();
+	genericActivityExecution(acquisitionProcess, "ProjectFundAllocation", fundAllocationBeans);
+	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
 
     public ActionForward executeFundAllocation(final ActionMapping mapping, final ActionForm form,

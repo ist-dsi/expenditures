@@ -44,4 +44,10 @@ public class Project extends Project_Base {
 	return new ProjectFinancer(acquisitionRequest, this);
     }
 
+    @Override
+    public boolean isProjectAccountingEmployee(final Person person) {
+	final AccountingUnit accountingUnit = getAccountingUnit();
+	return accountingUnit != null && accountingUnit.hasPeople(person);
+    }
+
 }

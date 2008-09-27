@@ -103,4 +103,13 @@ public class Financer extends Financer_Base {
 	return getAllocationIds(getEffectiveFundAllocationId(), "financer.label.allocation.id.prefix.giaf");
     }
 
+    public boolean isProjectAccountingEmployee(final Person person) {
+	final Unit unit = getUnit();
+	return unit.isProjectAccountingEmployee(person);
+    }
+
+    public boolean hasAllocatedFundsForAllProject() {
+	return true;
+    }
+
 }

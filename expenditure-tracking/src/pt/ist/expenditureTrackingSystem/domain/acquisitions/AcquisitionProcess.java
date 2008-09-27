@@ -178,6 +178,10 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 	return getAcquisitionRequest().getFinancersWithFundsAllocated();
     }
 
+    public Set<Financer> getProjectFinancersWithFundsAllocated() {
+	return getAcquisitionRequest().getProjectFinancersWithFundsAllocated();
+    }
+
     public Money getAcquisitionRequestValueLimit() {
 	return null;
     }
@@ -243,6 +247,21 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 
     public String getAcquisitionProcessId() {
 	return getAcquisitionProcessYear().getYear() + "/" + getAcquisitionProcessNumber();
+    }
+
+    public boolean isProjectAccountingEmployee(final Person person) {
+	final AcquisitionRequest acquisitionRequest = getAcquisitionRequest();
+	return acquisitionRequest.isProjectAccountingEmployee(person);
+    }
+
+    public boolean isProjectAccountingEmployee() {
+	final User user = UserView.getUser();
+	return user != null && isProjectAccountingEmployee(user.getPerson());
+    }
+
+    public boolean hasAllocatedFundsForAllProjectFinancers() {
+	final AcquisitionRequest acquisitionRequest = getAcquisitionRequest();
+	return acquisitionRequest.hasAllocatedFundsForAllProjectFinancers();
     }
 
 }
