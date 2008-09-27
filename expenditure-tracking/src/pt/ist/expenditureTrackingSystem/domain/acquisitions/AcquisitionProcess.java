@@ -264,4 +264,9 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 	return acquisitionRequest.hasAllocatedFundsForAllProjectFinancers();
     }
 
+    public boolean hasAllocatedFundsPermanentlyForAllProjectFinancers() {
+	final AcquisitionRequest acquisitionRequest = getAcquisitionRequest();
+	return acquisitionRequest.hasAllocatedFundsPermanentlyForAllProjectFinancers();
+    }
+
 }

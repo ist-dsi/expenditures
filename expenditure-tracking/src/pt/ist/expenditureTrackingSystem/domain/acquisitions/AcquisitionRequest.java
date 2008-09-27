@@ -520,4 +520,13 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	return true;
     }
 
+    public boolean hasAllocatedFundsPermanentlyForAllProjectFinancers() {
+	for (final Financer financer : getFinancersSet()) {
+	    if (!financer.hasAllocatedFundsPermanentlyForAllProjectFinancers()) {
+		return false;
+	    }
+	}
+	return true;
+    }
+
 }

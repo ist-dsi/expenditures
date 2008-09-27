@@ -4,17 +4,17 @@ import java.util.List;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.ProjectFinancer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
 import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean;
 
-public class AllocateFundsPermanently extends GenericAcquisitionProcessActivity {
+public class AllocateProjectFundsPermanently extends GenericAcquisitionProcessActivity {
 
     @Override
     protected boolean isAccessible(AcquisitionProcess process) {
-	return process.isAccountingEmployee();
+	return process.isProjectAccountingEmployee();
     }
 
     @Override
@@ -22,7 +22,7 @@ public class AllocateFundsPermanently extends GenericAcquisitionProcessActivity 
 	return process.isProcessInState(AcquisitionProcessStateType.INVOICE_CONFIRMED)
 		&& allItemsAreFilledWithRealValues(process)
 		&& process.getAcquisitionRequest().isEveryItemFullyAttributeInRealValues()
-		&& process.hasAllocatedFundsPermanentlyForAllProjectFinancers();
+		&& !process.hasAllocatedFundsPermanentlyForAllProjectFinancers();
     }
 
     private boolean allItemsAreFilledWithRealValues(AcquisitionProcess process) {
@@ -41,9 +41,9 @@ public class AllocateFundsPermanently extends GenericAcquisitionProcessActivity 
 	}
 	final List<FundAllocationBean> fundAllocationBeans = (List<FundAllocationBean>) objects[0];
 	for (FundAllocationBean fundAllocationBean : fundAllocationBeans) {
-	    fundAllocationBean.getFinancer().setEffectiveFundAllocationId(fundAllocationBean.getEffectiveFundAllocationId());
+	    final ProjectFinancer projectFinancer = (ProjectFinancer) fundAllocationBean.getFinancer();
+	    projectFinancer.setEffectiveProjectFundAllocationId(fundAllocationBean.getEffectiveFundAllocationId());
 	}
-	new AcquisitionProcessState(process, AcquisitionProcessStateType.FUNDS_ALLOCATED_PERMANENTLY);
     }
 
 }

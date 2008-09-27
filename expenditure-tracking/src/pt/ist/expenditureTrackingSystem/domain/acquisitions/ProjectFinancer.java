@@ -39,4 +39,9 @@ public class ProjectFinancer extends ProjectFinancer_Base {
 	return getProjectFundAllocationId() != null && !getProjectFundAllocationId().isEmpty();
     }
 
+    @Override
+    public boolean hasAllocatedFundsPermanentlyForAllProjectFinancers() {
+	return getEffectiveProjectFundAllocationId() != null && !getEffectiveProjectFundAllocationId().isEmpty();
+    }
+
 }
