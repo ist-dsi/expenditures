@@ -1,16 +1,16 @@
 <schema name="createUnit"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.CreateUnitBean"
 		bundle="ORGANIZATION_RESOURCES">
-	<slot name="name" key="unit.label.name" bundle="ORGANIZATION_RESOURCES">
+	<slot name="name" key="unit.label.name" bundle="ORGANIZATION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
 		<property name="size" value="40"/>
 	</slot>
-	<slot name="costCenter" key="unit.label.costCenter" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="costCenter" key="unit.label.costCenter" bundle="ORGANIZATION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 </schema>
 
 <schema name="createAccountingUnit"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.AccountingUnitBean"
 		bundle="ORGANIZATION_RESOURCES">
-	<slot name="name" key="unit.label.name" bundle="ORGANIZATION_RESOURCES">
+	<slot name="name" key="unit.label.name" bundle="ORGANIZATION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
 		<property name="size" value="40"/>
 	</slot>
 </schema>

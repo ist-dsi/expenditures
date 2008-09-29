@@ -68,7 +68,7 @@ public class OrganizationAction extends BaseAction {
 
     public final ActionForward viewOrganization(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
-	UnitBean unitBean = getRenderedObject();
+	UnitBean unitBean = getRenderedObject("unitBean");
 	if (unitBean == null) {
 	    unitBean = new UnitBean();
 	}
