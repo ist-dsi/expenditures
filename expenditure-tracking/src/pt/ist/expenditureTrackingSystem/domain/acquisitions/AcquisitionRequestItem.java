@@ -95,6 +95,8 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	}
 	setRecipient(recipient);
 	setAddress(address);
+	setRecipientEmail(email);
+	setRecipientPhone(phone);
     }
 
     public AcquisitionRequestItem(final AcquisitionRequest acquisitionRequest, final String description, final Integer quantity,
