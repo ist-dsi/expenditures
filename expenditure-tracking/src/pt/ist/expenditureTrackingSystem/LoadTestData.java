@@ -13,7 +13,9 @@ import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
+import pt.ist.expenditureTrackingSystem.domain.dto.AccountingUnitBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateUnitBean;
+import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.CostCenter;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Project;
@@ -28,6 +30,7 @@ public class LoadTestData {
 
     private static Set<Integer> projectResponsibles = new HashSet<Integer>();
     private static Map<String, String> teachers = new HashMap<String, String>();
+    private static Map<String, AccountingUnit> accountingUnitMap = new HashMap<String, AccountingUnit>();
 
     public static void init() {
 	String domainModelPath = "web/WEB-INF/classes/domain_model.dml";
@@ -185,6 +188,9 @@ public class LoadTestData {
 	// final FenixUnitMap fenixUnitMap = new FenixUnitMap(unitContents);
 	// createUnits(fenixUnitMap);
 
+	final String projectAccountingUnits = FileUtils.readFile("projectAccountingUnits.txt");
+	createProjectAccountingUnits(projectAccountingUnits);
+
 	loadTeachers();
 	final String activeCostCenterContents = FileUtils.readFile("activeCostCenters.csv");
 	final CdUnitMap cdUnitMap = new CdUnitMap(activeCostCenterContents);
@@ -208,6 +214,28 @@ public class LoadTestData {
 
 	final String cpvReferences = FileUtils.readFile("cpv.csv");
 	createCPVCodes(cpvReferences);
+    }
+
+    @Service
+    private static void createProjectAccountingUnits(final String projectAccountingUnits) {
+	final Map<String, AccountingUnit> accountingUnits = new HashMap<String, AccountingUnit>();
+
+	for (final String line : projectAccountingUnits.split("\n")) {
+	    final String parts[] = line.split("\t");
+	    final String projectCode = parts[0].trim();
+	    final String accountingUnitCode = parts[1].trim();
+
+	    final AccountingUnit accountingUnit;
+	    if (accountingUnits.containsKey(accountingUnitCode)) {
+		accountingUnit = accountingUnits.get(accountingUnitCode);
+	    } else {
+		final AccountingUnitBean accountingUnitBean = new AccountingUnitBean();
+		accountingUnitBean.setName(accountingUnitCode);
+		accountingUnit = AccountingUnit.createNewAccountingUnit(accountingUnitBean);
+		accountingUnits.put(accountingUnitCode, accountingUnit);
+	    }
+	    accountingUnitMap.put(projectCode, accountingUnit);
+	}
     }
 
     private static void loadTeachers() throws IOException {
@@ -362,6 +390,12 @@ public class LoadTestData {
 		createUnitBean.setProjectCode(projectCodeString);
 		createUnitBean.setName(acronimo);
 		final Unit unit = Unit.createNewUnit(createUnitBean);
+		final AccountingUnit accountingUnit = accountingUnitMap.get(projectCodeString);
+		if (accountingUnit != null) {
+		    unit.setAccountingUnit(accountingUnit);
+		} else {
+		    System.out.println("No accounting unit found for project: " + projectCodeString);
+		}
 
 		if (responsible != null) {
 		    if (projectResponsibles.contains(Integer.valueOf(responsibleString))) {
