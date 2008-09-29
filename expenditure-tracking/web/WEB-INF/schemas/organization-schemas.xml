@@ -163,12 +163,12 @@
 <schema name="createSupplier"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.CreateSupplierBean"
 		bundle="ORGANIZATION_RESOURCES">
-	<slot name="fiscalIdentificationCode" key="supplier.label.fiscalCode" bundle="ORGANIZATION_RESOURCES"/>
-	<slot name="name" key="supplier.label.name" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="fiscalIdentificationCode" key="supplier.label.fiscalCode" bundle="ORGANIZATION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="name" key="supplier.label.name" bundle="ORGANIZATION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 	<slot name="abbreviatedName" key="supplier.label.abbreviatedName" bundle="ORGANIZATION_RESOURCES"/>
-	<slot name="nib" key="supplier.label.nib" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="nib" key="supplier.label.nib" bundle="ORGANIZATION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 	<slot name="address" key="supplier.label.address" bundle="ORGANIZATION_RESOURCES"/>
-	<slot name="phone" key="supplier.label.phone" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="phone" key="supplier.label.phone" bundle="ORGANIZATION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 	<slot name="fax" key="supplier.label.fax" bundle="ORGANIZATION_RESOURCES"/>
 	<slot name="email" key="supplier.label.email" bundle="ORGANIZATION_RESOURCES"/>
 </schema>

@@ -5,11 +5,16 @@
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
 <h2><bean:message key="supplier.title.create" bundle="ORGANIZATION_RESOURCES"/></h2>
-<br/>
+
+<bean:define id="personOID" name="USER_SESSION_ATTRIBUTE" property="person.OID"/>
+
 <fr:edit action="/organization.do?method=createSupplier" name="bean" id="createBean"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.CreateSupplierBean"
 		schema="createSupplier">
 	<fr:layout name="tabular">
+		<fr:property name="classes" value="form"/>
+		<fr:property name="columnClasses" value=",,tderror"/>
 	</fr:layout>
+	<fr:destination name="cancel" path="<%= "/organization.do?method=viewPerson&personOid=" + personOID %>"/>
 </fr:edit>
 <br/>
