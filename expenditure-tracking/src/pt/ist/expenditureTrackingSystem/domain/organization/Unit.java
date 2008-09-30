@@ -169,7 +169,8 @@ public class Unit extends Unit_Base {
     }
 
     public boolean isProjectAccountingEmployee(Person person) {
-	throw new Error("Units with no accounting cannot finance any acquisitions.");
+	final Unit parentUnit = getParentUnit();
+	return parentUnit != null && parentUnit.isProjectAccountingEmployee(person);
     }
 
 }
