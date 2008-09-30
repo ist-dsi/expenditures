@@ -7,6 +7,7 @@ import java.util.List;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
+import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.announcement.AnnouncementProcessState;
 import pt.ist.expenditureTrackingSystem.domain.announcements.activities.ApproveAnnouncementProcess;
 import pt.ist.expenditureTrackingSystem.domain.announcements.activities.CancelAnnouncementProcess;
@@ -18,6 +19,7 @@ import pt.ist.expenditureTrackingSystem.domain.dto.AnnouncementBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
+import pt.ist.expenditureTrackingSystem.domain.requests.RequestForProposalProcessStateType;
 import pt.ist.fenixWebFramework.services.Service;
 
 public class AnnouncementProcess extends AnnouncementProcess_Base {
@@ -100,6 +102,13 @@ public class AnnouncementProcess extends AnnouncementProcess_Base {
 	    return getLastAnnouncementProcessState().getJustification();
 	}
 	return null;
+    }
+
+    public boolean isVisible(Person person) {
+	return getLastAnnouncementProcessState().equals(AnnouncementProcessStateType.APPROVED)
+		|| getAnnouncement().getPublisher() == person
+		|| person.hasRoleType(RoleType.ACQUISITION_CENTRAL)
+		|| person.hasRoleType(RoleType.ACQUISITION_CENTRAL_MANAGER);
     }
 
 }

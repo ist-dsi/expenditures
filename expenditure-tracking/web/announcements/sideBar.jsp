@@ -16,13 +16,11 @@
 					<bean:message key="link.sideBar.announcementProcess.createAnnouncement" bundle="EXPENDITURE_RESOURCES"/>
 				</html:link>
 			</li>
-			<!--
 			<li>
 				<html:link action="/announcementProcess.do?method=searchAnnouncementProcess">
-					<bean:message key="link.sideBar.announcementProcess.search" bundle="EXPENDITURE_RESOURCES"/>
+					<bean:message key="link.sideBar.announcementProcess.searchProcesses" bundle="EXPENDITURE_RESOURCES"/>
 				</html:link>
 			</li>
-			-->
 			<li>
 				<html:link action="/announcementProcess.do?method=showMyProcesses">
 					<bean:message key="link.sideBar.announcementProcess.myProcesses" bundle="EXPENDITURE_RESOURCES"/>

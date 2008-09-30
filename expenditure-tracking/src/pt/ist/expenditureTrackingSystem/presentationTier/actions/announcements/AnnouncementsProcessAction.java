@@ -12,8 +12,10 @@ import org.apache.struts.action.ActionMapping;
 
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.SearchAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.announcements.AnnouncementProcess;
 import pt.ist.expenditureTrackingSystem.domain.announcements.AnnouncementProcessStateType;
+import pt.ist.expenditureTrackingSystem.domain.announcements.SearchAnnouncementProcess;
 import pt.ist.expenditureTrackingSystem.domain.dto.AnnouncementBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.ProcessStateBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
@@ -31,6 +33,7 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "edit.announcement", path = "announcements/editAnnouncement.jsp"),
 	@Forward(name = "view.announcement", path = "announcements/viewAnnouncement.jsp"),
 	@Forward(name = "view.announcementProcess", path = "announcements/viewAnnouncementProcess.jsp"),
+	@Forward(name = "search.announcement.process", path = "announcements/searchAnnouncementProcess.jsp"),
 	@Forward(name = "reject.announcement.process", path = "announcements/rejectAnnouncementProcess.jsp") })
 public class AnnouncementsProcessAction extends ProcessAction {
 
@@ -84,6 +87,17 @@ public class AnnouncementsProcessAction extends ProcessAction {
 	return mapping.findForward("view.announcementProcess");
     }
 
+    public ActionForward searchAnnouncementProcess(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	SearchAnnouncementProcess searchAnnouncementProcess = getRenderedObject();
+	if (searchAnnouncementProcess == null) {
+	    searchAnnouncementProcess = new SearchAnnouncementProcess();
+	}
+	request.setAttribute("searchAnnouncementProcess", searchAnnouncementProcess);
+	return mapping.findForward("search.announcement.process");
+    }
+
+    
     public ActionForward viewAnnouncementProcess(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	AnnouncementProcess process = (AnnouncementProcess) getProcess(request);

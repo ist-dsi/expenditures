@@ -83,3 +83,17 @@
 			<property name="rows" value="4"/>
 	</slot>
 </schema>
+
+<schema name="searchAnnouncementProcess" bundle="ANNOUNCEMENT_RESOURCES" 
+		type="pt.ist.expenditureTrackingSystem.domain.announcements.SearchAnnouncementProcess">
+	<slot name="publisherName" key="label.requester" bundle="EXPENDITURE_RESOURCES"/>
+	<slot name="processStateType" key="label.processState" bundle="EXPENDITURE_RESOURCES">
+		<property name="defaultText" value="renderers.checkboxlist.selectAll"/>
+		<property name="key" value="true"/>
+		<property name="defaultTextBundle" value="RENDERER_RESOURCES"/>
+	</slot>
+	<slot name="supplierName" key="process.announcement.label.supplier" bundle="EXPENDITURE_RESOURCES"/>
+	<slot name="totalPrice"  key="process.announcement.label.totalPrice" bundle="EXPENDITURE_RESOURCES"/>
+	<slot name="publisherName" key="label.requester" bundle="EXPENDITURE_RESOURCES"/>
+	<slot name="requestingUnitName" key="label.requestingUnit" bundle="ANNOUNCEMENT_RESOURCES"/>
+</schema>

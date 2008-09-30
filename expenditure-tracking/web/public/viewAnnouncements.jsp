@@ -14,7 +14,6 @@
 	<p><em><bean:message key="process.messages.info.noProcessesToOperate" bundle="EXPENDITURE_RESOURCES"/>.</em></p>
 </logic:empty>
 
-
 <logic:iterate id="announcement" name="announcements" indexId="Id">
 	<div class="infoop2">
 		<table class="tstyle1">
@@ -41,6 +40,7 @@
 	</div>
 </logic:iterate>
 
+<%--
 <table>
 		
 		
@@ -50,3 +50,4 @@
 		</tr>
 
 </table>
+--%>
