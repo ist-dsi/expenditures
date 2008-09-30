@@ -27,13 +27,13 @@ public class UnitAutoCompleteProvider implements AutoCompleteProvider {
 		if (unit instanceof CostCenter) {
 		    final CostCenter costCenter = (CostCenter) unit;
 		    final String unitCode = costCenter.getCostCenter();
-		    if (unitCode != null && code == Integer.parseInt(unitCode)) {
+		    if (!StringUtils.isEmpty(unitCode) && code == Integer.parseInt(unitCode)) {
 			units.add(unit);
 		    }
 		} else if (unit instanceof Project) {
 		    final Project project = (Project) unit;
 		    final String unitCode = project.getProjectCode();
-		    if (unitCode != null && code == Integer.parseInt(unitCode)) {
+		    if (!StringUtils.isEmpty(unitCode) && code == Integer.parseInt(unitCode)) {
 			if (unit.hasAnySubUnits()) {
 			    addAllSubUnits(units, unit);
 			} else {
