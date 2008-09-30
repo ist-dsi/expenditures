@@ -39,15 +39,3 @@
 		</table>
 	</div>
 </logic:iterate>
-
-<%--
-<table>
-		
-		
-		<tr>
-			<th></th>
-
-		</tr>
-
-</table>
---%>
