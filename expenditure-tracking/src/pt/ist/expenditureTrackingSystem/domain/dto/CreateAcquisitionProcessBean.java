@@ -18,6 +18,7 @@ public class CreateAcquisitionProcessBean implements Serializable {
     public CreateAcquisitionProcessBean() {
 	setRequestingUnit(null);
 	setSupplier(null);
+	setRequestUnitPayingUnit(true);
     }
 
     public CreateAcquisitionProcessBean(AcquisitionRequest acquisitionRequest) {
