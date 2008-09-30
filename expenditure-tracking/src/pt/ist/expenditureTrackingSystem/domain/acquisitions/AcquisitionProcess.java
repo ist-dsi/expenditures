@@ -17,8 +17,10 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericLog;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
+import pt.ist.expenditureTrackingSystem.domain.processes.ProcessComment;
 import pt.ist.expenditureTrackingSystem.domain.util.Money;
 import pt.ist.fenixWebFramework.security.UserView;
+import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.pstm.Transaction;
 
 public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
@@ -269,4 +271,8 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 	return acquisitionRequest.hasAllocatedFundsPermanentlyForAllProjectFinancers();
     }
 
+    @Service
+    public void createComment(Person person, String comment) {
+	new ProcessComment(this,person,comment);
+    }
 }

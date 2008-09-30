@@ -337,7 +337,17 @@
 	<slot name="address" key="supplier.label.address"/>	
 </schema>
 
-<schema name="viewOperationLog"
+<schema name="viewLogForSimplifiedProcedureProcess"
+		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.OperationLog"
+		bundle="EXPENDITURE_RESOURCES">
+		<slot name="executor.name" key="process.logs.label.personName"/>
+		<slot name="activity.class" key="process.logs.label.operation" layout="label">
+			<property name="bundle" value="ACQUISITION_RESOURCES"/>
+		</slot>
+		<slot name="whenOperationWasRan" key="process.logs.label.executionDate"/>
+</schema>
+
+<schema name="viewLogForAfterTheFactAcquisitionProcess"
 		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.OperationLog"
 		bundle="EXPENDITURE_RESOURCES">
 		<slot name="executor.name" key="process.logs.label.personName"/>
@@ -346,7 +356,6 @@
 		</slot>
 		<slot name="whenOperationWasRan" key="process.logs.label.executionDate"/>
 </schema>
-
 
 <schema name="select.unit.from.domain.object.bean"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.DomainObjectBean"

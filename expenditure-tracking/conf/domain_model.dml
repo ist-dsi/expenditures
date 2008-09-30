@@ -240,6 +240,11 @@ class ProcessState {
 		RequestForProposalProcessStateType requestForProposalProcessStateType;
 	}
 
+class processes.ProcessComment {
+	String comment;
+	DateTime date;
+} 
+
 class requests.RequestForProposal {
 	String title;
 	String description;
@@ -664,4 +669,26 @@ relation UnitAccountingUnit {
 		multiplicity *;
 	}
 	organization.AccountingUnit playsRole accountingUnit;
+}
+
+relation PersonComment {
+	processes.ProcessComment playsRole comments {
+		multiplicity *;
+	}	
+	organization.Person playsRole commenter;
+}
+
+relation GenericProcessComment {
+	processes.ProcessComment playsRole comments {
+		multiplicity *;
+	}	
+	processes.GenericProcess playsRole process;
+}
+
+
+relation ProcessCommentExpenditureTrackingSystem {
+	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
+	processes.ProcessComment playsRole comments {
+		multiplicity *;
+	}
 }

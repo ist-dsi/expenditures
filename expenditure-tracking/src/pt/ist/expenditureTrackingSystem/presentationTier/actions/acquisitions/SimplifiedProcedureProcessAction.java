@@ -2,7 +2,10 @@ package pt.ist.expenditureTrackingSystem.presentationTier.actions.acquisitions;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -40,6 +43,7 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
+import pt.ist.expenditureTrackingSystem.domain.processes.ProcessComment;
 import pt.ist.expenditureTrackingSystem.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.presentationTier.Context;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.ProcessAction;
@@ -74,7 +78,9 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "assign.unit.item", path = "/acquisitions/assignUnitItem.jsp"),
 	@Forward(name = "edit.real.shares.values", path = "/acquisitions/editRealSharesValues.jsp"),
 	@Forward(name = "edit.supplier", path = "/acquisitions/editSupplierAddress.jsp"),
-	@Forward(name = "execute.payment", path = "/acquisitions/executePayment.jsp") })
+	@Forward(name = "execute.payment", path = "/acquisitions/executePayment.jsp"), 
+	@Forward(name = "view.comments", path = "/acquisitions/viewComments.jsp")
+})
 public class SimplifiedProcedureProcessAction extends ProcessAction {
 
     private static final Context CONTEXT = new Context("acquisitions");
@@ -387,7 +393,7 @@ public class SimplifiedProcedureProcessAction extends ProcessAction {
 
     public ActionForward saveInvoice(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) {
-	return processInvoiceData(mapping, request, "ReceiveInvoice");
+	return processInvoiceData(mapping, request, "CreateAcquisitionRequest.ReceiveInvoice");
     }
 
     public ActionForward updateInvoice(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -797,4 +803,29 @@ public class SimplifiedProcedureProcessAction extends ProcessAction {
 	return executeActivityAndViewProcess(mapping, form, request, response, "SubmitForConfirmInvoice");
     }
 
+    
+    public ActionForward viewComments(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	
+	AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
+	request.setAttribute("acquisitionProcess", acquisitionProcess);
+	
+	Set<ProcessComment> comments = new TreeSet<ProcessComment>  (ProcessComment.COMPARATOR);
+	comments.addAll(acquisitionProcess.getComments());
+	
+	request.setAttribute("comments", comments);
+	request.setAttribute("bean", new VariantBean());
+	return mapping.findForward("view.comments");
+    }
+    
+    public ActionForward addComment(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+
+	String comment = getRenderedObject("comment");
+	AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
+	acquisitionProcess.createComment(getLoggedPerson(), comment);
+
+	RenderUtils.invalidateViewState("comment");
+	return viewComments(mapping, form, request, response);
+    }
 }

@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.joda.time.DateTime;
 
@@ -31,9 +32,9 @@ public abstract class GenericProcess extends GenericProcess_Base {
     }
 
     public abstract <T extends GenericProcess> AbstractActivity<T> getActivityByName(String name);
-
+    
     public DateTime getDateFromLastActivity() {
-	List<GenericLog> logs = new ArrayList<GenericLog> ();
+	List<GenericLog> logs = new ArrayList<GenericLog>();
 	logs.addAll(getExecutionLogs());
 	Collections.sort(logs, new Comparator<GenericLog>() {
 
@@ -50,4 +51,11 @@ public abstract class GenericProcess extends GenericProcess_Base {
 	return UserView.getUser() != null;
     }
 
+    public ProcessComment getMostRecentComment() {
+	TreeSet<ProcessComment> comments = new TreeSet<ProcessComment>(ProcessComment.REVERSE_COMPARATOR);
+	comments.addAll(getComments());
+	return comments.size() > 0 ? comments.first() : null;
+    }
+
+    
 }

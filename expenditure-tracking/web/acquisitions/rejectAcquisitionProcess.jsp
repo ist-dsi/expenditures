@@ -7,9 +7,8 @@
 
 <h2><bean:message key="acquisitionProcess.title.rejectAcquisitionRequest" bundle="ACQUISITION_RESOURCES"/></h2>
 
-<bean:define id="acquisitionProcess" name="acquisitionProcess" type="pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess" />
-
-<bean:define id="acquisitionProcess" name="acquisitionProcess" toScope="request"/>
+<bean:define id="acquisitionProcess" name="acquisitionProcess" type="pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess" toScope="request"/>
+ 
 <jsp:include page="viewAcquisitionRequest.jsp" flush="true"/>
 
 <bean:define id="urlView">/acquisitionProcess.do?method=viewAcquisitionProcess&amp;acquisitionProcessOid=<%= acquisitionProcess.getOID() %></bean:define>
@@ -25,7 +24,6 @@
 	</fr:layout>
 	<fr:destination name="cancel" path="<%= urlView %>" />
 </fr:edit>
-
 
 
 

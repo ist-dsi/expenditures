@@ -31,7 +31,9 @@
 </logic:empty>
 
 
-<fr:view name="operationLogs" schema="viewOperationLog">
+<bean:define id="processClass" name="process" property="class.simpleName"/>
+
+<fr:view name="operationLogs" schema="<%= "viewLogFor" +  processClass%>">
 	<fr:layout name="tabular">
 		<fr:property name="classes" value="tstyle2"/>
 		<fr:property name="sortBy" value="whenOperationWasRan"/>

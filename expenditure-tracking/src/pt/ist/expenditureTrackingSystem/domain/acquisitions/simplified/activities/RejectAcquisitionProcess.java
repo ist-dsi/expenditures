@@ -5,7 +5,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
-import pt.ist.expenditureTrackingSystem.domain.dto.ProcessStateBean;
+import pt.ist.expenditureTrackingSystem.domain.processes.ProcessComment;
 
 public class RejectAcquisitionProcess extends GenericAcquisitionProcessActivity {
 
@@ -23,7 +23,9 @@ public class RejectAcquisitionProcess extends GenericAcquisitionProcessActivity 
 
     @Override
     protected void process(AcquisitionProcess process, Object... objects) {
-	new AcquisitionProcessState(process, AcquisitionProcessStateType.REJECTED, (String) objects[0]);
+	User user = getUser();
+	new ProcessComment(process, user.getPerson(), (String)objects[0]);
+	new AcquisitionProcessState(process, AcquisitionProcessStateType.REJECTED);
     }
 
 }

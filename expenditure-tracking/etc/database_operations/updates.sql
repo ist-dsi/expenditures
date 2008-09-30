@@ -26,3 +26,31 @@ alter table FINANCER add column OJB_CONCRETE_CLASS text;
 
 
 
+
+
+
+-- Inserted at 2008-09-30T14:25:45.112+01:00
+
+
+
+
+create table PROCESS_COMMENT (
+  `COMMENT` text,
+  `DATE` timestamp NULL default NULL,
+  `ID_INTERNAL` int(11) NOT NULL auto_increment,
+  `KEY_COMMENTER` int(11),
+  `KEY_PROCESS` int(11),
+  primary key (ID_INTERNAL),
+  index (KEY_COMMENTER),
+  index (KEY_PROCESS)
+) type=InnoDB ;
+
+
+
+
+-- Inserted at 2008-09-30T15:00:29.874+01:00
+
+alter table PROCESS_COMMENT add column KEY_EXPENDITURE_TRACKING_SYSTEM int(11);
+alter table PROCESS_COMMENT add index (KEY_EXPENDITURE_TRACKING_SYSTEM);
+
+
