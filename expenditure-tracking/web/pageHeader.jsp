@@ -27,14 +27,14 @@
 </logic:notPresent>
 <logic:present name="USER_SESSION_ATTRIBUTE">
 	<div class="login">
-		<html:link action="/customize.do?method=showNotificationOptions"><bean:message key="link.preferences" bundle="EXPENDITURE_RESOURCES"/></html:link> | 
+		<html:link action="/customize.do?method=showNotificationOptions"><bean:message key="link.preferences" bundle="EXPENDITURE_RESOURCES"/></html:link> |
+		<a href="https://193.136.132.88/Qualidade/Aquisicoes" target="_blank"><bean:message key="link.help" bundle="EXPENDITURE_RESOURCES"/></a> |  
 		<bean:message key="login.label.loggedInAs" bundle="EXPENDITURE_RESOURCES"/>: <bean:write name="USER_SESSION_ATTRIBUTE" property="username"/> |
 		<% if (isCasEnabled) {%>
 			<html:link href="<%= FenixWebFramework.getConfig().getCasLogoutUrl() %>"><bean:message key="login.label.logout" bundle="EXPENDITURE_RESOURCES"/></html:link>
 		<% } else { %>
 			<html:link action="/authenticationAction.do?method=logout"><bean:message key="login.label.logout" bundle="EXPENDITURE_RESOURCES"/></html:link>
 		<% } %>
-		| <a href="https://193.136.132.88/Qualidade/Aquisicoes" target="_blank"><bean:message key="link.help" bundle="EXPENDITURE_RESOURCES"/></a>
 	</div>
 </logic:present>
 
