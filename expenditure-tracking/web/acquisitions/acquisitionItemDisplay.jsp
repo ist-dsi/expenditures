@@ -158,6 +158,12 @@
 			<td colspan="3"><fr:view name="acquisitionRequestItem" property="description"/></td>
 		</tr>
 		
+		<tr>
+			<th><bean:message key="acquisitionRequestItem.label.deliveryInfo" bundle="ACQUISITION_RESOURCES"/>:</th>
+			<td>
+				<fr:view name="acquisitionRequestItem" property="address"/>
+			</td>
+		</tr>
 	</table>
 		
 </div>
