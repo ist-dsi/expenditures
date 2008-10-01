@@ -5,11 +5,15 @@
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
 <h2><bean:message key="supplier.title.edit" bundle="ORGANIZATION_RESOURCES"/></h2>
-<br/>
+
+
 <fr:edit action="/organization.do?method=editSupplier" name="supplier" id="edit"
 		type="pt.ist.expenditureTrackingSystem.domain.organization.Supplier"
 		schema="viewSupplier">
 	<fr:layout name="tabular">
+		<fr:property name="classes" value="form"/>
+		<fr:property name="columnClasses" value=",,tderror"/>
 	</fr:layout>
 </fr:edit>
-<br/>
+
+

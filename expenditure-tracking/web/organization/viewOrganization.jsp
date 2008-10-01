@@ -6,15 +6,17 @@
 
 <h2><bean:message key="title.viewOrganization" bundle="EXPENDITURE_RESOURCES"/></h2>
 
-<fr:edit id="unitBean"
-		name="unitBean"
-		type="pt.ist.expenditureTrackingSystem.domain.dto.UnitBean"
-		schema="unitBean">
-	<fr:layout name="tabular">
-		<fr:property name="classes" value="form"/>
-		<fr:property name="columnClasses" value=",,tderror"/>
-	</fr:layout>
-</fr:edit>
+<div class="mbottom15">
+	<fr:edit id="unitBean"
+			name="unitBean"
+			type="pt.ist.expenditureTrackingSystem.domain.dto.UnitBean"
+			schema="unitBean">
+		<fr:layout name="tabular">
+			<fr:property name="classes" value="form"/>
+			<fr:property name="columnClasses" value=",,tderror"/>
+		</fr:layout>
+	</fr:edit>
+</div>
 
 
 <logic:present role="MANAGER">

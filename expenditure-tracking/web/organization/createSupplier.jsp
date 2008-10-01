@@ -17,4 +17,4 @@
 	</fr:layout>
 	<fr:destination name="cancel" path="<%= "/organization.do?method=viewPerson&personOid=" + personOID %>"/>
 </fr:edit>
-<br/>
+

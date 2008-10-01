@@ -6,15 +6,17 @@
 
 <h2><bean:message key="search.label.users" bundle="EXPENDITURE_RESOURCES"/></h2>
 
-<fr:edit id="searchUsers"
-		name="searchUsers"
-		type="pt.ist.expenditureTrackingSystem.domain.organization.SearchUsers"
-		schema="searchUsers">
-	<fr:layout name="tabular">
-		<fr:property name="classes" value="form"/>
-		<fr:property name="columnClasses" value=",,tderror"/>
-	</fr:layout>
-</fr:edit>
+<div class="mbottom15">
+	<fr:edit id="searchUsers"
+			name="searchUsers"
+			type="pt.ist.expenditureTrackingSystem.domain.organization.SearchUsers"
+			schema="searchUsers">
+		<fr:layout name="tabular">
+			<fr:property name="classes" value="form"/>
+			<fr:property name="columnClasses" value=",,tderror"/>
+		</fr:layout>
+	</fr:edit>
+</div>
 
 <logic:present role="MANAGER">
 	<p class="mtop15">
