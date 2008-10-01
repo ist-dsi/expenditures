@@ -393,7 +393,7 @@ public class SimplifiedProcedureProcessAction extends ProcessAction {
 
     public ActionForward saveInvoice(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) {
-	return processInvoiceData(mapping, request, "CreateAcquisitionRequest.ReceiveInvoice");
+	return processInvoiceData(mapping, request, "ReceiveInvoice");
     }
 
     public ActionForward updateInvoice(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
