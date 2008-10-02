@@ -22,6 +22,7 @@ public class UnSubmitForApproval extends GenericAcquisitionProcessActivity {
 
     @Override
     protected void process(AcquisitionProcess process, Object... objects) {
+	process.getAcquisitionRequest().unSubmitForFundsAllocation();
 	new AcquisitionProcessState(process, AcquisitionProcessStateType.IN_GENESIS);
     }
 
