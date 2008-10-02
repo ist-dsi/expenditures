@@ -49,7 +49,7 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	}
     }
 
-    public void addAcquisitionProposalDocument(final String filename, final byte[] bytes) {
+    public void addAcquisitionProposalDocument(final String filename, final byte[] bytes, String proposalId) {
 	AcquisitionProposalDocument acquisitionProposalDocument = getAcquisitionProposalDocument();
 	if (acquisitionProposalDocument == null) {
 	    acquisitionProposalDocument = new AcquisitionProposalDocument();
@@ -57,6 +57,7 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	}
 	acquisitionProposalDocument.setFilename(filename);
 	acquisitionProposalDocument.setContent(new ByteArray(bytes));
+	acquisitionProposalDocument.setProposalId(proposalId != null && !proposalId.isEmpty() ? proposalId : null);
     }
 
     public AcquisitionRequestItem createAcquisitionRequestItem(AcquisitionRequestItemBean requestItemBean) {

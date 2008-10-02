@@ -1,19 +1,17 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
-import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
-import pt.ist.expenditureTrackingSystem.domain.File;
 import pt.ist.fenixframework.pstm.Transaction;
 
 public class AcquisitionRequestDocument extends AcquisitionRequestDocument_Base {
 
-    protected AcquisitionRequestDocument(Integer requestNumber) {
+    protected AcquisitionRequestDocument(String requestId) {
 	super();
-	setRequestNumber(requestNumber);
+	setRequestId(requestId);
     }
 
     public AcquisitionRequestDocument(final AcquisitionRequest acquisitionRequest, final byte[] contents, final String fileName,
-	    Integer requestNumber) {
-	this(requestNumber);
+	    String requestID) {
+	this(requestID);
 	if (acquisitionRequest.hasAcquisitionRequestDocument()) {
 	    acquisitionRequest.getAcquisitionRequestDocument().delete();
 	}
@@ -27,20 +25,6 @@ public class AcquisitionRequestDocument extends AcquisitionRequestDocument_Base 
 	removeAcquisitionRequest();
 	removeExpenditureTrackingSystem();
 	Transaction.deleteObject(this);
-    }
-
-    public static Integer readNextRequestNumber() {
-	int requestNumber = 0;
-	for (File file : ExpenditureTrackingSystem.getInstance().getFilesSet()) {
-	    if (file instanceof AcquisitionRequestDocument) {
-		AcquisitionRequestDocument acquisitionRequestDocument = (AcquisitionRequestDocument) file;
-		if (acquisitionRequestDocument.getRequestNumber() != null
-			&& acquisitionRequestDocument.getRequestNumber() > requestNumber) {
-		    requestNumber = acquisitionRequestDocument.getRequestNumber();
-		}
-	    }
-	}
-	return ++requestNumber;
     }
 
 }

@@ -25,7 +25,8 @@ public class AddAcquisitionProposalDocument extends GenericAcquisitionProcessAct
 	final AcquisitionRequest acquisitionRequest = process.getAcquisitionRequest();
 	String filename = (String) objects[0];
 	byte[] bytes = (byte[]) objects[1];
-	acquisitionRequest.addAcquisitionProposalDocument(filename, bytes);
+	String proposalID = (String) objects[2];
+	acquisitionRequest.addAcquisitionProposalDocument(filename, bytes, proposalID);
     }
 
 }

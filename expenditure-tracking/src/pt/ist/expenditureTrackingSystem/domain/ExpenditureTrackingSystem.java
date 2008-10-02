@@ -27,9 +27,10 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base {
 	    Transaction.withTransaction(false, new TransactionalCommand() {
 		@Override
 		public void doIt() {
-		    instance = oid == -1 ? new ExpenditureTrackingSystem()
-		    	: (ExpenditureTrackingSystem) Transaction.getObjectForOID(oid);
-		}});
+		    instance = oid == -1 ? new ExpenditureTrackingSystem() : (ExpenditureTrackingSystem) Transaction
+			    .getObjectForOID(oid);
+		}
+	    });
 	}
     }
 
@@ -113,6 +114,20 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base {
 
     private ExpenditureTrackingSystem() {
 	super();
+	setAcquisitionRequestDocumentCounter(0);
+    }
+
+    public String nextAcquisitionRequestDocumentID() {
+	return "D" + getAndUpdateNextAcquisitionRequestDocumentCountNumber();
+    }
+
+    public Integer nextAcquisitionRequestDocumentCountNumber() {
+	return getAndUpdateNextAcquisitionRequestDocumentCountNumber();
+    }
+
+    private Integer getAndUpdateNextAcquisitionRequestDocumentCountNumber() {
+	setAcquisitionRequestDocumentCounter(getAcquisitionRequestDocumentCounter().intValue() + 1);
+	return getAcquisitionRequestDocumentCounter();
     }
 
 }

@@ -16,6 +16,7 @@ enum pt.ist.expenditureTrackingSystem.domain.RoleType as RoleType;
 
 
 class ExpenditureTrackingSystem {
+	Integer acquisitionRequestDocumentCounter;
 }
 
 
@@ -110,10 +111,11 @@ class File {
 }
 
 	class acquisitions.AcquisitionProposalDocument extends File {
+		String proposalId;
 	}
 
 	class acquisitions.AcquisitionRequestDocument extends File {
-		Integer requestNumber;
+		String requestId;
 	}
 	
 	class acquisitions.Invoice extends File {

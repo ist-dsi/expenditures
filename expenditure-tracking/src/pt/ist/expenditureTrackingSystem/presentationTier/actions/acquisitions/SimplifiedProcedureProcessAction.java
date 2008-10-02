@@ -2,7 +2,6 @@ package pt.ist.expenditureTrackingSystem.presentationTier.actions.acquisitions;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -78,9 +77,8 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "assign.unit.item", path = "/acquisitions/assignUnitItem.jsp"),
 	@Forward(name = "edit.real.shares.values", path = "/acquisitions/editRealSharesValues.jsp"),
 	@Forward(name = "edit.supplier", path = "/acquisitions/editSupplierAddress.jsp"),
-	@Forward(name = "execute.payment", path = "/acquisitions/executePayment.jsp"), 
-	@Forward(name = "view.comments", path = "/acquisitions/viewComments.jsp")
-})
+	@Forward(name = "execute.payment", path = "/acquisitions/executePayment.jsp"),
+	@Forward(name = "view.comments", path = "/acquisitions/viewComments.jsp") })
 public class SimplifiedProcedureProcessAction extends ProcessAction {
 
     private static final Context CONTEXT = new Context("acquisitions");
@@ -91,6 +89,15 @@ public class SimplifiedProcedureProcessAction extends ProcessAction {
     }
 
     public static class AcquisitionProposalDocumentForm extends FileUploadBean {
+	private String proposalID;
+
+	public void setProposalID(String proposalID) {
+	    this.proposalID = proposalID;
+	}
+
+	public String getProposalID() {
+	    return proposalID;
+	}
     }
 
     public static class ReceiveInvoiceForm extends FileUploadBean {
@@ -181,7 +188,9 @@ public class SimplifiedProcedureProcessAction extends ProcessAction {
 	final AcquisitionProposalDocumentForm acquisitionProposalDocumentForm = getRenderedObject();
 	final String filename = acquisitionProposalDocumentForm.getFilename();
 	final byte[] bytes = consumeInputStream(acquisitionProposalDocumentForm);
-	acquisitionProcess.getActivityByName("AddAcquisitionProposalDocument").execute(acquisitionProcess, filename, bytes);
+	final String proposalID = acquisitionProposalDocumentForm.getProposalID();
+	acquisitionProcess.getActivityByName("AddAcquisitionProposalDocument").execute(acquisitionProcess, filename, bytes,
+		proposalID);
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
 
@@ -255,8 +264,8 @@ public class SimplifiedProcedureProcessAction extends ProcessAction {
 	return mapping.findForward("allocate.project.funds");
     }
 
-    public ActionForward allocateProjectFunds(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
+    public ActionForward allocateProjectFunds(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
 	final SimplifiedProcedureProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
 	final List<FundAllocationBean> fundAllocationBeans = getRenderedObject();
 	genericActivityExecution(acquisitionProcess, "ProjectFundAllocation", fundAllocationBeans);
@@ -803,21 +812,20 @@ public class SimplifiedProcedureProcessAction extends ProcessAction {
 	return executeActivityAndViewProcess(mapping, form, request, response, "SubmitForConfirmInvoice");
     }
 
-    
     public ActionForward viewComments(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) {
-	
+
 	AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
-	
-	Set<ProcessComment> comments = new TreeSet<ProcessComment>  (ProcessComment.COMPARATOR);
+
+	Set<ProcessComment> comments = new TreeSet<ProcessComment>(ProcessComment.COMPARATOR);
 	comments.addAll(acquisitionProcess.getComments());
-	
+
 	request.setAttribute("comments", comments);
 	request.setAttribute("bean", new VariantBean());
 	return mapping.findForward("view.comments");
     }
-    
+
     public ActionForward addComment(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) {
 

@@ -8,6 +8,7 @@ import java.util.ResourceBundle;
 
 import net.sf.jasperreports.engine.JRException;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.File;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
@@ -36,17 +37,17 @@ public class CreateAcquisitionRequest extends GenericAcquisitionProcessActivity 
 	if (objects.length == 2 && (objects[0] instanceof byte[])) {
 	    new AcquisitionRequestDocument(process.getAcquisitionRequest(), (byte[]) objects[0], (String) objects[1], null);
 	} else {
-	    Integer requestNumber = AcquisitionRequestDocument.readNextRequestNumber();
-	    byte[] file = createAcquisitionRequestItem(process.getAcquisitionRequest(), requestNumber);
-	    new AcquisitionRequestDocument(process.getAcquisitionRequest(), file, requestNumber + "." + File.EXTENSION_PDF,
-		    requestNumber);
+	    String requestID = ExpenditureTrackingSystem.getInstance().nextAcquisitionRequestDocumentID();
+	    byte[] file = createAcquisitionRequestItem(process.getAcquisitionRequest(), requestID);
+	    new AcquisitionRequestDocument(process.getAcquisitionRequest(), file, requestID + "." + File.EXTENSION_PDF, requestID);
 	}
     }
 
-    protected byte[] createAcquisitionRequestItem(final AcquisitionRequest acquisitionRequest, final Integer requestNumber) {
+    protected byte[] createAcquisitionRequestItem(final AcquisitionRequest acquisitionRequest, final String requestID) {
 	final Map<String, Object> paramMap = new HashMap<String, Object>();
 	paramMap.put("acquisitionRequest", acquisitionRequest);
-	paramMap.put("requestNumber", requestNumber);
+	paramMap.put("requestID", requestID);
+	paramMap.put("responsibleName", getUser().getPerson().getName());
 	DeliveryLocalList deliveryLocalList = new DeliveryLocalList();
 	List<AcquisitionRequestItemBean> acquisitionRequestItemBeans = new ArrayList<AcquisitionRequestItemBean>();
 	createBeansLists(acquisitionRequest, deliveryLocalList, acquisitionRequestItemBeans);
