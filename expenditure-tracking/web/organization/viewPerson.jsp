@@ -99,7 +99,7 @@
 </logic:notEmpty>
 <logic:empty name="authorizations">
 	<p>
-		<em><bean:message key="authorizations.label.person.none" bundle="ORGANIZATION_RESOURCES"/></em>
+		<em><bean:message key="authorizations.label.person.none" bundle="ORGANIZATION_RESOURCES"/>.</em>
 	</p>
 </logic:empty>
 
@@ -129,6 +129,6 @@
 </logic:notEmpty>
 <logic:empty name="person" property="accountingUnits">
 	<p>
-		<em><bean:message key="accountingUnit.message.person.not.associated" bundle="ORGANIZATION_RESOURCES"/></em>
+		<em><bean:message key="accountingUnit.message.person.not.associated" bundle="ORGANIZATION_RESOURCES"/>.</em>
 	</p>
 </logic:empty>

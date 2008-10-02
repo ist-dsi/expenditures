@@ -835,3 +835,25 @@ bottom: 0;
 right: 0;
 }
 
+
+/***********************************************/	
+/**************** comments *********************/
+
+div.comment {
+margin-bottom: 1.5em;
+}
+div.comment p {
+margin-bottom: 0 !important;
+}
+div.comment p span {
+margin-bottom: 0 !important;
+font-weight: bold;
+}
+div.comment div {
+margin-top: 0;
+}
+
+.tdbold td {
+font-weight: bold;
+}
+

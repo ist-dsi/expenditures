@@ -37,12 +37,13 @@
 </logic:present>
 
 
+
 <logic:present name="unit">
 	<div class="infoop2">
 		<fr:view name="unit" schema="unit">
 			<fr:layout name="tabular">
 				<fr:property name="classes" value="tstyle1"/>
-				<fr:property name="columnClasses" value="aleft,,,,aright,"/>
+				<fr:property name="rowClasses" value=",tdbold"/>
 			</fr:layout>
 		</fr:view>
 	</div>
@@ -67,7 +68,7 @@
 		</fr:view>	
 	</logic:notEmpty>	
 	<logic:empty name="unit" property="authorizations">
-		<p><em><bean:message key="authorizations.label.noResponsiblesDefinedForUnit" bundle="EXPENDITURE_RESOURCES"/></em></p>
+		<p><em><bean:message key="authorizations.label.noResponsiblesDefinedForUnit" bundle="EXPENDITURE_RESOURCES"/>.</em></p>
 	</logic:empty>
 
 	<logic:present name="unit" property="parentUnit">
@@ -85,7 +86,7 @@
 		<fr:view name="units" schema="unitList">
 			<fr:layout name="tabular">
 				<fr:property name="classes" value="tstyle2 mtop05"/>
-				<fr:property name="columnClasses" value="aleft,,,,aright,"/>
+				<fr:property name="columnClasses" value=",,aleft,"/>
 				<fr:property name="sortBy" value="name=asc"/>
 				<fr:property name="link(view)" value="/organization.do?method=viewOrganization"/>
 				<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
@@ -97,12 +98,13 @@
 	</logic:notEmpty>
 </logic:present>
 
-<h3><bean:message key="accountingUnit.title" bundle="ORGANIZATION_RESOURCES"/></h3>
-<p>
+<h3 class="mtop15 mbottom05"><bean:message key="accountingUnit.title" bundle="ORGANIZATION_RESOURCES"/></h3>
+<p class="mtop05">
 	<html:link action="/organization.do?method=prepareCreateAccountingUnit">
 		<bean:message key="unit.link.create.accounting.unit" bundle="ORGANIZATION_RESOURCES"/>
 	</html:link>
 </p>
+
 <logic:present name="accountingUnits">
 	<logic:empty name="accountingUnits">
 		<bean:message key="accountingUnit.message.none.defined" bundle="ORGANIZATION_RESOURCES"/>
@@ -111,7 +113,7 @@
 		<fr:view name="accountingUnits" schema="accountingUnits">
 			<fr:layout name="tabular">
 				<fr:property name="classes" value="tstyle2 mtop05"/>
-				<fr:property name="columnClasses" value="aleft,,,,aright,"/>
+				<fr:property name="columnClasses" value="aleft,,,,,"/>
 				<fr:property name="sortBy" value="name=asc"/>
 				<fr:property name="link(view)" value="/organization.do?method=viewAccountingUnit"/>
 				<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>

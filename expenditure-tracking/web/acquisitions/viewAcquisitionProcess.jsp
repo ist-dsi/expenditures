@@ -47,24 +47,26 @@
 </div>
 
 <ul>
-		<li>
-			<html:link page="/viewLogs.do?method=viewOperationLog&amp;module=acquisitions" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
-				<bean:message key="label.log.view" bundle="ACQUISITION_RESOURCES"/>
-			</html:link>
-		</li>
+	<li>
+		<html:link page="/viewLogs.do?method=viewOperationLog&amp;module=acquisitions" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
+			<bean:message key="label.log.view" bundle="ACQUISITION_RESOURCES"/>
+		</html:link>
+	</li>
 
-		<bean:size id="comments"  name="acquisitionProcess" property="comments"/>
-		<li> 
-				<html:link page="/acquisitionProcess.do?method=viewComments" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
-					<bean:message key="link.comments" bundle="EXPENDITURE_RESOURCES"/> ( <%= comments %> )
-				</html:link>	
-				<logic:greaterThan name="comments" value="0">
-					|
-					<bean:message key="label.lastBy" bundle="EXPENDITURE_RESOURCES"/> 
-					<bean:define id="mostRecentComment" name="acquisitionProcess" property="mostRecentComment"/>
-					<strong><fr:view name="mostRecentComment" property="commenter.name"/></strong>, <fr:view name="mostRecentComment" property="date"/> 
-				</logic:greaterThan>
-		</li>
+	<bean:size id="comments"  name="acquisitionProcess" property="comments"/>
+	<li> 
+		<html:link page="/acquisitionProcess.do?method=viewComments" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
+			<bean:message key="link.comments" bundle="EXPENDITURE_RESOURCES"/> (<%= comments %>)
+		</html:link>	
+		<logic:greaterThan name="comments" value="0">
+			|
+			<span class="color888">
+				<bean:message key="label.lastBy" bundle="EXPENDITURE_RESOURCES"/> 
+				<bean:define id="mostRecentComment" name="acquisitionProcess" property="mostRecentComment"/>
+				<strong><fr:view name="mostRecentComment" property="commenter.name"/></strong>, <fr:view name="mostRecentComment" property="date"/> 
+			</span>
+		</logic:greaterThan>
+	</li>
 </ul>
 
 <div class="expenditures">

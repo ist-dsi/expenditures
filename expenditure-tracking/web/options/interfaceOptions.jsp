@@ -6,8 +6,6 @@
 
 <h2><bean:message key="title.preferences" bundle="EXPENDITURE_RESOURCES"/></h2>
 
-<br/>
-
 <logic:present name="options" property="cascadingStyleSheet">
 	<html:link action="/CSS/user/layout.css">
 		<bean:write name="options" property="cascadingStyleSheet.filename"/>
