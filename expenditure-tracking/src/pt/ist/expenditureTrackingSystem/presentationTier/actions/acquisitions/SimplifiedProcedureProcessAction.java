@@ -510,7 +510,7 @@ public class SimplifiedProcedureProcessAction extends ProcessAction {
 	
 	fundAllocationBeans.add(index+1,fundAllocationBean);
 	request.setAttribute("fundAllocationBeans", fundAllocationBeans);
-	RenderUtils.invalidateViewState("financerFundAllocationId");
+	RenderUtils.invalidateViewState();
 	return mapping.findForward("allocate.effective.funds");
     }
 
@@ -524,7 +524,7 @@ public class SimplifiedProcedureProcessAction extends ProcessAction {
 	
 	fundAllocationBeans.remove(index);
 	request.setAttribute("fundAllocationBeans", fundAllocationBeans);
-	RenderUtils.invalidateViewState("financerFundAllocationId");
+	RenderUtils.invalidateViewState();
 	return mapping.findForward("allocate.effective.funds");
     }
     
