@@ -17,6 +17,7 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
     private AcquisitionProcessStateType acquisitionProcessStateType;
     private String fiscalIdentificationCode;
     private String costCenter;
+    private String proposalId;
 
     private class SearchResult extends SearchResultSet<AcquisitionProcess> {
 
@@ -33,18 +34,24 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
 
 	private boolean matchesSearchCriteria(final AcquisitionRequest acquisitionRequest) {
 	    final Person person = acquisitionRequest.getRequester();
-	    final String unsername = person == null ? null : person.getUsername();
+	    final String username = person == null ? null : person.getUsername();
 	    final Supplier supplier = acquisitionRequest.getSupplier();
 	    final String fiscalIdentificationCode = supplier == null ? null : supplier.getFiscalIdentificationCode();
 	    final String identification = acquisitionRequest.getAcquisitionProcessId();
+	    final String acquisitionProposalId = acquisitionRequest.getAcquisitionProposalDocumentId();
 	    return matchCriteria(processId, identification)
-	    		&& matchCriteria(requester, unsername)
-	    		&& matchCriteria(fiscalIdentificationCode, fiscalIdentificationCode);
+	    		&& matchCriteria(requester, username)
+	    		&& matchCriteria(fiscalIdentificationCode, fiscalIdentificationCode)
+	    		&& matchCriteria(proposalId, acquisitionProposalId);
 		    //&& matchCriteria(costCenter, acquisitionRequest.getCostCenter());
 	}
 
 	private boolean matchCriteria(final AcquisitionProcessStateType criteria, final AcquisitionProcessStateType value) {
 	    return criteria == null || criteria == value;
+	}
+
+	private boolean matchCriteria(Integer criteria, Integer value) {
+	    return criteria == null || criteria.equals(value);
 	}
 
     }
@@ -70,7 +77,8 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
 		|| hasCriteria(requester)
 		|| acquisitionProcessStateType != null
 		|| hasCriteria(fiscalIdentificationCode)
-		|| hasCriteria(costCenter);
+		|| hasCriteria(costCenter)
+		|| hasCriteria(proposalId);
     }
 
     public String getRequester() {
@@ -111,6 +119,14 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
 
     public void setProcessId(String processId) {
         this.processId = processId;
+    }
+
+    public String getProposalId() {
+        return proposalId;
+    }
+
+    public void setProposalId(String proposalId) {
+        this.proposalId = proposalId;
     }
 
 }

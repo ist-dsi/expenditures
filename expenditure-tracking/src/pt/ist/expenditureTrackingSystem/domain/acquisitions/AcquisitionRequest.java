@@ -530,4 +530,11 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	return true;
     }
 
+    public String getAcquisitionProposalDocumentId() {
+	if (hasAcquisitionProposalDocument()) {
+	    return getAcquisitionProposalDocument().getProposalId();
+	}
+	return null;
+    }
+
 }

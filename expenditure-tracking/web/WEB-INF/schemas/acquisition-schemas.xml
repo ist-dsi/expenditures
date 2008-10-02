@@ -25,7 +25,7 @@
 			<property name="key" value="true"/>
 		</validator>
 	</slot>
-	<slot name="requestUnitPayingUnit" key="acquisitionProcess.label.addRequestUnitAlsoHasPayingUnit" bundle="ACQUISITION_RESOURCES"/>	
+	<slot name="requestUnitPayingUnit" key="acquisitionProcess.label.addRequestUnitAlsoHasPayingUnit" bundle="ACQUISITION_RESOURCES" />
 </schema>
 
 <schema name="editAcquisitionRequest"
@@ -108,6 +108,7 @@
 		<property name="classes" value="nowrap"/>
 	</slot> 
 	<slot name="acquisitionRequest.fiscalIdentificationCode" key="supplier.label.fiscalCode" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="acquisitionRequest.acquisitionProposalDocumentId" key="acquisitionProcess.label.proposalID" bundle="ACQUISITION_RESOURCES" layout="null-as-label" />
 </schema>
 
 <schema name="addAcquisitionProposalDocument"
@@ -286,6 +287,7 @@
 		<property name="defaultTextBundle" value="RENDERER_RESOURCES"/>
 	</slot>
 	<slot name="fiscalIdentificationCode" key="supplier.label.fiscalCode" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="proposalId" key="acquisitionProcess.label.proposalID" bundle="ACQUISITION_RESOURCES" />
 </schema>
 
 <schema name="allocateFunds"
@@ -357,6 +359,7 @@
 		</slot>
 		<slot name="whenOperationWasRan" key="process.logs.label.executionDate"/>
 </schema>
+
 
 <schema name="select.unit.from.domain.object.bean"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.DomainObjectBean"
