@@ -34,8 +34,8 @@ public class ExceptionHandlerFilter implements Filter {
 	     * PrintWriter(out)); request.setAttribute("error", out.toString());
 	     */
 	    httpServletRequest.getRequestDispatcher("/error.jsp").forward(request, response);
-	} catch (Exception exception) {
-	    exception.printStackTrace();
+	} catch (Throwable throwable) {
+	    throwable.printStackTrace();
 	    /*
 	     * StringWriter out = new StringWriter();
 	     * exception.printStackTrace(new PrintWriter(out));
