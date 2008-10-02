@@ -2,6 +2,8 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import java.util.ResourceBundle;
 
+import org.apache.commons.lang.StringUtils;
+
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.organization.CostCenter;
@@ -9,6 +11,7 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.util.Money;
 import pt.ist.fenixframework.pstm.Transaction;
+import pt.utl.ist.fenix.tools.util.Strings;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 
 public class Financer extends Financer_Base {
@@ -92,7 +95,7 @@ public class Financer extends Financer_Base {
 	stringBuilder.append(resourceBundle.getObject(key));
 	stringBuilder.append(' ');
 	stringBuilder.append(id == null || id.isEmpty() ? "-" : id);
-	stringBuilder.append(" ]");
+	stringBuilder.append(']');
 	return stringBuilder.toString();
     }
 
@@ -101,7 +104,17 @@ public class Financer extends Financer_Base {
     }
 
     public String getEffectiveFundAllocationIds() {
-	return getAllocationIds(getEffectiveFundAllocationId(), "financer.label.allocation.id.prefix.giaf");
+	Strings strings = getEffectiveFundAllocationId();
+	if (strings != null && !strings.isEmpty()) {
+	    StringBuilder buffer = new StringBuilder("");
+
+	    for (String allocationId : strings) {
+		buffer.append(getAllocationIds(allocationId, "financer.label.allocation.id.prefix.giaf"));
+		buffer.append(' ');
+	    }
+	    return buffer.toString();
+	}
+	return getAllocationIds(null, "financer.label.allocation.id.prefix.giaf");
     }
 
     public boolean isProjectAccountingEmployee(final Person person) {
@@ -115,6 +128,16 @@ public class Financer extends Financer_Base {
 
     public boolean hasAllocatedFundsPermanentlyForAllProjectFinancers() {
 	return true;
+    }
+
+    public void addEffectiveFundAllocationId(String effectiveFundAllocationId) {
+	Strings strings = getEffectiveFundAllocationId();
+	if (strings == null) {
+	    strings = new Strings(effectiveFundAllocationId);
+	    setEffectiveFundAllocationId(strings);
+	} else {
+	    strings.add(effectiveFundAllocationId);
+	}
     }
 
 }

@@ -2,6 +2,9 @@ package pt.ist.expenditureTrackingSystem.presentationTier.actions.acquisitions;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -491,6 +494,40 @@ public class SimplifiedProcedureProcessAction extends ProcessAction {
 	return mapping.findForward("allocate.effective.funds");
     }
 
+    public ActionForward  addAllocationFund(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+
+	final SimplifiedProcedureProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
+	request.setAttribute("acquisitionProcess", acquisitionProcess);
+	List<FundAllocationBean> fundAllocationBeans = getRenderedObject("financerFundAllocationId");
+	Integer index = Integer.valueOf(request.getParameter("index"));
+
+	Financer financer = getDomainObject(request, "financerOID");
+	FundAllocationBean fundAllocationBean = new FundAllocationBean(financer);
+	fundAllocationBean.setFundAllocationId(null);
+	fundAllocationBean.setEffectiveFundAllocationId(null);
+	fundAllocationBean.setAllowedToAddNewFund(false);
+	
+	fundAllocationBeans.add(index+1,fundAllocationBean);
+	request.setAttribute("fundAllocationBeans", fundAllocationBeans);
+	RenderUtils.invalidateViewState("financerFundAllocationId");
+	return mapping.findForward("allocate.effective.funds");
+    }
+
+    public ActionForward  removeAllocationFund(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	
+	final SimplifiedProcedureProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
+	request.setAttribute("acquisitionProcess", acquisitionProcess);
+	List<FundAllocationBean> fundAllocationBeans = getRenderedObject("financerFundAllocationId");
+	int index = Integer.valueOf(request.getParameter("index")).intValue();
+	
+	fundAllocationBeans.remove(index);
+	request.setAttribute("fundAllocationBeans", fundAllocationBeans);
+	RenderUtils.invalidateViewState("financerFundAllocationId");
+	return mapping.findForward("allocate.effective.funds");
+    }
+    
     public ActionForward allocateFundsPermanently(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final SimplifiedProcedureProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");

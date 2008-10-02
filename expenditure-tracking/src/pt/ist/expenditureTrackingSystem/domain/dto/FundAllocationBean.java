@@ -10,9 +10,11 @@ public class FundAllocationBean implements Serializable {
     private DomainReference<Financer> financer;
     private String fundAllocationId;
     private String effectiveFundAllocationId;
-
+    private boolean allowedToAddNewFund;
+    
     public FundAllocationBean(final Financer financer) {
 	setFinancer(financer);
+	setAllowedToAddNewFund(true);
     }
 
     public void setFinancer(Financer financer) {
@@ -37,6 +39,14 @@ public class FundAllocationBean implements Serializable {
 
     public String getEffectiveFundAllocationId() {
 	return effectiveFundAllocationId;
+    }
+
+    public boolean isAllowedToAddNewFund() {
+        return allowedToAddNewFund;
+    }
+
+    public void setAllowedToAddNewFund(boolean allowedToAddNewFund) {
+        this.allowedToAddNewFund = allowedToAddNewFund;
     }
 
 }

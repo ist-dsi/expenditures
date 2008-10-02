@@ -6,6 +6,7 @@
 
 <h2><bean:message key="acquisitionProcess.title.viewAcquisitionRequest" bundle="ACQUISITION_RESOURCES"/></h2>
 
+<bean:define id="acquisitionProcessOID" name="acquisitionProcess"  property="OID"/>
 <bean:define id="acquisitionProcess" name="acquisitionProcess" toScope="request"/>
 <jsp:include page="viewAcquisitionRequest.jsp" flush="true"/>
 
@@ -23,17 +24,59 @@
 	</p>
 </div>
 
-<bean:define id="urlActivity">/acquisitionProcess.do?method=allocateFundsPermanently&amp;acquisitionProcessOid=<bean:write name="acquisitionProcess" property="OID"/></bean:define>
+<bean:define id="urlActivity">/acquisitionProcess.do?acquisitionProcessOid=<bean:write name="acquisitionProcess" property="OID"/></bean:define>
 <bean:define id="urlView">/acquisitionProcess.do?method=viewAcquisitionProcess&amp;acquisitionProcessOid=<bean:write name="acquisitionProcess" property="OID"/></bean:define>
-<fr:edit action="<%= urlActivity %>" 
-		id="financerFundAllocationId" 
-		schema="editFinancerEffectiveFundAllocationId" 
-		name="fundAllocationBeans" >
-	<fr:layout name="tabular-editable">
-		<fr:property name="classes" value="tstyle2"/>
-	</fr:layout>
-	<fr:destination name="cancel" path="<%= urlView %>" />
-</fr:edit>
+<div class="dinline forminline">
+<fr:form id="allocationForm" action="<%= urlActivity %>">
+	<fr:edit  
+		id="financerFundAllocationId"
+		name="fundAllocationBeans" visible="false"/>
+		
+	<html:hidden  property="method" value="allocateFundsPermanently"/>
+	<html:hidden property="financerOID" value=""/>
+	<html:hidden property="index" value=""/>
+
+<table class="tstyle2">
+<tr>
+	<th><strong><bean:message key="unit.label.unit" bundle="ORGANIZATION_RESOURCES"/></strong></th>
+	<th><strong><bean:message key="financer.label.fundAllocation.identification" bundle="ACQUISITION_RESOURCES"/></strong></th>
+	<th><strong><bean:message key="financer.label.effectiveFundAllocation.identification" bundle="ACQUISITION_RESOURCES"/></strong></th>
+	<th></th>
+</tr>	
+<logic:iterate id="financerBean" name="fundAllocationBeans" indexId="index">
+	<tr>
+		<td>
+			<fr:view name="financerBean" property="financer.unit.presentationName"/>
+		</td>
+		<td>
+			<fr:view name="financerBean" property="fundAllocationId" type="java.lang.String"/>
+		</td>
+		<td>
+			<fr:edit id="<%= "id" + index %>" name="financerBean" slot="effectiveFundAllocationId" type="java.lang.String" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+		</td>
+		<td>
+			<bean:define id="financerOID" name="financerBean" property="financer.OID"/>
+			<logic:equal name="financerBean" property="allowedToAddNewFund" value="true">
+				<a href="javascript:document.getElementById('allocationForm').method.value='addAllocationFund'; document.getElementById('allocationForm').financerOID.value='<%= financerOID %>'; document.getElementById('allocationForm').index.value='<%= index %>'; document.getElementById('allocationForm').submit();">
+					<bean:message key="financer.link.addEffectiveAllocationId" bundle="ACQUISITION_RESOURCES"/>
+				</a>
+			</logic:equal>
+			<logic:equal name="financerBean" property="allowedToAddNewFund" value="false">
+				<a href="javascript:document.getElementById('allocationForm').method.value='removeAllocationFund'; document.getElementById('allocationForm').index.value='<%= index %>'; document.getElementById('allocationForm').submit();">
+					<bean:message key="financer.link.removeEffectiveAllocationId" bundle="ACQUISITION_RESOURCES"/>
+				</a>
+			</logic:equal>
+		</td>
+	</tr>	
+</logic:iterate> 
+</table>
+
+	<html:submit styleClass="inputbutton"><bean:message key="button.atribute" bundle="EXPENDITURE_RESOURCES"/> </html:submit>
+</fr:form>
+<fr:form id="allocationForm" action="<%= urlView %>">
+	<html:submit styleClass="inputbutton"><bean:message key="renderers.form.cancel.name" bundle="RENDERER_RESOURCES"/> </html:submit>
+</fr:form>
+</div>
 
 <div class="item">
 	<bean:size id="totalItems" name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestItemsSet"/>

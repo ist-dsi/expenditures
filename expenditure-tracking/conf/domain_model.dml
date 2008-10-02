@@ -7,6 +7,7 @@ valueType org.joda.time.LocalDate as LocalDate;
 valueType pt.ist.expenditureTrackingSystem.domain.util.Address as Address;
 valueType pt.ist.expenditureTrackingSystem.domain.util.ByteArray as ByteArray;
 valueType pt.ist.expenditureTrackingSystem.domain.util.Money as Money;
+valueType pt.utl.ist.fenix.tools.util.Strings as Strings;
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType as AcquisitionProcessStateType;
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionType as AfterTheFactAcquisitionType;
 enum pt.ist.expenditureTrackingSystem.domain.announcements.AnnouncementProcessStateType as AnnouncementProcessStateType;
@@ -82,7 +83,7 @@ class acquisitions.UnitItem {
 class acquisitions.Financer {
 	String ojbConcreteClass;
 	String fundAllocationId;
-	String effectiveFundAllocationId;
+	Strings effectiveFundAllocationId;
 }
 
 	class acquisitions.ProjectFinancer extends acquisitions.Financer {
