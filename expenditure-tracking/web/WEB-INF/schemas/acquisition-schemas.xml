@@ -346,6 +346,7 @@
 		<slot name="executor.name" key="process.logs.label.personName"/>
 		<slot name="activity.class" key="process.logs.label.operation" layout="label">
 			<property name="bundle" value="ACQUISITION_RESOURCES"/>
+			<property name="escape" value="false"/>
 		</slot>
 		<slot name="whenOperationWasRan" key="process.logs.label.executionDate"/>
 </schema>
@@ -356,6 +357,7 @@
 		<slot name="executor.name" key="process.logs.label.personName"/>
 		<slot name="operation" key="process.logs.label.operation" layout="label">
 			<property name="bundle" value="ACQUISITION_RESOURCES"/>
+			<property name="escape" value="false"/>
 		</slot>
 		<slot name="whenOperationWasRan" key="process.logs.label.executionDate"/>
 </schema>
