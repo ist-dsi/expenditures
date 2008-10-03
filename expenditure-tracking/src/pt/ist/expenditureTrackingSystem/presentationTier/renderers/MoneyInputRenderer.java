@@ -21,7 +21,7 @@ public class MoneyInputRenderer extends InputRenderer {
 	    public HtmlComponent createComponent(Object object, Class type) {
 		HtmlTextInput input = new HtmlTextInput();
 		if (object != null) {
-		    input.setValue(((Money)object).getValue().toPlainString());
+		    input.setValue(((Money)object).getRoundedValue().toPlainString());
 		}
 		MetaSlotKey key = (MetaSlotKey) getInputContext().getMetaObject().getKey();
 		input.setTargetSlot(key);

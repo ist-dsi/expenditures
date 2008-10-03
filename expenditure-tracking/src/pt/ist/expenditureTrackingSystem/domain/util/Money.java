@@ -168,7 +168,7 @@ public class Money implements Serializable, Comparable<Money> {
     }
 
     public boolean equals(Money money) {
-	return getValue().compareTo(money.getValue()) == 0 && getCurrency().equals(money.getCurrency());
+	return getRoundedValue().compareTo(money.getRoundedValue()) == 0 && getCurrency().equals(money.getCurrency());
     }
 
     private NumberFormat getCurrencyFormat() {
@@ -177,7 +177,11 @@ public class Money implements Serializable, Comparable<Money> {
 	return numberFormat;
     }
 
+    public BigDecimal getRoundedValue() {
+	return getValue().setScale(getCurrencyFormat().getMaximumFractionDigits(), RoundingMode.HALF_EVEN);
+    }
+    
     public String toFormatString() {
-	return getCurrencyFormat().format(getValue().doubleValue());
+	return getCurrencyFormat().format(getRoundedValue().doubleValue());
     }
 }

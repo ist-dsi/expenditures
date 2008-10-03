@@ -21,7 +21,7 @@
 <bean:define id="acquisitionRequestItem" name="acquisitionRequestItem" toScope="request"/>
 <jsp:include page="./acquisitionItemDisplay.jsp" flush="false"/>
 
-<bean:define id="maxValue" name="acquisitionRequestItem" property="totalItemValueWithAdditionalCostsAndVat.value"/>
+<bean:define id="maxValue" name="acquisitionRequestItem" property="totalItemValueWithAdditionalCostsAndVat.roundedValue"/>
 <jsp:include page="../commons/defaultErrorDisplay.jsp"/>
 
 <div class="dinline forminline">
