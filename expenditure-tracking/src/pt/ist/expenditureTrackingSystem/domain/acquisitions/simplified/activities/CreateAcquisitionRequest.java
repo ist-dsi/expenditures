@@ -34,13 +34,9 @@ public class CreateAcquisitionRequest extends GenericAcquisitionProcessActivity 
 
     @Override
     protected void process(AcquisitionProcess process, Object... objects) {
-	if (objects.length == 2 && (objects[0] instanceof byte[])) {
-	    new AcquisitionRequestDocument(process.getAcquisitionRequest(), (byte[]) objects[0], (String) objects[1], null);
-	} else {
-	    String requestID = ExpenditureTrackingSystem.getInstance().nextAcquisitionRequestDocumentID();
-	    byte[] file = createAcquisitionRequestItem(process.getAcquisitionRequest(), requestID);
-	    new AcquisitionRequestDocument(process.getAcquisitionRequest(), file, requestID + "." + File.EXTENSION_PDF, requestID);
-	}
+	String requestID = ExpenditureTrackingSystem.getInstance().nextAcquisitionRequestDocumentID();
+	byte[] file = createAcquisitionRequestItem(process.getAcquisitionRequest(), requestID);
+	new AcquisitionRequestDocument(process.getAcquisitionRequest(), file, requestID + "." + File.EXTENSION_PDF, requestID);
     }
 
     protected byte[] createAcquisitionRequestItem(final AcquisitionRequest acquisitionRequest, final String requestID) {

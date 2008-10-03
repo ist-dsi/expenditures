@@ -180,8 +180,15 @@ public class Money implements Serializable, Comparable<Money> {
     public BigDecimal getRoundedValue() {
 	return getValue().setScale(getCurrencyFormat().getMaximumFractionDigits(), RoundingMode.HALF_EVEN);
     }
-    
+
     public String toFormatString() {
 	return getCurrencyFormat().format(getRoundedValue().doubleValue());
+    }
+
+    public String toFormatStringWithoutCurrency() {
+	NumberFormat numberInstance = NumberFormat.getNumberInstance(Language.getLocale());
+	numberInstance.setMinimumFractionDigits(getCurrencyFormat().getMaximumFractionDigits());
+
+	return numberInstance.format(getRoundedValue().doubleValue());
     }
 }

@@ -2,9 +2,6 @@ package pt.ist.expenditureTrackingSystem.presentationTier.actions.acquisitions;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -316,7 +313,6 @@ public class SimplifiedProcedureProcessAction extends ProcessAction {
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
-	request.setAttribute("uploadFile", new FileUploadBean());
 	return mapping.findForward("prepare.create.acquisition.request");
     }
 
@@ -348,30 +344,11 @@ public class SimplifiedProcedureProcessAction extends ProcessAction {
 	    HttpServletRequest request, HttpServletResponse response) throws JRException, IOException {
 	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
 
-	AcquisitionRequest acquisitionRequest = acquisitionProcess.getAcquisitionRequest();
-
 	AbstractActivity<AcquisitionProcess> createAquisitionRequest = acquisitionProcess
 		.getActivityByName("CreateAcquisitionRequest");
 	createAquisitionRequest.execute(acquisitionProcess);
-	AcquisitionRequestDocument acquisitionRequestDocument = acquisitionRequest.getAcquisitionRequestDocument();
 
-	download(response, acquisitionRequestDocument);
-
-	return null;
-    }
-
-    public ActionForward addAcquisitionRequestDocument(ActionMapping mapping, ActionForm actionForm, HttpServletRequest request,
-	    HttpServletResponse response) {
-	final SimplifiedProcedureProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
-	FileUploadBean fileUploadBean = getRenderedObject("acquisitionRequestDocument");
-	RenderUtils.invalidateViewState();
-
-	AbstractActivity<AcquisitionProcess> createAquisitionRequest = acquisitionProcess
-		.getActivityByName("CreateAcquisitionRequest");
-	byte[] content = consumeInputStream(fileUploadBean);
-	createAquisitionRequest.execute(acquisitionProcess, content, fileUploadBean.getFilename());
-
-	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
+	return executeCreateAcquisitionRequest(mapping, actionForm, request, response);
     }
 
     public ActionForward executeReceiveInvoice(final ActionMapping mapping, final ActionForm form,

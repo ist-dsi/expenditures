@@ -33,22 +33,30 @@
 	</logic:iterate>
 </logic:present>
 
-<p class="mtop15">
-	<html:link action="/acquisitionProcess.do?method=createAcquisitionRequestDocument" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
-		<bean:message key="acquisitionProcess.link.createRequestDocument" bundle="ACQUISITION_RESOURCES"/>
-	</html:link>
-</p>
+<div class="documents">
+	<p>
+		<bean:message key="acquisitionProcess.label.requestDocument" bundle="ACQUISITION_RESOURCES"/>:
+		<logic:present name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestDocument">
+			<html:link action="/acquisitionProcess.do?method=downloadAcquisitionRequestDocument" paramId="acquisitionRequestDocumentOid" paramName="acquisitionProcess" paramProperty="acquisitionRequest.acquisitionRequestDocument.OID">
+				<bean:write name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestDocument.filename"/>
+			</html:link>	
+		</logic:present>
+		<logic:notPresent name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestDocument">
+			<em><bean:message key="document.message.info.notAvailable" bundle="EXPENDITURE_RESOURCES"/></em>
+		</logic:notPresent>
+	</p>
+</div>
 
+<bean:define id="url">/acquisitionProcess.do?method=createAcquisitionRequestDocument&amp;acquisitionProcessOid=<%= acquisitionProcessOID %></bean:define>
+<p>
+	<html:link action="<%= url %>" onclick="setTimeout('document.location.reload(true)',10500)"><bean:message key="acquisitionProcess.link.createRequestDocument" bundle="ACQUISITION_RESOURCES"/></html:link>
+</p>
 <bean:define id="urlAdd">/acquisitionProcess.do?method=addAcquisitionRequestDocument&amp;acquisitionProcessOid=<%= acquisitionProcessOID %></bean:define>
 <bean:define id="urlView">/acquisitionProcess.do?method=viewAcquisitionProcess&amp;acquisitionProcessOid=<%= acquisitionProcessOID %></bean:define>
 
-<fr:edit id="acquisitionRequestDocument"
-		name="uploadFile"
-		schema="addAcquisitionRequestDocument" action="<%= urlAdd %>">
-	<fr:layout name="tabular">
-		<fr:property name="classes" value="form"/>
-		<fr:property name="columnClasses" value=",,tderror"/>
-	</fr:layout>
-	<fr:destination name="cancel" path="<%= urlView %>" />
-</fr:edit>
+<fr:form action="<%= urlView %>">
+	<html:submit styleClass="inputbutton">
+		<bean:message key="button.back" bundle="EXPENDITURE_RESOURCES"/>
+	</html:submit>
+</fr:form>
 
