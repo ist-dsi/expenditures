@@ -1,7 +1,10 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="/WEB-INF/struts-tiles.tld" prefix="tiles" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
-<title><tiles:getAsString name="title" ignore="true" /></title>
+<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
+
+<title><bean:message key="title.site" bundle="EXPENDITURE_RESOURCES"/></title>
+
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <%
 	final String contextPath = request.getContextPath();

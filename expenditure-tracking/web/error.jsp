@@ -13,6 +13,8 @@
 <div class="errorcontainer">
 	<div class="errorlogo">
 		<img src="images/logo03.gif"/>
+	</div>
+	<div class="corners">
 		<div class="c1"></div>
 		<div class="c2"></div>
 	</div>

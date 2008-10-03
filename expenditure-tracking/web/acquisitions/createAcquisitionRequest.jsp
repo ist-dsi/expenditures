@@ -33,7 +33,7 @@
 	</logic:iterate>
 </logic:present>
 
-<p class="mvert15">
+<p class="mtop15">
 	<html:link action="/acquisitionProcess.do?method=createAcquisitionRequestDocument" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
 		<bean:message key="acquisitionProcess.link.createRequestDocument" bundle="ACQUISITION_RESOURCES"/>
 	</html:link>

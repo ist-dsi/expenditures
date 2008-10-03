@@ -25,7 +25,9 @@ font-family: Arial, Helvetica, sans-serif;
 margin: 0;
 padding: 0.75em 0 0.5em 0;
 }
-
+h3 {
+font-size: 1.2em;
+}
 a {
 color: #6DA6E2;
 text-decoration: none;
@@ -800,7 +802,7 @@ background: #fff;
 padding: 0 0.5em;
 }
 div.errorlogo {
-padding: 1em;
+padding: 1em 1em 0.5em 1em;
 background: #15587a;
 position: relative;
 }
@@ -818,23 +820,44 @@ font-size: 11px;
 line-height: 1.6em;
 }
 
-div.errorlogo div.c1 {
+div.corners {
+height: 7px;
+position: relative;
+background: #15587a;
+}
+div.corners div.c1 {
 background: url(../images/corner1_02.gif) no-repeat;
 width: 7px;
 height: 7px;
 position: absolute;
-bottom: 0;
+bottom: -13px;
 left: 0;
 }
-div.errorlogo div.c2 {
+div.corners div.c2 {
 background: url(../images/corner2_02.gif) no-repeat;
 width: 7px;
 height: 7px;
 position: absolute;
-bottom: 0;
+bottom: -13px;
 right: 0;
 }
 
+div.corners div.c1[class] { bottom: 0; } /* all except <= ie6 */
+div.corners div.c2[class] { bottom: 0; } /* all except <= ie6 */
+
+
+div.infoop1 {
+margin-bottom: 1em;
+}
+ul.operations {
+margin: 0;
+padding-top: 0;
+padding-left: 3em;
+}
+ul.operations li {
+margin-top: 0;
+padding-top: 0;
+}
 
 /***********************************************/	
 /**************** comments *********************/
@@ -851,6 +874,12 @@ font-weight: bold;
 }
 div.comment div {
 margin-top: 0;
+}
+div.comment div.body {
+/*
+border-top: 1px solid #ddd;
+padding-top: 0.5em;
+*/
 }
 
 .tdbold td {

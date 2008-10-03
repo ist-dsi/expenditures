@@ -8,7 +8,6 @@
 	<bean:message key="title.comments" bundle="EXPENDITURE_RESOURCES"/>
 </h2>
 
-
 <p>
 	<html:link page="/acquisitionProcess.do?method=viewAcquisitionProcess" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
 		« <bean:message key="link.back" bundle="EXPENDITURE_RESOURCES"/>
@@ -27,7 +26,7 @@
 			<p>
 				<span><fr:view name="comment" property="commenter.name"/></span> <fr:view name="comment" property="date"/>
 			</p>
-			<div><fr:view name="comment" property="comment"/></div>
+			<div class="body"><fr:view name="comment" property="comment"/></div>
 		</div>
 	</logic:iterate>
 </logic:notEmpty>
@@ -42,13 +41,13 @@
 				<bean:message key="label.addComment" bundle="EXPENDITURE_RESOURCES"/>:
 			</td>
 			<td>
-			<fr:edit id="comment" name="bean" slot="string" type="java.lang.String" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
-				<fr:layout name="longText">
-					<fr:property name="rows" value="5"/>
-						<fr:property name="columns" value="40"/>
-					<fr:property name="classes" value="form"/>
-				</fr:layout>
-			</fr:edit>
+				<fr:edit id="comment" name="bean" slot="string" type="java.lang.String" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+					<fr:layout name="longText">
+						<fr:property name="rows" value="5"/>
+						<fr:property name="columns" value="50"/>
+						<fr:property name="classes" value="form"/>
+					</fr:layout>
+				</fr:edit>
 			</td>
 		</tr>
 	</table>

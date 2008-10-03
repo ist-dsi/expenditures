@@ -46,7 +46,7 @@
 	</logic:empty>
 </div>
 
-<ul>
+<ul class="operations">
 	<li>
 		<html:link page="/viewLogs.do?method=viewOperationLog&amp;module=acquisitions" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
 			<bean:message key="label.log.view" bundle="ACQUISITION_RESOURCES"/>
