@@ -31,6 +31,7 @@
 				<fr:view name="activity" property="class">
 					<fr:layout name="label">
 						<fr:property name="bundle" value="ACQUISITION_RESOURCES"/>
+						<fr:property name="escape" value="false"/>
 					</fr:layout>
 				</fr:view>
 			</html:link>

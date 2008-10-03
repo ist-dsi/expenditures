@@ -48,8 +48,12 @@ Documentation:
     <renderer type="pt.ist.fenixWebFramework.renderers.components.HtmlComponent" class="pt.ist.fenixWebFramework.renderers.StandardComponentRenderer"/>
   
     <!--@ The default presentation for every object. -->
-    <renderer type="java.lang.Class" layout="label" class="pt.ist.fenixWebFramework.renderers.ClassAsLabelRenderer"/>
-    <renderer type="java.lang.String" layout="label" class="pt.ist.fenixWebFramework.renderers.ClassAsLabelRenderer"/>
+    <renderer type="java.lang.Class" layout="label" class="pt.ist.fenixWebFramework.renderers.ClassAsLabelRenderer">
+    	<property name="escape" value="true"/>
+    </renderer>
+    <renderer type="java.lang.String" layout="label" class="pt.ist.fenixWebFramework.renderers.ClassAsLabelRenderer">
+    	<property name="escape" value="true"/>
+    </renderer>
 
     <!--@ The default presentation for every object. -->
     <renderer type="java.lang.Class" layout="label-to-material-type-in-spaces-management" class="pt.ist.fenixWebFramework.renderers.ClassAsLabelRenderer">
