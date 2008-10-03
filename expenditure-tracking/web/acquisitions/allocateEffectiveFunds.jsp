@@ -36,25 +36,21 @@
 	<html:hidden property="financerOID" value=""/>
 	<html:hidden property="index" value=""/>
 
-<table class="tstyle2">
-<tr>
-	<th><strong><bean:message key="unit.label.unit" bundle="ORGANIZATION_RESOURCES"/></strong></th>
-	<th><strong><bean:message key="financer.label.fundAllocation.identification" bundle="ACQUISITION_RESOURCES"/></strong></th>
-	<th><strong><bean:message key="financer.label.effectiveFundAllocation.identification" bundle="ACQUISITION_RESOURCES"/></strong></th>
-	<th></th>
-</tr>	
+
+<jsp:include page="../commons/defaultErrorDisplay.jsp"/>
+
 <logic:iterate id="financerBean" name="fundAllocationBeans" indexId="index">
-	<tr>
-		<td>
-			<fr:view name="financerBean" property="financer.unit.presentationName"/>
-		</td>
-		<td>
-			<fr:view name="financerBean" property="fundAllocationId" type="java.lang.String"/>
-		</td>
-		<td>
-			<fr:edit id="<%= "id" + index %>" name="financerBean" slot="effectiveFundAllocationId" type="java.lang.String" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-		</td>
-		<td>
+	
+	<bean:define id="usedClass" value="" toScope="request"/>
+	<logic:equal name="financerBean" property="allowedToAddNewFund" value="false">
+			<bean:define id="usedClass" value="dnone" toScope="request"/>
+	</logic:equal>
+	
+	<span class="<%= usedClass %>">
+		<fr:view name="financerBean" property="financer.unit.presentationName"/> (<bean:message key="financer.label.fundAllocation.identification" bundle="ACQUISITION_RESOURCES"/>: <fr:view name="financerBean" property="fundAllocationId" type="java.lang.String"/>)
+	</span> 
+	<div>
+		<fr:edit id="<%= "id" + index %>" name="financerBean" slot="effectiveFundAllocationId" type="java.lang.String"/>
 			<bean:define id="financerOID" name="financerBean" property="financer.OID"/>
 			<logic:equal name="financerBean" property="allowedToAddNewFund" value="true">
 				<a href="javascript:document.getElementById('allocationForm').method.value='addAllocationFund'; document.getElementById('allocationForm').financerOID.value='<%= financerOID %>'; document.getElementById('allocationForm').index.value='<%= index %>'; document.getElementById('allocationForm').submit();">
@@ -66,10 +62,8 @@
 					<bean:message key="financer.link.removeEffectiveAllocationId" bundle="ACQUISITION_RESOURCES"/>
 				</a>
 			</logic:equal>
-		</td>
-	</tr>	
-</logic:iterate> 
-</table>
+	</div>
+</logic:iterate>
 
 	<html:submit styleClass="inputbutton"><bean:message key="button.atribute" bundle="EXPENDITURE_RESOURCES"/> </html:submit>
 </fr:form>

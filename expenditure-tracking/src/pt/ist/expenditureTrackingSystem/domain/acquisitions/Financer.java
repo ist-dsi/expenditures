@@ -131,6 +131,9 @@ public class Financer extends Financer_Base {
     }
 
     public void addEffectiveFundAllocationId(String effectiveFundAllocationId) {
+	if (StringUtils.isEmpty(effectiveFundAllocationId)) {
+	    throw new DomainException("acquisitionProcess.message.exception.effectiveFundAllocationCannotBeNull");
+	}
 	Strings strings = getEffectiveFundAllocationId();
 	if (strings == null) {
 	    strings = new Strings(effectiveFundAllocationId);

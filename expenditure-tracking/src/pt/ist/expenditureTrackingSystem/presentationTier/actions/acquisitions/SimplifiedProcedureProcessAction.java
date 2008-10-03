@@ -494,8 +494,8 @@ public class SimplifiedProcedureProcessAction extends ProcessAction {
 	return mapping.findForward("allocate.effective.funds");
     }
 
-    public ActionForward  addAllocationFund(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
+    public ActionForward addAllocationFund(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
 
 	final SimplifiedProcedureProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
@@ -507,32 +507,39 @@ public class SimplifiedProcedureProcessAction extends ProcessAction {
 	fundAllocationBean.setFundAllocationId(null);
 	fundAllocationBean.setEffectiveFundAllocationId(null);
 	fundAllocationBean.setAllowedToAddNewFund(false);
-	
-	fundAllocationBeans.add(index+1,fundAllocationBean);
+
+	fundAllocationBeans.add(index + 1, fundAllocationBean);
 	request.setAttribute("fundAllocationBeans", fundAllocationBeans);
 	RenderUtils.invalidateViewState();
 	return mapping.findForward("allocate.effective.funds");
     }
 
-    public ActionForward  removeAllocationFund(final ActionMapping mapping, final ActionForm form,
+    public ActionForward removeAllocationFund(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
-	
+
 	final SimplifiedProcedureProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
 	List<FundAllocationBean> fundAllocationBeans = getRenderedObject("financerFundAllocationId");
 	int index = Integer.valueOf(request.getParameter("index")).intValue();
-	
+
 	fundAllocationBeans.remove(index);
 	request.setAttribute("fundAllocationBeans", fundAllocationBeans);
 	RenderUtils.invalidateViewState();
 	return mapping.findForward("allocate.effective.funds");
     }
-    
+
     public ActionForward allocateFundsPermanently(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final SimplifiedProcedureProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
 	final List<FundAllocationBean> fundAllocationBeans = getRenderedObject();
-	genericActivityExecution(acquisitionProcess, "AllocateFundsPermanently", fundAllocationBeans);
+	try {
+	    genericActivityExecution(acquisitionProcess, "AllocateFundsPermanently", fundAllocationBeans);
+	} catch (DomainException e) {
+	    request.setAttribute("fundAllocationBeans", fundAllocationBeans);
+	    request.setAttribute("acquisitionProcess", acquisitionProcess);
+	    addMessage(e.getMessage(), getBundle());
+	    return mapping.findForward("allocate.effective.funds");
+	}
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
 
