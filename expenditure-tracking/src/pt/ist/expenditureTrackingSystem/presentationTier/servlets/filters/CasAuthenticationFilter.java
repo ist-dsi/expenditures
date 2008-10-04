@@ -12,9 +12,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
-import pt.ist.expenditureTrackingSystem._development.PropertiesManager;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.AuthenticationAction;
-import pt.ist.fenixWebFramework.Config;
 import pt.ist.fenixWebFramework.FenixWebFramework;
 import edu.yale.its.tp.cas.client.CASAuthenticationException;
 import edu.yale.its.tp.cas.client.CASReceipt;
