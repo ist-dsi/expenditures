@@ -4,7 +4,6 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
-
 <h2>
 	<bean:message key="process.title.myProcesses" bundle="EXPENDITURE_RESOURCES"/>
 </h2>
@@ -16,7 +15,7 @@
 <fr:view name="processes" schema="viewAcquisitionProcessInList">
 	<fr:layout name="tabular">
 		<fr:property name="classes" value="tstyle2"/>
-		<fr:property name="columnClasses" value=",aleft,,,,,aright,"/>
+		<fr:property name="columnClasses" value=",,,,,,aright,"/>
 		<fr:property name="link(view)" value="/acquisitionProcess.do?method=viewAcquisitionProcess"/>
 		<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
 		<fr:property name="key(view)" value="link.view"/>

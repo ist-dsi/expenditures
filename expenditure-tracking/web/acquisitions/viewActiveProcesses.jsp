@@ -18,7 +18,7 @@
 <fr:view name="activeProcesses" schema="viewAcquisitionProcessInList">
 	<fr:layout name="tabular">
 		<fr:property name="classes" value="tstyle2"/>
-		<fr:property name="columnClasses" value=",aleft,,,,,aright,"/>
+		<fr:property name="columnClasses" value=",,,,,,aright,"/>
 		<fr:property name="link(view)" value="/acquisitionProcess.do?method=viewAcquisitionProcess"/>
 		<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
 		<fr:property name="key(view)" value="link.view"/>

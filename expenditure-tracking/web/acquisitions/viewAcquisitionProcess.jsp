@@ -61,7 +61,7 @@
 		</html:link>	
 		<logic:greaterThan name="comments" value="0">
 			|
-			<span class="color888">
+			<span class="color888" style="font-size: 0.9em;">
 				<bean:message key="label.lastBy" bundle="EXPENDITURE_RESOURCES"/> 
 				<bean:define id="mostRecentComment" name="acquisitionProcess" property="mostRecentComment"/>
 				<strong><fr:view name="mostRecentComment" property="commenter.name"/></strong>, <fr:view name="mostRecentComment" property="date"/> 

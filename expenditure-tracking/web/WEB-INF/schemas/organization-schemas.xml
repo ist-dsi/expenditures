@@ -42,8 +42,12 @@
 <schema name="createPerson"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.CreatePersonBean"
 		bundle="ORGANIZATION_RESOURCES">
-	<slot name="username" key="person.label.username" bundle="ORGANIZATION_RESOURCES"/>
-	<slot name="name" key="person.label.name" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="username" key="person.label.username" bundle="ORGANIZATION_RESOURCES">
+		<property name="size" value="40"/>
+	</slot>
+	<slot name="name" key="person.label.name" bundle="ORGANIZATION_RESOURCES">
+		<property name="size" value="40"/>
+	</slot>
 </schema>
 
 <schema name="editPerson"

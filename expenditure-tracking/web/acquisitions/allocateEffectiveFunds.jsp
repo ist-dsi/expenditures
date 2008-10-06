@@ -26,12 +26,14 @@
 
 <bean:define id="urlActivity">/acquisitionProcess.do?acquisitionProcessOid=<bean:write name="acquisitionProcess" property="OID"/></bean:define>
 <bean:define id="urlView">/acquisitionProcess.do?method=viewAcquisitionProcess&amp;acquisitionProcessOid=<bean:write name="acquisitionProcess" property="OID"/></bean:define>
-<div class="dinline forminline">
+
+
+<div class="forminline mbottom2">
+
 <fr:form id="allocationForm" action="<%= urlActivity %>">
 	<fr:edit  
 		id="financerFundAllocationId"
 		name="fundAllocationBeans" visible="false"/>
-		
 	<html:hidden  property="method" value="allocateFundsPermanently"/>
 	<html:hidden property="financerOID" value=""/>
 	<html:hidden property="index" value=""/>
@@ -39,18 +41,21 @@
 
 <jsp:include page="../commons/defaultErrorDisplay.jsp"/>
 
+
+<table class="tstyle6">
 <logic:iterate id="financerBean" name="fundAllocationBeans" indexId="index">
-	
-	<bean:define id="usedClass" value="" toScope="request"/>
-	<logic:equal name="financerBean" property="allowedToAddNewFund" value="false">
-			<bean:define id="usedClass" value="dnone" toScope="request"/>
-	</logic:equal>
-	
-	<span class="<%= usedClass %>">
-		<fr:view name="financerBean" property="financer.unit.presentationName"/> (<bean:message key="financer.label.fundAllocation.identification" bundle="ACQUISITION_RESOURCES"/>: <fr:view name="financerBean" property="fundAllocationId" type="java.lang.String"/>)
-	</span> 
-	<div>
-		<fr:edit id="<%= "id" + index %>" name="financerBean" slot="effectiveFundAllocationId" type="java.lang.String"/>
+	<tr>
+		<bean:define id="usedClass" value="" toScope="request"/>
+		<logic:equal name="financerBean" property="allowedToAddNewFund" value="false">
+				<bean:define id="usedClass" value="dnone" toScope="request"/>
+		</logic:equal>
+		<th class="<%= usedClass %>">			
+			<h4 class="dinline"><fr:view name="financerBean" property="financer.unit.presentationName"/></h4> <bean:message key="financer.label.fundAllocation.identification" bundle="ACQUISITION_RESOURCES"/>: <fr:view name="financerBean" property="fundAllocationId" type="java.lang.String"/>
+		</th>
+	</tr>
+	<tr>
+		<td>
+			<fr:edit id="<%= "id" + index %>" name="financerBean" slot="effectiveFundAllocationId" type="java.lang.String"/>
 			<bean:define id="financerOID" name="financerBean" property="financer.OID"/>
 			<logic:equal name="financerBean" property="allowedToAddNewFund" value="true">
 				<a href="javascript:document.getElementById('allocationForm').method.value='addAllocationFund'; document.getElementById('allocationForm').financerOID.value='<%= financerOID %>'; document.getElementById('allocationForm').index.value='<%= index %>'; document.getElementById('allocationForm').submit();">
@@ -62,14 +67,18 @@
 					<bean:message key="financer.link.removeEffectiveAllocationId" bundle="ACQUISITION_RESOURCES"/>
 				</a>
 			</logic:equal>
-	</div>
+		</td>
+	</tr>
 </logic:iterate>
+</table>
 
-	<html:submit styleClass="inputbutton"><bean:message key="button.atribute" bundle="EXPENDITURE_RESOURCES"/> </html:submit>
+<html:submit styleClass="inputbutton"><bean:message key="button.atribute" bundle="EXPENDITURE_RESOURCES"/> </html:submit>
 </fr:form>
+
 <fr:form id="allocationForm" action="<%= urlView %>">
 	<html:submit styleClass="inputbutton"><bean:message key="renderers.form.cancel.name" bundle="RENDERER_RESOURCES"/> </html:submit>
 </fr:form>
+
 </div>
 
 <div class="item">
