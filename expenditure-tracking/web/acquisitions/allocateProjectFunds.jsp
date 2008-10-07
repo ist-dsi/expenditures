@@ -27,7 +27,7 @@
 <bean:define id="urlView">/acquisitionProcess.do?method=viewAcquisitionProcess&amp;acquisitionProcessOid=<bean:write name="acquisitionProcess" property="OID"/></bean:define>
 <fr:edit action="<%= urlActivity %>" 
 		id="financerFundAllocationId" 
-		schema="editFinancerFundAllocationId" 
+		schema="editProjectFinancerFundAllocationId" 
 		name="fundAllocationBeans" >
 	<fr:layout name="tabular-editable">
 		<fr:property name="classes" value="tstyle2"/>

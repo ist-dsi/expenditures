@@ -4,9 +4,9 @@ import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.organization.Project;
 
 public class ProjectFinancer extends ProjectFinancer_Base {
-    
+
     protected ProjectFinancer() {
-        super();
+	super();
     }
 
     public ProjectFinancer(final AcquisitionRequest acquisitionRequest, final Project project) {
@@ -31,7 +31,8 @@ public class ProjectFinancer extends ProjectFinancer_Base {
     @Override
     public String getEffectiveFundAllocationIds() {
 	final String financerString = super.getEffectiveFundAllocationIds();
-	return financerString + " " + getAllocationIds(getEffectiveProjectFundAllocationId(), "financer.label.allocation.id.prefix.mgp");
+	return financerString + " "
+		+ getAllocationIds(getEffectiveProjectFundAllocationId(), "financer.label.allocation.id.prefix.mgp");
     }
 
     @Override
@@ -42,6 +43,11 @@ public class ProjectFinancer extends ProjectFinancer_Base {
     @Override
     public boolean hasAllocatedFundsPermanentlyForAllProjectFinancers() {
 	return getEffectiveProjectFundAllocationId() != null && !getEffectiveProjectFundAllocationId().isEmpty();
+    }
+
+    @Override
+    public boolean isProjectFinancer() {
+	return true;
     }
 
 }

@@ -1,11 +1,10 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities;
 
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
 
-public class RemoveFundAllocation extends GenericAcquisitionProcessActivity {
+public class RemoveProjectFundAllocation extends GenericAcquisitionProcessActivity {
 
     @Override
     protected boolean isAccessible(AcquisitionProcess process) {
@@ -18,23 +17,21 @@ public class RemoveFundAllocation extends GenericAcquisitionProcessActivity {
     }
 
     private boolean checkActiveConditions(AcquisitionProcess process) {
-	return process.isProcessInState(AcquisitionProcessStateType.FUNDS_ALLOCATED);
+	return process.isProcessInState(AcquisitionProcessStateType.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER)
+		&& process.hasAllocatedFundsForAllProjectFinancers();
     }
 
     private boolean checkCanceledConditions(AcquisitionProcess process) {
 	return process.isProcessInState(AcquisitionProcessStateType.CANCELED)
-		&& process.getAcquisitionRequest().hasAllFundAllocationId();
+		&& process.getAcquisitionRequest().hasAllocatedFundsForAllProjectFinancers();
     }
 
     @Override
     protected void process(AcquisitionProcess process, Object... objects) {
-	process.getAcquisitionRequest().resetFundAllocationId();
-	if (!process.isProcessInState(AcquisitionProcessStateType.CANCELED)) {
-	    new AcquisitionProcessState(process, AcquisitionProcessStateType.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER);
-	} else {
-	    if (!process.hasAllocatedFundsForAllProjectFinancers()) {
-		new RemoveFundAllocationExpirationDate().execute(process);
-	    }
+	process.getAcquisitionRequest().resetProjectFundAllocationId();
+	if (process.isProcessInState(AcquisitionProcessStateType.CANCELED)
+		&& !process.getAcquisitionRequest().hasAllFundAllocationId()) {
+	    new RemoveFundAllocationExpirationDate().execute(process);
 	}
     }
 }

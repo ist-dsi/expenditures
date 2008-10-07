@@ -1,5 +1,6 @@
 package pt.ist.expenditureTrackingSystem.presentationTier.actions.organization;
 
+import java.util.Collections;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -55,8 +56,7 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "change.authorization.unit", path = "/organization/changeAuthorizationUnit.jsp"),
 	@Forward(name = "select.accounting.unit.to.add.member", path = "/organization/selectAccountingUnitToAddMember.jsp"),
 	@Forward(name = "view.accounting.unit", path = "/organization/viewAccountingUnit.jsp"),
-	@Forward(name = "add.unit.to.accounting.unit", path = "/organization/addUnitToAccountingUnit.jsp")
-	})
+	@Forward(name = "add.unit.to.accounting.unit", path = "/organization/addUnitToAccountingUnit.jsp") })
 public class OrganizationAction extends BaseAction {
 
     private static final Context CONTEXT = new Context("organization");
@@ -85,6 +85,9 @@ public class OrganizationAction extends BaseAction {
 	    request.setAttribute("accountingUnits", expenditureTrackingSystem.getAccountingUnitsSet());
 	} else {
 	    request.setAttribute("unit", unit);
+	    if (unit.getAccountingUnit() != null) {
+		request.setAttribute("accountingUnits", Collections.singleton(unit.getAccountingUnit()));
+	    }
 	    units = unit.getSubUnitsSet();
 	}
 	request.setAttribute("units", units);
@@ -443,8 +446,8 @@ public class OrganizationAction extends BaseAction {
 	return mapping.findForward("view.authorization");
     }
 
-    public ActionForward removePersonFromAccountingUnit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
+    public ActionForward removePersonFromAccountingUnit(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
 	final AccountingUnit accountingUnit = getDomainObject(request, "accountingUnitOid");
 	final Person person = getDomainObject(request, "personOid");
 	accountingUnit.removePeople(person);
@@ -458,8 +461,8 @@ public class OrganizationAction extends BaseAction {
 	return mapping.findForward("view.accounting.unit");
     }
 
-    public ActionForward prepareAddUnitToAccountingUnit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
+    public ActionForward prepareAddUnitToAccountingUnit(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
 	final AccountingUnit accountingUnit = getDomainObject(request, "accountingUnitOid");
 	request.setAttribute("accountingUnit", accountingUnit);
 
@@ -484,8 +487,8 @@ public class OrganizationAction extends BaseAction {
 	return mapping.findForward("add.unit.to.accounting.unit");
     }
 
-    public ActionForward addUnitToAccountingUnit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
+    public ActionForward addUnitToAccountingUnit(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
 	final AccountingUnit accountingUnit = getDomainObject(request, "accountingUnitOid");
 	request.setAttribute("accountingUnit", accountingUnit);
 

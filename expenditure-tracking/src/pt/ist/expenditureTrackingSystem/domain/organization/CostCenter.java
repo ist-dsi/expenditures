@@ -8,12 +8,12 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 
 public class CostCenter extends CostCenter_Base {
-    
+
     public CostCenter(final Unit parentUnit, final String name, final String costCenter) {
-        super();
-    	setName(name);
-    	setCostCenter(costCenter);
-    	setParentUnit(parentUnit);
+	super();
+	setName(name);
+	setCostCenter(costCenter);
+	setParentUnit(parentUnit);
     }
 
     @Override
@@ -55,6 +55,11 @@ public class CostCenter extends CostCenter_Base {
     @Override
     public Financer finance(final AcquisitionRequest acquisitionRequest) {
 	return new Financer(acquisitionRequest, this);
+    }
+
+    @Override
+    public CostCenter getCostCenterUnit() {
+	return this;
     }
 
 }

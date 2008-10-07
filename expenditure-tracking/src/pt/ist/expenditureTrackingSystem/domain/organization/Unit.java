@@ -173,4 +173,8 @@ public class Unit extends Unit_Base {
 	return parentUnit != null && parentUnit.isProjectAccountingEmployee(person);
     }
 
+    public CostCenter getCostCenterUnit() {
+	return getParentUnit() != null ? getParentUnit().getCostCenterUnit() : null;
+    }
+
 }

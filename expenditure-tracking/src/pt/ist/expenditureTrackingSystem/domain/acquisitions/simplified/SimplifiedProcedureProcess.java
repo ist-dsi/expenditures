@@ -37,6 +37,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activitie
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RemoveFundAllocationExpirationDate;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RemoveFundsPermanentlyAllocated;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RemovePayingUnit;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RemoveProjectFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SendAcquisitionRequestToSupplier;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SubmitForApproval;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SubmitForConfirmInvoice;
@@ -90,6 +91,7 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	requestInformationActivities.add(new ProjectFundAllocation());
 	requestInformationActivities.add(new FundAllocation());
 	requestInformationActivities.add(new RemoveFundAllocation());
+	requestInformationActivities.add(new RemoveProjectFundAllocation());
 	requestInformationActivities.add(new RemoveFundAllocationExpirationDate());
 	requestInformationActivities.add(new CancelAcquisitionRequest());
 

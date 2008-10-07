@@ -35,6 +35,10 @@ public class Financer extends Financer_Base {
 	setUnit(costCenter);
     }
 
+    public boolean isProjectFinancer() {
+	return false;
+    }
+
     public void delete() {
 	if (checkIfCanDelete()) {
 	    removeExpenditureTrackingSystem();
@@ -141,6 +145,10 @@ public class Financer extends Financer_Base {
 	} else {
 	    strings.add(effectiveFundAllocationId);
 	}
+    }
+
+    public CostCenter getFinancerCostCenter() {
+	return getUnit() != null ? getUnit().getCostCenterUnit() : null;
     }
 
 }

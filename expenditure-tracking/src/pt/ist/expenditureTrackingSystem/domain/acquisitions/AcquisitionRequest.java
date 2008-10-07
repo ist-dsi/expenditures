@@ -413,6 +413,16 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 
     }
 
+    public void resetProjectFundAllocationId() {
+	for (Financer financer : getFinancersSet()) {
+	    if (financer.isProjectFinancer()) {
+		ProjectFinancer projectFinancer = (ProjectFinancer) financer;
+		projectFinancer.setProjectFundAllocationId(null);
+	    }
+	}
+
+    }
+
     public void resetEffectiveFundAllocationId() {
 	for (Financer financer : getFinancersSet()) {
 	    financer.setEffectiveFundAllocationId(null);
