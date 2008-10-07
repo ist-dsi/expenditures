@@ -114,7 +114,7 @@
 <schema name="addAcquisitionProposalDocument"
 		type="pt.ist.expenditureTrackingSystem.presentationTier.actions.acquisitions.SimplifiedProcedureProcessAction$AcquisitionProposalDocumentForm"
 		bundle="ACQUISITION_RESOURCES">
-	<slot name="proposalID" key="acquisitionProcess.label.proposalID" bundle="ACQUISITION_RESOURCES" />
+	<slot name="proposalID" key="acquisitionProcess.label.proposalID.optional" bundle="ACQUISITION_RESOURCES" />
 	<slot name="inputStream" key="acquisitionProcess.label.proposalDocument" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
 		<property name="fileNameSlot" value="filename" />
 		<property name="size" value="30"/>
@@ -145,7 +145,7 @@
 	<slot name="quantity" key="acquisitionRequestItem.label.quantity" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 	<slot name="unitValue" key="acquisitionRequestItem.label.unitValue" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 	<slot name="vatValue" key="acquisitionRequestItem.label.vatValue" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>	
-	<slot name="additionalCostValue" key="acquisitionRequestItem.label.additionalCostValue" bundle="ACQUISITION_RESOURCES" />
+	<slot name="additionalCostValue" key="acquisitionRequestItem.label.additionalCostValue.optional" bundle="ACQUISITION_RESOURCES" />
 </schema>
 
 <schema name="createAcquisitionRequestItem.block3_NEW_DELIVERY_INFO" type="pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean" bundle="ACQUISITION_RESOURCES">
@@ -156,10 +156,10 @@
 		<property name="size" value="60"/>
 	</slot>	
 	<slot name="address" key="label.receptionAddress" bundle="EXPENDITURE_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-	<slot name="phone" key="label.phone" bundle="EXPENDITURE_RESOURCES">
+	<slot name="phone" key="label.phone.optional" bundle="EXPENDITURE_RESOURCES">
 		<property name="size" value="20"/>
 	</slot>
-	<slot name="email" key="label.email" bundle="EXPENDITURE_RESOURCES">
+	<slot name="email" key="label.email.optional" bundle="EXPENDITURE_RESOURCES">
 		<property name="size" value="60"/>
 	</slot>
 </schema>

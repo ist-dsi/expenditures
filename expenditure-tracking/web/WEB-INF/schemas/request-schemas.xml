@@ -55,7 +55,7 @@
 			<property name="dateFormat" value="dd-MM-yyyy"/>
 		</validator>
 	</slot>
-	<slot name="inputStream" key="label.proposalDocument" bundle="REQUEST_RESOURCES" >
+	<slot name="inputStream" key="label.proposalDocument.optional" bundle="REQUEST_RESOURCES" >
 		<property name="fileNameSlot" value="filename" />
 		<property name="size" value="30"/>
 	</slot>
@@ -106,7 +106,7 @@
 			<property name="dateFormat" value="dd-MM-yyyy"/>
 		</validator>
 	</slot>
-	<slot name="inputStream" key="label.proposalDocument" bundle="ACQUISITION_RESOURCES" >
+	<slot name="inputStream" key="label.proposalDocument.optional" bundle="ACQUISITION_RESOURCES" >
 		<property name="fileNameSlot" value="filename" />
 		<property name="size" value="30"/>
 	</slot>

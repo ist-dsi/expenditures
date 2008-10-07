@@ -13,17 +13,27 @@
 
 <bean:define id="urlView">/acquisitionProcess.do?method=viewAcquisitionProcess&amp;acquisitionProcessOid=<%= acquisitionProcess.getOID() %></bean:define>
 <bean:define id="urlAdd">/acquisitionProcess.do?method=rejectAcquisitionProcess&amp;acquisitionProcessOid=<%= acquisitionProcess.getOID() %></bean:define>
-<fr:edit id="stateBean"
-		name="stateBean"
-		type="pt.ist.expenditureTrackingSystem.domain.dto.ProcessStateBean"
-		schema="stateJustification"
-		action="<%= urlAdd %>">
-	<fr:layout name="tabular">
-		<fr:property name="classes" value="form"/>
-		<fr:property name="columnClasses" value=",,tderror"/>
-	</fr:layout>
-	<fr:destination name="cancel" path="<%= urlView %>" />
-</fr:edit>
+
+<div class="forminline">
+	<fr:form action="<%= urlAdd %>">
+		<fr:edit id="stateBean"
+				name="stateBean"
+				type="pt.ist.expenditureTrackingSystem.domain.dto.ProcessStateBean"
+				schema="stateJustification"
+				>
+			<fr:layout name="tabular">
+				<fr:property name="classes" value="form"/>
+				<fr:property name="columnClasses" value=",,tderror"/>
+			</fr:layout>
+		</fr:edit>
+		<html:submit styleClass="inputbutton"><bean:message key="button.reject" bundle="EXPENDITURE_RESOURCES"/></html:submit>
+	</fr:form>
+	
+	<fr:form action="<%= urlView %>">
+		<html:cancel styleClass="inputbutton"><bean:message key="renderers.form.cancel.name" bundle="RENDERER_RESOURCES"/></html:cancel>
+	</fr:form>
+</div>
+
 
 
 

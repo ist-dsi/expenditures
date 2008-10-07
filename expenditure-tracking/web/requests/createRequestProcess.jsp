@@ -14,7 +14,6 @@
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="form"/>
 			<fr:property name="columnClasses" value=",,tderror"/>
-			<fr:property name="optionalMarkShown" value="true"/>
 		</fr:layout>
 		<fr:destination name="cancel" path="/requestForProposalProcess.do?method=showPendingRequests"/>
 	</fr:edit>

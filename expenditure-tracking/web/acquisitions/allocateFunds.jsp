@@ -4,7 +4,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
-<h2><bean:message key="acquisitionProcess.title.viewAcquisitionRequest" bundle="ACQUISITION_RESOURCES"/></h2>
+<h2>Efectuar Cabimento (GIAF)</h2>
 
 <bean:define id="acquisitionProcess" name="acquisitionProcess" toScope="request"/>
 <jsp:include page="viewAcquisitionRequest.jsp" flush="true"/>
@@ -23,6 +23,7 @@
 	</p>
 </div>
 
+
 <bean:define id="urlActivity">/acquisitionProcess.do?method=allocateFunds&amp;acquisitionProcessOid=<bean:write name="acquisitionProcess" property="OID"/></bean:define>
 <bean:define id="urlView">/acquisitionProcess.do?method=viewAcquisitionProcess&amp;acquisitionProcessOid=<bean:write name="acquisitionProcess" property="OID"/></bean:define>
 <fr:edit action="<%= urlActivity %>" 
@@ -35,7 +36,7 @@
 	<fr:destination name="cancel" path="<%= urlView %>" />
 </fr:edit>
 
-<div class="item">
+<div class="item mtop2">
 	<bean:size id="totalItems" name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestItemsSet"/>
 	<logic:iterate id="acquisitionRequestItem" name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestItemsSet" indexId="index">
 		<bean:define id="currentIndex" value="<%= String.valueOf(index + 1) %>"/>
