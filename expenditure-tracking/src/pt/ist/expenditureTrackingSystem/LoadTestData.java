@@ -30,7 +30,8 @@ public class LoadTestData {
 
     private static Set<Integer> projectResponsibles = new HashSet<Integer>();
     private static Map<String, String> teachers = new HashMap<String, String>();
-    private static Map<String, AccountingUnit> accountingUnitMap = new HashMap<String, AccountingUnit>();
+    private static Map<String, AccountingUnit> accountingUnitProjectMap = new HashMap<String, AccountingUnit>();
+    private static Map<String, AccountingUnit> accountingUnitCostCenterMap = new HashMap<String, AccountingUnit>();
 
     public static void init() {
 	String domainModelPath = "web/WEB-INF/classes/domain_model.dml";
@@ -189,7 +190,10 @@ public class LoadTestData {
 	// createUnits(fenixUnitMap);
 
 	final String projectAccountingUnits = FileUtils.readFile("projectAccountingUnits.txt");
-	createProjectAccountingUnits(projectAccountingUnits);
+	final Map<String, AccountingUnit> accountingUnits = createProjectAccountingUnits(projectAccountingUnits);
+
+	final String costCenterAccountingUnits = FileUtils.readFile("costCenterAccountingUnits.txt");
+	createcostCenterAccountingUnits(costCenterAccountingUnits, accountingUnits);
 
 	loadTeachers();
 	final String activeCostCenterContents = FileUtils.readFile("activeCostCenters.csv");
@@ -217,7 +221,7 @@ public class LoadTestData {
     }
 
     @Service
-    private static void createProjectAccountingUnits(final String projectAccountingUnits) {
+    private static Map<String, AccountingUnit> createProjectAccountingUnits(final String projectAccountingUnits) {
 	final Map<String, AccountingUnit> accountingUnits = new HashMap<String, AccountingUnit>();
 
 	for (final String line : projectAccountingUnits.split("\n")) {
@@ -234,7 +238,33 @@ public class LoadTestData {
 		accountingUnit = AccountingUnit.createNewAccountingUnit(accountingUnitBean);
 		accountingUnits.put(accountingUnitCode, accountingUnit);
 	    }
-	    accountingUnitMap.put(projectCode, accountingUnit);
+	    accountingUnitProjectMap.put(projectCode, accountingUnit);
+	}
+
+	return accountingUnits;
+    }
+
+    @Service
+    private static void createcostCenterAccountingUnits(final String costCenterAccountingUnits,
+	    final Map<String, AccountingUnit> accountingUnits) {
+
+	for (final String line : costCenterAccountingUnits.split("\n")) {
+	    final String parts[] = line.split("\t");
+	    final String costCenterCode = parts[0].trim();
+	    final String accountingUnitCode = parts.length == 2 ? parts[1].trim() : null;
+
+	    if (accountingUnitCode != null) {
+		final AccountingUnit accountingUnit;
+		if (accountingUnits.containsKey(accountingUnitCode)) {
+		    accountingUnit = accountingUnits.get(accountingUnitCode);
+		} else {
+		    final AccountingUnitBean accountingUnitBean = new AccountingUnitBean();
+		    accountingUnitBean.setName(accountingUnitCode);
+		    accountingUnit = AccountingUnit.createNewAccountingUnit(accountingUnitBean);
+		    accountingUnits.put(accountingUnitCode, accountingUnit);
+		}
+		accountingUnitCostCenterMap.put(costCenterCode, accountingUnit);
+	    }
 	}
     }
 
@@ -371,6 +401,18 @@ public class LoadTestData {
 	createUnitBean.setCostCenter(cdUnit.costCenterCode);
 	createUnitBean.setName(cdUnit.name);
 	cdUnit.unit = Unit.createNewUnit(createUnitBean);
+
+	if (cdUnit.unit instanceof CostCenter) {
+	    final CostCenter costCenter = (CostCenter) cdUnit.unit;
+	    if (costCenter.getCostCenter() != null && !costCenter.getCostCenter().isEmpty()) {
+		final AccountingUnit accountingUnit = accountingUnitCostCenterMap.get(costCenter.getCostCenter());
+		if (accountingUnit != null) {
+		    costCenter.setAccountingUnit(accountingUnit);
+		} else {
+		    System.out.println("No accounting unit found for cost center: " + costCenter.getCostCenter());
+		}
+	    }
+	}
     }
 
     @Service
@@ -390,7 +432,7 @@ public class LoadTestData {
 		createUnitBean.setProjectCode(projectCodeString);
 		createUnitBean.setName(acronimo);
 		final Unit unit = Unit.createNewUnit(createUnitBean);
-		final AccountingUnit accountingUnit = accountingUnitMap.get(projectCodeString);
+		final AccountingUnit accountingUnit = accountingUnitProjectMap.get(projectCodeString);
 		if (accountingUnit != null) {
 		    unit.setAccountingUnit(accountingUnit);
 		} else {
