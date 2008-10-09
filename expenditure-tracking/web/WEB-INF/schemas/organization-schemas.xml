@@ -27,8 +27,13 @@
 <schema name="searchUsers"
 		type="pt.ist.expenditureTrackingSystem.domain.organization.SearchUsers"
 		bundle="ORGANIZATION_RESOURCES">
-	<slot name="username" key="person.label.username" bundle="ORGANIZATION_RESOURCES"/>
-	<slot name="name" key="person.label.name" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="person" layout="autoComplete" key="label.person" bundle="EXPENDITURE_RESOURCES">
+        <property name="labelField" value="name"/>
+		<property name="format" value="${name} (${username})"/>
+		<property name="minChars" value="3"/>		
+		<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.PersonAutoComplete"/>
+		<property name="size" value="40"/>
+	</slot>
 	<slot name="roleType" key="role.label.roleType" bundle="ORGANIZATION_RESOURCES"/>
 </schema>
 
