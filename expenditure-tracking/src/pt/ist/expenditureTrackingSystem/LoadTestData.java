@@ -32,11 +32,18 @@ public class LoadTestData {
     private static Map<String, String> teachers = new HashMap<String, String>();
     private static Map<String, AccountingUnit> accountingUnitProjectMap = new HashMap<String, AccountingUnit>();
     private static Map<String, AccountingUnit> accountingUnitCostCenterMap = new HashMap<String, AccountingUnit>();
+    private static Map<String, Set<String>> personAccountingUnitMap = new HashMap<String, Set<String>>();
 
     public static void init() {
 	String domainModelPath = "web/WEB-INF/classes/domain_model.dml";
 	FenixWebFramework.initialize(PropertiesManager.getFenixFrameworkConfig(domainModelPath));
 	ExpenditureTrackingSystem.initialize(FenixWebFramework.getConfig());
+    }
+
+    private static Set<String> createSetWithElement(final String string) {
+	final Set<String> strings = new HashSet<String>();
+	strings.add(string);
+	return strings;
     }
 
     public static void main(String[] args) {
@@ -189,6 +196,9 @@ public class LoadTestData {
 	// final FenixUnitMap fenixUnitMap = new FenixUnitMap(unitContents);
 	// createUnits(fenixUnitMap);
 
+	final String personAccountingUnitsContent = FileUtils.readFile("accountingUsers.txt");
+	loadPersonAccountingUnits(personAccountingUnitsContent);
+
 	final String projectAccountingUnits = FileUtils.readFile("projectAccountingUnits.txt");
 	final Map<String, AccountingUnit> accountingUnits = createProjectAccountingUnits(projectAccountingUnits);
 
@@ -202,7 +212,7 @@ public class LoadTestData {
 
 	final String peopleContents = FileUtils.readFile("people.txt");
 	final FenixPeopleSet fenixPeopleSet = new FenixPeopleSet(peopleContents);
-	createPeople(fenixPeopleSet /* , fenixUnitMap */);
+	createPeople(fenixPeopleSet, accountingUnits /* , fenixUnitMap */);
 
 	final String projectContents = FileUtils.readFile("projects.txt");
 	loadProjectResponsiblesSet();
@@ -218,6 +228,21 @@ public class LoadTestData {
 
 	final String cpvReferences = FileUtils.readFile("cpv.csv");
 	createCPVCodes(cpvReferences);
+    }
+
+    private static void loadPersonAccountingUnits(final String personAccountingUnitsContent) {
+	for (final String line : personAccountingUnitsContent.split("\n")) {
+	    final String[] parts = line.split("\t");
+	    final String username = parts[0];
+	    final String accountingUnit = parts[1];
+
+	    Set<String> accountingUnits = personAccountingUnitMap.get(username);
+	    if (accountingUnits == null) {
+		accountingUnits = new HashSet<String>();
+		personAccountingUnitMap.put(username, accountingUnits);
+	    }
+	    accountingUnits.add(accountingUnit);
+	}
     }
 
     @Service
@@ -364,12 +389,8 @@ public class LoadTestData {
     }
 
     @Service
-    private static void createPeople(final FenixPeopleSet fenixPeopleSet /*
-									  * ,
-									  * final
-									  * FenixUnitMap
-									  * fenixUnitMap
-									  */) {
+    private static void createPeople(final FenixPeopleSet fenixPeopleSet, Map<String, AccountingUnit> accountingUnits
+	    /* , final FenixUnitMap fenixUnitMap */) {
 	for (final FenixPerson fenixPerson : fenixPeopleSet) {
 	    final Person person = Person.createEmptyPerson();
 	    person.setUsername(fenixPerson.username);
@@ -384,6 +405,17 @@ public class LoadTestData {
 		// final Authorization authorization = new Authorization(person,
 		// fenixUnit.unit);
 		// authorization.setCanDelegate(Boolean.TRUE);
+	    }
+	    final Set<String> personAccountingUnits = personAccountingUnitMap.get(fenixPerson.username);
+	    if (personAccountingUnits != null) {
+		for (final String aus : personAccountingUnits) {
+		    final AccountingUnit accountingUnit = accountingUnits.get(aus);
+		    if (accountingUnit == null) {
+			System.out.println("Did not find accounting unit: " + accountingUnit + "!!!");
+		    } else {
+			accountingUnit.addPeople(person);
+		    }
+		}
 	    }
 	}
     }
