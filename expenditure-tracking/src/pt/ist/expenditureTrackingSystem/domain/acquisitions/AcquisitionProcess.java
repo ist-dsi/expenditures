@@ -77,9 +77,9 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
     public abstract <T extends GenericProcess> AbstractActivity<T> getActivityByName(String activityName);
 
     public boolean isAvailableForPerson(Person person) {
-	return person.hasRoleType(RoleType.ACQUISITION_CENTRAL)
-		|| getRequestor() == person || getRequestingUnit().isResponsible(person)
-		|| isResponsibleForAtLeastOnePayingUnit(person) || isAccountingEmployee(person);
+	return person.hasRoleType(RoleType.ACQUISITION_CENTRAL) || getRequestor() == person
+		|| getRequestingUnit().isResponsible(person) || isResponsibleForAtLeastOnePayingUnit(person)
+		|| isAccountingEmployee(person);
     }
 
     public boolean isAccountingEmployee(final Person person) {
@@ -180,7 +180,7 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 	return getAcquisitionRequest().getFinancersWithFundsAllocated();
     }
 
-    public Set<Financer> getProjectFinancersWithFundsAllocated() {
+    public Set<ProjectFinancer> getProjectFinancersWithFundsAllocated() {
 	return getAcquisitionRequest().getProjectFinancersWithFundsAllocated();
     }
 
@@ -215,7 +215,8 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 
     public boolean isAllowedToViewCostCenterExpenditures() {
 	try {
-	    return getUnit() != null && isResponsibleForUnit() || userHasRole(RoleType.ACCOUNTING_MANAGER) || isAccountingEmployee();
+	    return getUnit() != null && isResponsibleForUnit() || userHasRole(RoleType.ACCOUNTING_MANAGER)
+		    || isAccountingEmployee();
 	} catch (Exception e) {
 	    e.printStackTrace();
 	    throw new Error(e);
@@ -273,6 +274,6 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 
     @Service
     public void createComment(Person person, String comment) {
-	new ProcessComment(this,person,comment);
+	new ProcessComment(this, person, comment);
     }
 }

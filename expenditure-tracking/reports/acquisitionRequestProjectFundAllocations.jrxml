@@ -24,8 +24,8 @@
 	<import value="net.sf.jasperreports.engine.data.*" />
 
 
-	<field name="fundAllocationId" class="java.lang.String"/>
-	<field name="financerCostCenter" class="pt.ist.expenditureTrackingSystem.domain.organization.CostCenter"/>
+	<field name="projectFundAllocationId" class="java.lang.String"/>
+	<field name="unit" class="pt.ist.expenditureTrackingSystem.domain.organization.Project"/>
 
 		<background>
 			<band height="0"  isSplitAllowed="true" >
@@ -52,7 +52,7 @@
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="8"/>
 					</textElement>
-				<text><![CDATA[Centro Custo]]></text>
+				<text><![CDATA[Projecto]]></text>
 				</staticText>
 				<staticText>
 					<reportElement
@@ -104,7 +104,7 @@
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{financerCostCenter}.getShortIdentifier()]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{unit}.getShortIdentifier()]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -117,7 +117,7 @@
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{fundAllocationId}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{projectFundAllocationId}]]></textFieldExpression>
 				</textField>
 			</band>
 		</detail>

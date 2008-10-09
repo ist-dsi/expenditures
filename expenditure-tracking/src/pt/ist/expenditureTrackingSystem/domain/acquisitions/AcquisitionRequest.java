@@ -396,11 +396,11 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	return res;
     }
 
-    public Set<Financer> getProjectFinancersWithFundsAllocated() {
-	Set<Financer> res = new HashSet<Financer>();
+    public Set<ProjectFinancer> getProjectFinancersWithFundsAllocated() {
+	Set<ProjectFinancer> res = new HashSet<ProjectFinancer>();
 	for (Financer financer : getFinancers()) {
 	    if (financer instanceof ProjectFinancer && financer.getAmountAllocated().isPositive()) {
-		res.add(financer);
+		res.add((ProjectFinancer) financer);
 	    }
 	}
 	return res;

@@ -13,7 +13,7 @@
 		 leftMargin="30"
 		 rightMargin="30"
 		 topMargin="20"
-		 bottomMargin="20"
+		 bottomMargin="0"
 		 whenNoDataType="NoPages"
 		 isTitleNewPage="false"
 		 isSummaryNewPage="false">
@@ -59,7 +59,7 @@
 						key="staticText-1"/>
 					<box></box>
 					<textElement verticalAlignment="Middle">
-						<font/>
+						<font pdfFontName="Helvetica-BoldOblique" isBold="true" isItalic="true"/>
 					</textElement>
 				<text><![CDATA[Requisição nº:]]></text>
 				</staticText>
@@ -102,7 +102,7 @@
 					<textElement textAlignment="Right">
 						<font pdfFontName="Helvetica-Oblique" isItalic="true"/>
 					</textElement>
-				<text><![CDATA[N. Contribuinte:]]></text>
+				<text><![CDATA[Nº Contribuinte:]]></text>
 				</staticText>
 				<staticText>
 					<reportElement
@@ -146,20 +146,20 @@
 				<staticText>
 					<reportElement
 						x="325"
-						y="31"
+						y="46"
 						width="75"
 						height="15"
 						key="staticText-24"/>
 					<box></box>
 					<textElement verticalAlignment="Middle">
-						<font/>
+						<font pdfFontName="Helvetica-BoldOblique" isBold="true" isItalic="true"/>
 					</textElement>
 				<text><![CDATA[Data :]]></text>
 				</staticText>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="403"
-						y="30"
+						y="46"
 						width="132"
 						height="15"
 						key="textField-25"/>
@@ -185,7 +185,7 @@
 				<staticText>
 					<reportElement
 						x="0"
-						y="262"
+						y="258"
 						width="80"
 						height="16"
 						key="staticText-26"/>
@@ -198,7 +198,7 @@
 				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="83"
-						y="262"
+						y="258"
 						width="218"
 						height="16"
 						key="textField-26"
@@ -266,6 +266,32 @@ $P{acquisitionRequest}.getSupplier().getAddress().getPostalCode() + ", " +
 $P{acquisitionRequest}.getSupplier().getAddress().getLocation() + "\n" +
 $P{acquisitionRequest}.getSupplier().getAddress().getCountry()]]></textFieldExpression>
 				</textField>
+				<staticText>
+					<reportElement
+						x="325"
+						y="29"
+						width="75"
+						height="15"
+						key="staticText-30"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font pdfFontName="Helvetica-BoldOblique" isBold="true" isItalic="true"/>
+					</textElement>
+				<text><![CDATA[Processo nº:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="403"
+						y="29"
+						width="132"
+						height="15"
+						key="textField-29"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{acquisitionRequest}.getAcquisitionProcessId()]]></textFieldExpression>
+				</textField>
 			</band>
 		</title>
 		<pageHeader>
@@ -278,7 +304,7 @@ $P{acquisitionRequest}.getSupplier().getAddress().getCountry()]]></textFieldExpr
 					<reportElement
 						x="0"
 						y="7"
-						width="54"
+						width="72"
 						height="16"
 						key="staticText-6"/>
 					<box></box>
@@ -289,9 +315,9 @@ $P{acquisitionRequest}.getSupplier().getAddress().getCountry()]]></textFieldExpr
 				</staticText>
 				<staticText>
 					<reportElement
-						x="57"
+						x="75"
 						y="7"
-						width="211"
+						width="188"
 						height="16"
 						key="staticText-7"/>
 					<box></box>
@@ -394,9 +420,9 @@ Entrega]]></text>
 			<band height="25"  isSplitAllowed="true" >
 				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="57"
+						x="75"
 						y="4"
-						width="211"
+						width="188"
 						height="18"
 						key="textField-5"/>
 					<box></box>
@@ -409,7 +435,7 @@ Entrega]]></text>
 					<reportElement
 						x="0"
 						y="4"
-						width="54"
+						width="72"
 						height="18"
 						key="textField-6"/>
 					<box></box>
@@ -491,11 +517,11 @@ Entrega]]></text>
 			</band>
 		</columnFooter>
 		<pageFooter>
-			<band height="30"  isSplitAllowed="true" >
+			<band height="43"  isSplitAllowed="true" >
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="303"
-						y="12"
+						y="25"
 						width="188"
 						height="18"
 						key="textField"/>
@@ -508,7 +534,7 @@ Entrega]]></text>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Report" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="495"
-						y="12"
+						y="25"
 						width="40"
 						height="18"
 						key="textField"/>
@@ -518,15 +544,61 @@ Entrega]]></text>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA["" + $V{PAGE_NUMBER} + ""]]></textFieldExpression>
 				</textField>
+				<staticText>
+					<reportElement
+						x="0"
+						y="0"
+						width="80"
+						height="43"
+						forecolor="#00427B"
+						key="staticText-34"/>
+					<box></box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+				<text><![CDATA[Av. Rovisco Pais
+1049 - 001 Lisboa
+Portugal]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="91"
+						y="0"
+						width="80"
+						height="43"
+						forecolor="#00427B"
+						key="staticText-35"/>
+					<box></box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+				<text><![CDATA[Tel. 214 417 210
+Fax 218 498 678]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="177"
+						y="0"
+						width="91"
+						height="43"
+						forecolor="#00427B"
+						key="staticText-36"/>
+					<box></box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+				<text><![CDATA[Contr. Nº 501 507 930
+CAE 931 400]]></text>
+				</staticText>
 			</band>
 		</pageFooter>
 		<lastPageFooter>
-			<band height="143"  isSplitAllowed="true" >
+			<band height="180"  isSplitAllowed="true" >
 				<rectangle>
 					<reportElement
 						mode="Opaque"
 						x="359"
-						y="59"
+						y="66"
 						width="176"
 						height="15"
 						forecolor="#EEEEEE"
@@ -538,7 +610,7 @@ Entrega]]></text>
 				<staticText>
 					<reportElement
 						x="369"
-						y="21"
+						y="28"
 						width="44"
 						height="16"
 						key="staticText-10"/>
@@ -551,7 +623,7 @@ Entrega]]></text>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="420"
-						y="21"
+						y="28"
 						width="115"
 						height="16"
 						key="textField-9"/>
@@ -564,7 +636,7 @@ Entrega]]></text>
 				<staticText>
 					<reportElement
 						x="369"
-						y="40"
+						y="47"
 						width="44"
 						height="16"
 						key="staticText-17"/>
@@ -577,7 +649,7 @@ Entrega]]></text>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="420"
-						y="40"
+						y="47"
 						width="115"
 						height="16"
 						key="textField-15"/>
@@ -590,7 +662,7 @@ Entrega]]></text>
 				<staticText>
 					<reportElement
 						x="369"
-						y="59"
+						y="66"
 						width="44"
 						height="16"
 						key="staticText-18"/>
@@ -603,7 +675,7 @@ Entrega]]></text>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="420"
-						y="59"
+						y="66"
 						width="115"
 						height="16"
 						key="textField-16"/>
@@ -616,7 +688,7 @@ Entrega]]></text>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="303"
-						y="125"
+						y="162"
 						width="188"
 						height="18"
 						key="textField-23"/>
@@ -629,7 +701,7 @@ Entrega]]></text>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Report" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="495"
-						y="125"
+						y="162"
 						width="40"
 						height="18"
 						key="textField-24"/>
@@ -642,7 +714,7 @@ Entrega]]></text>
 				<line direction="TopDown">
 					<reportElement
 						x="0"
-						y="7"
+						y="4"
 						width="535"
 						height="0"
 						key="line-4"/>
@@ -651,7 +723,7 @@ Entrega]]></text>
 				<line direction="TopDown">
 					<reportElement
 						x="0"
-						y="89"
+						y="106"
 						width="535"
 						height="0"
 						key="line-5"/>
@@ -660,27 +732,27 @@ Entrega]]></text>
 				<line direction="TopDown">
 					<reportElement
 						x="340"
-						y="7"
+						y="4"
 						width="0"
-						height="82"
+						height="103"
 						key="line-6"/>
 					<graphicElement stretchType="NoStretch"/>
 				</line>
 				<line direction="TopDown">
 					<reportElement
 						x="160"
-						y="7"
+						y="4"
 						width="0"
-						height="82"
+						height="103"
 						key="line-7"/>
 					<graphicElement stretchType="NoStretch"/>
 				</line>
 				<subreport  isUsingCache="true">
 					<reportElement
 						x="166"
-						y="21"
+						y="15"
 						width="170"
-						height="68"
+						height="45"
 						key="subreport-1"/>
 					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource(((Collection)$P{acquisitionRequest}.getFinancersWithFundsAllocated()))]]></dataSourceExpression>
 					<subreportExpression  class="java.lang.String"><![CDATA["reports/acquisitionRequestFundAllocations.jasper"]]></subreportExpression>
@@ -688,7 +760,7 @@ Entrega]]></text>
 				<staticText>
 					<reportElement
 						x="166"
-						y="10"
+						y="5"
 						width="75"
 						height="10"
 						key="staticText-22"/>
@@ -698,24 +770,11 @@ Entrega]]></text>
 					</textElement>
 				<text><![CDATA[Cabimentos:]]></text>
 				</staticText>
-				<staticText>
-					<reportElement
-						x="49"
-						y="18"
-						width="62"
-						height="18"
-						key="staticText-23"/>
-					<box></box>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font/>
-					</textElement>
-				<text><![CDATA[Autorização]]></text>
-				</staticText>
 				<line direction="TopDown">
 					<reportElement
-						x="10"
-						y="66"
-						width="139"
+						x="5"
+						y="69"
+						width="150"
 						height="0"
 						key="line-8"/>
 					<graphicElement stretchType="NoStretch"/>
@@ -723,7 +782,7 @@ Entrega]]></text>
 				<staticText>
 					<reportElement
 						x="0"
-						y="91"
+						y="108"
 						width="535"
 						height="29"
 						key="staticText-27"/>
@@ -733,6 +792,77 @@ Entrega]]></text>
 					</textElement>
 				<text><![CDATA[A Encomenda deverá ser acompanhada por Factura ou Guia, a ser entregue no Núcleo de Economato do Instituto Superior Técnico, sob pena de não ser efectuado o pagamento.]]></text>
 				</staticText>
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="166"
+						y="61"
+						width="170"
+						height="45"
+						key="subreport-3">
+							<printWhenExpression><![CDATA[!$P{acquisitionRequest}.getProjectFinancersWithFundsAllocated().isEmpty()]]></printWhenExpression>
+						</reportElement>
+					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource(((Collection)$P{acquisitionRequest}.getProjectFinancersWithFundsAllocated()))]]></dataSourceExpression>
+					<subreportExpression  class="java.lang.String"><![CDATA["reports/acquisitionRequestProjectFundAllocations.jasper"]]></subreportExpression>
+				</subreport>
+				<staticText>
+					<reportElement
+						x="9"
+						y="71"
+						width="141"
+						height="13"
+						key="staticText-29"/>
+					<box></box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+				<text><![CDATA[(Responsável Núcleo de Economato)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="137"
+						width="80"
+						height="43"
+						forecolor="#00427B"
+						key="staticText-31"/>
+					<box></box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+				<text><![CDATA[Av. Rovisco Pais
+1049 - 001 Lisboa
+Portugal]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="91"
+						y="137"
+						width="80"
+						height="43"
+						forecolor="#00427B"
+						key="staticText-32"/>
+					<box></box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+				<text><![CDATA[Tel. 214 417 210
+Fax 218 498 678]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="177"
+						y="137"
+						width="91"
+						height="43"
+						forecolor="#00427B"
+						key="staticText-33"/>
+					<box></box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+				<text><![CDATA[Contr. Nº 501 507 930
+CAE 931 400]]></text>
+				</staticText>
 			</band>
 		</lastPageFooter>
 		<summary>
@@ -740,7 +870,7 @@ Entrega]]></text>
 				<subreport  isUsingCache="true">
 					<reportElement
 						x="0"
-						y="8"
+						y="10"
 						width="70"
 						height="10"
 						key="subreport-2"/>
