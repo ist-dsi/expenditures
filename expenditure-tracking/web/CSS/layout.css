@@ -514,6 +514,10 @@ width: 150px;
 span.valid { color: #0a0; font-weight: bold; }
 span.invalid { color: #a00; font-weight: bold; }
 
+.inputsize40 input {
+width: 257px;
+}
+
 div.infoop1 {
 border: 1px dotted #aaa;
 padding: 15px 10px;
