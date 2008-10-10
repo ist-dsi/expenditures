@@ -12,10 +12,13 @@ import pt.ist.expenditureTrackingSystem.domain.util.Money;
 import pt.ist.fenixWebFramework.util.DomainReference;
 
 public class AcquisitionRequestItemBean implements Serializable {
+
+    public static final int DEFAULT_VAL_VALUE = 20;
+
     private String description;
     private Integer quantity;
     private Money unitValue;
-    private BigDecimal vatValue;
+    private BigDecimal vatValue = new BigDecimal(DEFAULT_VAL_VALUE);
     private Money additionalCostValue;
     private String proposalReference;
     private DomainReference<AcquisitionRequest> acquisitionRequest;
