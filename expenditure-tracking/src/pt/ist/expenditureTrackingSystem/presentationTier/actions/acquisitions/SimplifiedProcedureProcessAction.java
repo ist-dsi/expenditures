@@ -158,6 +158,13 @@ public class SimplifiedProcedureProcessAction extends ProcessAction {
 
     public ActionForward executeDeleteAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
+	final SimplifiedProcedureProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
+	request.setAttribute("confirmDeleteAcquisitionProcess", Boolean.TRUE);
+	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
+    }
+
+    public ActionForward deleteAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
 	genericActivityExecution(request, "DeleteAcquisitionProcess");
 	return showPendingProcesses(mapping, form, request, response);
     }

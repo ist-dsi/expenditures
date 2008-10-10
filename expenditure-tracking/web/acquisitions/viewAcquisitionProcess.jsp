@@ -6,6 +6,8 @@
 <%@ taglib uri="/WEB-INF/messages.tld" prefix="messages" %>
 
 <bean:define id="currentState" name="acquisitionProcess" property="acquisitionProcessStateType"/>
+<bean:define id="acquisitionProcessOid"><bean:write name="acquisitionProcess" property="OID"/></bean:define>
+<bean:define id="urlConfirm">/acquisitionProcess.do</bean:define>
  
 <fr:view name="acquisitionProcess"> 
 	<fr:layout name="process-state">
@@ -47,27 +49,22 @@
 	</logic:empty>
 </div>
 
-
-<%--
-<div class="warning2">
-	<span>Deseja apagar esta proposta de aquisição?</span>
-	<input type="button" value="Apagar"/>
-	<input type="button" value="Cancelar"/>
-</div>
-
-<div class="warning2">
-	<span>Deseja rejeitar esta proposta de aquisição?</span>
-	<input type="button" value="Rejeitar"/>
-	<input type="button" value="Cancelar"/>
-</div>
-
-<div class="warning2">
-	<span>Deseja terminar o processo de compra?</span>
-	<input type="button" value="Terminar"/>
-	<input type="button" value="Cancelar"/>
-</div>
---%>
-
+<logic:present name="confirmDeleteAcquisitionProcess">
+	<div class="warning2">
+		<span><bean:message key="message.confirm.delete.acquisition.process" bundle="ACQUISITION_RESOURCES"/></span>
+		<bean:define id="urlDelete">/acquisitionProcess.do?method=deleteAcquisitionProcess</bean:define>
+		<form action="<%= request.getContextPath() + urlConfirm %>" method="post">
+			<html:hidden property="method" value="deleteAcquisitionProcess"/>
+			<html:hidden property="acquisitionProcessOid" value="<%= acquisitionProcessOid %>"/>
+			<html:submit styleClass="inputbutton"><bean:message key="button.create" bundle="EXPENDITURE_RESOURCES"/></html:submit>
+		</form>
+		<form action="<%= request.getContextPath() + urlConfirm %>" method="post">
+			<html:hidden property="method" value="viewAcquisitionProcess"/>
+			<html:hidden property="acquisitionProcessOid" value="<%= acquisitionProcessOid %>"/>
+			<html:cancel styleClass="inputbutton"><bean:message key="button.cancel" bundle="EXPENDITURE_RESOURCES"/></html:cancel>
+		</form>
+	</div>
+</logic:present>
 
 <ul class="operations">
 	<li>
