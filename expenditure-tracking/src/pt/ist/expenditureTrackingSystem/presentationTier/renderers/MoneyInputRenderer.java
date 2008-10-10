@@ -12,6 +12,8 @@ import pt.ist.fenixWebFramework.renderers.model.MetaSlotKey;
 
 public class MoneyInputRenderer extends InputRenderer {
 
+    private String size;
+    
     @Override
     protected Layout getLayout(Object object, Class type) {
 
@@ -20,6 +22,8 @@ public class MoneyInputRenderer extends InputRenderer {
 	    @Override
 	    public HtmlComponent createComponent(Object object, Class type) {
 		HtmlTextInput input = new HtmlTextInput();
+		input.setSize(size);
+		
 		if (object != null) {
 		    input.setValue(((Money)object).getRoundedValue().toPlainString());
 		}
@@ -44,6 +48,14 @@ public class MoneyInputRenderer extends InputRenderer {
 	    return null;
 	}
 
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
     }
 
 }
