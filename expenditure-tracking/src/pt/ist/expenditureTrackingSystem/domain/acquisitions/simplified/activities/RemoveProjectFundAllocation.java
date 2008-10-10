@@ -8,7 +8,7 @@ public class RemoveProjectFundAllocation extends GenericAcquisitionProcessActivi
 
     @Override
     protected boolean isAccessible(AcquisitionProcess process) {
-	return process.isAccountingEmployee();
+	return process.isProjectAccountingEmployee();
     }
 
     @Override
