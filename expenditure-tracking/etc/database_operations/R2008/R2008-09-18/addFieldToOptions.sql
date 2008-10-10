@@ -1,1 +1,0 @@
-alter table OPTIONS add COLUMN RECEIVE_NOTIFICATIONS_BY_EMAIL tinyint(1) default '0';

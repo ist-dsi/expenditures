@@ -1,1 +1,0 @@
-alter table ANNOUNCEMENT add column KEY_REQUESTING_UNIT int(11) default NULL;
