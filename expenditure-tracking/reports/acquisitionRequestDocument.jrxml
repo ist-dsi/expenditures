@@ -292,6 +292,20 @@ $P{acquisitionRequest}.getSupplier().getAddress().getCountry()]]></textFieldExpr
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$P{acquisitionRequest}.getAcquisitionProcessId()]]></textFieldExpression>
 				</textField>
+				<staticText>
+					<reportElement
+						x="19"
+						y="191"
+						width="80"
+						height="38"
+						forecolor="#00427B"
+						key="staticText-37"/>
+					<box></box>
+					<textElement textAlignment="Left" verticalAlignment="Top" lineSpacing="1_1_2">
+						<font size="10"/>
+					</textElement>
+				<text><![CDATA[Núcleo de Economato]]></text>
+				</staticText>
 			</band>
 		</title>
 		<pageHeader>
@@ -431,7 +445,7 @@ Entrega]]></text>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{acquisitionRequestItem}.getDescription()]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="0"
 						y="4"
@@ -593,7 +607,7 @@ CAE 931 400]]></text>
 			</band>
 		</pageFooter>
 		<lastPageFooter>
-			<band height="180"  isSplitAllowed="true" >
+			<band height="187"  isSplitAllowed="true" >
 				<rectangle>
 					<reportElement
 						mode="Opaque"
@@ -688,7 +702,7 @@ CAE 931 400]]></text>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="303"
-						y="162"
+						y="169"
 						width="188"
 						height="18"
 						key="textField-23"/>
@@ -701,7 +715,7 @@ CAE 931 400]]></text>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Report" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="495"
-						y="162"
+						y="169"
 						width="40"
 						height="18"
 						key="textField-24"/>
@@ -784,13 +798,13 @@ CAE 931 400]]></text>
 						x="0"
 						y="108"
 						width="535"
-						height="29"
+						height="36"
 						key="staticText-27"/>
 					<box></box>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
+					<textElement textAlignment="Center" verticalAlignment="Top">
 						<font size="10"/>
 					</textElement>
-				<text><![CDATA[A Encomenda deverá ser acompanhada por Factura ou Guia, a ser entregue no Núcleo de Economato do Instituto Superior Técnico, sob pena de não ser efectuado o pagamento.]]></text>
+				<text><![CDATA[A Encomenda deverá ser acompanhada por Factura ou Guia, a ser entregue no Núcleo de Economato do Instituto Superior Técnico, na qual deverá constar o número da nossa nota de encomenda (Nº de Requisição Externa), sob pena de não ser efectuado o pagamento.]]></text>
 				</staticText>
 				<subreport  isUsingCache="true">
 					<reportElement
@@ -820,7 +834,7 @@ CAE 931 400]]></text>
 				<staticText>
 					<reportElement
 						x="0"
-						y="137"
+						y="144"
 						width="80"
 						height="43"
 						forecolor="#00427B"
@@ -836,7 +850,7 @@ Portugal]]></text>
 				<staticText>
 					<reportElement
 						x="91"
-						y="137"
+						y="144"
 						width="80"
 						height="43"
 						forecolor="#00427B"
@@ -845,13 +859,13 @@ Portugal]]></text>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font size="8"/>
 					</textElement>
-				<text><![CDATA[Tel. 214 417 210
-Fax 218 498 678]]></text>
+				<text><![CDATA[Tel. 218 419 716
+Fax 218 417 717]]></text>
 				</staticText>
 				<staticText>
 					<reportElement
 						x="177"
-						y="137"
+						y="144"
 						width="91"
 						height="43"
 						forecolor="#00427B"
