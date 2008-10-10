@@ -116,7 +116,7 @@ public class Unit extends Unit_Base {
 	for (final Unit unit : getSubUnitsSet()) {
 	    final Unit result = unit.findByCostCenter(costCenter);
 	    if (result != null) {
-		return unit;
+		return result;
 	    }
 	}
 	return null;
