@@ -44,6 +44,7 @@
 	</fr:edit>
 </div>
 
+
 <h3><bean:message key="acquisitionProcess.title.quantityAndCosts" bundle="ACQUISITION_RESOURCES"/></h3>
 
 <div  class="form1">
@@ -58,12 +59,14 @@
 	</fr:edit>
 </div>
 
+
 <h3><bean:message key="acquisitionProcess.title.deliveryInformation" bundle="ACQUISITION_RESOURCES"/></h3>
 
 <div  class="form1">
 	<fr:edit id="acquisitionRequestItem.block3" name="bean" schema="<%= "createAcquisitionRequestItem.block3_" + schemaType.toString() %>">
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="form thwidth150px"/>
+			<fr:property name="style" value="width: 600px;"/>
 			<fr:property name="columnClasses" value=",,tderror"/>
 		</fr:layout>
 		<fr:destination name="postBack" path="/acquisitionProcess.do?method=createItemPostBack" />

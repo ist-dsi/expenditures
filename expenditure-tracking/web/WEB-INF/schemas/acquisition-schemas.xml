@@ -128,7 +128,7 @@
 			<property name="format" value="${code} - ${description}"/>
 			<property name="minChars" value="1"/>		
 			<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.CPVAutoCompleteProvider"/>
-			<property name="size" value="40"/>
+			<property name="classes" value="inputsize300px"/>
 			<validator class="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator">
 				<property name="message" value="label.pleaseSelectOne.cpv"/>
 				<property name="bundle" value="EXPENDITURE_RESOURCES"/>
@@ -142,10 +142,18 @@
 </schema>
 
 <schema name="createAcquisitionRequestItem.block2" type="pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean" bundle="ACQUISITION_RESOURCES">
-	<slot name="quantity" key="acquisitionRequestItem.label.quantity" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-	<slot name="unitValue" key="acquisitionRequestItem.label.unitValue" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-	<slot name="vatValue" key="acquisitionRequestItem.label.vatValue" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>	
-	<slot name="additionalCostValue" key="acquisitionRequestItem.label.additionalCostValue.optional" bundle="ACQUISITION_RESOURCES" />
+	<slot name="quantity" key="acquisitionRequestItem.label.quantity" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="size" value="10"/>
+	</slot>
+	<slot name="unitValue" key="acquisitionRequestItem.label.unitValue" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="size" value="10"/>
+	</slot>
+	<slot name="vatValue" key="acquisitionRequestItem.label.vatValue" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">	
+		<property name="size" value="10"/>
+	</slot>
+	<slot name="additionalCostValue" key="acquisitionRequestItem.label.additionalCostValue.optional" bundle="ACQUISITION_RESOURCES">
+		<property name="size" value="10"/>
+	</slot>
 </schema>
 
 <schema name="createAcquisitionRequestItem.block3_NEW_DELIVERY_INFO" type="pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean" bundle="ACQUISITION_RESOURCES">

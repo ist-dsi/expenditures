@@ -47,6 +47,28 @@
 	</logic:empty>
 </div>
 
+
+<%--
+<div class="warning2">
+	<span>Deseja apagar esta proposta de aquisição?</span>
+	<input type="button" value="Apagar"/>
+	<input type="button" value="Cancelar"/>
+</div>
+
+<div class="warning2">
+	<span>Deseja rejeitar esta proposta de aquisição?</span>
+	<input type="button" value="Rejeitar"/>
+	<input type="button" value="Cancelar"/>
+</div>
+
+<div class="warning2">
+	<span>Deseja terminar o processo de compra?</span>
+	<input type="button" value="Terminar"/>
+	<input type="button" value="Cancelar"/>
+</div>
+--%>
+
+
 <ul class="operations">
 	<li>
 		<html:link page="/viewLogs.do?method=viewOperationLog&amp;module=acquisitions" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">

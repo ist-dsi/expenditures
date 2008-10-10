@@ -517,6 +517,9 @@ span.invalid { color: #a00; font-weight: bold; }
 .inputsize40 input {
 width: 257px;
 }
+.inputsize300px input {
+width: 300px;
+}
 
 div.infoop1 {
 border: 1px dotted #aaa;
@@ -571,6 +574,18 @@ margin: 1em 0;
 color: #8c6a0b;
 background: #fbf2cf url(../images/warning01.gif) 3px center no-repeat;
 }
+
+div.warning2 {
+margin: 0.75em 0;
+padding: 5px 15px 5px 15px;
+background: #fbf2cf;
+margin: 1em 0;
+color: #8c6a0b;
+border-top: 1px solid #dacea0;
+border-bottom: 1px solid #dacea0;
+background: #fbf2cf;
+}
+
 
 table.tstyle1 {
 border-collapse: collapse;
@@ -798,7 +813,6 @@ margin: 0;
 padding: 0 0.25em;
 }
 .nobullet { list-style: none; }
-.dinline { display: inline; }
 .forminline form { display: inline !important; }
 
 
@@ -917,4 +931,3 @@ display: none;
 div.infoop1 span.raquo {
 display: inline;
 }
-
