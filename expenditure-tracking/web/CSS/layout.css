@@ -931,3 +931,39 @@ display: none;
 div.infoop1 span.raquo {
 display: inline;
 }
+
+
+/***********************************************/	
+/**************** help  *********************/
+
+div.chelpcontainer {
+}
+a.chelp {
+width: 50px;
+cursor: default;
+text-decoration: none !important;
+padding-right: 5px;
+}
+a.chelp img {
+margin-right: 2px;
+}
+a.chelp span.chelptext {
+display: none;
+font-weight: normal;
+color: #00f;
+text-decoration: none;
+border: none;
+text-decoration: none !important;
+}
+a.chelp:hover {
+background: transparent; /* ie fix */
+}
+a.chelp:hover span.chelptext {
+background: #f5f5f5;
+width: 150px;
+padding: 5px 10px;
+border: 1px solid #ddd;
+        display: inline;
+        position:absolute;
+        z-index: 100;
+}
