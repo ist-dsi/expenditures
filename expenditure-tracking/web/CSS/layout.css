@@ -217,13 +217,13 @@ right: 0;
 
 /***********************************************/	
 /**************** content styles ****************/
-#header { width: 850px; }
-#tabs10 { width: 850px; }
-#container { width: 850px; }
-#container2 { width: 820px; } /* -30 padding*/
-#content { width: 625px; } /* -30 padding*/
+#header { width: 875px; }
+#tabs10 { width: 875px; }
+#container { width: 875px; }
+#container2 { width: 845px; } /* -30 padding*/
+#content { width: 650px; } /* -30 padding*/
 div.wrapper { padding-right: 150px; }
-#footer { width: 850px; }
+#footer { width: 875px; }
 
 #container {
 margin: 0 auto;
@@ -577,7 +577,7 @@ background: #fbf2cf url(../images/warning01.gif) 3px center no-repeat;
 
 div.warning2 {
 margin: 0.75em 0;
-padding: 5px 15px 5px 15px;
+padding: 0.5em 1.25em 0.5em 1.25em;
 background: #fbf2cf;
 margin: 1em 0;
 color: #8c6a0b;
@@ -585,7 +585,9 @@ border-top: 1px solid #dacea0;
 border-bottom: 1px solid #dacea0;
 background: #fbf2cf;
 }
-
+div.warning2 p {
+margin: 0 0 0.75em 0 !important;
+}
 
 table.tstyle1 {
 border-collapse: collapse;
@@ -958,7 +960,7 @@ margin: 2px 2px 0 4px;
 a.chelp span.chelptext {
 display: none;
 font-weight: normal;
-color: #555;
+color: #444;
 text-decoration: none;
 border: none;
 text-decoration: none !important;
@@ -968,10 +970,12 @@ background: transparent; /* ie fix */
 position: relative;
 }
 a.chelp:hover span.chelptext {
-background: #f5f5f5;
+background: #ebf1fa;
+background: #edf4f8;
 width: 200px;
-padding: 6px 12px;
-border: 1px solid #ddd;
+padding: 5px 10px;
+border: 1px solid #c0d0ed;
+border: 1px solid #c5dae7;
 display: block;
 position: absolute;
 }
