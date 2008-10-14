@@ -667,6 +667,15 @@ relation PersonAccountingUnit {
 	}
 }
 
+relation PersonProjectAccountingUnit {
+	organization.Person playsRole projectAccountants {
+		multiplicity *;
+	}
+	organization.AccountingUnit playsRole projectAccountingUnits {
+		multiplicity *;
+	}
+}
+
 relation UnitAccountingUnit {
 	organization.Unit playsRole units {
 		multiplicity *;

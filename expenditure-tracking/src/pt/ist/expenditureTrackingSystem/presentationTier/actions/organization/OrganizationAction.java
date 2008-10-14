@@ -55,6 +55,7 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "delegate.choose.unit", path = "/organization/delegateChooseUnit.jsp"),
 	@Forward(name = "change.authorization.unit", path = "/organization/changeAuthorizationUnit.jsp"),
 	@Forward(name = "select.accounting.unit.to.add.member", path = "/organization/selectAccountingUnitToAddMember.jsp"),
+	@Forward(name = "select.project.accounting.unit.to.add.member", path = "/organization/selectProjectAccountingUnitToAddMember.jsp"),
 	@Forward(name = "view.accounting.unit", path = "/organization/viewAccountingUnit.jsp"),
 	@Forward(name = "add.unit.to.accounting.unit", path = "/organization/addUnitToAccountingUnit.jsp") })
 public class OrganizationAction extends BaseAction {
@@ -257,6 +258,23 @@ public class OrganizationAction extends BaseAction {
 	return viewPerson(mapping, request, person);
     }
 
+    public final ActionForward prepareAddToProjectAccountingUnit(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final Person person = getDomainObject(request, "personOid");
+	request.setAttribute("person", person);
+	final Set<AccountingUnit> accountingUnits = ExpenditureTrackingSystem.getInstance().getAccountingUnitsSet();
+	request.setAttribute("accountingUnits", accountingUnits);
+	return mapping.findForward("select.project.accounting.unit.to.add.member");
+    }
+
+    public final ActionForward addToProjectAccountingUnit(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final Person person = getDomainObject(request, "personOid");
+	final AccountingUnit accountingUnit = getDomainObject(request, "accountingUnitOid");
+	accountingUnit.addProjectAccountants(person);
+	return viewPerson(mapping, request, person);
+    }
+
     public final ActionForward expandAuthorizationUnit(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final UnitBean unitBean = getRenderedObject();
@@ -451,6 +469,14 @@ public class OrganizationAction extends BaseAction {
 	final AccountingUnit accountingUnit = getDomainObject(request, "accountingUnitOid");
 	final Person person = getDomainObject(request, "personOid");
 	accountingUnit.removePeople(person);
+	return viewPerson(mapping, request, person);
+    }
+
+    public ActionForward removePersonFromProjectAccountingUnit(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final AccountingUnit accountingUnit = getDomainObject(request, "accountingUnitOid");
+	final Person person = getDomainObject(request, "personOid");
+	accountingUnit.removeProjectAccountants(person);
 	return viewPerson(mapping, request, person);
     }
 

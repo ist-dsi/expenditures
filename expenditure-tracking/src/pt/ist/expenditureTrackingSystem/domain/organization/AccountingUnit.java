@@ -26,8 +26,20 @@ public class AccountingUnit extends AccountingUnit_Base {
 
     @Service
     @Override
+    public void addProjectAccountants(final Person people) {
+        super.addProjectAccountants(people);
+    }
+
+    @Service
+    @Override
     public void removePeople(final Person people) {
         super.removePeople(people);
+    }
+
+    @Service
+    @Override
+    public void removeProjectAccountants(final Person people) {
+        super.removeProjectAccountants(people);
     }
 
     @Service

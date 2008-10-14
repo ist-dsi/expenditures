@@ -1,0 +1,9 @@
+
+
+
+-- Inserted at 2008-10-14T11:54:26.557+01:00
+
+
+
+
+create table PERSON_PROJECT_ACCOUNTING_UNIT (KEY_ACCOUNTING_UNIT int(11) not null, KEY_PERSON int(11) not null,  primary key (KEY_ACCOUNTING_UNIT, KEY_PERSON), key(KEY_ACCOUNTING_UNIT), key(KEY_PERSON)) type=InnoDB;
