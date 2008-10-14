@@ -32,6 +32,18 @@
 	<field name="identification" class="java.lang.String"/>
 	<field name="acquisitionRequestItem" class="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem"/>
 
+
+		<group  name="dummy" >
+			<groupExpression><![CDATA[]]></groupExpression>
+			<groupHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupHeader>
+			<groupFooter>
+			<band height="43"  isSplitAllowed="true" >
+			</band>
+			</groupFooter>
+		</group>
 		<background>
 			<band height="0"  isSplitAllowed="true" >
 			</band>
@@ -224,7 +236,7 @@ $P{acquisitionRequest}.getAcquisitionProposalDocument().getProposalId() != null 
 					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font pdfFontName="Helvetica-Oblique" isItalic="true"/>
 					</textElement>
-				<text><![CDATA[Resposta à Proposta Nº:]]></text>
+				<text><![CDATA[Vossa Proposta Nº:]]></text>
 				</staticText>
 				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
