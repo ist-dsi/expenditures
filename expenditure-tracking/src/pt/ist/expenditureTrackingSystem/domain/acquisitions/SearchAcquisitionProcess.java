@@ -1,7 +1,6 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Set;
 
 import pt.ist.expenditureTrackingSystem.domain.Search;
@@ -59,9 +58,10 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
     @Override
     public Set<AcquisitionProcess> search() {
 	try {
-	    return hasAnyCriteria() ?
-		    new SearchResult(GenericProcess.getAllProcesses(SimplifiedProcedureProcess.class)) :
-		    Collections.EMPTY_SET;
+	    return new SearchResult(GenericProcess.getAllProcesses(SimplifiedProcedureProcess.class));
+//	    return hasAnyCriteria() ?
+//		    new SearchResult(GenericProcess.getAllProcesses(SimplifiedProcedureProcess.class)) :
+//		    Collections.EMPTY_SET;
 	} catch (Exception ex) {
 	    ex.printStackTrace();
 	    throw new Error(ex);
