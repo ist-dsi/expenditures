@@ -56,10 +56,14 @@
 				<tr>
 					<td><bean:message key="acquisitionRequestItem.label.additionalCosts" bundle="ACQUISITION_RESOURCES"/>:</td>
 					<td class="aright">
-						<fr:view name="itemBean" property="additionalCostValue"/>
+						<fr:view name="itemBean" property="additionalCostValue" type="pt.ist.expenditureTrackingSystem.domain.util.Money">
+							<fr:layout name="null-as-label">
+								<fr:property name="subLayout" value="default"/>
+							</fr:layout>
+						</fr:view>
 					</td>
 					<td>
-						<fr:edit name="itemBean" slot="shipment" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+						<fr:edit name="itemBean" slot="shipment" />
 					</td>
 				</tr>
 			</table>
