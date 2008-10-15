@@ -6,7 +6,7 @@
 
 <h2><bean:message key="user.label.view" bundle="ORGANIZATION_RESOURCES"/> <bean:write name="person" property="username"/></h2>
 
-<logic:present role="MANAGER,ACQUISITION_CENTRAL_MANAGER,ACCOUNTING_MANAGER">
+<logic:present role="MANAGER,ACQUISITION_CENTRAL_MANAGER,ACCOUNTING_MANAGER,PROJECT_ACCOUNTING_MANAGER">
 	<div class="infoop1">
 		<ul>
 			<logic:present role="MANAGER,ACQUISITION_CENTRAL_MANAGER">
