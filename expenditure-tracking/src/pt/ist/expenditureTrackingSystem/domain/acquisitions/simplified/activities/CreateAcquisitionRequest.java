@@ -51,8 +51,8 @@ public class CreateAcquisitionRequest extends GenericAcquisitionProcessActivity 
 
 	final ResourceBundle resourceBundle = ResourceBundle.getBundle("resources/AcquisitionResources");
 	try {
-	    byte[] byteArray = ReportUtils.exportToPdfFileAsByteArray("acquisitionRequestDocument", paramMap, resourceBundle,
-		    acquisitionRequestItemBeans);
+	    byte[] byteArray = ReportUtils.exportToPdfFileAsByteArray("acquisitionRequestPurchaseOrder", paramMap,
+		    resourceBundle, acquisitionRequestItemBeans);
 	    return byteArray;
 	} catch (JRException e) {
 	    e.printStackTrace();
