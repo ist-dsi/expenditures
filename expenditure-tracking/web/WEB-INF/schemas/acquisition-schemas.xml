@@ -288,14 +288,34 @@
 		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.SearchAcquisitionProcess"
 		bundle="ACQUISITION_RESOURCES">
 	<slot name="processId" key="label.acquisitionProcessId" bundle="EXPENDITURE_RESOURCES"/>
-	<slot name="requester" key="label.requester" bundle="EXPENDITURE_RESOURCES"/>
+	<slot name="proposalId" key="acquisitionProcess.label.proposalID" bundle="ACQUISITION_RESOURCES" />
+	<slot name="requester" layout="autoComplete" key="label.requester" bundle="EXPENDITURE_RESOURCES">
+        <property name="labelField" value="name"/>
+		<property name="format" value="${name} (${username})"/>
+		<property name="minChars" value="3"/>		
+		<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.PersonAutoComplete"/>
+		<property name="size" value="40"/>
+	</slot>
+	<slot name="unit" layout="autoComplete" key="label.unit" bundle="EXPENDITURE_RESOURCES">
+        <property name="labelField" value="presentationName"/>
+		<property name="format" value="${presentationName}"/>
+		<property name="minChars" value="3"/>		
+		<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.UnitAutoCompleteProvider" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+		<property name="size" value="40"/>
+	</slot>
+	<slot name="supplier" layout="autoComplete" key="label.supplier" bundle="EXPENDITURE_RESOURCES">
+        <property name="labelField" value="presentationName"/>
+		<property name="format" value="${presentationName}"/>
+		<property name="minChars" value="1"/>		
+		<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.NIFSupplierAutoCompleteProvider"/>
+		<property name="size" value="40"/>
+	</slot>
 	<slot name="acquisitionProcessState" key="label.processState" bundle="EXPENDITURE_RESOURCES">
 		<property name="defaultText" value="renderers.checkboxlist.selectAll"/>
 		<property name="key" value="true"/>
 		<property name="defaultTextBundle" value="RENDERER_RESOURCES"/>
 	</slot>
-	<slot name="fiscalIdentificationCode" key="supplier.label.fiscalCode" bundle="ORGANIZATION_RESOURCES"/>
-	<slot name="proposalId" key="acquisitionProcess.label.proposalID" bundle="ACQUISITION_RESOURCES" />
+	<slot name="hasAvailableAndAccessibleActivityForUser" key="label.option.hasAvailableAndAccessibleActivityForUser" bundle="ACQUISITION_RESOURCES"/>
 </schema>
 
 <schema name="allocateFunds"

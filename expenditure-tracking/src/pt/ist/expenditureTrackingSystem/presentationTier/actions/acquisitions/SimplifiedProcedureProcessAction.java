@@ -9,8 +9,6 @@ import java.util.TreeSet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.jasperreports.engine.JRException;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -38,7 +36,6 @@ import pt.ist.expenditureTrackingSystem.domain.dto.ProcessStateBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.UnitItemBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.VariantBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean.CreateItemSchemaType;
-import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
@@ -68,8 +65,6 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "allocate.funds.to.service.provider", path = "/acquisitions/allocateFundsToServiceProvider.jsp"),
 	@Forward(name = "prepare.create.acquisition.request", path = "/acquisitions/createAcquisitionRequest.jsp"),
 	@Forward(name = "receive.invoice", path = "/acquisitions/receiveInvoice.jsp"),
-	@Forward(name = "view.active.processes", path = "/acquisitions/viewActiveProcesses.jsp"),
-	@Forward(name = "view.my.processes", path = "/acquisitions/viewMyProcesses.jsp"),
 	@Forward(name = "select.unit.to.add", path = "/acquisitions/selectPayingUnitToAdd.jsp"),
 	@Forward(name = "remove.paying.units", path = "/acquisitions/removePayingUnits.jsp"),
 	@Forward(name = "edit.request.item", path = "/acquisitions/editRequestItem.jsp"),
@@ -175,6 +170,11 @@ public class SimplifiedProcedureProcessAction extends ProcessAction {
 	if (searchAcquisitionProcess == null) {
 	    searchAcquisitionProcess = new SearchAcquisitionProcess();
 	}
+	return searchAcquisitionProcess(mapping, request, searchAcquisitionProcess);
+    }
+
+    public ActionForward searchAcquisitionProcess(final ActionMapping mapping, final HttpServletRequest request,
+	    final SearchAcquisitionProcess searchAcquisitionProcess) {
 	request.setAttribute("searchAcquisitionProcess", searchAcquisitionProcess);
 	return mapping.findForward("search.acquisition.process");
     }
@@ -325,30 +325,20 @@ public class SimplifiedProcedureProcessAction extends ProcessAction {
 
     public ActionForward showPendingProcesses(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
-
-	List<AcquisitionProcess> processes = new ArrayList<AcquisitionProcess>();
-
-	for (SimplifiedProcedureProcess process : GenericProcess.getAllProcesses(SimplifiedProcedureProcess.class)) {
-	    if (process.isPersonAbleToExecuteActivities()) {
-		processes.add((AcquisitionProcess) process);
-	    }
-	}
-	request.setAttribute("activeProcesses", processes);
-
-	return mapping.findForward("view.active.processes");
+	final SearchAcquisitionProcess searchAcquisitionProcess = new SearchAcquisitionProcess();
+	searchAcquisitionProcess.setHasAvailableAndAccessibleActivityForUser(Boolean.TRUE);
+	return searchAcquisitionProcess(mapping, request, searchAcquisitionProcess);
     }
 
     public ActionForward showMyProcesses(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) {
-
-	Person person = getLoggedPerson();
-	request.setAttribute("processes", person.getAcquisitionProcesses());
-
-	return mapping.findForward("view.my.processes");
+	final SearchAcquisitionProcess searchAcquisitionProcess = new SearchAcquisitionProcess();
+	searchAcquisitionProcess.setRequester(getLoggedPerson());
+	return searchAcquisitionProcess(mapping, request, searchAcquisitionProcess);
     }
 
     public ActionForward createAcquisitionRequestDocument(ActionMapping mapping, ActionForm actionForm,
-	    HttpServletRequest request, HttpServletResponse response) throws JRException, IOException {
+	    HttpServletRequest request, HttpServletResponse response) throws IOException {
 	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
 
 	AbstractActivity<AcquisitionProcess> createAquisitionRequest = acquisitionProcess
