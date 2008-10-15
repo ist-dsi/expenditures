@@ -88,7 +88,7 @@ class acquisitions.Financer {
 
 	class acquisitions.ProjectFinancer extends acquisitions.Financer {
 		String projectFundAllocationId;
-		String effectiveProjectFundAllocationId;
+		Strings effectiveProjectFundAllocationId;
 	}
 
 class authorizations.Authorization {

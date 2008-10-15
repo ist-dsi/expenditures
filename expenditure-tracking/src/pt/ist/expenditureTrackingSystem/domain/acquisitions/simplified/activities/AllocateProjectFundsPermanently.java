@@ -42,8 +42,9 @@ public class AllocateProjectFundsPermanently extends GenericAcquisitionProcessAc
 	final List<FundAllocationBean> fundAllocationBeans = (List<FundAllocationBean>) objects[0];
 	for (FundAllocationBean fundAllocationBean : fundAllocationBeans) {
 	    final ProjectFinancer projectFinancer = (ProjectFinancer) fundAllocationBean.getFinancer();
-	    projectFinancer.setEffectiveProjectFundAllocationId(fundAllocationBean.getEffectiveFundAllocationId());
+	    projectFinancer.addEffectiveProjectFundAllocationId(fundAllocationBean.getEffectiveFundAllocationId());
 	}
+
     }
 
 }

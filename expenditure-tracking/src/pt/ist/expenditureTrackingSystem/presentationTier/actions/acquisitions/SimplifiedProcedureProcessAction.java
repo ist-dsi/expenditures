@@ -462,6 +462,18 @@ public class SimplifiedProcedureProcessAction extends ProcessAction {
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
 
+    public ActionForward addAllocationFundForProject(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+
+	return addAllocationFundGeneric(mapping, request, "financerFundAllocationId", "allocate.effective.project.funds");
+    }
+
+    public ActionForward removeAllocationFundForProject(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+
+	return removeAllocationFundGeneric(mapping, request, "financerFundAllocationId", "allocate.effective.project.funds");
+    }
+
     public ActionForward executeAllocateFundsPermanently(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final SimplifiedProcedureProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
@@ -478,12 +490,12 @@ public class SimplifiedProcedureProcessAction extends ProcessAction {
 	return mapping.findForward("allocate.effective.funds");
     }
 
-    public ActionForward addAllocationFund(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
+    private ActionForward addAllocationFundGeneric(final ActionMapping mapping, final HttpServletRequest request,
+	    String viewStateID, String forward) {
 
 	final SimplifiedProcedureProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
-	List<FundAllocationBean> fundAllocationBeans = getRenderedObject("financerFundAllocationId");
+	List<FundAllocationBean> fundAllocationBeans = getRenderedObject(viewStateID);
 	Integer index = Integer.valueOf(request.getParameter("index"));
 
 	Financer financer = getDomainObject(request, "financerOID");
@@ -495,21 +507,32 @@ public class SimplifiedProcedureProcessAction extends ProcessAction {
 	fundAllocationBeans.add(index + 1, fundAllocationBean);
 	request.setAttribute("fundAllocationBeans", fundAllocationBeans);
 	RenderUtils.invalidateViewState();
-	return mapping.findForward("allocate.effective.funds");
+	return mapping.findForward(forward);
     }
 
-    public ActionForward removeAllocationFund(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-
+    private ActionForward removeAllocationFundGeneric(final ActionMapping mapping, final HttpServletRequest request,
+	    String viewStateID, String forward) {
 	final SimplifiedProcedureProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
-	List<FundAllocationBean> fundAllocationBeans = getRenderedObject("financerFundAllocationId");
+	List<FundAllocationBean> fundAllocationBeans = getRenderedObject(viewStateID);
 	int index = Integer.valueOf(request.getParameter("index")).intValue();
 
 	fundAllocationBeans.remove(index);
 	request.setAttribute("fundAllocationBeans", fundAllocationBeans);
 	RenderUtils.invalidateViewState();
-	return mapping.findForward("allocate.effective.funds");
+	return mapping.findForward(forward);
+    }
+
+    public ActionForward addAllocationFund(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+
+	return addAllocationFundGeneric(mapping, request, "financerFundAllocationId", "allocate.effective.funds");
+    }
+
+    public ActionForward removeAllocationFund(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+
+	return removeAllocationFundGeneric(mapping, request, "financerFundAllocationId", "allocate.effective.funds");
     }
 
     public ActionForward allocateFundsPermanently(final ActionMapping mapping, final ActionForm form,
