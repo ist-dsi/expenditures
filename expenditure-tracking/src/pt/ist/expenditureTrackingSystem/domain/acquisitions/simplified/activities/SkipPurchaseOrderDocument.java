@@ -6,7 +6,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessSt
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
 
-public class SendAcquisitionRequestToSupplier extends GenericAcquisitionProcessActivity {
+public class SkipPurchaseOrderDocument extends GenericAcquisitionProcessActivity {
 
     @Override
     protected boolean isAccessible(AcquisitionProcess process) {
@@ -15,8 +15,7 @@ public class SendAcquisitionRequestToSupplier extends GenericAcquisitionProcessA
 
     @Override
     protected boolean isAvailable(AcquisitionProcess process) {
-	return process.isProcessInState(AcquisitionProcessStateType.APPROVED)
-		&& process.getAcquisitionRequest().hasPurchaseOrderDocument();
+	return process.isProcessInState(AcquisitionProcessStateType.APPROVED);
     }
 
     @Override

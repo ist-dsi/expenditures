@@ -38,7 +38,8 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activitie
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RemoveFundsPermanentlyAllocated;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RemovePayingUnit;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RemoveProjectFundAllocation;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SendAcquisitionRequestToSupplier;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SendPurchaseOrderToSupplier;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SkipPurchaseOrderDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SubmitForApproval;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SubmitForConfirmInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SubmitForFundAllocation;
@@ -68,7 +69,8 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	List<AbstractActivity> requestItemActivities = new ArrayList<AbstractActivity>();
 
 	requestInformationActivities.add(new CreateAcquisitionPurchaseOrderDocument());
-	requestInformationActivities.add(new SendAcquisitionRequestToSupplier());
+	requestInformationActivities.add(new SendPurchaseOrderToSupplier());
+	requestInformationActivities.add(new SkipPurchaseOrderDocument());
 
 	requestInformationActivities.add(new AddAcquisitionProposalDocument());
 	requestInformationActivities.add(new CreateAcquisitionRequestItem());

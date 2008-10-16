@@ -848,9 +848,14 @@ public class SimplifiedProcedureProcessAction extends ProcessAction {
 	return mapping.findForward("edit.supplier");
     }
 
-    public ActionForward executeSendAcquisitionRequestToSupplier(final ActionMapping mapping, final ActionForm form,
+    public ActionForward executeSendPurchaseOrderToSupplier(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
-	return executeActivityAndViewProcess(mapping, form, request, response, "SendAcquisitionRequestToSupplier");
+	return executeActivityAndViewProcess(mapping, form, request, response, "SendPurchaseOrderToSupplier");
+    }
+
+    public ActionForward executeSkipPurchaseOrderDocument(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	return executeActivityAndViewProcess(mapping, form, request, response, "SkipPurchaseOrderDocument");
     }
 
     public ActionForward executeSubmitForConfirmInvoice(final ActionMapping mapping, final ActionForm form,
