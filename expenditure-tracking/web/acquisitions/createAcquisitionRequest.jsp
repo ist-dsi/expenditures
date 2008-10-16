@@ -54,25 +54,33 @@
 
 <bean:define id="url">/acquisitionProcess.do?method=createAcquisitionRequestDocument&amp;acquisitionProcessOid=<%= acquisitionProcessOID %></bean:define>
 
-<form id="createFile" action="<%= request.getContextPath()+ url %>" method="post" target="iframe">
-	<a href="#" onclick="javascript: document.getElementById('createFile').submit(); reloadOnDone('iframe');"><bean:message key="acquisitionProcess.link.createRequestDocument" bundle="ACQUISITION_RESOURCES"/></a>
-	<iframe id="iframe" name="iframe" src="" style="display: none;"></iframe>
-</form>
+<div class="switchInline">
+	<form id="createFile" action="<%= request.getContextPath()+ url %>" method="post" target="iframe">
+		<a href="#" onclick="javascript: document.getElementById('createFile').submit(); reloadOnDone('iframe');"><bean:message key="acquisitionProcess.link.createRequestDocument" bundle="ACQUISITION_RESOURCES"/></a>
+		<iframe id="iframe" name="iframe" src="" style="display: none;"></iframe>
+	</form>
+	
+	<script type="text/javascript">
+		function reloadOnDone(id) {
+			if (document.getElementById(id).contentWindow.document.body.innerHTML.length>0) {
+				document.getElementById('fileName').innerHTML = document.getElementById(id).contentWindow.document.getElementById('fileName').innerHTML;
+				document.getElementById(id).src=document.getElementById(id).contentWindow.document.getElementById('file').href;
+				// This hack is actually needed in order for the browser detects 1st a change of the iframe source to the file, request the download from the user and the
+				// resets the iframe source again. 10 milis should be enough for the browser to do that.
+				setTimeout("document.getElementById('" + id + "').src=''", 10);
+			}
+			else {
+					setTimeout("reloadOnDone('" + id + "')",500);
+			}
+		}
+	</script>
+</div>
 
-<script type="text/javascript">
-	function reloadOnDone(id) {
-		if (document.getElementById(id).contentWindow.document.body.innerHTML.length>0) {
-			document.getElementById('fileName').innerHTML = document.getElementById(id).contentWindow.document.getElementById('fileName').innerHTML;
-			document.getElementById(id).src=document.getElementById(id).contentWindow.document.getElementById('file').href;
-			// This hack is actually needed in order for the browser detects 1st a change of the iframe source to the file, request the download from the user and the
-			// resets the iframe source again. 10 milis should be enough for the browser to do that.
-			setTimeout("document.getElementById('" + id + "').src=''", 10);
-		}
-		else {
-				setTimeout("reloadOnDone('" + id + "')",500);
-		}
-	}
-</script>
+<div class="switchNone">
+	<form id="createFile" action="<%= request.getContextPath()+ url %>" method="post">
+		<html:submit styleClass="inputbutton"><bean:message key="acquisitionProcess.link.createRequestDocument" bundle="ACQUISITION_RESOURCES"/></html:submit>
+	</form>
+</div>
 
 <bean:define id="urlView">/acquisitionProcess.do?method=viewAcquisitionProcess&amp;acquisitionProcessOid=<%= acquisitionProcessOID %></bean:define>
 <fr:form action="<%= urlView %>">
@@ -81,3 +89,7 @@
 	</html:submit>
 </fr:form>
 
+<script type="text/javascript" src="<%= request.getContextPath() + "/javaScript/switchScript.js" %>"></script>
+<script type="text/javascript">
+	switchGlobal();
+</script>

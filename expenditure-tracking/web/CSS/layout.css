@@ -980,3 +980,11 @@ display: block;
 position: absolute;
 }
 
+/***********************************************/	
+/************ accessibility javascript ************/
+.switchInline { display: none; }
+.switchBlock { display: none; }
+.switchNone { display: block; }
+.dnone { display: none; }
+.dinline { display: inline; }
+.dblock { display: block; }
