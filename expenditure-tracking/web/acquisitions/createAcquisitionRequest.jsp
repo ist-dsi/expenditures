@@ -37,9 +37,14 @@
 	<p>
 		<bean:message key="acquisitionProcess.label.requestDocument" bundle="ACQUISITION_RESOURCES"/>:
 		<logic:present name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestDocument">
-			<html:link action="/acquisitionProcess.do?method=downloadAcquisitionRequestDocument" paramId="acquisitionRequestDocumentOid" paramName="acquisitionProcess" paramProperty="acquisitionRequest.acquisitionRequestDocument.OID">
-				<bean:write name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestDocument.filename"/>
-			</html:link>	
+			
+			<bean:define id="acquisitionRequestDocumentOID" name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestDocument.OID"/>
+			
+			<a id="file" href="<%= request.getContextPath() + "/acquisitionProcess.do?method=downloadAcquisitionRequestDocument&acquisitionRequestDocumentOid=" + acquisitionRequestDocumentOID%>">
+				<span id="fileName">
+					<bean:write name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestDocument.filename"/>
+				</span>
+			</a>
 		</logic:present>
 		<logic:notPresent name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestDocument">
 			<em><bean:message key="document.message.info.notAvailable" bundle="EXPENDITURE_RESOURCES"/></em>
@@ -48,12 +53,28 @@
 </div>
 
 <bean:define id="url">/acquisitionProcess.do?method=createAcquisitionRequestDocument&amp;acquisitionProcessOid=<%= acquisitionProcessOID %></bean:define>
-<p>
-	<html:link action="<%= url %>" onclick="setTimeout('document.location.reload(true)',10500)"><bean:message key="acquisitionProcess.link.createRequestDocument" bundle="ACQUISITION_RESOURCES"/></html:link>
-</p>
-<bean:define id="urlAdd">/acquisitionProcess.do?method=addAcquisitionRequestDocument&amp;acquisitionProcessOid=<%= acquisitionProcessOID %></bean:define>
-<bean:define id="urlView">/acquisitionProcess.do?method=viewAcquisitionProcess&amp;acquisitionProcessOid=<%= acquisitionProcessOID %></bean:define>
 
+<form id="createFile" action="<%= request.getContextPath()+ url %>" method="post" target="iframe">
+	<a href="#" onclick="javascript: document.getElementById('createFile').submit(); reloadOnDone('iframe');"><bean:message key="acquisitionProcess.link.createRequestDocument" bundle="ACQUISITION_RESOURCES"/></a>
+	<iframe id="iframe" name="iframe" src="" style="display: none;"></iframe>
+</form>
+
+<script type="text/javascript">
+	function reloadOnDone(id) {
+		if (document.getElementById(id).contentWindow.document.body.innerHTML.length>0) {
+			document.getElementById('fileName').innerHTML = document.getElementById(id).contentWindow.document.getElementById('fileName').innerHTML;
+			document.getElementById(id).src=document.getElementById(id).contentWindow.document.getElementById('file').href;
+			// This hack is actually needed in order for the browser detects 1st a change of the iframe source to the file, request the download from the user and the
+			// resets the iframe source again. 10 milis should be enough for the browser to do that.
+			setTimeout("document.getElementById('" + id + "').src=''", 10);
+		}
+		else {
+				setTimeout("reloadOnDone('" + id + "')",500);
+		}
+	}
+</script>
+
+<bean:define id="urlView">/acquisitionProcess.do?method=viewAcquisitionProcess&amp;acquisitionProcessOid=<%= acquisitionProcessOID %></bean:define>
 <fr:form action="<%= urlView %>">
 	<html:submit styleClass="inputbutton">
 		<bean:message key="button.back" bundle="EXPENDITURE_RESOURCES"/>
