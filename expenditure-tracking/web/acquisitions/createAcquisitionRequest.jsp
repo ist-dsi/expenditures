@@ -4,7 +4,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
-<h2><bean:message key="acquisitionProcess.title.createRequestDocument" bundle="ACQUISITION_RESOURCES"/></h2>
+<h2><bean:message key="acquisitionProcess.title.createPurchaseOrderDocument" bundle="ACQUISITION_RESOURCES"/></h2>
 
 <p class="mtop15"><strong><bean:message key="label.requester" bundle="EXPENDITURE_RESOURCES"/></strong></p>
 <bean:define id="acquisitionProcess" name="acquisitionProcess" toScope="request"/>
@@ -36,27 +36,27 @@
 <div class="documents">
 	<p>
 		<bean:message key="acquisitionProcess.label.requestDocument" bundle="ACQUISITION_RESOURCES"/>:
-		<logic:present name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestDocument">
+		<logic:present name="acquisitionProcess" property="acquisitionRequest.purchaseOrderDocument">
 			
-			<bean:define id="acquisitionRequestDocumentOID" name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestDocument.OID"/>
+			<bean:define id="acquisitionRequestDocumentOID" name="acquisitionProcess" property="acquisitionRequest.purchaseOrderDocument.OID"/>
 			
-			<a id="file" href="<%= request.getContextPath() + "/acquisitionProcess.do?method=downloadAcquisitionRequestDocument&acquisitionRequestDocumentOid=" + acquisitionRequestDocumentOID%>">
+			<a id="file" href="<%= request.getContextPath() + "/acquisitionProcess.do?method=downloadAcquisitionPurchaseOrderDocument&purchaseOrderDocumentOid=" + acquisitionRequestDocumentOID%>">
 				<span id="fileName">
-					<bean:write name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestDocument.filename"/>
+					<bean:write name="acquisitionProcess" property="acquisitionRequest.purchaseOrderDocument.filename"/>
 				</span>
 			</a>
 		</logic:present>
-		<logic:notPresent name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestDocument">
+		<logic:notPresent name="acquisitionProcess" property="acquisitionRequest.purchaseOrderDocument">
 			<em><bean:message key="document.message.info.notAvailable" bundle="EXPENDITURE_RESOURCES"/></em>
 		</logic:notPresent>
 	</p>
 </div>
 
-<bean:define id="url">/acquisitionProcess.do?method=createAcquisitionRequestDocument&amp;acquisitionProcessOid=<%= acquisitionProcessOID %></bean:define>
+<bean:define id="url">/acquisitionProcess.do?method=createAcquisitionPurchaseOrderDocument&amp;acquisitionProcessOid=<%= acquisitionProcessOID %></bean:define>
 
 <div class="switchInline">
 	<form id="createFile" action="<%= request.getContextPath()+ url %>" method="post" target="iframe">
-		<a href="#" onclick="javascript: document.getElementById('createFile').submit(); reloadOnDone('iframe');"><bean:message key="acquisitionProcess.link.createRequestDocument" bundle="ACQUISITION_RESOURCES"/></a>
+		<a href="#" onclick="javascript: document.getElementById('createFile').submit(); reloadOnDone('iframe');"><bean:message key="acquisitionProcess.link.createPurchaseOrderDocument" bundle="ACQUISITION_RESOURCES"/></a>
 		<iframe id="iframe" name="iframe" src="" style="display: none;"></iframe>
 	</form>
 	
@@ -67,7 +67,7 @@
 				document.getElementById(id).src=document.getElementById(id).contentWindow.document.getElementById('file').href;
 				// This hack is actually needed in order for the browser detects 1st a change of the iframe source to the file, request the download from the user and the
 				// resets the iframe source again. 10 milis should be enough for the browser to do that.
-				setTimeout("document.getElementById('" + id + "').src=''", 10);
+				setTimeout("document.getElementById('" + id + "').src=''", 1000);
 			}
 			else {
 					setTimeout("reloadOnDone('" + id + "')",500);
@@ -78,7 +78,7 @@
 
 <div class="switchNone">
 	<form id="createFile" action="<%= request.getContextPath()+ url %>" method="post">
-		<html:submit styleClass="inputbutton"><bean:message key="acquisitionProcess.link.createRequestDocument" bundle="ACQUISITION_RESOURCES"/></html:submit>
+		<html:submit styleClass="inputbutton"><bean:message key="acquisitionProcess.link.createPurchaseOrderDocument" bundle="ACQUISITION_RESOURCES"/></html:submit>
 	</form>
 </div>
 

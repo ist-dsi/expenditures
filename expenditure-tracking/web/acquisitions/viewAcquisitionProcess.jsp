@@ -130,12 +130,12 @@
 	</p>
 	<p>
 		<bean:message key="acquisitionProcess.label.requestDocument" bundle="ACQUISITION_RESOURCES"/>:
-		<logic:present name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestDocument">
-			<html:link action="/acquisitionProcess.do?method=downloadAcquisitionRequestDocument" paramId="acquisitionRequestDocumentOid" paramName="acquisitionProcess" paramProperty="acquisitionRequest.acquisitionRequestDocument.OID">
-				<bean:write name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestDocument.filename"/>
+		<logic:present name="acquisitionProcess" property="acquisitionRequest.purchaseOrderDocument">
+			<html:link action="/acquisitionProcess.do?method=downloadAcquisitionPurchaseOrderDocument" paramId="purchaseOrderDocumentOid" paramName="acquisitionProcess" paramProperty="acquisitionRequest.purchaseOrderDocument.OID">
+				<bean:write name="acquisitionProcess" property="acquisitionRequest.purchaseOrderDocument.filename"/>
 			</html:link>	
 		</logic:present>
-		<logic:notPresent name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestDocument">
+		<logic:notPresent name="acquisitionProcess" property="acquisitionRequest.purchaseOrderDocument">
 			<em><bean:message key="document.message.info.notAvailable" bundle="EXPENDITURE_RESOURCES"/></em>
 		</logic:notPresent>
 	</p>

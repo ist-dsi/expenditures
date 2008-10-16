@@ -2,18 +2,18 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import pt.ist.fenixframework.pstm.Transaction;
 
-public class AcquisitionRequestDocument extends AcquisitionRequestDocument_Base {
+public class PurchaseOrderDocument extends PurchaseOrderDocument_Base {
 
-    protected AcquisitionRequestDocument(String requestId) {
+    protected PurchaseOrderDocument(String requestId) {
 	super();
 	setRequestId(requestId);
     }
 
-    public AcquisitionRequestDocument(final AcquisitionRequest acquisitionRequest, final byte[] contents, final String fileName,
+    public PurchaseOrderDocument(final AcquisitionRequest acquisitionRequest, final byte[] contents, final String fileName,
 	    String requestID) {
 	this(requestID);
-	if (acquisitionRequest.hasAcquisitionRequestDocument()) {
-	    acquisitionRequest.getAcquisitionRequestDocument().delete();
+	if (acquisitionRequest.hasPurchaseOrderDocument()) {
+	    acquisitionRequest.getPurchaseOrderDocument().delete();
 	}
 
 	setAcquisitionRequest(acquisitionRequest);

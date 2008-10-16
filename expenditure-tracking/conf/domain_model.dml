@@ -32,8 +32,8 @@ class acquisitions.Acquisition {
 	}
 
 	class acquisitions.AcquisitionRequest extends acquisitions.Acquisition {
-	String paymentReference;
-}
+		String paymentReference;
+	}
 
 class acquisitions.CPVReference {
 	String code;
@@ -115,7 +115,7 @@ class File {
 		String proposalId;
 	}
 
-	class acquisitions.AcquisitionRequestDocument extends File {
+	class acquisitions.PurchaseOrderDocument extends File {
 		String requestId;
 	}
 	
@@ -343,7 +343,7 @@ relation AcquisitionRequestAcquisitionProposalDocument {
 
 relation AcquisitionRequestAcquisitionRequestDocument {
 	acquisitions.AcquisitionRequest playsRole acquisitionRequest ;
-	acquisitions.AcquisitionRequestDocument playsRole acquisitionRequestDocument;
+	acquisitions.PurchaseOrderDocument playsRole purchaseOrderDocument;
 }
 
 relation AcquisitionInvoice {

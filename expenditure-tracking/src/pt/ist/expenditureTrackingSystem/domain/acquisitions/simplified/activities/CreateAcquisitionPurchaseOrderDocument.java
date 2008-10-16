@@ -14,13 +14,13 @@ import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.PurchaseOrderDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
 import pt.ist.expenditureTrackingSystem.domain.util.Address;
 import pt.ist.expenditureTrackingSystem.util.ReportUtils;
 
-public class CreateAcquisitionRequest extends GenericAcquisitionProcessActivity {
+public class CreateAcquisitionPurchaseOrderDocument extends GenericAcquisitionProcessActivity {
 
     @Override
     protected boolean isAccessible(AcquisitionProcess process) {
@@ -35,11 +35,11 @@ public class CreateAcquisitionRequest extends GenericAcquisitionProcessActivity 
     @Override
     protected void process(AcquisitionProcess process, Object... objects) {
 	String requestID = ExpenditureTrackingSystem.getInstance().nextAcquisitionRequestDocumentID();
-	byte[] file = createAcquisitionRequestItem(process.getAcquisitionRequest(), requestID);
-	new AcquisitionRequestDocument(process.getAcquisitionRequest(), file, requestID + "." + File.EXTENSION_PDF, requestID);
+	byte[] file = createPurchaseOrderDocument(process.getAcquisitionRequest(), requestID);
+	new PurchaseOrderDocument(process.getAcquisitionRequest(), file, requestID + "." + File.EXTENSION_PDF, requestID);
     }
 
-    protected byte[] createAcquisitionRequestItem(final AcquisitionRequest acquisitionRequest, final String requestID) {
+    protected byte[] createPurchaseOrderDocument(final AcquisitionRequest acquisitionRequest, final String requestID) {
 	final Map<String, Object> paramMap = new HashMap<String, Object>();
 	paramMap.put("acquisitionRequest", acquisitionRequest);
 	paramMap.put("requestID", requestID);

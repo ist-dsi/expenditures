@@ -1,0 +1,2 @@
+UPDATE FILE SET FILE.OJB_CONCRETE_CLASS = "pt.ist.expenditureTrackingSystem.domain.acquisitions.PurchaseOrderDocument" WHERE FILE.OJB_CONCRETE_CLASS = "pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestDocument";
+ALTER TABLE ACQUISITION CHANGE COLUMN KEY_ACQUISITION_REQUEST_DOCUMENT KEY_PURCHASE_ORDER_DOCUMENT int(11) default NULL;

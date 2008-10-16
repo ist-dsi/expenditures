@@ -19,11 +19,11 @@ import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProposalDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Invoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.ProjectFinancer;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.PurchaseOrderDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.SearchAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.UnitItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
@@ -207,9 +207,9 @@ public class SimplifiedProcedureProcessAction extends ProcessAction {
 	return download(response, acquisitionProposalDocument);
     }
 
-    public ActionForward downloadAcquisitionRequestDocument(final ActionMapping mapping, final ActionForm form,
+    public ActionForward downloadAcquisitionPurchaseOrderDocument(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) throws IOException {
-	final AcquisitionRequestDocument acquisitionRequestDocument = getDomainObject(request, "acquisitionRequestDocumentOid");
+	final PurchaseOrderDocument acquisitionRequestDocument = getDomainObject(request, "purchaseOrderDocumentOid");
 	return download(response, acquisitionRequestDocument);
     }
 
@@ -316,7 +316,7 @@ public class SimplifiedProcedureProcessAction extends ProcessAction {
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
 
-    public ActionForward executeCreateAcquisitionRequest(final ActionMapping mapping, final ActionForm form,
+    public ActionForward executeCreateAcquisitionPurchaseOrderDocument(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
@@ -337,15 +337,15 @@ public class SimplifiedProcedureProcessAction extends ProcessAction {
 	return searchAcquisitionProcess(mapping, request, searchAcquisitionProcess);
     }
 
-    public ActionForward createAcquisitionRequestDocument(ActionMapping mapping, ActionForm actionForm,
+    public ActionForward createAcquisitionPurchaseOrderDocument(ActionMapping mapping, ActionForm actionForm,
 	    HttpServletRequest request, HttpServletResponse response) throws IOException {
 	final AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
 
 	AbstractActivity<AcquisitionProcess> createAquisitionRequest = acquisitionProcess
-		.getActivityByName("CreateAcquisitionRequest");
+		.getActivityByName("CreateAcquisitionPurchaseOrderDocument");
 	createAquisitionRequest.execute(acquisitionProcess);
 
-	return executeCreateAcquisitionRequest(mapping, actionForm, request, response);
+	return executeCreateAcquisitionPurchaseOrderDocument(mapping, actionForm, request, response);
     }
 
     public ActionForward executeReceiveInvoice(final ActionMapping mapping, final ActionForm form,
@@ -452,8 +452,8 @@ public class SimplifiedProcedureProcessAction extends ProcessAction {
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
 
-    public ActionForward addAllocationFundForProject(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
+    public ActionForward addAllocationFundForProject(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
 
 	return addAllocationFundGeneric(mapping, request, "financerFundAllocationId", "allocate.effective.project.funds");
     }

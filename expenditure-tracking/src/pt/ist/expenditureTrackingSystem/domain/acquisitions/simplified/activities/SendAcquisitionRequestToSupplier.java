@@ -16,7 +16,7 @@ public class SendAcquisitionRequestToSupplier extends GenericAcquisitionProcessA
     @Override
     protected boolean isAvailable(AcquisitionProcess process) {
 	return process.isProcessInState(AcquisitionProcessStateType.APPROVED)
-		&& process.getAcquisitionRequest().hasAcquisitionRequestDocument();
+		&& process.getAcquisitionRequest().hasPurchaseOrderDocument();
     }
 
     @Override
