@@ -17,6 +17,7 @@
 </div>
 
 <bean:define id="urlExpand" type="java.lang.String">/organization.do?method=expandAuthorizationUnit&amp;personOid=<bean:write name="person" property="OID"/></bean:define>
+<bean:define id="urlCancel" type="java.lang.String">/organization.do?method=viewPerson&amp;personOid=<bean:write name="person" property="OID"/></bean:define>
 <fr:edit id="unitBean"
 		name="unitBean"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.UnitBean"
@@ -26,6 +27,7 @@
 		<fr:property name="classes" value="form"/>
 		<fr:property name="columnClasses" value=",,tderror"/>
 	</fr:layout>
+	<fr:destination name="cancel" path="<%= urlCancel %>" />
 </fr:edit>
 
 
