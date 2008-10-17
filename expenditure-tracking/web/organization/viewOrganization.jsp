@@ -7,15 +7,17 @@
 <h2><bean:message key="title.viewOrganization" bundle="EXPENDITURE_RESOURCES"/></h2>
 
 <div class="mbottom15">
+	<fr:form action="/organization.do?method=viewOrganization">
 	<fr:edit id="unitBean"
 			name="unitBean"
-			type="pt.ist.expenditureTrackingSystem.domain.dto.UnitBean"
 			schema="unitBean">
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="form"/>
 			<fr:property name="columnClasses" value=",,tderror"/>
 		</fr:layout>
 	</fr:edit>
+		<html:submit styleClass="inputbutton"><bean:message key="renderers.form.submit.name" bundle="RENDERER_RESOURCES"/></html:submit>
+	</fr:form>
 </div>
 
 
