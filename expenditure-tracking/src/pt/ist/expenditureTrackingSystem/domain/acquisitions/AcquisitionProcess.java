@@ -119,11 +119,7 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
     }
 
     public boolean isActive() {
-	return getLastAcquisitionProcessStateType().isActive();
-    }
-
-    public boolean isProcessInState(AcquisitionProcessStateType state) {
-	return getLastAcquisitionProcessStateType().equals(state);
+	return getLastAcquisitionProcessState().isActive();
     }
 
     public AcquisitionProcessState getAcquisitionProcessState() {
@@ -143,23 +139,23 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
     }
 
     public boolean isPendingApproval() {
-	return isProcessInState(AcquisitionProcessStateType.SUBMITTED_FOR_APPROVAL);
+	return getLastAcquisitionProcessState().isPendingApproval();
     }
 
     public boolean isApproved() {
-	return isProcessInState(AcquisitionProcessStateType.APPROVED);
+	return getLastAcquisitionProcessState().isApproved();
     }
 
     public boolean isAllocatedToSupplier() {
-	return getAcquisitionProcessStateType().compareTo(AcquisitionProcessStateType.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER) >= 0;
+	return getLastAcquisitionProcessState().isAllocatedToSupplier();
     }
 
     public boolean isAllocatedToUnit() {
-	return getAcquisitionProcessStateType().compareTo(AcquisitionProcessStateType.FUNDS_ALLOCATED) >= 0;
+	return getLastAcquisitionProcessState().isAllocatedToUnit();
     }
 
     public boolean isPayed() {
-	return isProcessInState(AcquisitionProcessStateType.ACQUISITION_PAYED);
+	return getLastAcquisitionProcessState().isPayed();
     }
 
     public boolean isAllocatedToUnit(Unit unit) {
@@ -167,12 +163,12 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
     }
 
     public boolean isAcquisitionProcessed() {
-	return isProcessInState(AcquisitionProcessStateType.ACQUISITION_PROCESSED);
+	return getLastAcquisitionProcessState().isAcquisitionProcessed();
     }
 
     public boolean isInvoiceReceived() {
 	final AcquisitionRequest acquisitionRequest = getAcquisitionRequest();
-	return isProcessInState(AcquisitionProcessStateType.INVOICE_RECEIVED) && acquisitionRequest.isInvoiceReceived();
+	return getLastAcquisitionProcessState().isInvoiceReceived() && acquisitionRequest.isInvoiceReceived();
     }
 
     public Unit getUnit() {

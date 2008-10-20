@@ -2,7 +2,6 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activiti
 
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
 import pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean;
 import pt.ist.fenixWebFramework.security.UserView;
@@ -17,7 +16,7 @@ public class EditAcquisitionRequestItem extends GenericAcquisitionProcessActivit
 
     @Override
     protected boolean isAvailable(AcquisitionProcess process) {
-	return process.isProcessInState(AcquisitionProcessStateType.IN_GENESIS)
+	return process.getAcquisitionProcessState().isInGenesis()
 		&& process.getAcquisitionRequest().getAcquisitionRequestItemsCount() > 0;
     }
 

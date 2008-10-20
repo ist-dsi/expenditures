@@ -17,8 +17,8 @@ public class ProjectFundAllocation extends GenericAcquisitionProcessActivity {
 
     @Override
     protected boolean isAvailable(AcquisitionProcess process) {
-	return process.isProcessInState(AcquisitionProcessStateType.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER)
-		&& !process.isProcessInState(AcquisitionProcessStateType.CANCELED)
+	return process.getAcquisitionProcessState().isInState(AcquisitionProcessStateType.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER)
+		&& !process.getAcquisitionProcessState().isCanceled()
 		&& !process.hasAllocatedFundsForAllProjectFinancers();
     }
 

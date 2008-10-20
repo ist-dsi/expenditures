@@ -18,7 +18,7 @@ public class FundAllocationExpirationDate extends GenericAcquisitionProcessActiv
 
     @Override
     protected boolean isAvailable(AcquisitionProcess process) {
-	return process.isProcessInState(AcquisitionProcessStateType.SUBMITTED_FOR_FUNDS_ALLOCATION);
+	return process.getAcquisitionProcessState().isPendingFundAllocation();
     }
 
     @Override

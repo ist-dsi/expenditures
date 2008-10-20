@@ -29,7 +29,7 @@ public class CreateAcquisitionPurchaseOrderDocument extends GenericAcquisitionPr
 
     @Override
     protected boolean isAvailable(AcquisitionProcess process) {
-	return process.isProcessInState(AcquisitionProcessStateType.APPROVED);
+	return process.getAcquisitionProcessState().isApproved();
     }
 
     @Override

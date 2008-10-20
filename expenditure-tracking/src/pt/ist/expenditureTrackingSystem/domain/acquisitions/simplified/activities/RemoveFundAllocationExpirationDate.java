@@ -18,11 +18,11 @@ public class RemoveFundAllocationExpirationDate extends GenericAcquisitionProces
     }
 
     private boolean checkActiveConditions(AcquisitionProcess process) {
-	return process.isProcessInState(AcquisitionProcessStateType.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER);
+	return process.getAcquisitionProcessState().isInState(AcquisitionProcessStateType.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER);
     }
 
     private boolean checkCanceledConditions(AcquisitionProcess process) {
-	return process.isProcessInState(AcquisitionProcessStateType.CANCELED)
+	return process.getAcquisitionProcessState().isCanceled()
 		&& !process.getAcquisitionRequest().hasAllFundAllocationId() && process.getFundAllocationExpirationDate() != null;
     }
 
@@ -30,7 +30,7 @@ public class RemoveFundAllocationExpirationDate extends GenericAcquisitionProces
     protected void process(AcquisitionProcess process, Object... objects) {
 	process.setFundAllocationExpirationDate(null);
 	process.getAcquisitionRequest().unSubmitForFundsAllocation();
-	if (!process.isProcessInState(AcquisitionProcessStateType.CANCELED)) {
+	if (!process.getAcquisitionProcessState().isCanceled()) {
 	    new AcquisitionProcessState(process, AcquisitionProcessStateType.SUBMITTED_FOR_APPROVAL);
 	}
     }

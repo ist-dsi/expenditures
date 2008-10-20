@@ -4,7 +4,6 @@ import java.util.List;
 
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
 import pt.ist.expenditureTrackingSystem.domain.dto.UnitItemBean;
@@ -19,7 +18,7 @@ public class DistributeRealValuesForPayingUnits extends GenericAcquisitionProces
 
     @Override
     protected boolean isAvailable(AcquisitionProcess process) {
-	return process.isProcessInState(AcquisitionProcessStateType.INVOICE_RECEIVED) && !process.getAcquisitionRequest().hasAtLeastOneConfirmation();
+	return process.getAcquisitionProcessState().isInvoiceReceived() && !process.getAcquisitionRequest().hasAtLeastOneConfirmation();
     }
 
     @Override

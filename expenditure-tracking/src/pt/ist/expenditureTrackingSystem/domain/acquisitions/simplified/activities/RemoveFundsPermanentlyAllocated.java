@@ -14,7 +14,7 @@ public class RemoveFundsPermanentlyAllocated extends GenericAcquisitionProcessAc
 
     @Override
     protected boolean isAvailable(AcquisitionProcess process) {
-	return process.isProcessInState(AcquisitionProcessStateType.FUNDS_ALLOCATED_PERMANENTLY);
+	return process.getAcquisitionProcessState().isInState(AcquisitionProcessStateType.FUNDS_ALLOCATED_PERMANENTLY);
     }
 
     @Override

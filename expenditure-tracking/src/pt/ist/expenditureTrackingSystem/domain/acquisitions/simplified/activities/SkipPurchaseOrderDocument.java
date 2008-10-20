@@ -15,7 +15,7 @@ public class SkipPurchaseOrderDocument extends GenericAcquisitionProcessActivity
 
     @Override
     protected boolean isAvailable(AcquisitionProcess process) {
-	return process.isProcessInState(AcquisitionProcessStateType.APPROVED);
+	return process.getAcquisitionProcessState().isApproved();
     }
 
     @Override

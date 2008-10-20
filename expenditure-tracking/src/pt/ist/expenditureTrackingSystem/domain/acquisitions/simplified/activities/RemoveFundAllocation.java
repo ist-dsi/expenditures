@@ -18,18 +18,18 @@ public class RemoveFundAllocation extends GenericAcquisitionProcessActivity {
     }
 
     private boolean checkActiveConditions(AcquisitionProcess process) {
-	return process.isProcessInState(AcquisitionProcessStateType.FUNDS_ALLOCATED);
+	return process.getAcquisitionProcessState().isInState(AcquisitionProcessStateType.FUNDS_ALLOCATED);
     }
 
     private boolean checkCanceledConditions(AcquisitionProcess process) {
-	return process.isProcessInState(AcquisitionProcessStateType.CANCELED)
+	return process.getAcquisitionProcessState().isCanceled()
 		&& process.getAcquisitionRequest().hasAllFundAllocationId();
     }
 
     @Override
     protected void process(AcquisitionProcess process, Object... objects) {
 	process.getAcquisitionRequest().resetFundAllocationId();
-	if (!process.isProcessInState(AcquisitionProcessStateType.CANCELED)) {
+	if (!process.getAcquisitionProcessState().isCanceled()) {
 	    new AcquisitionProcessState(process, AcquisitionProcessStateType.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER);
 	} else {
 	    if (!process.hasAllocatedFundsForAllProjectFinancers()) {

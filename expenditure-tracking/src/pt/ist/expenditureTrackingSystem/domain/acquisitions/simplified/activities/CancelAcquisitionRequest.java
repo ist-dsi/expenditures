@@ -15,7 +15,7 @@ public class CancelAcquisitionRequest extends GenericAcquisitionProcessActivity 
 
     @Override
     protected boolean isAvailable(AcquisitionProcess process) {
-	return process.isProcessInState(AcquisitionProcessStateType.ACQUISITION_PROCESSED);
+	return process.getAcquisitionProcessState().isAcquisitionProcessed();
     }
 
     @Override

@@ -19,7 +19,7 @@ public class AssignPayingUnitToItem extends GenericAcquisitionProcessActivity {
 
     @Override
     protected boolean isAvailable(AcquisitionProcess process) {
-	return process.isProcessInState(AcquisitionProcessStateType.IN_GENESIS);
+	return process.getAcquisitionProcessState().isInGenesis();
     }
 
     @Override

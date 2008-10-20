@@ -17,7 +17,7 @@ public class DeleteAcquisitionRequestItem extends GenericAcquisitionProcessActiv
 
     @Override
     protected boolean isAvailable(AcquisitionProcess process) {
-	return process.isProcessInState(AcquisitionProcessStateType.IN_GENESIS) && process.getAcquisitionRequest().getAcquisitionRequestItemsCount() > 0;
+	return process.getAcquisitionProcessState().isInGenesis() && process.getAcquisitionRequest().getAcquisitionRequestItemsCount() > 0;
     }
 
     @Override

@@ -2,7 +2,6 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activiti
 
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 
 public class FixInvoice extends ReceiveInvoice {
 
@@ -13,7 +12,7 @@ public class FixInvoice extends ReceiveInvoice {
 
     @Override
     protected boolean isAvailable(AcquisitionProcess process) {
-	return process.isProcessInState(AcquisitionProcessStateType.INVOICE_RECEIVED);
+	return process.getAcquisitionProcessState().isInvoiceReceived();
     }
 
     @Override

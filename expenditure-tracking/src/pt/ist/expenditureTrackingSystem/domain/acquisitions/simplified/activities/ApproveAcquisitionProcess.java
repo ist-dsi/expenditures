@@ -20,7 +20,7 @@ public class ApproveAcquisitionProcess extends GenericAcquisitionProcessActivity
 
     @Override
     protected boolean isAvailable(AcquisitionProcess process) {
-	return process.isProcessInState(AcquisitionProcessStateType.FUNDS_ALLOCATED);
+	return process.getAcquisitionProcessState().isInState(AcquisitionProcessStateType.FUNDS_ALLOCATED);
     }
 
     @Override

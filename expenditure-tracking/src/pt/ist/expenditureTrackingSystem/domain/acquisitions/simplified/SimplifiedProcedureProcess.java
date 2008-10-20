@@ -148,7 +148,7 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
     public boolean isEditRequestItemAvailable() {
 	User user = UserView.getUser();
 	return user != null && user.getPerson().equals(getRequestor())
-		&& isProcessInState(AcquisitionProcessStateType.IN_GENESIS);
+		&& getLastAcquisitionProcessState().isInGenesis();
     }
 
     public List<GenericAcquisitionProcessActivity> getActiveActivitiesForItem() {

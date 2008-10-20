@@ -19,7 +19,7 @@ public class ConfirmInvoice extends GenericAcquisitionProcessActivity {
 
     @Override
     protected boolean isAvailable(AcquisitionProcess process) {
-	return process.isProcessInState(AcquisitionProcessStateType.SUBMITTED_FOR_CONFIRM_INVOICE);
+	return process.getAcquisitionProcessState().isPendingInvoiceConfirmation();
     }
 
     @Override
