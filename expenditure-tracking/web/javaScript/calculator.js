@@ -10,7 +10,7 @@
 					var checked = element.cells[0].getElementsByTagName("input")[0].checked;
 					var value = element.cells[2].getElementsByTagName("input")[0].value;
 					if (checked && value.match('\\d+')) {
-						sum += parseFloat(value);
+						sum += parseFloat(value.replace(',','.'));
 					}
 				}
 			}
@@ -22,7 +22,7 @@
 				sumValue = "<span class=\"valid\">" + sum + "</span>";
 			}
 			else {
-				sumValue = sum;
+				sumValue = sum + "";
 			}
-			document.getElementById(writeTo).innerHTML=sumValue + ' (' + outOfLabel + ' ' + maxValue + ')';
+			document.getElementById(writeTo).innerHTML=sumValue.replace('.',',') + ' (' + outOfLabel + ' ' + maxValue.replace('.',',') + ')';
 	}
