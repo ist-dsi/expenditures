@@ -480,7 +480,7 @@
 </schema>
 
 <schema name="editFinancerFundAllocationId" type="pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean" bundle="ACQUISITION_RESOURCES">
-	<slot name="financer.financerCostCenter.presentationName" key="unit.label.unit" read-only="true" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="financer.unit.presentationName" key="unit.label.unit" read-only="true" bundle="ORGANIZATION_RESOURCES"/>
 	<slot name="fundAllocationId" key="financer.label.fundAllocation.identification" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 </schema>
 
