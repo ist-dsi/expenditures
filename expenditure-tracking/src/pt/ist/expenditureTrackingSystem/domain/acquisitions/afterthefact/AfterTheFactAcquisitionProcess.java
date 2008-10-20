@@ -21,7 +21,7 @@ import pt.ist.fenixframework.pstm.Transaction;
 
 public class AfterTheFactAcquisitionProcess extends AfterTheFactAcquisitionProcess_Base {
 
-    private static List<AbstractActivity> activities = new ArrayList<AbstractActivity>();
+    private static List<AbstractActivity<AfterTheFactAcquisitionProcess>> activities = new ArrayList<AbstractActivity<AfterTheFactAcquisitionProcess>>();
 
     static {
 	activities.add(new EditAfterTheFactAcquisition());
@@ -54,8 +54,8 @@ public class AfterTheFactAcquisitionProcess extends AfterTheFactAcquisitionProce
 	return null;
     }
 
-    public List<AbstractActivity> getActiveActivities() {
-	return new ArrayList(activities);
+    public List<AbstractActivity<AfterTheFactAcquisitionProcess>> getActiveActivities() {
+	return new ArrayList<AbstractActivity<AfterTheFactAcquisitionProcess>>(activities);
     }
 
     public void edit(final AfterTheFactAcquisitionProcessBean afterTheFactAcquisitionProcessBean) {

@@ -11,6 +11,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.AddAcquisitionProposalDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.AddPayingUnit;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.AllocateFundsPermanently;
@@ -58,15 +59,15 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 
     private static Money PROCESS_VALUE_LIMIT = new Money("5000");
 
-    private static Map<ActivityScope, List<AbstractActivity>> activities = new HashMap<ActivityScope, List<AbstractActivity>>();
+    private static Map<ActivityScope, List<GenericAcquisitionProcessActivity>> activities = new HashMap<ActivityScope, List<GenericAcquisitionProcessActivity>>();
 
     public enum ActivityScope {
 	REQUEST_INFORMATION, REQUEST_ITEM;
     }
 
     static {
-	List<AbstractActivity> requestInformationActivities = new ArrayList<AbstractActivity>();
-	List<AbstractActivity> requestItemActivities = new ArrayList<AbstractActivity>();
+	List<GenericAcquisitionProcessActivity> requestInformationActivities = new ArrayList<GenericAcquisitionProcessActivity>();
+	List<GenericAcquisitionProcessActivity> requestItemActivities = new ArrayList<GenericAcquisitionProcessActivity>();
 
 	requestInformationActivities.add(new CreateAcquisitionPurchaseOrderDocument());
 	requestInformationActivities.add(new SendPurchaseOrderToSupplier());
@@ -150,17 +151,17 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 		&& isProcessInState(AcquisitionProcessStateType.IN_GENESIS);
     }
 
-    public List<AbstractActivity> getActiveActivitiesForItem() {
+    public List<GenericAcquisitionProcessActivity> getActiveActivitiesForItem() {
 	return getActiveActivities(ActivityScope.REQUEST_ITEM);
     }
 
-    public List<AbstractActivity> getActiveActivitiesForRequest() {
+    public List<GenericAcquisitionProcessActivity> getActiveActivitiesForRequest() {
 	return getActiveActivities(ActivityScope.REQUEST_INFORMATION);
     }
 
-    public List<AbstractActivity> getActiveActivities(ActivityScope scope) {
-	List<AbstractActivity> activitiesResult = new ArrayList<AbstractActivity>();
-	for (AbstractActivity activity : activities.get(scope)) {
+    public List<GenericAcquisitionProcessActivity> getActiveActivities(ActivityScope scope) {
+	List<GenericAcquisitionProcessActivity> activitiesResult = new ArrayList<GenericAcquisitionProcessActivity>();
+	for (GenericAcquisitionProcessActivity activity : activities.get(scope)) {
 	    if (activity.isActive(this)) {
 		activitiesResult.add(activity);
 	    }
@@ -168,8 +169,8 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	return activitiesResult;
     }
 
-    public List<AbstractActivity> getActiveActivities() {
-	List<AbstractActivity> activitiesResult = new ArrayList<AbstractActivity>();
+    public List<GenericAcquisitionProcessActivity> getActiveActivities() {
+	List<GenericAcquisitionProcessActivity> activitiesResult = new ArrayList<GenericAcquisitionProcessActivity>();
 	for (ActivityScope scope : activities.keySet()) {
 	    activitiesResult.addAll(getActiveActivities(scope));
 	}
@@ -188,10 +189,10 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
     }
 
     @Override
-    public AbstractActivity getActivityByName(String activityName) {
+    public GenericAcquisitionProcessActivity getActivityByName(String activityName) {
 
 	for (ActivityScope scope : activities.keySet()) {
-	    for (AbstractActivity activity : activities.get(scope)) {
+	    for (GenericAcquisitionProcessActivity activity : activities.get(scope)) {
 		if (activity.getName().equals(activityName)) {
 		    return activity;
 		}
