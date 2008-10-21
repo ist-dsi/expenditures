@@ -1,24 +1,24 @@
 <schema name="createAcquisitionRequest"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean"
 		bundle="ACQUISITION_RESOURCES">
-	<slot name="supplier" layout="autoComplete" key="label.supplier" bundle="EXPENDITURE_RESOURCES" help="messages.help.supplier">
+	<slot name="supplier" layout="autoComplete" key="label.supplier" bundle="EXPENDITURE_RESOURCES" help="message.help.supplier">
         <property name="labelField" value="presentationName"/>
 		<property name="format" value="${presentationName}"/>
 		<property name="minChars" value="1"/>		
 		<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.NIFSupplierAutoCompleteProvider"/>
-		<property name="classes" value="inputsize40"/>
+		<property name="classes" value="inputsize225px"/>
 		<validator class="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator">
 			<property name="message" value="label.pleaseSelectOne.supplier"/>
 			<property name="bundle" value="EXPENDITURE_RESOURCES"/>
 			<property name="key" value="true"/>
 		</validator>
 	</slot>
-	<slot name="requestingUnit" layout="autoComplete" key="acquisitionProcess.label.requestingUnit" bundle="ACQUISITION_RESOURCES" help="messages.help.requestingUnit">
+	<slot name="requestingUnit" layout="autoComplete" key="acquisitionProcess.label.requestingUnit" bundle="ACQUISITION_RESOURCES" help="message.help.requestingUnit">
         <property name="labelField" value="presentationName"/>
 		<property name="format" value="${presentationName}"/>
 		<property name="minChars" value="3"/>		
 		<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.UnitAutoCompleteProvider" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-		<property name="classes" value="inputsize40"/>
+		<property name="classes" value="inputsize225px"/>
 		<validator class="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator">
 			<property name="message" value="label.pleaseSelectOne.unit"/>
 			<property name="bundle" value="EXPENDITURE_RESOURCES"/>
@@ -122,8 +122,8 @@
 </schema>
 
 <schema name="createAcquisitionRequestItem.block1" type="pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean" bundle="ACQUISITION_RESOURCES">
-		<slot name="proposalReference" key="acquisitionRequestItem.label.proposalReference" bundle="ACQUISITION_RESOURCES" help="messages.help.proposalReference"/>
-		<slot name="CPVReference" layout="autoComplete" key="acquisitionRequestItem.label.salesCode" bundle="ACQUISITION_RESOURCES" help="messages.help.CPVReference">
+		<slot name="proposalReference" key="acquisitionRequestItem.label.proposalReference" bundle="ACQUISITION_RESOURCES" help="message.help.proposalReference"/>
+		<slot name="CPVReference" layout="autoComplete" key="acquisitionRequestItem.label.salesCode" bundle="ACQUISITION_RESOURCES" help="message.help.CPVReference">
 		    <property name="labelField" value="code"/>
 			<property name="format" value="${code} - ${description}"/>
 			<property name="minChars" value="1"/>		
@@ -151,7 +151,7 @@
 	<slot name="vatValue" key="acquisitionRequestItem.label.vatValue" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">	
 		<property name="size" value="10"/>
 	</slot>
-	<slot name="additionalCostValue" key="acquisitionRequestItem.label.additionalCostValue.optional" bundle="ACQUISITION_RESOURCES" help="messages.help.additionalCostValue">
+	<slot name="additionalCostValue" key="acquisitionRequestItem.label.additionalCostValue.optional" bundle="ACQUISITION_RESOURCES" help="message.help.additionalCostValue">
 		<property name="size" value="10"/>
 	</slot>
 </schema>
@@ -160,7 +160,7 @@
 	<slot name="createItemSchemaType" layout="radio-postback" key="acquisitionRequestItem.label.deliveryInfo" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
 		<property name="classes" value="liinline nobullet"/>
 	</slot>
-	<slot name="recipient" key="label.recipient" bundle="EXPENDITURE_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" help="messages.help.recipient">
+	<slot name="recipient" key="label.recipient" bundle="EXPENDITURE_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" help="message.help.recipient">
 		<property name="size" value="60"/>
 	</slot>	
 	<slot name="address" key="label.receptionAddress" bundle="EXPENDITURE_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
@@ -393,7 +393,8 @@
 
 <schema name="select.unit.from.domain.object.bean"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.DomainObjectBean"
-		bundle="ACQUISITION_RESOURCES">
+		bundle="ACQUISITION_RESOURCES"
+		>
 	<slot name="domainObject" layout="autoComplete" key="acquisitionProcess.label.payingUnit" bundle="ACQUISITION_RESOURCES">
         <property name="labelField" value="presentationName"/>
 		<property name="format" value="${presentationName}"/>

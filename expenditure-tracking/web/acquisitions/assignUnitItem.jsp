@@ -24,6 +24,10 @@
 <bean:define id="maxValue" name="acquisitionRequestItem" property="totalItemValueWithAdditionalCostsAndVat.roundedValue"/>
 <jsp:include page="../commons/defaultErrorDisplay.jsp"/>
 
+
+<h3 class="mbottom05"><bean:message key="acquisitionProcess.label.assignPayingUnitToItem" bundle="ACQUISITION_RESOURCES"/></h3>
+<p class="mvert05"><bean:message key="acquisitionProcess.label.assignPayingUnitToItem.description" bundle="ACQUISITION_RESOURCES"/></p>
+
 <div class="dinline forminline">
 	<fr:form action='<%="/acquisitionProcess.do?acquisitionProcessOid=" + processOID + "&acquisitionRequestItemOid=" + acquisitionRequestItemOid%>'>
 		<html:hidden  property="method" value="executeAssignPayingUnitToItemCreation"/>
@@ -37,10 +41,10 @@
 
 				</th>				
 				<th>
-					<strong><bean:message key="acquisitionProcess.label.payingUnit" bundle="ACQUISITION_RESOURCES"/></strong>
+					<bean:message key="acquisitionProcess.label.payingUnit" bundle="ACQUISITION_RESOURCES"/>
 				</th>
 				<th>
-					<strong><bean:message key="unitItem.label.shareValue" bundle="ACQUISITION_RESOURCES"/></strong>
+					<bean:message key="unitItem.label.shareValue" bundle="ACQUISITION_RESOURCES"/>
 				</th>
 			</tr>
 			<logic:iterate id="unitItemBean" name="unitItemBeans" indexId="id">

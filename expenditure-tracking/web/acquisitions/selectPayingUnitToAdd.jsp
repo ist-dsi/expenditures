@@ -9,6 +9,10 @@
 
 <bean:define id="processOID" name="acquisitionProcess" property="OID"/>
 
+<div class="infoop2">
+Indique o número ou nome do centro de custo/projecto responsável pelo financiamento da aquisição. Tem de escolher uma das opções da lista.
+</div>
+
 <fr:edit id="unitToAdd" name="domainObjectBean" schema="select.unit.from.domain.object.bean" 
 action='<%="/acquisitionProcess.do?method=addPayingUnit&acquisitionProcessOid=" + processOID%>'>
 	<fr:destination name="cancel" path='<%= "/acquisitionProcess.do?method=viewAcquisitionProcess&acquisitionProcessOid=" + processOID %>'/>
