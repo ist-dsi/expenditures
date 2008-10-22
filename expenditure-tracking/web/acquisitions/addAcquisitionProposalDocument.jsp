@@ -5,6 +5,10 @@
 
 <h2><bean:message key="acquisitionProcess.title.AddAcquisitionProposalDocument" bundle="ACQUISITION_RESOURCES"/></h2>
 
+<div class="infoop2">
+	<bean:message key="message.help.addAcquisitionProposalDocument" bundle="ACQUISITION_RESOURCES"/>
+</div>
+
 <bean:define id="acquisitionProcess"
 		name="acquisitionProcess"
 		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess"

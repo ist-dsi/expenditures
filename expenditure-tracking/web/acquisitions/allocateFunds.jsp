@@ -4,7 +4,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
-<h2>Efectuar Cabimento (GIAF)</h2>
+<h2><bean:message key="acquisitionProcess.title.fundAllocation" bundle="ACQUISITION_RESOURCES"/></h2>
 
 <bean:define id="acquisitionProcess" name="acquisitionProcess" toScope="request"/>
 <jsp:include page="viewAcquisitionRequest.jsp" flush="true"/>
@@ -24,6 +24,8 @@
 </div>
 
 
+<p class="mtop15 mbottom025"><bean:message key="acquisitionProcess.label.fundAllocation.insert" bundle="ACQUISITION_RESOURCES"/>:</p>
+
 <bean:define id="urlActivity">/acquisitionProcess.do?method=allocateFunds&amp;acquisitionProcessOid=<bean:write name="acquisitionProcess" property="OID"/></bean:define>
 <bean:define id="urlView">/acquisitionProcess.do?method=viewAcquisitionProcess&amp;acquisitionProcessOid=<bean:write name="acquisitionProcess" property="OID"/></bean:define>
 <fr:edit action="<%= urlActivity %>" 
@@ -31,7 +33,7 @@
 		schema="editFinancerFundAllocationId" 
 		name="fundAllocationBeans" >
 	<fr:layout name="tabular-editable">
-		<fr:property name="classes" value="tstyle2"/>
+		<fr:property name="classes" value="tstyle2 mtop05"/>
 	</fr:layout>
 	<fr:destination name="cancel" path="<%= urlView %>" />
 </fr:edit>

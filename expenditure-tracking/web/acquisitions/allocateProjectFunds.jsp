@@ -23,6 +23,8 @@
 	</p>
 </div>
 
+<p class="mtop15 mbottom025"><bean:message key="acquisitionProcess.label.projectFundAllocation.insert" bundle="ACQUISITION_RESOURCES"/>:</p>
+
 <bean:define id="urlActivity">/acquisitionProcess.do?method=allocateProjectFunds&amp;acquisitionProcessOid=<bean:write name="acquisitionProcess" property="OID"/></bean:define>
 <bean:define id="urlView">/acquisitionProcess.do?method=viewAcquisitionProcess&amp;acquisitionProcessOid=<bean:write name="acquisitionProcess" property="OID"/></bean:define>
 <fr:edit action="<%= urlActivity %>" 
@@ -30,7 +32,7 @@
 		schema="editProjectFinancerFundAllocationId" 
 		name="fundAllocationBeans" >
 	<fr:layout name="tabular-editable">
-		<fr:property name="classes" value="tstyle2"/>
+		<fr:property name="classes" value="tstyle2 mtop05"/>
 	</fr:layout>
 	<fr:destination name="cancel" path="<%= urlView %>" />
 </fr:edit>

@@ -516,6 +516,7 @@ span.invalid { color: #a00; font-weight: bold; }
 .inputsize40 input { width: 257px; }
 .inputsize200px input { width: 200px; }
 .inputsize225px input { width: 225px; }
+.inputsize250px input { width: 250px; }
 .inputsize300px input { width: 300px; }
 
 div.infoop1 {
@@ -760,8 +761,8 @@ div.box a {
 color: #555 !important;
 font-weight: normal;
 background: none;
-text-decoration: none;
-/*border-bottom: 1px solid #aaa;*/
+text-decoration: none !important;
+border-bottom: 1px solid #888;
 }
 div.box a:hover {
 text-decoration: none;
