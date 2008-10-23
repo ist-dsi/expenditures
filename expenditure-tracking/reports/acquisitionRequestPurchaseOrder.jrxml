@@ -64,16 +64,16 @@
 				</rectangle>
 				<staticText>
 					<reportElement
-						x="325"
+						x="285"
 						y="12"
-						width="75"
+						width="117"
 						height="15"
 						key="staticText-1"/>
 					<box></box>
 					<textElement verticalAlignment="Middle">
 						<font pdfFontName="Helvetica-BoldOblique" isBold="true" isItalic="true"/>
 					</textElement>
-				<text><![CDATA[Requisição nº:]]></text>
+				<text><![CDATA[Requisição Externa nº:]]></text>
 				</staticText>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -131,9 +131,9 @@
 				</textField>
 				<staticText>
 					<reportElement
-						x="325"
+						x="285"
 						y="46"
-						width="75"
+						width="117"
 						height="15"
 						key="staticText-24"/>
 					<box></box>
@@ -254,9 +254,9 @@ $P{acquisitionRequest}.getSupplier().getAddress().getCountry()]]></textFieldExpr
 				</textField>
 				<staticText>
 					<reportElement
-						x="325"
+						x="285"
 						y="29"
-						width="75"
+						width="117"
 						height="15"
 						key="staticText-30"/>
 					<box></box>
