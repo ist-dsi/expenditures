@@ -74,6 +74,7 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "edit.real.shares.values", path = "/acquisitions/editRealSharesValues.jsp"),
 	@Forward(name = "edit.supplier", path = "/acquisitions/editSupplierAddress.jsp"),
 	@Forward(name = "execute.payment", path = "/acquisitions/executePayment.jsp"),
+	@Forward(name = "change.financers.accounting.units", path = "/acquisitions/changeFinancersAccountingUnit.jsp"),
 	@Forward(name = "view.comments", path = "/acquisitions/viewComments.jsp") })
 public class SimplifiedProcedureProcessAction extends ProcessAction {
 
@@ -262,10 +263,11 @@ public class SimplifiedProcedureProcessAction extends ProcessAction {
 
     public ActionForward executeProjectFundAllocation(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
+	User user = UserView.getUser();
 	final SimplifiedProcedureProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
 	List<FundAllocationBean> fundAllocationBeans = new ArrayList<FundAllocationBean>();
-	for (Financer financer : acquisitionProcess.getProjectFinancersWithFundsAllocated()) {
+	for (Financer financer : acquisitionProcess.getProjectFinancersWithFundsAllocated(user.getPerson())) {
 	    fundAllocationBeans.add(new FundAllocationBean(financer));
 	}
 	request.setAttribute("fundAllocationBeans", fundAllocationBeans);
@@ -282,10 +284,11 @@ public class SimplifiedProcedureProcessAction extends ProcessAction {
 
     public ActionForward executeFundAllocation(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
+	User user = UserView.getUser();
 	final SimplifiedProcedureProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
 	List<FundAllocationBean> fundAllocationBeans = new ArrayList<FundAllocationBean>();
-	for (Financer financer : acquisitionProcess.getFinancersWithFundsAllocated()) {
+	for (Financer financer : acquisitionProcess.getFinancersWithFundsAllocated(user.getPerson())) {
 	    fundAllocationBeans.add(new FundAllocationBean(financer));
 	}
 	request.setAttribute("fundAllocationBeans", fundAllocationBeans);
@@ -887,5 +890,16 @@ public class SimplifiedProcedureProcessAction extends ProcessAction {
 
 	RenderUtils.invalidateViewState("comment");
 	return viewComments(mapping, form, request, response);
+    }
+
+    public ActionForward executeChangeFinancersAccountingUnit(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	User user = UserView.getUser();
+	AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
+	Set<Financer> financersWithFundsAllocated = acquisitionProcess.getAcquisitionRequest().getFinancersWithFundsAllocated(
+		user.getPerson());
+	request.setAttribute("acquisitionProcess", acquisitionProcess);
+	request.setAttribute("financers", financersWithFundsAllocated);
+	return mapping.findForward("change.financers.accounting.units");
     }
 }

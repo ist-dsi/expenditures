@@ -113,7 +113,7 @@
 			schema="viewPayingUnitWithTotalAmount">
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="tstyle5"/>
-			<fr:property name="columnClasses" value="aleft,nowrap,,"/>
+			<fr:property name="columnClasses" value=",,nowrap,,"/>
 		</fr:layout>
 	</fr:view>
 </logic:notEmpty>
@@ -225,8 +225,3 @@
 </logic:present>
 
 </div>
-
-
-
-
-

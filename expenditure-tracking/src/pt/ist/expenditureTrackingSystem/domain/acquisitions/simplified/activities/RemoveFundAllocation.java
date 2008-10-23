@@ -12,7 +12,8 @@ public class RemoveFundAllocation extends GenericAcquisitionProcessActivity {
 
     @Override
     protected boolean isAvailable(RegularAcquisitionProcess process) {
-	return checkActiveConditions(process) || checkCanceledConditions(process);
+	return (checkActiveConditions(process) || checkCanceledConditions(process))
+		&& process.getAcquisitionRequest().hasAllFundAllocationId(getUser().getPerson());
     }
 
     private boolean checkActiveConditions(RegularAcquisitionProcess process) {
@@ -20,12 +21,12 @@ public class RemoveFundAllocation extends GenericAcquisitionProcessActivity {
     }
 
     private boolean checkCanceledConditions(RegularAcquisitionProcess process) {
-	return process.getAcquisitionProcessState().isCanceled() && process.getAcquisitionRequest().hasAllFundAllocationId();
+	return process.getAcquisitionProcessState().isCanceled();
     }
 
     @Override
     protected void process(RegularAcquisitionProcess process, Object... objects) {
-	process.getAcquisitionRequest().resetFundAllocationId();
+	process.getAcquisitionRequest().resetFundAllocationId(getUser().getPerson());
 	if (!process.getAcquisitionProcessState().isCanceled()) {
 	    process.allocateFundsToSupplier();
 	} else {

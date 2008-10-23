@@ -156,8 +156,16 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 	return getAcquisitionRequest().getFinancersWithFundsAllocated();
     }
 
+    public Set<Financer> getFinancersWithFundsAllocated(Person person) {
+	return getAcquisitionRequest().getFinancersWithFundsAllocated(person);
+    }
+
     public Set<ProjectFinancer> getProjectFinancersWithFundsAllocated() {
 	return getAcquisitionRequest().getProjectFinancersWithFundsAllocated();
+    }
+
+    public Set<ProjectFinancer> getProjectFinancersWithFundsAllocated(final Person person) {
+	return getAcquisitionRequest().getProjectFinancersWithFundsAllocated(person);
     }
 
     public Money getAcquisitionRequestValueLimit() {
@@ -243,6 +251,11 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
     public boolean hasAllocatedFundsForAllProjectFinancers() {
 	final AcquisitionRequest acquisitionRequest = getAcquisitionRequest();
 	return acquisitionRequest.hasAllocatedFundsForAllProjectFinancers();
+    }
+
+    public boolean hasAllocatedFundsForAllProjectFinancers(final Person person) {
+	final AcquisitionRequest acquisitionRequest = getAcquisitionRequest();
+	return acquisitionRequest.hasAllocatedFundsForAllProjectFinancers(person);
     }
 
     public boolean hasAllocatedFundsPermanentlyForAllProjectFinancers() {

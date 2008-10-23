@@ -8,7 +8,6 @@ import java.util.ResourceBundle;
 
 import net.sf.jasperreports.engine.JRException;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
-import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.File;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
@@ -34,7 +33,7 @@ public class CreateAcquisitionPurchaseOrderDocument extends GenericAcquisitionPr
 
     @Override
     protected void process(RegularAcquisitionProcess process, Object... objects) {
-	String requestID = ExpenditureTrackingSystem.getInstance().nextAcquisitionRequestDocumentID();
+	String requestID = process.getAcquisitionRequest().getAcquisitionRequestDocumentID();
 	byte[] file = createPurchaseOrderDocument(process.getAcquisitionRequest(), requestID);
 	new PurchaseOrderDocument(process.getAcquisitionRequest(), file, requestID + "." + File.EXTENSION_PDF, requestID);
     }

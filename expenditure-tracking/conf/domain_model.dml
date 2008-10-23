@@ -558,6 +558,13 @@ relation UnitFinancer {
 	organization.Unit playsRole unit;
 }
 
+relation AccountingUnitFinancer {
+	acquisitions.Financer playsRole financers{
+		multiplicity *;
+	}
+	organization.AccountingUnit playsRole accountingUnit;
+}
+
 relation ItemUnitItem {
 	acquisitions.AcquisitionRequestItem playsRole item;
 	acquisitions.UnitItem playsRole unitItems {

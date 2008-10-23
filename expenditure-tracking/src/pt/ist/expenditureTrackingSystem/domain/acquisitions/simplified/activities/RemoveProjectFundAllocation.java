@@ -12,24 +12,22 @@ public class RemoveProjectFundAllocation extends GenericAcquisitionProcessActivi
 
     @Override
     protected boolean isAvailable(RegularAcquisitionProcess process) {
-	return checkActiveConditions(process) || checkCanceledConditions(process);
+	return (checkActiveConditions(process) || checkCanceledConditions(process))
+		&& process.hasAllocatedFundsForAllProjectFinancers(getUser().getPerson());
     }
 
     private boolean checkActiveConditions(RegularAcquisitionProcess process) {
-	return process.getAcquisitionProcessState().isInAllocatedToSupplierState()
-		&& process.hasAllocatedFundsForAllProjectFinancers();
+	return process.getAcquisitionProcessState().isInAllocatedToSupplierState();
     }
 
     private boolean checkCanceledConditions(RegularAcquisitionProcess process) {
-	return process.getAcquisitionProcessState().isCanceled()
-		&& process.getAcquisitionRequest().hasAllocatedFundsForAllProjectFinancers();
+	return process.getAcquisitionProcessState().isCanceled();
     }
 
     @Override
     protected void process(RegularAcquisitionProcess process, Object... objects) {
-	process.getAcquisitionRequest().resetProjectFundAllocationId();
-	if (process.getAcquisitionProcessState().isCanceled()
-		&& !process.getAcquisitionRequest().hasAllFundAllocationId()) {
+	process.getAcquisitionRequest().resetProjectFundAllocationId(getUser().getPerson());
+	if (process.getAcquisitionProcessState().isCanceled() && !process.getAcquisitionRequest().hasAllFundAllocationId()) {
 	    new RemoveFundAllocationExpirationDate().execute(process);
 	}
     }

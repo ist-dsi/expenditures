@@ -8,7 +8,6 @@ import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.organization.CostCenter;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
-import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.util.Money;
 import pt.ist.fenixframework.pstm.Transaction;
 import pt.utl.ist.fenix.tools.util.Strings;
@@ -33,6 +32,7 @@ public class Financer extends Financer_Base {
 
 	setFundedRequest(acquisitionRequest);
 	setUnit(costCenter);
+	setAccountingUnit(costCenter.getAccountingUnit());
     }
 
     public boolean isProjectFinancer() {
@@ -88,8 +88,11 @@ public class Financer extends Financer_Base {
     }
 
     public boolean isAccountingEmployee(final Person person) {
-	final Unit unit = getUnit();
-	return unit.isAccountingEmployee(person);
+	return getAccountingUnit().hasProjectAccountants(person);
+    }
+
+    public boolean isProjectAccountingEmployee(Person person) {
+	return getUnit().isProjectAccountingEmployee(person);
     }
 
     protected String getAllocationIds(final String id, final String key) {
@@ -119,11 +122,6 @@ public class Financer extends Financer_Base {
 	    return buffer.toString();
 	}
 	return getAllocationIds(null, "financer.label.allocation.id.prefix.giaf");
-    }
-
-    public boolean isProjectAccountingEmployee(final Person person) {
-	final Unit unit = getUnit();
-	return unit.isProjectAccountingEmployee(person);
     }
 
     public boolean hasAllocatedFundsForAllProject() {

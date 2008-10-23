@@ -17,6 +17,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activitie
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ApproveAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.AssignPayingUnitToItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.CancelAcquisitionRequest;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ChangeFinancersAccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ConfirmInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.CreateAcquisitionPurchaseOrderDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.CreateAcquisitionRequestItem;
@@ -107,6 +108,8 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	requestItemActivities.add(new AssignPayingUnitToItem());
 	requestItemActivities.add(new EditAcquisitionRequestItemRealValues());
 	requestItemActivities.add(new DistributeRealValuesForPayingUnits());
+
+	requestItemActivities.add(new ChangeFinancersAccountingUnit());
 
 	activities.put(ActivityScope.REQUEST_INFORMATION, requestInformationActivities);
 	activities.put(ActivityScope.REQUEST_ITEM, requestItemActivities);

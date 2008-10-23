@@ -3,6 +3,7 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 import java.math.BigDecimal;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
+import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.util.Money;
 import pt.ist.fenixframework.pstm.Transaction;
@@ -70,5 +71,9 @@ public class UnitItem extends UnitItem_Base {
 
     public Unit getUnit() {
 	return getFinancer().getUnit();
+    }
+
+    public AccountingUnit getAccountingUnit() {
+	return getFinancer().getAccountingUnit();
     }
 }

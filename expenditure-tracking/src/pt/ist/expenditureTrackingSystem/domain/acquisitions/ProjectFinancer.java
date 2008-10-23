@@ -3,6 +3,7 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 import org.apache.commons.lang.StringUtils;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
+import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Project;
 import pt.utl.ist.fenix.tools.util.Strings;
 
@@ -23,6 +24,7 @@ public class ProjectFinancer extends ProjectFinancer_Base {
 
 	setFundedRequest(acquisitionRequest);
 	setUnit(project);
+	setAccountingUnit(project.getAccountingUnit());
     }
 
     @Override
@@ -71,6 +73,11 @@ public class ProjectFinancer extends ProjectFinancer_Base {
 	    strings.add(effectiveProjectFundAllocationId);
 	}
 
+    }
+
+    @Override
+    public boolean isAccountingEmployee(Person person) {
+	return getUnit().isAccountingEmployee(person);
     }
 
 }

@@ -400,10 +400,31 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	return res;
     }
 
+    public Set<Financer> getFinancersWithFundsAllocated(Person person) {
+	Set<Financer> res = new HashSet<Financer>();
+	for (Financer financer : getFinancers()) {
+	    if (financer.isAccountingEmployee(person) && financer.getAmountAllocated().isPositive()) {
+		res.add(financer);
+	    }
+	}
+	return res;
+    }
+
     public Set<ProjectFinancer> getProjectFinancersWithFundsAllocated() {
 	Set<ProjectFinancer> res = new HashSet<ProjectFinancer>();
 	for (Financer financer : getFinancers()) {
 	    if (financer instanceof ProjectFinancer && financer.getAmountAllocated().isPositive()) {
+		res.add((ProjectFinancer) financer);
+	    }
+	}
+	return res;
+    }
+
+    public Set<ProjectFinancer> getProjectFinancersWithFundsAllocated(Person person) {
+	Set<ProjectFinancer> res = new HashSet<ProjectFinancer>();
+	for (Financer financer : getFinancers()) {
+	    if (financer instanceof ProjectFinancer && financer.isProjectAccountingEmployee(person)
+		    && financer.getAmountAllocated().isPositive()) {
 		res.add((ProjectFinancer) financer);
 	    }
 	}
@@ -417,6 +438,23 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 
     }
 
+    public void resetFundAllocationId(final Person person) {
+	for (Financer financer : getFinancersSet()) {
+	    if (financer.isAccountingEmployee(person)) {
+		financer.setFundAllocationId(null);
+	    }
+	}
+    }
+
+    public void resetProjectFundAllocationId(final Person person) {
+	for (Financer financer : getFinancersSet()) {
+	    if (financer.isProjectFinancer() && financer.isProjectAccountingEmployee(person)) {
+		ProjectFinancer projectFinancer = (ProjectFinancer) financer;
+		projectFinancer.setProjectFundAllocationId(null);
+	    }
+	}
+    }
+
     public void resetProjectFundAllocationId() {
 	for (Financer financer : getFinancersSet()) {
 	    if (financer.isProjectFinancer()) {
@@ -424,7 +462,6 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 		projectFinancer.setProjectFundAllocationId(null);
 	    }
 	}
-
     }
 
     public void resetEffectiveFundAllocationId() {
@@ -441,6 +478,24 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	    }
 	}
 	return true;
+    }
+
+    public boolean hasAllFundAllocationId(Person person) {
+	for (Financer financer : getFinancersWithFundsAllocated()) {
+	    if (financer.isAccountingEmployee(person) && financer.getFundAllocationId() == null) {
+		return false;
+	    }
+	}
+	return true;
+    }
+
+    public boolean hasAnyFundAllocationId() {
+	for (Financer financer : getFinancersWithFundsAllocated()) {
+	    if (financer.getFundAllocationId() != null) {
+		return true;
+	    }
+	}
+	return false;
     }
 
     public void submittedForFundsAllocation(Person person) {
@@ -535,6 +590,24 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	return true;
     }
 
+    public boolean hasAllocatedFundsForAnyProjectFinancers() {
+	for (final Financer financer : getFinancersSet()) {
+	    if (financer.hasAllocatedFundsForAllProject()) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
+    public boolean hasAllocatedFundsForAllProjectFinancers(Person person) {
+	for (final Financer financer : getFinancersSet()) {
+	    if (financer.isProjectAccountingEmployee(person) && !financer.hasAllocatedFundsForAllProject()) {
+		return false;
+	    }
+	}
+	return true;
+    }
+
     public boolean hasAllocatedFundsPermanentlyForAllProjectFinancers() {
 	for (final Financer financer : getFinancersSet()) {
 	    if (!financer.hasAllocatedFundsPermanentlyForAllProjectFinancers()) {
@@ -567,4 +640,10 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 
 	return getSuppliersCount() == 0 ? null : getSuppliers().get(0);
     }
+
+    public String getAcquisitionRequestDocumentID() {
+	return hasPurchaseOrderDocument() ? getPurchaseOrderDocument().getRequestId() : ExpenditureTrackingSystem.getInstance()
+		.nextAcquisitionRequestDocumentID();
+    }
+
 }

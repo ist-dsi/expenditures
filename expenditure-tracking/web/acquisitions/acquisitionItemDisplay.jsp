@@ -122,7 +122,7 @@
 				<logic:iterate id="unitItem" name="acquisitionRequestItem" property="sortedUnitItems">
 					<tr>
 						<td>
-							<fr:view name="unitItem" property="unit.presentationName"/>										
+							<fr:view name="unitItem" property="unit.presentationName"/>
 						</td>
 						<td class="nowrap vatop">
 							<logic:present name="unitItem" property="realShareValue">
