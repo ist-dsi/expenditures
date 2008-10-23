@@ -93,12 +93,15 @@
 
 <div class="expenditures">
 	<logic:equal name="acquisitionProcess" property="allowedToViewSupplierExpenditures" value="true">
-		<logic:present name="acquisitionProcess" property="acquisitionRequest.supplier">
+		<logic:notEmpty name="acquisitionProcess" property="acquisitionRequest.suppliers">
+			<logic:iterate id="supplier" name="acquisitionProcess" property="acquisitionRequest.suppliers">
+			<bean:define id="supplierName" name="supplier" property="name"/>
 			<p>
-			<bean:message key="supplier.message.info.totalAllocated" bundle="ORGANIZATION_RESOURCES"/>:
-			<fr:view name="acquisitionProcess" property="acquisitionRequest.supplier.totalAllocated"/>
+				<bean:message key="supplier.message.info.totalAllocated.withArgument" bundle="ORGANIZATION_RESOURCES" arg0="<%= supplierName.toString() %>"/>:
+				<fr:view name="supplier" property="totalAllocated"/>
 			</p>
-		</logic:present>
+			</logic:iterate>
+		</logic:notEmpty>
 	</logic:equal>
 </div>
 

@@ -1,33 +1,32 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities;
 
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
 
 public class RemoveProjectFundAllocation extends GenericAcquisitionProcessActivity {
 
     @Override
-    protected boolean isAccessible(AcquisitionProcess process) {
+    protected boolean isAccessible(RegularAcquisitionProcess process) {
 	return process.isProjectAccountingEmployee();
     }
 
     @Override
-    protected boolean isAvailable(AcquisitionProcess process) {
+    protected boolean isAvailable(RegularAcquisitionProcess process) {
 	return checkActiveConditions(process) || checkCanceledConditions(process);
     }
 
-    private boolean checkActiveConditions(AcquisitionProcess process) {
-	return process.getAcquisitionProcessState().isInState(AcquisitionProcessStateType.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER)
+    private boolean checkActiveConditions(RegularAcquisitionProcess process) {
+	return process.getAcquisitionProcessState().isInAllocatedToSupplierState()
 		&& process.hasAllocatedFundsForAllProjectFinancers();
     }
 
-    private boolean checkCanceledConditions(AcquisitionProcess process) {
+    private boolean checkCanceledConditions(RegularAcquisitionProcess process) {
 	return process.getAcquisitionProcessState().isCanceled()
 		&& process.getAcquisitionRequest().hasAllocatedFundsForAllProjectFinancers();
     }
 
     @Override
-    protected void process(AcquisitionProcess process, Object... objects) {
+    protected void process(RegularAcquisitionProcess process, Object... objects) {
 	process.getAcquisitionRequest().resetProjectFundAllocationId();
 	if (process.getAcquisitionProcessState().isCanceled()
 		&& !process.getAcquisitionRequest().hasAllFundAllocationId()) {

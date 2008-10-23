@@ -42,24 +42,6 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 	Transaction.deleteObject(this);
     }
 
-    public List<OperationLog> getOperationLogsInState(AcquisitionProcessStateType state) {
-	List<OperationLog> logs = new ArrayList<OperationLog>();
-	for (OperationLog log : getOperationLogs()) {
-	    if (log.getState() == state) {
-		logs.add(log);
-	    }
-	}
-	return logs;
-    }
-
-    public List<OperationLog> getOperationLogs() {
-	List<OperationLog> logs = new ArrayList<OperationLog>();
-	for (GenericLog log : super.getExecutionLogs()) {
-	    logs.add((OperationLog) log);
-	}
-	return logs;
-    }
-
     public boolean isAvailableForCurrentUser() {
 	User user = UserView.getUser();
 	return user != null && isAvailableForPerson(user.getPerson());
@@ -77,16 +59,11 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
     public abstract <T extends GenericProcess> AbstractActivity<T> getActivityByName(String activityName);
 
     public boolean isAvailableForPerson(Person person) {
-	return person.hasRoleType(RoleType.ACQUISITION_CENTRAL)
-			|| person.hasRoleType(RoleType.ACQUISITION_CENTRAL_MANAGER)
-			|| person.hasRoleType(RoleType.ACCOUNTING_MANAGER)
-			|| person.hasRoleType(RoleType.PROJECT_ACCOUNTING_MANAGER)
-			|| person.hasRoleType(RoleType.TREASURY)
-			|| getRequestor() == person
-			|| getRequestingUnit().isResponsible(person)
-			|| isResponsibleForAtLeastOnePayingUnit(person)
-			|| isAccountingEmployee(person)
-			|| isProjectAccountingEmployee(person);
+	return person.hasRoleType(RoleType.ACQUISITION_CENTRAL) || person.hasRoleType(RoleType.ACQUISITION_CENTRAL_MANAGER)
+		|| person.hasRoleType(RoleType.ACCOUNTING_MANAGER) || person.hasRoleType(RoleType.PROJECT_ACCOUNTING_MANAGER)
+		|| person.hasRoleType(RoleType.TREASURY) || getRequestor() == person || getRequestingUnit().isResponsible(person)
+		|| isResponsibleForAtLeastOnePayingUnit(person) || isAccountingEmployee(person)
+		|| isProjectAccountingEmployee(person);
     }
 
     public boolean isAccountingEmployee(final Person person) {
@@ -130,12 +107,8 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 	return (AcquisitionProcessState) Collections.max(getProcessStates(), ProcessState.COMPARATOR_BY_WHEN);
     }
 
-    public AcquisitionProcessStateType getAcquisitionProcessStateType() {
-	return getLastAcquisitionProcessStateType();
-    }
-
-    protected AcquisitionProcessStateType getLastAcquisitionProcessStateType() {
-	return getLastAcquisitionProcessState().getAcquisitionProcessStateType();
+    public Enum getAcquisitionProcessStateType() {
+	return getLastAcquisitionProcessState().getCurrentState();
     }
 
     public boolean isPendingApproval() {
@@ -218,12 +191,9 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 
     public boolean isAllowedToViewCostCenterExpenditures() {
 	try {
-	    return (getUnit() != null && isResponsibleForUnit())
-	    		|| userHasRole(RoleType.ACCOUNTING_MANAGER)
-	    		|| userHasRole(RoleType.PROJECT_ACCOUNTING_MANAGER)
-	    		|| isAccountingEmployee()
-	    		|| isProjectAccountingEmployee()
-	    		|| userHasRole(RoleType.MANAGER);
+	    return (getUnit() != null && isResponsibleForUnit()) || userHasRole(RoleType.ACCOUNTING_MANAGER)
+		    || userHasRole(RoleType.PROJECT_ACCOUNTING_MANAGER) || isAccountingEmployee()
+		    || isProjectAccountingEmployee() || userHasRole(RoleType.MANAGER);
 	} catch (Exception e) {
 	    e.printStackTrace();
 	    throw new Error(e);
@@ -236,9 +206,8 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
     }
 
     public boolean isAllowedToViewSupplierExpenditures() {
-	return userHasRole(RoleType.ACQUISITION_CENTRAL)
-			|| userHasRole(RoleType.ACQUISITION_CENTRAL_MANAGER)
-			|| userHasRole(RoleType.MANAGER);
+	return userHasRole(RoleType.ACQUISITION_CENTRAL) || userHasRole(RoleType.ACQUISITION_CENTRAL_MANAGER)
+		|| userHasRole(RoleType.MANAGER);
     }
 
     public boolean checkRealValues() {
@@ -285,4 +254,5 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
     public void createComment(Person person, String comment) {
 	new ProcessComment(this, person, comment);
     }
+
 }

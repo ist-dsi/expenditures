@@ -7,13 +7,16 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 
-public class OperationLog extends OperationLog_Base {
+public abstract class OperationLog extends OperationLog_Base {
 
-    public OperationLog(AcquisitionProcess process, Person person, String operation, AcquisitionProcessStateType state,
+    public OperationLog() {
+	super();
+    }
+    
+    public OperationLog(AcquisitionProcess process, Person person, String operation, 
 	    DateTime when) {
 	super();
 	init(process, person, operation, when);
-	super.setState(state);
     }
 
     @Override
@@ -42,9 +45,5 @@ public class OperationLog extends OperationLog_Base {
 	throw new DomainException("error.unable.to.change.when.operation.was.executed");
     }
 
-    @Override
-    public void setState(AcquisitionProcessStateType state) {
-	throw new DomainException("error.unable.to.change.when.state");
-    }
-
+    public abstract Enum getLogState();
 }

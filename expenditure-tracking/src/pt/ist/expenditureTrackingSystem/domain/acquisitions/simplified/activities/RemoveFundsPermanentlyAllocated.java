@@ -1,25 +1,22 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities;
 
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessState;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
 
 public class RemoveFundsPermanentlyAllocated extends GenericAcquisitionProcessActivity {
 
     @Override
-    protected boolean isAccessible(AcquisitionProcess process) {
+    protected boolean isAccessible(RegularAcquisitionProcess process) {
 	return process.isAccountingEmployee();
     }
 
     @Override
-    protected boolean isAvailable(AcquisitionProcess process) {
-	return process.getAcquisitionProcessState().isInState(AcquisitionProcessStateType.FUNDS_ALLOCATED_PERMANENTLY);
+    protected boolean isAvailable(RegularAcquisitionProcess process) {
+	return process.getAcquisitionProcessState().isAllocatedPermanently();
     }
 
     @Override
-    protected void process(AcquisitionProcess process, Object... objects) {
-	process.getAcquisitionRequest().resetEffectiveFundAllocationId();
-	new AcquisitionProcessState(process, AcquisitionProcessStateType.INVOICE_CONFIRMED);
+    protected void process(RegularAcquisitionProcess process, Object... objects) {
+	process.resetEffectiveFundAllocationId();
     }
 }

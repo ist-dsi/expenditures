@@ -1,103 +1,59 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
-import org.apache.commons.lang.StringUtils;
-
-import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
-public class AcquisitionProcessState extends AcquisitionProcessState_Base {
+public abstract class AcquisitionProcessState extends AcquisitionProcessState_Base {
 
     protected AcquisitionProcessState() {
 	super();
 	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
     }
 
-    public AcquisitionProcessState(final AcquisitionProcess process, final AcquisitionProcessStateType processStateType) {
+    public AcquisitionProcessState(final AcquisitionProcess process) {
 	this();
 	final Person person = getPerson();
-	checkArguments(process, processStateType, person);
+	super.checkArguments(process, person);
 	super.initFields(process, person);
-	setAcquisitionProcessStateType(processStateType);
     }
 
-    public AcquisitionProcessState(final AcquisitionProcess process, final AcquisitionProcessStateType processStateType,
-	    final String justification) {
-	this(process, processStateType);
-	if (!StringUtils.isEmpty(justification)) {
-	    setJustification(justification);
-	}
-    }
-
-    private void checkArguments(AcquisitionProcess acquisitionProcess, AcquisitionProcessStateType acquisitionProcessStateType,
-	    Person person) {
-	if (acquisitionProcessStateType == null) {
-	    throw new DomainException("error.wrong.AcquisitionProcessState.arguments");
-	}
-	super.checkArguments(acquisitionProcess, person);
-    }
-
-    public String getLocalizedName() {
-	return getAcquisitionProcessStateType().getLocalizedName();
-    }
-
-    public boolean isActive() {
-	return getAcquisitionProcessStateType().isActive();
-    }
-
-    public boolean isInState(AcquisitionProcessStateType state) {
-	return getAcquisitionProcessStateType().equals(state);
-    }
-
-    public boolean isProcessed() {
-	return isInState(AcquisitionProcessStateType.ACQUISITION_PROCESSED);
-    }
-
-    public boolean isPendingApproval() {
-	return isInState(AcquisitionProcessStateType.SUBMITTED_FOR_APPROVAL);
-    }
-
-    public boolean isPendingFundAllocation() {
-	return isInState(AcquisitionProcessStateType.SUBMITTED_FOR_FUNDS_ALLOCATION);
-    }
+    public abstract  Enum getCurrentState();
     
-    public boolean isApproved() {
-	return isInState(AcquisitionProcessStateType.APPROVED);
-    }
+    public abstract String getLocalizedName();
 
-    public boolean isAllocatedToSupplier() {
-	return getAcquisitionProcessStateType().compareTo(AcquisitionProcessStateType.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER) >= 0;
-    }
+    public abstract boolean isActive();
 
-    public boolean isAllocatedToUnit() {
-	return getAcquisitionProcessStateType().compareTo(AcquisitionProcessStateType.FUNDS_ALLOCATED) >= 0;
-    }
+    public abstract boolean isProcessed();
 
-    public boolean isPayed() {
-	return isInState(AcquisitionProcessStateType.ACQUISITION_PAYED);
-    }
+    public abstract boolean isPendingApproval();
 
-    public boolean isAcquisitionProcessed() {
-	return isInState(AcquisitionProcessStateType.ACQUISITION_PROCESSED);
-    }
+    public abstract boolean isPendingFundAllocation();
 
-    public boolean isInvoiceReceived() {
-	return isInState(AcquisitionProcessStateType.INVOICE_RECEIVED);
-    }
+    public abstract boolean isApproved();
 
-    public boolean isInvoiceConfirmed() {
-	return isInState(AcquisitionProcessStateType.INVOICE_CONFIRMED);
-    }
+    public abstract boolean isAllocatedToSupplier();
 
-    public boolean isPendingInvoiceConfirmation() {
-	return isInState(AcquisitionProcessStateType.SUBMITTED_FOR_CONFIRM_INVOICE);
-    }
+    public abstract boolean isInAllocatedToSupplierState();
+
+    public abstract boolean isAllocatedToUnit();
+
+    public abstract boolean isInAllocatedToUnitState();
+
+    public abstract boolean isPayed();
+
+    public abstract boolean isAcquisitionProcessed();
+
+    public abstract boolean isInvoiceReceived();
+
+    public abstract boolean isInvoiceConfirmed();
+
+    public abstract boolean isPendingInvoiceConfirmation();
+
+    public abstract boolean isInGenesis();
+
+    public abstract boolean isCanceled();
+
+    public abstract boolean isAllocatedPermanently();
     
-    public boolean isInGenesis() {
-	return isInState(AcquisitionProcessStateType.IN_GENESIS);
-    }
-    
-    public boolean isCanceled() {
-	return isInState(AcquisitionProcessStateType.CANCELED);
-    }
+    public abstract boolean hasBeenAllocatedPermanently();
 }

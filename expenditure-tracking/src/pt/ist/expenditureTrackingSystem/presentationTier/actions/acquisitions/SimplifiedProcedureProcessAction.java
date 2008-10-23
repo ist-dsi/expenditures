@@ -24,6 +24,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Invoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.ProjectFinancer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PurchaseOrderDocument;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.SearchAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.UnitItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
@@ -232,7 +233,7 @@ public class SimplifiedProcedureProcessAction extends ProcessAction {
 
 	SimplifiedProcedureProcess acquisitionProcess = (SimplifiedProcedureProcess) requestItemBean.getAcquisitionRequest()
 		.getAcquisitionProcess();
-	AbstractActivity<AcquisitionProcess> activity = acquisitionProcess.getActivityByName("CreateAcquisitionRequestItem");
+	AbstractActivity<RegularAcquisitionProcess> activity = acquisitionProcess.getActivityByName("CreateAcquisitionRequestItem");
 	try {
 	    activity.execute(acquisitionProcess, requestItemBean);
 	} catch (DomainException e) {
@@ -392,7 +393,7 @@ public class SimplifiedProcedureProcessAction extends ProcessAction {
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
 	final ReceiveInvoiceForm receiveInvoiceForm = getRenderedObject();
 	final byte[] bytes = consumeInputStream(receiveInvoiceForm);
-	AbstractActivity<AcquisitionProcess> receiveInvoice = acquisitionProcess.getActivityByName(activity);
+	AbstractActivity<RegularAcquisitionProcess> receiveInvoice = acquisitionProcess.getActivityByName(activity);
 	receiveInvoice.execute(acquisitionProcess, receiveInvoiceForm.getFilename(), bytes,
 		receiveInvoiceForm.getInvoiceNumber(), receiveInvoiceForm.getInvoiceDate());
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);

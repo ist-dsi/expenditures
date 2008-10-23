@@ -7,8 +7,8 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.SimplifiedAcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.presentationTier.Context;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.BaseAction;
 import pt.ist.fenixWebFramework.struts.annotations.Forward;
@@ -28,9 +28,9 @@ public class ViewLogsAction extends BaseAction {
     public ActionForward viewOperationLog(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 
-	final AcquisitionProcess process = getDomainObject(request, "acquisitionProcessOid");
+	final RegularAcquisitionProcess process = getDomainObject(request, "acquisitionProcessOid");
 	final String state = request.getParameter("state");
-	final AcquisitionProcessStateType stateType = state != null ? AcquisitionProcessStateType.valueOf(state) : null;
+	final SimplifiedAcquisitionProcessStateType stateType = state != null ? SimplifiedAcquisitionProcessStateType.valueOf(state) : null;
 
 	if (stateType == null) {
 	    request.setAttribute("operationLogs", process.getExecutionLogsSet());

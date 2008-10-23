@@ -9,8 +9,10 @@ import org.joda.time.DateTime;
 
 import pt.ist.expenditureTrackingSystem.applicationTier.EmailSender;
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.OperationLog;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcessOperationLog;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.standard.StandardProcessOperationLog;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
@@ -19,11 +21,15 @@ import pt.ist.expenditureTrackingSystem.domain.processes.ActivityException;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 
-public abstract class GenericAcquisitionProcessActivity extends AbstractActivity<AcquisitionProcess> {
+public abstract class GenericAcquisitionProcessActivity extends AbstractActivity<RegularAcquisitionProcess> {
 
     @Override
-    protected void logExecution(AcquisitionProcess process, String operationName, User user) {
-	new OperationLog(process, user.getPerson(), operationName, process.getAcquisitionProcessStateType(), new DateTime());
+    protected void logExecution(RegularAcquisitionProcess process, String operationName, User user) {
+	if (process.isSimplifiedAcquisitionProcess()) {
+	    new SimplifiedProcessOperationLog(process, user.getPerson(), operationName, new DateTime());
+	} else {
+	    new StandardProcessOperationLog(process, user.getPerson(), operationName, new DateTime());
+	}
     }
 
     @Override
@@ -31,7 +37,7 @@ public abstract class GenericAcquisitionProcessActivity extends AbstractActivity
 	return RenderUtils.getResourceString("ACQUISITION_RESOURCES", "label." + getClass().getName());
     }
 
-    protected void notifyAcquisitionRequester(AcquisitionProcess process) {
+    protected void notifyAcquisitionRequester(RegularAcquisitionProcess process) {
 	Person person = process.getRequestor();
 	ResourceBundle bundle = ResourceBundle.getBundle("resources/ExpenditureResources", Language.getLocale());
 	if (person.getOptions().getReceiveNotificationsByEmail()) {
@@ -45,7 +51,7 @@ public abstract class GenericAcquisitionProcessActivity extends AbstractActivity
 	}
     }
 
-    protected void notifyUnitsResponsibles(AcquisitionProcess process) {
+    protected void notifyUnitsResponsibles(RegularAcquisitionProcess process) {
 	List<Person> people = new ArrayList<Person>();
 	for (Unit unit : process.getPayingUnits()) {
 	    for (Authorization authorization : unit.getAuthorizations()) {

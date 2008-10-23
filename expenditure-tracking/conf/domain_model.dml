@@ -8,7 +8,8 @@ valueType pt.ist.expenditureTrackingSystem.domain.util.Address as Address;
 valueType pt.ist.expenditureTrackingSystem.domain.util.ByteArray as ByteArray;
 valueType pt.ist.expenditureTrackingSystem.domain.util.Money as Money;
 valueType pt.utl.ist.fenix.tools.util.Strings as Strings;
-enum pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType as AcquisitionProcessStateType;
+enum pt.ist.expenditureTrackingSystem.domain.acquisitions.SimplifiedAcquisitionProcessStateType as SimplifiedAcquisitionProcessStateType;
+enum pt.ist.expenditureTrackingSystem.domain.acquisitions.StandardAcquisitionProcessStateType as StandardAcquisitionProcessStateType;
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionType as AfterTheFactAcquisitionType;
 enum pt.ist.expenditureTrackingSystem.domain.announcements.AnnouncementProcessStateType as AnnouncementProcessStateType;
 enum pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationType as AuthorizationType;
@@ -190,7 +191,15 @@ class processes.GenericLog {
 }
 
 	class acquisitions.OperationLog extends processes.GenericLog {
-		AcquisitionProcessStateType state;
+	
+	}
+	
+	class acquisitions.simplified.SimplifiedProcessOperationLog extends acquisitions.OperationLog {
+		SimplifiedAcquisitionProcessStateType state;
+	}
+	
+	class acquisitions.standard.StandardProcessOperationLog extends acquisitions.OperationLog {
+		StandardAcquisitionProcessStateType state;
 	}
 	
 	class requests.OperationLog extends processes.GenericLog {
@@ -213,11 +222,17 @@ class processes.GenericProcess {
 		class acquisitions.afterthefact.AfterTheFactAcquisitionProcess extends acquisitions.AcquisitionProcess {
 		}
 
-		class acquisitions.simplified.SimplifiedProcedureProcess extends acquisitions.AcquisitionProcess {
-		}
-
 		class acquisitions.direct.DirectContractProcess extends acquisitions.AcquisitionProcess {
 		}
+
+			class acquisitions.RegularAcquisitionProcess extends acquisitions.AcquisitionProcess {
+			}
+			
+			class acquisitions.simplified.SimplifiedProcedureProcess extends acquisitions.RegularAcquisitionProcess {
+			}
+
+			class acquisitions.standard.StandardProcedureProcess extends acquisitions.RegularAcquisitionProcess {
+			}
 
 	class announcements.AnnouncementProcess extends processes.GenericProcess {
 	}
@@ -232,7 +247,15 @@ class ProcessState {
 }
 	
 	class acquisitions.AcquisitionProcessState extends ProcessState {
-		AcquisitionProcessStateType acquisitionProcessStateType;
+		
+	}
+	
+	class acquisitions.simplified.SimplifiedAcquitionProcessState extends acquisitions.AcquisitionProcessState {
+		SimplifiedAcquisitionProcessStateType acquisitionProcessStateType;
+	}
+	
+	class acquisitions.standard.StandardAcquitionProcessState extends acquisitions.AcquisitionProcessState {
+		StandardAcquisitionProcessStateType acquisitionProcessStateType;
 	}
 
 	class announcement.AnnouncementProcessState extends ProcessState {
@@ -439,7 +462,9 @@ relation AcquisitionRequestSupplier {
 	acquisitions.AcquisitionRequest playsRole acquisitionRequests {
 		multiplicity *;
 	}
-	organization.Supplier playsRole supplier;
+	organization.Supplier playsRole suppliers {
+		multiplicity *;
+	}
 }
 
 relation AcquisitionRequestRequester {

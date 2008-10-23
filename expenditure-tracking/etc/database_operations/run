@@ -40,3 +40,5 @@ function executeWithTempFile() {
 	echo
 }
 
+execute "Updating process state classes" updateProcessStateClasses.sql
+

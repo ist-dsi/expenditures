@@ -2,6 +2,7 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -38,11 +39,11 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 
     public AcquisitionRequest(AcquisitionProcess acquisitionProcess, Supplier supplier, Person person) {
 	this(acquisitionProcess, person);
-	setSupplier(supplier);
+	addSuppliers(supplier);
     }
 
     public void edit(Supplier supplier, Unit requestingUnit, Boolean isRequestingUnitPayingUnit) {
-	setSupplier(supplier);
+	addSuppliers(supplier);
 	setRequestingUnit(requestingUnit);
 	if (isRequestingUnitPayingUnit) {
 	    addFinancers(requestingUnit.finance(this));
@@ -75,21 +76,25 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 
 	removeAcquisitionProposalDocument();
 	removeRequester();
-	removeSupplier();
+	for (; !getSuppliers().isEmpty(); getSuppliers().get(0).delete())
+	    ;
 	removeAcquisitionProcess();
 	super.delete();
     }
 
     public String getFiscalIdentificationCode() {
-	return getSupplier() != null ? getSupplier().getFiscalIdentificationCode() : null;
-    }
-
-    public void setFiscalIdentificationCode(String fiscalIdentificationCode) {
-	Supplier supplier = Supplier.readSupplierByFiscalIdentificationCode(fiscalIdentificationCode);
-	if (supplier == null) {
-	    supplier = new Supplier(fiscalIdentificationCode);
+	if (getSuppliersCount() == 0) {
+	    return null;
 	}
-	setSupplier(supplier);
+	StringBuilder builder = new StringBuilder("");
+	Iterator<Supplier> suppliersIterator = getSuppliersIterator();
+	while (suppliersIterator.hasNext()) {
+	    builder.append(suppliersIterator.next().getFiscalIdentificationCode());
+	    if (suppliersIterator.hasNext()) {
+		builder.append(", ");
+	    }
+	}
+	return builder.toString();
     }
 
     public Money getTotalVatValue() {
@@ -326,8 +331,7 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 
     public Money getValueAllocated() {
 	if (getAcquisitionProcess().isActive()) {
-	    AcquisitionProcessStateType acquisitionProcessStateType = getAcquisitionProcess().getAcquisitionProcessStateType();
-	    return (acquisitionProcessStateType.compareTo(AcquisitionProcessStateType.FUNDS_ALLOCATED_PERMANENTLY) >= 0) ? getRealTotalValue()
+	    return (getAcquisitionProcess().getAcquisitionProcessState().hasBeenAllocatedPermanently()) ? getRealTotalValue()
 		    : getTotalItemValue();
 	}
 	return Money.ZERO;
@@ -547,4 +551,20 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	return null;
     }
 
+    public boolean isFundAllocationAllowed(Money totalValue) {
+	for (Supplier supplier : getSuppliers()) {
+	    if (!supplier.isFundAllocationAllowed(totalValue)) {
+		return false;
+	    }
+	}
+	return true;
+    }
+
+    public Supplier getSupplier() {
+	if (getSuppliersCount() > 1) {
+	    throw new DomainException("This method should be used only when 1 supplier is present");
+	}
+
+	return getSuppliersCount() == 0 ? null : getSuppliers().get(0);
+    }
 }

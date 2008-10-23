@@ -12,10 +12,10 @@ import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.File;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PurchaseOrderDocument;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
 import pt.ist.expenditureTrackingSystem.domain.util.Address;
 import pt.ist.expenditureTrackingSystem.util.ReportUtils;
@@ -23,17 +23,17 @@ import pt.ist.expenditureTrackingSystem.util.ReportUtils;
 public class CreateAcquisitionPurchaseOrderDocument extends GenericAcquisitionProcessActivity {
 
     @Override
-    protected boolean isAccessible(AcquisitionProcess process) {
+    protected boolean isAccessible(RegularAcquisitionProcess process) {
 	return userHasRole(RoleType.ACQUISITION_CENTRAL);
     }
 
     @Override
-    protected boolean isAvailable(AcquisitionProcess process) {
+    protected boolean isAvailable(RegularAcquisitionProcess process) {
 	return process.getAcquisitionProcessState().isApproved();
     }
 
     @Override
-    protected void process(AcquisitionProcess process, Object... objects) {
+    protected void process(RegularAcquisitionProcess process, Object... objects) {
 	String requestID = ExpenditureTrackingSystem.getInstance().nextAcquisitionRequestDocumentID();
 	byte[] file = createPurchaseOrderDocument(process.getAcquisitionRequest(), requestID);
 	new PurchaseOrderDocument(process.getAcquisitionRequest(), file, requestID + "." + File.EXTENSION_PDF, requestID);

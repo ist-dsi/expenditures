@@ -55,7 +55,7 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
     }
 
     private boolean checkSupplierFundAllocation(AcquisitionRequest acquisitionRequest, Money totalValue) {
-	return acquisitionRequest.getSupplier().isFundAllocationAllowed(totalValue);
+	return acquisitionRequest.isFundAllocationAllowed(totalValue);
     }
 
     public AcquisitionRequestItem(final AcquisitionRequestItemBean acquisitionRequestItemBean) {

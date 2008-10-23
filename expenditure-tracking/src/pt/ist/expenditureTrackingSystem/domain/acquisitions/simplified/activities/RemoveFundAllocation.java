@@ -1,36 +1,33 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities;
 
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessState;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
 
 public class RemoveFundAllocation extends GenericAcquisitionProcessActivity {
 
     @Override
-    protected boolean isAccessible(AcquisitionProcess process) {
+    protected boolean isAccessible(RegularAcquisitionProcess process) {
 	return process.isAccountingEmployee();
     }
 
     @Override
-    protected boolean isAvailable(AcquisitionProcess process) {
+    protected boolean isAvailable(RegularAcquisitionProcess process) {
 	return checkActiveConditions(process) || checkCanceledConditions(process);
     }
 
-    private boolean checkActiveConditions(AcquisitionProcess process) {
-	return process.getAcquisitionProcessState().isInState(AcquisitionProcessStateType.FUNDS_ALLOCATED);
+    private boolean checkActiveConditions(RegularAcquisitionProcess process) {
+	return process.getAcquisitionProcessState().isInAllocatedToUnitState();
     }
 
-    private boolean checkCanceledConditions(AcquisitionProcess process) {
-	return process.getAcquisitionProcessState().isCanceled()
-		&& process.getAcquisitionRequest().hasAllFundAllocationId();
+    private boolean checkCanceledConditions(RegularAcquisitionProcess process) {
+	return process.getAcquisitionProcessState().isCanceled() && process.getAcquisitionRequest().hasAllFundAllocationId();
     }
 
     @Override
-    protected void process(AcquisitionProcess process, Object... objects) {
+    protected void process(RegularAcquisitionProcess process, Object... objects) {
 	process.getAcquisitionRequest().resetFundAllocationId();
 	if (!process.getAcquisitionProcessState().isCanceled()) {
-	    new AcquisitionProcessState(process, AcquisitionProcessStateType.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER);
+	    process.allocateFundsToSupplier();
 	} else {
 	    if (!process.hasAllocatedFundsForAllProjectFinancers()) {
 		new RemoveFundAllocationExpirationDate().execute(process);

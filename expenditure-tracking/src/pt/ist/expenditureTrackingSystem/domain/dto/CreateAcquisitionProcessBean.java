@@ -1,6 +1,9 @@
 package pt.ist.expenditureTrackingSystem.domain.dto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
@@ -12,7 +15,7 @@ public class CreateAcquisitionProcessBean implements Serializable {
 
     private DomainReference<Unit> requestingUnit;
     private boolean requestUnitPayingUnit;
-    private DomainReference<Supplier> supplier;
+    private List<DomainReference<Supplier>> suppliers;
     private DomainReference<Person> requester;
 
     public CreateAcquisitionProcessBean() {
@@ -23,7 +26,7 @@ public class CreateAcquisitionProcessBean implements Serializable {
 
     public CreateAcquisitionProcessBean(AcquisitionRequest acquisitionRequest) {
 	setRequestingUnit(acquisitionRequest.getRequestingUnit());
-	setSupplier(acquisitionRequest.getSupplier());
+	setSuppliers(acquisitionRequest.getSuppliers());
 	if (acquisitionRequest.getPayingUnits().contains(acquisitionRequest.getRequestingUnit())) {
 	    setRequestUnitPayingUnit(true);
 	}
@@ -46,11 +49,27 @@ public class CreateAcquisitionProcessBean implements Serializable {
     }
 
     public void setSupplier(Supplier supplier) {
-	this.supplier = new DomainReference<Supplier>(supplier);
+	this.suppliers = new ArrayList<DomainReference<Supplier>>();
+	this.suppliers.add(new DomainReference<Supplier>(supplier));
     }
 
     public Supplier getSupplier() {
-	return supplier.getObject();
+	return this.suppliers.isEmpty() ? null : this.suppliers.get(0).getObject();
+    }
+
+    public void setSuppliers(List<Supplier> suppliers) {
+	this.suppliers = new ArrayList<DomainReference<Supplier>>();
+	for (Supplier supplier : suppliers) {
+	    this.suppliers.add(new DomainReference<Supplier>(supplier));
+	}
+    }
+
+    public List<Supplier> getSuppliers() {
+	List<Supplier> suppliers = new ArrayList<Supplier>();
+	for (DomainReference<Supplier> supplier : this.suppliers) {
+	    suppliers.add(supplier.getObject());
+	}
+	return suppliers;
     }
 
     public void setRequester(Person requester) {

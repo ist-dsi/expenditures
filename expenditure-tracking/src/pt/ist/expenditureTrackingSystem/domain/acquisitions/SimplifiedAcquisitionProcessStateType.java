@@ -4,22 +4,22 @@ import java.util.ResourceBundle;
 
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 
-public enum AcquisitionProcessStateType {
+public enum SimplifiedAcquisitionProcessStateType {
 
     IN_GENESIS {
 
 	@Override
-	public boolean showFor(final AcquisitionProcessStateType currentStateType) {
+	public boolean showFor(final SimplifiedAcquisitionProcessStateType currentStateType) {
 	    return true;
 	}
 
 	@Override
-	public boolean isCurrent(final AcquisitionProcessStateType currentStateType) {
+	public boolean isCurrent(final SimplifiedAcquisitionProcessStateType currentStateType) {
 	    return currentStateType == this;
 	}
 
 	@Override
-	public boolean isCompleted(final AcquisitionProcessStateType currentStateType) {
+	public boolean isCompleted(final SimplifiedAcquisitionProcessStateType currentStateType) {
 	    return currentStateType.ordinal() > ordinal();
 	}
 
@@ -28,12 +28,12 @@ public enum AcquisitionProcessStateType {
     SUBMITTED_FOR_APPROVAL {
 
 	@Override
-	public boolean showFor(final AcquisitionProcessStateType currentStateType) {
+	public boolean showFor(final SimplifiedAcquisitionProcessStateType currentStateType) {
 	    return true;
 	}
 
 	@Override
-	public boolean isCurrent(final AcquisitionProcessStateType currentStateType) {
+	public boolean isCurrent(final SimplifiedAcquisitionProcessStateType currentStateType) {
 	    return false;
 	}
 
@@ -67,7 +67,7 @@ public enum AcquisitionProcessStateType {
     REJECTED {
 
 	@Override
-	public boolean showFor(final AcquisitionProcessStateType currentStateType) {
+	public boolean showFor(final SimplifiedAcquisitionProcessStateType currentStateType) {
 	    return currentStateType == this;
 	}
 
@@ -77,7 +77,7 @@ public enum AcquisitionProcessStateType {
 	}
 
 	@Override
-	public boolean isBlocked(final AcquisitionProcessStateType currentStateType) {
+	public boolean isBlocked(final SimplifiedAcquisitionProcessStateType currentStateType) {
 	    return true;
 	}
 
@@ -85,7 +85,7 @@ public enum AcquisitionProcessStateType {
     CANCELED {
 
 	@Override
-	public boolean showFor(final AcquisitionProcessStateType currentStateType) {
+	public boolean showFor(final SimplifiedAcquisitionProcessStateType currentStateType) {
 	    return currentStateType == this;
 	}
 
@@ -95,21 +95,21 @@ public enum AcquisitionProcessStateType {
 	}
 
 	@Override
-	public boolean isBlocked(final AcquisitionProcessStateType currentStateType) {
+	public boolean isBlocked(final SimplifiedAcquisitionProcessStateType currentStateType) {
 	    return true;
 	}
 
     };
 
-    private AcquisitionProcessStateType() {
+    private SimplifiedAcquisitionProcessStateType() {
     }
 
     public String getLocalizedName() {
 	final ResourceBundle resourceBundle = ResourceBundle.getBundle("resources.EnumerationResources", Language.getLocale());
-	return resourceBundle.getString(AcquisitionProcessStateType.class.getSimpleName() + "." + name());
+	return resourceBundle.getString(SimplifiedAcquisitionProcessStateType.class.getSimpleName() + "." + name());
     }
 
-    public boolean showFor(final AcquisitionProcessStateType currentStateType) {
+    public boolean showFor(final SimplifiedAcquisitionProcessStateType currentStateType) {
 	return currentStateType.isActive();
     }
 
@@ -117,15 +117,15 @@ public enum AcquisitionProcessStateType {
 	return true;
     }
 
-    public boolean isCurrent(final AcquisitionProcessStateType currentStateType) {
+    public boolean isCurrent(final SimplifiedAcquisitionProcessStateType currentStateType) {
 	return currentStateType.ordinal() == ordinal() - 1;
     }
 
-    public boolean isCompleted(final AcquisitionProcessStateType currentStateType) {
+    public boolean isCompleted(final SimplifiedAcquisitionProcessStateType currentStateType) {
 	return currentStateType.ordinal() >= ordinal();
     }
 
-    public boolean isBlocked(final AcquisitionProcessStateType currentStateType) {
+    public boolean isBlocked(final SimplifiedAcquisitionProcessStateType currentStateType) {
 	return false;
     }
 
