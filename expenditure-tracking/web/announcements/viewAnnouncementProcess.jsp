@@ -5,23 +5,63 @@
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 <%@ taglib uri="/WEB-INF/messages.tld" prefix="messages" %>
 
-<!-- announcement/viewAnnouncement.jsp -->
-
+<!-- announcement/viewAnnouncementProcess.jsp -->
 <div class="wrapper">
 
-<h2><bean:message key="process.announcement.title.detail" bundle="EXPENDITURE_RESOURCES"/></h2>
+<h2><bean:message key="title.viewAnnouncementProcess" bundle="ANNOUNCEMENT_RESOURCES"/></h2>
 
 <jsp:include page="../commons/defaultErrorDisplay.jsp"/>
 
-<div class="infoop2">
-<fr:view name="announcementProcess" schema="viewAnnouncement" property="announcement">
-	<fr:layout name="tabular">
-		<fr:property name="classes" value="tstyle1"/>
-	</fr:layout>
-</fr:view>
-<fr:view name="announcementProcess" schema="viewAnnouncement.publish" property="announcement">
-	<fr:layout name="tabular" />
-</fr:view>
+<div class="infoop1">
+	<ul>
+		<logic:iterate id="activity" name="announcementProcess" property="activeActivities">
+			<bean:define id="activityName" name="activity" property="class.simpleName"/> 
+			<li>
+				<html:link page='<%= "/announcementProcess.do?method=execute" + activityName %>' paramId="announcementProcessOid" paramName="announcementProcess" paramProperty="OID">
+					<fr:view name="activity" property="class">
+						<fr:layout name="label">
+							<fr:property name="bundle" value="ANNOUNCEMENT_RESOURCES"/>
+						</fr:layout>
+					</fr:view>
+				</html:link>
+			</li>
+		</logic:iterate>
+	</ul>
+	<logic:empty name="announcementProcess" property="activeActivities">
+		<em>
+			<bean:message key="messages.info.noOperatesAvailabeATM" bundle="EXPENDITURE_RESOURCES"/>.
+		</em>
+	</logic:empty>
 </div>
 
+<div class="infoop2">
+	<fr:view name="announcementProcess" property="announcement"
+			type="pt.ist.expenditureTrackingSystem.domain.announcements.Announcement"
+			schema="viewAnnouncementDetails">
+		<fr:layout name="tabular">
+			<fr:property name="classes" value="tstyle1"/>
+		</fr:layout>
+	</fr:view>
 </div>
+
+<logic:present role="ACQUISITION_CENTRAL_MANAGER">
+	<fr:view name="announcementProcess" property="announcement"
+			type="pt.ist.expenditureTrackingSystem.domain.announcements.Announcement"
+			schema="viewAnnouncementDetails.admin">
+		<fr:layout name="tabular">
+			<fr:property name="classes" value="tstyle1"/>
+		</fr:layout>
+	</fr:view>
+</logic:present>
+
+<logic:present name="rejectionMotive">
+	<div class="infoop4">
+		<b><bean:message key="label.rejectionJustification" bundle="ANNOUNCEMENT_RESOURCES" />:</b>
+		<logic:notEmpty name="rejectionMotive">
+			<bean:write name="rejectionMotive" />
+		</logic:notEmpty>
+		<logic:empty name="rejectionMotive">
+			<bean:message key="label.rejectionJustification.notSuppliedDescription" bundle="ANNOUNCEMENT_RESOURCES" />
+		</logic:empty>
+	</div>
+</logic:present>
