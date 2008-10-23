@@ -26,6 +26,7 @@
 			schema="viewAcquisitionProcessInList">
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="tstyle2 mtop2"/>
+			<fr:property name="columnClasses" value=",,,width30px,,,,,"/>
 	
 			<fr:property name="sortBy" value="acquisitionProcessId=asc"/>
 	

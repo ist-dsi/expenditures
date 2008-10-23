@@ -304,7 +304,7 @@ padding: 1px 0 0 0;
 margin: 1em 0 0 0;
 }
 #sidebar ul li {
-padding: 5px 0 5px 5px;
+padding: 5px 0 5px 0;
 background: url(../images/dotted01.gif) bottom left repeat-x;
 /*
 background: #fafafa;
@@ -988,3 +988,18 @@ position: absolute;
 .dnone { display: none; }
 .dinline { display: inline; }
 .dblock { display: block; }
+
+.width30px {
+width: 30px !important;
+}
+
+table.tstyle2 tr td a {
+padding: 4px 5px;
+/*
+background: #f3f3e7;
+text-decoration: none !important;
+*/
+}
+table.tstyle2 tr td a:hover {
+background: #f3f3e7;
+}

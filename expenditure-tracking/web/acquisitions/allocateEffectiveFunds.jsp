@@ -72,7 +72,7 @@
 </logic:iterate>
 </table>
 
-<html:submit styleClass="inputbutton"><bean:message key="button.atribute" bundle="EXPENDITURE_RESOURCES"/> </html:submit>
+<html:submit styleClass="inputbutton"><bean:message key="button.submit" bundle="EXPENDITURE_RESOURCES"/> </html:submit>
 </fr:form>
 
 <fr:form id="allocationForm" action="<%= urlView %>">

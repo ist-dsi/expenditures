@@ -24,7 +24,7 @@
 
 <logic:equal name="item" property="filledWithRealValues" value="false">
 	<div class="infoop4">
-			<strong><bean:message key="messages.info.attention" bundle="EXPENDITURE_RESOURCES"/></strong>: <bean:message key="acquisitionRequestItem.message.warn.mustDefineRealValuesFirst" bundle="ACQUISITION_RESOURCES"/>
+		<strong><bean:message key="messages.info.attention" bundle="EXPENDITURE_RESOURCES"/></strong>: <bean:message key="acquisitionRequestItem.message.warn.mustDefineRealValuesFirst" bundle="ACQUISITION_RESOURCES"/>
 	</div>
 	<html:link page='<%= "/acquisitionProcess.do?method=viewAcquisitionProcess&acquisitionProcessOid="  + processOID %>'>« <bean:message key="link.back" bundle="EXPENDITURE_RESOURCES"/></html:link>
 </logic:equal>
@@ -40,13 +40,9 @@
 	<table class="tstyle4">	
 		<tr>
 			<th></th>
-			<th><strong><bean:message key="acquisitionProcess.label.payingUnit" bundle="ACQUISITION_RESOURCES"/></strong></th>
-			<th>
-				<strong><bean:message key="acquisitionRequestItem.label.effectiveValue" bundle="ACQUISITION_RESOURCES"/></strong>
-			</th>
-			<th>
-				<strong><bean:message key="acquisitionRequestItem.label.estimatedValue" bundle="ACQUISITION_RESOURCES"/></strong>
-			</th>
+			<th><bean:message key="acquisitionProcess.label.payingUnit" bundle="ACQUISITION_RESOURCES"/></th>
+			<th><bean:message key="acquisitionRequestItem.label.effectiveValue" bundle="ACQUISITION_RESOURCES"/></th>
+			<th><bean:message key="acquisitionRequestItem.label.estimatedValue" bundle="ACQUISITION_RESOURCES"/></th>
 		</tr>
 		<logic:iterate id="bean" name="beans" indexId="id">
 			<tr  id='<%= "tr" + id %>' onKeyUp="<%= "javascript:calculate('" + maxElements + "', 'sum', '" + maxValue + "', '" + outOfLabel+ "');" %>">
@@ -57,17 +53,16 @@
 			</tr>
 		</logic:iterate>
 			<tr>
-					<td colspan="2" class="aright">
-						<strong><bean:message key="label.total" bundle="EXPENDITURE_RESOURCES"/></strong>
-					</td>
-					<td>
-						<span id="sum">
-			
-						</span> 
-					</td>
-					<td>
-					</td>
-				</tr>
+				<td colspan="2" class="aright">
+					<strong><bean:message key="label.total" bundle="EXPENDITURE_RESOURCES"/></strong>
+				</td>
+				<td>
+					<span id="sum">
+					</span> 
+				</td>
+				<td>
+				</td>
+			</tr>
 	</table>
 		<script type="text/javascript">
 			 <%= "calculate('" + maxElements + "', 'sum', '" + maxValue + "', '" + outOfLabel+ "');" %> 
