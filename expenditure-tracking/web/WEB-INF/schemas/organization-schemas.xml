@@ -160,8 +160,12 @@
 		type="pt.ist.expenditureTrackingSystem.domain.organization.Supplier"
 		bundle="ORGANIZATION_RESOURCES">
 	<slot name="fiscalIdentificationCode" key="supplier.label.fiscalCode" bundle="ORGANIZATION_RESOURCES" read-only="true"/>
-	<slot name="name" key="supplier.label.name" bundle="ORGANIZATION_RESOURCES"/>
-	<slot name="abbreviatedName" key="supplier.label.abbreviatedName" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="name" key="supplier.label.name" bundle="ORGANIZATION_RESOURCES">
+		<property name="size" value="40"/>
+	</slot>
+	<slot name="abbreviatedName" key="supplier.label.abbreviatedName" bundle="ORGANIZATION_RESOURCES">
+		<property name="size" value="40"/>
+	</slot>
 	<slot name="nib" key="supplier.label.nib" bundle="ORGANIZATION_RESOURCES"/>
 	<slot name="address" key="supplier.label.address" bundle="ORGANIZATION_RESOURCES"/>
 	<slot name="phone" key="supplier.label.phone" bundle="ORGANIZATION_RESOURCES"/>

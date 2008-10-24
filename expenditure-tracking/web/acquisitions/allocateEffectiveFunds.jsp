@@ -42,6 +42,8 @@
 <jsp:include page="../commons/defaultErrorDisplay.jsp"/>
 
 
+<p class="mtop15 mbottom0"><bean:message key="acquisitionProcess.label.insertPermanentProjectFunds" bundle="ACQUISITION_RESOURCES"/></p>
+
 <table class="tstyle6">
 <logic:iterate id="financerBean" name="fundAllocationBeans" indexId="index">
 	<tr>
