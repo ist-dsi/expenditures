@@ -88,7 +88,7 @@ public class Financer extends Financer_Base {
     }
 
     public boolean isAccountingEmployee(final Person person) {
-	return getAccountingUnit().hasProjectAccountants(person);
+	return getAccountingUnit().hasPeople(person);
     }
 
     public boolean isProjectAccountingEmployee(Person person) {
