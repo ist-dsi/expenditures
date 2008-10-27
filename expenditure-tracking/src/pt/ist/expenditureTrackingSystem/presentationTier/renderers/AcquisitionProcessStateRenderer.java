@@ -126,12 +126,12 @@ public class AcquisitionProcessStateRenderer extends OutputRenderer {
 	    private HtmlComponent generateBox(String activity) {
 		HtmlBlockContainer container = new HtmlBlockContainer();
 		container.setClasses(getBoxClasses());
-		container.addChild(new HtmlText(activity));
+		container.addChild(new HtmlText(activity,false));
 		return container;
 	    }
 
 	    private HtmlComponent getBody(AcquisitionProcess process, SimplifiedAcquisitionProcessStateType stateType) {
-		HtmlComponent component = new HtmlText(RenderUtils.getEnumString(stateType));
+		HtmlComponent component = new HtmlText(RenderUtils.getEnumString(stateType),false);
 		if (getUrl() != null) {
 		    HtmlLink link = new HtmlLink();
 		    link.setBody(component);
