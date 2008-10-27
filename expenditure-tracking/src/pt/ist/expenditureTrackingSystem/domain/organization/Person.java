@@ -145,4 +145,10 @@ public class Person extends Person_Base {
 	return res;
     }
 
+    public String getFirstAndLastName() {
+	final String name = super.getName();
+	int s1 = name.indexOf(' ');
+	int s2 = name.lastIndexOf(' ');
+	 return s1 < 0 || s1 == s2 ? name : name.subSequence(0, s1) + name.substring(s2);
+    }
 }

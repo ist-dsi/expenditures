@@ -104,7 +104,7 @@
 		bundle="ACQUISITION_RESOURCES">
 	<slot name="acquisitionProcessId" key="label.acquisitionProcessId" bundle="EXPENDITURE_RESOURCES"/>		
 	<slot name="acquisitionProcessState.localizedName" key="label.processState" bundle="EXPENDITURE_RESOURCES"/>
-	<slot name="acquisitionRequest.requester.name" key="label.requester" bundle="EXPENDITURE_RESOURCES"/>
+	<slot name="acquisitionRequest.requester.firstAndLastName" key="label.requester" bundle="EXPENDITURE_RESOURCES"/>
 	<slot name="dateFromLastActivity" key="label.inactiveSince" bundle="EXPENDITURE_RESOURCES"/> 
 	<slot name="acquisitionRequest.fiscalIdentificationCode" key="supplier.label.fiscalCode" bundle="ORGANIZATION_RESOURCES"/>
 	<slot name="acquisitionRequest.acquisitionProposalDocumentId" key="acquisitionProcess.label.proposalID" bundle="ACQUISITION_RESOURCES" layout="null-as-label" />
