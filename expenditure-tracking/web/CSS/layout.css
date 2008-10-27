@@ -935,50 +935,7 @@ display: inline;
 }
 
 
-/***********************************************/	
-/**************** help  *********************/
 
-div.chelpcontainer table {
-border-collapse: collapse;
-}
-div.chelpcontainer table td {
-padding: 0;
-margin: 0;
-vertical-align: top;
-}
-a.chelp {
-width: 50px;
-cursor: default;
-text-decoration: none !important;
-padding-right: 5px;
-display: block;
-z-index: 1;
-}
-a.chelp img {
-margin: 2px 2px 0 4px;
-}
-a.chelp span.chelptext {
-display: none;
-font-weight: normal;
-color: #444;
-text-decoration: none;
-border: none;
-text-decoration: none !important;
-}
-a.chelp:hover {
-background: transparent; /* ie fix */
-position: relative;
-}
-a.chelp:hover span.chelptext {
-background: #ebf1fa;
-background: #edf4f8;
-width: 200px;
-padding: 5px 10px;
-border: 1px solid #c0d0ed;
-border: 1px solid #c5dae7;
-display: block;
-position: absolute;
-}
 
 /***********************************************/	
 /************ accessibility javascript ************/
@@ -1002,4 +959,57 @@ text-decoration: none !important;
 }
 table.tstyle2 tr td a:hover {
 background: #f3f3e7;
+}
+
+
+
+
+
+
+
+
+
+/***********************************************/	
+/**************** help  *********************/
+
+div.chelp {
+display: inline;
+padding-right: 10px;
+padding-top: 4px;
+}
+div.closed div.chelptext {
+display: none;
+}
+div.copen div.chelptext {
+display: inline;
+}
+div.chelp div.icon {
+background: #efa url(icon_help.gif) no-repeat;
+width: 20px;
+height: 20px;
+}
+div.chelp {
+position: relative;
+}
+div.chelp div.chelptext {
+position: absolute;
+z-index: 10;
+top: 0;
+left: 25px;
+width: 200px;
+background: #edf4f8;
+padding: 5px 10px;
+border: 1px solid #c5dae7;
+}
+
+div.nojavascript {
+display: inline;
+color: #888;
+font-size: 0.9em;
+}
+div.nojavascript img {
+display: none;
+}
+div.nojavascript div.text {
+display: block;
 }
