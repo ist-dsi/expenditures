@@ -25,7 +25,7 @@
 			<property name="key" value="true"/>
 		</validator>
 	</slot>
-	<slot name="requestUnitPayingUnit" key="acquisitionProcess.label.addRequestUnitAlsoHasPayingUnit" bundle="ACQUISITION_RESOURCES" />
+	<slot name="requestUnitPayingUnit" key="acquisitionProcess.label.addRequestUnitAlsoHasPayingUnit" bundle="ACQUISITION_RESOURCES"/>
 </schema>
 
 <schema name="editAcquisitionRequest"
