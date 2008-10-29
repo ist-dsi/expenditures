@@ -5,20 +5,20 @@
 
 <title><bean:message key="title.site" bundle="EXPENDITURE_RESOURCES"/></title>
 
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <%
 	final String contextPath = request.getContextPath();
 %>
 <logic:notPresent name="USER_SESSION_ATTRIBUTE">
-	<link rel="stylesheet" type="text/css" href="<%= contextPath %>/CSS/layout.css" media="screen">
+	<link rel="stylesheet" type="text/css" href="<%= contextPath %>/CSS/layout.css" media="screen"/>
 </logic:notPresent>
-<link rel="stylesheet" type="text/css" href="<%= contextPath %>/CSS/calendar.css" media="screen">
+<link rel="stylesheet" type="text/css" href="<%= contextPath %>/CSS/calendar.css" media="screen"/>
 
 <logic:present name="USER_SESSION_ATTRIBUTE">
 	<logic:present name="USER_SESSION_ATTRIBUTE" property="person.options.cascadingStyleSheet">
-		<link rel="stylesheet" type="text/css" href="<%= contextPath %>/CSS/user/layout.css" media="screen">
+		<link rel="stylesheet" type="text/css" href="<%= contextPath %>/CSS/user/layout.css" media="screen"/>
 	</logic:present>
 	<logic:notPresent name="USER_SESSION_ATTRIBUTE" property="person.options.cascadingStyleSheet">
-		<link rel="stylesheet" type="text/css" href="<%= contextPath %>/CSS/layout.css" media="screen">
+		<link rel="stylesheet" type="text/css" href="<%= contextPath %>/CSS/layout.css" media="screen"/>
 	</logic:notPresent>
 </logic:present>
