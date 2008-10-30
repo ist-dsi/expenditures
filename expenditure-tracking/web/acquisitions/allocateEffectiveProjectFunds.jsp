@@ -7,13 +7,14 @@
 <h2><bean:message key="acquisitionProcess.title.allocateProjectFundsPermanently" bundle="ACQUISITION_RESOURCES"/></h2>
 
 <bean:define id="acquisitionProcess" name="acquisitionProcess" toScope="request"/>
+
 <jsp:include page="viewAcquisitionRequest.jsp" flush="true"/>
 
 <div class="documents">
 	<p>
 		<bean:message key="acquisitionProcess.label.proposalDocument" bundle="ACQUISITION_RESOURCES"/>: 
 		<logic:present name="acquisitionProcess" property="acquisitionRequest.acquisitionProposalDocument">
-			<html:link action="/acquisitionProcess.do?method=downloadAcquisitionProposalDocument" paramId="acquisitionProposalDocumentOid" paramName="acquisitionProcess" paramProperty="acquisitionRequest.acquisitionProposalDocument.OID">
+			<html:link action="<%= "/acquisitionProcess" + acquisitionProcess.getClass().getSimpleName() + ".do?method=downloadAcquisitionProposalDocument" %>" paramId="acquisitionProposalDocumentOid" paramName="acquisitionProcess" paramProperty="acquisitionRequest.acquisitionProposalDocument.OID">
 				<bean:write name="acquisitionProcess" property="acquisitionRequest.acquisitionProposalDocument.filename"/>
 			</html:link>	
 		</logic:present>
@@ -23,8 +24,8 @@
 	</p>
 </div>
 
-<bean:define id="urlActivity">/acquisitionProcess.do?acquisitionProcessOid=<bean:write name="acquisitionProcess" property="OID"/></bean:define>
-<bean:define id="urlView">/acquisitionProcess.do?method=viewAcquisitionProcess&amp;acquisitionProcessOid=<bean:write name="acquisitionProcess" property="OID"/></bean:define>
+<bean:define id="urlActivity">/acquisition<%= acquisitionProcess.getClass().getSimpleName() %>.do?acquisitionProcessOid=<bean:write name="acquisitionProcess" property="OID"/></bean:define>
+<bean:define id="urlView">/acquisition<%= acquisitionProcess.getClass().getSimpleName() %>.do?method=viewAcquisitionProcess&amp;acquisitionProcessOid=<bean:write name="acquisitionProcess" property="OID"/></bean:define>
 
 <div class="forminline mbottom2">
 

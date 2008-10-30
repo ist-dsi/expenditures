@@ -8,11 +8,13 @@
 <h2><bean:message key="acquisitionProcess.title.rejectAcquisitionRequest" bundle="ACQUISITION_RESOURCES"/></h2>
 
 <bean:define id="acquisitionProcess" name="acquisitionProcess" type="pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess" toScope="request"/>
- 
+ <bean:define id="acquisitionProcessClass" name="acquisitionProcess" property="class.simpleName"/>
+ <bean:define id="actionMapping" value="<%= "/acquisition" +  acquisitionProcessClass%>"/>
+
 <jsp:include page="viewAcquisitionRequest.jsp" flush="true"/>
 
-<bean:define id="urlView">/acquisitionProcess.do?method=viewAcquisitionProcess&amp;acquisitionProcessOid=<%= acquisitionProcess.getOID() %></bean:define>
-<bean:define id="urlAdd">/acquisitionProcess.do?method=rejectAcquisitionProcess&amp;acquisitionProcessOid=<%= acquisitionProcess.getOID() %></bean:define>
+<bean:define id="urlView"><%= actionMapping%>.do?method=viewAcquisitionProcess&amp;acquisitionProcessOid=<%= acquisitionProcess.getOID() %></bean:define>
+<bean:define id="urlAdd"><%= actionMapping%>.do?method=rejectAcquisitionProcess&amp;acquisitionProcessOid=<%= acquisitionProcess.getOID() %></bean:define>
 
 <div class="forminline">
 	<fr:form action="<%= urlAdd %>">

@@ -10,7 +10,7 @@ import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 
 public abstract class ProcessAction extends BaseAction {
 
-    protected abstract GenericProcess getProcess(final HttpServletRequest request);
+    protected abstract <T extends GenericProcess> T getProcess(final HttpServletRequest request);
 
     protected GenericProcess getProcess(final HttpServletRequest request, final String attributeName) {
 	final GenericProcess genericProcess = getDomainObject(request, attributeName);

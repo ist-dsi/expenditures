@@ -9,7 +9,7 @@
 		name="afterTheFactAcquisitionProcessBean"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.AfterTheFactAcquisitionProcessBean"
 		schema="afterTheFactAcquisitionProcessBean"
-		action="/afterTheFactAcquisitionProcess.do?method=createNewAfterTheFactAcquisitionProcess">
+		action="/acquisitionAfterTheFactAcquisitionProcess.do?method=createNewAfterTheFactAcquisitionProcess">
 	<fr:layout name="tabular">
 		<fr:property name="classes" value="form"/>
 		<fr:property name="columnClasses" value=",,tderror"/>

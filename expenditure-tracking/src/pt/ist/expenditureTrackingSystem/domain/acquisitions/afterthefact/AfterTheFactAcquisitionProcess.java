@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
@@ -40,7 +41,8 @@ public class AfterTheFactAcquisitionProcess extends AfterTheFactAcquisitionProce
 	final AfterTheFactAcquisitionProcess afterTheFactAcquisitionProcess = new AfterTheFactAcquisitionProcess();
 	afterTheFactAcquisitionProcess.edit(afterTheFactAcquisitionProcessBean);
 	final User user = UserView.getUser();
-	new GenericLog(afterTheFactAcquisitionProcess, user.getPerson(), afterTheFactAcquisitionProcess.getClass().getName() + ".Create", new DateTime());
+	new GenericLog(afterTheFactAcquisitionProcess, user.getPerson(), afterTheFactAcquisitionProcess.getClass().getName()
+		+ ".Create", new DateTime());
 	return afterTheFactAcquisitionProcess;
     }
 

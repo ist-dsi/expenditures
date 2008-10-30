@@ -3,11 +3,9 @@ package pt.ist.expenditureTrackingSystem.presentationTier.renderers;
 import java.util.List;
 
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.OperationLog;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.SimplifiedAcquisitionProcessStateType;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedAcquitionProcessState;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcessOperationLog;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 import pt.ist.fenixWebFramework.renderers.OutputRenderer;
@@ -25,7 +23,6 @@ public class AcquisitionProcessStateRenderer extends OutputRenderer {
     private String arrowClasses;
     private String completedStateClass;
     private String failedStateClass;
-    private String currentStateClass;
     private String unreachableStateclass;
     private String url;
     private boolean moduleRelative;
@@ -39,17 +36,17 @@ public class AcquisitionProcessStateRenderer extends OutputRenderer {
 	    @Override
 	    public HtmlComponent createComponent(Object arg0, Class arg1) {
 		RegularAcquisitionProcess process = (RegularAcquisitionProcess) arg0;
-		return generateFlowChart(process, ((SimplifiedAcquitionProcessState) process.getAcquisitionProcessState())
+		return generateFlowChart(process, process.getAcquisitionProcessState()
 			.getAcquisitionProcessStateType());
 	    }
 
 	    private HtmlComponent generateFlowChart(RegularAcquisitionProcess process,
-		    SimplifiedAcquisitionProcessStateType currentState) {
+		    AcquisitionProcessStateType currentState) {
 		HtmlBlockContainer flowChartContainer = new HtmlBlockContainer();
 
 		if (process.isActive()) {
-		    SimplifiedAcquisitionProcessStateType[] types = SimplifiedAcquisitionProcessStateType.values();
-		    for (SimplifiedAcquisitionProcessStateType stateType : types) {
+		    List<AcquisitionProcessStateType> types = process.getAvailableStates();
+		    for (AcquisitionProcessStateType stateType : types) {
 			if (stateType.showFor(currentState)) {
 			    generateStateBox(process, currentState, flowChartContainer, stateType);
 			    if (stateType.hasNextState()) {
@@ -62,12 +59,12 @@ public class AcquisitionProcessStateRenderer extends OutputRenderer {
 		    List<OperationLog> logs = process.getOperationLogs();
 		    int i = logs.size() - 1;
 
-		    SimplifiedAcquisitionProcessStateType currentType = ((SimplifiedProcessOperationLog)logs.get(i--)).getState();
-		    SimplifiedAcquisitionProcessStateType newStateType = null;
+		    AcquisitionProcessStateType currentType = logs.get(i--).getState();
+		    AcquisitionProcessStateType newStateType = null;
 
 		    flowChartContainer.addChild(generateBox(process, currentType, currentState));
 		    while (i >= 0) {
-			newStateType = ((SimplifiedProcessOperationLog)logs.get(i)).getState();
+			newStateType = logs.get(i).getState();
 			if (currentType != newStateType) {
 			    currentType = newStateType;
 			    generateActivityBox(flowChartContainer, logs.get(i + 1).getActivity());
@@ -81,8 +78,8 @@ public class AcquisitionProcessStateRenderer extends OutputRenderer {
 		    if (process.getAcquisitionProcessStateType() != newStateType) {
 			generateActivityBox(flowChartContainer, logs.get(i + 1).getActivity());
 			generateArrowBox(flowChartContainer);
-			generateStateBox(process, currentState, flowChartContainer, ((SimplifiedAcquitionProcessState) process
-				.getAcquisitionProcessState()).getAcquisitionProcessStateType());
+			generateStateBox(process, currentState, flowChartContainer, process
+				.getAcquisitionProcessState().getAcquisitionProcessStateType());
 		    }
 
 		}
@@ -94,8 +91,8 @@ public class AcquisitionProcessStateRenderer extends OutputRenderer {
 		flowChartContainer.addChild(generateBox(abstractActivity.getLocalizedName()));
 	    }
 
-	    private void generateStateBox(AcquisitionProcess process, SimplifiedAcquisitionProcessStateType currentState,
-		    HtmlBlockContainer flowChartContainer, SimplifiedAcquisitionProcessStateType stateType) {
+	    private void generateStateBox(AcquisitionProcess process, AcquisitionProcessStateType currentState,
+		    HtmlBlockContainer flowChartContainer, AcquisitionProcessStateType stateType) {
 		flowChartContainer.addChild(generateBox(process, stateType, currentState));
 	    }
 
@@ -105,15 +102,13 @@ public class AcquisitionProcessStateRenderer extends OutputRenderer {
 		flowChartContainer.addChild(arrowContainer);
 	    }
 
-	    private HtmlComponent generateBox(AcquisitionProcess process, SimplifiedAcquisitionProcessStateType stateType,
-		    SimplifiedAcquisitionProcessStateType currentStateType) {
+	    private HtmlComponent generateBox(AcquisitionProcess process, AcquisitionProcessStateType stateType,
+		    AcquisitionProcessStateType currentStateType) {
 		HtmlBlockContainer container = new HtmlBlockContainer();
 
 		String classes = getBoxClasses();
 		if (stateType.isBlocked(currentStateType)) {
 		    classes += " " + getFailedStateClass();
-		} else if (stateType.isCurrent(currentStateType)) {
-		    classes += " " + getCurrentStateClass();
 		} else if (stateType.isCompleted(currentStateType)) {
 		    classes += " " + getCompletedStateClass();
 		}
@@ -130,7 +125,7 @@ public class AcquisitionProcessStateRenderer extends OutputRenderer {
 		return container;
 	    }
 
-	    private HtmlComponent getBody(AcquisitionProcess process, SimplifiedAcquisitionProcessStateType stateType) {
+	    private HtmlComponent getBody(AcquisitionProcess process, AcquisitionProcessStateType stateType) {
 		HtmlComponent component = new HtmlText(RenderUtils.getEnumString(stateType),false);
 		if (getUrl() != null) {
 		    HtmlLink link = new HtmlLink();
@@ -190,14 +185,6 @@ public class AcquisitionProcessStateRenderer extends OutputRenderer {
 
     public void setFailedStateClass(String failedStateClass) {
 	this.failedStateClass = failedStateClass;
-    }
-
-    public String getCurrentStateClass() {
-	return currentStateClass;
-    }
-
-    public void setCurrentStateClass(String currentStateClass) {
-	this.currentStateClass = currentStateClass;
     }
 
     public String getUnreachableStateclass() {

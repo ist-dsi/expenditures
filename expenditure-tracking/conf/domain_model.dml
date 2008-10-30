@@ -8,7 +8,7 @@ valueType pt.ist.expenditureTrackingSystem.domain.util.Address as Address;
 valueType pt.ist.expenditureTrackingSystem.domain.util.ByteArray as ByteArray;
 valueType pt.ist.expenditureTrackingSystem.domain.util.Money as Money;
 valueType pt.utl.ist.fenix.tools.util.Strings as Strings;
-enum pt.ist.expenditureTrackingSystem.domain.acquisitions.SimplifiedAcquisitionProcessStateType as SimplifiedAcquisitionProcessStateType;
+enum pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType as AcquisitionProcessStateType;
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.StandardAcquisitionProcessStateType as StandardAcquisitionProcessStateType;
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionType as AfterTheFactAcquisitionType;
 enum pt.ist.expenditureTrackingSystem.domain.announcements.AnnouncementProcessStateType as AnnouncementProcessStateType;
@@ -191,15 +191,7 @@ class processes.GenericLog {
 }
 
 	class acquisitions.OperationLog extends processes.GenericLog {
-	
-	}
-	
-	class acquisitions.simplified.SimplifiedProcessOperationLog extends acquisitions.OperationLog {
-		SimplifiedAcquisitionProcessStateType state;
-	}
-	
-	class acquisitions.standard.StandardProcessOperationLog extends acquisitions.OperationLog {
-		StandardAcquisitionProcessStateType state;
+		AcquisitionProcessStateType state;	
 	}
 	
 	class requests.OperationLog extends processes.GenericLog {
@@ -220,9 +212,6 @@ class processes.GenericProcess {
 	}
 
 		class acquisitions.afterthefact.AfterTheFactAcquisitionProcess extends acquisitions.AcquisitionProcess {
-		}
-
-		class acquisitions.direct.DirectContractProcess extends acquisitions.AcquisitionProcess {
 		}
 
 			class acquisitions.RegularAcquisitionProcess extends acquisitions.AcquisitionProcess {
@@ -247,15 +236,7 @@ class ProcessState {
 }
 	
 	class acquisitions.AcquisitionProcessState extends ProcessState {
-		
-	}
-	
-	class acquisitions.simplified.SimplifiedAcquitionProcessState extends acquisitions.AcquisitionProcessState {
-		SimplifiedAcquisitionProcessStateType acquisitionProcessStateType;
-	}
-	
-	class acquisitions.standard.StandardAcquitionProcessState extends acquisitions.AcquisitionProcessState {
-		StandardAcquisitionProcessStateType acquisitionProcessStateType;
+		AcquisitionProcessStateType acquisitionProcessStateType;
 	}
 
 	class announcement.AnnouncementProcessState extends ProcessState {

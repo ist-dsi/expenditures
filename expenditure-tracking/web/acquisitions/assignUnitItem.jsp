@@ -12,6 +12,7 @@
 <script type="text/javascript" src="<%= request.getContextPath() + "/javaScript/calculator.js" %>"></script> 
 
 <bean:define id="processOID" name="acquisitionProcess" property="OID"/>
+<bean:define id="processClass" name="acquisitionProcess" property="class.simpleName"/>
 <bean:define id="acquisitionRequestItemOid" name="acquisitionRequestItem" property="OID"/>
 
 <bean:define id="outOfLabel">
@@ -29,7 +30,7 @@
 <p class="mvert05"><bean:message key="acquisitionProcess.label.assignPayingUnitToItem.description" bundle="ACQUISITION_RESOURCES"/></p>
 
 <div class="dinline forminline">
-	<fr:form action='<%="/acquisitionProcess.do?acquisitionProcessOid=" + processOID + "&acquisitionRequestItemOid=" + acquisitionRequestItemOid%>'>
+	<fr:form action='<%="/acquisition" + processClass + ".do?acquisitionProcessOid=" + processOID + "&acquisitionRequestItemOid=" + acquisitionRequestItemOid%>'>
 		<html:hidden  property="method" value="executeAssignPayingUnitToItemCreation"/>
 		
 		<fr:edit id="unitItemBeans" name="unitItemBeans" visible="false"/>
@@ -85,7 +86,7 @@
 			<html:submit styleClass="inputbutton"><bean:message key="button.atribute" bundle="EXPENDITURE_RESOURCES"/> </html:submit>
 	</fr:form>
 
-	<fr:form action='<%="/acquisitionProcess.do?method=viewAcquisitionProcess&acquisitionProcessOid=" + processOID + "&acquisitionRequestItemOid=" + acquisitionRequestItemOid%>'>
+	<fr:form action='<%="/acquisition" + processClass +".do?method=viewAcquisitionProcess&acquisitionProcessOid=" + processOID + "&acquisitionRequestItemOid=" + acquisitionRequestItemOid%>'>
 		<html:submit styleClass="inputbutton"><bean:message key="renderers.form.cancel.name" bundle="RENDERER_RESOURCES"/> </html:submit>
 	</fr:form>
 </div>

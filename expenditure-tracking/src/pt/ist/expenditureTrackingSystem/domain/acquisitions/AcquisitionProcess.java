@@ -116,8 +116,8 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 	return (AcquisitionProcessState) Collections.max(getProcessStates(), ProcessState.COMPARATOR_BY_WHEN);
     }
 
-    public Enum getAcquisitionProcessStateType() {
-	return getLastAcquisitionProcessState().getCurrentState();
+    public AcquisitionProcessStateType getAcquisitionProcessStateType() {
+	return getLastAcquisitionProcessState().getAcquisitionProcessStateType();
     }
 
     public boolean isPendingApproval() {
@@ -281,4 +281,11 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 	new ProcessComment(this, person, comment);
     }
 
+    public boolean isProcessFlowCharAvailable() {
+	return false;
+    }
+
+    public List<AcquisitionProcessStateType> getAvailableStates() {
+	return Collections.emptyList();
+    }
 }

@@ -20,7 +20,7 @@ import pt.ist.fenixWebFramework.struts.annotations.Forward;
 import pt.ist.fenixWebFramework.struts.annotations.Forwards;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
-@Mapping(path = "/afterTheFactAcquisitionProcess")
+@Mapping(path = "/acquisitionAfterTheFactAcquisitionProcess")
 @Forwards( { 
     @Forward(name = "create.afterTheFact.acquisition.process", path = "/acquisitions/createAfterTheFactAcquisitionProcess.jsp"),
     @Forward(name = "view.afterTheFact.acquisition.process", path = "/acquisitions/viewAfterTheFactAcquisitionProcess.jsp"),
@@ -57,10 +57,9 @@ public class AfterTheFactAcquisitionProcessAction extends ProcessAction {
 	return viewAfterTheFactAcquisitionProcess(mapping, request, afterTheFactAcquisitionProcess);
     }
 
-    public ActionForward viewAfterTheFactAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
+    public ActionForward viewAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
-	final AcquisitionAfterTheFact acquisitionAfterTheFact = getDomainObject(request, "acquisitionAfterTheFactOid");
-	final AfterTheFactAcquisitionProcess afterTheFactAcquisitionProcess = acquisitionAfterTheFact.getAfterTheFactAcquisitionProcess();
+	final AfterTheFactAcquisitionProcess afterTheFactAcquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
 	return viewAfterTheFactAcquisitionProcess(mapping, request, afterTheFactAcquisitionProcess);
     }
     

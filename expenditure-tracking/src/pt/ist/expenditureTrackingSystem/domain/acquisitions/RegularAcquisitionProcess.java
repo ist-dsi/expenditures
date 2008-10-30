@@ -2,11 +2,17 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericLog;
 
 public abstract class RegularAcquisitionProcess extends RegularAcquisitionProcess_Base {
+
+    public enum ActivityScope {
+	REQUEST_INFORMATION, REQUEST_ITEM;
+    }
 
     public RegularAcquisitionProcess() {
 	super();
@@ -20,10 +26,10 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
 	return false;
     }
 
-    public List<OperationLog> getOperationLogsInState(Enum state) {
+    public List<OperationLog> getOperationLogsInState(AcquisitionProcessStateType state) {
 	List<OperationLog> logs = new ArrayList<OperationLog>();
 	for (OperationLog log : getOperationLogs()) {
-	    if (log.getLogState().equals(state)) {
+	    if (log.getState().equals(state)) {
 		logs.add(log);
 	    }
 	}
@@ -52,33 +58,84 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
 	}
     }
 
-    public abstract void cancel();
+    public boolean isPersonAbleToExecuteActivities() {
+	Map<ActivityScope, List<GenericAcquisitionProcessActivity>> activities = getProcessActivityMap();
+	for (ActivityScope scope : activities.keySet()) {
+	    for (GenericAcquisitionProcessActivity activity : activities.get(scope)) {
+		if (activity.isActive(this)) {
+		    return true;
+		}
+	    }
+	}
+	return false;
+    }
 
-    public abstract void reject();
+    public void allocateFundsPermanently() {
+	new AcquisitionProcessState(this, AcquisitionProcessStateType.FUNDS_ALLOCATED_PERMANENTLY);
+    }
 
-    public abstract void inGenesis();
+    public void cancel() {
+	new AcquisitionProcessState(this, AcquisitionProcessStateType.CANCELED);
+    }
 
-    public abstract void submitForApproval();
+    protected void approve() {
+	new AcquisitionProcessState(this, AcquisitionProcessStateType.APPROVED);
+    }
 
-    public abstract void submitForFundAllocation();
+    protected void confirmInvoice() {
+	new AcquisitionProcessState(this, AcquisitionProcessStateType.INVOICE_CONFIRMED);
+    }
 
-    protected abstract void approve();
+    public void allocateFundsToUnit() {
+	new AcquisitionProcessState(this, AcquisitionProcessStateType.FUNDS_ALLOCATED);
+    }
 
-    public abstract void allocateFundsToUnit();
+    public void allocateFundsToSupplier() {
+	new AcquisitionProcessState(this, AcquisitionProcessStateType.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER);
+    }
 
-    public abstract void allocateFundsToSupplier();
+    public void acquisitionPayed() {
+	new AcquisitionProcessState(this, AcquisitionProcessStateType.ACQUISITION_PAYED);
+    }
 
-    public abstract void processAcquisition();
+    public void invoiceReceived() {
+	new AcquisitionProcessState(this, AcquisitionProcessStateType.INVOICE_RECEIVED);
+    }
 
-    public abstract void invoiceReceived();
+    public void reject() {
+	new AcquisitionProcessState(this, AcquisitionProcessStateType.REJECTED);
+    }
 
-    public abstract void submitedForInvoiceConfirmation();
+    public void inGenesis() {
+	new AcquisitionProcessState(this, AcquisitionProcessStateType.IN_GENESIS);
+    }
 
-    protected abstract void confirmInvoice();
+    public void submitForApproval() {
+	new AcquisitionProcessState(this, AcquisitionProcessStateType.SUBMITTED_FOR_APPROVAL);
+    }
 
-    public abstract void allocateFundsPermanently();
+    public void processAcquisition() {
+	new AcquisitionProcessState(this, AcquisitionProcessStateType.ACQUISITION_PROCESSED);
+    }
 
-    public abstract void acquisitionPayed();
+    public void submitedForInvoiceConfirmation() {
+	new AcquisitionProcessState(this, AcquisitionProcessStateType.SUBMITTED_FOR_CONFIRM_INVOICE);
+    }
 
-    public abstract void resetEffectiveFundAllocationId();
+    public void submitForFundAllocation() {
+	new AcquisitionProcessState(this, AcquisitionProcessStateType.SUBMITTED_FOR_FUNDS_ALLOCATION);
+    }
+
+    public void resetEffectiveFundAllocationId() {
+	getAcquisitionRequest().resetEffectiveFundAllocationId();
+	confirmInvoice();
+    }
+
+    @Override
+    public boolean isProcessFlowCharAvailable() {
+	return true;
+    }
+
+    public abstract Map<ActivityScope, List<GenericAcquisitionProcessActivity>> getProcessActivityMap();
+
 }

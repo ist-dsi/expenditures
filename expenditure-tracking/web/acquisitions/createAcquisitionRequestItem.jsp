@@ -22,10 +22,11 @@
 		property="acquisitionRequest.acquisitionProcess"
 		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess"
 		/>
-<bean:define id="urlView">/acquisitionProcess.do?method=viewAcquisitionProcess&acquisitionProcessOid=<%= acquisitionProcess.getOID() %></bean:define>
+<bean:define id="actionMapping" value="<%= "/acquisition" + acquisitionProcess.getClass().getSimpleName() %>"/>
+<bean:define id="urlView"><%= actionMapping %>.do?method=viewAcquisitionProcess&acquisitionProcessOid=<%= acquisitionProcess.getOID() %></bean:define>
 
 
-<fr:form action="/acquisitionProcess.do?method=createNewAcquisitionRequestItem">
+<fr:form action="<%= actionMapping + ".do?method=createNewAcquisitionRequestItem"%>">
 	
 	<fr:edit id="acquisitionRequestItem"
 			name="bean" visible="false"/>
@@ -39,8 +40,8 @@
 			<fr:property name="columnClasses" value=",,tderror"/>
 		</fr:layout>
 		<fr:destination name="cancel" path="<%= urlView %>" />
-		<fr:destination name="invalid" path='<%= "/acquisitionProcess.do?method=executeCreateAcquisitionRequestItem&acquisitionProcessOid=" + acquisitionProcess.getOID() %>'/>
-		<fr:destination name="postBack" path="/acquisitionProcess.do?method=createItemPostBack" />
+		<fr:destination name="invalid" path='<%=  actionMapping + ".do?method=executeCreateAcquisitionRequestItem&acquisitionProcessOid=" + acquisitionProcess.getOID() %>'/>
+		<fr:destination name="postBack" path='<%=  actionMapping + "do?method=createItemPostBack" %>'/>
 	</fr:edit>
 </div>
 
@@ -54,8 +55,8 @@
 			<fr:property name="columnClasses" value=",,tderror"/>
 		</fr:layout>
 		<fr:destination name="cancel" path="<%= urlView %>" />
-		<fr:destination name="invalid" path='<%= "/acquisitionProcess.do?method=executeCreateAcquisitionRequestItem&acquisitionProcessOid=" + acquisitionProcess.getOID() %>'/>
-		<fr:destination name="postBack" path="/acquisitionProcess.do?method=createItemPostBack" />
+		<fr:destination name="invalid" path='<%= actionMapping + ".do?method=executeCreateAcquisitionRequestItem&acquisitionProcessOid=" + acquisitionProcess.getOID() %>'/>
+		<fr:destination name="postBack" path="<%=  actionMapping + ".do?method=createItemPostBack" %>"/>
 	</fr:edit>
 </div>
 
@@ -69,7 +70,7 @@
 			<fr:property name="style" value="width: 600px;"/>
 			<fr:property name="columnClasses" value=",,tderror"/>
 		</fr:layout>
-		<fr:destination name="postBack" path="/acquisitionProcess.do?method=createItemPostBack" />
+		<fr:destination name="postBack" path="<%=  actionMapping + ".do?method=createItemPostBack" %>"/>
 	</fr:edit>
 </div>
 	

@@ -37,6 +37,13 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	}
     }
 
+    public AcquisitionRequest(AcquisitionProcess acquisitionProcess, List<Supplier> suppliers, Person person) {
+	this(acquisitionProcess, person);
+	for (Supplier supplier : suppliers) {
+	    addSuppliers(supplier);
+	}
+    }
+
     public AcquisitionRequest(AcquisitionProcess acquisitionProcess, Supplier supplier, Person person) {
 	this(acquisitionProcess, person);
 	addSuppliers(supplier);
@@ -76,7 +83,7 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 
 	removeAcquisitionProposalDocument();
 	removeRequester();
-	for (; !getSuppliers().isEmpty(); getSuppliers().get(0).delete())
+	for (; !getSuppliers().isEmpty(); removeSuppliers(getSuppliers().get(0)))
 	    ;
 	removeAcquisitionProcess();
 	super.delete();

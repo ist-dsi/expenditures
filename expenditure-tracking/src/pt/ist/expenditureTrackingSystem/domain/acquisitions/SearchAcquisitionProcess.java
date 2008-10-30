@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Set;
 
 import pt.ist.expenditureTrackingSystem.domain.Search;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedAcquitionProcessState;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
@@ -18,10 +16,16 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
     private String processId;
     private DomainReference<Person> requester;
     private DomainReference<Unit> unit;
-    private SimplifiedAcquisitionProcessStateType acquisitionProcessStateType;
+    private AcquisitionProcessStateType acquisitionProcessStateType;
     private DomainReference<Supplier> supplier;
     private String proposalId;
     private Boolean hasAvailableAndAccessibleActivityForUser;
+
+    private Class<? extends AcquisitionProcess> clazz;
+
+    public SearchAcquisitionProcess(Class<? extends AcquisitionProcess> clazz) {
+	this.clazz = clazz;
+    }
 
     private class SearchResult extends SearchResultSet<AcquisitionProcess> {
 
@@ -32,10 +36,7 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
 	@Override
 	protected boolean matchesSearchCriteria(final AcquisitionProcess acquisitionProcess) {
 	    final AcquisitionRequest acquisitionRequest = acquisitionProcess.getAcquisitionRequest();
-	    return matchesSearchCriteria(acquisitionRequest)
-		    && acquisitionProcess.isAvailableForCurrentUser()
-		    && matchCriteria(acquisitionProcessStateType, ((SimplifiedAcquitionProcessState) acquisitionProcess
-			    .getAcquisitionProcessState()).getAcquisitionProcessStateType());
+	    return matchesSearchCriteria(acquisitionRequest) && acquisitionProcess.isAvailableForCurrentUser();
 	}
 
 	private boolean matchesSearchCriteria(final AcquisitionRequest acquisitionRequest) {
@@ -43,11 +44,17 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
 	    final List<Supplier> suppliers = acquisitionRequest.getSuppliers();
 	    final String identification = acquisitionRequest.getAcquisitionProcessId();
 	    final String acquisitionProposalId = acquisitionRequest.getAcquisitionProposalDocumentId();
+	    final AcquisitionProcessStateType type = acquisitionRequest.getAcquisitionProcess().getAcquisitionProcessStateType();
 	    return matchCriteria(processId, identification) && matchCriteria(getRequester(), person)
 		    && matchCriteria(getUnit(), acquisitionRequest) && matchCriteria(getSupplier(), suppliers)
 		    && matchCriteria(proposalId, acquisitionProposalId)
-		    && matchCriteria(hasAvailableAndAccessibleActivityForUser, acquisitionRequest);
+		    && matchCriteria(hasAvailableAndAccessibleActivityForUser, acquisitionRequest)
+		    && matchCriteria(acquisitionProcessStateType, type);
 	    // && matchCriteria(costCenter, acquisitionRequest.getCostCenter());
+	}
+
+	private boolean matchCriteria(AcquisitionProcessStateType acquisitionProcessStateType, AcquisitionProcessStateType type) {
+	    return acquisitionProcessStateType == null || acquisitionProcessStateType.equals(type);
 	}
 
 	private boolean matchCriteria(Supplier supplier, List<Supplier> suppliers) {
@@ -61,9 +68,8 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
 	}
 
 	private boolean isPersonAbleToExecuteActivities(final AcquisitionProcess acquisitionProcess) {
-	    if (acquisitionProcess instanceof SimplifiedProcedureProcess) {
-		final SimplifiedProcedureProcess simplifiedProcedureProcess = (SimplifiedProcedureProcess) acquisitionProcess;
-		return simplifiedProcedureProcess.isPersonAbleToExecuteActivities();
+	    if (acquisitionProcess instanceof RegularAcquisitionProcess) {
+		return ((RegularAcquisitionProcess) acquisitionProcess).isPersonAbleToExecuteActivities();
 	    }
 	    return false;
 	}
@@ -86,26 +92,12 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
 	    return requester == null || requester == person;
 	}
 
-	private boolean matchCriteria(final SimplifiedAcquisitionProcessStateType criteria,
-		final SimplifiedAcquisitionProcessStateType value) {
-	    return criteria == null || criteria == value;
-	}
-
-	private boolean matchCriteria(Integer criteria, Integer value) {
-	    return criteria == null || criteria.equals(value);
-	}
-
     }
 
     @Override
     public Set<AcquisitionProcess> search() {
 	try {
-	    return new SearchResult(GenericProcess.getAllProcesses(SimplifiedProcedureProcess.class));
-	    // return hasAnyCriteria() ?
-	    // new
-	    // SearchResult(GenericProcess.getAllProcesses(SimplifiedProcedureProcess.class))
-	    // :
-	    // Collections.EMPTY_SET;
+	    return new SearchResult(GenericProcess.getAllProcesses(clazz));
 	} catch (Exception ex) {
 	    ex.printStackTrace();
 	    throw new Error(ex);
@@ -117,8 +109,8 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
     }
 
     protected boolean hasAnyCriteria() {
-	return hasCriteria(processId) || getRequester() != null || acquisitionProcessStateType != null || getSupplier() != null
-		|| unit != null || hasCriteria(proposalId) || hasAvailableAndAccessibleActivityForUser != null;
+	return hasCriteria(processId) || getRequester() != null || getSupplier() != null || unit != null
+		|| hasCriteria(proposalId) || hasAvailableAndAccessibleActivityForUser != null;
     }
 
     public Person getRequester() {
@@ -127,14 +119,6 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
 
     public void setRequester(final Person requester) {
 	this.requester = requester == null ? null : new DomainReference<Person>(requester);
-    }
-
-    public SimplifiedAcquisitionProcessStateType getAcquisitionProcessState() {
-	return acquisitionProcessStateType;
-    }
-
-    public void setAcquisitionProcessState(SimplifiedAcquisitionProcessStateType acquisitionProcessStateType) {
-	this.acquisitionProcessStateType = acquisitionProcessStateType;
     }
 
     public Supplier getSupplier() {
@@ -175,6 +159,14 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
 
     public void setHasAvailableAndAccessibleActivityForUser(Boolean hasAvailableAndAccessibleActivityForUser) {
 	this.hasAvailableAndAccessibleActivityForUser = hasAvailableAndAccessibleActivityForUser;
+    }
+
+    public AcquisitionProcessStateType getAcquisitionProcessState() {
+	return acquisitionProcessStateType;
+    }
+
+    public void setAcquisitionProcessState(AcquisitionProcessStateType acquisitionProcessStateType) {
+	this.acquisitionProcessStateType = acquisitionProcessStateType;
     }
 
 }

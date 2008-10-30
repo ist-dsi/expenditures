@@ -6,10 +6,11 @@
 
 
 <bean:define id="processOID" name="process" property="OID"/>
+<bean:define id="processClass" name="process" property="class.simpleName"/>
 
 <h2><bean:message key="label.pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.PayAcquisition" bundle="ACQUISITION_RESOURCES"/></h2>
 
-<fr:form action='<%= "/acquisitionProcess.do?method=executePayAcquisitionAction&amp;acquisitionProcessOid=" + processOID %>'>
+<fr:form action='<%= "/acquisition" + processClass +".do?method=executePayAcquisitionAction&amp;acquisitionProcessOid=" + processOID %>'>
 
 	<table class="form mbottom05">
 		<tr>

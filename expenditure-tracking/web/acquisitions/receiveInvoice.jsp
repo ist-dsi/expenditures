@@ -7,13 +7,15 @@
 <h2><bean:message key="acquisitionProcess.title.invoice.receive" bundle="ACQUISITION_RESOURCES"/></h2>
 
 <bean:define id="acquisitionProcess" name="acquisitionProcess" toScope="request"/>
-<jsp:include page="viewAcquisitionRequest.jsp" flush="true"/>
+<bean:define id="acquisitionProcessClass" name="acquisitionProcess" property="class.simpleName" toScope="request"/>
+<bean:define id="actionMapping" value="<%= "/acquisition" + acquisitionProcessClass%>"/>
 
+<jsp:include page="viewAcquisitionRequest.jsp" flush="true"/>
 
 <p>
 	<bean:message key="acquisitionProcess.label.proposalDocument" bundle="ACQUISITION_RESOURCES"/>: 
 	<logic:present name="acquisitionProcess" property="acquisitionRequest.acquisitionProposalDocument">
-		<html:link action="/acquisitionProcess.do?method=downloadAcquisitionProposalDocument" paramId="acquisitionProposalDocumentOid" paramName="acquisitionProcess" paramProperty="acquisitionRequest.acquisitionProposalDocument.OID">
+		<html:link action="<%= actionMapping + ".do?method=downloadAcquisitionProposalDocument"%>" paramId="acquisitionProposalDocumentOid" paramName="acquisitionProcess" paramProperty="acquisitionRequest.acquisitionProposalDocument.OID">
 			<bean:write name="acquisitionProcess" property="acquisitionRequest.acquisitionProposalDocument.filename"/>
 		</html:link>	
 	</logic:present>
@@ -22,8 +24,8 @@
 	</logic:notPresent>
 </p>
 
-<bean:define id="urlView">/acquisitionProcess.do?method=viewAcquisitionProcess&amp;acquisitionProcessOid=<bean:write name="acquisitionProcess" property="OID"/></bean:define>
-<bean:define id="urlSave">/acquisitionProcess.do?method=<%= request.getAttribute("invoiceActivity").toString() %>&amp;acquisitionProcessOid=<bean:write name="acquisitionProcess" property="OID"/></bean:define>
+<bean:define id="urlView"><%= actionMapping %>.do?method=viewAcquisitionProcess&amp;acquisitionProcessOid=<bean:write name="acquisitionProcess" property="OID"/></bean:define>
+<bean:define id="urlSave"><%= actionMapping %>.do?method=<%= request.getAttribute("invoiceActivity").toString() %>&amp;acquisitionProcessOid=<bean:write name="acquisitionProcess" property="OID"/></bean:define>
 <fr:edit id="receiveInvoiceForm"
 		name="receiveInvoiceForm"
 		schema="receiveInvoiceForm"

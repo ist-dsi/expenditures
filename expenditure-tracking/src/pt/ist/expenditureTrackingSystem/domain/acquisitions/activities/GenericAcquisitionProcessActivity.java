@@ -11,8 +11,6 @@ import pt.ist.expenditureTrackingSystem.applicationTier.EmailSender;
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.OperationLog;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcessOperationLog;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.standard.StandardProcessOperationLog;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
@@ -25,11 +23,7 @@ public abstract class GenericAcquisitionProcessActivity extends AbstractActivity
 
     @Override
     protected void logExecution(RegularAcquisitionProcess process, String operationName, User user) {
-	if (process.isSimplifiedAcquisitionProcess()) {
-	    new SimplifiedProcessOperationLog(process, user.getPerson(), operationName, new DateTime());
-	} else {
-	    new StandardProcessOperationLog(process, user.getPerson(), operationName, new DateTime());
-	}
+	new OperationLog(process, user.getPerson(), operationName, new DateTime(), process.getAcquisitionProcessStateType());
     }
 
     @Override

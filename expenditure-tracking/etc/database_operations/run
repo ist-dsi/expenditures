@@ -40,3 +40,4 @@ function executeWithTempFile() {
 	echo
 }
 
+execute "Updade OJB Concrete Classes" updateClasses.sql

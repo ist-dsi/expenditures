@@ -222,6 +222,12 @@
 	<slot name="abbreviatedName" key="supplier.label.abbreviatedName" bundle="ORGANIZATION_RESOURCES"/>
 </schema>
 
+<schema name="viewSupplierPresentationName"
+		type="pt.ist.expenditureTrackingSystem.domain.organization.Supplier"
+		bundle="ORGANIZATION_RESOURCES">
+	<slot name="presentationName" key="supplier.label.abbreviatedName" bundle="ORGANIZATION_RESOURCES"/>
+</schema>
+
 <schema name="unitBean"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.UnitBean"
 		bundle="ORGANIZATION_RESOURCES">
@@ -298,5 +304,3 @@
 	<slot name="canDelegate" key="authorizations.label.canDelegate" bundle="EXPENDITURE_RESOURCES"/>
 	<slot name="maxAmount" key="authorizations.label.maxAmount" bundle="EXPENDITURE_RESOURCES" />
 </schema>
-
-

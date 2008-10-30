@@ -9,7 +9,7 @@
 	<bean:message key="acquisitionProcess.message.note" bundle="ACQUISITION_RESOURCES"/>
 </div>
 
-<fr:form action="/acquisitionProcess.do?method=createNewAcquisitionProcess">
+<fr:form action="/acquisitionSimplifiedProcedureProcess.do?method=createNewAcquisitionProcess">
 	<fr:edit id="acquisitionProcessBean"
 			name="acquisitionProcessBean"
 			type="pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean"

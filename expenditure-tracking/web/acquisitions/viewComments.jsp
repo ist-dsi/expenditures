@@ -8,8 +8,10 @@
 	<bean:message key="title.comments" bundle="EXPENDITURE_RESOURCES"/>
 </h2>
 
+<bean:define id="processClass" name="acquisitionProcess" property="class.simpleName"/>
+<bean:define id="actionMapping" value="<%="/acquisition" + processClass %>"/>
 <p>
-	<html:link page="/acquisitionProcess.do?method=viewAcquisitionProcess" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
+	<html:link page="<%= actionMapping + ".do?method=viewAcquisitionProcess"%>" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
 		« <bean:message key="link.back" bundle="EXPENDITURE_RESOURCES"/>
 	</html:link>
 </p>
@@ -34,7 +36,7 @@
 <bean:define id="acquisitionProcessOid" name="acquisitionProcess" property="OID"/>
 
 
-<fr:form action="<%= "/acquisitionProcess.do?method=addComment&acquisitionProcessOid=" + acquisitionProcessOid%>">
+<fr:form action="<%= actionMapping + ".do?method=addComment&acquisitionProcessOid=" + acquisitionProcessOid%>">
 	<table class="form">
 		<tr>
 			<td>

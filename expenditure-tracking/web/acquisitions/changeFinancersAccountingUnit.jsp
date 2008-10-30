@@ -9,8 +9,8 @@
 <bean:define id="acquisitionProcess" name="acquisitionProcess" toScope="request"/>
 <jsp:include page="viewAcquisitionRequest.jsp" flush="true"/>
 
-<bean:define id="urlActivity">/acquisitionProcess.do?method=changeFinancersAccountingUnit&amp;acquisitionProcessOid=<bean:write name="acquisitionProcess" property="OID"/></bean:define>
-<bean:define id="urlView">/acquisitionProcess.do?method=viewAcquisitionProcess&amp;acquisitionProcessOid=<bean:write name="acquisitionProcess" property="OID"/></bean:define>
+<bean:define id="urlActivity">/acquisition<%= acquisitionProcess.getClass().getSimpleName() %>.do?method=changeFinancersAccountingUnit&amp;acquisitionProcessOid=<bean:write name="acquisitionProcess" property="OID"/></bean:define>
+<bean:define id="urlView">/acquisition<%= acquisitionProcess.getClass().getSimpleName() %>.do?method=viewAcquisitionProcess&amp;acquisitionProcessOid=<bean:write name="acquisitionProcess" property="OID"/></bean:define>
 <fr:edit action="<%= urlActivity %>" 
 		id="financersAccountingUnits" 
 		schema="changeFinancersAccountingUnit" 

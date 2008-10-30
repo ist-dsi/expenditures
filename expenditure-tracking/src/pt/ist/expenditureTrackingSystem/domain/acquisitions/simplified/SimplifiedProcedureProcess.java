@@ -7,8 +7,8 @@ import java.util.Map;
 
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.SimplifiedAcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.AddAcquisitionProposalDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.AddPayingUnit;
@@ -58,10 +58,6 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
     private static Money PROCESS_VALUE_LIMIT = new Money("5000");
 
     private static Map<ActivityScope, List<GenericAcquisitionProcessActivity>> activities = new HashMap<ActivityScope, List<GenericAcquisitionProcessActivity>>();
-
-    public enum ActivityScope {
-	REQUEST_INFORMATION, REQUEST_ITEM;
-    }
 
     static {
 	List<GenericAcquisitionProcessActivity> requestInformationActivities = new ArrayList<GenericAcquisitionProcessActivity>();
@@ -175,17 +171,6 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	return activitiesResult;
     }
 
-    public boolean isPersonAbleToExecuteActivities() {
-	for (ActivityScope scope : activities.keySet()) {
-	    for (GenericAcquisitionProcessActivity activity : activities.get(scope)) {
-		if (activity.isActive(this)) {
-		    return true;
-		}
-	    }
-	}
-	return false;
-    }
-
     @Override
     public GenericAcquisitionProcessActivity getActivityByName(String activityName) {
 
@@ -205,84 +190,32 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
     }
 
     @Override
-    public void allocateFundsPermanently() {
-	new SimplifiedAcquitionProcessState(this, SimplifiedAcquisitionProcessStateType.FUNDS_ALLOCATED_PERMANENTLY);
-    }
-
-    @Override
-    public void cancel() {
-	new SimplifiedAcquitionProcessState(this, SimplifiedAcquisitionProcessStateType.CANCELED);
-    }
-
-    @Override
-    protected void approve() {
-	new SimplifiedAcquitionProcessState(this, SimplifiedAcquisitionProcessStateType.APPROVED);
-    }
-
-    @Override
-    protected void confirmInvoice() {
-	new SimplifiedAcquitionProcessState(this, SimplifiedAcquisitionProcessStateType.INVOICE_CONFIRMED);
-    }
-
-    @Override
-    public void allocateFundsToUnit() {
-	new SimplifiedAcquitionProcessState(this, SimplifiedAcquisitionProcessStateType.FUNDS_ALLOCATED);
-    }
-
-    @Override
-    public void allocateFundsToSupplier() {
-	new SimplifiedAcquitionProcessState(this, SimplifiedAcquisitionProcessStateType.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER);
-    }
-
-    @Override
-    public void acquisitionPayed() {
-	new SimplifiedAcquitionProcessState(this, SimplifiedAcquisitionProcessStateType.ACQUISITION_PAYED);
-    }
-
-    @Override
-    public void invoiceReceived() {
-	new SimplifiedAcquitionProcessState(this, SimplifiedAcquisitionProcessStateType.INVOICE_RECEIVED);
-    }
-
-    @Override
-    public void reject() {
-	new SimplifiedAcquitionProcessState(this, SimplifiedAcquisitionProcessStateType.REJECTED);
-    }
-
-    @Override
-    public void inGenesis() {
-	new SimplifiedAcquitionProcessState(this, SimplifiedAcquisitionProcessStateType.IN_GENESIS);
-    }
-
-    @Override
-    public void submitForApproval() {
-	new SimplifiedAcquitionProcessState(this, SimplifiedAcquisitionProcessStateType.SUBMITTED_FOR_APPROVAL);
-    }
-
-    @Override
-    public void processAcquisition() {
-	new SimplifiedAcquitionProcessState(this, SimplifiedAcquisitionProcessStateType.ACQUISITION_PROCESSED);
-    }
-
-    @Override
-    public void submitedForInvoiceConfirmation() {
-	new SimplifiedAcquitionProcessState(this, SimplifiedAcquisitionProcessStateType.SUBMITTED_FOR_CONFIRM_INVOICE);
-    }
-
-    @Override
-    public void submitForFundAllocation() {
-	new SimplifiedAcquitionProcessState(this, SimplifiedAcquisitionProcessStateType.SUBMITTED_FOR_FUNDS_ALLOCATION);
-    }
-
-    @Override
-    public void resetEffectiveFundAllocationId() {
-	getAcquisitionRequest().resetEffectiveFundAllocationId();
-	confirmInvoice();
-    }
-
-    @Override
     public boolean isSimplifiedAcquisitionProcess() {
 	return true;
     }
 
+    @Override
+    public Map<ActivityScope, List<GenericAcquisitionProcessActivity>> getProcessActivityMap() {
+	return activities;
+    }
+
+    @Override
+    public List<AcquisitionProcessStateType> getAvailableStates() {
+	List<AcquisitionProcessStateType> availableStates = new ArrayList<AcquisitionProcessStateType>();
+	availableStates.add(AcquisitionProcessStateType.IN_GENESIS);
+	availableStates.add(AcquisitionProcessStateType.SUBMITTED_FOR_APPROVAL);
+	availableStates.add(AcquisitionProcessStateType.SUBMITTED_FOR_FUNDS_ALLOCATION);
+	availableStates.add(AcquisitionProcessStateType.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER);
+	availableStates.add(AcquisitionProcessStateType.FUNDS_ALLOCATED);
+	availableStates.add(AcquisitionProcessStateType.APPROVED);
+	availableStates.add(AcquisitionProcessStateType.ACQUISITION_PROCESSED);
+	availableStates.add(AcquisitionProcessStateType.INVOICE_RECEIVED);
+	availableStates.add(AcquisitionProcessStateType.SUBMITTED_FOR_CONFIRM_INVOICE);
+	availableStates.add(AcquisitionProcessStateType.INVOICE_CONFIRMED);
+	availableStates.add(AcquisitionProcessStateType.FUNDS_ALLOCATED_PERMANENTLY);
+	availableStates.add(AcquisitionProcessStateType.ACQUISITION_PAYED);
+	availableStates.add(AcquisitionProcessStateType.REJECTED);
+	availableStates.add(AcquisitionProcessStateType.CANCELED);
+	return availableStates;
+    }
 }

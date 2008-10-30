@@ -12,7 +12,7 @@
 		<logic:iterate id="activity" name="afterTheFactAcquisitionProcess" property="activeActivities">
 			<bean:define id="activityName" name="activity" property="class.simpleName"/> 
 			<li>
-				<html:link page='<%= "/afterTheFactAcquisitionProcess.do?method=execute" + activityName %>' paramId="afterTheFactAcquisitionProcessOid" paramName="afterTheFactAcquisitionProcess" paramProperty="OID">
+				<html:link page='<%= "/acquisitionAfterTheFactAcquisitionProcess.do?method=execute" + activityName %>' paramId="afterTheFactAcquisitionProcessOid" paramName="afterTheFactAcquisitionProcess" paramProperty="OID">
 					<fr:view name="activity" property="class">
 						<fr:layout name="label">
 							<fr:property name="bundle" value="ACQUISITION_RESOURCES"/>

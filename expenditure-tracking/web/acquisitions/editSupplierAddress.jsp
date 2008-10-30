@@ -9,7 +9,9 @@
 <p class="mbottom05"><strong><bean:message key="label.supplier" bundle="EXPENDITURE_RESOURCES"/></strong></p>
 
 <bean:define id="acquisitionProcessOID" name="acquisitionProcess" property="OID"/>
-<bean:define id="url" value='<%= "/acquisitionProcess.do?method=executeCreateAcquisitionPurchaseOrderDocument&amp;acquisitionProcessOid=" + acquisitionProcessOID %>'/>
+<bean:define id="acquisitionProcessClass" name="acquisitionProcess" property="class.simpleName"/>
+
+<bean:define id="url" value='<%= "/acquisition" + acquisitionProcessClass + ".do?method=executeCreateAcquisitionPurchaseOrderDocument&amp;acquisitionProcessOid=" + acquisitionProcessOID %>'/>
 
 <fr:edit action="<%= url %>" name="acquisitionProcess" property="acquisitionRequest.supplier"
 		schema="editSupplier">

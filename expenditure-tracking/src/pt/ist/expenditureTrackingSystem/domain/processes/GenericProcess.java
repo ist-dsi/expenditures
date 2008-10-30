@@ -24,7 +24,7 @@ public abstract class GenericProcess extends GenericProcess_Base {
     public static <T extends GenericProcess> Set<T> getAllProcesses(Class<T> processClass) {
 	Set<T> classes = new HashSet<T>();
 	for (GenericProcess process : ExpenditureTrackingSystem.getInstance().getProcessesSet()) {
-	    if (process.getClass().equals(processClass)) {
+	    if (processClass.isAssignableFrom(process.getClass())) {
 		classes.add((T) process);
 	    }
 	}

@@ -7,6 +7,9 @@
 <h2><bean:message key="acquisitionRequestItem.title.insertRealValues" bundle="ACQUISITION_RESOURCES"/></h2>
 
 <bean:define id="processOID" name="itemBean" property="acquisitionRequest.acquisitionProcess.OID"/>
+<bean:define id="processClass" name="itemBean" property="acquisitionRequest.acquisitionProcess.class.simpleName"/>
+<bean:define id="actionMapping" value="<%= "/acquisition" + processClass %>"/>
+
 <bean:define id="itemOID" name="itemBean" property="item.OID"/>
 
 <bean:define id="acquisitionProcess" name="itemBean" property="acquisitionRequest.acquisitionProcess" toScope="request"/>
@@ -14,7 +17,7 @@
 
 
 <div class="dinline forminline">
-<fr:form action='<%= "/acquisitionProcess.do?method=executeAcquisitionRequestItemRealValuesEdition&acquisitionProcessOid="  + processOID %>'>
+<fr:form action='<%= actionMapping + ".do?method=executeAcquisitionRequestItemRealValuesEdition&acquisitionProcessOid="  + processOID %>'>
 	<fr:edit id="acquisitionRequestItem" name="itemBean" visible="false"/>
 			<table class="formhorizontal">
 				<tr>
@@ -70,7 +73,7 @@
 			<html:submit styleClass="inputbutton"><bean:message key="renderers.form.submit.name" bundle="RENDERER_RESOURCES"/> </html:submit>
 	</fr:form>
 
-	<fr:form action='<%="/acquisitionProcess.do?method=viewAcquisitionProcess&acquisitionProcessOid=" + processOID + "&acquisitionRequestItemOid=" + itemOID%>'>
+	<fr:form action='<%= actionMapping + ".do?method=viewAcquisitionProcess&acquisitionProcessOid=" + processOID + "&acquisitionRequestItemOid=" + itemOID%>'>
 		<html:submit styleClass="inputbutton"><bean:message key="renderers.form.cancel.name" bundle="RENDERER_RESOURCES"/> </html:submit>
 	</fr:form>
 </div>

@@ -2,7 +2,6 @@ package pt.ist.expenditureTrackingSystem.domain.dto;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
@@ -17,14 +16,17 @@ public class CreateAcquisitionProcessBean implements Serializable {
     private boolean requestUnitPayingUnit;
     private List<DomainReference<Supplier>> suppliers;
     private DomainReference<Person> requester;
+    private DomainReference<Supplier> supplierToAdd;
 
     public CreateAcquisitionProcessBean() {
 	setRequestingUnit(null);
 	setSupplier(null);
+	setSupplierToAdd(null);
 	setRequestUnitPayingUnit(true);
     }
 
     public CreateAcquisitionProcessBean(AcquisitionRequest acquisitionRequest) {
+	setSupplierToAdd(null);
 	setRequestingUnit(acquisitionRequest.getRequestingUnit());
 	setSuppliers(acquisitionRequest.getSuppliers());
 	if (acquisitionRequest.getPayingUnits().contains(acquisitionRequest.getRequestingUnit())) {
@@ -80,4 +82,24 @@ public class CreateAcquisitionProcessBean implements Serializable {
 	return requester.getObject();
     }
 
+    public Supplier getSupplierToAdd() {
+	return supplierToAdd.getObject();
+    }
+
+    public void setSupplierToAdd(Supplier supplierToAdd) {
+	this.supplierToAdd = new DomainReference<Supplier>(supplierToAdd);
+    }
+
+    public void addSupplierToList(Supplier supplier) {
+	if (this.suppliers == null) {
+	    this.suppliers = new ArrayList<DomainReference<Supplier>>();
+	}
+	this.suppliers.add(new DomainReference<Supplier>(supplier));
+    }
+    
+    public void removeSupplierFromList(int index) {
+	if (this.suppliers != null && index < this.suppliers.size()) {
+	  this.suppliers.remove(index);  
+	}
+    }
 }

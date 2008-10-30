@@ -13,27 +13,53 @@
 			<div class="lic1"></div><div class="lic2"></div>
 		</li>
 		<li>
-			<html:link action="/acquisitionProcess.do?method=prepareCreateAcquisitionProcess">
+			<html:link action="/acquisitionSimplifiedProcedureProcess.do?method=prepareCreateAcquisitionProcess">
 				<bean:message key="link.sideBar.acquisitionProcess.create" bundle="EXPENDITURE_RESOURCES"/>
 			</html:link>
 		</li>
 		<li>
-			<html:link action="/acquisitionProcess.do?method=searchAcquisitionProcess">
+			<html:link action="/acquisitionSimplifiedProcedureProcess.do?method=searchAcquisitionProcess">
 				<bean:message key="link.sideBar.acquisitionProcess.search" bundle="EXPENDITURE_RESOURCES"/>
 			</html:link>
 		</li>
 		<li>
-			<html:link action="/acquisitionProcess.do?method=showPendingProcesses">
+			<html:link action="/acquisitionSimplifiedProcedureProcess.do?method=showPendingProcesses">
 				<bean:message key="link.sideBar.acquisitionProcess.pendingProcesses" bundle="EXPENDITURE_RESOURCES"/>
 			</html:link>
 		</li>	
 		<li>
-			<html:link action="/acquisitionProcess.do?method=showMyProcesses">
+			<html:link action="/acquisitionSimplifiedProcedureProcess.do?method=showMyProcesses">
 				<bean:message key="link.sideBar.acquisitionProcess.myProcesses" bundle="EXPENDITURE_RESOURCES"/>
 			</html:link>
 		</li>
 	</ul>
 
+<ul>
+		<li class="header">
+			<strong><bean:message key="link.sideBar.standardProcedure" bundle="EXPENDITURE_RESOURCES"/></strong>
+			<div class="lic1"></div><div class="lic2"></div>
+		</li>
+		<li>
+			<html:link action="/acquisitionStandardProcedureProcess.do?method=prepareCreateAcquisitionStandardProcess">
+				<bean:message key="link.sideBar.acquisitionProcess.create" bundle="EXPENDITURE_RESOURCES"/>
+			</html:link>
+		</li>
+		<li>
+			<html:link action="/acquisitionStandardProcedureProcess.do?method=searchAcquisitionProcess">
+				<bean:message key="link.sideBar.acquisitionProcess.search" bundle="EXPENDITURE_RESOURCES"/>
+			</html:link>
+		</li>
+		<li>
+			<html:link action="/acquisitionStandardProcedureProcess.do?method=showPendingProcesses">
+				<bean:message key="link.sideBar.acquisitionProcess.pendingProcesses" bundle="EXPENDITURE_RESOURCES"/>
+			</html:link>
+		</li>	
+		<li>
+			<html:link action="/acquisitionStandardProcedureProcess.do?method=showMyProcesses">
+				<bean:message key="link.sideBar.acquisitionProcess.myProcesses" bundle="EXPENDITURE_RESOURCES"/>
+			</html:link>
+		</li>
+	</ul>
 <!--
 	<logic:present role="ACQUISITION_CENTRAL_MANAGER">
 		<ul>
@@ -73,7 +99,7 @@
 				<div class="lic1"></div><div class="lic2"></div>
 			</li>
 			<li>
-				<html:link action="/afterTheFactAcquisitionProcess.do?method=prepareCreateAfterTheFactAcquisitionProcess">
+				<html:link action="/acquisitionAfterTheFactAcquisitionProcess.do?method=prepareCreateAfterTheFactAcquisitionProcess">
 					<bean:message key="link.sideBar.afterTheFactAcquisitionProcess.create" bundle="EXPENDITURE_RESOURCES"/>
 				</html:link>
 			</li>

@@ -19,7 +19,10 @@
 	</fr:layout>
 </fr:view>
 <bean:define id="acquisitionProcessOID" name="acquisitionProcess" property="OID"/>
-<html:link action="/acquisitionProcess.do?method=editSupplierAddress" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID"><bean:message key="supplier.link.edit" bundle="ORGANIZATION_RESOURCES"/></html:link>
+<bean:define id="acquisitionProcessClass" name="acquisitionProcess" property="class.simpleName"/>
+<bean:define id="actionMapping" value="<%= "/acquisition" + acquisitionProcessClass %>"/>
+
+<html:link action="<%= actionMapping +".do?method=editSupplierAddress"%>" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID"><bean:message key="supplier.link.edit" bundle="ORGANIZATION_RESOURCES"/></html:link>
 </div>
 
 <logic:present name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestItemsSet">
@@ -40,7 +43,7 @@
 			
 			<bean:define id="acquisitionRequestDocumentOID" name="acquisitionProcess" property="acquisitionRequest.purchaseOrderDocument.OID"/>
 			
-			<a id="file" href="<%= request.getContextPath() + "/acquisitionProcess.do?method=downloadAcquisitionPurchaseOrderDocument&purchaseOrderDocumentOid=" + acquisitionRequestDocumentOID%>">
+			<a id="file" href="<%= request.getContextPath() +  actionMapping + ".do?method=downloadAcquisitionPurchaseOrderDocument&purchaseOrderDocumentOid=" + acquisitionRequestDocumentOID%>">
 				<span id="fileName">
 					<bean:write name="acquisitionProcess" property="acquisitionRequest.purchaseOrderDocument.filename"/>
 				</span>
@@ -54,7 +57,7 @@
 	</p>
 </div>
 
-<bean:define id="url">/acquisitionProcess.do?method=createAcquisitionPurchaseOrderDocument&amp;acquisitionProcessOid=<%= acquisitionProcessOID %></bean:define>
+<bean:define id="url"><%= actionMapping %>.do?method=createAcquisitionPurchaseOrderDocument&amp;acquisitionProcessOid=<%= acquisitionProcessOID %></bean:define>
 
 <div class="switchInline">
 	<form id="createFile" action="<%= request.getContextPath()+ url %>" method="post" target="iframe">
@@ -86,7 +89,7 @@
 	</form>
 </div>
 
-<bean:define id="urlView">/acquisitionProcess.do?method=viewAcquisitionProcess&amp;acquisitionProcessOid=<%= acquisitionProcessOID %></bean:define>
+<bean:define id="urlView"><%= actionMapping %>.do?method=viewAcquisitionProcess&amp;acquisitionProcessOid=<%= acquisitionProcessOID %></bean:define>
 <fr:form action="<%= urlView %>">
 	<html:submit styleClass="inputbutton">
 		<bean:message key="button.back" bundle="EXPENDITURE_RESOURCES"/>

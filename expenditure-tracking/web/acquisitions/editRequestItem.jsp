@@ -9,10 +9,12 @@
 <jsp:include page="../commons/defaultErrorDisplay.jsp"/>
 
 <bean:define id="processOID" name="itemBean" property="acquisitionRequest.acquisitionProcess.OID"/>
+<bean:define id="processClass" name="itemBean" property="acquisitionRequest.acquisitionProcess.class.simpleName"/>
+<bean:define id="actionMapping" value="<%= "/acquisition" + processClass%>"/>
 <bean:define id="itemOID" name="itemBean" property="item.OID"/>
 
-<bean:define id="urlView">/acquisitionProcess.do?method=viewAcquisitionProcess&acquisitionProcessOid=<%= processOID %></bean:define>
-<fr:form action='<%= "/acquisitionProcess.do?method=executeAcquisitionRequestItemEdition&acquisitionProcessOid="  + processOID + "&acquisitionRequestItemOid=" + itemOID%>'> 
+<bean:define id="urlView"><%=actionMapping %>.do?method=viewAcquisitionProcess&acquisitionProcessOid=<%= processOID %></bean:define>
+<fr:form action='<%= actionMapping + ".do?method=executeAcquisitionRequestItemEdition&acquisitionProcessOid="  + processOID + "&acquisitionRequestItemOid=" + itemOID%>'> 
 
 <fr:edit id="acquisitionRequestItem" name="itemBean"  visible="false"/>
 
@@ -25,8 +27,8 @@
 			<fr:property name="columnClasses" value=",,tderror"/>
 		</fr:layout>
 		<fr:destination name="cancel" path="<%= urlView %>" />
-		<fr:destination name="invalid" path='<%= "/acquisitionProcess.do?method=executeCreateAcquisitionRequestItem&acquisitionProcessOid=" + processOID %>'/>
-		<fr:destination name="postBack" path="/acquisitionProcess.do?method=createItemPostBack" />
+		<fr:destination name="invalid" path='<%= actionMapping + ".do?method=executeCreateAcquisitionRequestItem&acquisitionProcessOid=" + processOID %>'/>
+		<fr:destination name="postBack" path="<%= actionMapping + ".do?method=createItemPostBack" %>"/>
 	</fr:edit>
 </div>
 
@@ -40,7 +42,7 @@
 		</fr:layout>
 		<fr:destination name="cancel" path="<%= urlView %>" />
 		<fr:destination name="invalid" path='<%= "/acquisitionProcess.do?method=executeCreateAcquisitionRequestItem&acquisitionProcessOid=" + processOID %>'/>
-		<fr:destination name="postBack" path="/acquisitionProcess.do?method=createItemPostBack" />
+		<fr:destination name="postBack" path="<%= actionMapping + ".do?method=createItemPostBack" %>"/>
 	</fr:edit>
 </div>
 
@@ -56,7 +58,7 @@
 			<fr:property name="classes" value="form thwidth150px"/>
 			<fr:property name="columnClasses" value=",,tderror"/>
 		</fr:layout>
-		<fr:destination name="postBack" path="/acquisitionProcess.do?method=createItemPostBack" />
+		<fr:destination name="postBack" path="<%= actionMapping + ".do?method=createItemPostBack" %>"/>
 	</fr:edit>
 </div>
 	

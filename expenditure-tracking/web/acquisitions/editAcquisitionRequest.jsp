@@ -6,13 +6,14 @@
 <h2><bean:message key="acquisitionProcess.title.editAcquisitionRequest" bundle="ACQUISITION_RESOURCES"/></h2>
 
 <bean:define id="acquisitionProcessOID " name="acquisitionProcess" property="OID" />
-
+<bean:define id="acquisitionProcessclass" name="acquisitionProcess" property="class.simpleName" />
+<bean:define id="actionMapping" value="<%= "/acquisition" + acquisitionProcessclass %>"/>
 
 <fr:edit id="acquisitionRequestBean" name="acquisitionRequestBean"
 		schema="editAcquisitionRequest"
-		action='<%= "/acquisitionProcess.do?method=editAcquisitionRequest&amp;acquisitionProcessOid=" + acquisitionProcessOID  %>'>
+		action='<%= actionMapping + ".do?method=editAcquisitionRequest&amp;acquisitionProcessOid=" + acquisitionProcessOID  %>'>
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="form"/>
 		</fr:layout>
-		<fr:destination name="cancel" path='<%= "/acquisitionProcess.do?method=viewAcquisitionProcess&amp;acquisitionProcessOid=" + acquisitionProcessOID %>' />
+		<fr:destination name="cancel" path='<%= actionMapping + ".do?method=viewAcquisitionProcess&amp;acquisitionProcessOid=" + acquisitionProcessOID %>' />
 </fr:edit>

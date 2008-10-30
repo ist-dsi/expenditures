@@ -5,18 +5,12 @@
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
 <h2><bean:message key="process.logs.title.viewLogs" bundle="EXPENDITURE_RESOURCES"/></h2>
+<bean:define id="processClass" name="process" property="class.simpleName"/>
 
 <p class="mtop05">
-	<logic:equal name="process" property="class.name" value="pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionProcess">
-		<html:link action="/afterTheFactAcquisitionProcess.do?method=viewAfterTheFactAcquisitionProcess" paramId="acquisitionAfterTheFactOid" paramName="process" paramProperty="acquisitionAfterTheFact.OID">
+		<html:link action="<%= "/acquisition" + processClass + ".do?method=viewAcquisitionProcess"%>" paramId="acquisitionProcessOid" paramName="process" paramProperty="OID">
 			«  <bean:message key="link.back" bundle="EXPENDITURE_RESOURCES"/>
 		</html:link>
-	</logic:equal>
-	<logic:equal name="process" property="class.name" value="pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess">
-		<html:link action="/acquisitionProcess.do?method=viewAcquisitionProcess" paramId="acquisitionProcessOid" paramName="process" paramProperty="OID">
-			«  <bean:message key="link.back" bundle="EXPENDITURE_RESOURCES"/>
-		</html:link>
-	</logic:equal>
 </p>
 
 <logic:present name="state">
@@ -31,7 +25,6 @@
 </logic:empty>
 
 
-<bean:define id="processClass" name="process" property="class.simpleName"/>
 
 <fr:view name="operationLogs" schema="<%= "viewLogFor" +  processClass%>">
 	<fr:layout name="tabular">

@@ -10,6 +10,8 @@
 <script type="text/javascript" src="<%= request.getContextPath() + "/javaScript/calculator.js" %>"></script> 
 
 <bean:define id="processOID" name="item" property="acquisitionRequest.acquisitionProcess.OID"/>
+<bean:define id="processClass" name="item" property="acquisitionRequest.acquisitionProcess.class.simpleName"/>
+<bean:define id="actionMapping" value="<%= "/acquisition" + processClass%>"/>
 
 <bean:define id="outOfLabel">
 	<bean:message key="acquisitionRequestItem.label.outOf" bundle="ACQUISITION_RESOURCES"/>
@@ -26,7 +28,7 @@
 	<div class="infoop4">
 		<strong><bean:message key="messages.info.attention" bundle="EXPENDITURE_RESOURCES"/></strong>: <bean:message key="acquisitionRequestItem.message.warn.mustDefineRealValuesFirst" bundle="ACQUISITION_RESOURCES"/>
 	</div>
-	<html:link page='<%= "/acquisitionProcess.do?method=viewAcquisitionProcess&acquisitionProcessOid="  + processOID %>'>« <bean:message key="link.back" bundle="EXPENDITURE_RESOURCES"/></html:link>
+	<html:link page='<%= actionMapping + ".do?method=viewAcquisitionProcess&acquisitionProcessOid="  + processOID %>'>« <bean:message key="link.back" bundle="EXPENDITURE_RESOURCES"/></html:link>
 </logic:equal>
 			
 <logic:equal name="item" property="filledWithRealValues" value="true">
@@ -34,7 +36,7 @@
 <jsp:include page="../commons/defaultErrorDisplay.jsp"/>
 
 <div class="dinline forminline">	
-<fr:form action='<%= "/acquisitionProcess.do?method=executeDistributeRealValuesForPayingUnitsEdition&acquisitionProcessOid="  + processOID + "&acquisitionRequestItemOid=" + itemOID%>'>
+<fr:form action='<%= actionMapping + ".do?method=executeDistributeRealValuesForPayingUnitsEdition&acquisitionProcessOid="  + processOID + "&acquisitionRequestItemOid=" + itemOID%>'>
 	<fr:edit name="beans" id="beans" visible="false"/>
 	
 	<table class="tstyle4">	
@@ -71,7 +73,7 @@
 			<html:submit styleClass="inputbutton"><bean:message key="button.atribute" bundle="EXPENDITURE_RESOURCES"/> </html:submit>
 	</fr:form>
 
-	<fr:form action='<%="/acquisitionProcess.do?method=viewAcquisitionProcess&acquisitionProcessOid=" + processOID + "&acquisitionRequestItemOid=" + itemOID%>'>
+	<fr:form action='<%=actionMapping + ".do?method=viewAcquisitionProcess&acquisitionProcessOid=" + processOID + "&acquisitionRequestItemOid=" + itemOID%>'>
 		<html:submit styleClass="inputbutton"><bean:message key="renderers.form.cancel.name" bundle="RENDERER_RESOURCES"/> </html:submit>
 	</fr:form>
 </div>

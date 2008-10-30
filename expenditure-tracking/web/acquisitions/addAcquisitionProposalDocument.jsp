@@ -13,9 +13,9 @@
 		name="acquisitionProcess"
 		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess"
 		/>
-<bean:define id="urlView">/acquisitionProcess.do?method=viewAcquisitionProcess&amp;acquisitionProcessOid=<%= acquisitionProcess.getOID() %></bean:define>
-<bean:define id="urlPrepareAdd">/acquisitionProcess.do?method=executeAddAcquisitionProposalDocument&amp;acquisitionProcessOid=<%= acquisitionProcess.getOID() %></bean:define>
-<bean:define id="urlAdd">/acquisitionProcess.do?method=addAcquisitionProposalDocument&amp;acquisitionProcessOid=<%= acquisitionProcess.getOID() %></bean:define>
+<bean:define id="urlView">/acquisition<%= acquisitionProcess.getClass().getSimpleName() %>.do?method=viewAcquisitionProcess&amp;acquisitionProcessOid=<%= acquisitionProcess.getOID() %></bean:define>
+<bean:define id="urlPrepareAdd">/acquisition<%= acquisitionProcess.getClass().getSimpleName() %>.do?method=executeAddAcquisitionProposalDocument&amp;acquisitionProcessOid=<%= acquisitionProcess.getOID() %></bean:define>
+<bean:define id="urlAdd">/acquisition<%= acquisitionProcess.getClass().getSimpleName() %>.do?method=addAcquisitionProposalDocument&amp;acquisitionProcessOid=<%= acquisitionProcess.getOID() %></bean:define>
 <fr:edit id="acquisitionProposalDocumentForm"
 		name="acquisitionProposalDocumentForm"
 		schema="addAcquisitionProposalDocument"
