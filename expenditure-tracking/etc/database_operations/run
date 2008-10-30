@@ -41,4 +41,5 @@ function executeWithTempFile() {
 }
 
 execute "Updating process state classes" updateProcessStateClasses.sql
+execute "Update Financer" updates.sql
 
