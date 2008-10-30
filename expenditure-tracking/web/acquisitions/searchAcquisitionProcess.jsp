@@ -28,7 +28,7 @@
 			<fr:property name="classes" value="tstyle2 mtop2"/>
 			<fr:property name="columnClasses" value=",,,width30px,,,,,"/>
 	
-			<fr:property name="sortBy" value="acquisitionProcessId=asc"/>
+			<fr:property name="sortBy" value="year=asc,acquisitionProcessNumber=asc"/>
 	
 			<fr:property name="link(view)" value="/acquisitionProcess.do?method=viewAcquisitionProcess"/>
 			<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>

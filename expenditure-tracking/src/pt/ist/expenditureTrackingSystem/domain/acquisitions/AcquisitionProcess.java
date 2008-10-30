@@ -243,8 +243,12 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 	return false;
     }
 
+    public Integer getYear() {
+	return getAcquisitionProcessYear().getYear();
+    }
+
     public String getAcquisitionProcessId() {
-	return getAcquisitionProcessYear().getYear() + "/" + getAcquisitionProcessNumber();
+	return getYear() + "/" + getAcquisitionProcessNumber();
     }
 
     public boolean isProjectAccountingEmployee(final Person person) {
