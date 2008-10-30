@@ -1,11 +1,14 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
+import java.util.HashSet;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.CostCenter;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.util.Money;
@@ -147,6 +150,22 @@ public class Financer extends Financer_Base {
 
     public CostCenter getFinancerCostCenter() {
 	return getUnit() != null ? getUnit().getCostCenterUnit() : null;
+    }
+
+    public Set<AccountingUnit> getCostCenterAccountingUnits() {
+	Set<AccountingUnit> res = new HashSet<AccountingUnit>();
+	res.add(getFinancerCostCenter().getAccountingUnit());
+	res.add(AccountingUnit.readAccountingUnitByUnitName("10"));
+	return res;
+    }
+
+    public boolean isAccountingEmployeeForOnePossibleUnit(Person person) {
+	for (AccountingUnit accountingUnit : getCostCenterAccountingUnits()) {
+	    if (accountingUnit.hasPeople(person)) {
+		return true;
+	    }
+	}
+	return false;
     }
 
 }

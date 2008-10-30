@@ -25,7 +25,7 @@
 			<property name="key" value="true"/>
 		</validator>
 	</slot>
-	<slot name="requestUnitPayingUnit" key="acquisitionProcess.label.addRequestUnitAlsoHasPayingUnit" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="requestUnitPayingUnit" key="acquisitionProcess.label.addRequestUnitAlsoHasPayingUnit" bundle="ACQUISITION_RESOURCES" />
 </schema>
 
 <schema name="editAcquisitionRequest"
@@ -511,13 +511,14 @@
 	</slot>
 </schema>
 
-<schema name="changeFinancersAccountingUnit" type="pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer" bundle="ACQUISITION_RESOURCES">
+<schema name="changeFinancersAccountingUnit" type="pt.ist.expenditureTrackingSystem.domain.dto.ChangeFinancerAccountingUnitBean" bundle="ACQUISITION_RESOURCES">
 	<slot name="financer.unit.presentationName" key="unit.label.unit" read-only="true" bundle="ORGANIZATION_RESOURCES" />
-	<slot name="accountingUnit" layout="menu-select" key="acquisitionRequestItem.label.deliveryInfo" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
-		<property name="providerClass" value="pt.ist.expenditureTrackingSystem.presentationTier.renderers.dataProvider.DeliveryInfoProvider"/>
-		<property name="eachLayout" value="nonNullValues-commaSeparated"/>
-		<property name="eachSchema" value="showDeliveryInfo"/> 
+	<slot name="accountingUnit" layout="menu-select" key="acquisitionProcess.label.accountingUnit" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="providerClass" value="pt.ist.expenditureTrackingSystem.presentationTier.renderers.dataProvider.UnitAccountingUnitsProvider"/>
+		<property name="format" value="${name}"/>
+		<property name="nullOptionHidden" value="true"/>
 	</slot>
+	<slot name="financer.amountAllocated" key="financer.label.value" read-only="true" />
 </schema>
 
 

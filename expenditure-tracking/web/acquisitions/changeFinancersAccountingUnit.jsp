@@ -14,7 +14,7 @@
 <fr:edit action="<%= urlActivity %>" 
 		id="financersAccountingUnits" 
 		schema="changeFinancersAccountingUnit" 
-		name="financers" >
+		name="financersBean" >
 	<fr:layout name="tabular-editable">
 		<fr:property name="classes" value="tstyle2"/>
 	</fr:layout>

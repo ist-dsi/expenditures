@@ -572,6 +572,17 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	return false;
     }
 
+    public boolean isAccountingEmployeeForOnePossibleUnit(final Person person) {
+	for (final Financer financer : getFinancersSet()) {
+	    if (!financer.isProjectFinancer()) {
+		if (financer.isAccountingEmployeeForOnePossibleUnit(person)) {
+		    return true;
+		}
+	    }
+	}
+	return false;
+    }
+
     public boolean isProjectAccountingEmployee(final Person person) {
 	for (final Financer financer : getFinancersSet()) {
 	    if (financer.isProjectAccountingEmployee(person)) {
@@ -644,6 +655,27 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     public String getAcquisitionRequestDocumentID() {
 	return hasPurchaseOrderDocument() ? getPurchaseOrderDocument().getRequestId() : ExpenditureTrackingSystem.getInstance()
 		.nextAcquisitionRequestDocumentID();
+    }
+
+    public boolean hasAnyAccountingUnitFinancerWithNoFundsAllocated(final Person person) {
+	for (Financer financer : getFinancersSet()) {
+	    if (financer.isAccountingEmployeeForOnePossibleUnit(person) && financer.getAmountAllocated().isPositive()
+		    && financer.getFundAllocationId() == null) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
+    public Set<Financer> getAccountingUnitFinancerWithNoFundsAllocated(final Person person) {
+	Set<Financer> res = new HashSet<Financer>();
+	for (Financer financer : getFinancersSet()) {
+	    if (financer.isAccountingEmployeeForOnePossibleUnit(person) && financer.getAmountAllocated().isPositive()
+		    && financer.getFundAllocationId() == null) {
+		res.add(financer);
+	    }
+	}
+	return res;
     }
 
 }

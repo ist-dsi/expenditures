@@ -15,7 +15,6 @@ import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
-import pt.ist.expenditureTrackingSystem.domain.processes.GenericLog;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 import pt.ist.expenditureTrackingSystem.domain.processes.ProcessComment;
 import pt.ist.expenditureTrackingSystem.domain.util.Money;
@@ -74,6 +73,16 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
     public boolean isAccountingEmployee() {
 	final User user = UserView.getUser();
 	return user != null && isAccountingEmployee(user.getPerson());
+    }
+
+    public boolean isAccountingEmployeeForOnePossibleUnit() {
+	final User user = UserView.getUser();
+	return user != null && isAccountingEmployeeForOnePossibleUnit(user.getPerson());
+    }
+
+    public boolean isAccountingEmployeeForOnePossibleUnit(final Person person) {
+	final AcquisitionRequest acquisitionRequest = getAcquisitionRequest();
+	return acquisitionRequest.isAccountingEmployeeForOnePossibleUnit(person);
     }
 
     public boolean isRealValueEqualOrLessThanFundAllocation() {

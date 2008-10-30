@@ -1,8 +1,12 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
+import java.util.Collections;
+import java.util.Set;
+
 import org.apache.commons.lang.StringUtils;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
+import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Project;
 import pt.utl.ist.fenix.tools.util.Strings;
@@ -80,4 +84,13 @@ public class ProjectFinancer extends ProjectFinancer_Base {
 	return getUnit().isAccountingEmployee(person);
     }
 
+    @Override
+    public Set<AccountingUnit> getCostCenterAccountingUnits() {
+	return Collections.singleton(getFinancerCostCenter().getAccountingUnit());
+    }
+
+    @Override
+    public boolean isAccountingEmployeeForOnePossibleUnit(Person person) {
+	return false;
+    }
 }

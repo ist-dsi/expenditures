@@ -2,6 +2,8 @@ package pt.ist.expenditureTrackingSystem.presentationTier.actions.acquisitions;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -29,6 +31,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.SearchAcquisitionPro
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.UnitItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean;
+import pt.ist.expenditureTrackingSystem.domain.dto.ChangeFinancerAccountingUnitBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.DomainObjectBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean;
@@ -234,7 +237,8 @@ public class SimplifiedProcedureProcessAction extends ProcessAction {
 
 	SimplifiedProcedureProcess acquisitionProcess = (SimplifiedProcedureProcess) requestItemBean.getAcquisitionRequest()
 		.getAcquisitionProcess();
-	AbstractActivity<RegularAcquisitionProcess> activity = acquisitionProcess.getActivityByName("CreateAcquisitionRequestItem");
+	AbstractActivity<RegularAcquisitionProcess> activity = acquisitionProcess
+		.getActivityByName("CreateAcquisitionRequestItem");
 	try {
 	    activity.execute(acquisitionProcess, requestItemBean);
 	} catch (DomainException e) {
@@ -896,10 +900,23 @@ public class SimplifiedProcedureProcessAction extends ProcessAction {
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	User user = UserView.getUser();
 	AcquisitionProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
-	Set<Financer> financersWithFundsAllocated = acquisitionProcess.getAcquisitionRequest().getFinancersWithFundsAllocated(
-		user.getPerson());
+	Set<Financer> financersWithFundsAllocated = acquisitionProcess.getAcquisitionRequest()
+		.getAccountingUnitFinancerWithNoFundsAllocated(user.getPerson());
+	Set<ChangeFinancerAccountingUnitBean> financersBean = new HashSet<ChangeFinancerAccountingUnitBean>(
+		financersWithFundsAllocated.size());
+	for (Financer financer : financersWithFundsAllocated) {
+	    financersBean.add(new ChangeFinancerAccountingUnitBean(financer, financer.getAccountingUnit()));
+	}
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
-	request.setAttribute("financers", financersWithFundsAllocated);
+	request.setAttribute("financersBean", financersBean);
 	return mapping.findForward("change.financers.accounting.units");
+    }
+
+    public ActionForward changeFinancersAccountingUnit(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	Collection<ChangeFinancerAccountingUnitBean> financersBean = getRenderedObject();
+	SimplifiedProcedureProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
+	genericActivityExecution(acquisitionProcess, "ChangeFinancersAccountingUnit", financersBean);
+	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
 }

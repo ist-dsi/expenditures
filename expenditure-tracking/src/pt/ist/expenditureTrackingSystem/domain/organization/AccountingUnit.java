@@ -7,8 +7,8 @@ import pt.ist.fenixWebFramework.services.Service;
 public class AccountingUnit extends AccountingUnit_Base {
 
     public AccountingUnit() {
-        super();
-        setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
+	super();
+	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
     }
 
     @Service
@@ -21,31 +21,40 @@ public class AccountingUnit extends AccountingUnit_Base {
     @Service
     @Override
     public void addPeople(final Person people) {
-        super.addPeople(people);
+	super.addPeople(people);
     }
 
     @Service
     @Override
     public void addProjectAccountants(final Person people) {
-        super.addProjectAccountants(people);
+	super.addProjectAccountants(people);
     }
 
     @Service
     @Override
     public void removePeople(final Person people) {
-        super.removePeople(people);
+	super.removePeople(people);
     }
 
     @Service
     @Override
     public void removeProjectAccountants(final Person people) {
-        super.removeProjectAccountants(people);
+	super.removeProjectAccountants(people);
     }
 
     @Service
     @Override
     public void addUnits(final Unit unit) {
-        super.addUnits(unit);
+	super.addUnits(unit);
+    }
+
+    public static AccountingUnit readAccountingUnitByUnitName(final String name) {
+	for (AccountingUnit accountingUnit : ExpenditureTrackingSystem.getInstance().getAccountingUnitsSet()) {
+	    if (accountingUnit.getName().equals(name)) {
+		return accountingUnit;
+	    }
+	}
+	return null;
     }
 
 }

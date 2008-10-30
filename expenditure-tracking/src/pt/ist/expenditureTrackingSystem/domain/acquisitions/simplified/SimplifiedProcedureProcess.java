@@ -102,14 +102,13 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	requestInformationActivities.add(new SubmitForConfirmInvoice());
 	requestInformationActivities.add(new ConfirmInvoice());
 	requestInformationActivities.add(new UnSubmitForApproval());
+	requestInformationActivities.add(new ChangeFinancersAccountingUnit());
 
 	requestItemActivities.add(new DeleteAcquisitionRequestItem());
 	requestItemActivities.add(new EditAcquisitionRequestItem());
 	requestItemActivities.add(new AssignPayingUnitToItem());
 	requestItemActivities.add(new EditAcquisitionRequestItemRealValues());
 	requestItemActivities.add(new DistributeRealValuesForPayingUnits());
-
-	requestItemActivities.add(new ChangeFinancersAccountingUnit());
 
 	activities.put(ActivityScope.REQUEST_INFORMATION, requestInformationActivities);
 	activities.put(ActivityScope.REQUEST_ITEM, requestItemActivities);
