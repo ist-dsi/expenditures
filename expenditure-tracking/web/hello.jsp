@@ -14,10 +14,9 @@
 				<fr:layout name="tabular">
 					<fr:property name="classes" value="tstyle2"/>
 
-					<fr:property name="link(view)" value="/acquisitionProcess.do?method=viewAcquisitionProcess"/>
+					<fr:property name="linkFormat(view)" value="/acquisition${class.simpleName}.do?method=viewAcquisitionProcess&acquisitionProcessOid=${OID}"/>
 					<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
 					<fr:property name="key(view)" value="link.view"/>
-					<fr:property name="param(view)" value="OID/acquisitionProcessOid"/>
 					<fr:property name="order(view)" value="1"/>
 				</fr:layout>
 			</fr:view>
