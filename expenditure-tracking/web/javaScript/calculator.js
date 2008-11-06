@@ -10,10 +10,11 @@
 					var checked = element.cells[0].getElementsByTagName("input")[0].checked;
 					var value = element.cells[2].getElementsByTagName("input")[0].value;
 					if (checked && value.match('\\d+')) {
-						sum += parseFloat(value.replace(',','.'));
+						sum += parseFloat(value.replace('.','').replace(',','.'));
 					}
 				}
 			}
+			
 			sum = Math.round(sum*100)/100;
 			if (sum > maxValueFloat) {
 				sumValue = "<span class=\"invalid\">" + sum + "</span>";
