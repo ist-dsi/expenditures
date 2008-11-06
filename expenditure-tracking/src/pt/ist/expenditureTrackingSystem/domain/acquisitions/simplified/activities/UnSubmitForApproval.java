@@ -10,7 +10,7 @@ public class UnSubmitForApproval extends GenericAcquisitionProcessActivity {
     @Override
     protected boolean isAccessible(RegularAcquisitionProcess process) {
 	User user = UserView.getUser();
-	return user != null && user.getPerson().equals(process.getRequestor());
+	return user != null && ( user.getPerson().equals(process.getRequestor()) || process.isResponsibleForUnit(user.getPerson()));
     }
 
     @Override
