@@ -18,7 +18,7 @@ public class DistributeRealValuesForPayingUnits extends GenericAcquisitionProces
 
     @Override
     protected boolean isAvailable(RegularAcquisitionProcess process) {
-	return process.getAcquisitionProcessState().isInvoiceReceived() && !process.getAcquisitionRequest().hasAtLeastOneConfirmation();
+	return  super.isAvailable(process) && process.getAcquisitionProcessState().isInvoiceReceived() && !process.getAcquisitionRequest().hasAtLeastOneConfirmation();
     }
 
     @Override

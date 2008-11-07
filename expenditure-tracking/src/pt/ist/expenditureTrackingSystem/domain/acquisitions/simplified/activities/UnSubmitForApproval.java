@@ -15,7 +15,7 @@ public class UnSubmitForApproval extends GenericAcquisitionProcessActivity {
 
     @Override
     protected boolean isAvailable(RegularAcquisitionProcess process) {
-	return process.getAcquisitionProcessState().isPendingApproval() && !process.getAcquisitionRequest().isApprovedByAtLeastOneResponsible();
+	return  super.isAvailable(process) && process.getAcquisitionProcessState().isPendingApproval() && !process.getAcquisitionRequest().isApprovedByAtLeastOneResponsible();
     }
 
     @Override

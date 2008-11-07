@@ -17,9 +17,9 @@ public class UnApproveAcquisitionProcess extends GenericAcquisitionProcessActivi
     @Override
     protected boolean isAvailable(RegularAcquisitionProcess process) {
 	User user = UserView.getUser();
-	return process.isApproved()
+	return  super.isAvailable(process) &&  (process.isApproved()
 		|| (user != null && process.getAcquisitionProcessState().isInAllocatedToUnitState() && process
-			.getAcquisitionRequest().hasBeenApprovedBy(user.getPerson()));
+			.getAcquisitionRequest().hasBeenApprovedBy(user.getPerson())));
     }
 
     @Override

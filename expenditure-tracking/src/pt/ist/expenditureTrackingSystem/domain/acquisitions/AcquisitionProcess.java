@@ -8,6 +8,7 @@ import java.util.Set;
 import org.joda.time.LocalDate;
 
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
+import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
@@ -287,5 +288,51 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 
     public List<AcquisitionProcessStateType> getAvailableStates() {
 	return Collections.emptyList();
+    }
+
+    @Override
+    public void setCurrentOwner(Person currentOwner) {
+	throw new DomainException("error.message.illegal.method.useTakeInstead");
+    }
+
+    @Override
+    public void removeCurrentOwner() {
+	throw new DomainException("error.message.illegal.method.useReleaseInstead");
+    }
+
+    @Service
+    public void systemProcessRelease() {
+	super.setCurrentOwner(null);
+    }
+    
+    @Service
+    public void takeProcess() {
+	final Person currentOwner = getCurrentOwner();
+	if (currentOwner != null) {
+	    throw new DomainException("error.message.illegal.method.useStealInstead");
+	}
+	final User user = UserView.getUser();
+	super.setCurrentOwner(user.getPerson());
+    }
+
+    @Service
+    public void releaseProcess() {
+	final User user = UserView.getUser();
+	final Person person = getCurrentOwner();
+	if (user != null && person != null && user.getPerson() != person) {
+	    throw new DomainException("error.message.illegal.state.unableToReleaseATicketNotOwnerByUser");
+	}
+	super.setCurrentOwner(null);
+    }
+
+    @Service
+    public void stealProcess() {
+	final User user = UserView.getUser();
+	super.setCurrentOwner(user.getPerson());
+    }
+
+    public boolean isUserCurrentOwner() {
+	final User user = UserView.getUser();
+	return user != null && user.getPerson() == getCurrentOwner();
     }
 }

@@ -17,7 +17,7 @@ public class RemoveProjectFundAllocation extends GenericAcquisitionProcessActivi
     }
 
     private boolean checkActiveConditions(RegularAcquisitionProcess process) {
-	return process.getAcquisitionProcessState().isInAllocatedToSupplierState();
+	return  super.isAvailable(process) && process.getAcquisitionProcessState().isInAllocatedToSupplierState();
     }
 
     private boolean checkCanceledConditions(RegularAcquisitionProcess process) {

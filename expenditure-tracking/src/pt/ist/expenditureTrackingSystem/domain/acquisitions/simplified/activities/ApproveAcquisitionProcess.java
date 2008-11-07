@@ -18,7 +18,7 @@ public class ApproveAcquisitionProcess extends GenericAcquisitionProcessActivity
 
     @Override
     protected boolean isAvailable(RegularAcquisitionProcess process) {
-	return process.getAcquisitionProcessState().isInAllocatedToUnitState();
+	return  super.isAvailable(process) && process.getAcquisitionProcessState().isInAllocatedToUnitState();
     }
 
     @Override

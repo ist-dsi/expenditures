@@ -16,6 +16,7 @@ public class AcquisitionProcessState extends AcquisitionProcessState_Base {
 	final Person person = getPerson();
 	super.checkArguments(process, person);
 	super.initFields(process, person);
+	process.systemProcessRelease();
     }
 
     public AcquisitionProcessState(final AcquisitionProcess process, AcquisitionProcessStateType type) {

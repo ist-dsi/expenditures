@@ -17,7 +17,7 @@ public class CreateAcquisitionRequestItem extends GenericAcquisitionProcessActiv
 
     @Override
     protected boolean isAvailable(RegularAcquisitionProcess process) {
-	return process.getAcquisitionProcessState().isInGenesis();
+	return  super.isAvailable(process) && process.getAcquisitionProcessState().isInGenesis();
     }
 
     @Override

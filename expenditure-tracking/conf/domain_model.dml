@@ -717,3 +717,10 @@ relation ProcessCommentExpenditureTrackingSystem {
 		multiplicity *;
 	}
 }
+
+relation TakeSupportInAcquisitionProcess {
+	organization.Person playsRole currentOwner;
+	acquisitions.AcquisitionProcess playsRole acquisitionProcesses {
+		multiplicity *;
+	} 
+}

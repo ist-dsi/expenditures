@@ -17,7 +17,7 @@ public class ReceiveInvoice extends GenericAcquisitionProcessActivity {
 
     @Override
     protected boolean isAvailable(RegularAcquisitionProcess process) {
-	return process.getAcquisitionProcessState().isAcquisitionProcessed();
+	return  super.isAvailable(process) && process.getAcquisitionProcessState().isAcquisitionProcessed();
     }
 
     @Override

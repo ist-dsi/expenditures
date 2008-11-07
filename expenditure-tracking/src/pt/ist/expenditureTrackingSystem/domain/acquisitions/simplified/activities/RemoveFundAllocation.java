@@ -17,7 +17,7 @@ public class RemoveFundAllocation extends GenericAcquisitionProcessActivity {
     }
 
     private boolean checkActiveConditions(RegularAcquisitionProcess process) {
-	return process.getAcquisitionProcessState().isInAllocatedToUnitState();
+	return  super.isAvailable(process) && process.getAcquisitionProcessState().isInAllocatedToUnitState();
     }
 
     private boolean checkCanceledConditions(RegularAcquisitionProcess process) {

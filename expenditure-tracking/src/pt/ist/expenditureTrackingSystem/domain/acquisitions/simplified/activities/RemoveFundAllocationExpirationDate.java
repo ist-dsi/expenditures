@@ -19,7 +19,7 @@ public class RemoveFundAllocationExpirationDate extends GenericAcquisitionProces
     }
 
     private boolean checkActiveConditions(RegularAcquisitionProcess process) {
-	return process.getAcquisitionProcessState().isInAllocatedToSupplierState();
+	return  super.isAvailable(process) && process.getAcquisitionProcessState().isInAllocatedToSupplierState();
     }
 
     private boolean checkCanceledConditions(RegularAcquisitionProcess process) {

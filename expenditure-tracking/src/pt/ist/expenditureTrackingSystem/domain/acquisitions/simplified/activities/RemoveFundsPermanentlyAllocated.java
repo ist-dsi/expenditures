@@ -12,7 +12,7 @@ public class RemoveFundsPermanentlyAllocated extends GenericAcquisitionProcessAc
 
     @Override
     protected boolean isAvailable(RegularAcquisitionProcess process) {
-	return process.getAcquisitionProcessState().isAllocatedPermanently();
+	return  super.isAvailable(process) && process.getAcquisitionProcessState().isAllocatedPermanently();
     }
 
     @Override

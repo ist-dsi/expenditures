@@ -18,7 +18,7 @@ public class RemovePayingUnit extends GenericAcquisitionProcessActivity {
 
     @Override
     protected boolean isAvailable(RegularAcquisitionProcess process) {
-	return process.getAcquisitionProcessState().isInGenesis();
+	return  super.isAvailable(process) && process.getAcquisitionProcessState().isInGenesis();
     }
 
     @Override

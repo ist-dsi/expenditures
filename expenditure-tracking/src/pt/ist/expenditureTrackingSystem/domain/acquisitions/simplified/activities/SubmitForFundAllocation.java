@@ -16,7 +16,7 @@ public class SubmitForFundAllocation extends GenericAcquisitionProcessActivity {
 
     @Override
     protected boolean isAvailable(RegularAcquisitionProcess process) {
-	return process.isPendingApproval();
+	return  super.isAvailable(process) && process.isPendingApproval();
     }
 
     @Override

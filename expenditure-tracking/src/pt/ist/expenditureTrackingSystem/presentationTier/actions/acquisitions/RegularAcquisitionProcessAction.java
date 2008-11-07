@@ -37,8 +37,7 @@ import pt.ist.fenixWebFramework.struts.annotations.Forwards;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
 @Mapping(path = "/acquisitionProcess")
-@Forwards( { 
-	@Forward(name = "search.acquisition.process", path = "/acquisitions/searchAcquisitionProcess.jsp")})
+@Forwards( { @Forward(name = "search.acquisition.process", path = "/acquisitions/searchAcquisitionProcess.jsp") })
 public class RegularAcquisitionProcessAction extends ProcessAction {
 
     private static final Context CONTEXT = new Context("acquisitions");
@@ -368,6 +367,45 @@ public class RegularAcquisitionProcessAction extends ProcessAction {
 	    addErrorMessage(e.getMessage(), getBundle());
 	}
 	return viewAcquisitionProcess(mapping, request, (AcquisitionProcess) getProcess(request));
+    }
+
+    public ActionForward takeProcess(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+
+	final RegularAcquisitionProcess acquisitionProcess = getProcess(request);
+	try {
+	    acquisitionProcess.takeProcess();
+	} catch (DomainException e) {
+	    addErrorMessage(e.getMessage(), getBundle());
+	}
+
+	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
+    }
+
+    public ActionForward releaseProcess(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+
+	final RegularAcquisitionProcess acquisitionProcess = getProcess(request);
+	try {
+	    acquisitionProcess.releaseProcess();
+	} catch (DomainException e) {
+	    addErrorMessage(e.getMessage(), getBundle());
+	}
+
+	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
+    }
+
+    public ActionForward stealProcess(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+
+	final RegularAcquisitionProcess acquisitionProcess = getProcess(request);
+	try {
+	    acquisitionProcess.stealProcess();
+	} catch (DomainException e) {
+	    addErrorMessage(e.getMessage(), getBundle());
+	}
+
+	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
 
     @Override

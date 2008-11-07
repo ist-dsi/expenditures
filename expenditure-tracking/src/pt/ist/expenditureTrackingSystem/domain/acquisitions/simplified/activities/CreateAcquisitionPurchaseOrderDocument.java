@@ -28,7 +28,7 @@ public class CreateAcquisitionPurchaseOrderDocument extends GenericAcquisitionPr
 
     @Override
     protected boolean isAvailable(RegularAcquisitionProcess process) {
-	return process.getAcquisitionProcessState().isApproved();
+	return  super.isAvailable(process) && process.getAcquisitionProcessState().isApproved();
     }
 
     @Override

@@ -15,7 +15,7 @@ public class ChangeFinancersAccountingUnit extends GenericAcquisitionProcessActi
 
     @Override
     protected boolean isAvailable(RegularAcquisitionProcess process) {
-	return process.getAcquisitionProcessState().isInAllocatedToSupplierState()
+	return  super.isAvailable(process) && process.getAcquisitionProcessState().isInAllocatedToSupplierState()
 		&& process.hasAllocatedFundsForAllProjectFinancers()
 		&& process.getAcquisitionRequest().hasAnyAccountingUnitFinancerWithNoFundsAllocated(getUser().getPerson());
     }

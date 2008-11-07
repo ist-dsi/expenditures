@@ -13,7 +13,7 @@ public class PayAcquisition extends GenericAcquisitionProcessActivity {
 
     @Override
     protected boolean isAvailable(RegularAcquisitionProcess process) {
-	return process.getAcquisitionProcessState().isAllocatedPermanently();
+	return  super.isAvailable(process) && process.getAcquisitionProcessState().isAllocatedPermanently();
     }
 
     @Override

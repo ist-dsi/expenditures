@@ -18,7 +18,7 @@ public class AllocateProjectFundsPermanently extends GenericAcquisitionProcessAc
 
     @Override
     protected boolean isAvailable(RegularAcquisitionProcess process) {
-	return process.getAcquisitionProcessState().isInvoiceConfirmed()
+	return  super.isAvailable(process) &&  process.getAcquisitionProcessState().isInvoiceConfirmed()
 		&& allItemsAreFilledWithRealValues(process)
 		&& process.getAcquisitionRequest().isEveryItemFullyAttributeInRealValues()
 		&& !process.hasAllocatedFundsPermanentlyForAllProjectFinancers();

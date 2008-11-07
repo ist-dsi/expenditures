@@ -27,6 +27,13 @@
 
 <jsp:include page="../commons/defaultErrorDisplay.jsp"/>
 
+<logic:present name="acquisitionProcess" property="currentOwner">
+	<bean:define id="ownerName" name="acquisitionProcess" property="currentOwner.firstAndLastName"/>
+	<div class="infoop4">
+		<bean:message key="acquisitionProcess.message.info.currentOwnerIs" bundle="ACQUISITION_RESOURCES" arg0="<%= ownerName.toString() %>"/>
+	</div>
+</logic:present>
+
 <div class="infoop1">
 	<ul>
 	<logic:iterate id="activity" name="acquisitionProcess" property="activeActivitiesForRequest">
@@ -72,6 +79,24 @@
 </logic:present>
 
 <ul class="operations">
+	<li>
+	<logic:present name="acquisitionProcess" property="currentOwner">
+		<logic:equal name="acquisitionProcess" property="userCurrentOwner" value="true">
+				<html:link page="<%= actionMapping + ".do?method=releaseProcess" %>" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
+					<bean:message key="acquisitionProcess.link.releaseProcess" bundle="ACQUISITION_RESOURCES"/>
+				</html:link>
+		</logic:equal>
+		<logic:equal name="acquisitionProcess" property="userCurrentOwner" value="false">
+				<html:link page="<%= actionMapping + ".do?method=stealProcess" %>" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
+					<bean:message key="acquisitionProcess.link.stealProcess" bundle="ACQUISITION_RESOURCES"/>
+				</html:link>
+		</logic:equal>
+	</logic:present>
+	<logic:notPresent name="acquisitionProcess" property="currentOwner">
+		<html:link page="<%= actionMapping + ".do?method=takeProcess" %>" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
+				<bean:message key="acquisitionProcess.link.takeProcess" bundle="ACQUISITION_RESOURCES"/>
+		</html:link>
+	</logic:notPresent>
 	<li>
 		<html:link page="/viewLogs.do?method=viewOperationLog&amp;module=acquisitions" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
 			<bean:message key="label.log.view" bundle="ACQUISITION_RESOURCES"/>

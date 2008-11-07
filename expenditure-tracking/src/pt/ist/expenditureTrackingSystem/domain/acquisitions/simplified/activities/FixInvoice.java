@@ -12,7 +12,7 @@ public class FixInvoice extends ReceiveInvoice {
 
     @Override
     protected boolean isAvailable(RegularAcquisitionProcess process) {
-	return process.getAcquisitionProcessState().isInvoiceReceived();
+	return  super.isAvailable(process) && process.getAcquisitionProcessState().isInvoiceReceived();
     }
 
     @Override
