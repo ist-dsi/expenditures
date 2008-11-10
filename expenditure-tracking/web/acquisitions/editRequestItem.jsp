@@ -62,6 +62,6 @@
 	</fr:edit>
 </div>
 	
-	<html:submit styleClass="inputbutton"><bean:message key="button.create" bundle="EXPENDITURE_RESOURCES"/></html:submit>
-	<html:cancel styleClass="inputbutton"><bean:message key="button.cancel" bundle="EXPENDITURE_RESOURCES"/></html:cancel>
+	<html:submit styleClass="inputbutton"><bean:message key="acquisitionRequestItem.title.edit" bundle="ACQUISITION_RESOURCES"/></html:submit>
+	<html:cancel styleClass="inputbutton"><bean:message key="renderers.form.cancel.name" bundle="RENDERER_RESOURCES"/></html:cancel>
 </fr:form>
