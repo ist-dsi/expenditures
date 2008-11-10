@@ -329,11 +329,13 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
 	List<FundAllocationBean> fundAllocationBeans = new ArrayList<FundAllocationBean>();
 	for (Financer financer : acquisitionProcess.getFinancersWithFundsAllocated()) {
-	    final ProjectFinancer projectFinancer = (ProjectFinancer) financer;
-	    FundAllocationBean fundAllocationBean = new FundAllocationBean(projectFinancer);
-	    fundAllocationBean.setFundAllocationId(projectFinancer.getProjectFundAllocationId());
-	    fundAllocationBean.setEffectiveFundAllocationId(projectFinancer.getProjectFundAllocationId());
-	    fundAllocationBeans.add(fundAllocationBean);
+	    if (financer.isProjectFinancer()) {
+		final ProjectFinancer projectFinancer = (ProjectFinancer) financer;
+		FundAllocationBean fundAllocationBean = new FundAllocationBean(projectFinancer);
+		fundAllocationBean.setFundAllocationId(projectFinancer.getProjectFundAllocationId());
+		fundAllocationBean.setEffectiveFundAllocationId(projectFinancer.getProjectFundAllocationId());
+		fundAllocationBeans.add(fundAllocationBean);
+	    }
 	}
 	request.setAttribute("fundAllocationBeans", fundAllocationBeans);
 
@@ -558,7 +560,7 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	User user = UserView.getUser();
 	AcquisitionProcess acquisitionProcess = getProcess(request);
-Set<Financer> financersWithFundsAllocated = acquisitionProcess.getAcquisitionRequest()
+	Set<Financer> financersWithFundsAllocated = acquisitionProcess.getAcquisitionRequest()
 		.getAccountingUnitFinancerWithNoFundsAllocated(user.getPerson());
 	Set<ChangeFinancerAccountingUnitBean> financersBean = new HashSet<ChangeFinancerAccountingUnitBean>(
 		financersWithFundsAllocated.size());
