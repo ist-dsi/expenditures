@@ -40,6 +40,3 @@ function executeWithTempFile() {
 	echo
 }
 
-execute "Updade OJB Concrete Classes" updateClasses.sql
-execute "setup Take system" setupTakeSystem.sql
-execute "Add description column to AcquisitionAfterTheFact and missing indexes." updates.sql
