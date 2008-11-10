@@ -290,7 +290,7 @@ $P{acquisitionRequest}.getSupplier().getAddress().getCountry()]]></textFieldExpr
 					<textElement textAlignment="Left" verticalAlignment="Top" lineSpacing="1_1_2">
 						<font size="10"/>
 					</textElement>
-				<text><![CDATA[Núcleo de Economato]]></text>
+				<text><![CDATA[Central de Compras]]></text>
 				</staticText>
 			</band>
 		</title>
