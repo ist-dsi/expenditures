@@ -33,8 +33,7 @@ public class MoneyInputRenderer extends InputRenderer {
 		input.setTargetSlot(key);
 		input.setConverter(new MoneyInputConverter());
 		HtmlChainValidator htmlChainValidator = new HtmlChainValidator(input);
-		input.setChainValidator(htmlChainValidator);
-		new MoneyValidator(htmlChainValidator);
+		htmlChainValidator.addValidator(new MoneyValidator());
 		return input;
 
 	    }

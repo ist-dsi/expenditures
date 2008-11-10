@@ -14,6 +14,12 @@ public class MoneyValidator extends HtmlValidator {
 	setMessage("messages.exception.validation.invalidMoney");
     }
 
+    public MoneyValidator() {
+	super();
+	setBundle("EXPENDITURE_RESOURCES");
+	setMessage("messages.exception.validation.invalidMoney");
+    }
+
     @Override
     public void performValidation() {
 	setValid(true);
