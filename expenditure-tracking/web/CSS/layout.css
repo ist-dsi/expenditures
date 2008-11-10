@@ -461,12 +461,12 @@ table.formhorizontal table td {
 border: none;
 }
 table.formhorizontal tr td.tderror {
-border-top: none !important;
-border-bottom: none !important;
 color: #cc2200;
 /*white-space: nowrap;*/
 }
-
+table.formhorizontal tr td.tderror span {
+background-color: #fff0dd;
+}
 
 
 span.required {
