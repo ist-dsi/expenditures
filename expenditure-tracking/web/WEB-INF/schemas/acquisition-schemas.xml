@@ -500,22 +500,24 @@
 		</validator>
 	</slot>
 	<slot name="value" key="label.value" bundle="EXPENDITURE_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-	<slot name="vatValue" key="label.vatValue" bundle="EXPENDITURE_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>	
+	<slot name="vatValue" key="label.vatValue" bundle="EXPENDITURE_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="description" key="label.description" bundle="EXPENDITURE_RESOURCES" layout="longText"/>
 </schema>
 
 <schema name="viewAcquisitionAfterTheFact"
 		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AcquisitionAfterTheFact"
 		bundle="EXPENDITURE_RESOURCES">
 	<slot name="acquisitionProcessId" key="label.acquisitionProcessId" bundle="EXPENDITURE_RESOURCES"/>
-	<slot name="afterTheFactAcquisitionType" key="label.afterTheFactAcquisitionType" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="afterTheFactAcquisitionType" key="label.afterTheFactAcquisitionType" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="invoiceDate" key="acquisitionProcess.label.invoice.date" bundle="ACQUISITION_RESOURCES" layout="null-as-label">
 		<property name="subLayout" value="default"/>
 	</slot>
 	<slot name="invoiceNumber" key="acquisitionProcess.label.invoice.number" bundle="ACQUISITION_RESOURCES" layout="null-as-label">
 		<property name="subLayout" value="default"/>
 	</slot>
-	<slot name="value" key="label.value" bundle="EXPENDITURE_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-	<slot name="vatValue" key="label.vatValue" bundle="EXPENDITURE_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>	
+	<slot name="value" key="label.value" bundle="EXPENDITURE_RESOURCES"/>
+	<slot name="vatValue" key="label.vatValue" bundle="EXPENDITURE_RESOURCES"/>
+	<slot name="description" key="label.description" bundle="EXPENDITURE_RESOURCES"/>
 </schema>
 
 <schema name="editProjectFinancerFundAllocationId" type="pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean" bundle="ACQUISITION_RESOURCES">

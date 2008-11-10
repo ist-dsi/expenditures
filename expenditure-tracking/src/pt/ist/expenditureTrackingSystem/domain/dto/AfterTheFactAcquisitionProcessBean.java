@@ -17,6 +17,7 @@ public class AfterTheFactAcquisitionProcessBean implements Serializable {
     private Money value;
     private BigDecimal vatValue;
     private DomainReference<AfterTheFactAcquisitionProcess> afterTheFactAcquisitionProcess;
+    private String description;
 
     public AfterTheFactAcquisitionProcessBean() {
     }
@@ -28,6 +29,7 @@ public class AfterTheFactAcquisitionProcessBean implements Serializable {
 	setSupplier(acquisitionAfterTheFact.getSupplier());
 	setValue(acquisitionAfterTheFact.getValue());
 	setVatValue(acquisitionAfterTheFact.getVatValue());
+	setDescription(acquisitionAfterTheFact.getDescription());
     }
 
     public void setSupplier(Supplier supplier) {
@@ -68,6 +70,14 @@ public class AfterTheFactAcquisitionProcessBean implements Serializable {
 
     public void setAfterTheFactAcquisitionProcess(AfterTheFactAcquisitionProcess afterTheFactAcquisitionProcess) {
         this.afterTheFactAcquisitionProcess = afterTheFactAcquisitionProcess == null ? null : new DomainReference<AfterTheFactAcquisitionProcess>(afterTheFactAcquisitionProcess);
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
 }

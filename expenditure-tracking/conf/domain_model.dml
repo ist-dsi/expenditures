@@ -30,6 +30,7 @@ class acquisitions.Acquisition {
 		AfterTheFactAcquisitionType afterTheFactAcquisitionType;
 		Money value;
 		BigDecimal vatValue;
+		String description;
 	}
 
 	class acquisitions.AcquisitionRequest extends acquisitions.Acquisition {

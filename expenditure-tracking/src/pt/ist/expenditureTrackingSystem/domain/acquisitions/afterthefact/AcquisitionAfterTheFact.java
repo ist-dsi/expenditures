@@ -14,6 +14,7 @@ public class AcquisitionAfterTheFact extends AcquisitionAfterTheFact_Base {
 	setValue(afterTheFactAcquisitionProcessBean.getValue());
 	setVatValue(afterTheFactAcquisitionProcessBean.getVatValue());
 	setSupplier(afterTheFactAcquisitionProcessBean.getSupplier());
+	setDescription(afterTheFactAcquisitionProcessBean.getDescription());
     }
 
     @Override
