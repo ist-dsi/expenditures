@@ -40,6 +40,12 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 
     private void checkLimits(AcquisitionRequest acquisitionRequest, Integer quantity, Money unitValue) {
 	Money totalValue = unitValue.multiply(quantity.longValue());
+
+	if (getUnitValue() != null && getQuantity() != null) {
+	    Money currentValue = getUnitValue().multiply(quantity.longValue());
+	    totalValue = totalValue.subtract(currentValue);
+	}
+
 	if (!checkAcquisitionRequestValueLimit(acquisitionRequest, totalValue)) {
 	    throw new DomainException("acquisitionRequestItem.message.exception.totalValueExceed", acquisitionRequest
 		    .getAcquisitionProcess().getAcquisitionRequestValueLimit().toFormatString());
