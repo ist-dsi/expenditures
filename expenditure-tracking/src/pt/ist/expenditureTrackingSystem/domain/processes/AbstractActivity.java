@@ -44,7 +44,7 @@ public abstract class AbstractActivity<T extends GenericProcess> {
     }
 
     protected boolean userHasRole(final RoleType roleType) {
-	final User user = UserView.getUser();
+	final User user = getUser();
 	return user != null && user.getPerson().hasRoleType(roleType);
     }
 

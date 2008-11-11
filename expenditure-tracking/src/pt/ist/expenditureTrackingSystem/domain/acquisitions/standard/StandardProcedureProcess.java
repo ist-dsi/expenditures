@@ -8,13 +8,12 @@ import java.util.Map;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.StandardAcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.AddPayingUnit;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ApproveAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.AssignPayingUnitToItem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.CancelAcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.CreateAcquisitionRequestItem;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.DeleteAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.DeleteAcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.EditAcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RejectAcquisitionProcess;
@@ -24,8 +23,6 @@ import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
-import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
-import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 import pt.ist.expenditureTrackingSystem.domain.util.Money;
 import pt.ist.fenixWebFramework.services.Service;
 
@@ -53,7 +50,7 @@ public class StandardProcedureProcess extends StandardProcedureProcess_Base {
 	requestInformationActivities.add(new CreateAcquisitionRequestItem());
 	requestInformationActivities.add(new AddPayingUnit());
 	requestInformationActivities.add(new RemovePayingUnit());
-	requestInformationActivities.add(new DeleteAcquisitionProcess());
+	//requestInformationActivities.add(new DeleteAcquisitionProcess());
 	requestInformationActivities.add(new SubmitForApproval());
 
 	// requestInformationActivities.add(new SubmitForFundAllocation());
@@ -75,7 +72,7 @@ public class StandardProcedureProcess extends StandardProcedureProcess_Base {
 	// requestInformationActivities.add(new RemoveProjectFundAllocation());
 	// requestInformationActivities.add(new
 	// RemoveFundAllocationExpirationDate());
-	// requestInformationActivities.add(new CancelAcquisitionRequest());
+	 requestInformationActivities.add(new CancelAcquisitionRequest());
 
 	// requestInformationActivities.add(new PayAcquisition());
 	// requestInformationActivities.add(new ReceiveInvoice());

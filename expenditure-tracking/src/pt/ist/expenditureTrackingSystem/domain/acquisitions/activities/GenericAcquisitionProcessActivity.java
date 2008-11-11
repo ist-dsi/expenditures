@@ -9,6 +9,7 @@ import org.joda.time.DateTime;
 
 import pt.ist.expenditureTrackingSystem.applicationTier.EmailSender;
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.OperationLog;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
@@ -16,6 +17,7 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.domain.processes.ActivityException;
+import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 
@@ -75,4 +77,10 @@ public abstract class GenericAcquisitionProcessActivity extends AbstractActivity
 	    throw new ActivityException("activities.messages.exception.webserviceProblem", getLocalizedName());
 	}
     }
+
+    protected boolean isUserOwnerOfProcess(final RegularAcquisitionProcess process) {
+	final User user = getUser();
+	return user != null && process.getRequestor().equals(user.getPerson());
+    }
+
 }

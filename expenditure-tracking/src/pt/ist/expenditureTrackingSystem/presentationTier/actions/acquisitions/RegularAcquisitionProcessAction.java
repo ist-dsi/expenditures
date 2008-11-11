@@ -59,6 +59,19 @@ public class RegularAcquisitionProcessAction extends ProcessAction {
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
 
+    public ActionForward executeCancelAcquisitionRequest(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	AcquisitionProcess acquisitionProcess = getProcess(request);
+	request.setAttribute("acquisitionProcess", acquisitionProcess);
+	request.setAttribute("confirmCancelAcquisitionProcess", Boolean.TRUE);
+	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
+    }
+
+    public ActionForward cancelAcquisitionRequest(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	return executeActivityAndViewProcess(mapping, form, request, response, "CancelAcquisitionRequest");
+    }
+   
     public ActionForward executeDeleteAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final RegularAcquisitionProcess acquisitionProcess = getProcess(request);

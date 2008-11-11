@@ -59,20 +59,19 @@
 	</logic:empty>
 </div>
 
-<logic:present name="confirmDeleteAcquisitionProcess">
+<logic:present name="confirmCancelAcquisitionProcess">
 	<div class="warning2">
-		<p><span><bean:message key="message.confirm.delete.acquisition.process" bundle="ACQUISITION_RESOURCES"/></span></p>
-		<bean:define id="urlDelete"><%= actionMapping %>.do?method=deleteAcquisitionProcess</bean:define>
+		<p><span><bean:message key="message.confirm.cancel.acquisition.process" bundle="ACQUISITION_RESOURCES"/></span></p>
 		<div class="forminline">
 			<form action="<%= request.getContextPath() + urlConfirm %>" method="post">
-				<html:hidden property="method" value="deleteAcquisitionProcess"/>
+				<html:hidden property="method" value="cancelAcquisitionRequest"/>
 				<html:hidden property="acquisitionProcessOid" value="<%= acquisitionProcessOid %>"/>
-				<html:submit styleClass="inputbutton"><bean:message key="button.delete" bundle="EXPENDITURE_RESOURCES"/></html:submit>
+				<html:submit styleClass="inputbutton"><bean:message key="button.yes" bundle="EXPENDITURE_RESOURCES"/></html:submit>
 			</form>
 			<form action="<%= request.getContextPath() + urlConfirm %>" method="post">
 				<html:hidden property="method" value="viewAcquisitionProcess"/>
 				<html:hidden property="acquisitionProcessOid" value="<%= acquisitionProcessOid %>"/>
-				<html:cancel styleClass="inputbutton"><bean:message key="button.cancel" bundle="EXPENDITURE_RESOURCES"/></html:cancel>
+				<html:cancel styleClass="inputbutton"><bean:message key="button.no" bundle="EXPENDITURE_RESOURCES"/></html:cancel>
 			</form>
 		</div>
 	</div>

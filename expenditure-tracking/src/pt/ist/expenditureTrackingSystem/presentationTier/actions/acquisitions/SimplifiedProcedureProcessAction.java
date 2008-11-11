@@ -523,11 +523,6 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	return executeActivityAndViewProcess(mapping, form, request, response, "RemoveFundAllocationExpirationDate");
     }
 
-    public ActionForward executeCancelAcquisitionRequest(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-	return executeActivityAndViewProcess(mapping, form, request, response, "CancelAcquisitionRequest");
-    }
-
     public ActionForward executeCancelRemoveFundAllocationExpirationDate(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	return executeActivityAndViewProcess(mapping, form, request, response, "CancelRemoveFundAllocationExpirationDate");
