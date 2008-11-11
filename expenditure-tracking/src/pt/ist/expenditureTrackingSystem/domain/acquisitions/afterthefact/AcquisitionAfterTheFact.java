@@ -1,6 +1,10 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact;
 
+import java.math.BigDecimal;
+
 import pt.ist.expenditureTrackingSystem.domain.dto.AfterTheFactAcquisitionProcessBean;
+import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
+import pt.ist.expenditureTrackingSystem.domain.util.Money;
 
 public class AcquisitionAfterTheFact extends AcquisitionAfterTheFact_Base {
 
@@ -26,4 +30,5 @@ public class AcquisitionAfterTheFact extends AcquisitionAfterTheFact_Base {
     public String getAcquisitionProcessId() {
 	return getAfterTheFactAcquisitionProcess().getAcquisitionProcessId();
     }
+
 }

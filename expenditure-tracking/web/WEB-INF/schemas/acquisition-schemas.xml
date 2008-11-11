@@ -520,6 +520,16 @@
 	<slot name="description" key="label.description" bundle="EXPENDITURE_RESOURCES"/>
 </schema>
 
+<schema name="afterTheFactAcquisitionsImportBean"
+		type="pt.ist.expenditureTrackingSystem.domain.dto.AfterTheFactAcquisitionsImportBean"
+		bundle="EXPENDITURE_RESOURCES">
+	<slot name="afterTheFactAcquisitionType" key="label.afterTheFactAcquisitionType" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="inputStream" key="label.afterTheFactAcquisition.import" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="fileNameSlot" value="filename" />
+		<property name="size" value="30"/>
+	</slot>
+</schema>
+
 <schema name="editProjectFinancerFundAllocationId" type="pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean" bundle="ACQUISITION_RESOURCES">
 	<slot name="financer.unit.presentationName" key="unit.label.unit" read-only="true" bundle="ORGANIZATION_RESOURCES"/>
 	<slot name="financer.accountingUnit.name" key="acquisitionProcess.label.accountingUnit" read-only="true" />

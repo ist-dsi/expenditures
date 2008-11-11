@@ -11,6 +11,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.Invoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AcquisitionAfterTheFact;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.dto.AfterTheFactAcquisitionProcessBean;
+import pt.ist.expenditureTrackingSystem.domain.dto.AfterTheFactAcquisitionsImportBean;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 import pt.ist.expenditureTrackingSystem.presentationTier.Context;
@@ -26,7 +27,9 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
     @Forward(name = "view.afterTheFact.acquisition.process", path = "/acquisitions/viewAfterTheFactAcquisitionProcess.jsp"),
     @Forward(name = "edit.afterTheFact.acquisition.process", path = "/acquisitions/editAfterTheFactAcquisitionProcess.jsp"),
     @Forward(name = "receive.acquisition.invoice", path = "/acquisitions/receiveAcquisitionInvoice.jsp"),
-    @Forward(name = "show.pending.processes", path = "/acquisitionProcess.do?method=showPendingProcesses")
+    @Forward(name = "show.pending.processes", path = "/acquisitionProcess.do?method=showPendingProcesses"),
+    @Forward(name = "import.afterTheFact.acquisitions", path = "/acquisitions/importAfterTheFactAcquisitions.jsp"),
+    @Forward(name = "view.import.afterTheFact.acquisitions.result", path = "/acquisitions/viewImportAfterTheFactAcquisitionsResult.jsp")
 })
 public class AfterTheFactAcquisitionProcessAction extends ProcessAction {
 
@@ -123,6 +126,23 @@ public class AfterTheFactAcquisitionProcessAction extends ProcessAction {
 	final AbstractActivity<GenericProcess> activity = afterTheFactAcquisitionProcess.getActivityByName("DeleteAfterTheFactAcquisitionProcess");
 	activity.execute(afterTheFactAcquisitionProcess);
 	return mapping.findForward("show.pending.processes");
+    }
+
+    public ActionForward prepareImport(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	final AfterTheFactAcquisitionsImportBean afterTheFactAcquisitionsImportBean = new AfterTheFactAcquisitionsImportBean();
+	request.setAttribute("afterTheFactAcquisitionsImportBean", afterTheFactAcquisitionsImportBean);
+	return mapping.findForward("import.afterTheFact.acquisitions");
+    }
+
+    public ActionForward importAcquisitions(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	final AfterTheFactAcquisitionsImportBean afterTheFactAcquisitionsImportBean = getRenderedObject();
+	final byte[] contents = consumeInputStream(afterTheFactAcquisitionsImportBean);
+	afterTheFactAcquisitionsImportBean.setFileContents(contents);
+	afterTheFactAcquisitionsImportBean.importAcquisitions(afterTheFactAcquisitionsImportBean);
+	request.setAttribute("afterTheFactAcquisitionsImportBean", afterTheFactAcquisitionsImportBean);
+	return mapping.findForward("view.import.afterTheFact.acquisitions.result");
     }
 
 }

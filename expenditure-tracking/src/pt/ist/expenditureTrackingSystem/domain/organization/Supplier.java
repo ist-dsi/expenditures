@@ -61,6 +61,15 @@ public class Supplier extends Supplier_Base {
 	return null;
     }
 
+    public static Supplier readSupplierByName(final String name) {
+	for (Supplier supplier : ExpenditureTrackingSystem.getInstance().getSuppliersSet()) {
+	    if (supplier.getName().equalsIgnoreCase(name)) {
+		return supplier;
+	    }
+	}
+	return null;
+    }
+
     public Money getTotalAllocated() {
 	Money result = Money.ZERO;
 	for (final AcquisitionRequest acquisitionRequest : getAcquisitionRequestsSet()) {

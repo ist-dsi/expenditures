@@ -552,6 +552,13 @@ background: #fbf2cf;
 margin: 1em 0;
 }
 
+div.infoop5 {
+border: 1px dotted #aaa;
+padding: 15px 10px;
+background: #efd;
+margin: 1em 0;
+}
+
 div.error1 {
 margin: 0.75em 0;
 padding: 0.4em 0.4em 0.4em 2.5em;
@@ -585,6 +592,12 @@ background: #fbf2cf;
 }
 div.warning2 p {
 margin: 0 0 0.75em 0 !important;
+}
+
+div.warning3 {
+margin: 0.75em 0;
+padding: 0.4em 0.4em 0.4em 2.5em;
+background: #fbf2cf url(../images/warning01.gif) 0.5em 0.5em no-repeat;
 }
 
 table.tstyle1 {
