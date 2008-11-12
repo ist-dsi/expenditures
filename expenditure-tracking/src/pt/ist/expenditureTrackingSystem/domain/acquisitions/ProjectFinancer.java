@@ -93,4 +93,9 @@ public class ProjectFinancer extends ProjectFinancer_Base {
     public boolean isAccountingEmployeeForOnePossibleUnit(Person person) {
 	return false;
     }
+    
+    @Override
+    public boolean hasFundAllocationId() {
+        return super.hasFundAllocationId() && getProjectFundAllocationId() != null;
+    }
 }

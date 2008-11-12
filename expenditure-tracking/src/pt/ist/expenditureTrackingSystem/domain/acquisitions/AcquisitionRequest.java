@@ -498,9 +498,9 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 
     public boolean hasAnyFundAllocationId() {
 	for (Financer financer : getFinancersWithFundsAllocated()) {
-	    if (financer.getFundAllocationId() != null) {
-		return true;
-	    }
+	   if (financer.hasFundAllocationId()) {
+	       return true;
+	   }
 	}
 	return false;
     }
@@ -606,15 +606,6 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	    }
 	}
 	return true;
-    }
-
-    public boolean hasAllocatedFundsForAnyProjectFinancers() {
-	for (final Financer financer : getFinancersSet()) {
-	    if (financer.hasAllocatedFundsForAllProject()) {
-		return true;
-	    }
-	}
-	return false;
     }
 
     public boolean hasAllocatedFundsForAllProjectFinancers(Person person) {

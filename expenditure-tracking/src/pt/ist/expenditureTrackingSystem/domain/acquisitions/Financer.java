@@ -167,5 +167,9 @@ public class Financer extends Financer_Base {
 	}
 	return false;
     }
+    
+    public boolean hasFundAllocationId() {
+	return getFundAllocationId() != null;
+    }
 
 }
