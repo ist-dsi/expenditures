@@ -5,6 +5,10 @@
 
 <h2><bean:message key="link.sideBar.importAfterTheFactAcquisitions" bundle="EXPENDITURE_RESOURCES"/></h2>
 
+<div class="infoop2">
+	<bean:message key="message.help.afterTheFactAcquisition.import" bundle="ACQUISITION_RESOURCES"/>
+</div>
+
 <fr:edit id="afterTheFactAcquisitionsImportBean"
 		name="afterTheFactAcquisitionsImportBean"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.AfterTheFactAcquisitionsImportBean"
