@@ -96,6 +96,6 @@ public class ProjectFinancer extends ProjectFinancer_Base {
     
     @Override
     public boolean hasFundAllocationId() {
-        return super.hasFundAllocationId() && getProjectFundAllocationId() != null;
+        return super.hasFundAllocationId() || getProjectFundAllocationId() != null;
     }
 }
