@@ -19,7 +19,7 @@
 <div class="dinline forminline">
 <fr:form action='<%= actionMapping + ".do?method=executeAcquisitionRequestItemRealValuesEdition&acquisitionProcessOid="  + processOID %>'>
 	<fr:edit id="acquisitionRequestItem" name="itemBean" visible="false"/>
-			<table class="formhorizontal">
+			<table class="formhorizontal thnowrap">
 				<tr>
 					<th></th>
 					<th>
@@ -32,7 +32,7 @@
 					</th>
 				</tr>
 				<tr>
-					<td><bean:message key="acquisitionRequestItem.label.quantity" bundle="ACQUISITION_RESOURCES"/>:</td>
+					<td class="nowrap"><bean:message key="acquisitionRequestItem.label.quantity" bundle="ACQUISITION_RESOURCES"/>:</td>
 					<td class="aright">
 						<fr:view name="itemBean" property="quantity"/>
 					</td>
@@ -42,7 +42,7 @@
 					<td class="tderror"><fr:hasMessages for="realQuantity"><span><fr:message for="realQuantity"/></span></fr:hasMessages></td>
 				</tr>
 				<tr>
-					<td><bean:message key="acquisitionRequestItem.label.unitValue" bundle="ACQUISITION_RESOURCES"/>:</td>
+					<td class="nowrap"><bean:message key="acquisitionRequestItem.label.unitValue" bundle="ACQUISITION_RESOURCES"/>:</td>
 					<td class="aright">
 						<fr:view name="itemBean" property="unitValue"/>
 					</td>
@@ -52,7 +52,7 @@
 					<td class="tderror"><fr:hasMessages for="realUnitValue"><span><fr:message for="realUnitValue"/></span></fr:hasMessages></td>
 				</tr>
 				<tr>
-					<td><bean:message key="acquisitionRequestItem.label.vatValue" bundle="ACQUISITION_RESOURCES"/>:</td>
+					<td class="nowrap"><bean:message key="acquisitionRequestItem.label.vatValue" bundle="ACQUISITION_RESOURCES"/>:</td>
 					<td class="aright">
 						<fr:view name="itemBean" property="vatValue"/>
 					</td>
@@ -62,7 +62,7 @@
 					<td class="tderror"><fr:hasMessages for="realVatValue"><span><fr:message for="realVatValue"/></span></fr:hasMessages></td>
 				</tr>
 				<tr>
-					<td><bean:message key="acquisitionRequestItem.label.additionalCosts" bundle="ACQUISITION_RESOURCES"/>:</td>
+					<td class="nowrap"><bean:message key="acquisitionRequestItem.label.additionalCosts" bundle="ACQUISITION_RESOURCES"/>:</td>
 					<td class="aright">
 						<fr:view name="itemBean" property="additionalCostValue" type="pt.ist.expenditureTrackingSystem.domain.util.Money">
 							<fr:layout name="null-as-label">

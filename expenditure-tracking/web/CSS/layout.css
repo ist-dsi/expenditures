@@ -431,6 +431,8 @@ color: #cc2200;
 table.form tr td.tderror span {
 background-color: #fff0dd;
 }
+table.form table tr th { margin: 0; padding: 0 2px 0 0; }
+table.form table tr td { margin: 0; padding: 0 2px 0 0; }
 
 
 table.formhorizontal {
@@ -724,6 +726,9 @@ border-bottom: 1px solid #ddd;
 padding: 7px 15px 7px 0;
 }
 
+table.thnowrap th {
+white-space: nowrap;
+}
 
 
 .documents {
