@@ -15,7 +15,7 @@
 			<fr:property name="classes" value="form"/>
 		</fr:layout>
 	</fr:edit>
-		<html:submit styleClass="inputbutton"><bean:message key="renderers.form.submit.name" bundle="RENDERER_RESOURCES"/> </html:submit>
+	<html:submit styleClass="inputbutton"><bean:message key="button.search" bundle="EXPENDITURE_RESOURCES"/> </html:submit>
 </fr:form>
 
 
@@ -27,9 +27,7 @@
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="tstyle2 mtop2"/>
 			<fr:property name="columnClasses" value=",,,width30px,,,,,"/>
-	
 			<fr:property name="sortBy" value="year=asc,acquisitionProcessNumber=asc"/>
-	
 			<fr:property name="linkFormat(view)" value="/acquisition${class.simpleName}.do?method=viewAcquisitionProcess&acquisitionProcessOid=${OID}"/>
 			<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
 			<fr:property name="key(view)" value="link.view"/>
