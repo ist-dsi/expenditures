@@ -1,11 +1,18 @@
 package pt.ist.expenditureTrackingSystem.presentationTier.actions;
 
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
 
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.domain.processes.ActivityException;
+import pt.ist.expenditureTrackingSystem.domain.processes.GenericFile;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 
 public abstract class ProcessAction extends BaseAction {
@@ -48,5 +55,12 @@ public abstract class ProcessAction extends BaseAction {
 
     protected String getBundle() {
 	return StringUtils.EMPTY;
+    }
+    
+    public ActionForward downloadGenericFile(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) throws IOException {
+	
+	GenericFile file = getDomainObject(request, "fileOID");
+	return download(response, file);
     }
 }

@@ -10,15 +10,18 @@ import org.joda.time.LocalDate;
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.File;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
+import pt.ist.expenditureTrackingSystem.domain.processes.GenericFile;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 import pt.ist.expenditureTrackingSystem.domain.processes.ProcessComment;
 import pt.ist.expenditureTrackingSystem.domain.util.Money;
+import pt.ist.expenditureTrackingSystem.presentationTier.util.FileUploadBean;
 import pt.ist.fenixWebFramework.security.UserView;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.pstm.Transaction;
@@ -304,7 +307,7 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
     public void systemProcessRelease() {
 	super.setCurrentOwner(null);
     }
-    
+
     @Service
     public void takeProcess() {
 	final Person currentOwner = getCurrentOwner();
@@ -334,5 +337,11 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
     public boolean isUserCurrentOwner() {
 	final User user = UserView.getUser();
 	return user != null && user.getPerson() == getCurrentOwner();
+    }
+
+    @Service
+    public void addFile(String filename, byte[] consumeInputStream) {
+	GenericFile file = new GenericFile(filename, consumeInputStream);
+	addFiles(file);
     }
 }

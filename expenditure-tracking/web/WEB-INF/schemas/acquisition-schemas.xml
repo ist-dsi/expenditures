@@ -578,3 +578,13 @@
 </schema>
 
 
+<schema name="addGenericFile"
+		type="pt.ist.expenditureTrackingSystem.presentationTier.util.FileUploadBean"
+		bundle="ACQUISITION_RESOURCES">
+	<slot name="filename" key="acquisitionProcess.label.filename" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="inputStream" key="acquisitionProcess.label.document"	
+			bundle="ACQUISITION_RESOURCES" >
+		<property name="fileNameSlot" value="filename" />
+		<property name="size" value="30"/>
+	</slot>
+</schema>

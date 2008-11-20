@@ -113,6 +113,9 @@ class File {
 	String contentType;
 }
 
+	class processes.GenericFile extends File {
+	}
+	
 	class acquisitions.AcquisitionProposalDocument extends File {
 		String proposalId;
 	}
@@ -724,4 +727,11 @@ relation TakeSupportInAcquisitionProcess {
 	acquisitions.AcquisitionProcess playsRole acquisitionProcesses {
 		multiplicity *;
 	} 
+}
+
+relation ProcessFiles {
+	processes.GenericProcess playsRole process;
+	processes.GenericFile playsRole files {
+		multiplicity *;
+	}
 }

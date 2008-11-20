@@ -30,6 +30,7 @@ import pt.ist.expenditureTrackingSystem.domain.processes.ProcessComment;
 import pt.ist.expenditureTrackingSystem.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.presentationTier.Context;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.ProcessAction;
+import pt.ist.expenditureTrackingSystem.presentationTier.util.FileUploadBean;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 import pt.ist.fenixWebFramework.security.UserView;
 import pt.ist.fenixWebFramework.struts.annotations.Forward;
@@ -37,7 +38,7 @@ import pt.ist.fenixWebFramework.struts.annotations.Forwards;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
 @Mapping(path = "/acquisitionProcess")
-@Forwards( { @Forward(name = "search.acquisition.process", path = "/acquisitions/searchAcquisitionProcess.jsp") })
+@Forwards( { @Forward(name = "search.acquisition.process", path = "/acquisitions/searchAcquisitionProcess.jsp")})
 public class RegularAcquisitionProcessAction extends ProcessAction {
 
     private static final Context CONTEXT = new Context("acquisitions");
@@ -71,7 +72,7 @@ public class RegularAcquisitionProcessAction extends ProcessAction {
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	return executeActivityAndViewProcess(mapping, form, request, response, "CancelAcquisitionRequest");
     }
-   
+
     public ActionForward executeDeleteAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final RegularAcquisitionProcess acquisitionProcess = getProcess(request);
@@ -429,5 +430,27 @@ public class RegularAcquisitionProcessAction extends ProcessAction {
 
     protected Class<? extends AcquisitionProcess> getProcessClass() {
 	return RegularAcquisitionProcess.class;
+    }
+
+    public ActionForward prepareGenericUpload(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+
+	AcquisitionProcess process = getProcess(request);
+	FileUploadBean bean = new FileUploadBean();
+
+	request.setAttribute("bean", bean);
+	request.setAttribute("acquisitionProcess", process);
+
+	return mapping.findForward("generic.upload");
+    }
+
+    public ActionForward genericUpload(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+
+	FileUploadBean bean = getRenderedObject("uploadFile");
+	AcquisitionProcess process = getProcess(request);
+	process.addFile(bean.getFilename(), consumeInputStream(bean));
+
+	return viewAcquisitionProcess(mapping, request, process);
     }
 }

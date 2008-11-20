@@ -67,7 +67,8 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "edit.supplier", path = "/acquisitions/editSupplierAddress.jsp"),
 	@Forward(name = "execute.payment", path = "/acquisitions/executePayment.jsp"),
 	@Forward(name = "change.financers.accounting.units", path = "/acquisitions/changeFinancersAccountingUnit.jsp"),
-	@Forward(name = "view.comments", path = "/acquisitions/viewComments.jsp") })
+	@Forward(name = "view.comments", path = "/acquisitions/viewComments.jsp"),
+	@Forward(name = "generic.upload", path = "/acquisitions/genericUpload.jsp") })
 public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessAction {
 
     public static class AcquisitionProposalDocumentForm extends FileUploadBean {

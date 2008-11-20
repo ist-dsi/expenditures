@@ -97,6 +97,11 @@
 		</html:link>
 	</logic:notPresent>
 	<li>
+		<html:link page="<%= actionMapping + ".do?method=prepareGenericUpload" %>" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
+			<bean:message key="acquisitionProcess.link.uploadFile" bundle="ACQUISITION_RESOURCES"/>
+		</html:link>
+	</li>
+	<li>
 		<html:link page="/viewLogs.do?method=viewOperationLog&amp;module=acquisitions" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
 			<bean:message key="label.log.view" bundle="ACQUISITION_RESOURCES"/>
 		</html:link>
@@ -185,6 +190,21 @@
 			<em><bean:message key="document.message.info.notAvailable" bundle="EXPENDITURE_RESOURCES"/></em>
 		</logic:notPresent>
 	</p>
+	<p>
+		<bean:message key="acquisitionProcess.label.otherFiles" bundle="ACQUISITION_RESOURCES"/>:
+		<logic:notEmpty name="acquisitionProcess" property="files">
+			<ul>
+			<logic:iterate id="file" name="acquisitionProcess" property="files">
+				<li>
+					<html:link action="<%= actionMapping + ".do?method=downloadGenericFile&acquisitionProcess=" + acquisitionProcessOid %>" paramId="fileOID" paramName="file" paramProperty="OID">
+						<bean:write name="file" property="filename"/>
+					</html:link>
+				</li>
+			</logic:iterate>
+			</ul>
+		</logic:notEmpty>
+		<logic:empty name="acquisitionProcess" property="files"><em><bean:message key="document.message.info.notAvailable" bundle="EXPENDITURE_RESOURCES"/></em></logic:empty>
+	</p>
 </div>
 
 <logic:present name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestItemsSet">
@@ -250,3 +270,5 @@
 	</logic:present>
 	
 </div>
+
+
