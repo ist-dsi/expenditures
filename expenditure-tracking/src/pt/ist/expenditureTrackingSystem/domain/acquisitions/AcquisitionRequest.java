@@ -505,6 +505,15 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	return false;
     }
 
+    public boolean hasAnyFundAllocationId(Person person) {
+	for (Financer financer : getFinancersWithFundsAllocated()) {
+	   if (financer.hasFundAllocationId() && financer.isAccountingEmployee(person)) {
+	       return true;
+	   }
+	}
+	return false;
+    }
+ 
     public void submittedForFundsAllocation(Person person) {
 	for (AcquisitionRequestItem item : getAcquisitionRequestItems()) {
 	    item.submittedForFundsAllocation(person);

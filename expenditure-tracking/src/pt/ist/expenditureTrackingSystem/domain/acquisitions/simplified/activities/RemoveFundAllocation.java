@@ -13,7 +13,7 @@ public class RemoveFundAllocation extends GenericAcquisitionProcessActivity {
     @Override
     protected boolean isAvailable(RegularAcquisitionProcess process) {
 	return (checkActiveConditions(process) || checkCanceledConditions(process))
-		&& process.getAcquisitionRequest().hasAllFundAllocationId(getUser().getPerson());
+		&& process.getAcquisitionRequest().hasAnyFundAllocationId(getUser().getPerson());
     }
 
     private boolean checkActiveConditions(RegularAcquisitionProcess process) {
