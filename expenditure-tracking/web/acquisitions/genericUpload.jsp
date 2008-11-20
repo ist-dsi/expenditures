@@ -4,7 +4,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
-<h2><bean:message key="acquisitionProcess.title.uploadFile" bundle="EXPENDITURE_RESOURCES"/></h2>
+<h2><bean:message key="acquisitionProcess.title.uploadFile" bundle="ACQUISITION_RESOURCES"/></h2>
 
 <bean:define id="acquisitionProcess" name="acquisitionProcess" toScope="request"/>
 <bean:define id="acquisitionProcessOID" name="acquisitionProcess" property="OID" toScope="request"/>
