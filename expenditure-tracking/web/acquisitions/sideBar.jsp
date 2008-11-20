@@ -34,7 +34,7 @@
 		</li>
 	</ul>
 
-
+<%-- 
 <ul>
 		<li class="header">
 			<strong><bean:message key="link.sideBar.standardProcedure" bundle="EXPENDITURE_RESOURCES"/></strong>
@@ -61,6 +61,7 @@
 			</html:link>
 		</li>
 	</ul>
+--%>
 
 <!--
 	<logic:present role="ACQUISITION_CENTRAL_MANAGER">
