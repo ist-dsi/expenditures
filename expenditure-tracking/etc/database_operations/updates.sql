@@ -17,3 +17,12 @@ alter table FILE add column KEY_PROCESS int(11);
 alter table FILE add index (KEY_PROCESS);
 
 
+
+
+
+-- Inserted at 2008-11-20T16:31:22.200Z
+
+alter table ACQUISITION add column KEY_REFUNDEE int(11);
+alter table ACQUISITION add index (KEY_REFUNDEE);
+
+

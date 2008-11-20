@@ -1,0 +1,39 @@
+package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities;
+
+import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
+import pt.ist.expenditureTrackingSystem.domain.RoleType;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessState;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
+import pt.ist.expenditureTrackingSystem.domain.dto.SetRefundeeBean;
+import pt.ist.fenixWebFramework.security.UserView;
+
+public class SetRefundee extends GenericAcquisitionProcessActivity {
+
+    private boolean isRequester(final RegularAcquisitionProcess process) {
+	final User user = UserView.getUser();
+	return user != null && user.getPerson().equals(process.getRequestor());
+    }
+
+    @Override
+    protected boolean isAccessible(final RegularAcquisitionProcess process) {
+	return isRequester(process) || userHasRole(RoleType.ACQUISITION_CENTRAL);
+    }
+
+    @Override
+    protected boolean isAvailable(final RegularAcquisitionProcess process) {
+	final AcquisitionProcessState acquisitionProcessState = process.getAcquisitionProcessState();
+	return (isRequester(process) && acquisitionProcessState.isInGenesis())
+		|| (userHasRole(RoleType.ACQUISITION_CENTRAL) && (acquisitionProcessState.isAcquisitionProcessed()
+			|| (process.isInvoiceReceived() && process.checkRealValues())));
+    }
+
+    @Override
+    protected void process(final RegularAcquisitionProcess process, final Object... objects) {
+	final SetRefundeeBean setRefundeeBean = (SetRefundeeBean) objects[0];
+	final AcquisitionRequest acquisitionRequest = process.getAcquisitionRequest();
+	acquisitionRequest.setRefundee(setRefundeeBean.getRefundee());
+    }
+
+}

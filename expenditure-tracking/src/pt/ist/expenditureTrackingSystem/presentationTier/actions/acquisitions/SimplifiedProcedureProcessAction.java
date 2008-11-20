@@ -33,6 +33,7 @@ import pt.ist.expenditureTrackingSystem.domain.dto.ChangeFinancerAccountingUnitB
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationExpirationDateBean;
+import pt.ist.expenditureTrackingSystem.domain.dto.SetRefundeeBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.UnitItemBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.VariantBean;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
@@ -68,7 +69,8 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "execute.payment", path = "/acquisitions/executePayment.jsp"),
 	@Forward(name = "change.financers.accounting.units", path = "/acquisitions/changeFinancersAccountingUnit.jsp"),
 	@Forward(name = "view.comments", path = "/acquisitions/viewComments.jsp"),
-	@Forward(name = "generic.upload", path = "/acquisitions/genericUpload.jsp") })
+	@Forward(name = "generic.upload", path = "/acquisitions/genericUpload.jsp"),
+	@Forward(name = "set.refundee", path = "/acquisitions/setRefundee.jsp") })
 public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessAction {
 
     public static class AcquisitionProposalDocumentForm extends FileUploadBean {
@@ -580,4 +582,22 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
     protected Class<? extends AcquisitionProcess> getProcessClass() {
 	return SimplifiedProcedureProcess.class;
     }
+
+    public ActionForward executeSetRefundee(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final AcquisitionProcess acquisitionProcess = getProcess(request);
+	final SetRefundeeBean setRefundeeBean = new SetRefundeeBean(acquisitionProcess);
+	request.setAttribute("acquisitionProcess", acquisitionProcess);
+	request.setAttribute("setRefundeeBean", setRefundeeBean);
+	return mapping.findForward("set.refundee");
+    }
+
+    public ActionForward setRefundee(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final SetRefundeeBean setRefundeeBean = getRenderedObject();
+	final AcquisitionProcess acquisitionProcess = getProcess(request);
+	genericActivityExecution(acquisitionProcess, "SetRefundee", setRefundeeBean);
+	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
+    }
+
 }

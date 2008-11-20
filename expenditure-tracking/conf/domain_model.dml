@@ -459,6 +459,13 @@ relation AcquisitionRequestRequester {
 	}
 }
 
+relation AcquisitionRequestRefundee {
+	organization.Person playsRole refundee;
+	acquisitions.AcquisitionRequest playsRole refundedAcquisitionRequests {
+		multiplicity *;
+	}
+}
+
 relation RequestForProposalRequester {
 	organization.Person playsRole requester;
 	requests.RequestForProposal playsRole requestsForProposal {

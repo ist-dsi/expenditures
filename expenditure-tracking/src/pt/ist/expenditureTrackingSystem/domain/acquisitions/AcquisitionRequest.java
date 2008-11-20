@@ -685,4 +685,9 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	return res;
     }
 
+    public String getRefundeeName() {
+	final Person refundee = getRefundee();
+	return refundee == null ? null : refundee.getName();
+    }
+
 }
