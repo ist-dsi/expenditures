@@ -583,11 +583,13 @@
 <schema name="addGenericFile"
 		type="pt.ist.expenditureTrackingSystem.presentationTier.util.FileUploadBean"
 		bundle="ACQUISITION_RESOURCES">
-	<slot name="filename" key="acquisitionProcess.label.filename" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="filename" key="acquisitionProcess.label.filename" bundle="ACQUISITION_RESOURCES">
+		<property name="size" value="40"/>
+	</slot>
 	<slot name="inputStream" key="acquisitionProcess.label.document"	
 			bundle="ACQUISITION_RESOURCES" >
 		<property name="fileNameSlot" value="filename" />
-		<property name="size" value="30"/>
+		<property name="size" value="40"/>
 	</slot>
 </schema>
 
@@ -597,6 +599,6 @@
 		<property name="format" value="${name} (${username})"/>
 		<property name="minChars" value="3"/>		
 		<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.PersonAutoComplete"/>
-		<property name="size" value="40"/>
+		<property name="size" value="60"/>
 	</slot>
 </schema>

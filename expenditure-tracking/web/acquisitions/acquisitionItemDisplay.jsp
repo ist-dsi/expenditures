@@ -5,16 +5,49 @@
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 			
 			
+<style>
+table.asd th { padding: 0.25em 0.5em; }
+table tr.itemmbottom th { padding-bottom: 1em; }
+table tr.itemmbottom td { padding-bottom: 1em; }
+
+/*
+tr.asd td { text-align: right;}
+*/
+
+</style>
+
 <div class="infoop2">
 	
-	<table class="tstyle1">
+	<table class="tstyle1 asd">
 
+		<tr>
+			<th colspan="4" style="background: #eaeaea;"><bean:message key="acquisitionProcess.title.description" bundle="ACQUISITION_RESOURCES"/></th>
+		</tr>
 		<tr>
 			<th><bean:message key="acquisitionRequestItem.label.proposalReference" bundle="ACQUISITION_RESOURCES"/>:</th>
 			<td colspan="3"><fr:view name="acquisitionRequestItem" property="proposalReference"/></td>
 		</tr>
-		
 		<tr>
+			<th><bean:message key="acquisitionRequestItem.label.salesCode" bundle="ACQUISITION_RESOURCES"/>:</th>
+			<td colspan="3">
+				<fr:view name="acquisitionRequestItem" property="CPVReference">
+					<fr:layout name="format">
+						<fr:property name="format" value="${code} - ${description}"/>
+					</fr:layout>
+				</fr:view>
+			</td>
+		</tr>
+		<tr class="itemmbottom">
+			<th><bean:message key="acquisitionRequestItem.label.description" bundle="ACQUISITION_RESOURCES"/>:</th>
+			<td colspan="3"><fr:view name="acquisitionRequestItem" property="description"/></td>
+		</tr>
+
+
+
+		<tr>
+			<th colspan="4" style="background: #eaeaea;"><bean:message key="acquisitionProcess.title.quantityAndCosts.lowercase" bundle="ACQUISITION_RESOURCES"/></th>
+		</tr>	
+		<tr class="asd">
 			<th><bean:message key="acquisitionRequestItem.label.quantity" bundle="ACQUISITION_RESOURCES"/>:</th>
 			<td class="nowrap"><fr:view name="acquisitionRequestItem" property="quantity"/></td>
 			<th style="padding-left: 1em;"><bean:message key="acquisitionRequestItem.label.realQuantity" bundle="ACQUISITION_RESOURCES"/>:</th>
@@ -25,8 +58,7 @@
 					</fr:view>
 			</td>
 		</tr>
-		
-		<tr>
+		<tr class="asd">
 			<th><bean:message key="acquisitionRequestItem.label.unitValue" bundle="ACQUISITION_RESOURCES"/>:</th>
 			<td class="nowrap"><fr:view name="acquisitionRequestItem" property="unitValue"/></td>
 			<th style="padding-left: 1em;"><bean:message key="acquisitionRequestItem.label.realUnitValue" bundle="ACQUISITION_RESOURCES"/>:</th>
@@ -38,8 +70,7 @@
 				</fr:view>
 			</td>
 		</tr>
-		
-		<tr>
+		<tr class="asd">
 			<th><bean:message key="acquisitionRequestItem.label.totalValue" bundle="ACQUISITION_RESOURCES"/>:</th>
 			<td class="nowrap"><span><fr:view name="acquisitionRequestItem" property="totalItemValue"/></span></td>
 			<th style="padding-left: 1em;"><bean:message key="acquisitionRequestItem.label.totalRealValue" bundle="ACQUISITION_RESOURCES"/>:</th>
@@ -53,8 +84,7 @@
 				</span>
 			</td>
 		</tr>
-
-		<tr>
+		<tr class="asd">
 			<th><bean:message key="acquisitionRequestItem.label.vatValue" bundle="ACQUISITION_RESOURCES"/></th>
 			<td class="nowrap"><fr:view name="acquisitionRequestItem" property="vatValue"/></td>
 			<th style="padding-left: 1em;"><bean:message key="acquisitionRequestItem.label.realVatValue" bundle="ACQUISITION_RESOURCES"/>:</th>
@@ -66,8 +96,7 @@
 				</fr:view>
 			</td>
 		</tr>
-
-		<tr>
+		<tr class="asd">
 			<th><bean:message key="acquisitionRequestItem.label.vat" bundle="ACQUISITION_RESOURCES"/></th>
 			<td class="nowrap"><fr:view name="acquisitionRequestItem" property="totalVatValue"/></td>
 			<th style="padding-left: 1em;"><bean:message key="acquisitionRequestItem.label.realVat" bundle="ACQUISITION_RESOURCES"/>:</th>
@@ -79,8 +108,7 @@
 				</fr:view>
 			</td>
 		</tr>
-		
-		<tr>
+		<tr class="asd itemmbottom">
 			<th><bean:message key="acquisitionRequestItem.label.additionalCostValue" bundle="ACQUISITION_RESOURCES"/>:</th>
 			<td class="nowrap">
 				<fr:view name="acquisitionRequestItem" property="additionalCostValue" type="pt.ist.expenditureTrackingSystem.domain.util.Money">
@@ -98,8 +126,7 @@
 				</fr:view>
 			</td>
 		</tr>
-		
-		<tr>
+		<tr class="asd itemmbottom">
 			<th><bean:message key="acquisitionRequestItem.label.totalValueWithAdditionalCostsAndVat" bundle="ACQUISITION_RESOURCES"/>:</th>
 			<td class="nowrap"><span><fr:view name="acquisitionRequestItem" property="totalItemValueWithAdditionalCostsAndVat"/></span></td>
 			<th style="padding-left: 1em;"><bean:message key="acquisitionRequestItem.label.totalRealValueWithAdditionalCostsAndVat" bundle="ACQUISITION_RESOURCES"/>:</th>
@@ -115,55 +142,45 @@
 		</tr>
 		
 		<tr>
-			<th><bean:message key="acquisitionProcess.label.payingUnits" bundle="ACQUISITION_RESOURCES"/>:</th>
-			<td colspan="3">
+			<th colspan="4" style="background: #eaeaea;"><bean:message key="acquisitionRequestItem.label.deliveryInfo" bundle="ACQUISITION_RESOURCES"/></th>
+		</tr>	
+		<tr>
+			<th style="padding-bottom: 1em;"><bean:message key="label.address" bundle="ACQUISITION_RESOURCES"/>:</th>
+			<td colspan="3" style="padding-bottom: 1em; padding-left: 0px;">
+				<fr:view name="acquisitionRequestItem" property="address"/>
+			</td>
+		</tr>
+
+		<tr>
+			<th colspan="4" style="background: #eaeaea;"><bean:message key="acquisitionProcess.label.payingUnits" bundle="ACQUISITION_RESOURCES"/></th>
+		</tr>
+		<tr>
+			<td colspan="4" style="padding-left: 5px;">
 				<logic:notEmpty name="acquisitionRequestItem" property="unitItems">
-				<table class="payingunits">
-				<logic:iterate id="unitItem" name="acquisitionRequestItem" property="sortedUnitItems">
-					<tr>
-						<td>
-							<fr:view name="unitItem" property="unit.presentationName"/>
-						</td>
-						<td class="nowrap vatop">
-							<logic:present name="unitItem" property="realShareValue">
-								<fr:view name="unitItem" property="realShareValue"/>
-							</logic:present>
-							<logic:notPresent name="unitItem" property="realShareValue">
-								<fr:view name="unitItem" property="shareValue"/>
-							</logic:notPresent>
-						</td>
-					</tr>
-				</logic:iterate>
-				</table>
+					<table class="payingunits">
+						<logic:iterate id="unitItem" name="acquisitionRequestItem" property="sortedUnitItems">
+							<tr>
+								<td>
+									<fr:view name="unitItem" property="unit.presentationName"/>
+								</td>
+								<td class="nowrap vatop">
+									<logic:present name="unitItem" property="realShareValue">
+										<fr:view name="unitItem" property="realShareValue"/>
+									</logic:present>
+									<logic:notPresent name="unitItem" property="realShareValue">
+										<fr:view name="unitItem" property="shareValue"/>
+									</logic:notPresent>
+								</td>
+							</tr>
+						</logic:iterate>
+					</table>
 				</logic:notEmpty>
 				<logic:empty name="acquisitionRequestItem" property="unitItems">
 					<em><bean:message key="label.notDefined" bundle="EXPENDITURE_RESOURCES"/></em>
 				</logic:empty>
 			</td>
 		</tr>
-		
-		<tr>
-			<th><bean:message key="acquisitionRequestItem.label.salesCode" bundle="ACQUISITION_RESOURCES"/>:</th>
-			<td colspan="3">
-				<fr:view name="acquisitionRequestItem" property="CPVReference">
-					<fr:layout name="format">
-						<fr:property name="format" value="${code} - ${description}"/>
-					</fr:layout>
-				</fr:view>
-			</td>
-		</tr>
-	
-		<tr>
-			<th><bean:message key="acquisitionRequestItem.label.description" bundle="ACQUISITION_RESOURCES"/>:</th>
-			<td colspan="3"><fr:view name="acquisitionRequestItem" property="description"/></td>
-		</tr>
-		
-		<tr>
-			<th><bean:message key="acquisitionRequestItem.label.deliveryInfo" bundle="ACQUISITION_RESOURCES"/>:</th>
-			<td>
-				<fr:view name="acquisitionRequestItem" property="address"/>
-			</td>
-		</tr>
+
 	</table>
 		
 </div>

@@ -1036,3 +1036,6 @@ display: none;
 div.nojavascript div.chelptext {
 display: block;
 }
+
+.nopadding table tr th { padding: 0 !important; }
+.nopadding table tr td { padding: 0 !important; }
