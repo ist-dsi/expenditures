@@ -19,7 +19,7 @@
 	</fr:edit>
 </div>
 
-<logic:present role="MANAGER">
+<logic:present role="MANAGER,ACQUISITION_CENTRAL_MANAGER,ACQUISITION_CENTRAL">
 	<p>
 		<html:link action="/organization.do?method=prepareCreateSupplier">
 			<bean:message key="supplier.link.create" bundle="ORGANIZATION_RESOURCES"/>
