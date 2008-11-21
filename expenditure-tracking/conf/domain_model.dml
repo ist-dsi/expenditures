@@ -113,6 +113,9 @@ class File {
 	String contentType;
 }
 
+	class acquisitions.afterthefact.ImportFile extends File {
+	}
+	
 	class processes.GenericFile extends File {
 	}
 	
@@ -742,4 +745,11 @@ relation ProcessFiles {
 	processes.GenericFile playsRole files {
 		multiplicity *;
 	}
+}
+
+relation AfterTheFactImportFile {
+	acquisitions.afterthefact.AfterTheFactAcquisitionProcess playsRole afterTheFactAcquisitionProcesses {
+		multiplicity *;
+	}
+	acquisitions.afterthefact.ImportFile playsRole importFile;
 }

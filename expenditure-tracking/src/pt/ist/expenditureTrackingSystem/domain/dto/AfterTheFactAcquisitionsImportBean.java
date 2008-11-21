@@ -8,6 +8,7 @@ import java.util.List;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionType;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.ImportFile;
 import pt.ist.expenditureTrackingSystem.domain.dto.Issue.IssueType;
 import pt.ist.expenditureTrackingSystem.domain.dto.Issue.IssueTypeLevel;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
@@ -31,11 +32,11 @@ public class AfterTheFactAcquisitionsImportBean extends FileUploadBean implement
     }
 
     public AfterTheFactAcquisitionType getAfterTheFactAcquisitionType() {
-        return afterTheFactAcquisitionType;
+	return afterTheFactAcquisitionType;
     }
 
     public void setAfterTheFactAcquisitionType(AfterTheFactAcquisitionType afterTheFactAcquisitionType) {
-        this.afterTheFactAcquisitionType = afterTheFactAcquisitionType;
+	this.afterTheFactAcquisitionType = afterTheFactAcquisitionType;
     }
 
     public void setFileContents(final byte[] contents) {
@@ -43,11 +44,11 @@ public class AfterTheFactAcquisitionsImportBean extends FileUploadBean implement
     }
 
     public String getContents() {
-        return contents;
+	return contents;
     }
 
     public List<Issue> getIssues() {
-        return issues;
+	return issues;
     }
 
     public void registerIssue(final IssueType issueType, final int lineNumber, final String... messageArgs) {
@@ -62,6 +63,7 @@ public class AfterTheFactAcquisitionsImportBean extends FileUploadBean implement
     @Service
     public void importAcquisitions(final AfterTheFactAcquisitionsImportBean afterTheFactAcquisitionsImportBean) {
 	final String[] lines = afterTheFactAcquisitionsImportBean.getContents().split("\n");
+	final ImportFile file = new ImportFile(getContents().getBytes());
 	for (int i = 0; i < lines.length; i++) {
 	    final String line = lines[i];
 	    if (line.isEmpty()) {
@@ -82,10 +84,10 @@ public class AfterTheFactAcquisitionsImportBean extends FileUploadBean implement
 			value = new Money(valueString);
 		    } catch (DomainException ex) {
 			value = null;
-			registerIssue(IssueType.BAD_MONEY_VALUE_FORMAT, i, valueString);			
+			registerIssue(IssueType.BAD_MONEY_VALUE_FORMAT, i, valueString);
 		    } catch (NumberFormatException ex) {
 			value = null;
-			registerIssue(IssueType.BAD_MONEY_VALUE_FORMAT, i, valueString);						
+			registerIssue(IssueType.BAD_MONEY_VALUE_FORMAT, i, valueString);
 		    }
 		    final String vatValueString = parts[4];
 		    BigDecimal vatValue;
@@ -93,10 +95,10 @@ public class AfterTheFactAcquisitionsImportBean extends FileUploadBean implement
 			vatValue = new BigDecimal(vatValueString);
 		    } catch (NumberFormatException ex) {
 			vatValue = null;
-			registerIssue(IssueType.BAD_VAT_VALUE_FORMAT, i, vatValueString);			
+			registerIssue(IssueType.BAD_VAT_VALUE_FORMAT, i, vatValueString);
 		    }
 		    if (supplier != null && value != null && vatValue != null) {
-			importAcquisition(supplier, description, value, vatValue);
+			importAcquisition(supplier, description, value, vatValue,file);
 			importedLines++;
 		    }
 		} else {
@@ -106,14 +108,16 @@ public class AfterTheFactAcquisitionsImportBean extends FileUploadBean implement
 	}
     }
 
-    public void importAcquisition(final Supplier supplier, final String description, final Money value, final BigDecimal vatValue) {
+    public void importAcquisition(final Supplier supplier, final String description, final Money value,
+	    final BigDecimal vatValue, ImportFile file) {
 	final AfterTheFactAcquisitionProcessBean afterTheFactAcquisitionProcessBean = new AfterTheFactAcquisitionProcessBean();
 	afterTheFactAcquisitionProcessBean.setAfterTheFactAcquisitionType(getAfterTheFactAcquisitionType());
 	afterTheFactAcquisitionProcessBean.setDescription(description);
 	afterTheFactAcquisitionProcessBean.setSupplier(supplier);
 	afterTheFactAcquisitionProcessBean.setValue(value);
 	afterTheFactAcquisitionProcessBean.setVatValue(vatValue);
-	AfterTheFactAcquisitionProcess.createNewAfterTheFactAcquisitionProcess(afterTheFactAcquisitionProcessBean);
+	file.addAfterTheFactAcquisitionProcesses(AfterTheFactAcquisitionProcess
+		.createNewAfterTheFactAcquisitionProcess(afterTheFactAcquisitionProcessBean));
     }
 
     private Supplier findSupplier(final String supplierNif, final String supplierName) {
@@ -134,7 +138,7 @@ public class AfterTheFactAcquisitionsImportBean extends FileUploadBean implement
     }
 
     public int getImportedLines() {
-        return importedLines;
+	return importedLines;
     }
 
 }

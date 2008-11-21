@@ -26,3 +26,20 @@ alter table ACQUISITION add column KEY_REFUNDEE int(11);
 alter table ACQUISITION add index (KEY_REFUNDEE);
 
 
+
+
+
+-- Inserted at 2008-11-21T13:32:08.632Z
+
+alter table GENERIC_PROCESS add column SKIP_SUPPLIER_FUND_ALLOCATION tinyint(1) default '0';
+
+
+
+
+
+-- Inserted at 2008-11-21T20:13:53.796Z
+
+alter table GENERIC_PROCESS add column KEY_IMPORT_FILE int(11);
+alter table GENERIC_PROCESS add index (KEY_IMPORT_FILE);
+
+
