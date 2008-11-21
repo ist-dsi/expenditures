@@ -56,7 +56,7 @@ public class AcquisitionProcessState extends AcquisitionProcessState_Base {
     }
 
     public boolean isAllocatedToSupplier() {
-	return getAcquisitionProcessStateType().compareTo(AcquisitionProcessStateType.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER) >= 0;
+	return !((AcquisitionProcess)getProcess()).getSkipSupplierFundAllocation() && getAcquisitionProcessStateType().compareTo(AcquisitionProcessStateType.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER) >= 0;
     }
 
     public boolean isInAllocatedToSupplierState() {

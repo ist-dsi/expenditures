@@ -38,7 +38,7 @@ import pt.ist.fenixWebFramework.struts.annotations.Forwards;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
 @Mapping(path = "/acquisitionProcess")
-@Forwards( { @Forward(name = "search.acquisition.process", path = "/acquisitions/searchAcquisitionProcess.jsp")})
+@Forwards( { @Forward(name = "search.acquisition.process", path = "/acquisitions/searchAcquisitionProcess.jsp") })
 public class RegularAcquisitionProcessAction extends ProcessAction {
 
     private static final Context CONTEXT = new Context("acquisitions");
@@ -453,4 +453,27 @@ public class RegularAcquisitionProcessAction extends ProcessAction {
 
 	return viewAcquisitionProcess(mapping, request, process);
     }
+
+    public ActionForward executeSetSkipSupplierFundAllocation(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+
+	AcquisitionProcess process = getProcess(request);
+	genericActivityExecution(process, "SetSkipSupplierFundAllocation", new Object[] {});
+
+	return viewAcquisitionProcess(mapping, request, process);
+    }
+
+    public ActionForward executeUnsetSkipSupplierFundAllocation(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+
+	AcquisitionProcess process = getProcess(request);
+	try {
+	    genericActivityExecution(process, "UnsetSkipSupplierFundAllocation", new Object[] {});
+	} catch (DomainException e) {
+	    addMessage(e.getLocalizedMessage(), getBundle(), new String[] {});
+	}
+
+	return viewAcquisitionProcess(mapping, request, process);
+    }
+
 }

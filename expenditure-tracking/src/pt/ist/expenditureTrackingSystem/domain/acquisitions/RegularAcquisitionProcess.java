@@ -4,8 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.joda.time.LocalDate;
+
+import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
+import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericLog;
 
 public abstract class RegularAcquisitionProcess extends RegularAcquisitionProcess_Base {
@@ -137,5 +141,32 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
     }
 
     public abstract Map<ActivityScope, List<GenericAcquisitionProcessActivity>> getProcessActivityMap();
+
+    @Override
+    public void setSkipSupplierFundAllocation(Boolean skipSupplierFundAllocation) {
+	throw new DomainException("error.illegal.method.use");
+    }
+
+    public void unSkipSupplierFundAllocation() {
+	for (Supplier supplier : getAcquisitionRequest().getSuppliers()) {
+	    if (!supplier.isFundAllocationAllowed(getAcquisitionRequest().getTotalItemValue())) {
+		throw new DomainException("acquisitionProcess.message.exception.SupplierDoesNotAlloweAmount");
+	    }
+	}
+	super.setSkipSupplierFundAllocation(Boolean.FALSE);
+	if (!getAcquisitionProcessState().isInGenesis()) {
+	    LocalDate now = new LocalDate();
+	    setFundAllocationExpirationDate(now.plusDays(90));
+	}
+    }
+
+    public void skipSupplierFundAllocation() {
+	super.setSkipSupplierFundAllocation(Boolean.TRUE);
+	setFundAllocationExpirationDate(null);
+    }
+
+    public void skipFundAllocation() {
+	new AcquisitionProcessState(this, AcquisitionProcessStateType.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER);
+    }
 
 }

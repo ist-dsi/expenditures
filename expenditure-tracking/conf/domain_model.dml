@@ -212,6 +212,7 @@ class processes.GenericProcess {
 
 	class acquisitions.AcquisitionProcess extends processes.GenericProcess {
 		LocalDate fundAllocationExpirationDate;
+		Boolean skipSupplierFundAllocation;
 		Integer acquisitionProcessNumber;
 	}
 

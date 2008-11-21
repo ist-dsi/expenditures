@@ -36,6 +36,7 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 		.getYear());
 	setAcquisitionProcessYear(acquisitionProcessYear);
 	setAcquisitionProcessNumber(acquisitionProcessYear.nextAcquisitionProcessYearNumber());
+	super.setSkipSupplierFundAllocation(Boolean.FALSE);
     }
 
     public void delete() {

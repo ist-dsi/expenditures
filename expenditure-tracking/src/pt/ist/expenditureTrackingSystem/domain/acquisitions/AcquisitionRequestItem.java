@@ -39,6 +39,10 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
     }
 
     private void checkLimits(AcquisitionRequest acquisitionRequest, Integer quantity, Money unitValue) {
+	if (acquisitionRequest.getAcquisitionProcess().getSkipSupplierFundAllocation()) {
+	    return;
+	}
+
 	Money totalValue = unitValue.multiply(quantity.longValue());
 
 	if (getUnitValue() != null && getQuantity() != null) {

@@ -39,12 +39,14 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activitie
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RemoveProjectFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SendPurchaseOrderToSupplier;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SetRefundee;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SetSkipSupplierFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SkipPurchaseOrderDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SubmitForApproval;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SubmitForConfirmInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SubmitForFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.UnApproveAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.UnSubmitForApproval;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.UnsetSkipSupplierFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
@@ -102,6 +104,9 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 
 	requestInformationActivities.add(new SetRefundee());
 
+	requestInformationActivities.add(new SetSkipSupplierFundAllocation());
+	requestInformationActivities.add(new UnsetSkipSupplierFundAllocation());
+	
 	requestItemActivities.add(new DeleteAcquisitionRequestItem());
 	requestItemActivities.add(new EditAcquisitionRequestItem());
 	requestItemActivities.add(new AssignPayingUnitToItem());

@@ -16,7 +16,7 @@ public class SubmitForFundAllocation extends GenericAcquisitionProcessActivity {
 
     @Override
     protected boolean isAvailable(RegularAcquisitionProcess process) {
-	return  super.isAvailable(process) && process.isPendingApproval();
+	return super.isAvailable(process) && process.isPendingApproval();
     }
 
     @Override
@@ -24,8 +24,13 @@ public class SubmitForFundAllocation extends GenericAcquisitionProcessActivity {
 	Person person = (Person) objects[0];
 	process.getAcquisitionRequest().submittedForFundsAllocation(person);
 	if (process.getAcquisitionRequest().isSubmittedForFundsAllocationByAllResponsibles()) {
-	    process.submitForFundAllocation();
-	    new FundAllocationExpirationDate().execute(process, new Object[] {});
+	    if (!process.getSkipSupplierFundAllocation()) {
+		process.submitForFundAllocation();
+		new FundAllocationExpirationDate().execute(process, new Object[] {});
+	    }
+	    else {
+		process.skipFundAllocation();
+	    }
 	}
     }
 

@@ -5,6 +5,7 @@ import java.util.Set;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 
 public class CostCenter extends CostCenter_Base {
@@ -20,7 +21,7 @@ public class CostCenter extends CostCenter_Base {
     public void findAcquisitionProcessesPendingAuthorization(final Set<AcquisitionProcess> result, final boolean recurseSubUnits) {
 	final String costCenter = getCostCenter();
 	if (costCenter != null) {
-	    for (final AcquisitionProcess acquisitionProcess : GenericProcess.getAllProcesses(AcquisitionProcess.class)) {
+	    for (final AcquisitionProcess acquisitionProcess : GenericProcess.getAllProcesses(RegularAcquisitionProcess.class)) {
 		if (acquisitionProcess.getPayingUnits().contains(this) && acquisitionProcess.isPendingApproval())
 		    result.add(acquisitionProcess);
 	    }
