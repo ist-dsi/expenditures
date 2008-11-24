@@ -38,6 +38,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activitie
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RemoveFundsPermanentlyAllocated;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RemovePayingUnit;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RemoveProjectFundAllocation;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RevertInvoiceSubmission;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SendPurchaseOrderToSupplier;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SetRefundee;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SetSkipSupplierFundAllocation;
@@ -75,7 +76,7 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	requestInformationActivities.add(new CreateAcquisitionRequestItem());
 	requestInformationActivities.add(new AddPayingUnit());
 	requestInformationActivities.add(new RemovePayingUnit());
-	//requestInformationActivities.add(new DeleteAcquisitionProcess());
+	// requestInformationActivities.add(new DeleteAcquisitionProcess());
 	requestInformationActivities.add(new SubmitForApproval());
 
 	requestInformationActivities.add(new SubmitForFundAllocation());
@@ -108,7 +109,9 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 
 	requestInformationActivities.add(new SetSkipSupplierFundAllocation());
 	requestInformationActivities.add(new UnsetSkipSupplierFundAllocation());
-	
+
+	requestInformationActivities.add(new RevertInvoiceSubmission());
+
 	requestItemActivities.add(new DeleteAcquisitionRequestItem());
 	requestItemActivities.add(new EditAcquisitionRequestItem());
 	requestItemActivities.add(new AssignPayingUnitToItem());
