@@ -16,7 +16,7 @@
 <bean:define id="urlSave"><%= actionMapping %>.do?method=setRefundee&amp;acquisitionProcessOid=<bean:write name="acquisitionProcess" property="OID"/></bean:define>
 
 <p class="mbottom05">
-	<strong><bean:message key="acquisitionProcess.title.set.refundee" bundle="ACQUISITION_RESOURCES"/>:</strong>
+	<strong><bean:message key="acquisitionProcess.title.set.refundee" bundle="ACQUISITION_RESOURCES"/></strong>
 </p>
 
 <fr:edit id="setRefundeeBean"
