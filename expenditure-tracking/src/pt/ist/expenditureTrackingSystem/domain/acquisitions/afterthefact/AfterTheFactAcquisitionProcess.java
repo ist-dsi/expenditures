@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
@@ -18,7 +17,6 @@ import pt.ist.expenditureTrackingSystem.domain.processes.GenericLog;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 import pt.ist.fenixWebFramework.security.UserView;
 import pt.ist.fenixWebFramework.services.Service;
-import pt.ist.fenixframework.pstm.Transaction;
 
 public class AfterTheFactAcquisitionProcess extends AfterTheFactAcquisitionProcess_Base {
 
@@ -57,7 +55,14 @@ public class AfterTheFactAcquisitionProcess extends AfterTheFactAcquisitionProce
     }
 
     public List<AbstractActivity<AfterTheFactAcquisitionProcess>> getActiveActivities() {
-	return new ArrayList<AbstractActivity<AfterTheFactAcquisitionProcess>>(activities);
+	final List<AbstractActivity<AfterTheFactAcquisitionProcess>> activities =
+	    	new ArrayList<AbstractActivity<AfterTheFactAcquisitionProcess>>();
+	for (final AbstractActivity<AfterTheFactAcquisitionProcess> activity : this.activities) {
+	    if (activity.isActive(this)) {
+		activities.add(activity);
+	    }
+	}
+	return activities;
     }
 
     public void edit(final AfterTheFactAcquisitionProcessBean afterTheFactAcquisitionProcessBean) {
@@ -69,8 +74,6 @@ public class AfterTheFactAcquisitionProcess extends AfterTheFactAcquisitionProce
     public void delete() {
 	final AcquisitionAfterTheFact acquisitionAfterTheFact = getAcquisitionAfterTheFact();
 	acquisitionAfterTheFact.delete();
-	removeExpenditureTrackingSystem();
-	Transaction.deleteObject(this);
     }
 
     @Override

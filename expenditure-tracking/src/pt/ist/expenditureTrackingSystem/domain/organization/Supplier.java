@@ -78,7 +78,9 @@ public class Supplier extends Supplier_Base {
 	    }
 	}
 	for (final AcquisitionAfterTheFact acquisitionAfterTheFact : getAcquisitionsAfterTheFactSet()) {
-	    result = result.add(acquisitionAfterTheFact.getValue());
+	    if (!acquisitionAfterTheFact.getDeleted().booleanValue()) {
+		result = result.add(acquisitionAfterTheFact.getValue());
+	    }
 	}
 	return result;
     }
@@ -96,8 +98,10 @@ public class Supplier extends Supplier_Base {
     public Money getTotalAllocatedByAfterTheFactAcquisitions(final AfterTheFactAcquisitionType afterTheFactAcquisitionType) {
 	Money result = Money.ZERO;
 	for (final AcquisitionAfterTheFact acquisitionAfterTheFact : getAcquisitionsAfterTheFactSet()) {
-	    if (acquisitionAfterTheFact.getAfterTheFactAcquisitionType() == afterTheFactAcquisitionType) {
-		result = result.add(acquisitionAfterTheFact.getValue());
+	    if (!acquisitionAfterTheFact.getDeleted().booleanValue()) {
+		if (acquisitionAfterTheFact.getAfterTheFactAcquisitionType() == afterTheFactAcquisitionType) {
+		    result = result.add(acquisitionAfterTheFact.getValue());
+		}
 	    }
 	}
 	return result;
