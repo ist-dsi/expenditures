@@ -6,6 +6,8 @@ import pt.ist.expenditureTrackingSystem.domain.util.ByteArray;
 
 public class File extends File_Base {
 
+    public static final String EXTENSION_PDF = "pdf";
+
     public File() {
 	super();
 	setOjbConcreteClass(getClass().getName());
