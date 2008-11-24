@@ -15,12 +15,12 @@ public class AcquisitionAfterTheFact extends AcquisitionAfterTheFact_Base {
 	setVatValue(afterTheFactAcquisitionProcessBean.getVatValue());
 	setSupplier(afterTheFactAcquisitionProcessBean.getSupplier());
 	setDescription(afterTheFactAcquisitionProcessBean.getDescription());
-	setDeleted(Boolean.FALSE);
+	setDeletedState(Boolean.FALSE);
     }
 
     @Override
     public void delete() {
-	setDeleted(Boolean.TRUE);
+	setDeletedState(Boolean.TRUE);
     }
 
     public String getAcquisitionProcessId() {

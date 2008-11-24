@@ -21,7 +21,7 @@ public class DeleteAfterTheFactAcquisitionProcess extends AbstractActivity<After
     @Override
     protected boolean isAvailable(final AfterTheFactAcquisitionProcess process) {
 	final AcquisitionAfterTheFact acquisitionAfterTheFact = process.getAcquisitionAfterTheFact();
-	return !acquisitionAfterTheFact.getDeleted().booleanValue();
+	return !acquisitionAfterTheFact.getDeletedState().booleanValue();
     }
 
     @Override

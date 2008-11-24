@@ -22,7 +22,7 @@ public class EditAfterTheFactAcquisition extends AbstractActivity<AfterTheFactAc
     @Override
     protected boolean isAvailable(final AfterTheFactAcquisitionProcess process) {
 	final AcquisitionAfterTheFact acquisitionAfterTheFact = process.getAcquisitionAfterTheFact();
-	return !acquisitionAfterTheFact.getDeleted().booleanValue();
+	return !acquisitionAfterTheFact.getDeletedState().booleanValue();
     }
 
     @Override

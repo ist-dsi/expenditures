@@ -31,7 +31,7 @@ class acquisitions.Acquisition {
 		Money value;
 		BigDecimal vatValue;
 		String description;
-		Boolean deleted;
+		Boolean deletedState;
 	}
 
 	class acquisitions.AcquisitionRequest extends acquisitions.Acquisition {

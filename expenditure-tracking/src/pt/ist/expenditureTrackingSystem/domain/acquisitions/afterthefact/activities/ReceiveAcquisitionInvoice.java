@@ -23,7 +23,7 @@ public class ReceiveAcquisitionInvoice extends AbstractActivity<AfterTheFactAcqu
     @Override
     protected boolean isAvailable(final AfterTheFactAcquisitionProcess process) {
 	final AcquisitionAfterTheFact acquisitionAfterTheFact = process.getAcquisitionAfterTheFact();
-	return !acquisitionAfterTheFact.getDeleted().booleanValue();
+	return !acquisitionAfterTheFact.getDeletedState().booleanValue();
     }
 
     @Override

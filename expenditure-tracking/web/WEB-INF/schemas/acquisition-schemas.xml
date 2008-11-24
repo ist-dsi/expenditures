@@ -521,6 +521,7 @@
 	<slot name="value" key="label.value" bundle="EXPENDITURE_RESOURCES"/>
 	<slot name="vatValue" key="label.vatValue" bundle="EXPENDITURE_RESOURCES"/>
 	<slot name="description" key="label.description" bundle="EXPENDITURE_RESOURCES"/>
+	<slot name="deletedState" key="label.deleted" bundle="EXPENDITURE_RESOURCES"/>
 </schema>
 
 <schema name="afterTheFactAcquisitionsImportBean"
