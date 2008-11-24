@@ -23,11 +23,15 @@ import pt.utl.ist.fenix.tools.util.i18n.Language;
 
 public abstract class GenericAcquisitionProcessActivity extends AbstractActivity<RegularAcquisitionProcess> {
 
-    @Override
-    protected boolean isAvailable(RegularAcquisitionProcess process) {
+    protected boolean isCurrentUserProcessOwner(RegularAcquisitionProcess process) {
 	Person currentOwner = process.getCurrentOwner();
 	User user = getUser();
 	return currentOwner == null || (user != null && user.getPerson() == currentOwner);
+    }
+
+    @Override
+    protected boolean isAvailable(RegularAcquisitionProcess process) {
+	return isCurrentUserProcessOwner(process);
     }
 
     @Override

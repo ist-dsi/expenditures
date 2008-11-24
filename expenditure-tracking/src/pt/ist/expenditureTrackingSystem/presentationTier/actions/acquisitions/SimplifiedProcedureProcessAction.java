@@ -139,6 +139,11 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	return mapping.findForward("add.acquisition.proposal.document");
     }
 
+    public ActionForward executeChangeAcquisitionProposalDocument(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	return executeAddAcquisitionProposalDocument(mapping, form, request, response);
+    }
+    
     public ActionForward addAcquisitionProposalDocument(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final SimplifiedProcedureProcess acquisitionProcess = getProcess(request);
@@ -147,7 +152,10 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	final String filename = acquisitionProposalDocumentForm.getFilename();
 	final byte[] bytes = consumeInputStream(acquisitionProposalDocumentForm);
 	final String proposalID = acquisitionProposalDocumentForm.getProposalID();
-	acquisitionProcess.getActivityByName("AddAcquisitionProposalDocument").execute(acquisitionProcess, filename, bytes,
+	final AcquisitionRequest acquisitionRequest = acquisitionProcess.getAcquisitionRequest();
+	final AcquisitionProposalDocument acquisitionProposalDocument = acquisitionRequest.getAcquisitionProposalDocument();
+	final String activity = acquisitionProposalDocument == null ? "AddAcquisitionProposalDocument" : "ChangeAcquisitionProposalDocument";
+	acquisitionProcess.getActivityByName(activity).execute(acquisitionProcess, filename, bytes,
 		proposalID);
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }

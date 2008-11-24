@@ -16,7 +16,9 @@ public class AddAcquisitionProposalDocument extends GenericAcquisitionProcessAct
 
     @Override
     protected boolean isAvailable(RegularAcquisitionProcess process) {
-	return super.isAvailable(process) && process.getAcquisitionProcessState().isInGenesis();
+	final AcquisitionRequest acquisitionRequest = process.getAcquisitionRequest();
+	return super.isAvailable(process) && process.getAcquisitionProcessState().isInGenesis()
+		&& acquisitionRequest.getAcquisitionProposalDocument() == null;
     }
 
     @Override
