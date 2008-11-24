@@ -36,6 +36,7 @@ import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationExpirationDateB
 import pt.ist.expenditureTrackingSystem.domain.dto.SetRefundeeBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.UnitItemBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.VariantBean;
+import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.presentationTier.util.FileUploadBean;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
@@ -642,8 +643,25 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
     public ActionForward setRefundee(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final SetRefundeeBean setRefundeeBean = getRenderedObject();
-	final AcquisitionProcess acquisitionProcess = getProcess(request);
-	genericActivityExecution(acquisitionProcess, "SetRefundee", setRefundeeBean);
+	final SimplifiedProcedureProcess acquisitionProcess = getProcess(request);
+	final AcquisitionRequest acquisitionRequest = acquisitionProcess.getAcquisitionRequest();
+	final Person refundee = acquisitionRequest.getRefundee();
+	final String activity = refundee == null ? "SetRefundee" : "ChangeRefundee";
+	genericActivityExecution(acquisitionProcess, activity, setRefundeeBean);
+	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
+    }
+
+    public ActionForward executeChangeRefundee(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	return executeSetRefundee(mapping, form, request, response);
+    }
+
+    public ActionForward executeUnsetRefundee(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final SimplifiedProcedureProcess acquisitionProcess = getProcess(request);
+	final SetRefundeeBean setRefundeeBean = new SetRefundeeBean(acquisitionProcess);
+	setRefundeeBean.setRefundee(null);
+	genericActivityExecution(acquisitionProcess, "UnsetRefundee", setRefundeeBean);
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
 

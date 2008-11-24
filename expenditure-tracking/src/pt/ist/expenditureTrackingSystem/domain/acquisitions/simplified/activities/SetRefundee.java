@@ -11,14 +11,15 @@ import pt.ist.fenixWebFramework.security.UserView;
 
 public class SetRefundee extends GenericAcquisitionProcessActivity {
 
-    private boolean isRequester(final RegularAcquisitionProcess process) {
+    protected boolean isRequester(final RegularAcquisitionProcess process) {
 	final User user = UserView.getUser();
 	return user != null && user.getPerson().equals(process.getRequestor());
     }
 
     @Override
     protected boolean isAccessible(final RegularAcquisitionProcess process) {
-	return isRequester(process) || userHasRole(RoleType.ACQUISITION_CENTRAL);
+	final AcquisitionRequest acquisitionRequest = process.getAcquisitionRequest();
+	return acquisitionRequest.getRefundee() == null && (isRequester(process) || userHasRole(RoleType.ACQUISITION_CENTRAL));
     }
 
     @Override
