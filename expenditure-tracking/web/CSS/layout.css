@@ -1039,3 +1039,8 @@ display: block;
 
 .nopadding table tr th { padding: 0 !important; }
 .nopadding table tr td { padding: 0 !important; }
+
+table.thpadding02505 th { padding: 0.25em 0.5em; } /* higher th paddings for table.tstyle1 */
+table tr.itemmbottom th { padding-bottom: 1em; }
+table tr.itemmbottom td { padding-bottom: 1em; }
+

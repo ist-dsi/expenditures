@@ -4,21 +4,10 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 			
-			
-<style>
-table.asd th { padding: 0.25em 0.5em; }
-table tr.itemmbottom th { padding-bottom: 1em; }
-table tr.itemmbottom td { padding-bottom: 1em; }
-
-/*
-tr.asd td { text-align: right;}
-*/
-
-</style>
 
 <div class="infoop2">
 	
-	<table class="tstyle1 asd">
+	<table class="tstyle1 thpadding02505" style="width: 100%;">
 
 		<tr>
 			<th colspan="4" style="background: #eaeaea;"><bean:message key="acquisitionProcess.title.description" bundle="ACQUISITION_RESOURCES"/></th>
@@ -47,7 +36,7 @@ tr.asd td { text-align: right;}
 		<tr>
 			<th colspan="4" style="background: #eaeaea;"><bean:message key="acquisitionProcess.title.quantityAndCosts.lowercase" bundle="ACQUISITION_RESOURCES"/></th>
 		</tr>	
-		<tr class="asd">
+		<tr>
 			<th><bean:message key="acquisitionRequestItem.label.quantity" bundle="ACQUISITION_RESOURCES"/>:</th>
 			<td class="nowrap"><fr:view name="acquisitionRequestItem" property="quantity"/></td>
 			<th style="padding-left: 1em;"><bean:message key="acquisitionRequestItem.label.realQuantity" bundle="ACQUISITION_RESOURCES"/>:</th>
@@ -58,7 +47,7 @@ tr.asd td { text-align: right;}
 					</fr:view>
 			</td>
 		</tr>
-		<tr class="asd">
+		<tr>
 			<th><bean:message key="acquisitionRequestItem.label.unitValue" bundle="ACQUISITION_RESOURCES"/>:</th>
 			<td class="nowrap"><fr:view name="acquisitionRequestItem" property="unitValue"/></td>
 			<th style="padding-left: 1em;"><bean:message key="acquisitionRequestItem.label.realUnitValue" bundle="ACQUISITION_RESOURCES"/>:</th>
@@ -70,7 +59,7 @@ tr.asd td { text-align: right;}
 				</fr:view>
 			</td>
 		</tr>
-		<tr class="asd">
+		<tr>
 			<th><bean:message key="acquisitionRequestItem.label.totalValue" bundle="ACQUISITION_RESOURCES"/>:</th>
 			<td class="nowrap"><span><fr:view name="acquisitionRequestItem" property="totalItemValue"/></span></td>
 			<th style="padding-left: 1em;"><bean:message key="acquisitionRequestItem.label.totalRealValue" bundle="ACQUISITION_RESOURCES"/>:</th>
@@ -84,7 +73,7 @@ tr.asd td { text-align: right;}
 				</span>
 			</td>
 		</tr>
-		<tr class="asd">
+		<tr>
 			<th><bean:message key="acquisitionRequestItem.label.vatValue" bundle="ACQUISITION_RESOURCES"/></th>
 			<td class="nowrap"><fr:view name="acquisitionRequestItem" property="vatValue"/></td>
 			<th style="padding-left: 1em;"><bean:message key="acquisitionRequestItem.label.realVatValue" bundle="ACQUISITION_RESOURCES"/>:</th>
@@ -96,7 +85,7 @@ tr.asd td { text-align: right;}
 				</fr:view>
 			</td>
 		</tr>
-		<tr class="asd">
+		<tr>
 			<th><bean:message key="acquisitionRequestItem.label.vat" bundle="ACQUISITION_RESOURCES"/></th>
 			<td class="nowrap"><fr:view name="acquisitionRequestItem" property="totalVatValue"/></td>
 			<th style="padding-left: 1em;"><bean:message key="acquisitionRequestItem.label.realVat" bundle="ACQUISITION_RESOURCES"/>:</th>
