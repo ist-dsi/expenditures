@@ -516,7 +516,7 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	    beans.add(new UnitItemBean(unitItem));
 	}
 	request.setAttribute("item", item);
-	request.setAttribute("beans", beans);
+	request.setAttribute("unitItemBeans", beans);
 
 	return mapping.findForward("edit.real.shares.values");
     }

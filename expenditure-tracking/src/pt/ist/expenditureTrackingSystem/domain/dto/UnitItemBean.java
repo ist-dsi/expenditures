@@ -22,6 +22,7 @@ public class UnitItemBean implements Serializable {
 	setItem(unitItem.getItem());
 	setShareValue(unitItem.getShareValue());
 	setRealShareValue(unitItem.getRealShareValue());
+	setAssigned(Boolean.TRUE);
     }
     
     public UnitItemBean(Unit unit, AcquisitionRequestItem item) {

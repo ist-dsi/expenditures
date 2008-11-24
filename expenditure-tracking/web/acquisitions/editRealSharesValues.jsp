@@ -17,7 +17,7 @@
 	<bean:message key="acquisitionRequestItem.label.outOf" bundle="ACQUISITION_RESOURCES"/>
 </bean:define>
 <bean:define id="maxValue" name="item" property="totalRealValueWithAdditionalCostsAndVat.value"/>
-<bean:size id="maxElements" name="beans"/>
+<bean:size id="maxElements" name="unitItemBeans"/>
 
 <bean:define id="itemOID" name="item" property="OID"/>
 
@@ -36,8 +36,9 @@
 <jsp:include page="../commons/defaultErrorDisplay.jsp"/>
 
 <div class="dinline forminline">	
-<fr:form action='<%= actionMapping + ".do?method=executeDistributeRealValuesForPayingUnitsEdition&acquisitionProcessOid="  + processOID + "&acquisitionRequestItemOid=" + itemOID%>'>
-	<fr:edit name="beans" id="beans" visible="false"/>
+<fr:form action='<%= actionMapping + ".do?acquisitionProcessOid="  + processOID + "&acquisitionRequestItemOid=" + itemOID%>'>
+	<html:hidden property="method" value="executeDistributeRealValuesForPayingUnitsEdition"/>
+	<fr:edit name="unitItemBeans" id="unitItemBeans" visible="false"/>
 	
 	<table class="tstyle4">	
 		<tr>
@@ -46,11 +47,11 @@
 			<th><bean:message key="acquisitionRequestItem.label.effectiveValue" bundle="ACQUISITION_RESOURCES"/></th>
 			<th><bean:message key="acquisitionRequestItem.label.estimatedValue" bundle="ACQUISITION_RESOURCES"/></th>
 		</tr>
-		<logic:iterate id="bean" name="beans" indexId="id">
+		<logic:iterate id="bean" name="unitItemBeans" indexId="id">
 			<tr  id='<%= "tr" + id %>' onKeyUp="<%= "javascript:calculate('" + maxElements + "', 'sum', '" + maxValue + "', '" + outOfLabel+ "');" %>">
 				<td><input type="checkbox" checked="true" disabled="disabled"/></td>
 				<td><fr:view name="bean" property="unit.presentationName"/></td>
-				<td><fr:edit name="bean" slot="realShareValue" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/></td>
+				<td><fr:edit name="bean" slot="realShareValue"/></td>
 				<td><fr:view name="bean" property="shareValue"/></td>
 			</tr>
 		</logic:iterate>
@@ -69,6 +70,11 @@
 		<script type="text/javascript">
 			 <%= "calculate('" + maxElements + "', 'sum', '" + maxValue + "', '" + outOfLabel+ "');" %> 
 		</script>
+		
+			<p class="mtop05 mbottom2">
+				<a href="javascript:document.forms[0].method.value='calculateRealShareValuePostBack'; document.forms[0].submit();">
+				 <bean:message key="acquisitionRequestItem.link.autoDistribute" bundle="ACQUISITION_RESOURCES"/> </a>
+			</p>
 		
 			<html:submit styleClass="inputbutton"><bean:message key="button.atribute" bundle="EXPENDITURE_RESOURCES"/> </html:submit>
 	</fr:form>

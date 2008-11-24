@@ -18,6 +18,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.SearchAcquisitionProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.UnitItem;
 import pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.DomainObjectBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.ProcessStateBean;
@@ -320,6 +321,20 @@ public class RegularAcquisitionProcessAction extends ProcessAction {
     public ActionForward calculateShareValuePostBack(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 
+	return genericCalculateShareValuePostBack(mapping, form, request, response, "assign.unit.item", false);
+    }
+
+    public ActionForward calculateRealShareValuePostBack(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+
+	final AcquisitionRequestItem item = getDomainObject(request, "acquisitionRequestItemOid");
+	request.setAttribute("item", item);
+	return genericCalculateShareValuePostBack(mapping, form, request, response, "edit.real.shares.values", true);
+    }
+
+    private ActionForward genericCalculateShareValuePostBack(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response, String forward, boolean realValue) {
+
 	final AcquisitionProcess acquisitionProcess = getProcess(request);
 	final AcquisitionRequestItem item = getDomainObject(request, "acquisitionRequestItemOid");
 
@@ -332,14 +347,24 @@ public class RegularAcquisitionProcessAction extends ProcessAction {
 	}
 	if (assigned != 0) {
 	    Money[] shareValues;
-	    shareValues = item.getTotalItemValueWithAdditionalCostsAndVat().allocate(assigned);
+	    Money totalItemValue = realValue ? item.getTotalRealValueWithAdditionalCostsAndVat() : item
+		    .getTotalItemValueWithAdditionalCostsAndVat();
+	    shareValues = totalItemValue.allocate(assigned);
 
 	    int i = 0;
 	    for (UnitItemBean bean : beans) {
 		if (bean.getAssigned()) {
-		    bean.setShareValue(shareValues[i++]);
+		    if (realValue) {
+			bean.setRealShareValue(shareValues[i++]);
+		    } else {
+			bean.setShareValue(shareValues[i++]);
+		    }
 		} else {
-		    bean.setShareValue(null);
+		    if (realValue) {
+			bean.setRealShareValue(null);
+		    } else {
+			bean.setShareValue(null);
+		    }
 		}
 	    }
 	}
@@ -348,7 +373,7 @@ public class RegularAcquisitionProcessAction extends ProcessAction {
 	request.setAttribute("unitItemBeans", beans);
 
 	RenderUtils.invalidateViewState();
-	return mapping.findForward("assign.unit.item");
+	return mapping.findForward(forward);
     }
 
     public ActionForward executeSubmitForApproval(final ActionMapping mapping, final ActionForm form,
