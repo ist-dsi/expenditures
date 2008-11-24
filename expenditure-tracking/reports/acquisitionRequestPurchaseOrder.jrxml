@@ -758,7 +758,7 @@ CAE 931 400]]></text>
 					<textElement textAlignment="Center" verticalAlignment="Top">
 						<font size="10"/>
 					</textElement>
-				<text><![CDATA[A Encomenda deverá ser acompanhada por Factura ou Guia, a ser entregue no Núcleo de Economato do Instituto Superior Técnico, na qual deverá constar o número da nossa nota de encomenda (Nº de Requisição Externa), sob pena de não ser efectuado o pagamento.]]></text>
+				<text><![CDATA[A Encomenda deverá ser acompanhada por Factura ou Guia, a ser entregue na Central de Compras do Instituto Superior Técnico, na qual deverá constar o número da nossa nota de encomenda (Nº de Requisição Externa), sob pena de não ser efectuado o pagamento.]]></text>
 				</staticText>
 				<staticText>
 					<reportElement
@@ -771,7 +771,7 @@ CAE 931 400]]></text>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="8"/>
 					</textElement>
-				<text><![CDATA[(Responsável Núcleo de Economato)]]></text>
+				<text><![CDATA[(Responsável da Central de Compras)]]></text>
 				</staticText>
 				<staticText>
 					<reportElement
