@@ -6,6 +6,13 @@
 
 <h2><bean:message key="acquisitionProcess.title.allocateFundsPermanently" bundle="ACQUISITION_RESOURCES"/></h2>
 
+<logic:present name="acquisitionProcess" property="currentOwner">
+	<bean:define id="ownerName" name="acquisitionProcess" property="currentOwner.firstAndLastName"/>
+	<div class="infoop4">
+		<bean:message key="acquisitionProcess.message.info.currentOwnerIs" bundle="ACQUISITION_RESOURCES" arg0="<%= ownerName.toString() %>"/>
+	</div>
+</logic:present>
+
 <bean:define id="acquisitionProcessOID" name="acquisitionProcess"  property="OID"/>
 <bean:define id="acquisitionProcess" name="acquisitionProcess" toScope="request"/>
 <jsp:include page="viewAcquisitionRequest.jsp" flush="true"/>

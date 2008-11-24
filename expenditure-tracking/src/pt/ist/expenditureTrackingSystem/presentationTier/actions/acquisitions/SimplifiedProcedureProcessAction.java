@@ -172,15 +172,23 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 
     public ActionForward executeProjectFundAllocation(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
-	User user = UserView.getUser();
 	final SimplifiedProcedureProcess acquisitionProcess = getProcess(request);
-	request.setAttribute("acquisitionProcess", acquisitionProcess);
-	List<FundAllocationBean> fundAllocationBeans = new ArrayList<FundAllocationBean>();
-	for (Financer financer : acquisitionProcess.getProjectFinancersWithFundsAllocated(user.getPerson())) {
-	    fundAllocationBeans.add(new FundAllocationBean(financer));
+	final User user = UserView.getUser();
+	if (acquisitionProcess.getCurrentOwner() == null ||
+		(user != null && acquisitionProcess.getCurrentOwner() == user.getPerson())) {
+	    if (acquisitionProcess.getCurrentOwner() == null) { 
+		acquisitionProcess.takeProcess();
+	    }
+	    request.setAttribute("acquisitionProcess", acquisitionProcess);
+	    List<FundAllocationBean> fundAllocationBeans = new ArrayList<FundAllocationBean>();
+	    for (Financer financer : acquisitionProcess.getProjectFinancersWithFundsAllocated(user.getPerson())) {
+		fundAllocationBeans.add(new FundAllocationBean(financer));
+	    }
+	    request.setAttribute("fundAllocationBeans", fundAllocationBeans);
+	    return mapping.findForward("allocate.project.funds");
+	} else {
+	    return viewAcquisitionProcess(mapping, request, acquisitionProcess);
 	}
-	request.setAttribute("fundAllocationBeans", fundAllocationBeans);
-	return mapping.findForward("allocate.project.funds");
     }
 
     public ActionForward allocateProjectFunds(final ActionMapping mapping, final ActionForm form,
@@ -193,15 +201,23 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 
     public ActionForward executeFundAllocation(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
-	User user = UserView.getUser();
 	final SimplifiedProcedureProcess acquisitionProcess = getProcess(request);
-	request.setAttribute("acquisitionProcess", acquisitionProcess);
-	List<FundAllocationBean> fundAllocationBeans = new ArrayList<FundAllocationBean>();
-	for (Financer financer : acquisitionProcess.getFinancersWithFundsAllocated(user.getPerson())) {
-	    fundAllocationBeans.add(new FundAllocationBean(financer));
+	final User user = UserView.getUser();
+	if (acquisitionProcess.getCurrentOwner() == null ||
+		(user != null && acquisitionProcess.getCurrentOwner() == user.getPerson())) {
+	    if (acquisitionProcess.getCurrentOwner() == null) { 
+		acquisitionProcess.takeProcess();
+	    }
+	    request.setAttribute("acquisitionProcess", acquisitionProcess);
+	    List<FundAllocationBean> fundAllocationBeans = new ArrayList<FundAllocationBean>();
+	    for (Financer financer : acquisitionProcess.getFinancersWithFundsAllocated(user.getPerson())) {
+		fundAllocationBeans.add(new FundAllocationBean(financer));
+	    }
+	    request.setAttribute("fundAllocationBeans", fundAllocationBeans);
+	    return mapping.findForward("allocate.funds");
+	} else {
+	    return viewAcquisitionProcess(mapping, request, acquisitionProcess);
 	}
-	request.setAttribute("fundAllocationBeans", fundAllocationBeans);
-	return mapping.findForward("allocate.funds");
     }
 
     public ActionForward allocateFunds(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -329,20 +345,28 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
     public ActionForward executeAllocateProjectFundsPermanently(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final SimplifiedProcedureProcess acquisitionProcess = getProcess(request);
-	request.setAttribute("acquisitionProcess", acquisitionProcess);
-	List<FundAllocationBean> fundAllocationBeans = new ArrayList<FundAllocationBean>();
-	for (Financer financer : acquisitionProcess.getFinancersWithFundsAllocated()) {
-	    if (financer.isProjectFinancer()) {
-		final ProjectFinancer projectFinancer = (ProjectFinancer) financer;
-		FundAllocationBean fundAllocationBean = new FundAllocationBean(projectFinancer);
-		fundAllocationBean.setFundAllocationId(projectFinancer.getProjectFundAllocationId());
-		fundAllocationBean.setEffectiveFundAllocationId(projectFinancer.getProjectFundAllocationId());
-		fundAllocationBeans.add(fundAllocationBean);
+	final User user = UserView.getUser();
+	if (acquisitionProcess.getCurrentOwner() == null ||
+		(user != null && acquisitionProcess.getCurrentOwner() == user.getPerson())) {
+	    if (acquisitionProcess.getCurrentOwner() == null) { 
+		acquisitionProcess.takeProcess();
 	    }
+	    request.setAttribute("acquisitionProcess", acquisitionProcess);
+	    List<FundAllocationBean> fundAllocationBeans = new ArrayList<FundAllocationBean>();
+	    for (Financer financer : acquisitionProcess.getFinancersWithFundsAllocated()) {
+		if (financer.isProjectFinancer()) {
+		    final ProjectFinancer projectFinancer = (ProjectFinancer) financer;
+		    FundAllocationBean fundAllocationBean = new FundAllocationBean(projectFinancer);
+		    fundAllocationBean.setFundAllocationId(projectFinancer.getProjectFundAllocationId());
+		    fundAllocationBean.setEffectiveFundAllocationId(projectFinancer.getProjectFundAllocationId());
+		    fundAllocationBeans.add(fundAllocationBean);
+		}
+	    }
+	    request.setAttribute("fundAllocationBeans", fundAllocationBeans);	    
+	    return mapping.findForward("allocate.effective.project.funds");
+	} else {
+	    return viewAcquisitionProcess(mapping, request, acquisitionProcess);
 	}
-	request.setAttribute("fundAllocationBeans", fundAllocationBeans);
-
-	return mapping.findForward("allocate.effective.project.funds");
     }
 
     public ActionForward allocateProjectFundsPermanently(final ActionMapping mapping, final ActionForm form,
@@ -368,17 +392,26 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
     public ActionForward executeAllocateFundsPermanently(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final SimplifiedProcedureProcess acquisitionProcess = getProcess(request);
-	request.setAttribute("acquisitionProcess", acquisitionProcess);
-	List<FundAllocationBean> fundAllocationBeans = new ArrayList<FundAllocationBean>();
-	for (Financer financer : acquisitionProcess.getFinancersWithFundsAllocated()) {
-	    FundAllocationBean fundAllocationBean = new FundAllocationBean(financer);
-	    fundAllocationBean.setFundAllocationId(financer.getFundAllocationId());
-	    fundAllocationBean.setEffectiveFundAllocationId(financer.getFundAllocationId());
-	    fundAllocationBeans.add(fundAllocationBean);
-	}
-	request.setAttribute("fundAllocationBeans", fundAllocationBeans);
+	final User user = UserView.getUser();
+	if (acquisitionProcess.getCurrentOwner() == null ||
+		(user != null && acquisitionProcess.getCurrentOwner() == user.getPerson())) {
+	    if (acquisitionProcess.getCurrentOwner() == null) { 
+		acquisitionProcess.takeProcess();
+	    }
+	    request.setAttribute("acquisitionProcess", acquisitionProcess);
+	    List<FundAllocationBean> fundAllocationBeans = new ArrayList<FundAllocationBean>();
+	    for (Financer financer : acquisitionProcess.getFinancersWithFundsAllocated()) {
+		FundAllocationBean fundAllocationBean = new FundAllocationBean(financer);
+		fundAllocationBean.setFundAllocationId(financer.getFundAllocationId());
+		fundAllocationBean.setEffectiveFundAllocationId(financer.getFundAllocationId());
+		fundAllocationBeans.add(fundAllocationBean);
+	    }
+	    request.setAttribute("fundAllocationBeans", fundAllocationBeans);
 
-	return mapping.findForward("allocate.effective.funds");
+	    return mapping.findForward("allocate.effective.funds");
+	} else {
+	    return viewAcquisitionProcess(mapping, request, acquisitionProcess);
+	}
     }
 
     private ActionForward addAllocationFundGeneric(final ActionMapping mapping, final HttpServletRequest request,
