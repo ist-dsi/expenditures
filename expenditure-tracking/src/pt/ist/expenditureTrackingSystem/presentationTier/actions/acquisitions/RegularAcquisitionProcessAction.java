@@ -449,7 +449,7 @@ public class RegularAcquisitionProcessAction extends ProcessAction {
 
 	FileUploadBean bean = getRenderedObject("uploadFile");
 	AcquisitionProcess process = getProcess(request);
-	process.addFile(bean.getFilename(), consumeInputStream(bean));
+	process.addFile(bean.getDisplayName(), bean.getFilename(), consumeInputStream(bean));
 
 	return viewAcquisitionProcess(mapping, request, process);
     }

@@ -341,8 +341,8 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
     }
 
     @Service
-    public void addFile(String filename, byte[] consumeInputStream) {
-	GenericFile file = new GenericFile(filename, consumeInputStream);
+    public void addFile(String displayName, String filename, byte[] consumeInputStream) {
+	GenericFile file = new GenericFile(displayName, filename, consumeInputStream);
 	addFiles(file);
     }
 }

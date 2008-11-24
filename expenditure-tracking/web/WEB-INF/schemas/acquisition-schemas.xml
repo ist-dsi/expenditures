@@ -585,7 +585,7 @@
 <schema name="addGenericFile"
 		type="pt.ist.expenditureTrackingSystem.presentationTier.util.FileUploadBean"
 		bundle="ACQUISITION_RESOURCES">
-	<slot name="filename" key="acquisitionProcess.label.filename" bundle="ACQUISITION_RESOURCES">
+	<slot name="displayName" key="acquisitionProcess.label.filename" bundle="ACQUISITION_RESOURCES">
 		<property name="size" value="40"/>
 	</slot>
 	<slot name="inputStream" key="acquisitionProcess.label.document"	

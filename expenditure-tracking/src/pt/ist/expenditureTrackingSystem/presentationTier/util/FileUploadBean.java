@@ -7,6 +7,7 @@ public class FileUploadBean implements Serializable {
 
     private transient InputStream inputStream;
     private String filename;
+    private String displayName;
 
     public FileUploadBean() {
     }
@@ -25,6 +26,14 @@ public class FileUploadBean implements Serializable {
 
     public void setFilename(String filename) {
 	this.filename = filename;
+    }
+
+    public String getDisplayName() {
+	return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+	this.displayName = displayName;
     }
 
 }

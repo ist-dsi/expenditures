@@ -110,6 +110,7 @@ class authorizations.Authorization {
 class File {
 	String ojbConcreteClass;
 	String filename;
+	String displayName;
 	ByteArray content;
 	String contentType;
 }
