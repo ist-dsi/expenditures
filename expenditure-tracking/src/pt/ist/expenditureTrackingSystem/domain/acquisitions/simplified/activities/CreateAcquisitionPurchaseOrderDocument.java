@@ -8,9 +8,7 @@ import java.util.ResourceBundle;
 
 import net.sf.jasperreports.engine.JRException;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
-import pt.ist.expenditureTrackingSystem.domain.File;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PurchaseOrderDocument;
@@ -21,6 +19,8 @@ import pt.ist.expenditureTrackingSystem.util.ReportUtils;
 
 public class CreateAcquisitionPurchaseOrderDocument extends GenericAcquisitionProcessActivity {
 
+    private static final String EXTENSION_PDF = "pdf";
+
     @Override
     protected boolean isAccessible(RegularAcquisitionProcess process) {
 	return userHasRole(RoleType.ACQUISITION_CENTRAL);
@@ -28,14 +28,14 @@ public class CreateAcquisitionPurchaseOrderDocument extends GenericAcquisitionPr
 
     @Override
     protected boolean isAvailable(RegularAcquisitionProcess process) {
-	return  super.isAvailable(process) && process.getAcquisitionProcessState().isApproved();
+	return super.isAvailable(process) && process.getAcquisitionProcessState().isApproved();
     }
 
     @Override
     protected void process(RegularAcquisitionProcess process, Object... objects) {
 	String requestID = process.getAcquisitionRequest().getAcquisitionRequestDocumentID();
 	byte[] file = createPurchaseOrderDocument(process.getAcquisitionRequest(), requestID);
-	new PurchaseOrderDocument(process.getAcquisitionRequest(), file, requestID + "." + File.EXTENSION_PDF, requestID);
+	new PurchaseOrderDocument(process.getAcquisitionRequest(), file, requestID + "." + EXTENSION_PDF, requestID);
     }
 
     protected byte[] createPurchaseOrderDocument(final AcquisitionRequest acquisitionRequest, final String requestID) {
