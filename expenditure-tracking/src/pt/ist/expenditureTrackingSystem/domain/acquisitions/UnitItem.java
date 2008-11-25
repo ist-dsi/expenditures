@@ -42,6 +42,14 @@ public class UnitItem extends UnitItem_Base {
 	}
     }
 
+    public Money getRoundedShareValue() {
+	return getShareValue() != null ? new Money(getShareValue().getRoundedValue()) : null;
+    }
+
+    public Money getRoundedRealShareValue() {
+	return getRealShareValue() != null ? new Money(getRealShareValue().getRoundedValue()) : null;
+    }
+
     public BigDecimal getVatValue() {
 	return getItem().getVatValue();
     }

@@ -61,10 +61,10 @@ public class Financer extends Financer_Base {
     public Money getAmountAllocated() {
 	Money amount = Money.ZERO;
 	for (UnitItem unitItem : getUnitItems()) {
-	    if (unitItem.getRealShareValue() != null) {
-		amount = amount.add(unitItem.getRealShareValue());
-	    } else if (unitItem.getShareValue() != null) {
-		amount = amount.add(unitItem.getShareValue());
+	    if (unitItem.getRoundedRealShareValue() != null) {
+		amount = amount.add(unitItem.getRoundedRealShareValue());
+	    } else if (unitItem.getRoundedShareValue() != null) {
+		amount = amount.add(unitItem.getRoundedShareValue());
 	    }
 	}
 	return amount;
