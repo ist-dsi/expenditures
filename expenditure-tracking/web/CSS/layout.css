@@ -1044,3 +1044,4 @@ table.thpadding02505 th { padding: 0.25em 0.5em; } /* higher th paddings for tab
 table tr.itemmbottom th { padding-bottom: 1em; }
 table tr.itemmbottom td { padding-bottom: 1em; }
 
+table.thright th { text-align: right; }

@@ -5,6 +5,9 @@
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 <%@ taglib uri="/WEB-INF/messages.tld" prefix="messages" %>
 
+<%@page import="pt.ist.expenditureTrackingSystem.presentationTier.servlets.filters.contentRewrite.RequestChecksumFilter"%>
+
+<%@page import="pt.ist.fenixWebFramework.servlets.filters.contentRewrite.GenericChecksumRewriter"%>
 <bean:define id="acquisitionProcessOid"><bean:write name="acquisitionProcess" property="OID"/></bean:define>
 <bean:define id="acquisitionProcessClass" name="acquisitionProcess" property="class.simpleName"/>
 <bean:define id="actionMapping" value="<%= "/acquisition" + acquisitionProcessClass %>"/>
@@ -207,7 +210,8 @@
 	</p>
 </div>
 
-<logic:present name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestItemsSet">
+<bean:define id="itemSet" name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestItemsSet"/> 
+<logic:present name="itemSet">
 	
 		<logic:equal  name="acquisitionProcess" property="invoiceReceived"  value="true">		
 			<logic:equal name="acquisitionProcess" property="acquisitionRequest.realValueLessThanTotalValue" value="false">
@@ -228,10 +232,38 @@
 		</logic:equal>
 	
 	
-		<bean:size id="totalItems" name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestItemsSet"/>
-		<logic:iterate id="acquisitionRequestItem" name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestItemsSet" indexId="index">
-			<div class="item">
+		<table class="tstyle5 thright mvert1" style="width: 100%;" id="itemResume">
+			<tr>
+				<th></th>
+				<th><bean:message key="acquisitionRequestItem.label.quantity" bundle="ACQUISITION_RESOURCES"/></th>
+				<th><bean:message key="acquisitionRequestItem.label.unitValue" bundle="ACQUISITION_RESOURCES"/></th>
+				<th><bean:message key="acquisitionRequestItem.label.vatValue" bundle="ACQUISITION_RESOURCES"/></th>
+				<th><bean:message key="acquisitionRequestItem.label.additionalCostValue" bundle="ACQUISITION_RESOURCES"/></th>
+				<th><bean:message key="acquisitionRequestItem.label.totalValue" bundle="ACQUISITION_RESOURCES"/></th>
+			</tr>
+			<logic:iterate id="itemResume" name="itemSet" indexId="index">
 				<bean:define id="currentIndex" value="<%= String.valueOf(index + 1) %>"/>
+				<tr>
+					<td><%= GenericChecksumRewriter.NO_CHECKSUM_PREFIX %><a href="<%= "#item" + currentIndex%>">Item<%= currentIndex %></a></td>
+					<td class="aright"><fr:view name="itemResume" property="quantity"/></td>
+					<td class="aright"><fr:view name="itemResume" property="unitValue"/></td>
+					<td class="aright"><fr:view name="itemResume" property="vatValue"/></td>
+					<td class="aright">
+						<fr:view name="itemResume" property="additionalCostValue" type="pt.ist.expenditureTrackingSystem.domain.util.Money">
+							<fr:layout name="null-as-label">
+								<fr:property name="subLayout" value="default"/>
+							</fr:layout>
+						</fr:view>
+					</td>
+					<td class="aright"><fr:view name="itemResume" property="totalItemValue"/></td>
+				</tr>
+			</logic:iterate>
+		</table>
+			
+		<bean:size id="totalItems" name="itemSet"/>
+		<logic:iterate id="acquisitionRequestItem" name="itemSet" indexId="index">
+			<bean:define id="currentIndex" value="<%= String.valueOf(index + 1) %>"/>
+			<div class="item" id="<%= "item" + currentIndex %>">
 				<strong><bean:message key="acquisitionRequestItem.label.item" bundle="ACQUISITION_RESOURCES"/></strong> (<fr:view name="currentIndex"/>/<fr:view name="totalItems"/>)
 				<bean:define id="itemOID" name="acquisitionRequestItem" property="OID"/>
 				
@@ -263,7 +295,9 @@
 			
 				<bean:define id="acquisitionRequestItem" name="acquisitionRequestItem" toScope="request"/>
 				<jsp:include page="./acquisitionItemDisplay.jsp" flush="false"/>
-		
+				<p class="aright">
+					<%= GenericChecksumRewriter.NO_CHECKSUM_PREFIX %><a href="#itemResume"><bean:message key="link.top" bundle="EXPENDITURE_RESOURCES"/></a>
+				</p>
 			</div>
 		</logic:iterate>
 		
