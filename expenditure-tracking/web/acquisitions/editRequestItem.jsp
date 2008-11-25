@@ -61,7 +61,9 @@
 		<fr:destination name="postBack" path="<%= actionMapping + ".do?method=createItemPostBack" %>"/>
 	</fr:edit>
 </div>
-	
-	<html:submit styleClass="inputbutton"><bean:message key="acquisitionRequestItem.title.edit" bundle="ACQUISITION_RESOURCES"/></html:submit>
+
+<p>
+	<html:submit styleClass="inputbutton"><bean:message key="renderers.form.submit.name" bundle="RENDERER_RESOURCES"/></html:submit>
 	<html:cancel styleClass="inputbutton"><bean:message key="renderers.form.cancel.name" bundle="RENDERER_RESOURCES"/></html:cancel>
+</p>
 </fr:form>
