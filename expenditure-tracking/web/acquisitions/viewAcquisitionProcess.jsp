@@ -237,9 +237,9 @@
 				<th></th>
 				<th><bean:message key="acquisitionRequestItem.label.quantity" bundle="ACQUISITION_RESOURCES"/></th>
 				<th><bean:message key="acquisitionRequestItem.label.unitValue" bundle="ACQUISITION_RESOURCES"/></th>
-				<th><bean:message key="acquisitionRequestItem.label.vatValue" bundle="ACQUISITION_RESOURCES"/></th>
+				<th><bean:message key="acquisitionRequestItem.label.vat" bundle="ACQUISITION_RESOURCES"/></th>
 				<th><bean:message key="acquisitionRequestItem.label.additionalCostValue" bundle="ACQUISITION_RESOURCES"/></th>
-				<th><bean:message key="acquisitionRequestItem.label.totalValue" bundle="ACQUISITION_RESOURCES"/></th>
+				<th><bean:message key="acquisitionRequestItem.label.totalValueWithAdditionalCostsAndVat" bundle="ACQUISITION_RESOURCES"/></th>
 			</tr>
 			<logic:iterate id="itemResume" name="itemSet" indexId="index">
 				<bean:define id="currentIndex" value="<%= String.valueOf(index + 1) %>"/>
@@ -247,7 +247,7 @@
 					<td><%= GenericChecksumRewriter.NO_CHECKSUM_PREFIX %><a href="<%= "#item" + currentIndex%>">Item<%= currentIndex %></a></td>
 					<td class="aright"><fr:view name="itemResume" property="quantity"/></td>
 					<td class="aright"><fr:view name="itemResume" property="unitValue"/></td>
-					<td class="aright"><fr:view name="itemResume" property="vatValue"/></td>
+					<td class="aright"><fr:view name="itemResume" property="totalVatValue"/></td>
 					<td class="aright">
 						<fr:view name="itemResume" property="additionalCostValue" type="pt.ist.expenditureTrackingSystem.domain.util.Money">
 							<fr:layout name="null-as-label">
@@ -255,7 +255,7 @@
 							</fr:layout>
 						</fr:view>
 					</td>
-					<td class="aright"><fr:view name="itemResume" property="totalItemValue"/></td>
+					<td class="aright"><fr:view name="itemResume" property="totalItemValueWithAdditionalCostsAndVat"/></td>
 				</tr>
 			</logic:iterate>
 		</table>
