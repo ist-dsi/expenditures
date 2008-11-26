@@ -1045,3 +1045,5 @@ table tr.itemmbottom th { padding-bottom: 1em; }
 table tr.itemmbottom td { padding-bottom: 1em; }
 
 table.thright th { text-align: right; }
+
+table.width33 td { width: 33%; }
