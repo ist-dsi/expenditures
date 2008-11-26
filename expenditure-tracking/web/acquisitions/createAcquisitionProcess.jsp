@@ -7,8 +7,6 @@
 
 <div class="infoop2">
 	<bean:message key="acquisitionProcess.message.note" bundle="ACQUISITION_RESOURCES"/>
-	<p class="mvert05"><strong>Aviso:</strong> Os reembolsos ainda não podem ser tratados na aplicação. A funcionalidade será disponibilizada brevemente.</p>
-	<p class="mvert05"><strong>Aviso:</strong> É proibido o fraccionamento da despesa nos termos do artigo 16º. do Decreto -Lei nº. 197/99 de 8 de Junho, ainda em vigor. Para efeitos do presente diploma, a despesa a considerar é a do custo total da locação ou da aquisição de bens ou serviços.</p>
 </div>
 
 <fr:form action="/acquisitionSimplifiedProcedureProcess.do?method=createNewAcquisitionProcess">
