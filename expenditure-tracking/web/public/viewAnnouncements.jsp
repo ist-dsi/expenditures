@@ -11,7 +11,7 @@
 
 
 <logic:empty name="announcements">
-	<p><em><bean:message key="process.messages.info.noProcessesToOperate" bundle="EXPENDITURE_RESOURCES"/>.</em></p>
+	<p><em><bean:message key="process.messages.info.noAvailableAnnouncements" bundle="EXPENDITURE_RESOURCES"/>.</em></p>
 </logic:empty>
 
 <logic:iterate id="announcement" name="announcements" indexId="Id">
