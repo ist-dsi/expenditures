@@ -186,7 +186,7 @@
 	<slot name="quantity" key="acquisitionRequestItem.label.quantity" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
 		<property name="size" value="10"/>
 	</slot>
-	<slot name="unitValue" key="acquisitionRequestItem.label.unitValue" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+	<slot name="unitValue" key="acquisitionRequestItem.label.unitValue" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" help="message.help.unitValue">
 		<property name="size" value="10"/>
 	</slot>
 	<slot name="vatValue" key="acquisitionRequestItem.label.vatValue" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">	

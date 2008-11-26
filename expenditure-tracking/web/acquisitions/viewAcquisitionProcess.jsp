@@ -153,7 +153,7 @@
 	</fr:view>
 </logic:notEmpty>
 
- 
+
 <div class="documents">
 	<p>
 		<bean:message key="acquisitionProcess.label.proposalDocument" bundle="ACQUISITION_RESOURCES"/>:
@@ -196,7 +196,7 @@
 	<p>
 		<bean:message key="acquisitionProcess.label.otherFiles" bundle="ACQUISITION_RESOURCES"/>:
 		<logic:notEmpty name="acquisitionProcess" property="files">
-			<ul>
+			<ul class="mvert05">
 			<logic:iterate id="file" name="acquisitionProcess" property="files">
 				<li>
 					<html:link action="<%= actionMapping + ".do?method=downloadGenericFile&acquisitionProcess=" + acquisitionProcessOid %>" paramId="fileOID" paramName="file" paramProperty="OID">
