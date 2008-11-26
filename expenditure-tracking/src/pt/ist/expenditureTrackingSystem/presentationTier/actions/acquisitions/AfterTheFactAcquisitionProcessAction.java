@@ -12,6 +12,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.Acquisi
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.dto.AfterTheFactAcquisitionProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.AfterTheFactAcquisitionsImportBean;
+import pt.ist.expenditureTrackingSystem.domain.dto.AfterTheFactAcquisitionsImportBean.ImportError;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 import pt.ist.expenditureTrackingSystem.presentationTier.Context;
@@ -140,7 +141,11 @@ public class AfterTheFactAcquisitionProcessAction extends ProcessAction {
 	final AfterTheFactAcquisitionsImportBean afterTheFactAcquisitionsImportBean = getRenderedObject();
 	final byte[] contents = consumeInputStream(afterTheFactAcquisitionsImportBean);
 	afterTheFactAcquisitionsImportBean.setFileContents(contents);
-	afterTheFactAcquisitionsImportBean.importAcquisitions(afterTheFactAcquisitionsImportBean);
+	try {
+	    afterTheFactAcquisitionsImportBean.importAcquisitions(afterTheFactAcquisitionsImportBean);
+	} catch (ImportError ex) {
+	    // just show the page...
+	}
 	request.setAttribute("afterTheFactAcquisitionsImportBean", afterTheFactAcquisitionsImportBean);
 	return mapping.findForward("view.import.afterTheFact.acquisitions.result");
     }

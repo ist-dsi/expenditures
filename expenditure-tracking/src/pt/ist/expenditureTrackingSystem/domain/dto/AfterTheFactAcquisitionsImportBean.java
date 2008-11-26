@@ -57,7 +57,7 @@ public class AfterTheFactAcquisitionsImportBean extends FileUploadBean implement
 	} else if (issueType.getIssueTypeLevel() == IssueTypeLevel.WARNING) {
 	    warningCount++;
 	}
-	issues.add(new Issue(issueType, lineNumber, messageArgs));
+	issues.add(new Issue(issueType, lineNumber + 1, messageArgs));
     }
 
     @Service
@@ -71,17 +71,17 @@ public class AfterTheFactAcquisitionsImportBean extends FileUploadBean implement
 	    } else {
 		final String[] parts = line.split("\t");
 		if (parts.length == 5) {
-		    final String supplierNif = parts[0];
-		    final String supplierName = parts[1];
+		    final String supplierNif = cleanupNIF(parts[0]);
+		    final String supplierName = cleanup(parts[1]);
 		    final Supplier supplier = findSupplier(supplierNif, supplierName);
 		    if (supplier == null) {
 			registerIssue(IssueType.SUPPLIER_DOES_NOT_EXIST, i, supplierNif, supplierName);
 		    }
-		    final String description = parts[2];
-		    final String valueString = parts[3];
+		    final String description = cleanup(parts[2]);
+		    final String valueString = cleanup(parts[3]);
 		    Money value;
 		    try {
-			value = new Money(valueString);
+			value = new Money(valueString.replace(",", ""));
 		    } catch (DomainException ex) {
 			value = null;
 			registerIssue(IssueType.BAD_MONEY_VALUE_FORMAT, i, valueString);
@@ -89,10 +89,10 @@ public class AfterTheFactAcquisitionsImportBean extends FileUploadBean implement
 			value = null;
 			registerIssue(IssueType.BAD_MONEY_VALUE_FORMAT, i, valueString);
 		    }
-		    final String vatValueString = parts[4];
+		    final String vatValueString = cleanup(parts[4]);
 		    BigDecimal vatValue;
 		    try {
-			vatValue = new BigDecimal(vatValueString);
+			vatValue = new BigDecimal(vatValueString.replace(",", ""));
 		    } catch (NumberFormatException ex) {
 			vatValue = null;
 			registerIssue(IssueType.BAD_VAT_VALUE_FORMAT, i, vatValueString);
@@ -106,6 +106,12 @@ public class AfterTheFactAcquisitionsImportBean extends FileUploadBean implement
 		}
 	    }
 	}
+	if (issues.size() > 0) {
+	    throw new ImportError();
+	}
+    }
+
+    public static class ImportError extends Error {
     }
 
     public void importAcquisition(final Supplier supplier, final String description, final Money value,
@@ -139,6 +145,21 @@ public class AfterTheFactAcquisitionsImportBean extends FileUploadBean implement
 
     public int getImportedLines() {
 	return importedLines;
+    }
+
+    private String cleanupNIF(final String string) {
+	return cleanup(string).replace(" ", "");
+    }
+
+    private String cleanup(final String string) {
+	String result = string;
+	if (result.length() >= 2 && result.charAt(0) == '"' && result.charAt(result.length() - 1) == '"') {
+	    result = result.substring(1, result.length() - 1);
+	}
+	result = result.replace('€', ' ');
+	result = result.trim();
+	System.out.println("Transformed: [" + string + "] into [" + result + "]");
+	return result;
     }
 
 }
