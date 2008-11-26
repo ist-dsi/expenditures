@@ -7,7 +7,10 @@
 
 <div class="infoop2">
 	<bean:message key="acquisitionProcess.message.note" bundle="ACQUISITION_RESOURCES"/>
+	<p class="mvert05"><strong>Aviso: Os reembolsos ainda não podem ser tratados na aplicação. A funcionalidade será disponibilizada brevemente.</strong></p>
 </div>
+
+
 
 <fr:form action="/acquisitionSimplifiedProcedureProcess.do?method=createNewAcquisitionProcess">
 	<fr:edit id="acquisitionProcessBean"
