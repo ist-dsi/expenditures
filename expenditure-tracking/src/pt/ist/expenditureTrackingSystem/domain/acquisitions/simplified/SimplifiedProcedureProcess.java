@@ -107,9 +107,9 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	requestInformationActivities.add(new UnSubmitForApproval());
 	requestInformationActivities.add(new ChangeFinancersAccountingUnit());
 
-	requestInformationActivities.add(new SetRefundee());
-	requestInformationActivities.add(new ChangeRefundee());
-	requestInformationActivities.add(new UnsetRefundee());
+//	requestInformationActivities.add(new SetRefundee());
+//	requestInformationActivities.add(new ChangeRefundee());
+//	requestInformationActivities.add(new UnsetRefundee());
 
 	requestInformationActivities.add(new SetSkipSupplierFundAllocation());
 	requestInformationActivities.add(new UnsetSkipSupplierFundAllocation());
