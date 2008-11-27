@@ -1,6 +1,8 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact;
 
+import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.dto.AfterTheFactAcquisitionProcessBean;
+import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 
 public class AcquisitionAfterTheFact extends AcquisitionAfterTheFact_Base {
 
@@ -27,4 +29,11 @@ public class AcquisitionAfterTheFact extends AcquisitionAfterTheFact_Base {
 	return getAfterTheFactAcquisitionProcess().getAcquisitionProcessId();
     }
 
+    @Override
+    public void setSupplier(Supplier supplier) {
+	if (!supplier.isFundAllocationAllowed(getValue())) {
+	    throw new DomainException("acquisitionProcess.message.exception.SupplierDoesNotAlloweAmount");
+	}
+	super.setSupplier(supplier);
+    }
 }

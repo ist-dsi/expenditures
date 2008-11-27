@@ -109,10 +109,19 @@ public class AfterTheFactAcquisitionsImportBean extends FileUploadBean implement
 			registerIssue(IssueType.BAD_VAT_VALUE_FORMAT, i, vatValueString);
 		    }
 		    if (supplier != null && value != null && vatValue != null) {
-			if (createData) {
-			    importAcquisition(supplier, description, value, vatValue, file);
+			if (supplier.isFundAllocationAllowed(value)) {
+			    if (createData) {
+				try {
+				    importAcquisition(supplier, description, value, vatValue, file);
+				} catch (DomainException e) {
+				    registerIssue(IssueType.CANNOT_ALLOCATE_MONEY_TO_SUPPLIER, i, supplierNif, supplierName,
+					    valueString);
+				}
+			    }
+			    importedLines++;
+			} else {
+			    registerIssue(IssueType.CANNOT_ALLOCATE_MONEY_TO_SUPPLIER, i, supplierNif, supplierName, valueString);
 			}
-			importedLines++;
 		    }
 		} else {
 		    registerIssue(IssueType.WRONG_NUMBER_LINE_COLUMNS, i);
