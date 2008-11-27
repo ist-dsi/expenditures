@@ -690,4 +690,13 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	return refundee == null ? null : refundee.getName();
     }
 
+    public boolean hasAnyAllocatedFunds() {
+	for (Financer financer : getFinancers()) {
+	    if (financer.hasAnyFundsAllocated()) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
 }

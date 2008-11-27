@@ -271,6 +271,11 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 	return acquisitionRequest.hasAllocatedFundsForAllProjectFinancers();
     }
 
+    public boolean hasAnyAllocatedFunds() {
+	final AcquisitionRequest acquisitionRequest = getAcquisitionRequest();
+	return acquisitionRequest.hasAnyAllocatedFunds();
+    }
+
     public boolean hasAllocatedFundsForAllProjectFinancers(final Person person) {
 	final AcquisitionRequest acquisitionRequest = getAcquisitionRequest();
 	return acquisitionRequest.hasAllocatedFundsForAllProjectFinancers(person);
@@ -281,6 +286,7 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 	return acquisitionRequest.hasAllocatedFundsPermanentlyForAllProjectFinancers();
     }
 
+    
     @Service
     public void createComment(Person person, String comment) {
 	new ProcessComment(this, person, comment);
