@@ -13,7 +13,7 @@
 		name="afterTheFactAcquisitionsImportBean"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.AfterTheFactAcquisitionsImportBean"
 		schema="afterTheFactAcquisitionsImportBean"
-		action="/acquisitionAfterTheFactAcquisitionProcess.do?method=importAcquisitions">
+		action="/acquisitionAfterTheFactAcquisitionProcess.do?method=processImport">
 	<fr:layout name="tabular">
 		<fr:property name="classes" value="form"/>
 		<fr:property name="columnClasses" value=",,tderror"/>

@@ -10,7 +10,7 @@ public class Issue implements Serializable {
 
     public static enum IssueType {
 	EMPTY_LINE(IssueTypeLevel.WARNING), WRONG_NUMBER_LINE_COLUMNS(IssueTypeLevel.ERROR), SUPPLIER_DOES_NOT_EXIST(
-		IssueTypeLevel.ERROR), BAD_MONEY_VALUE_FORMAT(IssueTypeLevel.ERROR), BAD_VAT_VALUE_FORMAT(IssueTypeLevel.ERROR);
+		IssueTypeLevel.WARNING), BAD_MONEY_VALUE_FORMAT(IssueTypeLevel.ERROR), BAD_VAT_VALUE_FORMAT(IssueTypeLevel.ERROR);
 
 	private IssueTypeLevel issueTypeLevel;
 

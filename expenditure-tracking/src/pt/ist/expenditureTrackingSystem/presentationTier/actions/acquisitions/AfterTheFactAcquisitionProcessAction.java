@@ -23,15 +23,14 @@ import pt.ist.fenixWebFramework.struts.annotations.Forwards;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
 @Mapping(path = "/acquisitionAfterTheFactAcquisitionProcess")
-@Forwards( { 
-    @Forward(name = "create.afterTheFact.acquisition.process", path = "/acquisitions/createAfterTheFactAcquisitionProcess.jsp"),
-    @Forward(name = "view.afterTheFact.acquisition.process", path = "/acquisitions/viewAfterTheFactAcquisitionProcess.jsp"),
-    @Forward(name = "edit.afterTheFact.acquisition.process", path = "/acquisitions/editAfterTheFactAcquisitionProcess.jsp"),
-    @Forward(name = "receive.acquisition.invoice", path = "/acquisitions/receiveAcquisitionInvoice.jsp"),
-    @Forward(name = "show.pending.processes", path = "/acquisitionProcess.do?method=showPendingProcesses"),
-    @Forward(name = "import.afterTheFact.acquisitions", path = "/acquisitions/importAfterTheFactAcquisitions.jsp"),
-    @Forward(name = "view.import.afterTheFact.acquisitions.result", path = "/acquisitions/viewImportAfterTheFactAcquisitionsResult.jsp")
-})
+@Forwards( {
+	@Forward(name = "create.afterTheFact.acquisition.process", path = "/acquisitions/createAfterTheFactAcquisitionProcess.jsp"),
+	@Forward(name = "view.afterTheFact.acquisition.process", path = "/acquisitions/viewAfterTheFactAcquisitionProcess.jsp"),
+	@Forward(name = "edit.afterTheFact.acquisition.process", path = "/acquisitions/editAfterTheFactAcquisitionProcess.jsp"),
+	@Forward(name = "receive.acquisition.invoice", path = "/acquisitions/receiveAcquisitionInvoice.jsp"),
+	@Forward(name = "show.pending.processes", path = "/acquisitionProcess.do?method=showPendingProcesses"),
+	@Forward(name = "import.afterTheFact.acquisitions", path = "/acquisitions/importAfterTheFactAcquisitions.jsp"),
+	@Forward(name = "view.import.afterTheFact.acquisitions.result", path = "/acquisitions/viewImportAfterTheFactAcquisitionsResult.jsp") })
 public class AfterTheFactAcquisitionProcessAction extends ProcessAction {
 
     private static final Context CONTEXT = new Context("acquisitions");
@@ -66,7 +65,7 @@ public class AfterTheFactAcquisitionProcessAction extends ProcessAction {
 	final AfterTheFactAcquisitionProcess afterTheFactAcquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
 	return viewAfterTheFactAcquisitionProcess(mapping, request, afterTheFactAcquisitionProcess);
     }
-    
+
     private ActionForward viewAfterTheFactAcquisitionProcess(ActionMapping mapping, HttpServletRequest request,
 	    AfterTheFactAcquisitionProcess afterTheFactAcquisitionProcess) {
 	request.setAttribute("afterTheFactAcquisitionProcess", afterTheFactAcquisitionProcess);
@@ -77,8 +76,9 @@ public class AfterTheFactAcquisitionProcessAction extends ProcessAction {
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	AfterTheFactAcquisitionProcessBean afterTheFactAcquisitionProcessBean = getRenderedObject();
 	if (afterTheFactAcquisitionProcessBean == null) {
-	    final AfterTheFactAcquisitionProcess afterTheFactAcquisitionProcess = getDomainObject(request, "afterTheFactAcquisitionProcessOid");
-	    afterTheFactAcquisitionProcessBean = new AfterTheFactAcquisitionProcessBean(afterTheFactAcquisitionProcess);	    
+	    final AfterTheFactAcquisitionProcess afterTheFactAcquisitionProcess = getDomainObject(request,
+		    "afterTheFactAcquisitionProcessOid");
+	    afterTheFactAcquisitionProcessBean = new AfterTheFactAcquisitionProcessBean(afterTheFactAcquisitionProcess);
 	}
 	request.setAttribute("afterTheFactAcquisitionProcessBean", afterTheFactAcquisitionProcessBean);
 	return mapping.findForward("edit.afterTheFact.acquisition.process");
@@ -87,15 +87,18 @@ public class AfterTheFactAcquisitionProcessAction extends ProcessAction {
     public ActionForward editAfterTheFactAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final AfterTheFactAcquisitionProcessBean afterTheFactAcquisitionProcessBean = getRenderedObject();
-	final AfterTheFactAcquisitionProcess afterTheFactAcquisitionProcess = afterTheFactAcquisitionProcessBean.getAfterTheFactAcquisitionProcess();
-	final AbstractActivity<GenericProcess> activity = afterTheFactAcquisitionProcess.getActivityByName("EditAfterTheFactAcquisition");
+	final AfterTheFactAcquisitionProcess afterTheFactAcquisitionProcess = afterTheFactAcquisitionProcessBean
+		.getAfterTheFactAcquisitionProcess();
+	final AbstractActivity<GenericProcess> activity = afterTheFactAcquisitionProcess
+		.getActivityByName("EditAfterTheFactAcquisition");
 	activity.execute(afterTheFactAcquisitionProcess, afterTheFactAcquisitionProcessBean);
 	return viewAfterTheFactAcquisitionProcess(mapping, request, afterTheFactAcquisitionProcess);
     }
 
     public ActionForward executeReceiveAcquisitionInvoice(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
-	final AfterTheFactAcquisitionProcess afterTheFactAcquisitionProcess = getDomainObject(request, "afterTheFactAcquisitionProcessOid");
+	final AfterTheFactAcquisitionProcess afterTheFactAcquisitionProcess = getDomainObject(request,
+		"afterTheFactAcquisitionProcessOid");
 	request.setAttribute("afterTheFactAcquisitionProcess", afterTheFactAcquisitionProcess);
 	final ReceiveInvoiceForm receiveInvoiceForm = new ReceiveInvoiceForm();
 
@@ -113,18 +116,22 @@ public class AfterTheFactAcquisitionProcessAction extends ProcessAction {
     public ActionForward receiveAcquisitionInvoice(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final ReceiveInvoiceForm receiveInvoiceForm = getRenderedObject();
-	final AfterTheFactAcquisitionProcess afterTheFactAcquisitionProcess = getDomainObject(request, "afterTheFactAcquisitionProcessOid");
-	final AbstractActivity<GenericProcess> activity = afterTheFactAcquisitionProcess.getActivityByName("ReceiveAcquisitionInvoice");
+	final AfterTheFactAcquisitionProcess afterTheFactAcquisitionProcess = getDomainObject(request,
+		"afterTheFactAcquisitionProcessOid");
+	final AbstractActivity<GenericProcess> activity = afterTheFactAcquisitionProcess
+		.getActivityByName("ReceiveAcquisitionInvoice");
 	final byte[] bytes = consumeInputStream(receiveInvoiceForm);
-	activity.execute(afterTheFactAcquisitionProcess, receiveInvoiceForm.getFilename(), bytes,
-		receiveInvoiceForm.getInvoiceNumber(), receiveInvoiceForm.getInvoiceDate());
+	activity.execute(afterTheFactAcquisitionProcess, receiveInvoiceForm.getFilename(), bytes, receiveInvoiceForm
+		.getInvoiceNumber(), receiveInvoiceForm.getInvoiceDate());
 	return viewAfterTheFactAcquisitionProcess(mapping, request, afterTheFactAcquisitionProcess);
     }
 
     public ActionForward executeDeleteAfterTheFactAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
-	final AfterTheFactAcquisitionProcess afterTheFactAcquisitionProcess = getDomainObject(request, "afterTheFactAcquisitionProcessOid");
-	final AbstractActivity<GenericProcess> activity = afterTheFactAcquisitionProcess.getActivityByName("DeleteAfterTheFactAcquisitionProcess");
+	final AfterTheFactAcquisitionProcess afterTheFactAcquisitionProcess = getDomainObject(request,
+		"afterTheFactAcquisitionProcessOid");
+	final AbstractActivity<GenericProcess> activity = afterTheFactAcquisitionProcess
+		.getActivityByName("DeleteAfterTheFactAcquisitionProcess");
 	activity.execute(afterTheFactAcquisitionProcess);
 	return mapping.findForward("show.pending.processes");
     }
@@ -136,13 +143,24 @@ public class AfterTheFactAcquisitionProcessAction extends ProcessAction {
 	return mapping.findForward("import.afterTheFact.acquisitions");
     }
 
-    public ActionForward importAcquisitions(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+    public ActionForward processImport(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) {
 	final AfterTheFactAcquisitionsImportBean afterTheFactAcquisitionsImportBean = getRenderedObject();
 	final byte[] contents = consumeInputStream(afterTheFactAcquisitionsImportBean);
 	afterTheFactAcquisitionsImportBean.setFileContents(contents);
+	afterTheFactAcquisitionsImportBean.setCreateData(false);
+	afterTheFactAcquisitionsImportBean.importAcquisitions();
+	request.setAttribute("afterTheFactAcquisitionsImportBean", afterTheFactAcquisitionsImportBean);
+	return mapping.findForward("view.import.afterTheFact.acquisitions.result");
+    }
+
+    public ActionForward importAcquisitions(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	final AfterTheFactAcquisitionsImportBean afterTheFactAcquisitionsImportBean = getRenderedObject();
 	try {
-	    afterTheFactAcquisitionsImportBean.importAcquisitions(afterTheFactAcquisitionsImportBean);
+	    afterTheFactAcquisitionsImportBean.reset();
+	    afterTheFactAcquisitionsImportBean.setCreateData(true);
+	    afterTheFactAcquisitionsImportBean.importAcquisitions();
 	} catch (ImportError ex) {
 	    // just show the page...
 	}

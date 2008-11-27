@@ -8,11 +8,14 @@
 
 <bean:define id="afterTheFactAcquisitionsImportBean" name="afterTheFactAcquisitionsImportBean" type="pt.ist.expenditureTrackingSystem.domain.dto.AfterTheFactAcquisitionsImportBean"/>
 
-<logic:equal name="afterTheFactAcquisitionsImportBean" property="errorCount" value="0">
-	<div class="infoop5">
-		<bean:message key="label.afterTheFactAcquisition.import.lines" bundle="ACQUISITION_RESOURCES"/>: <bean:write name="afterTheFactAcquisitionsImportBean" property="importedLines"/>
-	</div>
+<logic:equal name="afterTheFactAcquisitionsImportBean" property="createData" value="true">
+	<logic:equal name="afterTheFactAcquisitionsImportBean" property="errorCount" value="0">
+		<div class="infoop5">
+			<bean:message key="label.afterTheFactAcquisition.import.lines" bundle="ACQUISITION_RESOURCES"/>: <bean:write name="afterTheFactAcquisitionsImportBean" property="importedLines"/>
+		</div>
+	</logic:equal>
 </logic:equal>
+
 <logic:greaterThan name="afterTheFactAcquisitionsImportBean" property="errorCount" value="0">
 	<div class="error1">
 		<bean:message key="label.afterTheFactAcquisition.import.not.imported" bundle="ACQUISITION_RESOURCES"/>
@@ -53,8 +56,8 @@
 							<%
 								final String[] args = new String[5];
 								args[0] = Integer.toString(issue.getLineNumber());
-								for (int i = 1; i < issue.getMessageArgs().length; i++) {
-								    args[i] = issue.getMessageArgs()[i];
+								for (int i = 0; i < issue.getMessageArgs().length; i++) {
+								    args[i+1] = issue.getMessageArgs()[i];
 								}
 								for (int i = issue.getMessageArgs().length + 1; i < 5; i++) {
 								    args[i] = "";
@@ -68,3 +71,23 @@
 		</table>
 	</div>
 </logic:greaterThan>
+
+<div class="forminline mbottom2">
+
+<logic:equal name="afterTheFactAcquisitionsImportBean" property="createData" value="false">
+	<logic:equal name="afterTheFactAcquisitionsImportBean" property="errorCount" value="0">
+		<div class="infoop2">
+			<bean:message key="label.afterTheFactAcquisition.processDoneWishtoImport" bundle="ACQUISITION_RESOURCES"/>
+		</div> 
+		<fr:form action="/acquisitionAfterTheFactAcquisitionProcess.do?method=importAcquisitions">
+			<fr:edit id="bean" name="afterTheFactAcquisitionsImportBean" visible="false"/>
+			<html:submit styleClass="inputbutton"><bean:message key="label.import" bundle="ACQUISITION_RESOURCES"/></html:submit>
+		</fr:form>
+	</logic:equal>
+</logic:equal>
+
+<fr:form action="/acquisitionAfterTheFactAcquisitionProcess.do?method=prepareImport">
+	<html:submit styleClass="inputbutton"><bean:message key="label.back" bundle="EXPENDITURE_RESOURCES"/></html:submit>
+</fr:form>
+
+</div>

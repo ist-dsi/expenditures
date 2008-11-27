@@ -28,6 +28,8 @@ public class AfterTheFactAcquisitionsImportBean extends FileUploadBean implement
     private int errorCount = 0;
     private int warningCount = 0;
 
+    private boolean createData;
+
     public AfterTheFactAcquisitionsImportBean() {
     }
 
@@ -60,9 +62,14 @@ public class AfterTheFactAcquisitionsImportBean extends FileUploadBean implement
 	issues.add(new Issue(issueType, lineNumber + 1, messageArgs));
     }
 
+    public void reset() {
+	importedLines = errorCount = warningCount = 0;
+	issues.clear();
+    }
+
     @Service
-    public void importAcquisitions(final AfterTheFactAcquisitionsImportBean afterTheFactAcquisitionsImportBean) {
-	final String[] lines = afterTheFactAcquisitionsImportBean.getContents().split("\n");
+    public void importAcquisitions() {
+	final String[] lines = getContents().split("\n");
 	final ImportFile file = new ImportFile(getContents().getBytes());
 	for (int i = 0; i < lines.length; i++) {
 	    final String line = lines[i];
@@ -73,9 +80,13 @@ public class AfterTheFactAcquisitionsImportBean extends FileUploadBean implement
 		if (parts.length == 5) {
 		    final String supplierNif = cleanupNIF(parts[0]);
 		    final String supplierName = cleanup(parts[1]);
-		    final Supplier supplier = findSupplier(supplierNif, supplierName);
+		    Supplier supplier = findSupplier(supplierNif, supplierName);
 		    if (supplier == null) {
-			registerIssue(IssueType.SUPPLIER_DOES_NOT_EXIST, i, supplierNif, supplierName);
+			if (!createData) {
+			    registerIssue(IssueType.SUPPLIER_DOES_NOT_EXIST, i, supplierNif, supplierName);
+			} else {
+			    supplier = createSupplier(supplierName, supplierNif);
+			}
 		    }
 		    final String description = cleanup(parts[2]);
 		    final String valueString = cleanup(parts[3]);
@@ -98,7 +109,9 @@ public class AfterTheFactAcquisitionsImportBean extends FileUploadBean implement
 			registerIssue(IssueType.BAD_VAT_VALUE_FORMAT, i, vatValueString);
 		    }
 		    if (supplier != null && value != null && vatValue != null) {
-			importAcquisition(supplier, description, value, vatValue,file);
+			if (createData) {
+			    importAcquisition(supplier, description, value, vatValue, file);
+			}
 			importedLines++;
 		    }
 		} else {
@@ -106,9 +119,15 @@ public class AfterTheFactAcquisitionsImportBean extends FileUploadBean implement
 		}
 	    }
 	}
-	if (issues.size() > 0) {
+	if (issues.size() > 0 && createData) {
 	    throw new ImportError();
 	}
+    }
+
+    private Supplier createSupplier(String supplierName, String supplierNif) {
+	Supplier supplier = new Supplier(supplierNif);
+	supplier.setName(supplierName);
+	return supplier;
     }
 
     public static class ImportError extends Error {
@@ -160,6 +179,14 @@ public class AfterTheFactAcquisitionsImportBean extends FileUploadBean implement
 	result = result.trim();
 	System.out.println("Transformed: [" + string + "] into [" + result + "]");
 	return result;
+    }
+
+    public boolean isCreateData() {
+	return createData;
+    }
+
+    public void setCreateData(boolean createData) {
+	this.createData = createData;
     }
 
 }
