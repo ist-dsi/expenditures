@@ -9,6 +9,8 @@
 	<bean:message key="acquisitionProcess.message.note" bundle="ACQUISITION_RESOURCES"/>
 </div>
 
+<p class="mtop15 mbottom05"><strong>Ajuste Directo - Regime Simplificado (até 5000 euros)</strong></p>
+
 <fr:form action="/acquisitionSimplifiedProcedureProcess.do?method=createNewAcquisitionProcess">
 	<fr:edit id="acquisitionProcessBean"
 			name="acquisitionProcessBean"
@@ -20,6 +22,8 @@
 		</fr:layout>
 		<fr:destination name="cancel" path="/acquisitionProcess.do?method=showPendingProcesses"/>
 	</fr:edit>
-	<html:submit styleClass="inputbutton"><bean:message key="button.create" bundle="EXPENDITURE_RESOURCES"/></html:submit>
+	<html:submit styleClass="inputbutton"><bean:message key="button.submit" bundle="EXPENDITURE_RESOURCES"/></html:submit>
+	<%--
 	<html:cancel styleClass="inputbutton"><bean:message key="button.cancel" bundle="EXPENDITURE_RESOURCES"/></html:cancel>
+	--%>
 </fr:form>

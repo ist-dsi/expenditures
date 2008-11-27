@@ -196,15 +196,11 @@
 	<p>
 		<bean:message key="acquisitionProcess.label.otherFiles" bundle="ACQUISITION_RESOURCES"/>:
 		<logic:notEmpty name="acquisitionProcess" property="files">
-			<ul class="mvert05">
 			<logic:iterate id="file" name="acquisitionProcess" property="files">
-				<li>
-					<html:link action="<%= actionMapping + ".do?method=downloadGenericFile&acquisitionProcess=" + acquisitionProcessOid %>" paramId="fileOID" paramName="file" paramProperty="OID">
-						<bean:write name="file" property="displayName"/>
-					</html:link>
-				</li>
+				<html:link action="<%= actionMapping + ".do?method=downloadGenericFile&acquisitionProcess=" + acquisitionProcessOid %>" paramId="fileOID" paramName="file" paramProperty="OID">
+					<bean:write name="file" property="displayName"/>
+				</html:link>, 
 			</logic:iterate>
-			</ul>
 		</logic:notEmpty>
 		<logic:empty name="acquisitionProcess" property="files"><em><bean:message key="document.message.info.notAvailable" bundle="EXPENDITURE_RESOURCES"/></em></logic:empty>
 	</p>

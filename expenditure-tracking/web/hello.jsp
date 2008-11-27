@@ -23,7 +23,10 @@
 	<tr>
 		<td>
 			<p class="mvert05">
-				<bean:message key="label.startAcquisition.text" bundle="EXPENDITURE_RESOURCES"/>
+				<bean:message key="label.startAcquisition.text" bundle="EXPENDITURE_RESOURCES"/><br/>
+				<html:link action="/acquisitionSimplifiedProcedureProcess.do?method=prepareCreateAcquisitionProcess">
+					<bean:message key="link.sideBar.acquisitionProcess.create" bundle="EXPENDITURE_RESOURCES"/>
+				</html:link>
 			</p>
 		</td>
 		<td>
@@ -33,15 +36,13 @@
 		</td>
 		<td>
 			<p class="mvert05">
-			<bean:message key="label.userSuport.processes" bundle="EXPENDITURE_RESOURCES"/>:
-			
+				<bean:message key="label.userSuport.processes" bundle="EXPENDITURE_RESOURCES"/>
 				<a href='mailto:<bean:message key="label.userSuport.processes.email" bundle="EXPENDITURE_RESOURCES"/>'>
-				<bean:message key="label.userSuport.processes.email" bundle="EXPENDITURE_RESOURCES"/>:
+					<bean:message key="label.userSuport.processes.email" bundle="EXPENDITURE_RESOURCES"/>:
 				</a>
 			</p>
 			<p class="mvert05">
-			<bean:message key="label.userSuport.technical" bundle="EXPENDITURE_RESOURCES"/>:
-			
+				<bean:message key="label.userSuport.technical" bundle="EXPENDITURE_RESOURCES"/>
 				<a href='mailto:<bean:message key="label.userSuport.technical.email" bundle="EXPENDITURE_RESOURCES"/>'>
 				<bean:message key="label.userSuport.technical.email" bundle="EXPENDITURE_RESOURCES"/>:
 				</a>
