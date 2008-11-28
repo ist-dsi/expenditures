@@ -2,6 +2,7 @@ package pt.ist.expenditureTrackingSystem.domain.organization;
 
 import java.util.Set;
 
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
@@ -51,4 +52,14 @@ public class Project extends Project_Base {
 	return accountingUnit != null && accountingUnit.hasProjectAccountants(person);
     }
 
+    public static Project findProjectByCode(String projectCode) {
+	for (Unit unit : ExpenditureTrackingSystem.getInstance().getUnits()) {
+	  if (unit instanceof Project) {
+	      if (((Project)unit).getProjectCode().equals(projectCode)) {
+		  return (Project)unit;
+	      }
+	  }
+	}
+	return null;
+    }
 }
