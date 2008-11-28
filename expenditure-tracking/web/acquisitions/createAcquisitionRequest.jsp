@@ -71,6 +71,7 @@
 		function reloadOnDone(id) {
 			if (document.getElementById(id).contentWindow.document.body.innerHTML.length>0) {
 				document.getElementById('fileName').innerHTML = document.getElementById(id).contentWindow.document.getElementById('fileName').innerHTML;
+				document.getElementById('file').href = document.getElementById(id).contentWindow.document.getElementById('file').href;
 				document.getElementById(id).src=document.getElementById(id).contentWindow.document.getElementById('file').href;
 				// This hack is actually needed in order for the browser detects 1st a change of the iframe source to the file, request the download from the user and the
 				// resets the iframe source again. 10 milis should be enough for the browser to do that.
