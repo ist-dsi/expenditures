@@ -93,7 +93,7 @@ public class AfterTheFactAcquisitionsImportBean extends FileUploadBean implement
 		    final String valueString = cleanup(parts[3]);
 		    Money value;
 		    try {
-			value = new Money(valueString.replace(",", ""));
+			value = new Money(valueString.replace('.', 'X').replace("X", "").replace(',', '.'));
 		    } catch (DomainException ex) {
 			value = null;
 			registerIssue(IssueType.BAD_MONEY_VALUE_FORMAT, i, valueString);
@@ -104,7 +104,7 @@ public class AfterTheFactAcquisitionsImportBean extends FileUploadBean implement
 		    final String vatValueString = parts.length == 5 ? cleanup(parts[4]) : "0";
 		    BigDecimal vatValue;
 		    try {
-			vatValue = new BigDecimal(vatValueString.replace(",", ""));
+			vatValue = new BigDecimal(vatValueString.replace('.', 'X').replace("X", "").replace(',', '.'));
 		    } catch (NumberFormatException ex) {
 			vatValue = null;
 			registerIssue(IssueType.BAD_VAT_VALUE_FORMAT, i, vatValueString);
@@ -121,6 +121,9 @@ public class AfterTheFactAcquisitionsImportBean extends FileUploadBean implement
 			    }
 			    importedLines++;
 			} else {
+			    System.out.println(supplier.getName());
+			    System.out.println("   total allocated:" + supplier.getTotalAllocated().getValue());
+			    System.out.println("   trying to allocate value: " + value.getValue());
 			    registerIssue(IssueType.CANNOT_ALLOCATE_MONEY_TO_SUPPLIER, i, supplierNif, supplierName, valueString);
 			}
 		    }
