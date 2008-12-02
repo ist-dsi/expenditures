@@ -52,6 +52,13 @@ public class Project extends Project_Base {
 	return accountingUnit != null && accountingUnit.hasProjectAccountants(person);
     }
 
+    @Override
+    public boolean isAccountingEmployee(final Person person) {
+	final AccountingUnit accountingUnit = getAccountingUnit();
+	return (accountingUnit != null && accountingUnit.hasPeople(person))
+		|| (accountingUnit == null && super.isAccountingEmployee(person));
+    }
+
     public static Project findProjectByCode(String projectCode) {
 	for (Unit unit : ExpenditureTrackingSystem.getInstance().getUnits()) {
 	  if (unit instanceof Project) {
