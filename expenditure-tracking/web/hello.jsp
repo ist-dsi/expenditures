@@ -38,13 +38,13 @@
 			<p class="mvert05">
 				<bean:message key="label.userSuport.processes" bundle="EXPENDITURE_RESOURCES"/>
 				<a href='mailto:<bean:message key="label.userSuport.processes.email" bundle="EXPENDITURE_RESOURCES"/>'>
-					<bean:message key="label.userSuport.processes.email" bundle="EXPENDITURE_RESOURCES"/>:
+					<bean:message key="label.userSuport.processes.email" bundle="EXPENDITURE_RESOURCES"/>
 				</a>
 			</p>
 			<p class="mvert05">
 				<bean:message key="label.userSuport.technical" bundle="EXPENDITURE_RESOURCES"/>
 				<a href='mailto:<bean:message key="label.userSuport.technical.email" bundle="EXPENDITURE_RESOURCES"/>'>
-				<bean:message key="label.userSuport.technical.email" bundle="EXPENDITURE_RESOURCES"/>:
+				<bean:message key="label.userSuport.technical.email" bundle="EXPENDITURE_RESOURCES"/>
 				</a>
 			</p>
 		</td>
