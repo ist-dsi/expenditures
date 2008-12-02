@@ -15,6 +15,7 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.presentationTier.util.FileUploadBean;
 import pt.ist.fenixWebFramework.services.Service;
+import pt.utl.ist.fenix.tools.util.StringNormalizer;
 
 public class AfterTheFactAcquisitionsImportBean extends FileUploadBean implements Serializable {
 
@@ -77,9 +78,9 @@ public class AfterTheFactAcquisitionsImportBean extends FileUploadBean implement
 		registerIssue(IssueType.EMPTY_LINE, i);
 	    } else {
 		final String[] parts = line.split("\t");
-		if (parts.length == 5) {
+		if (parts.length == 5 || parts.length == 4) {
 		    final String supplierNif = cleanupNIF(parts[0]);
-		    final String supplierName = cleanup(parts[1]);
+		    final String supplierName = StringNormalizer.normalizePreservingCapitalizedLetters(cleanup(parts[1]));
 		    Supplier supplier = findSupplier(supplierNif, supplierName);
 		    if (supplier == null) {
 			if (!createData) {
@@ -100,7 +101,7 @@ public class AfterTheFactAcquisitionsImportBean extends FileUploadBean implement
 			value = null;
 			registerIssue(IssueType.BAD_MONEY_VALUE_FORMAT, i, valueString);
 		    }
-		    final String vatValueString = cleanup(parts[4]);
+		    final String vatValueString = parts.length == 5 ? cleanup(parts[4]) : "0";
 		    BigDecimal vatValue;
 		    try {
 			vatValue = new BigDecimal(vatValueString.replace(",", ""));
@@ -186,7 +187,6 @@ public class AfterTheFactAcquisitionsImportBean extends FileUploadBean implement
 	}
 	result = result.replace('€', ' ');
 	result = result.trim();
-	System.out.println("Transformed: [" + string + "] into [" + result + "]");
 	return result;
     }
 
