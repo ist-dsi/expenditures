@@ -165,7 +165,7 @@ public class Unit extends Unit_Base {
     }
 
     public Financer finance(final AcquisitionRequest acquisitionRequest) {
-	throw new Error("Units with no accounting cannot finance any acquisitions.");
+	throw new Error("Units with no accounting cannot finance any acquisitions: " + getIdInternal());
     }
 
     public boolean isProjectAccountingEmployee(Person person) {
