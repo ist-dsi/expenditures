@@ -19,7 +19,7 @@
 	</fr:edit>
 </div>
 
-<logic:present role="MANAGER,ACQUISITION_CENTRAL_MANAGER,ACQUISITION_CENTRAL">
+<logic:present role="MANAGER,ACQUISITION_CENTRAL_MANAGER,ACQUISITION_CENTRAL,SUPPLIER_MANAGER">
 	<p>
 		<html:link action="/organization.do?method=prepareCreateSupplier">
 			<bean:message key="supplier.link.create" bundle="ORGANIZATION_RESOURCES"/>
@@ -38,7 +38,7 @@
 		</fr:view>
 	</div>
 	<bean:define id="supplierOID" name="supplierBean" property="supplier.OID"/>
-	<logic:present role="MANAGER,ACQUISITION_CENTRAL_MANAGER,ACQUISITION_CENTRAL">
+	<logic:present role="MANAGER,ACQUISITION_CENTRAL_MANAGER,ACQUISITION_CENTRAL,SUPPLIER_MANAGER">
 		<p>
 			<html:link action='<%= "/organization.do?method=prepareEditSupplier&supplierOid=" + supplierOID%>'>
 				<bean:message key="supplier.link.edit" bundle="ORGANIZATION_RESOURCES"/>
