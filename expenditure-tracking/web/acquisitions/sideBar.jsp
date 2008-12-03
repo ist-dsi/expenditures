@@ -111,6 +111,11 @@
 					<bean:message key="link.sideBar.importAfterTheFactAcquisitions" bundle="EXPENDITURE_RESOURCES"/>
 				</html:link>
 			</li>
+			<li>
+				<html:link action="/acquisitionAfterTheFactAcquisitionProcess.do?method=listImports">
+					<bean:message key="link.sideBar.listAfterTheFactAcquisitions" bundle="EXPENDITURE_RESOURCES"/>
+				</html:link>
+			</li>
 		</ul>
 	</logic:present>
 

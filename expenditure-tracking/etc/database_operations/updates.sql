@@ -1,0 +1,1 @@
+delete FROM FILE WHERE OJB_CONCRETE_CLASS='pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.ImportFile' AND ID_INTERNAL NOT IN (SELECT KEY_IMPORT_FILE FROM GENERIC_PROCESS WHERE KEY_IMPORT_FILE IS NOT NULL);

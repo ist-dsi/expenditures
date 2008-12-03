@@ -21,6 +21,7 @@ public class AfterTheFactAcquisitionsImportBean extends FileUploadBean implement
 
     private AfterTheFactAcquisitionType afterTheFactAcquisitionType;
 
+    private String filename;
     private String contents;
 
     private List<Issue> issues = new ArrayList<Issue>();
@@ -71,7 +72,7 @@ public class AfterTheFactAcquisitionsImportBean extends FileUploadBean implement
     @Service
     public void importAcquisitions() {
 	final String[] lines = getContents().split("\n");
-	final ImportFile file = new ImportFile(getContents().getBytes());
+	final ImportFile file = createData ? new ImportFile(getContents().getBytes(), getFilename()) : null;
 	for (int i = 0; i < lines.length; i++) {
 	    final String line = lines[i];
 	    if (line.isEmpty()) {
@@ -133,6 +134,7 @@ public class AfterTheFactAcquisitionsImportBean extends FileUploadBean implement
 	    }
 	}
 	if (issues.size() > 0 && createData) {
+	    file.delete();
 	    throw new ImportError();
 	}
     }
@@ -199,6 +201,14 @@ public class AfterTheFactAcquisitionsImportBean extends FileUploadBean implement
 
     public void setCreateData(boolean createData) {
 	this.createData = createData;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
     }
 
 }

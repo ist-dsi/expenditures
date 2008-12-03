@@ -130,7 +130,8 @@ public abstract class BaseAction extends DispatchAction {
     }
 
     protected ActionForward download(final HttpServletResponse response, final File file) throws IOException {
-	return file != null && file.getContent() != null ? download(response, file.getFilename(), file.getContent().getBytes(),
+	String filename = file.getFilename();
+	return file != null && file.getContent() != null ? download(response, filename != null ? filename : "", file.getContent().getBytes(),
 		file.getContentType()) : null;
     }
 

@@ -1,5 +1,8 @@
 package pt.ist.expenditureTrackingSystem.presentationTier.actions.acquisitions;
 
+import java.io.IOException;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -7,10 +10,11 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import pt.ist.expenditureTrackingSystem.domain.DomainException;
+import pt.ist.expenditureTrackingSystem.domain.File;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Invoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AcquisitionAfterTheFact;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.ImportFile;
 import pt.ist.expenditureTrackingSystem.domain.dto.AfterTheFactAcquisitionProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.AfterTheFactAcquisitionsImportBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.AfterTheFactAcquisitionsImportBean.ImportError;
@@ -31,7 +35,8 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "receive.acquisition.invoice", path = "/acquisitions/receiveAcquisitionInvoice.jsp"),
 	@Forward(name = "show.pending.processes", path = "/acquisitionProcess.do?method=showPendingProcesses"),
 	@Forward(name = "import.afterTheFact.acquisitions", path = "/acquisitions/importAfterTheFactAcquisitions.jsp"),
-	@Forward(name = "view.import.afterTheFact.acquisitions.result", path = "/acquisitions/viewImportAfterTheFactAcquisitionsResult.jsp") })
+	@Forward(name = "view.import.afterTheFact.acquisitions.result", path = "/acquisitions/viewImportAfterTheFactAcquisitionsResult.jsp"),
+	@Forward(name = "list.afterTheFact.imports", path = "/acquisitions/listImportAfterTheFactAcquisitionsResult.jsp") })
 public class AfterTheFactAcquisitionProcessAction extends ProcessAction {
 
     private static final Context CONTEXT = new Context("acquisitions");
@@ -169,4 +174,18 @@ public class AfterTheFactAcquisitionProcessAction extends ProcessAction {
 	return mapping.findForward("view.import.afterTheFact.acquisitions.result");
     }
 
+    public ActionForward listImports(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+
+	List<ImportFile> files = File.getFiles(ImportFile.class);
+	request.setAttribute("files", files);
+	return mapping.findForward("list.afterTheFact.imports");
+    }
+
+    public ActionForward downloadImportFile(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) throws IOException {
+
+	File file = getDomainObject(request, "fileOID");
+	return download(response, file);
+    }
 }
