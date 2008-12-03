@@ -185,7 +185,26 @@ public class AfterTheFactAcquisitionProcessAction extends ProcessAction {
     public ActionForward downloadImportFile(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) throws IOException {
 
-	File file = getDomainObject(request, "fileOID");
+	ImportFile file = getDomainObject(request, "fileOID");
 	return download(response, file);
+  }
+    
+    public ActionForward cancelImportFile(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	
+	ImportFile file = getDomainObject(request, "fileOID");
+	file.cancel();
+	
+	return listImports(mapping, form, request, response);
     }
+    
+    public ActionForward  enableImportFile(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	
+	ImportFile file = getDomainObject(request, "fileOID");
+	file.reenable();
+	
+	return listImports(mapping, form, request, response);
+    }
+
 }

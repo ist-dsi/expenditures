@@ -116,6 +116,7 @@ class File {
 }
 
 	class acquisitions.afterthefact.ImportFile extends File {
+		Boolean active;
 	}
 	
 	class processes.GenericFile extends File {

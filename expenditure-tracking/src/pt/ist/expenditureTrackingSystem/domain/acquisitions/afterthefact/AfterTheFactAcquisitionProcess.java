@@ -81,4 +81,12 @@ public class AfterTheFactAcquisitionProcess extends AfterTheFactAcquisitionProce
 	return person.hasRoleType(RoleType.ACQUISITION_CENTRAL) || person.hasRoleType(RoleType.ACQUISITION_CENTRAL_MANAGER);
     }
 
+    public void cancel() {
+	getAcquisitionAfterTheFact().setDeletedState(Boolean.TRUE);
+    }
+
+    public void renable() {
+	getAcquisitionAfterTheFact().setDeletedState(Boolean.FALSE);	
+    }
+
 }
