@@ -9,6 +9,8 @@ import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Project;
+import pt.ist.expenditureTrackingSystem.domain.organization.SubProject;
+import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.utl.ist.fenix.tools.util.Strings;
 
 public class ProjectFinancer extends ProjectFinancer_Base {
@@ -17,18 +19,26 @@ public class ProjectFinancer extends ProjectFinancer_Base {
 	super();
     }
 
-    public ProjectFinancer(final AcquisitionRequest acquisitionRequest, final Project project) {
+    protected ProjectFinancer(final AcquisitionRequest acquisitionRequest, final Unit unit) {
 	this();
-	if (acquisitionRequest == null || project == null) {
+	if (acquisitionRequest == null || unit == null) {
 	    throw new DomainException("error.financer.wrong.initial.arguments");
 	}
-	if (acquisitionRequest.hasPayingUnit(project)) {
+	if (acquisitionRequest.hasPayingUnit(unit)) {
 	    throw new DomainException("error.financer.acquisition.request.already.has.paying.unit");
 	}
 
 	setFundedRequest(acquisitionRequest);
-	setUnit(project);
-	setAccountingUnit(project.getAccountingUnit());
+	setUnit(unit);
+	setAccountingUnit(unit.getAccountingUnit());
+    }
+
+    public ProjectFinancer(final AcquisitionRequest acquisitionRequest, final Project project) {
+	this(acquisitionRequest, (Unit) project);
+    }
+
+    public ProjectFinancer(final AcquisitionRequest acquisitionRequest, final SubProject subProject) {
+	this(acquisitionRequest, (Unit) subProject);
     }
 
     @Override
