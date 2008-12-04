@@ -1,6 +1,7 @@
 package pt.ist.expenditureTrackingSystem.domain.organization;
 
 import java.util.Comparator;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
 
@@ -175,6 +176,33 @@ public class Unit extends Unit_Base {
 
     public CostCenter getCostCenterUnit() {
 	return getParentUnit() != null ? getParentUnit().getCostCenterUnit() : null;
+    }
+
+    public boolean hasResponsibleInSubUnits() {
+	for (Unit unit : getSubUnits()) {
+	    if (unit.hasResponsiblesInUnit()) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
+    public boolean hasResponsiblesInUnit() {
+	return getAuthorizationsCount() > 0;
+    }
+
+    public boolean hasAuthorizationsFor(Person person) {
+	for (Authorization authorization : getAuthorizations()) {
+	    if (authorization.getPerson() == person) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
+    public boolean isMostDirectAuthorization(Person person) {
+	return (!hasAnyAuthorizations() && hasParentUnit()) ? getParentUnit().isMostDirectAuthorization(person)
+		: hasAuthorizationsFor(person);
     }
 
 }

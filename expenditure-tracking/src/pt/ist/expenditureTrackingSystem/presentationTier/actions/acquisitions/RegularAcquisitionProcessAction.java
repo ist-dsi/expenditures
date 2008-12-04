@@ -141,6 +141,10 @@ public class RegularAcquisitionProcessAction extends ProcessAction {
     public ActionForward showPendingProcesses(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final SearchAcquisitionProcess searchAcquisitionProcess = new SearchAcquisitionProcess(getProcessClass());
+	User user = UserView.getUser();
+	if (user != null && user.getPerson().hasAnyAuthorizations()) {
+	    searchAcquisitionProcess.setResponsibleUnitSetOnly(Boolean.TRUE);
+	}
 	searchAcquisitionProcess.setHasAvailableAndAccessibleActivityForUser(Boolean.TRUE);
 	return searchAcquisitionProcess(mapping, request, searchAcquisitionProcess);
     }
@@ -157,6 +161,10 @@ public class RegularAcquisitionProcessAction extends ProcessAction {
 	SearchAcquisitionProcess searchAcquisitionProcess = getRenderedObject();
 	if (searchAcquisitionProcess == null) {
 	    searchAcquisitionProcess = new SearchAcquisitionProcess(getProcessClass());
+	    User user = UserView.getUser();
+	    if (user != null && user.getPerson().hasAnyAuthorizations()) {
+		searchAcquisitionProcess.setResponsibleUnitSetOnly(Boolean.TRUE);
+	    }
 	}
 	return searchAcquisitionProcess(mapping, request, searchAcquisitionProcess);
     }

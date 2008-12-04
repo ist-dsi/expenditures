@@ -10,6 +10,7 @@ import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
+import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericLog;
 
 public abstract class RegularAcquisitionProcess extends RegularAcquisitionProcess_Base {
@@ -169,4 +170,17 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
 	new AcquisitionProcessState(this, AcquisitionProcessStateType.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER);
     }
 
+    public boolean isFinanceByAnyUnit(List<Unit> fromUnits) {
+	for (Financer financer : getAcquisitionRequest().getFinancers()) {
+	    if (fromUnits.contains(financer.getUnit())) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
+    public boolean isPersonAbleToDirectlyAuthorize(Person person) {
+	return isFinanceByAnyUnit(person.getDirectResponsibleUnits()) ? true : getRequestingUnit().isMostDirectAuthorization(
+		person);
+    }
 }

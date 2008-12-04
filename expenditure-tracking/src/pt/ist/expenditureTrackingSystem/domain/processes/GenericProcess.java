@@ -8,9 +8,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.apache.commons.collections.Predicate;
 import org.joda.time.DateTime;
 
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
+import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.fenixWebFramework.security.UserView;
 
 public abstract class GenericProcess extends GenericProcess_Base {
@@ -31,8 +34,19 @@ public abstract class GenericProcess extends GenericProcess_Base {
 	return classes;
     }
 
+    public static <T extends GenericProcess> Set<T> getAllProcesses(Class<T> processClass, Predicate predicate) {
+	Set<T> classes = new HashSet<T>();
+	for (GenericProcess process : ExpenditureTrackingSystem.getInstance().getProcessesSet()) {
+	    if (processClass.isAssignableFrom(process.getClass()) && predicate.evaluate(process)) {
+		classes.add((T) process);
+	    }
+	}
+
+	return classes;
+    }
+
     public abstract <T extends GenericProcess> AbstractActivity<T> getActivityByName(String name);
-    
+
     public DateTime getDateFromLastActivity() {
 	List<GenericLog> logs = new ArrayList<GenericLog>();
 	logs.addAll(getExecutionLogs());
@@ -57,5 +71,4 @@ public abstract class GenericProcess extends GenericProcess_Base {
 	return comments.size() > 0 ? comments.first() : null;
     }
 
-    
 }

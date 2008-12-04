@@ -151,4 +151,15 @@ public class Person extends Person_Base {
 	int s2 = name.lastIndexOf(' ');
 	 return s1 < 0 || s1 == s2 ? name : name.subSequence(0, s1) + name.substring(s2);
     }
+    
+    public List<Unit> getDirectResponsibleUnits() {
+	List<Unit> units = new ArrayList<Unit>();
+	for (Authorization authorization : getAuthorizations()) {
+	    Unit unit = authorization.getUnit();
+	    if (!unit.hasResponsibleInSubUnits()) {
+		units.add(unit);
+	    }
+	}
+	return units;
+    }
 }

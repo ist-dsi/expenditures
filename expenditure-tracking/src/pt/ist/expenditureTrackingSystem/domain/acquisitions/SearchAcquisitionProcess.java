@@ -1,14 +1,20 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.collections.Predicate;
+
+import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.Search;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
+import pt.ist.fenixWebFramework.security.UserView;
 import pt.ist.fenixWebFramework.util.DomainReference;
 
 public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
@@ -20,6 +26,7 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
     private DomainReference<Supplier> supplier;
     private String proposalId;
     private Boolean hasAvailableAndAccessibleActivityForUser;
+    private Boolean responsibleUnitSetOnly = Boolean.FALSE;
 
     private Class<? extends AcquisitionProcess> clazz;
 
@@ -97,11 +104,24 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
     @Override
     public Set<AcquisitionProcess> search() {
 	try {
-	    return new SearchResult(GenericProcess.getAllProcesses(clazz));
+	    return new SearchResult(getProcesses());
 	} catch (Exception ex) {
 	    ex.printStackTrace();
 	    throw new Error(ex);
 	}
+    }
+
+    private Set<? extends AcquisitionProcess> getProcesses() {
+	return responsibleUnitSetOnly ? getProcessesWithResponsible((User) UserView.getUser()) : GenericProcess
+		.getAllProcesses(clazz);
+    }
+
+    private Set<? extends AcquisitionProcess> getProcessesWithResponsible(User user) {
+	Person person = user.getPerson();
+	if (person == null) {
+	    return Collections.emptySet();
+	}
+	return GenericProcess.getAllProcesses(clazz, new ProcessesThatAreAuthorizedByUserPredicate(person));
     }
 
     protected boolean hasCriteria(final String string) {
@@ -169,4 +189,26 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
 	this.acquisitionProcessStateType = acquisitionProcessStateType;
     }
 
+    public Boolean getResponsibleUnitSetOnly() {
+	return responsibleUnitSetOnly;
+    }
+
+    public void setResponsibleUnitSetOnly(Boolean responsibleUnitSetOnly) {
+	this.responsibleUnitSetOnly = responsibleUnitSetOnly;
+    }
+
+    public static class ProcessesThatAreAuthorizedByUserPredicate implements Predicate {
+
+	private Person person;
+
+	public ProcessesThatAreAuthorizedByUserPredicate(Person person) {
+	    this.person = person;
+	}
+
+	public boolean evaluate(Object arg0) {
+	    RegularAcquisitionProcess process = (RegularAcquisitionProcess) arg0;
+	    return process.isPersonAbleToDirectlyAuthorize(person);
+	}
+
+    }
 }

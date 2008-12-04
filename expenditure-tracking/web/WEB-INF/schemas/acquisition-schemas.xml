@@ -357,6 +357,7 @@
 		<property name="defaultTextBundle" value="RENDERER_RESOURCES"/>
 	</slot>
 	<slot name="hasAvailableAndAccessibleActivityForUser" key="label.option.hasAvailableAndAccessibleActivityForUser" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="responsibleUnitSetOnly" key="label.option.responsibleUnitSetOnly" bundle="ACQUISITION_RESOURCES"/>
 </schema>
 
 <schema name="allocateFunds"
