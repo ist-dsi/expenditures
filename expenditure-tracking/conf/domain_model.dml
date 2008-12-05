@@ -168,6 +168,7 @@ class organization.DeliveryInfo {
 }
 
 class organization.Supplier {
+	String giafKey;
 	String name;
 	String abbreviatedName;
 	String fiscalIdentificationCode;

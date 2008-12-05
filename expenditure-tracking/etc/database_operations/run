@@ -40,5 +40,5 @@ function executeWithTempFile() {
 	echo
 }
 
-#execute "Update DB structure." updates.sql
+execute "Update DB structure." updates.sql
 

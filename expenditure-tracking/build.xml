@@ -189,6 +189,12 @@
 		</java>
 	</target>
 
+	<target name="syncSuppliers" depends="compile">
+		<java classname="pt.ist.expenditureTrackingSystem.SyncSuppliers" fork="true">
+			<classpath refid="run.class.path"/>
+		</java>
+	</target>
+
 	<target name="compile-reports" >
 		<mkdir dir="${build.home.reports}"/>
 		<mkdir dir="${build.home.reports.images}"/>
