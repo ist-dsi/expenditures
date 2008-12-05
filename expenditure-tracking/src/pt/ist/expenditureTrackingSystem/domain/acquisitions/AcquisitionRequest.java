@@ -12,6 +12,7 @@ import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.PayingUnitTotalBean;
+import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
@@ -498,22 +499,22 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 
     public boolean hasAnyFundAllocationId() {
 	for (Financer financer : getFinancersWithFundsAllocated()) {
-	   if (financer.hasFundAllocationId()) {
-	       return true;
-	   }
+	    if (financer.hasFundAllocationId()) {
+		return true;
+	    }
 	}
 	return false;
     }
 
     public boolean hasAnyFundAllocationId(Person person) {
 	for (Financer financer : getFinancersWithFundsAllocated()) {
-	   if (financer.hasFundAllocationId() && financer.isAccountingEmployee(person)) {
-	       return true;
-	   }
+	    if (financer.hasFundAllocationId() && financer.isAccountingEmployee(person)) {
+		return true;
+	    }
 	}
 	return false;
     }
- 
+
     public void submittedForFundsAllocation(Person person) {
 	for (AcquisitionRequestItem item : getAcquisitionRequestItems()) {
 	    item.submittedForFundsAllocation(person);
@@ -697,6 +698,14 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	    }
 	}
 	return false;
+    }
+
+    public Set<AccountingUnit> getAccountingUnits() {
+	Set<AccountingUnit> units = new HashSet<AccountingUnit>();
+	for (Financer financer : getFinancers()) {
+	    units.add(financer.getAccountingUnit());
+	}
+	return units;
     }
 
 }

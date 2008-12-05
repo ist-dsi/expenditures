@@ -175,6 +175,14 @@
 		</java>
 	</target>
 			
+	<target name="CheckProjectResponsibles" depends="compile">
+		<java classname="pt.ist.expenditureTrackingSystem.CheckProjectResponsibles" fork="true" maxmemory="1024m">
+			<jvmarg value="-Dfile.encoding=utf-8"/>
+			<classpath refid="run.class.path"/>
+		</java>
+	</target>
+
+				
 	<target name="loadSuppliers" depends="compile">
 		<java classname="pt.ist.expenditureTrackingSystem.LoadSuppliersData" fork="true">
 			<classpath refid="run.class.path"/>

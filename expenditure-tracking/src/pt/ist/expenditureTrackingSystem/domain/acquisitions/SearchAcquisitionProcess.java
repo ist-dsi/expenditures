@@ -2,7 +2,6 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -10,6 +9,7 @@ import org.apache.commons.collections.Predicate;
 
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.Search;
+import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
@@ -25,6 +25,7 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
     private AcquisitionProcessStateType acquisitionProcessStateType;
     private DomainReference<Supplier> supplier;
     private String proposalId;
+    private DomainReference<AccountingUnit> accountingUnit;
     private Boolean hasAvailableAndAccessibleActivityForUser;
     private Boolean responsibleUnitSetOnly = Boolean.FALSE;
 
@@ -32,6 +33,7 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
 
     public SearchAcquisitionProcess(Class<? extends AcquisitionProcess> clazz) {
 	this.clazz = clazz;
+	setAccountingUnit(null);
     }
 
     private class SearchResult extends SearchResultSet<AcquisitionProcess> {
@@ -52,12 +54,18 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
 	    final String identification = acquisitionRequest.getAcquisitionProcessId();
 	    final String acquisitionProposalId = acquisitionRequest.getAcquisitionProposalDocumentId();
 	    final AcquisitionProcessStateType type = acquisitionRequest.getAcquisitionProcess().getAcquisitionProcessStateType();
+	    final Set<AccountingUnit> accountingUnits = acquisitionRequest.getAccountingUnits();
 	    return matchCriteria(processId, identification) && matchCriteria(getRequester(), person)
 		    && matchCriteria(getUnit(), acquisitionRequest) && matchCriteria(getSupplier(), suppliers)
 		    && matchCriteria(proposalId, acquisitionProposalId)
 		    && matchCriteria(hasAvailableAndAccessibleActivityForUser, acquisitionRequest)
-		    && matchCriteria(acquisitionProcessStateType, type);
+		    && matchCriteria(acquisitionProcessStateType, type) && matchCriteria(accountingUnits, getAccountingUnit());
+
 	    // && matchCriteria(costCenter, acquisitionRequest.getCostCenter());
+	}
+
+	private boolean matchCriteria(Set<AccountingUnit> accountingUnits, AccountingUnit accountingUnit) {
+	    return accountingUnit == null || accountingUnits.contains(accountingUnit);
 	}
 
 	private boolean matchCriteria(AcquisitionProcessStateType acquisitionProcessStateType, AcquisitionProcessStateType type) {
@@ -210,5 +218,13 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
 	    return process.isPersonAbleToDirectlyAuthorize(person);
 	}
 
+    }
+
+    public AccountingUnit getAccountingUnit() {
+	return accountingUnit.getObject();
+    }
+
+    public void setAccountingUnit(AccountingUnit accountingUnit) {
+	this.accountingUnit = new DomainReference<AccountingUnit>(accountingUnit);
     }
 }
