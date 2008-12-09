@@ -131,8 +131,11 @@ public abstract class BaseAction extends DispatchAction {
 
     protected ActionForward download(final HttpServletResponse response, final File file) throws IOException {
 	String filename = file.getFilename();
-	return file != null && file.getContent() != null ? download(response, filename != null ? filename : "", file.getContent().getBytes(),
-		file.getContentType()) : null;
+	if (filename == null) {
+	    filename = file.getDisplayName();
+	}
+	return file != null && file.getContent() != null ? download(response, filename != null ? filename : "", file.getContent()
+		.getBytes(), file.getContentType()) : null;
     }
 
     public void addMessage(String key, String bundle, String... args) {
@@ -142,5 +145,5 @@ public abstract class BaseAction extends DispatchAction {
     public void addErrorMessage(String key, String bundle, String... args) {
 	messageHandler.saveMessage(bundle, key, MessageType.ERROR, args);
     }
-    
+
 }
