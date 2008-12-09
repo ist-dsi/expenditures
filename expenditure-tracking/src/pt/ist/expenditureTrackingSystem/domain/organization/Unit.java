@@ -1,7 +1,6 @@
 package pt.ist.expenditureTrackingSystem.domain.organization;
 
 import java.util.Comparator;
-import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
 
