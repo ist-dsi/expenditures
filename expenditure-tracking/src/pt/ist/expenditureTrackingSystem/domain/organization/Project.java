@@ -33,7 +33,7 @@ public class Project extends Project_Base {
 
     @Override
     public String getPresentationName() {
-	return super.getPresentationName() + " (p. " + getProjectCode() + ")";
+	return "(P. " + getProjectCode() + ")" + super.getPresentationName();
     }
 
     @Override
