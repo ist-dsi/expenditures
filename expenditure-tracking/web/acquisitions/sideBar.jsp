@@ -116,9 +116,23 @@
 					<bean:message key="link.sideBar.listAfterTheFactAcquisitions" bundle="EXPENDITURE_RESOURCES"/>
 				</html:link>
 			</li>
+	
 		</ul>
 	</logic:present>
 
-
+	<logic:present role="ACCOUNTING_MANAGER,PROJECT_ACCOUNTING_MANAGER">
+		<ul>
+				<li class="header">
+					<strong><bean:message key="link.sideBar.other.operations" bundle="EXPENDITURE_RESOURCES"/></strong>
+					<div class="lic1"></div><div class="lic2"></div>
+				</li>
+				<li>
+					<html:link action="/acquisitionProcess.do?method=checkFundAllocations">
+						<bean:message key="link.sideBar.checkFundAllocations" bundle="EXPENDITURE_RESOURCES"/>
+					</html:link>
+				</li>
+		</ul>
+	</logic:present>
+	
 </logic:present>
 

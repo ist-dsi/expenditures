@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
@@ -18,8 +20,12 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.SearchAcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.UnitItem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.AllocateFundsPermanently;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.AllocateProjectFundsPermanently;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.FundAllocation;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ProjectFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean;
+import pt.ist.expenditureTrackingSystem.domain.dto.DateIntervalBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.DomainObjectBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.ProcessStateBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.UnitItemBean;
@@ -27,11 +33,13 @@ import pt.ist.expenditureTrackingSystem.domain.dto.VariantBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean.CreateItemSchemaType;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
+import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 import pt.ist.expenditureTrackingSystem.domain.processes.ProcessComment;
 import pt.ist.expenditureTrackingSystem.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.presentationTier.Context;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.ProcessAction;
 import pt.ist.expenditureTrackingSystem.presentationTier.util.FileUploadBean;
+import pt.ist.fenixWebFramework.renderers.components.state.IViewState;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 import pt.ist.fenixWebFramework.security.UserView;
 import pt.ist.fenixWebFramework.struts.annotations.Forward;
@@ -39,7 +47,8 @@ import pt.ist.fenixWebFramework.struts.annotations.Forwards;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
 @Mapping(path = "/acquisitionProcess")
-@Forwards( { @Forward(name = "search.acquisition.process", path = "/acquisitions/searchAcquisitionProcess.jsp") })
+@Forwards( { @Forward(name = "search.acquisition.process", path = "/acquisitions/searchAcquisitionProcess.jsp"),
+	@Forward(name = "view.fund.allocations", path = "/acquisitions/viewFundAllocations.jsp") })
 public class RegularAcquisitionProcessAction extends ProcessAction {
 
     private static final Context CONTEXT = new Context("acquisitions");
@@ -509,4 +518,35 @@ public class RegularAcquisitionProcessAction extends ProcessAction {
 	return viewAcquisitionProcess(mapping, request, process);
     }
 
+    public ActionForward checkFundAllocations(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+
+	IViewState viewState = RenderUtils.getViewState("dateSelection");
+
+	DateIntervalBean bean = viewState == null ? new DateIntervalBean() : (DateIntervalBean) viewState.getMetaObject()
+		.getObject();
+
+	if (viewState == null) {
+	    LocalDate today = new LocalDate();
+	    bean.setBegin(today);
+	    bean.setEnd(today);
+	}
+
+	DateTime begin = bean.getBegin().toDateTimeAtStartOfDay();
+	DateTime end = bean.getEnd().plusDays(1).toDateTimeAtStartOfDay();
+
+	List<AcquisitionProcess> processes = new ArrayList<AcquisitionProcess>();
+
+	for (AcquisitionProcess process : GenericProcess.getAllProcesses(AcquisitionProcess.class)) {
+	    if (!process.getExecutionLogs(begin, end, FundAllocation.class, ProjectFundAllocation.class,
+		    AllocateFundsPermanently.class, AllocateProjectFundsPermanently.class).isEmpty()) {
+		processes.add(process);
+	    }
+	}
+	RenderUtils.invalidateViewState();
+	request.setAttribute("processes", processes);
+	request.setAttribute("bean", bean);
+
+	return mapping.findForward("view.fund.allocations");
+    }
 }

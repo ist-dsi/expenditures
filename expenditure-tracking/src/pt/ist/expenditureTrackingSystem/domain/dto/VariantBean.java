@@ -2,9 +2,11 @@ package pt.ist.expenditureTrackingSystem.domain.dto;
 
 import java.io.Serializable;
 
+import org.joda.time.LocalDate;
+
 public class VariantBean implements Serializable {
     public static enum Type {
-	INTEGER, STRING
+	INTEGER, STRING, LOCAL_DATE
     };
 
     /**
@@ -28,7 +30,7 @@ public class VariantBean implements Serializable {
     }
 
     public Integer getInteger() {
-	return (Integer) (isType(Type.INTEGER) ? this.value : null); 
+	return (Integer) (isType(Type.INTEGER) ? this.value : null);
     }
 
     public void setInteger(Integer value) {
@@ -43,6 +45,15 @@ public class VariantBean implements Serializable {
     public void setString(String string) {
 	this.value = string;
 	setType(Type.STRING);
+    }
+
+    public LocalDate getLocalDate() {
+	return (LocalDate) (isType(Type.LOCAL_DATE) ? this.value : null);
+    }
+
+    public void setLocalDate(LocalDate value) {
+	this.value = value;
+	setType(Type.LOCAL_DATE);
     }
 
     private boolean isType(Type type) {

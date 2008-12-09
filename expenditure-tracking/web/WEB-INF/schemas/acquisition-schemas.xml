@@ -610,3 +610,14 @@
 		<property name="size" value="60"/>
 	</slot>
 </schema>
+
+<schema name="dateIntervalBean.dateSelection" type="pt.ist.expenditureTrackingSystem.domain.dto.DateIntervalBean" bundle="EXPENDITURE_RESOURCES">
+	<slot name="begin" layout="picker" key="label.beginDate" />
+	<slot name="end" layout="picker" key="label.endDate"/>
+</schema>
+
+<schema name="list.processes" type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess" bundle="ACQUISITION_RESOURCES">
+	<slot name="acquisitionProcessId" key="label.acquisitionProcessId" bundle="EXPENDITURE_RESOURCES"/>
+	<slot name="allocationIds" key="financer.label.fundAllocation.identification" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="effectiveAllocationIds" key="financer.label.effectiveFundAllocation.identification" bundle="ACQUISITION_RESOURCES"/>
+</schema>

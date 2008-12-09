@@ -14,6 +14,7 @@ import pt.ist.expenditureTrackingSystem.domain.File;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
+import pt.ist.expenditureTrackingSystem.domain.dto.PayingUnitTotalBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
@@ -286,7 +287,6 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 	return acquisitionRequest.hasAllocatedFundsPermanentlyForAllProjectFinancers();
     }
 
-    
     @Service
     public void createComment(Person person, String comment) {
 	new ProcessComment(this, person, comment);
@@ -350,5 +350,21 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
     public void addFile(String displayName, String filename, byte[] consumeInputStream) {
 	GenericFile file = new GenericFile(displayName, filename, consumeInputStream);
 	addFiles(file);
+    }
+
+    public String getAllocationIds() {
+	StringBuilder builder = new StringBuilder();
+	for (PayingUnitTotalBean bean : getAcquisitionRequest().getTotalAmountsForEachPayingUnit()) {
+	    builder.append(bean.getFinancer().getFundAllocationIds());
+	}
+	return builder.toString();
+    }
+
+    public String getEffectiveAllocationIds() {
+	StringBuilder builder = new StringBuilder();
+	for (PayingUnitTotalBean bean : getAcquisitionRequest().getTotalAmountsForEachPayingUnit()) {
+	    builder.append(bean.getFinancer().getEffectiveFundAllocationIds());
+	}
+	return builder.toString();
     }
 }

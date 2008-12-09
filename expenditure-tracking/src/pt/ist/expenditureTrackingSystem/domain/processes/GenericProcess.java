@@ -10,6 +10,7 @@ import java.util.TreeSet;
 
 import org.apache.commons.collections.Predicate;
 import org.joda.time.DateTime;
+import org.joda.time.Interval;
 
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
@@ -71,4 +72,29 @@ public abstract class GenericProcess extends GenericProcess_Base {
 	return comments.size() > 0 ? comments.first() : null;
     }
 
+    public List<GenericLog> getExecutionLogs(DateTime begin, DateTime end) {
+	return getExecutionLogs(begin, end);
+    }
+
+    public List<GenericLog> getExecutionLogs(DateTime begin, DateTime end,
+	    Class... activitiesClass) {
+	List<GenericLog> logs = new ArrayList<GenericLog>();
+	Interval interval = new Interval(begin, end);
+	for (GenericLog log : getExecutionLogs()) {
+	    if (interval.contains(log.getWhenOperationWasRan())
+		    && (activitiesClass.length == 0 || match(activitiesClass, log.getOperation()))) {
+		logs.add(log);
+	    }
+	}
+	return logs;
+    }
+
+    private boolean match(Class[] classes, String name) {
+	for (Class clazz : classes) {
+	    if (clazz.getSimpleName().equals(name)) {
+		return true;
+	    }
+	}
+	return false;
+    }
 }
