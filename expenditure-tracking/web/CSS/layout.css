@@ -803,7 +803,7 @@ div.item strong {
 /***** AUTO_COMPLETE *****/
 div.autoComplete {
 position:absolute;
-width:250px;
+width:325px !important;
 background: #fff;
 border:1px solid #888;
 margin:0px;
@@ -815,10 +815,10 @@ list-style-type: none;
 margin:0px;
 padding:0px;
 }
-
+/*
+ul.autoCompleteItems li { border-top: 1px solid #eee; }
+*/
 ul.autoCompleteItems li.selected { background-color:  #cef; }
-
-
 
 
 
