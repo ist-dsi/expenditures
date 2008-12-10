@@ -39,7 +39,7 @@ public class CostCenter extends CostCenter_Base {
 
     @Override
     public String getPresentationName() {
-	return "(CC. " + getCostCenter() + ")" + super.getPresentationName();
+	return "(CC. " + getCostCenter() + ") " + super.getPresentationName();
     }
 
     @Override
