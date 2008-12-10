@@ -33,8 +33,6 @@
 					<div class="lic1"></div>
 				</html:link>
 			</li>
-			</logic:present>
-		</logic:present>
 		<li class="<%= announcementsClass %>">
 			<html:link action="/announcementProcess.do?method=showPendingProcesses">
 				<span>
@@ -43,6 +41,8 @@
 				<div class="lic1"></div>
 			</html:link>
 		</li>
+			</logic:present>
+		</logic:present>
 		<li class="<%= processesClass %>">
 			<html:link action="/acquisitionProcess.do?method=showPendingProcesses">
 				<span>

@@ -10,7 +10,7 @@
 	if (module == null) {
 %>
 	<ul>
-		<logic:present role="MANAGER">
+		<logic:present user="ist151339">
 			<li>
 				<html:link action="/home.do?method=showActiveRequestsForProposal">
 					<bean:message key="link.sideBar.home.publicRequestsForProposal" bundle="EXPENDITURE_RESOURCES"/>
