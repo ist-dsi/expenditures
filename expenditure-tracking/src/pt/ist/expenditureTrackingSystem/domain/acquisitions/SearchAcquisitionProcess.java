@@ -9,11 +9,13 @@ import org.apache.commons.collections.Predicate;
 
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.Search;
+import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
+import pt.ist.expenditureTrackingSystem.domain.util.Money;
 import pt.ist.fenixWebFramework.security.UserView;
 import pt.ist.fenixWebFramework.util.DomainReference;
 
@@ -215,9 +217,37 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
 
 	public boolean evaluate(Object arg0) {
 	    RegularAcquisitionProcess process = (RegularAcquisitionProcess) arg0;
-	    return process.isPersonAbleToDirectlyAuthorize(person);
+	    List<Unit> units = process.getFinancingUnits();
+
+	    boolean evaluation = false;
+	    for (Unit unit : units) {
+		evaluation = evaluation || evaluate(unit, process);
+	    }
+
+	    return evaluation;
 	}
 
+	private boolean evaluate(Unit unit, RegularAcquisitionProcess process) {
+
+	    if (unit.hasAuthorizationsFor(person) && process.hasAnyAvailableActivitity()) {
+		return true;
+	    } else {
+		for (Authorization authorization : unit.getAuthorizations()) {
+		    Person person = authorization.getPerson();
+		    User user = UserView.getUser();
+		    try {
+			user.mockUser(person.getUsername());
+			if (process.hasAnyAvailableActivitity()) {
+			    user.unmockUser();
+			    return false;
+			}
+		    } finally {
+			user.unmockUser();
+		    }
+		}
+		return unit.hasParentUnit() && evaluate(unit.getParentUnit(), process);
+	    }
+	}
     }
 
     public AccountingUnit getAccountingUnit() {

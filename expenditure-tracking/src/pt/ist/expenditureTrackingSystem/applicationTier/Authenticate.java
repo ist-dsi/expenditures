@@ -54,26 +54,37 @@ public class Authenticate implements Serializable {
     public static class User implements pt.ist.fenixWebFramework.security.User, Serializable {
 
 	private final DomainReference<Person> personReference;
-
+	private DomainReference<Person> mockReference;
+	
 	private transient String privateConstantForDigestCalculation;
 
 	private User(final String username) {
 	    final Person person = findByUsername(username);
 	    personReference = new DomainReference<Person>(person);
+	    mockReference = null;
 	}
 
+	public void mockUser(final String username) {
+	    final Person person = Person.findByUsername(username);
+	    mockReference = new DomainReference<Person>(person);
+	}
+	
+	public void unmockUser() {
+	    mockReference = null;
+	}
+	
 	private Person findByUsername(final String username) {
 	    final Person person = Person.findByUsername(username);
 	    return person == null ? new Person(username) : person;
 	}
 
 	public String getUsername() {
-	    return getPerson().getUsername();
+	    return mockReference == null ? getPerson().getUsername() : mockReference.getObject().getUsername();
 	}
 
 	public boolean hasRole(final String roleAsString) {
 	    final RoleType roleType = RoleType.valueOf(roleAsString);
-	    final Person person = getPerson();
+	    final Person person = mockReference == null ? getPerson() : mockReference.getObject();
 	    return person != null && person.hasRoleType(roleType);
 	}
 
@@ -88,7 +99,7 @@ public class Authenticate implements Serializable {
 	}
 
 	public Person getPerson() {
-	    return personReference == null ? null : personReference.getObject();
+	    return mockReference == null ? personReference.getObject() : mockReference.getObject();
 	}
 
 	// TODO do an accurate and secure method here

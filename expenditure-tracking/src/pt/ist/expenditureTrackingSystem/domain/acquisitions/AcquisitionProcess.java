@@ -63,6 +63,8 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
     @Override
     public abstract <T extends GenericProcess> AbstractActivity<T> getActivityByName(String activityName);
 
+    public abstract boolean hasAnyAvailableActivitity();
+    
     public boolean isAvailableForPerson(Person person) {
 	return person.hasRoleType(RoleType.ACQUISITION_CENTRAL) || person.hasRoleType(RoleType.ACQUISITION_CENTRAL_MANAGER)
 		|| person.hasRoleType(RoleType.ACCOUNTING_MANAGER) || person.hasRoleType(RoleType.PROJECT_ACCOUNTING_MANAGER)

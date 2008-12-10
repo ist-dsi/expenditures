@@ -55,8 +55,7 @@ public class AfterTheFactAcquisitionProcess extends AfterTheFactAcquisitionProce
     }
 
     public List<AbstractActivity<AfterTheFactAcquisitionProcess>> getActiveActivities() {
-	final List<AbstractActivity<AfterTheFactAcquisitionProcess>> activities =
-	    	new ArrayList<AbstractActivity<AfterTheFactAcquisitionProcess>>();
+	final List<AbstractActivity<AfterTheFactAcquisitionProcess>> activities = new ArrayList<AbstractActivity<AfterTheFactAcquisitionProcess>>();
 	for (final AbstractActivity<AfterTheFactAcquisitionProcess> activity : this.activities) {
 	    if (activity.isActive(this)) {
 		activities.add(activity);
@@ -86,7 +85,12 @@ public class AfterTheFactAcquisitionProcess extends AfterTheFactAcquisitionProce
     }
 
     public void renable() {
-	getAcquisitionAfterTheFact().setDeletedState(Boolean.FALSE);	
+	getAcquisitionAfterTheFact().setDeletedState(Boolean.FALSE);
+    }
+
+    @Override
+    public boolean hasAnyAvailableActivitity() {
+	return !getActiveActivities().isEmpty();
     }
 
 }

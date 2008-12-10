@@ -55,6 +55,8 @@ import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
+import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
+import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 import pt.ist.expenditureTrackingSystem.domain.util.Money;
 import pt.ist.fenixWebFramework.security.UserView;
 import pt.ist.fenixWebFramework.services.Service;
@@ -233,5 +235,11 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	availableStates.add(AcquisitionProcessStateType.REJECTED);
 	availableStates.add(AcquisitionProcessStateType.CANCELED);
 	return availableStates;
+    }
+
+
+    @Override
+    public boolean hasAnyAvailableActivitity() {
+	return !getActiveActivities().isEmpty();
     }
 }

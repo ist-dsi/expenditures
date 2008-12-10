@@ -1,13 +1,16 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.joda.time.LocalDate;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
+import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
@@ -183,4 +186,14 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
 	return isFinanceByAnyUnit(person.getDirectResponsibleUnits()) ? true : getRequestingUnit().isMostDirectAuthorization(
 		person, getAcquisitionRequest().getTotalItemValueWithAdditionalCostsAndVat());
     }
+
+    
+    public List<Unit> getFinancingUnits() {
+	List<Unit> units = new ArrayList<Unit> ();
+	for (Financer financer : getAcquisitionRequest().getFinancers()) {
+	    units.add(financer.getUnit());
+	}
+	return units;
+    }
 }
+ 
