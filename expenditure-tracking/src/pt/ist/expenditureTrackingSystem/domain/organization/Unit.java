@@ -191,17 +191,31 @@ public class Unit extends Unit_Base {
     }
 
     public boolean hasAuthorizationsFor(Person person) {
+	return hasAuthorizationsFor(person, null);
+    }
+
+    public boolean hasAuthorizationsFor(Person person, Money money) {
 	for (Authorization authorization : getAuthorizations()) {
-	    if (authorization.getPerson() == person) {
+	    if (authorization.getPerson() == person
+		    && (money == null || authorization.getMaxAmount().isGreaterThanOrEqual(money))) {
 		return true;
 	    }
 	}
 	return false;
     }
 
-    public boolean isMostDirectAuthorization(Person person) {
-	return (!hasAnyAuthorizations() && hasParentUnit()) ? getParentUnit().isMostDirectAuthorization(person)
-		: hasAuthorizationsFor(person);
+    public boolean hasAnyAuthorizationForAmount(Money money) {
+	for (Authorization authorization : getAuthorizations()) {
+	    if (authorization.getMaxAmount().isGreaterThanOrEqual(money)) {
+		return true;
+	    }
+	}
+	return false;
     }
 
+    public boolean isMostDirectAuthorization(Person person, Money money) {
+	return !hasAnyAuthorizations() ? hasParentUnit() && getParentUnit().isMostDirectAuthorization(person, money)
+		: hasAnyAuthorizationForAmount(money) ? hasAuthorizationsFor(person, money) : hasParentUnit()
+			&& getParentUnit().isMostDirectAuthorization(person, money);
+    }
 }

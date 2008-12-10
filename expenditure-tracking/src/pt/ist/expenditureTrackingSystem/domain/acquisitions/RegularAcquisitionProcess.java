@@ -181,6 +181,6 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
 
     public boolean isPersonAbleToDirectlyAuthorize(Person person) {
 	return isFinanceByAnyUnit(person.getDirectResponsibleUnits()) ? true : getRequestingUnit().isMostDirectAuthorization(
-		person);
+		person, getAcquisitionRequest().getTotalItemValueWithAdditionalCostsAndVat());
     }
 }
