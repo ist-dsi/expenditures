@@ -525,7 +525,7 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	    final HttpServletRequest request, final HttpServletResponse response) {
 
 	final AcquisitionRequestItem item = getDomainObject(request, "acquisitionRequestItemOid");
-	List<UnitItemBean> beans = getRenderedObject("beans");
+	List<UnitItemBean> beans = getRenderedObject("unitItemBeans");
 
 	try {
 	    return executeActivityAndViewProcess(mapping, form, request, response, "DistributeRealValuesForPayingUnits", beans,
