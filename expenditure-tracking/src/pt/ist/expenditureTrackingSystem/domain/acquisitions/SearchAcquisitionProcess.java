@@ -15,7 +15,6 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
-import pt.ist.expenditureTrackingSystem.domain.util.Money;
 import pt.ist.fenixWebFramework.security.UserView;
 import pt.ist.fenixWebFramework.util.DomainReference;
 
@@ -47,7 +46,8 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
 	@Override
 	protected boolean matchesSearchCriteria(final AcquisitionProcess acquisitionProcess) {
 	    final AcquisitionRequest acquisitionRequest = acquisitionProcess.getAcquisitionRequest();
-	    return matchesSearchCriteria(acquisitionRequest) && acquisitionProcess.isAvailableForCurrentUser();
+	    return matchesSearchCriteria(acquisitionRequest)
+		    && (acquisitionProcess.isAvailableForCurrentUser() || acquisitionProcess.isTakenByCurrentUser());
 	}
 
 	private boolean matchesSearchCriteria(final AcquisitionRequest acquisitionRequest) {

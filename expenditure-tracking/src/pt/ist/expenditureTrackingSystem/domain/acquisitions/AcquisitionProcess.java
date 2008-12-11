@@ -64,7 +64,7 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
     public abstract <T extends GenericProcess> AbstractActivity<T> getActivityByName(String activityName);
 
     public abstract boolean hasAnyAvailableActivitity();
-    
+
     public boolean isAvailableForPerson(Person person) {
 	return person.hasRoleType(RoleType.ACQUISITION_CENTRAL) || person.hasRoleType(RoleType.ACQUISITION_CENTRAL_MANAGER)
 		|| person.hasRoleType(RoleType.ACCOUNTING_MANAGER) || person.hasRoleType(RoleType.PROJECT_ACCOUNTING_MANAGER)
@@ -368,5 +368,14 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 	    builder.append(bean.getFinancer().getEffectiveFundAllocationIds());
 	}
 	return builder.toString();
+    }
+
+    public boolean isTakenByPerson(Person person) {
+	return person != null && person == getCurrentOwner();
+    }
+
+    public boolean isTakenByCurrentUser() {
+	User user = UserView.getUser();
+	return user != null && isTakenByPerson(user.getPerson());
     }
 }
