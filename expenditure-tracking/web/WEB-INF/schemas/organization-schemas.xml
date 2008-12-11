@@ -303,3 +303,17 @@
 	<slot name="canDelegate" key="authorizations.label.canDelegate" bundle="EXPENDITURE_RESOURCES"/>
 	<slot name="maxAmount" key="authorizations.label.maxAmount" bundle="EXPENDITURE_RESOURCES" />
 </schema>
+
+
+<schema name="viewSupplierWithCosts"
+		type="pt.ist.expenditureTrackingSystem.domain.organization.Supplier"
+		bundle="ORGANIZATION_RESOURCES">
+	<slot name="fiscalIdentificationCode" key="supplier.label.fiscalCode" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="name" key="supplier.label.name" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="abbreviatedName" key="supplier.label.abbreviatedName" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="totalAllocated" key="supplier.message.info.totalAllocated" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="totalAllocatedByAcquisitionProcesses" key="supplier.message.info.totalAllocatedByAcquisitionProcesses" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="totalAllocatedByWorkingCapitals" key="supplier.message.info.totalAllocatedByWorkingCapitals" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="totalAllocatedByRefunds" key="supplier.message.info.totalAllocatedByRefunds" bundle="ORGANIZATION_RESOURCES"/>	
+	<slot name="totalAllocatedByPurchases" key="supplier.message.info.totalAllocatedByPurchases" bundle="ORGANIZATION_RESOURCES"/>	
+</schema>

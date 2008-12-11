@@ -1,8 +1,10 @@
 package pt.ist.expenditureTrackingSystem.presentationTier.actions.organization;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.Set;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -30,13 +32,16 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.presentationTier.Context;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.BaseAction;
+import pt.ist.expenditureTrackingSystem.util.reports.Spreadsheet;
+import pt.ist.expenditureTrackingSystem.util.reports.Spreadsheet.Row;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 import pt.ist.fenixWebFramework.struts.annotations.Forward;
 import pt.ist.fenixWebFramework.struts.annotations.Forwards;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
 @Mapping(path = "/organization")
-@Forwards( { @Forward(name = "view.organization", path = "/organization/viewOrganization.jsp"),
+@Forwards( {
+	@Forward(name = "view.organization", path = "/organization/viewOrganization.jsp"),
 	@Forward(name = "create.unit", path = "/organization/createUnit.jsp"),
 	@Forward(name = "create.accounting.unit", path = "/organization/createAccountingUnit.jsp"),
 	@Forward(name = "edit.unit", path = "/organization/editUnit.jsp"),
@@ -57,7 +62,7 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "select.accounting.unit.to.add.member", path = "/organization/selectAccountingUnitToAddMember.jsp"),
 	@Forward(name = "select.project.accounting.unit.to.add.member", path = "/organization/selectProjectAccountingUnitToAddMember.jsp"),
 	@Forward(name = "view.accounting.unit", path = "/organization/viewAccountingUnit.jsp"),
-	@Forward(name = "add.unit.to.accounting.unit", path = "/organization/addUnitToAccountingUnit.jsp") })
+	@Forward(name = "add.unit.to.accounting.unit", path = "/organization/addUnitToAccountingUnit.jsp")})
 public class OrganizationAction extends BaseAction {
 
     private static final Context CONTEXT = new Context("organization");
@@ -532,4 +537,43 @@ public class OrganizationAction extends BaseAction {
 	return mapping.findForward("view.accounting.unit");
     }
 
+    public ActionForward listSuppliers(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) throws IOException {
+
+	Spreadsheet suppliersSheet = getSuppliersSheet();
+	response.setContentType("application/xls ");
+	response.setHeader("Content-disposition", "attachment; filename=fornecedores.xls");
+
+	ServletOutputStream outputStream = response.getOutputStream();
+
+	suppliersSheet.exportToXLSSheet(outputStream);
+	outputStream.flush();
+	outputStream.close();
+
+	return null;
+    }
+
+    private Spreadsheet getSuppliersSheet() {
+	Spreadsheet spreadsheet = new Spreadsheet("Fornecedores");
+	spreadsheet.setHeader("Fornecedor");
+	spreadsheet.setHeader("NIF");
+	spreadsheet.setHeader("Total alocado");
+	spreadsheet.setHeader("Ajuste Directo");
+	spreadsheet.setHeader("Fundos de Maneio");
+	spreadsheet.setHeader("Reembolsos");
+	spreadsheet.setHeader("Por outras Vias");
+
+	for (Supplier supplier : ExpenditureTrackingSystem.getInstance().getSuppliers()) {
+	    Row row = spreadsheet.addRow();
+	    row.setCell(supplier.getName());
+	    row.setCell(supplier.getFiscalIdentificationCode());
+	    row.setCell(supplier.getTotalAllocated().getValue());
+	    row.setCell(supplier.getTotalAllocatedByAcquisitionProcesses().getValue());
+	    row.setCell(supplier.getTotalAllocatedByWorkingCapitals().getValue());
+	    row.setCell(supplier.getTotalAllocatedByRefunds().getValue());
+	    row.setCell(supplier.getTotalAllocatedByPurchases().getValue());
+	}
+
+	return spreadsheet;
+    }
 }
