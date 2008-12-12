@@ -15,6 +15,6 @@
 		<fr:property name="classes" value="form"/>
 		<fr:property name="columnClasses" value=",,tderror"/>
 	</fr:layout>
-	<fr:destination name="cancel" path="<%= "/organization.do?method=viewPerson&personOid=" + personOID %>"/>
+	<fr:destination name="cancel" path="/organization.do?method=manageSuppliers"/>
 </fr:edit>
 

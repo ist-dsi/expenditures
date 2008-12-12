@@ -6,7 +6,6 @@
 
 <h2><bean:message key="supplier.title.edit" bundle="ORGANIZATION_RESOURCES"/></h2>
 
-
 <fr:edit action="/organization.do?method=editSupplier" name="supplier" id="edit"
 		type="pt.ist.expenditureTrackingSystem.domain.organization.Supplier"
 		schema="viewSupplier">

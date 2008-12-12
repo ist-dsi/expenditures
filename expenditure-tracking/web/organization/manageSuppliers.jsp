@@ -6,31 +6,40 @@
 
 <h2><bean:message key="supplier.title.manage" bundle="ORGANIZATION_RESOURCES"/></h2>
 
+<logic:present role="MANAGER,ACQUISITION_CENTRAL_MANAGER,ACQUISITION_CENTRAL,SUPPLIER_MANAGER">
+	<div class="infoop1">
+		<ul>
+			<li>
+				<html:link action="/organization.do?method=prepareCreateSupplier">
+					<bean:message key="supplier.link.create" bundle="ORGANIZATION_RESOURCES"/>
+				</html:link>		
+			</li>
+			<li>
+				<html:link action="/organization.do?method=listSuppliers">
+					<bean:message key="supplier.link.list" bundle="ORGANIZATION_RESOURCES"/>
+				</html:link>
+			</li>
+		</ul>
+	</div>
+</logic:present>
+
+<p class="mvert05"><strong><bean:message key="label.search" bundle="ORGANIZATION_RESOURCES"/></strong></p>
+
 <div class="mbottom15">
-	<fr:edit id="supplierBean" action="/organization.do?method=manageSuppliers"
+	<fr:form action="/organization.do?method=manageSuppliers">
+	<fr:edit id="supplierBean" 
 			name="supplierBean"
 			type="pt.ist.expenditureTrackingSystem.domain.dto.SupplierBean"
 			schema="supplierBean">
 		<fr:layout name="tabular">
-			<fr:property name="classes" value="form"/>
+			<fr:property name="classes" value="form mtop05 mbottom1"/>
 			<fr:property name="columnClasses" value=",,tderror"/>
 		</fr:layout>
-		<fr:destination name="cancel" path="/organization.do?method=manageSuppliers"/>
 	</fr:edit>
+	<html:submit styleClass="inputbutton"><bean:message key="renderers.form.submit.name" bundle="RENDERER_RESOURCES"/></html:submit>
+	</fr:form>
 </div>
 
-<logic:present role="MANAGER,ACQUISITION_CENTRAL_MANAGER,ACQUISITION_CENTRAL,SUPPLIER_MANAGER">
-	<p>
-		<html:link action="/organization.do?method=prepareCreateSupplier">
-			<bean:message key="supplier.link.create" bundle="ORGANIZATION_RESOURCES"/>
-		</html:link>
-	</p>
-	<p>
-		<html:link action="/organization.do?method=listSuppliers">
-			<bean:message key="supplier.link.list" bundle="ORGANIZATION_RESOURCES"/>
-		</html:link>
-	</p>
-</logic:present>
 
 <logic:present name="supplierBean" property="supplier">
 	<div class="infoop2">
@@ -39,9 +48,11 @@
 				schema="viewSupplier">
 			<fr:layout name="tabular">
 				<fr:property name="classes" value="tstyle1"/>
+				<fr:property name="rowClasses" value=",tdbold,,,,,,,"/>
 			</fr:layout>
 		</fr:view>
 	</div>
+
 	<bean:define id="supplierOID" name="supplierBean" property="supplier.OID"/>
 	<logic:present role="MANAGER,SUPPLIER_MANAGER">
 		<p>

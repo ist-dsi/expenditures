@@ -340,7 +340,7 @@ public class OrganizationAction extends BaseAction {
 
     public final ActionForward manageSuppliers(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
-	SupplierBean supplierBean = getRenderedObject();
+	SupplierBean supplierBean = getRenderedObject("supplierBean");
 	if (supplierBean == null) {
 	    supplierBean = new SupplierBean();
 	}
