@@ -169,7 +169,7 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     public Money getTotalItemValueWithAdditionalCostsAndVat() {
 	Money result = Money.ZERO;
 	for (final AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
-	    result = result.add(acquisitionRequestItem.getTotalItemValueWithAdditionalCostsAndVat());
+	    result = result.addAndRound(acquisitionRequestItem.getTotalItemValueWithAdditionalCostsAndVat());
 	}
 	return result;
     }
@@ -201,7 +201,7 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     public Money getRealTotalValueWithAdditionalCostsAndVat() {
 	Money result = Money.ZERO;
 	for (final AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
-	    result = result.add(acquisitionRequestItem.getTotalRealValueWithAdditionalCostsAndVat());
+	    result = result.addAndRound(acquisitionRequestItem.getTotalRealValueWithAdditionalCostsAndVat());
 	}
 	return result;
     }

@@ -63,6 +63,11 @@ public class Money implements Serializable, Comparable<Money> {
 	return newMoney(getValue().subtract(valuePercentage(percentage)));
     }
 
+    public Money addAndRound(final Money money) {
+	checkCurreny(money);
+	return newMoney(getValue().add(money.getRoundedValue()));
+    }
+
     public Money add(final Money money) {
 	checkCurreny(money);
 	return newMoney(getValue().add(money.getValue()));
