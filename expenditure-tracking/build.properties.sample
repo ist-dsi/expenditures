@@ -21,6 +21,10 @@ projectAccountingAdministrator.usernames=
 treasury.usernames=
 war.name=compras.ist.utl.pt
 
+db.giaf.user=
+db.giaf.pass=
+db.giaf.alias=
+
 #----------------------------------------------------------------
 # WebServices - External Services Urls
 #----------------------------------------------------------------
