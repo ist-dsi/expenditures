@@ -81,7 +81,7 @@ public class SyncSuppliers {
 	    giafFiscalIdMap.put(giafSupplier.numFis, giafSupplier);
 	}
 
-	public static GiafSupplier getGiafSupplierByDicalId(final String fiscalIdentificationCode) {
+	public static GiafSupplier getGiafSupplierByFiscalId(final String fiscalIdentificationCode) {
 	    return giafFiscalIdMap.get(fiscalIdentificationCode);
 	}
 
@@ -119,45 +119,36 @@ public class SyncSuppliers {
 	}
 
 	int matched = 0;
-	int unmatched = 0;
-	for (final Supplier supplier : ExpenditureTrackingSystem.getInstance().getSuppliersSet()) {
-	    final String giafKey = supplier.getGiafKey();
-	    if (giafKey == null) {
-		final GiafSupplier giafSupplier = SupplierMap.getGiafSupplierByDicalId(supplier.getFiscalIdentificationCode());
-		if (giafSupplier == null) {
-		    unmatched++;
-		    System.out.println("No giaf supplier found for: " + supplier.getFiscalIdentificationCode() + " - " + supplier.getName());
-		} else {
-		    matched++;
-		    supplier.setGiafKey(giafSupplier.codEnt);
-		}
-	    } else {
-		final GiafSupplier giafSupplier = SupplierMap.getGiafSupplierByGiafKey(giafKey);
-		if (giafSupplier == null) {
-		    unmatched++;
-		    System.out.println("Holly shit, a supplier was deleted from giaf!");
-		} else {
-		    matched++;
-		    // TODO : update information
-		}
-	    }
-	}
-
 	int created = 0;
 	for (final GiafSupplier giafSupplier : SupplierMap.getGiafSuppliers()) {
 	    Supplier supplier = findSupplierByGiafKey(giafSupplier.codEnt);
 	    if (supplier == null) {
-		final Address address = new Address(giafSupplier.ruaEnt, null, giafSupplier.codPos, giafSupplier.locEnt, "Portugal");
+		final String country = getCountry(giafSupplier);
+		final Address address = new Address(giafSupplier.ruaEnt, null, giafSupplier.codPos, giafSupplier.locEnt, country);
 		supplier = new Supplier(giafSupplier.nom_ent, giafSupplier.nom_ent_abv, giafSupplier.numFis, address,
 			giafSupplier.telEnt, giafSupplier.faxEnt, giafSupplier.email, null);
 		supplier.setGiafKey(giafSupplier.codEnt);
 		created++;
+	    } else {
+		matched++;
+		updateSupplierInformation(supplier, giafSupplier);
 	    }
 	}
 
 	System.out.println("Matched: " + matched + " suppliers.");
-	System.out.println("Did not match: " + unmatched + " suppliers.");
 	System.out.println("Created: " + created + " suppliers.");
+    }
+
+    private static void updateSupplierInformation(final Supplier supplier, final GiafSupplier giafSupplier) {
+	final String country = getCountry(giafSupplier);
+	supplier.setFiscalIdentificationCode(giafSupplier.numFis);
+	supplier.setName(giafSupplier.nom_ent);
+	supplier.setAbbreviatedName(giafSupplier.nom_ent_abv);
+	supplier.setPhone(giafSupplier.telEnt);
+	supplier.setFax(giafSupplier.faxEnt);
+	supplier.setEmail(giafSupplier.email);
+	final Address address = new Address(giafSupplier.ruaEnt, null, giafSupplier.codPos, giafSupplier.locEnt, country);
+	supplier.setAddress(address);
     }
 
     private static Supplier findSupplierByGiafKey(final String codEnt) {
@@ -168,6 +159,10 @@ public class SyncSuppliers {
 	    }
 	}
 	return null;
+    }
+
+    private static String getCountry(GiafSupplier giafSupplier) {
+	return giafSupplier.codPai != null && giafSupplier.codPai.equals("P") ? "Portugal" : "?";
     }
 
 }
