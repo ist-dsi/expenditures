@@ -21,6 +21,7 @@ import pt.ist.fenixWebFramework.util.DomainReference;
 public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
 
     private String processId;
+    private String requestDocumentId;
     private DomainReference<Person> requester;
     private DomainReference<Unit> unit;
     private AcquisitionProcessStateType acquisitionProcessStateType;
@@ -55,13 +56,16 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
 	    final List<Supplier> suppliers = acquisitionRequest.getSuppliers();
 	    final String identification = acquisitionRequest.getAcquisitionProcessId();
 	    final String acquisitionProposalId = acquisitionRequest.getAcquisitionProposalDocumentId();
+	    final String acquisitionRequestDocumentID = acquisitionRequest.hasPurchaseOrderDocument() ? acquisitionRequest
+		    .getAcquisitionRequestDocumentID() : null;
 	    final AcquisitionProcessStateType type = acquisitionRequest.getAcquisitionProcess().getAcquisitionProcessStateType();
 	    final Set<AccountingUnit> accountingUnits = acquisitionRequest.getAccountingUnits();
 	    return matchCriteria(processId, identification) && matchCriteria(getRequester(), person)
 		    && matchCriteria(getUnit(), acquisitionRequest) && matchCriteria(getSupplier(), suppliers)
 		    && matchCriteria(proposalId, acquisitionProposalId)
 		    && matchCriteria(hasAvailableAndAccessibleActivityForUser, acquisitionRequest)
-		    && matchCriteria(acquisitionProcessStateType, type) && matchCriteria(accountingUnits, getAccountingUnit());
+		    && matchCriteria(acquisitionProcessStateType, type) && matchCriteria(accountingUnits, getAccountingUnit())
+		    && matchCriteria(requestDocumentId, acquisitionRequestDocumentID);
 
 	    // && matchCriteria(costCenter, acquisitionRequest.getCostCenter());
 	}
@@ -256,5 +260,13 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
 
     public void setAccountingUnit(AccountingUnit accountingUnit) {
 	this.accountingUnit = new DomainReference<AccountingUnit>(accountingUnit);
+    }
+
+    public String getRequestDocumentId() {
+	return requestDocumentId;
+    }
+
+    public void setRequestDocumentId(String requestDocumentId) {
+	this.requestDocumentId = requestDocumentId;
     }
 }

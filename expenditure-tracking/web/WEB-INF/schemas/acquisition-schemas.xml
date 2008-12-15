@@ -329,6 +329,7 @@
 		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.SearchAcquisitionProcess"
 		bundle="ACQUISITION_RESOURCES">
 	<slot name="processId" key="label.acquisitionProcessId" bundle="EXPENDITURE_RESOURCES"/>
+	<slot name="requestDocumentId" key="acquisitionProcess.label.requestDocument" bundle="ACQUISITION_RESOURCES" />
 	<slot name="proposalId" key="acquisitionProcess.label.proposalID" bundle="ACQUISITION_RESOURCES" />
 	<slot name="requester" layout="autoComplete" key="label.requester" bundle="EXPENDITURE_RESOURCES">
         <property name="labelField" value="name"/>
