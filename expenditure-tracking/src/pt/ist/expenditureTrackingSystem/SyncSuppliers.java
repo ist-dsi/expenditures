@@ -3,13 +3,9 @@ package pt.ist.expenditureTrackingSystem;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import pt.ist.expenditureTrackingSystem._development.PropertiesManager;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
@@ -19,23 +15,31 @@ import pt.ist.expenditureTrackingSystem.persistenceTier.ExternalDbOperation;
 import pt.ist.expenditureTrackingSystem.persistenceTier.ExternalDbQuery;
 import pt.ist.fenixWebFramework.FenixWebFramework;
 import pt.ist.fenixWebFramework.services.Service;
-import pt.utl.ist.fenix.tools.util.FileUtils;
 
 public class SyncSuppliers {
 
-    private static class RemoteSupplierContact {
-
+    static class GiafSupplier {
 	private String codEnt;
-	private String ruaEnt;
-	private String locEnt;
-	private String codPos;
-	private String codPai;
-	private String telEnt;
-	private String faxEnt;
-	private String email;
+	private String numFis;
+	private String nom_ent;
+	private String nom_ent_abv;
 
-	public RemoteSupplierContact(final ResultSet resultSet) throws SQLException {
+	private String ruaEnt = " ";
+	private String locEnt = " ";
+	private String codPos = " ";
+	private String codPai = " ";
+	private String telEnt = " ";
+	private String faxEnt = " ";
+	private String email = " ";
+
+	GiafSupplier(final ResultSet resultSet) throws SQLException {
 	    codEnt = get(resultSet, 1);
+	    numFis = get(resultSet, 2);
+	    nom_ent = get(resultSet, 3);
+	    nom_ent_abv = get(resultSet, 4);
+	}
+
+	public void setContactInformation(final ResultSet resultSet) throws SQLException {
 	    ruaEnt = get(resultSet, 2);
 	    locEnt = get(resultSet, 3);
 	    codPos = get(resultSet, 4);
@@ -48,115 +52,6 @@ public class SyncSuppliers {
 	private String get(final ResultSet resultSet, final int i) throws SQLException {
 	    final String string = resultSet.getString(i);
 	    return string == null || string.length() == 0 ? " " : string.replace('\n', ' ').replace('\t', ' ');
-	}
-
-    }
-
-    private static class RemoteSupplier {
-
-	private String codEnt;
-	private String numFis;
-	private String nom_ent;
-	private String nom_ent_abv;
-
-	private Set<RemoteSupplierContact> remoteSupplierContacts = new HashSet<RemoteSupplierContact>();
-
-	private RemoteSupplier(final ResultSet resultSet) throws SQLException {
-	    codEnt = resultSet.getString(1);
-	    numFis = resultSet.getString(2);
-	    nom_ent = resultSet.getString(3);
-	    nom_ent_abv = resultSet.getString(4);
-	}
-
-	private String get(final ResultSet resultSet, final int i) throws SQLException {
-	    final String string = resultSet.getString(i);
-	    return string == null || string.length() == 0 ? " " : string.replace('\n', ' ').replace('\t', ' ');
-	}
-
-	public RemoteSupplierContact getRemoteSupplierContact() {
-	    if (remoteSupplierContacts.isEmpty()) {
-		System.out.println("Supplier: " + codEnt + " has no contacts...");
-		return null;
-	    } else if (remoteSupplierContacts.size() == 1) {
-		return remoteSupplierContacts.iterator().next();
-	    } else {
-		System.out.println("Supplier: " + codEnt + " has multiple contacts...");
-		return remoteSupplierContacts.iterator().next();
-	    }
-	}
-
-	public void registerContact(final ResultSet resultSetContact) throws SQLException {
-	    remoteSupplierContacts.add(new RemoteSupplierContact(resultSetContact));
-	}
-
-    }
-
-    private static class GiafSupplier {
-	private String codEnt;
-	private String numFis;
-	private String nom_ent;
-	private String nom_ent_abv;
-
-	private String ruaEnt;
-	private String locEnt;
-	private String codPos;
-	private String codPai;
-	private String telEnt;
-	private String faxEnt;
-	private String email;
-
-	private GiafSupplier(final String line) {
-	    final String[] parts = split(line, '\t');
-	    try {
-	    codEnt = parts[0];
-	    numFis = parts[1];
-	    nom_ent = parts[2];
-	    nom_ent_abv = parts[3];
-
-	    ruaEnt = parts[4];
-	    locEnt = parts[5];
-	    codPos = parts[6];
-	    codPai = parts[7];
-	    telEnt = parts[8];
-	    faxEnt = parts[9];
-	    email = parts.length == 11 ? parts[10] : " ";
-	    } catch (Exception ex) {
-		System.out.println();
-		System.out.println(parts.length);
-		System.out.println(line);
-		for (final String part : parts) {
-		    System.out.println("   part: " + part);
-		}
-	    }
-	}
-
-	public GiafSupplier(final RemoteSupplier remoteSupplier) {
-	    codEnt = remoteSupplier.codEnt;
-	    numFis = remoteSupplier.numFis;
-	    nom_ent = remoteSupplier.nom_ent;
-	    nom_ent_abv = remoteSupplier.nom_ent_abv;
-
-	    ruaEnt = remoteSupplier.getRemoteSupplierContact().ruaEnt;
-	    locEnt = remoteSupplier.getRemoteSupplierContact().locEnt;
-	    codPos = remoteSupplier.getRemoteSupplierContact().codPos;
-	    codPai = remoteSupplier.getRemoteSupplierContact().codPai;
-	    telEnt = remoteSupplier.getRemoteSupplierContact().telEnt;
-	    faxEnt = remoteSupplier.getRemoteSupplierContact().faxEnt;
-	    email = remoteSupplier.getRemoteSupplierContact().email;
-	}
-
-	private String[] split(final String line, final char c) {
-	    final List<String> parts = new ArrayList<String>();
-	    for (int offset = line.indexOf(c), prev = 0; offset >= 0; ) {
-		parts.add(line.substring(prev, offset));
-		prev = offset + 1;
-		offset = line.indexOf(c, prev);
-	    }
-	    final String[] result = new String[parts.size()];
-	    for (int i = 0; i < result.length; i++) {
-		result[i] = parts.get(i);
-	    }
-	    return result;
 	}
     }
 
@@ -185,12 +80,6 @@ public class SyncSuppliers {
 
     private static class SupplierQuery extends ExternalDbQuery {
 
-	final Set<RemoteSupplier> remoteSuppliers;
-
-	private SupplierQuery(final Set<RemoteSupplier> remoteSuppliers) {
-	    this.remoteSuppliers = remoteSuppliers;
-	}
-
 	@Override
 	protected String getQueryString() {
 	    return "SELECT GIDFORN.forn_cod_ent, GIDENTGER.num_fis, GIDENTGER.nom_ent, GIDENTGER.nom_ent_abv"
@@ -199,19 +88,15 @@ public class SyncSuppliers {
 
 	@Override
 	protected void processResultSet(final ResultSet resultSet) throws SQLException {
-	    final RemoteSupplier remoteSupplier = new RemoteSupplier(resultSet);
-		remoteSuppliers.add(remoteSupplier);
+	    while (resultSet.next()) {
+		final GiafSupplier giafSupplier = new GiafSupplier(resultSet);
+		SupplierMap.index(giafSupplier);
+	    }
 	}
 	
     }
 
     private static class SupplierContactQuery extends ExternalDbQuery {
-
-	final Set<RemoteSupplier> remoteSuppliers;
-
-	private SupplierContactQuery(final Set<RemoteSupplier> remoteSuppliers) {
-	    this.remoteSuppliers = remoteSuppliers;
-	}
 
 	@Override
 	protected String getQueryString() {
@@ -220,17 +105,19 @@ public class SyncSuppliers {
 
 	@Override
 	protected void processResultSet(final ResultSet resultSet) throws SQLException {
-	    final RemoteSupplierContact remoteSupplierContact = new RemoteSupplierContact(resultSet);
-	    final RemoteSupplier remoteSupplier = findRemoteSupplier(remoteSupplierContact.codEnt);
-	    if (remoteSupplier != null) {
-		remoteSupplier.remoteSupplierContacts.add(remoteSupplierContact);
+	    while (resultSet.next()) {
+		final String codEnt = resultSet.getString(1);
+		final GiafSupplier giafSupplier = findRemoteSupplier(codEnt);
+		if (giafSupplier != null) {
+		    giafSupplier.setContactInformation(resultSet);
+		}
 	    }
 	}
 	
-	private RemoteSupplier findRemoteSupplier(final String codEnt) {
-	    for (final RemoteSupplier remoteSupplier : remoteSuppliers) {
-		if (remoteSupplier.codEnt.equalsIgnoreCase(codEnt)) {
-		    return remoteSupplier;
+	private GiafSupplier findRemoteSupplier(final String codEnt) {
+	    for (final GiafSupplier giafSupplier : SupplierMap.getGiafSuppliers()) {
+		if (giafSupplier.codEnt.equals(codEnt)) {
+		    return giafSupplier;
 		}
 	    }
 	    return null;
@@ -246,18 +133,11 @@ public class SyncSuppliers {
 
 	@Override
 	protected void doOperation() throws SQLException {
-	    final Set<RemoteSupplier> remoteSuppliers = new HashSet<RemoteSupplier>();
-
-	    final SupplierQuery supplierQuery = new SupplierQuery(remoteSuppliers);
+	    final SupplierQuery supplierQuery = new SupplierQuery();
 	    executeQuery(supplierQuery);
 
-	    final SupplierContactQuery supplierContactQuery = new SupplierContactQuery(remoteSuppliers);
+	    final SupplierContactQuery supplierContactQuery = new SupplierContactQuery();
 	    executeQuery(supplierContactQuery);
-
-	    for (final RemoteSupplier remoteSupplier : remoteSuppliers) {
-		final GiafSupplier giafSupplier = new GiafSupplier(remoteSupplier);
-		SupplierMap.index(giafSupplier);
-	    }
 	}	
 
     }
@@ -285,17 +165,7 @@ public class SyncSuppliers {
 	final SupplierReader supplierReader = new SupplierReader();
 	supplierReader.execute();
 
-	System.out.println("Read " + SupplierMap.giafCodEntMap.size() + " suppliers.");
-
-	if (true) {
-	    return;
-	}
-
-	final String suppliersContents = FileUtils.readFile("suppliers.csv");
-	for (final String line : suppliersContents.split("\n")) {
-	    final GiafSupplier giafSupplier = new GiafSupplier(line);
-	    SupplierMap.index(giafSupplier);
-	}
+	System.out.println("Read " + SupplierMap.giafCodEntMap.size() + " suppliers from giaf.");
 
 	int matched = 0;
 	int created = 0;

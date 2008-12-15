@@ -182,7 +182,6 @@
 		</java>
 	</target>
 
-				
 	<target name="loadSuppliers" depends="compile">
 		<java classname="pt.ist.expenditureTrackingSystem.LoadSuppliersData" fork="true">
 			<classpath refid="run.class.path"/>
@@ -191,6 +190,12 @@
 
 	<target name="syncSuppliers" depends="compile">
 		<java classname="pt.ist.expenditureTrackingSystem.SyncSuppliers" fork="true">
+			<classpath refid="run.class.path"/>
+		</java>
+	</target>
+
+	<target name="syncProjects" depends="compile">
+		<java classname="pt.ist.expenditureTrackingSystem.SyncProjects" fork="true">
 			<classpath refid="run.class.path"/>
 		</java>
 	</target>

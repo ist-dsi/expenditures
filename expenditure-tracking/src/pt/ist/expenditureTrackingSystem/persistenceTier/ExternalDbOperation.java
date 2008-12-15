@@ -27,6 +27,7 @@ public abstract class ExternalDbOperation {
 
     public void execute() throws SQLException {
 	try {
+	    DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
 	    connection = DriverManager.getConnection(getDatabaseUrl());
 	    connection.setAutoCommit(false);
 	    doOperation();

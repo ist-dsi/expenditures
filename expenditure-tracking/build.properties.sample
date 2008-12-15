@@ -25,6 +25,10 @@ db.giaf.user=
 db.giaf.pass=
 db.giaf.alias=
 
+db.mgp.user=
+db.mgp.pass=
+db.mgp.alias=
+
 #----------------------------------------------------------------
 # WebServices - External Services Urls
 #----------------------------------------------------------------
