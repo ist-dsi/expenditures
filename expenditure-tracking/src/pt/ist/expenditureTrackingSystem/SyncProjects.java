@@ -195,6 +195,8 @@ public class SyncProjects {
 	}
     }
 
+    final static Money AUTHORIZED_VALUE = new Money("12470");
+
     private static void updateProject(final MgpProject mgpProject, final Project project) {
 	String projectCodeString = mgpProject.projectCode;
 	String costCenterString = mgpProject.costCenter.replace("\"", "");
@@ -210,8 +212,10 @@ public class SyncProjects {
 	final Person responsible = findPerson(responsibleString);
 	if (responsible != null) {
 	    if (projectResponsibles.contains(Integer.valueOf(responsibleString))) {
-		final Authorization authorization = new Authorization(responsible, project);
-		authorization.setMaxAmount(new Money("12470"));
+		if (!hasAuthorization(project, responsible)) {
+		    final Authorization authorization = new Authorization(responsible, project);
+		    authorization.setMaxAmount(AUTHORIZED_VALUE);
+		}
 	    } else {
 		// System.out.println("[" + responsibleString + "] for project [" + acronym + "] is not in project responsibles list");
 	    }
@@ -223,6 +227,15 @@ public class SyncProjects {
 	    System.out.println("   current cost center is " + (project.getCostCenterUnit() == null ? null : project.getCostCenterUnit().getCostCenter()));
 	    project.setParentUnit(costCenter);
 	}
+    }
+
+    private static boolean hasAuthorization(final Project project, final Person responsible) {
+	for (final Authorization authorization : project.getAuthorizationsSet()) {
+	    if (authorization.getPerson() == responsible && authorization.getMaxAmount().isGreaterThanOrEqual(AUTHORIZED_VALUE)) {
+		return true;
+	    }
+	}
+	return false;
     }
 
     private static final Set<String> cdCostCenters = new HashSet<String>();
