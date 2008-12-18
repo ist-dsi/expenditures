@@ -21,7 +21,7 @@ public class RemoveFundAllocation extends GenericAcquisitionProcessActivity {
     }
 
     private boolean checkCanceledConditions(RegularAcquisitionProcess process) {
-	return process.getAcquisitionProcessState().isCanceled();
+	return super.isAvailable(process) && process.getAcquisitionProcessState().isCanceled();
     }
 
     @Override

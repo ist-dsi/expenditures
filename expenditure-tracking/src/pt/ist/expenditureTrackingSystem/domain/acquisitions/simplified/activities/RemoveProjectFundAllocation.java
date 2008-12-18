@@ -21,7 +21,7 @@ public class RemoveProjectFundAllocation extends GenericAcquisitionProcessActivi
     }
 
     private boolean checkCanceledConditions(RegularAcquisitionProcess process) {
-	return process.getAcquisitionProcessState().isCanceled();
+	return super.isAvailable(process) && process.getAcquisitionProcessState().isCanceled();
     }
 
     @Override

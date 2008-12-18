@@ -508,7 +508,7 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 
     public boolean hasAnyFundAllocationId(Person person) {
 	for (Financer financer : getFinancersWithFundsAllocated()) {
-	    if (financer.hasFundAllocationId() && financer.isAccountingEmployee(person)) {
+	    if (financer.getFundAllocationId() != null && financer.isAccountingEmployee(person)) {
 		return true;
 	    }
 	}

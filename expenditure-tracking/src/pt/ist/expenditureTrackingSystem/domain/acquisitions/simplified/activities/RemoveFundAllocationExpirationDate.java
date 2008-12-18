@@ -13,17 +13,15 @@ public class RemoveFundAllocationExpirationDate extends GenericAcquisitionProces
 
     @Override
     protected boolean isAvailable(RegularAcquisitionProcess process) {
-	return (checkActiveConditions(process) || checkCanceledConditions(process))
-		&& process.getAcquisitionProcessState().isInAllocatedToSupplierState()
-		&& !process.hasAnyAllocatedFunds();
+	return (checkActiveConditions(process) || checkCanceledConditions(process)) && !process.hasAnyAllocatedFunds() && process.getFundAllocationExpirationDate() != null;
     }
 
     private boolean checkActiveConditions(RegularAcquisitionProcess process) {
-	return  super.isAvailable(process) && process.getAcquisitionProcessState().isInAllocatedToSupplierState();
+	return super.isAvailable(process) && process.getAcquisitionProcessState().isInAllocatedToSupplierState();
     }
 
     private boolean checkCanceledConditions(RegularAcquisitionProcess process) {
-	return process.getAcquisitionProcessState().isCanceled();
+	return super.isAvailable(process) && process.getAcquisitionProcessState().isCanceled();
     }
 
     private boolean hasAnyAssociatedProject(final RegularAcquisitionProcess process) {
