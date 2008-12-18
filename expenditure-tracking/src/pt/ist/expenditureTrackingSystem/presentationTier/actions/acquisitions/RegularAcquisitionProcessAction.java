@@ -429,6 +429,11 @@ public class RegularAcquisitionProcessAction extends ProcessAction {
 	    final HttpServletResponse response) {
 
 	final RegularAcquisitionProcess acquisitionProcess = getProcess(request);
+
+	if (!acquisitionProcess.hasAnyAvailableActivitity() && request.getParameter("confirmTake") == null) {
+	    request.setAttribute("confirmTake", "yes");
+	    return viewAcquisitionProcess(mapping, request, acquisitionProcess);
+	}
 	try {
 	    acquisitionProcess.takeProcess();
 	} catch (DomainException e) {

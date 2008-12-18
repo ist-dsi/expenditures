@@ -80,6 +80,24 @@
 	</div>
 </logic:present>
 
+<logic:present name="confirmTake">
+	<div class="warning2">
+		<p><span><bean:message key="message.confirm.take.acquisition.process" bundle="ACQUISITION_RESOURCES"/></span></p>
+		<div class="forminline">
+			<form action="<%= request.getContextPath() + urlConfirm %>" method="post">
+				<html:hidden property="method" value="takeProcess"/>
+				<html:hidden property="confirmTake" value="yes"/>
+				<html:hidden property="acquisitionProcessOid" value="<%= acquisitionProcessOid %>"/>
+				<html:submit styleClass="inputbutton"><bean:message key="button.yes" bundle="EXPENDITURE_RESOURCES"/></html:submit>
+			</form>
+			<form action="<%= request.getContextPath() + urlConfirm %>" method="post">
+				<html:hidden property="method" value="viewAcquisitionProcess"/>
+				<html:hidden property="acquisitionProcessOid" value="<%= acquisitionProcessOid %>"/>
+				<html:cancel styleClass="inputbutton"><bean:message key="button.no" bundle="EXPENDITURE_RESOURCES"/></html:cancel>
+			</form>
+		</div>
+	</div>
+</logic:present>
 <ul class="operations">
 	<li>
 	<logic:present name="acquisitionProcess" property="currentOwner">
