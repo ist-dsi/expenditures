@@ -22,10 +22,14 @@
 <bean:define id="acquisitionProcesses" name="searchAcquisitionProcess" property="result"/>
 
 <logic:notEmpty name="acquisitionProcesses">
+	<bean:size id="listSize" name="acquisitionProcesses"/>
+	
+	<p class="mbottom05"><em><bean:message key="label.numberOfFoundProcesses" bundle="ACQUISITION_RESOURCES" arg0="<%= listSize.toString() %>"/>.</em></p>
+		
 	<fr:view name="acquisitionProcesses"
 			schema="viewAcquisitionProcessInList">
 		<fr:layout name="tabular">
-			<fr:property name="classes" value="tstyle2 mtop2"/>
+			<fr:property name="classes" value="tstyle2 mtop05"/>
 			<fr:property name="columnClasses" value=",,,width30px,,,,,"/>
 			<fr:property name="sortBy" value="year=asc,acquisitionProcessNumber=asc"/>
 			<fr:property name="linkFormat(view)" value="/acquisition${class.simpleName}.do?method=viewAcquisitionProcess&acquisitionProcessOid=${OID}"/>
