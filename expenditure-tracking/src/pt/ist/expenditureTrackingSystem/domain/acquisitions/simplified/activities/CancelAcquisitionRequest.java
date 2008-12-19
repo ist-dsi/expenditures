@@ -21,8 +21,9 @@ public class CancelAcquisitionRequest extends GenericAcquisitionProcessActivity 
 	return super.isAvailable(process)
 		&& ((acquisitionProcessState.isAcquisitionProcessed() && userHasRole(RoleType.ACQUISITION_CENTRAL))
 			|| (acquisitionProcessState.isInGenesis() && isUserOwnerOfProcess(process))
-			|| (acquisitionProcessState.isInAllocatedToUnitState() && isUserResponsibleForAuthorizingPayment(process)) || (acquisitionProcessState
-			.isPendingInvoiceConfirmation() && isUserResponsibleForUnit(process)));
+			|| (acquisitionProcessState.isInAllocatedToUnitState() && isUserResponsibleForAuthorizingPayment(process))
+			|| (acquisitionProcessState.isPendingInvoiceConfirmation() && isUserResponsibleForUnit(process)) || (acquisitionProcessState
+			.isInvoiceReceived() && userHasRole(RoleType.ACQUISITION_CENTRAL)));
     }
 
     private boolean isUserResponsibleForAuthorizingPayment(RegularAcquisitionProcess process) {
