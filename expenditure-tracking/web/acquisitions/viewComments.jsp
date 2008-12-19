@@ -28,7 +28,7 @@
 			<p>
 				<span><fr:view name="comment" property="commenter.name"/></span> <fr:view name="comment" property="date"/>
 			</p>
-			<div class="body"><fr:view name="comment" property="comment"/></div>
+			<div class="body"><fr:view name="comment" property="comment" layout="null-as-label" type="java.lang.String"/></div>
 		</div>
 	</logic:iterate>
 </logic:notEmpty>
