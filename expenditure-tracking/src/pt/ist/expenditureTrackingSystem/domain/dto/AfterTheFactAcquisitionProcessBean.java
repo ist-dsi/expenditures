@@ -18,6 +18,7 @@ public class AfterTheFactAcquisitionProcessBean implements Serializable {
     private BigDecimal vatValue;
     private DomainReference<AfterTheFactAcquisitionProcess> afterTheFactAcquisitionProcess;
     private String description;
+    private Integer year;
 
     public AfterTheFactAcquisitionProcessBean() {
     }
@@ -30,6 +31,7 @@ public class AfterTheFactAcquisitionProcessBean implements Serializable {
 	setValue(acquisitionAfterTheFact.getValue());
 	setVatValue(acquisitionAfterTheFact.getVatValue());
 	setDescription(acquisitionAfterTheFact.getDescription());
+	setYear(acquisitionAfterTheFact.getAfterTheFactAcquisitionProcess().getYear());
     }
 
     public void setSupplier(Supplier supplier) {
@@ -78,6 +80,14 @@ public class AfterTheFactAcquisitionProcessBean implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Integer getYear() {
+        return year;
+    }
+
+    public void setYear(Integer year) {
+        this.year = year;
     }
 
 }

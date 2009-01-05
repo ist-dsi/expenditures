@@ -534,6 +534,10 @@
 <schema name="afterTheFactAcquisitionsImportBean"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.AfterTheFactAcquisitionsImportBean"
 		bundle="EXPENDITURE_RESOURCES">
+	<slot name="year" key="label.year" bundle="ACQUISITION_RESOURCES">
+		<validator class="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+		<validator class="pt.ist.fenixWebFramework.renderers.validators.NumberValidator"/>
+	</slot>
 	<slot name="afterTheFactAcquisitionType" key="label.afterTheFactAcquisitionType" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 	<slot name="inputStream" key="label.afterTheFactAcquisition.import" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
 		<property name="fileNameSlot" value="filename" />

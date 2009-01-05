@@ -5,6 +5,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.joda.time.LocalDate;
+
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionType;
@@ -18,6 +20,8 @@ import pt.ist.fenixWebFramework.services.Service;
 import pt.utl.ist.fenix.tools.util.StringNormalizer;
 
 public class AfterTheFactAcquisitionsImportBean extends FileUploadBean implements Serializable {
+
+    private Integer year = Integer.valueOf(new LocalDate().getYear());
 
     private AfterTheFactAcquisitionType afterTheFactAcquisitionType;
 
@@ -156,6 +160,7 @@ public class AfterTheFactAcquisitionsImportBean extends FileUploadBean implement
 	afterTheFactAcquisitionProcessBean.setSupplier(supplier);
 	afterTheFactAcquisitionProcessBean.setValue(value);
 	afterTheFactAcquisitionProcessBean.setVatValue(vatValue);
+	afterTheFactAcquisitionProcessBean.setYear(year);
 	file.addAfterTheFactAcquisitionProcesses(AfterTheFactAcquisitionProcess
 		.createNewAfterTheFactAcquisitionProcess(afterTheFactAcquisitionProcessBean));
     }
@@ -209,6 +214,14 @@ public class AfterTheFactAcquisitionsImportBean extends FileUploadBean implement
 
     public void setFilename(String filename) {
         this.filename = filename;
+    }
+
+    public Integer getYear() {
+        return year;
+    }
+
+    public void setYear(Integer year) {
+        this.year = year;
     }
 
 }

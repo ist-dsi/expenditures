@@ -33,15 +33,22 @@ public class AfterTheFactAcquisitionProcess extends AfterTheFactAcquisitionProce
 	new AcquisitionAfterTheFact(this);
     }
 
+    private static final ThreadLocal<AfterTheFactAcquisitionProcessBean> threadLocal = new ThreadLocal<AfterTheFactAcquisitionProcessBean>();
+
     @Service
     public static AfterTheFactAcquisitionProcess createNewAfterTheFactAcquisitionProcess(
 	    AfterTheFactAcquisitionProcessBean afterTheFactAcquisitionProcessBean) {
+	threadLocal.set(afterTheFactAcquisitionProcessBean);
 	final AfterTheFactAcquisitionProcess afterTheFactAcquisitionProcess = new AfterTheFactAcquisitionProcess();
 	afterTheFactAcquisitionProcess.edit(afterTheFactAcquisitionProcessBean);
 	final User user = UserView.getUser();
 	new GenericLog(afterTheFactAcquisitionProcess, user.getPerson(), afterTheFactAcquisitionProcess.getClass().getName()
 		+ ".Create", new DateTime());
 	return afterTheFactAcquisitionProcess;
+    }
+
+    protected int getYearForConstruction() {
+	return threadLocal.get().getYear().intValue();
     }
 
     @Override

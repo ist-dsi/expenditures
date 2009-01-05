@@ -10,7 +10,6 @@ import org.joda.time.LocalDate;
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
-import pt.ist.expenditureTrackingSystem.domain.File;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
@@ -22,7 +21,6 @@ import pt.ist.expenditureTrackingSystem.domain.processes.GenericFile;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 import pt.ist.expenditureTrackingSystem.domain.processes.ProcessComment;
 import pt.ist.expenditureTrackingSystem.domain.util.Money;
-import pt.ist.expenditureTrackingSystem.presentationTier.util.FileUploadBean;
 import pt.ist.fenixWebFramework.security.UserView;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.pstm.Transaction;
@@ -33,11 +31,18 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 	super();
 	setOjbConcreteClass(getClass().getName());
 	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
-	AcquisitionProcessYear acquisitionProcessYear = AcquisitionProcessYear.getAcquisitionProcessYearByYear(new LocalDate()
-		.getYear());
+	final AcquisitionProcessYear acquisitionProcessYear = getAcquisitionProcessYearForConstruction();
 	setAcquisitionProcessYear(acquisitionProcessYear);
 	setAcquisitionProcessNumber(acquisitionProcessYear.nextAcquisitionProcessYearNumber());
 	super.setSkipSupplierFundAllocation(Boolean.FALSE);
+    }
+
+    private AcquisitionProcessYear getAcquisitionProcessYearForConstruction() {
+	return AcquisitionProcessYear.getAcquisitionProcessYearByYear(getYearForConstruction());
+    }
+
+    protected int getYearForConstruction() {
+	return new LocalDate().getYear();
     }
 
     public void delete() {

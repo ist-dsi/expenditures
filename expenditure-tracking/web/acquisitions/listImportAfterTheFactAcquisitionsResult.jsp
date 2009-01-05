@@ -20,7 +20,7 @@
 	<bean:define id="fileOID" name="file" property="OID"/>
 	<tr>
 		<td>
-			<html:link page="<%= action + "?method=downloadImportFile&fileOID=" + fileOID %>">
+			<html:link page='<%= action + "?method=downloadImportFile&fileOID=" + fileOID %>'>
 			<fr:view name="file" property="displayName" type="java.lang.String">
 					<fr:layout name="null-as-label">
 						<fr:property name="subLayout" value=""/>
@@ -32,12 +32,12 @@
 		<td><fr:view name="file" property="active"/></td>
 		<td>
 				<logic:equal name="file" property="active" value="true">
-					<html:link page="<%= action + "?method=cancelImportFile&fileOID=" + fileOID %>">
+					<html:link page='<%= action + "?method=cancelImportFile&fileOID=" + fileOID %>'>
 						<bean:message key="link.cancel" bundle="EXPENDITURE_RESOURCES"/>
 					 </html:link>
 				 </logic:equal>
 				 <logic:equal name="file" property="active" value="false">
-					<html:link page="<%= action + "?method=enableImportFile&fileOID=" + fileOID %>">
+					<html:link page='<%= action + "?method=enableImportFile&fileOID=" + fileOID %>'>
 						<bean:message key="link.reenable" bundle="EXPENDITURE_RESOURCES"/>
 					 </html:link>
 				 </logic:equal>
