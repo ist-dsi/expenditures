@@ -196,4 +196,8 @@ public class Money implements Serializable, Comparable<Money> {
 
 	return numberInstance.format(getRoundedValue().doubleValue());
     }
+
+    public Money round() {
+	return new Money(getRoundedValue());
+    }
 }

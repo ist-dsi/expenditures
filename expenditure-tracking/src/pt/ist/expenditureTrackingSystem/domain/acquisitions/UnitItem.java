@@ -37,7 +37,7 @@ public class UnitItem extends UnitItem_Base {
 	}
 
 	Money currentAssignedValue = item.getTotalAssignedValue();
-	if (currentAssignedValue.add(shareValue).isGreaterThan(item.getTotalItemValueWithAdditionalCostsAndVat())) {
+	if (currentAssignedValue.addAndRound(shareValue).isGreaterThan(item.getTotalItemValueWithAdditionalCostsAndVat().round())) {
 	    throw new DomainException("unitItem.message.exception.assignedValuedBiggerThanTotal");
 	}
     }
