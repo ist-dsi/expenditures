@@ -3,6 +3,8 @@ package pt.ist.expenditureTrackingSystem.domain.dto;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import org.joda.time.LocalDate;
+
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AcquisitionAfterTheFact;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionType;
@@ -18,7 +20,7 @@ public class AfterTheFactAcquisitionProcessBean implements Serializable {
     private BigDecimal vatValue;
     private DomainReference<AfterTheFactAcquisitionProcess> afterTheFactAcquisitionProcess;
     private String description;
-    private Integer year;
+    private Integer year = Integer.valueOf(new LocalDate().getYear());
 
     public AfterTheFactAcquisitionProcessBean() {
     }
