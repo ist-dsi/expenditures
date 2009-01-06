@@ -294,69 +294,12 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 	return acquisitionRequest.hasAllocatedFundsPermanentlyForAllProjectFinancers();
     }
 
-    @Service
-    public void createComment(Person person, String comment) {
-	new ProcessComment(this, person, comment);
-    }
-
     public boolean isProcessFlowCharAvailable() {
 	return false;
     }
 
     public List<AcquisitionProcessStateType> getAvailableStates() {
 	return Collections.emptyList();
-    }
-
-    @Override
-    public void setCurrentOwner(Person currentOwner) {
-	throw new DomainException("error.message.illegal.method.useTakeInstead");
-    }
-
-    @Override
-    public void removeCurrentOwner() {
-	throw new DomainException("error.message.illegal.method.useReleaseInstead");
-    }
-
-    @Service
-    public void systemProcessRelease() {
-	super.setCurrentOwner(null);
-    }
-
-    @Service
-    public void takeProcess() {
-	final Person currentOwner = getCurrentOwner();
-	if (currentOwner != null) {
-	    throw new DomainException("error.message.illegal.method.useStealInstead");
-	}
-	final User user = UserView.getUser();
-	super.setCurrentOwner(user.getPerson());
-    }
-
-    @Service
-    public void releaseProcess() {
-	final User user = UserView.getUser();
-	final Person person = getCurrentOwner();
-	if (user != null && person != null && user.getPerson() != person) {
-	    throw new DomainException("error.message.illegal.state.unableToReleaseATicketNotOwnerByUser");
-	}
-	super.setCurrentOwner(null);
-    }
-
-    @Service
-    public void stealProcess() {
-	final User user = UserView.getUser();
-	super.setCurrentOwner(user.getPerson());
-    }
-
-    public boolean isUserCurrentOwner() {
-	final User user = UserView.getUser();
-	return user != null && user.getPerson() == getCurrentOwner();
-    }
-
-    @Service
-    public void addFile(String displayName, String filename, byte[] consumeInputStream) {
-	GenericFile file = new GenericFile(displayName, filename, consumeInputStream);
-	addFiles(file);
     }
 
     public String getAllocationIds() {

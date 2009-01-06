@@ -97,6 +97,11 @@ public class AnnouncementProcess extends AnnouncementProcess_Base {
 	return activitiesResult;
     }
 
+    @Override
+    public boolean hasAnyAvailableActivitity() {
+	return !getActiveActivities().isEmpty();
+    }
+
     public String getRejectionJustification() {
 	if (getLastAnnouncementProcessState().getAnnouncementProcessStateType().equals(AnnouncementProcessStateType.REJECTED)) {
 	    return getLastAnnouncementProcessState().getJustification();
@@ -106,8 +111,7 @@ public class AnnouncementProcess extends AnnouncementProcess_Base {
 
     public boolean isVisible(Person person) {
 	return getLastAnnouncementProcessState().equals(AnnouncementProcessStateType.APPROVED)
-		|| getAnnouncement().getPublisher() == person
-		|| person.hasRoleType(RoleType.ACQUISITION_CENTRAL)
+		|| getAnnouncement().getPublisher() == person || person.hasRoleType(RoleType.ACQUISITION_CENTRAL)
 		|| person.hasRoleType(RoleType.ACQUISITION_CENTRAL_MANAGER);
     }
 

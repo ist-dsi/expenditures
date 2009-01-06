@@ -3,6 +3,7 @@ package pt.ist.expenditureTrackingSystem.domain.dto;
 import java.io.Serializable;
 
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.UnitItem;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.util.Money;
@@ -11,7 +12,7 @@ import pt.ist.fenixWebFramework.util.DomainReference;
 public class UnitItemBean implements Serializable {
 
     private DomainReference<Unit> unit;
-    private DomainReference<AcquisitionRequestItem> item;
+    private DomainReference<RequestItem> item;
     private Money shareValue;
     private Money realShareValue;
     private Boolean approved;
@@ -46,12 +47,12 @@ public class UnitItemBean implements Serializable {
 	this.unit = new DomainReference<Unit>(unit);
     }
 
-    public AcquisitionRequestItem getItem() {
+    public RequestItem getItem() {
 	return item.getObject();
     }
 
-    public void setItem(AcquisitionRequestItem item) {
-	this.item = new DomainReference<AcquisitionRequestItem>(item);
+    public void setItem(RequestItem item) {
+	this.item = new DomainReference<RequestItem>(item);
     }
 
     public Money getShareValue() {

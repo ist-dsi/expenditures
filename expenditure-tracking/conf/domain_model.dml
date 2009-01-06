@@ -26,6 +26,10 @@ class acquisitions.Acquisition {
 	String ojbConcreteClass;
 }
 
+	class acquisitions.refund.RefundRequest extends acquisitions.Acquisition {
+		
+	} 
+	
 	class acquisitions.afterthefact.AcquisitionAfterTheFact extends acquisitions.Acquisition {
 		AfterTheFactAcquisitionType afterTheFactAcquisitionType;
 		Money value;
@@ -56,9 +60,17 @@ class acquisitions.AcquisitionProcessYear {
 	Integer year;
 	Integer counter;
 }
-
-class acquisitions.AcquisitionRequestItem {
+class acquisitions.RequestItem {
+	String ojbConcreteClass;
 	String description;
+}
+ 
+class acquisitions.refund.RefundItem extends acquisitions.RequestItem {
+	Money valueEstimation;
+	Money valueSpent;
+}
+
+class acquisitions.AcquisitionRequestItem extends acquisitions.RequestItem {
 	Integer quantity;
 	Money unitValue;
 	BigDecimal vatValue;
@@ -144,6 +156,11 @@ class File {
 	class requests.SupplierProposalDocument extends File {
 	}
 
+	class acquisitions.refund.RefundableInvoice extends File {
+		Money invoiceValue;
+		Money invoiceVat;
+	}
+	
 class Options {
 	Boolean displayAuthorizationPending;
 	Boolean recurseAuthorizationPendingUnits;
@@ -241,6 +258,10 @@ class processes.GenericProcess {
 	class requests.RequestForProposalProcess extends processes.GenericProcess {
 	}
 
+	class acquisitions.refund.RefundProcess extends processes.GenericProcess {
+	
+	}
+	
 class ProcessState {
 	String ojbConcreteClass;
 	DateTime whenDateTime;
@@ -258,6 +279,11 @@ class ProcessState {
 	class requests.RequestForProposalProcessState extends ProcessState {
 		RequestForProposalProcessStateType requestForProposalProcessStateType;
 	}
+
+	class acquisitions.RefundProcessState extends ProcessState {
+		
+	}
+
 
 class processes.ProcessComment {
 	String comment;
@@ -314,7 +340,7 @@ relation AnnouncementProcessAnnouncement {
 
 relation ExpenditureTrackingSystemAcquisitionRequestItem {
 	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
-	acquisitions.AcquisitionRequestItem playsRole acquisitionRequestItems {
+	acquisitions.RequestItem playsRole requestItems {
 		multiplicity *;
 	}
 }
@@ -537,8 +563,8 @@ relation AcquisitionRequestRequestingUnit {
 	organization.Unit playsRole requestingUnit;
 }
 
-relation AcquisitionRequestFinancer {
-	acquisitions.AcquisitionRequest playsRole fundedRequest;
+relation RequestFinancer {
+	acquisitions.Acquisition playsRole fundedRequest;
 	acquisitions.Financer playsRole financers {
 		multiplicity *;
 	}
@@ -566,7 +592,7 @@ relation AccountingUnitFinancer {
 }
 
 relation ItemUnitItem {
-	acquisitions.AcquisitionRequestItem playsRole item;
+	acquisitions.RequestItem playsRole item;
 	acquisitions.UnitItem playsRole unitItems {
 		multiplicity *;
 	}
@@ -601,7 +627,7 @@ relation ExpenditureTrackingSystemCPVReference {
 
 relation AcquisitionRequestItemCPVReference {
 	acquisitions.CPVReference playsRole cPVReference;
-	acquisitions.AcquisitionRequestItem playsRole acquisitionRequestItems {
+	acquisitions.RequestItem playsRole acquisitionItems {
 		multiplicity *;
 	}
 }
@@ -739,7 +765,7 @@ relation ProcessCommentExpenditureTrackingSystem {
 
 relation TakeSupportInAcquisitionProcess {
 	organization.Person playsRole currentOwner;
-	acquisitions.AcquisitionProcess playsRole acquisitionProcesses {
+	processes.GenericProcess playsRole processes {
 		multiplicity *;
 	} 
 }
@@ -756,4 +782,52 @@ relation AfterTheFactImportFile {
 		multiplicity *;
 	}
 	acquisitions.afterthefact.ImportFile playsRole importFile;
+}
+
+relation RefundRequestRefundItem {
+	acquisitions.refund.RefundRequest  playsRole request;
+	acquisitions.refund.RefundItem playsRole refundItems {
+		multiplicity *;
+	}	
+}
+
+
+relation RefundItemRefundableInvoice {
+	acquisitions.refund.RefundItem playsRole refundItem;
+	acquisitions.refund.RefundableInvoice playsRole invoices {
+		multiplicity *;
+	}
+}
+
+relation RefundableInvoiceSupplier {
+	acquisitions.refund.RefundableInvoice playsRole refundableInvoices {
+			multiplicity *;
+		}
+	organization.Supplier  playsRole supplier;
+}
+
+relation RefundRequestRefundProcess {
+	acquisitions.refund.RefundRequest playsRole request;
+	acquisitions.refund.RefundProcess  playsRole process;
+}
+
+relation RefundRequestRequestor {
+	acquisitions.refund.RefundRequest playsRole requests {
+		multiplicity *;
+	}
+	organization.Person playsRole requestor;
+}
+
+relation RefundRequestRefundee {
+	acquisitions.refund.RefundRequest playsRole refundRequests {
+		multiplicity *;
+	}
+	organization.Person playsRole refundee;
+}
+
+relation RefundRequestRequestingUnit {
+	acquisitions.refund.RefundRequest playsRole refundRequests {
+		multiplicity *;
+	}
+	organization.Unit playsRole requestingUnit;
 }

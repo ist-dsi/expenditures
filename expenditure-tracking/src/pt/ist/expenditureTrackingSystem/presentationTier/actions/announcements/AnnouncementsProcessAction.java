@@ -1,5 +1,6 @@
 package pt.ist.expenditureTrackingSystem.presentationTier.actions.announcements;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import org.apache.struts.action.ActionMapping;
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.SearchAcquisitionProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.announcements.AnnouncementProcess;
 import pt.ist.expenditureTrackingSystem.domain.announcements.AnnouncementProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.announcements.SearchAnnouncementProcess;
@@ -47,6 +49,16 @@ public class AnnouncementsProcessAction extends ProcessAction {
     @Override
     protected GenericProcess getProcess(final HttpServletRequest request) {
 	return getProcess(request, "announcementProcessOid");
+    }
+
+    @Override
+    public ActionForward viewProcess(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+	    HttpServletResponse response) {
+	GenericProcess process = getProcess(request);
+	if (process == null) {
+	    process = getDomainObject(request, "processOid");
+	}
+	return viewAnnouncementProcess(mapping, request, (AnnouncementProcess) process);
     }
 
     public ActionForward showMyProcesses(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -97,15 +109,19 @@ public class AnnouncementsProcessAction extends ProcessAction {
 	return mapping.findForward("search.announcement.process");
     }
 
-    
-    public ActionForward viewAnnouncementProcess(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-	AnnouncementProcess process = (AnnouncementProcess) getProcess(request);
+    public ActionForward viewAnnouncementProcess(final ActionMapping mapping, final HttpServletRequest request,
+	    final AnnouncementProcess process) {
 	request.setAttribute("announcementProcess", process);
 	if (process.getAnnouncementProcessStateType().equals(AnnouncementProcessStateType.REJECTED)) {
 	    request.setAttribute("rejectionMotive", process.getRejectionJustification());
 	}
 	return mapping.findForward("view.announcementProcess");
+    }
+
+    public ActionForward viewAnnouncementProcess(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	AnnouncementProcess process = (AnnouncementProcess) getProcess(request);
+	return viewAnnouncementProcess(mapping, request, process);
     }
 
     public ActionForward executeActivityAndViewProcess(final ActionMapping mapping, final ActionForm form,

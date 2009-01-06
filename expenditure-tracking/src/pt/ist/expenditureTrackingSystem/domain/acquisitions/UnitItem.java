@@ -10,7 +10,7 @@ import pt.ist.fenixframework.pstm.Transaction;
 
 public class UnitItem extends UnitItem_Base {
 
-    public UnitItem(Financer financer, AcquisitionRequestItem item, Money shareValue, Boolean isApproved,
+    public UnitItem(Financer financer, RequestItem item, Money shareValue, Boolean isApproved,
 	    Boolean isSubmitedForFundsAllocation) {
 
 	checkParameters(financer, item, shareValue, isApproved);
@@ -23,7 +23,7 @@ public class UnitItem extends UnitItem_Base {
 	setInvoiceConfirmed(Boolean.FALSE);
     }
 
-    private void checkParameters(Financer financer, AcquisitionRequestItem item, Money shareValue, Boolean isApproved) {
+    private void checkParameters(Financer financer, RequestItem item, Money shareValue, Boolean isApproved) {
 	if (financer == null || item == null || shareValue == null || isApproved == null) {
 	    throw new DomainException("unitItem.message.exception.parametersCannotBeNull");
 	}
@@ -36,8 +36,8 @@ public class UnitItem extends UnitItem_Base {
 	    throw new DomainException("error.share.value.cannot.be.negative");
 	}
 
-	Money currentAssignedValue = item.getTotalAssignedValue();
-	if (currentAssignedValue.addAndRound(shareValue).isGreaterThan(item.getTotalItemValueWithAdditionalCostsAndVat().round())) {
+	Money currentAssignedValue = item.getTotalAssigned();
+	if (currentAssignedValue.addAndRound(shareValue).isGreaterThan(item.getValue().round())) {
 	    throw new DomainException("unitItem.message.exception.assignedValuedBiggerThanTotal");
 	}
     }
@@ -67,10 +67,10 @@ public class UnitItem extends UnitItem_Base {
     @Override
     public void setRealShareValue(Money realShareValue) {
 	if (realShareValue != null) {
-	    Money totalAmount = getItem().getTotalRealValueWithAdditionalCostsAndVat();
-	    Money currentAssignedValue = getItem().getTotalRealAssignedValue();
+	    Money totalAmount = getItem().getRealValue();
+	    Money currentAssignedValue = getItem().getTotalRealAssigned();
 
-	    if (currentAssignedValue.add(realShareValue).isGreaterThan(totalAmount)) {
+	    if (currentAssignedValue.addAndRound(realShareValue).isGreaterThan(totalAmount.round())) {
 		throw new DomainException("unitItem.message.exception.cannotASsignMoreThanTotalAmount");
 	    }
 	}

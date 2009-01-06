@@ -7,7 +7,6 @@ import java.util.Comparator;
 import java.util.List;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
-import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean.CreateItemSchemaType;
 import pt.ist.expenditureTrackingSystem.domain.organization.DeliveryInfo;
@@ -21,12 +20,12 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 
     protected AcquisitionRequestItem() {
 	super();
-	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
     }
 
     private AcquisitionRequestItem(final AcquisitionRequest acquisitionRequest, final String description, final Integer quantity,
 	    final Money unitValue, final BigDecimal vatValue, final String proposalReference, CPVReference reference) {
 
+	this();
 	checkLimits(acquisitionRequest, quantity, unitValue);
 
 	setAcquisitionRequest(acquisitionRequest);
@@ -160,24 +159,6 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 
     public Money getTotalRealValueWithVat() {
 	return getTotalRealValue() != null ? getTotalRealValue().addPercentage(getRealVatValue()) : null;
-    }
-
-    public Money getTotalAssignedValue() {
-	Money sum = Money.ZERO;
-	for (UnitItem unitItem : getUnitItems()) {
-	    sum = sum.add(unitItem.getShareValue());
-	}
-	return sum;
-    }
-
-    public Money getTotalRealAssignedValue() {
-	Money sum = Money.ZERO;
-	for (UnitItem unitItem : getUnitItems()) {
-	    if (unitItem.getRealShareValue() != null) {
-		sum = sum.add(unitItem.getRealShareValue());
-	    }
-	}
-	return sum;
     }
 
     public void edit(String description, Integer quantity, Money unitValue, BigDecimal vatValue, String proposalReference,
@@ -434,4 +415,15 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	    unitItem.setSubmitedForFundsAllocation(false);
 	}
     }
+
+    @Override
+    public Money getRealValue() {
+	return getTotalRealValueWithAdditionalCostsAndVat();
+    }
+
+    @Override
+    public Money getValue() {
+	return getTotalItemValueWithAdditionalCostsAndVat();
+    }
+
 }

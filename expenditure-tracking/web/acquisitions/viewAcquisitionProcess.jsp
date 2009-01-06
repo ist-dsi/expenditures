@@ -10,7 +10,7 @@
 <%@page import="pt.ist.fenixWebFramework.servlets.filters.contentRewrite.GenericChecksumRewriter"%>
 <bean:define id="acquisitionProcessOid"><bean:write name="acquisitionProcess" property="OID"/></bean:define>
 <bean:define id="acquisitionProcessClass" name="acquisitionProcess" property="class.simpleName"/>
-<bean:define id="actionMapping" value='<%= "/acquisition" + acquisitionProcessClass %>'/>
+<bean:define id="actionMapping" value="<%= "/acquisition" + acquisitionProcessClass %>"/>
 <bean:define id="urlConfirm"><%=actionMapping %>.do</bean:define>
 
 <logic:equal name="acquisitionProcess" property="processFlowCharAvailable" value="true">
@@ -87,12 +87,12 @@
 			<form action="<%= request.getContextPath() + urlConfirm %>" method="post">
 				<html:hidden property="method" value="takeProcess"/>
 				<html:hidden property="confirmTake" value="yes"/>
-				<html:hidden property="acquisitionProcessOid" value="<%= acquisitionProcessOid %>"/>
+				<html:hidden property="processOid" value="<%= acquisitionProcessOid %>"/>
 				<html:submit styleClass="inputbutton"><bean:message key="button.yes" bundle="EXPENDITURE_RESOURCES"/></html:submit>
 			</form>
 			<form action="<%= request.getContextPath() + urlConfirm %>" method="post">
-				<html:hidden property="method" value="viewAcquisitionProcess"/>
-				<html:hidden property="acquisitionProcessOid" value="<%= acquisitionProcessOid %>"/>
+				<html:hidden property="method" value="viewProcess"/>
+				<html:hidden property="processOid" value="<%= acquisitionProcessOid %>"/>
 				<html:cancel styleClass="inputbutton"><bean:message key="button.no" bundle="EXPENDITURE_RESOURCES"/></html:cancel>
 			</form>
 		</div>
@@ -102,23 +102,24 @@
 	<li>
 	<logic:present name="acquisitionProcess" property="currentOwner">
 		<logic:equal name="acquisitionProcess" property="userCurrentOwner" value="true">
-				<html:link page='<%= actionMapping + ".do?method=releaseProcess" %>' paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
+				<html:link page="<%= actionMapping + ".do?method=releaseProcess" %>" paramId="processOid" paramName="acquisitionProcess" paramProperty="OID">
 					<bean:message key="acquisitionProcess.link.releaseProcess" bundle="ACQUISITION_RESOURCES"/>
 				</html:link>
 		</logic:equal>
 		<logic:equal name="acquisitionProcess" property="userCurrentOwner" value="false">
-				<html:link page='<%= actionMapping + ".do?method=stealProcess" %>' paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
+				<html:link page="<%= actionMapping + ".do?method=stealProcess" %>" paramId="processOid" paramName="acquisitionProcess" paramProperty="OID">
 					<bean:message key="acquisitionProcess.link.stealProcess" bundle="ACQUISITION_RESOURCES"/>
 				</html:link>
 		</logic:equal>
 	</logic:present>
 	<logic:notPresent name="acquisitionProcess" property="currentOwner">
-		<html:link page='<%= actionMapping + ".do?method=takeProcess" %>' paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
+		<html:link page="<%= actionMapping + ".do?method=takeProcess" %>" paramId="processOid" paramName="acquisitionProcess" paramProperty="OID">
 				<bean:message key="acquisitionProcess.link.takeProcess" bundle="ACQUISITION_RESOURCES"/>
 		</html:link>
 	</logic:notPresent>
+	</li>
 	<li>
-		<html:link page='<%= actionMapping + ".do?method=prepareGenericUpload" %>' paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
+		<html:link page="<%= actionMapping + ".do?method=prepareGenericUpload" %>" paramId="processOid" paramName="acquisitionProcess" paramProperty="OID">
 			<bean:message key="acquisitionProcess.link.uploadFile" bundle="ACQUISITION_RESOURCES"/>
 		</html:link>
 	</li>
@@ -130,7 +131,7 @@
 
 	<bean:size id="comments"  name="acquisitionProcess" property="comments"/>
 	<li> 
-		<html:link page='<%= actionMapping + ".do?method=viewComments"%>' paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
+		<html:link page="<%= actionMapping + ".do?method=viewComments"%>" paramId="processOid" paramName="acquisitionProcess" paramProperty="OID">
 			<bean:message key="link.comments" bundle="EXPENDITURE_RESOURCES"/> (<%= comments %>)
 		</html:link>	
 		<logic:greaterThan name="comments" value="0">
@@ -176,7 +177,7 @@
 	<p>
 		<bean:message key="acquisitionProcess.label.proposalDocument" bundle="ACQUISITION_RESOURCES"/>:
 		<logic:present name="acquisitionProcess" property="acquisitionRequest.acquisitionProposalDocument">
-			<html:link action='<%= actionMapping + ".do?method=downloadAcquisitionProposalDocument"%>' paramId="acquisitionProposalDocumentOid" paramName="acquisitionProcess" paramProperty="acquisitionRequest.acquisitionProposalDocument.OID">
+			<html:link action="<%= actionMapping + ".do?method=downloadAcquisitionProposalDocument"%>" paramId="acquisitionProposalDocumentOid" paramName="acquisitionProcess" paramProperty="acquisitionRequest.acquisitionProposalDocument.OID">
 				<bean:write name="acquisitionProcess" property="acquisitionRequest.acquisitionProposalDocument.filename"/>
 			</html:link>	
 		</logic:present>
@@ -187,7 +188,7 @@
 	<p>
 		<bean:message key="acquisitionProcess.label.requestDocument" bundle="ACQUISITION_RESOURCES"/>:
 		<logic:present name="acquisitionProcess" property="acquisitionRequest.purchaseOrderDocument">
-			<html:link action='<%= actionMapping + ".do?method=downloadAcquisitionPurchaseOrderDocument"%>' paramId="purchaseOrderDocumentOid" paramName="acquisitionProcess" paramProperty="acquisitionRequest.purchaseOrderDocument.OID">
+			<html:link action="<%= actionMapping + ".do?method=downloadAcquisitionPurchaseOrderDocument"%>" paramId="purchaseOrderDocumentOid" paramName="acquisitionProcess" paramProperty="acquisitionRequest.purchaseOrderDocument.OID">
 				<bean:write name="acquisitionProcess" property="acquisitionRequest.purchaseOrderDocument.filename"/>
 			</html:link>	
 		</logic:present>
@@ -199,7 +200,7 @@
 		<bean:message key="acquisitionProcess.label.invoice" bundle="ACQUISITION_RESOURCES"/>:
 		<logic:present name="acquisitionProcess" property="acquisitionRequest.invoice">
 			<logic:present name="acquisitionProcess" property="acquisitionRequest.invoice.content">
-				<html:link action='<%= actionMapping + ".do?method=downloadInvoice"%>' paramId="invoiceOid" paramName="acquisitionProcess" paramProperty="acquisitionRequest.invoice.OID">
+				<html:link action="<%= actionMapping + ".do?method=downloadInvoice"%>" paramId="invoiceOid" paramName="acquisitionProcess" paramProperty="acquisitionRequest.invoice.OID">
 					<bean:write name="acquisitionProcess" property="acquisitionRequest.invoice.filename"/>
 				</html:link>
 			</logic:present>	
@@ -215,7 +216,7 @@
 		<bean:message key="acquisitionProcess.label.otherFiles" bundle="ACQUISITION_RESOURCES"/>:
 		<logic:notEmpty name="acquisitionProcess" property="files">
 			<logic:iterate id="file" name="acquisitionProcess" property="files">
-				<html:link action='<%= actionMapping + ".do?method=downloadGenericFile&acquisitionProcess=" + acquisitionProcessOid %>' paramId="fileOID" paramName="file" paramProperty="OID">
+				<html:link action="<%= actionMapping + ".do?method=downloadGenericFile&acquisitionProcess=" + acquisitionProcessOid %>" paramId="fileOID" paramName="file" paramProperty="OID">
 					<bean:write name="file" property="displayName"/>
 				</html:link>, 
 			</logic:iterate>
@@ -259,7 +260,7 @@
 				<logic:iterate id="itemResume" name="itemSet" indexId="index">
 					<bean:define id="currentIndex" value="<%= String.valueOf(index + 1) %>"/>
 					<tr>
-						<td><%= GenericChecksumRewriter.NO_CHECKSUM_PREFIX %><a href='<%= "#item" + currentIndex%>'>Item<%= currentIndex %></a></td>
+						<td><%= GenericChecksumRewriter.NO_CHECKSUM_PREFIX %><a href="<%= "#item" + currentIndex%>">Item<%= currentIndex %></a></td>
 						<td class="aright"><fr:view name="itemResume" property="quantity"/></td>
 						<td class="aright"><fr:view name="itemResume" property="unitValue"/></td>
 						<td class="aright"><fr:view name="itemResume" property="totalVatValue"/></td>
@@ -279,7 +280,7 @@
 		<bean:size id="totalItems" name="itemSet"/>
 		<logic:iterate id="acquisitionRequestItem" name="itemSet" indexId="index">
 			<bean:define id="currentIndex" value="<%= String.valueOf(index + 1) %>"/>
-			<div class="item" id='<%= "item" + currentIndex %>'>
+			<div class="item" id="<%= "item" + currentIndex %>">
 				<strong><bean:message key="acquisitionRequestItem.label.item" bundle="ACQUISITION_RESOURCES"/></strong> (<fr:view name="currentIndex"/>/<fr:view name="totalItems"/>)
 				<bean:define id="itemOID" name="acquisitionRequestItem" property="OID"/>
 				

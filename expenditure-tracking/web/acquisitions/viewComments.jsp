@@ -8,10 +8,10 @@
 	<bean:message key="title.comments" bundle="EXPENDITURE_RESOURCES"/>
 </h2>
 
-<bean:define id="processClass" name="acquisitionProcess" property="class.simpleName"/>
-<bean:define id="actionMapping" value="<%="/acquisition" + processClass %>"/>
+<bean:define id="processClass" name="process" property="class.simpleName" type="java.lang.String"/>
+<bean:define id="actionMapping" value='<%="/acquisition" + processClass %>'/>
 <p>
-	<html:link page="<%= actionMapping + ".do?method=viewAcquisitionProcess"%>" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID">
+	<html:link page="<%= actionMapping + ".do?method=viewProcess"%>" paramId="processOid" paramName="process" paramProperty="OID">
 		« <bean:message key="link.back" bundle="EXPENDITURE_RESOURCES"/>
 	</html:link>
 </p>
@@ -33,10 +33,10 @@
 	</logic:iterate>
 </logic:notEmpty>
 
-<bean:define id="acquisitionProcessOid" name="acquisitionProcess" property="OID"/>
+<bean:define id="processOid" name="process" property="OID"/>
 
 
-<fr:form action="<%= actionMapping + ".do?method=addComment&acquisitionProcessOid=" + acquisitionProcessOid%>">
+<fr:form action="<%= actionMapping + ".do?method=addComment&processOid=" + processOid%>">
 	<table class="form">
 		<tr>
 			<td>

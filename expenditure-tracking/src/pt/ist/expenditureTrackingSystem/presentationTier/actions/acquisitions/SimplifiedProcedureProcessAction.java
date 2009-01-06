@@ -533,7 +533,7 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	} catch (DomainException e) {
 	    addErrorMessage(e.getMessage(), getBundle());
 	    request.setAttribute("item", item);
-	    request.setAttribute("beans", beans);
+	    request.setAttribute("unitItemBeans", beans);
 	    return mapping.findForward("edit.real.shares.values");
 	}
     }

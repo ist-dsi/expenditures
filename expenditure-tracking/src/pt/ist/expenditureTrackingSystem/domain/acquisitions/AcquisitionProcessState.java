@@ -99,6 +99,10 @@ public class AcquisitionProcessState extends AcquisitionProcessState_Base {
 	return isInState(AcquisitionProcessStateType.CANCELED);
     }
 
+    public boolean isRejected() {
+	return isInState(AcquisitionProcessStateType.REJECTED);
+    }
+
     public boolean isAllocatedPermanently() {
 	return isInState(AcquisitionProcessStateType.FUNDS_ALLOCATED_PERMANENTLY);
     }

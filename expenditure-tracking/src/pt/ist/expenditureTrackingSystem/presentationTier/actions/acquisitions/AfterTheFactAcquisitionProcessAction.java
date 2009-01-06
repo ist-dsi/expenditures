@@ -51,6 +51,16 @@ public class AfterTheFactAcquisitionProcessAction extends ProcessAction {
 	return getProcess(request, "afterTheFactAcquisitionProcessOid");
     }
 
+    @Override
+    public ActionForward viewProcess(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+	    HttpServletResponse response) {
+	GenericProcess process = getProcess(request);
+	if (process == null) {
+	    process = getDomainObject(request, "processOid");
+	}
+	return viewAfterTheFactAcquisitionProcess(mapping, request, (AfterTheFactAcquisitionProcess) process);
+    }
+
     public ActionForward prepareCreateAfterTheFactAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final AfterTheFactAcquisitionProcessBean afterTheFactAcquisitionProcessBean = new AfterTheFactAcquisitionProcessBean();
@@ -187,23 +197,23 @@ public class AfterTheFactAcquisitionProcessAction extends ProcessAction {
 
 	ImportFile file = getDomainObject(request, "fileOID");
 	return download(response, file);
-  }
-    
+    }
+
     public ActionForward cancelImportFile(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) {
-	
+
 	ImportFile file = getDomainObject(request, "fileOID");
 	file.cancel();
-	
+
 	return listImports(mapping, form, request, response);
     }
-    
-    public ActionForward  enableImportFile(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+
+    public ActionForward enableImportFile(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) {
-	
+
 	ImportFile file = getDomainObject(request, "fileOID");
 	file.reenable();
-	
+
 	return listImports(mapping, form, request, response);
     }
 

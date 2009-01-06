@@ -6,17 +6,15 @@
 
 <h2><bean:message key="acquisitionProcess.title.uploadFile" bundle="ACQUISITION_RESOURCES"/></h2>
 
-<bean:define id="acquisitionProcess" name="acquisitionProcess" toScope="request"/>
-<bean:define id="acquisitionProcessOID" name="acquisitionProcess" property="OID" toScope="request"/>
+<bean:define id="process" name="process" toScope="request"/>
+<bean:define id="processOID" name="process" property="OID" toScope="request"/>
 
-<bean:define id="acquisitionProcessClass" name="acquisitionProcess" property="class.simpleName" toScope="request"/>
+<bean:define id="acquisitionProcessClass" name="process" property="class.simpleName" toScope="request"/>
 <bean:define id="actionMapping" value="<%= "/acquisition" + acquisitionProcessClass%>"/>
 
-<jsp:include page="viewAcquisitionRequest.jsp" flush="true"/>
+<bean:define id="urlView"><%= actionMapping %>.do?method=viewProcess&amp;processOid=<bean:write name="process" property="OID"/></bean:define>
 
-<bean:define id="urlView"><%= actionMapping %>.do?method=viewAcquisitionProcess&amp;acquisitionProcessOid=<bean:write name="acquisitionProcess" property="OID"/></bean:define>
-
-<fr:edit name="bean" id="uploadFile" action="<%= actionMapping + ".do?method=genericUpload&acquisitionProcessOid=" + acquisitionProcessOID %>" schema="addGenericFile">
+<fr:edit name="bean" id="uploadFile" action="<%= actionMapping + ".do?method=genericUpload&processOid=" + processOID %>" schema="addGenericFile">
 	<fr:layout name="tabular">
 		<fr:property name="classes" value="form mtop05"/>
 		<fr:property name="columnClasses" value=",,tderror"/>

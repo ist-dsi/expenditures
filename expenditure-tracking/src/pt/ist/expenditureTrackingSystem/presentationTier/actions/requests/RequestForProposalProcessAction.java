@@ -12,9 +12,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
-import pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateRequestForProposalProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 import pt.ist.expenditureTrackingSystem.domain.requests.RequestForProposalDocument;
@@ -22,7 +19,6 @@ import pt.ist.expenditureTrackingSystem.domain.requests.RequestForProposalProces
 import pt.ist.expenditureTrackingSystem.domain.requests.SearchRequestProposal;
 import pt.ist.expenditureTrackingSystem.presentationTier.Context;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.ProcessAction;
-import pt.ist.expenditureTrackingSystem.presentationTier.actions.acquisitions.SimplifiedProcedureProcessAction.AcquisitionProposalDocumentForm;
 import pt.ist.fenixWebFramework.security.UserView;
 import pt.ist.fenixWebFramework.struts.annotations.Forward;
 import pt.ist.fenixWebFramework.struts.annotations.Forwards;
@@ -45,6 +41,16 @@ public class RequestForProposalProcessAction extends ProcessAction {
 	return CONTEXT;
     }
 
+    @Override
+    public ActionForward viewProcess(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+	    HttpServletResponse response) {
+	GenericProcess process = getProcess(request);
+	if (process == null) {
+	    process = getDomainObject(request, "processOid");
+	}
+	return viewRequestForProposalProcess(mapping, request, (RequestForProposalProcess) process);
+    }
+    
     public ActionForward showPendingRequests(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 

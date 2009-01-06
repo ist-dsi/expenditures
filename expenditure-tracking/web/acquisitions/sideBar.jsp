@@ -2,7 +2,6 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
-<%@page import="pt.ist.expenditureTrackingSystem.domain.RoleType"%>
 
 
 <logic:present name="USER_SESSION_ATTRIBUTE" property="person">
@@ -92,6 +91,34 @@
 				</li>
 		</ul>
 	</logic:present>
+-->
+<!--
+	<ul>
+		<li class="header">
+			<strong><bean:message key="link.sideBar.refundProcedure" bundle="EXPENDITURE_RESOURCES"/></strong>
+			<div class="lic1"></div><div class="lic2"></div>
+		</li>
+		<li>
+			<html:link action="/acquisitionRefundProcess.do?method=prepareCreateRefundProcess">
+				<bean:message key="link.sideBar.acquisitionProcess.create" bundle="EXPENDITURE_RESOURCES"/>
+			</html:link>
+		</li>
+		<li>
+			<html:link action="/acquisitionRefundProcess.do?method=searchRefundProcess">
+				<bean:message key="link.sideBar.acquisitionProcess.search" bundle="EXPENDITURE_RESOURCES"/>
+			</html:link>
+		</li>
+		<li>
+			<html:link action="/acquisitionRefundProcess.do?method=showPendingProcesses">
+				<bean:message key="link.sideBar.acquisitionProcess.pendingProcesses" bundle="EXPENDITURE_RESOURCES"/>
+			</html:link>
+		</li>	
+		<li>
+			<html:link action="/acquisitionRefundProcess.do?method=showMyProcesses">
+				<bean:message key="link.sideBar.acquisitionProcess.myProcesses" bundle="EXPENDITURE_RESOURCES"/>
+			</html:link>
+		</li>
+	</ul>
 -->
 	
 	

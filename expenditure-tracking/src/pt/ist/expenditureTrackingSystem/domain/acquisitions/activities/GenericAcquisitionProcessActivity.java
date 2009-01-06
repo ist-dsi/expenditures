@@ -49,8 +49,8 @@ public abstract class GenericAcquisitionProcessActivity extends AbstractActivity
 	ResourceBundle bundle = ResourceBundle.getBundle("resources/ExpenditureResources", Language.getLocale());
 	if (person.getOptions().getReceiveNotificationsByEmail()) {
 	    try {
-		EmailSender.sendEmail(person.getUsername(), bundle.getString("process.label.notifyTopic"), bundle
-			.getString("process.label.notifyMessage"));
+//		EmailSender.sendEmail(person.getUsername(), bundle.getString("process.label.notifyTopic"), bundle
+//			.getString("process.label.notifyMessage"));
 	    } catch (XFireRuntimeException e) {
 		e.printStackTrace();
 		throw new ActivityException("activities.messages.exception.webserviceProblem", getLocalizedName());
@@ -73,8 +73,8 @@ public abstract class GenericAcquisitionProcessActivity extends AbstractActivity
 
 	try {
 	    for (Person person : people) {
-		EmailSender.sendEmail(person.getUsername(), bundle.getString("process.label.notifyTopic"), bundle
-			.getString("process.label.notifyMessage"));
+//		EmailSender.sendEmail(person.getUsername(), bundle.getString("process.label.notifyTopic"), bundle
+//			.getString("process.label.notifyMessage"));
 	    }
 	} catch (XFireRuntimeException e) {
 	    e.printStackTrace();

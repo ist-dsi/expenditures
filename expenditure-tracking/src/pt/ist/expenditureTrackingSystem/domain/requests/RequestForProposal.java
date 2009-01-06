@@ -48,4 +48,5 @@ public class RequestForProposal extends RequestForProposal_Base {
 	    addRequestForProposalDocument(requestBean.getFilename(), documentBytes);
 	}
     }
+
 }

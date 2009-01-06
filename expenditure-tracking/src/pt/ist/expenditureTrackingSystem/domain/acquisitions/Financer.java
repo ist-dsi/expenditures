@@ -73,7 +73,7 @@ public class Financer extends Financer_Base {
     public Money getRealShareValue() {
 	Money amount = Money.ZERO;
 	for (UnitItem unitItem : getUnitItemsSet()) {
-	    amount = amount.add(unitItem.getRealShareValue());
+	    amount = amount.addAndRound(unitItem.getRealShareValue());
 	}
 	return amount;
     }
@@ -81,7 +81,7 @@ public class Financer extends Financer_Base {
     public Money getShareValue() {
 	Money amount = Money.ZERO;
 	for (UnitItem unitItem : getUnitItemsSet()) {
-	    amount = amount.add(unitItem.getShareValue());
+	    amount = amount.addAndRound(unitItem.getShareValue());
 	}
 	return amount;
     }

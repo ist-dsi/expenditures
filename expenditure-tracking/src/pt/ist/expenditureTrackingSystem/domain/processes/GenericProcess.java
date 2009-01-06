@@ -12,10 +12,14 @@ import org.apache.commons.collections.Predicate;
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
 
+import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
+import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
+import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.fenixWebFramework.security.UserView;
+import pt.ist.fenixWebFramework.services.Service;
 
 public abstract class GenericProcess extends GenericProcess_Base {
 
@@ -48,6 +52,8 @@ public abstract class GenericProcess extends GenericProcess_Base {
 
     public abstract <T extends GenericProcess> AbstractActivity<T> getActivityByName(String name);
 
+    public abstract boolean hasAnyAvailableActivitity();
+
     public DateTime getDateFromLastActivity() {
 	List<GenericLog> logs = new ArrayList<GenericLog>();
 	logs.addAll(getExecutionLogs());
@@ -76,8 +82,7 @@ public abstract class GenericProcess extends GenericProcess_Base {
 	return getExecutionLogs(begin, end);
     }
 
-    public List<GenericLog> getExecutionLogs(DateTime begin, DateTime end,
-	    Class... activitiesClass) {
+    public List<GenericLog> getExecutionLogs(DateTime begin, DateTime end, Class... activitiesClass) {
 	List<GenericLog> logs = new ArrayList<GenericLog>();
 	Interval interval = new Interval(begin, end);
 	for (GenericLog log : getExecutionLogs()) {
@@ -97,4 +102,62 @@ public abstract class GenericProcess extends GenericProcess_Base {
 	}
 	return false;
     }
+
+    @Service
+    public void createComment(Person person, String comment) {
+	new ProcessComment(this, person, comment);
+    }
+
+    @Service
+    public void addFile(String displayName, String filename, byte[] consumeInputStream) {
+	GenericFile file = new GenericFile(displayName, filename, consumeInputStream);
+	addFiles(file);
+    }
+
+    @Override
+    public void setCurrentOwner(Person currentOwner) {
+	throw new DomainException("error.message.illegal.method.useTakeInstead");
+    }
+
+    @Override
+    public void removeCurrentOwner() {
+	throw new DomainException("error.message.illegal.method.useReleaseInstead");
+    }
+
+    @Service
+    public void systemProcessRelease() {
+	super.setCurrentOwner(null);
+    }
+
+    @Service
+    public void takeProcess() {
+	final Person currentOwner = getCurrentOwner();
+	if (currentOwner != null) {
+	    throw new DomainException("error.message.illegal.method.useStealInstead");
+	}
+	final User user = UserView.getUser();
+	super.setCurrentOwner(user.getPerson());
+    }
+
+    @Service
+    public void releaseProcess() {
+	final User user = UserView.getUser();
+	final Person person = getCurrentOwner();
+	if (user != null && person != null && user.getPerson() != person) {
+	    throw new DomainException("error.message.illegal.state.unableToReleaseATicketNotOwnerByUser");
+	}
+	super.setCurrentOwner(null);
+    }
+
+    @Service
+    public void stealProcess() {
+	final User user = UserView.getUser();
+	super.setCurrentOwner(user.getPerson());
+    }
+
+    public boolean isUserCurrentOwner() {
+	final User user = UserView.getUser();
+	return user != null && user.getPerson() == getCurrentOwner();
+    }
+
 }

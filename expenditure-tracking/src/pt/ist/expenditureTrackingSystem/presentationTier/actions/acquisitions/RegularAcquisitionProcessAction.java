@@ -1,9 +1,8 @@
 package pt.ist.expenditureTrackingSystem.presentationTier.actions.acquisitions;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,16 +28,13 @@ import pt.ist.expenditureTrackingSystem.domain.dto.DateIntervalBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.DomainObjectBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.ProcessStateBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.UnitItemBean;
-import pt.ist.expenditureTrackingSystem.domain.dto.VariantBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean.CreateItemSchemaType;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
-import pt.ist.expenditureTrackingSystem.domain.processes.ProcessComment;
 import pt.ist.expenditureTrackingSystem.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.presentationTier.Context;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.ProcessAction;
-import pt.ist.expenditureTrackingSystem.presentationTier.util.FileUploadBean;
 import pt.ist.fenixWebFramework.renderers.components.state.IViewState;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 import pt.ist.fenixWebFramework.security.UserView;
@@ -58,6 +54,16 @@ public class RegularAcquisitionProcessAction extends ProcessAction {
 	return CONTEXT;
     }
 
+    @Override
+    public ActionForward viewProcess(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+	    HttpServletResponse response) {
+	RegularAcquisitionProcess process = getProcess(request);
+	if (process == null) {
+	    process = getDomainObject(request, "processOid");
+	}
+	return viewAcquisitionProcess(mapping, request, process);
+    }
+    
     public ActionForward viewAcquisitionProcess(final ActionMapping mapping, final HttpServletRequest request,
 	    final AcquisitionProcess acquisitionProcess) {
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
@@ -195,31 +201,6 @@ public class RegularAcquisitionProcessAction extends ProcessAction {
 
 	genericActivityExecution(request, activityName, args);
 	return viewAcquisitionProcess(mapping, form, request, response);
-    }
-
-    public ActionForward viewComments(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
-
-	AcquisitionProcess acquisitionProcess = getProcess(request);
-	request.setAttribute("acquisitionProcess", acquisitionProcess);
-
-	Set<ProcessComment> comments = new TreeSet<ProcessComment>(ProcessComment.COMPARATOR);
-	comments.addAll(acquisitionProcess.getComments());
-
-	request.setAttribute("comments", comments);
-	request.setAttribute("bean", new VariantBean());
-	return mapping.findForward("view.comments");
-    }
-
-    public ActionForward addComment(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
-
-	String comment = getRenderedObject("comment");
-	AcquisitionProcess acquisitionProcess = getProcess(request);
-	acquisitionProcess.createComment(getLoggedPerson(), comment);
-
-	RenderUtils.invalidateViewState("comment");
-	return viewComments(mapping, form, request, response);
     }
 
     public ActionForward executeAddPayingUnit(final ActionMapping mapping, final ActionForm form,
@@ -424,51 +405,7 @@ public class RegularAcquisitionProcessAction extends ProcessAction {
 	}
 	return viewAcquisitionProcess(mapping, request, (AcquisitionProcess) getProcess(request));
     }
-
-    public ActionForward takeProcess(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
-
-	final RegularAcquisitionProcess acquisitionProcess = getProcess(request);
-
-	if (!acquisitionProcess.hasAnyAvailableActivitity() && request.getParameter("confirmTake") == null) {
-	    request.setAttribute("confirmTake", "yes");
-	    return viewAcquisitionProcess(mapping, request, acquisitionProcess);
-	}
-	try {
-	    acquisitionProcess.takeProcess();
-	} catch (DomainException e) {
-	    addErrorMessage(e.getMessage(), getBundle());
-	}
-
-	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
-    }
-
-    public ActionForward releaseProcess(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
-
-	final RegularAcquisitionProcess acquisitionProcess = getProcess(request);
-	try {
-	    acquisitionProcess.releaseProcess();
-	} catch (DomainException e) {
-	    addErrorMessage(e.getMessage(), getBundle());
-	}
-
-	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
-    }
-
-    public ActionForward stealProcess(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
-
-	final RegularAcquisitionProcess acquisitionProcess = getProcess(request);
-	try {
-	    acquisitionProcess.stealProcess();
-	} catch (DomainException e) {
-	    addErrorMessage(e.getMessage(), getBundle());
-	}
-
-	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
-    }
-
+ 
     @Override
     @SuppressWarnings("unchecked")
     protected RegularAcquisitionProcess getProcess(HttpServletRequest request) {
@@ -477,28 +414,6 @@ public class RegularAcquisitionProcessAction extends ProcessAction {
 
     protected Class<? extends AcquisitionProcess> getProcessClass() {
 	return RegularAcquisitionProcess.class;
-    }
-
-    public ActionForward prepareGenericUpload(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-
-	AcquisitionProcess process = getProcess(request);
-	FileUploadBean bean = new FileUploadBean();
-
-	request.setAttribute("bean", bean);
-	request.setAttribute("acquisitionProcess", process);
-
-	return mapping.findForward("generic.upload");
-    }
-
-    public ActionForward genericUpload(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
-
-	FileUploadBean bean = getRenderedObject("uploadFile");
-	AcquisitionProcess process = getProcess(request);
-	process.addFile(bean.getDisplayName(), bean.getFilename(), consumeInputStream(bean));
-
-	return viewAcquisitionProcess(mapping, request, process);
     }
 
     public ActionForward executeSetSkipSupplierFundAllocation(final ActionMapping mapping, final ActionForm form,

@@ -16,7 +16,7 @@
 <bean:define id="outOfLabel">
 	<bean:message key="acquisitionRequestItem.label.outOf" bundle="ACQUISITION_RESOURCES"/>
 </bean:define>
-<bean:define id="maxValue" name="item" property="totalRealValueWithAdditionalCostsAndVat.value"/>
+<bean:define id="maxValue" name="item" property="totalRealValueWithAdditionalCostsAndVat.roundedValue"/>
 <bean:size id="maxElements" name="unitItemBeans"/>
 
 <bean:define id="itemOID" name="item" property="OID"/>

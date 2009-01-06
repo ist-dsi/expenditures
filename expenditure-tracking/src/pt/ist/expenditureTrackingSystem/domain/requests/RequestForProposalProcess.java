@@ -78,6 +78,11 @@ public class RequestForProposalProcess extends RequestForProposalProcess_Base {
 	return activitiesResult;
     }
 
+    @Override
+    public boolean hasAnyAvailableActivitity() {
+	return !getActiveActivitiesForRequest().isEmpty();
+    }
+    
     public boolean isProcessInState(RequestForProposalProcessStateType state) {
 	return getLastRequestForProposalProcessStateType().equals(state);
     }

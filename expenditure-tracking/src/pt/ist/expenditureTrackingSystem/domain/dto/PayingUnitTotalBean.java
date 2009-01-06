@@ -2,7 +2,7 @@ package pt.ist.expenditureTrackingSystem.domain.dto;
 
 import java.io.Serializable;
 
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.Acquisition;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.util.Money;
@@ -30,7 +30,7 @@ public class PayingUnitTotalBean implements Serializable {
 	this.financer = new DomainReference<Financer>(financer);
     }
 
-    public AcquisitionRequest getRequest() {
+    public Acquisition getRequest() {
 	return getFinancer().getFundedRequest();
     }
 

@@ -14,6 +14,11 @@
 </fr:edit>
 
 <logic:notEmpty name="processes">
+	
+	<bean:size id="listSize" name="processes"/>
+	
+	<p class="mbottom05"><em><bean:message key="label.numberOfFoundProcesses" bundle="ACQUISITION_RESOURCES" arg0="<%= listSize.toString() %>"/>.</em></p>
+	
 	<fr:view name="processes" schema="list.processes">
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="tstyle2"/>		
