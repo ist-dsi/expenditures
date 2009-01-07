@@ -27,4 +27,13 @@ public class RefundRequest extends RefundRequest_Base {
 	return true;
     }
 
+    public boolean isApprovedByAtLeastOneResponsible() {
+	for (RefundItem item : getRefundItemsSet()) {
+	    if (item.hasAtLeastOneResponsibleApproval()) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
 }

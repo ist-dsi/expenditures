@@ -26,5 +26,9 @@ public class RefundProcessState extends RefundProcessState_Base {
     public boolean isInGenesis() {
 	return getRefundProcessStateType() == RefundProcessStateType.IN_GENESIS;
     }
+
+    public boolean isPendingApproval() {
+	return getRefundProcessStateType() == RefundProcessStateType.SUBMITTED_FOR_APPROVAL;
+    }
     
 }

@@ -207,4 +207,20 @@ public class RefundProcessAction extends ProcessAction {
 	return viewRefundProcess(mapping, request, process);
     }
 
+    public ActionForward executeActivityAndViewProcess(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response, final String activityName) {
+	genericActivityExecution(request, activityName);
+	return viewProcess(mapping, form, request, response);
+    }
+
+    public ActionForward executeSubmitForApproval(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	return executeActivityAndViewProcess(mapping, form, request, response, "SubmitForApproval");
+    }
+
+    public ActionForward executeUnSubmitForApproval(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	return executeActivityAndViewProcess(mapping, form, request, response, "UnSubmitForApproval");
+    }
+
 }

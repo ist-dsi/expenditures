@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
@@ -18,6 +19,8 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.De
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.EditRefundItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.RemovePayingUnit;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.SubmitForApproval;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.UnSubmitForApproval;
+import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateRefundProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
@@ -33,6 +36,8 @@ public class RefundProcess extends RefundProcess_Base {
 	requestActivitites.add(new CreateRefundItem());
 	requestActivitites.add(new AddPayingUnit());
 	requestActivitites.add(new RemovePayingUnit());
+	requestActivitites.add(new SubmitForApproval());
+	requestActivitites.add(new UnSubmitForApproval());
 	activityMap.put(ActivityScope.REQUEST_INFORMATION, requestActivitites);
 
 	List<GenericRefundProcessActivity> itemActivities = new ArrayList<GenericRefundProcessActivity>();
@@ -40,7 +45,6 @@ public class RefundProcess extends RefundProcess_Base {
 	itemActivities.add(new DeleteRefundItem());
 
 	activityMap.put(ActivityScope.REQUEST_ITEM, itemActivities);
-	requestActivitites.add(new SubmitForApproval());
     }
 
     public RefundProcess(Person requestor, Person refundee, Unit requestingUnit) {
@@ -127,6 +131,24 @@ public class RefundProcess extends RefundProcess_Base {
 	    res.add(financer.getUnit());
 	}
 	return res;
+    }
+
+    public boolean isResponsibleForUnit(final Person person) {
+	Set<Authorization> validAuthorizations = person.getValidAuthorizations();
+	for (Unit unit : getPayingUnits()) {
+	    for (Authorization authorization : validAuthorizations) {
+		if (unit.isSubUnit(authorization.getUnit())) {
+		    return true;
+		}
+	    }
+	}
+
+	return false;
+    }
+
+    public void unSubmitForApproval() {
+	final RefundProcessState refundProcessState = getProcessState();
+	refundProcessState.setRefundProcessStateType(RefundProcessStateType.IN_GENESIS);
     }
 
 }

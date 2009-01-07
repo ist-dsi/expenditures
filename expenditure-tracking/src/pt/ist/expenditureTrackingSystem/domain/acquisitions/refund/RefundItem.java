@@ -56,4 +56,13 @@ public class RefundItem extends RefundItem_Base {
 	return totalValue.equals(getValueEstimation());
     }
 
+    public boolean hasAtLeastOneResponsibleApproval() {
+	for (UnitItem unitItem : getUnitItems()) {
+	    if (unitItem.getItemApproved()) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
 }
