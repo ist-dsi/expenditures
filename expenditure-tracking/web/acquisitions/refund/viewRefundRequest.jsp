@@ -5,11 +5,11 @@
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
 <bean:define id="processClass" name="refundProcess" property="class.simpleName"/>
-<bean:define id="actionMapping" value="<%= "/acquisition" + processClass%>"/>
+<bean:define id="actionMapping" value='<%= "/acquisition" + processClass%>'/>
 
 <h2><bean:message key="refundProcess.title.viewRefundRequest" bundle="ACQUISITION_RESOURCES"/></h2>
 
-<jsp:include page="../commons/defaultErrorDisplay.jsp"/>
+<jsp:include page="../../commons/defaultErrorDisplay.jsp"/>
 
 <logic:present name="refundProcess" property="currentOwner">
 	<bean:define id="ownerName" name="refundProcess" property="currentOwner.firstAndLastName"/>
@@ -70,31 +70,31 @@
 	<li>
 	<logic:present name="refundProcess" property="currentOwner">
 		<logic:equal name="refundProcess" property="userCurrentOwner" value="true">
-				<html:link page="<%= actionMapping + ".do?method=releaseProcess" %>" paramId="processOid" paramName="refundProcess" paramProperty="OID">
+				<html:link page='<%= actionMapping + ".do?method=releaseProcess" %>' paramId="processOid" paramName="refundProcess" paramProperty="OID">
 					<bean:message key="acquisitionProcess.link.releaseProcess" bundle="ACQUISITION_RESOURCES"/>
 				</html:link>
 		</logic:equal>
 		<logic:equal name="refundProcess" property="userCurrentOwner" value="false">
-				<html:link page="<%= actionMapping + ".do?method=stealProcess" %>" paramId="processOid" paramName="refundProcess" paramProperty="OID">
+				<html:link page='<%= actionMapping + ".do?method=stealProcess" %>' paramId="processOid" paramName="refundProcess" paramProperty="OID">
 					<bean:message key="acquisitionProcess.link.stealProcess" bundle="ACQUISITION_RESOURCES"/>
 				</html:link>
 		</logic:equal>
 	</logic:present>
 	<logic:notPresent name="refundProcess" property="currentOwner">
-		<html:link page="<%= actionMapping + ".do?method=takeProcess" %>" paramId="processOid" paramName="refundProcess" paramProperty="OID">
+		<html:link page='<%= actionMapping + ".do?method=takeProcess" %>' paramId="processOid" paramName="refundProcess" paramProperty="OID">
 				<bean:message key="acquisitionProcess.link.takeProcess" bundle="ACQUISITION_RESOURCES"/>
 		</html:link>
 	</logic:notPresent>
 	</li>
 	<li>
-		<html:link page="<%= actionMapping + ".do?method=prepareGenericUpload" %>" paramId="processOid" paramName="refundProcess" paramProperty="OID">
+		<html:link page='<%= actionMapping + ".do?method=prepareGenericUpload" %>' paramId="processOid" paramName="refundProcess" paramProperty="OID">
 			<bean:message key="acquisitionProcess.link.uploadFile" bundle="ACQUISITION_RESOURCES"/>
 		</html:link>
 	</li>
 
 	<bean:size id="comments"  name="refundProcess" property="comments"/>
 	<li> 
-		<html:link page="<%= actionMapping + ".do?method=viewComments"%>" paramId="processOid" paramName="refundProcess" paramProperty="OID">
+		<html:link page='<%= actionMapping + ".do?method=viewComments"%>' paramId="processOid" paramName="refundProcess" paramProperty="OID">
 			<bean:message key="link.comments" bundle="EXPENDITURE_RESOURCES"/> (<%= comments %>)
 		</html:link>	
 		<logic:greaterThan name="comments" value="0">
@@ -120,7 +120,7 @@
 		<bean:message key="acquisitionProcess.label.otherFiles" bundle="ACQUISITION_RESOURCES"/>:
 		<logic:notEmpty name="refundProcess" property="files">
 			<logic:iterate id="file" name="refundProcess" property="files">
-				<html:link action="<%= actionMapping + ".do?method=downloadGenericFile" %>" paramId="fileOID" paramName="file" paramProperty="OID">
+				<html:link action='<%= actionMapping + ".do?method=downloadGenericFile" %>' paramId="fileOID" paramName="file" paramProperty="OID">
 					<bean:write name="file" property="displayName"/>
 				</html:link>, 
 			</logic:iterate>
