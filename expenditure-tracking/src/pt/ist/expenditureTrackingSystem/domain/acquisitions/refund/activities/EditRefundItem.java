@@ -1,10 +1,11 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities;
 
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericRefundProcessActivity;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 import pt.ist.expenditureTrackingSystem.domain.dto.RefundItemBean;
 
-public class CreateRefundItem extends GenericRefundProcessActivity {
+public class EditRefundItem extends GenericRefundProcessActivity {
 
     @Override
     protected boolean isAccessible(RefundProcess process) {
@@ -18,8 +19,9 @@ public class CreateRefundItem extends GenericRefundProcessActivity {
 
     @Override
     protected void process(RefundProcess process, Object... objects) {
-	RefundItemBean bean = (RefundItemBean) objects[0];
-	process.getRequest().createRefundItem(bean);
+	RefundItem item = (RefundItem) objects[0];
+	RefundItemBean bean = (RefundItemBean) objects[1];
+	item.edit(bean);
     }
 
 }

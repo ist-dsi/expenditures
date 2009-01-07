@@ -203,7 +203,7 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	removeExpenditureTrackingSystem();
 	for (; !getUnitItems().isEmpty(); getUnitItems().get(0).delete())
 	    ;
-	Transaction.deleteObject(this);
+	super.delete();
     }
 
     public boolean isAssignedTo(Unit unit) {

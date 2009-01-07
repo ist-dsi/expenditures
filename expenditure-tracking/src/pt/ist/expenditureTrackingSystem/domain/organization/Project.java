@@ -3,6 +3,7 @@ package pt.ist.expenditureTrackingSystem.domain.organization;
 import java.util.Set;
 
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.Acquisition;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
@@ -42,7 +43,7 @@ public class Project extends Project_Base {
     }
 
     @Override
-    public Financer finance(final AcquisitionRequest acquisitionRequest) {
+    public Financer finance(final Acquisition acquisitionRequest) {
 	return new ProjectFinancer(acquisitionRequest, this);
     }
 

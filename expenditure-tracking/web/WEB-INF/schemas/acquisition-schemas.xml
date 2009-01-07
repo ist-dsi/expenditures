@@ -659,35 +659,6 @@
 	<slot name="requestUnitPayingUnit" key="acquisitionProcess.label.addRequestUnitAlsoHasPayingUnit" bundle="ACQUISITION_RESOURCES" />
 </schema>
 
-
-<schema name="createRefundProcess" type="pt.ist.expenditureTrackingSystem.domain.dto.CreateRefundProcessBean" bundle="ACQUISITION_RESOURCES">
-	<slot name="refundee" layout="autoComplete" key="label.refundee" bundle="EXPENDITURE_RESOURCES">
-        <property name="labelField" value="name"/>
-		<property name="format" value="${name} (${username})"/>
-		<property name="minChars" value="3"/>		
-		<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.PersonAutoComplete"/>
-		<property name="size" value="40"/>
-		<validator class="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator">
-			<property name="message" value="label.pleaseSelectOne.person"/>
-			<property name="bundle" value="EXPENDITURE_RESOURCES"/>
-			<property name="key" value="true"/>
-		</validator>
-	</slot>
-	<slot name="requestingUnit" layout="autoComplete" key="acquisitionProcess.label.requestingUnit" bundle="ACQUISITION_RESOURCES" help="message.help.requestingUnit">
-        <property name="labelField" value="presentationName"/>
-		<property name="format" value="${presentationName}"/>
-		<property name="minChars" value="3"/>		
-		<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.UnitAutoCompleteProvider" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-		<property name="classes" value="inputsize250px"/>
-		<validator class="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator">
-			<property name="message" value="label.pleaseSelectOne.unit"/>
-			<property name="bundle" value="EXPENDITURE_RESOURCES"/>
-			<property name="key" value="true"/>
-		</validator>
-	</slot>
-	<slot name="requestUnitPayingUnit" key="acquisitionProcess.label.addRequestUnitAlsoHasPayingUnit" bundle="ACQUISITION_RESOURCES" />
-</schema>
-
 <schema name="viewRefundRequest"
 		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundRequest"
 		bundle="ACQUISITION_RESOURCES">
@@ -705,7 +676,7 @@
 </schema>
 
 <schema name="createRefundItem" type="pt.ist.expenditureTrackingSystem.domain.dto.RefundItemBean" bundle="ACQUISITION_RESOURCES">
-		<slot name="valueEstimation" key="refundItem.valueEstimation"/>
+		<slot name="valueEstimation" key="refundItem.valueEstimation" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 		<slot name="CPVReference" layout="autoComplete" key="refundItem.label.salesCode" bundle="ACQUISITION_RESOURCES" help="message.help.CPVReference">
 		    <property name="labelField" value="code"/>
 			<property name="format" value="${code} - ${description}"/>

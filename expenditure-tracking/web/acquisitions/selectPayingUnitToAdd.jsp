@@ -12,7 +12,7 @@
 <bean:define id="actionMapping" value="<%= "/acquisition" + processClass%>"/>
 
 <div class="infoop2">
-Indique o número ou nome do centro de custo/projecto responsável pelo financiamento da aquisição. Tem de escolher uma das opções da lista.
+	<bean:message key="message.help.selectNumberOrName.costCenterProject" bundle="ACQUISITION_RESOURCES"/>
 </div>
 
 <fr:edit id="unitToAdd" name="domainObjectBean" schema="select.unit.from.domain.object.bean" 

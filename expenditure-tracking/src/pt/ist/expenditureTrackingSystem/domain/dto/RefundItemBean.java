@@ -3,6 +3,7 @@ package pt.ist.expenditureTrackingSystem.domain.dto;
 import java.io.Serializable;
 
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundItem;
 import pt.ist.expenditureTrackingSystem.domain.util.Money;
 import pt.ist.fenixWebFramework.util.DomainReference;
 
@@ -14,6 +15,12 @@ public class RefundItemBean implements Serializable {
 
     public RefundItemBean() {
 	setCPVReference(null);
+    }
+
+    public RefundItemBean(RefundItem item) {
+	setValueEstimation(item.getValueEstimation());
+	setCPVReference(item.getCPVReference());
+	setDescription(item.getDescription());
     }
 
     public Money getValueEstimation() {

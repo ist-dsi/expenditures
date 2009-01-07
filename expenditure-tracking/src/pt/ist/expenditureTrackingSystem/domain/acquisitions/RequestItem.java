@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.util.Money;
+import pt.ist.fenixframework.pstm.Transaction;
 
 public abstract class RequestItem extends RequestItem_Base {
 
@@ -37,4 +38,7 @@ public abstract class RequestItem extends RequestItem_Base {
 	return sum;
     }
 
+    protected void delete() {
+	Transaction.deleteObject(this);
+    }
 }

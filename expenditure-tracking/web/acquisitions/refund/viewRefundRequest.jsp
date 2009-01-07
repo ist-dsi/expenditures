@@ -21,7 +21,7 @@
 
 <div class="infoop1">
 	<ul>
-	<logic:iterate id="activity" name="refundProcess" property="activeActivities">
+	<logic:iterate id="activity" name="refundProcess" property="activeActivitiesForRequest">
 		<bean:define id="activityName" name="activity" property="class.simpleName"/> 
 		<li>
 			<html:link page='<%= actionMapping + ".do?method=execute" + activityName %>' paramId="refundProcessOid" paramName="refundProcess" paramProperty="OID">
@@ -35,7 +35,7 @@
 		</li>
 	</logic:iterate>
 	</ul>
-	<logic:empty name="refundProcess" property="activeActivities">
+	<logic:empty name="refundProcess" property="activeActivitiesForRequest">
 		<p>
 			<em>
 				<bean:message key="messages.info.noOperatesAvailabeATM" bundle="EXPENDITURE_RESOURCES"/>.
@@ -131,6 +131,18 @@
 
 
 <logic:iterate id="refundItem" name="refundProcess" property="request.refundItems"> 
+	<bean:define id="itemOID" name="refundItem" property="OID"/>
+	<logic:iterate id="activity" name="refundProcess" property="activeActivitiesForItem" indexId="index">
+		<logic:greaterThan name="index" value="0"> | </logic:greaterThan>
+			<bean:define id="activityName" name="activity" property="class.simpleName"/> 
+			<html:link page='<%= actionMapping + ".do?method=execute" + activityName + "&refundItemOid=" + itemOID%>' paramId="refundProcessOid" paramName="refundProcess" paramProperty="OID">
+			<fr:view name="activity" property="class">
+				<fr:layout name="label">
+						<fr:property name="bundle" value="ACQUISITION_RESOURCES"/>
+				</fr:layout>
+			</fr:view>
+		</html:link>
+	</logic:iterate>
 	<div class="infoop2">
 	<fr:view name="refundItem" 
 			schema="viewRefundItem">

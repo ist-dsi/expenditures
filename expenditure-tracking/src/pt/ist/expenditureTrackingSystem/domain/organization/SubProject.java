@@ -1,6 +1,6 @@
 package pt.ist.expenditureTrackingSystem.domain.organization;
 
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.Acquisition;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.ProjectFinancer;
 
@@ -24,7 +24,7 @@ public class SubProject extends SubProject_Base {
     }
 
     @Override
-    public Financer finance(final AcquisitionRequest acquisitionRequest) {
+    public Financer finance(final Acquisition acquisitionRequest) {
 	return new ProjectFinancer(acquisitionRequest, this);
     }
 

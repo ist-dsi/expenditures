@@ -164,7 +164,7 @@ public class Unit extends Unit_Base {
 	return parentUnit != null && parentUnit.isAccountingEmployee(person);
     }
 
-    public Financer finance(final AcquisitionRequest acquisitionRequest) {
+    public Financer finance(final Acquisition acquisitionRequest) {
 	throw new Error("Units with no accounting cannot finance any acquisitions: " + getIdInternal());
     }
 

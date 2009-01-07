@@ -24,7 +24,7 @@ public class Financer extends Financer_Base {
 	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
     }
 
-    public Financer(final AcquisitionRequest acquisitionRequest, final CostCenter costCenter) {
+    public Financer(final Acquisition acquisitionRequest, final CostCenter costCenter) {
 	this();
 	if (acquisitionRequest == null || costCenter == null) {
 	    throw new DomainException("error.financer.wrong.initial.arguments");

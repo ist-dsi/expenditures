@@ -1,10 +1,13 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities;
 
+import java.util.List;
+
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericRefundProcessActivity;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
-import pt.ist.expenditureTrackingSystem.domain.dto.RefundItemBean;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundRequest;
+import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 
-public class CreateRefundItem extends GenericRefundProcessActivity {
+public class AddPayingUnit extends GenericRefundProcessActivity {
 
     @Override
     protected boolean isAccessible(RefundProcess process) {
@@ -18,8 +21,11 @@ public class CreateRefundItem extends GenericRefundProcessActivity {
 
     @Override
     protected void process(RefundProcess process, Object... objects) {
-	RefundItemBean bean = (RefundItemBean) objects[0];
-	process.getRequest().createRefundItem(bean);
-    }
+	List<Unit> units = (List<Unit>) objects[0];
+	RefundRequest request = process.getRequest();
+	for (Unit unit : units) {
+	    request.addPayingUnit(unit);
+	}
 
+    }
 }
