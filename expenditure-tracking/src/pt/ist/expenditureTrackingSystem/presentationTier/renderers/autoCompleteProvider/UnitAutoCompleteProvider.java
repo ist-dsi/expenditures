@@ -11,6 +11,7 @@ import org.apache.commons.lang.StringUtils;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.organization.CostCenter;
 import pt.ist.expenditureTrackingSystem.domain.organization.Project;
+import pt.ist.expenditureTrackingSystem.domain.organization.SubProject;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.utl.ist.fenix.tools.util.StringNormalizer;
 
@@ -47,7 +48,7 @@ public class UnitAutoCompleteProvider implements AutoCompleteProvider {
 	    StringNormalizer.normalize(input);
 
 	    for (final Unit unit : ExpenditureTrackingSystem.getInstance().getUnits()) {
-		if (unit instanceof CostCenter || unit instanceof Project) {
+		if (unit instanceof CostCenter || unit instanceof Project || unit instanceof SubProject) {
 		    final String unitName = StringNormalizer.normalize(unit.getName());
 		    if (hasMatch(input, unitName)) {
 			units.add(unit);
