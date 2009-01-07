@@ -9,6 +9,7 @@ import java.util.Map;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessState;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess.ActivityScope;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericRefundProcessActivity;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.AddPayingUnit;
@@ -16,10 +17,12 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.Cr
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.DeleteRefundItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.EditRefundItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.RemovePayingUnit;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.SubmitForApproval;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateRefundProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.fenixWebFramework.services.Service;
+
 
 public class RefundProcess extends RefundProcess_Base {
 
@@ -37,12 +40,13 @@ public class RefundProcess extends RefundProcess_Base {
 	itemActivities.add(new DeleteRefundItem());
 
 	activityMap.put(ActivityScope.REQUEST_ITEM, itemActivities);
+	requestActivitites.add(new SubmitForApproval());
     }
 
     public RefundProcess(Person requestor, Person refundee, Unit requestingUnit) {
 	super();
 	new RefundRequest(this, requestor, refundee, requestingUnit);
-	new RefundProcessState(this);
+	new RefundProcessState(this, RefundProcessStateType.IN_GENESIS);
     }
 
     public List<GenericRefundProcessActivity> getActiveActivities() {
@@ -107,6 +111,14 @@ public class RefundProcess extends RefundProcess_Base {
     @Override
     public boolean hasAnyAvailableActivitity() {
 	return !getActiveActivities().isEmpty();
+    }
+
+    public Person getRequestor() {
+	return getRequest().getRequestor();
+    }
+
+    public void submitForApproval() {
+	new RefundProcessState(this, RefundProcessStateType.SUBMITTED_FOR_APPROVAL);
     }
 
     public List<Unit> getPayingUnits() {

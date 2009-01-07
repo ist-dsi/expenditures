@@ -1,16 +1,30 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
+import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
+import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
 public class RefundProcessState extends RefundProcessState_Base {
     
-    public  RefundProcessState(RefundProcess process) {
+    protected RefundProcessState(final RefundProcess process) {
         super();
-        setProcess(process);
+        final Person person = getPerson();
+        super.checkArguments(process, person);
+        super.initFields(process, person);
+	process.systemProcessRelease();
+
     }
-    
+
+    public RefundProcessState(final RefundProcess refundProcess, final RefundProcessStateType refundProcessStateType) {
+	this(refundProcess);
+	if (refundProcessStateType == null) {
+	    throw new DomainException("error.wrong.ProcessState.arguments");
+	}
+	setRefundProcessStateType(refundProcessStateType);
+    }
+
     public boolean isInGenesis() {
-	return true;
+	return getRefundProcessStateType() == RefundProcessStateType.IN_GENESIS;
     }
     
 }

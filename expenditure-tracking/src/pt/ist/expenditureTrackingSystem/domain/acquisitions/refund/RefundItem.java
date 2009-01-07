@@ -4,9 +4,9 @@ import java.math.BigDecimal;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.UnitItem;
 import pt.ist.expenditureTrackingSystem.domain.dto.RefundItemBean;
 import pt.ist.expenditureTrackingSystem.domain.util.Money;
-import pt.ist.fenixframework.pstm.Transaction;
 
 public class RefundItem extends RefundItem_Base {
 
@@ -46,4 +46,14 @@ public class RefundItem extends RefundItem_Base {
 	removeRequest();
 	super.delete();
     }
+
+    public boolean isValueFullyAttributedToUnits() {
+	Money totalValue = Money.ZERO;
+	for (UnitItem unitItem : getUnitItems()) {
+	    totalValue = totalValue.add(unitItem.getShareValue());
+	}
+
+	return totalValue.equals(getValueEstimation());
+    }
+
 }

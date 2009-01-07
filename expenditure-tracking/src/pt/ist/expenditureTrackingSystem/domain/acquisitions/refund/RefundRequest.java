@@ -18,4 +18,13 @@ public class RefundRequest extends RefundRequest_Base {
 	new RefundItem(this, bean.getValueEstimation(), bean.getCPVReference(), bean.getDescription());
     }
 
+    public boolean isEveryItemFullyAttributedToPayingUnits() {
+	for (RefundItem item : getRefundItemsSet()) {
+	    if (!item.isValueFullyAttributedToUnits()) {
+		return false;
+	    }
+	}
+	return true;
+    }
+
 }

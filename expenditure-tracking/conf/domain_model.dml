@@ -9,6 +9,7 @@ valueType pt.ist.expenditureTrackingSystem.domain.util.ByteArray as ByteArray;
 valueType pt.ist.expenditureTrackingSystem.domain.util.Money as Money;
 valueType pt.utl.ist.fenix.tools.util.Strings as Strings;
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType as AcquisitionProcessStateType;
+enum pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType as RefundProcessStateType;
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.StandardAcquisitionProcessStateType as StandardAcquisitionProcessStateType;
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionType as AfterTheFactAcquisitionType;
 enum pt.ist.expenditureTrackingSystem.domain.announcements.AnnouncementProcessStateType as AnnouncementProcessStateType;
@@ -281,7 +282,7 @@ class ProcessState {
 	}
 
 	class acquisitions.RefundProcessState extends ProcessState {
-		
+		RefundProcessStateType refundProcessStateType;
 	}
 
 
