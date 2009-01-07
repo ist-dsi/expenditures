@@ -10,11 +10,11 @@
 <bean:define id="processOID" name="process" property="OID" toScope="request"/>
 
 <bean:define id="acquisitionProcessClass" name="process" property="class.simpleName" toScope="request"/>
-<bean:define id="actionMapping" value="<%= "/acquisition" + acquisitionProcessClass%>"/>
+<bean:define id="actionMapping" value='<%= "/acquisition" + acquisitionProcessClass%>'/>
 
 <bean:define id="urlView"><%= actionMapping %>.do?method=viewProcess&amp;processOid=<bean:write name="process" property="OID"/></bean:define>
 
-<fr:edit name="bean" id="uploadFile" action="<%= actionMapping + ".do?method=genericUpload&processOid=" + processOID %>" schema="addGenericFile">
+<fr:edit name="bean" id="uploadFile" action='<%= actionMapping + ".do?method=genericUpload&processOid=" + processOID %>' schema="addGenericFile">
 	<fr:layout name="tabular">
 		<fr:property name="classes" value="form mtop05"/>
 		<fr:property name="columnClasses" value=",,tderror"/>

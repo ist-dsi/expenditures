@@ -11,10 +11,10 @@
 <bean:define id="refundProcessOid" name="refundProcess" property="OID"/>
 <bean:define id="refundItemOid" name="refundItem" property="OID"/>
 
-<fr:edit id="refundItemBean" name="bean" schema="createRefundItem" action="<%= "/acquisitionRefundProcess.do?method=actualEditRefundItem&refundItemOid=" + refundItemOid + "&refundProcessOid=" + refundProcessOid%>">
+<fr:edit id="refundItemBean" name="bean" schema="createRefundItem" action='<%= "/acquisitionRefundProcess.do?method=actualEditRefundItem&refundItemOid=" + refundItemOid + "&refundProcessOid=" + refundProcessOid%>'>
 	<fr:layout name="tabular">
 		<fr:property name="classes" value="form" />
 		<fr:property name="columnClasses" value=",,tderror" />
 	</fr:layout>
-	<fr:destination name="cancel" path="<%= "/acquisitionRefundProcess.do?method=viewRefundProcess&refundProcessOid=" + refundProcessOid %>"/>
+	<fr:destination name="cancel" path='<%= "/acquisitionRefundProcess.do?method=viewRefundProcess&refundProcessOid=" + refundProcessOid %>'/>
 </fr:edit>

@@ -9,7 +9,7 @@
 
 <bean:define id="processOID" name="refundProcess" property="OID"/>
 <bean:define id="processClass" name="refundProcess" property="class.simpleName"/>
-<bean:define id="actionMapping" value="<%= "/acquisition" + processClass%>"/>
+<bean:define id="actionMapping" value='<%= "/acquisition" + processClass%>'/>
 
 <div class="infoop2">
 	<bean:message key="message.help.selectNumberOrName.costCenterProject" bundle="ACQUISITION_RESOURCES"/>

@@ -7,15 +7,15 @@
 <h2><bean:message key="label.pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.RemovePayingUnit" bundle="ACQUISITION_RESOURCES"/></h2>
 
 <bean:define id="processClass" name="refundProcess" property="class.simpleName"/>
-<bean:define id="actionMapping" value="<%= "/acquisition" + processClass %>"/>
+<bean:define id="actionMapping" value='<%= "/acquisition" + processClass %>'/>
 
 <p class="mbottom05">
-	<html:link page="<%= actionMapping + ".do?method=viewRefundProcess"%>" paramId="refundProcessOid" paramName="refundProcess" paramProperty="OID">
+	<html:link page='<%= actionMapping + ".do?method=viewRefundProcess"%>' paramId="refundProcessOid" paramName="refundProcess" paramProperty="OID">
 		« <bean:message key="link.back" bundle="EXPENDITURE_RESOURCES"/>
 	</html:link>
 </p>
 
-<jsp:include page="../commons/defaultErrorDisplay.jsp"/>
+<jsp:include page="../../commons/defaultErrorDisplay.jsp"/>
 
 <bean:define id="processOID" name="refundProcess" property="OID"/>
 <fr:view name="payingUnits" schema="unitName">
