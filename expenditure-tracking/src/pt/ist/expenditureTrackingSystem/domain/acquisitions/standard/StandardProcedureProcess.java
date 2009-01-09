@@ -8,23 +8,22 @@ import java.util.Map;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.AddPayingUnit;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAddPayingUnit;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAssignPayingUnitToItem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericRemovePayingUnit;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ApproveAcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.AssignPayingUnitToItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.CancelAcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.CreateAcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.DeleteAcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.EditAcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RejectAcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RemovePayingUnit;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SubmitForApproval;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
-import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 import pt.ist.expenditureTrackingSystem.domain.util.Money;
 import pt.ist.fenixWebFramework.services.Service;
 
@@ -36,11 +35,11 @@ public class StandardProcedureProcess extends StandardProcedureProcess_Base {
 	super();
     }
 
-    private static Map<ActivityScope, List<GenericAcquisitionProcessActivity>> activities = new HashMap<ActivityScope, List<GenericAcquisitionProcessActivity>>();
+    private static Map<ActivityScope, List<AbstractActivity<RegularAcquisitionProcess>>> activities = new HashMap<ActivityScope, List<AbstractActivity<RegularAcquisitionProcess>>>();
 
     static {
-	List<GenericAcquisitionProcessActivity> requestInformationActivities = new ArrayList<GenericAcquisitionProcessActivity>();
-	List<GenericAcquisitionProcessActivity> requestItemActivities = new ArrayList<GenericAcquisitionProcessActivity>();
+	List<AbstractActivity<RegularAcquisitionProcess>> requestInformationActivities = new ArrayList<AbstractActivity<RegularAcquisitionProcess>>();
+	List<AbstractActivity<RegularAcquisitionProcess>> requestItemActivities = new ArrayList<AbstractActivity<RegularAcquisitionProcess>>();
 
 	// requestInformationActivities.add(new
 	// CreateAcquisitionPurchaseOrderDocument());
@@ -50,9 +49,9 @@ public class StandardProcedureProcess extends StandardProcedureProcess_Base {
 	// requestInformationActivities.add(new
 	// AddAcquisitionProposalDocument());
 	requestInformationActivities.add(new CreateAcquisitionRequestItem());
-	requestInformationActivities.add(new AddPayingUnit());
-	requestInformationActivities.add(new RemovePayingUnit());
-	//requestInformationActivities.add(new DeleteAcquisitionProcess());
+	requestInformationActivities.add(new GenericAddPayingUnit<RegularAcquisitionProcess>());
+	requestInformationActivities.add(new GenericRemovePayingUnit<RegularAcquisitionProcess>());
+	// requestInformationActivities.add(new DeleteAcquisitionProcess());
 	requestInformationActivities.add(new SubmitForApproval());
 
 	// requestInformationActivities.add(new SubmitForFundAllocation());
@@ -74,7 +73,7 @@ public class StandardProcedureProcess extends StandardProcedureProcess_Base {
 	// requestInformationActivities.add(new RemoveProjectFundAllocation());
 	// requestInformationActivities.add(new
 	// RemoveFundAllocationExpirationDate());
-	 requestInformationActivities.add(new CancelAcquisitionRequest());
+	requestInformationActivities.add(new CancelAcquisitionRequest());
 
 	// requestInformationActivities.add(new PayAcquisition());
 	// requestInformationActivities.add(new ReceiveInvoice());
@@ -85,7 +84,7 @@ public class StandardProcedureProcess extends StandardProcedureProcess_Base {
 
 	requestItemActivities.add(new DeleteAcquisitionRequestItem());
 	requestItemActivities.add(new EditAcquisitionRequestItem());
-	requestItemActivities.add(new AssignPayingUnitToItem());
+	requestItemActivities.add(new GenericAssignPayingUnitToItem<RegularAcquisitionProcess>());
 	// requestItemActivities.add(new
 	// EditAcquisitionRequestItemRealValues());
 	// requestItemActivities.add(new DistributeRealValuesForPayingUnits());
@@ -110,10 +109,10 @@ public class StandardProcedureProcess extends StandardProcedureProcess_Base {
     }
 
     @Override
-    public GenericAcquisitionProcessActivity getActivityByName(String activityName) {
+    public AbstractActivity<RegularAcquisitionProcess> getActivityByName(String activityName) {
 
 	for (ActivityScope scope : activities.keySet()) {
-	    for (GenericAcquisitionProcessActivity activity : activities.get(scope)) {
+	    for (AbstractActivity<RegularAcquisitionProcess> activity : activities.get(scope)) {
 		if (activity.getName().equals(activityName)) {
 		    return activity;
 		}
@@ -139,9 +138,9 @@ public class StandardProcedureProcess extends StandardProcedureProcess_Base {
 	return process;
     }
 
-    public List<GenericAcquisitionProcessActivity> getActiveActivities(ActivityScope scope) {
-	List<GenericAcquisitionProcessActivity> activitiesResult = new ArrayList<GenericAcquisitionProcessActivity>();
-	for (GenericAcquisitionProcessActivity activity : activities.get(scope)) {
+    public List<AbstractActivity<RegularAcquisitionProcess>> getActiveActivities(ActivityScope scope) {
+	List<AbstractActivity<RegularAcquisitionProcess>> activitiesResult = new ArrayList<AbstractActivity<RegularAcquisitionProcess>>();
+	for (AbstractActivity<RegularAcquisitionProcess> activity : activities.get(scope)) {
 	    if (activity.isActive(this)) {
 		activitiesResult.add(activity);
 	    }
@@ -149,16 +148,16 @@ public class StandardProcedureProcess extends StandardProcedureProcess_Base {
 	return activitiesResult;
     }
 
-    public List<GenericAcquisitionProcessActivity> getActiveActivitiesForItem() {
+    public List<AbstractActivity<RegularAcquisitionProcess>> getActiveActivitiesForItem() {
 	return getActiveActivities(ActivityScope.REQUEST_ITEM);
     }
 
-    public List<GenericAcquisitionProcessActivity> getActiveActivitiesForRequest() {
+    public List<AbstractActivity<RegularAcquisitionProcess>> getActiveActivitiesForRequest() {
 	return getActiveActivities(ActivityScope.REQUEST_INFORMATION);
     }
 
     @Override
-    public Map<ActivityScope, List<GenericAcquisitionProcessActivity>> getProcessActivityMap() {
+    public Map<ActivityScope, List<AbstractActivity<RegularAcquisitionProcess>>> getProcessActivityMap() {
 	return activities;
     }
 
