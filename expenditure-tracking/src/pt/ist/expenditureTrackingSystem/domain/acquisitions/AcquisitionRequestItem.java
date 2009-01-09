@@ -28,7 +28,7 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	this();
 	checkLimits(acquisitionRequest, quantity, unitValue);
 
-	setAcquisitionRequest(acquisitionRequest);
+	setRequest(acquisitionRequest);
 	setDescription(description);
 	setQuantity(quantity);
 	setUnitValue(unitValue);
@@ -199,7 +199,7 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
     }
 
     public void delete() {
-	removeAcquisitionRequest();
+	removeRequest();
 	removeExpenditureTrackingSystem();
 	for (; !getUnitItems().isEmpty(); getUnitItems().get(0).delete())
 	    ;
@@ -213,15 +213,6 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	    }
 	}
 	return false;
-    }
-
-    public UnitItem getUnitItemFor(Unit unit) {
-	for (UnitItem unitItem : getUnitItems()) {
-	    if (unitItem.getUnit() == unit) {
-		return unitItem;
-	    }
-	}
-	return null;
     }
 
     public boolean isFilledWithRealValues() {
@@ -249,10 +240,7 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	return totalValue.equals(getTotalRealValueWithAdditionalCostsAndVat());
     }
 
-    public void createUnitItem(Financer financer, Money shareValue) {
-	new UnitItem(financer, this, shareValue, Boolean.FALSE, Boolean.FALSE);
-    }
-
+    @Override
     public void createUnitItem(Unit unit, Money shareValue) {
 	createUnitItem(getAcquisitionRequest().addPayingUnit(unit), shareValue);
     }
@@ -424,6 +412,10 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
     @Override
     public Money getValue() {
 	return getTotalItemValueWithAdditionalCostsAndVat();
+    }
+
+    public AcquisitionRequest getAcquisitionRequest() {
+	return (AcquisitionRequest) getRequest();
     }
 
 }

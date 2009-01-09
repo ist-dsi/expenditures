@@ -9,13 +9,14 @@ import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAddPayingUnit;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAssignPayingUnitToItem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericRemovePayingUnit;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.AddAcquisitionProposalDocument;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.AddPayingUnit;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.AllocateFundsPermanently;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.AllocateProjectFundsPermanently;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ApproveAcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.AssignPayingUnitToItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.CancelAcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ChangeAcquisitionProposalDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ChangeFinancersAccountingUnit;
@@ -36,7 +37,6 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activitie
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RemoveFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RemoveFundAllocationExpirationDate;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RemoveFundsPermanentlyAllocated;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RemovePayingUnit;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RemoveProjectFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RevertInvoiceSubmission;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SendPurchaseOrderToSupplier;
@@ -52,6 +52,7 @@ import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
+import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.domain.util.Money;
 import pt.ist.fenixWebFramework.security.UserView;
 import pt.ist.fenixWebFramework.services.Service;
@@ -60,21 +61,21 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 
     private static Money PROCESS_VALUE_LIMIT = new Money("5000");
 
-    private static Map<ActivityScope, List<GenericAcquisitionProcessActivity>> activities = new HashMap<ActivityScope, List<GenericAcquisitionProcessActivity>>();
+    private static Map<ActivityScope, List<AbstractActivity<RegularAcquisitionProcess>>> activities = new HashMap<ActivityScope, List<AbstractActivity<RegularAcquisitionProcess>>>();
 
     static {
-	List<GenericAcquisitionProcessActivity> requestInformationActivities = new ArrayList<GenericAcquisitionProcessActivity>();
-	List<GenericAcquisitionProcessActivity> requestItemActivities = new ArrayList<GenericAcquisitionProcessActivity>();
+	List<AbstractActivity<RegularAcquisitionProcess>> requestInformationActivities = new ArrayList<AbstractActivity<RegularAcquisitionProcess>>();
+	List<AbstractActivity<RegularAcquisitionProcess>> requestItemActivities = new ArrayList<AbstractActivity<RegularAcquisitionProcess>>();
 
 	requestInformationActivities.add(new CreateAcquisitionPurchaseOrderDocument());
 	requestInformationActivities.add(new SendPurchaseOrderToSupplier());
 	requestInformationActivities.add(new SkipPurchaseOrderDocument());
-
+	requestInformationActivities.add(new GenericAddPayingUnit<RegularAcquisitionProcess>());
+	requestInformationActivities.add(new GenericRemovePayingUnit<RegularAcquisitionProcess>());
+	
 	requestInformationActivities.add(new AddAcquisitionProposalDocument());
 	requestInformationActivities.add(new ChangeAcquisitionProposalDocument());
 	requestInformationActivities.add(new CreateAcquisitionRequestItem());
-	requestInformationActivities.add(new AddPayingUnit());
-	requestInformationActivities.add(new RemovePayingUnit());
 	// requestInformationActivities.add(new DeleteAcquisitionProcess());
 	requestInformationActivities.add(new SubmitForApproval());
 
@@ -115,7 +116,7 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 
 	requestItemActivities.add(new DeleteAcquisitionRequestItem());
 	requestItemActivities.add(new EditAcquisitionRequestItem());
-	requestItemActivities.add(new AssignPayingUnitToItem());
+	requestItemActivities.add(new GenericAssignPayingUnitToItem<RegularAcquisitionProcess>());
 	requestItemActivities.add(new EditAcquisitionRequestItemRealValues());
 	requestItemActivities.add(new DistributeRealValuesForPayingUnits());
 
@@ -158,17 +159,17 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	return user != null && user.getPerson().equals(getRequestor()) && getLastAcquisitionProcessState().isInGenesis();
     }
 
-    public List<GenericAcquisitionProcessActivity> getActiveActivitiesForItem() {
+    public List<AbstractActivity<RegularAcquisitionProcess>> getActiveActivitiesForItem() {
 	return getActiveActivities(ActivityScope.REQUEST_ITEM);
     }
 
-    public List<GenericAcquisitionProcessActivity> getActiveActivitiesForRequest() {
+    public List<AbstractActivity<RegularAcquisitionProcess>> getActiveActivitiesForRequest() {
 	return getActiveActivities(ActivityScope.REQUEST_INFORMATION);
     }
 
-    public List<GenericAcquisitionProcessActivity> getActiveActivities(ActivityScope scope) {
-	List<GenericAcquisitionProcessActivity> activitiesResult = new ArrayList<GenericAcquisitionProcessActivity>();
-	for (GenericAcquisitionProcessActivity activity : activities.get(scope)) {
+    public List<AbstractActivity<RegularAcquisitionProcess>> getActiveActivities(ActivityScope scope) {
+	List<AbstractActivity<RegularAcquisitionProcess>> activitiesResult = new ArrayList<AbstractActivity<RegularAcquisitionProcess>>();
+	for (AbstractActivity<RegularAcquisitionProcess> activity : activities.get(scope)) {
 	    if (activity.isActive(this)) {
 		activitiesResult.add(activity);
 	    }
@@ -176,8 +177,8 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	return activitiesResult;
     }
 
-    public List<GenericAcquisitionProcessActivity> getActiveActivities() {
-	List<GenericAcquisitionProcessActivity> activitiesResult = new ArrayList<GenericAcquisitionProcessActivity>();
+    public List<AbstractActivity<RegularAcquisitionProcess>> getActiveActivities() {
+	List<AbstractActivity<RegularAcquisitionProcess>> activitiesResult = new ArrayList<AbstractActivity<RegularAcquisitionProcess>>();
 	for (ActivityScope scope : activities.keySet()) {
 	    activitiesResult.addAll(getActiveActivities(scope));
 	}
@@ -185,10 +186,10 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
     }
 
     @Override
-    public GenericAcquisitionProcessActivity getActivityByName(String activityName) {
+    public AbstractActivity<RegularAcquisitionProcess> getActivityByName(String activityName) {
 
 	for (ActivityScope scope : activities.keySet()) {
-	    for (GenericAcquisitionProcessActivity activity : activities.get(scope)) {
+	    for (AbstractActivity<RegularAcquisitionProcess> activity : activities.get(scope)) {
 		if (activity.getName().equals(activityName)) {
 		    return activity;
 		}
@@ -208,7 +209,7 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
     }
 
     @Override
-    public Map<ActivityScope, List<GenericAcquisitionProcessActivity>> getProcessActivityMap() {
+    public Map<ActivityScope, List<AbstractActivity<RegularAcquisitionProcess>>> getProcessActivityMap() {
 	return activities;
     }
 

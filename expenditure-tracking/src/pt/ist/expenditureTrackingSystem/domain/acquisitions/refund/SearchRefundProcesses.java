@@ -41,7 +41,7 @@ public class SearchRefundProcesses extends Search<RefundProcess> {
 	protected boolean matchesSearchCriteria(RefundProcess process) {
 	    RefundRequest request = process.getRequest();
 	    Person refundee = request.getRefundee();
-	    Person requestor = request.getRequestor();
+	    Person requestor = request.getRequester();
 	    Unit unit = request.getRequestingUnit();
 
 	    return match(getRefundee(), refundee) && match(getRequestingPerson(), requestor) && match(getRequestingUnit(), unit);

@@ -6,6 +6,7 @@ import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.UnitItem;
 import pt.ist.expenditureTrackingSystem.domain.dto.RefundItemBean;
+import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.util.Money;
 
 public class RefundItem extends RefundItem_Base {
@@ -65,4 +66,8 @@ public class RefundItem extends RefundItem_Base {
 	return false;
     }
 
+    @Override
+    public void createUnitItem(Unit unit, Money shareValue) {
+	createUnitItem(getRequest().addPayingUnit(unit), shareValue);
+    }
 }

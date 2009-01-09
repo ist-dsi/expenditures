@@ -1,5 +1,9 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.refund;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
 import pt.ist.expenditureTrackingSystem.domain.dto.RefundItemBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
@@ -10,7 +14,7 @@ public class RefundRequest extends RefundRequest_Base {
 	super();
 	setProcess(process);
 	setRefundee(refundee);
-	setRequestor(requestor);
+	setRequester(requestor);
 	setRequestingUnit(requestingUnit);
     }
 
@@ -36,4 +40,11 @@ public class RefundRequest extends RefundRequest_Base {
 	return false;
     }
 
+    public Set<RefundItem> getRefundItemsSet() {
+	Set<RefundItem> refundItems = new HashSet<RefundItem>();
+	for (RequestItem item : getRequestItems()) {
+	    refundItems.add((RefundItem) item);
+	}
+	return refundItems;
+    }
 }

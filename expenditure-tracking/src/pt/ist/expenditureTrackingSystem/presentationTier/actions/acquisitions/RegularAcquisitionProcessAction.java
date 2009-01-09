@@ -1,6 +1,5 @@
 package pt.ist.expenditureTrackingSystem.presentationTier.actions.acquisitions;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,22 +18,18 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.SearchAcquisitionProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.AllocateFundsPermanently;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.AllocateProjectFundsPermanently;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.FundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ProjectFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.DateIntervalBean;
-import pt.ist.expenditureTrackingSystem.domain.dto.DomainObjectBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.ProcessStateBean;
-import pt.ist.expenditureTrackingSystem.domain.dto.UnitItemBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean.CreateItemSchemaType;
-import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
-import pt.ist.expenditureTrackingSystem.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.presentationTier.Context;
-import pt.ist.expenditureTrackingSystem.presentationTier.actions.ProcessAction;
 import pt.ist.fenixWebFramework.renderers.components.state.IViewState;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 import pt.ist.fenixWebFramework.security.UserView;
@@ -45,7 +40,7 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 @Mapping(path = "/acquisitionProcess")
 @Forwards( { @Forward(name = "search.acquisition.process", path = "/acquisitions/searchAcquisitionProcess.jsp"),
 	@Forward(name = "view.fund.allocations", path = "/acquisitions/viewFundAllocations.jsp") })
-public class RegularAcquisitionProcessAction extends ProcessAction {
+public class RegularAcquisitionProcessAction extends PaymentProcessAction {
 
     private static final Context CONTEXT = new Context("acquisitions");
 
@@ -57,13 +52,9 @@ public class RegularAcquisitionProcessAction extends ProcessAction {
     @Override
     public ActionForward viewProcess(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 	    HttpServletResponse response) {
-	RegularAcquisitionProcess process = getProcess(request);
-	if (process == null) {
-	    process = getDomainObject(request, "processOid");
-	}
-	return viewAcquisitionProcess(mapping, request, process);
+	return viewAcquisitionProcess(mapping, request, getProcess(request));
     }
-    
+
     public ActionForward viewAcquisitionProcess(final ActionMapping mapping, final HttpServletRequest request,
 	    final AcquisitionProcess acquisitionProcess) {
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
@@ -203,45 +194,6 @@ public class RegularAcquisitionProcessAction extends ProcessAction {
 	return viewAcquisitionProcess(mapping, form, request, response);
     }
 
-    public ActionForward executeAddPayingUnit(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-	final RegularAcquisitionProcess acquisitionProcess = getProcess(request);
-	request.setAttribute("acquisitionProcess", acquisitionProcess);
-	request.setAttribute("domainObjectBean", new DomainObjectBean<Unit>());
-	return mapping.findForward("select.unit.to.add");
-    }
-
-    public ActionForward addPayingUnit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
-
-	DomainObjectBean<Unit> bean = getRenderedObject("unitToAdd");
-	List<Unit> units = new ArrayList<Unit>();
-	units.add(bean.getDomainObject());
-	return executeActivityAndViewProcess(mapping, form, request, response, "AddPayingUnit", units);
-    }
-
-    public ActionForward executeRemovePayingUnit(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-	final RegularAcquisitionProcess acquisitionProcess = getProcess(request);
-	request.setAttribute("acquisitionProcess", acquisitionProcess);
-	request.setAttribute("payingUnits", acquisitionProcess.getPayingUnits());
-	return mapping.findForward("remove.paying.units");
-    }
-
-    public ActionForward removePayingUnit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
-
-	final Unit payingUnit = getDomainObject(request, "unitOID");
-	List<Unit> units = new ArrayList<Unit>();
-	units.add(payingUnit);
-	try {
-	    genericActivityExecution(request, "RemovePayingUnit", units);
-	} catch (DomainException e) {
-	    addErrorMessage(e.getMessage(), getBundle());
-	}
-	return executeRemovePayingUnit(mapping, form, request, response);
-    }
-
     public ActionForward executeDeleteAcquisitionRequestItem(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 
@@ -284,96 +236,6 @@ public class RegularAcquisitionProcessAction extends ProcessAction {
 	return viewAcquisitionProcess(mapping, request, requestItemBean.getAcquisitionRequest().getAcquisitionProcess());
     }
 
-    public ActionForward executeAssignPayingUnitToItem(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-	final AcquisitionRequestItem item = getDomainObject(request, "acquisitionRequestItemOid");
-	final RegularAcquisitionProcess acquisitionProcess = getProcess(request);
-	List<UnitItemBean> beans = new ArrayList<UnitItemBean>();
-	for (Unit unit : acquisitionProcess.getPayingUnits()) {
-	    beans.add(new UnitItemBean(unit, item));
-	}
-	request.setAttribute("acquisitionRequestItem", item);
-	request.setAttribute("acquisitionProcess", acquisitionProcess);
-	request.setAttribute("unitItemBeans", beans);
-
-	return mapping.findForward("assign.unit.item");
-    }
-
-    public ActionForward executeAssignPayingUnitToItemCreation(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-
-	final RegularAcquisitionProcess acquisitionProcess = getProcess(request);
-	final AcquisitionRequestItem item = getDomainObject(request, "acquisitionRequestItemOid");
-
-	List<UnitItemBean> beans = getRenderedObject("unitItemBeans");
-	try {
-	    genericActivityExecution(acquisitionProcess, "AssignPayingUnitToItem", item, beans);
-	} catch (DomainException e) {
-	    addErrorMessage(e.getMessage(), getBundle());
-	    return executeAssignPayingUnitToItem(mapping, form, request, response);
-	}
-
-	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
-    }
-
-    public ActionForward calculateShareValuePostBack(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-
-	return genericCalculateShareValuePostBack(mapping, form, request, response, "assign.unit.item", false);
-    }
-
-    public ActionForward calculateRealShareValuePostBack(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-
-	final AcquisitionRequestItem item = getDomainObject(request, "acquisitionRequestItemOid");
-	request.setAttribute("item", item);
-	return genericCalculateShareValuePostBack(mapping, form, request, response, "edit.real.shares.values", true);
-    }
-
-    private ActionForward genericCalculateShareValuePostBack(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response, String forward, boolean realValue) {
-
-	final AcquisitionProcess acquisitionProcess = getProcess(request);
-	final AcquisitionRequestItem item = getDomainObject(request, "acquisitionRequestItemOid");
-
-	List<UnitItemBean> beans = getRenderedObject("unitItemBeans");
-	int assigned = 0;
-	for (UnitItemBean bean : beans) {
-	    if (bean.getAssigned()) {
-		assigned++;
-	    }
-	}
-	if (assigned != 0) {
-	    Money[] shareValues;
-	    Money totalItemValue = realValue ? item.getTotalRealValueWithAdditionalCostsAndVat() : item
-		    .getTotalItemValueWithAdditionalCostsAndVat();
-	    shareValues = totalItemValue.allocate(assigned);
-
-	    int i = 0;
-	    for (UnitItemBean bean : beans) {
-		if (bean.getAssigned()) {
-		    if (realValue) {
-			bean.setRealShareValue(shareValues[i++]);
-		    } else {
-			bean.setShareValue(shareValues[i++]);
-		    }
-		} else {
-		    if (realValue) {
-			bean.setRealShareValue(null);
-		    } else {
-			bean.setShareValue(null);
-		    }
-		}
-	    }
-	}
-	request.setAttribute("acquisitionRequestItem", item);
-	request.setAttribute("acquisitionProcess", acquisitionProcess);
-	request.setAttribute("unitItemBeans", beans);
-
-	RenderUtils.invalidateViewState();
-	return mapping.findForward(forward);
-    }
-
     public ActionForward executeSubmitForApproval(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	return executeActivityAndViewProcess(mapping, form, request, response, "SubmitForApproval");
@@ -405,11 +267,11 @@ public class RegularAcquisitionProcessAction extends ProcessAction {
 	}
 	return viewAcquisitionProcess(mapping, request, (AcquisitionProcess) getProcess(request));
     }
- 
+
     @Override
     @SuppressWarnings("unchecked")
     protected RegularAcquisitionProcess getProcess(HttpServletRequest request) {
-	return getDomainObject(request, "acquisitionProcessOid");
+	return getDomainObject(request, "processOid");
     }
 
     protected Class<? extends AcquisitionProcess> getProcessClass() {
@@ -468,5 +330,11 @@ public class RegularAcquisitionProcessAction extends ProcessAction {
 	request.setAttribute("bean", bean);
 
 	return mapping.findForward("view.fund.allocations");
+    }
+
+    @Override
+    protected AcquisitionRequestItem getRequestItem(HttpServletRequest request) {
+	AcquisitionRequestItem item = getDomainObject(request, "acquisitionRequestItemOid");
+	return item != null ? item : (AcquisitionRequestItem) super.getRequestItem(request);
     }
 }

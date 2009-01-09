@@ -10,7 +10,7 @@ public abstract class GenericRefundProcessActivity extends AbstractActivity<Refu
 
     public boolean isCurrentUserRequestor(RefundProcess process) {
 	User user = UserView.getUser();
-	return user != null && process.getRequest().getRequestor() == user.getPerson();
+	return user != null && process.getRequestor() == user.getPerson();
     }
     
     protected boolean isCurrentUserProcessOwner(RefundProcess process) {

@@ -27,7 +27,11 @@ class acquisitions.Acquisition {
 	String ojbConcreteClass;
 }
 
-	class acquisitions.refund.RefundRequest extends acquisitions.Acquisition {
+	class acquisitions.RequestWithPayment extends acquisitions.Acquisition {
+	
+	}
+	
+	class acquisitions.refund.RefundRequest extends acquisitions.RequestWithPayment {
 		
 	} 
 	
@@ -39,7 +43,7 @@ class acquisitions.Acquisition {
 		Boolean deletedState;
 	}
 
-	class acquisitions.AcquisitionRequest extends acquisitions.Acquisition {
+	class acquisitions.AcquisitionRequest extends acquisitions.RequestWithPayment {
 		String paymentReference;
 	}
 
@@ -235,7 +239,11 @@ class processes.GenericProcess {
 	String ojbConcreteClass;
 }
 
-	class acquisitions.AcquisitionProcess extends processes.GenericProcess {
+	class acquisitions.PaymentProcess extends processes.GenericProcess {
+	
+	}
+
+	class acquisitions.AcquisitionProcess extends acquisitions.PaymentProcess {
 		LocalDate fundAllocationExpirationDate;
 		Boolean skipSupplierFundAllocation;
 		Integer acquisitionProcessNumber;
@@ -259,7 +267,7 @@ class processes.GenericProcess {
 	class requests.RequestForProposalProcess extends processes.GenericProcess {
 	}
 
-	class acquisitions.refund.RefundProcess extends processes.GenericProcess {
+	class acquisitions.refund.RefundProcess extends acquisitions.PaymentProcess {
 	
 	}
 	
@@ -347,8 +355,8 @@ relation ExpenditureTrackingSystemAcquisitionRequestItem {
 }
 
 relation AcquisitionRequestAcquisitionRequestItem {
-	acquisitions.AcquisitionRequest playsRole acquisitionRequest;
-	acquisitions.AcquisitionRequestItem playsRole acquisitionRequestItems {
+	acquisitions.RequestWithPayment playsRole request;
+	acquisitions.RequestItem playsRole requestItems {
 		multiplicity *;
 	}
 }
@@ -489,7 +497,7 @@ relation AcquisitionRequestSupplier {
 
 relation AcquisitionRequestRequester {
 	organization.Person playsRole requester;
-	acquisitions.AcquisitionRequest playsRole acquisitionRequests {
+	acquisitions.RequestWithPayment  playsRole requestsWithyPayment {
 		multiplicity *;
 	}
 }
@@ -558,7 +566,7 @@ relation RequestForProposalRequestingUnit {
 }
 
 relation AcquisitionRequestRequestingUnit {
-	acquisitions.AcquisitionRequest playsRole requests {
+	acquisitions.RequestWithPayment playsRole requests {
 		multiplicity *;
 	}
 	organization.Unit playsRole requestingUnit;
@@ -785,14 +793,6 @@ relation AfterTheFactImportFile {
 	acquisitions.afterthefact.ImportFile playsRole importFile;
 }
 
-relation RefundRequestRefundItem {
-	acquisitions.refund.RefundRequest  playsRole request;
-	acquisitions.refund.RefundItem playsRole refundItems {
-		multiplicity *;
-	}	
-}
-
-
 relation RefundItemRefundableInvoice {
 	acquisitions.refund.RefundItem playsRole refundItem;
 	acquisitions.refund.RefundableInvoice playsRole invoices {
@@ -812,13 +812,6 @@ relation RefundRequestRefundProcess {
 	acquisitions.refund.RefundProcess  playsRole process;
 }
 
-relation RefundRequestRequestor {
-	acquisitions.refund.RefundRequest playsRole requests {
-		multiplicity *;
-	}
-	organization.Person playsRole requestor;
-}
-
 relation RefundRequestRefundee {
 	acquisitions.refund.RefundRequest playsRole refundRequests {
 		multiplicity *;
@@ -826,9 +819,3 @@ relation RefundRequestRefundee {
 	organization.Person playsRole refundee;
 }
 
-relation RefundRequestRequestingUnit {
-	acquisitions.refund.RefundRequest playsRole refundRequests {
-		multiplicity *;
-	}
-	organization.Unit playsRole requestingUnit;
-}

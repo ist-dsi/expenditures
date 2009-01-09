@@ -3,6 +3,7 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 import java.math.BigDecimal;
 
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.util.Money;
 import pt.ist.fenixframework.pstm.Transaction;
 
@@ -41,4 +42,20 @@ public abstract class RequestItem extends RequestItem_Base {
     protected void delete() {
 	Transaction.deleteObject(this);
     }
+
+    public UnitItem getUnitItemFor(Unit unit) {
+	for (UnitItem unitItem : getUnitItems()) {
+	    if (unitItem.getUnit() == unit) {
+		return unitItem;
+	    }
+	}
+	return null;
+    }
+
+    public void createUnitItem(Financer financer, Money shareValue) {
+	new UnitItem(financer, this, shareValue, Boolean.FALSE, Boolean.FALSE);
+    }
+
+    public abstract void createUnitItem(Unit unit, Money shareValue);
+
 }

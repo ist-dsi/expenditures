@@ -9,8 +9,10 @@ import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.Options;
 import pt.ist.expenditureTrackingSystem.domain.Role;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.Acquisition;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestWithPayment;
 import pt.ist.expenditureTrackingSystem.domain.announcements.Announcement;
 import pt.ist.expenditureTrackingSystem.domain.announcements.AnnouncementProcess;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
@@ -119,9 +121,19 @@ public class Person extends Person_Base {
 	return null;
     }
 
+    private <T extends RequestWithPayment> List<T> getRequestsWithClassType(Class<T> clazz) {
+	List<T> requests = new ArrayList<T>();
+	for (RequestWithPayment acquisition : getRequestsWithyPayment()) {
+	    if (acquisition.getClass().equals(clazz)) {
+		requests.add((T) acquisition);
+	    }
+	}
+	return requests;
+    }
+
     public List<AcquisitionProcess> getAcquisitionProcesses() {
 	List<AcquisitionProcess> processes = new ArrayList<AcquisitionProcess>();
-	for (AcquisitionRequest request : getAcquisitionRequestsSet()) {
+	for (AcquisitionRequest request : getRequestsWithClassType(AcquisitionRequest.class)) {
 	    processes.add(request.getAcquisitionProcess());
 	}
 	return processes;
@@ -149,9 +161,9 @@ public class Person extends Person_Base {
 	final String name = super.getName();
 	int s1 = name.indexOf(' ');
 	int s2 = name.lastIndexOf(' ');
-	 return s1 < 0 || s1 == s2 ? name : name.subSequence(0, s1) + name.substring(s2);
+	return s1 < 0 || s1 == s2 ? name : name.subSequence(0, s1) + name.substring(s2);
     }
-    
+
     public List<Unit> getDirectResponsibleUnits() {
 	List<Unit> units = new ArrayList<Unit>();
 	for (Authorization authorization : getAuthorizations()) {

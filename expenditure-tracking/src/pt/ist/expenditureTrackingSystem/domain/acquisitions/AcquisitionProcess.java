@@ -1,6 +1,5 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -53,14 +52,6 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 	return user != null && isAvailableForPerson(user.getPerson());
     }
 
-    public List<Unit> getPayingUnits() {
-	List<Unit> res = new ArrayList<Unit>();
-	for (Financer financer : getAcquisitionRequest().getFinancers()) {
-	    res.add(financer.getUnit());
-	}
-	return res;
-    }
-
     @Override
     public abstract <T extends GenericProcess> AbstractActivity<T> getActivityByName(String activityName);
 
@@ -92,25 +83,6 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
     public boolean isAccountingEmployeeForOnePossibleUnit(final Person person) {
 	final AcquisitionRequest acquisitionRequest = getAcquisitionRequest();
 	return acquisitionRequest.isAccountingEmployeeForOnePossibleUnit(person);
-    }
-
-    public boolean isRealValueEqualOrLessThanFundAllocation() {
-	Money allocatedMoney = this.getAcquisitionRequest().getTotalItemValueWithAdditionalCostsAndVat();
-	Money realMoney = this.getAcquisitionRequest().getRealTotalValueWithAdditionalCostsAndVat();
-	return realMoney.isLessThanOrEqual(allocatedMoney);
-    }
-
-    public boolean isResponsibleForAtLeastOnePayingUnit(Person person) {
-	for (Unit unit : getPayingUnits()) {
-	    if (unit.isResponsible(person)) {
-		return true;
-	    }
-	}
-	return false;
-    }
-
-    public Person getRequestor() {
-	return getAcquisitionRequest().getRequester();
     }
 
     public boolean isActive() {
@@ -321,5 +293,14 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
     public boolean isTakenByCurrentUser() {
 	User user = UserView.getUser();
 	return user != null && isTakenByPerson(user.getPerson());
+    }
+
+    public AcquisitionRequest getRequest() {
+	return getAcquisitionRequest();
+    }
+
+    @Override
+    public boolean isInGenesis() {
+	return getAcquisitionProcessState().isInGenesis();
     }
 }

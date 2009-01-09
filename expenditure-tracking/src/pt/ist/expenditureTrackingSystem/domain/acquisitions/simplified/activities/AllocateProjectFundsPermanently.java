@@ -25,7 +25,7 @@ public class AllocateProjectFundsPermanently extends GenericAcquisitionProcessAc
     }
 
     private boolean allItemsAreFilledWithRealValues(RegularAcquisitionProcess process) {
-	for (AcquisitionRequestItem item : process.getAcquisitionRequest().getAcquisitionRequestItems()) {
+	for (AcquisitionRequestItem item : process.getAcquisitionRequest().getAcquisitionRequestItemsSet()) {
 	    if (!item.isFilledWithRealValues()) {
 		return false;
 	    }

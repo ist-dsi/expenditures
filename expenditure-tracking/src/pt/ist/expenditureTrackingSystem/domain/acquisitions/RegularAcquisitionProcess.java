@@ -7,10 +7,10 @@ import java.util.Map;
 import org.joda.time.LocalDate;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
+import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericLog;
 
 public abstract class RegularAcquisitionProcess extends RegularAcquisitionProcess_Base {
@@ -64,9 +64,9 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
     }
 
     public boolean isPersonAbleToExecuteActivities() {
-	Map<ActivityScope, List<GenericAcquisitionProcessActivity>> activities = getProcessActivityMap();
+	Map<ActivityScope, List<AbstractActivity<RegularAcquisitionProcess>>> activities = getProcessActivityMap();
 	for (ActivityScope scope : activities.keySet()) {
-	    for (GenericAcquisitionProcessActivity activity : activities.get(scope)) {
+	    for (AbstractActivity<RegularAcquisitionProcess> activity : activities.get(scope)) {
 		if (activity.isActive(this)) {
 		    return true;
 		}
@@ -141,7 +141,7 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
 	return true;
     }
 
-    public abstract Map<ActivityScope, List<GenericAcquisitionProcessActivity>> getProcessActivityMap();
+    public abstract Map<ActivityScope, List<AbstractActivity<RegularAcquisitionProcess>>> getProcessActivityMap();
 
     @Override
     public void setSkipSupplierFundAllocation(Boolean skipSupplierFundAllocation) {
@@ -184,13 +184,12 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
 		person, getAcquisitionRequest().getTotalItemValueWithAdditionalCostsAndVat());
     }
 
-    
     public List<Unit> getFinancingUnits() {
-	List<Unit> units = new ArrayList<Unit> ();
+	List<Unit> units = new ArrayList<Unit>();
 	for (Financer financer : getAcquisitionRequest().getFinancers()) {
 	    units.add(financer.getUnit());
 	}
 	return units;
     }
+
 }
- 

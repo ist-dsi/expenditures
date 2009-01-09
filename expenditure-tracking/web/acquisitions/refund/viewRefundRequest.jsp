@@ -25,7 +25,7 @@
 		<bean:define id="activityName" name="activity" property="class.simpleName"/> 
 		<li>
 			<html:link page='<%= actionMapping + ".do?method=execute" + activityName %>' paramId="refundProcessOid" paramName="refundProcess" paramProperty="OID">
-				<fr:view name="activity" property="class">
+				 <fr:view name="activity" property="class">
 					<fr:layout name="label">
 						<fr:property name="bundle" value="ACQUISITION_RESOURCES"/>
 						<fr:property name="escape" value="false"/>
@@ -130,7 +130,7 @@
 	
 
 
-<logic:iterate id="refundItem" name="refundProcess" property="request.refundItems"> 
+<logic:iterate id="refundItem" name="refundProcess" property="request.requestItems"> 
 	<bean:define id="itemOID" name="refundItem" property="OID"/>
 	<logic:iterate id="activity" name="refundProcess" property="activeActivitiesForItem" indexId="index">
 		<logic:greaterThan name="index" value="0"> | </logic:greaterThan>

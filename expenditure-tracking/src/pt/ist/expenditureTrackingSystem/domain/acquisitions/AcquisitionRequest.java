@@ -215,7 +215,7 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     }
 
     public boolean isRealCostAvailableForAtLeastOneItem() {
-	for (AcquisitionRequestItem item : getAcquisitionRequestItems()) {
+	for (AcquisitionRequestItem item : getAcquisitionRequestItemsSet()) {
 	    if (item.getRealQuantity() != null && item.getRealUnitValue() != null) {
 		return true;
 	    }
@@ -224,7 +224,7 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     }
 
     private void copyEstimateValuesToRealValues() {
-	for (AcquisitionRequestItem item : getAcquisitionRequestItems()) {
+	for (AcquisitionRequestItem item : getAcquisitionRequestItemsSet()) {
 	    item.setRealQuantity(item.getQuantity());
 	    item.setRealUnitValue(item.getUnitValue());
 	    item.setRealVatValue(item.getVatValue());
@@ -238,11 +238,11 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     }
 
     public boolean isFilled() {
-	return hasAcquisitionProposalDocument() && getAcquisitionRequestItemsCount() > 0;
+	return hasAcquisitionProposalDocument() && hasAnyRequestItems();
     }
 
     public boolean isEveryItemFullyAttributedToPayingUnits() {
-	for (AcquisitionRequestItem item : getAcquisitionRequestItems()) {
+	for (AcquisitionRequestItem item : getAcquisitionRequestItemsSet()) {
 	    if (!item.isValueFullyAttributedToUnits()) {
 		return false;
 	    }
@@ -251,7 +251,7 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     }
 
     public boolean isEveryItemFullyAttributeInRealValues() {
-	for (AcquisitionRequestItem item : getAcquisitionRequestItems()) {
+	for (AcquisitionRequestItem item : getAcquisitionRequestItemsSet()) {
 	    if (!item.isRealValueFullyAttributedToUnits()) {
 		return false;
 	    }
@@ -260,19 +260,19 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     }
 
     public void approvedBy(Person person) {
-	for (AcquisitionRequestItem item : getAcquisitionRequestItems()) {
+	for (AcquisitionRequestItem item : getAcquisitionRequestItemsSet()) {
 	    item.approvedBy(person);
 	}
     }
 
     public void unapproveBy(Person person) {
-	for (AcquisitionRequestItem item : getAcquisitionRequestItems()) {
+	for (AcquisitionRequestItem item : getAcquisitionRequestItemsSet()) {
 	    item.unapprovedBy(person);
 	}
     }
 
     public boolean isApprovedByAtLeastOneResponsible() {
-	for (AcquisitionRequestItem item : getAcquisitionRequestItems()) {
+	for (AcquisitionRequestItem item : getAcquisitionRequestItemsSet()) {
 	    if (item.hasAtLeastOneResponsibleApproval()) {
 		return true;
 	    }
@@ -281,7 +281,7 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     }
 
     public boolean isApprovedByAllResponsibles() {
-	for (AcquisitionRequestItem item : getAcquisitionRequestItems()) {
+	for (AcquisitionRequestItem item : getAcquisitionRequestItemsSet()) {
 	    if (!item.isApproved()) {
 		return false;
 	    }
@@ -290,7 +290,7 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     }
 
     public boolean hasBeenApprovedBy(Person person) {
-	for (AcquisitionRequestItem item : getAcquisitionRequestItems()) {
+	for (AcquisitionRequestItem item : getAcquisitionRequestItemsSet()) {
 	    if (item.hasBeenApprovedBy(person)) {
 		return true;
 	    }
@@ -299,7 +299,7 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     }
 
     public boolean hasAtLeastOneConfirmation() {
-	for (AcquisitionRequestItem item : getAcquisitionRequestItems()) {
+	for (AcquisitionRequestItem item : getAcquisitionRequestItemsSet()) {
 	    if (item.hasAtLeastOneInvoiceConfirmation()) {
 		return true;
 	    }
@@ -308,7 +308,7 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     }
 
     public boolean isInvoiceConfirmedBy(Person person) {
-	for (AcquisitionRequestItem item : getAcquisitionRequestItems()) {
+	for (AcquisitionRequestItem item : getAcquisitionRequestItemsSet()) {
 	    if (item.isInvoiceConfirmedBy(person)) {
 		return true;
 	    }
@@ -317,19 +317,19 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     }
 
     public void confirmInvoiceFor(Person person) {
-	for (AcquisitionRequestItem item : getAcquisitionRequestItems()) {
+	for (AcquisitionRequestItem item : getAcquisitionRequestItemsSet()) {
 	    item.confirmInvoiceBy(person);
 	}
     }
 
     public void unconfirmInvoiceFor(Person person) {
-	for (AcquisitionRequestItem item : getAcquisitionRequestItems()) {
+	for (AcquisitionRequestItem item : getAcquisitionRequestItemsSet()) {
 	    item.unconfirmInvoiceBy(person);
 	}
     }
 
     public boolean isInvoiceConfirmedBy() {
-	for (AcquisitionRequestItem item : getAcquisitionRequestItems()) {
+	for (AcquisitionRequestItem item : getAcquisitionRequestItemsSet()) {
 	    if (!item.isInvoiceConfirmed()) {
 		return false;
 	    }
@@ -428,13 +428,13 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     }
 
     public void submittedForFundsAllocation(Person person) {
-	for (AcquisitionRequestItem item : getAcquisitionRequestItems()) {
+	for (AcquisitionRequestItem item : getAcquisitionRequestItemsSet()) {
 	    item.submittedForFundsAllocation(person);
 	}
     }
 
     public boolean isSubmittedForFundsAllocationByAllResponsibles() {
-	for (AcquisitionRequestItem item : getAcquisitionRequestItems()) {
+	for (AcquisitionRequestItem item : getAcquisitionRequestItemsSet()) {
 	    if (!item.isSubmittedForFundsAllocation()) {
 		return false;
 	    }
@@ -443,7 +443,7 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     }
 
     public boolean hasBeenSubmittedForFundsAllocationBy(Person person) {
-	for (AcquisitionRequestItem item : getAcquisitionRequestItems()) {
+	for (AcquisitionRequestItem item : getAcquisitionRequestItemsSet()) {
 	    if (item.hasBeenSubmittedForFundsAllocationBy(person)) {
 		return true;
 	    }
@@ -618,6 +618,14 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	    units.add(financer.getAccountingUnit());
 	}
 	return units;
+    }
+
+    public Set<AcquisitionRequestItem> getAcquisitionRequestItemsSet() {
+	Set<AcquisitionRequestItem> acquisitionRequestItemSet = new HashSet<AcquisitionRequestItem>();
+	for (RequestItem item : getRequestItems()) {
+	    acquisitionRequestItemSet.add((AcquisitionRequestItem) item);
+	}
+	return acquisitionRequestItemSet;
     }
 
 }

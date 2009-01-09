@@ -12,37 +12,38 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess.ActivityScope;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericRefundProcessActivity;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.AddPayingUnit;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAddPayingUnit;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAssignPayingUnitToItem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericRemovePayingUnit;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.CreateRefundItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.DeleteRefundItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.EditRefundItem;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.RemovePayingUnit;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.SubmitForApproval;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.UnSubmitForApproval;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateRefundProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
+import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.fenixWebFramework.services.Service;
-
 
 public class RefundProcess extends RefundProcess_Base {
 
-    private static Map<ActivityScope, List<GenericRefundProcessActivity>> activityMap = new HashMap<ActivityScope, List<GenericRefundProcessActivity>>();
+    private static Map<ActivityScope, List<AbstractActivity<RefundProcess>>> activityMap = new HashMap<ActivityScope, List<AbstractActivity<RefundProcess>>>();
 
     static {
-	List<GenericRefundProcessActivity> requestActivitites = new ArrayList<GenericRefundProcessActivity>();
+	List<AbstractActivity<RefundProcess>> requestActivitites = new ArrayList<AbstractActivity<RefundProcess>>();
 	requestActivitites.add(new CreateRefundItem());
-	requestActivitites.add(new AddPayingUnit());
-	requestActivitites.add(new RemovePayingUnit());
+	requestActivitites.add(new GenericAddPayingUnit<RefundProcess>());
+	requestActivitites.add(new GenericRemovePayingUnit<RefundProcess>());
 	requestActivitites.add(new SubmitForApproval());
 	requestActivitites.add(new UnSubmitForApproval());
 	activityMap.put(ActivityScope.REQUEST_INFORMATION, requestActivitites);
 
-	List<GenericRefundProcessActivity> itemActivities = new ArrayList<GenericRefundProcessActivity>();
+	List<AbstractActivity<RefundProcess>> itemActivities = new ArrayList<AbstractActivity<RefundProcess>>();
 	itemActivities.add(new EditRefundItem());
 	itemActivities.add(new DeleteRefundItem());
+	itemActivities.add(new GenericAssignPayingUnitToItem<RefundProcess>());
 
 	activityMap.put(ActivityScope.REQUEST_ITEM, itemActivities);
     }
@@ -53,17 +54,17 @@ public class RefundProcess extends RefundProcess_Base {
 	new RefundProcessState(this, RefundProcessStateType.IN_GENESIS);
     }
 
-    public List<GenericRefundProcessActivity> getActiveActivities() {
-	List<GenericRefundProcessActivity> activities = new ArrayList<GenericRefundProcessActivity>();
+    public List<AbstractActivity<RefundProcess>> getActiveActivities() {
+	List<AbstractActivity<RefundProcess>> activities = new ArrayList<AbstractActivity<RefundProcess>>();
 	for (ActivityScope scope : ActivityScope.values()) {
 	    activities.addAll(getActiveActivitiesForScope(scope));
 	}
 	return activities;
     }
 
-    private List<GenericRefundProcessActivity> getActiveActivitiesForScope(ActivityScope scope) {
-	List<GenericRefundProcessActivity> activities = new ArrayList<GenericRefundProcessActivity>();
-	for (GenericRefundProcessActivity activity : activityMap.get(scope)) {
+    private List<AbstractActivity<RefundProcess>> getActiveActivitiesForScope(ActivityScope scope) {
+	List<AbstractActivity<RefundProcess>> activities = new ArrayList<AbstractActivity<RefundProcess>>();
+	for (AbstractActivity<RefundProcess> activity : activityMap.get(scope)) {
 	    if (activity.isActive(this)) {
 		activities.add(activity);
 	    }
@@ -71,18 +72,18 @@ public class RefundProcess extends RefundProcess_Base {
 	return activities;
     }
 
-    public List<GenericRefundProcessActivity> getActiveActivitiesForRequest() {
+    public List<AbstractActivity<RefundProcess>> getActiveActivitiesForRequest() {
 	return getActiveActivitiesForScope(ActivityScope.REQUEST_INFORMATION);
     }
 
-    public List<GenericRefundProcessActivity> getActiveActivitiesForItem() {
+    public List<AbstractActivity<RefundProcess>> getActiveActivitiesForItem() {
 	return getActiveActivitiesForScope(ActivityScope.REQUEST_ITEM);
     }
 
     @Override
-    public GenericRefundProcessActivity getActivityByName(String activityName) {
+    public AbstractActivity<RefundProcess> getActivityByName(String activityName) {
 	for (ActivityScope scope : ActivityScope.values()) {
-	    for (GenericRefundProcessActivity activity : activityMap.get(scope)) {
+	    for (AbstractActivity<RefundProcess> activity : activityMap.get(scope)) {
 		if (activity.getName().equals(activityName)) {
 		    return activity;
 		}
@@ -108,6 +109,7 @@ public class RefundProcess extends RefundProcess_Base {
 	return getLastProcessState();
     }
 
+    @Override
     public boolean isInGenesis() {
 	return getProcessState().isInGenesis();
     }
@@ -118,7 +120,7 @@ public class RefundProcess extends RefundProcess_Base {
     }
 
     public Person getRequestor() {
-	return getRequest().getRequestor();
+	return getRequest().getRequester();
     }
 
     public void submitForApproval() {

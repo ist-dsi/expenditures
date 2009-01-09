@@ -17,9 +17,7 @@ public class SubmitForApproval extends GenericRefundProcessActivity {
     @Override
     protected boolean isAvailable(final RefundProcess process) {
 	final RefundRequest refundRequest = process.getRequest();
-	return super.isAvailable(process)
-		&& process.getProcessState().isInGenesis()
-		&& refundRequest.hasAnyRefundItems()
+	return super.isAvailable(process) && process.getProcessState().isInGenesis() && refundRequest.hasAnyRequestItems()
 		&& refundRequest.isEveryItemFullyAttributedToPayingUnits();
     }
 

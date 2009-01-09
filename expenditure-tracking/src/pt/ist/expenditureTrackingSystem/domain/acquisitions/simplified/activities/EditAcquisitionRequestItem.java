@@ -17,7 +17,7 @@ public class EditAcquisitionRequestItem extends GenericAcquisitionProcessActivit
     @Override
     protected boolean isAvailable(RegularAcquisitionProcess process) {
 	return  super.isAvailable(process) && process.getAcquisitionProcessState().isInGenesis()
-		&& process.getAcquisitionRequest().getAcquisitionRequestItemsCount() > 0;
+		&& process.getAcquisitionRequest().hasAnyRequestItems();
     }
 
     @Override

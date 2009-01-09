@@ -4,6 +4,7 @@ import org.joda.time.DateTime;
 
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
+import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.fenixWebFramework.security.UserView;
 import pt.ist.fenixWebFramework.services.Service;
 
@@ -14,6 +15,16 @@ public abstract class AbstractActivity<T extends GenericProcess> {
     protected abstract boolean isAccessible(T process);
 
     protected abstract void process(T process, Object... objects);
+    
+    protected boolean isProcessTaken(T process) {
+	return process.getCurrentOwner() != null;
+    }
+
+    protected boolean isProcessTakenByCurrentUser(T process) {
+	User user = getUser();
+	Person taker = process.getCurrentOwner();
+	return taker != null && user != null && taker == user.getPerson();
+    }
 
     protected void logExecution(T process, String operationName, User user) {
 	new GenericLog(process, user.getPerson(), operationName, new DateTime());

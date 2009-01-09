@@ -26,7 +26,7 @@ public class UnitItemBean implements Serializable {
 	setAssigned(Boolean.TRUE);
     }
     
-    public UnitItemBean(Unit unit, AcquisitionRequestItem item) {
+    public UnitItemBean(Unit unit, RequestItem item) {
 	setItem(item);
 	setUnit(unit);
 	setAssigned(Boolean.FALSE);

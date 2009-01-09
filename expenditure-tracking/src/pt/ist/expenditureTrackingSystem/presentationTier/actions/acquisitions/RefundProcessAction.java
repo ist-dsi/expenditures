@@ -1,8 +1,5 @@
 package pt.ist.expenditureTrackingSystem.presentationTier.actions.acquisitions;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -10,16 +7,13 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import pt.ist.expenditureTrackingSystem.domain.DomainException;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.SearchRefundProcesses;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateRefundProcessBean;
-import pt.ist.expenditureTrackingSystem.domain.dto.DomainObjectBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.RefundItemBean;
-import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.presentationTier.Context;
-import pt.ist.expenditureTrackingSystem.presentationTier.actions.ProcessAction;
 import pt.ist.fenixWebFramework.struts.annotations.Forward;
 import pt.ist.fenixWebFramework.struts.annotations.Forwards;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
@@ -32,10 +26,10 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "edit.refund.item", path = "/acquisitions/refund/editRefundItem.jsp"),
 	@Forward(name = "view.comments", path = "/acquisitions/viewComments.jsp"),
 	@Forward(name = "generic.upload", path = "/acquisitions/genericUpload.jsp"),
-	@Forward(name = "select.unit.to.add", path = "/acquisitions/refund/selectPayingUnitToAdd.jsp"),
-	@Forward(name = "remove.paying.units", path = "/acquisitions/refund/removePayingUnits.jsp")
-})
-public class RefundProcessAction extends ProcessAction {
+	@Forward(name = "select.unit.to.add", path = "/acquisitions/commons/selectPayingUnitToAdd.jsp"),
+	@Forward(name = "assign.unit.item", path = "/acquisitions/commons/assignUnitItem.jsp"),
+	@Forward(name = "remove.paying.units", path = "/acquisitions/commons/removePayingUnits.jsp") })
+public class RefundProcessAction extends PaymentProcessAction {
 
     private static final Context CONTEXT = new Context("acquisitions");
 
@@ -136,7 +130,7 @@ public class RefundProcessAction extends ProcessAction {
     public ActionForward actualEditRefundItem(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	RefundItemBean bean = getRenderedObject("refundItemBean");
-	RefundItem item = getDomainObject(request,"refundItemOid");
+	RefundItem item = getDomainObject(request, "refundItemOid");
 	RefundProcess process = getProcess(request);
 	genericActivityExecution(request, "EditRefundItem", item, bean);
 	return viewRefundProcess(mapping, request, process);
@@ -149,62 +143,21 @@ public class RefundProcessAction extends ProcessAction {
 	genericActivityExecution(process, "DeleteRefundItem", item);
 	return viewRefundProcess(mapping, request, process);
     }
-    
-    public ActionForward executeAddPayingUnit(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-	final RefundProcess process = getProcess(request);
-	request.setAttribute("refundProcess", process);
-	request.setAttribute("domainObjectBean", new DomainObjectBean<Unit>());
-	return mapping.findForward("select.unit.to.add");
-    }
-
-    public ActionForward addPayingUnit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
-
-	DomainObjectBean<Unit> bean = getRenderedObject("unitToAdd");
-	List<Unit> units = new ArrayList<Unit>();
-	units.add(bean.getDomainObject());
-	RefundProcess process = getProcess(request);
-	genericActivityExecution(process, "AddPayingUnit",units);
-	return viewRefundProcess(mapping, request, process);
-    }
-
-    public ActionForward executeRemovePayingUnit(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-	final RefundProcess refundProcess = getProcess(request);
-	request.setAttribute("refundProcess", refundProcess);
-	request.setAttribute("payingUnits", refundProcess.getPayingUnits());
-	return mapping.findForward("remove.paying.units");
-    }
-
-    public ActionForward removePayingUnit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
-
-	final Unit payingUnit = getDomainObject(request, "unitOID");
-	List<Unit> units = new ArrayList<Unit>();
-	units.add(payingUnit);
-	try {
-	    genericActivityExecution(request, "RemovePayingUnit", units);
-	} catch (DomainException e) {
-	    addErrorMessage(e.getMessage(), getBundle());
-	}
-	return executeRemovePayingUnit(mapping, form, request, response);
-    }
 
     @Override
     @SuppressWarnings("unchecked")
     protected RefundProcess getProcess(HttpServletRequest request) {
-	return (RefundProcess) getProcess(request, "refundProcessOid");
+	RefundProcess process = getDomainObject(request, "refundProcessOid");
+	if (process == null) {
+	    process = getDomainObject(request, "processOid");
+	}
+	return process;
     }
 
     @Override
     public ActionForward viewProcess(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 	    HttpServletResponse response) {
-	RefundProcess process = getProcess(request);
-	if (process == null) {
-	    process = getDomainObject(request, "processOid");
-	}
-	return viewRefundProcess(mapping, request, process);
+	return viewRefundProcess(mapping, request, getProcess(request));
     }
 
     public ActionForward executeActivityAndViewProcess(final ActionMapping mapping, final ActionForm form,
@@ -223,4 +176,9 @@ public class RefundProcessAction extends ProcessAction {
 	return executeActivityAndViewProcess(mapping, form, request, response, "UnSubmitForApproval");
     }
 
+    @Override
+    protected RefundItem getRequestItem(HttpServletRequest request) {
+	RefundItem item = getDomainObject(request, "refundItemOid");
+	return item != null ? item : (RefundItem) super.getRequestItem(request);
+    }
 }

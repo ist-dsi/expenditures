@@ -10,6 +10,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.standard.StandardProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
@@ -42,7 +43,11 @@ public class StandardProcedureProcessAction extends RegularAcquisitionProcessAct
     @Override
     @SuppressWarnings("unchecked")
     protected StandardProcedureProcess getProcess(HttpServletRequest request) {
-	return (StandardProcedureProcess) getProcess(request, "acquisitionProcessOid");
+	StandardProcedureProcess process = getDomainObject(request, "acquisitionProcessOid");
+	if (process == null) {
+	    process = (StandardProcedureProcess) super.getProcess(request);
+	}
+	return process;
     }
 
     public ActionForward prepareCreateAcquisitionStandardProcess(final ActionMapping mapping, final ActionForm form,

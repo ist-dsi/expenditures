@@ -60,11 +60,11 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "allocate.funds.to.service.provider", path = "/acquisitions/allocateFundsToServiceProvider.jsp"),
 	@Forward(name = "prepare.create.acquisition.request", path = "/acquisitions/createAcquisitionRequest.jsp"),
 	@Forward(name = "receive.invoice", path = "/acquisitions/receiveInvoice.jsp"),
-	@Forward(name = "select.unit.to.add", path = "/acquisitions/selectPayingUnitToAdd.jsp"),
-	@Forward(name = "remove.paying.units", path = "/acquisitions/removePayingUnits.jsp"),
+	@Forward(name = "select.unit.to.add", path = "/acquisitions/commons/selectPayingUnitToAdd.jsp"),
+	@Forward(name = "remove.paying.units", path = "/acquisitions/commons/removePayingUnits.jsp"),
 	@Forward(name = "edit.request.item", path = "/acquisitions/editRequestItem.jsp"),
 	@Forward(name = "edit.request.item.real.values", path = "/acquisitions/editRequestItemRealValues.jsp"),
-	@Forward(name = "assign.unit.item", path = "/acquisitions/assignUnitItem.jsp"),
+	@Forward(name = "assign.unit.item", path = "/acquisitions/commons/assignUnitItem.jsp"),
 	@Forward(name = "edit.real.shares.values", path = "/acquisitions/editRealSharesValues.jsp"),
 	@Forward(name = "edit.supplier", path = "/acquisitions/editSupplierAddress.jsp"),
 	@Forward(name = "execute.payment", path = "/acquisitions/executePayment.jsp"),
@@ -110,7 +110,11 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
     @Override
     @SuppressWarnings("unchecked")
     protected SimplifiedProcedureProcess getProcess(final HttpServletRequest request) {
-	return (SimplifiedProcedureProcess) getProcess(request, "acquisitionProcessOid");
+	SimplifiedProcedureProcess process = getDomainObject(request, "acquisitionProcessOid");
+	if (process == null) {
+	    process = (SimplifiedProcedureProcess) super.getProcess(request);
+	}
+	return process;
     }
 
     public ActionForward prepareCreateAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
@@ -144,7 +148,7 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	return executeAddAcquisitionProposalDocument(mapping, form, request, response);
     }
-    
+
     public ActionForward addAcquisitionProposalDocument(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final SimplifiedProcedureProcess acquisitionProcess = getProcess(request);
@@ -155,9 +159,9 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	final String proposalID = acquisitionProposalDocumentForm.getProposalID();
 	final AcquisitionRequest acquisitionRequest = acquisitionProcess.getAcquisitionRequest();
 	final AcquisitionProposalDocument acquisitionProposalDocument = acquisitionRequest.getAcquisitionProposalDocument();
-	final String activity = acquisitionProposalDocument == null ? "AddAcquisitionProposalDocument" : "ChangeAcquisitionProposalDocument";
-	acquisitionProcess.getActivityByName(activity).execute(acquisitionProcess, filename, bytes,
-		proposalID);
+	final String activity = acquisitionProposalDocument == null ? "AddAcquisitionProposalDocument"
+		: "ChangeAcquisitionProposalDocument";
+	acquisitionProcess.getActivityByName(activity).execute(acquisitionProcess, filename, bytes, proposalID);
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
 
@@ -183,9 +187,9 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final SimplifiedProcedureProcess acquisitionProcess = getProcess(request);
 	final User user = UserView.getUser();
-	if (acquisitionProcess.getCurrentOwner() == null ||
-		(user != null && acquisitionProcess.getCurrentOwner() == user.getPerson())) {
-	    if (acquisitionProcess.getCurrentOwner() == null) { 
+	if (acquisitionProcess.getCurrentOwner() == null
+		|| (user != null && acquisitionProcess.getCurrentOwner() == user.getPerson())) {
+	    if (acquisitionProcess.getCurrentOwner() == null) {
 		acquisitionProcess.takeProcess();
 	    }
 	    request.setAttribute("acquisitionProcess", acquisitionProcess);
@@ -212,9 +216,9 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final SimplifiedProcedureProcess acquisitionProcess = getProcess(request);
 	final User user = UserView.getUser();
-	if (acquisitionProcess.getCurrentOwner() == null ||
-		(user != null && acquisitionProcess.getCurrentOwner() == user.getPerson())) {
-	    if (acquisitionProcess.getCurrentOwner() == null) { 
+	if (acquisitionProcess.getCurrentOwner() == null
+		|| (user != null && acquisitionProcess.getCurrentOwner() == user.getPerson())) {
+	    if (acquisitionProcess.getCurrentOwner() == null) {
 		acquisitionProcess.takeProcess();
 	    }
 	    request.setAttribute("acquisitionProcess", acquisitionProcess);
@@ -355,9 +359,9 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final SimplifiedProcedureProcess acquisitionProcess = getProcess(request);
 	final User user = UserView.getUser();
-	if (acquisitionProcess.getCurrentOwner() == null ||
-		(user != null && acquisitionProcess.getCurrentOwner() == user.getPerson())) {
-	    if (acquisitionProcess.getCurrentOwner() == null) { 
+	if (acquisitionProcess.getCurrentOwner() == null
+		|| (user != null && acquisitionProcess.getCurrentOwner() == user.getPerson())) {
+	    if (acquisitionProcess.getCurrentOwner() == null) {
 		acquisitionProcess.takeProcess();
 	    }
 	    request.setAttribute("acquisitionProcess", acquisitionProcess);
@@ -371,7 +375,7 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 		    fundAllocationBeans.add(fundAllocationBean);
 		}
 	    }
-	    request.setAttribute("fundAllocationBeans", fundAllocationBeans);	    
+	    request.setAttribute("fundAllocationBeans", fundAllocationBeans);
 	    return mapping.findForward("allocate.effective.project.funds");
 	} else {
 	    return viewAcquisitionProcess(mapping, request, acquisitionProcess);
@@ -402,9 +406,9 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final SimplifiedProcedureProcess acquisitionProcess = getProcess(request);
 	final User user = UserView.getUser();
-	if (acquisitionProcess.getCurrentOwner() == null ||
-		(user != null && acquisitionProcess.getCurrentOwner() == user.getPerson())) {
-	    if (acquisitionProcess.getCurrentOwner() == null) { 
+	if (acquisitionProcess.getCurrentOwner() == null
+		|| (user != null && acquisitionProcess.getCurrentOwner() == user.getPerson())) {
+	    if (acquisitionProcess.getCurrentOwner() == null) {
 		acquisitionProcess.takeProcess();
 	    }
 	    request.setAttribute("acquisitionProcess", acquisitionProcess);
@@ -538,11 +542,6 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	}
     }
 
-    @Override
-    protected String getBundle() {
-	return "ACQUISITION_RESOURCES";
-    }
-
     public ActionForward executeUnSubmitForApproval(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	return executeActivityAndViewProcess(mapping, form, request, response, "UnSubmitForApproval");
@@ -595,12 +594,11 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	return executeActivityAndViewProcess(mapping, form, request, response, "SubmitForConfirmInvoice");
     }
-    
+
     public ActionForward executeRevertInvoiceSubmission(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	return executeActivityAndViewProcess(mapping, form, request, response, "RevertInvoiceSubmission");
     }
-    
 
     public ActionForward executeChangeFinancersAccountingUnit(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
@@ -631,8 +629,8 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	return SimplifiedProcedureProcess.class;
     }
 
-    public ActionForward executeSetRefundee(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
+    public ActionForward executeSetRefundee(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
 	final AcquisitionProcess acquisitionProcess = getProcess(request);
 	final SetRefundeeBean setRefundeeBean = new SetRefundeeBean(acquisitionProcess);
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
@@ -640,8 +638,8 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	return mapping.findForward("set.refundee");
     }
 
-    public ActionForward setRefundee(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
+    public ActionForward setRefundee(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
 	final SetRefundeeBean setRefundeeBean = getRenderedObject();
 	final SimplifiedProcedureProcess acquisitionProcess = getProcess(request);
 	final AcquisitionRequest acquisitionRequest = acquisitionProcess.getAcquisitionRequest();
