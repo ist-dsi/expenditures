@@ -14,7 +14,6 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.util.Address;
 import pt.ist.expenditureTrackingSystem.domain.util.Money;
-import pt.ist.fenixframework.pstm.Transaction;
 
 public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 
@@ -370,6 +369,10 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 
     public void submittedForFundsAllocation(Person person) {
 	modifySubmittedForFundsAllocationStateFor(person, Boolean.TRUE);
+    }
+
+    public void unSubmitForFundsAllocation(Person person) {
+	modifySubmittedForFundsAllocationStateFor(person, Boolean.FALSE);
     }
 
     private void modifySubmittedForFundsAllocationStateFor(Person person, Boolean value) {

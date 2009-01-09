@@ -12,6 +12,7 @@
 		final String announcementsClass = Context.isPresent("announcements") ? "selected" : "";
 		final String processesClass = Context.isPresent("acquisitions") ? "selected" : "";
 		final String organizationClass = Context.isPresent("organization") ? "selected" : "";
+		final String statisticsClass = Context.isPresent("statisticsClass") ? "selected" : "";
 	%>
 
 	<ul>
@@ -59,6 +60,18 @@
 				<div class="lic1"></div>
 			</html:link>
 		</li>
+		<logic:present user="ist24439">
+		<logic:present role="MANAGER,ACQUISITION_CENTRAL_MANAGER,PROJECT_ACCOUNTING_MANAGER">
+			<li class="<%= statisticsClass %>">
+				<html:link action="/statistics.do?method=showStatistics">
+					<span>
+						<bean:message key="link.topBar.statistics" bundle="EXPENDITURE_RESOURCES"/>
+					</span>
+					<div class="lic1"></div>
+				</html:link>
+			</li>
+		</logic:present>
+		</logic:present>
 	</ul>
 </logic:present>
 

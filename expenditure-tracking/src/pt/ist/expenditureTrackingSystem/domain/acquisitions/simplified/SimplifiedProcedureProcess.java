@@ -36,6 +36,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activitie
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RejectAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RemoveFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RemoveFundAllocationExpirationDate;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RemoveFundAllocationExpirationDateForResponsible;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RemoveFundsPermanentlyAllocated;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RemoveProjectFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RevertInvoiceSubmission;
@@ -46,6 +47,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activitie
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SubmitForConfirmInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SubmitForFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.UnApproveAcquisitionProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.UnAuthorizeAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.UnSubmitForApproval;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.UnsetSkipSupplierFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean;
@@ -62,6 +64,8 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
     private static Money PROCESS_VALUE_LIMIT = new Money("5000");
 
     private static Map<ActivityScope, List<AbstractActivity<RegularAcquisitionProcess>>> activities = new HashMap<ActivityScope, List<AbstractActivity<RegularAcquisitionProcess>>>();
+
+    private static List<AcquisitionProcessStateType> availableStates = new ArrayList<AcquisitionProcessStateType>();
 
     static {
 	List<AbstractActivity<RegularAcquisitionProcess>> requestInformationActivities = new ArrayList<AbstractActivity<RegularAcquisitionProcess>>();
@@ -89,12 +93,14 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	requestInformationActivities.add(new AllocateFundsPermanently());
 	requestInformationActivities.add(new RemoveFundsPermanentlyAllocated());
 	requestInformationActivities.add(new UnApproveAcquisitionProcess());
+	requestInformationActivities.add(new UnAuthorizeAcquisitionProcess());
 
 	requestInformationActivities.add(new ProjectFundAllocation());
 	requestInformationActivities.add(new FundAllocation());
 	requestInformationActivities.add(new RemoveFundAllocation());
 	requestInformationActivities.add(new RemoveProjectFundAllocation());
 	requestInformationActivities.add(new RemoveFundAllocationExpirationDate());
+	requestInformationActivities.add(new RemoveFundAllocationExpirationDateForResponsible());
 	requestInformationActivities.add(new CancelAcquisitionRequest());
 
 	requestInformationActivities.add(new PayAcquisition());
@@ -123,6 +129,20 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	activities.put(ActivityScope.REQUEST_INFORMATION, requestInformationActivities);
 	activities.put(ActivityScope.REQUEST_ITEM, requestItemActivities);
 
+	availableStates.add(AcquisitionProcessStateType.IN_GENESIS);
+	availableStates.add(AcquisitionProcessStateType.SUBMITTED_FOR_APPROVAL);
+	availableStates.add(AcquisitionProcessStateType.SUBMITTED_FOR_FUNDS_ALLOCATION);
+	availableStates.add(AcquisitionProcessStateType.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER);
+	availableStates.add(AcquisitionProcessStateType.FUNDS_ALLOCATED);
+	availableStates.add(AcquisitionProcessStateType.APPROVED);
+	availableStates.add(AcquisitionProcessStateType.ACQUISITION_PROCESSED);
+	availableStates.add(AcquisitionProcessStateType.INVOICE_RECEIVED);
+	availableStates.add(AcquisitionProcessStateType.SUBMITTED_FOR_CONFIRM_INVOICE);
+	availableStates.add(AcquisitionProcessStateType.INVOICE_CONFIRMED);
+	availableStates.add(AcquisitionProcessStateType.FUNDS_ALLOCATED_PERMANENTLY);
+	availableStates.add(AcquisitionProcessStateType.ACQUISITION_PAYED);
+	availableStates.add(AcquisitionProcessStateType.REJECTED);
+	availableStates.add(AcquisitionProcessStateType.CANCELED);
     }
 
     protected SimplifiedProcedureProcess(final Person requester) {
@@ -215,21 +235,10 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 
     @Override
     public List<AcquisitionProcessStateType> getAvailableStates() {
-	List<AcquisitionProcessStateType> availableStates = new ArrayList<AcquisitionProcessStateType>();
-	availableStates.add(AcquisitionProcessStateType.IN_GENESIS);
-	availableStates.add(AcquisitionProcessStateType.SUBMITTED_FOR_APPROVAL);
-	availableStates.add(AcquisitionProcessStateType.SUBMITTED_FOR_FUNDS_ALLOCATION);
-	availableStates.add(AcquisitionProcessStateType.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER);
-	availableStates.add(AcquisitionProcessStateType.FUNDS_ALLOCATED);
-	availableStates.add(AcquisitionProcessStateType.APPROVED);
-	availableStates.add(AcquisitionProcessStateType.ACQUISITION_PROCESSED);
-	availableStates.add(AcquisitionProcessStateType.INVOICE_RECEIVED);
-	availableStates.add(AcquisitionProcessStateType.SUBMITTED_FOR_CONFIRM_INVOICE);
-	availableStates.add(AcquisitionProcessStateType.INVOICE_CONFIRMED);
-	availableStates.add(AcquisitionProcessStateType.FUNDS_ALLOCATED_PERMANENTLY);
-	availableStates.add(AcquisitionProcessStateType.ACQUISITION_PAYED);
-	availableStates.add(AcquisitionProcessStateType.REJECTED);
-	availableStates.add(AcquisitionProcessStateType.CANCELED);
+	return availableStates;
+    }
+
+    public static List<AcquisitionProcessStateType> getAvailableStatesForSimplifiedProcedureProcess() {
 	return availableStates;
     }
 
@@ -238,4 +247,9 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
     public boolean hasAnyAvailableActivitity() {
 	return !getActiveActivities().isEmpty();
     }
+
+    public boolean isSimplifiedProcedureProcess() {
+	return true;
+    }
+
 }

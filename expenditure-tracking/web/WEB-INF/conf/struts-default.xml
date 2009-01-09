@@ -37,6 +37,7 @@
     <message-resources parameter="resources.OrganizationResources" key="ORGANIZATION_RESOURCES" null="false"/>
     <message-resources parameter="resources.RequestResources" key="REQUEST_RESOURCES" null="false"/>
     <message-resources parameter="resources.AnnouncementResources" key="ANNOUNCEMENT_RESOURCES" null="false"/>
+    <message-resources parameter="resources.StatisticsResources" key="STATISTICS_RESOURCES" null="false"/>
 
     <!-- ========== Plug Ins Configuration ================================= -->
     <plug-in className="org.apache.struts.validator.ValidatorPlugIn">

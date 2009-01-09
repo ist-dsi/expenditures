@@ -663,4 +663,18 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
 
+    public ActionForward executeRemoveFundAllocationExpirationDateForResponsible(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final SimplifiedProcedureProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
+	genericActivityExecution(acquisitionProcess, "RemoveFundAllocationExpirationDateForResponsible");
+	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
+    }
+
+    public ActionForward executeUnAuthorizeAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final SimplifiedProcedureProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
+	genericActivityExecution(acquisitionProcess, "UnAuthorizeAcquisitionProcess");
+	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
+    }
+
 }

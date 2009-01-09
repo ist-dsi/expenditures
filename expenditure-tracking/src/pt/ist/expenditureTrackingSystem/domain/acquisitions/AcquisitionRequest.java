@@ -458,6 +458,13 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 
     }
 
+    public void unSubmitForFundsAllocation(final Person person) {
+	for (AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
+	    acquisitionRequestItem.unSubmitForFundsAllocation(person);
+	}
+
+    }
+
     public boolean checkRealValues() {
 	return isRealTotalValueEqualsRealShareValue() && isRealUnitShareValueLessThanUnitShareValue()
 		&& isRealValueLessThanTotalValue();

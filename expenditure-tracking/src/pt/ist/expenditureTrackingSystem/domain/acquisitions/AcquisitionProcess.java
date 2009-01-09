@@ -106,7 +106,8 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
     }
 
     public boolean isApproved() {
-	return getLastAcquisitionProcessState().isApproved();
+	final AcquisitionProcessStateType acquisitionProcessStateType = getAcquisitionProcessStateType();
+	return acquisitionProcessStateType.compareTo(AcquisitionProcessStateType.SUBMITTED_FOR_FUNDS_ALLOCATION) <= 0 && isActive();
     }
 
     public boolean isAllocatedToSupplier() {
@@ -293,6 +294,10 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
     public boolean isTakenByCurrentUser() {
 	User user = UserView.getUser();
 	return user != null && isTakenByPerson(user.getPerson());
+    }
+
+    public boolean isSimplifiedProcedureProcess() {
+	return false;
     }
 
     public AcquisitionRequest getRequest() {

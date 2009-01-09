@@ -9,6 +9,7 @@
 	<!ENTITY options SYSTEM "options-schemas.xml">
 	<!ENTITY request SYSTEM "request-schemas.xml">
 	<!ENTITY announcement SYSTEM "announcement-schemas.xml">
+	<!ENTITY statistics SYSTEM "statistics-schemas.xml">
 ]>
 
 <schemas>
@@ -17,4 +18,5 @@
 	&options;
 	&request;
 	&announcement;
+	&statistics;
 </schemas>

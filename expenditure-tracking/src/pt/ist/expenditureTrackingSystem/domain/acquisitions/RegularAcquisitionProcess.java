@@ -192,4 +192,8 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
 	return units;
     }
 
+    public boolean isInAuthorizedState() {
+	return getAcquisitionProcessState().isAuthorized();
+    }
+
 }

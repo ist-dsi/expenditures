@@ -52,7 +52,11 @@ public class AcquisitionProcessState extends AcquisitionProcessState_Base {
     }
 
     public boolean isApproved() {
-	return isInState(AcquisitionProcessStateType.APPROVED);
+	return isAuthorized();
+    }
+
+    public boolean isAuthorized() {
+	return isInState(AcquisitionProcessStateType.APPROVED); 
     }
 
     public boolean isAllocatedToSupplier() {

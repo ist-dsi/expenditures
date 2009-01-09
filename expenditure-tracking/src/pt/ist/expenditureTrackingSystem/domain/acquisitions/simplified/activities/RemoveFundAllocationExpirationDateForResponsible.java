@@ -6,7 +6,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAc
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.fenixWebFramework.security.UserView;
 
-public class UnApproveAcquisitionProcess extends GenericAcquisitionProcessActivity {
+public class RemoveFundAllocationExpirationDateForResponsible extends GenericAcquisitionProcessActivity {
 
     @Override
     protected boolean isAccessible(RegularAcquisitionProcess process) {
@@ -16,18 +16,19 @@ public class UnApproveAcquisitionProcess extends GenericAcquisitionProcessActivi
 
     @Override
     protected boolean isAvailable(RegularAcquisitionProcess process) {
-	final User user = UserView.getUser();
-	final Person person = user.getPerson();
-	return  super.isAvailable(process)
-		&& process.getFundAllocationExpirationDate() == null
-		&& process.getAcquisitionRequest().hasBeenSubmittedForFundsAllocationBy(person);
+	
+	return super.isAvailable(process)
+		&& process.getFundAllocationExpirationDate() != null
+		&& !process.hasAnyAllocatedFunds();
     }
 
     @Override
     protected void process(RegularAcquisitionProcess process, Object... objects) {
 	final User user = UserView.getUser();
 	final Person person = user.getPerson();
-	process.getAcquisitionRequest().unSubmitForFundsAllocation(person);
+	process.setFundAllocationExpirationDate(null);
+	process.getAcquisitionRequest().unapproveBy(person);
+	process.submitForApproval();
     }
 
 }
