@@ -61,9 +61,9 @@
 			</html:link>
 		</li>
 		<logic:present user="ist24439">
-		<logic:present role="MANAGER,ACQUISITION_CENTRAL_MANAGER,PROJECT_ACCOUNTING_MANAGER">
+		<logic:present role="MANAGER">
 			<li class="<%= statisticsClass %>">
-				<html:link action="/statistics.do?method=showStatistics">
+				<html:link action="/statistics.do?method=showSimplifiedProcessStatistics">
 					<span>
 						<bean:message key="link.topBar.statistics" bundle="EXPENDITURE_RESOURCES"/>
 					</span>

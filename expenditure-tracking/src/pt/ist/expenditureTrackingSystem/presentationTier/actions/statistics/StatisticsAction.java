@@ -1,6 +1,5 @@
 package pt.ist.expenditureTrackingSystem.presentationTier.actions.statistics;
 
-import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -11,18 +10,15 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.jfree.chart.JFreeChart;
 
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
+import pt.ist.expenditureTrackingSystem.domain.statistics.SimplifiedProcessActivityLogStatistics;
 import pt.ist.expenditureTrackingSystem.domain.statistics.SimplifiedProcessStatistics;
 import pt.ist.expenditureTrackingSystem.presentationTier.Context;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.BaseAction;
 import pt.ist.fenixWebFramework.struts.annotations.Forward;
 import pt.ist.fenixWebFramework.struts.annotations.Forwards;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
-import sun.awt.image.codec.JPEGImageEncoderImpl;
-
-import com.sun.image.codec.jpeg.ImageFormatException;
-import com.sun.image.codec.jpeg.JPEGImageEncoder;
 
 @Mapping(path = "/statistics")
 @Forwards( {
@@ -62,26 +58,119 @@ public class StatisticsAction extends BaseAction {
 	final String year = request.getParameter("year");
 
 	final SimplifiedProcessStatistics simplifiedProcessStatistics = SimplifiedProcessStatistics.create(new Integer(year));
-	final JFreeChart chart = ChartGenerator.simplifiedProcessStatisticsChart(simplifiedProcessStatistics);
-
-	final BufferedImage bufferedImage = chart.createBufferedImage(1000, 1000);
 
 	OutputStream outputStream = null;
 	try {
+	    final byte[] image = ChartGenerator.simplifiedProcessStatisticsImage(simplifiedProcessStatistics);
 	    outputStream = response.getOutputStream();
-	    final JPEGImageEncoder imageEncoder = new JPEGImageEncoderImpl(outputStream);
-	    imageEncoder.encode(bufferedImage);
+	    response.setContentType("image/jpeg");
+	    outputStream.write(image);
+	    outputStream.flush();
 	} catch (final FileNotFoundException e) {
+	    e.printStackTrace();
 	    throw new Error(e);
-	} catch (final ImageFormatException e) {
+	} catch (final RuntimeException e) {
+	    e.printStackTrace();
 	    throw new Error(e);
 	} catch (final IOException e) {
+	    e.printStackTrace();
 	    throw new Error(e);
 	} finally {
 	    if (outputStream != null) {
 		try {
 		    outputStream.close();
 		} catch (final IOException e) {
+		    e.printStackTrace();
+		    throw new Error(e);
+		}
+		try {
+		    response.flushBuffer();
+		} catch (IOException e) {
+		    e.printStackTrace();
+		    throw new Error(e);
+		}
+	    }
+	}
+
+	return null;
+    }
+
+    public ActionForward simplifiedProcessStatisticsTimeChart(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	final String year = request.getParameter("year");
+
+	final SimplifiedProcessActivityLogStatistics simplifiedProcessActivityLogStatistics = SimplifiedProcessActivityLogStatistics.create(new Integer(year));
+
+	OutputStream outputStream = null;
+	try {
+	    final byte[] image = ChartGenerator.simplifiedProcessStatisticsActivityTimeImage(simplifiedProcessActivityLogStatistics);
+	    outputStream = response.getOutputStream();
+	    response.setContentType("image/jpeg");
+	    outputStream.write(image);
+	    outputStream.flush();
+	} catch (final FileNotFoundException e) {
+	    e.printStackTrace();
+	    throw new Error(e);
+	} catch (final RuntimeException e) {
+	    e.printStackTrace();
+	    throw new Error(e);
+	} catch (final IOException e) {
+	    e.printStackTrace();
+	    throw new Error(e);
+	} finally {
+	    if (outputStream != null) {
+		try {
+		    outputStream.close();
+		} catch (final IOException e) {
+		    e.printStackTrace();
+		    throw new Error(e);
+		}
+		try {
+		    response.flushBuffer();
+		} catch (IOException e) {
+		    e.printStackTrace();
+		    throw new Error(e);
+		}
+	    }
+	}
+
+	return null;
+    }
+
+    public ActionForward simplifiedProcessStatisticsActivityTimeChartForProcess(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	final SimplifiedProcedureProcess simplifiedProcedureProcess = getDomainObject(request, "processId");
+
+	final SimplifiedProcessActivityLogStatistics simplifiedProcessActivityLogStatistics = SimplifiedProcessActivityLogStatistics.create(simplifiedProcedureProcess);
+
+	OutputStream outputStream = null;
+	try {
+	    final byte[] image = ChartGenerator.simplifiedProcessStatisticsActivityTimeImage(simplifiedProcessActivityLogStatistics);
+	    outputStream = response.getOutputStream();
+	    response.setContentType("image/jpeg");
+	    outputStream.write(image);
+	    outputStream.flush();
+	} catch (final FileNotFoundException e) {
+	    e.printStackTrace();
+	    throw new Error(e);
+	} catch (final RuntimeException e) {
+	    e.printStackTrace();
+	    throw new Error(e);
+	} catch (final IOException e) {
+	    e.printStackTrace();
+	    throw new Error(e);
+	} finally {
+	    if (outputStream != null) {
+		try {
+		    outputStream.close();
+		} catch (final IOException e) {
+		    e.printStackTrace();
+		    throw new Error(e);
+		}
+		try {
+		    response.flushBuffer();
+		} catch (IOException e) {
+		    e.printStackTrace();
 		    throw new Error(e);
 		}
 	    }

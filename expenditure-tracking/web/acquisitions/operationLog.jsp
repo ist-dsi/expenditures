@@ -27,7 +27,7 @@
 </logic:empty>
 
 
-<fr:view name="operationLogs" schema="<%= "viewLogFor" +  processClass%>">
+<fr:view name="operationLogs" schema="<%= "viewLogFor" +  processClass %>">
 	<fr:layout name="tabular">
 		<fr:property name="classes" value="tstyle2"/>
 		<fr:property name="columnClasses" value=",aleft,"/>
@@ -36,3 +36,6 @@
 </fr:view>
 
 
+<logic:equal name="process" property="class.name" value="pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess">
+	<html:img action="statistics.do?method=simplifiedProcessStatisticsActivityTimeChartForProcess" paramId="processId" paramName="process" paramProperty="OID"/>
+</logic:equal>

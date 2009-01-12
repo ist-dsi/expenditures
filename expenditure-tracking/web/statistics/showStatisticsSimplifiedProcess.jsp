@@ -20,18 +20,11 @@
 <br/>
 
 <logic:present name="simplifiedProcessStatistics">
-	Number of Processes: <bean:write name="simplifiedProcessStatistics" property="numberOfProcesses"/>
-
-	<logic:iterate id="entry" name="simplifiedProcessStatistics" property="numberOfProcessesByAcquisitionProcessStateType">
-		<bean:define id="acquisitionProcessStateType" name="entry" property="key"/>
-		<bean:define id="number" name="entry" property="value"/>
-		<br/>
-		<bean:write name="acquisitionProcessStateType" property="localizedName"/>
-		<bean:write name="number"/>
-	</logic:iterate>
-
+	<bean:message key="label.statistics.process.total.number" bundle="STATISTICS_RESOURCES"/> <bean:write name="simplifiedProcessStatistics" property="numberOfProcesses"/>
 	<html:img action="statistics.do?method=simplifiedProcessStatisticsChart" paramId="year" paramName="yearBean" paramProperty="year"/>
-
+	<br/>
+	<br/>
+	<html:img action="statistics.do?method=simplifiedProcessStatisticsTimeChart" paramId="year" paramName="yearBean" paramProperty="year"/>
 </logic:present>
 <logic:notPresent name="simplifiedProcessStatistics">
 	<bean:message key="label.statistics.not.available" bundle="STATISTICS_RESOURCES"/>

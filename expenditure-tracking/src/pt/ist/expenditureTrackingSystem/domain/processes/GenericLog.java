@@ -1,11 +1,25 @@
 package pt.ist.expenditureTrackingSystem.domain.processes;
 
+import java.util.Comparator;
+
 import org.joda.time.DateTime;
 
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
 public class GenericLog extends GenericLog_Base {
+
+    public static final Comparator<GenericLog> COMPARATOR_BY_WHEN = new Comparator<GenericLog>() {
+
+	@Override
+	public int compare(final GenericLog genericLog1, final GenericLog genericLog2) {
+	    final DateTime when1 = genericLog1.getWhenOperationWasRan();
+	    final DateTime when2 = genericLog2.getWhenOperationWasRan();
+	    final int result = when1.compareTo(when2);
+	    return result == 0 ? genericLog1.getIdInternal().compareTo(genericLog2.getIdInternal()) : result;
+	}
+	
+    };
 
     protected GenericLog() {
 	super();
