@@ -8,39 +8,38 @@
 
 <bean:define id="action" value="/acquisitionAfterTheFactAcquisitionProcess.do"/>
 
-<table class="tstyle3">
+<table class="tstyle2 tdleft">
 	<tr>
-		<td><bean:message key="label.filename" bundle="ACQUISITION_RESOURCES"/></td>
-		<td><bean:message key="label.processCount" bundle="ACQUISITION_RESOURCES"/></td>
-		<td><bean:message key="afterTheFactAcquisitionProcess.label.active" bundle="ACQUISITION_RESOURCES"/></td>
-		<td></td>
-		
+		<th><bean:message key="label.filename" bundle="ACQUISITION_RESOURCES"/></th>
+		<th><bean:message key="label.processCount" bundle="ACQUISITION_RESOURCES"/></th>
+		<th><bean:message key="afterTheFactAcquisitionProcess.label.active" bundle="ACQUISITION_RESOURCES"/></th>
+		<th></th>
 	</tr>
 <logic:iterate id="file" name="files" indexId="index">
 	<bean:define id="fileOID" name="file" property="OID"/>
 	<tr>
 		<td>
 			<html:link page='<%= action + "?method=downloadImportFile&fileOID=" + fileOID %>'>
-			<fr:view name="file" property="displayName" type="java.lang.String">
+				<fr:view name="file" property="displayName" type="java.lang.String">
 					<fr:layout name="null-as-label">
 						<fr:property name="subLayout" value=""/>
 					</fr:layout>
 				</fr:view>
-				</html:link>
+			</html:link>
 		</td>
 		<td><fr:view name="file" property="afterTheFactAcquisitionProcessesCount"/></td>
 		<td><fr:view name="file" property="active"/></td>
 		<td>
-				<logic:equal name="file" property="active" value="true">
-					<html:link page='<%= action + "?method=cancelImportFile&fileOID=" + fileOID %>'>
-						<bean:message key="link.cancel" bundle="EXPENDITURE_RESOURCES"/>
-					 </html:link>
-				 </logic:equal>
-				 <logic:equal name="file" property="active" value="false">
-					<html:link page='<%= action + "?method=enableImportFile&fileOID=" + fileOID %>'>
-						<bean:message key="link.reenable" bundle="EXPENDITURE_RESOURCES"/>
-					 </html:link>
-				 </logic:equal>
+			<logic:equal name="file" property="active" value="true">
+				<html:link page='<%= action + "?method=cancelImportFile&fileOID=" + fileOID %>'>
+					<bean:message key="link.cancel" bundle="EXPENDITURE_RESOURCES"/>
+				 </html:link>
+			 </logic:equal>
+			 <logic:equal name="file" property="active" value="false">
+				<html:link page='<%= action + "?method=enableImportFile&fileOID=" + fileOID %>'>
+					<bean:message key="link.reenable" bundle="EXPENDITURE_RESOURCES"/>
+				</html:link>
+			 </logic:equal>
 		</td>
 	</tr>
 </logic:iterate>

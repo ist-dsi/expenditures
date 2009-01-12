@@ -565,6 +565,7 @@ div.error1 {
 margin: 0.75em 0;
 padding: 0.4em 0.4em 0.4em 2.5em;
 background: #ffeddd url(../images/error01.gif) 0.5em 0.5em no-repeat;
+color: #cc1500;
 }
 div.error1 span {
 color: #cc1500;
@@ -595,11 +596,22 @@ background: #fbf2cf;
 div.warning2 p {
 margin: 0 0 0.75em 0 !important;
 }
-
 div.warning3 {
 margin: 0.75em 0;
 padding: 0.4em 0.4em 0.4em 2.5em;
 background: #fbf2cf url(../images/warning01.gif) 0.5em 0.5em no-repeat;
+}
+
+div.success1 {
+margin: 0.75em 0;
+padding: 0.5em 1.25em 0.75em 1.25em;
+background: #fbf2cf;
+margin: 1em 0;
+color: #447f18;
+border-top: 2px solid #b7d4a6;
+border-bottom: 2px solid #b7d4a6;
+background: #e0f6d3;
+}
 }
 
 table.tstyle1 {

@@ -10,8 +10,9 @@
 
 <logic:equal name="afterTheFactAcquisitionsImportBean" property="createData" value="true">
 	<logic:equal name="afterTheFactAcquisitionsImportBean" property="errorCount" value="0">
-		<div class="infoop5">
-			<bean:message key="label.afterTheFactAcquisition.import.lines" bundle="ACQUISITION_RESOURCES"/>: <bean:write name="afterTheFactAcquisitionsImportBean" property="importedLines"/>
+		<div class="success1">
+			<p class="mvert05"><strong>Ficheiro importado com sucesso.</strong></p>
+			<p class="mvert05"><bean:message key="label.afterTheFactAcquisition.import.lines" bundle="ACQUISITION_RESOURCES"/>: <bean:write name="afterTheFactAcquisitionsImportBean" property="importedLines"/></p>
 		</div>
 	</logic:equal>
 </logic:equal>
@@ -76,9 +77,7 @@
 
 <logic:equal name="afterTheFactAcquisitionsImportBean" property="createData" value="false">
 	<logic:equal name="afterTheFactAcquisitionsImportBean" property="errorCount" value="0">
-		<div class="infoop2">
-			<bean:message key="label.afterTheFactAcquisition.processDoneWishtoImport" bundle="ACQUISITION_RESOURCES"/>
-		</div> 
+		<p><bean:message key="label.afterTheFactAcquisition.processDoneWishtoImport" bundle="ACQUISITION_RESOURCES"/></p>
 		<fr:form action="/acquisitionAfterTheFactAcquisitionProcess.do?method=importAcquisitions">
 			<fr:edit id="bean" name="afterTheFactAcquisitionsImportBean" visible="false"/>
 			<html:submit styleClass="inputbutton"><bean:message key="label.import" bundle="ACQUISITION_RESOURCES"/></html:submit>

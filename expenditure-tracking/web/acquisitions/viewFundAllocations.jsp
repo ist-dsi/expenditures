@@ -7,9 +7,10 @@
 
 
 <h2><bean:message key="title.checkFundAllocations" bundle="EXPENDITURE_RESOURCES"/></h2>
+
 <fr:edit id="dateSelection"  name="bean" schema="dateIntervalBean.dateSelection" action="/acquisitionProcess.do?method=checkFundAllocations">
 	<fr:layout name="tabular">
-		<fr:property name="classes" value="form tstyle5"/>
+		<fr:property name="classes" value="form"/>
 	</fr:layout>
 </fr:edit>
 
@@ -21,7 +22,7 @@
 	
 	<fr:view name="processes" schema="list.processes">
 		<fr:layout name="tabular">
-			<fr:property name="classes" value="tstyle2"/>		
+			<fr:property name="classes" value="tstyle2 mtop15"/>		
 		</fr:layout>
 	</fr:view>
 </logic:notEmpty>
