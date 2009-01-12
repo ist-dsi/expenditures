@@ -49,10 +49,10 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
 	return logs;
     }
 
-    public void approveBy(Person person) {
+    public void authorizeBy(Person person) {
 	getAcquisitionRequest().approvedBy(person);
 	if (getAcquisitionRequest().isApprovedByAllResponsibles()) {
-	    approve();
+	    authorize();
 	}
     }
 
@@ -83,7 +83,7 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
 	new AcquisitionProcessState(this, AcquisitionProcessStateType.CANCELED);
     }
 
-    protected void approve() {
+    protected void authorize() {
 	new AcquisitionProcessState(this, AcquisitionProcessStateType.AUTHORIZED);
     }
 

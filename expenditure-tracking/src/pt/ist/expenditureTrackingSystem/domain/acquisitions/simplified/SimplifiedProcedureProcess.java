@@ -16,7 +16,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericRe
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.AddAcquisitionProposalDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.AllocateFundsPermanently;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.AllocateProjectFundsPermanently;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ApproveAcquisitionProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.AuthorizeAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.CancelAcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ChangeAcquisitionProposalDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ChangeFinancersAccountingUnit;
@@ -86,7 +86,7 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	requestInformationActivities.add(new SubmitForFundAllocation());
 	requestInformationActivities.add(new FundAllocationExpirationDate());
 
-	requestInformationActivities.add(new ApproveAcquisitionProcess());
+	requestInformationActivities.add(new AuthorizeAcquisitionProcess());
 	requestInformationActivities.add(new RejectAcquisitionProcess());
 
 	requestInformationActivities.add(new AllocateProjectFundsPermanently());

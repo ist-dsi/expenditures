@@ -5,7 +5,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionPr
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
-public class ApproveAcquisitionProcess extends GenericAcquisitionProcessActivity {
+public class AuthorizeAcquisitionProcess extends GenericAcquisitionProcessActivity {
 
     @Override
     protected boolean isAccessible(RegularAcquisitionProcess process) {
@@ -24,7 +24,7 @@ public class ApproveAcquisitionProcess extends GenericAcquisitionProcessActivity
     @Override
     protected void process(RegularAcquisitionProcess process, Object... objects) {
 	Person person = (Person) objects[0];
-	process.approveBy(person);
+	process.authorizeBy(person);
     }
 
 }

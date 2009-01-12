@@ -12,7 +12,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionPr
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAddPayingUnit;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAssignPayingUnitToItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericRemovePayingUnit;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ApproveAcquisitionProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.AuthorizeAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.CancelAcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.CreateAcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.DeleteAcquisitionRequestItem;
@@ -57,7 +57,7 @@ public class StandardProcedureProcess extends StandardProcedureProcess_Base {
 	// requestInformationActivities.add(new SubmitForFundAllocation());
 	// requestInformationActivities.add(new FundAllocationExpirationDate());
 
-	requestInformationActivities.add(new ApproveAcquisitionProcess());
+	requestInformationActivities.add(new AuthorizeAcquisitionProcess());
 	requestInformationActivities.add(new RejectAcquisitionProcess());
 
 	// requestInformationActivities.add(new

@@ -241,10 +241,10 @@ public class RegularAcquisitionProcessAction extends PaymentProcessAction {
 	return executeActivityAndViewProcess(mapping, form, request, response, "SubmitForApproval");
     }
 
-    public ActionForward executeApproveAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
+    public ActionForward executeAuthorizeAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	User user = UserView.getUser();
-	return executeActivityAndViewProcess(mapping, form, request, response, "ApproveAcquisitionProcess", user.getPerson());
+	return executeActivityAndViewProcess(mapping, form, request, response, "AuthorizeAcquisitionProcess", user.getPerson());
     }
 
     public ActionForward executeRejectAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
