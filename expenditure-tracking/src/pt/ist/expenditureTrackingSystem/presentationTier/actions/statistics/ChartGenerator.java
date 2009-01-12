@@ -131,13 +131,13 @@ public class ChartGenerator {
     public static byte[] simplifiedProcessStatisticsImage(final SimplifiedProcessStatistics simplifiedProcessStatistics)
     		throws RuntimeException, IOException {
 	final CategoryDataset dataset = simplifiedProcessStatisticsChart(simplifiedProcessStatistics);
-	return createBarChartImage(dataset, "Número de Processos por Estado");
+	return createBarChartImage(dataset, "Número de Processos");
     }
 
     public static byte[] simplifiedProcessStatisticsActivityTimeImage(final SimplifiedProcessActivityLogStatistics simplifiedProcessActivityLogStatistics)
 	throws RuntimeException, IOException {
 	final CategoryDataset dataset = simplifiedProcessStatisticsActivityTimeChart(simplifiedProcessActivityLogStatistics);
-	return createBarChartImage(dataset, "Dias por Actividade");
+	return createBarChartImage(dataset, "Tempo por Actividade (em Dias)");
     }
 
 }

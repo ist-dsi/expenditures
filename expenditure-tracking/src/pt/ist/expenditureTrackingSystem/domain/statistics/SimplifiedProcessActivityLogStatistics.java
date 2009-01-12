@@ -13,7 +13,6 @@ import org.joda.time.DateTime;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessYear;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.OperationLog;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericLog;
@@ -72,14 +71,14 @@ public class SimplifiedProcessActivityLogStatistics implements Serializable {
     }
 
     private void register(final SimplifiedProcedureProcess simplifiedProcedureProcess) {
-	final List<OperationLog> operationLogs = new ArrayList<OperationLog>(simplifiedProcedureProcess.getOperationLogs());
+	final List<GenericLog> operationLogs = new ArrayList<GenericLog>(simplifiedProcedureProcess.getExecutionLogsSet());
 	Collections.sort(operationLogs, GenericLog.COMPARATOR_BY_WHEN);
 
 	final Set<LogEntry> logEntrySet = new HashSet<LogEntry>();
 
 	for (int i = 1; i < operationLogs.size(); i++) {
-	    final OperationLog operationLog = operationLogs.get(i);
-	    final OperationLog previousLog = operationLogs.get(i - 1);
+	    final GenericLog operationLog = operationLogs.get(i);
+	    final GenericLog previousLog = operationLogs.get(i - 1);
 
 	    final long duration = calculateDuration(operationLog, previousLog);
 
@@ -93,7 +92,7 @@ public class SimplifiedProcessActivityLogStatistics implements Serializable {
 	}
     }
 
-    private long calculateDuration(final OperationLog operationLog, final OperationLog previousLog) {
+    private long calculateDuration(final GenericLog operationLog, final GenericLog previousLog) {
 	final DateTime dateTime = operationLog.getWhenOperationWasRan();
 	final DateTime previousDateTime = previousLog.getWhenOperationWasRan();
 	return dateTime.getMillis() - previousDateTime.getMillis();
