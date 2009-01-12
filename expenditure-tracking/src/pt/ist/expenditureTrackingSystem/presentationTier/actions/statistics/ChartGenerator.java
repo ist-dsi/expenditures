@@ -19,7 +19,7 @@ import org.jfree.data.DefaultCategoryDataset;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.AllocateFundsPermanently;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.AllocateProjectFundsPermanently;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ApproveAcquisitionProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.AuthorizeAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ConfirmInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.CreateAcquisitionPurchaseOrderDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.FixInvoice;
@@ -114,7 +114,7 @@ public class ChartGenerator {
 		|| clazz == SkipPurchaseOrderDocument.class
 		|| clazz == SubmitForApproval.class
 		|| clazz == SubmitForFundAllocation.class
-		|| clazz == ApproveAcquisitionProcess.class
+		|| clazz == AuthorizeAcquisitionProcess.class
 		|| clazz == AllocateProjectFundsPermanently.class
 		|| clazz == AllocateFundsPermanently.class
 		|| clazz == ProjectFundAllocation.class
