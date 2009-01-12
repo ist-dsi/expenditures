@@ -13,7 +13,7 @@ public class SendPurchaseOrderToSupplier extends GenericAcquisitionProcessActivi
 
     @Override
     protected boolean isAvailable(RegularAcquisitionProcess process) {
-	return  super.isAvailable(process) && process.getAcquisitionProcessState().isApproved()
+	return  super.isAvailable(process) && process.getAcquisitionProcessState().isAuthorized()
 		&& process.getAcquisitionRequest().hasPurchaseOrderDocument();
     }
 

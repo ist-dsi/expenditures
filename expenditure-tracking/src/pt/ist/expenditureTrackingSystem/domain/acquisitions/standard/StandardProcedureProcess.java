@@ -174,7 +174,7 @@ public class StandardProcedureProcess extends StandardProcedureProcess_Base {
 	availableStates.add(AcquisitionProcessStateType.SUBMITTED_FOR_FUNDS_ALLOCATION);
 	availableStates.add(AcquisitionProcessStateType.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER);
 	availableStates.add(AcquisitionProcessStateType.FUNDS_ALLOCATED);
-	availableStates.add(AcquisitionProcessStateType.APPROVED);
+	availableStates.add(AcquisitionProcessStateType.AUTHORIZED);
 	availableStates.add(AcquisitionProcessStateType.INVITES_SENT);
 	availableStates.add(AcquisitionProcessStateType.IN_NEGOTIATION);
 	availableStates.add(AcquisitionProcessStateType.NEGOTIATION_ENDED);

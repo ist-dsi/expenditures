@@ -84,7 +84,7 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
     }
 
     protected void approve() {
-	new AcquisitionProcessState(this, AcquisitionProcessStateType.APPROVED);
+	new AcquisitionProcessState(this, AcquisitionProcessStateType.AUTHORIZED);
     }
 
     protected void confirmInvoice() {

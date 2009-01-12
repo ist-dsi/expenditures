@@ -134,7 +134,7 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	availableStates.add(AcquisitionProcessStateType.SUBMITTED_FOR_FUNDS_ALLOCATION);
 	availableStates.add(AcquisitionProcessStateType.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER);
 	availableStates.add(AcquisitionProcessStateType.FUNDS_ALLOCATED);
-	availableStates.add(AcquisitionProcessStateType.APPROVED);
+	availableStates.add(AcquisitionProcessStateType.AUTHORIZED);
 	availableStates.add(AcquisitionProcessStateType.ACQUISITION_PROCESSED);
 	availableStates.add(AcquisitionProcessStateType.INVOICE_RECEIVED);
 	availableStates.add(AcquisitionProcessStateType.SUBMITTED_FOR_CONFIRM_INVOICE);

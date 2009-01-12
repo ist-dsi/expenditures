@@ -51,12 +51,8 @@ public class AcquisitionProcessState extends AcquisitionProcessState_Base {
 	return isInState(AcquisitionProcessStateType.SUBMITTED_FOR_FUNDS_ALLOCATION);
     }
 
-    public boolean isApproved() {
-	return isAuthorized();
-    }
-
     public boolean isAuthorized() {
-	return isInState(AcquisitionProcessStateType.APPROVED); 
+	return isInState(AcquisitionProcessStateType.AUTHORIZED); 
     }
 
     public boolean isAllocatedToSupplier() {

@@ -35,7 +35,7 @@ public enum AcquisitionProcessStateType {
 
     FUNDS_ALLOCATED,
 
-    APPROVED,
+    AUTHORIZED,
 
     INVITES_SENT, 
     
