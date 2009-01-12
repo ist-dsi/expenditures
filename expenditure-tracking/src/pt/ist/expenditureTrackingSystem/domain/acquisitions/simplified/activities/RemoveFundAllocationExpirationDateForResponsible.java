@@ -27,7 +27,7 @@ public class RemoveFundAllocationExpirationDateForResponsible extends GenericAcq
 	final User user = UserView.getUser();
 	final Person person = user.getPerson();
 	process.setFundAllocationExpirationDate(null);
-	process.getAcquisitionRequest().unapproveBy(person);
+	process.getAcquisitionRequest().unathorizeBy(person);
 	process.submitForApproval();
     }
 

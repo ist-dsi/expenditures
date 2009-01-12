@@ -11,7 +11,7 @@ public class RejectAcquisitionProcess extends GenericAcquisitionProcessActivity 
     protected boolean isAccessible(RegularAcquisitionProcess process) {
 	User user = getUser();
 	return user != null && process.isResponsibleForUnit(user.getPerson())
-		&& !process.getAcquisitionRequest().hasBeenApprovedBy(user.getPerson());
+		&& !process.getAcquisitionRequest().hasBeenAuthorizedBy(user.getPerson());
     }
 
     @Override

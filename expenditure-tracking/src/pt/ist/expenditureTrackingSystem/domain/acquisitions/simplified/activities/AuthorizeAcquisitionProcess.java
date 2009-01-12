@@ -13,7 +13,7 @@ public class AuthorizeAcquisitionProcess extends GenericAcquisitionProcessActivi
 	return user != null
 		&& process.isResponsibleForUnit(user.getPerson(), process.getAcquisitionRequest()
 			.getTotalItemValueWithAdditionalCostsAndVat())
-		&& !process.getAcquisitionRequest().hasBeenApprovedBy(user.getPerson());
+		&& !process.getAcquisitionRequest().hasBeenAuthorizedBy(user.getPerson());
     }
 
     @Override

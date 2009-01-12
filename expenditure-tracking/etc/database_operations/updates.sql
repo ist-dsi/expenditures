@@ -1,1 +1,3 @@
+UPDATE PROCESS_STATE set ACQUISITION_PROCESS_STATE_TYPE="AUTHORIZED" WHERE ACQUISITION_PROCESS_STATE_TYPE="APPROVED" AND OJB_CONCRETE_CLASS="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessState";
 
+UPDATE GENERIC_LOG SET STATE="AUTHORIZED" WHERE STATE="APPROVED" AND OJB_CONCRETE_CLASS="pt.ist.expenditureTrackingSystem.domain.acquisitions.OperationLog";

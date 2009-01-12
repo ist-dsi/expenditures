@@ -31,7 +31,7 @@ public class CancelAcquisitionRequest extends GenericAcquisitionProcessActivity 
 	return user != null
 		&& process.isResponsibleForUnit(user.getPerson(), process.getAcquisitionRequest()
 			.getTotalItemValueWithAdditionalCostsAndVat())
-		&& !process.getAcquisitionRequest().hasBeenApprovedBy(user.getPerson());
+		&& !process.getAcquisitionRequest().hasBeenAuthorizedBy(user.getPerson());
     }
 
     private boolean isUserResponsibleForUnit(RegularAcquisitionProcess process) {

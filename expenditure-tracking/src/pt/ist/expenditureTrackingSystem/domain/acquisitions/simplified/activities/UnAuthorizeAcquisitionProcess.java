@@ -22,7 +22,7 @@ public class UnAuthorizeAcquisitionProcess extends GenericAcquisitionProcessActi
 	final Person person = user.getPerson();
 	final AcquisitionRequest acquisitionRequest = process.getRequest();
 	return super.isAvailable(process)
-		&& acquisitionRequest.hasBeenApprovedBy(person)
+		&& acquisitionRequest.hasBeenAuthorizedBy(person)
 		&& (process.getAcquisitionProcessState().isInAllocatedToUnitState() || process.isInAuthorizedState());
     }
 
@@ -30,7 +30,7 @@ public class UnAuthorizeAcquisitionProcess extends GenericAcquisitionProcessActi
     protected void process(RegularAcquisitionProcess process, Object... objects) {
 	final User user = UserView.getUser();
 	final Person person = user.getPerson();
-	process.getAcquisitionRequest().unapproveBy(person);
+	process.getAcquisitionRequest().unathorizeBy(person);
 	process.allocateFundsToUnit();
     }
 

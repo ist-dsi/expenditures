@@ -50,8 +50,8 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
     }
 
     public void authorizeBy(Person person) {
-	getAcquisitionRequest().approvedBy(person);
-	if (getAcquisitionRequest().isApprovedByAllResponsibles()) {
+	getAcquisitionRequest().authorizeBy(person);
+	if (getAcquisitionRequest().isAuthorizedByAllResponsibles()) {
 	    authorize();
 	}
     }
