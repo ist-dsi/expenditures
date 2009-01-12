@@ -34,7 +34,7 @@ public class UnitItemBean implements Serializable {
 	UnitItem unitItem = item.getUnitItemFor(unit);
 	if (unitItem != null) {
 	    setAssigned(Boolean.TRUE);
-	    setApproved(unitItem.getItemApproved());
+	    setApproved(unitItem.getItemAuthorized());
 	    setShareValue(unitItem.getShareValue());
 	}
     }

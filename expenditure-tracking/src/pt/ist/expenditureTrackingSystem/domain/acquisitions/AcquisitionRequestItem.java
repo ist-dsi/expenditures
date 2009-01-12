@@ -255,7 +255,7 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
     private void modifyAuthorizationStateFor(Person person, Boolean value) {
 	for (UnitItem unitItem : getUnitItems()) {
 	    if (unitItem.getUnit().isResponsible(person)) {
-		unitItem.setItemApproved(value);
+		unitItem.setItemAuthorized(value);
 	    }
 	}
     }
@@ -286,7 +286,7 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 
     public boolean hasAtLeastOneResponsibleApproval() {
 	for (UnitItem unitItem : getUnitItems()) {
-	    if (unitItem.getItemApproved()) {
+	    if (unitItem.getItemAuthorized()) {
 		return true;
 	    }
 	}
@@ -295,7 +295,7 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 
     public boolean isAuthorized() {
 	for (UnitItem unitItem : getUnitItems()) {
-	    if (!unitItem.getItemApproved()) {
+	    if (!unitItem.getItemAuthorized()) {
 		return false;
 	    }
 	}
@@ -313,7 +313,7 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 
     public boolean hasBeenAuthorizedBy(Person person) {
 	for (UnitItem unitItem : getUnitItems()) {
-	    if (unitItem.getUnit().isResponsible(person) && unitItem.getItemApproved()) {
+	    if (unitItem.getUnit().isResponsible(person) && unitItem.getItemAuthorized()) {
 		return true;
 	    }
 	}

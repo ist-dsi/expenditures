@@ -59,7 +59,7 @@ public class RefundItem extends RefundItem_Base {
 
     public boolean hasAtLeastOneResponsibleApproval() {
 	for (UnitItem unitItem : getUnitItems()) {
-	    if (unitItem.getItemApproved()) {
+	    if (unitItem.getItemAuthorized()) {
 		return true;
 	    }
 	}

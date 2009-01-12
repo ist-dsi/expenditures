@@ -10,15 +10,15 @@ import pt.ist.fenixframework.pstm.Transaction;
 
 public class UnitItem extends UnitItem_Base {
 
-    public UnitItem(Financer financer, RequestItem item, Money shareValue, Boolean isApproved,
+    public UnitItem(Financer financer, RequestItem item, Money shareValue, Boolean isAuthorized,
 	    Boolean isSubmitedForFundsAllocation) {
 
-	checkParameters(financer, item, shareValue, isApproved);
+	checkParameters(financer, item, shareValue, isAuthorized);
 
 	setFinancer(financer);
 	setItem(item);
 	setShareValue(shareValue);
-	setItemApproved(isApproved);
+	setItemAuthorized(isAuthorized);
 	setSubmitedForFundsAllocation(isSubmitedForFundsAllocation);
 	setInvoiceConfirmed(Boolean.FALSE);
     }

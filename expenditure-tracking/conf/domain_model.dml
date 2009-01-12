@@ -94,7 +94,7 @@ class acquisitions.AcquisitionRequestItem extends acquisitions.RequestItem {
 
 class acquisitions.UnitItem {
 	Boolean submitedForFundsAllocation;
-	Boolean itemApproved;
+	Boolean itemAuthorized;
 	Boolean invoiceConfirmed;
 	Money shareValue;
 	Money realShareValue;
