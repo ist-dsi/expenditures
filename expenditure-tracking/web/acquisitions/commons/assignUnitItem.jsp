@@ -20,7 +20,7 @@
 </bean:define>
 
 <bean:define id="maxValue" name="item" property="value.roundedValue"/>
-<jsp:include page="../commons/defaultErrorDisplay.jsp"/>
+<jsp:include page="../../commons/defaultErrorDisplay.jsp"/>
 
 <h3 class="mbottom05"><bean:message key="acquisitionProcess.label.assignPayingUnitToItem" bundle="ACQUISITION_RESOURCES"/></h3>
 <p class="mvert05"><bean:message key="acquisitionProcess.label.assignPayingUnitToItem.description" bundle="ACQUISITION_RESOURCES"/></p>
