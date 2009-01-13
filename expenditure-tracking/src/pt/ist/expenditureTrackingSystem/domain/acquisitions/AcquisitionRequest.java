@@ -10,7 +10,6 @@ import org.joda.time.LocalDate;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean;
-import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
@@ -353,13 +352,6 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     public void unSubmitForFundsAllocation() {
 	for (AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
 	    acquisitionRequestItem.unSubmitForFundsAllocation();
-	}
-
-    }
-
-    public void unSubmitForFundsAllocation(final Person person) {
-	for (AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
-	    acquisitionRequestItem.unSubmitForFundsAllocation(person);
 	}
 
     }

@@ -243,4 +243,10 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
     public boolean isInGenesis() {
 	return getAcquisitionProcessState().isInGenesis();
     }
+
+    @Override
+    public boolean isInApprovedState() {
+	return getAcquisitionProcessState().isInApprovedState();
+    }
+
 }

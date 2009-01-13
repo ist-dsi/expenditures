@@ -111,4 +111,8 @@ public class AcquisitionProcessState extends AcquisitionProcessState_Base {
 	return getAcquisitionProcessStateType().compareTo(AcquisitionProcessStateType.FUNDS_ALLOCATED_PERMANENTLY) >= 0;
     }
 
+    public boolean isInApprovedState() {
+	return isPendingFundAllocation();
+    }
+
 }

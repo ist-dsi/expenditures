@@ -216,5 +216,11 @@ public class RequestWithPayment extends RequestWithPayment_Base {
 	}
 	return true;
     }
-    
+
+    public void unSubmitForFundsAllocation(final Person person) {
+	for (final RequestItem requestItem : getRequestItemsSet()) {
+	    requestItem.unSubmitForFundsAllocation(person);
+	}
+    }
+
 }

@@ -30,5 +30,9 @@ public class RefundProcessState extends RefundProcessState_Base {
     public boolean isPendingApproval() {
 	return getRefundProcessStateType() == RefundProcessStateType.SUBMITTED_FOR_APPROVAL;
     }
+
+    public boolean isInApprovedState() {
+	return getRefundProcessStateType() == RefundProcessStateType.APPROVED;
+    }
     
 }

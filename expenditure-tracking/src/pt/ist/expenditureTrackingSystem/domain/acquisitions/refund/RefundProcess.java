@@ -165,4 +165,10 @@ public class RefundProcess extends RefundProcess_Base {
 	new RefundProcessState(this, RefundProcessStateType.APPROVED);
     }
 
+    @Override
+    public boolean isInApprovedState() {
+	return getProcessState().isInApprovedState();
+    }
+
+
 }
