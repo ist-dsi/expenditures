@@ -109,4 +109,14 @@ public class AfterTheFactAcquisitionProcess extends AfterTheFactAcquisitionProce
     public void submitForApproval() {
 	// nothing to do here...
     }
+    @Override
+    public boolean isInAllocatedToUnitState() {
+	return false;
+    }
+
+    @Override
+    protected void authorize() {
+	// nothing to do here...
+    }
+
 }

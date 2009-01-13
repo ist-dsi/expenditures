@@ -158,18 +158,6 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 	return getAcquisitionRequest().checkRealValues();
     }
 
-    public boolean isResponsibleForUnit(Person person, Money amount) {
-	Set<Authorization> validAuthorizations = person.getValidAuthorizations();
-	for (Unit unit : getPayingUnits()) {
-	    for (Authorization authorization : validAuthorizations) {
-		if (authorization.getMaxAmount().isGreaterThanOrEqual(amount) && unit.isSubUnit(authorization.getUnit())) {
-		    return true;
-		}
-	    }
-	}
-	return false;
-    }
-
     public Integer getYear() {
 	return getAcquisitionProcessYear().getYear();
     }

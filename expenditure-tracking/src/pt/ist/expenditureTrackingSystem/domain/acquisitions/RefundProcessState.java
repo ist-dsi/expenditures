@@ -34,5 +34,9 @@ public class RefundProcessState extends RefundProcessState_Base {
     public boolean isInApprovedState() {
 	return getRefundProcessStateType() == RefundProcessStateType.APPROVED;
     }
+
+    public boolean isInAllocatedToUnitState() {
+	return getRefundProcessStateType() == RefundProcessStateType.FUNDS_ALLOCATED;
+    }
     
 }

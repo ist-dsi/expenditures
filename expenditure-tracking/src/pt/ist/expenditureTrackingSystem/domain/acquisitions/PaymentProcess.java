@@ -137,4 +137,28 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
     public abstract void allocateFundsToUnit();
     
         public abstract void submitForApproval();
+
+    public abstract boolean isInAllocatedToUnitState();
+
+    protected abstract void authorize();
+
+    public boolean isResponsibleForUnit(final Person person, final Money amount) {
+	Set<Authorization> validAuthorizations = person.getValidAuthorizations();
+	for (Unit unit : getPayingUnits()) {
+	    for (Authorization authorization : validAuthorizations) {
+		if (authorization.getMaxAmount().isGreaterThanOrEqual(amount) && unit.isSubUnit(authorization.getUnit())) {
+		    return true;
+		}
+	    }
+	}
+	return false;
+    }
+
+    public void authorizeBy(final Person person) {
+	getRequest().authorizeBy(person);
+	if (getRequest().isAuthorizedByAllResponsibles()) {
+	    authorize();
+	}
+    }
+
 }

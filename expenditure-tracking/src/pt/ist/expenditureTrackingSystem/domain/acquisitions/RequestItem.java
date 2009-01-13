@@ -93,4 +93,55 @@ public abstract class RequestItem extends RequestItem_Base {
 	return true;
     }
 
+    public boolean hasBeenAuthorizedBy(final Person person) {
+	for (UnitItem unitItem : getUnitItems()) {
+	    if (unitItem.getUnit().isResponsible(person) && unitItem.getItemAuthorized()) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
+    public void authorizeBy(Person person) {
+	modifyAuthorizationStateFor(person, Boolean.TRUE);
+    }
+
+    public void unathorizeBy(Person person) {
+	modifyAuthorizationStateFor(person, Boolean.FALSE);
+    }
+
+    private void modifyInvoiceState(Person person, Boolean value) {
+	for (UnitItem unitItem : getUnitItems()) {
+	    if (unitItem.getUnit().isResponsible(person)) {
+		unitItem.setInvoiceConfirmed(value);
+	    }
+	}
+    }
+
+    public void confirmInvoiceBy(Person person) {
+	modifyInvoiceState(person, Boolean.TRUE);
+    }
+
+    public void unconfirmInvoiceBy(Person person) {
+	modifyInvoiceState(person, Boolean.FALSE);
+    }
+
+    private void modifyAuthorizationStateFor(Person person, Boolean value) {
+	for (UnitItem unitItem : getUnitItems()) {
+	    if (unitItem.getUnit().isResponsible(person)) {
+		unitItem.setItemAuthorized(value);
+	    }
+	}
+    }
+
+    public boolean isAuthorized() {
+	for (UnitItem unitItem : getUnitItems()) {
+	    if (!unitItem.getItemAuthorized()) {
+		return false;
+	    }
+	}
+	return true;
+    }
+
+
 }

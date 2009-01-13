@@ -12,6 +12,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess.ActivityScope;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.Authorize;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.FundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAddPayingUnit;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAssignPayingUnitToItem;
@@ -46,6 +47,7 @@ public class RefundProcess extends RefundProcess_Base {
 	requestActivitites.add(new UnApprove<RefundProcess>());
 	requestActivitites.add(new ProjectFundAllocation<RefundProcess>());
 	requestActivitites.add(new FundAllocation<RefundProcess>());
+	requestActivitites.add(new Authorize<RefundProcess>());
 	activityMap.put(ActivityScope.REQUEST_INFORMATION, requestActivitites);
 
 	List<AbstractActivity<RefundProcess>> itemActivities = new ArrayList<AbstractActivity<RefundProcess>>();
@@ -178,6 +180,16 @@ public class RefundProcess extends RefundProcess_Base {
     }
 
     @Override
+    public boolean isInAllocatedToUnitState() {
+	return getProcessState().isInAllocatedToUnitState();
+    }
+
+    @Override
+    protected void authorize() {
+	new RefundProcessState(this, RefundProcessStateType.AUTHORIZED);
+    }
+
+    @Override
     public boolean isPendingFundAllocation() {
 	return isInApprovedState();
     }
@@ -186,4 +198,5 @@ public class RefundProcess extends RefundProcess_Base {
     public void allocateFundsToUnit() {
 	new RefundProcessState(this, RefundProcessStateType.FUNDS_ALLOCATED);
     }
+
 }

@@ -223,4 +223,29 @@ public class RequestWithPayment extends RequestWithPayment_Base {
 	}
     }
 
+    public boolean hasBeenAuthorizedBy(final Person person) {
+	for (final RequestItem requestItem : getRequestItemsSet()) {
+	    if (requestItem.hasBeenAuthorizedBy(person)) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
+    public void authorizeBy(final Person person) {
+	for (final RequestItem requestItem : getRequestItemsSet()) {
+	    requestItem.authorizeBy(person);
+	}
+    }
+
+    public boolean isAuthorizedByAllResponsibles() {
+	for (final RequestItem requestItem : getRequestItemsSet()) {
+	    if (!requestItem.isAuthorized()) {
+		return false;
+	    }
+	}
+	return true;
+    }
+
+
 }

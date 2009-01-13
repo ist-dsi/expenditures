@@ -252,38 +252,6 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	return payingUnits;
     }
 
-    private void modifyAuthorizationStateFor(Person person, Boolean value) {
-	for (UnitItem unitItem : getUnitItems()) {
-	    if (unitItem.getUnit().isResponsible(person)) {
-		unitItem.setItemAuthorized(value);
-	    }
-	}
-    }
-
-    public void authorizeBy(Person person) {
-	modifyAuthorizationStateFor(person, Boolean.TRUE);
-    }
-
-    public void unathorizeBy(Person person) {
-	modifyAuthorizationStateFor(person, Boolean.FALSE);
-    }
-
-    private void modifyInvoiceState(Person person, Boolean value) {
-	for (UnitItem unitItem : getUnitItems()) {
-	    if (unitItem.getUnit().isResponsible(person)) {
-		unitItem.setInvoiceConfirmed(value);
-	    }
-	}
-    }
-
-    public void confirmInvoiceBy(Person person) {
-	modifyInvoiceState(person, Boolean.TRUE);
-    }
-
-    public void unconfirmInvoiceBy(Person person) {
-	modifyInvoiceState(person, Boolean.FALSE);
-    }
-
     public boolean hasAtLeastOneResponsibleApproval() {
 	for (UnitItem unitItem : getUnitItems()) {
 	    if (unitItem.getItemAuthorized()) {
@@ -293,15 +261,6 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	return false;
     }
 
-    public boolean isAuthorized() {
-	for (UnitItem unitItem : getUnitItems()) {
-	    if (!unitItem.getItemAuthorized()) {
-		return false;
-	    }
-	}
-	return true;
-    }
-
     public boolean isInvoiceConfirmed() {
 	for (UnitItem unitItem : getUnitItems()) {
 	    if (!unitItem.getInvoiceConfirmed()) {
@@ -309,15 +268,6 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	    }
 	}
 	return true;
-    }
-
-    public boolean hasBeenAuthorizedBy(Person person) {
-	for (UnitItem unitItem : getUnitItems()) {
-	    if (unitItem.getUnit().isResponsible(person) && unitItem.getItemAuthorized()) {
-		return true;
-	    }
-	}
-	return false;
     }
 
     public boolean isInvoiceConfirmedBy(Person person) {

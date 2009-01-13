@@ -256,12 +256,6 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	return true;
     }
 
-    public void authorizeBy(Person person) {
-	for (AcquisitionRequestItem item : getAcquisitionRequestItemsSet()) {
-	    item.authorizeBy(person);
-	}
-    }
-
     public void unathorizeBy(Person person) {
 	for (AcquisitionRequestItem item : getAcquisitionRequestItemsSet()) {
 	    item.unathorizeBy(person);
@@ -271,24 +265,6 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     public boolean isAuthorizedByAtLeastOneResponsible() {
 	for (AcquisitionRequestItem item : getAcquisitionRequestItemsSet()) {
 	    if (item.hasAtLeastOneResponsibleApproval()) {
-		return true;
-	    }
-	}
-	return false;
-    }
-
-    public boolean isAuthorizedByAllResponsibles() {
-	for (AcquisitionRequestItem item : getAcquisitionRequestItemsSet()) {
-	    if (!item.isAuthorized()) {
-		return false;
-	    }
-	}
-	return true;
-    }
-
-    public boolean hasBeenAuthorizedBy(Person person) {
-	for (AcquisitionRequestItem item : getAcquisitionRequestItemsSet()) {
-	    if (item.hasBeenAuthorizedBy(person)) {
 		return true;
 	    }
 	}

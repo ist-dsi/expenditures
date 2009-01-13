@@ -50,13 +50,6 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
 	return logs;
     }
 
-    public void authorizeBy(Person person) {
-	getAcquisitionRequest().authorizeBy(person);
-	if (getAcquisitionRequest().isAuthorizedByAllResponsibles()) {
-	    authorize();
-	}
-    }
-
     public void confirmInvoiceBy(Person person) {
 	getAcquisitionRequest().confirmInvoiceFor(person);
 	if (getAcquisitionRequest().isInvoiceConfirmedBy()) {
@@ -206,6 +199,11 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
     public void removeFundAllocationExpirationDate() {
 	setFundAllocationExpirationDate(null);
 	submitForFundAllocation();
+    }
+
+    @Override
+    public boolean isInAllocatedToUnitState() {
+	return getAcquisitionProcessState().isInAllocatedToUnitState();
     }
 
 }
