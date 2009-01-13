@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.imageio.ImageIO;
+
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.AxisLocation;
@@ -38,9 +40,6 @@ import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.domain.statistics.SimplifiedProcessActivityLogStatistics;
 import pt.ist.expenditureTrackingSystem.domain.statistics.SimplifiedProcessStatistics;
 import pt.ist.expenditureTrackingSystem.domain.statistics.SimplifiedProcessActivityLogStatistics.LogEntry;
-import sun.awt.image.codec.JPEGImageEncoderImpl;
-
-import com.sun.image.codec.jpeg.JPEGImageEncoder;
 
 public class ChartGenerator {
 
@@ -62,9 +61,8 @@ public class ChartGenerator {
     		throws RuntimeException, IOException {
 	final JFreeChart chart = createBarChart(categoryDataset, title);
 	final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-	final JPEGImageEncoder imageEncoder = new JPEGImageEncoderImpl(outputStream);
 	final BufferedImage bufferedImage = chart.createBufferedImage(625, 475);
-	imageEncoder.encode(bufferedImage);
+	ImageIO.write(bufferedImage, "png", outputStream);
 	bufferedImage.flush();
 	outputStream.close();
 	return outputStream.toByteArray();	
