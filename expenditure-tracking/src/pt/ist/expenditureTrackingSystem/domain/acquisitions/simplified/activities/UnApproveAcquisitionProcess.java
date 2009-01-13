@@ -19,7 +19,7 @@ public class UnApproveAcquisitionProcess extends GenericAcquisitionProcessActivi
 	final User user = UserView.getUser();
 	final Person person = user.getPerson();
 	return super.isAvailable(process) && process.getFundAllocationExpirationDate() == null
-		&& process.getAcquisitionRequest().hasBeenSubmittedForFundsAllocationBy(person);
+		&& process.getAcquisitionRequest().hasBeenApprovedBy(person);
     }
 
     @Override

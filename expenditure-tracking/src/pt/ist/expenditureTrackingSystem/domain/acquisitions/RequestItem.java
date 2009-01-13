@@ -3,6 +3,7 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 import java.math.BigDecimal;
 
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.util.Money;
 import pt.ist.fenixframework.pstm.Transaction;
@@ -57,5 +58,39 @@ public abstract class RequestItem extends RequestItem_Base {
     }
 
     public abstract void createUnitItem(Unit unit, Money shareValue);
+
+    public boolean hasBeenApprovedBy(final Person person) {
+	for (final UnitItem unitItem : getUnitItems()) {
+	    if (unitItem.getUnit().isResponsible(person) && unitItem.getSubmitedForFundsAllocation()) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
+    public void submittedForFundsAllocation(final Person person) {
+	modifySubmittedForFundsAllocationStateFor(person, Boolean.TRUE);
+    }
+
+    public void unSubmitForFundsAllocation(final Person person) {
+	modifySubmittedForFundsAllocationStateFor(person, Boolean.FALSE);
+    }
+
+    private void modifySubmittedForFundsAllocationStateFor(final Person person, final Boolean value) {
+	for (final UnitItem unitItem : getUnitItems()) {
+	    if (unitItem.getUnit().isResponsible(person)) {
+		unitItem.setSubmitedForFundsAllocation(value);
+	    }
+	}
+    }
+
+    public boolean isApproved() {
+	for (final UnitItem unitItem : getUnitItems()) {
+	    if (!unitItem.getSubmitedForFundsAllocation()) {
+		return false;
+	    }
+	}
+	return true;
+    }
 
 }

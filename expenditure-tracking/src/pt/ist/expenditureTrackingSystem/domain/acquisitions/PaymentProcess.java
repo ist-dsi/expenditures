@@ -68,4 +68,7 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
     }
 
     public abstract boolean isInGenesis();
+
+    public abstract boolean isPendingApproval();
+
 }

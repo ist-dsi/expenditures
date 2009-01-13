@@ -132,6 +132,10 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
 	new AcquisitionProcessState(this, AcquisitionProcessStateType.SUBMITTED_FOR_FUNDS_ALLOCATION);
     }
 
+    public void skipFundAllocation() {
+	new AcquisitionProcessState(this, AcquisitionProcessStateType.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER);
+    }
+
     public void resetEffectiveFundAllocationId() {
 	getAcquisitionRequest().resetEffectiveFundAllocationId();
 	confirmInvoice();
@@ -165,10 +169,6 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
     public void skipSupplierFundAllocation() {
 	super.setSkipSupplierFundAllocation(Boolean.TRUE);
 	setFundAllocationExpirationDate(null);
-    }
-
-    public void skipFundAllocation() {
-	new AcquisitionProcessState(this, AcquisitionProcessStateType.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER);
     }
 
     public boolean isFinanceByAnyUnit(List<Unit> fromUnits) {

@@ -29,7 +29,7 @@ public enum RefundProcessStateType {
 
     },
 
-    SUBMITTED_FOR_FUNDS_ALLOCATION,
+    APPROVED,
 
     FUNDS_ALLOCATED,
 

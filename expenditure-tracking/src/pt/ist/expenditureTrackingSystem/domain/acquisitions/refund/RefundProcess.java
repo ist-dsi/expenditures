@@ -15,6 +15,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionPr
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAddPayingUnit;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAssignPayingUnitToItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericRemovePayingUnit;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.Approve;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.CreateRefundItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.DeleteRefundItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.EditRefundItem;
@@ -38,6 +39,7 @@ public class RefundProcess extends RefundProcess_Base {
 	requestActivitites.add(new GenericRemovePayingUnit<RefundProcess>());
 	requestActivitites.add(new SubmitForApproval());
 	requestActivitites.add(new UnSubmitForApproval());
+	requestActivitites.add(new Approve());
 	activityMap.put(ActivityScope.REQUEST_INFORMATION, requestActivitites);
 
 	List<AbstractActivity<RefundProcess>> itemActivities = new ArrayList<AbstractActivity<RefundProcess>>();
@@ -151,6 +153,16 @@ public class RefundProcess extends RefundProcess_Base {
     public void unSubmitForApproval() {
 	final RefundProcessState refundProcessState = getProcessState();
 	refundProcessState.setRefundProcessStateType(RefundProcessStateType.IN_GENESIS);
+    }
+
+    @Override
+    public boolean isPendingApproval() {
+	final RefundProcessState refundProcessState = getProcessState();
+	return refundProcessState.isPendingApproval();
+    }
+
+    public void submitForFundAllocation() {
+	new RefundProcessState(this, RefundProcessStateType.APPROVED);
     }
 
 }

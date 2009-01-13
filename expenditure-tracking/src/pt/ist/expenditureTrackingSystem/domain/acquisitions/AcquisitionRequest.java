@@ -1,6 +1,5 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -11,7 +10,6 @@ import org.joda.time.LocalDate;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean;
-import pt.ist.expenditureTrackingSystem.domain.dto.PayingUnitTotalBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
@@ -427,29 +425,15 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	return false;
     }
 
-    public void submittedForFundsAllocation(Person person) {
-	for (AcquisitionRequestItem item : getAcquisitionRequestItemsSet()) {
-	    item.submittedForFundsAllocation(person);
-	}
-    }
-
-    public boolean isSubmittedForFundsAllocationByAllResponsibles() {
-	for (AcquisitionRequestItem item : getAcquisitionRequestItemsSet()) {
-	    if (!item.isSubmittedForFundsAllocation()) {
-		return false;
-	    }
-	}
-	return true;
-    }
-
-    public boolean hasBeenSubmittedForFundsAllocationBy(Person person) {
-	for (AcquisitionRequestItem item : getAcquisitionRequestItemsSet()) {
-	    if (item.hasBeenSubmittedForFundsAllocationBy(person)) {
-		return true;
-	    }
-	}
-	return false;
-    }
+    // replaced with hasBeenApprovedBy
+//    public boolean hasBeenSubmittedForFundsAllocationBy(Person person) {
+//	for (AcquisitionRequestItem item : getAcquisitionRequestItemsSet()) {
+//	    if (item.hasBeenSubmittedForFundsAllocationBy(person)) {
+//		return true;
+//	    }
+//	}
+//	return false;
+//    }
 
     public void unSubmitForFundsAllocation() {
 	for (AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {

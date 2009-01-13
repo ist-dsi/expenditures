@@ -10,8 +10,9 @@ public class SubmitForFundAllocation extends GenericAcquisitionProcessActivity {
     @Override
     protected boolean isAccessible(RegularAcquisitionProcess process) {
 	User user = getUser();
-	return user != null && process.isResponsibleForUnit(user.getPerson())
-		&& !process.getAcquisitionRequest().hasBeenSubmittedForFundsAllocationBy(user.getPerson());
+	return user != null
+		&& process.isResponsibleForUnit(user.getPerson())
+		&& !process.getAcquisitionRequest().hasBeenApprovedBy(user.getPerson());
     }
 
     @Override

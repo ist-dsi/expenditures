@@ -101,6 +101,7 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 	return getLastAcquisitionProcessState().getAcquisitionProcessStateType();
     }
 
+    @Override
     public boolean isPendingApproval() {
 	return getLastAcquisitionProcessState().isPendingApproval();
     }

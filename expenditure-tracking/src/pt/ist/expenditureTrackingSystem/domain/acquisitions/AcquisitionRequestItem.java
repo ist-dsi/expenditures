@@ -367,39 +367,15 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	return getTotalRealValue() != null ? getTotalRealValue().percentage(getRealVatValue()) : null;
     }
 
-    public void submittedForFundsAllocation(Person person) {
-	modifySubmittedForFundsAllocationStateFor(person, Boolean.TRUE);
-    }
-
-    public void unSubmitForFundsAllocation(Person person) {
-	modifySubmittedForFundsAllocationStateFor(person, Boolean.FALSE);
-    }
-
-    private void modifySubmittedForFundsAllocationStateFor(Person person, Boolean value) {
-	for (UnitItem unitItem : getUnitItems()) {
-	    if (unitItem.getUnit().isResponsible(person)) {
-		unitItem.setSubmitedForFundsAllocation(value);
-	    }
-	}
-    }
-
-    public boolean isSubmittedForFundsAllocation() {
-	for (UnitItem unitItem : getUnitItems()) {
-	    if (!unitItem.getSubmitedForFundsAllocation()) {
-		return false;
-	    }
-	}
-	return true;
-    }
-
-    public boolean hasBeenSubmittedForFundsAllocationBy(Person person) {
-	for (UnitItem unitItem : getUnitItems()) {
-	    if (unitItem.getUnit().isResponsible(person) && unitItem.getSubmitedForFundsAllocation()) {
-		return true;
-	    }
-	}
-	return false;
-    }
+    // replaced with hasBeenApprovedBy()
+//    public boolean hasBeenSubmittedForFundsAllocationBy(Person person) {
+//	for (UnitItem unitItem : getUnitItems()) {
+//	    if (unitItem.getUnit().isResponsible(person) && unitItem.getSubmitedForFundsAllocation()) {
+//		return true;
+//	    }
+//	}
+//	return false;
+//    }
 
     public void unSubmitForFundsAllocation() {
 	for (UnitItem unitItem : getUnitItems()) {
