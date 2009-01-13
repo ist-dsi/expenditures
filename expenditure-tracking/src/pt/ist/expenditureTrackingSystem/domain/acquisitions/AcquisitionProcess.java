@@ -65,26 +65,6 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 		|| isProjectAccountingEmployee(person);
     }
 
-    public boolean isAccountingEmployee(final Person person) {
-	final AcquisitionRequest acquisitionRequest = getAcquisitionRequest();
-	return acquisitionRequest.isAccountingEmployee(person);
-    }
-
-    public boolean isAccountingEmployee() {
-	final User user = UserView.getUser();
-	return user != null && isAccountingEmployee(user.getPerson());
-    }
-
-    public boolean isAccountingEmployeeForOnePossibleUnit() {
-	final User user = UserView.getUser();
-	return user != null && isAccountingEmployeeForOnePossibleUnit(user.getPerson());
-    }
-
-    public boolean isAccountingEmployeeForOnePossibleUnit(final Person person) {
-	final AcquisitionRequest acquisitionRequest = getAcquisitionRequest();
-	return acquisitionRequest.isAccountingEmployeeForOnePossibleUnit(person);
-    }
-
     public boolean isActive() {
 	return getLastAcquisitionProcessState().isActive();
     }
@@ -211,31 +191,6 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 
     public String getAcquisitionProcessId() {
 	return getYear() + "/" + getAcquisitionProcessNumber();
-    }
-
-    public boolean isProjectAccountingEmployee(final Person person) {
-	final AcquisitionRequest acquisitionRequest = getAcquisitionRequest();
-	return acquisitionRequest.isProjectAccountingEmployee(person);
-    }
-
-    public boolean isProjectAccountingEmployee() {
-	final User user = UserView.getUser();
-	return user != null && isProjectAccountingEmployee(user.getPerson());
-    }
-
-    public boolean hasAllocatedFundsForAllProjectFinancers() {
-	final AcquisitionRequest acquisitionRequest = getAcquisitionRequest();
-	return acquisitionRequest.hasAllocatedFundsForAllProjectFinancers();
-    }
-
-    public boolean hasAnyAllocatedFunds() {
-	final AcquisitionRequest acquisitionRequest = getAcquisitionRequest();
-	return acquisitionRequest.hasAnyAllocatedFunds();
-    }
-
-    public boolean hasAllocatedFundsForAllProjectFinancers(final Person person) {
-	final AcquisitionRequest acquisitionRequest = getAcquisitionRequest();
-	return acquisitionRequest.hasAllocatedFundsForAllProjectFinancers(person);
     }
 
     public boolean hasAllocatedFundsPermanentlyForAllProjectFinancers() {

@@ -67,6 +67,49 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
 	return isResponsibleForUnit(user.getPerson());
     }
 
+    public boolean isProjectAccountingEmployee(final Person person) {
+	return getRequest().isProjectAccountingEmployee(person);
+    }
+
+    public boolean isProjectAccountingEmployee() {
+	final User user = UserView.getUser();
+	return user != null && isProjectAccountingEmployee(user.getPerson());
+    }
+
+    public boolean hasAllocatedFundsForAllProjectFinancers(final Person person) {
+	return getRequest().hasAllocatedFundsForAllProjectFinancers(person);
+    }
+
+    public boolean isAccountingEmployee(final Person person) {
+	return getRequest().isAccountingEmployee(person);
+    }
+
+    public boolean isAccountingEmployee() {
+	final User user = UserView.getUser();
+	return user != null && isAccountingEmployee(user.getPerson());
+    }
+
+    public boolean isAccountingEmployeeForOnePossibleUnit() {
+	final User user = UserView.getUser();
+	return user != null && isAccountingEmployeeForOnePossibleUnit(user.getPerson());
+    }
+
+    public boolean isAccountingEmployeeForOnePossibleUnit(final Person person) {
+	return getRequest().isAccountingEmployeeForOnePossibleUnit(person);
+    }
+
+    public boolean hasAllocatedFundsForAllProjectFinancers() {
+	return getRequest().hasAllocatedFundsForAllProjectFinancers();
+    }
+
+    public boolean hasAnyAllocatedFunds() {
+	return getRequest().hasAnyAllocatedFunds();
+    }
+
+    public boolean hasAllFundAllocationId(Person person) {
+	return getRequest().hasAllFundAllocationId(person);
+    }
+
     public abstract boolean isInGenesis();
 
     public abstract boolean isPendingApproval();

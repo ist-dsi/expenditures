@@ -349,91 +349,6 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	return totalValue.isLessThanOrEqual(getAcquisitionProcess().getAcquisitionRequestValueLimit());
     }
 
-    public void resetFundAllocationId() {
-	for (Financer financer : getFinancersSet()) {
-	    financer.setFundAllocationId(null);
-	}
-
-    }
-
-    public void resetFundAllocationId(final Person person) {
-	for (Financer financer : getFinancersSet()) {
-	    if (financer.isAccountingEmployee(person)) {
-		financer.setFundAllocationId(null);
-	    }
-	}
-    }
-
-    public void resetProjectFundAllocationId(final Person person) {
-	for (Financer financer : getFinancersSet()) {
-	    if (financer.isProjectFinancer() && financer.isProjectAccountingEmployee(person)) {
-		ProjectFinancer projectFinancer = (ProjectFinancer) financer;
-		projectFinancer.setProjectFundAllocationId(null);
-	    }
-	}
-    }
-
-    public void resetProjectFundAllocationId() {
-	for (Financer financer : getFinancersSet()) {
-	    if (financer.isProjectFinancer()) {
-		ProjectFinancer projectFinancer = (ProjectFinancer) financer;
-		projectFinancer.setProjectFundAllocationId(null);
-	    }
-	}
-    }
-
-    public void resetEffectiveFundAllocationId() {
-	for (Financer financer : getFinancersSet()) {
-	    financer.setEffectiveFundAllocationId(null);
-	}
-
-    }
-
-    public boolean hasAllFundAllocationId() {
-	for (Financer financer : getFinancersWithFundsAllocated()) {
-	    if (financer.getFundAllocationId() == null) {
-		return false;
-	    }
-	}
-	return true;
-    }
-
-    public boolean hasAllFundAllocationId(Person person) {
-	for (Financer financer : getFinancersWithFundsAllocated()) {
-	    if (financer.isAccountingEmployee(person) && financer.getFundAllocationId() == null) {
-		return false;
-	    }
-	}
-	return true;
-    }
-
-    public boolean hasAnyFundAllocationId() {
-	for (Financer financer : getFinancersWithFundsAllocated()) {
-	    if (financer.hasFundAllocationId()) {
-		return true;
-	    }
-	}
-	return false;
-    }
-
-    public boolean hasAnyFundAllocationId(Person person) {
-	for (Financer financer : getFinancersWithFundsAllocated()) {
-	    if (financer.getFundAllocationId() != null && financer.isAccountingEmployee(person)) {
-		return true;
-	    }
-	}
-	return false;
-    }
-
-    // replaced with hasBeenApprovedBy
-//    public boolean hasBeenSubmittedForFundsAllocationBy(Person person) {
-//	for (AcquisitionRequestItem item : getAcquisitionRequestItemsSet()) {
-//	    if (item.hasBeenSubmittedForFundsAllocationBy(person)) {
-//		return true;
-//	    }
-//	}
-//	return false;
-//    }
 
     public void unSubmitForFundsAllocation() {
 	for (AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
@@ -483,53 +398,6 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	return getAcquisitionProcess().getAcquisitionProcessId();
     }
 
-    public boolean isAccountingEmployee(final Person person) {
-	for (final Financer financer : getFinancersSet()) {
-	    if (financer.isAccountingEmployee(person)) {
-		return true;
-	    }
-	}
-	return false;
-    }
-
-    public boolean isAccountingEmployeeForOnePossibleUnit(final Person person) {
-	for (final Financer financer : getFinancersSet()) {
-	    if (!financer.isProjectFinancer()) {
-		if (financer.isAccountingEmployeeForOnePossibleUnit(person)) {
-		    return true;
-		}
-	    }
-	}
-	return false;
-    }
-
-    public boolean isProjectAccountingEmployee(final Person person) {
-	for (final Financer financer : getFinancersSet()) {
-	    if (financer.isProjectAccountingEmployee(person)) {
-		return true;
-	    }
-	}
-	return false;
-    }
-
-    public boolean hasAllocatedFundsForAllProjectFinancers() {
-	for (final Financer financer : getFinancersSet()) {
-	    if (!financer.hasAllocatedFundsForAllProject()) {
-		return false;
-	    }
-	}
-	return true;
-    }
-
-    public boolean hasAllocatedFundsForAllProjectFinancers(Person person) {
-	for (final Financer financer : getFinancersSet()) {
-	    if (financer.isProjectAccountingEmployee(person) && !financer.hasAllocatedFundsForAllProject()) {
-		return false;
-	    }
-	}
-	return true;
-    }
-
     public boolean hasAllocatedFundsPermanentlyForAllProjectFinancers() {
 	for (final Financer financer : getFinancersSet()) {
 	    if (!financer.hasAllocatedFundsPermanentlyForAllProjectFinancers()) {
@@ -568,47 +436,9 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 		.nextAcquisitionRequestDocumentID();
     }
 
-    public boolean hasAnyAccountingUnitFinancerWithNoFundsAllocated(final Person person) {
-	for (Financer financer : getFinancersSet()) {
-	    if (financer.isAccountingEmployeeForOnePossibleUnit(person) && financer.getAmountAllocated().isPositive()
-		    && financer.getFundAllocationId() == null) {
-		return true;
-	    }
-	}
-	return false;
-    }
-
-    public Set<Financer> getAccountingUnitFinancerWithNoFundsAllocated(final Person person) {
-	Set<Financer> res = new HashSet<Financer>();
-	for (Financer financer : getFinancersSet()) {
-	    if (financer.isAccountingEmployeeForOnePossibleUnit(person) && financer.getAmountAllocated().isPositive()
-		    && financer.getFundAllocationId() == null) {
-		res.add(financer);
-	    }
-	}
-	return res;
-    }
-
     public String getRefundeeName() {
 	final Person refundee = getRefundee();
 	return refundee == null ? null : refundee.getName();
-    }
-
-    public boolean hasAnyAllocatedFunds() {
-	for (Financer financer : getFinancers()) {
-	    if (financer.hasAnyFundsAllocated()) {
-		return true;
-	    }
-	}
-	return false;
-    }
-
-    public Set<AccountingUnit> getAccountingUnits() {
-	Set<AccountingUnit> units = new HashSet<AccountingUnit>();
-	for (Financer financer : getFinancers()) {
-	    units.add(financer.getAccountingUnit());
-	}
-	return units;
     }
 
     public Set<AcquisitionRequestItem> getAcquisitionRequestItemsSet() {
