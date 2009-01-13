@@ -14,6 +14,12 @@ public abstract class AbstractActivity<T extends GenericProcess> {
 
     protected abstract void process(T process, Object... objects);
 
+    protected boolean isCurrentUserProcessOwner(GenericProcess process) {
+	Person currentOwner = process.getCurrentOwner();
+	User user = getUser();
+	return currentOwner == null || (user != null && user.getPerson() == currentOwner);
+    }
+    
     protected boolean isProcessTaken(T process) {
 	return process.getCurrentOwner() != null;
     }
