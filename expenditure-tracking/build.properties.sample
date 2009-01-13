@@ -19,6 +19,7 @@ acquisitionCentralAdministrator.usernames=
 accountingAdministrator.usernames=
 projectAccountingAdministrator.usernames=
 treasury.usernames=
+statisticsViewer.usernames=
 war.name=compras.ist.utl.pt
 
 db.giaf.user=

@@ -30,6 +30,8 @@ public class StartupServlet extends HttpServlet {
 	Authenticate.initRole(RoleType.PROJECT_ACCOUNTING_MANAGER, projectAccountingManagerUsernames);
 	final String treasuryUsernames = PropertiesManager.getProperty("treasury.usernames");
 	Authenticate.initRole(RoleType.TREASURY, treasuryUsernames);
+	final String statisticsViewerUsernames = PropertiesManager.getProperty("statisticsViewer.usernames");
+	Authenticate.initRole(RoleType.STATISTICS_VIEWER, statisticsViewerUsernames);
     }
 
 }

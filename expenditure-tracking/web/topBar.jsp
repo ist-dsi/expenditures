@@ -60,8 +60,7 @@
 				<div class="lic1"></div>
 			</html:link>
 		</li>
-		<logic:present user="ist24439">
-		<logic:present role="MANAGER">
+		<logic:present role="STATISTICS_VIEWER">
 			<li class="<%= statisticsClass %>">
 				<html:link action="/statistics.do?method=showSimplifiedProcessStatistics">
 					<span>
@@ -70,7 +69,6 @@
 					<div class="lic1"></div>
 				</html:link>
 			</li>
-		</logic:present>
 		</logic:present>
 	</ul>
 </logic:present>
