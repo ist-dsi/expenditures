@@ -137,7 +137,7 @@ public class ChartGenerator {
     public static byte[] simplifiedProcessStatisticsActivityTimeImage(final SimplifiedProcessActivityLogStatistics simplifiedProcessActivityLogStatistics)
 	throws RuntimeException, IOException {
 	final CategoryDataset dataset = simplifiedProcessStatisticsActivityTimeChart(simplifiedProcessActivityLogStatistics);
-	return createBarChartImage(dataset, "Tempo por Actividade (em Dias)");
+	return createBarChartImage(dataset, "Tempo Médio por Actividade (em Dias)");
     }
 
 }
