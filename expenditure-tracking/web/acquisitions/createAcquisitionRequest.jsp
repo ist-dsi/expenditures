@@ -7,7 +7,7 @@
 <h2><bean:message key="acquisitionProcess.title.createPurchaseOrderDocument" bundle="ACQUISITION_RESOURCES"/></h2>
 
 <p class="mtop15"><strong><bean:message key="label.requester" bundle="EXPENDITURE_RESOURCES"/></strong></p>
-<bean:define id="acquisitionProcess" name="acquisitionProcess" toScope="request"/>
+<bean:define id="processRequest" name="acquisitionProcess" property="request" toScope="request"/>
 <jsp:include page="viewAcquisitionRequest.jsp" flush="true"/>
 
 <p class="mtop15"><strong><bean:message key="label.supplier" bundle="EXPENDITURE_RESOURCES"/></strong></p>

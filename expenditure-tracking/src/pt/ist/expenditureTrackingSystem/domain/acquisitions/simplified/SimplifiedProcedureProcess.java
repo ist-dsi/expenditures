@@ -10,9 +10,11 @@ import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.FundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAddPayingUnit;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAssignPayingUnitToItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericRemovePayingUnit;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.ProjectFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.AddAcquisitionProposalDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.AllocateFundsPermanently;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.AllocateProjectFundsPermanently;
@@ -28,10 +30,8 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activitie
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.EditAcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.EditAcquisitionRequestItemRealValues;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.FixInvoice;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.FundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.FundAllocationExpirationDate;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.PayAcquisition;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ProjectFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ReceiveInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RejectAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RemoveFundAllocation;
@@ -95,8 +95,8 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	requestInformationActivities.add(new UnApproveAcquisitionProcess());
 	requestInformationActivities.add(new UnAuthorizeAcquisitionProcess());
 
-	requestInformationActivities.add(new ProjectFundAllocation());
-	requestInformationActivities.add(new FundAllocation());
+	requestInformationActivities.add(new ProjectFundAllocation<RegularAcquisitionProcess>());
+	requestInformationActivities.add(new FundAllocation<RegularAcquisitionProcess>());
 	requestInformationActivities.add(new RemoveFundAllocation());
 	requestInformationActivities.add(new RemoveProjectFundAllocation());
 	requestInformationActivities.add(new RemoveFundAllocationExpirationDate());

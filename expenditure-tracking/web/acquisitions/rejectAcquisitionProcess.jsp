@@ -11,7 +11,8 @@
  <bean:define id="acquisitionProcessClass" name="acquisitionProcess" property="class.simpleName"/>
  <bean:define id="actionMapping" value="<%= "/acquisition" +  acquisitionProcessClass%>"/>
 
-<jsp:include page="viewAcquisitionRequest.jsp" flush="true"/>
+<bean:define id="processRequest" name="acquisitionProcess" property="request" toScope="request"/>
+<jsp:include page="commons/viewAcquisitionRequest.jsp" flush="true"/>
 
 <bean:define id="urlView"><%= actionMapping%>.do?method=viewAcquisitionProcess&amp;acquisitionProcessOid=<%= acquisitionProcess.getOID() %></bean:define>
 <bean:define id="urlAdd"><%= actionMapping%>.do?method=rejectAcquisitionProcess&amp;acquisitionProcessOid=<%= acquisitionProcess.getOID() %></bean:define>

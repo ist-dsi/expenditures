@@ -9,6 +9,10 @@
 <bean:define id="process" name="process" toScope="request"/>
 <bean:define id="processOID" name="process" property="OID" toScope="request"/>
 
+<bean:define id="processRequest" name="process" property="request" toScope="request"/>
+<bean:define id="requestClass" name="processRequest" property="class.simpleName"/>
+<jsp:include page="<%=  "commons/view" + requestClass + ".jsp" %>" flush="true"/>
+
 <bean:define id="acquisitionProcessClass" name="process" property="class.simpleName" toScope="request"/>
 <bean:define id="actionMapping" value='<%= "/acquisition" + acquisitionProcessClass%>'/>
 

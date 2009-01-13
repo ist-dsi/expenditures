@@ -15,6 +15,10 @@
 <bean:define id="processClass" name="process" property="class.simpleName"/>
 <bean:define id="itemOid" name="item" property="OID"/>
 
+<bean:define id="processRequest" name="process" property="request" toScope="request"/>
+<bean:define id="requestClass" name="processRequest" property="class.simpleName" toScope="request"/>
+<jsp:include page="<%= "view" + requestClass + ".jsp"%>" flush="true"/>
+
 <bean:define id="outOfLabel">
 	<bean:message key="acquisitionRequestItem.label.outOf" bundle="ACQUISITION_RESOURCES"/>
 </bean:define>

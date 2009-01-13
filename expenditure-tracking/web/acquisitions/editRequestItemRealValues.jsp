@@ -12,8 +12,8 @@
 
 <bean:define id="itemOID" name="itemBean" property="item.OID"/>
 
-<bean:define id="acquisitionProcess" name="itemBean" property="acquisitionRequest.acquisitionProcess" toScope="request"/>
-<jsp:include page="viewAcquisitionRequest.jsp" flush="true"/>
+<bean:define id="processRequest" name="acquisitionProcess" property="request" toScope="request"/>
+<jsp:include page="commons/viewAcquisitionRequest.jsp" flush="true"/>
 
 
 <div class="dinline forminline">

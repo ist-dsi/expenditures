@@ -88,7 +88,8 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 
     public boolean isApproved() {
 	final AcquisitionProcessStateType acquisitionProcessStateType = getAcquisitionProcessStateType();
-	return acquisitionProcessStateType.compareTo(AcquisitionProcessStateType.SUBMITTED_FOR_FUNDS_ALLOCATION) <= 0 && isActive();
+	return acquisitionProcessStateType.compareTo(AcquisitionProcessStateType.SUBMITTED_FOR_FUNDS_ALLOCATION) <= 0
+		&& isActive();
     }
 
     public boolean isAllocatedToSupplier() {
@@ -122,22 +123,6 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 
     public Money getAmountAllocatedToUnit(Unit unit) {
 	return getAcquisitionRequest().getAmountAllocatedToUnit(unit);
-    }
-
-    public Set<Financer> getFinancersWithFundsAllocated() {
-	return getAcquisitionRequest().getFinancersWithFundsAllocated();
-    }
-
-    public Set<Financer> getFinancersWithFundsAllocated(Person person) {
-	return getAcquisitionRequest().getFinancersWithFundsAllocated(person);
-    }
-
-    public Set<ProjectFinancer> getProjectFinancersWithFundsAllocated() {
-	return getAcquisitionRequest().getProjectFinancersWithFundsAllocated();
-    }
-
-    public Set<ProjectFinancer> getProjectFinancersWithFundsAllocated(final Person person) {
-	return getAcquisitionRequest().getProjectFinancersWithFundsAllocated(person);
     }
 
     public Money getAcquisitionRequestValueLimit() {

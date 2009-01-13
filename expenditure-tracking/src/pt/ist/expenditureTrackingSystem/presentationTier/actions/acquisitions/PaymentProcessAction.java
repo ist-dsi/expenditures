@@ -10,16 +10,20 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundItem;
 import pt.ist.expenditureTrackingSystem.domain.dto.DomainObjectBean;
+import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.UnitItemBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.ProcessAction;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
+import pt.ist.fenixWebFramework.security.UserView;
 
 public abstract class PaymentProcessAction extends ProcessAction {
 
@@ -151,6 +155,34 @@ public abstract class PaymentProcessAction extends ProcessAction {
 
 	RenderUtils.invalidateViewState();
 	return mapping.findForward(forward);
+    }
+
+    public ActionForward executeProjectFundAllocation(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final PaymentProcess process = getProcess(request);
+	final User user = UserView.getUser();
+	if (process.getCurrentOwner() == null || (user != null && process.getCurrentOwner() == user.getPerson())) {
+	    if (process.getCurrentOwner() == null) {
+		process.takeProcess();
+	    }
+	    request.setAttribute("process", process);
+	    List<FundAllocationBean> fundAllocationBeans = new ArrayList<FundAllocationBean>();
+	    for (Financer financer : process.getProjectFinancersWithFundsAllocated(user.getPerson())) {
+		fundAllocationBeans.add(new FundAllocationBean(financer));
+	    }
+	    request.setAttribute("fundAllocationBeans", fundAllocationBeans);
+	    return mapping.findForward("allocate.project.funds");
+	} else {
+	    return viewProcess(mapping, form, request, response);
+	}
+    }
+
+    public ActionForward allocateProjectFunds(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final PaymentProcess process = getProcess(request);
+	final List<FundAllocationBean> fundAllocationBeans = getRenderedObject();
+	genericActivityExecution(process, "ProjectFundAllocation", fundAllocationBeans);
+	return viewProcess(mapping, form, request, response);
     }
 
     @Override

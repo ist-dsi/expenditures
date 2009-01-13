@@ -18,7 +18,7 @@ public class GenericAddPayingUnit<T extends PaymentProcess> extends AbstractActi
 
     @Override
     protected boolean isAvailable(T process) {
-	return (!isProcessTaken(process) || isProcessTakenByCurrentUser(process)) && process.isInGenesis();
+	return isCurrentUserProcessOwner(process) && process.isInGenesis();
     }
 
     @Override

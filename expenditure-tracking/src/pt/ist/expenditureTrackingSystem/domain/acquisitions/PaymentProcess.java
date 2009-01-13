@@ -110,10 +110,26 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
 	return getRequest().hasAllFundAllocationId(person);
     }
 
+    public Set<Financer> getFinancersWithFundsAllocated() {
+	return getRequest().getFinancersWithFundsAllocated();
+    }
+
+    public Set<Financer> getFinancersWithFundsAllocated(Person person) {
+	return getRequest().getFinancersWithFundsAllocated(person);
+    }
+
+    public Set<ProjectFinancer> getProjectFinancersWithFundsAllocated() {
+	return getRequest().getProjectFinancersWithFundsAllocated();
+    }
+
+    public Set<ProjectFinancer> getProjectFinancersWithFundsAllocated(final Person person) {
+	return getRequest().getProjectFinancersWithFundsAllocated(person);
+    }
+
     public abstract boolean isInGenesis();
 
     public abstract boolean isPendingApproval();
 
     public abstract boolean isInApprovedState();
-
+    
 }

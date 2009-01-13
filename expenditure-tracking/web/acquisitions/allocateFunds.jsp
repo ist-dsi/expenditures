@@ -13,14 +13,15 @@
 	</div>
 </logic:present>
 
-<bean:define id="acquisitionProcess" name="acquisitionProcess" toScope="request"/>
-<jsp:include page="viewAcquisitionRequest.jsp" flush="true"/>
+<bean:define id="processClass" name="acquisitionProcess" propert="class.simpleName"/>
+<bean:define id="processRequest" name="acquisitionProcess" property="request" toScope="request"/>
+<jsp:include page="commons/viewAcquisitionRequest.jsp" flush="true"/>
 
 <div class="documents">
 	<p>
 		<bean:message key="acquisitionProcess.label.proposalDocument" bundle="ACQUISITION_RESOURCES"/>: 
 		<logic:present name="acquisitionProcess" property="acquisitionRequest.acquisitionProposalDocument">
-			<html:link action="<%= "/acquisitionProcess" + acquisitionProcess.getClass().getSimpleName() + ".do?method=downloadAcquisitionProposalDocument"%>" paramId="acquisitionProposalDocumentOid" paramName="acquisitionProcess" paramProperty="acquisitionRequest.acquisitionProposalDocument.OID">
+			<html:link action="<%= "/acquisitionProcess" + processClass + ".do?method=downloadAcquisitionProposalDocument"%>" paramId="acquisitionProposalDocumentOid" paramName="acquisitionProcess" paramProperty="acquisitionRequest.acquisitionProposalDocument.OID">
 				<bean:write name="acquisitionProcess" property="acquisitionRequest.acquisitionProposalDocument.filename"/>
 			</html:link>	
 		</logic:present>
@@ -33,8 +34,8 @@
 
 <p class="mtop15 mbottom025"><bean:message key="acquisitionProcess.label.fundAllocation.insert" bundle="ACQUISITION_RESOURCES"/>:</p>
 
-<bean:define id="urlActivity">/acquisition<%= acquisitionProcess.getClass().getSimpleName() %>.do?method=allocateFunds&amp;acquisitionProcessOid=<bean:write name="acquisitionProcess" property="OID"/></bean:define>
-<bean:define id="urlView">/acquisition<%= acquisitionProcess.getClass().getSimpleName() %>.do?method=viewAcquisitionProcess&amp;acquisitionProcessOid=<bean:write name="acquisitionProcess" property="OID"/></bean:define>
+<bean:define id="urlActivity">/acquisition<%= processClass %>.do?method=allocateFunds&amp;acquisitionProcessOid=<bean:write name="acquisitionProcess" property="OID"/></bean:define>
+<bean:define id="urlView">/acquisition<%= processClass %>.do?method=viewAcquisitionProcess&amp;acquisitionProcessOid=<bean:write name="acquisitionProcess" property="OID"/></bean:define>
 <fr:edit action="<%= urlActivity %>" 
 		id="financerFundAllocationId" 
 		schema="editFinancerFundAllocationId" 

@@ -6,8 +6,8 @@
 
 <h2><bean:message key="acquisitionProcess.title.viewAcquisitionRequest" bundle="ACQUISITION_RESOURCES"/></h2>
 
-<bean:define id="acquisitionProcess" name="acquisitionProcess" toScope="request"/>
-<jsp:include page="viewAcquisitionRequest.jsp" flush="true"/>
+<bean:define id="processRequest" name="acquisitionProcess" property="request" toScope="request"/>
+<jsp:include page="commons/viewAcquisitionRequest.jsp" flush="true"/>
 
 <div class="documents">
 	<p>

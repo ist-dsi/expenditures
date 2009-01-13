@@ -10,7 +10,8 @@
 <bean:define id="acquisitionProcessClass" name="acquisitionProcess" property="class.simpleName" toScope="request"/>
 <bean:define id="actionMapping" value="<%= "/acquisition" + acquisitionProcessClass%>"/>
 
-<jsp:include page="viewAcquisitionRequest.jsp" flush="true"/>
+<bean:define id="processRequest" name="acquisitionProcess" property="request" toScope="request"/>
+<jsp:include page="commons/viewAcquisitionRequest.jsp" flush="true"/>
 
 <p>
 	<bean:message key="acquisitionProcess.label.proposalDocument" bundle="ACQUISITION_RESOURCES"/>: 

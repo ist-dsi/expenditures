@@ -11,6 +11,10 @@
 <bean:define id="processClass" name="process" property="class.simpleName"/>
 <bean:define id="actionMapping" value='<%= "/acquisition" + processClass%>'/>
 
+<bean:define id="processRequest" name="process" property="request" toScope="request"/>
+<bean:define id="requestClass" name="processRequest" property="class.simpleName" toScope="request"/>
+<jsp:include page="<%= "view" + requestClass + ".jsp"%>" flush="true"/>
+
 <div class="infoop2">
 	<bean:message key="message.help.selectNumberOrName.costCenterProject" bundle="ACQUISITION_RESOURCES"/>
 </div>

@@ -159,8 +159,8 @@
 	</logic:equal>
 </div>
 
-<bean:define id="acquisitionProcess" name="acquisitionProcess" toScope="request"/>
-<jsp:include page="viewAcquisitionRequest.jsp" flush="true"/>
+<bean:define id="processRequest" name="acquisitionProcess" property="request" toScope="request"/>
+<jsp:include page="commons/viewAcquisitionRequest.jsp" flush="true"/>
 
 <logic:notEmpty name="acquisitionProcess" property="acquisitionRequest.totalAmountsForEachPayingUnit">
 	<fr:view name="acquisitionProcess" property="acquisitionRequest.totalAmountsForEachPayingUnit"

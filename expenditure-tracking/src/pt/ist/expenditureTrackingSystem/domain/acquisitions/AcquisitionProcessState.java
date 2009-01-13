@@ -112,7 +112,7 @@ public class AcquisitionProcessState extends AcquisitionProcessState_Base {
     }
 
     public boolean isInApprovedState() {
-	return isPendingFundAllocation();
+	return isInAllocatedToSupplierState();
     }
 
 }

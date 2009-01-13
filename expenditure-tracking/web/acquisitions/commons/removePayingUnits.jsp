@@ -15,6 +15,10 @@
 	</html:link>
 </p>
 
+<bean:define id="processRequest" name="process" property="request" toScope="request"/>
+<bean:define id="requestClass" name="processRequest" property="class.simpleName" toScope="request"/>
+<jsp:include page="<%= "view" + requestClass + ".jsp"%>" flush="true"/>
+
 <jsp:include page="../../commons/defaultErrorDisplay.jsp"/>
 
 <bean:define id="processOID" name="process" property="OID"/>

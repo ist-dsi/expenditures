@@ -12,9 +12,11 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess.ActivityScope;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.FundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAddPayingUnit;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAssignPayingUnitToItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericRemovePayingUnit;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.ProjectFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.Approve;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.CreateRefundItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.DeleteRefundItem;
@@ -40,6 +42,8 @@ public class RefundProcess extends RefundProcess_Base {
 	requestActivitites.add(new SubmitForApproval());
 	requestActivitites.add(new UnSubmitForApproval());
 	requestActivitites.add(new Approve());
+	requestActivitites.add(new ProjectFundAllocation<RefundProcess>());
+	requestActivitites.add(new FundAllocation<RefundProcess>());
 	activityMap.put(ActivityScope.REQUEST_INFORMATION, requestActivitites);
 
 	List<AbstractActivity<RefundProcess>> itemActivities = new ArrayList<AbstractActivity<RefundProcess>>();
@@ -169,6 +173,5 @@ public class RefundProcess extends RefundProcess_Base {
     public boolean isInApprovedState() {
 	return getProcessState().isInApprovedState();
     }
-
 
 }

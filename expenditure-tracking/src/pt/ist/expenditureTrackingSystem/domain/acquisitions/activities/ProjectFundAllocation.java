@@ -1,27 +1,27 @@
-package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities;
+package pt.ist.expenditureTrackingSystem.domain.acquisitions.activities;
 
 import java.util.List;
 
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.ProjectFinancer;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
 import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean;
+import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 
-public class ProjectFundAllocation extends GenericAcquisitionProcessActivity {
+public class ProjectFundAllocation<T extends PaymentProcess> extends AbstractActivity<T> {
 
     @Override
-    protected boolean isAccessible(RegularAcquisitionProcess process) {
+    protected boolean isAccessible(T process) {
 	return process.isProjectAccountingEmployee();
     }
 
     @Override
-    protected boolean isAvailable(RegularAcquisitionProcess process) {
-	return super.isAvailable(process) && process.getAcquisitionProcessState().isInAllocatedToSupplierState()
+    protected boolean isAvailable(T process) {
+	return isCurrentUserProcessOwner(process) && process.isInApprovedState()
 		&& !process.hasAllocatedFundsForAllProjectFinancers(getUser().getPerson());
     }
 
     @Override
-    protected void process(RegularAcquisitionProcess process, Object... objects) {
+    protected void process(T process, Object... objects) {
 	final List<FundAllocationBean> fundAllocationBeans = (List<FundAllocationBean>) objects[0];
 	for (FundAllocationBean fundAllocationBean : fundAllocationBeans) {
 	    final ProjectFinancer projectFinancer = (ProjectFinancer) fundAllocationBean.getFinancer();
