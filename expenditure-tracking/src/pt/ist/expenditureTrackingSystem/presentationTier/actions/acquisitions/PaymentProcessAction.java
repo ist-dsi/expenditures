@@ -16,6 +16,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundItem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.dto.DomainObjectBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.UnitItemBean;
@@ -182,6 +183,35 @@ public abstract class PaymentProcessAction extends ProcessAction {
 	final PaymentProcess process = getProcess(request);
 	final List<FundAllocationBean> fundAllocationBeans = getRenderedObject();
 	genericActivityExecution(process, "ProjectFundAllocation", fundAllocationBeans);
+	return viewProcess(mapping, form, request, response);
+    }
+
+    public ActionForward executeFundAllocation(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final PaymentProcess process = getProcess(request);
+	final User user = UserView.getUser();
+	if (process.getCurrentOwner() == null
+		|| (user != null && process.getCurrentOwner() == user.getPerson())) {
+	    if (process.getCurrentOwner() == null) {
+		process.takeProcess();
+	    }
+	    request.setAttribute("process", process);
+	    List<FundAllocationBean> fundAllocationBeans = new ArrayList<FundAllocationBean>();
+	    for (Financer financer : process.getFinancersWithFundsAllocated(user.getPerson())) {
+		fundAllocationBeans.add(new FundAllocationBean(financer));
+	    }
+	    request.setAttribute("fundAllocationBeans", fundAllocationBeans);
+	    return mapping.findForward("allocate.funds");
+	} else {
+	    return viewProcess(mapping, form, request, response);
+	}
+    }
+
+    public ActionForward allocateFunds(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	final PaymentProcess process = getProcess(request);
+	final List<FundAllocationBean> fundAllocationBeans = getRenderedObject();
+	genericActivityExecution(process, "FundAllocation", fundAllocationBeans);
 	return viewProcess(mapping, form, request, response);
     }
 

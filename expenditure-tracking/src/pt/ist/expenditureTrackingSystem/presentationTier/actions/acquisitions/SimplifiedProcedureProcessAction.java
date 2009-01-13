@@ -54,7 +54,7 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "create.acquisition.request.item", path = "/acquisitions/createAcquisitionRequestItem.jsp"),
 	@Forward(name = "reject.acquisition.process", path = "/acquisitions/rejectAcquisitionProcess.jsp"),
 	@Forward(name = "allocate.project.funds", path = "/acquisitions/commons/allocateProjectFunds.jsp"),
-	@Forward(name = "allocate.funds", path = "/acquisitions/allocateFunds.jsp"),
+	@Forward(name = "allocate.funds", path = "/acquisitions/commons/allocateFunds.jsp"),
 	@Forward(name = "allocate.effective.project.funds", path = "/acquisitions/allocateEffectiveProjectFunds.jsp"),
 	@Forward(name = "allocate.effective.funds", path = "/acquisitions/allocateEffectiveFunds.jsp"),
 	@Forward(name = "allocate.funds.to.service.provider", path = "/acquisitions/allocateFundsToServiceProvider.jsp"),
@@ -181,35 +181,6 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	User user = UserView.getUser();
 	return executeActivityAndViewProcess(mapping, form, request, response, "SubmitForFundAllocation", user.getPerson());
-    }
-
-    public ActionForward executeFundAllocation(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-	final SimplifiedProcedureProcess acquisitionProcess = getProcess(request);
-	final User user = UserView.getUser();
-	if (acquisitionProcess.getCurrentOwner() == null
-		|| (user != null && acquisitionProcess.getCurrentOwner() == user.getPerson())) {
-	    if (acquisitionProcess.getCurrentOwner() == null) {
-		acquisitionProcess.takeProcess();
-	    }
-	    request.setAttribute("acquisitionProcess", acquisitionProcess);
-	    List<FundAllocationBean> fundAllocationBeans = new ArrayList<FundAllocationBean>();
-	    for (Financer financer : acquisitionProcess.getFinancersWithFundsAllocated(user.getPerson())) {
-		fundAllocationBeans.add(new FundAllocationBean(financer));
-	    }
-	    request.setAttribute("fundAllocationBeans", fundAllocationBeans);
-	    return mapping.findForward("allocate.funds");
-	} else {
-	    return viewAcquisitionProcess(mapping, request, acquisitionProcess);
-	}
-    }
-
-    public ActionForward allocateFunds(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
-	final SimplifiedProcedureProcess acquisitionProcess = getProcess(request);
-	final List<FundAllocationBean> fundAllocationBeans = getRenderedObject();
-	genericActivityExecution(acquisitionProcess, "FundAllocation", fundAllocationBeans);
-	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
 
     public ActionForward executeFundAllocationExpirationDate(final ActionMapping mapping, final ActionForm form,

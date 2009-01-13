@@ -15,7 +15,7 @@ public class FundAllocation<T extends PaymentProcess> extends AbstractActivity<T
 
     @Override
     protected boolean isAvailable(T process) {
-	return isCurrentUserProcessOwner(process) && process.isInApprovedState()
+	return isCurrentUserProcessOwner(process) && process.isPendingFundAllocation()
 		&& process.hasAllocatedFundsForAllProjectFinancers() && !process.hasAllFundAllocationId(getUser().getPerson());
     }
 
@@ -26,7 +26,7 @@ public class FundAllocation<T extends PaymentProcess> extends AbstractActivity<T
 	    fundAllocationBean.getFinancer().setFundAllocationId(fundAllocationBean.getFundAllocationId());
 	}
 	if (process.getRequest().hasAllFundAllocationId()) {
-	    // process.allocateFundsToUnit();
+	    process.allocateFundsToUnit();
 	}
     }
 

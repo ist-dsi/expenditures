@@ -99,10 +99,14 @@ public class AfterTheFactAcquisitionProcess extends AfterTheFactAcquisitionProce
     public boolean hasAnyAvailableActivitity() {
 	return !getActiveActivities().isEmpty();
     }
-
+    
     @Override
+    public void allocateFundsToUnit() {
+	// do nothing
+    }
+    
+        @Override
     public void submitForApproval() {
 	// nothing to do here...
     }
-
 }

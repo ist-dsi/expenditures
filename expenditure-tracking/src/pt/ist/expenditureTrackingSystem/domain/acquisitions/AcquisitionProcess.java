@@ -234,4 +234,8 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 	return getAcquisitionProcessState().isInApprovedState();
     }
 
+    @Override
+    public boolean isPendingFundAllocation() {
+	return getAcquisitionProcessState().isInAllocatedToSupplierState();
+    }
 }

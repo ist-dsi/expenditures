@@ -16,7 +16,7 @@ public class ProjectFundAllocation<T extends PaymentProcess> extends AbstractAct
 
     @Override
     protected boolean isAvailable(T process) {
-	return isCurrentUserProcessOwner(process) && process.isInApprovedState()
+	return isCurrentUserProcessOwner(process) && process.isPendingFundAllocation()
 		&& !process.hasAllocatedFundsForAllProjectFinancers(getUser().getPerson());
     }
 

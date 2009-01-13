@@ -132,5 +132,9 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
 
     public abstract boolean isInApprovedState();
     
-    public abstract void submitForApproval();
+    public abstract boolean isPendingFundAllocation();
+    
+    public abstract void allocateFundsToUnit();
+    
+        public abstract void submitForApproval();
 }

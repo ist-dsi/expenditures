@@ -177,4 +177,13 @@ public class RefundProcess extends RefundProcess_Base {
 	return getProcessState().isInApprovedState();
     }
 
+    @Override
+    public boolean isPendingFundAllocation() {
+	return isInApprovedState();
+    }
+    
+    @Override
+    public void allocateFundsToUnit() {
+	new RefundProcessState(this, RefundProcessStateType.FUNDS_ALLOCATED);
+    }
 }

@@ -18,7 +18,7 @@
 
 <bean:define id="processRequest" name="process" property="request" toScope="request"/>
 <bean:define id="requestClass" name="processRequest" property="class.simpleName"/>
-<jsp:include page="<%=  "commons/view" + requestClass + ".jsp" %>" flush="true"/>
+<jsp:include page='<%=  "commons/view" + requestClass + ".jsp" %>' flush="true"/>
 
 <logic:empty name="comments">
 	<p class="mtop15"><em>Não existem comentários.</em></p>

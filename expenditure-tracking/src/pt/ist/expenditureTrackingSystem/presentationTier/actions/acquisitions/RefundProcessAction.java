@@ -27,7 +27,9 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "generic.upload", path = "/acquisitions/genericUpload.jsp"),
 	@Forward(name = "select.unit.to.add", path = "/acquisitions/commons/selectPayingUnitToAdd.jsp"),
 	@Forward(name = "assign.unit.item", path = "/acquisitions/commons/assignUnitItem.jsp"),
-	@Forward(name = "remove.paying.units", path = "/acquisitions/commons/removePayingUnits.jsp") })
+	@Forward(name = "remove.paying.units", path = "/acquisitions/commons/removePayingUnits.jsp"),
+	@Forward(name = "allocate.project.funds", path = "/acquisitions/commons/allocateProjectFunds.jsp"),
+	@Forward(name = "allocate.funds", path = "/acquisitions/commons/allocateFunds.jsp")})
 public class RefundProcessAction extends PaymentProcessAction {
 
     private static final Context CONTEXT = new Context("acquisitions");

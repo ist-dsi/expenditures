@@ -13,7 +13,7 @@
 	</div>
 </logic:present>
 
-<bean:define id="processClass" name="acquisitionProcess" propert="class.simpleName"/>
+<bean:define id="processClass" name="acquisitionProcess" property="class.simpleName"/>
 <bean:define id="processRequest" name="acquisitionProcess" property="request" toScope="request"/>
 <jsp:include page="commons/viewAcquisitionRequest.jsp" flush="true"/>
 
