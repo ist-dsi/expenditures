@@ -186,4 +186,9 @@ public class RefundProcessAction extends PaymentProcessAction {
 	return executeActivityAndViewProcess(mapping, form, request, response, "Approve");
     }
 
+    public ActionForward executeUnApprove(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	return executeActivityAndViewProcess(mapping, form, request, response, "UnApprove");
+    }
+
 }

@@ -132,4 +132,5 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
 
     public abstract boolean isInApprovedState();
     
+    public abstract void submitForApproval();
 }

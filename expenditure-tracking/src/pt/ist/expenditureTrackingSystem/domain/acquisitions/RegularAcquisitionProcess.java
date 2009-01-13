@@ -116,6 +116,7 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
 	new AcquisitionProcessState(this, AcquisitionProcessStateType.IN_GENESIS);
     }
 
+    @Override
     public void submitForApproval() {
 	new AcquisitionProcessState(this, AcquisitionProcessStateType.SUBMITTED_FOR_APPROVAL);
     }
@@ -201,4 +202,10 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
     public <T extends GenericLog> T logExecution(Person person, String operationName, Object... args) {
 	return (T) new OperationLog(this, person, operationName, new DateTime(), getAcquisitionProcessStateType());
     }
+
+    public void removeFundAllocationExpirationDate() {
+	setFundAllocationExpirationDate(null);
+	submitForFundAllocation();
+    }
+
 }

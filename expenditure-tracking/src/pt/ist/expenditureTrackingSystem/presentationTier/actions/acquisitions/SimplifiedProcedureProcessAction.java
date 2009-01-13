@@ -458,9 +458,9 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
 
-    public ActionForward executeUnApproveAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
+    public ActionForward executeUnApprove(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
-	return executeActivityAndViewProcess(mapping, form, request, response, "UnApproveAcquisitionProcess");
+	return executeActivityAndViewProcess(mapping, form, request, response, "UnApprove");
     }
 
     public ActionForward executeEditAcquisitionRequestItemRealValues(final ActionMapping mapping, final ActionForm form,

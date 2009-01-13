@@ -17,6 +17,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAd
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAssignPayingUnitToItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericRemovePayingUnit;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.ProjectFundAllocation;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.UnApprove;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.Approve;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.CreateRefundItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.DeleteRefundItem;
@@ -42,6 +43,7 @@ public class RefundProcess extends RefundProcess_Base {
 	requestActivitites.add(new SubmitForApproval());
 	requestActivitites.add(new UnSubmitForApproval());
 	requestActivitites.add(new Approve());
+	requestActivitites.add(new UnApprove<RefundProcess>());
 	requestActivitites.add(new ProjectFundAllocation<RefundProcess>());
 	requestActivitites.add(new FundAllocation<RefundProcess>());
 	activityMap.put(ActivityScope.REQUEST_INFORMATION, requestActivitites);
@@ -129,6 +131,7 @@ public class RefundProcess extends RefundProcess_Base {
 	return getRequest().getRequester();
     }
 
+    @Override
     public void submitForApproval() {
 	new RefundProcessState(this, RefundProcessStateType.SUBMITTED_FOR_APPROVAL);
     }

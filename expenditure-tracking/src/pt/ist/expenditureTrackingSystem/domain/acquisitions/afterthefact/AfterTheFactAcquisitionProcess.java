@@ -100,4 +100,9 @@ public class AfterTheFactAcquisitionProcess extends AfterTheFactAcquisitionProce
 	return !getActiveActivities().isEmpty();
     }
 
+    @Override
+    public void submitForApproval() {
+	// nothing to do here...
+    }
+
 }

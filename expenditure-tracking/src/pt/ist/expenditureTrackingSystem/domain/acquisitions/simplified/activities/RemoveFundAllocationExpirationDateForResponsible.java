@@ -3,7 +3,7 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activiti
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
-import pt.ist.expenditureTrackingSystem.domain.organization.Person;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.UnApprove;
 import pt.ist.fenixWebFramework.security.UserView;
 
 public class RemoveFundAllocationExpirationDateForResponsible extends GenericAcquisitionProcessActivity {
@@ -22,10 +22,8 @@ public class RemoveFundAllocationExpirationDateForResponsible extends GenericAcq
 
     @Override
     protected void process(RegularAcquisitionProcess process, Object... objects) {
-	final User user = UserView.getUser();
-	final Person person = user.getPerson();
-	process.setFundAllocationExpirationDate(null);
-	new UnApproveAcquisitionProcess().execute(process, objects);
+	process.removeFundAllocationExpirationDate();
+	new UnApprove<RegularAcquisitionProcess>().execute(process, objects);
     }
 
 }
