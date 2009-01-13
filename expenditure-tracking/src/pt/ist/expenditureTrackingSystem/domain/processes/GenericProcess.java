@@ -15,10 +15,7 @@ import org.joda.time.Interval;
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
-import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.fenixWebFramework.security.UserView;
 import pt.ist.fenixWebFramework.services.Service;
 
@@ -161,4 +158,7 @@ public abstract class GenericProcess extends GenericProcess_Base {
 	return user != null && user.getPerson() == getCurrentOwner();
     }
 
+    public <T extends GenericLog> T logExecution(Person person, String operationName, Object... args) {
+	return (T) new GenericLog(this, person, operationName, new DateTime());
+    }
 }

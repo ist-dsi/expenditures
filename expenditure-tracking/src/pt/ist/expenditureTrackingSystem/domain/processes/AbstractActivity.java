@@ -1,7 +1,5 @@
 package pt.ist.expenditureTrackingSystem.domain.processes;
 
-import org.joda.time.DateTime;
-
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
@@ -15,7 +13,7 @@ public abstract class AbstractActivity<T extends GenericProcess> {
     protected abstract boolean isAccessible(T process);
 
     protected abstract void process(T process, Object... objects);
-    
+
     protected boolean isProcessTaken(T process) {
 	return process.getCurrentOwner() != null;
     }
@@ -27,7 +25,7 @@ public abstract class AbstractActivity<T extends GenericProcess> {
     }
 
     protected void logExecution(T process, String operationName, User user) {
-	new GenericLog(process, user.getPerson(), operationName, new DateTime());
+	process.logExecution(user.getPerson(), operationName);
     }
 
     @Service

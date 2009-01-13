@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
@@ -44,9 +45,7 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
     public List<OperationLog> getOperationLogs() {
 	List<OperationLog> logs = new ArrayList<OperationLog>();
 	for (GenericLog log : super.getExecutionLogs()) {
-	    if (log instanceof OperationLog) {
-		logs.add((OperationLog) log);
-	    }
+	    logs.add((OperationLog) log);
 	}
 	return logs;
     }
@@ -198,4 +197,8 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
 	return getAcquisitionProcessState().isAuthorized();
     }
 
+    @Override
+    public <T extends GenericLog> T logExecution(Person person, String operationName, Object... args) {
+	return (T) new OperationLog(this, person, operationName, new DateTime(), getAcquisitionProcessStateType());
+    }
 }

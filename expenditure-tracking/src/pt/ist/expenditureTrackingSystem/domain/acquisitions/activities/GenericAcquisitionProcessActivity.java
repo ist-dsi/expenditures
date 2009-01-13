@@ -5,19 +5,14 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import org.codehaus.xfire.XFireRuntimeException;
-import org.joda.time.DateTime;
 
-import pt.ist.expenditureTrackingSystem.applicationTier.EmailSender;
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.OperationLog;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.domain.processes.ActivityException;
-import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 
@@ -35,11 +30,6 @@ public abstract class GenericAcquisitionProcessActivity extends AbstractActivity
     }
 
     @Override
-    protected void logExecution(RegularAcquisitionProcess process, String operationName, User user) {
-	new OperationLog(process, user.getPerson(), operationName, new DateTime(), process.getAcquisitionProcessStateType());
-    }
-
-    @Override
     public String getLocalizedName() {
 	return RenderUtils.getResourceString("ACQUISITION_RESOURCES", "label." + getClass().getName());
     }
@@ -49,8 +39,9 @@ public abstract class GenericAcquisitionProcessActivity extends AbstractActivity
 	ResourceBundle bundle = ResourceBundle.getBundle("resources/ExpenditureResources", Language.getLocale());
 	if (person.getOptions().getReceiveNotificationsByEmail()) {
 	    try {
-//		EmailSender.sendEmail(person.getUsername(), bundle.getString("process.label.notifyTopic"), bundle
-//			.getString("process.label.notifyMessage"));
+		// EmailSender.sendEmail(person.getUsername(),
+		// bundle.getString("process.label.notifyTopic"), bundle
+		// .getString("process.label.notifyMessage"));
 	    } catch (XFireRuntimeException e) {
 		e.printStackTrace();
 		throw new ActivityException("activities.messages.exception.webserviceProblem", getLocalizedName());
@@ -73,8 +64,9 @@ public abstract class GenericAcquisitionProcessActivity extends AbstractActivity
 
 	try {
 	    for (Person person : people) {
-//		EmailSender.sendEmail(person.getUsername(), bundle.getString("process.label.notifyTopic"), bundle
-//			.getString("process.label.notifyMessage"));
+		// EmailSender.sendEmail(person.getUsername(),
+		// bundle.getString("process.label.notifyTopic"), bundle
+		// .getString("process.label.notifyMessage"));
 	    }
 	} catch (XFireRuntimeException e) {
 	    e.printStackTrace();

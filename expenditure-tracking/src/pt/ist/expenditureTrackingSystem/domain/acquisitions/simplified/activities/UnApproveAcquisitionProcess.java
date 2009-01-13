@@ -18,8 +18,7 @@ public class UnApproveAcquisitionProcess extends GenericAcquisitionProcessActivi
     protected boolean isAvailable(RegularAcquisitionProcess process) {
 	final User user = UserView.getUser();
 	final Person person = user.getPerson();
-	return  super.isAvailable(process)
-		&& process.getFundAllocationExpirationDate() == null
+	return super.isAvailable(process) && process.getFundAllocationExpirationDate() == null
 		&& process.getAcquisitionRequest().hasBeenSubmittedForFundsAllocationBy(person);
     }
 
@@ -28,6 +27,7 @@ public class UnApproveAcquisitionProcess extends GenericAcquisitionProcessActivi
 	final User user = UserView.getUser();
 	final Person person = user.getPerson();
 	process.getAcquisitionRequest().unSubmitForFundsAllocation(person);
+	process.submitForApproval();
     }
 
 }

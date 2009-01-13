@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.joda.time.DateTime;
+
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
@@ -18,8 +20,8 @@ import pt.ist.expenditureTrackingSystem.domain.announcements.activities.SubmitAn
 import pt.ist.expenditureTrackingSystem.domain.dto.AnnouncementBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
+import pt.ist.expenditureTrackingSystem.domain.processes.GenericLog;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
-import pt.ist.expenditureTrackingSystem.domain.requests.RequestForProposalProcessStateType;
 import pt.ist.fenixWebFramework.services.Service;
 
 public class AnnouncementProcess extends AnnouncementProcess_Base {
@@ -115,4 +117,8 @@ public class AnnouncementProcess extends AnnouncementProcess_Base {
 		|| person.hasRoleType(RoleType.ACQUISITION_CENTRAL_MANAGER);
     }
 
+    @Override
+    public <T extends GenericLog> T logExecution(Person person, String operationName, Object... args) {
+	return (T) new OperationLog(this, person, operationName, getAnnouncementProcessStateType(), new DateTime());
+    }
 }

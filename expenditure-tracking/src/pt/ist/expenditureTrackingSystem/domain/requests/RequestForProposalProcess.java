@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
@@ -13,6 +14,7 @@ import pt.ist.expenditureTrackingSystem.domain.dto.CreateRequestForProposalProce
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
+import pt.ist.expenditureTrackingSystem.domain.processes.GenericLog;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 import pt.ist.expenditureTrackingSystem.domain.requests.activities.ApproveRequestForProposal;
 import pt.ist.expenditureTrackingSystem.domain.requests.activities.CancelRequestForProposal;
@@ -82,7 +84,7 @@ public class RequestForProposalProcess extends RequestForProposalProcess_Base {
     public boolean hasAnyAvailableActivitity() {
 	return !getActiveActivitiesForRequest().isEmpty();
     }
-    
+
     public boolean isProcessInState(RequestForProposalProcessStateType state) {
 	return getLastRequestForProposalProcessStateType().equals(state);
     }
@@ -143,5 +145,10 @@ public class RequestForProposalProcess extends RequestForProposalProcess_Base {
     public boolean isVisible(Person person) {
 	return getLastRequestForProposalProcessStateType().equals(RequestForProposalProcessStateType.APPROVED)
 		|| getRequestForProposal().getRequester() == person;
+    }
+
+    @Override
+    public <T extends GenericLog> T logExecution(Person person, String operationName, Object... args) {
+	return (T) new OperationLog(this, person, operationName, getRequestForProposalProcessStateType(), new DateTime());
     }
 }
