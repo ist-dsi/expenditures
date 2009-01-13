@@ -167,27 +167,6 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 	return getAcquisitionRequest().getRequestingUnit();
     }
 
-    public boolean isResponsibleForUnit(Person person) {
-	Set<Authorization> validAuthorizations = person.getValidAuthorizations();
-	for (Unit unit : getPayingUnits()) {
-	    for (Authorization authorization : validAuthorizations) {
-		if (unit.isSubUnit(authorization.getUnit())) {
-		    return true;
-		}
-	    }
-	}
-
-	return false;
-    }
-
-    public boolean isResponsibleForUnit() {
-	User user = UserView.getUser();
-	if (user == null) {
-	    return false;
-	}
-	return isResponsibleForUnit(user.getPerson());
-    }
-
     public boolean isAllowedToViewCostCenterExpenditures() {
 	try {
 	    return (getUnit() != null && isResponsibleForUnit()) || userHasRole(RoleType.ACCOUNTING_MANAGER)

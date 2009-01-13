@@ -44,7 +44,9 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
     public List<OperationLog> getOperationLogs() {
 	List<OperationLog> logs = new ArrayList<OperationLog>();
 	for (GenericLog log : super.getExecutionLogs()) {
-	    logs.add((OperationLog) log);
+	    if (log instanceof OperationLog) {
+		logs.add((OperationLog) log);
+	    }
 	}
 	return logs;
     }
