@@ -110,7 +110,7 @@ public abstract class PaymentProcessAction extends ProcessAction {
     public ActionForward calculateRealShareValuePostBack(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 
-	final RefundItem item = getRequestItem(request);
+	final RequestItem item = getRequestItem(request);
 	request.setAttribute("item", item);
 	return genericCalculateShareValuePostBack(mapping, form, request, response, "edit.real.shares.values", true);
     }
@@ -119,7 +119,7 @@ public abstract class PaymentProcessAction extends ProcessAction {
 	    final HttpServletRequest request, final HttpServletResponse response, String forward, boolean realValue) {
 
 	final PaymentProcess process = getProcess(request);
-	final RequestItem item = getDomainObject(request, "itemOid");
+	final RequestItem item = getRequestItem(request);
 
 	List<UnitItemBean> beans = getRenderedObject("unitItemBeans");
 	int assigned = 0;
