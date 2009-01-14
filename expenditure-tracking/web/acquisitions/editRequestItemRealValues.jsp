@@ -12,7 +12,7 @@
 
 <bean:define id="itemOID" name="itemBean" property="item.OID"/>
 
-<bean:define id="processRequest" name="acquisitionProcess" property="request" toScope="request"/>
+<bean:define id="processRequest" name="itemBean" property="acquisitionRequest" toScope="request"/>
 <jsp:include page="commons/viewAcquisitionRequest.jsp" flush="true"/>
 
 
