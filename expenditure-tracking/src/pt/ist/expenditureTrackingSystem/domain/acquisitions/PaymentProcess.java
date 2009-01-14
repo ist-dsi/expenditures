@@ -136,10 +136,12 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
     
     public abstract void allocateFundsToUnit();
     
-        public abstract void submitForApproval();
+    public abstract void submitForApproval();
 
     public abstract boolean isInAllocatedToUnitState();
 
+    public abstract boolean isInAuthorizedState();
+    
     protected abstract void authorize();
 
     public boolean isResponsibleForUnit(final Person person, final Money amount) {

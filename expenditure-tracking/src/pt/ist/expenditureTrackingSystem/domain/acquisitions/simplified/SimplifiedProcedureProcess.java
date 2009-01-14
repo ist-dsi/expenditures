@@ -17,6 +17,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAs
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericRemovePayingUnit;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.ProjectFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.UnApprove;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.UnAuthorize;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.AddAcquisitionProposalDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.AllocateFundsPermanently;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.AllocateProjectFundsPermanently;
@@ -93,7 +94,7 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	requestInformationActivities.add(new AllocateFundsPermanently());
 	requestInformationActivities.add(new RemoveFundsPermanentlyAllocated());
 	requestInformationActivities.add(new UnApprove<RegularAcquisitionProcess>());
-	requestInformationActivities.add(new UnAuthorizeAcquisitionProcess());
+	requestInformationActivities.add(new UnAuthorize<RegularAcquisitionProcess>());
 
 	requestInformationActivities.add(new ProjectFundAllocation<RegularAcquisitionProcess>());
 	requestInformationActivities.add(new FundAllocation<RegularAcquisitionProcess>());

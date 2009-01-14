@@ -256,12 +256,6 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	return true;
     }
 
-    public void unathorizeBy(Person person) {
-	for (AcquisitionRequestItem item : getAcquisitionRequestItemsSet()) {
-	    item.unathorizeBy(person);
-	}
-    }
-
     public boolean isAuthorizedByAtLeastOneResponsible() {
 	for (AcquisitionRequestItem item : getAcquisitionRequestItemsSet()) {
 	    if (item.hasAtLeastOneResponsibleApproval()) {

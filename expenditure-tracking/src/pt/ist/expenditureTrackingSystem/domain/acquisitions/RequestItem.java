@@ -143,5 +143,4 @@ public abstract class RequestItem extends RequestItem_Base {
 	return true;
     }
 
-
 }

@@ -2,7 +2,6 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import org.joda.time.LocalDate;
 
@@ -10,7 +9,6 @@ import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
-import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.PayingUnitTotalBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
@@ -226,4 +224,10 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
     public boolean isPendingFundAllocation() {
 	return getAcquisitionProcessState().isInAllocatedToSupplierState();
     }
+
+    @Override
+    public boolean isInAuthorizedState() {
+	return getAcquisitionProcessState().isAuthorized();
+    }
+    
 }

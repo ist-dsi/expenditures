@@ -232,12 +232,6 @@ public class RequestWithPayment extends RequestWithPayment_Base {
 	return false;
     }
 
-    public void authorizeBy(final Person person) {
-	for (final RequestItem requestItem : getRequestItemsSet()) {
-	    requestItem.authorizeBy(person);
-	}
-    }
-
     public boolean isAuthorizedByAllResponsibles() {
 	for (final RequestItem requestItem : getRequestItemsSet()) {
 	    if (!requestItem.isAuthorized()) {
@@ -247,5 +241,16 @@ public class RequestWithPayment extends RequestWithPayment_Base {
 	return true;
     }
 
+    public void authorizeBy(final Person person) {
+	for (final RequestItem requestItem : getRequestItemsSet()) {
+	    requestItem.authorizeBy(person);
+	}
+    }
+
+    public void unathorizeBy(final Person person) {
+	for (final RequestItem requestItem : getRequestItemsSet()) {
+	    requestItem.unathorizeBy(person);
+	}
+    }
 
 }

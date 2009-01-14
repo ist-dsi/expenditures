@@ -19,6 +19,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAs
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericRemovePayingUnit;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.ProjectFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.UnApprove;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.UnAuthorize;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.Approve;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.CreateRefundItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.DeleteRefundItem;
@@ -48,6 +49,7 @@ public class RefundProcess extends RefundProcess_Base {
 	requestActivitites.add(new ProjectFundAllocation<RefundProcess>());
 	requestActivitites.add(new FundAllocation<RefundProcess>());
 	requestActivitites.add(new Authorize<RefundProcess>());
+	requestActivitites.add(new UnAuthorize<RefundProcess>());
 	activityMap.put(ActivityScope.REQUEST_INFORMATION, requestActivitites);
 
 	List<AbstractActivity<RefundProcess>> itemActivities = new ArrayList<AbstractActivity<RefundProcess>>();
@@ -197,6 +199,11 @@ public class RefundProcess extends RefundProcess_Base {
     @Override
     public void allocateFundsToUnit() {
 	new RefundProcessState(this, RefundProcessStateType.FUNDS_ALLOCATED);
+    }
+
+    @Override
+    public boolean isInAuthorizedState() {
+	return getProcessState().isAuthorized();
     }
 
 }
