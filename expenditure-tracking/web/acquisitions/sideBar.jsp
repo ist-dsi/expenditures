@@ -62,7 +62,7 @@
 	</ul>
 --%>
 
-<!--
+<%--
 	<logic:present role="ACQUISITION_CENTRAL_MANAGER">
 		<ul>
 			<li class="header">
@@ -91,7 +91,8 @@
 				</li>
 		</ul>
 	</logic:present>
--->
+--%>
+<%--
 	<ul>
 		<li class="header">
 			<strong><bean:message key="link.sideBar.refundProcedure" bundle="EXPENDITURE_RESOURCES"/></strong>
@@ -118,6 +119,7 @@
 			</html:link>
 		</li>
 	</ul>
+--%>	
 	<logic:present role="ACQUISITION_CENTRAL,ACQUISITION_CENTRAL_MANAGER">
 		<ul>
 			<li class="header">
@@ -139,6 +141,7 @@
 					<bean:message key="link.sideBar.listAfterTheFactAcquisitions" bundle="EXPENDITURE_RESOURCES"/>
 				</html:link>
 			</li>
+	
 		</ul>
 	</logic:present>
 
