@@ -29,7 +29,7 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "assign.unit.item", path = "/acquisitions/commons/assignUnitItem.jsp"),
 	@Forward(name = "remove.paying.units", path = "/acquisitions/commons/removePayingUnits.jsp"),
 	@Forward(name = "allocate.project.funds", path = "/acquisitions/commons/allocateProjectFunds.jsp"),
-	@Forward(name = "allocate.funds", path = "/acquisitions/commons/allocateFunds.jsp")})
+	@Forward(name = "allocate.funds", path = "/acquisitions/commons/allocateFunds.jsp") })
 public class RefundProcessAction extends PaymentProcessAction {
 
     private static final Context CONTEXT = new Context("acquisitions");
@@ -161,12 +161,6 @@ public class RefundProcessAction extends PaymentProcessAction {
 	return viewRefundProcess(mapping, request, getProcess(request));
     }
 
-    public ActionForward executeActivityAndViewProcess(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response, final String activityName) {
-	genericActivityExecution(request, activityName);
-	return viewProcess(mapping, form, request, response);
-    }
-
     public ActionForward executeSubmitForApproval(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	return executeActivityAndViewProcess(mapping, form, request, response, "SubmitForApproval");
@@ -183,18 +177,18 @@ public class RefundProcessAction extends PaymentProcessAction {
 	return item != null ? item : (RefundItem) super.getRequestItem(request);
     }
 
-    public ActionForward executeApprove(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
+    public ActionForward executeApprove(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
 	return executeActivityAndViewProcess(mapping, form, request, response, "Approve");
     }
 
-    public ActionForward executeUnApprove(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
+    public ActionForward executeUnApprove(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
 	return executeActivityAndViewProcess(mapping, form, request, response, "UnApprove");
     }
 
-    public ActionForward executeAuthorize(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
+    public ActionForward executeAuthorize(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
 	return executeActivityAndViewProcess(mapping, form, request, response, "Authorize");
     }
 

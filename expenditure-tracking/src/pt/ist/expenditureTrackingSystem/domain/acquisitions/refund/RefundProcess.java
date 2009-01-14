@@ -24,6 +24,8 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.Ap
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.CreateRefundItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.DeleteRefundItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.EditRefundItem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.RemoveFundAllocation;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.RemoveProjectFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.SubmitForApproval;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.UnSubmitForApproval;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
@@ -47,7 +49,9 @@ public class RefundProcess extends RefundProcess_Base {
 	requestActivitites.add(new Approve());
 	requestActivitites.add(new UnApprove<RefundProcess>());
 	requestActivitites.add(new ProjectFundAllocation<RefundProcess>());
+	requestActivitites.add(new RemoveProjectFundAllocation());
 	requestActivitites.add(new FundAllocation<RefundProcess>());
+	requestActivitites.add(new RemoveFundAllocation());
 	requestActivitites.add(new Authorize<RefundProcess>());
 	requestActivitites.add(new UnAuthorize<RefundProcess>());
 	activityMap.put(ActivityScope.REQUEST_INFORMATION, requestActivitites);
@@ -204,6 +208,10 @@ public class RefundProcess extends RefundProcess_Base {
     @Override
     public boolean isInAuthorizedState() {
 	return getProcessState().isAuthorized();
+    }
+    
+    public void unApproveByAll() {
+	getRequest().unSubmitForFundsAllocation();
     }
 
 }

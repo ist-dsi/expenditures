@@ -2,8 +2,6 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
@@ -296,19 +294,6 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	}
     }
 
-    public List<UnitItem> getSortedUnitItems() {
-	List<UnitItem> unitItems = new ArrayList<UnitItem>(getUnitItems());
-	Collections.sort(unitItems, new Comparator<UnitItem>() {
-
-	    public int compare(UnitItem unitItem1, UnitItem unitItem2) {
-		return unitItem1.getUnit().getPresentationName().compareTo(unitItem2.getUnit().getPresentationName());
-	    }
-
-	});
-
-	return unitItems;
-    }
-
     public Money getTotalVatValue() {
 	return getTotalItemValue().percentage(getVatValue());
     }
@@ -318,14 +303,15 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
     }
 
     // replaced with hasBeenApprovedBy()
-//    public boolean hasBeenSubmittedForFundsAllocationBy(Person person) {
-//	for (UnitItem unitItem : getUnitItems()) {
-//	    if (unitItem.getUnit().isResponsible(person) && unitItem.getSubmitedForFundsAllocation()) {
-//		return true;
-//	    }
-//	}
-//	return false;
-//    }
+    // public boolean hasBeenSubmittedForFundsAllocationBy(Person person) {
+    // for (UnitItem unitItem : getUnitItems()) {
+    // if (unitItem.getUnit().isResponsible(person) &&
+    // unitItem.getSubmitedForFundsAllocation()) {
+    // return true;
+    // }
+    // }
+    // return false;
+    // }
 
     public void unSubmitForFundsAllocation() {
 	for (UnitItem unitItem : getUnitItems()) {

@@ -193,7 +193,8 @@ public class RequestWithPayment extends RequestWithPayment_Base {
 	}
 	return units;
     }
-        public boolean hasBeenApprovedBy(final Person person) {
+
+    public boolean hasBeenApprovedBy(final Person person) {
 	for (final RequestItem requestItem : getRequestItemsSet()) {
 	    if (requestItem.hasBeenApprovedBy(person)) {
 		return true;
@@ -220,6 +221,12 @@ public class RequestWithPayment extends RequestWithPayment_Base {
     public void unSubmitForFundsAllocation(final Person person) {
 	for (final RequestItem requestItem : getRequestItemsSet()) {
 	    requestItem.unSubmitForFundsAllocation(person);
+	}
+    }
+
+    public void unSubmitForFundsAllocation() {
+	for (final RequestItem requestItem : getRequestItemsSet()) {
+	    requestItem.unSubmitForFundsAllocation();
 	}
     }
 

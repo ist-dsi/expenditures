@@ -215,9 +215,25 @@ public abstract class PaymentProcessAction extends ProcessAction {
 	return viewProcess(mapping, form, request, response);
     }
 
+    public ActionForward executeRemoveFundAllocation(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	return executeActivityAndViewProcess(mapping, form, request, response, "RemoveFundAllocation");
+    }
+
+    public ActionForward executeRemoveProjectFundAllocation(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	return executeActivityAndViewProcess(mapping, form, request, response, "RemoveProjectFundAllocation");
+    }
+
     @Override
     protected String getBundle() {
 	return "ACQUISITION_RESOURCES";
+    }
+
+    public ActionForward executeActivityAndViewProcess(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response, final String activityName) {
+	genericActivityExecution(request, activityName);
+	return viewProcess(mapping, form, request, response);
     }
 
     protected <T extends RequestItem> T getRequestItem(HttpServletRequest request) {

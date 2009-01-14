@@ -116,6 +116,18 @@
 		</fr:layout>
 	</fr:view>
 </div>
+
+<logic:notEmpty name="refundProcess" property="request.totalAmountsForEachPayingUnit">
+	<fr:view name="refundProcess" property="request.totalAmountsForEachPayingUnit"
+			schema="viewPayingUnitWithTotalAmount">
+		<fr:layout name="tabular">
+			<fr:property name="classes" value="tstyle5"/>
+			<fr:property name="columnClasses" value=",,nowrap,,"/>
+		</fr:layout>
+	</fr:view>
+</logic:notEmpty>
+
+
 <p>
 		<bean:message key="acquisitionProcess.label.otherFiles" bundle="ACQUISITION_RESOURCES"/>:
 		<logic:notEmpty name="refundProcess" property="files">
@@ -151,4 +163,24 @@
 		</fr:layout>
 	</fr:view>
 	</div>
+		<logic:notEmpty name="refundItem" property="unitItems">
+					<table class="payingunits">
+						<logic:iterate id="unitItem" name="refundItem" property="sortedUnitItems">
+							<tr>
+								<td>
+									<fr:view name="unitItem" property="unit.presentationName"/>
+								</td>
+								<td class="nowrap vatop">
+									<logic:present name="unitItem" property="realShareValue">
+										<fr:view name="unitItem" property="realShareValue"/>
+									</logic:present>
+									<logic:notPresent name="unitItem" property="realShareValue">
+										<fr:view name="unitItem" property="shareValue"/>
+									</logic:notPresent>
+								</td>
+							</tr>
+						</logic:iterate>
+					</table>
+				</logic:notEmpty>
+	
 </logic:iterate>
