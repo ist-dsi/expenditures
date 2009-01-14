@@ -48,9 +48,14 @@
 					<bean:message key="unitItem.label.shareValue" bundle="ACQUISITION_RESOURCES"/>
 				</th>
 			</tr>
+			
+			<bean:define id="calculateFunction">
+				<%= "javascript:calculate('" + maxElements + "', 'sum', '" + maxValue + "', '" + outOfLabel+ "');" %> 
+			</bean:define>
+			
 			<logic:iterate id="unitItemBean" name="unitItemBeans" indexId="id">
-					<tr id='<%= "tr" + id %>' onKeyUp='<%= "javascript:calculate('" + maxElements + "', 'sum', '" + maxValue + "', '" + outOfLabel+ "');" %> '>
-						<td onClick='<%= "javascript:calculate('" + maxElements + "', 'sum', '" + maxValue + "', '" + outOfLabel+ "');" %> '>
+					<tr id='<%= "tr" + id %>' onKeyUp="<%=  calculateFunction %>">
+						<td onClick="<%= calculateFunction %>">
 							<fr:edit  id='<%= "assigned" + id %>' name="unitItemBean" slot="assigned"/>
 						</td>
 						<td>
