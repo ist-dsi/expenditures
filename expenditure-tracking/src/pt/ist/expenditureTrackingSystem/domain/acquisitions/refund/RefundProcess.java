@@ -28,6 +28,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.Re
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.RemoveProjectFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.SubmitForApproval;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.UnSubmitForApproval;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.UnSubmitForFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateRefundProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
@@ -54,6 +55,7 @@ public class RefundProcess extends RefundProcess_Base {
 	requestActivitites.add(new RemoveFundAllocation());
 	requestActivitites.add(new Authorize<RefundProcess>());
 	requestActivitites.add(new UnAuthorize<RefundProcess>());
+	requestActivitites.add(new UnSubmitForFundAllocation());
 	activityMap.put(ActivityScope.REQUEST_INFORMATION, requestActivitites);
 
 	List<AbstractActivity<RefundProcess>> itemActivities = new ArrayList<AbstractActivity<RefundProcess>>();
