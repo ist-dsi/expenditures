@@ -11,6 +11,7 @@ import pt.ist.expenditureTrackingSystem.domain.ProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess.ActivityScope;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.Authorize;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.FundAllocation;
@@ -21,12 +22,15 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.ProjectFu
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.UnApprove;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.UnAuthorize;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.Approve;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.ConfirmInvoices;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.CreateRefundInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.CreateRefundItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.DeleteRefundItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.EditRefundItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.RemoveFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.RemoveProjectFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.SubmitForApproval;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.SubmitForInvoiceConfirmation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.UnSubmitForApproval;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.UnSubmitForFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
@@ -56,12 +60,15 @@ public class RefundProcess extends RefundProcess_Base {
 	requestActivitites.add(new Authorize<RefundProcess>());
 	requestActivitites.add(new UnAuthorize<RefundProcess>());
 	requestActivitites.add(new UnSubmitForFundAllocation());
+	requestActivitites.add(new SubmitForInvoiceConfirmation());
+	requestActivitites.add(new ConfirmInvoices());
 	activityMap.put(ActivityScope.REQUEST_INFORMATION, requestActivitites);
 
 	List<AbstractActivity<RefundProcess>> itemActivities = new ArrayList<AbstractActivity<RefundProcess>>();
 	itemActivities.add(new EditRefundItem());
 	itemActivities.add(new DeleteRefundItem());
 	itemActivities.add(new GenericAssignPayingUnitToItem<RefundProcess>());
+	itemActivities.add(new CreateRefundInvoice());
 
 	activityMap.put(ActivityScope.REQUEST_ITEM, itemActivities);
     }
@@ -201,7 +208,7 @@ public class RefundProcess extends RefundProcess_Base {
     public boolean isPendingFundAllocation() {
 	return isInApprovedState();
     }
-    
+
     @Override
     public void allocateFundsToUnit() {
 	new RefundProcessState(this, RefundProcessStateType.FUNDS_ALLOCATED);
@@ -211,9 +218,25 @@ public class RefundProcess extends RefundProcess_Base {
     public boolean isInAuthorizedState() {
 	return getProcessState().isAuthorized();
     }
-    
+
     public void unApproveByAll() {
 	getRequest().unSubmitForFundsAllocation();
+    }
+
+    public List<RefundInvoice> getRefundableInvoices() {
+	List<RefundInvoice> invoices = new ArrayList<RefundInvoice>();
+	for (RequestItem item : getRequest().getRequestItems()) {
+	    invoices.addAll(((RefundItem) item).getInvoices());
+	}
+	return invoices;
+    }
+
+    public void submitForInvoiceConfirmation() {
+	new RefundProcessState(this, RefundProcessStateType.SUBMITTED_FOR_INVOICE_CONFIRMATION);
+    }
+
+    public void confirmInvoices() {
+	new RefundProcessState(this, RefundProcessStateType.INVOICES_CONFIRMED);
     }
 
 }

@@ -11,6 +11,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.SearchRefundProcesses;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateRefundProcessBean;
+import pt.ist.expenditureTrackingSystem.domain.dto.RefundInvoiceBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.RefundItemBean;
 import pt.ist.expenditureTrackingSystem.presentationTier.Context;
 import pt.ist.fenixWebFramework.struts.annotations.Forward;
@@ -29,7 +30,8 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "assign.unit.item", path = "/acquisitions/commons/assignUnitItem.jsp"),
 	@Forward(name = "remove.paying.units", path = "/acquisitions/commons/removePayingUnits.jsp"),
 	@Forward(name = "allocate.project.funds", path = "/acquisitions/commons/allocateProjectFunds.jsp"),
-	@Forward(name = "allocate.funds", path = "/acquisitions/commons/allocateFunds.jsp") })
+	@Forward(name = "allocate.funds", path = "/acquisitions/commons/allocateFunds.jsp"),
+	@Forward(name = "add.refund.invoice", path = "/acquisitions/refund/addRefundInvoice.jsp") })
 public class RefundProcessAction extends PaymentProcessAction {
 
     private static final Context CONTEXT = new Context("acquisitions");
@@ -192,8 +194,8 @@ public class RefundProcessAction extends PaymentProcessAction {
 	return executeActivityAndViewProcess(mapping, form, request, response, "Authorize");
     }
 
-    public ActionForward executeUnAuthorize(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
+    public ActionForward executeUnAuthorize(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
 	return executeActivityAndViewProcess(mapping, form, request, response, "UnAuthorize");
     }
 
@@ -202,4 +204,38 @@ public class RefundProcessAction extends PaymentProcessAction {
 	return executeActivityAndViewProcess(mapping, form, request, response, "UnSubmitForFundAllocation");
     }
 
+    public ActionForward executeCreateRefundInvoice(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+
+	RefundItem item = getRequestItem(request);
+	RefundInvoiceBean bean = new RefundInvoiceBean();
+	bean.setItem(item);
+
+	request.setAttribute("bean", bean);
+	return mapping.findForward("add.refund.invoice");
+    }
+
+    public ActionForward createRefundInvoice(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+
+	RefundProcess process = getProcess(request);
+	RefundInvoiceBean bean = getRenderedObject("bean");
+
+	byte[] fileBytes = consumeInputStream(bean);
+	process.getActivityByName("CreateRefundInvoice").execute(process, new Object[] { bean, fileBytes });
+
+	return viewProcess(mapping, form, request, response);
+    }
+
+
+    public ActionForward executeSubmitForInvoiceConfirmation(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	return executeActivityAndViewProcess(mapping, form, request, response, "SubmitForInvoiceConfirmation");
+    }
+
+
+    public ActionForward executeConfirmInvoices(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	return executeActivityAndViewProcess(mapping, form, request, response, "ConfirmInvoices");
+    }
 }

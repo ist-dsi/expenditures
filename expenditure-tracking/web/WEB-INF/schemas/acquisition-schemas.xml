@@ -705,4 +705,27 @@
 		<slot name="description" key="refundItem.label.description" />
 </schema>
 
+<schema name="create.refund.invoice" type="pt.ist.expenditureTrackingSystem.domain.dto.RefundInvoiceBean" bundle="ACQUISITION_RESOURCES">
+		<slot name="invoiceNumber" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" key="acquisitionProcess.label.invoice.number" bundle="ACQUISITION_RESOURCES"/>
+		<slot name="invoiceDate" layout="picker" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" key="acquisitionProcess.label.invoice.date"/>
+		<slot name="inputStream" key="acquisitionProcess.label.proposalDocument" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+			<property name="fileNameSlot" value="filename" />
+			<property name="size" value="30"/>
+		</slot>
+		<slot name="value" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" key="label.value" bundle="EXPENDITURE_RESOURCES"/>
+		<slot name="vatValue" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" key="label.vatValue" bundle="EXPENDITURE_RESOURCES"/>
+		<slot name="refundableValue" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" key="label.refundValue" bundle="EXPENDITURE_RESOURCES"/>
+		<slot name="supplier" layout="autoComplete" key="label.supplier" bundle="EXPENDITURE_RESOURCES" help="message.help.supplier">
+	        <property name="labelField" value="presentationName"/>
+			<property name="format" value="${presentationName}"/>
+			<property name="minChars" value="1"/>		
+			<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.NIFSupplierAutoCompleteProvider"/>
+			<property name="classes" value="inputsize250px"/>
+			<validator class="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator">
+				<property name="message" value="label.pleaseSelectOne.supplier"/>
+				<property name="bundle" value="EXPENDITURE_RESOURCES"/>
+				<property name="key" value="true"/>
+			</validator>
+		</slot>
+</schema>
 

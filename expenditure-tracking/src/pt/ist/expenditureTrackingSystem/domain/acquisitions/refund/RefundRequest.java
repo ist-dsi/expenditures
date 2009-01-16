@@ -1,6 +1,7 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.refund;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
@@ -19,7 +20,11 @@ public class RefundRequest extends RefundRequest_Base {
     }
 
     public void createRefundItem(RefundItemBean bean) {
-	new RefundItem(this, bean.getValueEstimation(), bean.getCPVReference(), bean.getDescription());
+	RefundItem refundItem = new RefundItem(this, bean.getValueEstimation(), bean.getCPVReference(), bean.getDescription());
+	List<Unit> payingUnits = this.getProcess().getPayingUnits();
+	if (payingUnits.size() == 1) {
+	    refundItem.createUnitItem(payingUnits.get(0), bean.getValueEstimation());
+	}
     }
 
     public boolean isEveryItemFullyAttributedToPayingUnits() {

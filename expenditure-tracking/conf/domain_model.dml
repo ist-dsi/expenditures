@@ -75,6 +75,14 @@ class acquisitions.refund.RefundItem extends acquisitions.RequestItem {
 	Money valueSpent;
 }
 
+class acquisitions.refund.RefundInvoice {
+	Integer invoiceNumber;
+	LocalDate invoiceDate;
+	Money value;
+	BigDecimal vatValue;
+	Money refundableValue;
+}
+
 class acquisitions.AcquisitionRequestItem extends acquisitions.RequestItem {
 	Integer quantity;
 	Money unitValue;
@@ -161,9 +169,7 @@ class File {
 	class requests.SupplierProposalDocument extends File {
 	}
 
-	class acquisitions.refund.RefundableInvoice extends File {
-		Money invoiceValue;
-		Money invoiceVat;
+	class acquisitions.refund.RefundableInvoiceFile extends File {
 	}
 	
 class Options {
@@ -793,15 +799,15 @@ relation AfterTheFactImportFile {
 	acquisitions.afterthefact.ImportFile playsRole importFile;
 }
 
-relation RefundItemRefundableInvoice {
+relation RefundItemRefundInvoice {
 	acquisitions.refund.RefundItem playsRole refundItem;
-	acquisitions.refund.RefundableInvoice playsRole invoices {
+	acquisitions.refund.RefundInvoice playsRole invoices {
 		multiplicity *;
 	}
 }
 
-relation RefundableInvoiceSupplier {
-	acquisitions.refund.RefundableInvoice playsRole refundableInvoices {
+relation RefundInvoiceSupplier {
+	acquisitions.refund.RefundInvoice playsRole refundInvoices {
 			multiplicity *;
 		}
 	organization.Supplier  playsRole supplier;
@@ -819,3 +825,14 @@ relation RefundRequestRefundee {
 	organization.Person playsRole refundee;
 }
 
+relation RefundInvoiceExpenditureTrackingSystem {
+	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
+	acquisitions.refund.RefundInvoice playsRole refundInvoices {
+		multiplicity *;
+	}
+}
+
+relation RefundInvoiceRefundableInvoiceFile {
+	acquisitions.refund.RefundInvoice playsRole invoice;
+	acquisitions.refund.RefundableInvoiceFile  playsRole file;
+}

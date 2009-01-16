@@ -2,12 +2,16 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.refund;
 
 import java.math.BigDecimal;
 
+import org.joda.time.LocalDate;
+
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.UnitItem;
 import pt.ist.expenditureTrackingSystem.domain.dto.RefundItemBean;
+import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.util.Money;
+import pt.ist.fenixWebFramework.services.Service;
 
 public class RefundItem extends RefundItem_Base {
 
@@ -69,5 +73,11 @@ public class RefundItem extends RefundItem_Base {
     @Override
     public void createUnitItem(Unit unit, Money shareValue) {
 	createUnitItem(getRequest().addPayingUnit(unit), shareValue);
+    }
+
+    @Service
+    public RefundInvoice createRefundInvoice(Integer invoiceNumber, LocalDate invoiceDate, Money value, BigDecimal vatValue,
+	    Money refundableValue, byte[] invoiceFile, RefundItem item, Supplier supplier) {
+	return new RefundInvoice(invoiceNumber, invoiceDate, value, vatValue, refundableValue, invoiceFile, item,supplier);
     }
 }

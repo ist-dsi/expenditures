@@ -181,6 +181,12 @@
 							</tr>
 						</logic:iterate>
 					</table>
-				</logic:notEmpty>
+			</logic:notEmpty>
+		<logic:notEmpty name="refundItem" property="invoices">
+				<logic:iterate id="invoice" name="refundItem" property="invoices">
+						<fr:view name="invoice" property="invoiceNumber"/>
+						<fr:view name="invoice" property="invoiceDate"/>
+				</logic:iterate>
+		</logic:notEmpty>
 	
 </logic:iterate>

@@ -35,8 +35,12 @@ public enum RefundProcessStateType {
 
     AUTHORIZED,
 
-    IN_EXECUTION, 
-    
+    SUBMITTED_FOR_INVOICE_CONFIRMATION,
+
+    INVOICES_CONFIRMED,
+
+    IN_EXECUTION,
+
     REJECTED {
 
 	@Override
@@ -82,7 +86,6 @@ public enum RefundProcessStateType {
 	return resourceBundle.getString(RefundProcessStateType.class.getSimpleName() + "." + name());
     }
 
-
     public boolean showFor(final RefundProcessStateType currentStateType) {
 	return currentStateType.isActive();
     }
@@ -102,6 +105,5 @@ public enum RefundProcessStateType {
     public boolean isActive() {
 	return (this != REJECTED && this != CANCELED);
     }
-
 
 }

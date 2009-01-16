@@ -7,6 +7,8 @@ import java.util.Set;
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
+import pt.ist.expenditureTrackingSystem.domain.organization.Project;
+import pt.ist.expenditureTrackingSystem.domain.organization.SubProject;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.util.Money;
 import pt.ist.fenixWebFramework.security.UserView;
@@ -131,17 +133,17 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
     public abstract boolean isPendingApproval();
 
     public abstract boolean isInApprovedState();
-    
+
     public abstract boolean isPendingFundAllocation();
-    
+
     public abstract void allocateFundsToUnit();
-    
+
     public abstract void submitForApproval();
 
     public abstract boolean isInAllocatedToUnitState();
 
     public abstract boolean isInAuthorizedState();
-    
+
     protected abstract void authorize();
 
     public boolean isResponsibleForUnit(final Person person, final Money amount) {
@@ -163,4 +165,12 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
 	}
     }
 
+    public boolean hasProjectsAsPayingUnits() {
+	for (Unit unit : getPayingUnits()) {
+	    if (unit instanceof Project || unit instanceof SubProject) {
+		return true;
+	    }
+	}
+	return false;
+    }
 }
