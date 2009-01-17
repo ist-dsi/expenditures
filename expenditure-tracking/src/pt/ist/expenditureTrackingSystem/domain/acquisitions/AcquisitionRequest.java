@@ -411,4 +411,9 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	return acquisitionRequestItemSet;
     }
 
+    @Override
+    public AcquisitionProcess getProcess() {
+	return getAcquisitionProcess();
+    }
+      
 }

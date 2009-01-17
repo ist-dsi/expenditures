@@ -26,7 +26,6 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.Invoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.ProjectFinancer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PurchaseOrderDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.UnitItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.ChangeFinancerAccountingUnitBean;
@@ -34,7 +33,6 @@ import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationExpirationDateBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.SetRefundeeBean;
-import pt.ist.expenditureTrackingSystem.domain.dto.UnitItemBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.VariantBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
@@ -65,7 +63,7 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "edit.request.item", path = "/acquisitions/editRequestItem.jsp"),
 	@Forward(name = "edit.request.item.real.values", path = "/acquisitions/editRequestItemRealValues.jsp"),
 	@Forward(name = "assign.unit.item", path = "/acquisitions/commons/assignUnitItem.jsp"),
-	@Forward(name = "edit.real.shares.values", path = "/acquisitions/editRealSharesValues.jsp"),
+	@Forward(name = "edit.real.shares.values", path = "/acquisitions/commons/assignUnitItemRealValues.jsp"),
 	@Forward(name = "edit.supplier", path = "/acquisitions/editSupplierAddress.jsp"),
 	@Forward(name = "execute.payment", path = "/acquisitions/executePayment.jsp"),
 	@Forward(name = "change.financers.accounting.units", path = "/acquisitions/changeFinancersAccountingUnit.jsp"),
@@ -450,38 +448,6 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 		"EditAcquisitionRequestItemRealValues", requestItemBean);
 	return viewAcquisitionProcess(mapping, request, (SimplifiedProcedureProcess) requestItemBean.getAcquisitionRequest()
 		.getAcquisitionProcess());
-    }
-
-    public ActionForward executeDistributeRealValuesForPayingUnits(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-
-	final AcquisitionRequestItem item = getDomainObject(request, "acquisitionRequestItemOid");
-	List<UnitItemBean> beans = new ArrayList<UnitItemBean>();
-
-	for (UnitItem unitItem : item.getUnitItems()) {
-	    beans.add(new UnitItemBean(unitItem));
-	}
-	request.setAttribute("item", item);
-	request.setAttribute("unitItemBeans", beans);
-
-	return mapping.findForward("edit.real.shares.values");
-    }
-
-    public ActionForward executeDistributeRealValuesForPayingUnitsEdition(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-
-	final AcquisitionRequestItem item = getDomainObject(request, "acquisitionRequestItemOid");
-	List<UnitItemBean> beans = getRenderedObject("unitItemBeans");
-
-	try {
-	    return executeActivityAndViewProcess(mapping, form, request, response, "DistributeRealValuesForPayingUnits", beans,
-		    item);
-	} catch (DomainException e) {
-	    addErrorMessage(e.getMessage(), getBundle());
-	    request.setAttribute("item", item);
-	    request.setAttribute("unitItemBeans", beans);
-	    return mapping.findForward("edit.real.shares.values");
-	}
     }
 
     public ActionForward executeUnSubmitForApproval(final ActionMapping mapping, final ActionForm form,

@@ -72,7 +72,6 @@ class acquisitions.RequestItem {
  
 class acquisitions.refund.RefundItem extends acquisitions.RequestItem {
 	Money valueEstimation;
-	Money valueSpent;
 }
 
 class acquisitions.refund.RefundInvoice {

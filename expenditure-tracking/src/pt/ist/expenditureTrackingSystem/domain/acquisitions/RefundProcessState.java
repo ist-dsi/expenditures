@@ -42,5 +42,9 @@ public class RefundProcessState extends RefundProcessState_Base {
     public boolean isAuthorized() {
 	return getRefundProcessStateType() == RefundProcessStateType.AUTHORIZED;
     }
+
+    public boolean isPendingInvoicesConfirmation() {
+	return getRefundProcessStateType() == RefundProcessStateType.SUBMITTED_FOR_INVOICE_CONFIRMATION;
+    }
     
 }

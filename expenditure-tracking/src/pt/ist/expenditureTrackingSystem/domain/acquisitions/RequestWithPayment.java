@@ -7,7 +7,9 @@ import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.util.Money;
 
-public class RequestWithPayment extends RequestWithPayment_Base {
+public abstract class RequestWithPayment extends RequestWithPayment_Base {
+
+    public abstract <T extends PaymentProcess> T getProcess();
 
     public RequestWithPayment() {
 	super();

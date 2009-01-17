@@ -12,9 +12,11 @@ import org.apache.struts.action.ActionMapping;
 
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.UnitItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.dto.DomainObjectBean;
@@ -101,6 +103,39 @@ public abstract class PaymentProcessAction extends ProcessAction {
 	return viewProcess(mapping, form, request, response);
     }
 
+    public ActionForward executeDistributeRealValuesForPayingUnits(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+
+	final RequestItem item = getRequestItem(request);
+	List<UnitItemBean> beans = new ArrayList<UnitItemBean>();
+
+	for (UnitItem unitItem : item.getUnitItems()) {
+	    beans.add(new UnitItemBean(unitItem));
+	}
+	request.setAttribute("item", item);
+	request.setAttribute("unitItemBeans", beans);
+
+	return mapping.findForward("edit.real.shares.values");
+    }
+
+    public ActionForward executeDistributeRealValuesForPayingUnitsEdition(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+
+	final RequestItem item = getRequestItem(request);
+	List<UnitItemBean> beans = getRenderedObject("unitItemBeans");
+
+	try {
+	    return executeActivityAndViewProcess(mapping, form, request, response, "DistributeRealValuesForPayingUnits", beans,
+		    item);
+	} catch (DomainException e) {
+	    addErrorMessage(e.getMessage(), getBundle());
+	    request.setAttribute("item", item);
+	    request.setAttribute("unitItemBeans", beans);
+	    return mapping.findForward("edit.real.shares.values");
+	}
+    }
+
+    
     public ActionForward calculateShareValuePostBack(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 
@@ -231,8 +266,8 @@ public abstract class PaymentProcessAction extends ProcessAction {
     }
 
     public ActionForward executeActivityAndViewProcess(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response, final String activityName) {
-	genericActivityExecution(request, activityName);
+	    final HttpServletRequest request, final HttpServletResponse response, final String activityName, Object... args) {
+	genericActivityExecution(request, activityName, args);
 	return viewProcess(mapping, form, request, response);
     }
 

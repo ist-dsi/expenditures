@@ -212,6 +212,7 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	return false;
     }
 
+    @Override 
     public boolean isFilledWithRealValues() {
 	return getRealQuantity() != null && getRealUnitValue() != null
 		&& (getAdditionalCostValue() == null || getRealAdditionalCostValue() != null);
@@ -284,14 +285,6 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	    }
 	}
 	return false;
-    }
-
-    public void clearRealShareValues() {
-	for (UnitItem unitItem : getUnitItems()) {
-	    if (unitItem.getRealShareValue() != null) {
-		unitItem.setRealShareValue(null);
-	    }
-	}
     }
 
     public Money getTotalVatValue() {

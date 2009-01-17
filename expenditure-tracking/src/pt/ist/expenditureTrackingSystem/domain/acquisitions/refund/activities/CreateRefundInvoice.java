@@ -23,7 +23,7 @@ public class CreateRefundInvoice extends GenericRefundProcessActivity {
 	byte[] filesBytes = (byte[]) objects[1];
 	RefundItem item = bean.getItem();
 	item.createRefundInvoice(bean.getInvoiceNumber(), bean.getInvoiceDate(), bean.getValue(), bean.getVatValue(), bean
-		.getRefundableValue(), filesBytes, item, bean.getSupplier());
+		.getRefundableValue(), filesBytes, bean.getFilename(), item, bean.getSupplier());
     }
 
 }

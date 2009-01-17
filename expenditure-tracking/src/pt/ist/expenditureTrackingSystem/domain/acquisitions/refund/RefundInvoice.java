@@ -10,8 +10,9 @@ import pt.ist.expenditureTrackingSystem.domain.util.Money;
 
 public class RefundInvoice extends RefundInvoice_Base {
 
+    
     public RefundInvoice(Integer invoiceNumber, LocalDate invoiceDate, Money value, BigDecimal vatValue, Money refundableValue,
-	    byte[] invoiceFile, RefundItem item, Supplier supplier) {
+	    RefundItem item, Supplier supplier) {
 	super();
 	this.setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
 	this.setInvoiceNumber(invoiceNumber);
@@ -21,7 +22,12 @@ public class RefundInvoice extends RefundInvoice_Base {
 	this.setRefundableValue(refundableValue);
 	this.setRefundItem(item);
 	this.setSupplier(supplier);
-	new RefundableInvoiceFile(this, invoiceFile);
+    }
+    
+    public RefundInvoice(Integer invoiceNumber, LocalDate invoiceDate, Money value, BigDecimal vatValue, Money refundableValue,
+	    byte[] invoiceFile, String filename, RefundItem item, Supplier supplier) {
+	this(invoiceNumber,invoiceDate,value,vatValue,refundableValue,item,supplier);
+	new RefundableInvoiceFile(this, invoiceFile,filename);
     }
 
 }

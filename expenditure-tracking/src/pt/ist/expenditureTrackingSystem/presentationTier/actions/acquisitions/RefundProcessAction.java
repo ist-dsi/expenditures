@@ -1,5 +1,7 @@
 package pt.ist.expenditureTrackingSystem.presentationTier.actions.acquisitions;
 
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -7,6 +9,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.SearchRefundProcesses;
@@ -237,5 +240,12 @@ public class RefundProcessAction extends PaymentProcessAction {
     public ActionForward executeConfirmInvoices(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	return executeActivityAndViewProcess(mapping, form, request, response, "ConfirmInvoices");
+    }
+    
+    public ActionForward downloadInvoice(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) throws IOException {
+	RefundInvoice invoice = getDomainObject(request, "invoiceOID");
+	download(response, invoice.getFile());
+	return null;
     }
 }

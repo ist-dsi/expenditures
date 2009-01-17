@@ -77,7 +77,25 @@ public class RefundItem extends RefundItem_Base {
 
     @Service
     public RefundInvoice createRefundInvoice(Integer invoiceNumber, LocalDate invoiceDate, Money value, BigDecimal vatValue,
-	    Money refundableValue, byte[] invoiceFile, RefundItem item, Supplier supplier) {
-	return new RefundInvoice(invoiceNumber, invoiceDate, value, vatValue, refundableValue, invoiceFile, item,supplier);
+	    Money refundableValue, byte[] invoiceFile, String filename, RefundItem item, Supplier supplier) {
+	return new RefundInvoice(invoiceNumber, invoiceDate, value, vatValue, refundableValue, invoiceFile, filename, item,
+		supplier);
+    }
+
+    public Money getValueSpent() {
+	if (getInvoices().isEmpty()) {
+	    return null;
+	}
+
+	Money spent = Money.ZERO;
+	for (RefundInvoice invoice : getInvoices()) {
+	    spent = spent.addAndRound(invoice.getRefundableValue());
+	}
+	return spent;
+    }
+    
+    @Override
+    public boolean isFilledWithRealValues() {
+       return !getInvoices().isEmpty();
     }
 }

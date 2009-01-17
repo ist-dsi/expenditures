@@ -166,4 +166,14 @@ public abstract class RequestItem extends RequestItem_Base {
 	return unitItems;
     }
 
+    public void clearRealShareValues() {
+	for (UnitItem unitItem : getUnitItems()) {
+	    if (unitItem.getRealShareValue() != null) {
+		unitItem.setRealShareValue(null);
+	    }
+	}
+    }
+
+    public abstract boolean isFilledWithRealValues();
+
 }

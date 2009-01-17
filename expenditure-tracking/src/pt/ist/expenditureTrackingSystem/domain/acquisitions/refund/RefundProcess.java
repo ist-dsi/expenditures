@@ -26,6 +26,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.Co
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.CreateRefundInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.CreateRefundItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.DeleteRefundItem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.DistributeRealShareValuesForPayingUnits;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.EditRefundItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.RemoveFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.RemoveProjectFundAllocation;
@@ -69,7 +70,7 @@ public class RefundProcess extends RefundProcess_Base {
 	itemActivities.add(new DeleteRefundItem());
 	itemActivities.add(new GenericAssignPayingUnitToItem<RefundProcess>());
 	itemActivities.add(new CreateRefundInvoice());
-
+	itemActivities.add(new DistributeRealShareValuesForPayingUnits());
 	activityMap.put(ActivityScope.REQUEST_ITEM, itemActivities);
     }
 
@@ -237,6 +238,10 @@ public class RefundProcess extends RefundProcess_Base {
 
     public void confirmInvoices() {
 	new RefundProcessState(this, RefundProcessStateType.INVOICES_CONFIRMED);
+    }
+
+    public boolean isPendingInvoicesConfirmation() {
+	return getProcessState().isPendingInvoicesConfirmation();
     }
 
 }

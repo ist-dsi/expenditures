@@ -183,10 +183,33 @@
 					</table>
 			</logic:notEmpty>
 		<logic:notEmpty name="refundItem" property="invoices">
-				<logic:iterate id="invoice" name="refundItem" property="invoices">
-						<fr:view name="invoice" property="invoiceNumber"/>
-						<fr:view name="invoice" property="invoiceDate"/>
+				<table class="tstyle5">
+					<tr>
+					<th><bean:message key="acquisitionProcess.label.invoice.number" bundle="ACQUISITION_RESOURCES"/></th>		
+					<th><bean:message key="acquisitionProcess.label.invoice.date" bundle="ACQUISITION_RESOURCES"/></th>
+					<th><bean:message key="label.supplier" bundle="EXPENDITURE_RESOURCES"/></th>
+					<th><bean:message key="acquisitionProcess.label.invoice.file" bundle="ACQUISITION_RESOURCES"/></th>
+					</tr>	
+					<logic:iterate id="invoice" name="refundItem" property="invoices">
+						<td><fr:view name="invoice" property="invoiceNumber"/></td>
+						<td><fr:view name="invoice" property="invoiceDate"/></td>
+					    <td> 
+					    	<logic:present name="invoice" property="supplier">
+					    	  <fr:view name="invoice" property="supplier.name"/>
+					    	</logic:present>
+					 		<logic:notPresent name="invoice" property="supplier">
+					    	-
+					    	</logic:notPresent>
+					    
+					    </td>
+						<td>
+					   	 <html:link action='<%= actionMapping + ".do?method=downloadInvoice" %>' paramId="invoiceOID" paramName="invoice" paramProperty="OID">
+							<bean:write name="invoice" property="file.filename"/>
+						  </html:link>
+						</td>
 				</logic:iterate>
+				</table>
+				
 		</logic:notEmpty>
 	
 </logic:iterate>
