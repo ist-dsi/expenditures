@@ -667,6 +667,9 @@
 	<slot name="requester.name" key="label.requesterName" bundle="EXPENDITURE_RESOURCES"/>
 	<slot name="refundee.name" key="label.refundee" bundle="ACQUISITION_RESOURCES" layout="null-as-label"/>
 	<slot name="requestingUnit.presentationName" key="acquisitionProcess.label.requestingUnit" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="process.processState.localizedName" key="label.processState" bundle="EXPENDITURE_RESOURCES"/>
+	<slot name="totalValue" key="label.totalValue" bundle="EXPENDITURE_RESOURCES"/>
+	<slot name="realTotalValue" key="label.totalRealValue" bundle="EXPENDITURE_RESOURCES"/>
 </schema>
 
 <schema name="viewRefundProcessInList"

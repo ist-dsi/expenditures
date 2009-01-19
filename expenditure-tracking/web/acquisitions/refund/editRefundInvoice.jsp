@@ -13,13 +13,11 @@
 <h2>
 	<bean:message key="title.editInvoices" bundle="ACQUISITION_RESOURCES"/>
 </h2>
-<ul>
-	<li>
-		<html:link page='<%= actionMapping + ".do?method=viewProcess&processOid="  + processOid %>'>« <bean:message key="link.back" bundle="EXPENDITURE_RESOURCES"/></html:link>
-	</li>
-</ul>
+
+<jsp:include page="../commons/viewRefundItem.jsp"/>
 <jsp:include page="../../commons/defaultErrorDisplay.jsp"/>
 
+<div class="dinline forminline">
 <fr:form action='<%= actionMapping + ".do?method=editRefundInvoice&refundProcessOid=" + processOid + "&itemOid=" + itemOid%>'>
 	<fr:edit id="invoiceBeans" name="invoices" visible="false"/>
 	
@@ -58,5 +56,9 @@
 	</logic:iterate>
 	</table> 
 	
-	<html:submit><bean:message key="renderers.form.submit.name" bundle="RENDERER_RESOURCES"/></html:submit>
+	<html:submit styleClass="inputbutton"><bean:message key="renderers.form.submit.name" bundle="RENDERER_RESOURCES"/></html:submit>
 </fr:form> 
+<fr:form action='<%= actionMapping + ".do?method=viewProcess&processOid=" + processOid %>'>
+	<html:submit styleClass="inputbutton"><bean:message key="renderers.form.cancel.name" bundle="RENDERER_RESOURCES"/></html:submit>
+</fr:form>
+</div>

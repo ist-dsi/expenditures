@@ -30,7 +30,9 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
     public Money getRealTotalValue() {
 	Money money = Money.ZERO;
 	for (RequestItem item : getRequestItems()) {
-	    money = money.add(item.getRealValue());
+	    if (item.getRealValue() != null) {
+		money = money.add(item.getRealValue());
+	    }
 	}
 	return money;
     }

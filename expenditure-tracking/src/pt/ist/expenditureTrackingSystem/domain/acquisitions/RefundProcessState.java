@@ -23,6 +23,10 @@ public class RefundProcessState extends RefundProcessState_Base {
 	setRefundProcessStateType(refundProcessStateType);
     }
 
+    public String getLocalizedName() {
+	return getRefundProcessStateType().getLocalizedName();
+    }
+    
     public boolean isInGenesis() {
 	return getRefundProcessStateType() == RefundProcessStateType.IN_GENESIS;
     }
