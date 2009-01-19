@@ -5,6 +5,7 @@ import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AcquisitionAfterTheFact;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionType;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundInvoice;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateSupplierBean;
 import pt.ist.expenditureTrackingSystem.domain.util.Address;
 import pt.ist.expenditureTrackingSystem.domain.util.Money;
@@ -80,6 +81,11 @@ public class Supplier extends Supplier_Base {
 	for (final AcquisitionAfterTheFact acquisitionAfterTheFact : getAcquisitionsAfterTheFactSet()) {
 	    if (!acquisitionAfterTheFact.getDeletedState().booleanValue()) {
 		result = result.add(acquisitionAfterTheFact.getValue());
+	    }
+	}
+	for (final RefundInvoice refundInvoice : getRefundInvoicesSet()) {
+	    if (!refundInvoice.getRefundItem().getRequest().isDeleted()) {
+		result = result.add(refundInvoice.getRefundableValue());
 	    }
 	}
 	return result;
