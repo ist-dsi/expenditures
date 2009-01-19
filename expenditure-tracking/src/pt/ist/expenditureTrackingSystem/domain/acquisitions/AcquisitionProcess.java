@@ -24,18 +24,7 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 	super();
 	setOjbConcreteClass(getClass().getName());
 	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
-	final AcquisitionProcessYear acquisitionProcessYear = getAcquisitionProcessYearForConstruction();
-	setAcquisitionProcessYear(acquisitionProcessYear);
-	setAcquisitionProcessNumber(acquisitionProcessYear.nextAcquisitionProcessYearNumber());
 	super.setSkipSupplierFundAllocation(Boolean.FALSE);
-    }
-
-    private AcquisitionProcessYear getAcquisitionProcessYearForConstruction() {
-	return AcquisitionProcessYear.getAcquisitionProcessYearByYear(getYearForConstruction());
-    }
-
-    protected int getYearForConstruction() {
-	return new LocalDate().getYear();
     }
 
     public void delete() {
@@ -157,7 +146,7 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
     }
 
     public Integer getYear() {
-	return getAcquisitionProcessYear().getYear();
+	return getPaymentProcessYear().getYear();
     }
 
     public String getAcquisitionProcessId() {
@@ -200,10 +189,6 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
     public boolean isTakenByCurrentUser() {
 	User user = UserView.getUser();
 	return user != null && isTakenByPerson(user.getPerson());
-    }
-
-    public boolean isSimplifiedProcedureProcess() {
-	return false;
     }
 
     public AcquisitionRequest getRequest() {

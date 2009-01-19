@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.joda.time.LocalDate;
+
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
@@ -17,6 +19,17 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
 
     public PaymentProcess() {
 	super();
+	final PaymentProcessYear acquisitionProcessYear = getPaymentProcessYearForConstruction();
+	setPaymentProcessYear(acquisitionProcessYear);
+	setAcquisitionProcessNumber(acquisitionProcessYear.nextAcquisitionProcessYearNumber());
+    }
+
+    private PaymentProcessYear getPaymentProcessYearForConstruction() {
+	return PaymentProcessYear.getPaymentProcessYearByYear(getYearForConstruction());
+    }
+
+    protected int getYearForConstruction() {
+	return new LocalDate().getYear();
     }
 
     public abstract <T extends RequestWithPayment> T getRequest();
@@ -177,4 +190,9 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
     public boolean isRealValueFullyAttributedToUnits() {
 	return getRequest().isRealValueFullyAttributedToUnits();
     }
+
+    public boolean isSimplifiedProcedureProcess() {
+	return false;
+    }
+
 }

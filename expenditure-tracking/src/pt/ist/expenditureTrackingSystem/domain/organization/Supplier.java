@@ -7,6 +7,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AcquisitionAfterTheFact;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundInvoice;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateSupplierBean;
 import pt.ist.expenditureTrackingSystem.domain.util.Address;
 import pt.ist.expenditureTrackingSystem.domain.util.Money;
@@ -76,7 +77,7 @@ public class Supplier extends Supplier_Base {
 	Money result = Money.ZERO;
 	for (final AcquisitionRequest acquisitionRequest : getAcquisitionRequestsSet()) {
 	    final AcquisitionProcess acquisitionProcess = acquisitionRequest.getAcquisitionProcess();
-	    if (!acquisitionProcess.isDeleted() && acquisitionProcess.isAllocatedToSupplier()) {
+	    if (!acquisitionProcess.isActive() && acquisitionProcess.isAllocatedToSupplier()) {
 		result = result.add(acquisitionRequest.getValueAllocated());
 	    }
 	}
@@ -86,7 +87,8 @@ public class Supplier extends Supplier_Base {
 	    }
 	}
 	for (final RefundInvoice refundInvoice : getRefundInvoicesSet()) {
-	    if (!refundInvoice.getRefundItem().getRequest().isDeleted()) {
+	    final RefundProcess refundProcess = refundInvoice.getRefundItem().getRequest().getProcess();
+	    if (!refundProcess.isActive()) {
 		result = result.add(refundInvoice.getRefundableValue());
 	    }
 	}

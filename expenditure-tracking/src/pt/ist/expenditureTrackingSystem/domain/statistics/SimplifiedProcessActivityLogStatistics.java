@@ -11,8 +11,8 @@ import java.util.Set;
 import org.joda.time.DateTime;
 
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessYear;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericLog;
@@ -57,14 +57,14 @@ public class SimplifiedProcessActivityLogStatistics implements Serializable {
 	register(simplifiedProcedureProcess);
     }
 
-    public SimplifiedProcessActivityLogStatistics(final AcquisitionProcessYear acquisitionProcessYear) {
-	register(acquisitionProcessYear);
+    public SimplifiedProcessActivityLogStatistics(final PaymentProcessYear paymentProcessYear) {
+	register(paymentProcessYear);
     }
 
-    private void register(final AcquisitionProcessYear acquisitionProcessYear) {
-	for (final AcquisitionProcess acquisitionProcess : acquisitionProcessYear.getAcquisitionProcessesSet()) {
-	    if (acquisitionProcess.isSimplifiedProcedureProcess()) {
-		final SimplifiedProcedureProcess simplifiedProcedureProcess = (SimplifiedProcedureProcess) acquisitionProcess;
+    private void register(final PaymentProcessYear paymentProcessYear) {
+	for (final PaymentProcess paymentProcess : paymentProcessYear.getPaymentProcessSet()) {
+	    if (paymentProcess.isSimplifiedProcedureProcess()) {
+		final SimplifiedProcedureProcess simplifiedProcedureProcess = (SimplifiedProcedureProcess) paymentProcess;
 		register(simplifiedProcedureProcess);
 	    }
 	}
@@ -113,16 +113,16 @@ public class SimplifiedProcessActivityLogStatistics implements Serializable {
 	return new SimplifiedProcessActivityLogStatistics(simplifiedProcedureProcess);
     }
 
-    public static SimplifiedProcessActivityLogStatistics create(final AcquisitionProcessYear acquisitionProcessYear) {
-	return new SimplifiedProcessActivityLogStatistics(acquisitionProcessYear);
+    public static SimplifiedProcessActivityLogStatistics create(final PaymentProcessYear paymentProcessYear) {
+	return new SimplifiedProcessActivityLogStatistics(paymentProcessYear);
     }
 
     public static SimplifiedProcessActivityLogStatistics create(final Integer year) {
 	if (year != null) {
 	    final int y = year.intValue();
-	    for (final AcquisitionProcessYear acquisitionProcessYear : ExpenditureTrackingSystem.getInstance().getAcquisitionProcessYearsSet()) {
-		if (acquisitionProcessYear.getYear().intValue() == y) {
-		    return create(acquisitionProcessYear);
+	    for (final PaymentProcessYear paymentProcessYear : ExpenditureTrackingSystem.getInstance().getPaymentProcessYearsSet()) {
+		if (paymentProcessYear.getYear().intValue() == y) {
+		    return create(paymentProcessYear);
 		}
 	    }
 	}

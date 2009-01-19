@@ -248,4 +248,8 @@ public class RefundProcess extends RefundProcess_Base {
 	return getProcessState().isPendingInvoicesConfirmation();
     }
 
+    public boolean isActive() {
+	return getProcessState().isActive();
+    }
+
 }

@@ -61,10 +61,11 @@ class announcements.Announcement {
 	DateTime creationDate;
 }
 
-class acquisitions.AcquisitionProcessYear {
+class acquisitions.PaymentProcessYear {
 	Integer year;
 	Integer counter;
 }
+
 class acquisitions.RequestItem {
 	String ojbConcreteClass;
 	String description;
@@ -245,13 +246,12 @@ class processes.GenericProcess {
 }
 
 	class acquisitions.PaymentProcess extends processes.GenericProcess {
-	
+		Integer acquisitionProcessNumber;	
 	}
 
 	class acquisitions.AcquisitionProcess extends acquisitions.PaymentProcess {
 		LocalDate fundAllocationExpirationDate;
 		Boolean skipSupplierFundAllocation;
-		Integer acquisitionProcessNumber;
 	}
 
 		class acquisitions.afterthefact.AfterTheFactAcquisitionProcess extends acquisitions.AcquisitionProcess {
@@ -709,18 +709,18 @@ relation OptionsCascadingStyleSheet {
 	CascadingStyleSheet playsRole cascadingStyleSheet;
 }
 
-relation ExpenditureTrackingSystemAcquisitionProcessYear {
+relation ExpenditureTrackingSystemPaymentProcessYear {
 	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
-	acquisitions.AcquisitionProcessYear playsRole acquisitionProcessYears {
+	acquisitions.PaymentProcessYear playsRole paymentProcessYears {
 		multiplicity *;
 	}
 }
 
-relation AcqusitionProcessAcquisitionProcessYear {
-	acquisitions.AcquisitionProcess playsRole acquisitionProcesses {
+relation PaymentProcessPaymentProcessYear {
+	acquisitions.PaymentProcess playsRole paymentProcess {
 		multiplicity *;
 	} 
-	acquisitions.AcquisitionProcessYear playsRole acquisitionProcessYear;
+	acquisitions.PaymentProcessYear playsRole paymentProcessYear;
 }
 
 relation ExpenditureTrackingSystemAccountingUnit {
