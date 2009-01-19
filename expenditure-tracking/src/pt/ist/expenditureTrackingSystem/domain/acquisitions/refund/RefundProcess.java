@@ -252,4 +252,12 @@ public class RefundProcess extends RefundProcess_Base {
 	return getProcessState().isActive();
     }
 
+    public Integer getYear() {
+	return getPaymentProcessYear().getYear();
+    }
+
+    public String getAcquisitionProcessId() {
+	return getYear() + "/" + getAcquisitionProcessNumber();
+    }
+
 }

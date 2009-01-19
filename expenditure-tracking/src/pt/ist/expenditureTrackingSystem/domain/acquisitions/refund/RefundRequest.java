@@ -53,4 +53,8 @@ public class RefundRequest extends RefundRequest_Base {
 	return refundItems;
     }
 
+    public String getAcquisitionProcessId() {
+	return getProcess().getAcquisitionProcessId();
+    }
+
 }
