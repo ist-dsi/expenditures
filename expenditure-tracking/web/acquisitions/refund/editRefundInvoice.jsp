@@ -1,0 +1,62 @@
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
+<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
+<%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
+<%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
+
+<bean:define id="process" name="item" property="request.process"/>
+<bean:define id="itemOid" name="item" property="OID"/>
+<bean:define id="processOid" name="process" property="OID"/>
+<bean:define id="processClass" name="process" property="class.simpleName"/>
+<bean:define id="actionMapping" value='<%= "/acquisition" + processClass%>'/>
+
+<h2>
+	<bean:message key="title.editInvoices" bundle="ACQUISITION_RESOURCES"/>
+</h2>
+<ul>
+	<li>
+		<html:link page='<%= actionMapping + ".do?method=viewProcess&processOid="  + processOid %>'>« <bean:message key="link.back" bundle="EXPENDITURE_RESOURCES"/></html:link>
+	</li>
+</ul>
+<jsp:include page="../../commons/defaultErrorDisplay.jsp"/>
+
+<fr:form action='<%= actionMapping + ".do?method=editRefundInvoice&refundProcessOid=" + processOid + "&itemOid=" + itemOid%>'>
+	<fr:edit id="invoiceBeans" name="invoices" visible="false"/>
+	
+	<table class="tstyle5">
+		<tr>
+			<th><bean:message key="acquisitionProcess.label.invoice.number" bundle="ACQUISITION_RESOURCES"/></th>		
+			<th><bean:message key="acquisitionProcess.label.invoice.date" bundle="ACQUISITION_RESOURCES"/></th>
+			<th><bean:message key="acquisitionProcess.label.invoice.file" bundle="ACQUISITION_RESOURCES"/></th>
+			<th><bean:message key="label.value" bundle="EXPENDITURE_RESOURCES"/></th>
+			<th><bean:message key="label.vatValue" bundle="EXPENDITURE_RESOURCES"/></th>
+			<th><bean:message key="label.refundValue" bundle="EXPENDITURE_RESOURCES"/></th>
+		</tr>	
+	<logic:iterate id="invoice" name="invoices">
+		<tr>
+		<td>
+			<fr:view name="invoice" property="invoiceNumber"/>
+		</td>
+		<td>
+			<fr:view name="invoice" property="invoiceDate"/>
+		</td>
+		<td>
+			<html:link action='<%= actionMapping + ".do?method=downloadInvoice" %>' paramId="invoiceOID" paramName="invoice" paramProperty="invoice.OID">
+				<bean:write name="invoice" property="file.filename"/>
+			</html:link>
+		</td>
+		<td>
+			<fr:edit name="invoice" slot="value" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+		</td>
+		<td>
+			<fr:edit name="invoice" slot="vatValue" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+		</td>
+		<td>
+			<fr:edit name="invoice" slot="refundableValue" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+		</td>
+		</tr>
+	</logic:iterate>
+	</table> 
+	
+	<html:submit><bean:message key="renderers.form.submit.name" bundle="RENDERER_RESOURCES"/></html:submit>
+</fr:form> 

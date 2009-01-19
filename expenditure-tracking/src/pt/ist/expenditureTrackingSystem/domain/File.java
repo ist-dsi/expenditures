@@ -6,6 +6,7 @@ import java.util.List;
 import javax.activation.MimetypesFileTypeMap;
 
 import pt.ist.expenditureTrackingSystem.domain.util.ByteArray;
+import pt.ist.fenixframework.pstm.Transaction;
 
 public class File extends File_Base {
 
@@ -30,6 +31,11 @@ public class File extends File_Base {
 	setContent(byteArray);
     }
 
+    public void delete() {
+	removeExpenditureTrackingSystem();
+	Transaction.deleteObject(this);
+    }
+    
     public static <T extends File> List<T> getFiles(Class<T> clazz) {
 	List<T> files = new ArrayList<T>();
 	for (File file : ExpenditureTrackingSystem.getInstance().getFiles()) {

@@ -1,6 +1,8 @@
 package pt.ist.expenditureTrackingSystem.presentationTier.actions.acquisitions;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -9,11 +11,14 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import pt.ist.expenditureTrackingSystem.domain.DomainException;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.SearchRefundProcesses;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateRefundProcessBean;
+import pt.ist.expenditureTrackingSystem.domain.dto.EditRefundInvoiceBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.RefundInvoiceBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.RefundItemBean;
 import pt.ist.expenditureTrackingSystem.presentationTier.Context;
@@ -31,10 +36,13 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "generic.upload", path = "/acquisitions/genericUpload.jsp"),
 	@Forward(name = "select.unit.to.add", path = "/acquisitions/commons/selectPayingUnitToAdd.jsp"),
 	@Forward(name = "assign.unit.item", path = "/acquisitions/commons/assignUnitItem.jsp"),
+	@Forward(name = "edit.real.shares.values", path = "/acquisitions/commons/assignUnitItemRealValues.jsp"),
 	@Forward(name = "remove.paying.units", path = "/acquisitions/commons/removePayingUnits.jsp"),
 	@Forward(name = "allocate.project.funds", path = "/acquisitions/commons/allocateProjectFunds.jsp"),
 	@Forward(name = "allocate.funds", path = "/acquisitions/commons/allocateFunds.jsp"),
-	@Forward(name = "add.refund.invoice", path = "/acquisitions/refund/addRefundInvoice.jsp") })
+	@Forward(name = "add.refund.invoice", path = "/acquisitions/refund/addRefundInvoice.jsp"),
+	@Forward(name = "remove.refund.invoice", path = "/acquisitions/refund/removeRefundInvoice.jsp"),
+	@Forward(name = "edit.refund.invoice", path = "/acquisitions/refund/editRefundInvoice.jsp") })
 public class RefundProcessAction extends PaymentProcessAction {
 
     private static final Context CONTEXT = new Context("acquisitions");
@@ -225,27 +233,72 @@ public class RefundProcessAction extends PaymentProcessAction {
 	RefundInvoiceBean bean = getRenderedObject("bean");
 
 	byte[] fileBytes = consumeInputStream(bean);
-	process.getActivityByName("CreateRefundInvoice").execute(process, new Object[] { bean, fileBytes });
+	try {
+	    genericActivityExecution(process, "CreateRefundInvoice", bean, fileBytes);
+	} catch (DomainException e) {
+	    addErrorMessage(e.getMessage(), getBundle());
+	}
 
 	return viewProcess(mapping, form, request, response);
     }
-
 
     public ActionForward executeSubmitForInvoiceConfirmation(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	return executeActivityAndViewProcess(mapping, form, request, response, "SubmitForInvoiceConfirmation");
     }
 
-
     public ActionForward executeConfirmInvoices(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	return executeActivityAndViewProcess(mapping, form, request, response, "ConfirmInvoices");
     }
-    
-    public ActionForward downloadInvoice(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws IOException {
+
+    public ActionForward downloadInvoice(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) throws IOException {
 	RefundInvoice invoice = getDomainObject(request, "invoiceOID");
 	download(response, invoice.getFile());
 	return null;
+    }
+
+    public ActionForward executeRemoveRefundInvoice(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	RequestItem item = getRequestItem(request);
+	request.setAttribute("item", item);
+	return mapping.findForward("remove.refund.invoice");
+    }
+
+    public ActionForward removeRefundInvoice(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+
+	RefundInvoice invoice = getDomainObject(request, "invoiceOid");
+	RefundProcess process = getProcess(request);
+	genericActivityExecution(process, "RemoveRefundInvoice", invoice);
+	return executeRemoveRefundInvoice(mapping, form, request, response);
+    }
+
+    public ActionForward executeEditRefundInvoice(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	RefundItem item = getRequestItem(request);
+	request.setAttribute("item", item);
+
+	List<EditRefundInvoiceBean> beans = new ArrayList<EditRefundInvoiceBean>();
+	for (RefundInvoice invoice : item.getInvoices()) {
+	    beans.add(new EditRefundInvoiceBean(invoice));
+	}
+	request.setAttribute("invoices", beans);
+	return mapping.findForward("edit.refund.invoice");
+    }
+
+    public ActionForward editRefundInvoice(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+
+	List<EditRefundInvoiceBean> beans = getRenderedObject("invoiceBeans");
+	RefundProcess process = getProcess(request);
+	try {
+	    genericActivityExecution(process, "EditRefundInvoice", beans);
+	} catch (DomainException e) {
+	    addErrorMessage(e.getMessage(), getBundle());
+	    return executeEditRefundInvoice(mapping, form, request, response);
+	}
+	return viewProcess(mapping, form, request, response);
     }
 }

@@ -698,7 +698,8 @@
 </schema>
 
 <schema name="viewRefundItem" type="pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundItem" bundle="ACQUISITION_RESOURCES">
-		<slot name="valueEstimation" key="refundItem.valueEstimation"/>
+		<slot name="value" key="label.value" bundle="EXPENDITURE_RESOURCES"/>
+		<slot name="realValue" key="label.realValue" bundle="EXPENDITURE_RESOURCES" layout="null-as-label"/>
 		<slot name="CPVReference"  key="refundItem.label.salesCode" bundle="ACQUISITION_RESOURCES" layout="format">
 			<property name="format" value="${code} - ${description}"/>
 		</slot>
@@ -708,7 +709,7 @@
 <schema name="create.refund.invoice" type="pt.ist.expenditureTrackingSystem.domain.dto.RefundInvoiceBean" bundle="ACQUISITION_RESOURCES">
 		<slot name="invoiceNumber" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" key="acquisitionProcess.label.invoice.number" bundle="ACQUISITION_RESOURCES"/>
 		<slot name="invoiceDate" layout="picker" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" key="acquisitionProcess.label.invoice.date"/>
-		<slot name="inputStream" key="acquisitionProcess.label.proposalDocument" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<slot name="inputStream" key="acquisitionProcess.label.invoice.file" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
 			<property name="fileNameSlot" value="filename" />
 			<property name="size" value="30"/>
 		</slot>

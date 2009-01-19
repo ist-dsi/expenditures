@@ -262,4 +262,12 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
 	}
     }
 
+    public boolean isRealValueFullyAttributedToUnits() {
+	for (final RequestItem requestItem : getRequestItemsSet()) {
+	    if (!requestItem.isRealValueFullyAttributedToUnits()) {
+		return false;
+	    }
+	}
+	return true;
+    }
 }

@@ -218,26 +218,6 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 		&& (getAdditionalCostValue() == null || getRealAdditionalCostValue() != null);
     }
 
-    public boolean isValueFullyAttributedToUnits() {
-	Money totalValue = Money.ZERO;
-	for (UnitItem unitItem : getUnitItems()) {
-	    totalValue = totalValue.add(unitItem.getShareValue());
-	}
-
-	return totalValue.equals(getTotalItemValueWithAdditionalCostsAndVat());
-    }
-
-    public boolean isRealValueFullyAttributedToUnits() {
-	Money totalValue = Money.ZERO;
-	for (UnitItem unitItem : getUnitItems()) {
-	    if (unitItem.getRealShareValue() != null) {
-		totalValue = totalValue.add(unitItem.getRealShareValue());
-	    }
-	}
-
-	return totalValue.equals(getTotalRealValueWithAdditionalCostsAndVat());
-    }
-
     @Override
     public void createUnitItem(Unit unit, Money shareValue) {
 	createUnitItem(getAcquisitionRequest().addPayingUnit(unit), shareValue);

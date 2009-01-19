@@ -155,14 +155,13 @@
 			</fr:view>
 		</html:link>
 	</logic:iterate>
-	<div class="infoop2">
-	<fr:view name="refundItem" 
-			schema="viewRefundItem">
-		<fr:layout name="tabular">
-			<fr:property name="classes" value="tstyle1"/>
-		</fr:layout>
-	</fr:view>
-	</div>
+	<logic:equal name="refundItem" property="realValueFullyAttributedToUnits" value="false">
+		<div class="infoop4">
+						<strong><bean:message key="messages.info.attention" bundle="EXPENDITURE_RESOURCES"/>:</strong> <bean:message key="acquisitionRequestItem.message.info.valueNotFullyAttributed" bundle="ACQUISITION_RESOURCES"/>
+		</div>
+	</logic:equal>		
+	<bean:define id="item" name="refundItem" toScope="request"/>
+	<jsp:include page="../commons/viewRefundItem.jsp"/>
 		<logic:notEmpty name="refundItem" property="unitItems">
 					<table class="payingunits">
 						<logic:iterate id="unitItem" name="refundItem" property="sortedUnitItems">
@@ -207,6 +206,7 @@
 							<bean:write name="invoice" property="file.filename"/>
 						  </html:link>
 						</td>
+						</tr>
 				</logic:iterate>
 				</table>
 				

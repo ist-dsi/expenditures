@@ -173,4 +173,8 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
 	}
 	return false;
     }
+    
+    public boolean isRealValueFullyAttributedToUnits() {
+	return getRequest().isRealValueFullyAttributedToUnits();
+    }
 }

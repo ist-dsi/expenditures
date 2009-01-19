@@ -176,4 +176,27 @@ public abstract class RequestItem extends RequestItem_Base {
 
     public abstract boolean isFilledWithRealValues();
 
+    public boolean isValueFullyAttributedToUnits() {
+	Money totalValue = Money.ZERO;
+	for (UnitItem unitItem : getUnitItems()) {
+	    totalValue = totalValue.add(unitItem.getShareValue());
+	}
+
+	return totalValue.equals(getValue());
+    }
+
+    public boolean isRealValueFullyAttributedToUnits() {
+	Money realValue = getRealValue();
+	if (realValue == null) {
+	    return false;
+	}
+	Money totalValue = Money.ZERO;
+	for (UnitItem unitItem : getUnitItems()) {
+	    if (unitItem.getRealShareValue() != null) {
+		totalValue = totalValue.add(unitItem.getRealShareValue());
+	    }
+	}
+
+	return totalValue.equals(realValue);
+    }
 }

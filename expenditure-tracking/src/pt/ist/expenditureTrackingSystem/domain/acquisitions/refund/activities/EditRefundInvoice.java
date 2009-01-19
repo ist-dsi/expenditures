@@ -1,10 +1,13 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities;
 
-import pt.ist.expenditureTrackingSystem.domain.RoleType;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AbstractDistributeRealValuesForPayingUnits;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
+import java.util.List;
 
-public class DistributeRealShareValuesForPayingUnits extends AbstractDistributeRealValuesForPayingUnits<RefundProcess> {
+import pt.ist.expenditureTrackingSystem.domain.RoleType;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericRefundProcessActivity;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
+import pt.ist.expenditureTrackingSystem.domain.dto.EditRefundInvoiceBean;
+
+public class EditRefundInvoice extends GenericRefundProcessActivity {
 
     @Override
     protected boolean isAccessible(RefundProcess process) {
@@ -18,6 +21,17 @@ public class DistributeRealShareValuesForPayingUnits extends AbstractDistributeR
 		|| process.isPendingInvoicesConfirmation()
 		&& ((userHasRole(RoleType.ACCOUNTING_MANAGER) && !process.hasProjectsAsPayingUnits()) || (userHasRole(RoleType.PROJECT_ACCOUNTING_MANAGER) && process
 			.hasProjectsAsPayingUnits()));
+    }
+
+    @Override
+    protected void process(RefundProcess process, Object... objects) {
+	List<EditRefundInvoiceBean> beans = (List<EditRefundInvoiceBean>) objects[0];
+	
+	beans.get(0).getInvoice().resetValues();
+	
+	for (EditRefundInvoiceBean bean : beans) {
+	    bean.getInvoice().editValues(bean.getValue(), bean.getVatValue(), bean.getRefundableValue());
+	}
     }
 
 }

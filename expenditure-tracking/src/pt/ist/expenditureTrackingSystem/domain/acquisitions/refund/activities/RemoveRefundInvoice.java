@@ -1,0 +1,25 @@
+package pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities;
+
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericRefundProcessActivity;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundInvoice;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
+
+public class RemoveRefundInvoice extends GenericRefundProcessActivity {
+
+    @Override
+    protected boolean isAccessible(RefundProcess process) {
+	return isCurrentUserProcessOwner(process);
+    }
+
+    @Override
+    protected boolean isAvailable(RefundProcess process) {
+	return (isCurrentUserProcessOwner(process) && process.isInAuthorizedState());
+    }
+
+    @Override
+    protected void process(RefundProcess process, Object... objects) {
+	RefundInvoice invoice = (RefundInvoice) objects[0];
+	invoice.delete();
+    }
+
+}

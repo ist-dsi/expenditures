@@ -310,8 +310,8 @@
 					</logic:equal>
 				</logic:equal>
 			
-				<bean:define id="acquisitionRequestItem" name="acquisitionRequestItem" toScope="request"/>
-				<jsp:include page="./acquisitionItemDisplay.jsp" flush="false"/>
+				<bean:define id="item" name="acquisitionRequestItem" toScope="request"/>
+				<jsp:include page="commons/viewAcquisitionRequestItem.jsp"/>
 				<p class="aright">
 					<%= GenericChecksumRewriter.NO_CHECKSUM_PREFIX %><a href="#itemResume"><bean:message key="link.top" bundle="EXPENDITURE_RESOURCES"/></a>
 				</p>

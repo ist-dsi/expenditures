@@ -5,6 +5,8 @@
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 			
 
+<bean:define id="acquisitionRequestItem" name="item"/>
+
 <div class="infoop2">
 	
 	<table class="tstyle1 thpadding02505" style="width: 100%;">

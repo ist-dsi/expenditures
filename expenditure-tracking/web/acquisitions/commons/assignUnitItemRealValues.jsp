@@ -16,20 +16,23 @@
 <bean:define id="outOfLabel">
 	<bean:message key="acquisitionRequestItem.label.outOf" bundle="ACQUISITION_RESOURCES"/>
 </bean:define>
-<bean:define id="maxValue" name="item" property="realValue.roundedValue"/>
 <bean:size id="maxElements" name="unitItemBeans"/>
 
 <bean:define id="itemOID" name="item" property="OID"/>
+<bean:define id="itemClass" name="item" property="class.simpleName"/>
+
+<jsp:include page='<%= "view" + itemClass + ".jsp"%>'/>
 
 <logic:equal name="item" property="filledWithRealValues" value="false">
 	<div class="infoop4">
 		<strong><bean:message key="messages.info.attention" bundle="EXPENDITURE_RESOURCES"/></strong>: <bean:message key="acquisitionRequestItem.message.warn.mustDefineRealValuesFirst" bundle="ACQUISITION_RESOURCES"/>
 	</div>
-	<html:link page='<%= actionMapping + ".do?method=viewAcquisitionProcess&acquisitionProcessOid="  + processOID %>'>« <bean:message key="link.back" bundle="EXPENDITURE_RESOURCES"/></html:link>
+	<html:link page='<%= actionMapping + ".do?method=viewProcess&processOid="  + processOID %>'>« <bean:message key="link.back" bundle="EXPENDITURE_RESOURCES"/></html:link>
 </logic:equal>
 			
 <logic:equal name="item" property="filledWithRealValues" value="true">
 	
+<bean:define id="maxValue" name="item" property="realValue.roundedValue"/>
 <jsp:include page="../../commons/defaultErrorDisplay.jsp"/>
 
 <div class="dinline forminline">	

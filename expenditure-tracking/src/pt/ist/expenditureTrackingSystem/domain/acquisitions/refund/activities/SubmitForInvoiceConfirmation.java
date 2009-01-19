@@ -12,7 +12,8 @@ public class SubmitForInvoiceConfirmation extends GenericRefundProcessActivity {
 
     @Override
     protected boolean isAccessible(RefundProcess process) {
-	return isCurrentUserProcessOwner(process) && process.isInAuthorizedState() && !process.getRefundableInvoices().isEmpty();
+	return isCurrentUserProcessOwner(process) && process.isInAuthorizedState() && !process.getRefundableInvoices().isEmpty()
+		&& process.isRealValueFullyAttributedToUnits();
     }
 
     @Override

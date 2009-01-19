@@ -26,10 +26,12 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.Co
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.CreateRefundInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.CreateRefundItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.DeleteRefundItem;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.DistributeRealShareValuesForPayingUnits;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.DistributeRealValuesForPayingUnits;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.EditRefundInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.EditRefundItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.RemoveFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.RemoveProjectFundAllocation;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.RemoveRefundInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.SubmitForApproval;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.SubmitForInvoiceConfirmation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.UnSubmitForApproval;
@@ -70,7 +72,9 @@ public class RefundProcess extends RefundProcess_Base {
 	itemActivities.add(new DeleteRefundItem());
 	itemActivities.add(new GenericAssignPayingUnitToItem<RefundProcess>());
 	itemActivities.add(new CreateRefundInvoice());
-	itemActivities.add(new DistributeRealShareValuesForPayingUnits());
+	itemActivities.add(new RemoveRefundInvoice());
+	itemActivities.add(new EditRefundInvoice());
+	itemActivities.add(new DistributeRealValuesForPayingUnits());
 	activityMap.put(ActivityScope.REQUEST_ITEM, itemActivities);
     }
 

@@ -9,4 +9,9 @@ public class RefundableInvoiceFile extends RefundableInvoiceFile_Base {
 	setContent(invoiceFile);
     }
 
+    public void delete() {
+	removeInvoice();
+	super.delete();
+    }
+
 }
