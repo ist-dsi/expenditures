@@ -8,9 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.OperationLog;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
@@ -34,6 +32,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.De
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.DistributeRealValuesForPayingUnits;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.EditRefundInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.EditRefundItem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.RefundPerson;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.RemoveFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.RemoveProjectFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.RemoveRefundInvoice;
@@ -46,7 +45,6 @@ import pt.ist.expenditureTrackingSystem.domain.dto.CreateRefundProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
-import pt.ist.expenditureTrackingSystem.domain.processes.GenericLog;
 import pt.ist.fenixWebFramework.services.Service;
 
 public class RefundProcess extends RefundProcess_Base {
@@ -74,6 +72,7 @@ public class RefundProcess extends RefundProcess_Base {
 	requestActivitites.add(new AllocateProjectFundsPermanently<RefundProcess>());
 	requestActivitites.add(new AllocateFundsPermanently<RefundProcess>());
 	requestActivitites.add(new RemoveFundsPermanentlyAllocated<RefundProcess>());
+	requestActivitites.add(new RefundPerson());
 	activityMap.put(ActivityScope.REQUEST_INFORMATION, requestActivitites);
 
 	List<AbstractActivity<RefundProcess>> itemActivities = new ArrayList<AbstractActivity<RefundProcess>>();
@@ -296,6 +295,19 @@ public class RefundProcess extends RefundProcess_Base {
 
     protected void confirmInvoice() {
 	new RefundProcessState(this, RefundProcessStateType.INVOICES_CONFIRMED);
+    }
+
+    public boolean hasFundsAllocatedPermanently() {
+	return getProcessState().hasFundsAllocatedPermanently();
+    }
+
+    public void refundPerson(final String paymentReference) {
+	getRequest().setPaymentReference(paymentReference);
+    }
+
+    @Override
+    public boolean isPayed() {
+	return getRequest().isPayed();
     }
 
 }

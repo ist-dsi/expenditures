@@ -218,4 +218,9 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
     public <T extends GenericLog> List<T> getExecutionLogsForState(String stateName) {
 	return (List<T>) getExecutionLogs();
     }
+
+    public boolean isPayed() {
+	return false;
+    }
+
 }

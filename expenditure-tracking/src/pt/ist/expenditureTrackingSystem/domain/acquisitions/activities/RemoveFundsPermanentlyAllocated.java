@@ -12,7 +12,7 @@ public class RemoveFundsPermanentlyAllocated<T extends PaymentProcess> extends A
 
     @Override
     protected boolean isAvailable(final T process) {
-	return isCurrentUserProcessOwner(process) && process.isAllocatedPermanently();
+	return isCurrentUserProcessOwner(process) && process.isAllocatedPermanently() && !process.isPayed();
     }
 
     @Override

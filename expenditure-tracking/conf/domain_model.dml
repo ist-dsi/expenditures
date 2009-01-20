@@ -32,7 +32,7 @@ class acquisitions.Acquisition {
 	}
 	
 	class acquisitions.refund.RefundRequest extends acquisitions.RequestWithPayment {
-		
+		String paymentReference;
 	} 
 	
 	class acquisitions.afterthefact.AcquisitionAfterTheFact extends acquisitions.Acquisition {

@@ -57,4 +57,9 @@ public class RefundRequest extends RefundRequest_Base {
 	return getProcess().getAcquisitionProcessId();
     }
 
+    public boolean isPayed() {
+	final String reference = getPaymentReference();
+	return reference != null && !reference.isEmpty();
+    }
+
 }

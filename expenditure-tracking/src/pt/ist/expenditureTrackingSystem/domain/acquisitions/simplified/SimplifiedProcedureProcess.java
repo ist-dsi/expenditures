@@ -252,4 +252,9 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	return true;
     }
 
+    @Override
+    public boolean isPayed() {
+	return getRequest().isPayed();
+    }
+
 }

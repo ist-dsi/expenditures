@@ -397,5 +397,10 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     public AcquisitionProcess getProcess() {
 	return getAcquisitionProcess();
     }
+
+    public boolean isPayed() {
+	final String reference = getPaymentReference();
+	return reference != null && !reference.isEmpty();
+    }
       
 }
