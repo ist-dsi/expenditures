@@ -18,10 +18,10 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.SearchAcquisitionProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AllocateFundsPermanently;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AllocateProjectFundsPermanently;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.FundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.ProjectFundAllocation;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.AllocateFundsPermanently;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.AllocateProjectFundsPermanently;
 import pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.DateIntervalBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.ProcessStateBean;
@@ -318,7 +318,8 @@ public class RegularAcquisitionProcessAction extends PaymentProcessAction {
 	List<AcquisitionProcess> processes = new ArrayList<AcquisitionProcess>();
 
 	for (AcquisitionProcess process : GenericProcess.getAllProcesses(AcquisitionProcess.class)) {
-	    if (!process.getExecutionLogs(begin, end, FundAllocation.class, ProjectFundAllocation.class,
+	    if (!process.getExecutionLogs(begin, end, FundAllocation.class,
+		    ProjectFundAllocation.class,
 		    AllocateFundsPermanently.class, AllocateProjectFundsPermanently.class).isEmpty()) {
 		processes.add(process);
 	    }

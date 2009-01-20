@@ -41,6 +41,8 @@ public enum RefundProcessStateType {
 
     IN_EXECUTION,
 
+    FUNDS_ALLOCATED_PERMANENTLY,
+
     REJECTED {
 
 	@Override

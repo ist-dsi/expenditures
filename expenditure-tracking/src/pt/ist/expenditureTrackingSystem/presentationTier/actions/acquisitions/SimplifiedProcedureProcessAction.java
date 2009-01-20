@@ -53,8 +53,8 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "reject.acquisition.process", path = "/acquisitions/rejectAcquisitionProcess.jsp"),
 	@Forward(name = "allocate.project.funds", path = "/acquisitions/commons/allocateProjectFunds.jsp"),
 	@Forward(name = "allocate.funds", path = "/acquisitions/commons/allocateFunds.jsp"),
-	@Forward(name = "allocate.effective.project.funds", path = "/acquisitions/allocateEffectiveProjectFunds.jsp"),
-	@Forward(name = "allocate.effective.funds", path = "/acquisitions/allocateEffectiveFunds.jsp"),
+	@Forward(name = "allocate.effective.project.funds", path = "/acquisitions/commons/allocateEffectiveProjectFunds.jsp"),
+	@Forward(name = "allocate.effective.funds", path = "/acquisitions/commons/allocateEffectiveFunds.jsp"),
 	@Forward(name = "allocate.funds.to.service.provider", path = "/acquisitions/allocateFundsToServiceProvider.jsp"),
 	@Forward(name = "prepare.create.acquisition.request", path = "/acquisitions/createAcquisitionRequest.jsp"),
 	@Forward(name = "receive.invoice", path = "/acquisitions/receiveInvoice.jsp"),
@@ -304,7 +304,7 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	    if (acquisitionProcess.getCurrentOwner() == null) {
 		acquisitionProcess.takeProcess();
 	    }
-	    request.setAttribute("acquisitionProcess", acquisitionProcess);
+	    request.setAttribute("process", acquisitionProcess);
 	    List<FundAllocationBean> fundAllocationBeans = new ArrayList<FundAllocationBean>();
 	    for (Financer financer : acquisitionProcess.getFinancersWithFundsAllocated()) {
 		if (financer.isProjectFinancer()) {
@@ -351,7 +351,7 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	    if (acquisitionProcess.getCurrentOwner() == null) {
 		acquisitionProcess.takeProcess();
 	    }
-	    request.setAttribute("acquisitionProcess", acquisitionProcess);
+	    request.setAttribute("process", acquisitionProcess);
 	    List<FundAllocationBean> fundAllocationBeans = new ArrayList<FundAllocationBean>();
 	    for (Financer financer : acquisitionProcess.getFinancersWithFundsAllocated()) {
 		FundAllocationBean fundAllocationBean = new FundAllocationBean(financer);

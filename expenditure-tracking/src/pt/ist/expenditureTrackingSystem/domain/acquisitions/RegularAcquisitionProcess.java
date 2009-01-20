@@ -69,6 +69,7 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
 	return false;
     }
 
+    @Override
     public void allocateFundsPermanently() {
 	new AcquisitionProcessState(this, AcquisitionProcessStateType.FUNDS_ALLOCATED_PERMANENTLY);
     }
@@ -130,6 +131,7 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
 	new AcquisitionProcessState(this, AcquisitionProcessStateType.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER);
     }
 
+    @Override
     public void resetEffectiveFundAllocationId() {
 	getAcquisitionRequest().resetEffectiveFundAllocationId();
 	confirmInvoice();

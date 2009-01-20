@@ -13,12 +13,15 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess.ActivityScope;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AllocateFundsPermanently;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AllocateProjectFundsPermanently;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.Authorize;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.FundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAddPayingUnit;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAssignPayingUnitToItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericRemovePayingUnit;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.ProjectFundAllocation;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.RemoveFundsPermanentlyAllocated;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.UnApprove;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.UnAuthorize;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.Approve;
@@ -65,6 +68,9 @@ public class RefundProcess extends RefundProcess_Base {
 	requestActivitites.add(new UnSubmitForFundAllocation());
 	requestActivitites.add(new SubmitForInvoiceConfirmation());
 	requestActivitites.add(new ConfirmInvoices());
+	requestActivitites.add(new AllocateProjectFundsPermanently<RefundProcess>());
+	requestActivitites.add(new AllocateFundsPermanently<RefundProcess>());
+	requestActivitites.add(new RemoveFundsPermanentlyAllocated<RefundProcess>());
 	activityMap.put(ActivityScope.REQUEST_INFORMATION, requestActivitites);
 
 	List<AbstractActivity<RefundProcess>> itemActivities = new ArrayList<AbstractActivity<RefundProcess>>();
@@ -258,6 +264,31 @@ public class RefundProcess extends RefundProcess_Base {
 
     public String getAcquisitionProcessId() {
 	return getYear() + "/" + getAcquisitionProcessNumber();
+    }
+
+    @Override
+    public boolean isInvoiceConfirmed() {
+	return getProcessState().isInvoiceConfirmed();
+    }
+
+    @Override
+    public void allocateFundsPermanently() {
+	new RefundProcessState(this, RefundProcessStateType.FUNDS_ALLOCATED_PERMANENTLY);
+    }
+
+    @Override
+    public boolean isAllocatedPermanently() {
+	return getProcessState().isAllocatedPermanently();
+    }
+
+    @Override
+    public void resetEffectiveFundAllocationId() {
+	getRequest().resetEffectiveFundAllocationId();
+	confirmInvoice();
+    }
+
+    protected void confirmInvoice() {
+	new RefundProcessState(this, RefundProcessStateType.INVOICES_CONFIRMED);
     }
 
 }

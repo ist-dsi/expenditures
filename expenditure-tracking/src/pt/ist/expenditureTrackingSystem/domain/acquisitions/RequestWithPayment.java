@@ -272,4 +272,23 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
 	}
 	return true;
     }
+
+    public boolean isEveryItemFullyAttributeInRealValues() {
+	for (final RequestItem item : getRequestItemsSet()) {
+	    if (!item.isRealValueFullyAttributedToUnits()) {
+		return false;
+	    }
+	}
+	return true;
+    }
+
+    public boolean hasAllocatedFundsPermanentlyForAllProjectFinancers() {
+	for (final Financer financer : getFinancersSet()) {
+	    if (!financer.hasAllocatedFundsPermanentlyForAllProjectFinancers()) {
+		return false;
+	    }
+	}
+	return true;
+    }
+
 }

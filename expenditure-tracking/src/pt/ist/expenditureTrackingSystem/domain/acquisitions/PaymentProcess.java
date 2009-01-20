@@ -195,4 +195,23 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
 	return false;
     }
 
+    public boolean isInvoiceConfirmed() {
+	return false;
+    }
+
+    public boolean hasAllocatedFundsPermanentlyForAllProjectFinancers() {
+	final RequestWithPayment requestWithPayment = getRequest();
+	return requestWithPayment.hasAllocatedFundsPermanentlyForAllProjectFinancers();
+    }
+
+    public void allocateFundsPermanently() {
+    }
+
+    public boolean isAllocatedPermanently() {
+	return false;
+    }
+
+    public void resetEffectiveFundAllocationId() {
+    }
+
 }

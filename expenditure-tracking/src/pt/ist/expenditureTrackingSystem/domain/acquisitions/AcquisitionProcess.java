@@ -3,8 +3,6 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 import java.util.Collections;
 import java.util.List;
 
-import org.joda.time.LocalDate;
-
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
@@ -153,11 +151,6 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 	return getYear() + "/" + getAcquisitionProcessNumber();
     }
 
-    public boolean hasAllocatedFundsPermanentlyForAllProjectFinancers() {
-	final AcquisitionRequest acquisitionRequest = getAcquisitionRequest();
-	return acquisitionRequest.hasAllocatedFundsPermanentlyForAllProjectFinancers();
-    }
-
     public boolean isProcessFlowCharAvailable() {
 	return false;
     }
@@ -214,5 +207,15 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
     public boolean isInAuthorizedState() {
 	return getAcquisitionProcessState().isAuthorized();
     }
-    
+
+    @Override
+    public boolean isInvoiceConfirmed() {
+	return getAcquisitionProcessState().isInvoiceConfirmed();
+    }
+
+    @Override
+    public boolean isAllocatedPermanently() {
+	return getAcquisitionProcessState().isAllocatedPermanently();
+    }
+
 }

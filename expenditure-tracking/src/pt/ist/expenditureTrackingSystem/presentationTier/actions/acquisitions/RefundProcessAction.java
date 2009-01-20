@@ -11,7 +11,9 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundItem;
@@ -19,9 +21,11 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.SearchRefundProcesses;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateRefundProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.EditRefundInvoiceBean;
+import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.RefundInvoiceBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.RefundItemBean;
 import pt.ist.expenditureTrackingSystem.presentationTier.Context;
+import pt.ist.fenixWebFramework.security.UserView;
 import pt.ist.fenixWebFramework.struts.annotations.Forward;
 import pt.ist.fenixWebFramework.struts.annotations.Forwards;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
@@ -42,7 +46,10 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "allocate.funds", path = "/acquisitions/commons/allocateFunds.jsp"),
 	@Forward(name = "add.refund.invoice", path = "/acquisitions/refund/addRefundInvoice.jsp"),
 	@Forward(name = "remove.refund.invoice", path = "/acquisitions/refund/removeRefundInvoice.jsp"),
-	@Forward(name = "edit.refund.invoice", path = "/acquisitions/refund/editRefundInvoice.jsp") })
+	@Forward(name = "edit.refund.invoice", path = "/acquisitions/refund/editRefundInvoice.jsp"),
+	@Forward(name = "allocate.effective.project.funds", path = "/acquisitions/commons/allocateEffectiveProjectFunds.jsp"),
+	@Forward(name = "allocate.effective.funds", path = "/acquisitions/commons/allocateEffectiveFunds.jsp")
+})
 public class RefundProcessAction extends PaymentProcessAction {
 
     private static final Context CONTEXT = new Context("acquisitions");
@@ -301,4 +308,50 @@ public class RefundProcessAction extends PaymentProcessAction {
 	}
 	return viewProcess(mapping, form, request, response);
     }
+
+    public ActionForward executeAllocateFundsPermanently(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final RefundProcess refundProcess = getProcess(request);
+	final User user = UserView.getUser();
+	if (refundProcess.getCurrentOwner() == null
+		|| (user != null && refundProcess.getCurrentOwner() == user.getPerson())) {
+	    if (refundProcess.getCurrentOwner() == null) {
+		refundProcess.takeProcess();
+	    }
+	    request.setAttribute("process", refundProcess);
+	    List<FundAllocationBean> fundAllocationBeans = new ArrayList<FundAllocationBean>();
+	    for (Financer financer : refundProcess.getFinancersWithFundsAllocated()) {
+		FundAllocationBean fundAllocationBean = new FundAllocationBean(financer);
+		fundAllocationBean.setFundAllocationId(financer.getFundAllocationId());
+		fundAllocationBean.setEffectiveFundAllocationId(financer.getFundAllocationId());
+		fundAllocationBeans.add(fundAllocationBean);
+	    }
+	    request.setAttribute("fundAllocationBeans", fundAllocationBeans);
+
+	    return mapping.findForward("allocate.effective.funds");
+	} else {
+	    return viewRefundProcess(mapping, request, refundProcess);
+	}
+    }
+
+    public ActionForward allocateFundsPermanently(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final RefundProcess refundProcess = getProcess(request);
+	final List<FundAllocationBean> fundAllocationBeans = getRenderedObject();
+	try {
+	    genericActivityExecution(refundProcess, "AllocateFundsPermanently", fundAllocationBeans);
+	} catch (DomainException e) {
+	    request.setAttribute("fundAllocationBeans", fundAllocationBeans);
+	    request.setAttribute("process", refundProcess);
+	    addMessage(e.getMessage(), getBundle());
+	    return mapping.findForward("allocate.effective.funds");
+	}
+	return viewRefundProcess(mapping, request, refundProcess);
+    }
+
+    public ActionForward executeRemoveFundsPermanentlyAllocated(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	return executeActivityAndViewProcess(mapping, form, request, response, "RemoveFundsPermanentlyAllocated");
+    }
+
 }

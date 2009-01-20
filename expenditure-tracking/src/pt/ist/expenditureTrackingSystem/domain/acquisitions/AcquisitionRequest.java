@@ -247,15 +247,6 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	return true;
     }
 
-    public boolean isEveryItemFullyAttributeInRealValues() {
-	for (AcquisitionRequestItem item : getAcquisitionRequestItemsSet()) {
-	    if (!item.isRealValueFullyAttributedToUnits()) {
-		return false;
-	    }
-	}
-	return true;
-    }
-
     public boolean isAuthorizedByAtLeastOneResponsible() {
 	for (AcquisitionRequestItem item : getAcquisitionRequestItemsSet()) {
 	    if (item.hasAtLeastOneResponsibleApproval()) {
@@ -358,15 +349,6 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 
     public String getAcquisitionProcessId() {
 	return getAcquisitionProcess().getAcquisitionProcessId();
-    }
-
-    public boolean hasAllocatedFundsPermanentlyForAllProjectFinancers() {
-	for (final Financer financer : getFinancersSet()) {
-	    if (!financer.hasAllocatedFundsPermanentlyForAllProjectFinancers()) {
-		return false;
-	    }
-	}
-	return true;
     }
 
     public String getAcquisitionProposalDocumentId() {
