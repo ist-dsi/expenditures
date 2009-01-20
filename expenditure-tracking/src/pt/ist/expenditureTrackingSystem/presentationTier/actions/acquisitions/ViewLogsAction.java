@@ -7,9 +7,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.presentationTier.Context;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.BaseAction;
 import pt.ist.fenixWebFramework.struts.annotations.Forward;
@@ -17,7 +15,7 @@ import pt.ist.fenixWebFramework.struts.annotations.Forwards;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
 @Mapping(path = "/viewLogs")
-@Forwards( { @Forward(name = "view.operation.logs", path = "/acquisitions/operationLog.jsp") })
+@Forwards( { @Forward(name = "view.operation.logs", path = "/acquisitions/commons/operationLog.jsp") })
 public class ViewLogsAction extends BaseAction {
 
     @Override
@@ -29,16 +27,11 @@ public class ViewLogsAction extends BaseAction {
     public ActionForward viewOperationLog(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) {
 
-	final AcquisitionProcess process = getDomainObject(request, "acquisitionProcessOid");
+	final PaymentProcess process = getDomainObject(request, "processOid");
 	final String state = request.getParameter("state");
-	final AcquisitionProcessStateType stateType = state != null ? AcquisitionProcessStateType
-		.valueOf(state) : null;
 
-	if (stateType == null) {
-	    request.setAttribute("operationLogs", process.getExecutionLogsSet());
-	} else {
-	    request.setAttribute("operationLogs", ((RegularAcquisitionProcess) process).getOperationLogsInState(stateType));
-	}
+	request.setAttribute("operationLogs", (state == null) ? process.getExecutionLogsSet() : process
+		.getExecutionLogsForState(state));
 
 	request.setAttribute("process", process);
 	return mapping.findForward("view.operation.logs");

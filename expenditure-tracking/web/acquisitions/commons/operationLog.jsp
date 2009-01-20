@@ -9,7 +9,7 @@
 <bean:define id="processClass" name="process" property="class.simpleName"/>
 
 <p class="mtop05">
-	<html:link action="<%= "/acquisition" + processClass + ".do?method=viewAcquisitionProcess"%>" paramId="acquisitionProcessOid" paramName="process" paramProperty="OID">
+	<html:link action="<%= "/acquisition" + processClass + ".do?method=viewProcess"%>" paramId="processOid" paramName="process" paramProperty="OID">
 		«  <bean:message key="link.back" bundle="EXPENDITURE_RESOURCES"/>
 	</html:link>
 </p>

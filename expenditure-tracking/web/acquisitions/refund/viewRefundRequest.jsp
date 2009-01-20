@@ -91,6 +91,11 @@
 			<bean:message key="acquisitionProcess.link.uploadFile" bundle="ACQUISITION_RESOURCES"/>
 		</html:link>
 	</li>
+	<li>
+		<html:link page="/viewLogs.do?method=viewOperationLog&amp;module=acquisitions" paramId="processOid" paramName="refundProcess" paramProperty="OID">
+			<bean:message key="label.log.view" bundle="ACQUISITION_RESOURCES"/>
+		</html:link>
+	</li>
 
 	<bean:size id="comments"  name="refundProcess" property="comments"/>
 	<li> 

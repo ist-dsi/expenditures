@@ -8,7 +8,9 @@ import java.util.Map;
 import java.util.Set;
 
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.OperationLog;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
@@ -44,6 +46,7 @@ import pt.ist.expenditureTrackingSystem.domain.dto.CreateRefundProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
+import pt.ist.expenditureTrackingSystem.domain.processes.GenericLog;
 import pt.ist.fenixWebFramework.services.Service;
 
 public class RefundProcess extends RefundProcess_Base {

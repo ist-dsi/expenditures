@@ -32,7 +32,9 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
 	return false;
     }
 
-    public List<OperationLog> getOperationLogsInState(AcquisitionProcessStateType state) {
+    @Override
+    public List<OperationLog> getExecutionLogsForState(String stateName) {
+	AcquisitionProcessStateType state = AcquisitionProcessStateType.valueOf(stateName);
 	List<OperationLog> logs = new ArrayList<OperationLog>();
 	for (OperationLog log : getOperationLogs()) {
 	    if (log.getState().equals(state)) {

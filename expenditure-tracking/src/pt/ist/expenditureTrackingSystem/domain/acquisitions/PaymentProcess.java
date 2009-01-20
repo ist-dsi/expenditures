@@ -12,6 +12,7 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Project;
 import pt.ist.expenditureTrackingSystem.domain.organization.SubProject;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
+import pt.ist.expenditureTrackingSystem.domain.processes.GenericLog;
 import pt.ist.expenditureTrackingSystem.domain.util.Money;
 import pt.ist.fenixWebFramework.security.UserView;
 
@@ -186,7 +187,7 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
 	}
 	return false;
     }
-    
+
     public boolean isRealValueFullyAttributedToUnits() {
 	return getRequest().isRealValueFullyAttributedToUnits();
     }
@@ -214,4 +215,7 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
     public void resetEffectiveFundAllocationId() {
     }
 
+    public <T extends GenericLog> List<T> getExecutionLogsForState(String stateName) {
+	return (List<T>) getExecutionLogs();
+    }
 }
