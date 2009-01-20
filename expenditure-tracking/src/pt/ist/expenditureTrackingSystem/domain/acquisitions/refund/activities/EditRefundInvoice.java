@@ -17,12 +17,12 @@ public class EditRefundInvoice extends GenericRefundProcessActivity {
 
     @Override
     protected boolean isAvailable(RefundProcess process) {
-	return isCurrentUserProcessOwner(process) 
+	return isCurrentUserProcessOwner(process) && process.isAnyRefundInvoiceAvailable()
 	&&
 	((isCurrentUserRequestor(process) && process.isInAuthorizedState())
-		|| process.isPendingInvoicesConfirmation()
+		|| (process.isPendingInvoicesConfirmation()
 		&& ((userHasRole(RoleType.ACCOUNTING_MANAGER) && !process.hasProjectsAsPayingUnits()) || (userHasRole(RoleType.PROJECT_ACCOUNTING_MANAGER) && process
-			.hasProjectsAsPayingUnits())));
+			.hasProjectsAsPayingUnits()))));
     }
 
     @Override

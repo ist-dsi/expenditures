@@ -65,4 +65,8 @@ public class RefundInvoice extends RefundInvoice_Base {
 	this.setVatValue(BigDecimal.ZERO);
 	this.setRefundableValue(Money.ZERO);
     }
+
+    public Money getValueWithVat() {
+	return getValue().addPercentage(getVatValue());
+    }
 }

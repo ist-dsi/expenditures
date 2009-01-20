@@ -13,7 +13,7 @@ public class RemoveRefundInvoice extends GenericRefundProcessActivity {
 
     @Override
     protected boolean isAvailable(RefundProcess process) {
-	return (isCurrentUserProcessOwner(process) && process.isInAuthorizedState());
+	return (isCurrentUserProcessOwner(process) && process.isInAuthorizedState() && process.isAnyRefundInvoiceAvailable());
     }
 
     @Override

@@ -12,13 +12,11 @@ import org.apache.struts.action.ActionMapping;
 
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.ProjectFinancer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.UnitItem;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundItem;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.dto.DomainObjectBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.UnitItemBean;
@@ -135,7 +133,6 @@ public abstract class PaymentProcessAction extends ProcessAction {
 	}
     }
 
-    
     public ActionForward calculateShareValuePostBack(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 
@@ -225,8 +222,7 @@ public abstract class PaymentProcessAction extends ProcessAction {
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final PaymentProcess process = getProcess(request);
 	final User user = UserView.getUser();
-	if (process.getCurrentOwner() == null
-		|| (user != null && process.getCurrentOwner() == user.getPerson())) {
+	if (process.getCurrentOwner() == null || (user != null && process.getCurrentOwner() == user.getPerson())) {
 	    if (process.getCurrentOwner() == null) {
 		process.takeProcess();
 	    }
@@ -258,6 +254,141 @@ public abstract class PaymentProcessAction extends ProcessAction {
     public ActionForward executeRemoveProjectFundAllocation(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	return executeActivityAndViewProcess(mapping, form, request, response, "RemoveProjectFundAllocation");
+    }
+
+    public ActionForward executeAllocateFundsPermanently(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final PaymentProcess process = getProcess(request);
+	final User user = UserView.getUser();
+	if (process.getCurrentOwner() == null || (user != null && process.getCurrentOwner() == user.getPerson())) {
+	    if (process.getCurrentOwner() == null) {
+		process.takeProcess();
+	    }
+	    request.setAttribute("process", process);
+	    List<FundAllocationBean> fundAllocationBeans = new ArrayList<FundAllocationBean>();
+	    for (Financer financer : process.getFinancersWithFundsAllocated()) {
+		FundAllocationBean fundAllocationBean = new FundAllocationBean(financer);
+		fundAllocationBean.setFundAllocationId(financer.getFundAllocationId());
+		fundAllocationBean.setEffectiveFundAllocationId(financer.getFundAllocationId());
+		fundAllocationBeans.add(fundAllocationBean);
+	    }
+	    request.setAttribute("fundAllocationBeans", fundAllocationBeans);
+
+	    return mapping.findForward("allocate.effective.funds");
+	} else {
+	    return viewProcess(mapping, form, request, response);
+	}
+    }
+
+    public ActionForward allocateFundsPermanently(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final PaymentProcess process = getProcess(request);
+	final List<FundAllocationBean> fundAllocationBeans = getRenderedObject();
+	try {
+	    genericActivityExecution(process, "AllocateFundsPermanently", fundAllocationBeans);
+	} catch (DomainException e) {
+	    request.setAttribute("fundAllocationBeans", fundAllocationBeans);
+	    request.setAttribute("process", process);
+	    addMessage(e.getMessage(), getBundle());
+	    return mapping.findForward("allocate.effective.funds");
+	}
+	return viewProcess(mapping, form, request, response);
+    }
+
+    public ActionForward executeRemoveFundsPermanentlyAllocated(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	return executeActivityAndViewProcess(mapping, form, request, response, "RemoveFundsPermanentlyAllocated");
+    }
+
+    public ActionForward executeAllocateProjectFundsPermanently(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final PaymentProcess process = getProcess(request);
+	final User user = UserView.getUser();
+	if (process.getCurrentOwner() == null || (user != null && process.getCurrentOwner() == user.getPerson())) {
+	    if (process.getCurrentOwner() == null) {
+		process.takeProcess();
+	    }
+	    request.setAttribute("process", process);
+	    List<FundAllocationBean> fundAllocationBeans = new ArrayList<FundAllocationBean>();
+	    for (Financer financer : process.getFinancersWithFundsAllocated()) {
+		if (financer.isProjectFinancer()) {
+		    final ProjectFinancer projectFinancer = (ProjectFinancer) financer;
+		    FundAllocationBean fundAllocationBean = new FundAllocationBean(projectFinancer);
+		    fundAllocationBean.setFundAllocationId(projectFinancer.getProjectFundAllocationId());
+		    fundAllocationBean.setEffectiveFundAllocationId(projectFinancer.getProjectFundAllocationId());
+		    fundAllocationBeans.add(fundAllocationBean);
+		}
+	    }
+	    request.setAttribute("fundAllocationBeans", fundAllocationBeans);
+	    return mapping.findForward("allocate.effective.project.funds");
+	} else {
+	    return viewProcess(mapping, form, request, response);
+	}
+    }
+
+    public ActionForward allocateProjectFundsPermanently(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final PaymentProcess process = getProcess(request);
+	final List<FundAllocationBean> fundAllocationBeans = getRenderedObject();
+	genericActivityExecution(process, "AllocateProjectFundsPermanently", fundAllocationBeans);
+	return viewProcess(mapping, form, request, response);
+    }
+
+    public ActionForward addAllocationFundForProject(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+
+	return addAllocationFundGeneric(mapping, request, "financerFundAllocationId", "allocate.effective.project.funds");
+    }
+
+    public ActionForward removeAllocationFundForProject(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+
+	return removeAllocationFundGeneric(mapping, request, "financerFundAllocationId", "allocate.effective.project.funds");
+    }
+
+    private ActionForward addAllocationFundGeneric(final ActionMapping mapping, final HttpServletRequest request,
+	    String viewStateID, String forward) {
+
+	final PaymentProcess process = getProcess(request);
+	request.setAttribute("process", process);
+	List<FundAllocationBean> fundAllocationBeans = getRenderedObject(viewStateID);
+	Integer index = Integer.valueOf(request.getParameter("index"));
+
+	Financer financer = getDomainObject(request, "financerOID");
+	FundAllocationBean fundAllocationBean = new FundAllocationBean(financer);
+	fundAllocationBean.setFundAllocationId(null);
+	fundAllocationBean.setEffectiveFundAllocationId(null);
+	fundAllocationBean.setAllowedToAddNewFund(false);
+
+	fundAllocationBeans.add(index + 1, fundAllocationBean);
+	request.setAttribute("fundAllocationBeans", fundAllocationBeans);
+	RenderUtils.invalidateViewState();
+	return mapping.findForward(forward);
+    }
+
+    private ActionForward removeAllocationFundGeneric(final ActionMapping mapping, final HttpServletRequest request,
+	    String viewStateID, String forward) {
+	final PaymentProcess process = getProcess(request);
+	request.setAttribute("process", process);
+	List<FundAllocationBean> fundAllocationBeans = getRenderedObject(viewStateID);
+	int index = Integer.valueOf(request.getParameter("index")).intValue();
+
+	fundAllocationBeans.remove(index);
+	request.setAttribute("fundAllocationBeans", fundAllocationBeans);
+	RenderUtils.invalidateViewState();
+	return mapping.findForward(forward);
+    }
+
+    public ActionForward addAllocationFund(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+
+	return addAllocationFundGeneric(mapping, request, "financerFundAllocationId", "allocate.effective.funds");
+    }
+
+    public ActionForward removeAllocationFund(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+
+	return removeAllocationFundGeneric(mapping, request, "financerFundAllocationId", "allocate.effective.funds");
     }
 
     @Override

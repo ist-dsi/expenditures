@@ -168,53 +168,42 @@
 			</div>
 		</logic:equal>
 	</logic:equal>		
-	<logic:equal name="refundProcess" property="inAuthorizedState" value="true">
-		<logic:equal name="refundItem" property="realValueFullyAttributedToUnits" value="false">
-			<div class="infoop4">
-						<strong><bean:message key="messages.info.attention" bundle="EXPENDITURE_RESOURCES"/>:</strong> <bean:message key="acquisitionRequestItem.message.info.valueNotFullyAttributed" bundle="ACQUISITION_RESOURCES"/>
-			</div>
-		</logic:equal>
-	</logic:equal>
-	<logic:equal name="refundProcess" property="inSubmittedForInvoiceConfirmationState" value="true">
-		<logic:equal name="refundItem" property="realValueFullyAttributedToUnits" value="false">
-			<div class="infoop4">
+	
+	<logic:equal name="refundProcess" property="anyRefundInvoiceAvailable" value="true">
+		<logic:equal name="refundProcess" property="inAuthorizedState" value="true">
+			<logic:equal name="refundItem" property="realValueFullyAttributedToUnits" value="false">
+				<div class="infoop4">
 							<strong><bean:message key="messages.info.attention" bundle="EXPENDITURE_RESOURCES"/>:</strong> <bean:message key="acquisitionRequestItem.message.info.valueNotFullyAttributed" bundle="ACQUISITION_RESOURCES"/>
-			</div>
+				</div>
+			</logic:equal>
+		</logic:equal>
+		<logic:equal name="refundProcess" property="inSubmittedForInvoiceConfirmationState" value="true">
+			<logic:equal name="refundItem" property="realValueFullyAttributedToUnits" value="false">
+				<div class="infoop4">
+								<strong><bean:message key="messages.info.attention" bundle="EXPENDITURE_RESOURCES"/>:</strong> <bean:message key="acquisitionRequestItem.message.info.valueNotFullyAttributed" bundle="ACQUISITION_RESOURCES"/>
+				</div>
+			</logic:equal>
 		</logic:equal>
 	</logic:equal>
 	
 	<bean:define id="item" name="refundItem" toScope="request"/>
 	<jsp:include page="../commons/viewRefundItem.jsp"/>
-		<logic:notEmpty name="refundItem" property="unitItems">
-					<table class="payingunits">
-						<logic:iterate id="unitItem" name="refundItem" property="sortedUnitItems">
-							<tr>
-								<td>
-									<fr:view name="unitItem" property="unit.presentationName"/>
-								</td>
-								<td class="nowrap vatop">
-									<logic:present name="unitItem" property="realShareValue">
-										<fr:view name="unitItem" property="realShareValue"/>
-									</logic:present>
-									<logic:notPresent name="unitItem" property="realShareValue">
-										<fr:view name="unitItem" property="shareValue"/>
-									</logic:notPresent>
-								</td>
-							</tr>
-						</logic:iterate>
-					</table>
-			</logic:notEmpty>
 		<logic:notEmpty name="refundItem" property="invoices">
 				<table class="tstyle5">
 					<tr>
 					<th><bean:message key="acquisitionProcess.label.invoice.number" bundle="ACQUISITION_RESOURCES"/></th>		
 					<th><bean:message key="acquisitionProcess.label.invoice.date" bundle="ACQUISITION_RESOURCES"/></th>
+					<th><bean:message key="label.invoice.value" bundle="ACQUISITION_RESOURCES"/></th>
+					<th><bean:message key="label.invoice.refundableValue" bundle="ACQUISITION_RESOURCES"/></th>
 					<th><bean:message key="label.supplier" bundle="EXPENDITURE_RESOURCES"/></th>
 					<th><bean:message key="acquisitionProcess.label.invoice.file" bundle="ACQUISITION_RESOURCES"/></th>
+					
 					</tr>	
 					<logic:iterate id="invoice" name="refundItem" property="invoices">
 						<td><fr:view name="invoice" property="invoiceNumber"/></td>
 						<td><fr:view name="invoice" property="invoiceDate"/></td>
+						<td><fr:view name="invoice" property="valueWithVat"/></td>
+						<td><fr:view name="invoice" property="refundableValue"/></td>
 					    <td> 
 					    	<logic:present name="invoice" property="supplier">
 					    	  <fr:view name="invoice" property="supplier.name"/>

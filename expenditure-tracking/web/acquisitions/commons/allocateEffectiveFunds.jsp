@@ -4,7 +4,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
-<h2><bean:message key="acquisitionProcess.title.fundAllocation" bundle="ACQUISITION_RESOURCES"/></h2>
+<h2><bean:message key="acquisitionProcess.title.allocateFundsPermanently" bundle="ACQUISITION_RESOURCES"/></h2>
 
 <logic:present name="process" property="currentOwner">
 	<bean:define id="ownerName" name="process" property="currentOwner.firstAndLastName"/>
@@ -13,24 +13,80 @@
 	</div>
 </logic:present>
 
-<bean:define id="processRequest" name="process" property="request" toScope="request"/>
-
-<bean:define id="processOID" name="process" property="OID"/>
-<bean:define id="requestClass" name="processRequest" property="class.simpleName"/>
+<bean:define id="processOID" name="process"  property="OID"/>
 <bean:define id="processClass" name="process" property="class.simpleName"/>
-<jsp:include page='<%=  "view" + requestClass + ".jsp" %>' flush="true"/>
+<bean:define id="processRequest" name="process" property="request" toScope="request"/>
+<bean:define id="requestclass" name="processRequest" property="class.simpleName"/>
+<jsp:include page='<%= "view" + requestclass  + ".jsp"%>' flush="true"/>
 
-<p class="mtop15 mbottom025"><bean:message key="acquisitionProcess.label.fundAllocation.insert" bundle="ACQUISITION_RESOURCES"/>:</p>
+<bean:define id="urlActivity">/acquisition<%= processClass %>.do?processOid=<bean:write name="process" property="OID"/></bean:define>
+<bean:define id="urlView">/acquisition<%= processClass %>.do?method=viewProcess&amp;processOid=<bean:write name="process" property="OID"/></bean:define>
 
-<bean:define id="urlActivity" value='<%= "/acquisition" + processClass   + ".do?method=allocateFundsPermanently&amp;processOid=" + processOID%>'/>
-<bean:define id="urlView" value='<%= "/acquisition" + processClass + ".do?method=viewProcess&amp;processOid=" + processOID%>'/>
 
-<fr:edit action="<%= urlActivity %>" 
-		id="financerFundAllocationId" 
-		schema="editFinancerEffectiveFundAllocationId" 
-		name="fundAllocationBeans" >
-	<fr:layout name="tabular-editable">
-		<fr:property name="classes" value="tstyle2 mtop05"/>
-	</fr:layout>
-	<fr:destination name="cancel" path="<%= urlView %>" />
-</fr:edit>
+<div class="forminline mbottom2">
+
+<fr:form id="allocationForm" action="<%= urlActivity %>">
+	<fr:edit  
+		id="financerFundAllocationId"
+		name="fundAllocationBeans" visible="false"/>
+	<html:hidden  property="method" value="allocateFundsPermanently"/>
+	<html:hidden property="financerOID" value=""/>
+	<html:hidden property="index" value=""/>
+
+
+<jsp:include page="../../commons/defaultErrorDisplay.jsp"/>
+
+
+<p class="mtop15 mbottom0"><bean:message key="acquisitionProcess.label.insertPermanentProjectFunds" bundle="ACQUISITION_RESOURCES"/></p>
+
+<table class="tstyle6">
+<logic:iterate id="financerBean" name="fundAllocationBeans" indexId="index">
+	<tr>
+		<bean:define id="usedClass" value="" toScope="request"/>
+		<logic:equal name="financerBean" property="allowedToAddNewFund" value="false">
+				<bean:define id="usedClass" value="dnone" toScope="request"/>
+		</logic:equal>
+		<th class="<%= usedClass %>">			
+			<h4 class="dinline"><fr:view name="financerBean" property="financer.unit.presentationName"/></h4> <bean:message key="financer.label.fundAllocation.identification" bundle="ACQUISITION_RESOURCES"/>: <fr:view name="financerBean" property="fundAllocationId" type="java.lang.String"/>
+		</th>
+	</tr>
+	<tr>
+		<td>
+			<fr:edit id="<%= "id" + index %>" name="financerBean" slot="effectiveFundAllocationId" type="java.lang.String"/>
+			<bean:define id="financerOID" name="financerBean" property="financer.OID"/>
+			<logic:equal name="financerBean" property="allowedToAddNewFund" value="true">
+				<a href="javascript:document.getElementById('allocationForm').method.value='addAllocationFund'; document.getElementById('allocationForm').financerOID.value='<%= financerOID %>'; document.getElementById('allocationForm').index.value='<%= index %>'; document.getElementById('allocationForm').submit();">
+					<bean:message key="financer.link.addEffectiveAllocationId" bundle="ACQUISITION_RESOURCES"/>
+				</a>
+			</logic:equal>
+			<logic:equal name="financerBean" property="allowedToAddNewFund" value="false">
+				<a href="javascript:document.getElementById('allocationForm').method.value='removeAllocationFund'; document.getElementById('allocationForm').index.value='<%= index %>'; document.getElementById('allocationForm').submit();">
+					<bean:message key="financer.link.removeEffectiveAllocationId" bundle="ACQUISITION_RESOURCES"/>
+				</a>
+			</logic:equal>
+		</td>
+	</tr>
+</logic:iterate>
+</table>
+
+<html:submit styleClass="inputbutton"><bean:message key="button.submit" bundle="EXPENDITURE_RESOURCES"/> </html:submit>
+</fr:form>
+
+<fr:form id="allocationForm" action="<%= urlView %>">
+	<html:submit styleClass="inputbutton"><bean:message key="renderers.form.cancel.name" bundle="RENDERER_RESOURCES"/> </html:submit>
+</fr:form>
+
+</div>
+
+<div class="item">
+	<bean:size id="totalItems" name="process" property="request.requestItems"/>
+	<logic:iterate id="item" name="process" property="request.requestItems" indexId="index">
+		<bean:define id="currentIndex" value="<%= String.valueOf(index + 1) %>"/>
+		<strong><bean:message key="acquisitionRequestItem.label.item" bundle="ACQUISITION_RESOURCES"/></strong> (<fr:view name="currentIndex"/>/<fr:view name="totalItems"/>)
+
+		<bean:define id="item" name="item" toScope="request"/>
+		<bean:define id="itemClass" name="item" property="class.simpleName"/>
+		<jsp:include page='<%= "view" + itemClass + ".jsp" %>' flush="false"/>
+	
+	</logic:iterate>
+</div>

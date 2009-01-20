@@ -248,6 +248,8 @@
 	
 	
 		<logic:notEmpty name="itemSet">
+			<bean:size id="size" name="itemSet"/>
+			<logic:greaterThan value="1" name="size">
 			<table class="tstyle5 thright mvert1" style="width: 100%;" id="itemResume">
 				<tr>
 					<th></th>
@@ -275,6 +277,7 @@
 					</tr>
 				</logic:iterate>
 			</table>
+			</logic:greaterThan>
 		</logic:notEmpty>
 		
 		<bean:size id="totalItems" name="itemSet"/>

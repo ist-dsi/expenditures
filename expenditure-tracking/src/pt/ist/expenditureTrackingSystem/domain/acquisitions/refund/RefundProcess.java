@@ -309,5 +309,14 @@ public class RefundProcess extends RefundProcess_Base {
     public boolean isPayed() {
 	return getRequest().isPayed();
     }
+    
+    public boolean isAnyRefundInvoiceAvailable() {
+	for (RefundItem item : getRequest().getRefundItemsSet()) {
+	    if (item.hasAnyInvoices()) {
+		return true;
+	    }
+	}
+	return false;
+    }
 
 }
