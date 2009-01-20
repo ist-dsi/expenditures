@@ -234,6 +234,10 @@ public class RefundProcess extends RefundProcess_Base {
 	getRequest().unSubmitForFundsAllocation();
     }
 
+    public boolean isInSubmittedForInvoiceConfirmationState() {
+	return getProcessState().isInSubmittedForInvoiceConfirmationState();
+    }
+
     public List<RefundInvoice> getRefundableInvoices() {
 	List<RefundInvoice> invoices = new ArrayList<RefundInvoice>();
 	for (RequestItem item : getRequest().getRequestItems()) {

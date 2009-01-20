@@ -8,16 +8,16 @@ public class DistributeRealValuesForPayingUnits extends AbstractDistributeRealVa
 
     @Override
     protected boolean isAccessible(RefundProcess process) {
-	return isCurrentUserProcessOwner(process) || userHasRole(RoleType.ACCOUNTING_MANAGER)
+	return isCurrentUserRequestor(process) || userHasRole(RoleType.ACCOUNTING_MANAGER)
 		|| userHasRole(RoleType.PROJECT_ACCOUNTING_MANAGER);
     }
 
     @Override
     protected boolean isAvailable(RefundProcess process) {
-	return (isCurrentUserProcessOwner(process) && process.isInAuthorizedState())
+	return isCurrentUserProcessOwner(process) 
+	&& ((isCurrentUserRequestor(process) && process.isInAuthorizedState())
 		|| process.isPendingInvoicesConfirmation()
 		&& ((userHasRole(RoleType.ACCOUNTING_MANAGER) && !process.hasProjectsAsPayingUnits()) || (userHasRole(RoleType.PROJECT_ACCOUNTING_MANAGER) && process
-			.hasProjectsAsPayingUnits()));
+			.hasProjectsAsPayingUnits())));
     }
-
 }

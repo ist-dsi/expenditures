@@ -8,7 +8,7 @@ public class RemoveRefundInvoice extends GenericRefundProcessActivity {
 
     @Override
     protected boolean isAccessible(RefundProcess process) {
-	return isCurrentUserProcessOwner(process);
+	return isCurrentUserRequestor(process);
     }
 
     @Override

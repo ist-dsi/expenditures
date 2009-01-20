@@ -63,4 +63,8 @@ public class RefundProcessState extends RefundProcessState_Base {
 	return getRefundProcessStateType() == RefundProcessStateType.FUNDS_ALLOCATED_PERMANENTLY;
     }
     
+    public boolean isInSubmittedForInvoiceConfirmationState() {
+	return getRefundProcessStateType() == RefundProcessStateType.SUBMITTED_FOR_INVOICE_CONFIRMATION;
+    }
+    
 }

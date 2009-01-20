@@ -155,11 +155,29 @@
 			</fr:view>
 		</html:link>
 	</logic:iterate>
-	<logic:equal name="refundItem" property="realValueFullyAttributedToUnits" value="false">
-		<div class="infoop4">
-						<strong><bean:message key="messages.info.attention" bundle="EXPENDITURE_RESOURCES"/>:</strong> <bean:message key="acquisitionRequestItem.message.info.valueNotFullyAttributed" bundle="ACQUISITION_RESOURCES"/>
-		</div>
+	
+	<logic:equal name="refundProcess" property="inGenesis" value="true">
+		<logic:equal name="refundItem" property="valueFullyAttributedToUnits" value="false">
+			<div class="infoop4">
+							<strong><bean:message key="messages.info.attention" bundle="EXPENDITURE_RESOURCES"/>:</strong> <bean:message key="acquisitionRequestItem.message.info.valueNotFullyAttributed" bundle="ACQUISITION_RESOURCES"/>
+			</div>
+		</logic:equal>
 	</logic:equal>		
+	<logic:equal name="refundProcess" property="inAuthorizedState" value="true">
+		<logic:equal name="refundItem" property="realValueFullyAttributedToUnits" value="false">
+			<div class="infoop4">
+						<strong><bean:message key="messages.info.attention" bundle="EXPENDITURE_RESOURCES"/>:</strong> <bean:message key="acquisitionRequestItem.message.info.valueNotFullyAttributed" bundle="ACQUISITION_RESOURCES"/>
+			</div>
+		</logic:equal>
+	</logic:equal>
+	<logic:equal name="refundProcess" property="inSubmittedForInvoiceConfirmationState" value="true">
+		<logic:equal name="refundItem" property="realValueFullyAttributedToUnits" value="false">
+			<div class="infoop4">
+							<strong><bean:message key="messages.info.attention" bundle="EXPENDITURE_RESOURCES"/>:</strong> <bean:message key="acquisitionRequestItem.message.info.valueNotFullyAttributed" bundle="ACQUISITION_RESOURCES"/>
+			</div>
+		</logic:equal>
+	</logic:equal>
+	
 	<bean:define id="item" name="refundItem" toScope="request"/>
 	<jsp:include page="../commons/viewRefundItem.jsp"/>
 		<logic:notEmpty name="refundItem" property="unitItems">

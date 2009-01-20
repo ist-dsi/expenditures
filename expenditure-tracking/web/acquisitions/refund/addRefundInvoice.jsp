@@ -7,6 +7,7 @@
 
 <bean:define id="item" name="bean" property="item"/>
 <bean:define id="process" name="item" property="request.process"/>
+<bean:define id="itemOID" name="item" property="OID"/>
 <bean:define id="processOID" name="process" property="OID"/>
 <bean:define id="processClass" name="process" property="class.simpleName"/>
 
@@ -14,7 +15,9 @@
 	<bean:message key="title.addInvoice" bundle="EXPENDITURE_RESOURCES"/>
 </h2>
 
-<fr:edit id="bean" name="bean" schema="create.refund.invoice" action='<%= "/acquisition" + processClass + ".do?method=createRefundInvoice&refundProcessOid=" + processOID %>'>
+<jsp:include page="../../commons/defaultErrorDisplay.jsp"/>
+
+<fr:edit id="bean" name="bean" schema="create.refund.invoice" action='<%= "/acquisition" + processClass + ".do?method=createRefundInvoice&refundProcessOid=" + processOID + "&refundItemOid=" + itemOID%>'>
 		<fr:layout name="tabular">
 		<fr:property name="classes" value="form" />
 		<fr:property name="columnClasses" value=",,tderror" />

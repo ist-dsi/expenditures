@@ -25,6 +25,7 @@ import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.RefundInvoiceBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.RefundItemBean;
 import pt.ist.expenditureTrackingSystem.presentationTier.Context;
+import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 import pt.ist.fenixWebFramework.security.UserView;
 import pt.ist.fenixWebFramework.struts.annotations.Forward;
 import pt.ist.fenixWebFramework.struts.annotations.Forwards;
@@ -48,8 +49,7 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "remove.refund.invoice", path = "/acquisitions/refund/removeRefundInvoice.jsp"),
 	@Forward(name = "edit.refund.invoice", path = "/acquisitions/refund/editRefundInvoice.jsp"),
 	@Forward(name = "allocate.effective.project.funds", path = "/acquisitions/commons/allocateEffectiveProjectFunds.jsp"),
-	@Forward(name = "allocate.effective.funds", path = "/acquisitions/commons/allocateEffectiveFunds.jsp")
-})
+	@Forward(name = "allocate.effective.funds", path = "/acquisitions/commons/allocateEffectiveFunds.jsp") })
 public class RefundProcessAction extends PaymentProcessAction {
 
     private static final Context CONTEXT = new Context("acquisitions");
@@ -244,6 +244,8 @@ public class RefundProcessAction extends PaymentProcessAction {
 	    genericActivityExecution(process, "CreateRefundInvoice", bean, fileBytes);
 	} catch (DomainException e) {
 	    addErrorMessage(e.getMessage(), getBundle());
+	    RenderUtils.invalidateViewState("bean");
+	    return executeCreateRefundInvoice(mapping, form, request, response);
 	}
 
 	return viewProcess(mapping, form, request, response);
@@ -313,8 +315,7 @@ public class RefundProcessAction extends PaymentProcessAction {
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final RefundProcess refundProcess = getProcess(request);
 	final User user = UserView.getUser();
-	if (refundProcess.getCurrentOwner() == null
-		|| (user != null && refundProcess.getCurrentOwner() == user.getPerson())) {
+	if (refundProcess.getCurrentOwner() == null || (user != null && refundProcess.getCurrentOwner() == user.getPerson())) {
 	    if (refundProcess.getCurrentOwner() == null) {
 		refundProcess.takeProcess();
 	    }

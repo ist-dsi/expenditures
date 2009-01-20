@@ -7,8 +7,10 @@ public class ConfirmInvoices extends GenericRefundProcessActivity {
 
     @Override
     protected boolean isAccessible(RefundProcess process) {
-	return ((process.isAccountingEmployee() && !process.hasProjectsAsPayingUnits())
-		|| (process.isProjectAccountingEmployee() && process.hasProjectsAsPayingUnits())) && process.isPendingInvoicesConfirmation();
+	return process.isRealValueFullyAttributedToUnits()
+		&& ((process.isAccountingEmployee() && !process.hasProjectsAsPayingUnits()) || (process
+			.isProjectAccountingEmployee() && process.hasProjectsAsPayingUnits()))
+		&& process.isPendingInvoicesConfirmation();
     }
 
     @Override
