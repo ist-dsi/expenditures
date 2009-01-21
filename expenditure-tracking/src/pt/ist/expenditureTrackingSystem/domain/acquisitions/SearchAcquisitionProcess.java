@@ -15,6 +15,7 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
+import pt.ist.expenditureTrackingSystem.domain.util.Money;
 import pt.ist.fenixWebFramework.security.UserView;
 import pt.ist.fenixWebFramework.util.DomainReference;
 
@@ -30,6 +31,8 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
     private DomainReference<AccountingUnit> accountingUnit;
     private Boolean hasAvailableAndAccessibleActivityForUser;
     private Boolean responsibleUnitSetOnly = Boolean.FALSE;
+    private Boolean showOnlyAcquisitionsExcludedFromSupplierLimit = Boolean.FALSE;
+    private Boolean showOnlyAcquisitionsWithAdditionalCosts = Boolean.FALSE;
 
     private Class<? extends AcquisitionProcess> clazz;
 
@@ -65,7 +68,8 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
 		    && matchCriteria(proposalId, acquisitionProposalId)
 		    && matchCriteria(hasAvailableAndAccessibleActivityForUser, acquisitionRequest)
 		    && matchCriteria(acquisitionProcessStateType, type) && matchCriteria(accountingUnits, getAccountingUnit())
-		    && matchCriteria(requestDocumentId, acquisitionRequestDocumentID);
+		    && matchCriteria(requestDocumentId, acquisitionRequestDocumentID)
+		    && matchShowOnlyCriteris(acquisitionRequest);
 
 	    // && matchCriteria(costCenter, acquisitionRequest.getCostCenter());
 	}
@@ -111,6 +115,26 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
 
 	private boolean matchCriteria(final Person requester, final Person person) {
 	    return requester == null || requester == person;
+	}
+
+	private boolean matchShowOnlyCriteris(final AcquisitionRequest acquisitionRequest) {
+	    if (showOnlyAcquisitionsExcludedFromSupplierLimit.booleanValue() && !acquisitionRequest.getProcess().getSkipSupplierFundAllocation().booleanValue()) {
+		return false;
+	    }
+	    if (showOnlyAcquisitionsWithAdditionalCosts.booleanValue() && !hasAdditionalCosts(acquisitionRequest)) {
+		return false;
+	    }
+	    return true;
+	}
+
+	private boolean hasAdditionalCosts(final AcquisitionRequest acquisitionRequest) {
+	    for (final AcquisitionRequestItem acquisitionRequestItem : acquisitionRequest.getAcquisitionRequestItemsSet()) {
+		final Money additionalCost = acquisitionRequestItem.getAdditionalCostValue();
+		if (additionalCost != null && additionalCost.isGreaterThan(Money.ZERO)) {
+		    return true;
+		}
+	    }
+	    return false;
 	}
 
     }
@@ -268,5 +292,21 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
 
     public void setRequestDocumentId(String requestDocumentId) {
 	this.requestDocumentId = requestDocumentId;
+    }
+
+    public Boolean getShowOnlyAcquisitionsExcludedFromSupplierLimit() {
+        return showOnlyAcquisitionsExcludedFromSupplierLimit;
+    }
+
+    public void setShowOnlyAcquisitionsExcludedFromSupplierLimit(Boolean showOnlyAcquisitionsExcludedFromSupplierLimit) {
+        this.showOnlyAcquisitionsExcludedFromSupplierLimit = showOnlyAcquisitionsExcludedFromSupplierLimit;
+    }
+
+    public Boolean getShowOnlyAcquisitionsWithAdditionalCosts() {
+        return showOnlyAcquisitionsWithAdditionalCosts;
+    }
+
+    public void setShowOnlyAcquisitionsWithAdditionalCosts(Boolean showOnlyAcquisitionsWithAdditionalCosts) {
+        this.showOnlyAcquisitionsWithAdditionalCosts = showOnlyAcquisitionsWithAdditionalCosts;
     }
 }

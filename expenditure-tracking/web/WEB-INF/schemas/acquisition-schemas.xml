@@ -364,6 +364,8 @@
 	</slot>
 	<slot name="hasAvailableAndAccessibleActivityForUser" key="label.option.hasAvailableAndAccessibleActivityForUser" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="responsibleUnitSetOnly" key="label.option.responsibleUnitSetOnly" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="showOnlyAcquisitionsExcludedFromSupplierLimit" key="label.option.showOnlyAcquisitionsExcludedFromSupplierLimit" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="showOnlyAcquisitionsWithAdditionalCosts" key="label.option.showOnlyAcquisitionsWithAdditionalCosts" bundle="ACQUISITION_RESOURCES"/>
 </schema>
 
 <schema name="allocateFunds"
