@@ -121,6 +121,10 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
 	new AcquisitionProcessState(this, AcquisitionProcessStateType.ACQUISITION_PROCESSED);
     }
 
+    public void revertProcessedAcquisition() {
+	new AcquisitionProcessState(this, AcquisitionProcessStateType.AUTHORIZED);
+    }
+
     public void submitedForInvoiceConfirmation() {
 	new AcquisitionProcessState(this, AcquisitionProcessStateType.SUBMITTED_FOR_CONFIRM_INVOICE);
     }

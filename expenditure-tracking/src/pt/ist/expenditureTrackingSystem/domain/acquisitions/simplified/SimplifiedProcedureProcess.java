@@ -42,6 +42,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activitie
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RemoveFundAllocationExpirationDateForResponsible;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RemoveProjectFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RevertInvoiceSubmission;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RevertSkipPurchaseOrderDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SendPurchaseOrderToSupplier;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SetSkipSupplierFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SkipPurchaseOrderDocument;
@@ -74,9 +75,10 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	requestInformationActivities.add(new CreateAcquisitionPurchaseOrderDocument());
 	requestInformationActivities.add(new SendPurchaseOrderToSupplier());
 	requestInformationActivities.add(new SkipPurchaseOrderDocument());
+	requestInformationActivities.add(new RevertSkipPurchaseOrderDocument());
 	requestInformationActivities.add(new GenericAddPayingUnit<RegularAcquisitionProcess>());
 	requestInformationActivities.add(new GenericRemovePayingUnit<RegularAcquisitionProcess>());
-	
+
 	requestInformationActivities.add(new AddAcquisitionProposalDocument());
 	requestInformationActivities.add(new ChangeAcquisitionProposalDocument());
 	requestInformationActivities.add(new CreateAcquisitionRequestItem());
@@ -111,9 +113,9 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	requestInformationActivities.add(new UnSubmitForApproval());
 	requestInformationActivities.add(new ChangeFinancersAccountingUnit());
 
-//	requestInformationActivities.add(new SetRefundee());
-//	requestInformationActivities.add(new ChangeRefundee());
-//	requestInformationActivities.add(new UnsetRefundee());
+	// requestInformationActivities.add(new SetRefundee());
+	// requestInformationActivities.add(new ChangeRefundee());
+	// requestInformationActivities.add(new UnsetRefundee());
 
 	requestInformationActivities.add(new SetSkipSupplierFundAllocation());
 	requestInformationActivities.add(new UnsetSkipSupplierFundAllocation());
@@ -241,7 +243,6 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
     public static List<AcquisitionProcessStateType> getAvailableStatesForSimplifiedProcedureProcess() {
 	return availableStates;
     }
-
 
     @Override
     public boolean hasAnyAvailableActivitity() {
