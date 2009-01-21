@@ -30,4 +30,8 @@ public class CPVReference extends CPVReference_Base {
 	}
 	return null;
     }
+
+    public String getFullDescription() {
+	return getCode() + " - " + getDescription();
+    }
 }
