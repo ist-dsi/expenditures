@@ -11,12 +11,12 @@ import pt.ist.fenixWebFramework.util.DomainReference;
 
 public class SearchRefundProcesses extends Search<RefundProcess> {
 
-    private DomainReference<Person> refundee;
+    private String refundeeName;
     private DomainReference<Person> requestingPerson;
     private DomainReference<Unit> requestingUnit;
 
     public SearchRefundProcesses() {
-	setRefundee(null);
+	setRefundeeName(null);
 	setRequestingPerson(null);
 	setRequestingUnit(null);
     }
@@ -40,11 +40,16 @@ public class SearchRefundProcesses extends Search<RefundProcess> {
 	@Override
 	protected boolean matchesSearchCriteria(RefundProcess process) {
 	    RefundRequest request = process.getRequest();
-	    Person refundee = request.getRefundee();
+	    String refundeeName = request.getRefundee().getName();
 	    Person requestor = request.getRequester();
 	    Unit unit = request.getRequestingUnit();
 
-	    return match(getRefundee(), refundee) && match(getRequestingPerson(), requestor) && match(getRequestingUnit(), unit);
+	    return match(getRefundeeName(), refundeeName) && match(getRequestingPerson(), requestor)
+		    && match(getRequestingUnit(), unit);
+	}
+
+	private boolean match(String searchString, String string) {
+	    return searchString == null || searchString.length() == 0 || searchString.equalsIgnoreCase(string);
 	}
 
 	private boolean match(Person searchPerson, Person person) {
@@ -56,12 +61,12 @@ public class SearchRefundProcesses extends Search<RefundProcess> {
 	}
     }
 
-    public Person getRefundee() {
-	return refundee.getObject();
+    public String getRefundeeName() {
+	return refundeeName;
     }
 
-    public void setRefundee(Person refundee) {
-	this.refundee = new DomainReference<Person>(refundee);
+    public void setRefundeeName(String refundee) {
+	this.refundeeName = refundee;
     }
 
     public Person getRequestingPerson() {

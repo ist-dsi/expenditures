@@ -7,10 +7,17 @@
 <h2><bean:message
 	key="acquisitionProcess.title.createRefundRequest"
 	bundle="ACQUISITION_RESOURCES" /></h2>
-	
-<fr:edit id="createRefundProcess" name="bean" schema="createRefundProcess" action="/acquisitionRefundProcess.do?method=createRefundProcess">
+
+<bean:define id="selection" value="internalPerson"/>
+
+<logic:equal name="bean" property="externalPerson" value="true"> 
+	<bean:define id="selection" value="externalPerson"/>
+</logic:equal>
+
+<fr:edit id="createRefundProcess" name="bean" schema='<%= "createRefundProcess." + selection %>' action="/acquisitionRefundProcess.do?method=createRefundProcess">
 	<fr:layout name="tabular">
 		<fr:property name="classes" value="form" />
 		<fr:property name="columnClasses" value=",,tderror" />
 	</fr:layout>
+	<fr:destination name="postBack" path="/acquisitionRefundProcess.do?method=createRefundProcessPostBack"/>
 </fr:edit>

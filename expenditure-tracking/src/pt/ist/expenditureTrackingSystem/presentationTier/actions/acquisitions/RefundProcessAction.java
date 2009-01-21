@@ -88,6 +88,16 @@ public class RefundProcessAction extends PaymentProcessAction {
 
     }
 
+    public ActionForward createRefundProcessPostBack(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+
+	CreateRefundProcessBean bean = getRenderedObject("createRefundProcess");
+	request.setAttribute("bean", bean);
+	RenderUtils.invalidateViewState("createRefundProcess");
+	return mapping.findForward("create.refund.process");
+
+    }
+    
     public ActionForward showPendingProcesses(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final SearchRefundProcesses searchRefundProcess = new SearchRefundProcesses();

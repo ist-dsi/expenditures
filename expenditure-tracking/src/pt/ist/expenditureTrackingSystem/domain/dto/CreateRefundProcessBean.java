@@ -8,16 +8,20 @@ import pt.ist.fenixWebFramework.util.DomainReference;
 
 public class CreateRefundProcessBean implements Serializable {
 
-    DomainReference<Person> requestor;
-    DomainReference<Person> refundee;
-    DomainReference<Unit> requestingUnit;
+    private DomainReference<Person> requestor;
+    private DomainReference<Person> refundee;
+    private DomainReference<Unit> requestingUnit;
     private boolean requestUnitPayingUnit;
+    private boolean externalPerson;
+    private String refundeeName;
+    private String refundeeFiscalCode;
 
     public CreateRefundProcessBean(Person requestor) {
 	setRequestor(requestor);
 	setRefundee(null);
 	setRequestingUnit(null);
 	setRequestUnitPayingUnit(false);
+	setExternalPerson(false);
     }
 
     public Person getRequestor() {
@@ -50,6 +54,30 @@ public class CreateRefundProcessBean implements Serializable {
 
     public void setRequestUnitPayingUnit(boolean requestUnitPayingUnit) {
 	this.requestUnitPayingUnit = requestUnitPayingUnit;
+    }
+
+    public boolean isExternalPerson() {
+	return externalPerson;
+    }
+
+    public void setExternalPerson(boolean externalPerson) {
+	this.externalPerson = externalPerson;
+    }
+
+    public String getRefundeeName() {
+	return refundeeName;
+    }
+
+    public void setRefundeeName(String refundeeName) {
+	this.refundeeName = refundeeName;
+    }
+
+    public String getRefundeeFiscalCode() {
+	return refundeeFiscalCode;
+    }
+
+    public void setRefundeeFiscalCode(String refundeeFiscalCode) {
+	this.refundeeFiscalCode = refundeeFiscalCode;
     }
 
 }

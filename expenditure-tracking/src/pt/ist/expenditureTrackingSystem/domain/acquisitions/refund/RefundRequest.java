@@ -11,9 +11,20 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 
 public class RefundRequest extends RefundRequest_Base {
 
-    public RefundRequest(RefundProcess process, Person requestor, Person refundee, Unit requestingUnit) {
+    public RefundRequest(RefundProcess process, Person requestor, String refundeeName, String refundeeFiscalCode,
+	    Unit requestingUnit) {
 	super();
 	setProcess(process);
+	Refundee refundee = Refundee.getExternalRefundee(refundeeName, refundeeFiscalCode);
+	setRefundee(refundee == null ? new Refundee(refundeeName, refundeeFiscalCode) : refundee);
+	setRequester(requestor);
+	setRequestingUnit(requestingUnit);
+    }
+
+    public RefundRequest(RefundProcess process, Person requestor, Person refundeePerson, Unit requestingUnit) {
+	super();
+	setProcess(process);
+	Refundee refundee = refundeePerson.hasRefundee() ? refundeePerson.getRefundee() : new Refundee(refundeePerson);
 	setRefundee(refundee);
 	setRequester(requestor);
 	setRequestingUnit(requestingUnit);

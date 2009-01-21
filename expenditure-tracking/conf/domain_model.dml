@@ -276,6 +276,11 @@ class processes.GenericProcess {
 	
 	}
 	
+	class acquisitions.refund.Refundee {
+		String name;
+		String fiscalCode;
+	} 
+	
 class ProcessState {
 	String ojbConcreteClass;
 	DateTime whenDateTime;
@@ -817,13 +822,6 @@ relation RefundRequestRefundProcess {
 	acquisitions.refund.RefundProcess  playsRole process;
 }
 
-relation RefundRequestRefundee {
-	acquisitions.refund.RefundRequest playsRole refundRequests {
-		multiplicity *;
-	}
-	organization.Person playsRole refundee;
-}
-
 relation RefundInvoiceExpenditureTrackingSystem {
 	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
 	acquisitions.refund.RefundInvoice playsRole refundInvoices {
@@ -834,4 +832,23 @@ relation RefundInvoiceExpenditureTrackingSystem {
 relation RefundInvoiceRefundableInvoiceFile {
 	acquisitions.refund.RefundInvoice playsRole invoice;
 	acquisitions.refund.RefundableInvoiceFile  playsRole file;
+}
+
+relation RefundeeExpenditureTrackingSystem {
+	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
+	acquisitions.refund.Refundee playsRole refundees {
+		multiplicity *;
+	}
+}
+
+relation RefundRequestRefundee {
+	acquisitions.refund.RefundRequest playsRole refundRequests {
+		multiplicity *;
+	}
+	acquisitions.refund.Refundee playsRole refundee;
+}
+
+relation PersonRefundee {
+	organization.Person playsRole person;
+	acquisitions.refund.Refundee playsRole refundee;
 }

@@ -86,6 +86,12 @@ public class RefundProcess extends RefundProcess_Base {
 	activityMap.put(ActivityScope.REQUEST_ITEM, itemActivities);
     }
 
+    public RefundProcess(Person requestor, String refundeeName, String refundeeFiscalCode, Unit requestingUnit) {
+	super();
+	new RefundRequest(this, requestor, refundeeName, refundeeFiscalCode, requestingUnit);
+	new RefundProcessState(this, RefundProcessStateType.IN_GENESIS);
+    }
+
     public RefundProcess(Person requestor, Person refundee, Unit requestingUnit) {
 	super();
 	new RefundRequest(this, requestor, refundee, requestingUnit);
@@ -132,7 +138,10 @@ public class RefundProcess extends RefundProcess_Base {
 
     @Service
     public static RefundProcess createNewRefundProcess(CreateRefundProcessBean bean) {
-	RefundProcess process = new RefundProcess(bean.getRequestor(), bean.getRefundee(), bean.getRequestingUnit());
+
+	RefundProcess process = bean.isExternalPerson() ? new RefundProcess(bean.getRequestor(), bean.getRefundeeName(), bean
+		.getRefundeeFiscalCode(), bean.getRequestingUnit()) : new RefundProcess(bean.getRequestor(), bean.getRefundee(),
+		bean.getRequestingUnit());
 	if (bean.isRequestUnitPayingUnit()) {
 	    process.getRequest().addPayingUnit(bean.getRequestingUnit());
 	}
@@ -309,7 +318,7 @@ public class RefundProcess extends RefundProcess_Base {
     public boolean isPayed() {
 	return getRequest().isPayed();
     }
-    
+
     public boolean isAnyRefundInvoiceAvailable() {
 	for (RefundItem item : getRequest().getRefundItemsSet()) {
 	    if (item.hasAnyInvoices()) {
