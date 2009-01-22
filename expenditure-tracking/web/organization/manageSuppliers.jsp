@@ -9,11 +9,13 @@
 <logic:present role="MANAGER,ACQUISITION_CENTRAL_MANAGER,ACQUISITION_CENTRAL,SUPPLIER_MANAGER">
 	<div class="infoop1">
 		<ul>
+			<logic:present role="SUPPLIER_MANAGER">
 			<li>
 				<html:link action="/organization.do?method=prepareCreateSupplier">
 					<bean:message key="supplier.link.create" bundle="ORGANIZATION_RESOURCES"/>
 				</html:link>		
 			</li>
+			</logic:present>
 			<li>
 				<html:link action="/organization.do?method=listSuppliers">
 					<bean:message key="supplier.link.list" bundle="ORGANIZATION_RESOURCES"/>
