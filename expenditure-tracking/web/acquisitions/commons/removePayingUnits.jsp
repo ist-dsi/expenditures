@@ -24,7 +24,7 @@
 <bean:define id="processOID" name="process" property="OID"/>
 <fr:view name="payingUnits" schema="unitName">
 	<fr:layout name="tabular">
-		<fr:property name="classes" value="tstyle4"/>
+		<fr:property name="classes" value="tstyle4 thcenter"/>
 		<fr:property name="columnClasses" value="aleft,"/>
 		<fr:property name="link(delete)" value='<%= actionMapping + ".do?method=removePayingUnit&processOid=" + processOID %>'/>
 		<fr:property name="bundle(delete)" value="EXPENDITURE_RESOURCES"/>

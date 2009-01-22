@@ -10,6 +10,8 @@
 <bean:define id="processClass" name="process" property="class.simpleName"/>
 <bean:define id="actionMapping" value='<%= "/acquisition" + processClass%>'/>
 
+<h2><bean:message key="label.pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.RemoveRefundInvoice" bundle="ACQUISITION_RESOURCES"/></h2>
+
 <ul>
 	<li>
 		 <html:link action='<%= actionMapping + ".do?method=viewProcess" %>' paramId="processOid" paramName="process" paramProperty="OID">
@@ -19,16 +21,17 @@
 </ul>
 
 <logic:empty name="item" property="invoices">
-	Sem facturas
+	<p><em>Não existem facturas</em></p>
 </logic:empty>
 
 <logic:notEmpty name="item" property="invoices">
 				<table class="tstyle5">
 					<tr>
-					<th><bean:message key="acquisitionProcess.label.invoice.number" bundle="ACQUISITION_RESOURCES"/></th>		
-					<th><bean:message key="acquisitionProcess.label.invoice.date" bundle="ACQUISITION_RESOURCES"/></th>
-					<th><bean:message key="label.supplier" bundle="EXPENDITURE_RESOURCES"/></th>
-					<th><bean:message key="acquisitionProcess.label.invoice.file" bundle="ACQUISITION_RESOURCES"/></th>
+						<th><bean:message key="acquisitionProcess.label.invoice.number" bundle="ACQUISITION_RESOURCES"/></th>		
+						<th><bean:message key="acquisitionProcess.label.invoice.date" bundle="ACQUISITION_RESOURCES"/></th>
+						<th><bean:message key="label.supplier" bundle="EXPENDITURE_RESOURCES"/></th>
+						<th><bean:message key="acquisitionProcess.label.invoice.file" bundle="ACQUISITION_RESOURCES"/></th>
+						<th></th>
 					</tr>	
 					<logic:iterate id="invoice" name="item" property="invoices">
 						<td><fr:view name="invoice" property="invoiceNumber"/></td>
@@ -53,7 +56,6 @@
 						  </html:link>
 						</td>
 						</tr>
-				</logic:iterate>
+					</logic:iterate>
 				</table>
-				
 		</logic:notEmpty>

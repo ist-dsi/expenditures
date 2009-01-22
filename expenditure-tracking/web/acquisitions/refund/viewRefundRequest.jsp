@@ -122,11 +122,13 @@
 	</fr:view>
 </div>
 
+
+
 <logic:notEmpty name="refundProcess" property="request.totalAmountsForEachPayingUnit">
 	<fr:view name="refundProcess" property="request.totalAmountsForEachPayingUnit"
 			schema="viewPayingUnitWithTotalAmount">
 		<fr:layout name="tabular">
-			<fr:property name="classes" value="tstyle5"/>
+			<fr:property name="classes" value="tstyle5 width100pc"/>
 			<fr:property name="columnClasses" value=",,nowrap,,"/>
 		</fr:layout>
 	</fr:view>
@@ -134,16 +136,16 @@
 
 
 <p>
-		<bean:message key="acquisitionProcess.label.otherFiles" bundle="ACQUISITION_RESOURCES"/>:
-		<logic:notEmpty name="refundProcess" property="files">
-			<logic:iterate id="file" name="refundProcess" property="files">
-				<html:link action='<%= actionMapping + ".do?method=downloadGenericFile" %>' paramId="fileOID" paramName="file" paramProperty="OID">
-					<bean:write name="file" property="displayName"/>
-				</html:link>, 
-			</logic:iterate>
-		</logic:notEmpty>
-		<logic:empty name="refundProcess" property="files"><em><bean:message key="document.message.info.notAvailable" bundle="EXPENDITURE_RESOURCES"/></em></logic:empty>
-	</p>
+	<bean:message key="acquisitionProcess.label.otherFiles" bundle="ACQUISITION_RESOURCES"/>:
+	<logic:notEmpty name="refundProcess" property="files">
+		<logic:iterate id="file" name="refundProcess" property="files">
+			<html:link action='<%= actionMapping + ".do?method=downloadGenericFile" %>' paramId="fileOID" paramName="file" paramProperty="OID">
+				<bean:write name="file" property="displayName"/>
+			</html:link>, 
+		</logic:iterate>
+	</logic:notEmpty>
+	<logic:empty name="refundProcess" property="files"><em><bean:message key="document.message.info.notAvailable" bundle="EXPENDITURE_RESOURCES"/></em></logic:empty>
+</p>
 	
 
 
@@ -180,7 +182,7 @@
 		<logic:equal name="refundProcess" property="inSubmittedForInvoiceConfirmationState" value="true">
 			<logic:equal name="refundItem" property="realValueFullyAttributedToUnits" value="false">
 				<div class="infoop4">
-								<strong><bean:message key="messages.info.attention" bundle="EXPENDITURE_RESOURCES"/>:</strong> <bean:message key="acquisitionRequestItem.message.info.valueNotFullyAttributed" bundle="ACQUISITION_RESOURCES"/>
+					<strong><bean:message key="messages.info.attention" bundle="EXPENDITURE_RESOURCES"/>:</strong> <bean:message key="acquisitionRequestItem.message.info.valueNotFullyAttributed" bundle="ACQUISITION_RESOURCES"/>
 				</div>
 			</logic:equal>
 		</logic:equal>
@@ -215,6 +217,7 @@
 					 		<logic:notPresent name="invoice" property="supplier">
 					    	-
 					    	</logic:notPresent>
+					    
 					    </td>
 						<td>
 					   	 <html:link action='<%= actionMapping + ".do?method=downloadInvoice" %>' paramId="invoiceOID" paramName="invoice" paramProperty="OID">

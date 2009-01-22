@@ -980,9 +980,8 @@ display: inline;
 .dinline { display: inline; }
 .dblock { display: block; }
 
-.width30px {
-width: 30px !important;
-}
+.width30px { width: 30px !important; }
+.width100pc { width: 100% !important; }
 
 table.tstyle2 tr td a {
 padding: 4px 5px;
