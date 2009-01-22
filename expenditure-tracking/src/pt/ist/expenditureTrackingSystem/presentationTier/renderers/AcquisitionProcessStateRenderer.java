@@ -2,108 +2,67 @@ package pt.ist.expenditureTrackingSystem.presentationTier.renderers;
 
 import java.util.List;
 
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.OperationLog;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
-import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
-import pt.ist.fenixWebFramework.renderers.OutputRenderer;
 import pt.ist.fenixWebFramework.renderers.components.HtmlBlockContainer;
 import pt.ist.fenixWebFramework.renderers.components.HtmlComponent;
-import pt.ist.fenixWebFramework.renderers.components.HtmlLink;
-import pt.ist.fenixWebFramework.renderers.components.HtmlText;
 import pt.ist.fenixWebFramework.renderers.layouts.Layout;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 
-public class AcquisitionProcessStateRenderer extends OutputRenderer {
+public class AcquisitionProcessStateRenderer extends ProcessStateRenderer<RegularAcquisitionProcess> {
 
-    private String classes;
-    private String boxClasses;
-    private String arrowClasses;
-    private String completedStateClass;
-    private String failedStateClass;
-    private String unreachableStateclass;
-    private String url;
-    private boolean moduleRelative;
-    private boolean contextRelative;
-    private String stateParameterName;
+    private class AcquisitionProcessStateLayout extends ProcessStateLayout<RegularAcquisitionProcess> {
 
-    @Override
-    protected Layout getLayout(Object arg0, Class arg1) {
-	return new Layout() {
-
-	    @Override
-	    public HtmlComponent createComponent(Object arg0, Class arg1) {
-		RegularAcquisitionProcess process = (RegularAcquisitionProcess) arg0;
-		return generateFlowChart(process, process.getAcquisitionProcessState()
-			.getAcquisitionProcessStateType());
-	    }
-
-	    private HtmlComponent generateFlowChart(RegularAcquisitionProcess process,
-		    AcquisitionProcessStateType currentState) {
-		HtmlBlockContainer flowChartContainer = new HtmlBlockContainer();
-
-		if (process.isActive()) {
-		    List<AcquisitionProcessStateType> types = process.getAvailableStates();
-		    for (AcquisitionProcessStateType stateType : types) {
-			if (stateType.showFor(currentState)) {
-			    generateStateBox(process, currentState, flowChartContainer, stateType);
-			    if (stateType.hasNextState()) {
-				generateArrowBox(flowChartContainer);
-			    }
-			}
-		    }
-		} else {
-
-		    List<OperationLog> logs = process.getOperationLogs();
-		    int i = logs.size() - 1;
-
-		    AcquisitionProcessStateType currentType = logs.get(i--).getState();
-		    AcquisitionProcessStateType newStateType = null;
-
-		    flowChartContainer.addChild(generateBox(process, currentType, currentState));
-		    while (i >= 0) {
-			newStateType = logs.get(i).getState();
-			if (currentType != newStateType) {
-			    currentType = newStateType;
-			    generateActivityBox(flowChartContainer, logs.get(i + 1).getActivity());
+	@Override
+	protected HtmlComponent generateFlowChart(final HtmlBlockContainer flowChartContainer, final RegularAcquisitionProcess process) {
+	    final AcquisitionProcessStateType currentState = process.getAcquisitionProcessStateType();
+	    if (process.isActive()) {
+		final List<AcquisitionProcessStateType> types = process.getAvailableStates();
+		for (final AcquisitionProcessStateType stateType : types) {
+		    if (stateType.showFor(currentState)) {
+			generateStateBox(process, currentState, flowChartContainer, stateType);
+			if (stateType.hasNextState()) {
 			    generateArrowBox(flowChartContainer);
-			    generateStateBox(process, currentState, flowChartContainer, newStateType);
 			}
-			i--;
 		    }
+		}
+	    } else {
+		final List<OperationLog> logs = process.getOperationLogs();
+		int i = logs.size() - 1;
 
-		    // state has changed, but no activity was performed: render
-		    if (process.getAcquisitionProcessStateType() != newStateType) {
+		AcquisitionProcessStateType currentType = logs.get(i--).getState();
+		AcquisitionProcessStateType newStateType = null;
+
+		flowChartContainer.addChild(generateBox(process, currentType, currentState));
+		while (i >= 0) {
+		    newStateType = logs.get(i).getState();
+		    if (currentType != newStateType) {
+			currentType = newStateType;
 			generateActivityBox(flowChartContainer, logs.get(i + 1).getActivity());
 			generateArrowBox(flowChartContainer);
-			generateStateBox(process, currentState, flowChartContainer, process
-				.getAcquisitionProcessState().getAcquisitionProcessStateType());
+			generateStateBox(process, currentState, flowChartContainer, newStateType);
 		    }
-
+		    i--;
 		}
-		return flowChartContainer;
-	    }
 
-	    private void generateActivityBox(HtmlBlockContainer flowChartContainer,
-		    AbstractActivity<GenericProcess> abstractActivity) {
-		flowChartContainer.addChild(generateBox(abstractActivity.getLocalizedName()));
+		// state has changed, but no activity was performed: render
+		if (process.getAcquisitionProcessStateType() != newStateType) {
+		    generateActivityBox(flowChartContainer, logs.get(i + 1).getActivity());
+		    generateArrowBox(flowChartContainer);
+		    generateStateBox(process, currentState, flowChartContainer, process.getAcquisitionProcessState().getAcquisitionProcessStateType());
+		}
 	    }
+	    return flowChartContainer;
+	}
 
-	    private void generateStateBox(AcquisitionProcess process, AcquisitionProcessStateType currentState,
-		    HtmlBlockContainer flowChartContainer, AcquisitionProcessStateType stateType) {
-		flowChartContainer.addChild(generateBox(process, stateType, currentState));
-	    }
+	private void generateStateBox(final RegularAcquisitionProcess process, final AcquisitionProcessStateType currentState,
+		final HtmlBlockContainer flowChartContainer, final AcquisitionProcessStateType stateType) {
+	    flowChartContainer.addChild(generateBox(process, stateType, currentState));
+	}
 
-	    private void generateArrowBox(HtmlBlockContainer flowChartContainer) {
-		HtmlBlockContainer arrowContainer = new HtmlBlockContainer();
-		arrowContainer.setClasses(getArrowClasses());
-		flowChartContainer.addChild(arrowContainer);
-	    }
-
-	    private HtmlComponent generateBox(AcquisitionProcess process, AcquisitionProcessStateType stateType,
-		    AcquisitionProcessStateType currentStateType) {
+	private HtmlComponent generateBox(RegularAcquisitionProcess process, AcquisitionProcessStateType stateType,
+		AcquisitionProcessStateType currentStateType) {
 		HtmlBlockContainer container = new HtmlBlockContainer();
 
 		String classes = getBoxClasses();
@@ -118,113 +77,14 @@ public class AcquisitionProcessStateRenderer extends OutputRenderer {
 		return container;
 	    }
 
-	    private HtmlComponent generateBox(String activity) {
-		HtmlBlockContainer container = new HtmlBlockContainer();
-		container.setClasses(getBoxClasses());
-		container.addChild(new HtmlText(activity,false));
-		return container;
-	    }
-
-	    private HtmlComponent getBody(AcquisitionProcess process, AcquisitionProcessStateType stateType) {
-		HtmlComponent component = new HtmlText(RenderUtils.getEnumString(stateType),false);
-		if (getUrl() != null) {
-		    HtmlLink link = new HtmlLink();
-		    link.setBody(component);
-		    link.setModuleRelative(isModuleRelative());
-		    link.setContextRelative(isContextRelative());
-		    StringBuilder url = new StringBuilder(RenderUtils.getFormattedProperties(getUrl(), process));
-		    url.append("&");
-		    url.append(getStateParameterName());
-		    url.append("=");
-		    url.append(stateType);
-		    link.setUrl(url.toString());
-		    component = link;
-		}
-		return component;
-	    }
-
-	};
-
+	private HtmlComponent getBody(final RegularAcquisitionProcess process, final AcquisitionProcessStateType stateType) {
+	    return getLink(getUrl(), RenderUtils.getEnumString(stateType), getStateParameterName(), process);
+	}
     }
 
-    public String getClasses() {
-	return classes;
-    }
-
-    public void setClasses(String classes) {
-	this.classes = classes;
-    }
-
-    public String getBoxClasses() {
-	return boxClasses;
-    }
-
-    public void setBoxClasses(String boxClasses) {
-	this.boxClasses = boxClasses;
-    }
-
-    public String getArrowClasses() {
-	return arrowClasses;
-    }
-
-    public void setArrowClasses(String arrowClasses) {
-	this.arrowClasses = arrowClasses;
-    }
-
-    public String getCompletedStateClass() {
-	return completedStateClass;
-    }
-
-    public void setCompletedStateClass(String completedStateClass) {
-	this.completedStateClass = completedStateClass;
-    }
-
-    public String getFailedStateClass() {
-	return failedStateClass;
-    }
-
-    public void setFailedStateClass(String failedStateClass) {
-	this.failedStateClass = failedStateClass;
-    }
-
-    public String getUnreachableStateclass() {
-	return unreachableStateclass;
-    }
-
-    public void setUnreachableStateclass(String unreachableStateclass) {
-	this.unreachableStateclass = unreachableStateclass;
-    }
-
-    public String getUrl() {
-	return url;
-    }
-
-    public void setUrl(String logUrl) {
-	this.url = logUrl;
-    }
-
-    public boolean isModuleRelative() {
-	return moduleRelative;
-    }
-
-    public void setModuleRelative(boolean moduleRelative) {
-	this.moduleRelative = moduleRelative;
-    }
-
-    public boolean isContextRelative() {
-	return contextRelative;
-    }
-
-    public void setContextRelative(boolean contextRelative) {
-	this.contextRelative = contextRelative;
-    }
-
-    public String getStateParameterName() {
-	return stateParameterName;
-    }
-
-    public void setStateParameterName(String stateParameterName) {
-	this.stateParameterName = stateParameterName;
+    @Override
+    protected Layout getLayout(final Object arg0, final Class arg1) {
+	return new AcquisitionProcessStateLayout();
     }
 
 }
