@@ -11,17 +11,13 @@ public class CreateRefundProcessBean implements Serializable {
     private DomainReference<Person> requestor;
     private DomainReference<Person> refundee;
     private DomainReference<Unit> requestingUnit;
-    private boolean requestUnitPayingUnit;
-    private boolean externalPerson;
+    private boolean requestUnitPayingUnit = true;
+    private boolean externalPerson = false;
     private String refundeeName;
     private String refundeeFiscalCode;
 
-    public CreateRefundProcessBean(Person requestor) {
+    public CreateRefundProcessBean(final Person requestor) {
 	setRequestor(requestor);
-	setRefundee(null);
-	setRequestingUnit(null);
-	setRequestUnitPayingUnit(true);
-	setExternalPerson(false);
     }
 
     public Person getRequestor() {
@@ -29,23 +25,23 @@ public class CreateRefundProcessBean implements Serializable {
     }
 
     public void setRequestor(Person requestor) {
-	this.requestor = new DomainReference<Person>(requestor);
+	this.requestor = requestor == null ? null : new DomainReference<Person>(requestor);
     }
 
     public Person getRefundee() {
-	return refundee.getObject();
+	return refundee == null ? null : refundee.getObject();
     }
 
     public void setRefundee(Person refundee) {
-	this.refundee = new DomainReference<Person>(refundee);
+	this.refundee = refundee == null ? null : new DomainReference<Person>(refundee);
     }
 
     public Unit getRequestingUnit() {
-	return requestingUnit.getObject();
+	return requestingUnit == null ? null : requestingUnit.getObject();
     }
 
     public void setRequestingUnit(Unit requestingUnit) {
-	this.requestingUnit = new DomainReference<Unit>(requestingUnit);
+	this.requestingUnit = requestingUnit == null ? null : new DomainReference<Unit>(requestingUnit);
     }
 
     public boolean isRequestUnitPayingUnit() {
