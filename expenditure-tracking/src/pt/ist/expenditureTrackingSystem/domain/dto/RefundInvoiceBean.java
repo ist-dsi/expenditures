@@ -13,7 +13,7 @@ import pt.ist.fenixWebFramework.util.DomainReference;
 
 public class RefundInvoiceBean extends FileUploadBean implements Serializable {
 
-    private Integer invoiceNumber;
+    private String invoiceNumber;
     private LocalDate invoiceDate;
     private Money value;
     private BigDecimal vatValue;
@@ -27,11 +27,11 @@ public class RefundInvoiceBean extends FileUploadBean implements Serializable {
 	setSupplier(null);
     }
 
-    public Integer getInvoiceNumber() {
+    public String getInvoiceNumber() {
 	return invoiceNumber;
     }
 
-    public void setInvoiceNumber(Integer invoiceNumber) {
+    public void setInvoiceNumber(String invoiceNumber) {
 	this.invoiceNumber = invoiceNumber;
     }
 

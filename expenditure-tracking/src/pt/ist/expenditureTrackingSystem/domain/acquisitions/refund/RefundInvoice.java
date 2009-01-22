@@ -13,7 +13,7 @@ import pt.ist.fenixframework.pstm.Transaction;
 
 public class RefundInvoice extends RefundInvoice_Base {
 
-    public RefundInvoice(Integer invoiceNumber, LocalDate invoiceDate, Money value, BigDecimal vatValue, Money refundableValue,
+    public RefundInvoice(String invoiceNumber, LocalDate invoiceDate, Money value, BigDecimal vatValue, Money refundableValue,
 	    RefundItem item, Supplier supplier) {
 	super();
 	check(item, supplier, value, refundableValue);
@@ -39,13 +39,14 @@ public class RefundInvoice extends RefundInvoice_Base {
 	}
     }
 
-    public RefundInvoice(Integer invoiceNumber, LocalDate invoiceDate, Money value, BigDecimal vatValue, Money refundableValue,
+    public RefundInvoice(String invoiceNumber, LocalDate invoiceDate, Money value, BigDecimal vatValue, Money refundableValue,
 	    byte[] invoiceFile, String filename, RefundItem item, Supplier supplier) {
 	this(invoiceNumber, invoiceDate, value, vatValue, refundableValue, item, supplier);
 	new RefundableInvoiceFile(this, invoiceFile, filename);
     }
 
     public void delete() {
+	getRefundItem().clearRealShareValues();
 	removeRefundItem();
 	removeSupplier();
 	removeExpenditureTrackingSystem();

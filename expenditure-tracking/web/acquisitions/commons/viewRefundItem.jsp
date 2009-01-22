@@ -30,7 +30,7 @@
 			<td><bean:message key="label.value" bundle="EXPENDITURE_RESOURCES"/></td><td><fr:view name="item" property="value"/></td>
 		</tr>
 		<tr>
-			 <td><bean:message key="label.realValue" bundle="EXPENDITURE_RESOURCES"/></td><td>
+			 <td><bean:message key="label.refundValue" bundle="EXPENDITURE_RESOURCES"/></td><td>
 			 
 			 	<fr:view name="item" property="realValue" type="pt.ist.expenditureTrackingSystem.domain.util.Money" layout="null-as-label"/>
 			 

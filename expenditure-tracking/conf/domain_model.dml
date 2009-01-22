@@ -76,7 +76,7 @@ class acquisitions.refund.RefundItem extends acquisitions.RequestItem {
 }
 
 class acquisitions.refund.RefundInvoice {
-	Integer invoiceNumber;
+	String invoiceNumber;
 	LocalDate invoiceDate;
 	Money value;
 	BigDecimal vatValue;

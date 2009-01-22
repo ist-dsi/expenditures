@@ -77,10 +77,21 @@ public class RefundItem extends RefundItem_Base {
     }
 
     @Service
-    public RefundInvoice createRefundInvoice(Integer invoiceNumber, LocalDate invoiceDate, Money value, BigDecimal vatValue,
+    public RefundInvoice createRefundInvoice(String invoiceNumber, LocalDate invoiceDate, Money value, BigDecimal vatValue,
 	    Money refundableValue, byte[] invoiceFile, String filename, RefundItem item, Supplier supplier) {
-	return new RefundInvoice(invoiceNumber, invoiceDate, value, vatValue, refundableValue, invoiceFile, filename, item,
-		supplier);
+	RefundInvoice invoice = new RefundInvoice(invoiceNumber, invoiceDate, value, vatValue, refundableValue, invoiceFile,
+		filename, item, supplier);
+
+	Set<Unit> payingUnits = item.getRequest().getPayingUnits();
+	if (payingUnits.size() == 1) {
+	    UnitItem unitItemFor = getUnitItemFor(payingUnits.iterator().next());
+	    Money share = unitItemFor.getRealShareValue();
+	    Money amount = share == null ? refundableValue : share.addAndRound(refundableValue);
+
+	    clearRealShareValues();
+	    unitItemFor.setRealShareValue(amount);
+	}
+	return invoice;
     }
 
     public Money getValueSpent() {
@@ -94,10 +105,10 @@ public class RefundItem extends RefundItem_Base {
 	}
 	return spent;
     }
-    
+
     @Override
     public boolean isFilledWithRealValues() {
-       return !getInvoices().isEmpty();
+	return !getInvoices().isEmpty();
     }
 
     public void getSuppliers(final Set<Supplier> suppliers) {

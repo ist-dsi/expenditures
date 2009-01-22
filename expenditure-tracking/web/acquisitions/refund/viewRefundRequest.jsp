@@ -194,6 +194,8 @@
 					<th><bean:message key="acquisitionProcess.label.invoice.number" bundle="ACQUISITION_RESOURCES"/></th>		
 					<th><bean:message key="acquisitionProcess.label.invoice.date" bundle="ACQUISITION_RESOURCES"/></th>
 					<th><bean:message key="label.invoice.value" bundle="ACQUISITION_RESOURCES"/></th>
+					<th><bean:message key="label.invoice.vatValue" bundle="ACQUISITION_RESOURCES"/></th>
+					<th><bean:message key="label.invoice.totalValue" bundle="ACQUISITION_RESOURCES"/></th>
 					<th><bean:message key="label.invoice.refundableValue" bundle="ACQUISITION_RESOURCES"/></th>
 					<th><bean:message key="label.supplier" bundle="EXPENDITURE_RESOURCES"/></th>
 					<th><bean:message key="acquisitionProcess.label.invoice.file" bundle="ACQUISITION_RESOURCES"/></th>
@@ -202,6 +204,8 @@
 					<logic:iterate id="invoice" name="refundItem" property="invoices">
 						<td><fr:view name="invoice" property="invoiceNumber"/></td>
 						<td><fr:view name="invoice" property="invoiceDate"/></td>
+						<td><fr:view name="invoice" property="value"/></td>
+						<td><fr:view name="invoice" property="vatValue"/></td>
 						<td><fr:view name="invoice" property="valueWithVat"/></td>
 						<td><fr:view name="invoice" property="refundableValue"/></td>
 					    <td> 
@@ -211,7 +215,6 @@
 					 		<logic:notPresent name="invoice" property="supplier">
 					    	-
 					    	</logic:notPresent>
-					    
 					    </td>
 						<td>
 					   	 <html:link action='<%= actionMapping + ".do?method=downloadInvoice" %>' paramId="invoiceOID" paramName="invoice" paramProperty="OID">
