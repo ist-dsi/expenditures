@@ -5,7 +5,7 @@
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
 <div class="infoop2">	
-	<table class="tstyle1">
+	<table class="tstyle1" style="width: 100%;">
 		<tr>
 				<th colspan="2" style="background: #eaeaea;"><bean:message key="acquisitionProcess.title.description" bundle="ACQUISITION_RESOURCES"/></th>
 		</tr>
