@@ -719,6 +719,7 @@
 <schema name="viewRefundProcessInList"
 		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess"
 		bundle="ACQUISITION_RESOURCES">
+	<slot name="acquisitionProcessId" key="label.acquisitionProcessId" bundle="EXPENDITURE_RESOURCES"/>
 	<slot name="request.requester.name" key="label.requesterName" bundle="EXPENDITURE_RESOURCES"/>
 	<slot name="request.refundee.name" key="label.refundee" bundle="ACQUISITION_RESOURCES" layout="null-as-label"/>
 	<slot name="request.requestingUnit.presentationName" key="acquisitionProcess.label.requestingUnit" bundle="ACQUISITION_RESOURCES"/>

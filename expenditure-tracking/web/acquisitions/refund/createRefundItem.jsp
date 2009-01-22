@@ -10,6 +10,7 @@
 
 <h2><bean:message key="refundProcess.title.createRefundItem" bundle="ACQUISITION_RESOURCES"/></h2>
 
+<jsp:include page="../../commons/defaultErrorDisplay.jsp"/>
 <fr:edit id="refundItemBean" name="bean" action='<%= actionMapping + ".do?method=actualCreationRefundItem&refundProcessOid=" +  processOID%>' schema="createRefundItem">
 	<fr:layout name="tabular">
 			<fr:property name="classes" value="form" />

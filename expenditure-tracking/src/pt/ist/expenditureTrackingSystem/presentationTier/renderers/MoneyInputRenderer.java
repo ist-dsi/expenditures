@@ -7,6 +7,7 @@ import pt.ist.expenditureTrackingSystem.presentationTier.renderers.validator.Mon
 import pt.ist.fenixWebFramework.renderers.InputRenderer;
 import pt.ist.fenixWebFramework.renderers.components.HtmlComponent;
 import pt.ist.fenixWebFramework.renderers.components.HtmlTextInput;
+import pt.ist.fenixWebFramework.renderers.components.converters.ConversionException;
 import pt.ist.fenixWebFramework.renderers.components.converters.Converter;
 import pt.ist.fenixWebFramework.renderers.layouts.Layout;
 import pt.ist.fenixWebFramework.renderers.model.MetaSlotKey;
@@ -47,7 +48,11 @@ public class MoneyInputRenderer extends InputRenderer {
 	public Object convert(Class type, Object value) {
 	    String moneyValue = (String) value;
 	    if (!StringUtils.isEmpty(moneyValue)) {
-		return new Money(moneyValue.replace(".", "").replace(",", "."));
+		try {
+		    return new Money(moneyValue.replace(".", "").replace(",", "."));
+		} catch (NumberFormatException e) {
+		    throw new ConversionException("renderers.converter.bigdecimal", e, true, value);
+		}
 	    }
 	    return null;
 	}

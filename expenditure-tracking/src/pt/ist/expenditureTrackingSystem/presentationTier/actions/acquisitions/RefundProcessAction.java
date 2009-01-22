@@ -47,8 +47,7 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "edit.refund.invoice", path = "/acquisitions/refund/editRefundInvoice.jsp"),
 	@Forward(name = "allocate.effective.project.funds", path = "/acquisitions/commons/allocateEffectiveProjectFunds.jsp"),
 	@Forward(name = "allocate.effective.funds", path = "/acquisitions/commons/allocateEffectiveFunds.jsp"),
-	@Forward(name = "execute.payment", path = "/acquisitions/refund/executePayment.jsp")
-})
+	@Forward(name = "execute.payment", path = "/acquisitions/refund/executePayment.jsp") })
 public class RefundProcessAction extends PaymentProcessAction {
 
     private static final Context CONTEXT = new Context("acquisitions");
@@ -97,7 +96,7 @@ public class RefundProcessAction extends PaymentProcessAction {
 	return mapping.findForward("create.refund.process");
 
     }
-    
+
     public ActionForward showPendingProcesses(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final SearchRefundProcesses searchRefundProcess = new SearchRefundProcesses();
@@ -254,8 +253,9 @@ public class RefundProcessAction extends PaymentProcessAction {
 	    genericActivityExecution(process, "CreateRefundInvoice", bean, fileBytes);
 	} catch (DomainException e) {
 	    addErrorMessage(e.getMessage(), getBundle());
+	    request.setAttribute("bean", bean);
 	    RenderUtils.invalidateViewState("bean");
-	    return executeCreateRefundInvoice(mapping, form, request, response);
+	    return mapping.findForward("add.refund.invoice");
 	}
 
 	return viewProcess(mapping, form, request, response);

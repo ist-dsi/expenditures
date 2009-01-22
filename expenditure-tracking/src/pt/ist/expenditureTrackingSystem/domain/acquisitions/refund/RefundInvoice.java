@@ -16,7 +16,7 @@ public class RefundInvoice extends RefundInvoice_Base {
     public RefundInvoice(String invoiceNumber, LocalDate invoiceDate, Money value, BigDecimal vatValue, Money refundableValue,
 	    RefundItem item, Supplier supplier) {
 	super();
-	check(item, supplier, value, refundableValue);
+	check(item, supplier, value, vatValue, refundableValue);
 	this.setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
 	this.setInvoiceNumber(invoiceNumber);
 	this.setInvoiceDate(invoiceDate);
@@ -27,7 +27,7 @@ public class RefundInvoice extends RefundInvoice_Base {
 	this.setSupplier(supplier);
     }
 
-    private void check(RequestItem item, Supplier supplier, Money value, Money refundableValue) {
+    private void check(RequestItem item, Supplier supplier, Money value, BigDecimal vatValue, Money refundableValue) {
 	if (!supplier.isFundAllocationAllowed(value)) {
 	    throw new DomainException("acquisitionRequestItem.message.exception.fundAllocationNotAllowed");
 	}
@@ -36,6 +36,10 @@ public class RefundInvoice extends RefundInvoice_Base {
 	if ((realValue != null && realValue.add(refundableValue).isGreaterThan(estimatedValue)) || realValue == null
 		&& refundableValue.isGreaterThan(estimatedValue)) {
 	    throw new DomainException("refundItem.message.info.realValueLessThanRefundableValue");
+	}
+
+	if (value.addPercentage(vatValue).isLessThan(refundableValue)) {
+	    throw new DomainException("refundItem.message.info.refundableValueCannotBeBiggerThanInvoiceValue");
 	}
     }
 
@@ -55,7 +59,7 @@ public class RefundInvoice extends RefundInvoice_Base {
     }
 
     public void editValues(Money value, BigDecimal vatValue, Money refundableValue) {
-	check(getRefundItem(), getSupplier(), value, refundableValue);
+	check(getRefundItem(), getSupplier(), value, vatValue, refundableValue);
 	this.setValue(value);
 	this.setVatValue(vatValue);
 	this.setRefundableValue(refundableValue);
