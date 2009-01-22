@@ -20,7 +20,7 @@ public class CreateRefundProcessBean implements Serializable {
 	setRequestor(requestor);
 	setRefundee(null);
 	setRequestingUnit(null);
-	setRequestUnitPayingUnit(false);
+	setRequestUnitPayingUnit(true);
 	setExternalPerson(false);
     }
 
