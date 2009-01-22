@@ -13,7 +13,7 @@
 	<p>
 		<bean:message key="acquisitionProcess.label.proposalDocument" bundle="ACQUISITION_RESOURCES"/>
 		<logic:present name="acquisitionProcess" property="acquisitionRequest.acquisitionProposalDocument">
-			<html:link action="<%= "/acquisitionProcess"+ acquisitionProcess.getClass().getSimpleName() + ".do?method=downloadAcquisitionProposalDocument"%>" paramId="acquisitionProposalDocumentOid" paramName="acquisitionProcess" paramProperty="acquisitionRequest.acquisitionProposalDocument.OID">
+			<html:link action="<%= "/acquisitionProcess"+ processRequest.getClass().getSimpleName() + ".do?method=downloadAcquisitionProposalDocument"%>" paramId="acquisitionProposalDocumentOid" paramName="acquisitionProcess" paramProperty="acquisitionRequest.acquisitionProposalDocument.OID">
 				<bean:write name="acquisitionProcess" property="acquisitionRequest.acquisitionProposalDocument.filename"/>
 			</html:link>	
 		</logic:present>
@@ -23,8 +23,8 @@
 	</p>
 </div>
 
-<bean:define id="urlActivity">/acquisition<%= acquisitionProcess.getClass().getSimpleName() %>.do?method=allocateFundsToServiceProvider&amp;acquisitionProcessOid=<bean:write name="acquisitionProcess" property="OID"/></bean:define>
-<bean:define id="urlView">/acquisition<%= acquisitionProcess.getClass().getSimpleName() %>.do?method=viewAcquisitionProcess&amp;acquisitionProcessOid=<bean:write name="acquisitionProcess" property="OID"/></bean:define>
+<bean:define id="urlActivity">/acquisition<%= processRequest.getClass().getSimpleName() %>.do?method=allocateFundsToServiceProvider&amp;acquisitionProcessOid=<bean:write name="acquisitionProcess" property="OID"/></bean:define>
+<bean:define id="urlView">/acquisition<%= processRequest.getClass().getSimpleName() %>.do?method=viewAcquisitionProcess&amp;acquisitionProcessOid=<bean:write name="acquisitionProcess" property="OID"/></bean:define>
 <fr:edit id="fundAllocationExpirationDateBean"
 		name="fundAllocationExpirationDateBean"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationExpirationDateBean"
@@ -43,7 +43,7 @@
 		<bean:define id="currentIndex" value="<%= String.valueOf(index + 1) %>"/>
 		<strong><bean:message key="acquisitionRequestItem.label.item" bundle="ACQUISITION_RESOURCES"/></strong> (<fr:view name="currentIndex"/>/<fr:view name="totalItems"/>)
 
-			<bean:define id="acquisitionRequestItem" name="acquisitionRequestItem" toScope="request"/>
-			<jsp:include page="./acquisitionItemDisplay.jsp" flush="false"/>
+			<bean:define id="item" name="acquisitionRequestItem" toScope="request"/>
+			<jsp:include page="commons/viewAcquisitionRequestItem.jsp" flush="false"/>
 	</logic:iterate>
 </div>

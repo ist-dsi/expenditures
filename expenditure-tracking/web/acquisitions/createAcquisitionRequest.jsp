@@ -33,8 +33,8 @@
 		<bean:define id="currentIndex" value="<%= String.valueOf(index + 1) %>"/>
 		<p class="mtop15"><strong><bean:message key="acquisitionRequestItem.label.item" bundle="ACQUISITION_RESOURCES"/></strong> (<fr:view name="currentIndex"/>/<fr:view name="totalItems"/>)</p>
 		
-		<bean:define id="acquisitionRequestItem" name="acquisitionRequestItem" toScope="request"/>
-		<jsp:include page="./acquisitionItemDisplay.jsp" flush="false"/>
+		<bean:define id="item" name="acquisitionRequestItem" toScope="request"/>
+		<jsp:include page="commons/viewAcquisitionRequestItem.jsp" flush="false"/>
 	</logic:iterate>
 </logic:present>
 
