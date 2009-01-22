@@ -223,4 +223,12 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
 	return false;
     }
 
+    public boolean isAuthorized() {
+	return isInAuthorizedState();
+    }
+
+    public boolean isRefundProcess() {
+	return false;
+    }
+
 }

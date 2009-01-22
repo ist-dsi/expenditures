@@ -9,4 +9,9 @@
 			<bean:message key="label.statistics.process.simplified" bundle="STATISTICS_RESOURCES"/>
 		</html:link>
 	</li>
+	<li>
+		<html:link action="/statistics.do?method=showRefundProcessStatistics">
+			<bean:message key="label.statistics.process.refund" bundle="STATISTICS_RESOURCES"/>
+		</html:link>
+	</li>
 </ul>

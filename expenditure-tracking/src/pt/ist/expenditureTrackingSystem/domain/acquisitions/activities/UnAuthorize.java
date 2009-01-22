@@ -23,7 +23,7 @@ public class UnAuthorize<T extends PaymentProcess> extends AbstractActivity<T> {
 	final RequestWithPayment requestWithPayment = process.getRequest();
 	return isCurrentUserProcessOwner(process)
 		&& requestWithPayment.hasBeenAuthorizedBy(person)
-		&& (process.isInAllocatedToUnitState() || process.isInAuthorizedState());
+		&& (process.isInAllocatedToUnitState() || process.isAuthorized());
     }
 
     @Override

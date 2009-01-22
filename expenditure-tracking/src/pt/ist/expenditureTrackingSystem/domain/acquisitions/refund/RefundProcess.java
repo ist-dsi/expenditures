@@ -10,6 +10,7 @@ import java.util.Set;
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
@@ -53,8 +54,6 @@ import pt.ist.fenixWebFramework.services.Service;
 public class RefundProcess extends RefundProcess_Base {
 
     private static Map<ActivityScope, List<AbstractActivity<RefundProcess>>> activityMap = new HashMap<ActivityScope, List<AbstractActivity<RefundProcess>>>();
-
-    private static List<RefundProcessStateType> availableStates = new ArrayList<RefundProcessStateType>();
 
     static {
 	List<AbstractActivity<RefundProcess>> requestActivitites = new ArrayList<AbstractActivity<RefundProcess>>();
@@ -370,6 +369,16 @@ public class RefundProcess extends RefundProcess_Base {
 	    }
 	}
 	return false;
+    }
+
+    @Override
+    public boolean isAuthorized() {
+        return super.isAuthorized() && getRefundableInvoices().isEmpty();
+    }
+
+    @Override
+    public boolean isRefundProcess() {
+	return true;
     }
 
 }

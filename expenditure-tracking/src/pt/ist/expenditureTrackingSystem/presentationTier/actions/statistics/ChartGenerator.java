@@ -19,11 +19,17 @@ import org.jfree.data.CategoryDataset;
 import org.jfree.data.DefaultCategoryDataset;
 
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AllocateFundsPermanently;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AllocateProjectFundsPermanently;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.Authorize;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.FundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.ProjectFundAllocation;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.Approve;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.ConfirmInvoices;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.CreateRefundItem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.RefundPerson;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.SubmitForInvoiceConfirmation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ConfirmInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.CreateAcquisitionPurchaseOrderDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.FixInvoice;
@@ -37,9 +43,11 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activitie
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SubmitForFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.UnsetSkipSupplierFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
+import pt.ist.expenditureTrackingSystem.domain.statistics.LogEntry;
+import pt.ist.expenditureTrackingSystem.domain.statistics.RefundProcessActivityLogStatistics;
+import pt.ist.expenditureTrackingSystem.domain.statistics.RefundProcessStatistics;
 import pt.ist.expenditureTrackingSystem.domain.statistics.SimplifiedProcessActivityLogStatistics;
 import pt.ist.expenditureTrackingSystem.domain.statistics.SimplifiedProcessStatistics;
-import pt.ist.expenditureTrackingSystem.domain.statistics.SimplifiedProcessActivityLogStatistics.LogEntry;
 
 public class ChartGenerator {
 
@@ -85,11 +93,45 @@ public class ChartGenerator {
 	return dataset;
     }
 
+    public static CategoryDataset refundProcessStatisticsChart(final RefundProcessStatistics refundProcessStatistics) {
+	final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+
+	final Map<RefundProcessStateType, Integer> map = refundProcessStatistics.getNumberOfProcessesByRefundProcessStateType();
+	char c = 'A';
+	for (final Entry<RefundProcessStateType, Integer> entry : map.entrySet()) {
+	    final RefundProcessStateType acquisitionProcessStateType = entry.getKey();
+	    final Integer numberOfProcesses = entry.getValue();
+
+	    if (numberOfProcesses.intValue() > 0) {
+		dataset.addValue(numberOfProcesses, "" + c + " - " + acquisitionProcessStateType.getLocalizedName(), Character.valueOf(c++));
+	    }
+	}
+
+	return dataset;
+    }
+
     private static CategoryDataset simplifiedProcessStatisticsActivityTimeChart(final SimplifiedProcessActivityLogStatistics simplifiedProcessActivityLogStatistics) {
 	final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
 	char c = 'A';
 	for (final LogEntry logEntry : simplifiedProcessActivityLogStatistics.getLogEntries()) {
+	    final AbstractActivity abstractActivity = logEntry.getAbstractActivity();
+	    if (isRelevanteActivity(abstractActivity)) {
+		final String name = abstractActivity.getLocalizedName();
+		int indexOfSpan = name.indexOf('<');
+		final String label = indexOfSpan > 0 ? name.substring(0, indexOfSpan) : name;
+		dataset.addValue(logEntry.getDays(), "" + c + " - " + label, Character.valueOf(c++));
+	    }
+	}
+
+	return dataset;
+    }
+
+    private static CategoryDataset refundProcessStatisticsActivityTimeChart(final RefundProcessActivityLogStatistics refundProcessActivityLogStatistics) {
+	final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+
+	char c = 'A';
+	for (final LogEntry logEntry : refundProcessActivityLogStatistics.getLogEntries()) {
 	    final AbstractActivity abstractActivity = logEntry.getAbstractActivity();
 	    if (isRelevanteActivity(abstractActivity)) {
 		final String name = abstractActivity.getLocalizedName();
@@ -123,7 +165,14 @@ public class ChartGenerator {
 		|| clazz == SubmitForConfirmInvoice.class
 		|| clazz == ConfirmInvoice.class
 		|| clazz == SetSkipSupplierFundAllocation.class
-		|| clazz == UnsetSkipSupplierFundAllocation.class;
+		|| clazz == UnsetSkipSupplierFundAllocation.class
+		|| clazz == CreateRefundItem.class
+		|| clazz == pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.SubmitForApproval.class
+		|| clazz == Approve.class
+		|| clazz == SubmitForInvoiceConfirmation.class
+		|| clazz == ConfirmInvoices.class
+		|| clazz == RefundPerson.class
+		;
     }
 
     public static byte[] simplifiedProcessStatisticsImage(final SimplifiedProcessStatistics simplifiedProcessStatistics)
@@ -135,6 +184,18 @@ public class ChartGenerator {
     public static byte[] simplifiedProcessStatisticsActivityTimeImage(final SimplifiedProcessActivityLogStatistics simplifiedProcessActivityLogStatistics)
 	throws RuntimeException, IOException {
 	final CategoryDataset dataset = simplifiedProcessStatisticsActivityTimeChart(simplifiedProcessActivityLogStatistics);
+	return createBarChartImage(dataset, "Tempo Médio por Actividade (em Dias)");
+    }
+
+    public static byte[] refundProcessStatisticsImage(final RefundProcessStatistics refundProcessStatistics)
+    		throws RuntimeException, IOException {
+	final CategoryDataset dataset = refundProcessStatisticsChart(refundProcessStatistics);
+	return createBarChartImage(dataset, "Número de Processos");
+    }
+
+    public static byte[] refundProcessStatisticsActivityTimeImage(final RefundProcessActivityLogStatistics refundProcessActivityLogStatistics)
+	throws RuntimeException, IOException {
+	final CategoryDataset dataset = refundProcessStatisticsActivityTimeChart(refundProcessActivityLogStatistics);
 	return createBarChartImage(dataset, "Tempo Médio por Actividade (em Dias)");
     }
 

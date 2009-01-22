@@ -12,33 +12,33 @@ import org.joda.time.DateTime;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericLog;
 
-public class SimplifiedProcessActivityLogStatistics implements Serializable {
+public class RefundProcessActivityLogStatistics implements Serializable {
 
     private final List<LogEntry> logEntries = new ArrayList<LogEntry>();
 
-    public SimplifiedProcessActivityLogStatistics(final SimplifiedProcedureProcess simplifiedProcedureProcess) {
-	register(simplifiedProcedureProcess);
+    public RefundProcessActivityLogStatistics(final RefundProcess refundProcess) {
+	register(refundProcess);
     }
 
-    public SimplifiedProcessActivityLogStatistics(final PaymentProcessYear paymentProcessYear) {
+    public RefundProcessActivityLogStatistics(final PaymentProcessYear paymentProcessYear) {
 	register(paymentProcessYear);
     }
 
     private void register(final PaymentProcessYear paymentProcessYear) {
 	for (final PaymentProcess paymentProcess : paymentProcessYear.getPaymentProcessSet()) {
-	    if (paymentProcess.isSimplifiedProcedureProcess()) {
-		final SimplifiedProcedureProcess simplifiedProcedureProcess = (SimplifiedProcedureProcess) paymentProcess;
-		register(simplifiedProcedureProcess);
+	    if (paymentProcess.isRefundProcess()) {
+		final RefundProcess refundProcess = (RefundProcess) paymentProcess;
+		register(refundProcess);
 	    }
 	}
     }
 
-    private void register(final SimplifiedProcedureProcess simplifiedProcedureProcess) {
-	final List<GenericLog> operationLogs = new ArrayList<GenericLog>(simplifiedProcedureProcess.getExecutionLogsSet());
+    private void register(final RefundProcess refundProcess) {
+	final List<GenericLog> operationLogs = new ArrayList<GenericLog>(refundProcess.getExecutionLogsSet());
 	Collections.sort(operationLogs, GenericLog.COMPARATOR_BY_WHEN);
 
 	final Set<LogEntry> logEntrySet = new HashSet<LogEntry>();
@@ -76,15 +76,15 @@ public class SimplifiedProcessActivityLogStatistics implements Serializable {
 	return logEntry;
     }
 
-    public static SimplifiedProcessActivityLogStatistics create(final SimplifiedProcedureProcess simplifiedProcedureProcess) {
-	return new SimplifiedProcessActivityLogStatistics(simplifiedProcedureProcess);
+    public static RefundProcessActivityLogStatistics create(final RefundProcess refundProcess) {
+	return new RefundProcessActivityLogStatistics(refundProcess);
     }
 
-    public static SimplifiedProcessActivityLogStatistics create(final PaymentProcessYear paymentProcessYear) {
-	return new SimplifiedProcessActivityLogStatistics(paymentProcessYear);
+    public static RefundProcessActivityLogStatistics create(final PaymentProcessYear paymentProcessYear) {
+	return new RefundProcessActivityLogStatistics(paymentProcessYear);
     }
 
-    public static SimplifiedProcessActivityLogStatistics create(final Integer year) {
+    public static RefundProcessActivityLogStatistics create(final Integer year) {
 	if (year != null) {
 	    final int y = year.intValue();
 	    for (final PaymentProcessYear paymentProcessYear : ExpenditureTrackingSystem.getInstance().getPaymentProcessYearsSet()) {
