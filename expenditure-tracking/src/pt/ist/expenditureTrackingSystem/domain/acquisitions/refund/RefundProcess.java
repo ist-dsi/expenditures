@@ -54,6 +54,8 @@ public class RefundProcess extends RefundProcess_Base {
 
     private static Map<ActivityScope, List<AbstractActivity<RefundProcess>>> activityMap = new HashMap<ActivityScope, List<AbstractActivity<RefundProcess>>>();
 
+    private static List<RefundProcessStateType> availableStates = new ArrayList<RefundProcessStateType>();
+
     static {
 	List<AbstractActivity<RefundProcess>> requestActivitites = new ArrayList<AbstractActivity<RefundProcess>>();
 	requestActivitites.add(new CreateRefundItem());
@@ -315,6 +317,7 @@ public class RefundProcess extends RefundProcess_Base {
 
     public void refundPerson(final String paymentReference) {
 	getRequest().setPaymentReference(paymentReference);
+	new RefundProcessState(this, RefundProcessStateType.REFUNDED);
     }
 
     @Override

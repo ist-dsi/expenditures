@@ -18,12 +18,12 @@
 	<fr:view name="acquisitionProcess"> 
 		<fr:layout name="process-state">
 			<fr:property name="stateParameterName" value="state"/>
-			<fr:property name="url" value="/viewLogs.do?method=viewOperationLog&acquisitionProcessOid=${OID}"/>
+			<fr:property name="url" value="/viewLogs.do?method=viewOperationLog&processOid=${OID}"/>
 			<fr:property name="contextRelative" value="true"/>
 			<fr:property name="currentStateClass" value=""/>
 		</fr:layout>
 	</fr:view>
-	</logic:equal>
+</logic:equal>
 <div class="wrapper">
 
 <h2><bean:message key="acquisitionProcess.title.viewAcquisitionRequest" bundle="ACQUISITION_RESOURCES"/></h2>

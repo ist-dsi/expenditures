@@ -39,9 +39,14 @@ public enum RefundProcessStateType {
 
     INVOICES_CONFIRMED,
 
-    IN_EXECUTION,
-
     FUNDS_ALLOCATED_PERMANENTLY,
+
+    REFUNDED {
+	@Override
+	public boolean hasNextState() {
+	    return false;
+	}
+    },
 
     REJECTED {
 

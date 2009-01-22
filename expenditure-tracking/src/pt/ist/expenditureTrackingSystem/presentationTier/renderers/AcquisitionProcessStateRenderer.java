@@ -61,21 +61,21 @@ public class AcquisitionProcessStateRenderer extends ProcessStateRenderer<Regula
 	    flowChartContainer.addChild(generateBox(process, stateType, currentState));
 	}
 
-	private HtmlComponent generateBox(RegularAcquisitionProcess process, AcquisitionProcessStateType stateType,
-		AcquisitionProcessStateType currentStateType) {
-		HtmlBlockContainer container = new HtmlBlockContainer();
+	private HtmlComponent generateBox(final RegularAcquisitionProcess process, final AcquisitionProcessStateType stateType,
+		final AcquisitionProcessStateType currentStateType) {
+	    final HtmlBlockContainer container = new HtmlBlockContainer();
 
-		String classes = getBoxClasses();
-		if (stateType.isBlocked(currentStateType)) {
-		    classes += " " + getFailedStateClass();
-		} else if (stateType.isCompleted(currentStateType)) {
-		    classes += " " + getCompletedStateClass();
-		}
-		container.setClasses(classes);
-
-		container.addChild(getBody(process, stateType));
-		return container;
+	    String classes = getBoxClasses();
+	    if (stateType.isBlocked(currentStateType)) {
+		classes += " " + getFailedStateClass();
+	    } else if (stateType.isCompleted(currentStateType)) {
+		classes += " " + getCompletedStateClass();
 	    }
+	    container.setClasses(classes);
+
+	    container.addChild(getBody(process, stateType));
+	    return container;
+	}
 
 	private HtmlComponent getBody(final RegularAcquisitionProcess process, final AcquisitionProcessStateType stateType) {
 	    return getLink(getUrl(), RenderUtils.getEnumString(stateType), getStateParameterName(), process);

@@ -7,6 +7,17 @@
 <bean:define id="processClass" name="refundProcess" property="class.simpleName"/>
 <bean:define id="actionMapping" value='<%= "/acquisition" + processClass%>'/>
 
+<bean:define id="currentState" name="refundProcess" property="processState.refundProcessStateType"/>
+<fr:view name="refundProcess"> 
+	<fr:layout name="process-state">
+		<fr:property name="stateParameterName" value="state"/>
+		<fr:property name="url" value="/viewLogs.do?method=viewOperationLog&processOid=${OID}"/>
+		<fr:property name="contextRelative" value="true"/>
+		<fr:property name="currentStateClass" value=""/>
+	</fr:layout>
+</fr:view>
+
+<div class="wrapper">
 <h2><bean:message key="refundProcess.title.viewRefundRequest" bundle="ACQUISITION_RESOURCES"/></h2>
 
 <jsp:include page="../../commons/defaultErrorDisplay.jsp"/>
@@ -231,3 +242,4 @@
 		</logic:notEmpty>
 	
 </logic:iterate>
+</div>
