@@ -7,6 +7,7 @@ import java.util.Set;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
 import pt.ist.expenditureTrackingSystem.domain.dto.RefundItemBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
+import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 
 public class RefundRequest extends RefundRequest_Base {
@@ -71,6 +72,14 @@ public class RefundRequest extends RefundRequest_Base {
     public boolean isPayed() {
 	final String reference = getPaymentReference();
 	return reference != null && !reference.isEmpty();
+    }
+
+    public Set<Supplier> getSuppliers() {
+	final Set<Supplier> suppliers = new HashSet<Supplier>();
+	for (final RefundItem refundItem : getRefundItemsSet()) {
+	    refundItem.getSuppliers(suppliers);
+	}
+	return suppliers;
     }
 
 }

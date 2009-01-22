@@ -63,13 +63,16 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
 		    .getAcquisitionRequestDocumentID() : null;
 	    final AcquisitionProcessStateType type = acquisitionRequest.getAcquisitionProcess().getAcquisitionProcessStateType();
 	    final Set<AccountingUnit> accountingUnits = acquisitionRequest.getAccountingUnits();
-	    return matchCriteria(processId, identification) && matchCriteria(getRequester(), person)
-		    && matchCriteria(getUnit(), acquisitionRequest) && matchCriteria(getSupplier(), suppliers)
-		    && matchCriteria(proposalId, acquisitionProposalId)
-		    && matchCriteria(hasAvailableAndAccessibleActivityForUser, acquisitionRequest)
-		    && matchCriteria(acquisitionProcessStateType, type) && matchCriteria(accountingUnits, getAccountingUnit())
-		    && matchCriteria(requestDocumentId, acquisitionRequestDocumentID)
-		    && matchShowOnlyCriteris(acquisitionRequest);
+	    return matchCriteria(processId, identification)
+	    		&& matchCriteria(getRequester(), person)
+	    		&& matchCriteria(getUnit(), acquisitionRequest)
+	    		&& matchCriteria(getSupplier(), suppliers)
+	    		&& matchCriteria(proposalId, acquisitionProposalId)
+	    		&& matchCriteria(hasAvailableAndAccessibleActivityForUser, acquisitionRequest)
+	    		&& matchCriteria(acquisitionProcessStateType, type)
+	    		&& matchCriteria(accountingUnits, getAccountingUnit())
+	    		&& matchCriteria(requestDocumentId, acquisitionRequestDocumentID)
+	    		&& matchShowOnlyCriteris(acquisitionRequest);
 
 	    // && matchCriteria(costCenter, acquisitionRequest.getCostCenter());
 	}
@@ -244,8 +247,8 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
 	}
 
 	public boolean evaluate(Object arg0) {
-	    RegularAcquisitionProcess process = (RegularAcquisitionProcess) arg0;
-	    List<Unit> units = process.getFinancingUnits();
+	    PaymentProcess process = (PaymentProcess) arg0;
+	    List<Unit> units = process.getPayingUnits();
 
 	    boolean evaluation = false;
 	    for (Unit unit : units) {
@@ -255,7 +258,7 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
 	    return evaluation;
 	}
 
-	private boolean evaluate(Unit unit, RegularAcquisitionProcess process) {
+	private boolean evaluate(Unit unit, PaymentProcess process) {
 
 	    if (unit.hasAuthorizationsFor(person) && process.hasAnyAvailableActivitity()) {
 		return true;

@@ -1,6 +1,7 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.refund;
 
 import java.math.BigDecimal;
+import java.util.Set;
 
 import org.joda.time.LocalDate;
 
@@ -97,5 +98,14 @@ public class RefundItem extends RefundItem_Base {
     @Override
     public boolean isFilledWithRealValues() {
        return !getInvoices().isEmpty();
+    }
+
+    public void getSuppliers(final Set<Supplier> suppliers) {
+	for (final RefundInvoice refundInvoice : getInvoicesSet()) {
+	    final Supplier supplier = refundInvoice.getSupplier();
+	    if (supplier != null) {
+		suppliers.add(supplier);
+	    }
+	}
     }
 }

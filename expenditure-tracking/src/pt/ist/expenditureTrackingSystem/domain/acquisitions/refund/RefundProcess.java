@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
+import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
@@ -45,6 +47,7 @@ import pt.ist.expenditureTrackingSystem.domain.dto.CreateRefundProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
+import pt.ist.fenixWebFramework.security.UserView;
 import pt.ist.fenixWebFramework.services.Service;
 
 public class RefundProcess extends RefundProcess_Base {
@@ -323,6 +326,44 @@ public class RefundProcess extends RefundProcess_Base {
 	for (RefundItem item : getRequest().getRefundItemsSet()) {
 	    if (item.hasAnyInvoices()) {
 		return true;
+	    }
+	}
+	return false;
+    }
+
+    public boolean isAvailableForCurrentUser() {
+	User user = UserView.getUser();
+	return user != null && isAvailableForPerson(user.getPerson());
+    }
+
+    public boolean isAvailableForPerson(Person person) {
+	return person.hasRoleType(RoleType.ACQUISITION_CENTRAL)
+		|| person.hasRoleType(RoleType.ACQUISITION_CENTRAL_MANAGER)
+		|| person.hasRoleType(RoleType.ACCOUNTING_MANAGER)
+		|| person.hasRoleType(RoleType.PROJECT_ACCOUNTING_MANAGER)
+		|| person.hasRoleType(RoleType.TREASURY)
+		|| getRequestor() == person
+		|| getRequest().getRequestingUnit().isResponsible(person)
+		|| isResponsibleForAtLeastOnePayingUnit(person)
+		|| isAccountingEmployee(person)
+		|| isProjectAccountingEmployee(person);
+    }
+
+    public boolean isTakenByCurrentUser() {
+	final User user = UserView.getUser();
+	return user != null && isTakenByPerson(user.getPerson());
+    }
+
+    public boolean isTakenByPerson(final Person person) {
+	return person != null && person == getCurrentOwner();
+    }
+
+    public boolean isPersonAbleToExecuteActivities() {
+	for (List<AbstractActivity<RefundProcess>> activities : activityMap.values()) {
+	    for (final AbstractActivity<RefundProcess> activity : activities) {
+		if (activity.isActive(this)) {
+		    return true;
+		}
 	    }
 	}
 	return false;

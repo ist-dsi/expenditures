@@ -6,8 +6,22 @@
 
 <h2><bean:message key="process.label.searchRefundProcesses" bundle="EXPENDITURE_RESOURCES"/></h2>
 
-<logic:notEmpty name="searchRefundProcess">
-	<fr:view name="searchRefundProcess"
+<fr:form action="/acquisitionRefundProcess.do?method=searchRefundProcess">
+	<fr:edit id="searchRefundProcess"
+			name="searchRefundProcess"
+			type="pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.SearchRefundProcesses"
+			schema="searchRefundProcesses">
+		<fr:layout name="tabular">
+			<fr:property name="classes" value="form"/>
+		</fr:layout>
+	</fr:edit>
+	<html:submit styleClass="inputbutton"><bean:message key="button.search" bundle="EXPENDITURE_RESOURCES"/> </html:submit>
+</fr:form>
+
+<bean:define id="result" name="searchRefundProcess" property="result"/>
+
+<logic:notEmpty name="result">
+	<fr:view name="result"
 			schema="viewRefundProcessInList">
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="tstyle2 mtop2"/>

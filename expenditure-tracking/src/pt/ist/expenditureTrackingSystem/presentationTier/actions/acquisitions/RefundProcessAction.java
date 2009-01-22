@@ -101,6 +101,7 @@ public class RefundProcessAction extends PaymentProcessAction {
     public ActionForward showPendingProcesses(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final SearchRefundProcesses searchRefundProcess = new SearchRefundProcesses();
+	searchRefundProcess.setHasAvailableAndAccessibleActivityForUser(Boolean.TRUE);
 	return searchRefundProcess(mapping, request, searchRefundProcess);
     }
 
@@ -122,7 +123,7 @@ public class RefundProcessAction extends PaymentProcessAction {
 
     public ActionForward searchRefundProcess(final ActionMapping mapping, final HttpServletRequest request,
 	    final SearchRefundProcesses searchRefundProcess) {
-	request.setAttribute("searchRefundProcess", searchRefundProcess.search());
+	request.setAttribute("searchRefundProcess", searchRefundProcess);
 	return mapping.findForward("search.refund.process");
     }
 

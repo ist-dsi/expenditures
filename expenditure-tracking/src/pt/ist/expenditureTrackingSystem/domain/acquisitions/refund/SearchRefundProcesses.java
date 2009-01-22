@@ -1,34 +1,57 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.refund;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Set;
 
+import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.Search;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.SearchAcquisitionProcess.ProcessesThatAreAuthorizedByUserPredicate;
+import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
+import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
+import pt.ist.fenixWebFramework.security.UserView;
 import pt.ist.fenixWebFramework.util.DomainReference;
 
 public class SearchRefundProcesses extends Search<RefundProcess> {
 
-    private String refundeeName;
+    private String processId;
     private DomainReference<Person> requestingPerson;
     private DomainReference<Unit> requestingUnit;
+    private RefundProcessStateType refundProcessStateType;
+    private DomainReference<Supplier> supplier;
+    private DomainReference<AccountingUnit> accountingUnit;
+    private Boolean hasAvailableAndAccessibleActivityForUser;
+    private Boolean responsibleUnitSetOnly = Boolean.FALSE;
+    private String refundeeName;
 
     public SearchRefundProcesses() {
-	setRefundeeName(null);
-	setRequestingPerson(null);
-	setRequestingUnit(null);
     }
 
     @Override
     public Set<RefundProcess> search() {
 	try {
-	    return new SearchResult(GenericProcess.getAllProcesses(RefundProcess.class));
+	    return new SearchResult(getProcesses());
 	} catch (Exception ex) {
 	    ex.printStackTrace();
 	    throw new Error(ex);
 	}
+    }
+
+    private Set<? extends RefundProcess> getProcesses() {
+	return responsibleUnitSetOnly ? getProcessesWithResponsible((User) UserView.getUser()) : GenericProcess.getAllProcesses(RefundProcess.class);
+    }
+
+    private Set<? extends RefundProcess> getProcessesWithResponsible(final User user) {
+	final Person person = user.getPerson();
+	if (person == null) {
+	    return Collections.emptySet();
+	}
+	return GenericProcess.getAllProcesses(RefundProcess.class, new ProcessesThatAreAuthorizedByUserPredicate(person));
     }
 
     private class SearchResult extends SearchResultSet<RefundProcess> {
@@ -38,14 +61,68 @@ public class SearchRefundProcesses extends Search<RefundProcess> {
 	}
 
 	@Override
-	protected boolean matchesSearchCriteria(RefundProcess process) {
-	    RefundRequest request = process.getRequest();
-	    String refundeeName = request.getRefundee().getName();
-	    Person requestor = request.getRequester();
-	    Unit unit = request.getRequestingUnit();
+	protected boolean matchesSearchCriteria(final RefundProcess refundProcess) {
+	    final RefundRequest refundRequest = refundProcess.getRequest();
+	    return matchesSearchCriteria(refundRequest)
+		    && (refundProcess.isAvailableForCurrentUser() || refundProcess.isTakenByCurrentUser());
+	}
 
-	    return match(getRefundeeName(), refundeeName) && match(getRequestingPerson(), requestor)
-		    && match(getRequestingUnit(), unit);
+	private boolean matchesSearchCriteria(final RefundRequest refundRequest) {
+	    final Person person = refundRequest.getRequester();
+	    final Set<Supplier> suppliers = refundRequest.getSuppliers();
+	    final String identification = refundRequest.getAcquisitionProcessId();
+	    final RefundProcessStateType type = refundRequest.getProcess().getProcessState().getRefundProcessStateType();
+	    final Set<AccountingUnit> accountingUnits = refundRequest.getAccountingUnits();
+	    final String refundeeName = refundRequest.getRefundee().getName();
+	    return matchCriteria(processId, identification)
+	    		&& matchCriteria(getRequestingPerson(), person)
+	    		&& matchCriteria(getRequestingUnit(), refundRequest)
+	    		&& matchCriteria(getSupplier(), suppliers)
+	    		&& matchCriteria(hasAvailableAndAccessibleActivityForUser, refundRequest)
+	    		&& matchCriteria(refundProcessStateType, type)
+	    		&& matchCriteria(accountingUnits, getAccountingUnit())
+	    		&& match(getRefundeeName(), refundeeName);
+	}
+
+	private boolean matchCriteria(final Unit unit, final RefundRequest refundRequest) {
+	    return unit == null || unit == refundRequest.getRequestingUnit()
+		    || matchCriteria(unit, refundRequest.getFinancersSet());
+	}
+
+	private boolean matchCriteria(final Unit unit, final Set<Financer> financers) {
+	    for (final Financer financer : financers) {
+		if (unit == financer.getUnit()) {
+		    return true;
+		}
+	    }
+	    return false;
+	}
+
+	private boolean matchCriteria(final Boolean hasAvailableAndAccessibleActivityForUser,
+		final RefundRequest refundRequest) {
+	    return hasAvailableAndAccessibleActivityForUser == null
+	    		|| !hasAvailableAndAccessibleActivityForUser.booleanValue()
+	    		|| isPersonAbleToExecuteActivities(refundRequest.getProcess());
+	}
+
+	private boolean isPersonAbleToExecuteActivities(final RefundProcess refundProcess) {
+	    return refundProcess.isPersonAbleToExecuteActivities();
+	}
+
+	private boolean matchCriteria(final Person requester, final Person person) {
+	    return requester == null || requester == person;
+	}
+
+	private boolean matchCriteria(Supplier supplier, Set<Supplier> suppliers) {
+	    return supplier == null || suppliers.contains(supplier);
+	}
+
+	private boolean matchCriteria(RefundProcessStateType refundProcessStateType, RefundProcessStateType type) {
+	    return refundProcessStateType == null || refundProcessStateType.equals(type);
+	}
+
+	private boolean matchCriteria(Set<AccountingUnit> accountingUnits, AccountingUnit accountingUnit) {
+	    return accountingUnit == null || accountingUnits.contains(accountingUnit);
 	}
 
 	private boolean match(String searchString, String string) {
@@ -70,18 +147,66 @@ public class SearchRefundProcesses extends Search<RefundProcess> {
     }
 
     public Person getRequestingPerson() {
-	return requestingPerson.getObject();
+	return requestingPerson == null ? null : requestingPerson.getObject();
     }
 
-    public void setRequestingPerson(Person requestingPerson) {
-	this.requestingPerson = new DomainReference<Person>(requestingPerson);
+    public void setRequestingPerson(final Person requestingPerson) {
+	this.requestingPerson = requestingPerson == null ? null : new DomainReference<Person>(requestingPerson);
     }
 
     public Unit getRequestingUnit() {
-	return requestingUnit.getObject();
+	return requestingUnit == null ? null : requestingUnit.getObject();
     }
 
-    public void setRequestingUnit(Unit requestingUnit) {
-	this.requestingUnit = new DomainReference<Unit>(requestingUnit);
+    public String getProcessId() {
+        return processId;
+    }
+
+    public void setProcessId(String processId) {
+        this.processId = processId;
+    }
+
+    public RefundProcessStateType getRefundProcessStateType() {
+        return refundProcessStateType;
+    }
+
+    public void setRefundProcessStateType(RefundProcessStateType refundProcessStateType) {
+        this.refundProcessStateType = refundProcessStateType;
+    }
+
+    public Supplier getSupplier() {
+        return supplier == null ? null : supplier.getObject();
+    }
+
+    public void setSupplier(final Supplier supplier) {
+        this.supplier = supplier == null ? null : new DomainReference<Supplier>(supplier);
+    }
+
+    public AccountingUnit getAccountingUnit() {
+        return accountingUnit == null ? null : accountingUnit.getObject();
+    }
+
+    public void setAccountingUnit(final AccountingUnit accountingUnit) {
+        this.accountingUnit = accountingUnit == null ? null : new DomainReference<AccountingUnit>(accountingUnit);
+    }
+
+    public Boolean getHasAvailableAndAccessibleActivityForUser() {
+        return hasAvailableAndAccessibleActivityForUser;
+    }
+
+    public void setHasAvailableAndAccessibleActivityForUser(Boolean hasAvailableAndAccessibleActivityForUser) {
+        this.hasAvailableAndAccessibleActivityForUser = hasAvailableAndAccessibleActivityForUser;
+    }
+
+    public Boolean getResponsibleUnitSetOnly() {
+        return responsibleUnitSetOnly;
+    }
+
+    public void setResponsibleUnitSetOnly(Boolean responsibleUnitSetOnly) {
+        this.responsibleUnitSetOnly = responsibleUnitSetOnly;
+    }
+
+    public void setRequestingUnit(final Unit requestingUnit) {
+        this.requestingUnit = requestingUnit == null ? null : new DomainReference<Unit>(requestingUnit);
     }
 }
