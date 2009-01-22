@@ -757,7 +757,7 @@
 <schema name="create.refund.invoice" type="pt.ist.expenditureTrackingSystem.domain.dto.RefundInvoiceBean" bundle="ACQUISITION_RESOURCES">
 		<slot name="invoiceNumber" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" key="acquisitionProcess.label.invoice.number" bundle="ACQUISITION_RESOURCES"/>
 		<slot name="invoiceDate" layout="picker" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" key="acquisitionProcess.label.invoice.date"/>
-		<slot name="inputStream" key="acquisitionProcess.label.invoice.file" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<slot name="inputStream" key="acquisitionProcess.label.invoice.file" bundle="ACQUISITION_RESOURCES">
 			<property name="fileNameSlot" value="filename" />
 			<property name="size" value="30"/>
 		</slot>

@@ -21,6 +21,7 @@ import pt.ist.expenditureTrackingSystem.domain.dto.DomainObjectBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.UnitItemBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
+import pt.ist.expenditureTrackingSystem.domain.processes.ActivityException;
 import pt.ist.expenditureTrackingSystem.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.ProcessAction;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
@@ -121,10 +122,10 @@ public abstract class PaymentProcessAction extends ProcessAction {
 
 	final RequestItem item = getRequestItem(request);
 	List<UnitItemBean> beans = getRenderedObject("unitItemBeans");
-
+	PaymentProcess process = getProcess(request);
 	try {
-	    return executeActivityAndViewProcess(mapping, form, request, response, "DistributeRealValuesForPayingUnits", beans,
-		    item);
+	    genericActivityExecution(process, "DistributeRealValuesForPayingUnits", beans, item);
+	    return viewProcess(mapping, form, request, response);
 	} catch (DomainException e) {
 	    addErrorMessage(e.getMessage(), getBundle());
 	    request.setAttribute("item", item);

@@ -14,10 +14,13 @@
 	<bean:define id="selection" value="externalPerson"/>
 </logic:equal>
 
-<fr:edit id="createRefundProcess" name="bean" schema='<%= "createRefundProcess." + selection %>' action="/acquisitionRefundProcess.do?method=createRefundProcess">
-	<fr:layout name="tabular">
-		<fr:property name="classes" value="form" />
-		<fr:property name="columnClasses" value=",,tderror" />
-	</fr:layout>
-	<fr:destination name="postBack" path="/acquisitionRefundProcess.do?method=createRefundProcessPostBack"/>
-</fr:edit>
+<fr:form action="/acquisitionRefundProcess.do?method=createRefundProcess">
+	<fr:edit id="createRefundProcess" name="bean" schema='<%= "createRefundProcess." + selection %>'>
+		<fr:layout name="tabular">
+			<fr:property name="classes" value="form" />
+			<fr:property name="columnClasses" value=",,tderror" />
+		</fr:layout>
+		<fr:destination name="postBack" path="/acquisitionRefundProcess.do?method=createRefundProcessPostBack"/>
+	</fr:edit>
+	<html:submit styleClass="inputbutton"><bean:message key="renderers.form.submit.name" bundle="RENDERER_RESOURCES"/></html:submit>
+</fr:form>

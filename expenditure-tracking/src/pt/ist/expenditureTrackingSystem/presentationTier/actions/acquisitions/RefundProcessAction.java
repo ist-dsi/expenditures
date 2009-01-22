@@ -248,6 +248,13 @@ public class RefundProcessAction extends PaymentProcessAction {
 	RefundProcess process = getProcess(request);
 	RefundInvoiceBean bean = getRenderedObject("bean");
 
+	if (bean.getInputStream() == null) {
+	    addMessage("refundItem.message.info.mustAddInvoiceFile", getBundle());
+	    request.setAttribute("bean", bean);
+	    RenderUtils.invalidateViewState("bean");
+	    return mapping.findForward("add.refund.invoice");
+	}
+	
 	byte[] fileBytes = consumeInputStream(bean);
 	try {
 	    genericActivityExecution(process, "CreateRefundInvoice", bean, fileBytes);
