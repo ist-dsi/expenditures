@@ -335,4 +335,17 @@ public class RefundProcessAction extends PaymentProcessAction {
 	String paymentReference = getRenderedObject("reference");
 	return executeActivityAndViewProcess(mapping, form, request, response, "RefundPerson", paymentReference);
     }
+
+    public ActionForward executeCancelRefundProcess(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+
+	request.setAttribute("confirmCancelProcess", Boolean.TRUE);
+	return viewProcess(mapping, form, request, response);
+    }
+
+    public ActionForward cancelRefundProcess(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+
+	return executeActivityAndViewProcess(mapping, form, request, response, "CancelRefundProcess");
+    }
 }

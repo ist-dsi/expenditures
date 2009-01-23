@@ -78,6 +78,24 @@
 	</div>
 </logic:present>
 
+<logic:present name="confirmCancelProcess">
+	<div class="warning2">
+		<p><span><bean:message key="message.confirm.cancel.refund.process" bundle="ACQUISITION_RESOURCES"/></span></p>
+		<div class="forminline">
+			<form action="<%= request.getContextPath() + urlConfirm %>" method="post">
+				<html:hidden property="method" value="cancelRefundProcess"/>
+				<html:hidden property="processOid" value="<%= processOid.toString() %>"/>
+				<html:submit styleClass="inputbutton"><bean:message key="button.yes" bundle="EXPENDITURE_RESOURCES"/></html:submit>
+			</form>
+			<form action="<%= request.getContextPath() + urlConfirm %>" method="post">
+				<html:hidden property="method" value="viewProcess"/>
+				<html:hidden property="processOid" value="<%= processOid.toString() %>"/>
+				<html:cancel styleClass="inputbutton"><bean:message key="button.no" bundle="EXPENDITURE_RESOURCES"/></html:cancel>
+			</form>
+		</div>
+	</div>
+</logic:present>
+
 <ul class="operations">
 	<li>
 	<logic:present name="refundProcess" property="currentOwner">

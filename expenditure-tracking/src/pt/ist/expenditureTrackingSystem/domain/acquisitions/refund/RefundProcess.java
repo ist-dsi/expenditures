@@ -28,6 +28,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.RemoveFun
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.UnApprove;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.UnAuthorize;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.Approve;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.CancelRefundProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.ConfirmInvoices;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.CreateRefundInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.CreateRefundItem;
@@ -77,6 +78,7 @@ public class RefundProcess extends RefundProcess_Base {
 	requestActivitites.add(new AllocateFundsPermanently<RefundProcess>());
 	requestActivitites.add(new RemoveFundsPermanentlyAllocated<RefundProcess>());
 	requestActivitites.add(new RefundPerson());
+	requestActivitites.add(new CancelRefundProcess());
 	activityMap.put(ActivityScope.REQUEST_INFORMATION, requestActivitites);
 
 	List<AbstractActivity<RefundProcess>> itemActivities = new ArrayList<AbstractActivity<RefundProcess>>();
@@ -339,16 +341,11 @@ public class RefundProcess extends RefundProcess_Base {
     }
 
     public boolean isAvailableForPerson(Person person) {
-	return person.hasRoleType(RoleType.ACQUISITION_CENTRAL)
-		|| person.hasRoleType(RoleType.ACQUISITION_CENTRAL_MANAGER)
-		|| person.hasRoleType(RoleType.ACCOUNTING_MANAGER)
-		|| person.hasRoleType(RoleType.PROJECT_ACCOUNTING_MANAGER)
-		|| person.hasRoleType(RoleType.TREASURY)
-		|| getRequestor() == person
-		|| getRequest().getRequestingUnit().isResponsible(person)
-		|| isResponsibleForAtLeastOnePayingUnit(person)
-		|| isAccountingEmployee(person)
-		|| isProjectAccountingEmployee(person);
+	return person.hasRoleType(RoleType.ACQUISITION_CENTRAL) || person.hasRoleType(RoleType.ACQUISITION_CENTRAL_MANAGER)
+		|| person.hasRoleType(RoleType.ACCOUNTING_MANAGER) || person.hasRoleType(RoleType.PROJECT_ACCOUNTING_MANAGER)
+		|| person.hasRoleType(RoleType.TREASURY) || getRequestor() == person
+		|| getRequest().getRequestingUnit().isResponsible(person) || isResponsibleForAtLeastOnePayingUnit(person)
+		|| isAccountingEmployee(person) || isProjectAccountingEmployee(person);
     }
 
     public boolean isTakenByCurrentUser() {
@@ -373,12 +370,16 @@ public class RefundProcess extends RefundProcess_Base {
 
     @Override
     public boolean isAuthorized() {
-        return super.isAuthorized() && getRefundableInvoices().isEmpty();
+	return super.isAuthorized() && getRefundableInvoices().isEmpty();
     }
 
     @Override
     public boolean isRefundProcess() {
 	return true;
+    }
+
+    public void cancel() {
+	new RefundProcessState(this, RefundProcessStateType.CANCELED);
     }
 
 }
