@@ -30,7 +30,7 @@ public class RemoveProjectFundAllocation extends GenericAcquisitionProcessActivi
 	process.getAcquisitionRequest().resetProjectFundAllocationId(getUser().getPerson());
 	RemoveFundAllocationExpirationDate removeFundAllocationExpirationDate = new RemoveFundAllocationExpirationDate();
 	if (process.getAcquisitionProcessState().isCanceled() && !process.getAcquisitionRequest().hasAllFundAllocationId()
-		&& removeFundAllocationExpirationDate.isAvailable(process)) {
+		&& removeFundAllocationExpirationDate.isActive(process)) {
 	    removeFundAllocationExpirationDate.execute(process);
 	}
     }

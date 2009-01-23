@@ -31,7 +31,7 @@ public class RemoveFundAllocation extends GenericAcquisitionProcessActivity {
 	    process.allocateFundsToSupplier();
 	} else {
 	    RemoveFundAllocationExpirationDate removeFundAllocationExpirationDate = new RemoveFundAllocationExpirationDate();
-	    if (!process.hasAllocatedFundsForAllProjectFinancers() && removeFundAllocationExpirationDate.isAvailable(process)) {
+	    if (!process.hasAnyAllocatedFunds() && removeFundAllocationExpirationDate.isActive(process)) {
 		removeFundAllocationExpirationDate.execute(process);
 	    }
 	}
