@@ -14,6 +14,7 @@
 		<fr:property name="url" value="/viewLogs.do?method=viewOperationLog&processOid=${OID}"/>
 		<fr:property name="contextRelative" value="true"/>
 		<fr:property name="currentStateClass" value=""/>
+		<fr:property name="linkable" value="false"/>
 	</fr:layout>
 </fr:view>
 

@@ -78,7 +78,7 @@ public class AcquisitionProcessStateRenderer extends ProcessStateRenderer<Regula
 	}
 
 	private HtmlComponent getBody(final RegularAcquisitionProcess process, final AcquisitionProcessStateType stateType) {
-	    return getLink(getUrl(), RenderUtils.getEnumString(stateType), getStateParameterName(), process);
+	    return getBoxBody(getUrl(), RenderUtils.getEnumString(stateType), stateType.toString(), process);
 	}
     }
 

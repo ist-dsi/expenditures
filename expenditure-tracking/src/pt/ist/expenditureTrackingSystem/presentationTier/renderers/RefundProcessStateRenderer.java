@@ -52,7 +52,7 @@ public class RefundProcessStateRenderer extends ProcessStateRenderer<RefundProce
 	}
 
 	private HtmlComponent getBody(final RefundProcess process, final RefundProcessStateType stateType) {
-	    return getLink(getUrl(), RenderUtils.getEnumString(stateType), getStateParameterName(), process);
+	    return getBoxBody(getUrl(), RenderUtils.getEnumString(stateType), getStateParameterName(), process);
 	}
     }
 

@@ -23,8 +23,7 @@ public abstract class ProcessStateRenderer<T extends GenericProcess> extends Out
 
 	protected abstract HtmlComponent generateFlowChart(final HtmlBlockContainer flowChartContainer, final T process);
 
-	protected void generateActivityBox(final HtmlBlockContainer flowChartContainer,
-		final AbstractActivity abstractActivity) {
+	protected void generateActivityBox(final HtmlBlockContainer flowChartContainer, final AbstractActivity abstractActivity) {
 	    flowChartContainer.addChild(generateBox(abstractActivity.getLocalizedName()));
 	}
 
@@ -37,13 +36,13 @@ public abstract class ProcessStateRenderer<T extends GenericProcess> extends Out
 	protected HtmlComponent generateBox(final String activity) {
 	    final HtmlBlockContainer container = new HtmlBlockContainer();
 	    container.setClasses(getBoxClasses());
-	    container.addChild(new HtmlText(activity,false));
+	    container.addChild(new HtmlText(activity, false));
 	    return container;
 	}
 
-	protected HtmlComponent getLink(final String url, final String text, final String parameterValue, final T process) {
-	    final HtmlComponent htmlComponent = new HtmlText(text,false);
-	    if (url == null) {
+	protected HtmlComponent getBoxBody(final String url, final String text, final String parameterValue, final T process) {
+	    final HtmlComponent htmlComponent = new HtmlText(text, false);
+	    if (url == null || !isLinkable()) {
 		return htmlComponent;
 	    } else {
 		final HtmlLink link = new HtmlLink();
@@ -57,11 +56,12 @@ public abstract class ProcessStateRenderer<T extends GenericProcess> extends Out
 		stringBuilder.append(parameterValue);
 		link.setUrl(stringBuilder.toString());
 		return link;
-		}
 	    }
+	}
 
     }
 
+    private boolean isLinkable;
     private String classes;
     private String boxClasses;
     private String arrowClasses;
@@ -154,6 +154,14 @@ public abstract class ProcessStateRenderer<T extends GenericProcess> extends Out
 
     public void setStateParameterName(String stateParameterName) {
 	this.stateParameterName = stateParameterName;
+    }
+
+    public boolean isLinkable() {
+	return isLinkable;
+    }
+
+    public void setLinkable(boolean isLinkable) {
+	this.isLinkable = isLinkable;
     }
 
 }
