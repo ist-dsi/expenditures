@@ -216,15 +216,6 @@ public class RefundProcessAction extends PaymentProcessAction {
 	return executeActivityAndViewProcess(mapping, form, request, response, "UnApprove");
     }
 
-    public ActionForward executeAuthorize(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
-	return executeActivityAndViewProcess(mapping, form, request, response, "Authorize");
-    }
-
-    public ActionForward executeUnAuthorize(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
-	return executeActivityAndViewProcess(mapping, form, request, response, "UnAuthorize");
-    }
 
     public ActionForward executeUnSubmitForFundAllocation(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {

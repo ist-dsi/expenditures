@@ -392,6 +392,16 @@ public abstract class PaymentProcessAction extends ProcessAction {
 	return removeAllocationFundGeneric(mapping, request, "financerFundAllocationId", "allocate.effective.funds");
     }
 
+    public ActionForward executeUnAuthorize(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	return executeActivityAndViewProcess(mapping, form, request, response, "UnAuthorize");
+    }
+
+    public ActionForward executeAuthorize(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	return executeActivityAndViewProcess(mapping, form, request, response, "Authorize");
+    }
+    
     @Override
     protected String getBundle() {
 	return "ACQUISITION_RESOURCES";
