@@ -96,6 +96,14 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
 	return getRequest().hasAllocatedFundsForAllProjectFinancers(person);
     }
 
+    public boolean hasAnyFundAllocationId() {
+	return getRequest().hasAnyFundAllocationId();
+    }
+
+    public boolean hasAnyNonProjectFundAllocationId() {
+	return getRequest().hasAnyNonProjectFundAllocationId();
+    }
+    
     public boolean isAccountingEmployee(final Person person) {
 	return getRequest().isAccountingEmployee(person);
     }

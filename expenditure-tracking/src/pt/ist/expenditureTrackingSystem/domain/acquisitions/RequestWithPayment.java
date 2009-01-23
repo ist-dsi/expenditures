@@ -160,6 +160,15 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
 	return false;
     }
 
+    public boolean hasAnyNonProjectFundAllocationId() {
+	for (Financer financer : getFinancersWithFundsAllocated()) {
+	    if (financer.getFundAllocationId() != null) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
     public boolean hasAnyFundAllocationId(Person person) {
 	for (Financer financer : getFinancersWithFundsAllocated()) {
 	    if (financer.getFundAllocationId() != null && financer.isAccountingEmployee(person)) {

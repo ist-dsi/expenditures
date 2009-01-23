@@ -17,7 +17,7 @@ public class RemoveFundAllocation extends GenericAcquisitionProcessActivity {
     }
 
     private boolean checkActiveConditions(RegularAcquisitionProcess process) {
-	return  super.isAvailable(process) && process.getAcquisitionProcessState().isInAllocatedToUnitState();
+	return super.isAvailable(process) && process.getAcquisitionProcessState().isInAllocatedToUnitState();
     }
 
     private boolean checkCanceledConditions(RegularAcquisitionProcess process) {
@@ -30,8 +30,9 @@ public class RemoveFundAllocation extends GenericAcquisitionProcessActivity {
 	if (!process.getAcquisitionProcessState().isCanceled()) {
 	    process.allocateFundsToSupplier();
 	} else {
-	    if (!process.hasAllocatedFundsForAllProjectFinancers()) {
-		new RemoveFundAllocationExpirationDate().execute(process);
+	    RemoveFundAllocationExpirationDate removeFundAllocationExpirationDate = new RemoveFundAllocationExpirationDate();
+	    if (!process.hasAllocatedFundsForAllProjectFinancers() && removeFundAllocationExpirationDate.isAvailable(process)) {
+		removeFundAllocationExpirationDate.execute(process);
 	    }
 	}
     }
