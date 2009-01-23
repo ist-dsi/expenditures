@@ -100,7 +100,7 @@
 		</li>
 		<li>
 			<html:link action="/acquisitionRefundProcess.do?method=prepareCreateRefundProcess">
-				<bean:message key="link.sideBar.acquisitionProcess.create" bundle="EXPENDITURE_RESOURCES"/>
+				<bean:message key="link.sideBar.refundProcess.create" bundle="EXPENDITURE_RESOURCES"/>
 			</html:link>
 		</li>
 		<li>
