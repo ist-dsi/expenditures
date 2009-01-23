@@ -3,6 +3,7 @@ package pt.ist.expenditureTrackingSystem.domain.processes;
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
+import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 import pt.ist.fenixWebFramework.security.UserView;
 import pt.ist.fenixWebFramework.services.Service;
 
@@ -72,6 +73,6 @@ public abstract class AbstractActivity<T extends GenericProcess> {
     }
 
     public String getLocalizedName() {
-	return getName();
+	return RenderUtils.getResourceString("ACQUISITION_RESOURCES", "label." + getClass().getName());
     }
 }

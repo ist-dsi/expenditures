@@ -99,11 +99,11 @@ public class ChartGenerator {
 	final Map<RefundProcessStateType, Integer> map = refundProcessStatistics.getNumberOfProcessesByRefundProcessStateType();
 	char c = 'A';
 	for (final Entry<RefundProcessStateType, Integer> entry : map.entrySet()) {
-	    final RefundProcessStateType acquisitionProcessStateType = entry.getKey();
+	    final RefundProcessStateType refundProcessStateType = entry.getKey();
 	    final Integer numberOfProcesses = entry.getValue();
 
 	    if (numberOfProcesses.intValue() > 0) {
-		dataset.addValue(numberOfProcesses, "" + c + " - " + acquisitionProcessStateType.getLocalizedName(), Character.valueOf(c++));
+		dataset.addValue(numberOfProcesses, "" + c + " - " + refundProcessStateType.getLocalizedName(), Character.valueOf(c++));
 	    }
 	}
 
@@ -166,7 +166,6 @@ public class ChartGenerator {
 		|| clazz == ConfirmInvoice.class
 		|| clazz == SetSkipSupplierFundAllocation.class
 		|| clazz == UnsetSkipSupplierFundAllocation.class
-		|| clazz == CreateRefundItem.class
 		|| clazz == pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.SubmitForApproval.class
 		|| clazz == Approve.class
 		|| clazz == SubmitForInvoiceConfirmation.class

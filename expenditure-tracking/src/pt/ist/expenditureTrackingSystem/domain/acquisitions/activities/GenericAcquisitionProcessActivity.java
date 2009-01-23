@@ -23,11 +23,6 @@ public abstract class GenericAcquisitionProcessActivity extends AbstractActivity
 	return isCurrentUserProcessOwner(process);
     }
 
-    @Override
-    public String getLocalizedName() {
-	return RenderUtils.getResourceString("ACQUISITION_RESOURCES", "label." + getClass().getName());
-    }
-
     protected void notifyAcquisitionRequester(RegularAcquisitionProcess process) {
 	Person person = process.getRequestor();
 	ResourceBundle bundle = ResourceBundle.getBundle("resources/ExpenditureResources", Language.getLocale());
