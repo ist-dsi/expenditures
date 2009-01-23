@@ -5,8 +5,10 @@
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
 <h2><bean:message
-	key="acquisitionProcess.title.createRefundRequest"
+	key="acquisitionProcess.title.createAcquisitionRequest"
 	bundle="ACQUISITION_RESOURCES" /></h2>
+
+<p class="mtop1 mbottom05"><strong>Reembolso</strong></p>
 
 <bean:define id="selection" value="internalPerson"/>
 
