@@ -25,7 +25,6 @@
 			schema="viewRefundProcessInList">
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="tstyle2 mtop2"/>
-			<fr:property name="columnClasses" value=",,,width30px,,,,,"/>
 			
 			<fr:property name="linkFormat(view)" value="/acquisition${class.simpleName}.do?method=viewRefundProcess&refundProcessOid=${OID}"/>
 			<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>

@@ -649,8 +649,11 @@
 
 
 <schema name="createRefundProcess.internalPerson" type="pt.ist.expenditureTrackingSystem.domain.dto.CreateRefundProcessBean" bundle="ACQUISITION_RESOURCES">
-	<slot name="externalPerson" layout="radio-postback" key="label.isRefundeeExternal">
+	<slot name="externalPerson" layout="radio-postback" key="label.isRefundeeExternal" help="refundProcess.message.help.externalPerson">
 		<property name="classes" value="nobullet liinline"/>
+		<property name="trueLabel" value="label.ISTExternal"/>
+		<property name="falseLabel" value="label.ISTInternal"/>
+		<property name="bundle" value="EXPENDITURE_RESOURCES"/>
 	</slot>	
 	<slot name="refundee" layout="autoComplete" key="label.refundee" bundle="EXPENDITURE_RESOURCES">
         <property name="labelField" value="name"/>
@@ -681,10 +684,15 @@
 
 
 <schema name="createRefundProcess.externalPerson" type="pt.ist.expenditureTrackingSystem.domain.dto.CreateRefundProcessBean" bundle="ACQUISITION_RESOURCES">
-	<slot name="externalPerson" layout="radio-postback" key="label.isRefundeeExternal">
+	<slot name="externalPerson" layout="radio-postback" key="label.isRefundeeExternal" help="refundProcess.message.help.externalPerson">
 		<property name="classes" value="nobullet liinline"/>
+		<property name="trueLabel" value="label.ISTExternal"/>
+		<property name="falseLabel" value="label.ISTInternal"/>
+		<property name="bundle" value="EXPENDITURE_RESOURCES"/>
 	</slot>	
-	<slot name="refundeeName" key="label.refundeeName" bundle="EXPENDITURE_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="refundeeName" key="label.refundeeName" bundle="EXPENDITURE_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="size" value="40"/>
+	</slot>
 	<slot name="refundeeFiscalCode" key="label.refundeeFiscalCode" bundle="EXPENDITURE_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 	<slot name="requestingUnit" layout="autoComplete" key="acquisitionProcess.label.requestingUnit" bundle="ACQUISITION_RESOURCES" help="message.help.requestingUnit">
         <property name="labelField" value="presentationName"/>

@@ -14,14 +14,17 @@
 	<bean:message key="title.editInvoices" bundle="ACQUISITION_RESOURCES"/>
 </h2>
 
+<div class="mbottom15">
 <jsp:include page="../commons/viewRefundItem.jsp"/>
+</div>
+
 <jsp:include page="../../commons/defaultErrorDisplay.jsp"/>
 
 <div class="dinline forminline">
 <fr:form action='<%= actionMapping + ".do?method=editRefundInvoice&refundProcessOid=" + processOid + "&itemOid=" + itemOid%>'>
 	<fr:edit id="invoiceBeans" name="invoices" visible="false"/>
 	
-	<table class="tstyle5">
+	<table class="tstyle5 mbottom1">
 		<tr>
 			<th><bean:message key="acquisitionProcess.label.invoice.number" bundle="ACQUISITION_RESOURCES"/></th>		
 			<th><bean:message key="acquisitionProcess.label.invoice.date" bundle="ACQUISITION_RESOURCES"/></th>
@@ -44,20 +47,33 @@
 			</html:link>
 		</td>
 		<td>
-			<fr:edit name="invoice" slot="value" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+			<fr:edit name="invoice" slot="value" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+					<fr:layout>
+						<fr:property name="size" value="10"/>
+					</fr:layout>
+			</fr:edit>
 		</td>
 		<td>
-			<fr:edit name="invoice" slot="vatValue" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+			<fr:edit name="invoice" slot="vatValue" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+					<fr:layout>
+						<fr:property name="size" value="10"/>
+					</fr:layout>
+			</fr:edit>
 		</td>
 		<td>
-			<fr:edit name="invoice" slot="refundableValue" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+			<fr:edit name="invoice" slot="refundableValue" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+					<fr:layout>
+						<fr:property name="size" value="10"/>
+					</fr:layout>
+			</fr:edit>
 		</td>
 		</tr>
 	</logic:iterate>
 	</table> 
 	
 	<html:submit styleClass="inputbutton"><bean:message key="renderers.form.submit.name" bundle="RENDERER_RESOURCES"/></html:submit>
-</fr:form> 
+	
+	</fr:form> 
 <fr:form action='<%= actionMapping + ".do?method=viewProcess&processOid=" + processOid %>'>
 	<html:submit styleClass="inputbutton"><bean:message key="renderers.form.cancel.name" bundle="RENDERER_RESOURCES"/></html:submit>
 </fr:form>

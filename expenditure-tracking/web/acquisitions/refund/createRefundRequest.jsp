@@ -21,6 +21,7 @@
 			<fr:property name="columnClasses" value=",,tderror" />
 		</fr:layout>
 		<fr:destination name="postBack" path="/acquisitionRefundProcess.do?method=createRefundProcessPostBack"/>
+		<fr:destination name="invalid" path="/acquisitionRefundProcess.do?method=prepareCreateRefundProcess"/>
 	</fr:edit>
 	<html:submit styleClass="inputbutton"><bean:message key="renderers.form.submit.name" bundle="RENDERER_RESOURCES"/></html:submit>
 </fr:form>

@@ -216,7 +216,6 @@ public class RefundProcessAction extends PaymentProcessAction {
 	return executeActivityAndViewProcess(mapping, form, request, response, "UnApprove");
     }
 
-
     public ActionForward executeUnSubmitForFundAllocation(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	return executeActivityAndViewProcess(mapping, form, request, response, "UnSubmitForFundAllocation");
@@ -245,7 +244,7 @@ public class RefundProcessAction extends PaymentProcessAction {
 	    RenderUtils.invalidateViewState("bean");
 	    return mapping.findForward("add.refund.invoice");
 	}
-	
+
 	byte[] fileBytes = consumeInputStream(bean);
 	try {
 	    genericActivityExecution(process, "CreateRefundInvoice", bean, fileBytes);
@@ -314,7 +313,10 @@ public class RefundProcessAction extends PaymentProcessAction {
 	    genericActivityExecution(process, "EditRefundInvoice", beans);
 	} catch (DomainException e) {
 	    addErrorMessage(e.getMessage(), getBundle());
-	    return executeEditRefundInvoice(mapping, form, request, response);
+	    RefundItem item = getRequestItem(request);
+	    request.setAttribute("item", item);
+	    request.setAttribute("invoices", beans);
+	    return mapping.findForward("edit.refund.invoice");
 	}
 	return viewProcess(mapping, form, request, response);
     }
