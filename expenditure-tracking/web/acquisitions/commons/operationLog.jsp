@@ -39,3 +39,6 @@
 <logic:equal name="process" property="class.name" value="pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess">
 	<html:img action="statistics.do?method=simplifiedProcessStatisticsActivityTimeChartForProcess" paramId="processId" paramName="process" paramProperty="OID"/>
 </logic:equal>
+<logic:equal name="process" property="class.name" value="pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess">
+	<html:img action="statistics.do?method=refundProcessStatisticsActivityTimeChartForProcess" paramId="processId" paramName="process" paramProperty="OID"/>
+</logic:equal>
