@@ -35,10 +35,6 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
     }
 
     private void checkLimits(AcquisitionRequest acquisitionRequest, Integer quantity, Money unitValue) {
-	if (acquisitionRequest.getAcquisitionProcess().getSkipSupplierFundAllocation()) {
-	    return;
-	}
-
 	Money totalValue = unitValue.multiply(quantity.longValue());
 
 	if (getUnitValue() != null && getQuantity() != null) {
@@ -51,7 +47,8 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 		    .getAcquisitionProcess().getAcquisitionRequestValueLimit().toFormatString());
 	}
 
-	if (!checkSupplierFundAllocation(acquisitionRequest, totalValue)) {
+	if (!acquisitionRequest.getAcquisitionProcess().getSkipSupplierFundAllocation()
+		&& !checkSupplierFundAllocation(acquisitionRequest, totalValue)) {
 	    throw new DomainException("acquisitionRequestItem.message.exception.fundAllocationNotAllowed");
 	}
     }
@@ -212,7 +209,7 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	return false;
     }
 
-    @Override 
+    @Override
     public boolean isFilledWithRealValues() {
 	return getRealQuantity() != null && getRealUnitValue() != null
 		&& (getAdditionalCostValue() == null || getRealAdditionalCostValue() != null);
