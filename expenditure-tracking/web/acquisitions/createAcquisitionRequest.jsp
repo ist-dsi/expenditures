@@ -52,9 +52,11 @@
 			</a>
 		</logic:present>
 		<logic:notPresent name="acquisitionProcess" property="acquisitionRequest.purchaseOrderDocument">
-			<span id="fileName">
-				<em><bean:message key="document.message.info.notAvailable" bundle="EXPENDITURE_RESOURCES"/></em>
-			</span>
+			<a id="file" href="#">
+				<span id="fileName">
+					<em><bean:message key="document.message.info.notAvailable" bundle="EXPENDITURE_RESOURCES"/></em>
+				</span>
+			</a>
 		</logic:notPresent>
 	</p>
 </div>
