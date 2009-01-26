@@ -14,7 +14,7 @@
 </div>
 
 <bean:define id="schemaType"
-		name="bean"
+		name="itemBean"
 		property="createItemSchemaType"/>
 
 <bean:define id="acquisitionProcess"
@@ -29,12 +29,12 @@
 <fr:form action="<%= actionMapping + ".do?method=createNewAcquisitionRequestItem"%>">
 	
 	<fr:edit id="acquisitionRequestItem"
-			name="bean" visible="false"/>
+			name="itemBean" visible="false"/>
 			
 <h3><bean:message key="acquisitionProcess.title.description" bundle="ACQUISITION_RESOURCES"/></h3>
 
 <div  class="form1">
-	<fr:edit id="acquisitionRequestItem.block1" name="bean" schema="createAcquisitionRequestItem.block1">
+	<fr:edit id="acquisitionRequestItem.block1" name="itemBean" schema="createAcquisitionRequestItem.block1">
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="form thwidth150px"/>
 			<fr:property name="columnClasses" value=",,tderror"/>
@@ -49,7 +49,7 @@
 <h3><bean:message key="acquisitionProcess.title.quantityAndCosts" bundle="ACQUISITION_RESOURCES"/></h3>
 
 <div  class="form1">
-	<fr:edit id="acquisitionRequestItem.block2" name="bean" schema="createAcquisitionRequestItem.block2">
+	<fr:edit id="acquisitionRequestItem.block2" name="itemBean" schema="createAcquisitionRequestItem.block2">
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="form thwidth150px"/>
 			<fr:property name="columnClasses" value=",,tderror"/>
@@ -64,7 +64,7 @@
 <h3><bean:message key="acquisitionProcess.title.deliveryInformation" bundle="ACQUISITION_RESOURCES"/></h3>
 
 <div  class="form1">
-	<fr:edit id="acquisitionRequestItem.block3" name="bean" schema="<%= "createAcquisitionRequestItem.block3_" + schemaType.toString() %>">
+	<fr:edit id="acquisitionRequestItem.block3" name="itemBean" schema="<%= "createAcquisitionRequestItem.block3_" + schemaType.toString() %>">
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="form thwidth150px"/>
 			<fr:property name="style" value="width: 600px;"/>

@@ -100,13 +100,12 @@ public class RegularAcquisitionProcessAction extends PaymentProcessAction {
 
     private ActionForward executeCreateAcquisitionRequestItem(final ActionMapping mapping, final HttpServletRequest request,
 	    RegularAcquisitionProcess acquisitionProcess) {
-	request.setAttribute("bean", new AcquisitionRequestItemBean(acquisitionProcess.getAcquisitionRequest()));
+	request.setAttribute("itemBean", new AcquisitionRequestItemBean(acquisitionProcess.getAcquisitionRequest()));
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
 	return mapping.findForward("create.acquisition.request.item");
     }
 
-    public ActionForward createItemPostBack(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
+    private ActionForward itemPostBack(final ActionMapping mapping, final HttpServletRequest request, String forward) {
 	AcquisitionRequestItemBean acquisitionRequestItemBean = getRenderedObject("acquisitionRequestItem");
 	RenderUtils.invalidateViewState();
 	acquisitionRequestItemBean.setRecipient(null);
@@ -121,9 +120,20 @@ public class RegularAcquisitionProcessAction extends PaymentProcessAction {
 	    acquisitionRequestItemBean.setDeliveryInfo(null);
 	}
 
-	request.setAttribute("bean", acquisitionRequestItemBean);
+	request.setAttribute("itemBean", acquisitionRequestItemBean);
 	request.setAttribute("acquisitionProcess", acquisitionRequestItemBean.getAcquisitionRequest().getAcquisitionProcess());
-	return mapping.findForward("create.acquisition.request.item");
+
+	return mapping.findForward(forward);
+    }
+
+    public ActionForward createItemPostBack(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	return itemPostBack(mapping, request, "create.acquisition.request.item");
+    }
+
+    public ActionForward editItemPostBack(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	return itemPostBack(mapping, request, "edit.request.item");
     }
 
     public ActionForward createNewAcquisitionRequestItem(final ActionMapping mapping, final ActionForm form,
@@ -313,8 +323,7 @@ public class RegularAcquisitionProcessAction extends PaymentProcessAction {
 	List<AcquisitionProcess> processes = new ArrayList<AcquisitionProcess>();
 
 	for (AcquisitionProcess process : GenericProcess.getAllProcesses(AcquisitionProcess.class)) {
-	    if (!process.getExecutionLogs(begin, end, FundAllocation.class,
-		    ProjectFundAllocation.class,
+	    if (!process.getExecutionLogs(begin, end, FundAllocation.class, ProjectFundAllocation.class,
 		    AllocateFundsPermanently.class, AllocateProjectFundsPermanently.class).isEmpty()) {
 		processes.add(process);
 	    }

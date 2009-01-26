@@ -28,7 +28,7 @@
 		</fr:layout>
 		<fr:destination name="cancel" path="<%= urlView %>" />
 		<fr:destination name="invalid" path='<%= actionMapping + ".do?method=executeCreateAcquisitionRequestItem&acquisitionProcessOid=" + processOID %>'/>
-		<fr:destination name="postBack" path="<%= actionMapping + ".do?method=createItemPostBack" %>"/>
+		<fr:destination name="postBack" path="<%= actionMapping + ".do?method=editItemPostBack" %>"/>
 	</fr:edit>
 </div>
 
@@ -42,7 +42,7 @@
 		</fr:layout>
 		<fr:destination name="cancel" path="<%= urlView %>" />
 		<fr:destination name="invalid" path='<%= "/acquisitionProcess.do?method=executeCreateAcquisitionRequestItem&acquisitionProcessOid=" + processOID %>'/>
-		<fr:destination name="postBack" path="<%= actionMapping + ".do?method=createItemPostBack" %>"/>
+		<fr:destination name="postBack" path="<%= actionMapping + ".do?method=editItemPostBack" %>"/>
 	</fr:edit>
 </div>
 
@@ -58,7 +58,7 @@
 			<fr:property name="classes" value="form thwidth150px"/>
 			<fr:property name="columnClasses" value=",,tderror"/>
 		</fr:layout>
-		<fr:destination name="postBack" path="<%= actionMapping + ".do?method=createItemPostBack" %>"/>
+		<fr:destination name="postBack" path="<%= actionMapping + ".do?method=editItemPostBack" %>"/>
 	</fr:edit>
 </div>
 
