@@ -309,7 +309,6 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	return totalValue.isLessThanOrEqual(getAcquisitionProcess().getAcquisitionRequestValueLimit());
     }
 
-
     public void unSubmitForFundsAllocation() {
 	for (AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
 	    acquisitionRequestItem.unSubmitForFundsAllocation();
@@ -402,5 +401,14 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	final String reference = getPaymentReference();
 	return reference != null && !reference.isEmpty();
     }
-      
+
+    public boolean hasAdditionalCosts() {
+	for (final AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
+	    final Money additionalCost = acquisitionRequestItem.getAdditionalCostValue();
+	    if (additionalCost != null && additionalCost.isGreaterThan(Money.ZERO)) {
+		return true;
+	    }
+	}
+	return false;
+    }
 }

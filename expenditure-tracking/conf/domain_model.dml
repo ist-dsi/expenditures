@@ -188,6 +188,21 @@ class organization.Person {
 	String password;
 }
 
+class SavedSearch {
+	String searchName;
+	String searchClassName;
+	String processId;
+	Boolean pendingOperations;
+	Boolean showOnlyResponsabilities;
+	String requestDocumentId;
+	AcquisitionProcessStateType acquisitionProcessStateType;
+    RefundProcessStateType refundProcessStateType;
+ 	String proposalId;
+ 	Boolean showOnlyAcquisitionsExcludedFromSupplierLimit;
+    Boolean showOnlyAcquisitionsWithAdditionalCosts;
+    String refundeeName;
+}
+
 class organization.DeliveryInfo {
 	String recipient;
 	Address address;
@@ -851,4 +866,60 @@ relation RefundRequestRefundee {
 relation PersonRefundee {
 	organization.Person playsRole person;
 	acquisitions.refund.Refundee playsRole refundee;
+}
+
+relation PersonSavedSearch {
+	organization.Person playsRole person;
+	SavedSearch playsRole saveSearches {
+		multiplicity *;
+	}
+}
+
+relation RequestorSavedSearch {
+	organization.Person playsRole requestor;
+	SavedSearch playsRole requestorSearches {
+		multiplicity *;
+	}
+}
+
+relation AccountingUnitSavedSearch {
+	organization.AccountingUnit playsRole accountingUnit;
+	SavedSearch playsRole accountingUnitsSearches {
+		multiplicity *;
+	}
+}
+
+relation requestingUnitSavedSearch {
+	organization.Unit playsRole unit;
+	SavedSearch playsRole unitSearches {
+		multiplicity *;
+	}
+}
+
+relation SavedSearchExpenditureTrackingSystem {
+	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
+	SavedSearch playsRole savedSearches {
+		multiplicity *;
+	}
+}
+
+relation SupplierSavedSearch {
+	organization.Supplier playsRole supplier;
+	SavedSearch playsRole supplierSearches {
+		multiplicity *;
+	}
+}
+
+relation PersonDefaultSavedSearch {
+	SavedSearch playsRole defaultSearch;
+	organization.Person playsRole people {
+		multiplicity *;
+	}
+}
+
+relation SystemSearchesExpenditureTrackingSystem {
+	SavedSearch playsRole systemSearches {
+		multiplicity *;
+	}
+	ExpenditureTrackingSystem playsRole expenditureTrackingSystemForSystemSearch;
 }

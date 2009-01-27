@@ -1,0 +1,72 @@
+package pt.ist.expenditureTrackingSystem.domain;
+
+import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPaymentProcess;
+import pt.ist.expenditureTrackingSystem.domain.organization.Person;
+import pt.ist.fenixWebFramework.security.UserView;
+import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.pstm.Transaction;
+
+public class SavedSearch extends SavedSearch_Base {
+
+    public SavedSearch(String name, Person person, SearchPaymentProcess searchBean) {
+	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
+	if (person == null) {
+	    throw new DomainException("message.exception.aPersonIsNeededToSaveTheSearch");
+	}
+	setSearchName(name);
+	setPerson(person);
+	setProcessId(searchBean.getProcessId());
+	Class clazz = searchBean.getSearchClass();
+	setSearchClassName(clazz != null ? clazz.getName() : null);
+	setPendingOperations(searchBean.getHasAvailableAndAccessibleActivityForUser());
+	setShowOnlyResponsabilities(searchBean.getResponsibleUnitSetOnly());
+	setRequestor(searchBean.getRequestingPerson());
+	setAccountingUnit(searchBean.getAccountingUnit());
+	setUnit(searchBean.getRequestingUnit());
+	setRequestDocumentId(searchBean.getRequestDocumentId());
+	setAcquisitionProcessStateType(searchBean.getAcquisitionProcessStateType());
+	setRefundProcessStateType(searchBean.getRefundProcessStateType());
+	setProposalId(searchBean.getProposalId());
+	setRefundeeName(searchBean.getRefundeeName());
+	setShowOnlyAcquisitionsExcludedFromSupplierLimit(searchBean.getShowOnlyAcquisitionsExcludedFromSupplierLimit());
+	setShowOnlyAcquisitionsWithAdditionalCosts(searchBean.getShowOnlyAcquisitionsWithAdditionalCosts());
+    }
+
+    public Class getSearchClass() {
+	if (getSearchClassName() == null) {
+	    return null;
+	}
+	try {
+	    return Class.forName(getSearchClassName());
+	} catch (ClassNotFoundException e) {
+	    throw new DomainException("message.exception.invalidClassInASavedSearch", e);
+	}
+
+    }
+
+    public SearchPaymentProcess getSearch() {
+	return new SearchPaymentProcess(this);
+    }
+
+    @Service
+    public void delete() {
+	removeAccountingUnit();
+	removeExpenditureTrackingSystem();
+	removePerson();
+	removeRequestor();
+	removeSupplier();
+	removeUnit();
+	Transaction.deleteObject(this);
+    }
+    
+    public boolean isSearchDefaultForUser(Person person) {
+	return person.getDefaultSearch() == this;
+    }
+    
+    public boolean isSearchDefaultForCurrentUser() {
+	User user = UserView.getUser();
+	return isSearchDefaultForUser(user.getPerson());
+    }
+    
+}

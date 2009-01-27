@@ -103,7 +103,7 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
     public boolean hasAnyNonProjectFundAllocationId() {
 	return getRequest().hasAnyNonProjectFundAllocationId();
     }
-    
+
     public boolean isAccountingEmployee(final Person person) {
 	return getRequest().isAccountingEmployee(person);
     }
@@ -238,5 +238,9 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
     public boolean isRefundProcess() {
 	return false;
     }
+
+    public abstract String getAcquisitionProcessId();
+
+    public abstract boolean isAvailableForCurrentUser();
 
 }

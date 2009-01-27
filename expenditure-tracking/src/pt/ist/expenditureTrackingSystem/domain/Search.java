@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import pt.ist.fenixWebFramework.services.Service;
+
 public abstract class Search<T> implements Serializable {
 
     protected abstract class SearchResultSet<T> extends HashSet<T> {
@@ -32,4 +34,12 @@ public abstract class Search<T> implements Serializable {
 	return search();
     }
 
+    @Service
+    public void persistSearch(String name) {
+	persist(name);
+    }
+
+    protected void persist(String name) {
+
+    }
 }

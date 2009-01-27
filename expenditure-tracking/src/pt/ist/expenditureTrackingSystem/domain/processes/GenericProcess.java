@@ -158,6 +158,15 @@ public abstract class GenericProcess extends GenericProcess_Base {
 	return user != null && user.getPerson() == getCurrentOwner();
     }
 
+    public boolean isTakenByPerson(Person person) {
+	return person != null && person == getCurrentOwner();
+    }
+
+    public boolean isTakenByCurrentUser() {
+	User user = UserView.getUser();
+	return user != null && isTakenByPerson(user.getPerson());
+    }
+
     public <T extends GenericLog> T logExecution(Person person, String operationName, Object... args) {
 	return (T) new GenericLog(this, person, operationName, new DateTime());
     }

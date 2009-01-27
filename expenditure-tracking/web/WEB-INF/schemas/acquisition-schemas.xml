@@ -810,13 +810,6 @@
 		<property name="size" value="40"/>
 	</slot>
 	<slot name="refundeeName" key="label.refundee" bundle="EXPENDITURE_RESOURCES"/>
-	<slot name="supplier" layout="autoComplete" key="label.supplier" bundle="EXPENDITURE_RESOURCES">
-        <property name="labelField" value="presentationName"/>
-		<property name="format" value="${presentationName}"/>
-		<property name="minChars" value="1"/>		
-		<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.NIFSupplierAutoCompleteProvider"/>
-		<property name="size" value="40"/>
-	</slot>
 	<slot name="refundProcessStateType" key="label.processState" bundle="EXPENDITURE_RESOURCES">
 		<property name="defaultText" value="renderers.checkboxlist.selectAll"/>
 		<property name="key" value="true"/>
@@ -824,4 +817,144 @@
 	</slot>
 	<slot name="hasAvailableAndAccessibleActivityForUser" key="label.option.hasAvailableAndAccessibleActivityForUser" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="responsibleUnitSetOnly" key="label.option.responsibleUnitSetOnly" bundle="ACQUISITION_RESOURCES"/>
+</schema>
+
+
+<schema name="search.abstract"
+		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPaymentProcess"
+		bundle="ACQUISITION_RESOURCES">
+		<slot name="searchClass" key="label.acquisitionType" bundle="ACQUISITION_RESOURCES"  layout="menu-select-postback">
+			<property name="providerClass" value="pt.ist.expenditureTrackingSystem.presentationTier.renderers.dataProvider.AcquisitionProcessesTypesProvider"/>
+			<property name="destination" value="typeSelector"/>
+			<property name="eachLayout" value="label-for-acquisitionProcessClass"/>
+			
+			<property name="defaultText" value="label.all"/>
+			<property name="bundle" value="EXPENDITURE_RESOURCES"/>
+			<property name="key" value="true"/>
+		</slot>
+</schema>
+
+<schema name="search.default"
+		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPaymentProcess"
+		bundle="ACQUISITION_RESOURCES" extends="search.abstract">
+	<slot name="processId" key="label.acquisitionProcessId" bundle="EXPENDITURE_RESOURCES"/>
+	<slot name="requestingPerson" layout="autoComplete" key="label.requester" bundle="EXPENDITURE_RESOURCES">
+        <property name="labelField" value="name"/>
+		<property name="format" value="${name} (${username})"/>
+		<property name="minChars" value="3"/>		
+		<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.PersonAutoComplete"/>
+		<property name="size" value="40"/>
+	</slot>
+	<slot name="accountingUnit" key="label.accountingUnit" bundle="EXPENDITURE_RESOURCES" layout="menu-select">
+		<property name="providerClass" value="pt.ist.expenditureTrackingSystem.presentationTier.renderers.dataProvider.AccountingUnitProvider"/>
+		<property name="format" value="${name}"/>
+		<property name="sortBy" value="name"/>
+	</slot>
+	<slot name="requestingUnit" layout="autoComplete" key="label.unit" bundle="EXPENDITURE_RESOURCES">
+        <property name="labelField" value="presentationName"/>
+		<property name="format" value="${presentationName}"/>
+		<property name="minChars" value="3"/>		
+		<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.UnitAutoCompleteProvider" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+		<property name="size" value="40"/>
+	</slot>
+	<slot name="hasAvailableAndAccessibleActivityForUser" key="label.option.hasAvailableAndAccessibleActivityForUser" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="responsibleUnitSetOnly" key="label.option.responsibleUnitSetOnly" bundle="ACQUISITION_RESOURCES"/>
+</schema>
+
+<schema name="search.SimplifiedProcedureProcess" type="pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPaymentProcess"
+		bundle="ACQUISITION_RESOURCES" extends="search.abstract">
+	<slot name="processId" key="label.acquisitionProcessId" bundle="EXPENDITURE_RESOURCES"/>
+	<slot name="requestDocumentId" key="acquisitionProcess.label.requestDocument" bundle="ACQUISITION_RESOURCES" />
+	<slot name="proposalId" key="acquisitionProcess.label.proposalID" bundle="ACQUISITION_RESOURCES" />
+	<slot name="requestingPerson" layout="autoComplete" key="label.requester" bundle="EXPENDITURE_RESOURCES">
+        <property name="labelField" value="name"/>
+		<property name="format" value="${name} (${username})"/>
+		<property name="minChars" value="3"/>		
+		<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.PersonAutoComplete"/>
+		<property name="size" value="40"/>
+	</slot>
+	<slot name="accountingUnit" key="label.accountingUnit" bundle="EXPENDITURE_RESOURCES" layout="menu-select">
+		<property name="providerClass" value="pt.ist.expenditureTrackingSystem.presentationTier.renderers.dataProvider.AccountingUnitProvider"/>
+		<property name="format" value="${name}"/>
+		<property name="sortBy" value="name"/>
+	</slot>
+	<slot name="requestingUnit" layout="autoComplete" key="label.unit" bundle="EXPENDITURE_RESOURCES">
+        <property name="labelField" value="presentationName"/>
+		<property name="format" value="${presentationName}"/>
+		<property name="minChars" value="3"/>		
+		<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.UnitAutoCompleteProvider" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+		<property name="size" value="40"/>
+	</slot>
+	<slot name="supplier" layout="autoComplete" key="label.supplier" bundle="EXPENDITURE_RESOURCES">
+        <property name="labelField" value="presentationName"/>
+		<property name="format" value="${presentationName}"/>
+		<property name="minChars" value="1"/>		
+		<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.NIFSupplierAutoCompleteProvider"/>
+		<property name="size" value="40"/>
+	</slot>
+	<slot name="acquisitionProcessStateType" key="label.processState" bundle="EXPENDITURE_RESOURCES">
+		<property name="defaultText" value="renderers.checkboxlist.selectAll"/>
+		<property name="key" value="true"/>
+		<property name="defaultTextBundle" value="RENDERER_RESOURCES"/>
+	</slot>
+	<slot name="hasAvailableAndAccessibleActivityForUser" key="label.option.hasAvailableAndAccessibleActivityForUser" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="responsibleUnitSetOnly" key="label.option.responsibleUnitSetOnly" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="showOnlyAcquisitionsExcludedFromSupplierLimit" key="label.option.showOnlyAcquisitionsExcludedFromSupplierLimit" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="showOnlyAcquisitionsWithAdditionalCosts" key="label.option.showOnlyAcquisitionsWithAdditionalCosts" bundle="ACQUISITION_RESOURCES"/>
+</schema>
+
+<schema name="search.RefundProcess" type="pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPaymentProcess"
+		bundle="ACQUISITION_RESOURCES" extends="search.abstract">
+<slot name="processId" key="label.acquisitionProcessId" bundle="EXPENDITURE_RESOURCES"/>
+	<slot name="requestingPerson" layout="autoComplete" key="label.requester" bundle="EXPENDITURE_RESOURCES">
+        <property name="labelField" value="name"/>
+		<property name="format" value="${name} (${username})"/>
+		<property name="minChars" value="3"/>		
+		<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.PersonAutoComplete"/>
+		<property name="size" value="40"/>
+	</slot>
+	<slot name="accountingUnit" key="label.accountingUnit" bundle="EXPENDITURE_RESOURCES" layout="menu-select">
+		<property name="providerClass" value="pt.ist.expenditureTrackingSystem.presentationTier.renderers.dataProvider.AccountingUnitProvider"/>
+		<property name="format" value="${name}"/>
+		<property name="sortBy" value="name"/>
+	</slot>
+	<slot name="requestingUnit" layout="autoComplete" key="label.unit" bundle="EXPENDITURE_RESOURCES">
+        <property name="labelField" value="presentationName"/>
+		<property name="format" value="${presentationName}"/>
+		<property name="minChars" value="3"/>		
+		<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.UnitAutoCompleteProvider" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+		<property name="size" value="40"/>
+	</slot>
+	<slot name="refundeeName" key="label.refundee" bundle="EXPENDITURE_RESOURCES"/>
+	<slot name="refundProcessStateType" key="label.processState" bundle="EXPENDITURE_RESOURCES">
+		<property name="defaultText" value="renderers.checkboxlist.selectAll"/>
+		<property name="key" value="true"/>
+		<property name="defaultTextBundle" value="RENDERER_RESOURCES"/>
+	</slot>
+	<slot name="hasAvailableAndAccessibleActivityForUser" key="label.option.hasAvailableAndAccessibleActivityForUser" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="responsibleUnitSetOnly" key="label.option.responsibleUnitSetOnly" bundle="ACQUISITION_RESOURCES"/>
+</schema>
+
+
+<schema name="viewProcessesInList"
+		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess"
+		bundle="ACQUISITION_RESOURCES">
+	<slot name="acquisitionProcessId" key="label.acquisitionProcessId" bundle="EXPENDITURE_RESOURCES"/>		
+	<slot name="class" key="label.acquisitionType" bundle="ACQUISITION_RESOURCES" layout="label">
+		<property name="bundle" value="ACQUISITION_RESOURCES"/>
+	</slot>
+	<slot name="dateFromLastActivity" key="label.inactiveSince" bundle="EXPENDITURE_RESOURCES"/>
+	<slot name="request.requester.firstAndLastName" key="label.requesterName" bundle="EXPENDITURE_RESOURCES"/>
+	<slot name="request.requestingUnit.name" key="acquisitionProcess.label.requestingUnit" bundle="ACQUISITION_RESOURCES"/>
+</schema>
+
+
+<schema name="viewMySavedSearches"
+		type="pt.ist.expenditureTrackingSystem.domain.dto.UserSearchBean"
+		bundle="ACQUISITION_RESOURCES">
+		<slot name="selectedSearch" layout="menu-select-postback" key="label.view" bundle="EXPENDITURE_RESOURCES">
+			<property name="format" value="${searchName}"/>
+			<property name="destination" value="mySearch"/>
+			<property name="providerClass" value="pt.ist.expenditureTrackingSystem.presentationTier.renderers.dataProvider.AvailableSavedSearchesProvider"/>
+		</slot>
 </schema>

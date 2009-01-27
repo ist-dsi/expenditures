@@ -63,16 +63,13 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
 		    .getAcquisitionRequestDocumentID() : null;
 	    final AcquisitionProcessStateType type = acquisitionRequest.getAcquisitionProcess().getAcquisitionProcessStateType();
 	    final Set<AccountingUnit> accountingUnits = acquisitionRequest.getAccountingUnits();
-	    return matchCriteria(processId, identification)
-	    		&& matchCriteria(getRequester(), person)
-	    		&& matchCriteria(getUnit(), acquisitionRequest)
-	    		&& matchCriteria(getSupplier(), suppliers)
-	    		&& matchCriteria(proposalId, acquisitionProposalId)
-	    		&& matchCriteria(hasAvailableAndAccessibleActivityForUser, acquisitionRequest)
-	    		&& matchCriteria(acquisitionProcessStateType, type)
-	    		&& matchCriteria(accountingUnits, getAccountingUnit())
-	    		&& matchCriteria(requestDocumentId, acquisitionRequestDocumentID)
-	    		&& matchShowOnlyCriteris(acquisitionRequest);
+	    return matchCriteria(processId, identification) && matchCriteria(getRequester(), person)
+		    && matchCriteria(getUnit(), acquisitionRequest) && matchCriteria(getSupplier(), suppliers)
+		    && matchCriteria(proposalId, acquisitionProposalId)
+		    && matchCriteria(hasAvailableAndAccessibleActivityForUser, acquisitionRequest)
+		    && matchCriteria(acquisitionProcessStateType, type) && matchCriteria(accountingUnits, getAccountingUnit())
+		    && matchCriteria(requestDocumentId, acquisitionRequestDocumentID)
+		    && matchShowOnlyCriteris(acquisitionRequest);
 
 	    // && matchCriteria(costCenter, acquisitionRequest.getCostCenter());
 	}
@@ -121,7 +118,8 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
 	}
 
 	private boolean matchShowOnlyCriteris(final AcquisitionRequest acquisitionRequest) {
-	    if (showOnlyAcquisitionsExcludedFromSupplierLimit.booleanValue() && !acquisitionRequest.getProcess().getSkipSupplierFundAllocation().booleanValue()) {
+	    if (showOnlyAcquisitionsExcludedFromSupplierLimit.booleanValue()
+		    && !acquisitionRequest.getProcess().getSkipSupplierFundAllocation().booleanValue()) {
 		return false;
 	    }
 	    if (showOnlyAcquisitionsWithAdditionalCosts.booleanValue() && !hasAdditionalCosts(acquisitionRequest)) {
@@ -154,7 +152,7 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
 
     private Set<? extends AcquisitionProcess> getProcesses() {
 	return responsibleUnitSetOnly ? getProcessesWithResponsible((User) UserView.getUser()) : GenericProcess
-		.getAllProcesses(clazz);
+		.getAllProcesses(getSearchingClass());
     }
 
     private Set<? extends AcquisitionProcess> getProcessesWithResponsible(User user) {
@@ -162,7 +160,7 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
 	if (person == null) {
 	    return Collections.emptySet();
 	}
-	return GenericProcess.getAllProcesses(clazz, new ProcessesThatAreAuthorizedByUserPredicate(person));
+	return GenericProcess.getAllProcesses(getSearchingClass(), new ProcessesThatAreAuthorizedByUserPredicate(person));
     }
 
     protected boolean hasCriteria(final String string) {
@@ -248,6 +246,9 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
 
 	public boolean evaluate(Object arg0) {
 	    PaymentProcess process = (PaymentProcess) arg0;
+	    if (process.getRequest() == null) {
+		return false;
+	    }
 	    List<Unit> units = process.getPayingUnits();
 
 	    boolean evaluation = false;
@@ -298,18 +299,23 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
     }
 
     public Boolean getShowOnlyAcquisitionsExcludedFromSupplierLimit() {
-        return showOnlyAcquisitionsExcludedFromSupplierLimit;
+	return showOnlyAcquisitionsExcludedFromSupplierLimit;
     }
 
     public void setShowOnlyAcquisitionsExcludedFromSupplierLimit(Boolean showOnlyAcquisitionsExcludedFromSupplierLimit) {
-        this.showOnlyAcquisitionsExcludedFromSupplierLimit = showOnlyAcquisitionsExcludedFromSupplierLimit;
+	this.showOnlyAcquisitionsExcludedFromSupplierLimit = showOnlyAcquisitionsExcludedFromSupplierLimit;
     }
 
     public Boolean getShowOnlyAcquisitionsWithAdditionalCosts() {
-        return showOnlyAcquisitionsWithAdditionalCosts;
+	return showOnlyAcquisitionsWithAdditionalCosts;
     }
 
     public void setShowOnlyAcquisitionsWithAdditionalCosts(Boolean showOnlyAcquisitionsWithAdditionalCosts) {
-        this.showOnlyAcquisitionsWithAdditionalCosts = showOnlyAcquisitionsWithAdditionalCosts;
+	this.showOnlyAcquisitionsWithAdditionalCosts = showOnlyAcquisitionsWithAdditionalCosts;
     }
+
+    public Class<? extends AcquisitionProcess> getSearchingClass() {
+	return clazz;
+    }
+
 }

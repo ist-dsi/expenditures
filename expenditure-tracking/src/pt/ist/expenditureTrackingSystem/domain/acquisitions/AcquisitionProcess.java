@@ -174,16 +174,7 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 	}
 	return builder.toString();
     }
-
-    public boolean isTakenByPerson(Person person) {
-	return person != null && person == getCurrentOwner();
-    }
-
-    public boolean isTakenByCurrentUser() {
-	User user = UserView.getUser();
-	return user != null && isTakenByPerson(user.getPerson());
-    }
-
+    
     public AcquisitionRequest getRequest() {
 	return getAcquisitionRequest();
     }

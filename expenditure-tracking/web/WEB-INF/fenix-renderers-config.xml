@@ -55,6 +55,12 @@ Documentation:
     	<property name="escape" value="true"/>
     </renderer>
 
+	<renderer type="java.lang.Class" layout="label-for-acquisitionProcessClass" class="pt.ist.fenixWebFramework.renderers.ClassAsLabelRenderer">
+    	<property name="escape" value="true"/>
+    	<property name="bundle" value="ACQUISITION_RESOURCES"/>
+    </renderer>
+
+
     <!--@ The default presentation for every object. -->
     <renderer type="java.lang.Class" layout="label-to-material-type-in-spaces-management" class="pt.ist.fenixWebFramework.renderers.ClassAsLabelRenderer">
     	<property name="labelFormat" value="label.${simpleName}.type"/>

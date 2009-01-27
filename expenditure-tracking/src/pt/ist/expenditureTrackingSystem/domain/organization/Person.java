@@ -9,6 +9,7 @@ import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.Options;
 import pt.ist.expenditureTrackingSystem.domain.Role;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
+import pt.ist.expenditureTrackingSystem.domain.SavedSearch;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Acquisition;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
@@ -173,5 +174,11 @@ public class Person extends Person_Base {
 	    }
 	}
 	return units;
+    }
+    
+    @Override
+    @Service
+    public void setDefaultSearch(SavedSearch defaultSearch) {
+        super.setDefaultSearch(defaultSearch);
     }
 }

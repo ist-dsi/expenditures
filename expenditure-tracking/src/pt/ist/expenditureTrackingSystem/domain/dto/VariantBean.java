@@ -4,9 +4,11 @@ import java.io.Serializable;
 
 import org.joda.time.LocalDate;
 
+import pt.ist.fenixframework.DomainObject;
+
 public class VariantBean implements Serializable {
     public static enum Type {
-	INTEGER, STRING, LOCAL_DATE
+	INTEGER, STRING, LOCAL_DATE, DOMAIN_OBJECT
     };
 
     /**
@@ -58,5 +60,14 @@ public class VariantBean implements Serializable {
 
     private boolean isType(Type type) {
 	return type.equals(this.getType());
+    }
+
+    public void setDomainObject(DomainObject value) {
+	this.value = value;
+	setType(Type.DOMAIN_OBJECT);
+    }
+
+    public DomainObject getDomainObject(DomainObject value) {
+	return (DomainObject) (isType(Type.DOMAIN_OBJECT) ? this.value : null);
     }
 }
