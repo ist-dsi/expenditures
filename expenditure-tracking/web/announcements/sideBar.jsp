@@ -13,24 +13,27 @@
 		<logic:present role="ACQUISITION_CENTRAL,ACQUISITION_CENTRAL_MANAGER">
 			<li>
 				<html:link action="/announcementProcess.do?method=prepareCreateAnnouncement">
-					<bean:message key="link.sideBar.announcementProcess.createAnnouncement" bundle="EXPENDITURE_RESOURCES"/>
+					<span><bean:message key="link.sideBar.announcementProcess.createAnnouncement" bundle="EXPENDITURE_RESOURCES"/></span>
 				</html:link>
+				<span class="bar">|</span>
 			</li>
 			<li>
 				<html:link action="/announcementProcess.do?method=searchAnnouncementProcess">
-					<bean:message key="link.sideBar.announcementProcess.searchProcesses" bundle="EXPENDITURE_RESOURCES"/>
+					<span><bean:message key="link.sideBar.announcementProcess.searchProcesses" bundle="EXPENDITURE_RESOURCES"/></span>
 				</html:link>
+				<span class="bar">|</span>
 			</li>
 			<li>
 				<html:link action="/announcementProcess.do?method=showMyProcesses">
-					<bean:message key="link.sideBar.announcementProcess.myProcesses" bundle="EXPENDITURE_RESOURCES"/>
+					<span><bean:message key="link.sideBar.announcementProcess.myProcesses" bundle="EXPENDITURE_RESOURCES"/></span>
 				</html:link>
 			</li>
 		</logic:present>
 		<logic:present role="ACQUISITION_CENTRAL_MANAGER">
 			<li>
+				<span class="bar">|</span>
 				<html:link action="/announcementProcess.do?method=showPendingProcesses">
-					<bean:message key="link.sideBar.announcementProcess.pendingProcesses" bundle="EXPENDITURE_RESOURCES"/>
+					<span><bean:message key="link.sideBar.announcementProcess.pendingProcesses" bundle="EXPENDITURE_RESOURCES"/></span>
 				</html:link>
 			</li>
 		</logic:present>

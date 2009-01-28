@@ -71,6 +71,7 @@
 			<fr:property name="columnClasses" value=",,tderror"/>
 		</fr:layout>
 		<fr:destination name="postBack" path="<%=  actionMapping + ".do?method=createItemPostBack" %>"/>
+		<fr:destination name="invalid" path='<%=  actionMapping + ".do?method=executeCreateAcquisitionRequestItem&acquisitionProcessOid=" + acquisitionProcess.getOID() %>'/>
 	</fr:edit>
 </div>
 	

@@ -10,7 +10,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.standard.StandardProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
@@ -29,8 +28,7 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "edit.request.item", path = "/acquisitions/editRequestItem.jsp"),
 	@Forward(name = "assign.unit.item", path = "/acquisitions/assignUnitItem.jsp"),
 	@Forward(name = "create.acquisition.request.item", path = "/acquisitions/createAcquisitionRequestItem.jsp"),
-	@Forward(name = "view.comments", path = "/acquisitions/viewComments.jsp"),
-	@Forward(name = "search.acquisition.process", path = "/acquisitions/searchAcquisitionProcess.jsp") })
+	@Forward(name = "view.comments", path = "/acquisitions/viewComments.jsp") })
 public class StandardProcedureProcessAction extends RegularAcquisitionProcessAction {
 
     private static final Context CONTEXT = new Context("acquisitions");

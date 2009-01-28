@@ -45,7 +45,7 @@
 			</logic:present>
 		</logic:present>
 		<li class="<%= processesClass %>">
-			<html:link action="/acquisitionProcess.do?method=showPendingProcesses">
+			<html:link action="/search.do?method=search">
 				<span>
 					<bean:message key="link.topBar.acquisitionProcesses" bundle="EXPENDITURE_RESOURCES"/>
 				</span>
@@ -73,5 +73,3 @@
 	</ul>
 </logic:present>
 
-<div class="c1"></div>
-<div class="c2"></div>

@@ -18,5 +18,5 @@
 		<fr:property name="classes" value="form"/>
 		<fr:property name="columnClasses" value=",,tderror"/>
 	</fr:layout>
-	<fr:destination name="cancel" path="/acquisitionProcess.do?method=showPendingProcesses"/>
+	<fr:destination name="cancel" path="/wizard.do?method=afterTheFactOperationsWizard"/>
 </fr:edit>

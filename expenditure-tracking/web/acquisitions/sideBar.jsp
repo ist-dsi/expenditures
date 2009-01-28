@@ -12,27 +12,54 @@
 			<div class="lic1"></div><div class="lic2"></div>
 		</li>
 		<li>
-			<html:link action="/acquisitionSimplifiedProcedureProcess.do?method=prepareCreateAcquisitionProcess">
-				<bean:message key="link.sideBar.acquisitionProcess.create" bundle="EXPENDITURE_RESOURCES"/>
+			<html:link action="/wizard.do?method=newAcquisitionWizard">
+				<span><bean:message key="link.sideBar.process.create" bundle="EXPENDITURE_RESOURCES"/></span>
 			</html:link>
+			<span class="bar">|</span>
 		</li>
 		<li>
-			<html:link action="/acquisitionSimplifiedProcedureProcess.do?method=searchAcquisitionProcess">
-				<bean:message key="link.sideBar.acquisitionProcess.search" bundle="EXPENDITURE_RESOURCES"/>
+			<html:link action="/search.do?method=search">
+					<span><bean:message key="link.sideBar.acquisitionProcess.search" bundle="EXPENDITURE_RESOURCES"/></span>
 			</html:link>
+		</li>
+		<logic:present role="ACQUISITION_CENTRAL_MANAGER">
+				<li>
+					<span class="bar">|</span>
+					<html:link action="/wizard.do?method=afterTheFactOperationsWizard">
+						<span><bean:message key="link.register" bundle="EXPENDITURE_RESOURCES"/></span>
+					</html:link>
+				</li>
+		</logic:present>
+		<logic:present role="ACCOUNTING_MANAGER,PROJECT_ACCOUNTING_MANAGER">
+				<li>
+					<span class="bar">|</span>
+					<html:link action="/acquisitionProcess.do?method=checkFundAllocations">
+						<span><bean:message key="link.fundAllocations" bundle="EXPENDITURE_RESOURCES"/></span>
+					</html:link>
+				</li>
+		</logic:present>
+		
+	<%-- 
+		<li>
+			<html:link action="/acquisitionSimplifiedProcedureProcess.do?method=searchAcquisitionProcess">
+				<span><bean:message key="link.sideBar.acquisitionProcess.search" bundle="EXPENDITURE_RESOURCES"/></span>
+			</html:link>
+			<span class="bar">|</span>
 		</li>
 		<li>
 			<html:link action="/acquisitionSimplifiedProcedureProcess.do?method=showPendingProcesses">
-				<bean:message key="link.sideBar.acquisitionProcess.pendingProcesses" bundle="EXPENDITURE_RESOURCES"/>
+				<span><bean:message key="link.sideBar.acquisitionProcess.pendingProcesses" bundle="EXPENDITURE_RESOURCES"/></span>
 			</html:link>
+			<span class="bar">|</span>
 		</li>	
 		<li>
 			<html:link action="/acquisitionSimplifiedProcedureProcess.do?method=showMyProcesses">
-				<bean:message key="link.sideBar.acquisitionProcess.myProcesses" bundle="EXPENDITURE_RESOURCES"/>
+				<span><bean:message key="link.sideBar.acquisitionProcess.myProcesses" bundle="EXPENDITURE_RESOURCES"/></span>
 			</html:link>
+			<span class="bar">|</span>
 		</li>
+		--%>
 	</ul>
-
 <%-- 
 <ul>
 		<li class="header">
@@ -92,7 +119,8 @@
 		</ul>
 	</logic:present>
 --%>
-<%--
+
+<%-- 
 	<ul>
 		<li class="header">
 			<strong><bean:message key="link.sideBar.refundProcedure" bundle="EXPENDITURE_RESOURCES"/></strong>
@@ -119,7 +147,7 @@
 			</html:link>
 		</li>
 	</ul>
---%>
+
 	<logic:present role="ACQUISITION_CENTRAL,ACQUISITION_CENTRAL_MANAGER">
 		<ul>
 			<li class="header">
@@ -158,6 +186,8 @@
 				</li>
 		</ul>
 	</logic:present>
-	
+
+--%>
+
 </logic:present>
 

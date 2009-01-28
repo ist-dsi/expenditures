@@ -13,7 +13,7 @@ public class UserSearchBean implements Serializable {
 
     public UserSearchBean(Person person) {
 	setUser(person);
-	setSelectedSearch(person.getDefaultSearch());
+	setSelectedSearch(null);
     }
 
     public SavedSearch getSelectedSearch() {

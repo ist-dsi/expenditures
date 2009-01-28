@@ -958,3 +958,38 @@
 			<property name="providerClass" value="pt.ist.expenditureTrackingSystem.presentationTier.renderers.dataProvider.AvailableSavedSearchesProvider"/>
 		</slot>
 </schema>
+
+<schema name="viewSavedSearch"
+		type="pt.ist.expenditureTrackingSystem.domain.SavedSearch"
+		bundle="ACQUISITION_RESOURCES">
+	<slot name="searchClass" key="label.acquisitionType" bundle="ACQUISITION_RESOURCES"  layout="label">
+		<property name="bundle" value="ACQUISITION_RESOURCES"/>
+	</slot>
+	<slot name="processId" key="label.acquisitionProcessId" bundle="EXPENDITURE_RESOURCES"/>
+	<slot name="requestDocumentId" key="acquisitionProcess.label.requestDocument" bundle="ACQUISITION_RESOURCES" />
+	<slot name="proposalId" key="acquisitionProcess.label.proposalID" bundle="ACQUISITION_RESOURCES" />
+	<slot name="requestor" key="label.requester" bundle="EXPENDITURE_RESOURCES" layout="null-as-label">
+		<property name="subLayout" value="values"/>
+		<property name="subSchema" value="viewPeopleInList"/>
+	</slot>
+	<slot name="accountingUnit" key="label.accountingUnit" bundle="EXPENDITURE_RESOURCES" layout="null-as-label">
+		<property name="subLayout" value="values"/>
+		<property name="subSchema" value="viewAccountingUnit"/>
+	</slot>
+	<slot name="unit" key="label.unit" bundle="EXPENDITURE_RESOURCES"  layout="null-as-label">
+		<property name="subLayout" value="values"/>
+		<property name="subSchema" value="unitName"/>
+	</slot>
+	
+	<slot name="supplier" key="label.supplier" bundle="EXPENDITURE_RESOURCES" layout="null-as-label">
+		<property name="subLayout" value="values"/>
+		<property name="subSchema" value="viewSupplierPresentationName"/>
+	</slot>
+	<slot name="acquisitionProcessStateType" key="label.processState" bundle="EXPENDITURE_RESOURCES"/>
+	<slot name="refundProcessStateType" key="label.processState" bundle="EXPENDITURE_RESOURCES"/>
+	<slot name="refundeeName" key="label.refundee" bundle="EXPENDITURE_RESOURCES"/>
+	<slot name="pendingOperations" key="label.option.hasAvailableAndAccessibleActivityForUser" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="showOnlyResponsabilities" key="label.option.responsibleUnitSetOnly" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="showOnlyAcquisitionsExcludedFromSupplierLimit" key="label.option.showOnlyAcquisitionsExcludedFromSupplierLimit" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="showOnlyAcquisitionsWithAdditionalCosts" key="label.option.showOnlyAcquisitionsWithAdditionalCosts" bundle="ACQUISITION_RESOURCES"/>
+</schema>

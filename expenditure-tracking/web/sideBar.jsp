@@ -13,13 +13,14 @@
 		<logic:present user="ist151339">
 			<li>
 				<html:link action="/home.do?method=showActiveRequestsForProposal">
-					<bean:message key="link.sideBar.home.publicRequestsForProposal" bundle="EXPENDITURE_RESOURCES"/>
+					<span><bean:message key="link.sideBar.home.publicRequestsForProposal" bundle="EXPENDITURE_RESOURCES"/></span>
 				</html:link>
+				<span class="bar">|</span>
 			</li>
 		</logic:present>
 		<li>
 			<html:link action="/home.do?method=showAcquisitionAnnouncements">
-				<bean:message key="link.sideBar.home.publicAnnouncements" bundle="EXPENDITURE_RESOURCES"/>
+				<span><bean:message key="link.sideBar.home.publicAnnouncements" bundle="EXPENDITURE_RESOURCES"/></span>
 			</html:link>
 		</li>
 	</ul>

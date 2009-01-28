@@ -22,7 +22,7 @@ public class UnitAutoCompleteProvider implements AutoCompleteProvider {
 
 	final String trimmedValue = value.trim();
 
-	if (StringUtils.isNumeric(trimmedValue)) {
+	if (isNumeric(trimmedValue)) {
 	    final int code = Integer.parseInt(trimmedValue);
 	    for (final Unit unit : ExpenditureTrackingSystem.getInstance().getUnits()) {
 		if (unit instanceof CostCenter) {
@@ -78,4 +78,16 @@ public class UnitAutoCompleteProvider implements AutoCompleteProvider {
 	return true;
     }
 
+    private boolean isNumeric(String someString) {
+	boolean isNumeric = StringUtils.isNumeric(someString);
+	if (isNumeric) {
+	    try {
+		int i = Integer.parseInt(someString);
+	    } catch (NumberFormatException e) {
+		return false;
+	    }
+	    return true;
+	}
+	return false;
+    }
 }

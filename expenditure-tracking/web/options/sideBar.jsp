@@ -8,13 +8,14 @@
 		<logic:present role="MANAGER">
 			<li>
 				<html:link action="/customize.do?method=showInterfaceOptions">
-					<bean:message key="link.options.interface" bundle="EXPENDITURE_RESOURCES"/>
+					<span><bean:message key="link.options.interface" bundle="EXPENDITURE_RESOURCES"/></span>
 				</html:link>
+				<span class="bar">|</span>
 			</li>
 		</logic:present>
 		<li>
 			<html:link action="/customize.do?method=showNotificationOptions">
-				<bean:message key="link.options.notifications" bundle="EXPENDITURE_RESOURCES"/>
+				<span><bean:message key="link.options.notifications" bundle="EXPENDITURE_RESOURCES"/></span>
 			</html:link>
 		</li>
 	</ul>

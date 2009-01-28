@@ -12,12 +12,10 @@ import org.apache.struts.action.ActionMapping;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
-import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.SearchAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AllocateFundsPermanently;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AllocateProjectFundsPermanently;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.FundAllocation;
@@ -31,7 +29,6 @@ import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 import pt.ist.expenditureTrackingSystem.presentationTier.Context;
 import pt.ist.fenixWebFramework.renderers.components.state.IViewState;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
-import pt.ist.fenixWebFramework.security.UserView;
 import pt.ist.fenixWebFramework.struts.annotations.Forward;
 import pt.ist.fenixWebFramework.struts.annotations.Forwards;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
@@ -77,19 +74,6 @@ public class RegularAcquisitionProcessAction extends PaymentProcessAction {
     public ActionForward cancelAcquisitionRequest(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	return executeActivityAndViewProcess(mapping, form, request, response, "CancelAcquisitionRequest");
-    }
-
-    public ActionForward executeDeleteAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-	final RegularAcquisitionProcess acquisitionProcess = getProcess(request);
-	request.setAttribute("confirmDeleteAcquisitionProcess", Boolean.TRUE);
-	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
-    }
-
-    public ActionForward deleteAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-	genericActivityExecution(request, "DeleteAcquisitionProcess");
-	return showPendingProcesses(mapping, form, request, response);
     }
 
     public ActionForward executeCreateAcquisitionRequestItem(final ActionMapping mapping, final ActionForm form,
@@ -152,44 +136,7 @@ public class RegularAcquisitionProcessAction extends PaymentProcessAction {
 	}
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
-
-    public ActionForward showPendingProcesses(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-	final SearchAcquisitionProcess searchAcquisitionProcess = new SearchAcquisitionProcess(getProcessClass());
-	User user = UserView.getUser();
-	if (user != null && user.getPerson().hasAnyAuthorizations()) {
-	    searchAcquisitionProcess.setResponsibleUnitSetOnly(Boolean.TRUE);
-	}
-	searchAcquisitionProcess.setHasAvailableAndAccessibleActivityForUser(Boolean.TRUE);
-	return searchAcquisitionProcess(mapping, request, searchAcquisitionProcess);
-    }
-
-    public ActionForward showMyProcesses(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
-	final SearchAcquisitionProcess searchAcquisitionProcess = new SearchAcquisitionProcess(getProcessClass());
-	searchAcquisitionProcess.setRequester(getLoggedPerson());
-	return searchAcquisitionProcess(mapping, request, searchAcquisitionProcess);
-    }
-
-    public ActionForward searchAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-	SearchAcquisitionProcess searchAcquisitionProcess = getRenderedObject();
-	if (searchAcquisitionProcess == null) {
-	    searchAcquisitionProcess = new SearchAcquisitionProcess(getProcessClass());
-	    User user = UserView.getUser();
-	    if (user != null && user.getPerson().hasAnyAuthorizations()) {
-		searchAcquisitionProcess.setResponsibleUnitSetOnly(Boolean.TRUE);
-	    }
-	}
-	return searchAcquisitionProcess(mapping, request, searchAcquisitionProcess);
-    }
-
-    public ActionForward searchAcquisitionProcess(final ActionMapping mapping, final HttpServletRequest request,
-	    final SearchAcquisitionProcess searchAcquisitionProcess) {
-	request.setAttribute("searchAcquisitionProcess", searchAcquisitionProcess);
-	return mapping.findForward("search.acquisition.process");
-    }
-
+    
     public ActionForward executeActivityAndViewProcess(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response, final String activityName) {
 	genericActivityExecution(request, activityName);

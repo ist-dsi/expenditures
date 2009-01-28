@@ -14,6 +14,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.Acquisition;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestWithPayment;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.announcements.Announcement;
 import pt.ist.expenditureTrackingSystem.domain.announcements.AnnouncementProcess;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
@@ -175,10 +176,11 @@ public class Person extends Person_Base {
 	}
 	return units;
     }
-    
+
     @Override
     @Service
     public void setDefaultSearch(SavedSearch defaultSearch) {
-        super.setDefaultSearch(defaultSearch);
+	super.setDefaultSearch(defaultSearch);
     }
+
 }

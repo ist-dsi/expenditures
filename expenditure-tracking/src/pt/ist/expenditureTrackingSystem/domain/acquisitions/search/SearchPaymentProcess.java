@@ -29,17 +29,14 @@ import pt.ist.fenixWebFramework.util.DomainReference;
 
 public class SearchPaymentProcess extends Search<PaymentProcess> {
 
+    private DomainReference<SavedSearch> savedSearch;
     private Class<? extends PaymentProcess> searchClass;
     private String processId;
     private String requestDocumentId;
-    // private DomainReference<Person> requester;
     private DomainReference<Person> requestingPerson;
-
-    // private DomainReference<Unit> unit;
     private DomainReference<Unit> requestingUnit;
     private AcquisitionProcessStateType acquisitionProcessStateType;
     private RefundProcessStateType refundProcessStateType;
-
     private DomainReference<Supplier> supplier;
     private String proposalId;
     private DomainReference<AccountingUnit> accountingUnit;
@@ -47,7 +44,6 @@ public class SearchPaymentProcess extends Search<PaymentProcess> {
     private Boolean responsibleUnitSetOnly = Boolean.FALSE;
     private Boolean showOnlyAcquisitionsExcludedFromSupplierLimit = Boolean.FALSE;
     private Boolean showOnlyAcquisitionsWithAdditionalCosts = Boolean.FALSE;
-
     private String refundeeName;
 
     private final static Map<Class<? extends PaymentProcess>, SearchPredicate> predicateMap = new HashMap<Class<? extends PaymentProcess>, SearchPredicate>();
@@ -63,7 +59,7 @@ public class SearchPaymentProcess extends Search<PaymentProcess> {
 	setRequestingUnit(null);
 	setSupplier(null);
 	setAccountingUnit(null);
-
+	setSavedSearch(null);
     }
 
     public SearchPaymentProcess(SavedSearch savedSearch) {
@@ -81,6 +77,7 @@ public class SearchPaymentProcess extends Search<PaymentProcess> {
 	setResponsibleUnitSetOnly(savedSearch.getShowOnlyResponsabilities());
 	setShowOnlyAcquisitionsExcludedFromSupplierLimit(savedSearch.getShowOnlyAcquisitionsExcludedFromSupplierLimit());
 	setShowOnlyAcquisitionsWithAdditionalCosts(savedSearch.getShowOnlyAcquisitionsWithAdditionalCosts());
+	setSavedSearch(savedSearch);
     }
 
     @Override
@@ -92,6 +89,10 @@ public class SearchPaymentProcess extends Search<PaymentProcess> {
 	    throw new Error(ex);
 	}
 
+    }
+
+    public boolean isSearchObjectAvailable() {
+	return getSavedSearch() != null;
     }
 
     private class SearchResult extends SearchResultSet<PaymentProcess> {
@@ -131,6 +132,12 @@ public class SearchPaymentProcess extends Search<PaymentProcess> {
 	    return Collections.emptySet();
 	}
 	return GenericProcess.getAllProcesses(getProcessClass(), new ProcessesThatAreAuthorizedByUserPredicate(person));
+    }
+
+    @Override
+    protected void persist(String name) {
+	User user = UserView.getUser();
+	new SavedSearch(name, user.getPerson(), this);
     }
 
     public String getProcessId() {
@@ -253,9 +260,11 @@ public class SearchPaymentProcess extends Search<PaymentProcess> {
 	this.searchClass = searchClass;
     }
 
-    @Override
-    protected void persist(String name) {
-	User user = UserView.getUser();
-	new SavedSearch(name, user.getPerson(), this);
+    public SavedSearch getSavedSearch() {
+	return savedSearch.getObject();
+    }
+
+    public void setSavedSearch(SavedSearch savedSearch) {
+	this.savedSearch = new DomainReference<SavedSearch>(savedSearch);
     }
 }

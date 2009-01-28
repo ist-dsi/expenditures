@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
+import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.util.Address;
 import pt.ist.fenixWebFramework.renderers.InputRenderer;
 import pt.ist.fenixWebFramework.renderers.components.HtmlBlockContainer;
@@ -281,7 +282,12 @@ public class AddressInputRenderer extends InputRenderer {
 	public Object convert(Class type, Object value) {
 	    String[] values = (String[]) value;
 	    if (hasAnyValue(values)) {
-		return new Address(values[0], values[1], values[3], values[2], values[4]);
+		try {
+		    return new Address(values[0], values[1], values[3], values[2], values[4]);
+		} catch (DomainException e) {
+		    e.printStackTrace();
+		    return null;
+		}
 	    }
 	    return null;
 	}

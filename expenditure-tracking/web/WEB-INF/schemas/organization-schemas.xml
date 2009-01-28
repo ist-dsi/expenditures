@@ -15,6 +15,13 @@
 	</slot>
 </schema>
 
+<schema name="viewAccountingUnit"
+		type="pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit"
+		bundle="ORGANIZATION_RESOURCES">
+	<slot name="name" key="unit.label.name" bundle="ORGANIZATION_RESOURCES" />
+</schema>
+
+
 <schema name="editUnit"
 		type="pt.ist.expenditureTrackingSystem.domain.organization.Unit"
 		bundle="ORGANIZATION_RESOURCES">

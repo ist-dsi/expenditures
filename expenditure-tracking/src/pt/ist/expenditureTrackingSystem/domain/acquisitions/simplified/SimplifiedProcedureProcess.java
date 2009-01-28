@@ -82,7 +82,6 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	requestInformationActivities.add(new AddAcquisitionProposalDocument());
 	requestInformationActivities.add(new ChangeAcquisitionProposalDocument());
 	requestInformationActivities.add(new CreateAcquisitionRequestItem());
-	// requestInformationActivities.add(new DeleteAcquisitionProcess());
 	requestInformationActivities.add(new SubmitForApproval());
 
 	requestInformationActivities.add(new SubmitForFundAllocation());

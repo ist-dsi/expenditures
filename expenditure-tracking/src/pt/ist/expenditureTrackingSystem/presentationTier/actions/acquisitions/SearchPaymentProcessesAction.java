@@ -34,14 +34,20 @@ public class SearchPaymentProcessesAction extends BaseAction {
 	return CONTEXT;
     }
 
-    private ActionForward search(final ActionMapping mapping, final HttpServletRequest request, SearchPaymentProcess searchBean) {
+    private ActionForward search(final ActionMapping mapping, final HttpServletRequest request, SearchPaymentProcess searchBean,
+	    boolean advanced) {
 	Person loggedPerson = getLoggedPerson();
 	request.setAttribute("results", searchBean.search());
 	request.setAttribute("searchBean", searchBean);
 	request.setAttribute("person", loggedPerson);
 
+	UserSearchBean userSearchBean = new UserSearchBean(loggedPerson);
+	if (searchBean.isSearchObjectAvailable()) {
+	    userSearchBean.setSelectedSearch(searchBean.getSavedSearch());
+	}
 	request.setAttribute("savingName", new VariantBean());
-	request.setAttribute("mySearches", new UserSearchBean(loggedPerson));
+	request.setAttribute("mySearches", userSearchBean);
+	request.setAttribute("advanced", advanced);
 	return mapping.findForward("search");
     }
 
@@ -49,11 +55,22 @@ public class SearchPaymentProcessesAction extends BaseAction {
 	    final HttpServletResponse response) {
 
 	SearchPaymentProcess searchBean = getRenderedObject("searchBean");
+	Person loggedPerson = getLoggedPerson();
 	if (searchBean == null) {
-	    searchBean = new SearchPaymentProcess();
+	    searchBean = loggedPerson.hasDefaultSearch() ? new SearchPaymentProcess(loggedPerson.getDefaultSearch())
+		    : new SearchPaymentProcess();
+	    return search(mapping, request, searchBean, false);
+	} else {
+	    searchBean.setSavedSearch(null);
+	    return search(mapping, request, searchBean, true);
 	}
 
-	return search(mapping, request, searchBean);
+    }
+
+    public ActionForward viewSearch(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	SavedSearch search = getDomainObject(request, "searchOID");
+	return search(mapping, request, new SearchPaymentProcess(search), false);
     }
 
     public ActionForward saveSearch(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -67,7 +84,7 @@ public class SearchPaymentProcessesAction extends BaseAction {
 	} else {
 	    request.setAttribute("invalidName", true);
 	}
-	return search(mapping, request, searchBean);
+	return search(mapping, request, searchBean, true);
     }
 
     public ActionForward changeSelectedClass(final ActionMapping mapping, final ActionForm form,
@@ -76,14 +93,14 @@ public class SearchPaymentProcessesAction extends BaseAction {
 	SearchPaymentProcess searchBean = getRenderedObject("searchBean");
 
 	RenderUtils.invalidateViewState("searchBean");
-	return search(mapping, request, searchBean);
+	return search(mapping, request, searchBean, true);
     }
 
     public ActionForward mySearches(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) {
 
 	UserSearchBean bean = getRenderedObject("mySearches");
-	return search(mapping, request, new SearchPaymentProcess(bean.getSelectedSearch()));
+	return search(mapping, request, new SearchPaymentProcess(bean.getSelectedSearch()), false);
     }
 
     public ActionForward configurateMySearches(final ActionMapping mapping, final ActionForm form,

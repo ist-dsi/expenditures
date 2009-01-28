@@ -4,39 +4,74 @@
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 
+<h2><bean:message key="title.configureSearches" bundle="EXPENDITURE_RESOURCES"/></h2>
+
+<ul>
+	<li>
+		<html:link page="/search.do?method=search">
+			<bean:message key="link.back" bundle="EXPENDITURE_RESOURCES"/>
+		</html:link>
+	</li>
+</ul>
+
+
+
+<ul style="padding-left: 0em; list-style: none;">
 
 <logic:iterate id="systemSearch" name="systemSearches" >
-	<logic:equal name="systemSearch" property="searchDefaultForCurrentUser" value="false"> 
-		<bean:define id="searchOID" name="systemSearch" property="OID"/>
-		<html:link page='<%= "/search.do?method=setSearchAsDefault&savedSearchOID=" + searchOID%>'>
-			Set Default
-		</html:link>
-	</logic:equal>
-	<logic:equal name="systemSearch" property="searchDefaultForCurrentUser" value="true">
-		Default
-	</logic:equal>
-	<div class="infoop2">
-		<fr:view name="systemSearch" layout="tabular-nonNullValues"/>
-	</div>
+	<bean:define id="searchOID" name="systemSearch" property="OID"/>
+	<li class="mvert1">
+		<div class="infoop6">
+			<span>
+				<strong><html:link page='<%= "/search.do?method=viewSearch&searchOID=" + searchOID%>'><fr:view name="systemSearch" property="searchName"/></html:link></strong>
+				(<logic:equal name="systemSearch" property="searchDefaultForCurrentUser" value="false"> 
+					<html:link page='<%= "/search.do?method=setSearchAsDefault&savedSearchOID=" + searchOID%>'>
+						<bean:message key="link.setAsDefault" bundle="EXPENDITURE_RESOURCES"/>
+					</html:link>
+				</logic:equal>
+				<logic:equal name="systemSearch" property="searchDefaultForCurrentUser" value="true">
+					<bean:message key="label.default" bundle="EXPENDITURE_RESOURCES"/>
+				</logic:equal>)
+			</span>
+			<p>
+				<fr:view name="systemSearch"  schema="viewSavedSearch">
+					<fr:layout name="tabular-nonNullValues">
+						<fr:property name="classes" value="thlight thleft mtop05"/>
+					</fr:layout>
+				</fr:view>
+			</p>
+		</div>
+	</li>
 </logic:iterate>
 
 
 <logic:iterate id="userSearch" name="userSearches" >
 	<bean:define id="searchOID" name="userSearch" property="OID"/>
-	<html:link page='<%= "/search.do?method=deleteMySearch&savedSearchOID=" + searchOID%>'>
-		Apagar
-	</html:link>
-	
-	<logic:equal name="userSearch" property="searchDefaultForCurrentUser" value="false"> 
-		<bean:define id="searchOID" name="userSearch" property="OID"/>
-		<html:link page='<%= "/search.do?method=setSearchAsDefault&savedSearchOID=" + searchOID%>'>
-			Set Default
-		</html:link>
-	</logic:equal>
-	<logic:equal name="userSearch" property="searchDefaultForCurrentUser" value="true">
-		Default
-	</logic:equal>
-	<div class="infoop2">
-		<fr:view name="userSearch" layout="tabular-nonNullValues"/>
-	</div>
+	<li class="mvert1">
+		<div class="infoop6">
+			<span>
+				<strong><html:link page='<%= "/search.do?method=viewSearch&searchOID=" + searchOID%>'><fr:view name="userSearch" property="searchName"/></html:link></strong>
+				(<html:link page='<%= "/search.do?method=deleteMySearch&savedSearchOID=" + searchOID%>'>
+						<bean:message key="link.delete" bundle="EXPENDITURE_RESOURCES"/>
+					</html:link> |
+				<logic:equal name="userSearch" property="searchDefaultForCurrentUser" value="false"> 
+					<html:link page='<%= "/search.do?method=setSearchAsDefault&savedSearchOID=" + searchOID%>'>
+						<bean:message key="link.setAsDefault" bundle="EXPENDITURE_RESOURCES"/>
+					</html:link>
+				</logic:equal>
+				<logic:equal name="userSearch" property="searchDefaultForCurrentUser" value="true">
+					<bean:message key="label.default" bundle="EXPENDITURE_RESOURCES"/>
+				</logic:equal>)
+			</span>
+			<p>
+				<fr:view name="userSearch" schema="viewSavedSearch">
+					<fr:layout name="tabular-nonNullValues">
+						<fr:property name="classes" value="thlight thleft mtop05"/>
+					</fr:layout>
+				</fr:view>
+			</p>
+		</div>
+	</li>
 </logic:iterate>
+
+</ul>

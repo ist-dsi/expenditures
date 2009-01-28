@@ -9,8 +9,13 @@ import pt.ist.fenixframework.pstm.Transaction;
 
 public class SavedSearch extends SavedSearch_Base {
 
-    public SavedSearch(String name, Person person, SearchPaymentProcess searchBean) {
+    protected SavedSearch() {
+	setOjbConcreteClass(this.getClass().getName());
 	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
+    }
+
+    public SavedSearch(String name, Person person, SearchPaymentProcess searchBean) {
+	this();
 	if (person == null) {
 	    throw new DomainException("message.exception.aPersonIsNeededToSaveTheSearch");
 	}
@@ -59,14 +64,14 @@ public class SavedSearch extends SavedSearch_Base {
 	removeUnit();
 	Transaction.deleteObject(this);
     }
-    
+
     public boolean isSearchDefaultForUser(Person person) {
 	return person.getDefaultSearch() == this;
     }
-    
+
     public boolean isSearchDefaultForCurrentUser() {
 	User user = UserView.getUser();
 	return isSearchDefaultForUser(user.getPerson());
     }
-    
+
 }

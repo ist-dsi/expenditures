@@ -53,10 +53,6 @@ alter table PERSON add index (KEY_DEFAULT_SEARCH);
 alter table SAVED_SEARCH add column KEY_EXPENDITURE_TRACKING_SYSTEM_FOR_SYSTEM_SEARCH int(11);
 alter table SAVED_SEARCH add index (KEY_EXPENDITURE_TRACKING_SYSTEM_FOR_SYSTEM_SEARCH);
 
-
-
-
-
 -- Inserted at 2009-01-28T15:06:13.667Z
 
 alter table PERSON add column LOGOUT_DATE_TIME timestamp NULL default NULL;
@@ -82,4 +78,12 @@ alter table FILE add column KEY_FILE_CONTENT int(11);
 alter table FILE add index (KEY_FILE_CONTENT);
 
 update FILE set KEY_FILE_CONTENT = ID_INTERNAL;
+
+
+
+
+-- Inserted at 2009-01-28T15:11:58.931Z
+
+alter table SAVED_SEARCH add column OJB_CONCRETE_CLASS text;
+
 

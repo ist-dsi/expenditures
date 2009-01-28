@@ -6,12 +6,13 @@
 <ul>
 	<li>
 		<html:link action="/statistics.do?method=showSimplifiedProcessStatistics">
-			<bean:message key="label.statistics.process.simplified" bundle="STATISTICS_RESOURCES"/>
+			<span><bean:message key="label.statistics.process.simplified" bundle="STATISTICS_RESOURCES"/></span>
 		</html:link>
+		<span class="bar">|</span>
 	</li>
 	<li>
 		<html:link action="/statistics.do?method=showRefundProcessStatistics">
-			<bean:message key="label.statistics.process.refund" bundle="STATISTICS_RESOURCES"/>
+			<span><bean:message key="label.statistics.process.refund" bundle="STATISTICS_RESOURCES"/></span>
 		</html:link>
 	</li>
 </ul>

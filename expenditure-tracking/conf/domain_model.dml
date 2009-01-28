@@ -193,6 +193,7 @@ class organization.Person {
 }
 
 class SavedSearch {
+	String ojbConcreteClass;
 	String searchName;
 	String searchClassName;
 	String processId;
@@ -205,6 +206,14 @@ class SavedSearch {
  	Boolean showOnlyAcquisitionsExcludedFromSupplierLimit;
     Boolean showOnlyAcquisitionsWithAdditionalCosts;
     String refundeeName;
+}
+
+class MyOwnProcessesSearch extends SavedSearch {
+
+}
+
+class PendingProcessesSearch extends SavedSearch {
+
 }
 
 class organization.DeliveryInfo {
