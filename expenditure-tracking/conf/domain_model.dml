@@ -186,6 +186,7 @@ class organization.Person {
 	String name;
 	String username;
 	String password;
+	DateTime logoutDateTime;
 }
 
 class SavedSearch {

@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
+import org.joda.time.DateTime;
+
 import pt.ist.expenditureTrackingSystem.domain.Role;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
@@ -55,6 +57,7 @@ public class Authenticate implements Serializable {
 
 	private final DomainReference<Person> personReference;
 	private DomainReference<Person> mockReference;
+	private final DateTime created = new DateTime();
 	
 	private transient String privateConstantForDigestCalculation;
 
@@ -109,6 +112,16 @@ public class Authenticate implements Serializable {
 		privateConstantForDigestCalculation = person.getUsername() + person.getPassword() + randomValue;
 	    }
 	    return privateConstantForDigestCalculation;
+	}
+
+	@Override
+	public DateTime getLastLogoutDateTime() {
+	    return getPerson().getLogoutDateTime();
+	}
+
+	@Override
+	public DateTime getUserCreationDateTime() {
+	    return created;
 	}
     }
 
