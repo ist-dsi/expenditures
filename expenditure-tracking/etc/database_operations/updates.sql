@@ -61,3 +61,25 @@ alter table SAVED_SEARCH add index (KEY_EXPENDITURE_TRACKING_SYSTEM_FOR_SYSTEM_S
 
 alter table PERSON add column LOGOUT_DATE_TIME timestamp NULL default NULL;
 
+
+
+
+-- Inserted at 2009-01-28T15:13:48.607Z
+
+create table FILE_CONTENT (
+  `CONTENT` longblob,
+  `ID_INTERNAL` int(11) NOT NULL auto_increment,
+  `KEY_EXPENDITURE_TRACKING_SYSTEM` int(11),
+  `KEY_FILE` int(11),
+  primary key (ID_INTERNAL),
+  index (KEY_EXPENDITURE_TRACKING_SYSTEM),
+  index (KEY_FILE)
+) type=InnoDB ;
+
+insert into FILE_CONTENT (ID_INTERNAL, KEY_EXPENDITURE_TRACKING_SYSTEM, KEY_FILE, CONTENT) select ID_INTERNAL, KEY_EXPENDITURE_TRACKING_SYSTEM, ID_INTERNAL, CONTENT from FILE;
+
+alter table FILE add column KEY_FILE_CONTENT int(11);
+alter table FILE add index (KEY_FILE_CONTENT);
+
+update FILE set KEY_FILE_CONTENT = ID_INTERNAL;
+

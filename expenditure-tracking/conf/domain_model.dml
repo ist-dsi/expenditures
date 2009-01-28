@@ -136,7 +136,6 @@ class File {
 	String ojbConcreteClass;
 	String filename;
 	String displayName;
-	ByteArray content;
 	String contentType;
 }
 
@@ -171,6 +170,10 @@ class File {
 
 	class acquisitions.refund.RefundableInvoiceFile extends File {
 	}
+	
+class FileContent {
+	ByteArray content;
+}
 	
 class Options {
 	Boolean displayAuthorizationPending;
@@ -392,6 +395,18 @@ relation ExpenditureTrackingSystemFile {
 	File playsRole files {
 		multiplicity *;
 	}
+}
+
+relation ExpenditureTrackingSystemFileContent {
+	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
+	FileContent playsRole fileContents {
+		multiplicity *;
+	}
+}
+
+relation FileFileContent {
+	File playsRole file;
+	FileContent playsRole fileContent;
 }
 
 relation RequestForProposalSupplierProposalDocument {

@@ -14,6 +14,7 @@ public class File extends File_Base {
 	super();
 	setOjbConcreteClass(getClass().getName());
 	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
+	new FileContent(this);
     }
 
     protected String guessContentType(final String filename) {
@@ -27,18 +28,26 @@ public class File extends File_Base {
     }
 
     public void setContent(final byte[] bytes) {
-	final ByteArray byteArray = new ByteArray(bytes);
-	setContent(byteArray);
+	getFileContent().setContent(bytes);
+    }
+
+    public ByteArray getContent() {
+        return getFileContent().getContent();
+    }
+
+    public void setContent(final ByteArray content) {
+	getFileContent().setContent(content);
     }
 
     public void delete() {
+	getFileContent().delete();
 	removeExpenditureTrackingSystem();
 	Transaction.deleteObject(this);
     }
     
-    public static <T extends File> List<T> getFiles(Class<T> clazz) {
-	List<T> files = new ArrayList<T>();
-	for (File file : ExpenditureTrackingSystem.getInstance().getFiles()) {
+    public static <T extends File> List<T> getFiles(final Class<T> clazz) {
+	final List<T> files = new ArrayList<T>();
+	for (final File file : ExpenditureTrackingSystem.getInstance().getFiles()) {
 	    if (file.getClass().equals(clazz)) {
 		files.add((T)file);
 	    }
