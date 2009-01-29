@@ -122,7 +122,6 @@ public abstract class GenericProcess extends GenericProcess_Base {
 	throw new DomainException("error.message.illegal.method.useReleaseInstead");
     }
 
-    @Service
     public void systemProcessRelease() {
 	super.setCurrentOwner(null);
     }
