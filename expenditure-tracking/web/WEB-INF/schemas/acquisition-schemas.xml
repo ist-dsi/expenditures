@@ -107,6 +107,7 @@
 	<slot name="acquisitionProcess.requestor.name" key="label.requesterName" bundle="EXPENDITURE_RESOURCES"/>
 	<slot name="acquisitionProcess.requestingUnit.presentationName" key="acquisitionProcess.label.requestingUnit" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="acquisitionProcess.acquisitionProcessState.localizedName" key="label.processState" bundle="EXPENDITURE_RESOURCES"/>
+	<slot name="acquisitionProcess.skipSupplierFundAllocation" key="label.skipingSupplierFundAllocation" bundle="EXPENDITURE_RESOURCES"/>
 	<slot name="supplier.presentationName" key="label.supplier" bundle="EXPENDITURE_RESOURCES"/>
 	<slot name="refundeeName" key="label.refundee" bundle="ACQUISITION_RESOURCES" layout="null-as-label"/>
 	<slot name="realTotalValue" key="acquisitionRequestItem.label.totalValue" bundle="ACQUISITION_RESOURCES"/>

@@ -50,7 +50,4 @@
 	<html:submit styleClass="inputbutton">
 		<bean:message key="button.create" bundle="EXPENDITURE_RESOURCES" />
 	</html:submit>
-	<html:cancel styleClass="inputbutton">
-		<bean:message key="button.cancel" bundle="EXPENDITURE_RESOURCES" />
-	</html:cancel>
 </fr:form>

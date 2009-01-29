@@ -100,7 +100,13 @@ public class SearchPaymentProcessesAction extends BaseAction {
 	    final HttpServletResponse response) {
 
 	UserSearchBean bean = getRenderedObject("mySearches");
-	return search(mapping, request, new SearchPaymentProcess(bean.getSelectedSearch()), false);
+	SavedSearch search = bean.getSelectedSearch();
+	if (search == null) {
+	    search = getLoggedPerson().getDefaultSearch();
+	    bean.setSelectedSearch(search);
+	    RenderUtils.invalidateViewState("mySearches");
+	}
+	return search(mapping, request, new SearchPaymentProcess(search), false);
     }
 
     public ActionForward configurateMySearches(final ActionMapping mapping, final ActionForm form,

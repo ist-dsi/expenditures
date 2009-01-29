@@ -28,8 +28,20 @@
 
 	<li>
 		<strong>
+			<html:link action="/acquisitionStandardProcedureProcess.do?method=prepareCreateAcquisitionStandardProcess">
+				<bean:message key="link.create.standardAcquisitionProcess" bundle="EXPENDITURE_RESOURCES"/>
+			</html:link>
+		</strong>
+		<p class="mtop025">
+			<bean:message key="message.info.acquisitionStandardProcessExplanation" bundle="EXPENDITURE_RESOURCES"/>
+		</p>
+	</li>
+
+
+	<li>
+		<strong>
 			<html:link action="/acquisitionRefundProcess.do?method=prepareCreateRefundProcess">
-				<bean:message key="link.sideBar.refundProcess.create" bundle="EXPENDITURE_RESOURCES"/>
+				<bean:message key="link.create.refundProcess" bundle="EXPENDITURE_RESOURCES"/>
 			</html:link>
 		</strong>
 		<p class="mtop025">
