@@ -5,12 +5,12 @@
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
 <div class="infoop2">	
-	<table class="tstyle1" style="width: 100%;">
+	<table class="tstyle1 thpadding02505" style="width: 100%;">
 		<tr>
 				<th colspan="2" style="background: #eaeaea;"><bean:message key="acquisitionProcess.title.description" bundle="ACQUISITION_RESOURCES"/></th>
 		</tr>
 		<tr>
-			<td><bean:message key="refundItem.label.salesCode" bundle="ACQUISITION_RESOURCES"/></td>
+			<td class="nowrap"><bean:message key="refundItem.label.salesCode" bundle="ACQUISITION_RESOURCES"/>:</td>
 			<td>
 				<fr:view name="item" property="CPVReference" >
 					<fr:layout name="format">
@@ -20,21 +20,20 @@
 			</td>
 		</tr>
 		<tr>
-			<td><bean:message key="refundItem.label.description" bundle="ACQUISITION_RESOURCES"/></td><td><fr:view name="item" property="description"/></td>
+			<td class="nowrap"><bean:message key="refundItem.label.description" bundle="ACQUISITION_RESOURCES"/>:</td><td><fr:view name="item" property="description"/></td>
 		</tr>
 
 		<tr>
 			<th colspan="2" style="background: #eaeaea;"><bean:message key="acquisitionProcess.title.quantityAndCosts.lowercase" bundle="ACQUISITION_RESOURCES"/></th>
 		</tr>	
 		<tr>
-			<td><bean:message key="label.value" bundle="EXPENDITURE_RESOURCES"/></td><td><fr:view name="item" property="value"/></td>
+			<td class="nowrap"><bean:message key="label.value" bundle="EXPENDITURE_RESOURCES"/>:</td><td><fr:view name="item" property="value"/></td>
 		</tr>
 		<tr>
-			 <td><bean:message key="label.refundValue" bundle="EXPENDITURE_RESOURCES"/></td><td>
-			 
+			<td class="nowrap"><bean:message key="label.refundValue" bundle="EXPENDITURE_RESOURCES"/>:</td>
+			<td>
 			 	<fr:view name="item" property="realValue" type="pt.ist.expenditureTrackingSystem.domain.util.Money" layout="null-as-label"/>
-			 
-			  </td>
+			</td>
 		</tr>
 
 		<logic:notEmpty name="item" property="unitItems">

@@ -12,7 +12,7 @@
 			<div class="lic1"></div><div class="lic2"></div>
 		</li>
 		<li>
-			<html:link action="/wizard.do?method=newAcquisitionWizard">
+			<html:link action="/wizard.do?method=newAcquisitionWizard" styleClass="new">
 				<span><bean:message key="link.sideBar.process.create" bundle="EXPENDITURE_RESOURCES"/></span>
 			</html:link>
 			<span class="bar">|</span>

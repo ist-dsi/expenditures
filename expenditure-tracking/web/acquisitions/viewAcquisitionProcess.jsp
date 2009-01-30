@@ -167,7 +167,7 @@
 	<fr:view name="acquisitionProcess" property="acquisitionRequest.totalAmountsForEachPayingUnit"
 			schema="viewPayingUnitWithTotalAmount">
 		<fr:layout name="tabular">
-			<fr:property name="classes" value="tstyle5"/>
+			<fr:property name="classes" value="tstyle5 width100pc"/>
 			<fr:property name="columnClasses" value=",,nowrap,,"/>
 		</fr:layout>
 	</fr:view>

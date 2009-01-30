@@ -8,7 +8,7 @@
 
 <bean:define id="processClass" name="process" property="class.simpleName"/>
 
-<p class="mtop05">
+<p>
 	<html:link action="<%= "/acquisition" + processClass + ".do?method=viewProcess"%>" paramId="processOid" paramName="process" paramProperty="OID">
 		«  <bean:message key="link.back" bundle="EXPENDITURE_RESOURCES"/>
 	</html:link>
@@ -35,10 +35,11 @@
 	</fr:layout>
 </fr:view>
 
-
-<logic:equal name="process" property="class.name" value="pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess">
-	<html:img action="statistics.do?method=simplifiedProcessStatisticsActivityTimeChartForProcess" paramId="processId" paramName="process" paramProperty="OID"/>
-</logic:equal>
-<logic:equal name="process" property="class.name" value="pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess">
-	<html:img action="statistics.do?method=refundProcessStatisticsActivityTimeChartForProcess" paramId="processId" paramName="process" paramProperty="OID"/>
-</logic:equal>
+<div class="mtop2">
+	<logic:equal name="process" property="class.name" value="pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess">
+		<html:img action="statistics.do?method=simplifiedProcessStatisticsActivityTimeChartForProcess" paramId="processId" paramName="process" paramProperty="OID"/>
+	</logic:equal>
+	<logic:equal name="process" property="class.name" value="pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess">
+		<html:img action="statistics.do?method=refundProcessStatisticsActivityTimeChartForProcess" paramId="processId" paramName="process" paramProperty="OID"/>
+	</logic:equal>
+</div>

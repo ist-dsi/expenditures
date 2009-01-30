@@ -14,42 +14,51 @@
 </p>
 
 
-<ul>
-	<li>
-		<strong>
-			<html:link action="/acquisitionSimplifiedProcedureProcess.do?method=prepareCreateAcquisitionProcess">
-				<bean:message key="link.create.simplifiedAcquisitionProcedure" bundle="EXPENDITURE_RESOURCES"/>
-			</html:link>
-		</strong>
-		<p class="mtop025">
-			<bean:message key="message.info.acquisitionSimplifiedProcessExplanation" bundle="EXPENDITURE_RESOURCES"/>
-		</p>
-	</li>
+<div class="infoop6 mvert1">
 
-	<li>
-		<strong>
-			<html:link action="/acquisitionStandardProcedureProcess.do?method=prepareCreateAcquisitionStandardProcess">
-				<bean:message key="link.create.standardAcquisitionProcess" bundle="EXPENDITURE_RESOURCES"/>
-			</html:link>
-		</strong>
-		<p class="mtop025">
-			<bean:message key="message.info.acquisitionStandardProcessExplanation" bundle="EXPENDITURE_RESOURCES"/>
-		</p>
-	</li>
+	<ul class="mvert05" style="padding-left: 0em; list-style: none;">
+		<li class="mbottom1">
+			<p class="mvert025">
+				<strong>
+					<html:link styleClass="big" action="/acquisitionSimplifiedProcedureProcess.do?method=prepareCreateAcquisitionProcess">
+						<bean:message key="link.create.simplifiedAcquisitionProcedure" bundle="EXPENDITURE_RESOURCES"/>
+					</html:link>
+				</strong>
+			</p>
+			<p class="mvert025">
+				<bean:message key="message.info.acquisitionSimplifiedProcessExplanation" bundle="EXPENDITURE_RESOURCES"/>
+			</p>
+		</li>
+	
+		<li class="mbottom1">
+			<p class="mvert025">
+				<strong>
+					<html:link styleClass="big" action="/acquisitionStandardProcedureProcess.do?method=prepareCreateAcquisitionStandardProcess">
+						<bean:message key="link.create.standardAcquisitionProcess" bundle="EXPENDITURE_RESOURCES"/>
+					</html:link>
+				</strong>
+			</p>
+			<p class="mvert025">
+				<bean:message key="message.info.acquisitionStandardProcessExplanation" bundle="EXPENDITURE_RESOURCES"/>
+			</p>
+		</li>
+	
+	
+		<li>
+			<p class="mvert025">
+				<strong>
+					<html:link styleClass="big" action="/acquisitionRefundProcess.do?method=prepareCreateRefundProcess">
+						<bean:message key="link.create.refundProcess" bundle="EXPENDITURE_RESOURCES"/>
+					</html:link>
+				</strong>
+			</p>
+			<p class="mvert025">
+				<bean:message key="message.info.refundProcessExplanation" bundle="EXPENDITURE_RESOURCES"/>
+			</p>
+		</li>
+	</ul>
 
-
-	<li>
-		<strong>
-			<html:link action="/acquisitionRefundProcess.do?method=prepareCreateRefundProcess">
-				<bean:message key="link.create.refundProcess" bundle="EXPENDITURE_RESOURCES"/>
-			</html:link>
-		</strong>
-		<p class="mtop025">
-			<bean:message key="message.info.refundProcessExplanation" bundle="EXPENDITURE_RESOURCES"/>
-		</p>
-	</li>
-</ul>
-
+</div>
 
 		
 			

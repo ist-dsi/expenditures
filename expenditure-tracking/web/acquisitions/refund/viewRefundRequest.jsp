@@ -217,7 +217,7 @@
 			</logic:equal>
 		</logic:equal>
 	</logic:equal>
-	
+
 	<bean:define id="item" name="refundItem" toScope="request"/>
 	<jsp:include page="../commons/viewRefundItem.jsp"/>
 		<logic:notEmpty name="refundItem" property="invoices">
@@ -255,7 +255,7 @@
 						  </html:link>
 						</td>
 						</tr>
-				</logic:iterate>
+					</logic:iterate>
 				</table>
 				
 		</logic:notEmpty>

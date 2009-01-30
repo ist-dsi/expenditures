@@ -133,7 +133,7 @@ margin-left: 30px;
 color: #999999;
 }
 #header img {
-padding: 10px 15px;
+padding: 10px 15px 10px 25px;
 }
 #header form {
 color: #fff;
@@ -153,7 +153,7 @@ text-transform: uppercase;
 position: absolute;
 bottom: 0;
 margin: 0;
-padding: 0 10px 0 50px;
+padding: 0 10px 0 25px;
 list-style: none;
 }
 #mainnav ul li {
@@ -262,7 +262,7 @@ color: #4b7d99;
 div.top #secnav ul {
 bottom: 0;
 margin: 0;
-padding: 9px 10px 0 52px;
+padding: 9px 10px 0 23px;
 }
 div.top #secnav ul li {
 bottom: 0;
@@ -283,6 +283,11 @@ div.top #secnav a span { color: #4b7d99; }
 div.top #secnav a:hover span { text-decoration: underline !important; }
 div.top #secnav a span { float: none; }
 
+div.top #secnav a.new {
+margin-left: 4px;
+padding-left: 15px;
+background: url(../images/plus01.gif) 0px 0.55em no-repeat;
+}
 
 div.top #secnav div.c1 {
 background: url(../images/corner5_02.gif) no-repeat;
@@ -562,6 +567,7 @@ width: 150px;
 table.thmiddle th { vertical-align: middle; }
 table.thlight th { font-weight: normal; }
 table.thleft th { text-align: left; }
+table.thcenter th { text-align: centerw; }
 table.structural th, table.structural td, table.structural tr { padding: 0; margin: 0; }
 
 .aleft { text-align: left !important; }
@@ -581,9 +587,11 @@ table.structural th, table.structural td, table.structural tr { padding: 0; marg
 .mtop15 { margin-top: 1.5em !important; }
 .mtop2 { margin-top: 2em !important; }
 .mvert0 { margin-top: 0em !important; margin-bottom: 0em !important; }
+.mvert025 { margin-top: 0.25em !important; margin-bottom: 0.25em !important; }
 .mvert05 { margin-top: 0.5em !important; margin-bottom: 0.5em !important; }
 .mvert1 { margin-top: 1em !important; margin-bottom: 1em !important; }
 .mvert15 { margin-top: 1.5em !important; margin-bottom: 1.5em !important; }
+.mvert2 { margin-top: 2em !important; margin-bottom: 2em !important; }
 .aleft { text-align: left !important; }
 .acenter { text-align: center !important; }
 .aright { text-align: right !important; }
@@ -598,6 +606,8 @@ span.invalid { color: #a00; font-weight: bold; }
 .inputsize225px input { width: 225px; }
 .inputsize250px input { width: 250px; }
 .inputsize300px input { width: 300px; }
+.inputsize350px input { width: 350px; }
+.inputsize400px input { width: 400px; }
 
 div.infoop1 {
 border: 1px dotted #aaa;
@@ -652,6 +662,12 @@ div.error1 span {
 color: #cc1500;
 }
 
+div.infoop6 a.big {
+padding: 4px 0;
+}
+div.infoop6 a.big:hover {
+background: #fef7e2;
+}
 
 div.warning1 {
 margin: 0.75em 0;
@@ -909,7 +925,7 @@ div.item strong {
 /***** AUTO_COMPLETE *****/
 div.autoComplete {
 position:absolute;
-width:325px !important;
+width:375px !important;
 background: #fff;
 border:1px solid #888;
 margin:0px;

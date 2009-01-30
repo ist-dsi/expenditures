@@ -10,6 +10,7 @@
 
 <bean:define id="processClass" name="process" property="class.simpleName" type="java.lang.String"/>
 <bean:define id="actionMapping" value='<%="/acquisition" + processClass %>'/>
+
 <p>
 	<html:link page='<%= actionMapping + ".do?method=viewProcess"%>' paramId="processOid" paramName="process" paramProperty="OID">
 		« <bean:message key="link.back" bundle="EXPENDITURE_RESOURCES"/>
@@ -26,6 +27,7 @@
 
 
 <logic:notEmpty name="comments">
+	<div class="mvert2">
 	<logic:iterate id="comment" name="comments">
 		<div class="comment">
 			<p>
@@ -34,6 +36,7 @@
 			<div class="body"><fr:view name="comment" property="comment" layout="null-as-label" type="java.lang.String"/></div>
 		</div>
 	</logic:iterate>
+	</div>
 </logic:notEmpty>
 
 <bean:define id="processOid" name="process" property="OID"/>
@@ -48,8 +51,8 @@
 			<td>
 				<fr:edit id="comment" name="bean" slot="string" type="java.lang.String" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
 					<fr:layout name="longText">
-						<fr:property name="rows" value="5"/>
-						<fr:property name="columns" value="50"/>
+						<fr:property name="rows" value="6"/>
+						<fr:property name="columns" value="60"/>
 						<fr:property name="classes" value="form"/>
 					</fr:layout>
 				</fr:edit>

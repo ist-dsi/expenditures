@@ -5,7 +5,7 @@
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
 <h2><bean:message
-	key="title.refundProcess.create"
+	key="acquisitionProcess.title.createAcquisitionRequest"
 	bundle="ACQUISITION_RESOURCES" /></h2>
 
 <p class="mtop1 mbottom05"><strong><bean:message key="label.refund" bundle="EXPENDITURE_RESOURCES"/></strong></p>

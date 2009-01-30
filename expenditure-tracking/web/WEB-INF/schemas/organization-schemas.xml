@@ -65,8 +65,12 @@
 <schema name="editPerson"
 		type="pt.ist.expenditureTrackingSystem.domain.organization.Person"
 		bundle="ORGANIZATION_RESOURCES">
-	<slot name="username" key="person.label.username" bundle="ORGANIZATION_RESOURCES"/>
-	<slot name="name" key="person.label.name" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="username" key="person.label.username" bundle="ORGANIZATION_RESOURCES">
+		<property name="size" value="50"/>
+	</slot>
+	<slot name="name" key="person.label.name" bundle="ORGANIZATION_RESOURCES">
+		<property name="size" value="50"/>
+	</slot>
 </schema>
 
 <schema name="viewPerson"
@@ -250,7 +254,7 @@
 		<property name="format" value="${presentationName}"/>
 		<property name="minChars" value="3"/>		
 		<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.UnitAutoCompleteProvider" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-		<property name="size" value="40"/>
+		<property name="size" value="60"/>
 		<validator class="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator">
 			<property name="message" value="label.pleaseSelectOne.unit"/>
 			<property name="bundle" value="EXPENDITURE_RESOURCES"/>

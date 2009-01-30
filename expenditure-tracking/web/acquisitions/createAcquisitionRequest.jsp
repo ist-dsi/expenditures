@@ -96,9 +96,11 @@
 
 <bean:define id="urlView"><%= actionMapping %>.do?method=viewAcquisitionProcess&amp;acquisitionProcessOid=<%= acquisitionProcessOID %></bean:define>
 <fr:form action="<%= urlView %>">
+	<p class="mtop15">
 	<html:submit styleClass="inputbutton">
 		<bean:message key="button.back" bundle="EXPENDITURE_RESOURCES"/>
 	</html:submit>
+	</p>
 </fr:form>
 
 <script type="text/javascript" src="<%= request.getContextPath() + "/javaScript/switchScript.js" %>"></script>

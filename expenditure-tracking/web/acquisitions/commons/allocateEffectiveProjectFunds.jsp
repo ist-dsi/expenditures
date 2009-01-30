@@ -46,7 +46,8 @@
 				<bean:define id="usedClass" value="dnone" toScope="request"/>
 		</logic:equal>
 		<th class="<%= usedClass %>">			
-			<h4 class="dinline"><fr:view name="financerBean" property="financer.unit.presentationName"/></h4> <bean:message key="financer.label.fundAllocation.identification" bundle="ACQUISITION_RESOURCES"/>: <fr:view name="financerBean" property="fundAllocationId" type="java.lang.String"/>
+			<h4 class="dinline"><fr:view name="financerBean" property="financer.unit.presentationName"/></h4>
+			<span style="padding-left: 1em;">(<bean:message key="financer.label.fundAllocation.identification" bundle="ACQUISITION_RESOURCES"/>: <fr:view name="financerBean" property="fundAllocationId" type="java.lang.String"/>)</span>
 		</th>
 	</tr>
 	<tr>

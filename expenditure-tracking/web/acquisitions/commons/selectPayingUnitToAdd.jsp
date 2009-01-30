@@ -15,15 +15,14 @@
 <bean:define id="requestClass" name="processRequest" property="class.simpleName" toScope="request"/>
 <jsp:include page="<%= "view" + requestClass + ".jsp"%>" flush="true"/>
 
-<div class="infoop2">
-	<bean:message key="message.help.selectNumberOrName.costCenterProject" bundle="ACQUISITION_RESOURCES"/>
-</div>
+
+<p class="mtop15 mbottom1"><bean:message key="message.help.selectNumberOrName.costCenterProject" bundle="ACQUISITION_RESOURCES"/></p>
 
 <fr:edit id="unitToAdd" name="domainObjectBean" schema="select.unit.from.domain.object.bean" 
 action='<%= actionMapping + ".do?method=addPayingUnit&processOid=" + processOID%>'>
 	<fr:destination name="cancel" path='<%= actionMapping + ".do?method=viewProcess&processOid=" + processOID %>'/>
 	<fr:layout name="tabular">
-		<fr:property name="classes" value="form"/>
+		<fr:property name="classes" value="form mtop05"/>
 		<fr:property name="columnClasses" value=",,tderror"/>
 	</fr:layout>
 </fr:edit>

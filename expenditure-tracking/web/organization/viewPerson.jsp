@@ -60,7 +60,7 @@
 					</fr:layout>
 				</fr:view>
 			</td>
-			<td style="texta-align: right;">
+			<td style="text-align: right;">
 				<html:img src="https://fenix.ist.utl.pt/publico/viewHomepage.do?method=retrieveByUUID&amp;contentContextPath_PATH=/homepage"
 					paramId="uuid" paramName="person" paramProperty="username"
 					align="middle" styleClass="float: right; border: 1px solid #aaa; padding: 3px;" />
