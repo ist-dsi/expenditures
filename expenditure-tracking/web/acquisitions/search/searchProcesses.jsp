@@ -92,7 +92,7 @@
 				<fr:property name="classes" value="tstyle2 mtop05 width100pc"/>
 				<fr:property name="columnClasses" value=",,,,,,,,"/>
 				<fr:property name="sortBy" value="year=asc,acquisitionProcessNumber=asc"/>
-				<fr:property name="linkFormat(view)" value="/acquisition${class.simpleName}.do?method=viewAcquisitionProcess&acquisitionProcessOid=${OID}"/>
+				<fr:property name="linkFormat(view)" value="/acquisition${class.simpleName}.do?method=viewProcess&processOid=${OID}"/>
 				<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
 				<fr:property name="key(view)" value="link.view"/>
 				<fr:property name="order(view)" value="1"/>
