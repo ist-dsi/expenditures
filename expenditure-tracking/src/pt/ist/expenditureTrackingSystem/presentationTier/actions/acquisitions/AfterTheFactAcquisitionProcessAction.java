@@ -33,7 +33,7 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "view.afterTheFact.acquisition.process", path = "/acquisitions/viewAfterTheFactAcquisitionProcess.jsp"),
 	@Forward(name = "edit.afterTheFact.acquisition.process", path = "/acquisitions/editAfterTheFactAcquisitionProcess.jsp"),
 	@Forward(name = "receive.acquisition.invoice", path = "/acquisitions/receiveAcquisitionInvoice.jsp"),
-	@Forward(name = "show.pending.processes", path = "/acquisitionProcess.do?method=showPendingProcesses"),
+	@Forward(name = "show.pending.processes", path = "/search.do?method=search"),
 	@Forward(name = "import.afterTheFact.acquisitions", path = "/acquisitions/importAfterTheFactAcquisitions.jsp"),
 	@Forward(name = "view.import.afterTheFact.acquisitions.result", path = "/acquisitions/viewImportAfterTheFactAcquisitionsResult.jsp"),
 	@Forward(name = "list.afterTheFact.imports", path = "/acquisitions/listImportAfterTheFactAcquisitionsResult.jsp") })
