@@ -321,6 +321,20 @@ public class RefundProcessAction extends PaymentProcessAction {
 	return viewProcess(mapping, form, request, response);
     }
 
+    public ActionForward invalidValueRefundInvoice(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+
+	List<EditRefundInvoiceBean> beans = getRenderedObject("invoiceBeans");
+
+	RenderUtils.invalidateViewState();
+	addErrorMessage("message.info.mustFillAllFields", getBundle());
+	RefundItem item = getRequestItem(request);
+	request.setAttribute("item", item);
+	request.setAttribute("invoices", beans);
+	return mapping.findForward("edit.refund.invoice");
+
+    }
+
     public ActionForward executeRefundPerson(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final RefundProcess refundProcess = getProcess(request);
