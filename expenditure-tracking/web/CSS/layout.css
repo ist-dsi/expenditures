@@ -568,7 +568,10 @@ table.thmiddle th { vertical-align: middle; }
 table.thlight th { font-weight: normal; }
 table.thleft th { text-align: left; }
 table.thcenter th { text-align: centerw; }
-table.structural th, table.structural td, table.structural tr { padding: 0; margin: 0; }
+
+table.structural { border-collapse: collapse; }
+table.structural th { padding: 0 0.5em 0 0; margin: 0; }
+table.structural td { padding: 0 0.2em 0 0; margin: 0; }
 
 .aleft { text-align: left !important; }
 .aright { text-align: right !important; }
@@ -1194,3 +1197,5 @@ color: #888 !important;
 strong.asd a {
 color: #888 !important;
 }
+
+table table { border-collapse: collapse; } /* auto-complete input left margin fix */

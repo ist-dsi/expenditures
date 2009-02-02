@@ -18,11 +18,11 @@
 	
 	<bean:size id="listSize" name="processes"/>
 	
-	<p class="mbottom05"><em><bean:message key="label.numberOfFoundProcesses" bundle="ACQUISITION_RESOURCES" arg0="<%= listSize.toString() %>"/>.</em></p>
+	<p class="mtop15 mbottom05"><em><bean:message key="label.numberOfFoundProcesses" bundle="ACQUISITION_RESOURCES" arg0="<%= listSize.toString() %>"/>.</em></p>
 	
 	<fr:view name="processes" schema="list.processes">
 		<fr:layout name="tabular">
-			<fr:property name="classes" value="tstyle2 mtop15"/>		
+			<fr:property name="classes" value="tstyle2 mtop05"/>		
 		</fr:layout>
 	</fr:view>
 </logic:notEmpty>

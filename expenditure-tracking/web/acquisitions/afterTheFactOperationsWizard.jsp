@@ -4,8 +4,8 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 
 <h2><bean:message key="title.registerAcquisitions" bundle="EXPENDITURE_RESOURCES"/></h2>
-<p>
-	<bean:message key="message.info.afterTheFactProcessIntroduction" bundle="EXPENDITURE_RESOURCES"/>
+<p class="mtop05">
+	<bean:message key="message.info.afterTheFactProcessIntroduction" bundle="EXPENDITURE_RESOURCES"/>.
 </p>
 <div class="infoop1">
 	<ul>

@@ -24,14 +24,12 @@
 		<div class="infoop6">
 			<span>
 				<strong><html:link page='<%= "/search.do?method=viewSearch&searchOID=" + searchOID%>'><fr:view name="systemSearch" property="searchName"/></html:link></strong>
-				(<logic:equal name="systemSearch" property="searchDefaultForCurrentUser" value="false"> 
-					<html:link page='<%= "/search.do?method=setSearchAsDefault&savedSearchOID=" + searchOID%>'>
-						<bean:message key="link.setAsDefault" bundle="EXPENDITURE_RESOURCES"/>
-					</html:link>
+				<logic:equal name="systemSearch" property="searchDefaultForCurrentUser" value="false"> 
+					(<html:link page='<%= "/search.do?method=setSearchAsDefault&savedSearchOID=" + searchOID%>'><bean:message key="link.setAsDefault" bundle="EXPENDITURE_RESOURCES"/></html:link>)
 				</logic:equal>
 				<logic:equal name="systemSearch" property="searchDefaultForCurrentUser" value="true">
-					<bean:message key="label.default" bundle="EXPENDITURE_RESOURCES"/>
-				</logic:equal>)
+					(<strong style="color: #777;"><bean:message key="label.default" bundle="EXPENDITURE_RESOURCES"/></strong>)
+				</logic:equal>
 			</span>
 			<p>
 				<fr:view name="systemSearch"  schema="viewSavedSearch">
@@ -44,24 +42,21 @@
 	</li>
 </logic:iterate>
 
-
 <logic:iterate id="userSearch" name="userSearches" >
 	<bean:define id="searchOID" name="userSearch" property="OID"/>
 	<li class="mvert1">
 		<div class="infoop6">
 			<span>
 				<strong><html:link page='<%= "/search.do?method=viewSearch&searchOID=" + searchOID%>'><fr:view name="userSearch" property="searchName"/></html:link></strong>
-				(<html:link page='<%= "/search.do?method=deleteMySearch&savedSearchOID=" + searchOID%>'>
-						<bean:message key="link.delete" bundle="EXPENDITURE_RESOURCES"/>
-					</html:link> |
+				(<html:link page='<%= "/search.do?method=deleteMySearch&savedSearchOID=" + searchOID%>'><bean:message key="link.delete" bundle="EXPENDITURE_RESOURCES"/></html:link> |
 				<logic:equal name="userSearch" property="searchDefaultForCurrentUser" value="false"> 
 					<html:link page='<%= "/search.do?method=setSearchAsDefault&savedSearchOID=" + searchOID%>'>
-						<bean:message key="link.setAsDefault" bundle="EXPENDITURE_RESOURCES"/>
-					</html:link>
+						<bean:message key="link.setAsDefault" bundle="EXPENDITURE_RESOURCES"/>)
+					</html:link>)
 				</logic:equal>
 				<logic:equal name="userSearch" property="searchDefaultForCurrentUser" value="true">
-					<bean:message key="label.default" bundle="EXPENDITURE_RESOURCES"/>
-				</logic:equal>)
+					<strong style="color: #777;"><bean:message key="label.default" bundle="EXPENDITURE_RESOURCES"/></strong>)
+				</logic:equal>
 			</span>
 			<p>
 				<fr:view name="userSearch" schema="viewSavedSearch">

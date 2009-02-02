@@ -21,8 +21,7 @@
 				<fr:form action="/search.do?method=mySearches">
 					<fr:edit id="mySearches" name="mySearches" schema='viewMySavedSearches'>
 						<fr:layout name="tabular">
-							<fr:property name="classes" value="structural thmiddle thlight"/>
-							<fr:property name="style" value="display: inline;"/>
+							<fr:property name="classes" value="structural thmiddle thlight mvert05"/>
 						</fr:layout>
 						<fr:destination name="mySearch" path="/search.do?method=mySearches"/>
 					</fr:edit>
@@ -40,7 +39,7 @@
 	<fr:form action="/search.do?method=search">
 		<fr:edit id="searchBean" name="searchBean" schema='<%= schema %>' >
 			<fr:layout name="tabular">
-					<fr:property name="classes" value="form"/>
+				<fr:property name="classes" value="form"/>
 			</fr:layout>
 			<fr:destination name="typeSelector" path="/search.do?method=changeSelectedClass"/>
 		</fr:edit>
@@ -75,15 +74,22 @@
 			</script>
 		</logic:present>
 		<div class="warning2">
-		<fr:form id="saveForm" action="/search.do?method=saveSearch">
-			<fr:edit id="beanToSave" name="searchBean" visible="false"/>
-	 		 <bean:message key="label.name" bundle="EXPENDITURE_RESOURCES"/>: <fr:edit id="searchName" name="savingName" slot="string"/>
-			<html:submit styleClass="inputbutton"><bean:message key="label.save" bundle="EXPENDITURE_RESOURCES"/> </html:submit>
-			<bean:define id="cancelLabel">
-				<bean:message key="renderers.form.cancel.name" bundle="RENDERER_RESOURCES"/>
-			</bean:define>
-			<input type="button" class="inputbutton" onclick="javascript:document.getElementById('saveSearch').style.display='none';" value="<%= cancelLabel %>"/> 
-		</fr:form>
+			<div style="padding: 0.5em 0;">
+				<fr:form id="saveForm" action="/search.do?method=saveSearch">
+					<fr:edit id="beanToSave" name="searchBean" visible="false"/>
+			 		<bean:message key="label.name" bundle="EXPENDITURE_RESOURCES"/>:
+			 		<fr:edit id="searchName" name="savingName" slot="string">
+				 		<fr:layout>
+							<fr:property name="size" value="40"/>
+						</fr:layout>
+			 		</fr:edit>
+					<html:submit styleClass="inputbutton"><bean:message key="label.save" bundle="EXPENDITURE_RESOURCES"/></html:submit>
+					<bean:define id="cancelLabel">
+						<bean:message key="renderers.form.cancel.name" bundle="RENDERER_RESOURCES"/>
+					</bean:define>
+					<input type="button" class="inputbutton" onclick="javascript:document.getElementById('saveSearch').style.display='none';" value="<%= cancelLabel %>"/> 
+				</fr:form>
+			</div>
 		</div>
 	</div>
 		
