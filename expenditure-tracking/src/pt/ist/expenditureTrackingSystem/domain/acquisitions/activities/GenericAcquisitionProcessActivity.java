@@ -1,6 +1,8 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.activities;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -14,6 +16,7 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.domain.processes.ActivityException;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
+import pt.utl.ist.fenix.tools.smtp.EmailSender;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 
 public abstract class GenericAcquisitionProcessActivity extends AbstractActivity<RegularAcquisitionProcess> {
@@ -27,14 +30,9 @@ public abstract class GenericAcquisitionProcessActivity extends AbstractActivity
 	Person person = process.getRequestor();
 	ResourceBundle bundle = ResourceBundle.getBundle("resources/ExpenditureResources", Language.getLocale());
 	if (person.getOptions().getReceiveNotificationsByEmail()) {
-	    try {
-		// EmailSender.sendEmail(person.getUsername(),
-		// bundle.getString("process.label.notifyTopic"), bundle
-		// .getString("process.label.notifyMessage"));
-	    } catch (XFireRuntimeException e) {
-		e.printStackTrace();
-		throw new ActivityException("activities.messages.exception.webserviceProblem", getLocalizedName());
-	    }
+	    EmailSender.send("Central Compras", "noreply@ist.utl.pt", new String[] { "noreply@ist.utl.pt" }, Collections
+		    .singletonList(person.getEmail()), Collections.EMPTY_LIST, Collections.EMPTY_LIST, bundle
+		    .getString("process.label.notifyTopic"), bundle.getString("process.label.notifyMessage"));
 	}
     }
 
@@ -50,16 +48,10 @@ public abstract class GenericAcquisitionProcessActivity extends AbstractActivity
 	}
 
 	ResourceBundle bundle = ResourceBundle.getBundle("resources/ExpenditureResources", Language.getLocale());
-
-	try {
-	    for (Person person : people) {
-		// EmailSender.sendEmail(person.getUsername(),
-		// bundle.getString("process.label.notifyTopic"), bundle
-		// .getString("process.label.notifyMessage"));
-	    }
-	} catch (XFireRuntimeException e) {
-	    e.printStackTrace();
-	    throw new ActivityException("activities.messages.exception.webserviceProblem", getLocalizedName());
+	for (Person person : people) {
+	    EmailSender.send("Central Compras", "noreply@ist.utl.pt", new String[] { "noreply@ist.utl.pt" }, Collections
+		    .singletonList(person.getEmail()), Collections.EMPTY_LIST, Collections.EMPTY_LIST, bundle
+		    .getString("process.label.notifyTopic"), bundle.getString("process.label.notifyMessage"));
 	}
     }
 
