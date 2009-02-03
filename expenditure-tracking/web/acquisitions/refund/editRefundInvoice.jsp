@@ -23,8 +23,6 @@
 <div class="dinline forminline">
 <fr:form action='<%= actionMapping + ".do?method=editRefundInvoice&refundProcessOid=" + processOid + "&itemOid=" + itemOid%>'>
 	<fr:edit id="invoiceBeans" name="invoices" visible="false"/>
-		
-	
 	
 	<table class="tstyle5 mbottom1">
 		<tr>
@@ -53,7 +51,6 @@
 					<fr:layout>
 						<fr:property name="size" value="10"/>
 					</fr:layout>
-					<fr:destination name="invalid" path='<%= actionMapping + ".do?method=invalidValueRefundInvoice&itemOid=" + itemOid %>'/>
 			</fr:edit>
 		</td>
 		<td>
@@ -61,7 +58,6 @@
 					<fr:layout>
 						<fr:property name="size" value="10"/>
 					</fr:layout>
-					<fr:destination name="invalid" path='<%= actionMapping + ".do?method=invalidValueRefundInvoice&itemOid=" + itemOid %>'/>
 			</fr:edit>
 		</td>
 		<td>
@@ -69,7 +65,6 @@
 					<fr:layout>
 						<fr:property name="size" value="10"/>
 					</fr:layout>
-					<fr:destination name="invalid" path='<%= actionMapping + ".do?method=invalidValueRefundInvoice&itemOid=" + itemOid %>'/>
 			</fr:edit>
 		</td>
 		</tr>

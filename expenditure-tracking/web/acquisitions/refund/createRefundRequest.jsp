@@ -8,7 +8,12 @@
 	key="acquisitionProcess.title.createAcquisitionRequest"
 	bundle="ACQUISITION_RESOURCES" /></h2>
 
-<p class="mtop1 mbottom05"><strong><bean:message key="label.refund" bundle="EXPENDITURE_RESOURCES"/></strong></p>
+<div class="infoop2">
+	<bean:message key="acquisitionProcess.refund.message.note" bundle="ACQUISITION_RESOURCES"/>
+</div>
+
+
+<p class="mtop15 mbottom05"><strong><bean:message key="label.refund" bundle="EXPENDITURE_RESOURCES"/></strong></p>
 
 <bean:define id="selection" value="internalPerson"/>
 
@@ -19,7 +24,7 @@
 <fr:form action="/acquisitionRefundProcess.do?method=createRefundProcess">
 	<fr:edit id="createRefundProcess" name="bean" schema='<%= "createRefundProcess." + selection %>'>
 		<fr:layout name="tabular">
-			<fr:property name="classes" value="form" />
+			<fr:property name="classes" value="form mtop05" />
 			<fr:property name="columnClasses" value=",,tderror" />
 		</fr:layout>
 		<fr:destination name="postBack" path="/acquisitionRefundProcess.do?method=createRefundProcessPostBack"/>
