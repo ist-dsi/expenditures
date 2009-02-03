@@ -87,3 +87,11 @@ update FILE set KEY_FILE_CONTENT = ID_INTERNAL;
 alter table SAVED_SEARCH add column OJB_CONCRETE_CLASS text;
 
 
+
+
+
+-- Inserted at 2009-02-03T12:51:50.848Z
+
+alter table PERSON add column EMAIL text;
+
+
