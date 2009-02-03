@@ -58,6 +58,7 @@
 		</tstamp>
 		<echo file="${build.home.webinf.classes}/.build.version">${build.version}</echo>
 		<copy file="build.properties" tofile="${build.home.webinf.classes}/configuration.properties"/>
+		<copy file="build.properties" tofile="${build.home.webinf.classes}/.build.properties"/>
 		<copy todir="${build.home.webinf.classes}/">
 			<fileset dir="${config}"/>
 		</copy>
