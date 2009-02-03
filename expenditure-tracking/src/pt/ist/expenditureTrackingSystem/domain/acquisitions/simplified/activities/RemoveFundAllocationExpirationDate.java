@@ -11,13 +11,15 @@ public class RemoveFundAllocationExpirationDate extends GenericAcquisitionProces
     @Override
     protected boolean isAccessible(RegularAcquisitionProcess process) {
 	User user = UserView.getUser();
-	return (process.isAccountingEmployee() && !hasAnyAssociatedProject(process))
-		|| process.isProjectAccountingEmployee();
+	return (process.isAccountingEmployee() && !hasAnyAssociatedProject(process)) || process.isProjectAccountingEmployee();
     }
 
     @Override
     protected boolean isAvailable(RegularAcquisitionProcess process) {
-	return (checkActiveConditions(process) || checkCanceledConditions(process)) && !process.hasAnyAllocatedFunds() && process.getFundAllocationExpirationDate() != null;
+	return (checkActiveConditions(process) || checkCanceledConditions(process))
+		&& !process.hasAnyAllocatedFunds()
+		&& ((!process.getSkipSupplierFundAllocation() && process.getFundAllocationExpirationDate() != null) || (process
+			.getSkipSupplierFundAllocation() && process.isPendingFundAllocation()));
     }
 
     private boolean checkActiveConditions(RegularAcquisitionProcess process) {
