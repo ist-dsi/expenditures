@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import org.joda.time.DateTime;
 
-import pt.ist.expenditureTrackingSystem.domain.util.Address;
+import myorg.domain.util.Address;
 
 public class CreateSupplierBean implements Serializable {
 

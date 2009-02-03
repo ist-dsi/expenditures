@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundItem;
-import pt.ist.expenditureTrackingSystem.domain.util.Money;
+import myorg.domain.util.Money;
 import pt.ist.fenixWebFramework.util.DomainReference;
 
 public class RefundItemBean implements Serializable {

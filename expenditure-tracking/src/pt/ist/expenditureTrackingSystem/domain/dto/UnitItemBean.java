@@ -6,7 +6,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestIt
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.UnitItem;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
-import pt.ist.expenditureTrackingSystem.domain.util.Money;
+import myorg.domain.util.Money;
 import pt.ist.fenixWebFramework.util.DomainReference;
 
 public class UnitItemBean implements Serializable {

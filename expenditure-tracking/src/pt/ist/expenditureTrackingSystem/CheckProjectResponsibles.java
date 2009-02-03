@@ -6,12 +6,12 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import pt.ist.expenditureTrackingSystem._development.PropertiesManager;
+import myorg._development.PropertiesManager;
+import myorg.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Project;
-import pt.ist.expenditureTrackingSystem.domain.util.Money;
 import pt.ist.fenixWebFramework.FenixWebFramework;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.utl.ist.fenix.tools.util.FileUtils;
@@ -23,7 +23,8 @@ public class CheckProjectResponsibles {
 
     public static void init() {
 	String domainModelPath = "web/WEB-INF/classes/domain_model.dml";
-	FenixWebFramework.initialize(PropertiesManager.getFenixFrameworkConfig(domainModelPath));
+	// TODO : reimplmenent as scheduled script
+	//FenixWebFramework.initialize(PropertiesManager.getFenixFrameworkConfig(domainModelPath));
 	ExpenditureTrackingSystem.initialize(FenixWebFramework.getConfig());
     }
 

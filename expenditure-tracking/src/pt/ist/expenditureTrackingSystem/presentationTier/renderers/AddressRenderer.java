@@ -1,6 +1,6 @@
 package pt.ist.expenditureTrackingSystem.presentationTier.renderers;
 
-import pt.ist.expenditureTrackingSystem.domain.util.Address;
+import myorg.domain.util.Address;
 import pt.ist.fenixWebFramework.renderers.OutputRenderer;
 import pt.ist.fenixWebFramework.renderers.components.HtmlComponent;
 import pt.ist.fenixWebFramework.renderers.components.HtmlTable;

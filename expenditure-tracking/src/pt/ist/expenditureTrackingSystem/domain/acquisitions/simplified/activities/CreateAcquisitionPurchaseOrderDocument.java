@@ -14,7 +14,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestIt
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PurchaseOrderDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
-import pt.ist.expenditureTrackingSystem.domain.util.Address;
+import myorg.domain.util.Address;
 import pt.ist.expenditureTrackingSystem.util.ReportUtils;
 
 public class CreateAcquisitionPurchaseOrderDocument extends GenericAcquisitionProcessActivity {

@@ -20,7 +20,7 @@ import pt.ist.expenditureTrackingSystem.domain.announcements.AnnouncementProcess
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.AuthorizationBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreatePersonBean;
-import pt.ist.expenditureTrackingSystem.domain.util.Address;
+import myorg.domain.util.Address;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.pstm.Transaction;
 

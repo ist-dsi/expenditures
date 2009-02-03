@@ -16,7 +16,7 @@ import pt.ist.fenixWebFramework.struts.annotations.Forward;
 import pt.ist.fenixWebFramework.struts.annotations.Forwards;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
-@Mapping( path="/authenticationAction" )
+@Mapping( path="/expendituresAuthenticationAction" )
 @Forwards( { @Forward(name="forward", path="/home.do?method=firstPage", redirect=true) } )
 public class AuthenticationAction extends BaseAction {
 

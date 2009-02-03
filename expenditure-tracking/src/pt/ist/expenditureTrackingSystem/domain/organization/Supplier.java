@@ -9,8 +9,8 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTh
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateSupplierBean;
-import pt.ist.expenditureTrackingSystem.domain.util.Address;
-import pt.ist.expenditureTrackingSystem.domain.util.Money;
+import myorg.domain.util.Address;
+import myorg.domain.util.Money;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.pstm.Transaction;
 

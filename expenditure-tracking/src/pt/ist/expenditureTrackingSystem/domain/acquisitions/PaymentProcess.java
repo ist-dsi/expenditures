@@ -13,7 +13,7 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Project;
 import pt.ist.expenditureTrackingSystem.domain.organization.SubProject;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericLog;
-import pt.ist.expenditureTrackingSystem.domain.util.Money;
+import myorg.domain.util.Money;
 import pt.ist.fenixWebFramework.security.UserView;
 
 public abstract class PaymentProcess extends PaymentProcess_Base {

@@ -10,8 +10,8 @@ import org.joda.time.LocalDate;
 import pt.ist.expenditureTrackingSystem.domain.dto.PayingUnitTotalBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
-import pt.ist.expenditureTrackingSystem.domain.util.ByteArray;
-import pt.ist.expenditureTrackingSystem.domain.util.Money;
+import myorg.domain.util.ByteArray;
+import myorg.domain.util.Money;
 import pt.ist.fenixframework.pstm.Transaction;
 
 public abstract class Acquisition extends Acquisition_Base {

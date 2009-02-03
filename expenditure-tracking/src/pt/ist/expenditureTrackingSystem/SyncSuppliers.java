@@ -7,10 +7,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import pt.ist.expenditureTrackingSystem._development.PropertiesManager;
+import myorg.domain.util.Address;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
-import pt.ist.expenditureTrackingSystem.domain.util.Address;
 import pt.ist.expenditureTrackingSystem.persistenceTier.ExternalDbOperation;
 import pt.ist.expenditureTrackingSystem.persistenceTier.ExternalDbQuery;
 import pt.ist.fenixWebFramework.FenixWebFramework;
@@ -144,7 +143,8 @@ public class SyncSuppliers {
 
     public static void init() {
 	String domainModelPath = "web/WEB-INF/classes/domain_model.dml";
-	FenixWebFramework.initialize(PropertiesManager.getFenixFrameworkConfig(domainModelPath));
+	// TODO : reimplmenent as scheduled script
+	//FenixWebFramework.initialize(PropertiesManager.getFenixFrameworkConfig(domainModelPath));
 	ExpenditureTrackingSystem.initialize(FenixWebFramework.getConfig());
     }
 

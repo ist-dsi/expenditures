@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import pt.ist.expenditureTrackingSystem._development.PropertiesManager;
+import myorg._development.PropertiesManager;
 
 public abstract class ExternalDbOperation {
 

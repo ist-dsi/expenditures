@@ -64,7 +64,7 @@
 				<tr>
 					<td class="nowrap"><bean:message key="acquisitionRequestItem.label.additionalCosts" bundle="ACQUISITION_RESOURCES"/>:</td>
 					<td class="aright">
-						<fr:view name="itemBean" property="additionalCostValue" type="pt.ist.expenditureTrackingSystem.domain.util.Money">
+						<fr:view name="itemBean" property="additionalCostValue" type="myorg.domain.util.Money">
 							<fr:layout name="null-as-label">
 								<fr:property name="subLayout" value="default"/>
 							</fr:layout>

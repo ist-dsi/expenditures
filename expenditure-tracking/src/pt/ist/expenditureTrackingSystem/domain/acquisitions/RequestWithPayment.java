@@ -5,7 +5,7 @@ import java.util.Set;
 
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
-import pt.ist.expenditureTrackingSystem.domain.util.Money;
+import myorg.domain.util.Money;
 
 public abstract class RequestWithPayment extends RequestWithPayment_Base {
 

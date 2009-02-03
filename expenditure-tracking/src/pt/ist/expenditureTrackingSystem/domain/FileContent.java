@@ -1,6 +1,6 @@
 package pt.ist.expenditureTrackingSystem.domain;
 
-import pt.ist.expenditureTrackingSystem.domain.util.ByteArray;
+import myorg.domain.util.ByteArray;
 import pt.ist.fenixframework.pstm.Transaction;
 
 public class FileContent extends FileContent_Base {

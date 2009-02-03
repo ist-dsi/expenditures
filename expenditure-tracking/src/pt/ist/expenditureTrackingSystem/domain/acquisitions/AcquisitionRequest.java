@@ -13,8 +13,8 @@ import pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
-import pt.ist.expenditureTrackingSystem.domain.util.ByteArray;
-import pt.ist.expenditureTrackingSystem.domain.util.Money;
+import myorg.domain.util.ByteArray;
+import myorg.domain.util.Money;
 
 public class AcquisitionRequest extends AcquisitionRequest_Base {
 

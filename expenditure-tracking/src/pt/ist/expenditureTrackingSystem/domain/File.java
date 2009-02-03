@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.activation.MimetypesFileTypeMap;
 
-import pt.ist.expenditureTrackingSystem.domain.util.ByteArray;
+import myorg.domain.util.ByteArray;
 import pt.ist.fenixframework.pstm.Transaction;
 
 public class File extends File_Base {

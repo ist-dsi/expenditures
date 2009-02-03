@@ -22,7 +22,7 @@ import pt.ist.fenixWebFramework.struts.annotations.Forward;
 import pt.ist.fenixWebFramework.struts.annotations.Forwards;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
-@Mapping(path = "/home")
+@Mapping(path = "/expendituresHome")
 @Forwards( { @Forward(name = "page.hello", path = "/hello.jsp"),
 	@Forward(name = "view.requests", path = "public/viewRequestsForProposal.jsp"),
 	@Forward(name = "view.request.process", path = "public/viewRequestProcess.jsp"),

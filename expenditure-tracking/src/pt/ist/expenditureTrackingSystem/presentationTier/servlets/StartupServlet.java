@@ -4,7 +4,7 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
-import pt.ist.expenditureTrackingSystem._development.PropertiesManager;
+import myorg._development.PropertiesManager;
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.MyOwnProcessesSearch;
@@ -20,7 +20,8 @@ public class StartupServlet extends HttpServlet {
     public void init(ServletConfig config) throws ServletException {
 	super.init(config);
 	String domainModelPath = getServletContext().getRealPath(getInitParameter("domainmodel"));
-	FenixWebFramework.initialize(PropertiesManager.getFenixFrameworkConfig(domainModelPath));
+	// TODO : delte this file... integrate with myorg stuff
+	//FenixWebFramework.initialize(PropertiesManager.getFenixFrameworkConfig(domainModelPath));
 	ExpenditureTrackingSystem.initialize(FenixWebFramework.getConfig());
 
 	final String managerUsernames = PropertiesManager.getProperty("manager.usernames");

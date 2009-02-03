@@ -14,7 +14,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.ImportF
 import pt.ist.expenditureTrackingSystem.domain.dto.Issue.IssueType;
 import pt.ist.expenditureTrackingSystem.domain.dto.Issue.IssueTypeLevel;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
-import pt.ist.expenditureTrackingSystem.domain.util.Money;
+import myorg.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.presentationTier.util.FileUploadBean;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.utl.ist.fenix.tools.util.StringNormalizer;

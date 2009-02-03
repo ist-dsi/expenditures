@@ -7,8 +7,8 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.organization.DeliveryInfo;
-import pt.ist.expenditureTrackingSystem.domain.util.Address;
-import pt.ist.expenditureTrackingSystem.domain.util.Money;
+import myorg.domain.util.Address;
+import myorg.domain.util.Money;
 import pt.ist.fenixWebFramework.util.DomainReference;
 
 public class AcquisitionRequestItemBean implements Serializable {

@@ -4,9 +4,9 @@ package pt.ist.expenditureTrackingSystem.domain;
 valueType org.joda.time.DateTime as DateTime;
 valueType org.joda.time.LocalDate as LocalDate;
 
-valueType pt.ist.expenditureTrackingSystem.domain.util.Address as Address;
-valueType pt.ist.expenditureTrackingSystem.domain.util.ByteArray as ByteArray;
-valueType pt.ist.expenditureTrackingSystem.domain.util.Money as Money;
+valueType myorg.domain.util.Address as Address;
+valueType myorg.domain.util.ByteArray as ByteArray;
+valueType myorg.domain.util.Money as Money;
 valueType pt.utl.ist.fenix.tools.util.Strings as Strings;
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType as AcquisitionProcessStateType;
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType as RefundProcessStateType;

@@ -268,7 +268,7 @@
 						<td class="aright"><fr:view name="itemResume" property="unitValue"/></td>
 						<td class="aright"><fr:view name="itemResume" property="totalVatValue"/></td>
 						<td class="aright">
-							<fr:view name="itemResume" property="additionalCostValue" type="pt.ist.expenditureTrackingSystem.domain.util.Money">
+							<fr:view name="itemResume" property="additionalCostValue" type="myorg.domain.util.Money">
 								<fr:layout name="null-as-label">
 									<fr:property name="subLayout" value="default"/>
 								</fr:layout>

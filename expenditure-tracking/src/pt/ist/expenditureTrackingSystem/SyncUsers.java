@@ -5,7 +5,6 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-import pt.ist.expenditureTrackingSystem._development.PropertiesManager;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.fenixWebFramework.FenixWebFramework;
@@ -16,7 +15,8 @@ public class SyncUsers {
 
     public static void init() {
 	String domainModelPath = "web/WEB-INF/classes/domain_model.dml";
-	FenixWebFramework.initialize(PropertiesManager.getFenixFrameworkConfig(domainModelPath));
+	// TODO : reimplmenent as scheduled script
+	//FenixWebFramework.initialize(PropertiesManager.getFenixFrameworkConfig(domainModelPath));
 	ExpenditureTrackingSystem.initialize(FenixWebFramework.getConfig());
     }
 

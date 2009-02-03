@@ -1,6 +1,6 @@
 package pt.ist.expenditureTrackingSystem.presentationTier.renderers.validator;
 
-import pt.ist.expenditureTrackingSystem.domain.util.Money;
+import myorg.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.presentationTier.renderers.MoneyInputRenderer;
 import pt.ist.fenixWebFramework.renderers.validators.HtmlChainValidator;
 import pt.ist.fenixWebFramework.renderers.validators.HtmlValidator;

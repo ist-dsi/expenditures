@@ -580,7 +580,7 @@ Documentation:
 	
 	<renderer type="java.lang.String" layout="slot-as-label" class="pt.ist.fenixWebFramework.renderers.SlotAsLabelRenderer"/>
 
-	<renderer type="pt.ist.expenditureTrackingSystem.domain.util.Money" class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.MoneyRenderer"/>
+	<renderer type="myorg.domain.util.Money" class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.MoneyRenderer"/>
 		
 	<renderer type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess" layout="process-state" class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.AcquisitionProcessStateRenderer">
 	    	<property name="classes" value="flow"/>
@@ -598,7 +598,7 @@ Documentation:
 	    	<property name="failedStateClass" value="red"/>
 	</renderer>
 
-	<renderer mode="input" type="pt.ist.expenditureTrackingSystem.domain.util.Address" class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.AddressInputRenderer">
+	<renderer mode="input" type="myorg.domain.util.Address" class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.AddressInputRenderer">
 		<property name="bundle" value="ORGANIZATION_RESOURCES"/>
 		<property name="line1Key" value="address.label.line1"/>
 		<property name="line2Key" value="address.label.line2"/>
@@ -613,9 +613,9 @@ Documentation:
 		<property name="countrySize" value="25"/>
 	</renderer>
 	
-	<renderer  type="pt.ist.expenditureTrackingSystem.domain.util.Address" class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.AddressRenderer">
+	<renderer  type="myorg.domain.util.Address" class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.AddressRenderer">
 	</renderer>
 
-	<renderer mode="input" type="pt.ist.expenditureTrackingSystem.domain.util.Money" class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.MoneyInputRenderer" />
+	<renderer mode="input" type="myorg.domain.util.Money" class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.MoneyInputRenderer" />
 	
 </renderers-config>
