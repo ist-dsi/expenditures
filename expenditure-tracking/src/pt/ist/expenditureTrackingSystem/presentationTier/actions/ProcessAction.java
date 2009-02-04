@@ -85,7 +85,8 @@ public abstract class ProcessAction extends BaseAction {
 
 	request.setAttribute("comments", comments);
 	request.setAttribute("bean", new VariantBean());
-	return mapping.findForward("view.comments");
+
+	return forward(request, "/acquisitions/viewComments.jsp");
     }
 
     public ActionForward addComment(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -108,7 +109,7 @@ public abstract class ProcessAction extends BaseAction {
 	request.setAttribute("bean", bean);
 	request.setAttribute("process", process);
 
-	return mapping.findForward("generic.upload");
+	return forward(request, "/acquisitions/genericUpload.jsp");
     }
 
     public ActionForward genericUpload(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
