@@ -1,0 +1,5 @@
+
+relation MyOrgExpenditureTrackingSystem {
+	myorg.domain.MyOrg playsRole myOrg;
+	pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
+}

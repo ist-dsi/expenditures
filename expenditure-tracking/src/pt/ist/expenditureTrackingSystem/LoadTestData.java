@@ -37,7 +37,7 @@ public class LoadTestData {
 	String domainModelPath = "web/WEB-INF/classes/domain_model.dml";
 	// TODO : reimplmenent as scheduled script
 	//FenixWebFramework.initialize(PropertiesManager.getFenixFrameworkConfig(domainModelPath));
-	ExpenditureTrackingSystem.initialize(FenixWebFramework.getConfig());
+	//ExpenditureTrackingSystem.initialize(FenixWebFramework.getConfig());
     }
 
     private static Set<String> createSetWithElement(final String string) {

@@ -30,7 +30,7 @@ public class LoadMissingProjects {
 	String domainModelPath = "web/WEB-INF/classes/domain_model.dml";
 	// TODO : reimplmenent as scheduled script
 	//FenixWebFramework.initialize(PropertiesManager.getFenixFrameworkConfig(domainModelPath));
-	ExpenditureTrackingSystem.initialize(FenixWebFramework.getConfig());
+	//ExpenditureTrackingSystem.initialize(FenixWebFramework.getConfig());
     }
 
     public static void main(String[] args) {

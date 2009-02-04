@@ -22,7 +22,7 @@ public class StartupServlet extends HttpServlet {
 	String domainModelPath = getServletContext().getRealPath(getInitParameter("domainmodel"));
 	// TODO : delte this file... integrate with myorg stuff
 	//FenixWebFramework.initialize(PropertiesManager.getFenixFrameworkConfig(domainModelPath));
-	ExpenditureTrackingSystem.initialize(FenixWebFramework.getConfig());
+	//ExpenditureTrackingSystem.initialize(FenixWebFramework.getConfig());
 
 	final String managerUsernames = PropertiesManager.getProperty("manager.usernames");
 	Authenticate.initRole(RoleType.MANAGER, managerUsernames);

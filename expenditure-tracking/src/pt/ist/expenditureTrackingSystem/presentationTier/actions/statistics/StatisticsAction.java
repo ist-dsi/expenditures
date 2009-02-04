@@ -7,6 +7,9 @@ import java.io.OutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import myorg.presentationTier.Context;
+import myorg.presentationTier.actions.ContextBaseAction;
+
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -17,30 +20,22 @@ import pt.ist.expenditureTrackingSystem.domain.statistics.RefundProcessActivityL
 import pt.ist.expenditureTrackingSystem.domain.statistics.RefundProcessStatistics;
 import pt.ist.expenditureTrackingSystem.domain.statistics.SimplifiedProcessActivityLogStatistics;
 import pt.ist.expenditureTrackingSystem.domain.statistics.SimplifiedProcessStatistics;
-import pt.ist.expenditureTrackingSystem.presentationTier.Context;
-import pt.ist.expenditureTrackingSystem.presentationTier.actions.BaseAction;
-import pt.ist.fenixWebFramework.struts.annotations.Forward;
-import pt.ist.fenixWebFramework.struts.annotations.Forwards;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
 @Mapping(path = "/statistics")
-@Forwards( {
-    @Forward(name = "show.statistics", path = "/statistics/showStatistics.jsp"),
-    @Forward(name = "show.statistics.simplified.process", path = "/statistics/showStatisticsSimplifiedProcess.jsp"),
-    @Forward(name = "show.statistics.refund.process", path = "/statistics/showStatisticsRefundProcess.jsp")
-})
-public class StatisticsAction extends BaseAction {
+public class StatisticsAction extends ContextBaseAction {
 
-    private static final Context CONTEXT = new Context("statistics");
-
-    @Override
-    protected Context getContextModule(final HttpServletRequest request) {
-	return CONTEXT;
-    }
+//    private static final Context CONTEXT = new Context("statistics");
+//
+//    @Override
+//    protected Context getContextModule(final HttpServletRequest request) {
+//	return CONTEXT;
+//    }
 
     public ActionForward showStatistics(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) {
-	return mapping.findForward("show.statistics");
+	final Context context = getContext(request);
+	return context.forward("/statistics/showStatistics.jsp");
     }
 
     public ActionForward showSimplifiedProcessStatistics(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -54,7 +49,8 @@ public class StatisticsAction extends BaseAction {
 	final SimplifiedProcessStatistics simplifiedProcessStatistics = SimplifiedProcessStatistics.create(yearBean.getYear());
 	request.setAttribute("simplifiedProcessStatistics", simplifiedProcessStatistics);
 
-	return mapping.findForward("show.statistics.simplified.process");
+	final Context context = getContext(request);
+	return context.forward("/statistics/showStatisticsSimplifiedProcess.jsp");
     }
 
     public ActionForward simplifiedProcessStatisticsChart(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -194,7 +190,8 @@ public class StatisticsAction extends BaseAction {
 	final RefundProcessStatistics refundProcessStatistics = RefundProcessStatistics.create(yearBean.getYear());
 	request.setAttribute("refundProcessStatistics", refundProcessStatistics);
 
-	return mapping.findForward("show.statistics.refund.process");
+	final Context context = getContext(request);
+	return context.forward("/statistics/showStatisticsRefundProcess.jsp");
     }
 
     public ActionForward refundProcessStatisticsChart(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
