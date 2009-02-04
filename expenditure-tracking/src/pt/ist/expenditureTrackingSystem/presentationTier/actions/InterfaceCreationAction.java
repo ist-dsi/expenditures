@@ -31,8 +31,8 @@ public class InterfaceCreationAction extends ContextBaseAction {
 	final Node node = getDomainObject(request, "parentOfNodesToManageId");
 
 	final Node homeNode = createNodeForPage(virtualHost, node, "resources.ExpenditureResources", "link.topBar.home");
-	ActionNode.createActionNode(virtualHost, homeNode, "/home", "showActiveRequestsForProposal", "resources.ExpenditureResources", "link.sideBar.home.publicRequestsForProposal", Role.getRole(RoleType.MANAGER));
-	ActionNode.createActionNode(virtualHost, homeNode, "/home", "showAcquisitionAnnouncements", "resources.ExpenditureResources", "link.sideBar.home.publicAnnouncements", Role.getRole(RoleType.MANAGER));
+	ActionNode.createActionNode(virtualHost, homeNode, "/expendituresHome", "showActiveRequestsForProposal", "resources.ExpenditureResources", "link.sideBar.home.publicRequestsForProposal", Role.getRole(RoleType.MANAGER));
+	ActionNode.createActionNode(virtualHost, homeNode, "/expendituresHome", "showAcquisitionAnnouncements", "resources.ExpenditureResources", "link.sideBar.home.publicAnnouncements", Role.getRole(RoleType.MANAGER));
 
 	final Node requestsForProposalNode = createNodeForPage(virtualHost, node, "resources.ExpenditureResources", "link.topBar.requestForProposal");
 	ActionNode.createActionNode(virtualHost, requestsForProposalNode, "/requestForProposalProcess", "prepareCreateRequestForProposalProcess", "resources.ExpenditureResources", "link.sideBar.requestForProposal.create", Role.getRole(RoleType.MANAGER));
