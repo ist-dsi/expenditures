@@ -25,13 +25,6 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 @Mapping(path = "/statistics")
 public class StatisticsAction extends ContextBaseAction {
 
-//    private static final Context CONTEXT = new Context("statistics");
-//
-//    @Override
-//    protected Context getContextModule(final HttpServletRequest request) {
-//	return CONTEXT;
-//    }
-
     public ActionForward showStatistics(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) {
 	final Context context = getContext(request);
