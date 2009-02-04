@@ -22,7 +22,6 @@ import pt.ist.expenditureTrackingSystem.domain.dto.EditRefundInvoiceBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.RefundInvoiceBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.RefundItemBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.VariantBean;
-import pt.ist.expenditureTrackingSystem.presentationTier.Context;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 import pt.ist.fenixWebFramework.struts.annotations.Forward;
 import pt.ist.fenixWebFramework.struts.annotations.Forwards;
@@ -50,11 +49,24 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "execute.payment", path = "/acquisitions/refund/executePayment.jsp") })
 public class RefundProcessAction extends PaymentProcessAction {
 
-    private static final Context CONTEXT = new Context("acquisitions");
+    @Override
+    protected String getSelectUnitToAddForwardUrl() {
+	return "/acquisitions/commons/selectPayingUnitToAdd.jsp";
+    }
 
     @Override
-    protected Context getContextModule(final HttpServletRequest request) {
-	return CONTEXT;
+    protected String getRemovePayingUnitsForwardUrl() {
+	return "/acquisitions/commons/removePayingUnits.jsp";
+    }
+
+    @Override
+    protected String getAssignUnitItemForwardUrl() {
+	return "/acquisitions/commons/assignUnitItem.jsp";
+    }
+
+    @Override
+    protected String getEditRealShareValuesForwardUrl() {
+	return "/acquisitions/commons/assignUnitItemRealValues.jsp";
     }
 
     public ActionForward viewRefundProcess(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -65,9 +77,8 @@ public class RefundProcessAction extends PaymentProcessAction {
     }
 
     public ActionForward viewRefundProcess(final ActionMapping mapping, final HttpServletRequest request, RefundProcess process) {
-
 	request.setAttribute("refundProcess", process);
-	return mapping.findForward("view.refund.process");
+	return forward(request, "/acquisitions/refund/viewRefundRequest.jsp");
     }
 
     public ActionForward prepareCreateRefundProcess(final ActionMapping mapping, final ActionForm form,
@@ -75,7 +86,7 @@ public class RefundProcessAction extends PaymentProcessAction {
 
 	CreateRefundProcessBean bean = new CreateRefundProcessBean(getLoggedPerson());
 	request.setAttribute("bean", bean);
-	return mapping.findForward("create.refund.process");
+	return forward(request, "/acquisitions/refund/createRefundRequest.jsp");
     }
 
     public ActionForward createRefundProcess(final ActionMapping mapping, final ActionForm form,
@@ -93,7 +104,7 @@ public class RefundProcessAction extends PaymentProcessAction {
 	CreateRefundProcessBean bean = getRenderedObject("createRefundProcess");
 	request.setAttribute("bean", bean);
 	RenderUtils.invalidateViewState("createRefundProcess");
-	return mapping.findForward("create.refund.process");
+	return forward(request, "/acquisitions/refund/createRefundRequest.jsp");
 
     }
 
@@ -123,7 +134,7 @@ public class RefundProcessAction extends PaymentProcessAction {
     public ActionForward searchRefundProcess(final ActionMapping mapping, final HttpServletRequest request,
 	    final SearchRefundProcesses searchRefundProcess) {
 	request.setAttribute("searchRefundProcess", searchRefundProcess);
-	return mapping.findForward("search.refund.process");
+	return forward(request, "/acquisitions/refund/searchRefundRequest.jsp");
     }
 
     public ActionForward executeCreateRefundItem(final ActionMapping mapping, final ActionForm form,
@@ -132,7 +143,7 @@ public class RefundProcessAction extends PaymentProcessAction {
 	request.setAttribute("bean", bean);
 	request.setAttribute("refundProcess", getProcess(request));
 
-	return mapping.findForward("create.refund.item");
+	return forward(request, "/acquisitions/refund/createRefundItem.jsp");
 
     }
 
@@ -154,7 +165,7 @@ public class RefundProcessAction extends PaymentProcessAction {
 	request.setAttribute("refundProcess", process);
 	request.setAttribute("refundItem", item);
 	request.setAttribute("bean", bean);
-	return mapping.findForward("edit.refund.item");
+	return forward(request, "/acquisitions/refund/editRefundItem.jsp");
     }
 
     public ActionForward actualEditRefundItem(final ActionMapping mapping, final ActionForm form,
@@ -229,7 +240,7 @@ public class RefundProcessAction extends PaymentProcessAction {
 	bean.setItem(item);
 
 	request.setAttribute("bean", bean);
-	return mapping.findForward("add.refund.invoice");
+	return forward(request, "/acquisitions/refund/addRefundInvoice.jsp");
     }
 
     public ActionForward createRefundInvoice(final ActionMapping mapping, final ActionForm form,
@@ -242,7 +253,7 @@ public class RefundProcessAction extends PaymentProcessAction {
 	    addMessage("refundItem.message.info.mustAddInvoiceFile", getBundle());
 	    request.setAttribute("bean", bean);
 	    RenderUtils.invalidateViewState("bean");
-	    return mapping.findForward("add.refund.invoice");
+	    return forward(request, "/acquisitions/refund/addRefundInvoice.jsp");
 	}
 
 	byte[] fileBytes = consumeInputStream(bean);
@@ -252,7 +263,7 @@ public class RefundProcessAction extends PaymentProcessAction {
 	    addErrorMessage(e.getMessage(), getBundle());
 	    request.setAttribute("bean", bean);
 	    RenderUtils.invalidateViewState("bean");
-	    return mapping.findForward("add.refund.invoice");
+	    return forward(request, "/acquisitions/refund/addRefundInvoice.jsp");
 	}
 
 	return viewProcess(mapping, form, request, response);
@@ -279,7 +290,7 @@ public class RefundProcessAction extends PaymentProcessAction {
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	RequestItem item = getRequestItem(request);
 	request.setAttribute("item", item);
-	return mapping.findForward("remove.refund.invoice");
+	return forward(request, "/acquisitions/refund/removeRefundInvoice.jsp");
     }
 
     public ActionForward removeRefundInvoice(final ActionMapping mapping, final ActionForm form,
@@ -301,7 +312,7 @@ public class RefundProcessAction extends PaymentProcessAction {
 	    beans.add(new EditRefundInvoiceBean(invoice));
 	}
 	request.setAttribute("invoices", beans);
-	return mapping.findForward("edit.refund.invoice");
+	return forward(request, "/acquisitions/refund/editRefundInvoice.jsp");
     }
 
     public ActionForward editRefundInvoice(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -316,7 +327,7 @@ public class RefundProcessAction extends PaymentProcessAction {
 	    RefundItem item = getRequestItem(request);
 	    request.setAttribute("item", item);
 	    request.setAttribute("invoices", beans);
-	    return mapping.findForward("edit.refund.invoice");
+	    return forward(request, "/acquisitions/refund/editRefundInvoice.jsp");
 	}
 	return viewProcess(mapping, form, request, response);
     }
@@ -331,7 +342,7 @@ public class RefundProcessAction extends PaymentProcessAction {
 	RefundItem item = getRequestItem(request);
 	request.setAttribute("item", item);
 	request.setAttribute("invoices", beans);
-	return mapping.findForward("edit.refund.invoice");
+	return forward(request, "/acquisitions/refund/editRefundInvoice.jsp");
 
     }
 
@@ -341,7 +352,7 @@ public class RefundProcessAction extends PaymentProcessAction {
 	VariantBean bean = new VariantBean();
 	request.setAttribute("bean", bean);
 	request.setAttribute("process", refundProcess);
-	return mapping.findForward("execute.payment");
+	return forward(request, "/acquisitions/refund/executePayment.jsp");
     }
 
     public ActionForward executeRefundPersonAction(final ActionMapping mapping, final ActionForm form,

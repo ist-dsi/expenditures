@@ -15,7 +15,6 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPayment
 import pt.ist.expenditureTrackingSystem.domain.dto.UserSearchBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.VariantBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
-import pt.ist.expenditureTrackingSystem.presentationTier.Context;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.BaseAction;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 import pt.ist.fenixWebFramework.struts.annotations.Forward;
@@ -26,13 +25,6 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 @Forwards( { @Forward(name = "search", path = "/acquisitions/search/searchProcesses.jsp"),
 	@Forward(name = "manage.searches", path = "/acquisitions/search/manageMySearches.jsp") })
 public class SearchPaymentProcessesAction extends BaseAction {
-
-    private static final Context CONTEXT = new Context("acquisitions");
-
-    @Override
-    protected Context getContextModule(final HttpServletRequest request) {
-	return CONTEXT;
-    }
 
     private ActionForward search(final ActionMapping mapping, final HttpServletRequest request, SearchPaymentProcess searchBean,
 	    boolean advanced) {
@@ -48,7 +40,7 @@ public class SearchPaymentProcessesAction extends BaseAction {
 	request.setAttribute("savingName", new VariantBean());
 	request.setAttribute("mySearches", userSearchBean);
 	request.setAttribute("advanced", advanced);
-	return mapping.findForward("search");
+	return forward(request, "/acquisitions/search/searchProcesses.jsp");
     }
 
     public ActionForward search(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -117,7 +109,7 @@ public class SearchPaymentProcessesAction extends BaseAction {
 	request.setAttribute("systemSearches", systemSearches);
 	request.setAttribute("userSearches", userSearches);
 
-	return mapping.findForward("manage.searches");
+	return forward(request, "/acquisitions/search/manageMySearches.jsp");
     }
 
     public ActionForward deleteMySearch(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,

@@ -20,7 +20,6 @@ import pt.ist.expenditureTrackingSystem.domain.dto.AfterTheFactAcquisitionsImpor
 import pt.ist.expenditureTrackingSystem.domain.dto.AfterTheFactAcquisitionsImportBean.ImportError;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
-import pt.ist.expenditureTrackingSystem.presentationTier.Context;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.ProcessAction;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.acquisitions.SimplifiedProcedureProcessAction.ReceiveInvoiceForm;
 import pt.ist.fenixWebFramework.struts.annotations.Forward;
@@ -38,13 +37,6 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "view.import.afterTheFact.acquisitions.result", path = "/acquisitions/viewImportAfterTheFactAcquisitionsResult.jsp"),
 	@Forward(name = "list.afterTheFact.imports", path = "/acquisitions/listImportAfterTheFactAcquisitionsResult.jsp") })
 public class AfterTheFactAcquisitionProcessAction extends ProcessAction {
-
-    private static final Context CONTEXT = new Context("acquisitions");
-
-    @Override
-    protected Context getContextModule(final HttpServletRequest request) {
-	return CONTEXT;
-    }
 
     @Override
     protected GenericProcess getProcess(HttpServletRequest request) {
@@ -65,7 +57,7 @@ public class AfterTheFactAcquisitionProcessAction extends ProcessAction {
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final AfterTheFactAcquisitionProcessBean afterTheFactAcquisitionProcessBean = new AfterTheFactAcquisitionProcessBean();
 	request.setAttribute("afterTheFactAcquisitionProcessBean", afterTheFactAcquisitionProcessBean);
-	return mapping.findForward("create.afterTheFact.acquisition.process");
+	return forward(request, "/acquisitions/createAfterTheFactAcquisitionProcess.jsp");
     }
 
     public ActionForward createNewAfterTheFactAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
@@ -85,7 +77,7 @@ public class AfterTheFactAcquisitionProcessAction extends ProcessAction {
     private ActionForward viewAfterTheFactAcquisitionProcess(ActionMapping mapping, HttpServletRequest request,
 	    AfterTheFactAcquisitionProcess afterTheFactAcquisitionProcess) {
 	request.setAttribute("afterTheFactAcquisitionProcess", afterTheFactAcquisitionProcess);
-	return mapping.findForward("view.afterTheFact.acquisition.process");
+	return forward(request, "/acquisitions/viewAfterTheFactAcquisitionProcess.jsp");
     }
 
     public ActionForward executeEditAfterTheFactAcquisition(final ActionMapping mapping, final ActionForm form,
@@ -97,7 +89,7 @@ public class AfterTheFactAcquisitionProcessAction extends ProcessAction {
 	    afterTheFactAcquisitionProcessBean = new AfterTheFactAcquisitionProcessBean(afterTheFactAcquisitionProcess);
 	}
 	request.setAttribute("afterTheFactAcquisitionProcessBean", afterTheFactAcquisitionProcessBean);
-	return mapping.findForward("edit.afterTheFact.acquisition.process");
+	return forward(request, "/acquisitions/editAfterTheFactAcquisitionProcess.jsp");
     }
 
     public ActionForward editAfterTheFactAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
@@ -126,7 +118,7 @@ public class AfterTheFactAcquisitionProcessAction extends ProcessAction {
 	}
 
 	request.setAttribute("receiveInvoiceForm", receiveInvoiceForm);
-	return mapping.findForward("receive.acquisition.invoice");
+	return forward(request, "/acquisitions/receiveAcquisitionInvoice.jsp");
     }
 
     public ActionForward receiveAcquisitionInvoice(final ActionMapping mapping, final ActionForm form,
@@ -149,14 +141,14 @@ public class AfterTheFactAcquisitionProcessAction extends ProcessAction {
 	final AbstractActivity<GenericProcess> activity = afterTheFactAcquisitionProcess
 		.getActivityByName("DeleteAfterTheFactAcquisitionProcess");
 	activity.execute(afterTheFactAcquisitionProcess);
-	return mapping.findForward("show.pending.processes");
+	return forward(request, "/search.do?method=search");
     }
 
     public ActionForward prepareImport(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) {
 	final AfterTheFactAcquisitionsImportBean afterTheFactAcquisitionsImportBean = new AfterTheFactAcquisitionsImportBean();
 	request.setAttribute("afterTheFactAcquisitionsImportBean", afterTheFactAcquisitionsImportBean);
-	return mapping.findForward("import.afterTheFact.acquisitions");
+	return forward(request, "/acquisitions/importAfterTheFactAcquisitions.jsp");
     }
 
     public ActionForward processImport(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -167,7 +159,7 @@ public class AfterTheFactAcquisitionProcessAction extends ProcessAction {
 	afterTheFactAcquisitionsImportBean.setCreateData(false);
 	afterTheFactAcquisitionsImportBean.importAcquisitions();
 	request.setAttribute("afterTheFactAcquisitionsImportBean", afterTheFactAcquisitionsImportBean);
-	return mapping.findForward("view.import.afterTheFact.acquisitions.result");
+	return forward(request, "/acquisitions/viewImportAfterTheFactAcquisitionsResult.jsp");
     }
 
     public ActionForward importAcquisitions(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -181,7 +173,7 @@ public class AfterTheFactAcquisitionProcessAction extends ProcessAction {
 	    // just show the page...
 	}
 	request.setAttribute("afterTheFactAcquisitionsImportBean", afterTheFactAcquisitionsImportBean);
-	return mapping.findForward("view.import.afterTheFact.acquisitions.result");
+	return forward(request, "/acquisitions/viewImportAfterTheFactAcquisitionsResult.jsp");
     }
 
     public ActionForward listImports(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -189,7 +181,7 @@ public class AfterTheFactAcquisitionProcessAction extends ProcessAction {
 
 	List<ImportFile> files = File.getFiles(ImportFile.class);
 	request.setAttribute("files", files);
-	return mapping.findForward("list.afterTheFact.imports");
+	return forward(request, "/acquisitions/listImportAfterTheFactAcquisitionsResult.jsp");
     }
 
     public ActionForward downloadImportFile(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,

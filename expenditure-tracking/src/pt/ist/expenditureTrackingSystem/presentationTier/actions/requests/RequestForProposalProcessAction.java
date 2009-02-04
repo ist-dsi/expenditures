@@ -17,29 +17,12 @@ import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 import pt.ist.expenditureTrackingSystem.domain.requests.RequestForProposalDocument;
 import pt.ist.expenditureTrackingSystem.domain.requests.RequestForProposalProcess;
 import pt.ist.expenditureTrackingSystem.domain.requests.SearchRequestProposal;
-import pt.ist.expenditureTrackingSystem.presentationTier.Context;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.ProcessAction;
 import pt.ist.fenixWebFramework.security.UserView;
-import pt.ist.fenixWebFramework.struts.annotations.Forward;
-import pt.ist.fenixWebFramework.struts.annotations.Forwards;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
 @Mapping(path = "/requestForProposalProcess")
-@Forwards( { @Forward(name = "view.active.requests", path = "/requests/viewActiveRequests.jsp"),
-	@Forward(name = "create.request.process", path = "/requests/createRequestProcess.jsp"),
-	@Forward(name = "view.request.process", path = "/requests/viewRequestProcess.jsp"),
-	@Forward(name = "search.proposal.process", path = "/requests/searchProposalProcess.jsp"),
-	@Forward(name = "edit.request.process", path = "/requests/editRequestProcess.jsp"),
-	@Forward(name = "choose.supplier.proposal", path = "/requests/chooseSupplierProposal.jsp")}
-)
 public class RequestForProposalProcessAction extends ProcessAction {
-
-    private static final Context CONTEXT = new Context("requests");
-
-    @Override
-    protected Context getContextModule(final HttpServletRequest request) {
-	return CONTEXT;
-    }
 
     @Override
     public ActionForward viewProcess(ActionMapping mapping, ActionForm form, HttpServletRequest request,
@@ -61,7 +44,7 @@ public class RequestForProposalProcessAction extends ProcessAction {
 	    }
 	}
 	request.setAttribute("activeRequests", processes);
-	return mapping.findForward("view.active.requests");
+	return forward(request, "/requests/viewActiveRequests.jsp");
     }
 
     public ActionForward prepareCreateRequestForProposalProcess(final ActionMapping mapping, final ActionForm form,
@@ -69,7 +52,7 @@ public class RequestForProposalProcessAction extends ProcessAction {
 
 	final CreateRequestForProposalProcessBean requestBean = new CreateRequestForProposalProcessBean();
 	request.setAttribute("requestForProposalBean", requestBean);
-	return mapping.findForward("create.request.process");
+	return forward(request, "/requests/createRequestProcess.jsp");
     }
 
     public ActionForward createNewRequestForProposalProcess(final ActionMapping mapping, final ActionForm form,
@@ -83,7 +66,7 @@ public class RequestForProposalProcessAction extends ProcessAction {
 		consumeInputStream(requestBean));
 
 	request.setAttribute("requestForProposalProcess", proposalProcess);
-	return mapping.findForward("view.request.process");
+	return forward(request, "/requests/viewRequestProcess.jsp");
     }
 
     public ActionForward viewRequestForProposalProcess(final ActionMapping mapping, final ActionForm form,
@@ -96,7 +79,7 @@ public class RequestForProposalProcessAction extends ProcessAction {
     public ActionForward viewRequestForProposalProcess(final ActionMapping mapping, final HttpServletRequest request,
 	    final RequestForProposalProcess process) {
 	request.setAttribute("requestForProposalProcess", process);
-	return mapping.findForward("view.request.process");
+	return forward(request, "/requests/viewRequestProcess.jsp");
     }
 
     public ActionForward downloadRequestForProposalDocument(final ActionMapping mapping, final ActionForm form,
@@ -140,19 +123,19 @@ public class RequestForProposalProcessAction extends ProcessAction {
 	final CreateRequestForProposalProcessBean requestBean = new CreateRequestForProposalProcessBean(process);
 	request.setAttribute("requestForProposalProcessBean", requestBean);
 	request.setAttribute("requestForProposalProcessOid", process.getOID());
-	return mapping.findForward("edit.request.process");
+	return forward(request, "/requests/editRequestProcess.jsp");
     }
     
     public ActionForward executeChooseSupplierProposal(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	request.setAttribute("requestForProposalProcessOid", getProcess(request).getOID());
-	return mapping.findForward("choose.supplier.proposal");
+	return forward(request, "/requests/chooseSupplierProposal.jsp");
     }
     
     public ActionForward chooseSupplierProposal(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	//TODO
-	return mapping.findForward("choose.supplier.proposal");
+	return forward(request, "/requests/chooseSupplierProposal.jsp");
     }
     
     public ActionForward editRequestForProposal(final ActionMapping mapping, final ActionForm form,
@@ -176,7 +159,7 @@ public class RequestForProposalProcessAction extends ProcessAction {
 	    searchProposalProcess.setRequestor(getLoggedPerson().getName());
 	}
 	request.setAttribute("searchRequestProposalProcess", searchProposalProcess);
-	return mapping.findForward("search.proposal.process");
+	return forward(request, "/requests/searchProposalProcess.jsp");
     }
 
     @Override

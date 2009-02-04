@@ -29,13 +29,14 @@ import pt.ist.fenixWebFramework.security.UserView;
 
 public abstract class PaymentProcessAction extends ProcessAction {
 
+    protected abstract String getSelectUnitToAddForwardUrl();
+
     public ActionForward executeGenericAddPayingUnit(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
-
 	final PaymentProcess process = getProcess(request);
 	request.setAttribute("process", process);
 	request.setAttribute("domainObjectBean", new DomainObjectBean<Unit>());
-	return mapping.findForward("select.unit.to.add");
+	return forward(request, getSelectUnitToAddForwardUrl());
     }
 
     public ActionForward addPayingUnit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -48,12 +49,14 @@ public abstract class PaymentProcessAction extends ProcessAction {
 	return viewProcess(mapping, form, request, response);
     }
 
+    protected abstract String getRemovePayingUnitsForwardUrl();
+
     public ActionForward executeGenericRemovePayingUnit(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final PaymentProcess process = getProcess(request);
 	request.setAttribute("process", process);
 	request.setAttribute("payingUnits", process.getPayingUnits());
-	return mapping.findForward("remove.paying.units");
+	return forward(request, getRemovePayingUnitsForwardUrl());
     }
 
     public ActionForward removePayingUnit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -70,6 +73,8 @@ public abstract class PaymentProcessAction extends ProcessAction {
 	return executeGenericRemovePayingUnit(mapping, form, request, response);
     }
 
+    protected abstract String getAssignUnitItemForwardUrl();
+
     public ActionForward executeGenericAssignPayingUnitToItem(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final RequestItem item = getRequestItem(request);
@@ -82,7 +87,7 @@ public abstract class PaymentProcessAction extends ProcessAction {
 	request.setAttribute("process", process);
 	request.setAttribute("unitItemBeans", beans);
 
-	return mapping.findForward("assign.unit.item");
+	return forward(request, getAssignUnitItemForwardUrl());
     }
 
     public ActionForward executeAssignPayingUnitToItemCreation(final ActionMapping mapping, final ActionForm form,
@@ -102,6 +107,8 @@ public abstract class PaymentProcessAction extends ProcessAction {
 	return viewProcess(mapping, form, request, response);
     }
 
+    protected abstract String getEditRealShareValuesForwardUrl();
+
     public ActionForward executeDistributeRealValuesForPayingUnits(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 
@@ -114,7 +121,7 @@ public abstract class PaymentProcessAction extends ProcessAction {
 	request.setAttribute("item", item);
 	request.setAttribute("unitItemBeans", beans);
 
-	return mapping.findForward("edit.real.shares.values");
+	return forward(request, getEditRealShareValuesForwardUrl());
     }
 
     public ActionForward executeDistributeRealValuesForPayingUnitsEdition(final ActionMapping mapping, final ActionForm form,
@@ -130,14 +137,14 @@ public abstract class PaymentProcessAction extends ProcessAction {
 	    addErrorMessage(e.getMessage(), getBundle());
 	    request.setAttribute("item", item);
 	    request.setAttribute("unitItemBeans", beans);
-	    return mapping.findForward("edit.real.shares.values");
+	    return forward(request, getEditRealShareValuesForwardUrl());
 	}
     }
 
     public ActionForward calculateShareValuePostBack(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 
-	return genericCalculateShareValuePostBack(mapping, form, request, response, "assign.unit.item", false);
+	return genericCalculateShareValuePostBack(mapping, form, request, response, getAssignUnitItemForwardUrl(), false);
     }
 
     public ActionForward calculateRealShareValuePostBack(final ActionMapping mapping, final ActionForm form,
@@ -145,7 +152,7 @@ public abstract class PaymentProcessAction extends ProcessAction {
 
 	final RequestItem item = getRequestItem(request);
 	request.setAttribute("item", item);
-	return genericCalculateShareValuePostBack(mapping, form, request, response, "edit.real.shares.values", true);
+	return genericCalculateShareValuePostBack(mapping, form, request, response, getEditRealShareValuesForwardUrl(), true);
     }
 
     private ActionForward genericCalculateShareValuePostBack(final ActionMapping mapping, final ActionForm form,
@@ -188,7 +195,7 @@ public abstract class PaymentProcessAction extends ProcessAction {
 	request.setAttribute("unitItemBeans", beans);
 
 	RenderUtils.invalidateViewState();
-	return mapping.findForward(forward);
+	return forward(request, forward);
     }
 
     public ActionForward executeProjectFundAllocation(final ActionMapping mapping, final ActionForm form,
@@ -205,7 +212,7 @@ public abstract class PaymentProcessAction extends ProcessAction {
 		fundAllocationBeans.add(new FundAllocationBean(financer));
 	    }
 	    request.setAttribute("fundAllocationBeans", fundAllocationBeans);
-	    return mapping.findForward("allocate.project.funds");
+	    return forward(request, "/acquisitions/commons/allocateProjectFunds.jsp");
 	} else {
 	    return viewProcess(mapping, form, request, response);
 	}
@@ -233,7 +240,7 @@ public abstract class PaymentProcessAction extends ProcessAction {
 		fundAllocationBeans.add(new FundAllocationBean(financer));
 	    }
 	    request.setAttribute("fundAllocationBeans", fundAllocationBeans);
-	    return mapping.findForward("allocate.funds");
+	    return forward(request, "/acquisitions/commons/allocateFunds.jsp");
 	} else {
 	    return viewProcess(mapping, form, request, response);
 	}
@@ -275,7 +282,7 @@ public abstract class PaymentProcessAction extends ProcessAction {
 	    }
 	    request.setAttribute("fundAllocationBeans", fundAllocationBeans);
 
-	    return mapping.findForward("allocate.effective.funds");
+	    return forward(request, "/acquisitions/commons/allocateEffectiveFunds.jsp");
 	} else {
 	    return viewProcess(mapping, form, request, response);
 	}
@@ -291,7 +298,7 @@ public abstract class PaymentProcessAction extends ProcessAction {
 	    request.setAttribute("fundAllocationBeans", fundAllocationBeans);
 	    request.setAttribute("process", process);
 	    addMessage(e.getMessage(), getBundle());
-	    return mapping.findForward("allocate.effective.funds");
+	    return forward(request, "/acquisitions/commons/allocateEffectiveFunds.jsp");
 	}
 	return viewProcess(mapping, form, request, response);
     }
@@ -321,7 +328,7 @@ public abstract class PaymentProcessAction extends ProcessAction {
 		}
 	    }
 	    request.setAttribute("fundAllocationBeans", fundAllocationBeans);
-	    return mapping.findForward("allocate.effective.project.funds");
+	    return forward(request, "/acquisitions/commons/allocateEffectiveProjectFunds.jsp");
 	} else {
 	    return viewProcess(mapping, form, request, response);
 	}
@@ -338,13 +345,13 @@ public abstract class PaymentProcessAction extends ProcessAction {
     public ActionForward addAllocationFundForProject(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 
-	return addAllocationFundGeneric(mapping, request, "financerFundAllocationId", "allocate.effective.project.funds");
+	return addAllocationFundGeneric(mapping, request, "financerFundAllocationId", "/acquisitions/commons/allocateEffectiveProjectFunds.jsp");
     }
 
     public ActionForward removeAllocationFundForProject(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 
-	return removeAllocationFundGeneric(mapping, request, "financerFundAllocationId", "allocate.effective.project.funds");
+	return removeAllocationFundGeneric(mapping, request, "financerFundAllocationId", "/acquisitions/commons/allocateEffectiveProjectFunds.jsp");
     }
 
     private ActionForward addAllocationFundGeneric(final ActionMapping mapping, final HttpServletRequest request,
@@ -364,7 +371,7 @@ public abstract class PaymentProcessAction extends ProcessAction {
 	fundAllocationBeans.add(index + 1, fundAllocationBean);
 	request.setAttribute("fundAllocationBeans", fundAllocationBeans);
 	RenderUtils.invalidateViewState();
-	return mapping.findForward(forward);
+	return forward(request, forward);
     }
 
     private ActionForward removeAllocationFundGeneric(final ActionMapping mapping, final HttpServletRequest request,
@@ -377,19 +384,19 @@ public abstract class PaymentProcessAction extends ProcessAction {
 	fundAllocationBeans.remove(index);
 	request.setAttribute("fundAllocationBeans", fundAllocationBeans);
 	RenderUtils.invalidateViewState();
-	return mapping.findForward(forward);
+	return forward(request, forward);
     }
 
     public ActionForward addAllocationFund(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) {
 
-	return addAllocationFundGeneric(mapping, request, "financerFundAllocationId", "allocate.effective.funds");
+	return addAllocationFundGeneric(mapping, request, "financerFundAllocationId", "/acquisitions/commons/allocateEffectiveFunds.jsp");
     }
 
     public ActionForward removeAllocationFund(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 
-	return removeAllocationFundGeneric(mapping, request, "financerFundAllocationId", "allocate.effective.funds");
+	return removeAllocationFundGeneric(mapping, request, "financerFundAllocationId", "/acquisitions/commons/allocateEffectiveFunds.jsp");
     }
 
     public ActionForward executeUnAuthorize(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,

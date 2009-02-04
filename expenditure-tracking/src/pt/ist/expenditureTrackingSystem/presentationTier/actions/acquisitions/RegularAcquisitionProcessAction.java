@@ -26,7 +26,6 @@ import pt.ist.expenditureTrackingSystem.domain.dto.ProcessStateBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean.CreateItemSchemaType;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
-import pt.ist.expenditureTrackingSystem.presentationTier.Context;
 import pt.ist.fenixWebFramework.renderers.components.state.IViewState;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 import pt.ist.fenixWebFramework.struts.annotations.Forward;
@@ -38,11 +37,24 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "view.fund.allocations", path = "/acquisitions/viewFundAllocations.jsp") })
 public class RegularAcquisitionProcessAction extends PaymentProcessAction {
 
-    private static final Context CONTEXT = new Context("acquisitions");
+    @Override
+    protected String getSelectUnitToAddForwardUrl() {
+	throw new Error("not.implemented");
+    }
 
     @Override
-    protected Context getContextModule(final HttpServletRequest request) {
-	return CONTEXT;
+    protected String getRemovePayingUnitsForwardUrl() {
+	throw new Error("not.implemented");
+    }
+
+    @Override
+    protected String getAssignUnitItemForwardUrl() {
+	throw new Error("not.implemented");
+    }
+
+    @Override
+    protected String getEditRealShareValuesForwardUrl() {
+	throw new Error("not.implemented");
     }
 
     @Override
@@ -54,7 +66,7 @@ public class RegularAcquisitionProcessAction extends PaymentProcessAction {
     public ActionForward viewAcquisitionProcess(final ActionMapping mapping, final HttpServletRequest request,
 	    final AcquisitionProcess acquisitionProcess) {
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
-	return mapping.findForward("view.acquisition.process");
+	return forward(request, "/acquisitions/viewAcquisitionProcess.jsp");
     }
 
     public ActionForward viewAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
@@ -86,7 +98,7 @@ public class RegularAcquisitionProcessAction extends PaymentProcessAction {
 	    RegularAcquisitionProcess acquisitionProcess) {
 	request.setAttribute("itemBean", new AcquisitionRequestItemBean(acquisitionProcess.getAcquisitionRequest()));
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
-	return mapping.findForward("create.acquisition.request.item");
+	return forward(request, "/acquisitions/createAcquisitionRequestItem.jsp");
     }
 
     private ActionForward itemPostBack(final ActionMapping mapping, final HttpServletRequest request, String forward) {
@@ -107,17 +119,17 @@ public class RegularAcquisitionProcessAction extends PaymentProcessAction {
 	request.setAttribute("itemBean", acquisitionRequestItemBean);
 	request.setAttribute("acquisitionProcess", acquisitionRequestItemBean.getAcquisitionRequest().getAcquisitionProcess());
 
-	return mapping.findForward(forward);
+	return forward(request, forward);
     }
 
     public ActionForward createItemPostBack(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) {
-	return itemPostBack(mapping, request, "create.acquisition.request.item");
+	return itemPostBack(mapping, request, "/acquisitions/createAcquisitionRequestItem.jsp");
     }
 
     public ActionForward editItemPostBack(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) {
-	return itemPostBack(mapping, request, "edit.request.item");
+	return itemPostBack(mapping, request, "/acquisitions/editRequestItem.jsp");
     }
 
     public ActionForward createNewAcquisitionRequestItem(final ActionMapping mapping, final ActionForm form,
@@ -136,7 +148,7 @@ public class RegularAcquisitionProcessAction extends PaymentProcessAction {
 	}
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
-    
+
     public ActionForward executeActivityAndViewProcess(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response, final String activityName) {
 	genericActivityExecution(request, activityName);
@@ -166,7 +178,7 @@ public class RegularAcquisitionProcessAction extends PaymentProcessAction {
 	AcquisitionRequestItemBean itemBean = getRenderedObject("acquisitionRequestItem");
 	request.setAttribute("itemBean", itemBean);
 	RenderUtils.invalidateViewState("acquisitionRequestItem");
-	return mapping.findForward("edit.request.item");
+	return forward(request, "/acquisitions/editRequestItem.jsp");
     }
 
     public ActionForward executeEditAcquisitionRequestItem(final ActionMapping mapping, final ActionForm form,
@@ -175,7 +187,7 @@ public class RegularAcquisitionProcessAction extends PaymentProcessAction {
 	final AcquisitionRequestItem acquisitionRequestItem = getDomainObject(request, "acquisitionRequestItemOid");
 	AcquisitionRequestItemBean itemBean = new AcquisitionRequestItemBean(acquisitionRequestItem);
 	request.setAttribute("itemBean", itemBean);
-	return mapping.findForward("edit.request.item");
+	return forward(request, "/acquisitions/editRequestItem.jsp");
     }
 
     public ActionForward executeAcquisitionRequestItemEdition(final ActionMapping mapping, final ActionForm form,
@@ -203,7 +215,7 @@ public class RegularAcquisitionProcessAction extends PaymentProcessAction {
 	final RegularAcquisitionProcess acquisitionProcess = getProcess(request);
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
 	request.setAttribute("stateBean", new ProcessStateBean());
-	return mapping.findForward("reject.acquisition.process");
+	return forward(request, "/acquisitions/rejectAcquisitionProcess.jsp");
     }
 
     public ActionForward rejectAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
@@ -279,7 +291,7 @@ public class RegularAcquisitionProcessAction extends PaymentProcessAction {
 	request.setAttribute("processes", processes);
 	request.setAttribute("bean", bean);
 
-	return mapping.findForward("view.fund.allocations");
+	return forward(request, "/acquisitions/viewFundAllocations.jsp");
     }
 
     @Override

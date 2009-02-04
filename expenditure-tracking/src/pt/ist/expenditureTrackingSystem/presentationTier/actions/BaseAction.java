@@ -17,7 +17,6 @@ import org.apache.struts.action.ActionMapping;
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.File;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
-import pt.ist.expenditureTrackingSystem.presentationTier.Context;
 import pt.ist.expenditureTrackingSystem.presentationTier.messageHandling.MessageHandler;
 import pt.ist.expenditureTrackingSystem.presentationTier.messageHandling.MessageHandler.MessageType;
 import pt.ist.expenditureTrackingSystem.presentationTier.util.FileUploadBean;
@@ -31,19 +30,11 @@ import pt.utl.ist.fenix.tools.util.FileUtils;
 
 public abstract class BaseAction extends ContextBaseAction {
 
-    private static final Context CONTEXT = new Context(null);
-
     private MessageHandler messageHandler = null;
-
-    protected Context getContextModule(final HttpServletRequest request) {
-	return CONTEXT;
-    }
 
     @Override
     public ActionForward execute(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) throws Exception {
-	final Context context = getContextModule(request);
-	context.setAsActive();
 	messageHandler = new MessageHandler();
 	request.setAttribute(MessageHandler.MESSAGE_HANDLER_NAME, messageHandler);
 	return super.execute(mapping, form, request, response);

@@ -65,6 +65,26 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "set.refundee", path = "/acquisitions/setRefundee.jsp") })
 public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessAction {
 
+    @Override
+    protected String getSelectUnitToAddForwardUrl() {
+	return "/acquisitions/commons/selectPayingUnitToAdd.jsp";
+    }
+
+    @Override
+    protected String getRemovePayingUnitsForwardUrl() {
+	return "/acquisitions/commons/removePayingUnits.jsp";
+    }
+
+    @Override
+    protected String getAssignUnitItemForwardUrl() {
+	return "/acquisitions/commons/assignUnitItem.jsp";
+    }
+
+    @Override
+    protected String getEditRealShareValuesForwardUrl() {
+	return "/acquisitions/commons/assignUnitItemRealValues.jsp";
+    }
+
     public static class AcquisitionProposalDocumentForm extends FileUploadBean {
 	private String proposalID;
 
@@ -112,7 +132,7 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final CreateAcquisitionProcessBean acquisitionProcessBean = new CreateAcquisitionProcessBean();
 	request.setAttribute("acquisitionProcessBean", acquisitionProcessBean);
-	return mapping.findForward("create.acquisition.process");
+	return forward(request, "/acquisitions/createAcquisitionProcess.jsp");
     }
 
     public ActionForward createNewAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
@@ -132,7 +152,7 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
 	final AcquisitionProposalDocumentForm acquisitionProposalDocumentForm = new AcquisitionProposalDocumentForm();
 	request.setAttribute("acquisitionProposalDocumentForm", acquisitionProposalDocumentForm);
-	return mapping.findForward("add.acquisition.proposal.document");
+	return forward(request, "/acquisitions/addAcquisitionProposalDocument.jsp");
     }
 
     public ActionForward executeChangeAcquisitionProposalDocument(final ActionMapping mapping, final ActionForm form,
@@ -180,7 +200,7 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
 	final FundAllocationExpirationDateBean fundAllocationExpirationDateBean = new FundAllocationExpirationDateBean();
 	request.setAttribute("fundAllocationExpirationDateBean", fundAllocationExpirationDateBean);
-	return mapping.findForward("allocate.funds.to.service.provider");
+	return forward(request, "/acquisitions/allocateFundsToServiceProvider.jsp");
     }
 
     public ActionForward allocateFundsToServiceProvider(final ActionMapping mapping, final ActionForm form,
@@ -195,7 +215,7 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final AcquisitionProcess acquisitionProcess = getProcess(request);
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
-	return mapping.findForward("prepare.create.acquisition.request");
+	return forward(request, "/acquisitions/createAcquisitionRequest.jsp");
     }
 
     public ActionForward createAcquisitionPurchaseOrderDocument(ActionMapping mapping, ActionForm actionForm,
@@ -235,7 +255,7 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	    }
 	}
 	request.setAttribute("receiveInvoiceForm", receiveInvoiceForm);
-	return mapping.findForward("receive.invoice");
+	return forward(request, "/acquisitions/receiveInvoice.jsp");
     }
 
     public ActionForward saveInvoice(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -278,7 +298,7 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 
 	request.setAttribute("bean", bean);
 	request.setAttribute("process", acquisitionProcess);
-	return mapping.findForward("execute.payment");
+	return forward(request, "/acquisitions/executePayment.jsp");
     }
 
     public ActionForward executePayAcquisitionAction(final ActionMapping mapping, final ActionForm form,
@@ -299,7 +319,7 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	final AcquisitionRequestItem acquisitionRequestItem = getDomainObject(request, "acquisitionRequestItemOid");
 	AcquisitionRequestItemBean itemBean = new AcquisitionRequestItemBean(acquisitionRequestItem);
 	request.setAttribute("itemBean", itemBean);
-	return mapping.findForward("edit.request.item.real.values");
+	return forward(request, "/acquisitions/editRequestItemRealValues.jsp");
     }
 
     public ActionForward executeAcquisitionRequestItemRealValuesEdition(final ActionMapping mapping, final ActionForm form,
@@ -331,7 +351,7 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	AcquisitionProcess acquisitionProcess = getProcess(request);
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
 
-	return mapping.findForward("edit.supplier");
+	return forward(request, "/acquisitions/editSupplierAddress.jsp");
     }
 
     public ActionForward executeSendPurchaseOrderToSupplier(final ActionMapping mapping, final ActionForm form,
@@ -367,7 +387,7 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	}
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
 	request.setAttribute("financersBean", financersBean);
-	return mapping.findForward("change.financers.accounting.units");
+	return forward(request, "/acquisitions/changeFinancersAccountingUnit.jsp");
     }
 
     public ActionForward changeFinancersAccountingUnit(final ActionMapping mapping, final ActionForm form,
@@ -389,7 +409,7 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	final SetRefundeeBean setRefundeeBean = new SetRefundeeBean(acquisitionProcess);
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
 	request.setAttribute("setRefundeeBean", setRefundeeBean);
-	return mapping.findForward("set.refundee");
+	return forward(request, "/acquisitions/setRefundee.jsp");
     }
 
     public ActionForward setRefundee(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,

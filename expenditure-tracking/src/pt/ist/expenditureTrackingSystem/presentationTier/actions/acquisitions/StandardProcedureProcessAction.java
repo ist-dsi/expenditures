@@ -13,7 +13,6 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.standard.StandardProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
-import pt.ist.expenditureTrackingSystem.presentationTier.Context;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 import pt.ist.fenixWebFramework.struts.annotations.Forward;
 import pt.ist.fenixWebFramework.struts.annotations.Forwards;
@@ -31,11 +30,19 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "view.comments", path = "/acquisitions/viewComments.jsp") })
 public class StandardProcedureProcessAction extends RegularAcquisitionProcessAction {
 
-    private static final Context CONTEXT = new Context("acquisitions");
+    @Override
+    protected String getSelectUnitToAddForwardUrl() {
+	return "/acquisitions/selectPayingUnitToAdd.jsp";
+    }
 
     @Override
-    protected Context getContextModule(final HttpServletRequest request) {
-	return CONTEXT;
+    protected String getRemovePayingUnitsForwardUrl() {
+	return "/acquisitions/removePayingUnits.jsp";
+    }
+
+    @Override
+    protected String getAssignUnitItemForwardUrl() {
+	return "/acquisitions/assignUnitItem.jsp";
     }
 
     @Override
@@ -54,7 +61,7 @@ public class StandardProcedureProcessAction extends RegularAcquisitionProcessAct
 	CreateAcquisitionProcessBean acquisitionProcessBean = new CreateAcquisitionProcessBean();
 	acquisitionProcessBean.setSuppliers(Collections.EMPTY_LIST);
 	request.setAttribute("acquisitionProcessBean", acquisitionProcessBean);
-	return mapping.findForward("create.acquisition.process");
+	return forward(request, "/acquisitions/standardProcess/createStandardAcquisitionProcess.jsp");
     }
 
     public ActionForward addSupplierInCreationPostBack(final ActionMapping mapping, final ActionForm form,
@@ -67,7 +74,7 @@ public class StandardProcedureProcessAction extends RegularAcquisitionProcessAct
 
 	RenderUtils.invalidateViewState("bean");
 	request.setAttribute("acquisitionProcessBean", acquisitionProcessBean);
-	return mapping.findForward("create.acquisition.process");
+	return forward(request, "/acquisitions/standardProcess/createStandardAcquisitionProcess.jsp");
     }
 
     public ActionForward removeSupplierInCreationPostBack(final ActionMapping mapping, final ActionForm form,
@@ -78,7 +85,7 @@ public class StandardProcedureProcessAction extends RegularAcquisitionProcessAct
 	acquisitionProcessBean.removeSupplierFromList(Integer.valueOf(index).intValue());
 
 	request.setAttribute("acquisitionProcessBean", acquisitionProcessBean);
-	return mapping.findForward("create.acquisition.process");
+	return forward(request, "/acquisitions/standardProcess/createStandardAcquisitionProcess.jsp");
     }
 
     public ActionForward createNewAquisitionStandardProcess(final ActionMapping mapping, final ActionForm form,

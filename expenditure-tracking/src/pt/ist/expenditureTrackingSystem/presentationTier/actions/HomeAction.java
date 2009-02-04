@@ -18,16 +18,9 @@ import pt.ist.expenditureTrackingSystem.domain.announcements.AnnouncementProcess
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.requests.RequestForProposalProcess;
 import pt.ist.fenixWebFramework.security.UserView;
-import pt.ist.fenixWebFramework.struts.annotations.Forward;
-import pt.ist.fenixWebFramework.struts.annotations.Forwards;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
 @Mapping(path = "/expendituresHome")
-@Forwards( { @Forward(name = "page.hello", path = "/hello.jsp"),
-	@Forward(name = "view.requests", path = "public/viewRequestsForProposal.jsp"),
-	@Forward(name = "view.request.process", path = "public/viewRequestProcess.jsp"),
-	@Forward(name = "view.announcements", path = "public/viewAnnouncements.jsp"),
-	@Forward(name = "view.announcement", path = "public/viewAnnouncement.jsp") })
 public class HomeAction extends BaseAction {
 
     public final ActionForward firstPage(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -42,7 +35,7 @@ public class HomeAction extends BaseAction {
 	    return showAcquisitionAnnouncements(mapping, form, request, response);
 	}
 	request.setAttribute("user", user);
-	return mapping.findForward("page.hello");
+	return forward(request, "/hello.jsp");
     }
 
     public final ActionForward showActiveRequestsForProposal(final ActionMapping mapping, final ActionForm form,
@@ -55,7 +48,7 @@ public class HomeAction extends BaseAction {
 	    }
 	}
 	request.setAttribute("activeRequests", requests);
-	return mapping.findForward("view.requests");
+	return forward(request, "public/viewRequestsForProposal.jsp");
     }
     
     public ActionForward viewRequestForProposalProcess(final ActionMapping mapping, final ActionForm form,
@@ -75,7 +68,7 @@ public class HomeAction extends BaseAction {
 	    }
 	}
 	request.setAttribute("announcements", approvedList);
-	return mapping.findForward("view.announcements");
+	return forward(request, "public/viewAnnouncements.jsp");
     }
 
     
@@ -83,7 +76,7 @@ public class HomeAction extends BaseAction {
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	
 	request.setAttribute("announcement", getDomainObject(request, "announcementOid"));
-	return mapping.findForward("view.announcement");
+	return forward(request, "public/viewAnnouncement.jsp");
     }
 
 }

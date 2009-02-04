@@ -30,47 +30,14 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.SearchUsers;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
-import pt.ist.expenditureTrackingSystem.presentationTier.Context;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.BaseAction;
 import pt.ist.expenditureTrackingSystem.util.reports.Spreadsheet;
 import pt.ist.expenditureTrackingSystem.util.reports.Spreadsheet.Row;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
-import pt.ist.fenixWebFramework.struts.annotations.Forward;
-import pt.ist.fenixWebFramework.struts.annotations.Forwards;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
 @Mapping(path = "/organization")
-@Forwards( {
-	@Forward(name = "view.organization", path = "/organization/viewOrganization.jsp"),
-	@Forward(name = "create.unit", path = "/organization/createUnit.jsp"),
-	@Forward(name = "create.accounting.unit", path = "/organization/createAccountingUnit.jsp"),
-	@Forward(name = "edit.unit", path = "/organization/editUnit.jsp"),
-	@Forward(name = "search.users", path = "/organization/searchUsers.jsp"),
-	@Forward(name = "manage.suppliers", path = "/organization/manageSuppliers.jsp"),
-	@Forward(name = "view.person", path = "/organization/viewPerson.jsp"),
-	@Forward(name = "view.authorization", path = "/organization/viewAuthorization.jsp"),
-	@Forward(name = "edit.authorization", path = "/organization/editAuthorization.jsp"),
-	@Forward(name = "delegate.authorization", path = "/organization/delegateAuthorization.jsp"),
-	@Forward(name = "create.person", path = "/organization/createPerson.jsp"),
-	@Forward(name = "edit.person", path = "/organization/editPerson.jsp"),
-	@Forward(name = "view.supplier", path = "/organization/viewSupplier.jsp"),
-	@Forward(name = "create.supplier", path = "/organization/createSupplier.jsp"),
-	@Forward(name = "edit.supplier", path = "/organization/editSupplier.jsp"),
-	@Forward(name = "create.authorization.unit", path = "/organization/createAuthorizationUnit.jsp"),
-	@Forward(name = "delegate.choose.unit", path = "/organization/delegateChooseUnit.jsp"),
-	@Forward(name = "change.authorization.unit", path = "/organization/changeAuthorizationUnit.jsp"),
-	@Forward(name = "select.accounting.unit.to.add.member", path = "/organization/selectAccountingUnitToAddMember.jsp"),
-	@Forward(name = "select.project.accounting.unit.to.add.member", path = "/organization/selectProjectAccountingUnitToAddMember.jsp"),
-	@Forward(name = "view.accounting.unit", path = "/organization/viewAccountingUnit.jsp"),
-	@Forward(name = "add.unit.to.accounting.unit", path = "/organization/addUnitToAccountingUnit.jsp")})
 public class OrganizationAction extends BaseAction {
-
-    private static final Context CONTEXT = new Context("organization");
-
-    @Override
-    protected Context getContextModule(final HttpServletRequest request) {
-	return CONTEXT;
-    }
 
     public final ActionForward viewOrganization(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
@@ -97,14 +64,14 @@ public class OrganizationAction extends BaseAction {
 	    units = unit.getSubUnitsSet();
 	}
 	request.setAttribute("units", units);
-	return mapping.findForward("view.organization");
+	return forward(request, "/organization/viewOrganization.jsp");
     }
 
     public final ActionForward prepareCreateUnit(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final Unit unit = getDomainObject(request, "unitOid");
 	request.setAttribute("bean", new CreateUnitBean(unit));
-	return mapping.findForward("create.unit");
+	return forward(request, "/organization/createUnit.jsp");
     }
 
     public final ActionForward createNewUnit(final ActionMapping mapping, final ActionForm form,
@@ -117,7 +84,7 @@ public class OrganizationAction extends BaseAction {
     public final ActionForward prepareCreateAccountingUnit(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	request.setAttribute("accountingUnitBean", new AccountingUnitBean());
-	return mapping.findForward("create.accounting.unit");
+	return forward(request, "/organization/createAccountingUnit.jsp");
     }
 
     public final ActionForward createNewAccountingUnit(final ActionMapping mapping, final ActionForm form,
@@ -130,7 +97,7 @@ public class OrganizationAction extends BaseAction {
 
     private ActionForward editUnit(ActionMapping mapping, HttpServletRequest request, Unit unit) {
 	request.setAttribute("unit", unit);
-	return mapping.findForward("edit.unit");
+	return forward(request, "/organization/editUnit.jsp");
     }
 
     public final ActionForward editUnit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -154,14 +121,14 @@ public class OrganizationAction extends BaseAction {
 	    searchUsers = new SearchUsers();
 	}
 	request.setAttribute("searchUsers", searchUsers);
-	return mapping.findForward("search.users");
+	return forward(request, "/organization/searchUsers.jsp");
     }
 
     public final ActionForward prepareCreatePerson(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final CreatePersonBean createPersonBean = new CreatePersonBean();
 	request.setAttribute("bean", createPersonBean);
-	return mapping.findForward("create.person");
+	return forward(request, "/organization/createPerson.jsp");
     }
 
     public final ActionForward createPerson(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -179,7 +146,7 @@ public class OrganizationAction extends BaseAction {
 
     public final ActionForward editPerson(final ActionMapping mapping, final HttpServletRequest request, final Person person) {
 	request.setAttribute("person", person);
-	return mapping.findForward("edit.person");
+	return forward(request, "/organization/editPerson.jsp");
     }
 
     public final ActionForward deletePerson(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -219,21 +186,21 @@ public class OrganizationAction extends BaseAction {
     public final ActionForward viewPerson(final ActionMapping mapping, final HttpServletRequest request, final Person person) {
 	request.setAttribute("person", person);
 	request.setAttribute("availableRoles", RoleType.values());
-	return mapping.findForward("view.person");
+	return forward(request, "/organization/viewPerson.jsp");
     }
 
     public final ActionForward editAuthorization(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final Authorization authorization = getDomainObject(request, "authorizationOid");
 	request.setAttribute("authorization", authorization);
-	return mapping.findForward("edit.authorization");
+	return forward(request, "/organization/editAuthorization.jsp");
     }
 
     public final ActionForward viewAuthorization(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final Authorization authorization = getDomainObject(request, "authorizationOid");
 	request.setAttribute("authorization", authorization);
-	return mapping.findForward("view.authorization");
+	return forward(request, "/organization/viewAuthorization.jsp");
     }
 
     public final ActionForward attributeAuthorization(final ActionMapping mapping, final ActionForm form,
@@ -252,7 +219,7 @@ public class OrganizationAction extends BaseAction {
 	request.setAttribute("person", person);
 	final Set<AccountingUnit> accountingUnits = ExpenditureTrackingSystem.getInstance().getAccountingUnitsSet();
 	request.setAttribute("accountingUnits", accountingUnits);
-	return mapping.findForward("select.accounting.unit.to.add.member");
+	return forward(request, "/organization/selectAccountingUnitToAddMember.jsp");
     }
 
     public final ActionForward addToAccountingUnit(final ActionMapping mapping, final ActionForm form,
@@ -269,7 +236,7 @@ public class OrganizationAction extends BaseAction {
 	request.setAttribute("person", person);
 	final Set<AccountingUnit> accountingUnits = ExpenditureTrackingSystem.getInstance().getAccountingUnitsSet();
 	request.setAttribute("accountingUnits", accountingUnits);
-	return mapping.findForward("select.project.accounting.unit.to.add.member");
+	return forward(request, "/organization/selectProjectAccountingUnitToAddMember.jsp");
     }
 
     public final ActionForward addToProjectAccountingUnit(final ActionMapping mapping, final ActionForm form,
@@ -301,7 +268,7 @@ public class OrganizationAction extends BaseAction {
 	request.setAttribute("units", units);
 	final UnitBean unitBean = new UnitBean();
 	request.setAttribute("unitBean", unitBean);
-	return mapping.findForward("change.authorization.unit");
+	return forward(request, "/organization/changeAuthorizationUnit.jsp");
     }
 
     public final ActionForward changeAuthorizationUnit(final ActionMapping mapping, final ActionForm form,
@@ -320,7 +287,7 @@ public class OrganizationAction extends BaseAction {
 	request.setAttribute("authorizationBean", authorizationBean);
 	request.setAttribute("person", person);
 	request.setAttribute("unit", unit);
-	return mapping.findForward("create.authorization.unit");
+	return forward(request, "/organization/createAuthorizationUnit.jsp");
     }
 
     public final ActionForward createAuthorizationUnit(final ActionMapping mapping, final ActionForm form,
@@ -346,13 +313,13 @@ public class OrganizationAction extends BaseAction {
 	}
 
 	request.setAttribute("supplierBean", supplierBean);
-	return mapping.findForward("manage.suppliers");
+	return forward(request, "/organization/manageSuppliers.jsp");
     }
 
     public final ActionForward manageSuppliers(final ActionMapping mapping, final HttpServletRequest request,
 	    final SupplierBean supplierBean) {
 	request.setAttribute("supplierBean", supplierBean);
-	return mapping.findForward("manage.suppliers");
+	return forward(request, "/organization/manageSuppliers.jsp");
     }
 
     public final ActionForward viewSupplier(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -365,7 +332,7 @@ public class OrganizationAction extends BaseAction {
     private final ActionForward viewSupplier(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response, final Supplier supplier) {
 	request.setAttribute("supplier", supplier);
-	return mapping.findForward("view.supplier");
+	return forward(request, "/organization/viewSupplier.jsp");
     }
 
     public final ActionForward prepareCreateSupplier(final ActionMapping mapping, final ActionForm form,
@@ -373,7 +340,7 @@ public class OrganizationAction extends BaseAction {
 	final CreateSupplierBean createSupplierBean = new CreateSupplierBean();
 
 	request.setAttribute("bean", createSupplierBean);
-	return mapping.findForward("create.supplier");
+	return forward(request, "/organization/createSupplier.jsp");
     }
 
     public final ActionForward createSupplier(final ActionMapping mapping, final ActionForm form,
@@ -389,7 +356,7 @@ public class OrganizationAction extends BaseAction {
 	final Supplier supplier = getDomainObject(request, "supplierOid");
 
 	request.setAttribute("supplier", supplier);
-	return mapping.findForward("edit.supplier");
+	return forward(request, "/organization/editSupplier.jsp");
     }
 
     public final ActionForward editSupplier(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -436,7 +403,7 @@ public class OrganizationAction extends BaseAction {
 	    addErrorMessage("label.unable.to.delegate.that.action", "EXPENDITURE_RESOURCES");
 	}
 
-	return mapping.findForward("delegate.authorization");
+	return forward(request, "/organization/delegateAuthorization.jsp");
     }
 
     public ActionForward chooseDelegationUnit(final ActionMapping mapping, final ActionForm form,
@@ -449,7 +416,7 @@ public class OrganizationAction extends BaseAction {
 	}
 	request.setAttribute("unit", unit);
 	request.setAttribute("units", unit.getSubUnitsSet());
-	return mapping.findForward("delegate.choose.unit");
+	return forward(request, "/organization/delegateChooseUnit.jsp");
     }
 
     public ActionForward createDelegation(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -462,11 +429,11 @@ public class OrganizationAction extends BaseAction {
 	} catch (DomainException e) {
 	    addErrorMessage(e.getMessage(), "EXPENDITURE_RESOURCES");
 	    request.setAttribute("bean", bean);
-	    return mapping.findForward("delegate.authorization");
+	    return forward(request, "/organization/delegateAuthorization.jsp");
 	}
 	RenderUtils.invalidateViewState();
 	request.setAttribute("authorization", bean.getAuthorization());
-	return mapping.findForward("view.authorization");
+	return forward(request, "/organization/viewAuthorization.jsp");
     }
 
     public ActionForward removePersonFromAccountingUnit(final ActionMapping mapping, final ActionForm form,
@@ -489,7 +456,7 @@ public class OrganizationAction extends BaseAction {
 	    final HttpServletResponse response) {
 	final AccountingUnit accountingUnit = getDomainObject(request, "accountingUnitOid");
 	request.setAttribute("accountingUnit", accountingUnit);
-	return mapping.findForward("view.accounting.unit");
+	return forward(request, "/organization/viewAccountingUnit.jsp");
     }
 
     public ActionForward prepareAddUnitToAccountingUnit(final ActionMapping mapping, final ActionForm form,
@@ -515,7 +482,7 @@ public class OrganizationAction extends BaseAction {
 
 	RenderUtils.invalidateViewState();
 
-	return mapping.findForward("add.unit.to.accounting.unit");
+	return forward(request, "/organization/addUnitToAccountingUnit.jsp");
     }
 
     public ActionForward addUnitToAccountingUnit(final ActionMapping mapping, final ActionForm form,
@@ -534,7 +501,7 @@ public class OrganizationAction extends BaseAction {
 
 	accountingUnit.addUnits(unit);
 
-	return mapping.findForward("view.accounting.unit");
+	return forward(request, "/organization/viewAccountingUnit.jsp");
     }
 
     public ActionForward listSuppliers(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,

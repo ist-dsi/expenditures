@@ -10,27 +10,13 @@ import org.apache.struts.action.ActionMapping;
 import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.Options;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
-import pt.ist.expenditureTrackingSystem.presentationTier.Context;
 import pt.ist.expenditureTrackingSystem.presentationTier.util.FileUploadBean;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 import pt.ist.fenixWebFramework.security.UserView;
-import pt.ist.fenixWebFramework.struts.annotations.Forward;
-import pt.ist.fenixWebFramework.struts.annotations.Forwards;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
 @Mapping( path="/customize" )
-@Forwards( {
-    @Forward(name="show.options", path="/options/notificationOptions.jsp"),
-    @Forward(name="show.interface.options", path="/options/interfaceOptions.jsp")
-} )
 public class CustomizeAction extends BaseAction {
-
-    private static final Context CONTEXT = new Context("options");
-
-    @Override
-    protected Context getContextModule(final HttpServletRequest request) {
-	return CONTEXT;
-    }
 
     protected Options getOptions() {
 	final User user = UserView.getUser();
@@ -43,19 +29,19 @@ public class CustomizeAction extends BaseAction {
     		throws Exception {
 	final Options options = getOptions();
 	request.setAttribute("options", options);
-	return mapping.findForward(forward);
+	return forward(request, forward);
     }
 
     public final ActionForward showNotificationOptions(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
-	return showOptions(mapping, request, "show.options");
+	return showOptions(mapping, request, "/options/notificationOptions.jsp");
     }
 
     public final ActionForward showInterfaceOptions(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
 	final FileUploadBean fileUploadBean = new FileUploadBean();
 	request.setAttribute("fileUploadBean", fileUploadBean);
-	return showOptions(mapping, request, "show.interface.options");
+	return showOptions(mapping, request, "/options/interfaceOptions.jsp");
     }
 
     public final ActionForward uploadCss(final ActionMapping mapping, final ActionForm form,
