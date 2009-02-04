@@ -79,11 +79,11 @@ public class InterfaceCreationAction extends ContextBaseAction {
 
 	final Node organizationNode = createNodeForPage(virtualHost, node, "resources.ExpenditureResources",
 		"link.topBar.organization", UserGroup.getInstance());
-	ActionNode.createActionNode(virtualHost, organizationNode, "/organization", "viewOrganization",
+	ActionNode.createActionNode(virtualHost, organizationNode, "/expenditureTrackingOrganization", "viewOrganization",
 		"resources.ExpenditureResources", "link.viewOrganization", UserGroup.getInstance());
-	ActionNode.createActionNode(virtualHost, organizationNode, "/organization", "searchUsers",
+	ActionNode.createActionNode(virtualHost, organizationNode, "/expenditureTrackingOrganization", "searchUsers",
 		"resources.ExpenditureResources", "search.link.users", UserGroup.getInstance());
-	ActionNode.createActionNode(virtualHost, organizationNode, "/organization", "manageSuppliers",
+	ActionNode.createActionNode(virtualHost, organizationNode, "/expenditureTrackingOrganization", "manageSuppliers",
 		"resources.ExpenditureOrganizationResources", "supplier.link.manage", UserGroup.getInstance());
 
 	final Node statisticsNode = createNodeForPage(virtualHost, node, "resources.ExpenditureResources",

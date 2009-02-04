@@ -136,7 +136,7 @@ public class Unit extends Unit_Base {
     }
 
     public String getType() {
-	return ResourceBundle.getBundle("resources/OrganizationResources", Language.getLocale()).getString(
+	return ResourceBundle.getBundle("resources/ExpenditureOrganizationResources", Language.getLocale()).getString(
 		"label." + getClass().getSimpleName());
     }
 

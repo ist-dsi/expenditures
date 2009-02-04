@@ -6,7 +6,7 @@
 
 <h2><bean:message key="title.accounting.unit.add.unit" bundle="ORGANIZATION_RESOURCES"/> <bean:write name="accountingUnit" property="name"/></h2>
 
-<bean:define id="urlExpand" type="java.lang.String">/organization.do?method=prepareAddUnitToAccountingUnit&amp;accountingUnitOid=<bean:write name="accountingUnit" property="OID"/></bean:define>
+<bean:define id="urlExpand" type="java.lang.String">/expenditureTrackingOrganization.do?method=prepareAddUnitToAccountingUnit&amp;accountingUnitOid=<bean:write name="accountingUnit" property="OID"/></bean:define>
 <fr:edit id="unitBean"
 		name="unitBean"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.UnitBean"
@@ -19,7 +19,7 @@
 </fr:edit>
 
 
-<bean:define id="urlSelect" type="java.lang.String">/organization.do?method=addUnitToAccountingUnit&amp;accountingUnitOid=<bean:write name="accountingUnit" property="OID"/></bean:define>
+<bean:define id="urlSelect" type="java.lang.String">/expenditureTrackingOrganization.do?method=addUnitToAccountingUnit&amp;accountingUnitOid=<bean:write name="accountingUnit" property="OID"/></bean:define>
 <p class="mtop15">
 	<html:link action="<%= urlExpand %>">
 		<bean:message key="link.top" bundle="EXPENDITURE_RESOURCES"/>

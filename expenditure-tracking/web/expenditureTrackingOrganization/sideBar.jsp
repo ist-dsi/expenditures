@@ -4,19 +4,19 @@
 
 <ul>
 	<li>
-		<html:link action="/organization.do?method=viewOrganization">
+		<html:link action="/expenditureTrackingOrganization.do?method=viewOrganization">
 			<span><bean:message key="link.viewOrganization" bundle="EXPENDITURE_RESOURCES"/></span>
 		</html:link>
 		<span class="bar">|</span>
 	</li>
 	<li>
-		<html:link action="/organization.do?method=searchUsers">
+		<html:link action="/expenditureTrackingOrganization.do?method=searchUsers">
 			<span><bean:message key="search.link.users" bundle="EXPENDITURE_RESOURCES"/></span>
 		</html:link>
 		<span class="bar">|</span>
 	</li>
 	<li>
-		<html:link action="/organization.do?method=manageSuppliers">
+		<html:link action="/expenditureTrackingOrganization.do?method=manageSuppliers">
 			<span><bean:message key="supplier.link.manage" bundle="ORGANIZATION_RESOURCES"/></span>
 		</html:link>
 	</li>	

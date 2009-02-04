@@ -4,16 +4,16 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
-<h2><bean:message key="unit.label.create" bundle="ORGANIZATION_RESOURCES"/></h2>
+<h2><bean:message key="person.label.create" bundle="ORGANIZATION_RESOURCES"/></h2>
 
 <fr:edit id="bean"
 		name="bean"
-		type="pt.ist.expenditureTrackingSystem.domain.dto.CreateUnitBean"
-		schema="createUnit"
-		action="/organization.do?method=createNewUnit">
+		type="pt.ist.expenditureTrackingSystem.domain.dto.CreatePersonBean"
+		schema="createPerson"
+		action="/expenditureTrackingOrganization.do?method=createPerson">
 	<fr:layout name="tabular">
 		<fr:property name="classes" value="form"/>
 		<fr:property name="columnClasses" value=",,tderror"/>
 	</fr:layout>
-	<fr:destination name="cancel" path="/organization.do?method=viewOrganization" />
+	<fr:destination name="cancel" path="/expenditureTrackingOrganization.do?method=searchUsers" />
 </fr:edit>

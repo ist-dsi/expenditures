@@ -20,7 +20,7 @@
 
 <logic:present role="MANAGER">
 	<p class="mtop15">
-		<html:link action="/organization.do?method=prepareCreatePerson">
+		<html:link action="/expenditureTrackingOrganization.do?method=prepareCreatePerson">
 			<bean:message key="person.link.create" bundle="ORGANIZATION_RESOURCES"/>
 		</html:link>
 	</p>
@@ -33,7 +33,7 @@
 		<fr:property name="classes" value="tstyle2"/>
 		<fr:property name="columnClasses" value="aleft,,,,aright,"/>
 		<fr:property name="sortBy" value="name=asc"/>
-		<fr:property name="link(view)" value="/organization.do?method=viewPerson"/>
+		<fr:property name="link(view)" value="/expenditureTrackingOrganization.do?method=viewPerson"/>
 		<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
 		<fr:property name="key(view)" value="link.view"/>
 		<fr:property name="param(view)" value="OID/personOid"/>

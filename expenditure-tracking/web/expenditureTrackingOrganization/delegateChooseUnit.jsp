@@ -6,9 +6,9 @@
 
 <h2><bean:message key="authorizations.title.delegate" bundle="EXPENDITURE_RESOURCES"/></h2>
 
-<bean:define id="urlExpand" type="java.lang.String">/organization.do?method=chooseDelegationUnit&amp;authorizationOid=<bean:write name="authorization" property="OID"/></bean:define>
+<bean:define id="urlExpand" type="java.lang.String">/expenditureTrackingOrganization.do?method=chooseDelegationUnit&amp;authorizationOid=<bean:write name="authorization" property="OID"/></bean:define>
 
-<bean:define id="urlSelect" type="java.lang.String">/organization.do?method=delegateAuthorization&amp;authorizationOid=<bean:write name="authorization" property="OID"/></bean:define>
+<bean:define id="urlSelect" type="java.lang.String">/expenditureTrackingOrganization.do?method=delegateAuthorization&amp;authorizationOid=<bean:write name="authorization" property="OID"/></bean:define>
 <p>
 	<html:link action="<%= urlExpand %>">
 		<bean:message key="link.top" bundle="EXPENDITURE_RESOURCES"/>

@@ -11,33 +11,33 @@
 		<ul>
 			<logic:present role="MANAGER,ACQUISITION_CENTRAL_MANAGER">
 				<li>
-					<html:link action="/organization.do?method=attributeAuthorization" paramId="personOid" paramName="person" paramProperty="OID">
+					<html:link action="/expenditureTrackingOrganization.do?method=attributeAuthorization" paramId="personOid" paramName="person" paramProperty="OID">
 						<bean:message key="authorizations.link.grant" bundle="EXPENDITURE_RESOURCES"/>
 					</html:link>
 				</li>
 			</logic:present>
 			<logic:present role="MANAGER,ACCOUNTING_MANAGER">
 				<li>
-					<html:link action="/organization.do?method=prepareAddToAccountingUnit" paramId="personOid" paramName="person" paramProperty="OID">
+					<html:link action="/expenditureTrackingOrganization.do?method=prepareAddToAccountingUnit" paramId="personOid" paramName="person" paramProperty="OID">
 						<bean:message key="accountingUnit.link.add.member" bundle="EXPENDITURE_RESOURCES"/>
 					</html:link>
 				</li>
 			</logic:present>
 			<logic:present role="MANAGER,PROJECT_ACCOUNTING_MANAGER">
 				<li>
-					<html:link action="/organization.do?method=prepareAddToProjectAccountingUnit" paramId="personOid" paramName="person" paramProperty="OID">
+					<html:link action="/expenditureTrackingOrganization.do?method=prepareAddToProjectAccountingUnit" paramId="personOid" paramName="person" paramProperty="OID">
 						<bean:message key="project.accountingUnit.link.add.member" bundle="EXPENDITURE_RESOURCES"/>
 					</html:link>
 				</li>
 			</logic:present>
 			<logic:present role="MANAGER">
 				<li>
-					<html:link action="/organization.do?method=editPerson" paramId="personOid" paramName="person" paramProperty="OID">
+					<html:link action="/expenditureTrackingOrganization.do?method=editPerson" paramId="personOid" paramName="person" paramProperty="OID">
 						<bean:message key="user.link.editUser" bundle="ORGANIZATION_RESOURCES"/>
 					</html:link>
 				</li>
 				<li>
-					<html:link action="/organization.do?method=deletePerson" paramId="personOid" paramName="person" paramProperty="OID">
+					<html:link action="/expenditureTrackingOrganization.do?method=deletePerson" paramId="personOid" paramName="person" paramProperty="OID">
 						<bean:message key="user.link.removeUser" bundle="ORGANIZATION_RESOURCES"/>
 					</html:link>
 				</li>
@@ -74,11 +74,11 @@
 		<p class="mvert05">
 			<span>
 				<fr:view name="role"/>: 
-				<html:link action='<%= "/organization.do?method=addRole&role=" + role %>' paramId="personOid" paramName="person" paramProperty="OID">
+				<html:link action='<%= "/expenditureTrackingOrganization.do?method=addRole&role=" + role %>' paramId="personOid" paramName="person" paramProperty="OID">
 					<bean:message key="role.label.add" bundle="ORGANIZATION_RESOURCES"/>
 				</html:link>
 				|
-				<html:link action='<%= "/organization.do?method=removeRole&role=" + role %>' paramId="personOid" paramName="person" paramProperty="OID">
+				<html:link action='<%= "/expenditureTrackingOrganization.do?method=removeRole&role=" + role %>' paramId="personOid" paramName="person" paramProperty="OID">
 					<bean:message key="role.label.remove" bundle="ORGANIZATION_RESOURCES"/>
 				</html:link>
 			</span>
@@ -96,7 +96,7 @@
 			<fr:property name="classes" value="tstyle2"/>
 			<fr:property name="columnClasses" value="aleft,,,,aright,"/>
 
-			<fr:property name="link(view)" value="/organization.do?method=viewAuthorization"/>
+			<fr:property name="link(view)" value="/expenditureTrackingOrganization.do?method=viewAuthorization"/>
 			<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
 			<fr:property name="key(view)" value="link.view"/>
 			<fr:property name="param(view)" value="OID/authorizationOid"/>
@@ -112,7 +112,7 @@
 
 
 <h3 class="mtop2 mbottom05"><bean:message key="accountingUnit.list.for.person" bundle="ORGANIZATION_RESOURCES"/></h3>
-<bean:define id="removeUrl">/organization.do?method=removePersonFromAccountingUnit&amp;personOid=<bean:write name="person" property="OID"/></bean:define>
+<bean:define id="removeUrl">/expenditureTrackingOrganization.do?method=removePersonFromAccountingUnit&amp;personOid=<bean:write name="person" property="OID"/></bean:define>
 <logic:notEmpty name="person" property="accountingUnits">
 	<fr:view name="person" property="accountingUnits"
 			schema="accountingUnits">
@@ -120,7 +120,7 @@
 			<fr:property name="classes" value="tstyle2"/>
 			<fr:property name="columnClasses" value="aleft,,,,aright,"/>
 
-			<fr:property name="link(view)" value="/organization.do?method=viewAccountingUnit"/>
+			<fr:property name="link(view)" value="/expenditureTrackingOrganization.do?method=viewAccountingUnit"/>
 			<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
 			<fr:property name="key(view)" value="link.view"/>
 			<fr:property name="param(view)" value="OID/accountingUnitOid"/>
@@ -142,7 +142,7 @@
 
 
 <h3 class="mtop2 mbottom05"><bean:message key="project.accountingUnit.list.for.person" bundle="ORGANIZATION_RESOURCES"/></h3>
-<bean:define id="removeUrl">/organization.do?method=removePersonFromProjectAccountingUnit&amp;personOid=<bean:write name="person" property="OID"/></bean:define>
+<bean:define id="removeUrl">/expenditureTrackingOrganization.do?method=removePersonFromProjectAccountingUnit&amp;personOid=<bean:write name="person" property="OID"/></bean:define>
 <logic:notEmpty name="person" property="projectAccountingUnits">
 	<fr:view name="person" property="projectAccountingUnits"
 			schema="accountingUnits">
@@ -150,7 +150,7 @@
 			<fr:property name="classes" value="tstyle2"/>
 			<fr:property name="columnClasses" value="aleft,,,,aright,"/>
 
-			<fr:property name="link(view)" value="/organization.do?method=viewAccountingUnit"/>
+			<fr:property name="link(view)" value="/expenditureTrackingOrganization.do?method=viewAccountingUnit"/>
 			<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
 			<fr:property name="key(view)" value="link.view"/>
 			<fr:property name="param(view)" value="OID/accountingUnitOid"/>

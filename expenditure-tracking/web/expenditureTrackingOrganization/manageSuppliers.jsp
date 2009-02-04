@@ -11,13 +11,13 @@
 		<ul>
 			<logic:present role="SUPPLIER_MANAGER">
 			<li>
-				<html:link action="/organization.do?method=prepareCreateSupplier">
+				<html:link action="/expenditureTrackingOrganization.do?method=prepareCreateSupplier">
 					<bean:message key="supplier.link.create" bundle="ORGANIZATION_RESOURCES"/>
 				</html:link>		
 			</li>
 			</logic:present>
 			<li>
-				<html:link action="/organization.do?method=listSuppliers">
+				<html:link action="/expenditureTrackingOrganization.do?method=listSuppliers">
 					<bean:message key="supplier.link.list" bundle="ORGANIZATION_RESOURCES"/>
 				</html:link>
 			</li>
@@ -28,7 +28,7 @@
 <p class="mvert05"><strong><bean:message key="label.search" bundle="ORGANIZATION_RESOURCES"/></strong></p>
 
 <div class="mbottom15">
-	<fr:form action="/organization.do?method=manageSuppliers">
+	<fr:form action="/expenditureTrackingOrganization.do?method=manageSuppliers">
 	<fr:edit id="supplierBean" 
 			name="supplierBean"
 			type="pt.ist.expenditureTrackingSystem.domain.dto.SupplierBean"
@@ -58,12 +58,12 @@
 	<bean:define id="supplierOID" name="supplierBean" property="supplier.OID"/>
 	<logic:present role="MANAGER,SUPPLIER_MANAGER">
 		<p>
-			<html:link action='<%= "/organization.do?method=prepareEditSupplier&supplierOid=" + supplierOID%>'>
+			<html:link action='<%= "/expenditureTrackingOrganization.do?method=prepareEditSupplier&supplierOid=" + supplierOID%>'>
 				<bean:message key="supplier.link.edit" bundle="ORGANIZATION_RESOURCES"/>
 			</html:link>
 			<logic:present role="MANAGER">
 			| 
-				<html:link action='<%= "/organization.do?method=deleteSupplier&supplierOid=" + supplierOID%>'>
+				<html:link action='<%= "/expenditureTrackingOrganization.do?method=deleteSupplier&supplierOid=" + supplierOID%>'>
 					<bean:message key="supplier.link.delete" bundle="ORGANIZATION_RESOURCES"/>
 				</html:link>
 			</logic:present>

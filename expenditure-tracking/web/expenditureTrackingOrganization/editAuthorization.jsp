@@ -4,19 +4,20 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
-<h2><bean:message key="authorizations.title.grant" bundle="ORGANIZATION_RESOURCES"/></h2>
+<h2><bean:message key="authorizations.title.editAuthorization" bundle="EXPENDITURE_RESOURCES"/></h2>
 
 <div class="infoop2">
-	<fr:view name="person"
-			type="pt.ist.expenditureTrackingSystem.domain.organization.Person"
-			schema="viewPerson">
+	<fr:view name="authorization" schema="viewAuthorizationBeingEdited">
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="tstyle1"/>
+			<fr:property name="columnClasses" value=",,tderror"/>
 		</fr:layout>
 	</fr:view>
 </div>
 
-<fr:edit id="bean" name="authorizationBean" schema="create.authorization.unit" action="/organization.do?method=createAuthorizationUnit">
+<bean:define id="url" type="java.lang.String">/expenditureTrackingOrganization.do?method=viewAuthorization&amp;authorizationOid=<bean:write name="authorization" property="OID"/></bean:define>
+<fr:edit name="authorization" schema="editAuthorization"
+		action="<%= url %>">
 	<fr:layout name="tabular">
 		<fr:property name="classes" value="form"/>
 		<fr:property name="columnClasses" value=",,tderror"/>

@@ -7,7 +7,7 @@
 <h2><bean:message key="title.viewOrganization" bundle="EXPENDITURE_RESOURCES"/></h2>
 
 <div class="mbottom15">
-	<fr:form action="/organization.do?method=viewOrganization">
+	<fr:form action="/expenditureTrackingOrganization.do?method=viewOrganization">
 	<fr:edit id="unitBean"
 			name="unitBean"
 			schema="unitBean">
@@ -24,14 +24,14 @@
 <logic:present role="MANAGER">
 	<logic:notPresent name="unit">
 		<p>
-			<html:link action="/organization.do?method=prepareCreateUnit">
+			<html:link action="/expenditureTrackingOrganization.do?method=prepareCreateUnit">
 				<bean:message key="unit.link.create" bundle="ORGANIZATION_RESOURCES"/>
 			</html:link>
 		</p>
 	</logic:notPresent>
 	<logic:present name="unit">
 		<p>
-			<html:link action="/organization.do?method=prepareCreateUnit" paramId="unitOid" paramName="unit" paramProperty="OID">
+			<html:link action="/expenditureTrackingOrganization.do?method=prepareCreateUnit" paramId="unitOid" paramName="unit" paramProperty="OID">
 				<bean:message key="unit.link.create" bundle="ORGANIZATION_RESOURCES"/>
 			</html:link>
 		</p>
@@ -52,10 +52,10 @@
 	
 	<logic:present role="MANAGER">
 		<p class="mtop05">
-			<html:link action="/organization.do?method=editUnit" paramId="unitOid" paramName="unit" paramProperty="OID">
+			<html:link action="/expenditureTrackingOrganization.do?method=editUnit" paramId="unitOid" paramName="unit" paramProperty="OID">
 				<bean:message key="link.edit" bundle="EXPENDITURE_RESOURCES"/>
 			</html:link> | 
-			<html:link action="/organization.do?method=deleteUnit" paramId="unitOid" paramName="unit" paramProperty="OID">
+			<html:link action="/expenditureTrackingOrganization.do?method=deleteUnit" paramId="unitOid" paramName="unit" paramProperty="OID">
 				<bean:message key="link.delete" bundle="EXPENDITURE_RESOURCES"/>
 			</html:link>
 		</p>
@@ -90,7 +90,7 @@
 				<fr:property name="classes" value="tstyle2 mtop05"/>
 				<fr:property name="columnClasses" value=",,aleft,"/>
 				<fr:property name="sortBy" value="name=asc"/>
-				<fr:property name="link(view)" value="/organization.do?method=viewOrganization"/>
+				<fr:property name="link(view)" value="/expenditureTrackingOrganization.do?method=viewOrganization"/>
 				<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
 				<fr:property name="key(view)" value="link.view"/>
 				<fr:property name="param(view)" value="OID/unitOid"/>
@@ -102,7 +102,7 @@
 
 <h3 class="mtop15 mbottom05"><bean:message key="accountingUnit.title" bundle="ORGANIZATION_RESOURCES"/></h3>
 <p class="mtop05">
-	<html:link action="/organization.do?method=prepareCreateAccountingUnit">
+	<html:link action="/expenditureTrackingOrganization.do?method=prepareCreateAccountingUnit">
 		<bean:message key="unit.link.create.accounting.unit" bundle="ORGANIZATION_RESOURCES"/>
 	</html:link>
 </p>
@@ -117,7 +117,7 @@
 				<fr:property name="classes" value="tstyle2 mtop05"/>
 				<fr:property name="columnClasses" value="aleft,,,,,"/>
 				<fr:property name="sortBy" value="name=asc"/>
-				<fr:property name="link(view)" value="/organization.do?method=viewAccountingUnit"/>
+				<fr:property name="link(view)" value="/expenditureTrackingOrganization.do?method=viewAccountingUnit"/>
 				<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
 				<fr:property name="key(view)" value="link.view"/>
 				<fr:property name="param(view)" value="OID/accountingUnitOid"/>

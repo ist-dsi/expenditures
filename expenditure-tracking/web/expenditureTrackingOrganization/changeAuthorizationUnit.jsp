@@ -16,8 +16,8 @@
 	</fr:view>
 </div>
 
-<bean:define id="urlExpand" type="java.lang.String">/organization.do?method=expandAuthorizationUnit&amp;personOid=<bean:write name="person" property="OID"/></bean:define>
-<bean:define id="urlCancel" type="java.lang.String">/organization.do?method=viewPerson&amp;personOid=<bean:write name="person" property="OID"/></bean:define>
+<bean:define id="urlExpand" type="java.lang.String">/expenditureTrackingOrganization.do?method=expandAuthorizationUnit&amp;personOid=<bean:write name="person" property="OID"/></bean:define>
+<bean:define id="urlCancel" type="java.lang.String">/expenditureTrackingOrganization.do?method=viewPerson&amp;personOid=<bean:write name="person" property="OID"/></bean:define>
 <fr:edit id="unitBean"
 		name="unitBean"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.UnitBean"
@@ -31,7 +31,7 @@
 </fr:edit>
 
 
-<bean:define id="urlSelect" type="java.lang.String">/organization.do?method=prepareCreateAuthorizationUnit&amp;personOid=<bean:write name="person" property="OID"/></bean:define>
+<bean:define id="urlSelect" type="java.lang.String">/expenditureTrackingOrganization.do?method=prepareCreateAuthorizationUnit&amp;personOid=<bean:write name="person" property="OID"/></bean:define>
 <p>
 	<html:link action="<%= urlExpand %>">
 		<bean:message key="link.top" bundle="EXPENDITURE_RESOURCES"/>

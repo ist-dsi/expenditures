@@ -20,7 +20,7 @@
 	<bean:message key="accountingUnit.message.none.defined" bundle="ORGANIZATION_RESOURCES"/>
 </logic:empty>
 <logic:notEmpty name="accountingUnits">
-	<bean:define id="selectUrl">/organization.do?method=addToAccountingUnit&amp;personOid=<bean:write name="person" property="OID"/></bean:define>
+	<bean:define id="selectUrl">/expenditureTrackingOrganization.do?method=addToAccountingUnit&amp;personOid=<bean:write name="person" property="OID"/></bean:define>
 	<fr:view name="accountingUnits" schema="accountingUnits">
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="tstyle2 mtop05"/>
