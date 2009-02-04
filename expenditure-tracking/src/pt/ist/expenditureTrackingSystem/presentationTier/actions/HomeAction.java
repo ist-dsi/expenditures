@@ -55,7 +55,7 @@ public class HomeAction extends BaseAction {
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	
 	request.setAttribute("requestForProposalProcess", getDomainObject(request, "requestForProposalProcessOid"));
-	return mapping.findForward("view.request.process");
+	return forward(request, "public/viewRequestProcess.jsp");
     }
 
     public final ActionForward showAcquisitionAnnouncements(final ActionMapping mapping, final ActionForm form,

@@ -26,13 +26,6 @@ import pt.ist.fenixWebFramework.struts.annotations.Forwards;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
 @Mapping(path = "/announcementProcess")
-@Forwards( { @Forward(name = "view.active.processes", path = "/announcements/viewActiveProcesses.jsp"),
-	@Forward(name = "create.announcement", path = "announcements/createAnnouncement.jsp"),
-	@Forward(name = "edit.announcement", path = "announcements/editAnnouncement.jsp"),
-	@Forward(name = "view.announcement", path = "announcements/viewAnnouncement.jsp"),
-	@Forward(name = "view.announcementProcess", path = "announcements/viewAnnouncementProcess.jsp"),
-	@Forward(name = "search.announcement.process", path = "announcements/searchAnnouncementProcess.jsp"),
-	@Forward(name = "reject.announcement.process", path = "announcements/rejectAnnouncementProcess.jsp") })
 public class AnnouncementsProcessAction extends ProcessAction {
 
     @Override

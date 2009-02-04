@@ -22,8 +22,6 @@ import pt.ist.fenixWebFramework.struts.annotations.Forwards;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
 @Mapping(path = "/search")
-@Forwards( { @Forward(name = "search", path = "/acquisitions/search/searchProcesses.jsp"),
-	@Forward(name = "manage.searches", path = "/acquisitions/search/manageMySearches.jsp") })
 public class SearchPaymentProcessesAction extends BaseAction {
 
     private ActionForward search(final ActionMapping mapping, final HttpServletRequest request, SearchPaymentProcess searchBean,

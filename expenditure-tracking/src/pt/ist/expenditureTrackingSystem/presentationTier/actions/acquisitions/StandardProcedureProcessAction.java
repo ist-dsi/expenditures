@@ -19,15 +19,6 @@ import pt.ist.fenixWebFramework.struts.annotations.Forwards;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
 @Mapping(path = "/acquisitionStandardProcedureProcess")
-@Forwards( {
-	@Forward(name = "create.acquisition.process", path = "/acquisitions/standardProcess/createStandardAcquisitionProcess.jsp"),
-	@Forward(name = "view.acquisition.process", path = "/acquisitions/viewAcquisitionProcess.jsp"),
-	@Forward(name = "select.unit.to.add", path = "/acquisitions/selectPayingUnitToAdd.jsp"),
-	@Forward(name = "remove.paying.units", path = "/acquisitions/removePayingUnits.jsp"),
-	@Forward(name = "edit.request.item", path = "/acquisitions/editRequestItem.jsp"),
-	@Forward(name = "assign.unit.item", path = "/acquisitions/assignUnitItem.jsp"),
-	@Forward(name = "create.acquisition.request.item", path = "/acquisitions/createAcquisitionRequestItem.jsp"),
-	@Forward(name = "view.comments", path = "/acquisitions/viewComments.jsp") })
 public class StandardProcedureProcessAction extends RegularAcquisitionProcessAction {
 
     @Override

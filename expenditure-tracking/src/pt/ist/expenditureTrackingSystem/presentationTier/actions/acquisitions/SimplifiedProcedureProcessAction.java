@@ -38,31 +38,6 @@ import pt.ist.fenixWebFramework.struts.annotations.Forwards;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
 @Mapping(path = "/acquisitionSimplifiedProcedureProcess")
-@Forwards( { @Forward(name = "edit.request.acquisition", path = "/acquisitions/editAcquisitionRequest.jsp"),
-	@Forward(name = "create.acquisition.process", path = "/acquisitions/createAcquisitionProcess.jsp"),
-	@Forward(name = "view.acquisition.process", path = "/acquisitions/viewAcquisitionProcess.jsp"),
-	@Forward(name = "add.acquisition.proposal.document", path = "/acquisitions/addAcquisitionProposalDocument.jsp"),
-	@Forward(name = "create.acquisition.request.item", path = "/acquisitions/createAcquisitionRequestItem.jsp"),
-	@Forward(name = "reject.acquisition.process", path = "/acquisitions/rejectAcquisitionProcess.jsp"),
-	@Forward(name = "allocate.project.funds", path = "/acquisitions/commons/allocateProjectFunds.jsp"),
-	@Forward(name = "allocate.funds", path = "/acquisitions/commons/allocateFunds.jsp"),
-	@Forward(name = "allocate.effective.project.funds", path = "/acquisitions/commons/allocateEffectiveProjectFunds.jsp"),
-	@Forward(name = "allocate.effective.funds", path = "/acquisitions/commons/allocateEffectiveFunds.jsp"),
-	@Forward(name = "allocate.funds.to.service.provider", path = "/acquisitions/allocateFundsToServiceProvider.jsp"),
-	@Forward(name = "prepare.create.acquisition.request", path = "/acquisitions/createAcquisitionRequest.jsp"),
-	@Forward(name = "receive.invoice", path = "/acquisitions/receiveInvoice.jsp"),
-	@Forward(name = "select.unit.to.add", path = "/acquisitions/commons/selectPayingUnitToAdd.jsp"),
-	@Forward(name = "remove.paying.units", path = "/acquisitions/commons/removePayingUnits.jsp"),
-	@Forward(name = "edit.request.item", path = "/acquisitions/editRequestItem.jsp"),
-	@Forward(name = "edit.request.item.real.values", path = "/acquisitions/editRequestItemRealValues.jsp"),
-	@Forward(name = "assign.unit.item", path = "/acquisitions/commons/assignUnitItem.jsp"),
-	@Forward(name = "edit.real.shares.values", path = "/acquisitions/commons/assignUnitItemRealValues.jsp"),
-	@Forward(name = "edit.supplier", path = "/acquisitions/editSupplierAddress.jsp"),
-	@Forward(name = "execute.payment", path = "/acquisitions/executePayment.jsp"),
-	@Forward(name = "change.financers.accounting.units", path = "/acquisitions/changeFinancersAccountingUnit.jsp"),
-	@Forward(name = "view.comments", path = "/acquisitions/viewComments.jsp"),
-	@Forward(name = "generic.upload", path = "/acquisitions/genericUpload.jsp"),
-	@Forward(name = "set.refundee", path = "/acquisitions/setRefundee.jsp") })
 public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessAction {
 
     @Override

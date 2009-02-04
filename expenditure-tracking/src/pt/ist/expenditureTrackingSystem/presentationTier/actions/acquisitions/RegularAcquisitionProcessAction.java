@@ -33,8 +33,6 @@ import pt.ist.fenixWebFramework.struts.annotations.Forwards;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
 @Mapping(path = "/acquisitionProcess")
-@Forwards( { @Forward(name = "search.acquisition.process", path = "/acquisitions/searchAcquisitionProcess.jsp"),
-	@Forward(name = "view.fund.allocations", path = "/acquisitions/viewFundAllocations.jsp") })
 public class RegularAcquisitionProcessAction extends PaymentProcessAction {
 
     @Override

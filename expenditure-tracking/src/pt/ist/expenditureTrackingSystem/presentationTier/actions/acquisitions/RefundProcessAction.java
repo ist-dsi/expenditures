@@ -28,25 +28,6 @@ import pt.ist.fenixWebFramework.struts.annotations.Forwards;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
 @Mapping(path = "/acquisitionRefundProcess")
-@Forwards( { @Forward(name = "create.refund.process", path = "/acquisitions/refund/createRefundRequest.jsp"),
-	@Forward(name = "view.refund.process", path = "/acquisitions/refund/viewRefundRequest.jsp"),
-	@Forward(name = "search.refund.process", path = "/acquisitions/refund/searchRefundRequest.jsp"),
-	@Forward(name = "create.refund.item", path = "/acquisitions/refund/createRefundItem.jsp"),
-	@Forward(name = "edit.refund.item", path = "/acquisitions/refund/editRefundItem.jsp"),
-	@Forward(name = "view.comments", path = "/acquisitions/viewComments.jsp"),
-	@Forward(name = "generic.upload", path = "/acquisitions/genericUpload.jsp"),
-	@Forward(name = "select.unit.to.add", path = "/acquisitions/commons/selectPayingUnitToAdd.jsp"),
-	@Forward(name = "assign.unit.item", path = "/acquisitions/commons/assignUnitItem.jsp"),
-	@Forward(name = "edit.real.shares.values", path = "/acquisitions/commons/assignUnitItemRealValues.jsp"),
-	@Forward(name = "remove.paying.units", path = "/acquisitions/commons/removePayingUnits.jsp"),
-	@Forward(name = "allocate.project.funds", path = "/acquisitions/commons/allocateProjectFunds.jsp"),
-	@Forward(name = "allocate.funds", path = "/acquisitions/commons/allocateFunds.jsp"),
-	@Forward(name = "add.refund.invoice", path = "/acquisitions/refund/addRefundInvoice.jsp"),
-	@Forward(name = "remove.refund.invoice", path = "/acquisitions/refund/removeRefundInvoice.jsp"),
-	@Forward(name = "edit.refund.invoice", path = "/acquisitions/refund/editRefundInvoice.jsp"),
-	@Forward(name = "allocate.effective.project.funds", path = "/acquisitions/commons/allocateEffectiveProjectFunds.jsp"),
-	@Forward(name = "allocate.effective.funds", path = "/acquisitions/commons/allocateEffectiveFunds.jsp"),
-	@Forward(name = "execute.payment", path = "/acquisitions/refund/executePayment.jsp") })
 public class RefundProcessAction extends PaymentProcessAction {
 
     @Override
