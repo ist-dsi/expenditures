@@ -3,3 +3,9 @@ relation MyOrgExpenditureTrackingSystem {
 	myorg.domain.MyOrg playsRole myOrg;
 	pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
 }
+
+
+relation MyOrgRoleExpendituresRole {
+	myorg.domain.groups.Role playsRole systemRole;
+	pt.ist.expenditureTrackingSystem.domain.Role playsRole expenditureTrackingSystemRole;
+}
