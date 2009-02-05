@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Set;
 
 import myorg.applicationTier.Authenticate.UserView;
-import myorg.domain.User;
 import myorg.domain.util.Money;
 
 import org.apache.commons.collections.Predicate;
@@ -152,8 +151,7 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
     }
 
     protected Person getLoggedPerson() {
-	final User user = UserView.getCurrentUser();
-	return user == null ? null : Person.findByUsername(user.getUsername());
+	return Person.getLoggedPerson();
     }
 
     private Set<? extends AcquisitionProcess> getProcesses() {

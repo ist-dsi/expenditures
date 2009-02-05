@@ -1,7 +1,5 @@
 package pt.ist.expenditureTrackingSystem.domain;
 
-import myorg.applicationTier.Authenticate.UserView;
-import myorg.domain.User;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.fenixWebFramework.services.Service;
@@ -70,8 +68,8 @@ public class SavedSearch extends SavedSearch_Base {
     }
 
     public boolean isSearchDefaultForCurrentUser() {
-	User user = UserView.getCurrentUser();
-	return isSearchDefaultForUser(Person.findByUsername(user.getUsername()));
+	final Person person = Person.getLoggedPerson();
+	return isSearchDefaultForUser(person);
     }
 
 }

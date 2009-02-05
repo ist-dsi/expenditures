@@ -4,7 +4,7 @@ import pt.ist.fenixWebFramework.services.Service;
 
 public class Role extends Role_Base {
 
-    public Role(RoleType type) {
+    public Role(final RoleType type) {
 	super();
 	setRoleType(type);
 	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
@@ -12,12 +12,12 @@ public class Role extends Role_Base {
     }
 
     @Service
-    public static Role createRole(RoleType type) {
+    public static Role createRole(final RoleType type) {
 	return new Role(type);
     }
 
-    public static Role getRole(RoleType roleType) {
-	for (Role role : ExpenditureTrackingSystem.getInstance().getRoles()) {
+    public static Role getRole(final RoleType roleType) {
+	for (final Role role : ExpenditureTrackingSystem.getInstance().getRoles()) {
 	    if (role.getRoleType().equals(roleType)) {
 		return role;
 	    }

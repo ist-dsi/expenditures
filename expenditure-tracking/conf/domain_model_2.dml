@@ -14,7 +14,7 @@ relation MyOrgRoleExpendituresRole {
 	pt.ist.expenditureTrackingSystem.domain.Role playsRole expenditureTrackingSystemRole;
 }
 
-relation PersonUser {
-	pt.ist.expenditureTrackingSystem.domain.organization.Person playsRole person;
+relation UserExpenditurePerson {
+	pt.ist.expenditureTrackingSystem.domain.organization.Person playsRole expenditurePerson;
 	myorg.domain.User playsRole user;
 }

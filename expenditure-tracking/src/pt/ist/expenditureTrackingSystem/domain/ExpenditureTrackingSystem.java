@@ -1,6 +1,7 @@
 package pt.ist.expenditureTrackingSystem.domain;
 
 import myorg.domain.MyOrg;
+import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.fenixWebFramework.services.Service;
 
 public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base {
@@ -21,6 +22,18 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base {
 	    instance = myOrg.getExpenditureTrackingSystem();
 	    if (instance == null) {
 		instance = new ExpenditureTrackingSystem();
+	    }
+
+	    initSystemSearches();
+	}
+    }
+
+    protected static void initSystemSearches() {
+	if (instance.getSystemSearches().isEmpty()) {
+	    new MyOwnProcessesSearch();
+	    final SavedSearch savedSearch = new PendingProcessesSearch();
+	    for (final Person person : instance.getPeopleSet()) {
+		person.setDefaultSearch(savedSearch);
 	    }
 	}
     }

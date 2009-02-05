@@ -5,24 +5,22 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import myorg.applicationTier.Authenticate.UserView;
+import myorg.domain.User;
+import myorg.domain.util.Address;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.Options;
 import pt.ist.expenditureTrackingSystem.domain.Role;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.SavedSearch;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.Acquisition;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestWithPayment;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.announcements.Announcement;
 import pt.ist.expenditureTrackingSystem.domain.announcements.AnnouncementProcess;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.AuthorizationBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreatePersonBean;
-import myorg.applicationTier.Authenticate.UserView;
-import myorg.domain.User;
-import myorg.domain.util.Address;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.pstm.Transaction;
 
@@ -186,20 +184,47 @@ public class Person extends Person_Base {
     }
 
     public static Person getLoggedPerson() {
-	User user = UserView.getCurrentUser();
+	final User user = UserView.getCurrentUser();
+	return getPerson(user);
+    }
+
+    public static Person getPerson(final User user) {
 	if (user == null) {
 	    return null;
 	}
-	Person person = user.getPerson();
+	Person person = user.getExpenditurePerson();
 	if (person == null) {
-	    person = Person.findByUsername(user.getUsername());
-	    setPersonInUser(person, user);
+	    setPersonInUser(user);
+	    person = user.getExpenditurePerson();
 	}
 	return person;
     }
 
     @Service
-    private static void setPersonInUser(Person person, User user) {
-	user.setPerson(person);
+    private static void setPersonInUser(final User user) {
+	final Person person = Person.findByUsername(user.getUsername());
+	if (person == null) {
+	    final CreatePersonBean createPersonBean = new CreatePersonBean();
+	    createPersonBean.setName(user.getUsername());
+	    createPersonBean.setUsername(user.getUsername());
+	    createPerson(createPersonBean);
+	} else {
+	    person.setUser(user);
+	}
     }
+
+    @Override
+    public void setUsername(final String username) {
+	super.setUsername(username);
+	connectToUser(username);
+    }
+
+    private void connectToUser(final String username) {
+	User user = User.findByUsername(username);
+	if (user == null) {
+	    user = new User(username);
+	}
+	setUser(user);
+    }
+    
 }
