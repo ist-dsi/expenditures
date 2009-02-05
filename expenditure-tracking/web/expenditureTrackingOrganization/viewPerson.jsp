@@ -4,7 +4,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
-<h2><bean:message key="user.label.view" bundle="ORGANIZATION_RESOURCES"/> <bean:write name="person" property="username"/></h2>
+<h2><bean:message key="user.label.view" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/> <bean:write name="person" property="username"/></h2>
 
 <logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL_MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.ACCOUNTING_MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.PROJECT_ACCOUNTING_MANAGER">
 	<div class="infoop1">
@@ -33,12 +33,12 @@
 			<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
 				<li>
 					<html:link action="/expenditureTrackingOrganization.do?method=editPerson" paramId="personOid" paramName="person" paramProperty="OID">
-						<bean:message key="user.link.editUser" bundle="ORGANIZATION_RESOURCES"/>
+						<bean:message key="user.link.editUser" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 					</html:link>
 				</li>
 				<li>
 					<html:link action="/expenditureTrackingOrganization.do?method=deletePerson" paramId="personOid" paramName="person" paramProperty="OID">
-						<bean:message key="user.link.removeUser" bundle="ORGANIZATION_RESOURCES"/>
+						<bean:message key="user.link.removeUser" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 					</html:link>
 				</li>
 			</logic:present>
@@ -75,11 +75,11 @@
 			<span>
 				<fr:view name="role"/>: 
 				<html:link action='<%= "/expenditureTrackingOrganization.do?method=addRole&role=" + role %>' paramId="personOid" paramName="person" paramProperty="OID">
-					<bean:message key="role.label.add" bundle="ORGANIZATION_RESOURCES"/>
+					<bean:message key="role.label.add" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 				</html:link>
 				|
 				<html:link action='<%= "/expenditureTrackingOrganization.do?method=removeRole&role=" + role %>' paramId="personOid" paramName="person" paramProperty="OID">
-					<bean:message key="role.label.remove" bundle="ORGANIZATION_RESOURCES"/>
+					<bean:message key="role.label.remove" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 				</html:link>
 			</span>
 		</p>
@@ -87,7 +87,7 @@
 </logic:present>
 
 
-<h3 class="mtop2 mbottom05"><bean:message key="authorizations.label.person.responsible" bundle="ORGANIZATION_RESOURCES"/></h3>
+<h3 class="mtop2 mbottom05"><bean:message key="authorizations.label.person.responsible" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/></h3>
 <bean:define id="authorizations" name="person" property="authorizations"/>
 <logic:notEmpty name="authorizations">
 	<fr:view name="authorizations"
@@ -106,12 +106,12 @@
 </logic:notEmpty>
 <logic:empty name="authorizations">
 	<p>
-		<em><bean:message key="authorizations.label.person.none" bundle="ORGANIZATION_RESOURCES"/>.</em>
+		<em><bean:message key="authorizations.label.person.none" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>.</em>
 	</p>
 </logic:empty>
 
 
-<h3 class="mtop2 mbottom05"><bean:message key="accountingUnit.list.for.person" bundle="ORGANIZATION_RESOURCES"/></h3>
+<h3 class="mtop2 mbottom05"><bean:message key="accountingUnit.list.for.person" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/></h3>
 <bean:define id="removeUrl">/expenditureTrackingOrganization.do?method=removePersonFromAccountingUnit&amp;personOid=<bean:write name="person" property="OID"/></bean:define>
 <logic:notEmpty name="person" property="accountingUnits">
 	<fr:view name="person" property="accountingUnits"
@@ -136,12 +136,12 @@
 </logic:notEmpty>
 <logic:empty name="person" property="accountingUnits">
 	<p>
-		<em><bean:message key="accountingUnit.message.person.not.associated" bundle="ORGANIZATION_RESOURCES"/>.</em>
+		<em><bean:message key="accountingUnit.message.person.not.associated" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>.</em>
 	</p>
 </logic:empty>
 
 
-<h3 class="mtop2 mbottom05"><bean:message key="project.accountingUnit.list.for.person" bundle="ORGANIZATION_RESOURCES"/></h3>
+<h3 class="mtop2 mbottom05"><bean:message key="project.accountingUnit.list.for.person" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/></h3>
 <bean:define id="removeUrl">/expenditureTrackingOrganization.do?method=removePersonFromProjectAccountingUnit&amp;personOid=<bean:write name="person" property="OID"/></bean:define>
 <logic:notEmpty name="person" property="projectAccountingUnits">
 	<fr:view name="person" property="projectAccountingUnits"
@@ -166,6 +166,6 @@
 </logic:notEmpty>
 <logic:empty name="person" property="projectAccountingUnits">
 	<p>
-		<em><bean:message key="accountingUnit.message.person.not.associated" bundle="ORGANIZATION_RESOURCES"/>.</em>
+		<em><bean:message key="accountingUnit.message.person.not.associated" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>.</em>
 	</p>
 </logic:empty>

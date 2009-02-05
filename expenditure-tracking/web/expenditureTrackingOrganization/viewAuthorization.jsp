@@ -10,7 +10,7 @@
 	<ul>
 		<li>
 			<html:link action="/expenditureTrackingOrganization.do?method=viewPerson" paramId="personOid" paramName="authorization" paramProperty="person.OID">
-				<bean:message key="person.label.view" bundle="ORGANIZATION_RESOURCES"/>
+				<bean:message key="person.label.view" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 			</html:link>
 		</li>
 		<bean:define id="personFromAuthorizationOid" name="authorization" property="person.OID"/>

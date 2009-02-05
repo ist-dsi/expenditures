@@ -23,7 +23,7 @@
 <bean:define id="actionMapping" value="<%= "/acquisition" + acquisitionProcessClass %>"/>
 
 <%-- 
-<html:link action="<%= actionMapping +".do?method=editSupplierAddress"%>" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID"><bean:message key="supplier.link.edit" bundle="ORGANIZATION_RESOURCES"/></html:link>
+<html:link action="<%= actionMapping +".do?method=editSupplierAddress"%>" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID"><bean:message key="supplier.link.edit" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/></html:link>
 --%>
 </div>
 

@@ -4,7 +4,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
-<h2><bean:message key="title.accounting.unit.add.unit" bundle="ORGANIZATION_RESOURCES"/> <bean:write name="accountingUnit" property="name"/></h2>
+<h2><bean:message key="title.accounting.unit.add.unit" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/> <bean:write name="accountingUnit" property="name"/></h2>
 
 <bean:define id="urlExpand" type="java.lang.String">/expenditureTrackingOrganization.do?method=prepareAddUnitToAccountingUnit&amp;accountingUnitOid=<bean:write name="accountingUnit" property="OID"/></bean:define>
 <fr:edit id="unitBean"

@@ -4,7 +4,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
-<h2><bean:message key="authorizations.title.grant" bundle="ORGANIZATION_RESOURCES"/></h2>
+<h2><bean:message key="authorizations.title.grant" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/></h2>
 
 <div class="infoop2">
 	<fr:view name="person"

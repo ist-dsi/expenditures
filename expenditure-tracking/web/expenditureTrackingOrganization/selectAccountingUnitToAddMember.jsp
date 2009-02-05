@@ -17,7 +17,7 @@
 </div>
 
 <logic:empty name="accountingUnits">
-	<bean:message key="accountingUnit.message.none.defined" bundle="ORGANIZATION_RESOURCES"/>
+	<bean:message key="accountingUnit.message.none.defined" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 </logic:empty>
 <logic:notEmpty name="accountingUnits">
 	<bean:define id="selectUrl">/expenditureTrackingOrganization.do?method=addToAccountingUnit&amp;personOid=<bean:write name="person" property="OID"/></bean:define>

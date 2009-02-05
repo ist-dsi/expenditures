@@ -5,7 +5,7 @@
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
 
-<h2><bean:message key="supplier.title.manage" bundle="ORGANIZATION_RESOURCES"/></h2>
+<h2><bean:message key="supplier.title.manage" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/></h2>
 
 <logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL_MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL,pt.ist.expenditureTrackingSystem.domain.RoleType.SUPPLIER_MANAGER">
 	<div class="infoop1">
@@ -13,20 +13,20 @@
 			<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.SUPPLIER_MANAGER">
 			<li>
 				<html:link action="/expenditureTrackingOrganization.do?method=prepareCreateSupplier">
-					<bean:message key="supplier.link.create" bundle="ORGANIZATION_RESOURCES"/>
+					<bean:message key="supplier.link.create" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 				</html:link>		
 			</li>
 			</logic:present>
 			<li>
 				<html:link action="/expenditureTrackingOrganization.do?method=listSuppliers">
-					<bean:message key="supplier.link.list" bundle="ORGANIZATION_RESOURCES"/>
+					<bean:message key="supplier.link.list" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 				</html:link>
 			</li>
 		</ul>
 	</div>
 </logic:present>
 
-<p class="mvert05"><strong><bean:message key="label.search" bundle="ORGANIZATION_RESOURCES"/></strong></p>
+<p class="mvert05"><strong><bean:message key="label.search" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/></strong></p>
 
 <div class="mbottom15">
 	<fr:form action="/expenditureTrackingOrganization.do?method=manageSuppliers">
@@ -60,12 +60,12 @@
 	<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.SUPPLIER_MANAGER">
 		<p>
 			<html:link action='<%= "/expenditureTrackingOrganization.do?method=prepareEditSupplier&supplierOid=" + supplierOID%>'>
-				<bean:message key="supplier.link.edit" bundle="ORGANIZATION_RESOURCES"/>
+				<bean:message key="supplier.link.edit" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 			</html:link>
 			<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
 			| 
 				<html:link action='<%= "/expenditureTrackingOrganization.do?method=deleteSupplier&supplierOid=" + supplierOID%>'>
-					<bean:message key="supplier.link.delete" bundle="ORGANIZATION_RESOURCES"/>
+					<bean:message key="supplier.link.delete" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 				</html:link>
 			</logic:present>
 		</p>

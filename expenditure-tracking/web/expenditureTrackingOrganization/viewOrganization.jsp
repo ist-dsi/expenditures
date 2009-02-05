@@ -25,14 +25,14 @@
 	<logic:notPresent name="unit">
 		<p>
 			<html:link action="/expenditureTrackingOrganization.do?method=prepareCreateUnit">
-				<bean:message key="unit.link.create" bundle="ORGANIZATION_RESOURCES"/>
+				<bean:message key="unit.link.create" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 			</html:link>
 		</p>
 	</logic:notPresent>
 	<logic:present name="unit">
 		<p>
 			<html:link action="/expenditureTrackingOrganization.do?method=prepareCreateUnit" paramId="unitOid" paramName="unit" paramProperty="OID">
-				<bean:message key="unit.link.create" bundle="ORGANIZATION_RESOURCES"/>
+				<bean:message key="unit.link.create" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 			</html:link>
 		</p>
 	</logic:present>
@@ -74,7 +74,7 @@
 	</logic:empty>
 
 	<logic:present name="unit" property="parentUnit">
-		<h3 class="mtop15 mbottom05"><bean:message key="unit.title.superior.unit" bundle="ORGANIZATION_RESOURCES"/></h3>
+		<h3 class="mtop15 mbottom05"><bean:message key="unit.title.superior.unit" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/></h3>
 		<bean:define id="unitToDisplay" toScope="request" name="unit" property="parentUnit"/>
 		<jsp:include page="unitLine.jsp" flush="false"/>
 	</logic:present>
@@ -83,7 +83,7 @@
 <logic:present name="units">
 	<logic:notEmpty name="units">
 		<logic:present name="unit">
-			<h3 class="mtop15 mbottom05"><bean:message key="unit.title.subunit" bundle="ORGANIZATION_RESOURCES"/></h3>
+			<h3 class="mtop15 mbottom05"><bean:message key="unit.title.subunit" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/></h3>
 		</logic:present>
 		<fr:view name="units" schema="unitList">
 			<fr:layout name="tabular">
@@ -100,16 +100,16 @@
 	</logic:notEmpty>
 </logic:present>
 
-<h3 class="mtop15 mbottom05"><bean:message key="accountingUnit.title" bundle="ORGANIZATION_RESOURCES"/></h3>
+<h3 class="mtop15 mbottom05"><bean:message key="accountingUnit.title" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/></h3>
 <p class="mtop05">
 	<html:link action="/expenditureTrackingOrganization.do?method=prepareCreateAccountingUnit">
-		<bean:message key="unit.link.create.accounting.unit" bundle="ORGANIZATION_RESOURCES"/>
+		<bean:message key="unit.link.create.accounting.unit" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 	</html:link>
 </p>
 
 <logic:present name="accountingUnits">
 	<logic:empty name="accountingUnits">
-		<bean:message key="accountingUnit.message.none.defined" bundle="ORGANIZATION_RESOURCES"/>
+		<bean:message key="accountingUnit.message.none.defined" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 	</logic:empty>
 	<logic:notEmpty name="accountingUnits">
 		<fr:view name="accountingUnits" schema="accountingUnits">

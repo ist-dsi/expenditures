@@ -17,7 +17,7 @@
 	</li>
 	<li>
 		<html:link action="/expenditureTrackingOrganization.do?method=manageSuppliers">
-			<span><bean:message key="supplier.link.manage" bundle="ORGANIZATION_RESOURCES"/></span>
+			<span><bean:message key="supplier.link.manage" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/></span>
 		</html:link>
 	</li>	
 </ul>

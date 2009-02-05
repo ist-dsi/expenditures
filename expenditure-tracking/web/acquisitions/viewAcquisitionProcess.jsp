@@ -152,7 +152,7 @@
 			<logic:iterate id="supplier" name="acquisitionProcess" property="acquisitionRequest.suppliers">
 			<bean:define id="supplierName" name="supplier" property="name"/>
 			<p>
-				<bean:message key="supplier.message.info.totalAllocated.withArgument" bundle="ORGANIZATION_RESOURCES" arg0="<%= supplierName.toString() %>"/>:
+				<bean:message key="supplier.message.info.totalAllocated.withArgument" bundle="EXPENDITURE_ORGANIZATION_RESOURCES" arg0="<%= supplierName.toString() %>"/>:
 				<fr:view name="supplier" property="totalAllocated"/>
 			</p>
 			</logic:iterate>

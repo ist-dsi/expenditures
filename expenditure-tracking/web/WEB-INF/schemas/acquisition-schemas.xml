@@ -149,7 +149,7 @@
 	<slot name="acquisitionProcessState.localizedName" key="label.processState" bundle="EXPENDITURE_RESOURCES"/>
 	<slot name="acquisitionRequest.requester.firstAndLastName" key="label.requester" bundle="EXPENDITURE_RESOURCES"/>
 	<slot name="dateFromLastActivity" key="label.inactiveSince" bundle="EXPENDITURE_RESOURCES"/> 
-	<slot name="acquisitionRequest.supplier.name" key="supplier.label.name" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="acquisitionRequest.supplier.name" key="supplier.label.name" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 	<slot name="acquisitionRequest.requestingUnit.name" key="acquisitionProcess.label.requestingUnit" bundle="ACQUISITION_RESOURCES"/>
 </schema>
 
@@ -407,15 +407,15 @@
 <schema name="viewAcquisitionRequester"
 		type="pt.ist.expenditureTrackingSystem.domain.organization.Person"
 		bundle="ACQUISITION_RESOURCES">
-	<slot name="name" key="unit.label.name" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="name" key="unit.label.name" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 </schema>
 
 <schema name="viewAcquisitionSupplier"
 		type="pt.ist.expenditureTrackingSystem.domain.organization.Supplier"
-		bundle="ORGANIZATION_RESOURCES">
+		bundle="EXPENDITURE_ORGANIZATION_RESOURCES">
 	<slot name="name" key="supplier.label.name"/>
 	<slot name="fiscalIdentificationCode" key="supplier.label.fiscalCode" />
-	<slot name="nib" key="supplier.label.nib" bundle="ORGANIZATION_RESOURCES"/>	
+	<slot name="nib" key="supplier.label.nib" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>	
 	<slot name="address" key="supplier.label.address"/>	
 </schema>
 
@@ -567,21 +567,21 @@
 </schema>
 
 <schema name="editProjectFinancerFundAllocationId" type="pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean" bundle="ACQUISITION_RESOURCES">
-	<slot name="financer.unit.presentationName" key="unit.label.unit" read-only="true" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="financer.unit.presentationName" key="unit.label.unit" read-only="true" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 	<slot name="financer.accountingUnit.name" key="acquisitionProcess.label.accountingUnit" read-only="true" />
 	<slot name="financer.amountAllocated" key="financer.label.value" read-only="true" />
 	<slot name="fundAllocationId" key="financer.label.fundAllocation.identification" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 </schema>
 
 <schema name="editFinancerFundAllocationId" type="pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean" bundle="ACQUISITION_RESOURCES">
-	<slot name="financer.unit.presentationName" key="unit.label.unit" read-only="true" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="financer.unit.presentationName" key="unit.label.unit" read-only="true" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 	<slot name="financer.financerCostCenter.accountingUnit.name" key="acquisitionProcess.label.accountingUnit" read-only="true" />
 	<slot name="financer.amountAllocated" key="financer.label.value" read-only="true" />
 	<slot name="fundAllocationId" key="financer.label.fundAllocation.identification" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 </schema>
 
 <schema name="editFinancerEffectiveFundAllocationId" type="pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean" bundle="ACQUISITION_RESOURCES">
-	<slot name="financer.unit.presentationName" key="unit.label.unit" read-only="true" bundle="ORGANIZATION_RESOURCES"/>
+	<slot name="financer.unit.presentationName" key="unit.label.unit" read-only="true" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 	<slot name="fundAllocationId" read-only="true" key="financer.label.fundAllocation.identification" />
 	<slot name="effectiveFundAllocationId" key="financer.label.effectiveFundAllocation.identification" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 </schema>
@@ -604,7 +604,7 @@
 </schema>
 
 <schema name="changeFinancersAccountingUnit" type="pt.ist.expenditureTrackingSystem.domain.dto.ChangeFinancerAccountingUnitBean" bundle="ACQUISITION_RESOURCES">
-	<slot name="financer.unit.presentationName" key="unit.label.unit" read-only="true" bundle="ORGANIZATION_RESOURCES" />
+	<slot name="financer.unit.presentationName" key="unit.label.unit" read-only="true" bundle="EXPENDITURE_ORGANIZATION_RESOURCES" />
 	<slot name="accountingUnit" layout="menu-select" key="acquisitionProcess.label.accountingUnit" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
 		<property name="providerClass" value="pt.ist.expenditureTrackingSystem.presentationTier.renderers.dataProvider.UnitAccountingUnitsProvider"/>
 		<property name="format" value="${name}"/>

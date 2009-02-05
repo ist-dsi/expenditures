@@ -21,7 +21,7 @@
 <logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
 	<p class="mtop15">
 		<html:link action="/expenditureTrackingOrganization.do?method=prepareCreatePerson">
-			<bean:message key="person.link.create" bundle="ORGANIZATION_RESOURCES"/>
+			<bean:message key="person.link.create" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 		</html:link>
 	</p>
 </logic:present>
