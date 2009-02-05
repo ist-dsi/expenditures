@@ -36,18 +36,13 @@ public class AfterTheFactAcquisitionProcess extends AfterTheFactAcquisitionProce
 
     private static final ThreadLocal<AfterTheFactAcquisitionProcessBean> threadLocal = new ThreadLocal<AfterTheFactAcquisitionProcessBean>();
 
-    protected static Person getLoggedPersonStatic() {
-	final User user = UserView.getCurrentUser();
-	return user == null ? null : Person.findByUsername(user.getUsername());
-    }
-
     @Service
     public static AfterTheFactAcquisitionProcess createNewAfterTheFactAcquisitionProcess(
 	    AfterTheFactAcquisitionProcessBean afterTheFactAcquisitionProcessBean) {
 	threadLocal.set(afterTheFactAcquisitionProcessBean);
 	final AfterTheFactAcquisitionProcess afterTheFactAcquisitionProcess = new AfterTheFactAcquisitionProcess();
 	afterTheFactAcquisitionProcess.edit(afterTheFactAcquisitionProcessBean);
-	final Person loggedPerson = getLoggedPersonStatic();
+	final Person loggedPerson = Person.getLoggedPerson();
 	new GenericLog(afterTheFactAcquisitionProcess, loggedPerson, afterTheFactAcquisitionProcess.getClass().getName()
 		+ ".Create", new DateTime());
 	return afterTheFactAcquisitionProcess;

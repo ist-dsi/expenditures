@@ -20,6 +20,8 @@ import pt.ist.expenditureTrackingSystem.domain.announcements.AnnouncementProcess
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.AuthorizationBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreatePersonBean;
+import myorg.applicationTier.Authenticate.UserView;
+import myorg.domain.User;
 import myorg.domain.util.Address;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.pstm.Transaction;
@@ -183,4 +185,21 @@ public class Person extends Person_Base {
 	super.setDefaultSearch(defaultSearch);
     }
 
+    public static Person getLoggedPerson() {
+	User user = UserView.getCurrentUser();
+	if (user == null) {
+	    return null;
+	}
+	Person person = user.getPerson();
+	if (person == null) {
+	    person = Person.findByUsername(user.getUsername());
+	    setPersonInUser(person, user);
+	}
+	return person;
+    }
+
+    @Service
+    private static void setPersonInUser(Person person, User user) {
+	user.setPerson(person);
+    }
 }

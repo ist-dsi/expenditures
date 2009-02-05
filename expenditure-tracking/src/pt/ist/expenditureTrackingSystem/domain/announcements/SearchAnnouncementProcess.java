@@ -29,14 +29,9 @@ public class SearchAnnouncementProcess extends Search<AnnouncementProcess> {
 	    super(c);
 	}
 
-	    protected Person getLoggedPerson() {
-		final User user = UserView.getCurrentUser();
-		return user == null ? null : Person.findByUsername(user.getUsername());
-	    }
-
 	@Override
 	protected boolean matchesSearchCriteria(final AnnouncementProcess announcementProcess) {
-	    final Person loggedPerson = getLoggedPerson();
+	    final Person loggedPerson = Person.getLoggedPerson();
 	    return announcementProcess.isVisible(loggedPerson) && matchCriteria(announcementProcess);
 	}
 

@@ -1,4 +1,8 @@
 
+class pt.ist.expenditureTrackingSystem.domain.ConnectPersonToUserTask extends myorg.domain.scheduler.Task {
+	
+}
+
 relation MyOrgExpenditureTrackingSystem {
 	myorg.domain.MyOrg playsRole myOrg;
 	pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
@@ -8,4 +12,9 @@ relation MyOrgExpenditureTrackingSystem {
 relation MyOrgRoleExpendituresRole {
 	myorg.domain.groups.Role playsRole systemRole;
 	pt.ist.expenditureTrackingSystem.domain.Role playsRole expenditureTrackingSystemRole;
+}
+
+relation PersonUser {
+	pt.ist.expenditureTrackingSystem.domain.organization.Person playsRole person;
+	myorg.domain.User playsRole user;
 }

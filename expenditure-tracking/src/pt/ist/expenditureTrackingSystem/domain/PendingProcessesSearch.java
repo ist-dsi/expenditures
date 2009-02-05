@@ -2,8 +2,6 @@ package pt.ist.expenditureTrackingSystem.domain;
 
 import java.util.ResourceBundle;
 
-import myorg.applicationTier.Authenticate.UserView;
-import myorg.domain.User;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 
@@ -19,8 +17,7 @@ public class PendingProcessesSearch extends PendingProcessesSearch_Base {
 
     @Override
     public Boolean getShowOnlyResponsabilities() {
-	final User user = UserView.getCurrentUser();
-	final Person person = Person.findByUsername(user.getUsername());
+	Person person = Person.getLoggedPerson();
 	return !person.getAuthorizations().isEmpty();
     }
 

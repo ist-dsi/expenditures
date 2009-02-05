@@ -30,8 +30,7 @@ public class SearchRequestProposal extends Search<RequestForProposalProcess> {
 	protected boolean matchesSearchCriteria(final RequestForProposalProcess requestProcess) {
 	    RequestForProposal proposal = requestProcess.getRequestForProposal();
 
-	    final User user = UserView.getCurrentUser();
-	    final Person person = user == null ? null : Person.findByUsername(user.getUsername());
+	    Person person = Person.getLoggedPerson();
 
 	    return proposal.getRequestForProposalProcess().isVisible(person)
 		    && matchCriteria(proposal.getPublishDate(), proposal.getExpireDate(), proposal.getRequester().getName(),

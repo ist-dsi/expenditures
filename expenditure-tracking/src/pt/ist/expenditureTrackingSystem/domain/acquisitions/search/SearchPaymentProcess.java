@@ -6,14 +6,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import myorg.applicationTier.Authenticate.UserView;
-import myorg.domain.User;
 import pt.ist.expenditureTrackingSystem.domain.SavedSearch;
 import pt.ist.expenditureTrackingSystem.domain.Search;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.ProcessesThatAreAuthorizedByUserPredicate;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.SearchAcquisitionProcess.ProcessesThatAreAuthorizedByUserPredicate;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.predicates.DefaultPredicate;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.predicates.RefundProcessPredicate;
@@ -121,14 +119,8 @@ public class SearchPaymentProcess extends Search<PaymentProcess> {
 	return clazz == null ? PaymentProcess.class : clazz;
     }
 
-    protected Person getLoggedPerson() {
-	final User user = UserView.getCurrentUser();
-	return user == null ? null : Person.findByUsername(user.getUsername());
-    }
-
     private Set<? extends PaymentProcess> getProcesses() {
-	final Person loggedPerson = getLoggedPerson();
-	return responsibleUnitSetOnly ? getProcessesWithResponsible(getLoggedPerson()) : GenericProcess
+	return responsibleUnitSetOnly ? getProcessesWithResponsible(Person.getLoggedPerson()) : GenericProcess
 		.getAllProcesses(getProcessClass());
     }
 
@@ -141,7 +133,7 @@ public class SearchPaymentProcess extends Search<PaymentProcess> {
 
     @Override
     protected void persist(String name) {
-	new SavedSearch(name, getLoggedPerson(), this);
+	new SavedSearch(name, Person.getLoggedPerson(), this);
     }
 
     public String getProcessId() {

@@ -129,8 +129,7 @@ public abstract class GenericProcess extends GenericProcess_Base {
     }
 
     protected Person getLoggedPerson() {
-	final User user = UserView.getCurrentUser();
-	return user == null ? null : Person.findByUsername(user.getUsername());
+	return Person.getLoggedPerson();
     }
 
     @Service

@@ -4,12 +4,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 
-import myorg.applicationTier.Authenticate.UserView;
-import myorg.domain.User;
 import pt.ist.expenditureTrackingSystem.domain.Search;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.ProcessesThatAreAuthorizedByUserPredicate;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.SearchAcquisitionProcess.ProcessesThatAreAuthorizedByUserPredicate;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
@@ -41,14 +39,8 @@ public class SearchRefundProcesses extends Search<RefundProcess> {
 	}
     }
 
-    protected Person getLoggedPerson() {
-	final User user = UserView.getCurrentUser();
-	return user == null ? null : Person.findByUsername(user.getUsername());
-    }
-
     private Set<? extends RefundProcess> getProcesses() {
-	final Person loggedPerson = getLoggedPerson();
-	return responsibleUnitSetOnly ? getProcessesWithResponsible(getLoggedPerson()) : GenericProcess
+	return responsibleUnitSetOnly ? getProcessesWithResponsible(Person.getLoggedPerson()) : GenericProcess
 		.getAllProcesses(RefundProcess.class);
     }
 
@@ -205,5 +197,5 @@ public class SearchRefundProcesses extends Search<RefundProcess> {
     public Class<RefundProcess> getSearchingClass() {
 	return RefundProcess.class;
     }
-   
+
 }

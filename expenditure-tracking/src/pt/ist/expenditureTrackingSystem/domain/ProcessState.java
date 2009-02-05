@@ -31,8 +31,7 @@ public abstract class ProcessState extends ProcessState_Base {
     }
 
     protected Person getPerson() {
-	final User user = UserView.getCurrentUser();
-	return user == null ? null : Person.findByUsername(user.getUsername());
+	return Person.getLoggedPerson();
     }
 
     public static final Comparator<ProcessState> COMPARATOR_BY_WHEN = new Comparator<ProcessState>() {

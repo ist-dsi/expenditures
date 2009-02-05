@@ -42,8 +42,7 @@ public abstract class BaseAction extends ContextBaseAction {
     }
 
     protected Person getLoggedPerson() {
-	final User user = UserView.getCurrentUser();
-	return user == null ? null : Person.findByUsername(user.getUsername());
+	return Person.getLoggedPerson();
     }
 
     protected <T> T getAttribute(final HttpServletRequest request, final String attributeName) {

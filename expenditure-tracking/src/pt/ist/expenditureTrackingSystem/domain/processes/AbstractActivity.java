@@ -10,8 +10,7 @@ import pt.ist.fenixWebFramework.services.Service;
 public abstract class AbstractActivity<T extends GenericProcess> {
 
     protected Person getLoggedPerson() {
-	final User user = UserView.getCurrentUser();
-	return user == null ? null : Person.findByUsername(user.getUsername());
+	return Person.getLoggedPerson();
     }
 
     protected abstract boolean isAvailable(T process);
@@ -25,7 +24,7 @@ public abstract class AbstractActivity<T extends GenericProcess> {
 	final Person loggedPerson = getLoggedPerson();
 	return currentOwner == null || (loggedPerson != null && loggedPerson == currentOwner);
     }
-    
+
     protected boolean isProcessTaken(T process) {
 	return process.getCurrentOwner() != null;
     }

@@ -334,13 +334,8 @@ public class RefundProcess extends RefundProcess_Base {
 	return false;
     }
 
-    protected Person getLoggedPerson() {
-	final User user = UserView.getCurrentUser();
-	return user == null ? null : Person.findByUsername(user.getUsername());
-    }
-
     public boolean isAvailableForCurrentUser() {
-	final Person loggedPerson = getLoggedPerson();
+	final Person loggedPerson = Person.getLoggedPerson();
 	return loggedPerson != null && isAvailableForPerson(loggedPerson);
     }
 
@@ -353,7 +348,7 @@ public class RefundProcess extends RefundProcess_Base {
     }
 
     public boolean isTakenByCurrentUser() {
-	final Person loggedPerson = getLoggedPerson();
+	final Person loggedPerson = Person.getLoggedPerson();
 	return loggedPerson != null && isTakenByPerson(loggedPerson);
     }
 

@@ -19,8 +19,7 @@ public class MyOwnProcessesSearch extends MyOwnProcessesSearch_Base {
 
     @Override
     public Boolean getShowOnlyResponsabilities() {
-	final User user = UserView.getCurrentUser();
-	final Person person = Person.findByUsername(user.getUsername());
+	Person person = Person.getLoggedPerson();
 	return !person.getAuthorizations().isEmpty();
     }
 
@@ -31,8 +30,7 @@ public class MyOwnProcessesSearch extends MyOwnProcessesSearch_Base {
 
     @Override
     public Person getRequestor() {
-	final User user = UserView.getCurrentUser();
-	return Person.findByUsername(user.getUsername());
+	return Person.getLoggedPerson();
     }
 
     @Override

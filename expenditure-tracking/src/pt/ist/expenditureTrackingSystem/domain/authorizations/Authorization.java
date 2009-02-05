@@ -90,13 +90,8 @@ public class Authorization extends Authorization_Base {
 	return getEndDate() == null || getEndDate().isAfter(new LocalDate());
     }
 
-    protected Person getLoggedPerson() {
-	final User user = UserView.getCurrentUser();
-	return user == null ? null : Person.findByUsername(user.getUsername());
-    }
-
     public boolean isCurrentUserAbleToRevoke() {
-	final Person loggedPerson = getLoggedPerson();
+	final Person loggedPerson = Person.getLoggedPerson();
 	return loggedPerson != null && isValid() && isPersonAbleToRevokeDelegatedAuthorization(loggedPerson);
     }
 

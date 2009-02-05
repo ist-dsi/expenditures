@@ -15,8 +15,7 @@ public class AnnouncementProcessState extends AnnouncementProcessState_Base {
 	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
     }
 
-    public AnnouncementProcessState(final AnnouncementProcess process,
-	    final AnnouncementProcessStateType processStateType) {
+    public AnnouncementProcessState(final AnnouncementProcess process, final AnnouncementProcessStateType processStateType) {
 	this();
 	final Person person = getPerson();
 	checkArguments(process, processStateType, person);
@@ -24,15 +23,14 @@ public class AnnouncementProcessState extends AnnouncementProcessState_Base {
 	setAnnouncementProcessStateType(processStateType);
     }
 
-    public AnnouncementProcessState(final AnnouncementProcess process,
-	    final AnnouncementProcessStateType processStateType, String justification) {
+    public AnnouncementProcessState(final AnnouncementProcess process, final AnnouncementProcessStateType processStateType,
+	    String justification) {
 	this(process, processStateType);
 	setJustification(justification);
     }
 
     protected Person getPerson() {
-	final User user = UserView.getCurrentUser();
-	return user == null ? null : Person.findByUsername(user.getUsername());
+	return Person.getLoggedPerson();
     }
 
     private void checkArguments(AnnouncementProcess announcementProcess,
