@@ -44,7 +44,7 @@
 	</fr:view>
 </div>
 
-<logic:present role="ACQUISITION_CENTRAL_MANAGER">
+<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL_MANAGER">
 	<fr:view name="announcementProcess" property="announcement"
 			type="pt.ist.expenditureTrackingSystem.domain.announcements.Announcement"
 			schema="viewAnnouncementDetails.admin">

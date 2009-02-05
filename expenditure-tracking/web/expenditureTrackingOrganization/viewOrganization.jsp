@@ -21,7 +21,7 @@
 </div>
 
 
-<logic:present role="MANAGER">
+<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
 	<logic:notPresent name="unit">
 		<p>
 			<html:link action="/expenditureTrackingOrganization.do?method=prepareCreateUnit">
@@ -50,7 +50,7 @@
 		</fr:view>
 	</div>
 	
-	<logic:present role="MANAGER">
+	<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
 		<p class="mtop05">
 			<html:link action="/expenditureTrackingOrganization.do?method=editUnit" paramId="unitOid" paramName="unit" paramProperty="OID">
 				<bean:message key="link.edit" bundle="EXPENDITURE_RESOURCES"/>

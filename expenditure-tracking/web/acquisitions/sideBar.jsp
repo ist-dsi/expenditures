@@ -22,7 +22,7 @@
 					<span><bean:message key="link.sideBar.acquisitionProcess.search" bundle="EXPENDITURE_RESOURCES"/></span>
 			</html:link>
 		</li>
-		<logic:present role="ACQUISITION_CENTRAL_MANAGER">
+		<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL_MANAGER">
 				<li>
 					<span class="bar">|</span>
 					<html:link action="/wizard.do?method=afterTheFactOperationsWizard">
@@ -30,7 +30,7 @@
 					</html:link>
 				</li>
 		</logic:present>
-		<logic:present role="ACCOUNTING_MANAGER,PROJECT_ACCOUNTING_MANAGER">
+		<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.ACCOUNTING_MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.PROJECT_ACCOUNTING_MANAGER">
 				<li>
 					<span class="bar">|</span>
 					<html:link action="/acquisitionProcess.do?method=checkFundAllocations">
@@ -90,7 +90,7 @@
 --%>
 
 <%--
-	<logic:present role="ACQUISITION_CENTRAL_MANAGER">
+	<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL_MANAGER">
 		<ul>
 			<li class="header">
 				<strong><bean:message key="link.sideBar.directContract" bundle="EXPENDITURE_RESOURCES"/></strong>
@@ -148,7 +148,7 @@
 		</li>
 	</ul>
 
-	<logic:present role="ACQUISITION_CENTRAL,ACQUISITION_CENTRAL_MANAGER">
+	<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL,pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL_MANAGER">
 		<ul>
 			<li class="header">
 				<strong><bean:message key="link.sideBar.other.operations" bundle="EXPENDITURE_RESOURCES"/></strong>
@@ -173,7 +173,7 @@
 		</ul>
 	</logic:present>
 
-	<logic:present role="ACCOUNTING_MANAGER,PROJECT_ACCOUNTING_MANAGER">
+	<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.ACCOUNTING_MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.PROJECT_ACCOUNTING_MANAGER">
 		<ul>
 				<li class="header">
 					<strong><bean:message key="link.sideBar.other.operations" bundle="EXPENDITURE_RESOURCES"/></strong>

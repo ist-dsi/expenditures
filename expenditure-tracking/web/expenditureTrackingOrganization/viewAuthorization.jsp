@@ -30,7 +30,7 @@
 				</html:link>
 			</li>
 		</logic:equal>
-		<logic:present role="MANAGER">
+		<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
 			<li>
 				<html:link action="/expenditureTrackingOrganization.do?method=editAuthorization" paramId="authorizationOid" paramName="authorization" paramProperty="OID">
 					<bean:message key="authorizations.link.edit" bundle="EXPENDITURE_RESOURCES"/>

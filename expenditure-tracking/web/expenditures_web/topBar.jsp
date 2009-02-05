@@ -24,7 +24,7 @@
 				<div class="lic1"></div>
 			</html:link>
 		</li>
-		<logic:present role="MANAGER">
+		<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
 			<logic:present user="ist151339">
 			<li class="<%= proposalsClass %>">
 				<html:link action="/requestForProposalProcess.do?method=showPendingRequests">
@@ -60,7 +60,7 @@
 				<div class="lic1"></div>
 			</html:link>
 		</li>
-		<logic:present role="STATISTICS_VIEWER">
+		<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.STATISTICS_VIEWER">
 			<li class="<%= statisticsClass %>">
 				<html:link action="/statistics.do?method=showSimplifiedProcessStatistics">
 					<span>

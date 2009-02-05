@@ -4,12 +4,13 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
+
 <h2><bean:message key="supplier.title.manage" bundle="ORGANIZATION_RESOURCES"/></h2>
 
-<logic:present role="MANAGER,ACQUISITION_CENTRAL_MANAGER,ACQUISITION_CENTRAL,SUPPLIER_MANAGER">
+<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL_MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL,pt.ist.expenditureTrackingSystem.domain.RoleType.SUPPLIER_MANAGER">
 	<div class="infoop1">
 		<ul>
-			<logic:present role="SUPPLIER_MANAGER">
+			<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.SUPPLIER_MANAGER">
 			<li>
 				<html:link action="/expenditureTrackingOrganization.do?method=prepareCreateSupplier">
 					<bean:message key="supplier.link.create" bundle="ORGANIZATION_RESOURCES"/>
@@ -56,12 +57,12 @@
 	</div>
 
 	<bean:define id="supplierOID" name="supplierBean" property="supplier.OID"/>
-	<logic:present role="MANAGER,SUPPLIER_MANAGER">
+	<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.SUPPLIER_MANAGER">
 		<p>
 			<html:link action='<%= "/expenditureTrackingOrganization.do?method=prepareEditSupplier&supplierOid=" + supplierOID%>'>
 				<bean:message key="supplier.link.edit" bundle="ORGANIZATION_RESOURCES"/>
 			</html:link>
-			<logic:present role="MANAGER">
+			<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
 			| 
 				<html:link action='<%= "/expenditureTrackingOrganization.do?method=deleteSupplier&supplierOid=" + supplierOID%>'>
 					<bean:message key="supplier.link.delete" bundle="ORGANIZATION_RESOURCES"/>
@@ -80,7 +81,7 @@
 		</fr:view>
 	</div>
 
-	<logic:present role="MANAGER,ACQUISITION_CENTRAL_MANAGER,ACQUISITION_CENTRAL">
+	<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL_MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL">
 		<bean:define id="aquisitions" name="supplierBean" property="supplier.acquisitionsAfterTheFactSet"/>
 		<fr:view name="aquisitions"
 				schema="acquisitionAfterTheFact">

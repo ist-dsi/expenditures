@@ -6,31 +6,31 @@
 
 <h2><bean:message key="user.label.view" bundle="ORGANIZATION_RESOURCES"/> <bean:write name="person" property="username"/></h2>
 
-<logic:present role="MANAGER,ACQUISITION_CENTRAL_MANAGER,ACCOUNTING_MANAGER,PROJECT_ACCOUNTING_MANAGER">
+<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL_MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.ACCOUNTING_MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.PROJECT_ACCOUNTING_MANAGER">
 	<div class="infoop1">
 		<ul>
-			<logic:present role="MANAGER,ACQUISITION_CENTRAL_MANAGER">
+			<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL_MANAGER">
 				<li>
 					<html:link action="/expenditureTrackingOrganization.do?method=attributeAuthorization" paramId="personOid" paramName="person" paramProperty="OID">
 						<bean:message key="authorizations.link.grant" bundle="EXPENDITURE_RESOURCES"/>
 					</html:link>
 				</li>
 			</logic:present>
-			<logic:present role="MANAGER,ACCOUNTING_MANAGER">
+			<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.ACCOUNTING_MANAGER">
 				<li>
 					<html:link action="/expenditureTrackingOrganization.do?method=prepareAddToAccountingUnit" paramId="personOid" paramName="person" paramProperty="OID">
 						<bean:message key="accountingUnit.link.add.member" bundle="EXPENDITURE_RESOURCES"/>
 					</html:link>
 				</li>
 			</logic:present>
-			<logic:present role="MANAGER,PROJECT_ACCOUNTING_MANAGER">
+			<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.PROJECT_ACCOUNTING_MANAGER">
 				<li>
 					<html:link action="/expenditureTrackingOrganization.do?method=prepareAddToProjectAccountingUnit" paramId="personOid" paramName="person" paramProperty="OID">
 						<bean:message key="project.accountingUnit.link.add.member" bundle="EXPENDITURE_RESOURCES"/>
 					</html:link>
 				</li>
 			</logic:present>
-			<logic:present role="MANAGER">
+			<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
 				<li>
 					<html:link action="/expenditureTrackingOrganization.do?method=editPerson" paramId="personOid" paramName="person" paramProperty="OID">
 						<bean:message key="user.link.editUser" bundle="ORGANIZATION_RESOURCES"/>
@@ -69,7 +69,7 @@
 	</table>
 </div>
 
-<logic:present role="MANAGER">
+<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
 	<logic:iterate id="role" name="availableRoles">
 		<p class="mvert05">
 			<span>

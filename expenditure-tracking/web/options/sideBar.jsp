@@ -5,7 +5,7 @@
 
 <ul>
 	<ul>
-		<logic:present role="MANAGER">
+		<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
 			<li>
 				<html:link action="/customize.do?method=showInterfaceOptions">
 					<span><bean:message key="link.options.interface" bundle="EXPENDITURE_RESOURCES"/></span>
