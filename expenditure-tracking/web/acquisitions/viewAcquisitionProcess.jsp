@@ -5,8 +5,6 @@
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 <%@ taglib uri="/WEB-INF/messages.tld" prefix="messages" %>
 
-<%@page import="pt.ist.expenditureTrackingSystem.presentationTier.servlets.filters.contentRewrite.RequestChecksumFilter"%>
-
 <%@page import="pt.ist.fenixWebFramework.servlets.filters.contentRewrite.GenericChecksumRewriter"%>
 <bean:define id="acquisitionProcessOid"><bean:write name="acquisitionProcess" property="OID"/></bean:define>
 <bean:define id="acquisitionProcessClass" name="acquisitionProcess" property="class.simpleName"/>
