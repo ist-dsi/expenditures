@@ -106,7 +106,7 @@ public enum AcquisitionProcessStateType {
 
     public String getLocalizedName() {
 	try {
-	final ResourceBundle resourceBundle = ResourceBundle.getBundle("resources.EnumerationResources", Language.getLocale());
+	final ResourceBundle resourceBundle = ResourceBundle.getBundle("resources.ExpenditureEnumerationResources", Language.getLocale());
 	return resourceBundle.getString(AcquisitionProcessStateType.class.getSimpleName() + "." + name());
 	} catch (Exception ex) {
 	    ex.printStackTrace();

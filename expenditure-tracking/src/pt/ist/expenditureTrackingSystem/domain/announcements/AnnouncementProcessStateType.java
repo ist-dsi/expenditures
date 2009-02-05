@@ -17,7 +17,7 @@ public enum AnnouncementProcessStateType {
     }
 
     public String getLocalizedName() {
-	final ResourceBundle resourceBundle = ResourceBundle.getBundle("resources.EnumerationResources", Language.getLocale());
+	final ResourceBundle resourceBundle = ResourceBundle.getBundle("resources.ExpenditureEnumerationResources", Language.getLocale());
 	return resourceBundle.getString(AnnouncementProcessStateType.class.getSimpleName() + "." + name());
     }
 

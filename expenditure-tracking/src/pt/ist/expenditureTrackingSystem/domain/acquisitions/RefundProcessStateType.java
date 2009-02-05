@@ -89,7 +89,7 @@ public enum RefundProcessStateType {
     }
 
     public String getLocalizedName() {
-	final ResourceBundle resourceBundle = ResourceBundle.getBundle("resources.EnumerationResources", Language.getLocale());
+	final ResourceBundle resourceBundle = ResourceBundle.getBundle("resources.ExpenditureEnumerationResources", Language.getLocale());
 	return resourceBundle.getString(RefundProcessStateType.class.getSimpleName() + "." + name());
     }
 
