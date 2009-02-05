@@ -27,7 +27,7 @@ public class ConnectPersonToUserTask extends ConnectPersonToUserTask_Base {
 
     @Override
     public String getLocalizedName() {
-	return BundleUtil.getStringFromResourceBundle("resources/ExpendituresResources", "label.task.connectPersonToUserTask");
+	return BundleUtil.getStringFromResourceBundle("resources/ExpenditureResources", "label.task.connectPersonToUserTask");
     }
 
 }
