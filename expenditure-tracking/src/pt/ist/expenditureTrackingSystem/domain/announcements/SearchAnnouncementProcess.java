@@ -4,14 +4,15 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 
+import myorg.applicationTier.Authenticate.UserView;
+import myorg.domain.User;
+import myorg.domain.util.Money;
+
 import org.apache.commons.lang.StringUtils;
 
-import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.Search;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
-import myorg.domain.util.Money;
-import pt.ist.fenixWebFramework.security.UserView;
 import pt.utl.ist.fenix.tools.util.StringNormalizer;
 
 public class SearchAnnouncementProcess extends Search<AnnouncementProcess> {
@@ -28,12 +29,15 @@ public class SearchAnnouncementProcess extends Search<AnnouncementProcess> {
 	    super(c);
 	}
 
+	    protected Person getLoggedPerson() {
+		final User user = UserView.getCurrentUser();
+		return user == null ? null : Person.findByUsername(user.getUsername());
+	    }
+
 	@Override
 	protected boolean matchesSearchCriteria(final AnnouncementProcess announcementProcess) {
-
-	    User user = UserView.getUser();
-	    Person person = (user != null ? user.getPerson() : null);
-	    return announcementProcess.isVisible(person) && matchCriteria(announcementProcess);
+	    final Person loggedPerson = getLoggedPerson();
+	    return announcementProcess.isVisible(loggedPerson) && matchCriteria(announcementProcess);
 	}
 
 	private boolean matchCriteria(AnnouncementProcess announcementProcess) {

@@ -5,9 +5,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import myorg.applicationTier.Authenticate.UserView;
+import myorg.domain.User;
+import myorg.domain.util.Money;
+
 import org.apache.commons.collections.Predicate;
 
-import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.Search;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
@@ -15,8 +18,6 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
-import myorg.domain.util.Money;
-import pt.ist.fenixWebFramework.security.UserView;
 import pt.ist.fenixWebFramework.util.DomainReference;
 
 public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
@@ -150,13 +151,17 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
 	}
     }
 
+    protected Person getLoggedPerson() {
+	final User user = UserView.getCurrentUser();
+	return user == null ? null : Person.findByUsername(user.getUsername());
+    }
+
     private Set<? extends AcquisitionProcess> getProcesses() {
-	return responsibleUnitSetOnly ? getProcessesWithResponsible((User) UserView.getUser()) : GenericProcess
+	return responsibleUnitSetOnly ? getProcessesWithResponsible(getLoggedPerson()) : GenericProcess
 		.getAllProcesses(getSearchingClass());
     }
 
-    private Set<? extends AcquisitionProcess> getProcessesWithResponsible(User user) {
-	Person person = user.getPerson();
+    private Set<? extends AcquisitionProcess> getProcessesWithResponsible(final Person person) {
 	if (person == null) {
 	    return Collections.emptySet();
 	}
@@ -266,15 +271,16 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
 	    } else {
 		for (Authorization authorization : unit.getAuthorizations()) {
 		    Person person = authorization.getPerson();
-		    User user = UserView.getUser();
+
+		    final UserView userView = UserView.getCurrentUserView();
 		    try {
-			user.mockUser(person.getUsername());
+			userView.mockUser(person.getUsername());
 			if (process.hasAnyAvailableActivitity()) {
-			    user.unmockUser();
+			    userView.unmockUser();
 			    return false;
 			}
 		    } finally {
-			user.unmockUser();
+			userView.unmockUser();
 		    }
 		}
 		return unit.hasParentUnit() && evaluate(unit.getParentUnit(), process);

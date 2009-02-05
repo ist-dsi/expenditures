@@ -7,20 +7,17 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.Options;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.presentationTier.util.FileUploadBean;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
-import pt.ist.fenixWebFramework.security.UserView;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
 @Mapping( path="/customize" )
 public class CustomizeAction extends BaseAction {
 
     protected Options getOptions() {
-	final User user = UserView.getUser();
-	final Person person = user.getPerson();
+	final Person person = getLoggedPerson();
 	return person.getOptions();
     }
 

@@ -1,17 +1,16 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities;
 
-import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.UnApprove;
-import pt.ist.fenixWebFramework.security.UserView;
+import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
 public class RemoveFundAllocationExpirationDateForResponsible extends GenericAcquisitionProcessActivity {
 
     @Override
     protected boolean isAccessible(RegularAcquisitionProcess process) {
-	final User user = UserView.getUser();
-	return user != null && process.isResponsibleForUnit(user.getPerson());
+	final Person loggedPerson = getLoggedPerson();
+	return loggedPerson != null && process.isResponsibleForUnit(loggedPerson);
     }
 
     @Override

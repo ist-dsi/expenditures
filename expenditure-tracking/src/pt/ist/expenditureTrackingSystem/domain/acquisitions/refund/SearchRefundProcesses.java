@@ -4,7 +4,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 
-import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
+import myorg.applicationTier.Authenticate.UserView;
+import myorg.domain.User;
 import pt.ist.expenditureTrackingSystem.domain.Search;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
@@ -14,7 +15,6 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
-import pt.ist.fenixWebFramework.security.UserView;
 import pt.ist.fenixWebFramework.util.DomainReference;
 
 public class SearchRefundProcesses extends Search<RefundProcess> {
@@ -41,13 +41,18 @@ public class SearchRefundProcesses extends Search<RefundProcess> {
 	}
     }
 
+    protected Person getLoggedPerson() {
+	final User user = UserView.getCurrentUser();
+	return user == null ? null : Person.findByUsername(user.getUsername());
+    }
+
     private Set<? extends RefundProcess> getProcesses() {
-	return responsibleUnitSetOnly ? getProcessesWithResponsible((User) UserView.getUser()) : GenericProcess
+	final Person loggedPerson = getLoggedPerson();
+	return responsibleUnitSetOnly ? getProcessesWithResponsible(getLoggedPerson()) : GenericProcess
 		.getAllProcesses(RefundProcess.class);
     }
 
-    private Set<? extends RefundProcess> getProcessesWithResponsible(final User user) {
-	final Person person = user.getPerson();
+    private Set<? extends RefundProcess> getProcessesWithResponsible(final Person person) {
 	if (person == null) {
 	    return Collections.emptySet();
 	}

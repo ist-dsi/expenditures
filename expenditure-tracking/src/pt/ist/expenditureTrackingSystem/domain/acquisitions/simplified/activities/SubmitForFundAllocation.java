@@ -1,6 +1,5 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities;
 
-import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
@@ -9,10 +8,10 @@ public class SubmitForFundAllocation extends GenericAcquisitionProcessActivity {
 
     @Override
     protected boolean isAccessible(RegularAcquisitionProcess process) {
-	User user = getUser();
-	return user != null
-		&& process.isResponsibleForUnit(user.getPerson())
-		&& !process.getAcquisitionRequest().hasBeenApprovedBy(user.getPerson());
+	final Person loggedPerson = getLoggedPerson();
+	return loggedPerson != null
+		&& process.isResponsibleForUnit(loggedPerson)
+		&& !process.getAcquisitionRequest().hasBeenApprovedBy(loggedPerson);
     }
 
     @Override

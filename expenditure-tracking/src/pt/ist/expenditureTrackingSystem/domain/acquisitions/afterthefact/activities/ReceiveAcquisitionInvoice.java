@@ -2,22 +2,19 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.activi
 
 import org.joda.time.LocalDate;
 
-import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AcquisitionAfterTheFact;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
-import pt.ist.fenixWebFramework.security.UserView;
 
 public class ReceiveAcquisitionInvoice extends AbstractActivity<AfterTheFactAcquisitionProcess> {
 
     @Override
     protected boolean isAccessible(final AfterTheFactAcquisitionProcess process) {
-	final User user = UserView.getUser();
-	final Person person = user == null ? null : user.getPerson();
-	return person != null && (person.hasRoleType(RoleType.ACQUISITION_CENTRAL)
-		|| person.hasRoleType(RoleType.ACQUISITION_CENTRAL_MANAGER));
+	final Person loggedPerson = getLoggedPerson();
+	return loggedPerson != null && (loggedPerson.hasRoleType(RoleType.ACQUISITION_CENTRAL)
+		|| loggedPerson.hasRoleType(RoleType.ACQUISITION_CENTRAL_MANAGER));
     }
 
     @Override

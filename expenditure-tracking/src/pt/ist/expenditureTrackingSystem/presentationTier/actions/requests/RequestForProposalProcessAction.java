@@ -11,14 +11,13 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateRequestForProposalProcessBean;
+import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 import pt.ist.expenditureTrackingSystem.domain.requests.RequestForProposalDocument;
 import pt.ist.expenditureTrackingSystem.domain.requests.RequestForProposalProcess;
 import pt.ist.expenditureTrackingSystem.domain.requests.SearchRequestProposal;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.ProcessAction;
-import pt.ist.fenixWebFramework.security.UserView;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
 @Mapping(path = "/requestForProposalProcess")
@@ -59,8 +58,8 @@ public class RequestForProposalProcessAction extends ProcessAction {
 	    final HttpServletRequest request, final HttpServletResponse response) {
 
 	CreateRequestForProposalProcessBean requestBean = getRenderedObject();
-	User user = UserView.getUser();
-	requestBean.setRequester(user != null ? user.getPerson() : null);
+	final Person person = getLoggedPerson();
+	requestBean.setRequester(person);
 
 	RequestForProposalProcess proposalProcess = RequestForProposalProcess.createNewRequestForProposalProcess(requestBean,
 		consumeInputStream(requestBean));

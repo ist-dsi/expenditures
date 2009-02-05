@@ -3,14 +3,15 @@ package pt.ist.expenditureTrackingSystem.domain.requests;
 import java.util.Collection;
 import java.util.Set;
 
+import myorg.applicationTier.Authenticate.UserView;
+import myorg.domain.User;
+
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.LocalDate;
 
-import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.Search;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
-import pt.ist.fenixWebFramework.security.UserView;
 
 public class SearchRequestProposal extends Search<RequestForProposalProcess> {
 
@@ -29,8 +30,9 @@ public class SearchRequestProposal extends Search<RequestForProposalProcess> {
 	protected boolean matchesSearchCriteria(final RequestForProposalProcess requestProcess) {
 	    RequestForProposal proposal = requestProcess.getRequestForProposal();
 
-	    User user = UserView.getUser();
-	    Person person = user != null ? user.getPerson() : null;
+	    final User user = UserView.getCurrentUser();
+	    final Person person = user == null ? null : Person.findByUsername(user.getUsername());
+
 	    return proposal.getRequestForProposalProcess().isVisible(person)
 		    && matchCriteria(proposal.getPublishDate(), proposal.getExpireDate(), proposal.getRequester().getName(),
 			    proposal.getTitle());

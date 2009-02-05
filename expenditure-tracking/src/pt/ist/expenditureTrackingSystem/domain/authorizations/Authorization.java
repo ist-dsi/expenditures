@@ -2,17 +2,18 @@ package pt.ist.expenditureTrackingSystem.domain.authorizations;
 
 import java.util.Set;
 
+import myorg.applicationTier.Authenticate.UserView;
+import myorg.domain.User;
+import myorg.domain.util.Money;
+
 import org.joda.time.LocalDate;
 
-import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.dto.AuthorizationBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
-import myorg.domain.util.Money;
-import pt.ist.fenixWebFramework.security.UserView;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.pstm.Transaction;
 
@@ -89,9 +90,14 @@ public class Authorization extends Authorization_Base {
 	return getEndDate() == null || getEndDate().isAfter(new LocalDate());
     }
 
+    protected Person getLoggedPerson() {
+	final User user = UserView.getCurrentUser();
+	return user == null ? null : Person.findByUsername(user.getUsername());
+    }
+
     public boolean isCurrentUserAbleToRevoke() {
-	User user = UserView.getUser();
-	return user != null && isValid() && isPersonAbleToRevokeDelegatedAuthorization(user.getPerson());
+	final Person loggedPerson = getLoggedPerson();
+	return loggedPerson != null && isValid() && isPersonAbleToRevokeDelegatedAuthorization(loggedPerson);
     }
 
     @Service

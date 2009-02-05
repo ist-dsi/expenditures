@@ -2,12 +2,13 @@ package pt.ist.expenditureTrackingSystem.domain;
 
 import java.util.Comparator;
 
+import myorg.applicationTier.Authenticate.UserView;
+import myorg.domain.User;
+
 import org.joda.time.DateTime;
 
-import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
-import pt.ist.fenixWebFramework.security.UserView;
 
 public abstract class ProcessState extends ProcessState_Base {
 
@@ -30,8 +31,8 @@ public abstract class ProcessState extends ProcessState_Base {
     }
 
     protected Person getPerson() {
-	final User user = UserView.getUser();
-	return user.getPerson();
+	final User user = UserView.getCurrentUser();
+	return user == null ? null : Person.findByUsername(user.getUsername());
     }
 
     public static final Comparator<ProcessState> COMPARATOR_BY_WHEN = new Comparator<ProcessState>() {

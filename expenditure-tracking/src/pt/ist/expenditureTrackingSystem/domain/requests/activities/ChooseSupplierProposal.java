@@ -1,14 +1,14 @@
 package pt.ist.expenditureTrackingSystem.domain.requests.activities;
 
-import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
+import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.requests.RequestForProposalProcess;
 
 public class ChooseSupplierProposal extends GenericRequestForProposalProcessActivity {
 
     @Override
     protected boolean isAccessible(RequestForProposalProcess process) {
-	User user = getUser();
-	return user != null && process.isResponsibleForUnit(user.getPerson());
+	final Person loggedPerson = getLoggedPerson();
+	return loggedPerson != null && process.isResponsibleForUnit(loggedPerson);
     }
 
     @Override

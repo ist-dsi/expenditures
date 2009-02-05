@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import myorg.domain.util.Address;
 import net.sf.jasperreports.engine.JRException;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
@@ -14,7 +15,6 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestIt
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PurchaseOrderDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
-import myorg.domain.util.Address;
 import pt.ist.expenditureTrackingSystem.util.ReportUtils;
 
 public class CreateAcquisitionPurchaseOrderDocument extends GenericAcquisitionProcessActivity {
@@ -42,7 +42,7 @@ public class CreateAcquisitionPurchaseOrderDocument extends GenericAcquisitionPr
 	final Map<String, Object> paramMap = new HashMap<String, Object>();
 	paramMap.put("acquisitionRequest", acquisitionRequest);
 	paramMap.put("requestID", requestID);
-	paramMap.put("responsibleName", getUser().getPerson().getName());
+	paramMap.put("responsibleName", getLoggedPerson().getName());
 	DeliveryLocalList deliveryLocalList = new DeliveryLocalList();
 	List<AcquisitionRequestItemBean> acquisitionRequestItemBeans = new ArrayList<AcquisitionRequestItemBean>();
 	createBeansLists(acquisitionRequest, deliveryLocalList, acquisitionRequestItemBeans);

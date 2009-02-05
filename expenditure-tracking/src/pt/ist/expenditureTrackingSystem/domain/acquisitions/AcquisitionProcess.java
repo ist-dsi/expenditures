@@ -3,7 +3,7 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 import java.util.Collections;
 import java.util.List;
 
-import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
+import myorg.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
@@ -12,8 +12,6 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
-import myorg.domain.util.Money;
-import pt.ist.fenixWebFramework.security.UserView;
 import pt.ist.fenixframework.pstm.Transaction;
 
 public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
@@ -33,8 +31,8 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
     }
 
     public boolean isAvailableForCurrentUser() {
-	User user = UserView.getUser();
-	return user != null && isAvailableForPerson(user.getPerson());
+	final Person loggedPerson = getLoggedPerson();
+	return loggedPerson != null && isAvailableForPerson(loggedPerson);
     }
 
     @Override
@@ -130,8 +128,8 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
     }
 
     protected boolean userHasRole(final RoleType roleType) {
-	final User user = UserView.getUser();
-	return user != null && user.getPerson().hasRoleType(roleType);
+	final Person loggedPerson = getLoggedPerson();
+	return loggedPerson != null && loggedPerson.hasRoleType(roleType);
     }
 
     public boolean isAllowedToViewSupplierExpenditures() {

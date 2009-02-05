@@ -3,9 +3,11 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact;
 import java.util.ArrayList;
 import java.util.List;
 
+import myorg.applicationTier.Authenticate.UserView;
+import myorg.domain.User;
+
 import org.joda.time.DateTime;
 
-import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.activities.DeleteAfterTheFactAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.activities.EditAfterTheFactAcquisition;
@@ -15,7 +17,6 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericLog;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
-import pt.ist.fenixWebFramework.security.UserView;
 import pt.ist.fenixWebFramework.services.Service;
 
 public class AfterTheFactAcquisitionProcess extends AfterTheFactAcquisitionProcess_Base {
@@ -35,14 +36,19 @@ public class AfterTheFactAcquisitionProcess extends AfterTheFactAcquisitionProce
 
     private static final ThreadLocal<AfterTheFactAcquisitionProcessBean> threadLocal = new ThreadLocal<AfterTheFactAcquisitionProcessBean>();
 
+    protected static Person getLoggedPersonStatic() {
+	final User user = UserView.getCurrentUser();
+	return user == null ? null : Person.findByUsername(user.getUsername());
+    }
+
     @Service
     public static AfterTheFactAcquisitionProcess createNewAfterTheFactAcquisitionProcess(
 	    AfterTheFactAcquisitionProcessBean afterTheFactAcquisitionProcessBean) {
 	threadLocal.set(afterTheFactAcquisitionProcessBean);
 	final AfterTheFactAcquisitionProcess afterTheFactAcquisitionProcess = new AfterTheFactAcquisitionProcess();
 	afterTheFactAcquisitionProcess.edit(afterTheFactAcquisitionProcessBean);
-	final User user = UserView.getUser();
-	new GenericLog(afterTheFactAcquisitionProcess, user.getPerson(), afterTheFactAcquisitionProcess.getClass().getName()
+	final Person loggedPerson = getLoggedPersonStatic();
+	new GenericLog(afterTheFactAcquisitionProcess, loggedPerson, afterTheFactAcquisitionProcess.getClass().getName()
 		+ ".Create", new DateTime());
 	return afterTheFactAcquisitionProcess;
     }

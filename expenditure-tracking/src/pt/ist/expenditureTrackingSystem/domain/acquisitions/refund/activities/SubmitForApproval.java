@@ -1,17 +1,16 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities;
 
-import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericRefundProcessActivity;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundRequest;
-import pt.ist.fenixWebFramework.security.UserView;
+import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
 public class SubmitForApproval extends GenericRefundProcessActivity {
 
     @Override
     protected boolean isAccessible(final RefundProcess process) {
-	final User user = UserView.getUser();
-	return user != null && user.getPerson() == process.getRequestor();
+	final Person loggedPerson = getLoggedPerson();
+	return loggedPerson != null && loggedPerson == process.getRequestor();
     }
 
     @Override

@@ -13,7 +13,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.joda.time.LocalDate;
 
-import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProposalDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
@@ -32,9 +31,6 @@ import pt.ist.expenditureTrackingSystem.domain.dto.VariantBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.presentationTier.util.FileUploadBean;
-import pt.ist.fenixWebFramework.security.UserView;
-import pt.ist.fenixWebFramework.struts.annotations.Forward;
-import pt.ist.fenixWebFramework.struts.annotations.Forwards;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
 @Mapping(path = "/acquisitionSimplifiedProcedureProcess")
@@ -113,8 +109,8 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
     public ActionForward createNewAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	CreateAcquisitionProcessBean createAcquisitionProcessBean = getRenderedObject();
-	User user = UserView.getUser();
-	createAcquisitionProcessBean.setRequester(user != null ? user.getPerson() : null);
+	final Person person = getLoggedPerson();
+	createAcquisitionProcessBean.setRequester(person);
 	final SimplifiedProcedureProcess acquisitionProcess = SimplifiedProcedureProcess
 		.createNewAcquisitionProcess(createAcquisitionProcessBean);
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
@@ -165,8 +161,8 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 
     public ActionForward executeSubmitForFundAllocation(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
-	User user = UserView.getUser();
-	return executeActivityAndViewProcess(mapping, form, request, response, "SubmitForFundAllocation", user.getPerson());
+	final Person person = getLoggedPerson();
+	return executeActivityAndViewProcess(mapping, form, request, response, "SubmitForFundAllocation", person);
     }
 
     public ActionForward executeFundAllocationExpirationDate(final ActionMapping mapping, final ActionForm form,
@@ -262,8 +258,8 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 
     public ActionForward executeConfirmInvoice(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
-	User user = UserView.getUser();
-	return executeActivityAndViewProcess(mapping, form, request, response, "ConfirmInvoice", user.getPerson());
+	final Person person = getLoggedPerson();
+	return executeActivityAndViewProcess(mapping, form, request, response, "ConfirmInvoice", person);
     }
 
     public ActionForward executePayAcquisition(final ActionMapping mapping, final ActionForm form,
@@ -351,10 +347,10 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 
     public ActionForward executeChangeFinancersAccountingUnit(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
-	User user = UserView.getUser();
+	final Person person = getLoggedPerson();
 	AcquisitionProcess acquisitionProcess = getProcess(request);
 	Set<Financer> financersWithFundsAllocated = acquisitionProcess.getAcquisitionRequest()
-		.getAccountingUnitFinancerWithNoFundsAllocated(user.getPerson());
+		.getAccountingUnitFinancerWithNoFundsAllocated(person);
 	Set<ChangeFinancerAccountingUnitBean> financersBean = new HashSet<ChangeFinancerAccountingUnitBean>(
 		financersWithFundsAllocated.size());
 	for (Financer financer : financersWithFundsAllocated) {

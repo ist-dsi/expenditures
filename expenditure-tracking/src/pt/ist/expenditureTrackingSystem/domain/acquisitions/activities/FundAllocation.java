@@ -4,6 +4,7 @@ import java.util.List;
 
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean;
+import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 
 public class FundAllocation<T extends PaymentProcess> extends AbstractActivity<T> {
@@ -15,8 +16,9 @@ public class FundAllocation<T extends PaymentProcess> extends AbstractActivity<T
 
     @Override
     protected boolean isAvailable(T process) {
+	final Person loggedPerson = getLoggedPerson();
 	return isCurrentUserProcessOwner(process) && process.isPendingFundAllocation()
-		&& process.hasAllocatedFundsForAllProjectFinancers() && !process.hasAllFundAllocationId(getUser().getPerson());
+		&& process.hasAllocatedFundsForAllProjectFinancers() && !process.hasAllFundAllocationId(loggedPerson);
     }
 
     @Override

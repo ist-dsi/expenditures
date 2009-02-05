@@ -10,7 +10,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.announcements.AnnouncementProcess;
 import pt.ist.expenditureTrackingSystem.domain.announcements.AnnouncementProcessStateType;
@@ -20,9 +19,6 @@ import pt.ist.expenditureTrackingSystem.domain.dto.ProcessStateBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.ProcessAction;
-import pt.ist.fenixWebFramework.security.UserView;
-import pt.ist.fenixWebFramework.struts.annotations.Forward;
-import pt.ist.fenixWebFramework.struts.annotations.Forwards;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
 @Mapping(path = "/announcementProcess")
@@ -74,8 +70,8 @@ public class AnnouncementsProcessAction extends ProcessAction {
 
     public ActionForward createNewAnnouncementProcess(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
-	User user = UserView.getUser();
-	AnnouncementProcess announcementProcess = AnnouncementProcess.createNewAnnouncementProcess(user.getPerson(),
+	final Person person = getLoggedPerson();
+	AnnouncementProcess announcementProcess = AnnouncementProcess.createNewAnnouncementProcess(person,
 		(AnnouncementBean) getRenderedObject());
 	request.setAttribute("announcementProcess", announcementProcess);
 	return forward(request, "announcements/viewAnnouncementProcess.jsp");

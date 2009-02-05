@@ -6,7 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
+import myorg.applicationTier.Authenticate.UserView;
+import myorg.domain.User;
 import pt.ist.expenditureTrackingSystem.domain.SavedSearch;
 import pt.ist.expenditureTrackingSystem.domain.Search;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
@@ -24,7 +25,6 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
-import pt.ist.fenixWebFramework.security.UserView;
 import pt.ist.fenixWebFramework.util.DomainReference;
 
 public class SearchPaymentProcess extends Search<PaymentProcess> {
@@ -121,13 +121,18 @@ public class SearchPaymentProcess extends Search<PaymentProcess> {
 	return clazz == null ? PaymentProcess.class : clazz;
     }
 
+    protected Person getLoggedPerson() {
+	final User user = UserView.getCurrentUser();
+	return user == null ? null : Person.findByUsername(user.getUsername());
+    }
+
     private Set<? extends PaymentProcess> getProcesses() {
-	return responsibleUnitSetOnly ? getProcessesWithResponsible((User) UserView.getUser()) : GenericProcess
+	final Person loggedPerson = getLoggedPerson();
+	return responsibleUnitSetOnly ? getProcessesWithResponsible(getLoggedPerson()) : GenericProcess
 		.getAllProcesses(getProcessClass());
     }
 
-    private Set<? extends PaymentProcess> getProcessesWithResponsible(User user) {
-	Person person = user.getPerson();
+    private Set<? extends PaymentProcess> getProcessesWithResponsible(final Person person) {
 	if (person == null) {
 	    return Collections.emptySet();
 	}
@@ -136,8 +141,7 @@ public class SearchPaymentProcess extends Search<PaymentProcess> {
 
     @Override
     protected void persist(String name) {
-	User user = UserView.getUser();
-	new SavedSearch(name, user.getPerson(), this);
+	new SavedSearch(name, getLoggedPerson(), this);
     }
 
     public String getProcessId() {

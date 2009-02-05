@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
+import myorg.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
@@ -56,8 +56,6 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
-import myorg.domain.util.Money;
-import pt.ist.fenixWebFramework.security.UserView;
 import pt.ist.fenixWebFramework.services.Service;
 
 public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base {
@@ -176,8 +174,8 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
     }
 
     public boolean isEditRequestItemAvailable() {
-	User user = UserView.getUser();
-	return user != null && user.getPerson().equals(getRequestor()) && getLastAcquisitionProcessState().isInGenesis();
+	final Person loggedPerson = getLoggedPerson();
+	return loggedPerson != null && loggedPerson.equals(getRequestor()) && getLastAcquisitionProcessState().isInGenesis();
     }
 
     public List<AbstractActivity<RegularAcquisitionProcess>> getActiveActivitiesForItem() {

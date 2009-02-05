@@ -10,11 +10,11 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
-import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
+import myorg.applicationTier.Authenticate.UserView;
+import myorg.domain.User;
 import pt.ist.expenditureTrackingSystem.domain.CascadingStyleSheet;
 import pt.ist.expenditureTrackingSystem.domain.Options;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
-import pt.ist.fenixWebFramework.security.UserView;
 
 public class LayoutFilter implements Filter {
 
@@ -24,12 +24,16 @@ public class LayoutFilter implements Filter {
     public void destroy() {
     }
 
+    protected Person getLoggedPerson() {
+	final User user = UserView.getCurrentUser();
+	return user == null ? null : Person.findByUsername(user.getUsername());
+    }
+
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
 	    throws IOException, ServletException {
 	final ServletOutputStream servletOutputStream = servletResponse.getOutputStream();
 	try {
-	    final User user = UserView.getUser();
-	    final Person person = user.getPerson();
+	    final Person person = getLoggedPerson();
 	    final Options options = person.getOptions();
 	    final CascadingStyleSheet cascadingStyleSheet = options.getCascadingStyleSheet();
 	    final byte[] bytes = cascadingStyleSheet.getContent().getBytes();

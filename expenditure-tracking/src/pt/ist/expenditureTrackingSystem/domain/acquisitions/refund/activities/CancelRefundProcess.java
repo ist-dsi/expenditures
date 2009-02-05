@@ -1,8 +1,8 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities;
 
-import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericRefundProcessActivity;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
+import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
 public class CancelRefundProcess extends GenericRefundProcessActivity {
 
@@ -18,8 +18,8 @@ public class CancelRefundProcess extends GenericRefundProcessActivity {
     }
 
     private boolean isUserResponsibleForUnit(RefundProcess process) {
-	User user = getUser();
-	return user != null && process.isResponsibleForAtLeastOnePayingUnit(user.getPerson());
+	final Person loggedPerson = getLoggedPerson();
+	return loggedPerson != null && process.isResponsibleForAtLeastOnePayingUnit(loggedPerson);
     }
 
     @Override

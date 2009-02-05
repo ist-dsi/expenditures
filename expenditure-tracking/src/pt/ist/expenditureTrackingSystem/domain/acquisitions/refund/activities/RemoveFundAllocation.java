@@ -13,12 +13,12 @@ public class RemoveFundAllocation extends GenericRefundProcessActivity {
     @Override
     protected boolean isAvailable(RefundProcess process) {
 	return isCurrentUserProcessOwner(process) && process.isInAllocatedToUnitState()
-		&& process.hasAllocatedFundsForAllProjectFinancers() && process.hasAllFundAllocationId(getUser().getPerson());
+		&& process.hasAllocatedFundsForAllProjectFinancers() && process.hasAllFundAllocationId(getLoggedPerson());
     }
 
     @Override
     protected void process(RefundProcess process, Object... objects) {
-	process.getRequest().resetFundAllocationId(getUser().getPerson());
+	process.getRequest().resetFundAllocationId(getLoggedPerson());
 	process.submitForFundAllocation();
     }
 

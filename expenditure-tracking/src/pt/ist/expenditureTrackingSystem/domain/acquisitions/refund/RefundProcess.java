@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
+import myorg.applicationTier.Authenticate.UserView;
+import myorg.domain.User;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
@@ -49,7 +49,6 @@ import pt.ist.expenditureTrackingSystem.domain.dto.CreateRefundProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
-import pt.ist.fenixWebFramework.security.UserView;
 import pt.ist.fenixWebFramework.services.Service;
 
 public class RefundProcess extends RefundProcess_Base {
@@ -335,9 +334,14 @@ public class RefundProcess extends RefundProcess_Base {
 	return false;
     }
 
+    protected Person getLoggedPerson() {
+	final User user = UserView.getCurrentUser();
+	return user == null ? null : Person.findByUsername(user.getUsername());
+    }
+
     public boolean isAvailableForCurrentUser() {
-	User user = UserView.getUser();
-	return user != null && isAvailableForPerson(user.getPerson());
+	final Person loggedPerson = getLoggedPerson();
+	return loggedPerson != null && isAvailableForPerson(loggedPerson);
     }
 
     public boolean isAvailableForPerson(Person person) {
@@ -349,8 +353,8 @@ public class RefundProcess extends RefundProcess_Base {
     }
 
     public boolean isTakenByCurrentUser() {
-	final User user = UserView.getUser();
-	return user != null && isTakenByPerson(user.getPerson());
+	final Person loggedPerson = getLoggedPerson();
+	return loggedPerson != null && isTakenByPerson(loggedPerson);
     }
 
     public boolean isTakenByPerson(final Person person) {

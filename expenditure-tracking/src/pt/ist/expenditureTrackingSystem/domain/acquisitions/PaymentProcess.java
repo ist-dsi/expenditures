@@ -4,17 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import myorg.domain.util.Money;
+
 import org.joda.time.LocalDate;
 
-import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Project;
 import pt.ist.expenditureTrackingSystem.domain.organization.SubProject;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericLog;
-import myorg.domain.util.Money;
-import pt.ist.fenixWebFramework.security.UserView;
 
 public abstract class PaymentProcess extends PaymentProcess_Base {
 
@@ -76,11 +75,8 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
     }
 
     public boolean isResponsibleForUnit() {
-	User user = UserView.getUser();
-	if (user == null) {
-	    return false;
-	}
-	return isResponsibleForUnit(user.getPerson());
+	final Person loggedPerson = getLoggedPerson();
+	return loggedPerson != null && isResponsibleForUnit(loggedPerson);
     }
 
     public boolean isProjectAccountingEmployee(final Person person) {
@@ -88,8 +84,8 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
     }
 
     public boolean isProjectAccountingEmployee() {
-	final User user = UserView.getUser();
-	return user != null && isProjectAccountingEmployee(user.getPerson());
+	final Person loggedPerson = getLoggedPerson();
+	return loggedPerson != null && isProjectAccountingEmployee(loggedPerson);
     }
 
     public boolean hasAllocatedFundsForAllProjectFinancers(final Person person) {
@@ -109,13 +105,13 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
     }
 
     public boolean isAccountingEmployee() {
-	final User user = UserView.getUser();
-	return user != null && isAccountingEmployee(user.getPerson());
+	final Person loggedPerson = getLoggedPerson();
+	return loggedPerson != null && isAccountingEmployee(loggedPerson);
     }
 
     public boolean isAccountingEmployeeForOnePossibleUnit() {
-	final User user = UserView.getUser();
-	return user != null && isAccountingEmployeeForOnePossibleUnit(user.getPerson());
+	final Person loggedPerson = getLoggedPerson();
+	return loggedPerson != null && isAccountingEmployeeForOnePossibleUnit(loggedPerson);
     }
 
     public boolean isAccountingEmployeeForOnePossibleUnit(final Person person) {

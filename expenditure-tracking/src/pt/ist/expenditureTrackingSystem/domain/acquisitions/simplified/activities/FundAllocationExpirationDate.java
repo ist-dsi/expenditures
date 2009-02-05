@@ -2,16 +2,16 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activiti
 
 import org.joda.time.LocalDate;
 
-import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
+import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
 public class FundAllocationExpirationDate extends GenericAcquisitionProcessActivity {
 
     @Override
     protected boolean isAccessible(RegularAcquisitionProcess process) {
-	User user = getUser();
-	return user != null && process.isResponsibleForUnit(user.getPerson());
+	final Person loggedPerson = getLoggedPerson();
+	return loggedPerson != null && process.isResponsibleForUnit(loggedPerson);
     }
 
     @Override

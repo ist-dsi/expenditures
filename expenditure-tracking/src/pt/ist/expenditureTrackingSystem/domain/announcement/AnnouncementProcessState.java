@@ -1,12 +1,12 @@
 package pt.ist.expenditureTrackingSystem.domain.announcement;
 
-import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
+import myorg.applicationTier.Authenticate.UserView;
+import myorg.domain.User;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.announcements.AnnouncementProcess;
 import pt.ist.expenditureTrackingSystem.domain.announcements.AnnouncementProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
-import pt.ist.fenixWebFramework.security.UserView;
 
 public class AnnouncementProcessState extends AnnouncementProcessState_Base {
 
@@ -31,9 +31,8 @@ public class AnnouncementProcessState extends AnnouncementProcessState_Base {
     }
 
     protected Person getPerson() {
-	final User user = UserView.getUser();
-	final Person person = user.getPerson();
-	return person;
+	final User user = UserView.getCurrentUser();
+	return user == null ? null : Person.findByUsername(user.getUsername());
     }
 
     private void checkArguments(AnnouncementProcess announcementProcess,

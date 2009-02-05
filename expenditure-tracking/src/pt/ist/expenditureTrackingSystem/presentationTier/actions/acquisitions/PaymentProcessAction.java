@@ -12,7 +12,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
@@ -22,10 +21,10 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.UnitItem;
 import pt.ist.expenditureTrackingSystem.domain.dto.DomainObjectBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.UnitItemBean;
+import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.ProcessAction;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
-import pt.ist.fenixWebFramework.security.UserView;
 
 public abstract class PaymentProcessAction extends ProcessAction {
 
@@ -201,14 +200,14 @@ public abstract class PaymentProcessAction extends ProcessAction {
     public ActionForward executeProjectFundAllocation(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final PaymentProcess process = getProcess(request);
-	final User user = UserView.getUser();
-	if (process.getCurrentOwner() == null || (user != null && process.getCurrentOwner() == user.getPerson())) {
+	final Person person = getLoggedPerson();
+	if (process.getCurrentOwner() == null || (person != null && process.getCurrentOwner() == person)) {
 	    if (process.getCurrentOwner() == null) {
 		process.takeProcess();
 	    }
 	    request.setAttribute("process", process);
 	    List<FundAllocationBean> fundAllocationBeans = new ArrayList<FundAllocationBean>();
-	    for (Financer financer : process.getProjectFinancersWithFundsAllocated(user.getPerson())) {
+	    for (Financer financer : process.getProjectFinancersWithFundsAllocated(person)) {
 		fundAllocationBeans.add(new FundAllocationBean(financer));
 	    }
 	    request.setAttribute("fundAllocationBeans", fundAllocationBeans);
@@ -229,14 +228,14 @@ public abstract class PaymentProcessAction extends ProcessAction {
     public ActionForward executeFundAllocation(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final PaymentProcess process = getProcess(request);
-	final User user = UserView.getUser();
-	if (process.getCurrentOwner() == null || (user != null && process.getCurrentOwner() == user.getPerson())) {
+	final Person person = getLoggedPerson();
+	if (process.getCurrentOwner() == null || (person != null && process.getCurrentOwner() == person)) {
 	    if (process.getCurrentOwner() == null) {
 		process.takeProcess();
 	    }
 	    request.setAttribute("process", process);
 	    List<FundAllocationBean> fundAllocationBeans = new ArrayList<FundAllocationBean>();
-	    for (Financer financer : process.getFinancersWithFundsAllocated(user.getPerson())) {
+	    for (Financer financer : process.getFinancersWithFundsAllocated(person)) {
 		fundAllocationBeans.add(new FundAllocationBean(financer));
 	    }
 	    request.setAttribute("fundAllocationBeans", fundAllocationBeans);
@@ -267,8 +266,8 @@ public abstract class PaymentProcessAction extends ProcessAction {
     public ActionForward executeAllocateFundsPermanently(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final PaymentProcess process = getProcess(request);
-	final User user = UserView.getUser();
-	if (process.getCurrentOwner() == null || (user != null && process.getCurrentOwner() == user.getPerson())) {
+	final Person person = getLoggedPerson();
+	if (process.getCurrentOwner() == null || (person != null && process.getCurrentOwner() == person)) {
 	    if (process.getCurrentOwner() == null) {
 		process.takeProcess();
 	    }
@@ -311,8 +310,8 @@ public abstract class PaymentProcessAction extends ProcessAction {
     public ActionForward executeAllocateProjectFundsPermanently(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final PaymentProcess process = getProcess(request);
-	final User user = UserView.getUser();
-	if (process.getCurrentOwner() == null || (user != null && process.getCurrentOwner() == user.getPerson())) {
+	final Person person = getLoggedPerson();
+	if (process.getCurrentOwner() == null || (person != null && process.getCurrentOwner() == person)) {
 	    if (process.getCurrentOwner() == null) {
 		process.takeProcess();
 	    }

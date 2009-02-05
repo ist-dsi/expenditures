@@ -1,13 +1,18 @@
 package pt.ist.expenditureTrackingSystem.domain.processes;
 
-import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
+import myorg.applicationTier.Authenticate.UserView;
+import myorg.domain.User;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
-import pt.ist.fenixWebFramework.security.UserView;
 import pt.ist.fenixWebFramework.services.Service;
 
 public abstract class AbstractActivity<T extends GenericProcess> {
+
+    protected Person getLoggedPerson() {
+	final User user = UserView.getCurrentUser();
+	return user == null ? null : Person.findByUsername(user.getUsername());
+    }
 
     protected abstract boolean isAvailable(T process);
 
@@ -16,9 +21,9 @@ public abstract class AbstractActivity<T extends GenericProcess> {
     protected abstract void process(T process, Object... objects);
 
     protected boolean isCurrentUserProcessOwner(GenericProcess process) {
-	Person currentOwner = process.getCurrentOwner();
-	User user = getUser();
-	return currentOwner == null || (user != null && user.getPerson() == currentOwner);
+	final Person currentOwner = process.getCurrentOwner();
+	final Person loggedPerson = getLoggedPerson();
+	return currentOwner == null || (loggedPerson != null && loggedPerson == currentOwner);
     }
     
     protected boolean isProcessTaken(T process) {
@@ -26,13 +31,13 @@ public abstract class AbstractActivity<T extends GenericProcess> {
     }
 
     protected boolean isProcessTakenByCurrentUser(T process) {
-	User user = getUser();
+	final Person loggedPerson = getLoggedPerson();
 	Person taker = process.getCurrentOwner();
-	return taker != null && user != null && taker == user.getPerson();
+	return taker != null && loggedPerson != null && taker == loggedPerson;
     }
 
     protected void logExecution(T process, String operationName, User user) {
-	process.logExecution(user.getPerson(), operationName);
+	process.logExecution(getLoggedPerson(), operationName);
     }
 
     @Service
@@ -60,12 +65,13 @@ public abstract class AbstractActivity<T extends GenericProcess> {
     }
 
     protected boolean userHasRole(final RoleType roleType) {
-	final User user = getUser();
-	return user != null && user.getPerson().hasRoleType(roleType);
+	final Person person = getLoggedPerson();
+	return person != null && person.hasRoleType(roleType);
     }
 
     protected User getUser() {
-	return UserView.getUser();
+	final User user = UserView.getCurrentUser();
+	return user;
     }
 
     public String getName() {

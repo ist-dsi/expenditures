@@ -1,19 +1,18 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities;
 
-import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
 import pt.ist.expenditureTrackingSystem.domain.dto.SetRefundeeBean;
-import pt.ist.fenixWebFramework.security.UserView;
+import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
 public class SetRefundee extends GenericAcquisitionProcessActivity {
 
     protected boolean isRequester(final RegularAcquisitionProcess process) {
-	final User user = UserView.getUser();
-	return user != null && user.getPerson().equals(process.getRequestor());
+	final Person loggedPerson = getLoggedPerson();
+	return loggedPerson != null && loggedPerson.equals(process.getRequestor());
     }
 
     @Override

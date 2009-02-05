@@ -10,14 +10,12 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.announcements.Announcement;
 import pt.ist.expenditureTrackingSystem.domain.announcements.AnnouncementProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.requests.RequestForProposalProcess;
-import pt.ist.fenixWebFramework.security.UserView;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
 @Mapping(path = "/expendituresHome")
@@ -25,16 +23,14 @@ public class HomeAction extends BaseAction {
 
     public final ActionForward firstPage(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) throws Exception {
-	final User user = UserView.getUser();
-	if (user != null) {
-	    final Person person = user.getPerson();
+	final Person person = getLoggedPerson();
+	if (person != null) {
 	    final Set<AcquisitionProcess> pendingAuthorizationAcquisitionProcesses = person
 		    .findAcquisitionProcessesPendingAuthorization();
 	    request.setAttribute("pendingAuthorizationAcquisitionProcesses", pendingAuthorizationAcquisitionProcesses);
 	} else {
 	    return showAcquisitionAnnouncements(mapping, form, request, response);
 	}
-	request.setAttribute("user", user);
 	return forward(request, "/hello.jsp");
     }
 

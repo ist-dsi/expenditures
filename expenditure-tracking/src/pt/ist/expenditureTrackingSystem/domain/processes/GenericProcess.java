@@ -8,15 +8,16 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import myorg.applicationTier.Authenticate.UserView;
+import myorg.domain.User;
+
 import org.apache.commons.collections.Predicate;
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
 
-import pt.ist.expenditureTrackingSystem.applicationTier.Authenticate.User;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
-import pt.ist.fenixWebFramework.security.UserView;
 import pt.ist.fenixWebFramework.services.Service;
 
 public abstract class GenericProcess extends GenericProcess_Base {
@@ -67,7 +68,8 @@ public abstract class GenericProcess extends GenericProcess_Base {
     }
 
     public static boolean isCreateNewProcessAvailable() {
-	return UserView.getUser() != null;
+	final User user = UserView.getCurrentUser();
+	return user != null;
     }
 
     public ProcessComment getMostRecentComment() {
@@ -126,21 +128,25 @@ public abstract class GenericProcess extends GenericProcess_Base {
 	super.setCurrentOwner(null);
     }
 
+    protected Person getLoggedPerson() {
+	final User user = UserView.getCurrentUser();
+	return user == null ? null : Person.findByUsername(user.getUsername());
+    }
+
     @Service
     public void takeProcess() {
 	final Person currentOwner = getCurrentOwner();
 	if (currentOwner != null) {
 	    throw new DomainException("error.message.illegal.method.useStealInstead");
 	}
-	final User user = UserView.getUser();
-	super.setCurrentOwner(user.getPerson());
+	super.setCurrentOwner(getLoggedPerson());
     }
 
     @Service
     public void releaseProcess() {
-	final User user = UserView.getUser();
+	final Person loggedPerson = getLoggedPerson();
 	final Person person = getCurrentOwner();
-	if (user != null && person != null && user.getPerson() != person) {
+	if (loggedPerson != null && person != null && loggedPerson != person) {
 	    throw new DomainException("error.message.illegal.state.unableToReleaseATicketNotOwnerByUser");
 	}
 	super.setCurrentOwner(null);
@@ -148,13 +154,12 @@ public abstract class GenericProcess extends GenericProcess_Base {
 
     @Service
     public void stealProcess() {
-	final User user = UserView.getUser();
-	super.setCurrentOwner(user.getPerson());
+	super.setCurrentOwner(getLoggedPerson());
     }
 
     public boolean isUserCurrentOwner() {
-	final User user = UserView.getUser();
-	return user != null && user.getPerson() == getCurrentOwner();
+	final Person loggedPerson = getLoggedPerson();
+	return loggedPerson != null && loggedPerson == getCurrentOwner();
     }
 
     public boolean isTakenByPerson(Person person) {
@@ -162,8 +167,8 @@ public abstract class GenericProcess extends GenericProcess_Base {
     }
 
     public boolean isTakenByCurrentUser() {
-	User user = UserView.getUser();
-	return user != null && isTakenByPerson(user.getPerson());
+	final Person loggedPerson = getLoggedPerson();
+	return loggedPerson != null && isTakenByPerson(loggedPerson);
     }
 
     public <T extends GenericLog> T logExecution(Person person, String operationName, Object... args) {
