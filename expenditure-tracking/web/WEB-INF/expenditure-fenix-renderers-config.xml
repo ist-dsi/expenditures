@@ -261,7 +261,7 @@ Documentation:
     <!--@ LabelFormatter output. -->
     <renderer type="pt.utl.ist.fenix.tools.resources.LabelFormatter" class="pt.ist.fenixWebFramework.rendererExtensions.LabelFormatterRenderer">
     		<property name="bundleName(application)" value="APPLICATION_RESOURCES"/>
-    		<property name="bundleName(enum)" value="ENUMERATION_RESOURCES"/>
+    		<property name="bundleName(enum)" value="EXPENDITURE_ENUMERATION_RESOURCES"/>
     		<property name="bundleName(default)" value="APPLICATION_RESOURCES"/>
     </renderer>
     
