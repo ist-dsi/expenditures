@@ -17,14 +17,29 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base {
 
     @Service
     public synchronized static void initialize() {
-	if (instance == null) {
-	    final MyOrg myOrg = MyOrg.getInstance();
-	    instance = myOrg.getExpenditureTrackingSystem();
-	    if (instance == null) {
-		instance = new ExpenditureTrackingSystem();
-	    }
+//	if (instance == null) {
+	    boolean revert = true;
+	    try {
+		final MyOrg myOrg = MyOrg.getInstance();
+		instance = myOrg.getExpenditureTrackingSystem();
+		if (instance == null) {
+		    instance = new ExpenditureTrackingSystem();
+		}
 
-	    initSystemSearches();
+		initRoles();
+		initSystemSearches();
+		revert = false;
+	    } finally {
+		if (revert) {
+//		    instance = null;
+		}
+	    }
+//	}
+    }
+
+    private static void initRoles() {
+	for (final RoleType roleType : RoleType.values()) {
+	    Role.getRole(roleType);
 	}
     }
 

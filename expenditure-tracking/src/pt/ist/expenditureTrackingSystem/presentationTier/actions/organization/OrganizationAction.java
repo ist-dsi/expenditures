@@ -116,6 +116,7 @@ public class OrganizationAction extends BaseAction {
 
     public final ActionForward searchUsers(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) {
+	ExpenditureTrackingSystem.getInstance();
 	SearchUsers searchUsers = getRenderedObject("searchUsers");
 	if (searchUsers == null) {
 	    searchUsers = new SearchUsers();

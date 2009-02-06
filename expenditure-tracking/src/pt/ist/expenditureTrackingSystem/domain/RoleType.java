@@ -9,4 +9,5 @@ public enum RoleType implements IRoleEnum {
     public String getRepresentation() {
 	return getClass().getName() + "." + name();
     }
+
 }

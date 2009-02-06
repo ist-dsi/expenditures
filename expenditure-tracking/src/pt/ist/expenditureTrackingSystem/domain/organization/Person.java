@@ -226,5 +226,15 @@ public class Person extends Person_Base {
 	}
 	setUser(user);
     }
-    
+
+    @Override
+    public User getUser() {
+	final User user = super.getUser();
+	if (user == null) {
+	    connectToUser(getUsername());
+	    return super.getUser();
+	}
+        return user;
+    }
+
 }
