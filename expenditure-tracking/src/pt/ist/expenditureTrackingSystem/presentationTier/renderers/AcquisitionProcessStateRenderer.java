@@ -2,6 +2,8 @@ package pt.ist.expenditureTrackingSystem.presentationTier.renderers;
 
 import java.util.List;
 
+import myorg.util.BundleUtil;
+
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.OperationLog;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
@@ -78,7 +80,7 @@ public class AcquisitionProcessStateRenderer extends ProcessStateRenderer<Regula
 	}
 
 	private HtmlComponent getBody(final RegularAcquisitionProcess process, final AcquisitionProcessStateType stateType) {
-	    return getBoxBody(getUrl(), RenderUtils.getEnumString(stateType), stateType.toString(), process);
+	    return getBoxBody(getUrl(), stateType.getLocalizedName(), stateType.toString(), process);
 	}
     }
 
