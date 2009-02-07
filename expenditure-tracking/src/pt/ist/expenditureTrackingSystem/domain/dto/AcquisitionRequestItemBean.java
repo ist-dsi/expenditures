@@ -2,14 +2,18 @@ package pt.ist.expenditureTrackingSystem.domain.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ResourceBundle;
 
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.organization.DeliveryInfo;
 import myorg.domain.util.Address;
 import myorg.domain.util.Money;
+import pt.ist.fenixWebFramework.rendererExtensions.util.IPresentableEnum;
 import pt.ist.fenixWebFramework.util.DomainReference;
+import pt.utl.ist.fenix.tools.util.i18n.Language;
 
 public class AcquisitionRequestItemBean implements Serializable {
 
@@ -163,8 +167,20 @@ public class AcquisitionRequestItemBean implements Serializable {
 	this.deliveryInfo = new DomainReference<DeliveryInfo>(deliveryInfo);
     }
 
-    public static enum CreateItemSchemaType {
+    public static enum CreateItemSchemaType implements IPresentableEnum {
 	NEW_DELIVERY_INFO, EXISTING_DELIVERY_INFO;
+
+	@Override
+	public String getLocalizedName() {
+	    try {
+		final ResourceBundle resourceBundle = ResourceBundle.getBundle("resources.ExpenditureEnumerationResources",
+			Language.getLocale());
+		return resourceBundle.getString(CreateItemSchemaType.class.getSimpleName() + "." + name());
+	    } catch (Exception ex) {
+		ex.printStackTrace();
+		throw new Error(ex);
+	    }
+	}
     }
 
     public BigDecimal getVatValue() {

@@ -2,9 +2,10 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import java.util.ResourceBundle;
 
+import pt.ist.fenixWebFramework.rendererExtensions.util.IPresentableEnum;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 
-public enum AcquisitionProcessStateType {
+public enum AcquisitionProcessStateType implements IPresentableEnum {
 
     IN_GENESIS {
 

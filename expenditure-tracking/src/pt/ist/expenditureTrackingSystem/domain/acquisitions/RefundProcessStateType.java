@@ -2,9 +2,10 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import java.util.ResourceBundle;
 
+import pt.ist.fenixWebFramework.rendererExtensions.util.IPresentableEnum;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 
-public enum RefundProcessStateType {
+public enum RefundProcessStateType implements IPresentableEnum {
 
     IN_GENESIS {
 
@@ -48,24 +49,6 @@ public enum RefundProcessStateType {
 	}
     },
 
-    REJECTED {
-
-	@Override
-	public boolean showFor(final RefundProcessStateType currentStateType) {
-	    return currentStateType == this;
-	}
-
-	@Override
-	public boolean hasNextState() {
-	    return false;
-	}
-
-	@Override
-	public boolean isBlocked(final RefundProcessStateType currentStateType) {
-	    return true;
-	}
-
-    },
     CANCELED {
 
 	@Override
@@ -89,7 +72,8 @@ public enum RefundProcessStateType {
     }
 
     public String getLocalizedName() {
-	final ResourceBundle resourceBundle = ResourceBundle.getBundle("resources.ExpenditureEnumerationResources", Language.getLocale());
+	final ResourceBundle resourceBundle = ResourceBundle.getBundle("resources.ExpenditureEnumerationResources", Language
+		.getLocale());
 	return resourceBundle.getString(RefundProcessStateType.class.getSimpleName() + "." + name());
     }
 
@@ -110,7 +94,7 @@ public enum RefundProcessStateType {
     }
 
     public boolean isActive() {
-	return (this != REJECTED && this != CANCELED);
+	return (this != CANCELED);
     }
 
 }
