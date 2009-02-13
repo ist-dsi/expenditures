@@ -101,11 +101,13 @@
 </logic:present>
 
 <h3 class="mtop15 mbottom05"><bean:message key="accountingUnit.title" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/></h3>
-<p class="mtop05">
-	<html:link action="/expenditureTrackingOrganization.do?method=prepareCreateAccountingUnit">
-		<bean:message key="unit.link.create.accounting.unit" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
-	</html:link>
-</p>
+<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
+	<p class="mtop05">
+		<html:link action="/expenditureTrackingOrganization.do?method=prepareCreateAccountingUnit">
+			<bean:message key="unit.link.create.accounting.unit" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+		</html:link>
+	</p>
+</logic:present>
 
 <logic:present name="accountingUnits">
 	<logic:empty name="accountingUnits">

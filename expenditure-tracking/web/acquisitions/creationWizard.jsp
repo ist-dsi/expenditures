@@ -33,9 +33,13 @@
 		<li class="mbottom1">
 			<p class="mvert025">
 				<strong>
+				<%-- 
 					<html:link styleClass="big" action="/acquisitionStandardProcedureProcess.do?method=prepareCreateAcquisitionStandardProcess">
+				 --%>
 						<bean:message key="link.create.standardAcquisitionProcess" bundle="EXPENDITURE_RESOURCES"/>
+				<%-- 
 					</html:link>
+				 --%>
 				</strong>
 			</p>
 			<p class="mvert025">
@@ -47,9 +51,13 @@
 		<li>
 			<p class="mvert025">
 				<strong>
+				<%-- 
 					<html:link styleClass="big" action="/acquisitionRefundProcess.do?method=prepareCreateRefundProcess">
+				 --%>
 						<bean:message key="link.create.refundProcess" bundle="EXPENDITURE_RESOURCES"/>
+				<%-- 
 					</html:link>
+				 --%>
 				</strong>
 			</p>
 			<p class="mvert025">

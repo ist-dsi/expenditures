@@ -544,4 +544,38 @@ public class OrganizationAction extends BaseAction {
 
 	return spreadsheet;
     }
+
+    public final ActionForward editSupplierLimit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	final Supplier supplier = getDomainObject(request, "supplierOid");
+	request.setAttribute("supplier", supplier);
+	return forward(request, "/expenditureTrackingOrganization/editSupplierLimit.jsp");
+    }
+
+    public final ActionForward prepareMergeSupplier(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final Supplier supplier = getDomainObject(request, "supplierToTransferOID");
+	request.setAttribute("supplierToTransfer", supplier);
+
+	SupplierBean supplierBean = getRenderedObject("supplierBean");
+	if (supplierBean == null) {
+	    supplierBean = new SupplierBean();
+	}
+	request.setAttribute("supplierBean", supplierBean);
+
+	return forward(request, "/expenditureTrackingOrganization/mergeSupplier.jsp");
+    }
+
+    public final ActionForward mergeSupplier(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final Supplier supplierToTransfer = getDomainObject(request, "supplierToTransferOID");
+	final Supplier supplierDestination = getDomainObject(request, "supplierDestinationOID");
+
+	supplierDestination.merge(supplierToTransfer);
+	
+	final SupplierBean supplierBean = new SupplierBean(supplierDestination);
+
+	return manageSuppliers(mapping, request, supplierBean);
+    }
+
 }

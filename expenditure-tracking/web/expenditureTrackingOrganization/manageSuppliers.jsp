@@ -45,6 +45,9 @@
 
 
 <logic:present name="supplierBean" property="supplier">
+	<bean:define id="supplier" name="supplierBean" property="supplier" type="pt.ist.expenditureTrackingSystem.domain.organization.Supplier"/>
+	<bean:message key="supplier.soft.limit" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>: <%= supplier.getSupplierLimit().toFormatString() %>
+
 	<div class="infoop2">
 		<fr:view name="supplierBean" property="supplier"
 				type="pt.ist.expenditureTrackingSystem.domain.organization.Supplier"
@@ -56,16 +59,28 @@
 		</fr:view>
 	</div>
 
-	<bean:define id="supplierOID" name="supplierBean" property="supplier.OID"/>
+	<bean:define id="supplierOID" name="supplier" property="OID"/>
 	<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.SUPPLIER_MANAGER">
 		<p>
 			<html:link action='<%= "/expenditureTrackingOrganization.do?method=prepareEditSupplier&supplierOid=" + supplierOID%>'>
 				<bean:message key="supplier.link.edit" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 			</html:link>
+			<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL_MANAGER">
+			| 
+				<html:link action='<%= "/expenditureTrackingOrganization.do?method=editSupplierLimit&supplierOid=" + supplierOID%>'>
+					<bean:message key="supplier.link.edit.limit" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+				</html:link>
+			</logic:present>
 			<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
 			| 
 				<html:link action='<%= "/expenditureTrackingOrganization.do?method=deleteSupplier&supplierOid=" + supplierOID%>'>
 					<bean:message key="supplier.link.delete" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+				</html:link>
+			</logic:present>
+			<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
+			| 
+				<html:link action='<%= "/expenditureTrackingOrganization.do?method=prepareMergeSupplier&supplierToTransferOID=" + supplierOID%>'>
+					<bean:message key="supplier.link.merge" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 				</html:link>
 			</logic:present>
 		</p>

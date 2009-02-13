@@ -188,6 +188,12 @@
 	<slot name="email" key="supplier.label.email" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>	
 </schema>
 
+<schema name="editSupplierLimit"
+		type="pt.ist.expenditureTrackingSystem.domain.organization.Supplier"
+		bundle="ORGANIZATION_RESOURCES">
+	<slot name="supplierLimit" key="supplier.soft.limit" bundle="ORGANIZATION_RESOURCES"/>
+</schema>
+
 <schema name="createSupplier"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.CreateSupplierBean"
 		bundle="EXPENDITURE_ORGANIZATION_RESOURCES">

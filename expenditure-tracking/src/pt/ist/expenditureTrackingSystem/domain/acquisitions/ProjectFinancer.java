@@ -3,6 +3,8 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 import java.util.Collections;
 import java.util.Set;
 
+import myorg.domain.util.Money;
+
 import org.apache.commons.lang.StringUtils;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
@@ -62,7 +64,21 @@ public class ProjectFinancer extends ProjectFinancer_Base {
 
     @Override
     public boolean hasAllocatedFundsForAllProject() {
-	return getProjectFundAllocationId() != null && !getProjectFundAllocationId().isEmpty();
+	return (getProjectFundAllocationId() != null && !getProjectFundAllocationId().isEmpty())
+		|| (getAmountAllocated().equals(Money.ZERO) && hasAnyOtherFinancerIsAllocated());
+    }
+
+    private boolean hasAnyOtherFinancerIsAllocated() {
+	for (Financer financer : getFundedRequest().getFinancers()) {
+	    if (financer != this && financer.isProjectFinancer()) {
+		ProjectFinancer projectFinancer = (ProjectFinancer) financer;
+		if ((projectFinancer.getProjectFundAllocationId() != null && !projectFinancer.getProjectFundAllocationId()
+			.isEmpty())) {
+		    return true;
+		}
+	    }
+	}
+	return false;
     }
 
     @Override

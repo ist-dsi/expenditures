@@ -1,4 +1,6 @@
 
+update MY_ORG set KEY_EXPENDITURE_TRACKING_SYSTEM = 1;
+update EXPENDITURE_TRACKING_SYSTEM set KEY_MY_ORG = 1; 
 
 
 
@@ -94,4 +96,9 @@ alter table SAVED_SEARCH add column OJB_CONCRETE_CLASS text;
 
 alter table PERSON add column EMAIL text;
 
+
+-- Inserted at 2009-02-12T17:04:13.674Z
+
+alter table SUPPLIER add column SUPPLIER_LIMIT text;
+update SUPPLIER set SUPPLIER_LIMIT = 'EUR:60000.00';
 

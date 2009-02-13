@@ -54,11 +54,14 @@
 
 
 <h3 class="mtop15 mbottom05"><bean:message key="title.accounting.unit.units" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/></h3>
-<p class="mtop05">
-	<html:link action="/expenditureTrackingOrganization.do?method=prepareAddUnitToAccountingUnit" paramId="accountingUnitOid" paramName="accountingUnit" paramProperty="OID">
-		<bean:message key="unit.link.add.accounting.unit" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
-	</html:link>
-</p>
+<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
+	<p class="mtop05">
+		<html:link action="/expenditureTrackingOrganization.do?method=prepareAddUnitToAccountingUnit" paramId="accountingUnitOid" paramName="accountingUnit" paramProperty="OID">
+			<bean:message key="unit.link.add.accounting.unit" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+		</html:link>
+	</p>
+</logic:present>
+
 
 <logic:empty name="accountingUnit" property="units">
 	<p>

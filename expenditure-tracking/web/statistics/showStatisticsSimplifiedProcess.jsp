@@ -17,10 +17,9 @@
 </fr:edit>
 
 <br/>
-<br/>
 
 <logic:present name="simplifiedProcessStatistics">
-	<bean:message key="label.statistics.process.total.number" bundle="STATISTICS_RESOURCES"/> <bean:write name="simplifiedProcessStatistics" property="numberOfProcesses"/>
+	<p><bean:message key="label.statistics.process.total.number" bundle="STATISTICS_RESOURCES"/>: <bean:write name="simplifiedProcessStatistics" property="numberOfProcesses"/></p>
 	<html:img action="statistics.do?method=simplifiedProcessStatisticsChart" paramId="year" paramName="yearBean" paramProperty="year"/>
 	<br/>
 	<br/>

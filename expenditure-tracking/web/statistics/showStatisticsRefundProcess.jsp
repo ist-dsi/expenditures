@@ -17,10 +17,9 @@
 </fr:edit>
 
 <br/>
-<br/>
 
 <logic:present name="refundProcessStatistics">
-	<bean:message key="label.statistics.process.total.number" bundle="STATISTICS_RESOURCES"/> <bean:write name="refundProcessStatistics" property="numberOfProcesses"/>
+	<p><bean:message key="label.statistics.process.total.number" bundle="STATISTICS_RESOURCES"/>: <bean:write name="refundProcessStatistics" property="numberOfProcesses"/></p>
 	<html:img action="statistics.do?method=refundProcessStatisticsChart" paramId="year" paramName="yearBean" paramProperty="year"/>
 	<br/>
 	<br/>

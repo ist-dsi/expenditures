@@ -31,13 +31,13 @@
 					(<strong style="color: #777;"><bean:message key="label.default" bundle="EXPENDITURE_RESOURCES"/></strong>)
 				</logic:equal>
 			</span>
-			<p>
+			<div class="mtop05">
 				<fr:view name="systemSearch"  schema="viewSavedSearch">
 					<fr:layout name="tabular-nonNullValues">
-						<fr:property name="classes" value="thlight thleft mtop05"/>
+						<fr:property name="classes" value="thlight thleft mtop0"/>
 					</fr:layout>
 				</fr:view>
-			</p>
+			</div>
 		</div>
 	</li>
 </logic:iterate>
@@ -58,13 +58,13 @@
 					<strong style="color: #777;"><bean:message key="label.default" bundle="EXPENDITURE_RESOURCES"/></strong>)
 				</logic:equal>
 			</span>
-			<p>
+			<div>
 				<fr:view name="userSearch" schema="viewSavedSearch">
 					<fr:layout name="tabular-nonNullValues">
-						<fr:property name="classes" value="thlight thleft mtop05"/>
+						<fr:property name="classes" value="thlight thleft mtop0"/>
 					</fr:layout>
 				</fr:view>
-			</p>
+			</div>
 		</div>
 	</li>
 </logic:iterate>

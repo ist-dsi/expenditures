@@ -137,7 +137,7 @@
 		</tr>	
 		<tr>
 			<th style="padding-bottom: 1em;"><bean:message key="label.address" bundle="ACQUISITION_RESOURCES"/>:</th>
-			<td colspan="3" style="padding-bottom: 1em; padding-left: 0px;">
+			<td colspan="3" style="padding-bottom: 1em; padding-left: 10px;">
 				<fr:view name="acquisitionRequestItem" property="address"/>
 			</td>
 		</tr>
@@ -152,7 +152,7 @@
 						<logic:iterate id="unitItem" name="acquisitionRequestItem" property="sortedUnitItems">
 							<tr>
 								<td>
-									<fr:view name="unitItem" property="unit.presentationName"/>
+									<fr:view name="unitItem" property="unit.presentationName"/>:
 								</td>
 								<td class="nowrap vatop">
 									<logic:present name="unitItem" property="realShareValue">

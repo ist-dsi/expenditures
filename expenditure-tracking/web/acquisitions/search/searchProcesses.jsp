@@ -95,8 +95,8 @@
 		
 	<fr:view name="results" schema="viewProcessesInList">
 			<fr:layout name="tabular">
-				<fr:property name="classes" value="tstyle2 mtop05 width100pc"/>
-				<fr:property name="columnClasses" value=",,,,,,,,"/>
+				<fr:property name="classes" value="tstyle2 mtop05 width100pc asd"/>
+				<fr:property name="columnClasses" value="width100px,aleft,,,aleft,,,,"/>
 				<fr:property name="sortBy" value="year=asc,acquisitionProcessNumber=asc"/>
 				<fr:property name="linkFormat(view)" value="/acquisition${class.simpleName}.do?method=viewProcess&processOid=${OID}"/>
 				<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>

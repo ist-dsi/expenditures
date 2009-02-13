@@ -234,6 +234,7 @@ class organization.Supplier {
 	String fax;
 	String email;
 	String nib;
+	Money supplierLimit;
 }
 
 class organization.Unit {

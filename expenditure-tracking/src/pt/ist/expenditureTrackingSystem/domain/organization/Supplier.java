@@ -16,11 +16,12 @@ import pt.ist.fenixframework.pstm.Transaction;
 
 public class Supplier extends Supplier_Base {
 
-    private static Money SUPPLIER_LIMIT = new Money("60000");
+    private static Money SUPPLIER_LIMIT = new Money("75000");
 
     private Supplier() {
 	super();
 	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
+	setSupplierLimit(new Money("60000"));
     }
 
     public Supplier(String fiscalCode) {
@@ -52,7 +53,12 @@ public class Supplier extends Supplier_Base {
     }
 
     private boolean checkIfCanBeDeleted() {
-	return !hasAnyAcquisitionRequests();
+	return !hasAnyAcquisitionRequests()
+		&& !hasAnyAcquisitionsAfterTheFact()
+		&& !hasAnyProposals()
+		&& !hasAnyRefundInvoices()
+		&& !hasAnyAnnouncements()
+		&& !hasAnySupplierSearches();
     }
 
     public static Supplier readSupplierByFiscalIdentificationCode(String fiscalIdentificationCode) {
@@ -139,11 +145,30 @@ public class Supplier extends Supplier_Base {
     public boolean isFundAllocationAllowed(final Money value) {
 	final Money totalAllocated = getTotalAllocated();
 	final Money totalValue = totalAllocated.add(value);
-	return totalValue.isLessThanOrEqual(SUPPLIER_LIMIT);
+	return totalValue.isLessThanOrEqual(SUPPLIER_LIMIT) && totalValue.isLessThan(getSupplierLimit());
     }
 
     public String getPresentationName() {
 	return getFiscalIdentificationCode() + " - " + getName();
+    }
+
+    @Override
+    public void setSupplierLimit(final Money supplierLimit) {
+	final Money newLimit = supplierLimit.isGreaterThanOrEqual(SUPPLIER_LIMIT) ? SUPPLIER_LIMIT : supplierLimit;
+	super.setSupplierLimit(newLimit);
+    }
+
+    @Service
+    public void merge(final Supplier supplier) {
+	if (supplier != this) {
+	    getAcquisitionsAfterTheFactSet().addAll(supplier.getAcquisitionsAfterTheFactSet());
+	    getProposalsSet().addAll(supplier.getProposalsSet());
+	    getRefundInvoicesSet().addAll(supplier.getRefundInvoicesSet());
+	    getAnnouncementsSet().addAll(supplier.getAnnouncementsSet());
+	    getSupplierSearchesSet().addAll(supplier.getSupplierSearchesSet());
+	    getAcquisitionRequestsSet().addAll(supplier.getAcquisitionRequestsSet());
+	    supplier.delete();
+	}
     }
 
 }

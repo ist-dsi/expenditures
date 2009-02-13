@@ -261,7 +261,7 @@
 				<logic:iterate id="itemResume" name="itemSet" indexId="index">
 					<bean:define id="currentIndex" value="<%= String.valueOf(index + 1) %>"/>
 					<tr>
-						<td><%= GenericChecksumRewriter.NO_CHECKSUM_PREFIX %><a href="<%= "#item" + currentIndex%>">Item<%= currentIndex %></a></td>
+						<td><%= GenericChecksumRewriter.NO_CHECKSUM_PREFIX %><a href="<%= "#item" + currentIndex%>">Item <%= currentIndex %></a></td>
 						<td class="aright"><fr:view name="itemResume" property="quantity"/></td>
 						<td class="aright"><fr:view name="itemResume" property="unitValue"/></td>
 						<td class="aright"><fr:view name="itemResume" property="totalVatValue"/></td>
@@ -315,13 +315,11 @@
 				<bean:define id="item" name="acquisitionRequestItem" toScope="request"/>
 				<jsp:include page="commons/viewAcquisitionRequestItem.jsp"/>
 				<p class="aright">
-					<%= GenericChecksumRewriter.NO_CHECKSUM_PREFIX %><a href="#itemResume"><bean:message key="link.top" bundle="EXPENDITURE_RESOURCES"/></a>
+					<%= GenericChecksumRewriter.NO_CHECKSUM_PREFIX %><a href="#"><bean:message key="link.top" bundle="EXPENDITURE_RESOURCES"/></a>
 				</p>
 			</div>
 		</logic:iterate>
-		
 	</logic:present>
-	
 </div>
 
 

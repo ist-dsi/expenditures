@@ -3,6 +3,7 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
+<%@page import="pt.ist.fenixWebFramework.servlets.filters.contentRewrite.GenericChecksumRewriter"%>
 
 <bean:define id="processClass" name="refundProcess" property="class.simpleName"/>
 <bean:define id="actionMapping" value='<%= "/acquisition" + processClass%>'/>
@@ -158,13 +159,13 @@
 	<fr:view name="refundProcess" property="request.totalAmountsForEachPayingUnit"
 			schema="viewPayingUnitWithTotalAmount">
 		<fr:layout name="tabular">
-			<fr:property name="classes" value="tstyle5 width100pc"/>
+			<fr:property name="classes" value="tstyle5 width100pc tdmiddle"/>
 			<fr:property name="columnClasses" value=",,nowrap,,"/>
 		</fr:layout>
 	</fr:view>
 </logic:notEmpty>
 
-
+<div class="documents" style="margin-bottom: 2em;">
 <p>
 	<bean:message key="acquisitionProcess.label.otherFiles" bundle="ACQUISITION_RESOURCES"/>:
 	<logic:notEmpty name="refundProcess" property="files">
@@ -177,10 +178,14 @@
 	<logic:empty name="refundProcess" property="files"><em><bean:message key="document.message.info.notAvailable" bundle="EXPENDITURE_RESOURCES"/></em></logic:empty>
 </p>
 	
+</div>
 
-
-<logic:iterate id="refundItem" name="refundProcess" property="request.requestItems"> 
-	<bean:define id="itemOID" name="refundItem" property="OID"/>
+<bean:size id="totalItems" name="refundProcess" property="request.requestItems"/>
+<logic:iterate id="refundItem" name="refundProcess" property="request.requestItems" indexId="index">
+	<div class="item">
+	<bean:define id="currentIndex" value="<%= String.valueOf(index + 1) %>"/>
+	<strong><bean:message key="acquisitionRequestItem.label.item" bundle="ACQUISITION_RESOURCES"/></strong> (<fr:view name="currentIndex"/>/<fr:view name="totalItems"/>)
+		<bean:define id="itemOID" name="refundItem" property="OID"/>
 	<logic:iterate id="activity" name="refundProcess" property="activeActivitiesForItem" indexId="index">
 		<logic:greaterThan name="index" value="0"> | </logic:greaterThan>
 			<bean:define id="activityName" name="activity" property="class.simpleName"/> 
@@ -221,7 +226,7 @@
 	<bean:define id="item" name="refundItem" toScope="request"/>
 	<jsp:include page="../commons/viewRefundItem.jsp"/>
 		<logic:notEmpty name="refundItem" property="invoices">
-				<table class="tstyle5">
+				<table class="tstyle5 tdmiddle tdnoborder vpadding05" style="width: 100%;">
 					<tr>
 					<th><bean:message key="acquisitionProcess.label.invoice.number" bundle="ACQUISITION_RESOURCES"/></th>		
 					<th><bean:message key="acquisitionProcess.label.invoice.date" bundle="ACQUISITION_RESOURCES"/></th>
@@ -229,36 +234,54 @@
 					<th><bean:message key="label.invoice.vatValue" bundle="ACQUISITION_RESOURCES"/></th>
 					<th><bean:message key="label.invoice.totalValue" bundle="ACQUISITION_RESOURCES"/></th>
 					<th><bean:message key="label.invoice.refundableValue" bundle="ACQUISITION_RESOURCES"/></th>
-					<th><bean:message key="label.supplier" bundle="EXPENDITURE_RESOURCES"/></th>
-					<th><bean:message key="acquisitionProcess.label.invoice.file" bundle="ACQUISITION_RESOURCES"/></th>
 					
 					</tr>	
 					<logic:iterate id="invoice" name="refundItem" property="invoices">
-						<td><fr:view name="invoice" property="invoiceNumber"/></td>
-						<td><fr:view name="invoice" property="invoiceDate"/></td>
-						<td><fr:view name="invoice" property="value"/></td>
-						<td><fr:view name="invoice" property="vatValue"/></td>
-						<td><fr:view name="invoice" property="valueWithVat"/></td>
-						<td><fr:view name="invoice" property="refundableValue"/></td>
-					    <td> 
-					    	<logic:present name="invoice" property="supplier">
-					    	  <fr:view name="invoice" property="supplier.name"/>
-					    	</logic:present>
-					 		<logic:notPresent name="invoice" property="supplier">
-					    	-
-					    	</logic:notPresent>
-					    
-					    </td>
-						<td>
-					   	 <html:link action='<%= actionMapping + ".do?method=downloadInvoice" %>' paramId="invoiceOID" paramName="invoice" paramProperty="OID">
-							<bean:write name="invoice" property="file.filename"/>
-						  </html:link>
-						</td>
+												<tr>
+							<td class="nowrap" rowspan="2" style="border-right: 1px solid #eee !important;"><fr:view name="invoice" property="invoiceNumber"/></td>
+							<td class="nowrap"><fr:view name="invoice" property="invoiceDate"/></td>
+							<td class="nowrap"><fr:view name="invoice" property="value"/></td>
+							<td class="nowrap"><fr:view name="invoice" property="vatValue"/></td>
+							<td class="nowrap"><fr:view name="invoice" property="valueWithVat"/></td>
+							<td class="nowrap"><fr:view name="invoice" property="refundableValue"/></td>
+							<%--
+							    <td> 
+							    	<logic:present name="invoice" property="supplier">
+							    	  <fr:view name="invoice" property="supplier.name"/>
+							    	</logic:present>
+							 		<logic:notPresent name="invoice" property="supplier">
+							    	-
+							    	</logic:notPresent>
+							    </td>
+								<td>
+									<html:link action='<%= actionMapping + ".do?method=downloadInvoice" %>' paramId="invoiceOID" paramName="invoice" paramProperty="OID">
+										<bean:write name="invoice" property="file.filename"/>
+									</html:link>
+								</td>
+							--%>
+						</tr>
+						<tr style="border-bottom: 4px solid #eee;">
+							<td colspan="6" class="aleft">
+								<html:link action='<%= actionMapping + ".do?method=downloadInvoice" %>' paramId="invoiceOID" paramName="invoice" paramProperty="OID">
+									<bean:write name="invoice" property="file.filename"/>
+								</html:link>
+
+					    		<logic:present name="invoice" property="supplier">
+						    	  (<fr:view name="invoice" property="supplier.name"/>)
+						    	</logic:present>
+						    	<logic:notPresent name="invoice" property="supplier">
+						    	</logic:notPresent>
+							
+							</td>
 						</tr>
 					</logic:iterate>
 				</table>
 				
 		</logic:notEmpty>
-	
+		<p class="aright" style="margin-bottom: 0;">
+			<%= GenericChecksumRewriter.NO_CHECKSUM_PREFIX %><a href="#"><bean:message key="link.top" bundle="EXPENDITURE_RESOURCES"/></a>
+		</p>
+		
+		</div>
 </logic:iterate>
 </div>
