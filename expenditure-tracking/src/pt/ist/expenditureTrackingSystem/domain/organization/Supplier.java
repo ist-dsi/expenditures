@@ -1,16 +1,21 @@
 package pt.ist.expenditureTrackingSystem.domain.organization;
 
+import java.util.Set;
+
+import myorg.domain.util.Address;
+import myorg.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.SavedSearch;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AcquisitionAfterTheFact;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
+import pt.ist.expenditureTrackingSystem.domain.announcements.Announcement;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateSupplierBean;
-import myorg.domain.util.Address;
-import myorg.domain.util.Money;
+import pt.ist.expenditureTrackingSystem.domain.requests.SupplierProposalDocument;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.pstm.Transaction;
 
@@ -161,12 +166,30 @@ public class Supplier extends Supplier_Base {
     @Service
     public void merge(final Supplier supplier) {
 	if (supplier != this) {
-	    getAcquisitionsAfterTheFactSet().addAll(supplier.getAcquisitionsAfterTheFactSet());
-	    getProposalsSet().addAll(supplier.getProposalsSet());
-	    getRefundInvoicesSet().addAll(supplier.getRefundInvoicesSet());
-	    getAnnouncementsSet().addAll(supplier.getAnnouncementsSet());
-	    getSupplierSearchesSet().addAll(supplier.getSupplierSearchesSet());
-	    getAcquisitionRequestsSet().addAll(supplier.getAcquisitionRequestsSet());
+	    final Set<AcquisitionAfterTheFact> acquisitionAfterTheFacts = supplier.getAcquisitionsAfterTheFactSet();
+	    getAcquisitionsAfterTheFactSet().addAll(acquisitionAfterTheFacts);
+	    acquisitionAfterTheFacts.clear();
+
+	    final Set<SupplierProposalDocument> supplierProposalDocument = supplier.getProposalsSet();
+	    getProposalsSet().addAll(supplierProposalDocument);
+	    supplierProposalDocument.clear();
+
+	    final Set<RefundInvoice> refundInvoices = supplier.getRefundInvoicesSet();
+	    getRefundInvoicesSet().addAll(refundInvoices);
+	    refundInvoices.clear();
+
+	    final Set<Announcement> announcements = supplier.getAnnouncementsSet();
+	    getAnnouncementsSet().addAll(announcements);
+	    announcements.clear();
+
+	    final Set<SavedSearch> savedSearches = supplier.getSupplierSearchesSet();
+	    getSupplierSearchesSet().addAll(savedSearches);
+	    savedSearches.clear();
+
+	    final Set<AcquisitionRequest> acquisitionRequests = supplier.getAcquisitionRequestsSet();
+	    getAcquisitionRequestsSet().addAll(acquisitionRequests);
+	    acquisitionRequests.clear();
+
 	    supplier.delete();
 	}
     }
