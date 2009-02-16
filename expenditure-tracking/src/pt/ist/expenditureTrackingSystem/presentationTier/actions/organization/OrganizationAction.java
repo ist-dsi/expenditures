@@ -8,6 +8,9 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import myorg.applicationTier.Authenticate.UserView;
+import myorg.domain.User;
+
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -188,6 +191,13 @@ public class OrganizationAction extends BaseAction {
 	request.setAttribute("person", person);
 	request.setAttribute("availableRoles", RoleType.values());
 	return forward(request, "/expenditureTrackingOrganization/viewPerson.jsp");
+    }
+
+    public final ActionForward viewLoggedPerson(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	final User user = UserView.getCurrentUser();
+	final Person person = user.getExpenditurePerson();
+	return viewPerson(mapping, request, person);
     }
 
     public final ActionForward editAuthorization(final ActionMapping mapping, final ActionForm form,
