@@ -239,4 +239,9 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
 
     public abstract boolean isAvailableForCurrentUser();
 
+    private static final String EMPTY_STRING = new String();
+    public String getProcessStateDescription() {
+	return EMPTY_STRING;
+    }
+
 }

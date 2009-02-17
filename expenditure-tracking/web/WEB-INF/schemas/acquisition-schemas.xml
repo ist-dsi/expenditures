@@ -944,6 +944,7 @@
 	<slot name="class" key="label.acquisitionType" bundle="ACQUISITION_RESOURCES" layout="label">
 		<property name="bundle" value="ACQUISITION_RESOURCES"/>
 	</slot>
+	<slot name="processStateDescription" key="label.process.state.description" bundle="EXPENDITURE_RESOURCES"/>
 	<slot name="dateFromLastActivity" key="label.inactiveSince" bundle="EXPENDITURE_RESOURCES"/>
 	<slot name="request.requester.firstAndLastName" key="label.requesterName" bundle="EXPENDITURE_RESOURCES"/>
 	<slot name="request.requestingUnit.name" key="acquisitionProcess.label.requestingUnit" bundle="ACQUISITION_RESOURCES"/>

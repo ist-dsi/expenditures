@@ -255,4 +255,9 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	return getRequest().isPayed();
     }
 
+    @Override
+    public String getProcessStateDescription() {
+	return getLastAcquisitionProcessState().getLocalizedName();
+    }
+
 }

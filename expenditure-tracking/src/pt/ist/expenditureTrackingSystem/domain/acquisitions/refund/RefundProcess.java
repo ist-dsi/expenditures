@@ -381,4 +381,9 @@ public class RefundProcess extends RefundProcess_Base {
 	new RefundProcessState(this, RefundProcessStateType.CANCELED);
     }
 
+    @Override
+    public String getProcessStateDescription() {
+	return getLastProcessState().getLocalizedName();
+    }
+
 }
