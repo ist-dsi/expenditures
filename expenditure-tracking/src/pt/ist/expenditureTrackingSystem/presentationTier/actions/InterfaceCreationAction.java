@@ -7,8 +7,8 @@ import module.contents.domain.Page;
 import module.contents.domain.Page.PageBean;
 import myorg.domain.VirtualHost;
 import myorg.domain.contents.ActionNode;
-import myorg.domain.contents.JumpToFirstAccessibleChildNode;
 import myorg.domain.contents.Node;
+import myorg.domain.groups.AnonymousGroup;
 import myorg.domain.groups.AnyoneGroup;
 import myorg.domain.groups.PersistentGroup;
 import myorg.domain.groups.UserGroup;
@@ -32,8 +32,10 @@ public class InterfaceCreationAction extends ContextBaseAction {
 	final VirtualHost virtualHost = getDomainObject(request, "virtualHostToManageId");
 	final Node node = getDomainObject(request, "parentOfNodesToManageId");
 
-	final Node homeNode = JumpToFirstAccessibleChildNode.createJumpToFirstAccessibleChildNode(virtualHost, node);
-	createNodeForPage(virtualHost, homeNode, "resources.ExpenditureResources", "link.topBar.home", UserGroup.getInstance());
+	ActionNode.createActionNode(virtualHost, node, "/expendituresHome", "showAcquisitionAnnouncements",
+		"resources.ExpenditureResources", "link.sideBar.home.publicAnnouncements", AnonymousGroup.getInstance());
+
+	final Node homeNode = createNodeForPage(virtualHost, node, "resources.ExpenditureResources", "link.topBar.home", UserGroup.getInstance());
 //	ActionNode.createActionNode(virtualHost, homeNode, "/expendituresHome", "showActiveRequestsForProposal",
 //		"resources.ExpenditureResources", "link.sideBar.home.publicRequestsForProposal", Role.getRole(RoleType.MANAGER));
 	ActionNode.createActionNode(virtualHost, homeNode, "/expendituresHome", "showAcquisitionAnnouncements",
