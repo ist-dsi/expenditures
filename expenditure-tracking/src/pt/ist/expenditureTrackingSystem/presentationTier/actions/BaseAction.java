@@ -1,6 +1,5 @@
 package pt.ist.expenditureTrackingSystem.presentationTier.actions;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -8,8 +7,6 @@ import java.io.OutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import myorg.applicationTier.Authenticate.UserView;
-import myorg.domain.User;
 import myorg.presentationTier.actions.ContextBaseAction;
 
 import org.apache.struts.action.ActionForm;
@@ -26,7 +23,6 @@ import pt.ist.fenixWebFramework.renderers.model.MetaObject;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 import pt.ist.fenixframework.DomainObject;
 import pt.ist.fenixframework.pstm.Transaction;
-import pt.utl.ist.fenix.tools.util.FileUtils;
 
 public abstract class BaseAction extends ContextBaseAction {
 
@@ -79,31 +75,6 @@ public abstract class BaseAction extends ContextBaseAction {
     protected byte[] consumeInputStream(final FileUploadBean fileUploadBean) {
 	final InputStream inputStream = fileUploadBean.getInputStream();
 	return consumeInputStream(inputStream);
-    }
-
-    protected byte[] consumeInputStream(final InputStream inputStream) {
-	byte[] result = null;
-	if (inputStream != null) {
-	    final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-	    try {
-		try {
-		    FileUtils.copy(inputStream, byteArrayOutputStream);
-		    byteArrayOutputStream.flush();
-		    result = byteArrayOutputStream.toByteArray();
-		    byteArrayOutputStream.close();
-		} catch (IOException e) {
-		    e.printStackTrace();
-		}
-	    } finally {
-		try {
-		    inputStream.close();
-		    byteArrayOutputStream.close();
-		} catch (IOException e) {
-		    e.printStackTrace();
-		}
-	    }
-	}
-	return result;
     }
 
     protected ActionForward download(final HttpServletResponse response, final String filename, final byte[] bytes,
