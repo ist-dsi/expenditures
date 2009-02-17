@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import myorg.applicationTier.Authenticate.UserView;
+import myorg.domain.MyOrg;
 import myorg.domain.User;
 import myorg.domain.util.Address;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
@@ -23,31 +24,43 @@ import pt.ist.expenditureTrackingSystem.domain.dto.AuthorizationBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreatePersonBean;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.pstm.Transaction;
+import dml.runtime.RelationAdapter;
 
 public class Person extends Person_Base {
 
-    public Person() {
+    public static class UserMyOrgListener extends RelationAdapter<User, MyOrg> {
+
+	@Override
+	public void afterAdd(final User user, final MyOrg myOrg) {
+	    new Person(user.getUsername());
+	}
+	
+    }
+
+    static {
+	User.MyOrgUser.addListener(new UserMyOrgListener());
+    }
+
+    protected Person() {
 	super();
 	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
 	new Options(this);
     }
 
-    public Person(final String username) {
+    protected Person(final String username) {
 	this();
 	setUsername(username);
 	setName(username);
     }
 
     @Service
-    public static Person createEmptyPerson() {
-	return new Person();
-    }
-
-    @Service
-    public static Person createPerson(CreatePersonBean createPersonBean) {
-	final Person person = new Person(createPersonBean.getUsername());
-	person.setName(createPersonBean.getName());
-	return person;
+    public static Person createPerson(final CreatePersonBean createPersonBean) {
+	final String username = createPersonBean.getUsername();
+	final User user = User.findByUsername(username);
+	if (user == null) {
+	    new User(username);
+	}
+	return user.getExpenditurePerson();
     }
 
     @Service

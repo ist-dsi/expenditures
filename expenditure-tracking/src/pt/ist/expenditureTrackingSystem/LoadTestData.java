@@ -14,6 +14,7 @@ import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.AccountingUnitBean;
+import pt.ist.expenditureTrackingSystem.domain.dto.CreatePersonBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateUnitBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.CostCenter;
@@ -21,7 +22,6 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Project;
 import pt.ist.expenditureTrackingSystem.domain.organization.SubProject;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
-import pt.ist.fenixWebFramework.FenixWebFramework;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.utl.ist.fenix.tools.util.FileUtils;
 
@@ -392,9 +392,10 @@ public class LoadTestData {
     private static void createPeople(final FenixPeopleSet fenixPeopleSet, Map<String, AccountingUnit> accountingUnits
 	    /* , final FenixUnitMap fenixUnitMap */) {
 	for (final FenixPerson fenixPerson : fenixPeopleSet) {
-	    final Person person = Person.createEmptyPerson();
-	    person.setUsername(fenixPerson.username);
-	    person.setName(fenixPerson.name);
+	    final CreatePersonBean createPersonBean = new CreatePersonBean();
+	    createPersonBean.setUsername(fenixPerson.username);
+	    createPersonBean.setName(fenixPerson.name);
+	    final Person person = Person.createPerson(createPersonBean);
 	    if (!fenixPerson.unitOids.isEmpty()) {
 		person.getOptions().setDisplayAuthorizationPending(Boolean.TRUE);
 		person.getOptions().setRecurseAuthorizationPendingUnits(Boolean.TRUE);

@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.dto.CreatePersonBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
-import pt.ist.fenixWebFramework.FenixWebFramework;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.utl.ist.fenix.tools.util.FileUtils;
 
@@ -49,8 +49,10 @@ public class SyncUsers {
 	    if (people.containsKey(username)) {
 		person = people.get(username);
 	    } else {
-		person = new Person(username);
-		person.setName(name);
+		final CreatePersonBean createPersonBean = new CreatePersonBean();
+		createPersonBean.setUsername(username);
+		createPersonBean.setName(name);
+		person = Person.createPerson(createPersonBean);
 	    }
 	    person.setEmail(email);
 	}
