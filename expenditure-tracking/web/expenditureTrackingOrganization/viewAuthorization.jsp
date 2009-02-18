@@ -14,7 +14,7 @@
 			</html:link>
 		</li>
 		<bean:define id="personFromAuthorizationOid" name="authorization" property="person.OID"/>
-		<logic:equal name="USER_SESSION_ATTRIBUTE" property="person.OID" value="<%= personFromAuthorizationOid.toString() %>">
+		<logic:equal name="USER_SESSION_ATTRIBUTE" property="user.expenditurePerson.OID" value="<%= personFromAuthorizationOid.toString() %>">
 			<logic:equal name="authorization" property="canDelegate" value="true">
 				<li>
 					<html:link action="/expenditureTrackingOrganization.do?method=chooseDelegationUnit" paramId="authorizationOid" paramName="authorization" paramProperty="OID">
