@@ -8,6 +8,9 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import myorg.applicationTier.Authenticate.UserView;
+import myorg.domain.User;
+
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -431,7 +434,7 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 
     public ActionForward executeCancelInvoiceConfirmation(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
-	User user = UserView.getUser();
+	User user = UserView.getCurrentUser();
 	final SimplifiedProcedureProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
 	genericActivityExecution(acquisitionProcess, "CancelInvoiceConfirmation", user.getPerson());
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);

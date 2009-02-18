@@ -23,6 +23,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.UnApprove
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.UnAuthorize;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.AddAcquisitionProposalDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.CancelAcquisitionRequest;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.CancelInvoiceConfirmation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ChangeAcquisitionProposalDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ChangeFinancersAccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ConfirmInvoice;

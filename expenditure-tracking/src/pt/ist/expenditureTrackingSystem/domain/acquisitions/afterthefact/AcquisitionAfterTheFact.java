@@ -1,5 +1,6 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact;
 
+import myorg.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.dto.AfterTheFactAcquisitionProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
