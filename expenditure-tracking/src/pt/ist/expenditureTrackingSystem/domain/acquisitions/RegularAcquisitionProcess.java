@@ -59,6 +59,11 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
 	}
     }
 
+    public void cancelInvoiceConfirmationBy(final Person person) {
+	getAcquisitionRequest().unconfirmInvoiceFor(person);
+	cancelInvoiceConfirmation();
+    }
+
     public boolean isPersonAbleToExecuteActivities() {
 	Map<ActivityScope, List<AbstractActivity<RegularAcquisitionProcess>>> activities = getProcessActivityMap();
 	for (ActivityScope scope : activities.keySet()) {
@@ -82,6 +87,10 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
 
     protected void authorize() {
 	new AcquisitionProcessState(this, AcquisitionProcessStateType.AUTHORIZED);
+    }
+
+    protected void cancelInvoiceConfirmation() {
+	new AcquisitionProcessState(this, AcquisitionProcessStateType.SUBMITTED_FOR_CONFIRM_INVOICE);
     }
 
     protected void confirmInvoice() {

@@ -172,6 +172,10 @@ public class Financer extends Financer_Base {
 	return getFundAllocationId() != null;
     }
 
+    public boolean hasEffectiveFundAllocationId() {
+	return getEffectiveFundAllocationId() != null;
+    }
+
     public boolean hasAnyFundsAllocated() {
 	return hasAllocatedFundsForAllProject() && hasFundAllocationId();
     }

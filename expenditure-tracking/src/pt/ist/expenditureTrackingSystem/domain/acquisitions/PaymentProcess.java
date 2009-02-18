@@ -96,6 +96,10 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
 	return getRequest().hasAnyFundAllocationId();
     }
 
+    public boolean hasAnyEffectiveFundAllocationId() {
+	return getRequest().hasAnyEffectiveFundAllocationId();
+    }
+
     public boolean hasAnyNonProjectFundAllocationId() {
 	return getRequest().hasAnyNonProjectFundAllocationId();
     }

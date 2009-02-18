@@ -428,4 +428,13 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	genericActivityExecution(acquisitionProcess, "RevertSkipPurchaseOrderDocument");
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
+
+    public ActionForward executeCancelInvoiceConfirmation(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	User user = UserView.getUser();
+	final SimplifiedProcedureProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
+	genericActivityExecution(acquisitionProcess, "CancelInvoiceConfirmation", user.getPerson());
+	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
+    }
+
 }

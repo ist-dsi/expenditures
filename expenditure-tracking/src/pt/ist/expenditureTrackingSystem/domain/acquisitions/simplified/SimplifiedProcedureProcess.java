@@ -107,6 +107,7 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	requestInformationActivities.add(new FixInvoice());
 	requestInformationActivities.add(new SubmitForConfirmInvoice());
 	requestInformationActivities.add(new ConfirmInvoice());
+	requestInformationActivities.add(new CancelInvoiceConfirmation());
 	requestInformationActivities.add(new UnSubmitForApproval());
 	requestInformationActivities.add(new ChangeFinancersAccountingUnit());
 
