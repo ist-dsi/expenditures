@@ -1,4 +1,4 @@
-package pt.ist.expenditureTrackingSystem;
+package pt.ist.expenditureTrackingSystem.domain;
 
 import java.io.IOException;
 import java.sql.ResultSet;
@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Set;
 
 import myorg.domain.util.Money;
-import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateUnitBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
@@ -19,11 +18,10 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Project;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.persistenceTier.ExternalDbOperation;
 import pt.ist.expenditureTrackingSystem.persistenceTier.ExternalDbQuery;
-import pt.ist.fenixWebFramework.FenixWebFramework;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.utl.ist.fenix.tools.util.FileUtils;
 
-public class SyncProjects {
+public class SyncProjectsAux {
 
     static class MgpProject {
 	private String projectCode;
@@ -92,32 +90,13 @@ public class SyncProjects {
 	}
     }
 
-    public static void init() {
-	String domainModelPath = "web/WEB-INF/classes/domain_model.dml";
-	// TODO : reimplmenent as scheduled script
-	//FenixWebFramework.initialize(PropertiesManager.getFenixFrameworkConfig(domainModelPath));
-	//ExpenditureTrackingSystem.initialize(FenixWebFramework.getConfig());
-    }
-
-    public static void main(String[] args) {
-	init();
-	try {
-	    syncData();
-	} catch (final IOException e) {
-	    throw new Error(e);
-	} catch (final SQLException e) {
-	    throw new Error(e);
-	}
-	System.out.println("Done.");
-    }
-
-    static int createdProjects = 0;
-    static int updatedProjects = 0;
-    private static Map<String, String> teachers = new HashMap<String, String>();
-    private static Set<Integer> projectResponsibles = new HashSet<Integer>();
+    int createdProjects = 0;
+    int updatedProjects = 0;
+    private Map<String, String> teachers = new HashMap<String, String>();
+    private Set<Integer> projectResponsibles = new HashSet<Integer>();
 
     @Service
-    public static void syncData() throws IOException, SQLException {
+    public void syncData() throws IOException, SQLException {
 	final ProjectReader projectReader = new ProjectReader();
 	projectReader.execute();
 	final Set<MgpProject> mgpProjects = projectReader.getMgpProjects();
@@ -142,7 +121,7 @@ public class SyncProjects {
 	System.out.println("Did not find " + notFoundCostCenters.size() + " cost centers.");
     }
 
-    private static void loadTeachers() throws IOException {
+    private void loadTeachers() throws IOException {
 	final String contents = FileUtils.readFile("teacher.csv");
 	for (String line : contents.split("\n")) {
 	    String[] split = line.split("\t");
@@ -152,7 +131,7 @@ public class SyncProjects {
 	}
     }
 
-    private static void loadProjectResponsiblesSet() throws IOException {
+    private void loadProjectResponsiblesSet() throws IOException {
 	String contents = FileUtils.readFile("responsaveisProjectos.csv");
 	for (String line : contents.split("\n")) {
 	    String[] split = line.split("\t");
@@ -160,7 +139,7 @@ public class SyncProjects {
 	}
     }
 
-    private static void createProject(final MgpProject mgpProject) {
+    private void createProject(final MgpProject mgpProject) {
 	String projectCodeString = mgpProject.projectCode;
 	String costCenterString = mgpProject.costCenter.replace("\"", "");
 	String responsibleString = mgpProject.idCoord;
@@ -197,7 +176,7 @@ public class SyncProjects {
 
     final static Money AUTHORIZED_VALUE = new Money("12470");
 
-    private static void updateProject(final MgpProject mgpProject, final Project project) {
+    private void updateProject(final MgpProject mgpProject, final Project project) {
 	String projectCodeString = mgpProject.projectCode;
 	String costCenterString = mgpProject.costCenter.replace("\"", "");
 	String responsibleString = mgpProject.idCoord;
@@ -229,7 +208,7 @@ public class SyncProjects {
 	}
     }
 
-    private static boolean hasAuthorization(final Project project, final Person responsible) {
+    private boolean hasAuthorization(final Project project, final Person responsible) {
 	for (final Authorization authorization : project.getAuthorizationsSet()) {
 	    if (authorization.getPerson() == responsible && authorization.getMaxAmount().isGreaterThanOrEqual(AUTHORIZED_VALUE)) {
 		return true;
@@ -244,9 +223,9 @@ public class SyncProjects {
 	cdCostCenters.add("0003");
     }
 
-    private static final Set<String> notFoundCostCenters = new HashSet<String>();
+    private final Set<String> notFoundCostCenters = new HashSet<String>();
 
-    private static Unit findCostCenter(final String costCenterString) {
+    private Unit findCostCenter(final String costCenterString) {
 	final String costCenter = cdCostCenters.contains(costCenterString) ? "0003" : costCenterString;
 	final Integer cc = Integer.valueOf(costCenter);
 	final String ccString = cc.toString();
@@ -269,7 +248,7 @@ public class SyncProjects {
 	return unit;
     }
 
-    private static Person findPerson(final String responsibleString) {
+    private Person findPerson(final String responsibleString) {
 	if (!responsibleString.isEmpty()) {
 	    String user = findISTUsername(responsibleString);
 	    return user == null ? null : Person.findByUsername(user);
@@ -277,7 +256,7 @@ public class SyncProjects {
 	return null;
     }
 
-    private static String findISTUsername(String nMec) {
+    private String findISTUsername(String nMec) {
 	String username = teachers.get(nMec);
 	if (username == null) {
 	    // System.out.println("Can't find username for " + nMec);

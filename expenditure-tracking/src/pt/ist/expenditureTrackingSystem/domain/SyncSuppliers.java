@@ -1,4 +1,4 @@
-package pt.ist.expenditureTrackingSystem;
+package pt.ist.expenditureTrackingSystem.domain;
 
 import java.io.IOException;
 import java.sql.ResultSet;
@@ -8,14 +8,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import myorg.domain.util.Address;
-import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.persistenceTier.ExternalDbOperation;
 import pt.ist.expenditureTrackingSystem.persistenceTier.ExternalDbQuery;
-import pt.ist.fenixWebFramework.FenixWebFramework;
 import pt.ist.fenixWebFramework.services.Service;
 
-public class SyncSuppliers {
+public class SyncSuppliers extends SyncSuppliers_Base {
 
     static class GiafSupplier {
 	private String codEnt;
@@ -141,15 +139,12 @@ public class SyncSuppliers {
 
     }
 
-    public static void init() {
-	String domainModelPath = "web/WEB-INF/classes/domain_model.dml";
-	// TODO : reimplmenent as scheduled script
-	//FenixWebFramework.initialize(PropertiesManager.getFenixFrameworkConfig(domainModelPath));
-	//ExpenditureTrackingSystem.initialize(FenixWebFramework.getConfig());
+    public SyncSuppliers() {
+        super();
     }
 
-    public static void main(String[] args) {
-	init();
+    @Override
+    public void executeTask() {
 	try {
 	    syncData();
 	} catch (final IOException e) {
@@ -157,7 +152,11 @@ public class SyncSuppliers {
 	} catch (final SQLException e) {
 	    throw new Error(e);
 	}
-	System.out.println("Done.");
+    }
+
+    @Override
+    public String getLocalizedName() {
+	return getClass().getName();
     }
 
     @Service

@@ -1,6 +1,12 @@
 
-class pt.ist.expenditureTrackingSystem.domain.ConnectPersonToUserTask extends myorg.domain.scheduler.Task {
-	
+
+class pt.ist.expenditureTrackingSystem.domain.SyncSuppliers extends myorg.domain.scheduler.Task {	
+}
+
+class pt.ist.expenditureTrackingSystem.domain.SyncProjects extends myorg.domain.scheduler.Task {	
+}
+
+class pt.ist.expenditureTrackingSystem.domain.ConnectPersonToUserTask extends myorg.domain.scheduler.Task {	
 }
 
 relation MyOrgExpenditureTrackingSystem {
