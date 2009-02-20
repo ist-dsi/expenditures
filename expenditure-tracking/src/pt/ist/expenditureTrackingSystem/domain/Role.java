@@ -50,10 +50,10 @@ public class Role extends Role_Base {
 	    if (role.getRoleType().equals(roleType)) {
 		if (!role.hasSystemRole()) {
 		    role.setSystemRole(myorg.domain.groups.Role.getRole(roleType));
-		    for (final Person person : role.getPersonSet()) {
-			final User user = person.getUser();
-			role.getSystemRole().addUsers(user);
-		    }
+		}
+		for (final Person person : role.getPersonSet()) {
+		    final User user = person.getUser();
+		    role.getSystemRole().addUsers(user);
 		}
 		return role;
 	    }
