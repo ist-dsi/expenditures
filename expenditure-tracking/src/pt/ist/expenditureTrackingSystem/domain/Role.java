@@ -53,7 +53,9 @@ public class Role extends Role_Base {
 		}
 		for (final Person person : role.getPersonSet()) {
 		    final User user = person.getUser();
-		    role.getSystemRole().addUsers(user);
+		    if (user != null) {
+			role.getSystemRole().addUsers(user);
+		    }
 		}
 		return role;
 	    }
