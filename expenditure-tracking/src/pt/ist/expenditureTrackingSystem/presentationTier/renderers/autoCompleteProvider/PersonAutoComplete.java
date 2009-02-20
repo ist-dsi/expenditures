@@ -1,9 +1,9 @@
 package pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import myorg.presentationTier.renderers.autoCompleteProvider.AutoCompleteProvider;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
@@ -12,7 +12,7 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 public class PersonAutoComplete implements AutoCompleteProvider {
 
     public Collection getSearchResults(Map<String, String> argsMap, String value, int maxCount) {
-	List<Person> people = new ArrayList<Person> ();
+	Set<Person> people = new HashSet<Person> ();
 	String[] values = value.toLowerCase().split(" ");
 	for (Person person : ExpenditureTrackingSystem.getInstance().getPeople()) {
 	    if (hasMatch(values, person.getName().toLowerCase())) {
