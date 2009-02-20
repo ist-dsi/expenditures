@@ -32,7 +32,12 @@ public class Person extends Person_Base {
 
 	@Override
 	public void afterAdd(final User user, final MyOrg myOrg) {
-	    new Person(user.getUsername());
+	    final String username = user.getUsername();
+	    final Person person = Person.findByUsername(username);
+	    if (person == null) {
+		new Person(user.getUsername());
+	    }
+	    user.setExpenditurePerson(person);
 	}
 	
     }
