@@ -87,7 +87,7 @@ public class Person extends Person_Base {
     public static Person findByUsername(final String username) {
 	if (username != null && username.length() > 0) {
 	    for (final Person person : ExpenditureTrackingSystem.getInstance().getPeopleSet()) {
-		if (username.equals(person.getUsername())) {
+		if (username.equalsIgnoreCase(person.getUsername())) {
 		    return person;
 		}
 	    }
@@ -211,48 +211,48 @@ public class Person extends Person_Base {
 	    return null;
 	}
 	Person person = user.getExpenditurePerson();
-	if (person == null) {
-	    setPersonInUser(user);
-	    person = user.getExpenditurePerson();
-	}
+//	if (person == null) {
+//	    setPersonInUser(user);
+//	    person = user.getExpenditurePerson();
+//	}
 	return person;
     }
 
-    @Service
-    private static void setPersonInUser(final User user) {
-	final Person person = Person.findByUsername(user.getUsername());
-	if (person == null) {
-	    final CreatePersonBean createPersonBean = new CreatePersonBean();
-	    createPersonBean.setName(user.getUsername());
-	    createPersonBean.setUsername(user.getUsername());
-	    createPerson(createPersonBean);
-	} else {
-	    person.setUser(user);
-	}
-    }
+//    @Service
+//    private static void setPersonInUser(final User user) {
+//	final Person person = Person.findByUsername(user.getUsername());
+//	if (person == null) {
+//	    final CreatePersonBean createPersonBean = new CreatePersonBean();
+//	    createPersonBean.setName(user.getUsername());
+//	    createPersonBean.setUsername(user.getUsername());
+//	    createPerson(createPersonBean);
+//	} else {
+//	    person.setUser(user);
+//	}
+//    }
 
-    @Override
-    public void setUsername(final String username) {
-	super.setUsername(username);
-	connectToUser(username);
-    }
+//    @Override
+//    public void setUsername(final String username) {
+//	super.setUsername(username);
+//	connectToUser(username);
+//    }
 
-    private void connectToUser(final String username) {
-	User user = User.findByUsername(username);
-	if (user == null) {
-	    user = new User(username);
-	}
-	setUser(user);
-    }
+//    private void connectToUser(final String username) {
+//	User user = User.findByUsername(username);
+//	if (user == null) {
+//	    user = new User(username);
+//	}
+//	setUser(user);
+//    }
 
-    @Override
-    public User getUser() {
-	final User user = super.getUser();
-	if (user == null) {
-	    connectToUser(getUsername());
-	    return super.getUser();
-	}
-        return user;
-    }
+//    @Override
+//    public User getUser() {
+//	final User user = super.getUser();
+//	if (user == null) {
+//	    connectToUser(getUsername());
+//	    return super.getUser();
+//	}
+//        return user;
+//    }
 
 }
