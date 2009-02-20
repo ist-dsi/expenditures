@@ -33,7 +33,7 @@ public class AcquisitionAfterTheFact extends AcquisitionAfterTheFact_Base {
     @Override
     public void setSupplier(final Supplier supplier) {
 	if (supplier != getSupplier()) {
-	    if (!supplier.isFundAllocationAllowed(getValue())) {
+	    if (getValue() != null && !supplier.isFundAllocationAllowed(getValue())) {
 		throw new DomainException("acquisitionProcess.message.exception.SupplierDoesNotAlloweAmount");
 	    }
 	    super.setSupplier(supplier);
@@ -42,7 +42,7 @@ public class AcquisitionAfterTheFact extends AcquisitionAfterTheFact_Base {
 
     @Override
     public void setValue(final Money value) {
-	if (!getSupplier().isFundAllocationAllowed(Money.ZERO)) {
+	if (getSupplier() != null && !getSupplier().isFundAllocationAllowed(Money.ZERO)) {
 	    throw new DomainException("acquisitionProcess.message.exception.SupplierDoesNotAlloweAmount");
 	}
 	super.setValue(value);
