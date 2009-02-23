@@ -1,9 +1,15 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
+
+import myorg.domain.util.ByteArray;
+import myorg.domain.util.Money;
 
 import org.joda.time.LocalDate;
 
@@ -13,8 +19,6 @@ import pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
-import myorg.domain.util.ByteArray;
-import myorg.domain.util.Money;
 
 public class AcquisitionRequest extends AcquisitionRequest_Base {
 
@@ -150,7 +154,7 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     public Money getTotalItemValueWithVat() {
 	Money result = Money.ZERO;
 	for (final AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
-	    result = result.add(acquisitionRequestItem.getTotalItemValueWithVat());
+	    result = result.addAndRound(acquisitionRequestItem.getTotalItemValueWithVat());
 	}
 	return result;
     }
@@ -385,11 +389,19 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     }
 
     public Set<AcquisitionRequestItem> getAcquisitionRequestItemsSet() {
-	Set<AcquisitionRequestItem> acquisitionRequestItemSet = new HashSet<AcquisitionRequestItem>();
-	for (RequestItem item : getRequestItems()) {
-	    acquisitionRequestItemSet.add((AcquisitionRequestItem) item);
+	return (HashSet<AcquisitionRequestItem>) addAcquisitionRequestItemsSetToArg(new HashSet<AcquisitionRequestItem>());
+    }
+
+    public SortedSet<AcquisitionRequestItem> getOrderedAcquisitionRequestItemsSet() {
+	return (SortedSet<AcquisitionRequestItem>) addAcquisitionRequestItemsSetToArg(
+		new TreeSet<AcquisitionRequestItem>(AcquisitionRequestItem.COMPARATOR_BY_REFERENCE));
+    }
+
+    public Collection<AcquisitionRequestItem> addAcquisitionRequestItemsSetToArg(final Collection<AcquisitionRequestItem> collection) {
+	for (final RequestItem item : getRequestItems()) {
+	    collection.add((AcquisitionRequestItem) item);
 	}
-	return acquisitionRequestItemSet;
+	return collection;
     }
 
     @Override

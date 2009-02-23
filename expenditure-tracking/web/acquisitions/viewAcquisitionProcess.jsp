@@ -6,7 +6,8 @@
 <%@ taglib uri="/WEB-INF/messages.tld" prefix="messages" %>
 
 <%@page import="pt.ist.fenixWebFramework.servlets.filters.contentRewrite.GenericChecksumRewriter"%>
-<bean:define id="acquisitionProcessOid"><bean:write name="acquisitionProcess" property="OID"/></bean:define>
+
+<%@page import="myorg.presentationTier.servlets.filters.contentRewrite.ContentContextInjectionRewriter"%><bean:define id="acquisitionProcessOid"><bean:write name="acquisitionProcess" property="OID"/></bean:define>
 <bean:define id="acquisitionProcessClass" name="acquisitionProcess" property="class.simpleName"/>
 <bean:define id="actionMapping" value="<%= "/acquisition" + acquisitionProcessClass %>"/>
 <bean:define id="urlConfirm"><%=actionMapping %>.do</bean:define>
@@ -224,7 +225,7 @@
 	</p>
 </div>
 
-<bean:define id="itemSet" name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestItemsSet"/> 
+<bean:define id="itemSet" name="acquisitionProcess" property="acquisitionRequest.orderedAcquisitionRequestItemsSet"/> 
 <logic:present name="itemSet">
 	
 		<logic:equal  name="acquisitionProcess" property="invoiceReceived"  value="true">		
@@ -261,7 +262,13 @@
 				<logic:iterate id="itemResume" name="itemSet" indexId="index">
 					<bean:define id="currentIndex" value="<%= String.valueOf(index + 1) %>"/>
 					<tr>
-						<td><%= GenericChecksumRewriter.NO_CHECKSUM_PREFIX %><a href="<%= "#item" + currentIndex%>">Item <%= currentIndex %></a></td>
+						<td>
+							<%= ContentContextInjectionRewriter.BLOCK_HAS_CONTEXT_PREFIX %>
+							<%= GenericChecksumRewriter.NO_CHECKSUM_PREFIX %><a href="<%= "#item" + currentIndex%>">
+								Item <%= currentIndex %>
+							</a>
+							<%= ContentContextInjectionRewriter.END_BLOCK_HAS_CONTEXT_PREFIX %>
+						</td>
 						<td class="aright"><fr:view name="itemResume" property="quantity"/></td>
 						<td class="aright"><fr:view name="itemResume" property="unitValue"/></td>
 						<td class="aright"><fr:view name="itemResume" property="totalVatValue"/></td>

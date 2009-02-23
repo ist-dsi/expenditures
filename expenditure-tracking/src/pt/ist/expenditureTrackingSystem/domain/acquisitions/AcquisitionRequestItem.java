@@ -2,18 +2,29 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
+import myorg.domain.util.Address;
+import myorg.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean.CreateItemSchemaType;
 import pt.ist.expenditureTrackingSystem.domain.organization.DeliveryInfo;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
-import myorg.domain.util.Address;
-import myorg.domain.util.Money;
 
 public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
+
+    public static final Comparator<AcquisitionRequestItem> COMPARATOR_BY_REFERENCE = new Comparator<AcquisitionRequestItem>() {
+
+	@Override
+	public int compare(final AcquisitionRequestItem acquisitionRequestItem1, final AcquisitionRequestItem acquisitionRequestItem2) {
+	    final int c = acquisitionRequestItem1.getProposalReference().compareTo(acquisitionRequestItem2.getProposalReference());
+	    return c == 0 ? acquisitionRequestItem1.getIdInternal().compareTo(acquisitionRequestItem2.getIdInternal()) : c;
+	}
+	
+    };
 
     protected AcquisitionRequestItem() {
 	super();
