@@ -60,31 +60,33 @@
 	</div>
 
 	<bean:define id="supplierOID" name="supplier" property="OID"/>
-	<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.SUPPLIER_MANAGER">
-		<p>
+	<p>
+		<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.SUPPLIER_MANAGER">
 			<html:link action='<%= "/expenditureTrackingOrganization.do?method=prepareEditSupplier&supplierOid=" + supplierOID%>'>
 				<bean:message key="supplier.link.edit" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 			</html:link>
+		</logic:present>
 			<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL">
-			| 
+				<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
+					| 
+				</logic:present>
 				<html:link action='<%= "/expenditureTrackingOrganization.do?method=editSupplierLimit&supplierOid=" + supplierOID%>'>
 					<bean:message key="supplier.link.edit.limit" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 				</html:link>
 			</logic:present>
 			<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
-			| 
+				| 
 				<html:link action='<%= "/expenditureTrackingOrganization.do?method=deleteSupplier&supplierOid=" + supplierOID%>'>
 					<bean:message key="supplier.link.delete" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 				</html:link>
 			</logic:present>
 			<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
-			| 
+				| 
 				<html:link action='<%= "/expenditureTrackingOrganization.do?method=prepareMergeSupplier&supplierToTransferOID=" + supplierOID%>'>
 					<bean:message key="supplier.link.merge" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 				</html:link>
 			</logic:present>
-		</p>
-	</logic:present>
+	</p>
 
 	<div class="infoop2">
 		<fr:view name="supplierBean" property="supplier"
