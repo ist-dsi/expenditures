@@ -50,7 +50,6 @@ public class Person extends Person_Base {
 	super();
 	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
 	new Options(this);
-	throw new Error("xpto");
     }
 
     protected Person(final String username) {
