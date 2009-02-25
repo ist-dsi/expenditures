@@ -193,9 +193,11 @@
 	<slot name="vatValue" key="acquisitionRequestItem.label.vatValue" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">	
 		<property name="size" value="10"/>
 	</slot>
+<!-- 
 	<slot name="additionalCostValue" key="acquisitionRequestItem.label.additionalCostValue.optional" bundle="ACQUISITION_RESOURCES" help="message.help.additionalCostValue">
 		<property name="size" value="10"/>
 	</slot>
+ -->
 </schema>
 
 <schema name="createAcquisitionRequestItem.block3_NEW_DELIVERY_INFO" type="pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean" bundle="ACQUISITION_RESOURCES">
@@ -230,8 +232,10 @@
 	<slot name="proposalReference" key="acquisitionRequestItem.label.proposalReference" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="quantity" key="acquisitionRequestItem.label.quantity" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 	<slot name="unitValue" key="acquisitionRequestItem.label.unitValue" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-	<slot name="vatValue" key="acquisitionRequestItem.label.vatValue" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>	
-	<slot name="additionalCostValue" key="acquisitionRequestItem.label.additionalCostValue" bundle="ACQUISITION_RESOURCES" />	
+	<slot name="vatValue" key="acquisitionRequestItem.label.vatValue" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+<!-- 
+	<slot name="additionalCostValue" key="acquisitionRequestItem.label.additionalCostValue" bundle="ACQUISITION_RESOURCES" />
+ -->
 	<slot name="CPVReference" layout="autoComplete" key="acquisitionRequestItem.label.salesCode" bundle="ACQUISITION_RESOURCES">
 	    <property name="labelField" value="fullDescription"/>
 		<property name="format" value="${code} - ${description}"/>
@@ -504,7 +508,9 @@
 	<slot name="realQuantity" key="acquisitionRequestItem.label.realQuantity" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 	<slot name="realUnitValue" key="acquisitionRequestItem.label.realUnitValue" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 	<slot name="realVatValue" key="acquisitionRequestItem.label.realVatValue" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-	<slot name="shipment" key="acquisitionRequestItem.label.realAdditionalCostValue" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>	
+<!-- 
+	<slot name="shipment" key="acquisitionRequestItem.label.realAdditionalCostValue" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+-->	
 </schema>
 
 <schema name="afterTheFactAcquisitionProcessBean"
