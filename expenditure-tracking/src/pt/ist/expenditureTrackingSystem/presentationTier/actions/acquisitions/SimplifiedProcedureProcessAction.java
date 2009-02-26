@@ -170,11 +170,10 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 
     public ActionForward executeFundAllocationExpirationDate(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
-	final AcquisitionProcess acquisitionProcess = getProcess(request);
-	request.setAttribute("acquisitionProcess", acquisitionProcess);
+	final SimplifiedProcedureProcess acquisitionProcess = getProcess(request);
 	final FundAllocationExpirationDateBean fundAllocationExpirationDateBean = new FundAllocationExpirationDateBean();
-	request.setAttribute("fundAllocationExpirationDateBean", fundAllocationExpirationDateBean);
-	return forward(request, "/acquisitions/allocateFundsToServiceProvider.jsp");
+	genericActivityExecution(acquisitionProcess, "FundAllocationExpirationDate", fundAllocationExpirationDateBean);
+	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
 
     public ActionForward allocateFundsToServiceProvider(final ActionMapping mapping, final ActionForm form,

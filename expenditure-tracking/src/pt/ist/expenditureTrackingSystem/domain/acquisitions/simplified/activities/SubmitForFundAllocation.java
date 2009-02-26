@@ -23,15 +23,16 @@ public class SubmitForFundAllocation extends GenericAcquisitionProcessActivity {
     protected void process(RegularAcquisitionProcess process, Object... objects) {
 	Person person = (Person) objects[0];
 	process.getAcquisitionRequest().submittedForFundsAllocation(person);
-	if (process.getAcquisitionRequest().isSubmittedForFundsAllocationByAllResponsibles()) {
-	    if (!process.getSkipSupplierFundAllocation()) {
-		process.submitForFundAllocation();
-		new FundAllocationExpirationDate().execute(process, new Object[] {});
-	    }
-	    else {
-		process.skipFundAllocation();
-	    }
-	}
+	process.submitForFundAllocation();
+//	if (process.getAcquisitionRequest().isSubmittedForFundsAllocationByAllResponsibles()) {
+//	    if (!process.getSkipSupplierFundAllocation()) {
+//		process.submitForFundAllocation();
+//		new FundAllocationExpirationDate().execute(process, new Object[] {});
+//	    }
+//	    else {
+//		process.skipFundAllocation();
+//	    }
+//	}
     }
 
 }

@@ -251,6 +251,17 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	return true;
     }
 
+    public boolean isApprovedByAtLeastOneResponsible() {
+	for (final RequestItem requestItem : getRequestItemsSet()) {
+	    for (final UnitItem unitItem : requestItem.getUnitItems()) {
+		if (unitItem.getSubmitedForFundsAllocation().booleanValue()) {
+		    return true;
+		}
+	    }
+	}
+	return false;
+    }
+
     public boolean isAuthorizedByAtLeastOneResponsible() {
 	for (AcquisitionRequestItem item : getAcquisitionRequestItemsSet()) {
 	    if (item.hasAtLeastOneResponsibleApproval()) {
