@@ -134,7 +134,8 @@ public class SyncProjectsAux {
     }
 
     private void loadProjectResponsiblesSet() throws IOException {
-	String contents = FileUtils.readFile("responsaveisProjectos.csv");
+	final InputStream inputStream = getClass().getResourceAsStream("/responsaveisProjectos.csv");
+	String contents = FileUtils.readFile(inputStream);
 	for (String line : contents.split("\n")) {
 	    String[] split = line.split("\t");
 	    projectResponsibles.add(Integer.valueOf(split[0]));
