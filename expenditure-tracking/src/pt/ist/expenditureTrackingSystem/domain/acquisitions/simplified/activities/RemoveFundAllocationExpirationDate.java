@@ -1,5 +1,6 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities;
 
+import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
@@ -8,7 +9,9 @@ public class RemoveFundAllocationExpirationDate extends GenericAcquisitionProces
 
     @Override
     protected boolean isAccessible(RegularAcquisitionProcess process) {
-	return (process.isAccountingEmployee() && !hasAnyAssociatedProject(process)) || process.isProjectAccountingEmployee();
+	return (process.isAccountingEmployee() && !hasAnyAssociatedProject(process))
+		|| process.isProjectAccountingEmployee()
+		|| userHasRole(RoleType.ACQUISITION_CENTRAL);
     }
 
     @Override
