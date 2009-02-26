@@ -1,6 +1,7 @@
 package pt.ist.expenditureTrackingSystem.domain;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -122,7 +123,8 @@ public class SyncProjectsAux {
     }
 
     private void loadTeachers() throws IOException {
-	final String contents = FileUtils.readFile("teacher.csv");
+	final InputStream inputStream = getClass().getResourceAsStream("/teacher.csv");
+	final String contents = FileUtils.readFile(inputStream);
 	for (String line : contents.split("\n")) {
 	    String[] split = line.split("\t");
 	    if (split.length == 2 && split[1] != null && !split[1].isEmpty()) {
