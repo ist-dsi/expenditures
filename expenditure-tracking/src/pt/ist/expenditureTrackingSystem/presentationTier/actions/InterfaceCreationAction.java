@@ -110,6 +110,31 @@ public class InterfaceCreationAction extends ContextBaseAction {
 	return forwardToMuneConfiguration(request, virtualHost, node);
     }
 
+    @CreateNodeAction(bundle = "EXPENDITURE_RESOURCES", key = "add.node.expenditure-tracking.interface.announcements", groupKey = "label.module.expenditure-tracking")
+    public final ActionForward createAnnouncmentNodes(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+	final VirtualHost virtualHost = getDomainObject(request, "virtualHostToManageId");
+	final Node node = getDomainObject(request, "parentOfNodesToManageId");
+
+	final Node announcementsnNode = createNodeForPage(virtualHost, node, "resources.ExpenditureResources",
+		"link.topBar.announcements",
+		pt.ist.expenditureTrackingSystem.domain.Role.getRole(pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL).getSystemRole());
+	ActionNode.createActionNode(virtualHost, announcementsnNode, "/announcementProcess", "prepareCreateAnnouncement",
+		"resources.ExpenditureResources", "link.sideBar.announcementProcess.createAnnouncement",
+		pt.ist.expenditureTrackingSystem.domain.Role.getRole(pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL).getSystemRole());
+	ActionNode.createActionNode(virtualHost, announcementsnNode, "/announcementProcess", "searchAnnouncementProcess",
+		"resources.ExpenditureResources", "link.sideBar.announcementProcess.searchProcesses",
+		pt.ist.expenditureTrackingSystem.domain.Role.getRole(pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL).getSystemRole());
+	ActionNode.createActionNode(virtualHost, announcementsnNode, "/announcementProcess", "showMyProcesses",
+		"resources.ExpenditureResources", "link.sideBar.announcementProcess.myProcesses",
+		pt.ist.expenditureTrackingSystem.domain.Role.getRole(pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL).getSystemRole());
+	ActionNode.createActionNode(virtualHost, announcementsnNode, "/announcementProcess", "showPendingProcesses",
+		"resources.ExpenditureResources", "link.sideBar.announcementProcess.pendingProcesses",
+		pt.ist.expenditureTrackingSystem.domain.Role.getRole(pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL).getSystemRole());
+
+	return forwardToMuneConfiguration(request, virtualHost, node);
+    }
+
     protected Node createNodeForPage(final VirtualHost virtualHost, final Node node, final String bundle, final String key,
 	    PersistentGroup userGroup) {
 	final PageBean pageBean = new PageBean(virtualHost, node, userGroup);
