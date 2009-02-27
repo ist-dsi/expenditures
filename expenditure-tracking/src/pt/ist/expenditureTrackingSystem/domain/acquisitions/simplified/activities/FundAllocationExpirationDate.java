@@ -24,6 +24,7 @@ public class FundAllocationExpirationDate extends GenericAcquisitionProcessActiv
 		//&& process.getAcquisitionProcessState().isPendingFundAllocation()
 		&& process.getAcquisitionRequest().isSubmittedForFundsAllocationByAllResponsibles()
 		&& !process.isPendingFundAllocation()
+		&& !process.getAcquisitionRequest().hasAnyFundAllocationId()
 		;
     }
 
