@@ -435,7 +435,7 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	User user = UserView.getCurrentUser();
 	final SimplifiedProcedureProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
-	genericActivityExecution(acquisitionProcess, "CancelInvoiceConfirmation", user.getPerson());
+	genericActivityExecution(acquisitionProcess, "CancelInvoiceConfirmation", user.getExpenditurePerson());
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
 
