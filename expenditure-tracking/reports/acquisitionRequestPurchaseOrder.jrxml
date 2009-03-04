@@ -258,12 +258,12 @@ Entrega]]></text>
 	<pageFooter>
 		<band height="43">
 			<textField isBlankWhenNull="false" hyperlinkType="None">
-				<reportElement key="textField" x="303" y="25" width="188" height="18"/>
+				<reportElement key="textField" x="203" y="25" width="300" height="18"/>
 				<textElement textAlignment="Right"/>
-				<textFieldExpression class="java.lang.String"><![CDATA["Pág. " + $V{PAGE_NUMBER} + " de "]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA["Processo:" + $P{acquisitionRequest}.getAcquisitionProcessId() + " - Requisição: " + $P{requestID}.toString() + " - Pág. " + $V{PAGE_NUMBER} + " de "]]></textFieldExpression>
 			</textField>
 			<textField evaluationTime="Report" isBlankWhenNull="false" hyperlinkType="None">
-				<reportElement key="textField" x="495" y="25" width="40" height="18"/>
+				<reportElement key="textField" x="507" y="25" width="40" height="18"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA["" + $V{PAGE_NUMBER} + ""]]></textFieldExpression>
 			</textField>
@@ -336,14 +336,9 @@ CAE 931 400]]></text>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{acquisitionRequest}.getTotalItemValueWithVat().toFormatString()]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="false" hyperlinkType="None">
-				<reportElement key="textField-23" x="303" y="169" width="188" height="18"/>
+				<reportElement key="textField-23" x="203" y="169" width="300" height="18"/>
 				<textElement textAlignment="Right"/>
-				<textFieldExpression class="java.lang.String"><![CDATA["Pág. " + $V{PAGE_NUMBER} + " de "]]></textFieldExpression>
-			</textField>
-			<textField evaluationTime="Report" isBlankWhenNull="false" hyperlinkType="None">
-				<reportElement key="textField-24" x="495" y="169" width="40" height="18"/>
-				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA["" + $V{PAGE_NUMBER} + ""]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA["Processo:" + $P{acquisitionRequest}.getAcquisitionProcessId() + " - Requisição: " + $P{requestID}.toString() + " - Pág. " + $V{PAGE_NUMBER} + " de " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement key="line-4" x="0" y="4" width="535" height="1"/>
