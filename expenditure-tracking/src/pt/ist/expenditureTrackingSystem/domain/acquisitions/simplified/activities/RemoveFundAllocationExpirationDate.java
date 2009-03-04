@@ -42,10 +42,7 @@ public class RemoveFundAllocationExpirationDate extends GenericAcquisitionProces
     @Override
     protected void process(RegularAcquisitionProcess process, Object... objects) {
 	process.setFundAllocationExpirationDate(null);
-	process.getAcquisitionRequest().unSubmitForFundsAllocation();
-	if (!process.getAcquisitionProcessState().isCanceled()) {
-	    process.submitForApproval();
-	}
+	process.submitForApproval();
     }
 
 }

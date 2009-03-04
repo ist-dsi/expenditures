@@ -439,4 +439,11 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
 
+    public ActionForward executeRevertProcessNotConfirmmingFundAllocationExpirationDate(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final SimplifiedProcedureProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
+	genericActivityExecution(acquisitionProcess, "RevertProcessNotConfirmmingFundAllocationExpirationDate");
+	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
+    }
+
 }
