@@ -38,6 +38,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activitie
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.PayAcquisition;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ReceiveInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RejectAcquisitionProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RemoveCancelProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RemoveFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RemoveFundAllocationExpirationDate;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RemoveFundAllocationExpirationDateForResponsible;
@@ -122,6 +123,8 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	requestInformationActivities.add(new UnsetSkipSupplierFundAllocation());
 
 	requestInformationActivities.add(new RevertInvoiceSubmission());
+
+	requestInformationActivities.add(new RemoveCancelProcess());
 
 	requestItemActivities.add(new DeleteAcquisitionRequestItem());
 	requestItemActivities.add(new EditAcquisitionRequestItem());

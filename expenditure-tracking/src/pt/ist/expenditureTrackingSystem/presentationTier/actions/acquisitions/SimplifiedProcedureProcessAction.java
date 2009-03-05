@@ -446,4 +446,11 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
 
+    public ActionForward executeRemoveCancelProcess(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final SimplifiedProcedureProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
+	genericActivityExecution(acquisitionProcess, "RemoveCancelProcess");
+	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
+    }
+
 }
