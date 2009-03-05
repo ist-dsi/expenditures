@@ -232,6 +232,9 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
     }
 
     public boolean isSubmittedForFundsAllocationByAllResponsibles() {
+	if (getRequestItemsCount() == 0) {
+	    return false;
+	}
 	for (final RequestItem requestItem : getRequestItemsSet()) {
 	    if (!requestItem.isApproved()) {
 		return false;
