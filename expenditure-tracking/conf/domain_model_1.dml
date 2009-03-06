@@ -1,13 +1,6 @@
 package pt.ist.expenditureTrackingSystem.domain;
 
 
-valueType org.joda.time.DateTime as DateTime;
-valueType org.joda.time.LocalDate as LocalDate;
-
-valueType myorg.domain.util.Address as Address;
-valueType myorg.domain.util.ByteArray as ByteArray;
-valueType myorg.domain.util.Money as Money;
-valueType pt.utl.ist.fenix.tools.util.Strings as Strings;
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType as AcquisitionProcessStateType;
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType as RefundProcessStateType;
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.StandardAcquisitionProcessStateType as StandardAcquisitionProcessStateType;
@@ -16,6 +9,43 @@ enum pt.ist.expenditureTrackingSystem.domain.announcements.AnnouncementProcessSt
 enum pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationType as AuthorizationType;
 enum pt.ist.expenditureTrackingSystem.domain.requests.RequestForProposalProcessStateType as RequestForProposalProcessStateType;
 enum pt.ist.expenditureTrackingSystem.domain.RoleType as RoleType;
+
+
+valueType pt.utl.ist.fenix.tools.util.Strings as Strings {
+    externalizeWith {
+        String exportAsString();
+    }
+
+    internalizeWith importFromString();
+}
+
+valueType myorg.domain.util.ByteArray as ByteArray {
+    externalizeWith {
+        bytearray getBytes();
+    }
+}
+
+valueType myorg.domain.util.Address as Address {
+    externalizeWith {
+        String exportAsString();
+    }
+
+    internalizeWith importFromString();
+}
+
+valueType myorg.domain.util.Money as Money {
+    externalizeWith {
+        String exportAsString();
+    }
+
+    internalizeWith importFromString();
+}
+
+valueType java.math.BigDecimal as BigDecimal {
+    externalizeWith {
+        String toString();
+    }
+}
 
 
 class ExpenditureTrackingSystem {
