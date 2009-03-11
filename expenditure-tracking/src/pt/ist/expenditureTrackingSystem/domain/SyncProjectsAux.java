@@ -24,7 +24,7 @@ import pt.utl.ist.fenix.tools.util.FileUtils;
 
 public class SyncProjectsAux {
 
-    static class MgpProject {
+    public static class MgpProject {
 	private String projectCode;
 	private String unidExploracao;
 	private String title;
@@ -44,6 +44,39 @@ public class SyncProjectsAux {
 	    duracao = resultSet.getString(7);
 	    status = resultSet.getString(8);
 	}
+
+	public String getProjectCode() {
+	    return projectCode;
+	}
+
+	public String getUnidExploracao() {
+	    return unidExploracao;
+	}
+
+	public String getTitle() {
+	    return title;
+	}
+
+	public String getIdCoord() {
+	    return idCoord;
+	}
+
+	public String getCostCenter() {
+	    return costCenter;
+	}
+
+	public String getInicio() {
+	    return inicio;
+	}
+
+	public String getDuracao() {
+	    return duracao;
+	}
+
+	public String getStatus() {
+	    return status;
+	}
+
     }
 
     private static class ProjectQuery extends ExternalDbQuery {
@@ -70,7 +103,7 @@ public class SyncProjectsAux {
 	}
     }
 
-    private static class ProjectReader extends ExternalDbOperation {
+    public static class ProjectReader extends ExternalDbOperation {
 
 	private Set<MgpProject> mgpProjects = null;
 
@@ -86,7 +119,7 @@ public class SyncProjectsAux {
 	    mgpProjects = projectQuery.getMgpProjects();
 	}	
 
-	Set<MgpProject> getMgpProjects() {
+	public Set<MgpProject> getMgpProjects() {
 	    return mgpProjects;
 	}
     }

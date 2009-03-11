@@ -1,6 +1,7 @@
 package pt.ist.expenditureTrackingSystem.presentationTier.actions.organization;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.Set;
 
@@ -19,6 +20,8 @@ import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.Role;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
+import pt.ist.expenditureTrackingSystem.domain.SyncProjectsAux.MgpProject;
+import pt.ist.expenditureTrackingSystem.domain.SyncProjectsAux.ProjectReader;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.DelegatedAuthorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.AccountingUnitBean;
@@ -586,6 +589,52 @@ public class OrganizationAction extends BaseAction {
 	final SupplierBean supplierBean = new SupplierBean(supplierDestination);
 
 	return manageSuppliers(mapping, request, supplierBean);
+    }
+
+    public final ActionForward downloadMGPProjects(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) throws IOException, SQLException {
+
+	Spreadsheet suppliersSheet = getMgpProjectsSheet();
+	response.setContentType("application/xls ");
+	response.setHeader("Content-disposition", "attachment; filename=projectosMgp.xls");
+
+	ServletOutputStream outputStream = response.getOutputStream();
+
+	suppliersSheet.exportToXLSSheet(outputStream);
+	outputStream.flush();
+	outputStream.close();
+
+	return null;
+    }
+
+    private Spreadsheet getMgpProjectsSheet() throws SQLException {
+	Spreadsheet spreadsheet = new Spreadsheet("ProjectosMGP");
+	spreadsheet.setHeader("projectCode");
+	spreadsheet.setHeader("unidExploracao");
+	spreadsheet.setHeader("title");
+	spreadsheet.setHeader("idCoord");
+	spreadsheet.setHeader("costCenter");
+	spreadsheet.setHeader("inicio");
+	spreadsheet.setHeader("duracao");
+	spreadsheet.setHeader("status");
+
+	final ProjectReader projectReader = new ProjectReader();
+	projectReader.execute();
+	final Set<MgpProject> mgpProjects = projectReader.getMgpProjects();
+
+	for (final MgpProject mgpProject : mgpProjects) {
+	    final Row row = spreadsheet.addRow();
+	    row.setCell(mgpProject.getProjectCode());
+	    row.setCell(mgpProject.getUnidExploracao());
+	    row.setCell(mgpProject.getTitle());
+	    row.setCell(mgpProject.getIdCoord());
+	    row.setCell(mgpProject.getCostCenter());
+	    row.setCell(mgpProject.getInicio());
+	    row.setCell(mgpProject.getDuracao());
+	    row.setCell(mgpProject.getStatus());
+	}
+
+	return spreadsheet;
     }
 
 }

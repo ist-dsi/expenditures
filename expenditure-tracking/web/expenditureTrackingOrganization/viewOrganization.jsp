@@ -6,6 +6,18 @@
 
 <h2><bean:message key="title.viewOrganization" bundle="EXPENDITURE_RESOURCES"/></h2>
 
+<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
+	<div class="infoop1">
+		<ul>
+			<li>
+				<html:link action="/expenditureTrackingOrganization.do?method=downloadMGPProjects">
+					<bean:message key="label.projects.mgp.download" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+				</html:link>
+			</li>
+		</ul>
+	</div>
+</logic:present>
+
 <div class="mbottom15">
 	<fr:form action="/expenditureTrackingOrganization.do?method=viewOrganization">
 	<fr:edit id="unitBean"
