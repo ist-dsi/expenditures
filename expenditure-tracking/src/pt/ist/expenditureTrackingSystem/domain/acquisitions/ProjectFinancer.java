@@ -101,6 +101,7 @@ public class ProjectFinancer extends ProjectFinancer_Base {
 	    setEffectiveProjectFundAllocationId(strings);
 	} else {
 	    strings.add(effectiveProjectFundAllocationId);
+	    setEffectiveProjectFundAllocationId(strings);
 	}
 
     }

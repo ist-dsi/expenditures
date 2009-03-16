@@ -301,6 +301,12 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	}
     }
 
+    public void unconfirmInvoiceForAll() {
+	for (AcquisitionRequestItem item : getAcquisitionRequestItemsSet()) {
+	    item.unconfirmInvoiceForAll();
+	}
+    }
+
     public boolean isInvoiceConfirmedBy() {
 	for (AcquisitionRequestItem item : getAcquisitionRequestItemsSet()) {
 	    if (!item.isInvoiceConfirmed()) {
@@ -404,11 +410,12 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     }
 
     public SortedSet<AcquisitionRequestItem> getOrderedAcquisitionRequestItemsSet() {
-	return (SortedSet<AcquisitionRequestItem>) addAcquisitionRequestItemsSetToArg(
-		new TreeSet<AcquisitionRequestItem>(AcquisitionRequestItem.COMPARATOR_BY_REFERENCE));
+	return (SortedSet<AcquisitionRequestItem>) addAcquisitionRequestItemsSetToArg(new TreeSet<AcquisitionRequestItem>(
+		AcquisitionRequestItem.COMPARATOR_BY_REFERENCE));
     }
 
-    public Collection<AcquisitionRequestItem> addAcquisitionRequestItemsSetToArg(final Collection<AcquisitionRequestItem> collection) {
+    public Collection<AcquisitionRequestItem> addAcquisitionRequestItemsSetToArg(
+	    final Collection<AcquisitionRequestItem> collection) {
 	for (final RequestItem item : getRequestItems()) {
 	    collection.add((AcquisitionRequestItem) item);
 	}

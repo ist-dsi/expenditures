@@ -19,6 +19,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAs
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericRemovePayingUnit;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.ProjectFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.RemoveFundsPermanentlyAllocated;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.RemovePermanentProjectFunds;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.UnApprove;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.UnAuthorize;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.AddAcquisitionProposalDocument;
@@ -46,6 +47,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activitie
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RevertInvoiceSubmission;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RevertProcessNotConfirmmingFundAllocationExpirationDate;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RevertSkipPurchaseOrderDocument;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RevertToInvoiceConfirmation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SendPurchaseOrderToSupplier;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SetSkipSupplierFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SkipPurchaseOrderDocument;
@@ -88,12 +90,15 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	requestInformationActivities.add(new SubmitForFundAllocation());
 	requestInformationActivities.add(new FundAllocationExpirationDate());
 	requestInformationActivities.add(new RevertProcessNotConfirmmingFundAllocationExpirationDate());
+	requestInformationActivities.add(new RevertToInvoiceConfirmation());
 
 	requestInformationActivities.add(new Authorize<RegularAcquisitionProcess>());
 	requestInformationActivities.add(new RejectAcquisitionProcess());
 
 	requestInformationActivities.add(new AllocateProjectFundsPermanently<RegularAcquisitionProcess>());
 	requestInformationActivities.add(new AllocateFundsPermanently<RegularAcquisitionProcess>());
+	requestInformationActivities.add(new RemovePermanentProjectFunds<RegularAcquisitionProcess>());
+	
 	requestInformationActivities.add(new RemoveFundsPermanentlyAllocated<RegularAcquisitionProcess>());
 	requestInformationActivities.add(new UnApprove<RegularAcquisitionProcess>());
 	requestInformationActivities.add(new UnAuthorize<RegularAcquisitionProcess>());

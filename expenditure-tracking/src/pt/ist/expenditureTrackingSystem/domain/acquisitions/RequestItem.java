@@ -138,6 +138,12 @@ public abstract class RequestItem extends RequestItem_Base {
 	modifyInvoiceState(person, Boolean.FALSE);
     }
 
+    public void unconfirmInvoiceForAll() {
+	for (UnitItem unitItem : getUnitItems()) {
+	    unitItem.setInvoiceConfirmed(Boolean.FALSE);
+	}
+    }
+
     private void modifyAuthorizationStateFor(Person person, Boolean value) {
 	for (UnitItem unitItem : getUnitItems()) {
 	    if (unitItem.getUnit().isResponsible(person)) {

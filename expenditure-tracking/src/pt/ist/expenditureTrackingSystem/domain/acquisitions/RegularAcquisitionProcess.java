@@ -61,6 +61,13 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
 
     public void cancelInvoiceConfirmationBy(final Person person) {
 	getAcquisitionRequest().unconfirmInvoiceFor(person);
+	if (!getAcquisitionRequest().hasAtLeastOneConfirmation()) {
+	    cancelInvoiceConfirmation();
+	}
+    }
+
+    public void unconfirmInvoiceForAll() {
+	getAcquisitionRequest().unconfirmInvoiceForAll();
 	cancelInvoiceConfirmation();
     }
 

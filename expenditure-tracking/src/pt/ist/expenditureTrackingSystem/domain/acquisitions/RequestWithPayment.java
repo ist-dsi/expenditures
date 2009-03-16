@@ -117,6 +117,15 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
 	}
     }
 
+    public void resetPermanentProjectFundAllocationId(final Person person) {
+	for (Financer financer : getFinancersSet()) {
+	    if (financer.isProjectFinancer() && financer.isProjectAccountingEmployee(person)) {
+		ProjectFinancer projectFinancer = (ProjectFinancer) financer;
+		projectFinancer.setEffectiveProjectFundAllocationId(null);
+	    }
+	}
+    }
+
     public void resetProjectFundAllocationId() {
 	for (Financer financer : getFinancersSet()) {
 	    if (financer.isProjectFinancer()) {

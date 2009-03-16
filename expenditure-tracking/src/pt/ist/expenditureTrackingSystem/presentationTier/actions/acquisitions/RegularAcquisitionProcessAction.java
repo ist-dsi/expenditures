@@ -247,6 +247,15 @@ public class RegularAcquisitionProcessAction extends PaymentProcessAction {
 	return viewAcquisitionProcess(mapping, request, process);
     }
 
+    public ActionForward executeRemovePermanentProjectFunds(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+
+	AcquisitionProcess process = getProcess(request);
+	genericActivityExecution(process, "RemovePermanentProjectFunds", new Object[] {});
+
+	return viewAcquisitionProcess(mapping, request, process);
+    }
+
     public ActionForward executeUnsetSkipSupplierFundAllocation(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 

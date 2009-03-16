@@ -280,9 +280,9 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	String paymentReference = getRenderedObject("reference");
 	return executeActivityAndViewProcess(mapping, form, request, response, "PayAcquisition", paymentReference);
     }
-   
-    public ActionForward executeUnApprove(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
+
+    public ActionForward executeUnApprove(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
 	return executeActivityAndViewProcess(mapping, form, request, response, "UnApprove");
     }
 
@@ -410,8 +410,8 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
 
-    public ActionForward executeRemoveFundAllocationExpirationDateForResponsible(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
+    public ActionForward executeRemoveFundAllocationExpirationDateForResponsible(final ActionMapping mapping,
+	    final ActionForm form, final HttpServletRequest request, final HttpServletResponse response) {
 	final SimplifiedProcedureProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
 	genericActivityExecution(acquisitionProcess, "RemoveFundAllocationExpirationDateForResponsible");
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
@@ -439,8 +439,8 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
 
-    public ActionForward executeRevertProcessNotConfirmmingFundAllocationExpirationDate(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
+    public ActionForward executeRevertProcessNotConfirmmingFundAllocationExpirationDate(final ActionMapping mapping,
+	    final ActionForm form, final HttpServletRequest request, final HttpServletResponse response) {
 	final SimplifiedProcedureProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
 	genericActivityExecution(acquisitionProcess, "RevertProcessNotConfirmmingFundAllocationExpirationDate");
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
@@ -453,4 +453,10 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
 
+    public ActionForward executeRevertToInvoiceConfirmation(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final SimplifiedProcedureProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
+	genericActivityExecution(acquisitionProcess, "RevertToInvoiceConfirmation");
+	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
+    }
 }
