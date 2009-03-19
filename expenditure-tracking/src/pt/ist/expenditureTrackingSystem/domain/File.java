@@ -7,6 +7,7 @@ import javax.activation.MimetypesFileTypeMap;
 
 import myorg.domain.util.ByteArray;
 import pt.ist.fenixframework.pstm.Transaction;
+import pt.utl.ist.fenix.tools.util.FileUtils;
 
 public class File extends File_Base {
 
@@ -23,8 +24,9 @@ public class File extends File_Base {
 
     @Override
     public void setFilename(final String filename) {
-	super.setFilename(filename);
-	setContentType(guessContentType(filename));
+	final String nicerFilename = FileUtils.getFilenameOnly(filename);
+	super.setFilename(nicerFilename);
+	setContentType(guessContentType(nicerFilename));
     }
 
     public void setContent(final byte[] bytes) {
