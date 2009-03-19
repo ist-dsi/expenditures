@@ -100,6 +100,11 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 	return getLastAcquisitionProcessState().isInvoiceReceived() && acquisitionRequest.isInvoiceReceived();
     }
 
+    public boolean isPastInvoiceReceived() {
+	final AcquisitionRequest acquisitionRequest = getAcquisitionRequest();
+	return getLastAcquisitionProcessState().isPastInvoiceReceived() && acquisitionRequest.isInvoiceReceived();
+    }
+
     public Unit getUnit() {
 	return getRequestingUnit();
     }

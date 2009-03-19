@@ -83,6 +83,10 @@ public class AcquisitionProcessState extends AcquisitionProcessState_Base {
 	return isInState(AcquisitionProcessStateType.INVOICE_RECEIVED);
     }
 
+    public boolean isPastInvoiceReceived() {
+	return isActive() && getAcquisitionProcessStateType().isInOrPastState(AcquisitionProcessStateType.INVOICE_RECEIVED);
+    }
+
     public boolean isInvoiceConfirmed() {
 	return isInState(AcquisitionProcessStateType.INVOICE_CONFIRMED);
     }

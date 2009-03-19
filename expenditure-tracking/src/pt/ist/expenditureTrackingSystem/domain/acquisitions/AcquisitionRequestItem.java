@@ -314,4 +314,34 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	return (AcquisitionRequest) getRequest();
     }
 
+    public Integer getCurrentQuantity() {
+	final Integer realQuantity = getRealQuantity();
+	return realQuantity == null ? getQuantity() : realQuantity;
+    }
+
+    public Money getCurrentUnitValue() {
+	final Money realUnitValue = getRealUnitValue();
+	return realUnitValue == null ? getUnitValue() : realUnitValue;
+    }
+
+    public BigDecimal getCurrentVatValue() {
+	final BigDecimal realVatValue = getRealVatValue();
+	return realVatValue == null ? getVatValue() : realVatValue;
+    }
+
+    public Money getCurrentAdditionalCostValue() {
+	final Money realAdditionalCostValue = getRealAdditionalCostValue();
+	return realAdditionalCostValue == null ? getAdditionalCostValue() : realAdditionalCostValue;
+    }
+
+    public Money getCurrentTotalVatValue() {
+	final Money totalRealVatValue = getTotalRealVatValue();
+	return totalRealVatValue == null ? getTotalVatValue() : totalRealVatValue;
+    }
+
+    public Money getCurrentTotalItemValueWithAdditionalCostsAndVat() {
+	final Money totalRealItemValueWithAdditionalCostsAndVat = getTotalRealValueWithAdditionalCostsAndVat();
+	return totalRealItemValueWithAdditionalCostsAndVat == null ? getTotalItemValueWithAdditionalCostsAndVat() : totalRealItemValueWithAdditionalCostsAndVat;
+    }
+    
 }

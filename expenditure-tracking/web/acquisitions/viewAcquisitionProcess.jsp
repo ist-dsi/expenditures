@@ -228,7 +228,7 @@
 <bean:define id="itemSet" name="acquisitionProcess" property="acquisitionRequest.orderedAcquisitionRequestItemsSet"/> 
 <logic:present name="itemSet">
 	
-		<logic:equal  name="acquisitionProcess" property="invoiceReceived"  value="true">		
+		<logic:equal  name="acquisitionProcess" property="pastInvoiceReceived"  value="true">		
 			<logic:equal name="acquisitionProcess" property="acquisitionRequest.realValueLessThanTotalValue" value="false">
 				<div class="infoop4">
 					<strong><bean:message key="messages.info.attention" bundle="EXPENDITURE_RESOURCES"/>:</strong> <bean:message key="acquisitionRequestItem.message.info.realValueLessThanTotalValue" bundle="ACQUISITION_RESOURCES"/>
@@ -269,17 +269,18 @@
 							</a>
 							<%= ContentContextInjectionRewriter.END_BLOCK_HAS_CONTEXT_PREFIX %>
 						</td>
-						<td class="aright"><fr:view name="itemResume" property="quantity"/></td>
-						<td class="aright"><fr:view name="itemResume" property="unitValue"/></td>
-						<td class="aright"><fr:view name="itemResume" property="totalVatValue"/></td>
+
+						<td class="aright"><fr:view name="itemResume" property="currentQuantity"/></td>
+						<td class="aright"><fr:view name="itemResume" property="currentUnitValue"/></td>
+						<td class="aright"><fr:view name="itemResume" property="currentTotalVatValue"/></td>
 						<td class="aright">
-							<fr:view name="itemResume" property="additionalCostValue" type="myorg.domain.util.Money">
+							<fr:view name="itemResume" property="currentAdditionalCostValue" type="myorg.domain.util.Money">
 								<fr:layout name="null-as-label">
 									<fr:property name="subLayout" value="default"/>
 								</fr:layout>
 							</fr:view>
 						</td>
-						<td class="aright"><fr:view name="itemResume" property="totalItemValueWithAdditionalCostsAndVat"/></td>
+						<td class="aright"><fr:view name="itemResume" property="currentTotalItemValueWithAdditionalCostsAndVat"/></td>
 					</tr>
 				</logic:iterate>
 			</table>

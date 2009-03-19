@@ -130,4 +130,8 @@ public enum AcquisitionProcessStateType implements IPresentableEnum {
 	return (this != REJECTED && this != CANCELED);
     }
 
+    public boolean isInOrPastState(final AcquisitionProcessStateType acquisitionProcessStateType) {
+	return ordinal() >= acquisitionProcessStateType.ordinal();
+    }
+
 }
