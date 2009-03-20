@@ -168,23 +168,35 @@ public class SyncSuppliers extends SyncSuppliers_Base {
 
 	int matched = 0;
 	int created = 0;
+	int discarded = 0;
 	for (final GiafSupplier giafSupplier : SupplierMap.getGiafSuppliers()) {
-	    Supplier supplier = findSupplierByGiafKey(giafSupplier.codEnt);
-	    if (supplier == null) {
-		final String country = getCountry(giafSupplier);
-		final Address address = new Address(giafSupplier.ruaEnt, null, giafSupplier.codPos, giafSupplier.locEnt, country);
-		supplier = new Supplier(giafSupplier.nom_ent, giafSupplier.nom_ent_abv, giafSupplier.numFis, address,
-			giafSupplier.telEnt, giafSupplier.faxEnt, giafSupplier.email, null);
-		supplier.setGiafKey(giafSupplier.codEnt);
-		created++;
+	    if (!shouldDiscard(giafSupplier)) {
+		Supplier supplier = findSupplierByGiafKey(giafSupplier.codEnt);
+		if (supplier == null) {
+		    final String country = getCountry(giafSupplier);
+		    final Address address = new Address(giafSupplier.ruaEnt, null, giafSupplier.codPos, giafSupplier.locEnt, country);
+		    supplier = new Supplier(giafSupplier.nom_ent, giafSupplier.nom_ent_abv, giafSupplier.numFis, address,
+			    giafSupplier.telEnt, giafSupplier.faxEnt, giafSupplier.email, null);
+		    supplier.setGiafKey(giafSupplier.codEnt);
+		    created++;
+		} else {
+		    matched++;
+		    updateSupplierInformation(supplier, giafSupplier);
+		}
 	    } else {
-		matched++;
-		updateSupplierInformation(supplier, giafSupplier);
+		discarded++;
 	    }
 	}
 
 	System.out.println("Matched: " + matched + " suppliers.");
 	System.out.println("Created: " + created + " suppliers.");
+	System.out.println("Discarded: " + discarded + " suppliers.");
+    }
+
+    private static boolean shouldDiscard(final GiafSupplier giafSupplier) {
+	final String giafKey = giafSupplier.codEnt;
+	return (giafKey.length() == 6 && giafKey.charAt(0) == '1')
+		|| (giafKey.length() == 10 && giafKey.charAt(0) == 'E');
     }
 
     private static void updateSupplierInformation(final Supplier supplier, final GiafSupplier giafSupplier) {
