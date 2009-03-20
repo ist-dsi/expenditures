@@ -1,6 +1,8 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
+import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import myorg.domain.util.Money;
@@ -9,6 +11,7 @@ import pt.ist.expenditureTrackingSystem.domain.ProcessState;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.dto.PayingUnitTotalBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
+import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
@@ -177,7 +180,7 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 	}
 	return builder.toString();
     }
-    
+
     public AcquisitionRequest getRequest() {
 	return getAcquisitionRequest();
     }
@@ -210,6 +213,12 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
     @Override
     public boolean isAllocatedPermanently() {
 	return getAcquisitionProcessState().isAllocatedPermanently();
+    }
+
+    @Override
+    public Collection<Supplier> getSuppliers() {
+	return getRequest().getSuppliers();
+
     }
 
 }

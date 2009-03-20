@@ -947,8 +947,26 @@
 		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess"
 		bundle="ACQUISITION_RESOURCES">
 	<slot name="acquisitionProcessId" key="label.acquisitionProcessId" bundle="EXPENDITURE_RESOURCES"/>		
-	<slot name="class" key="label.acquisitionType" bundle="ACQUISITION_RESOURCES" layout="label">
-		<property name="bundle" value="ACQUISITION_RESOURCES"/>
+	<slot name="typeShortDescription" key="label.acquisitionType" bundle="ACQUISITION_RESOURCES" layout="output-with-hover">
+		<property name="subLayout" value="default"/>
+		<property name="javascriptEnabled" value="true"/>
+		<property name="format" value="${typeDescription}"/>
+		<property name="useParent" value="true"/>
+	</slot>
+	<slot name="suppliersDescription" key="label.suppliersDescription" bundle="EXPENDITURE_RESOURCES">
+		<property name="length" value="60"/>
+		<property name="javascriptEnabled" value="true"/>
+	</slot>
+	<slot name="request.requestItemsCount" key="label.itemsCount" bundle="EXPENDITURE_RESOURCES" layout="output-with-list-hover">
+		<property name="subLayout" value="default"/>
+		<property name="javascriptEnabled" value="true"/>
+		<property name="useParent" value="true"/>
+		<property name="list" value="request.requestItems"/>
+		<property name="prefix" value="Item"/>
+		<property name="prefixClasses" value="bold"/>
+		<property name="counterEnabled" value="yes"/>
+		<property name="key" value="false"/>
+		<property name="listFormat" value=" ${description}"/>
 	</slot>
 	<slot name="processStateDescription" key="label.process.state.description" bundle="EXPENDITURE_RESOURCES"/>
 	<slot name="dateFromLastActivity" key="label.inactiveSince" bundle="EXPENDITURE_RESOURCES"/>

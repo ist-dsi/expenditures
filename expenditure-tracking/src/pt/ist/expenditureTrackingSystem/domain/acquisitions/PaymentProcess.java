@@ -1,10 +1,13 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import myorg.domain.util.Money;
+import myorg.util.BundleUtil;
 
 import org.joda.time.LocalDate;
 
@@ -12,6 +15,7 @@ import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Project;
 import pt.ist.expenditureTrackingSystem.domain.organization.SubProject;
+import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericLog;
 
@@ -244,8 +248,30 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
     public abstract boolean isAvailableForCurrentUser();
 
     private static final String EMPTY_STRING = new String();
+
     public String getProcessStateDescription() {
 	return EMPTY_STRING;
     }
 
+    public abstract Collection<Supplier> getSuppliers();
+
+    public String getSuppliersDescription() {
+	Iterator<Supplier> iterator = getSuppliers().iterator();
+	StringBuilder builder = new StringBuilder();
+	while (iterator.hasNext()) {
+	    builder.append(iterator.next().getName());
+	    if (iterator.hasNext()) {
+		builder.append(" ,");
+	    }
+	}
+	return builder.toString();
+    }
+
+    public String getTypeDescription() {
+	return BundleUtil.getStringFromResourceBundle("resources/ExpenditureResources", "label." + getClass().getSimpleName() + ".description");
+    }
+
+    public String getTypeShortDescription() {
+	return BundleUtil.getStringFromResourceBundle("resources/ExpenditureResources", "label." + getClass().getSimpleName() + ".shortDescription");
+    }
 }
