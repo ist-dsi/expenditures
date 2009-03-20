@@ -61,7 +61,6 @@
 					</td>
 					<td class="tderror"><fr:hasMessages for="realVatValue"><span><fr:message for="realVatValue"/></span></fr:hasMessages></td>
 				</tr>
-<%-- 
 				<tr>
 					<td class="nowrap"><bean:message key="acquisitionRequestItem.label.additionalCosts" bundle="ACQUISITION_RESOURCES"/>:</td>
 					<td class="aright">
@@ -76,7 +75,6 @@
 					</td>
 					<td></td>
 				</tr>
---%>
 			</table>
 			<html:submit styleClass="inputbutton"><bean:message key="renderers.form.submit.name" bundle="RENDERER_RESOURCES"/> </html:submit>
 	</fr:form>
