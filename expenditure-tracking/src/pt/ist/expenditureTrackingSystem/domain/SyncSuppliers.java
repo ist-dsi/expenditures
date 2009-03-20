@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import myorg.domain.util.Address;
+import myorg.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.persistenceTier.ExternalDbOperation;
 import pt.ist.expenditureTrackingSystem.persistenceTier.ExternalDbQuery;
@@ -20,6 +21,7 @@ public class SyncSuppliers extends SyncSuppliers_Base {
 	private String numFis;
 	private String nom_ent;
 	private String nom_ent_abv;
+	private boolean canceled = false;
 
 	private String ruaEnt = " ";
 	private String locEnt = " ";
@@ -121,6 +123,34 @@ public class SyncSuppliers extends SyncSuppliers_Base {
 	}
     }
 
+    private static class CanceledSupplierQuery extends ExternalDbQuery {
+
+	@Override
+	protected String getQueryString() {
+	    return "SELECT entc_cod_ent FROM GIDENTCAN";
+	}
+
+	@Override
+	protected void processResultSet(final ResultSet resultSet) throws SQLException {
+	    while (resultSet.next()) {
+		final String codEnt = resultSet.getString(1);
+		final GiafSupplier giafSupplier = findRemoteSupplier(codEnt);
+		if (giafSupplier != null) {
+		    giafSupplier.canceled = true;
+		}
+	    }
+	}
+	
+	private GiafSupplier findRemoteSupplier(final String codEnt) {
+	    for (final GiafSupplier giafSupplier : SupplierMap.getGiafSuppliers()) {
+		if (giafSupplier.codEnt.equals(codEnt)) {
+		    return giafSupplier;
+		}
+	    }
+	    return null;
+	}
+    }
+
     private static class SupplierReader extends ExternalDbOperation {
 
 	@Override
@@ -135,6 +165,9 @@ public class SyncSuppliers extends SyncSuppliers_Base {
 
 	    final SupplierContactQuery supplierContactQuery = new SupplierContactQuery();
 	    executeQuery(supplierContactQuery);
+
+	    final CanceledSupplierQuery canceledSupplierQuery = new CanceledSupplierQuery();
+	    executeQuery(canceledSupplierQuery);
 	}	
 
     }
@@ -172,7 +205,7 @@ public class SyncSuppliers extends SyncSuppliers_Base {
 	for (final GiafSupplier giafSupplier : SupplierMap.getGiafSuppliers()) {
 	    if (!shouldDiscard(giafSupplier)) {
 		Supplier supplier = findSupplierByGiafKey(giafSupplier.codEnt);
-		if (supplier == null) {
+		if (supplier == null && !giafSupplier.canceled) {
 		    final String country = getCountry(giafSupplier);
 		    final Address address = new Address(giafSupplier.ruaEnt, null, giafSupplier.codPos, giafSupplier.locEnt, country);
 		    supplier = new Supplier(giafSupplier.nom_ent, giafSupplier.nom_ent_abv, giafSupplier.numFis, address,
@@ -209,6 +242,9 @@ public class SyncSuppliers extends SyncSuppliers_Base {
 	supplier.setEmail(giafSupplier.email);
 	final Address address = new Address(giafSupplier.ruaEnt, null, giafSupplier.codPos, giafSupplier.locEnt, country);
 	supplier.setAddress(address);
+	if (giafSupplier.canceled) {
+	    supplier.setSupplierLimit(Money.ZERO);
+	}
     }
 
     private static Supplier findSupplierByGiafKey(final String codEnt) {
