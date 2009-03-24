@@ -1,6 +1,7 @@
 package pt.ist.expenditureTrackingSystem.domain.processes;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -17,6 +18,7 @@ import org.joda.time.Interval;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.fenixWebFramework.services.Service;
 
@@ -28,25 +30,35 @@ public abstract class GenericProcess extends GenericProcess_Base {
 	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
     }
 
-    public static <T extends GenericProcess> Set<T> getAllProcesses(Class<T> processClass) {
+    private static <T extends GenericProcess> Set<T> filter(Class<T> processClass, Predicate predicate,
+	    Collection<? extends GenericProcess> processes) {
 	Set<T> classes = new HashSet<T>();
-	for (GenericProcess process : ExpenditureTrackingSystem.getInstance().getProcessesSet()) {
-	    if (processClass.isAssignableFrom(process.getClass())) {
+	for (GenericProcess process : processes) {
+	    if (processClass.isAssignableFrom(process.getClass()) && (predicate == null || predicate.evaluate(process))) {
 		classes.add((T) process);
 	    }
 	}
+
 	return classes;
     }
 
-    public static <T extends GenericProcess> Set<T> getAllProcesses(Class<T> processClass, Predicate predicate) {
-	Set<T> classes = new HashSet<T>();
-	for (GenericProcess process : ExpenditureTrackingSystem.getInstance().getProcessesSet()) {
-	    if (processClass.isAssignableFrom(process.getClass()) && predicate.evaluate(process)) {
-		classes.add((T) process);
-	    }
-	}
+    public static <T extends GenericProcess> Set<T> getAllProcesses(Class<T> processClass) {
+	return filter(processClass, null, ExpenditureTrackingSystem.getInstance().getProcessesSet());
+    }
 
-	return classes;
+    public static <T extends GenericProcess> Set<T> getAllProcesses(Class<T> processClass, PaymentProcessYear year) {
+	return year != null ? filter(processClass, null, year.getPaymentProcess()) : filter(processClass, null,
+		ExpenditureTrackingSystem.getInstance().getProcessesSet());
+    }
+
+    public static <T extends GenericProcess> Set<T> getAllProcesses(Class<T> processClass, Predicate predicate) {
+	return filter(processClass, predicate, ExpenditureTrackingSystem.getInstance().getProcessesSet());
+    }
+
+    public static <T extends GenericProcess> Set<T> getAllProcess(Class<T> processClass, Predicate predicate,
+	    PaymentProcessYear year) {
+	return year != null ? filter(processClass, predicate, year.getPaymentProcess()) : filter(processClass, predicate,
+		ExpenditureTrackingSystem.getInstance().getProcessesSet());
     }
 
     public abstract <T extends GenericProcess> AbstractActivity<T> getActivityByName(String name);

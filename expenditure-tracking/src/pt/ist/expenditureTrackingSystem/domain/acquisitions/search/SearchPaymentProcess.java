@@ -10,6 +10,7 @@ import pt.ist.expenditureTrackingSystem.domain.SavedSearch;
 import pt.ist.expenditureTrackingSystem.domain.Search;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.ProcessesThatAreAuthorizedByUserPredicate;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
@@ -43,6 +44,7 @@ public class SearchPaymentProcess extends Search<PaymentProcess> {
     private Boolean showOnlyAcquisitionsExcludedFromSupplierLimit = Boolean.FALSE;
     private Boolean showOnlyAcquisitionsWithAdditionalCosts = Boolean.FALSE;
     private String refundeeName;
+    private DomainReference<PaymentProcessYear> year;
 
     private final static Map<Class<? extends PaymentProcess>, SearchPredicate> predicateMap = new HashMap<Class<? extends PaymentProcess>, SearchPredicate>();
     private final static SearchPredicate defaultPredicate = new DefaultPredicate();
@@ -76,6 +78,7 @@ public class SearchPaymentProcess extends Search<PaymentProcess> {
 	setShowOnlyAcquisitionsExcludedFromSupplierLimit(savedSearch.getShowOnlyAcquisitionsExcludedFromSupplierLimit());
 	setShowOnlyAcquisitionsWithAdditionalCosts(savedSearch.getShowOnlyAcquisitionsWithAdditionalCosts());
 	setSavedSearch(savedSearch);
+	setPaymentProcessYear(savedSearch.getYear());
     }
 
     @Override
@@ -120,15 +123,17 @@ public class SearchPaymentProcess extends Search<PaymentProcess> {
     }
 
     private Set<? extends PaymentProcess> getProcesses() {
-	return responsibleUnitSetOnly ? getProcessesWithResponsible(Person.getLoggedPerson()) : GenericProcess
-		.getAllProcesses(getProcessClass());
+	return responsibleUnitSetOnly ? getProcessesWithResponsible(Person.getLoggedPerson()) : GenericProcess.getAllProcesses(
+		getProcessClass(), getPaymentProcessYear());
     }
 
     private Set<? extends PaymentProcess> getProcessesWithResponsible(final Person person) {
 	if (person == null) {
 	    return Collections.emptySet();
 	}
-	return GenericProcess.getAllProcesses(getProcessClass(), new ProcessesThatAreAuthorizedByUserPredicate(person));
+
+	return GenericProcess.getAllProcess(getProcessClass(), new ProcessesThatAreAuthorizedByUserPredicate(person),
+		getPaymentProcessYear());
     }
 
     @Override
@@ -262,5 +267,13 @@ public class SearchPaymentProcess extends Search<PaymentProcess> {
 
     public void setSavedSearch(SavedSearch savedSearch) {
 	this.savedSearch = new DomainReference<SavedSearch>(savedSearch);
+    }
+
+    public void setPaymentProcessYear(PaymentProcessYear year) {
+	this.year = new DomainReference<PaymentProcessYear>(year);
+    }
+
+    public PaymentProcessYear getPaymentProcessYear() {
+	return this.year.getObject();
     }
 }

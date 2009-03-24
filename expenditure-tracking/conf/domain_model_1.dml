@@ -953,6 +953,13 @@ relation requestingUnitSavedSearch {
 	}
 }
 
+relation PaymentProcessYearSavedSearch {
+	acquisitions.PaymentProcessYear playsRole year;
+	SavedSearch playsRole yearSearches {
+		multiplicity *;
+	}
+}
+
 relation SavedSearchExpenditureTrackingSystem {
 	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
 	SavedSearch playsRole savedSearches {

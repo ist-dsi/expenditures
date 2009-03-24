@@ -34,6 +34,7 @@ public class SavedSearch extends SavedSearch_Base {
 	setRefundeeName(searchBean.getRefundeeName());
 	setShowOnlyAcquisitionsExcludedFromSupplierLimit(searchBean.getShowOnlyAcquisitionsExcludedFromSupplierLimit());
 	setShowOnlyAcquisitionsWithAdditionalCosts(searchBean.getShowOnlyAcquisitionsWithAdditionalCosts());
+	setYear(searchBean.getPaymentProcessYear());
     }
 
     public Class getSearchClass() {

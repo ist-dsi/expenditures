@@ -839,6 +839,11 @@
 			<property name="bundle" value="EXPENDITURE_RESOURCES"/>
 			<property name="key" value="true"/>
 		</slot>
+		<slot name="paymentProcessYear" key="label.processPaymentYear" bundle="EXPENDITURE_RESOURCES" layout="menu-select">
+			<property name="providerClass" value="pt.ist.expenditureTrackingSystem.presentationTier.renderers.dataProvider.PaymentProcessYearProvider"/>
+			<property name="format" value="${year}"/>
+			<property name="sortBy" value="year"/>
+		</slot>
 </schema>
 
 <schema name="search.default"
@@ -991,6 +996,10 @@
 	<slot name="searchClass" key="label.acquisitionType" bundle="ACQUISITION_RESOURCES"  layout="label">
 		<property name="bundle" value="ACQUISITION_RESOURCES"/>
 	</slot>
+	<slot name="year" key="label.processPaymentYear" bundle="ACQUISITION_RESOURCES" layout="null-as-label">
+		<property name="subLayout" value="values"/>
+		<property name="subSchema" value="viewPaymentProcessYear"/>
+	</slot>
 	<slot name="processId" key="label.acquisitionProcessId" bundle="EXPENDITURE_RESOURCES"/>
 	<slot name="requestDocumentId" key="acquisitionProcess.label.requestDocument" bundle="ACQUISITION_RESOURCES" />
 	<slot name="proposalId" key="acquisitionProcess.label.proposalID" bundle="ACQUISITION_RESOURCES" />
@@ -1018,4 +1027,9 @@
 	<slot name="showOnlyResponsabilities" key="label.option.responsibleUnitSetOnly" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="showOnlyAcquisitionsExcludedFromSupplierLimit" key="label.option.showOnlyAcquisitionsExcludedFromSupplierLimit" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="showOnlyAcquisitionsWithAdditionalCosts" key="label.option.showOnlyAcquisitionsWithAdditionalCosts" bundle="ACQUISITION_RESOURCES"/>
+</schema>
+
+
+<schema name="viewPaymentProcessYear" type="pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear" bundle="ACQUISITION_RESOURCES">
+	<slot name="year"/>
 </schema>
