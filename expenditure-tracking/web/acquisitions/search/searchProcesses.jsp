@@ -3,8 +3,10 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
+<%@ taglib uri="/WEB-INF/collectionPager.tld" prefix="cp"%>
 
-<h2><bean:message key="process.label.searchProcesses" bundle="EXPENDITURE_RESOURCES"/></h2>
+
+<%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPaymentProcess"%><h2><bean:message key="process.label.searchProcesses" bundle="EXPENDITURE_RESOURCES"/></h2>
 
 <bean:define id="schema" value="search.default" toScope="request" />
 
@@ -55,14 +57,24 @@
 </logic:equal>
 
 <logic:notEmpty name="results">
-	<bean:size id="listSize" name="results"/>
-	
-	<p class="mbottom05">
-		<em><bean:message key="label.numberOfFoundProcesses" bundle="ACQUISITION_RESOURCES" arg0="<%= listSize.toString() %>"/>.</em>
+	<bean:size id="listSize" name="collectionPager" property="collection"/>
+		<bean:define id="pagerString" name="pagerString"/>
+
+	<table class="width100pc">
+	<tr>
+	<td>
+		<em><bean:message key="label.numberOfFoundProcesses" bundle="ACQUISITION_RESOURCES" arg0="<%= listSize.toString() %>"/>.</em> 
 		<logic:equal name="searchBean" property="searchObjectAvailable" value="false">
 			<a href="#" onClick="javascript:document.getElementById('saveSearch').style.display='block'"><bean:message key="label.saveSearch" bundle="EXPENDITURE_RESOURCES"/></a>
 		</logic:equal>
-	</p>
+	
+	</td>
+	<td class="aright">
+	<cp:collectionPages url="<%= "/search.do?method=searchJump" + pagerString %>" 
+			pageNumberAttributeName="pageNumber" numberOfPagesAttributeName="numberOfPages" numberOfVisualizedPages="10"/>
+	</td>
+	</tr>
+	</table>
 	
 	<div id="saveSearch" style="display: none;">
 		<logic:present name="invalidName">
@@ -92,7 +104,9 @@
 			</div>
 		</div>
 	</div>
-		
+
+
+					
 	<fr:view name="results" schema="viewProcessesInList">
 			<fr:layout name="tabular">
 				<fr:property name="classes" value="tstyle2 mtop05 width100pc asd"/>
@@ -104,6 +118,10 @@
 				<fr:property name="order(view)" value="1"/>
 			</fr:layout>
 	</fr:view>	
+	<p class="aright">
+		<cp:collectionPages url="<%= "/search.do?method=searchJump" + pagerString %>" 
+			pageNumberAttributeName="pageNumber" numberOfPagesAttributeName="numberOfPages" numberOfVisualizedPages="10"/>
+	</p>
 </logic:notEmpty>
 
 <logic:empty name="results">

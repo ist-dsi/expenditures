@@ -18,11 +18,6 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.presentationTier.messageHandling.MessageHandler;
 import pt.ist.expenditureTrackingSystem.presentationTier.messageHandling.MessageHandler.MessageType;
 import pt.ist.expenditureTrackingSystem.presentationTier.util.FileUploadBean;
-import pt.ist.fenixWebFramework.renderers.components.state.IViewState;
-import pt.ist.fenixWebFramework.renderers.model.MetaObject;
-import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
-import pt.ist.fenixframework.DomainObject;
-import pt.ist.fenixframework.pstm.Transaction;
 
 public abstract class BaseAction extends ContextBaseAction {
 
@@ -41,37 +36,7 @@ public abstract class BaseAction extends ContextBaseAction {
 	return Person.getLoggedPerson();
     }
 
-    protected <T> T getAttribute(final HttpServletRequest request, final String attributeName) {
-	final T t = (T) request.getAttribute(attributeName);
-	return t == null ? (T) request.getParameter(attributeName) : t;
-    }
-
-    protected <T extends DomainObject> T getDomainObject(final HttpServletRequest request, final String attributeName) {
-	final String parameter = request.getParameter(attributeName);
-	final Long oid = parameter != null ? Long.valueOf(parameter) : (Long) request.getAttribute(attributeName);
-	return oid == null ? null : (T) Transaction.getObjectForOID(oid.longValue());
-    }
-
-    protected <T extends Object> T getRenderedObject() {
-	final IViewState viewState = RenderUtils.getViewState();
-	return (T) getRenderedObject(viewState);
-    }
-
-    protected <T extends Object> T getRenderedObject(final String id) {
-	final IViewState viewState = RenderUtils.getViewState(id);
-	return (T) getRenderedObject(viewState);
-    }
-
-    protected <T extends Object> T getRenderedObject(final IViewState viewState) {
-	if (viewState != null) {
-	    MetaObject metaObject = viewState.getMetaObject();
-	    if (metaObject != null) {
-		return (T) metaObject.getObject();
-	    }
-	}
-	return null;
-    }
-
+   
     protected byte[] consumeInputStream(final FileUploadBean fileUploadBean) {
 	final InputStream inputStream = fileUploadBean.getInputStream();
 	return consumeInputStream(inputStream);

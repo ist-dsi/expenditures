@@ -1,31 +1,54 @@
 package pt.ist.expenditureTrackingSystem.presentationTier.actions.acquisitions;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.SavedSearch;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.dto.UserSearchBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.VariantBean;
+import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
+import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
+import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
+import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.BaseAction;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
+import pt.utl.ist.fenix.tools.util.CollectionPager;
 
 @Mapping(path = "/search")
 public class SearchPaymentProcessesAction extends BaseAction {
 
+    private static final int REQUESTS_PER_PAGE = 50;
+
     private ActionForward search(final ActionMapping mapping, final HttpServletRequest request, SearchPaymentProcess searchBean,
 	    boolean advanced) {
 	Person loggedPerson = getLoggedPerson();
-	request.setAttribute("results", searchBean.search());
+	final CollectionPager<GenericProcess> pager = new CollectionPager<GenericProcess>((Collection) searchBean.search(),
+		REQUESTS_PER_PAGE);
+
+	request.setAttribute("collectionPager", pager);
+	request.setAttribute("numberOfPages", Integer.valueOf(pager.getNumberOfPages()));
+
+	final String pageParameter = request.getParameter("pageNumber");
+	final Integer page = StringUtils.isEmpty(pageParameter) ? Integer.valueOf(1) : Integer.valueOf(pageParameter);
+	request.setAttribute("pageNumber", page);
+	request.setAttribute("resultPage", pager.getPage(page));
+
+	request.setAttribute("results", pager.getPage(page));
 	request.setAttribute("searchBean", searchBean);
 	request.setAttribute("person", loggedPerson);
 
@@ -36,7 +59,131 @@ public class SearchPaymentProcessesAction extends BaseAction {
 	request.setAttribute("savingName", new VariantBean());
 	request.setAttribute("mySearches", userSearchBean);
 	request.setAttribute("advanced", advanced);
+	request.setAttribute("pagerString", getJumpParameters(searchBean));
 	return forward(request, "/acquisitions/search/searchProcesses.jsp");
+    }
+
+    private String getJumpParameters(SearchPaymentProcess searchBean) {
+	StringBuilder builder = new StringBuilder("&processId=");
+	if (searchBean.getProcessId() != null) {
+	    builder.append(searchBean.getProcessId());
+	}
+	builder.append("&requestDocumentId=");
+	if (searchBean.getRequestDocumentId() != null) {
+	    builder.append(searchBean.getRequestDocumentId());
+	}
+	builder.append("&proposalId=");
+	if (searchBean.getProposalId() != null) {
+	    builder.append(searchBean.getProposalId());
+	}
+	builder.append("&refundeeName=");
+	if (searchBean.getRefundeeName() != null) {
+	    builder.append(searchBean.getRefundeeName());
+	}
+	builder.append("&requestingPerson=");
+	if (searchBean.getRequestingPerson() != null) {
+	    builder.append(searchBean.getRequestingPerson().getOID());
+	}
+	builder.append("&requestingUnit=");
+	if (searchBean.getRequestingUnit() != null) {
+	    builder.append(searchBean.getRequestingUnit().getOID());
+	}
+	builder.append("&savedSearch=");
+	if (searchBean.getSavedSearch() != null) {
+	    builder.append(searchBean.getSavedSearch().getOID());
+	}
+	builder.append("&supplier=");
+	if (searchBean.getSupplier() != null) {
+	    builder.append(searchBean.getSupplier().getOID());
+	}
+	builder.append("&accountingUnit=");
+	if (searchBean.getAccountingUnit() != null) {
+	    builder.append(searchBean.getAccountingUnit().getOID());
+	}
+	builder.append("&year=");
+	if (searchBean.getPaymentProcessYear() != null) {
+	    builder.append(searchBean.getPaymentProcessYear().getOID());
+	}
+	builder.append("&hasAvailableAndAccessibleActivityForUser=");
+	builder.append(searchBean.getHasAvailableAndAccessibleActivityForUser());
+	
+	builder.append("&responsibleUnitSetOnly=");
+	builder.append(searchBean.getResponsibleUnitSetOnly());
+	
+	builder.append("&showOnlyAcquisitionsExcludedFromSupplierLimit=");
+	builder.append(searchBean.getShowOnlyAcquisitionsExcludedFromSupplierLimit());
+	
+	builder.append("&showOnlyAcquisitionsWithAdditionalCosts=");
+	builder.append(searchBean.getShowOnlyAcquisitionsWithAdditionalCosts());
+	
+	builder.append("&acquisitionProcessStateType=");
+	if (searchBean.getAcquisitionProcessStateType() != null) {
+		builder.append(searchBean.getAcquisitionProcessStateType().name());
+	}
+	
+	builder.append("&refundProcessStateType=");
+	if (searchBean.getRefundProcessStateType() != null) {
+		builder.append(searchBean.getRefundProcessStateType().name());
+	}
+	
+	builder.append("&searchClass=");
+	if (searchBean.getSearchClass() != null) {
+	    builder.append(searchBean.getSearchClass().getName());
+	}
+	
+	return builder.toString();
+    }
+
+    public ActionForward searchJump(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+
+	SearchPaymentProcess searchBean = materializeBeanFromRequest(request);
+	return search(mapping, request, searchBean, false);
+    }
+
+    private SearchPaymentProcess materializeBeanFromRequest(HttpServletRequest request) {
+	SearchPaymentProcess bean = new SearchPaymentProcess();
+	bean.setProcessId(request.getParameter("processId"));
+	bean.setRequestDocumentId(request.getParameter("requestDocumentId"));
+	bean.setProposalId(request.getParameter("proposalId"));
+	bean.setRefundeeName(request.getParameter("refundeeName"));
+
+	bean.setRequestingPerson((Person) getDomainObject(request, "requestingPerson"));
+	bean.setRequestingUnit((Unit) getDomainObject(request, "requestingUnit"));
+	bean.setSavedSearch((SavedSearch) getDomainObject(request, "savedSearch"));
+	bean.setSupplier((Supplier) getDomainObject(request, "supplier"));
+	bean.setAccountingUnit((AccountingUnit) getDomainObject(request, "accountingUnit"));
+	bean.setPaymentProcessYear((PaymentProcessYear) getDomainObject(request, "year"));
+
+	bean.setHasAvailableAndAccessibleActivityForUser(Boolean.valueOf(request
+		.getParameter("hasAvailableAndAccessibleActivityForUser")));
+	bean.setResponsibleUnitSetOnly(Boolean.valueOf(request.getParameter("responsibleUnitSetOnly")));
+	bean.setShowOnlyAcquisitionsExcludedFromSupplierLimit(Boolean.valueOf(request
+		.getParameter("showOnlyAcquisitionsExcludedFromSupplierLimit")));
+	bean.setShowOnlyAcquisitionsWithAdditionalCosts(Boolean.valueOf(request
+		.getParameter("showOnlyAcquisitionsWithAdditionalCosts")));
+
+	String searchClass = request.getParameter("searchClass");
+	if (searchClass != null) {
+	    try {
+		Class clazz = Class.forName(searchClass);
+		bean.setSearchClass(clazz);
+	    } catch (Exception e) {
+		// drop exception silently...
+	    }
+	}
+
+	String type = request.getParameter("acquisitionProcessStateType");
+	if (!StringUtils.isEmpty(type)) {
+	    bean.setAcquisitionProcessStateType(AcquisitionProcessStateType.valueOf(type));
+	}
+
+	type = request.getParameter("refundProcessStateType");
+	if (!StringUtils.isEmpty(type)) {
+	    bean.setRefundProcessStateType(RefundProcessStateType.valueOf(type));
+	}
+
+	return bean;
     }
 
     public ActionForward search(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
