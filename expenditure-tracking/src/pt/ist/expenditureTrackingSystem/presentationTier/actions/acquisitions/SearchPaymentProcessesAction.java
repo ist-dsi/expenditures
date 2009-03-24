@@ -63,127 +63,11 @@ public class SearchPaymentProcessesAction extends BaseAction {
 	return forward(request, "/acquisitions/search/searchProcesses.jsp");
     }
 
-    private String getJumpParameters(SearchPaymentProcess searchBean) {
-	StringBuilder builder = new StringBuilder("&processId=");
-	if (searchBean.getProcessId() != null) {
-	    builder.append(searchBean.getProcessId());
-	}
-	builder.append("&requestDocumentId=");
-	if (searchBean.getRequestDocumentId() != null) {
-	    builder.append(searchBean.getRequestDocumentId());
-	}
-	builder.append("&proposalId=");
-	if (searchBean.getProposalId() != null) {
-	    builder.append(searchBean.getProposalId());
-	}
-	builder.append("&refundeeName=");
-	if (searchBean.getRefundeeName() != null) {
-	    builder.append(searchBean.getRefundeeName());
-	}
-	builder.append("&requestingPerson=");
-	if (searchBean.getRequestingPerson() != null) {
-	    builder.append(searchBean.getRequestingPerson().getOID());
-	}
-	builder.append("&requestingUnit=");
-	if (searchBean.getRequestingUnit() != null) {
-	    builder.append(searchBean.getRequestingUnit().getOID());
-	}
-	builder.append("&savedSearch=");
-	if (searchBean.getSavedSearch() != null) {
-	    builder.append(searchBean.getSavedSearch().getOID());
-	}
-	builder.append("&supplier=");
-	if (searchBean.getSupplier() != null) {
-	    builder.append(searchBean.getSupplier().getOID());
-	}
-	builder.append("&accountingUnit=");
-	if (searchBean.getAccountingUnit() != null) {
-	    builder.append(searchBean.getAccountingUnit().getOID());
-	}
-	builder.append("&year=");
-	if (searchBean.getPaymentProcessYear() != null) {
-	    builder.append(searchBean.getPaymentProcessYear().getOID());
-	}
-	builder.append("&hasAvailableAndAccessibleActivityForUser=");
-	builder.append(searchBean.getHasAvailableAndAccessibleActivityForUser());
-	
-	builder.append("&responsibleUnitSetOnly=");
-	builder.append(searchBean.getResponsibleUnitSetOnly());
-	
-	builder.append("&showOnlyAcquisitionsExcludedFromSupplierLimit=");
-	builder.append(searchBean.getShowOnlyAcquisitionsExcludedFromSupplierLimit());
-	
-	builder.append("&showOnlyAcquisitionsWithAdditionalCosts=");
-	builder.append(searchBean.getShowOnlyAcquisitionsWithAdditionalCosts());
-	
-	builder.append("&acquisitionProcessStateType=");
-	if (searchBean.getAcquisitionProcessStateType() != null) {
-		builder.append(searchBean.getAcquisitionProcessStateType().name());
-	}
-	
-	builder.append("&refundProcessStateType=");
-	if (searchBean.getRefundProcessStateType() != null) {
-		builder.append(searchBean.getRefundProcessStateType().name());
-	}
-	
-	builder.append("&searchClass=");
-	if (searchBean.getSearchClass() != null) {
-	    builder.append(searchBean.getSearchClass().getName());
-	}
-	
-	return builder.toString();
-    }
-
     public ActionForward searchJump(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) {
 
 	SearchPaymentProcess searchBean = materializeBeanFromRequest(request);
 	return search(mapping, request, searchBean, false);
-    }
-
-    private SearchPaymentProcess materializeBeanFromRequest(HttpServletRequest request) {
-	SearchPaymentProcess bean = new SearchPaymentProcess();
-	bean.setProcessId(request.getParameter("processId"));
-	bean.setRequestDocumentId(request.getParameter("requestDocumentId"));
-	bean.setProposalId(request.getParameter("proposalId"));
-	bean.setRefundeeName(request.getParameter("refundeeName"));
-
-	bean.setRequestingPerson((Person) getDomainObject(request, "requestingPerson"));
-	bean.setRequestingUnit((Unit) getDomainObject(request, "requestingUnit"));
-	bean.setSavedSearch((SavedSearch) getDomainObject(request, "savedSearch"));
-	bean.setSupplier((Supplier) getDomainObject(request, "supplier"));
-	bean.setAccountingUnit((AccountingUnit) getDomainObject(request, "accountingUnit"));
-	bean.setPaymentProcessYear((PaymentProcessYear) getDomainObject(request, "year"));
-
-	bean.setHasAvailableAndAccessibleActivityForUser(Boolean.valueOf(request
-		.getParameter("hasAvailableAndAccessibleActivityForUser")));
-	bean.setResponsibleUnitSetOnly(Boolean.valueOf(request.getParameter("responsibleUnitSetOnly")));
-	bean.setShowOnlyAcquisitionsExcludedFromSupplierLimit(Boolean.valueOf(request
-		.getParameter("showOnlyAcquisitionsExcludedFromSupplierLimit")));
-	bean.setShowOnlyAcquisitionsWithAdditionalCosts(Boolean.valueOf(request
-		.getParameter("showOnlyAcquisitionsWithAdditionalCosts")));
-
-	String searchClass = request.getParameter("searchClass");
-	if (searchClass != null) {
-	    try {
-		Class clazz = Class.forName(searchClass);
-		bean.setSearchClass(clazz);
-	    } catch (Exception e) {
-		// drop exception silently...
-	    }
-	}
-
-	String type = request.getParameter("acquisitionProcessStateType");
-	if (!StringUtils.isEmpty(type)) {
-	    bean.setAcquisitionProcessStateType(AcquisitionProcessStateType.valueOf(type));
-	}
-
-	type = request.getParameter("refundProcessStateType");
-	if (!StringUtils.isEmpty(type)) {
-	    bean.setRefundProcessStateType(RefundProcessStateType.valueOf(type));
-	}
-
-	return bean;
     }
 
     public ActionForward search(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -275,6 +159,122 @@ public class SearchPaymentProcessesAction extends BaseAction {
 
 	person.setDefaultSearch(search);
 	return configurateMySearches(mapping, form, request, response);
+    }
+
+    private String getJumpParameters(SearchPaymentProcess searchBean) {
+	StringBuilder builder = new StringBuilder("&processId=");
+	if (searchBean.getProcessId() != null) {
+	    builder.append(searchBean.getProcessId());
+	}
+	builder.append("&requestDocumentId=");
+	if (searchBean.getRequestDocumentId() != null) {
+	    builder.append(searchBean.getRequestDocumentId());
+	}
+	builder.append("&proposalId=");
+	if (searchBean.getProposalId() != null) {
+	    builder.append(searchBean.getProposalId());
+	}
+	builder.append("&refundeeName=");
+	if (searchBean.getRefundeeName() != null) {
+	    builder.append(searchBean.getRefundeeName());
+	}
+	builder.append("&requestingPerson=");
+	if (searchBean.getRequestingPerson() != null) {
+	    builder.append(searchBean.getRequestingPerson().getOID());
+	}
+	builder.append("&requestingUnit=");
+	if (searchBean.getRequestingUnit() != null) {
+	    builder.append(searchBean.getRequestingUnit().getOID());
+	}
+	builder.append("&savedSearch=");
+	if (searchBean.getSavedSearch() != null) {
+	    builder.append(searchBean.getSavedSearch().getOID());
+	}
+	builder.append("&supplier=");
+	if (searchBean.getSupplier() != null) {
+	    builder.append(searchBean.getSupplier().getOID());
+	}
+	builder.append("&accountingUnit=");
+	if (searchBean.getAccountingUnit() != null) {
+	    builder.append(searchBean.getAccountingUnit().getOID());
+	}
+	builder.append("&year=");
+	if (searchBean.getPaymentProcessYear() != null) {
+	    builder.append(searchBean.getPaymentProcessYear().getOID());
+	}
+	builder.append("&hasAvailableAndAccessibleActivityForUser=");
+	builder.append(searchBean.getHasAvailableAndAccessibleActivityForUser());
+
+	builder.append("&responsibleUnitSetOnly=");
+	builder.append(searchBean.getResponsibleUnitSetOnly());
+
+	builder.append("&showOnlyAcquisitionsExcludedFromSupplierLimit=");
+	builder.append(searchBean.getShowOnlyAcquisitionsExcludedFromSupplierLimit());
+
+	builder.append("&showOnlyAcquisitionsWithAdditionalCosts=");
+	builder.append(searchBean.getShowOnlyAcquisitionsWithAdditionalCosts());
+
+	builder.append("&acquisitionProcessStateType=");
+	if (searchBean.getAcquisitionProcessStateType() != null) {
+	    builder.append(searchBean.getAcquisitionProcessStateType().name());
+	}
+
+	builder.append("&refundProcessStateType=");
+	if (searchBean.getRefundProcessStateType() != null) {
+	    builder.append(searchBean.getRefundProcessStateType().name());
+	}
+
+	builder.append("&searchClass=");
+	if (searchBean.getSearchClass() != null) {
+	    builder.append(searchBean.getSearchClass().getName());
+	}
+
+	return builder.toString();
+    }
+
+    private SearchPaymentProcess materializeBeanFromRequest(HttpServletRequest request) {
+	SearchPaymentProcess bean = new SearchPaymentProcess();
+	bean.setProcessId(request.getParameter("processId"));
+	bean.setRequestDocumentId(request.getParameter("requestDocumentId"));
+	bean.setProposalId(request.getParameter("proposalId"));
+	bean.setRefundeeName(request.getParameter("refundeeName"));
+
+	bean.setRequestingPerson((Person) getDomainObject(request, "requestingPerson"));
+	bean.setRequestingUnit((Unit) getDomainObject(request, "requestingUnit"));
+	bean.setSavedSearch((SavedSearch) getDomainObject(request, "savedSearch"));
+	bean.setSupplier((Supplier) getDomainObject(request, "supplier"));
+	bean.setAccountingUnit((AccountingUnit) getDomainObject(request, "accountingUnit"));
+	bean.setPaymentProcessYear((PaymentProcessYear) getDomainObject(request, "year"));
+
+	bean.setHasAvailableAndAccessibleActivityForUser(Boolean.valueOf(request
+		.getParameter("hasAvailableAndAccessibleActivityForUser")));
+	bean.setResponsibleUnitSetOnly(Boolean.valueOf(request.getParameter("responsibleUnitSetOnly")));
+	bean.setShowOnlyAcquisitionsExcludedFromSupplierLimit(Boolean.valueOf(request
+		.getParameter("showOnlyAcquisitionsExcludedFromSupplierLimit")));
+	bean.setShowOnlyAcquisitionsWithAdditionalCosts(Boolean.valueOf(request
+		.getParameter("showOnlyAcquisitionsWithAdditionalCosts")));
+
+	String searchClass = request.getParameter("searchClass");
+	if (searchClass != null) {
+	    try {
+		Class clazz = Class.forName(searchClass);
+		bean.setSearchClass(clazz);
+	    } catch (Exception e) {
+		// drop exception silently...
+	    }
+	}
+
+	String type = request.getParameter("acquisitionProcessStateType");
+	if (!StringUtils.isEmpty(type)) {
+	    bean.setAcquisitionProcessStateType(AcquisitionProcessStateType.valueOf(type));
+	}
+
+	type = request.getParameter("refundProcessStateType");
+	if (!StringUtils.isEmpty(type)) {
+	    bean.setRefundProcessStateType(RefundProcessStateType.valueOf(type));
+	}
+
+	return bean;
     }
 
 }
