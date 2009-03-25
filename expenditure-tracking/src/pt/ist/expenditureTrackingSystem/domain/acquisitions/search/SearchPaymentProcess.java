@@ -60,6 +60,7 @@ public class SearchPaymentProcess extends Search<PaymentProcess> {
 	setSupplier(null);
 	setAccountingUnit(null);
 	setSavedSearch(null);
+	setPaymentProcessYear(null);
     }
 
     public SearchPaymentProcess(SavedSearch savedSearch) {
