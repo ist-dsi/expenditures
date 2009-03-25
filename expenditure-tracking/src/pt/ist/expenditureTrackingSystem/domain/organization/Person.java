@@ -33,9 +33,9 @@ public class Person extends Person_Base {
 	@Override
 	public void afterAdd(final User user, final MyOrg myOrg) {
 	    final String username = user.getUsername();
-	    final Person person = Person.findByUsername(username);
+	    Person person = Person.findByUsername(username);
 	    if (person == null) {
-		new Person(user.getUsername());
+		person = new Person(user.getUsername());
 	    }
 	    user.setExpenditurePerson(person);
 	}
