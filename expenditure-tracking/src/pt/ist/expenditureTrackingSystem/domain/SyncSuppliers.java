@@ -212,6 +212,8 @@ public class SyncSuppliers extends SyncSuppliers_Base {
 			    giafSupplier.telEnt, giafSupplier.faxEnt, giafSupplier.email, null);
 		    supplier.setGiafKey(giafSupplier.codEnt);
 		    created++;
+		} else if (supplier == null) {
+		    // do nothing ...
 		} else {
 		    matched++;
 		    updateSupplierInformation(supplier, giafSupplier);
