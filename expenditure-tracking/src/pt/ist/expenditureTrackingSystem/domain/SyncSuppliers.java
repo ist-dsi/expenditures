@@ -237,12 +237,12 @@ public class SyncSuppliers extends SyncSuppliers_Base {
     private static void updateSupplierInformation(final Supplier supplier, final GiafSupplier giafSupplier) {
 	if (giafSupplier.canceled || shouldDiscard(giafSupplier)) {
 	    if (giafSupplier.canceled) {
-		System.out.println("Closing canceled supplier: " + giafSupplier.codEnt);
+		System.out.println("Closing canceled supplier: " + supplier.getIdInternal());
 	    } else {
-		System.out.println("Closing discared supplier: " + giafSupplier.codEnt);
+		System.out.println("Closing discared supplier: " + supplier.getIdInternal());
 	    }
 	    if (supplier.getTotalAllocated().isZero()) {
-		System.out.println("Deleting supplier " + giafSupplier.codEnt);
+		System.out.println("Deleting supplier " + supplier.getIdInternal());
 		supplier.delete();
 	    } else {
 		updateSupplierInformationAux(supplier, giafSupplier);
