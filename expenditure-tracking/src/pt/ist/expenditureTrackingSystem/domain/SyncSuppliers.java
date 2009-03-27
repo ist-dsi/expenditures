@@ -203,23 +203,23 @@ public class SyncSuppliers extends SyncSuppliers_Base {
 	int created = 0;
 	int discarded = 0;
 	for (final GiafSupplier giafSupplier : SupplierMap.getGiafSuppliers()) {
-	    if (!shouldDiscard(giafSupplier)) {
-		Supplier supplier = findSupplierByGiafKey(giafSupplier.codEnt);
-		if (supplier == null && !giafSupplier.canceled) {
-		    final String country = getCountry(giafSupplier);
-		    final Address address = new Address(giafSupplier.ruaEnt, null, giafSupplier.codPos, giafSupplier.locEnt, country);
-		    supplier = new Supplier(giafSupplier.nom_ent, giafSupplier.nom_ent_abv, giafSupplier.numFis, address,
-			    giafSupplier.telEnt, giafSupplier.faxEnt, giafSupplier.email, null);
-		    supplier.setGiafKey(giafSupplier.codEnt);
-		    created++;
-		} else if (supplier == null) {
-		    // do nothing ...
-		} else {
-		    matched++;
-		    updateSupplierInformation(supplier, giafSupplier);
-		}
-	    } else {
+	    if (giafSupplier.canceled || shouldDiscard(giafSupplier)) {
 		discarded++;
+	    }
+	    Supplier supplier = findSupplierByGiafKey(giafSupplier.codEnt);
+	    if (supplier == null && !giafSupplier.canceled && !shouldDiscard(giafSupplier)) {
+		final String country = getCountry(giafSupplier);
+		final Address address = new Address(giafSupplier.ruaEnt, null, giafSupplier.codPos, giafSupplier.locEnt, country);
+		supplier = new Supplier(giafSupplier.nom_ent, giafSupplier.nom_ent_abv, giafSupplier.numFis, address,
+			giafSupplier.telEnt, giafSupplier.faxEnt, giafSupplier.email, null);
+		supplier.setGiafKey(giafSupplier.codEnt);
+		created++;
+	    } else if (supplier == null && !shouldDiscard(giafSupplier)) {
+		System.out.println("Not importing supplier: " + giafSupplier.codEnt + " because it is canceled");
+		// do nothing ...
+	    } else {
+		matched++;
+		updateSupplierInformation(supplier, giafSupplier);
 	    }
 	}
 
@@ -244,7 +244,12 @@ public class SyncSuppliers extends SyncSuppliers_Base {
 	supplier.setEmail(giafSupplier.email);
 	final Address address = new Address(giafSupplier.ruaEnt, null, giafSupplier.codPos, giafSupplier.locEnt, country);
 	supplier.setAddress(address);
-	if (giafSupplier.canceled) {
+	if (giafSupplier.canceled || shouldDiscard(giafSupplier)) {
+	    if (giafSupplier.canceled) {
+		System.out.println("Closing supplier: " + giafSupplier.codEnt + " because it is canceled");
+	    } else {
+		System.out.println("Closing supplier: " + giafSupplier.codEnt + " because it is discarded");
+	    }
 	    supplier.setSupplierLimit(Money.ZERO);
 	}
     }
