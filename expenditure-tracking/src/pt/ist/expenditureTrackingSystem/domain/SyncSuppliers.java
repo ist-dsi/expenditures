@@ -214,10 +214,7 @@ public class SyncSuppliers extends SyncSuppliers_Base {
 			giafSupplier.telEnt, giafSupplier.faxEnt, giafSupplier.email, null);
 		supplier.setGiafKey(giafSupplier.codEnt);
 		created++;
-	    } else if (supplier == null && !shouldDiscard(giafSupplier)) {
-		System.out.println("Not importing supplier: " + giafSupplier.codEnt + " because it is canceled");
-		// do nothing ...
-	    } else {
+	    } else if (supplier != null) {
 		matched++;
 		updateSupplierInformation(supplier, giafSupplier);
 	    }
