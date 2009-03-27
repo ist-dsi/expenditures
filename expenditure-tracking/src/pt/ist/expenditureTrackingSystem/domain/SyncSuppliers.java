@@ -237,9 +237,9 @@ public class SyncSuppliers extends SyncSuppliers_Base {
     private static void updateSupplierInformation(final Supplier supplier, final GiafSupplier giafSupplier) {
 	if (giafSupplier.canceled || shouldDiscard(giafSupplier)) {
 	    if (giafSupplier.canceled) {
-		System.out.println("Closing supplier: " + giafSupplier.codEnt + " because it is canceled");
+		System.out.println("Closing canceled supplier: " + giafSupplier.codEnt);
 	    } else {
-		System.out.println("Closing supplier: " + giafSupplier.codEnt + " because it is discarded");
+		System.out.println("Closing discared supplier: " + giafSupplier.codEnt);
 	    }
 	    if (supplier.getTotalAllocated().isZero()) {
 		System.out.println("Deleting supplier " + giafSupplier.codEnt);
