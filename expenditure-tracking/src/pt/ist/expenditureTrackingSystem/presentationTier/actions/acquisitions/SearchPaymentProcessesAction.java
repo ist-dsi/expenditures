@@ -1,11 +1,15 @@
 package pt.ist.expenditureTrackingSystem.presentationTier.actions.acquisitions;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.collections.comparators.ComparatorChain;
 import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -14,6 +18,7 @@ import org.apache.struts.action.ActionMapping;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.SavedSearch;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPaymentProcess;
@@ -23,7 +28,6 @@ import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
-import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.BaseAction;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
@@ -37,7 +41,32 @@ public class SearchPaymentProcessesAction extends BaseAction {
     private ActionForward search(final ActionMapping mapping, final HttpServletRequest request, SearchPaymentProcess searchBean,
 	    boolean advanced) {
 	Person loggedPerson = getLoggedPerson();
-	final CollectionPager<GenericProcess> pager = new CollectionPager<GenericProcess>((Collection) searchBean.search(),
+
+	List<PaymentProcess> processes = new ArrayList<PaymentProcess>();
+	processes.addAll(searchBean.search());
+
+	ComparatorChain chain = new ComparatorChain();
+	chain.addComparator(new Comparator<PaymentProcess>() {
+
+	    @Override
+	    public int compare(PaymentProcess process1, PaymentProcess process2) {
+		return process1.getPaymentProcessYear().getYear().compareTo(process2.getPaymentProcessYear().getYear());
+	    }
+
+	});
+	chain.addComparator(new Comparator<PaymentProcess>() {
+
+	    @Override
+	    public int compare(PaymentProcess process1, PaymentProcess process2) {
+		return process1.getAcquisitionProcessNumber().compareTo(process2.getAcquisitionProcessNumber());
+
+	    }
+
+	});
+
+	Collections.sort(processes, chain);
+
+	final CollectionPager<SearchPaymentProcess> pager = new CollectionPager<SearchPaymentProcess>((Collection) processes,
 		REQUESTS_PER_PAGE);
 
 	request.setAttribute("collectionPager", pager);
