@@ -67,8 +67,8 @@ public class SimplifiedAcquisitionPredicate extends SearchPredicate {
 		&& !acquisitionRequest.getProcess().getSkipSupplierFundAllocation().booleanValue()) {
 	    return false;
 	}
-	if (searchBean.getShowOnlyAcquisitionsWithAdditionalCosts().booleanValue() && acquisitionRequest.hasAdditionalCosts()) {
-	    return false;
+	if (searchBean.getShowOnlyAcquisitionsWithAdditionalCosts().booleanValue()) {
+	    return acquisitionRequest.hasAdditionalCosts();
 	}
 	return true;
     }
