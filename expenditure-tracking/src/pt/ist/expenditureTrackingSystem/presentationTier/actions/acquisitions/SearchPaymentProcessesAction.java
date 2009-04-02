@@ -40,32 +40,39 @@ public class SearchPaymentProcessesAction extends BaseAction {
 
     private ActionForward search(final ActionMapping mapping, final HttpServletRequest request, SearchPaymentProcess searchBean,
 	    boolean advanced) {
+
+	return search(mapping, request, searchBean, advanced, false);
+    }
+
+    private ActionForward search(final ActionMapping mapping, final HttpServletRequest request, SearchPaymentProcess searchBean,
+	    boolean advanced, boolean skipSearch) {
 	Person loggedPerson = getLoggedPerson();
 
 	List<PaymentProcess> processes = new ArrayList<PaymentProcess>();
-	processes.addAll(searchBean.search());
+	if (!skipSearch) {
+	    processes.addAll(searchBean.search());
 
-	ComparatorChain chain = new ComparatorChain();
-	chain.addComparator(new Comparator<PaymentProcess>() {
+	    ComparatorChain chain = new ComparatorChain();
+	    chain.addComparator(new Comparator<PaymentProcess>() {
 
-	    @Override
-	    public int compare(PaymentProcess process1, PaymentProcess process2) {
-		return process1.getPaymentProcessYear().getYear().compareTo(process2.getPaymentProcessYear().getYear());
-	    }
+		@Override
+		public int compare(PaymentProcess process1, PaymentProcess process2) {
+		    return process1.getPaymentProcessYear().getYear().compareTo(process2.getPaymentProcessYear().getYear());
+		}
 
-	});
-	chain.addComparator(new Comparator<PaymentProcess>() {
+	    });
+	    chain.addComparator(new Comparator<PaymentProcess>() {
 
-	    @Override
-	    public int compare(PaymentProcess process1, PaymentProcess process2) {
-		return process1.getAcquisitionProcessNumber().compareTo(process2.getAcquisitionProcessNumber());
+		@Override
+		public int compare(PaymentProcess process1, PaymentProcess process2) {
+		    return process1.getAcquisitionProcessNumber().compareTo(process2.getAcquisitionProcessNumber());
 
-	    }
+		}
 
-	});
+	    });
 
-	Collections.sort(processes, chain);
-
+	    Collections.sort(processes, chain);
+	}
 	final CollectionPager<SearchPaymentProcess> pager = new CollectionPager<SearchPaymentProcess>((Collection) processes,
 		REQUESTS_PER_PAGE);
 
@@ -141,7 +148,7 @@ public class SearchPaymentProcessesAction extends BaseAction {
 	SearchPaymentProcess searchBean = getRenderedObject("searchBean");
 
 	RenderUtils.invalidateViewState("searchBean");
-	return search(mapping, request, searchBean, true);
+	return search(mapping, request, searchBean, true, true);
     }
 
     public ActionForward mySearches(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
