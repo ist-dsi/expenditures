@@ -37,10 +37,10 @@ import pt.ist.expenditureTrackingSystem.domain.organization.SearchUsers;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.BaseAction;
-import pt.ist.expenditureTrackingSystem.util.reports.Spreadsheet;
-import pt.ist.expenditureTrackingSystem.util.reports.Spreadsheet.Row;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
+import pt.utl.ist.fenix.tools.util.excel.Spreadsheet;
+import pt.utl.ist.fenix.tools.util.excel.Spreadsheet.Row;
 
 @Mapping(path = "/expenditureTrackingOrganization")
 public class OrganizationAction extends BaseAction {
@@ -585,7 +585,7 @@ public class OrganizationAction extends BaseAction {
 	final Supplier supplierDestination = getDomainObject(request, "supplierDestinationOID");
 
 	supplierDestination.merge(supplierToTransfer);
-	
+
 	final SupplierBean supplierBean = new SupplierBean(supplierDestination);
 
 	return manageSuppliers(mapping, request, supplierBean);
