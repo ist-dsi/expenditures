@@ -699,9 +699,6 @@ public class OrganizationAction extends BaseAction {
 		row.setCell(forSupplierLimit.toFormatString());
 		row.setCell(acquisitionRequest.getCurrentTotalVatValue().toFormatString());
 		row.setCell(currentValue.toFormatString());
-		final LocalDate localDate = acquisitionProcess.getFundAllocationExpirationDate();
-		row.setCell(localDate == null ? "" : localDate.toString());
-		row.setCell(acquisitionProcess.getSkipSupplierFundAllocation().toString());
 	    }
 	}
 
