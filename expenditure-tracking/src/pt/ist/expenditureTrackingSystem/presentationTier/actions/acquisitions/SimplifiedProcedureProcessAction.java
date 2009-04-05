@@ -25,6 +25,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.Invoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PurchaseOrderDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.FundAllocationExpirationDate.FundAllocationNotAllowedException;
 import pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.ChangeFinancerAccountingUnitBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean;
@@ -172,7 +173,11 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final SimplifiedProcedureProcess acquisitionProcess = getProcess(request);
 	final FundAllocationExpirationDateBean fundAllocationExpirationDateBean = new FundAllocationExpirationDateBean();
-	genericActivityExecution(acquisitionProcess, "FundAllocationExpirationDate", fundAllocationExpirationDateBean);
+	try {
+	    genericActivityExecution(acquisitionProcess, "FundAllocationExpirationDate", fundAllocationExpirationDateBean);
+	} catch (final FundAllocationNotAllowedException ex) {
+	    addErrorMessage(ex.getMessage(), getBundle(), ex.getArgs());
+	}
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
 
