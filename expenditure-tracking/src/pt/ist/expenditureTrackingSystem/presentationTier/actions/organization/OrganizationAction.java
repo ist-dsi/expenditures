@@ -11,10 +11,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.User;
+import myorg.domain.util.Money;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.joda.time.LocalDate;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
@@ -22,6 +24,9 @@ import pt.ist.expenditureTrackingSystem.domain.Role;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.SyncProjectsAux.MgpProject;
 import pt.ist.expenditureTrackingSystem.domain.SyncProjectsAux.ProjectReader;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AcquisitionAfterTheFact;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.DelegatedAuthorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.AccountingUnitBean;
@@ -633,6 +638,81 @@ public class OrganizationAction extends BaseAction {
 	    row.setCell(mgpProject.getDuracao());
 	    row.setCell(mgpProject.getStatus());
 	}
+
+	return spreadsheet;
+    }
+
+    public final ActionForward downloadSupplierAcquisitionInformation(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) throws IOException, SQLException {
+
+	final Supplier supplier = getDomainObject(request, "supplierOid");
+	final Spreadsheet suppliersSheet = getSupplierAcquisitionInformationSheet(supplier);
+	response.setContentType("application/xls ");
+	response.setHeader("Content-disposition", "attachment; filename=supplier.xls");
+
+	final ServletOutputStream outputStream = response.getOutputStream();
+
+	suppliersSheet.exportToXLSSheet(outputStream);
+	outputStream.flush();
+	outputStream.close();
+
+	return null;
+    }
+
+    private Spreadsheet getSupplierAcquisitionInformationSheet(final Supplier supplier) throws SQLException {
+	Spreadsheet spreadsheet = new Spreadsheet(supplier.getPresentationName());
+	spreadsheet.setHeader("Identificação Processo");
+	spreadsheet.setHeader("Descrição");
+	spreadsheet.setHeader("Valor alocado ao fornecedor");
+	spreadsheet.setHeader("IVA");
+	spreadsheet.setHeader("Total");
+
+	Money totalForSupplierLimit = Money.ZERO;
+	Money totalForSupplier = Money.ZERO;
+
+	for (final AcquisitionAfterTheFact acquisitionAfterTheFact : supplier.getAcquisitionsAfterTheFactSet()) {
+	    if (!acquisitionAfterTheFact.getDeletedState().booleanValue()) {
+		final Money value = acquisitionAfterTheFact.getValue();
+		totalForSupplierLimit = totalForSupplierLimit.add(value);
+		totalForSupplier = totalForSupplier.add(value);
+
+		final Row row = spreadsheet.addRow();
+		row.setCell(acquisitionAfterTheFact.getAcquisitionProcessId());
+		row.setCell(acquisitionAfterTheFact.getDescription());
+		row.setCell(value.toFormatString());
+		row.setCell(acquisitionAfterTheFact.getVatValue());
+		row.setCell(value.toFormatString());
+	    }
+	}
+
+	for (final AcquisitionRequest acquisitionRequest : supplier.getAcquisitionRequestsSet()) {
+	    final AcquisitionProcess acquisitionProcess = acquisitionRequest.getAcquisitionProcess();
+	    if (acquisitionProcess.isActive() && acquisitionProcess.isAllocatedToSupplier()) {
+		final Money forSupplierLimit = acquisitionRequest.getCurrentSupplierAllocationValue();
+		final Money currentValue = acquisitionRequest.getCurrentTotalValue();
+		totalForSupplierLimit = totalForSupplierLimit.add(forSupplierLimit);
+		totalForSupplier = totalForSupplier.add(currentValue);
+
+		final Row row = spreadsheet.addRow();
+		row.setCell(acquisitionRequest.getAcquisitionProcessId());
+		row.setCell(acquisitionRequest.getClass().getSimpleName());
+		row.setCell(forSupplierLimit.toFormatString());
+		row.setCell(acquisitionRequest.getCurrentTotalVatValue().toFormatString());
+		row.setCell(currentValue.toFormatString());
+		final LocalDate localDate = acquisitionProcess.getFundAllocationExpirationDate();
+		row.setCell(localDate == null ? "" : localDate.toString());
+		row.setCell(acquisitionProcess.getSkipSupplierFundAllocation().toString());
+	    }
+	}
+
+	spreadsheet.addRow();
+	final Row row = spreadsheet.addRow();
+	row.setCell("Total");
+	row.setCell("");
+	row.setCell(totalForSupplierLimit.toFormatString());
+	row.setCell("");
+	row.setCell(totalForSupplier.toFormatString());
+	
 
 	return spreadsheet;
     }

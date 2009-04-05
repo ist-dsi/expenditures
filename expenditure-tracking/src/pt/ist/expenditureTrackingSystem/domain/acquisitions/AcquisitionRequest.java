@@ -178,6 +178,9 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     public Money getRealTotalValue() {
 	Money result = Money.ZERO;
 	for (final AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
+	    if (acquisitionRequestItem.getTotalRealValue() == null) {
+		return null;
+	    }
 	    result = result.add(acquisitionRequestItem.getTotalRealValue());
 	}
 	return result;
@@ -206,6 +209,48 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	}
 	return result;
     }
+
+    public Money getCurrentTotalAdditionalCostsValue() {
+	Money result = Money.ZERO;
+	for (final AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
+	    if (acquisitionRequestItem.getCurrentAdditionalCostValue() != null) {
+		result = result.add(acquisitionRequestItem.getCurrentAdditionalCostValue());
+	    }
+	}
+	return result;
+    }
+
+    public Money getCurrentTotalValueWithAdditionalCosts() {
+	Money result = Money.ZERO;
+	for (final AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
+	    result = result.add(acquisitionRequestItem.getCurrentTotalItemValueWithAdditionalCosts());
+	}
+	return result;
+    }
+
+    public Money getCurrentTotalVatValue() {
+	Money result = Money.ZERO;
+	for (final AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
+	    result = result.add(acquisitionRequestItem.getCurrentTotalVatValue());
+	}
+	return result;
+    }
+
+    public Money getCurrentSupplierAllocationValue() {
+	Money result = Money.ZERO;
+	for (final AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
+	    result = result.add(acquisitionRequestItem.getCurrentSupplierAllocationValue());
+	}
+	return result;
+    }
+
+    public Money getCurrentTotalValue() {
+	Money result = Money.ZERO;
+	for (final AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
+	    result = result.add(acquisitionRequestItem.getCurrentTotalItemValueWithAdditionalCostsAndVat());
+	}
+	return result;
+    }    
 
     @Override
     public void receiveInvoice(final String filename, final byte[] bytes, final String invoiceNumber, final LocalDate invoiceDate) {
@@ -441,4 +486,5 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	}
 	return false;
     }
+
 }

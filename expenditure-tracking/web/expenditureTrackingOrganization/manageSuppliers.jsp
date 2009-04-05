@@ -73,6 +73,10 @@
 				<html:link action='<%= "/expenditureTrackingOrganization.do?method=editSupplierLimit&supplierOid=" + supplierOID%>'>
 					<bean:message key="supplier.link.edit.limit" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 				</html:link>
+					| 
+				<html:link action='<%= "/expenditureTrackingOrganization.do?method=downloadSupplierAcquisitionInformation&supplierOid=" + supplierOID%>'>
+					<bean:message key="supplier.link.export.aquisition.information" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+				</html:link>
 			</logic:present>
 			<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
 				| 

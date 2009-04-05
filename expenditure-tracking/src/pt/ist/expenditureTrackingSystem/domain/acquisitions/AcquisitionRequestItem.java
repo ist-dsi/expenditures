@@ -324,6 +324,11 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	return realUnitValue == null ? getUnitValue() : realUnitValue;
     }
 
+    public Money getCurrentSupplierAllocationValue() {
+	final Money currentUnitValue = getCurrentUnitValue();
+	return currentUnitValue.multiply(getCurrentQuantity());
+    }
+
     public BigDecimal getCurrentVatValue() {
 	final BigDecimal realVatValue = getRealVatValue();
 	return realVatValue == null ? getVatValue() : realVatValue;
@@ -343,5 +348,10 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	final Money totalRealItemValueWithAdditionalCostsAndVat = getTotalRealValueWithAdditionalCostsAndVat();
 	return totalRealItemValueWithAdditionalCostsAndVat == null ? getTotalItemValueWithAdditionalCostsAndVat() : totalRealItemValueWithAdditionalCostsAndVat;
     }
-    
+
+    public Money getCurrentTotalItemValueWithAdditionalCosts() {
+	final Money totalRealItemValueWithAdditionalCosts = getTotalRealValueWithAdditionalCosts();
+	return totalRealItemValueWithAdditionalCosts == null ? getTotalItemValueWithAdditionalCosts() : totalRealItemValueWithAdditionalCosts;
+    }
+
 }
