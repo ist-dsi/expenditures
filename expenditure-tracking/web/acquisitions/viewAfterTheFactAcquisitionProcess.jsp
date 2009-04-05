@@ -29,7 +29,7 @@
 	</logic:empty>
 </div>
 
-<html:link page="/viewLogs.do?method=viewOperationLog&amp;module=acquisitions" paramId="acquisitionProcessOid" paramName="afterTheFactAcquisitionProcess" paramProperty="OID">
+<html:link page="/viewLogs.do?method=viewOperationLog&amp;module=acquisitions" paramId="processOid" paramName="afterTheFactAcquisitionProcess" paramProperty="OID">
 	<bean:message key="label.log.view" bundle="ACQUISITION_RESOURCES"/>
 </html:link>
 
