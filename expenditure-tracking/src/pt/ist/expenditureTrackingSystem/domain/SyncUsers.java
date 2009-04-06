@@ -55,8 +55,11 @@ public class SyncUsers extends SyncUsers_Base {
 		    final Person person = user.getExpenditurePerson();
 		    if (person != null) {
 			final MultiLanguageString name = MultiLanguageString.importFromString(mlname);
-			person.setName(name.getContent());
-			u++;
+			final String localizedName = name.getContent();
+			if (!localizedName.equals(person.getName())) {
+			    person.setName(name.getContent());
+			    u++;
+			}
 		    }
 		}
 	    }
