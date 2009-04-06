@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import myorg.applicationTier.Authenticate.UserView;
+import myorg.domain.MyOrg;
 import myorg.domain.User;
 import myorg.domain.util.Money;
 
@@ -648,7 +649,7 @@ public class OrganizationAction extends BaseAction {
 	final Supplier supplier = getDomainObject(request, "supplierOid");
 	final Spreadsheet suppliersSheet = getSupplierAcquisitionInformationSheet(supplier);
 	response.setContentType("application/xls ");
-	response.setHeader("Content-disposition", "attachment; filename=supplier.xls");
+	response.setHeader("Content-disposition", "attachment; filename=fornecedor.xls");
 
 	final ServletOutputStream outputStream = response.getOutputStream();
 
