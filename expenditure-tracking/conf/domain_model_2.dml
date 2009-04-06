@@ -9,6 +9,9 @@ class pt.ist.expenditureTrackingSystem.domain.SyncProjects extends myorg.domain.
 class pt.ist.expenditureTrackingSystem.domain.SetRoleTypes extends myorg.domain.scheduler.Task {	
 }
 
+class pt.ist.expenditureTrackingSystem.domain.SyncUsers extends myorg.domain.scheduler.Task {	
+}
+
 class pt.ist.expenditureTrackingSystem.domain.ConnectPersonToUserTask extends myorg.domain.scheduler.Task {	
 }
 
