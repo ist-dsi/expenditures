@@ -180,4 +180,8 @@ public class Financer extends Financer_Base {
 	return hasAllocatedFundsForAllProject() && hasFundAllocationId();
     }
 
+    public boolean isTreasuryMember(Person person) {
+	return getUnit().isTreasuryMember(person);
+    }
+
 }

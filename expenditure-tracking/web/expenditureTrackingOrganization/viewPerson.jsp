@@ -30,6 +30,13 @@
 					</html:link>
 				</li>
 			</logic:present>
+			<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.ACCOUNTING_MANAGER">
+				<li>
+					<html:link action="/expenditureTrackingOrganization.do?method=prepareAddToTreasuryAccountingUnit" paramId="personOid" paramName="person" paramProperty="OID">
+						<bean:message key="treasury.accountingUnit.link.add.member" bundle="EXPENDITURE_RESOURCES"/>
+					</html:link>
+				</li>
+			</logic:present>
 			<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
 				<li>
 					<html:link action="/expenditureTrackingOrganization.do?method=editPerson" paramId="personOid" paramName="person" paramProperty="OID">
@@ -165,6 +172,35 @@
 	</fr:view>
 </logic:notEmpty>
 <logic:empty name="person" property="projectAccountingUnits">
+	<p>
+		<em><bean:message key="accountingUnit.message.person.not.associated" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>.</em>
+	</p>
+</logic:empty>
+
+<h3 class="mtop2 mbottom05"><bean:message key="treasury.accountingUnit.list.for.person" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/></h3>
+<bean:define id="removeUrl">/expenditureTrackingOrganization.do?method=removePersonFromTreasuryAccountingUnit&amp;personOid=<bean:write name="person" property="OID"/></bean:define>
+<logic:notEmpty name="person" property="treasuryAccountingUnits">
+	<fr:view name="person" property="treasuryAccountingUnits"
+			schema="accountingUnits">
+		<fr:layout name="tabular">
+			<fr:property name="classes" value="tstyle2"/>
+			<fr:property name="columnClasses" value="aleft,,,,aright,"/>
+
+			<fr:property name="link(view)" value="/expenditureTrackingOrganization.do?method=viewAccountingUnit"/>
+			<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
+			<fr:property name="key(view)" value="link.view"/>
+			<fr:property name="param(view)" value="OID/accountingUnitOid"/>
+			<fr:property name="order(view)" value="1"/>
+
+			<fr:property name="link(remove)" value="<%= removeUrl %>"/>
+			<fr:property name="bundle(remove)" value="EXPENDITURE_RESOURCES"/>
+			<fr:property name="key(remove)" value="link.remove"/>
+			<fr:property name="param(remove)" value="OID/accountingUnitOid"/>
+			<fr:property name="order(remove)" value="2"/>
+		</fr:layout>
+	</fr:view>
+</logic:notEmpty>
+<logic:empty name="person" property="treasuryAccountingUnits">
 	<p>
 		<em><bean:message key="accountingUnit.message.person.not.associated" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>.</em>
 	</p>

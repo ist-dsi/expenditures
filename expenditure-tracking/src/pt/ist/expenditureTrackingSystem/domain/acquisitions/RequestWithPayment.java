@@ -321,4 +321,13 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
 	return true;
     }
 
+    public boolean isTreasuryMember(final Person person) {
+	for (final Financer financer : getFinancersSet()) {
+	    if (financer.isTreasuryMember(person)) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
 }

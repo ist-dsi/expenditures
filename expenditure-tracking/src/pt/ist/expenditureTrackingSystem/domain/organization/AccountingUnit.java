@@ -32,6 +32,12 @@ public class AccountingUnit extends AccountingUnit_Base {
 
     @Service
     @Override
+    public void addTreasuryMembers(Person treasuryMembers) {
+        super.addTreasuryMembers(treasuryMembers);
+    }
+
+    @Service
+    @Override
     public void removePeople(final Person people) {
 	super.removePeople(people);
     }
@@ -40,6 +46,12 @@ public class AccountingUnit extends AccountingUnit_Base {
     @Override
     public void removeProjectAccountants(final Person people) {
 	super.removeProjectAccountants(people);
+    }
+
+    @Service
+    @Override
+    public void removeTreasuryMembers(Person treasuryMembers) {
+        super.removeTreasuryMembers(treasuryMembers);
     }
 
     @Service

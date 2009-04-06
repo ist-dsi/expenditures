@@ -3,12 +3,14 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activiti
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
+import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
 public class PayAcquisition extends GenericAcquisitionProcessActivity {
 
     @Override
     protected boolean isAccessible(RegularAcquisitionProcess process) {
-	return userHasRole(RoleType.TREASURY);
+	final Person person = getLoggedPerson();
+	return userHasRole(RoleType.TREASURY_MANAGER) || process.isTreasuryMember(person);
     }
 
     @Override

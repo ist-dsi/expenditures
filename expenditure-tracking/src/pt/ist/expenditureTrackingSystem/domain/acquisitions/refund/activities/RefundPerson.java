@@ -9,8 +9,8 @@ public class RefundPerson extends GenericRefundProcessActivity {
 
     @Override
     protected boolean isAccessible(final RefundProcess process) {
-	final Person loggedPerson = getLoggedPerson();
-	return loggedPerson != null && loggedPerson.hasRoleType(RoleType.TREASURY);
+	final Person person = getLoggedPerson();
+	return userHasRole(RoleType.TREASURY_MANAGER) || process.isTreasuryMember(person);
     }
 
     @Override

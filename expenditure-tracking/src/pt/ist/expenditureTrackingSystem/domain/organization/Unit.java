@@ -4,6 +4,7 @@ import java.util.Comparator;
 import java.util.ResourceBundle;
 import java.util.Set;
 
+import myorg.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Acquisition;
@@ -12,7 +13,6 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateUnitBean;
-import myorg.domain.util.Money;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.pstm.Transaction;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
@@ -218,4 +218,14 @@ public class Unit extends Unit_Base {
 		: hasAnyAuthorizationForAmount(money) ? hasAuthorizationsFor(person, money) : hasParentUnit()
 			&& getParentUnit().isMostDirectAuthorization(person, money);
     }
+
+    public boolean isTreasuryMember(Person person) {
+	final AccountingUnit accountingUnit = getAccountingUnit();
+	if (accountingUnit == null) {
+	    final Unit parentUnit = getParentUnit();
+	    return parentUnit != null && parentUnit.isTreasuryMember(person);
+	}
+	return accountingUnit.getTreasuryMembersSet().contains(person);
+    }
+
 }

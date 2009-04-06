@@ -87,6 +87,10 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
 	return getRequest().isProjectAccountingEmployee(person);
     }
 
+    public boolean isTreasuryMember(final Person person) {
+	return getRequest().isTreasuryMember(person);
+    }
+
     public boolean isProjectAccountingEmployee() {
 	final Person loggedPerson = getLoggedPerson();
 	return loggedPerson != null && isProjectAccountingEmployee(loggedPerson);

@@ -825,6 +825,15 @@ relation PersonProjectAccountingUnit {
 	}
 }
 
+relation PersonTreasuryAccountingUnit {
+	organization.Person playsRole treasuryMembers {
+		multiplicity *;
+	}
+	organization.AccountingUnit playsRole treasuryAccountingUnits {
+		multiplicity *;
+	}
+}
+
 relation UnitAccountingUnit {
 	organization.Unit playsRole units {
 		multiplicity *;

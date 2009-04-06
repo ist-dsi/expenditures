@@ -10,14 +10,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import myorg.applicationTier.Authenticate.UserView;
-import myorg.domain.MyOrg;
 import myorg.domain.User;
 import myorg.domain.util.Money;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.joda.time.LocalDate;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
@@ -267,6 +265,24 @@ public class OrganizationAction extends BaseAction {
 	return viewPerson(mapping, request, person);
     }
 
+    public final ActionForward prepareAddToTreasuryAccountingUnit(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final Person person = getDomainObject(request, "personOid");
+	request.setAttribute("person", person);
+	final Set<AccountingUnit> accountingUnits = ExpenditureTrackingSystem.getInstance().getAccountingUnitsSet();
+	request.setAttribute("accountingUnits", accountingUnits);
+	return forward(request, "/expenditureTrackingOrganization/selectTreasuryAccountingUnitToAddMember.jsp");
+    }
+
+    public final ActionForward addToTreasuryAccountingUnit(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final Person person = getDomainObject(request, "personOid");
+	final AccountingUnit accountingUnit = getDomainObject(request, "accountingUnitOid");
+	accountingUnit.addTreasuryMembers(person);
+	return viewPerson(mapping, request, person);
+    }
+
+
     public final ActionForward expandAuthorizationUnit(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final UnitBean unitBean = getRenderedObject();
@@ -469,6 +485,14 @@ public class OrganizationAction extends BaseAction {
 	final AccountingUnit accountingUnit = getDomainObject(request, "accountingUnitOid");
 	final Person person = getDomainObject(request, "personOid");
 	accountingUnit.removeProjectAccountants(person);
+	return viewPerson(mapping, request, person);
+    }
+
+    public ActionForward removePersonFromTreasuryAccountingUnit(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final AccountingUnit accountingUnit = getDomainObject(request, "accountingUnitOid");
+	final Person person = getDomainObject(request, "personOid");
+	accountingUnit.removeTreasuryMembers(person);
 	return viewPerson(mapping, request, person);
     }
 
