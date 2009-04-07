@@ -15,12 +15,9 @@ public class RevertProcessNotConfirmmingFundAllocationExpirationDate extends Gen
 
     @Override
     protected boolean isAvailable(RegularAcquisitionProcess process) {
-	return  super.isAvailable(process)
-		&& process.getAcquisitionProcessState().isActive()
-		&& process.getAcquisitionRequest().isSubmittedForFundsAllocationByAllResponsibles()
-		&& !process.isPendingFundAllocation()
-		&& !process.getAcquisitionRequest().hasAnyFundAllocationId()
-		;
+	return super.isAvailable(process) && process.getAcquisitionProcessState().isActive()
+		&& !process.isPendingFundAllocation() && !process.getAcquisitionRequest().hasAnyFundAllocationId()
+		&& process.getAcquisitionRequest().isSubmittedForFundsAllocationByAllResponsibles();
     }
 
     @Override
