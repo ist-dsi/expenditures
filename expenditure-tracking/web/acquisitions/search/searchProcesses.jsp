@@ -38,6 +38,9 @@
 
 <div id="advancedSearch" style="display: none;">
 <div class="mbottom15" style="border: 3px solid #eaeaea; background: #fafafa; padding: 0.5em 1em 1em 1em;">
+	
+	<span class="color888 smalltxt">Para mais opções de pesquisa, seleccione o tipo de aquisição.</span>
+	
 	<fr:form action="/search.do?method=search">
 		<fr:edit id="searchBean" name="searchBean" schema='<%= schema %>' >
 			<fr:layout name="tabular">
@@ -51,14 +54,19 @@
 </div>
 
 <logic:equal name="advanced" value="true">
-		<script type="text/javascript">
-			 document.getElementById('advancedSearch').style.display='block';
-		</script>
+	<script type="text/javascript">
+		 document.getElementById('advancedSearch').style.display='block';
+	</script>
 </logic:equal>
+
 
 <logic:notEmpty name="results">
 	<bean:size id="listSize" name="collectionPager" property="collection"/>
 		<bean:define id="pagerString" name="pagerString"/>
+
+	<p class="mvert05"><span style="background: #fff5dd; font-style: italic; color: #542;">
+		<span><bean:message key="label.search.suggestion" bundle="ACQUISITION_RESOURCES"/></span>
+	</p>
 
 	<table class="width100pc">
 	<tr>
@@ -116,7 +124,7 @@
 				<fr:property name="order(view)" value="1"/>
 			</fr:layout>
 	</fr:view>	
-	<p class="aright">
+	<p class="aright mtop05">
 		<cp:collectionPages url="<%= "/search.do?method=searchJump" + pagerString %>" 
 			pageNumberAttributeName="pageNumber" numberOfPagesAttributeName="numberOfPages" numberOfVisualizedPages="10"/>
 	</p>

@@ -15,7 +15,7 @@
 			<th colspan="4" style="background: #eaeaea;"><bean:message key="acquisitionProcess.title.description" bundle="ACQUISITION_RESOURCES"/></th>
 		</tr>
 		<tr>
-			<th><bean:message key="acquisitionRequestItem.label.proposalReference" bundle="ACQUISITION_RESOURCES"/>:</th>
+			<th style="width: 12em;"><bean:message key="acquisitionRequestItem.label.proposalReference" bundle="ACQUISITION_RESOURCES"/>:</th>
 			<td colspan="3"><fr:view name="acquisitionRequestItem" property="proposalReference"/></td>
 		</tr>
 		<tr>
