@@ -21,7 +21,7 @@ public class ProjectFinancer extends ProjectFinancer_Base {
 	super();
     }
 
-    protected ProjectFinancer(final Acquisition acquisitionRequest, final Unit unit) {
+    protected ProjectFinancer(final RequestWithPayment acquisitionRequest, final Unit unit) {
 	this();
 	if (acquisitionRequest == null || unit == null) {
 	    throw new DomainException("error.financer.wrong.initial.arguments");
@@ -35,11 +35,11 @@ public class ProjectFinancer extends ProjectFinancer_Base {
 	setAccountingUnit(unit.getAccountingUnit());
     }
 
-    public ProjectFinancer(final Acquisition acquisitionRequest, final Project project) {
+    public ProjectFinancer(final RequestWithPayment acquisitionRequest, final Project project) {
 	this(acquisitionRequest, (Unit) project);
     }
 
-    public ProjectFinancer(final Acquisition acquisitionRequest, final SubProject subProject) {
+    public ProjectFinancer(final RequestWithPayment acquisitionRequest, final SubProject subProject) {
 	this(acquisitionRequest, (Unit) subProject);
     }
 

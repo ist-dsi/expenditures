@@ -3,21 +3,20 @@ package pt.ist.expenditureTrackingSystem.domain.organization;
 import java.util.Set;
 
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.Acquisition;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.ProjectFinancer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestWithPayment;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 
 public class Project extends Project_Base {
 
     public Project(final Unit parentUnit, final String name, final String projectCode) {
-        super();
-    	setName(name);
-    	setProjectCode(projectCode);
-    	setParentUnit(parentUnit);
+	super();
+	setName(name);
+	setProjectCode(projectCode);
+	setParentUnit(parentUnit);
     }
 
     @Override
@@ -43,7 +42,7 @@ public class Project extends Project_Base {
     }
 
     @Override
-    public Financer finance(final Acquisition acquisitionRequest) {
+    public Financer finance(final RequestWithPayment acquisitionRequest) {
 	return new ProjectFinancer(acquisitionRequest, this);
     }
 
@@ -62,11 +61,11 @@ public class Project extends Project_Base {
 
     public static Project findProjectByCode(String projectCode) {
 	for (Unit unit : ExpenditureTrackingSystem.getInstance().getUnits()) {
-	  if (unit instanceof Project) {
-	      if (((Project)unit).getProjectCode().equals(projectCode)) {
-		  return (Project)unit;
-	      }
-	  }
+	    if (unit instanceof Project) {
+		if (((Project) unit).getProjectCode().equals(projectCode)) {
+		    return (Project) unit;
+		}
+	    }
 	}
 	return null;
     }

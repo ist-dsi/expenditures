@@ -9,6 +9,7 @@ import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.MyOrg;
 import myorg.domain.User;
 import myorg.domain.util.Address;
+import pt.ist.expenditureTrackingSystem.domain.DashBoard;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.Options;
 import pt.ist.expenditureTrackingSystem.domain.Role;
@@ -22,6 +23,7 @@ import pt.ist.expenditureTrackingSystem.domain.announcements.AnnouncementProcess
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.AuthorizationBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreatePersonBean;
+import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.pstm.Transaction;
 import dml.runtime.RelationAdapter;
@@ -39,7 +41,7 @@ public class Person extends Person_Base {
 	    }
 	    user.setExpenditurePerson(person);
 	}
-	
+
     }
 
     static {
@@ -211,48 +213,67 @@ public class Person extends Person_Base {
 	    return null;
 	}
 	Person person = user.getExpenditurePerson();
-//	if (person == null) {
-//	    setPersonInUser(user);
-//	    person = user.getExpenditurePerson();
-//	}
+	// if (person == null) {
+	// setPersonInUser(user);
+	// person = user.getExpenditurePerson();
+	// }
 	return person;
     }
 
-//    @Service
-//    private static void setPersonInUser(final User user) {
-//	final Person person = Person.findByUsername(user.getUsername());
-//	if (person == null) {
-//	    final CreatePersonBean createPersonBean = new CreatePersonBean();
-//	    createPersonBean.setName(user.getUsername());
-//	    createPersonBean.setUsername(user.getUsername());
-//	    createPerson(createPersonBean);
-//	} else {
-//	    person.setUser(user);
-//	}
-//    }
+    public <T extends GenericProcess> List<T> getProcesses(Class<T> classType) {
+	List<T> processes = new ArrayList<T>();
+	for (GenericProcess process : getProcesses()) {
+	    if (classType.isAssignableFrom(process.getClass())) {
+		processes.add((T) process);
+	    }
+	}
+	return processes;
+    }
 
-//    @Override
-//    public void setUsername(final String username) {
-//	super.setUsername(username);
-//	connectToUser(username);
-//    }
+    @Override
+    public DashBoard getDashBoard() {
+	DashBoard dashBoard = super.getDashBoard();
+	if (dashBoard == null) {
+	    dashBoard = DashBoard.newDashBoard(this);
+	    setDashBoard(dashBoard);
+	}
+	return dashBoard;
+    }
+    // @Service
+    // private static void setPersonInUser(final User user) {
+    // final Person person = Person.findByUsername(user.getUsername());
+    // if (person == null) {
+    // final CreatePersonBean createPersonBean = new CreatePersonBean();
+    // createPersonBean.setName(user.getUsername());
+    // createPersonBean.setUsername(user.getUsername());
+    // createPerson(createPersonBean);
+    // } else {
+    // person.setUser(user);
+    // }
+    // }
 
-//    private void connectToUser(final String username) {
-//	User user = User.findByUsername(username);
-//	if (user == null) {
-//	    user = new User(username);
-//	}
-//	setUser(user);
-//    }
+    // @Override
+    // public void setUsername(final String username) {
+    // super.setUsername(username);
+    // connectToUser(username);
+    // }
 
-//    @Override
-//    public User getUser() {
-//	final User user = super.getUser();
-//	if (user == null) {
-//	    connectToUser(getUsername());
-//	    return super.getUser();
-//	}
-//        return user;
-//    }
+    // private void connectToUser(final String username) {
+    // User user = User.findByUsername(username);
+    // if (user == null) {
+    // user = new User(username);
+    // }
+    // setUser(user);
+    // }
+
+    // @Override
+    // public User getUser() {
+    // final User user = super.getUser();
+    // if (user == null) {
+    // connectToUser(getUsername());
+    // return super.getUser();
+    // }
+    // return user;
+    // }
 
 }

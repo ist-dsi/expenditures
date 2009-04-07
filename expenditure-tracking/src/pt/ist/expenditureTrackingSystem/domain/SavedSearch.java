@@ -73,4 +73,12 @@ public class SavedSearch extends SavedSearch_Base {
 	return isSearchDefaultForUser(person);
     }
 
+    public static SavedSearch getOwnProcessesSearch() {
+	for (SavedSearch search : ExpenditureTrackingSystem.getInstance().getSystemSearches()) {
+	    if (search instanceof MyOwnProcessesSearch) {
+		return search;
+	    }
+	}
+	return null;
+    }
 }

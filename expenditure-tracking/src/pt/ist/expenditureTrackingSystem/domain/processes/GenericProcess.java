@@ -18,8 +18,12 @@ import org.joda.time.Interval;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.ProcessesThatAreAuthorizedByUserPredicate;
+import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
+import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.fenixWebFramework.services.Service;
 
 public abstract class GenericProcess extends GenericProcess_Base {
@@ -59,6 +63,27 @@ public abstract class GenericProcess extends GenericProcess_Base {
 	    PaymentProcessYear year) {
 	return year != null ? filter(processClass, predicate, year.getPaymentProcess()) : filter(processClass, predicate,
 		ExpenditureTrackingSystem.getInstance().getProcessesSet());
+    }
+
+    public static <T extends PaymentProcess> Set<T> getProcessesWithResponsible(Class<T> processClass, final Person person,
+	    PaymentProcessYear year) {
+	if (person == null) {
+	    return Collections.emptySet();
+	}
+
+	Set<PaymentProcess> processes = new HashSet<PaymentProcess>();
+	Set<Unit> units = new HashSet<Unit>();
+	for (Authorization authorization : person.getAuthorizations()) {
+	    Unit unit = authorization.getUnit();
+	    units.add(unit);
+	    units.addAll(unit.getAllSubUnits());
+	}
+
+	for (Unit unit : units) {
+	    processes.addAll(unit.getProcesses(year));
+	}
+	return (Set<T>) GenericProcess.filter(processClass != null ? processClass : PaymentProcess.class,
+		new ProcessesThatAreAuthorizedByUserPredicate(person), processes);
     }
 
     public abstract <T extends GenericProcess> AbstractActivity<T> getActivityByName(String name);
@@ -184,5 +209,28 @@ public abstract class GenericProcess extends GenericProcess_Base {
 
     public <T extends GenericLog> T logExecution(Person person, String operationName, Object... args) {
 	return (T) new GenericLog(this, person, operationName, new DateTime());
+    }
+
+    public List<ProcessComment> getUnreadCommentsForCurrentUser() {
+	return getUnreadCommentsForPerson(Person.getLoggedPerson());
+    }
+
+    public List<ProcessComment> getUnreadCommentsForPerson(Person person) {
+	List<ProcessComment> comments = new ArrayList<ProcessComment>();
+	for (ProcessComment comment : getComments()) {
+	    if (comment.isUnreadBy(person)) {
+		comments.add(comment);
+	    }
+	}
+	return comments;
+    }
+
+    @Service
+    public void markCommentsAsReadForPerson(Person person) {
+	for (ProcessComment comment : getComments()) {
+	    if (comment.isUnreadBy(person)) {
+		comment.addReaders(person);
+	    }
+	}
     }
 }

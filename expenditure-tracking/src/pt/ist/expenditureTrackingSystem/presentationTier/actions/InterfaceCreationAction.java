@@ -68,12 +68,14 @@ public class InterfaceCreationAction extends ContextBaseAction {
 //			.getRole(RoleType.MANAGER));
 
 	final Node aquisitionProcessNode = ActionNode.createActionNode(
-		virtualHost, node, "/search", "search", "resources.ExpenditureResources",
+		virtualHost, node, "/search", "viewDigest", "resources.ExpenditureResources",
 		"link.topBar.acquisitionProcesses", UserGroup.getInstance());
 	ActionNode.createActionNode(virtualHost, aquisitionProcessNode, "/wizard", "newAcquisitionWizard",
 		"resources.ExpenditureResources", "link.sideBar.process.create", UserGroup.getInstance());
 	ActionNode.createActionNode(virtualHost, aquisitionProcessNode, "/search", "search", "resources.ExpenditureResources",
 		"link.sideBar.acquisitionProcess.search", UserGroup.getInstance());
+	ActionNode.createActionNode(virtualHost, aquisitionProcessNode, "/search", "viewDigest", "resources.ExpenditureResources",
+		"link.sideBar.acquisitionProcess.digest", UserGroup.getInstance());
 	ActionNode.createActionNode(virtualHost, aquisitionProcessNode, "/wizard", "afterTheFactOperationsWizard",
 		"resources.ExpenditureResources", "link.register",
 		pt.ist.expenditureTrackingSystem.domain.Role.getRole(pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL)

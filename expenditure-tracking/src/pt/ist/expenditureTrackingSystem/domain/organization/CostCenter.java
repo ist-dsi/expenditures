@@ -6,6 +6,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.Acquisition;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestWithPayment;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 
 public class CostCenter extends CostCenter_Base {
@@ -54,7 +55,7 @@ public class CostCenter extends CostCenter_Base {
     }
 
     @Override
-    public Financer finance(final Acquisition acquisitionRequest) {
+    public Financer finance(final RequestWithPayment acquisitionRequest) {
 	return new Financer(acquisitionRequest, this);
     }
 

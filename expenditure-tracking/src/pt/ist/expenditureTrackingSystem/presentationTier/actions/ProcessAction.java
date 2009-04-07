@@ -83,6 +83,8 @@ public abstract class ProcessAction extends BaseAction {
 	Set<ProcessComment> comments = new TreeSet<ProcessComment>(ProcessComment.COMPARATOR);
 	comments.addAll(process.getComments());
 
+	process.markCommentsAsReadForPerson(getLoggedPerson());
+
 	request.setAttribute("comments", comments);
 	request.setAttribute("bean", new VariantBean());
 
@@ -121,15 +123,15 @@ public abstract class ProcessAction extends BaseAction {
 	return viewProcess(mapping, form, request, response);
 
     }
-    
+
     public ActionForward takeProcess(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) {
 
-	final GenericProcess process= getDomainObject(request, "processOid");
+	final GenericProcess process = getDomainObject(request, "processOid");
 
 	if (!process.hasAnyAvailableActivitity() && request.getParameter("confirmTake") == null) {
 	    request.setAttribute("confirmTake", "yes");
-	    return viewProcess(mapping, form,request,response);
+	    return viewProcess(mapping, form, request, response);
 	}
 	try {
 	    process.takeProcess();
@@ -137,33 +139,33 @@ public abstract class ProcessAction extends BaseAction {
 	    addErrorMessage(e.getMessage(), getBundle());
 	}
 
-	return viewProcess(mapping, form,request,response);
+	return viewProcess(mapping, form, request, response);
     }
 
     public ActionForward releaseProcess(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) {
 
-	final GenericProcess process= getDomainObject(request, "processOid");
+	final GenericProcess process = getDomainObject(request, "processOid");
 	try {
 	    process.releaseProcess();
 	} catch (DomainException e) {
 	    addErrorMessage(e.getMessage(), getBundle());
 	}
 
-	return viewProcess(mapping, form,request,response);
+	return viewProcess(mapping, form, request, response);
     }
 
     public ActionForward stealProcess(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) {
 
-	final GenericProcess process= getDomainObject(request, "processOid");
+	final GenericProcess process = getDomainObject(request, "processOid");
 	try {
 	    process.stealProcess();
 	} catch (DomainException e) {
 	    addErrorMessage(e.getMessage(), getBundle());
 	}
 
-	return viewProcess(mapping, form,request,response);
+	return viewProcess(mapping, form, request, response);
     }
 
 }

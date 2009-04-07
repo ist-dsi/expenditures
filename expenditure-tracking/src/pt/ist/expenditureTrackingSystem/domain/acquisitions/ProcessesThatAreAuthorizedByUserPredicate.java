@@ -43,7 +43,7 @@ public class ProcessesThatAreAuthorizedByUserPredicate implements Predicate {
 
 		final UserView userView = UserView.getCurrentUserView();
 		try {
-		    userView.mockUser(person.getUsername());
+		    userView.mockUser(person.getUser());
 		    if (process.hasAnyAvailableActivitity()) {
 			userView.unmockUser();
 			return false;

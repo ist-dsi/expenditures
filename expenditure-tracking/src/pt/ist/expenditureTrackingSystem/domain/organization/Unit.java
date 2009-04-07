@@ -1,6 +1,9 @@
 package pt.ist.expenditureTrackingSystem.domain.organization;
 
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
 
@@ -11,6 +14,9 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.Acquisition;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestWithPayment;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateUnitBean;
 import pt.ist.fenixWebFramework.services.Service;
@@ -164,7 +170,7 @@ public class Unit extends Unit_Base {
 	return parentUnit != null && parentUnit.isAccountingEmployee(person);
     }
 
-    public Financer finance(final Acquisition acquisitionRequest) {
+    public Financer finance(final RequestWithPayment acquisitionRequest) {
 	throw new Error("Units with no accounting cannot finance any acquisitions: " + getIdInternal());
     }
 
@@ -218,8 +224,8 @@ public class Unit extends Unit_Base {
 		: hasAnyAuthorizationForAmount(money) ? hasAuthorizationsFor(person, money) : hasParentUnit()
 			&& getParentUnit().isMostDirectAuthorization(person, money);
     }
-
-    public boolean isTreasuryMember(Person person) {
+    
+     public boolean isTreasuryMember(Person person) {
 	final AccountingUnit accountingUnit = getAccountingUnit();
 	if (accountingUnit == null) {
 	    final Unit parentUnit = getParentUnit();
@@ -227,5 +233,25 @@ public class Unit extends Unit_Base {
 	}
 	return accountingUnit.getTreasuryMembersSet().contains(person);
     }
+    
 
+    public Set<PaymentProcess> getProcesses(PaymentProcessYear year) {
+	Set<PaymentProcess> processes = new HashSet<PaymentProcess>();
+	for (Financer financer : getFinancedItems()) {
+	    PaymentProcess process = financer.getFundedRequest().getProcess();
+	    if (year == null || process.getPaymentProcessYear() == year) {
+		processes.add(process);
+	    }
+	}
+	return processes;
+    }
+
+    public List<Unit> getAllSubUnits() {
+	List<Unit> units = new ArrayList<Unit>();
+	for (Unit unit : getSubUnits()) {
+	    units.add(unit);
+	    units.addAll(unit.getSubUnits());
+	}
+	return units;
+    }
 }

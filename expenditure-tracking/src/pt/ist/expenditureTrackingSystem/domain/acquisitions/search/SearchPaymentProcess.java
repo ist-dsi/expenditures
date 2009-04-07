@@ -3,6 +3,7 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.search;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -19,6 +20,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.predicates.Re
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.predicates.SearchPredicate;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.predicates.SimplifiedAcquisitionPredicate;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
+import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
@@ -124,17 +126,8 @@ public class SearchPaymentProcess extends Search<PaymentProcess> {
     }
 
     private Set<? extends PaymentProcess> getProcesses() {
-	return responsibleUnitSetOnly ? getProcessesWithResponsible(Person.getLoggedPerson()) : GenericProcess.getAllProcesses(
-		getProcessClass(), getPaymentProcessYear());
-    }
-
-    private Set<? extends PaymentProcess> getProcessesWithResponsible(final Person person) {
-	if (person == null) {
-	    return Collections.emptySet();
-	}
-
-	return GenericProcess.getAllProcess(getProcessClass(), new ProcessesThatAreAuthorizedByUserPredicate(person),
-		getPaymentProcessYear());
+	return (responsibleUnitSetOnly ? GenericProcess.getProcessesWithResponsible(getSearchClass(), Person.getLoggedPerson(),
+		getPaymentProcessYear()) : GenericProcess.getAllProcesses(getProcessClass(), getPaymentProcessYear()));
     }
 
     @Override

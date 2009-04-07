@@ -4,12 +4,20 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import myorg.util.Counter;
+
+import org.apache.commons.beanutils.BeanComparator;
+import org.apache.commons.collections.Predicate;
 import org.apache.commons.collections.comparators.ComparatorChain;
+import org.apache.commons.collections.comparators.ReverseComparator;
 import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -17,17 +25,20 @@ import org.apache.struts.action.ActionMapping;
 
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.SavedSearch;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPaymentProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.dto.UserSearchBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.VariantBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
+import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.BaseAction;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
@@ -126,6 +137,56 @@ public class SearchPaymentProcessesAction extends BaseAction {
 	    final HttpServletResponse response) {
 	SavedSearch search = getDomainObject(request, "searchOID");
 	return search(mapping, request, new SearchPaymentProcess(search), false);
+    }
+
+    public ActionForward viewDigest(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	Person loggedPerson = getLoggedPerson();
+	Map<AcquisitionProcessStateType, Counter<AcquisitionProcessStateType>> simplifiedMap = generateAcquisitionMap(getProcesses(loggedPerson));
+	List<Counter<AcquisitionProcessStateType>> counters = new ArrayList<Counter<AcquisitionProcessStateType>>();
+	counters.addAll(simplifiedMap.values());
+	Collections.sort(counters, new BeanComparator("countableObject"));
+	request.setAttribute("simplifiedCounters", counters);
+
+	List<AcquisitionProcess> myProcesses = loggedPerson.getAcquisitionProcesses();
+	Collections.sort(myProcesses, new ReverseComparator(new BeanComparator("acquisitionProcessState.whenDateTime")));
+	request.setAttribute("ownProcesses", myProcesses.subList(0, Math.min(10, myProcesses.size())));
+
+	List<SimplifiedProcedureProcess> takenProcesses = loggedPerson.getProcesses(SimplifiedProcedureProcess.class);
+	request.setAttribute("takenProcesses", takenProcesses.subList(0, Math.min(10, takenProcesses.size())));
+
+	return forward(request, "/acquisitions/search/digest.jsp");
+    }
+
+    private Set<SimplifiedProcedureProcess> getProcesses(Person loggedPerson) {
+
+	return loggedPerson.hasAnyAuthorizations() ? GenericProcess.getProcessesWithResponsible(SimplifiedProcedureProcess.class,
+		loggedPerson, null) : GenericProcess.getAllProcess(SimplifiedProcedureProcess.class, new Predicate() {
+
+	    @Override
+	    public boolean evaluate(Object arg0) {
+		SimplifiedProcedureProcess process = (SimplifiedProcedureProcess) arg0;
+		return process.hasAnyAvailableActivitity();
+	    }
+
+	}, null);
+    }
+
+    private Map<AcquisitionProcessStateType, Counter<AcquisitionProcessStateType>> generateAcquisitionMap(
+	    Collection<SimplifiedProcedureProcess> processes) {
+	Map<AcquisitionProcessStateType, Counter<AcquisitionProcessStateType>> map = new HashMap<AcquisitionProcessStateType, Counter<AcquisitionProcessStateType>>();
+
+	for (SimplifiedProcedureProcess process : processes) {
+
+	    AcquisitionProcessStateType type = process.getAcquisitionProcessStateType();
+	    Counter<AcquisitionProcessStateType> counter = map.get(type);
+	    if (counter == null) {
+		counter = new Counter<AcquisitionProcessStateType>(type);
+		map.put(type, counter);
+	    }
+	    counter.increment();
+	}
+	return map;
     }
 
     public ActionForward saveSearch(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,

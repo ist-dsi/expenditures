@@ -380,6 +380,23 @@ class Role {
 	RoleType roleType;
 }
 
+class DashBoard {
+	Strings column1;
+	Strings column2;
+	Strings column3;
+}
+
+relation ExpenditureTrackingSystemDashBoard {
+	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
+	DashBoard playsRole dashBoards {
+		multiplicity *;
+	}
+}
+
+relation PersonDashBoard {
+	organization.Person playsRole person;
+	DashBoard playsRole dashBoard;
+}
 
 relation ExpenditureTrackingSystemGenericProcess {
 	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
@@ -655,7 +672,7 @@ relation AcquisitionRequestRequestingUnit {
 }
 
 relation RequestFinancer {
-	acquisitions.Acquisition playsRole fundedRequest;
+	acquisitions.RequestWithPayment playsRole fundedRequest;
 	acquisitions.Financer playsRole financers {
 		multiplicity *;
 	}
@@ -847,6 +864,17 @@ relation PersonComment {
 	}	
 	organization.Person playsRole commenter;
 }
+
+relation PersonReadComment {
+	organization.Person playsRole readers {
+		multiplicity *;
+	}
+	processes.ProcessComment playsRole readComments {
+		multiplicity *;
+	}	
+
+}
+
 
 relation GenericProcessComment {
 	processes.ProcessComment playsRole comments {

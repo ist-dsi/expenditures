@@ -155,14 +155,22 @@
 
 
 
-<logic:notEmpty name="refundProcess" property="request.totalAmountsForEachPayingUnit">
-	<fr:view name="refundProcess" property="request.totalAmountsForEachPayingUnit"
-			schema="viewPayingUnitWithTotalAmount">
-		<fr:layout name="tabular">
-			<fr:property name="classes" value="tstyle5 width100pc tdmiddle"/>
-			<fr:property name="columnClasses" value=",,nowrap,,"/>
-		</fr:layout>
-	</fr:view>
+<bean:define id="payingUnits" name="refundProcess" property="acquisitionRequest.totalAmountsForEachPayingUnit"/>
+<logic:notEmpty name="payingUnits">
+
+	<table class="tstyle5 mervt1 width100pc">
+		<tr>	
+			<th class="aleft"><bean:message key="acquisitionProcess.label.payingUnits" bundle="ACQUISITION_RESOURCES"/></th>
+			<th class="aright"><bean:message key="financer.label.value" bundle="ACQUISITION_RESOURCES"/></th>
+		</tr>
+	
+	<logic:iterate id="payingUnit" name="payingUnits">
+		<tr>
+			<td class="aleft"><fr:view name="payingUnit" property="payingUnit.presentationName"/></td>
+			<td class="aright"><fr:view name="payingUnit" property="amount"/></td>
+		</tr>
+	</logic:iterate>
+	</table>
 </logic:notEmpty>
 
 <div class="documents" style="margin-bottom: 2em;">

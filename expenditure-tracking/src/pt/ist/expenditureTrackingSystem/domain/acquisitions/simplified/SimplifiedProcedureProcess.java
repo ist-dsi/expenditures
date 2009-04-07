@@ -98,7 +98,7 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	requestInformationActivities.add(new AllocateProjectFundsPermanently<RegularAcquisitionProcess>());
 	requestInformationActivities.add(new AllocateFundsPermanently<RegularAcquisitionProcess>());
 	requestInformationActivities.add(new RemovePermanentProjectFunds<RegularAcquisitionProcess>());
-	
+
 	requestInformationActivities.add(new RemoveFundsPermanentlyAllocated<RegularAcquisitionProcess>());
 	requestInformationActivities.add(new UnApprove<RegularAcquisitionProcess>());
 	requestInformationActivities.add(new UnAuthorize<RegularAcquisitionProcess>());
@@ -255,7 +255,14 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 
     @Override
     public boolean hasAnyAvailableActivitity() {
-	return !getActiveActivities().isEmpty();
+	for (List<AbstractActivity<RegularAcquisitionProcess>> activityList : activities.values()) {
+	    for (AbstractActivity<RegularAcquisitionProcess> activity : activityList) {
+		if (activity.isActive(this)) {
+		    return true;
+		}
+	    }
+	}
+	return false;
     }
 
     public boolean isSimplifiedProcedureProcess() {

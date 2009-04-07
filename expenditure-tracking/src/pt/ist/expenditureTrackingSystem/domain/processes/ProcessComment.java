@@ -41,4 +41,8 @@ public class ProcessComment extends ProcessComment_Base {
 	removeExpenditureTrackingSystem();
 	Transaction.deleteObject(this);
     }
+
+    public boolean isUnreadBy(Person person) {
+	return !getReaders().contains(person);
+    }
 }
