@@ -39,7 +39,7 @@ $(function() {
 					portlets3 = portlets3 + $(this).attr('id') + ',';
 				});
 								
-				$.get("/workflow/dashBoard.do?method=order", { column1: portlets1, column2: portlets2, column3: portlets3 });
+				<%= "$.get(\"" + request.getContextPath() + "/dashBoard.do?method=order\", { column1: portlets1, column2: portlets2, column3: portlets3 });"%>
 			}
 		});
 
