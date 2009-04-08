@@ -48,15 +48,15 @@
 		<div class="infoop6">
 			<span>
 				<strong><html:link page='<%= "/search.do?method=viewSearch&searchOID=" + searchOID%>'><fr:view name="userSearch" property="searchName"/></html:link></strong>
-				(<html:link page='<%= "/search.do?method=deleteMySearch&savedSearchOID=" + searchOID%>'><bean:message key="link.delete" bundle="EXPENDITURE_RESOURCES"/></html:link> |
+				( <html:link page='<%= "/search.do?method=deleteMySearch&savedSearchOID=" + searchOID%>'><bean:message key="link.delete" bundle="EXPENDITURE_RESOURCES"/></html:link> |
 				<logic:equal name="userSearch" property="searchDefaultForCurrentUser" value="false"> 
 					<html:link page='<%= "/search.do?method=setSearchAsDefault&savedSearchOID=" + searchOID%>'>
-						<bean:message key="link.setAsDefault" bundle="EXPENDITURE_RESOURCES"/>)
-					</html:link>)
+						<bean:message key="link.setAsDefault" bundle="EXPENDITURE_RESOURCES"/>
+					</html:link>
 				</logic:equal>
 				<logic:equal name="userSearch" property="searchDefaultForCurrentUser" value="true">
-					<strong style="color: #777;"><bean:message key="label.default" bundle="EXPENDITURE_RESOURCES"/></strong>)
-				</logic:equal>
+					<strong style="color: #777;"><bean:message key="label.default" bundle="EXPENDITURE_RESOURCES"/></strong>
+				</logic:equal>)
 			</span>
 			<div>
 				<fr:view name="userSearch" schema="viewSavedSearch">

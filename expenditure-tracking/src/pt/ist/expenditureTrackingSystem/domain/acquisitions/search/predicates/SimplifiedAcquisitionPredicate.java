@@ -18,8 +18,10 @@ public class SimplifiedAcquisitionPredicate extends SearchPredicate {
     @Override
     public boolean evaluate(PaymentProcess process, SearchPaymentProcess searchBean) {
 	final AcquisitionRequest acquisitionRequest = process.getRequest();
+	final Person taker = searchBean.getTaker();
 	return matchesSearchCriteria(acquisitionRequest, searchBean)
-		&& (acquisitionRequest.getProcess().isAvailableForCurrentUser() || process.isTakenByCurrentUser());
+		&& (acquisitionRequest.getProcess().isAvailableForCurrentUser() || process.isTakenByCurrentUser() || (taker != null && process
+			.isTakenByPerson(taker)));
     }
 
     private boolean matchesSearchCriteria(final AcquisitionRequest acquisitionRequest, SearchPaymentProcess searchBean) {
@@ -31,6 +33,8 @@ public class SimplifiedAcquisitionPredicate extends SearchPredicate {
 		.getAcquisitionRequestDocumentID() : null;
 	final AcquisitionProcessStateType type = acquisitionRequest.getAcquisitionProcess().getAcquisitionProcessStateType();
 	final Set<AccountingUnit> accountingUnits = acquisitionRequest.getAccountingUnits();
+	final Person taker = acquisitionRequest.getAcquisitionProcess().getCurrentOwner();
+
 	return matchCriteria(searchBean.getProcessId(), identification)
 		&& matchCriteria(searchBean.getRequestingPerson(), person)
 		&& (matchCriteria(searchBean.getRequestingUnit(), acquisitionRequest.getFinancersSet()) || matchCriteria(
@@ -41,8 +45,7 @@ public class SimplifiedAcquisitionPredicate extends SearchPredicate {
 		&& matchCriteria(searchBean.getAcquisitionProcessStateType(), type)
 		&& matchCriteria(searchBean.getAccountingUnit(), accountingUnits)
 		&& matchCriteria(searchBean.getRequestDocumentId(), acquisitionRequestDocumentID)
-		&& matchShowOnlyCriteris(acquisitionRequest, searchBean);
-
+		&& matchShowOnlyCriteris(acquisitionRequest, searchBean) && matchCriteria(searchBean.getTaker(), taker);
     }
 
     protected boolean matchCriteria(AcquisitionProcessStateType acquisitionProcessStateType, AcquisitionProcessStateType type) {

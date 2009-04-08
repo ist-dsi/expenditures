@@ -1,9 +1,7 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.search;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -12,7 +10,6 @@ import pt.ist.expenditureTrackingSystem.domain.Search;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.ProcessesThatAreAuthorizedByUserPredicate;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.predicates.DefaultPredicate;
@@ -20,7 +17,6 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.predicates.Re
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.predicates.SearchPredicate;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.predicates.SimplifiedAcquisitionPredicate;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
-import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
@@ -35,6 +31,7 @@ public class SearchPaymentProcess extends Search<PaymentProcess> {
     private String processId;
     private String requestDocumentId;
     private DomainReference<Person> requestingPerson;
+    private DomainReference<Person> taker;
     private DomainReference<Unit> requestingUnit;
     private AcquisitionProcessStateType acquisitionProcessStateType;
     private RefundProcessStateType refundProcessStateType;
@@ -63,6 +60,7 @@ public class SearchPaymentProcess extends Search<PaymentProcess> {
 	setAccountingUnit(null);
 	setSavedSearch(null);
 	setPaymentProcessYear(null);
+	setTaker(null);
     }
 
     public SearchPaymentProcess(SavedSearch savedSearch) {
@@ -82,6 +80,7 @@ public class SearchPaymentProcess extends Search<PaymentProcess> {
 	setShowOnlyAcquisitionsWithAdditionalCosts(savedSearch.getShowOnlyAcquisitionsWithAdditionalCosts());
 	setSavedSearch(savedSearch);
 	setPaymentProcessYear(savedSearch.getYear());
+	setTaker(savedSearch.getTakenBy());
     }
 
     @Override
@@ -269,5 +268,13 @@ public class SearchPaymentProcess extends Search<PaymentProcess> {
 
     public PaymentProcessYear getPaymentProcessYear() {
 	return this.year.getObject();
+    }
+
+    public void setTaker(Person taker) {
+	this.taker = new DomainReference<Person>(taker);
+    }
+
+    public Person getTaker() {
+	return taker.getObject();
     }
 }

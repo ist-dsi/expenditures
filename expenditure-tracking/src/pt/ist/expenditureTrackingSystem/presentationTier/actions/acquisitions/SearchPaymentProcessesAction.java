@@ -139,56 +139,6 @@ public class SearchPaymentProcessesAction extends BaseAction {
 	return search(mapping, request, new SearchPaymentProcess(search), false);
     }
 
-    public ActionForward viewDigest(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
-	Person loggedPerson = getLoggedPerson();
-	Map<AcquisitionProcessStateType, Counter<AcquisitionProcessStateType>> simplifiedMap = generateAcquisitionMap(getProcesses(loggedPerson));
-	List<Counter<AcquisitionProcessStateType>> counters = new ArrayList<Counter<AcquisitionProcessStateType>>();
-	counters.addAll(simplifiedMap.values());
-	Collections.sort(counters, new BeanComparator("countableObject"));
-	request.setAttribute("simplifiedCounters", counters);
-
-	List<AcquisitionProcess> myProcesses = loggedPerson.getAcquisitionProcesses();
-	Collections.sort(myProcesses, new ReverseComparator(new BeanComparator("acquisitionProcessState.whenDateTime")));
-	request.setAttribute("ownProcesses", myProcesses.subList(0, Math.min(10, myProcesses.size())));
-
-	List<SimplifiedProcedureProcess> takenProcesses = loggedPerson.getProcesses(SimplifiedProcedureProcess.class);
-	request.setAttribute("takenProcesses", takenProcesses.subList(0, Math.min(10, takenProcesses.size())));
-
-	return forward(request, "/acquisitions/search/digest.jsp");
-    }
-
-    private Set<SimplifiedProcedureProcess> getProcesses(Person loggedPerson) {
-
-	return loggedPerson.hasAnyAuthorizations() ? GenericProcess.getProcessesWithResponsible(SimplifiedProcedureProcess.class,
-		loggedPerson, null) : GenericProcess.getAllProcess(SimplifiedProcedureProcess.class, new Predicate() {
-
-	    @Override
-	    public boolean evaluate(Object arg0) {
-		SimplifiedProcedureProcess process = (SimplifiedProcedureProcess) arg0;
-		return process.hasAnyAvailableActivitity();
-	    }
-
-	}, null);
-    }
-
-    private Map<AcquisitionProcessStateType, Counter<AcquisitionProcessStateType>> generateAcquisitionMap(
-	    Collection<SimplifiedProcedureProcess> processes) {
-	Map<AcquisitionProcessStateType, Counter<AcquisitionProcessStateType>> map = new HashMap<AcquisitionProcessStateType, Counter<AcquisitionProcessStateType>>();
-
-	for (SimplifiedProcedureProcess process : processes) {
-
-	    AcquisitionProcessStateType type = process.getAcquisitionProcessStateType();
-	    Counter<AcquisitionProcessStateType> counter = map.get(type);
-	    if (counter == null) {
-		counter = new Counter<AcquisitionProcessStateType>(type);
-		map.put(type, counter);
-	    }
-	    counter.increment();
-	}
-	return map;
-    }
-
     public ActionForward saveSearch(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) {
 
@@ -279,6 +229,10 @@ public class SearchPaymentProcessesAction extends BaseAction {
 	if (searchBean.getRequestingPerson() != null) {
 	    builder.append(searchBean.getRequestingPerson().getOID());
 	}
+	builder.append("&taker=");
+	if (searchBean.getTaker() != null) {
+	    builder.append(searchBean.getTaker().getOID());
+	}
 	builder.append("&requestingUnit=");
 	if (searchBean.getRequestingUnit() != null) {
 	    builder.append(searchBean.getRequestingUnit().getOID());
@@ -337,6 +291,7 @@ public class SearchPaymentProcessesAction extends BaseAction {
 	bean.setRefundeeName(request.getParameter("refundeeName"));
 
 	bean.setRequestingPerson((Person) getDomainObject(request, "requestingPerson"));
+	bean.setTaker((Person) getDomainObject(request, "taker"));
 	bean.setRequestingUnit((Unit) getDomainObject(request, "requestingUnit"));
 	bean.setSavedSearch((SavedSearch) getDomainObject(request, "savedSearch"));
 	bean.setSupplier((Supplier) getDomainObject(request, "supplier"));

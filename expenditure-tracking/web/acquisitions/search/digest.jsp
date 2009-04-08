@@ -71,8 +71,6 @@ $(function() {
 	});
 	</script>
 	
-
-
 <div class="dashboard">
 
 <bean:define id="dashBoard" name="person" property="dashBoard"/>

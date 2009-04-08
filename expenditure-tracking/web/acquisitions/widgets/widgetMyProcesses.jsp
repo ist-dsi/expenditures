@@ -26,8 +26,8 @@
 					</tr>
 				</logic:iterate>
 				<tr><td colspan="2" class="aright">
-					<bean:define id="ownSearchOID" value="<%= String.valueOf(SavedSearch.getOwnProcessesSearch().getOID()) %>"/>
-					<html:link page="<%= "/search.do?method=viewSearch&searchOID=" + ownSearchOID %>">Ver mais</html:link>
+					<bean:define id="personOID" name="person" property="OID"/>
+					<html:link page="<%= "/search.do?method=searchJump&requestingPerson=" + personOID %>"><bean:message key="label.viewAll" bundle="EXPENDITURE_RESOURCES"/></html:link>
 				</td></tr>
 				
 			</table>	

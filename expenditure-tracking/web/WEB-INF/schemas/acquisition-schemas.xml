@@ -318,49 +318,6 @@
 	<slot name="realShareValue"/>
 </schema>
 
-<schema name="searchAcquisitionProcess"
-		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.SearchAcquisitionProcess"
-		bundle="ACQUISITION_RESOURCES">
-	<slot name="processId" key="label.acquisitionProcessId" bundle="EXPENDITURE_RESOURCES"/>
-	<slot name="requestDocumentId" key="acquisitionProcess.label.requestDocument" bundle="ACQUISITION_RESOURCES" />
-	<slot name="proposalId" key="acquisitionProcess.label.proposalID" bundle="ACQUISITION_RESOURCES" />
-	<slot name="requester" layout="autoComplete" key="label.requester" bundle="EXPENDITURE_RESOURCES">
-        <property name="labelField" value="name"/>
-		<property name="format" value="${name} (${username})"/>
-		<property name="minChars" value="3"/>		
-		<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.PersonAutoComplete"/>
-		<property name="size" value="40"/>
-	</slot>
-	<slot name="accountingUnit" key="label.accountingUnit" bundle="EXPENDITURE_RESOURCES" layout="menu-select">
-		<property name="providerClass" value="pt.ist.expenditureTrackingSystem.presentationTier.renderers.dataProvider.AccountingUnitProvider"/>
-		<property name="format" value="${name}"/>
-		<property name="sortBy" value="name"/>
-	</slot>
-	<slot name="unit" layout="autoComplete" key="label.unit" bundle="EXPENDITURE_RESOURCES">
-        <property name="labelField" value="presentationName"/>
-		<property name="format" value="${presentationName}"/>
-		<property name="minChars" value="3"/>		
-		<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.UnitAutoCompleteProvider" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-		<property name="size" value="40"/>
-	</slot>
-	<slot name="supplier" layout="autoComplete" key="label.supplier" bundle="EXPENDITURE_RESOURCES">
-        <property name="labelField" value="presentationName"/>
-		<property name="format" value="${presentationName}"/>
-		<property name="minChars" value="1"/>		
-		<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.NIFSupplierAutoCompleteProvider"/>
-		<property name="size" value="40"/>
-	</slot>
-	<slot name="acquisitionProcessState" key="label.processState" bundle="EXPENDITURE_RESOURCES">
-		<property name="defaultText" value="renderers.checkboxlist.selectAll"/>
-		<property name="key" value="true"/>
-		<property name="defaultTextBundle" value="RENDERER_RESOURCES"/>
-	</slot>
-	<slot name="hasAvailableAndAccessibleActivityForUser" key="label.option.hasAvailableAndAccessibleActivityForUser" bundle="ACQUISITION_RESOURCES"/>
-	<slot name="responsibleUnitSetOnly" key="label.option.responsibleUnitSetOnly" bundle="ACQUISITION_RESOURCES"/>
-	<slot name="showOnlyAcquisitionsExcludedFromSupplierLimit" key="label.option.showOnlyAcquisitionsExcludedFromSupplierLimit" bundle="ACQUISITION_RESOURCES"/>
-	<slot name="showOnlyAcquisitionsWithAdditionalCosts" key="label.option.showOnlyAcquisitionsWithAdditionalCosts" bundle="ACQUISITION_RESOURCES"/>
-</schema>
-
 <schema name="allocateFunds"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean"
 		bundle="ACQUISITION_RESOURCES">
@@ -781,40 +738,6 @@
 		</slot>
 </schema>
 
-<schema name="searchRefundProcesses"
-		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.SearchRefundProcesses"
-		bundle="ACQUISITION_RESOURCES">
-	<slot name="processId" key="label.acquisitionProcessId" bundle="EXPENDITURE_RESOURCES"/>
-	<slot name="requestingPerson" layout="autoComplete" key="label.requester" bundle="EXPENDITURE_RESOURCES">
-        <property name="labelField" value="name"/>
-		<property name="format" value="${name} (${username})"/>
-		<property name="minChars" value="3"/>		
-		<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.PersonAutoComplete"/>
-		<property name="size" value="40"/>
-	</slot>
-	<slot name="accountingUnit" key="label.accountingUnit" bundle="EXPENDITURE_RESOURCES" layout="menu-select">
-		<property name="providerClass" value="pt.ist.expenditureTrackingSystem.presentationTier.renderers.dataProvider.AccountingUnitProvider"/>
-		<property name="format" value="${name}"/>
-		<property name="sortBy" value="name"/>
-	</slot>
-	<slot name="requestingUnit" layout="autoComplete" key="label.unit" bundle="EXPENDITURE_RESOURCES">
-        <property name="labelField" value="presentationName"/>
-		<property name="format" value="${presentationName}"/>
-		<property name="minChars" value="3"/>		
-		<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.UnitAutoCompleteProvider" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-		<property name="size" value="40"/>
-	</slot>
-	<slot name="refundeeName" key="label.refundee" bundle="EXPENDITURE_RESOURCES"/>
-	<slot name="refundProcessStateType" key="label.processState" bundle="EXPENDITURE_RESOURCES">
-		<property name="defaultText" value="renderers.checkboxlist.selectAll"/>
-		<property name="key" value="true"/>
-		<property name="defaultTextBundle" value="RENDERER_RESOURCES"/>
-	</slot>
-	<slot name="hasAvailableAndAccessibleActivityForUser" key="label.option.hasAvailableAndAccessibleActivityForUser" bundle="ACQUISITION_RESOURCES"/>
-	<slot name="responsibleUnitSetOnly" key="label.option.responsibleUnitSetOnly" bundle="ACQUISITION_RESOURCES"/>
-</schema>
-
-
 <schema name="search.abstract"
 		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPaymentProcess"
 		bundle="ACQUISITION_RESOURCES">
@@ -839,6 +762,13 @@
 		bundle="ACQUISITION_RESOURCES" extends="search.abstract">
 	<slot name="processId" key="label.acquisitionProcessId" bundle="EXPENDITURE_RESOURCES"/>
 	<slot name="requestingPerson" layout="autoComplete" key="label.requester" bundle="EXPENDITURE_RESOURCES">
+        <property name="labelField" value="name"/>
+		<property name="format" value="${name} (${username})"/>
+		<property name="minChars" value="3"/>		
+		<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.PersonAutoComplete"/>
+		<property name="size" value="50"/>
+	</slot>
+	<slot name="taker" layout="autoComplete" key="label.takenBy" bundle="EXPENDITURE_RESOURCES">
         <property name="labelField" value="name"/>
 		<property name="format" value="${name} (${username})"/>
 		<property name="minChars" value="3"/>		
@@ -992,6 +922,10 @@
 	<slot name="requestDocumentId" key="acquisitionProcess.label.requestDocument" bundle="ACQUISITION_RESOURCES" />
 	<slot name="proposalId" key="acquisitionProcess.label.proposalID" bundle="ACQUISITION_RESOURCES" />
 	<slot name="requestor" key="label.requester" bundle="EXPENDITURE_RESOURCES" layout="null-as-label">
+		<property name="subLayout" value="values"/>
+		<property name="subSchema" value="viewPeopleInList"/>
+	</slot>
+	<slot name="takenBy" key="label.takenBy" bundle="EXPENDITURE_RESOURCES" layout="null-as-label">
 		<property name="subLayout" value="values"/>
 		<property name="subSchema" value="viewPeopleInList"/>
 	</slot>

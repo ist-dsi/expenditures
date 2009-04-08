@@ -21,6 +21,10 @@
 							</td>
 							<td><fr:view name="process" property="acquisitionProcessState.acquisitionProcessStateType" /></td>
 						</tr>
+						<tr><td colspan="2" class="aright">
+					<bean:define id="personOID" name="person" property="OID"/>
+					<html:link page="<%= "/search.do?method=searchJump&taker=" + personOID %>"><bean:message key="label.viewAll" bundle="EXPENDITURE_RESOURCES"/></html:link>
+				</td></tr>
 					</logic:iterate>
 				</table>
 			</logic:notEmpty>
