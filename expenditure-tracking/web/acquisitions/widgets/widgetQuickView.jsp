@@ -13,13 +13,20 @@
 					<p><em><bean:message key="<%= label %>" bundle="EXPENDITURE_RESOURCES"/>.</em></p>
 				</logic:present>
 				<fr:form action="/dashBoard.do?method=quickAccess">
-				<fr:edit id="quickAccess" name="searchBean" schema="search.quick">
-					<fr:layout>
-						<fr:property name="columnClasses" value=",,dnone"/>
-					</fr:layout>
-				</fr:edit>
-				
-				<html:submit><bean:message key="renderers.form.submit.name" bundle="RENDERER_RESOURCES"/></html:submit>
+				<table>
+					<tr>
+						<td>
+							<fr:edit id="quickAccess" name="searchBean" schema="search.quick">
+								<fr:layout>
+									<fr:property name="columnClasses" value=",,dnone"/>
+								</fr:layout>
+							</fr:edit>
+						</td>
+						<td>
+							<html:submit><bean:message key="link.view" bundle="EXPENDITURE_RESOURCES"/></html:submit>
+						</td>
+					</tr>
+				</table>
 				</fr:form>
 		</div>
 </div>
