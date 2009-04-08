@@ -24,6 +24,7 @@ public class DashBoard extends DashBoard_Base {
 	column1.add("widgetMySearches");
 	column2.add("widgetPendingSimplified");
 	column3.add("widgetTakenProcesses");
+	column3.add("widgetQuickView");
 	setColumn1(new Strings(column1));
 	setColumn2(new Strings(column2));
 	setColumn3(new Strings(column3));

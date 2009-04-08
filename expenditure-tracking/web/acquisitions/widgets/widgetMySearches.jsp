@@ -24,7 +24,7 @@
 				</table>
 			</logic:notEmpty>
 			<logic:empty name="person" property="saveSearches">
-				<em><bean:message key="label.no.savedSearches" bundle="EXPENDITURE_RESOURCES"/></em>.
+				<p><em><bean:message key="label.no.savedSearches" bundle="EXPENDITURE_RESOURCES"/>.</em></p>
 			</logic:empty>
 		</div>
 	</div>

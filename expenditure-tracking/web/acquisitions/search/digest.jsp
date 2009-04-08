@@ -14,16 +14,6 @@
 						name="<%= SetUserViewFilter.USER_SESSION_ATTRIBUTE%>"
 						property="user.expenditurePerson" toScope="request"/>
 		
-<style type="text/css">
-	.column { width: 270px; float: left; padding-bottom: 100px; }
-	.portlet { margin: 0 1em 1em 0; }
-	.portlet-header { margin: 0.3em; padding-bottom: 4px; padding-left: 0.2em; }
-	.portlet-header .ui-icon { float: right; }
-	.portlet-content { padding: 0.4em; }
-	.ui-sortable-placeholder { border: 1px dotted black; visibility: visible !important; height: 50px !important; }
-	.ui-sortable-placeholder * { visibility: hidden; }
-</style>
-
 <script type="text/javascript">
 
 $(function() {
@@ -53,12 +43,6 @@ $(function() {
 			}
 		});
 
-		$(".portlet").addClass("ui-widget ui-widget-content ui-helper-clearfix ui-corner-all")
-			.find(".portlet-header")
-				.addClass("ui-widget-header ui-corner-all")
-				.prepend('<span class="ui-icon ui-icon-plusthick"></span>')
-				.end()
-			.find(".portlet-content");
 
 		$(".portlet-header .ui-icon").click(function() {
 			$(this).toggleClass("ui-icon-minusthick");
@@ -88,7 +72,7 @@ $(function() {
 </div>
 
 <div id="column3" class="column">
-		<logic:iterate id="widget" name="dashBoard" property="column3">
+	<logic:iterate id="widget" name="dashBoard" property="column3">
 		<jsp:include page="<%= "../widgets/" + widget +".jsp" %>" flush="false"/>
 	</logic:iterate>
 </div>

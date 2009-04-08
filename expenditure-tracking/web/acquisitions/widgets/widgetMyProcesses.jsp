@@ -34,7 +34,7 @@
 		</logic:notEmpty>
 		
 		<logic:empty name="ownProcesses">
-			<em><bean:message key="label.no.ownProcesses" bundle="EXPENDITURE_RESOURCES"/></em>.
+			<p><em><bean:message key="label.no.ownProcesses" bundle="EXPENDITURE_RESOURCES"/>.</em></p>
 		</logic:empty>
 		
 		</div>

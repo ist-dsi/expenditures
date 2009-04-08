@@ -250,7 +250,7 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	    result = result.add(acquisitionRequestItem.getCurrentTotalItemValueWithAdditionalCostsAndVat());
 	}
 	return result;
-    }    
+    }
 
     @Override
     public void receiveInvoice(final String filename, final byte[] bytes, final String invoiceNumber, final LocalDate invoiceDate) {
@@ -481,6 +481,15 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	for (final AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
 	    final Money additionalCost = acquisitionRequestItem.getAdditionalCostValue();
 	    if (additionalCost != null && additionalCost.isGreaterThan(Money.ZERO)) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
+    public boolean hasAnyProjectFinancers() {
+	for (Financer financer : getFinancers()) {
+	    if (financer.isProjectFinancer()) {
 		return true;
 	    }
 	}

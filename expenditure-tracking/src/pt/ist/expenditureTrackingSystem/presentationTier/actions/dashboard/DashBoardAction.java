@@ -23,6 +23,8 @@ import org.apache.struts.action.ActionMapping;
 
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
@@ -73,7 +75,25 @@ public class DashBoardAction extends ContextBaseAction {
 	List<SimplifiedProcedureProcess> takenProcesses = loggedPerson.getProcesses(SimplifiedProcedureProcess.class);
 	request.setAttribute("takenProcesses", takenProcesses.subList(0, Math.min(10, takenProcesses.size())));
 
+	request.setAttribute("searchBean", new SearchPaymentProcess());
+	
 	return forward(request, "/acquisitions/search/digest.jsp");
+    }
+
+    public ActionForward quickAccess(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	
+	SearchPaymentProcess searchBean = getRenderedObject("quickAccess");
+	Set<PaymentProcess> search = searchBean.search();
+	
+	if (search.size() != 1) {
+	    request.setAttribute("widgetQuickView.messages","widget.widgetQuickView.noProcessFound");
+	    return viewDigest(mapping, form, request, response);
+	}
+	
+	PaymentProcess process = search.iterator().next();
+	
+	return new ActionForward("/acquisition" + process.getClass().getSimpleName() + ".do?method=viewProcess&processOid=" + process.getOID()); 
     }
 
     private Set<SimplifiedProcedureProcess> getProcesses(Person loggedPerson) {

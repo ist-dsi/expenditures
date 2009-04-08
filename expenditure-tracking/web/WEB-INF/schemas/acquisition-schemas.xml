@@ -738,6 +738,15 @@
 		</slot>
 </schema>
 
+
+<schema name="search.quick"
+		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPaymentProcess"
+		bundle="ACQUISITION_RESOURCES">
+	<slot name="processId" key="label.acquisitionProcessId.short" bundle="EXPENDITURE_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="size" value="10"/>
+	</slot>
+</schema>
+
 <schema name="search.abstract"
 		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPaymentProcess"
 		bundle="ACQUISITION_RESOURCES">
@@ -895,6 +904,7 @@
 	<slot name="dateFromLastActivity" key="label.inactiveSince" bundle="EXPENDITURE_RESOURCES"/>
 	<slot name="request.requester.firstAndLastName" key="label.requesterName" bundle="EXPENDITURE_RESOURCES"/>
 	<slot name="request.requestingUnit.name" key="acquisitionProcess.label.requestingUnit" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="request" layout="fund-allocation-status" key="acquisitionProcess.label.fundAllocationStatus" bundle="ACQUISITION_RESOURCES"/>
 </schema>
 
 

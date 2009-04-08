@@ -5,7 +5,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 
 <div id="widgetPendingSimplified" class="portlet">
-		<div class="portlet-header"><bean:message key="link.sideBar.simplifiedProcedure" bundle="EXPENDITURE_RESOURCES" /></div>
+		<div class="portlet-header"><bean:message key="title.widget.simplifiedProcedure" bundle="EXPENDITURE_RESOURCES" /></div>
 		<div class="portlet-content">
 			<logic:notEmpty name="simplifiedCounters">
 				<table>
@@ -35,7 +35,7 @@
 				</table>	
 			</logic:notEmpty>
 			<logic:empty name="simplifiedCounters">
-				<em><bean:message key="label.no.pendingProcesses" bundle="EXPENDITURE_RESOURCES"/></em>.
+				<p><em><bean:message key="label.no.pendingProcesses" bundle="EXPENDITURE_RESOURCES"/>.</em></p>
 			 </logic:empty>
 		</div>
 	</div>

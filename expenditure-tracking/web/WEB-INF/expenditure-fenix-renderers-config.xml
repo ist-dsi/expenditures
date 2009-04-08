@@ -1,43 +1,66 @@
-	<renderer type="java.lang.Class" layout="label-for-acquisitionProcessClass" class="pt.ist.fenixWebFramework.renderers.ClassAsLabelRenderer">
-    	<property name="escape" value="true"/>
-    	<property name="bundle" value="ACQUISITION_RESOURCES"/>
-    </renderer>
+
+<renderer type="java.lang.Class" layout="label-for-acquisitionProcessClass"
+	class="pt.ist.fenixWebFramework.renderers.ClassAsLabelRenderer">
+	<property name="escape" value="true" />
+	<property name="bundle" value="ACQUISITION_RESOURCES" />
+</renderer>
 
 
-	<renderer type="myorg.domain.util.Money" class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.MoneyRenderer"/>
-		
-	<renderer type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess" layout="process-state" class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.AcquisitionProcessStateRenderer">
-	    	<property name="classes" value="flow"/>
-	    	<property name="boxClasses" value="box"/>
-	    	<property name="arrowClasses" value="arrow"/>
-	    	<property name="completedStateClass" value="green"/>
-	    	<property name="failedStateClass" value="red"/>
-	</renderer>
+<renderer type="myorg.domain.util.Money"
+	class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.MoneyRenderer" />
 
-	<renderer type="pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess" layout="process-state" class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.RefundProcessStateRenderer">
-	    	<property name="classes" value="flow"/>
-	    	<property name="boxClasses" value="box"/>
-	    	<property name="arrowClasses" value="arrow"/>
-	    	<property name="completedStateClass" value="green"/>
-	    	<property name="failedStateClass" value="red"/>
-	</renderer>
+<renderer
+	type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess"
+	layout="process-state"
+	class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.AcquisitionProcessStateRenderer">
+	<property name="classes" value="flow" />
+	<property name="boxClasses" value="box" />
+	<property name="arrowClasses" value="arrow" />
+	<property name="completedStateClass" value="green" />
+	<property name="failedStateClass" value="red" />
+</renderer>
 
-	<renderer mode="input" type="myorg.domain.util.Address" class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.AddressInputRenderer">
-		<property name="bundle" value="EXPENDITURE_ORGANIZATION_RESOURCES"/>
-		<property name="line1Key" value="address.label.line1"/>
-		<property name="line2Key" value="address.label.line2"/>
-		<property name="locationKey" value="address.label.location"/>
-		<property name="postalCodeKey" value="address.label.postalCode"/>
-		<property name="countryKey" value="address.label.country"/>
-		<property name="errorClasses" value="tderror"/>
-		<property name="line1Size" value="40"/>
-		<property name="line2Size" value="40"/>
-		<property name="postalCodeSize" value="15"/>
-		<property name="locationSize" value="25"/>
-		<property name="countrySize" value="25"/>
-	</renderer>
-	
-	<renderer  type="myorg.domain.util.Address" class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.AddressRenderer">
-	</renderer>
+<renderer
+	type="pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess"
+	layout="process-state"
+	class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.RefundProcessStateRenderer">
+	<property name="classes" value="flow" />
+	<property name="boxClasses" value="box" />
+	<property name="arrowClasses" value="arrow" />
+	<property name="completedStateClass" value="green" />
+	<property name="failedStateClass" value="red" />
+</renderer>
 
-	<renderer mode="input" type="myorg.domain.util.Money" class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.MoneyInputRenderer" />
+<renderer mode="input" type="myorg.domain.util.Address"
+	class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.AddressInputRenderer">
+	<property name="bundle" value="EXPENDITURE_ORGANIZATION_RESOURCES" />
+	<property name="line1Key" value="address.label.line1" />
+	<property name="line2Key" value="address.label.line2" />
+	<property name="locationKey" value="address.label.location" />
+	<property name="postalCodeKey" value="address.label.postalCode" />
+	<property name="countryKey" value="address.label.country" />
+	<property name="errorClasses" value="tderror" />
+	<property name="line1Size" value="40" />
+	<property name="line2Size" value="40" />
+	<property name="postalCodeSize" value="15" />
+	<property name="locationSize" value="25" />
+	<property name="countrySize" value="25" />
+</renderer>
+
+<renderer
+	type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest"
+	class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.FundAllocationStatus">
+	<property name="state1" value="M"/>
+	<property name="state2" value="C"/>
+	<property name="state3" value="Mf"/>
+	<property name="state4" value="Cf"/>
+	<property name="onClass" value="allocated"/>
+	<property name="offClass" value="notallocated"/>
+</renderer>
+
+<renderer type="myorg.domain.util.Address"
+	class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.AddressRenderer">
+</renderer>
+
+<renderer mode="input" type="myorg.domain.util.Money"
+	class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.MoneyInputRenderer" />

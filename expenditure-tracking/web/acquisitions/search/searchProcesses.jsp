@@ -117,7 +117,7 @@
 	<fr:view name="results" schema="viewProcessesInList">
 			<fr:layout name="tabular">
 				<fr:property name="classes" value="tstyle2 mtop05 width100pc asd"/>
-				<fr:property name="columnClasses" value="width100px,,,,,,,,"/>
+				<fr:property name="columnClasses" value="width100px,,,,,,,,nowrap,,,,,,,,,,,,,,,"/>
 				<fr:property name="linkFormat(view)" value="/acquisition${class.simpleName}.do?method=viewProcess&processOid=${OID}"/>
 				<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
 				<fr:property name="key(view)" value="link.view"/>
@@ -128,6 +128,18 @@
 		<cp:collectionPages url="<%= "/search.do?method=searchJump" + pagerString %>" 
 			pageNumberAttributeName="pageNumber" numberOfPagesAttributeName="numberOfPages" numberOfVisualizedPages="10"/>
 	</p>
+	
+
+	<p class="mvert025"><em><bean:message key="label.allocationState.title" bundle="EXPENDITURE_RESOURCES"/>:</em></p>
+	<p class="mvert025"><em><bean:message key="label.project.allocation" bundle="EXPENDITURE_RESOURCES"/>.</em></p>
+	<p class="mvert025"><em><bean:message key="label.allocation" bundle="EXPENDITURE_RESOURCES"/>.</em></p>
+	<p class="mvert025"><em><bean:message key="label.project.finalAllocation" bundle="EXPENDITURE_RESOURCES"/>.</em></p>
+	<p class="mvert025"><em><bean:message key="label.finalAllocation" bundle="EXPENDITURE_RESOURCES"/>.</em></p>	
+	Estado dos cabimentos:
+M - Cabimento MPG.
+C - Cabimento Contabilidade Central.
+Mf - Cabimento final MPG.
+Cf - Cabimento final Contabilidade Central.
 </logic:notEmpty>
 
 <logic:empty name="results">

@@ -155,6 +155,15 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
 	return true;
     }
 
+    public boolean hasAllEffectiveFundAllocationId() {
+	for (Financer financer : getFinancersWithFundsAllocated()) {
+	    if (financer.getEffectiveFundAllocationId() == null) {
+		return false;
+	    }
+	}
+	return true;
+    }
+
     public boolean hasAllFundAllocationId(Person person) {
 	for (Financer financer : getFinancersWithFundsAllocated()) {
 	    if (financer.isAccountingEmployee(person) && financer.getFundAllocationId() == null) {
@@ -333,7 +342,7 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
 	}
 	return false;
     }
-    
+
     public List<PayingUnitTotalBean> getTotalAmountsForEachPayingUnit() {
 	List<PayingUnitTotalBean> beans = new ArrayList<PayingUnitTotalBean>();
 	for (Financer financer : getFinancers()) {

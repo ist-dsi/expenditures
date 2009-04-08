@@ -29,7 +29,7 @@
 				</table>
 			</logic:notEmpty>
 			<logic:empty name="takenProcesses">
-				<em><bean:message key="label.no.takenProcesses" bundle="EXPENDITURE_RESOURCES"/></em>.
+				<p><em><bean:message key="label.no.takenProcesses" bundle="EXPENDITURE_RESOURCES"/>.</em></p>
 			</logic:empty>
 			</div>
 	</div>
