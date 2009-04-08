@@ -95,6 +95,9 @@ public abstract class RequestItem extends RequestItem_Base {
     }
 
     public boolean isApproved() {
+	if (getUnitItemsCount() == 0) {
+	    return false;
+	}
 	for (final UnitItem unitItem : getUnitItems()) {
 	    if (!unitItem.getSubmitedForFundsAllocation()) {
 		return false;
