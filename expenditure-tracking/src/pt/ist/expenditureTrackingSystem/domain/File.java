@@ -8,6 +8,7 @@ import javax.activation.MimetypesFileTypeMap;
 import myorg.domain.util.ByteArray;
 import pt.ist.fenixframework.pstm.Transaction;
 import pt.utl.ist.fenix.tools.util.FileUtils;
+import pt.utl.ist.fenix.tools.util.StringNormalizer;
 
 public class File extends File_Base {
 
@@ -25,8 +26,9 @@ public class File extends File_Base {
     @Override
     public void setFilename(final String filename) {
 	final String nicerFilename = FileUtils.getFilenameOnly(filename);
-	super.setFilename(nicerFilename);
-	setContentType(guessContentType(nicerFilename));
+	final String normalizedFilename = StringNormalizer.normalizePreservingCapitalizedLetters(nicerFilename);
+	super.setFilename(normalizedFilename);
+	setContentType(guessContentType(normalizedFilename));
     }
 
     public void setContent(final byte[] bytes) {
