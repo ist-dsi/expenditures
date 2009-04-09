@@ -243,7 +243,7 @@
 	<table class="tstyle5 mervt1 width100pc">
 		<tr>	
 			<th class="aleft"><bean:message key="acquisitionProcess.label.payingUnits" bundle="ACQUISITION_RESOURCES"/></th>
-			<th>
+			<th class="aright">
 					<bean:message key="acquisitionProcess.label.accountingUnit" bundle="ACQUISITION_RESOURCES"/>
 			</th>
 			<th id="fundAllocationHeader">
@@ -263,7 +263,7 @@
 	<logic:iterate id="payingUnit" name="payingUnits">
 		<tr>
 			<td class="aleft"><fr:view name="payingUnit" property="payingUnit.presentationName"/></td>
-			<td class="aleft"><fr:view name="payingUnit" property="financer.accountingUnit.name"/></td>
+			<td class="aright"><fr:view name="payingUnit" property="financer.accountingUnit.name"/></td>
 		<logic:present name="payingUnit" property="financer.fundAllocationId">
 				<td>
 					<fr:view name="payingUnit" property="financer.fundAllocationIds"/> 
