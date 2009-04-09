@@ -22,6 +22,13 @@
 					<bean:message key="supplier.link.list" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 				</html:link>
 			</li>
+			<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
+				<li>
+					<html:link action="/expenditureTrackingOrganization.do?method=listGiafSuppliers">
+						<bean:message key="supplier.link.list.giaf" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+					</html:link>
+				</li>
+			</logic:present>
 		</ul>
 	</div>
 </logic:present>

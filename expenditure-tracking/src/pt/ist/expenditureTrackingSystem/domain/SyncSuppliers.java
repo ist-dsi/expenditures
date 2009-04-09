@@ -16,20 +16,20 @@ import pt.ist.fenixWebFramework.services.Service;
 
 public class SyncSuppliers extends SyncSuppliers_Base {
 
-    static class GiafSupplier {
-	private String codEnt;
-	private String numFis;
-	private String nom_ent;
-	private String nom_ent_abv;
-	private boolean canceled = false;
+    public static class GiafSupplier {
+	public String codEnt;
+	public String numFis;
+	public String nom_ent;
+	public String nom_ent_abv;
+	public boolean canceled = false;
 
-	private String ruaEnt = " ";
-	private String locEnt = " ";
-	private String codPos = " ";
-	private String codPai = " ";
-	private String telEnt = " ";
-	private String faxEnt = " ";
-	private String email = " ";
+	public String ruaEnt = " ";
+	public String locEnt = " ";
+	public String codPos = " ";
+	public String codPai = " ";
+	public String telEnt = " ";
+	public String faxEnt = " ";
+	public String email = " ";
 
 	GiafSupplier(final ResultSet resultSet) throws SQLException {
 	    codEnt = get(resultSet, 1);
@@ -54,30 +54,36 @@ public class SyncSuppliers extends SyncSuppliers_Base {
 	}
     }
 
-    private static class SupplierMap {
+    public static class SupplierMap {
 
-	private static Map<String, GiafSupplier> giafCodEntMap = new HashMap<String, GiafSupplier>();
-	private static Map<String, GiafSupplier> giafFiscalIdMap = new HashMap<String, GiafSupplier>();
+	public Map<String, GiafSupplier> giafCodEntMap = new HashMap<String, GiafSupplier>();
+	public Map<String, GiafSupplier> giafFiscalIdMap = new HashMap<String, GiafSupplier>();
 
-	public static void index(final GiafSupplier giafSupplier) {
+	public void index(final GiafSupplier giafSupplier) {
 	    giafCodEntMap.put(giafSupplier.codEnt, giafSupplier);
 	    giafFiscalIdMap.put(giafSupplier.numFis, giafSupplier);
 	}
 
-	public static GiafSupplier getGiafSupplierByFiscalId(final String fiscalIdentificationCode) {
+	public GiafSupplier getGiafSupplierByFiscalId(final String fiscalIdentificationCode) {
 	    return giafFiscalIdMap.get(fiscalIdentificationCode);
 	}
 
-	public static GiafSupplier getGiafSupplierByGiafKey(final String giafKey) {
+	public GiafSupplier getGiafSupplierByGiafKey(final String giafKey) {
 	    return giafCodEntMap.get(giafKey);
 	}
 
-	public static Collection<GiafSupplier> getGiafSuppliers() {
+	public Collection<GiafSupplier> getGiafSuppliers() {
 	    return giafCodEntMap.values();
 	}
     }
 
     private static class SupplierQuery extends ExternalDbQuery {
+
+	private final SupplierMap supplierMap;
+
+	SupplierQuery(final SupplierMap supplierMap) {
+	    this.supplierMap = supplierMap;
+	}
 
 	@Override
 	protected String getQueryString() {
@@ -89,13 +95,19 @@ public class SyncSuppliers extends SyncSuppliers_Base {
 	protected void processResultSet(final ResultSet resultSet) throws SQLException {
 	    while (resultSet.next()) {
 		final GiafSupplier giafSupplier = new GiafSupplier(resultSet);
-		SupplierMap.index(giafSupplier);
+		supplierMap.index(giafSupplier);
 	    }
 	}
 	
     }
 
     private static class SupplierContactQuery extends ExternalDbQuery {
+
+	private final SupplierMap supplierMap;
+
+	SupplierContactQuery(final SupplierMap supplierMap) {
+	    this.supplierMap = supplierMap;
+	}
 
 	@Override
 	protected String getQueryString() {
@@ -114,7 +126,7 @@ public class SyncSuppliers extends SyncSuppliers_Base {
 	}
 	
 	private GiafSupplier findRemoteSupplier(final String codEnt) {
-	    for (final GiafSupplier giafSupplier : SupplierMap.getGiafSuppliers()) {
+	    for (final GiafSupplier giafSupplier : supplierMap.getGiafSuppliers()) {
 		if (giafSupplier.codEnt.equals(codEnt)) {
 		    return giafSupplier;
 		}
@@ -124,6 +136,12 @@ public class SyncSuppliers extends SyncSuppliers_Base {
     }
 
     private static class CanceledSupplierQuery extends ExternalDbQuery {
+
+	private final SupplierMap supplierMap;
+
+	CanceledSupplierQuery(final SupplierMap supplierMap) {
+	    this.supplierMap = supplierMap;
+	}
 
 	@Override
 	protected String getQueryString() {
@@ -142,7 +160,7 @@ public class SyncSuppliers extends SyncSuppliers_Base {
 	}
 	
 	private GiafSupplier findRemoteSupplier(final String codEnt) {
-	    for (final GiafSupplier giafSupplier : SupplierMap.getGiafSuppliers()) {
+	    for (final GiafSupplier giafSupplier : supplierMap.getGiafSuppliers()) {
 		if (giafSupplier.codEnt.equals(codEnt)) {
 		    return giafSupplier;
 		}
@@ -151,7 +169,13 @@ public class SyncSuppliers extends SyncSuppliers_Base {
 	}
     }
 
-    private static class SupplierReader extends ExternalDbOperation {
+    public static class SupplierReader extends ExternalDbOperation {
+
+	private final SupplierMap supplierMap;
+
+	public SupplierReader(final SupplierMap supplierMap) {
+	    this.supplierMap = supplierMap;
+	}
 
 	@Override
 	protected String getDbPropertyPrefix() {
@@ -160,13 +184,13 @@ public class SyncSuppliers extends SyncSuppliers_Base {
 
 	@Override
 	protected void doOperation() throws SQLException {
-	    final SupplierQuery supplierQuery = new SupplierQuery();
+	    final SupplierQuery supplierQuery = new SupplierQuery(supplierMap);
 	    executeQuery(supplierQuery);
 
-	    final SupplierContactQuery supplierContactQuery = new SupplierContactQuery();
+	    final SupplierContactQuery supplierContactQuery = new SupplierContactQuery(supplierMap);
 	    executeQuery(supplierContactQuery);
 
-	    final CanceledSupplierQuery canceledSupplierQuery = new CanceledSupplierQuery();
+	    final CanceledSupplierQuery canceledSupplierQuery = new CanceledSupplierQuery(supplierMap);
 	    executeQuery(canceledSupplierQuery);
 	}	
 
@@ -194,15 +218,16 @@ public class SyncSuppliers extends SyncSuppliers_Base {
 
     @Service
     public static void syncData() throws IOException, SQLException {
-	final SupplierReader supplierReader = new SupplierReader();
+	final SupplierMap supplierMap = new SupplierMap();
+	final SupplierReader supplierReader = new SupplierReader(supplierMap);
 	supplierReader.execute();
 
-	System.out.println("Read " + SupplierMap.giafCodEntMap.size() + " suppliers from giaf.");
+	System.out.println("Read " + supplierMap.giafCodEntMap.size() + " suppliers from giaf.");
 
 	int matched = 0;
 	int created = 0;
 	int discarded = 0;
-	for (final GiafSupplier giafSupplier : SupplierMap.getGiafSuppliers()) {
+	for (final GiafSupplier giafSupplier : supplierMap.getGiafSuppliers()) {
 	    if (giafSupplier.canceled || shouldDiscard(giafSupplier)) {
 		discarded++;
 	    }

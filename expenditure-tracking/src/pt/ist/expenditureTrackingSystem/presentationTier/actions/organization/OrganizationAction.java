@@ -23,6 +23,9 @@ import pt.ist.expenditureTrackingSystem.domain.Role;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.SyncProjectsAux.MgpProject;
 import pt.ist.expenditureTrackingSystem.domain.SyncProjectsAux.ProjectReader;
+import pt.ist.expenditureTrackingSystem.domain.SyncSuppliers.GiafSupplier;
+import pt.ist.expenditureTrackingSystem.domain.SyncSuppliers.SupplierMap;
+import pt.ist.expenditureTrackingSystem.domain.SyncSuppliers.SupplierReader;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AcquisitionAfterTheFact;
@@ -583,6 +586,60 @@ public class OrganizationAction extends BaseAction {
 	    row.setCell(supplier.getTotalAllocatedByWorkingCapitals().getValue());
 	    row.setCell(supplier.getTotalAllocatedByRefunds().getValue());
 	    row.setCell(supplier.getTotalAllocatedByPurchases().getValue());
+	}
+
+	return spreadsheet;
+    }
+
+    public ActionForward listGiafSuppliers(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) throws IOException, SQLException {
+
+	Spreadsheet suppliersSheet = getGiafSuppliersSheet();
+	response.setContentType("application/xls ");
+	response.setHeader("Content-disposition", "attachment; filename=fornecedores.xls");
+
+	ServletOutputStream outputStream = response.getOutputStream();
+
+	suppliersSheet.exportToXLSSheet(outputStream);
+	outputStream.flush();
+	outputStream.close();
+
+	return null;
+    }
+
+    private Spreadsheet getGiafSuppliersSheet() throws SQLException {
+	Spreadsheet spreadsheet = new Spreadsheet("Fornecedores");
+	spreadsheet.setHeader("forn_cod_ent");
+	spreadsheet.setHeader("num_fis");
+	spreadsheet.setHeader("nom_ent");
+	spreadsheet.setHeader("nom_ent_abv");
+	spreadsheet.setHeader("canceled");
+	spreadsheet.setHeader("rua_ent");
+	spreadsheet.setHeader("loc_ent");
+	spreadsheet.setHeader("cod_pos");
+	spreadsheet.setHeader("cod_pai");
+	spreadsheet.setHeader("tel_ent");
+	spreadsheet.setHeader("fax_ent");
+	spreadsheet.setHeader("email");
+
+	final SupplierMap supplierMap = new SupplierMap();
+	final SupplierReader supplierReader = new SupplierReader(supplierMap);
+	supplierReader.execute();
+
+	for (final GiafSupplier giafSupplier : supplierMap.getGiafSuppliers()) {
+	    Row row = spreadsheet.addRow();
+	    row.setCell(giafSupplier.codEnt == null ? "" : giafSupplier.codEnt);
+	    row.setCell(giafSupplier.numFis == null ? "" : giafSupplier.numFis);
+	    row.setCell(giafSupplier.nom_ent == null ? "" : giafSupplier.nom_ent);
+	    row.setCell(giafSupplier.nom_ent_abv == null ? "" : giafSupplier.nom_ent_abv);
+	    row.setCell(Boolean.toString(giafSupplier.canceled));
+	    row.setCell(giafSupplier.ruaEnt == null ? "" : giafSupplier.ruaEnt);
+	    row.setCell(giafSupplier.locEnt == null ? "" : giafSupplier.locEnt);
+	    row.setCell(giafSupplier.codPos == null ? "" : giafSupplier.codPos);
+	    row.setCell(giafSupplier.codPai == null ? "" : giafSupplier.codPai);
+	    row.setCell(giafSupplier.telEnt == null ? "" : giafSupplier.telEnt);
+	    row.setCell(giafSupplier.faxEnt == null ? "" : giafSupplier.faxEnt);
+	    row.setCell(giafSupplier.email == null ? "" : giafSupplier.email);
 	}
 
 	return spreadsheet;
