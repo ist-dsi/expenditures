@@ -135,11 +135,6 @@
 	<p class="mvert025"><em><bean:message key="label.allocation" bundle="EXPENDITURE_RESOURCES"/>.</em></p>
 	<p class="mvert025"><em><bean:message key="label.project.finalAllocation" bundle="EXPENDITURE_RESOURCES"/>.</em></p>
 	<p class="mvert025"><em><bean:message key="label.finalAllocation" bundle="EXPENDITURE_RESOURCES"/>.</em></p>	
-	Estado dos cabimentos:
-M - Cabimento MPG.
-C - Cabimento Contabilidade Central.
-Mf - Cabimento final MPG.
-Cf - Cabimento final Contabilidade Central.
 </logic:notEmpty>
 
 <logic:empty name="results">
