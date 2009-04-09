@@ -1,6 +1,6 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
-import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 import myorg.domain.util.Money;
@@ -112,11 +112,6 @@ public class ProjectFinancer extends ProjectFinancer_Base {
     }
 
     @Override
-    public Set<AccountingUnit> getCostCenterAccountingUnits() {
-	return Collections.singleton(getFinancerCostCenter().getAccountingUnit());
-    }
-
-    @Override
     public boolean isAccountingEmployeeForOnePossibleUnit(Person person) {
 	return false;
     }
@@ -124,5 +119,22 @@ public class ProjectFinancer extends ProjectFinancer_Base {
     @Override
     public boolean hasFundAllocationId() {
 	return super.hasFundAllocationId() || getProjectFundAllocationId() != null;
+    }
+
+    public Set<AccountingUnit> getAccountingUnits() {
+	Set<AccountingUnit> res = new HashSet<AccountingUnit>();
+	res.add(getUnit().getAccountingUnit());
+	res.add(AccountingUnit.readAccountingUnitByUnitName("10"));
+	return res;
+    }
+
+    @Override
+    public boolean isProjectAccountingEmployeeForOnePossibleUnit(final Person person) {
+	for (final AccountingUnit accountingUnit : getAccountingUnits()) {
+	    if (accountingUnit.hasPeople(person)) {
+		return true;
+	    }
+	}
+	return false;
     }
 }

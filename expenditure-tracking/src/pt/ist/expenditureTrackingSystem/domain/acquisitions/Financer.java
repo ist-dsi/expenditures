@@ -95,7 +95,8 @@ public class Financer extends Financer_Base {
     }
 
     public boolean isProjectAccountingEmployee(Person person) {
-	return getUnit().isProjectAccountingEmployee(person);
+	return getAccountingUnit().hasProjectAccountants(person);
+//	return getUnit().isProjectAccountingEmployee(person);
     }
 
     protected String getAllocationIds(final String id, final String key) {
@@ -182,6 +183,10 @@ public class Financer extends Financer_Base {
 
     public boolean isTreasuryMember(Person person) {
 	return getUnit().isTreasuryMember(person);
+    }
+
+    public boolean isProjectAccountingEmployeeForOnePossibleUnit(Person person) {
+	return false;
     }
 
 }

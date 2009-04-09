@@ -211,9 +211,19 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
 
     public boolean hasAnyAccountingUnitFinancerWithNoFundsAllocated(final Person person) {
 	for (Financer financer : getFinancersSet()) {
-	    if (financer.isAccountingEmployeeForOnePossibleUnit(person) && financer.getAmountAllocated().isPositive()
-		    && financer.getFundAllocationId() == null) {
-		return true;
+	    if (financer.isProjectFinancer()) {
+		final ProjectFinancer projectFinancer = (ProjectFinancer) financer;
+		if (projectFinancer.isProjectAccountingEmployeeForOnePossibleUnit(person)
+			&& projectFinancer.getAmountAllocated().isPositive()
+			&& projectFinancer.getProjectFundAllocationId() == null) {
+		    return true;
+		}
+	    } else {
+		if (financer.isAccountingEmployeeForOnePossibleUnit(person)
+			&& financer.getAmountAllocated().isPositive()
+			&& financer.getFundAllocationId() == null) {
+		    return true;
+		}
 	    }
 	}
 	return false;
@@ -222,9 +232,18 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
     public Set<Financer> getAccountingUnitFinancerWithNoFundsAllocated(final Person person) {
 	Set<Financer> res = new HashSet<Financer>();
 	for (Financer financer : getFinancersSet()) {
-	    if (financer.isAccountingEmployeeForOnePossibleUnit(person) && financer.getAmountAllocated().isPositive()
-		    && financer.getFundAllocationId() == null) {
-		res.add(financer);
+	    if (financer.isProjectFinancer()) {
+		final ProjectFinancer projectFinancer = (ProjectFinancer) financer;
+		if (projectFinancer.isProjectAccountingEmployeeForOnePossibleUnit(person)
+			&& projectFinancer.getAmountAllocated().isPositive()
+			&& projectFinancer.getProjectFundAllocationId() == null) {
+		    res.add(financer);
+		}		
+	    } else {
+		if (financer.isAccountingEmployeeForOnePossibleUnit(person) && financer.getAmountAllocated().isPositive()
+			&& financer.getFundAllocationId() == null) {
+		    res.add(financer);
+		}
 	    }
 	}
 	return res;

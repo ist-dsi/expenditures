@@ -33,6 +33,12 @@ public class FundAllocationExpirationDate extends GenericAcquisitionProcessActiv
 
     @Override
     protected boolean isAvailable(RegularAcquisitionProcess process) {
+	System.out.println("1: " + super.isAvailable(process));
+	System.out.println("2: " + process.getAcquisitionProcessState().isActive());
+	System.out.println("3: " + (!process.isPendingFundAllocation()));
+	System.out.println("4: " + (!process.getAcquisitionRequest().hasAnyFundAllocationId()));
+	System.out.println("5: " + process.getAcquisitionRequest().isSubmittedForFundsAllocationByAllResponsibles());
+
 	return  super.isAvailable(process)
 		&& process.getAcquisitionProcessState().isActive()
 		&& !process.isPendingFundAllocation()
