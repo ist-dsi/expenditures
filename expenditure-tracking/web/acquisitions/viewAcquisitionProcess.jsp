@@ -44,7 +44,7 @@
 
 <table class="structural">
 	<tr>
-		<td style="width: 40%; padding-right: 1em; border: 1px dotted #aaa; padding: 10px 15px;">
+		<td style="width: 50%; padding-right: 1em; border: 1px dotted #aaa; padding: 10px 15px;">
 			<p class="mtop0 mbottom05"><b style="color: #555;"><bean:message key="label.activities" bundle="EXPENDITURE_RESOURCES"/></b></p>
 			<ul class="operations mtop0">
 			<logic:iterate id="activity" name="acquisitionProcess" property="activeActivitiesForRequest">
@@ -68,8 +68,6 @@
 					</em>
 				</p>
 			</logic:empty>
-			
-			
 			
 			<p class="mtop15 mbottom05"><b style="color: #555;"><bean:message key="link.sideBar.other.operations" bundle="EXPENDITURE_RESOURCES"/></b></p>
 			
@@ -106,69 +104,69 @@
 					</html:link>	
 				</li>
 			</ul>
-
 		</td>
 				
 		<td style="width: 2%;"></td>
-		<td style="width: 40%; border: 1px dotted #aaa; padding: 10px 15px;">
+		
+		<td style="width: 45%; border: 1px dotted #aaa; padding: 10px 15px;">
 			<p class="mtop0 mbottom05"><b style="color: #555;"><bean:message key="label.documents" bundle="EXPENDITURE_RESOURCES"/></b></p>
 			<div class="documents mtop0" style="overflow: hidden; width: 300px">
-	<p>
-		<bean:message key="acquisitionProcess.label.proposalDocument" bundle="ACQUISITION_RESOURCES"/>:
-		<logic:present name="acquisitionProcess" property="acquisitionRequest.acquisitionProposalDocument">
-			<html:link action="<%= actionMapping + ".do?method=downloadAcquisitionProposalDocument"%>" paramId="acquisitionProposalDocumentOid" paramName="acquisitionProcess" paramProperty="acquisitionRequest.acquisitionProposalDocument.OID">
-				<bean:write name="acquisitionProcess" property="acquisitionRequest.acquisitionProposalDocument.filename"/>
-			</html:link>	
-		</logic:present>
-		<logic:notPresent name="acquisitionProcess" property="acquisitionRequest.acquisitionProposalDocument">
-			<em><bean:message key="document.message.info.notAvailable" bundle="EXPENDITURE_RESOURCES"/></em>
-		</logic:notPresent>
-	</p>
-	<p>
-		<bean:message key="acquisitionProcess.label.requestDocument" bundle="ACQUISITION_RESOURCES"/>:
-		<logic:present name="acquisitionProcess" property="acquisitionRequest.purchaseOrderDocument">
-			<html:link action="<%= actionMapping + ".do?method=downloadAcquisitionPurchaseOrderDocument"%>" paramId="purchaseOrderDocumentOid" paramName="acquisitionProcess" paramProperty="acquisitionRequest.purchaseOrderDocument.OID">
-				<bean:write name="acquisitionProcess" property="acquisitionRequest.purchaseOrderDocument.filename"/>
-			</html:link>
-		</logic:present>
-		<logic:notPresent name="acquisitionProcess" property="acquisitionRequest.purchaseOrderDocument">
-			<em><bean:message key="document.message.info.notAvailable" bundle="EXPENDITURE_RESOURCES"/></em>
-		</logic:notPresent>
-	</p>
-	<p>
-		<bean:message key="acquisitionProcess.label.invoice" bundle="ACQUISITION_RESOURCES"/>:
-		<logic:present name="acquisitionProcess" property="acquisitionRequest.invoice">
-			<logic:present name="acquisitionProcess" property="acquisitionRequest.invoice.content">
-				<html:link action="<%= actionMapping + ".do?method=downloadInvoice"%>" paramId="invoiceOid" paramName="acquisitionProcess" paramProperty="acquisitionRequest.invoice.OID">
-					<bean:write name="acquisitionProcess" property="acquisitionRequest.invoice.filename"/>
-				</html:link>
-			</logic:present>	
-			<logic:notPresent name="acquisitionProcess" property="acquisitionRequest.invoice">
-				<em><bean:message key="document.message.info.notAvailable" bundle="EXPENDITURE_RESOURCES"/></em>
-			</logic:notPresent>
-		</logic:present>
-		<logic:notPresent name="acquisitionProcess" property="acquisitionRequest.invoice">
-			<em><bean:message key="document.message.info.notAvailable" bundle="EXPENDITURE_RESOURCES"/></em>
-		</logic:notPresent>
-	</p>
-	<p>
-		<bean:message key="acquisitionProcess.label.otherFiles" bundle="ACQUISITION_RESOURCES"/>:
-		<logic:notEmpty name="acquisitionProcess" property="files">
-			<logic:iterate id="file" name="acquisitionProcess" property="files">
-				<html:link action="<%= actionMapping + ".do?method=downloadGenericFile&acquisitionProcess=" + acquisitionProcessOid %>" paramId="fileOID" paramName="file" paramProperty="OID">
-					<bean:write name="file" property="displayName"/>
-				</html:link>, 
-			</logic:iterate>
-		</logic:notEmpty>
-		<logic:empty name="acquisitionProcess" property="files"><em><bean:message key="document.message.info.notAvailable" bundle="EXPENDITURE_RESOURCES"/></em></logic:empty>
-	</p>
-</div>
+				<p>
+					<bean:message key="acquisitionProcess.label.proposalDocument" bundle="ACQUISITION_RESOURCES"/>:
+					<logic:present name="acquisitionProcess" property="acquisitionRequest.acquisitionProposalDocument">
+						<html:link action="<%= actionMapping + ".do?method=downloadAcquisitionProposalDocument"%>" paramId="acquisitionProposalDocumentOid" paramName="acquisitionProcess" paramProperty="acquisitionRequest.acquisitionProposalDocument.OID">
+							<bean:write name="acquisitionProcess" property="acquisitionRequest.acquisitionProposalDocument.filename"/>
+						</html:link>	
+					</logic:present>
+					<logic:notPresent name="acquisitionProcess" property="acquisitionRequest.acquisitionProposalDocument">
+						<em><bean:message key="document.message.info.notAvailable" bundle="EXPENDITURE_RESOURCES"/></em>
+					</logic:notPresent>
+				</p>
+				<p>
+					<bean:message key="acquisitionProcess.label.requestDocument" bundle="ACQUISITION_RESOURCES"/>:
+					<logic:present name="acquisitionProcess" property="acquisitionRequest.purchaseOrderDocument">
+						<html:link action="<%= actionMapping + ".do?method=downloadAcquisitionPurchaseOrderDocument"%>" paramId="purchaseOrderDocumentOid" paramName="acquisitionProcess" paramProperty="acquisitionRequest.purchaseOrderDocument.OID">
+							<bean:write name="acquisitionProcess" property="acquisitionRequest.purchaseOrderDocument.filename"/>
+						</html:link>
+					</logic:present>
+					<logic:notPresent name="acquisitionProcess" property="acquisitionRequest.purchaseOrderDocument">
+						<em><bean:message key="document.message.info.notAvailable" bundle="EXPENDITURE_RESOURCES"/></em>
+					</logic:notPresent>
+				</p>
+				<p>
+					<bean:message key="acquisitionProcess.label.invoice" bundle="ACQUISITION_RESOURCES"/>:
+					<logic:present name="acquisitionProcess" property="acquisitionRequest.invoice">
+						<logic:present name="acquisitionProcess" property="acquisitionRequest.invoice.content">
+							<html:link action="<%= actionMapping + ".do?method=downloadInvoice"%>" paramId="invoiceOid" paramName="acquisitionProcess" paramProperty="acquisitionRequest.invoice.OID">
+								<bean:write name="acquisitionProcess" property="acquisitionRequest.invoice.filename"/>
+							</html:link>
+						</logic:present>	
+						<logic:notPresent name="acquisitionProcess" property="acquisitionRequest.invoice">
+							<em><bean:message key="document.message.info.notAvailable" bundle="EXPENDITURE_RESOURCES"/></em>
+						</logic:notPresent>
+					</logic:present>
+					<logic:notPresent name="acquisitionProcess" property="acquisitionRequest.invoice">
+						<em><bean:message key="document.message.info.notAvailable" bundle="EXPENDITURE_RESOURCES"/></em>
+					</logic:notPresent>
+				</p>
+				<p>
+					<bean:message key="acquisitionProcess.label.otherFiles" bundle="ACQUISITION_RESOURCES"/>:
+					<logic:notEmpty name="acquisitionProcess" property="files">
+						<logic:iterate id="file" name="acquisitionProcess" property="files">
+							<html:link action="<%= actionMapping + ".do?method=downloadGenericFile&acquisitionProcess=" + acquisitionProcessOid %>" paramId="fileOID" paramName="file" paramProperty="OID">
+								<bean:write name="file" property="displayName"/>
+							</html:link>, 
+						</logic:iterate>
+					</logic:notEmpty>
+					<logic:empty name="acquisitionProcess" property="files"><em><bean:message key="document.message.info.notAvailable" bundle="EXPENDITURE_RESOURCES"/></em></logic:empty>
+				</p>
+			</div>
 			
 			<p>
-					<html:link page="<%= actionMapping + ".do?method=prepareGenericUpload" %>" paramId="processOid" paramName="acquisitionProcess" paramProperty="OID">
-						<bean:message key="acquisitionProcess.link.uploadFile" bundle="ACQUISITION_RESOURCES"/>
-					</html:link>
-				</p>
+				<html:link page="<%= actionMapping + ".do?method=prepareGenericUpload" %>" paramId="processOid" paramName="acquisitionProcess" paramProperty="OID">
+					<bean:message key="acquisitionProcess.link.uploadFile" bundle="ACQUISITION_RESOURCES"/>
+				</html:link>
+			</p>
 		</td>
 	</tr>
 </table>
@@ -243,7 +241,7 @@
 	<table class="tstyle5 mervt1 width100pc">
 		<tr>	
 			<th class="aleft"><bean:message key="acquisitionProcess.label.payingUnits" bundle="ACQUISITION_RESOURCES"/></th>
-			<th class="aright">
+			<th class="acenter">
 					<bean:message key="acquisitionProcess.label.accountingUnit" bundle="ACQUISITION_RESOURCES"/>
 			</th>
 			<th id="fundAllocationHeader">
@@ -263,27 +261,24 @@
 	<logic:iterate id="payingUnit" name="payingUnits">
 		<tr>
 			<td class="aleft"><fr:view name="payingUnit" property="payingUnit.presentationName"/></td>
-			<td class="aright"><fr:view name="payingUnit" property="financer.accountingUnit.name"/></td>
-		<logic:present name="payingUnit" property="financer.fundAllocationId">
+			<td class="acenter"><fr:view name="payingUnit" property="financer.accountingUnit.name"/></td>
+			<logic:present name="payingUnit" property="financer.fundAllocationId">
 				<td>
 					<fr:view name="payingUnit" property="financer.fundAllocationIds"/> 
 					<script type="text/javascript">
 						$('#fundAllocationHeader').show();
 					</script>
 				</td>
-			
-		</logic:present>
-		<logic:present name="payingUnit" property="financer.effectiveFundAllocationId">
-				
+			</logic:present>
+			<logic:present name="payingUnit" property="financer.effectiveFundAllocationId">
 				<td>
 					<fr:view name="payingUnit" property="financer.effectiveFundAllocationIds"/> 
 					<script type="text/javascript">
 						$('#effectiveFundAllocationHeader').show();
 					</script>
 				</td>
-			
-		</logic:present>
-			<td class="aright"><fr:view name="payingUnit" property="amount"/></td>
+			</logic:present>
+			<td class="aright nowrap"><fr:view name="payingUnit" property="amount"/></td>
 		</tr>
 		
 	</logic:iterate>
@@ -315,7 +310,7 @@
 	
 		<logic:notEmpty name="itemSet">
 			<bean:size id="size" name="itemSet"/>
-						<table class="tstyle5 thright mvert1" style="width: 100%;" id="itemResume">
+			<table class="tstyle5 thright mvert1" style="width: 100%;" id="itemResume">
 				<tr>
 					<th></th>
 					<th class="aleft"><bean:message key="acquisitionRequestItem.label.description" bundle="ACQUISITION_RESOURCES"/></th>
@@ -325,7 +320,7 @@
 				<logic:iterate id="itemResume" name="itemSet" indexId="index">
 					<bean:define id="currentIndex" value="<%= String.valueOf(index + 1) %>"/>
 					<tr>
-						<td>
+						<td class="nowrap">
 							<%= ContentContextInjectionRewriter.BLOCK_HAS_CONTEXT_PREFIX %>
 							<%= GenericChecksumRewriter.NO_CHECKSUM_PREFIX %><a href="<%= "#item" + currentIndex%>">
 								Item <%= currentIndex %>
@@ -334,17 +329,16 @@
 						</td>
 
 						<td class="aleft"><fr:view name="itemResume" property="description"/></td>
-						<td class="aright"><fr:view name="itemResume" property="quantity"/></td>
-						<td class="aright"><fr:view name="itemResume" property="currentTotalItemValueWithAdditionalCostsAndVat"/></td>
+						<td class="acenter"><fr:view name="itemResume" property="quantity"/></td>
+						<td class="aright nowrap"><fr:view name="itemResume" property="currentTotalItemValueWithAdditionalCostsAndVat"/></td>
 					</tr>
 				</logic:iterate>
 				<logic:greaterThan value="1" name="size">
 					<tr>
-						<td colspan="4" class="aright"><span><b></b><fr:view name="acquisitionProcess" property="acquisitionRequest.currentTotalValue"/></span></td>
+						<th colspan="4" class="aright" style="padding: 0.4em 0.8em;"><span><b></b><fr:view name="acquisitionProcess" property="acquisitionRequest.currentTotalValue"/></span></th>
 					</tr>
 				</logic:greaterThan>
 			</table>
-			
 		</logic:notEmpty>
 		
 		<bean:size id="totalItems" name="itemSet"/>

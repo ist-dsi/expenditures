@@ -6,7 +6,9 @@
 <%@ taglib uri="/WEB-INF/collectionPager.tld" prefix="cp"%>
 
 
-<%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPaymentProcess"%><h2><bean:message key="process.label.searchProcesses" bundle="EXPENDITURE_RESOURCES"/></h2>
+<%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPaymentProcess"%>
+
+<h2><bean:message key="process.label.searchProcesses" bundle="EXPENDITURE_RESOURCES"/></h2>
 
 <bean:define id="schema" value="search.default" toScope="request" />
 
@@ -17,7 +19,7 @@
 </logic:present>
 
 <div class="forminline mbottom1 mtop075">
-	<table class="structural">
+	<table>
 		<tr>
 			<td>
 				<fr:form action="/search.do?method=mySearches">

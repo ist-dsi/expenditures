@@ -9,11 +9,10 @@
 		<div class="portlet-content">
 		
 			<logic:notEmpty name="person" property="saveSearches">
-				<table>
+				<table style="width: 100%;">
 				<logic:iterate id="search" name="person" property="saveSearches">
 					<bean:define id="OID" name="search" property="OID"/>
 					<tr>
-					
 						<td>
 							<html:link page="<%= "/search.do?method=viewSearch&searchOID=" + OID %>">
 								<fr:view name="search" property="searchName" />
