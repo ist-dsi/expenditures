@@ -1,6 +1,6 @@
 package pt.ist.expenditureTrackingSystem.presentationTier.renderers;
 
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestWithPayment;
 import pt.ist.fenixWebFramework.renderers.OutputRenderer;
 import pt.ist.fenixWebFramework.renderers.components.HtmlBlockContainer;
 import pt.ist.fenixWebFramework.renderers.components.HtmlComponent;
@@ -55,7 +55,8 @@ public class FundAllocationStatus extends OutputRenderer {
 
 	    @Override
 	    public HtmlComponent createComponent(Object object, Class type) {
-		AcquisitionRequest request = (AcquisitionRequest) object;
+		//AcquisitionRequest request = (AcquisitionRequest) object;
+		RequestWithPayment request = (RequestWithPayment) object;
 		HtmlBlockContainer container = new HtmlBlockContainer();
 
 		boolean hasProjectFinancers = request.hasAnyProjectFinancers();

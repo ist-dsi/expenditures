@@ -48,7 +48,7 @@
 </renderer>
 
 <renderer
-	type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest"
+	type="pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestWithPayment"
 	class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.FundAllocationStatus">
 	<property name="state1" value="M"/>
 	<property name="state2" value="C"/>

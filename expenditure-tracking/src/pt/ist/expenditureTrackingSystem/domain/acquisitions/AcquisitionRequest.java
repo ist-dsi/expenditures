@@ -487,15 +487,6 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	return false;
     }
 
-    public boolean hasAnyProjectFinancers() {
-	for (Financer financer : getFinancers()) {
-	    if (financer.isProjectFinancer()) {
-		return true;
-	    }
-	}
-	return false;
-    }
-
     public boolean isProjectAccountingEmployeeForOnePossibleUnit(Person person) {
 	for (final Financer financer : getFinancersSet()) {
 	    if (financer.isProjectFinancer()) {

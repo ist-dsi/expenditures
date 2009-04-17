@@ -5,11 +5,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import myorg.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.dto.PayingUnitTotalBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
-import myorg.domain.util.Money;
 
 public abstract class RequestWithPayment extends RequestWithPayment_Base {
 
@@ -56,7 +56,7 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
 		return false;
 	    }
 	}
-	return true;
+	return !getFinancersSet().isEmpty();
     }
 
     public boolean hasAllocatedFundsForAllProjectFinancers(Person person) {
@@ -152,7 +152,7 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
 		return false;
 	    }
 	}
-	return true;
+	return !getFinancersWithFundsAllocated().isEmpty();
     }
 
     public boolean hasAllEffectiveFundAllocationId() {
@@ -161,7 +161,7 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
 		return false;
 	    }
 	}
-	return true;
+	return !getFinancersWithFundsAllocated().isEmpty();
     }
 
     public boolean hasAllFundAllocationId(Person person) {
@@ -350,7 +350,7 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
 		return false;
 	    }
 	}
-	return true;
+	return !getFinancersSet().isEmpty();
     }
 
     public boolean isTreasuryMember(final Person person) {
@@ -448,6 +448,15 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
 	    }
 	}
 	return res;
+    }
+
+    public boolean hasAnyProjectFinancers() {
+	for (Financer financer : getFinancers()) {
+	    if (financer.isProjectFinancer()) {
+		return true;
+	    }
+	}
+	return false;
     }
 
 }
