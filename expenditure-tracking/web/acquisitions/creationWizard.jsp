@@ -30,7 +30,7 @@
 			</p>
 		</li>
 
-		<li>
+		<li class="mbottom1">
 			<p class="mvert025">
 				<strong>
 					<html:link styleClass="big" action="/acquisitionRefundProcess.do?method=prepareCreateRefundProcess">
