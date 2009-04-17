@@ -278,4 +278,7 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
     public String getTypeShortDescription() {
 	return BundleUtil.getStringFromResourceBundle("resources/ExpenditureResources", "label." + getClass().getSimpleName() + ".shortDescription");
     }
+
+    public abstract boolean isAppiableForYear(final int year);
+
 }

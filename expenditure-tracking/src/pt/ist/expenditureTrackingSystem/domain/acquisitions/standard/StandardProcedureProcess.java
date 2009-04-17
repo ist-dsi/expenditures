@@ -195,4 +195,9 @@ public class StandardProcedureProcess extends StandardProcedureProcess_Base {
     public boolean hasAnyAvailableActivitity() {
 	return !getActiveActivitiesForItem().isEmpty() || !getActiveActivitiesForRequest().isEmpty();
     }
+
+    public boolean isAppiableForYear(final int year) {
+	throw new Error("not.implemented");
+    }
+
 }

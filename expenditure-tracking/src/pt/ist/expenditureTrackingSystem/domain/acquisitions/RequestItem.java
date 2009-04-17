@@ -209,4 +209,6 @@ public abstract class RequestItem extends RequestItem_Base {
 	return totalValue.equals(realValue);
     }
 
+    public abstract Money getTotalAmountForCPV(final int year);
+
 }

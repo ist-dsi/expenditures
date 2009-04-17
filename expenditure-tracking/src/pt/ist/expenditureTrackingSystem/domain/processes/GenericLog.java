@@ -21,6 +21,15 @@ public class GenericLog extends GenericLog_Base {
 	
     };
 
+    public static final Comparator<GenericLog> COMPARATOR_BY_WHEN_REVERSED = new Comparator<GenericLog>() {
+
+	@Override
+	public int compare(final GenericLog genericLog1, final GenericLog genericLog2) {
+	    return COMPARATOR_BY_WHEN.compare(genericLog2, genericLog1);
+	}
+
+    };
+
     protected GenericLog() {
 	super();
 	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());

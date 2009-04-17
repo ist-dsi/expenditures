@@ -11,6 +11,7 @@ import myorg.domain.contents.Node;
 import myorg.domain.groups.AnonymousGroup;
 import myorg.domain.groups.AnyoneGroup;
 import myorg.domain.groups.PersistentGroup;
+import myorg.domain.groups.UnionGroup;
 import myorg.domain.groups.UserGroup;
 import myorg.presentationTier.actions.ContextBaseAction;
 import myorg.util.BundleUtil;
@@ -95,19 +96,23 @@ public class InterfaceCreationAction extends ContextBaseAction {
 	ActionNode.createActionNode(virtualHost, organizationNode, "/expenditureTrackingOrganization", "manageSuppliers",
 		"resources.ExpenditureOrganizationResources", "supplier.link.manage", UserGroup.getInstance());
 
+	final PersistentGroup statisticsGroup = pt.ist.expenditureTrackingSystem.domain.Role.getRole(pt.ist.expenditureTrackingSystem.domain.RoleType.STATISTICS_VIEWER).getSystemRole();
+	final PersistentGroup acquisitionCentralManagerGroup = pt.ist.expenditureTrackingSystem.domain.Role.getRole(pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL_MANAGER).getSystemRole();
+	final UnionGroup statisticsOrAcquisitionCentralManagerGroup = UnionGroup.createUnionGroup(statisticsGroup, acquisitionCentralManagerGroup);
+
 	final Node statisticsNode = ActionNode.createActionNode(
-		virtualHost, node, "/statistics", "showSimplifiedProcessStatistics",
+		virtualHost, node, "/statistics", "showStatisticsReports",
 		"resources.ExpenditureResources", "link.topBar.statistics",
-		pt.ist.expenditureTrackingSystem.domain.Role.getRole(pt.ist.expenditureTrackingSystem.domain.RoleType.STATISTICS_VIEWER)
-				.getSystemRole());
+		statisticsOrAcquisitionCentralManagerGroup);
 	ActionNode.createActionNode(virtualHost, statisticsNode, "/statistics", "showSimplifiedProcessStatistics",
 		"resources.StatisticsResources", "label.statistics.process.simplified",
-		pt.ist.expenditureTrackingSystem.domain.Role.getRole(pt.ist.expenditureTrackingSystem.domain.RoleType.STATISTICS_VIEWER)
-				.getSystemRole());
+		statisticsGroup);
 	ActionNode.createActionNode(virtualHost, statisticsNode, "/statistics", "showRefundProcessStatistics",
 		"resources.StatisticsResources", "label.statistics.process.refund",
-		pt.ist.expenditureTrackingSystem.domain.Role.getRole(pt.ist.expenditureTrackingSystem.domain.RoleType.STATISTICS_VIEWER)
-				.getSystemRole());
+		statisticsGroup);
+	ActionNode.createActionNode(virtualHost, statisticsNode, "/statistics", "showStatisticsReports",
+		"resources.StatisticsResources", "label.statistics.reports",
+		statisticsOrAcquisitionCentralManagerGroup);
 
 	return forwardToMuneConfiguration(request, virtualHost, node);
     }

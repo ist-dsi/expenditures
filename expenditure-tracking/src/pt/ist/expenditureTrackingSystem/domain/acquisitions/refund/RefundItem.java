@@ -3,6 +3,8 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.refund;
 import java.math.BigDecimal;
 import java.util.Set;
 
+import myorg.domain.util.Money;
+
 import org.joda.time.LocalDate;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
@@ -11,7 +13,6 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.UnitItem;
 import pt.ist.expenditureTrackingSystem.domain.dto.RefundItemBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
-import myorg.domain.util.Money;
 import pt.ist.fenixWebFramework.services.Service;
 
 public class RefundItem extends RefundItem_Base {
@@ -119,4 +120,10 @@ public class RefundItem extends RefundItem_Base {
 	    }
 	}
     }
+
+    @Override
+    public Money getTotalAmountForCPV(final int year) {
+	throw new Error("not.implemented");
+    }
+
 }

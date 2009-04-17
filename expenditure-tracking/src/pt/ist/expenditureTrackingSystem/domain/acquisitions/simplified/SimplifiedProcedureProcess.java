@@ -279,4 +279,8 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	return getLastAcquisitionProcessState().getLocalizedName();
     }
 
+    public boolean isAppiableForYear(final int year) {
+	return Util.isAppiableForYear(year, this);
+    }
+
 }

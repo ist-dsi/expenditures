@@ -4,15 +4,18 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import myorg.domain.util.Money;
 import myorg.presentationTier.actions.ContextBaseAction;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.statistics.RefundProcessActivityLogStatistics;
@@ -20,6 +23,8 @@ import pt.ist.expenditureTrackingSystem.domain.statistics.RefundProcessStatistic
 import pt.ist.expenditureTrackingSystem.domain.statistics.SimplifiedProcessActivityLogStatistics;
 import pt.ist.expenditureTrackingSystem.domain.statistics.SimplifiedProcessStatistics;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
+import pt.utl.ist.fenix.tools.util.excel.Spreadsheet;
+import pt.utl.ist.fenix.tools.util.excel.Spreadsheet.Row;
 
 @Mapping(path = "/statistics")
 public class StatisticsAction extends ContextBaseAction {
@@ -307,6 +312,51 @@ public class StatisticsAction extends ContextBaseAction {
 	}
 
 	return null;
+    }
+
+    public ActionForward showStatisticsReports(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	YearBean yearBean = getRenderedObject();
+	if (yearBean == null) {
+	    yearBean = new YearBean();
+	}
+	request.setAttribute("yearBean", yearBean);
+
+	return forward(request, "/statistics/showStatisticsReports.jsp");
+    }
+
+    public ActionForward downloadStatisticsByCPV(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) throws IOException {
+	final Integer year = Integer.valueOf((String) getAttribute(request, "year"));
+
+	Spreadsheet suppliersSheet = createStatisticsByCPV(year);
+	response.setContentType("application/xls ");
+	response.setHeader("Content-disposition", "attachment; filename=cvp" + year + ".xls");
+
+	ServletOutputStream outputStream = response.getOutputStream();
+
+	suppliersSheet.exportToXLSSheet(outputStream);
+	outputStream.flush();
+	outputStream.close();
+
+	return null;
+    }
+
+    private Spreadsheet createStatisticsByCPV(final Integer year) {
+	final Spreadsheet spreadsheet = new Spreadsheet("CPV " + year);
+	spreadsheet.setHeader("CPV");
+	spreadsheet.setHeader("CPV desc.");
+	spreadsheet.setHeader("Montante");
+	for (final CPVReference reference : getMyOrg().getExpenditureTrackingSystem().getCPVReferencesSet()) {
+	    final Money money = reference.getTotalAmountAllocated(year);
+	    if (!money.isZero()) {
+		final Row row = spreadsheet.addRow();
+		row.setCell(reference.getCode());
+		row.setCell(reference.getDescription());
+		row.setCell(money.toFormatStringWithoutCurrency());
+	    }
+	}
+	return spreadsheet;
     }
 
 }

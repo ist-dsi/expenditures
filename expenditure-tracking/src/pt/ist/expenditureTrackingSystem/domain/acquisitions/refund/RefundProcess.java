@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import myorg.applicationTier.Authenticate.UserView;
-import myorg.domain.User;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
@@ -45,7 +43,6 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.Su
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.SubmitForInvoiceConfirmation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.UnSubmitForApproval;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.UnSubmitForFundAllocation;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ReceiveInvoice;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateRefundProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
@@ -396,6 +393,10 @@ public class RefundProcess extends RefundProcess_Base {
 	    suppliers.add(invoice.getSupplier());
 	}
 	return suppliers;
+    }
+
+    public boolean isAppiableForYear(final int year) {
+	throw new Error("not.implemented");
     }
 
 }

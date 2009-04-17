@@ -1,5 +1,6 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
+import myorg.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 
@@ -34,4 +35,13 @@ public class CPVReference extends CPVReference_Base {
     public String getFullDescription() {
 	return getCode() + " - " + getDescription();
     }
+
+    public Money getTotalAmountAllocated(final int year) {
+	Money money = Money.ZERO;
+	for (final RequestItem requestItem : getAcquisitionItemsSet()) {
+	    money = money.add(requestItem.getTotalAmountForCPV(year));
+	}
+	return money;
+    }
+
 }

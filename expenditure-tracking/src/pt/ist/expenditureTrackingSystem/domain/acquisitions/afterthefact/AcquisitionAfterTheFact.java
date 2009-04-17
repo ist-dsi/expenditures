@@ -1,6 +1,9 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact;
 
 import myorg.domain.util.Money;
+
+import org.joda.time.LocalDate;
+
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.dto.AfterTheFactAcquisitionProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
@@ -46,6 +49,11 @@ public class AcquisitionAfterTheFact extends AcquisitionAfterTheFact_Base {
 	    throw new DomainException("acquisitionProcess.message.exception.SupplierDoesNotAlloweAmount");
 	}
 	super.setValue(value);
+    }
+
+    public boolean isAppiableForYear(final int year) {
+	final LocalDate localDate = getInvoiceDate();
+	return localDate != null && localDate.getYear() == year;
     }
 
 }

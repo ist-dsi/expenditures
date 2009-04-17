@@ -354,4 +354,15 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	return totalRealItemValueWithAdditionalCosts == null ? getTotalItemValueWithAdditionalCosts() : totalRealItemValueWithAdditionalCosts;
     }
 
+    @Override
+    public Money getTotalAmountForCPV(final int year) {
+	return isAppliableForCPV(year) ? getCurrentSupplierAllocationValue() : Money.ZERO;
+    }
+
+    private boolean isAppliableForCPV(final int year) {
+	final AcquisitionRequest acquisitionRequest = getAcquisitionRequest();
+	final AcquisitionProcess acquisitionProcess = acquisitionRequest.getProcess();
+	return acquisitionProcess.isActive() && acquisitionProcess.isAppiableForYear(year);
+    }
+
 }

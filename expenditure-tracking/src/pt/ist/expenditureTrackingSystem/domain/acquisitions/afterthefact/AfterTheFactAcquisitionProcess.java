@@ -120,4 +120,8 @@ public class AfterTheFactAcquisitionProcess extends AfterTheFactAcquisitionProce
 	// nothing to do here...
     }
 
+    public boolean isAppiableForYear(final int year) {
+	return getAcquisitionAfterTheFact().isAppiableForYear(year);
+    }
+
 }
