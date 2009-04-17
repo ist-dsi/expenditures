@@ -24,6 +24,8 @@ import org.apache.struts.action.ActionMapping;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
@@ -67,6 +69,12 @@ public class DashBoardAction extends ContextBaseAction {
 	counters.addAll(simplifiedMap.values());
 	Collections.sort(counters, new BeanComparator("countableObject"));
 	request.setAttribute("simplifiedCounters", counters);
+
+	Map<RefundProcessStateType, Counter<RefundProcessStateType>> refundMap = generateRefundMap(getRefundProcesses(loggedPerson));
+	List<Counter<RefundProcessStateType>> refundCounters = new ArrayList<Counter<RefundProcessStateType>>();
+	refundCounters.addAll(refundMap.values());
+	Collections.sort(refundCounters, new BeanComparator("countableObject"));
+	request.setAttribute("refundCounters", refundCounters);
 
 	List<AcquisitionProcess> myProcesses = loggedPerson.getAcquisitionProcesses();
 	Collections.sort(myProcesses, new ReverseComparator(new BeanComparator("acquisitionProcessState.whenDateTime")));
@@ -112,6 +120,20 @@ public class DashBoardAction extends ContextBaseAction {
 	}, null);
     }
 
+    private Set<RefundProcess> getRefundProcesses(Person loggedPerson) {
+
+	return loggedPerson.hasAnyAuthorizations() ? GenericProcess.getProcessesWithResponsible(RefundProcess.class,
+		loggedPerson, null) : GenericProcess.getAllProcess(RefundProcess.class, new Predicate() {
+
+	    @Override
+	    public boolean evaluate(Object arg0) {
+		RefundProcess process = (RefundProcess) arg0;
+		return process.hasAnyAvailableActivitity();
+	    }
+
+	}, null);
+    }
+
     private Map<AcquisitionProcessStateType, Counter<AcquisitionProcessStateType>> generateAcquisitionMap(
 	    Collection<SimplifiedProcedureProcess> processes) {
 	Map<AcquisitionProcessStateType, Counter<AcquisitionProcessStateType>> map = new HashMap<AcquisitionProcessStateType, Counter<AcquisitionProcessStateType>>();
@@ -122,6 +144,23 @@ public class DashBoardAction extends ContextBaseAction {
 	    Counter<AcquisitionProcessStateType> counter = map.get(type);
 	    if (counter == null) {
 		counter = new Counter<AcquisitionProcessStateType>(type);
+		map.put(type, counter);
+	    }
+	    counter.increment();
+	}
+	return map;
+    }
+
+    private Map<RefundProcessStateType, Counter<RefundProcessStateType>> generateRefundMap(
+	    Collection<RefundProcess> processes) {
+	Map<RefundProcessStateType, Counter<RefundProcessStateType>> map = new HashMap<RefundProcessStateType, Counter<RefundProcessStateType>>();
+
+	for (RefundProcess process : processes) {
+
+	    RefundProcessStateType type = process.getProcessState().getRefundProcessStateType();
+	    Counter<RefundProcessStateType> counter = map.get(type);
+	    if (counter == null) {
+		counter = new Counter<RefundProcessStateType>(type);
 		map.put(type, counter);
 	    }
 	    counter.increment();

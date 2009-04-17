@@ -155,18 +155,20 @@
 
 
 
-<bean:define id="payingUnits" name="refundProcess" property="acquisitionRequest.totalAmountsForEachPayingUnit"/>
+<bean:define id="payingUnits" name="refundProcess" property="request.totalAmountsForEachPayingUnit"/>
 <logic:notEmpty name="payingUnits">
 
 	<table class="tstyle5 mervt1 width100pc">
 		<tr>	
 			<th class="aleft"><bean:message key="acquisitionProcess.label.payingUnits" bundle="ACQUISITION_RESOURCES"/></th>
+			<th class="acenter"><bean:message key="acquisitionProcess.label.accountingUnit" bundle="ACQUISITION_RESOURCES"/></th>
 			<th class="aright"><bean:message key="financer.label.value" bundle="ACQUISITION_RESOURCES"/></th>
 		</tr>
 	
 	<logic:iterate id="payingUnit" name="payingUnits">
 		<tr>
 			<td class="aleft"><fr:view name="payingUnit" property="payingUnit.presentationName"/></td>
+			<td class="acenter"><fr:view name="payingUnit" property="financer.accountingUnit.name"/></td>
 			<td class="aright"><fr:view name="payingUnit" property="amount"/></td>
 		</tr>
 	</logic:iterate>
