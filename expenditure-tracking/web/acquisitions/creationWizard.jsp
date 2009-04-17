@@ -29,6 +29,19 @@
 				<bean:message key="message.info.acquisitionSimplifiedProcessExplanation" bundle="EXPENDITURE_RESOURCES"/>
 			</p>
 		</li>
+
+		<li>
+			<p class="mvert025">
+				<strong>
+					<html:link styleClass="big" action="/acquisitionRefundProcess.do?method=prepareCreateRefundProcess">
+						<bean:message key="link.create.refundProcess" bundle="EXPENDITURE_RESOURCES"/>
+					</html:link>
+				</strong>
+			</p>
+			<p class="mvert025">
+				<bean:message key="message.info.refundProcessExplanation" bundle="EXPENDITURE_RESOURCES"/>
+			</p>
+		</li>
 	
 		<li class="mbottom1">
 			<p class="mvert025">
@@ -47,23 +60,6 @@
 			</p>
 		</li>
 	
-	
-		<li>
-			<p class="mvert025">
-				<strong>
-				<%-- 
-					<html:link styleClass="big" action="/acquisitionRefundProcess.do?method=prepareCreateRefundProcess">
-				 --%>
-						<bean:message key="link.create.refundProcess" bundle="EXPENDITURE_RESOURCES"/>
-				<%-- 
-					</html:link>
-				 --%>
-				</strong>
-			</p>
-			<p class="mvert025">
-				<bean:message key="message.info.refundProcessExplanation" bundle="EXPENDITURE_RESOURCES"/>
-			</p>
-		</li>
 	</ul>
 
 </div>
