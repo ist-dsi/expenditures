@@ -243,6 +243,9 @@ public class SyncProjectsAux {
 	project.setAccountingUnit(accountingUnit);
 
 	final Person responsible = findPerson(responsibleString);
+	    if (responsibleString.equals("953")) {
+		System.out.println("   resp string 953 has resopnsible: " + responsible);
+	    }
 	if (responsible != null) {
 	    if (projectResponsibles.contains(Integer.valueOf(responsibleString))) {
 		if (!hasAuthorization(project, responsible)) {
@@ -251,6 +254,9 @@ public class SyncProjectsAux {
 		}
 	    } else {
 		// System.out.println("[" + responsibleString + "] for project [" + acronym + "] is not in project responsibles list");
+		if (!hasAprovalAuthorization(project, responsible)) {
+		    new Authorization(responsible, project);
+		}
 	    }
 	}	    
 
@@ -265,6 +271,15 @@ public class SyncProjectsAux {
     private boolean hasAuthorization(final Project project, final Person responsible) {
 	for (final Authorization authorization : project.getAuthorizationsSet()) {
 	    if (authorization.getPerson() == responsible && authorization.getMaxAmount().isGreaterThanOrEqual(AUTHORIZED_VALUE)) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
+    private boolean hasAprovalAuthorization(final Project project, final Person responsible) {
+	for (final Authorization authorization : project.getAuthorizationsSet()) {
+	    if (authorization.getPerson() == responsible && authorization.getMaxAmount().isGreaterThanOrEqual(Money.ZERO)) {
 		return true;
 	    }
 	}
@@ -311,9 +326,12 @@ public class SyncProjectsAux {
     }
 
     private String findISTUsername(String nMec) {
+	if (nMec.length() == 66 && nMec.indexOf("99") == 0) {
+	    return null;
+	}
 	String username = teachers.get(nMec);
 	if (username == null) {
-	    // System.out.println("Can't find username for " + nMec);
+//	    System.out.println("Can't find username for " + nMec);
 	}
 	return username;
     }
