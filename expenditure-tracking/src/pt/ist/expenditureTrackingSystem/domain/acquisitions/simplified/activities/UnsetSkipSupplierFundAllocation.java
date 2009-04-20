@@ -16,8 +16,9 @@ public class UnsetSkipSupplierFundAllocation extends GenericAcquisitionProcessAc
     @Override
     protected boolean isAvailable(RegularAcquisitionProcess process) {
 	return super.isAvailable(process)
-		&& (process.getAcquisitionProcessState().isInGenesis() && getLoggedPerson() == process.getRequestor() || (process
-			.getAcquisitionProcessState().isAuthorized() && userHasRole(RoleType.ACQUISITION_CENTRAL)))
+		&& (process.getAcquisitionProcessState().isInGenesis() && getLoggedPerson() == process.getRequestor()
+			|| (userHasRole(RoleType.ACQUISITION_CENTRAL) &&
+				(process.getAcquisitionProcessState().isAuthorized() || process.getAcquisitionProcessState().isAcquisitionProcessed())))
 		&& process.getSkipSupplierFundAllocation();
     }
 
