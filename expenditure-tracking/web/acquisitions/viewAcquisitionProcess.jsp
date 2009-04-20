@@ -335,7 +335,7 @@
 				</logic:iterate>
 				<logic:greaterThan value="1" name="size">
 					<tr>
-						<th colspan="4" class="aright" style="padding: 0.4em 0.8em;"><span><b></b><fr:view name="acquisitionProcess" property="acquisitionRequest.currentTotalValue"/></span></th>
+						<th colspan="4" class="aright" style="padding: 0.4em 0.8em;"><span><b></b><fr:view name="acquisitionProcess" property="acquisitionRequest.currentTotalRoundedValue"/></span></th>
 					</tr>
 				</logic:greaterThan>
 			</table>

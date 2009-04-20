@@ -252,6 +252,14 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	return result;
     }
 
+    public Money getCurrentTotalRoundedValue() {
+	Money result = Money.ZERO;
+	for (final AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
+	    result = result.addAndRound(acquisitionRequestItem.getCurrentTotalItemValueWithAdditionalCostsAndVat());
+	}
+	return result;
+    }
+    
     @Override
     public void receiveInvoice(final String filename, final byte[] bytes, final String invoiceNumber, final LocalDate invoiceDate) {
 	super.receiveInvoice(filename, bytes, invoiceNumber, invoiceDate);
