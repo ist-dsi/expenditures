@@ -2,8 +2,10 @@ package pt.ist.expenditureTrackingSystem.domain;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -20,6 +22,7 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.persistenceTier.ExternalDbOperation;
 import pt.ist.expenditureTrackingSystem.persistenceTier.ExternalDbQuery;
 import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.pstm.Transaction;
 import pt.utl.ist.fenix.tools.util.FileUtils;
 
 public class SyncProjectsAux {
@@ -155,13 +158,28 @@ public class SyncProjectsAux {
 	System.out.println("Did not find " + notFoundCostCenters.size() + " cost centers.");
     }
 
-    private void loadTeachers() throws IOException {
-	final InputStream inputStream = getClass().getResourceAsStream("/teacher.csv");
-	final String contents = FileUtils.readFile(inputStream);
-	for (String line : contents.split("\n")) {
-	    String[] split = line.split("\t");
-	    if (split.length == 2 && split[1] != null && !split[1].isEmpty()) {
-		teachers.put(split[0], split[1]);
+    private void loadTeachers() throws SQLException {
+	final Connection connection = Transaction.getCurrentJdbcConnection();
+
+	Statement statementQuery = null;
+	ResultSet resultSetQuery = null;
+	try {
+	    statementQuery = connection.createStatement();
+	    resultSetQuery = statementQuery.executeQuery("select fenix.USER.USER_U_ID, fenix.TEACHER.TEACHER_NUMBER from fenix.TEACHER inner join fenix.USER on fenix.USER.KEY_PERSON = fenix.TEACHER.KEY_PERSON;");
+	    int c = 0;
+	    while (resultSetQuery.next()) {
+		final String username = resultSetQuery.getString(1);
+		final String teacherNumber = resultSetQuery.getString(2);
+		teachers.put(teacherNumber, username);
+		c++;
+	    }
+	    System.out.println("Processed: " + c + " teachers.");
+	} finally {
+	    if (resultSetQuery != null) {
+		resultSetQuery.close();
+	    }
+	    if (statementQuery != null) {
+		statementQuery.close();
 	    }
 	}
     }
