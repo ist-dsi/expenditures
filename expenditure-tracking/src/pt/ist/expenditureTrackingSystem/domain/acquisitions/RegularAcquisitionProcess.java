@@ -222,7 +222,9 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
 
     public void removeFundAllocationExpirationDate() {
 	setFundAllocationExpirationDate(null);
-	submitForFundAllocation();
+	if (!getAcquisitionProcessState().isCanceled()) {
+	    submitForFundAllocation();
+	}
     }
 
     @Override
