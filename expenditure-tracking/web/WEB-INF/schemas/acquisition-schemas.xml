@@ -63,11 +63,6 @@
 	<slot name="requestUnitPayingUnit" key="acquisitionProcess.label.addRequestUnitAlsoHasPayingUnit" bundle="ACQUISITION_RESOURCES" />
 </schema>
 
-<schema name="editAcquisitionRequest"
-		type="pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean"
-		bundle="ACQUISITION_RESOURCES" extends="createAcquisitionRequest">
-</schema>
-
 <schema name="viewAcquisitionRequest"
 		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest"
 		bundle="ACQUISITION_RESOURCES">
