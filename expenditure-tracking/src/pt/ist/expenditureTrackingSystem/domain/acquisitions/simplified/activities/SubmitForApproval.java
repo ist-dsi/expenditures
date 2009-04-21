@@ -25,12 +25,4 @@ public class SubmitForApproval extends GenericAcquisitionProcessActivity {
 	process.submitForApproval();
     }
 
-    @Override
-    protected void notifyUsers(final RegularAcquisitionProcess process) {
-	ServiceManager.registerAfterCommitCommand(new Command() {
-	    public void execute() {
-		notifyUnitsResponsibles(process);
-	    }
-	});
-    }
 }
