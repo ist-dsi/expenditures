@@ -11,6 +11,7 @@ public class DashBoard extends DashBoard_Base {
 
     public DashBoard(Person person) {
 	super();
+	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
 	setPerson(person);
 	reset();
     }
