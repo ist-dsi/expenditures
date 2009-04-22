@@ -92,8 +92,11 @@ public class DashBoardAction extends ContextBaseAction {
 	Collections.sort(processesWhereUserWasInvolvedWithUnreadComments, new ReverseComparator(new BeanComparator(
 		"acquisitionProcessId")));
 
-	request.setAttribute("processesWithUnreadComments", processesWhereUserWasInvolvedWithUnreadComments);
+	int unreadProcessCount = processesWhereUserWasInvolvedWithUnreadComments.size();
+	request.setAttribute("processesWithUnreadComments", processesWhereUserWasInvolvedWithUnreadComments.subList(0, Math.min(
+		10, unreadProcessCount)));
 
+	request.setAttribute("unreadProcessesCount", unreadProcessCount);
 	return forward(request, "/acquisitions/search/digest.jsp");
     }
 
@@ -113,17 +116,6 @@ public class DashBoardAction extends ContextBaseAction {
 
 	return new ActionForward("/acquisition" + process.getClass().getSimpleName() + ".do?method=viewProcess&processOid="
 		+ process.getOID());
-    }
-
-    public ActionForward markAllCommentsAsRead(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-
-	Person loggedPerson = Person.getLoggedPerson();
-	for (PaymentProcess process : loggedPerson.getProcessesWhereUserWasInvolvedWithUnreadComments(PaymentProcess.class)) {
-	    process.markCommentsAsReadForPerson(loggedPerson);
-	}
-
-	return viewDigest(mapping, form, request, response);
     }
 
     private Strings getStrings(String column1) {

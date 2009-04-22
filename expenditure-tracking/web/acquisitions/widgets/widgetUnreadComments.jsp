@@ -23,23 +23,11 @@
 					</logic:iterate>
 					<tr>
 						<td colspan="2" class="aright" style="padding-bottom: 8px !important;">
-							<html:link styleId="markAllAsRead" page="/dashBoard.do?method=markAllCommentsAsRead">
-								<bean:message key="label.markAllAsRead" bundle="EXPENDITURE_RESOURCES"/>
+							<html:link page="/search.do?method=searchJump&showOnlyWithUnreadComments=true">
+								<bean:message key="label.viewAll" bundle="EXPENDITURE_RESOURCES"/>
 							</html:link>
-							
-							<bean:define id="message">
-								<bean:message key="label.markAllAsRead.confirmation" bundle="EXPENDITURE_RESOURCES"/>
-							</bean:define>
-							
-							<bean:define id="title">
-								<bean:message key="title.confirmation" bundle="EXPENDITURE_RESOURCES"/>
-							</bean:define>
-							<script src="<%= request.getContextPath() + "/javaScript/jquery.alerts.js"%>" type="text/javascript"></script> 
- 							<script src="<%= request.getContextPath() + "/javaScript/alertHandlers.js"%>" type="text/javascript"></script> 
-							<script type="text/javascript"> 
-							   linkConfirmationHook('markAllAsRead', '<%= message %>','<%= title %>'); 
-							</script> 
 						</td>
+						
 					</tr>
 				</table>
 			</logic:notEmpty>

@@ -42,6 +42,7 @@ public class SearchPaymentProcess extends Search<PaymentProcess> {
     private Boolean responsibleUnitSetOnly = Boolean.FALSE;
     private Boolean showOnlyAcquisitionsExcludedFromSupplierLimit = Boolean.FALSE;
     private Boolean showOnlyAcquisitionsWithAdditionalCosts = Boolean.FALSE;
+    private Boolean showOnlyWithUnreadComments = Boolean.FALSE;
     private String refundeeName;
     private DomainReference<PaymentProcessYear> year;
 
@@ -81,6 +82,7 @@ public class SearchPaymentProcess extends Search<PaymentProcess> {
 	setSavedSearch(savedSearch);
 	setPaymentProcessYear(savedSearch.getYear());
 	setTaker(savedSearch.getTakenBy());
+	setShowOnlyWithUnreadComments(savedSearch.getShowOnlyWithUnreadComments());
     }
 
     @Override
@@ -276,5 +278,13 @@ public class SearchPaymentProcess extends Search<PaymentProcess> {
 
     public Person getTaker() {
 	return taker.getObject();
+    }
+
+    public void setShowOnlyWithUnreadComments(Boolean showOnlyWithUnreadComments) {
+	this.showOnlyWithUnreadComments = showOnlyWithUnreadComments;
+    }
+
+    public Boolean getShowOnlyWithUnreadComments() {
+	return showOnlyWithUnreadComments;
     }
 }

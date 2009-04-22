@@ -237,6 +237,7 @@ class SavedSearch {
  	Boolean showOnlyAcquisitionsExcludedFromSupplierLimit;
     Boolean showOnlyAcquisitionsWithAdditionalCosts;
     String refundeeName;
+	Boolean showOnlyWithUnreadComments;
 }
 
 class MyOwnProcessesSearch extends SavedSearch {

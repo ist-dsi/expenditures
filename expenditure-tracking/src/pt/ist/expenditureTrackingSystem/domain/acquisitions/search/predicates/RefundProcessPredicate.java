@@ -9,6 +9,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundRequest
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
+import sun.security.action.GetLongAction;
 
 public class RefundProcessPredicate extends SearchPredicate {
 
@@ -27,7 +28,11 @@ public class RefundProcessPredicate extends SearchPredicate {
 	final RefundProcessStateType type = refundRequest.getProcess().getProcessState().getRefundProcessStateType();
 	final Set<AccountingUnit> accountingUnits = refundRequest.getAccountingUnits();
 	final String refundeeName = refundRequest.getRefundee().getName();
-	final Person taker = refundRequest.getProcess().getCurrentOwner();
+	final Boolean showOnlyWithUnreadComments = searchBean.getShowOnlyWithUnreadComments();
+	final RefundProcess process = refundRequest.getProcess();
+	final Person taker = process.getCurrentOwner();
+
+	Person loggedPerson = Person.getLoggedPerson();
 
 	return matchCriteria(searchBean.getProcessId(), identification)
 		&& matchCriteria(searchBean.getRequestingPerson(), person)
@@ -35,7 +40,10 @@ public class RefundProcessPredicate extends SearchPredicate {
 		&& matchCriteria(searchBean.getHasAvailableAndAccessibleActivityForUser(), refundRequest)
 		&& matchCriteria(searchBean.getRefundProcessStateType(), type)
 		&& matchCriteria(searchBean.getAccountingUnit(), accountingUnits)
-		&& matchCriteria(searchBean.getRefundeeName(), refundeeName) && matchCriteria(searchBean.getTaker(), taker);
+		&& matchCriteria(searchBean.getRefundeeName(), refundeeName)
+		&& matchCriteria(searchBean.getTaker(), taker)
+		&& (!showOnlyWithUnreadComments || (!process.getUnreadCommentsForPerson(loggedPerson).isEmpty() && process
+			.hasActivitiesFromUser(loggedPerson)));
     }
 
     private boolean matchCriteria(RefundProcessStateType refundProcessStateType, RefundProcessStateType type) {

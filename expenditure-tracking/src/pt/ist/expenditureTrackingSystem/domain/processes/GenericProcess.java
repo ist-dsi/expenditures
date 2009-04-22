@@ -87,19 +87,20 @@ public abstract class GenericProcess extends GenericProcess_Base {
 		new ProcessesThatAreAuthorizedByUserPredicate(person), processes);
     }
 
-    public static <T extends PaymentProcess> Set<T> getProcessesForPerson(Class<T> processClass, final Person person, PaymentProcessYear year) {
-	return (Set<T>) (person.hasAnyAuthorizations() ? GenericProcess.getProcessesWithResponsible(processClass,
-		person, year) : GenericProcess.getAllProcess(processClass, new Predicate() {
+    public static <T extends PaymentProcess> Set<T> getProcessesForPerson(Class<T> processClass, final Person person,
+	    PaymentProcessYear year) {
+	return (Set<T>) (person.hasAnyAuthorizations() ? GenericProcess.getProcessesWithResponsible(processClass, person, year)
+		: GenericProcess.getAllProcess(processClass, new Predicate() {
 
-	    @Override
-	    public boolean evaluate(Object arg0) {
-		GenericProcess process = (GenericProcess) arg0;
-		return process.hasAnyAvailableActivity(person);
-	    }
+		    @Override
+		    public boolean evaluate(Object arg0) {
+			GenericProcess process = (GenericProcess) arg0;
+			return process.hasAnyAvailableActivity(person);
+		    }
 
-	}, year));
+		}, year));
     }
-    
+
     public abstract <T extends GenericProcess> AbstractActivity<T> getActivityByName(String name);
 
     public abstract boolean hasAnyAvailableActivitity();
@@ -116,7 +117,7 @@ public abstract class GenericProcess extends GenericProcess_Base {
 	}
 	return result;
     }
-    
+
     public DateTime getDateFromLastActivity() {
 	List<GenericLog> logs = new ArrayList<GenericLog>();
 	logs.addAll(getExecutionLogs());
@@ -259,5 +260,14 @@ public abstract class GenericProcess extends GenericProcess_Base {
 		comment.addReaders(person);
 	    }
 	}
+    }
+
+    public boolean hasActivitiesFromUser(Person person) {
+	for (GenericLog log : getExecutionLogs()) {
+	    if (log.getExecutor() == person) {
+		return true;
+	    }
+	}
+	return false;
     }
 }

@@ -254,6 +254,9 @@ public class SearchPaymentProcessesAction extends BaseAction {
 	builder.append("&showOnlyAcquisitionsWithAdditionalCosts=");
 	builder.append(searchBean.getShowOnlyAcquisitionsWithAdditionalCosts());
 
+	builder.append("&showOnlyWithUnreadComments=");
+	builder.append(searchBean.getShowOnlyWithUnreadComments());
+
 	builder.append("&acquisitionProcessStateType=");
 	if (searchBean.getAcquisitionProcessStateType() != null) {
 	    builder.append(searchBean.getAcquisitionProcessStateType().name());
@@ -294,6 +297,7 @@ public class SearchPaymentProcessesAction extends BaseAction {
 		.getParameter("showOnlyAcquisitionsExcludedFromSupplierLimit")));
 	bean.setShowOnlyAcquisitionsWithAdditionalCosts(Boolean.valueOf(request
 		.getParameter("showOnlyAcquisitionsWithAdditionalCosts")));
+	bean.setShowOnlyWithUnreadComments(Boolean.valueOf(request.getParameter("showOnlyWithUnreadComments")));
 
 	String searchClass = request.getParameter("searchClass");
 	if (searchClass != null) {
@@ -317,5 +321,4 @@ public class SearchPaymentProcessesAction extends BaseAction {
 
 	return bean;
     }
-
 }

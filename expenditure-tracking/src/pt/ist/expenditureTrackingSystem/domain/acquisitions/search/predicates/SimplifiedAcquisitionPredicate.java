@@ -34,6 +34,10 @@ public class SimplifiedAcquisitionPredicate extends SearchPredicate {
 	final AcquisitionProcessStateType type = acquisitionRequest.getAcquisitionProcess().getAcquisitionProcessStateType();
 	final Set<AccountingUnit> accountingUnits = acquisitionRequest.getAccountingUnits();
 	final Person taker = acquisitionRequest.getAcquisitionProcess().getCurrentOwner();
+	final Boolean showOnlyWithUnreadComments = searchBean.getShowOnlyWithUnreadComments();
+	final AcquisitionProcess process = acquisitionRequest.getProcess();
+
+	Person loggedPerson = Person.getLoggedPerson();
 
 	return matchCriteria(searchBean.getProcessId(), identification)
 		&& matchCriteria(searchBean.getRequestingPerson(), person)
@@ -45,7 +49,10 @@ public class SimplifiedAcquisitionPredicate extends SearchPredicate {
 		&& matchCriteria(searchBean.getAcquisitionProcessStateType(), type)
 		&& matchCriteria(searchBean.getAccountingUnit(), accountingUnits)
 		&& matchCriteria(searchBean.getRequestDocumentId(), acquisitionRequestDocumentID)
-		&& matchShowOnlyCriteris(acquisitionRequest, searchBean) && matchCriteria(searchBean.getTaker(), taker);
+		&& matchShowOnlyCriteris(acquisitionRequest, searchBean)
+		&& matchCriteria(searchBean.getTaker(), taker)
+		&& (!showOnlyWithUnreadComments || (!process.getUnreadCommentsForPerson(loggedPerson).isEmpty() && process
+			.hasActivitiesFromUser(loggedPerson)));
     }
 
     protected boolean matchCriteria(AcquisitionProcessStateType acquisitionProcessStateType, AcquisitionProcessStateType type) {

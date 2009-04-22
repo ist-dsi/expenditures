@@ -793,6 +793,7 @@
 	</slot>
 	<slot name="hasAvailableAndAccessibleActivityForUser" key="label.option.hasAvailableAndAccessibleActivityForUser" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="responsibleUnitSetOnly" key="label.option.responsibleUnitSetOnly" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="showOnlyWithUnreadComments" key="label.option.showOnlyWithUnreadComments" bundle="ACQUISITION_RESOURCES"/>
 </schema>
 
 <schema name="search.SimplifiedProcedureProcess" type="pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPaymentProcess"
