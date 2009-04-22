@@ -21,6 +21,7 @@ import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.ProcessesThatAreAuthorizedByUserPredicate;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
@@ -86,10 +87,36 @@ public abstract class GenericProcess extends GenericProcess_Base {
 		new ProcessesThatAreAuthorizedByUserPredicate(person), processes);
     }
 
+    public static <T extends PaymentProcess> Set<T> getProcessesForPerson(Class<T> processClass, final Person person, PaymentProcessYear year) {
+	return (Set<T>) (person.hasAnyAuthorizations() ? GenericProcess.getProcessesWithResponsible(processClass,
+		person, year) : GenericProcess.getAllProcess(processClass, new Predicate() {
+
+	    @Override
+	    public boolean evaluate(Object arg0) {
+		GenericProcess process = (GenericProcess) arg0;
+		return process.hasAnyAvailableActivity(person);
+	    }
+
+	}, year));
+    }
+    
     public abstract <T extends GenericProcess> AbstractActivity<T> getActivityByName(String name);
 
     public abstract boolean hasAnyAvailableActivitity();
 
+    public boolean hasAnyAvailableActivity(Person person) {
+	final UserView userView = UserView.getCurrentUserView();
+	boolean result = false;
+	try {
+	    userView.mockUser(person.getUser());
+	    result = hasAnyAvailableActivitity();
+	    userView.unmockUser();
+	} finally {
+	    userView.unmockUser();
+	}
+	return result;
+    }
+    
     public DateTime getDateFromLastActivity() {
 	List<GenericLog> logs = new ArrayList<GenericLog>();
 	logs.addAll(getExecutionLogs());

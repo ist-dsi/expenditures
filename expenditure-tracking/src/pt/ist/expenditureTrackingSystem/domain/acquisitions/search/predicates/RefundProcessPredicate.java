@@ -15,8 +15,10 @@ public class RefundProcessPredicate extends SearchPredicate {
     @Override
     public boolean evaluate(PaymentProcess refundProcess, SearchPaymentProcess searchBean) {
 	final RefundRequest refundRequest = refundProcess.getRequest();
+	final Person taker = searchBean.getTaker();
 	return matchesSearchCriteria(refundRequest, searchBean)
-		&& (refundRequest.getProcess().isAvailableForCurrentUser() || refundProcess.isTakenByCurrentUser());
+		&& (refundRequest.getProcess().isAvailableForCurrentUser() || refundProcess.isTakenByCurrentUser() || (taker != null && refundProcess
+			.isTakenByPerson(taker)));
     }
 
     private boolean matchesSearchCriteria(final RefundRequest refundRequest, SearchPaymentProcess searchBean) {
@@ -25,13 +27,15 @@ public class RefundProcessPredicate extends SearchPredicate {
 	final RefundProcessStateType type = refundRequest.getProcess().getProcessState().getRefundProcessStateType();
 	final Set<AccountingUnit> accountingUnits = refundRequest.getAccountingUnits();
 	final String refundeeName = refundRequest.getRefundee().getName();
+	final Person taker = refundRequest.getProcess().getCurrentOwner();
+
 	return matchCriteria(searchBean.getProcessId(), identification)
 		&& matchCriteria(searchBean.getRequestingPerson(), person)
 		&& matchCriteria(searchBean.getRequestingUnit(), refundRequest.getRequestingUnit())
 		&& matchCriteria(searchBean.getHasAvailableAndAccessibleActivityForUser(), refundRequest)
 		&& matchCriteria(searchBean.getRefundProcessStateType(), type)
 		&& matchCriteria(searchBean.getAccountingUnit(), accountingUnits)
-		&& matchCriteria(searchBean.getRefundeeName(), refundeeName);
+		&& matchCriteria(searchBean.getRefundeeName(), refundeeName) && matchCriteria(searchBean.getTaker(), taker);
     }
 
     private boolean matchCriteria(RefundProcessStateType refundProcessStateType, RefundProcessStateType type) {

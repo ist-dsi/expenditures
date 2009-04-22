@@ -18,10 +18,10 @@
 					<tr>
 						<td>
 							<html:link page="<%= "/acquisition" + className + ".do?method=viewProcess&processOid=" + oid %>">
-								<fr:view name="process" property="acquisitionRequest.acquisitionProcessId" />
+								<fr:view name="process" property="acquisitionProcessId" />
 							</html:link>
 						</td>
-						<td><fr:view name="process" property="acquisitionProcessState.acquisitionProcessStateType" /></td>
+						<td><fr:view name="process" property="processStateName" /></td>
 					</tr>
 				</logic:iterate>
 				<tr>

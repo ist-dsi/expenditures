@@ -257,6 +257,10 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
 	return EMPTY_STRING;
     }
 
+    public String getProcessStateName() {
+	return EMPTY_STRING;
+    }
+    
     public abstract Collection<Supplier> getSuppliers();
 
     public String getSuppliersDescription() {

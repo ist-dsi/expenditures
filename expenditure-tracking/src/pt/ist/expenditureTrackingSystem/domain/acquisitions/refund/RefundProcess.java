@@ -399,4 +399,8 @@ public class RefundProcess extends RefundProcess_Base {
 	throw new Error("not.implemented");
     }
 
+    @Override
+    public String getProcessStateName() {
+	return getProcessState().getLocalizedName();
+    }
 }

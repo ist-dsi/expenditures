@@ -75,6 +75,7 @@ $(function() {
 	<logic:iterate id="widget" name="dashBoard" property="column3">
 		<jsp:include page="<%= "../widgets/" + widget +".jsp" %>" flush="false"/>
 	</logic:iterate>
+	
 </div>
 
 </div><!-- End demo -->

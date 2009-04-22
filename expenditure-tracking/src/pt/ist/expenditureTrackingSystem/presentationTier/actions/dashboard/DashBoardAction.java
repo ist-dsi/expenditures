@@ -64,26 +64,35 @@ public class DashBoardAction extends ContextBaseAction {
     public ActionForward viewDigest(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) {
 	Person loggedPerson = Person.getLoggedPerson();
-	Map<AcquisitionProcessStateType, Counter<AcquisitionProcessStateType>> simplifiedMap = generateAcquisitionMap(getProcesses(loggedPerson));
+	Map<AcquisitionProcessStateType, Counter<AcquisitionProcessStateType>> simplifiedMap = loggedPerson
+		.generateAcquisitionMap();
 	List<Counter<AcquisitionProcessStateType>> counters = new ArrayList<Counter<AcquisitionProcessStateType>>();
 	counters.addAll(simplifiedMap.values());
 	Collections.sort(counters, new BeanComparator("countableObject"));
 	request.setAttribute("simplifiedCounters", counters);
 
-	Map<RefundProcessStateType, Counter<RefundProcessStateType>> refundMap = generateRefundMap(getRefundProcesses(loggedPerson));
+	Map<RefundProcessStateType, Counter<RefundProcessStateType>> refundMap = loggedPerson.generateRefundMap();
 	List<Counter<RefundProcessStateType>> refundCounters = new ArrayList<Counter<RefundProcessStateType>>();
 	refundCounters.addAll(refundMap.values());
 	Collections.sort(refundCounters, new BeanComparator("countableObject"));
 	request.setAttribute("refundCounters", refundCounters);
 
-	List<AcquisitionProcess> myProcesses = loggedPerson.getAcquisitionProcesses();
-	Collections.sort(myProcesses, new ReverseComparator(new BeanComparator("acquisitionProcessState.whenDateTime")));
+	List<PaymentProcess> myProcesses = loggedPerson.getAcquisitionProcesses(PaymentProcess.class);
+	Collections.sort(myProcesses, new ReverseComparator(new BeanComparator("acquisitionProcessId")));
 	request.setAttribute("ownProcesses", myProcesses.subList(0, Math.min(10, myProcesses.size())));
 
-	List<SimplifiedProcedureProcess> takenProcesses = loggedPerson.getProcesses(SimplifiedProcedureProcess.class);
+	List<PaymentProcess> takenProcesses = loggedPerson.getProcesses(PaymentProcess.class);
 	request.setAttribute("takenProcesses", takenProcesses.subList(0, Math.min(10, takenProcesses.size())));
 
 	request.setAttribute("searchBean", new SearchPaymentProcess());
+
+	List<PaymentProcess> processesWhereUserWasInvolvedWithUnreadComments = new ArrayList<PaymentProcess>();
+	processesWhereUserWasInvolvedWithUnreadComments.addAll(loggedPerson
+		.getProcessesWhereUserWasInvolvedWithUnreadComments(PaymentProcess.class));
+	Collections.sort(processesWhereUserWasInvolvedWithUnreadComments, new ReverseComparator(new BeanComparator(
+		"acquisitionProcessId")));
+
+	request.setAttribute("processesWithUnreadComments", processesWhereUserWasInvolvedWithUnreadComments);
 
 	return forward(request, "/acquisitions/search/digest.jsp");
     }
@@ -106,66 +115,15 @@ public class DashBoardAction extends ContextBaseAction {
 		+ process.getOID());
     }
 
-    private Set<SimplifiedProcedureProcess> getProcesses(Person loggedPerson) {
+    public ActionForward markAllCommentsAsRead(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
 
-	return loggedPerson.hasAnyAuthorizations() ? GenericProcess.getProcessesWithResponsible(SimplifiedProcedureProcess.class,
-		loggedPerson, null) : GenericProcess.getAllProcess(SimplifiedProcedureProcess.class, new Predicate() {
-
-	    @Override
-	    public boolean evaluate(Object arg0) {
-		SimplifiedProcedureProcess process = (SimplifiedProcedureProcess) arg0;
-		return process.hasAnyAvailableActivitity();
-	    }
-
-	}, null);
-    }
-
-    private Set<RefundProcess> getRefundProcesses(Person loggedPerson) {
-
-	return loggedPerson.hasAnyAuthorizations() ? GenericProcess.getProcessesWithResponsible(RefundProcess.class,
-		loggedPerson, null) : GenericProcess.getAllProcess(RefundProcess.class, new Predicate() {
-
-	    @Override
-	    public boolean evaluate(Object arg0) {
-		RefundProcess process = (RefundProcess) arg0;
-		return process.hasAnyAvailableActivitity();
-	    }
-
-	}, null);
-    }
-
-    private Map<AcquisitionProcessStateType, Counter<AcquisitionProcessStateType>> generateAcquisitionMap(
-	    Collection<SimplifiedProcedureProcess> processes) {
-	Map<AcquisitionProcessStateType, Counter<AcquisitionProcessStateType>> map = new HashMap<AcquisitionProcessStateType, Counter<AcquisitionProcessStateType>>();
-
-	for (SimplifiedProcedureProcess process : processes) {
-
-	    AcquisitionProcessStateType type = process.getAcquisitionProcessStateType();
-	    Counter<AcquisitionProcessStateType> counter = map.get(type);
-	    if (counter == null) {
-		counter = new Counter<AcquisitionProcessStateType>(type);
-		map.put(type, counter);
-	    }
-	    counter.increment();
+	Person loggedPerson = Person.getLoggedPerson();
+	for (PaymentProcess process : loggedPerson.getProcessesWhereUserWasInvolvedWithUnreadComments(PaymentProcess.class)) {
+	    process.markCommentsAsReadForPerson(loggedPerson);
 	}
-	return map;
-    }
 
-    private Map<RefundProcessStateType, Counter<RefundProcessStateType>> generateRefundMap(
-	    Collection<RefundProcess> processes) {
-	Map<RefundProcessStateType, Counter<RefundProcessStateType>> map = new HashMap<RefundProcessStateType, Counter<RefundProcessStateType>>();
-
-	for (RefundProcess process : processes) {
-
-	    RefundProcessStateType type = process.getProcessState().getRefundProcessStateType();
-	    Counter<RefundProcessStateType> counter = map.get(type);
-	    if (counter == null) {
-		counter = new Counter<RefundProcessStateType>(type);
-		map.put(type, counter);
-	    }
-	    counter.increment();
-	}
-	return map;
+	return viewDigest(mapping, form, request, response);
     }
 
     private Strings getStrings(String column1) {

@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
@@ -45,9 +46,9 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
     public boolean isAvailableForPerson(Person person) {
 	return person.hasRoleType(RoleType.ACQUISITION_CENTRAL) || person.hasRoleType(RoleType.ACQUISITION_CENTRAL_MANAGER)
 		|| person.hasRoleType(RoleType.ACCOUNTING_MANAGER) || person.hasRoleType(RoleType.PROJECT_ACCOUNTING_MANAGER)
-		|| person.hasRoleType(RoleType.TREASURY_MANAGER) || getRequestor() == person || getRequestingUnit().isResponsible(person)
-		|| isResponsibleForAtLeastOnePayingUnit(person) || isAccountingEmployee(person)
-		|| isProjectAccountingEmployee(person) || isTreasuryMember(person);
+		|| person.hasRoleType(RoleType.TREASURY_MANAGER) || getRequestor() == person
+		|| getRequestingUnit().isResponsible(person) || isResponsibleForAtLeastOnePayingUnit(person)
+		|| isAccountingEmployee(person) || isProjectAccountingEmployee(person) || isTreasuryMember(person);
     }
 
     public boolean isActive() {
@@ -220,4 +221,8 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 
     }
 
+    @Override
+    public String getProcessStateName() {
+       return getLastAcquisitionProcessState().getLocalizedName();
+    }
 }

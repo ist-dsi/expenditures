@@ -22,10 +22,12 @@ public class DashBoard extends DashBoard_Base {
 	List<String> column3 = new ArrayList<String>();
 	column1.add("widgetMyProcesses");
 	column1.add("widgetMySearches");
+	column1.add("widgetUnreadComments");
 	column2.add("widgetPendingSimplified");
 	column2.add("widgetPendingRefund");
 	column3.add("widgetTakenProcesses");
 	column3.add("widgetQuickView");
+	column3.add("widgetActivateEmailNotification");
 	setColumn1(new Strings(column1));
 	setColumn2(new Strings(column2));
 	setColumn3(new Strings(column3));

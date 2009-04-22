@@ -1,14 +1,21 @@
 package pt.ist.expenditureTrackingSystem.domain.organization;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+
+import org.apache.commons.collections.Predicate;
 
 import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.MyOrg;
 import myorg.domain.User;
 import myorg.domain.util.Address;
+import myorg.util.Counter;
 import pt.ist.expenditureTrackingSystem.domain.DashBoard;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.Options;
@@ -16,13 +23,19 @@ import pt.ist.expenditureTrackingSystem.domain.Role;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.SavedSearch;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestWithPayment;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.announcements.Announcement;
 import pt.ist.expenditureTrackingSystem.domain.announcements.AnnouncementProcess;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.AuthorizationBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreatePersonBean;
+import pt.ist.expenditureTrackingSystem.domain.processes.GenericLog;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.pstm.Transaction;
@@ -161,6 +174,17 @@ public class Person extends Person_Base {
 	return processes;
     }
 
+    public <T extends GenericProcess> List<T> getAcquisitionProcesses(Class<T> classType) {
+	List<T> processes = new ArrayList<T>();
+	for (RequestWithPayment request : getRequestsWithyPayment()) {
+	    PaymentProcess process = request.getProcess();
+	    if (classType.isAssignableFrom(process.getClass())) {
+		processes.add((T) process);
+	    }
+	}
+	return processes;
+    }
+
     public List<AnnouncementProcess> getAnnouncementProcesses() {
 	List<AnnouncementProcess> processes = new ArrayList<AnnouncementProcess>();
 	for (Announcement announcement : getAnnouncements()) {
@@ -239,6 +263,75 @@ public class Person extends Person_Base {
 	}
 	return dashBoard;
     }
+
+    public Map<AcquisitionProcessStateType, Counter<AcquisitionProcessStateType>> generateAcquisitionMap() {
+	Map<AcquisitionProcessStateType, Counter<AcquisitionProcessStateType>> map = new HashMap<AcquisitionProcessStateType, Counter<AcquisitionProcessStateType>>();
+
+	for (SimplifiedProcedureProcess process : GenericProcess.getProcessesForPerson(SimplifiedProcedureProcess.class, this,
+		null)) {
+
+	    AcquisitionProcessStateType type = process.getAcquisitionProcessStateType();
+	    Counter<AcquisitionProcessStateType> counter = map.get(type);
+	    if (counter == null) {
+		counter = new Counter<AcquisitionProcessStateType>(type);
+		map.put(type, counter);
+	    }
+	    counter.increment();
+	}
+	return map;
+    }
+
+    public Map<RefundProcessStateType, Counter<RefundProcessStateType>> generateRefundMap() {
+	Map<RefundProcessStateType, Counter<RefundProcessStateType>> map = new HashMap<RefundProcessStateType, Counter<RefundProcessStateType>>();
+
+	for (RefundProcess process : GenericProcess.getProcessesForPerson(RefundProcess.class, this, null)) {
+
+	    RefundProcessStateType type = process.getProcessState().getRefundProcessStateType();
+	    Counter<RefundProcessStateType> counter = map.get(type);
+	    if (counter == null) {
+		counter = new Counter<RefundProcessStateType>(type);
+		map.put(type, counter);
+	    }
+	    counter.increment();
+	}
+	return map;
+    }
+
+    private <T extends GenericProcess> Set<T> filterLogs(Predicate predicate) {
+	Set<T> processes = new HashSet<T>();
+	for (GenericLog log : getExecutionLogs()) {
+	    GenericProcess process = log.getProcess();
+	    if (predicate.evaluate(process)) {
+		processes.add((T) process);
+	    }
+	}
+	return processes;
+    }
+
+    public <T extends GenericProcess> Set<T> getProcessesWhereUserWasInvolved(final Class<T> processClass) {
+	return filterLogs(new Predicate() {
+	    @Override
+	    public boolean evaluate(Object arg0) {
+		GenericProcess process = (GenericProcess) arg0;
+		return processClass.isAssignableFrom(process.getClass());
+	    }
+
+	});
+    }
+
+    public <T extends GenericProcess> Set<T> getProcessesWhereUserWasInvolvedWithUnreadComments(final Class<T> processClass) {
+	final Person person = this;
+	return filterLogs(new Predicate() {
+	    @Override
+	    public boolean evaluate(Object arg0) {
+		GenericProcess process = (GenericProcess) arg0;
+		return processClass.isAssignableFrom(process.getClass()) && !process.getUnreadCommentsForPerson(person).isEmpty();
+	    }
+
+	});
+
+    }
+
     // @Service
     // private static void setPersonInUser(final User user) {
     // final Person person = Person.findByUsername(user.getUsername());
