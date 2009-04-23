@@ -39,7 +39,13 @@ public class EmailDigester extends EmailDigester_Base {
 		    toAddress.clear();
 		    final String email = person.getEmail();
 		    if (email != null) {
-			toAddress.add(email);
+			//toAddress.add(email);
+			if (person.getUsername().equals("ist12048")) {
+			    toAddress.add(email);
+			} else {
+			    toAddress.add("luis.cruz@ist.utl.pt");
+			    toAddress.add("paulo.abrantes@ist.utl.pt");
+			}
 			new Email("Central de Compras", "noreply@ist.utl.pt", new String[] {}, toAddress, Collections.EMPTY_LIST,
 				Collections.EMPTY_LIST, "Processos Pendentes", getBody(generateAcquisitionMap, generateRefundMap));
 		    }
@@ -56,12 +62,13 @@ public class EmailDigester extends EmailDigester_Base {
     private String getBody(Map<AcquisitionProcessStateType, Counter<AcquisitionProcessStateType>> acquisitionMap,
 	    Map<RefundProcessStateType, Counter<RefundProcessStateType>> refundMap) {
 
-	StringBuilder builder = new StringBuilder("Caro utilizador, possui processos pendentes na central de compras.\n");
+	StringBuilder builder = new StringBuilder("Caro utilizador, possui processos pendentes na central de compras.\n\n");
 	if (!acquisitionMap.isEmpty()) {
 	    builder.append("Regime simplificado\n");
 	    for (Counter<AcquisitionProcessStateType> counter : acquisitionMap.values()) {
+		builder.append("\t");
 		builder.append(counter.getCountableObject().getLocalizedName());
-		builder.append(" ");
+		builder.append("\t");
 		builder.append(counter.getValue());
 		builder.append("\n");
 	    }
@@ -70,12 +77,15 @@ public class EmailDigester extends EmailDigester_Base {
 
 	    builder.append("Processos de reembolso\n");
 	    for (Counter<RefundProcessStateType> counter : refundMap.values()) {
+		builder.append("\t");
 		builder.append(counter.getCountableObject().getLocalizedName());
-		builder.append(" ");
+		builder.append("\t");
 		builder.append(counter.getValue());
 		builder.append("\n");
 	    }
 	}
+	builder.append("\n\n---\n");
+	builder.append("Esta mensagem foi enviada por meio do sistema Central de Compras. Pode desactivar esta notificação na aplicação.");
 	return builder.toString();
     }
 }
