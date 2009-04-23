@@ -37,9 +37,14 @@ public class EmailDigester extends EmailDigester_Base {
 
 		if (!generateAcquisitionMap.isEmpty() || !generateRefundMap.isEmpty()) {
 		    toAddress.clear();
-		    toAddress.add(person.getEmail());
-		    new Email("Central de Compras", "noreply@ist.utl.pt", new String[] {}, toAddress, Collections.EMPTY_LIST,
-			    Collections.EMPTY_LIST, "Processos Pendentes", getBody(generateAcquisitionMap, generateRefundMap));
+		    final String email = person.getEmail();
+		    if (email != null) {
+			toAddress.add();
+			new Email("Central de Compras", "noreply@ist.utl.pt", new String[] {}, toAddress, Collections.EMPTY_LIST,
+				Collections.EMPTY_LIST, "Processos Pendentes", getBody(generateAcquisitionMap, generateRefundMap));
+		    } else {
+			System.out.println("Person: " + person.getUsername() + "");
+		    }
 		}
 	    }
 	}
