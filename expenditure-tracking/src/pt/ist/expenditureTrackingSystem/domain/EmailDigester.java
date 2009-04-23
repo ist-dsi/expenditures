@@ -10,7 +10,6 @@ import myorg.util.Counter;
 
 import org.apache.commons.lang.StringUtils;
 
-import pt.ist.emailNotifier.domain.Email;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
@@ -39,11 +38,13 @@ public class EmailDigester extends EmailDigester_Base {
 		    toAddress.clear();
 		    final String email = person.getEmail();
 		    if (email != null) {
-			toAddress.add();
+			//toAddress.add(email);
+			toAddress.add("luis.cruz@ist.utl.pt");
+			toAddress.add("paulo.abrantes@ist.utl.pt");
 			new Email("Central de Compras", "noreply@ist.utl.pt", new String[] {}, toAddress, Collections.EMPTY_LIST,
 				Collections.EMPTY_LIST, "Processos Pendentes", getBody(generateAcquisitionMap, generateRefundMap));
 		    } else {
-			System.out.println("Person: " + person.getUsername() + "");
+			System.out.println("Person: " + person.getUsername() + " has no email defined.");
 		    }
 		}
 	    }
