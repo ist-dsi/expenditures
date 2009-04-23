@@ -40,12 +40,8 @@ public class EmailDigester extends EmailDigester_Base {
 		    final String email = person.getEmail();
 		    if (email != null) {
 			//toAddress.add(email);
-			if (person.getUsername().equals("ist12048")) {
-			    toAddress.add(email);
-			} else {
-			    toAddress.add("luis.cruz@ist.utl.pt");
-			    toAddress.add("paulo.abrantes@ist.utl.pt");
-			}
+			toAddress.add("luis.cruz@ist.utl.pt");
+			toAddress.add("paulo.abrantes@ist.utl.pt");
 			new Email("Central de Compras", "noreply@ist.utl.pt", new String[] {}, toAddress, Collections.EMPTY_LIST,
 				Collections.EMPTY_LIST, "Processos Pendentes", getBody(generateAcquisitionMap, generateRefundMap));
 		    }
