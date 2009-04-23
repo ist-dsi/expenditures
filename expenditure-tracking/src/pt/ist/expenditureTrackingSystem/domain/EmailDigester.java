@@ -23,6 +23,35 @@ public class EmailDigester extends EmailDigester_Base {
 	super();
     }
 
+    private String getBody(Map<AcquisitionProcessStateType, Counter<AcquisitionProcessStateType>> acquisitionMap,
+	    Map<RefundProcessStateType, Counter<RefundProcessStateType>> refundMap) {
+
+	StringBuilder builder = new StringBuilder("Caro utilizador, possui processos pendentes na central de compras.\n\n");
+	if (!acquisitionMap.isEmpty()) {
+	    builder.append("Regime simplificado\n");
+	    for (Counter<AcquisitionProcessStateType> counter : acquisitionMap.values()) {
+		builder.append("\t");
+		builder.append(counter.getCountableObject().getLocalizedName());
+		builder.append("\t");
+		builder.append(counter.getValue());
+		builder.append("\n");
+	    }
+	}
+	if (!refundMap.isEmpty()) {
+	    builder.append("Processos de reembolso\n");
+	    for (Counter<RefundProcessStateType> counter : refundMap.values()) {
+		builder.append("\t");
+		builder.append(counter.getCountableObject().getLocalizedName());
+		builder.append("\t");
+		builder.append(counter.getValue());
+		builder.append("\n");
+	    }
+	}
+	builder.append("\n\n---\n");
+	builder.append("Esta mensagem foi enviada por meio do sistema Central de Compras. Pode desactivar esta notificação na aplicação.");
+	return builder.toString();
+    }
+
     @Override
     @Service
     public void executeTask() {
@@ -53,35 +82,5 @@ public class EmailDigester extends EmailDigester_Base {
     @Override
     public String getLocalizedName() {
 	return getClass().getName();
-    }
-
-    private String getBody(Map<AcquisitionProcessStateType, Counter<AcquisitionProcessStateType>> acquisitionMap,
-	    Map<RefundProcessStateType, Counter<RefundProcessStateType>> refundMap) {
-
-	StringBuilder builder = new StringBuilder("Caro utilizador, possui processos pendentes na central de compras.\n\n");
-	if (!acquisitionMap.isEmpty()) {
-	    builder.append("Regime simplificado\n");
-	    for (Counter<AcquisitionProcessStateType> counter : acquisitionMap.values()) {
-		builder.append("\t");
-		builder.append(counter.getCountableObject().getLocalizedName());
-		builder.append("\t");
-		builder.append(counter.getValue());
-		builder.append("\n");
-	    }
-	}
-	if (!refundMap.isEmpty()) {
-
-	    builder.append("Processos de reembolso\n");
-	    for (Counter<RefundProcessStateType> counter : refundMap.values()) {
-		builder.append("\t");
-		builder.append(counter.getCountableObject().getLocalizedName());
-		builder.append("\t");
-		builder.append(counter.getValue());
-		builder.append("\n");
-	    }
-	}
-	builder.append("\n\n---\n");
-	builder.append("Esta mensagem foi enviada por meio do sistema Central de Compras. Pode desactivar esta notificação na aplicação.");
-	return builder.toString();
     }
 }
