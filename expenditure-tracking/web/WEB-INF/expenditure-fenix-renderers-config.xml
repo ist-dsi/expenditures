@@ -41,7 +41,9 @@
 	<property name="countryKey" value="address.label.country" />
 	<property name="errorClasses" value="tderror" />
 	<property name="line1Size" value="40" />
+	<property name="line1MaxLength" value="50" />	
 	<property name="line2Size" value="40" />
+	<property name="line2MaxLength" value="50" />
 	<property name="postalCodeSize" value="15" />
 	<property name="locationSize" value="25" />
 	<property name="countrySize" value="25" />

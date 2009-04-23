@@ -39,6 +39,8 @@ public class AddressInputRenderer extends InputRenderer {
 
     private String line1Size;
     private String line2Size;
+    private String line1MaxLength;
+    private String line2MaxLength;
     private String postalCodeSize;
     private String locationSize;
     private String countrySize;
@@ -170,6 +172,7 @@ public class AddressInputRenderer extends InputRenderer {
 		HtmlTableRow row = table.createRow();
 		row.createCell().setBody(new HtmlText(RenderUtils.getResourceString(bundle, line1Key) + ":"));
 		HtmlTextInput line1 = new HtmlTextInput();
+		line1.setMaxLength(Integer.valueOf(getLine1MaxLength()));
 		line1.setSize(getLine1Size());
 		line1.setName(key.toString() + "_line1");
 		line1.setValue(address != null ? address.getLine1() : null);
@@ -180,6 +183,7 @@ public class AddressInputRenderer extends InputRenderer {
 
 		HtmlTextInput line2 = new HtmlTextInput();
 		line2.setSize(getLine2Size());
+		line2.setMaxLength(Integer.valueOf(getLine2MaxLength()));
 		HtmlTableRow row2 = table.createRow();
 		row2.createCell().setBody(new HtmlText(RenderUtils.getResourceString(bundle, line2Key) + ":"));
 		line2.setName(key.toString() + "_line2");
@@ -274,6 +278,22 @@ public class AddressInputRenderer extends InputRenderer {
 	    }
 
 	};
+    }
+
+    public void setLine1MaxLength(String line1MaxLength) {
+	this.line1MaxLength = line1MaxLength;
+    }
+
+    public String getLine1MaxLength() {
+	return line1MaxLength;
+    }
+
+    public void setLine2MaxLength(String line2MaxLength) {
+	this.line2MaxLength = line2MaxLength;
+    }
+
+    public String getLine2MaxLength() {
+	return line2MaxLength;
     }
 
     private static class AddressConverter extends Converter {
