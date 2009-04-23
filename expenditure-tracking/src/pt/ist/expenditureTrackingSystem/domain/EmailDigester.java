@@ -44,8 +44,6 @@ public class EmailDigester extends EmailDigester_Base {
 			toAddress.add("paulo.abrantes@ist.utl.pt");
 			new Email("Central de Compras", "noreply@ist.utl.pt", new String[] {}, toAddress, Collections.EMPTY_LIST,
 				Collections.EMPTY_LIST, "Processos Pendentes", getBody(generateAcquisitionMap, generateRefundMap));
-		    } else {
-			System.out.println("Person: " + person.getUsername() + " has no email defined.");
 		    }
 		}
 	    }
