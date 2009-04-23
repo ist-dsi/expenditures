@@ -48,7 +48,8 @@ public class EmailDigester extends EmailDigester_Base {
 	    }
 	}
 	builder.append("\n\n---\n");
-	builder.append("Esta mensagem foi enviada por meio do sistema Central de Compras. Pode desactivar esta notificação na aplicação.");
+	builder.append("Esta mensagem foi enviada por meio do sistema Central de Compras.\n");
+	builder.append("Pode desactivar o envio destes e-mails fazendo login em http://compras.ist.utl.pt/, aceder à página de resumo seleccionando \"Aquisições\" e desactivando a opção \"Notificação por e-mail\"");
 	return builder.toString();
     }
 
