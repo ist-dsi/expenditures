@@ -10,6 +10,7 @@ import myorg.util.Counter;
 
 import org.apache.commons.lang.StringUtils;
 
+import pt.ist.emailNotifier.domain.Email;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
