@@ -43,13 +43,14 @@ public class SyncUsers extends SyncUsers_Base {
 	ResultSet resultSetQuery = null;
 	try {
 	    statementQuery = connection.createStatement();
-	    resultSetQuery = statementQuery.executeQuery("select fenix.USER.USER_U_ID, fenix.PARTY.PARTY_NAME from fenix.USER inner join fenix.PARTY on fenix.PARTY.ID_INTERNAL = fenix.USER.KEY_PERSON;");
+	    resultSetQuery = statementQuery.executeQuery("select fenix.USER.USER_U_ID, fenix.PARTY.PARTY_NAME, fenix.PARTY_CONTACT.VALUE from fenix.USER inner join fenix.PARTY on fenix.PARTY.ID_INTERNAL = fenix.USER.KEY_PERSON inner join fenix.PARTY_CONTACT on fenix.PARTY_CONTACT.KEY_PARTY = fenix.PARTY.ID_INTERNAL where fenix.PARTY_CONTACT.OJB_CONCRETE_CLASS = 'net.sourceforge.fenixedu.domain.contacts.EmailAddress' and fenix.PARTY_CONTACT.TYPE = 'INSTITUTIONAL' group by fenix.USER.USER_U_ID;");
 	    int c = 0;
 	    int u = 0;
 	    while (resultSetQuery.next()) {
 		c++;
 		final String username = resultSetQuery.getString(1);
 		final String mlname = resultSetQuery.getString(2);
+		final String email = resultSetQuery.getString(3);
 		final User user = User.findByUsername(username);
 		if (user != null) {
 		    final Person person = user.getExpenditurePerson();
@@ -60,6 +61,7 @@ public class SyncUsers extends SyncUsers_Base {
 			    person.setName(name.getContent());
 			    u++;
 			}
+			person.setEmail(email);
 		    }
 		}
 	    }
