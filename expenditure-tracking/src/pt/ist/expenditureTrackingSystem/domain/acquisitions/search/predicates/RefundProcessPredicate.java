@@ -9,7 +9,6 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundRequest
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
-import sun.security.action.GetLongAction;
 
 public class RefundProcessPredicate extends SearchPredicate {
 
