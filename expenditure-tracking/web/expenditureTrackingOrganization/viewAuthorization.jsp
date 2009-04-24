@@ -6,6 +6,9 @@
 
 <h2><bean:message key="authorizations.title.details" bundle="EXPENDITURE_RESOURCES"/></h2>
 
+ <script src="<%= request.getContextPath() + "/javaScript/jquery.alerts.js"%>" type="text/javascript"></script> 
+ <script src="<%= request.getContextPath() + "/javaScript/alertHandlers.js"%>" type="text/javascript"></script> 
+ 
 <div class="infoop1">
 	<ul>
 		<li>
@@ -25,9 +28,19 @@
 		</logic:equal>
 		<logic:equal name="authorization" property="currentUserAbleToRevoke" value="true">
 			<li>
-				<html:link action="/expenditureTrackingOrganization.do?method=revokeAuthorization" paramId="authorizationOid" paramName="authorization" paramProperty="OID">
+				<html:link styleId="revokeLink" action="/expenditureTrackingOrganization.do?method=revokeAuthorization" paramId="authorizationOid" paramName="authorization" paramProperty="OID">
 					<bean:message key="authorizations.link.revoke" bundle="EXPENDITURE_RESOURCES"/>
 				</html:link>
+				
+				  <bean:define id="message">
+	            	<bean:message key="label.revokeAuthorization" bundle="EXPENDITURE_RESOURCES"/>
+	            </bean:define>
+	           <bean:define id="title">
+	            	<bean:message key="title.revokeAuthorization" bundle="EXPENDITURE_RESOURCES"/>
+	            </bean:define>
+	             <script type="text/javascript"> 
+	   						linkConfirmationHook('revokeLink', '<%= message %>','<%= title %>'); 
+	 			</script>  
 			</li>
 		</logic:equal>
 		<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
@@ -37,9 +50,19 @@
 				</html:link>
 			</li>
 			<li>
-				<html:link action="/expenditureTrackingOrganization.do?method=deleteAuthorization" paramId="authorizationOid" paramName="authorization" paramProperty="OID">
+				<html:link styleId="removeLink" action="/expenditureTrackingOrganization.do?method=deleteAuthorization" paramId="authorizationOid" paramName="authorization" paramProperty="OID">
 					<bean:message key="authorizations.link.remove" bundle="EXPENDITURE_RESOURCES"/>
 				</html:link>
+
+	            <bean:define id="message">
+	            	<bean:message key="label.removeAuthorization" bundle="EXPENDITURE_RESOURCES"/>
+	            </bean:define>
+	           <bean:define id="title">
+	            	<bean:message key="title.removeAuthorization" bundle="EXPENDITURE_RESOURCES"/>
+	            </bean:define>
+	             <script type="text/javascript"> 
+	   						linkConfirmationHook('removeLink', '<%= message %>','<%= title %>'); 
+	 			</script> 
 			</li>
 		</logic:present>
 	</ul>

@@ -138,6 +138,9 @@
 			<fr:property name="key(remove)" value="link.remove"/>
 			<fr:property name="param(remove)" value="OID/accountingUnitOid"/>
 			<fr:property name="order(remove)" value="2"/>
+			<fr:property name="confirmationBundle(remove)" value="EXPENDITURE_RESOURCES"/> 
+            <fr:property name="confirmationKey(remove)" value="label.removeAuthorization"/> 	
+            <fr:property name="confirmationTitleKey(remove)" value="title.removeAuthorization"/> 	
 		</fr:layout>
 	</fr:view>
 </logic:notEmpty>
@@ -168,6 +171,9 @@
 			<fr:property name="key(remove)" value="link.remove"/>
 			<fr:property name="param(remove)" value="OID/accountingUnitOid"/>
 			<fr:property name="order(remove)" value="2"/>
+			<fr:property name="confirmationBundle(remove)" value="EXPENDITURE_RESOURCES"/> 
+            <fr:property name="confirmationKey(remove)" value="label.removeAuthorization"/> 	
+            <fr:property name="confirmationTitleKey(remove)" value="title.removeAuthorization"/> 
 		</fr:layout>
 	</fr:view>
 </logic:notEmpty>
@@ -197,6 +203,9 @@
 			<fr:property name="key(remove)" value="link.remove"/>
 			<fr:property name="param(remove)" value="OID/accountingUnitOid"/>
 			<fr:property name="order(remove)" value="2"/>
+			<fr:property name="confirmationBundle(remove)" value="EXPENDITURE_RESOURCES"/> 
+            <fr:property name="confirmationKey(remove)" value="label.removeAuthorization"/> 	
+            <fr:property name="confirmationTitleKey(remove)" value="title.removeAuthorization"/> 
 		</fr:layout>
 	</fr:view>
 </logic:notEmpty>
