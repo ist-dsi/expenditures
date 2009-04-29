@@ -36,9 +36,9 @@ public class AllocateProjectFundsPermanently<T extends PaymentProcess> extends A
 
     @Override
     protected void process(final T process, final Object... objects) {
-	if (!process.isRealValueEqualOrLessThanFundAllocation()) {
-	    throw new DomainException("activities.message.exception.valuesCannotGoOverFundAllocation");
-	}
+//	if (!process.isRealValueEqualOrLessThanFundAllocation()) {
+//	    throw new DomainException("activities.message.exception.valuesCannotGoOverFundAllocation");
+//	}
 	final List<FundAllocationBean> fundAllocationBeans = (List<FundAllocationBean>) objects[0];
 	for (FundAllocationBean fundAllocationBean : fundAllocationBeans) {
 	    final ProjectFinancer projectFinancer = (ProjectFinancer) fundAllocationBean.getFinancer();
