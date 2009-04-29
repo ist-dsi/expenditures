@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.ResourceBundle;
 import java.util.Set;
 
+import myorg.domain.util.Money;
+
 import org.apache.commons.lang.StringUtils;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
@@ -11,7 +13,6 @@ import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.CostCenter;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
-import myorg.domain.util.Money;
 import pt.ist.fenixframework.pstm.Transaction;
 import pt.utl.ist.fenix.tools.util.Strings;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
@@ -95,8 +96,7 @@ public class Financer extends Financer_Base {
     }
 
     public boolean isProjectAccountingEmployee(Person person) {
-	return getAccountingUnit().hasProjectAccountants(person);
-//	return getUnit().isProjectAccountingEmployee(person);
+	return false;
     }
 
     protected String getAllocationIds(final String id, final String key) {

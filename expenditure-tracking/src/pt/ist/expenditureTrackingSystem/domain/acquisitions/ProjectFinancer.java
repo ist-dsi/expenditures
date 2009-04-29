@@ -137,4 +137,10 @@ public class ProjectFinancer extends ProjectFinancer_Base {
 	}
 	return false;
     }
+
+    @Override
+    public boolean isProjectAccountingEmployee(Person person) {
+	return getAccountingUnit().hasProjectAccountants(person);
+    }
+
 }
