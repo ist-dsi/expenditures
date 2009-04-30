@@ -237,10 +237,14 @@ public class SyncProjectsAux {
 	String acronym = mgpProject.title.replace("\"", "");
 	String accountingUnitString = mgpProject.unidExploracao.replace("\"", "");
 
-	project.setName(acronym);
+	if (!acronym.equals(project.getName())) {
+	    project.setName(acronym);
+	}
 
 	final AccountingUnit accountingUnit = AccountingUnit.readAccountingUnitByUnitName(accountingUnitString);
-	project.setAccountingUnit(accountingUnit);
+	if (accountingUnit != project.getAccountingUnit()) {
+	    project.setAccountingUnit(accountingUnit);
+	}
 
 	final Person responsible = findPerson(responsibleString);
 	    if (responsibleString.equals("953")) {

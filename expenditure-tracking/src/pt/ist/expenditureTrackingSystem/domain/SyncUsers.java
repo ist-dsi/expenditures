@@ -61,7 +61,9 @@ public class SyncUsers extends SyncUsers_Base {
 			    person.setName(name.getContent());
 			    u++;
 			}
-			person.setEmail(email);
+			if (!email.equals(person.getEmail())) {
+			    person.setEmail(email);
+			}
 		    }
 		}
 	    }

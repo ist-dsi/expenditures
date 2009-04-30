@@ -268,7 +268,9 @@ public class SyncSuppliers extends SyncSuppliers_Base {
 		supplier.delete();
 	    } else {
 		updateSupplierInformationAux(supplier, giafSupplier);
-		supplier.setSupplierLimit(Money.ZERO);
+		if (!supplier.getSupplierLimit().equals(Money.ZERO)) {
+		    supplier.setSupplierLimit(Money.ZERO);
+		}
 	    }
 	} else {
 	    updateSupplierInformationAux(supplier, giafSupplier);
@@ -277,14 +279,28 @@ public class SyncSuppliers extends SyncSuppliers_Base {
 
     private static void updateSupplierInformationAux(final Supplier supplier, final GiafSupplier giafSupplier) {
 	final String country = getCountry(giafSupplier);
-	supplier.setFiscalIdentificationCode(giafSupplier.numFis);
-	supplier.setName(giafSupplier.nom_ent);
-	supplier.setAbbreviatedName(giafSupplier.nom_ent_abv);
-	supplier.setPhone(giafSupplier.telEnt);
-	supplier.setFax(giafSupplier.faxEnt);
-	supplier.setEmail(giafSupplier.email);
+	if (!giafSupplier.numFis.equals(supplier.getFiscalIdentificationCode())) {
+	    supplier.setFiscalIdentificationCode(giafSupplier.numFis);
+	}
+	if (!giafSupplier.nom_ent.equals(supplier.getName())) {
+	    supplier.setName(giafSupplier.nom_ent);
+	}
+	if (!giafSupplier.nom_ent_abv.equals(supplier.getAbbreviatedName())) {
+	    supplier.setAbbreviatedName(giafSupplier.nom_ent_abv);
+	}
+	if (!giafSupplier.telEnt.equals(supplier.getPhone())) {
+	    supplier.setPhone(giafSupplier.telEnt);
+	}
+	if (!giafSupplier.faxEnt.equals(supplier.getFax())) {
+	    supplier.setFax(giafSupplier.faxEnt);
+	}
+	if (!giafSupplier.email.equals(supplier.getEmail())) {
+	    supplier.setEmail(giafSupplier.email);
+	}
 	final Address address = new Address(giafSupplier.ruaEnt, null, giafSupplier.codPos, giafSupplier.locEnt, country);
-	supplier.setAddress(address);	
+	if (!address.equals(supplier.getAddress())) {
+	    supplier.setAddress(address);
+	}
     }
 
     private static Supplier findSupplierByGiafKey(final String codEnt) {
