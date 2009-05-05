@@ -3,10 +3,11 @@ package pt.ist.expenditureTrackingSystem.presentationTier.renderers;
 import java.util.ArrayList;
 import java.util.List;
 
+import myorg.domain.exceptions.DomainException;
+import myorg.domain.util.Address;
+
 import org.apache.commons.lang.StringUtils;
 
-import pt.ist.expenditureTrackingSystem.domain.DomainException;
-import myorg.domain.util.Address;
 import pt.ist.fenixWebFramework.renderers.InputRenderer;
 import pt.ist.fenixWebFramework.renderers.components.HtmlBlockContainer;
 import pt.ist.fenixWebFramework.renderers.components.HtmlComponent;
@@ -305,7 +306,7 @@ public class AddressInputRenderer extends InputRenderer {
 		try {
 		    return new Address(values[0], values[1], values[3], values[2], values[4]);
 		} catch (DomainException e) {
-		    e.printStackTrace();
+		   e.printStackTrace();
 		    return null;
 		}
 	    }
