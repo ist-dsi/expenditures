@@ -277,35 +277,6 @@
 	<slot name="address.country"/>
 </schema>
 
-<schema name="viewAcquisitionRequestItem"
-		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem"
-		bundle="ACQUISITION_RESOURCES">
-	<slot name="proposalReference" key="acquisitionRequestItem.label.proposalReference" bundle="ACQUISITION_RESOURCES" />
-	<slot name="quantity" key="acquisitionRequestItem.label.quantity" bundle="ACQUISITION_RESOURCES"/>
-	<slot name="realQuantity" key="acquisitionRequestItem.label.realQuantity" bundle="ACQUISITION_RESOURCES" layout="null-as-label">
-		<property name="subLayout" value="default"/>
-	</slot>
-	<slot name="unitValue" key="acquisitionRequestItem.label.unitValue" bundle="ACQUISITION_RESOURCES"/>
-	<slot name="realUnitValue" key="acquisitionRequestItem.label.realUnitValue" bundle="ACQUISITION_RESOURCES" layout="null-as-label">
-		<property name="subLayout" value="default"/>
-	</slot>
-	<slot name="vatValue" key="acquisitionRequestItem.label.vatValue" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-	<slot name="additionalCostValue" key="acquisitionRequestItem.label.additionalCostValue" bundle="ACQUISITION_RESOURCES" layout="null-as-label" />
-	<slot name="totalItemValue" key="acquisitionRequestItem.label.totalValue" bundle="ACQUISITION_RESOURCES"/>
-	<slot name="totalAssignedValue" key="acquisitionRequestItem.label.assignedValue" bundle="ACQUISITION_RESOURCES"/>
-	.<slot name="realAdditionalCostValue" key="acquisitionRequestItem.label.realAdditionalCostValue" bundle="ACQUISITION_RESOURCES" layout="null-as-label">
-		<property name="subLayout" value="default"/>
-	</slot>
-	<slot name="unitItems" key="acquisitionProcess.label.payingUnits" bundle="ACQUISITION_RESOURCES" layout="tabular" schema="viewUnitItem">
-		<property name="classes" value="payingunits"/>
-		<property name="columnClasses" value=",nowrap vatop,"/>
-	</slot>
-	<slot name="CPVReference" key="acquisitionRequestItem.label.salesCode" bundle="ACQUISITION_RESOURCES" layout="format">
-		<property name="format" value="${code} - ${description}"/>
-	</slot>
-	<slot name="description" key="acquisitionRequestItem.label.description" bundle="ACQUISITION_RESOURCES"/>
-</schema>
-
 <schema name="viewUnitItem"
 		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.UnitItem"
 		bundle="ACQUISITION_RESOURCES">

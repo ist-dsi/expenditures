@@ -8,6 +8,10 @@
 
 <%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPaymentProcess"%>
 
+<div class="helpicon" title="Ajuda">
+	<a href="https://fenix-ashes.ist.utl.pt/fenixWiki/Qualidade/Aquisicoes/PesquisaAquisicoes" target="_blank"><img src="images/icon_help.gif"></a>
+</div>
+
 <h2><bean:message key="process.label.searchProcesses" bundle="EXPENDITURE_RESOURCES"/></h2>
 
 <bean:define id="schema" value="search.default" toScope="request" />
@@ -66,8 +70,10 @@
 	<bean:size id="listSize" name="collectionPager" property="collection"/>
 		<bean:define id="pagerString" name="pagerString"/>
 
-	<p class="mvert05"><span style="background: #fff5dd; font-style: italic; color: #542;">
-		<span><bean:message key="label.search.suggestion" bundle="ACQUISITION_RESOURCES"/></span>
+	<p class="mvert05">
+		<span style="background: #fff5dd; font-style: italic; color: #542;">
+			<bean:message key="label.search.suggestion" bundle="ACQUISITION_RESOURCES"/>
+		</span>
 	</p>
 
 	<table class="width100pc">
@@ -131,12 +137,6 @@
 			pageNumberAttributeName="pageNumber" numberOfPagesAttributeName="numberOfPages" numberOfVisualizedPages="10"/>
 	</p>
 	
-
-	<p class="mvert025"><em><bean:message key="label.allocationState.title" bundle="EXPENDITURE_RESOURCES"/>:</em></p>
-	<p class="mvert025"><em><bean:message key="label.project.allocation" bundle="EXPENDITURE_RESOURCES"/>.</em></p>
-	<p class="mvert025"><em><bean:message key="label.allocation" bundle="EXPENDITURE_RESOURCES"/>.</em></p>
-	<p class="mvert025"><em><bean:message key="label.project.finalAllocation" bundle="EXPENDITURE_RESOURCES"/>.</em></p>
-	<p class="mvert025"><em><bean:message key="label.finalAllocation" bundle="EXPENDITURE_RESOURCES"/>.</em></p>	
 </logic:notEmpty>
 
 <logic:empty name="results">

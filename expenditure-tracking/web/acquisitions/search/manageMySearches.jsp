@@ -4,6 +4,10 @@
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 
+<div class="helpicon" title="Ajuda">
+	<a href="https://fenix-ashes.ist.utl.pt/fenixWiki/Qualidade/Aquisicoes/PesquisaAquisicoes#head-519394d479afe350af823e8512e152289a161ec5" target="_blank"><img src="images/icon_help.gif"></a>
+</div>
+
 <h2><bean:message key="title.configureSearches" bundle="EXPENDITURE_RESOURCES"/></h2>
 
 <ul>
