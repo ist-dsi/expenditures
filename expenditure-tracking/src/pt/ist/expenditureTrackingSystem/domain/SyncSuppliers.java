@@ -145,7 +145,10 @@ public class SyncSuppliers extends SyncSuppliers_Base {
 
 	@Override
 	protected String getQueryString() {
-	    return "SELECT entc_cod_ent FROM GIDENTCAN";
+	    return "select * from (" +
+	    		"SELECT ENTC_COD_ENT, max(ENTC_DAT_CAN) as cancelamento, max(ENTC_DAT_ACT) as activacao " +
+	    		"FROM GIDENTCAN group by ENTC_COD_ENT) " +
+	    		"where activacao is null or activacao < cancelamento;";
 	}
 
 	@Override

@@ -64,6 +64,24 @@
 				<fr:property name="rowClasses" value=",tdbold,,,,,,,"/>
 			</fr:layout>
 		</fr:view>
+		<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL_MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL,pt.ist.expenditureTrackingSystem.domain.RoleType.SUPPLIER_MANAGER">
+			<logic:present name="supplierBean" property="supplier.giafKey">
+				<logic:notEmpty name="supplierBean" property="supplier.giafKey">
+					<bean:message key="label.supplier.giaf.key" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>:
+					<bean:write name="supplierBean" property="supplier.giafKey"/>
+				</logic:notEmpty>
+				<logic:empty name="supplierBean" property="supplier.giafKey">
+					<font color="red">
+						<bean:message key="label.supplier.giaf.key.does.not.exist" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>:
+					</font>
+				</logic:empty>
+			</logic:present>
+			<logic:notPresent name="supplierBean" property="supplier.giafKey">
+				<font color="red">
+					<bean:message key="label.supplier.giaf.key.does.not.exist" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>:
+				</font>
+			</logic:notPresent>
+		</logic:present>
 	</div>
 
 	<bean:define id="supplierOID" name="supplier" property="OID"/>
