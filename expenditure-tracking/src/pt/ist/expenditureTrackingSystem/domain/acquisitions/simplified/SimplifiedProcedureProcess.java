@@ -55,6 +55,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activitie
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SubmitForConfirmInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SubmitForFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.UnSubmitForApproval;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.UnlockInvoiceReceiving;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.UnsetSkipSupplierFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
@@ -113,6 +114,7 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 
 	requestInformationActivities.add(new PayAcquisition());
 	requestInformationActivities.add(new ReceiveInvoice());
+	requestInformationActivities.add(new UnlockInvoiceReceiving());
 	requestInformationActivities.add(new FixInvoice());
 	requestInformationActivities.add(new SubmitForConfirmInvoice());
 	requestInformationActivities.add(new ConfirmInvoice());

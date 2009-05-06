@@ -135,19 +135,21 @@
 				</p>
 				<p>
 					<bean:message key="acquisitionProcess.label.invoice" bundle="ACQUISITION_RESOURCES"/>:
-					<logic:present name="acquisitionProcess" property="acquisitionRequest.invoice">
-						<logic:present name="acquisitionProcess" property="acquisitionRequest.invoice.content">
-							<html:link action="<%= actionMapping + ".do?method=downloadInvoice"%>" paramId="invoiceOid" paramName="acquisitionProcess" paramProperty="acquisitionRequest.invoice.OID">
-								<bean:write name="acquisitionProcess" property="acquisitionRequest.invoice.filename"/>
-							</html:link>
-						</logic:present>	
-						<logic:notPresent name="acquisitionProcess" property="acquisitionRequest.invoice">
+					<logic:notEmpty name="acquisitionProcess" property="acquisitionRequest.invoices">
+						<logic:iterate id="invoice" name="acquisitionProcess" property="acquisitionRequest.invoices">
+							<logic:present name="invoice" property="content">
+								<html:link action="<%= actionMapping + ".do?method=downloadInvoice"%>" paramId="invoiceOid" paramName="invoice" paramProperty="OID">
+									<bean:write name="invoice" property="filename"/>
+								</html:link>
+							</logic:present>	
+						</logic:iterate>
+						<logic:notPresent name="invoice" property="content">
 							<em><bean:message key="document.message.info.notAvailable" bundle="EXPENDITURE_RESOURCES"/></em>
 						</logic:notPresent>
-					</logic:present>
-					<logic:notPresent name="acquisitionProcess" property="acquisitionRequest.invoice">
+					</logic:notEmpty>
+					<logic:empty name="acquisitionProcess" property="acquisitionRequest.invoices">
 						<em><bean:message key="document.message.info.notAvailable" bundle="EXPENDITURE_RESOURCES"/></em>
-					</logic:notPresent>
+					</logic:empty>
 				</p>
 				<p>
 					<bean:message key="acquisitionProcess.label.otherFiles" bundle="ACQUISITION_RESOURCES"/>:

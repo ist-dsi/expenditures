@@ -3,7 +3,9 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import myorg.domain.util.Address;
 import myorg.domain.util.Money;
@@ -19,11 +21,13 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
     public static final Comparator<AcquisitionRequestItem> COMPARATOR_BY_REFERENCE = new Comparator<AcquisitionRequestItem>() {
 
 	@Override
-	public int compare(final AcquisitionRequestItem acquisitionRequestItem1, final AcquisitionRequestItem acquisitionRequestItem2) {
-	    final int c = acquisitionRequestItem1.getProposalReference().compareTo(acquisitionRequestItem2.getProposalReference());
+	public int compare(final AcquisitionRequestItem acquisitionRequestItem1,
+		final AcquisitionRequestItem acquisitionRequestItem2) {
+	    final int c = acquisitionRequestItem1.getProposalReference()
+		    .compareTo(acquisitionRequestItem2.getProposalReference());
 	    return c == 0 ? acquisitionRequestItem1.getIdInternal().compareTo(acquisitionRequestItem2.getIdInternal()) : c;
 	}
-	
+
     };
 
     protected AcquisitionRequestItem() {
@@ -248,31 +252,19 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	return false;
     }
 
-    public boolean isInvoiceConfirmed() {
-	for (UnitItem unitItem : getUnitItems()) {
-	    if (!unitItem.getInvoiceConfirmed()) {
-		return false;
-	    }
-	}
-	return true;
+    @Override
+    public List<AcquisitionInvoice> getConfirmedInvoices() {
+	return super.getConfirmedInvoices();
     }
 
-    public boolean isInvoiceConfirmedBy(Person person) {
-	for (UnitItem unitItem : getUnitItems()) {
-	    if (unitItem.getUnit().isResponsible(person) && unitItem.getInvoiceConfirmed()) {
-		return true;
-	    }
-	}
-	return false;
+    @Override
+    public List<AcquisitionInvoice> getConfirmedInvoices(Person person) {
+	return super.getConfirmedInvoices(person);
     }
 
-    public boolean hasAtLeastOneInvoiceConfirmation() {
-	for (UnitItem unitItem : getUnitItems()) {
-	    if (unitItem.getInvoiceConfirmed()) {
-		return true;
-	    }
-	}
-	return false;
+    @Override
+    public List<AcquisitionInvoice> getUnconfirmedInvoices(Person person) {
+	return super.getUnconfirmedInvoices(person);
     }
 
     public Money getTotalVatValue() {
@@ -346,12 +338,14 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 
     public Money getCurrentTotalItemValueWithAdditionalCostsAndVat() {
 	final Money totalRealItemValueWithAdditionalCostsAndVat = getTotalRealValueWithAdditionalCostsAndVat();
-	return totalRealItemValueWithAdditionalCostsAndVat == null ? getTotalItemValueWithAdditionalCostsAndVat() : totalRealItemValueWithAdditionalCostsAndVat;
+	return totalRealItemValueWithAdditionalCostsAndVat == null ? getTotalItemValueWithAdditionalCostsAndVat()
+		: totalRealItemValueWithAdditionalCostsAndVat;
     }
 
     public Money getCurrentTotalItemValueWithAdditionalCosts() {
 	final Money totalRealItemValueWithAdditionalCosts = getTotalRealValueWithAdditionalCosts();
-	return totalRealItemValueWithAdditionalCosts == null ? getTotalItemValueWithAdditionalCosts() : totalRealItemValueWithAdditionalCosts;
+	return totalRealItemValueWithAdditionalCosts == null ? getTotalItemValueWithAdditionalCosts()
+		: totalRealItemValueWithAdditionalCosts;
     }
 
     @Override

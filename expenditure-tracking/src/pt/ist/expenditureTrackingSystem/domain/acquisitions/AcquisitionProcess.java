@@ -26,13 +26,6 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 	super.setSkipSupplierFundAllocation(Boolean.FALSE);
     }
 
-    public void delete() {
-	final AcquisitionRequest acquisitionRequest = getAcquisitionRequest();
-	acquisitionRequest.delete();
-	removeExpenditureTrackingSystem();
-	Transaction.deleteObject(this);
-    }
-
     public boolean isAvailableForCurrentUser() {
 	final Person loggedPerson = getLoggedPerson();
 	return loggedPerson != null && isAvailableForPerson(loggedPerson);
@@ -100,12 +93,12 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 
     public boolean isInvoiceReceived() {
 	final AcquisitionRequest acquisitionRequest = getAcquisitionRequest();
-	return getLastAcquisitionProcessState().isInvoiceReceived() && acquisitionRequest.isInvoiceReceived();
+	return getLastAcquisitionProcessState().isInvoiceReceived();
     }
 
     public boolean isPastInvoiceReceived() {
 	final AcquisitionRequest acquisitionRequest = getAcquisitionRequest();
-	return getLastAcquisitionProcessState().isPastInvoiceReceived() && acquisitionRequest.isInvoiceReceived();
+	return getLastAcquisitionProcessState().isPastInvoiceReceived();
     }
 
     public Unit getUnit() {
@@ -223,6 +216,6 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 
     @Override
     public String getProcessStateName() {
-       return getLastAcquisitionProcessState().getLocalizedName();
+	return getLastAcquisitionProcessState().getLocalizedName();
     }
 }

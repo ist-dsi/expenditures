@@ -1,6 +1,7 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import myorg.domain.util.Money;
@@ -83,6 +84,12 @@ public class ProjectFinancer extends ProjectFinancer_Base {
 
     @Override
     public boolean hasAllocatedFundsPermanentlyForAllProjectFinancers() {
+	List<PaymentProcessInvoice> allocatedInvoicesInProject = getAllocatedInvoicesInProject();
+	for (UnitItem unitItem : getUnitItems()) {
+	    if (!allocatedInvoicesInProject.containsAll(unitItem.getConfirmedInvoices())) {
+		return false;
+	    }
+	}
 	return getEffectiveProjectFundAllocationId() != null && !getEffectiveProjectFundAllocationId().isEmpty();
     }
 
@@ -98,12 +105,22 @@ public class ProjectFinancer extends ProjectFinancer_Base {
 	Strings strings = getEffectiveProjectFundAllocationId();
 	if (strings == null) {
 	    strings = new Strings(effectiveProjectFundAllocationId);
-	    setEffectiveProjectFundAllocationId(strings);
-	} else {
-	    strings.add(effectiveProjectFundAllocationId);
-	    setEffectiveProjectFundAllocationId(strings);
 	}
+	if (!strings.contains(effectiveProjectFundAllocationId)) {
+	    strings.add(effectiveProjectFundAllocationId);
+	}
+	setEffectiveProjectFundAllocationId(strings);
+	
+	allocateInvoicesInProject();
+    }
 
+    private void allocateInvoicesInProject() {
+	getAllocatedInvoicesInProject().clear();
+	Set<PaymentProcessInvoice> invoices = new HashSet<PaymentProcessInvoice>();
+	for (UnitItem unitItem : getUnitItems()) {
+	    invoices.addAll(unitItem.getConfirmedInvoices());
+	}
+	getAllocatedInvoicesInProject().addAll(invoices);
     }
 
     @Override

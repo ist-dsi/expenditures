@@ -2,6 +2,7 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities;
 
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericRefundProcessActivity;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
+import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
 public class ConfirmInvoices extends GenericRefundProcessActivity {
 
@@ -15,7 +16,8 @@ public class ConfirmInvoices extends GenericRefundProcessActivity {
 
     @Override
     protected void process(RefundProcess process, Object... objects) {
-	process.confirmInvoices();
+	Person person = getLoggedPerson();
+	process.confirmInvoicesByPerson(person);
     }
 
 }

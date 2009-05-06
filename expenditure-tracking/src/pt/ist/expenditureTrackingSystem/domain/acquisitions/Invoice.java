@@ -5,10 +5,9 @@ import pt.ist.fenixframework.pstm.Transaction;
 
 public class Invoice extends Invoice_Base {
     
-    public Invoice(final Acquisition acquisition) {
+    public Invoice() {
 	super();
 	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
-	setAcquisition(acquisition);
     }
 
     public boolean isInvoiceReceived() {
@@ -16,7 +15,6 @@ public class Invoice extends Invoice_Base {
     }
 
     public void delete() {
-	removeAcquisition();
 	removeExpenditureTrackingSystem();
 	Transaction.deleteObject(this);
     }

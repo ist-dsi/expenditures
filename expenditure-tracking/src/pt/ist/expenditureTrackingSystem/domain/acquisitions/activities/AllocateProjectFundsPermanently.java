@@ -2,7 +2,6 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.activities;
 
 import java.util.List;
 
-import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.ProjectFinancer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
@@ -19,9 +18,9 @@ public class AllocateProjectFundsPermanently<T extends PaymentProcess> extends A
     @Override
     protected boolean isAvailable(final T process) {
 	return isCurrentUserProcessOwner(process)
-		&& process.isInvoiceConfirmed()
 		&& allItemsAreFilledWithRealValues(process)
 		&& process.getRequest().isEveryItemFullyAttributeInRealValues()
+		&& process.getRequest().isConfirmedForAllInvoices() 
 		&& !process.hasAllocatedFundsPermanentlyForAllProjectFinancers();
     }
 

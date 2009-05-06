@@ -125,7 +125,7 @@
 	<fr:view name="results" schema="viewProcessesInList">
 			<fr:layout name="tabular">
 				<fr:property name="classes" value="tstyle2 mtop05 width100pc asd"/>
-				<fr:property name="columnClasses" value="width100px,,,,,,,,nowrap,,,,,,,,,,,,,,,"/>
+				<fr:property name="columnClasses" value="width30px,,,,,,,,nowrap,,,,,,,,,,,,,,,"/>
 				<fr:property name="linkFormat(view)" value="/acquisition${class.simpleName}.do?method=viewProcess&processOid=${OID}"/>
 				<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
 				<fr:property name="key(view)" value="link.view"/>

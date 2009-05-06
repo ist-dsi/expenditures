@@ -5,6 +5,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.joda.time.LocalDate;
+
+import myorg.domain.util.ByteArray;
 import myorg.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.dto.PayingUnitTotalBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
@@ -141,7 +144,7 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
 
     public void resetEffectiveFundAllocationId() {
 	for (Financer financer : getFinancersSet()) {
-	    financer.setEffectiveFundAllocationId(null);
+	    financer.resetEffectiveFundAllocationId();
 	}
 
     }
@@ -219,8 +222,7 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
 		    return true;
 		}
 	    } else {
-		if (financer.isAccountingEmployeeForOnePossibleUnit(person)
-			&& financer.getAmountAllocated().isPositive()
+		if (financer.isAccountingEmployeeForOnePossibleUnit(person) && financer.getAmountAllocated().isPositive()
 			&& financer.getFundAllocationId() == null) {
 		    return true;
 		}
@@ -238,7 +240,7 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
 			&& projectFinancer.getAmountAllocated().isPositive()
 			&& projectFinancer.getProjectFundAllocationId() == null) {
 		    res.add(financer);
-		}		
+		}
 	    } else {
 		if (financer.isAccountingEmployeeForOnePossibleUnit(person) && financer.getAmountAllocated().isPositive()
 			&& financer.getFundAllocationId() == null) {
@@ -459,4 +461,41 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
 	return false;
     }
 
+    @Override
+    public AcquisitionInvoice receiveInvoice(String filename, byte[] bytes, String invoiceNumber, LocalDate invoiceDate) {
+	final AcquisitionInvoice invoice = new AcquisitionInvoice();
+	invoice.setFilename(filename);
+	invoice.setContent(new ByteArray(bytes));
+	invoice.setInvoiceNumber(invoiceNumber);
+	invoice.setInvoiceDate(invoiceDate);
+	// addInvoice(invoice);
+	return invoice;
+    }
+
+    public boolean hasAllInvoicesAllocated() {
+	for (Financer financer : getFinancers()) {
+	    if (!financer.hasAllInvoicesAllocated()) {
+		return false;
+	    }
+	}
+	return true;
+    }
+
+    public boolean isConfirmedForAllInvoices() {
+	Set<PaymentProcessInvoice> allInvoices = getInvoices();
+	Set<PaymentProcessInvoice> confirmedInvoices = new HashSet<PaymentProcessInvoice>();
+	for (RequestItem item : getRequestItems()) {
+	    confirmedInvoices.addAll(item.getConfirmedInvoices());
+	}
+
+	return !confirmedInvoices.isEmpty() && confirmedInvoices.containsAll(allInvoices);
+    }
+
+    public Set<PaymentProcessInvoice> getInvoices() {
+	Set<PaymentProcessInvoice> allInvoices = new HashSet<PaymentProcessInvoice>();
+	for (RequestItem item : getRequestItems()) {
+	    allInvoices.addAll(item.getInvoicesFiles());
+	}
+	return allInvoices;
+    }
 }

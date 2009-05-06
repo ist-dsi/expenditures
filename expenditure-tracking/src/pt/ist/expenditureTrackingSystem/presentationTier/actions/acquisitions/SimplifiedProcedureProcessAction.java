@@ -1,8 +1,11 @@
 package pt.ist.expenditureTrackingSystem.presentationTier.actions.acquisitions;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,6 +39,7 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.presentationTier.util.FileUploadBean;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
+import pt.ist.fenixWebFramework.util.DomainReference;
 
 @Mapping(path = "/acquisitionSimplifiedProcedureProcess")
 public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessAction {
@@ -75,6 +79,22 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
     public static class ReceiveInvoiceForm extends FileUploadBean {
 	private String invoiceNumber;
 	private LocalDate invoiceDate;
+	private List<DomainReference<AcquisitionRequestItem>> items;
+	private DomainReference<AcquisitionRequest> request;
+	private Boolean lastInvoice = Boolean.TRUE;
+
+	public Boolean getLastInvoice() {
+	    return lastInvoice;
+	}
+
+	public void setLastInvoice(Boolean lastInvoice) {
+	    this.lastInvoice = lastInvoice;
+	}
+
+	public ReceiveInvoiceForm(AcquisitionRequest request) {
+	    setRequest(request);
+	    setItems(Collections.EMPTY_LIST);
+	}
 
 	public String getInvoiceNumber() {
 	    return invoiceNumber;
@@ -90,6 +110,29 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 
 	public void setInvoiceDate(LocalDate invoiceDate) {
 	    this.invoiceDate = invoiceDate;
+	}
+
+	public void setItems(List<AcquisitionRequestItem> items) {
+	    this.items = new ArrayList<DomainReference<AcquisitionRequestItem>>();
+	    for (AcquisitionRequestItem item : items) {
+		this.items.add(new DomainReference<AcquisitionRequestItem>(item));
+	    }
+	}
+
+	public List<AcquisitionRequestItem> getItems() {
+	    List<AcquisitionRequestItem> items = new ArrayList<AcquisitionRequestItem>();
+	    for (DomainReference<AcquisitionRequestItem> item : this.items) {
+		items.add(item.getObject());
+	    }
+	    return items;
+	}
+
+	public void setRequest(AcquisitionRequest request) {
+	    this.request = new DomainReference<AcquisitionRequest>(request);
+	}
+
+	public AcquisitionRequest getRequest() {
+	    return this.request.getObject();
 	}
     }
 
@@ -224,13 +267,14 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
 	ReceiveInvoiceForm receiveInvoiceForm = getRenderedObject();
 	if (receiveInvoiceForm == null) {
-	    receiveInvoiceForm = new ReceiveInvoiceForm();
 	    final AcquisitionRequest acquisitionRequest = acquisitionProcess.getAcquisitionRequest();
-	    if (acquisitionRequest.hasInvoice()) {
-		final Invoice invoice = acquisitionRequest.getInvoice();
-		receiveInvoiceForm.setInvoiceNumber(invoice.getInvoiceNumber());
-		receiveInvoiceForm.setInvoiceDate(invoice.getInvoiceDate());
-	    }
+	    receiveInvoiceForm = new ReceiveInvoiceForm(acquisitionRequest);
+	    // TODO: FIX INVOICE
+	    // if (acquisitionRequest.hasInvoice()) {
+	    // final Invoice invoice = acquisitionRequest.getInvoice();
+	    // receiveInvoiceForm.setInvoiceNumber(invoice.getInvoiceNumber());
+	    // receiveInvoiceForm.setInvoiceDate(invoice.getInvoiceDate());
+	    // }
 	}
 	request.setAttribute("receiveInvoiceForm", receiveInvoiceForm);
 	return forward(request, "/acquisitions/receiveInvoice.jsp");
@@ -253,7 +297,8 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	final byte[] bytes = consumeInputStream(receiveInvoiceForm);
 	AbstractActivity<RegularAcquisitionProcess> receiveInvoice = acquisitionProcess.getActivityByName(activity);
 	receiveInvoice.execute(acquisitionProcess, receiveInvoiceForm.getFilename(), bytes,
-		receiveInvoiceForm.getInvoiceNumber(), receiveInvoiceForm.getInvoiceDate());
+		receiveInvoiceForm.getInvoiceNumber(), receiveInvoiceForm.getInvoiceDate(), receiveInvoiceForm.getItems(),
+		receiveInvoiceForm.getLastInvoice());
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
 
@@ -464,4 +509,12 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	genericActivityExecution(acquisitionProcess, "RevertToInvoiceConfirmation");
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
+    
+    public ActionForward executeUnlockInvoiceReceiving(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final SimplifiedProcedureProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
+	genericActivityExecution(acquisitionProcess, "UnlockInvoiceReceiving");
+	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
+    }
+    
 }

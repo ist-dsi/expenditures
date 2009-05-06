@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
+import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import myorg.domain.util.Money;
 import pt.ist.fenixframework.pstm.Transaction;
@@ -84,5 +85,5 @@ public class UnitItem extends UnitItem_Base {
     public AccountingUnit getAccountingUnit() {
 	return getFinancer().getAccountingUnit();
     }
-}
 
+}

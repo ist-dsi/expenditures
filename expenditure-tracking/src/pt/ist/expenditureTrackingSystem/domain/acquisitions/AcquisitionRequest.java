@@ -75,22 +75,6 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	return new AcquisitionRequestItem(requestItemBean);
     }
 
-    @Override
-    public void delete() {
-	for (AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
-	    acquisitionRequestItem.delete();
-	}
-	for (; !getFinancers().isEmpty(); getFinancers().get(0).delete())
-	    ;
-
-	removeAcquisitionProposalDocument();
-	removeRequester();
-	for (; !getSuppliers().isEmpty(); removeSuppliers(getSuppliers().get(0)))
-	    ;
-	removeAcquisitionProcess();
-	super.delete();
-    }
-
     public String getFiscalIdentificationCode() {
 	if (getSuppliersCount() == 0) {
 	    return null;
@@ -117,7 +101,24 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     public Money getRealTotalVatValue() {
 	Money result = Money.ZERO;
 	for (final AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
-	    result = result.add(acquisitionRequestItem.getTotalRealVatValue());
+	    Money totalRealVatValue = acquisitionRequestItem.getTotalRealVatValue();
+	    if (totalRealVatValue == null) {
+		return null;
+	    }
+	    result = result.add(totalRealVatValue);
+	}
+	return result;
+    }
+
+    public Money getCurrentVatValue() {
+	Money result = Money.ZERO;
+	for (final AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
+	    Money totalRealVatValue = acquisitionRequestItem.getTotalRealVatValue();
+	    if (totalRealVatValue != null) {
+		result.add(totalRealVatValue);
+	    } else {
+		result.add(getTotalValue());
+	    }
 	}
 	return result;
     }
@@ -170,7 +171,23 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     public Money getTotalItemValueWithAdditionalCostsAndVat() {
 	Money result = Money.ZERO;
 	for (final AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
-	    result = result.addAndRound(acquisitionRequestItem.getTotalItemValueWithAdditionalCostsAndVat());
+	    Money totalItemValueWithAdditionalCostsAndVat = acquisitionRequestItem.getTotalItemValueWithAdditionalCostsAndVat();
+	    if (totalItemValueWithAdditionalCostsAndVat == null) {
+		return null;
+	    }
+	    result = result.addAndRound(totalItemValueWithAdditionalCostsAndVat);
+	}
+	return result;
+    }
+
+    public Money getCurrentTotalItemValueWithAdditionalCostsAndVat() {
+	Money result = Money.ZERO;
+	for (final AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
+	    if (acquisitionRequestItem.getTotalRealValueWithAdditionalCostsAndVat() != null) {
+		result = result.addAndRound(acquisitionRequestItem.getTotalRealValueWithAdditionalCostsAndVat());
+	    } else {
+		result = result.addAndRound(acquisitionRequestItem.getTotalItemValueWithAdditionalCostsAndVat());
+	    }
 	}
 	return result;
     }
@@ -259,13 +276,15 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	}
 	return result;
     }
-    
+
     @Override
-    public void receiveInvoice(final String filename, final byte[] bytes, final String invoiceNumber, final LocalDate invoiceDate) {
-	super.receiveInvoice(filename, bytes, invoiceNumber, invoiceDate);
+    public AcquisitionInvoice receiveInvoice(final String filename, final byte[] bytes, final String invoiceNumber,
+	    final LocalDate invoiceDate) {
+	AcquisitionInvoice invoice = super.receiveInvoice(filename, bytes, invoiceNumber, invoiceDate);
 	if (!isRealCostAvailableForAtLeastOneItem()) {
 	    copyEstimateValuesToRealValues();
 	}
+	return invoice;
     }
 
     public boolean isRealCostAvailableForAtLeastOneItem() {
@@ -333,9 +352,19 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	return false;
     }
 
+    public boolean isAnyInvoiceConfirmedBy(Person person) {
+	for (AcquisitionRequestItem item : getAcquisitionRequestItemsSet()) {
+	    if (!item.getConfirmedInvoices(person).isEmpty()) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
+    @Deprecated
     public boolean isInvoiceConfirmedBy(Person person) {
 	for (AcquisitionRequestItem item : getAcquisitionRequestItemsSet()) {
-	    if (item.isInvoiceConfirmedBy(person)) {
+	    if (item.isConfirmedForAllInvoices(person)) {
 		return true;
 	    }
 	}
@@ -362,7 +391,7 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 
     public boolean isInvoiceConfirmedBy() {
 	for (AcquisitionRequestItem item : getAcquisitionRequestItemsSet()) {
-	    if (!item.isInvoiceConfirmed()) {
+	    if (!item.isConfirmForAllInvoices()) {
 		return false;
 	    }
 	}

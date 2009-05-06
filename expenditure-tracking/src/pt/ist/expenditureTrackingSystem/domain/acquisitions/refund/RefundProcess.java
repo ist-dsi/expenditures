@@ -262,6 +262,16 @@ public class RefundProcess extends RefundProcess_Base {
 	return invoices;
     }
 
+    public void confirmInvoicesByPerson(Person person) {
+	for (RequestItem item : getRequest().getRequestItems()) {
+	    item.confirmInvoiceBy(person);
+	}
+
+	if (getRequest().isConfirmedForAllInvoices()) {
+	    confirmInvoices();
+	}
+    }
+
     public void submitForInvoiceConfirmation() {
 	new RefundProcessState(this, RefundProcessStateType.SUBMITTED_FOR_INVOICE_CONFIRMATION);
     }

@@ -84,40 +84,11 @@
 		bundle="ACQUISITION_RESOURCES">
 	<slot name="acquisitionProcess.skipSupplierFundAllocation" key="label.skipingSupplierFundAllocation" bundle="EXPENDITURE_RESOURCES"/>
 	<slot name="refundeeName" key="label.refundee" bundle="ACQUISITION_RESOURCES" layout="null-as-label"/>
-	<slot name="totalItemValue" key="acquisitionRequestItem.label.totalValue" bundle="ACQUISITION_RESOURCES"/>
-	<slot name="totalVatValue" key="acquisitionRequestItem.label.vat" bundle="ACQUISITION_RESOURCES"/>	
-	<slot name="totalAdditionalCostsValue" key="acquisitionRequestItem.label.additionalCosts" bundle="ACQUISITION_RESOURCES"/>
-	<slot name="totalItemValueWithAdditionalCostsAndVat" key="acquisitionRequestItem.label.totalValueWithAdditionalCostsAndVat" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="valueAllocated" key="acquisitionRequestItem.label.totalValue" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="currentTotalVatValue" key="acquisitionRequestItem.label.vat" bundle="ACQUISITION_RESOURCES"/>	
+	<slot name="currentTotalAdditionalCostsValue" key="acquisitionRequestItem.label.additionalCosts" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="currentTotalItemValueWithAdditionalCostsAndVat" key="acquisitionRequestItem.label.totalValueWithAdditionalCostsAndVat" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="acquisitionProcess.fundAllocationExpirationDate" key="acquisitionProcess.label.fundAllocation.expirationDate" bundle="ACQUISITION_RESOURCES" layout="null-as-label">
-		<property name="subLayout" value="default"/>
-	</slot>
-	<slot name="invoiceNumber" key="acquisitionProcess.label.invoice.number" bundle="ACQUISITION_RESOURCES" layout="null-as-label">
-		<property name="subLayout" value="default"/>
-	</slot>
-	<slot name="invoiceDate" key="acquisitionProcess.label.invoice.date" bundle="ACQUISITION_RESOURCES" layout="null-as-label">
-		<property name="subLayout" value="default"/>
-	</slot>
-	<slot name="paymentReference" key="acquisitionRequestItem.label.paymentReference" bundle="ACQUISITION_RESOURCES" layout="null-as-label">
-		<property name="subLayout" value="default"/>
-	</slot>
-</schema>
-
-<schema name="viewAcquisitionRequest.extraWithRealValues"
-		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest"
-		bundle="ACQUISITION_RESOURCES">
-	<slot name="acquisitionProcess.skipSupplierFundAllocation" key="label.skipingSupplierFundAllocation" bundle="EXPENDITURE_RESOURCES"/>
-	<slot name="refundeeName" key="label.refundee" bundle="ACQUISITION_RESOURCES" layout="null-as-label"/>
-	<slot name="realTotalValue" key="acquisitionRequestItem.label.totalValue" bundle="ACQUISITION_RESOURCES"/>
-	<slot name="realTotalVatValue" key="acquisitionRequestItem.label.vat" bundle="ACQUISITION_RESOURCES"/>	
-	<slot name="realTotalAdditionalCostsValue" key="acquisitionRequestItem.label.additionalCosts" bundle="ACQUISITION_RESOURCES"/>
-	<slot name="realTotalValueWithAdditionalCostsAndVat" key="acquisitionRequestItem.label.totalValueWithAdditionalCostsAndVat" bundle="ACQUISITION_RESOURCES"/>
-	<slot name="acquisitionProcess.fundAllocationExpirationDate" key="acquisitionProcess.label.fundAllocation.expirationDate" bundle="ACQUISITION_RESOURCES" layout="null-as-label">
-		<property name="subLayout" value="default"/>
-	</slot>
-	<slot name="invoiceNumber" key="acquisitionProcess.label.invoice.number" bundle="ACQUISITION_RESOURCES" layout="null-as-label">
-		<property name="subLayout" value="default"/>
-	</slot>
-	<slot name="invoiceDate" key="acquisitionProcess.label.invoice.date" bundle="ACQUISITION_RESOURCES" layout="null-as-label">
 		<property name="subLayout" value="default"/>
 	</slot>
 	<slot name="paymentReference" key="acquisitionRequestItem.label.paymentReference" bundle="ACQUISITION_RESOURCES" layout="null-as-label">
@@ -317,7 +288,17 @@
 		<property name="fileNameSlot" value="filename" />
 		<property name="size" value="30"/>
 	</slot>
+	<slot name="lastInvoice" key="acquisitionProcess.label.invoice.lastInvoice" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="items" key="acquisitionProcess.label.invoice.associatedItems" bundle="ACQUISITION_RESOURCES" layout="option-select">
+		<property name="providerClass" value="pt.ist.expenditureTrackingSystem.presentationTier.renderers.dataProvider.ItemsFromProcess"/>
+		<property name="eachLayout" value="values"/>
+		<property name="eachSchema" value="itemDescription.descriptionOnly"/> 
+		<property name="saveOptions" value="true"/>
+		<property name="classes" value="nobullet"/>
+		<property name="selectAllShown" value="true"/>
+	</slot>
 </schema>
+
 
 <schema name="viewAcquisitionRequester"
 		type="pt.ist.expenditureTrackingSystem.domain.organization.Person"
@@ -354,7 +335,7 @@
 		type="pt.ist.expenditureTrackingSystem.domain.processes.GenericLog"
 		bundle="EXPENDITURE_RESOURCES">
 		<slot name="executor.name" key="process.logs.label.personName"/>
-		<slot name="activity.class" key="process.logs.label.operation" layout="label">
+		<slot name="activity.class" key="process.logs.label.operation" layout="labelAfterTheFactAcquisitionProcessAction">
 			<property name="bundle" value="ACQUISITION_RESOURCES"/>
 			<property name="escape" value="false"/>
 		</slot>
@@ -398,6 +379,13 @@
 	<slot name="proposalReference" key="acquisitionRequestItem.label.proposalReference" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="quantity" key="acquisitionRequestItem.label.quantity" bundle="ACQUISITION_RESOURCES"/>
 </schema>
+
+<schema name="itemDescription.descriptionOnly"
+		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem"
+		bundle="ACQUISITION_RESOURCES">
+	<slot name="description" key="acquisitionRequestItem.label.description" bundle="ACQUISITION_RESOURCES"/>
+</schema>
+
 
 <schema name="unit.item.bean.edition"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.UnitItemBean"
@@ -457,10 +445,10 @@
 		bundle="EXPENDITURE_RESOURCES">
 	<slot name="acquisitionProcessId" key="label.acquisitionProcessId" bundle="EXPENDITURE_RESOURCES"/>
 	<slot name="afterTheFactAcquisitionType" key="label.afterTheFactAcquisitionType" bundle="ACQUISITION_RESOURCES"/>
-	<slot name="invoiceDate" key="acquisitionProcess.label.invoice.date" bundle="ACQUISITION_RESOURCES" layout="null-as-label">
+	<slot name="invoice.invoiceDate" key="acquisitionProcess.label.invoice.date" bundle="ACQUISITION_RESOURCES" layout="null-as-label">
 		<property name="subLayout" value="default"/>
 	</slot>
-	<slot name="invoiceNumber" key="acquisitionProcess.label.invoice.number" bundle="ACQUISITION_RESOURCES" layout="null-as-label">
+	<slot name="invoice.invoiceNumber" key="acquisitionProcess.label.invoice.number" bundle="ACQUISITION_RESOURCES" layout="null-as-label">
 		<property name="subLayout" value="default"/>
 	</slot>
 	<slot name="value" key="label.value" bundle="EXPENDITURE_RESOURCES"/>

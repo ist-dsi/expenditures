@@ -46,7 +46,9 @@ public class RefundInvoice extends RefundInvoice_Base {
     public RefundInvoice(String invoiceNumber, LocalDate invoiceDate, Money value, BigDecimal vatValue, Money refundableValue,
 	    byte[] invoiceFile, String filename, RefundItem item, Supplier supplier) {
 	this(invoiceNumber, invoiceDate, value, vatValue, refundableValue, item, supplier);
-	new RefundableInvoiceFile(this, invoiceFile, filename);
+	RefundableInvoiceFile refundInvoice = new RefundableInvoiceFile(this, invoiceFile, filename);
+	//item.getRequest().addInvoice(refundInvoice);
+	item.addInvoicesFiles(refundInvoice);
     }
 
     public void delete() {

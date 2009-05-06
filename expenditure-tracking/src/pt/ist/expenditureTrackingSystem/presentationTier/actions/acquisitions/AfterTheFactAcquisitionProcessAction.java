@@ -99,7 +99,7 @@ public class AfterTheFactAcquisitionProcessAction extends ProcessAction {
 	final AfterTheFactAcquisitionProcess afterTheFactAcquisitionProcess = getDomainObject(request,
 		"afterTheFactAcquisitionProcessOid");
 	request.setAttribute("afterTheFactAcquisitionProcess", afterTheFactAcquisitionProcess);
-	final ReceiveInvoiceForm receiveInvoiceForm = new ReceiveInvoiceForm();
+	final ReceiveInvoiceForm receiveInvoiceForm = new ReceiveInvoiceForm(null);
 
 	final AcquisitionAfterTheFact acquisitionAfterTheFact = afterTheFactAcquisitionProcess.getAcquisitionAfterTheFact();
 	if (acquisitionAfterTheFact.hasInvoice()) {

@@ -64,12 +64,13 @@ public abstract class RequestItem extends RequestItem_Base {
     public abstract void createUnitItem(Unit unit, Money shareValue);
 
     public boolean hasBeenApprovedBy(final Person person) {
+	boolean result = true;
 	for (final UnitItem unitItem : getUnitItems()) {
-	    if (unitItem.getUnit().isResponsible(person) && unitItem.getSubmitedForFundsAllocation()) {
-		return true;
+	    if (unitItem.getUnit().isResponsible(person)) {
+		result = result && unitItem.getSubmitedForFundsAllocation();
 	    }
 	}
-	return false;
+	return result;
     }
 
     public void submittedForFundsAllocation(final Person person) {
@@ -121,28 +122,6 @@ public abstract class RequestItem extends RequestItem_Base {
 
     public void unathorizeBy(Person person) {
 	modifyAuthorizationStateFor(person, Boolean.FALSE);
-    }
-
-    private void modifyInvoiceState(Person person, Boolean value) {
-	for (UnitItem unitItem : getUnitItems()) {
-	    if (unitItem.getUnit().isResponsible(person)) {
-		unitItem.setInvoiceConfirmed(value);
-	    }
-	}
-    }
-
-    public void confirmInvoiceBy(Person person) {
-	modifyInvoiceState(person, Boolean.TRUE);
-    }
-
-    public void unconfirmInvoiceBy(Person person) {
-	modifyInvoiceState(person, Boolean.FALSE);
-    }
-
-    public void unconfirmInvoiceForAll() {
-	for (UnitItem unitItem : getUnitItems()) {
-	    unitItem.setInvoiceConfirmed(Boolean.FALSE);
-	}
     }
 
     private void modifyAuthorizationStateFor(Person person, Boolean value) {
@@ -210,5 +189,81 @@ public abstract class RequestItem extends RequestItem_Base {
     }
 
     public abstract Money getTotalAmountForCPV(final int year);
+
+    public void confirmInvoiceBy(Person person) {
+	for (UnitItem unitItem : getUnitItems()) {
+	    if (unitItem.getUnit().isResponsible(person)) {
+		unitItem.getConfirmedInvoices().clear();
+		for (PaymentProcessInvoice invoice : getInvoicesFiles()) {
+		    unitItem.addConfirmedInvoices(invoice);
+		}
+	    }
+	}
+    }
+
+    public void unconfirmInvoiceBy(Person person) {
+	for (UnitItem unitItem : getUnitItems()) {
+	    if (unitItem.getUnit().isResponsible(person)) {
+		unitItem.getConfirmedInvoices().clear();
+	    }
+	}
+    }
+
+    public void unconfirmInvoiceForAll() {
+	for (UnitItem unitItem : getUnitItems()) {
+	    unitItem.getConfirmedInvoices().clear();
+	}
+    }
+
+    public boolean hasAtLeastOneInvoiceConfirmation() {
+	return !getConfirmedInvoices().isEmpty();
+    }
+
+    public <T extends PaymentProcessInvoice> List<T> getConfirmedInvoices() {
+	return getConfirmedInvoices(null);
+    }
+
+    public <T extends PaymentProcessInvoice> List<T> getConfirmedInvoices(Person person) {
+	List<T> invoices = new ArrayList<T>();
+	for (UnitItem unitItem : getUnitItems()) {
+	    if (person == null || unitItem.getFinancer().getUnit().isResponsible(person)) {
+		invoices.addAll((List<T>)unitItem.getConfirmedInvoices());
+	    }
+	}
+	return invoices;
+    }
+
+    public <T extends PaymentProcessInvoice> List<T> getUnconfirmedInvoices(Person person) {
+	List<T> invoices = new ArrayList<T>();
+	invoices.addAll((List<T>)getInvoicesFiles());
+	for (UnitItem unitItem : getUnitItems()) {
+	    if (person == null || unitItem.getFinancer().getUnit().isResponsible(person)) {
+		invoices.removeAll((List<T>)unitItem.getConfirmedInvoices());
+	    }
+	}
+	return invoices;
+    }
+
+    public boolean isConfirmedForAllInvoices(Person person) {
+	List<PaymentProcessInvoice> allInvoices = getInvoicesFiles();
+
+	if (allInvoices.isEmpty()) {
+	    return false;
+	}
+
+	for (UnitItem unitItem : getUnitItems()) {
+	    if (person == null || unitItem.getFinancer().getUnit().isResponsible(person)) {
+		if (!unitItem.getConfirmedInvoices().containsAll(allInvoices)) {
+		    return false;
+		}
+	    }
+	}
+
+	return true;
+    }
+
+    public boolean isConfirmForAllInvoices() {
+	return isConfirmedForAllInvoices(null);
+    }
 
 }

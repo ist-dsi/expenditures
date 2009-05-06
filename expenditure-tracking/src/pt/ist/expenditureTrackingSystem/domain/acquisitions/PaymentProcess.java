@@ -100,6 +100,10 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
 	return getRequest().hasAllocatedFundsForAllProjectFinancers(person);
     }
 
+    public boolean hasAllInvoicesAllocated() {
+	return getRequest().hasAllInvoicesAllocated();
+    }
+
     public boolean hasAnyFundAllocationId() {
 	return getRequest().hasAnyFundAllocationId();
     }
@@ -260,7 +264,7 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
     public String getProcessStateName() {
 	return EMPTY_STRING;
     }
-    
+
     public abstract Collection<Supplier> getSuppliers();
 
     public String getSuppliersDescription() {
@@ -276,11 +280,13 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
     }
 
     public String getTypeDescription() {
-	return BundleUtil.getStringFromResourceBundle("resources/ExpenditureResources", "label." + getClass().getSimpleName() + ".description");
+	return BundleUtil.getStringFromResourceBundle("resources/ExpenditureResources", "label." + getClass().getSimpleName()
+		+ ".description");
     }
 
     public String getTypeShortDescription() {
-	return BundleUtil.getStringFromResourceBundle("resources/ExpenditureResources", "label." + getClass().getSimpleName() + ".shortDescription");
+	return BundleUtil.getStringFromResourceBundle("resources/ExpenditureResources", "label." + getClass().getSimpleName()
+		+ ".shortDescription");
     }
 
     public abstract boolean isAppiableForYear(final int year);

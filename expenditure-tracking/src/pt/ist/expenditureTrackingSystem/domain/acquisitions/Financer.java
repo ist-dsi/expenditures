@@ -1,6 +1,7 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
 
@@ -143,10 +144,23 @@ public class Financer extends Financer_Base {
 	Strings strings = getEffectiveFundAllocationId();
 	if (strings == null) {
 	    strings = new Strings(effectiveFundAllocationId);
-	    setEffectiveFundAllocationId(strings);
-	} else {
+	}
+	if (!strings.contains(effectiveFundAllocationId)) {
 	    strings.add(effectiveFundAllocationId);
 	}
+	setEffectiveFundAllocationId(strings);
+
+	allocateInvoices();
+
+    }
+
+    private void allocateInvoices() {
+	getAllocatedInvoices().clear();
+	Set<PaymentProcessInvoice> invoices = new HashSet<PaymentProcessInvoice>();
+	for (UnitItem unitItem : getUnitItems()) {
+	    invoices.addAll(unitItem.getConfirmedInvoices());
+	}
+	getAllocatedInvoices().addAll(invoices);
     }
 
     public CostCenter getFinancerCostCenter() {
@@ -187,6 +201,21 @@ public class Financer extends Financer_Base {
 
     public boolean isProjectAccountingEmployeeForOnePossibleUnit(Person person) {
 	return false;
+    }
+
+    public boolean hasAllInvoicesAllocated() {
+	List<PaymentProcessInvoice> allocatedInvoices = getAllocatedInvoices();
+	for (UnitItem unitItem : getUnitItems()) {
+	    if (!allocatedInvoices.containsAll(unitItem.getConfirmedInvoices())) {
+		return false;
+	    }
+	}
+	return true;
+    }
+
+    public void resetEffectiveFundAllocationId() {
+	setEffectiveFundAllocationId(null);
+	getAllocatedInvoices().clear();
     }
 
 }

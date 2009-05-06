@@ -77,7 +77,6 @@ public class AfterTheFactAcquisitionProcess extends AfterTheFactAcquisitionProce
 	acquisitionAfterTheFact.edit(afterTheFactAcquisitionProcessBean);
     }
 
-    @Override
     public void delete() {
 	final AcquisitionAfterTheFact acquisitionAfterTheFact = getAcquisitionAfterTheFact();
 	acquisitionAfterTheFact.delete();

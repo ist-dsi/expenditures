@@ -1,8 +1,10 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -52,16 +54,32 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
 	return logs;
     }
 
+    public Set<AcquisitionInvoice> getConfirmedInvoices(Person person) {
+	Set<AcquisitionInvoice> invoices = new HashSet<AcquisitionInvoice>();
+	for (AcquisitionRequestItem item : getAcquisitionRequest().getAcquisitionRequestItemsSet()) {
+	    invoices.addAll(item.getConfirmedInvoices(person));
+	}
+	return invoices;
+    }
+
+    public Set<AcquisitionInvoice> getUnconfirmedInvoices(Person person) {
+	Set<AcquisitionInvoice> invoices = new HashSet<AcquisitionInvoice>();
+	for (AcquisitionRequestItem item : getAcquisitionRequest().getAcquisitionRequestItemsSet()) {
+	    invoices.addAll(item.getUnconfirmedInvoices(person));
+	}
+	return invoices;
+    }
+
     public void confirmInvoiceBy(Person person) {
 	getAcquisitionRequest().confirmInvoiceFor(person);
-	if (getAcquisitionRequest().isInvoiceConfirmedBy()) {
+	if (getAcquisitionRequest().isInvoiceConfirmedBy() && getLastAcquisitionProcessState().isPendingInvoiceConfirmation()) {
 	    confirmInvoice();
 	}
     }
 
     public void cancelInvoiceConfirmationBy(final Person person) {
 	getAcquisitionRequest().unconfirmInvoiceFor(person);
-	if (!getAcquisitionRequest().hasAtLeastOneConfirmation()) {
+	if (!getAcquisitionRequest().hasAtLeastOneConfirmation() && getLastAcquisitionProcessState().isInvoiceConfirmed()) {
 	    cancelInvoiceConfirmation();
 	}
     }

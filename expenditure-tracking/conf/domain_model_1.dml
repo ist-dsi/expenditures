@@ -189,6 +189,16 @@ class File {
 		LocalDate invoiceDate;
 	}
 	
+	class acquisitions.afterthefact.AfterTheFactInvoice extends acquisitions.Invoice {
+	}
+	
+	class acquisitions.PaymentProcessInvoice extends acquisitions.Invoice {
+	}
+	
+	class acquisitions.AcquisitionInvoice extends acquisitions.PaymentProcessInvoice {
+	}
+	
+	
 	class CascadingStyleSheet extends File {
 	}
 	
@@ -198,7 +208,7 @@ class File {
 	class requests.SupplierProposalDocument extends File {
 	}
 
-	class acquisitions.refund.RefundableInvoiceFile extends File {
+	class acquisitions.refund.RefundableInvoiceFile extends acquisitions.PaymentProcessInvoice {
 	}
 	
 class FileContent {
@@ -497,9 +507,45 @@ relation AcquisitionRequestAcquisitionRequestDocument {
 	acquisitions.PurchaseOrderDocument playsRole purchaseOrderDocument;
 }
 
-relation AcquisitionInvoice {
-	acquisitions.Acquisition playsRole acquisition;
-	acquisitions.Invoice playsRole invoice;
+relation AfterTheFactInvoiceAfterTheFact {
+	acquisitions.afterthefact.AfterTheFactInvoice playsRole invoice;
+	acquisitions.afterthefact.AcquisitionAfterTheFact playsRole acquisition;
+}
+
+relation PaymentProcessInvoiceRequestItem {
+	acquisitions.PaymentProcessInvoice playsRole invoicesFiles {
+		multiplicity *;
+	}
+	acquisitions.RequestItem playsRole requestItems {
+		multiplicity *;
+	}
+}
+
+relation PaymentProcessInvoiceUnitItem {
+	acquisitions.PaymentProcessInvoice playsRole confirmedInvoices {
+		multiplicity *;
+	}
+	acquisitions.UnitItem playsRole unitItems {
+		multiplicity *;
+	}
+}
+
+relation FundsAllocatedPermanentlyForFinancer {
+	acquisitions.PaymentProcessInvoice playsRole allocatedInvoices {
+		multiplicity *;
+	}
+	acquisitions.Financer playsRole financers {
+		multiplicity *;
+	}
+}
+
+relation FundsAllocatedPermanentlyForProjectFinancer {
+	acquisitions.PaymentProcessInvoice playsRole allocatedInvoicesInProject {
+		multiplicity *;
+	}
+	acquisitions.ProjectFinancer playsRole projectFinancers {
+		multiplicity *;
+	}
 }
 
 relation ExpenditureTrackingSystemPerson {
