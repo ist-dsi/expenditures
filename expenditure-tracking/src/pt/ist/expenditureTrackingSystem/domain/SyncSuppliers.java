@@ -277,6 +277,9 @@ public class SyncSuppliers extends SyncSuppliers_Base {
 	    }
 	} else {
 	    updateSupplierInformationAux(supplier, giafSupplier);
+	    if (supplier.getSupplierLimit().equals(Money.ZERO)) {
+		supplier.setSupplierLimit(Supplier.SOFT_SUPPLIER_LIMIT);
+	    }
 	}
     }
 

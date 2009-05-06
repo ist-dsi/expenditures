@@ -21,12 +21,14 @@ import pt.ist.fenixframework.pstm.Transaction;
 
 public class Supplier extends Supplier_Base {
 
-    private static Money SUPPLIER_LIMIT = new Money("75000");
+    public static Money SUPPLIER_LIMIT = new Money("75000");
+
+    public static Money SOFT_SUPPLIER_LIMIT = new Money("60000");
 
     private Supplier() {
 	super();
 	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
-	setSupplierLimit(new Money("60000"));
+	setSupplierLimit(SOFT_SUPPLIER_LIMIT);
     }
 
     public Supplier(String fiscalCode) {
