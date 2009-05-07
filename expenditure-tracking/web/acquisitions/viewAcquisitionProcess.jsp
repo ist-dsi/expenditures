@@ -140,8 +140,8 @@
 							<logic:present name="invoice" property="content">
 								<html:link action="<%= actionMapping + ".do?method=downloadInvoice"%>" paramId="invoiceOid" paramName="invoice" paramProperty="OID">
 									<bean:write name="invoice" property="filename"/>
-								</html:link>
-							</logic:present>	
+							</html:link>
+						</logic:present>	
 						</logic:iterate>
 						<logic:notPresent name="invoice" property="content">
 							<em><bean:message key="document.message.info.notAvailable" bundle="EXPENDITURE_RESOURCES"/></em>
@@ -243,7 +243,7 @@
 	<table class="tstyle5 mervt1 width100pc">
 		<tr>	
 			<th class="aleft"><bean:message key="acquisitionProcess.label.payingUnits" bundle="ACQUISITION_RESOURCES"/></th>
-			<th class="acenter">
+			<th class="acenter" style="width: 70px;">
 					<bean:message key="acquisitionProcess.label.accountingUnit" bundle="ACQUISITION_RESOURCES"/>
 			</th>
 			<th id="fundAllocationHeader">
@@ -252,7 +252,8 @@
 			<th id="effectiveFundAllocationHeader"> 
 					<bean:message key="financer.label.effectiveFundAllocation.identification" bundle="ACQUISITION_RESOURCES"/>
 			</th>
-			<th class="aright"><bean:message key="financer.label.value" bundle="ACQUISITION_RESOURCES"/>
+			<th class="aright">
+				<bean:message key="acquisitionRequestItem.label.totalValueWithVAT" bundle="ACQUISITION_RESOURCES"/>
 				<script type="text/javascript">
 						$('#fundAllocationHeader').hide();
 						$('#effectiveFundAllocationHeader').hide();
@@ -280,7 +281,7 @@
 					</script>
 				</td>
 			</logic:present>
-			<td class="aright nowrap"><fr:view name="payingUnit" property="amount"/></td>
+			<td class="aright nowrap" style="width: 110px;"><fr:view name="payingUnit" property="amount"/></td>
 		</tr>
 		
 	</logic:iterate>
@@ -317,7 +318,7 @@
 					<th></th>
 					<th class="aleft"><bean:message key="acquisitionRequestItem.label.description" bundle="ACQUISITION_RESOURCES"/></th>
 					<th><bean:message key="acquisitionRequestItem.label.quantity" bundle="ACQUISITION_RESOURCES"/></th>
-					<th><bean:message key="acquisitionRequestItem.label.totalValueWithAdditionalCostsAndVat" bundle="ACQUISITION_RESOURCES"/></th>
+					<th><bean:message key="acquisitionRequestItem.label.totalValueWithVAT" bundle="ACQUISITION_RESOURCES"/></th>
 				</tr>
 				<logic:iterate id="itemResume" name="itemSet" indexId="index">
 					<bean:define id="currentIndex" value="<%= String.valueOf(index + 1) %>"/>
@@ -332,7 +333,7 @@
 
 						<td class="aleft"><fr:view name="itemResume" property="description"/></td>
 						<td class="acenter"><fr:view name="itemResume" property="quantity"/></td>
-						<td class="aright nowrap"><fr:view name="itemResume" property="currentTotalItemValueWithAdditionalCostsAndVat"/></td>
+						<td class="aright nowrap" style="width: 110px;"><fr:view name="itemResume" property="currentTotalItemValueWithAdditionalCostsAndVat"/></td>
 					</tr>
 				</logic:iterate>
 				<logic:greaterThan value="1" name="size">
