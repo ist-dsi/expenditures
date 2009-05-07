@@ -13,7 +13,7 @@
 						<tr>
 							<bean:define id="state" name="counter" property="countableObject" />
 							<td><fr:view name="counter" property="countableObject" /></td>
-							<td>
+							<td class="aright">
 								<bean:define id="showResponsabilities" value="false"
 									toScope="request" />
 								<logic:present name="person">
