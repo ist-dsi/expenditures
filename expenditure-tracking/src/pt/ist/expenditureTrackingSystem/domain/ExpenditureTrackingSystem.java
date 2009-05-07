@@ -6,35 +6,28 @@ import pt.ist.fenixWebFramework.services.Service;
 
 public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base {
 
-    private static ExpenditureTrackingSystem instance = null;
+    private static boolean isInitialized = false;
 
     public static ExpenditureTrackingSystem getInstance() {
-	if (instance == null) {
+	if (!isInitialized) {
 	    initialize();
 	}
-	return instance;
+	final MyOrg myOrg = MyOrg.getInstance();
+	return myOrg.getExpenditureTrackingSystem();
     }
 
     @Service
     public synchronized static void initialize() {
-//	if (instance == null) {
-	    boolean revert = true;
-	    try {
-		final MyOrg myOrg = MyOrg.getInstance();
-		instance = myOrg.getExpenditureTrackingSystem();
-		if (instance == null) {
-		    instance = new ExpenditureTrackingSystem();
-		}
-
-		initRoles();
-		initSystemSearches();
-		revert = false;
-	    } finally {
-		if (revert) {
-//		    instance = null;
-		}
+	if (!isInitialized) {
+	    final MyOrg myOrg = MyOrg.getInstance();
+	    final ExpenditureTrackingSystem expendituretrackingSystem = myOrg.getExpenditureTrackingSystem();
+	    if (expendituretrackingSystem == null) {
+		new ExpenditureTrackingSystem();
 	    }
-//	}
+	    initRoles();
+	    initSystemSearches();
+	    isInitialized = true;
+	}
     }
 
     private static void initRoles() {
@@ -44,10 +37,12 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base {
     }
 
     protected static void initSystemSearches() {
-	if (instance.getSystemSearches().isEmpty()) {
+	final MyOrg myOrg = MyOrg.getInstance();
+	final ExpenditureTrackingSystem expendituretrackingSystem = myOrg.getExpenditureTrackingSystem();
+	if (expendituretrackingSystem.getSystemSearches().isEmpty()) {
 	    new MyOwnProcessesSearch();
 	    final SavedSearch savedSearch = new PendingProcessesSearch();
-	    for (final Person person : instance.getPeopleSet()) {
+	    for (final Person person : expendituretrackingSystem.getPeopleSet()) {
 		person.setDefaultSearch(savedSearch);
 	    }
 	}
