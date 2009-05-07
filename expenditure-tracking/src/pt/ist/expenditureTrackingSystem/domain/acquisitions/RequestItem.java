@@ -227,7 +227,7 @@ public abstract class RequestItem extends RequestItem_Base {
 	List<T> invoices = new ArrayList<T>();
 	for (UnitItem unitItem : getUnitItems()) {
 	    if (person == null || unitItem.getFinancer().getUnit().isResponsible(person)) {
-		invoices.addAll((List<T>)unitItem.getConfirmedInvoices());
+		invoices.addAll((List<T>) unitItem.getConfirmedInvoices());
 	    }
 	}
 	return invoices;
@@ -235,10 +235,10 @@ public abstract class RequestItem extends RequestItem_Base {
 
     public <T extends PaymentProcessInvoice> List<T> getUnconfirmedInvoices(Person person) {
 	List<T> invoices = new ArrayList<T>();
-	invoices.addAll((List<T>)getInvoicesFiles());
+	invoices.addAll((List<T>) getInvoicesFiles());
 	for (UnitItem unitItem : getUnitItems()) {
 	    if (person == null || unitItem.getFinancer().getUnit().isResponsible(person)) {
-		invoices.removeAll((List<T>)unitItem.getConfirmedInvoices());
+		invoices.removeAll((List<T>) unitItem.getConfirmedInvoices());
 	    }
 	}
 	return invoices;
@@ -264,6 +264,10 @@ public abstract class RequestItem extends RequestItem_Base {
 
     public boolean isConfirmForAllInvoices() {
 	return isConfirmedForAllInvoices(null);
+    }
+
+    public boolean isCurrentRealValueFullyAttributedToUnits() {
+	return getInvoicesFiles().isEmpty() ? true : isRealValueFullyAttributedToUnits();
     }
 
 }

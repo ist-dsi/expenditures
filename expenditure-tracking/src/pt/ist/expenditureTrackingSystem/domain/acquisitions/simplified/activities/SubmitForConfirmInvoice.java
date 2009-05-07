@@ -13,7 +13,8 @@ public class SubmitForConfirmInvoice extends GenericAcquisitionProcessActivity {
 
     @Override
     protected boolean isAvailable(RegularAcquisitionProcess process) {
-	return super.isAvailable(process) && process.isInvoiceReceived() /* && process.checkRealValues() */;
+	return super.isAvailable(process) && process.isInvoiceReceived()
+		&& process.getRequest().isCurrentTotalRealValueFullyDistributed();
     }
 
     @Override

@@ -424,6 +424,15 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 		&& isRealValueLessThanTotalValue();
     }
 
+    public boolean isCurrentTotalRealValueFullyDistributed() {
+	for (RequestItem requestItem : getRequestItems()) {
+	    if (!requestItem.isCurrentRealValueFullyAttributedToUnits()) {
+		return false;
+	    }
+	}
+	return true;
+    }
+
     public Money getTotalRealShareValue() {
 	Money res = Money.ZERO;
 	for (Financer financer : getFinancersSet()) {

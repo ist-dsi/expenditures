@@ -4,7 +4,6 @@ import java.util.List;
 
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.ProjectFinancer;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
 import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 
@@ -17,27 +16,16 @@ public class AllocateProjectFundsPermanently<T extends PaymentProcess> extends A
 
     @Override
     protected boolean isAvailable(final T process) {
-	return isCurrentUserProcessOwner(process)
-		&& allItemsAreFilledWithRealValues(process)
-		&& process.getRequest().isEveryItemFullyAttributeInRealValues()
-		&& process.getRequest().isConfirmedForAllInvoices() 
-		&& !process.hasAllocatedFundsPermanentlyForAllProjectFinancers();
-    }
-
-    private boolean allItemsAreFilledWithRealValues(final T process) {
-	for (final RequestItem requestItem : process.getRequest().getRequestItemsSet()) {
-	    if (!requestItem.isFilledWithRealValues()) {
-		return false;
-	    }
-	}
-	return true;
+	return isCurrentUserProcessOwner(process) && !process.hasAllocatedFundsPermanentlyForAllProjectFinancers()
+		&& !process.hasAllInvoicesAllocated();
     }
 
     @Override
     protected void process(final T process, final Object... objects) {
-//	if (!process.isRealValueEqualOrLessThanFundAllocation()) {
-//	    throw new DomainException("activities.message.exception.valuesCannotGoOverFundAllocation");
-//	}
+	// if (!process.isRealValueEqualOrLessThanFundAllocation()) {
+	// throw new
+	// DomainException("activities.message.exception.valuesCannotGoOverFundAllocation");
+	// }
 	final List<FundAllocationBean> fundAllocationBeans = (List<FundAllocationBean>) objects[0];
 	for (FundAllocationBean fundAllocationBean : fundAllocationBeans) {
 	    final ProjectFinancer projectFinancer = (ProjectFinancer) fundAllocationBean.getFinancer();

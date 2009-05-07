@@ -3,7 +3,6 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.activities;
 import java.util.List;
 
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
 import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 
@@ -16,18 +15,8 @@ public class AllocateFundsPermanently<T extends PaymentProcess> extends Abstract
 
     @Override
     protected boolean isAvailable(final T process) {
-	return isCurrentUserProcessOwner(process) && allItemsAreFilledWithRealValues(process)
-		&& process.getRequest().isEveryItemFullyAttributeInRealValues()
-		&& process.hasAllocatedFundsPermanentlyForAllProjectFinancers() && !process.hasAllInvoicesAllocated();
-    }
-
-    private boolean allItemsAreFilledWithRealValues(final T process) {
-	for (RequestItem requestItem : process.getRequest().getRequestItemsSet()) {
-	    if (!requestItem.isFilledWithRealValues()) {
-		return false;
-	    }
-	}
-	return true;
+	return isCurrentUserProcessOwner(process) && process.hasAllocatedFundsPermanentlyForAllProjectFinancers()
+		&& !process.hasAllInvoicesAllocated();
     }
 
     @Override
