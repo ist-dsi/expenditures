@@ -1,5 +1,6 @@
 package pt.ist.expenditureTrackingSystem.domain;
 
+import myorg.domain.MyOrg;
 import myorg.domain.User;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.fenixWebFramework.services.Service;
@@ -46,7 +47,7 @@ public class Role extends Role_Base {
 
     @Service
     public static Role getRole(final RoleType roleType) {
-	for (final Role role : ExpenditureTrackingSystem.getInstance().getRoles()) {
+	for (final Role role : MyOrg.getInstance().getExpenditureTrackingSystem().getRoles()) {
 	    if (role.getRoleType().equals(roleType)) {
 		if (!role.hasSystemRole()) {
 		    role.setSystemRole(myorg.domain.groups.Role.getRole(roleType));
