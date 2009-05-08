@@ -8,7 +8,13 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base {
 
     private static boolean isInitialized = false;
 
+    private static ThreadLocal<ExpenditureTrackingSystem> init = null;
+
     public static ExpenditureTrackingSystem getInstance() {
+	if (init != null) {
+	    return init.get();
+	}
+
 	if (!isInitialized) {
 	    initialize();
 	}
@@ -19,14 +25,19 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base {
     @Service
     public synchronized static void initialize() {
 	if (!isInitialized) {
-	    final MyOrg myOrg = MyOrg.getInstance();
-	    final ExpenditureTrackingSystem expendituretrackingSystem = myOrg.getExpenditureTrackingSystem();
-	    if (expendituretrackingSystem == null) {
-		new ExpenditureTrackingSystem();
+	    try {
+		final MyOrg myOrg = MyOrg.getInstance();
+		final ExpenditureTrackingSystem expendituretrackingSystem = myOrg.getExpenditureTrackingSystem();
+		if (expendituretrackingSystem == null) {
+		    init = new ThreadLocal<ExpenditureTrackingSystem>();
+		    init.set(new ExpenditureTrackingSystem());
+		}
+		initRoles();
+		initSystemSearches();
+		isInitialized = true;
+	    } finally {
+		init = null;
 	    }
-	    initRoles();
-	    initSystemSearches();
-	    isInitialized = true;
 	}
     }
 
@@ -37,8 +48,7 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base {
     }
 
     protected static void initSystemSearches() {
-	final MyOrg myOrg = MyOrg.getInstance();
-	final ExpenditureTrackingSystem expendituretrackingSystem = myOrg.getExpenditureTrackingSystem();
+	final ExpenditureTrackingSystem expendituretrackingSystem = getInstance();
 	if (expendituretrackingSystem.getSystemSearches().isEmpty()) {
 	    new MyOwnProcessesSearch();
 	    final SavedSearch savedSearch = new PendingProcessesSearch();
