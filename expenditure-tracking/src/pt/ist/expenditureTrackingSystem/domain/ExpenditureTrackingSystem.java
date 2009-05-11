@@ -29,9 +29,11 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base {
 		final MyOrg myOrg = MyOrg.getInstance();
 		final ExpenditureTrackingSystem expendituretrackingSystem = myOrg.getExpenditureTrackingSystem();
 		if (expendituretrackingSystem == null) {
-		    init = new ThreadLocal<ExpenditureTrackingSystem>();
-		    init.set(new ExpenditureTrackingSystem());
+		    new ExpenditureTrackingSystem();
 		}
+		init = new ThreadLocal<ExpenditureTrackingSystem>();
+		init.set(myOrg.getExpenditureTrackingSystem());
+		
 		initRoles();
 		initSystemSearches();
 		isInitialized = true;
