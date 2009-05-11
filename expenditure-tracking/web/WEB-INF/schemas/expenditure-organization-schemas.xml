@@ -190,8 +190,8 @@
 
 <schema name="editSupplierLimit"
 		type="pt.ist.expenditureTrackingSystem.domain.organization.Supplier"
-		bundle="ORGANIZATION_RESOURCES">
-	<slot name="supplierLimit" key="supplier.soft.limit" bundle="ORGANIZATION_RESOURCES"/>
+		bundle="EXPENDITURE_ORGANIZATION_RESOURCES">
+	<slot name="supplierLimit" key="supplier.soft.limit" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 </schema>
 
 <schema name="createSupplier"
