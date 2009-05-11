@@ -23,3 +23,31 @@
 	</fr:edit>
 	<html:submit styleClass="inputbutton"><bean:message key="button.submit" bundle="EXPENDITURE_RESOURCES"/></html:submit>
 </fr:form>
+
+<script src="<%= request.getContextPath() %>/javaScript/jquery.alerts.js" type="text/javascript"></script>
+<script type="text/javascript">
+	var inputs = $("input:hidden");
+	for (i = 0; i < inputs.length ; i++) {
+		if(inputs[i].id.indexOf("supplier_AutoComplete") > 0) {
+			$("#" + escapeId(inputs[i].id)).change(function() {
+				<%= "$.get(\"" + request.getContextPath() + "/acquisitionSimplifiedProcedureProcess.do?method=checkSupplierLimit&supplierOid=\" + $(this).attr('value'),function(data, textStatus) {dealWith(data)})" %>
+			}); 
+		}
+	}
+
+	function dealWith(data) {
+		if(data != 'SOK') {
+			<bean:define id="message">
+				<bean:message key="label.supplier.aboveSoftLimit" bundle="EXPENDITURE_RESOURCES"/>
+			</bean:define>
+
+			<bean:define id="title">
+				<bean:message key="title.supplier.aboveSoftLimit" bundle="EXPENDITURE_RESOURCES"/>
+			</bean:define>
+		
+			<%= "jAlert('" + message.toString() + "','" + title.toString() + "')" %>			
+		} 
+	}
+</script>
+
+	

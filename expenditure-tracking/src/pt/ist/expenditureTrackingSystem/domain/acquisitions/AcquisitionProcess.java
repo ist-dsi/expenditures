@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
@@ -15,7 +14,6 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
-import pt.ist.fenixframework.pstm.Transaction;
 
 public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 

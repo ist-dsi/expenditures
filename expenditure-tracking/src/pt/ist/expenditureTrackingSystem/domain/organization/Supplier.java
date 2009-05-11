@@ -60,12 +60,8 @@ public class Supplier extends Supplier_Base {
     }
 
     private boolean checkIfCanBeDeleted() {
-	return !hasAnyAcquisitionRequests()
-		&& !hasAnyAcquisitionsAfterTheFact()
-		&& !hasAnyProposals()
-		&& !hasAnyRefundInvoices()
-		&& !hasAnyAnnouncements()
-		&& !hasAnySupplierSearches();
+	return !hasAnyAcquisitionRequests() && !hasAnyAcquisitionsAfterTheFact() && !hasAnyProposals() && !hasAnyRefundInvoices()
+		&& !hasAnyAnnouncements() && !hasAnySupplierSearches();
     }
 
     public static Supplier readSupplierByFiscalIdentificationCode(String fiscalIdentificationCode) {
@@ -108,14 +104,37 @@ public class Supplier extends Supplier_Base {
 	return result;
     }
 
-    public Money getTotalAllocatedByAcquisitionProcesses() {
+    public Money getSoftTotalAllocated() {
+	Money result = Money.ZERO;
+	result = result.add(getTotalAllocatedByAcquisitionProcesses(true));
+
+	for (final AcquisitionAfterTheFact acquisitionAfterTheFact : getAcquisitionsAfterTheFactSet()) {
+	    if (!acquisitionAfterTheFact.getDeletedState().booleanValue()) {
+		result = result.add(acquisitionAfterTheFact.getValue());
+	    }
+	}
+	for (final RefundInvoice refundInvoice : getRefundInvoicesSet()) {
+	    final RefundProcess refundProcess = refundInvoice.getRefundItem().getRequest().getProcess();
+	    if (refundProcess.isActive()) {
+		result = result.add(refundInvoice.getRefundableValue());
+	    }
+	}
+	return result;
+    }
+
+    private Money getTotalAllocatedByAcquisitionProcesses(boolean allProcesses) {
 	Money result = Money.ZERO;
 	for (final AcquisitionRequest acquisitionRequest : getAcquisitionRequestsSet()) {
-	    if (acquisitionRequest.getAcquisitionProcess().isAllocatedToSupplier()) {
+	    if ((allProcesses && !acquisitionRequest.getProcess().getSkipSupplierFundAllocation())
+		    || acquisitionRequest.getAcquisitionProcess().isAllocatedToSupplier()) {
 		result = result.add(acquisitionRequest.getValueAllocated());
 	    }
 	}
 	return result;
+    }
+
+    public Money getTotalAllocatedByAcquisitionProcesses() {
+	return getTotalAllocatedByAcquisitionProcesses(false);
     }
 
     public Money getTotalAllocatedByAfterTheFactAcquisitions(final AfterTheFactAcquisitionType afterTheFactAcquisitionType) {

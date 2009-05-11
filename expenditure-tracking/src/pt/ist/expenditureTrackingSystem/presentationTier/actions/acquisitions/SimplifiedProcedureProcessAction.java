@@ -1,6 +1,7 @@
 package pt.ist.expenditureTrackingSystem.presentationTier.actions.acquisitions;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.User;
+import myorg.domain.util.Money;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -36,13 +38,26 @@ import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationExpirationDateB
 import pt.ist.expenditureTrackingSystem.domain.dto.SetRefundeeBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.VariantBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
+import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.presentationTier.util.FileUploadBean;
+import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.RequestChecksumFilter;
+import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.RequestChecksumFilter.ChecksumPredicate;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 import pt.ist.fenixWebFramework.util.DomainReference;
 
 @Mapping(path = "/acquisitionSimplifiedProcedureProcess")
 public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessAction {
+
+    static {
+	RequestChecksumFilter.registerFilterRule(new ChecksumPredicate() {
+	    public boolean shouldFilter(HttpServletRequest httpServletRequest) {
+		return !(httpServletRequest.getRequestURI().endsWith("/acquisitionSimplifiedProcedureProcess.do")
+			&& httpServletRequest.getQueryString() != null && httpServletRequest.getQueryString().contains(
+			"method=checkSupplierLimit"));
+	    }
+	});
+    }
 
     @Override
     protected String getSelectUnitToAddForwardUrl() {
@@ -509,12 +524,32 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	genericActivityExecution(acquisitionProcess, "RevertToInvoiceConfirmation");
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
-    
+
     public ActionForward executeUnlockInvoiceReceiving(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final SimplifiedProcedureProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
 	genericActivityExecution(acquisitionProcess, "UnlockInvoiceReceiving");
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
-    
+
+    private static final String SUPPLIER_LIMIT_OK = "SOK";
+    private static final String SUPPLIER_LIMIT_NOT_OK = "SNOK";
+
+    public ActionForward checkSupplierLimit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) throws IOException {
+
+	Supplier supplier = getDomainObject(request, "supplierOid");
+	Money softLimit = supplier.getSoftTotalAllocated();
+	String reply = softLimit.isGreaterThanOrEqual(supplier.getSupplierLimit()) ? SUPPLIER_LIMIT_NOT_OK : SUPPLIER_LIMIT_OK;
+
+	byte[] bytes = reply.getBytes();
+	final OutputStream outputStream = response.getOutputStream();
+
+	response.setContentLength(bytes.length);
+	outputStream.write(bytes);
+	outputStream.flush();
+	outputStream.close();
+
+	return null;
+    }
 }
