@@ -33,11 +33,26 @@
 		action="<%= urlSave %>">
 	<fr:layout name="tabular">
 		<fr:property name="classes" value="form mtop05"/>
-		<fr:property name="columnClasses" value=",,tderror"/>
+		<fr:property name="columnClasses" value="width215px,,tderror"/>
+		<fr:property name="rowClasses" value=",,,,itemsClass"/>
 	</fr:layout>
 		<fr:destination name="cancel" path="<%= urlView %>" />
 </fr:edit>
  
+<script type="text/javascript">
+var checkBox = $("input[id$='hasMoreInvoices']");
+var itemList = $(".itemsClass");
+
+if (checkBox.attr('checked') == false) {
+	itemList.hide();
+}
+
+checkBox.click(function(){	
+	itemList.toggle();
+});
+
+</script>
+
 <div class="item">
 	<bean:size id="totalItems" name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestItemsSet"/>
 	<logic:iterate id="acquisitionRequestItem" name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestItemsSet" indexId="index">

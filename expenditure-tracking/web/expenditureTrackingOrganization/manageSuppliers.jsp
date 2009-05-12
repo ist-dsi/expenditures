@@ -11,18 +11,20 @@
 	<div class="infoop1">
 		<ul>
 			<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.SUPPLIER_MANAGER">
-			<li>
-				<html:link action="/expenditureTrackingOrganization.do?method=prepareCreateSupplier">
-					<bean:message key="supplier.link.create" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
-				</html:link>		
-			</li>
+				<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
+					<li>
+						<html:link action="/expenditureTrackingOrganization.do?method=prepareCreateSupplier">
+							<bean:message key="supplier.link.create" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+						</html:link>		
+					</li>
+				</logic:present>
 			</logic:present>
 			<li>
 				<html:link action="/expenditureTrackingOrganization.do?method=listSuppliers">
 					<bean:message key="supplier.link.list" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 				</html:link>
 			</li>
-			<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
+			<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.SUPPLIER_MANAGER">
 				<li>
 					<html:link action="/expenditureTrackingOrganization.do?method=listGiafSuppliers">
 						<bean:message key="supplier.link.list.giaf" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>

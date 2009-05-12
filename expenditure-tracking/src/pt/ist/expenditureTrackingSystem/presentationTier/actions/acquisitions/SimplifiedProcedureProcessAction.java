@@ -43,6 +43,7 @@ import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.presentationTier.util.FileUploadBean;
 import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.RequestChecksumFilter;
 import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.RequestChecksumFilter.ChecksumPredicate;
+import pt.ist.fenixWebFramework.servlets.json.JsonObject;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 import pt.ist.fenixWebFramework.util.DomainReference;
 
@@ -96,19 +97,19 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	private LocalDate invoiceDate;
 	private List<DomainReference<AcquisitionRequestItem>> items;
 	private DomainReference<AcquisitionRequest> request;
-	private Boolean lastInvoice = Boolean.TRUE;
+	private Boolean hasMoreInvoices = Boolean.FALSE;
 
-	public Boolean getLastInvoice() {
-	    return lastInvoice;
+	public Boolean getHasMoreInvoices() {
+	    return hasMoreInvoices;
 	}
 
-	public void setLastInvoice(Boolean lastInvoice) {
-	    this.lastInvoice = lastInvoice;
+	public void setHasMoreInvoices(Boolean hasMoreInvoices) {
+	    this.hasMoreInvoices = hasMoreInvoices;
 	}
 
 	public ReceiveInvoiceForm(AcquisitionRequest request) {
 	    setRequest(request);
-	    setItems(Collections.EMPTY_LIST);
+	    setItems(new ArrayList<AcquisitionRequestItem>(request.getAcquisitionRequestItemsSet()));
 	}
 
 	public String getInvoiceNumber() {
@@ -313,7 +314,7 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	AbstractActivity<RegularAcquisitionProcess> receiveInvoice = acquisitionProcess.getActivityByName(activity);
 	receiveInvoice.execute(acquisitionProcess, receiveInvoiceForm.getFilename(), bytes,
 		receiveInvoiceForm.getInvoiceNumber(), receiveInvoiceForm.getInvoiceDate(), receiveInvoiceForm.getItems(),
-		receiveInvoiceForm.getLastInvoice());
+		receiveInvoiceForm.getHasMoreInvoices());
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
 
@@ -538,15 +539,26 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
     public ActionForward checkSupplierLimit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) throws IOException {
 
+	if (getLoggedPerson() == null) {
+	    return null;
+	}
+
 	Supplier supplier = getDomainObject(request, "supplierOid");
 	Money softLimit = supplier.getSoftTotalAllocated();
-	String reply = softLimit.isGreaterThanOrEqual(supplier.getSupplierLimit()) ? SUPPLIER_LIMIT_NOT_OK : SUPPLIER_LIMIT_OK;
+	Money supplierLimit = supplier.getSupplierLimit();
 
-	byte[] bytes = reply.getBytes();
+	JsonObject reply = new JsonObject();
+
+	reply.addAttribute("status", softLimit.isGreaterThanOrEqual(supplierLimit) ? SUPPLIER_LIMIT_NOT_OK : SUPPLIER_LIMIT_OK);
+	reply.addAttribute("softLimit", softLimit.toFormatStringWithoutCurrency());
+	reply.addAttribute("supplierLimit", supplierLimit.toFormatStringWithoutCurrency());
+
+	byte[] jsonReply = reply.getJsonString().getBytes();
+
 	final OutputStream outputStream = response.getOutputStream();
 
-	response.setContentLength(bytes.length);
-	outputStream.write(bytes);
+	response.setContentLength(jsonReply.length);
+	outputStream.write(jsonReply);
 	outputStream.flush();
 	outputStream.close();
 

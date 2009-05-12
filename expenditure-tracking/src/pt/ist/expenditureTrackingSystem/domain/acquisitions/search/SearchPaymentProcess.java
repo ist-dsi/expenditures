@@ -141,7 +141,7 @@ public class SearchPaymentProcess extends Search<PaymentProcess> {
     }
 
     public void setProcessId(String processId) {
-	this.processId = processId;
+	this.processId = processId != null ? processId.trim() : processId;
     }
 
     public String getRequestDocumentId() {

@@ -217,6 +217,16 @@ public abstract class GenericProcess extends GenericProcess_Base {
     }
 
     @Service
+    public void giveProcess(Person person) {
+	final Person currentOwner = getCurrentOwner();
+	final Person loggedPerson = getLoggedPerson();
+	if (currentOwner != null && currentOwner != loggedPerson) {
+	    throw new DomainException("error.message.illegal.state.unableToGiveUnownedProcess");
+	}
+	super.setCurrentOwner(person);
+    }
+
+    @Service
     public void stealProcess() {
 	super.setCurrentOwner(getLoggedPerson());
     }

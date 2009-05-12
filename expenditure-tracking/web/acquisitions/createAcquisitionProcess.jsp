@@ -11,7 +11,7 @@
 
 <p class="mtop15 mbottom05"><strong><bean:message key="link.create.simplifiedAcquisitionProcedure" bundle="EXPENDITURE_RESOURCES"/></strong></p>
 
-<fr:form action="/acquisitionSimplifiedProcedureProcess.do?method=createNewAcquisitionProcess">
+<fr:form id="createForm" action="/acquisitionSimplifiedProcedureProcess.do?method=createNewAcquisitionProcess">
 	<fr:edit id="acquisitionProcessBean"
 			name="acquisitionProcessBean"
 			type="pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean"
@@ -26,28 +26,47 @@
 
 <script src="<%= request.getContextPath() %>/javaScript/jquery.alerts.js" type="text/javascript"></script>
 <script type="text/javascript">
-	var inputs = $("input:hidden");
-	for (i = 0; i < inputs.length ; i++) {
-		if(inputs[i].id.indexOf("supplier_AutoComplete") > 0) {
-			$("#" + escapeId(inputs[i].id)).change(function() {
-				<%= "$.get(\"" + request.getContextPath() + "/acquisitionSimplifiedProcedureProcess.do?method=checkSupplierLimit&supplierOid=\" + $(this).attr('value'),function(data, textStatus) {dealWith(data)})" %>
+
+	
+	$("input[id$='supplier_AutoComplete']").change(function() {
+				<%= "$.getJSON(\"" + request.getContextPath() + "/acquisitionSimplifiedProcedureProcess.do?method=checkSupplierLimit&supplierOid=\" + $(this).attr('value'),function(data, textStatus) {dealWith(data)})" %>
 			}); 
+
+	function dealWith(data) {
+
+		$("#limitInformation").remove();
+		
+	
+		
+
+		if(data['status'] == 'SOK') {
+			$("#xpto").before("<span id=\"limitInformation\">" + data['limit'] + "</span>");
+			<bean:define id="message1">
+				<bean:message key="label.supplier.info.message1" bundle="ACQUISITION_RESOURCES"/>
+			</bean:define>
+
+			<bean:define id="message2">
+				<bean:message key="label.supplier.info.message2" bundle="ACQUISITION_RESOURCES"/>
+			</bean:define>
+		
+				$("#createForm").before("<div id=\"limitInformation\"><p class=\"mbottom05\"><span><%=message1%> " + data['softLimit'] + "&euro; <%= message2 %> " + data['supplierLimit'] + "&euro;.</span><br/>");
+		} else {
+			<bean:define id="message1">
+				<bean:message key="label.attention.supplier.supplierOverLimit.message1" bundle="ACQUISITION_RESOURCES"/>
+			</bean:define>
+			<bean:define id="message2">
+				<bean:message key="label.attention.supplier.supplierOverLimit.message2" bundle="ACQUISITION_RESOURCES"/>
+			</bean:define>
+			<bean:define id="message3">
+				<bean:message key="label.attention.supplier.explanation" bundle="ACQUISITION_RESOURCES"/>
+			</bean:define>
+
+			$("#createForm").before("<div id=\"limitInformation\"><div class=\"infoop4\"><%= message1 %> " + data['softLimit'] + "&euro; <%= message2 %> " + data['supplierLimit'] + "&euro;</p><p><%= message3 %></p>");
 		}
 	}
 
-	function dealWith(data) {
-		if(data != 'SOK') {
-			<bean:define id="message">
-				<bean:message key="label.supplier.aboveSoftLimit" bundle="EXPENDITURE_RESOURCES"/>
-			</bean:define>
 
-			<bean:define id="title">
-				<bean:message key="title.supplier.aboveSoftLimit" bundle="EXPENDITURE_RESOURCES"/>
-			</bean:define>
-		
-			<%= "jAlert('" + message.toString() + "','" + title.toString() + "')" %>			
-		} 
-	}
+	
 </script>
 
 	

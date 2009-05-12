@@ -37,7 +37,7 @@ public class ReceiveInvoice extends GenericAcquisitionProcessActivity {
 	String invoiceNumber = (String) objects[2];
 	LocalDate invoiceDate = (LocalDate) objects[3];
 	List<AcquisitionRequestItem> items = (List<AcquisitionRequestItem>) objects[4];
-	Boolean isLastInvoice = (Boolean) objects[5];
+	Boolean hasMoreInvoices = (Boolean) objects[5];
 
 	AcquisitionInvoice invoice = acquisitionRequest.receiveInvoice(filename, bytes, invoiceNumber, invoiceDate);
 
@@ -45,7 +45,7 @@ public class ReceiveInvoice extends GenericAcquisitionProcessActivity {
 	    invoice.addRequestItems(item);
 	}
 
-	if (isLastInvoice) {
+	if (!hasMoreInvoices) {
 	    process.invoiceReceived();
 	}
     }
