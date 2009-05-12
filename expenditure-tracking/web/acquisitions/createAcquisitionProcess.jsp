@@ -36,32 +36,29 @@
 
 		$("#limitInformation").remove();
 		
-	
-		
 
 		if(data['status'] == 'SOK') {
-			$("#xpto").before("<span id=\"limitInformation\">" + data['limit'] + "</span>");
-			<bean:define id="message1">
-				<bean:message key="label.supplier.info.message1" bundle="ACQUISITION_RESOURCES"/>
-			</bean:define>
 
-			<bean:define id="message2">
-				<bean:message key="label.supplier.info.message2" bundle="ACQUISITION_RESOURCES"/>
+			<bean:define id="message">
+				<bean:message key="label.supplier.allocationInfo.notFormatted" bundle="ACQUISITION_RESOURCES"/>
 			</bean:define>
+			var text = "<%= message %>";
+			text = text.replace(new RegExp("\\[softLimit\\]"),data['softLimit']).replace(new RegExp("\\[supplierLimit\\]"),data['supplierLimit']);
 		
-				$("#createForm").before("<div id=\"limitInformation\"><p class=\"mbottom05\"><span><%=message1%> " + data['softLimit'] + "&euro; <%= message2 %> " + data['supplierLimit'] + "&euro;.</span><br/>");
+			$("#createForm").before("<div id=\"limitInformation\"><p class=\"mbottom05\"><span>" + text + "</span><br/>");
 		} else {
-			<bean:define id="message1">
-				<bean:message key="label.attention.supplier.supplierOverLimit.message1" bundle="ACQUISITION_RESOURCES"/>
+
+			<bean:define id="message">
+				<bean:message key="label.attention.supplier.supplierOverLimit.notFormatted" bundle="ACQUISITION_RESOURCES"/>
 			</bean:define>
-			<bean:define id="message2">
-				<bean:message key="label.attention.supplier.supplierOverLimit.message2" bundle="ACQUISITION_RESOURCES"/>
-			</bean:define>
-			<bean:define id="message3">
+			var text = "<%= message %>";
+			text = text.replace(new RegExp("\\[softLimit\\]"),data['softLimit']).replace(new RegExp("\\[supplierLimit\\]"),data['supplierLimit']);
+	
+			<bean:define id="messageExtra">
 				<bean:message key="label.attention.supplier.explanation" bundle="ACQUISITION_RESOURCES"/>
 			</bean:define>
 
-			$("#createForm").before("<div id=\"limitInformation\"><div class=\"infoop4\"><%= message1 %> " + data['softLimit'] + "&euro; <%= message2 %> " + data['supplierLimit'] + "&euro;</p><p><%= message3 %></p>");
+			$("#createForm").before("<div id=\"limitInformation\"><div class=\"infoop4\">" + text + "</p><p><%= messageExtra %></p>");
 		}
 	}
 
