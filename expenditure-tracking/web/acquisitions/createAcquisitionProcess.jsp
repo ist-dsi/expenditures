@@ -3,10 +3,12 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
-<h2><bean:message key="acquisitionProcess.title.createAcquisitionRequest" bundle="ACQUISITION_RESOURCES"/></h2>
+
+<%@page import="java.util.ResourceBundle"%>
+<%@page import="myorg.util.BundleUtil"%><h2><bean:message key="acquisitionProcess.title.createAcquisitionRequest" bundle="ACQUISITION_RESOURCES"/></h2>
 
 <div class="infoop2">
-	<bean:message key="acquisitionProcess.message.note" bundle="ACQUISITION_RESOURCES"/>
+	<bean:message key="acquisitionProcess.message.note" bundle="ACQUISITION_RESOURCES" />
 </div>
 
 <p class="mtop15 mbottom05"><strong><bean:message key="link.create.simplifiedAcquisitionProcedure" bundle="EXPENDITURE_RESOURCES"/></strong></p>
@@ -24,7 +26,6 @@
 	<html:submit styleClass="inputbutton"><bean:message key="button.submit" bundle="EXPENDITURE_RESOURCES"/></html:submit>
 </fr:form>
 
-<script src="<%= request.getContextPath() %>/javaScript/jquery.alerts.js" type="text/javascript"></script>
 <script type="text/javascript">
 
 	
@@ -39,20 +40,22 @@
 
 		if(data['status'] == 'SOK') {
 
-			<bean:define id="message">
-				<bean:message key="label.supplier.allocationInfo.notFormatted" bundle="ACQUISITION_RESOURCES"/>
-			</bean:define>
+			<%
+				String message = BundleUtil.getStringFromResourceBundle("resources.AcquisitionResources","label.supplier.allocationInfo.notFormatted");
+			%>
+			
 			var text = "<%= message %>";
-			text = text.replace(new RegExp("\\[softLimit\\]"),data['softLimit']).replace(new RegExp("\\[supplierLimit\\]"),data['supplierLimit']);
+			text = formatString(text,[data['softLimit'], data['supplierLimit']]);
 		
 			$("#createForm").before("<div id=\"limitInformation\"><p class=\"mbottom05\"><span>" + text + "</span><br/>");
 		} else {
 
-			<bean:define id="message">
-				<bean:message key="label.attention.supplier.supplierOverLimit.notFormatted" bundle="ACQUISITION_RESOURCES"/>
-			</bean:define>
-			var text = "<%= message %>";
-			text = text.replace(new RegExp("\\[softLimit\\]"),data['softLimit']).replace(new RegExp("\\[supplierLimit\\]"),data['supplierLimit']);
+			<%
+				String message2 = BundleUtil.getStringFromResourceBundle("resources.AcquisitionResources","label.attention.supplier.supplierOverLimit.notFormatted");
+			%>
+		
+			var text = "<%= message2 %>";
+			text = formatString(text,[data['softLimit'],data['supplierLimit']]);
 	
 			<bean:define id="messageExtra">
 				<bean:message key="label.attention.supplier.explanation" bundle="ACQUISITION_RESOURCES"/>
@@ -63,6 +66,13 @@
 	}
 
 
+	function formatString(string, formatTokens) {
+		text = string;
+		for (i=0; i < formatTokens.length ; i++) {
+			text = text.replace(new RegExp("\\{" + i + "\\}"),formatTokens[i]);
+		}
+		return text;
+	}
 	
 </script>
 
