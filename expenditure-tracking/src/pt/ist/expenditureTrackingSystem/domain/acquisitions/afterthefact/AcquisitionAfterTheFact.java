@@ -65,7 +65,18 @@ public class AcquisitionAfterTheFact extends AcquisitionAfterTheFact_Base {
 	invoice.setInvoiceNumber(invoiceNumber);
 	invoice.setInvoiceDate(invoiceDate);
 	setInvoice(invoice);
+
 	return invoice;
+    }
+
+    public String getInvoiceNumber() {
+	Invoice invoice = getInvoice();
+	return invoice != null ? invoice.getInvoiceNumber() : null;
+    }
+
+    public LocalDate getInvoiceDate() {
+	Invoice invoice = getInvoice();
+	return invoice != null ? invoice.getInvoiceDate() : null;
     }
 
 }
