@@ -156,7 +156,12 @@
 					<logic:notEmpty name="acquisitionProcess" property="files">
 						<logic:iterate id="file" name="acquisitionProcess" property="files">
 							<html:link action="<%= actionMapping + ".do?method=downloadGenericFile&acquisitionProcess=" + acquisitionProcessOid %>" paramId="fileOID" paramName="file" paramProperty="OID">
-								<bean:write name="file" property="displayName"/>
+								<logic:notEmpty name="file" property="displayName"> 
+									<bean:write name="file" property="displayName"/>
+								</logic:notEmpty>
+								<logic:empty name="file" property="displayName"> 
+									<bean:write name="file" property="filename"/>
+								</logic:empty>
 							</html:link>, 
 						</logic:iterate>
 					</logic:notEmpty>
