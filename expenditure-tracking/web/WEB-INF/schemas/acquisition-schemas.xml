@@ -69,12 +69,17 @@
 	<slot name="acquisitionProcessId" key="label.acquisitionProcessId" bundle="EXPENDITURE_RESOURCES">
 		<property name="classes" value="bold"/>
 	</slot>
-	<slot name="acquisitionProcess.requestor.name" key="label.requesterName" bundle="EXPENDITURE_RESOURCES"/>
+	<slot name="acquisitionProcess.requestor.name" layout="link" key="label.requesterName" bundle="EXPENDITURE_RESOURCES">
+		<property name="useParent" value="true"/>
+		<property name="blankTarget" value="true"/>
+		<property name="linkFormat" value="/expenditureTrackingOrganization.do?personOid=${acquisitionProcess.requestor.OID}&amp;method=viewPerson"/>
+		<property name="classes" value="secondaryLink"/>
+	</slot>
 	<slot name="acquisitionProcess.requestingUnit.presentationName" key="acquisitionProcess.label.requestingUnit" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="acquisitionProcess.acquisitionProcessState.localizedName" key="label.processState" bundle="EXPENDITURE_RESOURCES"/>
 	<slot name="suppliers" key="label.supplier" bundle="EXPENDITURE_RESOURCES">
 		<property name="eachLayout" value="values"/>
-		<property name="eachSchema" value="viewSupplierPresentationName"/>
+		<property name="eachSchema" value="viewSupplierPresentationName.withLink"/>
 		<property name="classes" value="nobullet"/>
 	</slot>
 </schema>	
@@ -271,6 +276,14 @@
 		<property name="dateFormat" value="dd-MM-yyyy"/>
 	</validator>
 	</slot>
+</schema>
+
+<schema name="listInvoices"
+		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionInvoice"
+		bundle="ACQUISITION_RESOURCES">
+		<slot name="invoiceNumber" key="acquisitionProcess.label.invoice.number" bundle="ACQUISITION_RESOURCES"/>
+		<slot name="invoiceDate" key="acquisitionProcess.label.invoice.date" bundle="ACQUISITION_RESOURCES"/>
+		<slot name="filename" key="acquisitionProcess.label.filename" bundle="ACQUISITION_RESOURCES"/>
 </schema>
 
 <schema name="receiveInvoiceForm"

@@ -95,16 +95,52 @@ public abstract class RequestItem extends RequestItem_Base {
 	}
     }
 
+    public boolean isPartiallyApproved() {
+	if (getUnitItemsCount() == 0) {
+	    return false;
+	}
+
+	Boolean value = null;
+	for (final UnitItem unitItem : getUnitItems()) {
+	    Boolean approved = unitItem.isApproved();
+	    if (value == null) {
+		value = approved;
+	    }
+	    if (value != approved) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
     public boolean isApproved() {
 	if (getUnitItemsCount() == 0) {
 	    return false;
 	}
 	for (final UnitItem unitItem : getUnitItems()) {
-	    if (!unitItem.getSubmitedForFundsAllocation()) {
+	    if (!unitItem.isApproved()) {
 		return false;
 	    }
 	}
 	return true;
+    }
+
+    public boolean isPartiallyAuthorized() {
+	if (getUnitItemsCount() == 0) {
+	    return false;
+	}
+
+	Boolean value = null;
+	for (final UnitItem unitItem : getUnitItems()) {
+	    Boolean authorized = unitItem.getItemAuthorized();
+	    if (value == null) {
+		value = authorized;
+	    }
+	    if (value != authorized) {
+		return true;
+	    }
+	}
+	return false;
     }
 
     public boolean hasBeenAuthorizedBy(final Person person) {
@@ -217,6 +253,10 @@ public abstract class RequestItem extends RequestItem_Base {
 
     public boolean hasAtLeastOneInvoiceConfirmation() {
 	return !getConfirmedInvoices().isEmpty();
+    }
+
+    public boolean isWithInvoicesPartiallyConfirmed() {
+	return hasAtLeastOneInvoiceConfirmation() && !isConfirmForAllInvoices();
     }
 
     public <T extends PaymentProcessInvoice> List<T> getConfirmedInvoices() {

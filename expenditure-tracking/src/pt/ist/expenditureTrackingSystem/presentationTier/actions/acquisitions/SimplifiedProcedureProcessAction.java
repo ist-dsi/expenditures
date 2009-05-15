@@ -21,6 +21,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.joda.time.LocalDate;
 
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProposalDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
@@ -530,6 +531,28 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final SimplifiedProcedureProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
 	genericActivityExecution(acquisitionProcess, "UnlockInvoiceReceiving");
+	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
+    }
+
+    public ActionForward executeLockInvoiceReceiving(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final SimplifiedProcedureProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
+	genericActivityExecution(acquisitionProcess, "LockInvoiceReceiving");
+	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
+    }
+
+    public ActionForward executeRemoveInvoice(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final SimplifiedProcedureProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
+	request.setAttribute("process",acquisitionProcess);
+	return forward(request, "/acquisitions/removeAcquisitionInvoice.jsp");
+    }
+
+    public ActionForward removeInvoice(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	final SimplifiedProcedureProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
+	final AcquisitionInvoice invoice = getDomainObject(request, "invoiceOid");
+	genericActivityExecution(acquisitionProcess, "RemoveInvoice", invoice);
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
 

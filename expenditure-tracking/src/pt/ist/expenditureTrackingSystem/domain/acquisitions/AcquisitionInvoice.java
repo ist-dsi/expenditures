@@ -1,18 +1,24 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
+import pt.ist.expenditureTrackingSystem.domain.FileContent;
 import pt.ist.fenixWebFramework.services.Service;
 
 public class AcquisitionInvoice extends AcquisitionInvoice_Base {
 
-    public AcquisitionInvoice() { // final RequestWithPayment request) {
+    public AcquisitionInvoice() {
 	super();
-	//setAcquisition(request);
     }
 
     @Override
     @Service
     public void delete() {
-	//removeAcquisition();
+	getUnitItems().clear();
+	getRequestItems().clear();
+	getProjectFinancers().clear();
+	getFinancers().clear();
+	FileContent content = getFileContent();
+	removeFileContent();
+	content.delete();
 	super.delete();
     }
 }

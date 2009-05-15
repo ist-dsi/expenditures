@@ -498,4 +498,31 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
 	}
 	return allInvoices;
     }
+
+    public boolean isPartiallyApproved() {
+	for (RequestItem item : getRequestItems()) {
+	    if (item.isPartiallyApproved()) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
+    public boolean isPartiallyAuthorized() {
+	for (RequestItem item : getRequestItems()) {
+	    if (item.isPartiallyAuthorized()) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
+    public boolean isWithInvoicesPartiallyConfirmed() {
+	for (RequestItem item : getRequestItems()) {
+	    if (item.isWithInvoicesPartiallyConfirmed()) {
+		return true;
+	    }
+	}
+	return false;
+    }
 }

@@ -218,4 +218,33 @@ public class Financer extends Financer_Base {
 	getAllocatedInvoices().clear();
     }
 
+    public boolean isApproved() {
+	List<UnitItem> unitItems = getUnitItems();
+	for (UnitItem unitItem : unitItems) {
+	    if (!unitItem.isApproved()) {
+		return false;
+	    }
+	}
+	return !unitItems.isEmpty();
+    }
+
+    public boolean isAuthorized() {
+	List<UnitItem> unitItems = getUnitItems();
+	for (UnitItem unitItem : unitItems) {
+	    if (!unitItem.getItemAuthorized()) {
+		return false;
+	    }
+	}
+	return !unitItems.isEmpty();
+    }
+
+    public boolean isWithInvoicesConfirmed() {
+	List<UnitItem> unitItems = getUnitItems();
+	for (UnitItem unitItem : unitItems) {
+	    if (!unitItem.isWithAllInvoicesConfirmed()) {
+		return false;
+	    }
+	}
+	return !unitItems.isEmpty();
+    }
 }

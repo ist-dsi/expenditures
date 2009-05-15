@@ -203,8 +203,8 @@ public class OrganizationAction extends BaseAction {
 	return forward(request, "/expenditureTrackingOrganization/viewPerson.jsp");
     }
 
-    public final ActionForward viewLoggedPerson(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
+    public final ActionForward viewLoggedPerson(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
 	final User user = UserView.getCurrentUser();
 	final Person person = user.getExpenditurePerson();
 	return viewPerson(mapping, request, person);
@@ -285,7 +285,6 @@ public class OrganizationAction extends BaseAction {
 	return viewPerson(mapping, request, person);
     }
 
-
     public final ActionForward expandAuthorizationUnit(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final UnitBean unitBean = getRenderedObject();
@@ -351,6 +350,8 @@ public class OrganizationAction extends BaseAction {
 	    supplierBean = new SupplierBean();
 	}
 
+	Supplier supplier = getDomainObject(request, "supplierOid");
+	supplierBean.setSupplier(supplier);
 	request.setAttribute("supplierBean", supplierBean);
 	return forward(request, "/expenditureTrackingOrganization/manageSuppliers.jsp");
     }
@@ -645,8 +646,8 @@ public class OrganizationAction extends BaseAction {
 	return spreadsheet;
     }
 
-    public final ActionForward editSupplierLimit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
+    public final ActionForward editSupplierLimit(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
 	final Supplier supplier = getDomainObject(request, "supplierOid");
 	request.setAttribute("supplier", supplier);
 	return forward(request, "/expenditureTrackingOrganization/editSupplierLimit.jsp");
@@ -791,7 +792,6 @@ public class OrganizationAction extends BaseAction {
 	row.setCell(totalForSupplierLimit.toFormatString());
 	row.setCell("");
 	row.setCell(totalForSupplier.toFormatString());
-	
 
 	return spreadsheet;
     }

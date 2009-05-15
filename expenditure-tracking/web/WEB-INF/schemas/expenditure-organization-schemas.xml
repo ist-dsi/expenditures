@@ -252,6 +252,17 @@
 	<slot name="presentationName" key="supplier.label.abbreviatedName" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 </schema>
 
+<schema name="viewSupplierPresentationName.withLink"
+		type="pt.ist.expenditureTrackingSystem.domain.organization.Supplier"
+		bundle="EXPENDITURE_ORGANIZATION_RESOURCES">
+	<slot name="presentationName" key="supplier.label.abbreviatedName" bundle="EXPENDITURE_ORGANIZATION_RESOURCES" layout="link">
+		<property name="useParent" value="true"/>
+		<property name="blankTarget" value="true"/>
+		<property name="linkFormat" value="/expenditureTrackingOrganization.do?supplierOid=${OID}&amp;method=manageSuppliers"/>
+		<property name="classes" value="secondaryLink"/>
+	</slot>
+</schema>
+		
 <schema name="unitBean"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.UnitBean"
 		bundle="EXPENDITURE_ORGANIZATION_RESOURCES">

@@ -237,12 +237,37 @@
 <bean:define id="processRequest" name="acquisitionProcess" property="request" toScope="request"/>
 <jsp:include page="commons/viewAcquisitionRequest.jsp" flush="true"/>
 
+<logic:equal name="acquisitionProcess" property="acquisitionRequest.partiallyApproved" value="true">
+ <div class="infoop4 mtop15">
+ 	<p class="mvert025">
+         <bean:message key="label.warning.multipleApprovals" bundle="ACQUISITION_RESOURCES"/>
+    </p>
+</div>
+</logic:equal>
+
+<logic:equal name="acquisitionProcess" property="acquisitionRequest.partiallyAuthorized" value="true">
+ <div class="infoop4 mtop15">
+ 	<p class="mvert025">
+         <bean:message key="label.warning.multipleAuthorizations" bundle="ACQUISITION_RESOURCES"/>
+    </p>
+</div>
+</logic:equal>
+
+<logic:equal name="acquisitionProcess" property="acquisitionRequest.withInvoicesPartiallyConfirmed" value="true">
+ <div class="infoop4 mtop15">
+ 	<p class="mvert025">
+         <bean:message key="label.warning.multipleConfirmations" bundle="ACQUISITION_RESOURCES"/>
+    </p>
+</div>
+</logic:equal>
+   
 <bean:define id="payingUnits" name="acquisitionProcess" property="acquisitionRequest.totalAmountsForEachPayingUnit"/>
 <logic:notEmpty name="payingUnits">
 
-	<table class="tstyle5 mervt1 width100pc">
+	<table class="tstyle5 mervt1 width100pc tdmiddle punits">
 		<tr>	
 			<th class="aleft"><bean:message key="acquisitionProcess.label.payingUnits" bundle="ACQUISITION_RESOURCES"/></th>
+			<th></th>
 			<th class="acenter" style="width: 70px;">
 					<bean:message key="acquisitionProcess.label.accountingUnit" bundle="ACQUISITION_RESOURCES"/>
 			</th>
@@ -263,7 +288,17 @@
 	
 	<logic:iterate id="payingUnit" name="payingUnits">
 		<tr>
-			<td class="aleft"><fr:view name="payingUnit" property="payingUnit.presentationName"/></td>
+			<td class="aleft">
+				
+				<bean:define id="unitOID" name="payingUnit" property="payingUnit.OID"/>
+				<html:link styleClass="secondaryLink" page="<%= "/expenditureTrackingOrganization.do?method=viewOrganization&unitOid=" + unitOID%>" target="_blank">
+				<fr:view name="payingUnit" property="payingUnit.presentationName"/>
+				</html:link>
+			</td>
+			<bean:define id="financer" name="payingUnit" property="financer"/>
+			<td>
+				<fr:view name="financer" layout="financer-status"/>
+			</td>
 			<td class="acenter"><fr:view name="payingUnit" property="financer.accountingUnit.name"/></td>
 			<logic:present name="payingUnit" property="financer.fundAllocationId">
 				<td>

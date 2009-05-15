@@ -1,6 +1,7 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
@@ -86,4 +87,21 @@ public class UnitItem extends UnitItem_Base {
 	return getFinancer().getAccountingUnit();
     }
 
+    @Override
+    @Deprecated
+    public Boolean getSubmitedForFundsAllocation() {
+	return super.getSubmitedForFundsAllocation();
+    }
+
+    public boolean isApproved() {
+	return getSubmitedForFundsAllocation();
+    }
+
+    public boolean isWithAllInvoicesConfirmed() {
+	List<PaymentProcessInvoice> invoicesFiles = getItem().getInvoicesFiles();
+	List<PaymentProcessInvoice> confirmedInvoices = getConfirmedInvoices();
+
+	return !invoicesFiles.isEmpty() && confirmedInvoices.containsAll(invoicesFiles);
+
+    }
 }
