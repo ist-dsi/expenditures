@@ -23,12 +23,15 @@ import java.util.Map.Entry;
 import jvstm.TransactionalCommand;
 import myorg._development.PropertiesManager;
 import myorg.domain.MyOrg;
+import myorg.domain.util.Address;
 
 import org.apache.commons.lang.StringUtils;
 
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
+import pt.ist.expenditureTrackingSystem.domain.organization.DeliveryInfo;
+import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.fenixWebFramework.FenixWebFramework;
 import pt.ist.fenixframework.pstm.AbstractDomainObject;
 import pt.ist.fenixframework.pstm.Transaction;
@@ -88,7 +91,6 @@ public class EncodingFixer {
 	Language.setLocale(Language.getDefaultLocale());
 
 	FenixWebFramework.initialize(PropertiesManager.getFenixFrameworkConfig(paths));
-	MyOrg.initialize(FenixWebFramework.getConfig());
     }
 
     public static void main(String[] args) {
@@ -177,9 +179,9 @@ public class EncodingFixer {
 	return method.invoke(abstractDomainObject, null);
     }
 
-    private static Object callSetter(final AbstractDomainObject abstractDomainObject, final String fieldName, final String value) throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+    private static Object callSetter(final AbstractDomainObject abstractDomainObject, final String fieldName, final Object value) throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
 	final Class clazz = abstractDomainObject.getClass();
-	final Method method = clazz.getMethod("set" + StringUtils.capitalize(fieldName), String.class);
+	final Method method = clazz.getMethod("set" + StringUtils.capitalize(fieldName), value.getClass());
 	return method.invoke(abstractDomainObject, value);
     }
 
@@ -222,6 +224,15 @@ public class EncodingFixer {
 	if (domainObject instanceof RequestItem) {
 	    return true;
 	}
+	if (domainObject instanceof DeliveryInfo) {
+	    return true;
+	}
+	if (domainObject instanceof Supplier) {
+	    return true;
+	}
+	if (domainObject instanceof pt.ist.expenditureTrackingSystem.domain.File) {
+	    return true;
+	}
 	return false;
 //	return true;
     }
@@ -241,8 +252,8 @@ public class EncodingFixer {
 
     private static void fix(final AbstractDomainObject domainObject, final ResolutionCounter resolutionCounter, final DomainClass domainClass, final Slot slot) throws SecurityException, IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, UnsupportedEncodingException, CharacterCodingException {
 	final ValueType valueType = slot.getSlotType();
+	final String slotName = slot.getName();
 	if (valueType.getFullname().equals(String.class.getName())) {
-	    final String slotName = slot.getName();
 //		if (!slotName.equals("displayName")) {
 //		    return;
 //		}
@@ -274,7 +285,47 @@ public class EncodingFixer {
 		    resolutionCounter.count(domainClass, slotName);
 		}
 	    }
+	} else if (valueType.getFullname().equals(Address.class.getName())) {
+	    final Address address = (Address) callGetter(domainObject, slotName);
+	    final Address newAddress = fixAddress(address, domainObject, slotName);
+	    if (address != newAddress) {
+		callSetter(domainObject, slotName, newAddress);
+		resolutionCounter.count(domainClass, slotName);		
+	    }
 	}
+    }
+
+    private static Address fixAddress(Address address, AbstractDomainObject domainObject, String slotName) throws UnsupportedEncodingException, CharacterCodingException {
+	if (address == null) {
+	    return address;
+	}
+	final String line1 = address.getLine1();
+	final String line2 = address.getLine2();
+	final String location = address.getLocation();
+	final String postalCode = address.getPostalCode();
+	final String country = address.getCountry();
+
+	final String fline1 = fixString(line1, domainObject, slotName);
+	final String fline2 = fixString(line2, domainObject, slotName);
+	final String flocation = fixString(location, domainObject, slotName);
+	final String fpostalCode = fixString(postalCode, domainObject, slotName);
+	final String fcountry = fixString(country, domainObject, slotName);
+
+	return line1 != fline1 || line2 != fline2 || location != flocation || postalCode != fpostalCode || country != fcountry ?
+	    new Address(fline1, fline2, fpostalCode, flocation, fcountry) : address;
+    }
+
+    private static String fixString(final String value, final AbstractDomainObject domainObject, final String slotName) throws UnsupportedEncodingException, CharacterCodingException {
+	final byte[] bytes = value.getBytes("ISO8859-1");
+	final String piglet = porkify(value, bytes);
+	if (piglet.length() < value.length() && matchSizes(value, piglet)) {
+	    System.out.println(domainObject.getClass().getSimpleName() + " . " + slotName);
+	    System.out.println("Value : " + value);
+	    System.out.println("Piglet: " + piglet);
+	    System.out.println();
+	    return piglet;
+	}
+	return value;
     }
 
     private static String porkifyInc(final String string, final String charSet1, final String charset2) throws UnsupportedEncodingException, CharacterCodingException {

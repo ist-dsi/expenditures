@@ -47,7 +47,6 @@ public class MarkCommentsAsRead {
 	Language.setLocale(Language.getDefaultLocale());
 
 	FenixWebFramework.initialize(PropertiesManager.getFenixFrameworkConfig(paths));
-	MyOrg.initialize(FenixWebFramework.getConfig());
     }
 
     public static void main(String[] args) {
