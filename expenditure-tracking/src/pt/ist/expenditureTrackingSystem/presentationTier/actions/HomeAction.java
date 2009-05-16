@@ -1,25 +1,31 @@
 package pt.ist.expenditureTrackingSystem.presentationTier.actions;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.announcements.Announcement;
 import pt.ist.expenditureTrackingSystem.domain.announcements.AnnouncementProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.requests.RequestForProposalProcess;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
+import pt.utl.ist.fenix.tools.util.CollectionPager;
 
 @Mapping(path = "/expendituresHome")
 public class HomeAction extends BaseAction {
+
+    private static final int REQUESTS_PER_PAGE = 25;
 
     public final ActionForward firstPage(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) throws Exception {
@@ -46,10 +52,10 @@ public class HomeAction extends BaseAction {
 	request.setAttribute("activeRequests", requests);
 	return forward(request, "public/viewRequestsForProposal.jsp");
     }
-    
+
     public ActionForward viewRequestForProposalProcess(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
-	
+
 	request.setAttribute("requestForProposalProcess", getDomainObject(request, "requestForProposalProcessOid"));
 	return forward(request, "public/viewRequestProcess.jsp");
     }
@@ -63,14 +69,24 @@ public class HomeAction extends BaseAction {
 		approvedList.add(announcement);
 	    }
 	}
-	request.setAttribute("announcements", approvedList);
+
+	final CollectionPager<Announcement> pager = new CollectionPager<Announcement>((Collection) approvedList,
+		REQUESTS_PER_PAGE);
+
+	request.setAttribute("collectionPager", pager);
+	request.setAttribute("numberOfPages", Integer.valueOf(pager.getNumberOfPages()));
+
+	final String pageParameter = request.getParameter("pageNumber");
+	final Integer page = StringUtils.isEmpty(pageParameter) ? Integer.valueOf(1) : Integer.valueOf(pageParameter);
+	request.setAttribute("pageNumber", page);
+	request.setAttribute("announcements", pager.getPage(page));
+
 	return forward(request, "public/viewAnnouncements.jsp");
     }
 
-    
-    public ActionForward viewAnnouncement(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-	
+    public ActionForward viewAnnouncement(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+
 	request.setAttribute("announcement", getDomainObject(request, "announcementOid"));
 	return forward(request, "public/viewAnnouncement.jsp");
     }

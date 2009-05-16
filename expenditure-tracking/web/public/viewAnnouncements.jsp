@@ -3,6 +3,7 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
+<%@ taglib uri="/WEB-INF/collectionPager.tld" prefix="cp"%>
 
 <!-- public/viewAnnouncements.jsp -->
 
@@ -14,6 +15,11 @@
 	<p><em><bean:message key="process.messages.info.noAvailableAnnouncements" bundle="EXPENDITURE_RESOURCES"/>.</em></p>
 </logic:empty>
 
+<p class="aright mtop05">
+		<cp:collectionPages url="/expendituresHome.do?method=showAcquisitionAnnouncements" 
+			pageNumberAttributeName="pageNumber" numberOfPagesAttributeName="numberOfPages" numberOfVisualizedPages="10"/>
+</p>
+	
 <logic:iterate id="announcement" name="announcements" indexId="Id">
 	<div class="infoop2">
 		<table class="tstyle1">
@@ -39,3 +45,8 @@
 		</table>
 	</div>
 </logic:iterate>
+
+<p class="aright mtop05">
+		<cp:collectionPages url="/expendituresHome.do?method=showAcquisitionAnnouncements"
+			pageNumberAttributeName="pageNumber" numberOfPagesAttributeName="numberOfPages" numberOfVisualizedPages="10"/>
+	</p>
