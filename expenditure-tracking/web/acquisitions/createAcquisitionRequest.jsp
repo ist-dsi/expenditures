@@ -66,25 +66,26 @@
 <div class="switchInline">
 	<form id="createFile" action="<%= request.getContextPath()+ url %>" method="post" target="iframe">
 		<p>
-			<a href="#" onclick="javascript: document.getElementById('createFile').submit(); reloadOnDone('iframe');"><bean:message key="acquisitionProcess.link.createPurchaseOrderDocument" bundle="ACQUISITION_RESOURCES"/></a>
+			<a href="#" "><bean:message key="acquisitionProcess.link.createPurchaseOrderDocument" bundle="ACQUISITION_RESOURCES"/></a>
 		</p>
 		<iframe id="iframe" name="iframe" src="" style="display: none;"></iframe>
 	</form>
 	
 	<script type="text/javascript">
-		function reloadOnDone(id) {
-			if (document.getElementById(id).contentWindow.document.body.innerHTML.length>0) {
-				document.getElementById('fileName').innerHTML = document.getElementById(id).contentWindow.document.getElementById('fileName').innerHTML;
-				document.getElementById('file').href = document.getElementById(id).contentWindow.document.getElementById('file').href;
-				document.getElementById(id).src=document.getElementById(id).contentWindow.document.getElementById('file').href;
-				// This hack is actually needed in order for the browser detects 1st a change of the iframe source to the file, request the download from the user and the
-				// resets the iframe source again. 10 milis should be enough for the browser to do that.
-				setTimeout("document.getElementById('" + id + "').src=''", 1000);
-			}
-			else {
-					setTimeout("reloadOnDone('" + id + "')",500);
-			}
-		}
+		$("#createFile > p > a").click( function() {
+			$("#createFile").submit();
+		});
+		
+		$("#iframe").load(function() { 
+				var iframeContents =  $("#iframe").contents();
+				var link = iframeContents.find("#file").attr('href');
+				var name = iframeContents.find("#fileName").html();
+				if (link != null && name != null) {
+					$("#file").attr('href',link);
+					$("#fileName").replaceWith(name);
+					$("#iframe").attr('src',link);
+				}
+		 });
 	</script>
 </div>
 
