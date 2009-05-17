@@ -43,6 +43,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.Su
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.SubmitForInvoiceConfirmation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.UnSubmitForApproval;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.UnSubmitForFundAllocation;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.Util;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateRefundProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
@@ -406,7 +407,7 @@ public class RefundProcess extends RefundProcess_Base {
     }
 
     public boolean isAppiableForYear(final int year) {
-	throw new Error("not.implemented");
+	return Util.isAppiableForYear(year, this);
     }
 
     @Override
