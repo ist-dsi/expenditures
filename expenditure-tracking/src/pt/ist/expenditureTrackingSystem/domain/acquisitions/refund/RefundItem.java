@@ -8,7 +8,9 @@ import myorg.domain.util.Money;
 import org.joda.time.LocalDate;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestWithPayment;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.UnitItem;
 import pt.ist.expenditureTrackingSystem.domain.dto.RefundItemBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
@@ -123,7 +125,21 @@ public class RefundItem extends RefundItem_Base {
 
     @Override
     public Money getTotalAmountForCPV(final int year) {
-	throw new Error("not.implemented");
+	return isAppliableForCPV(year) ? getCurrentSupplierAllocationValue() : Money.ZERO;
+    }
+
+    private Money getCurrentSupplierAllocationValue() {
+	Money spent = Money.ZERO;
+	for (RefundInvoice invoice : getInvoices()) {
+	    spent = spent.add(invoice.getRefundableValue());
+	}
+	return spent;
+    }
+
+    private boolean isAppliableForCPV(final int year) {
+	final RequestWithPayment requestWithPayment = getRequest();
+	final AcquisitionProcess acquisitionProcess = requestWithPayment.getProcess();
+	return acquisitionProcess.isActive() && acquisitionProcess.isAppiableForYear(year);
     }
 
 }
