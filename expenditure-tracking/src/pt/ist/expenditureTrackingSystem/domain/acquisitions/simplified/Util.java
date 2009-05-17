@@ -25,7 +25,7 @@ public class Util {
     public static boolean isAppiableForYear(final int year, final RefundProcess refundProcess) {
 	// TODO : implement this properly... until then always count everything... which will work because there is still only one year... :)
 	// Currently I'm not sure whether this should be based on the invoice date, or some authorization date.
-	return true;
+	return year == 2009;
     }
 
     private static boolean matchesAppiableForYearActivity(final int year, final GenericLog genericLog) {
