@@ -8,7 +8,6 @@ import myorg.domain.util.Money;
 import org.joda.time.LocalDate;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestWithPayment;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.UnitItem;
@@ -138,8 +137,8 @@ public class RefundItem extends RefundItem_Base {
 
     private boolean isAppliableForCPV(final int year) {
 	final RequestWithPayment requestWithPayment = getRequest();
-	final AcquisitionProcess acquisitionProcess = requestWithPayment.getProcess();
-	return acquisitionProcess.isActive() && acquisitionProcess.isAppiableForYear(year);
+	final RefundProcess refundProcess = requestWithPayment.getProcess();
+	return refundProcess.isActive() && refundProcess.isAppiableForYear(year);
     }
 
 }
