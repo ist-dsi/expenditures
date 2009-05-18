@@ -132,8 +132,10 @@ public class SyncProjectsAux {
 	}
 
 	public MgpSubProject findSubProject(final String name) {
+	    final int i = name.indexOf(" - ");
+	    final String prefix = name.substring(0, i);
 	    for (final MgpSubProject mgpSubProject : subProjects) {
-		if (mgpSubProject.institution.equals(name)) {
+		if (mgpSubProject.institution.equals(prefix)) {
 		    return mgpSubProject;
 		}
 	    }
@@ -188,7 +190,7 @@ public class SyncProjectsAux {
 
 		final MgpProject mgpProject = findMgpProject(projectCode);
 		if (mgpProject == null) {
-		    System.out.println("Unable to find mgpProject with code: " + projectCode + " for sub-project creation.");
+		    // nothing to be done.
 		} else {
 		    mgpProject.registerSubProject(institution, institutionDescription);
 		}
@@ -266,6 +268,7 @@ public class SyncProjectsAux {
 	System.out.println("Created " + createdSubProjects + " sub-projects.");
 	System.out.println("Updated " + updatedProjects + " projects.");
 	System.out.println("Updated " + updatedSubProjects + " sub-projects.");
+	System.out.println("Found   " + disconnectedSubProjects + " diconnected sub-projects.");
 	System.out.println("Did not find " + notFoundCostCenters.size() + " cost centers.");
     }
 
@@ -383,13 +386,15 @@ public class SyncProjectsAux {
 	}
 
 	for (final MgpSubProject mgpSubProject : mgpProject.getSubProjects()) {
-	    final SubProject subProject = project.findSubProjectByName(mgpSubProject.institution);
+	    final SubProject subProject = project.findSubProjectByNamePrefix(mgpSubProject.institution);
 	    if (subProject == null) {
 		createdSubProjects++;
-		//createSubProject(project, mgpSubProject);
+//		System.out.println("Creating subproject: " + mgpSubProject.getInstitution() + " - " + mgpSubProject.getInstitutionDescription()
+//			+ " for project: " + mgpProject.getProjectCode() + " - " + mgpProject.getTitle());
+		createSubProject(project, mgpSubProject);
 	    } else {
 		updatedSubProjects++;
-		//updateSubProject(subProject, mgpSubProject);
+		updateSubProject(subProject, mgpSubProject);
 	    }
 	}
 
@@ -406,12 +411,12 @@ public class SyncProjectsAux {
     }
 
     private void createSubProject(final Project project, final MgpSubProject mgpSubProject) {
-	final SubProject subProject = new SubProject(project, mgpSubProject.getInstitution());
+	final SubProject subProject = new SubProject(project, mgpSubProject.getInstitution() + " - " + mgpSubProject.getInstitutionDescription());
 	updateSubProject(subProject, mgpSubProject);
     }
 
     private void updateSubProject(final SubProject subProject, final MgpSubProject mgpSubProject) {
-	// Nothing to do here...
+	subProject.setName(mgpSubProject.getInstitution() + " - " + mgpSubProject.getInstitutionDescription());
     }
 
 
