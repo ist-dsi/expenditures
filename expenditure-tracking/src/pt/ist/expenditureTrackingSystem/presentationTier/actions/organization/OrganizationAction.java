@@ -348,10 +348,10 @@ public class OrganizationAction extends BaseAction {
 	SupplierBean supplierBean = getRenderedObject("supplierBean");
 	if (supplierBean == null) {
 	    supplierBean = new SupplierBean();
+	    Supplier supplier = getDomainObject(request, "supplierOid");
+	    supplierBean.setSupplier(supplier);
 	}
 
-	Supplier supplier = getDomainObject(request, "supplierOid");
-	supplierBean.setSupplier(supplier);
 	request.setAttribute("supplierBean", supplierBean);
 	return forward(request, "/expenditureTrackingOrganization/manageSuppliers.jsp");
     }
