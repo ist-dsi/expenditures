@@ -18,6 +18,7 @@ import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.CostCenter;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Project;
+import pt.ist.expenditureTrackingSystem.domain.organization.SubProject;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.persistenceTier.ExternalDbOperation;
 import pt.ist.expenditureTrackingSystem.persistenceTier.ExternalDbQuery;
@@ -26,6 +27,47 @@ import pt.ist.fenixframework.pstm.Transaction;
 import pt.utl.ist.fenix.tools.util.FileUtils;
 
 public class SyncProjectsAux {
+
+    public static class MgpSubProject {
+	private String institution;
+	private String institutionDescription;
+
+	MgpSubProject(final String institution, final String institutionDescription) {
+	    this.institution = institution;
+	    this.institutionDescription = institutionDescription;
+	}
+
+	@Override
+	public boolean equals(final Object obj) {
+	    if (obj instanceof MgpSubProject) {
+		final MgpSubProject mgpSubProject = (MgpSubProject) obj;
+		return institution.equals(mgpSubProject.institution);
+	    }
+	    return false;
+	}
+
+	@Override
+	public int hashCode() {
+	    return institution.hashCode();
+	}
+
+	public String getInstitution() {
+	    return institution;
+	}
+
+	public void setInstitution(String institution) {
+	    this.institution = institution;
+	}
+
+	public String getInstitutionDescription() {
+	    return institutionDescription;
+	}
+
+	public void setInstitutionDescription(String institutionDescription) {
+	    this.institutionDescription = institutionDescription;
+	}
+
+    }
 
     public static class MgpProject {
 	private String projectCode;
@@ -36,6 +78,7 @@ public class SyncProjectsAux {
 	private String inicio;
 	private String duracao;
 	private String status;
+	private Set<MgpSubProject> subProjects = new HashSet<MgpSubProject>();
 
 	MgpProject(final ResultSet resultSet) throws SQLException {
 	    unidExploracao = resultSet.getString(1);
@@ -80,6 +123,23 @@ public class SyncProjectsAux {
 	    return status;
 	}
 
+	public Set<MgpSubProject> getSubProjects() {
+	    return subProjects;
+	}
+
+	public void registerSubProject(final String institution, final String institutionDescription) {
+	    subProjects.add(new MgpSubProject(institution, institutionDescription));
+	}
+
+	public MgpSubProject findSubProject(final String name) {
+	    for (final MgpSubProject mgpSubProject : subProjects) {
+		if (mgpSubProject.institution.equals(name)) {
+		    return mgpSubProject;
+		}
+	    }
+	    return null;
+	}
+
     }
 
     private static class ProjectQuery extends ExternalDbQuery {
@@ -106,6 +166,49 @@ public class SyncProjectsAux {
 	}
     }
 
+    private static class SubProjectQuery extends ExternalDbQuery {
+
+	private final Set<MgpProject> mgpProjects;
+
+	public SubProjectQuery(final Set<MgpProject> mgpProjects) {
+	    this.mgpProjects = mgpProjects;
+	}
+
+	@Override
+	protected String getQueryString() {
+	    return "SELECT a.projecto, a.instituicao, a.descricaoinstituicao FROM v_membros_consorcio a";
+	}
+
+	@Override
+	protected void processResultSet(final ResultSet resultSet) throws SQLException {
+	    while (resultSet.next()) {
+		final String projectCode = resultSet.getString(1);
+		final String institution = resultSet.getString(2);
+		final String institutionDescription = resultSet.getString(3);
+
+		final MgpProject mgpProject = findMgpProject(projectCode);
+		if (mgpProject == null) {
+		    System.out.println("Unable to find mgpProject with code: " + projectCode + " for sub-project creation.");
+		} else {
+		    mgpProject.registerSubProject(institution, institutionDescription);
+		}
+	    }
+	}
+
+	private MgpProject findMgpProject(final String projectCode) {
+	    for (final MgpProject mgpProject : mgpProjects) {
+		if (mgpProject.getProjectCode().equals(projectCode)) {
+		    return mgpProject;
+		}
+	    }
+	    return null;
+	}
+
+	Set<MgpProject> getMgpProjects() {
+	    return mgpProjects;
+	}
+    }
+
     public static class ProjectReader extends ExternalDbOperation {
 
 	private Set<MgpProject> mgpProjects = null;
@@ -120,6 +223,8 @@ public class SyncProjectsAux {
 	    final ProjectQuery projectQuery = new ProjectQuery();
 	    executeQuery(projectQuery);
 	    mgpProjects = projectQuery.getMgpProjects();
+	    final SubProjectQuery subProjectQuery = new SubProjectQuery(mgpProjects);
+	    executeQuery(subProjectQuery);
 	}	
 
 	public Set<MgpProject> getMgpProjects() {
@@ -129,6 +234,9 @@ public class SyncProjectsAux {
 
     int createdProjects = 0;
     int updatedProjects = 0;
+    int createdSubProjects = 0;
+    int updatedSubProjects = 0;
+    int disconnectedSubProjects = 0;
     private Map<String, String> teachers = new HashMap<String, String>();
     private Set<Integer> projectResponsibles = new HashSet<Integer>();
 
@@ -155,6 +263,9 @@ public class SyncProjectsAux {
 	}
 
 	System.out.println("Created " + createdProjects + " projects.");
+	System.out.println("Created " + createdSubProjects + " sub-projects.");
+	System.out.println("Updated " + updatedProjects + " projects.");
+	System.out.println("Updated " + updatedSubProjects + " sub-projects.");
 	System.out.println("Did not find " + notFoundCostCenters.size() + " cost centers.");
     }
 
@@ -270,7 +381,39 @@ public class SyncProjectsAux {
 	    System.out.println("   current cost center is " + (project.getCostCenterUnit() == null ? null : project.getCostCenterUnit().getCostCenter()));
 	    project.setParentUnit(costCenter);
 	}
+
+	for (final MgpSubProject mgpSubProject : mgpProject.getSubProjects()) {
+	    final SubProject subProject = project.findSubProjectByName(mgpSubProject.institution);
+	    if (subProject == null) {
+		createdSubProjects++;
+		//createSubProject(project, mgpSubProject);
+	    } else {
+		updatedSubProjects++;
+		//updateSubProject(subProject, mgpSubProject);
+	    }
+	}
+
+	for (final Unit unit : project.getSubUnitsSet()) {
+	    if (unit instanceof SubProject) {
+		final SubProject subProject = (SubProject) unit;
+		final MgpSubProject mgpSubProject = mgpProject.findSubProject(subProject.getName());
+		if (mgpProject == null) {
+		    disconnectedSubProjects++;
+		    System.out.println("Project: " + project.getPresentationName() + " no longer has subproject: " + mgpSubProject.getInstitution() + " - " + mgpSubProject.getInstitutionDescription());
+		}
+	    }
+	}
     }
+
+    private void createSubProject(final Project project, final MgpSubProject mgpSubProject) {
+	final SubProject subProject = new SubProject(project, mgpSubProject.getInstitution());
+	updateSubProject(subProject, mgpSubProject);
+    }
+
+    private void updateSubProject(final SubProject subProject, final MgpSubProject mgpSubProject) {
+	// Nothing to do here...
+    }
+
 
     private boolean hasAuthorization(final Project project, final Person responsible) {
 	for (final Authorization authorization : project.getAuthorizationsSet()) {

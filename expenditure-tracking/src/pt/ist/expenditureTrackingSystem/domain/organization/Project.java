@@ -69,4 +69,16 @@ public class Project extends Project_Base {
 	}
 	return null;
     }
+
+    public SubProject findSubProjectByName(final String institution) {
+	for (final Unit unit : getSubUnitsSet()) {
+	    if (unit instanceof SubProject) {
+		final SubProject subProject = (SubProject) unit;
+		if (subProject.getName().equals(institution)) {
+		    return subProject;
+		}
+	    }
+	}
+	return null;
+    }
 }
