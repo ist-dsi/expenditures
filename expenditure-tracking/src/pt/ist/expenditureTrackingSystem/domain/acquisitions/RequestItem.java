@@ -143,13 +143,22 @@ public abstract class RequestItem extends RequestItem_Base {
 	return false;
     }
 
-    public boolean hasBeenAuthorizedBy(final Person person) {
+    public boolean isResponsible(final Person person) {
 	for (UnitItem unitItem : getUnitItems()) {
-	    if (unitItem.getUnit().isResponsible(person) && unitItem.getItemAuthorized()) {
+	    if (unitItem.getUnit().isResponsible(person)) {
 		return true;
 	    }
 	}
 	return false;
+    }
+
+    public boolean hasBeenAuthorizedBy(final Person person) {
+	for (UnitItem unitItem : getUnitItems()) {
+	    if (unitItem.getUnit().isResponsible(person) && !unitItem.getItemAuthorized()) {
+		return false;
+	    }
+	}
+	return !getUnitItems().isEmpty();
     }
 
     public void authorizeBy(Person person) {

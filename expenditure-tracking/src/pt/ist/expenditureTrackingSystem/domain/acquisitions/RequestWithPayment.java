@@ -300,11 +300,11 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
 
     public boolean hasBeenAuthorizedBy(final Person person) {
 	for (final RequestItem requestItem : getRequestItemsSet()) {
-	    if (requestItem.hasBeenAuthorizedBy(person)) {
-		return true;
+	    if (requestItem.isResponsible(person) && !requestItem.hasBeenAuthorizedBy(person)) {
+		return false;
 	    }
 	}
-	return false;
+	return !getRequestItemsSet().isEmpty();
     }
 
     public boolean isAuthorizedByAllResponsibles() {
@@ -318,7 +318,9 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
 
     public void authorizeBy(final Person person) {
 	for (final RequestItem requestItem : getRequestItemsSet()) {
-	    requestItem.authorizeBy(person);
+	    if (!requestItem.hasBeenAuthorizedBy(person)) {
+		requestItem.authorizeBy(person);
+	    }
 	}
     }
 
