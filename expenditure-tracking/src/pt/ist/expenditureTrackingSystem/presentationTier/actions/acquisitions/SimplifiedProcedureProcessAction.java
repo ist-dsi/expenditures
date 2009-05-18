@@ -544,7 +544,7 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
     public ActionForward executeRemoveInvoice(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final SimplifiedProcedureProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
-	request.setAttribute("process",acquisitionProcess);
+	request.setAttribute("process", acquisitionProcess);
 	return forward(request, "/acquisitions/removeAcquisitionInvoice.jsp");
     }
 
@@ -576,14 +576,7 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	reply.addAttribute("softLimit", softLimit.toFormatStringWithoutCurrency());
 	reply.addAttribute("supplierLimit", supplierLimit.toFormatStringWithoutCurrency());
 
-	byte[] jsonReply = reply.getJsonString().getBytes();
-
-	final OutputStream outputStream = response.getOutputStream();
-
-	response.setContentLength(jsonReply.length);
-	outputStream.write(jsonReply);
-	outputStream.flush();
-	outputStream.close();
+	writeJsonReply(response, reply);
 
 	return null;
     }
