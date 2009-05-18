@@ -305,22 +305,22 @@
 				<fr:view name="financer" layout="financer-status"/>
 			</td>
 			<td class="acenter"><fr:view name="payingUnit" property="financer.accountingUnit.name"/></td>
-			<logic:present name="payingUnit" property="financer.fundAllocationId">
+			<logic:equal name="payingUnit" property="financer.fundAllocationPresent" value="true">
 				<td>
 					<fr:view name="payingUnit" property="financer.fundAllocationIds"/> 
 					<script type="text/javascript">
 						$('#fundAllocationHeader').show();
 					</script>
 				</td>
-			</logic:present>
-			<logic:present name="payingUnit" property="financer.effectiveFundAllocationId">
+			</logic:equal>
+			<logic:equal name="payingUnit" property="financer.effectiveFundAllocationPresent" value="true">
 				<td>
 					<fr:view name="payingUnit" property="financer.effectiveFundAllocationIds"/> 
 					<script type="text/javascript">
 						$('#effectiveFundAllocationHeader').show();
 					</script>
 				</td>
-			</logic:present>
+			</logic:equal>
 			<td class="aright nowrap" style="width: 110px;"><fr:view name="payingUnit" property="amount"/></td>
 		</tr>
 		

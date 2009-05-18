@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.joda.time.LocalDate;
 
+import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.ByteArray;
 import myorg.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.dto.PayingUnitTotalBean;
@@ -465,6 +466,11 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
 
     @Override
     public AcquisitionInvoice receiveInvoice(String filename, byte[] bytes, String invoiceNumber, LocalDate invoiceDate) {
+	for (PaymentProcessInvoice invoice : getInvoices()) {
+	    if (invoice.getInvoiceNumber().equals(invoiceNumber)) {
+		throw new DomainException("acquisitionProcess.message.exception.InvoiceWithSameNumber");
+	    }
+	}
 	final AcquisitionInvoice invoice = new AcquisitionInvoice();
 	invoice.setFilename(filename);
 	invoice.setContent(new ByteArray(bytes));

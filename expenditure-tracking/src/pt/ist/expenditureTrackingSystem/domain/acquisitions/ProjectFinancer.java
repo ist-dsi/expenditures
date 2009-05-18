@@ -110,7 +110,7 @@ public class ProjectFinancer extends ProjectFinancer_Base {
 	    strings.add(effectiveProjectFundAllocationId);
 	}
 	setEffectiveProjectFundAllocationId(strings);
-	
+
 	allocateInvoicesInProject();
     }
 
@@ -160,4 +160,13 @@ public class ProjectFinancer extends ProjectFinancer_Base {
 	return getAccountingUnit().hasProjectAccountants(person);
     }
 
+    @Override
+    public boolean isFundAllocationPresent() {
+	return getProjectFundAllocationId() != null || super.isFundAllocationPresent();
+    }
+
+    @Override
+    public boolean isEffectiveFundAllocationPresent() {
+	return getEffectiveProjectFundAllocationId() != null || super.isEffectiveFundAllocationPresent();
+    }
 }

@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.User;
+import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
 
 import org.apache.struts.action.ActionForm;
@@ -313,9 +314,13 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	final ReceiveInvoiceForm receiveInvoiceForm = getRenderedObject();
 	final byte[] bytes = consumeInputStream(receiveInvoiceForm);
 	AbstractActivity<RegularAcquisitionProcess> receiveInvoice = acquisitionProcess.getActivityByName(activity);
-	receiveInvoice.execute(acquisitionProcess, receiveInvoiceForm.getFilename(), bytes,
-		receiveInvoiceForm.getInvoiceNumber(), receiveInvoiceForm.getInvoiceDate(), receiveInvoiceForm.getItems(),
-		receiveInvoiceForm.getHasMoreInvoices());
+	try {
+	    receiveInvoice.execute(acquisitionProcess, receiveInvoiceForm.getFilename(), bytes, receiveInvoiceForm
+		    .getInvoiceNumber(), receiveInvoiceForm.getInvoiceDate(), receiveInvoiceForm.getItems(), receiveInvoiceForm
+		    .getHasMoreInvoices());
+	} catch (DomainException ex) {
+	    addErrorMessage(ex.getMessage(), getBundle(), ex.getArgs());
+	}
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
 

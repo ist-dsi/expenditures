@@ -247,4 +247,12 @@ public class Financer extends Financer_Base {
 	}
 	return !unitItems.isEmpty();
     }
+
+    public boolean isFundAllocationPresent() {
+	return getFundAllocationId() != null;
+    }
+    
+    public boolean isEffectiveFundAllocationPresent() {
+	return getEffectiveFundAllocationId() != null;
+    }
 }

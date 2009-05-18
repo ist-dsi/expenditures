@@ -58,6 +58,7 @@
 	<property name="state4" value="Cf"/>
 	<property name="onClass" value="on"/>
 	<property name="offClass" value="off"/>
+	<property name="middleClass" value="half"/>
 </renderer>
 
 <renderer
