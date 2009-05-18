@@ -286,7 +286,7 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
     // return false;
     // }
 
-    public void unSubmitForFundsAllocation() {
+    public void unapprove() {
 	for (UnitItem unitItem : getUnitItems()) {
 	    unitItem.setSubmitedForFundsAllocation(false);
 	}

@@ -22,7 +22,7 @@ public class Approve extends GenericRefundProcessActivity {
     @Override
     protected void process(final RefundProcess process, final Object... objects) {
 	final Person person = getLoggedPerson();
-	process.getRequest().submittedForFundsAllocation(person);
+	process.getRequest().approve(person);
 	if (process.getRequest().isSubmittedForFundsAllocationByAllResponsibles()) {
 	    process.submitForFundAllocation();
 	}

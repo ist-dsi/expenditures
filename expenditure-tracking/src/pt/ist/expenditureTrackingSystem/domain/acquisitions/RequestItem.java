@@ -64,24 +64,23 @@ public abstract class RequestItem extends RequestItem_Base {
     public abstract void createUnitItem(Unit unit, Money shareValue);
 
     public boolean hasBeenApprovedBy(final Person person) {
-	boolean result = true;
 	for (final UnitItem unitItem : getUnitItems()) {
-	    if (unitItem.getUnit().isResponsible(person)) {
-		result = result && unitItem.getSubmitedForFundsAllocation();
+	    if (unitItem.getUnit().isResponsible(person) && !unitItem.isApproved()) {
+		return false;
 	    }
 	}
-	return result;
+	return !getUnitItemsSet().isEmpty();
     }
 
-    public void submittedForFundsAllocation(final Person person) {
+    public void approve(final Person person) {
 	modifySubmittedForFundsAllocationStateFor(person, Boolean.TRUE);
     }
 
-    public void unSubmitForFundsAllocation(final Person person) {
+    public void unapprove(final Person person) {
 	modifySubmittedForFundsAllocationStateFor(person, Boolean.FALSE);
     }
 
-    public void unSubmitForFundsAllocation() {
+    public void unapprove() {
 	for (UnitItem unitItem : getUnitItems()) {
 	    unitItem.setSubmitedForFundsAllocation(Boolean.FALSE);
 	}

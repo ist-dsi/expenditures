@@ -22,7 +22,7 @@ public class UnApproveAcquisitionProcess extends GenericAcquisitionProcessActivi
     @Override
     protected void process(RegularAcquisitionProcess process, Object... objects) {
 	final Person loggedPerson = getLoggedPerson();
-	process.getAcquisitionRequest().unSubmitForFundsAllocation(loggedPerson);
+	process.getAcquisitionRequest().unapprove(loggedPerson);
 	process.submitForApproval();
     }
 

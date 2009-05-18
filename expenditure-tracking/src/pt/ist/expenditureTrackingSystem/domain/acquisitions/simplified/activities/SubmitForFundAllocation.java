@@ -22,7 +22,7 @@ public class SubmitForFundAllocation extends GenericAcquisitionProcessActivity {
     @Override
     protected void process(RegularAcquisitionProcess process, Object... objects) {
 	Person person = (Person) objects[0];
-	process.getAcquisitionRequest().submittedForFundsAllocation(person);
+	process.getAcquisitionRequest().approve(person);
 	if (process.getAcquisitionRequest().isSubmittedForFundsAllocationByAllResponsibles()) {
 	    process.submitForFundAllocation();
 	    //	    if (!process.getSkipSupplierFundAllocation()) {

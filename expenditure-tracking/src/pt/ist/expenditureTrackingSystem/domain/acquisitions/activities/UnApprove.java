@@ -23,7 +23,7 @@ public class UnApprove<T extends PaymentProcess> extends AbstractActivity<T> {
     @Override
     protected void process(final T process, final Object... objects) {
 	final Person loggedPerson = getLoggedPerson();
-	process.getRequest().unSubmitForFundsAllocation(loggedPerson);
+	process.getRequest().unapprove(loggedPerson);
 	process.submitForApproval();
     }
 

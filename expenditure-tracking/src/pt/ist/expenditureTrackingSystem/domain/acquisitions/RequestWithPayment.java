@@ -261,16 +261,16 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
 
     public boolean hasBeenApprovedBy(final Person person) {
 	for (final RequestItem requestItem : getRequestItemsSet()) {
-	    if (requestItem.hasBeenApprovedBy(person)) {
-		return true;
+	    if (requestItem.isResponsible(person) && !requestItem.hasBeenApprovedBy(person)) {
+		return false;
 	    }
 	}
-	return false;
+	return !getRequestItemsSet().isEmpty();
     }
 
-    public void submittedForFundsAllocation(final Person person) {
+    public void approve(final Person person) {
 	for (final RequestItem requestItem : getRequestItemsSet()) {
-	    requestItem.submittedForFundsAllocation(person);
+	    requestItem.approve(person);
 	}
     }
 
@@ -286,15 +286,15 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
 	return true;
     }
 
-    public void unSubmitForFundsAllocation(final Person person) {
+    public void unapprove(final Person person) {
 	for (final RequestItem requestItem : getRequestItemsSet()) {
-	    requestItem.unSubmitForFundsAllocation(person);
+	    requestItem.unapprove(person);
 	}
     }
 
     public void unSubmitForFundsAllocation() {
 	for (final RequestItem requestItem : getRequestItemsSet()) {
-	    requestItem.unSubmitForFundsAllocation();
+	    requestItem.unapprove();
 	}
     }
 

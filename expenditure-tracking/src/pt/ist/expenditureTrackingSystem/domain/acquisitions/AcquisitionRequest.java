@@ -414,7 +414,7 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 
     public void unSubmitForFundsAllocation() {
 	for (AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
-	    acquisitionRequestItem.unSubmitForFundsAllocation();
+	    acquisitionRequestItem.unapprove();
 	}
 
     }
