@@ -361,16 +361,6 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	return false;
     }
 
-    @Deprecated
-    public boolean isInvoiceConfirmedBy(Person person) {
-	for (AcquisitionRequestItem item : getAcquisitionRequestItemsSet()) {
-	    if (item.isConfirmedForAllInvoices(person)) {
-		return true;
-	    }
-	}
-	return false;
-    }
-
     public void confirmInvoiceFor(Person person) {
 	for (AcquisitionRequestItem item : getAcquisitionRequestItemsSet()) {
 	    item.confirmInvoiceBy(person);

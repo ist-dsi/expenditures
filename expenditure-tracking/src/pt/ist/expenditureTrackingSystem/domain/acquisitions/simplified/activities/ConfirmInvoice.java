@@ -9,8 +9,7 @@ public class ConfirmInvoice extends GenericAcquisitionProcessActivity {
     @Override
     protected boolean isAccessible(RegularAcquisitionProcess process) {
 	final Person loggedPerson = getLoggedPerson();
-	return loggedPerson != null && process.isResponsibleForUnit(loggedPerson)
-		&& !process.getAcquisitionRequest().isInvoiceConfirmedBy(loggedPerson);
+	return loggedPerson != null && process.isResponsibleForUnit(loggedPerson);
     }
 
     @Override

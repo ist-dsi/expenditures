@@ -17,8 +17,7 @@ public class CancelInvoiceConfirmation extends GenericAcquisitionProcessActivity
     @Override
     protected boolean isAvailable(final RegularAcquisitionProcess process) {
 	final User user = UserView.getCurrentUser();
-	return  super.isAvailable(process)
-		&& process.getAcquisitionRequest().isInvoiceConfirmedBy(user.getExpenditurePerson())
+	return super.isAvailable(process) && !process.getConfirmedInvoices(user.getExpenditurePerson()).isEmpty()
 		&& !process.hasAnyEffectiveFundAllocationId();
     }
 

@@ -65,7 +65,9 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
     public Set<AcquisitionInvoice> getUnconfirmedInvoices(Person person) {
 	Set<AcquisitionInvoice> invoices = new HashSet<AcquisitionInvoice>();
 	for (AcquisitionRequestItem item : getAcquisitionRequest().getAcquisitionRequestItemsSet()) {
-	    invoices.addAll(item.getUnconfirmedInvoices(person));
+	    if (item.isResponsible(person)) {
+		invoices.addAll(item.getUnconfirmedInvoices(person));
+	    }
 	}
 	return invoices;
     }
@@ -79,7 +81,7 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
 
     public void cancelInvoiceConfirmationBy(final Person person) {
 	getAcquisitionRequest().unconfirmInvoiceFor(person);
-	if (!getAcquisitionRequest().hasAtLeastOneConfirmation() && getLastAcquisitionProcessState().isInvoiceConfirmed()) {
+	if (getLastAcquisitionProcessState().isInvoiceConfirmed()) {
 	    cancelInvoiceConfirmation();
 	}
     }
