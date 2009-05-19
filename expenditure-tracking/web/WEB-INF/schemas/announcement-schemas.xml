@@ -34,7 +34,14 @@
 	</slot>
 </schema>
 
+<schema name="viewAnnouncementShort.public" type="pt.ist.expenditureTrackingSystem.domain.announcements.Announcement" >
+	<slot name="creationDate" key="label.publishDate" bundle="EXPENDITURE_RESOURCES" />
+	<slot name="supplier.name" key="process.announcement.label.supplier" bundle="EXPENDITURE_RESOURCES" />
+	<slot name="description" key="process.announcement.label.description" bundle="EXPENDITURE_RESOURCES" />
+</schema>
+
 <schema name="viewAnnouncementDetails.public" type="pt.ist.expenditureTrackingSystem.domain.announcements.Announcement" >
+	<slot name="creationDate" key="label.publishDate" bundle="EXPENDITURE_RESOURCES" />
 	<slot name="buyingUnit.name" key="process.announcement.label.buyingUnit" bundle="EXPENDITURE_RESOURCES" />
 	<slot name="supplier.name" key="process.announcement.label.supplier" bundle="EXPENDITURE_RESOURCES" />
 	<slot name="description" key="process.announcement.label.description" bundle="EXPENDITURE_RESOURCES" />
@@ -42,7 +49,6 @@
 	<slot name="executionDays" key="process.announcement.label.executionDays" bundle="EXPENDITURE_RESOURCES" />
 	<slot name="executionAddress" key="process.announcement.label.executionAddress" bundle="EXPENDITURE_RESOURCES" />
 	<slot name="choiceCriteria" key="process.announcement.label.choiceCriteria" bundle="EXPENDITURE_RESOURCES" layout="null-as-label" />
-	<slot name="creationDate" key="label.publishDate" bundle="EXPENDITURE_RESOURCES" />
 </schema>
 
 <schema name="viewAnnouncementDetails" type="pt.ist.expenditureTrackingSystem.domain.announcements.Announcement" >

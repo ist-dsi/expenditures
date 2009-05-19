@@ -84,11 +84,4 @@ public class HomeAction extends BaseAction {
 	return forward(request, "public/viewAnnouncements.jsp");
     }
 
-    public ActionForward viewAnnouncement(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
-
-	request.setAttribute("announcement", getDomainObject(request, "announcementOid"));
-	return forward(request, "public/viewAnnouncement.jsp");
-    }
-
 }

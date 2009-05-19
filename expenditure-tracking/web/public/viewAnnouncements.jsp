@@ -8,7 +8,9 @@
 <!-- public/viewAnnouncements.jsp -->
 
 
-<h2><bean:message key="process.announcement.title" bundle="EXPENDITURE_RESOURCES"/></h2>
+
+<%@page import="pt.ist.fenixWebFramework.servlets.filters.contentRewrite.RequestChecksumFilter"%>
+<%@page import="pt.ist.fenixWebFramework.servlets.filters.contentRewrite.GenericChecksumRewriter"%><h2><bean:message key="process.announcement.title" bundle="EXPENDITURE_RESOURCES"/></h2>
 
 
 <logic:empty name="announcements">
@@ -19,31 +21,25 @@
 		<cp:collectionPages url="/expendituresHome.do?method=showAcquisitionAnnouncements" 
 			pageNumberAttributeName="pageNumber" numberOfPagesAttributeName="numberOfPages" numberOfVisualizedPages="10"/>
 </p>
-	
+
 <logic:iterate id="announcement" name="announcements" indexId="Id">
-	<div class="infoop2">
-		<table class="tstyle1">
-			<tr>
-				<th><!-- <bean:message key="process.announcement.label.executionDays" bundle="EXPENDITURE_RESOURCES"/> --></th>
-				<td><fr:view name="announcement" property="creationDate"/></td>
-			</tr>
-			<tr>
-				<th><!-- <bean:message key="process.announcement.label.supplier" bundle="EXPENDITURE_RESOURCES"/> --></th>
-				<td><fr:view name="announcement" property="supplier.name"/></td>
-			</tr>
-			<tr>
-				<th><!-- <bean:message key="process.announcement.label.description" bundle="EXPENDITURE_RESOURCES"/> --></th>
-				<td><fr:view name="announcement" property="description"/></td>
-			</tr>
-			<tr>
-				<td colspan="2">
-					<html:link page="/expendituresHome.do?method=viewAnnouncement" paramId="announcementOid" paramName="announcement" paramProperty="OID">
-					<bean:message key="link.viewMore" bundle="EXPENDITURE_RESOURCES"/>
-					</html:link>
-				</td>
-			</tr>
-		</table>
-	</div>
+
+	<fr:view name="announcement">
+		<fr:layout name="expandable">
+		
+			<fr:property name="classes" value="infoop2"/>
+			<fr:property name="smallLayout" value="tabular"/>
+			<fr:property name="smallSchema" value="viewAnnouncementShort.public"/>
+			<fr:property name="smallSubProperty(classes)" value="tstyle1"/>
+			<fr:property name="smallSubProperty(columnClasses)" value="width190px,,"/>
+			
+			<fr:property name="expandedLayout" value="tabular"/>
+			<fr:property name="expandedSchema" value="viewAnnouncementDetails.public"/>
+			<fr:property name="expandedSubProperty(classes)" value="tstyle1"/>
+			<fr:property name="expandedSubProperty(columnClasses)" value="width190px,,"/>
+			
+		</fr:layout>
+	</fr:view>
 </logic:iterate>
 
 <p class="aright mtop05">
