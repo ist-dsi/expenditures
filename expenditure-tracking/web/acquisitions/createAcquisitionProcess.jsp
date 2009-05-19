@@ -27,8 +27,6 @@
 </fr:form>
 
 <script type="text/javascript">
-
-	
 	$("input[id$='supplier_AutoComplete']").change(function() {
 				<%= "$.getJSON(\"" + request.getContextPath() + "/acquisitionSimplifiedProcedureProcess.do?method=checkSupplierLimit&supplierOid=\" + $(this).attr('value'),function(data, textStatus) {dealWith(data)})" %>
 			}); 
@@ -63,17 +61,7 @@
 
 			$("#createForm").before("<div id=\"limitInformation\"><div class=\"infoop4\">" + text + "</p><p><%= messageExtra %></p>");
 		}
-	}
-
-
-	function formatString(string, formatTokens) {
-		text = string;
-		for (i=0; i < formatTokens.length ; i++) {
-			text = text.replace(new RegExp("\\{" + i + "\\}"),formatTokens[i]);
-		}
-		return text;
-	}
-	
+	}	
 </script>
 
 	
