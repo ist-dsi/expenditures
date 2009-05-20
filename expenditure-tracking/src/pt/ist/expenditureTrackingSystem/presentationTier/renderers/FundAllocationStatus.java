@@ -84,8 +84,8 @@ public class FundAllocationStatus extends OutputRenderer {
 	    @Override
 	    public HtmlComponent createComponent(Object object, Class type) {
 		// AcquisitionRequest request = (AcquisitionRequest) object;
-		AcquisitionRequest request = (AcquisitionRequest) object;
-		AcquisitionProcessStateType stateType = request.getProcess().getAcquisitionProcessStateType();
+		RequestWithPayment request = (RequestWithPayment) object;
+
 		HtmlBlockContainer container = new HtmlBlockContainer();
 
 		boolean hasProjectFinancers = request.hasAnyProjectFinancers();
@@ -107,10 +107,17 @@ public class FundAllocationStatus extends OutputRenderer {
 		    boolean hasAllocatedFundsPermanentlyForAllProjectFinancers = request
 			    .hasAllocatedFundsPermanentlyForAllProjectFinancers();
 		    if (hasAllocatedFundsPermanentlyForAllProjectFinancers) {
-			if (stateType != AcquisitionProcessStateType.ACQUISITION_PROCESSED) {
-			    inlineStatus3.setClasses(getOnClass());
+			if (request instanceof AcquisitionRequest) {
+			    AcquisitionProcessStateType stateType = ((AcquisitionRequest) request).getProcess()
+				    .getAcquisitionProcessStateType();
+
+			    if (stateType != AcquisitionProcessStateType.ACQUISITION_PROCESSED) {
+				inlineStatus3.setClasses(getOnClass());
+			    } else {
+				inlineStatus3.setClasses(getMiddleClass());
+			    }
 			} else {
-			    inlineStatus3.setClasses(getMiddleClass());
+			    inlineStatus3.setClasses(getOnClass());
 			}
 		    } else {
 			inlineStatus3.setClasses(getOffClass());
@@ -122,10 +129,16 @@ public class FundAllocationStatus extends OutputRenderer {
 		inlineStatus4.addChild(new HtmlText(getState4()));
 		boolean hasAllEffectiveFundAllocationId = request.hasAllEffectiveFundAllocationId();
 		if (hasAllEffectiveFundAllocationId) {
-		    if (stateType != AcquisitionProcessStateType.ACQUISITION_PROCESSED) {
-			inlineStatus4.setClasses(getOnClass());
+		    if (request instanceof AcquisitionRequest) {
+			AcquisitionProcessStateType stateType = ((AcquisitionRequest) request).getProcess()
+				.getAcquisitionProcessStateType();
+			if (stateType != AcquisitionProcessStateType.ACQUISITION_PROCESSED) {
+			    inlineStatus4.setClasses(getOnClass());
+			} else {
+			    inlineStatus4.setClasses(getMiddleClass());
+			}
 		    } else {
-			inlineStatus4.setClasses(getMiddleClass());
+			inlineStatus4.setClasses(getOnClass());
 		    }
 		} else {
 		    inlineStatus4.setClasses(getOffClass());
