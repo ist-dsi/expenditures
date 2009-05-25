@@ -76,9 +76,9 @@ public class Person extends Person_Base {
     @Service
     public static Person createPerson(final CreatePersonBean createPersonBean) {
 	final String username = createPersonBean.getUsername();
-	final User user = User.findByUsername(username);
+	User user = User.findByUsername(username);
 	if (user == null) {
-	    new User(username);
+	    user = new User(username);
 	}
 	return user.getExpenditurePerson();
     }
