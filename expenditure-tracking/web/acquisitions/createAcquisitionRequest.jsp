@@ -66,7 +66,7 @@
 <div class="switchInline">
 	<form id="createFile" action="<%= request.getContextPath()+ url %>" method="post" target="iframe">
 		<p>
-			<a href="#" "><bean:message key="acquisitionProcess.link.createPurchaseOrderDocument" bundle="ACQUISITION_RESOURCES"/></a>
+			<a href="#"><bean:message key="acquisitionProcess.link.createPurchaseOrderDocument" bundle="ACQUISITION_RESOURCES"/></a>
 		</p>
 		<iframe id="iframe" name="iframe" src="" style="display: none;"></iframe>
 	</form>
