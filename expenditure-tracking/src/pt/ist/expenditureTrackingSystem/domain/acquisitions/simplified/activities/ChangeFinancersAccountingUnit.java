@@ -1,12 +1,9 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities;
 
-import java.util.Collection;
-
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
-import pt.ist.expenditureTrackingSystem.domain.dto.ChangeFinancerAccountingUnitBean;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AbstractChangeFinancersAccountingUnit;
 
-public class ChangeFinancersAccountingUnit extends GenericAcquisitionProcessActivity {
+public class ChangeFinancersAccountingUnit extends AbstractChangeFinancersAccountingUnit<RegularAcquisitionProcess> {
 
     @Override
     protected boolean isAccessible(RegularAcquisitionProcess process) {
@@ -15,18 +12,8 @@ public class ChangeFinancersAccountingUnit extends GenericAcquisitionProcessActi
 
     @Override
     protected boolean isAvailable(RegularAcquisitionProcess process) {
-	return  super.isAvailable(process) && process.getAcquisitionProcessState().isInAllocatedToSupplierState()
-		// && process.hasAllocatedFundsForAllProjectFinancers()
+	return isCurrentUserProcessOwner(process) && process.getAcquisitionProcessState().isInAllocatedToSupplierState()
 		&& process.getAcquisitionRequest().hasAnyAccountingUnitFinancerWithNoFundsAllocated(getLoggedPerson());
-    }
-
-    @Override
-    protected void process(RegularAcquisitionProcess process, Object... objects) {
-	Collection<ChangeFinancerAccountingUnitBean> financersBean = (Collection<ChangeFinancerAccountingUnitBean>) objects[0];
-	for (ChangeFinancerAccountingUnitBean changeFinancerAccountingUnitBean : financersBean) {
-	    changeFinancerAccountingUnitBean.getFinancer()
-		    .setAccountingUnit(changeFinancerAccountingUnitBean.getAccountingUnit());
-	}
     }
 
 }

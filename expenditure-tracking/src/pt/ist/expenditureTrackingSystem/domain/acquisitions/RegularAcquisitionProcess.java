@@ -251,14 +251,4 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
     public boolean isInAllocatedToUnitState() {
 	return getAcquisitionProcessState().isInAllocatedToUnitState();
     }
-
-    public boolean isProjectAccountingEmployeeForOnePossibleUnit() {
-	final Person loggedPerson = getLoggedPerson();
-	return loggedPerson != null && isProjectAccountingEmployeeForOnePossibleUnit(loggedPerson);
-    }
-
-    private boolean isProjectAccountingEmployeeForOnePossibleUnit(final Person person) {
-	return getRequest().isProjectAccountingEmployeeForOnePossibleUnit(person);
-    }
-
 }

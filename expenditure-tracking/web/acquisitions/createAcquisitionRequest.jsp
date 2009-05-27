@@ -63,6 +63,12 @@
 
 <bean:define id="url"><%= actionMapping %>.do?method=createAcquisitionPurchaseOrderDocument&amp;acquisitionProcessOid=<%= acquisitionProcessOID %></bean:define>
 
+<logic:present name="acquisitionProcess" property="acquisitionRequest.purchaseOrderDocument">
+	<div class="infoop4">
+			<bean:message key="label.warning.purchaseOrderDocumentAlreadyExists" bundle="ACQUISITION_RESOURCES"/>
+	</div>
+</logic:present>
+
 <div class="switchInline">
 	<form id="createFile" action="<%= request.getContextPath()+ url %>" method="post" target="iframe">
 		<p>

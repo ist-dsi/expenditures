@@ -120,6 +120,15 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
 	return getRequest().isAccountingEmployee(person);
     }
 
+    public boolean isProjectAccountingEmployeeForOnePossibleUnit() {
+	final Person loggedPerson = getLoggedPerson();
+	return loggedPerson != null && isProjectAccountingEmployeeForOnePossibleUnit(loggedPerson);
+    }
+
+    private boolean isProjectAccountingEmployeeForOnePossibleUnit(final Person person) {
+	return getRequest().isProjectAccountingEmployeeForOnePossibleUnit(person);
+    }
+    
     public boolean isAccountingEmployee() {
 	final Person loggedPerson = getLoggedPerson();
 	return loggedPerson != null && isAccountingEmployee(loggedPerson);

@@ -2,7 +2,10 @@ package pt.ist.expenditureTrackingSystem.presentationTier.actions.acquisitions;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,16 +15,19 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.SearchRefundProcesses;
+import pt.ist.expenditureTrackingSystem.domain.dto.ChangeFinancerAccountingUnitBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateRefundProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.EditRefundInvoiceBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.RefundInvoiceBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.RefundItemBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.VariantBean;
+import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 import pt.ist.fenixWebFramework.struts.annotations.Forward;
 import pt.ist.fenixWebFramework.struts.annotations.Forwards;
@@ -353,5 +359,28 @@ public class RefundProcessAction extends PaymentProcessAction {
 	    final HttpServletRequest request, final HttpServletResponse response) {
 
 	return executeActivityAndViewProcess(mapping, form, request, response, "CancelRefundProcess");
+    }
+
+    public ActionForward executeChangeFinancersAccountingUnit(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final Person person = getLoggedPerson();
+	RefundProcess process = getProcess(request);
+	Set<Financer> financersWithFundsAllocated = process.getRequest().getAccountingUnitFinancerWithNoFundsAllocated(person);
+	Set<ChangeFinancerAccountingUnitBean> financersBean = new HashSet<ChangeFinancerAccountingUnitBean>(
+		financersWithFundsAllocated.size());
+	for (Financer financer : financersWithFundsAllocated) {
+	    financersBean.add(new ChangeFinancerAccountingUnitBean(financer, financer.getAccountingUnit()));
+	}
+	request.setAttribute("process", process);
+	request.setAttribute("financersBean", financersBean);
+	return forward(request, "/acquisitions/refund/changeFinancersAccountingUnit.jsp");
+    }
+
+    public ActionForward changeFinancersAccountingUnit(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	Collection<ChangeFinancerAccountingUnitBean> financersBean = getRenderedObject();
+	RefundProcess process = getDomainObject(request, "processOid");
+	genericActivityExecution(process, "ChangeFinancersAccountingUnit", financersBean);
+	return viewRefundProcess(mapping, request, process);
     }
 }
