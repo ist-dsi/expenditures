@@ -34,7 +34,6 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activitie
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.DistributeRealValuesForPayingUnits;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.EditAcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.EditAcquisitionRequestItemRealValues;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.FixInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.FundAllocationExpirationDate;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.LockInvoiceReceiving;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.PayAcquisition;
@@ -120,7 +119,6 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	requestInformationActivities.add(new LockInvoiceReceiving());
 	requestInformationActivities.add(new RemoveInvoice());
 
-	requestInformationActivities.add(new FixInvoice());
 	requestInformationActivities.add(new SubmitForConfirmInvoice());
 	requestInformationActivities.add(new ConfirmInvoice());
 	requestInformationActivities.add(new CancelInvoiceConfirmation());
