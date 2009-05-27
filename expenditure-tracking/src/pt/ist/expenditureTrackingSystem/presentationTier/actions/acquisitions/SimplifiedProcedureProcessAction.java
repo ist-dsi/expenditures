@@ -109,6 +109,10 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	    this.hasMoreInvoices = hasMoreInvoices;
 	}
 
+	public ReceiveInvoiceForm() {
+
+	}
+
 	public ReceiveInvoiceForm(AcquisitionRequest request) {
 	    setRequest(request);
 	    setItems(new ArrayList<AcquisitionRequestItem>(request.getAcquisitionRequestItemsSet()));

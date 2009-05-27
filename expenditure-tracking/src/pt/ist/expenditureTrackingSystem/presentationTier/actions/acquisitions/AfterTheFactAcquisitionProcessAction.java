@@ -6,6 +6,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import myorg.domain.exceptions.DomainException;
+
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -54,8 +56,14 @@ public class AfterTheFactAcquisitionProcessAction extends ProcessAction {
     public ActionForward createNewAfterTheFactAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	AfterTheFactAcquisitionProcessBean afterTheFactAcquisitionProcessBean = getRenderedObject();
-	final AfterTheFactAcquisitionProcess afterTheFactAcquisitionProcess = AfterTheFactAcquisitionProcess
-		.createNewAfterTheFactAcquisitionProcess(afterTheFactAcquisitionProcessBean);
+	final AfterTheFactAcquisitionProcess afterTheFactAcquisitionProcess;
+	try {
+	    afterTheFactAcquisitionProcess = AfterTheFactAcquisitionProcess
+		    .createNewAfterTheFactAcquisitionProcess(afterTheFactAcquisitionProcessBean);
+	} catch (pt.ist.expenditureTrackingSystem.domain.DomainException e) {
+	    addMessage(e.getMessage(), getBundle(), e.getArgs());
+	    return prepareCreateAfterTheFactAcquisitionProcess(mapping, form, request, response);
+	}
 	return viewAfterTheFactAcquisitionProcess(mapping, request, afterTheFactAcquisitionProcess);
     }
 
@@ -99,7 +107,7 @@ public class AfterTheFactAcquisitionProcessAction extends ProcessAction {
 	final AfterTheFactAcquisitionProcess afterTheFactAcquisitionProcess = getDomainObject(request,
 		"afterTheFactAcquisitionProcessOid");
 	request.setAttribute("afterTheFactAcquisitionProcess", afterTheFactAcquisitionProcess);
-	final ReceiveInvoiceForm receiveInvoiceForm = new ReceiveInvoiceForm(null);
+	final ReceiveInvoiceForm receiveInvoiceForm = new ReceiveInvoiceForm();
 
 	final AcquisitionAfterTheFact acquisitionAfterTheFact = afterTheFactAcquisitionProcess.getAcquisitionAfterTheFact();
 	if (acquisitionAfterTheFact.hasInvoice()) {
@@ -200,4 +208,8 @@ public class AfterTheFactAcquisitionProcessAction extends ProcessAction {
 	return listImports(mapping, form, request, response);
     }
 
+    @Override
+    protected String getBundle() {
+	return "ACQUISITION_RESOURCES";
+    }
 }

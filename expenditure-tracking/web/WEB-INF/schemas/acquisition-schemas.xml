@@ -286,6 +286,23 @@
 		<slot name="filename" key="acquisitionProcess.label.filename" bundle="ACQUISITION_RESOURCES"/>
 </schema>
 
+<schema name="receiveInvoiceForm.afterTheFact"
+		type="pt.ist.expenditureTrackingSystem.presentationTier.actions.acquisitions.SimplifiedProcedureProcessAction$ReceiveInvoiceForm"
+		bundle="ACQUISITION_RESOURCES">
+	<slot name="invoiceNumber" key="acquisitionProcess.label.invoice.number" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="invoiceDate" layout="picker" key="acquisitionProcess.label.invoice.date" bundle="ACQUISITION_RESOURCES">
+		<property name="format" value="dd-MM-yyyy"/>
+		<validator class="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+		<validator class="pt.ist.fenixWebFramework.renderers.validators.DateValidator">
+			<property name="dateFormat" value="dd-MM-yyyy"/>
+		</validator>
+	</slot>
+	<slot name="inputStream" key="acquisitionProcess.label.invoice.file" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="fileNameSlot" value="filename" />
+		<property name="size" value="30"/>
+	</slot>
+</schema>
+
 <schema name="receiveInvoiceForm"
 		type="pt.ist.expenditureTrackingSystem.presentationTier.actions.acquisitions.SimplifiedProcedureProcessAction$ReceiveInvoiceForm"
 		bundle="ACQUISITION_RESOURCES">

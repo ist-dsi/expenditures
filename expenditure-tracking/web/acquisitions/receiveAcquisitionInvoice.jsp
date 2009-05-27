@@ -43,7 +43,7 @@
 <fr:form action="<%= urlSave %>" encoding="multipart/form-data">
 	<fr:edit id="receiveInvoiceForm"
 			name="receiveInvoiceForm"
-			schema="receiveInvoiceForm">
+			schema="receiveInvoiceForm.afterTheFact">
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="form mtop05"/>
 			<fr:property name="columnClasses" value=",,tderror"/>
