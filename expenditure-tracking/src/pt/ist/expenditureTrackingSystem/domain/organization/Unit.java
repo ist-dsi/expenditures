@@ -137,6 +137,17 @@ public class Unit extends Unit_Base {
 	return false;
     }
 
+    public Authorization findClosestAuthorization(final Person person, final Money money) {
+	for (final Authorization authorization : getAuthorizationsSet()) {
+	    if (authorization.getPerson() == person && authorization.isValid()) {
+		if (authorization.getMaxAmount().isGreaterThanOrEqual(money)) {
+		    return authorization;
+		}
+	    }
+	}
+	return hasParentUnit() ? getParentUnit().findClosestAuthorization(person, money) : null;
+    }
+
     public String getPresentationName() {
 	return getName();
     }
