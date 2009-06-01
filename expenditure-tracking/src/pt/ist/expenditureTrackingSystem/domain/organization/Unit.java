@@ -224,8 +224,8 @@ public class Unit extends Unit_Base {
 		: hasAnyAuthorizationForAmount(money) ? hasAuthorizationsFor(person, money) : hasParentUnit()
 			&& getParentUnit().isMostDirectAuthorization(person, money);
     }
-    
-     public boolean isTreasuryMember(Person person) {
+
+    public boolean isTreasuryMember(Person person) {
 	final AccountingUnit accountingUnit = getAccountingUnit();
 	if (accountingUnit == null) {
 	    final Unit parentUnit = getParentUnit();
@@ -233,7 +233,6 @@ public class Unit extends Unit_Base {
 	}
 	return accountingUnit.getTreasuryMembersSet().contains(person);
     }
-    
 
     public Set<PaymentProcess> getProcesses(PaymentProcessYear year) {
 	Set<PaymentProcess> processes = new HashSet<PaymentProcess>();
@@ -250,7 +249,7 @@ public class Unit extends Unit_Base {
 	List<Unit> units = new ArrayList<Unit>();
 	for (Unit unit : getSubUnits()) {
 	    units.add(unit);
-	    units.addAll(unit.getSubUnits());
+	    units.addAll(unit.getAllSubUnits());
 	}
 	return units;
     }
