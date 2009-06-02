@@ -154,6 +154,7 @@ public class EncodingFixer {
 	resolutionCounter.printResults();
     }
 
+    @SuppressWarnings(value={"unchecked"})
     private static void fixConnectedObjects(final AbstractDomainObject abstractDomainObject, final ResolutionCounter resolutionCounter) throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, UnsupportedEncodingException, CharacterCodingException {
 	final DomainClass domainClass = findDomainClass(abstractDomainObject);
 	for (final Role role : domainClass.getRoleSlotsList()) {
@@ -173,12 +174,14 @@ public class EncodingFixer {
 	}
     }
 
+    @SuppressWarnings(value={"unchecked"})
     private static Object callGetter(final AbstractDomainObject abstractDomainObject, final String fieldName) throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
 	final Class clazz = abstractDomainObject.getClass();
-	final Method method = clazz.getMethod("get" + StringUtils.capitalize(fieldName), null);
-	return method.invoke(abstractDomainObject, null);
+	final Method method = clazz.getMethod("get" + StringUtils.capitalize(fieldName));
+	return method.invoke(abstractDomainObject);
     }
 
+    @SuppressWarnings(value={"unchecked"})
     private static Object callSetter(final AbstractDomainObject abstractDomainObject, final String fieldName, final Object value) throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
 	final Class clazz = abstractDomainObject.getClass();
 	final Method method = clazz.getMethod("set" + StringUtils.capitalize(fieldName), value.getClass());
@@ -375,7 +378,7 @@ public class EncodingFixer {
 	final CharsetDecoder charsetDecoder = ThreadLocalCoders.decoderFor(charset)
 		.onMalformedInput(CodingErrorAction.REPORT).onUnmappableCharacter(CodingErrorAction.REPORT);
 	final CharBuffer charBuffer = charsetDecoder.decode(byteBuffer);
-	final CodingErrorAction codingErrorAction = charsetDecoder.malformedInputAction();
+//	final CodingErrorAction codingErrorAction = charsetDecoder.malformedInputAction();
 	return charBuffer.toString().indexOf(charsetDecoder.replacement()) < 0;
     }
 
