@@ -75,7 +75,9 @@ public class Financer extends Financer_Base {
     public Money getRealShareValue() {
 	Money amount = Money.ZERO;
 	for (UnitItem unitItem : getUnitItemsSet()) {
-	    amount = amount.addAndRound(unitItem.getRealShareValue());
+	    if (unitItem.getRealShareValue() != null) {
+		amount = amount.addAndRound(unitItem.getRealShareValue());
+	    }
 	}
 	return amount;
     }
@@ -251,7 +253,7 @@ public class Financer extends Financer_Base {
     public boolean isFundAllocationPresent() {
 	return getFundAllocationId() != null;
     }
-    
+
     public boolean isEffectiveFundAllocationPresent() {
 	return getEffectiveFundAllocationId() != null;
     }
