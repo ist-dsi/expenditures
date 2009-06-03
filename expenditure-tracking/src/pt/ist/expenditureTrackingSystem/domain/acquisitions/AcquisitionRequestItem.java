@@ -267,6 +267,10 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	return super.getUnconfirmedInvoices(person);
     }
 
+    public List<AcquisitionInvoice> getAllUnconfirmedInvoices() {
+	return super.getUnconfirmedInvoices(null);
+    }
+
     public Money getTotalVatValue() {
 	return getTotalItemValue().percentage(getVatValue());
     }

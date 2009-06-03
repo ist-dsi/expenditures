@@ -72,6 +72,14 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
 	return invoices;
     }
 
+    public Set<AcquisitionInvoice> getAllUnconfirmedInvoices() {
+	Set<AcquisitionInvoice> invoices = new HashSet<AcquisitionInvoice>();
+	for (AcquisitionRequestItem item : getAcquisitionRequest().getAcquisitionRequestItemsSet()) {
+	    invoices.addAll(item.getAllUnconfirmedInvoices());
+	}
+	return invoices;
+    }
+
     public void confirmInvoiceBy(Person person) {
 	getAcquisitionRequest().confirmInvoiceFor(person);
 	if (getAcquisitionRequest().isInvoiceConfirmedBy() && getLastAcquisitionProcessState().isPendingInvoiceConfirmation()) {
@@ -163,6 +171,9 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
 
     public void submitedForInvoiceConfirmation() {
 	new AcquisitionProcessState(this, AcquisitionProcessStateType.SUBMITTED_FOR_CONFIRM_INVOICE);
+	if (getAllUnconfirmedInvoices().isEmpty()) {
+	    confirmInvoice();
+	}
     }
 
     public void submitForFundAllocation() {
