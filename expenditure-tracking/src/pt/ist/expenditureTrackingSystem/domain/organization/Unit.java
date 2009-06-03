@@ -137,6 +137,16 @@ public class Unit extends Unit_Base {
 	return false;
     }
 
+    public boolean isResponsible(final Person person, final Money amount) {
+	for (Authorization authorization : person.getAuthorizationsSet()) {
+	    if (authorization.isValid() && authorization.getMaxAmount().isGreaterThan(amount)
+		    && isSubUnit(authorization.getUnit())) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
     public Authorization findClosestAuthorization(final Person person, final Money money) {
 	for (final Authorization authorization : getAuthorizationsSet()) {
 	    if (authorization.getPerson() == person && authorization.isValid()) {
