@@ -350,9 +350,8 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
     }
 
     public boolean hasAllocatedFundsPermanentlyForAllProjectFinancers() {
-	for (final Financer financer : getFinancersSet()) {
-	    if (financer.getRealShareValue().isGreaterThan(Money.ZERO)
-		    && !financer.hasAllocatedFundsPermanentlyForAllProjectFinancers()) {
+	for (final Financer financer : getFinancersWithFundsAllocated()) {
+	    if (!financer.hasAllocatedFundsPermanentlyForAllProjectFinancers()) {
 		return false;
 	    }
 	}
