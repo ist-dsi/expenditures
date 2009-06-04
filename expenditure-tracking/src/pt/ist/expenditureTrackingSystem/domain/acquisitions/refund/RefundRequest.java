@@ -3,7 +3,10 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.refund;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
 import pt.ist.expenditureTrackingSystem.domain.dto.RefundItemBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
@@ -80,6 +83,13 @@ public class RefundRequest extends RefundRequest_Base {
 	    refundItem.getSuppliers(suppliers);
 	}
 	return suppliers;
+    }
+
+    @Override
+    public SortedSet<RefundItem> getOrderedRequestItemsSet() {
+	SortedSet<RefundItem> set = new TreeSet<RefundItem>(RefundItem.COMPARATOR);
+	set.addAll(getRefundItemsSet());
+	return set;
     }
 
 }

@@ -1,6 +1,7 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.refund;
 
 import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.Set;
 
 import myorg.domain.util.Money;
@@ -17,6 +18,15 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.fenixWebFramework.services.Service;
 
 public class RefundItem extends RefundItem_Base {
+
+    public static final Comparator<RefundItem> COMPARATOR = new Comparator<RefundItem>() {
+
+	public int compare(RefundItem arg0, RefundItem arg1) {
+	    final int c = arg0.getDescription().compareTo(arg1.getDescription());
+	    return c == 0 ? arg0.getIdInternal().compareTo(arg1.getIdInternal()) : c;
+	}
+
+    };
 
     public RefundItem(RefundRequest request, Money valueEstimation, CPVReference reference, String description) {
 	super();

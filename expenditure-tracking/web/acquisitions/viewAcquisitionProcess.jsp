@@ -329,7 +329,7 @@
 </logic:notEmpty>
 
 
-<bean:define id="itemSet" name="acquisitionProcess" property="acquisitionRequest.orderedAcquisitionRequestItemsSet"/> 
+<bean:define id="itemSet" name="acquisitionProcess" property="acquisitionRequest.orderedRequestItemsSet"/> 
 <logic:present name="itemSet">
 	
 		<logic:equal  name="acquisitionProcess" property="pastInvoiceReceived"  value="true">		

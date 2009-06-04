@@ -490,11 +490,6 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	return (HashSet<AcquisitionRequestItem>) addAcquisitionRequestItemsSetToArg(new HashSet<AcquisitionRequestItem>());
     }
 
-    public SortedSet<AcquisitionRequestItem> getOrderedAcquisitionRequestItemsSet() {
-	return (SortedSet<AcquisitionRequestItem>) addAcquisitionRequestItemsSetToArg(new TreeSet<AcquisitionRequestItem>(
-		AcquisitionRequestItem.COMPARATOR_BY_REFERENCE));
-    }
-
     public Collection<AcquisitionRequestItem> addAcquisitionRequestItemsSetToArg(
 	    final Collection<AcquisitionRequestItem> collection) {
 	for (final RequestItem item : getRequestItems()) {
@@ -521,6 +516,12 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	    }
 	}
 	return false;
+    }
+
+    @Override
+    public SortedSet<AcquisitionRequestItem> getOrderedRequestItemsSet() {
+	return (SortedSet<AcquisitionRequestItem>) addAcquisitionRequestItemsSetToArg(new TreeSet<AcquisitionRequestItem>(
+		AcquisitionRequestItem.COMPARATOR_BY_REFERENCE));
     }
 
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
 
 import org.joda.time.LocalDate;
 
@@ -544,4 +545,6 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
 	}
 	return false;
     }
+
+    public abstract SortedSet<? extends RequestItem> getOrderedRequestItemsSet();
 }

@@ -878,7 +878,7 @@
 		<property name="subLayout" value="default"/>
 		<property name="javascriptEnabled" value="true"/>
 		<property name="useParent" value="true"/>
-		<property name="list" value="request.requestItems"/>
+		<property name="list" value="request.orderedRequestItemsSet"/>
 		<property name="prefix" value="Item"/>
 		<property name="prefixClasses" value="bold"/>
 		<property name="counterEnabled" value="yes"/>

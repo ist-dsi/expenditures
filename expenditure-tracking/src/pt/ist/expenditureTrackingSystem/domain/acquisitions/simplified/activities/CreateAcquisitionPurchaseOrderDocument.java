@@ -62,7 +62,7 @@ public class CreateAcquisitionPurchaseOrderDocument extends GenericAcquisitionPr
 
     private void createBeansLists(AcquisitionRequest acquisitionRequest, DeliveryLocalList deliveryLocalList,
 	    List<AcquisitionRequestItemBean> acquisitionRequestItemBeans) {
-	for (AcquisitionRequestItem acquisitionRequestItem : acquisitionRequest.getOrderedAcquisitionRequestItemsSet()) {
+	for (AcquisitionRequestItem acquisitionRequestItem : acquisitionRequest.getOrderedRequestItemsSet()) {
 	    DeliveryLocal deliveryLocal = deliveryLocalList.getDeliveryLocal(acquisitionRequestItem.getRecipient(),
 		    acquisitionRequestItem.getRecipientPhone(), acquisitionRequestItem.getRecipientEmail(),
 		    acquisitionRequestItem.getAddress());
