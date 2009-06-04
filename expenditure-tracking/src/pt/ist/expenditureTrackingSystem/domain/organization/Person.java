@@ -1,21 +1,22 @@
 package pt.ist.expenditureTrackingSystem.domain.organization;
 
+import java.text.Collator;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import org.apache.commons.collections.Predicate;
 
 import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.MyOrg;
 import myorg.domain.User;
 import myorg.domain.util.Address;
 import myorg.util.Counter;
+
+import org.apache.commons.collections.Predicate;
+
 import pt.ist.expenditureTrackingSystem.domain.DashBoard;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.Options;
@@ -42,6 +43,17 @@ import pt.ist.fenixframework.pstm.Transaction;
 import dml.runtime.RelationAdapter;
 
 public class Person extends Person_Base {
+
+    public static final Comparator<Person> COMPARATOR_BY_NAME = new Comparator<Person>() {
+
+	@Override
+	public int compare(Person person1, Person person2) {
+	    final String name1 = person1.getName();
+	    final String name2 = person2.getName();
+	    return Collator.getInstance().compare(name1, name2);
+	}
+
+    };
 
     public static class UserMyOrgListener extends RelationAdapter<User, MyOrg> {
 
