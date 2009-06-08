@@ -39,7 +39,7 @@
 			<fr:view name="invoice" property="invoiceNumber"/>
 		</td>
 		<td>
-			<fr:view name="invoice" property="invoiceDate"/>
+			<fr:view name="invoice" property="invoiceDate" type="org.joda.time.LocalDate"/>
 		</td>
 		<td>
 			<html:link action='<%= actionMapping + ".do?method=downloadInvoice" %>' paramId="invoiceOID" paramName="invoice" paramProperty="invoice.OID">

@@ -249,7 +249,7 @@
 					<logic:iterate id="invoice" name="refundItem" property="invoices">
 												<tr>
 							<td class="nowrap" rowspan="2" style="border-right: 1px solid #eee !important;"><fr:view name="invoice" property="invoiceNumber"/></td>
-							<td class="nowrap"><fr:view name="invoice" property="invoiceDate"/></td>
+							<td class="nowrap"><fr:view name="invoice" property="invoiceDate" type="org.joda.time.LocalDate"/></td>
 							<td class="nowrap"><fr:view name="invoice" property="value"/></td>
 							<td class="nowrap"><fr:view name="invoice" property="vatValue"/></td>
 							<td class="nowrap"><fr:view name="invoice" property="valueWithVat"/></td>
