@@ -38,7 +38,7 @@ public class RefundInvoice extends RefundInvoice_Base {
 	    throw new DomainException("refundItem.message.info.realValueLessThanRefundableValue");
 	}
 
-	if (value.addPercentage(vatValue).isLessThan(refundableValue)) {
+	if (new Money(value.addPercentage(vatValue).getRoundedValue()).isLessThan(refundableValue)) {
 	    throw new DomainException("refundItem.message.info.refundableValueCannotBeBiggerThanInvoiceValue");
 	}
     }
