@@ -180,7 +180,7 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
 
     public boolean hasAnyFundAllocationId() {
 	for (Financer financer : getFinancers()) {
-	    if (financer.getAmountAllocated().isPositive() && financer.hasFundAllocationId()) {
+	    if (/*financer.getAmountAllocated().isPositive() &&*/ financer.hasFundAllocationId()) {
 		return true;
 	    }
 	}
