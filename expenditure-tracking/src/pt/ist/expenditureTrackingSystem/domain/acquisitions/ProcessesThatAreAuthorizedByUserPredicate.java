@@ -35,7 +35,7 @@ public class ProcessesThatAreAuthorizedByUserPredicate implements Predicate {
 
     private boolean evaluate(Unit unit, PaymentProcess process) {
 
-	if (unit.hasAuthorizationsFor(person) && process.hasAnyAvailableActivitity()) {
+	if (unit.hasAuthorizationsFor(person)) {
 	    return true;
 	} else {
 	    for (Authorization authorization : unit.getAuthorizations()) {
