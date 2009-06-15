@@ -10,9 +10,11 @@ import org.joda.time.LocalDate;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestWithPayment;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.UnitItem;
 import pt.ist.expenditureTrackingSystem.domain.dto.RefundItemBean;
+import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.fenixWebFramework.services.Service;
@@ -149,6 +151,18 @@ public class RefundItem extends RefundItem_Base {
 	final RequestWithPayment requestWithPayment = getRequest();
 	final RefundProcess refundProcess = requestWithPayment.getProcess();
 	return refundProcess.isActive() && refundProcess.isAppiableForYear(year);
+    }
+
+    @Override
+    public void confirmInvoiceBy(Person person) {
+	for (UnitItem unitItem : getUnitItems()) {
+	    if (getRequest().getProcess().isAccountingEmployee(person)) {
+		unitItem.getConfirmedInvoices().clear();
+		for (PaymentProcessInvoice invoice : getInvoicesFiles()) {
+		    unitItem.addConfirmedInvoices(invoice);
+		}
+	    }
+	}
     }
 
 }
