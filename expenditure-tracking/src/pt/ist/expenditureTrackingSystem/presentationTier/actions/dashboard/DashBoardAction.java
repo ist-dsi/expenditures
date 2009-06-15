@@ -15,6 +15,7 @@ import myorg.presentationTier.actions.ContextBaseAction;
 import myorg.util.Counter;
 
 import org.apache.commons.beanutils.BeanComparator;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 import org.apache.commons.collections.comparators.ReverseComparator;
 import org.apache.struts.action.ActionForm;
@@ -78,6 +79,18 @@ public class DashBoardAction extends ContextBaseAction {
 	request.setAttribute("refundCounters", refundCounters);
 
 	List<PaymentProcess> myProcesses = loggedPerson.getAcquisitionProcesses(PaymentProcess.class);
+	CollectionUtils.filter(myProcesses, new Predicate() {
+
+	    @Override
+	    public boolean evaluate(Object arg0) {
+		if (arg0 instanceof AcquisitionProcess) {
+		    return !((AcquisitionProcess) arg0).isPayed();
+		}
+
+		return true;
+	    }
+
+	});
 	Collections.sort(myProcesses, new ReverseComparator(new BeanComparator("acquisitionProcessId")));
 	request.setAttribute("ownProcesses", myProcesses.subList(0, Math.min(10, myProcesses.size())));
 
