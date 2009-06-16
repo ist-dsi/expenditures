@@ -9,7 +9,9 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.beanutils.BeanComparator;
 import org.apache.commons.collections.comparators.ComparatorChain;
+import org.apache.commons.collections.comparators.ReverseComparator;
 import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -38,40 +40,46 @@ public class SearchPaymentProcessesAction extends BaseAction {
 
     private static final int REQUESTS_PER_PAGE = 50;
 
-    private ActionForward search(final ActionMapping mapping, final HttpServletRequest request, SearchPaymentProcess searchBean,
-	    boolean advanced) {
+    private static final String DEFAULT_SORT = "acquisitionProcessId";
 
-	return search(mapping, request, searchBean, advanced, false);
+    private static final ComparatorChain DEFAULT_COMPARATOR = new ComparatorChain();
+
+    static {
+	DEFAULT_COMPARATOR.addComparator(new Comparator<PaymentProcess>() {
+
+	    @Override
+	    public int compare(PaymentProcess process1, PaymentProcess process2) {
+		return process1.getPaymentProcessYear().getYear().compareTo(process2.getPaymentProcessYear().getYear());
+	    }
+
+	});
+	DEFAULT_COMPARATOR.addComparator(new Comparator<PaymentProcess>() {
+
+	    @Override
+	    public int compare(PaymentProcess process1, PaymentProcess process2) {
+		return process1.getAcquisitionProcessNumber().compareTo(process2.getAcquisitionProcessNumber());
+
+	    }
+
+	});
+
     }
 
     private ActionForward search(final ActionMapping mapping, final HttpServletRequest request, SearchPaymentProcess searchBean,
-	    boolean advanced, boolean skipSearch) {
+	    boolean advanced) {
+
+	return search(mapping, request, searchBean, advanced, false, getComparator(request));
+    }
+
+    private ActionForward search(final ActionMapping mapping, final HttpServletRequest request, SearchPaymentProcess searchBean,
+	    boolean advanced, boolean skipSearch, Comparator<PaymentProcess> comparator) {
 	Person loggedPerson = getLoggedPerson();
 
 	List<PaymentProcess> processes = new ArrayList<PaymentProcess>();
 	if (!skipSearch) {
 	    processes.addAll(searchBean.search());
 
-	    ComparatorChain chain = new ComparatorChain();
-	    chain.addComparator(new Comparator<PaymentProcess>() {
-
-		@Override
-		public int compare(PaymentProcess process1, PaymentProcess process2) {
-		    return process1.getPaymentProcessYear().getYear().compareTo(process2.getPaymentProcessYear().getYear());
-		}
-
-	    });
-	    chain.addComparator(new Comparator<PaymentProcess>() {
-
-		@Override
-		public int compare(PaymentProcess process1, PaymentProcess process2) {
-		    return process1.getAcquisitionProcessNumber().compareTo(process2.getAcquisitionProcessNumber());
-
-		}
-
-	    });
-
-	    Collections.sort(processes, chain);
+	    Collections.sort(processes, comparator);
 	}
 	final CollectionPager<SearchPaymentProcess> pager = new CollectionPager<SearchPaymentProcess>((Collection) processes,
 		REQUESTS_PER_PAGE);
@@ -146,9 +154,8 @@ public class SearchPaymentProcessesAction extends BaseAction {
 	    final HttpServletRequest request, final HttpServletResponse response) {
 
 	SearchPaymentProcess searchBean = getRenderedObject("searchBean");
-
 	RenderUtils.invalidateViewState("searchBean");
-	return search(mapping, request, searchBean, true, true);
+	return search(mapping, request, searchBean, true, true, getComparator(request));
     }
 
     public ActionForward mySearches(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -320,5 +327,22 @@ public class SearchPaymentProcessesAction extends BaseAction {
 	}
 
 	return bean;
+    }
+
+    protected Comparator<PaymentProcess> getComparator(HttpServletRequest request) {
+	String sortParameter = request.getParameter("sortBy");
+	Comparator<PaymentProcess> comparator = null;
+
+	if (sortParameter == null) {
+	    comparator = DEFAULT_COMPARATOR;
+	} else {
+	    String[] split = sortParameter.split("=");
+	    comparator = split[0].equals(DEFAULT_SORT) ? DEFAULT_COMPARATOR : new BeanComparator(split[0]);
+	    if (split[1].indexOf("desc") > -1) {
+		comparator = new ReverseComparator(comparator);
+	    }
+	}
+
+	return comparator;
     }
 }

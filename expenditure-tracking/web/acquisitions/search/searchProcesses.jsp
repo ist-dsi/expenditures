@@ -86,7 +86,7 @@
 	
 	</td>
 	<td class="aright">
-	<cp:collectionPages url="<%= "/search.do?method=searchJump" + pagerString %>" 
+	<cp:collectionPages url="<%= "/search.do?method=searchJump" + pagerString + "&sortBy=" + request.getParameter("sortBy") %>" 
 			pageNumberAttributeName="pageNumber" numberOfPagesAttributeName="numberOfPages" numberOfVisualizedPages="10"/>
 	</td>
 	</tr>
@@ -123,17 +123,24 @@
 
 
 	<fr:view name="results" schema="viewProcessesInList">
-			<fr:layout name="tabular">
+			<fr:layout name="tabular-sortable">
 				<fr:property name="classes" value="plist mtop05 width100pc"/>
 				<fr:property name="columnClasses" value="width30px,,,,,,,,nowrap,,,,,,,,,,,,,,,"/>
 				<fr:property name="linkFormat(view)" value="/acquisition${class.simpleName}.do?method=viewProcess&processOid=${OID}"/>
 				<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
 				<fr:property name="key(view)" value="link.view"/>
 				<fr:property name="order(view)" value="1"/>
+				
+				<fr:property name="sortParameter" value="sortBy"/>
+	       		<fr:property name="sortUrl" value="<%= "/search.do?method=searchJump" + pagerString + "&pageNumber=" + (request.getParameter("pageNumber") != null ? request.getParameter("pageNumber") : 1)%>" />
+			    <fr:property name="sortBy" value="<%= request.getParameter("sortBy") == null ? "acquisitionProcessId=asc" : request.getParameter("sortBy") %>"/>
+				<fr:property name="sortIgnored" value="true"/>					
+				<fr:property name="sortableSlots" value="acquisitionProcessId, request.requestItemsCount, suppliersDescription, request.requester.firstAndLastName, dateFromLastActivity, request.requestingUnit.name, processStateDescription" />
+	
 			</fr:layout>
 	</fr:view>	
 	<p class="aright mtop05">
-		<cp:collectionPages url="<%= "/search.do?method=searchJump" + pagerString %>" 
+		<cp:collectionPages url="<%= "/search.do?method=searchJump" + pagerString + "&sortBy=" + request.getParameter("sortBy") %>" 
 			pageNumberAttributeName="pageNumber" numberOfPagesAttributeName="numberOfPages" numberOfVisualizedPages="10"/>
 	</p>
 	
