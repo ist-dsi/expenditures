@@ -28,8 +28,7 @@ import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 import pt.ist.fenixWebFramework.renderers.components.state.IViewState;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
-import pt.ist.fenixWebFramework.struts.annotations.Forward;
-import pt.ist.fenixWebFramework.struts.annotations.Forwards;
+import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.GenericChecksumRewriter;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
 @Mapping(path = "/acquisitionProcess")
@@ -70,7 +69,7 @@ public class RegularAcquisitionProcessAction extends PaymentProcessAction {
     public ActionForward viewAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final RegularAcquisitionProcess acquisitionProcess = getProcess(request);
-	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
+	return redirectToProcessPage(request, acquisitionProcess);
     }
 
     public ActionForward executeCancelAcquisitionRequest(final ActionMapping mapping, final ActionForm form,
@@ -78,7 +77,7 @@ public class RegularAcquisitionProcessAction extends PaymentProcessAction {
 	AcquisitionProcess acquisitionProcess = getProcess(request);
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
 	request.setAttribute("confirmCancelAcquisitionProcess", Boolean.TRUE);
-	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
+	return redirectToProcessPage(request, acquisitionProcess);
     }
 
     public ActionForward cancelAcquisitionRequest(final ActionMapping mapping, final ActionForm form,
@@ -144,7 +143,7 @@ public class RegularAcquisitionProcessAction extends PaymentProcessAction {
 	    addErrorMessage(e.getMessage(), getBundle(), e.getArgs());
 	    return executeCreateAcquisitionRequestItem(mapping, request, acquisitionProcess);
 	}
-	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
+	return redirectToProcessPage(request, acquisitionProcess);
     }
 
     public ActionForward executeActivityAndViewProcess(final ActionMapping mapping, final ActionForm form,
@@ -167,7 +166,7 @@ public class RegularAcquisitionProcessAction extends PaymentProcessAction {
 	AcquisitionProcess acquisitionProcess = item.getAcquisitionRequest().getAcquisitionProcess();
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
 	genericActivityExecution(acquisitionProcess, "DeleteAcquisitionRequestItem", item);
-	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
+	return viewAcquisitionProcess(mapping, form, request, response);
     }
 
     public ActionForward executeEditAcquisitionRequestItemPostBack(final ActionMapping mapping, final ActionForm form,
@@ -199,7 +198,7 @@ public class RegularAcquisitionProcessAction extends PaymentProcessAction {
 	    addErrorMessage(e.getMessage(), getBundle(), e.getArgs());
 	    return executeEditAcquisitionRequestItem(mapping, form, request, response);
 	}
-	return viewAcquisitionProcess(mapping, request, requestItemBean.getAcquisitionRequest().getAcquisitionProcess());
+	return viewAcquisitionProcess(mapping, form, request, response);
     }
 
     public ActionForward executeSubmitForApproval(final ActionMapping mapping, final ActionForm form,
@@ -225,7 +224,7 @@ public class RegularAcquisitionProcessAction extends PaymentProcessAction {
 	} catch (DomainException e) {
 	    addErrorMessage(e.getMessage(), getBundle());
 	}
-	return viewAcquisitionProcess(mapping, request, (AcquisitionProcess) getProcess(request));
+	return viewAcquisitionProcess(mapping, form, request, response);
     }
 
     @Override
@@ -244,7 +243,7 @@ public class RegularAcquisitionProcessAction extends PaymentProcessAction {
 	AcquisitionProcess process = getProcess(request);
 	genericActivityExecution(process, "SetSkipSupplierFundAllocation", new Object[] {});
 
-	return viewAcquisitionProcess(mapping, request, process);
+	return redirectToProcessPage(request, process);
     }
 
     public ActionForward executeRemovePermanentProjectFunds(final ActionMapping mapping, final ActionForm form,
@@ -253,7 +252,7 @@ public class RegularAcquisitionProcessAction extends PaymentProcessAction {
 	AcquisitionProcess process = getProcess(request);
 	genericActivityExecution(process, "RemovePermanentProjectFunds", new Object[] {});
 
-	return viewAcquisitionProcess(mapping, request, process);
+	return redirectToProcessPage(request, process);
     }
 
     public ActionForward executeUnsetSkipSupplierFundAllocation(final ActionMapping mapping, final ActionForm form,
@@ -266,7 +265,7 @@ public class RegularAcquisitionProcessAction extends PaymentProcessAction {
 	    addMessage(e.getLocalizedMessage(), getBundle(), new String[] {});
 	}
 
-	return viewAcquisitionProcess(mapping, request, process);
+	return redirectToProcessPage(request, process);
     }
 
     public ActionForward checkFundAllocations(final ActionMapping mapping, final ActionForm form,
@@ -305,5 +304,15 @@ public class RegularAcquisitionProcessAction extends PaymentProcessAction {
     protected AcquisitionRequestItem getRequestItem(HttpServletRequest request) {
 	AcquisitionRequestItem item = getDomainObject(request, "acquisitionRequestItemOid");
 	return item != null ? item : (AcquisitionRequestItem) super.getRequestItem(request);
+    }
+
+    protected ActionForward redirectToProcessPage(HttpServletRequest request, AcquisitionProcess process) {
+	ActionForward forward = new ActionForward();
+	forward.setRedirect(true);
+	String realPath = "/acquisition" + process.getClass().getSimpleName() + ".do?method=viewProcess&processOid="
+		+ process.getOID();
+	forward.setPath(realPath + "&" + GenericChecksumRewriter.CHECKSUM_ATTRIBUTE_NAME + "="
+		+ GenericChecksumRewriter.calculateChecksum(request.getContextPath() + realPath));
+	return forward;
     }
 }
