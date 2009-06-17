@@ -21,7 +21,6 @@ import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.ProcessesThatAreAuthorizedByUserPredicate;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
@@ -89,16 +88,28 @@ public abstract class GenericProcess extends GenericProcess_Base {
 
     public static <T extends PaymentProcess> Set<T> getProcessesForPerson(Class<T> processClass, final Person person,
 	    PaymentProcessYear year) {
-	return (Set<T>) (person.hasAnyAuthorizations() ? GenericProcess.getProcessesWithResponsible(processClass, person, year)
-		: GenericProcess.getAllProcess(processClass, new Predicate() {
 
-		    @Override
-		    public boolean evaluate(Object arg0) {
-			GenericProcess process = (GenericProcess) arg0;
-			return process.hasAnyAvailableActivity(person);
-		    }
+	Set<T> processes = null;
+	if (person.hasAnyAuthorizations()) {
+	    processes = new HashSet<T>();
+	    for (T process : GenericProcess.getProcessesWithResponsible(processClass, person, year)) {
+		if (process.hasAnyAvailableActivitity()) {
+		    processes.add(process);
+		}
+	    }
+	} else {
+	    processes = GenericProcess.getAllProcess(processClass, new Predicate() {
 
-		}, year));
+		@Override
+		public boolean evaluate(Object arg0) {
+		    GenericProcess process = (GenericProcess) arg0;
+		    return process.hasAnyAvailableActivity(person);
+		}
+
+	    }, year);
+	}
+
+	return processes;
     }
 
     public abstract <T extends GenericProcess> AbstractActivity<T> getActivityByName(String name);
