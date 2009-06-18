@@ -333,12 +333,12 @@ public class SearchPaymentProcessesAction extends BaseAction {
 	String sortParameter = request.getParameter("sortBy");
 	Comparator<PaymentProcess> comparator = null;
 
-	if (sortParameter == null) {
+	if (StringUtils.isEmpty(sortParameter)) {
 	    comparator = DEFAULT_COMPARATOR;
 	} else {
 	    String[] split = sortParameter.split("=");
 	    comparator = split[0].equals(DEFAULT_SORT) ? DEFAULT_COMPARATOR : new BeanComparator(split[0]);
-	    if (split[1].indexOf("desc") > -1) {
+	    if (split.length == 2 && split[1].indexOf("desc") > -1) {
 		comparator = new ReverseComparator(comparator);
 	    }
 	}

@@ -86,7 +86,7 @@
 	
 	</td>
 	<td class="aright">
-	<cp:collectionPages url="<%= "/search.do?method=searchJump" + pagerString + "&sortBy=" + request.getParameter("sortBy") %>" 
+	<cp:collectionPages url="<%= "/search.do?method=searchJump" + pagerString + "&sortBy=" + (request.getParameter("sortBy") != null ? request.getParameter("sortBy") : "") %>" 
 			pageNumberAttributeName="pageNumber" numberOfPagesAttributeName="numberOfPages" numberOfVisualizedPages="10"/>
 	</td>
 	</tr>
@@ -140,7 +140,7 @@
 			</fr:layout>
 	</fr:view>	
 	<p class="aright mtop05">
-		<cp:collectionPages url="<%= "/search.do?method=searchJump" + pagerString + "&sortBy=" + request.getParameter("sortBy") %>" 
+		<cp:collectionPages url="<%= "/search.do?method=searchJump" + pagerString + "&sortBy=" + (request.getParameter("sortBy") != null ? request.getParameter("sortBy") : "") %>" 
 			pageNumberAttributeName="pageNumber" numberOfPagesAttributeName="numberOfPages" numberOfVisualizedPages="10"/>
 	</p>
 	
