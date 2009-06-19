@@ -239,7 +239,7 @@ public class SyncProjectsAux {
     int createdSubProjects = 0;
     int updatedSubProjects = 0;
     int disconnectedSubProjects = 0;
-    private Map<String, String> teachers = new HashMap<String, String>();
+    private Map<String, String> employees = new HashMap<String, String>();
     private Set<Integer> projectResponsibles = new HashSet<Integer>();
 
     @Service
@@ -250,6 +250,7 @@ public class SyncProjectsAux {
 
 	System.out.println("Read " + mgpProjects.size() + " projects from mgp.");
 
+	loadEmployees();
 	loadTeachers();
 	loadProjectResponsiblesSet();
 
@@ -284,10 +285,36 @@ public class SyncProjectsAux {
 	    while (resultSetQuery.next()) {
 		final String username = resultSetQuery.getString(1);
 		final String teacherNumber = resultSetQuery.getString(2);
-		teachers.put(teacherNumber, username);
+		employees.put(teacherNumber, username);
 		c++;
 	    }
 	    System.out.println("Processed: " + c + " teachers.");
+	} finally {
+	    if (resultSetQuery != null) {
+		resultSetQuery.close();
+	    }
+	    if (statementQuery != null) {
+		statementQuery.close();
+	    }
+	}
+    }
+
+    private void loadEmployees() throws SQLException {
+	final Connection connection = Transaction.getCurrentJdbcConnection();
+
+	Statement statementQuery = null;
+	ResultSet resultSetQuery = null;
+	try {
+	    statementQuery = connection.createStatement();
+	    resultSetQuery = statementQuery.executeQuery("select fenix.USER.USER_U_ID, fenix.EMPLOYEE.EMPLOYEE_NUMBER from fenix.EMPLOYEE inner join fenix.USER on fenix.USER.KEY_PERSON = fenix.EMPLOYEE.KEY_PERSON;");
+	    int c = 0;
+	    while (resultSetQuery.next()) {
+		final String username = resultSetQuery.getString(1);
+		final String employeeNumber = resultSetQuery.getString(2);
+		employees.put(employeeNumber, username);
+		c++;
+	    }
+	    System.out.println("Processed: " + c + " employees.");
 	} finally {
 	    if (resultSetQuery != null) {
 		resultSetQuery.close();
@@ -361,10 +388,13 @@ public class SyncProjectsAux {
 	}
 
 	final Person responsible = findPerson(responsibleString);
-	    if (responsibleString.equals("953")) {
-		System.out.println("   resp string 953 has resopnsible: " + responsible);
+	    if (responsibleString.equals("3568")) {
+		System.out.println("   resp string 3568 has resopnsible: " + responsible);
 	    }
 	if (responsible != null) {
+	    if (responsibleString.equals("3568")) {
+		System.out.println("Found person.");
+	    }
 	    if (projectResponsibles.contains(Integer.valueOf(responsibleString))) {
 		if (!hasAuthorization(project, responsible)) {
 		    final Authorization authorization = new Authorization(responsible, project);
@@ -481,7 +511,7 @@ public class SyncProjectsAux {
 	if (nMec.length() == 66 && nMec.indexOf("99") == 0) {
 	    return null;
 	}
-	String username = teachers.get(nMec);
+	String username = employees.get(nMec);
 	if (username == null) {
 //	    System.out.println("Can't find username for " + nMec);
 	}
