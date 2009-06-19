@@ -4,7 +4,9 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import myorg.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
@@ -289,14 +291,19 @@ public abstract class RequestItem extends RequestItem_Base {
     }
 
     public <T extends PaymentProcessInvoice> List<T> getUnconfirmedInvoices(Person person) {
-	List<T> invoices = new ArrayList<T>();
-	invoices.addAll((List<T>) getInvoicesFiles());
-	for (UnitItem unitItem : getUnitItems()) {
-	    if (person == null || unitItem.getFinancer().getUnit().isResponsible(person)) {
-		invoices.removeAll((List<T>) unitItem.getConfirmedInvoices());
+	Set<T> unconfirmedInvoices = new HashSet<T>();
+
+	for (PaymentProcessInvoice invoice : getInvoicesFiles()) {
+	    for (UnitItem unitItem : getUnitItems()) {
+		if (person == null || unitItem.getFinancer().getUnit().isResponsible(person)) {
+		    if (!unitItem.getConfirmedInvoices().contains(invoice)) {
+			unconfirmedInvoices.add((T) invoice);
+		    }
+		}
 	    }
 	}
-	return invoices;
+
+	return new ArrayList<T>(unconfirmedInvoices);
     }
 
     public boolean isConfirmedForAllInvoices(Person person) {
