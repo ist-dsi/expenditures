@@ -17,7 +17,7 @@ public class RemoveInvoice extends GenericAcquisitionProcessActivity {
     protected boolean isAvailable(RegularAcquisitionProcess process) {
 	AcquisitionProcessState acquisitionProcessState = process.getAcquisitionProcessState();
 	return super.isAvailable(process) && acquisitionProcessState.isAcquisitionProcessed()
-		&& process.getRequest().getInvoices().size() > 1;
+		&& !process.getRequest().getInvoices().isEmpty();
     }
 
     @Override
