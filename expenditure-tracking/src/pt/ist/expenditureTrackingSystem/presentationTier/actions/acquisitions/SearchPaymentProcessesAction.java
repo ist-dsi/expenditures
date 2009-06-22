@@ -42,6 +42,10 @@ public class SearchPaymentProcessesAction extends BaseAction {
 
     private static final String DEFAULT_SORT = "acquisitionProcessId";
 
+    private static final String STATE_SORT = "processStateDescription";
+
+    private static final Comparator<PaymentProcess> STATE_SORT_COMPARATOR = new BeanComparator("processStateOrder");
+
     private static final ComparatorChain DEFAULT_COMPARATOR = new ComparatorChain();
 
     static {
@@ -337,7 +341,14 @@ public class SearchPaymentProcessesAction extends BaseAction {
 	    comparator = DEFAULT_COMPARATOR;
 	} else {
 	    String[] split = sortParameter.split("=");
-	    comparator = split[0].equals(DEFAULT_SORT) ? DEFAULT_COMPARATOR : new BeanComparator(split[0]);
+	    if (split[0].equals(DEFAULT_SORT)) {
+		comparator = DEFAULT_COMPARATOR;
+	    } else if (split[0].equals(STATE_SORT)) {
+		comparator = STATE_SORT_COMPARATOR;
+	    } else {
+		comparator = new BeanComparator(split[0]);
+	    }
+
 	    if (split.length == 2 && split[1].indexOf("desc") > -1) {
 		comparator = new ReverseComparator(comparator);
 	    }

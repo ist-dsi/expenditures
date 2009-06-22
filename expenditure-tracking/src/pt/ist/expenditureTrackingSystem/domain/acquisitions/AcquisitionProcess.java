@@ -216,4 +216,9 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
     public String getProcessStateName() {
 	return getLastAcquisitionProcessState().getLocalizedName();
     }
+
+    @Override
+    public int getProcessStateOrder() {
+	return getLastAcquisitionProcessState().getAcquisitionProcessStateType().ordinal();
+    }
 }

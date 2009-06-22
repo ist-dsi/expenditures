@@ -128,7 +128,7 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
     private boolean isProjectAccountingEmployeeForOnePossibleUnit(final Person person) {
 	return getRequest().isProjectAccountingEmployeeForOnePossibleUnit(person);
     }
-    
+
     public boolean isAccountingEmployee() {
 	final Person loggedPerson = getLoggedPerson();
 	return loggedPerson != null && isAccountingEmployee(loggedPerson);
@@ -272,6 +272,10 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
 
     public String getProcessStateName() {
 	return EMPTY_STRING;
+    }
+
+    public int getProcessStateOrder() {
+	return 0;
     }
 
     public abstract Collection<Supplier> getSuppliers();

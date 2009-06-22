@@ -416,4 +416,9 @@ public class RefundProcess extends RefundProcess_Base {
     public String getProcessStateName() {
 	return getProcessState().getLocalizedName();
     }
+
+    @Override
+    public int getProcessStateOrder() {
+	return getProcessState().getRefundProcessStateType().ordinal();
+    }
 }
