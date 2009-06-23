@@ -1,9 +1,8 @@
 package pt.ist.expenditureTrackingSystem.domain.authorizations;
 
+import java.util.Comparator;
 import java.util.Set;
 
-import myorg.applicationTier.Authenticate.UserView;
-import myorg.domain.User;
 import myorg.domain.util.Money;
 
 import org.joda.time.LocalDate;
@@ -18,6 +17,21 @@ import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.pstm.Transaction;
 
 public class Authorization extends Authorization_Base {
+
+    public static final Comparator<Authorization> COMPARATOR_BY_NAME_AND_DATE = new Comparator<Authorization>() {
+
+	@Override
+	public int compare(final Authorization o1, final Authorization o2) {
+	    final Person p1 = o1.getPerson();
+	    final Person p2 = o2.getPerson();
+	    final int p = p1.getName().compareTo(p2.getName());
+	    if (p == 0) {
+		return o1.getStartDate().compareTo(o2.getStartDate());
+	    }
+	    return p;
+	}
+	
+    };
 
     public Authorization() {
 	super();
