@@ -77,7 +77,7 @@ public class RegularAcquisitionProcessAction extends PaymentProcessAction {
 	AcquisitionProcess acquisitionProcess = getProcess(request);
 	request.setAttribute("acquisitionProcess", acquisitionProcess);
 	request.setAttribute("confirmCancelAcquisitionProcess", Boolean.TRUE);
-	return redirectToProcessPage(request, acquisitionProcess);
+	return forward(request, "/acquisitions/viewAcquisitionProcess.jsp");
     }
 
     public ActionForward cancelAcquisitionRequest(final ActionMapping mapping, final ActionForm form,
