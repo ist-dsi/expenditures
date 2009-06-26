@@ -773,7 +773,14 @@
 		<property name="format" value="${name}"/>
 		<property name="sortBy" value="name"/>
 	</slot>
-	<slot name="requestingUnit" layout="autoComplete" key="label.unit" bundle="EXPENDITURE_RESOURCES">
+	<slot name="requestingUnit" layout="autoComplete" key="label.requestingUnit" bundle="EXPENDITURE_RESOURCES">
+        <property name="labelField" value="presentationName"/>
+		<property name="format" value="${presentationName}"/>
+		<property name="minChars" value="3"/>		
+		<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.UnitAutoCompleteProvider" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+		<property name="size" value="50"/>
+	</slot>
+	<slot name="payingUnit" layout="autoComplete" key="label.payingUnit" bundle="EXPENDITURE_RESOURCES">
         <property name="labelField" value="presentationName"/>
 		<property name="format" value="${presentationName}"/>
 		<property name="minChars" value="3"/>		
@@ -802,7 +809,14 @@
 		<property name="format" value="${name}"/>
 		<property name="sortBy" value="name"/>
 	</slot>
-	<slot name="requestingUnit" layout="autoComplete" key="label.unit" bundle="EXPENDITURE_RESOURCES">
+	<slot name="requestingUnit" layout="autoComplete" key="label.requestingUnit" bundle="EXPENDITURE_RESOURCES">
+        <property name="labelField" value="presentationName"/>
+		<property name="format" value="${presentationName}"/>
+		<property name="minChars" value="3"/>		
+		<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.UnitAutoCompleteProvider" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+		<property name="size" value="50"/>
+	</slot>
+	<slot name="payingUnit" layout="autoComplete" key="label.payingUnit" bundle="EXPENDITURE_RESOURCES">
         <property name="labelField" value="presentationName"/>
 		<property name="format" value="${presentationName}"/>
 		<property name="minChars" value="3"/>		
@@ -842,7 +856,14 @@
 		<property name="format" value="${name}"/>
 		<property name="sortBy" value="name"/>
 	</slot>
-	<slot name="requestingUnit" layout="autoComplete" key="label.unit" bundle="EXPENDITURE_RESOURCES">
+	<slot name="requestingUnit" layout="autoComplete" key="label.requestingUnit" bundle="EXPENDITURE_RESOURCES">
+        <property name="labelField" value="presentationName"/>
+		<property name="format" value="${presentationName}"/>
+		<property name="minChars" value="3"/>		
+		<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.UnitAutoCompleteProvider" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+		<property name="size" value="50"/>
+	</slot>
+	<slot name="payingUnit" layout="autoComplete" key="label.payingUnit" bundle="EXPENDITURE_RESOURCES">
         <property name="labelField" value="presentationName"/>
 		<property name="format" value="${presentationName}"/>
 		<property name="minChars" value="3"/>		
@@ -928,7 +949,11 @@
 		<property name="subLayout" value="values"/>
 		<property name="subSchema" value="viewAccountingUnit"/>
 	</slot>
-	<slot name="unit" key="label.unit" bundle="EXPENDITURE_RESOURCES"  layout="null-as-label">
+	<slot name="unit" key="label.requestingUnit" bundle="EXPENDITURE_RESOURCES"  layout="null-as-label">
+		<property name="subLayout" value="values"/>
+		<property name="subSchema" value="unitName"/>
+	</slot>
+	<slot name="payingUnit" key="label.payingUnit" bundle="EXPENDITURE_RESOURCES"  layout="null-as-label">
 		<property name="subLayout" value="values"/>
 		<property name="subSchema" value="unitName"/>
 	</slot>

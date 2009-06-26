@@ -6,6 +6,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestWithPayment;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
+import pt.ist.expenditureTrackingSystem.domain.organization.CostCenter;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 
@@ -25,8 +26,8 @@ public class DefaultPredicate extends SearchPredicate {
 
 	return matchCriteria(searchBean.getRequestingPerson(), person)
 		&& matchCriteria(searchBean.getAccountingUnit(), accountingUnits)
-		&& (matchCriteria(searchBean.getRequestingUnit(), requestingUnit) || matchCriteria(
-			searchBean.getRequestingUnit(), request.getFinancersSet()))
+		&& matchCriteria(searchBean.getRequestingUnit(), requestingUnit)
+		&& matchCriteria(searchBean.getPayingUnit(), request.getFinancersSet())
 		&& matchCriteria(searchBean.getProcessId(), request.getProcess().getAcquisitionProcessId());
     }
 }

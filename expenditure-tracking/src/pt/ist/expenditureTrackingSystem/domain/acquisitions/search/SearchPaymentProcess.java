@@ -33,6 +33,7 @@ public class SearchPaymentProcess extends Search<PaymentProcess> {
     private DomainReference<Person> requestingPerson;
     private DomainReference<Person> taker;
     private DomainReference<Unit> requestingUnit;
+    private DomainReference<Unit> payingUnit;
     private AcquisitionProcessStateType acquisitionProcessStateType;
     private RefundProcessStateType refundProcessStateType;
     private DomainReference<Supplier> supplier;
@@ -57,6 +58,7 @@ public class SearchPaymentProcess extends Search<PaymentProcess> {
     public SearchPaymentProcess() {
 	setRequestingPerson(null);
 	setRequestingUnit(null);
+	setPayingUnit(null);
 	setSupplier(null);
 	setAccountingUnit(null);
 	setSavedSearch(null);
@@ -70,6 +72,7 @@ public class SearchPaymentProcess extends Search<PaymentProcess> {
 	setRequestDocumentId(savedSearch.getRequestDocumentId());
 	setRequestingPerson(savedSearch.getRequestor());
 	setRequestingUnit(savedSearch.getUnit());
+	setPayingUnit(savedSearch.getPayingUnit());
 	setAcquisitionProcessStateType(savedSearch.getAcquisitionProcessStateType());
 	setRefundProcessStateType(savedSearch.getRefundProcessStateType());
 	setSupplier(savedSearch.getSupplier());
@@ -166,6 +169,14 @@ public class SearchPaymentProcess extends Search<PaymentProcess> {
 
     public void setRequestingUnit(Unit requestingUnit) {
 	this.requestingUnit = new DomainReference<Unit>(requestingUnit);
+    }
+
+    public Unit getPayingUnit() {
+	return payingUnit.getObject();
+    }
+
+    public void setPayingUnit(final Unit payingUnit) {
+	this.payingUnit = new DomainReference<Unit>(payingUnit);
     }
 
     public AcquisitionProcessStateType getAcquisitionProcessStateType() {

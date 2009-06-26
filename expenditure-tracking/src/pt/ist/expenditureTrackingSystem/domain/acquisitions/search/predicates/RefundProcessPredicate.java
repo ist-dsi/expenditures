@@ -36,6 +36,7 @@ public class RefundProcessPredicate extends SearchPredicate {
 	return matchCriteria(searchBean.getProcessId(), identification)
 		&& matchCriteria(searchBean.getRequestingPerson(), person)
 		&& matchCriteria(searchBean.getRequestingUnit(), refundRequest.getRequestingUnit())
+		&& matchCriteria(searchBean.getPayingUnit(), refundRequest.getFinancersSet())
 		&& matchCriteria(searchBean.getHasAvailableAndAccessibleActivityForUser(), refundRequest)
 		&& matchCriteria(searchBean.getRefundProcessStateType(), type)
 		&& matchCriteria(searchBean.getAccountingUnit(), accountingUnits)

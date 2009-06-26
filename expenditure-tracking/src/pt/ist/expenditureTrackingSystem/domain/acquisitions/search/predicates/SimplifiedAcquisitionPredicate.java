@@ -41,8 +41,8 @@ public class SimplifiedAcquisitionPredicate extends SearchPredicate {
 
 	return matchCriteria(searchBean.getProcessId(), identification)
 		&& matchCriteria(searchBean.getRequestingPerson(), person)
-		&& (matchCriteria(searchBean.getRequestingUnit(), acquisitionRequest.getFinancersSet()) || matchCriteria(
-			searchBean.getRequestingUnit(), acquisitionRequest.getRequestingUnit()))
+		&& (matchCriteria(searchBean.getRequestingUnit(), acquisitionRequest.getRequestingUnit()))
+		&& (matchCriteria(searchBean.getPayingUnit(), acquisitionRequest.getFinancersSet()))
 		&& matchCriteria(searchBean.getSupplier(), suppliers)
 		&& matchCriteria(searchBean.getProposalId(), acquisitionProposalId)
 		&& matchCriteria(searchBean.getHasAvailableAndAccessibleActivityForUser(), acquisitionRequest)

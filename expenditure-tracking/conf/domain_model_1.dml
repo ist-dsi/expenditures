@@ -103,6 +103,7 @@ class acquisitions.RequestItem {
  
 class acquisitions.refund.RefundItem extends acquisitions.RequestItem {
 	Money valueEstimation;
+	Boolean itemNotExecuted;
 }
 
 class acquisitions.refund.RefundInvoice {
@@ -1040,6 +1041,13 @@ relation AccountingUnitSavedSearch {
 relation requestingUnitSavedSearch {
 	organization.Unit playsRole unit;
 	SavedSearch playsRole unitSearches {
+		multiplicity *;
+	}
+}
+
+relation payingUnitSavedSearch {
+	organization.Unit playsRole payingUnit;
+	SavedSearch playsRole payingUnitSearches {
 		multiplicity *;
 	}
 }

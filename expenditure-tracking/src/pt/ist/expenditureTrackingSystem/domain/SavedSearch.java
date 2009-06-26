@@ -27,6 +27,7 @@ public class SavedSearch extends SavedSearch_Base {
 	setRequestor(searchBean.getRequestingPerson());
 	setAccountingUnit(searchBean.getAccountingUnit());
 	setUnit(searchBean.getRequestingUnit());
+	setPayingUnit(searchBean.getPayingUnit());
 	setRequestDocumentId(searchBean.getRequestDocumentId());
 	setAcquisitionProcessStateType(searchBean.getAcquisitionProcessStateType());
 	setRefundProcessStateType(searchBean.getRefundProcessStateType());
@@ -63,6 +64,7 @@ public class SavedSearch extends SavedSearch_Base {
 	removeRequestor();
 	removeSupplier();
 	removeUnit();
+	removePayingUnit();
 	Transaction.deleteObject(this);
     }
 

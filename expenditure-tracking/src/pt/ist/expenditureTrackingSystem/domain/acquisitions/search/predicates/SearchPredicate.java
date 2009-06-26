@@ -25,6 +25,9 @@ public abstract class SearchPredicate {
     }
 
     protected boolean matchCriteria(final Unit unit, final Set<Financer> financers) {
+	if (unit == null) {
+	    return true;
+	}
 	for (final Financer financer : financers) {
 	    if (unit == financer.getUnit()) {
 		return true;
@@ -34,7 +37,7 @@ public abstract class SearchPredicate {
     }
 
     protected boolean matchCriteria(final DomainObject object, final DomainObject otherDomainObject) {
-	return object == null || (object.getClass().equals(otherDomainObject.getClass()) && object == otherDomainObject);
+	return object == null || object == otherDomainObject;
     }
 
     protected boolean matchCriteria(final Person requester, final Person person) {

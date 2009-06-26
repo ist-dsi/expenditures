@@ -25,6 +25,7 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
     private String requestDocumentId;
     private DomainReference<Person> requester;
     private DomainReference<Unit> unit;
+    private DomainReference<Unit> payingUnit;
     private AcquisitionProcessStateType acquisitionProcessStateType;
     private DomainReference<Supplier> supplier;
     private String proposalId;
@@ -64,7 +65,9 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
 	    final AcquisitionProcessStateType type = acquisitionRequest.getAcquisitionProcess().getAcquisitionProcessStateType();
 	    final Set<AccountingUnit> accountingUnits = acquisitionRequest.getAccountingUnits();
 	    return matchCriteria(processId, identification) && matchCriteria(getRequester(), person)
-		    && matchCriteria(getUnit(), acquisitionRequest) && matchCriteria(getSupplier(), suppliers)
+		    && matchCriteria(getUnit(), acquisitionRequest)
+		    && matchPayingUnitCriteria(getPayingUnit(), acquisitionRequest)
+		    && matchCriteria(getSupplier(), suppliers)
 		    && matchCriteria(proposalId, acquisitionProposalId)
 		    && matchCriteria(hasAvailableAndAccessibleActivityForUser, acquisitionRequest)
 		    && matchCriteria(acquisitionProcessStateType, type) && matchCriteria(accountingUnits, getAccountingUnit())
@@ -100,8 +103,11 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
 	}
 
 	private boolean matchCriteria(final Unit unit, final AcquisitionRequest acquisitionRequest) {
-	    return unit == null || unit == acquisitionRequest.getRequestingUnit()
-		    || matchCriteria(unit, acquisitionRequest.getFinancersSet());
+	    return unit == null || unit == acquisitionRequest.getRequestingUnit();
+	}
+
+	private boolean matchPayingUnitCriteria(final Unit unit, final AcquisitionRequest acquisitionRequest) {
+	    return unit == null || matchCriteria(unit, acquisitionRequest.getFinancersSet());
 	}
 
 	private boolean matchCriteria(final Unit unit, final Set<Financer> financers) {
@@ -172,7 +178,7 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
 
     protected boolean hasAnyCriteria() {
 	return hasCriteria(processId) || getRequester() != null || getSupplier() != null || unit != null
-		|| hasCriteria(proposalId) || hasAvailableAndAccessibleActivityForUser != null;
+		|| payingUnit != null || hasCriteria(proposalId) || hasAvailableAndAccessibleActivityForUser != null;
     }
 
     public Person getRequester() {
@@ -213,6 +219,14 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
 
     public void setUnit(final Unit unit) {
 	this.unit = unit == null ? null : new DomainReference<Unit>(unit);
+    }
+
+    public Unit getPayingUnit() {
+	return payingUnit == null ? null : payingUnit.getObject();
+    }
+
+    public void setPayingUnit(final Unit unit) {
+	this.payingUnit = unit == null ? null : new DomainReference<Unit>(unit);
     }
 
     public Boolean getHasAvailableAndAccessibleActivityForUser() {
