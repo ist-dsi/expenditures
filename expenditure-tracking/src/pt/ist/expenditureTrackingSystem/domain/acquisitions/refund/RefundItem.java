@@ -1,7 +1,9 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.refund;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Set;
 
 import myorg.domain.util.Money;
@@ -156,13 +158,26 @@ public class RefundItem extends RefundItem_Base {
     @Override
     public void confirmInvoiceBy(Person person) {
 	for (UnitItem unitItem : getUnitItems()) {
-	    if (getRequest().getProcess().isAccountingEmployee(person)) {
+	    if (getRequest().getProcess().isAccountingEmployee(person) || getRequest().getProcess().isProjectAccountingEmployee(person)) {
 		unitItem.getConfirmedInvoices().clear();
 		for (PaymentProcessInvoice invoice : getInvoicesFiles()) {
 		    unitItem.addConfirmedInvoices(invoice);
 		}
 	    }
 	}
+    }
+
+    @Override
+    public <T extends PaymentProcessInvoice> List<T> getConfirmedInvoices(Person person) {
+	List<T> invoices = new ArrayList<T>();
+	for (UnitItem unitItem : getUnitItems()) {
+	    if (person == null
+		    || unitItem.getFinancer().getUnit().isAccountingEmployee(person)
+		    || unitItem.getFinancer().getUnit().isProjectAccountingEmployee(person)) {
+		invoices.addAll((List<T>) unitItem.getConfirmedInvoices());
+	    }
+	}
+	return invoices;
     }
 
 }
