@@ -223,6 +223,8 @@ public class RegularAcquisitionProcessAction extends PaymentProcessAction {
 	    genericActivityExecution(request, "RejectAcquisitionProcess", stateBean.getJustification());
 	} catch (DomainException e) {
 	    addErrorMessage(e.getMessage(), getBundle());
+	    final RegularAcquisitionProcess process = getProcess(request);
+	    return viewAcquisitionProcess(mapping, request, process);
 	}
 	return viewAcquisitionProcess(mapping, form, request, response);
     }
@@ -263,6 +265,7 @@ public class RegularAcquisitionProcessAction extends PaymentProcessAction {
 	    genericActivityExecution(process, "UnsetSkipSupplierFundAllocation", new Object[] {});
 	} catch (DomainException e) {
 	    addMessage(e.getLocalizedMessage(), getBundle(), new String[] {});
+	    return viewAcquisitionProcess(mapping, request, process);
 	}
 
 	return redirectToProcessPage(request, process);

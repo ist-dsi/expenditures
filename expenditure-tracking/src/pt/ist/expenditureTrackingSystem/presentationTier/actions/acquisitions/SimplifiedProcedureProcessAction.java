@@ -242,6 +242,7 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	    genericActivityExecution(acquisitionProcess, "FundAllocationExpirationDate", fundAllocationExpirationDateBean);
 	} catch (final FundAllocationNotAllowedException ex) {
 	    addErrorMessage(ex.getMessage(), getBundle(), ex.getArgs());
+	    return viewAcquisitionProcess(mapping, request, acquisitionProcess);
 	}
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
@@ -324,6 +325,7 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 		    .getHasMoreInvoices());
 	} catch (DomainException ex) {
 	    addErrorMessage(ex.getMessage(), getBundle(), ex.getArgs());
+	    return viewAcquisitionProcess(mapping, request, acquisitionProcess);
 	}
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
     }
