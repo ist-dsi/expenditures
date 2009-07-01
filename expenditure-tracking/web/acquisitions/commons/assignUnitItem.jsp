@@ -59,7 +59,7 @@
 							<fr:edit  id='<%= "assigned" + id %>' name="unitItemBean" slot="assigned"/>
 						</td>
 						<td>
-							<fr:view name="unitItemBean" property="unit.name"/>
+							<fr:view name="unitItemBean" property="unit.presentationName"/>
 						</td>
 						<td>
 							<fr:edit id='<%= "shareValue" + id %>' name="unitItemBean" slot="shareValue"/>
