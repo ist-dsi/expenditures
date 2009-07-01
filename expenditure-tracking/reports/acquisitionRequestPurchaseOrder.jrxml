@@ -126,13 +126,23 @@ $P{acquisitionRequest}.getAcquisitionProposalDocument().getProposalId() != null 
 					<font fontName="SansSerif" pdfFontName="Helvetica"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA["<style isBold=\"true\" pdfFontName=\"Helvetica-Bold\">" + org.apache.commons.lang.StringEscapeUtils.escapeXml($P{acquisitionRequest}.getSupplier().getName()) + "</style>\n" +
-$P{acquisitionRequest}.getSupplier().getAddress().getLine1() + "\n" +
+
+($P{acquisitionRequest}.getSupplier().getAddress() != null ?
+
+(($P{acquisitionRequest}.getSupplier().getAddress().getLine1() != null && 
+!$P{acquisitionRequest}.getSupplier().getAddress().getLine1().isEmpty() ? 
+$P{acquisitionRequest}.getSupplier().getAddress().getLine1() + "\n" : "") +
+
 ($P{acquisitionRequest}.getSupplier().getAddress().getLine2() != null && 
 !$P{acquisitionRequest}.getSupplier().getAddress().getLine2().isEmpty() ? 
 $P{acquisitionRequest}.getSupplier().getAddress().getLine2() + "\n" : "") + 
+
 $P{acquisitionRequest}.getSupplier().getAddress().getPostalCode() + ", " + 
 $P{acquisitionRequest}.getSupplier().getAddress().getLocation() + "\n" +
-$P{acquisitionRequest}.getSupplier().getAddress().getCountry()]]></textFieldExpression>
+$P{acquisitionRequest}.getSupplier().getAddress().getCountry())
+
+: "")
+]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement key="staticText-30" x="285" y="29" width="117" height="15"/>
