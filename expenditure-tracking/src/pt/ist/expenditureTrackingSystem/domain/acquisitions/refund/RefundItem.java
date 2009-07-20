@@ -158,7 +158,8 @@ public class RefundItem extends RefundItem_Base {
     @Override
     public void confirmInvoiceBy(Person person) {
 	for (UnitItem unitItem : getUnitItems()) {
-	    if (getRequest().getProcess().isAccountingEmployee(person) || getRequest().getProcess().isProjectAccountingEmployee(person)) {
+	    if (getRequest().getProcess().isAccountingEmployee(person)
+		    || getRequest().getProcess().isProjectAccountingEmployee(person)) {
 		unitItem.getConfirmedInvoices().clear();
 		for (PaymentProcessInvoice invoice : getInvoicesFiles()) {
 		    unitItem.addConfirmedInvoices(invoice);
@@ -168,11 +169,20 @@ public class RefundItem extends RefundItem_Base {
     }
 
     @Override
+    public void unconfirmInvoiceBy(Person person) {
+	for (UnitItem unitItem : getUnitItems()) {
+	    if (getRequest().getProcess().isAccountingEmployee(person)
+		    || getRequest().getProcess().isProjectAccountingEmployee(person)) {
+		unitItem.getConfirmedInvoices().clear();
+	    }
+	}
+    }
+
+    @Override
     public <T extends PaymentProcessInvoice> List<T> getConfirmedInvoices(Person person) {
 	List<T> invoices = new ArrayList<T>();
 	for (UnitItem unitItem : getUnitItems()) {
-	    if (person == null
-		    || unitItem.getFinancer().getUnit().isAccountingEmployee(person)
+	    if (person == null || unitItem.getFinancer().getUnit().isAccountingEmployee(person)
 		    || unitItem.getFinancer().getUnit().isProjectAccountingEmployee(person)) {
 		invoices.addAll((List<T>) unitItem.getConfirmedInvoices());
 	    }

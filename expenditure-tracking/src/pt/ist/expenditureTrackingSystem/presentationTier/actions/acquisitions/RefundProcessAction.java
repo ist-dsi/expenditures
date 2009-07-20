@@ -266,6 +266,11 @@ public class RefundProcessAction extends PaymentProcessAction {
 	return executeActivityAndViewProcess(mapping, form, request, response, "ConfirmInvoices");
     }
 
+    public ActionForward executeUnconfirmInvoices(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	return executeActivityAndViewProcess(mapping, form, request, response, "UnconfirmInvoices");
+    }
+
     public ActionForward downloadInvoice(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) throws IOException {
 	RefundInvoice invoice = getDomainObject(request, "invoiceOID");

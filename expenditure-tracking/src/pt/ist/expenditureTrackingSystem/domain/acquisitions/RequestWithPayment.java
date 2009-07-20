@@ -180,7 +180,7 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
 
     public boolean hasAnyFundAllocationId() {
 	for (Financer financer : getFinancers()) {
-	    if (/*financer.getAmountAllocated().isPositive() &&*/ financer.hasFundAllocationId()) {
+	    if (/* financer.getAmountAllocated().isPositive() && */financer.hasFundAllocationId()) {
 		return true;
 	    }
 	}
@@ -498,6 +498,14 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
 	}
 
 	return !confirmedInvoices.isEmpty() && confirmedInvoices.containsAll(allInvoices);
+    }
+
+    public Set<PaymentProcessInvoice> getConfirmedInvoices() {
+	Set<PaymentProcessInvoice> confirmedInvoices = new HashSet<PaymentProcessInvoice>();
+	for (RequestItem item : getRequestItems()) {
+	    confirmedInvoices.addAll(item.getConfirmedInvoices());
+	}
+	return confirmedInvoices;
     }
 
     public Set<PaymentProcessInvoice> getInvoices() {

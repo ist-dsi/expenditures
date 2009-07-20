@@ -44,6 +44,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.Su
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.SubmitForInvoiceConfirmation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.UnSubmitForApproval;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.UnSubmitForFundAllocation;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.UnconfirmInvoices;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.Util;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateRefundProcessBean;
@@ -81,6 +82,7 @@ public class RefundProcess extends RefundProcess_Base {
 	requestActivitites.add(new RefundPerson());
 	requestActivitites.add(new CancelRefundProcess());
 	requestActivitites.add(new ChangeFinancersAccountingUnit());
+	requestActivitites.add(new UnconfirmInvoices());
 	activityMap.put(ActivityScope.REQUEST_INFORMATION, requestActivitites);
 
 	List<AbstractActivity<RefundProcess>> itemActivities = new ArrayList<AbstractActivity<RefundProcess>>();
@@ -273,6 +275,13 @@ public class RefundProcess extends RefundProcess_Base {
 	if (getRequest().isConfirmedForAllInvoices()) {
 	    confirmInvoices();
 	}
+    }
+
+    public void unconfirmInvoicesByPerson(Person person) {
+	for (RequestItem item : getRequest().getRequestItems()) {
+	    item.unconfirmInvoiceBy(person);
+	}
+	submitForInvoiceConfirmation();
     }
 
     public void submitForInvoiceConfirmation() {
