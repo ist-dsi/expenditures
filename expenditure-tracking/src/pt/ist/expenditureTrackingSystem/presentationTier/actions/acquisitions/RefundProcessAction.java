@@ -324,6 +324,11 @@ public class RefundProcessAction extends PaymentProcessAction {
 	return viewProcess(mapping, form, request, response);
     }
 
+    public ActionForward executeRevertInvoiceConfirmationSubmition(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	return executeActivityAndViewProcess(mapping, form, request, response, "RevertInvoiceConfirmationSubmition");
+    }
+
     public ActionForward invalidValueRefundInvoice(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 
