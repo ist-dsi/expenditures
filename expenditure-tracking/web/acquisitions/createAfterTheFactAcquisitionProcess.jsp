@@ -6,7 +6,6 @@
 <h2><bean:message key="link.sideBar.afterTheFactAcquisitionProcess.create" bundle="EXPENDITURE_RESOURCES"/></h2>
 
 <jsp:include page="../commons/defaultErrorDisplay.jsp"/>
-asfasfasfasfasfasfasfas
 
 <fr:edit id="afterTheFactAcquisitionProcessBean"
 		name="afterTheFactAcquisitionProcessBean"
