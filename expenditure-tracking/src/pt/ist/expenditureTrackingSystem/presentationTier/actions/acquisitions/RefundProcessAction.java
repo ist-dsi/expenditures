@@ -188,6 +188,16 @@ public class RefundProcessAction extends PaymentProcessAction {
 	return viewRefundProcess(mapping, request, getProcess(request));
     }
 
+    public ActionForward executeSetSkipSupplierFundAllocation(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	return executeActivityAndViewProcess(mapping, form, request, response, "SetSkipSupplierFundAllocation");
+    }
+    
+    public ActionForward executeUnsetSkipSupplierFundAllocation(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	return executeActivityAndViewProcess(mapping, form, request, response, "UnsetSkipSupplierFundAllocation");
+    }
+    
     public ActionForward executeSubmitForApproval(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	return executeActivityAndViewProcess(mapping, form, request, response, "SubmitForApproval");
@@ -316,6 +326,7 @@ public class RefundProcessAction extends PaymentProcessAction {
 	    genericActivityExecution(process, "EditRefundInvoice", beans);
 	} catch (DomainException e) {
 	    addErrorMessage(e.getMessage(), getBundle());
+	    RenderUtils.invalidateViewState();
 	    RefundItem item = getRequestItem(request);
 	    request.setAttribute("item", item);
 	    request.setAttribute("invoices", beans);

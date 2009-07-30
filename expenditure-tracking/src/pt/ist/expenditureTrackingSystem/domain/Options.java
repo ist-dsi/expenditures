@@ -2,12 +2,13 @@ package pt.ist.expenditureTrackingSystem.domain;
 
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.pstm.Transaction;
 
 public class Options extends Options_Base {
 
     public Options(final Person person) {
 	super();
-	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());	
+	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
 	setPerson(person);
 	setDisplayAuthorizationPending(Boolean.FALSE);
 	setRecurseAuthorizationPendingUnits(Boolean.FALSE);
@@ -31,6 +32,12 @@ public class Options extends Options_Base {
 	if (cascadingStyleSheet != null) {
 	    cascadingStyleSheet.delete();
 	}
+    }
+
+    public void delete() {
+	removeExpenditureTrackingSystem();
+	removePerson();
+	Transaction.deleteObject(this);
     }
 
 }

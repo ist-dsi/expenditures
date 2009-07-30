@@ -65,6 +65,7 @@ public class SavedSearch extends SavedSearch_Base {
 	removeSupplier();
 	removeUnit();
 	removePayingUnit();
+	getPeople().clear();
 	Transaction.deleteObject(this);
     }
 

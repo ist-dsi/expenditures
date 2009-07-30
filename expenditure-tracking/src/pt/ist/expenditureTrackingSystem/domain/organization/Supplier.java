@@ -97,7 +97,7 @@ public class Supplier extends Supplier_Base {
 	}
 	for (final RefundInvoice refundInvoice : getRefundInvoicesSet()) {
 	    final RefundProcess refundProcess = refundInvoice.getRefundItem().getRequest().getProcess();
-	    if (refundProcess.isActive()) {
+	    if (refundProcess.isActive() && !refundProcess.getSkipSupplierFundAllocation()) {
 		result = result.add(refundInvoice.getRefundableValue());
 	    }
 	}

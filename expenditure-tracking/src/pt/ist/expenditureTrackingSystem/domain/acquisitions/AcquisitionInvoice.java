@@ -12,13 +12,6 @@ public class AcquisitionInvoice extends AcquisitionInvoice_Base {
     @Override
     @Service
     public void delete() {
-	getUnitItems().clear();
-	getRequestItems().clear();
-	getProjectFinancers().clear();
-	getFinancers().clear();
-	FileContent content = getFileContent();
-	removeFileContent();
-	content.delete();
 	super.delete();
     }
 }

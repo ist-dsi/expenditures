@@ -345,7 +345,7 @@ class processes.GenericProcess {
 	}
 
 	class acquisitions.refund.RefundProcess extends acquisitions.PaymentProcess {
-	
+		Boolean skipSupplierFundAllocation;
 	}
 	
 	class acquisitions.refund.Refundee {

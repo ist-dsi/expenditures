@@ -41,11 +41,13 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.Re
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.RemoveProjectFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.RemoveRefundInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.RevertInvoiceConfirmationSubmition;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.SetSkipSupplierFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.SubmitForApproval;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.SubmitForInvoiceConfirmation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.UnSubmitForApproval;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.UnSubmitForFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.UnconfirmInvoices;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.UnsetSkipSupplierFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.Util;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateRefundProcessBean;
@@ -85,6 +87,8 @@ public class RefundProcess extends RefundProcess_Base {
 	requestActivitites.add(new ChangeFinancersAccountingUnit());
 	requestActivitites.add(new UnconfirmInvoices());
 	requestActivitites.add(new RevertInvoiceConfirmationSubmition());
+	requestActivitites.add(new SetSkipSupplierFundAllocation());
+	requestActivitites.add(new UnsetSkipSupplierFundAllocation());
 	activityMap.put(ActivityScope.REQUEST_INFORMATION, requestActivitites);
 
 	List<AbstractActivity<RefundProcess>> itemActivities = new ArrayList<AbstractActivity<RefundProcess>>();

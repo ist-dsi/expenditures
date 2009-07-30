@@ -98,6 +98,8 @@ public class Person extends Person_Base {
     @Service
     public void delete() {
 	removeExpenditureTrackingSystem();
+	getRoles().clear();
+	getOptions().delete();
 	Transaction.deleteObject(this);
     }
 

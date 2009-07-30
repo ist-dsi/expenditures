@@ -33,7 +33,7 @@
 			<th><bean:message key="label.vatValue" bundle="EXPENDITURE_RESOURCES"/></th>
 			<th><bean:message key="label.refundValue" bundle="EXPENDITURE_RESOURCES"/></th>
 		</tr>	
-	<logic:iterate id="invoice" name="invoices">
+	<logic:iterate id="invoice" name="invoices" indexId="index">
 		<tr>
 		<td>
 			<fr:view name="invoice" property="invoiceNumber"/>
@@ -47,21 +47,21 @@
 			</html:link>
 		</td>
 		<td>
-			<fr:edit name="invoice" slot="value" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+			<fr:edit id="<%= "value-" + index %>" name="invoice" slot="value" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
 					<fr:layout>
 						<fr:property name="size" value="10"/>
 					</fr:layout>
 			</fr:edit>
 		</td>
 		<td>
-			<fr:edit name="invoice" slot="vatValue" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+			<fr:edit id="<%= "vatValue-" + index %>" name="invoice" slot="vatValue" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
 					<fr:layout>
 						<fr:property name="size" value="10"/>
 					</fr:layout>
 			</fr:edit>
 		</td>
 		<td>
-			<fr:edit name="invoice" slot="refundableValue" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+			<fr:edit id="<%= "refundableValue-" + index %>" name="invoice" slot="refundableValue" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
 					<fr:layout>
 						<fr:property name="size" value="10"/>
 					</fr:layout>

@@ -17,11 +17,11 @@ public class EditRefundInvoice extends GenericRefundProcessActivity {
 
     @Override
     protected boolean isAvailable(RefundProcess process) {
-	return isCurrentUserProcessOwner(process) && process.isAnyRefundInvoiceAvailable()
-	&&
-	((isCurrentUserRequestor(process) && process.isInAuthorizedState())
-		|| (process.isPendingInvoicesConfirmation()
-		&& ((userHasRole(RoleType.ACCOUNTING_MANAGER) && !process.hasProjectsAsPayingUnits()) || (userHasRole(RoleType.PROJECT_ACCOUNTING_MANAGER) && process
+	return isCurrentUserProcessOwner(process)
+		&& process.isAnyRefundInvoiceAvailable()
+		&& ((isCurrentUserRequestor(process) && process.isInAuthorizedState()) || (process
+			.isPendingInvoicesConfirmation() && ((userHasRole(RoleType.ACCOUNTING_MANAGER) && !process
+			.hasProjectsAsPayingUnits()) || (userHasRole(RoleType.PROJECT_ACCOUNTING_MANAGER) && process
 			.hasProjectsAsPayingUnits()))));
     }
 
@@ -29,7 +29,9 @@ public class EditRefundInvoice extends GenericRefundProcessActivity {
     protected void process(RefundProcess process, Object... objects) {
 	List<EditRefundInvoiceBean> beans = (List<EditRefundInvoiceBean>) objects[0];
 
-	beans.get(0).getInvoice().resetValues();
+	for (EditRefundInvoiceBean bean : beans) {
+	    bean.getInvoice().resetValues();
+	}
 
 	for (EditRefundInvoiceBean bean : beans) {
 	    bean.getInvoice().editValues(bean.getValue(), bean.getVatValue(), bean.getRefundableValue());

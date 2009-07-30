@@ -6,6 +6,7 @@ import org.joda.time.LocalDate;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import myorg.domain.util.Money;
@@ -28,7 +29,8 @@ public class RefundInvoice extends RefundInvoice_Base {
     }
 
     private void check(RequestItem item, Supplier supplier, Money value, BigDecimal vatValue, Money refundableValue) {
-	if (!supplier.isFundAllocationAllowed(value)) {
+	RefundProcess process = item.getRequest().getProcess();
+	if (!process.getSkipSupplierFundAllocation() && !supplier.isFundAllocationAllowed(value)) {
 	    throw new DomainException("acquisitionRequestItem.message.exception.fundAllocationNotAllowed");
 	}
 	Money realValue = item.getRealValue();
