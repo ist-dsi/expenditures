@@ -70,9 +70,9 @@
 	<property name="state3" value="Co"/>
 	<property name="onClass" value="on"/>
 	<property name="offClass" value="off"/>
-	<property name="closedClasses" value="cinfo closed"/>
-    <property name="openClasses" value="cinfo copen prel"/>
-    <property name="textClasses" value="cinfotext"/>
+	<property name="closedClasses" value="tooltip tooltipClosed"/>
+    <property name="openClasses" value="tooltip tooltipOpen"/>
+    <property name="textClasses" value="tooltipText"/>
     <property name="bundle" value="ACQUISITION_RESOURCES"/>
     <property name="explanationMessage" value="label.payingunits.statusCodes.explanation"/>
     <property name="escape" value="false"/>
