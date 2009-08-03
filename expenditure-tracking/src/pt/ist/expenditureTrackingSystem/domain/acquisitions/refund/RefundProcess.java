@@ -106,12 +106,14 @@ public class RefundProcess extends RefundProcess_Base {
 	super();
 	new RefundRequest(this, requestor, refundeeName, refundeeFiscalCode, requestingUnit);
 	new RefundProcessState(this, RefundProcessStateType.IN_GENESIS);
+	setSkipSupplierFundAllocation(Boolean.FALSE);
     }
 
     public RefundProcess(Person requestor, Person refundee, Unit requestingUnit) {
 	super();
 	new RefundRequest(this, requestor, refundee, requestingUnit);
 	new RefundProcessState(this, RefundProcessStateType.IN_GENESIS);
+	setSkipSupplierFundAllocation(Boolean.FALSE);
     }
 
     public List<AbstractActivity<RefundProcess>> getActiveActivities() {
