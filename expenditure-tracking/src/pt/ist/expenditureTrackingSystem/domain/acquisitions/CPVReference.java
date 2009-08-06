@@ -3,6 +3,7 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 import myorg.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.fenixWebFramework.services.Service;
 
 public class CPVReference extends CPVReference_Base {
 
@@ -44,4 +45,17 @@ public class CPVReference extends CPVReference_Base {
 	return money;
     }
 
+    public boolean isPriorityCode() {
+	return getExpenditureTrackingSystemForPriorities() != null;
+    }
+
+    @Service
+    public void markAsPriority() {
+	setExpenditureTrackingSystemForPriorities(ExpenditureTrackingSystem.getInstance());
+    }
+
+    @Service
+    public void unmarkAsPriority() {
+	setExpenditureTrackingSystemForPriorities(null);
+    }
 }

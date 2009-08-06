@@ -1,9 +1,7 @@
 package pt.ist.expenditureTrackingSystem.presentationTier.actions.dashboard;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -13,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import myorg.presentationTier.actions.ContextBaseAction;
 import myorg.util.Counter;
+import myorg.util.MultiCounter;
 
 import org.apache.commons.beanutils.BeanComparator;
 import org.apache.commons.collections.CollectionUtils;
@@ -26,11 +25,9 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPaymentProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
-import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
+import pt.ist.expenditureTrackingSystem.util.ProcessMapGenerator;
 import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.RequestChecksumFilter;
 import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.RequestChecksumFilter.ChecksumPredicate;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
@@ -65,18 +62,49 @@ public class DashBoardAction extends ContextBaseAction {
     public ActionForward viewDigest(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) {
 	Person loggedPerson = Person.getLoggedPerson();
-	Map<AcquisitionProcessStateType, Counter<AcquisitionProcessStateType>> simplifiedMap = loggedPerson
-		.generateAcquisitionMap();
+	Map<AcquisitionProcessStateType, MultiCounter<AcquisitionProcessStateType>> simplifiedMap = ProcessMapGenerator
+		.generateAcquisitionMap(loggedPerson);
 	List<Counter<AcquisitionProcessStateType>> counters = new ArrayList<Counter<AcquisitionProcessStateType>>();
-	counters.addAll(simplifiedMap.values());
-	Collections.sort(counters, new BeanComparator("countableObject"));
-	request.setAttribute("simplifiedCounters", counters);
+	List<Counter<AcquisitionProcessStateType>> priorityCounters = new ArrayList<Counter<AcquisitionProcessStateType>>();
 
-	Map<RefundProcessStateType, Counter<RefundProcessStateType>> refundMap = loggedPerson.generateRefundMap();
+	for (MultiCounter<AcquisitionProcessStateType> multiCounter : simplifiedMap.values()) {
+	    Counter<AcquisitionProcessStateType> defaultCounter = ProcessMapGenerator.getDefaultCounter(multiCounter);
+	    Counter<AcquisitionProcessStateType> priorityCounter = ProcessMapGenerator.getPriorityCounter(multiCounter);
+
+	    if (defaultCounter != null) {
+		counters.add(defaultCounter);
+	    }
+	    if (priorityCounter != null) {
+		priorityCounters.add(priorityCounter);
+	    }
+	}
+
+	Collections.sort(counters, new BeanComparator("countableObject"));
+	Collections.sort(priorityCounters, new BeanComparator("countableObject"));
+	request.setAttribute("simplifiedCounters", counters);
+	request.setAttribute("simplifiedCounters-priority", priorityCounters);
+
+	Map<RefundProcessStateType, MultiCounter<RefundProcessStateType>> refundMap = ProcessMapGenerator
+		.generateRefundMap(loggedPerson);
 	List<Counter<RefundProcessStateType>> refundCounters = new ArrayList<Counter<RefundProcessStateType>>();
-	refundCounters.addAll(refundMap.values());
+	List<Counter<RefundProcessStateType>> priorityRefundCounters = new ArrayList<Counter<RefundProcessStateType>>();
+
+	for (MultiCounter<RefundProcessStateType> multiCounter : refundMap.values()) {
+	    Counter<RefundProcessStateType> defaultCounter = ProcessMapGenerator.getDefaultCounter(multiCounter);
+	    Counter<RefundProcessStateType> priorityCounter = ProcessMapGenerator.getPriorityCounter(multiCounter);
+
+	    if (defaultCounter != null) {
+		refundCounters.add(defaultCounter);
+	    }
+	    if (priorityCounter != null) {
+		priorityRefundCounters.add(priorityCounter);
+	    }
+	}
+
 	Collections.sort(refundCounters, new BeanComparator("countableObject"));
+	Collections.sort(priorityRefundCounters, new BeanComparator("countableObject"));
 	request.setAttribute("refundCounters", refundCounters);
+	request.setAttribute("refundCounters-priority", priorityRefundCounters);
 
 	List<PaymentProcess> myProcesses = loggedPerson.getAcquisitionProcesses(PaymentProcess.class);
 	CollectionUtils.filter(myProcesses, new Predicate() {

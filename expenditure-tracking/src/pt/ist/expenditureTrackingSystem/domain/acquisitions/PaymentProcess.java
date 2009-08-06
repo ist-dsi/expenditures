@@ -304,4 +304,12 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
 
     public abstract boolean isAppiableForYear(final int year);
 
+    public boolean isPriorityProcess() {
+	for (RequestItem item : getRequest().getRequestItems()) {
+	    if (item.getCPVReference().isPriorityCode()) {
+		return true;
+	    }
+	}
+	return false;
+    }
 }

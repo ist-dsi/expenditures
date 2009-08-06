@@ -2,7 +2,9 @@ package pt.ist.expenditureTrackingSystem.presentationTier.actions.organization;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 import javax.servlet.ServletOutputStream;
@@ -12,7 +14,9 @@ import javax.servlet.http.HttpServletResponse;
 import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.User;
 import myorg.domain.util.Money;
+import myorg.util.VariantBean;
 
+import org.apache.commons.beanutils.BeanComparator;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -28,6 +32,7 @@ import pt.ist.expenditureTrackingSystem.domain.SyncSuppliers.SupplierMap;
 import pt.ist.expenditureTrackingSystem.domain.SyncSuppliers.SupplierReader;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AcquisitionAfterTheFact;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.DelegatedAuthorization;
@@ -796,4 +801,34 @@ public class OrganizationAction extends BaseAction {
 	return spreadsheet;
     }
 
+    public final ActionForward managePriorityCPVs(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) throws IOException, SQLException {
+
+	List<CPVReference> priorityCPVReferences = new ArrayList<CPVReference>(ExpenditureTrackingSystem.getInstance().getPriorityCPVReferences());
+	Collections.sort(priorityCPVReferences, new BeanComparator("code"));
+	request.setAttribute("cpvs", priorityCPVReferences);
+	request.setAttribute("bean", new VariantBean());
+
+	return forward(request, "/expenditureTrackingOrganization/priorityCVPs.jsp");
+    }
+
+    public final ActionForward addPriorityCPV(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) throws IOException, SQLException {
+
+	CPVReference reference = getRenderedObject("cpvToAdd");
+	reference.markAsPriority();
+	RenderUtils.invalidateViewState();
+
+	return managePriorityCPVs(mapping, form, request, response);
+    }
+
+    public final ActionForward removePriorityCPV(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) throws IOException, SQLException {
+
+	CPVReference reference = getDomainObject(request, "cpvId");
+	reference.unmarkAsPriority();
+	RenderUtils.invalidateViewState();
+
+	return managePriorityCPVs(mapping, form, request, response);
+    }
 }

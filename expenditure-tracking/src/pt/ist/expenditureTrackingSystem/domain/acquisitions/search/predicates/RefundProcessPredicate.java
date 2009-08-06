@@ -30,6 +30,7 @@ public class RefundProcessPredicate extends SearchPredicate {
 	final Boolean showOnlyWithUnreadComments = searchBean.getShowOnlyWithUnreadComments();
 	final RefundProcess process = refundRequest.getProcess();
 	final Person taker = process.getCurrentOwner();
+	final Boolean showPrioritiesOnly = searchBean.getShowPriorityOnly();
 
 	Person loggedPerson = Person.getLoggedPerson();
 
@@ -39,6 +40,7 @@ public class RefundProcessPredicate extends SearchPredicate {
 		&& matchCriteria(searchBean.getPayingUnit(), refundRequest.getFinancersSet())
 		&& matchCriteria(searchBean.getHasAvailableAndAccessibleActivityForUser(), refundRequest)
 		&& matchCriteria(searchBean.getRefundProcessStateType(), type)
+		&& (!showPrioritiesOnly || process.isPriorityProcess())
 		&& matchCriteria(searchBean.getAccountingUnit(), accountingUnits)
 		&& matchCriteria(searchBean.getRefundeeName(), refundeeName)
 		&& matchCriteria(searchBean.getTaker(), taker)

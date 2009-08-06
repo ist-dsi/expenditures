@@ -46,6 +46,7 @@ public class SearchPaymentProcess extends Search<PaymentProcess> {
     private Boolean showOnlyWithUnreadComments = Boolean.FALSE;
     private String refundeeName;
     private DomainReference<PaymentProcessYear> year;
+    private Boolean showPriorityOnly = Boolean.FALSE;
 
     private final static Map<Class<? extends PaymentProcess>, SearchPredicate> predicateMap = new HashMap<Class<? extends PaymentProcess>, SearchPredicate>();
     private final static SearchPredicate defaultPredicate = new DefaultPredicate();
@@ -86,6 +87,7 @@ public class SearchPaymentProcess extends Search<PaymentProcess> {
 	setPaymentProcessYear(savedSearch.getYear());
 	setTaker(savedSearch.getTakenBy());
 	setShowOnlyWithUnreadComments(savedSearch.getShowOnlyWithUnreadComments());
+	setShowPriorityOnly(savedSearch.getShowPriorityOnly());
     }
 
     @Override
@@ -297,5 +299,13 @@ public class SearchPaymentProcess extends Search<PaymentProcess> {
 
     public Boolean getShowOnlyWithUnreadComments() {
 	return showOnlyWithUnreadComments;
+    }
+
+    public void setShowPriorityOnly(Boolean showPriorityOnly) {
+	this.showPriorityOnly = showPriorityOnly;
+    }
+
+    public Boolean getShowPriorityOnly() {
+	return showPriorityOnly;
     }
 }

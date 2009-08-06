@@ -249,6 +249,7 @@ class SavedSearch {
     Boolean showOnlyAcquisitionsWithAdditionalCosts;
     String refundeeName;
 	Boolean showOnlyWithUnreadComments;
+	Boolean showPriorityOnly;
 }
 
 class MyOwnProcessesSearch extends SavedSearch {
@@ -774,12 +775,21 @@ relation ExpenditureTrackingSystemDeliveryInfo {
 		multiplicity *;
 	}
 }
+
 relation ExpenditureTrackingSystemCPVReference {
 	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
 	acquisitions.CPVReference playsRole cPVReferences {
 		multiplicity *;
 	}
 }
+
+relation ExpenditureTrackingSystemPriorityCPVReference {
+	ExpenditureTrackingSystem playsRole expenditureTrackingSystemForPriorities;
+	acquisitions.CPVReference playsRole priorityCPVReferences {
+		multiplicity *;
+	}
+}
+
 
 relation AcquisitionRequestItemCPVReference {
 	acquisitions.CPVReference playsRole cPVReference;

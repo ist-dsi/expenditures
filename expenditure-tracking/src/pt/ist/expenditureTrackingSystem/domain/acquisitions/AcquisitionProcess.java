@@ -221,4 +221,5 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
     public int getProcessStateOrder() {
 	return getLastAcquisitionProcessState().getAcquisitionProcessStateType().ordinal();
     }
+
 }

@@ -13,7 +13,7 @@ import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.MyOrg;
 import myorg.domain.User;
 import myorg.domain.util.Address;
-import myorg.util.Counter;
+import myorg.util.MultiCounter;
 
 import org.apache.commons.collections.Predicate;
 
@@ -38,6 +38,7 @@ import pt.ist.expenditureTrackingSystem.domain.dto.AuthorizationBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreatePersonBean;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericLog;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
+import pt.ist.expenditureTrackingSystem.presentationTier.actions.dashboard.DashBoardAction;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.pstm.Transaction;
 import dml.runtime.RelationAdapter;
@@ -276,39 +277,6 @@ public class Person extends Person_Base {
 	    setDashBoard(dashBoard);
 	}
 	return dashBoard;
-    }
-
-    public Map<AcquisitionProcessStateType, Counter<AcquisitionProcessStateType>> generateAcquisitionMap() {
-	Map<AcquisitionProcessStateType, Counter<AcquisitionProcessStateType>> map = new HashMap<AcquisitionProcessStateType, Counter<AcquisitionProcessStateType>>();
-
-	for (SimplifiedProcedureProcess process : GenericProcess.getProcessesForPerson(SimplifiedProcedureProcess.class, this,
-		null)) {
-
-	    AcquisitionProcessStateType type = process.getAcquisitionProcessStateType();
-	    Counter<AcquisitionProcessStateType> counter = map.get(type);
-	    if (counter == null) {
-		counter = new Counter<AcquisitionProcessStateType>(type);
-		map.put(type, counter);
-	    }
-	    counter.increment();
-	}
-	return map;
-    }
-
-    public Map<RefundProcessStateType, Counter<RefundProcessStateType>> generateRefundMap() {
-	Map<RefundProcessStateType, Counter<RefundProcessStateType>> map = new HashMap<RefundProcessStateType, Counter<RefundProcessStateType>>();
-
-	for (RefundProcess process : GenericProcess.getProcessesForPerson(RefundProcess.class, this, null)) {
-
-	    RefundProcessStateType type = process.getProcessState().getRefundProcessStateType();
-	    Counter<RefundProcessStateType> counter = map.get(type);
-	    if (counter == null) {
-		counter = new Counter<RefundProcessStateType>(type);
-		map.put(type, counter);
-	    }
-	    counter.increment();
-	}
-	return map;
     }
 
     private <T extends GenericProcess> Set<T> filterLogs(Predicate predicate) {

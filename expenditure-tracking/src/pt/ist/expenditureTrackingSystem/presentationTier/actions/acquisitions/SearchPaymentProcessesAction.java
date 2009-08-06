@@ -273,6 +273,9 @@ public class SearchPaymentProcessesAction extends BaseAction {
 	    builder.append(searchBean.getAcquisitionProcessStateType().name());
 	}
 
+	builder.append("&showPriorityOnly=");
+	builder.append(searchBean.getShowPriorityOnly());
+
 	builder.append("&refundProcessStateType=");
 	if (searchBean.getRefundProcessStateType() != null) {
 	    builder.append(searchBean.getRefundProcessStateType().name());
@@ -309,6 +312,7 @@ public class SearchPaymentProcessesAction extends BaseAction {
 	bean.setShowOnlyAcquisitionsWithAdditionalCosts(Boolean.valueOf(request
 		.getParameter("showOnlyAcquisitionsWithAdditionalCosts")));
 	bean.setShowOnlyWithUnreadComments(Boolean.valueOf(request.getParameter("showOnlyWithUnreadComments")));
+	bean.setShowPriorityOnly(Boolean.valueOf(request.getParameter("showPriorityOnly")));
 
 	String searchClass = request.getParameter("searchClass");
 	if (searchClass != null) {

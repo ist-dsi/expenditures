@@ -48,6 +48,11 @@
 						<bean:message key="user.link.removeUser" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 					</html:link>
 				</li>
+				<li>
+					<html:link action="/expenditureTrackingOrganization.do?method=managePriorityCPVs">
+						<bean:message key="link.managePriorityCPVS" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+					</html:link>
+				</li>
 			</logic:present>
 		</ul>
 	</div>
