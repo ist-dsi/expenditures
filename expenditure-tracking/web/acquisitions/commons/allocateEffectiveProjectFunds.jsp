@@ -13,14 +13,13 @@
 	</div>
 </logic:present>
 
-<bean:define id="processOID" name="process"  property="OID"/>
 <bean:define id="processClass" name="process" property="class.simpleName"/>
 <bean:define id="processRequest" name="process" property="request" toScope="request"/>
 <bean:define id="requestclass" name="processRequest" property="class.simpleName"/>
 <jsp:include page='<%= "view" + requestclass  + ".jsp"%>' flush="true"/>
 
-<bean:define id="urlActivity">/acquisition<%= processClass %>.do?processOid=<bean:write name="process" property="OID"/></bean:define>
-<bean:define id="urlView">/acquisition<%= processClass %>.do?method=viewProcess&amp;processOid=<bean:write name="process" property="OID"/></bean:define>
+<bean:define id="urlActivity">/acquisition<%= processClass %>.do?processOid=<bean:write name="process" property="externalId"/></bean:define>
+<bean:define id="urlView">/acquisition<%= processClass %>.do?method=viewProcess&amp;processOid=<bean:write name="process" property="externalId"/></bean:define>
 
 <div class="forminline mbottom2">
 
@@ -53,7 +52,7 @@
 	<tr>
 		<td>
 			<fr:edit id="<%= "id" + index %>" name="financerBean" slot="effectiveFundAllocationId" type="java.lang.String"/>
-			<bean:define id="financerOID" name="financerBean" property="financer.OID"/>
+			<bean:define id="financerOID" name="financerBean" property="financer.externalId" type="java.lang.String"/>
 			<logic:equal name="financerBean" property="allowedToAddNewFund" value="true">
 				<a href="javascript:document.getElementById('allocationForm').method.value='addAllocationFundForProject'; document.getElementById('allocationForm').financerOID.value='<%= financerOID %>'; document.getElementById('allocationForm').index.value='<%= index %>'; document.getElementById('allocationForm').submit();">
 					<bean:message key="financer.link.addEffectiveAllocationId" bundle="ACQUISITION_RESOURCES"/>

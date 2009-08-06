@@ -126,7 +126,7 @@
 			<fr:layout name="tabular-sortable">
 				<fr:property name="classes" value="plist mtop05 width100pc"/>
 				<fr:property name="columnClasses" value="width30px,,,,,,,,nowrap,,,,,,,,,,,,,,,"/>
-				<fr:property name="linkFormat(view)" value="/acquisition${class.simpleName}.do?method=viewProcess&processOid=${OID}"/>
+				<fr:property name="linkFormat(view)" value="/acquisition${class.simpleName}.do?method=viewProcess&processOid=${externalId}"/>
 				<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
 				<fr:property name="key(view)" value="link.view"/>
 				<fr:property name="order(view)" value="1"/>

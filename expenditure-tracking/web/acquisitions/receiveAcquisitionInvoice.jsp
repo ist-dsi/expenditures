@@ -21,7 +21,7 @@
 		<bean:message key="acquisitionProcess.label.invoice" bundle="ACQUISITION_RESOURCES"/>:
 		<logic:present name="afterTheFactAcquisitionProcess" property="acquisitionAfterTheFact.invoice">
 			<logic:present name="afterTheFactAcquisitionProcess" property="acquisitionAfterTheFact.invoice.content">
-				<html:link action="/acquisitionSimplifiedProcedureProcess.do?method=downloadInvoice" paramId="invoiceOid" paramName="afterTheFactAcquisitionProcess" paramProperty="acquisitionAfterTheFact.invoice.OID">
+				<html:link action="/acquisitionSimplifiedProcedureProcess.do?method=downloadInvoice" paramId="invoiceOid" paramName="afterTheFactAcquisitionProcess" paramProperty="acquisitionAfterTheFact.invoice.externalId">
 					<bean:write name="afterTheFactAcquisitionProcess" property="acquisitionAfterTheFact.invoice.filename"/>
 				</html:link>
 			</logic:present>	
@@ -36,8 +36,8 @@
 </div>
 
 
-<bean:define id="urlView">/acquisitionAfterTheFactAcquisitionProcess.do?method=viewAfterTheFactAcquisitionProcess&amp;acquisitionAfterTheFactOid=<bean:write name="afterTheFactAcquisitionProcess" property="acquisitionAfterTheFact.OID"/></bean:define>
-<bean:define id="urlSave">/acquisitionAfterTheFactAcquisitionProcess.do?method=receiveAcquisitionInvoice&amp;afterTheFactAcquisitionProcessOid=<bean:write name="afterTheFactAcquisitionProcess" property="OID"/></bean:define>
+<bean:define id="urlView">/acquisitionAfterTheFactAcquisitionProcess.do?method=viewAfterTheFactAcquisitionProcess&amp;acquisitionAfterTheFactOid=<bean:write name="afterTheFactAcquisitionProcess" property="acquisitionAfterTheFact.externalId"/></bean:define>
+<bean:define id="urlSave">/acquisitionAfterTheFactAcquisitionProcess.do?method=receiveAcquisitionInvoice&amp;afterTheFactAcquisitionProcessOid=<bean:write name="afterTheFactAcquisitionProcess" property="externalId"/></bean:define>
 
 
 <fr:form action="<%= urlSave %>" encoding="multipart/form-data">

@@ -20,7 +20,7 @@
 	<bean:message key="accountingUnit.message.none.defined" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 </logic:empty>
 <logic:notEmpty name="accountingUnits">
-	<bean:define id="selectUrl">/expenditureTrackingOrganization.do?method=addToTreasuryAccountingUnit&amp;personOid=<bean:write name="person" property="OID"/></bean:define>
+	<bean:define id="selectUrl">/expenditureTrackingOrganization.do?method=addToTreasuryAccountingUnit&amp;personOid=<bean:write name="person" property="externalId"/></bean:define>
 	<fr:view name="accountingUnits" schema="accountingUnits">
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="tstyle2 mtop05"/>
@@ -29,7 +29,7 @@
 			<fr:property name="link(view)" value="<%= selectUrl %>"/>
 			<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
 			<fr:property name="key(view)" value="link.select"/>
-			<fr:property name="param(view)" value="OID/accountingUnitOid"/>
+			<fr:property name="param(view)" value="externalId/accountingUnitOid"/>
 			<fr:property name="order(view)" value="1"/>
 		</fr:layout>
 	</fr:view>

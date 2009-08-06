@@ -227,31 +227,31 @@ public class SearchPaymentProcessesAction extends BaseAction {
 	}
 	builder.append("&requestingPerson=");
 	if (searchBean.getRequestingPerson() != null) {
-	    builder.append(searchBean.getRequestingPerson().getOID());
+	    builder.append(searchBean.getRequestingPerson().getExternalId());
 	}
 	builder.append("&taker=");
 	if (searchBean.getTaker() != null) {
-	    builder.append(searchBean.getTaker().getOID());
+	    builder.append(searchBean.getTaker().getExternalId());
 	}
 	builder.append("&requestingUnit=");
 	if (searchBean.getRequestingUnit() != null) {
-	    builder.append(searchBean.getRequestingUnit().getOID());
+	    builder.append(searchBean.getRequestingUnit().getExternalId());
 	}
 	builder.append("&savedSearch=");
 	if (searchBean.getSavedSearch() != null) {
-	    builder.append(searchBean.getSavedSearch().getOID());
+	    builder.append(searchBean.getSavedSearch().getExternalId());
 	}
 	builder.append("&supplier=");
 	if (searchBean.getSupplier() != null) {
-	    builder.append(searchBean.getSupplier().getOID());
+	    builder.append(searchBean.getSupplier().getExternalId());
 	}
 	builder.append("&accountingUnit=");
 	if (searchBean.getAccountingUnit() != null) {
-	    builder.append(searchBean.getAccountingUnit().getOID());
+	    builder.append(searchBean.getAccountingUnit().getExternalId());
 	}
 	builder.append("&year=");
 	if (searchBean.getPaymentProcessYear() != null) {
-	    builder.append(searchBean.getPaymentProcessYear().getOID());
+	    builder.append(searchBean.getPaymentProcessYear().getExternalId());
 	}
 	builder.append("&hasAvailableAndAccessibleActivityForUser=");
 	builder.append(searchBean.getHasAvailableAndAccessibleActivityForUser());

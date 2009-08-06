@@ -8,7 +8,7 @@
 
 <p class="mbottom05"><strong><bean:message key="label.supplier" bundle="EXPENDITURE_RESOURCES"/></strong></p>
 
-<bean:define id="acquisitionProcessOID" name="acquisitionProcess" property="OID"/>
+<bean:define id="acquisitionProcessOID" name="acquisitionProcess" property="externalId" type="java.lang.String"/>
 <bean:define id="acquisitionProcessClass" name="acquisitionProcess" property="class.simpleName"/>
 
 <bean:define id="url" value='<%= "/acquisition" + acquisitionProcessClass + ".do?method=executeCreateAcquisitionPurchaseOrderDocument&amp;acquisitionProcessOid=" + acquisitionProcessOID %>'/>

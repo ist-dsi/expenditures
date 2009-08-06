@@ -72,7 +72,7 @@
 	<slot name="acquisitionProcess.requestor.name" layout="link" key="label.requesterName" bundle="EXPENDITURE_RESOURCES">
 		<property name="useParent" value="true"/>
 		<property name="blankTarget" value="true"/>
-		<property name="linkFormat" value="/expenditureTrackingOrganization.do?personOid=${acquisitionProcess.requestor.OID}&amp;method=viewPerson"/>
+		<property name="linkFormat" value="/expenditureTrackingOrganization.do?personOid=${acquisitionProcess.requestor.externalId}&amp;method=viewPerson"/>
 		<property name="classes" value="secondaryLink"/>
 	</slot>
 	<slot name="acquisitionProcess.requestingUnit.presentationName" key="acquisitionProcess.label.requestingUnit" bundle="ACQUISITION_RESOURCES"/>

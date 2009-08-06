@@ -12,7 +12,7 @@
 <bean:define id="actionMapping" value='<%="/acquisition" + processClass %>'/>
 
 <p>
-	<html:link page='<%= actionMapping + ".do?method=viewProcess"%>' paramId="processOid" paramName="process" paramProperty="OID">
+	<html:link page='<%= actionMapping + ".do?method=viewProcess"%>' paramId="processOid" paramName="process" paramProperty="externalId">
 		« <bean:message key="link.back" bundle="EXPENDITURE_RESOURCES"/>
 	</html:link>
 </p>
@@ -39,7 +39,7 @@
 	</div>
 </logic:notEmpty>
 
-<bean:define id="processOid" name="process" property="OID"/>
+<bean:define id="processOid" name="process" property="externalId" type="java.lang.String"/>
 
 
 <fr:form action='<%= actionMapping + ".do?method=addComment&processOid=" + processOid%>'>

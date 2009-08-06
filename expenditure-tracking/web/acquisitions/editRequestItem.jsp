@@ -8,10 +8,10 @@
 
 <jsp:include page="../commons/defaultErrorDisplay.jsp"/>
 
-<bean:define id="processOID" name="itemBean" property="acquisitionRequest.acquisitionProcess.OID"/>
+<bean:define id="processOID" name="itemBean" property="acquisitionRequest.acquisitionProcess.externalId" type="java.lang.String"/>
 <bean:define id="processClass" name="itemBean" property="acquisitionRequest.acquisitionProcess.class.simpleName"/>
 <bean:define id="actionMapping" value="<%= "/acquisition" + processClass%>"/>
-<bean:define id="itemOID" name="itemBean" property="item.OID"/>
+<bean:define id="itemOID" name="itemBean" property="item.externalId" type="java.lang.String"/>
 
 <bean:define id="urlView"><%=actionMapping %>.do?method=viewAcquisitionProcess&acquisitionProcessOid=<%= processOID %></bean:define>
 <fr:form action='<%= actionMapping + ".do?method=executeAcquisitionRequestItemEdition&acquisitionProcessOid="  + processOID + "&acquisitionRequestItemOid=" + itemOID%>'> 

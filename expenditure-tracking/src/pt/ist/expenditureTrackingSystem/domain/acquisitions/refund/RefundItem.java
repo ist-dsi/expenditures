@@ -27,7 +27,7 @@ public class RefundItem extends RefundItem_Base {
 
 	public int compare(RefundItem arg0, RefundItem arg1) {
 	    final int c = arg0.getDescription().compareTo(arg1.getDescription());
-	    return c == 0 ? arg0.getIdInternal().compareTo(arg1.getIdInternal()) : c;
+	    return c == 0 ? arg0.getExternalId().compareTo(arg1.getExternalId()) : c;
 	}
 
     };
@@ -64,11 +64,13 @@ public class RefundItem extends RefundItem_Base {
 	setValueEstimation(bean.getValueEstimation());
     }
 
+    @Override
     public void delete() {
 	removeRequest();
 	super.delete();
     }
 
+    @Override
     public boolean isValueFullyAttributedToUnits() {
 	Money totalValue = Money.ZERO;
 	for (UnitItem unitItem : getUnitItems()) {

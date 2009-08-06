@@ -12,7 +12,7 @@
 <fr:view name="refundProcess"> 
 	<fr:layout name="process-state">
 		<fr:property name="stateParameterName" value="state"/>
-		<fr:property name="url" value="/viewLogs.do?method=viewOperationLog&processOid=${OID}"/>
+		<fr:property name="url" value="/viewLogs.do?method=viewOperationLog&processOid=${externalId}"/>
 		<fr:property name="contextRelative" value="true"/>
 		<fr:property name="currentStateClass" value=""/>
 		<fr:property name="linkable" value="false"/>
@@ -37,7 +37,7 @@
 	<logic:iterate id="activity" name="refundProcess" property="activeActivitiesForRequest">
 		<bean:define id="activityName" name="activity" property="class.simpleName"/> 
 		<li>
-			<html:link page='<%= actionMapping + ".do?method=execute" + activityName %>' paramId="refundProcessOid" paramName="refundProcess" paramProperty="OID">
+			<html:link page='<%= actionMapping + ".do?method=execute" + activityName %>' paramId="refundProcessOid" paramName="refundProcess" paramProperty="externalId">
 				 <fr:view name="activity" property="class">
 					<fr:layout name="label">
 						<fr:property name="bundle" value="ACQUISITION_RESOURCES"/>
@@ -58,7 +58,7 @@
 </div>
 
 <bean:define id="urlConfirm"><%=actionMapping %>.do</bean:define>
-<bean:define id="processOid" name="refundProcess" property="OID"/>
+<bean:define id="processOid" name="refundProcess" property="externalId" type="java.lang.String"/>
 
 <logic:present name="confirmTake">
 	<div class="warning2">
@@ -67,12 +67,12 @@
 			<form action="<%= request.getContextPath() + urlConfirm %>" method="post">
 				<html:hidden property="method" value="takeProcess"/>
 				<html:hidden property="confirmTake" value="yes"/>
-				<html:hidden property="processOid" value="<%= processOid.toString() %>"/>
+				<html:hidden property="processOid" value="<%= processOid %>"/>
 				<html:submit styleClass="inputbutton"><bean:message key="button.yes" bundle="EXPENDITURE_RESOURCES"/></html:submit>
 			</form>
 			<form action="<%= request.getContextPath() + urlConfirm %>" method="post">
 				<html:hidden property="method" value="viewProcess"/>
-				<html:hidden property="processOid" value="<%= processOid.toString() %>"/>
+				<html:hidden property="processOid" value="<%= processOid %>"/>
 				<html:cancel styleClass="inputbutton"><bean:message key="button.no" bundle="EXPENDITURE_RESOURCES"/></html:cancel>
 			</form>
 		</div>
@@ -85,12 +85,12 @@
 		<div class="forminline">
 			<form action="<%= request.getContextPath() + urlConfirm %>" method="post">
 				<html:hidden property="method" value="cancelRefundProcess"/>
-				<html:hidden property="processOid" value="<%= processOid.toString() %>"/>
+				<html:hidden property="processOid" value="<%= processOid %>"/>
 				<html:submit styleClass="inputbutton"><bean:message key="button.yes" bundle="EXPENDITURE_RESOURCES"/></html:submit>
 			</form>
 			<form action="<%= request.getContextPath() + urlConfirm %>" method="post">
 				<html:hidden property="method" value="viewProcess"/>
-				<html:hidden property="processOid" value="<%= processOid.toString() %>"/>
+				<html:hidden property="processOid" value="<%= processOid %>"/>
 				<html:cancel styleClass="inputbutton"><bean:message key="button.no" bundle="EXPENDITURE_RESOURCES"/></html:cancel>
 			</form>
 		</div>
@@ -101,36 +101,36 @@
 	<li>
 	<logic:present name="refundProcess" property="currentOwner">
 		<logic:equal name="refundProcess" property="userCurrentOwner" value="true">
-				<html:link page='<%= actionMapping + ".do?method=releaseProcess" %>' paramId="processOid" paramName="refundProcess" paramProperty="OID">
+				<html:link page='<%= actionMapping + ".do?method=releaseProcess" %>' paramId="processOid" paramName="refundProcess" paramProperty="externalId">
 					<bean:message key="acquisitionProcess.link.releaseProcess" bundle="ACQUISITION_RESOURCES"/>
 				</html:link>
 		</logic:equal>
 		<logic:equal name="refundProcess" property="userCurrentOwner" value="false">
-				<html:link page='<%= actionMapping + ".do?method=stealProcess" %>' paramId="processOid" paramName="refundProcess" paramProperty="OID">
+				<html:link page='<%= actionMapping + ".do?method=stealProcess" %>' paramId="processOid" paramName="refundProcess" paramProperty="externalId">
 					<bean:message key="acquisitionProcess.link.stealProcess" bundle="ACQUISITION_RESOURCES"/>
 				</html:link>
 		</logic:equal>
 	</logic:present>
 	<logic:notPresent name="refundProcess" property="currentOwner">
-		<html:link page='<%= actionMapping + ".do?method=takeProcess" %>' paramId="processOid" paramName="refundProcess" paramProperty="OID">
+		<html:link page='<%= actionMapping + ".do?method=takeProcess" %>' paramId="processOid" paramName="refundProcess" paramProperty="externalId">
 				<bean:message key="acquisitionProcess.link.takeProcess" bundle="ACQUISITION_RESOURCES"/>
 		</html:link>
 	</logic:notPresent>
 	</li>
 	<li>
-		<html:link page='<%= actionMapping + ".do?method=prepareGenericUpload" %>' paramId="processOid" paramName="refundProcess" paramProperty="OID">
+		<html:link page='<%= actionMapping + ".do?method=prepareGenericUpload" %>' paramId="processOid" paramName="refundProcess" paramProperty="externalId">
 			<bean:message key="acquisitionProcess.link.uploadFile" bundle="ACQUISITION_RESOURCES"/>
 		</html:link>
 	</li>
 	<li>
-		<html:link page="/viewLogs.do?method=viewOperationLog&amp;module=acquisitions" paramId="processOid" paramName="refundProcess" paramProperty="OID">
+		<html:link page="/viewLogs.do?method=viewOperationLog&amp;module=acquisitions" paramId="processOid" paramName="refundProcess" paramProperty="externalId">
 			<bean:message key="label.log.view" bundle="ACQUISITION_RESOURCES"/>
 		</html:link>
 	</li>
 
 	<bean:size id="comments"  name="refundProcess" property="comments"/>
 	<li> 
-		<html:link page='<%= actionMapping + ".do?method=viewComments"%>' paramId="processOid" paramName="refundProcess" paramProperty="OID">
+		<html:link page='<%= actionMapping + ".do?method=viewComments"%>' paramId="processOid" paramName="refundProcess" paramProperty="externalId">
 			<bean:message key="link.comments" bundle="EXPENDITURE_RESOURCES"/> (<%= comments %>)
 		</html:link>	
 		<logic:greaterThan name="comments" value="0">
@@ -180,7 +180,7 @@
 	<bean:message key="acquisitionProcess.label.otherFiles" bundle="ACQUISITION_RESOURCES"/>:
 	<logic:notEmpty name="refundProcess" property="files">
 		<logic:iterate id="file" name="refundProcess" property="files">
-			<html:link action='<%= actionMapping + ".do?method=downloadGenericFile" %>' paramId="fileOID" paramName="file" paramProperty="OID">
+			<html:link action='<%= actionMapping + ".do?method=downloadGenericFile" %>' paramId="fileOID" paramName="file" paramProperty="externalId">
 				<bean:write name="file" property="displayName"/>
 			</html:link>, 
 		</logic:iterate>
@@ -195,11 +195,11 @@
 	<div class="item">
 	<bean:define id="currentIndex" value="<%= String.valueOf(index + 1) %>"/>
 	<strong><bean:message key="acquisitionRequestItem.label.item" bundle="ACQUISITION_RESOURCES"/></strong> (<fr:view name="currentIndex"/>/<fr:view name="totalItems"/>)
-		<bean:define id="itemOID" name="refundItem" property="OID"/>
+		<bean:define id="itemOID" name="refundItem" property="externalId" type="java.lang.String"/>
 	<logic:iterate id="activity" name="refundProcess" property="activeActivitiesForItem" indexId="index">
 		<logic:greaterThan name="index" value="0"> | </logic:greaterThan>
 			<bean:define id="activityName" name="activity" property="class.simpleName"/> 
-			<html:link page='<%= actionMapping + ".do?method=execute" + activityName + "&refundItemOid=" + itemOID%>' paramId="refundProcessOid" paramName="refundProcess" paramProperty="OID">
+			<html:link page='<%= actionMapping + ".do?method=execute" + activityName + "&refundItemOid=" + itemOID%>' paramId="refundProcessOid" paramName="refundProcess" paramProperty="externalId">
 			<fr:view name="activity" property="class">
 				<fr:layout name="label">
 						<fr:property name="bundle" value="ACQUISITION_RESOURCES"/>
@@ -264,7 +264,7 @@
 							    	</logic:notPresent>
 							    </td>
 								<td>
-									<html:link action='<%= actionMapping + ".do?method=downloadInvoice" %>' paramId="invoiceOID" paramName="invoice" paramProperty="OID">
+									<html:link action='<%= actionMapping + ".do?method=downloadInvoice" %>' paramId="invoiceOID" paramName="invoice" paramProperty="externalId">
 										<bean:write name="invoice" property="file.filename"/>
 									</html:link>
 								</td>
@@ -272,7 +272,7 @@
 						</tr>
 						<tr style="border-bottom: 4px solid #eee;">
 							<td colspan="6" class="aleft">
-								<html:link action='<%= actionMapping + ".do?method=downloadInvoice" %>' paramId="invoiceOID" paramName="invoice" paramProperty="OID">
+								<html:link action='<%= actionMapping + ".do?method=downloadInvoice" %>' paramId="invoiceOID" paramName="invoice" paramProperty="externalId">
 									<bean:write name="invoice" property="file.filename"/>
 								</html:link>
 

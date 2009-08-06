@@ -86,7 +86,7 @@
 		</logic:present>
 	</div>
 
-	<bean:define id="supplierOID" name="supplier" property="OID"/>
+	<bean:define id="supplierOID" name="supplier" property="externalId" type="java.lang.String"/>
 	<p>
 		<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.SUPPLIER_MANAGER">
 			<html:link action='<%= "/expenditureTrackingOrganization.do?method=prepareEditSupplier&supplierOid=" + supplierOID%>'>
@@ -140,7 +140,7 @@
 				<fr:property name="link(view)" value="/acquisitionAfterTheFactAcquisitionProcess.do?method=viewAcquisitionProcess"/>
 				<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
 				<fr:property name="key(view)" value="link.view"/>
-				<fr:property name="param(view)" value="afterTheFactAcquisitionProcess.OID/acquisitionProcessOid"/>
+				<fr:property name="param(view)" value="afterTheFactAcquisitionProcess.externalId/acquisitionProcessOid"/>
 				<fr:property name="order(view)" value="1"/>
 			</fr:layout>
 		</fr:view>

@@ -8,7 +8,7 @@
 
 <bean:define id="acquisitionProcessClass" name="process" property="class.simpleName" toScope="request"/>
 <bean:define id="actionMapping" value="<%= "/acquisition" + acquisitionProcessClass%>"/>
-<bean:define id="processOid" name="process" property="OID"/>
+<bean:define id="processOid" name="process" property="externalId" type="java.lang.String"/>
 
 <bean:define id="processRequest" name="process" property="request" toScope="request"/>
 <jsp:include page="commons/viewAcquisitionRequest.jsp" flush="true"/>
@@ -19,7 +19,7 @@
 		<fr:property name="link(delete)" value="<%= actionMapping + ".do?method=removeInvoice&acquisitionProcessOid=" + processOid %>"/>
 		<fr:property name="bundle(delete)" value="ACQUISITION_RESOURCES"/>
 		<fr:property name="key(delete)" value="link.deleteInvoice"/>
-		<fr:property name="param(delete)" value="OID/invoiceOid"/>
+		<fr:property name="param(delete)" value="externalId/invoiceOid"/>
 		<fr:property name="order(delete)" value="1"/>
 		<fr:property name="confirmationBundle(delete)" value="ACQUISITION_RESOURCES"/> 
         <fr:property name="confirmationKey(delete)" value="label.removeInvoice"/> 	

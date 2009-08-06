@@ -7,7 +7,7 @@
 <h2><bean:message key="acquisitionProcess.title.uploadFile" bundle="ACQUISITION_RESOURCES"/></h2>
 
 <bean:define id="process" name="process" toScope="request"/>
-<bean:define id="processOID" name="process" property="OID" toScope="request"/>
+<bean:define id="processOID" name="process" property="externalId" toScope="request" type="java.lang.String"/>
 
 <bean:define id="processRequest" name="process" property="request" toScope="request"/>
 <bean:define id="requestClass" name="processRequest" property="class.simpleName"/>
@@ -16,7 +16,7 @@
 <bean:define id="acquisitionProcessClass" name="process" property="class.simpleName" toScope="request"/>
 <bean:define id="actionMapping" value='<%= "/acquisition" + acquisitionProcessClass%>'/>
 
-<bean:define id="urlView"><%= actionMapping %>.do?method=viewProcess&amp;processOid=<bean:write name="process" property="OID"/></bean:define>
+<bean:define id="urlView"><%= actionMapping %>.do?method=viewProcess&amp;processOid=<bean:write name="process" property="externalId"/></bean:define>
 
 <fr:edit name="bean" id="uploadFile" action='<%= actionMapping + ".do?method=genericUpload&processOid=" + processOID %>' schema="addGenericFile">
 	<fr:layout name="tabular">

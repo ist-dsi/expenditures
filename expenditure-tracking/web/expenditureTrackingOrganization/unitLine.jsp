@@ -5,7 +5,7 @@
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
 <logic:present name="unitToDisplay">
-	<html:link action="/expenditureTrackingOrganization.do?method=viewOrganization" paramId="unitOid" paramName="unitToDisplay" paramProperty="OID">
+	<html:link action="/expenditureTrackingOrganization.do?method=viewOrganization" paramId="unitOid" paramName="unitToDisplay" paramProperty="externalId">
 		<bean:write name="unitToDisplay" property="name"/>
 	</html:link>
 	<logic:equal name="unitToDisplay" property="class.name" value="pt.ist.expenditureTrackingSystem.domain.organization.CostCenter">

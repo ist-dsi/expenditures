@@ -6,7 +6,7 @@
 
 <h2><bean:message key="person.label.edit" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/></h2>
 
-<bean:define id="url">/expenditureTrackingOrganization.do?method=viewPerson&amp;personOid=<bean:write name="person" property="OID"/></bean:define>
+<bean:define id="url">/expenditureTrackingOrganization.do?method=viewPerson&amp;personOid=<bean:write name="person" property="externalId"/></bean:define>
 <fr:edit id="person"
 		name="person"
 		type="pt.ist.expenditureTrackingSystem.domain.organization.Person"

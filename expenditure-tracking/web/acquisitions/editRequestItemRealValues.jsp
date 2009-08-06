@@ -6,11 +6,11 @@
 
 <h2><bean:message key="acquisitionRequestItem.title.insertRealValues" bundle="ACQUISITION_RESOURCES"/></h2>
 
-<bean:define id="processOID" name="itemBean" property="acquisitionRequest.acquisitionProcess.OID"/>
+<bean:define id="processOID" name="itemBean" property="acquisitionRequest.acquisitionProcess.externalId" type="java.lang.String"/>
 <bean:define id="processClass" name="itemBean" property="acquisitionRequest.acquisitionProcess.class.simpleName"/>
 <bean:define id="actionMapping" value="<%= "/acquisition" + processClass %>"/>
 
-<bean:define id="itemOID" name="itemBean" property="item.OID"/>
+<bean:define id="itemOID" name="itemBean" property="item.externalId" type="java.lang.String"/>
 
 <bean:define id="processRequest" name="itemBean" property="acquisitionRequest" toScope="request"/>
 <jsp:include page="commons/viewAcquisitionRequest.jsp" flush="true"/>

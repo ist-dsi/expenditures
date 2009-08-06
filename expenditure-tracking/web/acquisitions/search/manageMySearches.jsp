@@ -23,7 +23,7 @@
 <ul style="padding-left: 0em; list-style: none;">
 
 <logic:iterate id="systemSearch" name="systemSearches" >
-	<bean:define id="searchOID" name="systemSearch" property="OID"/>
+	<bean:define id="searchOID" name="systemSearch" property="externalId" type="java.lang.String"/>
 	<li class="mvert1">
 		<div class="infoop6">
 			<span>
@@ -47,7 +47,7 @@
 </logic:iterate>
 
 <logic:iterate id="userSearch" name="userSearches" >
-	<bean:define id="searchOID" name="userSearch" property="OID"/>
+	<bean:define id="searchOID" name="userSearch" property="externalId" type="java.lang.String"/>
 	<li class="mvert1">
 		<div class="infoop6">
 			<span>

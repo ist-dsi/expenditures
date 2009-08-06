@@ -15,7 +15,7 @@
 	</fr:view>
 </div>
 
-<bean:define id="url" type="java.lang.String">/expenditureTrackingOrganization.do?method=viewAuthorization&amp;authorizationOid=<bean:write name="authorization" property="OID"/></bean:define>
+<bean:define id="url" type="java.lang.String">/expenditureTrackingOrganization.do?method=viewAuthorization&amp;authorizationOid=<bean:write name="authorization" property="externalId"/></bean:define>
 <fr:edit name="authorization" schema="editAuthorization"
 		action="<%= url %>">
 	<fr:layout name="tabular">

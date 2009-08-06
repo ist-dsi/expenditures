@@ -47,7 +47,7 @@ public class EncodingFixer {
 
     private static class ResolutionCounter {
 
-	private Map<String, Integer> fixedSlots = new TreeMap<String, Integer>();
+	private final Map<String, Integer> fixedSlots = new TreeMap<String, Integer>();
 
 	public void count(final DomainClass domainClass, final String slotName) {
 	    final String key = domainClass.getFullName() + "." + slotName;
@@ -110,52 +110,67 @@ public class EncodingFixer {
 	System.out.println("Done.");
     }
 
-    private static void fix() throws UnsupportedEncodingException, SecurityException, IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, CharacterCodingException {
+    private static void fix() throws UnsupportedEncodingException, SecurityException, IllegalArgumentException,
+	    NoSuchMethodException, IllegalAccessException, InvocationTargetException, CharacterCodingException {
 	final ResolutionCounter resolutionCounter = new ResolutionCounter();
 	final MyOrg myOrg = MyOrg.getInstance();
 	fixConnectedObjects(myOrg, resolutionCounter);
 	final ExpenditureTrackingSystem expenditureTrackingSystem = myOrg.getExpenditureTrackingSystem();
 	fixConnectedObjects(expenditureTrackingSystem, resolutionCounter);
 
-//	final DomainModel domainModel = FenixWebFramework.getDomainModel();
-//	for (final DomainClass domainClass : domainModel.getDomainClasses()) {
-//	    for (final Slot slot : domainClass.getSlotsList()) {
-//		final ValueType valueType = slot.getSlotType();
-//		if (valueType.getFullname().equals(String.class.getName())) {
-//		    System.out.println("Class: " + domainClass.getFullName() + " has string slot: " + slot.getName());
-//		}
-//	    }
-//	}
+	// final DomainModel domainModel = FenixWebFramework.getDomainModel();
+	// for (final DomainClass domainClass : domainModel.getDomainClasses())
+	// {
+	// for (final Slot slot : domainClass.getSlotsList()) {
+	// final ValueType valueType = slot.getSlotType();
+	// if (valueType.getFullname().equals(String.class.getName())) {
+	// System.out.println("Class: " + domainClass.getFullName() +
+	// " has string slot: " + slot.getName());
+	// }
+	// }
+	// }
 
-//	for (final ProcessComment processComment : MyOrg.getInstance().getExpenditureTrackingSystem().getCommentsSet()) {
-//	    final String comment = processComment.getComment();
-//	    if (comment != null && processComment.getIdInternal().intValue() == 37804) {
-//		final byte[] bytes = comment.getBytes("ISO8859-1");
-//		final String piglet = new String(bytes);
-//		System.out.println("Comment: " + comment);
-//		System.out.println("Piglet : " + piglet);
-//		if (piglet.length() < comment.length()) {
-//		    System.out.println("Process comment: " + processComment.getIdInternal() + " is busted... and it is ficable...");
-//		}
-//	    }
-//	    if (comment != null && processComment.getIdInternal().intValue() == 38003) {
-//		final byte[] bytes = comment.getBytes("ISO8859-1");
-//		final String piglet = new String(bytes);
-//		System.out.println("Comment: " + comment);
-//		System.out.println("Piglet : " + piglet);
-//		if (piglet.length() < comment.length()) {
-//		    System.out.println("Process comment: " + processComment.getIdInternal() + " is not busted... and it will be f*cked up...");
-//		} else {
-//		    System.out.println("All is ok");
-//		}
-//	    }
-//	}
+	// for (final ProcessComment processComment :
+	// MyOrg.getInstance().getExpenditureTrackingSystem().getCommentsSet())
+	// {
+	// final String comment = processComment.getComment();
+	// if (comment != null && processComment.get**Id**Internal().intValue()
+	// ==
+	// 37804) {
+	// final byte[] bytes = comment.getBytes("ISO8859-1");
+	// final String piglet = new String(bytes);
+	// System.out.println("Comment: " + comment);
+	// System.out.println("Piglet : " + piglet);
+	// if (piglet.length() < comment.length()) {
+	// System.out.println("Process comment: " +
+	// processComment.get**Id**Internal() +
+	// " is busted... and it is ficable...");
+	// }
+	// }
+	// if (comment != null && processComment.get**Id**Internal().intValue()
+	// ==
+	// 38003) {
+	// final byte[] bytes = comment.getBytes("ISO8859-1");
+	// final String piglet = new String(bytes);
+	// System.out.println("Comment: " + comment);
+	// System.out.println("Piglet : " + piglet);
+	// if (piglet.length() < comment.length()) {
+	// System.out.println("Process comment: " +
+	// processComment.get**Id**Internal() +
+	// " is not busted... and it will be f*cked up...");
+	// } else {
+	// System.out.println("All is ok");
+	// }
+	// }
+	// }
 
 	resolutionCounter.printResults();
     }
 
-    @SuppressWarnings(value={"unchecked"})
-    private static void fixConnectedObjects(final AbstractDomainObject abstractDomainObject, final ResolutionCounter resolutionCounter) throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, UnsupportedEncodingException, CharacterCodingException {
+    @SuppressWarnings(value = { "unchecked" })
+    private static void fixConnectedObjects(final AbstractDomainObject abstractDomainObject,
+	    final ResolutionCounter resolutionCounter) throws SecurityException, NoSuchMethodException, IllegalArgumentException,
+	    IllegalAccessException, InvocationTargetException, UnsupportedEncodingException, CharacterCodingException {
 	final DomainClass domainClass = findDomainClass(abstractDomainObject);
 	for (final Role role : domainClass.getRoleSlotsList()) {
 	    final String roleName = role.getName();
@@ -174,15 +189,19 @@ public class EncodingFixer {
 	}
     }
 
-    @SuppressWarnings(value={"unchecked"})
-    private static Object callGetter(final AbstractDomainObject abstractDomainObject, final String fieldName) throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+    @SuppressWarnings(value = { "unchecked" })
+    private static Object callGetter(final AbstractDomainObject abstractDomainObject, final String fieldName)
+	    throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException,
+	    InvocationTargetException {
 	final Class clazz = abstractDomainObject.getClass();
 	final Method method = clazz.getMethod("get" + StringUtils.capitalize(fieldName));
 	return method.invoke(abstractDomainObject);
     }
 
-    @SuppressWarnings(value={"unchecked"})
-    private static Object callSetter(final AbstractDomainObject abstractDomainObject, final String fieldName, final Object value) throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+    @SuppressWarnings(value = { "unchecked" })
+    private static Object callSetter(final AbstractDomainObject abstractDomainObject, final String fieldName, final Object value)
+	    throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException,
+	    InvocationTargetException {
 	final Class clazz = abstractDomainObject.getClass();
 	final Method method = clazz.getMethod("set" + StringUtils.capitalize(fieldName), value.getClass());
 	return method.invoke(abstractDomainObject, value);
@@ -193,34 +212,46 @@ public class EncodingFixer {
 	return domainModel.findClass(abstractDomainObject.getClass().getName());
     }
 
-    private static void fix(final AbstractDomainObject domainObject, final ResolutionCounter resolutionCounter) throws SecurityException, IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, UnsupportedEncodingException, CharacterCodingException {
+    private static void fix(final AbstractDomainObject domainObject, final ResolutionCounter resolutionCounter)
+	    throws SecurityException, IllegalArgumentException, NoSuchMethodException, IllegalAccessException,
+	    InvocationTargetException, UnsupportedEncodingException, CharacterCodingException {
 	final DomainClass domainClass = findDomainClass(domainObject);
-//	if (domainObject.getOID() != 236223215292l) {
-//	    return;
-//	}
+	// if (domainObject.getExternalId() != 236223215292l) {
+	// return;
+	// }
 
-//	     [java] pt.ist.expenditureTrackingSystem.domain.SavedSearch.searchName: 6
-//	     [java] pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProposalDocument.proposalId: 37
-//	     [java] pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem.proposalReference: 137
-//	     [java] pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem.recipient: 636
-//	     [java] pt.ist.expenditureTrackingSystem.domain.organization.Person.name: 4
+	// [java]
+	// pt.ist.expenditureTrackingSystem.domain.SavedSearch.searchName: 6
+	// [java]
+	// pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProposalDocument.proposalId:
+	// 37
+	// [java]
+	// pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem.proposalReference:
+	// 137
+	// [java]
+	// pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem.recipient:
+	// 636
+	// [java]
+	// pt.ist.expenditureTrackingSystem.domain.organization.Person.name: 4
 
 	fix(domainObject, resolutionCounter, domainClass);
     }
 
     private static boolean handleClass(final AbstractDomainObject domainObject) {
-//	if (domainObject instanceof AcquisitionRequestItem) {
-//	    return true;
-//	}
-//	if (domainObject instanceof pt.ist.expenditureTrackingSystem.domain.File) {
-//	    return true;
-//	}
-//	if (domainObject instanceof GenericFile) {
-//	    return true;
-//	}
-//	if (domainObject instanceof pt.ist.expenditureTrackingSystem.domain.processes.GenericFile) {
-//	    return true;
-//	}
+	// if (domainObject instanceof AcquisitionRequestItem) {
+	// return true;
+	// }
+	// if (domainObject instanceof
+	// pt.ist.expenditureTrackingSystem.domain.File) {
+	// return true;
+	// }
+	// if (domainObject instanceof GenericFile) {
+	// return true;
+	// }
+	// if (domainObject instanceof
+	// pt.ist.expenditureTrackingSystem.domain.processes.GenericFile) {
+	// return true;
+	// }
 	if (domainObject instanceof AcquisitionRequestItem) {
 	    return true;
 	}
@@ -237,10 +268,12 @@ public class EncodingFixer {
 	    return true;
 	}
 	return false;
-//	return true;
+	// return true;
     }
 
-    private static void fix(final AbstractDomainObject domainObject, final ResolutionCounter resolutionCounter, final DomainClass domainClass) throws SecurityException, IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, UnsupportedEncodingException, CharacterCodingException {
+    private static void fix(final AbstractDomainObject domainObject, final ResolutionCounter resolutionCounter,
+	    final DomainClass domainClass) throws SecurityException, IllegalArgumentException, NoSuchMethodException,
+	    IllegalAccessException, InvocationTargetException, UnsupportedEncodingException, CharacterCodingException {
 	if (handleClass(domainObject)) {
 	    for (final Slot slot : domainClass.getSlotsList()) {
 		fix(domainObject, resolutionCounter, domainClass, slot);
@@ -253,37 +286,46 @@ public class EncodingFixer {
 	}
     }
 
-    private static void fix(final AbstractDomainObject domainObject, final ResolutionCounter resolutionCounter, final DomainClass domainClass, final Slot slot) throws SecurityException, IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, UnsupportedEncodingException, CharacterCodingException {
+    private static void fix(final AbstractDomainObject domainObject, final ResolutionCounter resolutionCounter,
+	    final DomainClass domainClass, final Slot slot) throws SecurityException, IllegalArgumentException,
+	    NoSuchMethodException, IllegalAccessException, InvocationTargetException, UnsupportedEncodingException,
+	    CharacterCodingException {
 	final ValueType valueType = slot.getSlotType();
 	final String slotName = slot.getName();
 	if (valueType.getFullname().equals(String.class.getName())) {
-//		if (!slotName.equals("displayName")) {
-//		    return;
-//		}
+	    // if (!slotName.equals("displayName")) {
+	    // return;
+	    // }
 	    final String value = (String) callGetter(domainObject, slotName);
 	    if (value != null) {
-//		final byte[] bytes = value.getBytes("UTF-8");
-//		final String piglet = new String(bytes, "ISO8859-1");
+		// final byte[] bytes = value.getBytes("UTF-8");
+		// final String piglet = new String(bytes, "ISO8859-1");
 		final byte[] bytes = value.getBytes("ISO8859-1");
-//		final String piglet = new String(bytes, "UTF-8");
-//		final String piglet = deporkify(value, bytes);
+		// final String piglet = new String(bytes, "UTF-8");
+		// final String piglet = deporkify(value, bytes);
 		final String piglet = porkify(value, bytes);
 
 		if (piglet.length() < value.length() && matchSizes(value, piglet)) {
-		    	System.out.println(domainObject.getClass().getSimpleName() + " . " + slotName);
-			System.out.println("Value : " + value);
-			System.out.println("Piglet: " + piglet);
-			System.out.println();
+		    System.out.println(domainObject.getClass().getSimpleName() + " . " + slotName);
+		    System.out.println("Value : " + value);
+		    System.out.println("Piglet: " + piglet);
+		    System.out.println();
 
-//			System.out.println("Norm  : " + StringNormalizer.normalizePreservingCapitalizedLetters(value).replaceAll("AA", ""));
-//			System.out.println("Norm P: " + StringNormalizer.normalizePreservingCapitalizedLetters(piglet).replace("?", ""));
+		    // System.out.println("Norm  : " +
+		    // StringNormalizer.normalizePreservingCapitalizedLetters(value).replaceAll("AA",
+		    // ""));
+		    // System.out.println("Norm P: " +
+		    // StringNormalizer.normalizePreservingCapitalizedLetters(piglet).replace("?",
+		    // ""));
 
-//			x(value);
-//			System.exit(0);
+		    // x(value);
+		    // System.exit(0);
 
-//			System.out.println("N Value: " + StringNormalizer.normalize(value));
-//			System.out.println("N Pig: " + StringNormalizer.normalize(piglet));
-//			System.out.println();
+		    // System.out.println("N Value: " +
+		    // StringNormalizer.normalize(value));
+		    // System.out.println("N Pig: " +
+		    // StringNormalizer.normalize(piglet));
+		    // System.out.println();
 		    callSetter(domainObject, slotName, piglet);
 		    resolutionCounter.count(domainClass, slotName);
 		}
@@ -293,12 +335,13 @@ public class EncodingFixer {
 	    final Address newAddress = fixAddress(address, domainObject, slotName);
 	    if (address != newAddress) {
 		callSetter(domainObject, slotName, newAddress);
-		resolutionCounter.count(domainClass, slotName);		
+		resolutionCounter.count(domainClass, slotName);
 	    }
 	}
     }
 
-    private static Address fixAddress(Address address, AbstractDomainObject domainObject, String slotName) throws UnsupportedEncodingException, CharacterCodingException {
+    private static Address fixAddress(Address address, AbstractDomainObject domainObject, String slotName)
+	    throws UnsupportedEncodingException, CharacterCodingException {
 	if (address == null) {
 	    return address;
 	}
@@ -314,11 +357,13 @@ public class EncodingFixer {
 	final String fpostalCode = fixString(postalCode, domainObject, slotName);
 	final String fcountry = fixString(country, domainObject, slotName);
 
-	return line1 != fline1 || line2 != fline2 || location != flocation || postalCode != fpostalCode || country != fcountry ?
-	    new Address(fline1, fline2, fpostalCode, flocation, fcountry) : address;
+	return line1 != fline1 || line2 != fline2 || location != flocation || postalCode != fpostalCode || country != fcountry ? new Address(
+		fline1, fline2, fpostalCode, flocation, fcountry)
+		: address;
     }
 
-    private static String fixString(final String value, final AbstractDomainObject domainObject, final String slotName) throws UnsupportedEncodingException, CharacterCodingException {
+    private static String fixString(final String value, final AbstractDomainObject domainObject, final String slotName)
+	    throws UnsupportedEncodingException, CharacterCodingException {
 	final byte[] bytes = value.getBytes("ISO8859-1");
 	final String piglet = porkify(value, bytes);
 	if (piglet.length() < value.length() && matchSizes(value, piglet)) {
@@ -331,7 +376,8 @@ public class EncodingFixer {
 	return value;
     }
 
-    private static String porkifyInc(final String string, final String charSet1, final String charset2) throws UnsupportedEncodingException, CharacterCodingException {
+    private static String porkifyInc(final String string, final String charSet1, final String charset2)
+	    throws UnsupportedEncodingException, CharacterCodingException {
 	final String aux = new String(string.getBytes(charSet1), charset2);
 	if (isALittlePiggy(aux, string)) {
 	    final String nextAux = new String(aux.getBytes(charSet1), charset2);
@@ -343,10 +389,12 @@ public class EncodingFixer {
 	return string;
     }
 
-    private static String porkify(final String string, byte[] bytes) throws UnsupportedEncodingException, CharacterCodingException {
+    private static String porkify(final String string, byte[] bytes) throws UnsupportedEncodingException,
+	    CharacterCodingException {
 	final String aux0 = new String(bytes, "UTF-8");
-	//final String aux0 = porkifyInc(string, "ISO8859-1", "UTF-8");
-	if (isALittlePiggy(string, aux0)) return aux0;
+	// final String aux0 = porkifyInc(string, "ISO8859-1", "UTF-8");
+	if (isALittlePiggy(string, aux0))
+	    return aux0;
 
 	final String aux1 = porkifyInc(string, "windows-1252", "UTF-8");
 	return isALittlePiggy(aux1, string) ? aux1 : string;
@@ -355,8 +403,8 @@ public class EncodingFixer {
     private static boolean isALittlePiggy(final String value, final String... priors) throws CharacterCodingException {
 	final Charset charset = Charset.forName("UTF-8");
 	final ByteBuffer byteBuffer = ByteBuffer.wrap(value.getBytes());
-	final CharsetDecoder charsetDecoder = ThreadLocalCoders.decoderFor(charset)
-		.onMalformedInput(CodingErrorAction.REPORT).onUnmappableCharacter(CodingErrorAction.REPORT);
+	final CharsetDecoder charsetDecoder = ThreadLocalCoders.decoderFor(charset).onMalformedInput(CodingErrorAction.REPORT)
+		.onUnmappableCharacter(CodingErrorAction.REPORT);
 	final CharBuffer charBuffer = charsetDecoder.decode(byteBuffer);
 	if (charBuffer.toString().indexOf(charsetDecoder.replacement()) >= 0) {
 	    return false;
@@ -375,10 +423,11 @@ public class EncodingFixer {
     private static boolean matchSizes(final String string1, final String string2) throws CharacterCodingException {
 	final Charset charset = Charset.forName("UTF-8");
 	final ByteBuffer byteBuffer = ByteBuffer.wrap(string2.getBytes());
-	final CharsetDecoder charsetDecoder = ThreadLocalCoders.decoderFor(charset)
-		.onMalformedInput(CodingErrorAction.REPORT).onUnmappableCharacter(CodingErrorAction.REPORT);
+	final CharsetDecoder charsetDecoder = ThreadLocalCoders.decoderFor(charset).onMalformedInput(CodingErrorAction.REPORT)
+		.onUnmappableCharacter(CodingErrorAction.REPORT);
 	final CharBuffer charBuffer = charsetDecoder.decode(byteBuffer);
-//	final CodingErrorAction codingErrorAction = charsetDecoder.malformedInputAction();
+	// final CodingErrorAction codingErrorAction =
+	// charsetDecoder.malformedInputAction();
 	return charBuffer.toString().indexOf(charsetDecoder.replacement()) < 0;
     }
 

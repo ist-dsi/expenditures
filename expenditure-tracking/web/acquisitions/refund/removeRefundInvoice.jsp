@@ -5,8 +5,8 @@
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
 <bean:define id="process" name="item" property="request.process"/>
-<bean:define id="itemOid" name="item" property="OID"/>
-<bean:define id="processOid" name="process" property="OID"/>
+<bean:define id="itemOid" name="item" property="externalId" type="java.lang.String"/>
+<bean:define id="processOid" name="process" property="externalId" type="java.lang.String"/>
 <bean:define id="processClass" name="process" property="class.simpleName"/>
 <bean:define id="actionMapping" value='<%= "/acquisition" + processClass%>'/>
 
@@ -14,7 +14,7 @@
 
 <ul>
 	<li>
-		 <html:link action='<%= actionMapping + ".do?method=viewProcess" %>' paramId="processOid" paramName="process" paramProperty="OID">
+		 <html:link action='<%= actionMapping + ".do?method=viewProcess" %>' paramId="processOid" paramName="process" paramProperty="externalId">
 				<bean:message key="link.back" bundle="EXPENDITURE_RESOURCES"/>
 		  </html:link>
 	</li>
@@ -46,12 +46,12 @@
 					    
 					    </td>
 						<td>
-					   	 <html:link action='<%= actionMapping + ".do?method=downloadInvoice" %>' paramId="invoiceOID" paramName="invoice" paramProperty="OID">
+					   	 <html:link action='<%= actionMapping + ".do?method=downloadInvoice" %>' paramId="invoiceOID" paramName="invoice" paramProperty="externalId">
 							<bean:write name="invoice" property="file.filename"/>
 						  </html:link>
 						</td>
 						<td>
-						  <html:link action='<%= actionMapping + ".do?method=removeRefundInvoice&refundProcessOid=" + processOid + "&refundItemOid=" + itemOid %>' paramId="invoiceOid" paramName="invoice" paramProperty="OID">
+						  <html:link action='<%= actionMapping + ".do?method=removeRefundInvoice&refundProcessOid=" + processOid + "&refundItemOid=" + itemOid %>' paramId="invoiceOid" paramName="invoice" paramProperty="externalId">
 								<bean:message key="link.delete" bundle="EXPENDITURE_RESOURCES"/>
 						  </html:link>
 						</td>

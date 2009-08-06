@@ -5,8 +5,8 @@
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
 <bean:define id="process" name="item" property="request.process"/>
-<bean:define id="itemOid" name="item" property="OID"/>
-<bean:define id="processOid" name="process" property="OID"/>
+<bean:define id="itemOid" name="item" property="externalId" type="java.lang.String"/>
+<bean:define id="processOid" name="process" property="externalId" type="java.lang.String"/>
 <bean:define id="processClass" name="process" property="class.simpleName"/>
 <bean:define id="actionMapping" value='<%= "/acquisition" + processClass%>'/>
 
@@ -42,7 +42,7 @@
 			<fr:view name="invoice" property="invoiceDate" type="org.joda.time.LocalDate"/>
 		</td>
 		<td>
-			<html:link action='<%= actionMapping + ".do?method=downloadInvoice" %>' paramId="invoiceOID" paramName="invoice" paramProperty="invoice.OID">
+			<html:link action='<%= actionMapping + ".do?method=downloadInvoice" %>' paramId="invoiceOID" paramName="invoice" paramProperty="invoice.externalId">
 				<bean:write name="invoice" property="file.filename"/>
 			</html:link>
 		</td>

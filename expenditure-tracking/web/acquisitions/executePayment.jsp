@@ -5,7 +5,7 @@
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
 
-<bean:define id="processOID" name="process" property="OID"/>
+<bean:define id="processOID" name="process" property="externalId" type="java.lang.String"/>
 <bean:define id="processClass" name="process" property="class.simpleName"/>
 
 <h2><bean:message key="label.pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.PayAcquisition" bundle="ACQUISITION_RESOURCES"/></h2>

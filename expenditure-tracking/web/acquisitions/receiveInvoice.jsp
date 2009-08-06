@@ -16,7 +16,7 @@
 <p>
 	<bean:message key="acquisitionProcess.label.proposalDocument" bundle="ACQUISITION_RESOURCES"/>: 
 	<logic:present name="acquisitionProcess" property="acquisitionRequest.acquisitionProposalDocument">
-		<html:link action="<%= actionMapping + ".do?method=downloadAcquisitionProposalDocument"%>" paramId="acquisitionProposalDocumentOid" paramName="acquisitionProcess" paramProperty="acquisitionRequest.acquisitionProposalDocument.OID">
+		<html:link action="<%= actionMapping + ".do?method=downloadAcquisitionProposalDocument"%>" paramId="acquisitionProposalDocumentOid" paramName="acquisitionProcess" paramProperty="acquisitionRequest.acquisitionProposalDocument.externalId">
 			<bean:write name="acquisitionProcess" property="acquisitionRequest.acquisitionProposalDocument.filename"/>
 		</html:link>	
 	</logic:present>
@@ -25,8 +25,8 @@
 	</logic:notPresent>
 </p>
 
-<bean:define id="urlView"><%= actionMapping %>.do?method=viewAcquisitionProcess&amp;acquisitionProcessOid=<bean:write name="acquisitionProcess" property="OID"/></bean:define>
-<bean:define id="urlSave"><%= actionMapping %>.do?method=<%= request.getAttribute("invoiceActivity").toString() %>&amp;acquisitionProcessOid=<bean:write name="acquisitionProcess" property="OID"/></bean:define>
+<bean:define id="urlView"><%= actionMapping %>.do?method=viewAcquisitionProcess&amp;acquisitionProcessOid=<bean:write name="acquisitionProcess" property="externalId"/></bean:define>
+<bean:define id="urlSave"><%= actionMapping %>.do?method=<%= request.getAttribute("invoiceActivity").toString() %>&amp;acquisitionProcessOid=<bean:write name="acquisitionProcess" property="externalId"/></bean:define>
 <fr:edit id="receiveInvoiceForm"
 		name="receiveInvoiceForm"
 		schema="receiveInvoiceForm"

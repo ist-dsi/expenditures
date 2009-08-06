@@ -25,7 +25,7 @@
 	<p>
 		<bean:message key="label.proposalDocument" bundle="REQUEST_RESOURCES"/>:
 		<logic:present name="requestForProposalProcess" property="requestForProposal.requestForProposalDocument">
-			<html:link action="/requestForProposalProcess.do?method=downloadRequestForProposalDocument" paramId="requestForProposalDocumentOid" paramName="requestForProposalProcess" paramProperty="requestForProposal.requestForProposalDocument.OID">
+			<html:link action="/requestForProposalProcess.do?method=downloadRequestForProposalDocument" paramId="requestForProposalDocumentOid" paramName="requestForProposalProcess" paramProperty="requestForProposal.requestForProposalDocument.externalId">
 				<bean:write name="requestForProposalProcess" property="requestForProposal.requestForProposalDocument.filename"/>
 			</html:link>	
 		</logic:present>

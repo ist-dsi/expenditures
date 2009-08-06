@@ -10,8 +10,8 @@
 
 <bean:define id="processClass" name="process" property="class.simpleName"/>
 
-<bean:define id="urlActivity">/acquisition<%=  processClass %>.do?method=changeFinancersAccountingUnit&amp;processOid=<bean:write name="process" property="OID"/></bean:define>
-<bean:define id="urlView">/acquisition<%= processClass %>.do?method=viewProcess&amp;processOid=<bean:write name="process" property="OID"/></bean:define>
+<bean:define id="urlActivity">/acquisition<%=  processClass %>.do?method=changeFinancersAccountingUnit&amp;processOid=<bean:write name="process" property="externalId"/></bean:define>
+<bean:define id="urlView">/acquisition<%= processClass %>.do?method=viewProcess&amp;processOid=<bean:write name="process" property="externalId"/></bean:define>
 <fr:edit action="<%= urlActivity %>" 
 		id="financersAccountingUnits" 
 		schema="changeFinancersAccountingUnit" 

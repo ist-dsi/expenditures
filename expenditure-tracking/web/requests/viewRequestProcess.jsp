@@ -13,7 +13,7 @@
 <fr:view name="requestForProposalProcess"> 
 	<fr:layout name="process-state">
 		<fr:property name="stateParameterName" value="state"/>
-		<fr:property name="url" value="/viewLogs.do?method=viewOperationLog&acquisitionProcessOid=${OID}"/>
+		<fr:property name="url" value="/viewLogs.do?method=viewOperationLog&acquisitionProcessOid=${externalId}"/>
 		<fr:property name="contextRelative" value="true"/>
 		<fr:property name="currentStateClass" value=""/>
 	</fr:layout>
@@ -31,7 +31,7 @@
 	<logic:iterate id="activity" name="requestForProposalProcess" property="activeActivitiesForRequest">
 		<bean:define id="activityName" name="activity" property="class.simpleName"/> 
 		<li>
-			<html:link page='<%= "/requestForProposalProcess.do?method=execute" + activityName %>' paramId="requestForProposalProcessOid" paramName="requestForProposalProcess" paramProperty="OID">
+			<html:link page='<%= "/requestForProposalProcess.do?method=execute" + activityName %>' paramId="requestForProposalProcessOid" paramName="requestForProposalProcess" paramProperty="externalId">
 				<fr:view name="activity" property="class">
 					<fr:layout name="label">
 						<fr:property name="bundle" value="REQUEST_RESOURCES"/>
@@ -61,7 +61,7 @@
 	<p>
 		<bean:message key="label.proposalDocument" bundle="REQUEST_RESOURCES"/>:
 		<logic:present name="requestForProposalProcess" property="requestForProposal.requestForProposalDocument">
-			<html:link action="/requestForProposalProcess.do?method=downloadRequestForProposalDocument" paramId="requestForProposalDocumentOid" paramName="requestForProposalProcess" paramProperty="requestForProposal.requestForProposalDocument.OID">
+			<html:link action="/requestForProposalProcess.do?method=downloadRequestForProposalDocument" paramId="requestForProposalDocumentOid" paramName="requestForProposalProcess" paramProperty="requestForProposal.requestForProposalDocument.externalId">
 				<bean:write name="requestForProposalProcess" property="requestForProposal.requestForProposalDocument.filename"/>
 			</html:link>	
 		</logic:present>

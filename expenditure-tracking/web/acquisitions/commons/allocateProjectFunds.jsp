@@ -20,8 +20,8 @@
 
 <p class="mtop15 mbottom025"><bean:message key="acquisitionProcess.label.projectFundAllocation.insert" bundle="ACQUISITION_RESOURCES"/>:</p>
 
-<bean:define id="urlActivity">/acquisition<%= processClass %>.do?method=allocateProjectFunds&amp;processOid=<bean:write name="process" property="OID"/></bean:define>
-<bean:define id="urlView">/acquisition<%= processClass %>.do?method=viewAcquisitionProcess&amp;processOid=<bean:write name="process" property="OID"/></bean:define>
+<bean:define id="urlActivity">/acquisition<%= processClass %>.do?method=allocateProjectFunds&amp;processOid=<bean:write name="process" property="externalId"/></bean:define>
+<bean:define id="urlView">/acquisition<%= processClass %>.do?method=viewAcquisitionProcess&amp;processOid=<bean:write name="process" property="externalId"/></bean:define>
 <fr:edit action="<%= urlActivity %>" 
 		id="financerFundAllocationId" 
 		schema="editProjectFinancerFundAllocationId" 

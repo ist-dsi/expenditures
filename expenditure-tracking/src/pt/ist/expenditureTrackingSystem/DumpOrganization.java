@@ -13,7 +13,6 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Project;
 import pt.ist.expenditureTrackingSystem.domain.organization.SubProject;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
-import pt.ist.fenixWebFramework.FenixWebFramework;
 import pt.ist.fenixWebFramework.services.Service;
 
 public class DumpOrganization {
@@ -21,8 +20,8 @@ public class DumpOrganization {
     public static void init() {
 	String domainModelPath = "web/WEB-INF/classes/domain_model.dml";
 	// TODO : reimplmenent as scheduled script
-	//FenixWebFramework.initialize(PropertiesManager.getFenixFrameworkConfig(domainModelPath));
-	//ExpenditureTrackingSystem.initialize(FenixWebFramework.getConfig());
+	// FenixWebFramework.initialize(PropertiesManager.getFenixFrameworkConfig(domainModelPath));
+	// ExpenditureTrackingSystem.initialize(FenixWebFramework.getConfig());
     }
 
     public static void main(String[] args) {
@@ -55,7 +54,7 @@ public class DumpOrganization {
     private static void dump(final PrintWriter printWriter, final Person person) {
 	printWriter.write("Person");
 	printWriter.write("\t");
-	printWriter.write(Long.toString(person.getOID()));
+	printWriter.write(person.getExternalId());
 	printWriter.write("\t");
 	printWriter.write(person.getUsername());
 	printWriter.write("\t");
@@ -115,13 +114,13 @@ public class DumpOrganization {
     private static void dumpUnitInfo(final PrintWriter printWriter, final Unit unit, final String prefix) {
 	printWriter.write(prefix);
 	printWriter.write("\t");
-	printWriter.write(Long.toString(unit.getOID()));
+	printWriter.write(unit.getExternalId());
 	printWriter.write("\t");
 	printWriter.write(unit.getName());
 	printWriter.write("\t");
 	printWriter.write(getAccountingUnitName(unit));
 	printWriter.write("\t");
-	printWriter.write(getParentId(unit));	
+	printWriter.write(getParentId(unit));
     }
 
     private static String getAccountingUnitName(final Unit unit) {
@@ -131,7 +130,7 @@ public class DumpOrganization {
 
     private static String getParentId(final Unit unit) {
 	final Unit parent = unit.getParentUnit();
-	return parent == null ? "null" : Long.toString(parent.getOID());
+	return parent == null ? "null" : parent.getExternalId();
     }
 
     private static void dumpResponsibilities(final PrintWriter printWriter, final Unit unit) {
@@ -144,10 +143,10 @@ public class DumpOrganization {
 	final Person person = authorization.getPerson();
 	printWriter.write("Responsibility");
 	printWriter.write("\t");
-	printWriter.write(Long.toString(unit.getOID()));
+	printWriter.write(unit.getExternalId());
 	printWriter.write("\t");
-	printWriter.write(Long.toString(person.getOID()));
-	printWriter.write("\n");	
+	printWriter.write(person.getExternalId());
+	printWriter.write("\n");
     }
 
 }

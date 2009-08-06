@@ -36,7 +36,7 @@
 		<fr:property name="link(view)" value="/expenditureTrackingOrganization.do?method=viewPerson"/>
 		<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
 		<fr:property name="key(view)" value="link.view"/>
-		<fr:property name="param(view)" value="OID/personOid"/>
+		<fr:property name="param(view)" value="externalId/personOid"/>
 		<fr:property name="order(view)" value="1"/>
 	</fr:layout>
 </fr:view>

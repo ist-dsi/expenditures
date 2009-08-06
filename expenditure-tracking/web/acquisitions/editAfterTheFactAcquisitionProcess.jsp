@@ -5,7 +5,7 @@
 
 <h2><bean:message key="afterTheFactAcquisitionProcess.title.viewAfterTheFactAcquisitionProcess" bundle="ACQUISITION_RESOURCES"/></h2>
 
-<bean:define id="urlCancel">/acquisitionAfterTheFactAcquisitionProcess.do?method=viewAfterTheFactAcquisitionProcess&amp;acquisitionAfterTheFactOid=<bean:write name="afterTheFactAcquisitionProcessBean" property="afterTheFactAcquisitionProcess.acquisitionAfterTheFact.OID"/></bean:define>
+<bean:define id="urlCancel">/acquisitionAfterTheFactAcquisitionProcess.do?method=viewAfterTheFactAcquisitionProcess&amp;acquisitionAfterTheFactOid=<bean:write name="afterTheFactAcquisitionProcessBean" property="afterTheFactAcquisitionProcess.acquisitionAfterTheFact.externalId"/></bean:define>
 <fr:form action="/acquisitionAfterTheFactAcquisitionProcess.do?method=editAfterTheFactAcquisitionProcess">
 	<fr:destination name="cancel" path="<%= urlCancel %>"/>
 	<fr:edit id="afterTheFactAcquisitionProcessBean"

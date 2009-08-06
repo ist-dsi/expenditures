@@ -30,7 +30,7 @@
 	</div>
 
 <div class="mbottom15">
-	<bean:define id="url">/expenditureTrackingOrganization.do?method=prepareMergeSupplier&amp;supplierToTransferOID=<bean:write name="supplierToTransfer" property="OID"/></bean:define>
+	<bean:define id="url">/expenditureTrackingOrganization.do?method=prepareMergeSupplier&amp;supplierToTransferOID=<bean:write name="supplierToTransfer" property="externalId"/></bean:define>
 	<fr:form action="<%= url %>">
 		<fr:edit id="supplierBean" 
 				name="supplierBean"
@@ -71,8 +71,8 @@
 	</div>
 
 	<p>
-		<bean:define id="supplierToTransferOID" name="supplierToTransfer" property="OID"/>
-		<bean:define id="supplierDestinationOID" name="supplierBean" property="supplier.OID"/>
+		<bean:define id="supplierToTransferOID" name="supplierToTransfer" property="externalId" type="java.lang.String"/>
+		<bean:define id="supplierDestinationOID" name="supplierBean" property="supplier.externalId" type="java.lang.String"/>
 		<html:link action='<%= "/expenditureTrackingOrganization.do?method=mergeSupplier&amp;supplierToTransferOID=" + supplierToTransferOID + "&amp;supplierDestinationOID=" + supplierDestinationOID%>'>
 			<bean:message key="supplier.link.merge.into.this" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 		</html:link>

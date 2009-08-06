@@ -14,7 +14,7 @@
 			<table>
 				<logic:iterate id="process" name="ownProcesses">
 					<bean:define id="className" name="process" property="class.simpleName"/>
-					<bean:define id="oid" name="process" property="OID"/>
+					<bean:define id="oid" name="process" property="externalId" type="java.lang.String"/>
 					<tr>
 						<td>
 							<html:link page="<%= "/acquisition" + className + ".do?method=viewProcess&processOid=" + oid %>">
@@ -26,7 +26,7 @@
 				</logic:iterate>
 				<tr>
 					<td colspan="2" class="aright" style="padding-bottom: 8px !important;">
-						<bean:define id="personOID" name="person" property="OID"/>
+						<bean:define id="personOID" name="person" property="externalId" type="java.lang.String"/>
 						<html:link page="<%= "/search.do?method=searchJump&requestingPerson=" + personOID %>"><bean:message key="label.viewAll" bundle="EXPENDITURE_RESOURCES"/></html:link>
 					</td>
 				</tr>

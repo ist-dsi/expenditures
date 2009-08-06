@@ -156,7 +156,7 @@ public class DashBoardAction extends ContextBaseAction {
 	PaymentProcess process = search.iterator().next();
 
 	return new ActionForward("/acquisition" + process.getClass().getSimpleName() + ".do?method=viewProcess&processOid="
-		+ process.getOID());
+		+ process.getExternalId());
     }
 
     private Strings getStrings(String column1) {

@@ -13,8 +13,8 @@
 <bean:define id="processRequest" name="acquisitionProcess" property="request" toScope="request"/>
 <jsp:include page="commons/viewAcquisitionRequest.jsp" flush="true"/>
 
-<bean:define id="urlView"><%= actionMapping %>.do?method=viewAcquisitionProcess&amp;acquisitionProcessOid=<bean:write name="acquisitionProcess" property="OID"/></bean:define>
-<bean:define id="urlSave"><%= actionMapping %>.do?method=setRefundee&amp;acquisitionProcessOid=<bean:write name="acquisitionProcess" property="OID"/></bean:define>
+<bean:define id="urlView"><%= actionMapping %>.do?method=viewAcquisitionProcess&amp;acquisitionProcessOid=<bean:write name="acquisitionProcess" property="externalId"/></bean:define>
+<bean:define id="urlSave"><%= actionMapping %>.do?method=setRefundee&amp;acquisitionProcessOid=<bean:write name="acquisitionProcess" property="externalId"/></bean:define>
 
 <p class="mbottom05">
 	<strong><bean:message key="acquisitionProcess.title.set.refundee" bundle="ACQUISITION_RESOURCES"/></strong>

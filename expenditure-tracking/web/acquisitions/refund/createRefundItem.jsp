@@ -5,7 +5,7 @@
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
 <bean:define id="processClass" name="refundProcess" property="class.simpleName"/> 
-<bean:define id="processOID" name="refundProcess" property="OID"/>
+<bean:define id="processOID" name="refundProcess" property="externalId" type="java.lang.String"/>
 <bean:define id="actionMapping" value='<%= "/acquisition" + processClass %>'/>
 
 <h2><bean:message key="refundProcess.title.createRefundItem" bundle="ACQUISITION_RESOURCES"/></h2>

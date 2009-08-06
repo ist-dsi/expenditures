@@ -30,7 +30,7 @@
 			<fr:property name="link(view)" value="/requestForProposalProcess.do?method=viewRequestForProposalProcess"/>
 			<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
 			<fr:property name="key(view)" value="link.view"/>
-			<fr:property name="param(view)" value="OID/requestForProposalProcessOid"/>
+			<fr:property name="param(view)" value="externalId/requestForProposalProcessOid"/>
 			<fr:property name="order(view)" value="1"/>
 		</fr:layout>
 	</fr:view>

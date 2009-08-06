@@ -9,7 +9,7 @@
 
 <script type="text/javascript" src="<%= request.getContextPath() + "/javaScript/calculator.js" %>"></script> 
 
-<bean:define id="processOID" name="item" property="request.process.OID"/>
+<bean:define id="processOID" name="item" property="request.process.externalId" type="java.lang.String"/>
 <bean:define id="processClass" name="item" property="request.process.class.simpleName"/>
 <bean:define id="actionMapping" value="<%= "/acquisition" + processClass%>"/>
 
@@ -18,7 +18,7 @@
 </bean:define>
 <bean:size id="maxElements" name="unitItemBeans"/>
 
-<bean:define id="itemOID" name="item" property="OID"/>
+<bean:define id="itemOID" name="item" property="externalId" type="java.lang.String"/>
 <bean:define id="itemClass" name="item" property="class.simpleName"/>
 
 <jsp:include page='<%= "view" + itemClass + ".jsp"%>'/>

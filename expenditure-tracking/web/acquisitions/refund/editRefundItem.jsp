@@ -8,8 +8,8 @@
 	key="acquisitionProcess.title.editRefundRequest"
 	bundle="ACQUISITION_RESOURCES" /></h2>
 	
-<bean:define id="refundProcessOid" name="refundProcess" property="OID"/>
-<bean:define id="refundItemOid" name="refundItem" property="OID"/>
+<bean:define id="refundProcessOid" name="refundProcess" property="externalId" type="java.lang.String"/>
+<bean:define id="refundItemOid" name="refundItem" property="externalId" type="java.lang.String"/>
 
 <fr:edit id="refundItemBean" name="bean" schema="createRefundItem" action='<%= "/acquisitionRefundProcess.do?method=actualEditRefundItem&refundItemOid=" + refundItemOid + "&refundProcessOid=" + refundProcessOid%>'>
 	<fr:layout name="tabular">

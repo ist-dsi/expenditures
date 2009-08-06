@@ -18,12 +18,12 @@
 		<fr:property name="classes" value="tstyle1"/>
 	</fr:layout>
 </fr:view>
-<bean:define id="acquisitionProcessOID" name="acquisitionProcess" property="OID"/>
+<bean:define id="acquisitionProcessOID" name="acquisitionProcess" property="externalId" type="java.lang.String"/>
 <bean:define id="acquisitionProcessClass" name="acquisitionProcess" property="class.simpleName"/>
 <bean:define id="actionMapping" value="<%= "/acquisition" + acquisitionProcessClass %>"/>
 
 <%-- 
-<html:link action="<%= actionMapping +".do?method=editSupplierAddress"%>" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="OID"><bean:message key="supplier.link.edit" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/></html:link>
+<html:link action="<%= actionMapping +".do?method=editSupplierAddress"%>" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="externalId"><bean:message key="supplier.link.edit" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/></html:link>
 --%>
 </div>
 
@@ -43,7 +43,7 @@
 		<bean:message key="acquisitionProcess.label.requestDocument" bundle="ACQUISITION_RESOURCES"/>:
 		<logic:present name="acquisitionProcess" property="acquisitionRequest.purchaseOrderDocument">
 			
-			<bean:define id="acquisitionRequestDocumentOID" name="acquisitionProcess" property="acquisitionRequest.purchaseOrderDocument.OID"/>
+			<bean:define id="acquisitionRequestDocumentOID" name="acquisitionProcess" property="acquisitionRequest.purchaseOrderDocument.externalId" type="java.lang.String"/>
 			
 			<a id="file" href="<%= request.getContextPath() +  actionMapping + ".do?method=downloadAcquisitionPurchaseOrderDocument&purchaseOrderDocumentOid=" + acquisitionRequestDocumentOID%>">
 				<span id="fileName">

@@ -12,7 +12,7 @@
 		<logic:iterate id="activity" name="afterTheFactAcquisitionProcess" property="activeActivities">
 			<bean:define id="activityName" name="activity" property="class.simpleName"/> 
 			<li>
-				<html:link page='<%= "/acquisitionAfterTheFactAcquisitionProcess.do?method=execute" + activityName %>' paramId="afterTheFactAcquisitionProcessOid" paramName="afterTheFactAcquisitionProcess" paramProperty="OID">
+				<html:link page='<%= "/acquisitionAfterTheFactAcquisitionProcess.do?method=execute" + activityName %>' paramId="afterTheFactAcquisitionProcessOid" paramName="afterTheFactAcquisitionProcess" paramProperty="externalId">
 					<fr:view name="activity" property="class">
 						<fr:layout name="label">
 							<fr:property name="bundle" value="ACQUISITION_RESOURCES"/>
@@ -29,7 +29,7 @@
 	</logic:empty>
 </div>
 
-<html:link page="/viewLogs.do?method=viewOperationLog&amp;module=acquisitions" paramId="processOid" paramName="afterTheFactAcquisitionProcess" paramProperty="OID">
+<html:link page="/viewLogs.do?method=viewOperationLog&amp;module=acquisitions" paramId="processOid" paramName="afterTheFactAcquisitionProcess" paramProperty="externalId">
 	<bean:message key="label.log.view" bundle="ACQUISITION_RESOURCES"/>
 </html:link>
 
@@ -58,7 +58,7 @@
 		<bean:message key="acquisitionProcess.label.invoice" bundle="ACQUISITION_RESOURCES"/>:
 		<logic:present name="afterTheFactAcquisitionProcess" property="acquisitionAfterTheFact.invoice">
 			<logic:present name="afterTheFactAcquisitionProcess" property="acquisitionAfterTheFact.invoice.content">
-				<html:link action="/acquisitionProcess.do?method=downloadInvoice" paramId="invoiceOid" paramName="afterTheFactAcquisitionProcess" paramProperty="acquisitionAfterTheFact.invoice.OID">
+				<html:link action="/acquisitionProcess.do?method=downloadInvoice" paramId="invoiceOid" paramName="afterTheFactAcquisitionProcess" paramProperty="acquisitionAfterTheFact.invoice.externalId">
 					<bean:write name="afterTheFactAcquisitionProcess" property="acquisitionAfterTheFact.invoice.filename"/>
 				</html:link>
 			</logic:present>	

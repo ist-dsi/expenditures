@@ -74,7 +74,7 @@ public class RevertProcessState {
     }
 
     @Service
-    private static void revert()  {
+    private static void revert() {
 	final String processToFix = "2009/1908";
 	final int year = Integer.parseInt(processToFix.substring(0, 4));
 
@@ -83,7 +83,8 @@ public class RevertProcessState {
 	    if (paymentProcessYear.getYear().intValue() == year) {
 		for (final PaymentProcess paymentProcess : paymentProcessYear.getPaymentProcessSet()) {
 		    if (paymentProcess.getAcquisitionProcessId().equals(processToFix)) {
-			System.out.println("Found it: " + paymentProcess.getOID() + " - " + paymentProcess.getAcquisitionProcessId());
+			System.out.println("Found it: " + paymentProcess.getExternalId() + " - "
+				+ paymentProcess.getAcquisitionProcessId());
 			revert(paymentProcess);
 		    }
 		}
@@ -101,8 +102,8 @@ public class RevertProcessState {
 	final DateTime when = genericLog.getWhenOperationWasRan();
 	System.out.println("Operation: " + operation + " " + when.toString("yyyy-MM-dd HH:mm:ss"));
 	if (operation.equals("FundAllocationExpirationDate") && when.equals(expected)) {
-		System.out.println("   Found log to delete.");
-		operationLog.delete();
+	    System.out.println("   Found log to delete.");
+	    operationLog.delete();
 	}
 
 	final Set<ProcessState> processStates = paymentProcess.getProcessStatesSet();
@@ -110,7 +111,8 @@ public class RevertProcessState {
 	final AcquisitionProcessState acquisitionProcessState = (AcquisitionProcessState) processState;
 	if (acquisitionProcessState.getAcquisitionProcessStateType() == AcquisitionProcessStateType.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER
 		&& acquisitionProcessState.getWhenDateTime().equals(expected)) {
-	    System.out.println("Found process state to delete: " + acquisitionProcessState.getAcquisitionProcessStateType().name());
+	    System.out.println("Found process state to delete: "
+		    + acquisitionProcessState.getAcquisitionProcessStateType().name());
 	    acquisitionProcessState.removeProcess();
 	    acquisitionProcessState.removeWho();
 	    acquisitionProcessState.removeExpenditureTrackingSystem();

@@ -32,14 +32,14 @@ public class RequestForProposalProcessAction extends ProcessAction {
 	}
 	return viewRequestForProposalProcess(mapping, request, (RequestForProposalProcess) process);
     }
-    
+
     public ActionForward showPendingRequests(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 
 	List<RequestForProposalProcess> processes = new ArrayList<RequestForProposalProcess>();
 	for (RequestForProposalProcess process : GenericProcess.getAllProcesses(RequestForProposalProcess.class)) {
 	    if (process.isPersonAbleToExecuteActivities()) {
-		processes.add((RequestForProposalProcess) process);
+		processes.add(process);
 	    }
 	}
 	request.setAttribute("activeRequests", processes);
@@ -82,24 +82,25 @@ public class RequestForProposalProcessAction extends ProcessAction {
     }
 
     public ActionForward downloadRequestForProposalDocument(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws IOException  {
+	    final HttpServletRequest request, final HttpServletResponse response) throws IOException {
 	RequestForProposalDocument document = getDomainObject(request, "requestForProposalDocumentOid");
 	return download(response, document);
     }
-    
-    // -------------------------------------------------- PROCESS ACTIVITIES - PROCESS ACTIVITIES - PROCESS ACTIVITIES BEGIN
+
+    // -------------------------------------------------- PROCESS ACTIVITIES -
+    // PROCESS ACTIVITIES - PROCESS ACTIVITIES BEGIN
     protected ActionForward executeActivityAndViewProcess(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response, final String activityName) {
 	genericActivityExecution(request, activityName);
 	return viewRequestForProposalProcess(mapping, request, (RequestForProposalProcess) getDomainObject(request,
-	"requestForProposalProcessOid"));
+		"requestForProposalProcessOid"));
     }
 
     public ActionForward executeSubmitRequestForApproval(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	return executeActivityAndViewProcess(mapping, form, request, response, "SubmitRequestForApproval");
     }
-    
+
     public ActionForward executeApproveRequestForProposal(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	return executeActivityAndViewProcess(mapping, form, request, response, "ApproveRequestForProposal");
@@ -110,33 +111,33 @@ public class RequestForProposalProcessAction extends ProcessAction {
 	return executeActivityAndViewProcess(mapping, form, request, response, "RejectRequestForProposal");
     }
 
-     public ActionForward executeCancelRequestForProposal(final ActionMapping mapping, final ActionForm form,
+    public ActionForward executeCancelRequestForProposal(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	return executeActivityAndViewProcess(mapping, form, request, response, "CancelRequestForProposal");
     }
-    
+
     public ActionForward executeEditRequestForProposal(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 
 	final RequestForProposalProcess process = (RequestForProposalProcess) getProcess(request);
 	final CreateRequestForProposalProcessBean requestBean = new CreateRequestForProposalProcessBean(process);
 	request.setAttribute("requestForProposalProcessBean", requestBean);
-	request.setAttribute("requestForProposalProcessOid", process.getOID());
+	request.setAttribute("requestForProposalProcessOid", process.getExternalId());
 	return forward(request, "/requests/editRequestProcess.jsp");
     }
-    
+
     public ActionForward executeChooseSupplierProposal(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
-	request.setAttribute("requestForProposalProcessOid", getProcess(request).getOID());
+	request.setAttribute("requestForProposalProcessOid", getProcess(request).getExternalId());
 	return forward(request, "/requests/chooseSupplierProposal.jsp");
     }
-    
+
     public ActionForward chooseSupplierProposal(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
-	//TODO
+	// TODO
 	return forward(request, "/requests/chooseSupplierProposal.jsp");
     }
-    
+
     public ActionForward editRequestForProposal(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 
@@ -147,11 +148,12 @@ public class RequestForProposalProcessAction extends ProcessAction {
 	return viewRequestForProposalProcess(mapping, request, process);
     }
 
-    // ---------------------------------------------------- PROCESS ACTIVITIES - PROCESS ACTIVITIES - PROCESS ACTIVITIES END
+    // ---------------------------------------------------- PROCESS ACTIVITIES -
+    // PROCESS ACTIVITIES - PROCESS ACTIVITIES END
 
     public ActionForward searchRequestProposalProcess(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
-	
+
 	SearchRequestProposal searchProposalProcess = getRenderedObject("searchProposalRequestProcess");
 	if (searchProposalProcess == null) {
 	    searchProposalProcess = new SearchRequestProposal();

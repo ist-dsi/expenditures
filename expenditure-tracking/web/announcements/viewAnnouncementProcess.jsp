@@ -17,7 +17,7 @@
 		<logic:iterate id="activity" name="announcementProcess" property="activeActivities">
 			<bean:define id="activityName" name="activity" property="class.simpleName"/> 
 			<li>
-				<html:link page='<%= "/announcementProcess.do?method=execute" + activityName %>' paramId="announcementProcessOid" paramName="announcementProcess" paramProperty="OID">
+				<html:link page='<%= "/announcementProcess.do?method=execute" + activityName %>' paramId="announcementProcessOid" paramName="announcementProcess" paramProperty="externalId">
 					<fr:view name="activity" property="class">
 						<fr:layout name="label">
 							<fr:property name="bundle" value="ANNOUNCEMENT_RESOURCES"/>

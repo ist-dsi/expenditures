@@ -15,7 +15,7 @@
 
 <bean:define id="processRequest" name="process" property="request" toScope="request"/>
 
-<bean:define id="processOID" name="process" property="OID"/>
+<bean:define id="processOID" name="process" property="externalId" type="java.lang.String"/>
 <bean:define id="requestClass" name="processRequest" property="class.simpleName"/>
 <bean:define id="processClass" name="process" property="class.simpleName"/>
 <jsp:include page='<%=  "view" + requestClass + ".jsp" %>' flush="true"/>

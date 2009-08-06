@@ -3,9 +3,7 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import myorg.domain.util.Address;
 import myorg.domain.util.Money;
@@ -25,7 +23,7 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 		final AcquisitionRequestItem acquisitionRequestItem2) {
 	    final int c = acquisitionRequestItem1.getProposalReference()
 		    .compareTo(acquisitionRequestItem2.getProposalReference());
-	    return c == 0 ? acquisitionRequestItem1.getIdInternal().compareTo(acquisitionRequestItem2.getIdInternal()) : c;
+	    return c == 0 ? acquisitionRequestItem1.getExternalId().compareTo(acquisitionRequestItem2.getExternalId()) : c;
 	}
 
     };
@@ -207,6 +205,7 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	setRealVatValue(acquisitionRequestItemBean.getRealVatValue());
     }
 
+    @Override
     public void delete() {
 	removeRequest();
 	removeExpenditureTrackingSystem();
@@ -290,6 +289,7 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
     // return false;
     // }
 
+    @Override
     public void unapprove() {
 	for (UnitItem unitItem : getUnitItems()) {
 	    unitItem.setSubmitedForFundsAllocation(false);

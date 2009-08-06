@@ -2,9 +2,6 @@ package pt.ist.expenditureTrackingSystem.domain;
 
 import java.util.Comparator;
 
-import myorg.applicationTier.Authenticate.UserView;
-import myorg.domain.User;
-
 import org.joda.time.DateTime;
 
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
@@ -37,7 +34,7 @@ public abstract class ProcessState extends ProcessState_Base {
     public static final Comparator<ProcessState> COMPARATOR_BY_WHEN = new Comparator<ProcessState>() {
 	public int compare(ProcessState o1, ProcessState o2) {
 	    int r = o1.getWhenDateTime().compareTo(o2.getWhenDateTime());
-	    return r == 0 ? (int) (o1.getOID() - o2.getOID()) : r;
+	    return r == 0 ? o1.getExternalId().compareTo(o2.getExternalId()) : r;
 	}
     };
 

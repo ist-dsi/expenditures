@@ -11,7 +11,7 @@
 				<table>
 					<logic:iterate id="process" name="processesWithUnreadComments">
 						<bean:define id="className" name="process" property="class.simpleName"/>
-						<bean:define id="oid" name="process" property="OID"/>
+						<bean:define id="oid" name="process" property="externalId" type="java.lang.String"/>
 						<tr>
 							<td>
 								<html:link page="<%= "/acquisition" + className + ".do?method=viewProcess&processOid=" + oid %>">

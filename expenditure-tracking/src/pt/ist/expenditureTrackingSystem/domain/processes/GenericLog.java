@@ -16,9 +16,9 @@ public class GenericLog extends GenericLog_Base {
 	    final DateTime when1 = genericLog1.getWhenOperationWasRan();
 	    final DateTime when2 = genericLog2.getWhenOperationWasRan();
 	    final int result = when1.compareTo(when2);
-	    return result == 0 ? genericLog1.getIdInternal().compareTo(genericLog2.getIdInternal()) : result;
+	    return result == 0 ? genericLog1.getExternalId().compareTo(genericLog2.getExternalId()) : result;
 	}
-	
+
     };
 
     public static final Comparator<GenericLog> COMPARATOR_BY_WHEN_REVERSED = new Comparator<GenericLog>() {

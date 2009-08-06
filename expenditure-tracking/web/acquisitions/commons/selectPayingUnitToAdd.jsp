@@ -7,7 +7,7 @@
 
 <h2><bean:message key="label.pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.AddPayingUnit" bundle="ACQUISITION_RESOURCES"/></h2>
 
-<bean:define id="processOID" name="process" property="OID"/>
+<bean:define id="processOID" name="process" property="externalId" type="java.lang.String"/>
 <bean:define id="processClass" name="process" property="class.simpleName"/>
 <bean:define id="actionMapping" value='<%= "/acquisition" + processClass%>'/>
 

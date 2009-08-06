@@ -7,8 +7,8 @@
 
 <bean:define id="item" name="bean" property="item"/>
 <bean:define id="process" name="item" property="request.process"/>
-<bean:define id="itemOID" name="item" property="OID"/>
-<bean:define id="processOID" name="process" property="OID"/>
+<bean:define id="itemOID" name="item" property="externalId" type="java.lang.String"/>
+<bean:define id="processOID" name="process" property="externalId" type="java.lang.String"/>
 <bean:define id="processClass" name="process" property="class.simpleName"/>
 
 <h2>

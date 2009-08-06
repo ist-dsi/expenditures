@@ -10,8 +10,6 @@ import java.util.Locale;
 
 import jvstm.TransactionalCommand;
 import myorg._development.PropertiesManager;
-import myorg.domain.MyOrg;
-import pt.ist.expenditureTrackingSystem.domain.processes.ProcessComment;
 import pt.ist.fenixWebFramework.FenixWebFramework;
 import pt.ist.fenixframework.pstm.Transaction;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
@@ -63,29 +61,37 @@ public class CheckSuppliersOverLimit {
     }
 
     private static void checkSupplierLimits() throws UnsupportedEncodingException {
-	for (final ProcessComment processComment : MyOrg.getInstance().getExpenditureTrackingSystem().getCommentsSet()) {
-	    final String comment = processComment.getComment();
-	    if (comment != null && processComment.getIdInternal().intValue() == 37804) {
-		final byte[] bytes = comment.getBytes("ISO8859-1");
-		final String piglet = new String(bytes);
-		System.out.println("Comment: " + comment);
-		System.out.println("Piglet : " + piglet);
-		if (piglet.length() < comment.length()) {
-		    System.out.println("Process comment: " + processComment.getIdInternal() + " is busted... and it is ficable...");
-		}
-	    }
-	    if (comment != null && processComment.getIdInternal().intValue() == 38003) {
-		final byte[] bytes = comment.getBytes("ISO8859-1");
-		final String piglet = new String(bytes);
-		System.out.println("Comment: " + comment);
-		System.out.println("Piglet : " + piglet);
-		if (piglet.length() < comment.length()) {
-		    System.out.println("Process comment: " + processComment.getIdInternal() + " is not busted... and it will be f*cked up...");
-		} else {
-		    System.out.println("All is ok");
-		}
-	    }
-	}
+	// for (final ProcessComment processComment :
+	// MyOrg.getInstance().getExpenditureTrackingSystem().getCommentsSet())
+	// {
+	// final String comment = processComment.getComment();
+	// if (comment != null && processComment.get**Id**Internal().intValue()
+	// == 37804) {
+	// final byte[] bytes = comment.getBytes("ISO8859-1");
+	// final String piglet = new String(bytes);
+	// System.out.println("Comment: " + comment);
+	// System.out.println("Piglet : " + piglet);
+	// if (piglet.length() < comment.length()) {
+	// System.out.println("Process comment: " +
+	// processComment.getExternalId() +
+	// " is busted... and it is ficable...");
+	// }
+	// }
+	// if (comment != null && processComment.get**Id**Internal().intValue()
+	// == 38003) {
+	// final byte[] bytes = comment.getBytes("ISO8859-1");
+	// final String piglet = new String(bytes);
+	// System.out.println("Comment: " + comment);
+	// System.out.println("Piglet : " + piglet);
+	// if (piglet.length() < comment.length()) {
+	// System.out.println("Process comment: " +
+	// processComment.getExternalId() +
+	// " is not busted... and it will be f*cked up...");
+	// } else {
+	// System.out.println("All is ok");
+	// }
+	// }
+	// }
     }
 
 }

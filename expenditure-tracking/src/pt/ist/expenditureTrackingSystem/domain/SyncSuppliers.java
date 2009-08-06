@@ -88,7 +88,7 @@ public class SyncSuppliers extends SyncSuppliers_Base {
 	@Override
 	protected String getQueryString() {
 	    return "SELECT GIDFORN.forn_cod_ent, GIDENTGER.num_fis, GIDENTGER.nom_ent, GIDENTGER.nom_ent_abv"
-		+ " FROM GIDFORN, GIDENTGER where GIDFORN.forn_cod_ent = GIDENTGER.cod_ent";
+		    + " FROM GIDFORN, GIDENTGER where GIDFORN.forn_cod_ent = GIDENTGER.cod_ent";
 	}
 
 	@Override
@@ -98,7 +98,7 @@ public class SyncSuppliers extends SyncSuppliers_Base {
 		supplierMap.index(giafSupplier);
 	    }
 	}
-	
+
     }
 
     private static class SupplierContactQuery extends ExternalDbQuery {
@@ -124,7 +124,7 @@ public class SyncSuppliers extends SyncSuppliers_Base {
 		}
 	    }
 	}
-	
+
 	private GiafSupplier findRemoteSupplier(final String codEnt) {
 	    for (final GiafSupplier giafSupplier : supplierMap.getGiafSuppliers()) {
 		if (giafSupplier.codEnt.equals(codEnt)) {
@@ -145,10 +145,8 @@ public class SyncSuppliers extends SyncSuppliers_Base {
 
 	@Override
 	protected String getQueryString() {
-	    return "select * from (" +
-	    		"SELECT ENTC_COD_ENT, max(ENTC_DAT_CAN) as cancelamento, max(ENTC_DAT_ACT) as activacao " +
-	    		"FROM GIDENTCAN group by ENTC_COD_ENT) " +
-	    		"where activacao is null or activacao < cancelamento";
+	    return "select * from (" + "SELECT ENTC_COD_ENT, max(ENTC_DAT_CAN) as cancelamento, max(ENTC_DAT_ACT) as activacao "
+		    + "FROM GIDENTCAN group by ENTC_COD_ENT) " + "where activacao is null or activacao < cancelamento";
 	}
 
 	@Override
@@ -161,7 +159,7 @@ public class SyncSuppliers extends SyncSuppliers_Base {
 		}
 	    }
 	}
-	
+
 	private GiafSupplier findRemoteSupplier(final String codEnt) {
 	    for (final GiafSupplier giafSupplier : supplierMap.getGiafSuppliers()) {
 		if (giafSupplier.codEnt.equals(codEnt)) {
@@ -195,12 +193,12 @@ public class SyncSuppliers extends SyncSuppliers_Base {
 
 	    final CanceledSupplierQuery canceledSupplierQuery = new CanceledSupplierQuery(supplierMap);
 	    executeQuery(canceledSupplierQuery);
-	}	
+	}
 
     }
 
     public SyncSuppliers() {
-        super();
+	super();
     }
 
     @Override
@@ -255,19 +253,18 @@ public class SyncSuppliers extends SyncSuppliers_Base {
 
     private static boolean shouldDiscard(final GiafSupplier giafSupplier) {
 	final String giafKey = giafSupplier.codEnt;
-	return (giafKey.length() == 6 && giafKey.charAt(0) == '1')
-		|| (giafKey.length() == 10 && giafKey.charAt(0) == 'E');
+	return (giafKey.length() == 6 && giafKey.charAt(0) == '1') || (giafKey.length() == 10 && giafKey.charAt(0) == 'E');
     }
 
     private static void updateSupplierInformation(final Supplier supplier, final GiafSupplier giafSupplier) {
 	if (giafSupplier.canceled || shouldDiscard(giafSupplier)) {
 	    if (giafSupplier.canceled) {
-		System.out.println("Closing canceled supplier: " + supplier.getIdInternal());
+		System.out.println("Closing canceled supplier: " + supplier.getExternalId());
 	    } else {
-		System.out.println("Closing discared supplier: " + supplier.getIdInternal());
+		System.out.println("Closing discared supplier: " + supplier.getExternalId());
 	    }
 	    if (supplier.getTotalAllocated().isZero()) {
-		System.out.println("Deleting supplier " + supplier.getIdInternal());
+		System.out.println("Deleting supplier " + supplier.getExternalId());
 		supplier.delete();
 	    } else {
 		updateSupplierInformationAux(supplier, giafSupplier);

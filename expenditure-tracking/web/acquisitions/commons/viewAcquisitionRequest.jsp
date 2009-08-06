@@ -51,7 +51,7 @@
 						<span><fr:view name="invoice" property="invoiceNumber"/></span> <span style="padding: 0 0.3em; color: #aaa;">|</span>
 						<span><fr:view name="invoice" property="invoiceDate"/></span> <span style="padding: 0 0.3em; color: #aaa;">|</span>
 						<span>
-							<html:link action="<%= actionMapping + ".do?method=downloadInvoice"%>" paramId="invoiceOid" paramName="invoice" paramProperty="OID">
+							<html:link action="<%= actionMapping + ".do?method=downloadInvoice"%>" paramId="invoiceOid" paramName="invoice" paramProperty="externalId">
 									<fr:view name="invoice" property="filename"/>
 							</html:link>
 						</span>

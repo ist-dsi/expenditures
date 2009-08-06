@@ -16,7 +16,7 @@
 		<th></th>
 	</tr>
 <logic:iterate id="file" name="files" indexId="index">
-	<bean:define id="fileOID" name="file" property="OID"/>
+	<bean:define id="fileOID" name="file" property="externalId" type="java.lang.String"/>
 	<tr>
 		<td>
 			<html:link page='<%= action + "?method=downloadImportFile&fileOID=" + fileOID %>'>

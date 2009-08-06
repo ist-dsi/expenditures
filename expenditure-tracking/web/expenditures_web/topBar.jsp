@@ -53,7 +53,7 @@
 			</html:link>
 		</li>
 		<li class="<%= organizationClass %>">
-			<html:link action="/expenditureTrackingOrganization.do?method=viewPerson" paramId="personOid" paramName="USER_SESSION_ATTRIBUTE" paramProperty="person.OID">
+			<html:link action="/expenditureTrackingOrganization.do?method=viewPerson" paramId="personOid" paramName="USER_SESSION_ATTRIBUTE" paramProperty="person.externalId">
 				<span>
 					<bean:message key="link.topBar.organization" bundle="EXPENDITURE_RESOURCES"/>
 				</span>

@@ -18,7 +18,6 @@ import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
-import pt.ist.fenixWebFramework.FenixWebFramework;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 
@@ -40,7 +39,7 @@ public class CleanProjects {
 
 	private int compareByStartDateAndId(final Authorization authorization1, final Authorization authorization2) {
 	    final int start = compareByStartDate(authorization1, authorization2);
-	    return start == 0 ? authorization1.getIdInternal().compareTo(authorization2.getIdInternal()) : start;
+	    return start == 0 ? authorization1.getExternalId().compareTo(authorization2.getExternalId()) : start;
 	}
 
 	@Override
@@ -54,8 +53,8 @@ public class CleanProjects {
     public static void init() {
 	String domainModelPath = "web/WEB-INF/classes/domain_model.dml";
 	// TODO : reimplmenent as scheduled script
-	//FenixWebFramework.initialize(PropertiesManager.getFenixFrameworkConfig(domainModelPath));
-	//ExpenditureTrackingSystem.initialize(FenixWebFramework.getConfig());
+	// FenixWebFramework.initialize(PropertiesManager.getFenixFrameworkConfig(domainModelPath));
+	// ExpenditureTrackingSystem.initialize(FenixWebFramework.getConfig());
 	Language.setLocale(new Locale("pt", "PT"));
     }
 

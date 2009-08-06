@@ -258,7 +258,7 @@
 	<slot name="presentationName" key="supplier.label.abbreviatedName" bundle="EXPENDITURE_ORGANIZATION_RESOURCES" layout="link">
 		<property name="useParent" value="true"/>
 		<property name="blankTarget" value="true"/>
-		<property name="linkFormat" value="/expenditureTrackingOrganization.do?supplierOid=${OID}&amp;method=manageSuppliers"/>
+		<property name="linkFormat" value="/expenditureTrackingOrganization.do?supplierOid=${externalId}&amp;method=manageSuppliers"/>
 		<property name="classes" value="secondaryLink"/>
 	</slot>
 </schema>

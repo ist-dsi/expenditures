@@ -30,7 +30,7 @@
 			<fr:property name="link(view)" value="/announcementProcess.do?method=viewAnnouncementProcess"/>
 			<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
 			<fr:property name="key(view)" value="link.view"/>
-			<fr:property name="param(view)" value="OID/announcementProcessOid"/>
+			<fr:property name="param(view)" value="externalId/announcementProcessOid"/>
 			<fr:property name="order(view)" value="1"/>
 		</fr:layout>
 	</fr:view>

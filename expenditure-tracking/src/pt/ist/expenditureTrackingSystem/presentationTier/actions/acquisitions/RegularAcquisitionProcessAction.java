@@ -152,6 +152,7 @@ public class RegularAcquisitionProcessAction extends PaymentProcessAction {
 	return viewAcquisitionProcess(mapping, form, request, response);
     }
 
+    @Override
     public ActionForward executeActivityAndViewProcess(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response, final String activityName, Object... args) {
 
@@ -313,7 +314,7 @@ public class RegularAcquisitionProcessAction extends PaymentProcessAction {
 	ActionForward forward = new ActionForward();
 	forward.setRedirect(true);
 	String realPath = "/acquisition" + process.getClass().getSimpleName() + ".do?method=viewProcess&processOid="
-		+ process.getOID();
+		+ process.getExternalId();
 	forward.setPath(realPath + "&" + GenericChecksumRewriter.CHECKSUM_ATTRIBUTE_NAME + "="
 		+ GenericChecksumRewriter.calculateChecksum(request.getContextPath() + realPath));
 	return forward;

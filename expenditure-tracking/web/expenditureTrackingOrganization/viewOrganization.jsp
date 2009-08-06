@@ -43,7 +43,7 @@
 	</logic:notPresent>
 	<logic:present name="unit">
 		<p>
-			<html:link action="/expenditureTrackingOrganization.do?method=prepareCreateUnit" paramId="unitOid" paramName="unit" paramProperty="OID">
+			<html:link action="/expenditureTrackingOrganization.do?method=prepareCreateUnit" paramId="unitOid" paramName="unit" paramProperty="externalId">
 				<bean:message key="unit.link.create" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 			</html:link>
 		</p>
@@ -64,10 +64,10 @@
 	
 	<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
 		<p class="mtop05">
-			<html:link action="/expenditureTrackingOrganization.do?method=editUnit" paramId="unitOid" paramName="unit" paramProperty="OID">
+			<html:link action="/expenditureTrackingOrganization.do?method=editUnit" paramId="unitOid" paramName="unit" paramProperty="externalId">
 				<bean:message key="link.edit" bundle="EXPENDITURE_RESOURCES"/>
 			</html:link> | 
-			<html:link action="/expenditureTrackingOrganization.do?method=deleteUnit" paramId="unitOid" paramName="unit" paramProperty="OID">
+			<html:link action="/expenditureTrackingOrganization.do?method=deleteUnit" paramId="unitOid" paramName="unit" paramProperty="externalId">
 				<bean:message key="link.delete" bundle="EXPENDITURE_RESOURCES"/>
 			</html:link>
 		</p>
@@ -105,7 +105,7 @@
 				<fr:property name="link(view)" value="/expenditureTrackingOrganization.do?method=viewOrganization"/>
 				<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
 				<fr:property name="key(view)" value="link.view"/>
-				<fr:property name="param(view)" value="OID/unitOid"/>
+				<fr:property name="param(view)" value="externalId/unitOid"/>
 				<fr:property name="order(view)" value="1"/>
 			</fr:layout>
 		</fr:view>
@@ -134,7 +134,7 @@
 				<fr:property name="link(view)" value="/expenditureTrackingOrganization.do?method=viewAccountingUnit"/>
 				<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
 				<fr:property name="key(view)" value="link.view"/>
-				<fr:property name="param(view)" value="OID/accountingUnitOid"/>
+				<fr:property name="param(view)" value="externalId/accountingUnitOid"/>
 				<fr:property name="order(view)" value="1"/>
 			</fr:layout>
 		</fr:view>

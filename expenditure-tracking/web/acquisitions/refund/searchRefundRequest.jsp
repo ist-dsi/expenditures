@@ -26,7 +26,7 @@
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="tstyle2 mtop2"/>
 			
-			<fr:property name="linkFormat(view)" value="/acquisition${class.simpleName}.do?method=viewRefundProcess&refundProcessOid=${OID}"/>
+			<fr:property name="linkFormat(view)" value="/acquisition${class.simpleName}.do?method=viewRefundProcess&refundProcessOid=${externalId}"/>
 			<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
 			<fr:property name="key(view)" value="link.view"/>
 			<fr:property name="order(view)" value="1"/>

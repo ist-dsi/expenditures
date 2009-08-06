@@ -11,7 +11,7 @@
 			<logic:notEmpty name="person" property="saveSearches">
 				<table style="width: 100%;">
 				<logic:iterate id="search" name="person" property="saveSearches">
-					<bean:define id="OID" name="search" property="OID"/>
+					<bean:define id="OID" name="search" property="externalId" type="java.lang.String"/>
 					<tr>
 						<td>
 							<html:link page="<%= "/search.do?method=viewSearch&searchOID=" + OID %>">

@@ -36,8 +36,8 @@ public class LoadTestData {
     public static void init() {
 	String domainModelPath = "web/WEB-INF/classes/domain_model.dml";
 	// TODO : reimplmenent as scheduled script
-	//FenixWebFramework.initialize(PropertiesManager.getFenixFrameworkConfig(domainModelPath));
-	//ExpenditureTrackingSystem.initialize(FenixWebFramework.getConfig());
+	// FenixWebFramework.initialize(PropertiesManager.getFenixFrameworkConfig(domainModelPath));
+	// ExpenditureTrackingSystem.initialize(FenixWebFramework.getConfig());
     }
 
     private static Set<String> createSetWithElement(final String string) {
@@ -57,10 +57,10 @@ public class LoadTestData {
     }
 
     private static class FenixUnit {
-	private Long oid;
-	private Long parent;
-	private String costCenterCode;
-	private String name;
+	private final String oid;
+	private final String parent;
+	private final String costCenterCode;
+	private final String name;
 	private Unit unit;
 
 	private FenixUnit(final String line) {
@@ -68,10 +68,10 @@ public class LoadTestData {
 	    final int iTab2 = line.indexOf('\t', iTab1 + 1);
 	    final int iTab3 = line.indexOf('\t', iTab2 + 1);
 
-	    oid = Long.valueOf(line.substring(0, iTab1));
+	    oid = line.substring(0, iTab1);
 
 	    final String parentString = line.substring(iTab1 + 1, iTab2);
-	    parent = parentString.equals("null") ? null : Long.valueOf(parentString);
+	    parent = parentString.equals("null") ? null : parentString;
 
 	    final String costCenterString = line.substring(iTab2 + 1, iTab3);
 	    costCenterCode = costCenterString.equals("null") ? null : costCenterString;
@@ -94,7 +94,7 @@ public class LoadTestData {
 	    }
 	}
 
-	public FenixUnit get(final Long oid) {
+	public FenixUnit get(final String oid) {
 	    if (oid == null) {
 		return null;
 	    }
@@ -163,9 +163,9 @@ public class LoadTestData {
 
     private static class FenixPerson {
 
-	private String username;
-	private String name;
-	private Set<Long> unitOids = new HashSet<Long>();
+	private final String username;
+	private final String name;
+	private final Set<String> unitOids = new HashSet<String>();
 	private Person person;
 
 	public FenixPerson(final String line) {
@@ -174,7 +174,7 @@ public class LoadTestData {
 	    name = parts[1];
 	    for (int i = 2; i < parts.length; i++) {
 		final String unitOid = parts[i];
-		unitOids.add(Long.valueOf(unitOid));
+		unitOids.add(unitOid);
 	    }
 	}
 
@@ -390,7 +390,7 @@ public class LoadTestData {
 
     @Service
     private static void createPeople(final FenixPeopleSet fenixPeopleSet, Map<String, AccountingUnit> accountingUnits
-	    /* , final FenixUnitMap fenixUnitMap */) {
+    /* , final FenixUnitMap fenixUnitMap */) {
 	for (final FenixPerson fenixPerson : fenixPeopleSet) {
 	    final CreatePersonBean createPersonBean = new CreatePersonBean();
 	    createPersonBean.setUsername(fenixPerson.username);
@@ -401,7 +401,7 @@ public class LoadTestData {
 		person.getOptions().setRecurseAuthorizationPendingUnits(Boolean.TRUE);
 	    }
 	    fenixPerson.person = person;
-	    for (final Long oid : fenixPerson.unitOids) {
+	    for (final String oid : fenixPerson.unitOids) {
 		// final FenixUnit fenixUnit = fenixUnitMap.get(oid);
 		// final Authorization authorization = new Authorization(person,
 		// fenixUnit.unit);

@@ -23,7 +23,7 @@
 			<fr:property name="link(view)" value="/expenditureTrackingOrganization.do?method=viewPerson"/>
 			<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
 			<fr:property name="key(view)" value="link.view"/>
-			<fr:property name="param(view)" value="OID/personOid"/>
+			<fr:property name="param(view)" value="externalId/personOid"/>
 			<fr:property name="order(view)" value="1"/>
 		</fr:layout>
 	</fr:view>
@@ -46,7 +46,7 @@
 			<fr:property name="link(view)" value="/expenditureTrackingOrganization.do?method=viewPerson"/>
 			<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
 			<fr:property name="key(view)" value="link.view"/>
-			<fr:property name="param(view)" value="OID/personOid"/>
+			<fr:property name="param(view)" value="externalId/personOid"/>
 			<fr:property name="order(view)" value="1"/>
 		</fr:layout>
 	</fr:view>
@@ -69,7 +69,7 @@
 			<fr:property name="link(view)" value="/expenditureTrackingOrganization.do?method=viewPerson"/>
 			<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
 			<fr:property name="key(view)" value="link.view"/>
-			<fr:property name="param(view)" value="OID/personOid"/>
+			<fr:property name="param(view)" value="externalId/personOid"/>
 			<fr:property name="order(view)" value="1"/>
 		</fr:layout>
 	</fr:view>
@@ -79,7 +79,7 @@
 <h3 class="mtop15 mbottom05"><bean:message key="title.accounting.unit.units" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/></h3>
 <logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
 	<p class="mtop05">
-		<html:link action="/expenditureTrackingOrganization.do?method=prepareAddUnitToAccountingUnit" paramId="accountingUnitOid" paramName="accountingUnit" paramProperty="OID">
+		<html:link action="/expenditureTrackingOrganization.do?method=prepareAddUnitToAccountingUnit" paramId="accountingUnitOid" paramName="accountingUnit" paramProperty="externalId">
 			<bean:message key="unit.link.add.accounting.unit" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 		</html:link>
 	</p>
@@ -101,7 +101,7 @@
 			<fr:property name="link(view)" value="/expenditureTrackingOrganization.do?method=viewOrganization"/>
 			<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
 			<fr:property name="key(view)" value="link.view"/>
-			<fr:property name="param(view)" value="OID/unitOid"/>
+			<fr:property name="param(view)" value="externalId/unitOid"/>
 			<fr:property name="order(view)" value="1"/>
 		</fr:layout>
 	</fr:view>

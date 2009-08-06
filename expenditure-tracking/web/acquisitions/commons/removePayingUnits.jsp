@@ -10,7 +10,7 @@
 <bean:define id="actionMapping" value='<%= "/acquisition" + processClass %>'/>
 
 <p class="mbottom05">
-	<html:link page='<%= actionMapping + ".do?method=viewProcess"%>' paramId="processOid" paramName="process" paramProperty="OID">
+	<html:link page='<%= actionMapping + ".do?method=viewProcess"%>' paramId="processOid" paramName="process" paramProperty="externalId">
 		« <bean:message key="link.back" bundle="EXPENDITURE_RESOURCES"/>
 	</html:link>
 </p>
@@ -21,7 +21,7 @@
 
 <jsp:include page="../../commons/defaultErrorDisplay.jsp"/>
 
-<bean:define id="processOID" name="process" property="OID"/>
+<bean:define id="processOID" name="process" property="externalId" type="java.lang.String"/>
 <fr:view name="payingUnits" schema="unitName">
 	<fr:layout name="tabular">
 		<fr:property name="classes" value="tstyle4 thcenter"/>
@@ -29,7 +29,7 @@
 		<fr:property name="link(delete)" value='<%= actionMapping + ".do?method=removePayingUnit&processOid=" + processOID %>'/>
 		<fr:property name="bundle(delete)" value="EXPENDITURE_RESOURCES"/>
 		<fr:property name="key(delete)" value="link.remove"/>
-		<fr:property name="param(delete)" value="OID/unitOID"/>
+		<fr:property name="param(delete)" value="externalId/unitOID"/>
 		<fr:property name="order(delete)" value="1"/>
 	</fr:layout>
 </fr:view>
