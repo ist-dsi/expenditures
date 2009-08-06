@@ -38,6 +38,7 @@ public class SavedSearch extends SavedSearch_Base {
 	setYear(searchBean.getPaymentProcessYear());
 	setTakenBy(searchBean.getTaker());
 	setShowOnlyWithUnreadComments(searchBean.getShowOnlyWithUnreadComments());
+	setShowPriorityOnly(searchBean.getShowPriorityOnly());
     }
 
     public Class getSearchClass() {
