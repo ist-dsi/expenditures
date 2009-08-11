@@ -9,8 +9,6 @@ import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.CharacterCodingException;
 import java.nio.charset.Charset;
-import java.nio.charset.CharsetDecoder;
-import java.nio.charset.CodingErrorAction;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -36,7 +34,6 @@ import pt.ist.fenixWebFramework.FenixWebFramework;
 import pt.ist.fenixframework.pstm.AbstractDomainObject;
 import pt.ist.fenixframework.pstm.Transaction;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
-import sun.nio.cs.ThreadLocalCoders;
 import dml.DomainClass;
 import dml.DomainModel;
 import dml.Role;
@@ -403,12 +400,15 @@ public class EncodingFixer {
     private static boolean isALittlePiggy(final String value, final String... priors) throws CharacterCodingException {
 	final Charset charset = Charset.forName("UTF-8");
 	final ByteBuffer byteBuffer = ByteBuffer.wrap(value.getBytes());
-	final CharsetDecoder charsetDecoder = ThreadLocalCoders.decoderFor(charset).onMalformedInput(CodingErrorAction.REPORT)
-		.onUnmappableCharacter(CodingErrorAction.REPORT);
-	final CharBuffer charBuffer = charsetDecoder.decode(byteBuffer);
-	if (charBuffer.toString().indexOf(charsetDecoder.replacement()) >= 0) {
-	    return false;
-	}
+
+	final CharBuffer charBuffer = charset.decode(byteBuffer);
+	if (true) throw new Error("Check this...");
+//	final CharsetDecoder charsetDecoder = ThreadLocalCoders.decoderFor(charset).onMalformedInput(CodingErrorAction.REPORT)
+//		.onUnmappableCharacter(CodingErrorAction.REPORT);
+//	final CharBuffer charBuffer = charsetDecoder.decode(byteBuffer);
+//	if (charBuffer.toString().indexOf(charsetDecoder.replacement()) >= 0) {
+//	    return false;
+//	}
 
 	final int ib = value.getBytes().length;
 	final int il = value.length();
@@ -423,12 +423,15 @@ public class EncodingFixer {
     private static boolean matchSizes(final String string1, final String string2) throws CharacterCodingException {
 	final Charset charset = Charset.forName("UTF-8");
 	final ByteBuffer byteBuffer = ByteBuffer.wrap(string2.getBytes());
-	final CharsetDecoder charsetDecoder = ThreadLocalCoders.decoderFor(charset).onMalformedInput(CodingErrorAction.REPORT)
-		.onUnmappableCharacter(CodingErrorAction.REPORT);
-	final CharBuffer charBuffer = charsetDecoder.decode(byteBuffer);
+
+	final CharBuffer charBuffer = charset.decode(byteBuffer);
+//	final CharsetDecoder charsetDecoder = ThreadLocalCoders.decoderFor(charset).onMalformedInput(CodingErrorAction.REPORT)
+//		.onUnmappableCharacter(CodingErrorAction.REPORT);
+//	final CharBuffer charBuffer = charsetDecoder.decode(byteBuffer);
 	// final CodingErrorAction codingErrorAction =
 	// charsetDecoder.malformedInputAction();
-	return charBuffer.toString().indexOf(charsetDecoder.replacement()) < 0;
+	throw new Error("Check what should be done here...");
+//	return charBuffer.toString().indexOf(charsetDecoder.replacement()) < 0;
     }
 
 }
