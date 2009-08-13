@@ -87,4 +87,10 @@ public class SavedSearch extends SavedSearch_Base {
 	}
 	return null;
     }
+
+    @Override
+    public Boolean getShowPriorityOnly() {
+	Boolean value = super.getShowPriorityOnly();
+	return value != null ? value : Boolean.FALSE;
+    }
 }
