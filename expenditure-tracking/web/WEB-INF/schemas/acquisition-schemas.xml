@@ -376,7 +376,7 @@
 		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.OperationLog"
 		bundle="EXPENDITURE_RESOURCES">
 		<slot name="executor.name" key="process.logs.label.personName"/>
-		<slot name="operation" key="process.logs.label.operation" layout="label">
+		<slot name="activity.class" key="process.logs.label.operation" layout="label">
 			<property name="bundle" value="ACQUISITION_RESOURCES"/>
 			<property name="escape" value="false"/>
 		</slot>
