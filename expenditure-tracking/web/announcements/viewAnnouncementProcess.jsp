@@ -12,7 +12,7 @@
 
 <jsp:include page="../commons/defaultErrorDisplay.jsp"/>
 
-<div class="infoop1">
+<div class="infobox_dotted">
 	<ul>
 		<logic:iterate id="activity" name="announcementProcess" property="activeActivities">
 			<bean:define id="activityName" name="activity" property="class.simpleName"/> 
@@ -34,7 +34,7 @@
 	</logic:empty>
 </div>
 
-<div class="infoop2">
+<div class="infobox">
 	<fr:view name="announcementProcess" property="announcement"
 			type="pt.ist.expenditureTrackingSystem.domain.announcements.Announcement"
 			schema="viewAnnouncementDetails">
@@ -55,7 +55,7 @@
 </logic:present>
 
 <logic:present name="rejectionMotive">
-	<div class="infoop4">
+	<div class="infobox_warning">
 		<b><bean:message key="label.rejectionJustification" bundle="ANNOUNCEMENT_RESOURCES" />:</b>
 		<logic:notEmpty name="rejectionMotive">
 			<bean:write name="rejectionMotive" />

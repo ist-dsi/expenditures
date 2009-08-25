@@ -5,7 +5,7 @@
 
 <h2><bean:message key="link.sideBar.importAfterTheFactAcquisitions" bundle="EXPENDITURE_RESOURCES"/></h2>
 
-<div class="infoop2">
+<div class="infobox">
 	<bean:message key="message.help.afterTheFactAcquisition.import" bundle="ACQUISITION_RESOURCES"/>
 </div>
 

@@ -7,7 +7,7 @@
 <h2><bean:message key="title.viewOrganization" bundle="EXPENDITURE_RESOURCES"/></h2>
 
 <logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
-	<div class="infoop1">
+	<div class="infobox_dotted">
 		<ul>
 			<li>
 				<html:link action="/expenditureTrackingOrganization.do?method=downloadMGPProjects">
@@ -53,7 +53,7 @@
 
 
 <logic:present name="unit">
-	<div class="infoop2">
+	<div class="infobox">
 		<fr:view name="unit" schema="unit">
 			<fr:layout name="tabular">
 				<fr:property name="classes" value="tstyle1"/>

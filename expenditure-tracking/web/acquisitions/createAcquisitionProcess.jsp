@@ -7,7 +7,7 @@
 <%@page import="java.util.ResourceBundle"%>
 <%@page import="myorg.util.BundleUtil"%><h2><bean:message key="acquisitionProcess.title.createAcquisitionRequest" bundle="ACQUISITION_RESOURCES"/></h2>
 
-<div class="infoop2">
+<div class="infobox">
 	<bean:message key="acquisitionProcess.message.note" bundle="ACQUISITION_RESOURCES" />
 </div>
 
@@ -59,7 +59,7 @@
 				<bean:message key="label.attention.supplier.explanation" bundle="ACQUISITION_RESOURCES"/>
 			</bean:define>
 
-			$("#createForm").before("<div id=\"limitInformation\"><div class=\"infoop4\">" + text + "</p><p><%= messageExtra %></p>");
+			$("#createForm").before("<div id=\"limitInformation\"><div class=\"infobox_warning\">" + text + "</p><p><%= messageExtra %></p>");
 		}
 	}	
 </script>

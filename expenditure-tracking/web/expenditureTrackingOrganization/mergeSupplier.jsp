@@ -8,7 +8,7 @@
 
 <p class="mvert05"><strong><bean:message key="label.supplier.to.transfer" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/></strong></p>
 
-	<div class="infoop2">
+	<div class="infobox">
 		<fr:view name="supplierToTransfer"
 				type="pt.ist.expenditureTrackingSystem.domain.organization.Supplier"
 				schema="viewSupplier">
@@ -19,7 +19,7 @@
 		</fr:view>
 	</div>
 
-	<div class="infoop2">
+	<div class="infobox">
 		<fr:view name="supplierToTransfer"
 				type="pt.ist.expenditureTrackingSystem.domain.organization.Supplier"
 				schema="viewSupplierAcquisitionInformation">
@@ -49,7 +49,7 @@
 <logic:present name="supplierBean" property="supplier">
 	<p class="mvert05"><strong><bean:message key="label.supplier.destination" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/></strong></p>
 
-	<div class="infoop2">
+	<div class="infobox">
 		<fr:view name="supplierBean" property="supplier"
 				type="pt.ist.expenditureTrackingSystem.domain.organization.Supplier"
 				schema="viewSupplier">
@@ -60,7 +60,7 @@
 		</fr:view>
 	</div>
 
-	<div class="infoop2">
+	<div class="infobox">
 		<fr:view name="supplierBean" property="supplier"
 				type="pt.ist.expenditureTrackingSystem.domain.organization.Supplier"
 				schema="viewSupplierAcquisitionInformation">

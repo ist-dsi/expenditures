@@ -15,7 +15,7 @@
 
 <fr:view name="process" property="request.invoices" schema="listInvoices">
 	<fr:layout name="tabular">
-		<fr:property name="classes" value="tstyle5"/>
+		<fr:property name="classes" value="tstyle3"/>
 		<fr:property name="link(delete)" value="<%= actionMapping + ".do?method=removeInvoice&acquisitionProcessOid=" + processOid %>"/>
 		<fr:property name="bundle(delete)" value="ACQUISITION_RESOURCES"/>
 		<fr:property name="key(delete)" value="link.deleteInvoice"/>

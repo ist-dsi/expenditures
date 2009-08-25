@@ -5,7 +5,7 @@
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 <%@ taglib uri="/WEB-INF/messages.tld" prefix="messages" %>
 
-<div class="infoop2">
+<div class="infobox">
 	<fr:view name="processRequest" 
 			schema="viewRefundRequest">
 		<fr:layout name="tabular">

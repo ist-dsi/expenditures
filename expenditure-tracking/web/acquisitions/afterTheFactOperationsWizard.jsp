@@ -7,7 +7,7 @@
 <p class="mtop05">
 	<bean:message key="message.info.afterTheFactProcessIntroduction" bundle="EXPENDITURE_RESOURCES"/>.
 </p>
-<div class="infoop1">
+<div class="infobox_dotted">
 	<ul>
 		<li>
 			<html:link action="/acquisitionAfterTheFactAcquisitionProcess.do?method=prepareCreateAfterTheFactAcquisitionProcess">

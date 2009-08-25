@@ -46,7 +46,7 @@
 	</div>
 </logic:greaterThan>
 <logic:greaterThan name="afterTheFactAcquisitionsImportBean" property="warningCount" value="0">
-	<div class="warning3">
+	<div class="warning2">
 		<bean:message key="label.afterTheFactAcquisition.import.warnings" bundle="ACQUISITION_RESOURCES" arg0="<%= Integer.toString(afterTheFactAcquisitionsImportBean.getWarningCount()) %>"/>
 		<table>
 			<logic:iterate id="issue" name="afterTheFactAcquisitionsImportBean" property="issues" type="pt.ist.expenditureTrackingSystem.domain.dto.Issue">

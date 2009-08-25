@@ -14,7 +14,7 @@
 </p>
 
 
-<div class="infoop6 mvert1">
+<div class="infobox mvert1">
 
 	<ul class="mvert05" style="padding-left: 0em; list-style: none;">
 		<li class="mbottom1">

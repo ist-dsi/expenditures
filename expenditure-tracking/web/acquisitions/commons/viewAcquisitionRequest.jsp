@@ -8,7 +8,7 @@
 <bean:define id="acquisitionProcessClass" name="processRequest" property="process.class.simpleName"/>
 <bean:define id="actionMapping" value="<%= "/acquisition" + acquisitionProcessClass %>"/>
 
-<div class="infoop2">
+<div class="infobox">
 	<fr:view name="processRequest"
 			type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest"
 			schema="viewAcquisitionRequest">

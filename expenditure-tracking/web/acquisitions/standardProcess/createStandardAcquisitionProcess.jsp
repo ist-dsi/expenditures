@@ -8,7 +8,7 @@
 	key="acquisitionProcess.title.createAcquisitionRequest"
 	bundle="ACQUISITION_RESOURCES" /></h2>
 
-<div class="infoop2"><bean:message
+<div class="infobox"><bean:message
 	key="acquisitionProcess.message.note" bundle="ACQUISITION_RESOURCES" />
 </div>
 

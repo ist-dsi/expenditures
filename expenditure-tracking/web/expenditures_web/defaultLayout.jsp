@@ -23,7 +23,7 @@
 
 	<div id="container2">
 
-		<div id="secnav">
+		<div id="secondarynav">
 			<tiles:insert attribute="sideBar"/>
 			<div class="c1"></div>
 			<div class="c2"></div>

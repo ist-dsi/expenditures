@@ -24,7 +24,7 @@
 <fr:form action='<%= actionMapping + ".do?method=editRefundInvoice&refundProcessOid=" + processOid + "&itemOid=" + itemOid%>'>
 	<fr:edit id="invoiceBeans" name="invoices" visible="false"/>
 	
-	<table class="tstyle5 mbottom1">
+	<table class="tstyle3 mbottom1">
 		<tr>
 			<th><bean:message key="acquisitionProcess.label.invoice.number" bundle="ACQUISITION_RESOURCES"/></th>		
 			<th><bean:message key="acquisitionProcess.label.invoice.date" bundle="ACQUISITION_RESOURCES"/></th>

@@ -25,7 +25,7 @@
 <logic:iterate id="systemSearch" name="systemSearches" >
 	<bean:define id="searchOID" name="systemSearch" property="externalId" type="java.lang.String"/>
 	<li class="mvert1">
-		<div class="infoop6">
+		<div class="infobox">
 			<span>
 				<strong><html:link page='<%= "/search.do?method=viewSearch&searchOID=" + searchOID%>'><fr:view name="systemSearch" property="searchName"/></html:link></strong>
 				<logic:equal name="systemSearch" property="searchDefaultForCurrentUser" value="false"> 
@@ -49,7 +49,7 @@
 <logic:iterate id="userSearch" name="userSearches" >
 	<bean:define id="searchOID" name="userSearch" property="externalId" type="java.lang.String"/>
 	<li class="mvert1">
-		<div class="infoop6">
+		<div class="infobox">
 			<span>
 				<strong><html:link page='<%= "/search.do?method=viewSearch&searchOID=" + searchOID%>'><fr:view name="userSearch" property="searchName"/></html:link></strong>
 				( <html:link page='<%= "/search.do?method=deleteMySearch&savedSearchOID=" + searchOID%>'><bean:message key="link.delete" bundle="EXPENDITURE_RESOURCES"/></html:link> |

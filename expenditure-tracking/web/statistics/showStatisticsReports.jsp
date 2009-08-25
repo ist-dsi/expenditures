@@ -18,7 +18,7 @@
 
 <br/>
 
-<div class="infoop1">
+<div class="infobox_dotted">
 	<ul>
 		<li>
 			<html:link action="/statistics.do?method=downloadStatisticsByCPV" paramId="year" paramName="yearBean" paramProperty="year">

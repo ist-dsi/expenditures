@@ -7,7 +7,7 @@
 <h2><bean:message key="user.label.view" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/> <bean:write name="person" property="username"/></h2>
 
 <logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL_MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.ACCOUNTING_MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.PROJECT_ACCOUNTING_MANAGER">
-	<div class="infoop1">
+	<div class="infobox_dotted">
 		<ul>
 			<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL_MANAGER">
 				<li>
@@ -59,7 +59,7 @@
 </logic:present>
 
 
-<div class="infoop2">
+<div class="infobox">
 	<table style="width: 100%;">
 		<tr>
 			<td style="vertical-align: top;">

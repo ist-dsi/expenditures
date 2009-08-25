@@ -36,7 +36,7 @@
 
 <logic:present name="acquisitionProcess" property="currentOwner">
 	<bean:define id="ownerName" name="acquisitionProcess" property="currentOwner.firstAndLastName"/>
-	<div class="infoop4">
+	<div class="infobox_warning">
 		<bean:message key="acquisitionProcess.message.info.currentOwnerIs" bundle="ACQUISITION_RESOURCES" arg0="<%= ownerName.toString() %>"/>
 	</div>
 </logic:present>
@@ -179,7 +179,7 @@
 </table>
 
 <logic:present name="confirmCancelAcquisitionProcess">
-	<div class="warning2">
+	<div class="infobox_strong">
 		<p><span><bean:message key="message.confirm.cancel.acquisition.process" bundle="ACQUISITION_RESOURCES"/></span></p>
 		<div class="forminline">
 			<form action="<%= request.getContextPath() + urlConfirm %>" method="post">
@@ -197,7 +197,7 @@
 </logic:present>
 
 <logic:present name="confirmTake">
-	<div class="warning2">
+	<div class="infobox_strong">
 		<p><span><bean:message key="message.confirm.take.acquisition.process" bundle="ACQUISITION_RESOURCES"/></span></p>
 		<div class="forminline">
 			<form action="<%= request.getContextPath() + urlConfirm %>" method="post">
@@ -220,7 +220,7 @@
 <bean:define id="unreadComments" name="acquisitionProcess" property="unreadCommentsForCurrentUser"/>
 <logic:notEmpty name="unreadComments">
 <bean:size id="count" name="unreadComments"/>
-	<div class="infoop4 mtop05 mbottom15">
+	<div class="infobox_warning mtop05 mbottom15">
 	<p class="mvert025">
 		<logic:greaterThan name="count" value="1">
 			<bean:message key="label.unreadComments.info.moreThanOne" arg0="<%= count.toString() %>" bundle="EXPENDITURE_RESOURCES"/>
@@ -243,7 +243,7 @@
 <jsp:include page="commons/viewAcquisitionRequest.jsp" flush="true"/>
 
 <logic:equal name="acquisitionProcess" property="acquisitionRequest.partiallyApproved" value="true">
- <div class="infoop4 mtop15">
+ <div class="infobox_warning mtop15">
  	<p class="mvert025">
          <bean:message key="label.warning.multipleApprovals" bundle="ACQUISITION_RESOURCES"/>
     </p>
@@ -251,7 +251,7 @@
 </logic:equal>
 
 <logic:equal name="acquisitionProcess" property="acquisitionRequest.partiallyAuthorized" value="true">
- <div class="infoop4 mtop15">
+ <div class="infobox_warning mtop15">
  	<p class="mvert025">
          <bean:message key="label.warning.multipleAuthorizations" bundle="ACQUISITION_RESOURCES"/>
     </p>
@@ -259,7 +259,7 @@
 </logic:equal>
 
 <logic:equal name="acquisitionProcess" property="acquisitionRequest.withInvoicesPartiallyConfirmed" value="true">
- <div class="infoop4 mtop15">
+ <div class="infobox_warning mtop15">
  	<p class="mvert025">
          <bean:message key="label.warning.multipleConfirmations" bundle="ACQUISITION_RESOURCES"/>
     </p>
@@ -269,7 +269,7 @@
 <bean:define id="payingUnits" name="acquisitionProcess" property="acquisitionRequest.totalAmountsForEachPayingUnit"/>
 <logic:notEmpty name="payingUnits">
 
-	<table class="tstyle5 mervt1 width100pc tdmiddle punits">
+	<table class="tstyle4 mvert1 width100pc tdmiddle thnoborder">
 		<tr>	
 			<th class="aleft"><bean:message key="acquisitionProcess.label.payingUnits" bundle="ACQUISITION_RESOURCES"/></th>
 			<th></th>
@@ -294,17 +294,16 @@
 	<logic:iterate id="payingUnit" name="payingUnits">
 		<tr>
 			<td class="aleft">
-				
 				<bean:define id="unitOID" name="payingUnit" property="payingUnit.externalId" type="java.lang.String"/>
 				<html:link styleClass="secondaryLink" page="<%= "/expenditureTrackingOrganization.do?method=viewOrganization&unitOid=" + unitOID%>" target="_blank">
-				<fr:view name="payingUnit" property="payingUnit.presentationName"/>
+					<fr:view name="payingUnit" property="payingUnit.presentationName"/>
 				</html:link>
 			</td>
 			<bean:define id="financer" name="payingUnit" property="financer"/>
-			<td>
+			<td class="nowrap">
 				<fr:view name="financer" layout="financer-status"/>
 			</td>
-			<td class="acenter"><fr:view name="payingUnit" property="financer.accountingUnit.name"/></td>
+			<td class="acenter" style="width: 80px;"><fr:view name="payingUnit" property="financer.accountingUnit.name"/></td>
 			<logic:equal name="payingUnit" property="financer.fundAllocationPresent" value="true">
 				<td>
 					<fr:view name="payingUnit" property="financer.fundAllocationIds"/> 
@@ -321,9 +320,8 @@
 					</script>
 				</td>
 			</logic:equal>
-			<td class="aright nowrap" style="width: 110px;"><fr:view name="payingUnit" property="amount"/></td>
+			<td class="aright nowrap" style="width: 80px;"><fr:view name="payingUnit" property="amount"/></td>
 		</tr>
-		
 	</logic:iterate>
 	</table>
 </logic:notEmpty>
@@ -334,31 +332,30 @@
 	
 		<logic:equal  name="acquisitionProcess" property="pastInvoiceReceived"  value="true">		
 			<logic:equal name="acquisitionProcess" property="acquisitionRequest.realValueLessThanTotalValue" value="false">
-				<div class="infoop4">
+				<div class="infobox_warning">
 					<strong><bean:message key="messages.info.attention" bundle="EXPENDITURE_RESOURCES"/>:</strong> <bean:message key="acquisitionRequestItem.message.info.realValueLessThanTotalValue" bundle="ACQUISITION_RESOURCES"/>
 				</div>
 			</logic:equal>
 			<logic:equal name="acquisitionProcess" property="acquisitionRequest.realUnitShareValueLessThanUnitShareValue" value="false">
-				<div class="infoop4">
+				<div class="infobox_warning">
 					<strong><bean:message key="messages.info.attention" bundle="EXPENDITURE_RESOURCES"/>:</strong> <bean:message key="acquisitionRequestItem.message.info.realUnitShareValueLessThanUnitShareValue" bundle="ACQUISITION_RESOURCES"/>
 				</div>
 			</logic:equal>
 			<logic:equal name="acquisitionProcess" property="acquisitionRequest.realTotalValueEqualsRealShareValue" value="false">
-				<div class="infoop4">
+				<div class="infobox_warning">
 					<strong><bean:message key="messages.info.attention" bundle="EXPENDITURE_RESOURCES"/>:</strong> <bean:message key="acquisitionRequestItem.message.info.realTotalValueEqualsRealShareValue" bundle="ACQUISITION_RESOURCES"/>
 				</div>
 			</logic:equal>
 		</logic:equal>
 	
-	
 		<logic:notEmpty name="itemSet">
 			<bean:size id="size" name="itemSet"/>
-			<table class="tstyle5 thright mvert1" style="width: 100%;" id="itemResume">
+			<table class="tstyle4 mvert1 width100pc tdmiddle thnoborder" id="itemResume">
 				<tr>
 					<th></th>
 					<th class="aleft"><bean:message key="acquisitionRequestItem.label.description" bundle="ACQUISITION_RESOURCES"/></th>
 					<th><bean:message key="acquisitionRequestItem.label.quantity" bundle="ACQUISITION_RESOURCES"/></th>
-					<th><bean:message key="acquisitionRequestItem.label.totalValueWithVAT" bundle="ACQUISITION_RESOURCES"/></th>
+					<th class="aright"><bean:message key="acquisitionRequestItem.label.totalValueWithVAT" bundle="ACQUISITION_RESOURCES"/></th>
 				</tr>
 				<logic:iterate id="itemResume" name="itemSet" indexId="index">
 					<bean:define id="currentIndex" value="<%= String.valueOf(index + 1) %>"/>
@@ -372,13 +369,13 @@
 						</td>
 
 						<td class="aleft"><fr:view name="itemResume" property="description"/></td>
-						<td class="acenter"><fr:view name="itemResume" property="quantity"/></td>
-						<td class="aright nowrap" style="width: 110px;"><fr:view name="itemResume" property="currentTotalItemValueWithAdditionalCostsAndVat"/></td>
+						<td class="acenter" style="width: 80px;"><fr:view name="itemResume" property="quantity"/></td>
+						<td class="aright nowrap" style="width: 80px;"><fr:view name="itemResume" property="currentTotalItemValueWithAdditionalCostsAndVat"/></td>
 					</tr>
 				</logic:iterate>
 				<logic:greaterThan value="1" name="size">
 					<tr>
-						<th colspan="4" class="aright" style="padding: 0.4em 0.8em;"><span><b></b><fr:view name="acquisitionProcess" property="acquisitionRequest.currentTotalRoundedValue"/></span></th>
+						<td colspan="4" class="aright"><span><b></b><fr:view name="acquisitionProcess" property="acquisitionRequest.currentTotalRoundedValue"/></span></td>
 					</tr>
 				</logic:greaterThan>
 			</table>
@@ -404,14 +401,14 @@
 				</logic:iterate>
 	
 				<logic:equal name="acquisitionRequestItem" property="valueFullyAttributedToUnits" value="false">
-					<div class="infoop4">
+					<div class="infobox_warning">
 						<strong><bean:message key="messages.info.attention" bundle="EXPENDITURE_RESOURCES"/>:</strong> <bean:message key="acquisitionRequestItem.message.info.valueNotFullyAttributed" bundle="ACQUISITION_RESOURCES"/>
 					</div>
 				</logic:equal>
 				
 				<logic:equal  name="acquisitionProcess" property="acquisitionProcessState.invoiceConfirmed"  value="true">		
 					<logic:equal name="acquisitionRequestItem" property="filledWithRealValues" value="false">
-						<div class="infoop4">
+						<div class="infobox_warning">
 							<strong><bean:message key="messages.info.attention" bundle="EXPENDITURE_RESOURCES"/></strong>: <bean:message key="acquisitionRequestItem.message.info.valuesNotFilled" bundle="ACQUISITION_RESOURCES"/>
 						</div>
 					</logic:equal>

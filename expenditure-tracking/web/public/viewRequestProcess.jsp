@@ -13,7 +13,7 @@
 
 <jsp:include page="../commons/defaultErrorDisplay.jsp"/>
 
-<div class="infoop2">
+<div class="infobox">
 <fr:view name="requestForProposalProcess" property="requestForProposal" schema="viewRequestForProposal">
 	<fr:layout name="tabular">
 		<fr:property name="classes" value="tstyle1"/>

@@ -36,7 +36,7 @@
 		<fr:edit id="unitItemBeans" name="unitItemBeans" visible="false"/>
 		<bean:size id="maxElements" name="unitItemBeans"/>
 			
-		<table class="tstyle4">
+		<table class="tstyle3 inputaright">
 			<tr>
 				<th>
 
@@ -58,10 +58,10 @@
 						<td onClick="<%= calculateFunction %>">
 							<fr:edit  id='<%= "assigned" + id %>' name="unitItemBean" slot="assigned"/>
 						</td>
-						<td>
+						<td class="aleft">
 							<fr:view name="unitItemBean" property="unit.presentationName"/>
 						</td>
-						<td>
+						<td class="aright">
 							<fr:edit id='<%= "shareValue" + id %>' name="unitItemBean" slot="shareValue"/>
 						</td>
 					</tr>
@@ -70,7 +70,7 @@
 						<td colspan="2" class="aright">
 							<strong><bean:message key="label.total" bundle="EXPENDITURE_RESOURCES"/></strong>
 						</td>
-						<td>
+						<td class="aright">
 							<span id="sum">
 									
 							</span> 

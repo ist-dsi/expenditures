@@ -6,7 +6,7 @@
 
 <h2><bean:message key="authorizations.title.grant" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/></h2>
 
-<div class="infoop2">
+<div class="infobox">
 	<fr:view name="person"
 			type="pt.ist.expenditureTrackingSystem.domain.organization.Person"
 			schema="viewPerson">

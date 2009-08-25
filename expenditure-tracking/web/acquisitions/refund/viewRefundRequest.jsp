@@ -26,13 +26,13 @@
 
 <logic:present name="refundProcess" property="currentOwner">
 	<bean:define id="ownerName" name="refundProcess" property="currentOwner.firstAndLastName"/>
-	<div class="infoop4">
+	<div class="infobox_warning">
 		<bean:message key="acquisitionProcess.message.info.currentOwnerIs" bundle="ACQUISITION_RESOURCES" arg0="<%= ownerName.toString() %>"/>
 	</div>
 </logic:present>
 
 
-<div class="infoop1">
+<div class="infobox_dotted">
 	<ul>
 	<logic:iterate id="activity" name="refundProcess" property="activeActivitiesForRequest">
 		<bean:define id="activityName" name="activity" property="class.simpleName"/> 
@@ -61,7 +61,7 @@
 <bean:define id="processOid" name="refundProcess" property="externalId" type="java.lang.String"/>
 
 <logic:present name="confirmTake">
-	<div class="warning2">
+	<div class="infobox_strong">
 		<p><span><bean:message key="message.confirm.take.acquisition.process" bundle="ACQUISITION_RESOURCES"/></span></p>
 		<div class="forminline">
 			<form action="<%= request.getContextPath() + urlConfirm %>" method="post">
@@ -80,7 +80,7 @@
 </logic:present>
 
 <logic:present name="confirmCancelProcess">
-	<div class="warning2">
+	<div class="infobox_strong">
 		<p><span><bean:message key="message.confirm.cancel.refund.process" bundle="ACQUISITION_RESOURCES"/></span></p>
 		<div class="forminline">
 			<form action="<%= request.getContextPath() + urlConfirm %>" method="post">
@@ -144,7 +144,7 @@
 	</li>
 </ul>
 
-<div class="infoop2">
+<div class="infobox">
 	<fr:view name="refundProcess" property="request"
 			schema="viewRefundRequest">
 		<fr:layout name="tabular">
@@ -158,7 +158,7 @@
 <bean:define id="payingUnits" name="refundProcess" property="request.totalAmountsForEachPayingUnit"/>
 <logic:notEmpty name="payingUnits">
 
-	<table class="tstyle5 mervt1 width100pc">
+	<table class="tstyle3 mervt1 width100pc">
 		<tr>	
 			<th class="aleft"><bean:message key="acquisitionProcess.label.payingUnits" bundle="ACQUISITION_RESOURCES"/></th>
 			<th class="acenter"><bean:message key="acquisitionProcess.label.accountingUnit" bundle="ACQUISITION_RESOURCES"/></th>
@@ -210,7 +210,7 @@
 	
 	<logic:equal name="refundProcess" property="inGenesis" value="true">
 		<logic:equal name="refundItem" property="valueFullyAttributedToUnits" value="false">
-			<div class="infoop4">
+			<div class="infobox_warning">
 							<strong><bean:message key="messages.info.attention" bundle="EXPENDITURE_RESOURCES"/>:</strong> <bean:message key="acquisitionRequestItem.message.info.valueNotFullyAttributed" bundle="ACQUISITION_RESOURCES"/>
 			</div>
 		</logic:equal>
@@ -219,14 +219,14 @@
 	<logic:equal name="refundProcess" property="anyRefundInvoiceAvailable" value="true">
 		<logic:equal name="refundProcess" property="inAuthorizedState" value="true">
 			<logic:equal name="refundItem" property="realValueFullyAttributedToUnits" value="false">
-				<div class="infoop4">
+				<div class="infobox_warning">
 							<strong><bean:message key="messages.info.attention" bundle="EXPENDITURE_RESOURCES"/>:</strong> <bean:message key="acquisitionRequestItem.message.info.valueNotFullyAttributed" bundle="ACQUISITION_RESOURCES"/>
 				</div>
 			</logic:equal>
 		</logic:equal>
 		<logic:equal name="refundProcess" property="inSubmittedForInvoiceConfirmationState" value="true">
 			<logic:equal name="refundItem" property="realValueFullyAttributedToUnits" value="false">
-				<div class="infoop4">
+				<div class="infobox_warning">
 					<strong><bean:message key="messages.info.attention" bundle="EXPENDITURE_RESOURCES"/>:</strong> <bean:message key="acquisitionRequestItem.message.info.valueNotFullyAttributed" bundle="ACQUISITION_RESOURCES"/>
 				</div>
 			</logic:equal>
@@ -236,7 +236,7 @@
 	<bean:define id="item" name="refundItem" toScope="request"/>
 	<jsp:include page="../commons/viewRefundItem.jsp"/>
 		<logic:notEmpty name="refundItem" property="invoices">
-				<table class="tstyle5 tdmiddle tdnoborder vpadding05" style="width: 100%;">
+				<table class="tstyle3 tdmiddle tdnoborder vpadding05" style="width: 100%;">
 					<tr>
 					<th><bean:message key="acquisitionProcess.label.invoice.number" bundle="ACQUISITION_RESOURCES"/></th>		
 					<th><bean:message key="acquisitionProcess.label.invoice.date" bundle="ACQUISITION_RESOURCES"/></th>

@@ -8,7 +8,7 @@
 <h2><bean:message key="supplier.title.manage" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/></h2>
 
 <logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL_MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL,pt.ist.expenditureTrackingSystem.domain.RoleType.SUPPLIER_MANAGER">
-	<div class="infoop1">
+	<div class="infobox_dotted">
 		<ul>
 			<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.SUPPLIER_MANAGER">
 				<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
@@ -57,7 +57,7 @@
 	<bean:define id="supplier" name="supplierBean" property="supplier" type="pt.ist.expenditureTrackingSystem.domain.organization.Supplier"/>
 	<bean:message key="supplier.soft.limit" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>: <%= supplier.getSupplierLimit().toFormatString() %>
 
-	<div class="infoop2">
+	<div class="infobox">
 		<fr:view name="supplierBean" property="supplier"
 				type="pt.ist.expenditureTrackingSystem.domain.organization.Supplier"
 				schema="viewSupplier">
@@ -119,7 +119,7 @@
 			</logic:present>
 	</p>
 
-	<div class="infoop2">
+	<div class="infobox">
 		<fr:view name="supplierBean" property="supplier"
 				type="pt.ist.expenditureTrackingSystem.domain.organization.Supplier"
 				schema="viewSupplierAcquisitionInformation">

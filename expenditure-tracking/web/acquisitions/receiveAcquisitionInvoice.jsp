@@ -6,7 +6,7 @@
 
 <h2><bean:message key="acquisitionProcess.title.invoice.receive" bundle="ACQUISITION_RESOURCES"/></h2>
 
-<div class="infoop2">
+<div class="infobox">
 	<fr:view name="afterTheFactAcquisitionProcess" property="acquisitionAfterTheFact"
 			type="pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AcquisitionAfterTheFact"
 			schema="viewAcquisitionAfterTheFact">

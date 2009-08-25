@@ -6,7 +6,7 @@
 
 <h2><bean:message key="authorizations.title.editAuthorization" bundle="EXPENDITURE_RESOURCES"/></h2>
 
-<div class="infoop2">
+<div class="infobox">
 	<fr:view name="authorization" schema="viewAuthorizationBeingEdited">
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="tstyle1"/>

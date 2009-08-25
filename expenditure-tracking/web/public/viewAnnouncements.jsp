@@ -12,7 +12,6 @@
 <%@page import="pt.ist.fenixWebFramework.servlets.filters.contentRewrite.RequestChecksumFilter"%>
 <%@page import="pt.ist.fenixWebFramework.servlets.filters.contentRewrite.GenericChecksumRewriter"%><h2><bean:message key="process.announcement.title" bundle="EXPENDITURE_RESOURCES"/></h2>
 
-
 <logic:empty name="announcements">
 	<p><em><bean:message key="process.messages.info.noAvailableAnnouncements" bundle="EXPENDITURE_RESOURCES"/>.</em></p>
 </logic:empty>
@@ -23,11 +22,10 @@
 </p>
 
 <logic:iterate id="announcement" name="announcements" indexId="Id">
-
 	<fr:view name="announcement">
 		<fr:layout name="expandable">
 		
-			<fr:property name="classes" value="infoop2"/>
+			<fr:property name="classes" value="infobox"/>
 			<fr:property name="smallLayout" value="tabular"/>
 			<fr:property name="smallSchema" value="viewAnnouncementShort.public"/>
 			<fr:property name="smallSubProperty(classes)" value="tstyle1"/>

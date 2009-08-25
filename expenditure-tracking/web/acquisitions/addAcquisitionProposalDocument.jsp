@@ -5,7 +5,7 @@
 
 <h2><bean:message key="acquisitionProcess.title.AddAcquisitionProposalDocument" bundle="ACQUISITION_RESOURCES"/></h2>
 
-<div class="infoop2">
+<div class="infobox">
 	<bean:message key="message.help.addAcquisitionProposalDocument" bundle="ACQUISITION_RESOURCES"/>
 </div>
 

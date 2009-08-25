@@ -26,7 +26,7 @@
 
 <jsp:include page="../commons/defaultErrorDisplay.jsp"/>
 
-<div class="infoop1">
+<div class="infobox_dotted">
 	<ul>
 	<logic:iterate id="activity" name="requestForProposalProcess" property="activeActivitiesForRequest">
 		<bean:define id="activityName" name="activity" property="class.simpleName"/> 
@@ -49,7 +49,7 @@
 </div>
 
 
-<div class="infoop2">
+<div class="infobox">
 <fr:view name="requestForProposalProcess" property="requestForProposal" schema="viewRequestForProposal">
 	<fr:layout name="tabular">
 		<fr:property name="classes" value="tstyle1"/>

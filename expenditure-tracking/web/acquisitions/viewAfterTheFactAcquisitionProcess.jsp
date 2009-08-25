@@ -7,7 +7,7 @@
 
 <h2><bean:message key="afterTheFactAcquisitionProcess.title.viewAfterTheFactAcquisitionProcess" bundle="ACQUISITION_RESOURCES"/></h2>
 
-<div class="infoop1">
+<div class="infobox_dotted">
 	<ul>
 		<logic:iterate id="activity" name="afterTheFactAcquisitionProcess" property="activeActivities">
 			<bean:define id="activityName" name="activity" property="class.simpleName"/> 
@@ -33,7 +33,7 @@
 	<bean:message key="label.log.view" bundle="ACQUISITION_RESOURCES"/>
 </html:link>
 
-<div class="infoop2">
+<div class="infobox">
 	<fr:view name="afterTheFactAcquisitionProcess" property="acquisitionAfterTheFact.supplier"
 			type="pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AcquisitionAfterTheFact"
 			schema="viewSupplierShort">
@@ -43,7 +43,7 @@
 	</fr:view>
 </div>
 
-<div class="infoop2">
+<div class="infobox">
 	<fr:view name="afterTheFactAcquisitionProcess" property="acquisitionAfterTheFact"
 			type="pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AcquisitionAfterTheFact"
 			schema="viewAcquisitionAfterTheFact">

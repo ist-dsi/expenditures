@@ -8,7 +8,7 @@
 
 <bean:message key="label.siteIntroduction" bundle="EXPENDITURE_RESOURCES"/>
 
-<table class="tstyle5 width33">
+<table class="tstyle3 width33">
 	<tr>
 		<th>
 			<h3 class="mvert05"><bean:message key="label.startAcquisition" bundle="EXPENDITURE_RESOURCES"/></h3>

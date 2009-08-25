@@ -9,7 +9,7 @@
  <script src="<%= request.getContextPath() + "/javaScript/jquery.alerts.js"%>" type="text/javascript"></script> 
  <script src="<%= request.getContextPath() + "/javaScript/alertHandlers.js"%>" type="text/javascript"></script> 
  
-<div class="infoop1">
+<div class="infobox_dotted">
 	<ul>
 		<li>
 			<html:link action="/expenditureTrackingOrganization.do?method=viewPerson" paramId="personOid" paramName="authorization" paramProperty="person.externalId">
@@ -68,7 +68,7 @@
 	</ul>
 </div>
 
-<div class="infoop2">
+<div class="infobox">
 	<fr:view name="authorization" schema="viewAuthorization">
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="tstyle1"/>

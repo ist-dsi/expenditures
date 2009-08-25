@@ -225,26 +225,26 @@ div.left div#container3 {
 margin-left: 175px;
 }
 
-div.left #secnav {
+div.left #secondarynav {
 width: 165px;
 float: left;
 margin: 1em 0 0 0;
 padding: 0 10px 2em 0;
 }
-div.left #secnav ul {
+div.left #secondarynav ul {
 list-style: none;
 padding: 1px 0 0 0;
 margin: 1em 0 0 0;
 }
-div.left #secnav ul li {
+div.left #secondarynav ul li {
 padding: 5px 0 5px 0;
 border-bottom: 1px dotted #aaa;
 }
-div.left #secnav ul li a {
+div.left #secondarynav ul li a {
 display: block;
 color: #5d9aba;
 }
-div.left #secnav span.bar {
+div.left #secondarynav span.bar {
 display: none;
 }
 
@@ -252,44 +252,44 @@ display: none;
 div.top ul li.header {
 display: none !important;
 }
-div.top #secnav {
+div.top #secondarynav {
 position: relative;
 height: 3.2em;
 border-top: 4px solid #a1cfe7;
 background: #e4edf2;
 color: #4b7d99;
 }
-div.top #secnav ul {
+div.top #secondarynav ul {
 bottom: 0;
 margin: 0;
 padding: 9px 10px 0 23px;
 }
-div.top #secnav ul li {
+div.top #secondarynav ul li {
 bottom: 0;
 margin: 0;
 display: inline;
 }
-div.top #secnav p { /* not used anymore */
+div.top #secondarynav p { /* not used anymore */
 bottom: 0;
 margin: 0;
 padding: 9px 10px 0 52px;
 }
-div.top #secnav a {
+div.top #secondarynav a {
 margin: 0;
 text-decoration: none;
 padding: 4px;
 }
-div.top #secnav a span { color: #4b7d99; }
-div.top #secnav a:hover span { text-decoration: underline !important; }
-div.top #secnav a span { float: none; }
+div.top #secondarynav a span { color: #4b7d99; }
+div.top #secondarynav a:hover span { text-decoration: underline !important; }
+div.top #secondarynav a span { float: none; }
 
-div.top #secnav a.new {
+div.top #secondarynav a.new {
 margin-left: 4px;
 padding-left: 15px;
 background: url(../images/plus01.gif) 0px 0.55em no-repeat;
 }
 
-div.top #secnav div.c1 {
+div.top #secondarynav div.c1 {
 background: url(../images/corner5_02.gif) no-repeat;
 width: 7px;
 height: 7px;
@@ -297,7 +297,7 @@ position: absolute;
 bottom: -5px;
 left: 0;
 }
-div.top #secnav div.c2 {
+div.top #secondarynav div.c2 {
 background: url(../images/corner6_02.gif) no-repeat;
 width: 7px;
 height: 7px;
@@ -306,8 +306,8 @@ bottom: -5px;
 right: 0;
 }
 
-div.top #secnav div.c1[class] { bottom: 0; } /* all except <= ie6 */
-div.top #secnav div.c2[class] { bottom: 0; } /* all except <= ie6 */
+div.top #secondarynav div.c1[class] { bottom: 0; } /* all except <= ie6 */
+div.top #secondarynav div.c2[class] { bottom: 0; } /* all except <= ie6 */
 
 
 /***********************************************/	
@@ -612,19 +612,19 @@ span.invalid { color: #a00; font-weight: bold; }
 .inputsize350px input { width: 350px; }
 .inputsize400px input { width: 400px; }
 
-div.infoop1 {
+div.infobox_dotted {
 border: 1px dotted #aaa;
 padding: 15px 10px;
 background: #fff;
 margin: 1em 0;
 }
-div.infoop1 ul {
+div.infobox_dotted ul {
 margin: 0;
 padding: 0;
 padding-left: 2em;
 }
 
-div.infoop2 {
+div.infobox {
 border: 1px solid #ddd;
 padding: 5px 10px;
 background: #f5f5f5;
@@ -638,7 +638,7 @@ background: #fafafa;
 margin: 1em 0;
 }
 
-div.infoop4 {
+div.infobox_warning {
 border: 1px solid #f0ce6f;
 padding: 5px 10px;
 background: #fbf2cf;
@@ -651,7 +651,7 @@ padding: 15px 10px;
 background: #efd;
 margin: 1em 0;
 }
-div.infoop6 {
+div.infobox {
 border: 1px solid #eaeaea;
 background: #fafafa;
 padding: 0.5em 1em 1em 1em;
@@ -665,10 +665,10 @@ div.error1 span {
 color: #cc1500;
 }
 
-div.infoop6 a.big {
+div.infobox a.big {
 padding: 4px 0;
 }
-div.infoop6 a.big:hover {
+div.infobox a.big:hover {
 background: #fef7e2;
 }
 
@@ -742,30 +742,30 @@ border: 1px solid #ccc;
 background: #fff;
 }
 
-table.tstyle3 {
+table.tstyle2 {
 border-collapse: collapse;
 margin: 1em 0 2em 0;
 }
-table.tstyle3 th {
+table.tstyle2 th {
 text-align: left;
 border-top: 1px solid #ddd;
 border-bottom: 1px solid #ddd;
 padding: 5px 0;
 font-weight: normal;
 }
-table.tstyle3 td {
+table.tstyle2 td {
 text-align: left;
 border-top: 1px solid #ddd;
 border-bottom: 1px solid #ddd;
 padding: 5px 0;
 padding-left: 20px;
 }
-/* tstyle4 > like tstyle3 but for horizontal display */
-table.tstyle4 {
+/* tstyle2 > like tstyle2 but for horizontal display */
+table.tstyle2 {
 border-collapse: collapse;
 margin: 1em 0 1em 0;
 }
-table.tstyle4 th {
+table.tstyle2 th {
 text-align: left;
 border-top: 1px solid #ddd;
 border-bottom: 1px solid #ddd;
@@ -774,7 +774,7 @@ padding: 5px 10px 5px 0;
 background: #f5f5f5;
 font-weight: normal;
 }
-table.tstyle4 td {
+table.tstyle2 td {
 text-align: left;
 border-top: 1px solid #ddd;
 border-bottom: 1px solid #ddd;
@@ -782,14 +782,14 @@ padding: 5px 15px 5px 0;
 }
 
 
-table.tstyle5 {
+table.tstyle3 {
 border-collapse: collapse;
 margin: 0.5em 0 0.5em 0;
 border: 1px solid #ddd;
 border-top: 4px solid #eee;
 border-bottom: 4px solid #eee;
 }
-table.tstyle5 th {
+table.tstyle3 th {
 text-align: center;
 border-top: 1px solid #ddd;
 border-bottom: 1px solid #ddd;
@@ -797,7 +797,7 @@ font-weight: normal;
 padding: 0.2em 0.2em;
 background: #fafafa;
 }
-table.tstyle5 td {
+table.tstyle3 td {
 text-align: center;
 border-top: 1px solid #ddd;
 border-bottom: 1px solid #ddd;
@@ -809,11 +809,11 @@ border-bottom: 4px solid #eee;
 }
 
 
-table.tstyle6 {
+table.tstyle2 {
 border-collapse: collapse;
 margin: 1em 0 1em 0;
 }
-table.tstyle6 th {
+table.tstyle2 th {
 text-align: left;
 border-top: 1px solid #ddd;
 border-bottom: 1px solid #ddd;
@@ -821,7 +821,7 @@ font-weight: normal;
 padding: 5px 10px 5px 0;
 background: #fafafa !important;
 }
-table.tstyle6 td {
+table.tstyle2 td {
 text-align: left;
 border-top: 1px solid #ddd;
 border-bottom: 1px solid #ddd;
@@ -1030,7 +1030,7 @@ div.corners div.c1[class] { bottom: 0; } /* all except <= ie6 */
 div.corners div.c2[class] { bottom: 0; } /* all except <= ie6 */
 
 
-div.infoop1 {
+div.infobox_dotted {
 margin-bottom: 1em;
 }
 ul.operations {
@@ -1073,7 +1073,7 @@ font-weight: bold;
 span.raquo {
 display: none;
 }
-div.infoop1 span.raquo {
+div.infobox_dotted span.raquo {
 display: inline;
 }
 

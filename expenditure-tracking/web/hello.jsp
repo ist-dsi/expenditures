@@ -6,13 +6,13 @@
 
 <h2><bean:message key="title.site" bundle="EXPENDITURE_RESOURCES"/></h2>
 
-<div class="infoop4">
+<div class="infobox_warning">
 	Notícia: Foram efectuadas alterações no sistema de navegação e layout. Mais informação <a href="https://fenix-ashes.ist.utl.pt/fenixWiki/Qualidade/Aquisicoes/Interface" target="_blank">aqui</a>.
 </div>
 
 <bean:message key="label.siteIntroduction" bundle="EXPENDITURE_RESOURCES"/>
 
-<table class="tstyle5 width33 tdleft">
+<table class="tstyle3 width33 tdleft">
 	<tr>
 		<th>
 			<h3 class="mvert05"><bean:message key="label.startAcquisition" bundle="EXPENDITURE_RESOURCES"/></h3>

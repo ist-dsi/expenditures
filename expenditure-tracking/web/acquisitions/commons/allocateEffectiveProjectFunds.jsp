@@ -8,7 +8,7 @@
 
 <logic:present name="process" property="currentOwner">
 	<bean:define id="ownerName" name="process" property="currentOwner.firstAndLastName"/>
-	<div class="infoop4">
+	<div class="infobox_warning">
 		<bean:message key="acquisitionProcess.message.info.currentOwnerIs" bundle="ACQUISITION_RESOURCES" arg0="<%= ownerName.toString() %>"/>
 	</div>
 </logic:present>
@@ -34,10 +34,9 @@
 
 <jsp:include page="../../commons/defaultErrorDisplay.jsp"/>
 
-
 <p class="mtop15 mbottom0"><bean:message key="acquisitionProcess.label.insertPermanentFunds" bundle="ACQUISITION_RESOURCES"/></p>
 
-<table class="tstyle6">
+<table class="tstyle2">
 <logic:iterate id="financerBean" name="fundAllocationBeans" indexId="index">
 	<tr>
 		<bean:define id="usedClass" value="" toScope="request"/>

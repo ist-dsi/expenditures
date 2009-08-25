@@ -6,25 +6,32 @@
 
 <h2><bean:message key="acquisitionProcess.title.createPurchaseOrderDocument" bundle="ACQUISITION_RESOURCES"/></h2>
 
+<%--
 <p class="mtop15"><strong><bean:message key="label.requester" bundle="EXPENDITURE_RESOURCES"/></strong></p>
+--%>
+
 <bean:define id="processRequest" name="acquisitionProcess" property="request" toScope="request"/>
 <jsp:include page="commons/viewAcquisitionRequest.jsp" flush="true"/>
 
-<p class="mtop15"><strong><bean:message key="label.supplier" bundle="EXPENDITURE_RESOURCES"/></strong></p>
-<div class="infoop2" style="width: 360px">
-<fr:view name="acquisitionProcess" property="acquisitionRequest.supplier"
-		schema="viewAcquisitionSupplier">
-	<fr:layout name="tabular">
-		<fr:property name="classes" value="tstyle1"/>
-	</fr:layout>
-</fr:view>
-<bean:define id="acquisitionProcessOID" name="acquisitionProcess" property="externalId" type="java.lang.String"/>
-<bean:define id="acquisitionProcessClass" name="acquisitionProcess" property="class.simpleName"/>
-<bean:define id="actionMapping" value="<%= "/acquisition" + acquisitionProcessClass %>"/>
 
-<%-- 
-<html:link action="<%= actionMapping +".do?method=editSupplierAddress"%>" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="externalId"><bean:message key="supplier.link.edit" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/></html:link>
---%>
+<p class="mtop15"><strong><bean:message key="label.supplier" bundle="EXPENDITURE_RESOURCES"/></strong></p>
+
+<div class="infobox">
+
+	<fr:view name="acquisitionProcess" property="acquisitionRequest.supplier"
+			schema="viewAcquisitionSupplier">
+		<fr:layout name="tabular">
+			<fr:property name="classes" value="tstyle1"/>
+		</fr:layout>
+	</fr:view>
+	<bean:define id="acquisitionProcessOID" name="acquisitionProcess" property="externalId" type="java.lang.String"/>
+	<bean:define id="acquisitionProcessClass" name="acquisitionProcess" property="class.simpleName"/>
+	<bean:define id="actionMapping" value="<%= "/acquisition" + acquisitionProcessClass %>"/>
+	
+	<%-- 
+	<html:link action="<%= actionMapping +".do?method=editSupplierAddress"%>" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="externalId"><bean:message key="supplier.link.edit" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/></html:link>
+	--%>
+
 </div>
 
 <logic:present name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestItemsSet">
@@ -32,7 +39,6 @@
 	<logic:iterate id="acquisitionRequestItem" name="acquisitionProcess" property="acquisitionRequest.orderedRequestItemsSet" indexId="index">
 		<bean:define id="currentIndex" value="<%= String.valueOf(index + 1) %>"/>
 		<p class="mtop15"><strong><bean:message key="acquisitionRequestItem.label.item" bundle="ACQUISITION_RESOURCES"/></strong> (<fr:view name="currentIndex"/>/<fr:view name="totalItems"/>)</p>
-		
 		<bean:define id="item" name="acquisitionRequestItem" toScope="request"/>
 		<jsp:include page="commons/viewAcquisitionRequestItem.jsp" flush="false"/>
 	</logic:iterate>
@@ -64,7 +70,7 @@
 <bean:define id="url"><%= actionMapping %>.do?method=createAcquisitionPurchaseOrderDocument&amp;acquisitionProcessOid=<%= acquisitionProcessOID %></bean:define>
 
 <logic:present name="acquisitionProcess" property="acquisitionRequest.purchaseOrderDocument">
-	<div class="infoop4">
+	<div class="infobox_warning">
 			<bean:message key="label.warning.purchaseOrderDocumentAlreadyExists" bundle="ACQUISITION_RESOURCES"/>
 	</div>
 </logic:present>

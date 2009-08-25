@@ -7,7 +7,7 @@
 
 <bean:define id="acquisitionRequestItem" name="item"/>
 
-<div class="infoop2">
+<div class="infobox">
 	
 	<table class="tstyle1 thpadding02505" style="width: 100%;">
 
@@ -99,7 +99,7 @@
 				</fr:view>
 			</td>
 		</tr>
-		<tr class="asd itemmbottom">
+		<tr class="itemmbottom">
 			<th><bean:message key="acquisitionRequestItem.label.additionalCostValue" bundle="ACQUISITION_RESOURCES"/>:</th>
 			<td class="nowrap">
 				<fr:view name="acquisitionRequestItem" property="additionalCostValue" type="myorg.domain.util.Money">
@@ -117,7 +117,7 @@
 				</fr:view>
 			</td>
 		</tr>
-		<tr class="asd itemmbottom">
+		<tr class="itemmbottom">
 			<th><bean:message key="acquisitionRequestItem.label.totalValueWithAdditionalCostsAndVat" bundle="ACQUISITION_RESOURCES"/>:</th>
 			<td class="nowrap"><span><fr:view name="acquisitionRequestItem" property="totalItemValueWithAdditionalCostsAndVat"/></span></td>
 			<th style="padding-left: 1em;"><bean:message key="acquisitionRequestItem.label.totalRealValueWithAdditionalCostsAndVat" bundle="ACQUISITION_RESOURCES"/>:</th>

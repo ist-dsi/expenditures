@@ -9,7 +9,7 @@
 
 <jsp:include page="../commons/defaultErrorDisplay.jsp"/>
 
-<div class="infoop2">
+<div class="infobox">
 	<bean:message key="acquisitionRequestItem.message.info.help" bundle="ACQUISITION_RESOURCES"/>
 </div>
 

@@ -25,7 +25,7 @@
 </logic:empty>
 
 <logic:notEmpty name="item" property="invoices">
-				<table class="tstyle5">
+				<table class="tstyle3">
 					<tr>
 						<th><bean:message key="acquisitionProcess.label.invoice.number" bundle="ACQUISITION_RESOURCES"/></th>		
 						<th><bean:message key="acquisitionProcess.label.invoice.date" bundle="ACQUISITION_RESOURCES"/></th>

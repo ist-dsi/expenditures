@@ -22,14 +22,14 @@
 	<bean:define id="schema" value='<%= "search." + simpleName%>'/>
 </logic:present>
 
-<div class="forminline mbottom1 mtop075">
+<div class="searchoptions">
 	<table>
 		<tr>
 			<td>
 				<fr:form action="/search.do?method=mySearches">
 					<fr:edit id="mySearches" name="mySearches" schema='viewMySavedSearches'>
 						<fr:layout name="tabular">
-							<fr:property name="classes" value="structural thmiddle thlight mvert05"/>
+							<fr:property name="classes" value=""/>
 						</fr:layout>
 						<fr:destination name="mySearch" path="/search.do?method=mySearches"/>
 					</fr:edit>
@@ -101,7 +101,7 @@
 				 document.getElementById('saveSearch').style.display='block';
 			</script>
 		</logic:present>
-		<div class="warning2">
+		<div class="infobox_strong">
 			<div style="padding: 0.5em 0;">
 				<fr:form id="saveForm" action="/search.do?method=saveSearch">
 					<fr:edit id="beanToSave" name="searchBean" visible="false"/>
@@ -124,7 +124,7 @@
 
 	<fr:view name="results" schema="viewProcessesInList">
 			<fr:layout name="tabular-sortable">
-				<fr:property name="classes" value="plist mtop05 width100pc"/>
+				<fr:property name="classes" value="plist mtop1 width100pc thsecondaryLink"/>
 				<fr:property name="columnClasses" value="width30px,,,,,,,,nowrap,,,,,,,,,,,,,,,"/>
 				<fr:property name="linkFormat(view)" value="/acquisition${class.simpleName}.do?method=viewProcess&processOid=${externalId}"/>
 				<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>

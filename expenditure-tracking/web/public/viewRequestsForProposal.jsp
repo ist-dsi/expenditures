@@ -16,7 +16,7 @@
 
 
 <logic:iterate id="requestProcess" name="activeRequests" indexId="Id">
-	<div class="infoop2">
+	<div class="infobox">
 		<table class="tstyle1">
 			<tr>
 				<th><bean:message key="label.title" bundle="EXPENDITURE_RESOURCES"/></th>
