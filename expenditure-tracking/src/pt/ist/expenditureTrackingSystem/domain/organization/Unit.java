@@ -274,4 +274,16 @@ public class Unit extends Unit_Base {
 	}
 	return units;
     }
+
+    @Override
+    @Service
+    public void removeUnit() {
+        super.removeUnit();
+    }
+
+    @Override
+    @Service
+    public void setUnit(final module.organization.domain.Unit unit) {
+        super.setUnit(unit);
+    }
 }

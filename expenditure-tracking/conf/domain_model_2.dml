@@ -18,6 +18,10 @@ class pt.ist.expenditureTrackingSystem.domain.ConnectPersonToUserTask extends my
 class pt.ist.expenditureTrackingSystem.domain.EmailDigester extends myorg.domain.scheduler.Task {
 }
 
+class pt.ist.expenditureTrackingSystem.domain.ConnectUnitsToOrganization extends myorg.domain.scheduler.Task {
+}
+
+
 relation MyOrgExpenditureTrackingSystem {
 	myorg.domain.MyOrg playsRole myOrg;
 	pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
@@ -32,4 +36,9 @@ relation MyOrgRoleExpendituresRole {
 relation UserExpenditurePerson {
 	pt.ist.expenditureTrackingSystem.domain.organization.Person playsRole expenditurePerson;
 	myorg.domain.User playsRole user;
+}
+
+relation UnitExpenditureUnit {
+	pt.ist.expenditureTrackingSystem.domain.organization.Unit playsRole expenditureUnit;
+	module.organization.domain.Unit playsRole unit;
 }

@@ -114,6 +114,11 @@ public class InterfaceCreationAction extends ContextBaseAction {
 		"resources.StatisticsResources", "label.statistics.reports",
 		statisticsOrAcquisitionCentralManagerGroup);
 
+	ActionNode.createActionNode(
+		virtualHost, node, "/connectUnits", "showUnits",
+		"resources.ExpenditureOrganizationResources", "link.topBar.connectUnits",
+		statisticsOrAcquisitionCentralManagerGroup);
+
 	return forwardToMuneConfiguration(request, virtualHost, node);
     }
 
