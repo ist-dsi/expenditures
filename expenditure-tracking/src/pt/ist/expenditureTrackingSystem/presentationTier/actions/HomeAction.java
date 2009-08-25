@@ -50,14 +50,14 @@ public class HomeAction extends BaseAction {
 	    }
 	}
 	request.setAttribute("activeRequests", requests);
-	return forward(request, "public/viewRequestsForProposal.jsp");
+	return forward(request, "/public/viewRequestsForProposal.jsp");
     }
 
     public ActionForward viewRequestForProposalProcess(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 
 	request.setAttribute("requestForProposalProcess", getDomainObject(request, "requestForProposalProcessOid"));
-	return forward(request, "public/viewRequestProcess.jsp");
+	return forward(request, "/public/viewRequestProcess.jsp");
     }
 
     public final ActionForward showAcquisitionAnnouncements(final ActionMapping mapping, final ActionForm form,
@@ -81,7 +81,7 @@ public class HomeAction extends BaseAction {
 	request.setAttribute("pageNumber", page);
 	request.setAttribute("announcements", pager.getPage(page));
 
-	return forward(request, "public/viewAnnouncements.jsp");
+	return forward(request, "/public/viewAnnouncements.jsp");
     }
 
 }
