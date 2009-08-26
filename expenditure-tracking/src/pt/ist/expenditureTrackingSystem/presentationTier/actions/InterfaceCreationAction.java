@@ -5,12 +5,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import module.contents.domain.Page;
 import module.contents.domain.Page.PageBean;
+import myorg.domain.RoleType;
 import myorg.domain.VirtualHost;
 import myorg.domain.contents.ActionNode;
 import myorg.domain.contents.Node;
 import myorg.domain.groups.AnonymousGroup;
 import myorg.domain.groups.AnyoneGroup;
 import myorg.domain.groups.PersistentGroup;
+import myorg.domain.groups.Role;
 import myorg.domain.groups.UnionGroup;
 import myorg.domain.groups.UserGroup;
 import myorg.presentationTier.actions.ContextBaseAction;
@@ -114,10 +116,13 @@ public class InterfaceCreationAction extends ContextBaseAction {
 		"resources.StatisticsResources", "label.statistics.reports",
 		statisticsOrAcquisitionCentralManagerGroup);
 
-	ActionNode.createActionNode(
+	final Node connectUnitsNode = ActionNode.createActionNode(
 		virtualHost, node, "/connectUnits", "showUnits",
 		"resources.ExpenditureOrganizationResources", "link.topBar.connectUnits",
-		statisticsOrAcquisitionCentralManagerGroup);
+		Role.getRole(RoleType.MANAGER));
+	ActionNode.createActionNode(virtualHost, connectUnitsNode, "/connectUnits", "listUnconnectedUnits",
+		"resources.ExpenditureOrganizationResources", "label.listUnconnectedUnits",
+		statisticsGroup);
 
 	return forwardToMuneConfiguration(request, virtualHost, node);
     }

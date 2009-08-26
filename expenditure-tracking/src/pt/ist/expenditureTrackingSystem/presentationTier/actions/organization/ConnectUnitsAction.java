@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +24,8 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.organization.Project;
+import pt.ist.expenditureTrackingSystem.domain.organization.SubProject;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.BaseAction;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
@@ -130,6 +134,30 @@ public class ConnectUnitsAction extends BaseAction {
 	final Unit unit = getDomainObject(request, "unitId");
 	unit.removeUnit();
 	return showUnits(mapping, form, request, response);
+    }
+
+    public final ActionForward listUnconnectedUnits(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final MyOrg myOrg = MyOrg.getInstance();
+	final ExpenditureTrackingSystem expenditureTrackingSystem = myOrg.getExpenditureTrackingSystem();
+
+	final Set<Unit> unconnectedUnits = new TreeSet<Unit>(Unit.COMPARATOR_BY_PRESENTATION_NAME);
+	final Map<String, Integer> counterMap = new TreeMap<String, Integer>();
+	for (final Unit unit : expenditureTrackingSystem.getUnitsSet()) {
+	    if (!unit.hasUnit()) {
+		if (!(unit instanceof Project) && !(unit instanceof SubProject)) {
+		    unconnectedUnits.add(unit);
+		}
+
+		final String classname = unit.getClass().getName();
+		final int count = counterMap.containsKey(classname) ? counterMap.get(classname).intValue() + 1 : 1;
+		counterMap.put(classname, Integer.valueOf(count));
+	    }
+	}
+	request.setAttribute("unconnectedUnits", unconnectedUnits);
+	request.setAttribute("counterMap", counterMap);
+
+	return forward(request, "/expenditureTrackingOrganization/listUnconnectedUnits.jsp");
     }
 
 }
