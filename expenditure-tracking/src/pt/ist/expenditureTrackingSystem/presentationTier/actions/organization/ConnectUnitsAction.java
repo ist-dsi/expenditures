@@ -67,7 +67,7 @@ public class ConnectUnitsAction extends BaseAction {
 	final ActionForward forward = super.execute(mapping, form, request, response);
 	final LayoutContext layoutContext = (LayoutContext) getContext(request);
 	request.setAttribute("previousLayoutContextHead", layoutContext.getHead());
-	layoutContext.setHead("/organization/layoutContext/head.jsp");
+	layoutContext.addHead("/organization/layoutContext/head.jsp");
 	return forward;
     }
 
