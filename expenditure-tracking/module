@@ -1,0 +1,2 @@
+name=expenditure-tracking
+depends=core, email-module, content, fileSupport, organization, organization-ist
