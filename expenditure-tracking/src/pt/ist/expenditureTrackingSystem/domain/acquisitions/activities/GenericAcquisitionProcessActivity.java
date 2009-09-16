@@ -51,7 +51,7 @@ public abstract class GenericAcquisitionProcessActivity extends AbstractActivity
 
     protected boolean isUserOwnerOfProcess(final RegularAcquisitionProcess process) {
 	final Person loggedPerson = getLoggedPerson();
-	return loggedPerson != null && process.getRequestor().equals(loggedPerson);
+	return loggedPerson != null && process.getRequestor() == loggedPerson;
     }
 
 }
