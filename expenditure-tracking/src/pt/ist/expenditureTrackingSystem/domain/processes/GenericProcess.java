@@ -122,7 +122,6 @@ public abstract class GenericProcess extends GenericProcess_Base {
 	try {
 	    userView.mockUser(person.getUser());
 	    result = hasAnyAvailableActivitity();
-	    userView.unmockUser();
 	} finally {
 	    userView.unmockUser();
 	}
