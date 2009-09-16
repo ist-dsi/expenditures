@@ -129,8 +129,8 @@ public class Unit extends Unit_Base {
     }
 
     public boolean isResponsible(Person person) {
-	for (Authorization authorization : person.getValidAuthorizations()) {
-	    if (isSubUnit(authorization.getUnit())) {
+	for (Authorization authorization : getAuthorizationsSet()) {
+	    if (authorization.isValid() && isSubUnit(authorization.getUnit())) {
 		return true;
 	    }
 	}
@@ -172,18 +172,11 @@ public class Unit extends Unit_Base {
     }
 
     public boolean isSubUnit(final Unit unit) {
-	if (unit == null) {
-	    return false;
-	}
+	return unit != null && (this == unit || isSubUnitOfParent(unit));
+    }
 
-	if (this == unit) {
-	    return true;
-	}
-
-	if (hasParentUnit()) {
-	    return getParentUnit().isSubUnit(unit);
-	}
-	return false;
+    protected boolean isSubUnitOfParent(final Unit unit) {
+	return hasParentUnit() && getParentUnit().isSubUnit(unit);
     }
 
     public boolean isAccountingEmployee(final Person person) {
@@ -267,12 +260,16 @@ public class Unit extends Unit_Base {
     }
 
     public List<Unit> getAllSubUnits() {
-	List<Unit> units = new ArrayList<Unit>();
-	for (Unit unit : getSubUnits()) {
-	    units.add(unit);
-	    units.addAll(unit.getAllSubUnits());
+	List<Unit> result = new ArrayList<Unit>();
+	addAllSubUnits(result);
+	return result;
+    }
+
+    protected void addAllSubUnits(final List<Unit> result) {
+	for (final Unit unit : getSubUnits()) {
+	    result.add(unit);
+	    unit.addAllSubUnits(result);
 	}
-	return units;
     }
 
     @Override
