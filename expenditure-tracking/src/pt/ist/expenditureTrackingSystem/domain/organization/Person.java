@@ -3,17 +3,14 @@ package pt.ist.expenditureTrackingSystem.domain.organization;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.MyOrg;
 import myorg.domain.User;
 import myorg.domain.util.Address;
-import myorg.util.MultiCounter;
 
 import org.apache.commons.collections.Predicate;
 
@@ -24,13 +21,9 @@ import pt.ist.expenditureTrackingSystem.domain.Role;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.SavedSearch;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestWithPayment;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.announcements.Announcement;
 import pt.ist.expenditureTrackingSystem.domain.announcements.AnnouncementProcess;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
@@ -38,7 +31,6 @@ import pt.ist.expenditureTrackingSystem.domain.dto.AuthorizationBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreatePersonBean;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericLog;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
-import pt.ist.expenditureTrackingSystem.presentationTier.actions.dashboard.DashBoardAction;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.pstm.Transaction;
 import dml.runtime.RelationAdapter;
@@ -135,9 +127,9 @@ public class Person extends Person_Base {
 	return result;
     }
 
-    public boolean hasRoleType(RoleType type) {
-	for (Role role : getRolesSet()) {
-	    if (role.getRoleType().equals(type)) {
+    public boolean hasRoleType(final RoleType type) {
+	for (final Role role : getRolesSet()) {
+	    if (role.getRoleType() == type) {
 		return true;
 	    }
 	}
@@ -248,15 +240,7 @@ public class Person extends Person_Base {
     }
 
     public static Person getPerson(final User user) {
-	if (user == null) {
-	    return null;
-	}
-	Person person = user.getExpenditurePerson();
-	// if (person == null) {
-	// setPersonInUser(user);
-	// person = user.getExpenditurePerson();
-	// }
-	return person;
+	return user == null ? null : user.getExpenditurePerson();
     }
 
     public <T extends GenericProcess> List<T> getProcesses(Class<T> classType) {
