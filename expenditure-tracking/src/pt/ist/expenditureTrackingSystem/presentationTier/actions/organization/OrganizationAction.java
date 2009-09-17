@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -35,6 +36,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AcquisitionAfterTheFact;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
+import pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationLog;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.DelegatedAuthorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.AccountingUnitBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.AuthorizationBean;
@@ -831,4 +833,34 @@ public class OrganizationAction extends BaseAction {
 
 	return managePriorityCPVs(mapping, form, request, response);
     }
+
+    public final ActionForward viewAuthorizationLogs(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) throws IOException, SQLException {
+
+	final Person person = getDomainObject(request, "personOid");
+	request.setAttribute("person", person);
+
+	final Unit unit = getDomainObject(request, "unitOid");
+	request.setAttribute("unit", unit);
+
+	final Set<AuthorizationLog> authorizationLogs;
+	if (person == null && unit == null) {
+	    authorizationLogs = null;
+	} else if (person == null) {
+	    authorizationLogs = unit.getSortedAuthorizationLogsSet();
+	} else if (unit == null) {
+	    authorizationLogs = person.getSortedAuthorizationLogsSet();
+	} else {
+	    authorizationLogs = new TreeSet<AuthorizationLog>(AuthorizationLog.COMPARATOR_BY_WHEN);
+	    for (final AuthorizationLog authorizationLog : unit.getAuthorizationLogsSet()) {
+		if (authorizationLog.getPerson() == person) {
+		    authorizationLogs.add(authorizationLog);
+		}
+	    }
+	}
+	request.setAttribute("authorizationLogs", authorizationLogs);
+
+	return forward(request, "/expenditureTrackingOrganization/viewAuthorizationLogs.jsp");
+    }
+
 }

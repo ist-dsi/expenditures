@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.MyOrg;
@@ -27,6 +28,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestWithPayment;
 import pt.ist.expenditureTrackingSystem.domain.announcements.Announcement;
 import pt.ist.expenditureTrackingSystem.domain.announcements.AnnouncementProcess;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
+import pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationLog;
 import pt.ist.expenditureTrackingSystem.domain.dto.AuthorizationBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreatePersonBean;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericLog;
@@ -296,6 +298,12 @@ public class Person extends Person_Base {
 
 	});
 
+    }
+
+    public Set<AuthorizationLog> getSortedAuthorizationLogsSet() {
+	final Set<AuthorizationLog> authorizationLogs = new TreeSet<AuthorizationLog>(AuthorizationLog.COMPARATOR_BY_WHEN);
+	authorizationLogs.addAll(getAuthorizationLogsSet());
+	return authorizationLogs;
     }
 
     // @Service

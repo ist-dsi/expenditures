@@ -54,6 +54,11 @@
 					</html:link>
 				</li>
 			</logic:present>
+			<li>
+				<html:link action="/expenditureTrackingOrganization.do?method=viewAuthorizationLogs" paramId="personOid" paramName="person" paramProperty="externalId">
+					<bean:message key="authorizations.link.logs" bundle="EXPENDITURE_RESOURCES"/>
+				</html:link>
+			</li>
 		</ul>
 	</div>
 </logic:present>

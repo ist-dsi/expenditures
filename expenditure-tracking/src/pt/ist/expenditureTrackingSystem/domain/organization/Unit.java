@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.TreeSet;
 
 import myorg.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
@@ -18,6 +19,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestWithPayment;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
+import pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationLog;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateUnitBean;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.pstm.Transaction;
@@ -283,4 +285,11 @@ public class Unit extends Unit_Base {
     public void setUnit(final module.organization.domain.Unit unit) {
         super.setUnit(unit);
     }
+
+    public Set<AuthorizationLog> getSortedAuthorizationLogsSet() {
+	final Set<AuthorizationLog> authorizationLogs = new TreeSet<AuthorizationLog>(AuthorizationLog.COMPARATOR_BY_WHEN);
+	authorizationLogs.addAll(getAuthorizationLogsSet());
+	return authorizationLogs;
+    }
+
 }

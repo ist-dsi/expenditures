@@ -9,6 +9,7 @@ enum pt.ist.expenditureTrackingSystem.domain.announcements.AnnouncementProcessSt
 enum pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationType as AuthorizationType;
 enum pt.ist.expenditureTrackingSystem.domain.requests.RequestForProposalProcessStateType as RequestForProposalProcessStateType;
 enum pt.ist.expenditureTrackingSystem.domain.RoleType as RoleType;
+enum pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationOperation as AuthorizationOperation;
 
 
 valueType pt.utl.ist.fenix.tools.util.Strings as Strings {
@@ -162,6 +163,16 @@ class authorizations.Authorization {
 
 	class authorizations.DelegatedAuthorization extends authorizations.Authorization {
 	}
+
+class authorizations.AuthorizationLog {
+	DateTime whenOperationWasRan;
+	AuthorizationOperation authorizationOperation;
+	AuthorizationType authorizationType;
+	Boolean canDelegate;
+	LocalDate startDate;
+	LocalDate endDate;
+	Money maxAmount;
+}	
 
 class File {
 	String ojbConcreteClass;
@@ -585,6 +596,13 @@ relation ExpenditureTrackingSystemAuthorization {
 	}
 }
 
+relation ExpenditureTrackingSystemAuthorizationLog {
+	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
+	authorizations.AuthorizationLog playsRole authorizationLogs {
+		multiplicity *;
+	}
+}
+
 relation UnitAuthorization {
 	organization.Unit playsRole unit;
 	authorizations.Authorization playsRole authorizations {
@@ -595,6 +613,27 @@ relation UnitAuthorization {
 relation PersonAuthorization {
 	organization.Person playsRole person;
 	authorizations.Authorization playsRole authorizations {
+		multiplicity *;
+	}
+}
+
+relation PersonAuthorizationLog {
+	organization.Person playsRole person;
+	authorizations.AuthorizationLog playsRole authorizationLogs {
+		multiplicity *;
+	}
+}
+
+relation WhoAuthorizationLog {
+	organization.Person playsRole who;
+	authorizations.AuthorizationLog playsRole authorizationLogsForWho {
+		multiplicity *;
+	}
+}
+
+relation UnitAuthorizationLog {
+	organization.Unit playsRole unit;
+	authorizations.AuthorizationLog playsRole authorizationLogs {
 		multiplicity *;
 	}
 }

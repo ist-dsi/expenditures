@@ -46,6 +46,7 @@ public class Authorization extends Authorization_Base {
 	setPerson(person);
 	setUnit(unit);
 	setCanDelegate(Boolean.FALSE);
+	AuthorizationOperation.CREATE.log(this);
     }
 
     public Authorization(final AuthorizationBean authorizationBean) {
@@ -84,6 +85,7 @@ public class Authorization extends Authorization_Base {
 	for (DelegatedAuthorization authorization : getDelegatedAuthorizations()) {
 	    authorization.revoke();
 	}
+	AuthorizationOperation.EDIT.log(this);
     }
 
     @Override
@@ -111,6 +113,7 @@ public class Authorization extends Authorization_Base {
 
     @Service
     public void delete() {
+	AuthorizationOperation.DELETE.log(this);
 	for (final DelegatedAuthorization delegatedAuthorization : getDelegatedAuthorizationsSet()) {
 	    delegatedAuthorization.delete();
 	}
@@ -118,6 +121,10 @@ public class Authorization extends Authorization_Base {
 	removeUnit();
 	removeExpenditureTrackingSystem();
 	Transaction.deleteObject(this);
+    }
+
+    public void logEdit() {
+	AuthorizationOperation.EDIT.log(this);
     }
 
 }

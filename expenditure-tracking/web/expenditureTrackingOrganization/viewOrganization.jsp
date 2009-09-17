@@ -61,17 +61,23 @@
 			</fr:layout>
 		</fr:view>
 	</div>
-	
-	<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
-		<p class="mtop05">
+
+
+	<p class="mtop05">
+		<html:link action="/expenditureTrackingOrganization.do?method=viewAuthorizationLogs" paramId="unitOid" paramName="unit" paramProperty="externalId">
+			<bean:message key="authorizations.link.logs" bundle="EXPENDITURE_RESOURCES"/>
+		</html:link>
+		<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
+			|
 			<html:link action="/expenditureTrackingOrganization.do?method=editUnit" paramId="unitOid" paramName="unit" paramProperty="externalId">
 				<bean:message key="link.edit" bundle="EXPENDITURE_RESOURCES"/>
-			</html:link> | 
+			</html:link>
+			| 
 			<html:link action="/expenditureTrackingOrganization.do?method=deleteUnit" paramId="unitOid" paramName="unit" paramProperty="externalId">
 				<bean:message key="link.delete" bundle="EXPENDITURE_RESOURCES"/>
 			</html:link>
-		</p>
-	</logic:present>
+		</logic:present>
+	</p>
 
 	<logic:notEmpty name="unit" property="authorizations">
 		<h3 class="mtop15 mbottom05"><bean:message key="authorizations.label.responsibles" bundle="EXPENDITURE_RESOURCES"/></h3>

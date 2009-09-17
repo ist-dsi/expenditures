@@ -127,6 +127,7 @@
 	</slot>
 	<slot name="canDelegate" key="authorizations.label.canDelegate" bundle="EXPENDITURE_RESOURCES"/>
 	<slot name="maxAmount" key="authorizations.label.maxAmount" bundle="EXPENDITURE_RESOURCES"/>
+	<setter signature="logEdit()" />
 </schema>
 
 <schema name="viewDelegatedAuthorizations"
@@ -352,4 +353,19 @@
 	<slot name="totalAllocatedByWorkingCapitals" key="supplier.message.info.totalAllocatedByWorkingCapitals" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 	<slot name="totalAllocatedByRefunds" key="supplier.message.info.totalAllocatedByRefunds" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>	
 	<slot name="totalAllocatedByPurchases" key="supplier.message.info.totalAllocatedByPurchases" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>	
+</schema>
+
+<schema name="pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationLog"
+		type="pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationLog"
+		bundle="EXPENDITURE_ORGANIZATION_RESOURCES">
+	<slot name="whenOperationWasRan" key="label.operation.date" bundle="EXPENDITURE_RESOURCES"/>
+	<slot name="who.username" key="label.operation.executor" bundle="EXPENDITURE_RESOURCES"/>
+	<slot name="authorizationOperation" key="label.operation" bundle="EXPENDITURE_RESOURCES"/>
+
+	<slot name="person.firstAndLastName" key="person.label.name" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+	<slot name="unit.name" key="label.unit" bundle="EXPENDITURE_RESOURCES"/>
+	<slot name="startDate" key="authorizations.label.startDate" bundle="EXPENDITURE_RESOURCES"/>
+	<slot name="endDate" key="authorizations.label.endDate" bundle="EXPENDITURE_RESOURCES"/>
+	<slot name="canDelegate" key="authorizations.label.canDelegate" bundle="EXPENDITURE_RESOURCES"/>
+	<slot name="maxAmount" key="authorizations.label.maxAmount" bundle="EXPENDITURE_RESOURCES" />
 </schema>
