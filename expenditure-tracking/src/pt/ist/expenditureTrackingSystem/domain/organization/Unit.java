@@ -132,7 +132,7 @@ public class Unit extends Unit_Base {
 
     public boolean isResponsible(Person person) {
 	for (Authorization authorization : getAuthorizationsSet()) {
-	    if (authorization.isValid() && isSubUnit(authorization.getUnit())) {
+	    if (authorization.isValid() && authorization.getPerson() == person && isSubUnit(authorization.getUnit())) {
 		return true;
 	    }
 	}
