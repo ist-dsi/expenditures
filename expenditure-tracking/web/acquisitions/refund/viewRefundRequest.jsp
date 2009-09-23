@@ -158,18 +158,57 @@
 <bean:define id="payingUnits" name="refundProcess" property="request.totalAmountsForEachPayingUnit"/>
 <logic:notEmpty name="payingUnits">
 
-	<table class="tstyle3 mervt1 width100pc">
+	<table class="tstyle4 mvert1 width100pc tdmiddle thnoborder">
 		<tr>	
 			<th class="aleft"><bean:message key="acquisitionProcess.label.payingUnits" bundle="ACQUISITION_RESOURCES"/></th>
-			<th class="acenter"><bean:message key="acquisitionProcess.label.accountingUnit" bundle="ACQUISITION_RESOURCES"/></th>
-			<th class="aright"><bean:message key="financer.label.value" bundle="ACQUISITION_RESOURCES"/></th>
+			<th class="acenter" style="width: 70px;">
+					<bean:message key="acquisitionProcess.label.accountingUnit" bundle="ACQUISITION_RESOURCES"/>
+			</th>
+			<th id="fundAllocationHeader">
+					<bean:message key="financer.label.fundAllocation.identification" bundle="ACQUISITION_RESOURCES"/>
+			</th>
+			<th id="effectiveFundAllocationHeader"> 
+					<bean:message key="financer.label.effectiveFundAllocation.identification" bundle="ACQUISITION_RESOURCES"/>
+			</th>
+			<th class="aright">
+				<bean:message key="acquisitionRequestItem.label.totalValueWithVAT" bundle="ACQUISITION_RESOURCES"/>
+				<script type="text/javascript">
+						$('#fundAllocationHeader').hide();
+						$('#effectiveFundAllocationHeader').hide();
+				</script>
+			</th>
 		</tr>
 	
 	<logic:iterate id="payingUnit" name="payingUnits">
 		<tr>
-			<td class="aleft"><fr:view name="payingUnit" property="payingUnit.presentationName"/></td>
-			<td class="acenter"><fr:view name="payingUnit" property="financer.accountingUnit.name"/></td>
-			<td class="aright"><fr:view name="payingUnit" property="amount"/></td>
+			<td class="aleft">
+				<bean:define id="unitOID" name="payingUnit" property="payingUnit.externalId" type="java.lang.String"/>
+				<html:link styleClass="secondaryLink" page="<%= "/expenditureTrackingOrganization.do?method=viewOrganization&unitOid=" + unitOID%>" target="_blank">
+					<fr:view name="payingUnit" property="payingUnit.presentationName"/>
+				</html:link>
+			</td>
+			<bean:define id="financer" name="payingUnit" property="financer"/>
+			<td class="acenter" style="width: 80px;"><fr:view name="payingUnit" property="financer.accountingUnit.name"/></td>
+			<td class="allocationCell" style="display: none;">
+				<logic:equal name="payingUnit" property="financer.fundAllocationPresent" value="true">
+					<fr:view name="payingUnit" property="financer.fundAllocationIds"/> 
+					<script type="text/javascript">
+						$('#fundAllocationHeader').show();
+						$('.allocationCell').show();
+					</script>
+				</logic:equal>
+			</td>
+			<td class="allocationCell" style="display: none;">
+				<logic:equal name="payingUnit" property="financer.effectiveFundAllocationPresent" value="true">
+					<fr:view name="payingUnit" property="financer.effectiveFundAllocationIds"/> 
+					<script type="text/javascript">
+						$('#effectiveFundAllocationHeader').show();
+						$('.allocationCell').show();
+					</script>
+				</logic:equal>
+			</td>
+		
+			<td class="aright nowrap" style="width: 80px;"><fr:view name="payingUnit" property="amount"/></td>
 		</tr>
 	</logic:iterate>
 	</table>

@@ -300,26 +300,26 @@
 				</html:link>
 			</td>
 			<bean:define id="financer" name="payingUnit" property="financer"/>
-			<td class="nowrap">
-				<fr:view name="financer" layout="financer-status"/>
-			</td>
 			<td class="acenter" style="width: 80px;"><fr:view name="payingUnit" property="financer.accountingUnit.name"/></td>
-			<logic:equal name="payingUnit" property="financer.fundAllocationPresent" value="true">
-				<td>
+			<td class="allocationCell" style="display: none;">
+				<logic:equal name="payingUnit" property="financer.fundAllocationPresent" value="true">
 					<fr:view name="payingUnit" property="financer.fundAllocationIds"/> 
 					<script type="text/javascript">
 						$('#fundAllocationHeader').show();
+						$('.allocationCell').show();
 					</script>
-				</td>
-			</logic:equal>
-			<logic:equal name="payingUnit" property="financer.effectiveFundAllocationPresent" value="true">
-				<td>
+				</logic:equal>
+			</td>
+			<td class="allocationCell" style="display: none;">
+				<logic:equal name="payingUnit" property="financer.effectiveFundAllocationPresent" value="true">
 					<fr:view name="payingUnit" property="financer.effectiveFundAllocationIds"/> 
 					<script type="text/javascript">
 						$('#effectiveFundAllocationHeader').show();
+						$('.allocationCell').show();
 					</script>
-				</td>
-			</logic:equal>
+				</logic:equal>
+			</td>
+		
 			<td class="aright nowrap" style="width: 80px;"><fr:view name="payingUnit" property="amount"/></td>
 		</tr>
 	</logic:iterate>
