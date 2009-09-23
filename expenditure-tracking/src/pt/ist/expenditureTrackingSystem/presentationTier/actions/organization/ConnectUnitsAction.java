@@ -104,6 +104,8 @@ public class ConnectUnitsAction extends BaseAction {
 		new UnitChart(((Set) expenditureTrackingSystem.getTopLevelUnitsSet())) : new UnitChart(unit, collect(unit.getParentUnit()), sortCollection(unit.getSubUnitsSet()));
 	request.setAttribute("unitChart", unitChart);
 
+	request.setAttribute("acquisitionUnits", expenditureTrackingSystem.getUnitsSet());
+
 	return forward(request, "/expenditureTrackingOrganization/connectUnits.jsp");
     }
 

@@ -12,7 +12,17 @@
 <bean:define id="partyChart" name="partyChart" type="module.organization.presentationTier.actions.OrganizationModelAction.PartyChart"/>
 <bean:define id="unitChart" name="unitChart" type="pt.ist.expenditureTrackingSystem.presentationTier.actions.organization.ConnectUnitsAction.UnitChart"/>
 
-<table width="100%" align="center">
+<table width="100%" align="center" class="table">
+	<tr>
+		<th>
+			Estrutura Organizacional
+		</th>
+		<th>
+		</th>
+		<th>
+			Estrutura de Aquisições
+		</th>
+	</tr>
 	<tr>
 		<td align="center">
 			<logic:present name="partyChart" property="element">
@@ -104,4 +114,72 @@
 		</td>
 	</tr>
 </table>
+
+<br/>
+<bean:message key="label.message.acquisition.units.without.units" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>:
+<br/>
+<%
+	int count = 0;
+	int totalUnmatchedUnits = 0;
+	int totalUnmatchedCostCenters = 0;
+	int totalUnmatchedProjects = 0;
+	int totalUnmatchedSubProjects = 0;
+%>
+<logic:iterate id="unit" name="acquisitionUnits">
+	<logic:notPresent name="unit" property="unit">
+		<logic:equal name="unit" property="class.name" value="pt.ist.expenditureTrackingSystem.domain.organization.Unit">
+			<% totalUnmatchedUnits++; %>
+		</logic:equal>
+		<logic:equal name="unit" property="class.name" value="pt.ist.expenditureTrackingSystem.domain.organization.CostCenter">
+			<% totalUnmatchedCostCenters++; %>
+		</logic:equal>
+		<logic:equal name="unit" property="class.name" value="pt.ist.expenditureTrackingSystem.domain.organization.Project">
+			<% totalUnmatchedProjects++; %>
+		</logic:equal>
+		<logic:equal name="unit" property="class.name" value="pt.ist.expenditureTrackingSystem.domain.organization.SubProject">
+			<% totalUnmatchedSubProjects++; %>
+		</logic:equal>
+	</logic:notPresent>
+</logic:iterate>
+<ul>
+	<li>
+		Unidades: <%= totalUnmatchedUnits %>
+	</li>
+	<li>
+		Centros de Custo: <%= totalUnmatchedCostCenters %>
+	</li>
+	<li>
+		Projectos: <%= totalUnmatchedProjects %>
+	</li>
+	<li>
+		Linhas de Acção: <%= totalUnmatchedSubProjects %>
+	</li>
+</ul>
+<logic:iterate id="unit" name="acquisitionUnits">
+	<logic:notPresent name="unit" property="unit">
+		<logic:equal name="unit" property="class.name" value="pt.ist.expenditureTrackingSystem.domain.organization.Unit">
+			<% if (count++ < 100) { %>
+				<bean:define id="urlSelectUnit">/connectUnits.do?method=showUnits<logic:present name="partyChart" property="element">&amp;partyId=<bean:write name="partyChart" property="element.externalId"/></logic:present></bean:define>
+				<html:link action="<%= urlSelectUnit %>" paramId="unitId" paramName="unit" paramProperty="externalId">
+					<bean:write name="unit" property="presentationName"/>
+				</html:link>
+				<br/>
+			<% } %>
+		</logic:equal>
+	</logic:notPresent>
+</logic:iterate>
+<br/>
+<logic:iterate id="unit" name="acquisitionUnits">
+	<logic:notPresent name="unit" property="unit">
+		<logic:equal name="unit" property="class.name" value="pt.ist.expenditureTrackingSystem.domain.organization.CostCenter">
+			<% if (count++ < 100) { %>
+				<bean:define id="urlSelectUnit">/connectUnits.do?method=showUnits<logic:present name="partyChart" property="element">&amp;partyId=<bean:write name="partyChart" property="element.externalId"/></logic:present></bean:define>
+				<html:link action="<%= urlSelectUnit %>" paramId="unitId" paramName="unit" paramProperty="externalId">
+					<bean:write name="unit" property="presentationName"/>
+				</html:link>
+				<br/>
+			<% } %>
+		</logic:equal>
+	</logic:notPresent>
+</logic:iterate>
 
