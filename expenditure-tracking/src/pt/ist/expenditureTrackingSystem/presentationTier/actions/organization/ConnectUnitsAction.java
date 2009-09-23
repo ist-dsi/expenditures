@@ -105,8 +105,29 @@ public class ConnectUnitsAction extends BaseAction {
 	request.setAttribute("unitChart", unitChart);
 
 	request.setAttribute("acquisitionUnits", expenditureTrackingSystem.getUnitsSet());
+	if (unit != null && party == null) {
+	    final List<module.organization.domain.Unit> possibleMatches = findPossibleMatches(unit, myOrg);
+	    request.setAttribute("possibleMatches", possibleMatches);
+	}
 
 	return forward(request, "/expenditureTrackingOrganization/connectUnits.jsp");
+    }
+
+    private List<module.organization.domain.Unit> findPossibleMatches(final Unit unit, final MyOrg myOrg) {
+	final List<module.organization.domain.Unit> matches = new ArrayList<module.organization.domain.Unit>();
+	final Set<module.organization.domain.Unit> unitsToSearch = myOrg.getTopUnitsSet();
+	findPossibleMatches(matches, unit, unitsToSearch);
+	return matches;
+    }
+
+    private void findPossibleMatches(final List<module.organization.domain.Unit> matches, final Unit unit, final Collection<module.organization.domain.Unit> unitsToSearch) {
+	for (final module.organization.domain.Unit unit2 : unitsToSearch) {
+	    if (unit2.getPartyName().getContent().equalsIgnoreCase(unit.getName())) {
+		matches.add(unit2);
+	    } else {
+		findPossibleMatches(matches, unit, unit2.getChildUnits());
+	    }
+	}
     }
 
     public final ActionForward disconnectParty(final ActionMapping mapping, final ActionForm form,

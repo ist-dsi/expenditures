@@ -99,6 +99,17 @@
 					</html:link>
 				</div>
 			</chart:orgChart>
+
+			<logic:present name="possibleMatches">
+				<br/>
+				<logic:iterate id="possibleMatch" name="possibleMatches">
+					<bean:define id="urlSelectParty">/connectUnits.do?method=showUnits<logic:present name="unitChart" property="element">&amp;unitId=<bean:write name="unitChart" property="element.externalId"/></logic:present></bean:define>
+					<html:link action="<%= urlSelectParty %>" paramId="partyId" paramName="possibleMatch" paramProperty="externalId">
+						<bean:write name="possibleMatch" property="presentationName"/>
+					</html:link>
+					<br/>
+				</logic:iterate>
+			</logic:present>
 		</td>
 		<td width="6%">
 		</td>
