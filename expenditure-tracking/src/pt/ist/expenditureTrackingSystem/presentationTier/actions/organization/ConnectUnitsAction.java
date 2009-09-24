@@ -29,6 +29,7 @@ import pt.ist.expenditureTrackingSystem.domain.organization.SubProject;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.BaseAction;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
+import pt.utl.ist.fenix.tools.util.StringNormalizer;
 
 @Mapping(path = "/connectUnits")
 public class ConnectUnitsAction extends BaseAction {
@@ -129,6 +130,7 @@ public class ConnectUnitsAction extends BaseAction {
 	final Unit firstConnectedParent = findFirstConnectedParent(unit);
 	if (firstConnectedParent != null) {
 	    final String[] nameParts = unit.getName().split(" ");
+	    StringNormalizer.normalize(nameParts);
 	    final Collection<module.organization.domain.Unit> unitsToSearch = firstConnectedParent.getUnit().getChildUnits();
 	    findPossibleMatches(matches, nameParts, unitsToSearch);
 	    Collections.sort(matches, module.organization.domain.Unit.COMPARATOR_BY_PRESENTATION_NAME);
@@ -143,7 +145,7 @@ public class ConnectUnitsAction extends BaseAction {
 
     private void findPossibleMatches(final List<module.organization.domain.Unit> matches, final Unit unit, final Collection<module.organization.domain.Unit> unitsToSearch) {
 	for (final module.organization.domain.Unit unit2 : unitsToSearch) {
-	    if (unit2.getPartyName().getContent().equalsIgnoreCase(unit.getName())) {
+	    if (StringNormalizer.normalize(unit2.getPartyName().getContent()).equalsIgnoreCase(StringNormalizer.normalize(unit.getName()))) {
 		matches.add(unit2);
 	    } else {
 		findPossibleMatches(matches, unit, unit2.getChildUnits());
@@ -153,7 +155,7 @@ public class ConnectUnitsAction extends BaseAction {
 
     private void findPossibleMatches(final List<module.organization.domain.Unit> matches, final String[] nameParts, final Collection<module.organization.domain.Unit> unitsToSearch) {
 	for (final module.organization.domain.Unit unit2 : unitsToSearch) {
-	    final String name = unit2.getPartyName().getContent();
+	    final String name = StringNormalizer.normalize(unit2.getPartyName().getContent());
 	    if (containsSomeNamePart(name, nameParts)) {
 		matches.add(unit2);
 	    }

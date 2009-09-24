@@ -179,7 +179,7 @@
 <logic:iterate id="unit" name="acquisitionUnits">
 	<logic:notPresent name="unit" property="unit">
 		<logic:equal name="unit" property="class.name" value="pt.ist.expenditureTrackingSystem.domain.organization.Unit">
-			<% if (count++ < 100) { %>
+			<% if (count++ < 200) { %>
 				<bean:define id="urlSelectUnit">/connectUnits.do?method=showUnits<logic:present name="partyChart" property="element">&amp;partyId=<bean:write name="partyChart" property="element.externalId"/></logic:present></bean:define>
 				<html:link action="<%= urlSelectUnit %>" paramId="unitId" paramName="unit" paramProperty="externalId">
 					<bean:write name="unit" property="presentationName"/>
@@ -193,7 +193,7 @@
 <logic:iterate id="unit" name="acquisitionUnits">
 	<logic:notPresent name="unit" property="unit">
 		<logic:equal name="unit" property="class.name" value="pt.ist.expenditureTrackingSystem.domain.organization.CostCenter">
-			<% if (count++ < 100) { %>
+			<% if (count++ < 200) { %>
 				<bean:define id="urlSelectUnit">/connectUnits.do?method=showUnits<logic:present name="partyChart" property="element">&amp;partyId=<bean:write name="partyChart" property="element.externalId"/></logic:present></bean:define>
 				<html:link action="<%= urlSelectUnit %>" paramId="unitId" paramName="unit" paramProperty="externalId">
 					<bean:write name="unit" property="presentationName"/>
