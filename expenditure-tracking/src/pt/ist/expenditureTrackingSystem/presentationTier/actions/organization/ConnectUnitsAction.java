@@ -108,6 +108,9 @@ public class ConnectUnitsAction extends BaseAction {
 	if (unit != null && party == null) {
 	    final List<module.organization.domain.Unit> possibleMatches = findPossibleMatches(unit, myOrg);
 	    request.setAttribute("possibleMatches", possibleMatches);
+
+	    final List<module.organization.domain.Unit> lessLikelyPossibleMatches = findLessLikelyPossibleMatches(unit, myOrg);
+	    request.setAttribute("lessLikelyPossibleMatches", lessLikelyPossibleMatches);
 	}
 
 	return forward(request, "/expenditureTrackingOrganization/connectUnits.jsp");
@@ -120,6 +123,24 @@ public class ConnectUnitsAction extends BaseAction {
 	return matches;
     }
 
+    private List<module.organization.domain.Unit> findLessLikelyPossibleMatches(final Unit unit, final MyOrg myOrg) {
+	final List<module.organization.domain.Unit> matches = new ArrayList<module.organization.domain.Unit>();
+
+	final Unit firstConnectedParent = findFirstConnectedParent(unit);
+	if (firstConnectedParent != null) {
+	    final String[] nameParts = unit.getName().split(" ");
+	    final Collection<module.organization.domain.Unit> unitsToSearch = firstConnectedParent.getUnit().getChildUnits();
+	    findPossibleMatches(matches, nameParts, unitsToSearch);
+	    Collections.sort(matches, module.organization.domain.Unit.COMPARATOR_BY_PRESENTATION_NAME);
+	}
+
+	return matches;
+    }
+
+    private Unit findFirstConnectedParent(final Unit unit) {
+	return unit == null || unit.hasUnit() ? unit : findFirstConnectedParent(unit.getParentUnit());
+    }
+
     private void findPossibleMatches(final List<module.organization.domain.Unit> matches, final Unit unit, final Collection<module.organization.domain.Unit> unitsToSearch) {
 	for (final module.organization.domain.Unit unit2 : unitsToSearch) {
 	    if (unit2.getPartyName().getContent().equalsIgnoreCase(unit.getName())) {
@@ -128,6 +149,26 @@ public class ConnectUnitsAction extends BaseAction {
 		findPossibleMatches(matches, unit, unit2.getChildUnits());
 	    }
 	}
+    }
+
+    private void findPossibleMatches(final List<module.organization.domain.Unit> matches, final String[] nameParts, final Collection<module.organization.domain.Unit> unitsToSearch) {
+	for (final module.organization.domain.Unit unit2 : unitsToSearch) {
+	    final String name = unit2.getPartyName().getContent();
+	    if (containsSomeNamePart(name, nameParts)) {
+		matches.add(unit2);
+	    }
+	    findPossibleMatches(matches, nameParts, unit2.getChildUnits());
+	}
+    }
+
+
+    private boolean containsSomeNamePart(final String name, final String[] nameParts) {
+	for (final String namePart : nameParts) {
+	    if (name.indexOf(namePart) >= 0) {
+		return true;
+	    }
+	}
+	return false;
     }
 
     public final ActionForward disconnectParty(final ActionMapping mapping, final ActionForm form,
