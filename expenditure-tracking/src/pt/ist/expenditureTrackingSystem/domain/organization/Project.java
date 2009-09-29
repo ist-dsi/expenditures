@@ -25,11 +25,11 @@ public class Project extends Project_Base {
     }
 
     public void setProjectCode(final String projectCode) {
-        getUnit().setAcronym(projectCode);
+        getUnit().setAcronym("P. " + projectCode);
     }
 
     public String getProjectCode() {
-	return getUnit().getAcronym();
+	return getUnit().getAcronym().substring(3);
     }
 
     @Override

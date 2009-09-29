@@ -23,11 +23,11 @@ public class CostCenter extends CostCenter_Base {
     }
 
     public void setCostCenter(final String costCenter) {
-        getUnit().setAcronym(costCenter);
+        getUnit().setAcronym("CC. " + costCenter);
     }
 
     public String getCostCenter() {
-	return getUnit().getAcronym();
+	return getUnit().getAcronym().substring(4);
     }
 
     @Override

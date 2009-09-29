@@ -293,15 +293,12 @@ class organization.Supplier {
 
 class organization.Unit {
 	String ojbConcreteClass;
-	String name;
 }
 
 	class organization.CostCenter extends organization.Unit {
-		String costCenter;
 	}
 
 	class organization.Project extends organization.Unit {
-		String projectCode;
 	}
 
 	class organization.SubProject extends organization.Unit {
