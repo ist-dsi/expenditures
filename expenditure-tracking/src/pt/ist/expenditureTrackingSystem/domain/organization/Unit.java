@@ -8,7 +8,15 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.TreeSet;
 
+import module.organization.domain.PartyType;
+import module.organization.domain.UnitBean;
+import module.organizationIst.domain.IstAccountabilityType;
+import module.organizationIst.domain.IstPartyType;
 import myorg.domain.util.Money;
+
+import org.apache.commons.lang.StringUtils;
+import org.joda.time.LocalDate;
+
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Acquisition;
@@ -24,6 +32,7 @@ import pt.ist.expenditureTrackingSystem.domain.dto.CreateUnitBean;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.pstm.Transaction;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
+import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
 public class Unit extends Unit_Base {
 
@@ -44,14 +53,41 @@ public class Unit extends Unit_Base {
 
     public Unit(final Unit parentUnit, final String name) {
 	this();
+	final String acronym = StringUtils.abbreviate(name, 5);
+	createRealUnit(this, parentUnit, IstPartyType.UNIT, acronym, name);
+
+	// TODO : After this object is refactored to retrieve the name and parent from the real unit,
+	//        the following two lines may be deleted.
 	setName(name);
 	setParentUnit(parentUnit);
+    }
+
+    @Override
+    public void setName(final String name) {
+        super.setName(name);
+        getUnit().setPartyName(new MultiLanguageString(name));
+    }
+
+    protected static void createRealUnit(final Unit expenditureUnit, final Unit parentExpenditureUnit, final IstPartyType istPartyType, final String acronym, final String name) {
+	final UnitBean unitBean = new UnitBean();
+	unitBean.setParent(parentExpenditureUnit.getUnit());
+	unitBean.setAccountabilityType(IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType());
+	unitBean.setAcronym(acronym);
+	unitBean.setBegin(new LocalDate());
+	unitBean.setEnd(null);
+	unitBean.setName(new MultiLanguageString(name));
+	unitBean.setPartyType(PartyType.readBy(istPartyType.getType()));
+	final module.organization.domain.Unit createdUnit = unitBean.createUnit();
+	expenditureUnit.setUnit(createdUnit);
     }
 
     @Override
     public void setParentUnit(final Unit parentUnit) {
 	if (parentUnit == null) {
 	    setExpenditureTrackingSystemFromTopLevelUnit(ExpenditureTrackingSystem.getInstance());
+	    getUnit().closeAllParentAccountabilitiesByType(IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType());
+	} else {
+	    parentUnit.getUnit().addChild(getUnit(), IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType(), new LocalDate(), null);
 	}
 	super.setParentUnit(parentUnit);
     }

@@ -2,7 +2,7 @@ package pt.ist.expenditureTrackingSystem.domain.organization;
 
 import java.util.Set;
 
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.Acquisition;
+import module.organizationIst.domain.IstPartyType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
@@ -13,9 +13,19 @@ public class CostCenter extends CostCenter_Base {
 
     public CostCenter(final Unit parentUnit, final String name, final String costCenter) {
 	super();
+	createRealUnit(this, parentUnit, IstPartyType.COST_CENTER, costCenter, name);
+
+	// TODO : After this object is refactored to retrieve the name and parent from the real unit,
+	//        the following three lines may be deleted.
 	setName(name);
 	setCostCenter(costCenter);
 	setParentUnit(parentUnit);
+    }
+
+    @Override
+    public void setCostCenter(final String costCenter) {
+        super.setCostCenter(costCenter);
+        getUnit().setAcronym(costCenter);
     }
 
     @Override

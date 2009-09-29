@@ -2,6 +2,7 @@ package pt.ist.expenditureTrackingSystem.domain.organization;
 
 import java.util.Set;
 
+import module.organizationIst.domain.IstPartyType;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
@@ -14,9 +15,19 @@ public class Project extends Project_Base {
 
     public Project(final Unit parentUnit, final String name, final String projectCode) {
 	super();
+	createRealUnit(this, parentUnit, IstPartyType.PROJECT, projectCode, name);
+
+	// TODO : After this object is refactored to retrieve the name and parent from the real unit,
+	//        the following three lines may be deleted.
 	setName(name);
 	setProjectCode(projectCode);
 	setParentUnit(parentUnit);
+    }
+
+    @Override
+    public void setProjectCode(final String projectCode) {
+        super.setProjectCode(projectCode);
+        getUnit().setAcronym(projectCode);
     }
 
     @Override

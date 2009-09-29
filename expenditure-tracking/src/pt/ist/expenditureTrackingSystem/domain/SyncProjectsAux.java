@@ -441,14 +441,12 @@ public class SyncProjectsAux {
     }
 
     private void createSubProject(final Project project, final MgpSubProject mgpSubProject) {
-	final SubProject subProject = new SubProject(project, mgpSubProject.getInstitution() + " - " + mgpSubProject.getInstitutionDescription());
-	updateSubProject(subProject, mgpSubProject);
+	new SubProject(project, mgpSubProject.getInstitution() + " - " + mgpSubProject.getInstitutionDescription());
     }
 
     private void updateSubProject(final SubProject subProject, final MgpSubProject mgpSubProject) {
 	subProject.setName(mgpSubProject.getInstitution() + " - " + mgpSubProject.getInstitutionDescription());
     }
-
 
     private boolean hasAuthorization(final Project project, final Person responsible) {
 	for (final Authorization authorization : project.getAuthorizationsSet()) {
