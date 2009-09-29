@@ -22,10 +22,12 @@ public class CostCenter extends CostCenter_Base {
 	setParentUnit(parentUnit);
     }
 
-    @Override
     public void setCostCenter(final String costCenter) {
-        super.setCostCenter(costCenter);
         getUnit().setAcronym(costCenter);
+    }
+
+    public String getCostCenter() {
+	return getUnit().getAcronym();
     }
 
     @Override

@@ -24,10 +24,12 @@ public class Project extends Project_Base {
 	setParentUnit(parentUnit);
     }
 
-    @Override
     public void setProjectCode(final String projectCode) {
-        super.setProjectCode(projectCode);
         getUnit().setAcronym(projectCode);
+    }
+
+    public String getProjectCode() {
+	return getUnit().getAcronym();
     }
 
     @Override

@@ -62,10 +62,12 @@ public class Unit extends Unit_Base {
 	setParentUnit(parentUnit);
     }
 
-    @Override
     public void setName(final String name) {
-        super.setName(name);
         getUnit().setPartyName(new MultiLanguageString(name));
+    }
+
+    public String getName() {
+	return getUnit().getPartyName().getContent();
     }
 
     protected static void createRealUnit(final Unit expenditureUnit, final Unit parentExpenditureUnit, final IstPartyType istPartyType, final String acronym, final String name) {
@@ -115,8 +117,11 @@ public class Unit extends Unit_Base {
 	for (final Unit unit : getSubUnitsSet()) {
 	    unit.delete();
 	}
+	super.setParentUnit(null);
 	removeExpenditureTrackingSystemFromTopLevelUnit();
-	removeParentUnit();
+	final module.organization.domain.Unit unit = getUnit();
+	removeUnit();
+	unit.delete();
 	removeExpenditureTrackingSystem();
 	Transaction.deleteObject(this);
     }
