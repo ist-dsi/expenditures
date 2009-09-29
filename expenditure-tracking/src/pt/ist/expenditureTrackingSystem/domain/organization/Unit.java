@@ -94,6 +94,12 @@ public class Unit extends Unit_Base {
 	super.setParentUnit(parentUnit);
     }
 
+    private void deleteUnit() {
+	final module.organization.domain.Unit unit = getUnit();
+	removeUnit();
+	unit.delete();
+    }
+
     @Service
     public static Unit createNewUnit(final CreateUnitBean createUnitBean) {
 	if (createUnitBean.getCostCenter() != null) {
@@ -104,6 +110,7 @@ public class Unit extends Unit_Base {
 	}
 	return new Unit(createUnitBean.getParentUnit(), createUnitBean.getName());
     }
+
 
     @Service
     public void delete() {
@@ -119,12 +126,11 @@ public class Unit extends Unit_Base {
 	}
 	super.setParentUnit(null);
 	removeExpenditureTrackingSystemFromTopLevelUnit();
-	final module.organization.domain.Unit unit = getUnit();
-	removeUnit();
-	unit.delete();
+	deleteUnit();
 	removeExpenditureTrackingSystem();
 	Transaction.deleteObject(this);
     }
+
 
     public void findAcquisitionProcessesPendingAuthorization(final Set<AcquisitionProcess> result, final boolean recurseSubUnits) {
 	if (recurseSubUnits) {
