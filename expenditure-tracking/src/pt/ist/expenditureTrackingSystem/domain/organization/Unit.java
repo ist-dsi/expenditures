@@ -8,10 +8,13 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.TreeSet;
 
+import module.organization.domain.Accountability;
+import module.organization.domain.Party;
 import module.organization.domain.PartyType;
 import module.organization.domain.UnitBean;
 import module.organizationIst.domain.IstAccountabilityType;
 import module.organizationIst.domain.IstPartyType;
+import myorg.domain.MyOrg;
 import myorg.domain.util.Money;
 
 import org.apache.commons.lang.StringUtils;
@@ -19,9 +22,7 @@ import org.joda.time.LocalDate;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.Acquisition;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
@@ -83,7 +84,6 @@ public class Unit extends Unit_Base {
 	expenditureUnit.setUnit(createdUnit);
     }
 
-    @Override
     public void setParentUnit(final Unit parentUnit) {
 	if (parentUnit == null) {
 	    setExpenditureTrackingSystemFromTopLevelUnit(ExpenditureTrackingSystem.getInstance());
@@ -91,7 +91,6 @@ public class Unit extends Unit_Base {
 	} else {
 	    parentUnit.getUnit().addChild(getUnit(), IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType(), new LocalDate(), null);
 	}
-	super.setParentUnit(parentUnit);
     }
 
     private void deleteUnit() {
@@ -120,11 +119,10 @@ public class Unit extends Unit_Base {
 	if (hasAnyFinancedItems()) {
 	    throw new DomainException("error.cannot.delete.units.which.have.or.had.financedItems");
 	}
-
-	for (final Unit unit : getSubUnitsSet()) {
-	    unit.delete();
+	if (getUnit().hasAnyParentAccountabilities()) {
+	    throw new DomainException("error.cannot.delete.units.which.have.subUnits");
 	}
-	super.setParentUnit(null);
+
 	removeExpenditureTrackingSystemFromTopLevelUnit();
 	deleteUnit();
 	removeExpenditureTrackingSystem();
@@ -133,57 +131,59 @@ public class Unit extends Unit_Base {
 
 
     public void findAcquisitionProcessesPendingAuthorization(final Set<AcquisitionProcess> result, final boolean recurseSubUnits) {
-	if (recurseSubUnits) {
-	    for (final Unit unit : getSubUnitsSet()) {
-		unit.findAcquisitionProcessesPendingAuthorization(result, recurseSubUnits);
-	    }
-	}
+	findAcquisitionProcessesPendingAuthorization(getUnit(), result, recurseSubUnits);
     }
 
-    public Money getTotalAllocated() {
-	Money result = Money.ZERO;
-	for (final Acquisition acquisition : ExpenditureTrackingSystem.getInstance().getAcquisitionsSet()) {
-	    if (acquisition instanceof AcquisitionRequest) {
-		final AcquisitionRequest acquisitionRequest = (AcquisitionRequest) acquisition;
-		AcquisitionProcess acquisitionProcess = acquisitionRequest.getAcquisitionProcess();
-		if (acquisitionProcess.isAllocatedToUnit(this)) {
-		    result = result.add(acquisitionRequest.getAcquisitionProcess().getAmountAllocatedToUnit(this));
+    public static void findAcquisitionProcessesPendingAuthorization(final Party party, final Set<AcquisitionProcess> result, final boolean recurseSubUnits) {
+	if (recurseSubUnits) {
+	    for (final Accountability accountability : party.getChildAccountabilitiesSet()) {
+		final Party child = accountability.getChild();
+		if (child.isUnit()) {
+		    final module.organization.domain.Unit childUnit = (module.organization.domain.Unit) child;
+		    if (childUnit.hasExpenditureUnit()) {
+			final Unit expenditureUnit = childUnit.getExpenditureUnit();
+			if (expenditureUnit instanceof CostCenter || expenditureUnit instanceof Project) {
+			    expenditureUnit.findAcquisitionProcessesPendingAuthorization(result, recurseSubUnits);
+			}
+		    }
+		    findAcquisitionProcessesPendingAuthorization(child, result, recurseSubUnits);
 		}
 	    }
 	}
-	for (final Unit unit : getSubUnitsSet()) {
-	    result = result.add(unit.getTotalAllocated());
-	}
-	return result;
     }
 
     public static Unit findUnitByCostCenter(final String costCenter) {
-	for (final Unit unit : ExpenditureTrackingSystem.getInstance().getTopLevelUnitsSet()) {
-	    final Unit result = unit.findByCostCenter(costCenter);
-	    if (result != null) {
-		return result;
-	    }
-	}
-	return null;
-    }
-
-    protected Unit findByCostCenter(final String costCenter) {
-	for (final Unit unit : getSubUnitsSet()) {
-	    final Unit result = unit.findByCostCenter(costCenter);
-	    if (result != null) {
-		return result;
-	    }
-	}
-	return null;
+	final Party party = Party.findPartyByPartyTypeAndAcronymForAccountabilityTypeLink(
+		(Set) MyOrg.getInstance().getTopUnitsSet(), IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType(),
+		PartyType.readBy(IstPartyType.COST_CENTER.getType()), "CC. " + costCenter);
+	return party == null || !party.isUnit() ? null : ((module.organization.domain.Unit) party).getExpenditureUnit();
     }
 
     public boolean isResponsible(Person person) {
-	for (Authorization authorization : getAuthorizationsSet()) {
-	    if (authorization.isValid() && authorization.getPerson() == person) {
-		return true;
+	return isResponsible(getUnit(), person);
+    }
+
+    public static boolean isResponsible(final Party party, final Person person) {
+	if (party.isUnit()) {
+	    final module.organization.domain.Unit unit = (module.organization.domain.Unit) party;
+	    if (unit.hasExpenditureUnit()) {
+		for (Authorization authorization : unit.getExpenditureUnit().getAuthorizationsSet()) {
+		    if (authorization.isValid() && authorization.getPerson() == person) {
+			return true;
+		    }
+		}
+	    }
+
+	    for (final Accountability accountability : unit.getParentAccountabilitiesSet()) {
+		if (accountability.getAccountabilityType() == IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType()) {
+		    final Party parent = accountability.getParent();
+		    if (isResponsible(accountability.getParent(), person)) {
+			return true;
+		    }
+		}
 	    }
 	}
-	return hasParentUnit() ? getParentUnit().isResponsible(person) : false;
+	return false;
     }
 
     public boolean isResponsible(final Person person, final Money amount) {
@@ -197,14 +197,33 @@ public class Unit extends Unit_Base {
     }
 
     public Authorization findClosestAuthorization(final Person person, final Money money) {
-	for (final Authorization authorization : getAuthorizationsSet()) {
-	    if (authorization.getPerson() == person && authorization.isValid()) {
-		if (authorization.getMaxAmount().isGreaterThanOrEqual(money)) {
-		    return authorization;
+	return findClosestAuthorization(getUnit(), person, money);
+    }
+
+    public static Authorization findClosestAuthorization(final Party party, final Person person, final Money money) {
+	if (party.isUnit()) {
+	    final module.organization.domain.Unit unit = (module.organization.domain.Unit) party;
+	    if (unit.hasExpenditureUnit()) {
+		for (final Authorization authorization : unit.getExpenditureUnit().getAuthorizationsSet()) {
+		    if (authorization.getPerson() == person && authorization.isValid()) {
+			if (authorization.getMaxAmount().isGreaterThanOrEqual(money)) {
+			    return authorization;
+			}
+		    }
+		}
+	    }
+
+	    for (final Accountability accountability : unit.getParentAccountabilitiesSet()) {
+		if (accountability.getAccountabilityType() == IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType()) {
+		    final Party parent = accountability.getParent();
+		    final Authorization authorization = findClosestAuthorization(accountability.getParent(), person, money);
+		    if (authorization != null) {
+			return authorization;
+		    }
 		}
 	    }
 	}
-	return hasParentUnit() ? getParentUnit().findClosestAuthorization(person, money) : null;
+	return null;
     }
 
     public String getPresentationName() {
@@ -221,11 +240,26 @@ public class Unit extends Unit_Base {
     }
 
     public boolean isSubUnit(final Unit unit) {
-	return unit != null && (this == unit || isSubUnitOfParent(unit));
+	return isSubUnit(getUnit(), unit);
     }
 
-    protected boolean isSubUnitOfParent(final Unit unit) {
-	return hasParentUnit() && getParentUnit().isSubUnit(unit);
+    public static boolean isSubUnit(final Party party, final Unit unit) {
+	if (party == null || unit == null || !party.isUnit()) {
+	    return false;
+	}
+	final module.organization.domain.Unit parentUnit = (module.organization.domain.Unit) party;
+	if (unit == parentUnit.getExpenditureUnit()) {
+	    return true;
+	}
+	for (final Accountability accountability : parentUnit.getParentAccountabilitiesSet()) {
+	    if (accountability.getAccountabilityType() == IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType()) {
+		final Party parent = accountability.getParent();
+		if (isSubUnit(parent, unit)) {
+		    return true;
+		}
+	    }
+	}
+	return false;
     }
 
     public boolean isAccountingEmployee(final Person person) {
@@ -247,9 +281,15 @@ public class Unit extends Unit_Base {
     }
 
     public boolean hasResponsibleInSubUnits() {
-	for (Unit unit : getSubUnits()) {
-	    if (unit.hasResponsiblesInUnit()) {
-		return true;
+	for (final Accountability accountability : getUnit().getChildAccountabilitiesSet()) {
+	    if (accountability.getAccountabilityType() == IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType()) {
+		final Party child = accountability.getChild();
+		if (child.isUnit()) {
+		    final module.organization.domain.Unit unit = (module.organization.domain.Unit) child;
+		    if (unit.hasExpenditureUnit() && unit.getExpenditureUnit().hasResponsiblesInUnit()) {
+			return true;
+		    }
+		}
 	    }
 	}
 	return false;
@@ -283,18 +323,83 @@ public class Unit extends Unit_Base {
     }
 
     public boolean isMostDirectAuthorization(Person person, Money money) {
-	return !hasAnyAuthorizations() ? hasParentUnit() && getParentUnit().isMostDirectAuthorization(person, money)
-		: hasAnyAuthorizationForAmount(money) ? hasAuthorizationsFor(person, money) : hasParentUnit()
-			&& getParentUnit().isMostDirectAuthorization(person, money);
+	return !hasAnyAuthorizations() ?
+			hasParentUnit() && getParentUnit().isMostDirectAuthorization(person, money)
+			: hasAnyAuthorizationForAmount(money) ?
+				hasAuthorizationsFor(person, money)
+				: hasParentUnit() && getParentUnit().isMostDirectAuthorization(person, money);
+    }
+
+    public Unit getParentUnit() {
+	return getParentUnit(getUnit());
+    }
+
+    private static Unit getParentUnit(final module.organization.domain.Unit unit) {
+	for (final Accountability accountability : unit.getParentAccountabilitiesSet()) {
+	    if (accountability.getAccountabilityType() == IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType()) {
+		final Party parent = accountability.getParent();
+		if (parent.isUnit() ) {
+		    final module.organization.domain.Unit parentUnit = (module.organization.domain.Unit) parent;
+		    if (parentUnit.hasExpenditureUnit()) {
+			return parentUnit.getExpenditureUnit();
+		    }
+		    final Unit result = getParentUnit(parentUnit);
+		    if (result != null) {
+			return result;
+		    }
+		}
+	    }
+	}
+	return null;
+    }
+
+    public boolean hasParentUnit() {
+	return hasParentUnit(getUnit());
+    }
+
+    private static boolean hasParentUnit(final module.organization.domain.Unit unit) {
+	for (final Accountability accountability : unit.getParentAccountabilitiesSet()) {
+	    if (accountability.getAccountabilityType() == IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType()) {
+		final Party parent = accountability.getParent();
+		if (parent.isUnit() ) {
+		    final module.organization.domain.Unit parentUnit = (module.organization.domain.Unit) parent;
+		    if (parentUnit.hasExpenditureUnit()) {
+			return true;
+		    }
+		    final boolean result = hasParentUnit(parentUnit);
+		    if (result) {
+			return true;
+		    }
+		}
+	    }
+	}
+	return false;
     }
 
     public boolean isTreasuryMember(Person person) {
-	final AccountingUnit accountingUnit = getAccountingUnit();
-	if (accountingUnit == null) {
-	    final Unit parentUnit = getParentUnit();
-	    return parentUnit != null && parentUnit.isTreasuryMember(person);
+	final AccountingUnit accountingUnit = getAccountingUnit(getUnit(), person);
+	return accountingUnit != null && accountingUnit.getTreasuryMembersSet().contains(person);
+    }
+
+    public static AccountingUnit getAccountingUnit(final Party party, final Person person) {
+	if (party.isUnit()) {
+	    final module.organization.domain.Unit unit = (module.organization.domain.Unit) party;
+	    if (unit.hasExpenditureUnit()) {
+		final Unit expenditureUnit = unit.getExpenditureUnit();
+		if (expenditureUnit.hasAccountingUnit()) {
+		    return expenditureUnit.getAccountingUnit();
+		}
+	    }
+	    for (final Accountability accountability : party.getParentAccountabilitiesSet()) {
+		if (accountability.getAccountabilityType() == IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType()) {
+		    final AccountingUnit accountingUnit = getAccountingUnit(accountability.getParent(), person);
+		    if (accountingUnit != null) {
+			return accountingUnit;
+		    }
+		}
+	    }
 	}
-	return accountingUnit.getTreasuryMembersSet().contains(person);
+	return null;
     }
 
     public Set<PaymentProcess> getProcesses(PaymentProcessYear year) {
@@ -315,9 +420,22 @@ public class Unit extends Unit_Base {
     }
 
     protected void addAllSubUnits(final List<Unit> result) {
-	for (final Unit unit : getSubUnits()) {
-	    result.add(unit);
-	    unit.addAllSubUnits(result);
+	addAllSubUnits(result, getUnit());
+    }
+
+    private static void addAllSubUnits(final List<Unit> result, final Party party) {
+	if (party.isUnit()) {
+	    final module.organization.domain.Unit unit = (module.organization.domain.Unit) party;
+	    if (unit.hasExpenditureUnit()) {
+		result.add(unit.getExpenditureUnit());
+	    }
+
+	    for (final Accountability accountability : unit.getChildAccountabilitiesSet()) {
+		if (accountability.getAccountabilityType() == IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType()) {
+		    final Party child = accountability.getChild();
+		    addAllSubUnits(result, child);
+		}
+	    }
 	}
     }
 
@@ -337,6 +455,43 @@ public class Unit extends Unit_Base {
 	final Set<AuthorizationLog> authorizationLogs = new TreeSet<AuthorizationLog>(AuthorizationLog.COMPARATOR_BY_WHEN);
 	authorizationLogs.addAll(getAuthorizationLogsSet());
 	return authorizationLogs;
+    }
+
+    public Set<Unit> getSubUnitsSet() {
+	final Set<Unit> result = new HashSet<Unit>();
+	getSubUnitsSet(result, getUnit());
+	return result;
+    }
+
+    public static void getSubUnitsSet(final Set<Unit> result, final Party party) {
+	for (final Accountability accountability : party.getChildAccountabilitiesSet()) {
+	    final Party child = accountability.getChild();
+	    if (child.isUnit()) {
+		final module.organization.domain.Unit unit = (module.organization.domain.Unit) child;
+		if (unit.hasExpenditureUnit()) {
+		    result.add(unit.getExpenditureUnit());
+		} else {
+		    getSubUnitsSet(result, unit);
+		}
+	    }
+	}
+    }
+
+    public boolean hasAnySubUnits() {
+	return hasAnySubUnits(getUnit());
+    }
+
+    private static boolean hasAnySubUnits(final module.organization.domain.Unit unit) {
+	for (final Accountability accountability : unit.getChildAccountabilitiesSet()) {
+	    final Party child = accountability.getChild();
+	    if (child.isUnit()) {
+		final module.organization.domain.Unit childUnit = (module.organization.domain.Unit) child;
+		if (childUnit.hasExpenditureUnit()) {
+		    return true;
+		}
+	    }
+	}
+	return false;
     }
 
 }

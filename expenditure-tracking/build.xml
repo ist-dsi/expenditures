@@ -201,12 +201,6 @@
 		</java>
 	</target>
 
-	<target name="dumpOrg" depends="compile">
-		<java classname="pt.ist.expenditureTrackingSystem.DumpOrganization" fork="true" maxmemory="1024m">
-			<classpath refid="run.class.path"/>
-		</java>
-	</target>
-
         <target name="DumpUnSyncedSuppliers" depends="compile">
                 <java classname="pt.ist.expenditureTrackingSystem.DumpUnSyncedSuppliers" fork="true">
                         <classpath refid="run.class.path"/>

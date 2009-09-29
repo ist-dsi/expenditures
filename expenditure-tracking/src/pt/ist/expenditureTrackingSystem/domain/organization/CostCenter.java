@@ -2,14 +2,37 @@ package pt.ist.expenditureTrackingSystem.domain.organization;
 
 import java.util.Set;
 
+import module.organization.domain.Party;
+import module.organization.domain.PartyType;
 import module.organizationIst.domain.IstPartyType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestWithPayment;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
+import dml.runtime.RelationAdapter;
 
 public class CostCenter extends CostCenter_Base {
+
+    public static class CostCenterPartyTypeListener extends RelationAdapter<Party, PartyType> {
+
+	@Override
+	public void afterAdd(final Party party, final PartyType partyType) {
+	    if (party.isUnit() && partyType != null && partyType == PartyType.readBy(IstPartyType.COST_CENTER.getType())) {
+		new CostCenter((module.organization.domain.Unit) party);
+	    }
+	}
+
+    }
+
+    static {
+	Party.PartyTypeParty.addListener(new CostCenterPartyTypeListener());
+    }
+
+    public CostCenter(final module.organization.domain.Unit unit) {
+	super();
+	setUnit(unit);
+    }
 
     public CostCenter(final Unit parentUnit, final String name, final String costCenter) {
 	super();
@@ -39,15 +62,6 @@ public class CostCenter extends CostCenter_Base {
 		    result.add(acquisitionProcess);
 	    }
 	}
-	super.findAcquisitionProcessesPendingAuthorization(result, recurseSubUnits);
-    }
-
-    @Override
-    protected Unit findByCostCenter(final String costCenter) {
-	if (getCostCenter() != null && getCostCenter().equals(costCenter)) {
-	    return this;
-	}
-	return super.findByCostCenter(costCenter);
     }
 
     @Override

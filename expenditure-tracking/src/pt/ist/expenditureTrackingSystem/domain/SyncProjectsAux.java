@@ -11,6 +11,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import module.organization.domain.Accountability;
+import module.organization.domain.Party;
+import module.organizationIst.domain.IstAccountabilityType;
 import myorg.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateUnitBean;
@@ -428,13 +431,22 @@ public class SyncProjectsAux {
 	    }
 	}
 
-	for (final Unit unit : project.getSubUnitsSet()) {
-	    if (unit instanceof SubProject) {
-		final SubProject subProject = (SubProject) unit;
-		final MgpSubProject mgpSubProject = mgpProject.findSubProject(subProject.getName());
-		if (mgpProject == null) {
-		    disconnectedSubProjects++;
-		    System.out.println("Project: " + project.getPresentationName() + " no longer has subproject: " + mgpSubProject.getInstitution() + " - " + mgpSubProject.getInstitutionDescription());
+	for (final Accountability accountability : project.getUnit().getChildAccountabilitiesSet()) {
+	    if (accountability.getAccountabilityType() == IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType()) {
+		final Party party = accountability.getChild();
+		if (party.isUnit()) {
+		    final module.organization.domain.Unit child = (module.organization.domain.Unit) party;
+		    if (child.hasExpenditureUnit()) {
+			final Unit unit = child.getExpenditureUnit();
+			if (unit instanceof SubProject) {
+			    final SubProject subProject = (SubProject) unit;
+			    final MgpSubProject mgpSubProject = mgpProject.findSubProject(subProject.getName());
+			    if (mgpProject == null) {
+				disconnectedSubProjects++;
+				System.out.println("Project: " + project.getPresentationName() + " no longer has subproject: " + mgpSubProject.getInstitution() + " - " + mgpSubProject.getInstitutionDescription());
+			    }
+			}
+		    }
 		}
 	    }
 	}

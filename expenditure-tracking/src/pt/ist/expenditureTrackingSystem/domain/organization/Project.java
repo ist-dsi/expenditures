@@ -2,6 +2,10 @@ package pt.ist.expenditureTrackingSystem.domain.organization;
 
 import java.util.Set;
 
+import module.organization.domain.Accountability;
+import module.organization.domain.Party;
+import module.organization.domain.PartyType;
+import module.organizationIst.domain.IstAccountabilityType;
 import module.organizationIst.domain.IstPartyType;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
@@ -10,8 +14,29 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.ProjectFinancer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestWithPayment;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
+import dml.runtime.RelationAdapter;
 
 public class Project extends Project_Base {
+
+    public static class ProjectPartyTypeListener extends RelationAdapter<Party, PartyType> {
+
+	@Override
+	public void afterAdd(final Party party, final PartyType partyType) {
+	    if (party.isUnit() && partyType != null && partyType == PartyType.readBy(IstPartyType.PROJECT.getType())) {
+		new Project((module.organization.domain.Unit) party);
+	    }
+	}
+
+    }
+
+    static {
+	Party.PartyTypeParty.addListener(new ProjectPartyTypeListener());
+    }
+
+    public Project(final module.organization.domain.Unit unit) {
+	super();
+	setUnit(unit);
+    }
 
     public Project(final Unit parentUnit, final String name, final String projectCode) {
 	super();
@@ -41,7 +66,6 @@ public class Project extends Project_Base {
 		    result.add(acquisitionProcess);
 	    }
 	}
-	super.findAcquisitionProcessesPendingAuthorization(result, recurseSubUnits);
     }
 
     @Override
@@ -84,11 +108,20 @@ public class Project extends Project_Base {
     }
 
     public SubProject findSubProjectByName(final String institution) {
-	for (final Unit unit : getSubUnitsSet()) {
-	    if (unit instanceof SubProject) {
-		final SubProject subProject = (SubProject) unit;
-		if (subProject.getName().equals(institution)) {
-		    return subProject;
+	for (final Accountability accountability : getUnit().getChildAccountabilitiesSet()) {
+	    if (accountability.getAccountabilityType() == IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType()) {
+		final Party party = accountability.getChild();
+		if (party.isUnit()) {
+		    final module.organization.domain.Unit child = (module.organization.domain.Unit) party;
+		    if (child.hasExpenditureUnit()) {
+			final Unit unit = child.getExpenditureUnit();
+			if (unit instanceof SubProject) {
+			    final SubProject subProject = (SubProject) unit;
+			    if (subProject.getName().equals(institution)) {
+				return subProject;
+			    }
+			}
+		    }
 		}
 	    }
 	}
@@ -96,14 +129,23 @@ public class Project extends Project_Base {
     }
 
     public SubProject findSubProjectByNamePrefix(final String institution) {
-	for (final Unit unit : getSubUnitsSet()) {
-	    if (unit instanceof SubProject) {
-		final SubProject subProject = (SubProject) unit;
-		final String name = subProject.getName();
-		final int i = name.indexOf(" - ");
-		final String prefix = name.substring(0, i);
-		if (prefix.equals(institution)) {
-		    return subProject;
+	for (final Accountability accountability : getUnit().getChildAccountabilitiesSet()) {
+	    if (accountability.getAccountabilityType() == IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType()) {
+		final Party party = accountability.getChild();
+		if (party.isUnit()) {
+		    final module.organization.domain.Unit child = (module.organization.domain.Unit) party;
+		    if (child.hasExpenditureUnit()) {
+			final Unit unit = child.getExpenditureUnit();
+			if (unit instanceof SubProject) {
+			    final SubProject subProject = (SubProject) unit;
+			    final String name = subProject.getName();
+			    final int i = name.indexOf(" - ");
+			    final String prefix = name.substring(0, i);
+			    if (prefix.equals(institution)) {
+				return subProject;
+			    }
+			}
+		    }
 		}
 	    }
 	}
