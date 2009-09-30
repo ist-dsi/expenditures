@@ -31,7 +31,6 @@ import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationLog;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateUnitBean;
 import pt.ist.fenixWebFramework.services.Service;
-import pt.ist.fenixframework.pstm.Transaction;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
@@ -126,7 +125,7 @@ public class Unit extends Unit_Base {
 	removeExpenditureTrackingSystemFromTopLevelUnit();
 	deleteUnit();
 	removeExpenditureTrackingSystem();
-	Transaction.deleteObject(this);
+	deleteDomainObject();
     }
 
 

@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import myorg.applicationTier.Authenticate;
-import myorg.util.Counter;
 import myorg.util.MultiCounter;
 
 import org.apache.commons.lang.StringUtils;
@@ -15,7 +14,6 @@ import pt.ist.emailNotifier.domain.Email;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
-import pt.ist.expenditureTrackingSystem.presentationTier.actions.dashboard.DashBoardAction;
 import pt.ist.expenditureTrackingSystem.util.ProcessMapGenerator;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.utl.ist.fenix.tools.util.i18n.Language;

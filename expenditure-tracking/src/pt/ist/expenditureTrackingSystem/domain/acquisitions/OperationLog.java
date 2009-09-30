@@ -6,7 +6,6 @@ import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
-import pt.ist.fenixframework.pstm.Transaction;
 
 public class OperationLog extends OperationLog_Base {
 
@@ -51,7 +50,7 @@ public class OperationLog extends OperationLog_Base {
 	super.setExecutor(null);
 	super.setProcess(null);
 	super.removeExpenditureTrackingSystem();
-	Transaction.deleteObject(this);
+	deleteDomainObject();
     }
 
 }

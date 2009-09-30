@@ -3,7 +3,6 @@ package pt.ist.expenditureTrackingSystem.domain;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.fenixWebFramework.services.Service;
-import pt.ist.fenixframework.pstm.Transaction;
 
 public class SavedSearch extends SavedSearch_Base {
 
@@ -67,7 +66,7 @@ public class SavedSearch extends SavedSearch_Base {
 	removeUnit();
 	removePayingUnit();
 	getPeople().clear();
-	Transaction.deleteObject(this);
+	deleteDomainObject();
     }
 
     public boolean isSearchDefaultForUser(Person person) {

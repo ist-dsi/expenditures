@@ -1,8 +1,8 @@
 package pt.ist.expenditureTrackingSystem.domain.organization;
 
+import myorg.domain.util.Address;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
-import myorg.domain.util.Address;
 
 public class DeliveryInfo extends DeliveryInfo_Base {
 

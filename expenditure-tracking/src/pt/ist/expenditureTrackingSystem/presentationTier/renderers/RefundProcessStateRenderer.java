@@ -5,7 +5,6 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess
 import pt.ist.fenixWebFramework.renderers.components.HtmlBlockContainer;
 import pt.ist.fenixWebFramework.renderers.components.HtmlComponent;
 import pt.ist.fenixWebFramework.renderers.layouts.Layout;
-import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 
 public class RefundProcessStateRenderer extends ProcessStateRenderer<RefundProcess> {
 

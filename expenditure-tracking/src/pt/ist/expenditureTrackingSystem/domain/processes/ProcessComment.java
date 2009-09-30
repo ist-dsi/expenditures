@@ -6,7 +6,6 @@ import org.joda.time.DateTime;
 
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
-import pt.ist.fenixframework.pstm.Transaction;
 
 public class ProcessComment extends ProcessComment_Base {
 
@@ -39,7 +38,7 @@ public class ProcessComment extends ProcessComment_Base {
 	removeCommenter();
 	removeProcess();
 	removeExpenditureTrackingSystem();
-	Transaction.deleteObject(this);
+	deleteDomainObject();
     }
 
     public boolean isUnreadBy(Person person) {

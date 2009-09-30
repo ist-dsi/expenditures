@@ -3,13 +3,14 @@ package pt.ist.expenditureTrackingSystem.domain.dto;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import myorg.domain.util.Money;
+
 import org.joda.time.LocalDate;
 
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AcquisitionAfterTheFact;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionType;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
-import myorg.domain.util.Money;
 import pt.ist.fenixWebFramework.util.DomainReference;
 
 public class AfterTheFactAcquisitionProcessBean implements Serializable {

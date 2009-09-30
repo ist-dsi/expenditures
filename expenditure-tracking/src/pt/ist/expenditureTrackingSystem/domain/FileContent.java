@@ -1,7 +1,6 @@
 package pt.ist.expenditureTrackingSystem.domain;
 
 import myorg.domain.util.ByteArray;
-import pt.ist.fenixframework.pstm.Transaction;
 
 public class FileContent extends FileContent_Base {
     
@@ -19,7 +18,7 @@ public class FileContent extends FileContent_Base {
     public void delete() {
 	removeFile();
 	removeExpenditureTrackingSystem();
-	Transaction.deleteObject(this);
+	deleteDomainObject();
     }
 
 }

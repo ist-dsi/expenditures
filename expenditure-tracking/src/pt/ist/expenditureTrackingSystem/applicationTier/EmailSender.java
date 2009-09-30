@@ -1,7 +1,7 @@
 package pt.ist.expenditureTrackingSystem.applicationTier;
 
-import sendmail.ArrayOfString;
 import net.sourceforge.fenixedu.webServices.generatedStubs.SendMailClient;
+import sendmail.ArrayOfString;
 
 public class EmailSender {
 

@@ -1,7 +1,5 @@
 package pt.ist.expenditureTrackingSystem.domain.announcement;
 
-import myorg.applicationTier.Authenticate.UserView;
-import myorg.domain.User;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.announcements.AnnouncementProcess;

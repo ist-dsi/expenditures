@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Locale;
 
 import myorg._development.PropertiesManager;
-import myorg.domain.MyOrg;
 import pt.ist.expenditureTrackingSystem.domain.DashBoard;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;

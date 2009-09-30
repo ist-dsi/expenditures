@@ -3,9 +3,6 @@ package pt.ist.expenditureTrackingSystem.domain.requests;
 import java.util.Collection;
 import java.util.Set;
 
-import myorg.applicationTier.Authenticate.UserView;
-import myorg.domain.User;
-
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.LocalDate;
 

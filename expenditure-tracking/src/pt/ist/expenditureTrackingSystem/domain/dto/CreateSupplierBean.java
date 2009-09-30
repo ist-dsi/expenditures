@@ -2,9 +2,9 @@ package pt.ist.expenditureTrackingSystem.domain.dto;
 
 import java.io.Serializable;
 
-import org.joda.time.DateTime;
-
 import myorg.domain.util.Address;
+
+import org.joda.time.DateTime;
 
 public class CreateSupplierBean implements Serializable {
 

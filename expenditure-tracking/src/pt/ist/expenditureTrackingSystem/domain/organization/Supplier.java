@@ -17,7 +17,6 @@ import pt.ist.expenditureTrackingSystem.domain.announcements.Announcement;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateSupplierBean;
 import pt.ist.expenditureTrackingSystem.domain.requests.SupplierProposalDocument;
 import pt.ist.fenixWebFramework.services.Service;
-import pt.ist.fenixframework.pstm.Transaction;
 
 public class Supplier extends Supplier_Base {
 
@@ -55,7 +54,7 @@ public class Supplier extends Supplier_Base {
     public void delete() {
 	if (checkIfCanBeDeleted()) {
 	    removeExpenditureTrackingSystem();
-	    Transaction.deleteObject(this);
+	    deleteDomainObject();
 	}
     }
 

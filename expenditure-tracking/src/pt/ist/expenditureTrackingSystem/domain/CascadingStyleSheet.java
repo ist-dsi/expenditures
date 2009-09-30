@@ -1,6 +1,5 @@
 package pt.ist.expenditureTrackingSystem.domain;
 
-import pt.ist.fenixframework.pstm.Transaction;
 
 public class CascadingStyleSheet extends CascadingStyleSheet_Base {
     
@@ -13,7 +12,7 @@ public class CascadingStyleSheet extends CascadingStyleSheet_Base {
     public void delete() {
 	removeOptions();
 	removeExpenditureTrackingSystem();
-	Transaction.deleteObject(this);
+	deleteDomainObject();
     }
 
 }

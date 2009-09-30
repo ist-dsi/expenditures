@@ -8,12 +8,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import myorg._development.PropertiesManager;
+
 import org.apache.commons.beanutils.BeanComparator;
 import org.apache.commons.collections.comparators.ReverseComparator;
 import org.joda.time.DateTime;
 
-import myorg._development.PropertiesManager;
-import myorg.domain.MyOrg;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;

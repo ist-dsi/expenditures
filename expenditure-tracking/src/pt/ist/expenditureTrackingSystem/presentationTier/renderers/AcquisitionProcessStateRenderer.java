@@ -2,15 +2,12 @@ package pt.ist.expenditureTrackingSystem.presentationTier.renderers;
 
 import java.util.List;
 
-import myorg.util.BundleUtil;
-
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.OperationLog;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.fenixWebFramework.renderers.components.HtmlBlockContainer;
 import pt.ist.fenixWebFramework.renderers.components.HtmlComponent;
 import pt.ist.fenixWebFramework.renderers.layouts.Layout;
-import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 
 public class AcquisitionProcessStateRenderer extends ProcessStateRenderer<RegularAcquisitionProcess> {
 

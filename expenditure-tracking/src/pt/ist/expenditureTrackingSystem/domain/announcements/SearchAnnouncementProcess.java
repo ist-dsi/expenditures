@@ -4,8 +4,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 
-import myorg.applicationTier.Authenticate.UserView;
-import myorg.domain.User;
 import myorg.domain.util.Money;
 
 import org.apache.commons.lang.StringUtils;

@@ -3,8 +3,6 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activiti
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
-import pt.ist.fenixWebFramework.services.Command;
-import pt.ist.fenixWebFramework.services.ServiceManager;
 
 public class SubmitForApproval extends GenericAcquisitionProcessActivity {
 

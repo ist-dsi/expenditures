@@ -1,6 +1,5 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
-import pt.ist.fenixframework.pstm.Transaction;
 
 public class PurchaseOrderDocument extends PurchaseOrderDocument_Base {
 
@@ -24,7 +23,7 @@ public class PurchaseOrderDocument extends PurchaseOrderDocument_Base {
     public void delete() {
 	removeAcquisitionRequest();
 	removeExpenditureTrackingSystem();
-	Transaction.deleteObject(this);
+	deleteDomainObject();
     }
 
 }

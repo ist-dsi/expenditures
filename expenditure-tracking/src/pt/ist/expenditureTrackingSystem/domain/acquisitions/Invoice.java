@@ -1,7 +1,6 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
-import pt.ist.fenixframework.pstm.Transaction;
 
 public class Invoice extends Invoice_Base {
     
@@ -17,7 +16,7 @@ public class Invoice extends Invoice_Base {
     public void delete() {
 	removeExpenditureTrackingSystem();
 	getFileContent().delete();
-	Transaction.deleteObject(this);
+	deleteDomainObject();
     }
     
 }

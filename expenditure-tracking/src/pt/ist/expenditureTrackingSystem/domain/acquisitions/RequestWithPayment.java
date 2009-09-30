@@ -6,11 +6,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 
-import org.joda.time.LocalDate;
-
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.ByteArray;
 import myorg.domain.util.Money;
+
+import org.joda.time.LocalDate;
+
 import pt.ist.expenditureTrackingSystem.domain.dto.PayingUnitTotalBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;

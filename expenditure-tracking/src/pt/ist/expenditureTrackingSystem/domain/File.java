@@ -6,7 +6,6 @@ import java.util.List;
 import javax.activation.MimetypesFileTypeMap;
 
 import myorg.domain.util.ByteArray;
-import pt.ist.fenixframework.pstm.Transaction;
 import pt.utl.ist.fenix.tools.util.FileUtils;
 import pt.utl.ist.fenix.tools.util.StringNormalizer;
 
@@ -46,7 +45,7 @@ public class File extends File_Base {
     public void delete() {
 	getFileContent().delete();
 	removeExpenditureTrackingSystem();
-	Transaction.deleteObject(this);
+	deleteDomainObject();
     }
     
     public static <T extends File> List<T> getFiles(final Class<T> clazz) {

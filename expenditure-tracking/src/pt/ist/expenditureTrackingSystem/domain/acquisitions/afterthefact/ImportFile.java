@@ -2,7 +2,6 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.fenixWebFramework.services.Service;
-import pt.ist.fenixframework.pstm.Transaction;
 
 public class ImportFile extends ImportFile_Base {
 
@@ -19,7 +18,7 @@ public class ImportFile extends ImportFile_Base {
 	    throw new DomainException("exception.domain.ImportFile.cannotDeleteImportFileWithProcesses");
 	}
 
-	Transaction.deleteObject(this);
+	deleteDomainObject();
     }
 
     @Service

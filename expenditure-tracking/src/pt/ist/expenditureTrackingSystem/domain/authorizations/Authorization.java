@@ -14,7 +14,6 @@ import pt.ist.expenditureTrackingSystem.domain.dto.AuthorizationBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.fenixWebFramework.services.Service;
-import pt.ist.fenixframework.pstm.Transaction;
 
 public class Authorization extends Authorization_Base {
 
@@ -120,7 +119,7 @@ public class Authorization extends Authorization_Base {
 	removePerson();
 	removeUnit();
 	removeExpenditureTrackingSystem();
-	Transaction.deleteObject(this);
+	deleteDomainObject();
     }
 
     public void logEdit() {

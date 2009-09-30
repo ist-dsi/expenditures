@@ -2,11 +2,10 @@ package pt.ist.expenditureTrackingSystem.domain.dto;
 
 import java.io.Serializable;
 
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
+import myorg.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.UnitItem;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
-import myorg.domain.util.Money;
 import pt.ist.fenixWebFramework.util.DomainReference;
 
 public class UnitItemBean implements Serializable {

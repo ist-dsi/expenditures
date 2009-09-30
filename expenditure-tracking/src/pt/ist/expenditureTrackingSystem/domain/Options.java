@@ -2,7 +2,6 @@ package pt.ist.expenditureTrackingSystem.domain;
 
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.fenixWebFramework.services.Service;
-import pt.ist.fenixframework.pstm.Transaction;
 
 public class Options extends Options_Base {
 
@@ -37,7 +36,7 @@ public class Options extends Options_Base {
     public void delete() {
 	removeExpenditureTrackingSystem();
 	removePerson();
-	Transaction.deleteObject(this);
+	deleteDomainObject();
     }
 
 }

@@ -3,8 +3,6 @@ package pt.ist.expenditureTrackingSystem.util;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.poi.hssf.record.formula.functions.T;
-
 import myorg.util.Counter;
 import myorg.util.MultiCounter;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;

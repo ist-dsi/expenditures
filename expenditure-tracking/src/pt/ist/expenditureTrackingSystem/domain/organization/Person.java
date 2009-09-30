@@ -34,7 +34,6 @@ import pt.ist.expenditureTrackingSystem.domain.dto.CreatePersonBean;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericLog;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 import pt.ist.fenixWebFramework.services.Service;
-import pt.ist.fenixframework.pstm.Transaction;
 import dml.runtime.RelationAdapter;
 
 public class Person extends Person_Base {
@@ -95,7 +94,7 @@ public class Person extends Person_Base {
 	removeExpenditureTrackingSystem();
 	getRoles().clear();
 	getOptions().delete();
-	Transaction.deleteObject(this);
+	deleteDomainObject();
     }
 
     @Service

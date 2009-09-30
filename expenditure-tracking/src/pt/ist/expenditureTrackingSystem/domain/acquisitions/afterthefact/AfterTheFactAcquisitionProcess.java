@@ -3,9 +3,6 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact;
 import java.util.ArrayList;
 import java.util.List;
 
-import myorg.applicationTier.Authenticate.UserView;
-import myorg.domain.User;
-
 import org.joda.time.DateTime;
 
 import pt.ist.expenditureTrackingSystem.domain.RoleType;

@@ -2,15 +2,14 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.refund;
 
 import java.math.BigDecimal;
 
+import myorg.domain.util.Money;
+
 import org.joda.time.LocalDate;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
-import myorg.domain.util.Money;
-import pt.ist.fenixframework.pstm.Transaction;
 
 public class RefundInvoice extends RefundInvoice_Base {
 
@@ -59,7 +58,7 @@ public class RefundInvoice extends RefundInvoice_Base {
 	removeSupplier();
 	removeExpenditureTrackingSystem();
 	getFile().delete();
-	Transaction.deleteObject(this);
+	deleteDomainObject();
     }
 
     public void editValues(Money value, BigDecimal vatValue, Money refundableValue) {

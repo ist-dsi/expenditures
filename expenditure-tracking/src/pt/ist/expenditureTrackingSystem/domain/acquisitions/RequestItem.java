@@ -12,7 +12,6 @@ import myorg.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
-import pt.ist.fenixframework.pstm.Transaction;
 
 public abstract class RequestItem extends RequestItem_Base {
 
@@ -54,7 +53,7 @@ public abstract class RequestItem extends RequestItem_Base {
 	for (; !getInvoicesFiles().isEmpty(); getInvoicesFiles().remove(0))
 	    ;
 
-	Transaction.deleteObject(this);
+	deleteDomainObject();
     }
 
     public UnitItem getUnitItemFor(Unit unit) {
