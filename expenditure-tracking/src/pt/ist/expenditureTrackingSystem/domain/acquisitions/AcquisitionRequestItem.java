@@ -271,11 +271,17 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
     }
 
     public Money getTotalVatValue() {
-	return getTotalItemValue().percentage(getVatValue());
+	Money percentage = getTotalItemValue().percentage(getVatValue());
+	return new Money(percentage.getRoundedValue());
     }
 
     public Money getTotalRealVatValue() {
-	return getTotalRealValue() != null ? getTotalRealValue().percentage(getRealVatValue()) : null;
+	if (getTotalRealValue() == null) {
+	    return null;
+	}
+	
+	Money percentage = getTotalRealValue().percentage(getRealVatValue());
+	return new Money(percentage.getRoundedValue());
     }
 
     // replaced with hasBeenApprovedBy()

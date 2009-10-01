@@ -110,6 +110,19 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	return result;
     }
 
+    public Money getCurrentValue() {
+	Money result = Money.ZERO;
+	for (final AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
+	    Money totalRealValue = acquisitionRequestItem.getTotalRealValue();
+	    if (totalRealValue != null) {
+		result = result.add(totalRealValue);
+	    } else {
+		result = result.add(acquisitionRequestItem.getTotalItemValue());
+	    }
+	}
+	return result;
+    }
+    
     public Money getCurrentVatValue() {
 	Money result = Money.ZERO;
 	for (final AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {

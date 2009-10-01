@@ -82,14 +82,14 @@
 		<property name="eachSchema" value="viewSupplierPresentationName.withLink"/>
 		<property name="classes" value="nobullet"/>
 	</slot>
+	<slot name="acquisitionProcess.skipSupplierFundAllocation" key="label.skipingSupplierFundAllocation" bundle="EXPENDITURE_RESOURCES"/>
 </schema>	
 
 <schema name="viewAcquisitionRequest.extra"
 		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest"
 		bundle="ACQUISITION_RESOURCES">
-	<slot name="acquisitionProcess.skipSupplierFundAllocation" key="label.skipingSupplierFundAllocation" bundle="EXPENDITURE_RESOURCES"/>
 	<slot name="refundeeName" key="label.refundee" bundle="ACQUISITION_RESOURCES" layout="null-as-label"/>
-	<slot name="valueAllocated" key="acquisitionRequestItem.label.totalValue" bundle="ACQUISITION_RESOURCES"/>
+	<slot name="currentValue" key="acquisitionRequestItem.label.totalValue" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="currentTotalVatValue" key="acquisitionRequestItem.label.vat" bundle="ACQUISITION_RESOURCES"/>	
 	<slot name="currentTotalAdditionalCostsValue" key="acquisitionRequestItem.label.additionalCosts" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="currentTotalItemValueWithAdditionalCostsAndVat" key="acquisitionRequestItem.label.totalValueWithAdditionalCostsAndVat" bundle="ACQUISITION_RESOURCES"/>
