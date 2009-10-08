@@ -8,10 +8,10 @@ public class PaymentProcessInvoice extends PaymentProcessInvoice_Base {
 
     @Override
     public void delete() {
-	super.delete();
 	getUnitItems().clear();
 	getRequestItems().clear();
 	getProjectFinancers().clear();
 	getFinancers().clear();
+	super.delete();
     }
 }
