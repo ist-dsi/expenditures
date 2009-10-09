@@ -83,6 +83,19 @@ public class Unit extends Unit_Base {
 	expenditureUnit.setUnit(createdUnit);
     }
 
+    protected static final Unit createRealUnit(final Unit parentExpenditureUnit, final IstPartyType istPartyType, final String acronym, final String name) {
+	final UnitBean unitBean = new UnitBean();
+	unitBean.setParent(parentExpenditureUnit.getUnit());
+	unitBean.setAccountabilityType(IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType());
+	unitBean.setAcronym(acronym);
+	unitBean.setBegin(new LocalDate());
+	unitBean.setEnd(null);
+	unitBean.setName(new MultiLanguageString(name));
+	unitBean.setPartyType(PartyType.readBy(istPartyType.getType()));
+	final module.organization.domain.Unit createdUnit = unitBean.createUnit();
+	return createdUnit.getExpenditureUnit();
+    }
+
     public void setParentUnit(final Unit parentUnit) {
 	if (parentUnit == null) {
 	    setExpenditureTrackingSystemFromTopLevelUnit(ExpenditureTrackingSystem.getInstance());
@@ -104,7 +117,12 @@ public class Unit extends Unit_Base {
 	    return new CostCenter(createUnitBean.getParentUnit(), createUnitBean.getName(), createUnitBean.getCostCenter());
 	}
 	if (createUnitBean.getProjectCode() != null) {
-	    return new Project(createUnitBean.getParentUnit(), createUnitBean.getName(), createUnitBean.getProjectCode());
+	    final Unit unit = createRealUnit(createUnitBean.getParentUnit(), IstPartyType.PROJECT, createUnitBean.getProjectCode(), createUnitBean.getName());
+	    final Project project = (Project) unit;
+	    project.setName(createUnitBean.getName());
+	    project.setProjectCode(createUnitBean.getProjectCode());
+	    project.setParentUnit(createUnitBean.getParentUnit());
+	    return project;
 	}
 	return new Unit(createUnitBean.getParentUnit(), createUnitBean.getName());
     }
