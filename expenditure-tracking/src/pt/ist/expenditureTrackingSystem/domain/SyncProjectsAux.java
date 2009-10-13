@@ -14,6 +14,7 @@ import java.util.Set;
 import module.organization.domain.Accountability;
 import module.organization.domain.Party;
 import module.organizationIst.domain.IstAccountabilityType;
+import module.organizationIst.domain.IstPartyType;
 import myorg.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateUnitBean;
@@ -453,7 +454,9 @@ public class SyncProjectsAux {
     }
 
     private void createSubProject(final Project project, final MgpSubProject mgpSubProject) {
-	new SubProject(project, mgpSubProject.getInstitution() + " - " + mgpSubProject.getInstitutionDescription());
+	final Unit unit = Unit.createRealUnit(project, IstPartyType.SUB_PROJECT, "", mgpSubProject.getInstitution() + " - " + mgpSubProject.getInstitutionDescription());
+	final SubProject subProject = (SubProject) unit;
+	subProject.setParentUnit(project);
     }
 
     private void updateSubProject(final SubProject subProject, final MgpSubProject mgpSubProject) {
