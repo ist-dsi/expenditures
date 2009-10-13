@@ -83,7 +83,7 @@ public class Unit extends Unit_Base {
 	expenditureUnit.setUnit(createdUnit);
     }
 
-    protected static final Unit createRealUnit(final Unit parentExpenditureUnit, final IstPartyType istPartyType, final String acronym, final String name) {
+    public static final Unit createRealUnit(final Unit parentExpenditureUnit, final IstPartyType istPartyType, final String acronym, final String name) {
 	final UnitBean unitBean = new UnitBean();
 	unitBean.setParent(parentExpenditureUnit.getUnit());
 	unitBean.setAccountabilityType(IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType());
