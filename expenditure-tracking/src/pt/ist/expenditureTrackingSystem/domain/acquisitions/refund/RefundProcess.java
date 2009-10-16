@@ -24,6 +24,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAs
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericRemovePayingUnit;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.ProjectFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.RemoveFundsPermanentlyAllocated;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.RemovePermanentProjectFunds;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.UnApprove;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.UnAuthorize;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.Approve;
@@ -81,6 +82,7 @@ public class RefundProcess extends RefundProcess_Base {
 	requestActivitites.add(new ConfirmInvoices());
 	requestActivitites.add(new AllocateProjectFundsPermanently<RefundProcess>());
 	requestActivitites.add(new AllocateFundsPermanently<RefundProcess>());
+	requestActivitites.add(new RemovePermanentProjectFunds<RefundProcess>());
 	requestActivitites.add(new RemoveFundsPermanentlyAllocated<RefundProcess>());
 	requestActivitites.add(new RefundPerson());
 	requestActivitites.add(new CancelRefundProcess());

@@ -329,6 +329,11 @@ public abstract class PaymentProcessAction extends ProcessAction {
 	return executeActivityAndViewProcess(mapping, form, request, response, "RemoveFundsPermanentlyAllocated");
     }
 
+    public ActionForward executeRemovePermanentProjectFunds(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	return executeActivityAndViewProcess(mapping, form, request, response, "RemovePermanentProjectFunds");
+    }
+
     public ActionForward executeAllocateProjectFundsPermanently(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final PaymentProcess process = getProcess(request);
@@ -341,7 +346,7 @@ public abstract class PaymentProcessAction extends ProcessAction {
 	    List<FundAllocationBean> fundAllocationBeans = new ArrayList<FundAllocationBean>();
 	    for (Financer financer : process.getFinancersWithFundsAllocated()) {
 		if (financer.isProjectFinancer()) {
-		    fundAllocationBeans.addAll(getProjectFundAllocationBeans((ProjectFinancer)financer));
+		    fundAllocationBeans.addAll(getProjectFundAllocationBeans((ProjectFinancer) financer));
 		}
 	    }
 	    request.setAttribute("fundAllocationBeans", fundAllocationBeans);
