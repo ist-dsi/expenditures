@@ -28,7 +28,7 @@
 
 <h2>
 	<bean:message key="acquisitionProcess.title.viewAcquisitionRequest" bundle="ACQUISITION_RESOURCES"/>
-	<span class="acquisitionNumber">(<fr:view name="acquisitionProcess" property="acquisitionRequest.acquisitionProcessId"/>)</span>	
+	<span class="processNumber">(<fr:view name="acquisitionProcess" property="acquisitionRequest.acquisitionProcessId"/>)</span>	
 </h2> 
 
 
