@@ -62,7 +62,7 @@ public class AcquisitionAfterTheFact extends AcquisitionAfterTheFact_Base {
     public AfterTheFactInvoice receiveInvoice(String filename, byte[] bytes, String invoiceNumber, LocalDate invoiceDate) {
 	final AfterTheFactInvoice invoice = hasInvoice() ? getInvoice() : new AfterTheFactInvoice(this);
 	invoice.setFilename(filename);
-	invoice.setContent(new ByteArray(bytes));
+	invoice.setContent(bytes);
 	invoice.setInvoiceNumber(invoiceNumber);
 	invoice.setInvoiceDate(invoiceDate);
 	setInvoice(invoice);

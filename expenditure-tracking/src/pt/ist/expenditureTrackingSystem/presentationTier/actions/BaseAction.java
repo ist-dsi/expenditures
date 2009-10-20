@@ -61,8 +61,8 @@ public abstract class BaseAction extends ContextBaseAction {
 	if (filename == null) {
 	    filename = file.getDisplayName();
 	}
-	return file != null && file.getContent() != null ? download(response, filename != null ? filename : "", file.getContent()
-		.getBytes(), file.getContentType()) : null;
+	return file != null && file.getContent() != null ? download(response, filename != null ? filename : "",
+		file.getContent(), file.getContentType()) : null;
     }
 
     public void addMessage(String key, String bundle, String... args) {

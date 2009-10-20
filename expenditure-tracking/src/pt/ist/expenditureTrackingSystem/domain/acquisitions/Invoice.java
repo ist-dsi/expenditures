@@ -15,8 +15,7 @@ public class Invoice extends Invoice_Base {
 
     public void delete() {
 	removeExpenditureTrackingSystem();
-	getFileContent().delete();
-	deleteDomainObject();
+	super.delete();
     }
     
 }

@@ -66,7 +66,7 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	    setAcquisitionProposalDocument(acquisitionProposalDocument);
 	}
 	acquisitionProposalDocument.setFilename(filename);
-	acquisitionProposalDocument.setContent(new ByteArray(bytes));
+	acquisitionProposalDocument.setContent(bytes);
 	acquisitionProposalDocument.setProposalId(proposalId != null && !proposalId.isEmpty() ? proposalId : null);
     }
 

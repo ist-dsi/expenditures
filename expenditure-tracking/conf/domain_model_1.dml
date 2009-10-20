@@ -174,11 +174,7 @@ class authorizations.AuthorizationLog {
 	Money maxAmount;
 }	
 
-class File {
-	String ojbConcreteClass;
-	String filename;
-	String displayName;
-	String contentType;
+class File extends .module.fileSupport.domain.GenericFile {
 }
 
 	class acquisitions.afterthefact.ImportFile extends File {
@@ -222,10 +218,6 @@ class File {
 
 	class acquisitions.refund.RefundableInvoiceFile extends acquisitions.PaymentProcessInvoice {
 	}
-	
-class FileContent {
-	ByteArray content;
-}
 	
 class Options {
 	Boolean displayAuthorizationPending;
@@ -474,18 +466,6 @@ relation ExpenditureTrackingSystemFile {
 	File playsRole files {
 		multiplicity *;
 	}
-}
-
-relation ExpenditureTrackingSystemFileContent {
-	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
-	FileContent playsRole fileContents {
-		multiplicity *;
-	}
-}
-
-relation FileFileContent {
-	File playsRole file;
-	FileContent playsRole fileContent;
 }
 
 relation RequestForProposalSupplierProposalDocument {

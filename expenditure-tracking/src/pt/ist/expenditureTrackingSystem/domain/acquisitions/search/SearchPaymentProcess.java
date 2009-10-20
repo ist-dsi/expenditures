@@ -302,7 +302,7 @@ public class SearchPaymentProcess extends Search<PaymentProcess> {
     }
 
     public void setShowPriorityOnly(Boolean showPriorityOnly) {
-	this.showPriorityOnly = showPriorityOnly;
+	this.showPriorityOnly = showPriorityOnly != null ? showPriorityOnly : Boolean.FALSE;
     }
 
     public Boolean getShowPriorityOnly() {
