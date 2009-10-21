@@ -5,7 +5,7 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <html:html xhtml="true">
 <head>
-	<tiles:insert page="head.jsp"/>
+	<tiles:insert page="layout/head.jsp"/>
 </head>
 
 <body>
