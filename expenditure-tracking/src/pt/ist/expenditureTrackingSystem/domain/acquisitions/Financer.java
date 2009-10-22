@@ -48,6 +48,8 @@ public class Financer extends Financer_Base {
 	    removeExpenditureTrackingSystem();
 	    removeFundedRequest();
 	    removeUnit();
+	    removeAccountingUnit();
+	    getAllocatedInvoices().clear();
 	    deleteDomainObject();
 	}
     }
