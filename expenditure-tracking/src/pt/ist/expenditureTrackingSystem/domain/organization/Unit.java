@@ -1,6 +1,7 @@
 package pt.ist.expenditureTrackingSystem.domain.organization;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
@@ -15,6 +16,9 @@ import module.organization.domain.UnitBean;
 import module.organizationIst.domain.IstAccountabilityType;
 import module.organizationIst.domain.IstPartyType;
 import myorg.domain.MyOrg;
+import myorg.domain.index.IndexDocument;
+import myorg.domain.index.interfaces.Indexable;
+import myorg.domain.index.interfaces.Searchable;
 import myorg.domain.util.Money;
 
 import org.apache.commons.lang.StringUtils;
@@ -56,21 +60,23 @@ public class Unit extends Unit_Base {
 	final String acronym = StringUtils.abbreviate(name, 5);
 	createRealUnit(this, parentUnit, IstPartyType.UNIT, acronym, name);
 
-	// TODO : After this object is refactored to retrieve the name and parent from the real unit,
-	//        the following two lines may be deleted.
+	// TODO : After this object is refactored to retrieve the name and
+	// parent from the real unit,
+	// the following two lines may be deleted.
 	setName(name);
 	setParentUnit(parentUnit);
     }
 
     public void setName(final String name) {
-        getUnit().setPartyName(new MultiLanguageString(name));
+	getUnit().setPartyName(new MultiLanguageString(name));
     }
 
     public String getName() {
 	return getUnit().getPartyName().getContent();
     }
 
-    protected static void createRealUnit(final Unit expenditureUnit, final Unit parentExpenditureUnit, final IstPartyType istPartyType, final String acronym, final String name) {
+    protected static void createRealUnit(final Unit expenditureUnit, final Unit parentExpenditureUnit,
+	    final IstPartyType istPartyType, final String acronym, final String name) {
 	final UnitBean unitBean = new UnitBean();
 	unitBean.setParent(parentExpenditureUnit.getUnit());
 	unitBean.setAccountabilityType(IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType());
@@ -83,7 +89,8 @@ public class Unit extends Unit_Base {
 	expenditureUnit.setUnit(createdUnit);
     }
 
-    public static final Unit createRealUnit(final Unit parentExpenditureUnit, final IstPartyType istPartyType, final String acronym, final String name) {
+    public static final Unit createRealUnit(final Unit parentExpenditureUnit, final IstPartyType istPartyType,
+	    final String acronym, final String name) {
 	final UnitBean unitBean = new UnitBean();
 	unitBean.setParent(parentExpenditureUnit.getUnit());
 	unitBean.setAccountabilityType(IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType());
@@ -101,7 +108,8 @@ public class Unit extends Unit_Base {
 	    setExpenditureTrackingSystemFromTopLevelUnit(ExpenditureTrackingSystem.getInstance());
 	    getUnit().closeAllParentAccountabilitiesByType(IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType());
 	} else {
-	    parentUnit.getUnit().addChild(getUnit(), IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType(), new LocalDate(), null);
+	    parentUnit.getUnit().addChild(getUnit(), IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType(),
+		    new LocalDate(), null);
 	}
     }
 
@@ -117,7 +125,8 @@ public class Unit extends Unit_Base {
 	    return new CostCenter(createUnitBean.getParentUnit(), createUnitBean.getName(), createUnitBean.getCostCenter());
 	}
 	if (createUnitBean.getProjectCode() != null) {
-	    final Unit unit = createRealUnit(createUnitBean.getParentUnit(), IstPartyType.PROJECT, createUnitBean.getProjectCode(), createUnitBean.getName());
+	    final Unit unit = createRealUnit(createUnitBean.getParentUnit(), IstPartyType.PROJECT, createUnitBean
+		    .getProjectCode(), createUnitBean.getName());
 	    final Project project = (Project) unit;
 	    project.setName(createUnitBean.getName());
 	    project.setProjectCode(createUnitBean.getProjectCode());
@@ -126,7 +135,6 @@ public class Unit extends Unit_Base {
 	}
 	return new Unit(createUnitBean.getParentUnit(), createUnitBean.getName());
     }
-
 
     @Service
     public void delete() {
@@ -146,12 +154,12 @@ public class Unit extends Unit_Base {
 	deleteDomainObject();
     }
 
-
     public void findAcquisitionProcessesPendingAuthorization(final Set<AcquisitionProcess> result, final boolean recurseSubUnits) {
 	findAcquisitionProcessesPendingAuthorization(getUnit(), result, recurseSubUnits);
     }
 
-    public static void findAcquisitionProcessesPendingAuthorization(final Party party, final Set<AcquisitionProcess> result, final boolean recurseSubUnits) {
+    public static void findAcquisitionProcessesPendingAuthorization(final Party party, final Set<AcquisitionProcess> result,
+	    final boolean recurseSubUnits) {
 	if (recurseSubUnits) {
 	    for (final Accountability accountability : party.getChildAccountabilitiesSet()) {
 		final Party child = accountability.getChild();
@@ -170,9 +178,9 @@ public class Unit extends Unit_Base {
     }
 
     public static Unit findUnitByCostCenter(final String costCenter) {
-	final Party party = Party.findPartyByPartyTypeAndAcronymForAccountabilityTypeLink(
-		(Set) MyOrg.getInstance().getTopUnitsSet(), IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType(),
-		PartyType.readBy(IstPartyType.COST_CENTER.getType()), "CC. " + costCenter);
+	final Party party = Party.findPartyByPartyTypeAndAcronymForAccountabilityTypeLink((Set) MyOrg.getInstance()
+		.getTopUnitsSet(), IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType(), PartyType
+		.readBy(IstPartyType.COST_CENTER.getType()), "CC. " + costCenter);
 	return party == null || !party.isUnit() ? null : ((module.organization.domain.Unit) party).getExpenditureUnit();
     }
 
@@ -340,11 +348,9 @@ public class Unit extends Unit_Base {
     }
 
     public boolean isMostDirectAuthorization(Person person, Money money) {
-	return !hasAnyAuthorizations() ?
-			hasParentUnit() && getParentUnit().isMostDirectAuthorization(person, money)
-			: hasAnyAuthorizationForAmount(money) ?
-				hasAuthorizationsFor(person, money)
-				: hasParentUnit() && getParentUnit().isMostDirectAuthorization(person, money);
+	return !hasAnyAuthorizations() ? hasParentUnit() && getParentUnit().isMostDirectAuthorization(person, money)
+		: hasAnyAuthorizationForAmount(money) ? hasAuthorizationsFor(person, money) : hasParentUnit()
+			&& getParentUnit().isMostDirectAuthorization(person, money);
     }
 
     public Unit getParentUnit() {
@@ -355,7 +361,7 @@ public class Unit extends Unit_Base {
 	for (final Accountability accountability : unit.getParentAccountabilitiesSet()) {
 	    if (accountability.getAccountabilityType() == IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType()) {
 		final Party parent = accountability.getParent();
-		if (parent.isUnit() ) {
+		if (parent.isUnit()) {
 		    final module.organization.domain.Unit parentUnit = (module.organization.domain.Unit) parent;
 		    if (parentUnit.hasExpenditureUnit()) {
 			return parentUnit.getExpenditureUnit();
@@ -378,7 +384,7 @@ public class Unit extends Unit_Base {
 	for (final Accountability accountability : unit.getParentAccountabilitiesSet()) {
 	    if (accountability.getAccountabilityType() == IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType()) {
 		final Party parent = accountability.getParent();
-		if (parent.isUnit() ) {
+		if (parent.isUnit()) {
 		    final module.organization.domain.Unit parentUnit = (module.organization.domain.Unit) parent;
 		    if (parentUnit.hasExpenditureUnit()) {
 			return true;
@@ -459,13 +465,13 @@ public class Unit extends Unit_Base {
     @Override
     @Service
     public void removeUnit() {
-        super.removeUnit();
+	super.removeUnit();
     }
 
     @Override
     @Service
     public void setUnit(final module.organization.domain.Unit unit) {
-        super.setUnit(unit);
+	super.setUnit(unit);
     }
 
     public Set<AuthorizationLog> getSortedAuthorizationLogsSet() {
@@ -511,4 +517,15 @@ public class Unit extends Unit_Base {
 	return false;
     }
 
+    @Override
+    @Service
+    public void addObservers(Person observer) {
+	super.addObservers(observer);
+    }
+
+    @Override
+    @Service
+    public void removeObservers(Person observer) {
+	super.removeObservers(observer);
+    }
 }

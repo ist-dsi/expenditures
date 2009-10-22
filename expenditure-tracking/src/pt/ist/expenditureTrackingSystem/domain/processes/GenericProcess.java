@@ -6,25 +6,36 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import myorg.applicationTier.Authenticate;
 import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.User;
+import myorg.util.BundleUtil;
+import myorg.util.MultiCounter;
 
 import org.apache.commons.collections.Predicate;
+import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
 
+import pt.ist.emailNotifier.domain.Email;
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.ProcessesThatAreAuthorizedByUserPredicate;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
+import pt.ist.expenditureTrackingSystem.domain.dto.CommentBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
+import pt.ist.expenditureTrackingSystem.util.ProcessMapGenerator;
 import pt.ist.fenixWebFramework.services.Service;
+import pt.utl.ist.fenix.tools.util.i18n.Language;
 
 public abstract class GenericProcess extends GenericProcess_Base {
 
@@ -178,9 +189,24 @@ public abstract class GenericProcess extends GenericProcess_Base {
 	return false;
     }
 
+    public void notifyPersonDueToComment(Person person, String comment) {
+	List<String> toAddress = new ArrayList<String>();
+	toAddress.clear();
+	final String email = person.getEmail();
+	if (email != null) {
+	    toAddress.add(email);
+
+//	    new Email("Central de Compras", "noreply@ist.utl.pt", new String[] {}, toAddress, Collections.EMPTY_LIST,
+//		    Collections.EMPTY_LIST, "New Process Comment", "There's a comment directed to you");
+	}
+    }
+
     @Service
-    public void createComment(Person person, String comment) {
-	new ProcessComment(this, person, comment);
+    public void createComment(Person person, CommentBean bean) {
+	new ProcessComment(this, person, bean.getComment());
+	for (Person personToNotify : bean.getPeopleToNotify()) {
+	    notifyPersonDueToComment(personToNotify, bean.getComment());
+	}
     }
 
     @Service

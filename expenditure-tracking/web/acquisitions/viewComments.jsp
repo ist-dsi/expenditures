@@ -43,17 +43,37 @@
 
 
 <fr:form action='<%= actionMapping + ".do?method=addComment&processOid=" + processOid%>'>
+	 
+	<fr:edit id="comment" name="bean" visible="false"/>
+
 	<table class="form">
 		<tr>
 			<td>
 				<bean:message key="label.addComment" bundle="EXPENDITURE_RESOURCES"/>:
 			</td>
 			<td>
-				<fr:edit id="comment" name="bean" slot="string" type="java.lang.String" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+				<fr:edit id="comment-text" name="bean" slot="comment" type="java.lang.String" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
 					<fr:layout name="longText">
 						<fr:property name="rows" value="6"/>
 						<fr:property name="columns" value="60"/>
 						<fr:property name="classes" value="form"/>
+					</fr:layout>
+				</fr:edit>
+			</td>
+		</tr>
+			<tr>
+			<td>
+				<bean:message key="label.notifyPeopleByEmail" bundle="EXPENDITURE_RESOURCES"/>:
+			</td>
+			<td>
+				<fr:edit id="peopleToNotify" name="bean" slot="peopleToNotify">
+					<fr:layout name="option-select">
+						<fr:property name="providerClass" value="pt.ist.expenditureTrackingSystem.presentationTier.renderers.dataProvider.CommentersForProcess"/>
+						<fr:property name="eachLayout" value="values"/>
+						<fr:property name="eachSchema" value="viewPeopleInList"/> 
+						<fr:property name="saveOptions" value="true"/>
+						<fr:property name="selectAllShown" value="true"/>
+						<fr:property name="classes" value="nobullet"/>
 					</fr:layout>
 				</fr:edit>
 			</td>

@@ -111,13 +111,21 @@
 			schema="viewAuthorizations">
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="tstyle2"/>
-			<fr:property name="columnClasses" value="aleft,,,,aright,"/>
+			<fr:property name="columnClasses" value="aleft,,,,aright nowrap,"/>
+			<fr:property name="linkGroupSeparator" value=" | "/> 
 
 			<fr:property name="link(view)" value="/expenditureTrackingOrganization.do?method=viewAuthorization"/>
 			<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
 			<fr:property name="key(view)" value="link.view"/>
 			<fr:property name="param(view)" value="externalId/authorizationOid"/>
 			<fr:property name="order(view)" value="1"/>
+			
+			<fr:property name="link(observers)" value="/expenditureTrackingOrganization.do?method=manageObservers"/>
+			<fr:property name="bundle(observers)" value="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+			<fr:property name="key(observers)" value="label.observers"/>
+			<fr:property name="param(observers)" value="unit.externalId/unitOid"/>
+			<fr:property name="order(observers)" value="2"/>
+			<fr:property name="visibleIf(observers)" value="valid"/>
 		</fr:layout>
 	</fr:view>
 </logic:notEmpty>

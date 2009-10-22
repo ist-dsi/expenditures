@@ -13,7 +13,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
-import pt.ist.expenditureTrackingSystem.domain.dto.VariantBean;
+import pt.ist.expenditureTrackingSystem.domain.dto.CommentBean;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.domain.processes.ActivityException;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericFile;
@@ -86,7 +86,7 @@ public abstract class ProcessAction extends BaseAction {
 	process.markCommentsAsReadForPerson(getLoggedPerson());
 
 	request.setAttribute("comments", comments);
-	request.setAttribute("bean", new VariantBean());
+	request.setAttribute("bean", new CommentBean(process));
 
 	return forward(request, "/acquisitions/viewComments.jsp");
     }
@@ -94,11 +94,12 @@ public abstract class ProcessAction extends BaseAction {
     public ActionForward addComment(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) {
 
-	String comment = getRenderedObject("comment");
+	CommentBean bean = getRenderedObject("comment");
+	
 	GenericProcess acquisitionProcess = getDomainObject(request, "processOid");
-	acquisitionProcess.createComment(getLoggedPerson(), comment);
+	acquisitionProcess.createComment(getLoggedPerson(), bean);
 
-	RenderUtils.invalidateViewState("comment");
+	RenderUtils.invalidateViewState();
 	return viewComments(mapping, form, request, response);
     }
 

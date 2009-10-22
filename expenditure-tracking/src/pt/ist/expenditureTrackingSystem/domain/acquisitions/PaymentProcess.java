@@ -2,6 +2,7 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -11,6 +12,7 @@ import myorg.util.BundleUtil;
 
 import org.joda.time.LocalDate;
 
+import pt.ist.emailNotifier.domain.Email;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Project;
@@ -311,5 +313,21 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
 	    }
 	}
 	return false;
+    }
+
+    @Override
+    public void notifyPersonDueToComment(Person person, String comment) {
+	List<String> toAddress = new ArrayList<String>();
+	toAddress.clear();
+	final String email = person.getEmail();
+	if (email != null) {
+	    toAddress.add(email);
+
+	    new Email("Central de Compras", "noreply@ist.utl.pt", new String[] {}, toAddress, Collections.EMPTY_LIST,
+		    Collections.EMPTY_LIST, BundleUtil.getFormattedStringFromResourceBundle("resources/AcquisitionResources",
+			    "label.email.commentCreated.subject", getAcquisitionProcessId()), BundleUtil
+			    .getFormattedStringFromResourceBundle("resources/AcquisitionResources", "label.email.commentCreated.body",
+				    Person.getLoggedPerson().getName(), getAcquisitionProcessId(), comment));
+	}
     }
 }

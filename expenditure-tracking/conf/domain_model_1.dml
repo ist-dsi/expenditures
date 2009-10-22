@@ -1105,3 +1105,12 @@ relation SystemSearchesExpenditureTrackingSystem {
 	}
 	ExpenditureTrackingSystem playsRole expenditureTrackingSystemForSystemSearch;
 }
+
+relation UnitObservers {
+organization.Unit playsRole observableUnits {
+	multiplicity *;
+}
+organization.Person playsRole observers {
+	multiplicity *;
+}
+}

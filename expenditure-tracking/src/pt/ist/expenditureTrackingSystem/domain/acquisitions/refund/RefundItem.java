@@ -192,4 +192,16 @@ public class RefundItem extends RefundItem_Base {
 	return invoices;
     }
 
+    public boolean isRefundValueBiggerThanEstimateValue() {
+	Money refundableValue = Money.ZERO;
+	for (RefundInvoice invoice : getInvoices()) {
+	    refundableValue = refundableValue.add(invoice.getRefundableValue());
+	}
+	return refundableValue.isGreaterThan(getValueEstimation());
+    }
+
+    public boolean isAnyRefundInvoiceAvailable() {
+	return !getInvoices().isEmpty();
+    }
+    
 }

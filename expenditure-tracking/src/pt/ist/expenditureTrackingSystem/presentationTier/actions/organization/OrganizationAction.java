@@ -43,6 +43,7 @@ import pt.ist.expenditureTrackingSystem.domain.dto.AuthorizationBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreatePersonBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateSupplierBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateUnitBean;
+import pt.ist.expenditureTrackingSystem.domain.dto.DomainObjectBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.SupplierBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.UnitBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
@@ -733,7 +734,7 @@ public class OrganizationAction extends BaseAction {
     }
 
     public final ActionForward downloadSupplierAcquisitionInformation(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws IOException, SQLException {
+	    final HttpServletRequest request, final HttpServletResponse response) throws IOException {
 
 	final Supplier supplier = getDomainObject(request, "supplierOid");
 	final Spreadsheet suppliersSheet = getSupplierAcquisitionInformationSheet(supplier);
@@ -749,7 +750,7 @@ public class OrganizationAction extends BaseAction {
 	return null;
     }
 
-    private Spreadsheet getSupplierAcquisitionInformationSheet(final Supplier supplier) throws SQLException {
+    private Spreadsheet getSupplierAcquisitionInformationSheet(final Supplier supplier) {
 	Spreadsheet spreadsheet = new Spreadsheet(supplier.getPresentationName());
 	spreadsheet.setHeader("Identificação Processo");
 	spreadsheet.setHeader("Descrição");
@@ -804,9 +805,10 @@ public class OrganizationAction extends BaseAction {
     }
 
     public final ActionForward managePriorityCPVs(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws IOException, SQLException {
+	    final HttpServletRequest request, final HttpServletResponse response) {
 
-	List<CPVReference> priorityCPVReferences = new ArrayList<CPVReference>(ExpenditureTrackingSystem.getInstance().getPriorityCPVReferences());
+	List<CPVReference> priorityCPVReferences = new ArrayList<CPVReference>(ExpenditureTrackingSystem.getInstance()
+		.getPriorityCPVReferences());
 	Collections.sort(priorityCPVReferences, new BeanComparator("code"));
 	request.setAttribute("cpvs", priorityCPVReferences);
 	request.setAttribute("bean", new VariantBean());
@@ -815,7 +817,7 @@ public class OrganizationAction extends BaseAction {
     }
 
     public final ActionForward addPriorityCPV(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws IOException, SQLException {
+	    final HttpServletRequest request, final HttpServletResponse response) {
 
 	CPVReference reference = getRenderedObject("cpvToAdd");
 	reference.markAsPriority();
@@ -825,7 +827,7 @@ public class OrganizationAction extends BaseAction {
     }
 
     public final ActionForward removePriorityCPV(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws IOException, SQLException {
+	    final HttpServletRequest request, final HttpServletResponse response) {
 
 	CPVReference reference = getDomainObject(request, "cpvId");
 	reference.unmarkAsPriority();
@@ -835,7 +837,7 @@ public class OrganizationAction extends BaseAction {
     }
 
     public final ActionForward viewAuthorizationLogs(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws IOException, SQLException {
+	    final HttpServletRequest request, final HttpServletResponse response) {
 
 	final Person person = getDomainObject(request, "personOid");
 	request.setAttribute("person", person);
@@ -863,4 +865,39 @@ public class OrganizationAction extends BaseAction {
 	return forward(request, "/expenditureTrackingOrganization/viewAuthorizationLogs.jsp");
     }
 
+    public final ActionForward manageObservers(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+
+	final Unit unit = getDomainObject(request, "unitOid");
+	request.setAttribute("unit", unit);
+
+	if (!unit.isResponsible(Person.getLoggedPerson())) {
+	    return viewLoggedPerson(mapping, form, request, response);
+	}
+
+	request.setAttribute("bean", new SearchUsers());
+	return forward(request, "/expenditureTrackingOrganization/manageUnitObservers.jsp");
+    }
+
+    public final ActionForward addObserver(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+
+	final Unit unit = getDomainObject(request, "unitOid");
+	SearchUsers bean = getRenderedObject("bean");
+
+	unit.addObservers(bean.getPerson());
+	RenderUtils.invalidateViewState("bean");
+
+	return manageObservers(mapping, form, request, response);
+
+    }
+
+    public final ActionForward removeObserver(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+
+	final Unit unit = getDomainObject(request, "unitOid");
+	final Person observer = getDomainObject(request, "observerOid");
+	unit.removeObservers(observer);
+	return manageObservers(mapping, form, request, response);
+    }
 }

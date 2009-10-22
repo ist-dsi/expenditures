@@ -17,7 +17,7 @@
         <property name="labelField" value="presentationName"/>
 		<property name="format" value="${presentationName}"/>
 		<property name="minChars" value="3"/>		
-		<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.UnitAutoCompleteProvider" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+		<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.UnitAutoCompleteProvider"/>
 		<property name="classes" value="inputsize300px"/>
 		<validator class="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator">
 			<property name="message" value="label.pleaseSelectOne.unit"/>

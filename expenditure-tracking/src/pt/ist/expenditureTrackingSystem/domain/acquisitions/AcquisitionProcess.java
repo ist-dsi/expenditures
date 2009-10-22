@@ -39,7 +39,8 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 		|| person.hasRoleType(RoleType.ACCOUNTING_MANAGER) || person.hasRoleType(RoleType.PROJECT_ACCOUNTING_MANAGER)
 		|| person.hasRoleType(RoleType.TREASURY_MANAGER) || getRequestor() == person || getCurrentOwner() == person
 		|| getRequestingUnit().isResponsible(person) || isResponsibleForAtLeastOnePayingUnit(person)
-		|| isAccountingEmployee(person) || isProjectAccountingEmployee(person) || isTreasuryMember(person);
+		|| isAccountingEmployee(person) || isProjectAccountingEmployee(person) || isTreasuryMember(person)
+		|| isObserver(person);
     }
 
     public boolean isActive() {
@@ -134,6 +135,23 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
     public boolean isAllowedToViewSupplierExpenditures() {
 	return userHasRole(RoleType.ACQUISITION_CENTRAL) || userHasRole(RoleType.ACQUISITION_CENTRAL_MANAGER)
 		|| userHasRole(RoleType.MANAGER);
+    }
+
+    public boolean isCurrentUserObserver() {
+	return isObserver(Person.getLoggedPerson());
+    }
+
+    public boolean isObserver(Person person) {
+	if (getRequestingUnit().hasObservers(person)) {
+	    return true;
+	}
+
+	for (Unit unit : getPayingUnits()) {
+	    if (unit.hasObservers(person)) {
+		return true;
+	    }
+	}
+	return false;
     }
 
     public boolean checkRealValues() {

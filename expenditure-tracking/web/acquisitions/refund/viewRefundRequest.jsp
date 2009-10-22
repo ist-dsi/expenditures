@@ -255,8 +255,8 @@
 		</logic:equal>
 	</logic:equal>		
 	
-	<logic:equal name="refundProcess" property="anyRefundInvoiceAvailable" value="true">
-		<logic:equal name="refundProcess" property="inAuthorizedState" value="true">
+	<logic:equal name="refundProcess" property="inAuthorizedState" value="true">
+		<logic:equal name="refundItem" property="anyRefundInvoiceAvailable" value="true">
 			<logic:equal name="refundItem" property="realValueFullyAttributedToUnits" value="false">
 				<div class="infobox_warning">
 							<strong><bean:message key="messages.info.attention" bundle="EXPENDITURE_RESOURCES"/>:</strong> <bean:message key="acquisitionRequestItem.message.info.valueNotFullyAttributed" bundle="ACQUISITION_RESOURCES"/>
@@ -273,6 +273,13 @@
 	</logic:equal>
 
 	<bean:define id="item" name="refundItem" toScope="request"/>
+	<logic:equal name="item" property="refundValueBiggerThanEstimateValue" value="true">
+	<div class="infobox_warning mtop15">
+ 		<p class="mvert025">
+         <bean:message key="label.warning.refundValueBiggerThanEstimateValue" bundle="ACQUISITION_RESOURCES"/>
+		 </p>
+	</div>
+	</logic:equal>
 	<jsp:include page="../commons/viewRefundItem.jsp"/>
 		<logic:notEmpty name="refundItem" property="invoices">
 				<table class="tstyle3 tdmiddle tdnoborder vpadding05" style="width: 100%;">
