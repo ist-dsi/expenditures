@@ -8,13 +8,20 @@ public class CancelRefundProcess extends GenericRefundProcessActivity {
 
     @Override
     protected boolean isAvailable(RefundProcess process) {
-	return super.isAvailable(process) && (isCurrentUserRequestor(process) || isUserResponsibleForUnit(process));
+	return super.isAvailable(process)
+		&& (isCurrentUserRequestor(process) || isUserResponsibleForUnit(process) || process.isAccountingEmployee());
     }
 
     @Override
     protected boolean isAccessible(RefundProcess process) {
-	return (process.isInGenesis() && isCurrentUserRequestor(process))
-		|| (process.isPendingApproval() && isUserResponsibleForUnit(process));
+	Person loggedPerson = Person.getLoggedPerson();
+	return ((process.isInGenesis() || process.isInAuthorizedState()) && isCurrentUserRequestor(process))
+		|| (process.isPendingApproval() && isUserResponsibleForUnit(process))
+		|| (process.isResponsibleForUnit(loggedPerson, process.getRequest().getTotalValue())
+			&& !process.getRequest().hasBeenAuthorizedBy(loggedPerson) && process.isInAllocatedToUnitState())
+		|| ((process.isPendingInvoicesConfirmation() || process.isPendingFundAllocation())
+			&& (process.isAccountingEmployee() && !process.hasProjectsAsPayingUnits()) || (process
+			.isProjectAccountingEmployee() && process.hasProjectsAsPayingUnits()));
     }
 
     private boolean isUserResponsibleForUnit(RefundProcess process) {
