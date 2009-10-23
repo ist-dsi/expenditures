@@ -50,7 +50,7 @@ public class MoneyInputRenderer extends InputRenderer {
 	    String moneyValue = (String) value;
 	    if (!StringUtils.isEmpty(moneyValue)) {
 		try {
-		    return new Money(moneyValue.replace(".", "").replace(",", "."));
+		    return new Money(moneyValue.replace(",", "."));
 		} catch (NumberFormatException e) {
 		    throw new ConversionException("renderers.converter.bigdecimal", e, true, value);
 		}

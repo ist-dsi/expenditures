@@ -146,8 +146,10 @@
 	<slot name="quantity" key="acquisitionRequestItem.label.quantity" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
 		<property name="size" value="10"/>
 	</slot>
-	<slot name="unitValue" key="acquisitionRequestItem.label.unitValue" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" help="message.help.unitValue">
+	<slot name="unitValue" key="acquisitionRequestItem.label.unitValue" bundle="ACQUISITION_RESOURCES" help="message.help.unitValue">
 		<property name="size" value="10"/>
+		<validator class="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+		<validator class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.validator.MoneyValidator"/>
 	</slot>
 	<slot name="vatValue" key="acquisitionRequestItem.label.vatValue" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">	
 		<property name="size" value="10"/>
