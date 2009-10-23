@@ -1,10 +1,13 @@
 package pt.ist.expenditureTrackingSystem.domain;
 
+import module.organization.presentationTier.actions.OrganizationModelAction;
+import myorg.domain.ModuleInitializer;
 import myorg.domain.MyOrg;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
+import pt.ist.expenditureTrackingSystem.presentationTier.actions.organization.OrganizationModelPlugin.ExpendituresView;
 import pt.ist.fenixWebFramework.services.Service;
 
-public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base {
+public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base implements ModuleInitializer {
 
     private static boolean isInitialized = false;
 
@@ -36,6 +39,7 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base {
 		
 		initRoles();
 		initSystemSearches();
+		OrganizationModelAction.partyViewHookManager.register(new ExpendituresView());
 		isInitialized = true;
 	    } finally {
 		init = null;
@@ -77,6 +81,11 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base {
     private Integer getAndUpdateNextAcquisitionRequestDocumentCountNumber() {
 	setAcquisitionRequestDocumentCounter(getAcquisitionRequestDocumentCounter().intValue() + 1);
 	return getAcquisitionRequestDocumentCounter();
+    }
+
+    @Override
+    public void init(final MyOrg root) {
+	// nothing else to be done... getInstance() already did it.
     }
 
 }
