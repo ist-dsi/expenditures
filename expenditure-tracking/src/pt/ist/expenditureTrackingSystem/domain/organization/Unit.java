@@ -1,12 +1,12 @@
 package pt.ist.expenditureTrackingSystem.domain.organization;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import module.organization.domain.Accountability;
@@ -16,9 +16,6 @@ import module.organization.domain.UnitBean;
 import module.organizationIst.domain.IstAccountabilityType;
 import module.organizationIst.domain.IstPartyType;
 import myorg.domain.MyOrg;
-import myorg.domain.index.IndexDocument;
-import myorg.domain.index.interfaces.Indexable;
-import myorg.domain.index.interfaces.Searchable;
 import myorg.domain.util.Money;
 
 import org.apache.commons.lang.StringUtils;
@@ -478,6 +475,12 @@ public class Unit extends Unit_Base {
 	final Set<AuthorizationLog> authorizationLogs = new TreeSet<AuthorizationLog>(AuthorizationLog.COMPARATOR_BY_WHEN);
 	authorizationLogs.addAll(getAuthorizationLogsSet());
 	return authorizationLogs;
+    }
+
+    public SortedSet<Authorization> getSortedAuthorizationsSet() {
+	final SortedSet<Authorization> authorizations = new TreeSet<Authorization>(Authorization.COMPARATOR_BY_NAME_AND_DATE);
+	authorizations.addAll(getAuthorizationsSet());
+	return authorizations;
     }
 
     public Set<Unit> getSubUnitsSet() {
