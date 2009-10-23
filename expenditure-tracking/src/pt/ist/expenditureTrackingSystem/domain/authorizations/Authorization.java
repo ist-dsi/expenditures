@@ -25,7 +25,8 @@ public class Authorization extends Authorization_Base {
 	    final Person p2 = o2.getPerson();
 	    final int p = p1.getName().compareTo(p2.getName());
 	    if (p == 0) {
-		return o1.getStartDate().compareTo(o2.getStartDate());
+		final int d = o1.getStartDate().compareTo(o2.getStartDate());
+		return d == 0 ? o1.hashCode() - o2.hashCode() : d;
 	    }
 	    return p;
 	}
