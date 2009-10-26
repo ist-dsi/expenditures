@@ -77,6 +77,11 @@
 				<bean:message key="link.delete" bundle="EXPENDITURE_RESOURCES"/>
 			</html:link>
 		</logic:present>
+		<logic:equal name="unit" property="currentUserResponsibleForUnit" value="true">
+			| <html:link action="/expenditureTrackingOrganization.do?method=manageObservers" paramId="unitOid" paramName="unit" paramProperty="externalId">
+				<bean:message key="label.observers" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/> ( <fr:view name="unit" property="observersCount"/>)
+			</html:link>
+		</logic:equal>
 	</p>
 
 	<logic:notEmpty name="unit" property="authorizations">

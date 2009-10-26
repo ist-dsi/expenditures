@@ -120,6 +120,7 @@
 			<fr:property name="param(view)" value="externalId/authorizationOid"/>
 			<fr:property name="order(view)" value="1"/>
 			
+			<fr:property name="counter(observers)" value="(${unit.observersCount})"/>
 			<fr:property name="link(observers)" value="/expenditureTrackingOrganization.do?method=manageObservers"/>
 			<fr:property name="bundle(observers)" value="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 			<fr:property name="key(observers)" value="label.observers"/>

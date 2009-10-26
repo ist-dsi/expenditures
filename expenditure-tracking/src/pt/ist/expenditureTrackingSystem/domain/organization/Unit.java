@@ -181,6 +181,10 @@ public class Unit extends Unit_Base {
 	return party == null || !party.isUnit() ? null : ((module.organization.domain.Unit) party).getExpenditureUnit();
     }
 
+    public boolean isCurrentUserResponsibleForUnit() {
+	return isResponsible(getUnit(), Person.getLoggedPerson());
+    }
+    
     public boolean isResponsible(Person person) {
 	return isResponsible(getUnit(), person);
     }
