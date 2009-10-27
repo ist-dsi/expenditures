@@ -85,7 +85,7 @@
 	<logic:equal name="unit" property="defaultRegeimIsCCP" value="false">
 		<bean:message key="label.unit.default.regeim.is.not.ccp" bundle="EXPENDITURE_RESOURCES"/>
 	</logic:equal>
-	<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
+	<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.AQUISITIONS_UNIT_MANAGER">
 		<html:link action="/expenditureTrackingOrganization.do?method=changeDefaultRegeimIsCCP" paramId="unitOid" paramName="unit" paramProperty="externalId">
 			<bean:message key="label.unit.default.regeim.toggle" bundle="EXPENDITURE_RESOURCES"/>
 		</html:link>
