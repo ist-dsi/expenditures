@@ -62,13 +62,8 @@
 		</fr:view>
 	</div>
 
-
 	<p class="mtop05">
-		<html:link action="/expenditureTrackingOrganization.do?method=viewAuthorizationLogs" paramId="unitOid" paramName="unit" paramProperty="externalId">
-			<bean:message key="authorizations.link.logs" bundle="EXPENDITURE_RESOURCES"/>
-		</html:link>
 		<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
-			|
 			<html:link action="/expenditureTrackingOrganization.do?method=editUnit" paramId="unitOid" paramName="unit" paramProperty="externalId">
 				<bean:message key="link.edit" bundle="EXPENDITURE_RESOURCES"/>
 			</html:link>
@@ -84,8 +79,23 @@
 		</logic:equal>
 	</p>
 
+	<logic:equal name="unit" property="defaultRegeimIsCCP" value="true">
+		<bean:message key="label.unit.default.regeim.is.ccp" bundle="EXPENDITURE_RESOURCES"/>
+	</logic:equal>
+	<logic:equal name="unit" property="defaultRegeimIsCCP" value="false">
+		<bean:message key="label.unit.default.regeim.is.not.ccp" bundle="EXPENDITURE_RESOURCES"/>
+	</logic:equal>
+	<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
+		<html:link action="/expenditureTrackingOrganization.do?method=changeDefaultRegeimIsCCP" paramId="unitOid" paramName="unit" paramProperty="externalId">
+			<bean:message key="label.unit.default.regeim.toggle" bundle="EXPENDITURE_RESOURCES"/>
+		</html:link>
+	</logic:present>
+
 	<logic:notEmpty name="unit" property="authorizations">
 		<h3 class="mtop15 mbottom05"><bean:message key="authorizations.label.responsibles" bundle="EXPENDITURE_RESOURCES"/></h3>
+		<html:link action="/expenditureTrackingOrganization.do?method=viewAuthorizationLogs" paramId="unitOid" paramName="unit" paramProperty="externalId">
+			<bean:message key="authorizations.link.logs" bundle="EXPENDITURE_RESOURCES"/>
+		</html:link>
 		<fr:view name="unit" property="authorizations" schema="viewAuthorization">
 			<fr:layout name="tabular">
 				<fr:property name="classes" value="tstyle2 mtop05"/>

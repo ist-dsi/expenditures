@@ -50,6 +50,7 @@ public class Unit extends Unit_Base {
 	setOjbConcreteClass(getClass().getName());
 	final ExpenditureTrackingSystem expenditureTrackingSystem = ExpenditureTrackingSystem.getInstance();
 	setExpenditureTrackingSystem(expenditureTrackingSystem);
+	setDefaultRegeimIsCCP(Boolean.TRUE);
     }
 
     public Unit(final Unit parentUnit, final String name) {
@@ -535,4 +536,12 @@ public class Unit extends Unit_Base {
     public void removeObservers(Person observer) {
 	super.removeObservers(observer);
     }
+
+    @Service
+    public void toggleDefaultRegeim() {
+	final Boolean currentValue = getDefaultRegeimIsCCP();
+	final boolean newValue = currentValue == null ? Boolean.TRUE : !currentValue.booleanValue();
+	setDefaultRegeimIsCCP(Boolean.valueOf(newValue));
+    }
+
 }

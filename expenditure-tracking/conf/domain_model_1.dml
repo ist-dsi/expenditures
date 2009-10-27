@@ -285,6 +285,7 @@ class organization.Supplier {
 
 class organization.Unit {
 	String ojbConcreteClass;
+	Boolean defaultRegeimIsCCP;
 }
 
 	class organization.CostCenter extends organization.Unit {

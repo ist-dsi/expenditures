@@ -892,12 +892,13 @@ public class OrganizationAction extends BaseAction {
 
     }
 
-    public final ActionForward removeObserver(final ActionMapping mapping, final ActionForm form,
+    public final ActionForward changeDefaultRegeimIsCCP(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
-
 	final Unit unit = getDomainObject(request, "unitOid");
-	final Person observer = getDomainObject(request, "observerOid");
-	unit.removeObservers(observer);
-	return manageObservers(mapping, form, request, response);
+	unit.toggleDefaultRegeim();
+	final UnitBean unitBean = new UnitBean(unit);
+	request.setAttribute("unitBean", unitBean);
+	return viewOrganization(mapping, request, unit);
     }
+
 }
