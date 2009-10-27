@@ -43,7 +43,7 @@ public class SyncUsers extends SyncUsers_Base {
 	ResultSet resultSetQuery = null;
 	try {
 	    statementQuery = connection.createStatement();
-	    resultSetQuery = statementQuery.executeQuery("select fenix.USER.USER_U_ID, fenix.PARTY.PARTY_NAME, fenix.PARTY_CONTACT.VALUE from fenix.USER inner join fenix.PARTY on fenix.PARTY.ID_INTERNAL = fenix.USER.KEY_PERSON left join fenix.PARTY_CONTACT on fenix.PARTY_CONTACT.KEY_PARTY = fenix.PARTY.ID_INTERNAL and fenix.PARTY_CONTACT.OJB_CONCRETE_CLASS = 'net.sourceforge.fenixedu.domain.contacts.EmailAddress' and fenix.PARTY_CONTACT.TYPE = 'INSTITUTIONAL' group by fenix.USER.USER_U_ID;");
+	    resultSetQuery = statementQuery.executeQuery("select fenix.USER.USER_U_ID, fenix.PARTY.PARTY_NAME, fenix.PARTY_CONTACT.VALUE from fenix.USER inner join fenix.PARTY on fenix.PARTY.OID = fenix.USER.OID_PERSON left join fenix.PARTY_CONTACT on fenix.PARTY_CONTACT.OID_PARTY = fenix.PARTY.OID and fenix.PARTY_CONTACT.OJB_CONCRETE_CLASS = 'net.sourceforge.fenixedu.domain.contacts.EmailAddress' and fenix.PARTY_CONTACT.TYPE = 'INSTITUTIONAL' group by fenix.USER.USER_U_ID;");
 	    int c = 0;
 	    int u = 0;
 	    while (resultSetQuery.next()) {
