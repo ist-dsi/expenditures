@@ -4,7 +4,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess.ProcessClassification;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
@@ -17,12 +20,14 @@ public class CreateAcquisitionProcessBean implements Serializable {
     private List<DomainReference<Supplier>> suppliers;
     private DomainReference<Person> requester;
     private DomainReference<Supplier> supplierToAdd;
+    private ProcessClassification classification;
 
-    public CreateAcquisitionProcessBean() {
+    public CreateAcquisitionProcessBean(ProcessClassification classification) {
 	setRequestingUnit(null);
 	setSupplier(null);
 	setSupplierToAdd(null);
 	setRequestUnitPayingUnit(true);
+	setClassification(classification);
     }
 
     public CreateAcquisitionProcessBean(AcquisitionRequest acquisitionRequest) {
@@ -32,6 +37,11 @@ public class CreateAcquisitionProcessBean implements Serializable {
 	if (acquisitionRequest.getPayingUnits().contains(acquisitionRequest.getRequestingUnit())) {
 	    setRequestUnitPayingUnit(true);
 	}
+	AcquisitionProcess process = acquisitionRequest.getProcess();
+	if (process instanceof SimplifiedProcedureProcess) {
+	    setClassification(((SimplifiedProcedureProcess) process).getProcessClassification());
+	}
+
     }
 
     public Unit getRequestingUnit() {
@@ -96,10 +106,19 @@ public class CreateAcquisitionProcessBean implements Serializable {
 	}
 	this.suppliers.add(new DomainReference<Supplier>(supplier));
     }
-    
+
     public void removeSupplierFromList(int index) {
 	if (this.suppliers != null && index < this.suppliers.size()) {
-	  this.suppliers.remove(index);  
+	    this.suppliers.remove(index);
 	}
     }
+
+    public ProcessClassification getClassification() {
+	return classification;
+    }
+
+    public void setClassification(ProcessClassification classification) {
+	this.classification = classification;
+    }
+
 }

@@ -30,6 +30,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.Invoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PurchaseOrderDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess.ProcessClassification;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.FundAllocationExpirationDate.FundAllocationNotAllowedException;
 import pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.ChangeFinancerAccountingUnitBean;
@@ -168,7 +169,23 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 
     public ActionForward prepareCreateAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
-	final CreateAcquisitionProcessBean acquisitionProcessBean = new CreateAcquisitionProcessBean();
+	final CreateAcquisitionProcessBean acquisitionProcessBean = new CreateAcquisitionProcessBean(ProcessClassification.CCP);
+	request.setAttribute("acquisitionProcessBean", acquisitionProcessBean);
+	return forward(request, "/acquisitions/createAcquisitionProcess.jsp");
+    }
+
+    public ActionForward prepareCreateAcquisitionProcessCT10000(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final CreateAcquisitionProcessBean acquisitionProcessBean = new CreateAcquisitionProcessBean(
+		ProcessClassification.CT10000);
+	request.setAttribute("acquisitionProcessBean", acquisitionProcessBean);
+	return forward(request, "/acquisitions/createAcquisitionProcess.jsp");
+    }
+
+    public ActionForward prepareCreateAcquisitionProcessCT75000(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final CreateAcquisitionProcessBean acquisitionProcessBean = new CreateAcquisitionProcessBean(
+		ProcessClassification.CT75000);
 	request.setAttribute("acquisitionProcessBean", acquisitionProcessBean);
 	return forward(request, "/acquisitions/createAcquisitionProcess.jsp");
     }
@@ -563,6 +580,30 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	final AcquisitionInvoice invoice = getDomainObject(request, "invoiceOid");
 	genericActivityExecution(acquisitionProcess, "RemoveInvoice", invoice);
 	return viewAcquisitionProcess(mapping, request, acquisitionProcess);
+    }
+
+    public ActionForward executeChangeProcessClassification(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final SimplifiedProcedureProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
+	request.setAttribute("acquisitionProcess", acquisitionProcess);
+	CreateAcquisitionProcessBean bean = new CreateAcquisitionProcessBean(acquisitionProcess.getRequest());
+	request.setAttribute("bean", bean);
+
+	return forward(request, "/acquisitions/changeProcessClassification.jsp");
+    }
+
+    public ActionForward setClassification(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	final SimplifiedProcedureProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
+	CreateAcquisitionProcessBean bean = getRenderedObject("bean");
+	try {
+	    genericActivityExecution(acquisitionProcess, "ChangeProcessClassification", bean.getClassification());
+	} catch (DomainException ex) {
+	    addErrorMessage(ex.getMessage(), getBundle(), ex.getArgs());
+	    return viewAcquisitionProcess(mapping, request, acquisitionProcess);
+	}
+
+	return viewAcquisitionProcess(mapping, form, request, response);
     }
 
     private static final String SUPPLIER_LIMIT_OK = "SOK";

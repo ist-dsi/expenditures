@@ -12,6 +12,7 @@
 <bean:define id="actionMapping" value="<%= "/acquisition" + acquisitionProcessClass %>"/>
 <bean:define id="urlConfirm"><%=actionMapping %>.do</bean:define>
 
+
 <logic:equal name="acquisitionProcess" property="processFlowCharAvailable" value="true">
 	<bean:define id="currentState" name="acquisitionProcess" property="acquisitionProcessStateType"/>
 	<fr:view name="acquisitionProcess"> 
@@ -33,6 +34,14 @@
 
 
 <jsp:include page="../commons/defaultErrorDisplay.jsp"/>
+
+<logic:equal name="acquisitionProcess" property="warnRegardingProcessClassificationNeeded" value="true">
+	 <div class="infobox_warning mtop15">
+	 	<p class="mvert025">
+	         <bean:message key="label.warning.mismatchBetweenClassificationAndUnitDefault" bundle="ACQUISITION_RESOURCES"/>
+	    </p>
+	</div>
+</logic:equal>
 
 <logic:present name="acquisitionProcess" property="currentOwner">
 	<bean:define id="ownerName" name="acquisitionProcess" property="currentOwner.firstAndLastName"/>

@@ -73,7 +73,10 @@
 			</html:link>
 		</logic:present>
 		<logic:equal name="unit" property="currentUserResponsibleForUnit" value="true">
-			| <html:link action="/expenditureTrackingOrganization.do?method=manageObservers" paramId="unitOid" paramName="unit" paramProperty="externalId">
+			<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
+			| 
+			</logic:present>
+			<html:link action="/expenditureTrackingOrganization.do?method=manageObservers" paramId="unitOid" paramName="unit" paramProperty="externalId">
 				<bean:message key="label.observers" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/> ( <fr:view name="unit" property="observersCount"/>)
 			</html:link>
 		</logic:equal>

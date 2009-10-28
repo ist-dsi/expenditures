@@ -8,6 +8,7 @@ import myorg.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.dto.PayingUnitTotalBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
@@ -137,23 +138,6 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 		|| userHasRole(RoleType.MANAGER);
     }
 
-    public boolean isCurrentUserObserver() {
-	return isObserver(Person.getLoggedPerson());
-    }
-
-    public boolean isObserver(Person person) {
-	if (getRequestingUnit().hasObservers(person)) {
-	    return true;
-	}
-
-	for (Unit unit : getPayingUnits()) {
-	    if (unit.hasObservers(person)) {
-		return true;
-	    }
-	}
-	return false;
-    }
-
     public boolean checkRealValues() {
 	return getAcquisitionRequest().checkRealValues();
     }
@@ -238,6 +222,10 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
     @Override
     public int getProcessStateOrder() {
 	return getLastAcquisitionProcessState().getAcquisitionProcessStateType().ordinal();
+    }
+
+    public Boolean getShouldSkipSupplierFundAllocation() {
+	return getSkipSupplierFundAllocation();
     }
 
 }

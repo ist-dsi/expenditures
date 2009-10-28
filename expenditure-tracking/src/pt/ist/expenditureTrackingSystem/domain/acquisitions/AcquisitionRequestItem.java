@@ -60,8 +60,7 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 		    .getAcquisitionProcess().getAcquisitionRequestValueLimit().toFormatString());
 	}
 
-	if (!acquisitionRequest.getAcquisitionProcess().getSkipSupplierFundAllocation()
-		&& !checkSupplierFundAllocation(acquisitionRequest, totalValue)) {
+	if (!acquisitionRequest.getAcquisitionProcess().getShouldSkipSupplierFundAllocation() && !checkSupplierFundAllocation(acquisitionRequest, totalValue)) {
 	    throw new DomainException("acquisitionRequestItem.message.exception.fundAllocationNotAllowed");
 	}
     }

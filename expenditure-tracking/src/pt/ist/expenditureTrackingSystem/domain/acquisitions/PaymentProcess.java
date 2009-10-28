@@ -326,8 +326,25 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
 	    new Email("Central de Compras", "noreply@ist.utl.pt", new String[] {}, toAddress, Collections.EMPTY_LIST,
 		    Collections.EMPTY_LIST, BundleUtil.getFormattedStringFromResourceBundle("resources/AcquisitionResources",
 			    "label.email.commentCreated.subject", getAcquisitionProcessId()), BundleUtil
-			    .getFormattedStringFromResourceBundle("resources/AcquisitionResources", "label.email.commentCreated.body",
-				    Person.getLoggedPerson().getName(), getAcquisitionProcessId(), comment));
+			    .getFormattedStringFromResourceBundle("resources/AcquisitionResources",
+				    "label.email.commentCreated.body", Person.getLoggedPerson().getName(),
+				    getAcquisitionProcessId(), comment));
 	}
+    }
+
+    public boolean isCurrentUserObserver() {
+	return isObserver(Person.getLoggedPerson());
+    }
+
+    public boolean isObserver(Person person) {
+	if (getRequest().getRequestingUnit().hasObservers(person)) {
+	    return true;
+	}
+	for (Unit unit : getPayingUnits()) {
+	    if (unit.hasObservers(person)) {
+		return true;
+	    }
+	}
+	return false;
     }
 }

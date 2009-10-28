@@ -380,7 +380,8 @@ public class RefundProcess extends RefundProcess_Base {
 		|| person.hasRoleType(RoleType.ACCOUNTING_MANAGER) || person.hasRoleType(RoleType.PROJECT_ACCOUNTING_MANAGER)
 		|| person.hasRoleType(RoleType.TREASURY_MANAGER) || getRequestor() == person
 		|| getRequest().getRequestingUnit().isResponsible(person) || isResponsibleForAtLeastOnePayingUnit(person)
-		|| isAccountingEmployee(person) || isProjectAccountingEmployee(person) || isTreasuryMember(person);
+		|| isAccountingEmployee(person) || isProjectAccountingEmployee(person) || isTreasuryMember(person)
+		|| isObserver(person);
     }
 
     public boolean isTakenByCurrentUser() {
@@ -444,4 +445,5 @@ public class RefundProcess extends RefundProcess_Base {
     public int getProcessStateOrder() {
 	return getProcessState().getRefundProcessStateType().ordinal();
     }
+
 }

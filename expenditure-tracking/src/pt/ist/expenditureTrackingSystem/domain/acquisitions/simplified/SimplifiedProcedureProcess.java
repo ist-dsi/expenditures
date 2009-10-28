@@ -5,8 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
-import pt.ist.expenditureTrackingSystem.domain.DomainException;
+import myorg.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
@@ -27,6 +28,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activitie
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.CancelInvoiceConfirmation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ChangeAcquisitionProposalDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ChangeFinancersAccountingUnit;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ChangeProcessClassification;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ConfirmInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.CreateAcquisitionPurchaseOrderDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.CreateAcquisitionRequestItem;
@@ -63,11 +65,41 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
+import pt.ist.fenixWebFramework.rendererExtensions.util.IPresentableEnum;
 import pt.ist.fenixWebFramework.services.Service;
 
 public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base {
 
-    private static Money PROCESS_VALUE_LIMIT = new Money("5000");
+    public static enum ProcessClassification implements IPresentableEnum {
+
+	CCP(new Money("5000"), true), CT10000(new Money("10000")), CT75000(new Money("75000"));
+
+	final private Money value;
+	final private boolean ccp;
+
+	ProcessClassification(Money value) {
+	    this(value, false);
+	}
+
+	ProcessClassification(Money value, boolean ccp) {
+	    this.value = value;
+	    this.ccp = ccp;
+	}
+
+	public Money getLimit() {
+	    return value;
+	}
+
+	public boolean isCCP() {
+	    return ccp;
+	}
+
+	@Override
+	public String getLocalizedName() {
+	    return BundleUtil.getFormattedStringFromResourceBundle("resources/ExpenditureResources",
+		    "label.processClassification." + name());
+	}
+    }
 
     private static Map<ActivityScope, List<AbstractActivity<RegularAcquisitionProcess>>> activities = new HashMap<ActivityScope, List<AbstractActivity<RegularAcquisitionProcess>>>();
 
@@ -125,6 +157,7 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	requestInformationActivities.add(new UnSubmitForApproval());
 	requestInformationActivities.add(new ChangeFinancersAccountingUnit());
 
+	requestInformationActivities.add(new ChangeProcessClassification());
 	// requestInformationActivities.add(new SetRefundee());
 	// requestInformationActivities.add(new ChangeRefundee());
 	// requestInformationActivities.add(new UnsetRefundee());
@@ -187,6 +220,7 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	    process.getAcquisitionRequest().addFinancers(unit.finance(process.getAcquisitionRequest()));
 	}
 
+	process.setProcessClassification(createAcquisitionProcessBean.getClassification());
 	return process;
     }
 
@@ -236,7 +270,7 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 
     @Override
     public Money getAcquisitionRequestValueLimit() {
-	return PROCESS_VALUE_LIMIT;
+	return getProcessClassification().getLimit();
     }
 
     @Override
@@ -288,4 +322,27 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	return Util.isAppiableForYear(year, this);
     }
 
+    public boolean isCCP() {
+	return getProcessClassification().isCCP();
+    }
+
+    @Override
+    public void setProcessClassification(ProcessClassification processClassification) {
+	if (getSkipSupplierFundAllocation()) {
+	    unSkipSupplierFundAllocation();
+	}
+	if (processClassification.getLimit().isLessThan(this.getAcquisitionRequest().getCurrentValue())) {
+	    throw new DomainException("error.message.processValueExceedsLimitForClassification");
+	}
+	super.setProcessClassification(processClassification);
+    }
+
+    public boolean isWarnRegardingProcessClassificationNeeded() {
+	return getProcessClassification().isCCP() != getRequestingUnit().getDefaultRegeimIsCCP();
+    }
+
+    @Override
+    public Boolean getShouldSkipSupplierFundAllocation() {
+	return !this.isCCP() || super.getShouldSkipSupplierFundAllocation();
+    }
 }

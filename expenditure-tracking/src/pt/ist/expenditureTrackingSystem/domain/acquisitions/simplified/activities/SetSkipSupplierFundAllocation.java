@@ -3,6 +3,7 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activiti
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
 public class SetSkipSupplierFundAllocation extends GenericAcquisitionProcessActivity {
@@ -10,22 +11,19 @@ public class SetSkipSupplierFundAllocation extends GenericAcquisitionProcessActi
     @Override
     protected boolean isAccessible(RegularAcquisitionProcess process) {
 	final Person loggedPerson = getLoggedPerson();
-	return loggedPerson != null &&
-		(loggedPerson == process.getRequestor() ||
-			userHasRole(RoleType.ACQUISITION_CENTRAL) ||
-			userHasRole(RoleType.SUPPLIER_FUND_ALLOCATION_MANAGER));
+	return loggedPerson != null
+		&& (loggedPerson == process.getRequestor() || userHasRole(RoleType.ACQUISITION_CENTRAL) || userHasRole(RoleType.SUPPLIER_FUND_ALLOCATION_MANAGER));
     }
 
     @Override
     protected boolean isAvailable(RegularAcquisitionProcess process) {
 	return super.isAvailable(process)
-		&& ((process.getAcquisitionProcessState().isInGenesis() && getLoggedPerson() == process.getRequestor()
-			|| (userHasRole(RoleType.ACQUISITION_CENTRAL) &&
-				(process.getAcquisitionProcessState().isAuthorized()
-					|| process.getAcquisitionProcessState().isAcquisitionProcessed()
-					|| process.isInvoiceReceived())))
-			|| userHasRole(RoleType.SUPPLIER_FUND_ALLOCATION_MANAGER))
-		&& !process.getSkipSupplierFundAllocation();
+		&& (process instanceof SimplifiedProcedureProcess && ((SimplifiedProcedureProcess) process)
+			.getProcessClassification().isCCP())
+		&& ((process.getAcquisitionProcessState().isInGenesis() && getLoggedPerson() == process.getRequestor() || (userHasRole(RoleType.ACQUISITION_CENTRAL) && (process
+			.getAcquisitionProcessState().isAuthorized()
+			|| process.getAcquisitionProcessState().isAcquisitionProcessed() || process.isInvoiceReceived()))) || userHasRole(RoleType.SUPPLIER_FUND_ALLOCATION_MANAGER))
+		&& !process.getShouldSkipSupplierFundAllocation();
     }
 
     @Override

@@ -76,7 +76,7 @@ public class SimplifiedAcquisitionPredicate extends SearchPredicate {
 
     private boolean matchShowOnlyCriteris(final AcquisitionRequest acquisitionRequest, final SearchPaymentProcess searchBean) {
 	if (searchBean.getShowOnlyAcquisitionsExcludedFromSupplierLimit().booleanValue()
-		&& !acquisitionRequest.getProcess().getSkipSupplierFundAllocation().booleanValue()) {
+		&& !acquisitionRequest.getProcess().getShouldSkipSupplierFundAllocation().booleanValue()) {
 	    return false;
 	}
 	if (searchBean.getShowOnlyAcquisitionsWithAdditionalCosts().booleanValue()) {

@@ -17,8 +17,8 @@ public class RemoveFundAllocationExpirationDateForResponsible extends GenericAcq
     protected boolean isAvailable(RegularAcquisitionProcess process) {
 
 	return super.isAvailable(process)
-		&& ((!process.getSkipSupplierFundAllocation() && process.getFundAllocationExpirationDate() != null) || (process
-			.getSkipSupplierFundAllocation() && process.isPendingFundAllocation()))
+		&& ((!process.getShouldSkipSupplierFundAllocation() && process.getFundAllocationExpirationDate() != null) || (process
+			.getShouldSkipSupplierFundAllocation() && process.isPendingFundAllocation()))
 		&& !process.hasAnyAllocatedFunds();
     }
 

@@ -124,7 +124,7 @@ public class Supplier extends Supplier_Base {
     private Money getTotalAllocatedByAcquisitionProcesses(boolean allProcesses) {
 	Money result = Money.ZERO;
 	for (final AcquisitionRequest acquisitionRequest : getAcquisitionRequestsSet()) {
-	    if ((allProcesses && !acquisitionRequest.getProcess().getSkipSupplierFundAllocation())
+	    if ((allProcesses && !acquisitionRequest.getProcess().getShouldSkipSupplierFundAllocation())
 		    || acquisitionRequest.getAcquisitionProcess().isAllocatedToSupplier()) {
 		result = result.add(acquisitionRequest.getValueAllocated());
 	    }

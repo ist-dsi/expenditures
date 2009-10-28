@@ -125,7 +125,7 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
 
 	private boolean matchShowOnlyCriteris(final AcquisitionRequest acquisitionRequest) {
 	    if (showOnlyAcquisitionsExcludedFromSupplierLimit.booleanValue()
-		    && !acquisitionRequest.getProcess().getSkipSupplierFundAllocation().booleanValue()) {
+		    && !acquisitionRequest.getProcess().getShouldSkipSupplierFundAllocation().booleanValue()) {
 		return false;
 	    }
 	    if (showOnlyAcquisitionsWithAdditionalCosts.booleanValue() && !hasAdditionalCosts(acquisitionRequest)) {

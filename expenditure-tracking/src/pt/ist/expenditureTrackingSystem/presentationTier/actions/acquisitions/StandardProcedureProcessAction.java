@@ -47,10 +47,11 @@ public class StandardProcedureProcessAction extends RegularAcquisitionProcessAct
     public ActionForward prepareCreateAcquisitionStandardProcess(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 
-	CreateAcquisitionProcessBean acquisitionProcessBean = new CreateAcquisitionProcessBean();
-	acquisitionProcessBean.setSuppliers(Collections.EMPTY_LIST);
-	request.setAttribute("acquisitionProcessBean", acquisitionProcessBean);
-	return forward(request, "/acquisitions/standardProcess/createStandardAcquisitionProcess.jsp");
+////	CreateAcquisitionProcessBean acquisitionProcessBean = new CreateAcquisitionProcessBean();
+//	acquisitionProcessBean.setSuppliers(Collections.EMPTY_LIST);
+//	request.setAttribute("acquisitionProcessBean", acquisitionProcessBean);
+//	return forward(request, "/acquisitions/standardProcess/createStandardAcquisitionProcess.jsp");
+	return null;
     }
 
     public ActionForward addSupplierInCreationPostBack(final ActionMapping mapping, final ActionForm form,

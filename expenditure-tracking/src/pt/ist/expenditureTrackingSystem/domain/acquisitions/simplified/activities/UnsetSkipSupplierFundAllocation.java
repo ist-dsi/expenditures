@@ -10,20 +10,16 @@ public class UnsetSkipSupplierFundAllocation extends GenericAcquisitionProcessAc
     @Override
     protected boolean isAccessible(RegularAcquisitionProcess process) {
 	final Person loggedPerson = getLoggedPerson();
-	return loggedPerson != null && (loggedPerson == process.getRequestor()
-		|| userHasRole(RoleType.ACQUISITION_CENTRAL)
-		|| userHasRole(RoleType.SUPPLIER_FUND_ALLOCATION_MANAGER));
+	return loggedPerson != null
+		&& (loggedPerson == process.getRequestor() || userHasRole(RoleType.ACQUISITION_CENTRAL) || userHasRole(RoleType.SUPPLIER_FUND_ALLOCATION_MANAGER));
     }
 
     @Override
     protected boolean isAvailable(RegularAcquisitionProcess process) {
 	return super.isAvailable(process)
-		&& ((process.getAcquisitionProcessState().isInGenesis() && getLoggedPerson() == process.getRequestor()
-			|| (userHasRole(RoleType.ACQUISITION_CENTRAL) &&
-				(process.getAcquisitionProcessState().isAuthorized()
-					|| process.getAcquisitionProcessState().isAcquisitionProcessed()
-					|| process.isInvoiceReceived())))
-			|| userHasRole(RoleType.SUPPLIER_FUND_ALLOCATION_MANAGER))
+		&& ((process.getAcquisitionProcessState().isInGenesis() && getLoggedPerson() == process.getRequestor() || (userHasRole(RoleType.ACQUISITION_CENTRAL) && (process
+			.getAcquisitionProcessState().isAuthorized()
+			|| process.getAcquisitionProcessState().isAcquisitionProcessed() || process.isInvoiceReceived()))) || userHasRole(RoleType.SUPPLIER_FUND_ALLOCATION_MANAGER))
 		&& process.getSkipSupplierFundAllocation();
     }
 

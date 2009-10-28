@@ -69,6 +69,9 @@
 	<slot name="acquisitionProcessId" key="label.acquisitionProcessId" bundle="EXPENDITURE_RESOURCES">
 		<property name="classes" value="bold"/>
 	</slot>
+	<slot name="process.processClassification" key="label.processClassification" bundle="EXPENDITURE_RESOURCES">
+		<property name="classes" value="bold"/>
+	</slot>
 	<slot name="acquisitionProcess.requestor.name" layout="link" key="label.requesterName" bundle="EXPENDITURE_RESOURCES">
 		<property name="useParent" value="true"/>
 		<property name="blankTarget" value="true"/>
@@ -980,4 +983,10 @@
 
 <schema name="viewPaymentProcessYear" type="pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear" bundle="ACQUISITION_RESOURCES">
 	<slot name="year"/>
+</schema>
+
+<schema name="changeProcessClassification"
+		type="pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean"
+		bundle="ACQUISITION_RESOURCES">
+	<slot name="classification" key="label.processClassification" bundle="EXPENDITURE_RESOURCES"/>
 </schema>

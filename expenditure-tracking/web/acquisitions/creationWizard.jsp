@@ -15,7 +15,74 @@
 
 
 <div class="infobox mvert1">
+	<strong>
+		<bean:message key="label.ScienticeAndTechnologyProcesses" bundle="EXPENDITURE_RESOURCES"/>:
+	</strong>
 
+	<p>
+	<bean:message key="label.ScienticeAndTechnologyProcesses.explanation" bundle="EXPENDITURE_RESOURCES"/>
+	</p>
+	
+	<ul class="mvert05" style="padding-left: 0em; list-style: none;">
+	<li class="mbottom1">
+			<p class="mvert025">
+				<strong>
+					<html:link styleClass="big" action="/acquisitionSimplifiedProcedureProcess.do?method=prepareCreateAcquisitionProcessCT10000">
+						<bean:message key="link.create.process.CT10000" bundle="EXPENDITURE_RESOURCES"/>
+					</html:link>
+				</strong>
+			</p>
+			<p class="mvert025">
+				<bean:message key="message.info.processExplanation.CT10000" bundle="EXPENDITURE_RESOURCES"/>
+			</p>
+		</li>
+
+
+	<li class="mbottom1">
+			<p class="mvert025">
+				<strong>
+					<html:link styleClass="big" action="/acquisitionSimplifiedProcedureProcess.do?method=prepareCreateAcquisitionProcessCT75000">
+						<bean:message key="link.create.process.CT75000" bundle="EXPENDITURE_RESOURCES"/>
+					</html:link>
+				</strong>
+			</p>
+			<p class="mvert025">
+				<bean:message key="message.info.processExplanation.CT75000" bundle="EXPENDITURE_RESOURCES"/>
+			</p>
+		</li>
+
+
+	<li class="mbottom1">
+			<p class="mvert025">
+				<strong>
+					<html:link styleClass="big" action="/acquisitionRefundProcess.do?method=prepareCreateRefundProcess">
+						<bean:message key="link.create.refundProcess" bundle="EXPENDITURE_RESOURCES"/>
+					</html:link>
+				</strong>
+			</p>
+			<p class="mvert025">
+				<bean:message key="message.info.refundProcessExplanation" bundle="EXPENDITURE_RESOURCES"/>
+			</p>
+		</li>
+		
+	
+	
+	</ul>
+
+</div>
+
+		
+
+<div class="infobox mvert1">
+
+	<strong>
+		<bean:message key="label.ccp" bundle="EXPENDITURE_RESOURCES"/>:
+	</strong>
+	
+	<p>
+	<bean:message key="label.ccp.explanation" bundle="EXPENDITURE_RESOURCES"/>
+	</p>
+	
 	<ul class="mvert05" style="padding-left: 0em; list-style: none;">
 		<li class="mbottom1">
 			<p class="mvert025">
@@ -30,19 +97,6 @@
 			</p>
 		</li>
 
-		<li class="mbottom1">
-			<p class="mvert025">
-				<strong>
-					<html:link styleClass="big" action="/acquisitionRefundProcess.do?method=prepareCreateRefundProcess">
-						<bean:message key="link.create.refundProcess" bundle="EXPENDITURE_RESOURCES"/>
-					</html:link>
-				</strong>
-			</p>
-			<p class="mvert025">
-				<bean:message key="message.info.refundProcessExplanation" bundle="EXPENDITURE_RESOURCES"/>
-			</p>
-		</li>
-	
 		<li class="mbottom1">
 			<p class="mvert025">
 				<strong>
@@ -64,5 +118,4 @@
 
 </div>
 
-		
 			

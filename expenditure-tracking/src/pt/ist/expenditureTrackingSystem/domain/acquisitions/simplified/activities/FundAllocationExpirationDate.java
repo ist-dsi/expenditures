@@ -43,7 +43,7 @@ public class FundAllocationExpirationDate extends GenericAcquisitionProcessActiv
     @Override
     protected void process(RegularAcquisitionProcess process, Object... objects) {
 	if (process.getAcquisitionRequest().isSubmittedForFundsAllocationByAllResponsibles()) {
-	    if (!process.getSkipSupplierFundAllocation()) {
+	   if (!process.getShouldSkipSupplierFundAllocation()) {
 		checkSupplierLimit(process);
 		LocalDate now = new LocalDate();
 		process.setFundAllocationExpirationDate(now.plusDays(90));

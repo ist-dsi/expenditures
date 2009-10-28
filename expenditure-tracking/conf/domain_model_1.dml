@@ -10,7 +10,7 @@ enum pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationType as
 enum pt.ist.expenditureTrackingSystem.domain.requests.RequestForProposalProcessStateType as RequestForProposalProcessStateType;
 enum pt.ist.expenditureTrackingSystem.domain.RoleType as RoleType;
 enum pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationOperation as AuthorizationOperation;
-
+enum pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess.ProcessClassification as ProcessClassification;
 
 valueType pt.utl.ist.fenix.tools.util.Strings as Strings {
     externalizeWith {
@@ -335,6 +335,7 @@ class processes.GenericProcess {
 			}
 			
 			class acquisitions.simplified.SimplifiedProcedureProcess extends acquisitions.RegularAcquisitionProcess {
+				ProcessClassification processClassification;
 			}
 
 			class acquisitions.standard.StandardProcedureProcess extends acquisitions.RegularAcquisitionProcess {
