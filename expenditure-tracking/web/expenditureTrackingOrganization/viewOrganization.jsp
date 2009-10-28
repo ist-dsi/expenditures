@@ -104,6 +104,19 @@
 				<fr:property name="classes" value="tstyle2 mtop05"/>
 			</fr:layout>
 		</fr:view>	
+	</logic:notEmpty>
+	
+	<logic:notEmpty name="unit" property="observers">
+		<h3 class="mtop15 mbottom05"><bean:message key="label.observers" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/></h3>
+		<ul>
+			<logic:iterate name="unit" property="observers" id="person">
+				<li>
+					<html:link page="/expenditureTrackingOrganization.do?&method=viewPerson" paramName="person" paramId="personOid" paramProperty="externalId">
+						<fr:view name="person" property="name"/>
+					</html:link>
+				</li>
+			</logic:iterate>
+		</ul>
 	</logic:notEmpty>	
 	<logic:empty name="unit" property="authorizations">
 		<p><em><bean:message key="authorizations.label.noResponsiblesDefinedForUnit" bundle="EXPENDITURE_RESOURCES"/>.</em></p>

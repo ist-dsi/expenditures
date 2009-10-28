@@ -136,6 +136,25 @@
 	</p>
 </logic:empty>
 
+<h3 class="mtop2 mbottom05"><bean:message key="observableUnits.for.person" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/></h3>
+
+<logic:notEmpty name="person" property="observableUnits">
+	<ul>
+	<logic:iterate name="person" property="observableUnits" id="unit">
+		<bean:define id="unitOID" name="unit" property="externalId" type="java.lang.String"/>
+		<li>
+		<html:link page="<%= "/expenditureTrackingOrganization.do?method=viewOrganization&unitOid=" + unitOID%>">
+			<fr:view name="unit" property="presentationName"/>
+		</html:link>
+		</li>
+	</logic:iterate>
+	</ul>
+</logic:notEmpty>
+
+
+<logic:empty name="person" property="observableUnits">
+
+</logic:empty>
 
 <h3 class="mtop2 mbottom05"><bean:message key="accountingUnit.list.for.person" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/></h3>
 <bean:define id="removeUrl">/expenditureTrackingOrganization.do?method=removePersonFromAccountingUnit&amp;personOid=<bean:write name="person" property="externalId"/></bean:define>
@@ -228,6 +247,7 @@
 		</fr:layout>
 	</fr:view>
 </logic:notEmpty>
+
 <logic:empty name="person" property="treasuryAccountingUnits">
 	<p>
 		<em><bean:message key="accountingUnit.message.person.not.associated" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>.</em>
