@@ -337,6 +337,13 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	super.setProcessClassification(processClassification);
     }
 
+    public void setProcessClassificationWithoutChecks(ProcessClassification processClassification) {
+	if (processClassification.getLimit().isLessThan(this.getAcquisitionRequest().getCurrentValue())) {
+	    System.out.println("Process: " + getAcquisitionProcessId() + " exceed limit with: " + getAcquisitionRequest().getCurrentValue().toFormatString());
+	}
+	super.setProcessClassification(processClassification);
+    }
+
     public boolean isWarnRegardingProcessClassificationNeeded() {
 	return getProcessClassification().isCCP() != getRequestingUnit().getDefaultRegeimIsCCP();
     }
