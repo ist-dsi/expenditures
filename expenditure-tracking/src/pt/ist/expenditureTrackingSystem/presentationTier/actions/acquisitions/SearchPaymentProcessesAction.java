@@ -213,6 +213,11 @@ public class SearchPaymentProcessesAction extends BaseAction {
 	if (searchBean.getProcessId() != null) {
 	    builder.append(searchBean.getProcessId());
 	}
+
+	builder.append("&payingUnit=");
+	if (searchBean.getPayingUnit() != null) {
+	    builder.append(searchBean.getPayingUnit().getExternalId());
+	}
 	builder.append("&requestDocumentId=");
 	if (searchBean.getRequestDocumentId() != null) {
 	    builder.append(searchBean.getRequestDocumentId());
@@ -296,6 +301,7 @@ public class SearchPaymentProcessesAction extends BaseAction {
 	bean.setProposalId(request.getParameter("proposalId"));
 	bean.setRefundeeName(request.getParameter("refundeeName"));
 
+	bean.setPayingUnit((Unit) getDomainObject(request, "payingUnit"));
 	bean.setRequestingPerson((Person) getDomainObject(request, "requestingPerson"));
 	bean.setTaker((Person) getDomainObject(request, "taker"));
 	bean.setRequestingUnit((Unit) getDomainObject(request, "requestingUnit"));
