@@ -4,12 +4,15 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionPr
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess.ProcessClassification;
+import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
 public class ChangeProcessClassification extends GenericAcquisitionProcessActivity {
 
     @Override
     protected boolean isAccessible(RegularAcquisitionProcess process) {
-	return process.getAcquisitionProcessState().isInGenesis() && process instanceof SimplifiedProcedureProcess;
+	Person loggedPerson = getLoggedPerson();
+	return loggedPerson == process.getRequestor() && process.getAcquisitionProcessState().isInGenesis()
+		&& process instanceof SimplifiedProcedureProcess;
     }
 
     @Override
