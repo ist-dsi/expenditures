@@ -122,7 +122,7 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	}
 	return result;
     }
-    
+
     public Money getCurrentVatValue() {
 	Money result = Money.ZERO;
 	for (final AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
@@ -482,11 +482,13 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     }
 
     public Supplier getSupplier() {
-	if (getSuppliersCount() > 1) {
-	    throw new DomainException("This method should be used only when 1 supplier is present");
-	}
-
-	return getSuppliersCount() == 0 ? null : getSuppliers().get(0);
+	// if (getSuppliersCount() > 1) {
+	// throw new
+	// DomainException("This method should be used only when 1 supplier is present");
+	// }
+	//
+	// return getSuppliersCount() == 0 ? null : getSuppliers().get(0);
+	return getSelectedSupplier();
     }
 
     public String getAcquisitionRequestDocumentID() {

@@ -42,6 +42,7 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.presentationTier.util.FileUploadBean;
+import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.RequestChecksumFilter;
 import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.RequestChecksumFilter.ChecksumPredicate;
 import pt.ist.fenixWebFramework.servlets.json.JsonObject;
@@ -187,7 +188,7 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	final CreateAcquisitionProcessBean acquisitionProcessBean = new CreateAcquisitionProcessBean(
 		ProcessClassification.CT75000);
 	request.setAttribute("acquisitionProcessBean", acquisitionProcessBean);
-	return forward(request, "/acquisitions/createAcquisitionProcess.jsp");
+	return forward(request, "/acquisitions/createAcqusitionProcessCT75000.jsp");
     }
 
     public ActionForward createNewAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
@@ -604,6 +605,52 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	}
 
 	return viewAcquisitionProcess(mapping, form, request, response);
+    }
+
+    public ActionForward executeSelectSupplier(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final SimplifiedProcedureProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
+	request.setAttribute("acquisitionProcess", acquisitionProcess);
+
+	return forward(request, "/acquisitions/selectSupplier.jsp");
+    }
+
+    public ActionForward selectSupplier(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	final SimplifiedProcedureProcess acquisitionProcess = getDomainObject(request, "acquisitionProcessOid");
+	final Supplier supplier = getDomainObject(request, "supplierOID");
+	try {
+	    genericActivityExecution(acquisitionProcess, "SelectSupplier", supplier);
+	} catch (DomainException ex) {
+	    addErrorMessage(ex.getMessage(), getBundle(), ex.getArgs());
+	    return viewAcquisitionProcess(mapping, request, acquisitionProcess);
+	}
+
+	return viewAcquisitionProcess(mapping, form, request, response);
+    }
+
+    public ActionForward addSupplierInCreationPostBack(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+
+	CreateAcquisitionProcessBean acquisitionProcessBean = getRenderedObject("bean");
+	Supplier supplierToAdd = acquisitionProcessBean.getSupplierToAdd();
+	acquisitionProcessBean.addSupplierToList(supplierToAdd);
+	acquisitionProcessBean.setSupplierToAdd(null);
+
+	RenderUtils.invalidateViewState("bean");
+	request.setAttribute("acquisitionProcessBean", acquisitionProcessBean);
+	return forward(request, "/acquisitions/createAcqusitionProcessCT75000.jsp");
+    }
+
+    public ActionForward removeSupplierInCreationPostBack(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+
+	String index = request.getParameter("index");
+	CreateAcquisitionProcessBean acquisitionProcessBean = getRenderedObject("bean-" + index);
+	acquisitionProcessBean.removeSupplierFromList(Integer.valueOf(index).intValue());
+
+	request.setAttribute("acquisitionProcessBean", acquisitionProcessBean);
+	return forward(request, "/acquisitions/createAcqusitionProcessCT75000.jsp");
     }
 
     private static final String SUPPLIER_LIMIT_OK = "SOK";

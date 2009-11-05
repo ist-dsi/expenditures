@@ -1,6 +1,5 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
-
 public class PurchaseOrderDocument extends PurchaseOrderDocument_Base {
 
     protected PurchaseOrderDocument(String requestId) {
@@ -20,10 +19,10 @@ public class PurchaseOrderDocument extends PurchaseOrderDocument_Base {
 	setFilename(fileName);
     }
 
+    @Override
     public void delete() {
 	removeAcquisitionRequest();
-	removeExpenditureTrackingSystem();
-	deleteDomainObject();
+	super.delete();
     }
 
 }

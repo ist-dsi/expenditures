@@ -646,12 +646,19 @@ relation PersonRole {
 } 
 
 relation AcquisitionRequestSupplier {
-	acquisitions.AcquisitionRequest playsRole acquisitionRequests {
+	acquisitions.AcquisitionRequest playsRole possibleAcquisitionRequests {
 		multiplicity *;
 	}
 	organization.Supplier playsRole suppliers {
 		multiplicity *;
 	}
+}
+
+relation AcquisitionRequestSelectedSupplier {
+	acquisitions.AcquisitionRequest playsRole acquisitionRequests {
+		multiplicity *;
+	}
+	organization.Supplier playsRole selectedSupplier;
 }
 
 relation AcquisitionRequestRequester {

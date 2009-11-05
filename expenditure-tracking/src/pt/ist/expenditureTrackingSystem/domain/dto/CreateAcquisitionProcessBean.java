@@ -79,7 +79,9 @@ public class CreateAcquisitionProcessBean implements Serializable {
     public List<Supplier> getSuppliers() {
 	List<Supplier> suppliers = new ArrayList<Supplier>();
 	for (DomainReference<Supplier> supplier : this.suppliers) {
-	    suppliers.add(supplier.getObject());
+	    if (supplier.getObject() != null) {
+		suppliers.add(supplier.getObject());
+	    }
 	}
 	return suppliers;
     }

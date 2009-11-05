@@ -1,6 +1,7 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,6 +52,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activitie
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RevertProcessNotConfirmmingFundAllocationExpirationDate;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RevertSkipPurchaseOrderDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RevertToInvoiceConfirmation;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SelectSupplier;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SendPurchaseOrderToSupplier;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SetSkipSupplierFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SkipPurchaseOrderDocument;
@@ -109,6 +111,7 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	List<AbstractActivity<RegularAcquisitionProcess>> requestInformationActivities = new ArrayList<AbstractActivity<RegularAcquisitionProcess>>();
 	List<AbstractActivity<RegularAcquisitionProcess>> requestItemActivities = new ArrayList<AbstractActivity<RegularAcquisitionProcess>>();
 
+	requestInformationActivities.add(new SelectSupplier());
 	requestInformationActivities.add(new CreateAcquisitionPurchaseOrderDocument());
 	requestInformationActivities.add(new SendPurchaseOrderToSupplier());
 	requestInformationActivities.add(new SkipPurchaseOrderDocument());
@@ -206,21 +209,34 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	new AcquisitionRequest(this, supplier, person);
     }
 
+    protected SimplifiedProcedureProcess(ProcessClassification classification, List<Supplier> suppliers, Person person) {
+	super();
+	inGenesis();
+	AcquisitionRequest acquisitionRequest = new AcquisitionRequest(this, suppliers, person);
+	if (classification == ProcessClassification.CT75000 && suppliers.size() < 3) {
+	    throw new DomainException("acquisitionProcess.message.exception.needsMoreSuppliers");
+	}
+	if (suppliers.size() == 1) {
+	    acquisitionRequest.setSelectedSupplier(suppliers.get(0));
+	}
+
+	setProcessClassification(classification);
+    }
+
     @Service
     public static SimplifiedProcedureProcess createNewAcquisitionProcess(
 	    final CreateAcquisitionProcessBean createAcquisitionProcessBean) {
 	if (!isCreateNewProcessAvailable()) {
 	    throw new DomainException("acquisitionProcess.message.exception.invalidStateToRun.create");
 	}
-	SimplifiedProcedureProcess process = new SimplifiedProcedureProcess(createAcquisitionProcessBean.getSupplier(),
-		createAcquisitionProcessBean.getRequester());
+	SimplifiedProcedureProcess process = new SimplifiedProcedureProcess(createAcquisitionProcessBean.getClassification(),
+		createAcquisitionProcessBean.getSuppliers(), createAcquisitionProcessBean.getRequester());
 	process.getAcquisitionRequest().setRequestingUnit(createAcquisitionProcessBean.getRequestingUnit());
 	if (createAcquisitionProcessBean.isRequestUnitPayingUnit()) {
 	    final Unit unit = createAcquisitionProcessBean.getRequestingUnit();
 	    process.getAcquisitionRequest().addFinancers(unit.finance(process.getAcquisitionRequest()));
 	}
 
-	process.setProcessClassification(createAcquisitionProcessBean.getClassification());
 	return process;
     }
 
@@ -339,7 +355,8 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 
     public void setProcessClassificationWithoutChecks(ProcessClassification processClassification) {
 	if (processClassification.getLimit().isLessThan(this.getAcquisitionRequest().getCurrentValue())) {
-	    System.out.println("Process: " + getAcquisitionProcessId() + " exceed limit with: " + getAcquisitionRequest().getCurrentValue().toFormatString());
+	    System.out.println("Process: " + getAcquisitionProcessId() + " exceed limit with: "
+		    + getAcquisitionRequest().getCurrentValue().toFormatString());
 	}
 	super.setProcessClassification(processClassification);
     }
