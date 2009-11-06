@@ -3,6 +3,8 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activiti
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess.ProcessClassification;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
 public class AddAcquisitionProposalDocument extends GenericAcquisitionProcessActivity {
@@ -16,8 +18,11 @@ public class AddAcquisitionProposalDocument extends GenericAcquisitionProcessAct
     @Override
     protected boolean isAvailable(RegularAcquisitionProcess process) {
 	final AcquisitionRequest acquisitionRequest = process.getAcquisitionRequest();
-	return super.isAvailable(process) && process.getAcquisitionProcessState().isInGenesis()
-		&& acquisitionRequest.getAcquisitionProposalDocument() == null;
+	return super.isAvailable(process)
+		&& process.getAcquisitionProcessState().isInGenesis()
+		&& acquisitionRequest.getAcquisitionProposalDocument() == null
+		&& (!process.isSimplifiedAcquisitionProcess() || ((SimplifiedProcedureProcess) process)
+			.getProcessClassification() != ProcessClassification.CT75000);
     }
 
     @Override

@@ -15,6 +15,8 @@ import org.joda.time.LocalDate;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess.ProcessClassification;
 import pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
@@ -323,8 +325,15 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 
     }
 
+    /*
+     * As soon as we have a decent implementation for the CT75000 this code
+     * should be rolled back again.
+     */
     public boolean isFilled() {
-	return hasAcquisitionProposalDocument() && hasAnyRequestItems();
+	AcquisitionProcess process = getProcess();
+	return hasAnyRequestItems()
+		&& ((!process.isSimplifiedProcedureProcess() && hasAcquisitionProcess()) || (process
+			.isSimplifiedProcedureProcess() && (((SimplifiedProcedureProcess) process).getProcessClassification() == ProcessClassification.CT75000 || hasAcquisitionProposalDocument())));
     }
 
     public boolean isEveryItemFullyAttributedToPayingUnits() {
