@@ -50,7 +50,17 @@ public class MoneyInputRenderer extends InputRenderer {
 	    String moneyValue = (String) value;
 	    if (!StringUtils.isEmpty(moneyValue)) {
 		try {
-		    return new Money(moneyValue.replace(",", "."));
+		    if (moneyValue.indexOf('.') > 0 && moneyValue.indexOf(',') > 0) {
+			// format 2.000,56 = 2k + 0.56
+			return new Money(moneyValue.replace(".", "").replace(',', '.'));
+		    }
+		    if (moneyValue.indexOf('.') > 0 && moneyValue.indexOf(',') < 0) {
+			// format 2.000 = 2k
+			return new Money(moneyValue.replace(".", ""));
+		    } else {
+			// format 2,00 = 2
+			return new Money(moneyValue.replace(",", "."));
+		    }
 		} catch (NumberFormatException e) {
 		    throw new ConversionException("renderers.converter.bigdecimal", e, true, value);
 		}

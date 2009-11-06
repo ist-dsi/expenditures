@@ -38,6 +38,6 @@ public class MoneyValidator extends HtmlValidator {
     @Override
     protected String getSpecificValidatorScript() {
 	return "function(element) { var text = $(element).attr('value');"
-		+ "return text.length == 0 || text.search(/^[0-9]+((\\.||,)[0-9]+)?$/) == 0; }";
+		+ "return text.length == 0 || text.search(/^[0-9]+(\\.[0-9]+)*(,[0-9]+)?$/) == 0; }";
     }
 }
