@@ -20,7 +20,8 @@ public class GenericAssignPayingUnitToItem<T extends PaymentProcess> extends Abs
 
     @Override
     protected boolean isAvailable(T process) {
-	return (isCurrentUserProcessOwner(process) && process.isInGenesis())
+	final Person loggedPerson = getLoggedPerson();
+	return (loggedPerson == process.getRequestor() && isCurrentUserProcessOwner(process) && process.isInGenesis())
 		|| ((process instanceof SimplifiedProcedureProcess)
 			&& ((SimplifiedProcedureProcess) process).getProcessClassification() == ProcessClassification.CT75000
 			&& userHasRole(RoleType.ACQUISITION_CENTRAL) && process.isAuthorized());
