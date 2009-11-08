@@ -69,17 +69,30 @@
 		</table>
 	</logic:notEmpty>
 		
-	<logic:equal name="processRequest" property="process.allowedToViewSupplierExpenditures" value="true">
 		<logic:notEmpty name="processRequest" property="suppliers">
+			<bean:message key="supplier.title.manage" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>:
+			
+			
 			<logic:iterate id="supplier" name="processRequest" property="suppliers">
 				<bean:define id="supplierName" name="supplier" property="name"/>
 				<p>
-					<bean:message key="supplier.message.info.totalAllocated.withArgument" bundle="EXPENDITURE_ORGANIZATION_RESOURCES" arg0="<%= supplierName.toString() %>"/>:
-					<fr:view name="supplier" property="totalAllocated"/>
+					<logic:equal name="processRequest" property="process.allowedToViewSupplierExpenditures" value="true">
+						<logic:equal name="processRequest" property="process.processClassification" value="CCP">
+							<bean:message key="supplier.message.info.totalAllocated.withArgument" bundle="EXPENDITURE_ORGANIZATION_RESOURCES" arg0="<%= supplierName.toString() %>"/>:
+							<fr:view name="supplier" property="totalAllocated"/>
+						</logic:equal>
+						
+						<logic:notEqual name="processRequest" property="process.processClassification" value="CCP">
+							<fr:view name="supplierName"/>
+						</logic:notEqual>
+					</logic:equal>
+				
+					<logic:equal name="processRequest" property="process.allowedToViewSupplierExpenditures" value="false">
+						<fr:view name="supplierName"/>
+					</logic:equal>
 				</p>
 			</logic:iterate>
 		</logic:notEmpty>
-	</logic:equal>
 
 	</div>
 	
