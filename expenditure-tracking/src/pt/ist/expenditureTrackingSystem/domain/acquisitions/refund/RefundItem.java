@@ -203,5 +203,20 @@ public class RefundItem extends RefundItem_Base {
     public boolean isAnyRefundInvoiceAvailable() {
 	return !getInvoices().isEmpty();
     }
-    
+
+    public boolean isRealValueFullyAttributedToUnits() {
+	Money realValue = getRealValue();
+	if (realValue == null) {
+	    return getInvoices().isEmpty();
+	}
+	Money totalValue = Money.ZERO;
+	for (UnitItem unitItem : getUnitItems()) {
+	    if (unitItem.getRealShareValue() != null) {
+		totalValue = totalValue.add(unitItem.getRealShareValue());
+	    }
+	}
+
+	return totalValue.equals(realValue);
+    }
+
 }
