@@ -35,11 +35,10 @@ public class RefundInvoice extends RefundInvoice_Base {
 	Money realValue = item.getRealValue();
 	Money estimatedValue = item.getValue();
 
-	//   INVOICES THAT EXCEED LIMIT STILL WANT TO BE ALLOWED TO UPLOAD 
-	//	if ((realValue != null && realValue.add(refundableValue).isGreaterThan(estimatedValue)) || realValue == null
-//		&& refundableValue.isGreaterThan(estimatedValue)) {
-//	    throw new DomainException("refundItem.message.info.realValueLessThanRefundableValue");
-//	}
+	if ((realValue != null && realValue.add(refundableValue).isGreaterThan(estimatedValue)) || realValue == null
+		&& refundableValue.isGreaterThan(estimatedValue)) {
+	    throw new DomainException("refundItem.message.info.realValueLessThanRefundableValue");
+	}
 
 	if (new Money(value.addPercentage(vatValue).getRoundedValue()).isLessThan(refundableValue)) {
 	    throw new DomainException("refundItem.message.info.refundableValueCannotBeBiggerThanInvoiceValue");
@@ -50,7 +49,7 @@ public class RefundInvoice extends RefundInvoice_Base {
 	    byte[] invoiceFile, String filename, RefundItem item, Supplier supplier) {
 	this(invoiceNumber, invoiceDate, value, vatValue, refundableValue, item, supplier);
 	RefundableInvoiceFile refundInvoice = new RefundableInvoiceFile(this, invoiceFile, filename);
-	//item.getRequest().addInvoice(refundInvoice);
+	// item.getRequest().addInvoice(refundInvoice);
 	item.addInvoicesFiles(refundInvoice);
     }
 
