@@ -22,6 +22,9 @@ public class UnitNameAutoCompleteProvider implements AutoCompleteProvider {
 	    if (hasMatch(input, unitName)) {
 		units.add(unit);
 	    }
+	    if (units.size() >= maxCount) {
+		break;
+	    }
 	}
 	return units;
     }

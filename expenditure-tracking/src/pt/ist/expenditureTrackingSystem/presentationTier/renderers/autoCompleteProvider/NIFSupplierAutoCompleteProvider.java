@@ -26,6 +26,9 @@ public class NIFSupplierAutoCompleteProvider implements AutoCompleteProvider {
 		    result.add(supplier);
 		}
 	    }
+	    if (result.size() >= maxCount) {
+		break;
+	    }
 	}
 	return result;
     }

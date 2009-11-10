@@ -13,12 +13,15 @@ import pt.utl.ist.fenix.tools.util.StringNormalizer;
 public class PersonNameAutoComplete implements AutoCompleteProvider {
 
     public Collection getSearchResults(Map<String, String> argsMap, String value, int maxCount) {
-	List<Person> people = new ArrayList<Person> ();
+	List<Person> people = new ArrayList<Person>();
 	String[] values = StringNormalizer.normalize(value).toLowerCase().split(" ");
 	for (Person person : ExpenditureTrackingSystem.getInstance().getPeople()) {
 	    final String normalizedName = StringNormalizer.normalize(person.getName()).toLowerCase();
 	    if (hasMatch(values, normalizedName)) {
 		people.add(person);
+	    }
+	    if (people.size() >= maxCount) {
+		break;
 	    }
 	}
 	return people;

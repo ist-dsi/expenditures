@@ -23,6 +23,9 @@ public class PersonAutoComplete implements AutoCompleteProvider {
 	    if (person.getUsername().indexOf(value) >= 0) {
 		people.add(person);
 	    }
+	    if (people.size() >= maxCount) {
+		break;
+	    }
 	}
 	return people;
     }

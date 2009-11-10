@@ -19,6 +19,9 @@ public class CPVAutoCompleteProvider implements AutoCompleteProvider {
 	    if (cpvCode.getCode().startsWith(value) || match(cpvCode.getDescription().toLowerCase(), values)) {
 		result.add(cpvCode);
 	    }
+	    if (result.size() >= maxCount) {
+		break;
+	    }
 	}
 	return result;
     }
