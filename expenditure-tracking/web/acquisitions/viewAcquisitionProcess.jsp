@@ -39,6 +39,14 @@
 	 <div class="infobox_warning mtop15">
 	 	<p class="mvert025">
 	         <bean:message key="label.warning.mismatchBetweenClassificationAndUnitDefault" bundle="ACQUISITION_RESOURCES"/>
+	         
+	         <logic:equal name="acquisitionProcess" property="acquisitionRequest.requestingUnit.defaultRegeimIsCCP" value="true">
+	        	<p>
+	        	<strong>
+	        			<bean:message key="label.warning.mismatchBetweenClassificationAndUnitDefault.ccpWarn" bundle="ACQUISITION_RESOURCES"/>
+	        	</strong>
+	        	</p>
+	         </logic:equal>
 	    </p>
 	</div>
 </logic:equal>
