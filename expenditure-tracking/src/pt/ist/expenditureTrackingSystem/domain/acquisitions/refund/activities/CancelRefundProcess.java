@@ -19,9 +19,9 @@ public class CancelRefundProcess extends GenericRefundProcessActivity {
 		|| (process.isPendingApproval() && isUserResponsibleForUnit(process))
 		|| (process.isResponsibleForUnit(loggedPerson, process.getRequest().getTotalValue())
 			&& !process.getRequest().hasBeenAuthorizedBy(loggedPerson) && process.isInAllocatedToUnitState())
-		|| ((process.isPendingInvoicesConfirmation() || process.isPendingFundAllocation())
-			&& (process.isAccountingEmployee() && !process.hasProjectsAsPayingUnits()) || (process
-			.isProjectAccountingEmployee() && process.hasProjectsAsPayingUnits()));
+		|| ((process.isPendingInvoicesConfirmation() || process.isPendingFundAllocation()) && ((process
+			.isAccountingEmployee() && !process.hasProjectsAsPayingUnits()) || (process.isProjectAccountingEmployee() && process
+			.hasProjectsAsPayingUnits())));
     }
 
     private boolean isUserResponsibleForUnit(RefundProcess process) {
