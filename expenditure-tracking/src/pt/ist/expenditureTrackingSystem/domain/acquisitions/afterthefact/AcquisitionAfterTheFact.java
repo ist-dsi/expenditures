@@ -1,6 +1,5 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact;
 
-import myorg.domain.util.ByteArray;
 import myorg.domain.util.Money;
 
 import org.joda.time.LocalDate;
@@ -18,12 +17,12 @@ public class AcquisitionAfterTheFact extends AcquisitionAfterTheFact_Base {
     }
 
     public void edit(final AfterTheFactAcquisitionProcessBean afterTheFactAcquisitionProcessBean) {
+	setDeletedState(Boolean.FALSE);
 	setAfterTheFactAcquisitionType(afterTheFactAcquisitionProcessBean.getAfterTheFactAcquisitionType());
 	setValue(afterTheFactAcquisitionProcessBean.getValue());
 	setVatValue(afterTheFactAcquisitionProcessBean.getVatValue());
 	setSupplier(afterTheFactAcquisitionProcessBean.getSupplier());
 	setDescription(afterTheFactAcquisitionProcessBean.getDescription());
-	setDeletedState(Boolean.FALSE);
     }
 
     public void delete() {
@@ -37,10 +36,8 @@ public class AcquisitionAfterTheFact extends AcquisitionAfterTheFact_Base {
     @Override
     public void setSupplier(final Supplier supplier) {
 	if (supplier != getSupplier()) {
-	    if (getValue() != null && !supplier.isFundAllocationAllowed(getValue())) {
-		throw new DomainException("acquisitionProcess.message.exception.SupplierDoesNotAlloweAmount");
-	    }
 	    super.setSupplier(supplier);
+	    setValue(getValue());
 	}
     }
 
