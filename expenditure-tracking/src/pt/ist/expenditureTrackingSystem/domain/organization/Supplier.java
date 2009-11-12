@@ -210,6 +210,14 @@ public class Supplier extends Supplier_Base {
 	    getAcquisitionRequestsSet().addAll(acquisitionRequests);
 	    acquisitionRequests.clear();
 
+	    final Set<AcquisitionRequest> possibleAcquisitionRequests = supplier.getPossibleAcquisitionRequestsSet();
+	    getPossibleAcquisitionRequestsSet().addAll(possibleAcquisitionRequests);
+	    possibleAcquisitionRequests.clear();
+
+	    final Set<SupplierProposalDocument> proposals = supplier.getProposalsSet();
+	    getProposalsSet().addAll(proposals);
+	    proposals.clear();
+
 	    supplier.delete();
 	}
     }
