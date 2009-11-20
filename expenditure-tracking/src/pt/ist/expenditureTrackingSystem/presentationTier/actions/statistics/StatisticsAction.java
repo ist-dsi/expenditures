@@ -3,6 +3,8 @@ package pt.ist.expenditureTrackingSystem.presentationTier.actions.statistics;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -15,13 +17,17 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.statistics.RefundProcessActivityLogStatistics;
 import pt.ist.expenditureTrackingSystem.domain.statistics.RefundProcessStatistics;
+import pt.ist.expenditureTrackingSystem.domain.statistics.RefundProcessTotalValueStatistics;
 import pt.ist.expenditureTrackingSystem.domain.statistics.SimplifiedProcessActivityLogStatistics;
 import pt.ist.expenditureTrackingSystem.domain.statistics.SimplifiedProcessStatistics;
+import pt.ist.expenditureTrackingSystem.domain.statistics.SimplifiedProcessTotalValueStatistics;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 import pt.utl.ist.fenix.tools.util.excel.Spreadsheet;
 import pt.utl.ist.fenix.tools.util.excel.Spreadsheet.Row;
@@ -34,8 +40,8 @@ public class StatisticsAction extends ContextBaseAction {
 	return forward(request, "/statistics/showStatistics.jsp");
     }
 
-    public ActionForward showSimplifiedProcessStatistics(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
+    public ActionForward showSimplifiedProcessStatistics(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
 	YearBean yearBean = getRenderedObject();
 	if (yearBean == null) {
 	    yearBean = new YearBean();
@@ -48,8 +54,8 @@ public class StatisticsAction extends ContextBaseAction {
 	return forward(request, "/statistics/showStatisticsSimplifiedProcess.jsp");
     }
 
-    public ActionForward simplifiedProcessStatisticsChart(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
+    public ActionForward simplifiedProcessStatisticsChart(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
 	final String year = request.getParameter("year");
 
 	final SimplifiedProcessStatistics simplifiedProcessStatistics = SimplifiedProcessStatistics.create(new Integer(year));
@@ -90,15 +96,17 @@ public class StatisticsAction extends ContextBaseAction {
 	return null;
     }
 
-    public ActionForward simplifiedProcessStatisticsTimeChart(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
+    public ActionForward simplifiedProcessStatisticsTimeChart(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
 	final String year = request.getParameter("year");
 
-	final SimplifiedProcessActivityLogStatistics simplifiedProcessActivityLogStatistics = SimplifiedProcessActivityLogStatistics.create(new Integer(year));
+	final SimplifiedProcessActivityLogStatistics simplifiedProcessActivityLogStatistics = SimplifiedProcessActivityLogStatistics
+		.create(new Integer(year));
 
 	OutputStream outputStream = null;
 	try {
-	    final byte[] image = ChartGenerator.simplifiedProcessStatisticsActivityTimeImage(simplifiedProcessActivityLogStatistics);
+	    final byte[] image = ChartGenerator
+		    .simplifiedProcessStatisticsActivityTimeImage(simplifiedProcessActivityLogStatistics);
 	    outputStream = response.getOutputStream();
 	    response.setContentType("image/jpeg");
 	    outputStream.write(image);
@@ -132,15 +140,17 @@ public class StatisticsAction extends ContextBaseAction {
 	return null;
     }
 
-    public ActionForward simplifiedProcessStatisticsActivityTimeChartForProcess(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
+    public ActionForward simplifiedProcessStatisticsActivityTimeChartForProcess(final ActionMapping mapping,
+	    final ActionForm form, final HttpServletRequest request, final HttpServletResponse response) {
 	final SimplifiedProcedureProcess simplifiedProcedureProcess = getDomainObject(request, "processId");
 
-	final SimplifiedProcessActivityLogStatistics simplifiedProcessActivityLogStatistics = SimplifiedProcessActivityLogStatistics.create(simplifiedProcedureProcess);
+	final SimplifiedProcessActivityLogStatistics simplifiedProcessActivityLogStatistics = SimplifiedProcessActivityLogStatistics
+		.create(simplifiedProcedureProcess);
 
 	OutputStream outputStream = null;
 	try {
-	    final byte[] image = ChartGenerator.simplifiedProcessStatisticsActivityTimeImage(simplifiedProcessActivityLogStatistics);
+	    final byte[] image = ChartGenerator
+		    .simplifiedProcessStatisticsActivityTimeImage(simplifiedProcessActivityLogStatistics);
 	    outputStream = response.getOutputStream();
 	    response.setContentType("image/jpeg");
 	    outputStream.write(image);
@@ -174,8 +184,8 @@ public class StatisticsAction extends ContextBaseAction {
 	return null;
     }
 
-    public ActionForward showRefundProcessStatistics(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
+    public ActionForward showRefundProcessStatistics(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
 	YearBean yearBean = getRenderedObject();
 	if (yearBean == null) {
 	    yearBean = new YearBean();
@@ -188,8 +198,8 @@ public class StatisticsAction extends ContextBaseAction {
 	return forward(request, "/statistics/showStatisticsRefundProcess.jsp");
     }
 
-    public ActionForward refundProcessStatisticsChart(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
+    public ActionForward refundProcessStatisticsChart(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
 	final String year = request.getParameter("year");
 
 	final RefundProcessStatistics refundProcessStatistics = RefundProcessStatistics.create(new Integer(year));
@@ -230,11 +240,12 @@ public class StatisticsAction extends ContextBaseAction {
 	return null;
     }
 
-    public ActionForward refundProcessStatisticsTimeChart(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
+    public ActionForward refundProcessStatisticsTimeChart(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
 	final String year = request.getParameter("year");
 
-	final RefundProcessActivityLogStatistics refundProcessActivityLogStatistics = RefundProcessActivityLogStatistics.create(new Integer(year));
+	final RefundProcessActivityLogStatistics refundProcessActivityLogStatistics = RefundProcessActivityLogStatistics
+		.create(new Integer(year));
 
 	OutputStream outputStream = null;
 	try {
@@ -272,11 +283,12 @@ public class StatisticsAction extends ContextBaseAction {
 	return null;
     }
 
-    public ActionForward refundProcessStatisticsActivityTimeChartForProcess(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
+    public ActionForward refundProcessStatisticsActivityTimeChartForProcess(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
 	final RefundProcess refundProcess = getDomainObject(request, "processId");
 
-	final RefundProcessActivityLogStatistics refundProcessActivityLogStatistics = RefundProcessActivityLogStatistics.create(refundProcess);
+	final RefundProcessActivityLogStatistics refundProcessActivityLogStatistics = RefundProcessActivityLogStatistics
+		.create(refundProcess);
 
 	OutputStream outputStream = null;
 	try {
@@ -314,8 +326,8 @@ public class StatisticsAction extends ContextBaseAction {
 	return null;
     }
 
-    public ActionForward showStatisticsReports(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
+    public ActionForward showStatisticsReports(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
 	YearBean yearBean = getRenderedObject();
 	if (yearBean == null) {
 	    yearBean = new YearBean();
@@ -325,21 +337,11 @@ public class StatisticsAction extends ContextBaseAction {
 	return forward(request, "/statistics/showStatisticsReports.jsp");
     }
 
-    public ActionForward downloadStatisticsByCPV(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) throws IOException {
+    public ActionForward downloadStatisticsByCPV(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) throws IOException {
+
 	final Integer year = Integer.valueOf((String) getAttribute(request, "year"));
-
-	Spreadsheet suppliersSheet = createStatisticsByCPV(year);
-	response.setContentType("application/xls ");
-	response.setHeader("Content-disposition", "attachment; filename=cvp" + year + ".xls");
-
-	ServletOutputStream outputStream = response.getOutputStream();
-
-	suppliersSheet.exportToXLSSheet(outputStream);
-	outputStream.flush();
-	outputStream.close();
-
-	return null;
+	return streamSpreadsheet(response, "cvp", createStatisticsByCPV(year), year);
     }
 
     private Spreadsheet createStatisticsByCPV(final Integer year) {
@@ -356,6 +358,67 @@ public class StatisticsAction extends ContextBaseAction {
 		row.setCell(money.toFormatStringWithoutCurrency());
 	    }
 	}
+	return spreadsheet;
+    }
+
+    public ActionForward downloadTotalValuesStatistics(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) throws IOException {
+
+	final Integer year = Integer.valueOf((String) getAttribute(request, "year"));
+	return streamSpreadsheet(response, "values", createTotalValuesStatistics(year), year);
+    }
+
+    private Spreadsheet createTotalValuesStatistics(final Integer year) {
+	final Spreadsheet spreadsheet = new Spreadsheet("Valores por Tipo - " + year);
+	spreadsheet.setHeader("Tipo");
+	spreadsheet.setHeader("Montante");
+
+	final Map<AcquisitionProcessStateType, Money> values = SimplifiedProcessTotalValueStatistics.create(year)
+		.getTotalValuesOfProcessesByAcquisitionProcessStateType();
+	for (final Entry<AcquisitionProcessStateType, Money> valueEntry : values.entrySet()) {
+	    final Row row = spreadsheet.addRow();
+	    row.setCell(valueEntry.getKey().getLocalizedName());
+	    row.setCell(valueEntry.getValue().toFormatStringWithoutCurrency());
+	}
+
+	return spreadsheet;
+    }
+
+    public ActionForward downloadRefundTotalValuesStatistics(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) throws IOException {
+
+	final Integer year = Integer.valueOf((String) getAttribute(request, "year"));
+	return streamSpreadsheet(response, "refundValues", createRefundTotalValuesStatistics(year), year);
+    }
+
+    private ActionForward streamSpreadsheet(final HttpServletResponse response, final String fileName,
+	    final Spreadsheet resultSheet, final Integer year) throws IOException {
+
+	response.setContentType("application/xls ");
+	response.setHeader("Content-disposition", "attachment; filename=" + fileName + year + ".xls");
+
+	ServletOutputStream outputStream = response.getOutputStream();
+
+	resultSheet.exportToXLSSheet(outputStream);
+	outputStream.flush();
+	outputStream.close();
+
+	return null;
+    }
+
+    private Spreadsheet createRefundTotalValuesStatistics(final Integer year) {
+	final Spreadsheet spreadsheet = new Spreadsheet("Valores por Tipo - " + year);
+	spreadsheet.setHeader("Tipo");
+	spreadsheet.setHeader("Montante");
+
+	final Map<RefundProcessStateType, Money> values = RefundProcessTotalValueStatistics.create(year)
+		.getTotalValuesOfProcessesByRefundProcessStateType();
+	for (final Entry<RefundProcessStateType, Money> valueEntry : values.entrySet()) {
+	    final Row row = spreadsheet.addRow();
+	    row.setCell(valueEntry.getKey().getLocalizedName());
+	    row.setCell(valueEntry.getValue().toFormatStringWithoutCurrency());
+	}
+
 	return spreadsheet;
     }
 
