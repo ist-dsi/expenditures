@@ -35,5 +35,10 @@
                 <bean:message key="label.statistics.report.refundTotalValuesByType" bundle="STATISTICS_RESOURCES"/>
             </html:link>
         </li>
+        <li>
+            <html:link action="/statistics.do?method=downloadAfterTheFactTotalValuesStatistics" paramId="year" paramName="yearBean" paramProperty="year">
+                <bean:message key="label.statistics.report.afterTheFactTotalValuesByType" bundle="STATISTICS_RESOURCES"/>
+            </html:link>
+        </li>
 	</ul>
 </div>

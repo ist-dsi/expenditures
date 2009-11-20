@@ -20,8 +20,10 @@ import org.apache.struts.action.ActionMapping;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
+import pt.ist.expenditureTrackingSystem.domain.statistics.AfterTheFactProcessTotalValueStatistics;
 import pt.ist.expenditureTrackingSystem.domain.statistics.RefundProcessActivityLogStatistics;
 import pt.ist.expenditureTrackingSystem.domain.statistics.RefundProcessStatistics;
 import pt.ist.expenditureTrackingSystem.domain.statistics.RefundProcessTotalValueStatistics;
@@ -391,6 +393,22 @@ public class StatisticsAction extends ContextBaseAction {
 	return streamSpreadsheet(response, "refundValues", createRefundTotalValuesStatistics(year), year);
     }
 
+    private Spreadsheet createRefundTotalValuesStatistics(final Integer year) {
+	final Spreadsheet spreadsheet = new Spreadsheet("Valores por Tipo - " + year);
+	spreadsheet.setHeader("Tipo");
+	spreadsheet.setHeader("Montante");
+
+	final Map<RefundProcessStateType, Money> values = RefundProcessTotalValueStatistics.create(year)
+		.getTotalValuesOfProcessesByRefundProcessStateType();
+	for (final Entry<RefundProcessStateType, Money> valueEntry : values.entrySet()) {
+	    final Row row = spreadsheet.addRow();
+	    row.setCell(valueEntry.getKey().getLocalizedName());
+	    row.setCell(valueEntry.getValue().toFormatStringWithoutCurrency());
+	}
+
+	return spreadsheet;
+    }
+
     private ActionForward streamSpreadsheet(final HttpServletResponse response, final String fileName,
 	    final Spreadsheet resultSheet, final Integer year) throws IOException {
 
@@ -406,14 +424,21 @@ public class StatisticsAction extends ContextBaseAction {
 	return null;
     }
 
-    private Spreadsheet createRefundTotalValuesStatistics(final Integer year) {
+    public ActionForward downloadAfterTheFactTotalValuesStatistics(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) throws IOException {
+
+	final Integer year = Integer.valueOf((String) getAttribute(request, "year"));
+	return streamSpreadsheet(response, "afterTheFact", createAfterTheFactTotalValuesStatistics(year), year);
+    }
+
+    private Spreadsheet createAfterTheFactTotalValuesStatistics(final Integer year) {
 	final Spreadsheet spreadsheet = new Spreadsheet("Valores por Tipo - " + year);
 	spreadsheet.setHeader("Tipo");
 	spreadsheet.setHeader("Montante");
 
-	final Map<RefundProcessStateType, Money> values = RefundProcessTotalValueStatistics.create(year)
-		.getTotalValuesOfProcessesByRefundProcessStateType();
-	for (final Entry<RefundProcessStateType, Money> valueEntry : values.entrySet()) {
+	final Map<AfterTheFactAcquisitionType, Money> values = AfterTheFactProcessTotalValueStatistics.create(year)
+		.getTotalValuesOfProcessesByAquisitionProcessStateType();
+	for (final Entry<AfterTheFactAcquisitionType, Money> valueEntry : values.entrySet()) {
 	    final Row row = spreadsheet.addRow();
 	    row.setCell(valueEntry.getKey().getLocalizedName());
 	    row.setCell(valueEntry.getValue().toFormatStringWithoutCurrency());
