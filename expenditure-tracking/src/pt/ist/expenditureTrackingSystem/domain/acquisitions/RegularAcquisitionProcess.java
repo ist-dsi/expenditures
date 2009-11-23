@@ -6,7 +6,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.joda.time.DateTime;
+import module.workflow.domain.ActivityLog;
+import module.workflow.domain.WorkflowLog;
+import myorg.domain.User;
+
 import org.joda.time.LocalDate;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
@@ -14,7 +17,6 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
-import pt.ist.expenditureTrackingSystem.domain.processes.GenericLog;
 
 public abstract class RegularAcquisitionProcess extends RegularAcquisitionProcess_Base {
 
@@ -48,7 +50,7 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
 
     public List<OperationLog> getOperationLogs() {
 	List<OperationLog> logs = new ArrayList<OperationLog>();
-	for (GenericLog log : super.getExecutionLogs()) {
+	for (WorkflowLog log : super.getExecutionLogs()) {
 	    logs.add((OperationLog) log);
 	}
 	return logs;
@@ -247,8 +249,8 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
     }
 
     @Override
-    public <T extends GenericLog> T logExecution(Person person, String operationName, Object... args) {
-	return (T) new OperationLog(this, person, operationName, new DateTime(), getAcquisitionProcessStateType());
+    public <T extends ActivityLog> T logExecution(User user, String operationName, String... args) {
+	return (T) new OperationLog(this, user, operationName, getAcquisitionProcessStateType());
     }
 
     public void removeFundAllocationExpirationDate() {

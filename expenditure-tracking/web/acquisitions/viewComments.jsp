@@ -31,7 +31,7 @@
 	<logic:iterate id="comment" name="comments">
 		<div class="comment">
 			<p>
-				<span><fr:view name="comment" property="commenter.name"/></span> <fr:view name="comment" property="date"/>
+				<span><fr:view name="comment" property="commenter.expenditurePerson.name"/></span> <fr:view name="comment" property="date"/>
 			</p>
 			<div class="body"><fr:view name="comment" property="comment" layout="null-as-label" type="java.lang.String"/></div>
 		</div>
@@ -68,9 +68,9 @@
 			<td>
 				<fr:edit id="peopleToNotify" name="bean" slot="peopleToNotify">
 					<fr:layout name="option-select">
-						<fr:property name="providerClass" value="pt.ist.expenditureTrackingSystem.presentationTier.renderers.dataProvider.CommentersForProcess"/>
+						<fr:property name="providerClass" value="module.workflow.presentationTier.renderers.providers.CommentersForProcess"/>
 						<fr:property name="eachLayout" value="values"/>
-						<fr:property name="eachSchema" value="viewPeopleInList"/> 
+						<fr:property name="eachSchema" value="viewUsersInList"/> 
 						<fr:property name="saveOptions" value="true"/>
 						<fr:property name="selectAllShown" value="true"/>
 						<fr:property name="classes" value="nobullet"/>

@@ -353,11 +353,8 @@
 <schema name="viewLogForSimplifiedProcedureProcess"
 		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.OperationLog"
 		bundle="EXPENDITURE_RESOURCES">
-		<slot name="executor.name" key="process.logs.label.personName"/>
-		<slot name="activity.class" key="process.logs.label.operation" layout="label">
-			<property name="bundle" value="ACQUISITION_RESOURCES"/>
-			<property name="escape" value="false"/>
-		</slot>
+		<slot name="activityExecutor.expenditurePerson.name" key="process.logs.label.personName"/>
+		<slot name="description" key="process.logs.label.operation" layout="html"/>
 		<slot name="whenOperationWasRan" key="process.logs.label.executionDate"/>
 </schema>
 
@@ -369,22 +366,16 @@
 <schema name="viewLogForRefundProcess"
 		type="pt.ist.expenditureTrackingSystem.domain.processes.GenericLog"
 		bundle="EXPENDITURE_RESOURCES">
-		<slot name="executor.name" key="process.logs.label.personName"/>
-		<slot name="activity.class" key="process.logs.label.operation" layout="label">
-			<property name="bundle" value="ACQUISITION_RESOURCES"/>
-			<property name="escape" value="false"/>
-		</slot>
+		<slot name="activityExecutor.expenditurePerson.name" key="process.logs.label.personName"/>
+		<slot name="description" key="process.logs.label.operation" layout="html"/>
 		<slot name="whenOperationWasRan" key="process.logs.label.executionDate"/>
 </schema>
 
 <schema name="viewLogForAfterTheFactAcquisitionProcess"
 		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.OperationLog"
 		bundle="EXPENDITURE_RESOURCES">
-		<slot name="executor.name" key="process.logs.label.personName"/>
-		<slot name="activity.class" key="process.logs.label.operation" layout="label">
-			<property name="bundle" value="ACQUISITION_RESOURCES"/>
-			<property name="escape" value="false"/>
-		</slot>
+		<slot name="activityExecutor.expenditurePerson.name" key="process.logs.label.personName"/>
+		<slot name="description" key="process.logs.label.operation" layout="html"/>
 		<slot name="whenOperationWasRan" key="process.logs.label.executionDate"/>
 </schema>
 

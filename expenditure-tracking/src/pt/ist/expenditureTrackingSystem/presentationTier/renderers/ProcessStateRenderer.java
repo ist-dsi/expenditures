@@ -1,6 +1,5 @@
 package pt.ist.expenditureTrackingSystem.presentationTier.renderers;
 
-import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 import pt.ist.fenixWebFramework.renderers.OutputRenderer;
 import pt.ist.fenixWebFramework.renderers.components.HtmlBlockContainer;
@@ -23,8 +22,8 @@ public abstract class ProcessStateRenderer<T extends GenericProcess> extends Out
 
 	protected abstract HtmlComponent generateFlowChart(final HtmlBlockContainer flowChartContainer, final T process);
 
-	protected void generateActivityBox(final HtmlBlockContainer flowChartContainer, final AbstractActivity abstractActivity) {
-	    flowChartContainer.addChild(generateBox(abstractActivity.getLocalizedName()));
+	protected void generateActivityBox(final HtmlBlockContainer flowChartContainer, final String name) {
+	    flowChartContainer.addChild(generateBox(name));
 	}
 
 	protected void generateArrowBox(final HtmlBlockContainer flowChartContainer) {

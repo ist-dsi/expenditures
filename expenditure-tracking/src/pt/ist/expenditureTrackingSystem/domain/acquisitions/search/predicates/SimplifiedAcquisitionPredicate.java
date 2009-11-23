@@ -3,6 +3,8 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.search.predicates;
 import java.util.List;
 import java.util.Set;
 
+import myorg.domain.User;
+
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
@@ -21,7 +23,7 @@ public class SimplifiedAcquisitionPredicate extends SearchPredicate {
 	final Person taker = searchBean.getTaker();
 	return matchesSearchCriteria(acquisitionRequest, searchBean)
 		&& (acquisitionRequest.getProcess().isAvailableForCurrentUser() || process.isTakenByCurrentUser() || (taker != null && process
-			.isTakenByPerson(taker)));
+			.isTakenByPerson(taker.getUser())));
     }
 
     private boolean matchesSearchCriteria(final AcquisitionRequest acquisitionRequest, SearchPaymentProcess searchBean) {
@@ -33,7 +35,8 @@ public class SimplifiedAcquisitionPredicate extends SearchPredicate {
 		.getAcquisitionRequestDocumentID() : null;
 	final AcquisitionProcessStateType type = acquisitionRequest.getAcquisitionProcess().getAcquisitionProcessStateType();
 	final Set<AccountingUnit> accountingUnits = acquisitionRequest.getAccountingUnits();
-	final Person taker = acquisitionRequest.getAcquisitionProcess().getCurrentOwner();
+	User currentOwner = acquisitionRequest.getAcquisitionProcess().getCurrentOwner();
+	final Person taker = currentOwner != null ? currentOwner.getExpenditurePerson() : null;
 	final Boolean showOnlyWithUnreadComments = searchBean.getShowOnlyWithUnreadComments();
 	final AcquisitionProcess process = acquisitionRequest.getProcess();
 	final Boolean showPrioritiesOnly = searchBean.getShowPriorityOnly();

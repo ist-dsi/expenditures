@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.joda.time.DateTime;
+import module.workflow.domain.ActivityLog;
+import module.workflow.domain.WorkflowLog;
+import myorg.domain.User;
+
 import org.joda.time.LocalDate;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
@@ -14,7 +17,6 @@ import pt.ist.expenditureTrackingSystem.domain.dto.CreateRequestForProposalProce
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
-import pt.ist.expenditureTrackingSystem.domain.processes.GenericLog;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 import pt.ist.expenditureTrackingSystem.domain.requests.activities.ApproveRequestForProposal;
 import pt.ist.expenditureTrackingSystem.domain.requests.activities.CancelRequestForProposal;
@@ -148,7 +150,7 @@ public class RequestForProposalProcess extends RequestForProposalProcess_Base {
     }
 
     @Override
-    public <T extends GenericLog> T logExecution(Person person, String operationName, Object... args) {
-	return (T) new OperationLog(this, person, operationName, getRequestForProposalProcessStateType(), new DateTime());
+    public <T extends ActivityLog> T logExecution(User user, String operationName, String... args) {
+	return (T) new OperationLog(this, user, operationName, getRequestForProposalProcessStateType());
     }
 }

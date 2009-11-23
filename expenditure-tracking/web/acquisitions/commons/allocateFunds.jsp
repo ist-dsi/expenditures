@@ -7,7 +7,7 @@
 <h2><bean:message key="acquisitionProcess.title.fundAllocation" bundle="ACQUISITION_RESOURCES"/></h2>
 
 <logic:present name="process" property="currentOwner">
-	<bean:define id="ownerName" name="process" property="currentOwner.firstAndLastName"/>
+	<bean:define id="ownerName" name="process" property="currentOwner.expenditurePerson.firstAndLastName"/>
 	<div class="infobox_warning">
 		<bean:message key="acquisitionProcess.message.info.currentOwnerIs" bundle="ACQUISITION_RESOURCES" arg0="<%= ownerName.toString() %>"/>
 	</div>

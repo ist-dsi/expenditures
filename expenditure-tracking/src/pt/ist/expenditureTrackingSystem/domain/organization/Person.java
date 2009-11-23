@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import module.workflow.domain.WorkflowLog;
+import module.workflow.domain.WorkflowProcess;
 import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.MyOrg;
 import myorg.domain.User;
@@ -31,7 +33,6 @@ import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationLog;
 import pt.ist.expenditureTrackingSystem.domain.dto.AuthorizationBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreatePersonBean;
-import pt.ist.expenditureTrackingSystem.domain.processes.GenericLog;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 import pt.ist.fenixWebFramework.services.Service;
 import dml.runtime.RelationAdapter;
@@ -244,9 +245,9 @@ public class Person extends Person_Base {
 	return user == null ? null : user.getExpenditurePerson();
     }
 
-    public <T extends GenericProcess> List<T> getProcesses(Class<T> classType) {
+    public <T extends WorkflowProcess> List<T> getProcesses(Class<T> classType) {
 	List<T> processes = new ArrayList<T>();
-	for (GenericProcess process : getProcesses()) {
+	for (WorkflowProcess process : getUser().getUserProcesses()) {
 	    if (classType.isAssignableFrom(process.getClass())) {
 		processes.add((T) process);
 	    }
@@ -264,10 +265,10 @@ public class Person extends Person_Base {
 	return dashBoard;
     }
 
-    private <T extends GenericProcess> Set<T> filterLogs(Predicate predicate) {
+    private <T extends WorkflowProcess> Set<T> filterLogs(Predicate predicate) {
 	Set<T> processes = new HashSet<T>();
-	for (GenericLog log : getExecutionLogs()) {
-	    GenericProcess process = log.getProcess();
+	for (WorkflowLog log : getUser().getUserLogs()) {
+	    WorkflowProcess process = log.getProcess();
 	    if (predicate.evaluate(process)) {
 		processes.add((T) process);
 	    }

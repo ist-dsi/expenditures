@@ -64,6 +64,13 @@
 	<slot name="name" key="person.label.name" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 </schema>
 
+<schema name="viewUsersInList"
+		type="myorg.domain.User"
+		bundle="EXPENDITURE_ORGANIZATION_RESOURCES">
+	<slot name="expenditurePerson.username" key="person.label.username" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+	<slot name="expenditurePerson.name" key="person.label.name" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+</schema>
+
 <schema name="createPerson"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.CreatePersonBean"
 		bundle="EXPENDITURE_ORGANIZATION_RESOURCES">

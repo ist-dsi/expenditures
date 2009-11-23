@@ -1,30 +1,30 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
+import module.workflow.domain.WorkflowProcess;
+import myorg.domain.User;
+import myorg.util.BundleUtil;
+
 import org.joda.time.DateTime;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
-import pt.ist.expenditureTrackingSystem.domain.organization.Person;
-import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
-import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 
 public class OperationLog extends OperationLog_Base {
 
-    public OperationLog() {
+    public OperationLog(AcquisitionProcess process, User user, String operation, AcquisitionProcessStateType type) {
+
 	super();
+	init(process, user);
+	super.setOperation(operation);
+	super.setState(type);
     }
-    
-    public OperationLog(AcquisitionProcess process, Person person, String operation, 
-	    DateTime when, AcquisitionProcessStateType type) {
-	super();
-	init(process, person, operation, when);
-	setState(type);
-    }
-    
-    @Override
-    public <T extends GenericProcess> AbstractActivity<T> getActivity() {
-	AcquisitionProcess process = (AcquisitionProcess) getProcess();
-	return process.getActivityByName(getOperation());
-    }
+
+    // TODO: Should we have this or not?
+
+    // @Override
+    // public <T extends GenericProcess> AbstractActivity<T> getActivity() {
+    // AcquisitionProcess process = (AcquisitionProcess) getProcess();
+    // return process.getActivityByName(getOperation());
+    // }
 
     @Override
     public void setOperation(String operation) {
@@ -32,12 +32,12 @@ public class OperationLog extends OperationLog_Base {
     }
 
     @Override
-    public void setProcess(GenericProcess process) {
+    public void setProcess(WorkflowProcess process) {
 	throw new DomainException("error.unable.to.change.process");
     }
 
     @Override
-    public void setExecutor(Person executor) {
+    public void setActivityExecutor(User executor) {
 	throw new DomainException("error.unable.to.change.executor");
     }
 
@@ -47,10 +47,13 @@ public class OperationLog extends OperationLog_Base {
     }
 
     public void delete() {
-	super.setExecutor(null);
+	super.setActivityExecutor(null);
 	super.setProcess(null);
-	super.removeExpenditureTrackingSystem();
 	deleteDomainObject();
     }
 
+    @Override
+    public String getDescription() {
+	return BundleUtil.getFormattedStringFromResourceBundle("resources.AcquisitionResources", "label." + getOperation());
+    }
 }

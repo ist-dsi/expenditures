@@ -1,8 +1,9 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities;
 
+import myorg.applicationTier.Authenticate.UserView;
+import myorg.domain.User;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
 public class FixInvoice extends ReceiveInvoice {
 
@@ -13,10 +14,9 @@ public class FixInvoice extends ReceiveInvoice {
 
     @Override
     protected boolean isAvailable(RegularAcquisitionProcess process) {
-	Person currentOwner = process.getCurrentOwner();
-	final Person loggedPerson = getLoggedPerson();
+	User currentOwner = process.getCurrentOwner();
 	return process.getAcquisitionProcessState().isInvoiceReceived()
-		&& (currentOwner == null || (loggedPerson != null && loggedPerson == currentOwner));
+		&& (currentOwner == null || process.isTakenByPerson(UserView.getCurrentUser()));
     }
 
     @Override

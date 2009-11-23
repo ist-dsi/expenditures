@@ -3,6 +3,7 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activiti
 import java.util.Collections;
 import java.util.List;
 
+import module.workflow.domain.WorkflowLog;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
@@ -11,7 +12,6 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.OperationLog;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
-import pt.ist.expenditureTrackingSystem.domain.processes.GenericLog;
 
 public class RemoveCancelProcess extends GenericAcquisitionProcessActivity {
 
@@ -30,7 +30,7 @@ public class RemoveCancelProcess extends GenericAcquisitionProcessActivity {
     @Override
     protected void process(RegularAcquisitionProcess process, Object... objects) {
 	List<OperationLog> logs = process.getOperationLogs();
-	Collections.sort(logs, GenericLog.COMPARATOR_BY_WHEN);
+	Collections.sort(logs, WorkflowLog.COMPARATOR_BY_WHEN);
 	for (int i = logs.size(); i > 0; i--) {
 	    final OperationLog operationLog = logs.get(i - 1);
 	    final AcquisitionProcessStateType acquisitionProcessStateType = operationLog.getState();

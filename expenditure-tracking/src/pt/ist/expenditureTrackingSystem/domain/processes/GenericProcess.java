@@ -1,79 +1,48 @@
 package pt.ist.expenditureTrackingSystem.domain.processes;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import myorg.applicationTier.Authenticate;
+import module.workflow.activities.ActivityInformation;
+import module.workflow.activities.WorkflowActivity;
+import module.workflow.domain.WorkflowLog;
+import module.workflow.domain.WorkflowProcess;
+import module.workflow.domain.WorkflowProcessComment;
+import module.workflow.domain.WorkflowSystem;
 import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.User;
-import myorg.util.BundleUtil;
-import myorg.util.MultiCounter;
 
 import org.apache.commons.collections.Predicate;
-import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
-import org.joda.time.Interval;
 
-import pt.ist.emailNotifier.domain.Email;
-import pt.ist.expenditureTrackingSystem.domain.DomainException;
-import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.ProcessesThatAreAuthorizedByUserPredicate;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
-import pt.ist.expenditureTrackingSystem.domain.dto.CommentBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
-import pt.ist.expenditureTrackingSystem.util.ProcessMapGenerator;
 import pt.ist.fenixWebFramework.services.Service;
-import pt.utl.ist.fenix.tools.util.i18n.Language;
 
 public abstract class GenericProcess extends GenericProcess_Base {
 
     public GenericProcess() {
 	super();
-	setOjbConcreteClass(getClass().getName());
-	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
-    }
-
-    private static <T extends GenericProcess> Set<T> filter(Class<T> processClass, Predicate predicate,
-	    Collection<? extends GenericProcess> processes) {
-	Set<T> classes = new HashSet<T>();
-	for (GenericProcess process : processes) {
-	    if (processClass.isAssignableFrom(process.getClass()) && (predicate == null || predicate.evaluate(process))) {
-		classes.add((T) process);
-	    }
-	}
-
-	return classes;
-    }
-
-    public static <T extends GenericProcess> Set<T> getAllProcesses(Class<T> processClass) {
-	return filter(processClass, null, ExpenditureTrackingSystem.getInstance().getProcessesSet());
     }
 
     public static <T extends GenericProcess> Set<T> getAllProcesses(Class<T> processClass, PaymentProcessYear year) {
-	return year != null ? filter(processClass, null, year.getPaymentProcess()) : filter(processClass, null,
-		ExpenditureTrackingSystem.getInstance().getProcessesSet());
-    }
-
-    public static <T extends GenericProcess> Set<T> getAllProcesses(Class<T> processClass, Predicate predicate) {
-	return filter(processClass, predicate, ExpenditureTrackingSystem.getInstance().getProcessesSet());
+	return year != null ? filter(processClass, null, year.getPaymentProcess()) : filter(processClass, null, WorkflowSystem
+		.getInstance().getProcessesSet());
     }
 
     public static <T extends GenericProcess> Set<T> getAllProcess(Class<T> processClass, Predicate predicate,
 	    PaymentProcessYear year) {
 	return year != null ? filter(processClass, predicate, year.getPaymentProcess()) : filter(processClass, predicate,
-		ExpenditureTrackingSystem.getInstance().getProcessesSet());
+		WorkflowSystem.getInstance().getProcessesSet());
     }
 
     public static <T extends PaymentProcess> Set<T> getProcessesWithResponsible(Class<T> processClass, final Person person,
@@ -140,11 +109,11 @@ public abstract class GenericProcess extends GenericProcess_Base {
     }
 
     public DateTime getDateFromLastActivity() {
-	List<GenericLog> logs = new ArrayList<GenericLog>();
+	List<WorkflowLog> logs = new ArrayList<WorkflowLog>();
 	logs.addAll(getExecutionLogs());
-	Collections.sort(logs, new Comparator<GenericLog>() {
+	Collections.sort(logs, new Comparator<WorkflowLog>() {
 
-	    public int compare(GenericLog log1, GenericLog log2) {
+	    public int compare(WorkflowLog log1, WorkflowLog log2) {
 		return -1 * log1.getWhenOperationWasRan().compareTo(log2.getWhenOperationWasRan());
 	    }
 
@@ -158,26 +127,10 @@ public abstract class GenericProcess extends GenericProcess_Base {
 	return user != null;
     }
 
-    public ProcessComment getMostRecentComment() {
-	TreeSet<ProcessComment> comments = new TreeSet<ProcessComment>(ProcessComment.REVERSE_COMPARATOR);
+    public WorkflowProcessComment getMostRecentComment() {
+	TreeSet<WorkflowProcessComment> comments = new TreeSet<WorkflowProcessComment>(WorkflowProcessComment.REVERSE_COMPARATOR);
 	comments.addAll(getComments());
 	return comments.size() > 0 ? comments.first() : null;
-    }
-
-    public List<GenericLog> getExecutionLogs(DateTime begin, DateTime end) {
-	return getExecutionLogs(begin, end);
-    }
-
-    public List<GenericLog> getExecutionLogs(DateTime begin, DateTime end, Class... activitiesClass) {
-	List<GenericLog> logs = new ArrayList<GenericLog>();
-	Interval interval = new Interval(begin, end);
-	for (GenericLog log : getExecutionLogs()) {
-	    if (interval.contains(log.getWhenOperationWasRan())
-		    && (activitiesClass.length == 0 || match(activitiesClass, log.getOperation()))) {
-		logs.add(log);
-	    }
-	}
-	return logs;
     }
 
     private boolean match(Class[] classes, String name) {
@@ -189,6 +142,11 @@ public abstract class GenericProcess extends GenericProcess_Base {
 	return false;
     }
 
+    @Override
+    public void notifyUserDueToComment(User user, String comment) {
+	notifyPersonDueToComment(user.getExpenditurePerson(), comment);
+    }
+
     public void notifyPersonDueToComment(Person person, String comment) {
 	List<String> toAddress = new ArrayList<String>();
 	toAddress.clear();
@@ -196,124 +154,57 @@ public abstract class GenericProcess extends GenericProcess_Base {
 	if (email != null) {
 	    toAddress.add(email);
 
-//	    new Email("Central de Compras", "noreply@ist.utl.pt", new String[] {}, toAddress, Collections.EMPTY_LIST,
-//		    Collections.EMPTY_LIST, "New Process Comment", "There's a comment directed to you");
-	}
-    }
-
-    @Service
-    public void createComment(Person person, CommentBean bean) {
-	new ProcessComment(this, person, bean.getComment());
-	for (Person personToNotify : bean.getPeopleToNotify()) {
-	    notifyPersonDueToComment(personToNotify, bean.getComment());
+	    // new Email("Central de Compras", "noreply@ist.utl.pt", new
+	    // String[] {}, toAddress, Collections.EMPTY_LIST,
+	    // Collections.EMPTY_LIST, "New Process Comment",
+	    // "There's a comment directed to you");
 	}
     }
 
     @Service
     public void addFile(String displayName, String filename, byte[] consumeInputStream) {
 	GenericFile file = new GenericFile(displayName, filename, consumeInputStream);
-	addFiles(file);
-    }
-
-    @Override
-    public void setCurrentOwner(Person currentOwner) {
-	throw new DomainException("error.message.illegal.method.useTakeInstead");
-    }
-
-    @Override
-    public void removeCurrentOwner() {
-	throw new DomainException("error.message.illegal.method.useReleaseInstead");
-    }
-
-    public void systemProcessRelease() {
-	super.setCurrentOwner(null);
+	addFiles2(file);
     }
 
     protected Person getLoggedPerson() {
 	return Person.getLoggedPerson();
     }
 
-    @Service
-    public void takeProcess() {
-	final Person currentOwner = getCurrentOwner();
-	if (currentOwner != null) {
-	    throw new DomainException("error.message.illegal.method.useStealInstead");
-	}
-	super.setCurrentOwner(getLoggedPerson());
-    }
-
-    @Service
-    public void releaseProcess() {
-	final Person loggedPerson = getLoggedPerson();
-	final Person person = getCurrentOwner();
-	if (loggedPerson != null && person != null && loggedPerson != person) {
-	    throw new DomainException("error.message.illegal.state.unableToReleaseATicketNotOwnerByUser");
-	}
-	super.setCurrentOwner(null);
-    }
-
-    @Service
-    public void giveProcess(Person person) {
-	final Person currentOwner = getCurrentOwner();
-	final Person loggedPerson = getLoggedPerson();
-	if (currentOwner != null && currentOwner != loggedPerson) {
-	    throw new DomainException("error.message.illegal.state.unableToGiveUnownedProcess");
-	}
-	super.setCurrentOwner(person);
-    }
-
-    @Service
-    public void stealProcess() {
-	super.setCurrentOwner(getLoggedPerson());
-    }
-
-    public boolean isUserCurrentOwner() {
-	final Person loggedPerson = getLoggedPerson();
-	return loggedPerson != null && loggedPerson == getCurrentOwner();
-    }
-
-    public boolean isTakenByPerson(Person person) {
-	return person != null && person == getCurrentOwner();
-    }
-
-    public boolean isTakenByCurrentUser() {
-	final Person loggedPerson = getLoggedPerson();
-	return loggedPerson != null && isTakenByPerson(loggedPerson);
-    }
-
-    public <T extends GenericLog> T logExecution(Person person, String operationName, Object... args) {
-	return (T) new GenericLog(this, person, operationName, new DateTime());
-    }
-
-    public List<ProcessComment> getUnreadCommentsForCurrentUser() {
+    public List<WorkflowProcessComment> getUnreadCommentsForCurrentUser() {
 	return getUnreadCommentsForPerson(Person.getLoggedPerson());
     }
 
-    public List<ProcessComment> getUnreadCommentsForPerson(Person person) {
-	List<ProcessComment> comments = new ArrayList<ProcessComment>();
-	for (ProcessComment comment : getComments()) {
-	    if (comment.isUnreadBy(person)) {
+    public List<WorkflowProcessComment> getUnreadCommentsForPerson(Person person) {
+	User user = person.getUser();
+	List<WorkflowProcessComment> comments = new ArrayList<WorkflowProcessComment>();
+	for (WorkflowProcessComment comment : getComments()) {
+	    if (comment.isUnreadBy(user)) {
 		comments.add(comment);
 	    }
 	}
 	return comments;
     }
 
-    @Service
-    public void markCommentsAsReadForPerson(Person person) {
-	for (ProcessComment comment : getComments()) {
-	    if (comment.isUnreadBy(person)) {
-		comment.addReaders(person);
-	    }
-	}
-    }
-
     public boolean hasActivitiesFromUser(Person person) {
-	for (GenericLog log : getExecutionLogs()) {
-	    if (log.getExecutor() == person) {
+	User user = person.getUser();
+	for (WorkflowLog log : getExecutionLogs()) {
+	    if (log.getActivityExecutor() == user) {
 		return true;
 	    }
 	}
 	return false;
     }
+
+    /*
+     * TODO: Implement this methods correctly
+     */
+    public <T extends WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>> List<T> getActivities() {
+	return Collections.EMPTY_LIST;
+    }
+
+    public boolean isActive() {
+	return true;
+    }
+
 }

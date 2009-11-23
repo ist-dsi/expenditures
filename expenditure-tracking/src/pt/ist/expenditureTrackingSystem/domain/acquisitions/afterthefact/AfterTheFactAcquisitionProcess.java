@@ -3,8 +3,7 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.joda.time.DateTime;
-
+import module.workflow.domain.ActivityLog;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.activities.DeleteAfterTheFactAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.activities.EditAfterTheFactAcquisition;
@@ -40,8 +39,9 @@ public class AfterTheFactAcquisitionProcess extends AfterTheFactAcquisitionProce
 	final AfterTheFactAcquisitionProcess afterTheFactAcquisitionProcess = new AfterTheFactAcquisitionProcess();
 	afterTheFactAcquisitionProcess.edit(afterTheFactAcquisitionProcessBean);
 	final Person loggedPerson = Person.getLoggedPerson();
-	new GenericLog(afterTheFactAcquisitionProcess, loggedPerson, afterTheFactAcquisitionProcess.getClass().getName()
-		+ ".Create", new DateTime());
+	new GenericLog(afterTheFactAcquisitionProcess, loggedPerson.getUser(), afterTheFactAcquisitionProcess.getClass()
+		.getName()
+		+ ".Create");
 	return afterTheFactAcquisitionProcess;
     }
 
@@ -96,16 +96,17 @@ public class AfterTheFactAcquisitionProcess extends AfterTheFactAcquisitionProce
     public boolean hasAnyAvailableActivitity() {
 	return !getActiveActivities().isEmpty();
     }
-    
+
     @Override
     public void allocateFundsToUnit() {
 	// do nothing
     }
-    
-        @Override
+
+    @Override
     public void submitForApproval() {
 	// nothing to do here...
     }
+
     @Override
     public boolean isInAllocatedToUnitState() {
 	return false;

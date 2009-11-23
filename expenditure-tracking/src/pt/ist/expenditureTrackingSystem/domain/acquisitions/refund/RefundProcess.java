@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import module.workflow.domain.ActivityLog;
+import myorg.domain.User;
+
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
@@ -56,6 +59,7 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
+import pt.ist.expenditureTrackingSystem.domain.processes.GenericLog;
 import pt.ist.fenixWebFramework.services.Service;
 
 public class RefundProcess extends RefundProcess_Base {
@@ -384,15 +388,6 @@ public class RefundProcess extends RefundProcess_Base {
 		|| isObserver(person);
     }
 
-    public boolean isTakenByCurrentUser() {
-	final Person loggedPerson = Person.getLoggedPerson();
-	return loggedPerson != null && isTakenByPerson(loggedPerson);
-    }
-
-    public boolean isTakenByPerson(final Person person) {
-	return person != null && person == getCurrentOwner();
-    }
-
     public boolean isPersonAbleToExecuteActivities() {
 	for (List<AbstractActivity<RefundProcess>> activities : activityMap.values()) {
 	    for (final AbstractActivity<RefundProcess> activity : activities) {
@@ -446,4 +441,8 @@ public class RefundProcess extends RefundProcess_Base {
 	return getProcessState().getRefundProcessStateType().ordinal();
     }
 
+    @SuppressWarnings("unchecked")
+    public <T extends ActivityLog> T logExecution(User person, String operationName, String... args) {
+	return (T) new GenericLog(this, person, operationName);
+    }
 }

@@ -52,7 +52,7 @@
 </logic:equal>
 
 <logic:present name="acquisitionProcess" property="currentOwner">
-	<bean:define id="ownerName" name="acquisitionProcess" property="currentOwner.firstAndLastName"/>
+	<bean:define id="ownerName" name="acquisitionProcess" property="currentOwner.expenditurePerson.firstAndLastName"/>
 	<div class="infobox_warning">
 		<bean:message key="acquisitionProcess.message.info.currentOwnerIs" bundle="ACQUISITION_RESOURCES" arg0="<%= ownerName.toString() %>"/>
 	</div>
@@ -170,8 +170,8 @@
 				</p>
 				<p>
 					<bean:message key="acquisitionProcess.label.otherFiles" bundle="ACQUISITION_RESOURCES"/>:
-					<logic:notEmpty name="acquisitionProcess" property="files">
-						<logic:iterate id="file" name="acquisitionProcess" property="files">
+					<logic:notEmpty name="acquisitionProcess" property="files2">
+						<logic:iterate id="file" name="acquisitionProcess" property="files2">
 							<html:link action="<%= actionMapping + ".do?method=downloadGenericFile&acquisitionProcess=" + acquisitionProcessOid %>" paramId="fileOID" paramName="file" paramProperty="externalId">
 								<logic:notEmpty name="file" property="displayName"> 
 									<bean:write name="file" property="displayName"/>
@@ -182,7 +182,7 @@
 							</html:link>, 
 						</logic:iterate>
 					</logic:notEmpty>
-					<logic:empty name="acquisitionProcess" property="files"><em><bean:message key="document.message.info.notAvailable" bundle="EXPENDITURE_RESOURCES"/></em></logic:empty>
+					<logic:empty name="acquisitionProcess" property="files2"><em><bean:message key="document.message.info.notAvailable" bundle="EXPENDITURE_RESOURCES"/></em></logic:empty>
 				</p>
 			</div>
 			

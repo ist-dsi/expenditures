@@ -20,8 +20,8 @@ public abstract class AbstractActivity<T extends GenericProcess> {
     protected abstract void process(T process, Object... objects);
 
     protected boolean isCurrentUserProcessOwner(GenericProcess process) {
-	final Person currentOwner = process.getCurrentOwner();
-	final Person loggedPerson = getLoggedPerson();
+	final User currentOwner = process.getCurrentOwner();
+	final User loggedPerson = UserView.getCurrentUser();
 	return currentOwner == null || (loggedPerson != null && loggedPerson == currentOwner);
     }
 
@@ -30,19 +30,19 @@ public abstract class AbstractActivity<T extends GenericProcess> {
     }
 
     protected boolean isProcessTakenByCurrentUser(T process) {
-	final Person loggedPerson = getLoggedPerson();
-	Person taker = process.getCurrentOwner();
+	final User loggedPerson = UserView.getCurrentUser();
+	User taker = process.getCurrentOwner();
 	return taker != null && loggedPerson != null && taker == loggedPerson;
     }
 
     protected void logExecution(T process, String operationName, User user) {
-	process.logExecution(getLoggedPerson(), operationName);
+	process.logExecution(getLoggedPerson().getUser(), operationName);
     }
 
     @Service
     public final void execute(T process, Object... args) {
 	checkConditionsFor(process);
-	logExecution(process, getClass().getSimpleName(), getUser());
+	logExecution(process, getClass().getName(), getUser());
 	process(process, args);
 	notifyUsers(process);
     }

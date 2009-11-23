@@ -38,7 +38,7 @@ public class AcquisitionProcessStateRenderer extends ProcessStateRenderer<Regula
 		    newStateType = logs.get(i).getState();
 		    if (currentType != newStateType) {
 			currentType = newStateType;
-			generateActivityBox(flowChartContainer, logs.get(i + 1).getActivity());
+			generateActivityBox(flowChartContainer, logs.get(i + 1).getDescription());
 			generateArrowBox(flowChartContainer);
 			generateStateBox(process, currentState, flowChartContainer, newStateType);
 		    }
@@ -47,7 +47,7 @@ public class AcquisitionProcessStateRenderer extends ProcessStateRenderer<Regula
 
 		// state has changed, but no activity was performed: render
 		if (process.getAcquisitionProcessStateType() != newStateType) {
-		    generateActivityBox(flowChartContainer, logs.get(i + 1).getActivity());
+		    generateActivityBox(flowChartContainer, logs.get(i + 1).getDescription());
 		    generateArrowBox(flowChartContainer);
 		    generateStateBox(process, currentState, flowChartContainer, process.getAcquisitionProcessState().getAcquisitionProcessStateType());
 		}

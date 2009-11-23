@@ -2,6 +2,8 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.search.predicates;
 
 import java.util.Set;
 
+import myorg.domain.User;
+
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
@@ -18,7 +20,7 @@ public class RefundProcessPredicate extends SearchPredicate {
 	final Person taker = searchBean.getTaker();
 	return matchesSearchCriteria(refundRequest, searchBean)
 		&& (refundRequest.getProcess().isAvailableForCurrentUser() || refundProcess.isTakenByCurrentUser() || (taker != null && refundProcess
-			.isTakenByPerson(taker)));
+			.isTakenByPerson(taker.getUser())));
     }
 
     private boolean matchesSearchCriteria(final RefundRequest refundRequest, SearchPaymentProcess searchBean) {
@@ -29,7 +31,8 @@ public class RefundProcessPredicate extends SearchPredicate {
 	final String refundeeName = refundRequest.getRefundee().getName();
 	final Boolean showOnlyWithUnreadComments = searchBean.getShowOnlyWithUnreadComments();
 	final RefundProcess process = refundRequest.getProcess();
-	final Person taker = process.getCurrentOwner();
+	User currentOwner = process.getCurrentOwner();
+	final Person taker = currentOwner != null ? currentOwner.getExpenditurePerson() : null;
 	final Boolean showPrioritiesOnly = searchBean.getShowPriorityOnly();
 
 	Person loggedPerson = Person.getLoggedPerson();

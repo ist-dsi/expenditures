@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import module.workflow.domain.WorkflowLog;
+import myorg.domain.User;
 import myorg.domain.util.Money;
 import myorg.util.BundleUtil;
 
@@ -19,7 +21,6 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Project;
 import pt.ist.expenditureTrackingSystem.domain.organization.SubProject;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
-import pt.ist.expenditureTrackingSystem.domain.processes.GenericLog;
 
 public abstract class PaymentProcess extends PaymentProcess_Base {
 
@@ -246,7 +247,7 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
     public void resetEffectiveFundAllocationId() {
     }
 
-    public <T extends GenericLog> List<T> getExecutionLogsForState(String stateName) {
+    public <T extends WorkflowLog> List<T> getExecutionLogsForState(String stateName) {
 	return (List<T>) getExecutionLogs();
     }
 
@@ -346,5 +347,9 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
 	    }
 	}
 	return false;
+    }
+
+    public User getProcessCreator() {
+	return getRequest().getRequester().getUser();
     }
 }

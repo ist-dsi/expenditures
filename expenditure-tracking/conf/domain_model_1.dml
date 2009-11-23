@@ -297,12 +297,9 @@ class organization.Unit {
 	class organization.SubProject extends organization.Unit {
 	}
 
-class processes.GenericLog {
-	String ojbConcreteClass;
-	DateTime whenOperationWasRan;
-	String operation;
-}
-
+	class processes.GenericLog extends .module.workflow.domain.ActivityLog {
+	}
+	
 	class acquisitions.OperationLog extends processes.GenericLog {
 		AcquisitionProcessStateType state;	
 	}
@@ -315,8 +312,7 @@ class processes.GenericLog {
 		AnnouncementProcessStateType state;
 	}
 
-class processes.GenericProcess {
-	String ojbConcreteClass;
+class processes.GenericProcess extends .module.workflow.domain.WorkflowProcess {
 }
 
 	class acquisitions.PaymentProcess extends processes.GenericProcess {
@@ -378,11 +374,6 @@ class ProcessState {
 		RefundProcessStateType refundProcessStateType;
 	}
 
-
-class processes.ProcessComment {
-	String comment;
-	DateTime date;
-} 
 
 class requests.RequestForProposal {
 	String title;
@@ -703,27 +694,6 @@ relation ExpenditureTrackingSystemProcessState {
 	}
 }
 
-relation ExpenditureTrackingSystemGenericLog {
-	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
-	processes.GenericLog playsRole logs {
-		multiplicity *;
-	}
-}
-
-relation GenericLogUser {
-	processes.GenericLog playsRole executionLogs {
-		multiplicity *;
-	}
-	organization.Person playsRole executor;
-}
-
-relation GenericLogProcess {
-	processes.GenericLog playsRole executionLogs {
-		multiplicity *;
-	}
-	processes.GenericProcess playsRole process;
-}
-
 relation RequestForProposalRequestingUnit {
 	organization.Unit playsRole requestingUnit;
 	requests.RequestForProposal playsRole requestsForProposal {
@@ -934,49 +904,9 @@ relation UnitAccountingUnit {
 	organization.AccountingUnit playsRole accountingUnit;
 }
 
-relation PersonComment {
-	processes.ProcessComment playsRole comments {
-		multiplicity *;
-	}	
-	organization.Person playsRole commenter;
-}
-
-relation PersonReadComment {
-	organization.Person playsRole readers {
-		multiplicity *;
-	}
-	processes.ProcessComment playsRole readComments {
-		multiplicity *;
-	}	
-
-}
-
-
-relation GenericProcessComment {
-	processes.ProcessComment playsRole comments {
-		multiplicity *;
-	}	
-	processes.GenericProcess playsRole process;
-}
-
-
-relation ProcessCommentExpenditureTrackingSystem {
-	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
-	processes.ProcessComment playsRole comments {
-		multiplicity *;
-	}
-}
-
-relation TakeSupportInAcquisitionProcess {
-	organization.Person playsRole currentOwner;
-	processes.GenericProcess playsRole processes {
-		multiplicity *;
-	} 
-}
-
 relation ProcessFiles {
 	processes.GenericProcess playsRole process;
-	processes.GenericFile playsRole files {
+	processes.GenericFile playsRole files2 {
 		multiplicity *;
 	}
 }

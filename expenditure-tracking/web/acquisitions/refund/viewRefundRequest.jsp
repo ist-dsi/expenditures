@@ -25,7 +25,7 @@
 <jsp:include page="../../commons/defaultErrorDisplay.jsp"/>
 
 <logic:present name="refundProcess" property="currentOwner">
-	<bean:define id="ownerName" name="refundProcess" property="currentOwner.firstAndLastName"/>
+	<bean:define id="ownerName" name="refundProcess" property="currentOwner.expenditurePerson.firstAndLastName"/>
 	<div class="infobox_warning">
 		<bean:message key="acquisitionProcess.message.info.currentOwnerIs" bundle="ACQUISITION_RESOURCES" arg0="<%= ownerName.toString() %>"/>
 	</div>
@@ -138,7 +138,7 @@
 			<span class="color888" style="font-size: 0.9em;">
 				<bean:message key="label.lastBy" bundle="EXPENDITURE_RESOURCES"/> 
 				<bean:define id="mostRecentComment" name="refundProcess" property="mostRecentComment"/>
-				<strong><fr:view name="mostRecentComment" property="commenter.name"/></strong>, <fr:view name="mostRecentComment" property="date"/> 
+				<strong><fr:view name="mostRecentComment" property="commenter.expenditurePerson.name"/></strong>, <fr:view name="mostRecentComment" property="date"/> 
 			</span>
 		</logic:greaterThan>
 	</li>
@@ -217,14 +217,14 @@
 <div class="documents" style="margin-bottom: 2em;">
 <p>
 	<bean:message key="acquisitionProcess.label.otherFiles" bundle="ACQUISITION_RESOURCES"/>:
-	<logic:notEmpty name="refundProcess" property="files">
-		<logic:iterate id="file" name="refundProcess" property="files">
+	<logic:notEmpty name="refundProcess" property="files2">
+		<logic:iterate id="file" name="refundProcess" property="files2">
 			<html:link action='<%= actionMapping + ".do?method=downloadGenericFile" %>' paramId="fileOID" paramName="file" paramProperty="externalId">
 				<bean:write name="file" property="displayName"/>
 			</html:link>, 
 		</logic:iterate>
 	</logic:notEmpty>
-	<logic:empty name="refundProcess" property="files"><em><bean:message key="document.message.info.notAvailable" bundle="EXPENDITURE_RESOURCES"/></em></logic:empty>
+	<logic:empty name="refundProcess" property="files2"><em><bean:message key="document.message.info.notAvailable" bundle="EXPENDITURE_RESOURCES"/></em></logic:empty>
 </p>
 	
 </div>

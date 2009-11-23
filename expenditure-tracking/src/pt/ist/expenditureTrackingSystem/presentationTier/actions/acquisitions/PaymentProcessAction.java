@@ -202,7 +202,7 @@ public abstract class PaymentProcessAction extends ProcessAction {
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final PaymentProcess process = getProcess(request);
 	final Person person = getLoggedPerson();
-	if (process.getCurrentOwner() == null || (person != null && process.getCurrentOwner() == person)) {
+	if (process.getCurrentOwner() == null || (person != null && process.isTakenByPerson(person.getUser()))) {
 	    if (process.getCurrentOwner() == null) {
 		process.takeProcess();
 	    }
@@ -230,7 +230,7 @@ public abstract class PaymentProcessAction extends ProcessAction {
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final PaymentProcess process = getProcess(request);
 	final Person person = getLoggedPerson();
-	if (process.getCurrentOwner() == null || (person != null && process.getCurrentOwner() == person)) {
+	if (process.getCurrentOwner() == null || (person != null && process.isTakenByPerson(person.getUser()))) {
 	    if (process.getCurrentOwner() == null) {
 		process.takeProcess();
 	    }
@@ -268,7 +268,7 @@ public abstract class PaymentProcessAction extends ProcessAction {
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final PaymentProcess process = getProcess(request);
 	final Person person = getLoggedPerson();
-	if (process.getCurrentOwner() == null || (person != null && process.getCurrentOwner() == person)) {
+	if (process.getCurrentOwner() == null || (person != null && process.isTakenByPerson(person.getUser()))) {
 	    if (process.getCurrentOwner() == null) {
 		process.takeProcess();
 	    }
@@ -338,7 +338,7 @@ public abstract class PaymentProcessAction extends ProcessAction {
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final PaymentProcess process = getProcess(request);
 	final Person person = getLoggedPerson();
-	if (process.getCurrentOwner() == null || (person != null && process.getCurrentOwner() == person)) {
+	if (process.getCurrentOwner() == null || (person != null && process.isTakenByPerson(person.getUser()))) {
 	    if (process.getCurrentOwner() == null) {
 		process.takeProcess();
 	    }

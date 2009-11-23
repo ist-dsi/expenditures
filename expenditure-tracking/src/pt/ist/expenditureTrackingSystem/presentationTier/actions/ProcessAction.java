@@ -7,18 +7,19 @@ import java.util.TreeSet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import module.workflow.domain.WorkflowProcessComment;
+import module.workflow.presentationTier.actions.CommentBean;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import pt.ist.expenditureTrackingSystem.domain.DomainException;
-import pt.ist.expenditureTrackingSystem.domain.dto.CommentBean;
 import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.domain.processes.ActivityException;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericFile;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
-import pt.ist.expenditureTrackingSystem.domain.processes.ProcessComment;
 import pt.ist.expenditureTrackingSystem.presentationTier.util.FileUploadBean;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 
@@ -80,10 +81,10 @@ public abstract class ProcessAction extends BaseAction {
 	GenericProcess process = getDomainObject(request, "processOid");
 	request.setAttribute("process", process);
 
-	Set<ProcessComment> comments = new TreeSet<ProcessComment>(ProcessComment.COMPARATOR);
+	Set<WorkflowProcessComment> comments = new TreeSet<WorkflowProcessComment>(WorkflowProcessComment.COMPARATOR);
 	comments.addAll(process.getComments());
 
-	process.markCommentsAsReadForPerson(getLoggedPerson());
+	process.markCommentsAsReadForUser(getLoggedPerson().getUser());
 
 	request.setAttribute("comments", comments);
 	request.setAttribute("bean", new CommentBean(process));
@@ -95,9 +96,9 @@ public abstract class ProcessAction extends BaseAction {
 	    final HttpServletResponse response) {
 
 	CommentBean bean = getRenderedObject("comment");
-	
+
 	GenericProcess acquisitionProcess = getDomainObject(request, "processOid");
-	acquisitionProcess.createComment(getLoggedPerson(), bean);
+	acquisitionProcess.createComment(getLoggedPerson().getUser(), bean);
 
 	RenderUtils.invalidateViewState();
 	return viewComments(mapping, form, request, response);
