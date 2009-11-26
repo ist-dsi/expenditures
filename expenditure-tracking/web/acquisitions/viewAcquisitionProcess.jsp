@@ -51,6 +51,14 @@
 	</div>
 </logic:equal>
 
+<logic:equal name="acquisitionProcess" property="warnForLessSuppliersActive" value="true">
+	<div class="infobox_warning mtop15">
+	 	<p class="mvert025">
+	 		<bean:message key="label.warning.warnForLessSuppliers" bundle="ACQUISITION_RESOURCES"/>
+	 	</p>
+	 </div>
+</logic:equal>
+
 <logic:present name="acquisitionProcess" property="currentOwner">
 	<bean:define id="ownerName" name="acquisitionProcess" property="currentOwner.expenditurePerson.firstAndLastName"/>
 	<div class="infobox_warning">

@@ -213,9 +213,11 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	super();
 	inGenesis();
 	AcquisitionRequest acquisitionRequest = new AcquisitionRequest(this, suppliers, person);
-	if (classification == ProcessClassification.CT75000 && suppliers.size() < 3) {
-	    throw new DomainException("acquisitionProcess.message.exception.needsMoreSuppliers");
-	}
+	// if (classification == ProcessClassification.CT75000 &&
+	// suppliers.size() < 3) {
+	// throw new
+	// DomainException("acquisitionProcess.message.exception.needsMoreSuppliers");
+	// }
 	if (suppliers.size() == 1) {
 	    acquisitionRequest.setSelectedSupplier(suppliers.get(0));
 	}
@@ -368,5 +370,9 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
     @Override
     public Boolean getShouldSkipSupplierFundAllocation() {
 	return !this.isCCP() || super.getShouldSkipSupplierFundAllocation();
+    }
+
+    public boolean isWarnForLessSuppliersActive() {
+	return classification == ProcessClassification.CT75000 && suppliers.size() < 3;
     }
 }
