@@ -373,6 +373,6 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
     }
 
     public boolean isWarnForLessSuppliersActive() {
-	return classification == ProcessClassification.CT75000 && suppliers.size() < 3;
+	return getProcessClassification() == ProcessClassification.CT75000 && getSuppliers().size() < 3;
     }
 }
