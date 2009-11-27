@@ -129,8 +129,6 @@ public class Project extends Project_Base {
     }
 
     public SubProject findSubProjectByNamePrefix(final String institution) {
-	final String subProjectName = getName() + " - " + institution + " - ";
-
 	for (final Accountability accountability : getUnit().getChildAccountabilitiesSet()) {
 	    if (accountability.getAccountabilityType() == IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType()) {
 		final Party party = accountability.getChild();
@@ -141,7 +139,7 @@ public class Project extends Project_Base {
 			if (unit instanceof SubProject) {
 			    final SubProject subProject = (SubProject) unit;
 			    final String name = subProject.getName();
-			    if (name.startsWith(subProjectName)) {
+			    if (name.indexOf(institution) >= 0) {
 				return subProject;
 			    }
 			}

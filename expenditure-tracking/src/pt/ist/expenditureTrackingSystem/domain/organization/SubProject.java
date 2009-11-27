@@ -47,8 +47,13 @@ public class SubProject extends SubProject_Base {
     @Override
     public void setName(final String name) {
         super.setName(name);
-        final String acronym = StringUtils.abbreviate(name, 5);
-        getUnit().setAcronym(acronym);
+        final Project project = (Project) getParentUnit();
+        if (project == null) {
+            final String acronym = StringUtils.abbreviate(name, 5);
+            getUnit().setAcronym(acronym);
+        } else {
+            getUnit().setAcronym(project.getUnit().getAcronym());
+        }
     }
 
     @Override

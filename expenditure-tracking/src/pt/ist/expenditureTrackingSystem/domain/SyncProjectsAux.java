@@ -461,7 +461,8 @@ public class SyncProjectsAux {
     }
 
     private void updateSubProject(final SubProject subProject, final MgpSubProject mgpSubProject) {
-	subProject.setName(mgpSubProject.getInstitution() + " - " + mgpSubProject.getInstitutionDescription());
+	final String subProjectName = subProject.getParentUnit().getName() + " - " + mgpSubProject.getInstitution() + " - " + mgpSubProject.getInstitutionDescription();
+	subProject.setName(subProjectName);
     }
 
     private boolean hasAuthorization(final Project project, final Person responsible) {
