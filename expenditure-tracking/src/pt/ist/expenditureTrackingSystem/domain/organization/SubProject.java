@@ -53,7 +53,15 @@ public class SubProject extends SubProject_Base {
 
     @Override
     public String getPresentationName() {
-	return getParentUnit().getPresentationName() + " - " + super.getPresentationName();
+	return "(" + getUnit().getAcronym() + ") " + " - " + super.getPresentationName();
+    }
+
+    @Override
+    public void setParentUnit(final Unit parentUnit) {
+        super.setParentUnit(parentUnit);
+        if (parentUnit != null && hasUnit()) {
+            getUnit().setAcronym(parentUnit.getUnit().getAcronym());
+        }
     }
 
     @Override

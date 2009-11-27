@@ -454,7 +454,8 @@ public class SyncProjectsAux {
     }
 
     private void createSubProject(final Project project, final MgpSubProject mgpSubProject) {
-	final Unit unit = Unit.createRealUnit(project, IstPartyType.SUB_PROJECT, "", mgpSubProject.getInstitution() + " - " + mgpSubProject.getInstitutionDescription());
+	final String subProjectName = project.getName() + " - " + mgpSubProject.getInstitution() + " - " + mgpSubProject.getInstitutionDescription();
+	final Unit unit = Unit.createRealUnit(project, IstPartyType.SUB_PROJECT, "", subProjectName);
 	final SubProject subProject = (SubProject) unit;
 	subProject.setParentUnit(project);
     }
