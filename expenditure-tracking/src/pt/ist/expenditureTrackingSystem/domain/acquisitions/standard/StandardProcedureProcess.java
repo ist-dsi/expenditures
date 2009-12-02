@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import myorg.domain.util.Money;
-import pt.ist.expenditureTrackingSystem.domain.DomainException;
+import myorg.domain.exceptions.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;

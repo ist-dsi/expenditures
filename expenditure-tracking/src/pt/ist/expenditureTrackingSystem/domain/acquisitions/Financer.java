@@ -9,7 +9,7 @@ import myorg.domain.util.Money;
 
 import org.apache.commons.lang.StringUtils;
 
-import pt.ist.expenditureTrackingSystem.domain.DomainException;
+import myorg.domain.exceptions.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.CostCenter;
@@ -140,6 +140,10 @@ public class Financer extends Financer_Base {
 	return true;
     }
 
+    public boolean hasAllocatedFundsPermanentlyForAnyProjectFinancers() {
+	return true;
+    }
+
     public void addEffectiveFundAllocationId(String effectiveFundAllocationId) {
 	if (StringUtils.isEmpty(effectiveFundAllocationId)) {
 	    throw new DomainException("acquisitionProcess.message.exception.effectiveFundAllocationCannotBeNull");
@@ -258,4 +262,5 @@ public class Financer extends Financer_Base {
     public boolean isEffectiveFundAllocationPresent() {
 	return getEffectiveFundAllocationId() != null;
     }
+
 }

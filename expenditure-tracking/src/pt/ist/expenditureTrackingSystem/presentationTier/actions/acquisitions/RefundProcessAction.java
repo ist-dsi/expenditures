@@ -10,16 +10,18 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import myorg.domain.exceptions.DomainException;
+
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import pt.ist.expenditureTrackingSystem.domain.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundableInvoiceFile;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.SearchRefundProcesses;
 import pt.ist.expenditureTrackingSystem.domain.dto.ChangeFinancerAccountingUnitBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateRefundProcessBean;
@@ -190,12 +192,12 @@ public class RefundProcessAction extends PaymentProcessAction {
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	return executeActivityAndViewProcess(mapping, form, request, response, "SetSkipSupplierFundAllocation");
     }
-    
+
     public ActionForward executeUnsetSkipSupplierFundAllocation(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	return executeActivityAndViewProcess(mapping, form, request, response, "UnsetSkipSupplierFundAllocation");
     }
-    
+
     public ActionForward executeSubmitForApproval(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	return executeActivityAndViewProcess(mapping, form, request, response, "SubmitForApproval");
@@ -281,8 +283,8 @@ public class RefundProcessAction extends PaymentProcessAction {
 
     public ActionForward downloadInvoice(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) throws IOException {
-	RefundInvoice invoice = getDomainObject(request, "invoiceOID");
-	download(response, invoice.getFile());
+	RefundableInvoiceFile invoice = getDomainObject(request, "invoiceOID");
+	download(response, invoice);
 	return null;
     }
 
@@ -296,7 +298,7 @@ public class RefundProcessAction extends PaymentProcessAction {
     public ActionForward removeRefundInvoice(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 
-	RefundInvoice invoice = getDomainObject(request, "invoiceOid");
+	RefundableInvoiceFile invoice = getDomainObject(request, "invoiceOid");
 	RefundProcess process = getProcess(request);
 	genericActivityExecution(process, "RemoveRefundInvoice", invoice);
 	return executeRemoveRefundInvoice(mapping, form, request, response);
@@ -308,8 +310,8 @@ public class RefundProcessAction extends PaymentProcessAction {
 	request.setAttribute("item", item);
 
 	List<EditRefundInvoiceBean> beans = new ArrayList<EditRefundInvoiceBean>();
-	for (RefundInvoice invoice : item.getInvoices()) {
-	    beans.add(new EditRefundInvoiceBean(invoice));
+	for (PaymentProcessInvoice invoice : item.getInvoicesFiles()) {
+	    beans.add(new EditRefundInvoiceBean((RefundableInvoiceFile) invoice));
 	}
 	request.setAttribute("invoices", beans);
 	return forward(request, "/acquisitions/refund/editRefundInvoice.jsp");

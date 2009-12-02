@@ -1,7 +1,7 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import myorg.domain.util.Money;
-import pt.ist.expenditureTrackingSystem.domain.DomainException;
+import myorg.domain.exceptions.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.fenixWebFramework.services.Service;
 

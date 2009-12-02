@@ -224,8 +224,7 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	final String filename = acquisitionProposalDocumentForm.getFilename();
 	final byte[] bytes = consumeInputStream(acquisitionProposalDocumentForm);
 	final String proposalID = acquisitionProposalDocumentForm.getProposalID();
-	final AcquisitionRequest acquisitionRequest = acquisitionProcess.getAcquisitionRequest();
-	final AcquisitionProposalDocument acquisitionProposalDocument = acquisitionRequest.getAcquisitionProposalDocument();
+	final AcquisitionProposalDocument acquisitionProposalDocument = acquisitionProcess.getAcquisitionProposalDocument();
 	final String activity = acquisitionProposalDocument == null ? "AddAcquisitionProposalDocument"
 		: "ChangeAcquisitionProposalDocument";
 	acquisitionProcess.getActivityByName(activity).execute(acquisitionProcess, filename, bytes, proposalID);

@@ -6,7 +6,7 @@ import myorg.util.BundleUtil;
 
 import org.joda.time.DateTime;
 
-import pt.ist.expenditureTrackingSystem.domain.DomainException;
+import myorg.domain.exceptions.DomainException;
 
 public class OperationLog extends OperationLog_Base {
 

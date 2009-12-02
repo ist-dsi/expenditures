@@ -228,9 +228,9 @@
 						width="121"
 						height="16"
 						key="staticText-28">
-							<printWhenExpression><![CDATA[$P{acquisitionRequest}.getAcquisitionProposalDocument() != null && 
-$P{acquisitionRequest}.getAcquisitionProposalDocument().getProposalId() != null &&
-!$P{acquisitionRequest}.getAcquisitionProposalDocument().getProposalId().isEmpty()]]></printWhenExpression>
+							<printWhenExpression><![CDATA[$P{acquisitionRequest}.getProcess().getAcquisitionProposalDocument() != null && 
+$P{acquisitionRequest}.getProcess().getAcquisitionProposalDocument().getProposalId() != null &&
+!$P{acquisitionRequest}.getProcess().getAcquisitionProposalDocument().getProposalId().isEmpty()]]></printWhenExpression>
 						</reportElement>
 					<box></box>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
@@ -246,15 +246,15 @@ $P{acquisitionRequest}.getAcquisitionProposalDocument().getProposalId() != null 
 						height="16"
 						key="textField-27"
 						isPrintWhenDetailOverflows="true">
-							<printWhenExpression><![CDATA[$P{acquisitionRequest}.getAcquisitionProposalDocument() != null && 
-$P{acquisitionRequest}.getAcquisitionProposalDocument().getProposalId() != null &&
-!$P{acquisitionRequest}.getAcquisitionProposalDocument().getProposalId().isEmpty()]]></printWhenExpression>
+							<printWhenExpression><![CDATA[$P{acquisitionRequest}.getProcess().getAcquisitionProposalDocument() != null && 
+$P{acquisitionRequest}.getProcess().getAcquisitionProposalDocument().getProposalId() != null &&
+!$P{acquisitionRequest}.getProcess().getAcquisitionProposalDocument().getProposalId().isEmpty()]]></printWhenExpression>
 						</reportElement>
 					<box></box>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$P{acquisitionRequest}.getAcquisitionProposalDocument().getProposalId()]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{acquisitionRequest}.getProcess().getAcquisitionProposalDocument().getProposalId()]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement

@@ -7,21 +7,20 @@ public class PurchaseOrderDocument extends PurchaseOrderDocument_Base {
 	setRequestId(requestId);
     }
 
-    public PurchaseOrderDocument(final AcquisitionRequest acquisitionRequest, final byte[] contents, final String fileName,
-	    String requestID) {
+    public PurchaseOrderDocument(final AcquisitionProcess process, final byte[] contents, final String fileName, String requestID) {
 	this(requestID);
-	if (acquisitionRequest.hasPurchaseOrderDocument()) {
-	    acquisitionRequest.getPurchaseOrderDocument().delete();
+	if (process.hasPurchaseOrderDocument()) {
+	    process.getPurchaseOrderDocument().delete();
 	}
 
-	setAcquisitionRequest(acquisitionRequest);
+	setProcess(process);
 	setContent(contents);
 	setFilename(fileName);
     }
 
     @Override
     public void delete() {
-	removeAcquisitionRequest();
+	removeProcess();
 	super.delete();
     }
 

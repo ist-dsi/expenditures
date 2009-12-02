@@ -6,14 +6,16 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import module.fileSupport.domain.GenericFile;
+import myorg.domain.exceptions.DomainException;
+
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import pt.ist.expenditureTrackingSystem.domain.File;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Invoice;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AcquisitionAfterTheFact;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.ImportFile;
 import pt.ist.expenditureTrackingSystem.domain.dto.AfterTheFactAcquisitionProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.AfterTheFactAcquisitionsImportBean;
@@ -56,7 +58,7 @@ public class AfterTheFactAcquisitionProcessAction extends ProcessAction {
 	try {
 	    afterTheFactAcquisitionProcess = AfterTheFactAcquisitionProcess
 		    .createNewAfterTheFactAcquisitionProcess(afterTheFactAcquisitionProcessBean);
-	} catch (pt.ist.expenditureTrackingSystem.domain.DomainException e) {
+	} catch (DomainException e) {
 	    addMessage(e.getMessage(), getBundle(), e.getArgs());
 	    return prepareCreateAfterTheFactAcquisitionProcess(mapping, form, request, response);
 	}
@@ -105,9 +107,8 @@ public class AfterTheFactAcquisitionProcessAction extends ProcessAction {
 	request.setAttribute("afterTheFactAcquisitionProcess", afterTheFactAcquisitionProcess);
 	final ReceiveInvoiceForm receiveInvoiceForm = new ReceiveInvoiceForm();
 
-	final AcquisitionAfterTheFact acquisitionAfterTheFact = afterTheFactAcquisitionProcess.getAcquisitionAfterTheFact();
-	if (acquisitionAfterTheFact.hasInvoice()) {
-	    final Invoice invoice = acquisitionAfterTheFact.getInvoice();
+	if (afterTheFactAcquisitionProcess.hasInvoice()) {
+	    final Invoice invoice = afterTheFactAcquisitionProcess.getInvoice();
 	    receiveInvoiceForm.setInvoiceDate(invoice.getInvoiceDate());
 	    receiveInvoiceForm.setInvoiceNumber(invoice.getInvoiceNumber());
 	}
@@ -174,7 +175,7 @@ public class AfterTheFactAcquisitionProcessAction extends ProcessAction {
     public ActionForward listImports(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) {
 
-	List<ImportFile> files = File.getFiles(ImportFile.class);
+	List<ImportFile> files = GenericFile.getFiles(ImportFile.class);
 	request.setAttribute("files", files);
 	return forward(request, "/acquisitions/listImportAfterTheFactAcquisitionsResult.jsp");
     }
@@ -183,6 +184,13 @@ public class AfterTheFactAcquisitionProcessAction extends ProcessAction {
 	    final HttpServletResponse response) throws IOException {
 
 	ImportFile file = getDomainObject(request, "fileOID");
+	return download(response, file);
+    }
+
+    public ActionForward downloadInvoice(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) throws IOException {
+
+	AfterTheFactInvoice file = getDomainObject(request, "fileOID");
 	return download(response, file);
     }
 

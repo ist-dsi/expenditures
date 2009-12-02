@@ -56,17 +56,17 @@
 <div class="documents">
 	<p>
 		<bean:message key="acquisitionProcess.label.invoice" bundle="ACQUISITION_RESOURCES"/>:
-		<logic:present name="afterTheFactAcquisitionProcess" property="acquisitionAfterTheFact.invoice">
-			<logic:present name="afterTheFactAcquisitionProcess" property="acquisitionAfterTheFact.invoice.content">
-				<html:link action="/acquisitionProcess.do?method=downloadInvoice" paramId="invoiceOid" paramName="afterTheFactAcquisitionProcess" paramProperty="acquisitionAfterTheFact.invoice.externalId">
-					<bean:write name="afterTheFactAcquisitionProcess" property="acquisitionAfterTheFact.invoice.filename"/>
+		<logic:present name="afterTheFactAcquisitionProcess" property="invoice">
+			<logic:present name="afterTheFactAcquisitionProcess" property="invoice.content">
+				<html:link action="/acquisitionAfterTheFactAcquisitionProcess.do?method=downloadInvoice" paramId="fileOID" paramName="afterTheFactAcquisitionProcess" paramProperty="invoice.externalId">
+					<bean:write name="afterTheFactAcquisitionProcess" property="invoice.filename"/>
 				</html:link>
 			</logic:present>	
-			<logic:notPresent name="afterTheFactAcquisitionProcess" property="acquisitionAfterTheFact.invoice">
+			<logic:notPresent name="afterTheFactAcquisitionProcess" property="invoice">
 				<em><bean:message key="document.message.info.notAvailable" bundle="EXPENDITURE_RESOURCES"/></em>
 			</logic:notPresent>
 		</logic:present>
-		<logic:notPresent name="afterTheFactAcquisitionProcess" property="acquisitionAfterTheFact.invoice">
+		<logic:notPresent name="afterTheFactAcquisitionProcess" property="invoice">
 			<em><bean:message key="document.message.info.notAvailable" bundle="EXPENDITURE_RESOURCES"/></em>
 		</logic:notPresent>
 	</p>

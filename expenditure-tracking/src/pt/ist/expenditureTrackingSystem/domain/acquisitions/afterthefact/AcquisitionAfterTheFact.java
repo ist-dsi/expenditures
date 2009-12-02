@@ -4,8 +4,7 @@ import myorg.domain.util.Money;
 
 import org.joda.time.LocalDate;
 
-import pt.ist.expenditureTrackingSystem.domain.DomainException;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.Invoice;
+import myorg.domain.exceptions.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.dto.AfterTheFactAcquisitionProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 
@@ -51,30 +50,20 @@ public class AcquisitionAfterTheFact extends AcquisitionAfterTheFact_Base {
     }
 
     public boolean isAppiableForYear(final int year) {
-	final LocalDate localDate = getInvoice().getInvoiceDate();
+	final LocalDate localDate = getAfterTheFactAcquisitionProcess().getInvoice().getInvoiceDate();
 	return localDate != null && localDate.getYear() == year;
     }
 
     @Override
     public AfterTheFactInvoice receiveInvoice(String filename, byte[] bytes, String invoiceNumber, LocalDate invoiceDate) {
-	final AfterTheFactInvoice invoice = hasInvoice() ? getInvoice() : new AfterTheFactInvoice(this);
-	invoice.setFilename(filename);
-	invoice.setContent(bytes);
-	invoice.setInvoiceNumber(invoiceNumber);
-	invoice.setInvoiceDate(invoiceDate);
-	setInvoice(invoice);
-
-	return invoice;
+	return getAfterTheFactAcquisitionProcess().receiveInvoice(filename, bytes, invoiceNumber, invoiceDate);
     }
 
     public String getInvoiceNumber() {
-	Invoice invoice = getInvoice();
-	return invoice != null ? invoice.getInvoiceNumber() : null;
+	return getAfterTheFactAcquisitionProcess().getInvoiceNumber();
     }
 
     public LocalDate getInvoiceDate() {
-	Invoice invoice = getInvoice();
-	return invoice != null ? invoice.getInvoiceDate() : null;
+	return getAfterTheFactAcquisitionProcess().getInvoiceDate();
     }
-
 }

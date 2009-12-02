@@ -47,17 +47,17 @@
 <div class="documents">
 	<p>
 		<bean:message key="acquisitionProcess.label.requestDocument" bundle="ACQUISITION_RESOURCES"/>:
-		<logic:present name="acquisitionProcess" property="acquisitionRequest.purchaseOrderDocument">
+		<logic:present name="acquisitionProcess" property="purchaseOrderDocument">
 			
-			<bean:define id="acquisitionRequestDocumentOID" name="acquisitionProcess" property="acquisitionRequest.purchaseOrderDocument.externalId" type="java.lang.String"/>
+			<bean:define id="acquisitionRequestDocumentOID" name="acquisitionProcess" property="purchaseOrderDocument.externalId" type="java.lang.String"/>
 			
 			<a id="file" href="<%= request.getContextPath() +  actionMapping + ".do?method=downloadAcquisitionPurchaseOrderDocument&purchaseOrderDocumentOid=" + acquisitionRequestDocumentOID%>">
 				<span id="fileName">
-					<bean:write name="acquisitionProcess" property="acquisitionRequest.purchaseOrderDocument.filename"/>
+					<bean:write name="acquisitionProcess" property="purchaseOrderDocument.filename"/>
 				</span>
 			</a>
 		</logic:present>
-		<logic:notPresent name="acquisitionProcess" property="acquisitionRequest.purchaseOrderDocument">
+		<logic:notPresent name="acquisitionProcess" property="purchaseOrderDocument">
 			<a id="file" href="#">
 				<span id="fileName">
 					<em><bean:message key="document.message.info.notAvailable" bundle="EXPENDITURE_RESOURCES"/></em>
@@ -69,7 +69,7 @@
 
 <bean:define id="url"><%= actionMapping %>.do?method=createAcquisitionPurchaseOrderDocument&amp;acquisitionProcessOid=<%= acquisitionProcessOID %></bean:define>
 
-<logic:present name="acquisitionProcess" property="acquisitionRequest.purchaseOrderDocument">
+<logic:present name="acquisitionProcess" property="purchaseOrderDocument">
 	<div class="infobox_warning">
 			<bean:message key="label.warning.purchaseOrderDocumentAlreadyExists" bundle="ACQUISITION_RESOURCES"/>
 	</div>

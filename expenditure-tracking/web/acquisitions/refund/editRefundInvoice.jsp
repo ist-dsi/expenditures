@@ -43,7 +43,7 @@
 		</td>
 		<td>
 			<html:link action='<%= actionMapping + ".do?method=downloadInvoice" %>' paramId="invoiceOID" paramName="invoice" paramProperty="invoice.externalId">
-				<bean:write name="invoice" property="file.filename"/>
+				<bean:write name="invoice" property="filename"/>
 			</html:link>
 		</td>
 		<td>

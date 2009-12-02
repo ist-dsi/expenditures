@@ -217,14 +217,19 @@
 <div class="documents" style="margin-bottom: 2em;">
 <p>
 	<bean:message key="acquisitionProcess.label.otherFiles" bundle="ACQUISITION_RESOURCES"/>:
-	<logic:notEmpty name="refundProcess" property="files2">
-		<logic:iterate id="file" name="refundProcess" property="files2">
+	<logic:notEmpty name="refundProcess" property="genericFiles">
+		<logic:iterate id="file" name="refundProcess" property="genericFiles">
 			<html:link action='<%= actionMapping + ".do?method=downloadGenericFile" %>' paramId="fileOID" paramName="file" paramProperty="externalId">
+				<logic:present name="file" property="displayName">
 				<bean:write name="file" property="displayName"/>
+				</logic:present>
+				<logic:notPresent name="file" property="displayName">
+					<bean:write name="file" property="filename"/>
+				</logic:notPresent>
 			</html:link>, 
 		</logic:iterate>
 	</logic:notEmpty>
-	<logic:empty name="refundProcess" property="files2"><em><bean:message key="document.message.info.notAvailable" bundle="EXPENDITURE_RESOURCES"/></em></logic:empty>
+	<logic:empty name="refundProcess" property="genericFiles"><em><bean:message key="document.message.info.notAvailable" bundle="EXPENDITURE_RESOURCES"/></em></logic:empty>
 </p>
 	
 </div>
@@ -281,7 +286,7 @@
 	</div>
 	</logic:equal>
 	<jsp:include page="../commons/viewRefundItem.jsp"/>
-		<logic:notEmpty name="refundItem" property="invoices">
+		<logic:notEmpty name="refundItem" property="refundableInvoices">
 				<table class="tstyle3 tdmiddle tdnoborder vpadding05" style="width: 100%;">
 					<tr>
 					<th><bean:message key="acquisitionProcess.label.invoice.number" bundle="ACQUISITION_RESOURCES"/></th>		
@@ -292,7 +297,7 @@
 					<th><bean:message key="label.invoice.refundableValue" bundle="ACQUISITION_RESOURCES"/></th>
 					
 					</tr>	
-					<logic:iterate id="invoice" name="refundItem" property="invoices">
+					<logic:iterate id="invoice" name="refundItem" property="refundableInvoices">
 												<tr>
 							<td class="nowrap" rowspan="2" style="border-right: 1px solid #eee !important;"><fr:view name="invoice" property="invoiceNumber"/></td>
 							<td class="nowrap"><fr:view name="invoice" property="invoiceDate" type="org.joda.time.LocalDate"/></td>
@@ -319,7 +324,7 @@
 						<tr style="border-bottom: 4px solid #eee;">
 							<td colspan="6" class="aleft">
 								<html:link action='<%= actionMapping + ".do?method=downloadInvoice" %>' paramId="invoiceOID" paramName="invoice" paramProperty="externalId">
-									<bean:write name="invoice" property="file.filename"/>
+									<bean:write name="invoice" property="filename"/>
 								</html:link>
 
 					    		<logic:present name="invoice" property="supplier">

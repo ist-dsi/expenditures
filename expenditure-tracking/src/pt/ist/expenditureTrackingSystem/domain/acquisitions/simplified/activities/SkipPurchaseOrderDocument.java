@@ -13,7 +13,8 @@ public class SkipPurchaseOrderDocument extends GenericAcquisitionProcessActivity
 
     @Override
     protected boolean isAvailable(RegularAcquisitionProcess process) {
-	return  super.isAvailable(process) && process.getAcquisitionProcessState().isAuthorized() && !process.getAcquisitionRequest().hasPurchaseOrderDocument();
+	return super.isAvailable(process) && process.getAcquisitionProcessState().isAuthorized()
+		&& !process.hasPurchaseOrderDocument();
     }
 
     @Override

@@ -2,6 +2,8 @@ package pt.ist.expenditureTrackingSystem.domain;
 
 import java.util.Comparator;
 
+import myorg.domain.exceptions.DomainException;
+
 import org.joda.time.DateTime;
 
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;

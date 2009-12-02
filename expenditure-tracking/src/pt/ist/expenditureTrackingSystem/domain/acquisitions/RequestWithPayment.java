@@ -130,7 +130,7 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
 	for (Financer financer : getFinancersSet()) {
 	    if (financer.isProjectFinancer() && financer.isProjectAccountingEmployee(person)) {
 		ProjectFinancer projectFinancer = (ProjectFinancer) financer;
-		projectFinancer.setEffectiveProjectFundAllocationId(null);
+		projectFinancer.resetEffectiveFundAllocation();
 	    }
 	}
     }
@@ -359,6 +359,15 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
 	return !getFinancersSet().isEmpty();
     }
 
+    public boolean hasAllocatedFundsPermanentlyForAnyProjectFinancer() {
+	for (final Financer financer : getFinancersWithFundsAllocated()) {
+	    if (financer.hasAllocatedFundsPermanentlyForAnyProjectFinancers()) {
+		return true;
+	    }
+	}
+	return getFinancersSet().isEmpty();
+    }
+
     public boolean isTreasuryMember(final Person person) {
 	for (final Financer financer : getFinancersSet()) {
 	    if (financer.isTreasuryMember(person)) {
@@ -477,7 +486,7 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
 	invoice.setContent(bytes);
 	invoice.setInvoiceNumber(invoiceNumber);
 	invoice.setInvoiceDate(invoiceDate);
-	// addInvoice(invoice);
+	getProcess().addFiles(invoice);
 	return invoice;
     }
 
@@ -488,6 +497,16 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
 	    }
 	}
 	return true;
+    }
+
+    public boolean hasAnyInvoiceAllocated() {
+	for (Financer financer : getFinancers()) {
+	    if (financer.hasAllInvoicesAllocated()) {
+		return true;
+	    }
+	}
+	return false;
+
     }
 
     public boolean isConfirmedForAllInvoices() {
@@ -555,4 +574,5 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
     }
 
     public abstract SortedSet<? extends RequestItem> getOrderedRequestItemsSet();
+
 }

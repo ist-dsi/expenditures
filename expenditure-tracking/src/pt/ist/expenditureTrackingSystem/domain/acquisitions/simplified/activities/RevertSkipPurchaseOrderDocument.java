@@ -14,7 +14,7 @@ public class RevertSkipPurchaseOrderDocument extends GenericAcquisitionProcessAc
     @Override
     protected boolean isAvailable(RegularAcquisitionProcess process) {
 	return super.isAvailable(process) && process.getAcquisitionProcessState().isProcessed()
-		&& !process.getAcquisitionRequest().hasPurchaseOrderDocument();
+		&& !process.hasPurchaseOrderDocument();
     }
 
     @Override

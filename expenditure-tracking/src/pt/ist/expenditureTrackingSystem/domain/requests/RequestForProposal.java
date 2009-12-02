@@ -2,7 +2,7 @@ package pt.ist.expenditureTrackingSystem.domain.requests;
 
 import org.joda.time.LocalDate;
 
-import pt.ist.expenditureTrackingSystem.domain.DomainException;
+import myorg.domain.exceptions.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateRequestForProposalProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;

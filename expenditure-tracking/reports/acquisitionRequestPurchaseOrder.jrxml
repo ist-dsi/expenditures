@@ -102,9 +102,9 @@
 			</textField>
 			<staticText>
 				<reportElement key="staticText-28" x="0" y="242" width="121" height="16">
-					<printWhenExpression><![CDATA[$P{acquisitionRequest}.getAcquisitionProposalDocument() != null && 
-$P{acquisitionRequest}.getAcquisitionProposalDocument().getProposalId() != null &&
-!$P{acquisitionRequest}.getAcquisitionProposalDocument().getProposalId().isEmpty()]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$P{acquisitionRequest}.getProcess().getAcquisitionProposalDocument() != null && 
+$P{acquisitionRequest}.getProcess().getAcquisitionProposalDocument().getProposalId() != null &&
+!$P{acquisitionRequest}.getProcess().getAcquisitionProposalDocument().getProposalId().isEmpty()]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font isItalic="true" pdfFontName="Helvetica-Oblique"/>
@@ -113,12 +113,12 @@ $P{acquisitionRequest}.getAcquisitionProposalDocument().getProposalId() != null 
 			</staticText>
 			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false" hyperlinkType="None">
 				<reportElement key="textField-27" x="121" y="242" width="180" height="16" isPrintWhenDetailOverflows="true">
-					<printWhenExpression><![CDATA[$P{acquisitionRequest}.getAcquisitionProposalDocument() != null && 
-$P{acquisitionRequest}.getAcquisitionProposalDocument().getProposalId() != null &&
-!$P{acquisitionRequest}.getAcquisitionProposalDocument().getProposalId().isEmpty()]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$P{acquisitionRequest}.getProcess().getAcquisitionProposalDocument() != null && 
+$P{acquisitionRequest}.getProcess().getAcquisitionProposalDocument().getProposalId() != null &&
+!$P{acquisitionRequest}.getProcess().getAcquisitionProposalDocument().getProposalId().isEmpty()]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Left" verticalAlignment="Middle"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{acquisitionRequest}.getAcquisitionProposalDocument().getProposalId()]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{acquisitionRequest}.getProcess().getAcquisitionProposalDocument().getProposalId()]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="false" hyperlinkType="None">
 				<reportElement key="textField-28" positionType="Float" x="255" y="97" width="275" height="105" isPrintWhenDetailOverflows="true"/>

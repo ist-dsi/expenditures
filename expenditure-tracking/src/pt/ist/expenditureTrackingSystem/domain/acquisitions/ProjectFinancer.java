@@ -8,7 +8,7 @@ import myorg.domain.util.Money;
 
 import org.apache.commons.lang.StringUtils;
 
-import pt.ist.expenditureTrackingSystem.domain.DomainException;
+import myorg.domain.exceptions.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Project;
@@ -94,6 +94,17 @@ public class ProjectFinancer extends ProjectFinancer_Base {
     }
 
     @Override
+    public boolean hasAllocatedFundsPermanentlyForAnyProjectFinancers() {
+	List<PaymentProcessInvoice> allocatedInvoicesInProject = getAllocatedInvoicesInProject();
+	for (UnitItem unitItem : getUnitItems()) {
+	    if (allocatedInvoicesInProject.containsAll(unitItem.getConfirmedInvoices())) {
+		return true;
+	    }
+	}
+	return getEffectiveProjectFundAllocationId() != null && !getEffectiveProjectFundAllocationId().isEmpty();
+    }
+
+    @Override
     public boolean isProjectFinancer() {
 	return true;
     }
@@ -172,4 +183,10 @@ public class ProjectFinancer extends ProjectFinancer_Base {
     public boolean isEffectiveFundAllocationPresent() {
 	return getEffectiveProjectFundAllocationId() != null || super.isEffectiveFundAllocationPresent();
     }
+
+    public void resetEffectiveFundAllocation() {
+	setEffectiveProjectFundAllocationId(null);
+	getAllocatedInvoicesInProject().clear();
+    }
+
 }

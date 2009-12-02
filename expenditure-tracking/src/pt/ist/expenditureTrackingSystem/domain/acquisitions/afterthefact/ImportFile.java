@@ -1,6 +1,6 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact;
 
-import pt.ist.expenditureTrackingSystem.domain.DomainException;
+import myorg.domain.exceptions.DomainException;
 import pt.ist.fenixWebFramework.services.Service;
 
 public class ImportFile extends ImportFile_Base {

@@ -7,13 +7,13 @@ import java.io.OutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import module.fileSupport.domain.GenericFile;
 import myorg.presentationTier.actions.ContextBaseAction;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import pt.ist.expenditureTrackingSystem.domain.File;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.presentationTier.messageHandling.MessageHandler;
 import pt.ist.expenditureTrackingSystem.presentationTier.messageHandling.MessageHandler.MessageType;
@@ -56,7 +56,7 @@ public abstract class BaseAction extends ContextBaseAction {
 	return null;
     }
 
-    protected ActionForward download(final HttpServletResponse response, final File file) throws IOException {
+    protected ActionForward download(final HttpServletResponse response, final GenericFile file) throws IOException {
 	String filename = file.getFilename();
 	if (filename == null) {
 	    filename = file.getDisplayName();

@@ -273,10 +273,10 @@ public class RefundProcess extends RefundProcess_Base {
 	return getProcessState().isInSubmittedForInvoiceConfirmationState();
     }
 
-    public List<RefundInvoice> getRefundableInvoices() {
-	List<RefundInvoice> invoices = new ArrayList<RefundInvoice>();
+    public List<RefundableInvoiceFile> getRefundableInvoices() {
+	List<RefundableInvoiceFile> invoices = new ArrayList<RefundableInvoiceFile>();
 	for (RequestItem item : getRequest().getRequestItems()) {
-	    invoices.addAll(((RefundItem) item).getInvoices());
+	    invoices.addAll(((RefundItem) item).getRefundableInvoices());
 	}
 	return invoices;
     }
@@ -367,7 +367,7 @@ public class RefundProcess extends RefundProcess_Base {
 
     public boolean isAnyRefundInvoiceAvailable() {
 	for (RefundItem item : getRequest().getRefundItemsSet()) {
-	    if (item.hasAnyInvoices()) {
+	    if (!item.getRefundableInvoices().isEmpty()) {
 		return true;
 	    }
 	}
@@ -421,7 +421,7 @@ public class RefundProcess extends RefundProcess_Base {
     @Override
     public Set<Supplier> getSuppliers() {
 	Set<Supplier> suppliers = new HashSet<Supplier>();
-	for (RefundInvoice invoice : getRefundableInvoices()) {
+	for (RefundableInvoiceFile invoice : getRefundableInvoices()) {
 	    suppliers.add(invoice.getSupplier());
 	}
 	return suppliers;

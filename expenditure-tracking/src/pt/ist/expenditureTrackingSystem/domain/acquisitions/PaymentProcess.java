@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import module.workflow.domain.ProcessFile;
 import module.workflow.domain.WorkflowLog;
 import myorg.domain.User;
 import myorg.domain.util.Money;
@@ -237,6 +238,11 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
 	return requestWithPayment.hasAllocatedFundsPermanentlyForAllProjectFinancers();
     }
 
+    public boolean hasAllocatedFundsPermanentlyForAnyProjectFinancers() {
+	final RequestWithPayment requestWithPayment = getRequest();
+	return requestWithPayment.hasAllocatedFundsPermanentlyForAnyProjectFinancer();
+    }
+
     public void allocateFundsPermanently() {
     }
 
@@ -351,5 +357,9 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
 
     public User getProcessCreator() {
 	return getRequest().getRequester().getUser();
+    }
+
+    public List<ProcessFile> getGenericFiles() {
+	return getFiles(ProcessFile.class);
     }
 }

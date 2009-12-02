@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import module.workflow.domain.ProcessFile;
+import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
@@ -226,6 +228,57 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 
     public Boolean getShouldSkipSupplierFundAllocation() {
 	return getSkipSupplierFundAllocation();
+    }
+
+    public void addAcquisitionProposalDocument(final String filename, final byte[] bytes, String proposalId) {
+	AcquisitionProposalDocument acquisitionProposalDocument = getAcquisitionProposalDocument();
+	if (acquisitionProposalDocument == null) {
+	    acquisitionProposalDocument = new AcquisitionProposalDocument();
+	    setAcquisitionProposalDocument(acquisitionProposalDocument);
+	}
+	acquisitionProposalDocument.setFilename(filename);
+	acquisitionProposalDocument.setContent(bytes);
+	acquisitionProposalDocument.setProposalId(proposalId != null && !proposalId.isEmpty() ? proposalId : null);
+    }
+
+    public String getAcquisitionRequestDocumentID() {
+	return hasPurchaseOrderDocument() ? getPurchaseOrderDocument().getRequestId() : ExpenditureTrackingSystem.getInstance()
+		.nextAcquisitionRequestDocumentID();
+    }
+
+    /*
+     * TODO: Remove these mocks
+     */
+    public void setAcquisitionProposalDocument(AcquisitionProposalDocument document) {
+	addFiles(document);
+    }
+
+    public AcquisitionProposalDocument getAcquisitionProposalDocument() {
+	List<AcquisitionProposalDocument> files = getFiles(AcquisitionProposalDocument.class);
+	if (files.size() > 1) {
+	    throw new DomainException("error.should.only.have.one.proposal");
+	}
+	return files.isEmpty() ? null : files.get(0);
+    }
+
+    public boolean hasAcquisitionProposalDocument() {
+	return !getFiles(AcquisitionProposalDocument.class).isEmpty();
+    }
+
+    public void setPurchaseOrderDocument(PurchaseOrderDocument document) {
+	addFiles(document);
+    }
+
+    public PurchaseOrderDocument getPurchaseOrderDocument() {
+	List<PurchaseOrderDocument> files = getFiles(PurchaseOrderDocument.class);
+	if (files.size() > 1) {
+	    throw new DomainException("error.should.only.have.one.purchaseOrder");
+	}
+	return files.isEmpty() ? null : files.get(0);
+    }
+
+    public boolean hasPurchaseOrderDocument() {
+	return !getFiles(PurchaseOrderDocument.class).isEmpty();
     }
 
 }

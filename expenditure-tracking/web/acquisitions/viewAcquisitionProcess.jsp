@@ -138,23 +138,23 @@
 			<div class="documents mtop0" style="overflow: hidden; width: 300px">
 				<p>
 					<bean:message key="acquisitionProcess.label.proposalDocument" bundle="ACQUISITION_RESOURCES"/>:
-					<logic:present name="acquisitionProcess" property="acquisitionRequest.acquisitionProposalDocument">
-						<html:link action="<%= actionMapping + ".do?method=downloadAcquisitionProposalDocument"%>" paramId="acquisitionProposalDocumentOid" paramName="acquisitionProcess" paramProperty="acquisitionRequest.acquisitionProposalDocument.externalId">
-							<bean:write name="acquisitionProcess" property="acquisitionRequest.acquisitionProposalDocument.filename"/>
+					<logic:present name="acquisitionProcess" property="acquisitionProposalDocument">
+						<html:link action="<%= actionMapping + ".do?method=downloadAcquisitionProposalDocument"%>" paramId="acquisitionProposalDocumentOid" paramName="acquisitionProcess" paramProperty="acquisitionProposalDocument.externalId">
+							<bean:write name="acquisitionProcess" property="acquisitionProposalDocument.filename"/>
 						</html:link>	
 					</logic:present>
-					<logic:notPresent name="acquisitionProcess" property="acquisitionRequest.acquisitionProposalDocument">
+					<logic:notPresent name="acquisitionProcess" property="acquisitionProposalDocument">
 						<em><bean:message key="document.message.info.notAvailable" bundle="EXPENDITURE_RESOURCES"/></em>
 					</logic:notPresent>
 				</p>
 				<p>
 					<bean:message key="acquisitionProcess.label.requestDocument" bundle="ACQUISITION_RESOURCES"/>:
-					<logic:present name="acquisitionProcess" property="acquisitionRequest.purchaseOrderDocument">
-						<html:link action="<%= actionMapping + ".do?method=downloadAcquisitionPurchaseOrderDocument"%>" paramId="purchaseOrderDocumentOid" paramName="acquisitionProcess" paramProperty="acquisitionRequest.purchaseOrderDocument.externalId">
-							<bean:write name="acquisitionProcess" property="acquisitionRequest.purchaseOrderDocument.filename"/>
+					<logic:present name="acquisitionProcess" property="purchaseOrderDocument">
+						<html:link action="<%= actionMapping + ".do?method=downloadAcquisitionPurchaseOrderDocument"%>" paramId="purchaseOrderDocumentOid" paramName="acquisitionProcess" paramProperty="purchaseOrderDocument.externalId">
+							<bean:write name="acquisitionProcess" property="purchaseOrderDocument.filename"/>
 						</html:link>
 					</logic:present>
-					<logic:notPresent name="acquisitionProcess" property="acquisitionRequest.purchaseOrderDocument">
+					<logic:notPresent name="acquisitionProcess" property="purchaseOrderDocument">
 						<em><bean:message key="document.message.info.notAvailable" bundle="EXPENDITURE_RESOURCES"/></em>
 					</logic:notPresent>
 				</p>
@@ -178,8 +178,8 @@
 				</p>
 				<p>
 					<bean:message key="acquisitionProcess.label.otherFiles" bundle="ACQUISITION_RESOURCES"/>:
-					<logic:notEmpty name="acquisitionProcess" property="files2">
-						<logic:iterate id="file" name="acquisitionProcess" property="files2">
+					<logic:notEmpty name="acquisitionProcess" property="genericFiles">
+						<logic:iterate id="file" name="acquisitionProcess" property="genericFiles">
 							<html:link action="<%= actionMapping + ".do?method=downloadGenericFile&acquisitionProcess=" + acquisitionProcessOid %>" paramId="fileOID" paramName="file" paramProperty="externalId">
 								<logic:notEmpty name="file" property="displayName"> 
 									<bean:write name="file" property="displayName"/>
@@ -190,7 +190,7 @@
 							</html:link>, 
 						</logic:iterate>
 					</logic:notEmpty>
-					<logic:empty name="acquisitionProcess" property="files2"><em><bean:message key="document.message.info.notAvailable" bundle="EXPENDITURE_RESOURCES"/></em></logic:empty>
+					<logic:empty name="acquisitionProcess" property="genericFiles"><em><bean:message key="document.message.info.notAvailable" bundle="EXPENDITURE_RESOURCES"/></em></logic:empty>
 				</p>
 			</div>
 			

@@ -11,7 +11,9 @@ public class UnconfirmInvoices extends GenericRefundProcessActivity {
 	return process.isRealValueFullyAttributedToUnits()
 		&& ((process.isAccountingEmployee() && !process.hasProjectsAsPayingUnits()) || (process
 			.isProjectAccountingEmployee() && process.hasProjectsAsPayingUnits()))
-		&& !process.getRequest().getConfirmedInvoices().isEmpty();
+		&& !process.getRequest().getConfirmedInvoices().isEmpty()
+		&& !process.getRequest().hasAllocatedFundsPermanentlyForAnyProjectFinancer();
+
     }
 
     @Override

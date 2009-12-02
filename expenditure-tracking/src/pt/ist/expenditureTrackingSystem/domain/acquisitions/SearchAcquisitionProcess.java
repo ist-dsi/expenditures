@@ -57,17 +57,18 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
 
 	private boolean matchesSearchCriteria(final AcquisitionRequest acquisitionRequest) {
 	    final Person person = acquisitionRequest.getRequester();
+	    AcquisitionProcess acquisitionProcess = acquisitionRequest.getAcquisitionProcess();
+
 	    final List<Supplier> suppliers = acquisitionRequest.getSuppliers();
 	    final String identification = acquisitionRequest.getAcquisitionProcessId();
 	    final String acquisitionProposalId = acquisitionRequest.getAcquisitionProposalDocumentId();
-	    final String acquisitionRequestDocumentID = acquisitionRequest.hasPurchaseOrderDocument() ? acquisitionRequest
+	    final String acquisitionRequestDocumentID = acquisitionProcess.hasPurchaseOrderDocument() ? acquisitionProcess
 		    .getAcquisitionRequestDocumentID() : null;
-	    final AcquisitionProcessStateType type = acquisitionRequest.getAcquisitionProcess().getAcquisitionProcessStateType();
+	    final AcquisitionProcessStateType type = acquisitionProcess.getAcquisitionProcessStateType();
 	    final Set<AccountingUnit> accountingUnits = acquisitionRequest.getAccountingUnits();
 	    return matchCriteria(processId, identification) && matchCriteria(getRequester(), person)
 		    && matchCriteria(getUnit(), acquisitionRequest)
-		    && matchPayingUnitCriteria(getPayingUnit(), acquisitionRequest)
-		    && matchCriteria(getSupplier(), suppliers)
+		    && matchPayingUnitCriteria(getPayingUnit(), acquisitionRequest) && matchCriteria(getSupplier(), suppliers)
 		    && matchCriteria(proposalId, acquisitionProposalId)
 		    && matchCriteria(hasAvailableAndAccessibleActivityForUser, acquisitionRequest)
 		    && matchCriteria(acquisitionProcessStateType, type) && matchCriteria(accountingUnits, getAccountingUnit())
@@ -177,8 +178,8 @@ public class SearchAcquisitionProcess extends Search<AcquisitionProcess> {
     }
 
     protected boolean hasAnyCriteria() {
-	return hasCriteria(processId) || getRequester() != null || getSupplier() != null || unit != null
-		|| payingUnit != null || hasCriteria(proposalId) || hasAvailableAndAccessibleActivityForUser != null;
+	return hasCriteria(processId) || getRequester() != null || getSupplier() != null || unit != null || payingUnit != null
+		|| hasCriteria(proposalId) || hasAvailableAndAccessibleActivityForUser != null;
     }
 
     public Person getRequester() {

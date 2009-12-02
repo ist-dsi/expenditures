@@ -2,18 +2,14 @@ package pt.ist.expenditureTrackingSystem.domain.dto;
 
 import java.io.Serializable;
 
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundableInvoiceFile;
-import pt.ist.fenixWebFramework.util.DomainReference;
 
 public class EditRefundInvoiceBean extends RefundInvoiceBean implements Serializable {
 
-    private DomainReference<RefundInvoice> invoice;
-    private DomainReference<RefundableInvoiceFile> file;
+    private RefundableInvoiceFile invoice;
 
-    public EditRefundInvoiceBean(RefundInvoice invoice) {
+    public EditRefundInvoiceBean(RefundableInvoiceFile invoice) {
 	setInvoice(invoice);
-	setFile(invoice.getFile());
 	setInvoiceDate(invoice.getInvoiceDate());
 	setInvoiceNumber(invoice.getInvoiceNumber());
 	setSupplier(invoice.getSupplier());
@@ -22,21 +18,12 @@ public class EditRefundInvoiceBean extends RefundInvoiceBean implements Serializ
 	setVatValue(invoice.getVatValue());
     }
 
-    public RefundInvoice getInvoice() {
-	return invoice.getObject();
+    public RefundableInvoiceFile getInvoice() {
+	return invoice;
     }
 
-    public void setInvoice(RefundInvoice invoice) {
-	this.invoice = new DomainReference<RefundInvoice>(invoice);
+    public void setInvoice(RefundableInvoiceFile invoice) {
+	this.invoice = invoice;
     }
 
-    public RefundableInvoiceFile getFile() {
-	return file.getObject();
-    }
-
-    public void setFile(RefundableInvoiceFile file) {
-	this.file = new DomainReference<RefundableInvoiceFile>(file);
-    }
-
-    
 }

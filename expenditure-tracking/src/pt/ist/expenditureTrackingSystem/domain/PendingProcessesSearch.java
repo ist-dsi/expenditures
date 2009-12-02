@@ -2,11 +2,13 @@ package pt.ist.expenditureTrackingSystem.domain;
 
 import java.util.ResourceBundle;
 
+import myorg.domain.exceptions.DomainException;
+
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 
 public class PendingProcessesSearch extends PendingProcessesSearch_Base {
-    
+
     public PendingProcessesSearch() {
 	super();
 	setPendingOperations(Boolean.TRUE);

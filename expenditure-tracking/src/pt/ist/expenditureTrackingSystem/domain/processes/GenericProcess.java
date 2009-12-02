@@ -10,6 +10,7 @@ import java.util.TreeSet;
 
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
+import module.workflow.domain.ProcessFile;
 import module.workflow.domain.WorkflowLog;
 import module.workflow.domain.WorkflowProcess;
 import module.workflow.domain.WorkflowProcessComment;
@@ -161,11 +162,15 @@ public abstract class GenericProcess extends GenericProcess_Base {
 	}
     }
 
+    /*
+     * TODO: This will be removed when using the new workflow interface.
+     */
     @Service
     public void addFile(String displayName, String filename, byte[] consumeInputStream) {
-	GenericFile file = new GenericFile(displayName, filename, consumeInputStream);
-	addFiles2(file);
+	ProcessFile file = new ProcessFile(displayName, filename, consumeInputStream);
+	addFiles(file);
     }
+
 
     protected Person getLoggedPerson() {
 	return Person.getLoggedPerson();

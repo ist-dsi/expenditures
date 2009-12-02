@@ -10,7 +10,7 @@ import myorg.domain.util.Money;
 
 import org.joda.time.LocalDate;
 
-import pt.ist.expenditureTrackingSystem.domain.DomainException;
+import myorg.domain.exceptions.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestWithPayment;
@@ -95,10 +95,10 @@ public class RefundItem extends RefundItem_Base {
     }
 
     @Service
-    public RefundInvoice createRefundInvoice(String invoiceNumber, LocalDate invoiceDate, Money value, BigDecimal vatValue,
-	    Money refundableValue, byte[] invoiceFile, String filename, RefundItem item, Supplier supplier) {
-	RefundInvoice invoice = new RefundInvoice(invoiceNumber, invoiceDate, value, vatValue, refundableValue, invoiceFile,
-		filename, item, supplier);
+    public RefundableInvoiceFile createRefundInvoice(String invoiceNumber, LocalDate invoiceDate, Money value,
+	    BigDecimal vatValue, Money refundableValue, byte[] invoiceFile, String filename, RefundItem item, Supplier supplier) {
+	RefundableInvoiceFile invoice = new RefundableInvoiceFile(invoiceNumber, invoiceDate, value, vatValue, refundableValue,
+		invoiceFile, filename, item, supplier);
 
 	Set<Unit> payingUnits = item.getRequest().getPayingUnits();
 	if (payingUnits.size() == 1) {
@@ -113,12 +113,12 @@ public class RefundItem extends RefundItem_Base {
     }
 
     public Money getValueSpent() {
-	if (getInvoices().isEmpty()) {
+	if (getRefundableInvoices().isEmpty()) {
 	    return null;
 	}
 
 	Money spent = Money.ZERO;
-	for (RefundInvoice invoice : getInvoices()) {
+	for (RefundableInvoiceFile invoice : getRefundableInvoices()) {
 	    spent = spent.addAndRound(invoice.getRefundableValue());
 	}
 	return spent;
@@ -126,11 +126,11 @@ public class RefundItem extends RefundItem_Base {
 
     @Override
     public boolean isFilledWithRealValues() {
-	return !getInvoices().isEmpty();
+	return !getRefundableInvoices().isEmpty();
     }
 
     public void getSuppliers(final Set<Supplier> suppliers) {
-	for (final RefundInvoice refundInvoice : getInvoicesSet()) {
+	for (final RefundableInvoiceFile refundInvoice : getRefundableInvoices()) {
 	    final Supplier supplier = refundInvoice.getSupplier();
 	    if (supplier != null) {
 		suppliers.add(supplier);
@@ -145,7 +145,7 @@ public class RefundItem extends RefundItem_Base {
 
     private Money getCurrentSupplierAllocationValue() {
 	Money spent = Money.ZERO;
-	for (RefundInvoice invoice : getInvoices()) {
+	for (RefundableInvoiceFile invoice : getRefundableInvoices()) {
 	    spent = spent.add(invoice.getRefundableValue());
 	}
 	return spent;
@@ -194,20 +194,20 @@ public class RefundItem extends RefundItem_Base {
 
     public boolean isRefundValueBiggerThanEstimateValue() {
 	Money refundableValue = Money.ZERO;
-	for (RefundInvoice invoice : getInvoices()) {
+	for (RefundableInvoiceFile invoice : getRefundableInvoices()) {
 	    refundableValue = refundableValue.add(invoice.getRefundableValue());
 	}
 	return refundableValue.isGreaterThan(getValueEstimation());
     }
 
     public boolean isAnyRefundInvoiceAvailable() {
-	return !getInvoices().isEmpty();
+	return !getRefundableInvoices().isEmpty();
     }
 
     public boolean isRealValueFullyAttributedToUnits() {
 	Money realValue = getRealValue();
 	if (realValue == null) {
-	    return getInvoices().isEmpty();
+	    return getRefundableInvoices().isEmpty();
 	}
 	Money totalValue = Money.ZERO;
 	for (UnitItem unitItem : getUnitItems()) {
@@ -219,4 +219,11 @@ public class RefundItem extends RefundItem_Base {
 	return totalValue.equals(realValue);
     }
 
+    public List<RefundableInvoiceFile> getRefundableInvoices() {
+	List<RefundableInvoiceFile> invoices = new ArrayList<RefundableInvoiceFile>();
+	for (PaymentProcessInvoice invoice : getInvoicesFiles()) {
+	    invoices.add((RefundableInvoiceFile) invoice);
+	}
+	return invoices;
+    }
 }

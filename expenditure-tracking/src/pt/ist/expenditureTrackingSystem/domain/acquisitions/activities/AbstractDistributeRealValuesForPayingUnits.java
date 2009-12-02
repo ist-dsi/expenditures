@@ -3,7 +3,7 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.activities;
 import java.util.List;
 
 import myorg.domain.util.Money;
-import pt.ist.expenditureTrackingSystem.domain.DomainException;
+import myorg.domain.exceptions.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
 import pt.ist.expenditureTrackingSystem.domain.dto.UnitItemBean;

@@ -4,7 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import module.workflow.domain.ActivityLog;
+import myorg.domain.User;
+import myorg.domain.exceptions.DomainException;
+
+import org.joda.time.LocalDate;
+
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.Invoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.activities.DeleteAfterTheFactAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.activities.EditAfterTheFactAcquisition;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.activities.ReceiveAcquisitionInvoice;
@@ -43,6 +49,16 @@ public class AfterTheFactAcquisitionProcess extends AfterTheFactAcquisitionProce
 		.getName()
 		+ ".Create");
 	return afterTheFactAcquisitionProcess;
+    }
+
+    /*
+     * TODO: Remove this when new activities are implemented. For now we still
+     * need the generic log but when we have the full integration, we can use
+     * activitylogs.
+     */
+    @SuppressWarnings("unchecked")
+    public <T extends ActivityLog> T logExecution(User person, String operationName, String... args) {
+	return (T) new GenericLog(this, person, operationName);
     }
 
     protected int getYearForConstruction() {
@@ -119,6 +135,39 @@ public class AfterTheFactAcquisitionProcess extends AfterTheFactAcquisitionProce
 
     public boolean isAppiableForYear(final int year) {
 	return getAcquisitionAfterTheFact().isAppiableForYear(year);
+    }
+
+    public AfterTheFactInvoice receiveInvoice(String filename, byte[] bytes, String invoiceNumber, LocalDate invoiceDate) {
+
+	final AfterTheFactInvoice invoice = hasInvoice() ? getInvoice() : new AfterTheFactInvoice(this);
+	invoice.setFilename(filename);
+	invoice.setContent(bytes);
+	invoice.setInvoiceNumber(invoiceNumber);
+	invoice.setInvoiceDate(invoiceDate);
+
+	return invoice;
+    }
+
+    public String getInvoiceNumber() {
+	Invoice invoice = getInvoice();
+	return invoice != null ? invoice.getInvoiceNumber() : null;
+    }
+
+    public LocalDate getInvoiceDate() {
+	Invoice invoice = getInvoice();
+	return invoice != null ? invoice.getInvoiceDate() : null;
+    }
+
+    public AfterTheFactInvoice getInvoice() {
+	List<AfterTheFactInvoice> files = getFiles(AfterTheFactInvoice.class);
+	if (files.size() > 1) {
+	    throw new DomainException("error.should.only.have.one.invoice");
+	}
+	return files.isEmpty() ? null : files.get(0);
+    }
+
+    public boolean hasInvoice() {
+	return !getFiles(Invoice.class).isEmpty();
     }
 
 }

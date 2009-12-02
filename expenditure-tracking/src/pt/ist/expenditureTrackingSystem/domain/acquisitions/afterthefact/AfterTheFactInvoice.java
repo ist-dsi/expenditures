@@ -4,15 +4,15 @@ import pt.ist.fenixWebFramework.services.Service;
 
 public class AfterTheFactInvoice extends AfterTheFactInvoice_Base {
 
-    public AfterTheFactInvoice(final AcquisitionAfterTheFact acquisition) {
+    public AfterTheFactInvoice(final AfterTheFactAcquisitionProcess process) {
 	super();
-	setAcquisition(acquisition);
+	process.addFiles(this);
     }
 
     @Override
     @Service
     public void delete() {
-	removeAcquisition();
+	removeProcess();
 	super.delete();
     }
 }

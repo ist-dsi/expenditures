@@ -13,7 +13,7 @@ import myorg.domain.util.Money;
 
 import org.joda.time.LocalDate;
 
-import pt.ist.expenditureTrackingSystem.domain.DomainException;
+import myorg.domain.exceptions.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess.ProcessClassification;
@@ -59,17 +59,6 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	if (isRequestingUnitPayingUnit) {
 	    addFinancers(requestingUnit.finance(this));
 	}
-    }
-
-    public void addAcquisitionProposalDocument(final String filename, final byte[] bytes, String proposalId) {
-	AcquisitionProposalDocument acquisitionProposalDocument = getAcquisitionProposalDocument();
-	if (acquisitionProposalDocument == null) {
-	    acquisitionProposalDocument = new AcquisitionProposalDocument();
-	    setAcquisitionProposalDocument(acquisitionProposalDocument);
-	}
-	acquisitionProposalDocument.setFilename(filename);
-	acquisitionProposalDocument.setContent(bytes);
-	acquisitionProposalDocument.setProposalId(proposalId != null && !proposalId.isEmpty() ? proposalId : null);
     }
 
     public AcquisitionRequestItem createAcquisitionRequestItem(AcquisitionRequestItemBean requestItemBean) {
@@ -326,14 +315,15 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     }
 
     /*
-     * As soon as we have a decent implementation for the CT75000 this code
-     * should be rolled back again.
+     * TODO: As soon as we have a decent implementation for the CT75000 this
+     * code should be rolled back again.
      */
     public boolean isFilled() {
 	AcquisitionProcess process = getProcess();
 	return hasAnyRequestItems()
 		&& ((!process.isSimplifiedProcedureProcess() && hasAcquisitionProcess()) || (process
-			.isSimplifiedProcedureProcess() && (((SimplifiedProcedureProcess) process).getProcessClassification() == ProcessClassification.CT75000 || hasAcquisitionProposalDocument())));
+			.isSimplifiedProcedureProcess() && (((SimplifiedProcedureProcess) process).getProcessClassification() == ProcessClassification.CT75000 || process
+			.hasAcquisitionProposalDocument())));
     }
 
     public boolean isEveryItemFullyAttributedToPayingUnits() {
@@ -475,8 +465,10 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     }
 
     public String getAcquisitionProposalDocumentId() {
-	if (hasAcquisitionProposalDocument()) {
-	    return getAcquisitionProposalDocument().getProposalId();
+	AcquisitionProcess process = getProcess();
+
+	if (process.hasAcquisitionProposalDocument()) {
+	    return process.getAcquisitionProposalDocument().getProposalId();
 	}
 	return null;
     }
@@ -498,11 +490,6 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	//
 	// return getSuppliersCount() == 0 ? null : getSuppliers().get(0);
 	return getSelectedSupplier();
-    }
-
-    public String getAcquisitionRequestDocumentID() {
-	return hasPurchaseOrderDocument() ? getPurchaseOrderDocument().getRequestId() : ExpenditureTrackingSystem.getInstance()
-		.nextAcquisitionRequestDocumentID();
     }
 
     public String getRefundeeName() {

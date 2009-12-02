@@ -107,14 +107,6 @@ class acquisitions.refund.RefundItem extends acquisitions.RequestItem {
 	Boolean itemNotExecuted;
 }
 
-class acquisitions.refund.RefundInvoice {
-	String invoiceNumber;
-	LocalDate invoiceDate;
-	Money value;
-	BigDecimal vatValue;
-	Money refundableValue;
-}
-
 class acquisitions.AcquisitionRequestItem extends acquisitions.RequestItem {
 	Integer quantity;
 	Money unitValue;
@@ -174,25 +166,19 @@ class authorizations.AuthorizationLog {
 	Money maxAmount;
 }	
 
-class File extends .module.fileSupport.domain.GenericFile {
-}
-
-	class acquisitions.afterthefact.ImportFile extends File {
+	class acquisitions.afterthefact.ImportFile extends .module.fileSupport.domain.GenericFile {
 		Boolean active;
 	}
 	
-	class processes.GenericFile extends File {
-	}
-	
-	class acquisitions.AcquisitionProposalDocument extends File {
+	class acquisitions.AcquisitionProposalDocument extends .module.workflow.domain.ProcessFile {
 		String proposalId;
 	}
 
-	class acquisitions.PurchaseOrderDocument extends File {
+	class acquisitions.PurchaseOrderDocument extends .module.workflow.domain.ProcessFile {
 		String requestId;
 	}
 	
-	class acquisitions.Invoice extends File {
+	class acquisitions.Invoice extends .module.workflow.domain.ProcessFile {
 		String invoiceNumber;
 		LocalDate invoiceDate;
 	}
@@ -206,17 +192,16 @@ class File extends .module.fileSupport.domain.GenericFile {
 	class acquisitions.AcquisitionInvoice extends acquisitions.PaymentProcessInvoice {
 	}
 	
-	
-	class CascadingStyleSheet extends File {
+	class requests.RequestForProposalDocument extends .module.fileSupport.domain.GenericFile {
 	}
 	
-	class requests.RequestForProposalDocument extends File {
-	}
-	
-	class requests.SupplierProposalDocument extends File {
+	class requests.SupplierProposalDocument extends .module.fileSupport.domain.GenericFile {
 	}
 
 	class acquisitions.refund.RefundableInvoiceFile extends acquisitions.PaymentProcessInvoice {
+		Money value;
+		BigDecimal vatValue;
+		Money refundableValue;
 	}
 	
 class Options {
@@ -454,13 +439,6 @@ relation AcquisitionRequestAcquisitionRequestItem {
 	}
 }
 
-relation ExpenditureTrackingSystemFile {
-	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
-	File playsRole files {
-		multiplicity *;
-	}
-}
-
 relation RequestForProposalSupplierProposalDocument {
 	requests.RequestForProposal playsRole requestForProposal;
 	requests.SupplierProposalDocument playsRole supplierProposals {
@@ -478,21 +456,6 @@ relation SupplierSupplierProposalDocument {
 	requests.SupplierProposalDocument playsRole proposals {
 		multiplicity *;
 	}
-}
-
-relation AcquisitionRequestAcquisitionProposalDocument {
-	acquisitions.AcquisitionRequest playsRole acquisitionRequest;
-	acquisitions.AcquisitionProposalDocument playsRole acquisitionProposalDocument;
-}
-
-relation AcquisitionRequestAcquisitionRequestDocument {
-	acquisitions.AcquisitionRequest playsRole acquisitionRequest ;
-	acquisitions.PurchaseOrderDocument playsRole purchaseOrderDocument;
-}
-
-relation AfterTheFactInvoiceAfterTheFact {
-	acquisitions.afterthefact.AfterTheFactInvoice playsRole invoice;
-	acquisitions.afterthefact.AcquisitionAfterTheFact playsRole acquisition;
 }
 
 relation PaymentProcessInvoiceRequestItem {
@@ -844,11 +807,6 @@ relation AnnouncementAcquisition {
 	acquisitions.Acquisition playsRole acquisition;
 }
 
-relation OptionsCascadingStyleSheet {
-	Options playsRole options;
-	CascadingStyleSheet playsRole cascadingStyleSheet;
-}
-
 relation ExpenditureTrackingSystemPaymentProcessYear {
 	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
 	acquisitions.PaymentProcessYear playsRole paymentProcessYears {
@@ -904,13 +862,6 @@ relation UnitAccountingUnit {
 	organization.AccountingUnit playsRole accountingUnit;
 }
 
-relation ProcessFiles {
-	processes.GenericProcess playsRole process;
-	processes.GenericFile playsRole files2 {
-		multiplicity *;
-	}
-}
-
 relation AfterTheFactImportFile {
 	acquisitions.afterthefact.AfterTheFactAcquisitionProcess playsRole afterTheFactAcquisitionProcesses {
 		multiplicity *;
@@ -918,35 +869,16 @@ relation AfterTheFactImportFile {
 	acquisitions.afterthefact.ImportFile playsRole importFile;
 }
 
-relation RefundItemRefundInvoice {
-	acquisitions.refund.RefundItem playsRole refundItem;
-	acquisitions.refund.RefundInvoice playsRole invoices {
+relation RefundableInvoiceFileSupplier {
+	acquisitions.refund.RefundableInvoiceFile playsRole refundInvoices {
 		multiplicity *;
 	}
-}
-
-relation RefundInvoiceSupplier {
-	acquisitions.refund.RefundInvoice playsRole refundInvoices {
-			multiplicity *;
-		}
-	organization.Supplier  playsRole supplier;
+	organization.Supplier playsRole supplier;
 }
 
 relation RefundRequestRefundProcess {
 	acquisitions.refund.RefundRequest playsRole request;
 	acquisitions.refund.RefundProcess  playsRole process;
-}
-
-relation RefundInvoiceExpenditureTrackingSystem {
-	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
-	acquisitions.refund.RefundInvoice playsRole refundInvoices {
-		multiplicity *;
-	}
-}
-
-relation RefundInvoiceRefundableInvoiceFile {
-	acquisitions.refund.RefundInvoice playsRole invoice;
-	acquisitions.refund.RefundableInvoiceFile  playsRole file;
 }
 
 relation RefundeeExpenditureTrackingSystem {

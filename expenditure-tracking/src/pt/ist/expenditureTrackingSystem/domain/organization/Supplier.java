@@ -4,15 +4,15 @@ import java.util.Set;
 
 import myorg.domain.util.Address;
 import myorg.domain.util.Money;
-import pt.ist.expenditureTrackingSystem.domain.DomainException;
+import myorg.domain.exceptions.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.SavedSearch;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AcquisitionAfterTheFact;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionType;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundableInvoiceFile;
 import pt.ist.expenditureTrackingSystem.domain.announcements.Announcement;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateSupplierBean;
 import pt.ist.expenditureTrackingSystem.domain.requests.SupplierProposalDocument;
@@ -94,7 +94,7 @@ public class Supplier extends Supplier_Base {
 		result = result.add(acquisitionAfterTheFact.getValue());
 	    }
 	}
-	for (final RefundInvoice refundInvoice : getRefundInvoicesSet()) {
+	for (final RefundableInvoiceFile refundInvoice : getRefundInvoicesSet()) {
 	    final RefundProcess refundProcess = refundInvoice.getRefundItem().getRequest().getProcess();
 	    if (refundProcess.isActive() && !refundProcess.getSkipSupplierFundAllocation()) {
 		result = result.add(refundInvoice.getRefundableValue());
@@ -112,7 +112,7 @@ public class Supplier extends Supplier_Base {
 		result = result.add(acquisitionAfterTheFact.getValue());
 	    }
 	}
-	for (final RefundInvoice refundInvoice : getRefundInvoicesSet()) {
+	for (final RefundableInvoiceFile refundInvoice : getRefundInvoicesSet()) {
 	    final RefundProcess refundProcess = refundInvoice.getRefundItem().getRequest().getProcess();
 	    if (refundProcess.isActive()) {
 		result = result.add(refundInvoice.getRefundableValue());
@@ -194,7 +194,7 @@ public class Supplier extends Supplier_Base {
 	    getProposalsSet().addAll(supplierProposalDocument);
 	    supplierProposalDocument.clear();
 
-	    final Set<RefundInvoice> refundInvoices = supplier.getRefundInvoicesSet();
+	    final Set<RefundableInvoiceFile> refundInvoices = supplier.getRefundInvoicesSet();
 	    getRefundInvoicesSet().addAll(refundInvoices);
 	    refundInvoices.clear();
 
