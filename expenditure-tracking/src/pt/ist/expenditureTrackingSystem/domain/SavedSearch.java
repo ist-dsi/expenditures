@@ -59,14 +59,17 @@ public class SavedSearch extends SavedSearch_Base {
 
     @Service
     public void delete() {
-	removeAccountingUnit();
-	removeExpenditureTrackingSystem();
-	removePerson();
-	removeRequestor();
-	removeSupplier();
-	removeUnit();
+	removeTakenBy();
+	removeYear();
 	removePayingUnit();
+	removePerson();
+	removeUnit();
+	removeRequestor();
+	removeAccountingUnit();
+	removeSupplier();
 	getPeople().clear();
+	removeExpenditureTrackingSystemForSystemSearch();
+	removeExpenditureTrackingSystem();
 	deleteDomainObject();
     }
 
