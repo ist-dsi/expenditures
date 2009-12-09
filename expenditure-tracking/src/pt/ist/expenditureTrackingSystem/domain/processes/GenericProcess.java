@@ -93,7 +93,12 @@ public abstract class GenericProcess extends GenericProcess_Base {
 	return processes;
     }
 
-    public abstract <T extends GenericProcess> AbstractActivity<T> getActivityByName(String name);
+    /*
+     * TODO: EVENTUALLY REMOVE THIS
+     */
+    public <T extends GenericProcess> AbstractActivity<T> getActivityByName(String name) {
+	return null;
+    }
 
     public abstract boolean hasAnyAvailableActivitity();
 
@@ -170,7 +175,6 @@ public abstract class GenericProcess extends GenericProcess_Base {
 	ProcessFile file = new ProcessFile(displayName, filename, consumeInputStream);
 	addFiles(file);
     }
-
 
     protected Person getLoggedPerson() {
 	return Person.getLoggedPerson();

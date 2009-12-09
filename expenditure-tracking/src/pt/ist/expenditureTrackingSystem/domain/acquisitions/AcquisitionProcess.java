@@ -13,8 +13,6 @@ import pt.ist.expenditureTrackingSystem.domain.dto.PayingUnitTotalBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
-import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
-import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 
 public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 
@@ -29,11 +27,6 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 	final Person loggedPerson = getLoggedPerson();
 	return loggedPerson != null && isAvailableForPerson(loggedPerson);
     }
-
-    @Override
-    public abstract <T extends GenericProcess> AbstractActivity<T> getActivityByName(String activityName);
-
-    public abstract boolean hasAnyAvailableActivitity();
 
     public boolean isAvailableForPerson(Person person) {
 	return person.hasRoleType(RoleType.ACQUISITION_CENTRAL) || person.hasRoleType(RoleType.ACQUISITION_CENTRAL_MANAGER)

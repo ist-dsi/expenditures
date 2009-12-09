@@ -1,11 +1,12 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact;
 
+import java.math.BigDecimal;
+
+import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
 
 import org.joda.time.LocalDate;
 
-import myorg.domain.exceptions.DomainException;
-import pt.ist.expenditureTrackingSystem.domain.dto.AfterTheFactAcquisitionProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 
 public class AcquisitionAfterTheFact extends AcquisitionAfterTheFact_Base {
@@ -15,13 +16,13 @@ public class AcquisitionAfterTheFact extends AcquisitionAfterTheFact_Base {
 	setAfterTheFactAcquisitionProcess(afterTheFactAcquisitionProcess);
     }
 
-    public void edit(final AfterTheFactAcquisitionProcessBean afterTheFactAcquisitionProcessBean) {
+    public void edit(AfterTheFactAcquisitionType type, Money value, BigDecimal vatValue, Supplier supplier, String description) {
 	setDeletedState(Boolean.FALSE);
-	setAfterTheFactAcquisitionType(afterTheFactAcquisitionProcessBean.getAfterTheFactAcquisitionType());
-	setValue(afterTheFactAcquisitionProcessBean.getValue());
-	setVatValue(afterTheFactAcquisitionProcessBean.getVatValue());
-	setSupplier(afterTheFactAcquisitionProcessBean.getSupplier());
-	setDescription(afterTheFactAcquisitionProcessBean.getDescription());
+	setAfterTheFactAcquisitionType(type);
+	setValue(value);
+	setVatValue(vatValue);
+	setSupplier(supplier);
+	setDescription(description);
     }
 
     public void delete() {

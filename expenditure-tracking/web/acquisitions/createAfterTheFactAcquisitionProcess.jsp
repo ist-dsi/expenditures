@@ -9,8 +9,7 @@
 
 <fr:edit id="afterTheFactAcquisitionProcessBean"
 		name="afterTheFactAcquisitionProcessBean"
-		type="pt.ist.expenditureTrackingSystem.domain.dto.AfterTheFactAcquisitionProcessBean"
-		schema="afterTheFactAcquisitionProcessBean"
+		schema="activityInformation.EditAfterTheFactAcquisition"
 		action="/acquisitionAfterTheFactAcquisitionProcess.do?method=createNewAfterTheFactAcquisitionProcess">
 	<fr:layout name="tabular">
 		<fr:property name="classes" value="form"/>

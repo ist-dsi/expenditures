@@ -1,31 +1,47 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.activities;
 
+import module.workflow.activities.ActivityInformation;
+import module.workflow.activities.WorkflowActivity;
+import myorg.domain.User;
+import myorg.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AcquisitionAfterTheFact;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.dto.AfterTheFactAcquisitionProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
-import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 
-public class EditAfterTheFactAcquisition extends AbstractActivity<AfterTheFactAcquisitionProcess> {
-
-    @Override
-    protected boolean isAccessible(final AfterTheFactAcquisitionProcess process) {
-	final Person loggedPerson = getLoggedPerson();
-	return loggedPerson != null && (loggedPerson.hasRoleType(RoleType.ACQUISITION_CENTRAL)
-		|| loggedPerson.hasRoleType(RoleType.ACQUISITION_CENTRAL_MANAGER));
-    }
+public class EditAfterTheFactAcquisition extends
+	WorkflowActivity<AfterTheFactAcquisitionProcess, EditAfterTheFactProcessActivityInformation> {
 
     @Override
-    protected boolean isAvailable(final AfterTheFactAcquisitionProcess process) {
+    public boolean isActive(AfterTheFactAcquisitionProcess process, User user) {
+	final Person loggedPerson = Person.getLoggedPerson();
 	final AcquisitionAfterTheFact acquisitionAfterTheFact = process.getAcquisitionAfterTheFact();
-	return !acquisitionAfterTheFact.getDeletedState().booleanValue();
+	return loggedPerson != null
+		&& (loggedPerson.hasRoleType(RoleType.ACQUISITION_CENTRAL) || loggedPerson
+			.hasRoleType(RoleType.ACQUISITION_CENTRAL_MANAGER))
+		&& !acquisitionAfterTheFact.getDeletedState().booleanValue();
     }
 
     @Override
-    protected void process(final AfterTheFactAcquisitionProcess process, final Object... objects) {
-	final AfterTheFactAcquisitionProcessBean afterTheFactAcquisitionProcessBean = (AfterTheFactAcquisitionProcessBean) objects[0];
-	process.edit(afterTheFactAcquisitionProcessBean);
+    public ActivityInformation<AfterTheFactAcquisitionProcess> getActivityInformation(AfterTheFactAcquisitionProcess process) {
+	return new EditAfterTheFactProcessActivityInformation(process, this);
+    }
+
+    @Override
+    protected void process(EditAfterTheFactProcessActivityInformation activityInformation) {
+	activityInformation.getProcess().edit(activityInformation.getAfterTheFactAcquisitionType(),
+		activityInformation.getValue(), activityInformation.getVatValue(), activityInformation.getSupplier(),
+		activityInformation.getDescription());
+    }
+
+    @Override
+    public String getLocalizedName() {
+	return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+    }
+
+    @Override
+    public String getUsedBundle() {
+	return "resources/AcquisitionResources";
     }
 
 }

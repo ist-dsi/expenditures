@@ -291,23 +291,6 @@
 		<slot name="filename" key="acquisitionProcess.label.filename" bundle="ACQUISITION_RESOURCES"/>
 </schema>
 
-<schema name="receiveInvoiceForm.afterTheFact"
-		type="pt.ist.expenditureTrackingSystem.presentationTier.actions.acquisitions.SimplifiedProcedureProcessAction$ReceiveInvoiceForm"
-		bundle="ACQUISITION_RESOURCES">
-	<slot name="invoiceNumber" key="acquisitionProcess.label.invoice.number" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-	<slot name="invoiceDate" layout="picker" key="acquisitionProcess.label.invoice.date" bundle="ACQUISITION_RESOURCES">
-		<property name="format" value="dd-MM-yyyy"/>
-		<validator class="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-		<validator class="pt.ist.fenixWebFramework.renderers.validators.DateValidator">
-			<property name="dateFormat" value="dd-MM-yyyy"/>
-		</validator>
-	</slot>
-	<slot name="inputStream" key="acquisitionProcess.label.invoice.file" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
-		<property name="fileNameSlot" value="filename" />
-		<property name="size" value="30"/>
-	</slot>
-</schema>
-
 <schema name="receiveInvoiceForm"
 		type="pt.ist.expenditureTrackingSystem.presentationTier.actions.acquisitions.SimplifiedProcedureProcessAction$ReceiveInvoiceForm"
 		bundle="ACQUISITION_RESOURCES">
@@ -438,8 +421,8 @@
 -->	
 </schema>
 
-<schema name="afterTheFactAcquisitionProcessBean"
-		type="pt.ist.expenditureTrackingSystem.domain.dto.AfterTheFactAcquisitionProcessBean"
+<schema name="activityInformation.EditAfterTheFactAcquisition"
+		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.activities.EditAfterTheFactProcessActivityInformation"
 		bundle="EXPENDITURE_RESOURCES">
 	<slot name="year" key="label.year" bundle="ACQUISITION_RESOURCES">
 		<validator class="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
@@ -471,12 +454,6 @@
 		bundle="EXPENDITURE_RESOURCES">
 	<slot name="acquisitionProcessId" key="label.acquisitionProcessId" bundle="EXPENDITURE_RESOURCES"/>
 	<slot name="afterTheFactAcquisitionType" key="label.afterTheFactAcquisitionType" bundle="ACQUISITION_RESOURCES"/>
-	<slot name="afterTheFactAcquisitionProcess.invoice.invoiceDate" key="acquisitionProcess.label.invoice.date" bundle="ACQUISITION_RESOURCES" layout="null-as-label">
-		<property name="subLayout" value="default"/>
-	</slot>
-	<slot name="afterTheFactAcquisitionProcess.invoice.invoiceNumber" key="acquisitionProcess.label.invoice.number" bundle="ACQUISITION_RESOURCES" layout="null-as-label">
-		<property name="subLayout" value="default"/>
-	</slot>
 	<slot name="value" key="label.value" bundle="EXPENDITURE_RESOURCES"/>
 	<slot name="vatValue" key="label.vatValue" bundle="EXPENDITURE_RESOURCES"/>
 	<slot name="description" key="label.description" bundle="EXPENDITURE_RESOURCES"/>
@@ -980,4 +957,30 @@
 		type="pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean"
 		bundle="ACQUISITION_RESOURCES">
 	<slot name="classification" key="label.processClassification" bundle="EXPENDITURE_RESOURCES"/>
+</schema>
+
+<schema name="addFile-AfterTheFactInvoice"
+		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.fileBeans.AfterTheFactInvoiceBean"
+		bundle="WORKFLOW_RESOURCES">
+	<slot name="displayName" key="label.filename">
+		<property name="size" value="50"/>
+	</slot>
+		<slot name="invoiceNumber" key="acquisitionProcess.label.invoice.number" bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="invoiceDate" layout="picker" key="acquisitionProcess.label.invoice.date" bundle="ACQUISITION_RESOURCES">
+		<property name="format" value="dd-MM-yyyy"/>
+		<validator class="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+		<validator class="pt.ist.fenixWebFramework.renderers.validators.DateValidator">
+			<property name="dateFormat" value="dd-MM-yyyy"/>
+		</validator>
+	</slot>
+	<slot name="inputStream" key="label.document">
+		<property name="fileNameSlot" value="filename" />
+		<property name="size" value="50"/>
+	</slot>
+	<slot name="selectedInstance" layout="menu-select-postback" key="label.selectedInstance">
+		<property name="providerClass" value="module.workflow.presentationTier.renderers.providers.AvailableFileClassesProvider"/>
+		<property name="eachLayout" value="name-resolver"/>
+		<property name="nullOptionHidden" value="true"/>
+		<property name="saveOptions" value="true"/>
+	</slot>
 </schema>

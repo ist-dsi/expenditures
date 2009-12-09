@@ -1,11 +1,16 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import module.workflow.domain.ActivityLog;
-import myorg.domain.User;
+import module.workflow.activities.ActivityInformation;
+import module.workflow.activities.WorkflowActivity;
+import module.workflow.domain.LabelLog;
+import module.workflow.domain.ProcessFile;
+import module.workflow.domain.WorkflowProcess;
 import myorg.domain.exceptions.DomainException;
+import myorg.domain.util.Money;
 
 import org.joda.time.LocalDate;
 
@@ -13,21 +18,17 @@ import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Invoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.activities.DeleteAfterTheFactAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.activities.EditAfterTheFactAcquisition;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.activities.ReceiveAcquisitionInvoice;
-import pt.ist.expenditureTrackingSystem.domain.dto.AfterTheFactAcquisitionProcessBean;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.activities.EditAfterTheFactProcessActivityInformation.AfterTheFactAcquisitionProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
-import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
-import pt.ist.expenditureTrackingSystem.domain.processes.GenericLog;
-import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
+import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.fenixWebFramework.services.Service;
 
 public class AfterTheFactAcquisitionProcess extends AfterTheFactAcquisitionProcess_Base {
 
-    private static List<AbstractActivity<AfterTheFactAcquisitionProcess>> activities = new ArrayList<AbstractActivity<AfterTheFactAcquisitionProcess>>();
+    private static List<WorkflowActivity<AfterTheFactAcquisitionProcess, ? extends ActivityInformation<AfterTheFactAcquisitionProcess>>> activities = new ArrayList<WorkflowActivity<AfterTheFactAcquisitionProcess, ? extends ActivityInformation<AfterTheFactAcquisitionProcess>>>();
 
     static {
 	activities.add(new EditAfterTheFactAcquisition());
-	activities.add(new ReceiveAcquisitionInvoice());
 	activities.add(new DeleteAfterTheFactAcquisitionProcess());
     }
 
@@ -43,51 +44,22 @@ public class AfterTheFactAcquisitionProcess extends AfterTheFactAcquisitionProce
 	    AfterTheFactAcquisitionProcessBean afterTheFactAcquisitionProcessBean) {
 	threadLocal.set(afterTheFactAcquisitionProcessBean);
 	final AfterTheFactAcquisitionProcess afterTheFactAcquisitionProcess = new AfterTheFactAcquisitionProcess();
-	afterTheFactAcquisitionProcess.edit(afterTheFactAcquisitionProcessBean);
+	afterTheFactAcquisitionProcess.edit(afterTheFactAcquisitionProcessBean.getAfterTheFactAcquisitionType(),
+		afterTheFactAcquisitionProcessBean.getValue(), afterTheFactAcquisitionProcessBean.getVatValue(),
+		afterTheFactAcquisitionProcessBean.getSupplier(), afterTheFactAcquisitionProcessBean.getDescription());
 	final Person loggedPerson = Person.getLoggedPerson();
-	new GenericLog(afterTheFactAcquisitionProcess, loggedPerson.getUser(), afterTheFactAcquisitionProcess.getClass()
-		.getName()
-		+ ".Create");
+	new LabelLog(afterTheFactAcquisitionProcess, loggedPerson.getUser(), "label."
+		+ afterTheFactAcquisitionProcess.getClass().getName() + ".Create", "resources/AcquisitionResources");
 	return afterTheFactAcquisitionProcess;
-    }
-
-    /*
-     * TODO: Remove this when new activities are implemented. For now we still
-     * need the generic log but when we have the full integration, we can use
-     * activitylogs.
-     */
-    @SuppressWarnings("unchecked")
-    public <T extends ActivityLog> T logExecution(User person, String operationName, String... args) {
-	return (T) new GenericLog(this, person, operationName);
     }
 
     protected int getYearForConstruction() {
 	return threadLocal.get().getYear().intValue();
     }
 
-    @Override
-    public <T extends GenericProcess> AbstractActivity<T> getActivityByName(final String activityName) {
-	for (AbstractActivity activity : activities) {
-	    if (activity.getName().equals(activityName)) {
-		return activity;
-	    }
-	}
-	return null;
-    }
-
-    public List<AbstractActivity<AfterTheFactAcquisitionProcess>> getActiveActivities() {
-	final List<AbstractActivity<AfterTheFactAcquisitionProcess>> activities = new ArrayList<AbstractActivity<AfterTheFactAcquisitionProcess>>();
-	for (final AbstractActivity<AfterTheFactAcquisitionProcess> activity : this.activities) {
-	    if (activity.isActive(this)) {
-		activities.add(activity);
-	    }
-	}
-	return activities;
-    }
-
-    public void edit(final AfterTheFactAcquisitionProcessBean afterTheFactAcquisitionProcessBean) {
+    public void edit(AfterTheFactAcquisitionType type, Money value, BigDecimal vatValue, Supplier supplier, String description) {
 	final AcquisitionAfterTheFact acquisitionAfterTheFact = getAcquisitionAfterTheFact();
-	acquisitionAfterTheFact.edit(afterTheFactAcquisitionProcessBean);
+	acquisitionAfterTheFact.edit(type, value, vatValue, supplier, description);
     }
 
     public void delete() {
@@ -110,7 +82,8 @@ public class AfterTheFactAcquisitionProcess extends AfterTheFactAcquisitionProce
 
     @Override
     public boolean hasAnyAvailableActivitity() {
-	return !getActiveActivities().isEmpty();
+	List<WorkflowActivity<WorkflowProcess, ActivityInformation<WorkflowProcess>>> activeActivities = getActiveActivities();
+	return !activeActivities.isEmpty();
     }
 
     @Override
@@ -170,4 +143,35 @@ public class AfterTheFactAcquisitionProcess extends AfterTheFactAcquisitionProce
 	return !getFiles(Invoice.class).isEmpty();
     }
 
+    @Override
+    public <T extends WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>> List<T> getActivities() {
+	return (List<T>) activities;
+    }
+
+    @Override
+    public boolean isTicketSupportAvailable() {
+	return false;
+    }
+
+    @Override
+    public boolean isFileSupportAvailable() {
+	return true;
+    }
+
+    @Override
+    public boolean isObserverSupportAvailable() {
+	return false;
+    }
+
+    @Override
+    public boolean isCommentsSupportAvailable() {
+	return false;
+    }
+
+    @Override
+    public List<Class<? extends ProcessFile>> getAvailableFileTypes() {
+	List<Class<? extends ProcessFile>> availableFileTypes = super.getAvailableFileTypes();
+	availableFileTypes.add(AfterTheFactInvoice.class);
+	return availableFileTypes;
+    }
 }

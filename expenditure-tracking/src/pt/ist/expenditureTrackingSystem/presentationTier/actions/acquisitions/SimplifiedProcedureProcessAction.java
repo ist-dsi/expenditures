@@ -94,6 +94,9 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	}
     }
 
+    /*
+     * TODO: DELETE CODE
+     */
     public static class ReceiveInvoiceForm extends FileUploadBean {
 	private String invoiceNumber;
 	private LocalDate invoiceDate;
