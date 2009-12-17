@@ -3,6 +3,8 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
+
+
 <%@page import="pt.ist.fenixWebFramework.servlets.filters.contentRewrite.GenericChecksumRewriter"%>
 
 <bean:define id="processClass" name="refundProcess" property="class.simpleName"/>
@@ -285,7 +287,8 @@
 		 </p>
 	</div>
 	</logic:equal>
-	<jsp:include page="../commons/viewRefundItem.jsp"/>
+	
+	
 		<logic:notEmpty name="refundItem" property="refundableInvoices">
 				<table class="tstyle3 tdmiddle tdnoborder vpadding05" style="width: 100%;">
 					<tr>

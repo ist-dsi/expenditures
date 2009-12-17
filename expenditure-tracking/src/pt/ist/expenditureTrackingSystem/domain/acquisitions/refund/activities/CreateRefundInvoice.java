@@ -1,29 +1,45 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities;
 
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericRefundProcessActivity;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundItem;
+import module.workflow.activities.ActivityInformation;
+import module.workflow.activities.WorkflowActivity;
+import myorg.domain.User;
+import myorg.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
-import pt.ist.expenditureTrackingSystem.domain.dto.RefundInvoiceBean;
 
-public class CreateRefundInvoice extends GenericRefundProcessActivity {
+public class CreateRefundInvoice extends WorkflowActivity<RefundProcess, CreateRefundInvoiceActivityInformation> {
 
     @Override
-    protected boolean isAvailable(RefundProcess process) {
-	return isCurrentUserRequestor(process);
+    public boolean isActive(RefundProcess process, User user) {
+	return process.getRequestor() == user.getExpenditurePerson() && isUserProcessOwner(process, user)
+		&& process.isInAuthorizedState();
     }
 
     @Override
-    protected boolean isAccessible(RefundProcess process) {
-	return isCurrentUserProcessOwner(process) && process.isInAuthorizedState();
+    protected void process(CreateRefundInvoiceActivityInformation activityInformation) {
+	activityInformation.getItem().createRefundInvoice(activityInformation.getInvoiceNumber(),
+		activityInformation.getInvoiceDate(), activityInformation.getValue(), activityInformation.getVatValue(),
+		activityInformation.getRefundableValue(), activityInformation.getBytes(), activityInformation.getFilename(),
+		activityInformation.getSupplier());
+
     }
 
     @Override
-    protected void process(RefundProcess process, Object... objects) {
-	RefundInvoiceBean bean = (RefundInvoiceBean) objects[0];
-	byte[] filesBytes = (byte[]) objects[1];
-	RefundItem item = bean.getItem();
-	item.createRefundInvoice(bean.getInvoiceNumber(), bean.getInvoiceDate(), bean.getValue(), bean.getVatValue(), bean
-		.getRefundableValue(), filesBytes, bean.getFilename(), item, bean.getSupplier());
+    public ActivityInformation<RefundProcess> getActivityInformation(RefundProcess process) {
+	return new CreateRefundInvoiceActivityInformation(process, this);
     }
 
+    @Override
+    public String getLocalizedName() {
+	return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+    }
+
+    @Override
+    public String getUsedBundle() {
+	return "resources/AcquisitionResources";
+    }
+
+    @Override
+    public boolean isVisible() {
+	return false;
+    }
 }

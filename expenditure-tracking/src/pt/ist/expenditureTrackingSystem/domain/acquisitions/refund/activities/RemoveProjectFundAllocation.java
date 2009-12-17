@@ -1,21 +1,33 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities;
 
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericRefundProcessActivity;
+import module.workflow.activities.ActivityInformation;
+import module.workflow.activities.WorkflowActivity;
+import myorg.domain.User;
+import myorg.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
+import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
-public class RemoveProjectFundAllocation extends GenericRefundProcessActivity {
+public class RemoveProjectFundAllocation extends WorkflowActivity<RefundProcess, ActivityInformation<RefundProcess>> {
+
     @Override
-    protected boolean isAccessible(RefundProcess process) {
-	return process.isProjectAccountingEmployee();
+    public boolean isActive(RefundProcess process, User user) {
+	Person person = user.getExpenditurePerson();
+	return process.isProjectAccountingEmployee(person) && isUserProcessOwner(process, user)
+		&& process.hasAllocatedFundsForAllProjectFinancers(person) && process.isPendingFundAllocation();
     }
 
     @Override
-    protected boolean isAvailable(RefundProcess process) {
-	return isCurrentUserProcessOwner(process) && process.hasAllocatedFundsForAllProjectFinancers(getLoggedPerson()) && process.isPendingFundAllocation();
+    protected void process(ActivityInformation<RefundProcess> activityInformation) {
+	activityInformation.getProcess().getRequest().resetProjectFundAllocationId(Person.getLoggedPerson());
     }
 
     @Override
-    protected void process(RefundProcess process, Object... objects) {
-	process.getRequest().resetProjectFundAllocationId(getLoggedPerson());
+    public String getLocalizedName() {
+	return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+    }
+
+    @Override
+    public String getUsedBundle() {
+	return "resources/AcquisitionResources";
     }
 }

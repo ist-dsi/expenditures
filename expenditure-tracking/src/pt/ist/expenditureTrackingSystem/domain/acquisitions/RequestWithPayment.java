@@ -274,6 +274,9 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
 	for (final RequestItem requestItem : getRequestItemsSet()) {
 	    requestItem.approve(person);
 	}
+	if (isSubmittedForFundsAllocationByAllResponsibles()) {
+	    getProcess().submitForFundAllocation();
+	}
     }
 
     public boolean isSubmittedForFundsAllocationByAllResponsibles() {

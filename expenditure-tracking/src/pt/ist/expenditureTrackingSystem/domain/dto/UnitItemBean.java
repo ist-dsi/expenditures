@@ -24,7 +24,7 @@ public class UnitItemBean implements Serializable {
 	setRealShareValue(unitItem.getRealShareValue());
 	setAssigned(Boolean.TRUE);
     }
-    
+
     public UnitItemBean(Unit unit, RequestItem item) {
 	setItem(item);
 	setUnit(unit);
@@ -35,6 +35,7 @@ public class UnitItemBean implements Serializable {
 	    setAssigned(Boolean.TRUE);
 	    setApproved(unitItem.getItemAuthorized());
 	    setShareValue(unitItem.getShareValue());
+	    setRealShareValue(unitItem.getRealShareValue());
 	}
     }
 
@@ -79,10 +80,10 @@ public class UnitItemBean implements Serializable {
     }
 
     public Money getRealShareValue() {
-        return realShareValue;
+	return realShareValue;
     }
 
     public void setRealShareValue(Money realShareValue) {
-        this.realShareValue = realShareValue;
+	this.realShareValue = realShareValue;
     }
 }

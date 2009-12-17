@@ -100,8 +100,6 @@ public abstract class GenericProcess extends GenericProcess_Base {
 	return null;
     }
 
-    public abstract boolean hasAnyAvailableActivitity();
-
     public boolean hasAnyAvailableActivity(Person person) {
 	final UserView userView = UserView.getCurrentUserView();
 	boolean result = false;
@@ -151,6 +149,11 @@ public abstract class GenericProcess extends GenericProcess_Base {
     @Override
     public void notifyUserDueToComment(User user, String comment) {
 	notifyPersonDueToComment(user.getExpenditurePerson(), comment);
+    }
+
+    @Override
+    public boolean isSystemAbleToNotifyUser(User user) {
+	return user.getExpenditurePerson().getEmail() != null;
     }
 
     public void notifyPersonDueToComment(Person person, String comment) {

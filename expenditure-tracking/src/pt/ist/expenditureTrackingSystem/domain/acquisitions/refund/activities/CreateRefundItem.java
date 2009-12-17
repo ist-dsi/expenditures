@@ -1,25 +1,37 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities;
 
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericRefundProcessActivity;
+import module.workflow.activities.ActivityInformation;
+import module.workflow.activities.WorkflowActivity;
+import myorg.domain.User;
+import myorg.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
-import pt.ist.expenditureTrackingSystem.domain.dto.RefundItemBean;
 
-public class CreateRefundItem extends GenericRefundProcessActivity {
+public class CreateRefundItem extends WorkflowActivity<RefundProcess, CreateRefundItemActivityInformation> {
 
     @Override
-    protected boolean isAccessible(RefundProcess process) {
-	return isCurrentUserRequestor(process);
+    public boolean isActive(RefundProcess process, User user) {
+	return process.getRequestor() == user.getExpenditurePerson() && isUserProcessOwner(process, user)
+		&& process.isInGenesis();
     }
 
     @Override
-    protected boolean isAvailable(RefundProcess process) {
-	return super.isAvailable(process) && process.isInGenesis();
+    protected void process(CreateRefundItemActivityInformation activityInformation) {
+	activityInformation.getProcess().getRequest().createRefundItem(activityInformation.getValueEstimation(),
+		activityInformation.getCPVReference(), activityInformation.getDescription());
     }
 
     @Override
-    protected void process(RefundProcess process, Object... objects) {
-	RefundItemBean bean = (RefundItemBean) objects[0];
-	process.getRequest().createRefundItem(bean);
+    public ActivityInformation<RefundProcess> getActivityInformation(RefundProcess process) {
+	return new CreateRefundItemActivityInformation(process, this);
     }
 
+    @Override
+    public String getLocalizedName() {
+	return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+    }
+
+    @Override
+    public String getUsedBundle() {
+	return "resources/AcquisitionResources";
+    }
 }

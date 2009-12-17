@@ -1,5 +1,6 @@
 package pt.ist.expenditureTrackingSystem.presentationTier.actions.acquisitions;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +19,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.ProjectFinancer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.UnitItem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.AllocateProjectFundsPermanentlyActivityInformation;
 import pt.ist.expenditureTrackingSystem.domain.dto.DomainObjectBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.UnitItemBean;
@@ -25,9 +27,24 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.ProcessAction;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
+import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.RequestChecksumFilter;
+import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.RequestChecksumFilter.ChecksumPredicate;
+import pt.ist.fenixWebFramework.servlets.json.JsonObject;
 import pt.utl.ist.fenix.tools.util.Strings;
 
 public abstract class PaymentProcessAction extends ProcessAction {
+
+    static {
+	RequestChecksumFilter.registerFilterRule(new ChecksumPredicate() {
+
+	    @Override
+	    public boolean shouldFilter(HttpServletRequest request) {
+		return !(request.getQueryString() != null && request.getQueryString().contains(
+			"method=calculateShareValuesViaAjax"));
+	    }
+
+	});
+    }
 
     protected abstract String getSelectUnitToAddForwardUrl();
 
@@ -153,6 +170,25 @@ public abstract class PaymentProcessAction extends ProcessAction {
 	final RequestItem item = getRequestItem(request);
 	request.setAttribute("item", item);
 	return genericCalculateShareValuePostBack(mapping, form, request, response, getEditRealShareValuesForwardUrl(), true);
+    }
+
+    public ActionForward calculateShareValuesViaAjax(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) throws IOException {
+
+	Money money = new Money(request.getParameter("money"));
+	String requestorsIds = request.getParameter("requestors");
+	String[] ids = requestorsIds.split(",");
+
+	Money[] allocate = money.allocate(ids.length);
+	List<JsonObject> sharesResult = new ArrayList<JsonObject>();
+	for (int i = 0; i < allocate.length; i++) {
+	    JsonObject jsonObject = new JsonObject();
+	    jsonObject.addAttribute("id", ids[i]);
+	    jsonObject.addAttribute("share", allocate[i].getValue().toPlainString());
+	    sharesResult.add(jsonObject);
+	}
+	writeJsonReply(response, sharesResult);
+	return null;
     }
 
     private ActionForward genericCalculateShareValuePostBack(final ActionMapping mapping, final ActionForm form,
@@ -401,6 +437,11 @@ public abstract class PaymentProcessAction extends ProcessAction {
 	return removeAllocationFundGeneric(mapping, request, "financerFundAllocationId",
 		"/acquisitions/commons/allocateEffectiveProjectFunds.jsp");
     }
+
+    /*
+     * TODO: This should be refactored after simplified process is also
+     * migrated.
+     */
 
     private ActionForward addAllocationFundGeneric(final ActionMapping mapping, final HttpServletRequest request,
 	    String viewStateID, String forward) {

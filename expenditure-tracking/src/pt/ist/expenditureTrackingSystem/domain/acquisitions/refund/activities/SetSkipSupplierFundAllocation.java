@@ -1,31 +1,37 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities;
 
+import module.workflow.activities.ActivityInformation;
+import module.workflow.activities.WorkflowActivity;
+import myorg.domain.User;
+import myorg.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericRefundProcessActivity;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
-import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
-public class SetSkipSupplierFundAllocation extends GenericRefundProcessActivity {
-
-    @Override
-    protected boolean isAccessible(RefundProcess process) {
-	final Person loggedPerson = getLoggedPerson();
-	return loggedPerson != null
-		&& (loggedPerson == process.getRequestor() || userHasRole(RoleType.SUPPLIER_FUND_ALLOCATION_MANAGER));
-    }
+public class SetSkipSupplierFundAllocation extends WorkflowActivity<RefundProcess, ActivityInformation<RefundProcess>> {
 
     @Override
-    protected boolean isAvailable(RefundProcess process) {
-	return super.isAvailable(process)
+    public boolean isActive(RefundProcess process, User user) {
+	return isUserProcessOwner(process, user)
 		&& !process.getSkipSupplierFundAllocation()
-		&& (((process.isInGenesis() ||process.getProcessState().getRefundProcessStateType() == RefundProcessStateType.AUTHORIZED) && getLoggedPerson() == process.getRequestor()) 
-			|| userHasRole(RoleType.SUPPLIER_FUND_ALLOCATION_MANAGER));
+		&& (((process.isInGenesis() || process.getProcessState().getRefundProcessStateType() == RefundProcessStateType.AUTHORIZED) && process
+			.getRequestor() == user.getExpenditurePerson()) || user.getExpenditurePerson().hasRoleType(
+			RoleType.SUPPLIER_FUND_ALLOCATION_MANAGER));
 
     }
 
     @Override
-    protected void process(RefundProcess process, Object... objects) {
-	process.setSkipSupplierFundAllocation(Boolean.TRUE);
+    protected void process(ActivityInformation<RefundProcess> activityInformation) {
+	activityInformation.getProcess().setSkipSupplierFundAllocation(Boolean.TRUE);
+    }
+
+    @Override
+    public String getLocalizedName() {
+	return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+    }
+
+    @Override
+    public String getUsedBundle() {
+	return "resources/AcquisitionResources";
     }
 }

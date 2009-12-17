@@ -25,9 +25,8 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AllocateP
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.Authorize;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.FundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.ProjectFundAllocation;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.Approve;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.Approve;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.ConfirmInvoices;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.CreateRefundItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.RefundPerson;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.SubmitForInvoiceConfirmation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ConfirmInvoice;
@@ -52,8 +51,8 @@ import pt.ist.expenditureTrackingSystem.domain.statistics.SimplifiedProcessStati
 public class ChartGenerator {
 
     protected static JFreeChart createBarChart(final CategoryDataset categoryDataset, final String title) {
-	final JFreeChart chart = ChartFactory.createBarChart3D(title, "", "",
-		categoryDataset, PlotOrientation.VERTICAL, true, true, false);
+	final JFreeChart chart = ChartFactory.createBarChart3D(title, "", "", categoryDataset, PlotOrientation.VERTICAL, true,
+		true, false);
 	chart.setBackgroundPaint(new Color(0xF5, 0xF5, 0xF5));
 
 	final CategoryPlot plot = chart.getCategoryPlot();
@@ -66,27 +65,29 @@ public class ChartGenerator {
     }
 
     protected static byte[] createBarChartImage(final CategoryDataset categoryDataset, final String title)
-    		throws RuntimeException, IOException {
+	    throws RuntimeException, IOException {
 	final JFreeChart chart = createBarChart(categoryDataset, title);
 	final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 	final BufferedImage bufferedImage = chart.createBufferedImage(625, 475);
 	ImageIO.write(bufferedImage, "png", outputStream);
 	bufferedImage.flush();
 	outputStream.close();
-	return outputStream.toByteArray();	
+	return outputStream.toByteArray();
     }
 
     public static CategoryDataset simplifiedProcessStatisticsChart(final SimplifiedProcessStatistics simplifiedProcessStatistics) {
 	final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
-	final Map<AcquisitionProcessStateType, Integer>	map = simplifiedProcessStatistics.getNumberOfProcessesByAcquisitionProcessStateType();
+	final Map<AcquisitionProcessStateType, Integer> map = simplifiedProcessStatistics
+		.getNumberOfProcessesByAcquisitionProcessStateType();
 	char c = 'A';
 	for (final Entry<AcquisitionProcessStateType, Integer> entry : map.entrySet()) {
 	    final AcquisitionProcessStateType acquisitionProcessStateType = entry.getKey();
 	    final Integer numberOfProcesses = entry.getValue();
 
 	    if (numberOfProcesses.intValue() > 0) {
-		dataset.addValue(numberOfProcesses, "" + c + " - " + acquisitionProcessStateType.getLocalizedName(), Character.valueOf(c++));
+		dataset.addValue(numberOfProcesses, "" + c + " - " + acquisitionProcessStateType.getLocalizedName(), Character
+			.valueOf(c++));
 	    }
 	}
 
@@ -103,14 +104,16 @@ public class ChartGenerator {
 	    final Integer numberOfProcesses = entry.getValue();
 
 	    if (numberOfProcesses.intValue() > 0) {
-		dataset.addValue(numberOfProcesses, "" + c + " - " + refundProcessStateType.getLocalizedName(), Character.valueOf(c++));
+		dataset.addValue(numberOfProcesses, "" + c + " - " + refundProcessStateType.getLocalizedName(), Character
+			.valueOf(c++));
 	    }
 	}
 
 	return dataset;
     }
 
-    private static CategoryDataset simplifiedProcessStatisticsActivityTimeChart(final SimplifiedProcessActivityLogStatistics simplifiedProcessActivityLogStatistics) {
+    private static CategoryDataset simplifiedProcessStatisticsActivityTimeChart(
+	    final SimplifiedProcessActivityLogStatistics simplifiedProcessActivityLogStatistics) {
 	final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
 	char c = 'A';
@@ -127,7 +130,8 @@ public class ChartGenerator {
 	return dataset;
     }
 
-    private static CategoryDataset refundProcessStatisticsActivityTimeChart(final RefundProcessActivityLogStatistics refundProcessActivityLogStatistics) {
+    private static CategoryDataset refundProcessStatisticsActivityTimeChart(
+	    final RefundProcessActivityLogStatistics refundProcessActivityLogStatistics) {
 	final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
 	char c = 'A';
@@ -149,51 +153,40 @@ public class ChartGenerator {
 	    return false;
 	}
 	final Class clazz = abstractActivity.getClass();
-	return clazz == CreateAcquisitionPurchaseOrderDocument.class
-		|| clazz == SendPurchaseOrderToSupplier.class
-		|| clazz == SkipPurchaseOrderDocument.class
-		|| clazz == SubmitForApproval.class
-		|| clazz == SubmitForFundAllocation.class
-		|| clazz == Authorize.class
-		|| clazz == AllocateProjectFundsPermanently.class
-		|| clazz == AllocateFundsPermanently.class
-		|| clazz == ProjectFundAllocation.class
-		|| clazz == FundAllocation.class
-		|| clazz == PayAcquisition.class
-		|| clazz == ReceiveInvoice.class
-		|| clazz == FixInvoice.class
-		|| clazz == SubmitForConfirmInvoice.class
-		|| clazz == ConfirmInvoice.class
-		|| clazz == SetSkipSupplierFundAllocation.class
+	return clazz == CreateAcquisitionPurchaseOrderDocument.class || clazz == SendPurchaseOrderToSupplier.class
+		|| clazz == SkipPurchaseOrderDocument.class || clazz == SubmitForApproval.class
+		|| clazz == SubmitForFundAllocation.class || clazz == Authorize.class
+		|| clazz == AllocateProjectFundsPermanently.class || clazz == AllocateFundsPermanently.class
+		|| clazz == ProjectFundAllocation.class || clazz == FundAllocation.class || clazz == PayAcquisition.class
+		|| clazz == ReceiveInvoice.class || clazz == FixInvoice.class || clazz == SubmitForConfirmInvoice.class
+		|| clazz == ConfirmInvoice.class || clazz == SetSkipSupplierFundAllocation.class
 		|| clazz == UnsetSkipSupplierFundAllocation.class
 		|| clazz == pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.SubmitForApproval.class
-		|| clazz == Approve.class
-		|| clazz == SubmitForInvoiceConfirmation.class
-		|| clazz == ConfirmInvoices.class
-		|| clazz == RefundPerson.class
-		;
+		|| clazz == Approve.class || clazz == SubmitForInvoiceConfirmation.class || clazz == ConfirmInvoices.class
+		|| clazz == RefundPerson.class;
     }
 
     public static byte[] simplifiedProcessStatisticsImage(final SimplifiedProcessStatistics simplifiedProcessStatistics)
-    		throws RuntimeException, IOException {
+	    throws RuntimeException, IOException {
 	final CategoryDataset dataset = simplifiedProcessStatisticsChart(simplifiedProcessStatistics);
 	return createBarChartImage(dataset, "Número de Processos");
     }
 
-    public static byte[] simplifiedProcessStatisticsActivityTimeImage(final SimplifiedProcessActivityLogStatistics simplifiedProcessActivityLogStatistics)
-	throws RuntimeException, IOException {
+    public static byte[] simplifiedProcessStatisticsActivityTimeImage(
+	    final SimplifiedProcessActivityLogStatistics simplifiedProcessActivityLogStatistics) throws RuntimeException,
+	    IOException {
 	final CategoryDataset dataset = simplifiedProcessStatisticsActivityTimeChart(simplifiedProcessActivityLogStatistics);
 	return createBarChartImage(dataset, "Tempo Médio por Actividade (em Dias)");
     }
 
     public static byte[] refundProcessStatisticsImage(final RefundProcessStatistics refundProcessStatistics)
-    		throws RuntimeException, IOException {
+	    throws RuntimeException, IOException {
 	final CategoryDataset dataset = refundProcessStatisticsChart(refundProcessStatistics);
 	return createBarChartImage(dataset, "Número de Processos");
     }
 
-    public static byte[] refundProcessStatisticsActivityTimeImage(final RefundProcessActivityLogStatistics refundProcessActivityLogStatistics)
-	throws RuntimeException, IOException {
+    public static byte[] refundProcessStatisticsActivityTimeImage(
+	    final RefundProcessActivityLogStatistics refundProcessActivityLogStatistics) throws RuntimeException, IOException {
 	final CategoryDataset dataset = refundProcessStatisticsActivityTimeChart(refundProcessActivityLogStatistics);
 	return createBarChartImage(dataset, "Tempo Médio por Actividade (em Dias)");
     }

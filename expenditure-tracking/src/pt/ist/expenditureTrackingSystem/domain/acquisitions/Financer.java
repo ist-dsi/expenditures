@@ -56,7 +56,8 @@ public class Financer extends Financer_Base {
 
     private boolean checkIfCanDelete() {
 	if (hasAnyUnitItems()) {
-	    throw new DomainException("acquisitionProcess.message.exception.cannotRemovePayingUnit.alreadyAssignedToItems");
+	    throw new DomainException("acquisitionProcess.message.exception.cannotRemovePayingUnit.alreadyAssignedToItems",
+		    DomainException.getResourceFor("resources/AcquisitionResources"));
 	}
 	return true;
     }

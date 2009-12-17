@@ -1,41 +1,53 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities;
 
-import java.util.List;
-
+import module.workflow.activities.WorkflowActivity;
+import myorg.domain.User;
+import myorg.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericRefundProcessActivity;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
-import pt.ist.expenditureTrackingSystem.domain.dto.EditRefundInvoiceBean;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundableInvoiceFile;
+import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
-public class EditRefundInvoice extends GenericRefundProcessActivity {
-
-    @Override
-    protected boolean isAccessible(RefundProcess process) {
-	return isCurrentUserRequestor(process) || userHasRole(RoleType.ACCOUNTING_MANAGER)
-		|| userHasRole(RoleType.PROJECT_ACCOUNTING_MANAGER);
-    }
+public class EditRefundInvoice extends WorkflowActivity<RefundProcess, EditRefundInvoiceActivityInformation> {
 
     @Override
-    protected boolean isAvailable(RefundProcess process) {
-	return isCurrentUserProcessOwner(process)
+    public boolean isActive(RefundProcess process, User user) {
+	Person person = user.getExpenditurePerson();
+	return isUserProcessOwner(process, user)
+
 		&& process.isAnyRefundInvoiceAvailable()
-		&& ((isCurrentUserRequestor(process) && process.isInAuthorizedState()) || (process
-			.isPendingInvoicesConfirmation() && ((userHasRole(RoleType.ACCOUNTING_MANAGER) && !process
-			.hasProjectsAsPayingUnits()) || (userHasRole(RoleType.PROJECT_ACCOUNTING_MANAGER) && process
+		&& ((person == process.getRequestor() && process.isInAuthorizedState()) || (process
+			.isPendingInvoicesConfirmation() && ((person.hasRoleType(RoleType.ACCOUNTING_MANAGER) && !process
+			.hasProjectsAsPayingUnits()) || (person.hasRoleType(RoleType.PROJECT_ACCOUNTING_MANAGER) && process
 			.hasProjectsAsPayingUnits()))));
     }
 
     @Override
-    protected void process(RefundProcess process, Object... objects) {
-	List<EditRefundInvoiceBean> beans = (List<EditRefundInvoiceBean>) objects[0];
+    public EditRefundInvoiceActivityInformation getActivityInformation(RefundProcess process) {
+	return new EditRefundInvoiceActivityInformation(process, this);
+    }
 
-	for (EditRefundInvoiceBean bean : beans) {
-	    bean.getInvoice().resetValues();
-	}
+    @Override
+    protected void process(EditRefundInvoiceActivityInformation activityInformation) {
+	RefundableInvoiceFile invoice = activityInformation.getInvoice();
+	invoice.resetValues();
+	invoice.editValues(activityInformation.getValue(), activityInformation.getVatValue(), activityInformation
+		.getRefundableValue());
+    }
 
-	for (EditRefundInvoiceBean bean : beans) {
-	    bean.getInvoice().editValues(bean.getValue(), bean.getVatValue(), bean.getRefundableValue());
-	}
+    @Override
+    public String getLocalizedName() {
+	return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+    }
+
+    @Override
+    public String getUsedBundle() {
+	return "resources/AcquisitionResources";
+    }
+
+    @Override
+    public boolean isVisible() {
+	return false;
     }
 
 }

@@ -97,6 +97,11 @@ public class AfterTheFactAcquisitionProcess extends AfterTheFactAcquisitionProce
     }
 
     @Override
+    public void submitForFundAllocation() {
+	// nothing to do here...
+    }
+
+    @Override
     public boolean isInAllocatedToUnitState() {
 	return false;
     }

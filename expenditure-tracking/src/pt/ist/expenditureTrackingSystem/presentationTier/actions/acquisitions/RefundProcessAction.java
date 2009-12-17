@@ -1,6 +1,5 @@
 package pt.ist.expenditureTrackingSystem.presentationTier.actions.acquisitions;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -10,6 +9,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import module.workflow.presentationTier.actions.ProcessManagement;
 import myorg.domain.exceptions.DomainException;
 
 import org.apache.struts.action.ActionForm;
@@ -18,7 +18,6 @@ import org.apache.struts.action.ActionMapping;
 
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessInvoice;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundableInvoiceFile;
@@ -26,9 +25,6 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.SearchRefundP
 import pt.ist.expenditureTrackingSystem.domain.dto.ChangeFinancerAccountingUnitBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateRefundProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.EditRefundInvoiceBean;
-import pt.ist.expenditureTrackingSystem.domain.dto.RefundInvoiceBean;
-import pt.ist.expenditureTrackingSystem.domain.dto.RefundItemBean;
-import pt.ist.expenditureTrackingSystem.domain.dto.VariantBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
@@ -64,8 +60,7 @@ public class RefundProcessAction extends PaymentProcessAction {
     }
 
     public ActionForward viewRefundProcess(final ActionMapping mapping, final HttpServletRequest request, RefundProcess process) {
-	request.setAttribute("refundProcess", process);
-	return forward(request, "/acquisitions/refund/viewRefundRequest.jsp");
+	return ProcessManagement.forwardToProcess(process);
     }
 
     public ActionForward prepareCreateRefundProcess(final ActionMapping mapping, final ActionForm form,
@@ -124,54 +119,6 @@ public class RefundProcessAction extends PaymentProcessAction {
 	return forward(request, "/acquisitions/refund/searchRefundRequest.jsp");
     }
 
-    public ActionForward executeCreateRefundItem(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-	RefundItemBean bean = new RefundItemBean();
-	request.setAttribute("bean", bean);
-	request.setAttribute("refundProcess", getProcess(request));
-
-	return forward(request, "/acquisitions/refund/createRefundItem.jsp");
-
-    }
-
-    public ActionForward actualCreationRefundItem(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-
-	RefundItemBean bean = getRenderedObject("refundItemBean");
-	RefundProcess process = getProcess(request);
-	genericActivityExecution(process, "CreateRefundItem", bean);
-
-	return viewRefundProcess(mapping, request, process);
-    }
-
-    public ActionForward executeEditRefundItem(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-	RefundItem item = getDomainObject(request, "refundItemOid");
-	RefundProcess process = getProcess(request);
-	RefundItemBean bean = new RefundItemBean(item);
-	request.setAttribute("refundProcess", process);
-	request.setAttribute("refundItem", item);
-	request.setAttribute("bean", bean);
-	return forward(request, "/acquisitions/refund/editRefundItem.jsp");
-    }
-
-    public ActionForward actualEditRefundItem(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-	RefundItemBean bean = getRenderedObject("refundItemBean");
-	RefundItem item = getDomainObject(request, "refundItemOid");
-	RefundProcess process = getProcess(request);
-	genericActivityExecution(request, "EditRefundItem", item, bean);
-	return viewRefundProcess(mapping, request, process);
-    }
-
-    public ActionForward executeDeleteRefundItem(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-	RefundItem item = getDomainObject(request, "refundItemOid");
-	RefundProcess process = getProcess(request);
-	genericActivityExecution(process, "DeleteRefundItem", item);
-	return viewRefundProcess(mapping, request, process);
-    }
-
     @Override
     @SuppressWarnings("unchecked")
     protected RefundProcess getProcess(HttpServletRequest request) {
@@ -188,25 +135,25 @@ public class RefundProcessAction extends PaymentProcessAction {
 	return viewRefundProcess(mapping, request, getProcess(request));
     }
 
-    public ActionForward executeSetSkipSupplierFundAllocation(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-	return executeActivityAndViewProcess(mapping, form, request, response, "SetSkipSupplierFundAllocation");
-    }
-
-    public ActionForward executeUnsetSkipSupplierFundAllocation(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-	return executeActivityAndViewProcess(mapping, form, request, response, "UnsetSkipSupplierFundAllocation");
-    }
-
-    public ActionForward executeSubmitForApproval(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-	return executeActivityAndViewProcess(mapping, form, request, response, "SubmitForApproval");
-    }
-
-    public ActionForward executeUnSubmitForApproval(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-	return executeActivityAndViewProcess(mapping, form, request, response, "UnSubmitForApproval");
-    }
+//    public ActionForward executeSetSkipSupplierFundAllocation(final ActionMapping mapping, final ActionForm form,
+//	    final HttpServletRequest request, final HttpServletResponse response) {
+//	return executeActivityAndViewProcess(mapping, form, request, response, "SetSkipSupplierFundAllocation");
+//    }
+//
+//    public ActionForward executeUnsetSkipSupplierFundAllocation(final ActionMapping mapping, final ActionForm form,
+//	    final HttpServletRequest request, final HttpServletResponse response) {
+//	return executeActivityAndViewProcess(mapping, form, request, response, "UnsetSkipSupplierFundAllocation");
+//    }
+//
+//    public ActionForward executeSubmitForApproval(final ActionMapping mapping, final ActionForm form,
+//	    final HttpServletRequest request, final HttpServletResponse response) {
+//	return executeActivityAndViewProcess(mapping, form, request, response, "SubmitForApproval");
+//    }
+//
+//    public ActionForward executeUnSubmitForApproval(final ActionMapping mapping, final ActionForm form,
+//	    final HttpServletRequest request, final HttpServletResponse response) {
+//	return executeActivityAndViewProcess(mapping, form, request, response, "UnSubmitForApproval");
+//    }
 
     @Override
     protected RefundItem getRequestItem(HttpServletRequest request) {
@@ -214,95 +161,95 @@ public class RefundProcessAction extends PaymentProcessAction {
 	return item != null ? item : (RefundItem) super.getRequestItem(request);
     }
 
-    public ActionForward executeApprove(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
-	return executeActivityAndViewProcess(mapping, form, request, response, "Approve");
-    }
+//    public ActionForward executeApprove(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+//	    final HttpServletResponse response) {
+//	return executeActivityAndViewProcess(mapping, form, request, response, "Approve");
+//    }
+//
+//    public ActionForward executeUnApprove(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+//	    final HttpServletResponse response) {
+//	return executeActivityAndViewProcess(mapping, form, request, response, "UnApprove");
+//    }
+//
+//    public ActionForward executeUnSubmitForFundAllocation(final ActionMapping mapping, final ActionForm form,
+//	    final HttpServletRequest request, final HttpServletResponse response) {
+//	return executeActivityAndViewProcess(mapping, form, request, response, "UnSubmitForFundAllocation");
+//    }
 
-    public ActionForward executeUnApprove(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
-	return executeActivityAndViewProcess(mapping, form, request, response, "UnApprove");
-    }
+//    public ActionForward executeCreateRefundInvoice(final ActionMapping mapping, final ActionForm form,
+//	    final HttpServletRequest request, final HttpServletResponse response) {
+//
+//	RefundItem item = getRequestItem(request);
+//	RefundInvoiceBean bean = new RefundInvoiceBean();
+//	bean.setItem(item);
+//
+//	request.setAttribute("bean", bean);
+//	return forward(request, "/acquisitions/refund/addRefundInvoice.jsp");
+//    }
 
-    public ActionForward executeUnSubmitForFundAllocation(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-	return executeActivityAndViewProcess(mapping, form, request, response, "UnSubmitForFundAllocation");
-    }
+//    public ActionForward createRefundInvoice(final ActionMapping mapping, final ActionForm form,
+//	    final HttpServletRequest request, final HttpServletResponse response) {
+//
+//	RefundProcess process = getProcess(request);
+//	RefundInvoiceBean bean = getRenderedObject("bean");
+//
+//	if (bean.getInputStream() == null) {
+//	    addMessage("refundItem.message.info.mustAddInvoiceFile", getBundle());
+//	    request.setAttribute("bean", bean);
+//	    RenderUtils.invalidateViewState("bean");
+//	    return forward(request, "/acquisitions/refund/addRefundInvoice.jsp");
+//	}
+//
+//	byte[] fileBytes = consumeInputStream(bean);
+//	try {
+//	    genericActivityExecution(process, "CreateRefundInvoice", bean, fileBytes);
+//	} catch (DomainException e) {
+//	    addErrorMessage(e.getMessage(), getBundle());
+//	    request.setAttribute("bean", bean);
+//	    RenderUtils.invalidateViewState("bean");
+//	    return forward(request, "/acquisitions/refund/addRefundInvoice.jsp");
+//	}
+//
+//	return viewProcess(mapping, form, request, response);
+//    }
 
-    public ActionForward executeCreateRefundInvoice(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
+//    public ActionForward executeSubmitForInvoiceConfirmation(final ActionMapping mapping, final ActionForm form,
+//	    final HttpServletRequest request, final HttpServletResponse response) {
+//	return executeActivityAndViewProcess(mapping, form, request, response, "SubmitForInvoiceConfirmation");
+//    }
+//
+//    public ActionForward executeConfirmInvoices(final ActionMapping mapping, final ActionForm form,
+//	    final HttpServletRequest request, final HttpServletResponse response) {
+//	return executeActivityAndViewProcess(mapping, form, request, response, "ConfirmInvoices");
+//    }
+//
+//    public ActionForward executeUnconfirmInvoices(final ActionMapping mapping, final ActionForm form,
+//	    final HttpServletRequest request, final HttpServletResponse response) {
+//	return executeActivityAndViewProcess(mapping, form, request, response, "UnconfirmInvoices");
+//    }
 
-	RefundItem item = getRequestItem(request);
-	RefundInvoiceBean bean = new RefundInvoiceBean();
-	bean.setItem(item);
+//    public ActionForward downloadInvoice(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+//	    final HttpServletResponse response) throws IOException {
+//	RefundableInvoiceFile invoice = getDomainObject(request, "invoiceOID");
+//	download(response, invoice);
+//	return null;
+//    }
 
-	request.setAttribute("bean", bean);
-	return forward(request, "/acquisitions/refund/addRefundInvoice.jsp");
-    }
-
-    public ActionForward createRefundInvoice(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-
-	RefundProcess process = getProcess(request);
-	RefundInvoiceBean bean = getRenderedObject("bean");
-
-	if (bean.getInputStream() == null) {
-	    addMessage("refundItem.message.info.mustAddInvoiceFile", getBundle());
-	    request.setAttribute("bean", bean);
-	    RenderUtils.invalidateViewState("bean");
-	    return forward(request, "/acquisitions/refund/addRefundInvoice.jsp");
-	}
-
-	byte[] fileBytes = consumeInputStream(bean);
-	try {
-	    genericActivityExecution(process, "CreateRefundInvoice", bean, fileBytes);
-	} catch (DomainException e) {
-	    addErrorMessage(e.getMessage(), getBundle());
-	    request.setAttribute("bean", bean);
-	    RenderUtils.invalidateViewState("bean");
-	    return forward(request, "/acquisitions/refund/addRefundInvoice.jsp");
-	}
-
-	return viewProcess(mapping, form, request, response);
-    }
-
-    public ActionForward executeSubmitForInvoiceConfirmation(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-	return executeActivityAndViewProcess(mapping, form, request, response, "SubmitForInvoiceConfirmation");
-    }
-
-    public ActionForward executeConfirmInvoices(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-	return executeActivityAndViewProcess(mapping, form, request, response, "ConfirmInvoices");
-    }
-
-    public ActionForward executeUnconfirmInvoices(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-	return executeActivityAndViewProcess(mapping, form, request, response, "UnconfirmInvoices");
-    }
-
-    public ActionForward downloadInvoice(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) throws IOException {
-	RefundableInvoiceFile invoice = getDomainObject(request, "invoiceOID");
-	download(response, invoice);
-	return null;
-    }
-
-    public ActionForward executeRemoveRefundInvoice(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-	RequestItem item = getRequestItem(request);
-	request.setAttribute("item", item);
-	return forward(request, "/acquisitions/refund/removeRefundInvoice.jsp");
-    }
-
-    public ActionForward removeRefundInvoice(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-
-	RefundableInvoiceFile invoice = getDomainObject(request, "invoiceOid");
-	RefundProcess process = getProcess(request);
-	genericActivityExecution(process, "RemoveRefundInvoice", invoice);
-	return executeRemoveRefundInvoice(mapping, form, request, response);
-    }
+//    public ActionForward executeRemoveRefundInvoice(final ActionMapping mapping, final ActionForm form,
+//	    final HttpServletRequest request, final HttpServletResponse response) {
+//	RequestItem item = getRequestItem(request);
+//	request.setAttribute("item", item);
+//	return forward(request, "/acquisitions/refund/removeRefundInvoice.jsp");
+//    }
+//
+//    public ActionForward removeRefundInvoice(final ActionMapping mapping, final ActionForm form,
+//	    final HttpServletRequest request, final HttpServletResponse response) {
+//
+//	RefundableInvoiceFile invoice = getDomainObject(request, "invoiceOid");
+//	RefundProcess process = getProcess(request);
+//	genericActivityExecution(process, "RemoveRefundInvoice", invoice);
+//	return executeRemoveRefundInvoice(mapping, form, request, response);
+//    }
 
     public ActionForward executeEditRefundInvoice(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
@@ -335,10 +282,10 @@ public class RefundProcessAction extends PaymentProcessAction {
 	return viewProcess(mapping, form, request, response);
     }
 
-    public ActionForward executeRevertInvoiceConfirmationSubmition(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-	return executeActivityAndViewProcess(mapping, form, request, response, "RevertInvoiceConfirmationSubmition");
-    }
+//    public ActionForward executeRevertInvoiceConfirmationSubmition(final ActionMapping mapping, final ActionForm form,
+//	    final HttpServletRequest request, final HttpServletResponse response) {
+//	return executeActivityAndViewProcess(mapping, form, request, response, "RevertInvoiceConfirmationSubmition");
+//    }
 
     public ActionForward invalidValueRefundInvoice(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
@@ -354,33 +301,18 @@ public class RefundProcessAction extends PaymentProcessAction {
 
     }
 
-    public ActionForward executeRefundPerson(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-	final RefundProcess refundProcess = getProcess(request);
-	VariantBean bean = new VariantBean();
-	request.setAttribute("bean", bean);
-	request.setAttribute("process", refundProcess);
-	return forward(request, "/acquisitions/refund/executePayment.jsp");
-    }
-
-    public ActionForward executeRefundPersonAction(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-	String paymentReference = getRenderedObject("reference");
-	return executeActivityAndViewProcess(mapping, form, request, response, "RefundPerson", paymentReference);
-    }
-
-    public ActionForward executeCancelRefundProcess(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-
-	request.setAttribute("confirmCancelProcess", Boolean.TRUE);
-	return viewProcess(mapping, form, request, response);
-    }
-
-    public ActionForward cancelRefundProcess(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-
-	return executeActivityAndViewProcess(mapping, form, request, response, "CancelRefundProcess");
-    }
+//    public ActionForward executeCancelRefundProcess(final ActionMapping mapping, final ActionForm form,
+//	    final HttpServletRequest request, final HttpServletResponse response) {
+//
+//	request.setAttribute("confirmCancelProcess", Boolean.TRUE);
+//	return viewProcess(mapping, form, request, response);
+//    }
+//
+//    public ActionForward cancelRefundProcess(final ActionMapping mapping, final ActionForm form,
+//	    final HttpServletRequest request, final HttpServletResponse response) {
+//
+//	return executeActivityAndViewProcess(mapping, form, request, response, "CancelRefundProcess");
+//    }
 
     public ActionForward executeChangeFinancersAccountingUnit(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {

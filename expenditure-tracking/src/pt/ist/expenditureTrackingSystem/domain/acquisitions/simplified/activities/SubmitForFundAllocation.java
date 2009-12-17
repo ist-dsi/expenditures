@@ -9,8 +9,7 @@ public class SubmitForFundAllocation extends GenericAcquisitionProcessActivity {
     @Override
     protected boolean isAccessible(RegularAcquisitionProcess process) {
 	final Person loggedPerson = getLoggedPerson();
-	return loggedPerson != null
-		&& process.isResponsibleForUnit(loggedPerson)
+	return loggedPerson != null && process.isResponsibleForUnit(loggedPerson)
 		&& !process.getAcquisitionRequest().hasBeenApprovedBy(loggedPerson);
     }
 
@@ -23,16 +22,6 @@ public class SubmitForFundAllocation extends GenericAcquisitionProcessActivity {
     protected void process(RegularAcquisitionProcess process, Object... objects) {
 	Person person = (Person) objects[0];
 	process.getAcquisitionRequest().approve(person);
-	if (process.getAcquisitionRequest().isSubmittedForFundsAllocationByAllResponsibles()) {
-	    process.submitForFundAllocation();
-	    //	    if (!process.getSkipSupplierFundAllocation()) {
-//		process.submitForFundAllocation();
-//		new FundAllocationExpirationDate().execute(process, new Object[] {});
-//	    }
-//	    else {
-//		process.skipFundAllocation();
-//	    }
-	}
     }
 
 }

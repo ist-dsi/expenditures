@@ -129,7 +129,7 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
 	return loggedPerson != null && isProjectAccountingEmployeeForOnePossibleUnit(loggedPerson);
     }
 
-    private boolean isProjectAccountingEmployeeForOnePossibleUnit(final Person person) {
+    public boolean isProjectAccountingEmployeeForOnePossibleUnit(final Person person) {
 	return getRequest().isProjectAccountingEmployeeForOnePossibleUnit(person);
     }
 
@@ -186,6 +186,8 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
     public abstract void allocateFundsToUnit();
 
     public abstract void submitForApproval();
+
+    public abstract void submitForFundAllocation();
 
     public abstract boolean isInAllocatedToUnitState();
 
@@ -362,4 +364,5 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
     public List<ProcessFile> getGenericFiles() {
 	return getFiles(ProcessFile.class);
     }
+
 }

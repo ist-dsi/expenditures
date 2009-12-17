@@ -1,29 +1,36 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities;
 
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericRefundProcessActivity;
+import module.workflow.activities.ActivityInformation;
+import module.workflow.activities.WorkflowActivity;
+import myorg.domain.User;
+import myorg.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundRequest;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
-public class UnSubmitForApproval extends GenericRefundProcessActivity {
+public class UnSubmitForApproval extends WorkflowActivity<RefundProcess, ActivityInformation<RefundProcess>> {
 
     @Override
-    protected boolean isAccessible(final RefundProcess process) {
-	final Person loggedPerson = getLoggedPerson();
-	return loggedPerson != null && (loggedPerson == process.getRequestor() || process.isResponsibleForUnit(loggedPerson));
+    public boolean isActive(RefundProcess process, User user) {
+	Person person = user.getExpenditurePerson();
+
+	return (person == process.getRequestor() || process.isResponsibleForUnit(person)) && isUserProcessOwner(process, user)
+		&& process.getProcessState().isPendingApproval() && !process.getRequest().isApprovedByAtLeastOneResponsible();
+
     }
 
     @Override
-    protected boolean isAvailable(final RefundProcess process) {
-	final RefundRequest refundRequest = process.getRequest();
-	return  super.isAvailable(process)
-		&& process.getProcessState().isPendingApproval()
-		&& !refundRequest.isApprovedByAtLeastOneResponsible();
+    protected void process(ActivityInformation<RefundProcess> activityInformation) {
+	activityInformation.getProcess().unSubmitForApproval();
+    }
+    
+    @Override
+    public String getLocalizedName() {
+	return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
     }
 
     @Override
-    protected void process(final RefundProcess process, final Object... objects) {
-	process.unSubmitForApproval();
+    public String getUsedBundle() {
+	return "resources/AcquisitionResources";
     }
 
 }

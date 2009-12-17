@@ -1,24 +1,51 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities;
 
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericRefundProcessActivity;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundItem;
+import module.workflow.activities.ActivityInformation;
+import module.workflow.activities.WorkflowActivity;
+import myorg.domain.User;
+import myorg.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 
-public class DeleteRefundItem extends GenericRefundProcessActivity {
+public class DeleteRefundItem extends WorkflowActivity<RefundProcess, DeleteRefundItemActivityInformation> {
 
     @Override
-    protected boolean isAccessible(RefundProcess process) {
-	return isCurrentUserRequestor(process);
+    public boolean isActive(RefundProcess process, User user) {
+	return process.getRequestor() == user.getExpenditurePerson() && isUserProcessOwner(process, user)
+		&& process.isInGenesis();
     }
 
     @Override
-    protected boolean isAvailable(RefundProcess process) {
-	return super.isAvailable(process) && process.isInGenesis();
+    protected void process(DeleteRefundItemActivityInformation activityInformation) {
+	activityInformation.getItem().delete();
     }
 
     @Override
-    protected void process(RefundProcess process, Object... objects) {
-	RefundItem item = (RefundItem) objects[0];
-	item.delete();
+    public ActivityInformation<RefundProcess> getActivityInformation(RefundProcess process) {
+	return new DeleteRefundItemActivityInformation(process, this);
+    }
+
+    @Override
+    public boolean isVisible() {
+	return false;
+    }
+
+    @Override
+    public String getLocalizedName() {
+	return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+    }
+
+    @Override
+    public String getUsedBundle() {
+	return "resources/AcquisitionResources";
+    }
+
+    @Override
+    public boolean isConfirmationNeeded() {
+	return true;
+    }
+
+    @Override
+    public String getLocalizedConfirmationMessage() {
+	return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "activity.confirmation." + getClass().getName());
     }
 }

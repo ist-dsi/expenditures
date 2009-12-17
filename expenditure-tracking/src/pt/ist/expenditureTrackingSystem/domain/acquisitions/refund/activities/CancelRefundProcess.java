@@ -1,37 +1,45 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities;
 
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericRefundProcessActivity;
+import module.workflow.activities.ActivityInformation;
+import module.workflow.activities.WorkflowActivity;
+import myorg.domain.User;
+import myorg.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
-public class CancelRefundProcess extends GenericRefundProcessActivity {
+public class CancelRefundProcess extends WorkflowActivity<RefundProcess, ActivityInformation<RefundProcess>> {
 
     @Override
-    protected boolean isAvailable(RefundProcess process) {
-	return super.isAvailable(process)
-		&& (isCurrentUserRequestor(process) || isUserResponsibleForUnit(process) || process.isAccountingEmployee());
-    }
+    public boolean isActive(RefundProcess process, User user) {
+	final Person executor = user.getExpenditurePerson();
 
-    @Override
-    protected boolean isAccessible(RefundProcess process) {
-	Person loggedPerson = Person.getLoggedPerson();
-	return ((process.isInGenesis() || process.isInAuthorizedState()) && isCurrentUserRequestor(process))
-		|| (process.isPendingApproval() && isUserResponsibleForUnit(process))
-		|| (process.isResponsibleForUnit(loggedPerson, process.getRequest().getTotalValue())
-			&& !process.getRequest().hasBeenAuthorizedBy(loggedPerson) && process.isInAllocatedToUnitState())
-		|| ((process.isPendingInvoicesConfirmation() || process.isPendingFundAllocation()) && ((process
-			.isAccountingEmployee() && !process.hasProjectsAsPayingUnits()) || (process.isProjectAccountingEmployee() && process
-			.hasProjectsAsPayingUnits())));
-    }
-
-    private boolean isUserResponsibleForUnit(RefundProcess process) {
-	final Person loggedPerson = getLoggedPerson();
-	return loggedPerson != null && process.isResponsibleForAtLeastOnePayingUnit(loggedPerson);
+	return isUserProcessOwner(process, user)
+		&& (((process.isInGenesis() || process.isInAuthorizedState()) && process.getRequestor() == executor)
+			|| (process.isPendingApproval() && process.isResponsibleForAtLeastOnePayingUnit(executor))
+			|| (process.isResponsibleForUnit(executor, process.getRequest().getTotalValue())
+				&& !process.getRequest().hasBeenAuthorizedBy(executor) && process.isInAllocatedToUnitState()) || ((process
+			.isPendingInvoicesConfirmation() || process.isPendingFundAllocation()) && ((process
+			.isAccountingEmployee(executor) && !process.hasProjectsAsPayingUnits()) || (process
+			.isProjectAccountingEmployee(executor) && process.hasProjectsAsPayingUnits()))));
     }
 
     @Override
-    protected void process(RefundProcess process, Object... objects) {
-	process.cancel();
+    protected void process(ActivityInformation<RefundProcess> activityInformation) {
+	activityInformation.getProcess().cancel();
     }
 
+    @Override
+    public String getLocalizedName() {
+	return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+    }
+
+    @Override
+    public String getUsedBundle() {
+	return "resources/AcquisitionResources";
+    }
+
+    @Override
+    public boolean isConfirmationNeeded() {
+	return true;
+    }
 }

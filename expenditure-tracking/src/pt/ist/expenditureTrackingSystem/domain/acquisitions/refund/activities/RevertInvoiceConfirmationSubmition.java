@@ -1,23 +1,31 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities;
 
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericRefundProcessActivity;
+import module.workflow.activities.ActivityInformation;
+import module.workflow.activities.WorkflowActivity;
+import myorg.domain.User;
+import myorg.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 
-public class RevertInvoiceConfirmationSubmition extends GenericRefundProcessActivity {
+public class RevertInvoiceConfirmationSubmition extends WorkflowActivity<RefundProcess, ActivityInformation<RefundProcess>> {
 
     @Override
-    protected boolean isAvailable(RefundProcess process) {
-	return isCurrentUserRequestor(process);
+    public boolean isActive(RefundProcess process, User user) {
+	return process.getRequestor() == user.getExpenditurePerson() && isUserProcessOwner(process, user)
+		&& process.isInSubmittedForInvoiceConfirmationState();
     }
 
     @Override
-    protected boolean isAccessible(RefundProcess process) {
-	return isCurrentUserProcessOwner(process) && process.isInSubmittedForInvoiceConfirmationState();
+    protected void process(ActivityInformation<RefundProcess> activityInformation) {
+	activityInformation.getProcess().revertInvoiceConfirmationSubmition();
     }
 
     @Override
-    protected void process(RefundProcess process, Object... objects) {
-	process.revertInvoiceConfirmationSubmition();
+    public String getLocalizedName() {
+	return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
     }
 
+    @Override
+    public String getUsedBundle() {
+	return "resources/AcquisitionResources";
+    }
 }

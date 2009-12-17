@@ -61,6 +61,6 @@ public class RefundProcessPredicate extends SearchPredicate {
     }
 
     private boolean isPersonAbleToExecuteActivities(final RefundProcess refundProcess) {
-	return refundProcess.isPersonAbleToExecuteActivities();
+	return refundProcess.hasAnyAvailableActivitity();
     }
 }

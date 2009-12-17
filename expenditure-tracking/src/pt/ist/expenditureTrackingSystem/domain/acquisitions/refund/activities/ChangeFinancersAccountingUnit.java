@@ -1,19 +1,30 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities;
 
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AbstractChangeFinancersAccountingUnit;
+import myorg.domain.User;
+import myorg.util.BundleUtil;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.AbstractChangeFinancersAccountUnit;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
+import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
-public class ChangeFinancersAccountingUnit extends AbstractChangeFinancersAccountingUnit<RefundProcess> {
+public class ChangeFinancersAccountingUnit extends AbstractChangeFinancersAccountUnit<RefundProcess> {
 
     @Override
-    protected boolean isAccessible(RefundProcess process) {
-	return process.isAccountingEmployeeForOnePossibleUnit() || process.isProjectAccountingEmployeeForOnePossibleUnit();
+    public boolean isActive(RefundProcess process, User user) {
+	Person person = user.getExpenditurePerson();
+	return (process.isAccountingEmployeeForOnePossibleUnit(person) || process
+		.isProjectAccountingEmployeeForOnePossibleUnit(person))
+		&& isUserProcessOwner(process, user)
+		&& process.isPendingFundAllocation()
+		&& process.getRequest().hasAnyAccountingUnitFinancerWithNoFundsAllocated(person);
     }
 
     @Override
-    protected boolean isAvailable(RefundProcess process) {
-	return isCurrentUserProcessOwner(process) && process.isPendingFundAllocation()
-		&& process.getRequest().hasAnyAccountingUnitFinancerWithNoFundsAllocated(getLoggedPerson());
+    public String getLocalizedName() {
+	return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
     }
 
+    @Override
+    public String getUsedBundle() {
+	return "resources/AcquisitionResources";
+    }
 }

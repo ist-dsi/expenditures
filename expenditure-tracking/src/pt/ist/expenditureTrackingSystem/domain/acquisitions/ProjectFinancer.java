@@ -97,7 +97,7 @@ public class ProjectFinancer extends ProjectFinancer_Base {
     public boolean hasAllocatedFundsPermanentlyForAnyProjectFinancers() {
 	List<PaymentProcessInvoice> allocatedInvoicesInProject = getAllocatedInvoicesInProject();
 	for (UnitItem unitItem : getUnitItems()) {
-	    if (allocatedInvoicesInProject.containsAll(unitItem.getConfirmedInvoices())) {
+	    if (!allocatedInvoicesInProject.isEmpty() && allocatedInvoicesInProject.containsAll(unitItem.getConfirmedInvoices())) {
 		return true;
 	    }
 	}

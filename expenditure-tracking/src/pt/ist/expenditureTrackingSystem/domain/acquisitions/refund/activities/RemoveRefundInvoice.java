@@ -1,25 +1,51 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities;
 
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericRefundProcessActivity;
+import module.workflow.activities.ActivityInformation;
+import module.workflow.activities.WorkflowActivity;
+import myorg.domain.User;
+import myorg.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundableInvoiceFile;
 
-public class RemoveRefundInvoice extends GenericRefundProcessActivity {
+public class RemoveRefundInvoice extends WorkflowActivity<RefundProcess, RemoveRefundInvoiceActivityInformation> {
 
     @Override
-    protected boolean isAccessible(RefundProcess process) {
-	return isCurrentUserRequestor(process);
+    public boolean isActive(RefundProcess process, User user) {
+	return process.getRequestor() == user.getExpenditurePerson() && isUserProcessOwner(process, user)
+		&& process.isInAuthorizedState() && process.isAnyRefundInvoiceAvailable();
+    }
+
+    /*
+     * TODO: This should be only invoice removable when these invoices are as
+     * files.
+     */
+    @Override
+    protected void process(RemoveRefundInvoiceActivityInformation activityInformation) {
+	activityInformation.getRefundInvoice().delete();
     }
 
     @Override
-    protected boolean isAvailable(RefundProcess process) {
-	return (isCurrentUserProcessOwner(process) && process.isInAuthorizedState() && process.isAnyRefundInvoiceAvailable());
+    public ActivityInformation<RefundProcess> getActivityInformation(RefundProcess process) {
+	return new RemoveRefundInvoiceActivityInformation(process, this);
     }
 
     @Override
-    protected void process(RefundProcess process, Object... objects) {
-	RefundableInvoiceFile invoice = (RefundableInvoiceFile) objects[0];
-	invoice.delete();
+    public String getLocalizedName() {
+	return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
     }
 
+    @Override
+    public String getUsedBundle() {
+	return "resources/AcquisitionResources";
+    }
+    
+    @Override
+    public boolean isVisible() {
+	return false;
+    }
+    
+    @Override
+    public boolean isConfirmationNeeded() {
+	return true;
+    }
+    
 }

@@ -2,35 +2,36 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.refund;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
-import module.workflow.domain.ActivityLog;
-import myorg.domain.User;
-
+import module.workflow.activities.ActivityInformation;
+import module.workflow.activities.GiveProcess;
+import module.workflow.activities.ReleaseProcess;
+import module.workflow.activities.StealProcess;
+import module.workflow.activities.TakeProcess;
+import module.workflow.activities.WorkflowActivity;
+import module.workflow.domain.WorkflowProcess;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess.ActivityScope;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AllocateFundsPermanently;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AllocateProjectFundsPermanently;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.Authorize;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.FundAllocation;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAddPayingUnit;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAssignPayingUnitToItem;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericRemovePayingUnit;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.ProjectFundAllocation;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.RemoveFundsPermanentlyAllocated;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.RemovePermanentProjectFunds;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.UnApprove;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.UnAuthorize;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.Approve;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.AllocateFundsPermanently;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.AllocateProjectFundsPermanently;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.Approve;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.Authorize;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.FundAllocation;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.GenericAddPayingUnit;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.GenericAssignPayingUnitToItem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.GenericRemovePayingUnit;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.ProjectFundAllocation;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.RemoveFundsPermanentlyAllocated;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.RemovePermanentProjectFunds;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.UnApprove;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.UnAuthorize;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.CancelRefundProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.ChangeFinancersAccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.ConfirmInvoices;
@@ -40,7 +41,6 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.De
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.DistributeRealValuesForPayingUnits;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.EditRefundInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.EditRefundItem;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.RefundPerson;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.RemoveFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.RemoveProjectFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.RemoveRefundInvoice;
@@ -58,54 +58,97 @@ import pt.ist.expenditureTrackingSystem.domain.dto.CreateRefundProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
-import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
-import pt.ist.expenditureTrackingSystem.domain.processes.GenericLog;
 import pt.ist.fenixWebFramework.services.Service;
 
 public class RefundProcess extends RefundProcess_Base {
 
-    private static Map<ActivityScope, List<AbstractActivity<RefundProcess>>> activityMap = new HashMap<ActivityScope, List<AbstractActivity<RefundProcess>>>();
+    private static List<WorkflowActivity<RefundProcess, ? extends ActivityInformation<RefundProcess>>> activities = new ArrayList<WorkflowActivity<RefundProcess, ? extends ActivityInformation<RefundProcess>>>();
 
     static {
-	List<AbstractActivity<RefundProcess>> requestActivitites = new ArrayList<AbstractActivity<RefundProcess>>();
-	requestActivitites.add(new CreateRefundItem());
-	requestActivitites.add(new GenericAddPayingUnit<RefundProcess>());
-	requestActivitites.add(new GenericRemovePayingUnit<RefundProcess>());
-	requestActivitites.add(new SubmitForApproval());
-	requestActivitites.add(new UnSubmitForApproval());
-	requestActivitites.add(new Approve());
-	requestActivitites.add(new UnApprove<RefundProcess>());
-	requestActivitites.add(new ProjectFundAllocation<RefundProcess>());
-	requestActivitites.add(new RemoveProjectFundAllocation());
-	requestActivitites.add(new FundAllocation<RefundProcess>());
-	requestActivitites.add(new RemoveFundAllocation());
-	requestActivitites.add(new Authorize<RefundProcess>());
-	requestActivitites.add(new UnAuthorize<RefundProcess>());
-	requestActivitites.add(new UnSubmitForFundAllocation());
-	requestActivitites.add(new SubmitForInvoiceConfirmation());
-	requestActivitites.add(new ConfirmInvoices());
-	requestActivitites.add(new AllocateProjectFundsPermanently<RefundProcess>());
-	requestActivitites.add(new AllocateFundsPermanently<RefundProcess>());
-	requestActivitites.add(new RemovePermanentProjectFunds<RefundProcess>());
-	requestActivitites.add(new RemoveFundsPermanentlyAllocated<RefundProcess>());
-	requestActivitites.add(new RefundPerson());
-	requestActivitites.add(new CancelRefundProcess());
-	requestActivitites.add(new ChangeFinancersAccountingUnit());
-	requestActivitites.add(new UnconfirmInvoices());
-	requestActivitites.add(new RevertInvoiceConfirmationSubmition());
-	requestActivitites.add(new SetSkipSupplierFundAllocation());
-	requestActivitites.add(new UnsetSkipSupplierFundAllocation());
-	activityMap.put(ActivityScope.REQUEST_INFORMATION, requestActivitites);
-
-	List<AbstractActivity<RefundProcess>> itemActivities = new ArrayList<AbstractActivity<RefundProcess>>();
-	itemActivities.add(new EditRefundItem());
-	itemActivities.add(new DeleteRefundItem());
-	itemActivities.add(new GenericAssignPayingUnitToItem<RefundProcess>());
-	itemActivities.add(new CreateRefundInvoice());
-	itemActivities.add(new RemoveRefundInvoice());
-	itemActivities.add(new EditRefundInvoice());
-	itemActivities.add(new DistributeRealValuesForPayingUnits());
-	activityMap.put(ActivityScope.REQUEST_ITEM, itemActivities);
+	activities.add(new Approve<RefundProcess>());
+	activities.add(new UnApprove<RefundProcess>());
+	activities.add(new CancelRefundProcess());
+	activities.add(new ConfirmInvoices());
+	activities.add(new RemoveFundAllocation());
+	activities.add(new RemoveProjectFundAllocation());
+	activities.add(new RevertInvoiceConfirmationSubmition());
+	activities.add(new SetSkipSupplierFundAllocation());
+	activities.add(new SubmitForApproval());
+	activities.add(new SubmitForInvoiceConfirmation());
+	activities.add(new UnconfirmInvoices());
+	activities.add(new UnsetSkipSupplierFundAllocation());
+	activities.add(new UnSubmitForApproval());
+	activities.add(new UnSubmitForFundAllocation());
+	activities.add(new CreateRefundItem());
+	activities.add(new EditRefundItem());
+	activities.add(new DeleteRefundItem());
+	activities.add(new CreateRefundInvoice());
+	activities.add(new RemoveRefundInvoice());
+	activities.add(new GenericAddPayingUnit<RefundProcess>());
+	activities.add(new GenericRemovePayingUnit<RefundProcess>());
+	activities.add(new Authorize<RefundProcess>());
+	activities.add(new UnAuthorize<RefundProcess>());
+	activities.add(new GenericAssignPayingUnitToItem<RefundProcess>());
+	activities.add(new DistributeRealValuesForPayingUnits());
+	activities.add(new FundAllocation<RefundProcess>());
+	activities.add(new ProjectFundAllocation<RefundProcess>());
+	activities.add(new RemoveFundsPermanentlyAllocated<RefundProcess>());
+	activities.add(new RemovePermanentProjectFunds<RefundProcess>());
+	activities.add(new TakeProcess<RefundProcess>());
+	activities.add(new ReleaseProcess<RefundProcess>());
+	activities.add(new StealProcess<RefundProcess>());
+	//activities.add(new GiveProcess<RefundProcess>());
+	activities.add(new EditRefundInvoice());
+	activities.add(new AllocateProjectFundsPermanently<RefundProcess>());
+	activities.add(new AllocateFundsPermanently<RefundProcess>());
+	activities.add(new ChangeFinancersAccountingUnit());
+	// List<AbstractActivity<RefundProcess>> requestActivitites = new
+	// ArrayList<AbstractActivity<RefundProcess>>();
+	// requestActivitites.add(new CreateRefundItem());
+	// requestActivitites.add(new GenericAddPayingUnit<RefundProcess>());
+	// requestActivitites.add(new GenericRemovePayingUnit<RefundProcess>());
+	// requestActivitites.add(new SubmitForApproval());
+	// requestActivitites.add(new UnSubmitForApproval());
+	// requestActivitites.add(new Approve());
+	// requestActivitites.add(new UnApprove<RefundProcess>());
+	// requestActivitites.add(new ProjectFundAllocation<RefundProcess>());
+	// requestActivitites.add(new RemoveProjectFundAllocation());
+	// requestActivitites.add(new FundAllocation<RefundProcess>());
+	// requestActivitites.add(new RemoveFundAllocation());
+	// requestActivitites.add(new Authorize<RefundProcess>());
+	// requestActivitites.add(new UnAuthorize<RefundProcess>());
+	// requestActivitites.add(new UnSubmitForFundAllocation());
+	// requestActivitites.add(new SubmitForInvoiceConfirmation());
+	// requestActivitites.add(new ConfirmInvoices());
+	// requestActivitites.add(new
+	// AllocateProjectFundsPermanently<RefundProcess>());
+	// requestActivitites.add(new
+	// AllocateFundsPermanently<RefundProcess>());
+	// requestActivitites.add(new
+	// RemovePermanentProjectFunds<RefundProcess>());
+	// requestActivitites.add(new
+	// RemoveFundsPermanentlyAllocated<RefundProcess>());
+	// requestActivitites.add(new RefundPerson());
+	// requestActivitites.add(new CancelRefundProcess());
+	// requestActivitites.add(new ChangeFinancersAccountingUnit());
+	// requestActivitites.add(new UnconfirmInvoices());
+	// requestActivitites.add(new RevertInvoiceConfirmationSubmition());
+	// requestActivitites.add(new SetSkipSupplierFundAllocation());
+	// requestActivitites.add(new UnsetSkipSupplierFundAllocation());
+	// activityMap.put(ActivityScope.REQUEST_INFORMATION,
+	// requestActivitites);
+	//
+	// List<AbstractActivity<RefundProcess>> itemActivities = new
+	// ArrayList<AbstractActivity<RefundProcess>>();
+	// itemActivities.add(new EditRefundItem());
+	// itemActivities.add(new DeleteRefundItem());
+	// itemActivities.add(new
+	// GenericAssignPayingUnitToItem<RefundProcess>());
+	// itemActivities.add(new CreateRefundInvoice());
+	// itemActivities.add(new RemoveRefundInvoice());
+	// itemActivities.add(new EditRefundInvoice());
+	// itemActivities.add(new DistributeRealValuesForPayingUnits());
+	// activityMap.put(ActivityScope.REQUEST_ITEM, itemActivities);
     }
 
     public RefundProcess(Person requestor, String refundeeName, String refundeeFiscalCode, Unit requestingUnit) {
@@ -122,43 +165,40 @@ public class RefundProcess extends RefundProcess_Base {
 	setSkipSupplierFundAllocation(Boolean.FALSE);
     }
 
-    public List<AbstractActivity<RefundProcess>> getActiveActivities() {
-	List<AbstractActivity<RefundProcess>> activities = new ArrayList<AbstractActivity<RefundProcess>>();
-	for (ActivityScope scope : ActivityScope.values()) {
-	    activities.addAll(getActiveActivitiesForScope(scope));
-	}
-	return activities;
-    }
-
-    private List<AbstractActivity<RefundProcess>> getActiveActivitiesForScope(ActivityScope scope) {
-	List<AbstractActivity<RefundProcess>> activities = new ArrayList<AbstractActivity<RefundProcess>>();
-	for (AbstractActivity<RefundProcess> activity : activityMap.get(scope)) {
-	    if (activity.isActive(this)) {
-		activities.add(activity);
-	    }
-	}
-	return activities;
-    }
-
-    public List<AbstractActivity<RefundProcess>> getActiveActivitiesForRequest() {
-	return getActiveActivitiesForScope(ActivityScope.REQUEST_INFORMATION);
-    }
-
-    public List<AbstractActivity<RefundProcess>> getActiveActivitiesForItem() {
-	return getActiveActivitiesForScope(ActivityScope.REQUEST_ITEM);
-    }
-
-    @Override
-    public AbstractActivity<RefundProcess> getActivityByName(String activityName) {
-	for (ActivityScope scope : ActivityScope.values()) {
-	    for (AbstractActivity<RefundProcess> activity : activityMap.get(scope)) {
-		if (activity.getName().equals(activityName)) {
-		    return activity;
-		}
-	    }
-	}
-	return null;
-    }
+    // private List<AbstractActivity<RefundProcess>>
+    // getActiveActivitiesForScope(ActivityScope scope) {
+    // List<AbstractActivity<RefundProcess>> activities = new
+    // ArrayList<AbstractActivity<RefundProcess>>();
+    // for (AbstractActivity<RefundProcess> activity : activityMap.get(scope)) {
+    // if (activity.isActive(this)) {
+    // activities.add(activity);
+    // }
+    // }
+    // return activities;
+    // }
+    //
+    // public List<AbstractActivity<RefundProcess>>
+    // getActiveActivitiesForRequest() {
+    // return getActiveActivitiesForScope(ActivityScope.REQUEST_INFORMATION);
+    // }
+    //
+    // public List<AbstractActivity<RefundProcess>> getActiveActivitiesForItem()
+    // {
+    // return getActiveActivitiesForScope(ActivityScope.REQUEST_ITEM);
+    // }
+    //
+    // @Override
+    // public AbstractActivity<RefundProcess> getActivityByName(String
+    // activityName) {
+    // for (ActivityScope scope : ActivityScope.values()) {
+    // for (AbstractActivity<RefundProcess> activity : activityMap.get(scope)) {
+    // if (activity.getName().equals(activityName)) {
+    // return activity;
+    // }
+    // }
+    // }
+    // return null;
+    // }
 
     @Service
     public static RefundProcess createNewRefundProcess(CreateRefundProcessBean bean) {
@@ -183,11 +223,6 @@ public class RefundProcess extends RefundProcess_Base {
     @Override
     public boolean isInGenesis() {
 	return getProcessState().isInGenesis();
-    }
-
-    @Override
-    public boolean hasAnyAvailableActivitity() {
-	return !getActiveActivities().isEmpty();
     }
 
     public Person getRequestor() {
@@ -388,17 +423,6 @@ public class RefundProcess extends RefundProcess_Base {
 		|| isObserver(person);
     }
 
-    public boolean isPersonAbleToExecuteActivities() {
-	for (List<AbstractActivity<RefundProcess>> activities : activityMap.values()) {
-	    for (final AbstractActivity<RefundProcess> activity : activities) {
-		if (activity.isActive(this)) {
-		    return true;
-		}
-	    }
-	}
-	return false;
-    }
-
     @Override
     public boolean isAuthorized() {
 	return super.isAuthorized() && getRefundableInvoices().isEmpty();
@@ -441,8 +465,8 @@ public class RefundProcess extends RefundProcess_Base {
 	return getProcessState().getRefundProcessStateType().ordinal();
     }
 
-    @SuppressWarnings("unchecked")
-    public <T extends ActivityLog> T logExecution(User person, String operationName, String... args) {
-	return (T) new GenericLog(this, person, operationName);
+    @Override
+    public <T extends WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>> List<T> getActivities() {
+	return (List<T>) activities;
     }
 }

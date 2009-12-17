@@ -98,7 +98,7 @@ public class SearchRefundProcesses extends Search<RefundProcess> {
 	}
 
 	private boolean isPersonAbleToExecuteActivities(final RefundProcess refundProcess) {
-	    return refundProcess.isPersonAbleToExecuteActivities();
+	    return refundProcess.hasAnyAvailableActivitity();
 	}
 
 	private boolean matchCriteria(final Person requester, final Person person) {

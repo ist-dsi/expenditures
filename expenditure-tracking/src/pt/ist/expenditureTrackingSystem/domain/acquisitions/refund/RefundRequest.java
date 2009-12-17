@@ -6,6 +6,9 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import myorg.domain.util.Money;
+
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
 import pt.ist.expenditureTrackingSystem.domain.dto.RefundItemBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
@@ -33,11 +36,11 @@ public class RefundRequest extends RefundRequest_Base {
 	setRequestingUnit(requestingUnit);
     }
 
-    public void createRefundItem(RefundItemBean bean) {
-	RefundItem refundItem = new RefundItem(this, bean.getValueEstimation(), bean.getCPVReference(), bean.getDescription());
+    public void createRefundItem(Money valueEstimation, CPVReference reference, String description) {
+	RefundItem refundItem = new RefundItem(this, valueEstimation, reference, description);
 	List<Unit> payingUnits = this.getProcess().getPayingUnits();
 	if (payingUnits.size() == 1) {
-	    refundItem.createUnitItem(payingUnits.get(0), bean.getValueEstimation());
+	    refundItem.createUnitItem(payingUnits.get(0), valueEstimation);
 	}
     }
 

@@ -1,28 +1,36 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities;
 
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericRefundProcessActivity;
+import module.workflow.activities.ActivityInformation;
+import module.workflow.activities.WorkflowActivity;
+import myorg.domain.User;
+import myorg.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundRequest;
-import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
-public class SubmitForApproval extends GenericRefundProcessActivity {
-
-    @Override
-    protected boolean isAccessible(final RefundProcess process) {
-	final Person loggedPerson = getLoggedPerson();
-	return loggedPerson != null && loggedPerson == process.getRequestor();
-    }
+public class SubmitForApproval extends WorkflowActivity<RefundProcess, ActivityInformation<RefundProcess>> {
 
     @Override
-    protected boolean isAvailable(final RefundProcess process) {
+    public boolean isActive(RefundProcess process, User user) {
 	final RefundRequest refundRequest = process.getRequest();
-	return super.isAvailable(process) && process.getProcessState().isInGenesis() && refundRequest.hasAnyRequestItems()
+
+	return isUserProcessOwner(process, user) && process.getRequestor() == user.getExpenditurePerson()
+		&& process.getProcessState().isInGenesis() && refundRequest.hasAnyRequestItems()
 		&& refundRequest.isEveryItemFullyAttributedToPayingUnits();
     }
 
     @Override
-    protected void process(final RefundProcess process, final Object... objects) {
-	process.submitForApproval();
+    protected void process(ActivityInformation<RefundProcess> activityInformation) {
+	activityInformation.getProcess().submitForApproval();
+    }
+
+    @Override
+    public String getLocalizedName() {
+	return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+    }
+
+    @Override
+    public String getUsedBundle() {
+	return "resources/AcquisitionResources";
     }
 
 }

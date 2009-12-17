@@ -58,10 +58,10 @@ public class RefundItem extends RefundItem_Base {
 	return null;
     }
 
-    public void edit(RefundItemBean bean) {
-	setDescription(bean.getDescription());
-	setCPVReference(bean.getCPVReference());
-	setValueEstimation(bean.getValueEstimation());
+    public void edit(Money valueEstimation, CPVReference reference, String description) {
+	setDescription(description);
+	setCPVReference(reference);
+	setValueEstimation(valueEstimation);
     }
 
     @Override
@@ -96,11 +96,11 @@ public class RefundItem extends RefundItem_Base {
 
     @Service
     public RefundableInvoiceFile createRefundInvoice(String invoiceNumber, LocalDate invoiceDate, Money value,
-	    BigDecimal vatValue, Money refundableValue, byte[] invoiceFile, String filename, RefundItem item, Supplier supplier) {
+	    BigDecimal vatValue, Money refundableValue, byte[] invoiceFile, String filename, Supplier supplier) {
 	RefundableInvoiceFile invoice = new RefundableInvoiceFile(invoiceNumber, invoiceDate, value, vatValue, refundableValue,
-		invoiceFile, filename, item, supplier);
+		invoiceFile, filename, this, supplier);
 
-	Set<Unit> payingUnits = item.getRequest().getPayingUnits();
+	Set<Unit> payingUnits = getRequest().getPayingUnits();
 	if (payingUnits.size() == 1) {
 	    UnitItem unitItemFor = getUnitItemFor(payingUnits.iterator().next());
 	    Money share = unitItemFor.getRealShareValue();
