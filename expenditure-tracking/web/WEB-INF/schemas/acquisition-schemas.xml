@@ -1326,7 +1326,7 @@
 		validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"
 		key="acquisitionProcess.label.invoice.date" />
 	<slot name="inputStream" key="acquisitionProcess.label.invoice.file"
-		bundle="ACQUISITION_RESOURCES">
+		bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
 		<property name="fileNameSlot" value="filename" />
 		<property name="size" value="30" />
 	</slot>
