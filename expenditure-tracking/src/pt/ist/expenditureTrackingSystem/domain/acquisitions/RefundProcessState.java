@@ -5,12 +5,12 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
 public class RefundProcessState extends RefundProcessState_Base {
-    
+
     protected RefundProcessState(final RefundProcess process) {
-        super();
-        final Person person = getPerson();
-        super.checkArguments(process, person);
-        super.initFields(process, person);
+	super();
+	final Person person = getPerson();
+	super.checkArguments(process, person);
+	super.initFields(process, person);
 	process.systemProcessRelease();
 
     }
@@ -26,7 +26,7 @@ public class RefundProcessState extends RefundProcessState_Base {
     public String getLocalizedName() {
 	return getRefundProcessStateType().getLocalizedName();
     }
-    
+
     public boolean isInGenesis() {
 	return getRefundProcessStateType() == RefundProcessStateType.IN_GENESIS;
     }
@@ -62,13 +62,17 @@ public class RefundProcessState extends RefundProcessState_Base {
     public boolean isAllocatedPermanently() {
 	return getRefundProcessStateType() == RefundProcessStateType.FUNDS_ALLOCATED_PERMANENTLY;
     }
-    
+
     public boolean isInSubmittedForInvoiceConfirmationState() {
 	return getRefundProcessStateType() == RefundProcessStateType.SUBMITTED_FOR_INVOICE_CONFIRMATION;
     }
 
     public boolean hasFundsAllocatedPermanently() {
 	return getRefundProcessStateType() == RefundProcessStateType.FUNDS_ALLOCATED_PERMANENTLY;
+    }
+
+    public boolean isCanceled() {
+	return getRefundProcessStateType() == RefundProcessStateType.CANCELED;
     }
 
 }

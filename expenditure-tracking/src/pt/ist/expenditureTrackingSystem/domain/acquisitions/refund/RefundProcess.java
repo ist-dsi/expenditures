@@ -97,7 +97,7 @@ public class RefundProcess extends RefundProcess_Base {
 	activities.add(new TakeProcess<RefundProcess>());
 	activities.add(new ReleaseProcess<RefundProcess>());
 	activities.add(new StealProcess<RefundProcess>());
-	//activities.add(new GiveProcess<RefundProcess>());
+	// activities.add(new GiveProcess<RefundProcess>());
 	activities.add(new EditRefundInvoice());
 	activities.add(new AllocateProjectFundsPermanently<RefundProcess>());
 	activities.add(new AllocateFundsPermanently<RefundProcess>());
@@ -426,6 +426,10 @@ public class RefundProcess extends RefundProcess_Base {
     @Override
     public boolean isAuthorized() {
 	return super.isAuthorized() && getRefundableInvoices().isEmpty();
+    }
+
+    public boolean isCanceled() {
+	return getProcessState().isCanceled();
     }
 
     @Override

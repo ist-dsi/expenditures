@@ -12,15 +12,20 @@ public class RemoveFundAllocation extends WorkflowActivity<RefundProcess, Activi
     @Override
     public boolean isActive(RefundProcess process, User user) {
 	Person person = user.getExpenditurePerson();
-	return process.isAccountingEmployee(person) && isUserProcessOwner(process, user) && process.isInAllocatedToUnitState()
-		&& process.hasAllocatedFundsForAllProjectFinancers() && process.hasAllFundAllocationId(person);
+	return process.isAccountingEmployee(person)
+		&& isUserProcessOwner(process, user)
+		&& process.hasAllFundAllocationId(person)
+		&& ((process.isInAllocatedToUnitState() && process.hasAllocatedFundsForAllProjectFinancers()) || (process
+			.isCanceled() && process.hasAnyFundAllocationId()));
     }
 
     @Override
     protected void process(ActivityInformation<RefundProcess> activityInformation) {
 	RefundProcess process = activityInformation.getProcess();
 	process.getRequest().resetFundAllocationId(Person.getLoggedPerson());
-	process.submitForFundAllocation();
+	if (!process.isCanceled()) {
+	    process.submitForFundAllocation();
+	}
     }
 
     @Override

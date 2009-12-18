@@ -13,7 +13,8 @@ public class RemoveProjectFundAllocation extends WorkflowActivity<RefundProcess,
     public boolean isActive(RefundProcess process, User user) {
 	Person person = user.getExpenditurePerson();
 	return process.isProjectAccountingEmployee(person) && isUserProcessOwner(process, user)
-		&& process.hasAllocatedFundsForAllProjectFinancers(person) && process.isPendingFundAllocation();
+		&& process.hasAllocatedFundsForAllProjectFinancers(person)
+		&& (process.isPendingFundAllocation() || process.isCanceled());
     }
 
     @Override
