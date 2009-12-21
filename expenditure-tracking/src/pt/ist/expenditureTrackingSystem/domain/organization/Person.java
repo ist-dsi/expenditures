@@ -292,8 +292,7 @@ public class Person extends Person_Base {
 	return filterLogs(new Predicate() {
 	    @Override
 	    public boolean evaluate(Object arg0) {
-		GenericProcess process = (GenericProcess) arg0;
-		return processClass.isAssignableFrom(process.getClass()) && !process.getUnreadCommentsForPerson(person).isEmpty();
+		return processClass.isAssignableFrom(arg0.getClass()) && !((GenericProcess) arg0).getUnreadCommentsForPerson(person).isEmpty();
 	    }
 
 	});
