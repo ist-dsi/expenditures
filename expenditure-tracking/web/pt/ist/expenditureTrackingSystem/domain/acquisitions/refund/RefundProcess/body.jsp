@@ -206,11 +206,13 @@
 						</tr>
 						<tr style="border-bottom: 4px solid #eee;">
 							<td colspan="6" class="aleft">
-								<html:link action="/workflowProcessManagement.do?method=downloadFile" paramId="fileId" paramName="invoice" paramProperty="externalId">
+								<bean:define id="invoiceId" name="invoice" property="externalId" type="java.lang.String"/>
+								<bean:define id="processId" name="process" property="externalId" type="java.lang.String"/>
+
+								<bean:define id="invoiceDownloadUrl" type="java.lang.String">/workflowProcessManagement.do?method=downloadFile&amp;processId=<bean:write name="processId"/></bean:define>
+								<html:link action="<%= invoiceDownloadUrl %>" paramId="fileId" paramName="invoice" paramProperty="externalId">
 									<bean:write name="invoice" property="filename"/>
 								</html:link><wf:isActive processName="process" activityName="RemoveRefundInvoice" scope="request">:</wf:isActive>
-									<bean:define id="invoiceId" name="invoice" property="externalId" type="java.lang.String"/>
-									<bean:define id="processId" name="process" property="externalId" type="java.lang.String"/>
 									
 									
 									<wf:activityLink id="<%= "EditRefundInvoice-" + invoiceId %>" processName="process" activityName="EditRefundInvoice" scope="request" paramName0="invoice" paramValue0="<%= invoiceId %>">
