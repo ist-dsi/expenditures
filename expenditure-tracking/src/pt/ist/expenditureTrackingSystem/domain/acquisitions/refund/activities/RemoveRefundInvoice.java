@@ -44,7 +44,7 @@ public class RemoveRefundInvoice extends WorkflowActivity<RefundProcess, RemoveR
     }
     
     @Override
-    public boolean isConfirmationNeeded() {
+    public boolean isConfirmationNeeded(RefundProcess process) {
 	return true;
     }
     

@@ -39,7 +39,7 @@ public class DeleteAfterTheFactAcquisitionProcess extends
     }
 
     @Override
-    public boolean isConfirmationNeeded() {
+    public boolean isConfirmationNeeded(AfterTheFactAcquisitionProcess process) {
 	return true;
     }
 
