@@ -1,0 +1,21 @@
+package module.workingCapital.domain;
+
+
+valueType myorg.domain.util.Money as Money {
+    externalizeWith {
+        String exportAsString();
+    }
+
+    internalizeWith importFromString();
+}
+
+
+class WorkingCapitalSystem {
+}
+
+
+relation MyOrgWorkingCapitalSystem {
+	.myorg.domain.MyOrg playsRole myOrg;
+	WorkingCapitalSystem playsRole workingCapitalSystem;
+}
+
