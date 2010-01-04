@@ -14,8 +14,7 @@ public class EditAcquisitionRequestItemRealValues extends GenericAcquisitionProc
 
     @Override
     protected boolean isAvailable(RegularAcquisitionProcess process) {
-	return super.isAvailable(process) && process.getAcquisitionProcessState().isInvoiceReceived()
-		&& !process.getAcquisitionRequest().hasAtLeastOneConfirmation();
+	return super.isAvailable(process) && process.getAcquisitionProcessState().isInvoiceReceived();
     }
 
     @Override
