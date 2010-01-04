@@ -13,7 +13,7 @@ public class DistributeRealValuesForPayingUnits extends AbstractDistributeRealVa
 
     @Override
     protected boolean isAvailable(RegularAcquisitionProcess process) {
-	return  isCurrentUserProcessOwner(process) && process.getAcquisitionProcessState().isInvoiceReceived() && !process.getAcquisitionRequest().hasAtLeastOneConfirmation();
+	return  isCurrentUserProcessOwner(process) && process.getAcquisitionProcessState().isInvoiceReceived();
     }
 
 }
