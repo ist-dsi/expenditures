@@ -1,2 +1,2 @@
 name=workingCapital
-depends=core
+depends=core, metaWorkflow, expenditure-tracking

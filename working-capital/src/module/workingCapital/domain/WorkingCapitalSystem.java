@@ -7,7 +7,7 @@ public class WorkingCapitalSystem extends WorkingCapitalSystem_Base {
 
     public static WorkingCapitalSystem getInstance() {
 	final MyOrg myOrg = MyOrg.getInstance();
-	if (!myOrg.hasMissionSystem()) {
+	if (!myOrg.hasWorkingCapitalSystem()) {
 	    initialize();
 	}
 	return myOrg.getWorkingCapitalSystem();
@@ -16,7 +16,7 @@ public class WorkingCapitalSystem extends WorkingCapitalSystem_Base {
     @Service
     public synchronized static void initialize() {
 	final MyOrg myOrg = MyOrg.getInstance();
-	if (!myOrg.hasMissionSystem()) {
+	if (!myOrg.hasWorkingCapitalSystem()) {
 	    new WorkingCapitalSystem(myOrg);
 	}
     }

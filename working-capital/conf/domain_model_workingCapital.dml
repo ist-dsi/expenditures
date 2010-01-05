@@ -13,9 +13,88 @@ valueType myorg.domain.util.Money as Money {
 class WorkingCapitalSystem {
 }
 
+class WorkingCapitalYear {
+	Integer year;
+}
+
+class WorkingCapital {
+}
+
+class WorkingCapitalInitialization {
+	DateTime requestCreation;
+	Money requestedAnualValue;
+	Money authorizedAnualValue;
+	Money maxAuthorizedAnualValue;
+	String fiscalId;
+	String bankAccountId;
+}
+
+class WorkingCapitalProcess extends .module.workflow.domain.WorkflowProcess {
+}
+
 
 relation MyOrgWorkingCapitalSystem {
 	.myorg.domain.MyOrg playsRole myOrg;
 	WorkingCapitalSystem playsRole workingCapitalSystem;
 }
 
+relation WorkingCapitalSystemWorkingCapitalYear {
+	WorkingCapitalSystem playsRole workingCapitalSystem;
+	WorkingCapitalYear playsRole workingCapitalYears {
+		multiplicity *;
+	}
+}
+
+relation WorkingCapitalSystemWorkingCapital {
+	WorkingCapitalSystem playsRole workingCapitalSystem;
+	WorkingCapital playsRole workingCapitals {
+		multiplicity *;
+	}
+}
+
+relation WorkingCapitalSystemWorkingCapitalInitialization {
+	WorkingCapitalSystem playsRole workingCapitalSystem;
+	WorkingCapitalInitialization playsRole workingCapitalInitializations {
+		multiplicity *;
+	}
+}
+
+relation WorkingCapitalWorkingCapitalYear {
+	WorkingCapitalYear playsRole workingCapitalYear;
+	WorkingCapital playsRole workingCapitals {
+		multiplicity *;
+	}
+}
+
+relation WorkingCapitalProcessWorkingCapital {
+	WorkingCapitalProcess playsRole workingCapitalProcess;
+	WorkingCapital playsRole workingCapital;
+}
+
+relation WorkingCapitalUnit {
+	.pt.ist.expenditureTrackingSystem.domain.organization.Unit playsRole unit;
+	WorkingCapital playsRole workingCapitals {
+		multiplicity *;
+	}
+}
+
+relation WorkingCapitalMovementResponsible {
+	.module.organization.domain.Person playsRole movementResponsible;
+	WorkingCapital playsRole movementResponsibleWorkingCapitals {
+		multiplicity *;
+	}
+}
+
+relation WorkingCapitalWorkingCapitalInitialization {
+	WorkingCapital playsRole workingCapital;
+	WorkingCapitalInitialization playsRole workingCapitalInitializations {
+		multiplicity *;
+	}
+}
+
+relation WorkingCapitalInitializationRequestor {
+	.module.organization.domain.Person playsRole requestor;
+	WorkingCapitalInitialization playsRole requestedWorkingCapitalInitializations {
+		multiplicity *;
+	}
+}
