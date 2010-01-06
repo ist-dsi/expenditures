@@ -1,10 +1,12 @@
 package module.workingCapital.presentationTier.action;
 
 import java.util.Set;
+import java.util.SortedSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import module.organization.domain.Accountability;
 import module.workflow.presentationTier.actions.ProcessManagement;
 import module.workingCapital.domain.WorkingCapital;
 import module.workingCapital.domain.WorkingCapitalProcess;
@@ -30,6 +32,8 @@ public class WorkingCapitalAction extends ContextBaseAction {
 
     public ActionForward configuration(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) {
+	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstance();
+	request.setAttribute("workingCapitalSystem", workingCapitalSystem);
 	return forward(request, "/workingCapital/configuration.jsp");
     }
 
@@ -56,6 +60,20 @@ public class WorkingCapitalAction extends ContextBaseAction {
 	final WorkingCapital workingCapital = getDomainObject(request, "workingCapitalOid");
 	final WorkingCapitalProcess workingCapitalProcess = workingCapital.getWorkingCapitalProcess();
 	return viewWorkingCapital(request, workingCapitalProcess);
+    }
+
+    public ActionForward configureAccountingUnit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstance();
+	request.setAttribute("workingCapitalSystem", workingCapitalSystem);
+	return forward(request, "/workingCapital/configureAccountingUnit.jsp");
+    }
+
+    public ActionForward configureManagementUnit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstance();
+	request.setAttribute("workingCapitalSystem", workingCapitalSystem);
+	return forward(request, "/workingCapital/configureManagementUnit.jsp");
     }
 
 }

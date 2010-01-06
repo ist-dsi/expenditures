@@ -9,6 +9,12 @@ import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.ProcessFile;
 import module.workflow.domain.WorkflowProcess;
+import module.workingCapital.domain.activity.ApproveActivity;
+import module.workingCapital.domain.activity.AuthorizeActivity;
+import module.workingCapital.domain.activity.UnApproveActivity;
+import module.workingCapital.domain.activity.UnAuthorizeActivity;
+import module.workingCapital.domain.activity.UnVerifyActivity;
+import module.workingCapital.domain.activity.VerifyActivity;
 import myorg.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 
@@ -18,6 +24,12 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base {
 
     static {
 	final List<WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>> activitiesAux = new ArrayList<WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>>();
+	activitiesAux.add(new ApproveActivity());
+	activitiesAux.add(new UnApproveActivity());
+	activitiesAux.add(new VerifyActivity());
+	activitiesAux.add(new UnVerifyActivity());
+	activitiesAux.add(new AuthorizeActivity());
+	activitiesAux.add(new UnAuthorizeActivity());
 	activities = Collections.unmodifiableList(activitiesAux);
     }
 

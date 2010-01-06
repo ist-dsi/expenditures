@@ -2,11 +2,16 @@ package module.workingCapital.domain;
 
 import java.util.Comparator;
 
-import org.joda.time.DateTime;
-
+import module.organization.domain.Accountability;
 import module.organization.domain.Person;
 import myorg.applicationTier.Authenticate.UserView;
+import myorg.domain.User;
+import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
+
+import org.joda.time.DateTime;
+
+import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 
 public class WorkingCapitalInitialization extends WorkingCapitalInitialization_Base {
@@ -37,5 +42,53 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
 	setFiscalId(fiscalId);
 	setBankAccountId(bankAccountId);
     }
-    
+
+    public void approve(final Person person) {
+	final WorkingCapital workingCapital = getWorkingCapital();
+	final Money requestedAnualValue = getRequestedAnualValue();
+	final Authorization authorization = workingCapital.findUnitResponsible(person, requestedAnualValue);
+	if (authorization == null) {
+	    throw new DomainException("person.cannot.approve.expense", person.getName());
+	}
+	setAprovalByUnitResponsible(new DateTime());
+	setResponsibleForUnitApproval(authorization);
+    }
+
+    public void unapprove() {
+	setAprovalByUnitResponsible(null);
+	removeResponsibleForUnitApproval();
+    }
+
+    public void verify(final User user) {
+	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstance();
+	final Accountability accountability = workingCapitalSystem.getAccountingAccountability(user);
+	if (accountability == null) {
+	    throw new DomainException("person.cannot.verify.expense", user.getPerson().getName());
+	}
+	setVerificationByAccounting(new DateTime());
+	setResponsibleForAccountingVerification(accountability);
+    }
+
+    public void unverify() {
+	setVerificationByAccounting(new DateTime());
+	removeResponsibleForAccountingVerification();
+	setAuthorizedAnualValue(null);
+	setMaxAuthorizedAnualValue(null);
+    }
+
+    public void authorize(final User user) {
+	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstance();
+	final Accountability accountability = workingCapitalSystem.getManagementeAccountability(user);
+	if (accountability == null) {
+	    throw new DomainException("person.cannot.authorize.expense", user.getPerson().getName());
+	}
+	setAuthorizationByUnitResponsible(new DateTime());
+	setResponsibleForUnitAuthorization(accountability);
+    }
+
+    public void unauthorize() {
+	setAuthorizationByUnitResponsible(new DateTime());
+	removeResponsibleForUnitAuthorization();
+    }
+
 }

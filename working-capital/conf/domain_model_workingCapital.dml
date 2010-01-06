@@ -27,6 +27,9 @@ class WorkingCapitalInitialization {
 	Money maxAuthorizedAnualValue;
 	String fiscalId;
 	String bankAccountId;
+	DateTime aprovalByUnitResponsible;
+	DateTime authorizationByUnitResponsible;
+	DateTime verificationByAccounting;
 }
 
 class WorkingCapitalProcess extends .module.workflow.domain.WorkflowProcess {
@@ -98,3 +101,45 @@ relation WorkingCapitalInitializationRequestor {
 		multiplicity *;
 	}
 }
+
+relation WorkingCapitalInitializationResponsibleForUnitApproval {
+	.pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization playsRole responsibleForUnitApproval;
+	WorkingCapitalInitialization playsRole approvedWorkingCapitalInitializations {
+		multiplicity *;
+	}
+}
+
+relation WorkingCapitalInitializationResponsibleForUnitAuthorization {
+	.module.organization.domain.Accountability playsRole responsibleForUnitAuthorization;
+	WorkingCapitalInitialization playsRole authorizedWorkingCapitalInitializations {
+		multiplicity *;
+	}
+}
+
+relation WorkingCapitalInitializationResponsibleForAccountingVerification {
+	.module.organization.domain.Accountability playsRole responsibleForAccountingVerification;
+	WorkingCapitalInitialization playsRole verifiedAccountingWorkingCapitalInitializations {
+		multiplicity *;
+	}
+}
+
+relation WorkingCapitalSystemAccountingUnit {
+	WorkingCapitalSystem playsRole workingCapitalSystemFromAccountingUnit;
+	.module.organization.domain.Unit playsRole accountingUnit;
+}
+
+relation WorkingCapitalSystemManagementUnit {
+	WorkingCapitalSystem playsRole workingCapitalSystemFromManagmentUnit;
+	.module.organization.domain.Unit playsRole managementUnit;
+}
+
+relation WorkingCapitalSystemAccountingAccountabilityType {
+	WorkingCapitalSystem playsRole workingCapitalSystemFromAccountingAccountabilityType;
+	.module.organization.domain.AccountabilityType playsRole accountingAccountabilityType;
+}
+
+relation WorkingCapitalSystemManagementAccountabilityType {
+	WorkingCapitalSystem playsRole workingCapitalSystemFromManagementeAccountabilityType;
+	.module.organization.domain.AccountabilityType playsRole managementAccountabilityType;
+}
+
