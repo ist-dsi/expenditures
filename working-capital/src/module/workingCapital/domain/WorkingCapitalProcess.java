@@ -7,8 +7,8 @@ import java.util.List;
 import module.organization.domain.Person;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
+import module.workflow.domain.ProcessFile;
 import module.workflow.domain.WorkflowProcess;
-import module.workflow.domain.WorkflowSystem;
 import myorg.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 
@@ -41,6 +41,11 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base {
     @Override
     public boolean isActive() {
 	return true;
+    }
+
+    @Override
+    public List<Class<? extends ProcessFile>> getAvailableFileTypes() {
+        return Collections.emptyList();
     }
 
 }

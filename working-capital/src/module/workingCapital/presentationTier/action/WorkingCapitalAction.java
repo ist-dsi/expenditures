@@ -5,6 +5,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import module.workflow.presentationTier.actions.ProcessManagement;
 import module.workingCapital.domain.WorkingCapital;
 import module.workingCapital.domain.WorkingCapitalProcess;
 import module.workingCapital.domain.WorkingCapitalSystem;
@@ -47,8 +48,7 @@ public class WorkingCapitalAction extends ContextBaseAction {
     }
 
     public ActionForward viewWorkingCapital(final HttpServletRequest request, final WorkingCapitalProcess workingCapitalProcess) {
-	request.setAttribute("workingCapitalProcess", workingCapitalProcess);
-	return forward(request, "/workingCapital/workingCapitalProcess.jsp");
+	return ProcessManagement.forwardToProcess(workingCapitalProcess);
     }
 
     public ActionForward viewWorkingCapital(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
