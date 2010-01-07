@@ -4,6 +4,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import module.organization.domain.Person;
+import myorg.domain.User;
 import myorg.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
@@ -50,6 +51,58 @@ public class WorkingCapital extends WorkingCapital_Base {
 	    return findUnitResponsible(person, amount, parent);
 	}
 	return null; 
+    }
+
+    public boolean isPendingAproval(final User user) {
+	for (final WorkingCapitalInitialization workingCapitalInitialization : getWorkingCapitalInitializationsSet()) {
+	    if (workingCapitalInitialization.isPendingAproval(user)) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
+    public boolean isPendingVerification(final User user) {
+	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstance(); 
+	if (workingCapitalSystem.isAccountingMember(user)) {
+	    for (final WorkingCapitalInitialization workingCapitalInitialization : getWorkingCapitalInitializationsSet()) {
+		if (workingCapitalInitialization.isPendingVerification()) {
+		    return true;
+		}
+	    }
+	}
+	return false;
+    }
+
+    public boolean isPendingAuthorization(User user) {
+	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstance(); 
+	if (workingCapitalSystem.isManagementeMember(user)) {
+	    for (final WorkingCapitalInitialization workingCapitalInitialization : getWorkingCapitalInitializationsSet()) {
+		if (workingCapitalInitialization.isPendingAuthorization()) {
+		    return true;
+		}
+	    }
+	}
+	return false;
+    }
+
+    public boolean isAvailable(final User user) {
+	if (user == null) {
+	    return false;
+	}
+	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstance();
+	if (user == getMovementResponsible().getUser()
+		|| workingCapitalSystem.isAccountingMember(user)
+		|| workingCapitalSystem.isManagementeMember(user)
+		|| findUnitResponsible(user.getPerson(), Money.ZERO) != null) {
+	    return true;
+	}
+	for (final WorkingCapitalInitialization workingCapitalInitialization : getWorkingCapitalInitializationsSet()) {
+	    if (user == workingCapitalInitialization.getRequestor().getUser()) {
+		return true;
+	    }
+	}
+	return false;
     }
 
 }

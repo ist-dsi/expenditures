@@ -2,6 +2,7 @@ package module.workingCapital.domain;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import module.organization.domain.Person;
@@ -15,10 +16,19 @@ import module.workingCapital.domain.activity.UnApproveActivity;
 import module.workingCapital.domain.activity.UnAuthorizeActivity;
 import module.workingCapital.domain.activity.UnVerifyActivity;
 import module.workingCapital.domain.activity.VerifyActivity;
+import myorg.domain.User;
 import myorg.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 
 public class WorkingCapitalProcess extends WorkingCapitalProcess_Base {
+
+    public static final Comparator<WorkingCapitalProcess> COMPARATOR_BY_UNIT_NAME = new Comparator<WorkingCapitalProcess>() {
+	@Override
+	public int compare(WorkingCapitalProcess o1, WorkingCapitalProcess o2) {
+	    final int c = o1.getWorkingCapital().getUnit().getName().compareTo(o2.getWorkingCapital().getUnit().getName());
+	    return c == 0 ? o2.hashCode() - o1.hashCode() : c;
+	}
+    };
 
     private static final List<WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>> activities;
 
@@ -58,6 +68,18 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base {
     @Override
     public List<Class<? extends ProcessFile>> getAvailableFileTypes() {
         return Collections.emptyList();
+    }
+
+    public boolean isPendingAproval(final User user) {
+	return getWorkingCapital().isPendingAproval(user);
+    }
+
+    public boolean isPendingVerification(User user) {
+	return getWorkingCapital().isPendingVerification(user);
+    }
+
+    public boolean isPendingAuthorization(User user) {
+	return getWorkingCapital().isPendingAuthorization(user);
     }
 
 }

@@ -7,9 +7,7 @@ import module.workingCapital.domain.WorkingCapital;
 import module.workingCapital.domain.WorkingCapitalInitialization;
 import module.workingCapital.domain.WorkingCapitalProcess;
 import myorg.domain.User;
-import myorg.domain.util.Money;
 import myorg.util.BundleUtil;
-import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 
 public class ApproveActivity extends WorkflowActivity<WorkingCapitalProcess, WorkingCapitalInitializationInformation> {
 
@@ -20,18 +18,8 @@ public class ApproveActivity extends WorkflowActivity<WorkingCapitalProcess, Wor
 
     @Override
     public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
-	final Person person = user.getPerson();
 	final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
-	for (final WorkingCapitalInitialization workingCapitalInitialization : workingCapital.getWorkingCapitalInitializationsSet()) {
-	    if (!workingCapitalInitialization.hasResponsibleForUnitApproval()) {
-		final Money requestedAnualValue = workingCapitalInitialization.getRequestedAnualValue();
-		final Authorization authorization = workingCapital.findUnitResponsible(person, requestedAnualValue);
-		if (authorization != null) {
-		    return true;
-		}
-	    }
-	}
-	return false;
+	return workingCapital.isPendingAproval(user);
     }
 
     @Override

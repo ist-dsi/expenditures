@@ -5,7 +5,6 @@ import module.workflow.activities.WorkflowActivity;
 import module.workingCapital.domain.WorkingCapital;
 import module.workingCapital.domain.WorkingCapitalInitialization;
 import module.workingCapital.domain.WorkingCapitalProcess;
-import module.workingCapital.domain.WorkingCapitalSystem;
 import myorg.domain.User;
 import myorg.util.BundleUtil;
 
@@ -18,16 +17,8 @@ public class AuthorizeActivity extends WorkflowActivity<WorkingCapitalProcess, W
 
     @Override
     public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
-	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstance(); 
-	if (workingCapitalSystem.isManagementeMember(user)) {
-	    final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
-	    for (final WorkingCapitalInitialization workingCapitalInitialization : workingCapital.getWorkingCapitalInitializationsSet()) {
-		if (workingCapitalInitialization.hasResponsibleForAccountingVerification() && !workingCapitalInitialization.hasResponsibleForUnitAuthorization()) {
-		    return true;
-		}
-	    }
-	}
-	return false;
+	final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
+	return workingCapital.isPendingAuthorization(user);
     }
 
     @Override

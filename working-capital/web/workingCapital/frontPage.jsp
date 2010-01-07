@@ -8,19 +8,101 @@
 	<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.front.page"/>
 </h2>
 
-<html:link page="/workingCapital.do?method=prepareCreateWorkingCapitalInitialization">
-	<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.initialization.create"/>
-</html:link>
+<fr:edit id="workingCapitalContext" name="workingCapitalContext" action="/workingCapital.do?method=frontPage">
+	<fr:schema type="module.workingCapital.presentationTier.action.util.WorkingCapitalContext" bundle="WORKING_CAPITAL_RESOURCES">
+		<fr:slot name="year" key="label.module.workingCapital.year" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	</fr:schema>
+	<fr:layout name="tabular">
+		<fr:property name="classes" value="form" />
+		<fr:property name="columnClasses" value=",,tderror" />
+	</fr:layout>
+</fr:edit>
 
-<logic:iterate id="workingCapital" name="workingCapitals">
-	<br/>
-	<html:link page="/workingCapital.do?method=viewWorkingCapital" paramId="workingCapitalOid" paramName="workingCapital" paramProperty="externalId">
-		<bean:write name="workingCapital" property="externalId"/>
-	</html:link>
-	<logic:present name="workingCapital" property="workingCapitalProcess">
-		:
-		<html:link action="/workflowProcessManagement.do?method=viewProcess" paramId="processId" paramName="workingCapital" paramProperty="workingCapitalProcess.externalId">
-			<bean:write name="workingCapital" property="workingCapitalProcess" />
-		</html:link>
-	</logic:present>
-</logic:iterate>
+<br/>
+
+<div style="float: left; width: 100%">
+	<table style="width: 100%; margin: 1em 0;">
+		<tr>
+			<td style="border: 1px dotted #aaa; padding: 10px 15px; width: 48%; vertical-align: top;">
+				<p class="mtop0 mbottom05">
+					<b>
+						<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.front.page.pending.my.aproval"/>
+					</b>
+				</p>
+				<bean:define id="processList" toScope="request" name="workingCapitalContext" property="workingCapitalYear.pendingAproval"/>
+				<jsp:include page="processList.jsp"/>
+
+				<br/>
+				<p class="mtop0 mbottom05">
+					<b>
+						<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.front.page.pending.my.verification"/>
+					</b>
+				</p>
+				<bean:define id="processList" toScope="request" name="workingCapitalContext" property="workingCapitalYear.pendingVerification"/>
+				<jsp:include page="processList.jsp"/>
+
+				<br/>
+				<p class="mtop0 mbottom05">
+					<b>
+						<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.front.page.pending.my.authorization"/>
+					</b>
+				</p>
+				<bean:define id="processList" toScope="request" name="workingCapitalContext" property="workingCapitalYear.pendingAuthorization"/>
+				<jsp:include page="processList.jsp"/>
+			</td>
+			<td style="border: none; width: 2%; padding: 0;"></td>
+			<td style="border: 1px dotted #aaa; padding: 10px 15px; width: 48%; vertical-align: top;">
+				<p class="mtop0 mbottom05">
+					<b>
+						<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.front.page.mine"/>
+					</b>
+				</p>
+				<bean:define id="processList" toScope="request" name="workingCapitalContext" property="workingCapitalYear.myWorkingCapital"/>
+				<jsp:include page="processList.jsp"/>
+
+				<br/>
+				<p class="mtop0 mbottom05">
+					<b>
+						<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.front.page.requested"/>
+					</b>
+				</p>
+				<bean:define id="processList" toScope="request" name="workingCapitalContext" property="workingCapitalYear.requestedWorkingCapital"/>
+				<jsp:include page="processList.jsp"/>
+
+				<br/>
+				<html:link page="/workingCapital.do?method=prepareCreateWorkingCapitalInitialization">
+					<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.initialization.create"/>
+				</html:link>
+			</td>
+		</tr>
+	</table>
+</div>
+<div style="clear: left;"></div>
+
+<br/>
+
+<h3>
+	<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.front.page.search"/>
+</h3>
+<fr:edit id="workingCapitalContextUnitSearch" name="workingCapitalContext" action="/workingCapital.do?method=search">
+	<fr:schema type="module.workingCapital.presentationTier.action.util.WorkingCapitalContext" bundle="WORKING_CAPITAL_RESOURCES">
+		<fr:slot name="unit" layout="autoComplete" key="label.party" bundle="ORGANIZATION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+        	<fr:property name="labelField" value="partyName.content"/>
+			<fr:property name="format" value="${presentationName}"/>
+			<fr:property name="minChars" value="3"/>
+			<fr:property name="args" value="provider=module.organization.presentationTier.renderers.providers.UnitAutoCompleteProvider"/>
+			<fr:property name="size" value="60"/>
+		</fr:slot>
+	</fr:schema>
+	<fr:layout name="tabular">
+		<fr:property name="classes" value="form" />
+		<fr:property name="columnClasses" value=",,tderror" />
+	</fr:layout>
+</fr:edit>
+
+<br/>
+
+<logic:present name="unitProcesses">
+	<bean:define id="processList" toScope="request" name="unitProcesses"/>
+	<jsp:include page="processList.jsp"/>
+</logic:present>

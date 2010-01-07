@@ -1,17 +1,16 @@
 package module.workingCapital.presentationTier.action;
 
-import java.util.Set;
 import java.util.SortedSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import module.organization.domain.Accountability;
 import module.workflow.presentationTier.actions.ProcessManagement;
 import module.workingCapital.domain.WorkingCapital;
 import module.workingCapital.domain.WorkingCapitalProcess;
 import module.workingCapital.domain.WorkingCapitalSystem;
 import module.workingCapital.domain.util.WorkingCapitalInitializationBean;
+import module.workingCapital.presentationTier.action.util.WorkingCapitalContext;
 import myorg.presentationTier.actions.ContextBaseAction;
 
 import org.apache.struts.action.ActionForm;
@@ -25,9 +24,29 @@ public class WorkingCapitalAction extends ContextBaseAction {
 
     public ActionForward frontPage(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) {
-	final Set<WorkingCapital> workingCapitals = WorkingCapitalSystem.getInstance().getWorkingCapitalsSet();
-	request.setAttribute("workingCapitals", workingCapitals);
+	WorkingCapitalContext workingCapitalContext = getRenderedObject();
+	if (workingCapitalContext == null) {
+	    workingCapitalContext = new WorkingCapitalContext();
+	}
+	return frontPage(request, workingCapitalContext);
+    }
+
+    public ActionForward frontPage(final HttpServletRequest request, final WorkingCapitalContext workingCapitalContext) {
+	request.setAttribute("workingCapitalContext", workingCapitalContext);
 	return forward(request, "/workingCapital/frontPage.jsp");
+    }
+
+    public ActionForward search(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	final WorkingCapitalContext workingCapitalContext = getRenderedObject();
+	final SortedSet<WorkingCapitalProcess> unitProcesses = workingCapitalContext.getWorkingCapitalSearchByUnit();
+	if (unitProcesses.size() == 1) {
+	    final WorkingCapitalProcess workingCapitalProcess = unitProcesses.first();
+	    return ProcessManagement.forwardToProcess(workingCapitalProcess);
+	} else {
+	    request.setAttribute("unitProcesses", unitProcesses);
+	    return frontPage(request, workingCapitalContext);
+	}
     }
 
     public ActionForward configuration(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
