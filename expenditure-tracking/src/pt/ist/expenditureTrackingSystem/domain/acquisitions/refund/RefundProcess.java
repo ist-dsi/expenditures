@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Set;
 
 import module.workflow.activities.ActivityInformation;
-import module.workflow.activities.GiveProcess;
 import module.workflow.activities.ReleaseProcess;
 import module.workflow.activities.StealProcess;
 import module.workflow.activities.TakeProcess;
@@ -34,6 +33,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.U
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.UnAuthorize;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.CancelRefundProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.ChangeFinancersAccountingUnit;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.ChangeProcessRequester;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.ConfirmInvoices;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.CreateRefundInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.CreateRefundItem;
@@ -102,6 +102,7 @@ public class RefundProcess extends RefundProcess_Base {
 	activities.add(new AllocateProjectFundsPermanently<RefundProcess>());
 	activities.add(new AllocateFundsPermanently<RefundProcess>());
 	activities.add(new ChangeFinancersAccountingUnit());
+	activities.add(new ChangeProcessRequester());
 	// List<AbstractActivity<RefundProcess>> requestActivitites = new
 	// ArrayList<AbstractActivity<RefundProcess>>();
 	// requestActivitites.add(new CreateRefundItem());
