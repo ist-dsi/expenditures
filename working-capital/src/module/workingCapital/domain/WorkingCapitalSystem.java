@@ -1,5 +1,6 @@
 package module.workingCapital.domain;
 
+import java.util.Calendar;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -7,11 +8,12 @@ import module.organization.domain.Accountability;
 import module.organization.domain.AccountabilityType;
 import module.organization.domain.Person;
 import module.organization.domain.Unit;
+import myorg.domain.ModuleInitializer;
 import myorg.domain.MyOrg;
 import myorg.domain.User;
 import pt.ist.fenixWebFramework.services.Service;
 
-public class WorkingCapitalSystem extends WorkingCapitalSystem_Base {
+public class WorkingCapitalSystem extends WorkingCapitalSystem_Base implements ModuleInitializer {
 
     public static WorkingCapitalSystem getInstance() {
 	final MyOrg myOrg = MyOrg.getInstance();
@@ -98,6 +100,12 @@ public class WorkingCapitalSystem extends WorkingCapitalSystem_Base {
 	    }
 	}
 	return null;
+    }
+
+    @Override
+    @Service
+    public void init(final MyOrg root) {
+	WorkingCapitalYear.findOrCreate(Integer.valueOf(Calendar.getInstance().get(Calendar.YEAR)));
     }
 
 }
