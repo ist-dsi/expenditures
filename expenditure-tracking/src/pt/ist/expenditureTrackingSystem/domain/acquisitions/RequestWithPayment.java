@@ -354,7 +354,7 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
     }
 
     public boolean hasAllocatedFundsPermanentlyForAllProjectFinancers() {
-	for (final Financer financer : getFinancersWithFundsAllocated()) {
+	for (final Financer financer : getFinancersWithFundsInitiallyAllocated()) {
 	    if (!financer.hasAllocatedFundsPermanentlyForAllProjectFinancers()) {
 		return false;
 	    }
@@ -363,7 +363,7 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
     }
 
     public boolean hasAllocatedFundsPermanentlyForAnyProjectFinancer() {
-	for (final Financer financer : getFinancersWithFundsAllocated()) {
+	for (final Financer financer : getFinancersWithFundsInitiallyAllocated()) {
 	    if (financer.hasAllocatedFundsPermanentlyForAnyProjectFinancers()) {
 		return true;
 	    }
@@ -431,6 +431,16 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
 	Set<Financer> res = new HashSet<Financer>();
 	for (Financer financer : getFinancers()) {
 	    if (financer.getAmountAllocated().isPositive()) {
+		res.add(financer);
+	    }
+	}
+	return res;
+    }
+
+    public Set<Financer> getFinancersWithFundsInitiallyAllocated() {
+	Set<Financer> res = new HashSet<Financer>();
+	for (Financer financer : getFinancers()) {
+	    if (financer.getInitialAmountAllocated().isPositive()) {
 		res.add(financer);
 	    }
 	}

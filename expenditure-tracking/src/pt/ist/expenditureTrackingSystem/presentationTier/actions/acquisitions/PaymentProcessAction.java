@@ -7,19 +7,18 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import myorg.domain.exceptions.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.ProjectFinancer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.UnitItem;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.AllocateProjectFundsPermanentlyActivityInformation;
 import pt.ist.expenditureTrackingSystem.domain.dto.DomainObjectBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.UnitItemBean;
@@ -310,7 +309,7 @@ public abstract class PaymentProcessAction extends ProcessAction {
 	    }
 	    request.setAttribute("process", process);
 	    List<FundAllocationBean> fundAllocationBeans = new ArrayList<FundAllocationBean>();
-	    for (Financer financer : process.getFinancersWithFundsAllocated()) {
+	    for (Financer financer : process.getRequest().getFinancersWithFundsInitiallyAllocated()) {
 		fundAllocationBeans.addAll(getFundAllocationBeans(financer));
 	    }
 	    request.setAttribute("fundAllocationBeans", fundAllocationBeans);
@@ -380,7 +379,7 @@ public abstract class PaymentProcessAction extends ProcessAction {
 	    }
 	    request.setAttribute("process", process);
 	    List<FundAllocationBean> fundAllocationBeans = new ArrayList<FundAllocationBean>();
-	    for (Financer financer : process.getFinancersWithFundsAllocated()) {
+	    for (Financer financer : process.getRequest().getFinancersWithFundsInitiallyAllocated()) {
 		if (financer.isProjectFinancer()) {
 		    fundAllocationBeans.addAll(getProjectFundAllocationBeans((ProjectFinancer) financer));
 		}

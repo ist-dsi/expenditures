@@ -393,7 +393,7 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 
     public boolean isInvoiceConfirmedBy() {
 	for (AcquisitionRequestItem item : getAcquisitionRequestItemsSet()) {
-	    if (!item.isConfirmForAllInvoices()) {
+	    if (!Money.ZERO.equals(item.getRealValue()) && !item.isConfirmForAllInvoices()) {
 		return false;
 	    }
 	}

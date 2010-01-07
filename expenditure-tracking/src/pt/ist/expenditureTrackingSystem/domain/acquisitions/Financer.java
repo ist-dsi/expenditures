@@ -5,11 +5,11 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
 
+import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
 
 import org.apache.commons.lang.StringUtils;
 
-import myorg.domain.exceptions.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.CostCenter;
@@ -68,6 +68,16 @@ public class Financer extends Financer_Base {
 	    if (unitItem.getRoundedRealShareValue() != null) {
 		amount = amount.add(unitItem.getRoundedRealShareValue());
 	    } else if (unitItem.getRoundedShareValue() != null) {
+		amount = amount.add(unitItem.getRoundedShareValue());
+	    }
+	}
+	return amount;
+    }
+
+    public Money getInitialAmountAllocated() {
+	Money amount = Money.ZERO;
+	for (UnitItem unitItem : getUnitItems()) {
+	    if (unitItem.getRoundedShareValue() != null) {
 		amount = amount.add(unitItem.getRoundedShareValue());
 	    }
 	}
