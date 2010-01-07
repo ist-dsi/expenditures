@@ -213,15 +213,12 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	super();
 	inGenesis();
 	AcquisitionRequest acquisitionRequest = new AcquisitionRequest(this, suppliers, person);
-	// if (classification == ProcessClassification.CT75000 &&
-	// suppliers.size() < 3) {
-	// throw new
-	// DomainException("acquisitionProcess.message.exception.needsMoreSuppliers");
-	// }
+	if (suppliers.size() == 0) {
+	    throw new DomainException("acquisitionProcess.message.exception.needsMoreSuppliers");
+	}
 	if (suppliers.size() == 1) {
 	    acquisitionRequest.setSelectedSupplier(suppliers.get(0));
 	}
-
 	setProcessClassification(classification);
     }
 
