@@ -24,8 +24,9 @@ public class UnApproveActivity extends WorkflowActivity<WorkingCapitalProcess, W
 	final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
 	for (final WorkingCapitalInitialization workingCapitalInitialization : workingCapital.getWorkingCapitalInitializationsSet()) {
 	    if (workingCapitalInitialization.hasResponsibleForUnitApproval() && !workingCapitalInitialization.hasResponsibleForAccountingVerification()) {
-		final Money requestedAnualValue = workingCapitalInitialization.getRequestedAnualValue();
-		final Authorization authorization = workingCapital.findUnitResponsible(person, requestedAnualValue);
+		//final Money valueForAuthorization = workingCapitalInitialization.getRequestedAnualValue();
+		final Money valueForAuthorization = Money.ZERO;
+		final Authorization authorization = workingCapital.findUnitResponsible(person, valueForAuthorization);
 		if (authorization != null) {
 		    return true;
 		}

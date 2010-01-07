@@ -11,7 +11,7 @@
 </logic:empty>
 <logic:notEmpty name="processList">
 	<ul class="operations mtop0">
-		<logic:iterate id="process" name="workingCapitalContext" property="workingCapitalYear.pendingAproval">
+		<logic:iterate id="process" name="processList">
 			<li>
 				<html:link action="/workflowProcessManagement.do?method=viewProcess" paramId="processId" paramName="process" paramProperty="externalId">
 					<bean:write name="process" property="workingCapital.unit.presentationName"/>

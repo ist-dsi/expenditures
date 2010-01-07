@@ -82,4 +82,9 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base {
 	return getWorkingCapital().isPendingAuthorization(user);
     }
 
+    @Override
+    public User getProcessCreator() {
+        return getWorkingCapital().getRequester();
+    }
+
 }

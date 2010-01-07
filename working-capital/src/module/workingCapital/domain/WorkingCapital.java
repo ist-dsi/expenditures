@@ -1,5 +1,6 @@
 package module.workingCapital.domain;
 
+import java.util.Collections;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -40,15 +41,19 @@ public class WorkingCapital extends WorkingCapital_Base {
 
     private Authorization findUnitResponsible(final Person person, final Money amount, final Unit unit) {
 	if (unit != null) {
+	    boolean hasAtLeastOneResponsible = false;
 	    for (final Authorization authorization : unit.getAuthorizationsSet()) {
-		if (authorization.getPerson().getUser() == person.getUser()
-			&& authorization.isValid()
-			&& authorization.getMaxAmount().isGreaterThanOrEqual(amount)) {
-		    return authorization;
+		if (authorization.isValid() && authorization.getMaxAmount().isGreaterThanOrEqual(amount)) {
+		    hasAtLeastOneResponsible = true;
+		    if (authorization.getPerson().getUser() == person.getUser()) {
+			return authorization;
+		    }
 		}
 	    }
-	    final Unit parent = unit.getParentUnit();
-	    return findUnitResponsible(person, amount, parent);
+	    if (!hasAtLeastOneResponsible) {
+		final Unit parent = unit.getParentUnit();
+		return findUnitResponsible(person, amount, parent);
+	    }
 	}
 	return null; 
     }
@@ -103,6 +108,11 @@ public class WorkingCapital extends WorkingCapital_Base {
 	    }
 	}
 	return false;
+    }
+
+    public User getRequester() {
+	final WorkingCapitalInitialization workingCapitalInitialization = Collections.min(getWorkingCapitalInitializationsSet(), WorkingCapitalInitialization.COMPARATOR_BY_REQUEST_CREATION);
+	return workingCapitalInitialization.getRequestor().getUser();
     }
 
 }

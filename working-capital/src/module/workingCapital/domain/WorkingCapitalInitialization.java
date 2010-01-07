@@ -45,8 +45,9 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
 
     public void approve(final Person person) {
 	final WorkingCapital workingCapital = getWorkingCapital();
-	final Money requestedAnualValue = getRequestedAnualValue();
-	final Authorization authorization = workingCapital.findUnitResponsible(person, requestedAnualValue);
+	//final Money requestedAnualValue = getRequestedAnualValue();
+	final Money valueForAuthorization = Money.ZERO;
+	final Authorization authorization = workingCapital.findUnitResponsible(person, valueForAuthorization);
 	if (authorization == null) {
 	    throw new DomainException("person.cannot.approve.expense", person.getName());
 	}
@@ -93,8 +94,9 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
 
     public boolean isPendingAproval(User user) {
 	if (!hasResponsibleForUnitApproval()) {
-	    final Money requestedAnualValue = getRequestedAnualValue();
-	    final Authorization authorization = getWorkingCapital().findUnitResponsible(user.getPerson(), requestedAnualValue);
+	    //final Money valueForAuthorization = getRequestedAnualValue();
+	    final Money valueForAuthorization = Money.ZERO;
+	    final Authorization authorization = getWorkingCapital().findUnitResponsible(user.getPerson(), valueForAuthorization);
 	    if (authorization != null) {
 		return true;
 	    }
