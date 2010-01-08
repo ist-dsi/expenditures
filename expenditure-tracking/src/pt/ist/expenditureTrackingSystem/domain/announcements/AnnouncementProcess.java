@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-
 import module.workflow.domain.ActivityLog;
 import myorg.domain.User;
 import myorg.domain.exceptions.DomainException;
@@ -120,5 +119,15 @@ public class AnnouncementProcess extends AnnouncementProcess_Base {
     @Override
     public <T extends ActivityLog> T logExecution(User user, String operationName, String... args) {
 	return (T) new OperationLog(this, user, operationName, getAnnouncementProcessStateType());
+    }
+
+    @Override
+    public User getProcessCreator() {
+	return getAnnouncement().getPublisher().getUser();
+    }
+
+    @Override
+    public void notifyUserDueToComment(final User user, final String comment) {
+	// do nothing.
     }
 }

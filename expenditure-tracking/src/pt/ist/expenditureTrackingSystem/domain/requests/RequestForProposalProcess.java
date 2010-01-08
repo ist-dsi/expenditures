@@ -153,4 +153,15 @@ public class RequestForProposalProcess extends RequestForProposalProcess_Base {
     public <T extends ActivityLog> T logExecution(User user, String operationName, String... args) {
 	return (T) new OperationLog(this, user, operationName, getRequestForProposalProcessStateType());
     }
+
+    @Override
+    public User getProcessCreator() {
+	return null;
+    }
+
+    @Override
+    public void notifyUserDueToComment(final User user, final String comment) {
+	// do nothing.
+    }
+
 }

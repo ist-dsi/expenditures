@@ -27,6 +27,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.G
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.GenericAssignPayingUnitToItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.GenericRemovePayingUnit;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.ProjectFundAllocation;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.RemoveCancelProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.RemoveFundsPermanentlyAllocated;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.RemovePermanentProjectFunds;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.UnApprove;
@@ -103,6 +104,7 @@ public class RefundProcess extends RefundProcess_Base {
 	activities.add(new AllocateFundsPermanently<RefundProcess>());
 	activities.add(new ChangeFinancersAccountingUnit());
 	activities.add(new ChangeProcessRequester());
+	activities.add(new RemoveCancelProcess<RefundProcess>());
 	// List<AbstractActivity<RefundProcess>> requestActivitites = new
 	// ArrayList<AbstractActivity<RefundProcess>>();
 	// requestActivitites.add(new CreateRefundItem());
@@ -474,4 +476,14 @@ public class RefundProcess extends RefundProcess_Base {
     public <T extends WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>> List<T> getActivities() {
 	return (List<T>) activities;
     }
+
+    @Override
+    public void revertToState(ProcessState processState) {
+	final RefundProcessState refundProcessState =  (RefundProcessState) processState;
+	final RefundProcessStateType refundProcessStateType = refundProcessState.getRefundProcessStateType();
+	if (refundProcessStateType != null && refundProcessStateType != RefundProcessStateType.CANCELED) {
+	    new RefundProcessState(this, refundProcessStateType);
+	}
+    }
+
 }

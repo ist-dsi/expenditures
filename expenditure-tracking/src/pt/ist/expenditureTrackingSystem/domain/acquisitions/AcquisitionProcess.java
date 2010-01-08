@@ -272,4 +272,18 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 	return !getFiles(PurchaseOrderDocument.class).isEmpty();
     }
 
+    @Override
+    public boolean isCanceled() {
+	return getLastAcquisitionProcessState().isCanceled();
+    }
+
+    @Override
+    public void revertToState(ProcessState processState) {
+	final AcquisitionProcessState acquisitionProcessState = (AcquisitionProcessState) processState;
+	final AcquisitionProcessStateType acquisitionProcessStateType = acquisitionProcessState.getAcquisitionProcessStateType();
+	if (acquisitionProcessStateType != null && acquisitionProcessStateType != AcquisitionProcessStateType.CANCELED) {
+	    new AcquisitionProcessState(this, acquisitionProcessStateType);
+	}
+    }
+
 }

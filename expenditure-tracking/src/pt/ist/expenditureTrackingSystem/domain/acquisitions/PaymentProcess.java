@@ -16,6 +16,7 @@ import myorg.util.BundleUtil;
 import org.joda.time.LocalDate;
 
 import pt.ist.emailNotifier.domain.Email;
+import pt.ist.expenditureTrackingSystem.domain.ProcessState;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Project;
@@ -174,6 +175,8 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
     public Set<ProjectFinancer> getProjectFinancersWithFundsAllocated(final Person person) {
 	return getRequest().getProjectFinancersWithFundsAllocated(person);
     }
+
+    public abstract boolean isCanceled();
 
     public abstract boolean isInGenesis();
 
@@ -364,5 +367,7 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
     public List<ProcessFile> getGenericFiles() {
 	return getFiles(ProcessFile.class);
     }
+
+    public abstract void revertToState(ProcessState processState);
 
 }
