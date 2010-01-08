@@ -87,4 +87,9 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base {
         return getWorkingCapital().getRequester();
     }
 
+    @Override
+    public void notifyUserDueToComment(final User user, final String comment) {
+	// do nothing.
+    }
+
 }
