@@ -69,15 +69,10 @@ public class SimplifiedAcquisitionPredicate extends SearchPredicate {
 
     private boolean matchCriteria(final Boolean hasAvailableAndAccessibleActivityForUser,
 	    final AcquisitionRequest acquisitionRequest) {
-	return hasAvailableAndAccessibleActivityForUser == null || !hasAvailableAndAccessibleActivityForUser.booleanValue()
-		|| isPersonAbleToExecuteActivities(acquisitionRequest.getAcquisitionProcess());
-    }
-
-    private boolean isPersonAbleToExecuteActivities(final AcquisitionProcess acquisitionProcess) {
-	if (acquisitionProcess instanceof RegularAcquisitionProcess) {
-	    return ((RegularAcquisitionProcess) acquisitionProcess).isPersonAbleToExecuteActivities();
-	}
-	return false;
+	return hasAvailableAndAccessibleActivityForUser == null
+		|| !hasAvailableAndAccessibleActivityForUser.booleanValue()
+		|| (acquisitionRequest.getProcess() instanceof RegularAcquisitionProcess && acquisitionRequest.getProcess()
+			.hasAnyAvailableActivity(true));
     }
 
     private boolean matchShowOnlyCriteris(final AcquisitionRequest acquisitionRequest, final SearchPaymentProcess searchBean) {

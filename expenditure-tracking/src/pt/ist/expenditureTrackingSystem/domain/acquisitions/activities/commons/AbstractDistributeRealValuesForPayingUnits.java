@@ -11,10 +11,10 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
 import pt.ist.expenditureTrackingSystem.domain.dto.UnitItemBean;
 
 public abstract class AbstractDistributeRealValuesForPayingUnits<P extends PaymentProcess> extends
-	WorkflowActivity<P, GenericAssignPayingUnitToItemActivityInformation<P>> {
+	WorkflowActivity<P, AbstractDistributeRealValuesForPayingUnitsActivityInformation<P>> {
 
     @Override
-    protected void process(GenericAssignPayingUnitToItemActivityInformation<P> activityInformation) {
+    protected void process(AbstractDistributeRealValuesForPayingUnitsActivityInformation<P> activityInformation) {
 	List<UnitItemBean> beans = activityInformation.getBeans();
 	RequestItem item = activityInformation.getItem();
 	Money amount = Money.ZERO;
@@ -32,8 +32,8 @@ public abstract class AbstractDistributeRealValuesForPayingUnits<P extends Payme
 
     }
 
-    public GenericAssignPayingUnitToItemActivityInformation<P> getActivityInformation(P process) {
-	return new GenericAssignPayingUnitToItemActivityInformation<P>(process, this);
+    public AbstractDistributeRealValuesForPayingUnitsActivityInformation<P> getActivityInformation(P process) {
+	return new AbstractDistributeRealValuesForPayingUnitsActivityInformation<P>(process, this);
     }
 
     @Override

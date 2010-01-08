@@ -2,15 +2,12 @@ package pt.ist.expenditureTrackingSystem.domain.processes;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
-import module.workflow.domain.ProcessFile;
 import module.workflow.domain.WorkflowLog;
 import module.workflow.domain.WorkflowProcess;
 import module.workflow.domain.WorkflowProcessComment;
@@ -19,7 +16,6 @@ import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.User;
 
 import org.apache.commons.collections.Predicate;
-import org.joda.time.DateTime;
 
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
@@ -27,7 +23,6 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.ProcessesThatAreAuth
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
-import pt.ist.fenixWebFramework.services.Service;
 
 public abstract class GenericProcess extends GenericProcess_Base {
 
@@ -68,23 +63,24 @@ public abstract class GenericProcess extends GenericProcess_Base {
     }
 
     public static <T extends PaymentProcess> Set<T> getProcessesForPerson(Class<T> processClass, final Person person,
-	    PaymentProcessYear year) {
+	    PaymentProcessYear year, final boolean userAwarness) {
 
 	Set<T> processes = null;
 	if (person.hasAnyAuthorizations()) {
 	    processes = new HashSet<T>();
 	    for (T process : GenericProcess.getProcessesWithResponsible(processClass, person, year)) {
-		if (process.hasAnyAvailableActivitity()) {
+		if (process.hasAnyAvailableActivity(userAwarness)) {
 		    processes.add(process);
 		}
 	    }
 	} else {
+	    final User user = person.getUser();
 	    processes = GenericProcess.getAllProcess(processClass, new Predicate() {
 
 		@Override
 		public boolean evaluate(Object arg0) {
 		    GenericProcess process = (GenericProcess) arg0;
-		    return process.hasAnyAvailableActivity(person);
+		    return process.hasAnyAvailableActivity(user, userAwarness);
 		}
 
 	    }, year);
@@ -93,90 +89,14 @@ public abstract class GenericProcess extends GenericProcess_Base {
 	return processes;
     }
 
-    /*
-     * TODO: EVENTUALLY REMOVE THIS
-     */
-    public <T extends GenericProcess> AbstractActivity<T> getActivityByName(String name) {
-	return null;
-    }
-
-    public boolean hasAnyAvailableActivity(Person person) {
-	final UserView userView = UserView.getCurrentUserView();
-	boolean result = false;
-	try {
-	    userView.mockUser(person.getUser());
-	    result = hasAnyAvailableActivitity();
-	} finally {
-	    userView.unmockUser();
-	}
-	return result;
-    }
-
-    public DateTime getDateFromLastActivity() {
-	List<WorkflowLog> logs = new ArrayList<WorkflowLog>();
-	logs.addAll(getExecutionLogs());
-	Collections.sort(logs, new Comparator<WorkflowLog>() {
-
-	    public int compare(WorkflowLog log1, WorkflowLog log2) {
-		return -1 * log1.getWhenOperationWasRan().compareTo(log2.getWhenOperationWasRan());
-	    }
-
-	});
-
-	return logs.isEmpty() ? null : logs.get(0).getWhenOperationWasRan();
-    }
-
     public static boolean isCreateNewProcessAvailable() {
 	final User user = UserView.getCurrentUser();
 	return user != null;
     }
 
-    public WorkflowProcessComment getMostRecentComment() {
-	TreeSet<WorkflowProcessComment> comments = new TreeSet<WorkflowProcessComment>(WorkflowProcessComment.REVERSE_COMPARATOR);
-	comments.addAll(getComments());
-	return comments.size() > 0 ? comments.first() : null;
-    }
-
-    private boolean match(Class[] classes, String name) {
-	for (Class clazz : classes) {
-	    if (clazz.getSimpleName().equals(name)) {
-		return true;
-	    }
-	}
-	return false;
-    }
-
-    @Override
-    public void notifyUserDueToComment(User user, String comment) {
-	notifyPersonDueToComment(user.getExpenditurePerson(), comment);
-    }
-
     @Override
     public boolean isSystemAbleToNotifyUser(User user) {
 	return user.getExpenditurePerson().getEmail() != null;
-    }
-
-    public void notifyPersonDueToComment(Person person, String comment) {
-	List<String> toAddress = new ArrayList<String>();
-	toAddress.clear();
-	final String email = person.getEmail();
-	if (email != null) {
-	    toAddress.add(email);
-
-	    // new Email("Central de Compras", "noreply@ist.utl.pt", new
-	    // String[] {}, toAddress, Collections.EMPTY_LIST,
-	    // Collections.EMPTY_LIST, "New Process Comment",
-	    // "There's a comment directed to you");
-	}
-    }
-
-    /*
-     * TODO: This will be removed when using the new workflow interface.
-     */
-    @Service
-    public void addFile(String displayName, String filename, byte[] consumeInputStream) {
-	ProcessFile file = new ProcessFile(displayName, filename, consumeInputStream);
-	addFiles(file);
     }
 
     protected Person getLoggedPerson() {

@@ -40,18 +40,21 @@ public class RefundableInvoiceFile extends RefundableInvoiceFile_Base {
     private void check(RequestItem item, Supplier supplier, Money value, BigDecimal vatValue, Money refundableValue) {
 	RefundProcess process = item.getRequest().getProcess();
 	if (!process.getSkipSupplierFundAllocation() && !supplier.isFundAllocationAllowed(value)) {
-	    throw new DomainException("acquisitionRequestItem.message.exception.fundAllocationNotAllowed","resources/AcquisitionResources");
+	    throw new DomainException("acquisitionRequestItem.message.exception.fundAllocationNotAllowed", DomainException
+		    .getResourceFor("resources/AcquisitionResources"));
 	}
 	Money realValue = item.getRealValue();
 	Money estimatedValue = item.getValue();
 
 	if ((realValue != null && realValue.add(refundableValue).isGreaterThan(estimatedValue)) || realValue == null
 		&& refundableValue.isGreaterThan(estimatedValue)) {
-	    throw new DomainException("refundItem.message.info.realValueLessThanRefundableValue","resources/AcquisitionResources");
+	    throw new DomainException("refundItem.message.info.realValueLessThanRefundableValue", DomainException
+		    .getResourceFor("resources/AcquisitionResources"));
 	}
 
 	if (new Money(value.addPercentage(vatValue).getRoundedValue()).isLessThan(refundableValue)) {
-	    throw new DomainException("refundItem.message.info.refundableValueCannotBeBiggerThanInvoiceValue","resources/AcquisitionResources");
+	    throw new DomainException("refundItem.message.info.refundableValueCannotBeBiggerThanInvoiceValue", DomainException
+		    .getResourceFor("resources/AcquisitionResources"));
 	}
     }
 

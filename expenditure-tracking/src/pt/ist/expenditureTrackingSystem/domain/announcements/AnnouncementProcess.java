@@ -36,7 +36,6 @@ public class AnnouncementProcess extends AnnouncementProcess_Base {
 	activities.add(new CloseAnnouncementProcess());
     }
 
-    @Override
     public <T extends GenericProcess> AbstractActivity<T> getActivityByName(String activityName) {
 
 	for (AbstractActivity activity : activities) {
@@ -127,7 +126,7 @@ public class AnnouncementProcess extends AnnouncementProcess_Base {
     }
 
     @Override
-    public void notifyUserDueToComment(final User user, final String comment) {
-	// do nothing.
+    public void notifyUserDueToComment(User user, String comment) {
+	// no nothing
     }
 }

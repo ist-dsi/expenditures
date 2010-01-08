@@ -5,12 +5,9 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Address;
 import myorg.domain.util.Money;
-import myorg.domain.exceptions.DomainException;
-import pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean;
-import pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean.CreateItemSchemaType;
-import pt.ist.expenditureTrackingSystem.domain.organization.DeliveryInfo;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 
@@ -47,6 +44,19 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	setCPVReference(reference);
     }
 
+    public AcquisitionRequestItem(final AcquisitionRequest acquisitionRequest, final String description, final Integer quantity,
+	    final Money unitValue, final BigDecimal vatValue, final Money additionalCostValue, final String proposalReference,
+	    CPVReference reference, String recipient, Address address, String phone, String email) {
+	this(acquisitionRequest, description, quantity, unitValue, vatValue, proposalReference, reference);
+	setAdditionalCostValue(additionalCostValue);
+	setRecipient(recipient);
+	setAddress(address);
+	setRecipientEmail(email);
+	setRecipientPhone(phone);
+
+	createUnitItem();
+    }
+
     private void checkLimits(AcquisitionRequest acquisitionRequest, Integer quantity, Money unitValue) {
 	Money totalValue = unitValue.multiply(quantity.longValue());
 
@@ -60,7 +70,8 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 		    .getAcquisitionProcess().getAcquisitionRequestValueLimit().toFormatString());
 	}
 
-	if (!acquisitionRequest.getAcquisitionProcess().getShouldSkipSupplierFundAllocation() && !checkSupplierFundAllocation(acquisitionRequest, totalValue)) {
+	if (!acquisitionRequest.getAcquisitionProcess().getShouldSkipSupplierFundAllocation()
+		&& !checkSupplierFundAllocation(acquisitionRequest, totalValue)) {
 	    throw new DomainException("acquisitionRequestItem.message.exception.fundAllocationNotAllowed");
 	}
     }
@@ -73,54 +84,10 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	return acquisitionRequest.isFundAllocationAllowed(totalValue);
     }
 
-    public AcquisitionRequestItem(final AcquisitionRequestItemBean acquisitionRequestItemBean) {
-	this(acquisitionRequestItemBean.getAcquisitionRequest(), acquisitionRequestItemBean.getDescription(),
-		acquisitionRequestItemBean.getQuantity(), acquisitionRequestItemBean.getUnitValue(), acquisitionRequestItemBean
-			.getVatValue(), acquisitionRequestItemBean.getProposalReference(), acquisitionRequestItemBean
-			.getCPVReference());
-	setAdditionalCostValue(acquisitionRequestItemBean.getAdditionalCostValue());
-	setDeliveryInfo(acquisitionRequestItemBean);
-
-	createUnitItem();
-    }
-
     private void createUnitItem() {
 	if (getAcquisitionRequest().getFinancersCount() == 1) {
 	    createUnitItem(getAcquisitionRequest().getFinancers().iterator().next(), getTotalItemValueWithAdditionalCostsAndVat());
 	}
-    }
-
-    protected void setDeliveryInfo(AcquisitionRequestItemBean acquisitionRequestItemBean) {
-	String recipient;
-	String phone;
-	String email;
-	Address address;
-	if (CreateItemSchemaType.EXISTING_DELIVERY_INFO.equals(acquisitionRequestItemBean.getCreateItemSchemaType())) {
-	    recipient = acquisitionRequestItemBean.getDeliveryInfo().getRecipient();
-	    address = acquisitionRequestItemBean.getDeliveryInfo().getAddress();
-	    phone = acquisitionRequestItemBean.getDeliveryInfo().getPhone();
-	    email = acquisitionRequestItemBean.getDeliveryInfo().getEmail();
-	} else {
-	    recipient = acquisitionRequestItemBean.getRecipient();
-	    address = acquisitionRequestItemBean.getAddress();
-	    phone = acquisitionRequestItemBean.getPhone();
-	    email = acquisitionRequestItemBean.getEmail();
-	    acquisitionRequestItemBean.getAcquisitionRequest().getRequester().createNewDeliveryInfo(recipient, address, phone,
-		    email);
-	}
-	setRecipient(recipient);
-	setAddress(address);
-	setRecipientEmail(email);
-	setRecipientPhone(phone);
-    }
-
-    public AcquisitionRequestItem(final AcquisitionRequest acquisitionRequest, final String description, final Integer quantity,
-	    final Money unitValue, final BigDecimal vatValue, final Money additionalCostValue, final String proposalReference,
-	    CPVReference reference, String recipient, Address address) {
-	this(acquisitionRequest, description, quantity, unitValue, vatValue, proposalReference, reference);
-	setRecipient(recipient);
-	setAddress(address);
-	setAdditionalCostValue(additionalCostValue);
     }
 
     public Money getTotalItemValueWithAdditionalCosts() {
@@ -167,41 +134,29 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	return getTotalRealValue() != null ? getTotalRealValue().addPercentage(getRealVatValue()) : null;
     }
 
-    public void edit(String description, Integer quantity, Money unitValue, BigDecimal vatValue, String proposalReference,
-	    CPVReference reference, DeliveryInfo deliveryInfo) {
+    public void edit(final AcquisitionRequest acquisitionRequest, final String description, final Integer quantity,
+	    final Money unitValue, final BigDecimal vatValue, final Money additionalCostValue, final String proposalReference,
+	    CPVReference reference, String recipient, Address address, String phone, String email) {
 
 	checkLimits(getAcquisitionRequest(), quantity, unitValue);
-
 	setDescription(description);
 	setQuantity(quantity);
 	setUnitValue(unitValue);
-	setCPVReference(reference);
 	setProposalReference(proposalReference);
 	setVatValue(vatValue);
-	setRecipient(deliveryInfo.getRecipient());
-	setAddress(deliveryInfo.getAddress());
+	setAdditionalCostValue(additionalCostValue);
+	setRecipient(recipient);
+	setAddress(address);
+	setRecipientEmail(email);
+	setRecipientPhone(phone);
+	setCPVReference(reference);
     }
 
-    public void edit(AcquisitionRequestItemBean acquisitionRequestItemBean) {
-
-	checkLimits(getAcquisitionRequest(), acquisitionRequestItemBean.getQuantity(), acquisitionRequestItemBean.getUnitValue());
-
-	setDescription(acquisitionRequestItemBean.getDescription());
-	setQuantity(acquisitionRequestItemBean.getQuantity());
-	setUnitValue(acquisitionRequestItemBean.getUnitValue());
-	setProposalReference(acquisitionRequestItemBean.getProposalReference());
-	setVatValue(acquisitionRequestItemBean.getVatValue());
-	setAdditionalCostValue(acquisitionRequestItemBean.getAdditionalCostValue());
-	setDeliveryInfo(acquisitionRequestItemBean);
-	setCPVReference(acquisitionRequestItemBean.getCPVReference());
-
-    }
-
-    public void editRealValues(AcquisitionRequestItemBean acquisitionRequestItemBean) {
-	setRealQuantity(acquisitionRequestItemBean.getRealQuantity());
-	setRealUnitValue(acquisitionRequestItemBean.getRealUnitValue());
-	setRealAdditionalCostValue(acquisitionRequestItemBean.getShipment());
-	setRealVatValue(acquisitionRequestItemBean.getRealVatValue());
+    public void editRealValues(Integer realQuantity, Money realUnitValue, Money shipment, BigDecimal realVatValue) {
+	setRealQuantity(realQuantity);
+	setRealUnitValue(realUnitValue);
+	setRealAdditionalCostValue(shipment);
+	setRealVatValue(realVatValue);
     }
 
     @Override
@@ -278,7 +233,7 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	if (getTotalRealValue() == null) {
 	    return null;
 	}
-	
+
 	Money percentage = getTotalRealValue().percentage(getRealVatValue());
 	return new Money(percentage.getRoundedValue());
     }

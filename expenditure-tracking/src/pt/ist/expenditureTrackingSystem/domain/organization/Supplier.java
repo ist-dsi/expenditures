@@ -2,9 +2,9 @@ package pt.ist.expenditureTrackingSystem.domain.organization;
 
 import java.util.Set;
 
+import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Address;
 import myorg.domain.util.Money;
-import myorg.domain.exceptions.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.SavedSearch;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
@@ -15,7 +15,6 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundableInvoiceFile;
 import pt.ist.expenditureTrackingSystem.domain.announcements.Announcement;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateSupplierBean;
-import pt.ist.expenditureTrackingSystem.domain.requests.SupplierProposalDocument;
 import pt.ist.fenixWebFramework.services.Service;
 
 public class Supplier extends Supplier_Base {
@@ -59,7 +58,7 @@ public class Supplier extends Supplier_Base {
     }
 
     private boolean checkIfCanBeDeleted() {
-	return !hasAnyAcquisitionRequests() && !hasAnyAcquisitionsAfterTheFact() && !hasAnyProposals() && !hasAnyRefundInvoices()
+	return !hasAnyAcquisitionRequests() && !hasAnyAcquisitionsAfterTheFact() && !hasAnyRefundInvoices()
 		&& !hasAnyAnnouncements() && !hasAnySupplierSearches();
     }
 
@@ -190,10 +189,6 @@ public class Supplier extends Supplier_Base {
 	    getAcquisitionsAfterTheFactSet().addAll(acquisitionAfterTheFacts);
 	    acquisitionAfterTheFacts.clear();
 
-	    final Set<SupplierProposalDocument> supplierProposalDocument = supplier.getProposalsSet();
-	    getProposalsSet().addAll(supplierProposalDocument);
-	    supplierProposalDocument.clear();
-
 	    final Set<RefundableInvoiceFile> refundInvoices = supplier.getRefundInvoicesSet();
 	    getRefundInvoicesSet().addAll(refundInvoices);
 	    refundInvoices.clear();
@@ -213,10 +208,6 @@ public class Supplier extends Supplier_Base {
 	    final Set<AcquisitionRequest> possibleAcquisitionRequests = supplier.getPossibleAcquisitionRequestsSet();
 	    getPossibleAcquisitionRequestsSet().addAll(possibleAcquisitionRequests);
 	    possibleAcquisitionRequests.clear();
-
-	    final Set<SupplierProposalDocument> proposals = supplier.getProposalsSet();
-	    getProposalsSet().addAll(proposals);
-	    proposals.clear();
 
 	    supplier.delete();
 	}

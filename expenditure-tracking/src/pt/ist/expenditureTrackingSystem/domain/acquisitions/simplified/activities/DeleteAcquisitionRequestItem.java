@@ -1,28 +1,49 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities;
 
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
+import module.workflow.activities.ActivityInformation;
+import module.workflow.activities.WorkflowActivity;
+import myorg.domain.User;
+import myorg.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
-public class DeleteAcquisitionRequestItem extends GenericAcquisitionProcessActivity {
+public class DeleteAcquisitionRequestItem extends
+	WorkflowActivity<RegularAcquisitionProcess, DeleteAcquisitionRequestItemActivityInformation> {
 
     @Override
-    protected boolean isAccessible(RegularAcquisitionProcess process) {
-	final Person loggedPerson = getLoggedPerson();
-	return loggedPerson != null && loggedPerson.equals(process.getRequestor());
+    public boolean isActive(RegularAcquisitionProcess process, User user) {
+	Person person = user.getExpenditurePerson();
+	return process.getRequestor() == person && isUserProcessOwner(process, user)
+		&& process.getAcquisitionProcessState().isInGenesis() && process.getAcquisitionRequest().hasAnyRequestItems();
     }
 
     @Override
-    protected boolean isAvailable(RegularAcquisitionProcess process) {
-	return super.isAvailable(process) && process.getAcquisitionProcessState().isInGenesis()
-		&& process.getAcquisitionRequest().hasAnyRequestItems();
+    protected void process(DeleteAcquisitionRequestItemActivityInformation activityInformation) {
+	activityInformation.getItem().delete();
     }
 
     @Override
-    protected void process(RegularAcquisitionProcess process, Object... objects) {
-	AcquisitionRequestItem item = (AcquisitionRequestItem) objects[0];
-	item.delete();
+    public ActivityInformation<RegularAcquisitionProcess> getActivityInformation(RegularAcquisitionProcess process) {
+	return new DeleteAcquisitionRequestItemActivityInformation(process, this);
     }
 
+    @Override
+    public String getLocalizedName() {
+	return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+    }
+
+    @Override
+    public String getUsedBundle() {
+	return "resources/AcquisitionResources";
+    }
+
+    @Override
+    public boolean isVisible() {
+	return false;
+    }
+
+    @Override
+    public boolean isConfirmationNeeded(RegularAcquisitionProcess process) {
+	return true;
+    }
 }

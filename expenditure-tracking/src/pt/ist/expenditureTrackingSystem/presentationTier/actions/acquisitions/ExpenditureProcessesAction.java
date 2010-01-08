@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import module.workflow.domain.WorkflowProcess;
 import module.workflow.presentationTier.WorkflowLayoutContext;
+import module.workflow.presentationTier.actions.ProcessManagement;
 import myorg.presentationTier.Context;
 import myorg.presentationTier.actions.ContextBaseAction;
 
@@ -17,42 +18,20 @@ import org.apache.struts.action.ActionMapping;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.AbstractFundAllocationActivityInformation;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.AllocateProjectFundsPermanentlyActivityInformation;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.CreateAcquisitionRequestItemActivityInformation;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.CreateAcquisitionRequestItemActivityInformation.CreateItemSchemaType;
 import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
+import pt.ist.fenixframework.pstm.AbstractDomainObject;
 
 @Mapping(path = "/expenditureProcesses")
 public class ExpenditureProcessesAction extends ContextBaseAction {
 
-    public ActionForward addAllocationFund(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
-
-	return addAllocationFundGeneric(mapping, request, "activityBean", "/workflow/nonDefaultActivityInput.jsp");
-    }
-
-    public ActionForward removeAllocationFund(final ActionMapping mapping, final ActionForm form,
+    public ActionForward addAllocationFundGeneric(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 
-	return removeAllocationFundGeneric(mapping, request, "activityBean", "/workflow/nonDefaultActivityInput.jsp");
-    }
-
-    public ActionForward addAllocationFundForProject(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-
-	return addAllocationFundGeneric(mapping, request, "activityBean", "/workflow/nonDefaultActivityInput.jsp");
-    }
-
-    public ActionForward removeAllocationFundForProject(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-
-	return removeAllocationFundGeneric(mapping, request, "activityBean", "/workflow/nonDefaultActivityInput.jsp");
-    }
-
-    private ActionForward addAllocationFundGeneric(final ActionMapping mapping, final HttpServletRequest request,
-	    String viewStateID, String forward) {
-
-	AbstractFundAllocationActivityInformation<PaymentProcess> activityInformation = getRenderedObject(viewStateID);
+	AbstractFundAllocationActivityInformation<PaymentProcess> activityInformation = getRenderedObject("activityBean");
 	final PaymentProcess process = activityInformation.getProcess();
 	request.setAttribute("process", process);
 	request.setAttribute("information", activityInformation);
@@ -68,13 +47,12 @@ public class ExpenditureProcessesAction extends ContextBaseAction {
 
 	fundAllocationBeans.add(index + 1, fundAllocationBean);
 	RenderUtils.invalidateViewState();
-	request.setAttribute("inputInterface", activityInformation.getActivity().getClass().getName().replace('.', '/') + ".jsp");
-	return forward(request, forward);
+	return ProcessManagement.performActivityPostback(activityInformation, request);
     }
 
-    private ActionForward removeAllocationFundGeneric(final ActionMapping mapping, final HttpServletRequest request,
-	    String viewStateID, String forward) {
-	AbstractFundAllocationActivityInformation<PaymentProcess> activityInformation = getRenderedObject(viewStateID);
+    public ActionForward removeAllocationFundGeneric(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	AbstractFundAllocationActivityInformation<PaymentProcess> activityInformation = getRenderedObject("activityBean");
 	final PaymentProcess process = activityInformation.getProcess();
 	request.setAttribute("process", process);
 	request.setAttribute("information", activityInformation);
@@ -84,8 +62,27 @@ public class ExpenditureProcessesAction extends ContextBaseAction {
 
 	fundAllocationBeans.remove(index);
 	RenderUtils.invalidateViewState();
-	request.setAttribute("inputInterface", activityInformation.getActivity().getClass().getName().replace('.', '/') + ".jsp");
-	return forward(request, forward);
+	return ProcessManagement.performActivityPostback(activityInformation, request);
+    }
+
+    public ActionForward itemPostBack(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	CreateAcquisitionRequestItemActivityInformation activityInformation = getRenderedObject("activityBean");
+	WorkflowProcess process = AbstractDomainObject.fromExternalId(request.getParameter("processId"));
+	RenderUtils.invalidateViewState();
+	activityInformation.setRecipient(null);
+	activityInformation.setAddress(null);
+
+	if (activityInformation.getCreateItemSchemaType().equals(CreateItemSchemaType.EXISTING_DELIVERY_INFO)) {
+	    activityInformation.setDeliveryInfo(activityInformation.getAcquisitionRequest().getRequester()
+		    .getDeliveryInfoByRecipientAndAddress(activityInformation.getRecipient(), activityInformation.getAddress()));
+	} else {
+	    activityInformation.setDeliveryInfo(null);
+	}
+
+	request.setAttribute("information", activityInformation);
+	request.setAttribute("process", process);
+	return ProcessManagement.performActivityPostback(activityInformation, request);
     }
 
     @Override

@@ -3,32 +3,29 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activiti
 import java.util.Collections;
 import java.util.List;
 
+import module.workflow.activities.ActivityInformation;
+import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.WorkflowLog;
+import myorg.domain.User;
+import myorg.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.OperationLog;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
-import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
-public class RemoveCancelProcess extends GenericAcquisitionProcessActivity {
+public class RemoveCancelProcess extends
+	WorkflowActivity<RegularAcquisitionProcess, ActivityInformation<RegularAcquisitionProcess>> {
 
     @Override
-    protected boolean isAccessible(RegularAcquisitionProcess process) {
-	final Person loggedPerson = getLoggedPerson();
-	return loggedPerson != null && loggedPerson.hasRoleType(RoleType.MANAGER);
+    public boolean isActive(RegularAcquisitionProcess process, User user) {
+	return user.getExpenditurePerson().hasRoleType(RoleType.MANAGER) && isUserProcessOwner(process, user)
+		&& process.getAcquisitionProcessState().isCanceled();
     }
 
     @Override
-    protected boolean isAvailable(RegularAcquisitionProcess process) {
-	final AcquisitionRequest acquisitionRequest = process.getAcquisitionRequest();
-	return super.isAvailable(process) && process.getAcquisitionProcessState().isCanceled();
-    }
-
-    @Override
-    protected void process(RegularAcquisitionProcess process, Object... objects) {
+    protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
+	RegularAcquisitionProcess process = activityInformation.getProcess();
 	List<OperationLog> logs = process.getOperationLogs();
 	Collections.sort(logs, WorkflowLog.COMPARATOR_BY_WHEN);
 	for (int i = logs.size(); i > 0; i--) {
@@ -39,6 +36,21 @@ public class RemoveCancelProcess extends GenericAcquisitionProcessActivity {
 		break;
 	    }
 	}
+
     }
 
+    @Override
+    public String getLocalizedName() {
+	return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+    }
+
+    @Override
+    public String getUsedBundle() {
+	return "resources/AcquisitionResources";
+    }
+
+    @Override
+    public boolean isUserAwarenessNeeded(RegularAcquisitionProcess process, User user) {
+	return false;
+    }
 }

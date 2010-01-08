@@ -9,6 +9,8 @@ import java.util.Map.Entry;
 
 import javax.imageio.ImageIO;
 
+import module.workflow.activities.WorkflowActivity;
+
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.AxisLocation;
@@ -20,20 +22,18 @@ import org.jfree.data.DefaultCategoryDataset;
 
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AllocateFundsPermanently;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AllocateProjectFundsPermanently;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.Authorize;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.FundAllocation;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.ProjectFundAllocation;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.AllocateFundsPermanently;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.AllocateProjectFundsPermanently;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.Approve;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.Authorize;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.FundAllocation;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.ProjectFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.ConfirmInvoices;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.RefundPerson;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.SubmitForInvoiceConfirmation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ConfirmInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.CreateAcquisitionPurchaseOrderDocument;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.FixInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.PayAcquisition;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ReceiveInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SendPurchaseOrderToSupplier;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SetSkipSupplierFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SkipPurchaseOrderDocument;
@@ -41,7 +41,6 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activitie
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SubmitForConfirmInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SubmitForFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.UnsetSkipSupplierFundAllocation;
-import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.expenditureTrackingSystem.domain.statistics.LogEntry;
 import pt.ist.expenditureTrackingSystem.domain.statistics.RefundProcessActivityLogStatistics;
 import pt.ist.expenditureTrackingSystem.domain.statistics.RefundProcessStatistics;
@@ -118,7 +117,7 @@ public class ChartGenerator {
 
 	char c = 'A';
 	for (final LogEntry logEntry : simplifiedProcessActivityLogStatistics.getLogEntries()) {
-	    final AbstractActivity abstractActivity = logEntry.getAbstractActivity();
+	    final WorkflowActivity abstractActivity = logEntry.getAbstractActivity();
 	    if (isRelevanteActivity(abstractActivity)) {
 		final String name = abstractActivity.getLocalizedName();
 		int indexOfSpan = name.indexOf('<');
@@ -136,7 +135,7 @@ public class ChartGenerator {
 
 	char c = 'A';
 	for (final LogEntry logEntry : refundProcessActivityLogStatistics.getLogEntries()) {
-	    final AbstractActivity abstractActivity = logEntry.getAbstractActivity();
+	    final WorkflowActivity abstractActivity = logEntry.getAbstractActivity();
 	    if (isRelevanteActivity(abstractActivity)) {
 		final String name = abstractActivity.getLocalizedName();
 		int indexOfSpan = name.indexOf('<');
@@ -148,7 +147,7 @@ public class ChartGenerator {
 	return dataset;
     }
 
-    private static boolean isRelevanteActivity(final AbstractActivity abstractActivity) {
+    private static boolean isRelevanteActivity(final WorkflowActivity abstractActivity) {
 	if (abstractActivity == null) {
 	    return false;
 	}
@@ -158,9 +157,8 @@ public class ChartGenerator {
 		|| clazz == SubmitForFundAllocation.class || clazz == Authorize.class
 		|| clazz == AllocateProjectFundsPermanently.class || clazz == AllocateFundsPermanently.class
 		|| clazz == ProjectFundAllocation.class || clazz == FundAllocation.class || clazz == PayAcquisition.class
-		|| clazz == ReceiveInvoice.class || clazz == FixInvoice.class || clazz == SubmitForConfirmInvoice.class
-		|| clazz == ConfirmInvoice.class || clazz == SetSkipSupplierFundAllocation.class
-		|| clazz == UnsetSkipSupplierFundAllocation.class
+		|| clazz == SubmitForConfirmInvoice.class || clazz == ConfirmInvoice.class
+		|| clazz == SetSkipSupplierFundAllocation.class || clazz == UnsetSkipSupplierFundAllocation.class
 		|| clazz == pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.SubmitForApproval.class
 		|| clazz == Approve.class || clazz == SubmitForInvoiceConfirmation.class || clazz == ConfirmInvoices.class
 		|| clazz == RefundPerson.class;

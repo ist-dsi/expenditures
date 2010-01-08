@@ -221,17 +221,6 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 	return getSkipSupplierFundAllocation();
     }
 
-    public void addAcquisitionProposalDocument(final String filename, final byte[] bytes, String proposalId) {
-	AcquisitionProposalDocument acquisitionProposalDocument = getAcquisitionProposalDocument();
-	if (acquisitionProposalDocument == null) {
-	    acquisitionProposalDocument = new AcquisitionProposalDocument();
-	    setAcquisitionProposalDocument(acquisitionProposalDocument);
-	}
-	acquisitionProposalDocument.setFilename(filename);
-	acquisitionProposalDocument.setContent(bytes);
-	acquisitionProposalDocument.setProposalId(proposalId != null && !proposalId.isEmpty() ? proposalId : null);
-    }
-
     public String getAcquisitionRequestDocumentID() {
 	return hasPurchaseOrderDocument() ? getPurchaseOrderDocument().getRequestId() : ExpenditureTrackingSystem.getInstance()
 		.nextAcquisitionRequestDocumentID();
@@ -271,7 +260,7 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
     public boolean hasPurchaseOrderDocument() {
 	return !getFiles(PurchaseOrderDocument.class).isEmpty();
     }
-
+    
     @Override
     public boolean isCanceled() {
 	return getLastAcquisitionProcessState().isCanceled();

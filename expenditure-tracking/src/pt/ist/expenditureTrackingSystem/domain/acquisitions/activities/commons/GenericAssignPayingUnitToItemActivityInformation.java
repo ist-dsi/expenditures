@@ -8,13 +8,13 @@ import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.WorkflowProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.UnitItem;
 import pt.ist.expenditureTrackingSystem.domain.dto.UnitItemBean;
+import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 
 public class GenericAssignPayingUnitToItemActivityInformation<P extends PaymentProcess> extends ActivityInformation<P> {
 
-    private RequestItem item;
-    private List<UnitItemBean> beans;
+    protected RequestItem item;
+    protected List<UnitItemBean> beans;
 
     public GenericAssignPayingUnitToItemActivityInformation(P process,
 	    WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity) {
@@ -28,8 +28,8 @@ public class GenericAssignPayingUnitToItemActivityInformation<P extends PaymentP
 
     public void setItem(RequestItem item) {
 	this.item = item;
-	for (final UnitItem unitItem : item.getUnitItemsSet()) {
-	    this.beans.add(new UnitItemBean(unitItem.getUnit(), item));
+	for (Unit unit : getProcess().getPayingUnits()) {
+	    this.beans.add(new UnitItemBean(unit, item));
 	}
     }
 

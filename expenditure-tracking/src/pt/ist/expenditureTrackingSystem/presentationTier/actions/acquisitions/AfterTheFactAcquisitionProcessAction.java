@@ -40,7 +40,7 @@ public class AfterTheFactAcquisitionProcessAction extends BaseAction {
 	    afterTheFactAcquisitionProcess = AfterTheFactAcquisitionProcess
 		    .createNewAfterTheFactAcquisitionProcess(afterTheFactAcquisitionProcessBean);
 	} catch (DomainException e) {
-	    addMessage(e.getMessage(), "ACQUISITION_RESOURCES", e.getArgs());
+	    addMessage(request, e.getMessage());
 	    return prepareCreateAfterTheFactAcquisitionProcess(mapping, form, request, response);
 	}
 	return ProcessManagement.forwardToProcess(afterTheFactAcquisitionProcess);

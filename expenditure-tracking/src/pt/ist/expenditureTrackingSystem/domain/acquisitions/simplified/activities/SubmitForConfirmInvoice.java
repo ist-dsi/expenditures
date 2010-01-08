@@ -1,25 +1,33 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities;
 
+import module.workflow.activities.ActivityInformation;
+import module.workflow.activities.WorkflowActivity;
+import myorg.domain.User;
+import myorg.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
 
-public class SubmitForConfirmInvoice extends GenericAcquisitionProcessActivity {
+public class SubmitForConfirmInvoice extends
+	WorkflowActivity<RegularAcquisitionProcess, ActivityInformation<RegularAcquisitionProcess>> {
 
     @Override
-    protected boolean isAccessible(RegularAcquisitionProcess process) {
-	return userHasRole(RoleType.ACQUISITION_CENTRAL);
+    public boolean isActive(RegularAcquisitionProcess process, User user) {
+	return isUserProcessOwner(process, user) && user.getExpenditurePerson().hasRoleType(RoleType.ACQUISITION_CENTRAL)
+		&& process.isInvoiceReceived() && process.getRequest().isCurrentTotalRealValueFullyDistributed();
     }
 
     @Override
-    protected boolean isAvailable(RegularAcquisitionProcess process) {
-	return super.isAvailable(process) && process.isInvoiceReceived()
-		&& process.getRequest().isCurrentTotalRealValueFullyDistributed();
+    protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
+	activityInformation.getProcess().submitedForInvoiceConfirmation();
     }
 
     @Override
-    protected void process(RegularAcquisitionProcess process, Object... objects) {
-	process.submitedForInvoiceConfirmation();
+    public String getLocalizedName() {
+	return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
     }
 
+    @Override
+    public String getUsedBundle() {
+	return "resources/AcquisitionResources";
+    }
 }

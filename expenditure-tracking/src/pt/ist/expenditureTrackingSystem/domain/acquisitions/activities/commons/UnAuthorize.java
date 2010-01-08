@@ -35,4 +35,8 @@ public class UnAuthorize<P extends PaymentProcess> extends WorkflowActivity<P, A
 	return "resources/AcquisitionResources";
     }
 
+    @Override
+    public boolean isUserAwarenessNeeded(P process, User user) {
+	return false;
+    }
 }

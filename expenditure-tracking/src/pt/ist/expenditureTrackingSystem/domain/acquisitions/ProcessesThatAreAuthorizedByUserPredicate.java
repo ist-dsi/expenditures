@@ -2,8 +2,6 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import java.util.List;
 
-import myorg.applicationTier.Authenticate.UserView;
-
 import org.apache.commons.collections.Predicate;
 
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
@@ -41,15 +39,8 @@ public class ProcessesThatAreAuthorizedByUserPredicate implements Predicate {
 	    for (Authorization authorization : unit.getAuthorizations()) {
 		Person person = authorization.getPerson();
 
-		final UserView userView = UserView.getCurrentUserView();
-		try {
-		    userView.mockUser(person.getUser());
-		    if (process.hasAnyAvailableActivitity()) {
-			userView.unmockUser();
-			return false;
-		    }
-		} finally {
-		    userView.unmockUser();
+		if (process.hasAnyAvailableActivity(person.getUser(), false)) {
+		    return false;
 		}
 	    }
 	    return unit.hasParentUnit() && evaluate(unit.getParentUnit(), process);

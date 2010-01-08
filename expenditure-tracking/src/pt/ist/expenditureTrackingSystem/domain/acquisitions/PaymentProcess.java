@@ -164,6 +164,10 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
 	return getRequest().getFinancersWithFundsAllocated();
     }
 
+    public Set<Financer> getFinancersWithFundsInitiallyAllocated() {
+	return getRequest().getFinancersWithFundsInitiallyAllocated();
+    }
+    
     public Set<Financer> getFinancersWithFundsAllocated(Person person) {
 	return getRequest().getFinancersWithFundsAllocated(person);
     }
@@ -328,10 +332,10 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
     }
 
     @Override
-    public void notifyPersonDueToComment(Person person, String comment) {
+    public void notifyUserDueToComment(User user, String comment) {
 	List<String> toAddress = new ArrayList<String>();
 	toAddress.clear();
-	final String email = person.getEmail();
+	final String email = user.getExpenditurePerson().getEmail();
 	if (email != null) {
 	    toAddress.add(email);
 
@@ -369,5 +373,5 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
     }
 
     public abstract void revertToState(ProcessState processState);
-
+    
 }

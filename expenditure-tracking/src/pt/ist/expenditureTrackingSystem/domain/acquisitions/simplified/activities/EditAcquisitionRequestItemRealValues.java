@@ -1,26 +1,44 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities;
 
+import module.workflow.activities.ActivityInformation;
+import module.workflow.activities.WorkflowActivity;
+import myorg.domain.User;
+import myorg.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
-import pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean;
 
-public class EditAcquisitionRequestItemRealValues extends GenericAcquisitionProcessActivity {
+public class EditAcquisitionRequestItemRealValues extends
+	WorkflowActivity<RegularAcquisitionProcess, EditAcquisitionRequestItemRealValuesActivityInformation> {
 
     @Override
-    protected boolean isAccessible(RegularAcquisitionProcess process) {
-	return userHasRole(RoleType.ACQUISITION_CENTRAL);
+    public boolean isActive(RegularAcquisitionProcess process, User user) {
+	return isUserProcessOwner(process, user) && user.getExpenditurePerson().hasRoleType(RoleType.ACQUISITION_CENTRAL)
+		&& process.getAcquisitionProcessState().isInvoiceReceived();
     }
 
     @Override
-    protected boolean isAvailable(RegularAcquisitionProcess process) {
-	return super.isAvailable(process) && process.getAcquisitionProcessState().isInvoiceReceived();
+    protected void process(EditAcquisitionRequestItemRealValuesActivityInformation activityInformation) {
+	activityInformation.getItem().editRealValues(activityInformation.getRealQuantity(),
+		activityInformation.getRealUnitValue(), activityInformation.getShipment(), activityInformation.getRealVatValue());
     }
 
     @Override
-    protected void process(RegularAcquisitionProcess process, Object... objects) {
-	AcquisitionRequestItemBean acquisitionRequestItemBean = (AcquisitionRequestItemBean) objects[0];
-	acquisitionRequestItemBean.getItem().editRealValues(acquisitionRequestItemBean);
+    public ActivityInformation<RegularAcquisitionProcess> getActivityInformation(RegularAcquisitionProcess process) {
+	return new EditAcquisitionRequestItemRealValuesActivityInformation(process, this);
     }
 
+    @Override
+    public String getLocalizedName() {
+	return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+    }
+
+    @Override
+    public String getUsedBundle() {
+	return "resources/AcquisitionResources";
+    }
+
+    @Override
+    public boolean isDefaultInputInterfaceUsed() {
+	return false;
+    }
 }

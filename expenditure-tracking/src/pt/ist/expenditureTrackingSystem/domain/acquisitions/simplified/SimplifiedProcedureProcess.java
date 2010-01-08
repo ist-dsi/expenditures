@@ -1,34 +1,38 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import myorg.domain.User;
+import module.workflow.activities.ActivityInformation;
+import module.workflow.activities.ReleaseProcess;
+import module.workflow.activities.StealProcess;
+import module.workflow.activities.TakeProcess;
+import module.workflow.activities.WorkflowActivity;
+import module.workflow.domain.ProcessFile;
+import module.workflow.domain.WorkflowProcess;
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
 import myorg.util.BundleUtil;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProposalDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.PurchaseOrderDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AllocateFundsPermanently;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AllocateProjectFundsPermanently;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.Authorize;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.FundAllocation;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAddPayingUnit;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAssignPayingUnitToItem;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericRemovePayingUnit;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.ProjectFundAllocation;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.RemoveFundsPermanentlyAllocated;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.RemovePermanentProjectFunds;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.UnApprove;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.UnAuthorize;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.AddAcquisitionProposalDocument;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.AllocateFundsPermanently;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.AllocateProjectFundsPermanently;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.Authorize;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.FundAllocation;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.GenericAddPayingUnit;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.GenericAssignPayingUnitToItem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.GenericRemovePayingUnit;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.ProjectFundAllocation;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.RemoveFundsPermanentlyAllocated;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.RemovePermanentProjectFunds;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.UnApprove;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.UnAuthorize;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.CancelAcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.CancelInvoiceConfirmation;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ChangeAcquisitionProposalDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ChangeFinancersAccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ChangeProcessClassification;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ConfirmInvoice;
@@ -41,13 +45,11 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activitie
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.FundAllocationExpirationDate;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.LockInvoiceReceiving;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.PayAcquisition;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ReceiveInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RejectAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RemoveCancelProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RemoveFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RemoveFundAllocationExpirationDate;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RemoveFundAllocationExpirationDateForResponsible;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RemoveInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RemoveProjectFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RevertInvoiceSubmission;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RevertProcessNotConfirmmingFundAllocationExpirationDate;
@@ -67,7 +69,6 @@ import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
-import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 import pt.ist.fenixWebFramework.rendererExtensions.util.IPresentableEnum;
 import pt.ist.fenixWebFramework.services.Service;
 
@@ -104,83 +105,71 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	}
     }
 
-    private static Map<ActivityScope, List<AbstractActivity<RegularAcquisitionProcess>>> activities = new HashMap<ActivityScope, List<AbstractActivity<RegularAcquisitionProcess>>>();
-
     private static List<AcquisitionProcessStateType> availableStates = new ArrayList<AcquisitionProcessStateType>();
 
+    private static List<WorkflowActivity<? extends RegularAcquisitionProcess, ? extends ActivityInformation<? extends RegularAcquisitionProcess>>> activities = new ArrayList<WorkflowActivity<? extends RegularAcquisitionProcess, ? extends ActivityInformation<? extends RegularAcquisitionProcess>>>();
+
     static {
-	List<AbstractActivity<RegularAcquisitionProcess>> requestInformationActivities = new ArrayList<AbstractActivity<RegularAcquisitionProcess>>();
-	List<AbstractActivity<RegularAcquisitionProcess>> requestItemActivities = new ArrayList<AbstractActivity<RegularAcquisitionProcess>>();
+	activities.add(new CreateAcquisitionPurchaseOrderDocument());
+	activities.add(new SendPurchaseOrderToSupplier());
+	activities.add(new SkipPurchaseOrderDocument());
+	activities.add(new RevertSkipPurchaseOrderDocument());
+	activities.add(new GenericAddPayingUnit<RegularAcquisitionProcess>());
+	activities.add(new GenericRemovePayingUnit<RegularAcquisitionProcess>());
+	activities.add(new SubmitForApproval());
+	activities.add(new SubmitForFundAllocation());
+	activities.add(new FundAllocationExpirationDate());
+	activities.add(new RevertProcessNotConfirmmingFundAllocationExpirationDate());
+	activities.add(new RevertToInvoiceConfirmation());
+	activities.add(new Authorize<RegularAcquisitionProcess>());
+	activities.add(new UnAuthorize<RegularAcquisitionProcess>());
 
-	requestInformationActivities.add(new SelectSupplier());
-	requestInformationActivities.add(new CreateAcquisitionPurchaseOrderDocument());
-	requestInformationActivities.add(new SendPurchaseOrderToSupplier());
-	requestInformationActivities.add(new SkipPurchaseOrderDocument());
-	requestInformationActivities.add(new RevertSkipPurchaseOrderDocument());
-	requestInformationActivities.add(new GenericAddPayingUnit<RegularAcquisitionProcess>());
-	requestInformationActivities.add(new GenericRemovePayingUnit<RegularAcquisitionProcess>());
+	activities.add(new AllocateProjectFundsPermanently<RegularAcquisitionProcess>());
+	activities.add(new AllocateFundsPermanently<RegularAcquisitionProcess>());
+	activities.add(new RemovePermanentProjectFunds<RegularAcquisitionProcess>());
+	activities.add(new RemoveFundsPermanentlyAllocated<RegularAcquisitionProcess>());
 
-	requestInformationActivities.add(new AddAcquisitionProposalDocument());
-	requestInformationActivities.add(new ChangeAcquisitionProposalDocument());
-	requestInformationActivities.add(new CreateAcquisitionRequestItem());
-	requestInformationActivities.add(new SubmitForApproval());
+	activities.add(new UnApprove<RegularAcquisitionProcess>());
+	activities.add(new ProjectFundAllocation<RegularAcquisitionProcess>());
+	activities.add(new FundAllocation<RegularAcquisitionProcess>());
+	activities.add(new RemoveFundAllocation());
+	activities.add(new RemoveProjectFundAllocation());
+	activities.add(new RemoveFundAllocationExpirationDate());
+	activities.add(new RemoveFundAllocationExpirationDateForResponsible());
+	activities.add(new CancelAcquisitionRequest());
 
-	requestInformationActivities.add(new SubmitForFundAllocation());
-	requestInformationActivities.add(new FundAllocationExpirationDate());
-	requestInformationActivities.add(new RevertProcessNotConfirmmingFundAllocationExpirationDate());
-	requestInformationActivities.add(new RevertToInvoiceConfirmation());
+	activities.add(new UnlockInvoiceReceiving());
+	activities.add(new LockInvoiceReceiving());
 
-	requestInformationActivities.add(new Authorize<RegularAcquisitionProcess>());
-	requestInformationActivities.add(new RejectAcquisitionProcess());
+	activities.add(new SubmitForConfirmInvoice());
+	activities.add(new ConfirmInvoice());
+	activities.add(new CancelInvoiceConfirmation());
 
-	requestInformationActivities.add(new AllocateProjectFundsPermanently<RegularAcquisitionProcess>());
-	requestInformationActivities.add(new AllocateFundsPermanently<RegularAcquisitionProcess>());
-	requestInformationActivities.add(new RemovePermanentProjectFunds<RegularAcquisitionProcess>());
+	activities.add(new UnSubmitForApproval());
 
-	requestInformationActivities.add(new RemoveFundsPermanentlyAllocated<RegularAcquisitionProcess>());
-	requestInformationActivities.add(new UnApprove<RegularAcquisitionProcess>());
-	requestInformationActivities.add(new UnAuthorize<RegularAcquisitionProcess>());
+	activities.add(new SetSkipSupplierFundAllocation());
+	activities.add(new UnsetSkipSupplierFundAllocation());
 
-	requestInformationActivities.add(new ProjectFundAllocation<RegularAcquisitionProcess>());
-	requestInformationActivities.add(new FundAllocation<RegularAcquisitionProcess>());
-	requestInformationActivities.add(new RemoveFundAllocation());
-	requestInformationActivities.add(new RemoveProjectFundAllocation());
-	requestInformationActivities.add(new RemoveFundAllocationExpirationDate());
-	requestInformationActivities.add(new RemoveFundAllocationExpirationDateForResponsible());
-	requestInformationActivities.add(new CancelAcquisitionRequest());
+	activities.add(new RevertInvoiceSubmission());
+	activities.add(new RemoveCancelProcess());
 
-	requestInformationActivities.add(new PayAcquisition());
-	requestInformationActivities.add(new ReceiveInvoice());
-	requestInformationActivities.add(new UnlockInvoiceReceiving());
-	requestInformationActivities.add(new LockInvoiceReceiving());
-	requestInformationActivities.add(new RemoveInvoice());
+	activities.add(new GenericAssignPayingUnitToItem<RegularAcquisitionProcess>());
 
-	requestInformationActivities.add(new SubmitForConfirmInvoice());
-	requestInformationActivities.add(new ConfirmInvoice());
-	requestInformationActivities.add(new CancelInvoiceConfirmation());
-	requestInformationActivities.add(new UnSubmitForApproval());
-	requestInformationActivities.add(new ChangeFinancersAccountingUnit());
+	activities.add(new DistributeRealValuesForPayingUnits());
 
-	requestInformationActivities.add(new ChangeProcessClassification());
-	// requestInformationActivities.add(new SetRefundee());
-	// requestInformationActivities.add(new ChangeRefundee());
-	// requestInformationActivities.add(new UnsetRefundee());
+	activities.add(new ChangeFinancersAccountingUnit());
+	activities.add(new SelectSupplier());
 
-	requestInformationActivities.add(new SetSkipSupplierFundAllocation());
-	requestInformationActivities.add(new UnsetSkipSupplierFundAllocation());
-
-	requestInformationActivities.add(new RevertInvoiceSubmission());
-
-	requestInformationActivities.add(new RemoveCancelProcess());
-
-	requestItemActivities.add(new DeleteAcquisitionRequestItem());
-	requestItemActivities.add(new EditAcquisitionRequestItem());
-	requestItemActivities.add(new GenericAssignPayingUnitToItem<RegularAcquisitionProcess>());
-	requestItemActivities.add(new EditAcquisitionRequestItemRealValues());
-	requestItemActivities.add(new DistributeRealValuesForPayingUnits());
-
-	activities.put(ActivityScope.REQUEST_INFORMATION, requestInformationActivities);
-	activities.put(ActivityScope.REQUEST_ITEM, requestItemActivities);
+	activities.add(new ChangeProcessClassification());
+	activities.add(new CreateAcquisitionRequestItem());
+	activities.add(new RejectAcquisitionProcess());
+	activities.add(new PayAcquisition());
+	activities.add(new DeleteAcquisitionRequestItem());
+	activities.add(new EditAcquisitionRequestItem());
+	activities.add(new EditAcquisitionRequestItemRealValues());
+	activities.add(new TakeProcess<RegularAcquisitionProcess>());
+	activities.add(new ReleaseProcess<RegularAcquisitionProcess>());
+	activities.add(new StealProcess<RegularAcquisitionProcess>());
 
 	availableStates.add(AcquisitionProcessStateType.IN_GENESIS);
 	availableStates.add(AcquisitionProcessStateType.SUBMITTED_FOR_APPROVAL);
@@ -240,48 +229,13 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	return process;
     }
 
+    public <T extends WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>> List<T> getActivities() {
+	return (List<T>) activities;
+    }
+
     public boolean isEditRequestItemAvailable() {
 	final Person loggedPerson = getLoggedPerson();
 	return loggedPerson != null && loggedPerson.equals(getRequestor()) && getLastAcquisitionProcessState().isInGenesis();
-    }
-
-    public List<AbstractActivity<RegularAcquisitionProcess>> getActiveActivitiesForItem() {
-	return getActiveActivities(ActivityScope.REQUEST_ITEM);
-    }
-
-    public List<AbstractActivity<RegularAcquisitionProcess>> getActiveActivitiesForRequest() {
-	return getActiveActivities(ActivityScope.REQUEST_INFORMATION);
-    }
-
-    public List<AbstractActivity<RegularAcquisitionProcess>> getActiveActivities(ActivityScope scope) {
-	List<AbstractActivity<RegularAcquisitionProcess>> activitiesResult = new ArrayList<AbstractActivity<RegularAcquisitionProcess>>();
-	for (AbstractActivity<RegularAcquisitionProcess> activity : activities.get(scope)) {
-	    if (activity.isActive(this)) {
-		activitiesResult.add(activity);
-	    }
-	}
-	return activitiesResult;
-    }
-
-    public List<AbstractActivity<RegularAcquisitionProcess>> getActiveActivities() {
-	List<AbstractActivity<RegularAcquisitionProcess>> activitiesResult = new ArrayList<AbstractActivity<RegularAcquisitionProcess>>();
-	for (ActivityScope scope : activities.keySet()) {
-	    activitiesResult.addAll(getActiveActivities(scope));
-	}
-	return activitiesResult;
-    }
-
-    @Override
-    public AbstractActivity<RegularAcquisitionProcess> getActivityByName(String activityName) {
-
-	for (ActivityScope scope : activities.keySet()) {
-	    for (AbstractActivity<RegularAcquisitionProcess> activity : activities.get(scope)) {
-		if (activity.getName().equals(activityName)) {
-		    return activity;
-		}
-	    }
-	}
-	return null;
     }
 
     @Override
@@ -295,29 +249,12 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
     }
 
     @Override
-    public Map<ActivityScope, List<AbstractActivity<RegularAcquisitionProcess>>> getProcessActivityMap() {
-	return activities;
-    }
-
-    @Override
     public List<AcquisitionProcessStateType> getAvailableStates() {
 	return availableStates;
     }
 
     public static List<AcquisitionProcessStateType> getAvailableStatesForSimplifiedProcedureProcess() {
 	return availableStates;
-    }
-
-    @Override
-    public boolean hasAnyAvailableActivitity() {
-	for (List<AbstractActivity<RegularAcquisitionProcess>> activityList : activities.values()) {
-	    for (AbstractActivity<RegularAcquisitionProcess> activity : activityList) {
-		if (activity.isActive(this)) {
-		    return true;
-		}
-	    }
-	}
-	return false;
     }
 
     public boolean isSimplifiedProcedureProcess() {
@@ -348,7 +285,8 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	    unSkipSupplierFundAllocation();
 	}
 	if (processClassification.getLimit().isLessThan(this.getAcquisitionRequest().getCurrentValue())) {
-	    throw new DomainException("error.message.processValueExceedsLimitForClassification");
+	    throw new DomainException("error.message.processValueExceedsLimitForClassification", DomainException
+		    .getResourceFor("resources/AcquisitionResources"));
 	}
 	super.setProcessClassification(processClassification);
     }
@@ -372,5 +310,22 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 
     public boolean isWarnForLessSuppliersActive() {
 	return getProcessClassification() == ProcessClassification.CT75000 && getSuppliers().size() < 3;
+    }
+
+    @Override
+    public List<Class<? extends ProcessFile>> getAvailableFileTypes() {
+	List<Class<? extends ProcessFile>> availableFileTypes = new ArrayList<Class<? extends ProcessFile>>();
+	availableFileTypes.add(AcquisitionProposalDocument.class);
+	availableFileTypes.add(PurchaseOrderDocument.class);
+	availableFileTypes.add(AcquisitionInvoice.class);
+	availableFileTypes.addAll(super.getAvailableFileTypes());
+	return availableFileTypes;
+    }
+
+    @Override
+    public List<Class<? extends ProcessFile>> getUploadableFileTypes() {
+	List<Class<? extends ProcessFile>> uploadableFileTypes = super.getUploadableFileTypes();
+	uploadableFileTypes.remove(PurchaseOrderDocument.class);
+	return uploadableFileTypes;
     }
 }

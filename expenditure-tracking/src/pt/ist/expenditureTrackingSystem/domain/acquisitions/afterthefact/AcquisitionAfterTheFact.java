@@ -55,7 +55,6 @@ public class AcquisitionAfterTheFact extends AcquisitionAfterTheFact_Base {
 	return localDate != null && localDate.getYear() == year;
     }
 
-    @Override
     public AfterTheFactInvoice receiveInvoice(String filename, byte[] bytes, String invoiceNumber, LocalDate invoiceDate) {
 	return getAfterTheFactAcquisitionProcess().receiveInvoice(filename, bytes, invoiceNumber, invoiceDate);
     }

@@ -17,7 +17,6 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.announcements.Announcement;
 import pt.ist.expenditureTrackingSystem.domain.announcements.AnnouncementProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
-import pt.ist.expenditureTrackingSystem.domain.requests.RequestForProposalProcess;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 import pt.utl.ist.fenix.tools.util.CollectionPager;
 
@@ -37,26 +36,6 @@ public class HomeAction extends BaseAction {
 	    return showAcquisitionAnnouncements(mapping, form, request, response);
 	}
 	return forward(request, "/hello.jsp");
-    }
-
-    public final ActionForward showActiveRequestsForProposal(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
-
-	ArrayList<RequestForProposalProcess> requests = new ArrayList<RequestForProposalProcess>();
-	for (RequestForProposalProcess process : RequestForProposalProcess.getAllProcesses(RequestForProposalProcess.class)) {
-	    if (process.hasNotExpired()) {
-		requests.add(process);
-	    }
-	}
-	request.setAttribute("activeRequests", requests);
-	return forward(request, "/public/viewRequestsForProposal.jsp");
-    }
-
-    public ActionForward viewRequestForProposalProcess(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-
-	request.setAttribute("requestForProposalProcess", getDomainObject(request, "requestForProposalProcessOid"));
-	return forward(request, "/public/viewRequestProcess.jsp");
     }
 
     public final ActionForward showAcquisitionAnnouncements(final ActionMapping mapping, final ActionForm form,

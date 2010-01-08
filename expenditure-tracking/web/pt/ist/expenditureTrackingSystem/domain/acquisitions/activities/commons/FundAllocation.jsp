@@ -4,8 +4,6 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
-<h2><bean:message key="acquisitionProcess.title.fundAllocation" bundle="ACQUISITION_RESOURCES"/></h2>
-
 <logic:present name="process" property="currentOwner">
 	<bean:define id="ownerName" name="process" property="currentOwner.expenditurePerson.firstAndLastName"/>
 	<div class="infobox_warning">

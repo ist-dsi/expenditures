@@ -2,17 +2,17 @@ package pt.ist.expenditureTrackingSystem.domain.statistics;
 
 import java.math.BigDecimal;
 
-import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
+import module.workflow.activities.WorkflowActivity;
 
 public class LogEntry {
 
-    private final AbstractActivity abstractActivity;
+    private final WorkflowActivity abstractActivity;
 
     private long duration = 0;
 
     private int numberOfProcesses = 0;
 
-    public LogEntry(final AbstractActivity abstractActivity) {
+    public LogEntry(final WorkflowActivity abstractActivity) {
 	this.abstractActivity = abstractActivity;
     }
 
@@ -24,7 +24,7 @@ public class LogEntry {
 	this.duration += duration;
     }
 
-    public AbstractActivity getAbstractActivity() {
+    public WorkflowActivity getAbstractActivity() {
 	return abstractActivity;
     }
 

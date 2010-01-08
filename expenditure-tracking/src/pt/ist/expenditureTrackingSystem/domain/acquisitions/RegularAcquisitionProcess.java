@@ -8,6 +8,7 @@ import java.util.Set;
 
 import module.workflow.domain.ActivityLog;
 import module.workflow.domain.WorkflowLog;
+import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.User;
 
 import org.joda.time.LocalDate;
@@ -48,10 +49,15 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
 	return logs;
     }
 
+    /*
+     * TODO: Fix this isAssignableFrom
+     */
     public List<OperationLog> getOperationLogs() {
 	List<OperationLog> logs = new ArrayList<OperationLog>();
 	for (WorkflowLog log : super.getExecutionLogs()) {
-	    logs.add((OperationLog) log);
+	    if (OperationLog.class.isAssignableFrom(log.getClass())) {
+		logs.add((OperationLog) log);
+	    }
 	}
 	return logs;
     }
@@ -99,18 +105,6 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
     public void unconfirmInvoiceForAll() {
 	getAcquisitionRequest().unconfirmInvoiceForAll();
 	cancelInvoiceConfirmation();
-    }
-
-    public boolean isPersonAbleToExecuteActivities() {
-	Map<ActivityScope, List<AbstractActivity<RegularAcquisitionProcess>>> activities = getProcessActivityMap();
-	for (ActivityScope scope : activities.keySet()) {
-	    for (AbstractActivity<RegularAcquisitionProcess> activity : activities.get(scope)) {
-		if (activity.isActive(this)) {
-		    return true;
-		}
-	    }
-	}
-	return false;
     }
 
     @Override
@@ -196,8 +190,6 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
     public boolean isProcessFlowCharAvailable() {
 	return true;
     }
-
-    public abstract Map<ActivityScope, List<AbstractActivity<RegularAcquisitionProcess>>> getProcessActivityMap();
 
     @Override
     public void setSkipSupplierFundAllocation(Boolean skipSupplierFundAllocation) {

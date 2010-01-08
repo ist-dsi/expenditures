@@ -1,39 +1,56 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities;
 
+import module.workflow.activities.ActivityInformation;
+import module.workflow.activities.WorkflowActivity;
+import myorg.applicationTier.Authenticate.UserView;
+import myorg.domain.User;
+import myorg.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
 
-public class RemoveFundAllocation extends GenericAcquisitionProcessActivity {
-
-    @Override
-    protected boolean isAccessible(RegularAcquisitionProcess process) {
-	return process.isAccountingEmployee();
-    }
+public class RemoveFundAllocation extends
+	WorkflowActivity<RegularAcquisitionProcess, ActivityInformation<RegularAcquisitionProcess>> {
 
     @Override
-    protected boolean isAvailable(RegularAcquisitionProcess process) {
-	return (checkActiveConditions(process) || checkCanceledConditions(process))
-		&& process.getAcquisitionRequest().hasAnyFundAllocationId(getLoggedPerson());
+    public boolean isActive(RegularAcquisitionProcess process, User user) {
+	return isUserProcessOwner(process, user) && process.isAccountingEmployee(user.getExpenditurePerson())
+		&& (checkActiveConditions(process) || checkCanceledConditions(process))
+		&& process.getAcquisitionRequest().hasAnyFundAllocationId(user.getExpenditurePerson());
     }
 
     private boolean checkActiveConditions(RegularAcquisitionProcess process) {
-	return super.isAvailable(process) && process.getAcquisitionProcessState().isInAllocatedToUnitState();
+	return process.getAcquisitionProcessState().isInAllocatedToUnitState();
     }
 
     private boolean checkCanceledConditions(RegularAcquisitionProcess process) {
-	return super.isAvailable(process) && process.getAcquisitionProcessState().isCanceled();
+	return process.getAcquisitionProcessState().isCanceled();
     }
 
     @Override
-    protected void process(RegularAcquisitionProcess process, Object... objects) {
-	process.getAcquisitionRequest().resetFundAllocationId(getLoggedPerson());
+    protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
+	RegularAcquisitionProcess process = activityInformation.getProcess();
+	process.getAcquisitionRequest().resetFundAllocationId(UserView.getCurrentUser().getExpenditurePerson());
 	if (!process.getAcquisitionProcessState().isCanceled()) {
 	    process.allocateFundsToSupplier();
 	} else {
 	    RemoveFundAllocationExpirationDate removeFundAllocationExpirationDate = new RemoveFundAllocationExpirationDate();
 	    if (!process.hasAnyAllocatedFunds() && removeFundAllocationExpirationDate.isActive(process)) {
-		removeFundAllocationExpirationDate.execute(process);
+		removeFundAllocationExpirationDate.execute(removeFundAllocationExpirationDate.getActivityInformation(process));
 	    }
 	}
+    }
+
+    @Override
+    public String getLocalizedName() {
+	return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+    }
+
+    @Override
+    public String getUsedBundle() {
+	return "resources/AcquisitionResources";
+    }
+
+    @Override
+    public boolean isUserAwarenessNeeded(RegularAcquisitionProcess process, User user) {
+	return false;
     }
 }

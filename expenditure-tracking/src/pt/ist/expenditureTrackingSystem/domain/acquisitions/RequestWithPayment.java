@@ -487,22 +487,6 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
 	return false;
     }
 
-    @Override
-    public AcquisitionInvoice receiveInvoice(String filename, byte[] bytes, String invoiceNumber, LocalDate invoiceDate) {
-	for (PaymentProcessInvoice invoice : getInvoices()) {
-	    if (invoice.getInvoiceNumber().equals(invoiceNumber)) {
-		throw new DomainException("acquisitionProcess.message.exception.InvoiceWithSameNumber");
-	    }
-	}
-	final AcquisitionInvoice invoice = new AcquisitionInvoice();
-	invoice.setFilename(filename);
-	invoice.setContent(bytes);
-	invoice.setInvoiceNumber(invoiceNumber);
-	invoice.setInvoiceDate(invoiceDate);
-	getProcess().addFiles(invoice);
-	return invoice;
-    }
-
     public boolean hasAllInvoicesAllocated() {
 	for (Financer financer : getFinancers()) {
 	    if (!financer.hasAllInvoicesAllocated()) {

@@ -41,4 +41,9 @@ public class RemovePermanentProjectFunds<P extends PaymentProcess> extends Workf
     public String getUsedBundle() {
 	return "resources/AcquisitionResources";
     }
+
+    @Override
+    public boolean isUserAwarenessNeeded(P process, User user) {
+	return false;
+    }
 }

@@ -39,4 +39,9 @@ public class AbstractChangeFinancersAccountUnitActivityInformation<P extends Pay
 	this.beans = beans;
     }
 
+    @Override
+    public boolean hasAllneededInfo() {
+	return isForwardedFromInput();
+    }
+
 }

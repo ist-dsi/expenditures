@@ -1,31 +1,23 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities;
 
+import module.workflow.activities.ActivityInformation;
+import module.workflow.activities.WorkflowActivity;
+import myorg.domain.User;
+import myorg.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
+import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
-public class RemoveFundAllocationExpirationDate extends GenericAcquisitionProcessActivity {
-
-    @Override
-    protected boolean isAccessible(RegularAcquisitionProcess process) {
-	return (process.isAccountingEmployee() && !hasAnyAssociatedProject(process)) || process.isProjectAccountingEmployee()
-		|| userHasRole(RoleType.ACQUISITION_CENTRAL);
-    }
-
-    @Override
-    protected boolean isAvailable(RegularAcquisitionProcess process) {
-	return (checkActiveConditions(process) || checkCanceledConditions(process))
-		&& !process.hasAnyAllocatedFunds()
-		&& ((!process.getShouldSkipSupplierFundAllocation() && process.getFundAllocationExpirationDate() != null) || (process
-			.getShouldSkipSupplierFundAllocation() && process.isPendingFundAllocation()));  }
+public class RemoveFundAllocationExpirationDate extends
+	WorkflowActivity<RegularAcquisitionProcess, ActivityInformation<RegularAcquisitionProcess>> {
 
     private boolean checkActiveConditions(RegularAcquisitionProcess process) {
-	return super.isAvailable(process) && process.getAcquisitionProcessState().isInAllocatedToSupplierState();
+	return process.getAcquisitionProcessState().isInAllocatedToSupplierState();
     }
 
     private boolean checkCanceledConditions(RegularAcquisitionProcess process) {
-	return super.isAvailable(process) && process.getAcquisitionProcessState().isCanceled();
+	return process.getAcquisitionProcessState().isCanceled();
     }
 
     private boolean hasAnyAssociatedProject(final RegularAcquisitionProcess process) {
@@ -38,7 +30,20 @@ public class RemoveFundAllocationExpirationDate extends GenericAcquisitionProces
     }
 
     @Override
-    protected void process(RegularAcquisitionProcess process, Object... objects) {
+    public boolean isActive(RegularAcquisitionProcess process, User user) {
+	Person person = user.getExpenditurePerson();
+	return isUserProcessOwner(process, user)
+		&& ((process.isAccountingEmployee(person) && !hasAnyAssociatedProject(process))
+			|| process.isProjectAccountingEmployee(person) || person.hasRoleType(RoleType.ACQUISITION_CENTRAL))
+		&& (checkActiveConditions(process) || checkCanceledConditions(process))
+		&& !process.hasAnyAllocatedFunds()
+		&& ((!process.getShouldSkipSupplierFundAllocation() && process.getFundAllocationExpirationDate() != null) || (process
+			.getShouldSkipSupplierFundAllocation() && process.isPendingFundAllocation()));
+    }
+
+    @Override
+    protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
+	RegularAcquisitionProcess process = activityInformation.getProcess();
 	process.removeFundAllocationExpirationDate();
 	process.getRequest().unSubmitForFundsAllocation();
 	if (!process.getAcquisitionProcessState().isCanceled()) {
@@ -46,4 +51,13 @@ public class RemoveFundAllocationExpirationDate extends GenericAcquisitionProces
 	}
     }
 
+    @Override
+    public String getLocalizedName() {
+	return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+    }
+
+    @Override
+    public String getUsedBundle() {
+	return "resources/AcquisitionResources";
+    }
 }

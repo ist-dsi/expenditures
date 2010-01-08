@@ -1,19 +1,17 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities;
 
+import myorg.domain.User;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.AbstractDistributeRealValuesForPayingUnits;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.AbstractDistributeRealValuesForPayingUnits;
 
 public class DistributeRealValuesForPayingUnits extends AbstractDistributeRealValuesForPayingUnits<RegularAcquisitionProcess> {
 
     @Override
-    protected boolean isAccessible(RegularAcquisitionProcess process) {
-	return userHasRole(RoleType.ACQUISITION_CENTRAL);
-    }
-
-    @Override
-    protected boolean isAvailable(RegularAcquisitionProcess process) {
-	return  isCurrentUserProcessOwner(process) && process.getAcquisitionProcessState().isInvoiceReceived();
+    public boolean isActive(RegularAcquisitionProcess process, User user) {
+	return user.getExpenditurePerson().hasRoleType(RoleType.ACQUISITION_CENTRAL) && isUserProcessOwner(process, user)
+		&& process.getAcquisitionProcessState().isInvoiceReceived()
+		&& !process.getAcquisitionRequest().hasAtLeastOneConfirmation();
     }
 
 }

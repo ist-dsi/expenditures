@@ -1,11 +1,15 @@
 package pt.ist.expenditureTrackingSystem.domain;
 
+import javax.servlet.http.HttpServletRequest;
+
 import module.organization.presentationTier.actions.OrganizationModelAction;
 import myorg.domain.ModuleInitializer;
 import myorg.domain.MyOrg;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.organization.OrganizationModelPlugin.ExpendituresView;
 import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.RequestChecksumFilter;
+import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.RequestChecksumFilter.ChecksumPredicate;
 
 public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base implements ModuleInitializer {
 
@@ -36,15 +40,37 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 		}
 		init = new ThreadLocal<ExpenditureTrackingSystem>();
 		init.set(myOrg.getExpenditureTrackingSystem());
-		
+
 		initRoles();
 		initSystemSearches();
+		registerChecksumFilterException();
 		OrganizationModelAction.partyViewHookManager.register(new ExpendituresView());
 		isInitialized = true;
 	    } finally {
 		init = null;
 	    }
 	}
+    }
+
+    private static void registerChecksumFilterException() {
+	RequestChecksumFilter.registerFilterRule(new ChecksumPredicate() {
+
+	    @Override
+	    public boolean shouldFilter(HttpServletRequest request) {
+		return !(request.getQueryString() != null && request.getQueryString().contains(
+			"method=calculateShareValuesViaAjax"));
+	    }
+
+	});
+
+	RequestChecksumFilter.registerFilterRule(new ChecksumPredicate() {
+	    public boolean shouldFilter(HttpServletRequest httpServletRequest) {
+		return !(httpServletRequest.getRequestURI().endsWith("/acquisitionSimplifiedProcedureProcess.do")
+			&& httpServletRequest.getQueryString() != null && httpServletRequest.getQueryString().contains(
+			"method=checkSupplierLimit"));
+	    }
+	});
+
     }
 
     private static void initRoles() {

@@ -3,7 +3,6 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
-<%@ taglib uri="/WEB-INF/messages.tld" prefix="messages" %>
 
 <bean:define id="acquisitionProcessClass" name="processRequest" property="process.class.simpleName"/>
 <bean:define id="actionMapping" value="<%= "/acquisition" + acquisitionProcessClass %>"/>

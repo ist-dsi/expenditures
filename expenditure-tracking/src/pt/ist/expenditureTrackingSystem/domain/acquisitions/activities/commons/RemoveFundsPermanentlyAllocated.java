@@ -29,4 +29,9 @@ public class RemoveFundsPermanentlyAllocated<P extends PaymentProcess> extends W
     public String getUsedBundle() {
 	return "resources/AcquisitionResources";
     }
+
+    @Override
+    public boolean isUserAwarenessNeeded(P process, User user) {
+	return false;
+    }
 }

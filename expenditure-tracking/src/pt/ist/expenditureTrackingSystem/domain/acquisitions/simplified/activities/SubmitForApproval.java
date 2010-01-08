@@ -1,26 +1,33 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities;
 
+import module.workflow.activities.ActivityInformation;
+import module.workflow.activities.WorkflowActivity;
+import myorg.domain.User;
+import myorg.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
-import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
-public class SubmitForApproval extends GenericAcquisitionProcessActivity {
-
-    @Override
-    protected boolean isAccessible(RegularAcquisitionProcess process) {
-	final Person loggedPerson = getLoggedPerson();
-	return loggedPerson != null && loggedPerson.equals(process.getRequestor());
-    }
+public class SubmitForApproval extends
+	WorkflowActivity<RegularAcquisitionProcess, ActivityInformation<RegularAcquisitionProcess>> {
 
     @Override
-    protected boolean isAvailable(RegularAcquisitionProcess process) {
-	return  super.isAvailable(process) && process.getAcquisitionProcessState().isInGenesis() && process.getAcquisitionRequest().isFilled()
+    public boolean isActive(RegularAcquisitionProcess process, User user) {
+	return user.getExpenditurePerson() == process.getRequestor() && isUserProcessOwner(process, user)
+		&& process.getAcquisitionProcessState().isInGenesis() && process.getAcquisitionRequest().isFilled()
 		&& process.getAcquisitionRequest().isEveryItemFullyAttributedToPayingUnits();
     }
 
     @Override
-    protected void process(RegularAcquisitionProcess process, Object... objects) {
-	process.submitForApproval();
+    protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
+	activityInformation.getProcess().submitForApproval();
     }
 
+    @Override
+    public String getLocalizedName() {
+	return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+    }
+
+    @Override
+    public String getUsedBundle() {
+	return "resources/AcquisitionResources";
+    }
 }

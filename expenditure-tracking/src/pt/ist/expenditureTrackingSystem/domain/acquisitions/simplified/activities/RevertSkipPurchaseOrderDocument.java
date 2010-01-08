@@ -1,25 +1,39 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities;
 
+import module.workflow.activities.ActivityInformation;
+import module.workflow.activities.WorkflowActivity;
+import myorg.domain.User;
+import myorg.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
 
-public class RevertSkipPurchaseOrderDocument extends GenericAcquisitionProcessActivity {
+public class RevertSkipPurchaseOrderDocument extends
+	WorkflowActivity<RegularAcquisitionProcess, ActivityInformation<RegularAcquisitionProcess>> {
 
     @Override
-    protected boolean isAccessible(RegularAcquisitionProcess process) {
-	return userHasRole(RoleType.ACQUISITION_CENTRAL);
+    public boolean isActive(RegularAcquisitionProcess process, User user) {
+	return isUserProcessOwner(process, user) && process.getAcquisitionProcessState().isProcessed()
+		&& !process.hasPurchaseOrderDocument() && user.getExpenditurePerson().hasRoleType(RoleType.ACQUISITION_CENTRAL);
     }
 
     @Override
-    protected boolean isAvailable(RegularAcquisitionProcess process) {
-	return super.isAvailable(process) && process.getAcquisitionProcessState().isProcessed()
-		&& !process.hasPurchaseOrderDocument();
+    protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
+	activityInformation.getProcess().revertProcessedAcquisition();
+
     }
 
     @Override
-    protected void process(RegularAcquisitionProcess process, Object... objects) {
-	process.revertProcessedAcquisition();
+    public String getLocalizedName() {
+	return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
     }
 
+    @Override
+    public String getUsedBundle() {
+	return "resources/AcquisitionResources";
+    }
+
+    @Override
+    public boolean isUserAwarenessNeeded(RegularAcquisitionProcess process, User user) {
+	return false;
+    }
 }

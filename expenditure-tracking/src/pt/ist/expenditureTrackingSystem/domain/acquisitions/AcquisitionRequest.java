@@ -1,5 +1,6 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -8,16 +9,12 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import myorg.domain.util.ByteArray;
-import myorg.domain.util.Money;
-
-import org.joda.time.LocalDate;
-
 import myorg.domain.exceptions.DomainException;
+import myorg.domain.util.Address;
+import myorg.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess.ProcessClassification;
-import pt.ist.expenditureTrackingSystem.domain.dto.AcquisitionRequestItemBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
@@ -61,9 +58,12 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	}
     }
 
-    public AcquisitionRequestItem createAcquisitionRequestItem(AcquisitionRequestItemBean requestItemBean) {
-
-	return new AcquisitionRequestItem(requestItemBean);
+    public AcquisitionRequestItem createAcquisitionRequestItem(final AcquisitionRequest acquisitionRequest,
+	    final String description, final Integer quantity, final Money unitValue, final BigDecimal vatValue,
+	    final Money additionalCostValue, final String proposalReference, CPVReference reference, String recipient,
+	    Address address, String phone, String email) {
+	return new AcquisitionRequestItem(acquisitionRequest, description, quantity, unitValue, vatValue, additionalCostValue,
+		proposalReference, reference, recipient, address, phone, email);
     }
 
     public String getFiscalIdentificationCode() {
@@ -281,14 +281,10 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	return result;
     }
 
-    @Override
-    public AcquisitionInvoice receiveInvoice(final String filename, final byte[] bytes, final String invoiceNumber,
-	    final LocalDate invoiceDate) {
-	AcquisitionInvoice invoice = super.receiveInvoice(filename, bytes, invoiceNumber, invoiceDate);
+    public void processReceivedInvoice() {
 	if (!isRealCostAvailableForAtLeastOneItem()) {
 	    copyEstimateValuesToRealValues();
 	}
-	return invoice;
     }
 
     public boolean isRealCostAvailableForAtLeastOneItem() {
@@ -533,6 +529,14 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     public SortedSet<AcquisitionRequestItem> getOrderedRequestItemsSet() {
 	return (SortedSet<AcquisitionRequestItem>) addAcquisitionRequestItemsSetToArg(new TreeSet<AcquisitionRequestItem>(
 		AcquisitionRequestItem.COMPARATOR_BY_REFERENCE));
+    }
+
+    public void validateInvoiceNumber(String invoiceNumber) {
+	for (PaymentProcessInvoice invoice : getInvoices()) {
+	    if (invoice.getInvoiceNumber().equals(invoiceNumber)) {
+		throw new DomainException("acquisitionProcess.message.exception.InvoiceWithSameNumber");
+	    }
+	}
     }
 
 }

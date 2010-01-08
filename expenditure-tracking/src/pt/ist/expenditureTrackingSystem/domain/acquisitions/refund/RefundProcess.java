@@ -105,53 +105,6 @@ public class RefundProcess extends RefundProcess_Base {
 	activities.add(new ChangeFinancersAccountingUnit());
 	activities.add(new ChangeProcessRequester());
 	activities.add(new RemoveCancelProcess<RefundProcess>());
-	// List<AbstractActivity<RefundProcess>> requestActivitites = new
-	// ArrayList<AbstractActivity<RefundProcess>>();
-	// requestActivitites.add(new CreateRefundItem());
-	// requestActivitites.add(new GenericAddPayingUnit<RefundProcess>());
-	// requestActivitites.add(new GenericRemovePayingUnit<RefundProcess>());
-	// requestActivitites.add(new SubmitForApproval());
-	// requestActivitites.add(new UnSubmitForApproval());
-	// requestActivitites.add(new Approve());
-	// requestActivitites.add(new UnApprove<RefundProcess>());
-	// requestActivitites.add(new ProjectFundAllocation<RefundProcess>());
-	// requestActivitites.add(new RemoveProjectFundAllocation());
-	// requestActivitites.add(new FundAllocation<RefundProcess>());
-	// requestActivitites.add(new RemoveFundAllocation());
-	// requestActivitites.add(new Authorize<RefundProcess>());
-	// requestActivitites.add(new UnAuthorize<RefundProcess>());
-	// requestActivitites.add(new UnSubmitForFundAllocation());
-	// requestActivitites.add(new SubmitForInvoiceConfirmation());
-	// requestActivitites.add(new ConfirmInvoices());
-	// requestActivitites.add(new
-	// AllocateProjectFundsPermanently<RefundProcess>());
-	// requestActivitites.add(new
-	// AllocateFundsPermanently<RefundProcess>());
-	// requestActivitites.add(new
-	// RemovePermanentProjectFunds<RefundProcess>());
-	// requestActivitites.add(new
-	// RemoveFundsPermanentlyAllocated<RefundProcess>());
-	// requestActivitites.add(new RefundPerson());
-	// requestActivitites.add(new CancelRefundProcess());
-	// requestActivitites.add(new ChangeFinancersAccountingUnit());
-	// requestActivitites.add(new UnconfirmInvoices());
-	// requestActivitites.add(new RevertInvoiceConfirmationSubmition());
-	// requestActivitites.add(new SetSkipSupplierFundAllocation());
-	// requestActivitites.add(new UnsetSkipSupplierFundAllocation());
-	// activityMap.put(ActivityScope.REQUEST_INFORMATION,
-	// requestActivitites);
-	//
-	// List<AbstractActivity<RefundProcess>> itemActivities = new
-	// ArrayList<AbstractActivity<RefundProcess>>();
-	// itemActivities.add(new EditRefundItem());
-	// itemActivities.add(new DeleteRefundItem());
-	// itemActivities.add(new
-	// GenericAssignPayingUnitToItem<RefundProcess>());
-	// itemActivities.add(new CreateRefundInvoice());
-	// itemActivities.add(new RemoveRefundInvoice());
-	// itemActivities.add(new EditRefundInvoice());
-	// itemActivities.add(new DistributeRealValuesForPayingUnits());
-	// activityMap.put(ActivityScope.REQUEST_ITEM, itemActivities);
     }
 
     public RefundProcess(Person requestor, String refundeeName, String refundeeFiscalCode, Unit requestingUnit) {
@@ -167,41 +120,6 @@ public class RefundProcess extends RefundProcess_Base {
 	new RefundProcessState(this, RefundProcessStateType.IN_GENESIS);
 	setSkipSupplierFundAllocation(Boolean.FALSE);
     }
-
-    // private List<AbstractActivity<RefundProcess>>
-    // getActiveActivitiesForScope(ActivityScope scope) {
-    // List<AbstractActivity<RefundProcess>> activities = new
-    // ArrayList<AbstractActivity<RefundProcess>>();
-    // for (AbstractActivity<RefundProcess> activity : activityMap.get(scope)) {
-    // if (activity.isActive(this)) {
-    // activities.add(activity);
-    // }
-    // }
-    // return activities;
-    // }
-    //
-    // public List<AbstractActivity<RefundProcess>>
-    // getActiveActivitiesForRequest() {
-    // return getActiveActivitiesForScope(ActivityScope.REQUEST_INFORMATION);
-    // }
-    //
-    // public List<AbstractActivity<RefundProcess>> getActiveActivitiesForItem()
-    // {
-    // return getActiveActivitiesForScope(ActivityScope.REQUEST_ITEM);
-    // }
-    //
-    // @Override
-    // public AbstractActivity<RefundProcess> getActivityByName(String
-    // activityName) {
-    // for (ActivityScope scope : ActivityScope.values()) {
-    // for (AbstractActivity<RefundProcess> activity : activityMap.get(scope)) {
-    // if (activity.getName().equals(activityName)) {
-    // return activity;
-    // }
-    // }
-    // }
-    // return null;
-    // }
 
     @Service
     public static RefundProcess createNewRefundProcess(CreateRefundProcessBean bean) {
@@ -479,7 +397,7 @@ public class RefundProcess extends RefundProcess_Base {
 
     @Override
     public void revertToState(ProcessState processState) {
-	final RefundProcessState refundProcessState =  (RefundProcessState) processState;
+	final RefundProcessState refundProcessState = (RefundProcessState) processState;
 	final RefundProcessStateType refundProcessStateType = refundProcessState.getRefundProcessStateType();
 	if (refundProcessStateType != null && refundProcessStateType != RefundProcessStateType.CANCELED) {
 	    new RefundProcessState(this, refundProcessStateType);

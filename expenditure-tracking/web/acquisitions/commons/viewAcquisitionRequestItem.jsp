@@ -3,10 +3,68 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
-			
+<%@ taglib uri="/WEB-INF/workflow.tld" prefix="wf"%>
 
 <bean:define id="acquisitionRequestItem" name="item"/>
+<bean:define id="itemId" name="item" property="externalId" type="java.lang.String"/>
+<bean:define id="processId" name="item" property="request.process.externalId" type="java.lang.String"/>
 
+<bean:define id="needsSeparator" value="false" toScope="request"/>	
+	
+	
+	<wf:activityLink id="<%= "delete-" + itemId %>" processName="process" activityName="DeleteAcquisitionRequestItem" scope="request" paramName0="item" paramValue0="<%= itemId %>">
+		<bean:define id="needsSeparator" value="true" toScope="request"/>
+		<wf:activityName processName="process" activityName="DeleteAcquisitionRequestItem" scope="request"/>
+	</wf:activityLink>					
+		 	
+	<wf:isActive processName="process" activityName="EditAcquisitionRequestItem" scope="request">	 					
+		<logic:equal name="needsSeparator" value="true">
+			<bean:define id="needsSeparator" value="false" toScope="request"/>
+			| 
+		</logic:equal>
+	</wf:isActive>
+	
+	<wf:activityLink id="<%= "edit-" + itemId %>" processName="process" activityName="EditAcquisitionRequestItem" scope="request" paramName0="item" paramValue0="<%= itemId %>">
+		<bean:define id="needsSeparator" value="true" toScope="request"/>
+		<wf:activityName processName="process" activityName="EditAcquisitionRequestItem" scope="request"/>
+	</wf:activityLink>		
+	
+	<wf:isActive processName="process" activityName="GenericAssignPayingUnitToItem" scope="request">	 					
+		<logic:equal name="needsSeparator" value="true">
+			<bean:define id="needsSeparator" value="false" toScope="request"/>
+			| 
+		</logic:equal>
+	</wf:isActive>
+	
+	<wf:activityLink id="<%= "gaput-" + itemId %>" processName="process" activityName="GenericAssignPayingUnitToItem" scope="request" paramName0="item" paramValue0="<%= itemId %>">
+		<bean:define id="needsSeparator" value="true" toScope="request"/>
+		<wf:activityName processName="process" activityName="GenericAssignPayingUnitToItem" scope="request"/>
+	</wf:activityLink>		
+	
+	<wf:isActive processName="process" activityName="EditAcquisitionRequestItemRealValues" scope="request">	 					
+		<logic:equal name="needsSeparator" value="true">
+			<bean:define id="needsSeparator" value="false" toScope="request"/>
+			| 
+		</logic:equal>
+	</wf:isActive>
+	
+	<wf:activityLink id="<%= "realEdit-" + itemId %>" processName="process" activityName="EditAcquisitionRequestItemRealValues" scope="request" paramName0="item" paramValue0="<%= itemId %>">
+		<bean:define id="needsSeparator" value="true" toScope="request"/>
+		<wf:activityName processName="process" activityName="EditAcquisitionRequestItemRealValues" scope="request"/>
+	</wf:activityLink>	
+	
+	<wf:isActive processName="process" activityName="DistributeRealValuesForPayingUnits" scope="request">	 					
+		<logic:equal name="needsSeparator" value="true">
+			<bean:define id="needsSeparator" value="false" toScope="request"/>
+			| 
+		</logic:equal>
+	</wf:isActive>
+	
+	<wf:activityLink id="<%= "realDistribute-" + itemId %>" processName="process" activityName="DistributeRealValuesForPayingUnits" scope="request" paramName0="item" paramValue0="<%= itemId %>">
+		<bean:define id="needsSeparator" value="true" toScope="request"/>
+		<wf:activityName processName="process" activityName="DistributeRealValuesForPayingUnits" scope="request"/>
+	</wf:activityLink>		
+	
 <div class="infobox">
 	
 	<table class="tstyle1 thpadding02505" style="width: 100%;">

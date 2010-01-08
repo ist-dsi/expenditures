@@ -1,5 +1,8 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
+import myorg.util.ClassNameBundle;
+
+@ClassNameBundle(bundle = "resources/AcquisitionResources")
 public class PurchaseOrderDocument extends PurchaseOrderDocument_Base {
 
     protected PurchaseOrderDocument(String requestId) {
@@ -24,4 +27,13 @@ public class PurchaseOrderDocument extends PurchaseOrderDocument_Base {
 	super.delete();
     }
 
+    @Override
+    public boolean isPossibleToArchieve() {
+	return false;
+    }
+
+    @Override
+    public String getDisplayName() {
+	return getFilename();
+    }
 }

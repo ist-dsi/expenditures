@@ -9,7 +9,6 @@ import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.WorkflowProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.ProjectFinancer;
 import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean;
 import pt.utl.ist.fenix.tools.util.Strings;
 
@@ -29,14 +28,14 @@ public class AllocateFundsPermanentlyActivityInformation<P extends PaymentProces
     @Override
     public void generateBeans() {
 	for (Financer financer : getFinancers()) {
-	    beans.addAll(getFundAllocationBeans((ProjectFinancer) financer));
+	    beans.addAll(getFundAllocationBeans(financer));
 	}
 
     }
 
     @Override
     public Set<? extends Financer> getFinancers() {
-	return getProcess().getFinancersWithFundsAllocated();
+	return getProcess().getFinancersWithFundsInitiallyAllocated();
     }
 
     @Override

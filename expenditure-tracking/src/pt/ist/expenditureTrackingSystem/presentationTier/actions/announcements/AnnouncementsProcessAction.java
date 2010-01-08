@@ -6,30 +6,45 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import myorg.domain.exceptions.DomainException;
+
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import myorg.domain.exceptions.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.announcements.AnnouncementProcess;
 import pt.ist.expenditureTrackingSystem.domain.announcements.AnnouncementProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.announcements.SearchAnnouncementProcess;
 import pt.ist.expenditureTrackingSystem.domain.dto.AnnouncementBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.ProcessStateBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
+import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
+import pt.ist.expenditureTrackingSystem.domain.processes.ActivityException;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
-import pt.ist.expenditureTrackingSystem.presentationTier.actions.ProcessAction;
+import pt.ist.expenditureTrackingSystem.presentationTier.actions.BaseAction;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
 @Mapping(path = "/announcementProcess")
-public class AnnouncementsProcessAction extends ProcessAction {
+public class AnnouncementsProcessAction extends BaseAction {
 
-    @Override
-    protected GenericProcess getProcess(final HttpServletRequest request) {
-	return getProcess(request, "announcementProcessOid");
+    protected void genericActivityExecution(final AnnouncementProcess process, final String activityName, Object... args) {
+	AbstractActivity<AnnouncementProcess> acquitivity = process.getActivityByName(activityName);
+	acquitivity.execute(process, args);
     }
 
-    @Override
+    protected void genericActivityExecution(final HttpServletRequest request, final String activityName, final Object... args) {
+	final AnnouncementProcess process = getProcess(request);
+	try {
+	    genericActivityExecution(process, activityName, args);
+	} catch (ActivityException e) {
+	    addMessage(request, e.getMessage());
+	}
+    }
+
+    protected AnnouncementProcess getProcess(final HttpServletRequest request) {
+	return getDomainObject(request, "announcementProcessOid");
+    }
+
     public ActionForward viewProcess(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 	    HttpServletResponse response) {
 	GenericProcess process = getProcess(request);
@@ -136,7 +151,7 @@ public class AnnouncementsProcessAction extends ProcessAction {
 	try {
 	    genericActivityExecution(request, "CancelAnnouncementProcess");
 	} catch (DomainException e) {
-	    addErrorMessage(e.getMessage(), getBundle());
+	    addMessage(request, e.getMessage());
 	}
 
 	return showMyProcesses(mapping, form, request, response);
@@ -169,7 +184,7 @@ public class AnnouncementsProcessAction extends ProcessAction {
 	try {
 	    genericActivityExecution(request, "RejectAnnouncementProcess", stateBean.getJustification());
 	} catch (DomainException e) {
-	    addErrorMessage(e.getMessage(), getBundle());
+	    addMessage(request, e.getMessage());
 	}
 	return viewAnnouncementProcess(mapping, form, request, response);
     }

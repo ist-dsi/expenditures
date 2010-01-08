@@ -6,15 +6,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import module.workflow.activities.ActivityInformation;
+import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.ActivityLog;
 import module.workflow.domain.WorkflowLog;
+import module.workflow.domain.WorkflowProcess;
 
 import org.joda.time.DateTime;
 
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
-import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 
 public abstract class ProcessActivityLogStatistics {
 
@@ -41,7 +43,7 @@ public abstract class ProcessActivityLogStatistics {
 
 	    final long duration = calculateDuration(operationLog, previousLog);
 
-	    final AbstractActivity abstractActivity = getActivity(process, operationLog);
+	    final WorkflowActivity abstractActivity = getActivity(process, (ActivityLog) operationLog);
 	    final LogEntry logEntry = getLogEntry(abstractActivity);
 	    if (!logEntrySet.contains(logEntry)) {
 		logEntrySet.add(logEntry);
@@ -51,11 +53,9 @@ public abstract class ProcessActivityLogStatistics {
 	}
     }
 
-    protected AbstractActivity getActivity(PaymentProcess process, WorkflowLog operationLog) {
-
-	String operationName = ((ActivityLog) operationLog).getOperation();
-	int index = operationName.lastIndexOf('.');
-	return process.getActivityByName(operationName.substring(index + 1));
+    protected WorkflowActivity<WorkflowProcess, ActivityInformation<WorkflowProcess>> getActivity(PaymentProcess process,
+	    ActivityLog operationLog) {
+	return process.getActivity(operationLog.getOperation());
     }
 
     protected long calculateDuration(final WorkflowLog operationLog, final WorkflowLog previousLog) {
@@ -64,7 +64,7 @@ public abstract class ProcessActivityLogStatistics {
 	return dateTime.getMillis() - previousDateTime.getMillis();
     }
 
-    protected LogEntry getLogEntry(final AbstractActivity abstractActivity) {
+    protected LogEntry getLogEntry(final WorkflowActivity abstractActivity) {
 	for (final LogEntry logEntry : logEntries) {
 	    if (logEntry.getAbstractActivity() == abstractActivity) {
 		return logEntry;

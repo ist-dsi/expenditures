@@ -429,7 +429,7 @@ public class OrganizationAction extends BaseAction {
 	try {
 	    authorization.revoke();
 	} catch (DomainException e) {
-	    addErrorMessage(e.getMessage(), "EXPENDITURE_RESOURCES");
+	    addMessage(request, e.getMessage());
 	}
 
 	return viewAuthorization(mapping, form, request, response);
@@ -448,7 +448,7 @@ public class OrganizationAction extends BaseAction {
 	    bean.setUnit(unit);
 	    request.setAttribute("bean", bean);
 	} else {
-	    addErrorMessage("label.unable.to.delegate.that.action", "EXPENDITURE_RESOURCES");
+	    addMessage(request, "label.unable.to.delegate.that.action");
 	}
 
 	return forward(request, "/expenditureTrackingOrganization/delegateAuthorization.jsp");
@@ -475,7 +475,7 @@ public class OrganizationAction extends BaseAction {
 	    DelegatedAuthorization.delegate(bean.getAuthorization(), bean.getPerson(), bean.getUnit(), bean.getCanDelegate(),
 		    bean.getEndDate(), bean.getMaxAmount());
 	} catch (DomainException e) {
-	    addErrorMessage(e.getMessage(), "EXPENDITURE_RESOURCES");
+	    addMessage(request, e.getMessage());
 	    request.setAttribute("bean", bean);
 	    return forward(request, "/expenditureTrackingOrganization/delegateAuthorization.jsp");
 	}
@@ -900,7 +900,7 @@ public class OrganizationAction extends BaseAction {
 	unit.removeObservers(observer);
 	return manageObservers(mapping, form, request, response);
     }
-    
+
     public final ActionForward changeDefaultRegeimIsCCP(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final Unit unit = getDomainObject(request, "unitOid");

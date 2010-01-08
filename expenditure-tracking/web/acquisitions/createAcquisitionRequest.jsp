@@ -28,10 +28,6 @@
 	<bean:define id="acquisitionProcessClass" name="acquisitionProcess" property="class.simpleName"/>
 	<bean:define id="actionMapping" value="<%= "/acquisition" + acquisitionProcessClass %>"/>
 	
-	<%-- 
-	<html:link action="<%= actionMapping +".do?method=editSupplierAddress"%>" paramId="acquisitionProcessOid" paramName="acquisitionProcess" paramProperty="externalId"><bean:message key="supplier.link.edit" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/></html:link>
-	--%>
-
 </div>
 
 <logic:present name="acquisitionProcess" property="acquisitionRequest.acquisitionRequestItemsSet">

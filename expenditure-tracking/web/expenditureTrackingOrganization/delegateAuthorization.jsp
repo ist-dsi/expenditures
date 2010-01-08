@@ -3,13 +3,10 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
-<%@ taglib uri="/WEB-INF/messages.tld" prefix="messages" %>
 
 <h2>
 	<bean:message key="authorizations.title.delegate" bundle="EXPENDITURE_RESOURCES"/>
 </h2>
-
-<jsp:include page="../commons/defaultErrorDisplay.jsp"/>
 
 <bean:define id="urlCreate">/expenditureTrackingOrganization.do?method=createDelegation&amp;authorizationOid=<bean:write name="authorization" property="externalId"/></bean:define>
 <bean:define id="urlCancel">/expenditureTrackingOrganization.do?method=viewAuthorization&amp;authorizationOid=<bean:write name="authorization" property="externalId"/></bean:define>

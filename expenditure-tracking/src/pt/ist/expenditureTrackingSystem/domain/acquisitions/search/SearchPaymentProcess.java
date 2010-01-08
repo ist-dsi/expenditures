@@ -308,4 +308,5 @@ public class SearchPaymentProcess extends Search<PaymentProcess> {
     public Boolean getShowPriorityOnly() {
 	return showPriorityOnly;
     }
+
 }

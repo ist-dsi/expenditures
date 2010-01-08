@@ -37,15 +37,15 @@ public class RemoveRefundInvoice extends WorkflowActivity<RefundProcess, RemoveR
     public String getUsedBundle() {
 	return "resources/AcquisitionResources";
     }
-    
+
     @Override
     public boolean isVisible() {
 	return false;
     }
-    
+
     @Override
     public boolean isConfirmationNeeded(RefundProcess process) {
 	return true;
     }
-    
+
 }

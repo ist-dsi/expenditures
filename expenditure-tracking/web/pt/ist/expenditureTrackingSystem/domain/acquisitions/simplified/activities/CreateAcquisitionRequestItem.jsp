@@ -1,0 +1,66 @@
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
+<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
+<%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
+<%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
+<%@ taglib uri="/WEB-INF/workflow.tld" prefix="wf"%>
+
+<div class="infobox">
+	<bean:message key="acquisitionRequestItem.message.info.help" bundle="ACQUISITION_RESOURCES"/>
+</div>
+
+<bean:define id="processId" name="process" property="externalId" type="java.lang.String"/>
+<bean:define id="name" name="information" property="activityName"/>
+
+<bean:define id="schemaType"
+		name="information"
+		property="createItemSchemaType"/>
+		
+<div class="dinline forminline">
+
+<fr:form action='<%= "/workflowProcessManagement.do?method=process&processId=" + processId + "&activity=" + name %>'>
+		
+<fr:edit id="activityBean" name="information" visible="false"/>
+			
+<h3><bean:message key="acquisitionProcess.title.description" bundle="ACQUISITION_RESOURCES"/></h3>
+
+<div  class="form1">
+	<fr:edit id="acquisitionRequestItem.block1" name="information" schema="createAcquisitionRequestItem.block1">
+		<fr:layout name="tabular">
+			<fr:property name="classes" value="form thwidth150px"/>
+			<fr:property name="columnClasses" value=",,tderror"/>
+		</fr:layout>
+	</fr:edit>
+</div>
+
+
+<h3><bean:message key="acquisitionProcess.title.quantityAndCosts" bundle="ACQUISITION_RESOURCES"/></h3>
+
+<div  class="form1">
+	<fr:edit id="acquisitionRequestItem.block2" name="information" schema="createAcquisitionRequestItem.block2">
+		<fr:layout name="tabular">
+			<fr:property name="classes" value="form thwidth150px"/>
+			<fr:property name="columnClasses" value=",,tderror"/>
+		</fr:layout>
+	</fr:edit>
+</div>
+
+
+<h3><bean:message key="acquisitionProcess.title.deliveryInformation" bundle="ACQUISITION_RESOURCES"/></h3>
+
+<div  class="form1 mbottom1">
+	<fr:edit id="acquisitionRequestItem.block3" name="information" schema="<%= "createAcquisitionRequestItem.block3_" + schemaType.toString() %>">
+		<fr:layout name="tabular">
+			<fr:property name="classes" value="form thwidth150px"/>
+			<fr:property name="columnClasses" value=",,tderror"/>
+		</fr:layout>
+		<fr:destination name="postBack" path="/expenditureProcesses.do?method=itemPostBack"/>
+	</fr:edit>
+</div>
+	
+	<html:submit styleClass="inputbutton"><bean:message key="button.createItem" bundle="EXPENDITURE_RESOURCES"/></html:submit>
+</fr:form>
+<fr:form action='<%= "/workflowProcessManagement.do?method=viewProcess&processId=" + processId %>'>
+<html:submit styleClass="inputbutton"><bean:message key="renderers.form.cancel.name" bundle="RENDERER_RESOURCES"/></html:submit>
+</fr:form>
+</div>

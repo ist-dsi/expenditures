@@ -1,34 +1,42 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities;
 
+import module.workflow.activities.ActivityInformation;
+import module.workflow.activities.WorkflowActivity;
+import myorg.domain.User;
+import myorg.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
-public class SetSkipSupplierFundAllocation extends GenericAcquisitionProcessActivity {
+public class SetSkipSupplierFundAllocation extends
+	WorkflowActivity<RegularAcquisitionProcess, ActivityInformation<RegularAcquisitionProcess>> {
 
     @Override
-    protected boolean isAccessible(RegularAcquisitionProcess process) {
-	final Person loggedPerson = getLoggedPerson();
-	return loggedPerson != null
-		&& (loggedPerson == process.getRequestor() || userHasRole(RoleType.ACQUISITION_CENTRAL) || userHasRole(RoleType.SUPPLIER_FUND_ALLOCATION_MANAGER));
-    }
-
-    @Override
-    protected boolean isAvailable(RegularAcquisitionProcess process) {
-	return super.isAvailable(process)
+    public boolean isActive(RegularAcquisitionProcess process, User user) {
+	Person person = user.getExpenditurePerson();
+	return isUserProcessOwner(process, user)
 		&& (process instanceof SimplifiedProcedureProcess && ((SimplifiedProcedureProcess) process)
 			.getProcessClassification().isCCP())
-		&& ((process.getAcquisitionProcessState().isInGenesis() && getLoggedPerson() == process.getRequestor() || (userHasRole(RoleType.ACQUISITION_CENTRAL) && (process
-			.getAcquisitionProcessState().isAuthorized()
-			|| process.getAcquisitionProcessState().isAcquisitionProcessed() || process.isInvoiceReceived()))) || userHasRole(RoleType.SUPPLIER_FUND_ALLOCATION_MANAGER))
+		&& ((process.getAcquisitionProcessState().isInGenesis() && person == process.getRequestor() || (person
+			.hasRoleType(RoleType.ACQUISITION_CENTRAL) && (process.getAcquisitionProcessState().isAuthorized()
+			|| process.getAcquisitionProcessState().isAcquisitionProcessed() || process.isInvoiceReceived()))) || person
+			.hasRoleType(RoleType.SUPPLIER_FUND_ALLOCATION_MANAGER))
 		&& !process.getShouldSkipSupplierFundAllocation();
     }
 
     @Override
-    protected void process(RegularAcquisitionProcess process, Object... objects) {
-	process.skipSupplierFundAllocation();
+    protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
+	activityInformation.getProcess().skipSupplierFundAllocation();
     }
 
+    @Override
+    public String getLocalizedName() {
+	return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+    }
+
+    @Override
+    public String getUsedBundle() {
+	return "resources/AcquisitionResources";
+    }
 }

@@ -29,7 +29,7 @@ public class ProcessMapGenerator {
 	Map<AcquisitionProcessStateType, MultiCounter<AcquisitionProcessStateType>> map = new HashMap<AcquisitionProcessStateType, MultiCounter<AcquisitionProcessStateType>>();
 
 	for (SimplifiedProcedureProcess process : GenericProcess.getProcessesForPerson(SimplifiedProcedureProcess.class, person,
-		null)) {
+		null,true)) {
 
 	    AcquisitionProcessStateType type = process.getAcquisitionProcessStateType();
 	    MultiCounter<AcquisitionProcessStateType> counter = map.get(type);
@@ -48,7 +48,7 @@ public class ProcessMapGenerator {
     public static Map<RefundProcessStateType, MultiCounter<RefundProcessStateType>> generateRefundMap(Person person) {
 	Map<RefundProcessStateType, MultiCounter<RefundProcessStateType>> map = new HashMap<RefundProcessStateType, MultiCounter<RefundProcessStateType>>();
 
-	for (RefundProcess process : GenericProcess.getProcessesForPerson(RefundProcess.class, person, null)) {
+	for (RefundProcess process : GenericProcess.getProcessesForPerson(RefundProcess.class, person, null,true)) {
 
 	    RefundProcessStateType type = process.getProcessState().getRefundProcessStateType();
 	    MultiCounter<RefundProcessStateType> counter = map.get(type);

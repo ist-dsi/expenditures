@@ -7,7 +7,6 @@ enum pt.ist.expenditureTrackingSystem.domain.acquisitions.StandardAcquisitionPro
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionType as AfterTheFactAcquisitionType;
 enum pt.ist.expenditureTrackingSystem.domain.announcements.AnnouncementProcessStateType as AnnouncementProcessStateType;
 enum pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationType as AuthorizationType;
-enum pt.ist.expenditureTrackingSystem.domain.requests.RequestForProposalProcessStateType as RequestForProposalProcessStateType;
 enum pt.ist.expenditureTrackingSystem.domain.RoleType as RoleType;
 enum pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationOperation as AuthorizationOperation;
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess.ProcessClassification as ProcessClassification;
@@ -192,12 +191,6 @@ class authorizations.AuthorizationLog {
 	class acquisitions.AcquisitionInvoice extends acquisitions.PaymentProcessInvoice {
 	}
 	
-	class requests.RequestForProposalDocument extends .module.fileSupport.domain.GenericFile {
-	}
-	
-	class requests.SupplierProposalDocument extends .module.fileSupport.domain.GenericFile {
-	}
-
 	class acquisitions.refund.RefundableInvoiceFile extends acquisitions.PaymentProcessInvoice {
 		Money value;
 		BigDecimal vatValue;
@@ -282,18 +275,11 @@ class organization.Unit {
 	class organization.SubProject extends organization.Unit {
 	}
 
-	class processes.GenericLog extends .module.workflow.domain.ActivityLog {
-	}
-	
-	class acquisitions.OperationLog extends processes.GenericLog {
+	class acquisitions.OperationLog extends .module.workflow.domain.ActivityLog {
 		AcquisitionProcessStateType state;	
 	}
 	
-	class requests.OperationLog extends processes.GenericLog {
-		RequestForProposalProcessStateType state;
-	}
-	
-	class announcements.OperationLog extends processes.GenericLog {
+	class announcements.OperationLog extends .module.workflow.domain.ActivityLog {
 		AnnouncementProcessStateType state;
 	}
 
@@ -325,9 +311,6 @@ class processes.GenericProcess extends .module.workflow.domain.WorkflowProcess {
 	class announcements.AnnouncementProcess extends processes.GenericProcess {
 	}
 
-	class requests.RequestForProposalProcess extends processes.GenericProcess {
-	}
-
 	class acquisitions.refund.RefundProcess extends acquisitions.PaymentProcess {
 		Boolean skipSupplierFundAllocation;
 	}
@@ -351,21 +334,10 @@ class ProcessState {
 		AnnouncementProcessStateType announcementProcessStateType;
 	}
 
-	class requests.RequestForProposalProcessState extends ProcessState {
-		RequestForProposalProcessStateType requestForProposalProcessStateType;
-	}
-
 	class acquisitions.RefundProcessState extends ProcessState {
 		RefundProcessStateType refundProcessStateType;
 	}
 
-
-class requests.RequestForProposal {
-	String title;
-	String description;
-	LocalDate publishDate;
-	LocalDate expireDate;
-}
 
 class Role {
 	RoleType roleType;
@@ -403,22 +375,11 @@ relation ExpenditureTrackingSystemAcquisition {
 	}
 }
 
-relation ExpenditureTrackingSystemRequestForProposal {
-	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
-	requests.RequestForProposal playsRole requestsForProposal {
-		multiplicity *;
-	}
-}
-
 relation AcquisitionProcessAcquisitionRequest {
 	acquisitions.AcquisitionProcess playsRole acquisitionProcess;
 	acquisitions.AcquisitionRequest playsRole acquisitionRequest;
 }
 
-relation RequestForProposalProcessRequestForProposal {
-	requests.RequestForProposalProcess playsRole requestForProposalProcess;
-	requests.RequestForProposal playsRole requestForProposal;
-}
 
 relation AnnouncementProcessAnnouncement {
 	announcements.AnnouncementProcess playsRole announcementProcess;
@@ -435,25 +396,6 @@ relation ExpenditureTrackingSystemAcquisitionRequestItem {
 relation AcquisitionRequestAcquisitionRequestItem {
 	acquisitions.RequestWithPayment playsRole request;
 	acquisitions.RequestItem playsRole requestItems {
-		multiplicity *;
-	}
-}
-
-relation RequestForProposalSupplierProposalDocument {
-	requests.RequestForProposal playsRole requestForProposal;
-	requests.SupplierProposalDocument playsRole supplierProposals {
-		multiplicity *;
-	}
-}
-
-relation RequestForProposalRequestForProposalDocument {
-	requests.RequestForProposal playsRole requestForProposal;
-	requests.RequestForProposalDocument playsRole requestForProposalDocument;
-}
-
-relation SupplierSupplierProposalDocument {
-	organization.Supplier playsRole supplier;
-	requests.SupplierProposalDocument playsRole proposals {
 		multiplicity *;
 	}
 }
@@ -629,13 +571,6 @@ relation AcquisitionRequestRefundee {
 	}
 }
 
-relation RequestForProposalRequester {
-	organization.Person playsRole requester;
-	requests.RequestForProposal playsRole requestsForProposal {
-		multiplicity *;
-	}
-}
-
 relation ProcessStatePerson {
 	organization.Person playsRole who;
 	ProcessState playsRole processStates {
@@ -653,13 +588,6 @@ relation GenericProcessProcessState {
 relation ExpenditureTrackingSystemProcessState {
 	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
 	ProcessState playsRole processStates {
-		multiplicity *;
-	}
-}
-
-relation RequestForProposalRequestingUnit {
-	organization.Unit playsRole requestingUnit;
-	requests.RequestForProposal playsRole requestsForProposal {
 		multiplicity *;
 	}
 }

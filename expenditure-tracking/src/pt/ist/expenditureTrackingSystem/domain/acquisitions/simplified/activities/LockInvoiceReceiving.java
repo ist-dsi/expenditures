@@ -1,28 +1,36 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities;
 
+import module.workflow.activities.ActivityInformation;
+import module.workflow.activities.WorkflowActivity;
+import myorg.domain.User;
+import myorg.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
 
-public class LockInvoiceReceiving extends GenericAcquisitionProcessActivity {
-
-    @Override
-    protected boolean isAccessible(RegularAcquisitionProcess process) {
-	return userHasRole(RoleType.ACQUISITION_CENTRAL);
-    }
+public class LockInvoiceReceiving extends
+	WorkflowActivity<RegularAcquisitionProcess, ActivityInformation<RegularAcquisitionProcess>> {
 
     @Override
-    protected boolean isAvailable(RegularAcquisitionProcess process) {
+    public boolean isActive(RegularAcquisitionProcess process, User user) {
 	AcquisitionProcessState acquisitionProcessState = process.getAcquisitionProcessState();
-	return super.isAvailable(process) && acquisitionProcessState.isAcquisitionProcessed()
-		&& !process.getRequest().getInvoices().isEmpty();
+
+	return isUserProcessOwner(process, user) && user.getExpenditurePerson().hasRoleType(RoleType.ACQUISITION_CENTRAL)
+		&& acquisitionProcessState.isAcquisitionProcessed() && !process.getRequest().getInvoices().isEmpty();
     }
 
     @Override
-    protected void process(RegularAcquisitionProcess process, Object... objects) {
-	process.invoiceReceived();
-
+    protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
+	activityInformation.getProcess().invoiceReceived();
     }
 
+    @Override
+    public String getLocalizedName() {
+	return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+    }
+
+    @Override
+    public String getUsedBundle() {
+	return "resources/AcquisitionResources";
+    }
 }

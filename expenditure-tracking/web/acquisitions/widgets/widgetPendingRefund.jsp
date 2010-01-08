@@ -24,7 +24,7 @@
 							</logic:present>
 							
 							<html:link
-								page="<%="/search.do?method=searchJump&searchClass=pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess&hasAvailableAndAccessibleActivityForUser=true&responsibleUnitSetOnly="
+								page="<%="/search.do?method=searchJump&searchClass=pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess&hasAvailableAndAccessibleActivityForUser=true&checkForUserAwareness=true&responsibleUnitSetOnly="
 								    + showResponsabilities.toString() + "&refundProcessStateType=" + state%>">
 									<fr:view name="counter" property="value" />	    
 							</html:link>

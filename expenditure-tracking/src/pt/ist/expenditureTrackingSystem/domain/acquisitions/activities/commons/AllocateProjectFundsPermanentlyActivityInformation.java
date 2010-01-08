@@ -65,7 +65,7 @@ public class AllocateProjectFundsPermanentlyActivityInformation<P extends Paymen
 
     @Override
     public Set<? extends Financer> getFinancers() {
-	return getProcess().getFinancersWithFundsAllocated();
+	return getProcess().getFinancersWithFundsInitiallyAllocated();
     }
 
 }

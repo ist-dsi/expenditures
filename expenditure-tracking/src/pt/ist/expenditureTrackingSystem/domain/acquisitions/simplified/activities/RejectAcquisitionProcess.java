@@ -1,29 +1,44 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities;
 
+import module.workflow.activities.ActivityInformation;
+import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.WorkflowProcessComment;
 import myorg.applicationTier.Authenticate.UserView;
+import myorg.domain.User;
+import myorg.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
-public class RejectAcquisitionProcess extends GenericAcquisitionProcessActivity {
+public class RejectAcquisitionProcess extends
+	WorkflowActivity<RegularAcquisitionProcess, RejectAcquisitionProcessActivityInformation> {
 
     @Override
-    protected boolean isAccessible(RegularAcquisitionProcess process) {
-	final Person loggedPerson = getLoggedPerson();
-	return loggedPerson != null && process.isResponsibleForUnit(loggedPerson)
-		&& !process.getAcquisitionRequest().hasBeenAuthorizedBy(loggedPerson);
+    public boolean isActive(RegularAcquisitionProcess process, User user) {
+	Person person = user.getExpenditurePerson();
+	return isUserProcessOwner(process, user) && process.isResponsibleForUnit(person)
+		&& !process.getAcquisitionRequest().hasBeenAuthorizedBy(person) && process.isPendingApproval();
     }
 
     @Override
-    protected boolean isAvailable(RegularAcquisitionProcess process) {
-	return super.isAvailable(process) && process.isPendingApproval();
-    }
-
-    @Override
-    protected void process(RegularAcquisitionProcess process, Object... objects) {
-	new WorkflowProcessComment(process, UserView.getCurrentUser(), (String) objects[0]);
+    protected void process(RejectAcquisitionProcessActivityInformation activityInformation) {
+	RegularAcquisitionProcess process = activityInformation.getProcess();
+	new WorkflowProcessComment(process, UserView.getCurrentUser(), activityInformation.getRejectionJustification());
 	process.reject();
     }
 
+    @Override
+    public ActivityInformation<RegularAcquisitionProcess> getActivityInformation(RegularAcquisitionProcess process) {
+	return new RejectAcquisitionProcessActivityInformation(process, this);
+    }
+
+    @Override
+    public String getLocalizedName() {
+	return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+    }
+
+    @Override
+    public String getUsedBundle() {
+	return "resources/AcquisitionResources";
+    }
+    
 }

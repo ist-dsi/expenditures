@@ -2,11 +2,9 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import module.workflow.domain.WorkflowProcess;
 import myorg.domain.User;
-import myorg.util.BundleUtil;
+import myorg.domain.exceptions.DomainException;
 
 import org.joda.time.DateTime;
-
-import myorg.domain.exceptions.DomainException;
 
 public class OperationLog extends OperationLog_Base {
 
@@ -17,14 +15,6 @@ public class OperationLog extends OperationLog_Base {
 	super.setOperation(operation);
 	super.setState(type);
     }
-
-    // TODO: Should we have this or not?
-
-    // @Override
-    // public <T extends GenericProcess> AbstractActivity<T> getActivity() {
-    // AcquisitionProcess process = (AcquisitionProcess) getProcess();
-    // return process.getActivityByName(getOperation());
-    // }
 
     @Override
     public void setOperation(String operation) {
@@ -52,8 +42,4 @@ public class OperationLog extends OperationLog_Base {
 	deleteDomainObject();
     }
 
-    @Override
-    public String getDescription() {
-	return BundleUtil.getFormattedStringFromResourceBundle("resources.AcquisitionResources", "label." + getOperation());
-    }
 }

@@ -9,6 +9,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import module.workflow.presentationTier.actions.ProcessManagement;
 import myorg.presentationTier.actions.ContextBaseAction;
 import myorg.util.Counter;
 import myorg.util.MultiCounter;
@@ -155,8 +156,7 @@ public class DashBoardAction extends ContextBaseAction {
 
 	PaymentProcess process = search.iterator().next();
 
-	return new ActionForward("/acquisition" + process.getClass().getSimpleName() + ".do?method=viewProcess&processOid="
-		+ process.getExternalId());
+	return ProcessManagement.forwardToProcess(process);
     }
 
     private Strings getStrings(String column1) {

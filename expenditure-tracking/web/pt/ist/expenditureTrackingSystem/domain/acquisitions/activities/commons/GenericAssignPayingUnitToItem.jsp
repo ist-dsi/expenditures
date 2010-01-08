@@ -3,9 +3,10 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
-<%@ taglib uri="/WEB-INF/messages.tld" prefix="messages" %>
 
-<script type="text/javascript" src='<%= request.getContextPath() + "/javaScript/calculator.js" %>'></script> 
+
+<%@page import="myorg.presentationTier.servlets.filters.contentRewrite.ContentContextInjectionRewriter"%>
+<%@page import="pt.ist.fenixWebFramework.servlets.filters.contentRewrite.GenericChecksumRewriter"%><script type="text/javascript" src='<%= request.getContextPath() + "/javaScript/calculator.js" %>'></script> 
 
 
 <bean:define id="processId" name="process" property="externalId" type="java.lang.String"/>
@@ -64,75 +65,33 @@
 					</tr>
 		</table>
 		
+		<p>	
+		<%= ContentContextInjectionRewriter.BLOCK_HAS_CONTEXT_PREFIX %>
+		<%= GenericChecksumRewriter.NO_CHECKSUM_PREFIX %><a href="#" id="distribute"><bean:message key="acquisitionRequestItem.link.autoDistribute" bundle="ACQUISITION_RESOURCES"/></a>
+		<%= ContentContextInjectionRewriter.END_BLOCK_HAS_CONTEXT_PREFIX %>
+		</p>
+		
+		<script type="text/javascript" src='<%=  request.getContextPath() + "/javaScript/valueDistribution.js"%>'></script>
 		<script type="text/javascript">
 
-			function getShares(maxValue,outOfLabel) {
-				var maxValueFloat = parseFloat(maxValue);
-				var activeRows = "";
-				jQuery.each($("#assign input[type='checkbox']:checked"), function() {
-					var value = $(this).parent("td").parent("tr").attr("id")
-					if (activeRows.length > 0) {
-						activeRows += ",";
-					}
-					activeRows += value;
-				});
-				
-				var url = '<%= request.getContextPath() +  "/acquisition" + processClass + ".do?method=calculateShareValuesViaAjax" %>';
-				if (activeRows.length > 0) {
-				$.getJSON(url,
-					 	    { money: maxValueFloat, requestors: activeRows },
-					    	function(data) { 
-						    	size = data.length;
-						    	for (i = 0; i < size; i++) {
-									var trId = data[i]['id'];
-									var value = data[i]['share'].replace(".",",");
-									$("#" + trId + " td:last").children("input").attr("value",value);
-									writeSum(maxValue,outOfLabel);
-							    }
-					 	    });
-				}else {
-					writeSum(maxValue,outOfLabel);
-				}
-					 			
-			}
-			
-			function writeSum(maxValue, outOfLabel) {
-				var sum = parseFloat("0");	
-				var maxValueFloat = parseFloat(maxValue);
-				
-				jQuery.each($("#assign input[type='checkbox']:checked"), function() {
-					var value = $(this).parent("td").siblings("td:last").children("input").val()
-					sum += parseFloat(value.replace('.','').replace(',','.'));
-				});
-
-				sum = Math.round(sum*100)/100;
-				if (sum > maxValueFloat) {
-					sumValue = "<span class=\"invalid\">" + sum + "</span>";
-				}
-				else if (sum == maxValueFloat) {
-					sumValue = "<span class=\"valid\">" + sum + "</span>";
-				}
-				else {
-					sumValue = sum + "";
-				}
-
-				$("#sum").empty();
-				$("#sum").append(sumValue.replace('.',',') + ' (' + outOfLabel + ' ' + maxValue.replace('.',',') + ')');
-			}
-
+			var url = '<%= request.getContextPath() +  "/acquisition" + processClass + ".do?method=calculateShareValuesViaAjax" %>';
+		
 			$("#assign input[type='checkbox']").click(function() {
 					if(!$(this).attr('checked')) {
 						$(this).parent("td").siblings("td:last").children("input").attr('value','0');
 					}
-					<%= "getShares('" + maxValue + "', '" + outOfLabel + "');" %>
+					<%= "getShares('" + maxValue + "', '" + outOfLabel + "',url);" %>
 			});
 
+			$("#distribute").click(function() {
+				<%= "getShares('" + maxValue + "', '" + outOfLabel + "',url);" %>
+			});
 			
 			$("input[type=text]").keyup(function() {
-				<%= "writeSum('" + maxValue + "', '" + outOfLabel + "');" %>
+				<%= "writeSum('" + maxValue + "', '" + outOfLabel + "',url);" %>
 			});
 
-			<%= "writeSum('" + maxValue + "', '" + outOfLabel + "');" %>
+			<%= "writeSum('" + maxValue + "', '" + outOfLabel + "',url);" %>
 		</script>
 				
 		<html:submit styleClass="inputbutton"><bean:message key="button.atribute" bundle="EXPENDITURE_RESOURCES"/> </html:submit>

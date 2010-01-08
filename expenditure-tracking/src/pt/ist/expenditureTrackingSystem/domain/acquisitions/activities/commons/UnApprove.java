@@ -34,4 +34,9 @@ public class UnApprove<P extends PaymentProcess> extends WorkflowActivity<P, Act
 	return "resources/AcquisitionResources";
     }
 
+    @Override
+    public boolean isUserAwarenessNeeded(P process, User user) {
+	return false;
+    }
+
 }

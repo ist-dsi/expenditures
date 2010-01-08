@@ -17,7 +17,7 @@
 					<bean:define id="oid" name="process" property="externalId" type="java.lang.String"/>
 					<tr>
 						<td>
-							<html:link page="<%= "/acquisition" + className + ".do?method=viewProcess&processOid=" + oid %>">
+							<html:link page="<%= "/workflowProcessManagement.do?method=viewProcess&processId=" + oid %>">
 								<fr:view name="process" property="acquisitionProcessId" />
 							</html:link>
 						</td>

@@ -1,22 +1,14 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities;
 
+import module.workflow.activities.ActivityInformation;
+import module.workflow.activities.WorkflowActivity;
+import myorg.domain.User;
+import myorg.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
 
-public class RevertToInvoiceConfirmation extends GenericAcquisitionProcessActivity {
-
-    @Override
-    protected boolean isAccessible(final RegularAcquisitionProcess process) {
-	return process.isProjectAccountingEmployee();
-    }
-
-    @Override
-    protected boolean isAvailable(final RegularAcquisitionProcess process) {
-	return isCurrentUserProcessOwner(process) && process.isInvoiceConfirmed() && allItemsAreFilledWithRealValues(process)
-		&& process.getRequest().isEveryItemFullyAttributeInRealValues()
-		&& !process.hasAllocatedFundsPermanentlyForAllProjectFinancers();
-    }
+public class RevertToInvoiceConfirmation extends
+	WorkflowActivity<RegularAcquisitionProcess, ActivityInformation<RegularAcquisitionProcess>> {
 
     private boolean allItemsAreFilledWithRealValues(final RegularAcquisitionProcess process) {
 	for (final RequestItem requestItem : process.getRequest().getRequestItemsSet()) {
@@ -28,8 +20,29 @@ public class RevertToInvoiceConfirmation extends GenericAcquisitionProcessActivi
     }
 
     @Override
-    protected void process(final RegularAcquisitionProcess process, final Object... objects) {
-	process.unconfirmInvoiceForAll();
+    public boolean isActive(RegularAcquisitionProcess process, User user) {
+	return process.isProjectAccountingEmployee() && isUserProcessOwner(process, user) && process.isInvoiceConfirmed()
+		&& allItemsAreFilledWithRealValues(process) && process.getRequest().isEveryItemFullyAttributeInRealValues()
+		&& !process.hasAllocatedFundsPermanentlyForAllProjectFinancers();
     }
 
+    @Override
+    protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
+	activityInformation.getProcess().unconfirmInvoiceForAll();
+    }
+
+    @Override
+    public String getLocalizedName() {
+	return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+    }
+
+    @Override
+    public String getUsedBundle() {
+	return "resources/AcquisitionResources";
+    }
+    
+    @Override
+    public boolean isUserAwarenessNeeded(RegularAcquisitionProcess process, User user) {
+	return false;
+    }
 }

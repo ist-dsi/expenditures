@@ -1,27 +1,42 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities;
 
+import module.workflow.activities.ActivityInformation;
+import module.workflow.activities.WorkflowActivity;
+import myorg.domain.User;
+import myorg.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
-public class PayAcquisition extends GenericAcquisitionProcessActivity {
+public class PayAcquisition extends WorkflowActivity<RegularAcquisitionProcess, PayAcquisitionActivityInformation> {
 
     @Override
-    protected boolean isAccessible(RegularAcquisitionProcess process) {
-	final Person person = getLoggedPerson();
-	return userHasRole(RoleType.TREASURY_MANAGER) || process.isTreasuryMember(person);
+    public boolean isActive(RegularAcquisitionProcess process, User user) {
+	Person person = user.getExpenditurePerson();
+	return isUserProcessOwner(process, user)
+		&& (person.hasRoleType(RoleType.TREASURY_MANAGER) || process.isTreasuryMember(person))
+		&& process.getAcquisitionProcessState().isAllocatedPermanently();
     }
 
     @Override
-    protected boolean isAvailable(RegularAcquisitionProcess process) {
-	return  super.isAvailable(process) && process.getAcquisitionProcessState().isAllocatedPermanently();
-    }
-
-    @Override
-    protected void process(RegularAcquisitionProcess process, Object... objects) {
-	process.getAcquisitionRequest().setPaymentReference((String)objects[0]);
+    protected void process(PayAcquisitionActivityInformation activityInformation) {
+	RegularAcquisitionProcess process = activityInformation.getProcess();
+	process.getAcquisitionRequest().setPaymentReference(activityInformation.getPaymentReference());
 	process.acquisitionPayed();
     }
 
+    @Override
+    public ActivityInformation<RegularAcquisitionProcess> getActivityInformation(RegularAcquisitionProcess process) {
+	return new PayAcquisitionActivityInformation(process, this);
+    }
+
+    @Override
+    public String getLocalizedName() {
+	return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+    }
+
+    @Override
+    public String getUsedBundle() {
+	return "resources/AcquisitionResources";
+    }
 }

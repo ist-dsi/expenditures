@@ -3,7 +3,6 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.search.predicates;
 import java.util.Set;
 
 import myorg.domain.User;
-
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
@@ -57,10 +56,6 @@ public class RefundProcessPredicate extends SearchPredicate {
 
     private boolean matchCriteria(final Boolean hasAvailableAndAccessibleActivityForUser, final RefundRequest refundRequest) {
 	return hasAvailableAndAccessibleActivityForUser == null || !hasAvailableAndAccessibleActivityForUser.booleanValue()
-		|| isPersonAbleToExecuteActivities(refundRequest.getProcess());
-    }
-
-    private boolean isPersonAbleToExecuteActivities(final RefundProcess refundProcess) {
-	return refundProcess.hasAnyAvailableActivitity();
+		|| refundRequest.getProcess().hasAnyAvailableActivity(true);
     }
 }

@@ -1,28 +1,35 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities;
 
+import module.workflow.activities.ActivityInformation;
+import module.workflow.activities.WorkflowActivity;
+import myorg.applicationTier.Authenticate.UserView;
+import myorg.domain.User;
+import myorg.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.GenericAcquisitionProcessActivity;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
-public class ConfirmInvoice extends GenericAcquisitionProcessActivity {
+public class ConfirmInvoice extends WorkflowActivity<RegularAcquisitionProcess, ActivityInformation<RegularAcquisitionProcess>> {
 
     @Override
-    protected boolean isAccessible(RegularAcquisitionProcess process) {
-	final Person loggedPerson = getLoggedPerson();
-	return loggedPerson != null && process.isResponsibleForUnit(loggedPerson);
+    public boolean isActive(RegularAcquisitionProcess process, User user) {
+	Person person = user.getExpenditurePerson();
+	return isUserProcessOwner(process, user) && person != null && process.isResponsibleForUnit(person)
+		&& !process.getUnconfirmedInvoices(person).isEmpty() && !process.isInvoiceReceived();
     }
 
     @Override
-    protected boolean isAvailable(RegularAcquisitionProcess process) {
-	final Person loggedPerson = getLoggedPerson();
-	return super.isAvailable(process) && loggedPerson != null && !process.getUnconfirmedInvoices(loggedPerson).isEmpty()
-		&& !process.isInvoiceReceived();
+    protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
+	activityInformation.getProcess().confirmInvoiceBy(UserView.getCurrentUser().getExpenditurePerson());
     }
 
     @Override
-    protected void process(RegularAcquisitionProcess process, Object... objects) {
-	Person person = (Person) objects[0];
-	process.confirmInvoiceBy(person);
+    public String getLocalizedName() {
+	return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+    }
+
+    @Override
+    public String getUsedBundle() {
+	return "resources/AcquisitionResources";
     }
 
 }
