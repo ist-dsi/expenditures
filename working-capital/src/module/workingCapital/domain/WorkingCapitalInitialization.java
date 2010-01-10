@@ -15,7 +15,11 @@ import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 
 public class WorkingCapitalInitialization extends WorkingCapitalInitialization_Base {
-    
+
+    public static enum WorkingCapitalInitializationState {
+	ACTIVE, CANCELED, REJECTED;
+    }
+
     public static final Comparator<WorkingCapitalInitialization> COMPARATOR_BY_REQUEST_CREATION = new Comparator<WorkingCapitalInitialization>() {
 
 	@Override
@@ -104,12 +108,29 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
 	return false;
     }
 
+    public boolean isPendingAproval() {
+	return !hasResponsibleForUnitApproval();
+    }
+
     public boolean isPendingVerification() {
 	return hasResponsibleForUnitApproval() && !hasResponsibleForAccountingVerification();
     }
 
     public boolean isPendingAuthorization() {
 	return hasResponsibleForAccountingVerification() && !hasResponsibleForUnitAuthorization();
+    }
+
+    public void cancel() {
+	setState(WorkingCapitalInitializationState.CANCELED);
+    }
+
+    public void reject() {
+	setState(WorkingCapitalInitializationState.REJECTED);
+    }
+
+    public boolean isCanceledOrRejected() {
+	final WorkingCapitalInitializationState state = getState();
+	return state == WorkingCapitalInitializationState.CANCELED || state == WorkingCapitalInitializationState.REJECTED;
     }
 
 }

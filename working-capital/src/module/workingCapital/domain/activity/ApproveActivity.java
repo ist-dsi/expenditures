@@ -19,7 +19,7 @@ public class ApproveActivity extends WorkflowActivity<WorkingCapitalProcess, Wor
     @Override
     public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
 	final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
-	return workingCapital.isPendingAproval(user);
+	return !workingCapital.isCanceledOrRejected() && workingCapital.isPendingAproval(user);
     }
 
     @Override

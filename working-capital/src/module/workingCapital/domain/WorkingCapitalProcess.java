@@ -12,9 +12,12 @@ import module.workflow.domain.ProcessFile;
 import module.workflow.domain.WorkflowProcess;
 import module.workingCapital.domain.activity.ApproveActivity;
 import module.workingCapital.domain.activity.AuthorizeActivity;
+import module.workingCapital.domain.activity.CancelWorkingCapitalInitializationActivity;
+import module.workingCapital.domain.activity.RejectWorkingCapitalInitializationActivity;
 import module.workingCapital.domain.activity.UnApproveActivity;
 import module.workingCapital.domain.activity.UnAuthorizeActivity;
 import module.workingCapital.domain.activity.UnVerifyActivity;
+import module.workingCapital.domain.activity.UndoCancelOrRejectWorkingCapitalInitializationActivity;
 import module.workingCapital.domain.activity.VerifyActivity;
 import myorg.domain.User;
 import myorg.domain.util.Money;
@@ -34,12 +37,15 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base {
 
     static {
 	final List<WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>> activitiesAux = new ArrayList<WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>>();
+	activitiesAux.add(new CancelWorkingCapitalInitializationActivity());
 	activitiesAux.add(new ApproveActivity());
 	activitiesAux.add(new UnApproveActivity());
 	activitiesAux.add(new VerifyActivity());
 	activitiesAux.add(new UnVerifyActivity());
 	activitiesAux.add(new AuthorizeActivity());
 	activitiesAux.add(new UnAuthorizeActivity());
+	activitiesAux.add(new RejectWorkingCapitalInitializationActivity());
+	activitiesAux.add(new UndoCancelOrRejectWorkingCapitalInitializationActivity());
 	activities = Collections.unmodifiableList(activitiesAux);
     }
 

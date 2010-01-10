@@ -58,6 +58,15 @@ public class WorkingCapital extends WorkingCapital_Base {
 	return null; 
     }
 
+    public boolean isPendingAproval() {
+	for (final WorkingCapitalInitialization workingCapitalInitialization : getWorkingCapitalInitializationsSet()) {
+	    if (workingCapitalInitialization.isPendingAproval()) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
     public boolean isPendingAproval(final User user) {
 	for (final WorkingCapitalInitialization workingCapitalInitialization : getWorkingCapitalInitializationsSet()) {
 	    if (workingCapitalInitialization.isPendingAproval(user)) {
@@ -102,6 +111,15 @@ public class WorkingCapital extends WorkingCapital_Base {
 		|| findUnitResponsible(user.getPerson(), Money.ZERO) != null) {
 	    return true;
 	}
+	return isRequester(user);
+    }
+
+    public User getRequester() {
+	final WorkingCapitalInitialization workingCapitalInitialization = Collections.min(getWorkingCapitalInitializationsSet(), WorkingCapitalInitialization.COMPARATOR_BY_REQUEST_CREATION);
+	return workingCapitalInitialization.getRequestor().getUser();
+    }
+
+    public boolean isRequester(final User user) {
 	for (final WorkingCapitalInitialization workingCapitalInitialization : getWorkingCapitalInitializationsSet()) {
 	    if (user == workingCapitalInitialization.getRequestor().getUser()) {
 		return true;
@@ -110,9 +128,13 @@ public class WorkingCapital extends WorkingCapital_Base {
 	return false;
     }
 
-    public User getRequester() {
-	final WorkingCapitalInitialization workingCapitalInitialization = Collections.min(getWorkingCapitalInitializationsSet(), WorkingCapitalInitialization.COMPARATOR_BY_REQUEST_CREATION);
-	return workingCapitalInitialization.getRequestor().getUser();
+    public boolean isCanceledOrRejected() {
+	for (final WorkingCapitalInitialization workingCapitalInitialization : getWorkingCapitalInitializationsSet()) {
+	    if (workingCapitalInitialization.isCanceledOrRejected()) {
+		return true;
+	    }
+	}
+	return false;
     }
 
 }

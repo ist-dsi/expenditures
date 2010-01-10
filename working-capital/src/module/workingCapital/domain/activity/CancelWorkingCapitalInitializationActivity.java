@@ -8,7 +8,7 @@ import module.workingCapital.domain.WorkingCapitalProcess;
 import myorg.domain.User;
 import myorg.util.BundleUtil;
 
-public class VerifyActivity extends WorkflowActivity<WorkingCapitalProcess, VerifyActivityInformation> {
+public class CancelWorkingCapitalInitializationActivity extends WorkflowActivity<WorkingCapitalProcess, WorkingCapitalInitializationInformation> {
 
     @Override
     public String getLocalizedName() {
@@ -18,29 +18,37 @@ public class VerifyActivity extends WorkflowActivity<WorkingCapitalProcess, Veri
     @Override
     public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
 	final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
-	return !workingCapital.isCanceledOrRejected() && workingCapital.isPendingVerification(user);
+	return !workingCapital.isCanceledOrRejected() && workingCapital.isRequester(user) && workingCapital.isPendingAproval();
     }
 
     @Override
-    protected void process(final VerifyActivityInformation activityInformation) {
+    protected void process(final WorkingCapitalInitializationInformation activityInformation) {
 	final WorkingCapitalInitialization workingCapitalInitialization = activityInformation.getWorkingCapitalInitialization();
-	final User user = getLoggedPerson();
-	workingCapitalInitialization.verify(user);
+	workingCapitalInitialization.cancel();
     }
 
     @Override
     public ActivityInformation<WorkingCapitalProcess> getActivityInformation(final WorkingCapitalProcess process) {
-        return new VerifyActivityInformation(process, this);
+	final WorkingCapitalInitializationInformation workingCapitalInitializationInformation = new WorkingCapitalInitializationInformation(process, this);
+	final WorkingCapital workingCapital = process.getWorkingCapital();
+	final WorkingCapitalInitialization workingCapitalInitialization = workingCapital.getSortedWorkingCapitalInitializations().last();
+	workingCapitalInitializationInformation.setWorkingCapitalInitialization(workingCapitalInitialization);
+	return workingCapitalInitializationInformation;
     }
 
     @Override
     public boolean isDefaultInputInterfaceUsed() {
-	return false;
+	return true;
     }
 
     @Override
-    public boolean isVisible() {
-	return false;
+    public boolean isConfirmationNeeded(final WorkingCapitalProcess process) {
+	return true;
+    }
+
+    @Override
+    public String getUsedBundle() {
+	return "resources/WorkingCapitalResources";
     }
 
 }

@@ -8,7 +8,7 @@ import module.workingCapital.domain.WorkingCapitalProcess;
 import myorg.domain.User;
 import myorg.util.BundleUtil;
 
-public class AuthorizeActivity extends WorkflowActivity<WorkingCapitalProcess, WorkingCapitalInitializationInformation> {
+public class RejectWorkingCapitalInitializationActivity extends WorkflowActivity<WorkingCapitalProcess, WorkingCapitalInitializationInformation> {
 
     @Override
     public String getLocalizedName() {
@@ -18,19 +18,22 @@ public class AuthorizeActivity extends WorkflowActivity<WorkingCapitalProcess, W
     @Override
     public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
 	final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
-	return !workingCapital.isCanceledOrRejected() && workingCapital.isPendingAuthorization(user);
+	return !workingCapital.isCanceledOrRejected() && workingCapital.isPendingAproval(user) || workingCapital.isPendingVerification(user) || workingCapital.isPendingAuthorization(user);
     }
 
     @Override
     protected void process(final WorkingCapitalInitializationInformation activityInformation) {
 	final WorkingCapitalInitialization workingCapitalInitialization = activityInformation.getWorkingCapitalInitialization();
-	final User user = getLoggedPerson();
-	workingCapitalInitialization.authorize(user);
+	workingCapitalInitialization.reject();
     }
 
     @Override
     public ActivityInformation<WorkingCapitalProcess> getActivityInformation(final WorkingCapitalProcess process) {
-        return new WorkingCapitalInitializationInformation(process, this);
+	final WorkingCapitalInitializationInformation workingCapitalInitializationInformation = new WorkingCapitalInitializationInformation(process, this);
+	final WorkingCapital workingCapital = process.getWorkingCapital();
+	final WorkingCapitalInitialization workingCapitalInitialization = workingCapital.getSortedWorkingCapitalInitializations().last();
+	workingCapitalInitializationInformation.setWorkingCapitalInitialization(workingCapitalInitialization);
+	return workingCapitalInitializationInformation;
     }
 
     @Override
@@ -39,8 +42,13 @@ public class AuthorizeActivity extends WorkflowActivity<WorkingCapitalProcess, W
     }
 
     @Override
-    public boolean isVisible() {
-	return false;
+    public boolean isConfirmationNeeded(final WorkingCapitalProcess process) {
+        return true;
+    }
+
+    @Override
+    public String getUsedBundle() {
+	return "resources/WorkingCapitalResources";
     }
 
 }
