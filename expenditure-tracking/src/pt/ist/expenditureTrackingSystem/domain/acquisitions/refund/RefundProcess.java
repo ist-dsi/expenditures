@@ -112,6 +112,7 @@ public class RefundProcess extends RefundProcess_Base {
 	new RefundRequest(this, requestor, refundeeName, refundeeFiscalCode, requestingUnit);
 	new RefundProcessState(this, RefundProcessStateType.IN_GENESIS);
 	setSkipSupplierFundAllocation(Boolean.FALSE);
+	setProcessNumber(getYear() + "/" + getAcquisitionProcessNumber());
     }
 
     public RefundProcess(Person requestor, Person refundee, Unit requestingUnit) {
@@ -278,6 +279,10 @@ public class RefundProcess extends RefundProcess_Base {
 	return getPaymentProcessYear().getYear();
     }
 
+    /*
+     * use getProcessNumber() instead
+     */
+    @Deprecated
     public String getAcquisitionProcessId() {
 	return getYear() + "/" + getAcquisitionProcessNumber();
     }

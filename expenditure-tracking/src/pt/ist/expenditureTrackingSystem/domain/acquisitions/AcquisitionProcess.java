@@ -21,6 +21,7 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 	setOjbConcreteClass(getClass().getName());
 	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
 	super.setSkipSupplierFundAllocation(Boolean.FALSE);
+	setProcessNumber(getYear() + "/" + getAcquisitionProcessNumber());
     }
 
     public boolean isAvailableForCurrentUser() {
@@ -139,6 +140,10 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 	return getPaymentProcessYear().getYear();
     }
 
+    /*
+     * use getProcessNumber() instead
+     */
+    @Deprecated
     public String getAcquisitionProcessId() {
 	return getYear() + "/" + getAcquisitionProcessNumber();
     }
@@ -260,7 +265,7 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
     public boolean hasPurchaseOrderDocument() {
 	return !getFiles(PurchaseOrderDocument.class).isEmpty();
     }
-    
+
     @Override
     public boolean isCanceled() {
 	return getLastAcquisitionProcessState().isCanceled();
