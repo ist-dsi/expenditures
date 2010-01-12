@@ -118,6 +118,8 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	activities.add(new GenericRemovePayingUnit<RegularAcquisitionProcess>());
 	activities.add(new SubmitForApproval());
 	activities.add(new SubmitForFundAllocation());
+	activities.add(new RejectAcquisitionProcess());
+	activities.add(new UnApprove<RegularAcquisitionProcess>());
 	activities.add(new FundAllocationExpirationDate());
 	activities.add(new RevertProcessNotConfirmmingFundAllocationExpirationDate());
 	activities.add(new RevertToInvoiceConfirmation());
@@ -129,7 +131,6 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	activities.add(new RemovePermanentProjectFunds<RegularAcquisitionProcess>());
 	activities.add(new RemoveFundsPermanentlyAllocated<RegularAcquisitionProcess>());
 
-	activities.add(new UnApprove<RegularAcquisitionProcess>());
 	activities.add(new ProjectFundAllocation<RegularAcquisitionProcess>());
 	activities.add(new FundAllocation<RegularAcquisitionProcess>());
 	activities.add(new RemoveFundAllocation());
@@ -162,7 +163,6 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 
 	activities.add(new ChangeProcessClassification());
 	activities.add(new CreateAcquisitionRequestItem());
-	activities.add(new RejectAcquisitionProcess());
 	activities.add(new PayAcquisition());
 	activities.add(new DeleteAcquisitionRequestItem());
 	activities.add(new EditAcquisitionRequestItem());

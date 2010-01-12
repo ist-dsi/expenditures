@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import module.workflow.activities.ActivityInformation;
+import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.ActivityLog;
+import module.workflow.domain.WorkflowProcess;
 import myorg.domain.User;
 import myorg.domain.exceptions.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
@@ -128,5 +131,16 @@ public class AnnouncementProcess extends AnnouncementProcess_Base {
     @Override
     public void notifyUserDueToComment(User user, String comment) {
 	// no nothing
+    }
+
+    /*
+     * TODO: Implement this methods correctly
+     */
+    public <T extends WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>> List<T> getActivities() {
+	return Collections.EMPTY_LIST;
+    }
+
+    public boolean isActive() {
+	return true;
     }
 }

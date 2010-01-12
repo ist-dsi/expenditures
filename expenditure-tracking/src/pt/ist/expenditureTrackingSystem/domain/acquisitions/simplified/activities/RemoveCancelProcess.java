@@ -5,13 +5,11 @@ import java.util.List;
 
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
-import module.workflow.domain.WorkflowLog;
 import myorg.domain.User;
 import myorg.util.BundleUtil;
+import pt.ist.expenditureTrackingSystem.domain.ProcessState;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessState;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.OperationLog;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 
 public class RemoveCancelProcess extends
@@ -26,15 +24,18 @@ public class RemoveCancelProcess extends
     @Override
     protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
 	RegularAcquisitionProcess process = activityInformation.getProcess();
-	List<OperationLog> logs = process.getOperationLogs();
-	Collections.sort(logs, WorkflowLog.COMPARATOR_BY_WHEN);
-	for (int i = logs.size(); i > 0; i--) {
-	    final OperationLog operationLog = logs.get(i - 1);
-	    final AcquisitionProcessStateType acquisitionProcessStateType = operationLog.getState();
-	    if (acquisitionProcessStateType != null && acquisitionProcessStateType != AcquisitionProcessStateType.CANCELED) {
-		new AcquisitionProcessState(process, acquisitionProcessStateType);
+	List<ProcessState> states = process.getProcessStates();
+	Collections.sort(states, ProcessState.COMPARATOR_BY_WHEN);
+
+	for (int i = states.size(); i > 0; i--) {
+
+	    final AcquisitionProcessState state = (AcquisitionProcessState) states.get(i - 1);
+
+	    if (!state.isCanceled()) {
+		new AcquisitionProcessState(process, state.getAcquisitionProcessStateType());
 		break;
 	    }
+
 	}
 
     }

@@ -179,4 +179,9 @@ public class AfterTheFactAcquisitionProcess extends AfterTheFactAcquisitionProce
 	availableFileTypes.add(AfterTheFactInvoice.class);
 	return availableFileTypes;
     }
+
+    @Override
+    public boolean isActive() {
+	return !isCanceled();
+    }
 }

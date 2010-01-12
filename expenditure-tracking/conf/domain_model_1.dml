@@ -275,10 +275,6 @@ class organization.Unit {
 	class organization.SubProject extends organization.Unit {
 	}
 
-	class acquisitions.OperationLog extends .module.workflow.domain.ActivityLog {
-		AcquisitionProcessStateType state;	
-	}
-	
 	class announcements.OperationLog extends .module.workflow.domain.ActivityLog {
 		AnnouncementProcessStateType state;
 	}

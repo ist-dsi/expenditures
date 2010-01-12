@@ -1,8 +1,12 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.standard;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import module.workflow.activities.ActivityInformation;
+import module.workflow.activities.WorkflowActivity;
+import module.workflow.domain.WorkflowProcess;
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
@@ -84,4 +88,14 @@ public class StandardProcedureProcess extends StandardProcedureProcess_Base {
 	throw new Error("not.implemented");
     }
 
+    /*
+     * TODO: Implement this methods correctly
+     */
+    public <T extends WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>> List<T> getActivities() {
+	return Collections.EMPTY_LIST;
+    }
+
+    public boolean isActive() {
+	return true;
+    }
 }

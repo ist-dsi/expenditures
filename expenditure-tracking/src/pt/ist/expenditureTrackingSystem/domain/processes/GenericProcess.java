@@ -6,10 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import module.workflow.activities.ActivityInformation;
-import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.WorkflowLog;
-import module.workflow.domain.WorkflowProcess;
 import module.workflow.domain.WorkflowProcessComment;
 import module.workflow.domain.WorkflowSystem;
 import myorg.applicationTier.Authenticate.UserView;
@@ -126,17 +123,6 @@ public abstract class GenericProcess extends GenericProcess_Base {
 	    }
 	}
 	return false;
-    }
-
-    /*
-     * TODO: Implement this methods correctly
-     */
-    public <T extends WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>> List<T> getActivities() {
-	return Collections.EMPTY_LIST;
-    }
-
-    public boolean isActive() {
-	return true;
     }
 
 }

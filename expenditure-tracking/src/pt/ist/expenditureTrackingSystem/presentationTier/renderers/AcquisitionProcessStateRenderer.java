@@ -3,7 +3,6 @@ package pt.ist.expenditureTrackingSystem.presentationTier.renderers;
 import java.util.List;
 
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.OperationLog;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.fenixWebFramework.renderers.components.HtmlBlockContainer;
 import pt.ist.fenixWebFramework.renderers.components.HtmlComponent;
@@ -14,44 +13,19 @@ public class AcquisitionProcessStateRenderer extends ProcessStateRenderer<Regula
     private class AcquisitionProcessStateLayout extends ProcessStateLayout<RegularAcquisitionProcess> {
 
 	@Override
-	protected HtmlComponent generateFlowChart(final HtmlBlockContainer flowChartContainer, final RegularAcquisitionProcess process) {
+	protected HtmlComponent generateFlowChart(final HtmlBlockContainer flowChartContainer,
+		final RegularAcquisitionProcess process) {
 	    final AcquisitionProcessStateType currentState = process.getAcquisitionProcessStateType();
-	    if (process.isActive()) {
-		final List<AcquisitionProcessStateType> types = process.getAvailableStates();
-		for (final AcquisitionProcessStateType stateType : types) {
-		    if (stateType.showFor(currentState)) {
-			generateStateBox(process, currentState, flowChartContainer, stateType);
-			if (stateType.hasNextState()) {
-			    generateArrowBox(flowChartContainer);
-			}
-		    }
-		}
-	    } else {
-		final List<OperationLog> logs = process.getOperationLogs();
-		int i = logs.size() - 1;
-
-		AcquisitionProcessStateType currentType = logs.get(i--).getState();
-		AcquisitionProcessStateType newStateType = null;
-
-		flowChartContainer.addChild(generateBox(process, currentType, currentState));
-		while (i >= 0) {
-		    newStateType = logs.get(i).getState();
-		    if (currentType != newStateType) {
-			currentType = newStateType;
-			generateActivityBox(flowChartContainer, logs.get(i + 1).getDescription());
+	    final List<AcquisitionProcessStateType> types = process.getAvailableStates();
+	    for (final AcquisitionProcessStateType stateType : types) {
+		if (stateType.showFor(currentState)) {
+		    generateStateBox(process, currentState, flowChartContainer, stateType);
+		    if (stateType.hasNextState()) {
 			generateArrowBox(flowChartContainer);
-			generateStateBox(process, currentState, flowChartContainer, newStateType);
 		    }
-		    i--;
-		}
-
-		// state has changed, but no activity was performed: render
-		if (process.getAcquisitionProcessStateType() != newStateType) {
-		    generateActivityBox(flowChartContainer, logs.get(i + 1).getDescription());
-		    generateArrowBox(flowChartContainer);
-		    generateStateBox(process, currentState, flowChartContainer, process.getAcquisitionProcessState().getAcquisitionProcessStateType());
 		}
 	    }
+
 	    return flowChartContainer;
 	}
 

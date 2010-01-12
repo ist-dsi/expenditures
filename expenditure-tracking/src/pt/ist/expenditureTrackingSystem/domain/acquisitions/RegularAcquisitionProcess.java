@@ -3,21 +3,18 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import module.workflow.domain.ActivityLog;
 import module.workflow.domain.WorkflowLog;
-import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.User;
+import myorg.domain.exceptions.DomainException;
 
 import org.joda.time.LocalDate;
 
-import myorg.domain.exceptions.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
-import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
 
 public abstract class RegularAcquisitionProcess extends RegularAcquisitionProcess_Base {
 
@@ -35,31 +32,6 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
 
     public boolean isStandardAcquisitionProcess() {
 	return false;
-    }
-
-    @Override
-    public List<OperationLog> getExecutionLogsForState(String stateName) {
-	AcquisitionProcessStateType state = AcquisitionProcessStateType.valueOf(stateName);
-	List<OperationLog> logs = new ArrayList<OperationLog>();
-	for (OperationLog log : getOperationLogs()) {
-	    if (log.getState().equals(state)) {
-		logs.add(log);
-	    }
-	}
-	return logs;
-    }
-
-    /*
-     * TODO: Fix this isAssignableFrom
-     */
-    public List<OperationLog> getOperationLogs() {
-	List<OperationLog> logs = new ArrayList<OperationLog>();
-	for (WorkflowLog log : super.getExecutionLogs()) {
-	    if (OperationLog.class.isAssignableFrom(log.getClass())) {
-		logs.add((OperationLog) log);
-	    }
-	}
-	return logs;
     }
 
     public Set<AcquisitionInvoice> getConfirmedInvoices(Person person) {
@@ -240,11 +212,6 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
 	return getAcquisitionProcessState().isAuthorized();
     }
 
-    @Override
-    public <T extends ActivityLog> T logExecution(User user, String operationName, String... args) {
-	return (T) new OperationLog(this, user, operationName, getAcquisitionProcessStateType());
-    }
-
     public void removeFundAllocationExpirationDate() {
 	setFundAllocationExpirationDate(null);
 	if (!getAcquisitionProcessState().isCanceled()) {
@@ -255,5 +222,11 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
     @Override
     public boolean isInAllocatedToUnitState() {
 	return getAcquisitionProcessState().isInAllocatedToUnitState();
+    }
+
+    @Override
+    public boolean isActive() {
+	return !(getAcquisitionProcessState().isCanceled() || getAcquisitionProcessState().isRejected() || getAcquisitionProcessState()
+		.isPayed());
     }
 }

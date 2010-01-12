@@ -80,7 +80,7 @@ public class AnnouncementsProcessAction extends BaseAction {
 	    final HttpServletRequest request, final HttpServletResponse response) {
 
 	request.setAttribute("announcementBean", new AnnouncementBean());
-	return forward(request, "announcements/createAnnouncement.jsp");
+	return forward(request, "/announcements/createAnnouncement.jsp");
     }
 
     public ActionForward createNewAnnouncementProcess(final ActionMapping mapping, final ActionForm form,
@@ -89,7 +89,7 @@ public class AnnouncementsProcessAction extends BaseAction {
 	AnnouncementProcess announcementProcess = AnnouncementProcess.createNewAnnouncementProcess(person,
 		(AnnouncementBean) getRenderedObject());
 	request.setAttribute("announcementProcess", announcementProcess);
-	return forward(request, "announcements/viewAnnouncementProcess.jsp");
+	return forward(request, "/announcements/viewAnnouncementProcess.jsp");
     }
 
     public ActionForward searchAnnouncementProcess(final ActionMapping mapping, final ActionForm form,
@@ -99,7 +99,7 @@ public class AnnouncementsProcessAction extends BaseAction {
 	    searchAnnouncementProcess = new SearchAnnouncementProcess();
 	}
 	request.setAttribute("searchAnnouncementProcess", searchAnnouncementProcess);
-	return forward(request, "announcements/searchAnnouncementProcess.jsp");
+	return forward(request, "/announcements/searchAnnouncementProcess.jsp");
     }
 
     public ActionForward viewAnnouncementProcess(final ActionMapping mapping, final HttpServletRequest request,
@@ -108,7 +108,7 @@ public class AnnouncementsProcessAction extends BaseAction {
 	if (process.getAnnouncementProcessStateType().equals(AnnouncementProcessStateType.REJECTED)) {
 	    request.setAttribute("rejectionMotive", process.getRejectionJustification());
 	}
-	return forward(request, "announcements/viewAnnouncementProcess.jsp");
+	return forward(request, "/announcements/viewAnnouncementProcess.jsp");
     }
 
     public ActionForward viewAnnouncementProcess(final ActionMapping mapping, final ActionForm form,
@@ -135,7 +135,7 @@ public class AnnouncementsProcessAction extends BaseAction {
 
 	AnnouncementProcess process = (AnnouncementProcess) getProcess(request);
 	request.setAttribute("announcementBean", AnnouncementBean.create(process.getAnnouncement()));
-	return forward(request, "announcements/editAnnouncement.jsp");
+	return forward(request, "/announcements/editAnnouncement.jsp");
     }
 
     public ActionForward editAnnouncementForApproval(final ActionMapping mapping, final ActionForm form,
@@ -174,7 +174,7 @@ public class AnnouncementsProcessAction extends BaseAction {
 
 	request.setAttribute("announcementProcess", getProcess(request));
 	request.setAttribute("stateBean", new ProcessStateBean());
-	return forward(request, "announcements/rejectAnnouncementProcess.jsp");
+	return forward(request, "/announcements/rejectAnnouncementProcess.jsp");
     }
 
     public ActionForward rejectAnnouncementProcess(final ActionMapping mapping, final ActionForm form,
