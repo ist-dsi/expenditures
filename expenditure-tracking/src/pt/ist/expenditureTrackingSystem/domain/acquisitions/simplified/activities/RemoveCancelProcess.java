@@ -1,5 +1,6 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class RemoveCancelProcess extends
     @Override
     protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
 	RegularAcquisitionProcess process = activityInformation.getProcess();
-	List<ProcessState> states = process.getProcessStates();
+	List<ProcessState> states = new ArrayList<ProcessState>(process.getProcessStates());
 	Collections.sort(states, ProcessState.COMPARATOR_BY_WHEN);
 
 	for (int i = states.size(); i > 0; i--) {

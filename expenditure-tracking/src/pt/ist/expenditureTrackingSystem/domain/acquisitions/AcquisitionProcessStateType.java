@@ -10,25 +10,13 @@ public enum AcquisitionProcessStateType implements IPresentableEnum {
     IN_GENESIS {
 
 	@Override
-	public boolean showFor(final AcquisitionProcessStateType currentStateType) {
-	    return true;
-	}
-
-	@Override
 	public boolean isCompleted(final AcquisitionProcessStateType currentStateType) {
 	    return currentStateType.ordinal() > ordinal();
 	}
 
     },
 
-    SUBMITTED_FOR_APPROVAL {
-
-	@Override
-	public boolean showFor(final AcquisitionProcessStateType currentStateType) {
-	    return true;
-	}
-
-    },
+    SUBMITTED_FOR_APPROVAL,
 
     SUBMITTED_FOR_FUNDS_ALLOCATION,
 
