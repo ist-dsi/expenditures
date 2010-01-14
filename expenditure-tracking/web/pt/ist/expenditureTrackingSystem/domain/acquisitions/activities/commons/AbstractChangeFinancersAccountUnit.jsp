@@ -22,6 +22,7 @@
 		<fr:property name="classes" value="tstyle2"/>
 	</fr:layout>
 </fr:edit>
+	<html:submit styleClass="inputbutton"><bean:message key="renderers.form.submit.name" bundle="RENDERER_RESOURCES"/> </html:submit>
 </fr:form>
 
 <fr:form action='<%= "/workflowProcessManagement.do?method=viewProcess&processId=" + processId %>'>
