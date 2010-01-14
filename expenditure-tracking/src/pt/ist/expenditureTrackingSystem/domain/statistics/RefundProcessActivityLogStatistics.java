@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 
@@ -40,6 +41,15 @@ public class RefundProcessActivityLogStatistics extends ProcessActivityLogStatis
 
     public List<LogEntry> getLogEntries() {
 	return logEntries;
+    }
+
+    protected void register(final PaymentProcessYear paymentProcessYear) {
+	for (final PaymentProcess paymentProcess : paymentProcessYear.getPaymentProcessSet()) {
+	    if (paymentProcess.isRefundProcess()) {
+		final RefundProcess refundProcess = (RefundProcess) paymentProcess;
+		register(refundProcess);
+	    }
+	}
     }
 
 }

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 
@@ -40,6 +41,15 @@ public class SimplifiedProcessActivityLogStatistics extends ProcessActivityLogSt
 
     public List<LogEntry> getLogEntries() {
 	return logEntries;
+    }
+
+    @Override
+    protected void register(PaymentProcessYear paymentProcessYear) {
+	for (final PaymentProcess paymentProcess : paymentProcessYear.getPaymentProcessSet()) {
+	    if (paymentProcess.isSimplifiedProcedureProcess()) {
+		register(paymentProcess);
+	    }
+	}
     }
 
 }

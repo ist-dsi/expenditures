@@ -373,5 +373,5 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
     }
 
     public abstract void revertToState(ProcessState processState);
-    
+
 }

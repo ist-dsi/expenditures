@@ -22,17 +22,10 @@ public abstract class ProcessActivityLogStatistics {
 
     protected final List<LogEntry> logEntries = new ArrayList<LogEntry>();
 
-    protected void register(final PaymentProcessYear paymentProcessYear) {
-	for (final PaymentProcess paymentProcess : paymentProcessYear.getPaymentProcessSet()) {
-	    if (paymentProcess.isRefundProcess()) {
-		final RefundProcess refundProcess = (RefundProcess) paymentProcess;
-		register(refundProcess);
-	    }
-	}
-    }
+    protected abstract void register(final PaymentProcessYear paymentProcessYear);
 
     protected void register(final PaymentProcess process) {
-	final List<WorkflowLog> operationLogs = new ArrayList<WorkflowLog>(process.getExecutionLogsSet());
+	final List<WorkflowLog> operationLogs = new ArrayList<WorkflowLog>(process.getExecutionLogs(ActivityLog.class));
 	Collections.sort(operationLogs, WorkflowLog.COMPARATOR_BY_WHEN);
 
 	final Set<LogEntry> logEntrySet = new HashSet<LogEntry>();
