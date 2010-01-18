@@ -238,11 +238,9 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 	addFiles(document);
     }
 
+    // TODO: delete this method... it's not used.
     public AcquisitionProposalDocument getAcquisitionProposalDocument() {
 	List<AcquisitionProposalDocument> files = getFiles(AcquisitionProposalDocument.class);
-	if (files.size() > 1) {
-	    throw new DomainException("error.should.only.have.one.proposal");
-	}
 	return files.isEmpty() ? null : files.get(0);
     }
 

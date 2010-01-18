@@ -34,7 +34,6 @@ public class SimplifiedAcquisitionPredicate extends SearchPredicate {
 
 	final List<Supplier> suppliers = acquisitionRequest.getSuppliers();
 	final String identification = acquisitionRequest.getAcquisitionProcessId();
-//	final String acquisitionProposalId = acquisitionRequest.getAcquisitionProposalDocumentId();
 	final String acquisitionRequestDocumentID = acquisitionProcess.hasPurchaseOrderDocument() ? acquisitionProcess
 		.getAcquisitionRequestDocumentID() : null;
 	final AcquisitionProcessStateType type = acquisitionProcess.getAcquisitionProcessStateType();
@@ -52,7 +51,6 @@ public class SimplifiedAcquisitionPredicate extends SearchPredicate {
 		&& (matchCriteria(searchBean.getRequestingUnit(), acquisitionRequest.getRequestingUnit()))
 		&& (matchCriteria(searchBean.getPayingUnit(), acquisitionRequest.getFinancersSet()))
 		&& matchCriteria(searchBean.getSupplier(), suppliers)
-//		&& matchCriteria(searchBean.getProposalId(), acquisitionProposalId)
  		&& matchAcquisitionProposalId(searchBean.getProposalId(), acquisitionRequest.getAcquisitionProcess())
 		&& matchCriteria(searchBean.getHasAvailableAndAccessibleActivityForUser(), acquisitionRequest)
 		&& matchCriteria(searchBean.getAcquisitionProcessStateType(), type)
