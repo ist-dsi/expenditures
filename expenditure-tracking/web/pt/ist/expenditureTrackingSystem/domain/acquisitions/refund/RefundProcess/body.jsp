@@ -20,6 +20,17 @@
 	</fr:view>
 </div>
 
+<logic:present name="process" property="missionProcess">
+	<div class="infobox mtop15">
+ 		<p class="mvert025">
+ 			<bean:message key="label.acquisition.process.consult.mission.process" bundle="ACQUISITION_RESOURCES"/>:
+			<html:link target="blank" action="/workflowProcessManagement.do?method=viewProcess" paramId="processId" paramName="process" paramProperty="missionProcess.externalId">
+	 			<bean:write name="process" property="missionProcess.processIdentification"/>
+			</html:link>
+    	</p>
+	</div>
+</logic:present>
+
 <bean:define id="payingUnits" name="process" property="request.totalAmountsForEachPayingUnit"/>
 <logic:notEmpty name="payingUnits">
 

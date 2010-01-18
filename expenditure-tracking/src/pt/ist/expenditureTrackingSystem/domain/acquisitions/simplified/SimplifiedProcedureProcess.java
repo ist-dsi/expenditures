@@ -225,6 +225,12 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	    final Unit unit = createAcquisitionProcessBean.getRequestingUnit();
 	    process.getAcquisitionRequest().addFinancers(unit.finance(process.getAcquisitionRequest()));
 	}
+	if (createAcquisitionProcessBean.isForMission()) {
+	    if (createAcquisitionProcessBean.getMissionProcess() == null) {
+		throw new DomainException("mission.process.is.mandatory");
+	    }
+	    process.setMissionProcess(createAcquisitionProcessBean.getMissionProcess());
+	}
 
 	return process;
     }

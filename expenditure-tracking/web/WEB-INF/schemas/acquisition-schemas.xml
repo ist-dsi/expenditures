@@ -1372,3 +1372,8 @@
 		<property name="size" value="40"/>
 	</slot>
 </schema>
+
+
+<schema name="missionProcess-identification" type="module.mission.domain.MissionProcess">
+	<slot name="processIdentification"/>
+</schema>

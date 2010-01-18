@@ -3,6 +3,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr"%>
+<%@page import="module.mission.domain.MissionSystem"%>
 
 <h2><bean:message key="acquisitionProcess.title.createAcquisitionRequest" bundle="ACQUISITION_RESOURCES"/></h2>
 
@@ -31,6 +32,22 @@
 	</table>
 </logic:notEmpty>
 
+<% if (MissionSystem.getInstance().hasAnyMissions()) { %>
+	<fr:form id="createForm" action="/acquisitionSimplifiedProcedureProcess.do?method=prepareCreateAcquisitionProcessCT75000">
+		<fr:edit id="selectMissionBean" name="acquisitionProcessBean">
+			<fr:schema type="pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean" bundle="ACQUISITION_RESOURCES">
+   				<fr:slot name="isForMission" key="label.aquisition.process.create.is.for.mission" layout="radio-postback">
+    				<fr:property name="classes" value="liinline"/>
+   				</fr:slot>
+			</fr:schema>
+			<fr:layout name="tabular">
+				<fr:property name="classes" value="form"/>
+				<fr:property name="columnClasses" value=",,tderror"/>
+			</fr:layout>
+		</fr:edit>
+	</fr:form>
+<% } %>
+
 <fr:form
 	action="/acquisitionSimplifiedProcedureProcess.do?method=addSupplierInCreationPostBack">
 	<fr:edit id="bean" name="acquisitionProcessBean"
@@ -38,8 +55,27 @@
 	<html:submit><bean:message key="link.add" bundle="MYORG_RESOURCES"/></html:submit>
 </fr:form>
 
-<fr:form
-	action="/acquisitionSimplifiedProcedureProcess.do?method=createNewAcquisitionProcess">
+<fr:form action="/acquisitionSimplifiedProcedureProcess.do?method=createNewAcquisitionProcess">
+	<logic:equal name="acquisitionProcessBean" property="isForMission" value="true">
+		<fr:edit id="acquisitionProcessBeanMissionProcess" name="acquisitionProcessBean">
+			<fr:schema type="pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean" bundle="ACQUISITION_RESOURCES">
+    			<fr:slot name="missionProcess" layout="autoComplete" key="label.mission.process" bundle="ACQUISITION_RESOURCES"
+    					validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+        			<fr:property name="args" value="provider=module.mission.presentationTier.provider.MissionProcessProvider" />
+        			<fr:property name="labelField" value="processIdentification"/>
+        			<fr:property name="format" value="${processIdentification}"/>
+        			<fr:property name="classes" value="inputsize100px"/>
+        			<fr:property name="minChars" value="1"/>
+        			<fr:property name="sortBy" value="processIdentification"/>
+					<fr:property name="saveOptions" value="true"/>
+    			</fr:slot>
+    		</fr:schema>
+			<fr:layout name="tabular">
+				<fr:property name="classes" value="form"/>
+				<fr:property name="columnClasses" value=",,tderror"/>
+			</fr:layout>
+		</fr:edit>
+	</logic:equal>
 	<fr:edit id="acquisitionProcessBean" name="acquisitionProcessBean"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean"
 		schema="createStandardAcquistion.selectRequester">

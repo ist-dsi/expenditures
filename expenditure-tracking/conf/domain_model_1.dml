@@ -902,10 +902,10 @@ relation SystemSearchesExpenditureTrackingSystem {
 }
 
 relation UnitObservers {
-organization.Unit playsRole observableUnits {
-	multiplicity *;
-}
-organization.Person playsRole observers {
-	multiplicity *;
-}
+	organization.Unit playsRole observableUnits {
+		multiplicity *;
+	}
+	organization.Person playsRole observers {
+		multiplicity *;
+	}
 }

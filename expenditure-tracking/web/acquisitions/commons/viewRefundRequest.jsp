@@ -12,3 +12,14 @@
 		</fr:layout>
 	</fr:view>
 </div>
+
+<logic:present name="processRequest" property="acquisitionProcess.missionProcess">
+	<div class="infobox mtop15">
+ 		<p class="mvert025">
+ 			<bean:message key="label.acquisition.process.consult.mission.process" bundle="ACQUISITION_RESOURCES"/>:
+			<html:link target="blank" action="/workflowProcessManagement.do?method=viewProcess" paramId="processId" paramName="processRequest" paramProperty="acquisitionProcess.missionProcess.externalId">
+	 			<bean:write name="processRequest" property="acquisitionProcess.missionProcess.processIdentification"/>
+			</html:link>
+    	</p>
+	</div>
+</logic:present>

@@ -20,7 +20,10 @@ public class RefundProcessAction extends PaymentProcessAction {
     public ActionForward prepareCreateRefundProcess(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 
-	CreateRefundProcessBean bean = new CreateRefundProcessBean(getLoggedPerson());
+	CreateRefundProcessBean bean = getRenderedObject();
+	if (bean == null) {
+	    bean = new CreateRefundProcessBean(getLoggedPerson());
+	}
 	request.setAttribute("bean", bean);
 	return forward(request, "/acquisitions/refund/createRefundRequest.jsp");
     }

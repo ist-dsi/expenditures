@@ -12,6 +12,7 @@ import module.workflow.activities.StealProcess;
 import module.workflow.activities.TakeProcess;
 import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.WorkflowProcess;
+import myorg.domain.exceptions.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
@@ -131,6 +132,13 @@ public class RefundProcess extends RefundProcess_Base {
 	if (bean.isRequestUnitPayingUnit()) {
 	    process.getRequest().addPayingUnit(bean.getRequestingUnit());
 	}
+	if (bean.isForMission()) {
+	    if (bean.getMissionProcess() == null) {
+		throw new DomainException("mission.process.is.mandatory");
+	    }
+	    process.setMissionProcess(bean.getMissionProcess());
+	}
+
 	return process;
     }
 

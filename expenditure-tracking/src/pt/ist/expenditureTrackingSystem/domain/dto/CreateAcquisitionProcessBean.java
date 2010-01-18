@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import module.mission.domain.MissionProcess;
+
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
@@ -15,6 +17,8 @@ import pt.ist.fenixWebFramework.util.DomainReference;
 
 public class CreateAcquisitionProcessBean implements Serializable {
 
+    private boolean isForMission = false;
+    private MissionProcess missionProcess;
     private DomainReference<Unit> requestingUnit;
     private boolean requestUnitPayingUnit;
     private List<DomainReference<Supplier>> suppliers;
@@ -121,6 +125,30 @@ public class CreateAcquisitionProcessBean implements Serializable {
 
     public void setClassification(ProcessClassification classification) {
 	this.classification = classification;
+    }
+
+    public boolean isForMission() {
+        return isForMission;
+    }
+
+    public boolean getIsForMission() {
+        return isForMission;
+    }
+
+    public void setIsForMission(boolean isForMission) {
+        this.isForMission = isForMission;
+    }
+
+    public void setForMission(boolean isForMission) {
+        this.isForMission = isForMission;
+    }
+
+    public MissionProcess getMissionProcess() {
+        return missionProcess;
+    }
+
+    public void setMissionProcess(MissionProcess missionProcess) {
+        this.missionProcess = missionProcess;
     }
 
 }

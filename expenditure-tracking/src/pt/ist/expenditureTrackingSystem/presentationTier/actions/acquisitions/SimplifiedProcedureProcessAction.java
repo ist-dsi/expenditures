@@ -26,23 +26,30 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 
     public ActionForward prepareCreateAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
-	final CreateAcquisitionProcessBean acquisitionProcessBean = new CreateAcquisitionProcessBean(ProcessClassification.CCP);
+	CreateAcquisitionProcessBean acquisitionProcessBean = getRenderedObject();
+	if (acquisitionProcessBean == null) {
+	    acquisitionProcessBean = new CreateAcquisitionProcessBean(ProcessClassification.CCP);
+	}
 	request.setAttribute("acquisitionProcessBean", acquisitionProcessBean);
 	return forward(request, "/acquisitions/createAcquisitionProcess.jsp");
     }
 
     public ActionForward prepareCreateAcquisitionProcessCT10000(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
-	final CreateAcquisitionProcessBean acquisitionProcessBean = new CreateAcquisitionProcessBean(
-		ProcessClassification.CT10000);
+	CreateAcquisitionProcessBean acquisitionProcessBean = getRenderedObject();
+	if (acquisitionProcessBean == null) {
+	    acquisitionProcessBean = new CreateAcquisitionProcessBean(ProcessClassification.CT10000);
+	}
 	request.setAttribute("acquisitionProcessBean", acquisitionProcessBean);
 	return forward(request, "/acquisitions/createAcquisitionProcess.jsp");
     }
 
     public ActionForward prepareCreateAcquisitionProcessCT75000(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
-	final CreateAcquisitionProcessBean acquisitionProcessBean = new CreateAcquisitionProcessBean(
-		ProcessClassification.CT75000);
+	CreateAcquisitionProcessBean acquisitionProcessBean = getRenderedObject();
+	if (acquisitionProcessBean == null) {
+	    acquisitionProcessBean = new CreateAcquisitionProcessBean(ProcessClassification.CT75000);
+	}
 	request.setAttribute("acquisitionProcessBean", acquisitionProcessBean);
 	return forward(request, "/acquisitions/createAcqusitionProcessCT75000.jsp");
     }

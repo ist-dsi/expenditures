@@ -2,12 +2,16 @@ package pt.ist.expenditureTrackingSystem.domain.dto;
 
 import java.io.Serializable;
 
+import module.mission.domain.MissionProcess;
+
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.fenixWebFramework.util.DomainReference;
 
 public class CreateRefundProcessBean implements Serializable {
 
+    private boolean isForMission = false;
+    private MissionProcess missionProcess;
     private DomainReference<Person> requestor;
     private DomainReference<Person> refundee;
     private DomainReference<Unit> requestingUnit;
@@ -74,6 +78,30 @@ public class CreateRefundProcessBean implements Serializable {
 
     public void setRefundeeFiscalCode(String refundeeFiscalCode) {
 	this.refundeeFiscalCode = refundeeFiscalCode;
+    }
+
+    public boolean isForMission() {
+        return isForMission;
+    }
+
+    public boolean getIsForMission() {
+        return isForMission;
+    }
+
+    public void setIsForMission(boolean isForMission) {
+        this.isForMission = isForMission;
+    }
+
+    public void setForMission(boolean isForMission) {
+        this.isForMission = isForMission;
+    }
+
+    public MissionProcess getMissionProcess() {
+        return missionProcess;
+    }
+
+    public void setMissionProcess(MissionProcess missionProcess) {
+        this.missionProcess = missionProcess;
     }
 
 }
