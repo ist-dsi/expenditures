@@ -6,6 +6,7 @@
 
 <bean:define id="acquisitionProcessClass" name="processRequest" property="process.class.simpleName"/>
 <bean:define id="actionMapping" value="<%= "/acquisition" + acquisitionProcessClass %>"/>
+<bean:define id="processId" name="processRequest" property="process.externalId"/>
 
 <div class="infobox">
 	<fr:view name="processRequest"
@@ -50,7 +51,7 @@
 						<span><fr:view name="invoice" property="invoiceNumber"/></span> <span style="padding: 0 0.3em; color: #aaa;">|</span>
 						<span><fr:view name="invoice" property="invoiceDate"/></span> <span style="padding: 0 0.3em; color: #aaa;">|</span>
 						<span>
-							<html:link action="<%= actionMapping + ".do?method=downloadInvoice"%>" paramId="invoiceOid" paramName="invoice" paramProperty="externalId">
+							<html:link action="<%= "/workflowProcessManagement.do?method=downloadFile&processId=" + processId%>" paramId="fileId" paramName="invoice" paramProperty="externalId">
 									<fr:view name="invoice" property="filename"/>
 							</html:link>
 						</span>
