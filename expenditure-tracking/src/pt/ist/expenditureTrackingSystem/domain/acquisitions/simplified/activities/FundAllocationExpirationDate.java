@@ -20,9 +20,9 @@ public class FundAllocationExpirationDate extends
     public static class FundAllocationNotAllowedException extends DomainException {
 
 	public FundAllocationNotAllowedException() {
-	    super("acquisitionRequestItem.message.exception.fundAllocationNotAllowed");
+	    super("acquisitionRequestItem.message.exception.fundAllocationNotAllowed", DomainException
+		    .getResourceFor("resources/AcquisitionResources"));
 	}
-
     }
 
     private void checkSupplierLimit(final RegularAcquisitionProcess process) {

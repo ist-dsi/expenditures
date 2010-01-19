@@ -66,13 +66,15 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	}
 
 	if (!checkAcquisitionRequestValueLimit(acquisitionRequest, totalValue)) {
-	    throw new DomainException("acquisitionRequestItem.message.exception.totalValueExceed", acquisitionRequest
-		    .getAcquisitionProcess().getAcquisitionRequestValueLimit().toFormatString());
+	    throw new DomainException("acquisitionRequestItem.message.exception.totalValueExceed", DomainException
+		    .getResourceFor("resources/AcquisitionResources"), acquisitionRequest.getAcquisitionProcess()
+		    .getAcquisitionRequestValueLimit().toFormatString());
 	}
 
 	if (!acquisitionRequest.getAcquisitionProcess().getShouldSkipSupplierFundAllocation()
 		&& !checkSupplierFundAllocation(acquisitionRequest, totalValue)) {
-	    throw new DomainException("acquisitionRequestItem.message.exception.fundAllocationNotAllowed");
+	    throw new DomainException("acquisitionRequestItem.message.exception.fundAllocationNotAllowed", DomainException
+		    .getResourceFor("resources/AcquisitionResources"));
 	}
     }
 
