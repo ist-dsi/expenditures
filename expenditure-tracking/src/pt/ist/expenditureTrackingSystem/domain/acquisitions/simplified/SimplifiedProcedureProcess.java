@@ -17,6 +17,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProposalDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.CreditNoteDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PurchaseOrderDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.AllocateFundsPermanently;
@@ -326,6 +327,7 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	availableFileTypes.add(AcquisitionProposalDocument.class);
 	availableFileTypes.add(PurchaseOrderDocument.class);
 	availableFileTypes.add(AcquisitionInvoice.class);
+	availableFileTypes.add(CreditNoteDocument.class);
 	availableFileTypes.addAll(super.getAvailableFileTypes());
 	return availableFileTypes;
     }

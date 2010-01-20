@@ -173,6 +173,9 @@ class authorizations.AuthorizationLog {
 		String proposalId;
 	}
 
+	class acquisitions.CreditNoteDocument extends .module.workflow.domain.ProcessFile {
+	}
+	
 	class acquisitions.PurchaseOrderDocument extends .module.workflow.domain.ProcessFile {
 		String requestId;
 	}

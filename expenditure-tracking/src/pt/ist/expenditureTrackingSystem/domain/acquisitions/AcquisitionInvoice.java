@@ -75,4 +75,16 @@ public class AcquisitionInvoice extends AcquisitionInvoice_Base {
 	return getFilename();
     }
 
+    @Override
+    public void processRemoval() {
+	for (; !getFinancers().isEmpty(); getFinancers().get(0).removeAllocatedInvoices(this))
+	    ;
+	for (; !getProjectFinancers().isEmpty(); getProjectFinancers().get(0).removeAllocatedInvoices(this))
+	    ;
+	for (; !getRequestItems().isEmpty(); getRequestItems().get(0).removeInvoicesFiles(this))
+	    ;
+	for (; !getUnitItems().isEmpty(); getUnitItems().get(0).removeConfirmedInvoices(this))
+	    ;
+    }
+
 }

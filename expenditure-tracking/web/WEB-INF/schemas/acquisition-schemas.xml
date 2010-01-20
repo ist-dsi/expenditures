@@ -1391,3 +1391,5 @@
 		<property name="saveOptions" value="true"/>
 	</slot>
 </schema>
+
+<schema name="addFile-CreditNoteDocument" extends="addFile-ProcessFile" type="module.workflow.util.WorkflowFileUploadBean"/>
