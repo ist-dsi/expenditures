@@ -13,7 +13,7 @@ import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 
 public class RemoveCancelProcess<P extends PaymentProcess> extends WorkflowActivity<P, ActivityInformation<P>> {
-    
+
     @Override
     public boolean isActive(P process, User user) {
 	return user != null && user.getExpenditurePerson().hasRoleType(RoleType.MANAGER) && process.isCanceled();
@@ -39,6 +39,10 @@ public class RemoveCancelProcess<P extends PaymentProcess> extends WorkflowActiv
     @Override
     public String getUsedBundle() {
 	return "resources/AcquisitionResources";
+    }
+
+    public boolean isUserAwarenessNeeded(P process, User user) {
+	return false;
     }
 
 }
