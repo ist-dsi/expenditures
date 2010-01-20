@@ -43,6 +43,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activitie
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.EditAcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.EditAcquisitionRequestItemRealValues;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.FundAllocationExpirationDate;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.JumpToProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.LockInvoiceReceiving;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.PayAcquisition;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RejectAcquisitionProcess;
@@ -170,6 +171,7 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	activities.add(new TakeProcess<RegularAcquisitionProcess>());
 	activities.add(new ReleaseProcess<RegularAcquisitionProcess>());
 	activities.add(new StealProcess<RegularAcquisitionProcess>());
+	activities.add(new JumpToProcessState());
 
 	availableStates.add(AcquisitionProcessStateType.IN_GENESIS);
 	availableStates.add(AcquisitionProcessStateType.SUBMITTED_FOR_APPROVAL);
@@ -334,4 +336,5 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	uploadableFileTypes.remove(PurchaseOrderDocument.class);
 	return uploadableFileTypes;
     }
+
 }

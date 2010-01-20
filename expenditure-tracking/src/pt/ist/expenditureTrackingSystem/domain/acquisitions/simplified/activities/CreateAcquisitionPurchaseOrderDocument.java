@@ -27,8 +27,10 @@ public class CreateAcquisitionPurchaseOrderDocument extends
 
     @Override
     public boolean isActive(RegularAcquisitionProcess process, User user) {
-	return isUserProcessOwner(process, user) && process.getAcquisitionProcessState().isAuthorized()
-		&& user.getExpenditurePerson().hasRoleType(RoleType.ACQUISITION_CENTRAL);
+	return isUserProcessOwner(process, user)
+		&& process.getAcquisitionProcessState().isAuthorized()
+		&& user.getExpenditurePerson().hasRoleType(RoleType.ACQUISITION_CENTRAL)
+		&& process.hasAcquisitionProposalDocument();
     }
 
     @Override

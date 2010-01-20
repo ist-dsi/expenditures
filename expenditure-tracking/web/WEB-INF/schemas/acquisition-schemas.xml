@@ -1377,3 +1377,17 @@
 <schema name="missionProcess-identification" type="module.mission.domain.MissionProcess">
 	<slot name="processIdentification"/>
 </schema>
+
+<schema name="acquisitionProcessStateType-localizedName" type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType">
+	<slot name="localizedName"/>
+</schema>
+
+<schema name="activityInformation.JumpToProcessState"
+		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.JumpToProcessState"
+		bundle="ACQUISITION_RESOURCES">
+	<slot name="acquisitionProcessStateType" layout="menu-select" key="label.acquisitionProcessStateType">
+		<property name="providerClass" value="pt.ist.expenditureTrackingSystem.presentationTier.renderers.dataProvider.AcquisitionProcessStateTypeProvider"/>
+		<property name="format" value="${localizedName}" />
+		<property name="saveOptions" value="true"/>
+	</slot>
+</schema>
