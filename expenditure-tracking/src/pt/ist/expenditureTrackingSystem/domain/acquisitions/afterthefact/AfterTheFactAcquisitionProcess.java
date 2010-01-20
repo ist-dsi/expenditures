@@ -11,6 +11,7 @@ import module.workflow.domain.ProcessFile;
 import module.workflow.domain.WorkflowProcess;
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
+import myorg.util.BundleUtil;
 
 import org.joda.time.LocalDate;
 
@@ -184,4 +185,10 @@ public class AfterTheFactAcquisitionProcess extends AfterTheFactAcquisitionProce
     public boolean isActive() {
 	return !isCanceled();
     }
+
+    @Override
+    public String getLocalizedName() {
+	return BundleUtil.getStringFromResourceBundle("resources/AcquisitionResources", "label.AfterTheFactAcquisitionProcess");
+    }
+
 }

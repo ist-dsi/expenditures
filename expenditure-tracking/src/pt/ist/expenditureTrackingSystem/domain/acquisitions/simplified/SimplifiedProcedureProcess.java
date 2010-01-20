@@ -339,4 +339,9 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	return uploadableFileTypes;
     }
 
+    @Override
+    public String getLocalizedName() {
+	return getProcessClassification().getLocalizedName();
+    }
+
 }

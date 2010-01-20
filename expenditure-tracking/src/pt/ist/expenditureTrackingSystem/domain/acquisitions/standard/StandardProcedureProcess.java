@@ -9,6 +9,7 @@ import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.WorkflowProcess;
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
+import myorg.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean;
@@ -98,4 +99,10 @@ public class StandardProcedureProcess extends StandardProcedureProcess_Base {
     public boolean isActive() {
 	return true;
     }
+
+    @Override
+    public String getLocalizedName() {
+	return BundleUtil.getStringFromResourceBundle("resources/AcquisitionResources", "label.StandardProcedureProcess");
+    }
+
 }

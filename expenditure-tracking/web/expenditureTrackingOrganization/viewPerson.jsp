@@ -59,6 +59,23 @@
 					<bean:message key="authorizations.link.logs" bundle="EXPENDITURE_RESOURCES"/>
 				</html:link>
 			</li>
+			<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL_MANAGER">
+				<li>
+					<html:link action="/expenditureTrackingOrganization.do?method=viewAcquisitionProcessStatistics" paramId="userOid" paramName="person" paramProperty="user.externalId">
+						<bean:message key="user.link.view.acquisition.process.statistics" bundle="EXPENDITURE_RESOURCES"/>
+					</html:link>
+				</li>
+			</logic:present>
+			<logic:notPresent role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL_MANAGER">
+				<bean:define id="username" name="person" property="username" type="java.lang.String"/>
+				<logic:present user="<%= username %>">
+					<li>
+						<html:link action="/expenditureTrackingOrganization.do?method=viewAcquisitionProcessStatistics" paramId="userOid" paramName="person" paramProperty="user.externalId">
+							<bean:message key="user.link.view.acquisition.process.statistics" bundle="EXPENDITURE_RESOURCES"/>
+						</html:link>
+					</li>
+				</logic:present>
+			</logic:notPresent>
 		</ul>
 	</div>
 </logic:present>

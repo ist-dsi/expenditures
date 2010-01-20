@@ -13,6 +13,7 @@ import module.workflow.activities.TakeProcess;
 import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.WorkflowProcess;
 import myorg.domain.exceptions.DomainException;
+import myorg.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
@@ -416,6 +417,11 @@ public class RefundProcess extends RefundProcess_Base {
 	if (refundProcessStateType != null && refundProcessStateType != RefundProcessStateType.CANCELED) {
 	    new RefundProcessState(this, refundProcessStateType);
 	}
+    }
+
+    @Override
+    public String getLocalizedName() {
+	return BundleUtil.getStringFromResourceBundle("resources/AcquisitionResources", "label.RefundProcess");
     }
 
 }
