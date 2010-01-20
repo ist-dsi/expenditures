@@ -231,13 +231,6 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 		.nextAcquisitionRequestDocumentID();
     }
 
-    /*
-     * TODO: Remove these mocks
-     */
-    public void setAcquisitionProposalDocument(AcquisitionProposalDocument document) {
-	addFiles(document);
-    }
-
     // TODO: delete this method... it's not used.
     public AcquisitionProposalDocument getAcquisitionProposalDocument() {
 	List<AcquisitionProposalDocument> files = getFiles(AcquisitionProposalDocument.class);
