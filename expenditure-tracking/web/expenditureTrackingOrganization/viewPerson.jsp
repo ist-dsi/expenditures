@@ -6,9 +6,12 @@
 
 <h2><bean:message key="user.label.view" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/> <bean:write name="person" property="username"/></h2>
 
-<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL_MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.ACCOUNTING_MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.PROJECT_ACCOUNTING_MANAGER">
-	<div class="infobox_dotted">
-		<ul>
+<div id="xpto">
+	<ul>
+		<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL_MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.ACCOUNTING_MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.PROJECT_ACCOUNTING_MANAGER">
+			<script type="text/javascript">
+				$("#xpto").attr("class","infobox_dotted");
+			</script>
 			<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL_MANAGER">
 				<li>
 					<html:link action="/expenditureTrackingOrganization.do?method=attributeAuthorization" paramId="personOid" paramName="person" paramProperty="externalId">
@@ -59,26 +62,32 @@
 					<bean:message key="authorizations.link.logs" bundle="EXPENDITURE_RESOURCES"/>
 				</html:link>
 			</li>
-			<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL_MANAGER">
+		</logic:present>
+		<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL_MANAGER">
+			<script type="text/javascript">
+				$("#xpto").attr("class","infobox_dotted");
+			</script>
+			<li>
+				<html:link action="/expenditureTrackingOrganization.do?method=viewAcquisitionProcessStatistics" paramId="userOid" paramName="person" paramProperty="user.externalId">
+					<bean:message key="user.link.view.acquisition.process.statistics" bundle="EXPENDITURE_RESOURCES"/>
+				</html:link>
+			</li>
+		</logic:present>
+		<logic:notPresent role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL_MANAGER">
+			<bean:define id="username" name="person" property="username" type="java.lang.String"/>
+			<logic:present user="<%= username %>">
+					<script type="text/javascript">
+						$("#xpto").attr("class","infobox_dotted");
+					</script>
 				<li>
 					<html:link action="/expenditureTrackingOrganization.do?method=viewAcquisitionProcessStatistics" paramId="userOid" paramName="person" paramProperty="user.externalId">
 						<bean:message key="user.link.view.acquisition.process.statistics" bundle="EXPENDITURE_RESOURCES"/>
 					</html:link>
 				</li>
 			</logic:present>
-			<logic:notPresent role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL_MANAGER">
-				<bean:define id="username" name="person" property="username" type="java.lang.String"/>
-				<logic:present user="<%= username %>">
-					<li>
-						<html:link action="/expenditureTrackingOrganization.do?method=viewAcquisitionProcessStatistics" paramId="userOid" paramName="person" paramProperty="user.externalId">
-							<bean:message key="user.link.view.acquisition.process.statistics" bundle="EXPENDITURE_RESOURCES"/>
-						</html:link>
-					</li>
-				</logic:present>
-			</logic:notPresent>
-		</ul>
-	</div>
-</logic:present>
+		</logic:notPresent>
+	</ul>
+</div>
 
 
 <div class="infobox">
