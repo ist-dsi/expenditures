@@ -16,18 +16,14 @@ public class CreditNoteDocument extends CreditNoteDocument_Base {
 
     @Override
     public void validateUpload(WorkflowProcess workflowProcess) {
-	RegularAcquisitionProcess process = (RegularAcquisitionProcess) workflowProcess;
-	if (!process.isAcquisitionProcessed()
-		|| !UserView.getCurrentUser().getExpenditurePerson().hasRoleType(RoleType.ACQUISITION_CENTRAL)) {
+	if (!UserView.getCurrentUser().getExpenditurePerson().hasRoleType(RoleType.ACQUISITION_CENTRAL)) {
 	    throw new ProcessFileValidationException("resources/AcquisitionResources", "error.creditNoteDocument.upload.invalid");
 	}
     }
 
     @Override
     public boolean isPossibleToArchieve() {
-	RegularAcquisitionProcess process = (RegularAcquisitionProcess) getProcess();
-	return (process.isAcquisitionProcessed() || process.isInvoiceReceived())
-		&& UserView.getCurrentUser().getExpenditurePerson().hasRoleType(RoleType.ACQUISITION_CENTRAL);
+	return UserView.getCurrentUser().getExpenditurePerson().hasRoleType(RoleType.ACQUISITION_CENTRAL);
     }
 
 }
