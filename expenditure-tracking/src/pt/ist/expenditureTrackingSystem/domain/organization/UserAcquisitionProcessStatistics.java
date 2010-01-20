@@ -20,9 +20,10 @@ public class UserAcquisitionProcessStatistics implements Serializable {
 
     private PaymentProcessYear paymentProcessYear;
 
-    private int numberOfParticipatedProcesses;
-    private int numberOfActivities;
-    private Duration totalActivityDuration = new Duration(0);
+    private int numberOfParticipatedProcesses = 0;
+    private int numberOfActivities = 0;
+    private long totalActivityDuration = 0;
+    private int numberOfActivitiesForAverage = 0;
 
     public class UserAcquisitionProcessTypeStatistics implements Serializable {
 
@@ -30,7 +31,7 @@ public class UserAcquisitionProcessStatistics implements Serializable {
 
 	private int numberOfParticipatedProcesses;
 	private int numberOfActivities;
-	private Duration totalActivityDuration = new Duration(0);
+	private long totalActivityDuration = 0;
 
 	private UserAcquisitionProcessTypeStatistics(final String processType) {
 	    this.processType = processType;
@@ -51,11 +52,16 @@ public class UserAcquisitionProcessStatistics implements Serializable {
 
 	public Duration getAverateaActivityDuration() {
 	    if (numberOfActivities == 0) {
-		return totalActivityDuration;
+		return new Duration(totalActivityDuration);
 	    }
-	    final BigDecimal millis = new BigDecimal(totalActivityDuration.getMillis());
+	    final BigDecimal millis = new BigDecimal(totalActivityDuration);
 	    final BigDecimal divisor = new BigDecimal(numberOfActivities);
 	    final BigDecimal result = millis.divide(divisor, RoundingMode.HALF_EVEN);
+	    System.out.println("");
+	    System.out.println(processType);
+	    System.out.println("millis: " + millis.toString());
+	    System.out.println("divisor: " + divisor.toString());
+	    System.out.println("result: " + result.toString());
 	    return new Duration(result.longValue());
 	}
 
@@ -67,10 +73,8 @@ public class UserAcquisitionProcessStatistics implements Serializable {
 	    numberOfActivities++;
 	}
 
-	private void registerActivity(final Duration duration) {
-	    if (duration != null) {
-		totalActivityDuration = totalActivityDuration.plus(duration);
-	    }
+	private void registerActivity(final long duration) {
+	    totalActivityDuration += duration;
 	}
 
 	public String getProcessType() {
@@ -110,12 +114,16 @@ public class UserAcquisitionProcessStatistics implements Serializable {
     }
 
     public Duration getAverateaActivityDuration() {
-	if (numberOfActivities == 0) {
-	    return totalActivityDuration;
+	if (numberOfActivitiesForAverage == 0) {
+	    return new Duration(totalActivityDuration);
 	}
-	final BigDecimal millis = new BigDecimal(totalActivityDuration.getMillis());
-	final BigDecimal divisor = new BigDecimal(numberOfActivities);
+	final BigDecimal millis = new BigDecimal(totalActivityDuration);
+	final BigDecimal divisor = new BigDecimal(numberOfActivitiesForAverage);
 	final BigDecimal result = millis.divide(divisor, RoundingMode.HALF_EVEN);
+	System.out.println("");
+	System.out.println("millis: " + millis.toString());
+	System.out.println("divisor: " + divisor.toString());
+	System.out.println("result: " + result.toString());
 	return new Duration(result.longValue());
     }
 
@@ -123,10 +131,12 @@ public class UserAcquisitionProcessStatistics implements Serializable {
         this.paymentProcessYear = paymentProcessYear;
 
         processTypeMap.clear();
+        numberOfParticipatedProcesses = 0;
+        numberOfActivities = 0;
+        totalActivityDuration = 0;
+        numberOfActivitiesForAverage = 0;
 
-	int numberOfParticipatedProcesses = 0;
-	int numberOfActivities = 0;
-	if (paymentProcessYear != null) {
+        if (paymentProcessYear != null) {
 	    for (final PaymentProcess paymentProcess : paymentProcessYear.getPaymentProcessSet()) {
 		if (participated(paymentProcess)) {
 		    numberOfParticipatedProcesses++;
@@ -142,16 +152,16 @@ public class UserAcquisitionProcessStatistics implements Serializable {
 
 			    final Duration duration = workflowLog.getDurationFromPreviousLog();
 			    if (duration != null) {
-				totalActivityDuration = totalActivityDuration.plus(duration);
-				userAcquisitionProcessTypeStatistics.registerActivity(duration);
+				long millis = duration.getMillis();
+				totalActivityDuration += millis;
+				numberOfActivitiesForAverage++;
+				userAcquisitionProcessTypeStatistics.registerActivity(millis);
 			    }
 			}
 		    }
 		}
 	    }
 	}
-	this.numberOfParticipatedProcesses = numberOfParticipatedProcesses;
-	this.numberOfActivities = numberOfActivities;
     }
 
     private String getProcessType(final PaymentProcess paymentProcess) {

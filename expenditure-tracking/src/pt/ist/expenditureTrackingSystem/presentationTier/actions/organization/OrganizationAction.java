@@ -919,6 +919,8 @@ public class OrganizationAction extends BaseAction {
 	    final User user = getDomainObject(request, "userOid");
 	    final PaymentProcessYear paymentProcessYear = PaymentProcessYear.getPaymentProcessYearByYear(Integer.valueOf(Calendar.getInstance().get(Calendar.YEAR)));
 	    userAcquisitionProcessStatistics = new UserAcquisitionProcessStatistics(user, paymentProcessYear);
+	} else {
+	    RenderUtils.invalidateViewState();
 	}
 	request.setAttribute("userAcquisitionProcessStatistics", userAcquisitionProcessStatistics);
 	return forward(request, "/expenditureTrackingOrganization/viewAcquisitionProcessStatistics.jsp");
