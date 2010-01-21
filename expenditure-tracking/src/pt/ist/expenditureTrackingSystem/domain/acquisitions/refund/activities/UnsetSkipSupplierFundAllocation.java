@@ -30,7 +30,8 @@ public class UnsetSkipSupplierFundAllocation extends WorkflowActivity<RefundProc
 
 	for (Supplier supplier : process.getRequest().getSuppliers()) {
 	    if (!supplier.isFundAllocationAllowed(process.getRequest().getTotalValue())) {
-		throw new DomainException("acquisitionProcess.message.exception.SupplierDoesNotAlloweAmount");
+		throw new DomainException("acquisitionProcess.message.exception.SupplierDoesNotAlloweAmount", DomainException
+			.getResourceFor("resources/AcquisitionResources"));
 	    }
 	}
 	process.setSkipSupplierFundAllocation(Boolean.FALSE);

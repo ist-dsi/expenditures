@@ -45,7 +45,8 @@ public class AcquisitionAfterTheFact extends AcquisitionAfterTheFact_Base {
     public void setValue(final Money value) {
 	super.setValue(Money.ZERO);
 	if (getSupplier() != null && !getSupplier().isFundAllocationAllowed(Money.ZERO)) {
-	    throw new DomainException("acquisitionProcess.message.exception.SupplierDoesNotAlloweAmount");
+	    throw new DomainException("acquisitionProcess.message.exception.SupplierDoesNotAlloweAmount", DomainException
+		    .getResourceFor("resources/AcquisitionResources"));
 	}
 	super.setValue(value);
     }

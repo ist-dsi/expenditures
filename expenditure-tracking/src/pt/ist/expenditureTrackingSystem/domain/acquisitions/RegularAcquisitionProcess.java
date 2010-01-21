@@ -171,7 +171,8 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
     public void unSkipSupplierFundAllocation() {
 	for (Supplier supplier : getAcquisitionRequest().getSuppliers()) {
 	    if (!supplier.isFundAllocationAllowed(getAcquisitionRequest().getTotalItemValue())) {
-		throw new DomainException("acquisitionProcess.message.exception.SupplierDoesNotAlloweAmount");
+		throw new DomainException("acquisitionProcess.message.exception.SupplierDoesNotAlloweAmount", DomainException
+			.getResourceFor("resources/AcquisitionResources"));
 	    }
 	}
 	super.setSkipSupplierFundAllocation(Boolean.FALSE);
