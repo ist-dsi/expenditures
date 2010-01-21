@@ -57,11 +57,6 @@ public class UserAcquisitionProcessStatistics implements Serializable {
 	    final BigDecimal millis = new BigDecimal(totalActivityDuration);
 	    final BigDecimal divisor = new BigDecimal(numberOfActivities);
 	    final BigDecimal result = millis.divide(divisor, RoundingMode.HALF_EVEN);
-	    System.out.println("");
-	    System.out.println(processType);
-	    System.out.println("millis: " + millis.toString());
-	    System.out.println("divisor: " + divisor.toString());
-	    System.out.println("result: " + result.toString());
 	    return new Duration(result.longValue());
 	}
 
@@ -120,10 +115,6 @@ public class UserAcquisitionProcessStatistics implements Serializable {
 	final BigDecimal millis = new BigDecimal(totalActivityDuration);
 	final BigDecimal divisor = new BigDecimal(numberOfActivitiesForAverage);
 	final BigDecimal result = millis.divide(divisor, RoundingMode.HALF_EVEN);
-	System.out.println("");
-	System.out.println("millis: " + millis.toString());
-	System.out.println("divisor: " + divisor.toString());
-	System.out.println("result: " + result.toString());
 	return new Duration(result.longValue());
     }
 
