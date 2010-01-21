@@ -104,8 +104,8 @@
 				</fr:view>
 			</td>
 			<td style="text-align: right;">
-				<html:img src="https://fenix.ist.utl.pt/publico/retrievePersonalPhoto.do?method=retrieveByIstId&amp;contentContextPath_PATH=/homepage"
-					paramId="istId" paramName="person" paramProperty="username"
+				<html:img src="https://fenix.ist.utl.pt/publico/retrievePersonalPhoto.do?method=retrieveByUUID&amp;contentContextPath_PATH=/homepage"
+					paramId="uuid" paramName="person" paramProperty="username"
 					align="middle" styleClass="float: right; border: 1px solid #aaa; padding: 3px;" />
 			</td>
 		</tr>
