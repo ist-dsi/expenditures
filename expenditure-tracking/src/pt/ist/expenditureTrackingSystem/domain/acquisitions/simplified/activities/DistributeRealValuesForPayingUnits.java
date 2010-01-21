@@ -10,8 +10,7 @@ public class DistributeRealValuesForPayingUnits extends AbstractDistributeRealVa
     @Override
     public boolean isActive(RegularAcquisitionProcess process, User user) {
 	return user.getExpenditurePerson().hasRoleType(RoleType.ACQUISITION_CENTRAL) && isUserProcessOwner(process, user)
-		&& process.getAcquisitionProcessState().isInvoiceReceived()
-		&& !process.getAcquisitionRequest().hasAtLeastOneConfirmation();
+		&& process.getAcquisitionProcessState().isInvoiceReceived();
     }
 
 }

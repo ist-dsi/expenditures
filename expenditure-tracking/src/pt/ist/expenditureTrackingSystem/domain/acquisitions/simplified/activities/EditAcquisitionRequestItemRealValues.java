@@ -41,4 +41,9 @@ public class EditAcquisitionRequestItemRealValues extends
     public boolean isDefaultInputInterfaceUsed() {
 	return false;
     }
+
+    @Override
+    public boolean isVisible() {
+	return false;
+    }
 }
