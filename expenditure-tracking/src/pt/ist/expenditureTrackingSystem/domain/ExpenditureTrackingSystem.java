@@ -2,16 +2,48 @@ package pt.ist.expenditureTrackingSystem.domain;
 
 import javax.servlet.http.HttpServletRequest;
 
+import module.dashBoard.WidgetRegister;
+import module.dashBoard.WidgetRegister.WidgetAditionPredicate;
+import module.dashBoard.domain.DashBoardPanel;
+import module.dashBoard.widgets.WidgetController;
 import module.organization.presentationTier.actions.OrganizationModelAction;
 import myorg.domain.ModuleInitializer;
 import myorg.domain.MyOrg;
+import myorg.domain.User;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.organization.OrganizationModelPlugin.ExpendituresView;
+import pt.ist.expenditureTrackingSystem.presentationTier.widgets.ActivateEmailNotificationWidget;
+import pt.ist.expenditureTrackingSystem.presentationTier.widgets.MyProcessesWidget;
+import pt.ist.expenditureTrackingSystem.presentationTier.widgets.MySearchesWidget;
+import pt.ist.expenditureTrackingSystem.presentationTier.widgets.PendingRefundWidget;
+import pt.ist.expenditureTrackingSystem.presentationTier.widgets.PendingSimplifiedWidget;
+import pt.ist.expenditureTrackingSystem.presentationTier.widgets.PrioritiesWidget;
+import pt.ist.expenditureTrackingSystem.presentationTier.widgets.QuickViewWidget;
+import pt.ist.expenditureTrackingSystem.presentationTier.widgets.TakenProcessesWidget;
+import pt.ist.expenditureTrackingSystem.presentationTier.widgets.UnreadCommentsWidget;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.RequestChecksumFilter;
 import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.RequestChecksumFilter.ChecksumPredicate;
 
 public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base implements ModuleInitializer {
+
+    public static WidgetAditionPredicate EXPENDITURE_TRACKING_PANEL_PREDICATE = new WidgetAditionPredicate() {
+	@Override
+	public boolean canBeAdded(DashBoardPanel panel, User userAdding) {
+	    return (ExpenditureUserDashBoardPanel.class.isAssignableFrom(panel.getClass()));
+	}
+    };
+
+    public static WidgetAditionPredicate EXPENDITURE_SERVICES_ONLY_PREDICATE = new WidgetAditionPredicate() {
+
+	@Override
+	public boolean canBeAdded(DashBoardPanel panel, User userAdding) {
+	    return EXPENDITURE_TRACKING_PANEL_PREDICATE.canBeAdded(panel, userAdding)
+		    && (userAdding.getExpenditurePerson().hasRoleType(RoleType.ACQUISITION_CENTRAL)
+			    || !userAdding.getExpenditurePerson().getAccountingUnits().isEmpty() || !userAdding
+			    .getExpenditurePerson().getProjectAccountingUnits().isEmpty());
+	}
+    };
 
     private static boolean isInitialized = false;
 
@@ -111,7 +143,19 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 
     @Override
     public void init(final MyOrg root) {
-	// nothing else to be done... getInstance() already did it.
+	registerWidget(MySearchesWidget.class);
+	registerWidget(UnreadCommentsWidget.class);
+	registerWidget(TakenProcessesWidget.class);
+	registerWidget(MyProcessesWidget.class);
+	registerWidget(PendingRefundWidget.class);
+	registerWidget(PendingSimplifiedWidget.class);
+	registerWidget(ActivateEmailNotificationWidget.class);
+	registerWidget(QuickViewWidget.class);
+	WidgetRegister.registerWidget(PrioritiesWidget.class, EXPENDITURE_SERVICES_ONLY_PREDICATE);
+    }
+
+    private static void registerWidget(Class<? extends WidgetController> widgetClass) {
+	WidgetRegister.registerWidget(widgetClass, EXPENDITURE_TRACKING_PANEL_PREDICATE);
     }
 
 }

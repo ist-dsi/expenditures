@@ -1,2 +1,2 @@
 name=expenditure-tracking
-depends=core, email-module, content, fileSupport, workflow-module, organization, organization-ist
+depends=core, email-module, content, fileSupport, workflow-module, organization, organization-ist, dashBoard

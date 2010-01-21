@@ -21,6 +21,8 @@ class pt.ist.expenditureTrackingSystem.domain.EmailDigester extends myorg.domain
 class pt.ist.expenditureTrackingSystem.domain.ConnectUnitsToOrganization extends myorg.domain.scheduler.Task {
 }
 
+class pt.ist.expenditureTrackingSystem.domain.ExpenditureUserDashBoardPanel extends module.dashBoard.domain.UserDashBoardPanel {
+}
 
 relation MyOrgExpenditureTrackingSystem {
 	myorg.domain.MyOrg playsRole myOrg;
