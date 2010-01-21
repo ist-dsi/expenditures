@@ -11,7 +11,7 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 public class ProcessesThatAreAuthorizedByUserPredicate implements Predicate {
 
     private Person person;
-
+    
     public ProcessesThatAreAuthorizedByUserPredicate(Person person) {
 	this.person = person;
     }
@@ -38,8 +38,7 @@ public class ProcessesThatAreAuthorizedByUserPredicate implements Predicate {
 	} else {
 	    for (Authorization authorization : unit.getAuthorizations()) {
 		Person person = authorization.getPerson();
-
-		if (process.hasAnyAvailableActivity(person.getUser(), false)) {
+		if (process.hasAnyAvailableActivity(person.getUser(), true)) {
 		    return false;
 		}
 	    }
