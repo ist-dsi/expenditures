@@ -15,8 +15,10 @@ public class SelectSupplier extends WorkflowActivity<RegularAcquisitionProcess, 
     @Override
     public boolean isActive(RegularAcquisitionProcess process, User user) {
 	Person person = user.getExpenditurePerson();
-	return person.hasRoleType(RoleType.ACQUISITION_CENTRAL_MANAGER) && isUserProcessOwner(process, user)
-		&& process.getAcquisitionProcessState().isAuthorized() && process.isSimplifiedAcquisitionProcess()
+	return person.hasRoleType(RoleType.ACQUISITION_CENTRAL_MANAGER)
+		&& isUserProcessOwner(process, user)
+		&& process.isSimplifiedAcquisitionProcess()
+		&& process.getAcquisitionProcessState().isAuthorized()
 		&& ((SimplifiedProcedureProcess) process).getProcessClassification() == ProcessClassification.CT75000;
     }
 

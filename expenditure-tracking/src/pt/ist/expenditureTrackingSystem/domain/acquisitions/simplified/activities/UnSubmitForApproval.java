@@ -14,8 +14,8 @@ public class UnSubmitForApproval extends
     public boolean isActive(RegularAcquisitionProcess process, User user) {
 	Person person = user.getExpenditurePerson();
 	return isUserProcessOwner(process, user)
-		&& (person.equals(process.getRequestor()) || process.isResponsibleForUnit(person))
 		&& process.getAcquisitionProcessState().isPendingApproval()
+		&& (person.equals(process.getRequestor()) || process.isResponsibleForUnit(person))
 		&& !process.getAcquisitionRequest().isApprovedByAtLeastOneResponsible();
     }
 

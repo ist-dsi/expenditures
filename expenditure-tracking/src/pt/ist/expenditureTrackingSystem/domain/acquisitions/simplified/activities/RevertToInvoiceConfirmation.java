@@ -21,8 +21,11 @@ public class RevertToInvoiceConfirmation extends
 
     @Override
     public boolean isActive(RegularAcquisitionProcess process, User user) {
-	return process.isProjectAccountingEmployee() && isUserProcessOwner(process, user) && process.isInvoiceConfirmed()
-		&& allItemsAreFilledWithRealValues(process) && process.getRequest().isEveryItemFullyAttributeInRealValues()
+	return process.isInvoiceConfirmed()
+		&& isUserProcessOwner(process, user)
+		&& process.isProjectAccountingEmployee()
+		&& allItemsAreFilledWithRealValues(process)
+		&& process.getRequest().isEveryItemFullyAttributeInRealValues()
 		&& !process.hasAllocatedFundsPermanentlyForAllProjectFinancers();
     }
 

@@ -12,8 +12,10 @@ public class SkipPurchaseOrderDocument extends
 
     @Override
     public boolean isActive(RegularAcquisitionProcess process, User user) {
-	return isUserProcessOwner(process, user) && process.getAcquisitionProcessState().isAuthorized()
-		&& !process.hasPurchaseOrderDocument() && user.getExpenditurePerson().hasRoleType(RoleType.ACQUISITION_CENTRAL);
+	return isUserProcessOwner(process, user)
+		&& user.getExpenditurePerson().hasRoleType(RoleType.ACQUISITION_CENTRAL)
+		&& process.getAcquisitionProcessState().isAuthorized()
+		&& !process.hasPurchaseOrderDocument();
     }
 
     @Override

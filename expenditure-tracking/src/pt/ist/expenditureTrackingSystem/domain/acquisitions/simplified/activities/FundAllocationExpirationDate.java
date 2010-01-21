@@ -37,10 +37,11 @@ public class FundAllocationExpirationDate extends
 
     @Override
     public boolean isActive(RegularAcquisitionProcess process, User user) {
-	return isUserProcessOwner(process, user) && process.getAcquisitionProcessState().isActive()
+	return isUserProcessOwner(process, user)
+		&& user.getExpenditurePerson().hasRoleType(RoleType.ACQUISITION_CENTRAL)
+		&& process.getAcquisitionProcessState().isActive()
 		&& !process.isPendingFundAllocation() && !process.getAcquisitionRequest().hasAnyFundAllocationId()
-		&& process.getAcquisitionRequest().isSubmittedForFundsAllocationByAllResponsibles()
-		&& user.getExpenditurePerson().hasRoleType(RoleType.ACQUISITION_CENTRAL);
+		&& process.getAcquisitionRequest().isSubmittedForFundsAllocationByAllResponsibles();
     }
 
     @Override

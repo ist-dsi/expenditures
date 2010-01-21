@@ -16,7 +16,8 @@ public class UnlockInvoiceReceiving extends
     public boolean isActive(RegularAcquisitionProcess process, User user) {
 	AcquisitionProcessState acquisitionProcessState = process.getAcquisitionProcessState();
 	Person person = user.getExpenditurePerson();
-	return person.hasRoleType(RoleType.ACQUISITION_CENTRAL) && isUserProcessOwner(process, user)
+	return person.hasRoleType(RoleType.ACQUISITION_CENTRAL)
+		&& isUserProcessOwner(process, user)
 		&& (acquisitionProcessState.isInvoiceReceived() || acquisitionProcessState.isPendingInvoiceConfirmation());
     }
 

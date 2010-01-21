@@ -14,8 +14,9 @@ public class RevertInvoiceSubmission extends
     @Override
     public boolean isActive(RegularAcquisitionProcess process, User user) {
 	Person person = user.getExpenditurePerson();
-	return (process.isResponsibleForUnit(person) || person.hasRoleType(RoleType.ACQUISITION_CENTRAL))
-		&& isUserProcessOwner(process, user) && process.getAcquisitionProcessState().isPendingInvoiceConfirmation();
+	return isUserProcessOwner(process, user)
+		&& process.getAcquisitionProcessState().isPendingInvoiceConfirmation()
+		&& (person.hasRoleType(RoleType.ACQUISITION_CENTRAL) || process.isResponsibleForUnit(person));
     }
 
     @Override

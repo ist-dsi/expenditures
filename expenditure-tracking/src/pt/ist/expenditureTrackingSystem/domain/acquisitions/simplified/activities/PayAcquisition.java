@@ -14,8 +14,8 @@ public class PayAcquisition extends WorkflowActivity<RegularAcquisitionProcess, 
     public boolean isActive(RegularAcquisitionProcess process, User user) {
 	Person person = user.getExpenditurePerson();
 	return isUserProcessOwner(process, user)
-		&& (person.hasRoleType(RoleType.TREASURY_MANAGER) || process.isTreasuryMember(person))
-		&& process.getAcquisitionProcessState().isAllocatedPermanently();
+		&& process.getAcquisitionProcessState().isAllocatedPermanently()
+		&& (person.hasRoleType(RoleType.TREASURY_MANAGER) || process.isTreasuryMember(person));
     }
 
     @Override

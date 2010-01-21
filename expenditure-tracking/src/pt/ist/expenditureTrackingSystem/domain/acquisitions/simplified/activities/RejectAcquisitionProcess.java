@@ -15,8 +15,10 @@ public class RejectAcquisitionProcess extends
     @Override
     public boolean isActive(RegularAcquisitionProcess process, User user) {
 	Person person = user.getExpenditurePerson();
-	return isUserProcessOwner(process, user) && process.isResponsibleForUnit(person)
-		&& !process.getAcquisitionRequest().hasBeenAuthorizedBy(person) && process.isPendingApproval();
+	return isUserProcessOwner(process, user)
+		&& process.isPendingApproval()
+		&& !process.getAcquisitionRequest().hasBeenAuthorizedBy(person)
+		&& process.isResponsibleForUnit(person);
     }
 
     @Override

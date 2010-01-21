@@ -16,13 +16,14 @@ public class SetSkipSupplierFundAllocation extends
     public boolean isActive(RegularAcquisitionProcess process, User user) {
 	Person person = user.getExpenditurePerson();
 	return isUserProcessOwner(process, user)
+		&& !process.getShouldSkipSupplierFundAllocation().booleanValue()
 		&& (process instanceof SimplifiedProcedureProcess && ((SimplifiedProcedureProcess) process)
 			.getProcessClassification().isCCP())
 		&& ((process.getAcquisitionProcessState().isInGenesis() && person == process.getRequestor() || (person
 			.hasRoleType(RoleType.ACQUISITION_CENTRAL) && (process.getAcquisitionProcessState().isAuthorized()
 			|| process.getAcquisitionProcessState().isAcquisitionProcessed() || process.isInvoiceReceived()))) || person
 			.hasRoleType(RoleType.SUPPLIER_FUND_ALLOCATION_MANAGER))
-		&& !process.getShouldSkipSupplierFundAllocation();
+		;
     }
 
     @Override
