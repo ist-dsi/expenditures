@@ -21,18 +21,18 @@ public class ProcessesThatAreAuthorizedByUserPredicate implements Predicate {
 	if (process.getRequest() == null) {
 	    return false;
 	}
-	List<Unit> units = process.getPayingUnits();
+	final List<Financer> financers = process.getRequest().getFinancers();
 
-	boolean evaluation = false;
-	for (Unit unit : units) {
-	    evaluation = evaluation || evaluate(unit, process);
+	for (final Financer financer : financers) {
+	    final Unit unit = financer.getUnit();
+	    if (evaluate(unit, process)) {
+		return true;
+	    }
 	}
-
-	return evaluation;
+	return false;
     }
 
     private boolean evaluate(Unit unit, PaymentProcess process) {
-
 	if (unit.hasAuthorizationsFor(person)) {
 	    return true;
 	} else {
@@ -45,4 +45,5 @@ public class ProcessesThatAreAuthorizedByUserPredicate implements Predicate {
 	    return unit.hasParentUnit() && evaluate(unit.getParentUnit(), process);
 	}
     }
+
 }
