@@ -19,14 +19,17 @@ import org.apache.struts.action.ActionMapping;
 
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.statistics.AfterTheFactProcessTotalValueStatistics;
+import pt.ist.expenditureTrackingSystem.domain.statistics.ChartData;
 import pt.ist.expenditureTrackingSystem.domain.statistics.RefundProcessActivityLogStatistics;
 import pt.ist.expenditureTrackingSystem.domain.statistics.RefundProcessStatistics;
 import pt.ist.expenditureTrackingSystem.domain.statistics.RefundProcessTotalValueStatistics;
+import pt.ist.expenditureTrackingSystem.domain.statistics.SimplifiedProcedureProcessProcessStateCountChartData;
 import pt.ist.expenditureTrackingSystem.domain.statistics.SimplifiedProcessActivityLogStatistics;
 import pt.ist.expenditureTrackingSystem.domain.statistics.SimplifiedProcessStatistics;
 import pt.ist.expenditureTrackingSystem.domain.statistics.SimplifiedProcessTotalValueStatistics;
@@ -56,15 +59,12 @@ public class StatisticsAction extends ContextBaseAction {
 	return forward(request, "/statistics/showStatisticsSimplifiedProcess.jsp");
     }
 
-    public ActionForward simplifiedProcessStatisticsChart(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-	final String year = request.getParameter("year");
-
-	final SimplifiedProcessStatistics simplifiedProcessStatistics = SimplifiedProcessStatistics.create(new Integer(year));
-
+    protected ActionForward generateChart(final HttpServletResponse response, final ChartData chartData, final long t1) {
 	OutputStream outputStream = null;
 	try {
-	    final byte[] image = ChartGenerator.simplifiedProcessStatisticsImage(simplifiedProcessStatistics);
+	    final byte[] image = ChartGenerator.createBarChartImage(chartData);
+	    long t2 = System.currentTimeMillis();
+	    System.out.println("New total simpl took: " + (t2 - t1) + "ms");
 	    outputStream = response.getOutputStream();
 	    response.setContentType("image/jpeg");
 	    outputStream.write(image);
@@ -140,6 +140,30 @@ public class StatisticsAction extends ContextBaseAction {
 	}
 
 	return null;
+    }
+
+    public ActionForward simplifiedProcessStatisticsStateChart(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final String year = request.getParameter("year");
+
+	long t1 = System.currentTimeMillis();
+	final PaymentProcessYear paymentProcessYear = PaymentProcessYear.getPaymentProcessYearByYear(Integer.valueOf(year));
+	final SimplifiedProcedureProcessProcessStateCountChartData chartData =
+	    	new SimplifiedProcedureProcessProcessStateCountChartData(paymentProcessYear);
+	chartData.calculateData();
+	return generateChart(response, chartData, t1);
+    }
+
+    public ActionForward simplifiedProcessStatisticsStateTimeChart(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final String year = request.getParameter("year");
+
+	long t1 = System.currentTimeMillis();
+	final PaymentProcessYear paymentProcessYear = PaymentProcessYear.getPaymentProcessYearByYear(Integer.valueOf(year));
+	final SimplifiedProcedureProcessProcessStateCountChartData chartData =
+	    	new SimplifiedProcedureProcessProcessStateCountChartData(paymentProcessYear);
+	chartData.calculateData();
+	return generateChart(response, chartData, t1);
     }
 
     public ActionForward simplifiedProcessStatisticsActivityTimeChartForProcess(final ActionMapping mapping,

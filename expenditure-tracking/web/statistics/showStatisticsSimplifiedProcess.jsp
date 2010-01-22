@@ -19,10 +19,13 @@
 
 <logic:present name="simplifiedProcessStatistics">
 	<p><bean:message key="label.statistics.process.total.number" bundle="STATISTICS_RESOURCES"/>: <bean:write name="simplifiedProcessStatistics" property="numberOfProcesses"/></p>
-	<html:img action="statistics.do?method=simplifiedProcessStatisticsChart" paramId="year" paramName="yearBean" paramProperty="year"/>
+	<html:img action="statistics.do?method=simplifiedProcessStatisticsStateChart" paramId="year" paramName="yearBean" paramProperty="year"/>
 	<br/>
 	<br/>
 	<html:img action="statistics.do?method=simplifiedProcessStatisticsTimeChart" paramId="year" paramName="yearBean" paramProperty="year"/>
+	<br/>
+	<br/>
+	<html:img action="statistics.do?method=simplifiedProcessStatisticsStateTimeChart" paramId="year" paramName="yearBean" paramProperty="year"/>
 </logic:present>
 <logic:notPresent name="simplifiedProcessStatistics">
 	<bean:message key="label.statistics.not.available" bundle="STATISTICS_RESOURCES"/>

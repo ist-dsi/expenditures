@@ -41,6 +41,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activitie
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SubmitForConfirmInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SubmitForFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.UnsetSkipSupplierFundAllocation;
+import pt.ist.expenditureTrackingSystem.domain.statistics.ChartData;
 import pt.ist.expenditureTrackingSystem.domain.statistics.LogEntry;
 import pt.ist.expenditureTrackingSystem.domain.statistics.RefundProcessActivityLogStatistics;
 import pt.ist.expenditureTrackingSystem.domain.statistics.RefundProcessStatistics;
@@ -66,6 +67,16 @@ public class ChartGenerator {
     protected static byte[] createBarChartImage(final CategoryDataset categoryDataset, final String title)
 	    throws RuntimeException, IOException {
 	final JFreeChart chart = createBarChart(categoryDataset, title);
+	final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+	final BufferedImage bufferedImage = chart.createBufferedImage(625, 475);
+	ImageIO.write(bufferedImage, "png", outputStream);
+	bufferedImage.flush();
+	outputStream.close();
+	return outputStream.toByteArray();
+    }
+
+    protected static byte[] createBarChartImage(final ChartData chartData) throws RuntimeException, IOException {
+	final JFreeChart chart = createBarChart(chartData.getDataset(), chartData.getTitle());
 	final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 	final BufferedImage bufferedImage = chart.createBufferedImage(625, 475);
 	ImageIO.write(bufferedImage, "png", outputStream);

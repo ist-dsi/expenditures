@@ -16,7 +16,6 @@ import org.joda.time.DateTime;
 
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 
 public abstract class ProcessActivityLogStatistics {
 
