@@ -15,13 +15,14 @@ import module.organization.domain.PartyType;
 import module.organization.domain.UnitBean;
 import module.organizationIst.domain.IstAccountabilityType;
 import module.organizationIst.domain.IstPartyType;
+import module.workflow.util.ProcessEvaluator;
 import myorg.domain.MyOrg;
+import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
 
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.LocalDate;
 
-import myorg.domain.exceptions.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
@@ -31,6 +32,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestWithPayment;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationLog;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateUnitBean;
+import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
@@ -542,6 +544,48 @@ public class Unit extends Unit_Base {
 	final Boolean currentValue = getDefaultRegeimIsCCP();
 	final boolean newValue = currentValue == null ? Boolean.TRUE : !currentValue.booleanValue();
 	setDefaultRegeimIsCCP(Boolean.valueOf(newValue));
+    }
+
+    public static class UnitProcessEvaluator extends ProcessEvaluator<GenericProcess> {
+
+	private final Set<Unit> processed = new HashSet<Unit>();
+
+	public UnitProcessEvaluator(ProcessEvaluator<GenericProcess> genericProcessEvaluator) {
+	    next = genericProcessEvaluator;
+	}
+
+    }
+
+    public void evaluateAllProcesses(final ProcessEvaluator<GenericProcess> unitProcessEvaluator, final PaymentProcessYear year) {
+//	if (!unitProcessEvaluator.processed.contains(this)) {
+//	    unitProcessEvaluator.processed.add(this);
+	    for (final Financer financer : getFinancedItems()) {
+		final PaymentProcess process = financer.getFundedRequest().getProcess();
+		if (year == null || process.getPaymentProcessYear() == year) {
+		    unitProcessEvaluator.evaluate(process);
+		}
+	    }
+	    evaluateAllProcesses(unitProcessEvaluator, year, getUnit());
+
+//	    for (final Unit unit : getSubUnitsSet()) {
+//		unit.evaluateAllProcesses(unitProcessEvaluator, year);
+//	    }
+//	}
+    }
+
+    private static void evaluateAllProcesses(final ProcessEvaluator<GenericProcess> unitProcessEvaluator,
+	    final PaymentProcessYear year, final module.organization.domain.Unit unit) {
+	for (final Accountability accountability : unit.getChildAccountabilitiesSet()) {
+	    final Party child = accountability.getChild();
+	    if (child.isUnit()) {
+		final module.organization.domain.Unit childUnit = (module.organization.domain.Unit) child;
+		if (childUnit.hasExpenditureUnit()) {
+		    childUnit.getExpenditureUnit().evaluateAllProcesses(unitProcessEvaluator, year);
+		} else {
+		    evaluateAllProcesses(unitProcessEvaluator, year, childUnit);
+		}
+	    }
+	}
     }
 
 }

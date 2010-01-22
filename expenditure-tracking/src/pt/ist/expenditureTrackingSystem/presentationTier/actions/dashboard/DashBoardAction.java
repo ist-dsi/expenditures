@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import module.workflow.presentationTier.actions.ProcessManagement;
+import module.workflow.util.ProcessEvaluator;
 import myorg.presentationTier.actions.ContextBaseAction;
 import myorg.util.Counter;
 import myorg.util.MultiCounter;
@@ -27,7 +28,10 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessSt
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPaymentProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
+import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
+import pt.ist.expenditureTrackingSystem.util.AcquisitionProcessStateTypeCounter;
 import pt.ist.expenditureTrackingSystem.util.ProcessMapGenerator;
 import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.RequestChecksumFilter;
 import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.RequestChecksumFilter.ChecksumPredicate;
@@ -63,6 +67,33 @@ public class DashBoardAction extends ContextBaseAction {
     public ActionForward viewDigest(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) {
 	Person loggedPerson = Person.getLoggedPerson();
+
+//	long start1 = System.currentTimeMillis();
+//	final AcquisitionProcessStateTypeCounter simplifiedProcedureProcessStateTypeCounter = new AcquisitionProcessStateTypeCounter();
+//	final AcquisitionProcessStateTypeCounter prioritySimplifiedProcedureProcessStateTypeCounter = new AcquisitionProcessStateTypeCounter();
+//
+//	final ProcessEvaluator simplifiedProcedureProcessEvaluator = new ProcessEvaluator<SimplifiedProcedureProcess>() {
+//
+//	    @Override
+//	    public void evaluate(final SimplifiedProcedureProcess process) {
+//		final AcquisitionProcessStateType type = process.getAcquisitionProcessStateType();
+//		simplifiedProcedureProcessStateTypeCounter.count(type);
+//		if (process.isPriorityProcess()) {
+//		    prioritySimplifiedProcedureProcessStateTypeCounter.count(type);
+//		}
+//		super.evaluate(process);
+//	    }
+//	    
+//	};
+//	GenericProcess.evaluateProcessesForPerson((Class) SimplifiedProcedureProcess.class, loggedPerson, null, true,
+//		simplifiedProcedureProcessEvaluator);
+//
+//	long end1 = System.currentTimeMillis();
+//	System.out.println("Testing: " + (end1 - start1) + "ms.");
+//	request.setAttribute("simplifiedProcedureProcessStateTypeCounter", simplifiedProcedureProcessStateTypeCounter);
+//	request.setAttribute("prioritySimplifiedProcedureProcessStateTypeCounter", prioritySimplifiedProcedureProcessStateTypeCounter);
+
+	long start2 = System.currentTimeMillis();
 	Map<AcquisitionProcessStateType, MultiCounter<AcquisitionProcessStateType>> simplifiedMap = ProcessMapGenerator
 		.generateAcquisitionMap(loggedPerson);
 	List<Counter<AcquisitionProcessStateType>> counters = new ArrayList<Counter<AcquisitionProcessStateType>>();
@@ -82,6 +113,9 @@ public class DashBoardAction extends ContextBaseAction {
 
 	Collections.sort(counters, new BeanComparator("countableObject"));
 	Collections.sort(priorityCounters, new BeanComparator("countableObject"));
+
+	long end2 = System.currentTimeMillis();
+	System.out.println("Current: " + (end2 - start2) + "ms.");
 	request.setAttribute("simplifiedCounters", counters);
 	request.setAttribute("simplifiedCounters-priority", priorityCounters);
 
