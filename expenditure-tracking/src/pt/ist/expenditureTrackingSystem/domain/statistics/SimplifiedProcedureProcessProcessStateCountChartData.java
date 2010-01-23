@@ -3,6 +3,8 @@ package pt.ist.expenditureTrackingSystem.domain.statistics;
 import java.util.SortedMap;
 import java.util.Map.Entry;
 
+import myorg.util.BundleUtil;
+
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
@@ -15,6 +17,7 @@ public class SimplifiedProcedureProcessProcessStateCountChartData extends Paymen
 
     public SimplifiedProcedureProcessProcessStateCountChartData(PaymentProcessYear paymentProcessYear) {
 	super(paymentProcessYear);
+	setTitle(BundleUtil.getStringFromResourceBundle("resources.AcquisitionResources", "label.number.processes"));
     }
 
     @Override

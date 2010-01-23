@@ -30,6 +30,7 @@ import pt.ist.expenditureTrackingSystem.domain.statistics.RefundProcessActivityL
 import pt.ist.expenditureTrackingSystem.domain.statistics.RefundProcessStatistics;
 import pt.ist.expenditureTrackingSystem.domain.statistics.RefundProcessTotalValueStatistics;
 import pt.ist.expenditureTrackingSystem.domain.statistics.SimplifiedProcedureProcessProcessStateCountChartData;
+import pt.ist.expenditureTrackingSystem.domain.statistics.SimplifiedProcedureProcessStateTimeChartData;
 import pt.ist.expenditureTrackingSystem.domain.statistics.SimplifiedProcessActivityLogStatistics;
 import pt.ist.expenditureTrackingSystem.domain.statistics.SimplifiedProcessStatistics;
 import pt.ist.expenditureTrackingSystem.domain.statistics.SimplifiedProcessTotalValueStatistics;
@@ -64,7 +65,7 @@ public class StatisticsAction extends ContextBaseAction {
 	try {
 	    final byte[] image = ChartGenerator.createBarChartImage(chartData);
 	    long t2 = System.currentTimeMillis();
-	    System.out.println("New total simpl took: " + (t2 - t1) + "ms");
+	    System.out.println(chartData.getTitle() + ": " + (t2 - t1) + "ms");
 	    outputStream = response.getOutputStream();
 	    response.setContentType("image/jpeg");
 	    outputStream.write(image);
@@ -160,8 +161,8 @@ public class StatisticsAction extends ContextBaseAction {
 
 	long t1 = System.currentTimeMillis();
 	final PaymentProcessYear paymentProcessYear = PaymentProcessYear.getPaymentProcessYearByYear(Integer.valueOf(year));
-	final SimplifiedProcedureProcessProcessStateCountChartData chartData =
-	    	new SimplifiedProcedureProcessProcessStateCountChartData(paymentProcessYear);
+	final SimplifiedProcedureProcessStateTimeChartData chartData =
+	    	new SimplifiedProcedureProcessStateTimeChartData(paymentProcessYear);
 	chartData.calculateData();
 	return generateChart(response, chartData, t1);
     }
