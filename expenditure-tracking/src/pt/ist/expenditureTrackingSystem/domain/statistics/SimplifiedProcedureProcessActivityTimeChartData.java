@@ -3,151 +3,79 @@ package pt.ist.expenditureTrackingSystem.domain.statistics;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.ActivityLog;
 import module.workflow.domain.WorkflowLog;
 import module.workflow.domain.WorkflowProcess;
-import myorg.util.BundleUtil;
 
 import org.joda.time.DateTime;
 
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
+import pt.ist.expenditureTrackingSystem.util.Calculation.Operation;
 
-public class SimplifiedProcedureProcessActivityTimeChartData extends PaymentProcessChartData {
-
-    private List<Long>[] durations = null;
-    //private long[] accumulatedTimes = null;
-    //private int[] activityCount = null;
-    private int[] order = null;
+public class SimplifiedProcedureProcessActivityTimeChartData extends PaymentProcessChartData<String> {
 
     private List<WorkflowActivity<? extends WorkflowProcess,? extends ActivityInformation>> activities = null;
 
     public SimplifiedProcedureProcessActivityTimeChartData(PaymentProcessYear paymentProcessYear) {
-	super(paymentProcessYear);
-	setTitle(BundleUtil.getStringFromResourceBundle("resources.AcquisitionResources", "label.activity.times.average"));
+	super(paymentProcessYear, Operation.MEDIAN);
     }
 
-    private void init(final SimplifiedProcedureProcess simplifiedProcedureProcess) {
-	if (activities == null) {
-	    activities = new ArrayList<WorkflowActivity<? extends WorkflowProcess,? extends ActivityInformation>>(simplifiedProcedureProcess.getActivities());
-	    final int size = activities.size();
-	    durations = new ArrayList[size];
-//	    accumulatedTimes = new long[size];
-//	    activityCount = new int[size];
-	    order = new int[size];
-	}	
+    protected String getTitleKey() {
+	return "label.activity.times.average";
     }
 
-    private void sort() {
-	for (int i = 0; i < order.length - 1; i++) {
-	    final int minIndex = findMinValue(i);
-	    swap(activities, i, minIndex);
-//	    swap(accumulatedTimes, i, minIndex);
-//	    swap(activityCount, i, minIndex);
-	    swap(durations, i, minIndex);
-	    swap(order, i, minIndex);
-	}
-    }
+    protected String[] getCategories() {
+	Set<WorkflowActivity<? extends WorkflowProcess,? extends ActivityInformation>> activities =
+	    	new TreeSet<WorkflowActivity<? extends WorkflowProcess,? extends ActivityInformation>>(
+	    		new Comparator<WorkflowActivity>() {
 
-    private int findMinValue(final int i) {
-	int min = i;
-	for (int j = min + 1; j < order.length; j++) {
-	    if (order[j] < order[min]) {
-		min = j;
+			    @Override
+			    public int compare(WorkflowActivity o1, WorkflowActivity o2) {
+				final int c = o1.getLocalizedName().compareTo(o2.getLocalizedName());
+				return c == 0 ? o2.hashCode() - o1.hashCode() : c;
+			    }
+	});
+	for (final PaymentProcessYear paymentProcessYear : ExpenditureTrackingSystem.getInstance().getPaymentProcessYearsSet()) {
+	    for (final PaymentProcess paymentProcess : paymentProcessYear.getPaymentProcessSet()) {
+		activities.addAll(paymentProcess.getActivities());
 	    }
 	}
-	return min;
+	final String[] catagories = new String[activities.size()];
+	int i = 0;
+	for (final WorkflowActivity workflowActivity : activities) {
+	    catagories[i++] = workflowActivity.getLocalizedName();
+	}
+	return catagories;
     }
 
-    private void swap(final long[] values, final int i, final int j) {
-	final long temp = values[i];
-	values[i] = values[j];
-	values[j] = temp;
-    }
-
-    private void swap(final int[] values, final int i, final int j) {
-	final int temp = values[i];
-	values[i] = values[j];
-	values[j] = temp;
-    }
-
-    private void swap(final Object[] values, final int i, final int j) {
-	final Object temp = values[i];
-	values[i] = values[j];
-	values[j] = temp;
-    }
-
-    private void swap(final List values, final int i, final int j) {
-	final Object temp = values.set(i, values.get(j));
-	values.set(j, temp);
-    }
-
-    @Override
-    public void calculateData() {
-        super.calculateData();
-
-        if (activities != null) {
-            sort();
-            final BigDecimal DAYS_CONST = new BigDecimal(1000 * 3600 * 24);
-            for (int i = 0; i < activities.size(); i++) {
-
-        	final List<Long> activityDurations = durations[i];
-        	final int size = activityDurations == null ? 0 : activityDurations.size();
-        	if (size > 0) { 
-        	    Collections.sort(activityDurations);
-
-        	    final String key = activities.get(i).getLocalizedName();
-        	    final double midPoint = 0.5 * size;
-        	    final BigDecimal mediana;
-        	    if (midPoint == (int) midPoint) {
-        		final double nextPoint = midPoint - 1;
-        		final Long value1 = activityDurations.get((int) midPoint);
-        		final Long value2 = activityDurations.get((int) nextPoint);
-        		final long sum = value1.longValue() + value2.longValue();
-        		mediana = new BigDecimal(sum).divide(new BigDecimal(2));
-        	    } else {
-        		final double index = midPoint - 0.5;
-        		mediana = new BigDecimal(activityDurations.get((int) index));
-        	    }
-//        	    final BigDecimal bigDecimal = new BigDecimal(accumulatedTimes[i] / count);
-        	    final BigDecimal value = mediana.divide(DAYS_CONST, 100, BigDecimal.ROUND_HALF_UP);
-        	    registerData(key, value);
-        	}
-
-
-//        	final int count = activityCount[i];
-//        	if (count > 0) {
-//        	    final String key = activities.get(i).getLocalizedName();
-//        	    final BigDecimal bigDecimal = new BigDecimal(accumulatedTimes[i] / count);
-//        	    final BigDecimal value = bigDecimal.divide(DAYS_CONST, 100, BigDecimal.ROUND_HALF_UP);
-//        	    registerData(key, value);
-//        	}
-            }
-        }
+    protected String getLabel(final String c) {
+	return c;
     }
 
     @Override
     protected void registerData(final String key, final Number number) {
-	int indexOfSpan = key.indexOf('<');
-	final String label = indexOfSpan > 0 ? key.substring(0, indexOfSpan) : key; 
-        super.registerData(label, number);
+	final BigDecimal value = ((BigDecimal) number).divide(DAYS_CONST, 100, BigDecimal.ROUND_HALF_UP);
+        super.registerData(key, value);
     }
 
     @Override
     protected void count(final PaymentProcess paymentProcess) {
 	if (paymentProcess.isSimplifiedProcedureProcess()) {
 	    final SimplifiedProcedureProcess simplifiedProcedureProcess = (SimplifiedProcedureProcess) paymentProcess;
-	    init(simplifiedProcedureProcess);
 
 	    final List<WorkflowLog> operationLogs = new ArrayList<WorkflowLog>(simplifiedProcedureProcess.getExecutionLogsSet());
-	    //final List<WorkflowLog> operationLogs = new ArrayList<WorkflowLog>(simplifiedProcedureProcess.getExecutionLogs(ActivityLog.class));
 	    Collections.sort(operationLogs, WorkflowLog.COMPARATOR_BY_WHEN);
 
 	    final List<ProcessState> processStates = new ArrayList<ProcessState>(simplifiedProcedureProcess.getProcessStatesSet());
@@ -165,37 +93,12 @@ public class SimplifiedProcedureProcessActivityTimeChartData extends PaymentProc
 		    if (workflowLog != null) {
 			final WorkflowActivity abstractActivity = getActivity(simplifiedProcedureProcess, (ActivityLog) workflowLog);
 			if (abstractActivity != null) {
-			    final int activityIndex = getActivityIndex(abstractActivity);
-
-			    if (durations[activityIndex] == null) {
-				durations[activityIndex] = new ArrayList<Long>();
-			    }
-			    durations[activityIndex].add(Long.valueOf(duration));
-
-//			    activityCount[activityIndex]++;
-//			    accumulatedTimes[activityIndex] += duration;
-
-			    order[activityIndex] = previousState.getAcquisitionProcessStateType().ordinal();
+			    final String key = abstractActivity.getLocalizedName();
+			    calculation.registerValue(key, new BigDecimal(duration));
 			}
 		    }
 		}
 	    }
-
-//	    for (int i = 1; i < operationLogs.size(); i++) {
-//		final WorkflowLog operationLog = operationLogs.get(i);
-//		final WorkflowLog previousLog = operationLogs.get(i - 1);
-//
-//		final long duration = calculateDuration(operationLog, previousLog);
-//
-//		final WorkflowActivity abstractActivity = getActivity(simplifiedProcedureProcess, (ActivityLog) operationLog);
-//		if (abstractActivity != null) {
-//		    final int activityIndex = getActivityIndex(abstractActivity);
-//
-//		    activityCount[activityIndex]++;
-//		    accumulatedTimes[activityIndex] += duration;
-//		}
-//	    }
-
 	}
     }
 
