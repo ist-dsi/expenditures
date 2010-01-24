@@ -45,7 +45,6 @@ import pt.ist.expenditureTrackingSystem.domain.statistics.ChartData;
 import pt.ist.expenditureTrackingSystem.domain.statistics.LogEntry;
 import pt.ist.expenditureTrackingSystem.domain.statistics.RefundProcessActivityLogStatistics;
 import pt.ist.expenditureTrackingSystem.domain.statistics.RefundProcessStatistics;
-import pt.ist.expenditureTrackingSystem.domain.statistics.SimplifiedProcessActivityLogStatistics;
 import pt.ist.expenditureTrackingSystem.domain.statistics.SimplifiedProcessStatistics;
 
 public class ChartGenerator {
@@ -122,24 +121,6 @@ public class ChartGenerator {
 	return dataset;
     }
 
-    private static CategoryDataset simplifiedProcessStatisticsActivityTimeChart(
-	    final SimplifiedProcessActivityLogStatistics simplifiedProcessActivityLogStatistics) {
-	final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-
-	char c = 'A';
-	for (final LogEntry logEntry : simplifiedProcessActivityLogStatistics.getLogEntries()) {
-	    final WorkflowActivity abstractActivity = logEntry.getAbstractActivity();
-	    if (isRelevanteActivity(abstractActivity)) {
-		final String name = abstractActivity.getLocalizedName();
-		int indexOfSpan = name.indexOf('<');
-		final String label = indexOfSpan > 0 ? name.substring(0, indexOfSpan) : name;
-		dataset.addValue(logEntry.getDays(), "" + c + " - " + label, Character.valueOf(c++));
-	    }
-	}
-
-	return dataset;
-    }
-
     private static CategoryDataset refundProcessStatisticsActivityTimeChart(
 	    final RefundProcessActivityLogStatistics refundProcessActivityLogStatistics) {
 	final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
@@ -179,13 +160,6 @@ public class ChartGenerator {
 	    throws RuntimeException, IOException {
 	final CategoryDataset dataset = simplifiedProcessStatisticsChart(simplifiedProcessStatistics);
 	return createBarChartImage(dataset, "Número de Processos");
-    }
-
-    public static byte[] simplifiedProcessStatisticsActivityTimeImage(
-	    final SimplifiedProcessActivityLogStatistics simplifiedProcessActivityLogStatistics) throws RuntimeException,
-	    IOException {
-	final CategoryDataset dataset = simplifiedProcessStatisticsActivityTimeChart(simplifiedProcessActivityLogStatistics);
-	return createBarChartImage(dataset, "Tempo Médio por Actividade (em Dias)");
     }
 
     public static byte[] refundProcessStatisticsImage(final RefundProcessStatistics refundProcessStatistics)

@@ -23,15 +23,15 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.statistics.AfterTheFactProcessTotalValueStatistics;
 import pt.ist.expenditureTrackingSystem.domain.statistics.ChartData;
 import pt.ist.expenditureTrackingSystem.domain.statistics.RefundProcessActivityLogStatistics;
 import pt.ist.expenditureTrackingSystem.domain.statistics.RefundProcessStatistics;
 import pt.ist.expenditureTrackingSystem.domain.statistics.RefundProcessTotalValueStatistics;
-import pt.ist.expenditureTrackingSystem.domain.statistics.SimplifiedProcedureProcessProcessStateCountChartData;
+import pt.ist.expenditureTrackingSystem.domain.statistics.SimplifiedProcedureProcessActivityTimeChartData;
+import pt.ist.expenditureTrackingSystem.domain.statistics.SimplifiedProcedureProcessStateCountChartData;
+import pt.ist.expenditureTrackingSystem.domain.statistics.SimplifiedProcedureProcessStateTimeAverageChartData;
 import pt.ist.expenditureTrackingSystem.domain.statistics.SimplifiedProcedureProcessStateTimeChartData;
-import pt.ist.expenditureTrackingSystem.domain.statistics.SimplifiedProcessActivityLogStatistics;
 import pt.ist.expenditureTrackingSystem.domain.statistics.SimplifiedProcessStatistics;
 import pt.ist.expenditureTrackingSystem.domain.statistics.SimplifiedProcessTotalValueStatistics;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
@@ -99,58 +99,14 @@ public class StatisticsAction extends ContextBaseAction {
 	return null;
     }
 
-    public ActionForward simplifiedProcessStatisticsTimeChart(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-	final String year = request.getParameter("year");
-
-	final SimplifiedProcessActivityLogStatistics simplifiedProcessActivityLogStatistics = SimplifiedProcessActivityLogStatistics
-		.create(new Integer(year));
-
-	OutputStream outputStream = null;
-	try {
-	    final byte[] image = ChartGenerator
-		    .simplifiedProcessStatisticsActivityTimeImage(simplifiedProcessActivityLogStatistics);
-	    outputStream = response.getOutputStream();
-	    response.setContentType("image/jpeg");
-	    outputStream.write(image);
-	    outputStream.flush();
-	} catch (final FileNotFoundException e) {
-	    e.printStackTrace();
-	    throw new Error(e);
-	} catch (final RuntimeException e) {
-	    e.printStackTrace();
-	    throw new Error(e);
-	} catch (final IOException e) {
-	    e.printStackTrace();
-	    throw new Error(e);
-	} finally {
-	    if (outputStream != null) {
-		try {
-		    outputStream.close();
-		} catch (final IOException e) {
-		    e.printStackTrace();
-		    throw new Error(e);
-		}
-		try {
-		    response.flushBuffer();
-		} catch (IOException e) {
-		    e.printStackTrace();
-		    throw new Error(e);
-		}
-	    }
-	}
-
-	return null;
-    }
-
     public ActionForward simplifiedProcessStatisticsStateChart(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final String year = request.getParameter("year");
 
 	long t1 = System.currentTimeMillis();
 	final PaymentProcessYear paymentProcessYear = PaymentProcessYear.getPaymentProcessYearByYear(Integer.valueOf(year));
-	final SimplifiedProcedureProcessProcessStateCountChartData chartData =
-	    	new SimplifiedProcedureProcessProcessStateCountChartData(paymentProcessYear);
+	final SimplifiedProcedureProcessStateCountChartData chartData =
+	    	new SimplifiedProcedureProcessStateCountChartData(paymentProcessYear);
 	chartData.calculateData();
 	return generateChart(response, chartData, t1);
     }
@@ -167,48 +123,28 @@ public class StatisticsAction extends ContextBaseAction {
 	return generateChart(response, chartData, t1);
     }
 
-    public ActionForward simplifiedProcessStatisticsActivityTimeChartForProcess(final ActionMapping mapping,
-	    final ActionForm form, final HttpServletRequest request, final HttpServletResponse response) {
-	final SimplifiedProcedureProcess simplifiedProcedureProcess = getDomainObject(request, "processId");
+    public ActionForward simplifiedProcessStatisticsStateTimeAverageChart(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final String year = request.getParameter("year");
 
-	final SimplifiedProcessActivityLogStatistics simplifiedProcessActivityLogStatistics = SimplifiedProcessActivityLogStatistics
-		.create(simplifiedProcedureProcess);
+	long t1 = System.currentTimeMillis();
+	final PaymentProcessYear paymentProcessYear = PaymentProcessYear.getPaymentProcessYearByYear(Integer.valueOf(year));
+	final SimplifiedProcedureProcessStateTimeAverageChartData chartData =
+	    	new SimplifiedProcedureProcessStateTimeAverageChartData(paymentProcessYear);
+	chartData.calculateData();
+	return generateChart(response, chartData, t1);
+    }
 
-	OutputStream outputStream = null;
-	try {
-	    final byte[] image = ChartGenerator
-		    .simplifiedProcessStatisticsActivityTimeImage(simplifiedProcessActivityLogStatistics);
-	    outputStream = response.getOutputStream();
-	    response.setContentType("image/jpeg");
-	    outputStream.write(image);
-	    outputStream.flush();
-	} catch (final FileNotFoundException e) {
-	    e.printStackTrace();
-	    throw new Error(e);
-	} catch (final RuntimeException e) {
-	    e.printStackTrace();
-	    throw new Error(e);
-	} catch (final IOException e) {
-	    e.printStackTrace();
-	    throw new Error(e);
-	} finally {
-	    if (outputStream != null) {
-		try {
-		    outputStream.close();
-		} catch (final IOException e) {
-		    e.printStackTrace();
-		    throw new Error(e);
-		}
-		try {
-		    response.flushBuffer();
-		} catch (IOException e) {
-		    e.printStackTrace();
-		    throw new Error(e);
-		}
-	    }
-	}
+    public ActionForward simplifiedProcessStatisticsActivityTimeChart(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final String year = request.getParameter("year");
 
-	return null;
+	long t1 = System.currentTimeMillis();
+	final PaymentProcessYear paymentProcessYear = PaymentProcessYear.getPaymentProcessYearByYear(Integer.valueOf(year));
+	final SimplifiedProcedureProcessActivityTimeChartData chartData =
+	    	new SimplifiedProcedureProcessActivityTimeChartData(paymentProcessYear);
+	chartData.calculateData();
+	return generateChart(response, chartData, t1);
     }
 
     public ActionForward showRefundProcessStatistics(final ActionMapping mapping, final ActionForm form,

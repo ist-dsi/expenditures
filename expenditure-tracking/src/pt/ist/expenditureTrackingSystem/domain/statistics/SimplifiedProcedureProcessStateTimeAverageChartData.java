@@ -1,6 +1,7 @@
 package pt.ist.expenditureTrackingSystem.domain.statistics;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -16,21 +17,21 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 
-public class SimplifiedProcedureProcessStateTimeChartData extends PaymentProcessChartData {
+public class SimplifiedProcedureProcessStateTimeAverageChartData extends PaymentProcessChartData {
 
-    private List<Long>[] durations = null;
+    private long[] durations = null;
+    private int[] counts = null;
 
-    public SimplifiedProcedureProcessStateTimeChartData(PaymentProcessYear paymentProcessYear) {
+    public SimplifiedProcedureProcessStateTimeAverageChartData(PaymentProcessYear paymentProcessYear) {
 	super(paymentProcessYear);
-	setTitle(BundleUtil.getStringFromResourceBundle("resources.AcquisitionResources", "label.process.state.times.median"));
+	setTitle(BundleUtil.getStringFromResourceBundle("resources.AcquisitionResources", "label.process.state.times.average"));
     }
 
     private void init(final SimplifiedProcedureProcess simplifiedProcedureProcess) {
 	if (durations == null) {
-	    durations = durations = new List[AcquisitionProcessStateType.values().length];
-	    for (int i = 0; i < durations.length; i++) {
-		durations[i] = new ArrayList<Long>();
-	    }
+	    final int size = AcquisitionProcessStateType.values().length;
+	    durations = durations = new long[size];
+	    counts = counts= new int[size];
 	}	
     }
 
@@ -41,25 +42,12 @@ public class SimplifiedProcedureProcessStateTimeChartData extends PaymentProcess
         if (durations != null) {
             final BigDecimal DAYS_CONST = new BigDecimal(1000 * 3600 * 24);
             for (int i = 0; i < durations.length; i++) {
-        	final List<Long> stateDurations = durations[i];
-        	final int size = stateDurations == null ? 0 : stateDurations.size();
-        	if (size > 0) { 
+        	final int count = counts[i];
+        	if (count > 0) {
+        	    final long duration = durations[i];
+        	    final BigDecimal average = new BigDecimal(duration).divide(new BigDecimal(count), RoundingMode.HALF_EVEN);
         	    final String key = AcquisitionProcessStateType.values()[i].getLocalizedName();
-
-        	    Collections.sort(stateDurations);
-        	    final double midPoint = 0.5 * size;
-        	    final BigDecimal mediana;
-        	    if (midPoint == (int) midPoint) {
-        		final double nextPoint = midPoint - 1;
-        		final Long value1 = stateDurations.get((int) midPoint);
-        		final Long value2 = stateDurations.get((int) nextPoint);
-        		final long sum = value1.longValue() + value2.longValue();
-        		mediana = new BigDecimal(sum).divide(new BigDecimal(2));
-        	    } else {
-        		final double index = midPoint - 0.5;
-        		mediana = new BigDecimal(stateDurations.get((int) index));
-        	    }
-        	    final BigDecimal value = mediana.divide(DAYS_CONST, 100, BigDecimal.ROUND_HALF_UP);
+        	    final BigDecimal value = average.divide(DAYS_CONST, 100, BigDecimal.ROUND_HALF_UP);
         	    registerData(key, value);
         	}
             }
@@ -85,7 +73,8 @@ public class SimplifiedProcedureProcessStateTimeChartData extends PaymentProcess
 		final AcquisitionProcessStateType acquisitionProcessStateType = previousState.getAcquisitionProcessStateType();
 		final int index = acquisitionProcessStateType.ordinal();
 
-		durations[index].add(new Long(duration));
+		durations[index] += duration;
+		counts[index]++;
 	    }
 	}
     }

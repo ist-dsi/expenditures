@@ -11,7 +11,7 @@ public class ChartData {
     private String title;
 
     protected void registerData(final String key, final Number number) {
-	dataset.addValue(number, "" + c + " - " + key, Character.valueOf(c++));
+	dataset.addValue(number, "" + c + " - " + key, Character.valueOf(nextChar()));
     }
 
     protected void setTitle(String title) {
@@ -24,6 +24,10 @@ public class ChartData {
 
     public String getTitle() {
         return title;
+    }
+
+    protected char nextChar() {
+	return c == 'Z' ? c = 'a' : c++;
     }
 
 }

@@ -4,18 +4,17 @@ import java.util.SortedMap;
 import java.util.Map.Entry;
 
 import myorg.util.BundleUtil;
-
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.util.AcquisitionProcessStateTypeCounter;
 
-public class SimplifiedProcedureProcessProcessStateCountChartData extends PaymentProcessChartData {
+public class SimplifiedProcedureProcessStateCountChartData extends PaymentProcessChartData {
 
     protected final AcquisitionProcessStateTypeCounter processCounter = new AcquisitionProcessStateTypeCounter();
 
-    public SimplifiedProcedureProcessProcessStateCountChartData(PaymentProcessYear paymentProcessYear) {
+    public SimplifiedProcedureProcessStateCountChartData(PaymentProcessYear paymentProcessYear) {
 	super(paymentProcessYear);
 	setTitle(BundleUtil.getStringFromResourceBundle("resources.AcquisitionResources", "label.number.processes"));
     }

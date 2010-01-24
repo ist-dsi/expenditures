@@ -22,10 +22,13 @@
 	<html:img action="statistics.do?method=simplifiedProcessStatisticsStateChart" paramId="year" paramName="yearBean" paramProperty="year"/>
 	<br/>
 	<br/>
-	<html:img action="statistics.do?method=simplifiedProcessStatisticsTimeChart" paramId="year" paramName="yearBean" paramProperty="year"/>
-	<br/>
-	<br/>
 	<html:img action="statistics.do?method=simplifiedProcessStatisticsStateTimeChart" paramId="year" paramName="yearBean" paramProperty="year"/>
+	<br/>
+	<br/>
+	<html:img action="statistics.do?method=simplifiedProcessStatisticsStateTimeAverageChart" paramId="year" paramName="yearBean" paramProperty="year"/>
+	<br/>
+	<br/>
+	<html:img action="statistics.do?method=simplifiedProcessStatisticsActivityTimeChart" paramId="year" paramName="yearBean" paramProperty="year"/>
 </logic:present>
 <logic:notPresent name="simplifiedProcessStatistics">
 	<bean:message key="label.statistics.not.available" bundle="STATISTICS_RESOURCES"/>
