@@ -13,7 +13,9 @@ public class TakenProcessesWidget extends WidgetController {
 
     @Override
     public void doView(WidgetRequest request) {
-	List<PaymentProcess> takenProcesses = Person.getLoggedPerson().getProcesses(PaymentProcess.class);
+	Person loggedPerson = Person.getLoggedPerson();
+	List<PaymentProcess> takenProcesses = loggedPerson.getProcesses(PaymentProcess.class);
 	request.setAttribute("takenProcesses", takenProcesses.subList(0, Math.min(10, takenProcesses.size())));
+	request.setAttribute("person", loggedPerson);
     }
 }
