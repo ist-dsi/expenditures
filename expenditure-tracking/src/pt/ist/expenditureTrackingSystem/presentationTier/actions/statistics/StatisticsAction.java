@@ -26,6 +26,9 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess
 import pt.ist.expenditureTrackingSystem.domain.statistics.AfterTheFactProcessTotalValueStatistics;
 import pt.ist.expenditureTrackingSystem.domain.statistics.ChartData;
 import pt.ist.expenditureTrackingSystem.domain.statistics.RefundProcessActivityLogStatistics;
+import pt.ist.expenditureTrackingSystem.domain.statistics.RefundProcessStateCountChartData;
+import pt.ist.expenditureTrackingSystem.domain.statistics.RefundProcessStateTimeAverageChartData;
+import pt.ist.expenditureTrackingSystem.domain.statistics.RefundProcessStateTimeChartData;
 import pt.ist.expenditureTrackingSystem.domain.statistics.RefundProcessStatistics;
 import pt.ist.expenditureTrackingSystem.domain.statistics.RefundProcessTotalValueStatistics;
 import pt.ist.expenditureTrackingSystem.domain.statistics.SimplifiedProcedureProcessActivityTimeChartData;
@@ -165,85 +168,33 @@ public class StatisticsAction extends ContextBaseAction {
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final String year = request.getParameter("year");
 
-	final RefundProcessStatistics refundProcessStatistics = RefundProcessStatistics.create(new Integer(year));
-
-	OutputStream outputStream = null;
-	try {
-	    final byte[] image = ChartGenerator.refundProcessStatisticsImage(refundProcessStatistics);
-	    outputStream = response.getOutputStream();
-	    response.setContentType("image/jpeg");
-	    outputStream.write(image);
-	    outputStream.flush();
-	} catch (final FileNotFoundException e) {
-	    e.printStackTrace();
-	    throw new Error(e);
-	} catch (final RuntimeException e) {
-	    e.printStackTrace();
-	    throw new Error(e);
-	} catch (final IOException e) {
-	    e.printStackTrace();
-	    throw new Error(e);
-	} finally {
-	    if (outputStream != null) {
-		try {
-		    outputStream.close();
-		} catch (final IOException e) {
-		    e.printStackTrace();
-		    throw new Error(e);
-		}
-		try {
-		    response.flushBuffer();
-		} catch (IOException e) {
-		    e.printStackTrace();
-		    throw new Error(e);
-		}
-	    }
-	}
-
-	return null;
+	long t1 = System.currentTimeMillis();
+	final PaymentProcessYear paymentProcessYear = PaymentProcessYear.getPaymentProcessYearByYear(Integer.valueOf(year));
+	final RefundProcessStateCountChartData chartData = new RefundProcessStateCountChartData(paymentProcessYear);
+	chartData.calculateData();
+	return generateChart(response, chartData, t1);
     }
 
-    public ActionForward refundProcessStatisticsTimeChart(final ActionMapping mapping, final ActionForm form,
+    public ActionForward refundProcessStatisticsStateTimeChart(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final String year = request.getParameter("year");
 
-	final RefundProcessActivityLogStatistics refundProcessActivityLogStatistics = RefundProcessActivityLogStatistics
-		.create(new Integer(year));
+	long t1 = System.currentTimeMillis();
+	final PaymentProcessYear paymentProcessYear = PaymentProcessYear.getPaymentProcessYearByYear(Integer.valueOf(year));
+	final RefundProcessStateTimeChartData chartData = new RefundProcessStateTimeChartData(paymentProcessYear);
+	chartData.calculateData();
+	return generateChart(response, chartData, t1);
+    }
 
-	OutputStream outputStream = null;
-	try {
-	    final byte[] image = ChartGenerator.refundProcessStatisticsActivityTimeImage(refundProcessActivityLogStatistics);
-	    outputStream = response.getOutputStream();
-	    response.setContentType("image/jpeg");
-	    outputStream.write(image);
-	    outputStream.flush();
-	} catch (final FileNotFoundException e) {
-	    e.printStackTrace();
-	    throw new Error(e);
-	} catch (final RuntimeException e) {
-	    e.printStackTrace();
-	    throw new Error(e);
-	} catch (final IOException e) {
-	    e.printStackTrace();
-	    throw new Error(e);
-	} finally {
-	    if (outputStream != null) {
-		try {
-		    outputStream.close();
-		} catch (final IOException e) {
-		    e.printStackTrace();
-		    throw new Error(e);
-		}
-		try {
-		    response.flushBuffer();
-		} catch (IOException e) {
-		    e.printStackTrace();
-		    throw new Error(e);
-		}
-	    }
-	}
+    public ActionForward refundProcessStatisticsStateTimeAverageChart(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final String year = request.getParameter("year");
 
-	return null;
+	long t1 = System.currentTimeMillis();
+	final PaymentProcessYear paymentProcessYear = PaymentProcessYear.getPaymentProcessYearByYear(Integer.valueOf(year));
+	final RefundProcessStateTimeAverageChartData chartData = new RefundProcessStateTimeAverageChartData(paymentProcessYear);
+	chartData.calculateData();
+	return generateChart(response, chartData, t1);
     }
 
     public ActionForward refundProcessStatisticsActivityTimeChartForProcess(final ActionMapping mapping, final ActionForm form,

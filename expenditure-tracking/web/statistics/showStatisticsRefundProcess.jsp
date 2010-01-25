@@ -22,7 +22,10 @@
 	<html:img action="statistics.do?method=refundProcessStatisticsChart" paramId="year" paramName="yearBean" paramProperty="year"/>
 	<br/>
 	<br/>
-	<html:img action="statistics.do?method=refundProcessStatisticsTimeChart" paramId="year" paramName="yearBean" paramProperty="year"/>
+	<html:img action="statistics.do?method=refundProcessStatisticsStateTimeChart" paramId="year" paramName="yearBean" paramProperty="year"/>
+	<br/>
+	<br/>
+	<html:img action="statistics.do?method=refundProcessStatisticsStateTimeAverageChart" paramId="year" paramName="yearBean" paramProperty="year"/>
 </logic:present>
 <logic:notPresent name="refundProcessStatistics">
 	<bean:message key="label.statistics.not.available" bundle="STATISTICS_RESOURCES"/>
