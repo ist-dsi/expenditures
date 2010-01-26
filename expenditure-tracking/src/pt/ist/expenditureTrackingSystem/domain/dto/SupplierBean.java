@@ -3,11 +3,10 @@ package pt.ist.expenditureTrackingSystem.domain.dto;
 import java.io.Serializable;
 
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
-import pt.ist.fenixWebFramework.util.DomainReference;
 
 public class SupplierBean implements Serializable {
 
-    private DomainReference<Supplier> supplier;
+    private Supplier supplier;
 
     public SupplierBean() {
     }
@@ -17,11 +16,11 @@ public class SupplierBean implements Serializable {
     }
 
     public Supplier getSupplier() {
-        return supplier == null ? null : supplier.getObject();
+	return supplier;
     }
 
     public void setSupplier(final Supplier supplier) {
-        this.supplier = supplier == null ? null : new DomainReference<Supplier>(supplier);
+	this.supplier = supplier;
     }
 
 }

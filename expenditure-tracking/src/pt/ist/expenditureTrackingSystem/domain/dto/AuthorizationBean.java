@@ -9,13 +9,12 @@ import org.joda.time.LocalDate;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
-import pt.ist.fenixWebFramework.util.DomainReference;
 
 public class AuthorizationBean implements Serializable {
 
-    private DomainReference<Authorization> authorization;
-    private DomainReference<Unit> unit;
-    private DomainReference<Person> person;
+    private Authorization authorization;
+    private Unit unit;
+    private Person person;
     private LocalDate startDate;
     private LocalDate endDate;
     private Boolean canDelegate;
@@ -37,27 +36,27 @@ public class AuthorizationBean implements Serializable {
     }
 
     public Authorization getAuthorization() {
-	return authorization.getObject();
+	return authorization;
     }
 
     public void setAuthorization(Authorization authorization) {
-	this.authorization = new DomainReference<Authorization>(authorization);
+	this.authorization = authorization;
     }
 
     public Person getPerson() {
-	return person.getObject();
+	return person;
     }
 
     public void setPerson(Person person) {
-	this.person = new DomainReference<Person>(person);
+	this.person = person;
     }
 
     public Unit getUnit() {
-	return unit.getObject();
+	return unit;
     }
 
     public void setUnit(Unit unit) {
-	this.unit = new DomainReference<Unit>(unit);
+	this.unit = unit;
     }
 
     public Boolean getCanDelegate() {

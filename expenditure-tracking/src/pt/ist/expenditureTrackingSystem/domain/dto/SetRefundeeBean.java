@@ -4,12 +4,11 @@ import java.io.Serializable;
 
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
-import pt.ist.fenixWebFramework.util.DomainReference;
 
 public class SetRefundeeBean implements Serializable {
 
-    private DomainReference<Person> refundee;
-    private DomainReference<AcquisitionProcess> acquisitionProcess;
+    private Person refundee;
+    private AcquisitionProcess acquisitionProcess;
 
     public SetRefundeeBean(final Person refundee) {
 	setRefundee(refundee);
@@ -21,19 +20,19 @@ public class SetRefundeeBean implements Serializable {
     }
 
     public Person getRefundee() {
-        return refundee == null ? null : refundee.getObject();
+	return refundee;
     }
 
     public void setRefundee(final Person refundee) {
-        this.refundee = refundee == null ? null : new DomainReference<Person>(refundee);
+	this.refundee = refundee;
     }
 
     public AcquisitionProcess getAcquisitionProcess() {
-        return acquisitionProcess == null ? null : acquisitionProcess.getObject();
+	return acquisitionProcess;
     }
 
     public void setAcquisitionProcess(final AcquisitionProcess acquisitionProcess) {
-        this.acquisitionProcess = acquisitionProcess == null ? null : new DomainReference<AcquisitionProcess>(acquisitionProcess);
+	this.acquisitionProcess = acquisitionProcess;
     }
 
 }

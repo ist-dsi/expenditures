@@ -4,11 +4,10 @@ import java.io.Serializable;
 
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
-import pt.ist.fenixWebFramework.util.DomainReference;
 
 public class ChangeFinancerAccountingUnitBean implements Serializable {
-    private DomainReference<Financer> financer;
-    private DomainReference<AccountingUnit> accountingUnit;
+    private Financer financer;
+    private AccountingUnit accountingUnit;
 
     public ChangeFinancerAccountingUnitBean(final Financer financer, final AccountingUnit accountingUnit) {
 	setFinancer(financer);
@@ -16,19 +15,19 @@ public class ChangeFinancerAccountingUnitBean implements Serializable {
     }
 
     public void setFinancer(Financer financer) {
-	this.financer = new DomainReference<Financer>(financer);
+	this.financer = financer;
     }
 
     public Financer getFinancer() {
-	return this.financer.getObject();
+	return this.financer;
     }
 
     public void setAccountingUnit(AccountingUnit accountingUnit) {
-	this.accountingUnit = new DomainReference<AccountingUnit>(accountingUnit);
+	this.accountingUnit = accountingUnit;
     }
 
     public AccountingUnit getAccountingUnit() {
-	return this.accountingUnit.getObject();
+	return this.accountingUnit;
     }
 
 }

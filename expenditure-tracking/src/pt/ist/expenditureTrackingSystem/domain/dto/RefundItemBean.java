@@ -5,12 +5,11 @@ import java.io.Serializable;
 import myorg.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundItem;
-import pt.ist.fenixWebFramework.util.DomainReference;
 
 public class RefundItemBean implements Serializable {
 
     private Money valueEstimation;
-    private DomainReference<CPVReference> reference;
+    private CPVReference reference;
     private String description;
 
     public RefundItemBean() {
@@ -32,11 +31,11 @@ public class RefundItemBean implements Serializable {
     }
 
     public CPVReference getCPVReference() {
-	return reference.getObject();
+	return reference;
     }
 
     public void setCPVReference(CPVReference reference) {
-	this.reference = new DomainReference<CPVReference>(reference);
+	this.reference = reference;
     }
 
     public String getDescription() {

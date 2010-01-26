@@ -7,60 +7,59 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.Acquisition;
 import pt.ist.expenditureTrackingSystem.domain.announcements.Announcement;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
-import pt.ist.fenixWebFramework.util.DomainReference;
 
 public class AnnouncementBean implements Serializable {
 
-    private DomainReference<Announcement> announcement;
+    private Announcement announcement;
 
     private String description;
     private Money totalPrice;
     private Integer executionDays;
     private String executionAddress;
     private String choiceCriteria;
-    private DomainReference<Unit> buyingUnit;
-    private DomainReference<Unit> requestingUnit;
-    private DomainReference<Supplier> supplier;
-    private DomainReference<Acquisition> acquisition;
-    
+    private Unit buyingUnit;
+    private Unit requestingUnit;
+    private Supplier supplier;
+    private Acquisition acquisition;
+
     public Unit getBuyingUnit() {
-	return (buyingUnit != null ? buyingUnit.getObject() : null);
+	return buyingUnit;
     }
-    
+
     public void setBuyingUnit(Unit buyingUnit) {
-	this.buyingUnit = new DomainReference<Unit>(buyingUnit);
+	this.buyingUnit = buyingUnit;
     }
 
     public Unit getRequestingUnit() {
-	return (requestingUnit != null ? requestingUnit.getObject() : null);
+	return requestingUnit;
     }
 
     public void setRequestingUnit(Unit requestingUnit) {
-	this.requestingUnit = new DomainReference<Unit>(requestingUnit);
+	this.requestingUnit = requestingUnit;
     }
 
     public Supplier getSupplier() {
-	return (supplier != null ? supplier.getObject() : null);
+	return supplier;
     }
 
     public void setSupplier(Supplier supplier) {
-	this.supplier = new DomainReference<Supplier>(supplier);
+	this.supplier = supplier;
     }
 
     public Acquisition getAcqusition() {
-	return (acquisition != null ? acquisition.getObject() : null);
+	return acquisition;
     }
 
     public void setAcquisition(Acquisition acquisition) {
-	this.acquisition = new DomainReference<Acquisition>(acquisition);
+	this.acquisition = acquisition;
     }
 
     public Announcement getAnnouncement() {
-	return (announcement != null ? announcement.getObject() : null);
+	return announcement;
     }
 
     public void setAnnouncement(Announcement announcement) {
-	this.announcement = new DomainReference<Announcement>(announcement);
+	this.announcement = announcement;
     }
 
     public String getDescription() {

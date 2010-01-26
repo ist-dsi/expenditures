@@ -22,30 +22,29 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
-import pt.ist.fenixWebFramework.util.DomainReference;
 
 public class SearchPaymentProcess extends Search<PaymentProcess> {
 
-    private DomainReference<SavedSearch> savedSearch;
+    private SavedSearch savedSearch;
     private Class<? extends PaymentProcess> searchClass;
     private String processId;
     private String requestDocumentId;
-    private DomainReference<Person> requestingPerson;
-    private DomainReference<Person> taker;
-    private DomainReference<Unit> requestingUnit;
-    private DomainReference<Unit> payingUnit;
+    private Person requestingPerson;
+    private Person taker;
+    private Unit requestingUnit;
+    private Unit payingUnit;
     private AcquisitionProcessStateType acquisitionProcessStateType;
     private RefundProcessStateType refundProcessStateType;
-    private DomainReference<Supplier> supplier;
+    private Supplier supplier;
     private String proposalId;
-    private DomainReference<AccountingUnit> accountingUnit;
+    private AccountingUnit accountingUnit;
     private Boolean hasAvailableAndAccessibleActivityForUser = Boolean.TRUE;
     private Boolean responsibleUnitSetOnly = Boolean.FALSE;
     private Boolean showOnlyAcquisitionsExcludedFromSupplierLimit = Boolean.FALSE;
     private Boolean showOnlyAcquisitionsWithAdditionalCosts = Boolean.FALSE;
     private Boolean showOnlyWithUnreadComments = Boolean.FALSE;
     private String refundeeName;
-    private DomainReference<PaymentProcessYear> year;
+    private PaymentProcessYear year;
     private Boolean showPriorityOnly = Boolean.FALSE;
 
     private final static Map<Class<? extends PaymentProcess>, SearchPredicate> predicateMap = new HashMap<Class<? extends PaymentProcess>, SearchPredicate>();
@@ -158,27 +157,27 @@ public class SearchPaymentProcess extends Search<PaymentProcess> {
     }
 
     public Person getRequestingPerson() {
-	return requestingPerson.getObject();
+	return requestingPerson;
     }
 
     public void setRequestingPerson(Person requestingPerson) {
-	this.requestingPerson = new DomainReference<Person>(requestingPerson);
+	this.requestingPerson = requestingPerson;
     }
 
     public Unit getRequestingUnit() {
-	return requestingUnit.getObject();
+	return requestingUnit;
     }
 
     public void setRequestingUnit(Unit requestingUnit) {
-	this.requestingUnit = new DomainReference<Unit>(requestingUnit);
+	this.requestingUnit = requestingUnit;
     }
 
     public Unit getPayingUnit() {
-	return payingUnit.getObject();
+	return payingUnit;
     }
 
     public void setPayingUnit(final Unit payingUnit) {
-	this.payingUnit = new DomainReference<Unit>(payingUnit);
+	this.payingUnit = payingUnit;
     }
 
     public AcquisitionProcessStateType getAcquisitionProcessStateType() {
@@ -198,11 +197,11 @@ public class SearchPaymentProcess extends Search<PaymentProcess> {
     }
 
     public Supplier getSupplier() {
-	return supplier.getObject();
+	return supplier;
     }
 
     public void setSupplier(Supplier supplier) {
-	this.supplier = new DomainReference<Supplier>(supplier);
+	this.supplier = supplier;
     }
 
     public String getProposalId() {
@@ -214,11 +213,11 @@ public class SearchPaymentProcess extends Search<PaymentProcess> {
     }
 
     public AccountingUnit getAccountingUnit() {
-	return accountingUnit.getObject();
+	return accountingUnit;
     }
 
     public void setAccountingUnit(AccountingUnit accountingUnit) {
-	this.accountingUnit = new DomainReference<AccountingUnit>(accountingUnit);
+	this.accountingUnit = accountingUnit;
     }
 
     public Boolean getHasAvailableAndAccessibleActivityForUser() {
@@ -270,27 +269,27 @@ public class SearchPaymentProcess extends Search<PaymentProcess> {
     }
 
     public SavedSearch getSavedSearch() {
-	return savedSearch.getObject();
+	return savedSearch;
     }
 
     public void setSavedSearch(SavedSearch savedSearch) {
-	this.savedSearch = new DomainReference<SavedSearch>(savedSearch);
+	this.savedSearch = savedSearch;
     }
 
     public void setPaymentProcessYear(PaymentProcessYear year) {
-	this.year = new DomainReference<PaymentProcessYear>(year);
+	this.year = year;
     }
 
     public PaymentProcessYear getPaymentProcessYear() {
-	return this.year.getObject();
+	return this.year;
     }
 
     public void setTaker(Person taker) {
-	this.taker = new DomainReference<Person>(taker);
+	this.taker = taker;
     }
 
     public Person getTaker() {
-	return taker.getObject();
+	return taker;
     }
 
     public void setShowOnlyWithUnreadComments(Boolean showOnlyWithUnreadComments) {

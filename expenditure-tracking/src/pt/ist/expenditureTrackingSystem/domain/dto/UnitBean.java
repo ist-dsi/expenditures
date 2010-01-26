@@ -3,11 +3,10 @@ package pt.ist.expenditureTrackingSystem.domain.dto;
 import java.io.Serializable;
 
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
-import pt.ist.fenixWebFramework.util.DomainReference;
 
 public class UnitBean implements Serializable {
 
-    private DomainReference<Unit> unit;
+    private Unit unit;
 
     public UnitBean() {
     }
@@ -17,11 +16,11 @@ public class UnitBean implements Serializable {
     }
 
     public Unit getUnit() {
-        return unit == null ? null : unit.getObject();
+	return unit;
     }
 
     public void setUnit(final Unit unit) {
-        this.unit = unit == null ? null : new DomainReference<Unit>(unit);
+	this.unit = unit;
     }
 
 }

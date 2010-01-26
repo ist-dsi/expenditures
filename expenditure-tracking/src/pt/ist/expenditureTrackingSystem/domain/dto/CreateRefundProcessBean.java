@@ -3,18 +3,16 @@ package pt.ist.expenditureTrackingSystem.domain.dto;
 import java.io.Serializable;
 
 import module.mission.domain.MissionProcess;
-
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
-import pt.ist.fenixWebFramework.util.DomainReference;
 
 public class CreateRefundProcessBean implements Serializable {
 
     private boolean isForMission = false;
     private MissionProcess missionProcess;
-    private DomainReference<Person> requestor;
-    private DomainReference<Person> refundee;
-    private DomainReference<Unit> requestingUnit;
+    private Person requestor;
+    private Person refundee;
+    private Unit requestingUnit;
     private boolean requestUnitPayingUnit = true;
     private boolean externalPerson = false;
     private String refundeeName;
@@ -25,27 +23,27 @@ public class CreateRefundProcessBean implements Serializable {
     }
 
     public Person getRequestor() {
-	return requestor.getObject();
+	return requestor;
     }
 
     public void setRequestor(Person requestor) {
-	this.requestor = requestor == null ? null : new DomainReference<Person>(requestor);
+	this.requestor = requestor;
     }
 
     public Person getRefundee() {
-	return refundee == null ? null : refundee.getObject();
+	return refundee;
     }
 
     public void setRefundee(Person refundee) {
-	this.refundee = refundee == null ? null : new DomainReference<Person>(refundee);
+	this.refundee = refundee;
     }
 
     public Unit getRequestingUnit() {
-	return requestingUnit == null ? null : requestingUnit.getObject();
+	return requestingUnit;
     }
 
     public void setRequestingUnit(Unit requestingUnit) {
-	this.requestingUnit = requestingUnit == null ? null : new DomainReference<Unit>(requestingUnit);
+	this.requestingUnit = requestingUnit;
     }
 
     public boolean isRequestUnitPayingUnit() {
@@ -81,27 +79,27 @@ public class CreateRefundProcessBean implements Serializable {
     }
 
     public boolean isForMission() {
-        return isForMission;
+	return isForMission;
     }
 
     public boolean getIsForMission() {
-        return isForMission;
+	return isForMission;
     }
 
     public void setIsForMission(boolean isForMission) {
-        this.isForMission = isForMission;
+	this.isForMission = isForMission;
     }
 
     public void setForMission(boolean isForMission) {
-        this.isForMission = isForMission;
+	this.isForMission = isForMission;
     }
 
     public MissionProcess getMissionProcess() {
-        return missionProcess;
+	return missionProcess;
     }
 
     public void setMissionProcess(MissionProcess missionProcess) {
-        this.missionProcess = missionProcess;
+	this.missionProcess = missionProcess;
     }
 
 }

@@ -14,7 +14,6 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.Acquisi
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionType;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
-import pt.ist.fenixWebFramework.util.DomainReference;
 
 public class EditAfterTheFactProcessActivityInformation extends ActivityInformation<AfterTheFactAcquisitionProcess> {
 
@@ -99,7 +98,7 @@ public class EditAfterTheFactProcessActivityInformation extends ActivityInformat
 	}
     }
 
-    private AfterTheFactAcquisitionProcessBean bean;
+    private final AfterTheFactAcquisitionProcessBean bean;
 
     public EditAfterTheFactProcessActivityInformation(AfterTheFactAcquisitionProcess afterTheFactAcquisitionProcess,
 	    WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity) {

@@ -6,12 +6,11 @@ import myorg.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.UnitItem;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
-import pt.ist.fenixWebFramework.util.DomainReference;
 
 public class UnitItemBean implements Serializable {
 
-    private DomainReference<Unit> unit;
-    private DomainReference<RequestItem> item;
+    private Unit unit;
+    private RequestItem item;
     private Money shareValue;
     private Money realShareValue;
     private Boolean approved;
@@ -40,19 +39,19 @@ public class UnitItemBean implements Serializable {
     }
 
     public Unit getUnit() {
-	return unit.getObject();
+	return unit;
     }
 
     public void setUnit(Unit unit) {
-	this.unit = new DomainReference<Unit>(unit);
+	this.unit = unit;
     }
 
     public RequestItem getItem() {
-	return item.getObject();
+	return item;
     }
 
     public void setItem(RequestItem item) {
-	this.item = new DomainReference<RequestItem>(item);
+	this.item = item;
     }
 
     public Money getShareValue() {

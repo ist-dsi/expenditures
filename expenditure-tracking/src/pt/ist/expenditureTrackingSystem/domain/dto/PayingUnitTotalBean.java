@@ -6,11 +6,10 @@ import myorg.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Acquisition;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
-import pt.ist.fenixWebFramework.util.DomainReference;
 
 public class PayingUnitTotalBean implements Serializable {
 
-    DomainReference<Financer> financer;
+    Financer financer;
     Money amount;
 
     public PayingUnitTotalBean(Financer financer) {
@@ -23,11 +22,11 @@ public class PayingUnitTotalBean implements Serializable {
     }
 
     public Financer getFinancer() {
-	return financer.getObject();
+	return financer;
     }
 
     public void setFinancer(Financer financer) {
-	this.financer = new DomainReference<Financer>(financer);
+	this.financer = financer;
     }
 
     public Acquisition getRequest() {

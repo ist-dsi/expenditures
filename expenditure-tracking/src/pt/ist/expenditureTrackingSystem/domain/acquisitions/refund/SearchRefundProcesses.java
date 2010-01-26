@@ -13,15 +13,14 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
-import pt.ist.fenixWebFramework.util.DomainReference;
 
 public class SearchRefundProcesses extends Search<RefundProcess> {
 
     private String processId;
-    private DomainReference<Person> requestingPerson;
-    private DomainReference<Unit> requestingUnit;
+    private Person requestingPerson;
+    private Unit requestingUnit;
     private RefundProcessStateType refundProcessStateType;
-    private DomainReference<AccountingUnit> accountingUnit;
+    private AccountingUnit accountingUnit;
     private Boolean hasAvailableAndAccessibleActivityForUser;
     private Boolean responsibleUnitSetOnly = Boolean.FALSE;
     private String refundeeName;
@@ -139,15 +138,15 @@ public class SearchRefundProcesses extends Search<RefundProcess> {
     }
 
     public Person getRequestingPerson() {
-	return requestingPerson == null ? null : requestingPerson.getObject();
+	return requestingPerson;
     }
 
     public void setRequestingPerson(final Person requestingPerson) {
-	this.requestingPerson = requestingPerson == null ? null : new DomainReference<Person>(requestingPerson);
+	this.requestingPerson = requestingPerson;
     }
 
     public Unit getRequestingUnit() {
-	return requestingUnit == null ? null : requestingUnit.getObject();
+	return requestingUnit;
     }
 
     public String getProcessId() {
@@ -167,11 +166,11 @@ public class SearchRefundProcesses extends Search<RefundProcess> {
     }
 
     public AccountingUnit getAccountingUnit() {
-	return accountingUnit == null ? null : accountingUnit.getObject();
+	return accountingUnit;
     }
 
     public void setAccountingUnit(final AccountingUnit accountingUnit) {
-	this.accountingUnit = accountingUnit == null ? null : new DomainReference<AccountingUnit>(accountingUnit);
+	this.accountingUnit = accountingUnit;
     }
 
     public Boolean getHasAvailableAndAccessibleActivityForUser() {
@@ -191,7 +190,7 @@ public class SearchRefundProcesses extends Search<RefundProcess> {
     }
 
     public void setRequestingUnit(final Unit requestingUnit) {
-	this.requestingUnit = requestingUnit == null ? null : new DomainReference<Unit>(requestingUnit);
+	this.requestingUnit = requestingUnit;
     }
 
     public Class<RefundProcess> getSearchingClass() {

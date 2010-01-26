@@ -3,26 +3,25 @@ package pt.ist.expenditureTrackingSystem.domain.dto;
 import java.io.Serializable;
 
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
-import pt.ist.fenixWebFramework.util.DomainReference;
 
 public class FundAllocationBean implements Serializable {
 
-    private DomainReference<Financer> financer;
+    private Financer financer;
     private String fundAllocationId;
     private String effectiveFundAllocationId;
     private boolean allowedToAddNewFund;
-    
+
     public FundAllocationBean(final Financer financer) {
 	setFinancer(financer);
 	setAllowedToAddNewFund(true);
     }
 
     public void setFinancer(Financer financer) {
-	this.financer = new DomainReference<Financer>(financer);
+	this.financer = financer;
     }
 
     public Financer getFinancer() {
-	return this.financer.getObject();
+	return this.financer;
     }
 
     public String getFundAllocationId() {
@@ -42,11 +41,11 @@ public class FundAllocationBean implements Serializable {
     }
 
     public boolean isAllowedToAddNewFund() {
-        return allowedToAddNewFund;
+	return allowedToAddNewFund;
     }
 
     public void setAllowedToAddNewFund(boolean allowedToAddNewFund) {
-        this.allowedToAddNewFund = allowedToAddNewFund;
+	this.allowedToAddNewFund = allowedToAddNewFund;
     }
 
 }

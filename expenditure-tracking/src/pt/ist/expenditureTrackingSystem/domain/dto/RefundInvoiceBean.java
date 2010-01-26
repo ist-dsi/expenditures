@@ -10,7 +10,6 @@ import org.joda.time.LocalDate;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundItem;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.presentationTier.util.FileUploadBean;
-import pt.ist.fenixWebFramework.util.DomainReference;
 
 public class RefundInvoiceBean extends FileUploadBean implements Serializable {
 
@@ -19,8 +18,8 @@ public class RefundInvoiceBean extends FileUploadBean implements Serializable {
     private Money value;
     private BigDecimal vatValue;
     private Money refundableValue;
-    private DomainReference<RefundItem> item;
-    private DomainReference<Supplier> supplier;
+    private RefundItem item;
+    private Supplier supplier;
 
     public RefundInvoiceBean() {
 	super();
@@ -69,19 +68,19 @@ public class RefundInvoiceBean extends FileUploadBean implements Serializable {
     }
 
     public RefundItem getItem() {
-	return item.getObject();
+	return item;
     }
 
     public void setItem(RefundItem item) {
-	this.item = new DomainReference<RefundItem>(item);
+	this.item = item;
     }
 
     public Supplier getSupplier() {
-        return supplier.getObject();
+	return supplier;
     }
 
     public void setSupplier(Supplier supplier) {
-        this.supplier = new DomainReference<Supplier>(supplier);
+	this.supplier = supplier;
     }
 
 }
