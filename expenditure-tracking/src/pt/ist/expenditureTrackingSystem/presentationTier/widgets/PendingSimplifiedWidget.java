@@ -22,8 +22,9 @@ public class PendingSimplifiedWidget extends WidgetController {
 
     @Override
     public void doView(WidgetRequest request) {
+	Person loggedPerson = Person.getLoggedPerson();
 	Map<AcquisitionProcessStateType, MultiCounter<AcquisitionProcessStateType>> simplifiedMap = ProcessMapGenerator
-		.generateAcquisitionMap(Person.getLoggedPerson());
+		.generateAcquisitionMap(loggedPerson);
 	List<Counter<AcquisitionProcessStateType>> counters = new ArrayList<Counter<AcquisitionProcessStateType>>();
 
 	for (MultiCounter<AcquisitionProcessStateType> multiCounter : simplifiedMap.values()) {
@@ -35,5 +36,6 @@ public class PendingSimplifiedWidget extends WidgetController {
 
 	Collections.sort(counters, new BeanComparator("countableObject"));
 	request.setAttribute("simplifiedCounters", counters);
+	request.setAttribute("person", loggedPerson);
     }
 }
