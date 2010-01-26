@@ -113,13 +113,14 @@ public class RefundItem extends RefundItem_Base {
     }
 
     public Money getValueSpent() {
-	if (getRefundableInvoices().isEmpty()) {
+	List<PaymentProcessInvoice> invoicesFiles = getInvoicesFiles();
+	if (invoicesFiles.isEmpty()) {
 	    return null;
 	}
 
 	Money spent = Money.ZERO;
-	for (RefundableInvoiceFile invoice : getRefundableInvoices()) {
-	    spent = spent.addAndRound(invoice.getRefundableValue());
+	for (PaymentProcessInvoice invoice : invoicesFiles) {
+	    spent = spent.addAndRound(((RefundableInvoiceFile) invoice).getRefundableValue());
 	}
 	return spent;
     }

@@ -584,6 +584,11 @@ relation GenericProcessProcessState {
 	}
 }
 
+relation GenericProcessCurrentProcessState {
+	processes.GenericProcess playsRole;
+	ProcessState playsRole currentProcessState;
+}
+
 relation ExpenditureTrackingSystemProcessState {
 	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
 	ProcessState playsRole processStates {

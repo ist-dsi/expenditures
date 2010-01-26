@@ -13,8 +13,9 @@ public class UnSubmitForApproval extends WorkflowActivity<RefundProcess, Activit
     public boolean isActive(RefundProcess process, User user) {
 	Person person = user.getExpenditurePerson();
 
-	return (person == process.getRequestor() || process.isResponsibleForUnit(person)) && isUserProcessOwner(process, user)
-		&& process.getProcessState().isPendingApproval() && !process.getRequest().isApprovedByAtLeastOneResponsible();
+	return isUserProcessOwner(process, user) && process.getProcessState().isPendingApproval()
+		&& !process.getRequest().isApprovedByAtLeastOneResponsible()
+		&& (person == process.getRequestor() || process.isResponsibleForUnit(person));
 
     }
 
@@ -22,7 +23,7 @@ public class UnSubmitForApproval extends WorkflowActivity<RefundProcess, Activit
     protected void process(ActivityInformation<RefundProcess> activityInformation) {
 	activityInformation.getProcess().unSubmitForApproval();
     }
-    
+
     @Override
     public String getLocalizedName() {
 	return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());

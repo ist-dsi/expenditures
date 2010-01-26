@@ -33,10 +33,10 @@ public class RemoveFundAllocationExpirationDate extends
     public boolean isActive(RegularAcquisitionProcess process, User user) {
 	Person person = user.getExpenditurePerson();
 	return isUserProcessOwner(process, user)
-		&& ((process.isAccountingEmployee(person) && !hasAnyAssociatedProject(process))
-			|| process.isProjectAccountingEmployee(person) || person.hasRoleType(RoleType.ACQUISITION_CENTRAL))
 		&& (checkActiveConditions(process) || checkCanceledConditions(process))
 		&& !process.hasAnyAllocatedFunds()
+		&& ((process.isAccountingEmployee(person) && !hasAnyAssociatedProject(process))
+			|| process.isProjectAccountingEmployee(person) || person.hasRoleType(RoleType.ACQUISITION_CENTRAL))
 		&& ((!process.getShouldSkipSupplierFundAllocation() && process.getFundAllocationExpirationDate() != null) || (process
 			.getShouldSkipSupplierFundAllocation() && process.isPendingFundAllocation()));
     }

@@ -21,6 +21,7 @@ public abstract class ProcessState extends ProcessState_Base {
 	setProcess(process);
 	setWho(person);
 	setWhenDateTime(new DateTime());
+	process.setCurrentProcessState(this);
     }
 
     protected void checkArguments(GenericProcess process, Person person) {

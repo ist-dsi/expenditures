@@ -21,7 +21,6 @@ import pt.ist.expenditureTrackingSystem.presentationTier.widgets.PrioritiesWidge
 import pt.ist.expenditureTrackingSystem.presentationTier.widgets.QuickViewWidget;
 import pt.ist.expenditureTrackingSystem.presentationTier.widgets.TakenProcessesWidget;
 import pt.ist.expenditureTrackingSystem.presentationTier.widgets.UnreadCommentsWidget;
-import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.RequestChecksumFilter;
 import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.RequestChecksumFilter.ChecksumPredicate;
 
@@ -61,8 +60,7 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 	return myOrg.getExpenditureTrackingSystem();
     }
 
-    @Service
-    public synchronized static void initialize() {
+    public static void initialize() {
 	if (!isInitialized) {
 	    try {
 		final MyOrg myOrg = MyOrg.getInstance();
@@ -143,6 +141,7 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 
     @Override
     public void init(final MyOrg root) {
+	initialize();
 	registerWidget(MySearchesWidget.class);
 	registerWidget(UnreadCommentsWidget.class);
 	registerWidget(TakenProcessesWidget.class);

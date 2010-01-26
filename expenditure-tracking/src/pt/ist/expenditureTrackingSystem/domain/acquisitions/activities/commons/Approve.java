@@ -13,8 +13,9 @@ public class Approve<P extends PaymentProcess> extends WorkflowActivity<P, Activ
     public boolean isActive(P process, User user) {
 	final Person executor = user.getExpenditurePerson();
 
-	return executor != null && process.isResponsibleForUnit(executor) && !process.getRequest().hasBeenApprovedBy(executor)
-		&& isUserProcessOwner(process, user) && process.isPendingApproval();
+	return executor != null && process.isPendingApproval() && isUserProcessOwner(process, user)
+		&& process.isResponsibleForUnit(executor) && !process.getRequest().hasBeenApprovedBy(executor);
+
     }
 
     @Override

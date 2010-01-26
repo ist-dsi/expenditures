@@ -16,11 +16,11 @@ public class CancelRefundProcess extends WorkflowActivity<RefundProcess, Activit
 	return isUserProcessOwner(process, user)
 		&& (((process.isInGenesis() || process.isInAuthorizedState()) && process.getRequestor() == executor)
 			|| (process.isPendingApproval() && process.isResponsibleForAtLeastOnePayingUnit(executor))
-			|| (process.isResponsibleForUnit(executor, process.getRequest().getTotalValue())
-				&& !process.getRequest().hasBeenAuthorizedBy(executor) && process.isInAllocatedToUnitState()) || ((process
-			.isPendingInvoicesConfirmation() || process.isPendingFundAllocation()) && ((process
-			.isAccountingEmployee(executor) && !process.hasProjectsAsPayingUnits()) || (process
-			.isProjectAccountingEmployee(executor) && process.hasProjectsAsPayingUnits()))));
+			|| ((process.isPendingInvoicesConfirmation() || process.isPendingFundAllocation()) && ((process
+				.isAccountingEmployee(executor) && !process.hasProjectsAsPayingUnits()) || (process
+				.isProjectAccountingEmployee(executor) && process.hasProjectsAsPayingUnits()))) || (process
+			.isResponsibleForUnit(executor, process.getRequest().getTotalValue())
+			&& !process.getRequest().hasBeenAuthorizedBy(executor) && process.isInAllocatedToUnitState()));
     }
 
     @Override

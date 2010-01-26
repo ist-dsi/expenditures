@@ -30,7 +30,7 @@ public class Authorization extends Authorization_Base {
 	    }
 	    return p;
 	}
-	
+
     };
 
     public Authorization() {
@@ -102,8 +102,12 @@ public class Authorization extends Authorization_Base {
 	}
     }
 
+    public boolean isValidFor(LocalDate date) {
+	return getEndDate() == null || getEndDate().isAfter(date);
+    }
+
     public boolean isValid() {
-	return getEndDate() == null || getEndDate().isAfter(new LocalDate());
+	return isValidFor(new LocalDate());
     }
 
     public boolean isCurrentUserAbleToRevoke() {

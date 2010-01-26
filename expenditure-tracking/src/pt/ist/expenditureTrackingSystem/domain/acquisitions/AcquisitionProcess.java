@@ -47,7 +47,11 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
     }
 
     protected AcquisitionProcessState getLastAcquisitionProcessState() {
-	return (AcquisitionProcessState) Collections.max(getProcessStates(), ProcessState.COMPARATOR_BY_WHEN);
+	AcquisitionProcessState state = (AcquisitionProcessState) getCurrentProcessState();
+	if (state == null) {
+	    state = (AcquisitionProcessState) Collections.max(getProcessStates(), ProcessState.COMPARATOR_BY_WHEN);
+	}
+	return state;
     }
 
     public AcquisitionProcessStateType getAcquisitionProcessStateType() {
