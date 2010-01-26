@@ -5,6 +5,7 @@ import java.util.List;
 
 import myorg.domain.util.Money;
 import myorg.domain.exceptions.DomainException;
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 
