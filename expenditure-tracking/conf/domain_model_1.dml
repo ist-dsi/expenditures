@@ -10,6 +10,7 @@ enum pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationType as
 enum pt.ist.expenditureTrackingSystem.domain.RoleType as RoleType;
 enum pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationOperation as AuthorizationOperation;
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess.ProcessClassification as ProcessClassification;
+enum pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPaymentProcess.SearchProcessValues as SearchProcessValues;
 
 valueType pt.utl.ist.fenix.tools.util.Strings as Strings {
     externalizeWith {
@@ -221,7 +222,7 @@ class organization.Person {
 class SavedSearch {
 	String ojbConcreteClass;
 	String searchName;
-	String searchClassName;
+	SearchProcessValues searchProcessValues;
 	String processId;
 	Boolean pendingOperations;
 	Boolean showOnlyResponsabilities;

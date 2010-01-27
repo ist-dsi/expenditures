@@ -20,8 +20,7 @@ public class SavedSearch extends SavedSearch_Base {
 	setSearchName(name);
 	setPerson(person);
 	setProcessId(searchBean.getProcessId());
-	Class clazz = searchBean.getSearchClass();
-	setSearchClassName(clazz != null ? clazz.getName() : null);
+	setSearchProcessValues(searchBean.getSearchProcess());
 	setPendingOperations(searchBean.getHasAvailableAndAccessibleActivityForUser());
 	setShowOnlyResponsabilities(searchBean.getResponsibleUnitSetOnly());
 	setRequestor(searchBean.getRequestingPerson());
@@ -39,18 +38,6 @@ public class SavedSearch extends SavedSearch_Base {
 	setTakenBy(searchBean.getTaker());
 	setShowOnlyWithUnreadComments(searchBean.getShowOnlyWithUnreadComments());
 	setShowPriorityOnly(searchBean.getShowPriorityOnly());
-    }
-
-    public Class getSearchClass() {
-	if (getSearchClassName() == null) {
-	    return null;
-	}
-	try {
-	    return Class.forName(getSearchClassName());
-	} catch (ClassNotFoundException e) {
-	    throw new DomainException("message.exception.invalidClassInASavedSearch", e);
-	}
-
     }
 
     public SearchPaymentProcess getSearch() {

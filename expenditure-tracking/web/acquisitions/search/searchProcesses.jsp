@@ -135,7 +135,7 @@
 	       		<fr:property name="sortUrl" value="<%= "/search.do?method=searchJump" + pagerString + "&pageNumber=" + (request.getParameter("pageNumber") != null ? request.getParameter("pageNumber") : 1)%>" />
 			    <fr:property name="sortBy" value="<%= request.getParameter("sortBy") == null ? "acquisitionProcessId=asc" : request.getParameter("sortBy") %>"/>
 				<fr:property name="sortIgnored" value="true"/>					
-				<fr:property name="sortableSlots" value="acquisitionProcessId, request.requestItemsCount, suppliersDescription, request.requester.firstAndLastName, dateFromLastActivity, request.requestingUnit.name, processStateDescription" />
+				<fr:property name="sortableSlots" value="acquisitionProcessId, typeShortDescription, request.requestItemsCount, suppliersDescription, request.requester.firstAndLastName, dateFromLastActivity, request.requestingUnit.name, processStateDescription" />
 	
 			</fr:layout>
 	</fr:view>	

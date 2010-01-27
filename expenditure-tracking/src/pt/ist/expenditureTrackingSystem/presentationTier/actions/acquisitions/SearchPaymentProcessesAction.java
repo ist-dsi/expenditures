@@ -24,6 +24,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPaymentProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPaymentProcess.SearchProcessValues;
 import pt.ist.expenditureTrackingSystem.domain.dto.UserSearchBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.VariantBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
@@ -286,9 +287,9 @@ public class SearchPaymentProcessesAction extends BaseAction {
 	    builder.append(searchBean.getRefundProcessStateType().name());
 	}
 
-	builder.append("&searchClass=");
-	if (searchBean.getSearchClass() != null) {
-	    builder.append(searchBean.getSearchClass().getName());
+	builder.append("&searchProcessValue=");
+	if (searchBean.getSearchProcess() != null) {
+	    builder.append(searchBean.getSearchProcess().name());
 	}
 
 	return builder.toString();
@@ -320,14 +321,9 @@ public class SearchPaymentProcessesAction extends BaseAction {
 	bean.setShowOnlyWithUnreadComments(Boolean.valueOf(request.getParameter("showOnlyWithUnreadComments")));
 	bean.setShowPriorityOnly(Boolean.valueOf(request.getParameter("showPriorityOnly")));
 
-	String searchClass = request.getParameter("searchClass");
-	if (searchClass != null) {
-	    try {
-		Class clazz = Class.forName(searchClass);
-		bean.setSearchClass(clazz);
-	    } catch (Exception e) {
-		// drop exception silently...
-	    }
+	String searchValue = request.getParameter("searchProcessValue");
+	if (searchValue != null) {
+	    bean.setSearchProcess(SearchProcessValues.valueOf(searchValue));
 	}
 
 	String type = request.getParameter("acquisitionProcessStateType");

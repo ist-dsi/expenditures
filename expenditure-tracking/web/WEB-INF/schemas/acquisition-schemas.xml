@@ -787,12 +787,10 @@
 <schema name="search.abstract"
 	type="pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPaymentProcess"
 	bundle="ACQUISITION_RESOURCES">
-	<slot name="searchClass" key="label.acquisitionType" bundle="ACQUISITION_RESOURCES"
-		layout="menu-select-postback">
-		<property name="providerClass"
-			value="pt.ist.expenditureTrackingSystem.presentationTier.renderers.dataProvider.AcquisitionProcessesTypesProvider" />
+	<slot name="searchProcess" key="label.acquisitionType" bundle="ACQUISITION_RESOURCES"
+		layout="menu-postback">
 		<property name="destination" value="typeSelector" />
-		<property name="eachLayout" value="label-for-acquisitionProcessClass" />
+		<property name="eachLayout" value="" />
 
 		<property name="defaultText" value="label.all" />
 		<property name="bundle" value="EXPENDITURE_RESOURCES" />
@@ -1050,10 +1048,7 @@
 
 <schema name="viewSavedSearch"
 	type="pt.ist.expenditureTrackingSystem.domain.SavedSearch" bundle="ACQUISITION_RESOURCES">
-	<slot name="searchClass" key="label.acquisitionType" bundle="ACQUISITION_RESOURCES"
-		layout="label">
-		<property name="bundle" value="ACQUISITION_RESOURCES" />
-	</slot>
+	<slot name="searchProcessValues" key="label.acquisitionType" bundle="ACQUISITION_RESOURCES"/>
 	<slot name="year" key="label.processPaymentYear" bundle="ACQUISITION_RESOURCES"
 		layout="null-as-label">
 		<property name="subLayout" value="values" />

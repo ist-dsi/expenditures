@@ -78,18 +78,20 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 
     public static enum ProcessClassification implements IPresentableEnum {
 
-	CCP(new Money("5000"), true), CT10000(new Money("10000")), CT75000(new Money("75000"));
+	CCP(new Money("5000"), true, "RS 5000"), CT10000(new Money("10000"), "CT 10000"), CT75000(new Money("75000"), "CT 75000");
 
 	final private Money value;
+	final private String shortDescription;
 	final private boolean ccp;
 
-	ProcessClassification(Money value) {
-	    this(value, false);
+	ProcessClassification(Money value, String shortDescription) {
+	    this(value, false, shortDescription);
 	}
 
-	ProcessClassification(Money value, boolean ccp) {
+	ProcessClassification(Money value, boolean ccp, String shortDescription) {
 	    this.value = value;
 	    this.ccp = ccp;
+	    this.shortDescription = shortDescription;
 	}
 
 	public Money getLimit() {
@@ -98,6 +100,10 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 
 	public boolean isCCP() {
 	    return ccp;
+	}
+
+	public String getShortDescription() {
+	    return shortDescription;
 	}
 
 	@Override
@@ -344,4 +350,11 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	return getProcessClassification().getLocalizedName();
     }
 
+    public String getTypeDescription() {
+	return getProcessClassification().getLocalizedName();
+    }
+
+    public String getTypeShortDescription() {
+	return getProcessClassification().getShortDescription();
+    }
 }

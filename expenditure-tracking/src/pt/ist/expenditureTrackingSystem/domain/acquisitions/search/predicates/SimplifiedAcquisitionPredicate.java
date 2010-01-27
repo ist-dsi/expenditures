@@ -12,6 +12,9 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPaymentProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPaymentProcess.SearchProcessValues;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess.ProcessClassification;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
@@ -41,17 +44,20 @@ public class SimplifiedAcquisitionPredicate extends SearchPredicate {
 	User currentOwner = acquisitionProcess.getCurrentOwner();
 	final Person taker = currentOwner != null ? currentOwner.getExpenditurePerson() : null;
 	final Boolean showOnlyWithUnreadComments = searchBean.getShowOnlyWithUnreadComments();
-	final AcquisitionProcess process = acquisitionRequest.getProcess();
+	final SimplifiedProcedureProcess process = (SimplifiedProcedureProcess) acquisitionRequest.getProcess();
 	final Boolean showPrioritiesOnly = searchBean.getShowPriorityOnly();
+	SearchProcessValues searchProcess = searchBean.getSearchProcess();
+	final ProcessClassification searchClassification = searchProcess != null ? searchProcess.getSearchClassification() : null;
 
 	Person loggedPerson = Person.getLoggedPerson();
 
 	return matchCriteria(searchBean.getProcessId(), identification)
+		&& matchCriteria(searchClassification, process.getProcessClassification())
 		&& matchCriteria(searchBean.getRequestingPerson(), person)
 		&& (matchCriteria(searchBean.getRequestingUnit(), acquisitionRequest.getRequestingUnit()))
 		&& (matchCriteria(searchBean.getPayingUnit(), acquisitionRequest.getFinancersSet()))
 		&& matchCriteria(searchBean.getSupplier(), suppliers)
- 		&& matchAcquisitionProposalId(searchBean.getProposalId(), acquisitionRequest.getAcquisitionProcess())
+		&& matchAcquisitionProposalId(searchBean.getProposalId(), acquisitionRequest.getAcquisitionProcess())
 		&& matchCriteria(searchBean.getHasAvailableAndAccessibleActivityForUser(), acquisitionRequest)
 		&& matchCriteria(searchBean.getAcquisitionProcessStateType(), type)
 		&& matchCriteria(searchBean.getAccountingUnit(), accountingUnits)
@@ -61,6 +67,10 @@ public class SimplifiedAcquisitionPredicate extends SearchPredicate {
 		&& matchCriteria(searchBean.getTaker(), taker)
 		&& (!showOnlyWithUnreadComments || (!process.getUnreadCommentsForPerson(loggedPerson).isEmpty() && process
 			.hasActivitiesFromUser(loggedPerson)));
+    }
+
+    private boolean matchCriteria(ProcessClassification searchClassification, ProcessClassification processClassification) {
+	return searchClassification == null || searchClassification == processClassification;
     }
 
     private boolean matchAcquisitionProposalId(final String proposalId, final AcquisitionProcess acquisitionProcess) {
