@@ -15,7 +15,7 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.persistenceTier.ExternalDbOperation;
 import pt.ist.expenditureTrackingSystem.persistenceTier.ExternalDbQuery;
 
-public class SyncSuppliersAux extends SyncSuppliers_Base {
+public class SyncSuppliersAux {
 
     public static class GiafSupplier {
 	public String codEnt;
