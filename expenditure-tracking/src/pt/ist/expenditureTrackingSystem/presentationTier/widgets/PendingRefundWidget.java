@@ -22,8 +22,9 @@ public class PendingRefundWidget extends WidgetController {
 
     @Override
     public void doView(WidgetRequest request) {
+	Person loggedPerson = Person.getLoggedPerson();
 	Map<RefundProcessStateType, MultiCounter<RefundProcessStateType>> refundMap = ProcessMapGenerator
-		.generateRefundMap(Person.getLoggedPerson());
+		.generateRefundMap(loggedPerson);
 	List<Counter<RefundProcessStateType>> refundCounters = new ArrayList<Counter<RefundProcessStateType>>();
 
 	for (MultiCounter<RefundProcessStateType> multiCounter : refundMap.values()) {
@@ -35,5 +36,6 @@ public class PendingRefundWidget extends WidgetController {
 
 	Collections.sort(refundCounters, new BeanComparator("countableObject"));
 	request.setAttribute("refundCounters", refundCounters);
+	request.setAttribute("person", loggedPerson);
     }
 }
