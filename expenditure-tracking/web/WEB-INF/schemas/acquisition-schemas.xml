@@ -793,7 +793,7 @@
 		<property name="eachLayout" value="" />
 
 		<property name="defaultText" value="label.all" />
-		<property name="bundle" value="EXPENDITURE_RESOURCES" />
+		<property name="defaultTextBundle" value="EXPENDITURE_RESOURCES" />
 		<property name="key" value="true" />
 	</slot>
 	<slot name="paymentProcessYear" key="label.processPaymentYear"
