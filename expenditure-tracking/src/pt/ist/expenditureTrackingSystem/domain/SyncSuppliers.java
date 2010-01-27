@@ -14,6 +14,7 @@ import myorg.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.persistenceTier.ExternalDbOperation;
 import pt.ist.expenditureTrackingSystem.persistenceTier.ExternalDbQuery;
+import pt.ist.fenixWebFramework.services.Service;
 
 public class SyncSuppliers extends SyncSuppliers_Base {
 
