@@ -257,8 +257,6 @@ public class SyncSuppliers extends SyncSuppliers_Base {
 	System.out.println("Discarded: " + discarded + " suppliers.");
     }
 
-    
-
     private static void closeLocalSuppliers(final Set<Supplier> suppliersFromGiaf) {
 	final ExpenditureTrackingSystem expenditureTrackingSystem = ExpenditureTrackingSystem.getInstance();
 	for (final Supplier supplier : expenditureTrackingSystem.getSuppliersSet()) {
