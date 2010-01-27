@@ -250,7 +250,18 @@ public class SyncSuppliers extends SyncSuppliers_Base {
 	    suppliersFromGiaf.add(supplier);
 	}
 
-	for (final Supplier supplier : ExpenditureTrackingSystem.getInstance().getSuppliersSet()) {
+	closeLocalSuppliers(suppliersFromGiaf);
+
+	System.out.println("Matched: " + matched + " suppliers.");
+	System.out.println("Created: " + created + " suppliers.");
+	System.out.println("Discarded: " + discarded + " suppliers.");
+    }
+
+    
+
+    private static void closeLocalSuppliers(final Set<Supplier> suppliersFromGiaf) {
+	final ExpenditureTrackingSystem expenditureTrackingSystem = ExpenditureTrackingSystem.getInstance();
+	for (final Supplier supplier : expenditureTrackingSystem.getSuppliersSet()) {
 	    if (!suppliersFromGiaf.contains(supplier)) {
 		System.out.println("Closing supplier not in GIAF: " + supplier.getExternalId());
 		if (supplier.getTotalAllocated().isZero()) {
@@ -261,10 +272,6 @@ public class SyncSuppliers extends SyncSuppliers_Base {
 		}
 	    }
 	}
-
-	System.out.println("Matched: " + matched + " suppliers.");
-	System.out.println("Created: " + created + " suppliers.");
-	System.out.println("Discarded: " + discarded + " suppliers.");
     }
 
     private static boolean shouldDiscard(final GiafSupplier giafSupplier) {
