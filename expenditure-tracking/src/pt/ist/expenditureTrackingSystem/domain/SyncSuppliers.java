@@ -5,14 +5,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import myorg.domain.util.Address;
 import myorg.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.persistenceTier.ExternalDbOperation;
 import pt.ist.expenditureTrackingSystem.persistenceTier.ExternalDbQuery;
-import pt.ist.fenixWebFramework.services.Service;
 
 public class SyncSuppliers extends SyncSuppliers_Base {
 
@@ -228,6 +229,7 @@ public class SyncSuppliers extends SyncSuppliers_Base {
 	int matched = 0;
 	int created = 0;
 	int discarded = 0;
+	final Set<Supplier> suppliersFromGiaf = new HashSet<Supplier>();
 	for (final GiafSupplier giafSupplier : supplierMap.getGiafSuppliers()) {
 	    if (giafSupplier.canceled || shouldDiscard(giafSupplier)) {
 		discarded++;
@@ -243,6 +245,19 @@ public class SyncSuppliers extends SyncSuppliers_Base {
 	    } else if (supplier != null) {
 		matched++;
 		updateSupplierInformation(supplier, giafSupplier);
+	    }
+	    suppliersFromGiaf.add(supplier);
+	}
+
+	for (final Supplier supplier : ExpenditureTrackingSystem.getInstance().getSuppliersSet()) {
+	    if (!suppliersFromGiaf.contains(supplier)) {
+		System.out.println("Closing supplier not in GIAF: " + supplier.getExternalId());
+		if (supplier.getTotalAllocated().isZero()) {
+		    System.out.println("Deleting supplier " + supplier.getExternalId());
+		    supplier.delete();
+		} else if (!supplier.getSupplierLimit().equals(Money.ZERO)) {
+		    supplier.setSupplierLimit(Money.ZERO);
+		}
 	    }
 	}
 
