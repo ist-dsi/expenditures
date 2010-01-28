@@ -4,9 +4,11 @@
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 
-<bean:define id="widget" name="widget" toScope="request" type="module.dashBoard.domain.DashBoardWidget"/>
+
+<%@page import="pt.ist.expenditureTrackingSystem.presentationTier.widgets.QuickViewWidget"%><bean:define id="widget" name="widget" toScope="request" type="module.dashBoard.domain.DashBoardWidget"/>
 <bean:define id="widgetId" name="widget" property="externalId" type="java.lang.String" />
-<fr:form action="<%="/dashBoardManagement.do?method=widgetSubmition&dashBoardWidgetId=" + widgetId %>">
+	
+<fr:form id="quickAccessForm" action="<%="/dashBoardManagement.do?method=widgetSubmition&dashBoardWidgetId=" + widgetId %>">
 	<table class="quicksearch">
 		<tr>
 			<td>
@@ -22,8 +24,31 @@
 			</td>
 		</tr>
 	</table>
+	<div>
+
+	</div>
 </fr:form>
-<logic:present name="widgetQuickView.messages">
-	<bean:define id="label" name="widgetQuickView.messages" type="java.lang.String"/>
-	<p class="mtop0"><em><bean:message key="<%= label %>" bundle="EXPENDITURE_RESOURCES"/>.</em></p>
-</logic:present>
+
+<bean:define id="theme" name="virtualHost" property="theme.name"/>
+
+<script type="text/javascript">
+
+function spinner(formData, jqForm, options) {
+	var warningDiv =$("#quickAccessForm > div");
+	warningDiv.empty();
+	warningDiv.append('<bean:message key="label.searching" bundle="EXPENDITURE_RESOURCES"/>...<img src="<%= request.getContextPath() + "/CSS/" + theme + "/images/autocomplete.gif"%>"/>');
+}
+
+function decide(responseText, statusText) {
+	if (responseText == '<%= QuickViewWidget.NOT_FOUND %>') {
+		var warningDiv =$("#quickAccessForm > div");
+		warningDiv.empty();
+		warningDiv.append('<p class="mtop0"><em><bean:message key="widget.widgetQuickView.noProcessFound" bundle="EXPENDITURE_RESOURCES"/>.</em></p>');
+	}
+	else {
+		window.location.replace(<%= "\"" + request.getContextPath() + "\" + responseText" %>);
+	}
+}
+
+$("#quickAccessForm").ajaxForm({beforeSubmit: spinner, success: decide});
+</script> 
