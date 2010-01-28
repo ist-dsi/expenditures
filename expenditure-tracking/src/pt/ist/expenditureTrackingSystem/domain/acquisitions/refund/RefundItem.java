@@ -15,6 +15,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestWithPayment;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.UnitItem;
+import pt.ist.expenditureTrackingSystem.domain.dto.RefundInvoiceBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.RefundItemBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
@@ -103,9 +104,10 @@ public class RefundItem extends RefundItem_Base {
 	Set<Unit> payingUnits = getRequest().getPayingUnits();
 	if (payingUnits.size() == 1) {
 	    UnitItem unitItemFor = getUnitItemFor(payingUnits.iterator().next());
-	    Money share = unitItemFor.getRealShareValue();
-	    Money amount = share == null ? refundableValue : share.addAndRound(refundableValue);
-
+	    Money amount = Money.ZERO;
+	    for (RefundableInvoiceFile invoicesToSum : getRefundableInvoices()) {
+		amount = amount.addAndRound(invoicesToSum.getRefundableValue());
+	    }
 	    clearRealShareValues();
 	    unitItemFor.setRealShareValue(amount);
 	}
