@@ -322,7 +322,7 @@ public class SearchPaymentProcessesAction extends BaseAction {
 	bean.setShowPriorityOnly(Boolean.valueOf(request.getParameter("showPriorityOnly")));
 
 	String searchValue = request.getParameter("searchProcessValue");
-	if (searchValue != null) {
+	if (!StringUtils.isEmpty(searchValue)) {
 	    bean.setSearchProcess(SearchProcessValues.valueOf(searchValue));
 	}
 
