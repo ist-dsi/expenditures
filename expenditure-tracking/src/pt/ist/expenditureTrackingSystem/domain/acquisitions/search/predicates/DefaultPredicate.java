@@ -15,7 +15,7 @@ public class DefaultPredicate extends SearchPredicate {
     public boolean evaluate(PaymentProcess process, SearchPaymentProcess searchBean) {
 	RequestWithPayment request = process.getRequest();
 	return request != null && matchesSearchCriteria(request, searchBean)
-		&& (process.isAvailableForCurrentUser() || process.isTakenByCurrentUser());
+		&& (process.isAccessibleToCurrentUser() || process.isTakenByCurrentUser());
     }
 
     private boolean matchesSearchCriteria(RequestWithPayment request, SearchPaymentProcess searchBean) {

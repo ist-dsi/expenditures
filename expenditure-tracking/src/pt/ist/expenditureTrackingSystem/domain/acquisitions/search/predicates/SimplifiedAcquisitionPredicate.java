@@ -26,7 +26,7 @@ public class SimplifiedAcquisitionPredicate extends SearchPredicate {
 	final AcquisitionRequest acquisitionRequest = process.getRequest();
 	final Person taker = searchBean.getTaker();
 	return matchesSearchCriteria(acquisitionRequest, searchBean)
-		&& (acquisitionRequest.getProcess().isAvailableForCurrentUser() || process.isTakenByCurrentUser() || (taker != null && process
+		&& (acquisitionRequest.getProcess().isAccessibleToCurrentUser() || process.isTakenByCurrentUser() || (taker != null && process
 			.isTakenByPerson(taker.getUser())));
     }
 

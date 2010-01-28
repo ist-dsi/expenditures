@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import myorg.domain.User;
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
@@ -36,6 +37,11 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 		|| getRequestingUnit().isResponsible(person) || isResponsibleForAtLeastOnePayingUnit(person)
 		|| isAccountingEmployee(person) || isProjectAccountingEmployee(person) || isTreasuryMember(person)
 		|| isObserver(person);
+    }
+
+    @Override
+    public boolean isAccessible(User user) {
+	return isAvailableForPerson(user.getExpenditurePerson());
     }
 
     public boolean isActive() {
