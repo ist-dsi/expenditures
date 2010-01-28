@@ -10,6 +10,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestWithPayment;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
+import pt.ist.fenixframework.plugins.luceneIndexing.domain.IndexDocument;
 import dml.runtime.RelationAdapter;
 
 public class CostCenter extends CostCenter_Base {
@@ -38,15 +39,16 @@ public class CostCenter extends CostCenter_Base {
 	super();
 	createRealUnit(this, parentUnit, IstPartyType.COST_CENTER, costCenter, name);
 
-	// TODO : After this object is refactored to retrieve the name and parent from the real unit,
-	//        the following three lines may be deleted.
+	// TODO : After this object is refactored to retrieve the name and
+	// parent from the real unit,
+	// the following three lines may be deleted.
 	setName(name);
 	setCostCenter(costCenter);
 	setParentUnit(parentUnit);
     }
 
     public void setCostCenter(final String costCenter) {
-        getUnit().setAcronym("CC. " + costCenter);
+	getUnit().setAcronym("CC. " + costCenter);
     }
 
     public String getCostCenter() {
@@ -90,4 +92,10 @@ public class CostCenter extends CostCenter_Base {
 	return this;
     }
 
+    @Override
+    public IndexDocument getDocumentToIndex() {
+	IndexDocument document = super.getDocumentToIndex();
+	document.indexField(UnitIndexFields.NUMBER_INDEX, getCostCenter());
+	return document;
+    }
 }

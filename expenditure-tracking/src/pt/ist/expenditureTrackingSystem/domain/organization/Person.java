@@ -35,9 +35,30 @@ import pt.ist.expenditureTrackingSystem.domain.dto.AuthorizationBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreatePersonBean;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.plugins.luceneIndexing.IndexableField;
+import pt.ist.fenixframework.plugins.luceneIndexing.domain.IndexDocument;
+import pt.ist.fenixframework.plugins.luceneIndexing.domain.interfaces.Indexable;
+import pt.utl.ist.fenix.tools.util.StringNormalizer;
 import dml.runtime.RelationAdapter;
 
-public class Person extends Person_Base {
+public class Person extends Person_Base implements Indexable {
+
+    public static enum PersonIndexes implements IndexableField {
+
+	NAME_INDEX("name"), USERNAME_INDEX("username");
+
+	private String fieldName;
+
+	private PersonIndexes(String fieldName) {
+	    this.fieldName = fieldName;
+	}
+
+	@Override
+	public String getFieldName() {
+	    return fieldName;
+	}
+
+    }
 
     public static final Comparator<Person> COMPARATOR_BY_NAME = new Comparator<Person>() {
 
@@ -292,7 +313,8 @@ public class Person extends Person_Base {
 	return filterLogs(new Predicate() {
 	    @Override
 	    public boolean evaluate(Object arg0) {
-		return processClass.isAssignableFrom(arg0.getClass()) && !((GenericProcess) arg0).getUnreadCommentsForPerson(person).isEmpty();
+		return processClass.isAssignableFrom(arg0.getClass())
+			&& !((GenericProcess) arg0).getUnreadCommentsForPerson(person).isEmpty();
 	    }
 
 	});
@@ -305,6 +327,13 @@ public class Person extends Person_Base {
 	return authorizationLogs;
     }
 
+    @Override
+    public IndexDocument getDocumentToIndex() {
+	IndexDocument document = new IndexDocument(this);
+	document.indexField(PersonIndexes.NAME_INDEX, StringNormalizer.normalize(getName()));
+	document.indexField(PersonIndexes.USERNAME_INDEX, getUsername());
+	return document;
+    }
     // @Service
     // private static void setPersonInUser(final User user) {
     // final Person person = Person.findByUsername(user.getUsername());

@@ -34,10 +34,31 @@ import pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationLog;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateUnitBean;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.plugins.luceneIndexing.IndexableField;
+import pt.ist.fenixframework.plugins.luceneIndexing.domain.IndexDocument;
+import pt.ist.fenixframework.plugins.luceneIndexing.domain.interfaces.Indexable;
+import pt.utl.ist.fenix.tools.util.StringNormalizer;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
-public class Unit extends Unit_Base {
+public class Unit extends Unit_Base implements Indexable {
+
+    public static enum UnitIndexFields implements IndexableField {
+
+	NAME_INDEX("name"), NUMBER_INDEX("number");
+
+	private String fieldName;
+
+	private UnitIndexFields(String fieldName) {
+	    this.fieldName = fieldName;
+	}
+
+	@Override
+	public String getFieldName() {
+	    return fieldName;
+	}
+
+    }
 
     public static final Comparator<Unit> COMPARATOR_BY_PRESENTATION_NAME = new Comparator<Unit>() {
 
@@ -187,17 +208,22 @@ public class Unit extends Unit_Base {
     public boolean isCurrentUserResponsibleForUnit() {
 	return isResponsible(getUnit(), Person.getLoggedPerson());
     }
-    
+
     public boolean isResponsible(Person person) {
 	return isResponsible(getUnit(), person);
     }
 
     public static boolean isResponsible(final Party party, final Person person) {
 	if (party.isUnit()) {
+
+	    if (!person.hasAnyAuthorizations()) {
+		return false;
+	    }
 	    final module.organization.domain.Unit unit = (module.organization.domain.Unit) party;
+	    LocalDate today = new LocalDate();
 	    if (unit.hasExpenditureUnit()) {
 		for (Authorization authorization : unit.getExpenditureUnit().getAuthorizationsSet()) {
-		    if (authorization.isValid() && authorization.getPerson() == person) {
+		    if (authorization.isValidFor(today) && authorization.getPerson() == person) {
 			return true;
 		    }
 		}
@@ -557,20 +583,20 @@ public class Unit extends Unit_Base {
     }
 
     public void evaluateAllProcesses(final ProcessEvaluator<GenericProcess> unitProcessEvaluator, final PaymentProcessYear year) {
-//	if (!unitProcessEvaluator.processed.contains(this)) {
-//	    unitProcessEvaluator.processed.add(this);
-	    for (final Financer financer : getFinancedItems()) {
-		final PaymentProcess process = financer.getFundedRequest().getProcess();
-		if (year == null || process.getPaymentProcessYear() == year) {
-		    unitProcessEvaluator.evaluate(process);
-		}
+	// if (!unitProcessEvaluator.processed.contains(this)) {
+	// unitProcessEvaluator.processed.add(this);
+	for (final Financer financer : getFinancedItems()) {
+	    final PaymentProcess process = financer.getFundedRequest().getProcess();
+	    if (year == null || process.getPaymentProcessYear() == year) {
+		unitProcessEvaluator.evaluate(process);
 	    }
-	    evaluateAllProcesses(unitProcessEvaluator, year, getUnit());
+	}
+	evaluateAllProcesses(unitProcessEvaluator, year, getUnit());
 
-//	    for (final Unit unit : getSubUnitsSet()) {
-//		unit.evaluateAllProcesses(unitProcessEvaluator, year);
-//	    }
-//	}
+	// for (final Unit unit : getSubUnitsSet()) {
+	// unit.evaluateAllProcesses(unitProcessEvaluator, year);
+	// }
+	// }
     }
 
     private static void evaluateAllProcesses(final ProcessEvaluator<GenericProcess> unitProcessEvaluator,
@@ -588,4 +614,10 @@ public class Unit extends Unit_Base {
 	}
     }
 
+    @Override
+    public IndexDocument getDocumentToIndex() {
+	IndexDocument document = new IndexDocument(this);
+	document.indexField(UnitIndexFields.NAME_INDEX, StringNormalizer.normalize(getName()));
+	return document;
+    }
 }

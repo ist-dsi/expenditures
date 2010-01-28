@@ -9,6 +9,8 @@ import org.apache.commons.lang.StringUtils;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.ProjectFinancer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestWithPayment;
+import pt.ist.expenditureTrackingSystem.domain.organization.Unit.UnitIndexFields;
+import pt.ist.fenixframework.plugins.luceneIndexing.domain.IndexDocument;
 import dml.runtime.RelationAdapter;
 
 public class SubProject extends SubProject_Base {
@@ -38,22 +40,23 @@ public class SubProject extends SubProject_Base {
 	final String acronym = StringUtils.abbreviate(name, 5);
 	createRealUnit(this, parentUnit, IstPartyType.SUB_PROJECT, acronym, name);
 
-	// TODO : After this object is refactored to retrieve the name and parent from the real unit,
-	//        the following two lines may be deleted.
+	// TODO : After this object is refactored to retrieve the name and
+	// parent from the real unit,
+	// the following two lines may be deleted.
 	setName(name);
 	setParentUnit(parentUnit);
     }
 
     @Override
     public void setName(final String name) {
-        super.setName(name);
-        final Project project = (Project) getParentUnit();
-        if (project == null) {
-            final String acronym = StringUtils.abbreviate(name, 5);
-            getUnit().setAcronym(acronym);
-        } else {
-            getUnit().setAcronym(project.getUnit().getAcronym());
-        }
+	super.setName(name);
+	final Project project = (Project) getParentUnit();
+	if (project == null) {
+	    final String acronym = StringUtils.abbreviate(name, 5);
+	    getUnit().setAcronym(acronym);
+	} else {
+	    getUnit().setAcronym(project.getUnit().getAcronym());
+	}
     }
 
     @Override
@@ -63,10 +66,10 @@ public class SubProject extends SubProject_Base {
 
     @Override
     public void setParentUnit(final Unit parentUnit) {
-        super.setParentUnit(parentUnit);
-        if (parentUnit != null && hasUnit()) {
-            getUnit().setAcronym(parentUnit.getUnit().getAcronym());
-        }
+	super.setParentUnit(parentUnit);
+	if (parentUnit != null && hasUnit()) {
+	    getUnit().setAcronym(parentUnit.getUnit().getAcronym());
+	}
     }
 
     @Override
@@ -80,4 +83,10 @@ public class SubProject extends SubProject_Base {
 	return new ProjectFinancer(acquisitionRequest, this);
     }
 
+    @Override
+    public IndexDocument getDocumentToIndex() {
+	IndexDocument document = super.getDocumentToIndex();
+	document.indexField(UnitIndexFields.NUMBER_INDEX, getUnit().getAcronym());
+	return document;
+    }
 }
