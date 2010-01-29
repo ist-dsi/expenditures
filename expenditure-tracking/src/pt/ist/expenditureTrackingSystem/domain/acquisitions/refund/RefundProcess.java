@@ -122,6 +122,7 @@ public class RefundProcess extends RefundProcess_Base {
 	new RefundRequest(this, requestor, refundee, requestingUnit);
 	new RefundProcessState(this, RefundProcessStateType.IN_GENESIS);
 	setSkipSupplierFundAllocation(Boolean.FALSE);
+	setProcessNumber(getYear() + "/" + getAcquisitionProcessNumber());
     }
 
     @Service
