@@ -47,7 +47,7 @@ public class RefundableInvoiceFile extends RefundableInvoiceFile_Base {
 	Money estimatedValue = item.getValue();
 
 	if ((realValue != null && realValue.add(refundableValue).isGreaterThan(estimatedValue)) || realValue == null
-		&& refundableValue.isGreaterThan(estimatedValue)) {
+		&& refundableValue.isGreaterThan(estimatedValue.round())) {
 	    throw new DomainException("refundItem.message.info.realValueLessThanRefundableValue", DomainException
 		    .getResourceFor("resources/AcquisitionResources"));
 	}
