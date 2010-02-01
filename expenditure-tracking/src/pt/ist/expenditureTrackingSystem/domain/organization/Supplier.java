@@ -2,6 +2,8 @@ package pt.ist.expenditureTrackingSystem.domain.organization;
 
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
+
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Address;
 import myorg.domain.util.Money;
@@ -16,8 +18,28 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundableInv
 import pt.ist.expenditureTrackingSystem.domain.announcements.Announcement;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateSupplierBean;
 import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.plugins.luceneIndexing.IndexableField;
+import pt.ist.fenixframework.plugins.luceneIndexing.domain.IndexDocument;
+import pt.ist.fenixframework.plugins.luceneIndexing.domain.interfaces.Indexable;
+import pt.utl.ist.fenix.tools.util.StringNormalizer;
 
-public class Supplier extends Supplier_Base {
+public class Supplier extends Supplier_Base implements Indexable {
+
+    public static enum SupplierIndexes implements IndexableField {
+	FISCAL_CODE("nif"), NAME("supplierName");
+
+	private String name;
+
+	private SupplierIndexes(String name) {
+	    this.name = name;
+	}
+
+	@Override
+	public String getFieldName() {
+	    return this.name;
+	}
+
+    }
 
     public static Money SUPPLIER_LIMIT = new Money("75000");
 
@@ -211,6 +233,16 @@ public class Supplier extends Supplier_Base {
 
 	    supplier.delete();
 	}
+    }
+
+    @Override
+    public IndexDocument getDocumentToIndex() {
+	IndexDocument indexDocument = new IndexDocument(this);
+	if (!StringUtils.isEmpty(getFiscalIdentificationCode())) {
+	    indexDocument.indexField(SupplierIndexes.FISCAL_CODE, getFiscalIdentificationCode());
+	}
+	indexDocument.indexField(SupplierIndexes.NAME, StringNormalizer.normalize(getName()));
+	return indexDocument;
     }
 
 }
