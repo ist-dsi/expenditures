@@ -1,11 +1,16 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
+import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion.User;
+
 import module.workflow.domain.ProcessFileValidationException;
 import module.workflow.domain.WorkflowProcess;
 import module.workflow.util.FileUploadBeanResolver;
 import module.workflow.util.WorkflowFileUploadBean;
 import myorg.applicationTier.Authenticate.UserView;
 import myorg.util.ClassNameBundle;
+import pt.ist.expenditureTrackingSystem.domain.RoleType;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess.ProcessClassification;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.fileBeans.AcquisitionProposalDocumentFileBean;
 
 @ClassNameBundle(bundle = "resources/AcquisitionResources")
@@ -38,17 +43,29 @@ public class AcquisitionProposalDocument extends AcquisitionProposalDocument_Bas
 
     @Override
     public void validateUpload(WorkflowProcess workflowProcess) {
-	PaymentProcess process = (PaymentProcess) workflowProcess;
-	if (!process.isInGenesis() || process.getProcessCreator() != UserView.getCurrentUser()) {
+	SimplifiedProcedureProcess process = (SimplifiedProcedureProcess) workflowProcess;
+
+	if (process.getProcessClassification() != ProcessClassification.CT75000
+		&& (!process.isInGenesis() || process.getProcessCreator() != UserView.getCurrentUser())) {
 	    throw new ProcessFileValidationException("resources/AcquisitionResources",
 		    "error.acquisitionProposalDocument.upload.invalid");
 	}
+	if (process.getProcessClassification() == ProcessClassification.CT75000
+		&& !((process.isAuthorized() || process.isAcquisitionProcessed()) && UserView.getCurrentUser()
+			.getExpenditurePerson().hasRoleType(RoleType.ACQUISITION_CENTRAL))) {
+	    throw new ProcessFileValidationException("resources/AcquisitionResources",
+		    "error.acquisitionProposalDocument.ct75000.upload.invalid");
+	}
+
 	super.validateUpload(workflowProcess);
     }
 
     @Override
     public boolean isPossibleToArchieve() {
-	PaymentProcess process = (PaymentProcess) getProcess();
-	return process.isInGenesis() && process.getProcessCreator() == UserView.getCurrentUser();
+	SimplifiedProcedureProcess process = (SimplifiedProcedureProcess) getProcess();
+	return process.getProcessClassification() != ProcessClassification.CT75000 ? process.isInGenesis()
+		&& process.getProcessCreator() == UserView.getCurrentUser() : (process.isAuthorized() || process
+		.isAcquisitionProcessed())
+		&& UserView.getCurrentUser().getExpenditurePerson().hasRoleType(RoleType.ACQUISITION_CENTRAL);
     }
 }
