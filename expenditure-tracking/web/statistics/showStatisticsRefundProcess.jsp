@@ -17,6 +17,16 @@
 
 <br/>
 
+<div class="infobox_dotted">
+	<ul>
+		<li>
+			<html:link action="/statistics.do?method=refundProcessStatistics" paramId="year" paramName="yearBean" paramProperty="year">
+				<bean:message key="label.statistics.simplifiedProcess" bundle="STATISTICS_RESOURCES"/>
+			</html:link>
+		</li>
+	</ul>
+</div>
+
 <logic:present name="refundProcessStatistics">
 	<p><bean:message key="label.statistics.process.total.number" bundle="STATISTICS_RESOURCES"/>: <bean:write name="refundProcessStatistics" property="numberOfProcesses"/></p>
 	<html:img action="statistics.do?method=refundProcessStatisticsChart" paramId="year" paramName="yearBean" paramProperty="year"/>

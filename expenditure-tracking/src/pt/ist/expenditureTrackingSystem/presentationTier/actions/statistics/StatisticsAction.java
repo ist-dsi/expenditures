@@ -3,7 +3,11 @@ package pt.ist.expenditureTrackingSystem.presentationTier.actions.statistics;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.util.Map;
+import java.util.SortedMap;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.Map.Entry;
 
 import javax.servlet.ServletOutputStream;
@@ -37,6 +41,8 @@ import pt.ist.expenditureTrackingSystem.domain.statistics.SimplifiedProcedurePro
 import pt.ist.expenditureTrackingSystem.domain.statistics.SimplifiedProcedureProcessStateTimeChartData;
 import pt.ist.expenditureTrackingSystem.domain.statistics.SimplifiedProcessStatistics;
 import pt.ist.expenditureTrackingSystem.domain.statistics.SimplifiedProcessTotalValueStatistics;
+import pt.ist.expenditureTrackingSystem.util.Calculation.Operation;
+import pt.ist.fenixWebFramework.rendererExtensions.util.IPresentableEnum;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 import pt.utl.ist.fenix.tools.util.excel.Spreadsheet;
 import pt.utl.ist.fenix.tools.util.excel.Spreadsheet.Row;
@@ -148,6 +154,73 @@ public class StatisticsAction extends ContextBaseAction {
 	    	new SimplifiedProcedureProcessActivityTimeChartData(paymentProcessYear);
 	chartData.calculateData();
 	return generateChart(response, chartData, t1);
+    }
+    
+    public ActionForward simplifiedProcessStatistics(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) throws IOException {
+	final Integer year = Integer.valueOf((String) request.getParameter("year"));
+	return streamSpreadsheet(response, "simplifiedProcedure", simplifiedProcessStatistics(year), year);
+    }
+
+    private Spreadsheet simplifiedProcessStatistics(final Integer year) {
+	final PaymentProcessYear paymentProcessYear = PaymentProcessYear.getPaymentProcessYearByYear(Integer.valueOf(year));
+	final SimplifiedProcedureProcessStateCountChartData countData = new SimplifiedProcedureProcessStateCountChartData(paymentProcessYear);
+	countData.calculateData();
+	final SimplifiedProcedureProcessStateTimeChartData medianData = new SimplifiedProcedureProcessStateTimeChartData(paymentProcessYear);
+	medianData.calculateData();
+	final SimplifiedProcedureProcessStateTimeAverageChartData averageData = new SimplifiedProcedureProcessStateTimeAverageChartData(paymentProcessYear);
+	averageData.calculateData();
+	final SortedMap<Object, BigDecimal> sumMap = (SortedMap) countData.getResults(Operation.SUM);
+	final SortedMap<Object, BigDecimal> averageMap = (SortedMap) averageData.getResults(Operation.AVERAGE);
+	final SortedMap<Object, BigDecimal> medianMap = (SortedMap) medianData.getResults(Operation.MEDIAN);
+	return generateSpreadSheet(sumMap, averageMap, medianMap);
+    }
+
+    public ActionForward refundProcessStatistics(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) throws IOException {
+	final Integer year = Integer.valueOf((String) request.getParameter("year"));
+	return streamSpreadsheet(response, "refund", refundProcessStatistics(year), year);
+    }
+
+    private Spreadsheet refundProcessStatistics(final Integer year) {
+	final PaymentProcessYear paymentProcessYear = PaymentProcessYear.getPaymentProcessYearByYear(Integer.valueOf(year));
+	final RefundProcessStateCountChartData countData = new RefundProcessStateCountChartData(paymentProcessYear);
+	countData.calculateData();
+	final RefundProcessStateTimeChartData medianData = new RefundProcessStateTimeChartData(paymentProcessYear);
+	medianData.calculateData();
+	final RefundProcessStateTimeAverageChartData averageData = new RefundProcessStateTimeAverageChartData(paymentProcessYear);
+	averageData.calculateData();
+	final SortedMap<Object, BigDecimal> sumMap = (SortedMap) countData.getResults(Operation.SUM);
+	final SortedMap<Object, BigDecimal> averageMap = (SortedMap) averageData.getResults(Operation.AVERAGE);
+	final SortedMap<Object, BigDecimal> medianMap = (SortedMap) medianData.getResults(Operation.MEDIAN);
+	return generateSpreadSheet(sumMap, averageMap, medianMap);
+    }
+
+    private Spreadsheet generateSpreadSheet(final SortedMap<Object, BigDecimal> sumMap,
+	    final SortedMap<Object, BigDecimal> medianMap,
+	    final SortedMap<Object, BigDecimal> averageMap) {
+	final Spreadsheet spreadsheet = new Spreadsheet("Estatísticas");
+	spreadsheet.setHeader("Estado");
+	spreadsheet.setHeader("Soma");
+	spreadsheet.setHeader("Mediana Tempo (em dias)");
+	spreadsheet.setHeader("Média Tempo (em dias)");
+	final SortedSet<Object> types = new TreeSet<Object>();
+	types.addAll(sumMap.keySet());
+	types.addAll(medianMap.keySet());
+	types.addAll(averageMap.keySet());
+	BigDecimal DAYS_CONST = new BigDecimal(1000 * 3600 * 24);
+	for (final Object type : types) {
+	    final BigDecimal sum = sumMap.get(type);
+	    final BigDecimal median = medianMap.get(type);
+	    final BigDecimal average = averageMap.get(type);
+
+	    final Row row = spreadsheet.addRow();
+	    row.setCell(((IPresentableEnum) type).getLocalizedName());
+	    row.setCell(sum == null ? "0" : sum.toString());
+	    row.setCell(median == null ? "" : median.divide(DAYS_CONST, 2, BigDecimal.ROUND_HALF_UP).toString());
+	    row.setCell(average == null ? "" : average.divide(DAYS_CONST, 2, BigDecimal.ROUND_HALF_UP).toString());
+	}
+	return spreadsheet;
     }
 
     public ActionForward showRefundProcessStatistics(final ActionMapping mapping, final ActionForm form,

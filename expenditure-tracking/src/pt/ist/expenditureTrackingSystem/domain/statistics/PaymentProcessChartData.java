@@ -16,7 +16,7 @@ public abstract class PaymentProcessChartData<C extends Comparable<C>> extends C
 
     protected final PaymentProcessYear paymentProcessYear;
 
-    protected final Calculation<C> calculation;
+    protected Calculation<C> calculation;
 
     private final Operation operation;
 
@@ -47,5 +47,9 @@ public abstract class PaymentProcessChartData<C extends Comparable<C>> extends C
     protected abstract String getLabel(final C c);
 
     protected abstract void count(final PaymentProcess paymentProcess);
+
+    public SortedMap<C, BigDecimal> getResults(final Operation operation) {
+	return calculation.getResult(operation);
+    }
 
 }
