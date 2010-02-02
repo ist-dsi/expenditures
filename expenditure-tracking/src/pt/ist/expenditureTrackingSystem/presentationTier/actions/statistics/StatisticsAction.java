@@ -173,7 +173,9 @@ public class StatisticsAction extends ContextBaseAction {
 	final SortedMap<Object, BigDecimal> sumMap = (SortedMap) countData.getResults(Operation.SUM);
 	final SortedMap<Object, BigDecimal> averageMap = (SortedMap) averageData.getResults(Operation.AVERAGE);
 	final SortedMap<Object, BigDecimal> medianMap = (SortedMap) medianData.getResults(Operation.MEDIAN);
-	return generateSpreadSheet(sumMap, averageMap, medianMap);
+	final SortedMap<Object, BigDecimal> minsMap = (SortedMap) medianData.getMinResults();
+	final SortedMap<Object, BigDecimal> maxsMap = (SortedMap) medianData.getMaxResults();
+	return generateSpreadSheet(sumMap, medianMap, averageMap, minsMap, maxsMap);
     }
 
     public ActionForward refundProcessStatistics(final ActionMapping mapping, final ActionForm form,
@@ -193,17 +195,23 @@ public class StatisticsAction extends ContextBaseAction {
 	final SortedMap<Object, BigDecimal> sumMap = (SortedMap) countData.getResults(Operation.SUM);
 	final SortedMap<Object, BigDecimal> averageMap = (SortedMap) averageData.getResults(Operation.AVERAGE);
 	final SortedMap<Object, BigDecimal> medianMap = (SortedMap) medianData.getResults(Operation.MEDIAN);
-	return generateSpreadSheet(sumMap, averageMap, medianMap);
+	final SortedMap<Object, BigDecimal> minsMap = (SortedMap) medianData.getMinResults();
+	final SortedMap<Object, BigDecimal> maxsMap = (SortedMap) medianData.getMaxResults();
+	return generateSpreadSheet(sumMap, medianMap, averageMap, minsMap, maxsMap);
     }
 
     private Spreadsheet generateSpreadSheet(final SortedMap<Object, BigDecimal> sumMap,
 	    final SortedMap<Object, BigDecimal> medianMap,
-	    final SortedMap<Object, BigDecimal> averageMap) {
+	    final SortedMap<Object, BigDecimal> averageMap,
+	    final SortedMap<Object, BigDecimal> minsMap,
+	    final SortedMap<Object, BigDecimal> maxsMap) {
 	final Spreadsheet spreadsheet = new Spreadsheet("Estatísticas");
 	spreadsheet.setHeader("Estado");
 	spreadsheet.setHeader("Soma");
 	spreadsheet.setHeader("Mediana Tempo (em dias)");
 	spreadsheet.setHeader("Média Tempo (em dias)");
+	spreadsheet.setHeader("Tempo Mínimo (em dias)");
+	spreadsheet.setHeader("Tempo Máximo (em dias)");
 	final SortedSet<Object> types = new TreeSet<Object>();
 	types.addAll(sumMap.keySet());
 	types.addAll(medianMap.keySet());
@@ -213,12 +221,16 @@ public class StatisticsAction extends ContextBaseAction {
 	    final BigDecimal sum = sumMap.get(type);
 	    final BigDecimal median = medianMap.get(type);
 	    final BigDecimal average = averageMap.get(type);
+	    final BigDecimal min = minsMap.get(type);
+	    final BigDecimal max = maxsMap.get(type);
 
 	    final Row row = spreadsheet.addRow();
 	    row.setCell(((IPresentableEnum) type).getLocalizedName());
 	    row.setCell(sum == null ? "0" : sum.toString());
 	    row.setCell(median == null ? "" : median.divide(DAYS_CONST, 2, BigDecimal.ROUND_HALF_UP).toString());
 	    row.setCell(average == null ? "" : average.divide(DAYS_CONST, 2, BigDecimal.ROUND_HALF_UP).toString());
+	    row.setCell(min == null ? "" : min.divide(DAYS_CONST, 2, BigDecimal.ROUND_HALF_UP).toString());
+	    row.setCell(max == null ? "" : max.divide(DAYS_CONST, 2, BigDecimal.ROUND_HALF_UP).toString());
 	}
 	return spreadsheet;
     }

@@ -52,4 +52,12 @@ public abstract class PaymentProcessChartData<C extends Comparable<C>> extends C
 	return calculation.getResult(operation);
     }
 
+    public SortedMap<C, BigDecimal> getMinResults() {
+	return calculation.getMins();
+    }
+
+    public SortedMap<C, BigDecimal> getMaxResults() {
+	return calculation.getMaxs();
+    }
+
 }

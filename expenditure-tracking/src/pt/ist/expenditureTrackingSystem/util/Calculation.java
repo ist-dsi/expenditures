@@ -124,4 +124,36 @@ public class Calculation<C extends Comparable<C>> {
 	return getResult(Operation.MEDIAN);
     }
 
+    public SortedMap<C, BigDecimal> getMins() {
+	final SortedMap<C, BigDecimal> result = new TreeMap<C, BigDecimal>();
+	for (int i = 0; i < catagories.length; i++) {
+	    final C catagory = catagories[i];
+
+	    if (values != null && values[i] != null && values[i].size() > 0) {
+		final BigDecimal min = Collections.min(values[i]);
+		result.put(catagory, min);
+	    } else {
+		result.put(catagory, null);
+	    }
+
+	}
+	return result;
+    }
+
+    public SortedMap<C, BigDecimal> getMaxs() {
+	final SortedMap<C, BigDecimal> result = new TreeMap<C, BigDecimal>();
+	for (int i = 0; i < catagories.length; i++) {
+	    final C catagory = catagories[i];
+
+	    if (values != null && values[i] != null && values[i].size() > 0) {
+		final BigDecimal min = Collections.max(values[i]);
+		result.put(catagory, min);
+	    } else {
+		result.put(catagory, null);
+	    }
+
+	}
+	return result;
+    }
+
 }
