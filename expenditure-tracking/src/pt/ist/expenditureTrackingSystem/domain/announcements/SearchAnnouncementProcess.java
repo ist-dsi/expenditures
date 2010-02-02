@@ -35,7 +35,7 @@ public class SearchAnnouncementProcess extends Search<AnnouncementProcess> {
 
 	private boolean matchCriteria(AnnouncementProcess announcementProcess) {
 
-	    Announcement a = announcementProcess.getAnnouncement();
+	    CCPAnnouncement a = announcementProcess.getAnnouncement();
 	    return matchCriteria(a.getPublisher().getName(), getPublisherName())
 		    && matchCriteria(a.getSupplier().getName(), getSupplierName())
 		    && matchCriteria(a.getTotalPrice(), getTotalPrice())
@@ -57,11 +57,11 @@ public class SearchAnnouncementProcess extends Search<AnnouncementProcess> {
 	    if (StringUtils.isEmpty(recordName) && !StringUtils.isEmpty(inputName)) {
 		return false;
 	    }
-	    
+
 	    if (StringUtils.isEmpty(inputName)) {
 		return true;
 	    }
-	    
+
 	    recordName = StringNormalizer.normalize(recordName);
 	    inputName = StringNormalizer.normalize(inputName);
 

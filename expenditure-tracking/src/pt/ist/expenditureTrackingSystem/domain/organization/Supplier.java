@@ -16,6 +16,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTh
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundableInvoiceFile;
 import pt.ist.expenditureTrackingSystem.domain.announcements.Announcement;
+import pt.ist.expenditureTrackingSystem.domain.announcements.CCPAnnouncement;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateSupplierBean;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.plugins.luceneIndexing.IndexableField;
@@ -215,7 +216,7 @@ public class Supplier extends Supplier_Base implements Indexable {
 	    getRefundInvoicesSet().addAll(refundInvoices);
 	    refundInvoices.clear();
 
-	    final Set<Announcement> announcements = supplier.getAnnouncementsSet();
+	    final Set<CCPAnnouncement> announcements = supplier.getAnnouncementsSet();
 	    getAnnouncementsSet().addAll(announcements);
 	    announcements.clear();
 

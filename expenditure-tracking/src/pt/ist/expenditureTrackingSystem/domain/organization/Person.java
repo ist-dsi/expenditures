@@ -215,14 +215,6 @@ public class Person extends Person_Base implements Indexable {
 	return processes;
     }
 
-    public List<AnnouncementProcess> getAnnouncementProcesses() {
-	List<AnnouncementProcess> processes = new ArrayList<AnnouncementProcess>();
-	for (Announcement announcement : getAnnouncements()) {
-	    processes.add(announcement.getAnnouncementProcess());
-	}
-	return processes;
-    }
-
     public Set<Authorization> getValidAuthorizations() {
 	final Set<Authorization> res = new HashSet<Authorization>();
 	for (Authorization authorization : getAuthorizationsSet()) {

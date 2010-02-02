@@ -1,6 +1,5 @@
 package pt.ist.expenditureTrackingSystem.domain.announcements;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -14,40 +13,14 @@ import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.announcement.AnnouncementProcessState;
-import pt.ist.expenditureTrackingSystem.domain.announcements.activities.ApproveAnnouncementProcess;
-import pt.ist.expenditureTrackingSystem.domain.announcements.activities.CancelAnnouncementProcess;
-import pt.ist.expenditureTrackingSystem.domain.announcements.activities.CloseAnnouncementProcess;
-import pt.ist.expenditureTrackingSystem.domain.announcements.activities.EditAnnouncementForApproval;
-import pt.ist.expenditureTrackingSystem.domain.announcements.activities.RejectAnnouncementProcess;
-import pt.ist.expenditureTrackingSystem.domain.announcements.activities.SubmitAnnouncementForApproval;
 import pt.ist.expenditureTrackingSystem.domain.dto.AnnouncementBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
-import pt.ist.expenditureTrackingSystem.domain.processes.AbstractActivity;
-import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 import pt.ist.fenixWebFramework.services.Service;
 
+/*
+ * TODO: This should be deleted
+ */
 public class AnnouncementProcess extends AnnouncementProcess_Base {
-
-    private static ArrayList<AbstractActivity> activities = new ArrayList<AbstractActivity>();
-
-    static {
-	activities.add(new EditAnnouncementForApproval());
-	activities.add(new SubmitAnnouncementForApproval());
-	activities.add(new ApproveAnnouncementProcess());
-	activities.add(new RejectAnnouncementProcess());
-	activities.add(new CancelAnnouncementProcess());
-	activities.add(new CloseAnnouncementProcess());
-    }
-
-    public <T extends GenericProcess> AbstractActivity<T> getActivityByName(String activityName) {
-
-	for (AbstractActivity activity : activities) {
-	    if (activity.getName().equals(activityName)) {
-		return activity;
-	    }
-	}
-	return null;
-    }
 
     public boolean isProcessInState(AnnouncementProcessStateType state) {
 	return getAnnouncementProcessStateType().equals(state);
@@ -65,15 +38,6 @@ public class AnnouncementProcess extends AnnouncementProcess_Base {
 	return getLastAnnouncementProcessState().getAnnouncementProcessStateType();
     }
 
-    public boolean isPersonAbleToExecuteActivities() {
-	for (AbstractActivity<AnnouncementProcess> activity : activities) {
-	    if (activity.isActive(this)) {
-		return true;
-	    }
-	}
-	return false;
-    }
-
     @Service
     public static AnnouncementProcess createNewAnnouncementProcess(Person publisher, AnnouncementBean announcementBean) {
 	if (!isCreateNewProcessAvailable()) {
@@ -86,23 +50,13 @@ public class AnnouncementProcess extends AnnouncementProcess_Base {
 
     private AnnouncementProcess(final Person publisher, AnnouncementBean announcementBean) {
 	super();
-	new AnnouncementProcessState(this, AnnouncementProcessStateType.IN_GENESIS);
-	new Announcement(this, publisher, announcementBean);
-    }
-
-    public List<AbstractActivity> getActiveActivities() {
-	List<AbstractActivity> activitiesResult = new ArrayList<AbstractActivity>();
-	for (AbstractActivity activity : activities) {
-	    if (activity.isActive(this)) {
-		activitiesResult.add(activity);
-	    }
-	}
-	return activitiesResult;
+//	new AnnouncementProcessState(this, AnnouncementProcessStateType.IN_GENESIS);
+//	new Announcement(this, publisher, announcementBean);
     }
 
     @Override
     public boolean hasAnyAvailableActivitity() {
-	return !getActiveActivities().isEmpty();
+	return false;
     }
 
     public String getRejectionJustification() {

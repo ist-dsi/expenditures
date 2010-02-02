@@ -86,10 +86,17 @@ class acquisitions.CPVReference {
 class announcements.Announcement {
 	String description;
 	Money totalPrice;
+	DateTime creationDate;
+	Boolean active;
+}
+
+class announcements.CCPAnnouncement extends announcements.Announcement {
 	Integer executionDays;
 	String executionAddress;
 	String choiceCriteria;
-	DateTime creationDate;
+}
+
+class announcements.RCISTAnnouncement extends announcements.Announcement {
 }
 
 class acquisitions.PaymentProcessYear {
@@ -383,7 +390,7 @@ relation AcquisitionProcessAcquisitionRequest {
 
 relation AnnouncementProcessAnnouncement {
 	announcements.AnnouncementProcess playsRole announcementProcess;
-	announcements.Announcement playsRole announcement;
+	announcements.CCPAnnouncement playsRole announcement;
 }
 
 relation ExpenditureTrackingSystemAcquisitionRequestItem {
@@ -709,20 +716,20 @@ relation ExpenditureTrackingSystemAnnouncement {
 
 relation AnnoucementBuyingUnit {
 	organization.Unit playsRole buyingUnit;
-	announcements.Announcement playsRole buyAnnouncements {
+	announcements.CCPAnnouncement playsRole buyAnnouncements {
 		multiplicity *;
 	}
 }
 
 relation AnnoucementRequestingUnit {
 	organization.Unit playsRole requestingUnit;
-	announcements.Announcement playsRole requestAnnouncements {
+	announcements.CCPAnnouncement playsRole requestAnnouncements {
 		multiplicity *;
 	}
 }
 
 relation AnnouncementSupplier {
-	announcements.Announcement playsRole announcements {
+	announcements.CCPAnnouncement playsRole announcements {
 		multiplicity *;
 	}
 	organization.Supplier playsRole supplier;
@@ -730,7 +737,7 @@ relation AnnouncementSupplier {
 
 relation AnnouncementPublisher {
 	organization.Person playsRole publisher;
-	announcements.Announcement playsRole announcements {
+	announcements.CCPAnnouncement playsRole announcements {
 		multiplicity *;
 	}
 }

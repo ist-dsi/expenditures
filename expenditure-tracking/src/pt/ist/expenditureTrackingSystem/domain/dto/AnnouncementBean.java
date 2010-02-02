@@ -5,12 +5,13 @@ import java.io.Serializable;
 import myorg.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Acquisition;
 import pt.ist.expenditureTrackingSystem.domain.announcements.Announcement;
+import pt.ist.expenditureTrackingSystem.domain.announcements.CCPAnnouncement;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 
 public class AnnouncementBean implements Serializable {
 
-    private Announcement announcement;
+    private CCPAnnouncement announcement;
 
     private String description;
     private Money totalPrice;
@@ -58,7 +59,7 @@ public class AnnouncementBean implements Serializable {
 	return announcement;
     }
 
-    public void setAnnouncement(Announcement announcement) {
+    public void setAnnouncement(CCPAnnouncement announcement) {
 	this.announcement = announcement;
     }
 
@@ -102,7 +103,7 @@ public class AnnouncementBean implements Serializable {
 	this.choiceCriteria = choiceCriteria;
     }
 
-    public static AnnouncementBean create(Announcement announcement) {
+    public static AnnouncementBean create(CCPAnnouncement announcement) {
 	AnnouncementBean bean = new AnnouncementBean();
 	bean.setAnnouncement(announcement);
 	bean.setDescription(announcement.getDescription());

@@ -12,10 +12,10 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.announcements.Announcement;
 import pt.ist.expenditureTrackingSystem.domain.announcements.AnnouncementProcessStateType;
+import pt.ist.expenditureTrackingSystem.domain.announcements.CCPAnnouncement;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 import pt.utl.ist.fenix.tools.util.CollectionPager;
@@ -42,7 +42,7 @@ public class HomeAction extends BaseAction {
 	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
 
 	ArrayList<Announcement> approvedList = new ArrayList<Announcement>();
-	for (Announcement announcement : ExpenditureTrackingSystem.getInstance().getAnnouncements()) {
+	for (CCPAnnouncement announcement : Announcement.getAnnouncements(CCPAnnouncement.class)) {
 	    if (announcement.getAnnouncementProcess().isProcessInState(AnnouncementProcessStateType.APPROVED)) {
 		approvedList.add(announcement);
 	    }
