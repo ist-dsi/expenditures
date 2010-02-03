@@ -2,6 +2,7 @@ package pt.ist.expenditureTrackingSystem.domain.organization;
 
 import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
@@ -27,8 +28,6 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestWithPayment;
-import pt.ist.expenditureTrackingSystem.domain.announcements.Announcement;
-import pt.ist.expenditureTrackingSystem.domain.announcements.AnnouncementProcess;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationLog;
 import pt.ist.expenditureTrackingSystem.domain.dto.AuthorizationBean;
@@ -38,10 +37,11 @@ import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.plugins.luceneIndexing.IndexableField;
 import pt.ist.fenixframework.plugins.luceneIndexing.domain.IndexDocument;
 import pt.ist.fenixframework.plugins.luceneIndexing.domain.interfaces.Indexable;
+import pt.ist.fenixframework.plugins.luceneIndexing.domain.interfaces.Searchable;
 import pt.utl.ist.fenix.tools.util.StringNormalizer;
 import dml.runtime.RelationAdapter;
 
-public class Person extends Person_Base implements Indexable {
+public class Person extends Person_Base implements Indexable, Searchable {
 
     public static enum PersonIndexes implements IndexableField {
 
@@ -326,6 +326,14 @@ public class Person extends Person_Base implements Indexable {
 	document.indexField(PersonIndexes.USERNAME_INDEX, getUsername());
 	return document;
     }
+
+    @Override
+    public Set<Indexable> getObjectsToIndex() {
+	Set<Indexable> set = new HashSet<Indexable>();
+	set.add(this);
+	return set;
+    }
+
     // @Service
     // private static void setPersonInUser(final User user) {
     // final Person person = Person.findByUsername(user.getUsername());

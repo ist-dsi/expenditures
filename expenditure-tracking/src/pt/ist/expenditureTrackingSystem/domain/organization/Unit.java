@@ -37,11 +37,12 @@ import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.plugins.luceneIndexing.IndexableField;
 import pt.ist.fenixframework.plugins.luceneIndexing.domain.IndexDocument;
 import pt.ist.fenixframework.plugins.luceneIndexing.domain.interfaces.Indexable;
+import pt.ist.fenixframework.plugins.luceneIndexing.domain.interfaces.Searchable;
 import pt.utl.ist.fenix.tools.util.StringNormalizer;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
-public class Unit extends Unit_Base implements Indexable {
+public class Unit extends Unit_Base implements Indexable, Searchable {
 
     public static enum UnitIndexFields implements IndexableField {
 
@@ -619,5 +620,12 @@ public class Unit extends Unit_Base implements Indexable {
 	IndexDocument document = new IndexDocument(this);
 	document.indexField(UnitIndexFields.NAME_INDEX, StringNormalizer.normalize(getName()));
 	return document;
+    }
+
+    @Override
+    public Set<Indexable> getObjectsToIndex() {
+	Set<Indexable> set = new HashSet<Indexable>();
+	set.add(this);
+	return set;
     }
 }

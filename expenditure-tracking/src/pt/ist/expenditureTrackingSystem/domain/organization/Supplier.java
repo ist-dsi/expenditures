@@ -1,12 +1,14 @@
 package pt.ist.expenditureTrackingSystem.domain.organization;
 
+import java.util.HashSet;
 import java.util.Set;
-
-import org.apache.commons.lang.StringUtils;
 
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Address;
 import myorg.domain.util.Money;
+
+import org.apache.commons.lang.StringUtils;
+
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.SavedSearch;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
@@ -15,16 +17,16 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.Acquisi
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundableInvoiceFile;
-import pt.ist.expenditureTrackingSystem.domain.announcements.Announcement;
 import pt.ist.expenditureTrackingSystem.domain.announcements.CCPAnnouncement;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateSupplierBean;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.plugins.luceneIndexing.IndexableField;
 import pt.ist.fenixframework.plugins.luceneIndexing.domain.IndexDocument;
 import pt.ist.fenixframework.plugins.luceneIndexing.domain.interfaces.Indexable;
+import pt.ist.fenixframework.plugins.luceneIndexing.domain.interfaces.Searchable;
 import pt.utl.ist.fenix.tools.util.StringNormalizer;
 
-public class Supplier extends Supplier_Base implements Indexable {
+public class Supplier extends Supplier_Base implements Indexable, Searchable {
 
     public static enum SupplierIndexes implements IndexableField {
 	FISCAL_CODE("nif"), NAME("supplierName");
@@ -244,6 +246,13 @@ public class Supplier extends Supplier_Base implements Indexable {
 	}
 	indexDocument.indexField(SupplierIndexes.NAME, StringNormalizer.normalize(getName()));
 	return indexDocument;
+    }
+
+    @Override
+    public Set<Indexable> getObjectsToIndex() {
+	Set<Indexable> set = new HashSet<Indexable>();
+	set.add(this);
+	return set;
     }
 
 }
