@@ -30,6 +30,7 @@
 			<fr:property name="classes" value="form thwidth150px"/>
 			<fr:property name="columnClasses" value=",,tderror"/>
 		</fr:layout>
+		<fr:destination name="invalid" path="/expenditureProcesses.do?method=itemInvalidInfo"/>
 	</fr:edit>
 </div>
 
@@ -42,6 +43,7 @@
 			<fr:property name="classes" value="form thwidth150px"/>
 			<fr:property name="columnClasses" value=",,tderror"/>
 		</fr:layout>
+		<fr:destination name="invalid" path="/expenditureProcesses.do?method=itemInvalidInfo"/>
 	</fr:edit>
 </div>
 
@@ -55,6 +57,7 @@
 			<fr:property name="columnClasses" value=",,tderror"/>
 		</fr:layout>
 		<fr:destination name="postBack" path="/expenditureProcesses.do?method=itemPostBack"/>
+		<fr:destination name="invalid" path="/expenditureProcesses.do?method=itemInvalidInfo"/>
 	</fr:edit>
 </div>
 	

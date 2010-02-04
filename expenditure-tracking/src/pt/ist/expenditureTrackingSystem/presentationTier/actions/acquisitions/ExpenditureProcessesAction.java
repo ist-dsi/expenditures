@@ -85,6 +85,17 @@ public class ExpenditureProcessesAction extends ContextBaseAction {
 	return ProcessManagement.performActivityPostback(activityInformation, request);
     }
 
+    public ActionForward itemInvalidInfo(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	CreateAcquisitionRequestItemActivityInformation activityInformation = getRenderedObject("activityBean");
+	WorkflowProcess process = AbstractDomainObject.fromExternalId(request.getParameter("processId"));
+
+	request.setAttribute("information", activityInformation);
+	request.setAttribute("process", process);
+
+	return ProcessManagement.performActivityPostback(activityInformation, request);
+    }
+
     @Override
     public Context createContext(String contextPathString, HttpServletRequest request) {
 	WorkflowProcess process = getProcess(request);
