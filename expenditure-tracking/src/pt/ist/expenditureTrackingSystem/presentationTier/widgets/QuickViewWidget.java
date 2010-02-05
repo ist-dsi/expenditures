@@ -2,6 +2,7 @@ package pt.ist.expenditureTrackingSystem.presentationTier.widgets;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -15,6 +16,7 @@ import myorg.util.ClassNameBundle;
 
 import org.apache.struts.action.ActionForward;
 
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPaymentProcess;
 import pt.ist.fenixWebFramework.renderers.components.state.IViewState;
 import pt.ist.fenixWebFramework.renderers.model.MetaObject;
@@ -34,19 +36,26 @@ public class QuickViewWidget extends WidgetController {
 
     @Override
     public ActionForward doSubmit(WidgetRequest request) {
-	SearchPaymentProcess searchBean = getRenderedObject("quickAccess");
 
-	List<WorkflowProcess> search = DomainIndexer.getInstance().search(WorkflowProcess.class, WorkflowProcessIndex.NUMBER,
-		searchBean.getProcessId(), 2);
+	SearchPaymentProcess searchBean = getRenderedObject("quickAccess");
+	searchBean.setHasAvailableAndAccessibleActivityForUser(Boolean.FALSE);
+	Set<PaymentProcess> search = searchBean.search();
+
+	// SearchPaymentProcess searchBean = getRenderedObject("quickAccess");
+	//	
+	// List<WorkflowProcess> search =
+	// DomainIndexer.getInstance().search(WorkflowProcess.class,
+	// WorkflowProcessIndex.NUMBER,
+	// searchBean.getProcessId(), 2);
 
 	HttpServletResponse response = request.getResponse();
 	response.setContentType("text");
 	ServletOutputStream stream = null;
 
 	try {
-	    String write = (search.size() != 1 || !search.get(0).isAccessibleToCurrentUser()) ? QuickViewWidget.NOT_FOUND
+	    String write = (search.size() != 1 || !search.iterator().next().isAccessibleToCurrentUser()) ? QuickViewWidget.NOT_FOUND
 		    : GenericChecksumRewriter.injectChecksumInUrl(request.getContextPath(),
-			    ProcessManagement.workflowManagementURL + search.get(0).getExternalId());
+			    ProcessManagement.workflowManagementURL + search.iterator().next().getExternalId());
 
 	    stream = response.getOutputStream();
 	    response.setContentLength(write.length());
