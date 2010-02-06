@@ -39,6 +39,7 @@ public class SimplifiedProcedureProcessStateTimeChartData extends SimplifiedProc
 
 	    final List<ProcessState> processStates = new ArrayList<ProcessState>(simplifiedProcedureProcess.getProcessStatesSet());
 	    Collections.sort(processStates, ProcessState.COMPARATOR_BY_WHEN);
+	    final long[] durations = new long[AcquisitionProcessStateType.values().length];
 	    for (int i = 1; i < processStates.size(); i++) {
 		final AcquisitionProcessState processState = (AcquisitionProcessState) processStates.get(i);
 		final AcquisitionProcessState previousState = (AcquisitionProcessState) processStates.get(i - 1);
@@ -48,7 +49,14 @@ public class SimplifiedProcedureProcessStateTimeChartData extends SimplifiedProc
 		final long duration = startMillis - previousStateChangeDateTime.getMillis();
 
 		final AcquisitionProcessStateType acquisitionProcessStateType = previousState.getAcquisitionProcessStateType();
-		calculation.registerValue(acquisitionProcessStateType, new BigDecimal(duration));
+		durations[acquisitionProcessStateType.ordinal()] += duration;
+		//calculation.registerValue(acquisitionProcessStateType, new BigDecimal(duration));
+	    }
+	    for (final AcquisitionProcessStateType acquisitionProcessStateType : AcquisitionProcessStateType.values()) {
+		final long duration = durations[acquisitionProcessStateType.ordinal()];
+		if (duration > 0) {
+		    calculation.registerValue(acquisitionProcessStateType, new BigDecimal(duration));
+		}
 	    }
 	}
     }

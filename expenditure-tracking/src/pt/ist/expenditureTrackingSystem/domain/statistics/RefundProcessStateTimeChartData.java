@@ -8,6 +8,7 @@ import java.util.List;
 import org.joda.time.DateTime;
 
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessState;
@@ -39,6 +40,7 @@ public class RefundProcessStateTimeChartData extends RefundProcessStateTypeChart
 
 	    final List<ProcessState> processStates = new ArrayList<ProcessState>(refundProcess.getProcessStatesSet());
 	    Collections.sort(processStates, ProcessState.COMPARATOR_BY_WHEN);
+	    final long[] durations = new long[AcquisitionProcessStateType.values().length];
 	    for (int i = 1; i < processStates.size(); i++) {
 		final RefundProcessState processState = (RefundProcessState) processStates.get(i);
 		final RefundProcessState previousState = (RefundProcessState) processStates.get(i - 1);
@@ -48,7 +50,14 @@ public class RefundProcessStateTimeChartData extends RefundProcessStateTypeChart
 		final long duration = startMillis - previousStateChangeDateTime.getMillis();
 
 		final RefundProcessStateType refundProcessStateType = previousState.getRefundProcessStateType();
-		calculation.registerValue(refundProcessStateType, new BigDecimal(duration));
+		durations[refundProcessStateType.ordinal()] += duration;
+		//calculation.registerValue(refundProcessStateType, new BigDecimal(duration));
+	    }
+	    for (final RefundProcessStateType refundProcessStateType : RefundProcessStateType.values()) {
+		final long duration = durations[refundProcessStateType.ordinal()];
+		if (duration > 0) {
+		    calculation.registerValue(refundProcessStateType, new BigDecimal(duration));
+		}
 	    }
 	}
     }
