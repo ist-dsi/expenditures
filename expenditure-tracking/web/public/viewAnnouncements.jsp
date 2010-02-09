@@ -10,7 +10,9 @@
 
 
 <%@page import="pt.ist.fenixWebFramework.servlets.filters.contentRewrite.RequestChecksumFilter"%>
-<%@page import="pt.ist.fenixWebFramework.servlets.filters.contentRewrite.GenericChecksumRewriter"%><h2><bean:message key="process.announcement.title" bundle="EXPENDITURE_RESOURCES"/></h2>
+<%@page import="pt.ist.fenixWebFramework.servlets.filters.contentRewrite.GenericChecksumRewriter"%>
+
+<h2><bean:message key="process.announcement.title" bundle="EXPENDITURE_RESOURCES"/></h2>
 
 <logic:empty name="announcements">
 	<p><em><bean:message key="process.messages.info.noAvailableAnnouncements" bundle="EXPENDITURE_RESOURCES"/>.</em></p>

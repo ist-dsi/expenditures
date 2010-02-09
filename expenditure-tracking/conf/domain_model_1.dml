@@ -76,6 +76,7 @@ class acquisitions.Acquisition {
 
 	class acquisitions.AcquisitionRequest extends acquisitions.RequestWithPayment {
 		String paymentReference;
+		String contractSimpleDescription;
 	}
 
 class acquisitions.CPVReference {

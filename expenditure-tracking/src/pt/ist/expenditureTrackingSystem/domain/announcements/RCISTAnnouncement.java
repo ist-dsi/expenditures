@@ -10,10 +10,10 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 
 public class RCISTAnnouncement extends RCISTAnnouncement_Base {
 
-    public RCISTAnnouncement(AcquisitionRequest request, String description) {
+    public RCISTAnnouncement(AcquisitionRequest request) {
 	super();
 	setAcquisition(request);
-	setDescription(description);
+	setDescription(request.getContractSimpleDescription());
     }
 
     @Override

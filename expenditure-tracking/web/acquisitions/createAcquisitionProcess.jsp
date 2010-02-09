@@ -52,10 +52,14 @@
 			</fr:layout>
 		</fr:edit>
 	</logic:equal>
+	<bean:define id="type" name="acquisitionProcessBean" property="classification"/>
+	
+	<bean:define id="schema" value="<%= "createAcquisitionRequest." + type %>"/>
+	
 	<fr:edit id="acquisitionProcessBean"
 			name="acquisitionProcessBean"
 			type="pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean"
-			schema="createAcquisitionRequest">
+			schema="<%= schema %>">
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="form"/>
 			<fr:property name="columnClasses" value=",,tderror"/>
@@ -64,42 +68,44 @@
 	<html:submit styleClass="inputbutton"><bean:message key="button.submit" bundle="EXPENDITURE_RESOURCES"/></html:submit>
 </fr:form>
 
-<script type="text/javascript">
-	$("input[id$='supplier_AutoComplete']").change(function() {
-				<%= "$.getJSON(\"" + request.getContextPath() + "/acquisitionSimplifiedProcedureProcess.do?method=checkSupplierLimit&supplierOid=\" + $(this).attr('value'),function(data, textStatus) {dealWith(data)})" %>
-			}); 
-
-	function dealWith(data) {
-
-		$("#limitInformation").remove();
-		
-
-		if(data['status'] == 'SOK') {
-
-			<%
-				String message = BundleUtil.getStringFromResourceBundle("resources.AcquisitionResources","label.supplier.allocationInfo.notFormatted");
-			%>
-			
-			var text = "<%= message %>";
-			text = formatString(text,[data['softLimit'], data['supplierLimit']]);
-		
-			$("#createForm").before("<div id=\"limitInformation\"><p class=\"mbottom05\"><span>" + text + "</span><br/>");
-		} else {
-
-			<%
-				String message2 = BundleUtil.getStringFromResourceBundle("resources.AcquisitionResources","label.attention.supplier.supplierOverLimit.notFormatted");
-			%>
-		
-			var text = "<%= message2 %>";
-			text = formatString(text,[data['softLimit'],data['supplierLimit']]);
+<logic:equal name="type" value="CCP">
+	<script type="text/javascript">
+		$("input[id$='supplier_AutoComplete']").change(function() {
+					<%= "$.getJSON(\"" + request.getContextPath() + "/acquisitionSimplifiedProcedureProcess.do?method=checkSupplierLimit&supplierOid=\" + $(this).attr('value'),function(data, textStatus) {dealWith(data)})" %>
+				}); 
 	
-			<bean:define id="messageExtra">
-				<bean:message key="label.attention.supplier.explanation" bundle="ACQUISITION_RESOURCES"/>
-			</bean:define>
-
-			$("#createForm").before("<div id=\"limitInformation\"><div class=\"infobox_warning\">" + text + "</p><p><%= messageExtra %></p>");
-		}
-	}	
-</script>
+		function dealWith(data) {
+	
+			$("#limitInformation").remove();
+			
+	
+			if(data['status'] == 'SOK') {
+	
+				<%
+					String message = BundleUtil.getStringFromResourceBundle("resources.AcquisitionResources","label.supplier.allocationInfo.notFormatted");
+				%>
+				
+				var text = "<%= message %>";
+				text = formatString(text,[data['softLimit'], data['supplierLimit']]);
+			
+				$("#createForm").before("<div id=\"limitInformation\"><p class=\"mbottom05\"><span>" + text + "</span><br/>");
+			} else {
+	
+				<%
+					String message2 = BundleUtil.getStringFromResourceBundle("resources.AcquisitionResources","label.attention.supplier.supplierOverLimit.notFormatted");
+				%>
+			
+				var text = "<%= message2 %>";
+				text = formatString(text,[data['softLimit'],data['supplierLimit']]);
+		
+				<bean:define id="messageExtra">
+					<bean:message key="label.attention.supplier.explanation" bundle="ACQUISITION_RESOURCES"/>
+				</bean:define>
+	
+				$("#createForm").before("<div id=\"limitInformation\"><div class=\"infobox_warning\">" + text + "</p><p><%= messageExtra %></p>");
+			}
+		}	
+	</script>
+</logic:equal>
 
 	

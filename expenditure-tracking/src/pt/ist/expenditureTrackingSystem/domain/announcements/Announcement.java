@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.joda.time.DateTime;
+
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
@@ -13,6 +15,7 @@ public abstract class Announcement extends Announcement_Base {
     protected Announcement() {
 	super();
 	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
+	setCreationDate(new DateTime());
     }
 
     public abstract Set<Unit> getBuyingUnits();

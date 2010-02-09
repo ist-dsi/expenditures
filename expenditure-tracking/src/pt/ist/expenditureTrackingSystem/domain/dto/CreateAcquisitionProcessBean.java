@@ -23,6 +23,7 @@ public class CreateAcquisitionProcessBean implements Serializable {
     private Person requester;
     private Supplier supplierToAdd;
     private ProcessClassification classification;
+    private String simpleDescription;
 
     public CreateAcquisitionProcessBean(ProcessClassification classification) {
 	setRequestingUnit(null);
@@ -147,6 +148,14 @@ public class CreateAcquisitionProcessBean implements Serializable {
 
     public void setMissionProcess(MissionProcess missionProcess) {
 	this.missionProcess = missionProcess;
+    }
+
+    public String getContractSimpleDescription() {
+	return simpleDescription;
+    }
+
+    public void setContractSimpleDescription(String simpleDescription) {
+	this.simpleDescription = simpleDescription;
     }
 
 }

@@ -101,6 +101,12 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 	    }
 	});
 
+	RequestChecksumFilter.registerFilterRule(new ChecksumPredicate() {
+	    public boolean shouldFilter(HttpServletRequest httpServletRequest) {
+		return !(httpServletRequest.getRequestURI().endsWith("/viewRCISTAnnouncements.do"));
+	    }
+	});
+
     }
 
     private static void initRoles() {
