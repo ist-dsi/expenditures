@@ -9,8 +9,12 @@
 <%@page import="pt.ist.fenixWebFramework.servlets.filters.contentRewrite.GenericChecksumRewriter"%>
 
 <style>
+table.rcistTable {
+margin: 0;
+margin-bottom: 20px;
+}
 table.rcistTable th {
-	
+width: 115px;
 }
 table.rcistTable th, table.rcistTable td {
 background: #f5f5f5 !important;
@@ -33,7 +37,7 @@ border-top: 2px solid #ccc;
 	<p><em><bean:message key="process.messages.info.noAvailableAnnouncements" bundle="EXPENDITURE_RESOURCES"/>.</em></p>
 </logic:empty>
 
-<p class="aright mtop05">
+<p class="aright mbottom1">
 		<cp:collectionPages url="/viewRCISTAnnouncements.do?method=viewRCIST" 
 			pageNumberAttributeName="pageNumber" numberOfPagesAttributeName="numberOfPages" numberOfVisualizedPages="10"/>
 </p>
@@ -42,16 +46,14 @@ border-top: 2px solid #ccc;
 	<div>
 	<fr:view name="announcement" schema="viewRCISTAnnouncement">
 		<fr:layout name="tabular">
-			<fr:property name="classes" value="tstyle2 thwhite thnowrap thlight thleft thtop ulnomargin width100pc rcistTable"/>
+			<fr:property name="classes" value="tstyle2 thnowrap thlight thleft thtop width100pc rcistTable"/>
 			<fr:property name="rowClasses" value="firstrow,,"/>
-			<fr:property name="columnClasses" value="width100px,,"/>
-			
 		</fr:layout>
 	</fr:view>
 	</div>
 </logic:iterate>
 
-<p class="aright mtop05">
+<p class="aright mtop0">
 		<cp:collectionPages url="/viewRCISTAnnouncements.do?method=viewRCIST"
 			pageNumberAttributeName="pageNumber" numberOfPagesAttributeName="numberOfPages" numberOfVisualizedPages="10"/>
 	</p>
