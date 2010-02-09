@@ -45,6 +45,10 @@ public class AcquisitionProposalDocument extends AcquisitionProposalDocument_Bas
     public void validateUpload(WorkflowProcess workflowProcess) {
 	SimplifiedProcedureProcess process = (SimplifiedProcedureProcess) workflowProcess;
 
+	if (!process.getFiles(AcquisitionProposalDocument.class).isEmpty()) {
+	    throw new ProcessFileValidationException("resources/AcquisitionResources",
+		    "error.acquisitionProposalDocument.allowedOnlyOneProposal");
+	}
 	if (process.getProcessClassification() != ProcessClassification.CT75000
 		&& (!process.isInGenesis() || process.getProcessCreator() != UserView.getCurrentUser())) {
 	    throw new ProcessFileValidationException("resources/AcquisitionResources",
