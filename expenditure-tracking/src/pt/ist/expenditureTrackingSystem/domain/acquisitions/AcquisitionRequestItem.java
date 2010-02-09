@@ -61,7 +61,7 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	Money totalValue = unitValue.multiply(quantity.longValue());
 
 	if (getUnitValue() != null && getQuantity() != null) {
-	    Money currentValue = getUnitValue().multiply(quantity.longValue());
+	    Money currentValue = getUnitValue().multiply(getQuantity().longValue());
 	    totalValue = totalValue.subtract(currentValue);
 	}
 
