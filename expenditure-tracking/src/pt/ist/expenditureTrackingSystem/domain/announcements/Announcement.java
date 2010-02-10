@@ -16,6 +16,7 @@ public abstract class Announcement extends Announcement_Base {
 	super();
 	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
 	setCreationDate(new DateTime());
+	setOjbConcreteClass(getClass().getName());
     }
 
     public abstract Set<Unit> getBuyingUnits();

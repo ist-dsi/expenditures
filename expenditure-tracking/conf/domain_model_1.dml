@@ -89,6 +89,7 @@ class announcements.Announcement {
 	Money totalPrice;
 	DateTime creationDate;
 	Boolean active;
+	String ojbConcreteClass;
 }
 
 class announcements.CCPAnnouncement extends announcements.Announcement {

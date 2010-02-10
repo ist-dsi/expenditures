@@ -367,7 +367,8 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
     public void processAcquisition() {
 	super.processAcquisition();
 	ProcessClassification processClassification = getProcessClassification();
-	if (processClassification == ProcessClassification.CT75000 || processClassification == ProcessClassification.CT10000) {
+	if ((processClassification == ProcessClassification.CT75000 || processClassification == ProcessClassification.CT10000)
+		&& !getAcquisitionRequest().hasAnnouncement()) {
 	    new RCISTAnnouncement(getAcquisitionRequest());
 	}
     }
