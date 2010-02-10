@@ -222,9 +222,4 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
 	return getAcquisitionProcessState().isInAllocatedToUnitState();
     }
 
-    @Override
-    public boolean isActive() {
-	return !(getAcquisitionProcessState().isCanceled() || getAcquisitionProcessState().isRejected() || getAcquisitionProcessState()
-		.isPayed());
-    }
 }
