@@ -24,6 +24,16 @@
 				<bean:message key="label.statistics.simplifiedProcess" bundle="STATISTICS_RESOURCES"/>
 			</html:link>
 		</li>
+		<li>	
+			<html:link action="/statistics.do?method=generateProcessesStatsCSV" paramId="year" paramName="yearBean" paramProperty="year">
+				<bean:message key="label.processedDump.processes" bundle="STATISTICS_RESOURCES"/>
+			</html:link>
+		</li>
+		<li>
+			<html:link action="/statistics.do?method=generateLogStatsCSV" paramId="year" paramName="yearBean" paramProperty="year">
+				<bean:message key="label.processedDump.logs" bundle="STATISTICS_RESOURCES"/>
+			</html:link>
+		</li>
 	</ul>
 </div>
 

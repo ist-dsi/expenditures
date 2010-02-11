@@ -4,7 +4,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -14,19 +19,30 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import module.workflow.domain.ActivityLog;
+import module.workflow.domain.WorkflowLog;
+import module.workflow.domain.WorkflowProcess;
 import myorg.domain.util.Money;
 import myorg.presentationTier.actions.ContextBaseAction;
 
+import org.apache.commons.collections.comparators.ComparatorChain;
+import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess.ProcessClassification;
+import pt.ist.expenditureTrackingSystem.domain.organization.Person;
+import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
+import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 import pt.ist.expenditureTrackingSystem.domain.statistics.AfterTheFactProcessTotalValueStatistics;
 import pt.ist.expenditureTrackingSystem.domain.statistics.ChartData;
 import pt.ist.expenditureTrackingSystem.domain.statistics.RefundProcessActivityLogStatistics;
@@ -44,11 +60,14 @@ import pt.ist.expenditureTrackingSystem.domain.statistics.SimplifiedProcessTotal
 import pt.ist.expenditureTrackingSystem.util.Calculation.Operation;
 import pt.ist.fenixWebFramework.rendererExtensions.util.IPresentableEnum;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
+import pt.utl.ist.fenix.tools.util.StringNormalizer;
 import pt.utl.ist.fenix.tools.util.excel.Spreadsheet;
 import pt.utl.ist.fenix.tools.util.excel.Spreadsheet.Row;
 
 @Mapping(path = "/statistics")
 public class StatisticsAction extends ContextBaseAction {
+
+    private Logger logger = Logger.getLogger(StatisticsAction.class);
 
     public ActionForward showStatistics(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) {
@@ -114,8 +133,8 @@ public class StatisticsAction extends ContextBaseAction {
 
 	long t1 = System.currentTimeMillis();
 	final PaymentProcessYear paymentProcessYear = PaymentProcessYear.getPaymentProcessYearByYear(Integer.valueOf(year));
-	final SimplifiedProcedureProcessStateCountChartData chartData =
-	    	new SimplifiedProcedureProcessStateCountChartData(paymentProcessYear);
+	final SimplifiedProcedureProcessStateCountChartData chartData = new SimplifiedProcedureProcessStateCountChartData(
+		paymentProcessYear);
 	chartData.calculateData();
 	return generateChart(response, chartData, t1);
     }
@@ -126,8 +145,8 @@ public class StatisticsAction extends ContextBaseAction {
 
 	long t1 = System.currentTimeMillis();
 	final PaymentProcessYear paymentProcessYear = PaymentProcessYear.getPaymentProcessYearByYear(Integer.valueOf(year));
-	final SimplifiedProcedureProcessStateTimeChartData chartData =
-	    	new SimplifiedProcedureProcessStateTimeChartData(paymentProcessYear);
+	final SimplifiedProcedureProcessStateTimeChartData chartData = new SimplifiedProcedureProcessStateTimeChartData(
+		paymentProcessYear);
 	chartData.calculateData();
 	return generateChart(response, chartData, t1);
     }
@@ -138,8 +157,8 @@ public class StatisticsAction extends ContextBaseAction {
 
 	long t1 = System.currentTimeMillis();
 	final PaymentProcessYear paymentProcessYear = PaymentProcessYear.getPaymentProcessYearByYear(Integer.valueOf(year));
-	final SimplifiedProcedureProcessStateTimeAverageChartData chartData =
-	    	new SimplifiedProcedureProcessStateTimeAverageChartData(paymentProcessYear);
+	final SimplifiedProcedureProcessStateTimeAverageChartData chartData = new SimplifiedProcedureProcessStateTimeAverageChartData(
+		paymentProcessYear);
 	chartData.calculateData();
 	return generateChart(response, chartData, t1);
     }
@@ -150,12 +169,12 @@ public class StatisticsAction extends ContextBaseAction {
 
 	long t1 = System.currentTimeMillis();
 	final PaymentProcessYear paymentProcessYear = PaymentProcessYear.getPaymentProcessYearByYear(Integer.valueOf(year));
-	final SimplifiedProcedureProcessActivityTimeChartData chartData =
-	    	new SimplifiedProcedureProcessActivityTimeChartData(paymentProcessYear);
+	final SimplifiedProcedureProcessActivityTimeChartData chartData = new SimplifiedProcedureProcessActivityTimeChartData(
+		paymentProcessYear);
 	chartData.calculateData();
 	return generateChart(response, chartData, t1);
     }
-    
+
     public ActionForward simplifiedProcessStatistics(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) throws IOException {
 	final Integer year = Integer.valueOf((String) request.getParameter("year"));
@@ -164,11 +183,14 @@ public class StatisticsAction extends ContextBaseAction {
 
     private Spreadsheet simplifiedProcessStatistics(final Integer year) {
 	final PaymentProcessYear paymentProcessYear = PaymentProcessYear.getPaymentProcessYearByYear(Integer.valueOf(year));
-	final SimplifiedProcedureProcessStateCountChartData countData = new SimplifiedProcedureProcessStateCountChartData(paymentProcessYear);
+	final SimplifiedProcedureProcessStateCountChartData countData = new SimplifiedProcedureProcessStateCountChartData(
+		paymentProcessYear);
 	countData.calculateData();
-	final SimplifiedProcedureProcessStateTimeChartData medianData = new SimplifiedProcedureProcessStateTimeChartData(paymentProcessYear);
+	final SimplifiedProcedureProcessStateTimeChartData medianData = new SimplifiedProcedureProcessStateTimeChartData(
+		paymentProcessYear);
 	medianData.calculateData();
-	final SimplifiedProcedureProcessStateTimeAverageChartData averageData = new SimplifiedProcedureProcessStateTimeAverageChartData(paymentProcessYear);
+	final SimplifiedProcedureProcessStateTimeAverageChartData averageData = new SimplifiedProcedureProcessStateTimeAverageChartData(
+		paymentProcessYear);
 	averageData.calculateData();
 	final SortedMap<Object, BigDecimal> sumMap = (SortedMap) countData.getResults(Operation.SUM);
 	final SortedMap<Object, BigDecimal> averageMap = (SortedMap) averageData.getResults(Operation.AVERAGE);
@@ -201,10 +223,8 @@ public class StatisticsAction extends ContextBaseAction {
     }
 
     private Spreadsheet generateSpreadSheet(final SortedMap<Object, BigDecimal> sumMap,
-	    final SortedMap<Object, BigDecimal> medianMap,
-	    final SortedMap<Object, BigDecimal> averageMap,
-	    final SortedMap<Object, BigDecimal> minsMap,
-	    final SortedMap<Object, BigDecimal> maxsMap) {
+	    final SortedMap<Object, BigDecimal> medianMap, final SortedMap<Object, BigDecimal> averageMap,
+	    final SortedMap<Object, BigDecimal> minsMap, final SortedMap<Object, BigDecimal> maxsMap) {
 	final Spreadsheet spreadsheet = new Spreadsheet("Estatísticas");
 	spreadsheet.setHeader("Estado");
 	spreadsheet.setHeader("Soma");
@@ -421,6 +441,21 @@ public class StatisticsAction extends ContextBaseAction {
 	return null;
     }
 
+    private ActionForward streamCSV(final HttpServletResponse response, final String fileName, final String csvContent)
+	    throws IOException {
+
+	response.setContentType("application/csv");
+	response.setHeader("Content-disposition", "attachment; filename=" + fileName + ".csv");
+
+	ServletOutputStream outputStream = response.getOutputStream();
+
+	outputStream.write(csvContent.getBytes());
+	outputStream.flush();
+	outputStream.close();
+
+	return null;
+    }
+
     public ActionForward downloadAfterTheFactTotalValuesStatistics(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) throws IOException {
 
@@ -444,4 +479,101 @@ public class StatisticsAction extends ContextBaseAction {
 	return spreadsheet;
     }
 
+    private static final ComparatorChain DEFAULT_COMPARATOR = new ComparatorChain();
+
+    static {
+	DEFAULT_COMPARATOR.addComparator(new Comparator<PaymentProcess>() {
+
+	    @Override
+	    public int compare(PaymentProcess process1, PaymentProcess process2) {
+		return process1.getPaymentProcessYear().getYear().compareTo(process2.getPaymentProcessYear().getYear());
+	    }
+
+	});
+	DEFAULT_COMPARATOR.addComparator(new Comparator<PaymentProcess>() {
+
+	    @Override
+	    public int compare(PaymentProcess process1, PaymentProcess process2) {
+		return process1.getAcquisitionProcessNumber().compareTo(process2.getAcquisitionProcessNumber());
+
+	    }
+
+	});
+
+    }
+
+    private List<SimplifiedProcedureProcess> collectInterestingProcessesForCSVStats(HttpServletRequest request) {
+	List<SimplifiedProcedureProcess> processes = new ArrayList<SimplifiedProcedureProcess>();
+	final Integer year = Integer.valueOf((String) getAttribute(request, "year"));
+	PaymentProcessYear paymentYear = PaymentProcessYear.getPaymentProcessYearByYear(year);
+
+	for (SimplifiedProcedureProcess process : GenericProcess.getAllProcesses(SimplifiedProcedureProcess.class, paymentYear)) {
+	    ProcessClassification classification = process.getProcessClassification();
+	    if (classification == ProcessClassification.CCP || classification == ProcessClassification.CT10000) {
+		processes.add(process);
+	    }
+	}
+
+	Collections.sort(processes, DEFAULT_COMPARATOR);
+	return processes;
+    }
+
+    public ActionForward generateProcessesStatsCSV(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) throws IOException {
+	String year = (String) getAttribute(request, "year");
+	return streamCSV(response, "processos-" + year, generateProcessesFile(collectInterestingProcessesForCSVStats(request)));
+    }
+
+    public ActionForward generateLogStatsCSV(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) throws IOException {
+	String year = (String) getAttribute(request, "year");
+
+	return streamCSV(response, "actividades-" + year,
+		generateProcessActivities(collectInterestingProcessesForCSVStats(request)));
+    }
+
+    private String generateProcessesFile(List<SimplifiedProcedureProcess> processes) {
+
+	StringBuilder buffer = new StringBuilder();
+
+	for (SimplifiedProcedureProcess process : processes) {
+	    for (Unit unit : process.getPayingUnits()) {
+		buffer.append(process.getProcessNumber() + "\t" + process.getProcessClassification() + "\t"
+			+ unit.getPresentationName() + "\t" + unit.getAccountingUnit().getName() + "\t"
+			+ process.isPriorityProcess() + "\n");
+	    }
+	}
+
+	return buffer.toString();
+
+    }
+
+    private String generateProcessActivities(List<SimplifiedProcedureProcess> processes) {
+
+	StringBuilder buffer = new StringBuilder();
+
+	for (SimplifiedProcedureProcess process : processes) {
+	    Set<WorkflowLog> logs = new TreeSet<WorkflowLog>(WorkflowLog.COMPARATOR_BY_WHEN);
+	    logs.addAll(process.getExecutionLogs());
+	    for (WorkflowLog log : logs) {
+
+		String description = null;
+		try {
+		    description = log.getDescription();
+		} catch (NullPointerException e) {
+		    logger.warn("No description for: " + ((ActivityLog) log).getOperation());
+		}
+		if (description != null) {
+		    Person expenditurePerson = log.getActivityExecutor().getExpenditurePerson();
+		    buffer.append(process.getProcessNumber() + "\t" + process.getProcessClassification() + "\t"
+			    + log.getWhenOperationWasRan().toString("dd-MM-yyyy HH:mm") + "\t" + expenditurePerson.getName()
+			    + "\t" + expenditurePerson.getUsername() + "\t"
+			    + StringNormalizer.normalize(description.replaceAll("<span.*", "")) + "\n");
+		}
+	    }
+
+	}
+
+	return buffer.toString();
+    }
 }
