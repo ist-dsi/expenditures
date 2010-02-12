@@ -24,6 +24,10 @@ class pt.ist.expenditureTrackingSystem.domain.ConnectUnitsToOrganization extends
 class pt.ist.expenditureTrackingSystem.domain.ExpenditureUserDashBoardPanel extends module.dashBoard.domain.UserDashBoardPanel {
 }
 
+class pt.ist.expenditureTrackingSystem.domain.ExpenditureWidgetOptions extends module.dashBoard.domain.WidgetOptions {
+	Integer maxListSize;
+}
+
 relation MyOrgExpenditureTrackingSystem {
 	myorg.domain.MyOrg playsRole myOrg;
 	pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem playsRole expenditureTrackingSystem;

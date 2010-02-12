@@ -5,7 +5,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 
 <logic:notEmpty name="refundCounters">
-	<table>
+	<table class="width100pc">
 		<logic:iterate id="counter" name="refundCounters">
 			<tr>
 				<bean:define id="state" name="counter" property="countableObject" />
