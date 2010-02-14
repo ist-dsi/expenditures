@@ -38,6 +38,12 @@ class WorkingCapitalInitialization {
 class WorkingCapitalProcess extends .module.workflow.domain.WorkflowProcess {
 }
 
+class AcquisitionClassification {
+	String description;
+	String economicClassification;
+	String pocCode;
+}
+
 
 relation MyOrgWorkingCapitalSystem {
 	.myorg.domain.MyOrg playsRole myOrg;
@@ -146,3 +152,9 @@ relation WorkingCapitalSystemManagementAccountabilityType {
 	.module.organization.domain.AccountabilityType playsRole managementAccountabilityType;
 }
 
+relation WorkingCapitalSystemAcquisitionClassification {
+	WorkingCapitalSystem playsRole workingCapitalSystem;
+	AcquisitionClassification playsRole acquisitionClassifications {
+		multiplicity *;
+	}
+}

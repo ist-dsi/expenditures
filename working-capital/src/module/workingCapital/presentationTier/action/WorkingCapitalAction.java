@@ -6,9 +6,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import module.workflow.presentationTier.actions.ProcessManagement;
+import module.workingCapital.domain.AcquisitionClassification;
 import module.workingCapital.domain.WorkingCapital;
 import module.workingCapital.domain.WorkingCapitalProcess;
 import module.workingCapital.domain.WorkingCapitalSystem;
+import module.workingCapital.domain.util.AcquisitionClassificationBean;
 import module.workingCapital.domain.util.WorkingCapitalInitializationBean;
 import module.workingCapital.presentationTier.action.util.WorkingCapitalContext;
 import myorg.presentationTier.actions.ContextBaseAction;
@@ -93,6 +95,20 @@ public class WorkingCapitalAction extends ContextBaseAction {
 	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstance();
 	request.setAttribute("workingCapitalSystem", workingCapitalSystem);
 	return forward(request, "/workingCapital/configureManagementUnit.jsp");
+    }
+
+    public ActionForward prepareAddAcquisitionClassification(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	final AcquisitionClassificationBean acquisitionClassificationBean = new AcquisitionClassificationBean();
+	request.setAttribute("acquisitionClassificationBean", acquisitionClassificationBean);
+	return forward(request, "/workingCapital/addAcquisitionClassification.jsp");
+    }
+
+    public ActionForward addAcquisitionClassification(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	final AcquisitionClassificationBean acquisitionClassificationBean = getRenderedObject();
+	acquisitionClassificationBean.create();
+	return configuration(mapping, form, request, response);
     }
 
 }

@@ -63,9 +63,8 @@
 	</tr>
 </table>
 
-<br/>
-
 <logic:present name="workingCapitalSystem" property="accountingUnit">
+	<br/>
 	<h3>
 		<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.configuration.accounting.members"/>
 	</h3>
@@ -81,9 +80,8 @@
 	</fr:view>
 </logic:present>
 
-<br/>
-
 <logic:present name="workingCapitalSystem" property="managementUnit">
+	<br/>
 	<h3>
 		<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.configuration.management.members"/>
 	</h3>
@@ -98,3 +96,30 @@
 		</fr:layout>
 	</fr:view>
 </logic:present>
+
+<br/>
+
+<h3>
+	<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.configuration.acquisition.classifications"/>
+</h3>
+<p>
+	<html:link action="/workingCapital.do?method=prepareAddAcquisitionClassification">
+		<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.configuration.acquisition.classifications.add"/>
+	</html:link>
+</p>
+<logic:notPresent name="workingCapitalSystem" property="acquisitionClassifications">
+	<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.configuration.acquisition.classifications.none"/>
+</logic:notPresent>
+<logic:present name="workingCapitalSystem" property="acquisitionClassifications">
+	<fr:view name="workingCapitalSystem" property="acquisitionClassifications">
+		<fr:schema type="module.workingCapital.domain.AcquisitionClassification" bundle="WORKING_CAPITAL_RESOURCES">
+			<fr:slot name="description" key="label.module.workingCapital.configuration.acquisition.classifications.description"/>
+			<fr:slot name="economicClassification" key="label.module.workingCapital.configuration.acquisition.classifications.economicClassification"/>
+			<fr:slot name="pocCode" key="label.module.workingCapital.configuration.acquisition.classifications.pocCode" />
+		</fr:schema>
+		<fr:layout name="tabular">
+			<fr:property name="classes" value="tstyle2 tdleft thleft"/>
+		</fr:layout>
+	</fr:view>
+</logic:present>
+
