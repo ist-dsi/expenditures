@@ -100,5 +100,9 @@
 <schema name="viewRCISTAnnouncement" type="pt.ist.expenditureTrackingSystem.domain.announcements.RCISTAnnouncement" >
 	<slot name="supplier.name" key="process.announcement.label.supplier" bundle="EXPENDITURE_RESOURCES" />
 	<slot name="totalPrice"  key="process.announcement.label.totalPrice" bundle="EXPENDITURE_RESOURCES"/>
-	<slot name="description" key="process.announcement.label.description" bundle="EXPENDITURE_RESOURCES" />
+	<slot name="description" key="process.announcement.label.description" layout="null-as-label" bundle="EXPENDITURE_RESOURCES" >
+		<property name="label" value="label.rcist.announcements.noDescription"/>
+		<property name="key" value="true"/>
+		<property name="bundle" value="ACQUISITION_RESOURCES"/>	
+	</slot>
 </schema>
