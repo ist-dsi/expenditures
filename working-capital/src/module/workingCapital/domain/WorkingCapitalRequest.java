@@ -1,6 +1,7 @@
 package module.workingCapital.domain;
 
 import module.organization.domain.Accountability;
+import module.organization.domain.Person;
 import module.workingCapital.domain.util.PaymentMethod;
 import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.User;
@@ -33,7 +34,9 @@ public class WorkingCapitalRequest extends WorkingCapitalRequest_Base {
 
     public void pay(final User user) {
 	setProcessedByTreasury(new DateTime());
-	setWorkingCapitalTreasuryProcessor(user.getPerson());
+	final Person person = user.getPerson();
+	setWorkingCapitalTreasuryProcessor(person);
+	new WorkingCapitalPayment(this, person);
     }
 
 }

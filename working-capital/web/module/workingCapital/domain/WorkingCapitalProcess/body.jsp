@@ -166,3 +166,30 @@
 		</logic:iterate>
 	</p>
 </div>
+
+<h3>
+	<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.transactions"/>
+</h3>
+
+<logic:empty name="workingCapital" property="workingCapitalTransactions">
+	<p>
+		<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.transactions.none"/>
+	</p>
+</logic:empty>
+<logic:notEmpty name="workingCapital" property="workingCapitalTransactions">
+	<br/>
+	<fr:view name="workingCapital" property="sortedWorkingCapitalTransactions">
+		<fr:schema type="module.workingCapital.domain.WorkingCapitalTransaction" bundle="WORKING_CAPITAL_RESOURCES">
+			<fr:slot name="number" key="label.module.workingCapital.transaction.number"/>
+			<fr:slot name="transationInstant" key="label.module.workingCapital.transaction.transationInstant"/>
+			<fr:slot name="description" key="label.module.workingCapital.transaction.description"/>
+			<fr:slot name="value" key="label.module.workingCapital.transaction.value"/>
+			<fr:slot name="accumulatedValue" key="label.module.workingCapital.transaction.accumulatedValue"/>
+			<fr:slot name="balance" key="label.module.workingCapital.transaction.balance"/>
+			<fr:slot name="debt" key="label.module.workingCapital.transaction.debt"/>
+		</fr:schema>
+		<fr:layout name="tabular">
+			<fr:property name="classes" value="tstyle2"/>
+		</fr:layout>
+	</fr:view>
+</logic:notEmpty>

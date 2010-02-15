@@ -52,6 +52,18 @@ class AcquisitionClassification {
 	String pocCode;
 }
 
+class WorkingCapitalTransaction {
+	Integer number;
+	DateTime transationInstant;
+	Money value;
+	Money accumulatedValue;
+	Money balance;
+	Money debt;
+}
+
+	class WorkingCapitalPayment extends WorkingCapitalTransaction {
+	}
+
 
 relation MyOrgWorkingCapitalSystem {
 	.myorg.domain.MyOrg playsRole myOrg;
@@ -193,4 +205,30 @@ relation WorkingCapitalSystemAcquisitionClassification {
 	AcquisitionClassification playsRole acquisitionClassifications {
 		multiplicity *;
 	}
+}
+
+relation WorkingCapitalSystemWorkingCapitalTransaction {
+	WorkingCapitalSystem playsRole workingCapitalSystem;
+	WorkingCapitalTransaction playsRole workingCapitalTransactions {
+		multiplicity *;
+	}
+}
+
+relation WorkingCapitalWorkingCapitalTransaction {
+	WorkingCapital playsRole workingCapital;
+	WorkingCapitalTransaction playsRole workingCapitalTransactions {
+		multiplicity *;
+	}
+}
+
+relation WorkingCapitalTransactionPerson {
+	.module.organization.domain.Person playsRole person;
+	WorkingCapitalTransaction playsRole workingCapitalTransactions {
+		multiplicity *;
+	}
+}
+
+relation WorkingCapitalTransactionWorkingCapitalPayment {
+	WorkingCapitalRequest playsRole workingCapitalRequest;
+	WorkingCapitalPayment playsRole workingCapitalPayment;
 }

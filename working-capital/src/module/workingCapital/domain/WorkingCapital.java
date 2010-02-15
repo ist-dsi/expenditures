@@ -1,6 +1,7 @@
 package module.workingCapital.domain;
 
 import java.util.Collections;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -154,6 +155,27 @@ public class WorkingCapital extends WorkingCapital_Base {
     public boolean isTreasuryMember(final User user) {
 	final Unit unit = getUnit();
 	return unit.isTreasuryMember(user.getExpenditurePerson());
+    }
+
+    public Money getAvailableCapital() {
+	Money result = Money.ZERO;
+	for (final WorkingCapitalRequest workingCapitalRequest : getWorkingCapitalRequestsSet()) {
+	    if (workingCapitalRequest.isRequestProcessedByTreasury()) {
+		result = result.add(workingCapitalRequest.getRequestedValue());
+	    }
+	}
+	return result;
+    }
+
+    public WorkingCapitalTransaction getLastTransaction() {
+	final Set<WorkingCapitalTransaction> workingCapitalTransactionsSet = getWorkingCapitalTransactionsSet();
+	return workingCapitalTransactionsSet.isEmpty() ? null : Collections.max(workingCapitalTransactionsSet, WorkingCapitalTransaction.COMPARATOR_BY_NUMBER);
+    }
+
+    public SortedSet<WorkingCapitalTransaction> getSortedWorkingCapitalTransactions() {
+	final SortedSet<WorkingCapitalTransaction> result = new TreeSet<WorkingCapitalTransaction>(WorkingCapitalTransaction.COMPARATOR_BY_NUMBER);
+	result.addAll(getWorkingCapitalTransactionsSet());
+	return result;
     }
 
 }
