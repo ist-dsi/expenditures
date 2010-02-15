@@ -31,4 +31,9 @@ public class WorkingCapitalRequest extends WorkingCapitalRequest_Base {
 	return getProcessedByTreasury() != null;
     }
 
+    public void pay(final User user) {
+	setProcessedByTreasury(new DateTime());
+	setWorkingCapitalTreasuryProcessor(user.getPerson());
+    }
+
 }

@@ -13,6 +13,7 @@ import module.workflow.domain.WorkflowProcess;
 import module.workingCapital.domain.activity.ApproveActivity;
 import module.workingCapital.domain.activity.AuthorizeActivity;
 import module.workingCapital.domain.activity.CancelWorkingCapitalInitializationActivity;
+import module.workingCapital.domain.activity.PayCapitalActivity;
 import module.workingCapital.domain.activity.RejectWorkingCapitalInitializationActivity;
 import module.workingCapital.domain.activity.RequestCapitalActivity;
 import module.workingCapital.domain.activity.UnApproveActivity;
@@ -48,6 +49,7 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base {
 	activitiesAux.add(new RejectWorkingCapitalInitializationActivity());
 	activitiesAux.add(new UndoCancelOrRejectWorkingCapitalInitializationActivity());
 	activitiesAux.add(new RequestCapitalActivity());
+	activitiesAux.add(new PayCapitalActivity());
 	activities = Collections.unmodifiableList(activitiesAux);
     }
 

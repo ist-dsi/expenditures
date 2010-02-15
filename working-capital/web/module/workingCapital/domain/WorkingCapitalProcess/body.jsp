@@ -150,13 +150,19 @@
 			<br/>
 
 			<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.request.processedByTreasury"/>:
-			<logic:present name="workingCapitalRequest"  property="processedByTreasury">
-				<fr:view name="workingCapitalRequest"  property="processedByTreasury"/>
-				<logic:present name="workingCapitalRequest"  property="workingCapitalTreasuryProcessor">
+			<logic:present name="workingCapitalRequest" property="processedByTreasury">
+				<fr:view name="workingCapitalRequest" property="processedByTreasury"/>
+				<logic:present name="workingCapitalRequest" property="workingCapitalTreasuryProcessor">
 					<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.request.treasuryProcessor"/>:
-					<fr:view name="workingCapitalRequest"  property="workingCapitalTreasuryProcessor.child.name"/>
+					<fr:view name="workingCapitalRequest" property="workingCapitalTreasuryProcessor.name"/>
 				</logic:present>
 			</logic:present>
+			<logic:notPresent name="workingCapitalRequest" property="processedByTreasury">
+				<bean:define id="workingCapitalRequestOid" type="java.lang.String" name="workingCapitalRequest" property="externalId"/>
+				<wf:activityLink processName="process" activityName="PayCapitalActivity" scope="request" paramName0="workingCapitalRequest" paramValue0="<%= workingCapitalRequestOid %>">
+					<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.PayCapitalActivity"/>
+				</wf:activityLink>
+			</logic:notPresent>
 		</logic:iterate>
 	</p>
 </div>

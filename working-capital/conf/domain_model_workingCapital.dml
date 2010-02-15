@@ -182,7 +182,7 @@ relation WorkingCapitalRequestRequester {
 }
 
 relation WorkingCapitalRequestTreasuryProcessor {
-	.module.organization.domain.Accountability playsRole workingCapitalTreasuryProcessor;
+	.module.organization.domain.Person playsRole workingCapitalTreasuryProcessor;
 	WorkingCapitalRequest playsRole workingCapitalRequestsFromTreasuryProcessor {
 		multiplicity *;
 	}

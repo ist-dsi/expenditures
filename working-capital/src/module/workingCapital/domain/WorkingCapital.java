@@ -108,6 +108,7 @@ public class WorkingCapital extends WorkingCapital_Base {
 	if (user == getMovementResponsible().getUser()
 		|| workingCapitalSystem.isAccountingMember(user)
 		|| workingCapitalSystem.isManagementeMember(user)
+		|| isTreasuryMember(user)
 		|| findUnitResponsible(user.getPerson(), Money.ZERO) != null) {
 	    return true;
 	}
@@ -148,6 +149,11 @@ public class WorkingCapital extends WorkingCapital_Base {
 	    }
 	}
 	return false;
+    }
+
+    public boolean isTreasuryMember(final User user) {
+	final Unit unit = getUnit();
+	return unit.isTreasuryMember(user.getExpenditurePerson());
     }
 
 }
