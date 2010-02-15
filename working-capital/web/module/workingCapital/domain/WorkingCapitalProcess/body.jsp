@@ -127,6 +127,12 @@
 	<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.request"/>
 </h3>
 
+<logic:empty name="workingCapital" property="workingCapitalRequests">
+	<p>
+		<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.requests.none"/>
+	</p>
+</logic:empty>
+<logic:notEmpty name="workingCapital" property="workingCapitalRequests">
 <div class="infobox mtop1 mbottom1">
 	<p>
 		<logic:iterate id="workingCapitalRequest" name="workingCapital" property="workingCapitalRequests">
@@ -166,6 +172,7 @@
 		</logic:iterate>
 	</p>
 </div>
+</logic:notEmpty>
 
 <h3>
 	<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.transactions"/>
