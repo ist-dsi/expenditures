@@ -18,7 +18,9 @@ public class AuthorizeActivity extends WorkflowActivity<WorkingCapitalProcess, W
     @Override
     public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
 	final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
-	return !workingCapital.isCanceledOrRejected() && workingCapital.isPendingAuthorization(user);
+	return !workingCapital.isCanceledOrRejected()
+		&& workingCapital.isPendingAuthorization(user)
+		&& workingCapital.getWorkingCapitalRequestsSet().isEmpty();
     }
 
     @Override

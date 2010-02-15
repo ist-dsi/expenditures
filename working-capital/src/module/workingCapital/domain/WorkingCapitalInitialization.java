@@ -120,6 +120,10 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
 	return hasResponsibleForAccountingVerification() && !hasResponsibleForUnitAuthorization();
     }
 
+    public boolean isAuthorized() {
+	return hasResponsibleForUnitAuthorization();
+    }
+
     public void cancel() {
 	setState(WorkingCapitalInitializationState.CANCELED);
     }

@@ -137,4 +137,17 @@ public class WorkingCapital extends WorkingCapital_Base {
 	return false;
     }
 
+    public WorkingCapitalInitialization getWorkingCapitalInitialization() {
+	return Collections.max(getWorkingCapitalInitializationsSet(), WorkingCapitalInitialization.COMPARATOR_BY_REQUEST_CREATION);
+    }
+
+    public boolean hasAnyPendingWorkingCapitalRequests() {
+	for (final WorkingCapitalRequest workingCapitalRequest : getWorkingCapitalRequestsSet()) {
+	    if (!workingCapitalRequest.isRequestProcessedByTreasury()) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
 }

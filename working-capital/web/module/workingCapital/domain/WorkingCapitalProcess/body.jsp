@@ -5,11 +5,11 @@
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr"%>
 <%@ taglib uri="/WEB-INF/workflow.tld" prefix="wf"%>
 
+<bean:define id="workingCapital" name="process" property="workingCapital"/>
+
 <h3>
 	<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.initialization"/>
 </h3>
-
-<bean:define id="workingCapital" name="process" property="workingCapital"/>
 
 <div class="infobox mtop1 mbottom1">
 	<p>
@@ -122,3 +122,41 @@
 	</p>
 </div>
 
+
+<h3>
+	<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.request"/>
+</h3>
+
+<div class="infobox mtop1 mbottom1">
+	<p>
+		<logic:iterate id="workingCapitalRequest" name="workingCapital" property="workingCapitalRequests">
+			<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.request.creation"/>:
+			<fr:view name="workingCapitalRequest" property="requestCreation"/>
+			<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.request.requester"/>:
+			<bean:write name="workingCapitalRequest" property="workingCapitalRequester.child.name"/>
+
+			<br/>
+			<br/>
+
+			<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.request.requestedValue"/>:
+			<fr:view name="workingCapitalRequest" property="requestedValue"/>
+
+			&nbsp;&nbsp;
+
+			<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.request.paymentMethod"/>:
+			<fr:view name="workingCapitalRequest" property="paymentMethod"/>
+
+			<br/>
+			<br/>
+
+			<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.request.processedByTreasury"/>:
+			<logic:present name="workingCapitalRequest"  property="processedByTreasury">
+				<fr:view name="workingCapitalRequest"  property="processedByTreasury"/>
+				<logic:present name="workingCapitalRequest"  property="workingCapitalTreasuryProcessor">
+					<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.request.treasuryProcessor"/>:
+					<fr:view name="workingCapitalRequest"  property="workingCapitalTreasuryProcessor.child.name"/>
+				</logic:present>
+			</logic:present>
+		</logic:iterate>
+	</p>
+</div>

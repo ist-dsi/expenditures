@@ -1,6 +1,7 @@
 package module.workingCapital.domain;
 
 enum WorkingCapitalInitialization.WorkingCapitalInitializationState as WorkingCapitalInitializationState;
+enum module.workingCapital.domain.util.PaymentMethod as PaymentMethod;
 
 
 valueType myorg.domain.util.Money as Money {
@@ -36,6 +37,13 @@ class WorkingCapitalInitialization {
 }
 
 class WorkingCapitalProcess extends .module.workflow.domain.WorkflowProcess {
+}
+
+class WorkingCapitalRequest {
+	DateTime requestCreation;
+	Money requestedValue;
+	PaymentMethod paymentMethod;
+	DateTime processedByTreasury;
 }
 
 class AcquisitionClassification {
@@ -150,6 +158,34 @@ relation WorkingCapitalSystemAccountingAccountabilityType {
 relation WorkingCapitalSystemManagementAccountabilityType {
 	WorkingCapitalSystem playsRole workingCapitalSystemFromManagementeAccountabilityType;
 	.module.organization.domain.AccountabilityType playsRole managementAccountabilityType;
+}
+
+relation WorkingCapitalSystemWorkingCapitalRequest {
+	WorkingCapitalSystem playsRole workingCapitalSystem;
+	WorkingCapitalRequest playsRole workingCapitalRequests {
+		multiplicity *;
+	}
+}
+
+relation WorkingCapitalWorkingCapitalRequest {
+	WorkingCapital playsRole workingCapital;
+	WorkingCapitalRequest playsRole workingCapitalRequests {
+		multiplicity *;
+	}
+}
+
+relation WorkingCapitalRequestRequester {
+	.module.organization.domain.Accountability playsRole workingCapitalRequester;
+	WorkingCapitalRequest playsRole workingCapitalRequestsFromRequesters {
+		multiplicity *;
+	}
+}
+
+relation WorkingCapitalRequestTreasuryProcessor {
+	.module.organization.domain.Accountability playsRole workingCapitalTreasuryProcessor;
+	WorkingCapitalRequest playsRole workingCapitalRequestsFromTreasuryProcessor {
+		multiplicity *;
+	}
 }
 
 relation WorkingCapitalSystemAcquisitionClassification {
