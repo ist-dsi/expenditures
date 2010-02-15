@@ -98,6 +98,7 @@
 </schema>
 
 <schema name="viewRCISTAnnouncement" type="pt.ist.expenditureTrackingSystem.domain.announcements.RCISTAnnouncement" >
+	<slot name="creationDate" layout="no-time" key="process.announcement.label.creationDate" bundle="EXPENDITURE_RESOURCES"/>
 	<slot name="supplier.name" key="process.announcement.label.supplier" bundle="EXPENDITURE_RESOURCES" />
 	<slot name="totalPrice"  key="process.announcement.label.totalPrice" bundle="EXPENDITURE_RESOURCES"/>
 	<slot name="description" key="process.announcement.label.description" layout="null-as-label" bundle="EXPENDITURE_RESOURCES" >
