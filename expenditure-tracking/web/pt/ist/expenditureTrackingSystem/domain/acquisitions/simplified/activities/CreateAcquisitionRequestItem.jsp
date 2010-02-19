@@ -6,7 +6,11 @@
 <%@ taglib uri="/WEB-INF/workflow.tld" prefix="wf"%>
 
 <div class="infobox">
-	<bean:message key="acquisitionRequestItem.message.info.help" bundle="ACQUISITION_RESOURCES"/>
+	<bean:message key="acquisitionRequestItem.message.info.help.prefix" bundle="ACQUISITION_RESOURCES"/>
+	<html:link action="/expenditureTrackingOrganization.do?method=listCPVReferences" styleClass="bluelink" target="_blank">
+		<bean:message key="acquisitionRequestItem.message.info.help.infix" bundle="ACQUISITION_RESOURCES"/>
+	</html:link>
+	<bean:message key="acquisitionRequestItem.message.info.help.suffix" bundle="ACQUISITION_RESOURCES"/>
 </div>
 
 <bean:define id="processId" name="process" property="externalId" type="java.lang.String"/>

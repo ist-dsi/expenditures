@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.servlet.ServletOutputStream;
@@ -924,6 +925,15 @@ public class OrganizationAction extends BaseAction {
 	}
 	request.setAttribute("userAcquisitionProcessStatistics", userAcquisitionProcessStatistics);
 	return forward(request, "/expenditureTrackingOrganization/viewAcquisitionProcessStatistics.jsp");
+    }
+
+    public ActionForward listCPVReferences(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final Set<CPVReference> cvpReferences = ExpenditureTrackingSystem.getInstance().getCPVReferencesSet();
+	final SortedSet<CPVReference> sortedCPVReferences = new TreeSet<CPVReference>(CPVReference.COMPARATOR_BY_DESCRIPTION);
+	sortedCPVReferences.addAll(cvpReferences);
+	request.setAttribute("cvpReferences", sortedCPVReferences);
+	return forward(request, "/expenditureTrackingOrganization/listCPVReferences.jsp");
     }
 
 }

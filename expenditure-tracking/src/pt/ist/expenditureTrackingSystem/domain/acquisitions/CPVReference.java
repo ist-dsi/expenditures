@@ -1,5 +1,6 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,6 +30,15 @@ public class CPVReference extends CPVReference_Base implements Indexable, Search
 	    return this.name;
 	}
     }
+
+    public static Comparator<CPVReference> COMPARATOR_BY_DESCRIPTION = new Comparator<CPVReference>() {
+
+	@Override
+	public int compare(final CPVReference o1, final CPVReference o2) {
+	    return o1.getDescription().compareTo(o2.getDescription());
+	}
+
+    };
 
     public CPVReference(String code, String description) {
 	checkParameters(code, description);
