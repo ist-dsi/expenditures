@@ -26,6 +26,8 @@ public class RequestCapitalActivityInformation extends ActivityInformation<Worki
 	if (requestedValue.isGreaterThan(anualValue)) {
 	    requestedValue = anualValue;
 	}
+	final String bankAccountId = workingCapitalInitialization.getBankAccountId();
+	paymentMethod = bankAccountId == null  || bankAccountId.isEmpty() ? PaymentMethod.CHECK : PaymentMethod.WIRETRANSFER;
     }
 
     public PaymentMethod getPaymentMethod() {
