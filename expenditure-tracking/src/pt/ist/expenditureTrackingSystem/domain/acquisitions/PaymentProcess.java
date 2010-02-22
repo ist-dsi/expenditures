@@ -7,9 +7,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import module.mission.domain.MissionProcess;
 import module.workflow.domain.ProcessFile;
 import module.workflow.domain.WorkflowLog;
 import myorg.domain.User;
+import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
 import myorg.util.BundleUtil;
 
@@ -373,5 +375,14 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
     public abstract void revertToState(ProcessState processState);
 
     public abstract String getLocalizedName();
+
+    @Override
+    public void setMissionProcess(final MissionProcess missionProcess) {
+	if (missionProcess == null || missionProcess.isExpenditureAuthorized()) {
+	    super.setMissionProcess(missionProcess);
+	} else {
+	    throw new DomainException("error.cannot.connect.acquisition.to.unauthorized.mission");
+	}
+    }
 
 }
