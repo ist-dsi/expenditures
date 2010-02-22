@@ -82,6 +82,7 @@ public class SyncProjectsAux {
 	private String inicio;
 	private String duracao;
 	private String status;
+	private String type;
 	private Set<MgpSubProject> subProjects = new HashSet<MgpSubProject>();
 
 	MgpProject(final ResultSet resultSet) throws SQLException {
@@ -93,6 +94,7 @@ public class SyncProjectsAux {
 	    inicio = resultSet.getString(6);
 	    duracao = resultSet.getString(7);
 	    status = resultSet.getString(8);
+	    type = resultSet.getString(9);
 	}
 
 	public String getProjectCode() {
@@ -127,6 +129,10 @@ public class SyncProjectsAux {
 	    return status;
 	}
 
+	public String getType() {
+	    return type;
+	}
+
 	public Set<MgpSubProject> getSubProjects() {
 	    return subProjects;
 	}
@@ -155,7 +161,7 @@ public class SyncProjectsAux {
 	@Override
 	protected String getQueryString() {
 	    return "SELECT v_projectos.unid_exploracao, v_projectos.projectcode, v_projectos.title,"
-	    		+ " v_projectos.idcoord, v_projectos.costcenter, v_projectos.inicio, v_projectos.duracao, v_projectos.status"
+	    		+ " v_projectos.idcoord, v_projectos.costcenter, v_projectos.inicio, v_projectos.duracao, v_projectos.status, v_projectos.tipo"
 	    		+ " FROM v_projectos";
 	}
 
@@ -344,6 +350,7 @@ public class SyncProjectsAux {
 	String responsibleString = mgpProject.idCoord;
 	String acronym = mgpProject.title.replace("\"", "");
 	String accountingUnitString = mgpProject.unidExploracao.replace("\"", "");
+	String type = mgpProject.type.replace("\"", "");
 
 	final Unit costCenter = findCostCenter(costCenterString);
 	if (costCenter != null) {
@@ -353,6 +360,7 @@ public class SyncProjectsAux {
 	    createUnitBean.setProjectCode(projectCodeString);
 	    createUnitBean.setName(acronym);
 	    final Unit unit = Unit.createNewUnit(createUnitBean);
+	    unit.setDefaultRegeimIsCCP(!type.equalsIgnoreCase("i"));
 
 	    final AccountingUnit accountingUnit = AccountingUnit.readAccountingUnitByUnitName(accountingUnitString);
 	    if (accountingUnit != null) {
@@ -381,10 +389,23 @@ public class SyncProjectsAux {
 	String responsibleString = mgpProject.idCoord;
 	String acronym = mgpProject.title.replace("\"", "");
 	String accountingUnitString = mgpProject.unidExploracao.replace("\"", "");
+	String type = mgpProject.type.replace("\"", "");
 
 	if (!acronym.equals(project.getName())) {
 	    project.setName(acronym);
 	}
+
+//	if (type.equalsIgnoreCase("i")) {
+//	    if (project.getDefaultRegeimIsCCP().booleanValue()) {
+//		project.setDefaultRegeimIsCCP(Boolean.FALSE);
+//		System.out.println("Updatiny: " + projectCodeString + " to r and d");
+//	    }
+//	} else {
+//	    if (!project.getDefaultRegeimIsCCP()) {
+//		project.setDefaultRegeimIsCCP(Boolean.TRUE);
+//		System.out.println("Updatiny: " + projectCodeString + " to ccp");
+//	    }
+//	}
 
 	final AccountingUnit accountingUnit = AccountingUnit.readAccountingUnitByUnitName(accountingUnitString);
 	if (accountingUnit != project.getAccountingUnit()) {
@@ -456,6 +477,7 @@ public class SyncProjectsAux {
     private void createSubProject(final Project project, final MgpSubProject mgpSubProject) {
 	final String subProjectName = project.getName() + " - " + mgpSubProject.getInstitution() + " - " + mgpSubProject.getInstitutionDescription();
 	final Unit unit = Unit.createRealUnit(project, IstPartyType.SUB_PROJECT, "", subProjectName);
+	unit.setDefaultRegeimIsCCP(project.getDefaultRegeimIsCCP());
 	final SubProject subProject = (SubProject) unit;
 	subProject.setParentUnit(project);
     }
