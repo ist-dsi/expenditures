@@ -23,5 +23,10 @@ public class WorkingCapitalPayment extends WorkingCapitalPayment_Base {
 	return getWorkingCapitalRequest().getPaymentMethod().getLocalizedName();
     }
 
+    @Override
+    public boolean isPayment() {
+	return true;
+    }
+
 }
 

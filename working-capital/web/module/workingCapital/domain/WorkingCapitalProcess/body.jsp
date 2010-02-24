@@ -188,7 +188,6 @@
 	<fr:view name="workingCapital" property="sortedWorkingCapitalTransactions">
 		<fr:schema type="module.workingCapital.domain.WorkingCapitalTransaction" bundle="WORKING_CAPITAL_RESOURCES">
 			<fr:slot name="number" key="label.module.workingCapital.transaction.number"/>
-			<fr:slot name="transationInstant" key="label.module.workingCapital.transaction.transationInstant"/>
 			<fr:slot name="description" key="label.module.workingCapital.transaction.description"/>
 			<fr:slot name="value" key="label.module.workingCapital.transaction.value"/>
 			<fr:slot name="accumulatedValue" key="label.module.workingCapital.transaction.accumulatedValue"/>
@@ -197,6 +196,11 @@
 		</fr:schema>
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="tstyle2"/>
+
+			<fr:property name="linkFormat(edit)" value="/workingCapital.do?method=viewWorkingCapitalTransaction&workingCapitalTransactionOid=${externalId}"/>
+			<fr:property name="bundle(edit)" value="WORKING_CAPITAL_RESOURCES"/>
+			<fr:property name="key(edit)" value="link.view"/>
+			<fr:property name="order(edit)" value="1"/>
 		</fr:layout>
 	</fr:view>
 </logic:notEmpty>

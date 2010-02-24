@@ -57,4 +57,12 @@ public class WorkingCapitalTransaction extends WorkingCapitalTransaction_Base {
 	return "";
     }
 
+    public boolean isPayment() {
+	return false;
+    }
+
+    public boolean isAcquisition() {
+	return false;
+    }
+
 }

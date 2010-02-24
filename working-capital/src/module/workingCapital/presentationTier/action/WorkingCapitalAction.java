@@ -6,10 +6,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import module.workflow.presentationTier.actions.ProcessManagement;
-import module.workingCapital.domain.AcquisitionClassification;
 import module.workingCapital.domain.WorkingCapital;
 import module.workingCapital.domain.WorkingCapitalProcess;
 import module.workingCapital.domain.WorkingCapitalSystem;
+import module.workingCapital.domain.WorkingCapitalTransaction;
 import module.workingCapital.domain.util.AcquisitionClassificationBean;
 import module.workingCapital.domain.util.WorkingCapitalInitializationBean;
 import module.workingCapital.presentationTier.action.util.WorkingCapitalContext;
@@ -109,6 +109,14 @@ public class WorkingCapitalAction extends ContextBaseAction {
 	final AcquisitionClassificationBean acquisitionClassificationBean = getRenderedObject();
 	acquisitionClassificationBean.create();
 	return configuration(mapping, form, request, response);
+    }
+
+    public ActionForward viewWorkingCapitalTransaction(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	final WorkingCapitalTransaction workingCapitalTransaction = getDomainObject(request, "workingCapitalTransactionOid");
+	request.setAttribute("workingCapitalTransaction", workingCapitalTransaction);
+	request.setAttribute("process", workingCapitalTransaction.getWorkingCapital().getWorkingCapitalProcess());
+	return forward(request, "/module/workingCapital/domain/WorkingCapitalProcess/viewWorkingCapitalTransaction.jsp");
     }
 
 }
