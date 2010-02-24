@@ -52,6 +52,12 @@ class AcquisitionClassification {
 	String pocCode;
 }
 
+class WorkingCapitalAcquisition extends .pt.ist.expenditureTrackingSystem.domain.acquisitions.Acquisition{
+    String documentNumber;
+    String description;
+    Money valueWithoutVat;
+}
+
 class WorkingCapitalTransaction {
 	Integer number;
 	DateTime transationInstant;
@@ -62,6 +68,9 @@ class WorkingCapitalTransaction {
 }
 
 	class WorkingCapitalPayment extends WorkingCapitalTransaction {
+	}
+
+	class WorkingCapitalAcquisitionTransaction extends WorkingCapitalTransaction {
 	}
 
 
@@ -231,4 +240,37 @@ relation WorkingCapitalTransactionPerson {
 relation WorkingCapitalTransactionWorkingCapitalPayment {
 	WorkingCapitalRequest playsRole workingCapitalRequest;
 	WorkingCapitalPayment playsRole workingCapitalPayment;
+}
+
+relation WorkingCapitalSystemWorkingCapitalAcquisition {
+	WorkingCapitalSystem playsRole workingCapitalSystem;
+	WorkingCapitalAcquisition playsRole workingCapitalAcquisitions {
+		multiplicity *;
+	}
+}
+
+relation WorkingCapitalWorkingCapitalAcquisition {
+	WorkingCapital playsRole workingCapital;
+	WorkingCapitalAcquisition playsRole workingCapitalAcquisitions {
+		multiplicity *;
+	}
+}
+
+relation WorkingCapitalAcquisitionSupplier {
+	WorkingCapitalAcquisition playsRole workingCapitalAcquisitions {
+		multiplicity *;
+	}
+	.pt.ist.expenditureTrackingSystem.domain.organization.Supplier playsRole supplier;
+}
+
+relation WorkingCapitalAcquisitionWorkingCapitalAcquisitionTransaction {
+	WorkingCapitalAcquisition playsRole workingCapitalAcquisition;
+	WorkingCapitalAcquisitionTransaction playsRole workingCapitalAcquisitionTransaction;
+}
+
+relation WorkingCapitalAcquisitionAcquisitionClassification {
+	WorkingCapitalAcquisition playsRole workingCapitalAcquisitions {
+		multiplicity *;
+	}
+	AcquisitionClassification playsRole acquisitionClassification;
 }

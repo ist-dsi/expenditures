@@ -178,4 +178,9 @@ public class WorkingCapital extends WorkingCapital_Base {
 	return result;
     }
 
+    public Money getBalance() {
+	final WorkingCapitalTransaction workingCapitalTransaction = getLastTransaction();
+	return workingCapitalTransaction == null ? Money.ZERO : workingCapitalTransaction.getBalance();
+    }
+
 }

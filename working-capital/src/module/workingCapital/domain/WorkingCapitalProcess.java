@@ -14,6 +14,7 @@ import module.workingCapital.domain.activity.ApproveActivity;
 import module.workingCapital.domain.activity.AuthorizeActivity;
 import module.workingCapital.domain.activity.CancelWorkingCapitalInitializationActivity;
 import module.workingCapital.domain.activity.PayCapitalActivity;
+import module.workingCapital.domain.activity.RegisterWorkingCapitalAcquisitionActivity;
 import module.workingCapital.domain.activity.RejectWorkingCapitalInitializationActivity;
 import module.workingCapital.domain.activity.RequestCapitalActivity;
 import module.workingCapital.domain.activity.UnApproveActivity;
@@ -50,6 +51,7 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base {
 	activitiesAux.add(new UndoCancelOrRejectWorkingCapitalInitializationActivity());
 	activitiesAux.add(new RequestCapitalActivity());
 	activitiesAux.add(new PayCapitalActivity());
+	activitiesAux.add(new RegisterWorkingCapitalAcquisitionActivity());
 	activities = Collections.unmodifiableList(activitiesAux);
     }
 

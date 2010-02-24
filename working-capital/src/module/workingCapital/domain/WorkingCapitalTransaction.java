@@ -47,6 +47,12 @@ public class WorkingCapitalTransaction extends WorkingCapitalTransaction_Base {
 	setDebt(getDebt().add(value));
     }
 
+    public void addValue(final Money value) {
+	setValue(getValue().add(value));
+	setAccumulatedValue(getAccumulatedValue().add(value));
+	setBalance(getBalance().subtract(value));
+    }
+
     public String getDescription() {
 	return "";
     }
