@@ -198,7 +198,7 @@ public class WorkingCapital extends WorkingCapital_Base {
 	return hasAcquisitionPendingApproval() && findUnitResponsible(user.getPerson(), valueForAuthorization) != null;
     }
 
-    private boolean hasAcquisitionPendingVerification() {
+    public boolean hasAcquisitionPendingVerification() {
 	for (final WorkingCapitalAcquisition workingCapitalAcquisition : getWorkingCapitalAcquisitionsSet()) {
 	    final WorkingCapitalTransaction workingCapitalTransaction = workingCapitalAcquisition.getWorkingCapitalAcquisitionTransaction();
 	    if (workingCapitalTransaction.isPendingVerification()) {

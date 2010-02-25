@@ -7,6 +7,7 @@ import module.workflow.activities.WorkflowActivity;
 import module.workingCapital.domain.WorkingCapital;
 import module.workingCapital.domain.WorkingCapitalInitialization;
 import module.workingCapital.domain.WorkingCapitalProcess;
+import module.workingCapital.domain.WorkingCapitalTransaction;
 import module.workingCapital.domain.util.PaymentMethod;
 import myorg.domain.util.Money;
 
@@ -20,14 +21,19 @@ public class RequestCapitalActivityInformation extends ActivityInformation<Worki
 	super(workingCapitalProcess, activity);
 	final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
 	final WorkingCapitalInitialization workingCapitalInitialization = workingCapital.getWorkingCapitalInitialization();
-	final Money maxAnualValue = workingCapitalInitialization.getMaxAuthorizedAnualValue();
-	requestedValue = maxAnualValue.divideAndRound(new BigDecimal(6));
-	final Money anualValue = workingCapitalInitialization.getAuthorizedAnualValue();
-	if (requestedValue.isGreaterThan(anualValue)) {
-	    requestedValue = anualValue;
-	}
 	final String bankAccountId = workingCapitalInitialization.getBankAccountId();
 	paymentMethod = bankAccountId == null  || bankAccountId.isEmpty() ? PaymentMethod.CHECK : PaymentMethod.WIRETRANSFER;
+	if (workingCapital.hasAnyWorkingCapitalTransactions()) {
+	    final WorkingCapitalTransaction workingCapitalTransaction = workingCapital.getLastTransaction();
+	    requestedValue = workingCapitalTransaction.getAccumulatedValue();
+	} else {
+	    final Money maxAnualValue = workingCapitalInitialization.getMaxAuthorizedAnualValue();
+	    requestedValue = maxAnualValue.divideAndRound(new BigDecimal(6));
+	    final Money anualValue = workingCapitalInitialization.getAuthorizedAnualValue();
+	    if (requestedValue.isGreaterThan(anualValue)) {
+		requestedValue = anualValue;
+	    }
+	}
     }
 
     public PaymentMethod getPaymentMethod() {

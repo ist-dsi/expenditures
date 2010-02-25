@@ -15,7 +15,11 @@ public class WorkingCapitalPayment extends WorkingCapitalPayment_Base {
 	setWorkingCapitalRequest(workingCapitalRequest);
 	setPerson(person);
 	final Money value = workingCapitalRequest.getRequestedValue();
-	addDebt(value);
+	if (getAccumulatedValue().isZero()) {
+	    addDebt(value);
+	} else {
+	    restoreDebt(value);
+	}
     }
 
     @Override

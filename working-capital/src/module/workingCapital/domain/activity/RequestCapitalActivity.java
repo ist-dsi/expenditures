@@ -26,7 +26,8 @@ public class RequestCapitalActivity extends WorkflowActivity<WorkingCapitalProce
 		&& !workingCapital.isCanceledOrRejected()
 		&& workingCapitalSystem.isAccountingMember(user)
 		&& workingCapitalInitialization.isAuthorized()
-		&& !workingCapital.hasAnyPendingWorkingCapitalRequests();
+		&& !workingCapital.hasAnyPendingWorkingCapitalRequests()
+		&& !workingCapital.hasAcquisitionPendingVerification();
     }
 
     @Override
