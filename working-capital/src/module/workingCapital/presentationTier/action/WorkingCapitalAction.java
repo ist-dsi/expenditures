@@ -26,7 +26,7 @@ public class WorkingCapitalAction extends ContextBaseAction {
 
     public ActionForward frontPage(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) {
-	WorkingCapitalContext workingCapitalContext = getRenderedObject();
+	WorkingCapitalContext workingCapitalContext = getRenderedObject("workingCapitalContext");
 	if (workingCapitalContext == null) {
 	    workingCapitalContext = new WorkingCapitalContext();
 	}
@@ -40,7 +40,7 @@ public class WorkingCapitalAction extends ContextBaseAction {
 
     public ActionForward search(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) {
-	final WorkingCapitalContext workingCapitalContext = getRenderedObject();
+	final WorkingCapitalContext workingCapitalContext = getRenderedObject("workingCapitalInitializationBean");
 	final SortedSet<WorkingCapitalProcess> unitProcesses = workingCapitalContext.getWorkingCapitalSearchByUnit();
 	if (unitProcesses.size() == 1) {
 	    final WorkingCapitalProcess workingCapitalProcess = unitProcesses.first();

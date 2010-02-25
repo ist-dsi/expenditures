@@ -14,11 +14,15 @@
 		<bean:write name="workingCapital" property="workingCapitalYear.year"/>
 	</h3>
 
-	<p>
-		<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.movementResponsible"/>:
-		:
-		<strong>
-			<bean:write name="workingCapital" property="movementResponsible.name"/>
-		</strong>
-	</p>
+	<fr:view name="workingCapital">
+		<fr:schema bundle="WORKING_CAPITAL_RESOURCES" type="module.workingCapital.domain.WorkingCapital">
+			<fr:slot name="movementResponsible.name" key="label.module.workingCapital.movementResponsible"/>
+			<fr:slot name="workingCapitalInitialization.requestCreation" key="label.module.workingCapital.requestingDate"/>
+			<fr:slot name="workingCapitalInitialization.requestor.name"  key="label.module.workingCapital.requester"/>
+		</fr:schema>
+		<fr:layout name="tabular">
+				<fr:property name="columnClasses" value="aleft,,"/>
+		</fr:layout>
+	</fr:view>
+
 </div>

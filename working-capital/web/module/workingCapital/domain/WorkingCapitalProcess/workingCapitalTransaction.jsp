@@ -7,7 +7,7 @@
 
 <jsp:include page="shortBody.jsp"/>
 
-<table class="tstyle2">
+<table class="tstyle3 width100pc">
 	<tr>
 		<jsp:include page="workingCapitalTransactionLineHeader.jsp"/>
 	</tr>
@@ -17,49 +17,37 @@
 </table>
 
 <logic:equal name="workingCapitalTransaction" property="payment" value="true">
-	<div class="infobox mtop1 mbottom1">
-		<p>
-			<bean:define id="workingCapitalRequest" name="workingCapitalTransaction" property="workingCapitalRequest"/>
+	<p class="mtop15">
+	<h3>
+		<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.request"/>
+	</h3>
+	
+	
+	<bean:define id="workingCapitalRequest" name="workingCapitalTransaction" property="workingCapitalRequest"/>
 
-			<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.request.creation"/>:
-			<fr:view name="workingCapitalRequest" property="requestCreation"/>
-			<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.request.requester"/>:
-			<bean:write name="workingCapitalRequest" property="workingCapitalRequester.child.name"/>
-
-			<br/>
-			<br/>
-
-			<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.request.requestedValue"/>:
-			<fr:view name="workingCapitalRequest" property="requestedValue"/>
-
-			&nbsp;&nbsp;
-
-			<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.request.paymentMethod"/>:
-			<fr:view name="workingCapitalRequest" property="paymentMethod"/>
-
-			<br/>
-			<br/>
-
-			<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.request.processedByTreasury"/>:
-			<logic:present name="workingCapitalRequest" property="processedByTreasury">
-				<fr:view name="workingCapitalRequest" property="processedByTreasury"/>
-				<logic:present name="workingCapitalRequest" property="workingCapitalTreasuryProcessor">
-					<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.request.treasuryProcessor"/>:
-					<fr:view name="workingCapitalRequest" property="workingCapitalTreasuryProcessor.name"/>
-				</logic:present>
-			</logic:present>
-			<logic:notPresent name="workingCapitalRequest" property="processedByTreasury">
-				<bean:define id="workingCapitalRequestOid" type="java.lang.String" name="workingCapitalRequest" property="externalId"/>
-				<wf:activityLink processName="process" activityName="PayCapitalActivity" scope="request" paramName0="workingCapitalRequest" paramValue0="<%= workingCapitalRequestOid %>">
-					<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.PayCapitalActivity"/>
-				</wf:activityLink>
-			</logic:notPresent>
-		</p>
-	</div>
+	<table class="tstyle3 width100pc">
+				<tr>
+					<th> <bean:message key="label.module.workingCapital.requester" bundle="WORKING_CAPITAL_RESOURCES"/> </th>
+					<th> <bean:message key="label.module.workingCapital.request.creation" bundle="WORKING_CAPITAL_RESOURCES"/> </th>
+					<th> <bean:message key="label.module.workingCapital.request.requestedValue" bundle="WORKING_CAPITAL_RESOURCES"/> </th>
+					<th> <bean:message key="label.module.workingCapital.request.paymentMethod" bundle="WORKING_CAPITAL_RESOURCES"/> </th>
+					<th> <bean:message key="label.module.workingCapital.request.processedByTreasury" bundle="WORKING_CAPITAL_RESOURCES"/></th>
+					<th> <bean:message key="label.module.workingCapital.request.dateTreasury" bundle="WORKING_CAPITAL_RESOURCES"/></th>				
+				</tr>
+				<tr>
+					<td><fr:view name="workingCapitalRequest" property="workingCapitalRequester.child.firstAndLastName"/></td>
+					<td><fr:view name="workingCapitalRequest" property="requestCreation"/></td>
+					<td><fr:view name="workingCapitalRequest" property="requestedValue"/></td>
+					<td><fr:view name="workingCapitalRequest" property="paymentMethod"/></td>
+					<td><fr:view name="workingCapitalRequest" property="workingCapitalTreasuryProcessor.firstAndLastName"/></td>
+					<td><fr:view name="workingCapitalRequest" property="processedByTreasury"/></td>
+				</tr>
+	</table>
+	</p>
 </logic:equal>
 
 <logic:equal name="workingCapitalTransaction" property="acquisition" value="true">
-	<br/>
+
 	<fr:view name="workingCapitalTransaction" property="workingCapitalAcquisition">
 		<fr:schema type="module.workingCapital.domain.WorkingCapitalTransaction" bundle="WORKING_CAPITAL_RESOURCES">
 			<fr:slot name="supplier.presentationName" key="label.module.workingCapital.acquisition.supplier"/>

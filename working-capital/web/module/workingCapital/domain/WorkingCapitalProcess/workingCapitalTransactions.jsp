@@ -16,9 +16,10 @@
 		<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.transactions.none"/>
 	</p>
 </logic:empty>
+
 <logic:notEmpty name="workingCapital" property="workingCapitalTransactions">
 	<br/>
-	<table class="tstyle2">
+	<table class="tstyle3 width100pc">
 		<tr>
 			<jsp:include page="workingCapitalTransactionLineHeader.jsp"/>
 			<th>

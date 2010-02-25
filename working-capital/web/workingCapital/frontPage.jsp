@@ -8,7 +8,8 @@
 	<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.front.page"/>
 </h2>
 
-<fr:edit id="workingCapitalContext" name="workingCapitalContext" action="/workingCapital.do?method=frontPage">
+<fr:form action="/workingCapital.do?method=frontPage">
+<fr:edit id="workingCapitalContext" name="workingCapitalContext" >
 	<fr:schema type="module.workingCapital.presentationTier.action.util.WorkingCapitalContext" bundle="WORKING_CAPITAL_RESOURCES">
 		<fr:slot name="year" key="label.module.workingCapital.year" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 	</fr:schema>
@@ -18,7 +19,8 @@
 	</fr:layout>
 </fr:edit>
 
-<br/>
+<html:submit styleClass="inputbutton"><bean:message key="renderers.form.submit.name" bundle="RENDERER_RESOURCES"/> </html:submit>
+</fr:form>
 
 <div style="float: left; width: 100%">
 	<table style="width: 100%; margin: 1em 0;">

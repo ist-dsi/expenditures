@@ -11,113 +11,122 @@
 	<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.initialization"/>
 </h3>
 
+<bean:define id="workingCapitalInitialization" name="workingCapital" property="workingCapitalInitialization"/>
+<bean:define id="workingCapitalInitializationOid" type="java.lang.String" name="workingCapitalInitialization" property="externalId"/>
+				
+		
 <div class="infobox mtop1 mbottom1">
-	<p>
-		<logic:iterate id="workingCapitalInitialization" name="workingCapital" property="sortedWorkingCapitalInitializations">
-			<bean:define id="workingCapitalInitializationOid" type="java.lang.String" name="workingCapitalInitialization" property="externalId"/>
-
-			<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.movementResponsible"/>:
-			<bean:write name="workingCapital" property="movementResponsible.name"/>
-
-			<br/>
-
-			<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.fiscalId"/>:
-			<bean:write name="workingCapitalInitialization" property="fiscalId"/>
-
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-			<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.bankAccountId"/>:
-			<bean:write name="workingCapitalInitialization" property="bankAccountId"/>
-
-			<br/>
-			<br/>
-
-			<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.requestedAnualValue.requested"/>:
-			<fr:view name="workingCapitalInitialization" property="requestedAnualValue"/>
-
-			<br/>
-
-			<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.authorizedAnualValue"/>:
-			<logic:present name="workingCapitalInitialization" property="authorizedAnualValue">
-				<strong>
-					<fr:view name="workingCapitalInitialization" property="authorizedAnualValue"/>
-				</strong>
-			</logic:present>
-
-			<br/>
-
-			<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.maxAuthorizedAnualValue"/>:
-			<logic:present name="workingCapitalInitialization" property="maxAuthorizedAnualValue">
-				<fr:view name="workingCapitalInitialization" property="maxAuthorizedAnualValue"/>
-			</logic:present>
-
-			<br/>
-			<br/>
-
-			<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.initialization.creation"/>:
-			<fr:view name="workingCapitalInitialization" property="requestCreation"/>
-
-			<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.initialization.requester"/>:
-			<bean:write name="workingCapitalInitialization" property="requestor.name"/>
-
-			<br/>
-			<br/>
-
-			<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.initialization.aprovalByUnitResponsible"/>:
-			<logic:present name="workingCapitalInitialization" property="aprovalByUnitResponsible">
-				<fr:view name="workingCapitalInitialization" property="aprovalByUnitResponsible"/>
-			</logic:present>
-
-			<logic:present name="workingCapitalInitialization" property="responsibleForUnitApproval">
-				<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.initialization.UnitAprovalResponsible"/>:
-				<bean:write name="workingCapitalInitialization" property="responsibleForUnitApproval.person.name"/>
-			</logic:present>
-			<wf:activityLink processName="process" activityName="ApproveActivity" scope="request" paramName0="workingCapitalInitialization" paramValue0="<%= workingCapitalInitializationOid %>">
-				<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.ApproveActivity"/>
-			</wf:activityLink>
-			<wf:activityLink processName="process" activityName="UnApproveActivity" scope="request" paramName0="workingCapitalInitialization" paramValue0="<%= workingCapitalInitializationOid %>">
-				<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.UnApproveActivity"/>
-			</wf:activityLink>
-
-			<br/>
-			<br/>
-
-			<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.initialization.verificationByAccounting"/>:
-			<logic:present name="workingCapitalInitialization" property="verificationByAccounting">
-				<fr:view name="workingCapitalInitialization" property="verificationByAccounting"/>
-			</logic:present>
-
-			<logic:present name="workingCapitalInitialization" property="responsibleForAccountingVerification">
-				<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.initialization.AccountingResponsible"/>:
-				<bean:write name="workingCapitalInitialization" property="responsibleForAccountingVerification.child.name"/>
-			</logic:present>
-			<wf:activityLink processName="process" activityName="VerifyActivity" scope="request" paramName0="workingCapitalInitialization" paramValue0="<%= workingCapitalInitializationOid %>">
-				<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.VerifyActivity"/>
-			</wf:activityLink>
-			<wf:activityLink processName="process" activityName="UnVerifyActivity" scope="request" paramName0="workingCapitalInitialization" paramValue0="<%= workingCapitalInitializationOid %>">
-				<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.UnVerifyActivity"/>
-			</wf:activityLink>
-
-			<br/>
-			<br/>
-
-			<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.initialization.authorizationByUnitResponsible"/>:
-			<logic:present name="workingCapitalInitialization" property="authorizationByUnitResponsible">
-				<fr:view name="workingCapitalInitialization" property="authorizationByUnitResponsible"/>
-			</logic:present>
-
-			<logic:present name="workingCapitalInitialization" property="responsibleForUnitAuthorization">
-				<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.initialization.UnitAuthorizationResponsible"/>:
-				<bean:write name="workingCapitalInitialization" property="responsibleForUnitAuthorization.child.name"/>
-			</logic:present>
-			<wf:activityLink processName="process" activityName="AuthorizeActivity" scope="request" paramName0="workingCapitalInitialization" paramValue0="<%= workingCapitalInitializationOid %>">
-				<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.AuthorizeActivity"/>
-			</wf:activityLink>
-			<wf:activityLink processName="process" activityName="UnAuthorizeActivity" scope="request" paramName0="workingCapitalInitialization" paramValue0="<%= workingCapitalInitializationOid %>">
-				<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.UnAuthorizeActivity"/>
-			</wf:activityLink>
-
-		</logic:iterate>
-	</p>
+			<fr:view name="workingCapital">
+				<fr:schema bundle="WORKING_CAPITAL_RESOURCES" type="module.workingCapital.domain.WorkingCapital">
+					<fr:slot name="movementResponsible.name" key="label.module.workingCapital.movementResponsible"/>
+					<fr:slot name="workingCapitalInitialization.fiscalId"  key="label.module.workingCapital.fiscalId"/>
+					<fr:slot name="workingCapitalInitialization.bankAccountId"  key="label.module.workingCapital.bankAccountId"/>
+					<fr:slot name="workingCapitalInitialization.requestedAnualValue"  key="label.module.workingCapital.requestedAnualValue.requested"/>
+					<fr:slot name="workingCapitalInitialization.authorizedAnualValue"  key="label.module.workingCapital.authorizedAnualValue" layout="null-as-label">
+						<fr:property name="subLayout" value=""/>
+						<fr:property name="classes" value="bold"/>
+					</fr:slot>
+					<fr:slot name="workingCapitalInitialization.maxAuthorizedAnualValue"  key="label.module.workingCapital.maxAuthorizedAnualValue" layout="null-as-label">
+						<fr:property name="subLayout" value=""/>
+					</fr:slot>
+				</fr:schema>
+				<fr:layout name="tabular">
+					<fr:property name="columnClasses" value="aleft width215px,,"/>
+				</fr:layout>
+			</fr:view>		
 </div>
+		
+
+			<table class="tstyle3 mtop1 mbottom1 width100pc" >
+				<tr><th>Operação</th><th>Data</th><th>Pessoa</th><th</th></tr>
+				<tr>
+					<td class="aleft">
+						<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.initialization.aprovalByUnitResponsible"/>
+					</td>
+					<td>
+						<logic:present name="workingCapitalInitialization" property="aprovalByUnitResponsible">
+							<fr:view name="workingCapitalInitialization" property="aprovalByUnitResponsible"/>
+						</logic:present>
+						<logic:notPresent name="workingCapitalInitialization" property="aprovalByUnitResponsible">
+							-
+						</logic:notPresent>
+					</td>
+					<td>
+					<logic:present name="workingCapitalInitialization" property="responsibleForUnitApproval">
+						<fr:view name="workingCapitalInitialization" property="responsibleForUnitApproval.person.firstAndLastName"/>
+					</logic:present>
+					<logic:notPresent name="workingCapitalInitialization" property="responsibleForUnitApproval">
+						-
+					</logic:notPresent>
+					</td>
+					<td>
+					<wf:activityLink processName="process" activityName="ApproveActivity" scope="request" paramName0="workingCapitalInitialization" paramValue0="<%= workingCapitalInitializationOid %>">
+						<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.ApproveActivity"/>
+					</wf:activityLink>
+					<wf:activityLink processName="process" activityName="UnApproveActivity" scope="request" paramName0="workingCapitalInitialization" paramValue0="<%= workingCapitalInitializationOid %>">
+						<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.UnApproveActivity"/>
+					</wf:activityLink>
+					</td>
+				</tr>
+				
+				
+				<tr>
+					<td class="aleft">
+						<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.initialization.verificationByAccounting"/>
+					</td>
+					<td>
+						<logic:present name="workingCapitalInitialization" property="verificationByAccounting">
+							<fr:view name="workingCapitalInitialization" property="verificationByAccounting"/>
+						</logic:present>
+						<logic:notPresent name="workingCapitalInitialization" property="verificationByAccounting">
+							-
+						</logic:notPresent>
+					</td>
+					<td>
+					<logic:present name="workingCapitalInitialization" property="responsibleForAccountingVerification">
+						<fr:view name="workingCapitalInitialization" property="responsibleForAccountingVerification.child.firstAndLastName"/>
+					</logic:present>
+					<logic:notPresent name="workingCapitalInitialization" property="responsibleForAccountingVerification">
+						-
+					</logic:notPresent>
+					</td>
+					<td>
+					<wf:activityLink processName="process" activityName="VerifyActivity" scope="request" paramName0="workingCapitalInitialization" paramValue0="<%= workingCapitalInitializationOid %>">
+						<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.VerifyActivity"/>
+					</wf:activityLink>
+					<wf:activityLink processName="process" activityName="UnVerifyActivity" scope="request" paramName0="workingCapitalInitialization" paramValue0="<%= workingCapitalInitializationOid %>">
+						<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.UnVerifyActivity"/>
+					</wf:activityLink>
+					</td>
+				</tr>
+				
+				<tr>
+					<td class="aleft">
+						<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.initialization.authorizationByUnitResponsible"/>
+					</td>
+					<td>
+						<logic:present name="workingCapitalInitialization" property="authorizationByUnitResponsible">
+							<fr:view name="workingCapitalInitialization" property="authorizationByUnitResponsible"/>
+						</logic:present>
+						<logic:notPresent name="workingCapitalInitialization" property="authorizationByUnitResponsible">
+							-
+						</logic:notPresent>
+					</td>
+					<td>
+					<logic:present name="workingCapitalInitialization" property="responsibleForUnitAuthorization">
+						<fr:view name="workingCapitalInitialization" property="responsibleForUnitAuthorization.child.firstAndLastName"/>
+					</logic:present>
+					<logic:notPresent name="workingCapitalInitialization" property="responsibleForUnitAuthorization">
+						-
+					</logic:notPresent>
+					</td>
+					<td>
+						<wf:activityLink processName="process" activityName="AuthorizeActivity" scope="request" paramName0="workingCapitalInitialization" paramValue0="<%= workingCapitalInitializationOid %>">
+							<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.AuthorizeActivity"/>
+						</wf:activityLink>
+						<wf:activityLink processName="process" activityName="UnAuthorizeActivity" scope="request" paramName0="workingCapitalInitialization" paramValue0="<%= workingCapitalInitializationOid %>">
+							<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.UnAuthorizeActivity"/>
+						</wf:activityLink>
+					</td>
+				</tr>
+			</table>

@@ -8,7 +8,7 @@
 	<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.front.page"/>
 </h2>
 
-<fr:edit name="workingCapitalInitializationBean" action="/workingCapital.do?method=createWorkingCapitalInitialization">
+<fr:edit id="workingCapitalInitializationBean" name="workingCapitalInitializationBean" action="/workingCapital.do?method=createWorkingCapitalInitialization">
 	<fr:schema type="module.workingCapital.domain.util.WorkingCapitalInitializationBean" bundle="WORKING_CAPITAL_RESOURCES">
 		<fr:slot name="year" key="label.module.workingCapital.year" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 		<fr:slot name="unit" layout="autoComplete" key="label.module.workingCapital.unit" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
@@ -33,5 +33,6 @@
 		<fr:property name="classes" value="form" />
 		<fr:property name="columnClasses" value=",,tderror" />
 	</fr:layout>
+	<fr:destination name="cancel" path="/workingCapital.do?method=frontPage"/>
 </fr:edit>
 
