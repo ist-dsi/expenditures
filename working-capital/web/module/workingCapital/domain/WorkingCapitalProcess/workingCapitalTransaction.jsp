@@ -7,20 +7,14 @@
 
 <jsp:include page="shortBody.jsp"/>
 
-<fr:view name="workingCapitalTransaction">
-	<fr:schema type="module.workingCapital.domain.WorkingCapitalTransaction" bundle="WORKING_CAPITAL_RESOURCES">
-		<fr:slot name="number" key="label.module.workingCapital.transaction.number"/>
-		<fr:slot name="transationInstant" key="label.module.workingCapital.transaction.transationInstant"/>
-		<fr:slot name="description" key="label.module.workingCapital.transaction.description"/>
-		<fr:slot name="value" key="label.module.workingCapital.transaction.value"/>
-		<fr:slot name="accumulatedValue" key="label.module.workingCapital.transaction.accumulatedValue"/>
-		<fr:slot name="balance" key="label.module.workingCapital.transaction.balance"/>
-		<fr:slot name="debt" key="label.module.workingCapital.transaction.debt"/>
-	</fr:schema>
-	<fr:layout name="tabular">
-		<fr:property name="classes" value="tstyle2"/>
-	</fr:layout>
-</fr:view>
+<table class="tstyle2">
+	<tr>
+		<jsp:include page="workingCapitalTransactionLineHeader.jsp"/>
+	</tr>
+	<tr>
+		<jsp:include page="workingCapitalTransactionLine.jsp"/>
+	</tr>
+</table>
 
 <logic:equal name="workingCapitalTransaction" property="payment" value="true">
 	<div class="infobox mtop1 mbottom1">

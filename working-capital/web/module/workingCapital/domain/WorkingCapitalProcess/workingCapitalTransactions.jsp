@@ -20,47 +20,14 @@
 	<br/>
 	<table class="tstyle2">
 		<tr>
-			<th>
-				<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.transaction.number"/>
-			</th>
-			<th>
-				<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.transaction.description"/>
-			</th>
-			<th>
-				<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.transaction.value"/>
-			</th>
-			<th>
-				<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.transaction.accumulatedValue"/>
-			</th>
-			<th>
-				<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.transaction.balance"/>
-			</th>
-			<th>
-				<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.transaction.debt"/>
-			</th>
+			<jsp:include page="workingCapitalTransactionLineHeader.jsp"/>
 			<th>
 			</th>
 		</tr>
 		<logic:iterate id="workingCapitalTransaction" name="workingCapital" property="sortedWorkingCapitalTransactions">
 			<tr>
-				<td>
-					<fr:view name="workingCapitalTransaction" property="number"/>
-				</td>
-				<td>
-					<fr:view name="workingCapitalTransaction" property="description"/>
-				</td>
-				<td>
-					<fr:view name="workingCapitalTransaction" property="value"/>
-				</td>
-				<td>
-					<fr:view name="workingCapitalTransaction" property="accumulatedValue"/>
-				</td>
-				<td>
-					<fr:view name="workingCapitalTransaction" property="balance"/>
-				</td>
-				<td>
-					<fr:view name="workingCapitalTransaction" property="debt"/>
-				</td>
+				<bean:define id="workingCapitalTransaction" name="workingCapitalTransaction" toScope="request"/>
+				<jsp:include page="workingCapitalTransactionLine.jsp"/>
 				<td>
 					<html:link action="/workingCapital.do?method=viewWorkingCapitalTransaction" paramId="workingCapitalTransactionOid" paramName="workingCapitalTransaction" paramProperty="externalId">
 						<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="link.view"/>
