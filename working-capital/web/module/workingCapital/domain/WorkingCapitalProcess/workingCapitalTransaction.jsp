@@ -70,21 +70,33 @@
 			<fr:slot name="acquisitionClassification.pocCode" key="label.module.workingCapital.configuration.acquisition.classifications.pocCode"/>
 			<fr:slot name="valueWithoutVat" key="label.module.workingCapital.acquisition.valueWithoutVat"/>
 			<fr:slot name="workingCapitalAcquisitionTransaction.value" key="label.module.workingCapital.acquisition.money"/>
-			<fr:slot name="approved" key="label.module.workingCapital.acquisition.approved"/>
-			<fr:slot name="approver" key="label.module.workingCapital.acquisition.approver" layout="null-as-label">
-				<fr:property name="subLayout" value="values"/>
-				<fr:property name="subSchema" value="workingCapital.acquisition.approver"/>
-			</fr:slot>
-			<fr:slot name="verified" key="label.module.workingCapital.acquisition.verified"/>
-			<fr:slot name="verifier" key="label.module.workingCapital.acquisition.verifier" layout="null-as-label">
-				<fr:property name="subLayout" value="values"/>
-				<fr:property name="subSchema" value="workingCapital.acquisition.verifier"/>
-			</fr:slot>
 		</fr:schema>
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="tstyle2"/>
 		</fr:layout>
 	</fr:view>
+
+	<logic:notEmpty name="workingCapitalTransaction" property="workingCapitalAcquisition.approver">
+		<div class="infobox mtop1 mbottom1">
+			<logic:equal name="workingCapitalTransaction" property="approved" value="true">
+				<p>
+					<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.acquisition.approved"/>
+					<fr:view name="workingCapitalTransaction" property="workingCapitalAcquisition.approved"/>
+					<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.acquisition.approver"/>
+					<fr:view name="workingCapitalTransaction" property="workingCapitalAcquisition.approver.person.name"/>
+				</p>
+			</logic:equal>
+			<logic:equal name="workingCapitalTransaction" property="verified" value="true">
+				<p>
+					<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.acquisition.verified"/>
+					<fr:view name="workingCapitalTransaction" property="workingCapitalAcquisition.verified"/>
+					<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.acquisition.verifier"/>
+					<fr:view name="workingCapitalTransaction" property="workingCapitalAcquisition.verifier.child.name"/>
+				</p>
+			</logic:equal>
+		</div>	
+	</logic:notEmpty>
+
 	<bean:define id="workingCapitalTransactionOid" type="java.lang.String" name="workingCapitalTransaction" property="externalId"/>
 	<logic:equal name="workingCapitalTransaction" property="lastTransaction" value="true">
 		<wf:activityLink processName="process" activityName="EditWorkingCapitalActivity" scope="request" paramName0="workingCapitalAcquisitionTransaction" paramValue0="<%= workingCapitalTransactionOid %>">

@@ -61,7 +61,7 @@ public class WorkingCapitalAcquisitionTransaction extends WorkingCapitalAcquisit
     @Override
     public boolean isVerified() {
 	final WorkingCapitalAcquisition workingCapitalAcquisition = getWorkingCapitalAcquisition();
-	return workingCapitalAcquisition.getVerifier() == null;
+	return workingCapitalAcquisition.getVerifier() != null;
     }
 
     @Override
