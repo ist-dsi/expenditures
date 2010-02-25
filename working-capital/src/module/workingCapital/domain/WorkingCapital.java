@@ -183,4 +183,19 @@ public class WorkingCapital extends WorkingCapital_Base {
 	return workingCapitalTransaction == null ? Money.ZERO : workingCapitalTransaction.getBalance();
     }
 
+    public boolean hasAcquisitionPendingApproval() {
+	for (final WorkingCapitalAcquisition workingCapitalAcquisition : getWorkingCapitalAcquisitionsSet()) {
+	    final WorkingCapitalTransaction workingCapitalTransaction = workingCapitalAcquisition.getWorkingCapitalAcquisitionTransaction();
+	    if (workingCapitalTransaction.isPendingApproval()) {
+		return true;
+	    }	    
+	}
+	return false;
+    }
+
+    public boolean hasAcquisitionPendingApproval(final User user) {
+	final Money valueForAuthorization = Money.ZERO;
+	return hasAcquisitionPendingApproval() && findUnitResponsible(user.getPerson(), valueForAuthorization) != null;
+    }
+
 }

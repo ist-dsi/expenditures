@@ -56,6 +56,7 @@ class WorkingCapitalAcquisition extends .pt.ist.expenditureTrackingSystem.domain
     String documentNumber;
     String description;
     Money valueWithoutVat;
+    DateTime approved;
 }
 
 class WorkingCapitalTransaction {
@@ -274,3 +275,11 @@ relation WorkingCapitalAcquisitionAcquisitionClassification {
 	}
 	AcquisitionClassification playsRole acquisitionClassification;
 }
+
+relation WorkingCapitalAcquisitionApprover {
+	.pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization playsRole approver;
+	WorkingCapitalAcquisition playsRole workingCapitalAcquisitions {
+		multiplicity *;
+	}
+}
+

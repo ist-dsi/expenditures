@@ -2,6 +2,7 @@ package module.workingCapital.domain;
 
 import java.util.Comparator;
 
+import myorg.domain.User;
 import myorg.domain.util.Money;
 
 import org.joda.time.DateTime;
@@ -53,6 +54,11 @@ public class WorkingCapitalTransaction extends WorkingCapitalTransaction_Base {
 	setBalance(getBalance().subtract(value));
     }
 
+    public void resetValue(final Money value) {
+	final Money diffValue = value.subtract(getValue());
+	addValue(diffValue);
+    }
+
     public String getDescription() {
 	return "";
     }
@@ -63,6 +69,22 @@ public class WorkingCapitalTransaction extends WorkingCapitalTransaction_Base {
 
     public boolean isAcquisition() {
 	return false;
+    }
+
+    public boolean isLastTransaction() {
+	final WorkingCapital workingCapital = getWorkingCapital();
+	return workingCapital.getLastTransaction() == this;
+    }
+
+    public boolean isPendingApproval() {
+	return false;
+    }
+
+    public boolean isApproved() {
+	return false;
+    }
+
+    public void approve(final User loggedPerson) {
     }
 
 }

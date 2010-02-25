@@ -116,7 +116,7 @@ public class WorkingCapitalAction extends ContextBaseAction {
 	final WorkingCapitalTransaction workingCapitalTransaction = getDomainObject(request, "workingCapitalTransactionOid");
 	request.setAttribute("workingCapitalTransaction", workingCapitalTransaction);
 	request.setAttribute("process", workingCapitalTransaction.getWorkingCapital().getWorkingCapitalProcess());
-	return forward(request, "/module/workingCapital/domain/WorkingCapitalProcess/viewWorkingCapitalTransaction.jsp");
+	return forward(request, "/module/workingCapital/domain/WorkingCapitalProcess/workingCapitalTransaction.jsp");
     }
 
 }

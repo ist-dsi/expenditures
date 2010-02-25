@@ -81,5 +81,14 @@
 			<fr:property name="classes" value="tstyle2"/>
 		</fr:layout>
 	</fr:view>
+	<logic:equal name="workingCapitalTransaction" property="lastTransaction" value="true">
+		<bean:define id="workingCapitalTransactionOid" type="java.lang.String" name="workingCapitalTransaction" property="externalId"/>
+		<wf:activityLink processName="process" activityName="EditWorkingCapitalActivity" scope="request" paramName0="workingCapitalAcquisitionTransaction" paramValue0="<%= workingCapitalTransactionOid %>">
+			<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.EditWorkingCapitalActivity"/>
+		</wf:activityLink>
+		<wf:activityLink processName="process" activityName="ApproveWorkingCapitalAcquisitionActivity" scope="request" paramName0="workingCapitalAcquisitionTransaction" paramValue0="<%= workingCapitalTransactionOid %>">
+			<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.ApproveWorkingCapitalAcquisitionActivity"/>
+		</wf:activityLink>
+	</logic:equal>
 </logic:equal>
-	
+

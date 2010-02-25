@@ -1,5 +1,6 @@
 package module.workingCapital.domain;
 
+import myorg.domain.User;
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
 import myorg.util.BundleUtil;
@@ -30,6 +31,23 @@ public class WorkingCapitalAcquisitionTransaction extends WorkingCapitalAcquisit
     @Override
     public boolean isAcquisition() {
 	return true;
+    }
+
+    public boolean isPendingApproval() {
+	final WorkingCapitalAcquisition workingCapitalAcquisition = getWorkingCapitalAcquisition();
+	return workingCapitalAcquisition.getApproved() == null;
+    }
+
+    public boolean isApproved() {
+	final WorkingCapitalAcquisition workingCapitalAcquisition = getWorkingCapitalAcquisition();
+	return workingCapitalAcquisition.getApproved() != null;
+    }
+
+    @Override
+    public void approve(final User user) {
+        super.approve(user);
+        final WorkingCapitalAcquisition workingCapitalAcquisition = getWorkingCapitalAcquisition();
+        workingCapitalAcquisition.approve(user);
     }
 
 }

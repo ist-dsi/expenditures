@@ -14,7 +14,7 @@
 		<fr:slot name="unit" layout="autoComplete" key="label.module.workingCapital.unit" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
         	<fr:property name="labelField" value="presentationName"/>
 			<fr:property name="format" value="${presentationName}"/>
-			<fr:property name="minChars" value="3"/>		
+			<fr:property name="minChars" value="3"/>
 			<fr:property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.UnitAutoCompleteProvider"/>
 			<fr:property name="size" value="60"/>
 		</fr:slot>
