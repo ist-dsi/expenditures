@@ -198,4 +198,18 @@ public class WorkingCapital extends WorkingCapital_Base {
 	return hasAcquisitionPendingApproval() && findUnitResponsible(user.getPerson(), valueForAuthorization) != null;
     }
 
+    private boolean hasAcquisitionPendingVerification() {
+	for (final WorkingCapitalAcquisition workingCapitalAcquisition : getWorkingCapitalAcquisitionsSet()) {
+	    final WorkingCapitalTransaction workingCapitalTransaction = workingCapitalAcquisition.getWorkingCapitalAcquisitionTransaction();
+	    if (workingCapitalTransaction.isPendingVerification()) {
+		return true;
+	    }	    
+	}
+	return false;
+    }
+
+    public boolean hasAcquisitionPendingVerification(final User user) {
+	return hasAcquisitionPendingVerification() && getWorkingCapitalSystem().getAccountingAccountability(user) != null;
+    }
+
 }

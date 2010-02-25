@@ -1,5 +1,6 @@
 package module.workingCapital.domain;
 
+import module.organization.domain.Accountability;
 import myorg.domain.User;
 import myorg.domain.util.Money;
 
@@ -17,6 +18,7 @@ public class WorkingCapitalAcquisition extends WorkingCapitalAcquisition_Base {
 
     public WorkingCapitalAcquisition(final WorkingCapital workingCapital, final String documentNumber, final Supplier supplier,
 	    final String description, final AcquisitionClassification acquisitionClassification, final Money valueWithoutVat, final Money money) {
+	this();
 	setWorkingCapital(workingCapital);
 	edit(documentNumber, supplier, description, acquisitionClassification, valueWithoutVat);
 	new WorkingCapitalAcquisitionTransaction(this, money);
@@ -44,6 +46,12 @@ public class WorkingCapitalAcquisition extends WorkingCapitalAcquisition_Base {
 	final WorkingCapital workingCapital = getWorkingCapital();
 	final Authorization authorization = workingCapital.findUnitResponsible(user.getPerson(), valueForAuthorization);
 	setApprover(authorization);
+    }
+
+    public void verify(User user) {
+	setVerified(new DateTime());
+	final Accountability accountability = getWorkingCapitalSystem().getAccountingAccountability(user);
+	setVerifier(accountability);
     }
 
 }

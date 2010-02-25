@@ -8,7 +8,7 @@ import module.workingCapital.domain.WorkingCapitalTransaction;
 import myorg.domain.User;
 import myorg.util.BundleUtil;
 
-public class ApproveWorkingCapitalAcquisitionActivity extends WorkflowActivity<WorkingCapitalProcess, WorkingCapitalTransactionInformation> {
+public class VerifyWorkingCapitalAcquisitionActivity extends WorkflowActivity<WorkingCapitalProcess, WorkingCapitalTransactionInformation> {
 
     @Override
     public String getLocalizedName() {
@@ -18,13 +18,13 @@ public class ApproveWorkingCapitalAcquisitionActivity extends WorkflowActivity<W
     @Override
     public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
 	final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
-	return !workingCapital.isCanceledOrRejected() && workingCapital.hasAcquisitionPendingApproval(user);
+	return !workingCapital.isCanceledOrRejected() && workingCapital.hasAcquisitionPendingVerification(user);
     }
 
     @Override
     protected void process(final WorkingCapitalTransactionInformation activityInformation) {
 	final WorkingCapitalTransaction workingCapitalTransaction = activityInformation.getWorkingCapitalTransaction();
-	workingCapitalTransaction.approve(getLoggedPerson());
+	workingCapitalTransaction.verify(getLoggedPerson());
     }
 
     @Override

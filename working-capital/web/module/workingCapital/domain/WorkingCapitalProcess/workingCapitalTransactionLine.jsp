@@ -13,6 +13,26 @@
 	<fr:view name="workingCapitalTransaction" property="description"/>
 </td>
 <td>
+	<logic:equal name="workingCapitalTransaction" property="acquisition" value="true">
+		<logic:notEmpty name="workingCapitalTransaction" property="workingCapitalAcquisition.approved">
+			<img src="<%= request.getContextPath() + "/workingCapital/image/accept.gif" %>">
+		</logic:notEmpty>
+		<logic:notEmpty name="workingCapitalTransaction" property="workingCapitalAcquisition.rejectedApproval">
+			<img src="<%= request.getContextPath() + "/workingCapital/image/incorrect.gif" %>">
+		</logic:notEmpty>
+	</logic:equal>
+</td>
+<td>
+	<logic:equal name="workingCapitalTransaction" property="acquisition" value="true">
+		<logic:notEmpty name="workingCapitalTransaction" property="workingCapitalAcquisition.verified">
+			<img src="<%= request.getContextPath() + "/workingCapital/image/accept.gif" %>">
+		</logic:notEmpty>
+		<logic:notEmpty name="workingCapitalTransaction" property="workingCapitalAcquisition.notVerified">
+			<img src="<%= request.getContextPath() + "/workingCapital/image/incorrect.gif" %>">
+		</logic:notEmpty>
+	</logic:equal>
+</td>
+<td>
 	<fr:view name="workingCapitalTransaction" property="value"/>
 </td>
 <td>

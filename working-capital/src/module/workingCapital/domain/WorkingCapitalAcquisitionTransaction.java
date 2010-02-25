@@ -33,11 +33,13 @@ public class WorkingCapitalAcquisitionTransaction extends WorkingCapitalAcquisit
 	return true;
     }
 
+    @Override
     public boolean isPendingApproval() {
 	final WorkingCapitalAcquisition workingCapitalAcquisition = getWorkingCapitalAcquisition();
 	return workingCapitalAcquisition.getApproved() == null;
     }
 
+    @Override
     public boolean isApproved() {
 	final WorkingCapitalAcquisition workingCapitalAcquisition = getWorkingCapitalAcquisition();
 	return workingCapitalAcquisition.getApproved() != null;
@@ -48,6 +50,25 @@ public class WorkingCapitalAcquisitionTransaction extends WorkingCapitalAcquisit
         super.approve(user);
         final WorkingCapitalAcquisition workingCapitalAcquisition = getWorkingCapitalAcquisition();
         workingCapitalAcquisition.approve(user);
+    }
+
+    @Override
+    public boolean isPendingVerification() {
+	final WorkingCapitalAcquisition workingCapitalAcquisition = getWorkingCapitalAcquisition();
+	return isApproved() && workingCapitalAcquisition.getVerifier() == null;
+    }
+
+    @Override
+    public boolean isVerified() {
+	final WorkingCapitalAcquisition workingCapitalAcquisition = getWorkingCapitalAcquisition();
+	return workingCapitalAcquisition.getVerifier() == null;
+    }
+
+    @Override
+    public void verify(final User user) {
+        super.approve(user);
+        final WorkingCapitalAcquisition workingCapitalAcquisition = getWorkingCapitalAcquisition();
+        workingCapitalAcquisition.verify(user);
     }
 
 }

@@ -84,7 +84,18 @@ public class WorkingCapitalTransaction extends WorkingCapitalTransaction_Base {
 	return false;
     }
 
-    public void approve(final User loggedPerson) {
+    public void approve(final User user) {
+    }
+
+    public boolean isPendingVerification() {
+	return false;
+    }
+
+    public boolean isVerified() {
+	return false;
+    }
+
+    public void verify(final User user) {
     }
 
 }

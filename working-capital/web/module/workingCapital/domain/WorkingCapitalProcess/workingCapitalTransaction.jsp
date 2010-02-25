@@ -70,18 +70,35 @@
 			<fr:slot name="acquisitionClassification.pocCode" key="label.module.workingCapital.configuration.acquisition.classifications.pocCode"/>
 			<fr:slot name="valueWithoutVat" key="label.module.workingCapital.acquisition.valueWithoutVat"/>
 			<fr:slot name="workingCapitalAcquisitionTransaction.value" key="label.module.workingCapital.acquisition.money"/>
+			<fr:slot name="approved" key="label.module.workingCapital.acquisition.approved"/>
+			<fr:slot name="approver" key="label.module.workingCapital.acquisition.approver" layout="null-as-label">
+				<fr:property name="subLayout" value="values"/>
+				<fr:property name="subSchema" value="workingCapital.acquisition.approver"/>
+			</fr:slot>
+			<fr:slot name="verified" key="label.module.workingCapital.acquisition.verified"/>
+			<fr:slot name="verifier" key="label.module.workingCapital.acquisition.verifier" layout="null-as-label">
+				<fr:property name="subLayout" value="values"/>
+				<fr:property name="subSchema" value="workingCapital.acquisition.verifier"/>
+			</fr:slot>
 		</fr:schema>
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="tstyle2"/>
 		</fr:layout>
 	</fr:view>
+	<bean:define id="workingCapitalTransactionOid" type="java.lang.String" name="workingCapitalTransaction" property="externalId"/>
 	<logic:equal name="workingCapitalTransaction" property="lastTransaction" value="true">
-		<bean:define id="workingCapitalTransactionOid" type="java.lang.String" name="workingCapitalTransaction" property="externalId"/>
 		<wf:activityLink processName="process" activityName="EditWorkingCapitalActivity" scope="request" paramName0="workingCapitalAcquisitionTransaction" paramValue0="<%= workingCapitalTransactionOid %>">
 			<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.EditWorkingCapitalActivity"/>
 		</wf:activityLink>
-		<wf:activityLink processName="process" activityName="ApproveWorkingCapitalAcquisitionActivity" scope="request" paramName0="workingCapitalAcquisitionTransaction" paramValue0="<%= workingCapitalTransactionOid %>">
+	</logic:equal>
+	<logic:equal name="workingCapitalTransaction" property="pendingApproval" value="true">
+		<wf:activityLink processName="process" activityName="ApproveWorkingCapitalAcquisitionActivity" scope="request" paramName0="workingCapitalTransaction" paramValue0="<%= workingCapitalTransactionOid %>">
 			<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.ApproveWorkingCapitalAcquisitionActivity"/>
+		</wf:activityLink>
+	</logic:equal>
+	<logic:equal name="workingCapitalTransaction" property="pendingVerification" value="true">
+		<wf:activityLink processName="process" activityName="VerifyWorkingCapitalAcquisitionActivity" scope="request" paramName0="workingCapitalTransaction" paramValue0="<%= workingCapitalTransactionOid %>">
+			<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.VerifyWorkingCapitalAcquisitionActivity"/>
 		</wf:activityLink>
 	</logic:equal>
 </logic:equal>

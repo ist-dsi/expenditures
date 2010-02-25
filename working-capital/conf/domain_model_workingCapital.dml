@@ -57,6 +57,9 @@ class WorkingCapitalAcquisition extends .pt.ist.expenditureTrackingSystem.domain
     String description;
     Money valueWithoutVat;
     DateTime approved;
+    DateTime rejectedApproval;
+    DateTime verified;
+    DateTime notVerified;    
 }
 
 class WorkingCapitalTransaction {
@@ -278,7 +281,14 @@ relation WorkingCapitalAcquisitionAcquisitionClassification {
 
 relation WorkingCapitalAcquisitionApprover {
 	.pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization playsRole approver;
-	WorkingCapitalAcquisition playsRole workingCapitalAcquisitions {
+	WorkingCapitalAcquisition playsRole workingCapitalAcquisitionsFromApprover {
+		multiplicity *;
+	}
+}
+
+relation WorkingCapitalAcquisitionVerifier {
+	.module.organization.domain.Accountability playsRole verifier;
+	WorkingCapitalAcquisition playsRole workingCapitalAcquisitionsFromVerifier {
 		multiplicity *;
 	}
 }

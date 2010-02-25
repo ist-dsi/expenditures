@@ -24,6 +24,7 @@ import module.workingCapital.domain.activity.UnAuthorizeActivity;
 import module.workingCapital.domain.activity.UnVerifyActivity;
 import module.workingCapital.domain.activity.UndoCancelOrRejectWorkingCapitalInitializationActivity;
 import module.workingCapital.domain.activity.VerifyActivity;
+import module.workingCapital.domain.activity.VerifyWorkingCapitalAcquisitionActivity;
 import myorg.domain.User;
 import myorg.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
@@ -56,6 +57,7 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base {
 	activitiesAux.add(new RegisterWorkingCapitalAcquisitionActivity());
 	activitiesAux.add(new EditWorkingCapitalActivity());
 	activitiesAux.add(new ApproveWorkingCapitalAcquisitionActivity());
+	activitiesAux.add(new VerifyWorkingCapitalAcquisitionActivity());
 	activities = Collections.unmodifiableList(activitiesAux);
     }
 

@@ -13,6 +13,12 @@
 	<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.transaction.description"/>
 </th>
 <th>
+	<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.transaction.approval"/>
+</th>
+<th>
+	<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.transaction.verification"/>
+</th>
+<th>
 	<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.transaction.value"/>
 </th>
 <th>
