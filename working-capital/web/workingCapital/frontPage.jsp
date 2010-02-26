@@ -11,15 +11,18 @@
 <fr:form action="/workingCapital.do?method=frontPage">
 <fr:edit id="workingCapitalContext" name="workingCapitalContext" >
 	<fr:schema type="module.workingCapital.presentationTier.action.util.WorkingCapitalContext" bundle="WORKING_CAPITAL_RESOURCES">
-		<fr:slot name="year" key="label.module.workingCapital.year" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+		<fr:slot name="workingCapitalYear" key="label.module.workingCapital.seeYear" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" layout="menu-select-postback">
+			<fr:property name="providerClass" value="module.workingCapital.presentationTier.provider.WorkingCapitalYearProvider"/>
+			<fr:property name="saveOptions" value="true"/>
+			<fr:property name="format" value="${year}"/>
+			<fr:property name="nullOptionHidden" value="true"/>
+		</fr:slot>
 	</fr:schema>
 	<fr:layout name="tabular">
 		<fr:property name="classes" value="form" />
 		<fr:property name="columnClasses" value=",,tderror" />
 	</fr:layout>
 </fr:edit>
-
-<html:submit styleClass="inputbutton"><bean:message key="renderers.form.submit.name" bundle="RENDERER_RESOURCES"/> </html:submit>
 </fr:form>
 
 <div style="float: left; width: 100%">
@@ -71,40 +74,54 @@
 				<bean:define id="processList" toScope="request" name="workingCapitalContext" property="workingCapitalYear.requestedWorkingCapital"/>
 				<jsp:include page="processList.jsp"/>
 
-				<br/>
-				<html:link page="/workingCapital.do?method=prepareCreateWorkingCapitalInitialization">
-					<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.initialization.create"/>
-				</html:link>
 			</td>
 		</tr>
 	</table>
 </div>
 <div style="clear: left;"></div>
 
-<br/>
+<div style="border: 1px dotted #aaa; background: #f5f5f5; padding: 10px;  margin-top: 10px;">
+		
+			<h3 class="mtop0">
+				<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.front.page.search"/>
+			</h3>
+        
+			<p class="mvert05">
+				<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.front.page.search.text"/>
+			</p>
+        
+        <fr:form action="/workingCapital.do?method=search">
+		<fr:edit id="workingCapitalContextUnitSearch" name="workingCapitalContext" >
+			<fr:schema type="module.workingCapital.presentationTier.action.util.WorkingCapitalContext" bundle="WORKING_CAPITAL_RESOURCES">
+				<fr:slot name="workingCapitalYear" key="label.module.workingCapital.year" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" layout="menu-select">
+					<fr:property name="providerClass" value="module.workingCapital.presentationTier.provider.WorkingCapitalYearProvider"/>
+					<fr:property name="saveOptions" value="true"/>
+					<fr:property name="format" value="${year}"/>
+					<fr:property name="nullOptionHidden" value="true"/>
+				</fr:slot>
+				<fr:slot name="unit" layout="autoComplete" key="label.party" bundle="ORGANIZATION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" help="label.module.workingCapital.selectParty.help">
+		        	<fr:property name="labelField" value="partyName.content"/>
+					<fr:property name="format" value="${presentationName}"/>
+					<fr:property name="minChars" value="3"/>
+					<fr:property name="args" value="provider=module.organization.presentationTier.renderers.providers.UnitAutoCompleteProvider"/>
+					<fr:property name="size" value="60"/>
+				</fr:slot>
+			</fr:schema>
+			<fr:layout name="tabular">
+				<fr:property name="classes" value="form" />
+				<fr:property name="columnClasses" value=",,tderror" />
+			</fr:layout>
+		</fr:edit>
+		<html:submit styleClass="inputbutton"><bean:message key="renderers.form.submit.name" bundle="RENDERER_RESOURCES"/></html:submit>
+		</fr:form>
 
-<h3>
-	<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.front.page.search"/>
-</h3>
-<fr:edit id="workingCapitalContextUnitSearch" name="workingCapitalContext" action="/workingCapital.do?method=search">
-	<fr:schema type="module.workingCapital.presentationTier.action.util.WorkingCapitalContext" bundle="WORKING_CAPITAL_RESOURCES">
-		<fr:slot name="unit" layout="autoComplete" key="label.party" bundle="ORGANIZATION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
-        	<fr:property name="labelField" value="partyName.content"/>
-			<fr:property name="format" value="${presentationName}"/>
-			<fr:property name="minChars" value="3"/>
-			<fr:property name="args" value="provider=module.organization.presentationTier.renderers.providers.UnitAutoCompleteProvider"/>
-			<fr:property name="size" value="60"/>
-		</fr:slot>
-	</fr:schema>
-	<fr:layout name="tabular">
-		<fr:property name="classes" value="form" />
-		<fr:property name="columnClasses" value=",,tderror" />
-	</fr:layout>
-</fr:edit>
 
-<br/>
+	<p>
+		<logic:present name="unitProcesses">
+			<bean:define id="processList" toScope="request" name="unitProcesses"/>
+			<jsp:include page="processList.jsp"/>
+		</logic:present>			
+   </p>     
+</div>	
+		
 
-<logic:present name="unitProcesses">
-	<bean:define id="processList" toScope="request" name="unitProcesses"/>
-	<jsp:include page="processList.jsp"/>
-</logic:present>

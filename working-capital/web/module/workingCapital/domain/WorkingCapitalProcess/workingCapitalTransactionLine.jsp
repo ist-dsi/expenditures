@@ -21,6 +21,9 @@
 			<img src="<%= request.getContextPath() + "/workingCapital/image/incorrect.gif" %>">
 		</logic:notEmpty>
 	</logic:equal>
+	<logic:equal name="workingCapitalTransaction" property="acquisition" value="false">
+	-
+	</logic:equal>
 </td>
 <td>
 	<logic:equal name="workingCapitalTransaction" property="acquisition" value="true">
@@ -30,6 +33,9 @@
 		<logic:notEmpty name="workingCapitalTransaction" property="workingCapitalAcquisition.notVerified">
 			<img src="<%= request.getContextPath() + "/workingCapital/image/incorrect.gif" %>">
 		</logic:notEmpty>
+	</logic:equal>
+	<logic:equal name="workingCapitalTransaction" property="acquisition" value="false">
+	-
 	</logic:equal>
 </td>
 <td>

@@ -18,6 +18,8 @@
 <div class="infobox mtop1 mbottom1">
 			<fr:view name="workingCapital">
 				<fr:schema bundle="WORKING_CAPITAL_RESOURCES" type="module.workingCapital.domain.WorkingCapital">
+					<fr:slot name="workingCapitalInitialization.requestCreation" key="label.module.workingCapital.requestingDate"/>
+					<fr:slot name="workingCapitalInitialization.requestor.name"  key="label.module.workingCapital.requester"/>
 					<fr:slot name="movementResponsible.name" key="label.module.workingCapital.movementResponsible"/>
 					<fr:slot name="workingCapitalInitialization.fiscalId"  key="label.module.workingCapital.fiscalId"/>
 					<fr:slot name="workingCapitalInitialization.bankAccountId"  key="label.module.workingCapital.bankAccountId"/>

@@ -7,18 +7,12 @@
 <bean:define id="workingCapital" name="process" property="workingCapital"/>
 
 <div class="infobox mtop1 mbottom1">
-	<h3 class="mbottom05">
-		<bean:write name="workingCapital" property="unit.presentationName"/>
-		-
-		<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.year"/>
-		<bean:write name="workingCapital" property="workingCapitalYear.year"/>
-	</h3>
-
 	<fr:view name="workingCapital">
 		<fr:schema bundle="WORKING_CAPITAL_RESOURCES" type="module.workingCapital.domain.WorkingCapital">
-			<fr:slot name="movementResponsible.name" key="label.module.workingCapital.movementResponsible"/>
+			<fr:slot name="unit.presentationName" key="label.module.workingCapital"/>
 			<fr:slot name="workingCapitalInitialization.requestCreation" key="label.module.workingCapital.requestingDate"/>
 			<fr:slot name="workingCapitalInitialization.requestor.name"  key="label.module.workingCapital.requester"/>
+			<fr:slot name="movementResponsible.name" key="label.module.workingCapital.movementResponsible"/>
 		</fr:schema>
 		<fr:layout name="tabular">
 				<fr:property name="columnClasses" value="aleft,,"/>

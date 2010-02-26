@@ -22,36 +22,41 @@ public class WorkingCapitalContext implements Serializable {
     }
 
     public Integer getYear() {
-        return year;
+	return year;
     }
 
     public void setYear(Integer year) {
-        this.year = year;
-        if (year != null) {
-            for (final WorkingCapitalYear workingCapitalYear : WorkingCapitalSystem.getInstance().getWorkingCapitalYearsSet()) {
-        	if (workingCapitalYear.getYear().intValue() == year.intValue()) {
-        	    this.workingCapitalYear = workingCapitalYear;
-        	}
-            }
-        }
+	this.year = year;
+	if (year != null) {
+	    for (final WorkingCapitalYear workingCapitalYear : WorkingCapitalSystem.getInstance().getWorkingCapitalYearsSet()) {
+		if (workingCapitalYear.getYear().intValue() == year.intValue()) {
+		    this.workingCapitalYear = workingCapitalYear;
+		}
+	    }
+	}
     }
 
     public WorkingCapitalYear getWorkingCapitalYear() {
-        return workingCapitalYear;
+	return workingCapitalYear;
+    }
+
+    public void setWorkingCapitalYear(WorkingCapitalYear year) {
+	this.workingCapitalYear = year;
     }
 
     public Unit getUnit() {
-        return unit;
+	return unit;
     }
 
     public void setUnit(Unit unit) {
-        this.unit = unit;
+	this.unit = unit;
     }
 
     public SortedSet<WorkingCapitalProcess> getWorkingCapitalSearchByUnit() {
 	final WorkingCapitalYear workingCapitalYear = getWorkingCapitalYear();
 	final Unit unit = getUnit();
-	return workingCapitalYear == null || unit == null ? new TreeSet<WorkingCapitalProcess>() : workingCapitalYear.getForUnit(unit);
+	return workingCapitalYear == null || unit == null ? new TreeSet<WorkingCapitalProcess>() : workingCapitalYear
+		.getForUnit(unit);
     }
 
 }

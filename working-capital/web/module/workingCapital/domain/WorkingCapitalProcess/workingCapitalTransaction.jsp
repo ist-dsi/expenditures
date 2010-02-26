@@ -48,6 +48,11 @@
 
 <logic:equal name="workingCapitalTransaction" property="acquisition" value="true">
 
+	<p class="mtop15 mbottom15">
+	<h3>
+		<bean:message key="label.module.workingCapital.acquisition.details" bundle="WORKING_CAPITAL_RESOURCES"/>
+	</h3>
+	<div class="infobox mtop1 mbottom1">
 	<fr:view name="workingCapitalTransaction" property="workingCapitalAcquisition">
 		<fr:schema type="module.workingCapital.domain.WorkingCapitalTransaction" bundle="WORKING_CAPITAL_RESOURCES">
 			<fr:slot name="supplier.presentationName" key="label.module.workingCapital.acquisition.supplier"/>
@@ -60,37 +65,63 @@
 			<fr:slot name="workingCapitalAcquisitionTransaction.value" key="label.module.workingCapital.acquisition.money"/>
 		</fr:schema>
 		<fr:layout name="tabular">
-			<fr:property name="classes" value="tstyle2"/>
 		</fr:layout>
 	</fr:view>
-
+	</div>
+	
 	<logic:notEmpty name="workingCapitalTransaction" property="workingCapitalAcquisition.approver">
-		<div class="infobox mtop1 mbottom1">
-			<logic:equal name="workingCapitalTransaction" property="approved" value="true">
-				<p>
-					<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.acquisition.approved"/>
-					<fr:view name="workingCapitalTransaction" property="workingCapitalAcquisition.approved"/>
-					<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.acquisition.approver"/>
-					<fr:view name="workingCapitalTransaction" property="workingCapitalAcquisition.approver.person.name"/>
-				</p>
-			</logic:equal>
-			<logic:equal name="workingCapitalTransaction" property="verified" value="true">
-				<p>
-					<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.acquisition.verified"/>
-					<fr:view name="workingCapitalTransaction" property="workingCapitalAcquisition.verified"/>
-					<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.acquisition.verifier"/>
-					<fr:view name="workingCapitalTransaction" property="workingCapitalAcquisition.verifier.child.name"/>
-				</p>
-			</logic:equal>
-		</div>	
+		
+		<table class="tstyle3 mtop1 mbottom1 width100pc" >
+				<tr><th>Operação</th><th>Data</th><th>Pessoa</th></tr>
+				<tr>
+					<td class="aleft">
+						<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.initialization.aprovalByUnitResponsible"/>
+					</td>
+					<td>
+					<logic:equal name="workingCapitalTransaction" property="approved" value="true">
+							<fr:view name="workingCapitalTransaction" property="workingCapitalAcquisition.approved"/>
+					</logic:equal>
+					<logic:equal name="workingCapitalTransaction" property="approved" value="false">
+						-
+					</logic:equal>
+					</td>
+					<td>
+					<logic:equal name="workingCapitalTransaction" property="approved" value="true">
+						<fr:view name="workingCapitalTransaction" property="workingCapitalAcquisition.approver.person.name"/>
+					</logic:equal>
+					<logic:equal name="workingCapitalTransaction" property="approved" value="false">
+						-
+					</logic:equal>
+					</td>
+				</tr>
+				
+				
+				<tr>
+					<td class="aleft">
+											<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.acquisition.verifier"/>
+					</td>
+					<td>
+					<logic:equal name="workingCapitalTransaction" property="verified" value="true">
+							<fr:view name="workingCapitalTransaction" property="workingCapitalAcquisition.verified"/>
+					</logic:equal>
+					<logic:equal name="workingCapitalTransaction" property="verified" value="false">
+						-
+					</logic:equal>
+					</td>
+					<td>
+					<logic:equal name="workingCapitalTransaction" property="verified" value="true">
+						<fr:view name="workingCapitalTransaction" property="workingCapitalAcquisition.verifier.child.name"/>
+					</logic:equal>
+					<logic:equal name="workingCapitalTransaction" property="verified" value="false">
+						-
+					</logic:equal>
+					</td>
+				</tr>
+			</table>
+		
 	</logic:notEmpty>
-
+	</p>
 	<bean:define id="workingCapitalTransactionOid" type="java.lang.String" name="workingCapitalTransaction" property="externalId"/>
-	<logic:equal name="workingCapitalTransaction" property="lastTransaction" value="true">
-		<wf:activityLink processName="process" activityName="EditWorkingCapitalActivity" scope="request" paramName0="workingCapitalAcquisitionTransaction" paramValue0="<%= workingCapitalTransactionOid %>">
-			<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.EditWorkingCapitalActivity"/>
-		</wf:activityLink>
-	</logic:equal>
 	<logic:equal name="workingCapitalTransaction" property="pendingApproval" value="true">
 		<wf:activityLink processName="process" activityName="ApproveWorkingCapitalAcquisitionActivity" scope="request" paramName0="workingCapitalTransaction" paramValue0="<%= workingCapitalTransactionOid %>">
 			<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.ApproveWorkingCapitalAcquisitionActivity"/>
