@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import module.workflow.presentationTier.actions.ProcessManagement;
 import module.workingCapital.domain.WorkingCapital;
+import module.workingCapital.domain.WorkingCapitalInitialization;
 import module.workingCapital.domain.WorkingCapitalProcess;
 import module.workingCapital.domain.WorkingCapitalSystem;
 import module.workingCapital.domain.WorkingCapitalTransaction;
@@ -77,7 +78,9 @@ public class WorkingCapitalAction extends ContextBaseAction {
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final WorkingCapitalInitializationBean workingCapitalInitializationBean = getRenderedObject();
 	try {
-	    final WorkingCapitalProcess workingCapitalProcess = workingCapitalInitializationBean.create();
+	    final WorkingCapitalInitialization workingCapitalInitialization = workingCapitalInitializationBean.create();
+	    final WorkingCapital workingCapital = workingCapitalInitialization.getWorkingCapital();
+	    final WorkingCapitalProcess workingCapitalProcess = workingCapital.getWorkingCapitalProcess();
 	    return viewWorkingCapital(request, workingCapitalProcess);
 	} catch (final DomainException domainException) {
 	    RenderUtils.invalidateViewState();

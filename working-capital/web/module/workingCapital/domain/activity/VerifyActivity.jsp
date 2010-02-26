@@ -44,7 +44,7 @@
 	
 		<fr:edit id="activityBean" name="information" visible="false"/>
 	
-		<fr:edit id="workingCapitalInitialization" name="information" property="workingCapitalInitialization">
+		<fr:edit id="workingCapitalInitialization" name="information">
 			<fr:schema type="module.workingCapital.domain.WorkingCapitalInitialization" bundle="WORKING_CAPITAL_RESOURCES">
 				<fr:slot name="authorizedAnualValue" key="label.module.workingCapital.authorizedAnualValue" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 				<fr:slot name="maxAuthorizedAnualValue" key="label.module.workingCapital.maxAuthorizedAnualValue" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>

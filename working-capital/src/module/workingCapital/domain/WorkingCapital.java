@@ -13,7 +13,25 @@ import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 
 public class WorkingCapital extends WorkingCapital_Base {
-    
+
+    public static WorkingCapital find(final WorkingCapitalYear workingCapitalYear, final Unit unit) {
+	for (final WorkingCapital workingCapital : unit.getWorkingCapitalsSet()) {
+	    if (workingCapital.getWorkingCapitalYear() == workingCapitalYear) {
+		return workingCapital;
+	    }
+	}
+	return null;
+    }
+
+    public static WorkingCapital find(final Integer year, final Unit unit) {
+	for (final WorkingCapital workingCapital : unit.getWorkingCapitalsSet()) {
+	    if (workingCapital.getWorkingCapitalYear().getYear().intValue() == year.intValue()) {
+		return workingCapital;
+	    }
+	}
+	return null;
+    }
+
     public WorkingCapital() {
         super();
         setWorkingCapitalSystem(WorkingCapitalSystem.getInstance());
@@ -21,14 +39,13 @@ public class WorkingCapital extends WorkingCapital_Base {
 
     public WorkingCapital(final WorkingCapitalYear workingCapitalYear, final Unit unit, final Person movementResponsible) {
 	this();
-	for (final WorkingCapital workingCapital : unit.getWorkingCapitalsSet()) {
-	    if (workingCapital.getWorkingCapitalYear() == workingCapitalYear) {
-		throw new DomainException("message.working.capital.exists.for.year.and.unit");
-	    }
+	if (find(workingCapitalYear, unit) != null) {
+	    throw new DomainException("message.working.capital.exists.for.year.and.unit");
 	}
 	setWorkingCapitalYear(workingCapitalYear);
 	setUnit(unit);
 	setMovementResponsible(movementResponsible);
+	new WorkingCapitalProcess(this);
     }
 
     public WorkingCapital(final Integer year, final Unit unit, final Person movementResponsible) {
@@ -66,31 +83,20 @@ public class WorkingCapital extends WorkingCapital_Base {
     }
 
     public boolean isPendingAproval() {
-	for (final WorkingCapitalInitialization workingCapitalInitialization : getWorkingCapitalInitializationsSet()) {
-	    if (workingCapitalInitialization.isPendingAproval()) {
-		return true;
-	    }
-	}
-	return false;
+	final WorkingCapitalInitialization workingCapitalInitialization = getWorkingCapitalInitialization();
+	return workingCapitalInitialization != null && workingCapitalInitialization.isPendingAproval();
     }
 
     public boolean isPendingAproval(final User user) {
-	for (final WorkingCapitalInitialization workingCapitalInitialization : getWorkingCapitalInitializationsSet()) {
-	    if (workingCapitalInitialization.isPendingAproval(user)) {
-		return true;
-	    }
-	}
-	return false;
+	final WorkingCapitalInitialization workingCapitalInitialization = getWorkingCapitalInitialization();
+	return workingCapitalInitialization != null && workingCapitalInitialization.isPendingAproval(user);
     }
 
     public boolean isPendingVerification(final User user) {
 	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstance(); 
 	if (workingCapitalSystem.isAccountingMember(user)) {
-	    for (final WorkingCapitalInitialization workingCapitalInitialization : getWorkingCapitalInitializationsSet()) {
-		if (workingCapitalInitialization.isPendingVerification()) {
-		    return true;
-		}
-	    }
+	    final WorkingCapitalInitialization workingCapitalInitialization = getWorkingCapitalInitialization();
+	    return workingCapitalInitialization != null && workingCapitalInitialization.isPendingVerification();
 	}
 	return false;
     }
@@ -98,11 +104,8 @@ public class WorkingCapital extends WorkingCapital_Base {
     public boolean isPendingAuthorization(User user) {
 	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstance(); 
 	if (workingCapitalSystem.isManagementeMember(user)) {
-	    for (final WorkingCapitalInitialization workingCapitalInitialization : getWorkingCapitalInitializationsSet()) {
-		if (workingCapitalInitialization.isPendingAuthorization()) {
-		    return true;
-		}
-	    }
+	    final WorkingCapitalInitialization workingCapitalInitialization = getWorkingCapitalInitialization();
+	    return workingCapitalInitialization != null && workingCapitalInitialization.isPendingAuthorization();
 	}
 	return false;
     }
@@ -137,12 +140,8 @@ public class WorkingCapital extends WorkingCapital_Base {
     }
 
     public boolean isCanceledOrRejected() {
-	for (final WorkingCapitalInitialization workingCapitalInitialization : getWorkingCapitalInitializationsSet()) {
-	    if (workingCapitalInitialization.isCanceledOrRejected()) {
-		return true;
-	    }
-	}
-	return false;
+	final WorkingCapitalInitialization workingCapitalInitialization = getWorkingCapitalInitialization();
+	return workingCapitalInitialization != null && workingCapitalInitialization.isCanceledOrRejected();
     }
 
     public WorkingCapitalInitialization getWorkingCapitalInitialization() {

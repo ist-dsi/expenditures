@@ -21,10 +21,12 @@ public class UnVerifyActivity extends WorkflowActivity<WorkingCapitalProcess, Wo
 	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstance(); 
 	if (workingCapitalSystem.isAccountingMember(user)) {
 	    final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
-	    for (final WorkingCapitalInitialization workingCapitalInitialization : workingCapital.getWorkingCapitalInitializationsSet()) {
-		if (workingCapitalInitialization.hasResponsibleForAccountingVerification() && !workingCapitalInitialization.hasResponsibleForUnitAuthorization()) {
-		    return true;
-		}
+	    final WorkingCapitalInitialization workingCapitalInitialization = workingCapital.getWorkingCapitalInitialization();
+	    if (workingCapitalInitialization != null
+		    && !workingCapitalInitialization.isCanceledOrRejected()
+		    && workingCapitalInitialization.hasResponsibleForAccountingVerification()
+		    && !workingCapitalInitialization.hasResponsibleForUnitAuthorization()) {
+		return true;
 	    }
 	}
 	return false;

@@ -22,14 +22,16 @@ public class UnApproveActivity extends WorkflowActivity<WorkingCapitalProcess, W
     public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
 	final Person person = user.getPerson();
 	final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
-	for (final WorkingCapitalInitialization workingCapitalInitialization : workingCapital.getWorkingCapitalInitializationsSet()) {
-	    if (workingCapitalInitialization.hasResponsibleForUnitApproval() && !workingCapitalInitialization.hasResponsibleForAccountingVerification()) {
-		//final Money valueForAuthorization = workingCapitalInitialization.getRequestedAnualValue();
+	if (!workingCapital.isCanceledOrRejected()) {
+	    final WorkingCapitalInitialization workingCapitalInitialization = workingCapital.getWorkingCapitalInitialization();
+	    if (workingCapitalInitialization != null
+		    && workingCapitalInitialization.hasResponsibleForUnitApproval()
+		    && !workingCapitalInitialization.hasResponsibleForAccountingVerification()) {
 		final Money valueForAuthorization = Money.ZERO;
 		final Authorization authorization = workingCapital.findUnitResponsible(person, valueForAuthorization);
 		if (authorization != null) {
 		    return true;
-		}
+		}	    
 	    }
 	}
 	return false;

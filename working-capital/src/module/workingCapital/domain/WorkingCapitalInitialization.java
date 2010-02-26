@@ -40,7 +40,15 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
     public WorkingCapitalInitialization(final Integer year, final Unit unit, final Person person,
 	    final Money requestedAnualValue, final String fiscalId, final String bankAccountId) {
 	this();
-	final WorkingCapital workingCapital = new WorkingCapital(year, unit, person);
+	WorkingCapital workingCapital = WorkingCapital.find(year, unit);
+	if (workingCapital == null) {
+	    workingCapital = new WorkingCapital(year, unit, person);
+	} else {
+	    final WorkingCapitalInitialization workingCapitalInitialization = workingCapital.getWorkingCapitalInitialization();
+	    if (workingCapitalInitialization != null && !workingCapitalInitialization.isCanceledOrRejected()) {
+		throw new DomainException("message.working.capital.exists.for.year.and.unit");
+	    }
+	}
 	setWorkingCapital(workingCapital);
 	setRequestedAnualValue(requestedAnualValue);
 	setFiscalId(fiscalId);
@@ -64,7 +72,9 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
 	removeResponsibleForUnitApproval();
     }
 
-    public void verify(final User user) {
+    public void verify(final User user, final Money authorizedAnualValue, final Money maxAuthorizedAnualValue) {
+	setAuthorizedAnualValue(authorizedAnualValue);
+	setMaxAuthorizedAnualValue(maxAuthorizedAnualValue);
 	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstance();
 	final Accountability accountability = workingCapitalSystem.getAccountingAccountability(user);
 	if (accountability == null) {

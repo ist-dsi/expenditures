@@ -23,9 +23,9 @@ public class VerifyActivity extends WorkflowActivity<WorkingCapitalProcess, Veri
 
     @Override
     protected void process(final VerifyActivityInformation activityInformation) {
-	final WorkingCapitalInitialization workingCapitalInitialization = activityInformation.getWorkingCapitalInitialization();
 	final User user = getLoggedPerson();
-	workingCapitalInitialization.verify(user);
+	final WorkingCapitalInitialization workingCapitalInitialization = activityInformation.getWorkingCapitalInitialization();
+	workingCapitalInitialization.verify(user, activityInformation.getAuthorizedAnualValue(), activityInformation.getMaxAuthorizedAnualValue());
     }
 
     @Override

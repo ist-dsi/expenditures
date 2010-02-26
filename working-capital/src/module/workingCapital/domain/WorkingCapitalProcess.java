@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import module.organization.domain.Person;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.ProcessFile;
@@ -26,8 +25,6 @@ import module.workingCapital.domain.activity.UndoCancelOrRejectWorkingCapitalIni
 import module.workingCapital.domain.activity.VerifyActivity;
 import module.workingCapital.domain.activity.VerifyWorkingCapitalAcquisitionActivity;
 import myorg.domain.User;
-import myorg.domain.util.Money;
-import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 
 public class WorkingCapitalProcess extends WorkingCapitalProcess_Base {
 
@@ -65,11 +62,8 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base {
         super();
     }
 
-    public WorkingCapitalProcess(final Integer year, final Unit unit, final Person person,
-	    final Money requestedAnualValue, final String fiscalId, final String bankAccountId) {
+    public WorkingCapitalProcess(final WorkingCapital workingCapital) {
 	this();
-	final WorkingCapitalInitialization workingCapitalInitialization = new WorkingCapitalInitialization(year, unit, person, requestedAnualValue, fiscalId, bankAccountId);
-	final WorkingCapital workingCapital = workingCapitalInitialization.getWorkingCapital();
 	setWorkingCapital(workingCapital);
     }
 

@@ -14,14 +14,13 @@
 <bean:define id="workingCapitalInitialization" name="workingCapital" property="workingCapitalInitialization"/>
 <bean:define id="workingCapitalOid" name="workingCapital" property="externalId"/>
 <bean:define id="workingCapitalInitializationOid" type="java.lang.String" name="workingCapitalInitialization" property="externalId"/>
-				
-		
+
 <div class="infobox mtop1 mbottom1">
-			<fr:view name="workingCapital" property="workingCapitalInitialization" schema="workingCapitalInitialization.view">
-				<fr:layout name="tabular">
-					<fr:property name="columnClasses" value="aleft width215px,,"/>
-				</fr:layout>
-			</fr:view>		
+	<fr:view name="workingCapital" property="workingCapitalInitialization" schema="workingCapitalInitialization.view">
+		<fr:layout name="tabular">
+			<fr:property name="columnClasses" value="aleft width215px,,"/>
+		</fr:layout>
+	</fr:view>		
 </div>
 
 <bean:size id="capitalInitializationsCount" name="workingCapital"  property="workingCapitalInitializations"/>
@@ -54,9 +53,11 @@
 					</logic:notPresent>
 					</td>
 					<td>
-					<wf:activityLink processName="process" activityName="ApproveActivity" scope="request" paramName0="workingCapitalInitialization" paramValue0="<%= workingCapitalInitializationOid %>">
-						<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.ApproveActivity"/>
-					</wf:activityLink>
+					<logic:equal name="process" property="workingCapital.workingCapitalInitialization.pendingAproval" value="true">
+						<wf:activityLink processName="process" activityName="ApproveActivity" scope="request" paramName0="workingCapitalInitialization" paramValue0="<%= workingCapitalInitializationOid %>">
+							<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.ApproveActivity"/>
+						</wf:activityLink>
+					</logic:equal>
 					<wf:activityLink processName="process" activityName="UnApproveActivity" scope="request" paramName0="workingCapitalInitialization" paramValue0="<%= workingCapitalInitializationOid %>">
 						<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.UnApproveActivity"/>
 					</wf:activityLink>

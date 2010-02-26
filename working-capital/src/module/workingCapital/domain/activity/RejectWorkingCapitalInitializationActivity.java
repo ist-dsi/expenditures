@@ -18,7 +18,10 @@ public class RejectWorkingCapitalInitializationActivity extends WorkflowActivity
     @Override
     public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
 	final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
-	return !workingCapital.isCanceledOrRejected() && workingCapital.isPendingAproval(user) || workingCapital.isPendingVerification(user) || workingCapital.isPendingAuthorization(user);
+	return !workingCapital.isCanceledOrRejected()
+		&& (workingCapital.isPendingAproval(user)
+			|| workingCapital.isPendingVerification(user)
+			|| workingCapital.isPendingAuthorization(user));
     }
 
     @Override

@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Calendar;
 
 import module.organization.domain.Person;
-import module.workingCapital.domain.WorkingCapitalProcess;
+import module.workingCapital.domain.WorkingCapitalInitialization;
 import myorg.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.fenixWebFramework.services.Service;
@@ -57,8 +57,8 @@ public class WorkingCapitalInitializationBean implements Serializable {
     }
 
     @Service
-    public WorkingCapitalProcess create() {
-	return new WorkingCapitalProcess(year, unit, person, requestedAnualValue, fiscalId, bankAccountId);
+    public WorkingCapitalInitialization create() {
+	return new WorkingCapitalInitialization(year, unit, person, requestedAnualValue, fiscalId, bankAccountId);
     }
 
 }
