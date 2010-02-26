@@ -59,10 +59,10 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base {
     }
 
     public WorkingCapitalProcess() {
-        super();
+	super();
     }
 
-    public WorkingCapitalProcess(final WorkingCapital workingCapital) {
+   public WorkingCapitalProcess(final WorkingCapital workingCapital) {
 	this();
 	setWorkingCapital(workingCapital);
     }
@@ -75,11 +75,6 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base {
     @Override
     public boolean isActive() {
 	return true;
-    }
-
-    @Override
-    public List<Class<? extends ProcessFile>> getAvailableFileTypes() {
-        return Collections.emptyList();
     }
 
     public boolean isPendingAproval(final User user) {
@@ -96,7 +91,7 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base {
 
     @Override
     public User getProcessCreator() {
-        return getWorkingCapital().getRequester();
+	return getWorkingCapital().getRequester();
     }
 
     @Override
@@ -104,4 +99,15 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base {
 	// do nothing.
     }
 
+    @Override
+    public List<Class<? extends ProcessFile>> getAvailableFileTypes() {
+	List<Class<? extends ProcessFile>> availableFileTypes = super.getAvailableFileTypes();
+	availableFileTypes.add(WorkingCapitalInvoiceFile.class);
+	return availableFileTypes;
+    }
+
+    @Override
+    public List<Class<? extends ProcessFile>> getUploadableFileTypes() {
+	return super.getAvailableFileTypes();
+    }
 }

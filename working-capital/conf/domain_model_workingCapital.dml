@@ -78,6 +78,15 @@ class WorkingCapitalTransaction {
 	}
 
 
+
+class WorkingCapitalInvoiceFile extends .module.workflow.domain.ProcessFile {
+}
+
+relation WorkingCapitalInvoiceFileWorkingCapitalTransaction {
+	WorkingCapitalInvoiceFile playsRole invoice;
+	WorkingCapitalTransaction playsRole transaction;
+}
+
 relation MyOrgWorkingCapitalSystem {
 	.myorg.domain.MyOrg playsRole myOrg;
 	WorkingCapitalSystem playsRole workingCapitalSystem;

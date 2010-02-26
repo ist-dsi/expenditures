@@ -10,18 +10,21 @@ import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 
 public class WorkingCapitalAcquisition extends WorkingCapitalAcquisition_Base {
-    
+
     public WorkingCapitalAcquisition() {
-        super();
-        setWorkingCapitalSystem(WorkingCapitalSystem.getInstance());
+	super();
+	setWorkingCapitalSystem(WorkingCapitalSystem.getInstance());
     }
 
     public WorkingCapitalAcquisition(final WorkingCapital workingCapital, final String documentNumber, final Supplier supplier,
-	    final String description, final AcquisitionClassification acquisitionClassification, final Money valueWithoutVat, final Money money) {
+	    final String description, final AcquisitionClassification acquisitionClassification, final Money valueWithoutVat,
+	    final Money money, final byte[] invoiceContent, String displayName, String fileName) {
 	this();
 	setWorkingCapital(workingCapital);
 	edit(documentNumber, supplier, description, acquisitionClassification, valueWithoutVat);
-	new WorkingCapitalAcquisitionTransaction(this, money);
+	WorkingCapitalInvoiceFile workingCapitalInvoiceFile = new WorkingCapitalInvoiceFile(displayName, fileName,
+		invoiceContent, new WorkingCapitalAcquisitionTransaction(this, money));
+	workingCapital.getWorkingCapitalProcess().addFiles(workingCapitalInvoiceFile);
     }
 
     public void edit(String documentNumber, Supplier supplier, String description,
