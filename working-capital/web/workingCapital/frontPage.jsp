@@ -91,7 +91,7 @@
 			</p>
         
         <fr:form action="/workingCapital.do?method=search">
-		<fr:edit id="workingCapitalContextUnitSearch" name="workingCapitalContext" >
+		<fr:edit id="workingCapitalInitializationBean" name="workingCapitalContext" >
 			<fr:schema type="module.workingCapital.presentationTier.action.util.WorkingCapitalContext" bundle="WORKING_CAPITAL_RESOURCES">
 				<fr:slot name="workingCapitalYear" key="label.module.workingCapital.year" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" layout="menu-select">
 					<fr:property name="providerClass" value="module.workingCapital.presentationTier.provider.WorkingCapitalYearProvider"/>
