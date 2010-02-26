@@ -231,4 +231,16 @@ public class WorkingCapital extends WorkingCapital_Base {
 	return hasVerifiedAcquisition() && getWorkingCapitalSystem().getAccountingAccountability(user) != null;
     }
 
+    public boolean hasAllPaymentsRequested() {
+	if (!hasAnyWorkingCapitalTransactions()) {
+	    return false;
+	}
+	for (final WorkingCapitalTransaction workingCapitalTransaction : getWorkingCapitalTransactionsSet()) {
+	    if (workingCapitalTransaction.isAcquisition() && !workingCapitalTransaction.isPaymentRequested()) {
+		return false;
+	    }
+	}
+	return true;
+    }
+
 }

@@ -150,11 +150,13 @@
 		</wf:activityLink>
 		&nbsp;&nbsp;&nbsp;
 	</logic:equal>
-	<logic:equal name="workingCapitalTransaction" property="verified" value="true">
-		<wf:activityLink processName="process" activityName="UnVerifyWorkingCapitalAcquisitionActivity" scope="request" paramName0="workingCapitalTransaction" paramValue0="<%= workingCapitalTransactionOid %>">
-			<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.UnVerifyWorkingCapitalAcquisitionActivity"/>
-		</wf:activityLink>
-		&nbsp;&nbsp;&nbsp;
+	<logic:equal name="workingCapitalTransaction" property="paymentRequested" value="false">
+		<logic:equal name="workingCapitalTransaction" property="verified" value="true">
+			<wf:activityLink processName="process" activityName="UnVerifyWorkingCapitalAcquisitionActivity" scope="request" paramName0="workingCapitalTransaction" paramValue0="<%= workingCapitalTransactionOid %>">
+				<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.UnVerifyWorkingCapitalAcquisitionActivity"/>
+			</wf:activityLink>
+			&nbsp;&nbsp;&nbsp;
+		</logic:equal>
 	</logic:equal>
 </logic:equal>
 

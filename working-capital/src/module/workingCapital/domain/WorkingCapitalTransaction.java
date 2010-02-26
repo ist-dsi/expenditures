@@ -109,4 +109,8 @@ public class WorkingCapitalTransaction extends WorkingCapitalTransaction_Base {
     public void unApprove() {
     }
 
+    public boolean isPaymentRequested() {
+	return false;
+    }
+
 }

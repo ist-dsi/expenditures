@@ -17,7 +17,7 @@ public class RegisterWorkingCapitalAcquisitionActivityInformation extends Activi
     private AcquisitionClassification acquisitionClassification;
     private Money money;
     private Money valueWithoutVat;
-    private InputStream inputStream;
+    private transient InputStream inputStream;
     private String filename;
     private String displayName;
 

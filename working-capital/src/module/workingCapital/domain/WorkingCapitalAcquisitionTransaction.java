@@ -5,6 +5,8 @@ import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
 import myorg.util.BundleUtil;
 
+import org.joda.time.DateTime;
+
 public class WorkingCapitalAcquisitionTransaction extends WorkingCapitalAcquisitionTransaction_Base {
     
     public WorkingCapitalAcquisitionTransaction() {
@@ -83,6 +85,21 @@ public class WorkingCapitalAcquisitionTransaction extends WorkingCapitalAcquisit
 	super.unVerify();
 	final WorkingCapitalAcquisition workingCapitalAcquisition = getWorkingCapitalAcquisition();
 	workingCapitalAcquisition.unVerify();
+    }
+
+    @Override
+    public boolean isPaymentRequested() {
+	if (isVerified()) {
+	    final WorkingCapital workingCapital = getWorkingCapital();
+	    final WorkingCapitalAcquisition workingCapitalAcquisition = getWorkingCapitalAcquisition();
+	    final DateTime verified = workingCapitalAcquisition.getVerified();
+	    for (final WorkingCapitalRequest workingCapitalRequest : workingCapital.getWorkingCapitalRequestsSet()) {
+		if (workingCapitalRequest.getRequestCreation().isAfter(verified)) {
+		    return true;
+		}
+	    }
+	}
+	return false;
     }
 
 }
