@@ -99,7 +99,7 @@
 					<fr:property name="format" value="${year}"/>
 					<fr:property name="nullOptionHidden" value="true"/>
 				</fr:slot>
-				<fr:slot name="unit" layout="autoComplete" key="label.party" bundle="ORGANIZATION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" help="label.module.workingCapital.selectParty.help">
+				<fr:slot name="unit" layout="autoComplete" key="label.party" bundle="WORKING_CAPITAL_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" help="label.module.workingCapital.selectParty.help">
 		        	<fr:property name="labelField" value="partyName.content"/>
 					<fr:property name="format" value="${presentationName}"/>
 					<fr:property name="minChars" value="3"/>

@@ -13,15 +13,20 @@ public class UnAuthorizeActivity extends WorkflowActivity<WorkingCapitalProcess,
 
     @Override
     public String getLocalizedName() {
-	return BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources", "activity." + getClass().getSimpleName());
+	return BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources", "activity."
+		+ getClass().getSimpleName());
     }
 
     @Override
     public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
-	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstance(); 
+	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstance();
+	if (!missionProcess.getWorkingCapital().getWorkingCapitalRequestsSet().isEmpty()) {
+	    return false;
+	}
 	if (workingCapitalSystem.isManagementeMember(user)) {
 	    final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
-	    for (final WorkingCapitalInitialization workingCapitalInitialization : workingCapital.getWorkingCapitalInitializationsSet()) {
+	    for (final WorkingCapitalInitialization workingCapitalInitialization : workingCapital
+		    .getWorkingCapitalInitializationsSet()) {
 		if (workingCapitalInitialization.hasResponsibleForUnitAuthorization()) {
 		    return true;
 		}
@@ -38,7 +43,7 @@ public class UnAuthorizeActivity extends WorkflowActivity<WorkingCapitalProcess,
 
     @Override
     public ActivityInformation<WorkingCapitalProcess> getActivityInformation(final WorkingCapitalProcess process) {
-        return new WorkingCapitalInitializationInformation(process, this);
+	return new WorkingCapitalInitializationInformation(process, this);
     }
 
     @Override
