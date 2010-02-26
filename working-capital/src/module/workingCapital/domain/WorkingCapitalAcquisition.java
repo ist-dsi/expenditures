@@ -51,10 +51,20 @@ public class WorkingCapitalAcquisition extends WorkingCapitalAcquisition_Base {
 	setApprover(authorization);
     }
 
+    public void unApprove() {
+	setApproved(null);
+	removeApprover();
+    }
+
     public void verify(User user) {
 	setVerified(new DateTime());
 	final Accountability accountability = getWorkingCapitalSystem().getAccountingAccountability(user);
 	setVerifier(accountability);
+    }
+
+    public void unVerify() {
+	setVerified(null);
+	removeVerifier();
     }
 
 }

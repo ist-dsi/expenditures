@@ -53,6 +53,13 @@ public class WorkingCapitalAcquisitionTransaction extends WorkingCapitalAcquisit
     }
 
     @Override
+    public void unApprove() {
+	super.unApprove();
+	final WorkingCapitalAcquisition workingCapitalAcquisition = getWorkingCapitalAcquisition();
+	workingCapitalAcquisition.unApprove();
+    }
+
+    @Override
     public boolean isPendingVerification() {
 	final WorkingCapitalAcquisition workingCapitalAcquisition = getWorkingCapitalAcquisition();
 	return isApproved() && workingCapitalAcquisition.getVerifier() == null;
@@ -69,6 +76,13 @@ public class WorkingCapitalAcquisitionTransaction extends WorkingCapitalAcquisit
         super.approve(user);
         final WorkingCapitalAcquisition workingCapitalAcquisition = getWorkingCapitalAcquisition();
         workingCapitalAcquisition.verify(user);
+    }
+
+    @Override
+    public void unVerify() {
+	super.unVerify();
+	final WorkingCapitalAcquisition workingCapitalAcquisition = getWorkingCapitalAcquisition();
+	workingCapitalAcquisition.unVerify();
     }
 
 }

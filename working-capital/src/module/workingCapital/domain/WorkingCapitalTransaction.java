@@ -103,4 +103,10 @@ public class WorkingCapitalTransaction extends WorkingCapitalTransaction_Base {
     public void verify(final User user) {
     }
 
+    public void unVerify() {
+    }
+
+    public void unApprove() {
+    }
+
 }
