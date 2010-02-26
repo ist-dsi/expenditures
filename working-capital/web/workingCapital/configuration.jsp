@@ -71,6 +71,7 @@
 	<fr:view name="workingCapitalSystem" property="accountingMembers" schema="module.organization.domain.Accountability.with.child.info">
 		<fr:schema type="module.organization.domain.Accountability" bundle="ORGANIZATION_RESOURCES">
 			<fr:slot name="child.partyName" key="label.name"/>
+			<fr:slot name="child.user.username" key="label.username"/>
 			<fr:slot name="beginDate" key="label.begin"/>
 			<fr:slot name="endDate" key="label.end" />
 		</fr:schema>
@@ -88,6 +89,7 @@
 	<fr:view name="workingCapitalSystem" property="managementeMembers" schema="module.organization.domain.Accountability.with.child.info">
 		<fr:schema type="module.organization.domain.Accountability" bundle="ORGANIZATION_RESOURCES">
 			<fr:slot name="child.partyName" key="label.name"/>
+			<fr:slot name="child.user.username" key="label.username"/>
 			<fr:slot name="beginDate" key="label.begin"/>
 			<fr:slot name="endDate" key="label.end" />
 		</fr:schema>

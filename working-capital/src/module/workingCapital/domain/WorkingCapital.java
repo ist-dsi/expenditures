@@ -7,6 +7,7 @@ import java.util.TreeSet;
 
 import module.organization.domain.Person;
 import myorg.domain.User;
+import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
@@ -20,6 +21,11 @@ public class WorkingCapital extends WorkingCapital_Base {
 
     public WorkingCapital(final WorkingCapitalYear workingCapitalYear, final Unit unit, final Person movementResponsible) {
 	this();
+	for (final WorkingCapital workingCapital : unit.getWorkingCapitalsSet()) {
+	    if (workingCapital.getWorkingCapitalYear() == workingCapitalYear) {
+		throw new DomainException("message.working.capital.exists.for.year.and.unit");
+	    }
+	}
 	setWorkingCapitalYear(workingCapitalYear);
 	setUnit(unit);
 	setMovementResponsible(movementResponsible);

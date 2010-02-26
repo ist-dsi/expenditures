@@ -13,12 +13,15 @@ import module.workingCapital.domain.WorkingCapitalTransaction;
 import module.workingCapital.domain.util.AcquisitionClassificationBean;
 import module.workingCapital.domain.util.WorkingCapitalInitializationBean;
 import module.workingCapital.presentationTier.action.util.WorkingCapitalContext;
+import myorg.domain.exceptions.DomainException;
 import myorg.presentationTier.actions.ContextBaseAction;
+import myorg.util.BundleUtil;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
 @Mapping(path = "/workingCapital")
@@ -61,6 +64,11 @@ public class WorkingCapitalAction extends ContextBaseAction {
     public ActionForward prepareCreateWorkingCapitalInitialization(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) {
 	final WorkingCapitalInitializationBean workingCapitalInitializationBean = new WorkingCapitalInitializationBean();
+	return prepareCreateWorkingCapitalInitialization(request, workingCapitalInitializationBean);
+    }
+
+    public ActionForward prepareCreateWorkingCapitalInitialization(final HttpServletRequest request,
+	    final WorkingCapitalInitializationBean workingCapitalInitializationBean) {
 	request.setAttribute("workingCapitalInitializationBean", workingCapitalInitializationBean);
 	return forward(request, "/workingCapital/createWorkingCapitalInitialization.jsp");
     }
@@ -68,8 +76,15 @@ public class WorkingCapitalAction extends ContextBaseAction {
     public ActionForward createWorkingCapitalInitialization(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) {
 	final WorkingCapitalInitializationBean workingCapitalInitializationBean = getRenderedObject();
-	final WorkingCapitalProcess workingCapitalProcess = workingCapitalInitializationBean.create();
-	return viewWorkingCapital(request, workingCapitalProcess);
+	try {
+	    final WorkingCapitalProcess workingCapitalProcess = workingCapitalInitializationBean.create();
+	    return viewWorkingCapital(request, workingCapitalProcess);
+	} catch (final DomainException domainException) {
+	    RenderUtils.invalidateViewState();
+	    addLocalizedMessage(request, BundleUtil.getFormattedStringFromResourceBundle("resources.WorkingCapitalResources",
+		    	domainException.getKey()));
+	    return prepareCreateWorkingCapitalInitialization(request, workingCapitalInitializationBean);
+	}
     }
 
     public ActionForward viewWorkingCapital(final HttpServletRequest request, final WorkingCapitalProcess workingCapitalProcess) {
