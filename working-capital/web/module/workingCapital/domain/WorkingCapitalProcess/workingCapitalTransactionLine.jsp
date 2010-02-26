@@ -23,11 +23,13 @@
 		<logic:notEmpty name="workingCapitalTransaction" property="workingCapitalAcquisition.rejectedApproval">
 			<img src="<%= request.getContextPath() + "/workingCapital/image/incorrect.gif" %>">
 		</logic:notEmpty>
-		<logic:equal name="workingCapitalTransaction" property="pendingApproval" value="true">
-			<wf:activityLink processName="process" activityName="ApproveWorkingCapitalAcquisitionActivity" scope="request" paramName0="workingCapitalTransaction" paramValue0="<%= workingCapitalTransactionOid %>">
-				<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.ApproveWorkingCapitalAcquisitionActivity"/>
-			</wf:activityLink>
-		</logic:equal>
+		<logic:notPresent name="viewWorkingCapitalTransaction">
+			<logic:equal name="workingCapitalTransaction" property="pendingApproval" value="true">
+				<html:link action="/workingCapital.do?method=viewWorkingCapitalTransaction" paramId="workingCapitalTransactionOid" paramName="workingCapitalTransaction" paramProperty="externalId">
+					<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.ApproveWorkingCapitalAcquisitionActivity"/>
+				</html:link>
+			</logic:equal>
+		</logic:notPresent>
 	</logic:equal>
 	<logic:equal name="workingCapitalTransaction" property="acquisition" value="false">
 	-
@@ -41,11 +43,13 @@
 		<logic:notEmpty name="workingCapitalTransaction" property="workingCapitalAcquisition.notVerified">
 			<img src="<%= request.getContextPath() + "/workingCapital/image/incorrect.gif" %>">
 		</logic:notEmpty>
-		<logic:equal name="workingCapitalTransaction" property="pendingVerification" value="true">
-			<wf:activityLink processName="process" activityName="VerifyWorkingCapitalAcquisitionActivity" scope="request" paramName0="workingCapitalTransaction" paramValue0="<%= workingCapitalTransactionOid %>">
-				<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.VerifyWorkingCapitalAcquisitionActivity"/>
-			</wf:activityLink>
-		</logic:equal>
+		<logic:notPresent name="viewWorkingCapitalTransaction">
+			<logic:equal name="workingCapitalTransaction" property="pendingVerification" value="true">
+				<html:link action="/workingCapital.do?method=viewWorkingCapitalTransaction" paramId="workingCapitalTransactionOid" paramName="workingCapitalTransaction" paramProperty="externalId">
+					<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.VerifyWorkingCapitalAcquisitionActivity"/>
+				</html:link>
+			</logic:equal>
+		</logic:notPresent>
 	</logic:equal>
 	<logic:equal name="workingCapitalTransaction" property="acquisition" value="false">
 	-

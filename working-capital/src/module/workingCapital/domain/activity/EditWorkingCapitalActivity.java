@@ -30,10 +30,12 @@ public class EditWorkingCapitalActivity extends WorkflowActivity<WorkingCapitalP
     @Override
     protected void process(final EditWorkingCapitalActivityInformation activityInformation) {
 	final WorkingCapitalAcquisitionTransaction workingCapitalAcquisitionTransaction = activityInformation.getWorkingCapitalAcquisitionTransaction();
-	final WorkingCapitalAcquisition workingCapitalAcquisition = workingCapitalAcquisitionTransaction.getWorkingCapitalAcquisition();
-	workingCapitalAcquisition.edit(activityInformation.getDocumentNumber(), activityInformation.getSupplier(),
-		activityInformation.getDescription(), activityInformation.getAcquisitionClassification(),
-		activityInformation.getValueWithoutVat(), activityInformation.getMoney());
+	if (workingCapitalAcquisitionTransaction.isPendingApproval()) {
+	    final WorkingCapitalAcquisition workingCapitalAcquisition = workingCapitalAcquisitionTransaction.getWorkingCapitalAcquisition();
+	    workingCapitalAcquisition.edit(activityInformation.getDocumentNumber(), activityInformation.getSupplier(),
+		    activityInformation.getDescription(), activityInformation.getAcquisitionClassification(),
+		    activityInformation.getValueWithoutVat(), activityInformation.getMoney());
+	}
     }
 
     @Override
