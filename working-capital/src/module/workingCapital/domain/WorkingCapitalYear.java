@@ -11,13 +11,13 @@ import myorg.domain.User;
 public class WorkingCapitalYear extends WorkingCapitalYear_Base {
 
     public WorkingCapitalYear() {
-        super();
-        setWorkingCapitalSystem(WorkingCapitalSystem.getInstance());
+	super();
+	setWorkingCapitalSystem(WorkingCapitalSystem.getInstance());
     }
 
     public WorkingCapitalYear(final Integer year) {
-        this();
-        setYear(year);
+	this();
+	setYear(year);
     }
 
     public static WorkingCapitalYear findOrCreate(final Integer year) {
@@ -35,14 +35,15 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
 
 	SortedSet<WorkingCapitalProcess> search() {
 	    final User user = UserView.getCurrentUser();
-	    final SortedSet<WorkingCapitalProcess> result = new TreeSet<WorkingCapitalProcess>(WorkingCapitalProcess.COMPARATOR_BY_UNIT_NAME);
+	    final SortedSet<WorkingCapitalProcess> result = new TreeSet<WorkingCapitalProcess>(
+		    WorkingCapitalProcess.COMPARATOR_BY_UNIT_NAME);
 	    for (final WorkingCapital workingCapital : getWorkingCapitalsSet()) {
 		final WorkingCapitalProcess workingCapitalProcess = workingCapital.getWorkingCapitalProcess();
 		if (shouldAdd(workingCapitalProcess, user)) {
 		    result.add(workingCapitalProcess);
 		}
 	    }
-	    return result;	    
+	    return result;
 	}
 
     }
@@ -77,10 +78,13 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
     public SortedSet<WorkingCapitalProcess> getMyWorkingCapital() {
 	final User user = UserView.getCurrentUser();
 	final Person person = user.getPerson();
-	final SortedSet<WorkingCapitalProcess> result = new TreeSet<WorkingCapitalProcess>(WorkingCapitalProcess.COMPARATOR_BY_UNIT_NAME);
+	final SortedSet<WorkingCapitalProcess> result = new TreeSet<WorkingCapitalProcess>(
+		WorkingCapitalProcess.COMPARATOR_BY_UNIT_NAME);
 	for (final WorkingCapital workingCapital : person.getMovementResponsibleWorkingCapitalsSet()) {
-	    final WorkingCapitalProcess workingCapitalProcess = workingCapital.getWorkingCapitalProcess();
-	    result.add(workingCapitalProcess);
+	    if (workingCapital.getWorkingCapitalYear() == this) {
+		final WorkingCapitalProcess workingCapitalProcess = workingCapital.getWorkingCapitalProcess();
+		result.add(workingCapitalProcess);
+	    }
 	}
 	return result;
     }
@@ -88,18 +92,23 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
     public SortedSet<WorkingCapitalProcess> getRequestedWorkingCapital() {
 	final User user = UserView.getCurrentUser();
 	final Person person = user.getPerson();
-	final SortedSet<WorkingCapitalProcess> result = new TreeSet<WorkingCapitalProcess>(WorkingCapitalProcess.COMPARATOR_BY_UNIT_NAME);
-	for (final WorkingCapitalInitialization workingCapitalInitialization : person.getRequestedWorkingCapitalInitializationsSet()) {
+	final SortedSet<WorkingCapitalProcess> result = new TreeSet<WorkingCapitalProcess>(
+		WorkingCapitalProcess.COMPARATOR_BY_UNIT_NAME);
+	for (final WorkingCapitalInitialization workingCapitalInitialization : person
+		.getRequestedWorkingCapitalInitializationsSet()) {
 	    final WorkingCapital workingCapital = workingCapitalInitialization.getWorkingCapital();
-	    final WorkingCapitalProcess workingCapitalProcess = workingCapital.getWorkingCapitalProcess();
-	    result.add(workingCapitalProcess);
+	    if (workingCapital.getWorkingCapitalYear() == this) {
+		final WorkingCapitalProcess workingCapitalProcess = workingCapital.getWorkingCapitalProcess();
+		result.add(workingCapitalProcess);
+	    }
 	}
 	return result;
     }
 
     public SortedSet<WorkingCapitalProcess> getForUnit(final Unit unit) {
 	final User user = UserView.getCurrentUser();
-	final SortedSet<WorkingCapitalProcess> result = new TreeSet<WorkingCapitalProcess>(WorkingCapitalProcess.COMPARATOR_BY_UNIT_NAME);
+	final SortedSet<WorkingCapitalProcess> result = new TreeSet<WorkingCapitalProcess>(
+		WorkingCapitalProcess.COMPARATOR_BY_UNIT_NAME);
 	if (unit.hasExpenditureUnit()) {
 	    for (final WorkingCapital workingCapital : unit.getExpenditureUnit().getWorkingCapitalsSet()) {
 		if (workingCapital.getWorkingCapitalYear() == this && workingCapital.isAvailable(user)) {
