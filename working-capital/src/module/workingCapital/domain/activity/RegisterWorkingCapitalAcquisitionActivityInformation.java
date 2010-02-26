@@ -30,7 +30,7 @@ public class RegisterWorkingCapitalAcquisitionActivityInformation extends Activi
     public boolean hasAllneededInfo() {
 	return isForwardedFromInput() && documentNumber != null && supplier != null && acquisitionClassification != null
 		&& money != null && money.isPositive() && valueWithoutVat != null && valueWithoutVat.isPositive()
-		&& description != null && !description.isEmpty() && getInputStream() != null;
+		&& description != null && !description.isEmpty() /** && getInputStream() != null **/;
     }
 
     public String getDocumentNumber() {
