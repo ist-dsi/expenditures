@@ -12,35 +12,27 @@
 </h3>
 
 <bean:define id="workingCapitalInitialization" name="workingCapital" property="workingCapitalInitialization"/>
+<bean:define id="workingCapitalOid" name="workingCapital" property="externalId"/>
 <bean:define id="workingCapitalInitializationOid" type="java.lang.String" name="workingCapitalInitialization" property="externalId"/>
 				
 		
 <div class="infobox mtop1 mbottom1">
-			<fr:view name="workingCapital">
-				<fr:schema bundle="WORKING_CAPITAL_RESOURCES" type="module.workingCapital.domain.WorkingCapital">
-					<fr:slot name="workingCapitalInitialization.requestCreation" key="label.module.workingCapital.requestingDate"/>
-					<fr:slot name="workingCapitalInitialization.requestor.name"  key="label.module.workingCapital.requester"/>
-					<fr:slot name="movementResponsible.name" key="label.module.workingCapital.movementResponsible"/>
-					<fr:slot name="workingCapitalInitialization.fiscalId"  key="label.module.workingCapital.fiscalId"/>
-					<fr:slot name="workingCapitalInitialization.bankAccountId"  key="label.module.workingCapital.bankAccountId"/>
-					<fr:slot name="workingCapitalInitialization.requestedAnualValue"  key="label.module.workingCapital.requestedAnualValue.requested"/>
-					<fr:slot name="workingCapitalInitialization.authorizedAnualValue"  key="label.module.workingCapital.authorizedAnualValue" layout="null-as-label">
-						<fr:property name="subLayout" value=""/>
-						<fr:property name="classes" value="bold"/>
-					</fr:slot>
-					<fr:slot name="workingCapitalInitialization.maxAuthorizedAnualValue"  key="label.module.workingCapital.maxAuthorizedAnualValue" layout="null-as-label">
-						<fr:property name="subLayout" value=""/>
-					</fr:slot>
-				</fr:schema>
+			<fr:view name="workingCapital" property="workingCapitalInitialization" schema="workingCapitalInitialization.view">
 				<fr:layout name="tabular">
 					<fr:property name="columnClasses" value="aleft width215px,,"/>
 				</fr:layout>
 			</fr:view>		
 </div>
-		
 
+<bean:size id="capitalInitializationsCount" name="workingCapital"  property="workingCapitalInitializations"/>
+<logic:greaterThan name="capitalInitializationsCount" value="1">
+	<html:link page='<%= "/workingCapital.do?method=viewAllCapitalInitializations&workingCapitalOid=" + workingCapitalOid %>'><bean:message key="label.module.workingCapital.showAllWorkingCapitalInitializationForProcess" bundle="WORKING_CAPITAL_RESOURCES"/></html:link>
+</logic:greaterThan>
+		
 			<table class="tstyle3 mtop1 mbottom1 width100pc" >
-				<tr><th>Operação</th><th>Data</th><th>Pessoa</th><th</th></tr>
+				<tr><th><bean:message key="label.module.workingCapital.operations" bundle="WORKING_CAPITAL_RESOURCES"/></th>
+				<th><bean:message key="label.module.workingCapital.date" bundle="WORKING_CAPITAL_RESOURCES"/></th>
+				<th><bean:message key="label.module.workingCapital.person" bundle="WORKING_CAPITAL_RESOURCES"/></th></tr>
 				<tr>
 					<td class="aleft">
 						<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.initialization.aprovalByUnitResponsible"/>

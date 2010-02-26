@@ -6,3 +6,18 @@
 	<slot name="child.name" key="label.module.workingCapital.acquisition.verifier"/>
 </schema>
 
+<schema name="workingCapitalInitialization.view" bundle="WORKING_CAPITAL_RESOURCES"  type="module.workingCapital.domain.WorkingCapitalInitialization">
+	<slot name="requestCreation" key="label.module.workingCapital.requestingDate"/>
+	<slot name="requestor.name"  key="label.module.workingCapital.requester"/>
+	<slot name="workingCapital.movementResponsible.name" key="label.module.workingCapital.movementResponsible"/>
+	<slot name="fiscalId"  key="label.module.workingCapital.fiscalId"/>
+	<slot name="bankAccountId"  key="label.module.workingCapital.bankAccountId"/>
+	<slot name="requestedAnualValue"  key="label.module.workingCapital.requestedAnualValue.requested"/>
+	<slot name="authorizedAnualValue"  key="label.module.workingCapital.authorizedAnualValue" layout="null-as-label">
+		<property name="subLayout" value=""/>
+		<property name="classes" value="bold"/>
+	</slot>
+	<slot name="maxAuthorizedAnualValue"  key="label.module.workingCapital.maxAuthorizedAnualValue" layout="null-as-label">
+		<property name="subLayout" value=""/>
+	</slot>
+</schema>

@@ -61,8 +61,8 @@ public class WorkingCapitalAction extends ContextBaseAction {
 	return forward(request, "/workingCapital/configuration.jsp");
     }
 
-    public ActionForward prepareCreateWorkingCapitalInitialization(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
+    public ActionForward prepareCreateWorkingCapitalInitialization(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
 	final WorkingCapitalInitializationBean workingCapitalInitializationBean = new WorkingCapitalInitializationBean();
 	return prepareCreateWorkingCapitalInitialization(request, workingCapitalInitializationBean);
     }
@@ -73,8 +73,8 @@ public class WorkingCapitalAction extends ContextBaseAction {
 	return forward(request, "/workingCapital/createWorkingCapitalInitialization.jsp");
     }
 
-    public ActionForward createWorkingCapitalInitialization(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
+    public ActionForward createWorkingCapitalInitialization(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
 	final WorkingCapitalInitializationBean workingCapitalInitializationBean = getRenderedObject();
 	try {
 	    final WorkingCapitalProcess workingCapitalProcess = workingCapitalInitializationBean.create();
@@ -98,40 +98,48 @@ public class WorkingCapitalAction extends ContextBaseAction {
 	return viewWorkingCapital(request, workingCapitalProcess);
     }
 
-    public ActionForward configureAccountingUnit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
+    public ActionForward configureAccountingUnit(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
 	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstance();
 	request.setAttribute("workingCapitalSystem", workingCapitalSystem);
 	return forward(request, "/workingCapital/configureAccountingUnit.jsp");
     }
 
-    public ActionForward configureManagementUnit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
+    public ActionForward configureManagementUnit(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
 	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstance();
 	request.setAttribute("workingCapitalSystem", workingCapitalSystem);
 	return forward(request, "/workingCapital/configureManagementUnit.jsp");
     }
 
-    public ActionForward prepareAddAcquisitionClassification(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
+    public ActionForward prepareAddAcquisitionClassification(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
 	final AcquisitionClassificationBean acquisitionClassificationBean = new AcquisitionClassificationBean();
 	request.setAttribute("acquisitionClassificationBean", acquisitionClassificationBean);
 	return forward(request, "/workingCapital/addAcquisitionClassification.jsp");
     }
 
-    public ActionForward addAcquisitionClassification(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
+    public ActionForward addAcquisitionClassification(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
 	final AcquisitionClassificationBean acquisitionClassificationBean = getRenderedObject();
 	acquisitionClassificationBean.create();
 	return configuration(mapping, form, request, response);
     }
 
-    public ActionForward viewWorkingCapitalTransaction(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
+    public ActionForward viewWorkingCapitalTransaction(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
 	final WorkingCapitalTransaction workingCapitalTransaction = getDomainObject(request, "workingCapitalTransactionOid");
 	request.setAttribute("workingCapitalTransaction", workingCapitalTransaction);
 	request.setAttribute("process", workingCapitalTransaction.getWorkingCapital().getWorkingCapitalProcess());
 	return forward(request, "/module/workingCapital/domain/WorkingCapitalProcess/workingCapitalTransaction.jsp");
+    }
+
+    public ActionForward viewAllCapitalInitializations(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final WorkingCapital workingCapital = getDomainObject(request, "workingCapitalOid");
+	request.setAttribute("workingCapital", workingCapital);
+
+	return forward(request, "/workingCapital/viewAllWorkingCapitalInitializations.jsp");
     }
 
 }
