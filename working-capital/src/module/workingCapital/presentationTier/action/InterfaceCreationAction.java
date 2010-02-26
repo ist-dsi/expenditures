@@ -30,10 +30,15 @@ public class InterfaceCreationAction extends ContextBaseAction {
 	ActionNode homeNode = ActionNode.createActionNode(virtualHost, node, "/workingCapital", "frontPage",
 		"resources.WorkingCapitalResources", "link.sideBar.workingCapital", UserGroup.getInstance());
 
+	ActionNode.createActionNode(virtualHost, homeNode, "/workingCapital", "prepareCreateWorkingCapitalInitialization",
+		"resources.WorkingCapitalResources", "link.sideBar.workingCapital.create", UserGroup.getInstance());
+
+	ActionNode.createActionNode(virtualHost, homeNode, "/workingCapital", "frontPage", "resources.WorkingCapitalResources",
+		"link.sideBar.workingCapital.frontPage", UserGroup.getInstance());
+
 	ActionNode.createActionNode(virtualHost, homeNode, "/workingCapital", "configuration",
 		"resources.WorkingCapitalResources", "link.sideBar.workingCapitalConfiguration", Role.getRole(RoleType.MANAGER));
 
 	return forwardToMuneConfiguration(request, virtualHost, node);
     }
-
 }
