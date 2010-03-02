@@ -41,4 +41,9 @@ public class RCISTAnnouncement extends RCISTAnnouncement_Base {
 	return getAcquisition().getCurrentTotalItemValueWithAdditionalCostsAndVat();
     }
 
+    @Override
+    public Boolean getActive() {
+	return getAcquisition().getProcess().isActive();
+    }
+
 }

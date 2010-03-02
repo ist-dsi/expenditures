@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.collections.Predicate;
 import org.joda.time.DateTime;
 
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
@@ -34,4 +35,15 @@ public abstract class Announcement extends Announcement_Base {
 	}
 	return announcements;
     }
+
+    public static <T extends Announcement> List<T> getAnnouncements(Class<T> clazz, Predicate predicate) {
+	List<T> announcements = new ArrayList<T>();
+	for (Announcement announcement : ExpenditureTrackingSystem.getInstance().getAnnouncements()) {
+	    if (clazz.isAssignableFrom(announcement.getClass()) && predicate.evaluate(announcement)) {
+		announcements.add((T) announcement);
+	    }
+	}
+	return announcements;
+    }
+
 }

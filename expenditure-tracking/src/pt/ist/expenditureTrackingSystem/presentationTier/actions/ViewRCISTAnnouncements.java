@@ -12,6 +12,7 @@ import myorg.presentationTier.LayoutContext;
 import myorg.presentationTier.actions.ContextBaseAction;
 
 import org.apache.commons.beanutils.BeanComparator;
+import org.apache.commons.collections.Predicate;
 import org.apache.commons.collections.comparators.ReverseComparator;
 import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForm;
@@ -33,7 +34,15 @@ public class ViewRCISTAnnouncements extends ContextBaseAction {
 	    final HttpServletResponse response) throws Exception {
 
 	ArrayList<RCISTAnnouncement> approvedList = new ArrayList<RCISTAnnouncement>();
-	approvedList.addAll(Announcement.getAnnouncements(RCISTAnnouncement.class));
+	approvedList.addAll(Announcement.getAnnouncements(RCISTAnnouncement.class, new Predicate() {
+
+	    @Override
+	    public boolean evaluate(Object arg0) {
+		RCISTAnnouncement announcement = (RCISTAnnouncement) arg0;
+		return announcement.getActive();
+	    }
+
+	}));
 
 	Collections.sort(approvedList, new ReverseComparator(new BeanComparator("creationDate")));
 
