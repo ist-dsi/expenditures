@@ -23,7 +23,9 @@
 			<fr:property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.UnitAutoCompleteProvider"/>
 			<fr:property name="size" value="60"/>
 		</fr:slot>
-		<fr:slot name="person" layout="autoComplete" key="label.module.workingCapital.movementResponsible" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<fr:slot name="person" layout="autoComplete" key="label.module.workingCapital.movementResponsible"
+				validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"
+				help="label.module.workingCapital.movementResponsible.help">
         	<fr:property name="labelField" value="name"/>
 			<fr:property name="format" value="${partyName} (${user.username})"/>
 			<fr:property name="minChars" value="3"/>
@@ -31,8 +33,11 @@
 			<fr:property name="size" value="60"/>
 		</fr:slot>
 		<fr:slot name="requestedAnualValue" key="label.module.workingCapital.requestedAnualValue" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-		<fr:slot name="fiscalId" key="label.module.workingCapital.fiscalId" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-		<fr:slot name="bankAccountId" key="label.module.workingCapital.bankAccountId"/>
+		<fr:slot name="fiscalId" key="label.module.workingCapital.fiscalId"
+				validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"
+				help="label.module.workingCapital.fiscalId.help"/>
+		<fr:slot name="bankAccountId" key="label.module.workingCapital.bankAccountId"
+				help="label.module.workingCapital.bankAccountId.help"/>
 	</fr:schema>
 	<fr:layout name="tabular">
 		<fr:property name="classes" value="form" />
