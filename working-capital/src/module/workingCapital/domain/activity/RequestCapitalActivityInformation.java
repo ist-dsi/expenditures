@@ -21,8 +21,8 @@ public class RequestCapitalActivityInformation extends ActivityInformation<Worki
 	super(workingCapitalProcess, activity);
 	final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
 	final WorkingCapitalInitialization workingCapitalInitialization = workingCapital.getWorkingCapitalInitialization();
-	final String bankAccountId = workingCapitalInitialization.getBankAccountId();
-	paymentMethod = bankAccountId == null  || bankAccountId.isEmpty() ? PaymentMethod.CHECK : PaymentMethod.WIRETRANSFER;
+	final String internationalBankAccountNumber = workingCapitalInitialization.getInternationalBankAccountNumber();
+	paymentMethod = internationalBankAccountNumber == null  || internationalBankAccountNumber.isEmpty() ? PaymentMethod.CHECK : PaymentMethod.WIRETRANSFER;
 	if (workingCapital.hasAnyWorkingCapitalTransactions()) {
 	    final WorkingCapitalTransaction workingCapitalTransaction = workingCapital.getLastTransaction();
 	    requestedValue = workingCapitalTransaction.getAccumulatedValue();

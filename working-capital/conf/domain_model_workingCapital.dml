@@ -29,7 +29,7 @@ class WorkingCapitalInitialization {
 	Money authorizedAnualValue;
 	Money maxAuthorizedAnualValue;
 	String fiscalId;
-	String bankAccountId;
+	String internationalBankAccountNumber;
 	DateTime aprovalByUnitResponsible;
 	DateTime authorizationByUnitResponsible;
 	DateTime verificationByAccounting;

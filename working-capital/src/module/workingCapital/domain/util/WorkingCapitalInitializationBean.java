@@ -17,7 +17,7 @@ public class WorkingCapitalInitializationBean implements Serializable {
 
     private Money requestedAnualValue;
     private String fiscalId;
-    private String bankAccountId;
+    private String internationalBankAccountNumber;
 
     public Unit getUnit() {
         return unit;
@@ -49,16 +49,16 @@ public class WorkingCapitalInitializationBean implements Serializable {
     public void setFiscalId(String fiscalId) {
         this.fiscalId = fiscalId;
     }
-    public String getBankAccountId() {
-        return bankAccountId;
+    public String getInternationalBankAccountNumber() {
+        return internationalBankAccountNumber;
     }
-    public void setBankAccountId(String bankAccountId) {
-        this.bankAccountId = bankAccountId;
+    public void setInternationalBankAccountNumber(String internationalBankAccountNumber) {
+        this.internationalBankAccountNumber = internationalBankAccountNumber;
     }
 
     @Service
     public WorkingCapitalInitialization create() {
-	return new WorkingCapitalInitialization(year, unit, person, requestedAnualValue, fiscalId, bankAccountId);
+	return new WorkingCapitalInitialization(year, unit, person, requestedAnualValue, fiscalId, internationalBankAccountNumber);
     }
 
 }

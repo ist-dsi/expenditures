@@ -38,7 +38,7 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
     }
 
     public WorkingCapitalInitialization(final Integer year, final Unit unit, final Person person,
-	    final Money requestedAnualValue, final String fiscalId, final String bankAccountId) {
+	    final Money requestedAnualValue, final String fiscalId, final String internationalBankAccountNumber) {
 	this();
 	WorkingCapital workingCapital = WorkingCapital.find(year, unit);
 	if (workingCapital == null) {
@@ -52,7 +52,7 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
 	setWorkingCapital(workingCapital);
 	setRequestedAnualValue(requestedAnualValue);
 	setFiscalId(fiscalId);
-	setBankAccountId(bankAccountId);
+	setInternationalBankAccountNumber(internationalBankAccountNumber);
     }
 
     public void approve(final Person person) {

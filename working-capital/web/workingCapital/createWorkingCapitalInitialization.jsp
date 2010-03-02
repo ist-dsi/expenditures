@@ -35,9 +35,16 @@
 		<fr:slot name="requestedAnualValue" key="label.module.workingCapital.requestedAnualValue" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 		<fr:slot name="fiscalId" key="label.module.workingCapital.fiscalId"
 				validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"
-				help="label.module.workingCapital.fiscalId.help"/>
-		<fr:slot name="bankAccountId" key="label.module.workingCapital.bankAccountId"
-				help="label.module.workingCapital.bankAccountId.help"/>
+				help="label.module.workingCapital.fiscalId.help">
+ 			<fr:validator name="pt.ist.fenixWebFramework.rendererExtensions.validators.NumberRangeValidator">
+       			<fr:property name="upperBound" value="999999999"/>
+       			<fr:property name="lowerBound" value="1"/>
+   			</fr:validator>
+		</fr:slot>
+		<fr:slot name="internationalBankAccountNumber" key="label.module.workingCapital.internationalBankAccountNumber"
+				help="label.module.workingCapital.internationalBankAccountNumber.help">
+ 			<fr:validator name="module.workingCapital.presentationTier.validator.IBANValidator"/>
+		</fr:slot>
 	</fr:schema>
 	<fr:layout name="tabular">
 		<fr:property name="classes" value="form" />

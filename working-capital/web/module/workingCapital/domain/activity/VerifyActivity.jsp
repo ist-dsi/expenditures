@@ -26,8 +26,8 @@
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
-			<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.bankAccountId"/>:
-			<bean:write name="workingCapitalInitialization" property="bankAccountId"/>
+			<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.internationalBankAccountNumber"/>:
+			<bean:write name="workingCapitalInitialization" property="internationalBankAccountNumber"/>
 
 			<br/>
 			<br/>
