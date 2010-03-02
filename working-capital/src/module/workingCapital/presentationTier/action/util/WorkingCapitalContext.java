@@ -5,7 +5,7 @@ import java.util.Calendar;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import module.organization.domain.Unit;
+import module.organization.domain.Party;
 import module.workingCapital.domain.WorkingCapitalProcess;
 import module.workingCapital.domain.WorkingCapitalSystem;
 import module.workingCapital.domain.WorkingCapitalYear;
@@ -14,7 +14,7 @@ public class WorkingCapitalContext implements Serializable {
 
     private Integer year;
     private WorkingCapitalYear workingCapitalYear;
-    private Unit unit;
+    private Party party;
 
     public WorkingCapitalContext() {
 	super();
@@ -25,7 +25,7 @@ public class WorkingCapitalContext implements Serializable {
 	return year;
     }
 
-    public void setYear(Integer year) {
+    public void setYear(final Integer year) {
 	this.year = year;
 	if (year != null) {
 	    for (final WorkingCapitalYear workingCapitalYear : WorkingCapitalSystem.getInstance().getWorkingCapitalYearsSet()) {
@@ -40,23 +40,23 @@ public class WorkingCapitalContext implements Serializable {
 	return workingCapitalYear;
     }
 
-    public void setWorkingCapitalYear(WorkingCapitalYear year) {
+    public void setWorkingCapitalYear(final WorkingCapitalYear year) {
 	this.workingCapitalYear = year;
     }
 
-    public Unit getUnit() {
-	return unit;
+    public Party getParty() {
+	return party;
     }
 
-    public void setUnit(Unit unit) {
-	this.unit = unit;
+    public void setParty(final Party party) {
+	this.party = party;
     }
 
     public SortedSet<WorkingCapitalProcess> getWorkingCapitalSearchByUnit() {
 	final WorkingCapitalYear workingCapitalYear = getWorkingCapitalYear();
-	final Unit unit = getUnit();
-	return workingCapitalYear == null || unit == null ? new TreeSet<WorkingCapitalProcess>() : workingCapitalYear
-		.getForUnit(unit);
+	final Party party = getParty();
+	return workingCapitalYear == null || party == null ? new TreeSet<WorkingCapitalProcess>() : workingCapitalYear
+		.getForParty(party);
     }
 
 }

@@ -99,13 +99,13 @@
 					<fr:property name="format" value="${year}"/>
 					<fr:property name="nullOptionHidden" value="true"/>
 				</fr:slot>
-				<fr:slot name="unit" layout="autoComplete" key="label.party" bundle="WORKING_CAPITAL_RESOURCES"
+				<fr:slot name="party" layout="autoComplete" key="label.party" bundle="WORKING_CAPITAL_RESOURCES"
 						validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"
 						help="label.module.workingCapital.selectParty.help">
 		        	<fr:property name="labelField" value="partyName.content"/>
 					<fr:property name="format" value="${presentationName}"/>
 					<fr:property name="minChars" value="3"/>
-					<fr:property name="args" value="provider=module.organization.presentationTier.renderers.providers.UnitAutoCompleteProvider"/>
+					<fr:property name="args" value="provider=module.organization.presentationTier.renderers.providers.PartiesAutoCompleteProvider"/>
 					<fr:property name="size" value="60"/>
 				</fr:slot>
 			</fr:schema>

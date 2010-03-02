@@ -3,6 +3,7 @@ package module.workingCapital.domain;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import module.organization.domain.Party;
 import module.organization.domain.Person;
 import module.organization.domain.Unit;
 import myorg.applicationTier.Authenticate.UserView;
@@ -118,6 +119,21 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
 	    }
 	}
 	return result;
+    }
+
+    public SortedSet<WorkingCapitalProcess> getForPerson(final Person person) {
+	final SortedSet<WorkingCapitalProcess> result = new TreeSet<WorkingCapitalProcess>(
+		WorkingCapitalProcess.COMPARATOR_BY_UNIT_NAME);
+	for (final WorkingCapital workingCapital : person.getMovementResponsibleWorkingCapitalsSet()) {
+	    if (workingCapital.getWorkingCapitalYear() == this) {
+		result.add(workingCapital.getWorkingCapitalProcess());
+	    }
+	}
+	return result;
+    }
+
+    public SortedSet<WorkingCapitalProcess> getForParty(final Party party) {
+	return party.isUnit() ? getForUnit((Unit) party) : getForPerson((Person) party);
     }
 
 }
