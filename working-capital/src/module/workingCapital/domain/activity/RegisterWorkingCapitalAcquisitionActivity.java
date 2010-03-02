@@ -5,7 +5,6 @@ import module.workflow.activities.WorkflowActivity;
 import module.workingCapital.domain.WorkingCapital;
 import module.workingCapital.domain.WorkingCapitalAcquisition;
 import module.workingCapital.domain.WorkingCapitalProcess;
-import module.workingCapital.domain.WorkingCapitalSystem;
 import myorg.domain.User;
 import myorg.util.BundleUtil;
 import myorg.util.InputStreamUtil;

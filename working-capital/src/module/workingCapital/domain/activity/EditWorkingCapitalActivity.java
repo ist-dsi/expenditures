@@ -9,48 +9,51 @@ import module.workingCapital.domain.WorkingCapitalProcess;
 import module.workingCapital.domain.WorkingCapitalSystem;
 import myorg.domain.User;
 import myorg.util.BundleUtil;
+import myorg.util.InputStreamUtil;
 
 public class EditWorkingCapitalActivity extends WorkflowActivity<WorkingCapitalProcess, EditWorkingCapitalActivityInformation> {
 
     @Override
     public String getLocalizedName() {
-	return BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources", "activity." + getClass().getSimpleName());
+	return BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources", "activity."
+		+ getClass().getSimpleName());
     }
 
     @Override
     public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
 	final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
 	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstance();
-	return workingCapital.getMovementResponsible().getUser() == user
-		&& !workingCapital.isCanceledOrRejected()
-		// TODO : maybe check whether the last transaction is an acquisition transaction
-		;
+	return workingCapital.getMovementResponsible().getUser() == user && !workingCapital.isCanceledOrRejected()
+	// TODO : maybe check whether the last transaction is an acquisition
+	// transaction
+	;
     }
 
     @Override
     protected void process(final EditWorkingCapitalActivityInformation activityInformation) {
-	final WorkingCapitalAcquisitionTransaction workingCapitalAcquisitionTransaction = activityInformation.getWorkingCapitalAcquisitionTransaction();
+	final WorkingCapitalAcquisitionTransaction workingCapitalAcquisitionTransaction = activityInformation
+		.getWorkingCapitalAcquisitionTransaction();
 	if (workingCapitalAcquisitionTransaction.isPendingApproval()) {
-	    final WorkingCapitalAcquisition workingCapitalAcquisition = workingCapitalAcquisitionTransaction.getWorkingCapitalAcquisition();
-	    workingCapitalAcquisition.edit(activityInformation.getDocumentNumber(), activityInformation.getSupplier(),
-		    activityInformation.getDescription(), activityInformation.getAcquisitionClassification(),
-		    activityInformation.getValueWithoutVat(), activityInformation.getMoney());
+	    final WorkingCapitalAcquisition workingCapitalAcquisition = workingCapitalAcquisitionTransaction
+		    .getWorkingCapitalAcquisition();
+
+	    if (activityInformation.getInputStream() != null) {
+		workingCapitalAcquisition.edit(activityInformation.getDocumentNumber(), activityInformation.getSupplier(),
+			activityInformation.getDescription(), activityInformation.getAcquisitionClassification(),
+			activityInformation.getValueWithoutVat(), activityInformation.getMoney(), InputStreamUtil
+				.consumeInputStream(activityInformation.getInputStream()), activityInformation.getDisplayName(),
+			activityInformation.getFilename());
+	    } else {
+		workingCapitalAcquisition.edit(activityInformation.getDocumentNumber(), activityInformation.getSupplier(),
+			activityInformation.getDescription(), activityInformation.getAcquisitionClassification(),
+			activityInformation.getValueWithoutVat(), activityInformation.getMoney());
+	    }
+
 	}
     }
 
     @Override
     public ActivityInformation<WorkingCapitalProcess> getActivityInformation(final WorkingCapitalProcess process) {
-        return new EditWorkingCapitalActivityInformation(process, this);
+	return new EditWorkingCapitalActivityInformation(process, this);
     }
-
-    @Override
-    public boolean isDefaultInputInterfaceUsed() {
-        return false;
-    }
-
-    @Override
-    public boolean isVisible() {
-	return false;
-    }
-
 }

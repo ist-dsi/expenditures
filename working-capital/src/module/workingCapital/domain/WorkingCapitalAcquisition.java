@@ -43,6 +43,18 @@ public class WorkingCapitalAcquisition extends WorkingCapitalAcquisition_Base {
 	workingCapitalAcquisitionTransaction.resetValue(value);
     }
 
+    public void edit(String documentNumber, Supplier supplier, String description,
+	    AcquisitionClassification acquisitionClassification, Money valueWithoutVat, Money value, byte[] invoiceContent,
+	    String displayName, String fileName) {
+	edit(documentNumber, supplier, description, acquisitionClassification, valueWithoutVat, value);
+	getWorkingCapitalAcquisitionTransaction().getInvoice().delete();
+
+	WorkingCapitalInvoiceFile workingCapitalInvoiceFile = new WorkingCapitalInvoiceFile(displayName, fileName,
+		invoiceContent, getWorkingCapitalAcquisitionTransaction());
+	getWorkingCapital().getWorkingCapitalProcess().addFiles(workingCapitalInvoiceFile);
+
+    }
+
     public void approve(final User user) {
 	setApproved(new DateTime());
 	final Money valueForAuthorization = Money.ZERO;

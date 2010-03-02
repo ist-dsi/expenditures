@@ -11,7 +11,7 @@
 	<slot name="requestor.name"  key="label.module.workingCapital.requester"/>
 	<slot name="workingCapital.movementResponsible.name" key="label.module.workingCapital.movementResponsible"/>
 	<slot name="fiscalId"  key="label.module.workingCapital.fiscalId"/>
-	<slot name="internationalBankAccountNumber"  key="label.module.workingCapital.internationalBankAccountNumber"/>
+	<slot name="bankAccountId"  key="label.module.workingCapital.bankAccountId"/>
 	<slot name="requestedAnualValue"  key="label.module.workingCapital.requestedAnualValue.requested"/>
 	<slot name="authorizedAnualValue"  key="label.module.workingCapital.authorizedAnualValue" layout="null-as-label">
 		<property name="subLayout" value=""/>
@@ -49,3 +49,7 @@
 		<property name="size" value="50"/>
 	</slot>
 </schema>
+
+<schema name="activityInformation.EditWorkingCapitalActivity" extends="activityInformation.RegisterWorkingCapitalAcquisitionActivity" type="module.workingCapital.domain.activity.EditWorkingCapitalActivityInformation"  bundle="WORKING_CAPITAL_RESOURCES">
+</schema>		
+			
