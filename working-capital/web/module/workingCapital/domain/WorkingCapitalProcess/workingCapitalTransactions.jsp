@@ -36,7 +36,7 @@
 					<bean:define id="workingCapitalTransactionOid" type="java.lang.String" name="workingCapitalTransaction" property="externalId"/>
 					<logic:equal name="workingCapitalTransaction" property="acquisition" value="true">
 						<logic:equal name="workingCapitalTransaction" property="pendingApproval" value="true">
-						 | 	<wf:activityLink processName="process" activityName="EditWorkingCapitalActivity" scope="request" paramName0="workingCapitalAcquisitionTransaction" paramValue0="<%= workingCapitalTransactionOid %>">
+						 	<wf:activityLink processName="process" activityName="EditWorkingCapitalActivity" scope="request" paramName0="workingCapitalAcquisitionTransaction" paramValue0="<%= workingCapitalTransactionOid %>">
 								<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.EditWorkingCapitalActivity"/>
 							</wf:activityLink>
 						</logic:equal>
