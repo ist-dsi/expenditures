@@ -114,7 +114,9 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
 	    for (final WorkingCapital workingCapital : unit.getExpenditureUnit().getWorkingCapitalsSet()) {
 		if (workingCapital.getWorkingCapitalYear() == this && workingCapital.isAvailable(user)) {
 		    final WorkingCapitalProcess workingCapitalProcess = workingCapital.getWorkingCapitalProcess();
-		    result.add(workingCapitalProcess);
+		    if (workingCapitalProcess.isAccessibleToCurrentUser()) {
+			result.add(workingCapitalProcess);
+		    }
 		}
 	    }
 	}
@@ -126,7 +128,10 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
 		WorkingCapitalProcess.COMPARATOR_BY_UNIT_NAME);
 	for (final WorkingCapital workingCapital : person.getMovementResponsibleWorkingCapitalsSet()) {
 	    if (workingCapital.getWorkingCapitalYear() == this) {
-		result.add(workingCapital.getWorkingCapitalProcess());
+		final WorkingCapitalProcess workingCapitalProcess = workingCapital.getWorkingCapitalProcess();
+		if (workingCapitalProcess.isAccessibleToCurrentUser()) {
+		    result.add(workingCapitalProcess);
+		}
 	    }
 	}
 	return result;

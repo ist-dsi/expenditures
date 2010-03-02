@@ -24,7 +24,7 @@
 			<img src="<%= request.getContextPath() + "/workingCapital/image/incorrect.gif" %>">
 		</logic:notEmpty>
 		<logic:notPresent name="viewWorkingCapitalTransaction">
-			<logic:equal name="workingCapitalTransaction" property="pendingApproval" value="true">
+			<logic:equal name="workingCapitalTransaction" property="pendingApprovalByUser" value="true">
 				<html:link action="/workingCapital.do?method=viewWorkingCapitalTransaction" paramId="workingCapitalTransactionOid" paramName="workingCapitalTransaction" paramProperty="externalId">
 					<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.ApproveWorkingCapitalAcquisitionActivity"/>
 				</html:link>
@@ -44,7 +44,7 @@
 			<img src="<%= request.getContextPath() + "/workingCapital/image/incorrect.gif" %>">
 		</logic:notEmpty>
 		<logic:notPresent name="viewWorkingCapitalTransaction">
-			<logic:equal name="workingCapitalTransaction" property="pendingVerification" value="true">
+			<logic:equal name="workingCapitalTransaction" property="pendingVerificationByUser" value="true">
 				<html:link action="/workingCapital.do?method=viewWorkingCapitalTransaction" paramId="workingCapitalTransactionOid" paramName="workingCapitalTransaction" paramProperty="externalId">
 					<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.VerifyWorkingCapitalAcquisitionActivity"/>
 				</html:link>

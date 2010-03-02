@@ -1,5 +1,6 @@
 package module.workingCapital.domain;
 
+import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.User;
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
@@ -41,6 +42,13 @@ public class WorkingCapitalAcquisitionTransaction extends WorkingCapitalAcquisit
 	return workingCapitalAcquisition.getApproved() == null;
     }
 
+    public boolean isPendingApprovalByUser() {
+	final User user = UserView.getCurrentUser();
+	return isPendingApproval()
+		&& !getWorkingCapital().isCanceledOrRejected()
+		&& getWorkingCapital().hasAcquisitionPendingApproval(user);
+    }
+
     @Override
     public boolean isApproved() {
 	final WorkingCapitalAcquisition workingCapitalAcquisition = getWorkingCapitalAcquisition();
@@ -65,6 +73,13 @@ public class WorkingCapitalAcquisitionTransaction extends WorkingCapitalAcquisit
     public boolean isPendingVerification() {
 	final WorkingCapitalAcquisition workingCapitalAcquisition = getWorkingCapitalAcquisition();
 	return isApproved() && workingCapitalAcquisition.getVerifier() == null;
+    }
+
+    public boolean isPendingVerificationByUser() {
+	final User user = UserView.getCurrentUser();
+	return isPendingVerification()
+		&& !getWorkingCapital().isCanceledOrRejected()
+		&& getWorkingCapital().hasAcquisitionPendingVerification(user);
     }
 
     @Override
