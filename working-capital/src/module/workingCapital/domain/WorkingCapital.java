@@ -64,7 +64,7 @@ public class WorkingCapital extends WorkingCapital_Base {
     }
 
     private Authorization findUnitResponsible(final Person person, final Money amount, final Unit unit) {
-	if (unit != null) {
+	if (unit != null && person != null) {
 	    boolean hasAtLeastOneResponsible = false;
 	    for (final Authorization authorization : unit.getAuthorizationsSet()) {
 		if (authorization.isValid() && authorization.getMaxAmount().isGreaterThanOrEqual(amount)) {

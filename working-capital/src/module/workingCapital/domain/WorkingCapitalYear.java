@@ -77,30 +77,34 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
     }
 
     public SortedSet<WorkingCapitalProcess> getMyWorkingCapital() {
-	final User user = UserView.getCurrentUser();
-	final Person person = user.getPerson();
 	final SortedSet<WorkingCapitalProcess> result = new TreeSet<WorkingCapitalProcess>(
 		WorkingCapitalProcess.COMPARATOR_BY_UNIT_NAME);
-	for (final WorkingCapital workingCapital : person.getMovementResponsibleWorkingCapitalsSet()) {
-	    if (workingCapital.getWorkingCapitalYear() == this) {
-		final WorkingCapitalProcess workingCapitalProcess = workingCapital.getWorkingCapitalProcess();
-		result.add(workingCapitalProcess);
+	final User user = UserView.getCurrentUser();
+	final Person person = user.getPerson();
+	if (person != null) {
+	    for (final WorkingCapital workingCapital : person.getMovementResponsibleWorkingCapitalsSet()) {
+		if (workingCapital.getWorkingCapitalYear() == this) {
+		    final WorkingCapitalProcess workingCapitalProcess = workingCapital.getWorkingCapitalProcess();
+		    result.add(workingCapitalProcess);
+		}
 	    }
 	}
 	return result;
     }
 
     public SortedSet<WorkingCapitalProcess> getRequestedWorkingCapital() {
-	final User user = UserView.getCurrentUser();
-	final Person person = user.getPerson();
 	final SortedSet<WorkingCapitalProcess> result = new TreeSet<WorkingCapitalProcess>(
 		WorkingCapitalProcess.COMPARATOR_BY_UNIT_NAME);
-	for (final WorkingCapitalInitialization workingCapitalInitialization : person
-		.getRequestedWorkingCapitalInitializationsSet()) {
-	    final WorkingCapital workingCapital = workingCapitalInitialization.getWorkingCapital();
-	    if (workingCapital.getWorkingCapitalYear() == this) {
-		final WorkingCapitalProcess workingCapitalProcess = workingCapital.getWorkingCapitalProcess();
-		result.add(workingCapitalProcess);
+	final User user = UserView.getCurrentUser();
+	final Person person = user.getPerson();
+	if (person != null) {
+	    for (final WorkingCapitalInitialization workingCapitalInitialization : person
+		    .getRequestedWorkingCapitalInitializationsSet()) {
+		final WorkingCapital workingCapital = workingCapitalInitialization.getWorkingCapital();
+		if (workingCapital.getWorkingCapitalYear() == this) {
+		    final WorkingCapitalProcess workingCapitalProcess = workingCapital.getWorkingCapitalProcess();
+		    result.add(workingCapitalProcess);
+		}
 	    }
 	}
 	return result;
@@ -126,11 +130,13 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
     public SortedSet<WorkingCapitalProcess> getForPerson(final Person person) {
 	final SortedSet<WorkingCapitalProcess> result = new TreeSet<WorkingCapitalProcess>(
 		WorkingCapitalProcess.COMPARATOR_BY_UNIT_NAME);
-	for (final WorkingCapital workingCapital : person.getMovementResponsibleWorkingCapitalsSet()) {
-	    if (workingCapital.getWorkingCapitalYear() == this) {
-		final WorkingCapitalProcess workingCapitalProcess = workingCapital.getWorkingCapitalProcess();
-		if (workingCapitalProcess.isAccessibleToCurrentUser()) {
-		    result.add(workingCapitalProcess);
+	if (person != null) {
+	    for (final WorkingCapital workingCapital : person.getMovementResponsibleWorkingCapitalsSet()) {
+		if (workingCapital.getWorkingCapitalYear() == this) {
+		    final WorkingCapitalProcess workingCapitalProcess = workingCapital.getWorkingCapitalProcess();
+		    if (workingCapitalProcess.isAccessibleToCurrentUser()) {
+			result.add(workingCapitalProcess);
+		    }
 		}
 	    }
 	}

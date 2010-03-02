@@ -5,6 +5,8 @@ import java.util.Calendar;
 
 import module.organization.domain.Person;
 import module.workingCapital.domain.WorkingCapitalInitialization;
+import myorg.applicationTier.Authenticate.UserView;
+import myorg.domain.User;
 import myorg.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.fenixWebFramework.services.Service;
@@ -12,12 +14,17 @@ import pt.ist.fenixWebFramework.services.Service;
 public class WorkingCapitalInitializationBean implements Serializable {
 
     private Unit unit;
-    private Person person;
+    private Person person = initPerson();
     private Integer year = Integer.valueOf(Calendar.getInstance().get(Calendar.YEAR));
 
     private Money requestedAnualValue;
     private String fiscalId;
     private String internationalBankAccountNumber;
+
+    private Person initPerson() {
+	final User user = UserView.getCurrentUser();
+	return user == null ? null : user.getPerson();
+    }
 
     public Unit getUnit() {
         return unit;
