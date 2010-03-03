@@ -6,13 +6,13 @@ import java.io.OutputStream;
 
 import javax.servlet.http.HttpServletResponse;
 
-import module.fileSupport.domain.GenericFile;
 import myorg.presentationTier.actions.ContextBaseAction;
 
 import org.apache.struts.action.ActionForward;
 
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.presentationTier.util.FileUploadBean;
+import pt.ist.fenixframework.plugins.fileSupport.domain.GenericFile;
 
 public abstract class BaseAction extends ContextBaseAction {
 

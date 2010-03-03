@@ -6,7 +6,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import module.fileSupport.domain.GenericFile;
 import module.workflow.presentationTier.actions.ProcessManagement;
 import myorg.domain.exceptions.DomainException;
 
@@ -21,6 +20,7 @@ import pt.ist.expenditureTrackingSystem.domain.dto.AfterTheFactAcquisitionsImpor
 import pt.ist.expenditureTrackingSystem.domain.dto.AfterTheFactAcquisitionsImportBean.ImportError;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.BaseAction;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
+import pt.ist.fenixframework.plugins.fileSupport.domain.GenericFile;
 
 @Mapping(path = "/acquisitionAfterTheFactAcquisitionProcess")
 public class AfterTheFactAcquisitionProcessAction extends BaseAction {

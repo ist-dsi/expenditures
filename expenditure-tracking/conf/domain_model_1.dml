@@ -175,7 +175,7 @@ class authorizations.AuthorizationLog {
 	Money maxAmount;
 }	
 
-	class acquisitions.afterthefact.ImportFile extends .module.fileSupport.domain.GenericFile {
+	class acquisitions.afterthefact.ImportFile extends .pt.ist.fenixframework.plugins.fileSupport.domain.GenericFile {
 		Boolean active;
 	}
 	
