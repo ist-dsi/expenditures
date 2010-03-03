@@ -125,4 +125,13 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base {
 	final WorkingCapital workingCapital = getWorkingCapital();
 	workingCapital.submitAcquisitionsForValidation();
     }
+
+    @Override
+    public List<Class<? extends ProcessFile>> getDisplayableFileTypes() {
+	final List<Class<? extends ProcessFile>> fileTypes = new ArrayList<Class<? extends ProcessFile>>();
+	fileTypes.addAll(super.getDisplayableFileTypes());
+	fileTypes.remove(WorkingCapitalInvoiceFile.class);
+        return fileTypes;
+    }
+
 }
