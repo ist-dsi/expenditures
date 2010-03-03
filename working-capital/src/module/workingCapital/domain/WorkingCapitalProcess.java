@@ -16,8 +16,11 @@ import module.workingCapital.domain.activity.CancelWorkingCapitalInitializationA
 import module.workingCapital.domain.activity.EditWorkingCapitalActivity;
 import module.workingCapital.domain.activity.PayCapitalActivity;
 import module.workingCapital.domain.activity.RegisterWorkingCapitalAcquisitionActivity;
+import module.workingCapital.domain.activity.RejectVerifyWorkingCapitalAcquisitionActivity;
+import module.workingCapital.domain.activity.RejectWorkingCapitalAcquisitionActivity;
 import module.workingCapital.domain.activity.RejectWorkingCapitalInitializationActivity;
 import module.workingCapital.domain.activity.RequestCapitalActivity;
+import module.workingCapital.domain.activity.SubmitForValidationActivity;
 import module.workingCapital.domain.activity.UnApproveActivity;
 import module.workingCapital.domain.activity.UnApproveWorkingCapitalAcquisitionActivity;
 import module.workingCapital.domain.activity.UnAuthorizeActivity;
@@ -56,9 +59,12 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base {
 	activitiesAux.add(new RegisterWorkingCapitalAcquisitionActivity());
 	activitiesAux.add(new EditWorkingCapitalActivity());
 	activitiesAux.add(new ApproveWorkingCapitalAcquisitionActivity());
+	activitiesAux.add(new RejectWorkingCapitalAcquisitionActivity());
 	activitiesAux.add(new UnApproveWorkingCapitalAcquisitionActivity());
 	activitiesAux.add(new VerifyWorkingCapitalAcquisitionActivity());
+	activitiesAux.add(new RejectVerifyWorkingCapitalAcquisitionActivity());
 	activitiesAux.add(new UnVerifyWorkingCapitalAcquisitionActivity());
+	activitiesAux.add(new SubmitForValidationActivity());
 	activities = Collections.unmodifiableList(activitiesAux);
     }
 
@@ -113,5 +119,10 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base {
     @Override
     public List<Class<? extends ProcessFile>> getUploadableFileTypes() {
 	return super.getAvailableFileTypes();
+    }
+
+    public void submitAcquisitionsForValidation() {
+	final WorkingCapital workingCapital = getWorkingCapital();
+	workingCapital.submitAcquisitionsForValidation();
     }
 }

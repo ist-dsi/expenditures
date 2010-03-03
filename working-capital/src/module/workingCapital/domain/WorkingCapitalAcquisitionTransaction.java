@@ -39,7 +39,8 @@ public class WorkingCapitalAcquisitionTransaction extends WorkingCapitalAcquisit
     @Override
     public boolean isPendingApproval() {
 	final WorkingCapitalAcquisition workingCapitalAcquisition = getWorkingCapitalAcquisition();
-	return workingCapitalAcquisition.getApproved() == null;
+	return workingCapitalAcquisition.getApproved() == null
+		&& workingCapitalAcquisition.getRejectedApproval() == null;
     }
 
     public boolean isPendingApprovalByUser() {
@@ -63,6 +64,13 @@ public class WorkingCapitalAcquisitionTransaction extends WorkingCapitalAcquisit
     }
 
     @Override
+    public void reject(final User user) {
+        super.reject(user);
+        final WorkingCapitalAcquisition workingCapitalAcquisition = getWorkingCapitalAcquisition();
+        workingCapitalAcquisition.reject(user);
+    }
+
+    @Override
     public void unApprove() {
 	super.unApprove();
 	final WorkingCapitalAcquisition workingCapitalAcquisition = getWorkingCapitalAcquisition();
@@ -72,7 +80,7 @@ public class WorkingCapitalAcquisitionTransaction extends WorkingCapitalAcquisit
     @Override
     public boolean isPendingVerification() {
 	final WorkingCapitalAcquisition workingCapitalAcquisition = getWorkingCapitalAcquisition();
-	return isApproved() && workingCapitalAcquisition.getVerifier() == null;
+	return isApproved() && workingCapitalAcquisition.getSubmitedForVerification() != null && workingCapitalAcquisition.getVerifier() == null;
     }
 
     public boolean isPendingVerificationByUser() {
@@ -85,7 +93,7 @@ public class WorkingCapitalAcquisitionTransaction extends WorkingCapitalAcquisit
     @Override
     public boolean isVerified() {
 	final WorkingCapitalAcquisition workingCapitalAcquisition = getWorkingCapitalAcquisition();
-	return workingCapitalAcquisition.getVerifier() != null;
+	return workingCapitalAcquisition.getVerified() != null;
     }
 
     @Override
@@ -93,6 +101,14 @@ public class WorkingCapitalAcquisitionTransaction extends WorkingCapitalAcquisit
         super.approve(user);
         final WorkingCapitalAcquisition workingCapitalAcquisition = getWorkingCapitalAcquisition();
         workingCapitalAcquisition.verify(user);
+    }
+
+    @Override
+    public void rejectVerify(final User user) {
+        super.rejectVerify(user);
+        final WorkingCapitalAcquisition workingCapitalAcquisition = getWorkingCapitalAcquisition();
+        workingCapitalAcquisition.rejectVerify(user);
+
     }
 
     @Override
@@ -115,6 +131,11 @@ public class WorkingCapitalAcquisitionTransaction extends WorkingCapitalAcquisit
 	    }
 	}
 	return false;
+    }
+
+    public boolean isCanceledOrRejected() {
+	final WorkingCapitalAcquisition workingCapitalAcquisition = getWorkingCapitalAcquisition();
+	return workingCapitalAcquisition.isCanceledOrRejected();
     }
 
 }

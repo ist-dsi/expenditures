@@ -4,12 +4,10 @@ import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workingCapital.domain.WorkingCapital;
 import module.workingCapital.domain.WorkingCapitalProcess;
-import module.workingCapital.domain.WorkingCapitalRequest;
-import module.workingCapital.domain.WorkingCapitalSystem;
 import myorg.domain.User;
 import myorg.util.BundleUtil;
 
-public class RequestCapitalActivity extends WorkflowActivity<WorkingCapitalProcess, RequestCapitalActivityInformation> {
+public class SubmitForValidationActivity extends WorkflowActivity<WorkingCapitalProcess, ActivityInformation<WorkingCapitalProcess>> {
 
     @Override
     public String getLocalizedName() {
@@ -19,25 +17,20 @@ public class RequestCapitalActivity extends WorkflowActivity<WorkingCapitalProce
     @Override
     public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
 	final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
-	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstance();
-	return workingCapitalSystem.isAccountingMember(user) && workingCapital.canRequestCapital();
+	return !workingCapital.isCanceledOrRejected()
+		&& workingCapital.isMovementResponsible(user)
+		&& workingCapital.hasApprovedAndUnSubmittedAcquisitions();
     }
 
     @Override
-    protected void process(final RequestCapitalActivityInformation activityInformation) {
+    protected void process(final ActivityInformation<WorkingCapitalProcess> activityInformation) {
 	final WorkingCapitalProcess workingCapitalProcess = activityInformation.getProcess();
-	final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
-	new WorkingCapitalRequest(workingCapital, activityInformation.getRequestedValue(), activityInformation.getPaymentMethod());
+	workingCapitalProcess.submitAcquisitionsForValidation();
     }
 
     @Override
     public ActivityInformation<WorkingCapitalProcess> getActivityInformation(final WorkingCapitalProcess process) {
-        return new RequestCapitalActivityInformation(process, this);
-    }
-
-    @Override
-    public boolean isDefaultInputInterfaceUsed() {
-        return false;
+        return new ActivityInformation<WorkingCapitalProcess>(process, this);
     }
 
 }

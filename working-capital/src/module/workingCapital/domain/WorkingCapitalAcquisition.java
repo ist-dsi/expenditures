@@ -22,9 +22,11 @@ public class WorkingCapitalAcquisition extends WorkingCapitalAcquisition_Base {
 	this();
 	setWorkingCapital(workingCapital);
 	edit(documentNumber, supplier, description, acquisitionClassification, valueWithoutVat);
-	WorkingCapitalInvoiceFile workingCapitalInvoiceFile = new WorkingCapitalInvoiceFile(displayName, fileName,
-		invoiceContent, new WorkingCapitalAcquisitionTransaction(this, money));
-	workingCapital.getWorkingCapitalProcess().addFiles(workingCapitalInvoiceFile);
+	if (invoiceContent != null) {
+	    WorkingCapitalInvoiceFile workingCapitalInvoiceFile = new WorkingCapitalInvoiceFile(displayName, fileName,
+		    invoiceContent, new WorkingCapitalAcquisitionTransaction(this, money));
+	    workingCapital.getWorkingCapitalProcess().addFiles(workingCapitalInvoiceFile);
+	}
     }
 
     public void edit(String documentNumber, Supplier supplier, String description,
@@ -63,6 +65,14 @@ public class WorkingCapitalAcquisition extends WorkingCapitalAcquisition_Base {
 	setApprover(authorization);
     }
 
+    public void reject(final User user) {
+	setRejectedApproval(new DateTime());
+	final Money valueForAuthorization = Money.ZERO;
+	final WorkingCapital workingCapital = getWorkingCapital();
+	final Authorization authorization = workingCapital.findUnitResponsible(user.getPerson(), valueForAuthorization);
+	setApprover(authorization);
+    }
+
     public void unApprove() {
 	setApproved(null);
 	removeApprover();
@@ -74,9 +84,19 @@ public class WorkingCapitalAcquisition extends WorkingCapitalAcquisition_Base {
 	setVerifier(accountability);
     }
 
+    public void rejectVerify(final User user) {
+	setNotVerified(new DateTime());
+	final Accountability accountability = getWorkingCapitalSystem().getAccountingAccountability(user);
+	setVerifier(accountability);
+    }
+
     public void unVerify() {
 	setVerified(null);
 	removeVerifier();
+    }
+
+    public boolean isCanceledOrRejected() {
+	return getRejectedApproval() != null || getNotVerified() != null;
     }
 
 }

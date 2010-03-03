@@ -92,6 +92,20 @@ public class WorkingCapitalTransaction extends WorkingCapitalTransaction_Base {
     public void approve(final User user) {
     }
 
+    protected void restoreDebtOfFollowingTransactions() {
+	final int current = getNumber().intValue();
+	final WorkingCapital workingCapital = getWorkingCapital();
+	for (final WorkingCapitalTransaction workingCapitalTransaction : workingCapital.getWorkingCapitalTransactionsSet()) {
+	    if (workingCapitalTransaction.getNumber().intValue() >= current) {
+		workingCapitalTransaction.restoreDebt(getValue());
+	    }
+	}
+    }
+
+    public void reject(User loggedPerson) {
+	restoreDebtOfFollowingTransactions();
+    }
+
     public boolean isPendingVerification() {
 	return false;
     }
@@ -103,6 +117,10 @@ public class WorkingCapitalTransaction extends WorkingCapitalTransaction_Base {
     public void verify(final User user) {
     }
 
+    public void rejectVerify(User loggedPerson) {
+	restoreDebtOfFollowingTransactions();
+    }
+
     public void unVerify() {
     }
 
@@ -110,6 +128,10 @@ public class WorkingCapitalTransaction extends WorkingCapitalTransaction_Base {
     }
 
     public boolean isPaymentRequested() {
+	return false;
+    }
+
+    public boolean isCanceledOrRejected() {
 	return false;
     }
 

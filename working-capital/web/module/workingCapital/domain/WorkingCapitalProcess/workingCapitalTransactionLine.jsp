@@ -13,7 +13,14 @@
 	<fr:view name="workingCapitalTransaction" property="number"/>
 </td>
 <td>
-	<fr:view name="workingCapitalTransaction" property="description"/>
+	<logic:notEqual name="workingCapitalTransaction" property="canceledOrRejected" value="true">
+		<fr:view name="workingCapitalTransaction" property="description"/>
+	</logic:notEqual>
+	<logic:equal name="workingCapitalTransaction" property="canceledOrRejected" value="true">
+		<del>
+			<fr:view name="workingCapitalTransaction" property="description"/>
+		</del>
+	</logic:equal>
 </td>
 <td>
 	<logic:equal name="workingCapitalTransaction" property="acquisition" value="true">
@@ -56,14 +63,42 @@
 	</logic:equal>
 </td>
 <td>
-	<fr:view name="workingCapitalTransaction" property="value"/>
+	<logic:notEqual name="workingCapitalTransaction" property="canceledOrRejected" value="true">
+		<fr:view name="workingCapitalTransaction" property="value"/>
+	</logic:notEqual>
+	<logic:equal name="workingCapitalTransaction" property="canceledOrRejected" value="true">
+		<del>
+			<fr:view name="workingCapitalTransaction" property="value"/>
+		</del>
+	</logic:equal>
 </td>
 <td>
-	<fr:view name="workingCapitalTransaction" property="accumulatedValue"/>
+	<logic:notEqual name="workingCapitalTransaction" property="canceledOrRejected" value="true">
+		<fr:view name="workingCapitalTransaction" property="accumulatedValue"/>
+	</logic:notEqual>
+	<logic:equal name="workingCapitalTransaction" property="canceledOrRejected" value="true">
+		<del>
+			<fr:view name="workingCapitalTransaction" property="accumulatedValue"/>
+		</del>
+	</logic:equal>
 </td>
 <td>
-	<fr:view name="workingCapitalTransaction" property="balance"/>
+	<logic:notEqual name="workingCapitalTransaction" property="canceledOrRejected" value="true">
+		<fr:view name="workingCapitalTransaction" property="balance"/>
+	</logic:notEqual>
+	<logic:equal name="workingCapitalTransaction" property="canceledOrRejected" value="true">
+		<del>
+			<fr:view name="workingCapitalTransaction" property="balance"/>
+		</del>
+	</logic:equal>
 </td>
 <td>
-	<fr:view name="workingCapitalTransaction" property="debt"/>
+	<logic:notEqual name="workingCapitalTransaction" property="canceledOrRejected" value="true">
+		<fr:view name="workingCapitalTransaction" property="debt"/>
+	</logic:notEqual>
+	<logic:equal name="workingCapitalTransaction" property="canceledOrRejected" value="true">
+		<del>
+			<fr:view name="workingCapitalTransaction" property="debt"/>
+		</del>
+	</logic:equal>
 </td>

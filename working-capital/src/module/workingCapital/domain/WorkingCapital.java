@@ -9,6 +9,9 @@ import module.organization.domain.Person;
 import myorg.domain.User;
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
+
+import org.joda.time.DateTime;
+
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 
@@ -241,6 +244,64 @@ public class WorkingCapital extends WorkingCapital_Base {
 	    }
 	}
 	return true;
+    }
+
+    public boolean isMovementResponsible(final User user) {
+	return hasMovementResponsible() && getMovementResponsible().getUser() == user;
+    }
+
+    public boolean hasApprovedAndUnSubmittedAcquisitions() {
+	for (final WorkingCapitalAcquisition workingCapitalAcquisition : getWorkingCapitalAcquisitionsSet()) {
+	    final WorkingCapitalAcquisitionTransaction workingCapitalAcquisitionTransaction = workingCapitalAcquisition.getWorkingCapitalAcquisitionTransaction();
+	    if (workingCapitalAcquisitionTransaction.isApproved() && workingCapitalAcquisition.getSubmitedForVerification() == null) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
+    public void submitAcquisitionsForValidation() {
+	final DateTime now = new DateTime();
+	for (final WorkingCapitalAcquisition workingCapitalAcquisition : getWorkingCapitalAcquisitionsSet()) {
+	    final WorkingCapitalAcquisitionTransaction workingCapitalAcquisitionTransaction = workingCapitalAcquisition.getWorkingCapitalAcquisitionTransaction();
+	    if (workingCapitalAcquisitionTransaction.isApproved() && workingCapitalAcquisition.getSubmitedForVerification() == null) {
+		workingCapitalAcquisition.setSubmitedForVerification(now);
+	    }
+	}
+    }
+
+    public boolean canRequestCapital() {
+	final WorkingCapitalInitialization workingCapitalInitialization = getWorkingCapitalInitialization();
+	return workingCapitalInitialization != null
+		&& !isCanceledOrRejected()
+		&& workingCapitalInitialization.isAuthorized()
+		&& !hasAnyPendingWorkingCapitalRequests()
+		&& !allCapitalIsAvailable();
+    }
+
+    private boolean allCapitalIsAvailable() {
+	final WorkingCapitalInitialization workingCapitalInitialization = getWorkingCapitalInitialization();
+	final WorkingCapitalTransaction lastWorkingCapitalTransaction = getLastTransaction();
+	if (lastWorkingCapitalTransaction != null
+		&& workingCapitalInitialization.getAuthorizedAnualValue().isGreaterThan(lastWorkingCapitalTransaction.getDebt())) {
+	    return true;
+	}
+	boolean hasSomeAcquisition = false;
+	boolean areAllAcquisitionsValidatedOrCanceled = true;
+	for (final WorkingCapitalTransaction workingCapitalTransaction : getWorkingCapitalTransactionsSet()) {
+	    if (workingCapitalTransaction.isAcquisition()) {
+		final WorkingCapitalAcquisitionTransaction workingCapitalAcquisitionTransaction = (WorkingCapitalAcquisitionTransaction) workingCapitalTransaction;
+		final WorkingCapitalAcquisition workingCapitalAcquisition = workingCapitalAcquisitionTransaction.getWorkingCapitalAcquisition();
+		if (workingCapitalAcquisition.getSubmitedForVerification() != null) {
+		    hasSomeAcquisition = true;
+		    if (!workingCapitalTransaction.isVerified()
+			    && !workingCapitalTransaction.isCanceledOrRejected()) {
+			areAllAcquisitionsValidatedOrCanceled = false;
+		    }
+		}
+	    }
+	}
+	return hasSomeAcquisition && areAllAcquisitionsValidatedOrCanceled && lastWorkingCapitalTransaction.getAccumulatedValue().isPositive();
     }
 
 }
