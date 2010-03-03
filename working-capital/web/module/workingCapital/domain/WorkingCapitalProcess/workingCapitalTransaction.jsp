@@ -53,20 +53,28 @@
 		<bean:message key="label.module.workingCapital.acquisition.details" bundle="WORKING_CAPITAL_RESOURCES"/>
 	</h3>
 	<div class="infobox mtop1 mbottom1">
-	<fr:view name="workingCapitalTransaction" property="workingCapitalAcquisition">
-		<fr:schema type="module.workingCapital.domain.WorkingCapitalTransaction" bundle="WORKING_CAPITAL_RESOURCES">
-			<fr:slot name="supplier.presentationName" key="label.module.workingCapital.acquisition.supplier"/>
-			<fr:slot name="documentNumber" key="label.module.workingCapital.acquisition.documentNumber"/>
-			<fr:slot name="description" key="label.module.workingCapital.acquisition.description"/>
-			<fr:slot name="acquisitionClassification.description" key="label.module.workingCapital.acquisition.acquisitionClassification"/>
-			<fr:slot name="acquisitionClassification.economicClassification" key="label.module.workingCapital.configuration.acquisition.classifications.economicClassification"/>
-			<fr:slot name="acquisitionClassification.pocCode" key="label.module.workingCapital.configuration.acquisition.classifications.pocCode"/>
-			<fr:slot name="valueWithoutVat" key="label.module.workingCapital.acquisition.valueWithoutVat"/>
-			<fr:slot name="workingCapitalAcquisitionTransaction.value" key="label.module.workingCapital.acquisition.money"/>
-		</fr:schema>
-		<fr:layout name="tabular">
-		</fr:layout>
-	</fr:view>
+		<fr:view name="workingCapitalTransaction" property="workingCapitalAcquisition">
+			<fr:schema type="module.workingCapital.domain.WorkingCapitalTransaction" bundle="WORKING_CAPITAL_RESOURCES">
+				<fr:slot name="supplier.presentationName" key="label.module.workingCapital.acquisition.supplier"/>
+				<fr:slot name="documentNumber" key="label.module.workingCapital.acquisition.documentNumber"/>
+				<fr:slot name="description" key="label.module.workingCapital.acquisition.description"/>
+				<fr:slot name="acquisitionClassification.description" key="label.module.workingCapital.acquisition.acquisitionClassification"/>
+				<fr:slot name="acquisitionClassification.economicClassification" key="label.module.workingCapital.configuration.acquisition.classifications.economicClassification"/>
+				<fr:slot name="acquisitionClassification.pocCode" key="label.module.workingCapital.configuration.acquisition.classifications.pocCode"/>
+				<fr:slot name="valueWithoutVat" key="label.module.workingCapital.acquisition.valueWithoutVat"/>
+				<fr:slot name="workingCapitalAcquisitionTransaction.value" key="label.module.workingCapital.acquisition.money"/>
+			</fr:schema>
+			<fr:layout name="tabular">
+			</fr:layout>
+		</fr:view>
+		<logic:present name="workingCapitalTransaction" property="invoice">
+			<bean:define id="url">/workflowProcessManagement.do?method=downloadFile&amp;processId=<bean:write name="workingCapitalTransaction" property="workingCapital.workingCapitalProcess.externalId"/></bean:define>
+			<blockquote>
+				<html:link action="<%= url %>" paramId="fileId" paramName="workingCapitalTransaction" paramProperty="invoice.externalId">
+					<bean:write name="workingCapitalTransaction" property="invoice.filename"/>
+				</html:link>
+			</blockquote>
+		</logic:present>
 	</div>
 	
 	<logic:notEmpty name="workingCapitalTransaction" property="workingCapitalAcquisition.approver">
