@@ -140,4 +140,8 @@ public class WorkingCapitalTransaction extends WorkingCapitalTransaction_Base {
 	throw new NotImplementedException();
     }
 
+    public boolean isPendingSubmission() {
+	return false;
+    }
+
 }

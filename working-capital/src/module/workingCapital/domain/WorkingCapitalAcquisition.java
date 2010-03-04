@@ -22,9 +22,10 @@ public class WorkingCapitalAcquisition extends WorkingCapitalAcquisition_Base {
 	this();
 	setWorkingCapital(workingCapital);
 	edit(documentNumber, supplier, description, acquisitionClassification, valueWithoutVat);
+	final WorkingCapitalAcquisitionTransaction workingCapitalAcquisitionTransaction = new WorkingCapitalAcquisitionTransaction(this, money);
 	if (invoiceContent != null) {
 	    WorkingCapitalInvoiceFile workingCapitalInvoiceFile = new WorkingCapitalInvoiceFile(displayName, fileName,
-		    invoiceContent, new WorkingCapitalAcquisitionTransaction(this, money));
+		    invoiceContent, workingCapitalAcquisitionTransaction);
 	    workingCapital.getWorkingCapitalProcess().addFiles(workingCapitalInvoiceFile);
 	}
     }

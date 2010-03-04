@@ -19,7 +19,7 @@ public class UnApproveWorkingCapitalAcquisitionActivity extends WorkflowActivity
     public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
 	final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
 	return !workingCapital.isCanceledOrRejected()
-		&& workingCapital.hasAcquisitionPendingVerification();
+		&& workingCapital.hasAcquisitionPendingSubmission();
     }
 
     @Override

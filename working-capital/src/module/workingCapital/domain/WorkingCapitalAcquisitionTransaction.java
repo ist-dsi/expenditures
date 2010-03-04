@@ -85,6 +85,12 @@ public class WorkingCapitalAcquisitionTransaction extends WorkingCapitalAcquisit
 	return !isCanceledOrRejected() && isApproved() && workingCapitalAcquisition.getSubmitedForVerification() != null && workingCapitalAcquisition.getVerifier() == null;
     }
 
+    public boolean isPendingSubmission() {
+	final WorkingCapitalAcquisition workingCapitalAcquisition = getWorkingCapitalAcquisition();
+	return !isCanceledOrRejected() && isApproved() && workingCapitalAcquisition.getSubmitedForVerification() == null;
+    }
+
+
     public boolean isPendingVerificationByUser() {
 	final User user = UserView.getCurrentUser();
 	return isPendingVerification()

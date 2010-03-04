@@ -32,9 +32,14 @@
 		</logic:notEmpty>
 		<logic:notPresent name="viewWorkingCapitalTransaction">
 			<logic:equal name="workingCapitalTransaction" property="pendingApprovalByUser" value="true">
+				<!-- 
 				<html:link action="/workingCapital.do?method=viewWorkingCapitalTransaction" paramId="workingCapitalTransactionOid" paramName="workingCapitalTransaction" paramProperty="externalId">
 					<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.ApproveWorkingCapitalAcquisitionActivity"/>
 				</html:link>
+				 -->
+				<wf:activityLink processName="process" activityName="ApproveWorkingCapitalAcquisitionActivity" scope="request" paramName0="workingCapitalTransaction" paramValue0="<%= workingCapitalTransactionOid %>">
+					<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.ApproveWorkingCapitalAcquisitionActivity"/>
+				</wf:activityLink>
 			</logic:equal>
 		</logic:notPresent>
 	</logic:equal>

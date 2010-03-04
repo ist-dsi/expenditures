@@ -216,6 +216,16 @@ public class WorkingCapital extends WorkingCapital_Base {
 	return false;
     }
 
+    public boolean hasAcquisitionPendingSubmission() {
+	for (final WorkingCapitalAcquisition workingCapitalAcquisition : getWorkingCapitalAcquisitionsSet()) {
+	    final WorkingCapitalTransaction workingCapitalTransaction = workingCapitalAcquisition.getWorkingCapitalAcquisitionTransaction();
+	    if (workingCapitalTransaction.isPendingSubmission()) {
+		return true;
+	    }	    
+	}
+	return false;
+    }
+
     public boolean hasAcquisitionPendingVerification(final User user) {
 	return hasAcquisitionPendingVerification() && getWorkingCapitalSystem().getAccountingAccountability(user) != null;
     }
