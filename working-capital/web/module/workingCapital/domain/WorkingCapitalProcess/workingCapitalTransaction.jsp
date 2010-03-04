@@ -140,6 +140,10 @@
 	<bean:define id="workingCapitalTransactionOid" type="java.lang.String" name="workingCapitalTransaction" property="externalId"/>
 	<logic:equal name="workingCapitalTransaction" property="acquisition" value="true">
 		<logic:equal name="workingCapitalTransaction" property="pendingApproval" value="true">
+			 <wf:activityLink processName="process" activityName="CancelWorkingCapitalAcquisitionActivity" scope="request" paramName0="workingCapitalTransaction" paramValue0="<%= workingCapitalTransactionOid %>">
+				<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.CancelWorkingCapitalAcquisitionActivity"/>
+			</wf:activityLink>
+			&nbsp;&nbsp;&nbsp;
 			 <wf:activityLink processName="process" activityName="EditWorkingCapitalActivity" scope="request" paramName0="workingCapitalAcquisitionTransaction" paramValue0="<%= workingCapitalTransactionOid %>">
 				<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.EditWorkingCapitalActivity"/>
 			</wf:activityLink>
@@ -157,12 +161,12 @@
 		&nbsp;&nbsp;&nbsp;
 	</logic:equal>
 	<logic:equal name="workingCapitalTransaction" property="approved" value="true">
-		<logic:notEqual name="workingCapitalTransaction" property="verified" value="true">
+		<logic:notPresent name="workingCapitalTransaction" property="workingCapitalAcquisition.submitedForVerification">
 			<wf:activityLink processName="process" activityName="UnApproveWorkingCapitalAcquisitionActivity" scope="request" paramName0="workingCapitalTransaction" paramValue0="<%= workingCapitalTransactionOid %>">
 				<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.UnApproveWorkingCapitalAcquisitionActivity"/>
 			</wf:activityLink>
 			&nbsp;&nbsp;&nbsp;
-		</logic:notEqual>
+		</logic:notPresent>
 	</logic:equal>
 	<logic:equal name="workingCapitalTransaction" property="pendingVerification" value="true">
 		<wf:activityLink processName="process" activityName="VerifyWorkingCapitalAcquisitionActivity" scope="request" paramName0="workingCapitalTransaction" paramValue0="<%= workingCapitalTransactionOid %>">

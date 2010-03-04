@@ -39,13 +39,15 @@ public class WorkingCapitalAcquisitionTransaction extends WorkingCapitalAcquisit
     @Override
     public boolean isPendingApproval() {
 	final WorkingCapitalAcquisition workingCapitalAcquisition = getWorkingCapitalAcquisition();
-	return workingCapitalAcquisition.getApproved() == null
+	return !isCanceledOrRejected()
+		&& workingCapitalAcquisition.getApproved() == null
 		&& workingCapitalAcquisition.getRejectedApproval() == null;
     }
 
     public boolean isPendingApprovalByUser() {
 	final User user = UserView.getCurrentUser();
-	return isPendingApproval()
+	return !isCanceledOrRejected()
+		&& isPendingApproval()
 		&& !getWorkingCapital().isCanceledOrRejected()
 		&& getWorkingCapital().hasAcquisitionPendingApproval(user);
     }
@@ -80,7 +82,7 @@ public class WorkingCapitalAcquisitionTransaction extends WorkingCapitalAcquisit
     @Override
     public boolean isPendingVerification() {
 	final WorkingCapitalAcquisition workingCapitalAcquisition = getWorkingCapitalAcquisition();
-	return isApproved() && workingCapitalAcquisition.getSubmitedForVerification() != null && workingCapitalAcquisition.getVerifier() == null;
+	return !isCanceledOrRejected() && isApproved() && workingCapitalAcquisition.getSubmitedForVerification() != null && workingCapitalAcquisition.getVerifier() == null;
     }
 
     public boolean isPendingVerificationByUser() {
@@ -133,9 +135,17 @@ public class WorkingCapitalAcquisitionTransaction extends WorkingCapitalAcquisit
 	return false;
     }
 
+    @Override
     public boolean isCanceledOrRejected() {
 	final WorkingCapitalAcquisition workingCapitalAcquisition = getWorkingCapitalAcquisition();
 	return workingCapitalAcquisition.isCanceledOrRejected();
+    }
+
+    @Override
+    public void cancel() {
+	final WorkingCapitalAcquisition workingCapitalAcquisition = getWorkingCapitalAcquisition();
+	workingCapitalAcquisition.cancel();
+	restoreDebtOfFollowingTransactions();
     }
 
 }

@@ -96,7 +96,11 @@ public class WorkingCapitalAcquisition extends WorkingCapitalAcquisition_Base {
     }
 
     public boolean isCanceledOrRejected() {
-	return getRejectedApproval() != null || getNotVerified() != null;
+	return (getIsCanceled() != null && getIsCanceled().booleanValue()) || getRejectedApproval() != null || getNotVerified() != null;
+    }
+
+    public void cancel() {
+	setIsCanceled(Boolean.TRUE);
     }
 
 }

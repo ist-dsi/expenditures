@@ -6,7 +6,6 @@ import module.workingCapital.domain.WorkingCapital;
 import module.workingCapital.domain.WorkingCapitalAcquisition;
 import module.workingCapital.domain.WorkingCapitalAcquisitionTransaction;
 import module.workingCapital.domain.WorkingCapitalProcess;
-import module.workingCapital.domain.WorkingCapitalSystem;
 import myorg.domain.User;
 import myorg.util.BundleUtil;
 import myorg.util.InputStreamUtil;
@@ -22,11 +21,7 @@ public class EditWorkingCapitalActivity extends WorkflowActivity<WorkingCapitalP
     @Override
     public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
 	final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
-	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstance();
-	return workingCapital.getMovementResponsible().getUser() == user && !workingCapital.isCanceledOrRejected()
-	// TODO : maybe check whether the last transaction is an acquisition
-	// transaction
-	;
+	return workingCapital.getMovementResponsible().getUser() == user && !workingCapital.isCanceledOrRejected();
     }
 
     @Override
@@ -56,4 +51,10 @@ public class EditWorkingCapitalActivity extends WorkflowActivity<WorkingCapitalP
     public ActivityInformation<WorkingCapitalProcess> getActivityInformation(final WorkingCapitalProcess process) {
 	return new EditWorkingCapitalActivityInformation(process, this);
     }
+
+    @Override
+    public boolean isVisible() {
+        return false;
+    }
+
 }

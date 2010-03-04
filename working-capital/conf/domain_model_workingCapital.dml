@@ -61,6 +61,7 @@ class WorkingCapitalAcquisition extends .pt.ist.expenditureTrackingSystem.domain
     DateTime verified;
     DateTime notVerified;
     DateTime submitedForVerification;
+    Boolean isCanceled;
 }
 
 class WorkingCapitalTransaction {

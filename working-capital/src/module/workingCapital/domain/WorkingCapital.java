@@ -276,32 +276,38 @@ public class WorkingCapital extends WorkingCapital_Base {
 		&& !isCanceledOrRejected()
 		&& workingCapitalInitialization.isAuthorized()
 		&& !hasAnyPendingWorkingCapitalRequests()
-		&& !allCapitalIsAvailable();
+		&& hasCapitalPendingRequest();
     }
 
-    private boolean allCapitalIsAvailable() {
+    private boolean hasCapitalPendingRequest() {
 	final WorkingCapitalInitialization workingCapitalInitialization = getWorkingCapitalInitialization();
 	final WorkingCapitalTransaction lastWorkingCapitalTransaction = getLastTransaction();
 	if (lastWorkingCapitalTransaction != null
-		&& workingCapitalInitialization.getAuthorizedAnualValue().isGreaterThan(lastWorkingCapitalTransaction.getDebt())) {
+		&& lastWorkingCapitalTransaction.getDebt().isLessThan(workingCapitalInitialization.getAuthorizedAnualValue())) {
 	    return true;
 	}
+
 	boolean hasSomeAcquisition = false;
-	boolean areAllAcquisitionsValidatedOrCanceled = true;
+
+	DateTime lastPayment = null;
 	for (final WorkingCapitalTransaction workingCapitalTransaction : getWorkingCapitalTransactionsSet()) {
-	    if (workingCapitalTransaction.isAcquisition()) {
+	    if (workingCapitalTransaction.isPayment() && (lastPayment == null || lastPayment.isBefore(workingCapitalTransaction.getTransationInstant()))) {
+		lastPayment = workingCapitalTransaction.getTransationInstant();
+	    }
+	}
+
+	for (final WorkingCapitalTransaction workingCapitalTransaction : getWorkingCapitalTransactionsSet()) {
+	    if (workingCapitalTransaction.isAcquisition() && workingCapitalTransaction.getTransationInstant().isAfter(lastPayment)) {
 		final WorkingCapitalAcquisitionTransaction workingCapitalAcquisitionTransaction = (WorkingCapitalAcquisitionTransaction) workingCapitalTransaction;
 		final WorkingCapitalAcquisition workingCapitalAcquisition = workingCapitalAcquisitionTransaction.getWorkingCapitalAcquisition();
 		if (workingCapitalAcquisition.getSubmitedForVerification() != null) {
-		    hasSomeAcquisition = true;
-		    if (!workingCapitalTransaction.isVerified()
-			    && !workingCapitalTransaction.isCanceledOrRejected()) {
-			areAllAcquisitionsValidatedOrCanceled = false;
+		    if (workingCapitalTransaction.isVerified() && !workingCapitalAcquisition.isCanceledOrRejected()) {
+			hasSomeAcquisition = true;
 		    }
 		}
 	    }
 	}
-	return hasSomeAcquisition && areAllAcquisitionsValidatedOrCanceled && lastWorkingCapitalTransaction.getAccumulatedValue().isPositive();
+	return hasSomeAcquisition && lastWorkingCapitalTransaction.getAccumulatedValue().isPositive();
     }
 
 }

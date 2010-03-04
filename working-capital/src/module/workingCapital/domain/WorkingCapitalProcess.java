@@ -12,6 +12,7 @@ import module.workflow.domain.WorkflowProcess;
 import module.workingCapital.domain.activity.ApproveActivity;
 import module.workingCapital.domain.activity.ApproveWorkingCapitalAcquisitionActivity;
 import module.workingCapital.domain.activity.AuthorizeActivity;
+import module.workingCapital.domain.activity.CancelWorkingCapitalAcquisitionActivity;
 import module.workingCapital.domain.activity.CancelWorkingCapitalInitializationActivity;
 import module.workingCapital.domain.activity.EditWorkingCapitalActivity;
 import module.workingCapital.domain.activity.PayCapitalActivity;
@@ -57,6 +58,7 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base {
 	activitiesAux.add(new RequestCapitalActivity());
 	activitiesAux.add(new PayCapitalActivity());
 	activitiesAux.add(new RegisterWorkingCapitalAcquisitionActivity());
+	activitiesAux.add(new CancelWorkingCapitalAcquisitionActivity());
 	activitiesAux.add(new EditWorkingCapitalActivity());
 	activitiesAux.add(new ApproveWorkingCapitalAcquisitionActivity());
 	activitiesAux.add(new RejectWorkingCapitalAcquisitionActivity());

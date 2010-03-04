@@ -5,6 +5,7 @@ import java.util.Comparator;
 import myorg.domain.User;
 import myorg.domain.util.Money;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.joda.time.DateTime;
 
 public class WorkingCapitalTransaction extends WorkingCapitalTransaction_Base {
@@ -133,6 +134,10 @@ public class WorkingCapitalTransaction extends WorkingCapitalTransaction_Base {
 
     public boolean isCanceledOrRejected() {
 	return false;
+    }
+
+    public void cancel() {
+	throw new NotImplementedException();
     }
 
 }
