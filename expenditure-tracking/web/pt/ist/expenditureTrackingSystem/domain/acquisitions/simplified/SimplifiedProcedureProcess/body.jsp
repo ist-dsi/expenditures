@@ -174,10 +174,12 @@
 				<strong><bean:message key="acquisitionRequestItem.label.item" bundle="ACQUISITION_RESOURCES"/></strong> (<fr:view name="currentIndex"/>/<fr:view name="totalItems"/>)
 				<bean:define id="itemOID" name="acquisitionRequestItem" property="externalId" type="java.lang.String"/>
 				
-				<logic:equal name="acquisitionRequestItem" property="valueFullyAttributedToUnits" value="false">
-					<div class="infobox_warning">
-						<strong><bean:message key="messages.info.attention" bundle="EXPENDITURE_RESOURCES"/>:</strong> <bean:message key="acquisitionRequestItem.message.info.valueNotFullyAttributed" bundle="ACQUISITION_RESOURCES"/>
-					</div>
+				<logic:equal name="acquisitionRequestItem" property="filledWithRealValues" value="false">
+					<logic:equal name="acquisitionRequestItem" property="valueFullyAttributedToUnits" value="false">
+						<div class="infobox_warning">
+							<strong><bean:message key="messages.info.attention" bundle="EXPENDITURE_RESOURCES"/>:</strong> <bean:message key="acquisitionRequestItem.message.info.valueNotFullyAttributed" bundle="ACQUISITION_RESOURCES"/>
+						</div>
+					</logic:equal>
 				</logic:equal>
 				
 				<logic:equal  name="process" property="acquisitionProcessState.invoiceConfirmed"  value="true">		
