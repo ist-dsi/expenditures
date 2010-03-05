@@ -321,4 +321,13 @@ public class WorkingCapital extends WorkingCapital_Base {
 	return hasSomeAcquisition && lastWorkingCapitalTransaction.getAccumulatedValue().isPositive();
     }
 
+    public boolean hasWorkingCapitalRequestPendingTreasuryProcessing() {
+	for (final WorkingCapitalRequest workingCapitalRequest : getWorkingCapitalRequestsSet()) {
+	    if (workingCapitalRequest.getProcessedByTreasury() == null) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
 }

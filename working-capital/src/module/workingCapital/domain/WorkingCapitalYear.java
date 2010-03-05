@@ -52,8 +52,11 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
     public SortedSet<WorkingCapitalProcess> getPendingAproval() {
 	return new WorkingCapitalProcessSearch() {
 	    @Override
-	    boolean shouldAdd(WorkingCapitalProcess workingCapitalProcess, User user) {
-		return workingCapitalProcess.isPendingAproval(user);
+	    boolean shouldAdd(final WorkingCapitalProcess workingCapitalProcess, final User user) {
+		final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
+		return !workingCapital.isCanceledOrRejected()
+			&& (workingCapitalProcess.isPendingAproval(user)
+				|| workingCapital.hasAcquisitionPendingApproval(user));
 	    }
 	}.search();
     }
@@ -61,8 +64,10 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
     public SortedSet<WorkingCapitalProcess> getPendingVerification() {
 	return new WorkingCapitalProcessSearch() {
 	    @Override
-	    boolean shouldAdd(WorkingCapitalProcess workingCapitalProcess, User user) {
-		return workingCapitalProcess.isPendingVerification(user);
+	    boolean shouldAdd(final WorkingCapitalProcess workingCapitalProcess, final User user) {
+		final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
+		return !workingCapital.isCanceledOrRejected()
+			&& (workingCapitalProcess.isPendingVerification(user) || workingCapital.hasAcquisitionPendingVerification(user));
 	    }
 	}.search();
     }
@@ -72,6 +77,19 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
 	    @Override
 	    boolean shouldAdd(WorkingCapitalProcess workingCapitalProcess, User user) {
 		return workingCapitalProcess.isPendingAuthorization(user);
+	    }
+	}.search();
+    }
+
+    public SortedSet<WorkingCapitalProcess> getPendingPayment() {
+	return new WorkingCapitalProcessSearch() {
+	    @Override
+	    boolean shouldAdd(final WorkingCapitalProcess workingCapitalProcess, final User user) {
+		final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
+		final WorkingCapitalSystem workingCapitalSystem = workingCapital.getWorkingCapitalSystem();
+		return !workingCapital.isCanceledOrRejected()
+			&& ((workingCapitalSystem.isAccountingMember(user) && workingCapital.canRequestCapital())
+				|| (workingCapital.isTreasuryMember(user) && workingCapital.hasWorkingCapitalRequestPendingTreasuryProcessing()));
 	    }
 	}.search();
     }
