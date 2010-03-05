@@ -34,7 +34,7 @@
 <schema name="searchUsers"
 		type="pt.ist.expenditureTrackingSystem.domain.organization.SearchUsers"
 		bundle="EXPENDITURE_ORGANIZATION_RESOURCES">
-	<slot name="person" layout="autoComplete" key="label.person" bundle="EXPENDITURE_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+	<slot name="person" layout="autoComplete" key="label.person" bundle="EXPENDITURE_RESOURCES">
         <property name="labelField" value="name"/>
 		<property name="format" value="${name} (${username})"/>
 		<property name="minChars" value="3"/>		
