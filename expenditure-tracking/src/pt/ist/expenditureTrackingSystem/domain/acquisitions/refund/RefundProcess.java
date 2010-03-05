@@ -354,10 +354,10 @@ public class RefundProcess extends RefundProcess_Base {
     public boolean isAvailableForPerson(Person person) {
 	return person.hasRoleType(RoleType.ACQUISITION_CENTRAL) || person.hasRoleType(RoleType.ACQUISITION_CENTRAL_MANAGER)
 		|| person.hasRoleType(RoleType.ACCOUNTING_MANAGER) || person.hasRoleType(RoleType.PROJECT_ACCOUNTING_MANAGER)
-		|| person.hasRoleType(RoleType.TREASURY_MANAGER) || getRequestor() == person
-		|| getRequest().getRequestingUnit().isResponsible(person) || isResponsibleForAtLeastOnePayingUnit(person)
-		|| isAccountingEmployee(person) || isProjectAccountingEmployee(person) || isTreasuryMember(person)
-		|| isObserver(person);
+		|| person.hasRoleType(RoleType.TREASURY_MANAGER) || person.hasRoleType(RoleType.ACQUISITION_PROCESS_AUDITOR)
+		|| getRequestor() == person || getRequest().getRequestingUnit().isResponsible(person)
+		|| isResponsibleForAtLeastOnePayingUnit(person) || isAccountingEmployee(person)
+		|| isProjectAccountingEmployee(person) || isTreasuryMember(person) || isObserver(person);
     }
 
     @Override
