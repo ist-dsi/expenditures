@@ -292,8 +292,9 @@ public class WorkingCapital extends WorkingCapital_Base {
     private boolean hasCapitalPendingRequest() {
 	final WorkingCapitalInitialization workingCapitalInitialization = getWorkingCapitalInitialization();
 	final WorkingCapitalTransaction lastWorkingCapitalTransaction = getLastTransaction();
-	if (lastWorkingCapitalTransaction != null
-		&& lastWorkingCapitalTransaction.getDebt().isLessThan(workingCapitalInitialization.getAuthorizedAnualValue())) {
+	if ((lastWorkingCapitalTransaction == null && workingCapitalInitialization.getAuthorizedAnualValue().isPositive())
+		|| (lastWorkingCapitalTransaction != null
+			&& lastWorkingCapitalTransaction.getDebt().isLessThan(workingCapitalInitialization.getAuthorizedAnualValue()))) {
 	    return true;
 	}
 
