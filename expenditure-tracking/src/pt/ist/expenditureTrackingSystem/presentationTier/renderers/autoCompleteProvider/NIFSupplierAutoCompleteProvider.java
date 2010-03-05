@@ -19,11 +19,11 @@ public class NIFSupplierAutoCompleteProvider implements AutoCompleteProvider {
 
 	for (final Supplier supplier : ExpenditureTrackingSystem.getInstance().getSuppliers()) {
 	    if (supplier.getFiscalIdentificationCode().startsWith(value)) {
-		result.add(supplier);
+		addResult(result, supplier);
 	    } else {
 		final String name = StringNormalizer.normalize(supplier.getName());
 		if (hasMatch(input, name)) {
-		    result.add(supplier);
+		    addResult(result, supplier);
 		}
 	    }
 	    if (result.size() >= maxCount) {
@@ -31,6 +31,10 @@ public class NIFSupplierAutoCompleteProvider implements AutoCompleteProvider {
 	    }
 	}
 	return result;
+    }
+
+    protected void addResult(final List<Supplier> result, final Supplier supplier) {
+	result.add(supplier);
     }
 
     private boolean hasMatch(final String[] input, final String unitNameParts) {
