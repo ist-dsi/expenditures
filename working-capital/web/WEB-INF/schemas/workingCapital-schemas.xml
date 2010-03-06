@@ -52,4 +52,26 @@
 
 <schema name="activityInformation.EditWorkingCapitalActivity" extends="activityInformation.RegisterWorkingCapitalAcquisitionActivity" type="module.workingCapital.domain.activity.EditWorkingCapitalActivityInformation"  bundle="WORKING_CAPITAL_RESOURCES">
 </schema>		
-			
+
+<schema name="activityInformation.EditInitializationActivity" type="module.workingCapital.domain.activity.EditInitializationActivityInformation"  bundle="WORKING_CAPITAL_RESOURCES">
+	<slot name="movementResponsible" layout="autoComplete" key="label.module.workingCapital.movementResponsible"
+			validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"
+			help="label.module.workingCapital.movementResponsible.help">
+		<property name="labelField" value="name"/>
+		<property name="format" value="${partyName} (${user.username})"/>
+		<property name="minChars" value="3"/>
+		<property name="args" value="provider=module.organization.presentationTier.renderers.providers.PersonAutoCompleteProvider" />
+		<property name="size" value="60"/>
+	</slot>
+	<slot name="requestedAnualValue" key="label.module.workingCapital.requestedAnualValue" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="fiscalId" key="label.module.workingCapital.fiscalId"
+			validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"
+			help="label.module.workingCapital.fiscalId.help">
+ 		<validator class="pt.ist.fenixWebFramework.rendererExtensions.validators.NumberRangeValidator">
+    		<property name="upperBound" value="999999999"/>
+    		<property name="lowerBound" value="1"/>
+   		</validator>
+	</slot>
+	<slot name="internationalBankAccountNumber" key="label.module.workingCapital.internationalBankAccountNumber"
+			help="label.module.workingCapital.internationalBankAccountNumber.help" validator="module.workingCapital.presentationTier.validator.IBANValidator"/>
+</schema>		

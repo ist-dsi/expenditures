@@ -20,7 +20,10 @@
 		<fr:layout name="tabular">
 			<fr:property name="columnClasses" value="aleft width215px,,"/>
 		</fr:layout>
-	</fr:view>		
+	</fr:view>
+	<wf:activityLink processName="process" activityName="EditInitializationActivity" scope="request" paramName0="workingCapitalInitialization" paramValue0="<%= workingCapitalInitializationOid %>">
+		<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.EditInitializationActivity"/>
+	</wf:activityLink>
 </div>
 
 <bean:size id="capitalInitializationsCount" name="workingCapital"  property="workingCapitalInitializations"/>
