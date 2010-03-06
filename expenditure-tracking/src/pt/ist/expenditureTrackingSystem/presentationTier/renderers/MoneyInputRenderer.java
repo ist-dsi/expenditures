@@ -1,12 +1,16 @@
 package pt.ist.expenditureTrackingSystem.presentationTier.renderers;
 
 import myorg.domain.util.Money;
+import myorg.util.BundleUtil;
 
 import org.apache.commons.lang.StringUtils;
 
 import pt.ist.expenditureTrackingSystem.presentationTier.renderers.validator.MoneyValidator;
 import pt.ist.fenixWebFramework.renderers.InputRenderer;
 import pt.ist.fenixWebFramework.renderers.components.HtmlComponent;
+import pt.ist.fenixWebFramework.renderers.components.HtmlContainer;
+import pt.ist.fenixWebFramework.renderers.components.HtmlInlineContainer;
+import pt.ist.fenixWebFramework.renderers.components.HtmlText;
 import pt.ist.fenixWebFramework.renderers.components.HtmlTextInput;
 import pt.ist.fenixWebFramework.renderers.components.converters.ConversionException;
 import pt.ist.fenixWebFramework.renderers.components.converters.Converter;
@@ -36,10 +40,15 @@ public class MoneyInputRenderer extends InputRenderer {
 		input.setConverter(new MoneyInputConverter());
 		HtmlChainValidator htmlChainValidator = new HtmlChainValidator(input);
 		htmlChainValidator.addValidator(new MoneyValidator());
-		return input;
 
+		
+	        HtmlContainer container = new HtmlInlineContainer();
+	        container.addChild(input);
+	        container.addChild(new HtmlText(BundleUtil.getFormattedStringFromResourceBundle("resources/MyorgResources", "label.decimal.seprator")));
+
+		//return input;
+	        return container;
 	    }
-
 	};
     }
 
