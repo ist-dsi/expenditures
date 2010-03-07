@@ -44,6 +44,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.De
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.DistributeRealValuesForPayingUnits;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.EditRefundInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.EditRefundItem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.RefundPerson;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.RemoveFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.RemoveProjectFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.RemoveRefundInvoice;
@@ -107,6 +108,7 @@ public class RefundProcess extends RefundProcess_Base {
 	activities.add(new ChangeFinancersAccountingUnit());
 	activities.add(new ChangeProcessRequester());
 	activities.add(new RemoveCancelProcess<RefundProcess>());
+	activities.add(new RefundPerson());
     }
 
     public RefundProcess(Person requestor, String refundeeName, String refundeeFiscalCode, Unit requestingUnit) {
