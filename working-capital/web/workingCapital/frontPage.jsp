@@ -83,6 +83,15 @@
 				<bean:define id="processList" toScope="request" name="workingCapitalContext" property="workingCapitalYear.requestedWorkingCapital"/>
 				<jsp:include page="processList.jsp"/>
 
+				<br/>
+				<p class="mtop0 mbottom05">
+					<b>
+						<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.front.page.aprovalResponsible"/>
+					</b>
+				</p>
+				<bean:define id="processList" toScope="request" name="workingCapitalContext" property="workingCapitalYear.aprovalResponsibleWorkingCapital"/>
+				<jsp:include page="processList.jsp"/>
+
 			</td>
 		</tr>
 	</table>

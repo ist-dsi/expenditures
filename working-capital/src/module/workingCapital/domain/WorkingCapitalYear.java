@@ -8,6 +8,7 @@ import module.organization.domain.Person;
 import module.organization.domain.Unit;
 import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.User;
+import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 
 public class WorkingCapitalYear extends WorkingCapitalYear_Base {
 
@@ -122,6 +123,24 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
 		if (workingCapital.getWorkingCapitalYear() == this) {
 		    final WorkingCapitalProcess workingCapitalProcess = workingCapital.getWorkingCapitalProcess();
 		    result.add(workingCapitalProcess);
+		}
+	    }
+	}
+	return result;
+    }
+
+    public SortedSet<WorkingCapitalProcess> getAprovalResponsibleWorkingCapital() {
+	final SortedSet<WorkingCapitalProcess> result = new TreeSet<WorkingCapitalProcess>(
+		WorkingCapitalProcess.COMPARATOR_BY_UNIT_NAME);
+	final User user = UserView.getCurrentUser();
+	if (user.hasExpenditurePerson()) {
+	    for (final Authorization authorization : user.getExpenditurePerson().getAuthorizationsSet()) {
+		final pt.ist.expenditureTrackingSystem.domain.organization.Unit unit = authorization.getUnit();
+		for (final WorkingCapital workingCapital : unit.getWorkingCapitalsSet()) {
+		    if (workingCapital.getWorkingCapitalYear() == this) {
+			final WorkingCapitalProcess workingCapitalProcess = workingCapital.getWorkingCapitalProcess();
+			result.add(workingCapitalProcess);
+		    }
 		}
 	    }
 	}
