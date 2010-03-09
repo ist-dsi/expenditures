@@ -41,9 +41,9 @@
        			<fr:property name="lowerBound" value="1"/>
    			</fr:validator>
 		</fr:slot>
-		<fr:slot name="internationalBankAccountNumber" key="label.module.workingCapital.internationalBankAccountNumber"
+		<fr:slot name="internationalBankAccountNumber" key="label.module.workingCapital.ibanOrBan"
 				help="label.module.workingCapital.internationalBankAccountNumber.help">
- 			<fr:validator name="module.workingCapital.presentationTier.validator.IBANValidator"/>
+ 			<fr:validator name="module.workingCapital.presentationTier.validator.IbanOfPTBanValidator"/>
 		</fr:slot>
 	</fr:schema>
 	<fr:layout name="tabular">

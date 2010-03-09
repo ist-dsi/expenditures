@@ -29,7 +29,12 @@ public class EditInitializationActivity extends WorkflowActivity<WorkingCapitalP
 	workingCapitalInitialization.getWorkingCapital().setMovementResponsible(activityInformation.getMovementResponsible());
 	workingCapitalInitialization.setRequestedAnualValue(activityInformation.getRequestedAnualValue());
 	workingCapitalInitialization.setFiscalId(activityInformation.getFiscalId());
-	workingCapitalInitialization.setInternationalBankAccountNumber(activityInformation.getInternationalBankAccountNumber());
+
+	final String banOrIban = activityInformation.getInternationalBankAccountNumber();
+	final String internationalBankAccountNumber = banOrIban == null || banOrIban.isEmpty() || !Character.isDigit(banOrIban.charAt(0))
+		? banOrIban : "PT50" + banOrIban;
+
+	workingCapitalInitialization.setInternationalBankAccountNumber(internationalBankAccountNumber);
     }
 
     @Override

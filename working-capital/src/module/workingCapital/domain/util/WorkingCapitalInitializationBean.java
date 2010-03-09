@@ -65,7 +65,11 @@ public class WorkingCapitalInitializationBean implements Serializable {
 
     @Service
     public WorkingCapitalInitialization create() {
-	return new WorkingCapitalInitialization(year, unit, person, requestedAnualValue, fiscalId, internationalBankAccountNumber);
+	String iban = internationalBankAccountNumber == null
+		|| internationalBankAccountNumber.isEmpty()
+		|| !Character.isDigit(internationalBankAccountNumber.charAt(0))
+		? internationalBankAccountNumber : "PT50" + internationalBankAccountNumber;
+	return new WorkingCapitalInitialization(year, unit, person, requestedAnualValue, fiscalId, iban);
     }
 
 }

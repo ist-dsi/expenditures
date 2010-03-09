@@ -21,6 +21,10 @@ public class IBANValidator extends HtmlValidator {
     @Override
     public void performValidation() {
 	final String iban = getComponent().getValue().replace(" ", "");
+	performIBANValidation(iban);
+    }
+
+    protected void performIBANValidation(final String iban) {
 	setValid(StringUtils.isEmpty(iban) || IBAN.isCheckDigitValid(iban));
     }
 
