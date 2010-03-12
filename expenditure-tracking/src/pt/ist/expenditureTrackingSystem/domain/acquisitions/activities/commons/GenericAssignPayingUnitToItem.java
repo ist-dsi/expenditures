@@ -19,12 +19,10 @@ public class GenericAssignPayingUnitToItem<P extends PaymentProcess> extends
     @Override
     public boolean isActive(P process, User user) {
 	Person person = user.getExpenditurePerson();
-	return isUserProcessOwner(process, user) && (person == process.getRequestor() && process.isInGenesis());
-	// || ((process instanceof SimplifiedProcedureProcess)
-	// && ((SimplifiedProcedureProcess) process).getProcessClassification()
-	// == ProcessClassification.CT75000
-	// && person.hasRoleType(RoleType.ACQUISITION_CENTRAL) &&
-	// process.isAuthorized());
+	return isUserProcessOwner(process, user)
+		&& ((person == process.getRequestor() && process.isInGenesis()) || ((process instanceof SimplifiedProcedureProcess)
+			&& ((SimplifiedProcedureProcess) process).getProcessClassification() == ProcessClassification.CT75000
+			&& person.hasRoleType(RoleType.ACQUISITION_CENTRAL) && process.isAuthorized()));
     }
 
     @Override

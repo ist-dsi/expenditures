@@ -20,14 +20,11 @@ public class EditAcquisitionRequestItem extends
     public boolean isActive(RegularAcquisitionProcess process, User user) {
 	Person person = user.getExpenditurePerson();
 	return isUserProcessOwner(process, user)
-		&& (process.getRequestor() == person && process.getAcquisitionProcessState().isInGenesis() && process
-			.getAcquisitionRequest().hasAnyRequestItems());
-	// || (process.isSimplifiedAcquisitionProcess()
-	// && ((SimplifiedProcedureProcess) process).getProcessClassification()
-	// == ProcessClassification.CT75000
-	// && person.hasRoleType(RoleType.ACQUISITION_CENTRAL) &&
-	// process.getAcquisitionProcessState()
-	// .isAuthorized());
+		&& ((process.getRequestor() == person && process.getAcquisitionProcessState().isInGenesis() && process
+			.getAcquisitionRequest().hasAnyRequestItems()) || (process.isSimplifiedAcquisitionProcess()
+			&& ((SimplifiedProcedureProcess) process).getProcessClassification() == ProcessClassification.CT75000
+			&& person.hasRoleType(RoleType.ACQUISITION_CENTRAL) && process.getAcquisitionProcessState()
+			.isAuthorized()));
     }
 
     @Override
