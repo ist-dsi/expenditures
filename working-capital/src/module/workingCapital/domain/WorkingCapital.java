@@ -47,6 +47,9 @@ public class WorkingCapital extends WorkingCapital_Base {
 	}
 	setWorkingCapitalYear(workingCapitalYear);
 	setUnit(unit);
+	if (movementResponsible == null) {
+	    throw new DomainException("message.working.capital.movementResponsible.cannot.be.null");
+	}
 	setMovementResponsible(movementResponsible);
 	new WorkingCapitalProcess(this);
     }

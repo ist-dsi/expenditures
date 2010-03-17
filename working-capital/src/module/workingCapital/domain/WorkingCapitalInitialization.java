@@ -33,7 +33,11 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
     public WorkingCapitalInitialization() {
         super();
         setWorkingCapitalSystem(WorkingCapitalSystem.getInstance());
-        setRequestor(UserView.getCurrentUser().getPerson());
+        final Person person = UserView.getCurrentUser().getPerson();
+        if (person == null) {
+            throw new DomainException("message.working.capital.requestor.cannot.be.null");
+        }
+        setRequestor(person);
         setRequestCreation(new DateTime());
     }
 
