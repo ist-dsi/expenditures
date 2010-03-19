@@ -287,6 +287,18 @@ public class WorkingCapital extends WorkingCapital_Base {
 	final WorkingCapitalInitialization workingCapitalInitialization = getWorkingCapitalInitialization();
 	return workingCapitalInitialization != null
 		&& !isCanceledOrRejected()
+		&& workingCapitalInitialization.getLastSubmission() == null
+		&& workingCapitalInitialization.isAuthorized()
+		&& !hasAnyPendingWorkingCapitalRequests()
+		&& hasCapitalPendingRequest();
+    }
+
+    public boolean canRequestCapitalRefund() {
+	final WorkingCapitalInitialization workingCapitalInitialization = getWorkingCapitalInitialization();
+	return workingCapitalInitialization != null
+		&& !isCanceledOrRejected()
+		&& workingCapitalInitialization.getLastSubmission() != null
+		&& workingCapitalInitialization.getRefundRequested() == null
 		&& workingCapitalInitialization.isAuthorized()
 		&& !hasAnyPendingWorkingCapitalRequests()
 		&& hasCapitalPendingRequest();

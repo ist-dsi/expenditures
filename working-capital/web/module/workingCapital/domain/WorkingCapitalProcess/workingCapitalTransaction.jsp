@@ -46,6 +46,29 @@
 	</p>
 </logic:equal>
 
+<logic:equal name="workingCapitalTransaction" property="refund" value="true">
+	<p class="mtop15">
+		<h3>
+			<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.transaction.WorkingCapitalRefund"/>
+		</h3>
+	
+		<table class="tstyle3 width100pc">
+			<tr>
+				<th> <bean:message key="label.module.workingCapital.refund.origin" bundle="WORKING_CAPITAL_RESOURCES"/> </th>
+				<th> <bean:message key="label.module.workingCapital.refund.value" bundle="WORKING_CAPITAL_RESOURCES"/> </th>
+				<th> <bean:message key="label.module.workingCapital.request.processedByTreasury" bundle="WORKING_CAPITAL_RESOURCES"/></th>
+				<th> <bean:message key="label.module.workingCapital.request.dateTreasury" bundle="WORKING_CAPITAL_RESOURCES"/></th>				
+			</tr>
+			<tr>
+				<td><fr:view name="workingCapitalTransaction" property="origin.firstAndLastName"/></td>
+				<td><fr:view name="workingCapitalTransaction" property="refundedValue"/></td>
+				<td><fr:view name="workingCapitalTransaction" property="person.firstAndLastName"/></td>
+				<td><fr:view name="workingCapitalTransaction" property="transationInstant"/></td>
+			</tr>
+		</table>
+	</p>
+</logic:equal>
+
 <logic:equal name="workingCapitalTransaction" property="acquisition" value="true">
 
 	<p class="mtop15 mbottom15">

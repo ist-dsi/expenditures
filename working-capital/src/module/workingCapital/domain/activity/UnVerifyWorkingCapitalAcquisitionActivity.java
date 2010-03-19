@@ -19,7 +19,9 @@ public class UnVerifyWorkingCapitalAcquisitionActivity extends WorkflowActivity<
     public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
 	final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
 	return !workingCapital.isCanceledOrRejected()
-		&& workingCapital.hasVerifiedAcquisition(user);
+		&& workingCapital.hasVerifiedAcquisition(user)
+		&& workingCapital.getWorkingCapitalInitialization() != null
+		&& workingCapital.getWorkingCapitalInitialization().getRefundRequested() == null;
     }
 
     @Override

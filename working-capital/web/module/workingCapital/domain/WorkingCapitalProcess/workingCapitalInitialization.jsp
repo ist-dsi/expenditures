@@ -16,7 +16,28 @@
 <bean:define id="workingCapitalInitializationOid" type="java.lang.String" name="workingCapitalInitialization" property="externalId"/>
 
 <div class="infobox mtop1 mbottom1">
-	<fr:view name="workingCapital" property="workingCapitalInitialization" schema="workingCapitalInitialization.view">
+	<fr:view name="workingCapital" property="workingCapitalInitialization">
+		<fr:schema bundle="WORKING_CAPITAL_RESOURCES"  type="module.workingCapital.domain.WorkingCapitalInitialization">
+			<fr:slot name="requestCreation" key="label.module.workingCapital.requestingDate"/>
+			<fr:slot name="requestor.name"  key="label.module.workingCapital.requester"/>
+			<fr:slot name="workingCapital.movementResponsible.name" key="label.module.workingCapital.movementResponsible"/>
+			<fr:slot name="fiscalId"  key="label.module.workingCapital.fiscalId"/>
+			<fr:slot name="internationalBankAccountNumber"  key="label.module.workingCapital.internationalBankAccountNumber"/>
+			<fr:slot name="requestedAnualValue"  key="label.module.workingCapital.requestedAnualValue.requested"/>
+			<fr:slot name="authorizedAnualValue"  key="label.module.workingCapital.authorizedAnualValue" layout="null-as-label">
+				<fr:property name="subLayout" value=""/>
+				<fr:property name="classes" value="bold"/>
+			</fr:slot>
+			<fr:slot name="maxAuthorizedAnualValue"  key="label.module.workingCapital.maxAuthorizedAnualValue" layout="null-as-label">
+				<fr:property name="subLayout" value=""/>
+			</fr:slot>
+			<logic:present name="workingCapital" property="workingCapitalInitialization.lastSubmission">
+				<fr:slot name="lastSubmission" key="label.module.workingCapital.initialization.lastSubmission"/>
+			</logic:present>
+			<logic:present name="workingCapital" property="workingCapitalInitialization.refundRequested">
+				<fr:slot name="refundRequested" key="label.module.workingCapital.initialization.refundRequested"/>
+			</logic:present>
+		</fr:schema>
 		<fr:layout name="tabular">
 			<fr:property name="columnClasses" value="aleft width215px,,"/>
 		</fr:layout>

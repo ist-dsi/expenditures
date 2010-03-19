@@ -21,8 +21,11 @@ public class RegisterWorkingCapitalAcquisitionActivity extends
     @Override
     public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
 	final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
-	return workingCapital.getMovementResponsible().getUser() == user && !workingCapital.isCanceledOrRejected()
-		&& workingCapital.getBalance().isPositive();
+	return workingCapital.getMovementResponsible().getUser() == user
+		&& !workingCapital.isCanceledOrRejected()
+		&& workingCapital.getBalance().isPositive()
+		&& workingCapital.getWorkingCapitalInitialization() != null
+		&& workingCapital.getWorkingCapitalInitialization().getLastSubmission() == null;
     }
 
     @Override
@@ -40,10 +43,5 @@ public class RegisterWorkingCapitalAcquisitionActivity extends
     public ActivityInformation<WorkingCapitalProcess> getActivityInformation(final WorkingCapitalProcess process) {
 	return new RegisterWorkingCapitalAcquisitionActivityInformation(process, this);
     }
-    //
-    // @Override
-    // public boolean isDefaultInputInterfaceUsed() {
-    // return false;
-    // }
 
 }

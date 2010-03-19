@@ -77,6 +77,10 @@ public class WorkingCapitalTransaction extends WorkingCapitalTransaction_Base {
 	return false;
     }
 
+    public boolean isRefund() {
+	return false;
+    }
+
     public boolean isLastTransaction() {
 	final WorkingCapital workingCapital = getWorkingCapital();
 	return workingCapital.getLastTransaction() == this;
@@ -142,6 +146,19 @@ public class WorkingCapitalTransaction extends WorkingCapitalTransaction_Base {
 
     public boolean isPendingSubmission() {
 	return false;
+    }
+
+    public WorkingCapitalTransaction getPreviousTransaction() {
+	final WorkingCapital workingCapital = getWorkingCapital();
+	WorkingCapitalTransaction previous = null;
+	for (final WorkingCapitalTransaction workingCapitalTransaction : workingCapital.getWorkingCapitalTransactionsSet()) {
+	    final DateTime transationInstant = workingCapitalTransaction.getTransationInstant();
+	    if (transationInstant.isBefore(getTransationInstant())
+		    && (previous == null || previous.getTransationInstant().isBefore(transationInstant))) {
+		previous = workingCapitalTransaction;
+	    }
+	}
+	return previous;
     }
 
 }

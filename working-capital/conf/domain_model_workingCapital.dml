@@ -34,6 +34,8 @@ class WorkingCapitalInitialization {
 	DateTime authorizationByUnitResponsible;
 	DateTime verificationByAccounting;
 	WorkingCapitalInitializationState state;
+	DateTime lastSubmission;
+	DateTime refundRequested;
 }
 
 class WorkingCapitalProcess extends .module.workflow.domain.WorkflowProcess {
@@ -73,13 +75,14 @@ class WorkingCapitalTransaction {
 	Money debt;
 }
 
-	class WorkingCapitalPayment extends WorkingCapitalTransaction {
-	}
-
 	class WorkingCapitalAcquisitionTransaction extends WorkingCapitalTransaction {
 	}
 
+	class WorkingCapitalPayment extends WorkingCapitalTransaction {
+	}
 
+	class WorkingCapitalRefund extends WorkingCapitalTransaction {
+	}
 
 class WorkingCapitalInvoiceFile extends .module.workflow.domain.ProcessFile {
 }
