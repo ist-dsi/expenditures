@@ -21,8 +21,10 @@ public class CancelAcquisitionRequest extends
 			|| (acquisitionProcessState.isInGenesis() && process.getRequestor() == person)
 			|| (acquisitionProcessState.isInAllocatedToUnitState() && isUserResponsibleForAuthorizingPayment(process,
 				person))
-			|| (acquisitionProcessState.isPendingInvoiceConfirmation() && isUserResponsibleForUnit(process, person)) || (acquisitionProcessState
-			.isInvoiceReceived() && person.hasRoleType(RoleType.ACQUISITION_CENTRAL)));
+		// Por indicação da Iria em 22-03-2010
+		// || (acquisitionProcessState.isPendingInvoiceConfirmation() &&
+		// isUserResponsibleForUnit(process, person))
+		|| (acquisitionProcessState.isInvoiceReceived() && person.hasRoleType(RoleType.ACQUISITION_CENTRAL)));
     }
 
     private boolean isUserResponsibleForAuthorizingPayment(RegularAcquisitionProcess process, Person person) {
