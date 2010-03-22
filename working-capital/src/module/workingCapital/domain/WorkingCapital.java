@@ -345,4 +345,13 @@ public class WorkingCapital extends WorkingCapital_Base {
 	return false;
     }
 
+    public boolean isPendingAcceptResponsability() {
+	for (final WorkingCapitalInitialization workingCapitalInitialization : getWorkingCapitalInitializationsSet()) {
+	    if (!workingCapitalInitialization.isCanceledOrRejected() && workingCapitalInitialization.getAcceptedResponsability() == null) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
 }

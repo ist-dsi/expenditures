@@ -9,6 +9,7 @@ import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.ProcessFile;
 import module.workflow.domain.WorkflowProcess;
+import module.workingCapital.domain.activity.AcceptResponsabilityForWorkingCapitalActivity;
 import module.workingCapital.domain.activity.ApproveActivity;
 import module.workingCapital.domain.activity.ApproveWorkingCapitalAcquisitionActivity;
 import module.workingCapital.domain.activity.AuthorizeActivity;
@@ -49,6 +50,7 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base {
 
     static {
 	final List<WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>> activitiesAux = new ArrayList<WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>>();
+	activitiesAux.add(new AcceptResponsabilityForWorkingCapitalActivity());
 	activitiesAux.add(new CancelWorkingCapitalInitializationActivity());
 	activitiesAux.add(new EditInitializationActivity());
 	activitiesAux.add(new ApproveActivity());

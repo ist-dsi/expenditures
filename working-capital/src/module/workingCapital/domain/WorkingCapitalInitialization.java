@@ -111,7 +111,7 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
     }
 
     public boolean isPendingAproval(User user) {
-	if (!hasResponsibleForUnitApproval()) {
+	if (getAcceptedResponsability() != null && !hasResponsibleForUnitApproval()) {
 	    //final Money valueForAuthorization = getRequestedAnualValue();
 	    final Money valueForAuthorization = Money.ZERO;
 	    final Authorization authorization = getWorkingCapital().findUnitResponsible(user.getPerson(), valueForAuthorization);

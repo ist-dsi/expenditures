@@ -36,6 +36,7 @@ class WorkingCapitalInitialization {
 	WorkingCapitalInitializationState state;
 	DateTime lastSubmission;
 	DateTime refundRequested;
+	DateTime acceptedResponsability;
 }
 
 class WorkingCapitalProcess extends .module.workflow.domain.WorkflowProcess {
