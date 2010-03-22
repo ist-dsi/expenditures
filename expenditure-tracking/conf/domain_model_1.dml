@@ -12,6 +12,8 @@ enum pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationOperati
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess.ProcessClassification as ProcessClassification;
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPaymentProcess.SearchProcessValues as SearchProcessValues;
 
+external class .pt.ist.fenixframework.plugins.fileSupport.domain.GenericFile;
+
 valueType pt.utl.ist.fenix.tools.util.Strings as Strings {
     externalizeWith {
         String exportAsString();
