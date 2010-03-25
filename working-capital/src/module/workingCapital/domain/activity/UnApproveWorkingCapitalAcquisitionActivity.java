@@ -1,12 +1,16 @@
 package module.workingCapital.domain.activity;
 
+import module.organization.domain.Person;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workingCapital.domain.WorkingCapital;
+import module.workingCapital.domain.WorkingCapitalInitialization;
 import module.workingCapital.domain.WorkingCapitalProcess;
 import module.workingCapital.domain.WorkingCapitalTransaction;
 import myorg.domain.User;
+import myorg.domain.util.Money;
 import myorg.util.BundleUtil;
+import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 
 public class UnApproveWorkingCapitalAcquisitionActivity extends WorkflowActivity<WorkingCapitalProcess, WorkingCapitalTransactionInformation> {
 
@@ -17,9 +21,21 @@ public class UnApproveWorkingCapitalAcquisitionActivity extends WorkflowActivity
 
     @Override
     public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
+	final Person person = user.getPerson();
 	final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
-	return !workingCapital.isCanceledOrRejected()
-		&& workingCapital.hasAcquisitionPendingSubmission();
+	if (!workingCapital.isCanceledOrRejected() && workingCapital.hasAcquisitionPendingSubmission()) {
+	    final WorkingCapitalInitialization workingCapitalInitialization = workingCapital.getWorkingCapitalInitialization();
+	    if (workingCapitalInitialization != null
+		    && workingCapitalInitialization.hasResponsibleForUnitApproval()
+		    && !workingCapitalInitialization.hasResponsibleForAccountingVerification()) {
+		final Money valueForAuthorization = Money.ZERO;
+		final Authorization authorization = workingCapital.findUnitResponsible(person, valueForAuthorization);
+		if (authorization != null) {
+		    return true;
+		}	    
+	    }
+	}
+	return false;
     }
 
     @Override
