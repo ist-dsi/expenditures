@@ -5,7 +5,9 @@ import module.organization.domain.Person;
 import module.workingCapital.domain.util.PaymentMethod;
 import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.User;
+import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
+import myorg.util.BundleUtil;
 
 import org.joda.time.DateTime;
 
@@ -37,6 +39,18 @@ public class WorkingCapitalRequest extends WorkingCapitalRequest_Base {
 	final Person person = user.getPerson();
 	setWorkingCapitalTreasuryProcessor(person);
 	new WorkingCapitalPayment(this, person);
+    }
+
+    @Override
+    public void setRequestedValue(final Money requestedValue) {
+	final WorkingCapital workingCapital = getWorkingCapital();
+	if (workingCapital == null) {
+	    throw new NullPointerException();
+	}
+	if (!workingCapital.canRequestValue(requestedValue)) {
+	    throw new DomainException(BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources", "error.insufficient.authorized.funds"));
+	}
+        super.setRequestedValue(requestedValue);
     }
 
 }

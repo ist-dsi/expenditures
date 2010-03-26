@@ -354,4 +354,36 @@ public class WorkingCapital extends WorkingCapital_Base {
 	return false;
     }
 
+    public boolean canRequestValue(final Money requestedValue) {
+	final WorkingCapitalInitialization workingCapitalInitialization = getWorkingCapitalInitialization();
+	if (workingCapitalInitialization != null && !workingCapitalInitialization.isCanceledOrRejected()
+		&& workingCapitalInitialization.isAuthorized()) {
+	    final Money maxAuthorizedAnualValue = workingCapitalInitialization.getMaxAuthorizedAnualValue();
+	    final Money allocatedValue = calculateAllocatedValue();
+	    if (maxAuthorizedAnualValue.isGreaterThanOrEqual(allocatedValue)) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
+    private Money calculateAllocatedValue() {
+	Money result = Money.ZERO;
+	for (final WorkingCapitalTransaction workingCapitalTransaction : getWorkingCapitalTransactionsSet()) {
+	    if (!workingCapitalTransaction.isCanceledOrRejected()) {
+		if (workingCapitalTransaction.isPayment()) {
+		    final WorkingCapitalPayment workingCapitalPayment = (WorkingCapitalPayment) workingCapitalTransaction;
+		    final WorkingCapitalRequest workingCapitalRequest = workingCapitalPayment.getWorkingCapitalRequest();
+		    final Money requestedValue = workingCapitalRequest.getRequestedValue();
+		    result = result.add(requestedValue);
+		} else if (workingCapitalTransaction.isRefund()) {
+		    final WorkingCapitalRefund workingCapitalRefund = (WorkingCapitalRefund) workingCapitalTransaction;
+		    final Money refundedValue = workingCapitalRefund.getRefundedValue();
+		    result = result.subtract(refundedValue);
+		}
+	    }
+	}
+	return result;
+    }
+
 }
