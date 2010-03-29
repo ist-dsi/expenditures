@@ -44,14 +44,9 @@ public class Supplier extends Supplier_Base implements Indexable, Searchable {
 
     }
 
-    public static Money SUPPLIER_LIMIT = new Money("75000");
-
-    public static Money SOFT_SUPPLIER_LIMIT = new Money("60000");
-
     private Supplier() {
 	super();
 	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
-	setSupplierLimit(SOFT_SUPPLIER_LIMIT);
     }
 
     public Supplier(String fiscalCode) {
@@ -74,10 +69,12 @@ public class Supplier extends Supplier_Base implements Indexable, Searchable {
 	setNib(nib);
     }
 
+    @Override
     @Service
     public void delete() {
 	if (checkIfCanBeDeleted()) {
 	    removeExpenditureTrackingSystem();
+	    super.delete();
 	    deleteDomainObject();
 	}
     }
@@ -105,6 +102,7 @@ public class Supplier extends Supplier_Base implements Indexable, Searchable {
 	return null;
     }
 
+    @Deprecated
     public Money getTotalAllocated() {
 	Money result = Money.ZERO;
 	for (final AcquisitionRequest acquisitionRequest : getAcquisitionRequestsSet()) {
@@ -127,6 +125,7 @@ public class Supplier extends Supplier_Base implements Indexable, Searchable {
 	return result;
     }
 
+    @Deprecated
     public Money getSoftTotalAllocated() {
 	Money result = Money.ZERO;
 	result = result.add(getTotalAllocatedByAcquisitionProcesses(true));
@@ -195,16 +194,6 @@ public class Supplier extends Supplier_Base implements Indexable, Searchable {
 	final Money totalAllocated = getTotalAllocated();
 	final Money totalValue = totalAllocated.add(value);
 	return totalValue.isLessThanOrEqual(SUPPLIER_LIMIT) && totalValue.isLessThan(getSupplierLimit());
-    }
-
-    public String getPresentationName() {
-	return getFiscalIdentificationCode() + " - " + getName();
-    }
-
-    @Override
-    public void setSupplierLimit(final Money supplierLimit) {
-	final Money newLimit = supplierLimit.isGreaterThanOrEqual(SUPPLIER_LIMIT) ? SUPPLIER_LIMIT : supplierLimit;
-	super.setSupplierLimit(newLimit);
     }
 
     @Service

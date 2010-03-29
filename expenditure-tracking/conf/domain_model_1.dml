@@ -263,17 +263,7 @@ class organization.DeliveryInfo {
 	String email;
 }
 
-class organization.Supplier {
-	String giafKey;
-	String name;
-	String abbreviatedName;
-	String fiscalIdentificationCode;
-	Address address;
-	String phone;
-	String fax;
-	String email;
-	String nib;
-	Money supplierLimit;
+class organization.Supplier extends .module.finance.domain.Supplier {
 }
 
 class organization.Unit {
