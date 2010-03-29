@@ -2,12 +2,12 @@ package module.workingCapital.domain.activity;
 
 import java.io.InputStream;
 
+import module.finance.domain.Supplier;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workingCapital.domain.AcquisitionClassification;
 import module.workingCapital.domain.WorkingCapitalProcess;
 import myorg.domain.util.Money;
-import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 
 public class RegisterWorkingCapitalAcquisitionActivityInformation extends ActivityInformation<WorkingCapitalProcess> {
 

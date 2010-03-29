@@ -1,5 +1,6 @@
 package module.workingCapital.domain;
 
+import module.finance.domain.Supplier;
 import module.organization.domain.Accountability;
 import myorg.domain.User;
 import myorg.domain.util.Money;
@@ -7,7 +8,6 @@ import myorg.domain.util.Money;
 import org.joda.time.DateTime;
 
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
-import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 
 public class WorkingCapitalAcquisition extends WorkingCapitalAcquisition_Base {
 
@@ -102,6 +102,20 @@ public class WorkingCapitalAcquisition extends WorkingCapitalAcquisition_Base {
 
     public void cancel() {
 	setIsCanceled(Boolean.TRUE);
+    }
+
+    public Money getValue() {
+	return getWorkingCapitalAcquisitionTransaction().getValue();
+    }
+
+    @Override
+    public Money getValueAllocatedToSupplier() {
+	return isCanceledOrRejected() ? Money.ZERO : getValue();
+    }
+
+    @Override
+    public Money getValueAllocatedToSupplierForLimit() {
+	return isCanceledOrRejected() ? Money.ZERO : getValueWithoutVat();
     }
 
 }

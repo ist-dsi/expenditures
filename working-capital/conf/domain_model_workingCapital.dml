@@ -55,7 +55,7 @@ class AcquisitionClassification {
 	String pocCode;
 }
 
-class WorkingCapitalAcquisition extends .pt.ist.expenditureTrackingSystem.domain.acquisitions.Acquisition{
+class WorkingCapitalAcquisition extends .module.finance.domain.Provision {
     String documentNumber;
     String description;
     Money valueWithoutVat;
@@ -273,13 +273,6 @@ relation WorkingCapitalWorkingCapitalAcquisition {
 	WorkingCapitalAcquisition playsRole workingCapitalAcquisitions {
 		multiplicity *;
 	}
-}
-
-relation WorkingCapitalAcquisitionSupplier {
-	WorkingCapitalAcquisition playsRole workingCapitalAcquisitions {
-		multiplicity *;
-	}
-	.pt.ist.expenditureTrackingSystem.domain.organization.Supplier playsRole supplier;
 }
 
 relation WorkingCapitalAcquisitionWorkingCapitalAcquisitionTransaction {
