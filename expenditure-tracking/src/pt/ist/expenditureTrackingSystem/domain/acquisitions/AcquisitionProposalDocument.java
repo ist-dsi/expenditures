@@ -1,7 +1,5 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
-import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion.User;
-
 import module.workflow.domain.ProcessFileValidationException;
 import module.workflow.domain.WorkflowProcess;
 import module.workflow.util.FileUploadBeanResolver;
