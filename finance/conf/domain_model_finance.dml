@@ -1,0 +1,82 @@
+package module.finance.domain;
+
+
+valueType myorg.domain.util.Address as Address {
+    externalizeWith {
+        String exportAsString();
+    }
+
+    internalizeWith importFromString();
+}
+
+valueType myorg.domain.util.Money as Money {
+    externalizeWith {
+        String exportAsString();
+    }
+
+    internalizeWith importFromString();
+}
+
+
+class FinanceSystem {
+}
+
+class Supplier {
+	String giafKey;
+	String name;
+	String abbreviatedName;
+	String fiscalIdentificationCode;
+	Address address;
+	String phone;
+	String fax;
+	String email;
+	String nib;
+	Money supplierLimit;
+}
+
+class Provision {
+}
+
+
+relation MyOrgFinanceSystem {
+	.myorg.domain.MyOrg playsRole myOrg;
+	FinanceSystem playsRole financeSystem;
+}
+
+relation FinanceSystemSupplier {
+	FinanceSystem playsRole financeSystem;
+	Supplier playsRole suppliers {
+		multiplicity *;
+	}
+}
+
+relation FinanceSystemProvision {
+	FinanceSystem playsRole financeSystem;
+	Provision playsRole provisions {
+		multiplicity *;
+	}
+}
+
+relation SupplierProvision {
+	Supplier playsRole supplier;
+	Provision playsRole provisions {
+		multiplicity *;
+	}
+}
+
+/**
+// Think about moving name and abbreviatedName slots from Supplier
+// to Party. This means that a supplier is just some Party. I'm not
+// sure if it should have a relation with the some entity or if
+// they can just be top level beings in some domain model. If so, 
+// then we can't determine when they exist and seese to exist. On
+// the other hand, if we want to relate them to some entity, then 
+// to which entity do we connect them? To the institution they are
+// suppliers for? That may be one possibility... I still need to 
+// about this... 
+relation SupplierParty {
+	Supplier playsRole supplier;
+	.module.organization.domain.Party playsRole party;
+}
+*/
+
