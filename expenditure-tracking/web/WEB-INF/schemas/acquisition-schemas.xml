@@ -23,7 +23,7 @@
 		<property name="format" value="${presentationName}" />
 		<property name="minChars" value="3" />
 		<property name="args"
-			value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.UnitAutoCompleteProvider" />
+			value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.ActiveUnitAutoCompleteProvider" />
 		<property name="classes" value="inputsize300px" />
 		<validator
 			class="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator">
@@ -76,7 +76,7 @@
 		<property name="format" value="${presentationName}" />
 		<property name="minChars" value="3" />
 		<property name="args"
-			value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.UnitAutoCompleteProvider"
+			value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.ActiveUnitAutoCompleteProvider"
 			validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
 		<property name="classes" value="inputsize250px" />
 		<validator
@@ -656,7 +656,7 @@
 		<property name="format" value="${presentationName}" />
 		<property name="minChars" value="3" />
 		<property name="args"
-			value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.UnitAutoCompleteProvider"
+			value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.ActiveUnitAutoCompleteProvider"
 			validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
 		<property name="classes" value="inputsize300px" />
 		<validator
@@ -694,7 +694,7 @@
 		<property name="format" value="${presentationName}" />
 		<property name="minChars" value="3" />
 		<property name="args"
-			value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.UnitAutoCompleteProvider"
+			value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.ActiveUnitAutoCompleteProvider"
 			validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
 		<property name="classes" value="inputsize300px" />
 		<validator
@@ -1236,7 +1236,7 @@
 		<property name="minChars" value="3" />
 		<property name="size" value="60" />
 		<property name="args"
-			value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.UnitAutoCompleteProvider" />
+			value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.ActiveUnitAutoCompleteProvider" />
 		<validator
 			class="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator">
 			<property name="message" value="label.pleaseSelectOne.unit" />
