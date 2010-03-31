@@ -79,7 +79,7 @@ public class ActiveUnitAutoCompleteProvider implements AutoCompleteProvider {
 
     private void addAllSubUnits(final List<Unit> units, final Unit unit) {
 	for (final Unit subUnit : unit.getSubUnitsSet()) {
-	    addUnit(units, unit);
+	    addUnit(units, subUnit);
 	    addAllSubUnits(units, subUnit);
 	}
     }
