@@ -67,14 +67,23 @@ public class ActiveUnitAutoCompleteProvider implements AutoCompleteProvider {
     }
 
     private void addUnit(List<Unit> units, Unit unit) {
-	if (isActive(unit)) {
+	if (isActive(unit) || ((unit instanceof Project) && isActive((Project) unit))) {
 	    units.add(unit);
 	}
     }
 
     private boolean isActive(final Unit unit) {
 	final module.organization.domain.Unit orgUnit = unit.getUnit();
-	return orgUnit != null && orgUnit.hasActiveAncestry(IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType(), new LocalDate());
+	return orgUnit != null
+		&& orgUnit.hasActiveAncestry(IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType(), new LocalDate());
+    }
+
+    private boolean isActive(final Project project) {
+	final module.organization.domain.Unit orgUnit = project.getUnit();
+	return orgUnit != null
+		&& orgUnit
+			.hasDirectActiveAncestry(IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType(), new LocalDate());
+
     }
 
     private void addAllSubUnits(final List<Unit> units, final Unit unit) {
