@@ -372,7 +372,7 @@ public class SyncProjectsAux {
 	    if (responsible != null) {
 		if (projectResponsibles.contains(Integer.valueOf(responsibleString))) {
 		    final Authorization authorization = new Authorization(responsible, unit);
-		    authorization.setMaxAmount(new Money("12470"));
+		    authorization.setMaxAmount(AUTHORIZED_VALUE);
 		} else {
 //		    System.out.println("[" + responsibleString + "] for project [" + acronym
 //			    + "] is not in project responsibles list");
@@ -381,7 +381,7 @@ public class SyncProjectsAux {
 	}
     }
 
-    final static Money AUTHORIZED_VALUE = new Money("12470");
+    final static Money AUTHORIZED_VALUE = new Money("75000");
 
     private void updateProject(final MgpProject mgpProject, final Project project) {
 	String projectCodeString = mgpProject.projectCode;
@@ -413,13 +413,7 @@ public class SyncProjectsAux {
 	}
 
 	final Person responsible = findPerson(responsibleString);
-	    if (responsibleString.equals("3568")) {
-		System.out.println("   resp string 3568 has resopnsible: " + responsible);
-	    }
 	if (responsible != null) {
-	    if (responsibleString.equals("3568")) {
-		System.out.println("Found person.");
-	    }
 	    if (projectResponsibles.contains(Integer.valueOf(responsibleString))) {
 		if (!hasAuthorization(project, responsible)) {
 		    final Authorization authorization = new Authorization(responsible, project);
