@@ -67,7 +67,9 @@ public class ActiveUnitAutoCompleteProvider implements AutoCompleteProvider {
     }
 
     private void addUnit(List<Unit> units, Unit unit) {
-	if (isActive(unit) || ((unit instanceof Project) && isActive((Project) unit))) {
+
+	if (isActive(unit) || ((unit instanceof Project) && isActive((Project) unit))
+		|| ((unit instanceof SubProject) && isActive(((Project) ((SubProject) unit).getParentUnit())))) {
 	    units.add(unit);
 	}
     }
