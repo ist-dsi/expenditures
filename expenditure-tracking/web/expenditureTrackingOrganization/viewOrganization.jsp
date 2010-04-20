@@ -99,11 +99,63 @@
 		<html:link action="/expenditureTrackingOrganization.do?method=viewAuthorizationLogs" paramId="unitOid" paramName="unit" paramProperty="externalId">
 			<bean:message key="authorizations.link.logs" bundle="EXPENDITURE_RESOURCES"/>
 		</html:link>
-		<fr:view name="unit" property="authorizations" schema="viewAuthorization">
-			<fr:layout name="tabular">
-				<fr:property name="classes" value="tstyle2 mtop05"/>
-			</fr:layout>
-		</fr:view>	
+
+		<table class="tstyle2 mtop05">
+			<tr>
+				<th>
+					<bean:message bundle="EXPENDITURE_ORGANIZATION_RESOURCES" key="person.label.name"/>
+				</th>
+				<th>
+					<bean:message bundle="EXPENDITURE_RESOURCES" key="label.unit"/>
+				</th>
+				<th>
+					<bean:message bundle="EXPENDITURE_RESOURCES" key="authorizations.label.startDate"/>
+				</th>
+				<th>
+					<bean:message bundle="EXPENDITURE_RESOURCES" key="authorizations.label.endDate"/>
+				</th>
+				<th>
+					<bean:message bundle="EXPENDITURE_RESOURCES" key="authorizations.label.canDelegate"/>
+				</th>
+				<th>
+					<bean:message bundle="EXPENDITURE_RESOURCES" key="authorizations.label.maxAmount"/>
+				</th>
+			</tr>
+			<logic:iterate id="authorization" name="unit" property="authorizations">
+				<tr>
+					<td>
+						<html:link styleClass="secondaryLink" action="/expenditureTrackingOrganization.do?method=viewPerson" paramId="personOid" paramName="authorization" paramProperty="person.externalId">
+							<fr:view name="authorization" property="person.name"/>
+						</html:link>
+					</td>
+					<td>	
+						<fr:view name="authorization" property="unit.name"/>
+					</td>
+					<td>
+						<logic:present name="authorization" property="startDate">
+							<fr:view name="authorization" property="startDate"/>
+						</logic:present>
+						<logic:notPresent name="authorization" property="startDate">
+							-
+						</logic:notPresent>
+					</td>
+					<td>
+						<logic:present name="authorization" property="endDate">
+							<fr:view name="authorization" property="endDate"/>
+						</logic:present>
+						<logic:notPresent name="authorization" property="endDate">
+							-
+						</logic:notPresent>
+					</td>
+					<td>
+						<fr:view name="authorization" property="canDelegate"/>
+					</td>
+					<td>
+						<fr:view name="authorization" property="maxAmount"/>
+					</td>
+				</tr>
+			</logic:iterate>
+		</table>
 	</logic:notEmpty>
 	
 	<logic:notEmpty name="unit" property="observers">
