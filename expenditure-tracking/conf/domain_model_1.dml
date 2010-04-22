@@ -289,11 +289,11 @@ class processes.GenericProcess extends .module.workflow.domain.WorkflowProcess {
 
 	class acquisitions.PaymentProcess extends processes.GenericProcess {
 		Integer acquisitionProcessNumber;	
+		Boolean skipSupplierFundAllocation;
 	}
 
 	class acquisitions.AcquisitionProcess extends acquisitions.PaymentProcess {
 		LocalDate fundAllocationExpirationDate;
-		Boolean skipSupplierFundAllocation;
 	}
 
 		class acquisitions.afterthefact.AfterTheFactAcquisitionProcess extends acquisitions.AcquisitionProcess {
@@ -313,7 +313,6 @@ class processes.GenericProcess extends .module.workflow.domain.WorkflowProcess {
 	}
 
 	class acquisitions.refund.RefundProcess extends acquisitions.PaymentProcess {
-		Boolean skipSupplierFundAllocation;
 	}
 	
 	class acquisitions.refund.Refundee {
