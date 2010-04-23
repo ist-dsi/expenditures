@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import module.workflow.presentationTier.actions.ProcessManagement;
+import module.workingCapital.domain.AcquisitionClassification;
 import module.workingCapital.domain.WorkingCapital;
 import module.workingCapital.domain.WorkingCapitalInitialization;
 import module.workingCapital.domain.WorkingCapitalProcess;
@@ -126,6 +127,13 @@ public class WorkingCapitalAction extends ContextBaseAction {
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final AcquisitionClassificationBean acquisitionClassificationBean = getRenderedObject();
 	acquisitionClassificationBean.create();
+	return configuration(mapping, form, request, response);
+    }
+
+    public ActionForward deleteAcquisitionClassification(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final AcquisitionClassification acquisitionClassification = getDomainObject(request, "acquisitionClassificationOid");
+	acquisitionClassification.delete();
 	return configuration(mapping, form, request, response);
     }
 

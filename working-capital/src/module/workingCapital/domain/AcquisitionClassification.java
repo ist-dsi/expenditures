@@ -4,6 +4,8 @@ import java.util.Comparator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import pt.ist.fenixWebFramework.services.Service;
+
 public class AcquisitionClassification extends AcquisitionClassification_Base {
 
     public static final Comparator<AcquisitionClassification> COMPARATOR_BY_DESCRIPTION = new Comparator<AcquisitionClassification>() {
@@ -32,6 +34,14 @@ public class AcquisitionClassification extends AcquisitionClassification_Base {
 	final SortedSet<AcquisitionClassification> result = new TreeSet<AcquisitionClassification>(COMPARATOR_BY_DESCRIPTION);
 	result.addAll(WorkingCapitalSystem.getInstance().getAcquisitionClassificationsSet());
 	return result;
+    }
+
+    @Service
+    public void delete() {
+	if (!hasAnyWorkingCapitalAcquisitions()) {
+	    removeWorkingCapitalSystem();
+	    deleteDomainObject();
+	}
     }
     
 }

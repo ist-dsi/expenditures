@@ -121,6 +121,12 @@
 		</fr:schema>
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="tstyle2 tdleft thleft"/>
+
+			<fr:property name="link(view)" value="/workingCapital.do?method=deleteAcquisitionClassification"/>
+			<fr:property name="bundle(view)" value="WORKING_CAPITAL_RESOURCES"/>
+			<fr:property name="key(view)" value="link.delete"/>
+			<fr:property name="param(view)" value="externalId/acquisitionClassificationOid"/>
+			<fr:property name="order(view)" value="1"/>
 		</fr:layout>
 	</fr:view>
 </logic:present>
