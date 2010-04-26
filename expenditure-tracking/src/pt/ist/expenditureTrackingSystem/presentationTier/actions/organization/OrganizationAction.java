@@ -726,7 +726,14 @@ public class OrganizationAction extends BaseAction {
 	    row.setCell(mgpProject.getProjectCode());
 	    row.setCell(mgpProject.getUnidExploracao());
 	    row.setCell(mgpProject.getTitle());
-	    row.setCell(mgpProject.getIdCoord());
+	    final StringBuilder stringBuilder = new StringBuilder();
+	    for (final String idCoord : mgpProject.getIdCoord()) {
+		if (stringBuilder.length() > 0) {
+		    stringBuilder.append(", ");
+		}
+		stringBuilder.append(idCoord);
+	    }
+	    row.setCell(stringBuilder.toString());
 	    row.setCell(mgpProject.getCostCenter());
 	    row.setCell(mgpProject.getInicio());
 	    row.setCell(mgpProject.getDuracao());
