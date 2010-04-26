@@ -73,19 +73,19 @@ public class WorkingCapital extends WorkingCapital_Base {
 
     private Authorization findUnitResponsible(final Person person, final Money amount, final Unit unit) {
 	if (unit != null && person != null) {
-	    boolean hasAtLeastOneResponsible = false;
+//	    boolean hasAtLeastOneResponsible = false;
 	    for (final Authorization authorization : unit.getAuthorizationsSet()) {
 		if (authorization.isValid() && authorization.getMaxAmount().isGreaterThanOrEqual(amount)) {
-		    hasAtLeastOneResponsible = true;
+//		    hasAtLeastOneResponsible = true;
 		    if (authorization.getPerson().getUser() == person.getUser()) {
 			return authorization;
 		    }
 		}
 	    }
-	    if (!hasAtLeastOneResponsible) {
+//	    if (!hasAtLeastOneResponsible) {
 		final Unit parent = unit.getParentUnit();
 		return findUnitResponsible(person, amount, parent);
-	    }
+//	    }
 	}
 	return null; 
     }
