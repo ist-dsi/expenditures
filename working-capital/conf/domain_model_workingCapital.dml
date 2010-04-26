@@ -39,6 +39,10 @@ class WorkingCapitalInitialization {
 	DateTime acceptedResponsability;
 }
 
+	class WorkingCapitalInitializationReenforcement extends WorkingCapitalInitialization {
+		Money requestedReenforcementValue;
+	}
+
 class WorkingCapitalProcess extends .module.workflow.domain.WorkflowProcess {
 }
 

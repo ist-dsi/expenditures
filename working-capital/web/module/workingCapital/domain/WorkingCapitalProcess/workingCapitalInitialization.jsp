@@ -37,6 +37,9 @@
 			<logic:present name="workingCapital" property="workingCapitalInitialization.refundRequested">
 				<fr:slot name="refundRequested" key="label.module.workingCapital.initialization.refundRequested"/>
 			</logic:present>
+			<logic:equal name="workingCapital" property="workingCapitalInitialization.class.name" value="module.workingCapital.domain.WorkingCapitalInitializationReenforcement">
+				<fr:slot name="requestedReenforcementValue" key="label.module.workingCapital.initialization.requestedReenforcementValue"/>
+			</logic:equal>
 		</fr:schema>
 		<fr:layout name="tabular">
 			<fr:property name="columnClasses" value="aleft width215px,,"/>
