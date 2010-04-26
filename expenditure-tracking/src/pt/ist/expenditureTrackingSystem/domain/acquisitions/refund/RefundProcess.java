@@ -44,6 +44,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.De
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.DistributeRealValuesForPayingUnits;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.EditRefundInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.EditRefundItem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.MarkProcessAsCCPProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.RefundPerson;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.RemoveFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.RemoveProjectFundAllocation;
@@ -55,6 +56,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.Su
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.UnSubmitForApproval;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.UnSubmitForFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.UnconfirmInvoices;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.UnmarkProcessAsCCPProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.UnsetSkipSupplierFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.Util;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
@@ -109,6 +111,8 @@ public class RefundProcess extends RefundProcess_Base {
 	activities.add(new ChangeProcessRequester());
 	activities.add(new RemoveCancelProcess<RefundProcess>());
 	activities.add(new RefundPerson());
+	activities.add(new MarkProcessAsCCPProcess());
+	activities.add(new UnmarkProcessAsCCPProcess());
     }
 
     public RefundProcess(Person requestor, String refundeeName, String refundeeFiscalCode, Unit requestingUnit) {
@@ -133,6 +137,9 @@ public class RefundProcess extends RefundProcess_Base {
 	RefundProcess process = bean.isExternalPerson() ? new RefundProcess(bean.getRequestor(), bean.getRefundeeName(), bean
 		.getRefundeeFiscalCode(), bean.getRequestingUnit()) : new RefundProcess(bean.getRequestor(), bean.getRefundee(),
 		bean.getRequestingUnit());
+
+	process.setUnderCCPRegime(bean.isUnderCCP());
+
 	if (bean.isRequestUnitPayingUnit()) {
 	    process.getRequest().addPayingUnit(bean.getRequestingUnit());
 	}
@@ -427,4 +434,7 @@ public class RefundProcess extends RefundProcess_Base {
 	return BundleUtil.getStringFromResourceBundle("resources/AcquisitionResources", "label.RefundProcess");
     }
 
+    public Boolean getShouldSkipSupplierFundAllocation() {
+	return !getUnderCCPRegime() || super.getSkipSupplierFundAllocation();
+    }
 }

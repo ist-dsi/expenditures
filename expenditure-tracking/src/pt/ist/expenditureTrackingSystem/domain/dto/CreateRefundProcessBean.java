@@ -17,9 +17,11 @@ public class CreateRefundProcessBean implements Serializable {
     private boolean externalPerson = false;
     private String refundeeName;
     private String refundeeFiscalCode;
+    private boolean underCCP;
 
-    public CreateRefundProcessBean(final Person requestor) {
+    public CreateRefundProcessBean(final Person requestor, boolean underCCP) {
 	setRequestor(requestor);
+	setUnderCCP(underCCP);
     }
 
     public Person getRequestor() {
@@ -100,6 +102,14 @@ public class CreateRefundProcessBean implements Serializable {
 
     public void setMissionProcess(MissionProcess missionProcess) {
 	this.missionProcess = missionProcess;
+    }
+
+    public void setUnderCCP(boolean underCCP) {
+	this.underCCP = underCCP;
+    }
+
+    public boolean isUnderCCP() {
+	return underCCP;
     }
 
 }

@@ -118,7 +118,7 @@ public class Supplier extends Supplier_Base implements Indexable, Searchable {
 	}
 	for (final RefundableInvoiceFile refundInvoice : getRefundInvoicesSet()) {
 	    final RefundProcess refundProcess = refundInvoice.getRefundItem().getRequest().getProcess();
-	    if (refundProcess.isActive() && !refundProcess.getSkipSupplierFundAllocation()) {
+	    if (refundProcess.isActive() && !refundProcess.getShouldSkipSupplierFundAllocation()) {
 		result = result.add(refundInvoice.getRefundableValue());
 	    }
 	}

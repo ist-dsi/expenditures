@@ -714,8 +714,10 @@
 	<slot name="process.acquisitionProcessId" key="label.acquisitionProcessId"
 		bundle="EXPENDITURE_RESOURCES" />
 	<slot name="requester.name" key="label.requesterName" bundle="EXPENDITURE_RESOURCES" />
-	<slot name="process.skipSupplierFundAllocation" key="label.skipingSupplierFundAllocation"
+	<slot name="process.underCCPRegime" key="label.underCCPRegime"
 		bundle="EXPENDITURE_RESOURCES" />
+	<slot name="process.skipSupplierFundAllocation" key="label.skipingSupplierFundAllocation"
+		bundle="EXPENDITURE_RESOURCES" />		
 	<slot name="refundee.refundeePresentation" key="label.refundee"
 		bundle="ACQUISITION_RESOURCES" layout="null-as-label" />
 	<slot name="requestingUnit.presentationName" key="acquisitionProcess.label.requestingUnit"

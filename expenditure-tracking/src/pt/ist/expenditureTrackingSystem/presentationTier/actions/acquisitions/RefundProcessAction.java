@@ -17,12 +17,23 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 @Mapping(path = "/acquisitionRefundProcess")
 public class RefundProcessAction extends PaymentProcessAction {
 
-    public ActionForward prepareCreateRefundProcess(final ActionMapping mapping, final ActionForm form,
+    public ActionForward prepareCreateRefundProcessUnderCCP(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 
 	CreateRefundProcessBean bean = getRenderedObject();
 	if (bean == null) {
-	    bean = new CreateRefundProcessBean(getLoggedPerson());
+	    bean = new CreateRefundProcessBean(getLoggedPerson(), true);
+	}
+	request.setAttribute("bean", bean);
+	return forward(request, "/acquisitions/refund/createRefundRequest.jsp");
+    }
+
+    public ActionForward prepareCreateRefundProcessUnderRCIST(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+
+	CreateRefundProcessBean bean = getRenderedObject();
+	if (bean == null) {
+	    bean = new CreateRefundProcessBean(getLoggedPerson(), false);
 	}
 	request.setAttribute("bean", bean);
 	return forward(request, "/acquisitions/refund/createRefundRequest.jsp");

@@ -39,7 +39,7 @@ public class RefundableInvoiceFile extends RefundableInvoiceFile_Base {
 
     private void check(RequestItem item, Supplier supplier, Money value, BigDecimal vatValue, Money refundableValue) {
 	RefundProcess process = item.getRequest().getProcess();
-	if (!process.getSkipSupplierFundAllocation() && !supplier.isFundAllocationAllowed(value)) {
+	if (!process.getShouldSkipSupplierFundAllocation() && !supplier.isFundAllocationAllowed(value)) {
 	    throw new DomainException("acquisitionRequestItem.message.exception.fundAllocationNotAllowed", DomainException
 		    .getResourceFor("resources/AcquisitionResources"));
 	}

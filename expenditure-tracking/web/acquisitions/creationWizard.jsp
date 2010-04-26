@@ -3,14 +3,11 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 
-
 <h2><bean:message key="title.newAcquisition" bundle="EXPENDITURE_RESOURCES"/></h2>
-
 
 <p class="mvert05">
 	<bean:message key="label.selectProcessType" bundle="EXPENDITURE_RESOURCES"/>:
 </p>
-
 
 
 <table class="mvert1">
@@ -52,6 +49,18 @@
 						</p>
 						<p class="mvert025">
 							<bean:message key="message.info.acquisitionStandardProcessExplanation" bundle="EXPENDITURE_RESOURCES"/>
+						</p>
+					</li>
+					<li class="mbottom1">
+						<p class="mvert025">
+							<strong>
+								<html:link styleClass="big" action="/acquisitionRefundProcess.do?method=prepareCreateRefundProcessUnderCCP">
+									<bean:message key="link.create.refundProcess" bundle="EXPENDITURE_RESOURCES"/>
+								</html:link>
+							</strong>
+						</p>
+						<p class="mvert025">
+							<bean:message key="message.info.refundProcessExplanation" bundle="EXPENDITURE_RESOURCES"/>
 						</p>
 					</li>
 				</ul>
@@ -99,7 +108,7 @@
 					<li class="mbottom1">
 						<p class="mvert025">
 							<strong>
-								<html:link styleClass="big" action="/acquisitionRefundProcess.do?method=prepareCreateRefundProcess">
+								<html:link styleClass="big" action="/acquisitionRefundProcess.do?method=prepareCreateRefundProcessUnderRCIST">
 									<bean:message key="link.create.refundProcess" bundle="EXPENDITURE_RESOURCES"/>
 								</html:link>
 							</strong>
