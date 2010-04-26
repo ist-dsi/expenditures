@@ -77,7 +77,7 @@ public class SyncProjectsAux {
 	private String projectCode;
 	private String unidExploracao;
 	private String title;
-	private String idCoord;
+	private Set<String> idCoord = new HashSet<String>();
 	private String costCenter;
 	private String inicio;
 	private String duracao;
@@ -89,7 +89,10 @@ public class SyncProjectsAux {
 	    unidExploracao = resultSet.getString(1);
 	    projectCode = resultSet.getString(2);
 	    title = resultSet.getString(3);
-	    idCoord = resultSet.getString(4);
+	    final String coord = resultSet.getString(4);
+	    if (coord != null && !coord.isEmpty()) {
+		idCoord.add(coord);
+	    }
 	    costCenter = resultSet.getString(5);
 	    inicio = resultSet.getString(6);
 	    duracao = resultSet.getString(7);
@@ -109,7 +112,7 @@ public class SyncProjectsAux {
 	    return title;
 	}
 
-	public String getIdCoord() {
+	public Set<String> getIdCoord() {
 	    return idCoord;
 	}
 
@@ -178,6 +181,71 @@ public class SyncProjectsAux {
 	}
     }
 
+    private static class OtherProjectCoordinatorsQuery extends ExternalDbQuery {
+
+	private final Set<MgpProject> mgpProjects;
+
+	private OtherProjectCoordinatorsQuery(final Set<MgpProject> mgpProjects) {
+	    this.mgpProjects = mgpProjects;
+	}
+
+	@Override
+	protected String getQueryString() {
+	    return "SELECT a.idproj, a.idautorizado, a.inicio, a.fim FROM autorizacoes a";
+	}
+
+	@Override
+	protected void processResultSet(final ResultSet resultSet) throws SQLException {
+	    while (resultSet.next()) {
+		final String idproj = resultSet.getString(1);
+		final String idautorizado = resultSet.getString(2);
+//		final String inicio = resultSet.getString(3);
+//		final String fim = resultSet.getString(4);
+
+		final MgpProject mgpProject = findMgpProject(idproj);
+		mgpProject.getIdCoord().add(idautorizado);
+	    }
+	}
+
+	private MgpProject findMgpProject(String idproj) {
+	    for (final MgpProject mgpProject : mgpProjects) {
+		if (mgpProject.projectCode.equals(idproj)) {
+		    return mgpProject;
+		}
+	    }
+	    return null;
+	}
+
+	Set<MgpProject> getMgpProjects() {
+	    return mgpProjects;
+	}
+    }
+
+    public static class ProjectReader extends ExternalDbOperation {
+
+	private Set<MgpProject> mgpProjects = null;
+
+	@Override
+	protected String getDbPropertyPrefix() {
+	    return "db.mgp";
+	}
+
+	@Override
+	protected void doOperation() throws SQLException {
+	    final ProjectQuery projectQuery = new ProjectQuery();
+	    executeQuery(projectQuery);
+	    mgpProjects = projectQuery.getMgpProjects();
+	    final SubProjectQuery subProjectQuery = new SubProjectQuery(mgpProjects);
+	    executeQuery(subProjectQuery);
+	    final OtherProjectCoordinatorsQuery otherProjectCoordinatorsQuery = new OtherProjectCoordinatorsQuery(mgpProjects);
+	    executeQuery(otherProjectCoordinatorsQuery);
+	}	
+
+	public Set<MgpProject> getMgpProjects() {
+	    return mgpProjects;
+	}
+    }
+
     private static class SubProjectQuery extends ExternalDbQuery {
 
 	private final Set<MgpProject> mgpProjects;
@@ -217,29 +285,6 @@ public class SyncProjectsAux {
 	}
 
 	Set<MgpProject> getMgpProjects() {
-	    return mgpProjects;
-	}
-    }
-
-    public static class ProjectReader extends ExternalDbOperation {
-
-	private Set<MgpProject> mgpProjects = null;
-
-	@Override
-	protected String getDbPropertyPrefix() {
-	    return "db.mgp";
-	}
-
-	@Override
-	protected void doOperation() throws SQLException {
-	    final ProjectQuery projectQuery = new ProjectQuery();
-	    executeQuery(projectQuery);
-	    mgpProjects = projectQuery.getMgpProjects();
-	    final SubProjectQuery subProjectQuery = new SubProjectQuery(mgpProjects);
-	    executeQuery(subProjectQuery);
-	}	
-
-	public Set<MgpProject> getMgpProjects() {
 	    return mgpProjects;
 	}
     }
@@ -347,14 +392,13 @@ public class SyncProjectsAux {
     private void createProject(final MgpProject mgpProject) {
 	String projectCodeString = mgpProject.projectCode;
 	String costCenterString = mgpProject.costCenter.replace("\"", "");
-	String responsibleString = mgpProject.idCoord;
+	Set<String> responsibleStrings = mgpProject.idCoord;
 	String acronym = mgpProject.title.replace("\"", "");
 	String accountingUnitString = mgpProject.unidExploracao.replace("\"", "");
 	String type = mgpProject.type.replace("\"", "");
 
 	final Unit costCenter = findCostCenter(costCenterString);
 	if (costCenter != null) {
-	    final Person responsible = findPerson(responsibleString);
 
 	    final CreateUnitBean createUnitBean = new CreateUnitBean(costCenter);
 	    createUnitBean.setProjectCode(projectCodeString);
@@ -369,13 +413,16 @@ public class SyncProjectsAux {
 		System.out.println("No accounting unit found for project: " + projectCodeString);
 	    }
 
-	    if (responsible != null) {
-		if (projectResponsibles.contains(Integer.valueOf(responsibleString))) {
-		    final Authorization authorization = new Authorization(responsible, unit);
-		    authorization.setMaxAmount(AUTHORIZED_VALUE);
-		} else {
+	    for (final String responsibleString : responsibleStrings) {
+		final Person responsible = findPerson(responsibleString);
+		if (responsible != null) {
+		    if (projectResponsibles.contains(Integer.valueOf(responsibleString))) {
+			final Authorization authorization = new Authorization(responsible, unit);
+			authorization.setMaxAmount(AUTHORIZED_VALUE);
+		    } else {
 //		    System.out.println("[" + responsibleString + "] for project [" + acronym
 //			    + "] is not in project responsibles list");
+		    }
 		}
 	    }
 	}
@@ -386,7 +433,7 @@ public class SyncProjectsAux {
     private void updateProject(final MgpProject mgpProject, final Project project) {
 	String projectCodeString = mgpProject.projectCode;
 	String costCenterString = mgpProject.costCenter.replace("\"", "");
-	String responsibleString = mgpProject.idCoord;
+	Set<String> responsibleStrings = mgpProject.idCoord;
 	String acronym = mgpProject.title.replace("\"", "");
 	String accountingUnitString = mgpProject.unidExploracao.replace("\"", "");
 	String type = mgpProject.type.replace("\"", "");
@@ -412,20 +459,22 @@ public class SyncProjectsAux {
 	    project.setAccountingUnit(accountingUnit);
 	}
 
-	final Person responsible = findPerson(responsibleString);
-	if (responsible != null) {
-	    if (projectResponsibles.contains(Integer.valueOf(responsibleString))) {
-		if (!hasAuthorization(project, responsible)) {
-		    final Authorization authorization = new Authorization(responsible, project);
-		    authorization.setMaxAmount(AUTHORIZED_VALUE);
-		}
-	    } else {
-		// System.out.println("[" + responsibleString + "] for project [" + acronym + "] is not in project responsibles list");
-		if (!hasAprovalAuthorization(project, responsible)) {
-		    new Authorization(responsible, project);
+	for (final String responsibleString : responsibleStrings) {
+	    final Person responsible = findPerson(responsibleString);
+	    if (responsible != null) {
+		if (projectResponsibles.contains(Integer.valueOf(responsibleString))) {
+		    if (!hasAuthorization(project, responsible)) {
+			final Authorization authorization = new Authorization(responsible, project);
+			authorization.setMaxAmount(AUTHORIZED_VALUE);
+		    }
+		} else {
+		    //System.out.println("[" + responsibleString + "] for project [" + acronym + "] is not in project responsibles list");
+		    if (!hasAprovalAuthorization(project, responsible)) {
+			new Authorization(responsible, project);
+		    }
 		}
 	    }
-	}	    
+	}
 
 	final Unit costCenter = findCostCenter(costCenterString);
 	if (project.getCostCenterUnit() != costCenter) {
