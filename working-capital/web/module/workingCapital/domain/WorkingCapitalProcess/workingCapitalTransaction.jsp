@@ -35,7 +35,7 @@
 					<th> <bean:message key="label.module.workingCapital.request.dateTreasury" bundle="WORKING_CAPITAL_RESOURCES"/></th>				
 				</tr>
 				<tr>
-					<td><fr:view name="workingCapitalRequest" property="workingCapitalRequester.child.firstAndLastName"/></td>
+					<td><fr:view name="workingCapitalRequest" property="workingCapitalRequester.firstAndLastName"/></td>
 					<td><fr:view name="workingCapitalRequest" property="requestCreation"/></td>
 					<td><fr:view name="workingCapitalRequest" property="requestedValue"/></td>
 					<td><fr:view name="workingCapitalRequest" property="paymentMethod"/></td>

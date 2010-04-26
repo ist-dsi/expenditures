@@ -13,6 +13,8 @@ import myorg.domain.util.Money;
 import org.joda.time.DateTime;
 
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
+import pt.ist.expenditureTrackingSystem.domain.organization.Project;
+import pt.ist.expenditureTrackingSystem.domain.organization.SubProject;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 
 public class WorkingCapital extends WorkingCapital_Base {
@@ -99,8 +101,7 @@ public class WorkingCapital extends WorkingCapital_Base {
     }
 
     public boolean isPendingVerification(final User user) {
-	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstance(); 
-	if (workingCapitalSystem.isAccountingMember(user)) {
+	if (isAccountingResponsible(user)) {
 	    final WorkingCapitalInitialization workingCapitalInitialization = getWorkingCapitalInitialization();
 	    return workingCapitalInitialization != null && workingCapitalInitialization.isPendingVerification();
 	}
@@ -122,7 +123,8 @@ public class WorkingCapital extends WorkingCapital_Base {
 	}
 	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstance();
 	if (user == getMovementResponsible().getUser()
-		|| workingCapitalSystem.isAccountingMember(user)
+		|| isAccountingResponsible(user)
+		|| isAccountingEmployee(user)
 		|| workingCapitalSystem.isManagementeMember(user)
 		|| isTreasuryMember(user)
 		|| findUnitResponsible(user.getPerson(), Money.ZERO) != null) {
@@ -230,7 +232,7 @@ public class WorkingCapital extends WorkingCapital_Base {
     }
 
     public boolean hasAcquisitionPendingVerification(final User user) {
-	return hasAcquisitionPendingVerification() && getWorkingCapitalSystem().getAccountingAccountability(user) != null;
+	return hasAcquisitionPendingVerification() && isAccountingEmployee(user);
     }
 
     private boolean hasVerifiedAcquisition() {
@@ -244,7 +246,7 @@ public class WorkingCapital extends WorkingCapital_Base {
     }
 
     public boolean hasVerifiedAcquisition(User user) {
-	return hasVerifiedAcquisition() && getWorkingCapitalSystem().getAccountingAccountability(user) != null;
+	return hasVerifiedAcquisition() && isAccountingEmployee(user);
     }
 
     public boolean hasAllPaymentsRequested() {
@@ -384,6 +386,22 @@ public class WorkingCapital extends WorkingCapital_Base {
 	    }
 	}
 	return result;
+    }
+
+    public boolean isAccountingResponsible(final User user) {
+	final Unit unit = getUnit();
+	return user != null && unit != null && unit.isAccountingResponsible(user.getExpenditurePerson());
+    }
+
+    public boolean isAccountingEmployee(final User user) {
+	final Unit unit = getUnit();
+	if (unit != null && user != null) {
+	    if (unit instanceof Project || unit instanceof SubProject) {
+		unit.isProjectAccountingEmployee(user.getExpenditurePerson());
+	    }
+	    return unit.isAccountingEmployee(user.getExpenditurePerson());
+	}
+	return false;
     }
 
 }

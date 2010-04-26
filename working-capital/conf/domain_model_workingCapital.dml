@@ -174,25 +174,15 @@ relation WorkingCapitalInitializationResponsibleForUnitAuthorization {
 }
 
 relation WorkingCapitalInitializationResponsibleForAccountingVerification {
-	.module.organization.domain.Accountability playsRole responsibleForAccountingVerification;
+	.module.organization.domain.Person playsRole responsibleForAccountingVerification;
 	WorkingCapitalInitialization playsRole verifiedAccountingWorkingCapitalInitializations {
 		multiplicity *;
 	}
 }
 
-relation WorkingCapitalSystemAccountingUnit {
-	WorkingCapitalSystem playsRole workingCapitalSystemFromAccountingUnit;
-	.module.organization.domain.Unit playsRole accountingUnit;
-}
-
 relation WorkingCapitalSystemManagementUnit {
 	WorkingCapitalSystem playsRole workingCapitalSystemFromManagmentUnit;
 	.module.organization.domain.Unit playsRole managementUnit;
-}
-
-relation WorkingCapitalSystemAccountingAccountabilityType {
-	WorkingCapitalSystem playsRole workingCapitalSystemFromAccountingAccountabilityType;
-	.module.organization.domain.AccountabilityType playsRole accountingAccountabilityType;
 }
 
 relation WorkingCapitalSystemManagementAccountabilityType {
@@ -215,7 +205,7 @@ relation WorkingCapitalWorkingCapitalRequest {
 }
 
 relation WorkingCapitalRequestRequester {
-	.module.organization.domain.Accountability playsRole workingCapitalRequester;
+	.module.organization.domain.Person playsRole workingCapitalRequester;
 	WorkingCapitalRequest playsRole workingCapitalRequestsFromRequesters {
 		multiplicity *;
 	}
@@ -295,7 +285,7 @@ relation WorkingCapitalAcquisitionApprover {
 }
 
 relation WorkingCapitalAcquisitionVerifier {
-	.module.organization.domain.Accountability playsRole verifier;
+	.module.organization.domain.Person playsRole verifier;
 	WorkingCapitalAcquisition playsRole workingCapitalAcquisitionsFromVerifier {
 		multiplicity *;
 	}

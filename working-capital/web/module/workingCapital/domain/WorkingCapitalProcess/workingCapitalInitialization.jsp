@@ -104,7 +104,7 @@
 					</td>
 					<td>
 					<logic:present name="workingCapitalInitialization" property="responsibleForAccountingVerification">
-						<fr:view name="workingCapitalInitialization" property="responsibleForAccountingVerification.child.firstAndLastName"/>
+						<fr:view name="workingCapitalInitialization" property="responsibleForAccountingVerification.firstAndLastName"/>
 					</logic:present>
 					<logic:notPresent name="workingCapitalInitialization" property="responsibleForAccountingVerification">
 						-

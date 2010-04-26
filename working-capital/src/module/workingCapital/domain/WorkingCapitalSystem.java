@@ -36,20 +36,6 @@ public class WorkingCapitalSystem extends WorkingCapitalSystem_Base implements M
 	setMyOrg(myOrg);
     }
 
-    public SortedSet<Accountability> getAccountingMembers() {
-	final SortedSet<Accountability> accountingMembers = new TreeSet<Accountability>(Accountability.COMPARATOR_BY_CHILD_PARTY_NAMES);
-	if (hasAccountingUnit() && hasAccountingAccountabilityType()) {
-	    final Unit accountingUnit = getAccountingUnit();
-	    final AccountabilityType accountabilityType = getAccountingAccountabilityType();
-	    for (final Accountability accountability : accountingUnit.getChildAccountabilitiesSet()) {
-		if (accountability.getAccountabilityType() == accountabilityType && accountability.getChild().isPerson()) {
-		    accountingMembers.add(accountability);
-		}
-	    }
-	}
-	return accountingMembers;
-    }
-
     public SortedSet<Accountability> getManagementeMembers() {
 	final SortedSet<Accountability> accountingMembers = new TreeSet<Accountability>(Accountability.COMPARATOR_BY_CHILD_PARTY_NAMES);
 	if (hasManagementUnit() && hasManagementAccountabilityType()) {
@@ -62,19 +48,6 @@ public class WorkingCapitalSystem extends WorkingCapitalSystem_Base implements M
 	    }
 	}
 	return accountingMembers;
-    }
-
-    public boolean isAccountingMember(final User user) {
-	return getAccountingAccountability(user) != null;
-    }
-
-    public Accountability getAccountingAccountability(final User user) {
-	if (hasAccountingUnit() && hasAccountingAccountabilityType()) {
-	    final Unit accountingUnit = getAccountingUnit();
-	    final AccountabilityType accountabilityType = getAccountingAccountabilityType();
-	    return findAccountability(user, accountabilityType, accountingUnit);
-	}
-	return null;
     }
 
     public boolean isManagementeMember(final User user) {

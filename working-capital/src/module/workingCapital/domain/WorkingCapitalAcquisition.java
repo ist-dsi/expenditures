@@ -1,7 +1,6 @@
 package module.workingCapital.domain;
 
 import module.finance.domain.Supplier;
-import module.organization.domain.Accountability;
 import myorg.domain.User;
 import myorg.domain.util.Money;
 
@@ -81,14 +80,12 @@ public class WorkingCapitalAcquisition extends WorkingCapitalAcquisition_Base {
 
     public void verify(User user) {
 	setVerified(new DateTime());
-	final Accountability accountability = getWorkingCapitalSystem().getAccountingAccountability(user);
-	setVerifier(accountability);
+	setVerifier(user.getPerson());
     }
 
     public void rejectVerify(final User user) {
 	setNotVerified(new DateTime());
-	final Accountability accountability = getWorkingCapitalSystem().getAccountingAccountability(user);
-	setVerifier(accountability);
+	setVerifier(user.getPerson());
     }
 
     public void unVerify() {

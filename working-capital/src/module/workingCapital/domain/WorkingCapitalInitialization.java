@@ -79,13 +79,16 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
     public void verify(final User user, final Money authorizedAnualValue, final Money maxAuthorizedAnualValue) {
 	setAuthorizedAnualValue(authorizedAnualValue);
 	setMaxAuthorizedAnualValue(maxAuthorizedAnualValue);
-	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstance();
-	final Accountability accountability = workingCapitalSystem.getAccountingAccountability(user);
-	if (accountability == null) {
+	
+	if (!isAccountingResponsible(user)) {
 	    throw new DomainException("person.cannot.verify.expense", user.getPerson().getName());
 	}
 	setVerificationByAccounting(new DateTime());
-	setResponsibleForAccountingVerification(accountability);
+	setResponsibleForAccountingVerification(user.getPerson());
+    }
+
+    private boolean isAccountingResponsible(final User user) {
+	return getWorkingCapital().isAccountingResponsible(user);
     }
 
     public void unverify() {

@@ -5,7 +5,6 @@ import module.workflow.activities.WorkflowActivity;
 import module.workingCapital.domain.WorkingCapital;
 import module.workingCapital.domain.WorkingCapitalProcess;
 import module.workingCapital.domain.WorkingCapitalRequest;
-import module.workingCapital.domain.WorkingCapitalSystem;
 import myorg.domain.User;
 import myorg.util.BundleUtil;
 
@@ -19,8 +18,8 @@ public class RequestCapitalActivity extends WorkflowActivity<WorkingCapitalProce
     @Override
     public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
 	final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
-	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstance();
-	return workingCapitalSystem.isAccountingMember(user) && workingCapital.canRequestCapital();
+	return (workingCapital.isAccountingResponsible(user) || workingCapital.isAccountingEmployee(user))
+		&& workingCapital.canRequestCapital();
     }
 
     @Override

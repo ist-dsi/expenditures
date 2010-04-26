@@ -5,7 +5,6 @@ import module.workflow.activities.WorkflowActivity;
 import module.workingCapital.domain.WorkingCapital;
 import module.workingCapital.domain.WorkingCapitalInitialization;
 import module.workingCapital.domain.WorkingCapitalProcess;
-import module.workingCapital.domain.WorkingCapitalSystem;
 import myorg.domain.User;
 import myorg.util.BundleUtil;
 
@@ -17,10 +16,9 @@ public class UnVerifyActivity extends WorkflowActivity<WorkingCapitalProcess, Wo
     }
 
     @Override
-    public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
-	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstance(); 
-	if (workingCapitalSystem.isAccountingMember(user)) {
-	    final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
+    public boolean isActive(final WorkingCapitalProcess workingCapitalProcess, final User user) {
+	final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
+	if (workingCapital.isAccountingResponsible(user)) {
 	    final WorkingCapitalInitialization workingCapitalInitialization = workingCapital.getWorkingCapitalInitialization();
 	    if (workingCapitalInitialization != null
 		    && !workingCapitalInitialization.isCanceledOrRejected()

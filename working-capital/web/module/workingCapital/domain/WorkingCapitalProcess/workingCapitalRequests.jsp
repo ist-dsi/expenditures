@@ -35,7 +35,7 @@
 							<th>  </th>
 						</tr>
 						<tr>
-							<td><fr:view name="workingCapitalRequest" property="workingCapitalRequester.child.name"/></td>
+							<td><fr:view name="workingCapitalRequest" property="workingCapitalRequester.name"/></td>
 							<td><fr:view name="workingCapitalRequest" property="requestCreation"/></td>
 							<td><fr:view name="workingCapitalRequest" property="requestedValue"/></td>
 							<td><fr:view name="workingCapitalRequest" property="paymentMethod"/></td>

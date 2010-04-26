@@ -102,13 +102,6 @@ public class WorkingCapitalAction extends ContextBaseAction {
 	return viewWorkingCapital(request, workingCapitalProcess);
     }
 
-    public ActionForward configureAccountingUnit(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstance();
-	request.setAttribute("workingCapitalSystem", workingCapitalSystem);
-	return forward(request, "/workingCapital/configureAccountingUnit.jsp");
-    }
-
     public ActionForward configureManagementUnit(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstance();

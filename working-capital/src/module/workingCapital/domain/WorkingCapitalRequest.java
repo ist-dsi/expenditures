@@ -1,6 +1,5 @@
 package module.workingCapital.domain;
 
-import module.organization.domain.Accountability;
 import module.organization.domain.Person;
 import module.workingCapital.domain.util.PaymentMethod;
 import myorg.applicationTier.Authenticate.UserView;
@@ -19,8 +18,10 @@ public class WorkingCapitalRequest extends WorkingCapitalRequest_Base {
         setWorkingCapitalSystem(workingCapitalSystem);
         setRequestCreation(new DateTime());
         final User user = UserView.getCurrentUser();
-        final Accountability accountability = workingCapitalSystem.getAccountingAccountability(user);
-        setWorkingCapitalRequester(accountability);
+        if (user == null || !user.hasPerson()) {
+            throw new Error("error.requester.must.be.specified");
+        }
+        setWorkingCapitalRequester(user.getPerson());
     }
 
     public WorkingCapitalRequest(final WorkingCapital workingCapital, final Money requestedValue, final PaymentMethod paymentMethod) {

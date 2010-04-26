@@ -1,15 +1,14 @@
 package module.workingCapital.domain.activity;
 
-import org.joda.time.DateTime;
-
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workingCapital.domain.WorkingCapital;
 import module.workingCapital.domain.WorkingCapitalInitialization;
 import module.workingCapital.domain.WorkingCapitalProcess;
-import module.workingCapital.domain.WorkingCapitalSystem;
 import myorg.domain.User;
 import myorg.util.BundleUtil;
+
+import org.joda.time.DateTime;
 
 public class RequestCapitalRestitutionActivity extends WorkflowActivity<WorkingCapitalProcess, ActivityInformation<WorkingCapitalProcess>> {
 
@@ -21,8 +20,8 @@ public class RequestCapitalRestitutionActivity extends WorkflowActivity<WorkingC
     @Override
     public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
 	final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
-	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstance();
-	return workingCapitalSystem.isAccountingMember(user) && workingCapital.canRequestCapitalRefund();
+	return (workingCapital.isAccountingResponsible(user) || workingCapital.isAccountingEmployee(user))
+		&& workingCapital.canRequestCapitalRefund();
     }
 
     @Override
