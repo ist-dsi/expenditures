@@ -1,11 +1,16 @@
 package module.workingCapital.domain.activity;
 
+import java.math.BigDecimal;
+
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workingCapital.domain.WorkingCapital;
 import module.workingCapital.domain.WorkingCapitalInitialization;
 import module.workingCapital.domain.WorkingCapitalProcess;
+import module.workingCapital.domain.WorkingCapitalRequest;
+import module.workingCapital.domain.util.PaymentMethod;
 import myorg.domain.User;
+import myorg.domain.util.Money;
 import myorg.util.BundleUtil;
 
 public class AuthorizeActivity extends WorkflowActivity<WorkingCapitalProcess, WorkingCapitalInitializationInformation> {
@@ -28,6 +33,20 @@ public class AuthorizeActivity extends WorkflowActivity<WorkingCapitalProcess, W
 	final WorkingCapitalInitialization workingCapitalInitialization = activityInformation.getWorkingCapitalInitialization();
 	final User user = getLoggedPerson();
 	workingCapitalInitialization.authorize(user);
+
+	final WorkingCapitalProcess workingCapitalProcess = activityInformation.getProcess();
+	final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
+
+	final Money maxAnualValue = workingCapitalInitialization.getMaxAuthorizedAnualValue();
+	Money requestedValue = maxAnualValue.divideAndRound(new BigDecimal(6));
+	final Money anualValue = workingCapitalInitialization.getAuthorizedAnualValue();
+	if (requestedValue.isGreaterThan(anualValue)) {
+	    requestedValue = anualValue;
+	}
+	final PaymentMethod paymentMethod = workingCapitalInitialization.getInternationalBankAccountNumber() == null  
+		|| workingCapitalInitialization.getInternationalBankAccountNumber().isEmpty() ? 
+			PaymentMethod.CHECK : PaymentMethod.WIRETRANSFER;
+	new WorkingCapitalRequest(workingCapital, requestedValue, paymentMethod);
     }
 
     @Override

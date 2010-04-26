@@ -23,7 +23,7 @@ public class VerifyActivityInformation extends WorkingCapitalInitializationInfor
         super.setWorkingCapitalInitialization(workingCapitalInitialization);
         if (workingCapitalInitialization != null) {
             maxAuthorizedAnualValue = workingCapitalInitialization.getRequestedAnualValue();
-            authorizedAnualValue = maxAuthorizedAnualValue.divideAndRound(new BigDecimal(12));
+            authorizedAnualValue = maxAuthorizedAnualValue.multiply(new BigDecimal(2)).divideAndRound(new BigDecimal(12));
         }
     }
 
