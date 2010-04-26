@@ -9,7 +9,6 @@ import org.apache.commons.lang.StringUtils;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.ProjectFinancer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestWithPayment;
-import pt.ist.expenditureTrackingSystem.domain.organization.Unit.UnitIndexFields;
 import pt.ist.fenixframework.plugins.luceneIndexing.domain.IndexDocument;
 import dml.runtime.RelationAdapter;
 
@@ -89,4 +88,11 @@ public class SubProject extends SubProject_Base {
 	document.indexField(UnitIndexFields.NUMBER_INDEX, getUnit().getAcronym());
 	return document;
     }
+
+    @Override
+    public boolean isAccountingResponsible(final Person person) {
+	final Project project = (Project) getParentUnit();
+	return project.isAccountingResponsible(person);
+    }
+
 }

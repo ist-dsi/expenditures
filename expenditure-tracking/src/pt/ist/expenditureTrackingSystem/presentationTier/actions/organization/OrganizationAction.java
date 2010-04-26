@@ -245,6 +245,23 @@ public class OrganizationAction extends BaseAction {
 	return expandAuthorizationUnit(mapping, request, person, null);
     }
 
+    public final ActionForward prepareAddResponsibleAccountingUnit(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final Person person = getDomainObject(request, "personOid");
+	request.setAttribute("person", person);
+	final Set<AccountingUnit> accountingUnits = ExpenditureTrackingSystem.getInstance().getAccountingUnitsSet();
+	request.setAttribute("accountingUnits", accountingUnits);
+	return forward(request, "/expenditureTrackingOrganization/selectResponsibleAccountingUnitToAddMember.jsp");
+    }
+
+    public final ActionForward addResponsibleAccountingUnit(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final Person person = getDomainObject(request, "personOid");
+	final AccountingUnit accountingUnit = getDomainObject(request, "accountingUnitOid");
+	accountingUnit.addResponsiblePeople(person);
+	return viewPerson(mapping, request, person);
+    }
+
     public final ActionForward prepareAddToAccountingUnit(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final Person person = getDomainObject(request, "personOid");
@@ -259,6 +276,23 @@ public class OrganizationAction extends BaseAction {
 	final Person person = getDomainObject(request, "personOid");
 	final AccountingUnit accountingUnit = getDomainObject(request, "accountingUnitOid");
 	accountingUnit.addPeople(person);
+	return viewPerson(mapping, request, person);
+    }
+
+    public final ActionForward prepareAddResponsibleProjectAccountingUnit(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final Person person = getDomainObject(request, "personOid");
+	request.setAttribute("person", person);
+	final Set<AccountingUnit> accountingUnits = ExpenditureTrackingSystem.getInstance().getAccountingUnitsSet();
+	request.setAttribute("accountingUnits", accountingUnits);
+	return forward(request, "/expenditureTrackingOrganization/selectResponsibleProjectAccountingUnitToAddMember.jsp");
+    }
+
+    public final ActionForward addResponsibleProjectAccountingUnit(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final Person person = getDomainObject(request, "personOid");
+	final AccountingUnit accountingUnit = getDomainObject(request, "accountingUnitOid");
+	accountingUnit.addResponsibleProjectAccountants(person);
 	return viewPerson(mapping, request, person);
     }
 
@@ -487,11 +521,27 @@ public class OrganizationAction extends BaseAction {
 	return forward(request, "/expenditureTrackingOrganization/viewAuthorization.jsp");
     }
 
+    public ActionForward removeResponsibleFromAccountingUnit(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final AccountingUnit accountingUnit = getDomainObject(request, "accountingUnitOid");
+	final Person person = getDomainObject(request, "personOid");
+	accountingUnit.removeResponsiblePeople(person);
+	return viewPerson(mapping, request, person);
+    }
+
     public ActionForward removePersonFromAccountingUnit(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final AccountingUnit accountingUnit = getDomainObject(request, "accountingUnitOid");
 	final Person person = getDomainObject(request, "personOid");
 	accountingUnit.removePeople(person);
+	return viewPerson(mapping, request, person);
+    }
+
+    public ActionForward removePersonResponsibleForProjectAccountingUnit(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final AccountingUnit accountingUnit = getDomainObject(request, "accountingUnitOid");
+	final Person person = getDomainObject(request, "personOid");
+	accountingUnit.removeResponsibleProjectAccountants(person);
 	return viewPerson(mapping, request, person);
     }
 

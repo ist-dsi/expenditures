@@ -150,4 +150,10 @@ public class Project extends Project_Base {
 	return null;
     }
 
+    @Override
+    public boolean isAccountingResponsible(Person person) {
+	final AccountingUnit accountingUnit = getAccountingUnit();
+	return accountingUnit != null && person != null && accountingUnit.hasResponsibleProjectAccountants(person);
+    }
+
 }

@@ -771,11 +771,29 @@ relation PersonAccountingUnit {
 	}
 }
 
+relation ResponsibleAccountingUnit {
+	organization.Person playsRole responsiblePeople {
+		multiplicity *;
+	}
+	organization.AccountingUnit playsRole responsibleAccountingUnits {
+		multiplicity *;
+	}
+}
+
 relation PersonProjectAccountingUnit {
 	organization.Person playsRole projectAccountants {
 		multiplicity *;
 	}
 	organization.AccountingUnit playsRole projectAccountingUnits {
+		multiplicity *;
+	}
+}
+
+relation ResponsibleProjectAccountingUnit {
+	organization.Person playsRole responsibleProjectAccountants {
+		multiplicity *;
+	}
+	organization.AccountingUnit playsRole responsibleProjectAccountingUnits {
 		multiplicity *;
 	}
 }

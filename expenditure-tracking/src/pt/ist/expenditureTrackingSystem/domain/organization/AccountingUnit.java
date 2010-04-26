@@ -20,8 +20,20 @@ public class AccountingUnit extends AccountingUnit_Base {
 
     @Service
     @Override
+    public void addResponsiblePeople(final Person people) {
+	super.addResponsiblePeople(people);
+    }
+
+    @Service
+    @Override
     public void addPeople(final Person people) {
 	super.addPeople(people);
+    }
+
+    @Service
+    @Override
+    public void addResponsibleProjectAccountants(final Person people) {
+	super.addResponsibleProjectAccountants(people);
     }
 
     @Service
@@ -38,8 +50,20 @@ public class AccountingUnit extends AccountingUnit_Base {
 
     @Service
     @Override
+    public void removeResponsiblePeople(final Person people) {
+	super.removeResponsiblePeople(people);
+    }
+
+    @Service
+    @Override
     public void removePeople(final Person people) {
 	super.removePeople(people);
+    }
+
+    @Service
+    @Override
+    public void removeResponsibleProjectAccountants(final Person people) {
+	super.removeResponsibleProjectAccountants(people);
     }
 
     @Service

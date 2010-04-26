@@ -628,4 +628,10 @@ public class Unit extends Unit_Base implements Indexable, Searchable {
 	set.add(this);
 	return set;
     }
+
+    public boolean isAccountingResponsible(final Person person) {
+	final AccountingUnit accountingUnit = getAccountingUnit();
+	return accountingUnit != null && person != null && accountingUnit.hasResponsiblePeople(person);
+    }
+
 }

@@ -19,10 +19,24 @@
 					</html:link>
 				</li>
 			</logic:present>
+			<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
+				<li>
+					<html:link action="/expenditureTrackingOrganization.do?method=prepareAddResponsibleAccountingUnit" paramId="personOid" paramName="person" paramProperty="externalId">
+						<bean:message key="accountingUnit.link.add.responsible" bundle="EXPENDITURE_RESOURCES"/>
+					</html:link>
+				</li>
+			</logic:present>
 			<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.ACCOUNTING_MANAGER">
 				<li>
 					<html:link action="/expenditureTrackingOrganization.do?method=prepareAddToAccountingUnit" paramId="personOid" paramName="person" paramProperty="externalId">
 						<bean:message key="accountingUnit.link.add.member" bundle="EXPENDITURE_RESOURCES"/>
+					</html:link>
+				</li>
+			</logic:present>
+			<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
+				<li>
+					<html:link action="/expenditureTrackingOrganization.do?method=prepareAddResponsibleProjectAccountingUnit" paramId="personOid" paramName="person" paramProperty="externalId">
+						<bean:message key="project.accountingUnit.link.add.responsible" bundle="EXPENDITURE_RESOURCES"/>
 					</html:link>
 				</li>
 			</logic:present>
@@ -182,6 +196,38 @@
 
 </logic:empty>
 
+<h3 class="mtop2 mbottom05"><bean:message key="accountingUnit.list.for.person.responsible" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/></h3>
+<bean:define id="removeUrl">/expenditureTrackingOrganization.do?method=removeResponsibleFromAccountingUnit&amp;personOid=<bean:write name="person" property="externalId"/></bean:define>
+<logic:notEmpty name="person" property="responsibleAccountingUnits">
+	<fr:view name="person" property="responsibleAccountingUnits"
+			schema="accountingUnits">
+		<fr:layout name="tabular">
+			<fr:property name="classes" value="tstyle2"/>
+			<fr:property name="columnClasses" value="aleft,,,,aright,"/>
+
+			<fr:property name="link(view)" value="/expenditureTrackingOrganization.do?method=viewAccountingUnit"/>
+			<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
+			<fr:property name="key(view)" value="link.view"/>
+			<fr:property name="param(view)" value="externalId/accountingUnitOid"/>
+			<fr:property name="order(view)" value="1"/>
+
+			<fr:property name="link(remove)" value="<%= removeUrl %>"/>
+			<fr:property name="bundle(remove)" value="EXPENDITURE_RESOURCES"/>
+			<fr:property name="key(remove)" value="link.remove"/>
+			<fr:property name="param(remove)" value="externalId/accountingUnitOid"/>
+			<fr:property name="order(remove)" value="2"/>
+			<fr:property name="confirmationBundle(remove)" value="EXPENDITURE_RESOURCES"/> 
+            <fr:property name="confirmationKey(remove)" value="label.removeAuthorization"/> 	
+            <fr:property name="confirmationTitleKey(remove)" value="title.removeAuthorization"/> 	
+		</fr:layout>
+	</fr:view>
+</logic:notEmpty>
+<logic:empty name="person" property="responsibleAccountingUnits">
+	<p>
+		<em><bean:message key="accountingUnit.message.person.not.responsible" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>.</em>
+	</p>
+</logic:empty>
+
 <h3 class="mtop2 mbottom05"><bean:message key="accountingUnit.list.for.person" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/></h3>
 <bean:define id="removeUrl">/expenditureTrackingOrganization.do?method=removePersonFromAccountingUnit&amp;personOid=<bean:write name="person" property="externalId"/></bean:define>
 <logic:notEmpty name="person" property="accountingUnits">
@@ -211,6 +257,38 @@
 <logic:empty name="person" property="accountingUnits">
 	<p>
 		<em><bean:message key="accountingUnit.message.person.not.associated" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>.</em>
+	</p>
+</logic:empty>
+
+<h3 class="mtop2 mbottom05"><bean:message key="project.accountingUnit.list.for.person.responsible" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/></h3>
+<bean:define id="removeUrl">/expenditureTrackingOrganization.do?method=removePersonResponsibleForProjectAccountingUnit&amp;personOid=<bean:write name="person" property="externalId"/></bean:define>
+<logic:notEmpty name="person" property="responsibleProjectAccountingUnits">
+	<fr:view name="person" property="responsibleProjectAccountingUnits"
+			schema="accountingUnits">
+		<fr:layout name="tabular">
+			<fr:property name="classes" value="tstyle2"/>
+			<fr:property name="columnClasses" value="aleft,,,,aright,"/>
+
+			<fr:property name="link(view)" value="/expenditureTrackingOrganization.do?method=viewAccountingUnit"/>
+			<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
+			<fr:property name="key(view)" value="link.view"/>
+			<fr:property name="param(view)" value="externalId/accountingUnitOid"/>
+			<fr:property name="order(view)" value="1"/>
+
+			<fr:property name="link(remove)" value="<%= removeUrl %>"/>
+			<fr:property name="bundle(remove)" value="EXPENDITURE_RESOURCES"/>
+			<fr:property name="key(remove)" value="link.remove"/>
+			<fr:property name="param(remove)" value="externalId/accountingUnitOid"/>
+			<fr:property name="order(remove)" value="2"/>
+			<fr:property name="confirmationBundle(remove)" value="EXPENDITURE_RESOURCES"/> 
+            <fr:property name="confirmationKey(remove)" value="label.removeAuthorization"/> 	
+            <fr:property name="confirmationTitleKey(remove)" value="title.removeAuthorization"/> 
+		</fr:layout>
+	</fr:view>
+</logic:notEmpty>
+<logic:empty name="person" property="responsibleProjectAccountingUnits">
+	<p>
+		<em><bean:message key="accountingUnit.message.person.not.responsible" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>.</em>
 	</p>
 </logic:empty>
 
