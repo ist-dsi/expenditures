@@ -13,14 +13,12 @@ public class ChangeProcessClassification extends
     @Override
     public boolean isActive(SimplifiedProcedureProcess process, User user) {
 	Person loggedPerson = user.getExpenditurePerson();
-	return loggedPerson == process.getRequestor() && process.getAcquisitionProcessState().isInGenesis()
-		&& process instanceof SimplifiedProcedureProcess;
+	return loggedPerson == process.getRequestor() && process.getAcquisitionProcessState().isInGenesis();
     }
 
     @Override
     protected void process(ChangeProcessClassificationActivityInformation activityInformation) {
-	((SimplifiedProcedureProcess) activityInformation.getProcess()).setProcessClassification(activityInformation
-		.getClassification());
+	activityInformation.getProcess().setProcessClassification(activityInformation.getClassification());
     }
 
     @Override
