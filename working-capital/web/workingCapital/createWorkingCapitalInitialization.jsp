@@ -20,7 +20,7 @@
         	<fr:property name="labelField" value="presentationName"/>
 			<fr:property name="format" value="${presentationName}"/>
 			<fr:property name="minChars" value="3"/>
-			<fr:property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.UnitAutoCompleteProvider"/>
+			<fr:property name="args" value="provider=module.workingCapital.presentationTier.renderers.UnitAutoCompleteProvider"/>
 			<fr:property name="size" value="60"/>
 		</fr:slot>
 		<fr:slot name="person" layout="autoComplete" key="label.module.workingCapital.movementResponsible"
