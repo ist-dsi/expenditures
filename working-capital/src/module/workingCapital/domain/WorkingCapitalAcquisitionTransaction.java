@@ -22,6 +22,7 @@ public class WorkingCapitalAcquisitionTransaction extends WorkingCapitalAcquisit
 	if (getBalance().isNegative()) {
 	    throw new DomainException(BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources", "error.insufficient.funds"));
 	}
+	setDebt(getDebt().subtract(value));
     }
 
     @Override

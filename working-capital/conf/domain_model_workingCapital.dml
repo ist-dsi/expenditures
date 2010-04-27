@@ -84,6 +84,9 @@ class WorkingCapitalTransaction {
 	class WorkingCapitalAcquisitionTransaction extends WorkingCapitalTransaction {
 	}
 
+	class WorkingCapitalAcquisitionSubmission extends WorkingCapitalTransaction {
+	}
+
 	class WorkingCapitalPayment extends WorkingCapitalTransaction {
 	}
 

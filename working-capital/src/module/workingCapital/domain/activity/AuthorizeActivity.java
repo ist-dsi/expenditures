@@ -48,7 +48,7 @@ public class AuthorizeActivity extends WorkflowActivity<WorkingCapitalProcess, W
 	} else {
 	    requestedValue = maxAnualValue.divideAndRound(new BigDecimal(6));
 	}
-	final Money anualValue = workingCapitalInitialization.getAuthorizedAnualValue();
+	final Money anualValue = workingCapitalInitialization.getMaxAuthorizedAnualValue();
 	final Money possibaySpent = workingCapital.getPossibaySpent();
 	final Money maxAllocatableValue = anualValue.subtract(possibaySpent);
 	if (requestedValue.isGreaterThan(maxAllocatableValue)) {

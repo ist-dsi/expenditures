@@ -49,9 +49,10 @@ public class WorkingCapitalTransaction extends WorkingCapitalTransaction_Base {
 	setDebt(getDebt().add(value));
     }
 
-    public void restoreDebt(final Money value) {
-	setAccumulatedValue(getAccumulatedValue().subtract(value));
-	setBalance(getBalance().add(value));
+    public void restoreDebt(final Money debtValue, final Money accumulatedValue) {
+	setAccumulatedValue(getAccumulatedValue().subtract(accumulatedValue));
+	setBalance(getBalance().add(debtValue));
+	setDebt(getDebt().add(debtValue));
     }
 
     public void addValue(final Money value) {
@@ -97,14 +98,27 @@ public class WorkingCapitalTransaction extends WorkingCapitalTransaction_Base {
     public void approve(final User user) {
     }
 
-    protected void restoreDebtOfFollowingTransactions() {
+    protected WorkingCapitalTransaction getNext() {
 	final int current = getNumber().intValue();
 	final WorkingCapital workingCapital = getWorkingCapital();
 	for (final WorkingCapitalTransaction workingCapitalTransaction : workingCapital.getWorkingCapitalTransactionsSet()) {
-	    if (workingCapitalTransaction.getNumber().intValue() >= current) {
-		workingCapitalTransaction.restoreDebt(getValue());
+	    if (workingCapitalTransaction.getNumber().intValue() == current + 1) {
+		return workingCapitalTransaction;
 	    }
 	}
+	return null;
+    }
+
+    protected void restoreDebtOfFollowingTransactions(final Money debtValue, final Money accumulatedValue) {
+	restoreDebt(debtValue, accumulatedValue);
+	final WorkingCapitalTransaction workingCapitalTransaction = getNext();
+	if (workingCapitalTransaction != null) {
+	    workingCapitalTransaction.restoreDebtOfFollowingTransactions(debtValue, accumulatedValue);
+	}	
+    }
+
+    protected void restoreDebtOfFollowingTransactions() {
+	restoreDebtOfFollowingTransactions(getValue(), getValue());
     }
 
     public void reject(User loggedPerson) {

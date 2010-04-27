@@ -33,7 +33,7 @@ public class RegisterCapitalRefundActivity extends WorkflowActivity<WorkingCapit
 	    final WorkingCapitalProcess process = activityInformation.getProcess();
 	    final WorkingCapital workingCapital = process.getWorkingCapital();
 	    final Person person = getLoggedPerson().getPerson();
-	    new WorkingCapitalRefund(workingCapital, person);
+	    new WorkingCapitalRefund(workingCapital, person, workingCapital.getBalance());
 	}
     }
 

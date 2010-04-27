@@ -149,7 +149,7 @@
 					</td>
 					<td>
 					<logic:equal name="workingCapitalTransaction" property="verified" value="true">
-						<fr:view name="workingCapitalTransaction" property="workingCapitalAcquisition.verifier.child.name"/>
+						<fr:view name="workingCapitalTransaction" property="workingCapitalAcquisition.verifier.name"/>
 					</logic:equal>
 					<logic:equal name="workingCapitalTransaction" property="verified" value="false">
 						-

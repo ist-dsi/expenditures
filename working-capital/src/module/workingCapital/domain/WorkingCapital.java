@@ -315,27 +315,37 @@ public class WorkingCapital extends WorkingCapital_Base {
 	    return true;
 	}
 
-	boolean hasSomeAcquisition = false;
-
-	DateTime lastPayment = null;
 	for (final WorkingCapitalTransaction workingCapitalTransaction : getWorkingCapitalTransactionsSet()) {
-	    if (workingCapitalTransaction.isPayment() && (lastPayment == null || lastPayment.isBefore(workingCapitalTransaction.getTransationInstant()))) {
-		lastPayment = workingCapitalTransaction.getTransationInstant();
-	    }
-	}
-
-	for (final WorkingCapitalTransaction workingCapitalTransaction : getWorkingCapitalTransactionsSet()) {
-	    if (workingCapitalTransaction.isAcquisition() && workingCapitalTransaction.getTransationInstant().isAfter(lastPayment)) {
+	    if (workingCapitalTransaction.isAcquisition() && !workingCapitalTransaction.isCanceledOrRejected()) {
 		final WorkingCapitalAcquisitionTransaction workingCapitalAcquisitionTransaction = (WorkingCapitalAcquisitionTransaction) workingCapitalTransaction;
-		final WorkingCapitalAcquisition workingCapitalAcquisition = workingCapitalAcquisitionTransaction.getWorkingCapitalAcquisition();
-		if (workingCapitalAcquisition.getSubmitedForVerification() != null) {
-		    if (workingCapitalTransaction.isVerified() && !workingCapitalAcquisition.isCanceledOrRejected()) {
-			hasSomeAcquisition = true;
-		    }
+		if (!workingCapitalAcquisitionTransaction.isVerified()) {
+		    return false;
 		}
 	    }
 	}
-	return hasSomeAcquisition && lastWorkingCapitalTransaction.getAccumulatedValue().isPositive();
+	return true;
+
+//	boolean hasSomeAcquisition = false;
+//
+//	DateTime lastPayment = null;
+//	for (final WorkingCapitalTransaction workingCapitalTransaction : getWorkingCapitalTransactionsSet()) {
+//	    if (workingCapitalTransaction.isPayment() && (lastPayment == null || lastPayment.isBefore(workingCapitalTransaction.getTransationInstant()))) {
+//		lastPayment = workingCapitalTransaction.getTransationInstant();
+//	    }
+//	}
+//
+//	for (final WorkingCapitalTransaction workingCapitalTransaction : getWorkingCapitalTransactionsSet()) {
+//	    if (workingCapitalTransaction.isAcquisition() && workingCapitalTransaction.getTransationInstant().isAfter(lastPayment)) {
+//		final WorkingCapitalAcquisitionTransaction workingCapitalAcquisitionTransaction = (WorkingCapitalAcquisitionTransaction) workingCapitalTransaction;
+//		final WorkingCapitalAcquisition workingCapitalAcquisition = workingCapitalAcquisitionTransaction.getWorkingCapitalAcquisition();
+//		if (workingCapitalAcquisition.getSubmitedForVerification() != null) {
+//		    if (workingCapitalTransaction.isVerified() && !workingCapitalAcquisition.isCanceledOrRejected()) {
+//			hasSomeAcquisition = true;
+//		    }
+//		}
+//	    }
+//	}
+//	return hasSomeAcquisition && lastWorkingCapitalTransaction.getAccumulatedValue().isPositive();
     }
 
     public boolean hasWorkingCapitalRequestPendingTreasuryProcessing() {

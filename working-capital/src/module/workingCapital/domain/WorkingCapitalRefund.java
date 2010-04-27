@@ -10,10 +10,11 @@ public class WorkingCapitalRefund extends WorkingCapitalRefund_Base {
         super();
     }
 
-    public WorkingCapitalRefund(final WorkingCapital workingCapital, final Person person) {
+    public WorkingCapitalRefund(final WorkingCapital workingCapital, final Person person, final Money value) {
 	this();
 	setWorkingCapital(workingCapital);
 	setPerson(person);
+	setValue(value);
     }
 
     @Override
@@ -33,11 +34,6 @@ public class WorkingCapitalRefund extends WorkingCapitalRefund_Base {
 
     @Override
     public Money getDebt() {
-	return Money.ZERO;
-    }
-
-    @Override
-    public Money getValue() {
 	return Money.ZERO;
     }
 
