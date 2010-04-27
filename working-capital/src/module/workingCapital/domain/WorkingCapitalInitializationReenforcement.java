@@ -10,7 +10,12 @@ public class WorkingCapitalInitializationReenforcement extends WorkingCapitalIni
         setFiscalId(workingCapitalInitialization.getFiscalId());
         setInternationalBankAccountNumber(workingCapitalInitialization.getInternationalBankAccountNumber());
         setAcceptedResponsability(workingCapitalInitialization.getAcceptedResponsability());
-        setRequestedAnualValue(workingCapitalInitialization.getRequestedAnualValue());
+        Money requestedAnualValue = workingCapitalInitialization.getRequestedAnualValue();
+        if (workingCapitalInitialization instanceof WorkingCapitalInitializationReenforcement) {
+            final WorkingCapitalInitializationReenforcement workingCapitalInitializationReenforcement = (WorkingCapitalInitializationReenforcement) workingCapitalInitialization;
+            requestedAnualValue = requestedAnualValue.add(workingCapitalInitializationReenforcement.getRequestedReenforcementValue());
+        }
+        setRequestedAnualValue(requestedAnualValue);
         setAuthorizedAnualValue(workingCapitalInitialization.getAuthorizedAnualValue());
         setMaxAuthorizedAnualValue(workingCapitalInitialization.getMaxAuthorizedAnualValue());
         setRequestedReenforcementValue(amount);
