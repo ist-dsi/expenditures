@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workingCapital.domain.WorkingCapitalInitialization;
+import module.workingCapital.domain.WorkingCapitalInitializationReenforcement;
 import module.workingCapital.domain.WorkingCapitalProcess;
 import myorg.domain.util.Money;
 
@@ -24,6 +25,11 @@ public class VerifyActivityInformation extends WorkingCapitalInitializationInfor
         if (workingCapitalInitialization != null) {
             maxAuthorizedAnualValue = workingCapitalInitialization.getRequestedAnualValue();
             authorizedAnualValue = maxAuthorizedAnualValue.multiply(new BigDecimal(2)).divideAndRound(new BigDecimal(12));
+            if (workingCapitalInitialization instanceof WorkingCapitalInitializationReenforcement) {
+        	final WorkingCapitalInitializationReenforcement workingCapitalInitializationReenforcement =
+        	    	(WorkingCapitalInitializationReenforcement) workingCapitalInitialization;
+        	authorizedAnualValue = authorizedAnualValue.add(workingCapitalInitializationReenforcement.getRequestedReenforcementValue());
+            }
         }
     }
 

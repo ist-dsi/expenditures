@@ -34,6 +34,11 @@
 
 			<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.requestedAnualValue.requested"/>:
 			<fr:view name="workingCapitalInitialization" property="requestedAnualValue"/>
+
+			<logic:equal name="workingCapitalInitialization" property="class.name" value="module.workingCapital.domain.WorkingCapitalInitializationReenforcement">
+				<br/>
+				<fr:slot name="workingCapitalInitialization" property="requestedReenforcementValue" key="label.module.workingCapital.initialization.requestedReenforcementValue"/>
+			</logic:equal>
 	</p>
 </div>
 

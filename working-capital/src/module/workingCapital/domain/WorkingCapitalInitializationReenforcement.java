@@ -9,6 +9,7 @@ public class WorkingCapitalInitializationReenforcement extends WorkingCapitalIni
         setWorkingCapital(workingCapitalInitialization.getWorkingCapital());
         setFiscalId(workingCapitalInitialization.getFiscalId());
         setInternationalBankAccountNumber(workingCapitalInitialization.getInternationalBankAccountNumber());
+        setAcceptedResponsability(workingCapitalInitialization.getAcceptedResponsability());
         setRequestedAnualValue(workingCapitalInitialization.getRequestedAnualValue());
         setAuthorizedAnualValue(workingCapitalInitialization.getAuthorizedAnualValue());
         setMaxAuthorizedAnualValue(workingCapitalInitialization.getMaxAuthorizedAnualValue());
