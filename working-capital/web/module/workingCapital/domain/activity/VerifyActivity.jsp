@@ -37,7 +37,7 @@
 
 			<logic:equal name="workingCapitalInitialization" property="class.name" value="module.workingCapital.domain.WorkingCapitalInitializationReenforcement">
 				<br/>
-				<fr:slot name="workingCapitalInitialization" property="requestedReenforcementValue" key="label.module.workingCapital.initialization.requestedReenforcementValue"/>
+				<fr:view name="workingCapitalInitialization" property="requestedReenforcementValue" key="label.module.workingCapital.initialization.requestedReenforcementValue"/>
 			</logic:equal>
 	</p>
 </div>
