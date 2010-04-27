@@ -10,15 +10,24 @@ public class WorkingCapitalInitializationReenforcement extends WorkingCapitalIni
         setFiscalId(workingCapitalInitialization.getFiscalId());
         setInternationalBankAccountNumber(workingCapitalInitialization.getInternationalBankAccountNumber());
         setAcceptedResponsability(workingCapitalInitialization.getAcceptedResponsability());
-        Money requestedAnualValue = workingCapitalInitialization.getRequestedAnualValue();
-        if (workingCapitalInitialization instanceof WorkingCapitalInitializationReenforcement) {
-            final WorkingCapitalInitializationReenforcement workingCapitalInitializationReenforcement = (WorkingCapitalInitializationReenforcement) workingCapitalInitialization;
-            requestedAnualValue = requestedAnualValue.add(workingCapitalInitializationReenforcement.getRequestedReenforcementValue());
-        }
+        Money requestedAnualValue = workingCapitalInitialization.getMaxAuthorizedAnualValue();
+        requestedAnualValue = requestedAnualValue.add(amount);
+
+//        if (workingCapitalInitialization instanceof WorkingCapitalInitializationReenforcement) {
+//            final WorkingCapitalInitializationReenforcement workingCapitalInitializationReenforcement = (WorkingCapitalInitializationReenforcement) workingCapitalInitialization;
+//            requestedAnualValue = requestedAnualValue.add(workingCapitalInitializationReenforcement.getRequestedReenforcementValue());
+//        }
+
         setRequestedAnualValue(requestedAnualValue);
         setAuthorizedAnualValue(workingCapitalInitialization.getAuthorizedAnualValue());
         setMaxAuthorizedAnualValue(workingCapitalInitialization.getMaxAuthorizedAnualValue());
         setRequestedReenforcementValue(amount);
+    }
+
+    @Override
+    public void unverify() {
+        super.unverify();
+        setAuthorizedReenforcementValue(null);
     }
 
 }

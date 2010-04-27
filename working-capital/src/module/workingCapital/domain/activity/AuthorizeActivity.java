@@ -44,7 +44,7 @@ public class AuthorizeActivity extends WorkflowActivity<WorkingCapitalProcess, W
 	if (workingCapitalInitialization instanceof WorkingCapitalInitializationReenforcement) {
 	    final WorkingCapitalInitializationReenforcement workingCapitalInitializationReenforcement =
 			(WorkingCapitalInitializationReenforcement) workingCapitalInitialization;
-	    requestedValue = workingCapitalInitializationReenforcement.getRequestedReenforcementValue();
+	    requestedValue = workingCapitalInitializationReenforcement.getAuthorizedReenforcementValue();
 	} else {
 	    requestedValue = maxAnualValue.divideAndRound(new BigDecimal(6));
 	}

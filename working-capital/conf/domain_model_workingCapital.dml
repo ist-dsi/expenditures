@@ -41,6 +41,7 @@ class WorkingCapitalInitialization {
 
 	class WorkingCapitalInitializationReenforcement extends WorkingCapitalInitialization {
 		Money requestedReenforcementValue;
+		Money authorizedReenforcementValue;
 	}
 
 class WorkingCapitalProcess extends .module.workflow.domain.WorkflowProcess {

@@ -4,6 +4,7 @@ import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workingCapital.domain.WorkingCapital;
 import module.workingCapital.domain.WorkingCapitalInitialization;
+import module.workingCapital.domain.WorkingCapitalInitializationReenforcement;
 import module.workingCapital.domain.WorkingCapitalProcess;
 import myorg.domain.User;
 import myorg.util.BundleUtil;
@@ -26,6 +27,10 @@ public class VerifyActivity extends WorkflowActivity<WorkingCapitalProcess, Veri
 	final User user = getLoggedPerson();
 	final WorkingCapitalInitialization workingCapitalInitialization = activityInformation.getWorkingCapitalInitialization();
 	workingCapitalInitialization.verify(user, activityInformation.getAuthorizedAnualValue(), activityInformation.getMaxAuthorizedAnualValue());
+	if (workingCapitalInitialization instanceof WorkingCapitalInitializationReenforcement) {
+	    final WorkingCapitalInitializationReenforcement workingCapitalInitializationReenforcement = (WorkingCapitalInitializationReenforcement) workingCapitalInitialization;
+	    workingCapitalInitializationReenforcement.setAuthorizedReenforcementValue(activityInformation.getAuthorizedReenforcementValue());
+	}
     }
 
     @Override

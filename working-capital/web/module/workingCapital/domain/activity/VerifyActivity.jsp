@@ -54,6 +54,9 @@
 			<fr:schema type="module.workingCapital.domain.WorkingCapitalInitialization" bundle="WORKING_CAPITAL_RESOURCES">
 				<fr:slot name="authorizedAnualValue" key="label.module.workingCapital.authorizedAnualValue" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 				<fr:slot name="maxAuthorizedAnualValue" key="label.module.workingCapital.maxAuthorizedAnualValue" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+				<logic:equal name="workingCapitalInitialization" property="class.name" value="module.workingCapital.domain.WorkingCapitalInitializationReenforcement">
+					<fr:slot name="authorizedReenforcementValue" key="label.module.workingCapital.initialization.authorizedReenforcementValue" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+				</logic:equal>
 			</fr:schema>
 			<fr:layout name="tabular">
 				<fr:property name="classes" value="form listInsideClear" />

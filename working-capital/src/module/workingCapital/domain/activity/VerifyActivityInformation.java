@@ -13,6 +13,7 @@ public class VerifyActivityInformation extends WorkingCapitalInitializationInfor
 
     private Money authorizedAnualValue;
     private Money maxAuthorizedAnualValue;
+    private Money authorizedReenforcementValue;
 
     public VerifyActivityInformation(final WorkingCapitalProcess workingCapitalProcess,
 	    final WorkflowActivity<WorkingCapitalProcess, ? extends ActivityInformation<WorkingCapitalProcess>> activity) {
@@ -24,11 +25,14 @@ public class VerifyActivityInformation extends WorkingCapitalInitializationInfor
         super.setWorkingCapitalInitialization(workingCapitalInitialization);
         if (workingCapitalInitialization != null) {
             maxAuthorizedAnualValue = workingCapitalInitialization.getRequestedAnualValue();
-            authorizedAnualValue = maxAuthorizedAnualValue.multiply(new BigDecimal(2)).divideAndRound(new BigDecimal(12));
             if (workingCapitalInitialization instanceof WorkingCapitalInitializationReenforcement) {
         	final WorkingCapitalInitializationReenforcement workingCapitalInitializationReenforcement =
         	    	(WorkingCapitalInitializationReenforcement) workingCapitalInitialization;
-        	maxAuthorizedAnualValue = maxAuthorizedAnualValue.add(workingCapitalInitializationReenforcement.getRequestedReenforcementValue());
+        	//maxAuthorizedAnualValue = maxAuthorizedAnualValue.add(workingCapitalInitializationReenforcement.getRequestedReenforcementValue());
+        	authorizedAnualValue = workingCapitalInitialization.getAuthorizedAnualValue();
+        	authorizedReenforcementValue = workingCapitalInitializationReenforcement.getRequestedReenforcementValue();
+            } else {
+        	authorizedAnualValue = maxAuthorizedAnualValue.multiply(new BigDecimal(2)).divideAndRound(new BigDecimal(12));
             }
         }
     }
@@ -47,6 +51,14 @@ public class VerifyActivityInformation extends WorkingCapitalInitializationInfor
 
     public void setMaxAuthorizedAnualValue(Money maxAuthorizedAnualValue) {
         this.maxAuthorizedAnualValue = maxAuthorizedAnualValue;
+    }
+
+    public Money getAuthorizedReenforcementValue() {
+        return authorizedReenforcementValue;
+    }
+
+    public void setAuthorizedReenforcementValue(Money authorizedReenforcementValue) {
+        this.authorizedReenforcementValue = authorizedReenforcementValue;
     }
 
     @Override

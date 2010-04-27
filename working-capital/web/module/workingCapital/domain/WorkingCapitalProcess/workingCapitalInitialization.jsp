@@ -39,6 +39,10 @@
 			</logic:present>
 			<logic:equal name="workingCapital" property="workingCapitalInitialization.class.name" value="module.workingCapital.domain.WorkingCapitalInitializationReenforcement">
 				<fr:slot name="requestedReenforcementValue" key="label.module.workingCapital.initialization.requestedReenforcementValue"/>
+				<fr:slot name="authorizedReenforcementValue" key="label.module.workingCapital.initialization.authorizedReenforcementValue" layout="null-as-label">
+					<fr:property name="subLayout" value=""/>
+					<fr:property name="classes" value="bold"/>
+				</fr:slot>
 			</logic:equal>
 		</fr:schema>
 		<fr:layout name="tabular">
