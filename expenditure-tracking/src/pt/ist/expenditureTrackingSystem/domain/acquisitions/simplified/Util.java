@@ -10,7 +10,7 @@ public class Util {
 
     public static boolean isAppiableForYear(final int year, final SimplifiedProcedureProcess simplifiedProcedureProcess) {
 	final TreeSet<ActivityLog> logs = new TreeSet<ActivityLog>(WorkflowLog.COMPARATOR_BY_WHEN_REVERSED);
-	for (WorkflowLog log : simplifiedProcedureProcess.getExecutionLogsSet()) {
+	for (WorkflowLog log : simplifiedProcedureProcess.getExecutionLogs(ActivityLog.class)) {
 	    logs.add((ActivityLog) log);
 	}
 	for (final ActivityLog genericLog : logs) {
