@@ -28,7 +28,7 @@ public class VerifyActivityInformation extends WorkingCapitalInitializationInfor
             if (workingCapitalInitialization instanceof WorkingCapitalInitializationReenforcement) {
         	final WorkingCapitalInitializationReenforcement workingCapitalInitializationReenforcement =
         	    	(WorkingCapitalInitializationReenforcement) workingCapitalInitialization;
-        	authorizedAnualValue = authorizedAnualValue.add(workingCapitalInitializationReenforcement.getRequestedReenforcementValue());
+        	maxAuthorizedAnualValue = maxAuthorizedAnualValue.add(workingCapitalInitializationReenforcement.getRequestedReenforcementValue());
             }
         }
     }
