@@ -25,7 +25,8 @@ public class AuthorizeActivity extends WorkflowActivity<WorkingCapitalProcess, W
 	final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
 	return !workingCapital.isCanceledOrRejected()
 		&& workingCapital.isPendingAuthorization(user)
-		&& workingCapital.getWorkingCapitalRequestsSet().isEmpty();
+		// && workingCapital.getWorkingCapitalRequestsSet().isEmpty()
+		;
     }
 
     @Override
