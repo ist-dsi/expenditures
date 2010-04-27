@@ -37,7 +37,8 @@
 
 			<logic:equal name="workingCapitalInitialization" property="class.name" value="module.workingCapital.domain.WorkingCapitalInitializationReenforcement">
 				<br/>
-				<fr:view name="workingCapitalInitialization" property="requestedReenforcementValue" key="label.module.workingCapital.initialization.requestedReenforcementValue"/>
+				<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.initialization.requestedReenforcementValue"/>:
+				<fr:view name="workingCapitalInitialization" property="requestedReenforcementValue"/>
 			</logic:equal>
 	</p>
 </div>
