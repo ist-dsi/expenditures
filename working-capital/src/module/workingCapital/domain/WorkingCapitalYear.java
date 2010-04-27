@@ -3,6 +3,7 @@ package module.workingCapital.domain;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import module.organization.domain.Accountability;
 import module.organization.domain.Party;
 import module.organization.domain.Person;
 import module.organization.domain.Unit;
@@ -135,16 +136,48 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
 	final User user = UserView.getCurrentUser();
 	if (user.hasExpenditurePerson()) {
 	    for (final Authorization authorization : user.getExpenditurePerson().getAuthorizationsSet()) {
-		final pt.ist.expenditureTrackingSystem.domain.organization.Unit unit = authorization.getUnit();
-		for (final WorkingCapital workingCapital : unit.getWorkingCapitalsSet()) {
-		    if (workingCapital.getWorkingCapitalYear() == this) {
-			final WorkingCapitalProcess workingCapitalProcess = workingCapital.getWorkingCapitalProcess();
-			result.add(workingCapitalProcess);
+		if (authorization.isValid()) {
+		    final pt.ist.expenditureTrackingSystem.domain.organization.Unit unit = authorization.getUnit();
+		    for (final WorkingCapital workingCapital : unit.getWorkingCapitalsSet()) {
+			if (workingCapital.getWorkingCapitalYear() == this) {
+			    final WorkingCapitalProcess workingCapitalProcess = workingCapital.getWorkingCapitalProcess();
+			    result.add(workingCapitalProcess);
+			}
 		    }
+		    addSubUnitWorkingCapitals(result, unit.getUnit());
 		}
 	    }
 	}
 	return result;
+    }
+
+    private void addSubUnitWorkingCapitals(final SortedSet<WorkingCapitalProcess> result, final Unit unit) {
+	for (final Accountability accountability : unit.getChildAccountabilitiesSet()) {
+	    final Party child = accountability.getChild();
+	    if (child.isUnit()) {
+		final Unit childUnit = (Unit) child;
+		if (childUnit.hasExpenditureUnit()) {
+		    final pt.ist.expenditureTrackingSystem.domain.organization.Unit expenditureUnit = childUnit.getExpenditureUnit();
+		    if (!hasValidAuthorization(expenditureUnit)) {
+			for (WorkingCapital workingCapital : expenditureUnit.getWorkingCapitalsSet()) {
+			    if (workingCapital.getWorkingCapitalYear() == this) {
+				result.add(workingCapital.getWorkingCapitalProcess());
+			    }
+			}
+		    }
+		}
+		addSubUnitWorkingCapitals(result, childUnit);
+	    }
+	}
+    }
+
+    private boolean hasValidAuthorization(final pt.ist.expenditureTrackingSystem.domain.organization.Unit expenditureUnit) {
+	for (final Authorization authorization : expenditureUnit.getAuthorizationsSet()) {
+	    if (authorization.isValid()) {
+		return true;
+	    }
+	}
+	return false;
     }
 
     public SortedSet<WorkingCapitalProcess> getForUnit(final Unit unit) {
