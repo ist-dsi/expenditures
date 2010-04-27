@@ -6,6 +6,7 @@ import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workingCapital.domain.WorkingCapital;
 import module.workingCapital.domain.WorkingCapitalInitialization;
+import module.workingCapital.domain.WorkingCapitalInitializationReenforcement;
 import module.workingCapital.domain.WorkingCapitalProcess;
 import module.workingCapital.domain.WorkingCapitalRequest;
 import module.workingCapital.domain.util.PaymentMethod;
@@ -39,10 +40,19 @@ public class AuthorizeActivity extends WorkflowActivity<WorkingCapitalProcess, W
 	final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
 
 	final Money maxAnualValue = workingCapitalInitialization.getMaxAuthorizedAnualValue();
-	Money requestedValue = maxAnualValue.divideAndRound(new BigDecimal(6));
+	Money requestedValue;
+	if (workingCapitalInitialization instanceof WorkingCapitalInitializationReenforcement) {
+	    final WorkingCapitalInitializationReenforcement workingCapitalInitializationReenforcement =
+			(WorkingCapitalInitializationReenforcement) workingCapitalInitialization;
+	    requestedValue = workingCapitalInitializationReenforcement.getRequestedReenforcementValue();
+	} else {
+	    requestedValue = maxAnualValue.divideAndRound(new BigDecimal(6));
+	}
 	final Money anualValue = workingCapitalInitialization.getAuthorizedAnualValue();
-	if (requestedValue.isGreaterThan(anualValue)) {
-	    requestedValue = anualValue;
+	final Money possibaySpent = workingCapital.getPossibaySpent();
+	final Money maxAllocatableValue = anualValue.subtract(possibaySpent);
+	if (requestedValue.isGreaterThan(maxAllocatableValue)) {
+	    requestedValue = maxAllocatableValue;
 	}
 	final PaymentMethod paymentMethod = workingCapitalInitialization.getInternationalBankAccountNumber() == null  
 		|| workingCapitalInitialization.getInternationalBankAccountNumber().isEmpty() ? 

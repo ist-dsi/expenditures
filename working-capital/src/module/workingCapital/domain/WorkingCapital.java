@@ -404,4 +404,17 @@ public class WorkingCapital extends WorkingCapital_Base {
 	return false;
     }
 
+    public Money getPossibaySpent() {
+	Money result = Money.ZERO;
+	for (final WorkingCapitalTransaction workingCapitalTransaction : getWorkingCapitalTransactionsSet()) {
+	    if (workingCapitalTransaction.isPayment()) {
+		result = result.add(workingCapitalTransaction.getValue());
+	    }
+	    if (workingCapitalTransaction.isRefund()) {
+		result = result.subtract(workingCapitalTransaction.getValue());
+	    }
+	}
+	return result;
+    }
+
 }
