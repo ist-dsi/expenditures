@@ -26,6 +26,9 @@ public class RequestCapitalActivityInformation extends ActivityInformation<Worki
 	if (workingCapital.hasAnyWorkingCapitalTransactions()) {
 	    final WorkingCapitalTransaction workingCapitalTransaction = workingCapital.getLastTransaction();
 	    requestedValue = workingCapitalTransaction.getAccumulatedValue();
+	    if (requestedValue.isGreaterThan(workingCapitalInitialization.getAuthorizedAnualValue())) {
+		requestedValue = workingCapitalInitialization.getAuthorizedAnualValue();
+	    }
 	} else {
 	    final Money maxAnualValue = workingCapitalInitialization.getMaxAuthorizedAnualValue();
 	    requestedValue = maxAnualValue.divideAndRound(new BigDecimal(6));
