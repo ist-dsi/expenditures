@@ -1,6 +1,7 @@
 package module.workingCapital.presentationTier.action;
 
 import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,6 +13,7 @@ import module.workingCapital.domain.WorkingCapitalInitialization;
 import module.workingCapital.domain.WorkingCapitalProcess;
 import module.workingCapital.domain.WorkingCapitalSystem;
 import module.workingCapital.domain.WorkingCapitalTransaction;
+import module.workingCapital.domain.WorkingCapitalYear;
 import module.workingCapital.domain.util.AcquisitionClassificationBean;
 import module.workingCapital.domain.util.WorkingCapitalInitializationBean;
 import module.workingCapital.presentationTier.action.util.WorkingCapitalContext;
@@ -47,6 +49,11 @@ public class WorkingCapitalAction extends ContextBaseAction {
 	    final HttpServletResponse response) {
 	final WorkingCapitalContext workingCapitalContext = getRenderedObject("workingCapitalInitializationBean");
 	final SortedSet<WorkingCapitalProcess> unitProcesses = workingCapitalContext.getWorkingCapitalSearchByUnit();
+	return showList(request, workingCapitalContext, unitProcesses);
+    }
+
+    private ActionForward showList(final HttpServletRequest request, final WorkingCapitalContext workingCapitalContext,
+	    final SortedSet<WorkingCapitalProcess> unitProcesses) {
 	if (unitProcesses.size() == 1) {
 	    final WorkingCapitalProcess workingCapitalProcess = unitProcesses.first();
 	    return ProcessManagement.forwardToProcess(workingCapitalProcess);
@@ -54,6 +61,21 @@ public class WorkingCapitalAction extends ContextBaseAction {
 	    request.setAttribute("unitProcesses", unitProcesses);
 	    return frontPage(request, workingCapitalContext);
 	}
+    }
+
+    public ActionForward listProcesses(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	final WorkingCapitalYear workingCapitalYear = getDomainObject(request, "workingCapitalYearOid");
+	final WorkingCapitalContext workingCapitalContext = new WorkingCapitalContext();;
+	workingCapitalContext.setWorkingCapitalYear(workingCapitalYear);
+	final SortedSet<WorkingCapitalProcess> unitProcesses = new TreeSet<WorkingCapitalProcess>(WorkingCapitalProcess.COMPARATOR_BY_UNIT_NAME);
+	for (final WorkingCapital workingCapital : workingCapitalYear.getWorkingCapitalsSet()) {
+	    final WorkingCapitalProcess workingCapitalProcess = workingCapital.getWorkingCapitalProcess();
+	    if (workingCapitalProcess.isAccessibleToCurrentUser()) {
+		unitProcesses.add(workingCapitalProcess);
+	    }
+	}
+	return showList(request, workingCapitalContext, unitProcesses);
     }
 
     public ActionForward configuration(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,

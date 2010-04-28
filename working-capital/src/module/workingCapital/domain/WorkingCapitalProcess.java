@@ -1,5 +1,6 @@
 package module.workingCapital.domain;
 
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -42,7 +43,7 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base {
     public static final Comparator<WorkingCapitalProcess> COMPARATOR_BY_UNIT_NAME = new Comparator<WorkingCapitalProcess>() {
 	@Override
 	public int compare(WorkingCapitalProcess o1, WorkingCapitalProcess o2) {
-	    final int c = o1.getWorkingCapital().getUnit().getName().compareTo(o2.getWorkingCapital().getUnit().getName());
+	    final int c = Collator.getInstance().compare(o1.getWorkingCapital().getUnit().getName(), o2.getWorkingCapital().getUnit().getName());
 	    return c == 0 ? o2.hashCode() - o1.hashCode() : c;
 	}
     };
@@ -97,6 +98,20 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base {
     @Override
     public boolean isActive() {
 	return true;
+    }
+
+    @Override
+    public boolean isAccessible(final User user) {
+	final WorkingCapital workingCapital = getWorkingCapital();
+	return user != null && user.hasPerson() && (
+		user.getPerson() == workingCapital.getMovementResponsible()
+		|| workingCapital.isRequester(user)
+		|| workingCapital.getWorkingCapitalSystem().isManagementeMember(user)
+		|| workingCapital.isAccountingEmployee(user)
+		|| workingCapital.isAccountingResponsible(user)
+		|| workingCapital.isTreasuryMember(user)
+		|| workingCapital.isResponsibleFor(user)
+		);
     }
 
     public boolean isPendingAproval(final User user) {

@@ -96,19 +96,20 @@
 		</tr>
 	</table>
 </div>
+
 <div style="clear: left;"></div>
 
 <div style="border: 1px dotted #aaa; background: #f5f5f5; padding: 10px;  margin-top: 10px;">
 		
-			<h3 class="mtop0">
-				<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.front.page.search"/>
-			</h3>
+	<h3 class="mtop0">
+		<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.front.page.search"/>
+	</h3>
         
-			<p class="mvert05">
-				<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.front.page.search.text"/>
-			</p>
+	<p class="mvert05">
+		<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.front.page.search.text"/>
+	</p>
         
-        <fr:form action="/workingCapital.do?method=search">
+	<fr:form action="/workingCapital.do?method=search">
 		<fr:edit id="workingCapitalInitializationBean" name="workingCapitalContext" >
 			<fr:schema type="module.workingCapital.presentationTier.action.util.WorkingCapitalContext" bundle="WORKING_CAPITAL_RESOURCES">
 				<fr:slot name="workingCapitalYear" key="label.module.workingCapital.year" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" layout="menu-select">
@@ -133,8 +134,11 @@
 			</fr:layout>
 		</fr:edit>
 		<html:submit styleClass="inputbutton"><bean:message key="renderers.form.submit.name" bundle="RENDERER_RESOURCES"/></html:submit>
-		</fr:form>
-
+		&nbsp;&nbsp; 
+		<html:link action="/workingCapital.do?method=listProcesses" paramId="workingCapitalYearOid" paramName="workingCapitalContext" paramProperty="workingCapitalYear.externalId">
+			<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.list.all"/>
+		</html:link>
+	</fr:form>
 
 	<p>
 		<logic:present name="unitProcesses">

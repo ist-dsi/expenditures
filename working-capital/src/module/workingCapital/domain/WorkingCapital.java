@@ -444,4 +444,10 @@ public class WorkingCapital extends WorkingCapital_Base {
 	return result;
     }
 
+    public boolean isResponsibleFor(final User user) {
+	final Money valueForAuthorization = Money.ZERO;
+	final Authorization authorization = findUnitResponsible(user.getPerson(), valueForAuthorization);
+	return authorization != null;
+    }
+
 }
