@@ -1,5 +1,7 @@
 package module.workingCapital.domain;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -135,20 +137,69 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
 		WorkingCapitalProcess.COMPARATOR_BY_UNIT_NAME);
 	final User user = UserView.getCurrentUser();
 	if (user.hasExpenditurePerson()) {
-	    for (final Authorization authorization : user.getExpenditurePerson().getAuthorizationsSet()) {
-		if (authorization.isValid()) {
-		    final pt.ist.expenditureTrackingSystem.domain.organization.Unit unit = authorization.getUnit();
-		    for (final WorkingCapital workingCapital : unit.getWorkingCapitalsSet()) {
-			if (workingCapital.getWorkingCapitalYear() == this) {
-			    final WorkingCapitalProcess workingCapitalProcess = workingCapital.getWorkingCapitalProcess();
-			    result.add(workingCapitalProcess);
-			}
+	    final Set<Authorization> authorizations = getAuthorizations(user);
+	    if (!authorizations.isEmpty()) {
+		for (final WorkingCapital workingCapital : getWorkingCapitalsSet()) {
+		    final pt.ist.expenditureTrackingSystem.domain.organization.Unit unit = workingCapital.getUnit();
+		    if (isDirectlyResponsibleFor(authorizations, unit)) {
+			result.add(workingCapital.getWorkingCapitalProcess());
 		    }
-		    addSubUnitWorkingCapitals(result, unit.getUnit());
 		}
 	    }
+//	    for (final Authorization authorization : user.getExpenditurePerson().getAuthorizationsSet()) {
+//		if (authorization.isValid()) {
+//		    final pt.ist.expenditureTrackingSystem.domain.organization.Unit unit = authorization.getUnit();
+//		    for (final WorkingCapital workingCapital : unit.getWorkingCapitalsSet()) {
+//			if (workingCapital.getWorkingCapitalYear() == this) {
+//			    final WorkingCapitalProcess workingCapitalProcess = workingCapital.getWorkingCapitalProcess();
+//			    result.add(workingCapitalProcess);
+//			}
+//		    }
+//		    addSubUnitWorkingCapitals(result, unit.getUnit());
+//		}
+//	    }
 	}
 	return result;
+    }
+
+    private boolean isDirectlyResponsibleFor(final Set<Authorization> authorizations, final pt.ist.expenditureTrackingSystem.domain.organization.Unit unit) {
+	final Set<Authorization> authorizationsFromUnit = unit.getAuthorizationsSet();
+	if (intersect(authorizations, authorizationsFromUnit)) {
+	    return true;
+	}
+	if (hasValidAuthorization(authorizationsFromUnit)) {
+	    return false;
+	}
+	final pt.ist.expenditureTrackingSystem.domain.organization.Unit parentUnit = unit.getParentUnit();
+	return parentUnit != null && isDirectlyResponsibleFor(authorizations, parentUnit);
+    }
+
+    private boolean hasValidAuthorization(final Set<Authorization> authorizations) {
+	for (final Authorization authorization : authorizations) {
+	    if (authorization.isValid()) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
+    private boolean intersect(final Set<Authorization> authorizations, final Set<Authorization> authorizationsFromUnit) {
+	for (final Authorization authorization : authorizationsFromUnit) {
+	    if (authorizations.contains(authorization)) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
+    private Set<Authorization> getAuthorizations(final User user) {
+	final Set<Authorization> authorizations = new HashSet<Authorization>();
+	for (final Authorization authorization : user.getExpenditurePerson().getAuthorizationsSet()) {
+	    if (authorization.isValid()) {
+		authorizations.add(authorization);
+	    }
+	}
+	return authorizations;
     }
 
     private void addSubUnitWorkingCapitals(final SortedSet<WorkingCapitalProcess> result, final Unit unit) {
