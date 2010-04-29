@@ -50,6 +50,7 @@ import pt.ist.expenditureTrackingSystem.domain.dto.SupplierBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.UnitBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
+import pt.ist.expenditureTrackingSystem.domain.organization.Project;
 import pt.ist.expenditureTrackingSystem.domain.organization.SearchUsers;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
@@ -766,6 +767,8 @@ public class OrganizationAction extends BaseAction {
 	spreadsheet.setHeader("inicio");
 	spreadsheet.setHeader("duracao");
 	spreadsheet.setHeader("status");
+	spreadsheet.setHeader("tipo");
+	spreadsheet.setHeader("regime");
 
 	final ProjectReader projectReader = new ProjectReader();
 	projectReader.execute();
@@ -788,9 +791,17 @@ public class OrganizationAction extends BaseAction {
 	    row.setCell(mgpProject.getInicio());
 	    row.setCell(mgpProject.getDuracao());
 	    row.setCell(mgpProject.getStatus());
+	    row.setCell(mgpProject.getType());
+	    row.setCell(determineProjectRegime(mgpProject.getProjectCode()));
 	}
 
 	return spreadsheet;
+    }
+
+    private String determineProjectRegime(final String projectCode) {
+	final Project project = Project.findProjectByCode(projectCode);
+	return project == null ? "" : (project.getDefaultRegeimIsCCP() != null && project.getDefaultRegeimIsCCP().booleanValue()
+		? "CCP" : "C&T");
     }
 
     public final ActionForward downloadSupplierAcquisitionInformation(final ActionMapping mapping, final ActionForm form,
