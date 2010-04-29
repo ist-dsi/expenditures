@@ -14,8 +14,12 @@ public class CancelInvoiceConfirmation extends
     @Override
     public boolean isActive(RegularAcquisitionProcess process, User user) {
 	Person person = user.getExpenditurePerson();
-	return isUserProcessOwner(process, user) && process.isResponsibleForUnit(person)
-		&& !process.getConfirmedInvoices(person).isEmpty() && !process.hasAnyEffectiveFundAllocationId();
+	return isUserProcessOwner(process, user)
+		&& process.isResponsibleForUnit(person)
+		&& !process.getConfirmedInvoices(person).isEmpty()
+		&& ((process.hasProjectsAsPayingUnits() && !process.getRequest()
+			.hasAllocatedFundsPermanentlyForAnyProjectFinancer()) || (!process.hasProjectsAsPayingUnits() && !process
+			.getRequest().hasAnyEffectiveFundAllocationId()));
     }
 
     @Override
