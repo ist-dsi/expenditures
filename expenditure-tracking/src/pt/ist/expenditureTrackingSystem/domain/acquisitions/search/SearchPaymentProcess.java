@@ -13,6 +13,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessSt
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.predicates.DefaultPredicate;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.predicates.RefundProcessPredicate;
@@ -87,6 +88,7 @@ public class SearchPaymentProcess extends Search<PaymentProcess> {
     static {
 	predicateMap.put(SimplifiedProcedureProcess.class, new SimplifiedAcquisitionPredicate());
 	predicateMap.put(RefundProcess.class, new RefundProcessPredicate());
+	predicateMap.put(AfterTheFactAcquisitionProcess.class, new AfterTheFactPredicate());
     }
 
     public SearchPaymentProcess() {
