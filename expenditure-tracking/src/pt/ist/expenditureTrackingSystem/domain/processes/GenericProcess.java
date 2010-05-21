@@ -15,6 +15,7 @@ import myorg.domain.User;
 
 import org.apache.commons.collections.Predicate;
 
+import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.ProcessesThatAreAuthorizedByUserPredicate;
@@ -66,35 +67,36 @@ public abstract class GenericProcess extends GenericProcess_Base {
 
 	    @Override
 	    public void evaluate(GenericProcess process) {
-		if (!processed.contains(process)
-			&& clazz.isAssignableFrom(process.getClass())
-			&& predicate.evaluate(process)) {
+		if (!processed.contains(process) && clazz.isAssignableFrom(process.getClass()) && predicate.evaluate(process)) {
 		    processed.add(process);
 		    super.evaluate(process);
 		}
 	    }
 	};
 
-//	final Set<PaymentProcess> processes = new HashSet<PaymentProcess>();
-//	final Set<Unit> units = new HashSet<Unit>();
+	// final Set<PaymentProcess> processes = new HashSet<PaymentProcess>();
+	// final Set<Unit> units = new HashSet<Unit>();
 	for (final Authorization authorization : person.getAuthorizations()) {
 	    final Unit unit = authorization.getUnit();
 	    unit.evaluateAllProcesses(genericProcessEvaluator, year);
-//	    units.add(unit);
-//	    units.addAll(unit.getAllSubUnits());
+	    // units.add(unit);
+	    // units.addAll(unit.getAllSubUnits());
 	}
 
-//	for (final Unit unit : units) {
-//	    processes.addAll(unit.getProcesses(year));
-//	}
+	// for (final Unit unit : units) {
+	// processes.addAll(unit.getProcesses(year));
+	// }
 
-//	final Class clazz = processClass == null ? PaymentProcess.class : processClass;
-//	final ProcessesThatAreAuthorizedByUserPredicate predicate = new ProcessesThatAreAuthorizedByUserPredicate(person);
-//	for (final PaymentProcess paymentProcess : processes) {
-//	    if (clazz.isAssignableFrom(paymentProcess.getClass()) && predicate.evaluate(paymentProcess)) {
-//		processEvaluator.evaluate(paymentProcess);
-//	    }
-//	}
+	// final Class clazz = processClass == null ? PaymentProcess.class :
+	// processClass;
+	// final ProcessesThatAreAuthorizedByUserPredicate predicate = new
+	// ProcessesThatAreAuthorizedByUserPredicate(person);
+	// for (final PaymentProcess paymentProcess : processes) {
+	// if (clazz.isAssignableFrom(paymentProcess.getClass()) &&
+	// predicate.evaluate(paymentProcess)) {
+	// processEvaluator.evaluate(paymentProcess);
+	// }
+	// }
     }
 
     public static <T extends PaymentProcess> Set<T> getProcessesWithResponsible(Class<T> processClass, final Person person,
@@ -118,21 +120,21 @@ public abstract class GenericProcess extends GenericProcess_Base {
 		new ProcessesThatAreAuthorizedByUserPredicate(person), processes);
     }
 
-    public static void evaluateProcessesForPerson(final Class processClass, final Person person,
-	    final PaymentProcessYear year, final boolean userAwarness, final ProcessEvaluator<GenericProcess> processEvaluator) {
+    public static void evaluateProcessesForPerson(final Class processClass, final Person person, final PaymentProcessYear year,
+	    final boolean userAwarness, final ProcessEvaluator<GenericProcess> processEvaluator) {
 	if (person.hasAnyAuthorizations()) {
 	    GenericProcess.evaluateProcessesWithResponsible(processClass, person, year, new ProcessEvaluator<GenericProcess>() {
 		{
 		    next = processEvaluator;
 		}
-		
+
 		@Override
 		public void evaluate(final GenericProcess process) {
 		    if (process.hasAnyAvailableActivity(userAwarness)) {
 			super.evaluate(process);
 		    }
 		}
-		
+
 	    });
 	} else {
 	    final User user = person.getUser();
@@ -140,14 +142,14 @@ public abstract class GenericProcess extends GenericProcess_Base {
 		{
 		    next = processEvaluator;
 		}
-		
+
 		@Override
 		public void evaluate(final GenericProcess process) {
 		    if (process.hasAnyAvailableActivity(user, userAwarness)) {
 			super.evaluate(process);
 		    }
 		}
-		
+
 	    }, year);
 	}
     }
@@ -156,7 +158,8 @@ public abstract class GenericProcess extends GenericProcess_Base {
 	    PaymentProcessYear year, final boolean userAwarness) {
 
 	Set<T> processes = null;
-	if (person.hasAnyAuthorizations()) {
+	if (person.hasAnyAuthorizations()
+		&& !(person.hasRoleType(RoleType.ACQUISITION_CENTRAL) || person.hasRoleType(RoleType.ACQUISITION_CENTRAL_MANAGER))) {
 	    processes = new HashSet<T>();
 	    for (T process : GenericProcess.getProcessesWithResponsible(processClass, person, year)) {
 		if (process.hasAnyAvailableActivity(userAwarness)) {
