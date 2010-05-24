@@ -16,6 +16,8 @@ public class AfterTheFactPredicate extends SearchPredicate {
 
     private boolean matchesSearchCriteria(AcquisitionAfterTheFact request, SearchPaymentProcess searchBean) {
 
-	return matchCriteria(searchBean.getProcessId(), request.getAfterTheFactAcquisitionProcess().getProcessNumber());
+	return searchBean.getProcessId() != null
+		&& matchCriteria(searchBean.getProcessId(), request.getAfterTheFactAcquisitionProcess().getProcessNumber());
+
     }
 }
