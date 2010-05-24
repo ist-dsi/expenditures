@@ -83,6 +83,7 @@
 			<fr:property name="classes" value="form" />
 			<fr:property name="columnClasses" value=",,tderror" />
 		</fr:layout>
+		<fr:destination name="invalid" path="/acquisitionSimplifiedProcedureProcess.do?method=prepareCreateAcquisitionProcessCT75000"/>
 	</fr:edit>
 	<html:submit styleClass="inputbutton">
 		<bean:message key="button.create" bundle="EXPENDITURE_RESOURCES" />
