@@ -7,8 +7,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import myorg.domain.User;
+import net.sourceforge.fenixedu.domain.RemotePerson;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.plugins.remote.domain.RemoteHost;
+import pt.ist.fenixframework.plugins.remote.domain.RemoteSystem;
 import pt.ist.fenixframework.pstm.Transaction;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
@@ -43,7 +46,7 @@ public class SyncUsers extends SyncUsers_Base {
 	ResultSet resultSetQuery = null;
 	try {
 	    statementQuery = connection.createStatement();
-	    resultSetQuery = statementQuery.executeQuery("select fenix.USER.USER_U_ID, fenix.PARTY.PARTY_NAME, fenix.PARTY_CONTACT.VALUE from fenix.USER inner join fenix.PARTY on fenix.PARTY.OID = fenix.USER.OID_PERSON left join fenix.PARTY_CONTACT on fenix.PARTY_CONTACT.OID_PARTY = fenix.PARTY.OID and fenix.PARTY_CONTACT.OJB_CONCRETE_CLASS = 'net.sourceforge.fenixedu.domain.contacts.EmailAddress' and fenix.PARTY_CONTACT.TYPE = 'INSTITUTIONAL' group by fenix.USER.USER_U_ID;");
+	    resultSetQuery = statementQuery.executeQuery("select fenix.USER.USER_U_ID, fenix.PARTY.PARTY_NAME, fenix.PARTY_CONTACT.VALUE, fenix.PARTY.OID from fenix.USER inner join fenix.PARTY on fenix.PARTY.OID = fenix.USER.OID_PERSON left join fenix.PARTY_CONTACT on fenix.PARTY_CONTACT.OID_PARTY = fenix.PARTY.OID and fenix.PARTY_CONTACT.OJB_CONCRETE_CLASS = 'net.sourceforge.fenixedu.domain.contacts.EmailAddress' and fenix.PARTY_CONTACT.TYPE = 'INSTITUTIONAL' group by fenix.USER.USER_U_ID;");
 	    int c = 0;
 	    int u = 0;
 	    while (resultSetQuery.next()) {
@@ -51,6 +54,7 @@ public class SyncUsers extends SyncUsers_Base {
 		final String username = resultSetQuery.getString(1);
 		final String mlname = resultSetQuery.getString(2);
 		final String email = resultSetQuery.getString(3);
+		final String remotePersonOid = resultSetQuery.getString(4);
 		final User user = User.findByUsername(username);
 		if (user != null) {
 		    final Person person = user.getExpenditurePerson();
@@ -61,9 +65,10 @@ public class SyncUsers extends SyncUsers_Base {
 			    person.setName(name.getContent());
 			    u++;
 			}
-			if (email != null && !email.equals(person.getEmail())) {
-			    person.setEmail(email);
-			}
+//			if (email != null && !email.equals(person.getEmail())) {
+//			    person.setEmail(email);
+//			}
+			syncEmail(person, remotePersonOid);
 		    }
 		}
 	    }
@@ -77,6 +82,41 @@ public class SyncUsers extends SyncUsers_Base {
 		statementQuery.close();
 	    }
 	}
+    }
+
+    private static void syncEmail(final Person exPerson, final String remotePersonOid) {
+	final User user = exPerson.getUser();
+	final module.organization.domain.Person person = user.getPerson();
+	if (person != null) {
+	    RemotePerson remotePerson = person.getRemotePerson();
+	    final RemoteHost remoteHost = getRemoteHost();
+	    if (remoteHost != null) {
+		if (remotePerson == null) {
+		    remotePerson = new RemotePerson();
+		    remotePerson.setRemoteHost(remoteHost);
+		    remotePerson.setRemoteOid(remotePersonOid);
+		    person.setRemotePerson(remotePerson);
+		}
+//		final String email = remotePerson.getEmailForSendingEmails();
+//		if (email != null && !email.isEmpty()) {
+//		    if (!email.equals(exPerson.getEmail())) {
+//			exPerson.setEmail(email);
+//		    }
+//		} else {
+//		    exPerson.setEmail(null);
+//		}
+	    }
+	} else {
+	    System.out.println("No person found for expenditure person: " + user.getUsername());
+	}
+    }
+
+    private static RemoteHost getRemoteHost() {
+	// TODO : This is a hack... it should be selected when the person is first imported.
+	for (final RemoteHost remoteHost : RemoteSystem.getInstance().getRemoteHostsSet()) {
+	    return remoteHost;
+	}
+	return null;
     }
 
 }

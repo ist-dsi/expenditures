@@ -107,7 +107,7 @@
 <div class="infobox">
 	<table style="width: 100%;">
 		<tr>
-			<td style="vertical-align: top;">
+			<td style="vertical-align: top;">				
 				<fr:view name="person"
 						type="pt.ist.expenditureTrackingSystem.domain.organization.Person"
 						schema="viewPerson">
@@ -116,6 +116,9 @@
 						<fr:property name="columnClasses" value=",,tderror"/>
 					</fr:layout>
 				</fr:view>
+				<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
+					E-Mail: <bean:write name="person" property="email"/>
+				</logic:present>
 			</td>
 			<td style="text-align: right;">
 				<html:img src="https://fenix.ist.utl.pt/publico/retrievePersonalPhoto.do?method=retrieveByUUID&amp;contentContextPath_PATH=/homepage"
