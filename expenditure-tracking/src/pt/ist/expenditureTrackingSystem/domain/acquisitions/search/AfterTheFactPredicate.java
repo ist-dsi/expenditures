@@ -1,5 +1,7 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.search;
 
+import org.apache.commons.lang.StringUtils;
+
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AcquisitionAfterTheFact;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionProcess;
@@ -16,7 +18,7 @@ public class AfterTheFactPredicate extends SearchPredicate {
 
     private boolean matchesSearchCriteria(AcquisitionAfterTheFact request, SearchPaymentProcess searchBean) {
 
-	return searchBean.getProcessId() != null
+	return !StringUtils.isEmpty(searchBean.getProcessId())
 		&& matchCriteria(searchBean.getProcessId(), request.getAfterTheFactAcquisitionProcess().getProcessNumber());
 
     }
