@@ -373,10 +373,12 @@ public class Person extends Person_Base implements Indexable, Searchable {
 
     @Override
     public String getEmail() {
-	final User user = getUser();
-	final module.organization.domain.Person person = user == null ? null : user.getPerson();
-	final RemotePerson remotePerson = person == null ? null : person.getRemotePerson();
-	return remotePerson == null ? super.getEmail() : remotePerson.getEmailForSendingEmails();
+	return super.getEmail();
+	// TODO : the following behavior can only be used after ssl is properly working in production.
+//	final User user = getUser();
+//	final module.organization.domain.Person person = user == null ? null : user.getPerson();
+//	final RemotePerson remotePerson = person == null ? null : person.getRemotePerson();
+//	return remotePerson == null ? super.getEmail() : remotePerson.getEmailForSendingEmails();
     }
 
 }
