@@ -83,6 +83,7 @@ public class SyncProjectsAux {
 	private String duracao;
 	private String status;
 	private String type;
+	private String accountManager;
 	private Set<MgpSubProject> subProjects = new HashSet<MgpSubProject>();
 
 	MgpProject(final ResultSet resultSet) throws SQLException {
@@ -98,6 +99,7 @@ public class SyncProjectsAux {
 	    duracao = resultSet.getString(7);
 	    status = resultSet.getString(8);
 	    type = resultSet.getString(9);
+	    accountManager = resultSet.getString(10);
 	}
 
 	public String getProjectCode() {
@@ -140,6 +142,10 @@ public class SyncProjectsAux {
 	    return subProjects;
 	}
 
+	public String getAccountManager() {
+	    return accountManager;
+	}
+
 	public void registerSubProject(final String institution, final String institutionDescription) {
 	    subProjects.add(new MgpSubProject(institution, institutionDescription));
 	}
@@ -164,7 +170,8 @@ public class SyncProjectsAux {
 	@Override
 	protected String getQueryString() {
 	    return "SELECT v_projectos.unid_exploracao, v_projectos.projectcode, v_projectos.title,"
-	    		+ " v_projectos.idcoord, v_projectos.costcenter, v_projectos.inicio, v_projectos.duracao, v_projectos.status, v_projectos.tipo"
+	    		+ " v_projectos.idcoord, v_projectos.costcenter, v_projectos.inicio, v_projectos.duracao,"
+	    		+ " v_projectos.status, v_projectos.tipo, v_projectos.gestor"
 	    		+ " FROM v_projectos";
 	}
 
@@ -396,6 +403,7 @@ public class SyncProjectsAux {
 	String acronym = mgpProject.title.replace("\"", "");
 	String accountingUnitString = mgpProject.unidExploracao.replace("\"", "");
 	String type = mgpProject.type.replace("\"", "");
+	String accountManager = mgpProject.accountManager;
 
 	final Unit costCenter = findCostCenter(costCenterString);
 	if (costCenter != null) {
@@ -425,6 +433,10 @@ public class SyncProjectsAux {
 		    }
 		}
 	    }
+
+	    final Person accountManagerPerson = findPersonByUsername(accountManager);
+	    final Project project = (Project) unit;
+	    project.setAccountManager(accountManagerPerson);
 	}
     }
 
@@ -437,10 +449,14 @@ public class SyncProjectsAux {
 	String acronym = mgpProject.title.replace("\"", "");
 	String accountingUnitString = mgpProject.unidExploracao.replace("\"", "");
 	String type = mgpProject.type.replace("\"", "");
+	String accountManager = mgpProject.accountManager;
+	Person accountManagerPerson = findPersonByUsername(accountManager);
 
 	if (!acronym.equals(project.getName())) {
 	    project.setName(acronym);
 	}
+
+	project.setAccountManager(accountManagerPerson);
 
 //	if (type.equalsIgnoreCase("i")) {
 //	    if (project.getDefaultRegeimIsCCP().booleanValue()) {
@@ -515,6 +531,13 @@ public class SyncProjectsAux {
 		}
 	    }
 	}
+    }
+
+    private Person findPersonByUsername(final String username) {
+	if (username == null || username.trim().isEmpty()) {
+	    return null;
+	}
+	return Person.findByUsername(username.trim().toLowerCase());
     }
 
     private void createSubProject(final Project project, final MgpSubProject mgpSubProject) {

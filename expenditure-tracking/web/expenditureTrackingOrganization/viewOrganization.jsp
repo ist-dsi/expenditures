@@ -54,12 +54,39 @@
 
 <logic:present name="unit">
 	<div class="infobox">
-		<fr:view name="unit" schema="unit">
-			<fr:layout name="tabular">
-				<fr:property name="classes" value="tstyle1"/>
-				<fr:property name="rowClasses" value=",tdbold"/>
-			</fr:layout>
-		</fr:view>
+		<table>
+			<tr style="text-align: left;">
+				<th>
+					<bean:message bundle="EXPENDITURE_ORGANIZATION_RESOURCES" key="unit.label.type"/>
+				</th>
+				<td>
+					<bean:write name="unit" property="type"/>
+				</td>
+			</tr>
+			<tr style="text-align: left;">
+				<th>
+					<bean:message bundle="EXPENDITURE_ORGANIZATION_RESOURCES" key="unit.label.name"/>
+				</th>
+				<td>
+					<strong>
+						<bean:write name="unit" property="presentationName"/>
+					</strong>
+				</td>
+			</tr>
+			<logic:present name="unit" property="accountManager">
+				<tr style="text-align: left;">
+					<th>
+						<bean:message bundle="EXPENDITURE_ORGANIZATION_RESOURCES" key="unit.label.account.manager.name"/>
+						&nbsp;&nbsp;&nbsp;
+					</th>
+					<td>
+						<html:link styleClass="secondaryLink" action="/expenditureTrackingOrganization.do?method=viewPerson" paramId="personOid" paramName="unit" paramProperty="accountManager.externalId">
+							<bean:write name="unit" property="accountManager.name"/>
+						</html:link>
+					</td>
+				</tr>
+			</logic:present>
+		</table>
 	</div>
 
 	<p class="mtop05">
@@ -157,7 +184,6 @@
 			</logic:iterate>
 		</table>
 	</logic:notEmpty>
-	
 	<logic:notEmpty name="unit" property="observers">
 		<h3 class="mtop15 mbottom05"><bean:message key="label.observers" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/></h3>
 		<ul>

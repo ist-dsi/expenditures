@@ -937,3 +937,10 @@ relation UnitObservers {
 		multiplicity *;
 	}
 }
+
+relation UnitAccountManager {
+	organization.Unit playsRole unitForAccountManager {
+		multiplicity *;
+	}
+	organization.Person playsRole accountManager;
+}
