@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import myorg.domain.RoleType;
 import myorg.domain.VirtualHost;
 import myorg.domain.contents.ActionNode;
+import myorg.domain.contents.LinkNode;
 import myorg.domain.contents.Node;
 import myorg.domain.groups.Role;
 import myorg.domain.groups.UserGroup;
@@ -41,4 +42,17 @@ public class InterfaceCreationAction extends ContextBaseAction {
 
 	return forwardToMuneConfiguration(request, virtualHost, node);
     }
+
+    @CreateNodeAction(bundle = "WORKING_CAPITAL_RESOURCES", key = "add.node.workingCapital.interface.help", groupKey = "label.module.workingCapital")
+    public final ActionForward createHelpLinkNode(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+	final VirtualHost virtualHost = getDomainObject(request, "virtualHostToManageId");
+	final Node node = getDomainObject(request, "parentOfNodesToManageId");
+
+	LinkNode.createLinkNode(virtualHost, node, "https://fenix-ashes.ist.utl.pt/fenixWiki/Qualidade/FundoDeManeio", 
+		"resources.WorkingCapitalResources", "link.sideBar.workingCapital.help", UserGroup.getInstance());
+
+	return forwardToMuneConfiguration(request, virtualHost, node);
+    }
+
 }
