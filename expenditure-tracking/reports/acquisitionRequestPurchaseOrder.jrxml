@@ -2,6 +2,9 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="acquisitionRequestDocument" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="0">
 	<property name="ireport.scriptlethandling" value="0"/>
 	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="509"/>
+	<property name="ireport.y" value="144"/>
 	<import value="net.sf.jasperreports.engine.*"/>
 	<import value="java.util.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
@@ -44,12 +47,12 @@
 				</textElement>
 				<text><![CDATA[Requisição Externa nº:]]></text>
 			</staticText>
-			<textField isBlankWhenNull="false" hyperlinkType="None">
+			<textField isBlankWhenNull="false">
 				<reportElement key="textField-1" x="403" y="12" width="132" height="15"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{requestID}.toString()]]></textFieldExpression>
 			</textField>
-			<image hyperlinkType="None">
+			<image>
 				<reportElement key="image-1" x="19" y="9" width="87" height="181"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -66,7 +69,7 @@
 				</textElement>
 				<text><![CDATA[Nº Contribuinte:]]></text>
 			</staticText>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="false" hyperlinkType="None">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
 				<reportElement key="textField-21" x="435" y="218" width="100" height="16"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{acquisitionRequest}.getSupplier().getFiscalIdentificationCode()]]></textFieldExpression>
@@ -78,7 +81,7 @@
 				</textElement>
 				<text><![CDATA[Data :]]></text>
 			</staticText>
-			<textField isBlankWhenNull="false" hyperlinkType="None">
+			<textField isBlankWhenNull="false">
 				<reportElement key="textField-25" x="403" y="46" width="132" height="15"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression class="java.lang.String"><![CDATA[new SimpleDateFormat("yyyy/MM/dd").format(new Date())]]></textFieldExpression>
@@ -95,14 +98,14 @@
 				</textElement>
 				<text><![CDATA[Processado por:]]></text>
 			</staticText>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="false" hyperlinkType="None">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
 				<reportElement key="textField-26" x="83" y="258" width="218" height="16" isPrintWhenDetailOverflows="true"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle"/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{responsibleName}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement key="staticText-28" x="0" y="242" width="121" height="16">
-					<printWhenExpression><![CDATA[$P{acquisitionRequest}.getProcess().getAcquisitionProposalDocument() != null && 
+					<printWhenExpression><![CDATA[$P{acquisitionRequest}.getProcess().getAcquisitionProposalDocument() != null &&
 $P{acquisitionRequest}.getProcess().getAcquisitionProposalDocument().getProposalId() != null &&
 !$P{acquisitionRequest}.getProcess().getAcquisitionProposalDocument().getProposalId().isEmpty()]]></printWhenExpression>
 				</reportElement>
@@ -111,16 +114,16 @@ $P{acquisitionRequest}.getProcess().getAcquisitionProposalDocument().getProposal
 				</textElement>
 				<text><![CDATA[Vossa Proposta Nº:]]></text>
 			</staticText>
-			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false" hyperlinkType="None">
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-27" x="121" y="242" width="180" height="16" isPrintWhenDetailOverflows="true">
-					<printWhenExpression><![CDATA[$P{acquisitionRequest}.getProcess().getAcquisitionProposalDocument() != null && 
+					<printWhenExpression><![CDATA[$P{acquisitionRequest}.getProcess().getAcquisitionProposalDocument() != null &&
 $P{acquisitionRequest}.getProcess().getAcquisitionProposalDocument().getProposalId() != null &&
 !$P{acquisitionRequest}.getProcess().getAcquisitionProposalDocument().getProposalId().isEmpty()]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Left" verticalAlignment="Middle"/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{acquisitionRequest}.getProcess().getAcquisitionProposalDocument().getProposalId()]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="false" hyperlinkType="None">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
 				<reportElement key="textField-28" positionType="Float" x="255" y="97" width="275" height="105" isPrintWhenDetailOverflows="true"/>
 				<textElement verticalAlignment="Middle" lineSpacing="Single" markup="styled">
 					<font fontName="SansSerif" pdfFontName="Helvetica"/>
@@ -129,20 +132,19 @@ $P{acquisitionRequest}.getProcess().getAcquisitionProposalDocument().getProposal
 
 ($P{acquisitionRequest}.getSupplier().getAddress() != null ?
 
-(($P{acquisitionRequest}.getSupplier().getAddress().getLine1() != null && 
-!$P{acquisitionRequest}.getSupplier().getAddress().getLine1().isEmpty() ? 
+(($P{acquisitionRequest}.getSupplier().getAddress().getLine1() != null &&
+!$P{acquisitionRequest}.getSupplier().getAddress().getLine1().isEmpty() ?
 $P{acquisitionRequest}.getSupplier().getAddress().getLine1() + "\n" : "") +
 
-($P{acquisitionRequest}.getSupplier().getAddress().getLine2() != null && 
-!$P{acquisitionRequest}.getSupplier().getAddress().getLine2().isEmpty() ? 
-$P{acquisitionRequest}.getSupplier().getAddress().getLine2() + "\n" : "") + 
+($P{acquisitionRequest}.getSupplier().getAddress().getLine2() != null &&
+!$P{acquisitionRequest}.getSupplier().getAddress().getLine2().isEmpty() ?
+$P{acquisitionRequest}.getSupplier().getAddress().getLine2() + "\n" : "") +
 
-$P{acquisitionRequest}.getSupplier().getAddress().getPostalCode() + ", " + 
+$P{acquisitionRequest}.getSupplier().getAddress().getPostalCode() + ", " +
 $P{acquisitionRequest}.getSupplier().getAddress().getLocation() + "\n" +
 $P{acquisitionRequest}.getSupplier().getAddress().getCountry())
 
-: "")
-]]></textFieldExpression>
+: "")]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement key="staticText-30" x="285" y="29" width="117" height="15"/>
@@ -151,7 +153,7 @@ $P{acquisitionRequest}.getSupplier().getAddress().getCountry())
 				</textElement>
 				<text><![CDATA[Processo nº:]]></text>
 			</staticText>
-			<textField isBlankWhenNull="false" hyperlinkType="None">
+			<textField isBlankWhenNull="false">
 				<reportElement key="textField-29" x="403" y="29" width="132" height="15"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{acquisitionRequest}.getAcquisitionProcessId()]]></textFieldExpression>
@@ -163,6 +165,18 @@ $P{acquisitionRequest}.getSupplier().getAddress().getCountry())
 				</textElement>
 				<text><![CDATA[Central de Compras]]></text>
 			</staticText>
+			<staticText>
+				<reportElement key="staticText-20" x="350" y="242" width="80" height="16"/>
+				<textElement textAlignment="Right">
+					<font isItalic="true" pdfFontName="Helvetica-Oblique"/>
+				</textElement>
+				<text><![CDATA[Fax:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+				<reportElement key="textField-21" x="435" y="242" width="100" height="16"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{acquisitionRequest}.getSupplier().getFax()]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<pageHeader>
@@ -225,37 +239,37 @@ Entrega]]></text>
 	</columnHeader>
 	<detail>
 		<band height="23">
-			<textField isStretchWithOverflow="true" isBlankWhenNull="false" hyperlinkType="None">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
 				<reportElement key="textField-5" x="75" y="3" width="188" height="18"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{acquisitionRequestItem}.getDescription()]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true" hyperlinkType="None">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement key="textField-6" x="0" y="3" width="72" height="18"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{acquisitionRequestItem}.getProposalReference()]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="false" hyperlinkType="None">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
 				<reportElement key="textField-7" x="304" y="3" width="45" height="18"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{acquisitionRequestItem}.getQuantity().toString()]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="false" hyperlinkType="None">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
 				<reportElement key="textField-8" x="353" y="3" width="65" height="18"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{acquisitionRequestItem}.getUnitValue().toFormatStringWithoutCurrency()]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="false" hyperlinkType="None">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
 				<reportElement key="textField-12" mode="Opaque" x="423" y="3" width="35" height="18"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{acquisitionRequestItem}.getVatValue().toPlainString()]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="false" hyperlinkType="None">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
 				<reportElement key="textField-13" x="461" y="3" width="69" height="18"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{acquisitionRequestItem}.getTotalItemValueWithVat().toFormatStringWithoutCurrency()]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="false" hyperlinkType="None">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
 				<reportElement key="textField-20" x="270" y="3" width="32" height="18"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{identification}]]></textFieldExpression>
@@ -267,12 +281,12 @@ Entrega]]></text>
 	</columnFooter>
 	<pageFooter>
 		<band height="43">
-			<textField isBlankWhenNull="false" hyperlinkType="None">
+			<textField isBlankWhenNull="false">
 				<reportElement key="textField" x="203" y="25" width="300" height="18"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression class="java.lang.String"><![CDATA["Processo:" + $P{acquisitionRequest}.getAcquisitionProcessId() + " - Requisição: " + $P{requestID}.toString() + " - Pág. " + $V{PAGE_NUMBER} + " de "]]></textFieldExpression>
 			</textField>
-			<textField evaluationTime="Report" isBlankWhenNull="false" hyperlinkType="None">
+			<textField evaluationTime="Report" isBlankWhenNull="false">
 				<reportElement key="textField" x="507" y="25" width="40" height="18"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA["" + $V{PAGE_NUMBER} + ""]]></textFieldExpression>
@@ -316,7 +330,7 @@ CAE 931 400]]></text>
 				</textElement>
 				<text><![CDATA[Ilíquido]]></text>
 			</staticText>
-			<textField isBlankWhenNull="false" hyperlinkType="None">
+			<textField isBlankWhenNull="false">
 				<reportElement key="textField-9" x="377" y="28" width="115" height="16"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{acquisitionRequest}.getTotalItemValue().toFormatString()]]></textFieldExpression>
@@ -328,7 +342,7 @@ CAE 931 400]]></text>
 				</textElement>
 				<text><![CDATA[IVA]]></text>
 			</staticText>
-			<textField isBlankWhenNull="false" hyperlinkType="None">
+			<textField isBlankWhenNull="false">
 				<reportElement key="textField-15" x="377" y="47" width="115" height="16"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{acquisitionRequest}.getTotalVatValue().toFormatString()]]></textFieldExpression>
@@ -340,12 +354,12 @@ CAE 931 400]]></text>
 				</textElement>
 				<text><![CDATA[Total]]></text>
 			</staticText>
-			<textField isBlankWhenNull="false" hyperlinkType="None">
+			<textField isBlankWhenNull="false">
 				<reportElement key="textField-16" x="377" y="66" width="115" height="16"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{acquisitionRequest}.getTotalItemValueWithVat().toFormatString()]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="false" hyperlinkType="None">
+			<textField isBlankWhenNull="false">
 				<reportElement key="textField-23" x="203" y="169" width="300" height="18"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression class="java.lang.String"><![CDATA["Processo:" + $P{acquisitionRequest}.getAcquisitionProcessId() + " - Requisição: " + $P{requestID}.toString() + " - Pág. " + $V{PAGE_NUMBER} + " de " + $V{PAGE_NUMBER}]]></textFieldExpression>
