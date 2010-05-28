@@ -552,7 +552,8 @@ public class SyncProjectsAux {
 	    if (accountManagerPerson != null) {
 		final SubAccountingUnit subAccountingUnitRemote = subAccountingUnits.get(accountManagerPerson.getUsername());
 		if (subAccountingUnitRemote != null) {
-		    final AccountingUnit subAccountingUnit = AccountingUnit.readAccountingUnitByUnitName(subAccountingUnitRemote.getGroupName());
+		    final String subName = "20 - " + subAccountingUnitRemote.getGroupName();
+		    final AccountingUnit subAccountingUnit = AccountingUnit.readAccountingUnitByUnitName(subName);
 		    if (subAccountingUnit != null) {
 			unit.setAccountingUnit(accountingUnit);
 		    } else {
@@ -601,7 +602,8 @@ public class SyncProjectsAux {
 	if (accountManagerPerson != null) {
 	    final SubAccountingUnit subAccountingUnitRemote = subAccountingUnits.get(accountManagerPerson.getUsername());
 	    if (subAccountingUnitRemote != null) {
-		final AccountingUnit subAccountingUnit = AccountingUnit.readAccountingUnitByUnitName(subAccountingUnitRemote.getGroupName());
+		final String subName = "20 - " + subAccountingUnitRemote.getGroupName();
+		final AccountingUnit subAccountingUnit = AccountingUnit.readAccountingUnitByUnitName(subName);
 		if (subAccountingUnit != null) {
 		    project.setAccountingUnit(accountingUnit);
 		} else {
