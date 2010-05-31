@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
+import java.util.Map.Entry;
 
 import module.organization.domain.Accountability;
 import module.organization.domain.Party;
@@ -217,7 +219,7 @@ public class SyncProjectsAux {
 
     private static class SubAccountingUnitQuery extends ExternalDbQuery {
 
-	private final Map<String, SubAccountingUnit> subAccountingUnits = new HashMap<String, SubAccountingUnit>();
+	private final Map<String, SubAccountingUnit> subAccountingUnits = new TreeMap<String, SubAccountingUnit>();
 
 	@Override
 	protected String getQueryString() {
@@ -232,10 +234,19 @@ public class SyncProjectsAux {
 		final SubAccountingUnit subAccountingUnit = new SubAccountingUnit(resultSet);
 		if (isValid(subAccountingUnit)) {
 		    subAccountingUnits.put(subAccountingUnit.getUsername(), subAccountingUnit);
+		    System.out.println("Putting: " + subAccountingUnit.username + " " + subAccountingUnit.groupName);
+		} else {
+		    System.out.println("Invalid subaccounting unit: " + subAccountingUnit.groupName
+			    + " " + subAccountingUnit.start + " " + subAccountingUnit.end);
 		}
 	    }
 	    System.out.println("Result set has " + i + " elements projects with subAccountingUnits.");
 	    System.out.println("Loaded " + subAccountingUnits.size() + " projects with subAccountingUnits.");
+
+	    for (final Entry<String, SubAccountingUnit> entry : subAccountingUnits.entrySet()) {
+		System.out.println("   " + entry.getKey() + " -> " + entry.getValue().groupName
+			+ " : " + entry.getValue().getStart() + " - " + entry.getValue().getEnd());
+	    }
 	}
 
 	private boolean isValid(final SubAccountingUnit subAccountingUnit) {
@@ -605,9 +616,9 @@ public class SyncProjectsAux {
 		final String subName = "20 - " + subAccountingUnitRemote.getGroupName();
 		final AccountingUnit subAccountingUnit = AccountingUnit.readAccountingUnitByUnitName(subName);
 		if (subAccountingUnit != null) {
-		    project.setAccountingUnit(accountingUnit);
+		    project.setAccountingUnit(subAccountingUnit);
 		} else {
-		    System.out.println("Unable to find accounting unit with name: " + subAccountingUnitRemote.getGroupName());
+		    System.out.println("Unable to find accounting unit with name: [" + subAccountingUnitRemote.getGroupName() + "]");
 		}
 	    }
 	}
