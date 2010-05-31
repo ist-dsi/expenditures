@@ -5,6 +5,7 @@ import module.workflow.activities.WorkflowActivity;
 import myorg.domain.User;
 import myorg.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
 public class RemovePermanentProjectFunds<P extends PaymentProcess> extends WorkflowActivity<P, ActivityInformation<P>> {
@@ -12,7 +13,13 @@ public class RemovePermanentProjectFunds<P extends PaymentProcess> extends Workf
     @Override
     public boolean isActive(P process, User user) {
 	return process.isProjectAccountingEmployee(user.getExpenditurePerson()) && isUserProcessOwner(process, user)
-		&& process.isInvoiceConfirmed() && process.hasAllocatedFundsPermanentlyForAllProjectFinancers();
+		&& isInAPossibleState(process) && process.hasAllocatedFundsPermanentlyForAllProjectFinancers();
+    }
+
+    private boolean isInAPossibleState(P process) {
+	return process.isInvoiceConfirmed()
+		|| (process instanceof SimplifiedProcedureProcess && !process.getRequest().getInvoices().isEmpty() && ((SimplifiedProcedureProcess) process)
+			.getAcquisitionProcessState().isAcquisitionProcessed());
     }
 
     @Override
