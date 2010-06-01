@@ -27,7 +27,7 @@
 
 <script type="text/javascript">
 var checkBox = $("input[id$='hasMoreInvoices']");
-var itemList = $(checkBox).parents("tr").next("tr:last")
+var itemList = $(checkBox).parents("tr").next("tr:last");
 
 if (checkBox.attr('checked') == false) {
 	itemList.hide();
@@ -35,5 +35,10 @@ if (checkBox.attr('checked') == false) {
 
 checkBox.click(function(){	
 	itemList.toggle();
+	if (checkBox.attr('checked') == false) {
+		$("input[id*=items_]").each(function(){
+			$(this).attr('checked','true');
+		});
+	}
 });
 </script>
