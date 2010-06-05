@@ -366,7 +366,7 @@ public class SyncSuppliersAux {
 	final ExpenditureTrackingSystem expenditureTrackingSystem = ExpenditureTrackingSystem.getInstance();
 	for (final Supplier supplier : expenditureTrackingSystem.getSuppliersSet()) {
 	    if (!suppliersFromGiaf.contains(supplier)) {
-		System.out.println("Closing supplier not in GIAF: " + supplier.getExternalId());
+//		System.out.println("Closing supplier not in GIAF: " + supplier.getExternalId());
 		if (supplier.getTotalAllocated().isZero()) {
 		    System.out.println("Deleting supplier " + supplier.getExternalId());
 		    supplier.delete();
