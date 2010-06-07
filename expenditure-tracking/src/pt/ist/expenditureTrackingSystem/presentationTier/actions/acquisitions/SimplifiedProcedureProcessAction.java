@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import module.workflow.presentationTier.actions.ProcessManagement;
+import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
 
 import org.apache.struts.action.ActionForm;
@@ -59,8 +60,16 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	CreateAcquisitionProcessBean createAcquisitionProcessBean = getRenderedObject();
 	final Person person = getLoggedPerson();
 	createAcquisitionProcessBean.setRequester(person);
-	final SimplifiedProcedureProcess acquisitionProcess = SimplifiedProcedureProcess
-		.createNewAcquisitionProcess(createAcquisitionProcessBean);
+	SimplifiedProcedureProcess acquisitionProcess = null;
+	try {
+	    acquisitionProcess = SimplifiedProcedureProcess.createNewAcquisitionProcess(createAcquisitionProcessBean);
+	} catch (DomainException e) {
+	    addLocalizedMessage(request, e.getLocalizedMessage());
+	    request.setAttribute("acquisitionProcessBean", createAcquisitionProcessBean);
+	    return createAcquisitionProcessBean.getClassification().equals(ProcessClassification.CT75000) ? forward(request,
+		    "/acquisitions/createAcqusitionProcessCT75000.jsp") : forward(request,
+		    "/acquisitions/createAcquisitionProcess.jsp");
+	}
 	return ProcessManagement.forwardToProcess(acquisitionProcess);
     }
 

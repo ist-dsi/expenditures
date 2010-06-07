@@ -216,7 +216,8 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	inGenesis();
 	AcquisitionRequest acquisitionRequest = new AcquisitionRequest(this, suppliers, person);
 	if (suppliers.size() == 0) {
-	    throw new DomainException("acquisitionProcess.message.exception.needsMoreSuppliers");
+	    throw new DomainException("acquisitionProcess.message.exception.needsMoreSuppliers", DomainException
+		    .getResourceFor("resources/AcquisitionResources"));
 	}
 	if (suppliers.size() == 1) {
 	    acquisitionRequest.setSelectedSupplier(suppliers.get(0));

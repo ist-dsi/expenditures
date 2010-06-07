@@ -7,6 +7,14 @@
 
 <h2><bean:message key="acquisitionProcess.title.createAcquisitionRequest" bundle="ACQUISITION_RESOURCES"/></h2>
 
+<logic:messagesPresent property="message" message="true">
+	<div class="error1">
+		<html:messages id="errorMessage" property="message" message="true"> 
+			<span><fr:view name="errorMessage"/></span>
+		</html:messages>
+	</div>
+</logic:messagesPresent>
+
 <div class="infobox">
 	<bean:message key="acquisitionProcess.message.note" bundle="ACQUISITION_RESOURCES" />
 </div>
@@ -24,7 +32,7 @@
 			<td>
 				<fr:form action="<%= "/acquisitionSimplifiedProcedureProcess.do?method=removeSupplierInCreationPostBack&index=" + index.toString() %>">
 					<fr:edit id="<%= "bean-" + index.toString() %>" name="acquisitionProcessBean" visible="false"/>
-					<html:submit><bean:message key="link.remove" bundle="MYORG_RESOURCES"/></html:submit>
+					<html:submit styleClass="inputbutton"><bean:message key="link.remove" bundle="MYORG_RESOURCES"/></html:submit>
 				</fr:form>
 			</td>
 		</tr>
@@ -55,7 +63,7 @@
 	action="/acquisitionSimplifiedProcedureProcess.do?method=addSupplierInCreationPostBack">
 	<fr:edit id="bean" name="acquisitionProcessBean"
 		schema="createStandardAcquistion.selectSuppliers" />
-	<html:submit><bean:message key="link.add" bundle="MYORG_RESOURCES"/></html:submit>
+	<html:submit styleClass="inputbutton"><bean:message key="label.addSupplier" bundle="ACQUISITION_RESOURCES"/></html:submit>
 </fr:form>
 
 <fr:form action="/acquisitionSimplifiedProcedureProcess.do?method=createNewAcquisitionProcess">
