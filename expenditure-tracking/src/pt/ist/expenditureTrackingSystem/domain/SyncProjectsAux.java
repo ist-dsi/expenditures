@@ -21,6 +21,9 @@ import myorg.domain.util.Money;
 
 import org.joda.time.DateTime;
 
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestWithPayment;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateUnitBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
@@ -236,23 +239,23 @@ public class SyncProjectsAux {
 		    subAccountingUnits.put(subAccountingUnit.getUsername(), subAccountingUnit);
 		    System.out.println("Putting: " + subAccountingUnit.username + " " + subAccountingUnit.groupName);
 		} else {
-		    System.out.println("Invalid subaccounting unit: " + subAccountingUnit.groupName
-			    + " " + subAccountingUnit.start + " " + subAccountingUnit.end);
+		    System.out.println("Invalid subaccounting unit: " + subAccountingUnit.groupName + " "
+			    + subAccountingUnit.start + " " + subAccountingUnit.end);
 		}
 	    }
 	    System.out.println("Result set has " + i + " elements projects with subAccountingUnits.");
 	    System.out.println("Loaded " + subAccountingUnits.size() + " projects with subAccountingUnits.");
 
 	    for (final Entry<String, SubAccountingUnit> entry : subAccountingUnits.entrySet()) {
-		System.out.println("   " + entry.getKey() + " -> " + entry.getValue().groupName
-			+ " : " + entry.getValue().getStart() + " - " + entry.getValue().getEnd());
+		System.out.println("   " + entry.getKey() + " -> " + entry.getValue().groupName + " : "
+			+ entry.getValue().getStart() + " - " + entry.getValue().getEnd());
 	    }
 	}
 
 	private boolean isValid(final SubAccountingUnit subAccountingUnit) {
 	    final DateTime start = subAccountingUnit.getStartDate();
 	    final DateTime end = subAccountingUnit.getEndDate();
-	    return (start == null || !start.isAfterNow()) && (end == null || !end.isBeforeNow()); 
+	    return (start == null || !start.isAfterNow()) && (end == null || !end.isBeforeNow());
 	}
 
 	Map<String, SubAccountingUnit> getSubAccountingUnits() {
@@ -267,9 +270,8 @@ public class SyncProjectsAux {
 	@Override
 	protected String getQueryString() {
 	    return "SELECT v_projectos.unid_exploracao, v_projectos.projectcode, v_projectos.title,"
-	    		+ " v_projectos.idcoord, v_projectos.costcenter, v_projectos.inicio, v_projectos.duracao,"
-	    		+ " v_projectos.status, v_projectos.tipo, v_projectos.gestor"
-	    		+ " FROM v_projectos";
+		    + " v_projectos.idcoord, v_projectos.costcenter, v_projectos.inicio, v_projectos.duracao,"
+		    + " v_projectos.status, v_projectos.tipo, v_projectos.gestor" + " FROM v_projectos";
 	}
 
 	@Override
@@ -303,8 +305,8 @@ public class SyncProjectsAux {
 	    while (resultSet.next()) {
 		final String idproj = resultSet.getString(1);
 		final String idautorizado = resultSet.getString(2);
-//		final String inicio = resultSet.getString(3);
-//		final String fim = resultSet.getString(4);
+		// final String inicio = resultSet.getString(3);
+		// final String fim = resultSet.getString(4);
 
 		final MgpProject mgpProject = findMgpProject(idproj);
 		mgpProject.getIdCoord().add(idautorizado);
@@ -339,7 +341,7 @@ public class SyncProjectsAux {
 	    final SubAccountingUnitQuery subAccountingUnitQuery = new SubAccountingUnitQuery();
 	    executeQuery(subAccountingUnitQuery);
 	    subAccountingUnit = subAccountingUnitQuery.getSubAccountingUnits();
-	}	
+	}
 
 	public Map<String, SubAccountingUnit> getSubAccountingUnits() {
 	    return subAccountingUnit;
@@ -364,7 +366,7 @@ public class SyncProjectsAux {
 	    executeQuery(subProjectQuery);
 	    final OtherProjectCoordinatorsQuery otherProjectCoordinatorsQuery = new OtherProjectCoordinatorsQuery(mgpProjects);
 	    executeQuery(otherProjectCoordinatorsQuery);
-	}	
+	}
 
 	public Set<MgpProject> getMgpProjects() {
 	    return mgpProjects;
@@ -464,7 +466,8 @@ public class SyncProjectsAux {
 	ResultSet resultSetQuery = null;
 	try {
 	    statementQuery = connection.createStatement();
-	    resultSetQuery = statementQuery.executeQuery("select fenix.USER.USER_U_ID, fenix.TEACHER.TEACHER_NUMBER from fenix.TEACHER inner join fenix.USER on fenix.USER.KEY_PERSON = fenix.TEACHER.KEY_PERSON;");
+	    resultSetQuery = statementQuery
+		    .executeQuery("select fenix.USER.USER_U_ID, fenix.TEACHER.TEACHER_NUMBER from fenix.TEACHER inner join fenix.USER on fenix.USER.KEY_PERSON = fenix.TEACHER.KEY_PERSON;");
 	    int c = 0;
 	    while (resultSetQuery.next()) {
 		final String username = resultSetQuery.getString(1);
@@ -490,7 +493,8 @@ public class SyncProjectsAux {
 	ResultSet resultSetQuery = null;
 	try {
 	    statementQuery = connection.createStatement();
-	    resultSetQuery = statementQuery.executeQuery("select fenix.USER.USER_U_ID, fenix.EMPLOYEE.EMPLOYEE_NUMBER from fenix.EMPLOYEE inner join fenix.USER on fenix.USER.KEY_PERSON = fenix.EMPLOYEE.KEY_PERSON;");
+	    resultSetQuery = statementQuery
+		    .executeQuery("select fenix.USER.USER_U_ID, fenix.EMPLOYEE.EMPLOYEE_NUMBER from fenix.EMPLOYEE inner join fenix.USER on fenix.USER.KEY_PERSON = fenix.EMPLOYEE.KEY_PERSON;");
 	    int c = 0;
 	    while (resultSetQuery.next()) {
 		final String username = resultSetQuery.getString(1);
@@ -550,8 +554,9 @@ public class SyncProjectsAux {
 			final Authorization authorization = new Authorization(responsible, unit);
 			authorization.setMaxAmount(AUTHORIZED_VALUE);
 		    } else {
-//		    System.out.println("[" + responsibleString + "] for project [" + acronym
-//			    + "] is not in project responsibles list");
+			// System.out.println("[" + responsibleString +
+			// "] for project [" + acronym
+			// + "] is not in project responsibles list");
 		    }
 		}
 	    }
@@ -577,7 +582,8 @@ public class SyncProjectsAux {
 
     final static Money AUTHORIZED_VALUE = new Money("75000");
 
-    private void updateProject(final Map<String, SubAccountingUnit> subAccountingUnits, final MgpProject mgpProject, final Project project) {
+    private void updateProject(final Map<String, SubAccountingUnit> subAccountingUnits, final MgpProject mgpProject,
+	    final Project project) {
 	String projectCodeString = mgpProject.projectCode;
 	String costCenterString = mgpProject.costCenter.replace("\"", "");
 	Set<String> responsibleStrings = mgpProject.idCoord;
@@ -593,21 +599,21 @@ public class SyncProjectsAux {
 
 	project.setAccountManager(accountManagerPerson);
 
-//	if (type.equalsIgnoreCase("i")) {
-//	    if (project.getDefaultRegeimIsCCP().booleanValue()) {
-//		project.setDefaultRegeimIsCCP(Boolean.FALSE);
-//		System.out.println("Updatiny: " + projectCodeString + " to r and d");
-//	    }
-//	} else {
-//	    if (!project.getDefaultRegeimIsCCP()) {
-//		project.setDefaultRegeimIsCCP(Boolean.TRUE);
-//		System.out.println("Updatiny: " + projectCodeString + " to ccp");
-//	    }
-//	}
+	// if (type.equalsIgnoreCase("i")) {
+	// if (project.getDefaultRegeimIsCCP().booleanValue()) {
+	// project.setDefaultRegeimIsCCP(Boolean.FALSE);
+	// System.out.println("Updatiny: " + projectCodeString + " to r and d");
+	// }
+	// } else {
+	// if (!project.getDefaultRegeimIsCCP()) {
+	// project.setDefaultRegeimIsCCP(Boolean.TRUE);
+	// System.out.println("Updatiny: " + projectCodeString + " to ccp");
+	// }
+	// }
 
 	final AccountingUnit accountingUnit = AccountingUnit.readAccountingUnitByUnitName(accountingUnitString);
 	if (accountingUnit != project.getAccountingUnit()) {
-	    project.setAccountingUnit(accountingUnit);
+	    changeAccountingUnit(project, accountingUnit);
 	}
 
 	if (accountManagerPerson != null) {
@@ -616,9 +622,10 @@ public class SyncProjectsAux {
 		final String subName = "20 - " + subAccountingUnitRemote.getGroupName();
 		final AccountingUnit subAccountingUnit = AccountingUnit.readAccountingUnitByUnitName(subName);
 		if (subAccountingUnit != null) {
-		    project.setAccountingUnit(subAccountingUnit);
+		    changeAccountingUnit(project, subAccountingUnit);
 		} else {
-		    System.out.println("Unable to find accounting unit with name: [" + subAccountingUnitRemote.getGroupName() + "]");
+		    System.out.println("Unable to find accounting unit with name: [" + subAccountingUnitRemote.getGroupName()
+			    + "]");
 		}
 	    }
 	}
@@ -632,7 +639,9 @@ public class SyncProjectsAux {
 			authorization.setMaxAmount(AUTHORIZED_VALUE);
 		    }
 		} else {
-		    //System.out.println("[" + responsibleString + "] for project [" + acronym + "] is not in project responsibles list");
+		    // System.out.println("[" + responsibleString +
+		    // "] for project [" + acronym +
+		    // "] is not in project responsibles list");
 		    if (!hasAprovalAuthorization(project, responsible)) {
 			new Authorization(responsible, project);
 		    }
@@ -643,7 +652,8 @@ public class SyncProjectsAux {
 	final Unit costCenter = findCostCenter(costCenterString);
 	if (project.getCostCenterUnit() != costCenter) {
 	    System.out.println("Project: " + projectCodeString + " changed cost center to " + costCenterString + "!");
-	    System.out.println("   current cost center is " + (project.getCostCenterUnit() == null ? null : project.getCostCenterUnit().getCostCenter()));
+	    System.out.println("   current cost center is "
+		    + (project.getCostCenterUnit() == null ? null : project.getCostCenterUnit().getCostCenter()));
 	    project.setParentUnit(costCenter);
 	}
 
@@ -651,8 +661,11 @@ public class SyncProjectsAux {
 	    final SubProject subProject = project.findSubProjectByNamePrefix(mgpSubProject.institution);
 	    if (subProject == null) {
 		createdSubProjects++;
-//		System.out.println("Creating subproject: " + mgpSubProject.getInstitution() + " - " + mgpSubProject.getInstitutionDescription()
-//			+ " for project: " + mgpProject.getProjectCode() + " - " + mgpProject.getTitle());
+		// System.out.println("Creating subproject: " +
+		// mgpSubProject.getInstitution() + " - " +
+		// mgpSubProject.getInstitutionDescription()
+		// + " for project: " + mgpProject.getProjectCode() + " - " +
+		// mgpProject.getTitle());
 		createSubProject(project, mgpSubProject);
 	    } else {
 		updatedSubProjects++;
@@ -672,12 +685,20 @@ public class SyncProjectsAux {
 			    final MgpSubProject mgpSubProject = mgpProject.findSubProject(subProject.getName());
 			    if (mgpProject == null) {
 				disconnectedSubProjects++;
-				System.out.println("Project: " + project.getPresentationName() + " no longer has subproject: " + mgpSubProject.getInstitution() + " - " + mgpSubProject.getInstitutionDescription());
+				System.out.println("Project: " + project.getPresentationName() + " no longer has subproject: "
+					+ mgpSubProject.getInstitution() + " - " + mgpSubProject.getInstitutionDescription());
 			    }
 			}
 		    }
 		}
 	    }
+	}
+    }
+
+    private void changeAccountingUnit(final Project project, final AccountingUnit newAccountingUnit) {
+	project.setAccountingUnit(newAccountingUnit);
+	for (Financer financer : project.getFinancedItems()) {
+	    financer.setAccountingUnit(newAccountingUnit);
 	}
     }
 
@@ -689,7 +710,8 @@ public class SyncProjectsAux {
     }
 
     private void createSubProject(final Project project, final MgpSubProject mgpSubProject) {
-	final String subProjectName = project.getName() + " - " + mgpSubProject.getInstitution() + " - " + mgpSubProject.getInstitutionDescription();
+	final String subProjectName = project.getName() + " - " + mgpSubProject.getInstitution() + " - "
+		+ mgpSubProject.getInstitutionDescription();
 	final Unit unit = Unit.createRealUnit(project, IstPartyType.SUB_PROJECT, "", subProjectName);
 	unit.setDefaultRegeimIsCCP(project.getDefaultRegeimIsCCP());
 	final SubProject subProject = (SubProject) unit;
@@ -697,7 +719,8 @@ public class SyncProjectsAux {
     }
 
     private void updateSubProject(final SubProject subProject, final MgpSubProject mgpSubProject) {
-	final String subProjectName = subProject.getParentUnit().getName() + " - " + mgpSubProject.getInstitution() + " - " + mgpSubProject.getInstitutionDescription();
+	final String subProjectName = subProject.getParentUnit().getName() + " - " + mgpSubProject.getInstitution() + " - "
+		+ mgpSubProject.getInstitutionDescription();
 	subProject.setName(subProjectName);
     }
 
@@ -764,7 +787,7 @@ public class SyncProjectsAux {
 	}
 	String username = employees.get(nMec);
 	if (username == null) {
-//	    System.out.println("Can't find username for " + nMec);
+	    // System.out.println("Can't find username for " + nMec);
 	}
 	return username;
     }
