@@ -18,6 +18,7 @@
 <div class="infobox mtop1 mbottom1">
 	<fr:view name="workingCapital" property="workingCapitalInitialization">
 		<fr:schema bundle="WORKING_CAPITAL_RESOURCES"  type="module.workingCapital.domain.WorkingCapitalInitialization">
+			<fr:slot name="workingCapital.accountingUnit.name" key="label.module.workingCapital.initialization.accountingUnit"/>
 			<fr:slot name="requestCreation" key="label.module.workingCapital.requestingDate"/>
 			<fr:slot name="requestor.name"  key="label.module.workingCapital.requester"/>
 			<fr:slot name="workingCapital.movementResponsible.name" key="label.module.workingCapital.movementResponsible"/>

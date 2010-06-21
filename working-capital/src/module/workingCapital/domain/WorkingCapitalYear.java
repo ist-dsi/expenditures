@@ -60,7 +60,8 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
 		final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
 		return !workingCapital.isCanceledOrRejected()
 			&& (workingCapitalProcess.isPendingAproval(user)
-				|| workingCapital.hasAcquisitionPendingApproval(user));
+				|| workingCapital.hasAcquisitionPendingApproval(user)
+				|| workingCapital.isPendingAcceptResponsability(user));
 	    }
 	}.search();
     }

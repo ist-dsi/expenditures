@@ -299,3 +299,9 @@ relation WorkingCapitalAcquisitionVerifier {
 	}
 }
 
+relation WorkingCapitalInitialization {
+	.pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit playsRole accountingUnit;
+	WorkingCapitalInitialization playsRole workingCapitalInitialization {
+		multiplicity *;
+	}
+}

@@ -13,6 +13,7 @@ import myorg.domain.util.Money;
 import org.joda.time.DateTime;
 
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
+import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Project;
 import pt.ist.expenditureTrackingSystem.domain.organization.SubProject;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
@@ -383,6 +384,10 @@ public class WorkingCapital extends WorkingCapital_Base {
 	return false;
     }
 
+    public boolean isPendingAcceptResponsability(User user) {
+	return isMovementResponsible(user) && isPendingAcceptResponsability();
+    }
+
     public boolean canRequestValue(final Money requestedValue) {
 	final WorkingCapitalInitialization workingCapitalInitialization = getWorkingCapitalInitialization();
 	if (workingCapitalInitialization != null && !workingCapitalInitialization.isCanceledOrRejected()
@@ -416,17 +421,27 @@ public class WorkingCapital extends WorkingCapital_Base {
     }
 
     public boolean isAccountingResponsible(final User user) {
-	final Unit unit = getUnit();
-	return user != null && unit != null && unit.isAccountingResponsible(user.getExpenditurePerson());
+	final AccountingUnit accountingUnit = getAccountingUnit();
+	final pt.ist.expenditureTrackingSystem.domain.organization.Person person = user.getExpenditurePerson();
+	if (accountingUnit != null) {
+	    final Unit unit = getUnit();
+	    if (unit instanceof Project || unit instanceof SubProject) {		
+		return accountingUnit.hasResponsibleProjectAccountants(person);
+	    }
+	    return accountingUnit.hasResponsiblePeople(person);
+	}
+	return false;
     }
 
     public boolean isAccountingEmployee(final User user) {
 	final Unit unit = getUnit();
-	if (unit != null && user != null) {
+	final AccountingUnit accountingUnit = getAccountingUnit();
+	final pt.ist.expenditureTrackingSystem.domain.organization.Person person = user.getExpenditurePerson();
+	if (unit != null && accountingUnit != null && person != null) {
 	    if (unit instanceof Project || unit instanceof SubProject) {
-		unit.isProjectAccountingEmployee(user.getExpenditurePerson());
+		return accountingUnit.hasProjectAccountants(person);
 	    }
-	    return unit.isAccountingEmployee(user.getExpenditurePerson());
+	    return accountingUnit.hasPeople(person);
 	}
 	return false;
     }
@@ -448,6 +463,17 @@ public class WorkingCapital extends WorkingCapital_Base {
 	final Money valueForAuthorization = Money.ZERO;
 	final Authorization authorization = findUnitResponsible(user.getPerson(), valueForAuthorization);
 	return authorization != null;
+    }
+
+    public AccountingUnit getAccountingUnit() {
+	final WorkingCapitalInitialization workingCapitalInitialization = getWorkingCapitalInitialization();
+	return workingCapitalInitialization == null ? getUnit().getAccountingUnit() : workingCapitalInitialization.getAccountingUnit();
+    }
+
+    public boolean canChangeAccountingUnit() {
+	final Unit unit = getUnit();
+	final AccountingUnit accountingUnit = unit == null ? null : unit.getAccountingUnit();
+	return accountingUnit == null ? false : !accountingUnit.getName().equals("10");
     }
 
 }

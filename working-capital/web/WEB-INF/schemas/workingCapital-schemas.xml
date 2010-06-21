@@ -68,3 +68,12 @@
 <schema name="activityInformation.ReenforceWorkingCapitalInitializationActivity" type="module.workingCapital.domain.WorkingCapitalInitializationReenforcement" bundle="WORKING_CAPITAL_RESOURCES">
 	<slot name="amount" key="label.module.workingCapital.initialization.requestedReenforcementValue"/>
 </schema>		
+
+<schema name="activityInformation.ChangeAccountingUnitActivity" type="module.workingCapital.domain.activity.ChangeAccountingUnitActivity" bundle="WORKING_CAPITAL_RESOURCES">
+	<slot name="accountingUnit" key="label.module.workingCapital.initialization.accountingUnit" layout="menu-select"
+			validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="providerClass" value="module.workingCapital.presentationTier.provider.ChangeAccountingUnitProvider"/>
+		<property name="format" value="${name}" />
+		<property name="nullOptionHidden" value="true" />
+	</slot>
+</schema>		

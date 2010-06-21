@@ -12,6 +12,7 @@ import myorg.domain.util.Money;
 import org.joda.time.DateTime;
 
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
+import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 
 public class WorkingCapitalInitialization extends WorkingCapitalInitialization_Base {
@@ -152,6 +153,12 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
     public boolean isCanceledOrRejected() {
 	final WorkingCapitalInitializationState state = getState();
 	return state == WorkingCapitalInitializationState.CANCELED || state == WorkingCapitalInitializationState.REJECTED;
+    }
+
+    @Override
+    public AccountingUnit getAccountingUnit() {
+	final AccountingUnit accountingUnit = super.getAccountingUnit();
+	return accountingUnit == null ? getWorkingCapital().getUnit().getAccountingUnit() : accountingUnit;
     }
 
 }
