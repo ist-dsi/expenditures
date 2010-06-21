@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workingCapital.domain.WorkingCapital;
+import module.workingCapital.domain.WorkingCapitalAcquisitionSubmission;
 import module.workingCapital.domain.WorkingCapitalInitialization;
 import module.workingCapital.domain.WorkingCapitalProcess;
 import module.workingCapital.domain.WorkingCapitalTransaction;
@@ -25,7 +26,12 @@ public class RequestCapitalActivityInformation extends ActivityInformation<Worki
 	paymentMethod = internationalBankAccountNumber == null  || internationalBankAccountNumber.isEmpty() ? PaymentMethod.CHECK : PaymentMethod.WIRETRANSFER;
 	if (workingCapital.hasAnyWorkingCapitalTransactions()) {
 	    final WorkingCapitalTransaction workingCapitalTransaction = workingCapital.getLastTransaction();
-	    requestedValue = workingCapitalTransaction.getAccumulatedValue();
+	    if (workingCapitalTransaction instanceof WorkingCapitalAcquisitionSubmission) {
+		final WorkingCapitalAcquisitionSubmission workingCapitalAcquisitionSubmission = (WorkingCapitalAcquisitionSubmission) workingCapitalTransaction;
+		requestedValue = workingCapitalAcquisitionSubmission.getValue();
+	    } else {
+		requestedValue = workingCapitalTransaction.getAccumulatedValue();
+	    }
 	    if (requestedValue.isGreaterThan(workingCapitalInitialization.getAuthorizedAnualValue())) {
 		requestedValue = workingCapitalInitialization.getAuthorizedAnualValue();
 	    }
