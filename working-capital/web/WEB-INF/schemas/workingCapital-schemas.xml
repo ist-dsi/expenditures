@@ -28,7 +28,7 @@
 	</slot>
 	<slot name="valueWithoutVat" key="label.module.workingCapital.acquisition.valueWithoutVat" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 	<slot name="money" key="label.module.workingCapital.acquisition.money" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-	<slot name="inputStream" key="label.module.workingCapital.acquisition.invoice">
+	<slot name="inputStream" key="label.module.workingCapital.acquisition.invoice" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
 		<property name="fileNameSlot" value="filename" />
 		<property name="size" value="50"/>
 	</slot>
