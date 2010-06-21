@@ -24,6 +24,7 @@
 			<fr:slot name="workingCapital.movementResponsible.name" key="label.module.workingCapital.movementResponsible"/>
 			<fr:slot name="fiscalId"  key="label.module.workingCapital.fiscalId"/>
 			<fr:slot name="internationalBankAccountNumber"  key="label.module.workingCapital.internationalBankAccountNumber"/>
+			<fr:slot name="fundAllocationId" key="label.module.workingCapital.fundAllocationId"/>
 			<fr:slot name="requestedAnualValue"  key="label.module.workingCapital.requestedAnualValue.requested"/>
 			<fr:slot name="authorizedAnualValue"  key="label.module.workingCapital.authorizedAnualValue" layout="null-as-label">
 				<fr:property name="subLayout" value=""/>

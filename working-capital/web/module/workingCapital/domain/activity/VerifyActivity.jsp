@@ -57,6 +57,7 @@
 				<logic:equal name="workingCapitalInitialization" property="class.name" value="module.workingCapital.domain.WorkingCapitalInitializationReenforcement">
 					<fr:slot name="authorizedReenforcementValue" key="label.module.workingCapital.initialization.authorizedReenforcementValue" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 				</logic:equal>
+				<fr:slot name="fundAllocationId" key="label.module.workingCapital.fundAllocationId" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 			</fr:schema>
 			<fr:layout name="tabular">
 				<fr:property name="classes" value="form listInsideClear" />

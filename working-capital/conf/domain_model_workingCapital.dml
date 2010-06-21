@@ -37,6 +37,7 @@ class WorkingCapitalInitialization {
 	DateTime lastSubmission;
 	DateTime refundRequested;
 	DateTime acceptedResponsability;
+	String fundAllocationId;
 }
 
 	class WorkingCapitalInitializationReenforcement extends WorkingCapitalInitialization {
@@ -88,6 +89,7 @@ class WorkingCapitalTransaction {
 	}
 
 	class WorkingCapitalPayment extends WorkingCapitalTransaction {
+		String paymentIdentification;
 	}
 
 	class WorkingCapitalRefund extends WorkingCapitalTransaction {

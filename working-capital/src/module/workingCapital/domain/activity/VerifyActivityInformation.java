@@ -14,6 +14,7 @@ public class VerifyActivityInformation extends WorkingCapitalInitializationInfor
     private Money authorizedAnualValue;
     private Money maxAuthorizedAnualValue;
     private Money authorizedReenforcementValue;
+    private String fundAllocationId;
 
     public VerifyActivityInformation(final WorkingCapitalProcess workingCapitalProcess,
 	    final WorkflowActivity<WorkingCapitalProcess, ? extends ActivityInformation<WorkingCapitalProcess>> activity) {
@@ -34,6 +35,7 @@ public class VerifyActivityInformation extends WorkingCapitalInitializationInfor
             } else {
         	authorizedAnualValue = maxAuthorizedAnualValue.multiply(new BigDecimal(2)).divideAndRound(new BigDecimal(12));
             }
+            fundAllocationId = workingCapitalInitialization.getFundAllocationId();
         }
     }
 
@@ -67,6 +69,14 @@ public class VerifyActivityInformation extends WorkingCapitalInitializationInfor
 		&& super.hasAllneededInfo()
 		&& authorizedAnualValue != null
 		&& maxAuthorizedAnualValue != null;
+    }
+
+    public String getFundAllocationId() {
+        return fundAllocationId;
+    }
+
+    public void setFundAllocationId(String fundAllocationId) {
+        this.fundAllocationId = fundAllocationId;
     }
 
 }

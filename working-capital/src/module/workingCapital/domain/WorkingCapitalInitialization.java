@@ -77,7 +77,7 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
 	removeResponsibleForUnitApproval();
     }
 
-    public void verify(final User user, final Money authorizedAnualValue, final Money maxAuthorizedAnualValue) {
+    public void verify(final User user, final Money authorizedAnualValue, final Money maxAuthorizedAnualValue, final String fundAllocationId) {
 	setAuthorizedAnualValue(authorizedAnualValue);
 	setMaxAuthorizedAnualValue(maxAuthorizedAnualValue);
 	
@@ -86,6 +86,7 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
 	}
 	setVerificationByAccounting(new DateTime());
 	setResponsibleForAccountingVerification(user.getPerson());
+	setFundAllocationId(fundAllocationId);
     }
 
     private boolean isAccountingResponsible(final User user) {

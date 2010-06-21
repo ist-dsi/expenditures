@@ -26,7 +26,7 @@ public class VerifyActivity extends WorkflowActivity<WorkingCapitalProcess, Veri
     protected void process(final VerifyActivityInformation activityInformation) {
 	final User user = getLoggedPerson();
 	final WorkingCapitalInitialization workingCapitalInitialization = activityInformation.getWorkingCapitalInitialization();
-	workingCapitalInitialization.verify(user, activityInformation.getAuthorizedAnualValue(), activityInformation.getMaxAuthorizedAnualValue());
+	workingCapitalInitialization.verify(user, activityInformation.getAuthorizedAnualValue(), activityInformation.getMaxAuthorizedAnualValue(), activityInformation.getFundAllocationId());
 	if (workingCapitalInitialization instanceof WorkingCapitalInitializationReenforcement) {
 	    final WorkingCapitalInitializationReenforcement workingCapitalInitializationReenforcement = (WorkingCapitalInitializationReenforcement) workingCapitalInitialization;
 	    workingCapitalInitializationReenforcement.setAuthorizedReenforcementValue(activityInformation.getAuthorizedReenforcementValue());
