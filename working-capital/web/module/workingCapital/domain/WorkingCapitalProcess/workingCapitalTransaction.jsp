@@ -7,6 +7,13 @@
 
 <jsp:include page="shortBody.jsp"/>
 
+<bean:define id="processId" name="process" property="externalId"/>
+<html:link page='<%= "/workflowProcessManagement.do?method=viewProcess&processId=" + processId %>'> 
+	<bean:message key="link.back" bundle="MYORG_RESOURCES"/>
+</html:link>
+<br/>
+<br/>
+
 <table class="tstyle3 width100pc">
 	<tr>
 		<jsp:include page="workingCapitalTransactionLineHeader.jsp"/>
