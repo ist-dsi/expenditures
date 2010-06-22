@@ -13,6 +13,11 @@
 	<bean:message key="acquisitionProcess.message.note" bundle="ACQUISITION_RESOURCES" />
 </div>
 
+<html:messages id="message" message="true" bundle="MISSION_RESOURCES">
+	<span class="error0"> <bean:write name="message" /> </span>
+	<br />
+</html:messages>
+
 <p class="mtop15 mbottom05"><strong><fr:view name="acquisitionProcessBean" property="classification"/></strong></p>
 
 <% if (MissionSystem.getInstance().hasAnyMissions()) { %>

@@ -381,7 +381,7 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
 	if (missionProcess == null || missionProcess.isExpenditureAuthorized()) {
 	    super.setMissionProcess(missionProcess);
 	} else {
-	    throw new DomainException("error.cannot.connect.acquisition.to.unauthorized.mission");
+	    throw new DomainException("error.cannot.connect.acquisition.to.unauthorized.mission", DomainException.getResourceFor("resources/AcquisitionResources"));
 	}
     }
 

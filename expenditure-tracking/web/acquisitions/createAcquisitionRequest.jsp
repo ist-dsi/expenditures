@@ -10,6 +10,11 @@
 <p class="mtop15"><strong><bean:message key="label.requester" bundle="EXPENDITURE_RESOURCES"/></strong></p>
 --%>
 
+<html:messages id="message" message="true" bundle="MISSION_RESOURCES">
+	<span class="error0"> <bean:write name="message" /> </span>
+	<br />
+</html:messages>
+
 <bean:define id="processRequest" name="acquisitionProcess" property="request" toScope="request"/>
 <jsp:include page="commons/viewAcquisitionRequest.jsp" flush="true"/>
 

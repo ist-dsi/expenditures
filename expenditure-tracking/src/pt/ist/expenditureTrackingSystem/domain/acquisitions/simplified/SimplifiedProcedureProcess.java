@@ -242,7 +242,7 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	}
 	if (createAcquisitionProcessBean.isForMission()) {
 	    if (createAcquisitionProcessBean.getMissionProcess() == null) {
-		throw new DomainException("mission.process.is.mandatory");
+		throw new DomainException("mission.process.is.mandatory", DomainException.getResourceFor("resources/AcquisitionResources"));
 	    }
 	    process.setMissionProcess(createAcquisitionProcessBean.getMissionProcess());
 	}

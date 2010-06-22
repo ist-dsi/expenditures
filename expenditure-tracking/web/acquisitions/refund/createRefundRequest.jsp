@@ -11,6 +11,10 @@
 	<bean:message key="acquisitionProcess.refund.message.note" bundle="ACQUISITION_RESOURCES"/>
 </div>
 
+<html:messages id="message" message="true" bundle="MISSION_RESOURCES">
+	<span class="error0"> <bean:write name="message" /> </span>
+	<br />
+</html:messages>
 
 <p class="mtop15 mbottom05"><strong><bean:message key="label.refund" bundle="EXPENDITURE_RESOURCES"/></strong></p>
 
@@ -20,8 +24,11 @@
 	<bean:define id="selection" value="externalPerson"/>
 </logic:equal>
 
+<bean:define id="underCCP" type="java.lang.Boolean" name="bean" property="underCCP"/>
+<% String actionUrl = underCCP ? "/acquisitionRefundProcess.do?method=prepareCreateRefundProcessUnderCCP" : "/acquisitionRefundProcess.do?method=prepareCreateRefundProcessUnderRCIST"; %>
+
 <% if (MissionSystem.getInstance().hasAnyMissions()) { %>
-	<fr:form id="createForm" action="/acquisitionRefundProcess.do?method=prepareCreateRefundProcess">
+	<fr:form id="createForm" action="<%= actionUrl %>">
 		<fr:edit id="selectMissionBean" name="bean">
 			<fr:schema type="pt.ist.expenditureTrackingSystem.domain.dto.CreateRefundProcessBean" bundle="ACQUISITION_RESOURCES">
    				<fr:slot name="isForMission" key="label.aquisition.process.create.is.for.mission" layout="radio-postback">
@@ -66,7 +73,7 @@
 			<fr:property name="columnClasses" value=",,tderror" />
 		</fr:layout>
 		<fr:destination name="postBack" path="/acquisitionRefundProcess.do?method=createRefundProcessPostBack"/>
-		<fr:destination name="invalid" path="/acquisitionRefundProcess.do?method=prepareCreateRefundProcess"/>
+		<fr:destination name="invalid" path="<%= actionUrl %>"/>
 	</fr:edit>
 	<html:submit styleClass="inputbutton"><bean:message key="renderers.form.submit.name" bundle="RENDERER_RESOURCES"/></html:submit>
 </fr:form>

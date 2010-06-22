@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import module.workflow.presentationTier.actions.ProcessManagement;
+import myorg.domain.exceptions.DomainException;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -41,16 +42,20 @@ public class RefundProcessAction extends PaymentProcessAction {
 
     public ActionForward createRefundProcess(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
-
 	CreateRefundProcessBean bean = getRenderedObject("createRefundProcess");
-	RefundProcess process = RefundProcess.createNewRefundProcess(bean);
-	return ProcessManagement.forwardToProcess(process);
-
+	try {
+	    RefundProcess process = RefundProcess.createNewRefundProcess(bean);
+	    return ProcessManagement.forwardToProcess(process);
+	} catch (DomainException e) {
+	    addLocalizedMessage(request, e.getLocalizedMessage());
+	    request.setAttribute("bean", bean);
+	    RenderUtils.invalidateViewState("createRefundProcess");
+	    return forward(request, "/acquisitions/refund/createRefundRequest.jsp");
+	}
     }
 
     public ActionForward createRefundProcessPostBack(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
-
 	CreateRefundProcessBean bean = getRenderedObject("createRefundProcess");
 	request.setAttribute("bean", bean);
 	RenderUtils.invalidateViewState("createRefundProcess");
