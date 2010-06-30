@@ -26,18 +26,18 @@ public enum AcquisitionProcessStateType implements IPresentableEnum {
 
     AUTHORIZED,
 
-    INVITES_SENT, 
-    
+    INVITES_SENT,
+
     IN_NEGOTIATION,
-    
+
     NEGOTIATION_ENDED,
-    
+
     SELECTED_SERVICE_PROVIDER,
-    
+
     DOCUMENTATION_INSERTED,
 
     ACQUISITION_PROCESSED,
-    
+
     INVOICE_RECEIVED,
 
     SUBMITTED_FOR_CONFIRM_INVOICE,
@@ -94,7 +94,8 @@ public enum AcquisitionProcessStateType implements IPresentableEnum {
     }
 
     public String getLocalizedName() {
-	final ResourceBundle resourceBundle = ResourceBundle.getBundle("resources.ExpenditureEnumerationResources", Language.getLocale());
+	final ResourceBundle resourceBundle = ResourceBundle.getBundle("resources.ExpenditureEnumerationResources", Language
+		.getLocale());
 	return resourceBundle.getString(AcquisitionProcessStateType.class.getSimpleName() + "." + name());
     }
 
@@ -120,6 +121,10 @@ public enum AcquisitionProcessStateType implements IPresentableEnum {
 
     public boolean isInOrPastState(final AcquisitionProcessStateType acquisitionProcessStateType) {
 	return ordinal() >= acquisitionProcessStateType.ordinal();
+    }
+
+    public String getDescription() {
+	return getLocalizedName();
     }
 
 }
