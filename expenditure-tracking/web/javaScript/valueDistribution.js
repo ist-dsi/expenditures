@@ -17,7 +17,7 @@ function getShares(maxValue,outOfLabel,url) {
 						    	for (i = 0; i < size; i++) {
 									var trId = data[i]['id'];
 									var value = data[i]['share'].replace(".",",");
-									$("#" + trId + " td:last").children("input").attr("value",value);
+									$("#" + trId + " td:last").find("input").attr("value",value);
 									writeSum(maxValue,outOfLabel);
 							    }
 					 	    });
@@ -32,7 +32,7 @@ function getShares(maxValue,outOfLabel,url) {
 				var maxValueFloat = parseFloat(maxValue);
 				
 				jQuery.each($("#assign input[type='checkbox']:checked"), function() {
-					var value = $(this).parent("td").siblings("td:last").children("input").val()
+					var value = $(this).parent("td").siblings("td:last").find("input").val()
 					sum += parseFloat(value.replace('.','').replace(',','.'));
 				});
 
