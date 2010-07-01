@@ -36,15 +36,15 @@
 				<fr:slot name="maxAuthorizedAnualValue"  key="label.module.workingCapital.maxAuthorizedAnualValue" layout="null-as-label">
 					<fr:property name="subLayout" value=""/>
 				</fr:slot>
-				<logic:present name="workingCapital" property="workingCapitalInitialization.lastSubmission">
+				<logic:present name="workingCapitalInitialization" property="lastSubmission">
 					<fr:slot name="lastSubmission" key="label.module.workingCapital.initialization.lastSubmission"/>
 				</logic:present>
-				<logic:present name="workingCapital" property="workingCapitalInitialization.refundRequested">
+				<logic:present name="workingCapitalInitialization" property="refundRequested">
 					<fr:slot name="refundRequested" key="label.module.workingCapital.initialization.refundRequested"/>
 				</logic:present>
-				<logic:equal name="workingCapital" property="workingCapitalInitialization.class.name" value="module.workingCapital.domain.WorkingCapitalInitializationReenforcement">
+				<logic:equal name="workingCapitalInitialization" property="class.name" value="module.workingCapital.domain.WorkingCapitalInitializationReenforcement">
 					<fr:slot name="requestedReenforcementValue" key="label.module.workingCapital.initialization.requestedReenforcementValue"/>
-					<fr:slot name="authorizedReenforcementValue" key="label.module.workingCapital.initialization.authorizedReenforcementValue"/>
+					<fr:slot name="authorizedReenforcementValue" key="label.module.workingCapital.initialization.authorizedReenforcementValue" layout="null-as-label"/>
 				</logic:equal>
 			</fr:schema>
 			<fr:layout name="tabular">
