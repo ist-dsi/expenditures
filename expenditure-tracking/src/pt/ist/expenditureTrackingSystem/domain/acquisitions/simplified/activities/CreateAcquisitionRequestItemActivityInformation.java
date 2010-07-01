@@ -33,7 +33,7 @@ public class CreateAcquisitionRequestItemActivityInformation extends ActivityInf
 	}
     }
 
-    public static final int DEFAULT_VAL_VALUE = 20;
+    public static final int DEFAULT_VAL_VALUE = 21;
 
     private String description;
     private Integer quantity;
