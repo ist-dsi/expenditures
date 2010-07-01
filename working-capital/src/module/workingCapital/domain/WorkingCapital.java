@@ -476,4 +476,14 @@ public class WorkingCapital extends WorkingCapital_Base {
 	return accountingUnit == null ? false : !accountingUnit.getName().equals("10");
     }
 
+    public boolean canTerminateFund() {
+	final WorkingCapitalTransaction workingCapitalTransaction = getLastTransaction();
+	return workingCapitalTransaction != null && !isTerminated() && workingCapitalTransaction.getAccumulatedValue().equals(Money.ZERO);
+    }
+
+    private boolean isTerminated() {
+	final WorkingCapitalInitialization workingCapitalInitialization = getWorkingCapitalInitialization();
+	return workingCapitalInitialization != null && workingCapitalInitialization.getLastSubmission() != null;
+    }
+
 }
