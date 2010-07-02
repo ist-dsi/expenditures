@@ -96,9 +96,11 @@ public class NewAcquisitionProcessStateRenderer extends OutputRenderer {
 
 		for (final AcquisitionProcessStateType stateType : types) {
 		    if (stateType.showFor(currentState)) {
+			HtmlBlockContainer numberContainer = new HtmlBlockContainer();
 			HtmlTableCell cell = numberRow.createCell();
 			cell.setType(CellType.HEADER);
-			cell.setBody(new HtmlText(String.valueOf(i++)));
+			numberContainer.addChild(new HtmlText(String.valueOf(i++)));
+			cell.setBody(numberContainer);
 			cell.setId(stateType.toString());
 			HtmlTableCell gutterCell = gutterRow.createCell();
 			gutterCell.setType(CellType.HEADER);
