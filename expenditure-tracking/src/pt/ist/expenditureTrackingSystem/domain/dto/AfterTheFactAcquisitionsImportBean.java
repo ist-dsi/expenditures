@@ -85,7 +85,8 @@ public class AfterTheFactAcquisitionsImportBean extends FileUploadBean implement
 		registerIssue(IssueType.EMPTY_LINE, i);
 	    } else {
 		final String[] parts = line.split("\t");
-		if (parts.length == 5 || parts.length == 4) {
+		//if (parts.length == 5 || parts.length == 4) {
+		if (parts.length >= 4) {
 		    final String supplierNif = cleanupNIF(parts[0]);
 		    final String supplierName = StringNormalizer.normalizePreservingCapitalizedLetters(cleanup(parts[1]));
 		    Supplier supplier = findSupplier(supplierNif, supplierName);
@@ -100,7 +101,7 @@ public class AfterTheFactAcquisitionsImportBean extends FileUploadBean implement
 		    final String valueString = cleanup(parts[3]);
 		    Money value;
 		    try {
-			value = new Money(valueString.replace('.', 'X').replace("X", "").replace(',', '.'));
+			value = new Money(valueString.replace('.', 'X').replaceAll("X", "").replace(',', '.'));
 		    } catch (DomainException ex) {
 			value = null;
 			registerIssue(IssueType.BAD_MONEY_VALUE_FORMAT, i, valueString);
@@ -108,10 +109,13 @@ public class AfterTheFactAcquisitionsImportBean extends FileUploadBean implement
 			value = null;
 			registerIssue(IssueType.BAD_MONEY_VALUE_FORMAT, i, valueString);
 		    }
-		    final String vatValueString = parts.length == 5 ? cleanup(parts[4]) : "0";
+		    String vatValueString = parts.length > 4 ? cleanup(parts[4]) : "0";
+		    if (vatValueString.isEmpty()) {
+			vatValueString = "0";
+		    }
 		    BigDecimal vatValue;
 		    try {
-			vatValue = new BigDecimal(vatValueString.replace('.', 'X').replace("X", "").replace(',', '.'));
+			vatValue = new BigDecimal(vatValueString.replace('.', 'X').replaceAll("X", "").replace(',', '.'));
 		    } catch (NumberFormatException ex) {
 			vatValue = null;
 			registerIssue(IssueType.BAD_VAT_VALUE_FORMAT, i, vatValueString);
