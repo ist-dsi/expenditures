@@ -104,11 +104,10 @@
 		type="pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization"
 		bundle="EXPENDITURE_ORGANIZATION_RESOURCES">
 	<slot name="unit.presentationName" key="label.unit" bundle="EXPENDITURE_RESOURCES"/>
-	<slot name="class" layout="label" key="label.authorizations.type"  bundle="EXPENDITURE_RESOURCES">
-		<property name="bundle" value="EXPENDITURE_RESOURCES"/>
-	</slot>
+	<slot name="maxAmount" key="authorizations.label.maxAmount" bundle="EXPENDITURE_RESOURCES"/>
 	<slot name="startDate" key="authorizations.label.startDate" bundle="EXPENDITURE_RESOURCES" layout="null-as-label"/>
 	<slot name="endDate" key="authorizations.label.endDate" bundle="EXPENDITURE_RESOURCES" layout="null-as-label"/>
+	<slot name="canDelegate" key="authorizations.label.canDelegate" bundle="EXPENDITURE_RESOURCES"/>
 </schema>
 
 <schema name="viewAuthorization" type="pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization"
