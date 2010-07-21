@@ -7,7 +7,11 @@
 <bean:define id="workingCapital" name="process" property="workingCapital"/>
 
 <h2>
-	<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital"/> - <bean:write name="workingCapital" property="unit.presentationName"/> - <bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.year"/>
+	<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital"/>
+	-
+	<bean:write name="workingCapital" property="unit.presentationName"/>
+	-
+	<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.year"/>
 	<bean:write name="workingCapital" property="workingCapitalYear.year"/> 
 </h2>
 

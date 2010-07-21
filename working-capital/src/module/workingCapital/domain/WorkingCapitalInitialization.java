@@ -127,6 +127,18 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
 	return false;
     }
 
+    public boolean isPendingDirectAproval(User user) {
+	if (getAcceptedResponsability() != null && !hasResponsibleForUnitApproval()) {
+	    //final Money valueForAuthorization = getRequestedAnualValue();
+	    final Money valueForAuthorization = Money.ZERO;
+	    final Authorization authorization = getWorkingCapital().findDirectUnitResponsible(user.getPerson(), valueForAuthorization);
+	    if (authorization != null) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
     public boolean isPendingAproval() {
 	return !hasResponsibleForUnitApproval();
     }

@@ -38,7 +38,10 @@ import module.workingCapital.domain.activity.UnVerifyWorkingCapitalAcquisitionAc
 import module.workingCapital.domain.activity.UndoCancelOrRejectWorkingCapitalInitializationActivity;
 import module.workingCapital.domain.activity.VerifyActivity;
 import module.workingCapital.domain.activity.VerifyWorkingCapitalAcquisitionActivity;
+import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.User;
+import myorg.util.BundleUtil;
+import pt.ist.emailNotifier.domain.Email;
 
 public class WorkingCapitalProcess extends WorkingCapitalProcess_Base {
 
@@ -122,6 +125,10 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base {
 	return getWorkingCapital().isPendingAproval(user);
     }
 
+    public boolean isPendingDirectAproval(final User user) {
+	return getWorkingCapital().isPendingDirectAproval(user);
+    }
+
     public boolean isPendingVerification(User user) {
 	return getWorkingCapital().isPendingVerification(user);
     }
@@ -137,7 +144,25 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base {
 
     @Override
     public void notifyUserDueToComment(final User user, final String comment) {
-	// do nothing.
+	List<String> toAddress = new ArrayList<String>();
+	toAddress.clear();
+	final String email = user.getExpenditurePerson().getEmail();
+	if (email != null) {
+	    toAddress.add(email);
+
+	    final User loggedUser = UserView.getCurrentUser();
+	    final WorkingCapital workingCapital = getWorkingCapital();
+	    new Email("Aplicações Centrais do IST", "noreply@ist.utl.pt", new String[] {}, toAddress, Collections.EMPTY_LIST,
+		    Collections.EMPTY_LIST,
+		    	BundleUtil.getFormattedStringFromResourceBundle("resources/WorkingCapitalResources",
+			    "label.email.commentCreated.subject",
+			    workingCapital.getUnit().getPresentationName(),
+			    workingCapital.getWorkingCapitalYear().getYear().toString()),
+			BundleUtil.getFormattedStringFromResourceBundle("resources/WorkingCapitalResources",
+				    "label.email.commentCreated.body", loggedUser.getPerson().getName(),
+				    workingCapital.getUnit().getPresentationName(),
+				    workingCapital.getWorkingCapitalYear().getYear().toString(), comment));
+	}
     }
 
     @Override

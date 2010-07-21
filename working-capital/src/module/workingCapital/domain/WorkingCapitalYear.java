@@ -59,7 +59,7 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
 	    boolean shouldAdd(final WorkingCapitalProcess workingCapitalProcess, final User user) {
 		final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
 		return !workingCapital.isCanceledOrRejected()
-			&& (workingCapitalProcess.isPendingAproval(user)
+			&& (workingCapitalProcess.isPendingDirectAproval(user)
 				|| workingCapital.hasAcquisitionPendingApproval(user)
 				|| workingCapital.isPendingAcceptResponsability(user));
 	    }

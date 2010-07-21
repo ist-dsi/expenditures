@@ -72,6 +72,11 @@ public class WorkingCapital extends WorkingCapital_Base {
 	return findUnitResponsible(person, amount, unit);
     }
 
+    public Authorization findDirectUnitResponsible(final Person person, final Money amount) {
+	final Unit unit = getUnit();
+	return findDirectUnitResponsible(person, amount, unit);
+    }
+
     private Authorization findUnitResponsible(final Person person, final Money amount, final Unit unit) {
 	if (unit != null && person != null) {
 //	    boolean hasAtLeastOneResponsible = false;
@@ -91,6 +96,25 @@ public class WorkingCapital extends WorkingCapital_Base {
 	return null; 
     }
 
+    private Authorization findDirectUnitResponsible(final Person person, final Money amount, final Unit unit) {
+	if (unit != null && person != null) {
+	    boolean hasAtLeastOneResponsible = false;
+	    for (final Authorization authorization : unit.getAuthorizationsSet()) {
+		if (authorization.isValid() && authorization.getMaxAmount().isGreaterThanOrEqual(amount)) {
+		    hasAtLeastOneResponsible = true;
+		    if (authorization.getPerson().getUser() == person.getUser()) {
+			return authorization;
+		    }
+		}
+	    }
+	    if (!hasAtLeastOneResponsible) {
+		final Unit parent = unit.getParentUnit();
+		return findUnitResponsible(person, amount, parent);
+	    }
+	}
+	return null; 
+    }
+
     public boolean isPendingAproval() {
 	final WorkingCapitalInitialization workingCapitalInitialization = getWorkingCapitalInitialization();
 	return workingCapitalInitialization != null && workingCapitalInitialization.isPendingAproval();
@@ -99,6 +123,11 @@ public class WorkingCapital extends WorkingCapital_Base {
     public boolean isPendingAproval(final User user) {
 	final WorkingCapitalInitialization workingCapitalInitialization = getWorkingCapitalInitialization();
 	return workingCapitalInitialization != null && workingCapitalInitialization.isPendingAproval(user);
+    }
+
+    public boolean isPendingDirectAproval(final User user) {
+	final WorkingCapitalInitialization workingCapitalInitialization = getWorkingCapitalInitialization();
+	return workingCapitalInitialization != null && workingCapitalInitialization.isPendingDirectAproval(user);
     }
 
     public boolean isPendingVerification(final User user) {
