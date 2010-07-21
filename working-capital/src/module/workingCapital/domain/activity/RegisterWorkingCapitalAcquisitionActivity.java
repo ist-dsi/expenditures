@@ -21,7 +21,8 @@ public class RegisterWorkingCapitalAcquisitionActivity extends
     @Override
     public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
 	final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
-	return workingCapital.getMovementResponsible().getUser() == user
+	return workingCapital.hasMovementResponsible()
+		&& workingCapital.getMovementResponsible().getUser() == user
 		&& !workingCapital.isCanceledOrRejected()
 		&& workingCapital.getBalance().isPositive()
 		&& workingCapital.getWorkingCapitalInitialization() != null

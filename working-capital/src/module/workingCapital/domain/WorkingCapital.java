@@ -123,7 +123,7 @@ public class WorkingCapital extends WorkingCapital_Base {
 	    return false;
 	}
 	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstance();
-	if (user == getMovementResponsible().getUser()
+	if ((hasMovementResponsible() && user == getMovementResponsible().getUser())
 		|| isAccountingResponsible(user)
 		|| isAccountingEmployee(user)
 		|| workingCapitalSystem.isManagementeMember(user)

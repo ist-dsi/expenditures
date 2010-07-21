@@ -22,7 +22,8 @@ public class ReenforceWorkingCapitalInitializationActivity extends
     public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
 	final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
 	final WorkingCapitalInitialization workingCapitalInitialization = workingCapital.getWorkingCapitalInitialization();
-	return workingCapital.getMovementResponsible().getUser() == user
+	return workingCapital.hasMovementResponsible()
+		&& workingCapital.getMovementResponsible().getUser() == user
 		&& !workingCapital.isCanceledOrRejected()
 		&& workingCapitalInitialization != null
 		&& workingCapitalInitialization.getLastSubmission() == null

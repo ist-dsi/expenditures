@@ -12,7 +12,9 @@
 			<fr:slot name="unit.presentationName" key="label.module.workingCapital"/>
 			<fr:slot name="workingCapitalInitialization.requestCreation" key="label.module.workingCapital.requestingDate"/>
 			<fr:slot name="workingCapitalInitialization.requestor.name"  key="label.module.workingCapital.requester"/>
-			<fr:slot name="movementResponsible.name" key="label.module.workingCapital.movementResponsible"/>
+			<logic:present name="workingCapital" property="movementResponsible">
+				<fr:slot name="movementResponsible.name" key="label.module.workingCapital.movementResponsible"/>
+			</logic:present>
 		</fr:schema>
 		<fr:layout name="tabular">
 				<fr:property name="columnClasses" value="aleft,,"/>

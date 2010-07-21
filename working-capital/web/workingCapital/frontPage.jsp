@@ -119,7 +119,7 @@
 					<fr:property name="nullOptionHidden" value="true"/>
 				</fr:slot>
 				<fr:slot name="party" layout="autoComplete" key="label.party" bundle="WORKING_CAPITAL_RESOURCES"
-						validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"
+						validator="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator"
 						help="label.module.workingCapital.selectParty.help">
 		        	<fr:property name="labelField" value="partyName.content"/>
 					<fr:property name="format" value="${presentationName}"/>

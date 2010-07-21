@@ -108,7 +108,7 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base {
     public boolean isAccessible(final User user) {
 	final WorkingCapital workingCapital = getWorkingCapital();
 	return user != null && user.hasPerson() && (
-		user.getPerson() == workingCapital.getMovementResponsible()
+		(workingCapital.hasMovementResponsible() && user.getPerson() == workingCapital.getMovementResponsible())
 		|| workingCapital.isRequester(user)
 		|| workingCapital.getWorkingCapitalSystem().isManagementeMember(user)
 		|| workingCapital.isAccountingEmployee(user)

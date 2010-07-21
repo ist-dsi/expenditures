@@ -16,7 +16,7 @@
 <fr:edit id="workingCapitalInitializationBean" name="workingCapitalInitializationBean" action="/workingCapital.do?method=createWorkingCapitalInitialization">
 	<fr:schema type="module.workingCapital.domain.util.WorkingCapitalInitializationBean" bundle="WORKING_CAPITAL_RESOURCES">
 		<fr:slot name="year" key="label.module.workingCapital.year" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-		<fr:slot name="unit" layout="autoComplete" key="label.module.workingCapital.unit" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<fr:slot name="unit" layout="autoComplete" key="label.module.workingCapital.unit" validator="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator">
         	<fr:property name="labelField" value="presentationName"/>
 			<fr:property name="format" value="${presentationName}"/>
 			<fr:property name="minChars" value="3"/>
@@ -24,7 +24,7 @@
 			<fr:property name="size" value="60"/>
 		</fr:slot>
 		<fr:slot name="person" layout="autoComplete" key="label.module.workingCapital.movementResponsible"
-				validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"
+				validator="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator"
 				help="label.module.workingCapital.movementResponsible.help">
         	<fr:property name="labelField" value="name"/>
 			<fr:property name="format" value="${partyName} (${user.username})"/>

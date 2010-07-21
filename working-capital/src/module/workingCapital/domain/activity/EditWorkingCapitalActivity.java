@@ -21,7 +21,9 @@ public class EditWorkingCapitalActivity extends WorkflowActivity<WorkingCapitalP
     @Override
     public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
 	final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
-	return workingCapital.getMovementResponsible().getUser() == user && !workingCapital.isCanceledOrRejected();
+	return workingCapital.hasMovementResponsible()
+		&& workingCapital.getMovementResponsible().getUser() == user
+		&& !workingCapital.isCanceledOrRejected();
     }
 
     @Override

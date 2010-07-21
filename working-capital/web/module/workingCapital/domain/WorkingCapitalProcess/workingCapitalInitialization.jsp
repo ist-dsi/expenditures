@@ -21,7 +21,9 @@
 			<fr:slot name="workingCapital.accountingUnit.name" key="label.module.workingCapital.initialization.accountingUnit"/>
 			<fr:slot name="requestCreation" key="label.module.workingCapital.requestingDate"/>
 			<fr:slot name="requestor.name"  key="label.module.workingCapital.requester"/>
-			<fr:slot name="workingCapital.movementResponsible.name" key="label.module.workingCapital.movementResponsible"/>
+			<logic:present name="workingCapital" property="movementResponsible">
+				<fr:slot name="workingCapital.movementResponsible.name" key="label.module.workingCapital.movementResponsible"/>
+			</logic:present>
 			<fr:slot name="fiscalId"  key="label.module.workingCapital.fiscalId"/>
 			<fr:slot name="internationalBankAccountNumber"  key="label.module.workingCapital.internationalBankAccountNumber"/>
 			<fr:slot name="fundAllocationId" key="label.module.workingCapital.fundAllocationId"/>

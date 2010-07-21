@@ -10,7 +10,7 @@
 
 <fr:edit id="workingCapitalSystem" name="workingCapitalSystem" action="/workingCapital.do?method=configuration">
 	<fr:schema type="module.mission.domain.util.MissionAuthorizationAccountabilityTypeBean" bundle="ORGANIZATION_RESOURCES">
-		<fr:slot name="accountingUnit" layout="autoComplete" key="label.party" bundle="ORGANIZATION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<fr:slot name="accountingUnit" layout="autoComplete" key="label.party" bundle="ORGANIZATION_RESOURCES" validator="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator">
         	<fr:property name="labelField" value="partyName.content"/>
 			<fr:property name="format" value="${presentationName}"/>
 			<fr:property name="minChars" value="3"/>
