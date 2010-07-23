@@ -31,4 +31,9 @@ public class Authorize<P extends PaymentProcess> extends WorkflowActivity<P, Act
     public String getUsedBundle() {
 	return "resources/AcquisitionResources";
     }
+
+    @Override
+    public boolean isSigned() {
+	return true;
+    }
 }

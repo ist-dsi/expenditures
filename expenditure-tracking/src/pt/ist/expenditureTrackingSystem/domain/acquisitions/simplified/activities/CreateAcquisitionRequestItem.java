@@ -39,10 +39,11 @@ public class CreateAcquisitionRequestItem extends
 	    address = activityInformation.getAddress();
 	    acquisitionRequest.getRequester().createNewDeliveryInfo(recipient, address, phone, email);
 	}
-	acquisitionRequest.createAcquisitionRequestItem(activityInformation.getAcquisitionRequest(), activityInformation
-		.getDescription(), activityInformation.getQuantity(), activityInformation.getUnitValue(), activityInformation
-		.getVatValue(), activityInformation.getAdditionalCostValue(), activityInformation.getProposalReference(),
-		activityInformation.getCPVReference(), recipient, address, phone, email);
+	acquisitionRequest.createAcquisitionRequestItem(activityInformation.getAcquisitionRequest(),
+		activityInformation.getDescription(), activityInformation.getQuantity(), activityInformation.getUnitValue(),
+		activityInformation.getVatValue(), activityInformation.getAdditionalCostValue(),
+		activityInformation.getProposalReference(), activityInformation.getCPVReference(), recipient, address, phone,
+		email);
     }
 
     @Override
@@ -63,6 +64,11 @@ public class CreateAcquisitionRequestItem extends
     @Override
     public boolean isDefaultInputInterfaceUsed() {
 	return false;
+    }
+
+    @Override
+    public boolean isSigned() {
+	return true;
     }
 
 }
