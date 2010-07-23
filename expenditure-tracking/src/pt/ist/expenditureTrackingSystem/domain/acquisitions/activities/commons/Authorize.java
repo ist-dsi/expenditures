@@ -32,8 +32,4 @@ public class Authorize<P extends PaymentProcess> extends WorkflowActivity<P, Act
 	return "resources/AcquisitionResources";
     }
 
-    @Override
-    public boolean isSigned() {
-	return true;
-    }
 }

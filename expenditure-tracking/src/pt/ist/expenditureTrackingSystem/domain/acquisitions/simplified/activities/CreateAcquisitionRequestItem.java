@@ -66,9 +66,5 @@ public class CreateAcquisitionRequestItem extends
 	return false;
     }
 
-    @Override
-    public boolean isSigned() {
-	return true;
-    }
 
 }
