@@ -39,6 +39,7 @@ import module.workingCapital.domain.activity.UndoCancelOrRejectWorkingCapitalIni
 import module.workingCapital.domain.activity.VerifyActivity;
 import module.workingCapital.domain.activity.VerifyWorkingCapitalAcquisitionActivity;
 import myorg.applicationTier.Authenticate.UserView;
+import myorg.domain.RoleType;
 import myorg.domain.User;
 import myorg.util.BundleUtil;
 import pt.ist.emailNotifier.domain.Email;
@@ -111,7 +112,8 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base {
     public boolean isAccessible(final User user) {
 	final WorkingCapital workingCapital = getWorkingCapital();
 	return user != null && user.hasPerson() && (
-		(workingCapital.hasMovementResponsible() && user.getPerson() == workingCapital.getMovementResponsible())
+		user.hasRoleType(RoleType.MANAGER)
+		|| (workingCapital.hasMovementResponsible() && user.getPerson() == workingCapital.getMovementResponsible())
 		|| workingCapital.isRequester(user)
 		|| workingCapital.getWorkingCapitalSystem().isManagementeMember(user)
 		|| workingCapital.isAccountingEmployee(user)
