@@ -73,6 +73,7 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
 		final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
 		return !workingCapital.isCanceledOrRejected()
 			&& (workingCapitalProcess.isPendingVerification(user)
+				|| workingCapital.isPendingFundAllocation(user)
 				|| workingCapital.hasAcquisitionPendingVerification(user)
 				|| ((workingCapital.isAccountingResponsible(user) || workingCapital.isAccountingEmployee(user))
 					&& workingCapital.canRequestCapitalRefund()));

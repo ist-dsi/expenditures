@@ -86,7 +86,13 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
 	}
 	setVerificationByAccounting(new DateTime());
 	setResponsibleForAccountingVerification(user.getPerson());
-	setFundAllocationId(fundAllocationId);
+	allocateFunds(fundAllocationId);
+    }
+
+    public void allocateFunds(final String fundAllocationId) {
+	final String value = fundAllocationId != null && !fundAllocationId.isEmpty() ?
+		fundAllocationId : null;
+	setFundAllocationId(value);
     }
 
     private boolean isAccountingResponsible(final User user) {
@@ -98,6 +104,7 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
 	removeResponsibleForAccountingVerification();
 	setAuthorizedAnualValue(null);
 	setMaxAuthorizedAnualValue(null);
+	setFundAllocationId(null);
     }
 
     public void authorize(final User user) {
@@ -148,7 +155,10 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
     }
 
     public boolean isPendingAuthorization() {
-	return hasResponsibleForAccountingVerification() && !hasResponsibleForUnitAuthorization();
+	return hasResponsibleForAccountingVerification()
+		&& getFundAllocationId() != null
+		&& !getFundAllocationId().isEmpty()
+		&& !hasResponsibleForUnitAuthorization();
     }
 
     public boolean isAuthorized() {
@@ -172,6 +182,13 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
     public AccountingUnit getAccountingUnit() {
 	final AccountingUnit accountingUnit = super.getAccountingUnit();
 	return accountingUnit == null ? getWorkingCapital().getUnit().getAccountingUnit() : accountingUnit;
+    }
+
+    public boolean isPendingFundAllocation() {
+	return !isCanceledOrRejected()
+		&& (getFundAllocationId() == null || getFundAllocationId().isEmpty())
+		&& hasResponsibleForAccountingVerification()
+		&& !hasResponsibleForUnitAuthorization();
     }
 
 }

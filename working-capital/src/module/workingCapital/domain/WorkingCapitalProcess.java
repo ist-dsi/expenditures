@@ -11,6 +11,7 @@ import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.ProcessFile;
 import module.workflow.domain.WorkflowProcess;
 import module.workingCapital.domain.activity.AcceptResponsabilityForWorkingCapitalActivity;
+import module.workingCapital.domain.activity.AllocateFundsActivity;
 import module.workingCapital.domain.activity.ApproveActivity;
 import module.workingCapital.domain.activity.ApproveWorkingCapitalAcquisitionActivity;
 import module.workingCapital.domain.activity.AuthorizeActivity;
@@ -66,6 +67,7 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base {
 	activitiesAux.add(new UnApproveActivity());
 	activitiesAux.add(new VerifyActivity());
 	activitiesAux.add(new UnVerifyActivity());
+	activitiesAux.add(new AllocateFundsActivity());
 	activitiesAux.add(new AuthorizeActivity());
 	activitiesAux.add(new UnAuthorizeActivity());
 	activitiesAux.add(new RejectWorkingCapitalInitializationActivity());
@@ -133,6 +135,10 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base {
 
     public boolean isPendingVerification(User user) {
 	return getWorkingCapital().isPendingVerification(user);
+    }
+
+    public boolean isPendingFundAllocation(User user) {
+	return getWorkingCapital().isPendingFundAllocation(user);
     }
 
     public boolean isPendingAuthorization(User user) {

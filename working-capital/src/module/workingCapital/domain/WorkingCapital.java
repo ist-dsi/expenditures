@@ -138,6 +138,14 @@ public class WorkingCapital extends WorkingCapital_Base {
 	return false;
     }
 
+    public boolean isPendingFundAllocation(final User user) {
+	if (isAccountingEmployee(user)) {
+	    final WorkingCapitalInitialization workingCapitalInitialization = getWorkingCapitalInitialization();
+	    return workingCapitalInitialization != null && workingCapitalInitialization.isPendingFundAllocation();
+	}
+	return false;
+    }
+
     public boolean isPendingAuthorization(User user) {
 	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstance(); 
 	if (workingCapitalSystem.isManagementeMember(user)) {
