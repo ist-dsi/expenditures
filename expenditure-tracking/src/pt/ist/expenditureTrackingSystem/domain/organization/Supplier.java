@@ -192,8 +192,8 @@ public class Supplier extends Supplier_Base implements Indexable, Searchable {
 
     public boolean isFundAllocationAllowed(final Money value) {
 	final Money totalAllocated = getTotalAllocated();
-	final Money totalValue = totalAllocated.add(value);
-	return totalValue.isLessThanOrEqual(SUPPLIER_LIMIT) && totalValue.isLessThan(getSupplierLimit());
+	final Money totalValue = totalAllocated; //.add(value);
+	return totalValue.isLessThan(SUPPLIER_LIMIT) && totalValue.isLessThan(getSupplierLimit());
     }
 
     @Service
