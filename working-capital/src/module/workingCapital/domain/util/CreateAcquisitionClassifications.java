@@ -6,7 +6,7 @@ import myorg.domain.scheduler.WriteCustomTask;
 public class CreateAcquisitionClassifications extends WriteCustomTask {
 
     @Override
-    public void doIt() {
+    protected void doService() {
 	create("Combustiveis", "622121", "020102");
 	create("Laboratorio", "622151", "020120");
 	create("Ferra.Utensílios", "622159", "020117");
