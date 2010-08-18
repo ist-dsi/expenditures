@@ -496,6 +496,15 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
 	return true;
     }
 
+    public boolean hasAllInvoicesAllocatedInProject() {
+	for (Financer financer : getFinancers()) {
+	    if (!financer.hasAllInvoicesAllocatedInProject()) {
+		return false;
+	    }
+	}
+	return true;
+    }
+    
     public boolean hasAnyInvoiceAllocated() {
 	for (Financer financer : getFinancers()) {
 	    if (financer.hasAllInvoicesAllocated()) {

@@ -221,6 +221,10 @@ public class Financer extends Financer_Base {
 	return false;
     }
 
+    public boolean hasAllInvoicesAllocatedInProject() {
+	return true;
+    }
+    
     public boolean hasAllInvoicesAllocated() {
 	List<PaymentProcessInvoice> allocatedInvoices = getAllocatedInvoices();
 	for (UnitItem unitItem : getUnitItems()) {

@@ -111,6 +111,10 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
 	return getRequest().hasAllInvoicesAllocated();
     }
 
+    public boolean hasAllInvoicesAllocatedInProject() {
+	return getRequest().hasAllInvoicesAllocatedInProject();
+    }
+
     public boolean hasAnyFundAllocationId() {
 	return getRequest().hasAnyFundAllocationId();
     }

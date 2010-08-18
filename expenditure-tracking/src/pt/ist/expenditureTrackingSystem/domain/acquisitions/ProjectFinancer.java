@@ -189,4 +189,14 @@ public class ProjectFinancer extends ProjectFinancer_Base {
 	getAllocatedInvoicesInProject().clear();
     }
 
+    public boolean hasAllInvoicesAllocatedInProject() {
+	List<PaymentProcessInvoice> allocatedInvoices = getAllocatedInvoicesInProject();
+	for (UnitItem unitItem : getUnitItems()) {
+	    if (!allocatedInvoices.containsAll(unitItem.getConfirmedInvoices())) {
+		return false;
+	    }
+	}
+	return true;
+    }
+
 }

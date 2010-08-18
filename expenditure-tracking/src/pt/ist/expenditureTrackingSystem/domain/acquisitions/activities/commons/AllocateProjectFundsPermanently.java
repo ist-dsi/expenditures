@@ -13,7 +13,7 @@ public class AllocateProjectFundsPermanently<P extends PaymentProcess> extends
     @Override
     public boolean isActive(P process, User user) {
 	return process.isProjectAccountingEmployee(user.getExpenditurePerson()) && isUserProcessOwner(process, user)
-		&& !process.hasAllocatedFundsPermanentlyForAllProjectFinancers() && !process.hasAllInvoicesAllocated();
+		&& !process.hasAllocatedFundsPermanentlyForAllProjectFinancers() && !process.hasAllInvoicesAllocatedInProject();
     }
 
     @Override
