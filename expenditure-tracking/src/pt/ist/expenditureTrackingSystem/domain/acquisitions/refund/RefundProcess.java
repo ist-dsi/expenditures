@@ -12,6 +12,7 @@ import module.workflow.activities.StealProcess;
 import module.workflow.activities.TakeProcess;
 import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.WorkflowProcess;
+import myorg.domain.User;
 import myorg.domain.exceptions.DomainException;
 import myorg.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
@@ -353,6 +354,11 @@ public class RefundProcess extends RefundProcess_Base {
 	    }
 	}
 	return false;
+    }
+
+    @Override
+    public boolean isAccessible(User user) {
+	return isAvailableForPerson(user.getExpenditurePerson());
     }
 
     public boolean isAvailableForCurrentUser() {
