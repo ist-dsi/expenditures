@@ -352,7 +352,7 @@ public class SearchPaymentProcessesAction extends BaseAction {
 	    } else if (split[0].equals(STATE_SORT)) {
 		comparator = STATE_SORT_COMPARATOR;
 	    } else {
-		comparator = new BeanComparator(split[0]);
+		comparator = new NullResilientBeanComparator(split[0]);
 	    }
 
 	    if (split.length == 2 && split[1].indexOf("desc") > -1) {
@@ -361,5 +361,26 @@ public class SearchPaymentProcessesAction extends BaseAction {
 	}
 
 	return comparator;
+    }
+    
+    public static class NullResilientBeanComparator extends BeanComparator {
+
+	public NullResilientBeanComparator(String property) {
+	    super(property);
+	}
+
+	@Override
+	public int compare(Object o1, Object o2) {
+	    if (o1 == null && o2 != null) {
+		return 1;
+	    }
+	    if (o2 == null && o1 != null) {
+		return -1;
+	    }
+	    if (o1 == null && o2 == null) {
+		return 0;
+	    }
+	    return super.compare(o1, o2);
+	}
     }
 }

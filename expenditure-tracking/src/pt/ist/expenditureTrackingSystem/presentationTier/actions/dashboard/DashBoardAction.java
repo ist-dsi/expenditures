@@ -8,7 +8,12 @@ import javax.servlet.http.HttpServletResponse;
 import module.dashBoard.domain.DashBoardPanel;
 import module.dashBoard.domain.DashBoardWidget;
 import module.dashBoard.presentationTier.DashBoardManagementAction;
+import module.workflow.widgets.QuickViewWidget;
 import myorg.domain.User;
+import myorg.domain.VirtualHost;
+import myorg.domain.contents.ActionNode;
+import myorg.domain.contents.Node;
+import myorg.domain.groups.UserGroup;
 import myorg.presentationTier.actions.ContextBaseAction;
 
 import org.apache.struts.action.ActionForm;
@@ -22,10 +27,10 @@ import pt.ist.expenditureTrackingSystem.presentationTier.widgets.MyProcessesWidg
 import pt.ist.expenditureTrackingSystem.presentationTier.widgets.MySearchesWidget;
 import pt.ist.expenditureTrackingSystem.presentationTier.widgets.PendingRefundWidget;
 import pt.ist.expenditureTrackingSystem.presentationTier.widgets.PendingSimplifiedWidget;
-import pt.ist.expenditureTrackingSystem.presentationTier.widgets.QuickViewWidget;
 import pt.ist.expenditureTrackingSystem.presentationTier.widgets.TakenProcessesWidget;
 import pt.ist.expenditureTrackingSystem.presentationTier.widgets.UnreadCommentsWidget;
 import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixWebFramework.servlets.functionalities.CreateNodeAction;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
@@ -58,6 +63,20 @@ public class DashBoardAction extends ContextBaseAction {
 	expenditureUserDashBoardPanel.addWidgetToColumn(2, new DashBoardWidget(QuickViewWidget.class));
 	expenditureUserDashBoardPanel.addWidgetToColumn(2, new DashBoardWidget(TakenProcessesWidget.class));
 	return expenditureUserDashBoardPanel;
+    }
+
+    @CreateNodeAction(bundle = "EXPENDITURE_RESOURCES", key = "add.node.expenditure-tracking.interface.dashboard", groupKey = "label.module.dashboard")
+    public ActionForward createDashBoardLink(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+
+	final VirtualHost virtualHost = getDomainObject(request, "virtualHostToManageId");
+	final Node node = getDomainObject(request, "parentOfNodesToManageId");
+
+	ActionNode.createActionNode(virtualHost, node, "/dashBoard", "viewDigest", "resources.ExpenditureResources",
+		"link.sideBar.acquisitionProcess.digest", UserGroup.getInstance());
+
+	return forwardToMuneConfiguration(request, virtualHost, node);
+
     }
 
 }

@@ -16,7 +16,6 @@
 	$("#processControl").addClass("wrapper");
 </script>
 
-
 <bean:define id="processRequest" name="process" property="request" toScope="request"/>
 <jsp:include page="/acquisitions/commons/viewAcquisitionRequest.jsp" flush="true"/>
 
@@ -77,7 +76,7 @@
 					<fr:view name="payingUnit" property="payingUnit.presentationName"/>
 				</html:link>
 				<wf:isActive processName="process" activityName="GenericRemovePayingUnit" scope="request">(</wf:isActive>
-				<wf:activityLink id="<%= "remove-" + unitOID %>" processName="process" activityName="GenericRemovePayingUnit" scope="request" paramName0="payingUnit" paramValue0="<%= unitOID %>">
+				<wf:activityLink processName="process" activityName="GenericRemovePayingUnit" scope="request" paramName0="payingUnit" paramValue0="<%= unitOID %>">
 						<bean:message key="link.remove" bundle="MYORG_RESOURCES"/>
 				</wf:activityLink>
 				<wf:isActive processName="process" activityName="GenericRemovePayingUnit" scope="request">)</wf:isActive>	

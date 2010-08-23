@@ -8,6 +8,7 @@ import pt.ist.fenixWebFramework.services.Service;
 import module.dashBoard.domain.DashBoardWidget;
 import module.dashBoard.presentationTier.WidgetRequest;
 import module.dashBoard.widgets.WidgetController;
+import myorg.util.BundleUtil;
 import myorg.util.ClassNameBundle;
 
 import org.apache.commons.beanutils.BeanComparator;
@@ -69,5 +70,11 @@ public class MyProcessesWidget extends WidgetController {
     public void doEditOptions(WidgetRequest request) {
 	DashBoardWidget widget = request.getWidget();
 	request.setAttribute("edit-widgetOptions-" + widget.getExternalId(), getOrCreateOptions(widget));
+    }
+
+    @Override
+    public String getWidgetDescription() {
+	return BundleUtil.getStringFromResourceBundle("resources/ExpenditureResources",
+		"widget.description.MyProcessesWidget");
     }
 }

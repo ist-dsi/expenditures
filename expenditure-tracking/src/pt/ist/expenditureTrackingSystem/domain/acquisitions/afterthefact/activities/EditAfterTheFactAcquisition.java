@@ -44,4 +44,8 @@ public class EditAfterTheFactAcquisition extends
 	return "resources/AcquisitionResources";
     }
 
+    @Override
+    public boolean isUserAwarenessNeeded(AfterTheFactAcquisitionProcess process, User user) {
+	return false;
+    }
 }

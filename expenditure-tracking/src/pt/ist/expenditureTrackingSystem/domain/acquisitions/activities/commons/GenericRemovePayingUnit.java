@@ -4,6 +4,7 @@ import module.workflow.activities.WorkflowActivity;
 import myorg.domain.User;
 import myorg.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 
 public class GenericRemovePayingUnit<P extends PaymentProcess> extends
 	WorkflowActivity<P, GenericRemovePayingUnitActivityInformation<P>> {
@@ -38,4 +39,8 @@ public class GenericRemovePayingUnit<P extends PaymentProcess> extends
 	return false;
     }
 
+    @Override
+    public boolean isConfirmationNeeded(P process) {
+	return true;
+    }
 }

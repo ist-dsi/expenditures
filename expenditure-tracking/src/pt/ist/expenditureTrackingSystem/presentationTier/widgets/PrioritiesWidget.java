@@ -7,6 +7,7 @@ import java.util.Map;
 
 import module.dashBoard.presentationTier.WidgetRequest;
 import module.dashBoard.widgets.WidgetController;
+import myorg.util.BundleUtil;
 import myorg.util.ClassNameBundle;
 import myorg.util.Counter;
 import myorg.util.MultiCounter;
@@ -36,5 +37,10 @@ public class PrioritiesWidget extends WidgetController {
 
 	Collections.sort(priorityCounters, new BeanComparator("countableObject"));
 	request.setAttribute("simplifiedCounters-priority", priorityCounters);
+    }
+
+    @Override
+    public String getWidgetDescription() {
+	return BundleUtil.getStringFromResourceBundle("resources/ExpenditureResources", "widget.description.PrioritiesWidget");
     }
 }

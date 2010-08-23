@@ -9,6 +9,7 @@ import module.workflow.domain.ActivityLog;
 import module.workflow.domain.WorkflowProcess;
 import myorg.domain.User;
 import myorg.domain.exceptions.DomainException;
+import myorg.util.ClassNameBundle;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
@@ -20,6 +21,7 @@ import pt.ist.fenixWebFramework.services.Service;
 /*
  * TODO: This should be deleted
  */
+@ClassNameBundle(bundle = "resources/ExpenditureResources", key = "label.process.announcements")
 public class AnnouncementProcess extends AnnouncementProcess_Base {
 
     public boolean isProcessInState(AnnouncementProcessStateType state) {
@@ -50,8 +52,9 @@ public class AnnouncementProcess extends AnnouncementProcess_Base {
 
     private AnnouncementProcess(final Person publisher, AnnouncementBean announcementBean) {
 	super();
-//	new AnnouncementProcessState(this, AnnouncementProcessStateType.IN_GENESIS);
-//	new Announcement(this, publisher, announcementBean);
+	// new AnnouncementProcessState(this,
+	// AnnouncementProcessStateType.IN_GENESIS);
+	// new Announcement(this, publisher, announcementBean);
     }
 
     @Override
@@ -85,6 +88,11 @@ public class AnnouncementProcess extends AnnouncementProcess_Base {
     @Override
     public void notifyUserDueToComment(User user, String comment) {
 	// no nothing
+    }
+
+    @Override
+    public boolean isAccessible(User user) {
+	return user == getProcessCreator();
     }
 
     /*

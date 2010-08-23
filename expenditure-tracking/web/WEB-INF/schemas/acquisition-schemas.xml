@@ -796,15 +796,6 @@
 	<slot name="description" key="refundItem.label.description" />
 </schema>
 
-<schema name="search.quick"
-	type="pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPaymentProcess"
-	bundle="ACQUISITION_RESOURCES">
-	<slot name="processId" key="label.acquisitionProcessId.short"
-		bundle="EXPENDITURE_RESOURCES">
-		<property name="size" value="10" />
-	</slot>
-</schema>
-
 <schema name="search.abstract"
 	type="pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPaymentProcess"
 	bundle="ACQUISITION_RESOURCES">

@@ -7,6 +7,7 @@ import java.util.Map;
 
 import module.dashBoard.presentationTier.WidgetRequest;
 import module.dashBoard.widgets.WidgetController;
+import myorg.util.BundleUtil;
 import myorg.util.ClassNameBundle;
 import myorg.util.Counter;
 import myorg.util.MultiCounter;
@@ -37,5 +38,11 @@ public class PendingRefundWidget extends WidgetController {
 	Collections.sort(refundCounters, new BeanComparator("countableObject"));
 	request.setAttribute("refundCounters", refundCounters);
 	request.setAttribute("person", loggedPerson);
+    }
+    
+    @Override
+    public String getWidgetDescription() {
+	return BundleUtil.getStringFromResourceBundle("resources/ExpenditureResources",
+		"widget.description.PendingRefundWidget");
     }
 }

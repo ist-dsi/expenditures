@@ -7,9 +7,13 @@ import module.dashBoard.WidgetRegister.WidgetAditionPredicate;
 import module.dashBoard.domain.DashBoardPanel;
 import module.dashBoard.widgets.WidgetController;
 import module.organization.presentationTier.actions.OrganizationModelAction;
+import module.workflow.presentationTier.ProcessNodeSelectionMapper;
 import myorg.domain.ModuleInitializer;
 import myorg.domain.MyOrg;
 import myorg.domain.User;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.organization.OrganizationModelPlugin.ExpendituresView;
 import pt.ist.expenditureTrackingSystem.presentationTier.widgets.ActivateEmailNotificationWidget;
@@ -18,7 +22,6 @@ import pt.ist.expenditureTrackingSystem.presentationTier.widgets.MySearchesWidge
 import pt.ist.expenditureTrackingSystem.presentationTier.widgets.PendingRefundWidget;
 import pt.ist.expenditureTrackingSystem.presentationTier.widgets.PendingSimplifiedWidget;
 import pt.ist.expenditureTrackingSystem.presentationTier.widgets.PrioritiesWidget;
-import pt.ist.expenditureTrackingSystem.presentationTier.widgets.QuickViewWidget;
 import pt.ist.expenditureTrackingSystem.presentationTier.widgets.TakenProcessesWidget;
 import pt.ist.expenditureTrackingSystem.presentationTier.widgets.UnreadCommentsWidget;
 import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.RequestChecksumFilter;
@@ -107,6 +110,14 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 	    }
 	});
 
+	RequestChecksumFilter.registerFilterRule(new ChecksumPredicate() {
+	    public boolean shouldFilter(HttpServletRequest httpServletRequest) {
+		return !(httpServletRequest.getRequestURI().endsWith("/expenditureProcesses.do"))
+			&& httpServletRequest.getQueryString() != null
+			&& httpServletRequest.getQueryString().contains("method=viewTypeDescription");
+	    }
+	});
+
     }
 
     private static void initRoles() {
@@ -155,7 +166,6 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 	registerWidget(PendingRefundWidget.class);
 	registerWidget(PendingSimplifiedWidget.class);
 	registerWidget(ActivateEmailNotificationWidget.class);
-	registerWidget(QuickViewWidget.class);
 	WidgetRegister.registerWidget(PrioritiesWidget.class, EXPENDITURE_SERVICES_ONLY_PREDICATE);
     }
 

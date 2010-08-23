@@ -48,4 +48,8 @@ public class DeleteAfterTheFactAcquisitionProcess extends
 	return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "message.confirm.delete.acquisition.process");
     }
 
+    @Override
+    public boolean isUserAwarenessNeeded(AfterTheFactAcquisitionProcess process, User user) {
+	return false;
+    }
 }
