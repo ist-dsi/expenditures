@@ -13,6 +13,7 @@ import module.workflow.domain.WorkflowProcess;
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
 import myorg.util.BundleUtil;
+import myorg.util.ClassNameBundle;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProposalDocument;
@@ -76,6 +77,7 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.fenixWebFramework.rendererExtensions.util.IPresentableEnum;
 import pt.ist.fenixWebFramework.services.Service;
 
+@ClassNameBundle(bundle = "resources/ExpenditureResources", key = "label.process.acquisition")
 public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base {
 
     public static enum ProcessClassification implements IPresentableEnum {

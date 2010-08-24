@@ -12,6 +12,7 @@ import module.workflow.domain.WorkflowProcess;
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
 import myorg.util.BundleUtil;
+import myorg.util.ClassNameBundle;
 
 import org.joda.time.LocalDate;
 
@@ -24,6 +25,7 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.fenixWebFramework.services.Service;
 
+@ClassNameBundle(bundle = "resources/ExpenditureResources", key = "label.process.afterTheFactAcquisition")
 public class AfterTheFactAcquisitionProcess extends AfterTheFactAcquisitionProcess_Base {
 
     private static List<WorkflowActivity<AfterTheFactAcquisitionProcess, ? extends ActivityInformation<AfterTheFactAcquisitionProcess>>> activities = new ArrayList<WorkflowActivity<AfterTheFactAcquisitionProcess, ? extends ActivityInformation<AfterTheFactAcquisitionProcess>>>();

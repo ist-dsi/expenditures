@@ -15,6 +15,7 @@ import module.workflow.domain.WorkflowProcess;
 import myorg.domain.User;
 import myorg.domain.exceptions.DomainException;
 import myorg.util.BundleUtil;
+import myorg.util.ClassNameBundle;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
@@ -67,6 +68,7 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.fenixWebFramework.services.Service;
 
+@ClassNameBundle(bundle = "resources/ExpenditureResources", key = "label.process.refund")
 public class RefundProcess extends RefundProcess_Base {
 
     private static List<WorkflowActivity<RefundProcess, ? extends ActivityInformation<RefundProcess>>> activities = new ArrayList<WorkflowActivity<RefundProcess, ? extends ActivityInformation<RefundProcess>>>();
