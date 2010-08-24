@@ -44,7 +44,9 @@ import myorg.domain.RoleType;
 import myorg.domain.User;
 import myorg.util.BundleUtil;
 import pt.ist.emailNotifier.domain.Email;
+import myorg.util.ClassNameBundle;
 
+@ClassNameBundle(key="label.module.workingCapital", bundle="resources/WorkingCapitalResources")
 public class WorkingCapitalProcess extends WorkingCapitalProcess_Base {
 
     public static final Comparator<WorkingCapitalProcess> COMPARATOR_BY_UNIT_NAME = new Comparator<WorkingCapitalProcess>() {
