@@ -2,6 +2,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="/WEB-INF/struts-tiles.tld" prefix="tiles" %>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
+<%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <html:html xhtml="true">
 <head>
@@ -31,6 +32,11 @@
 			<bean:message key="messages.exception.backToHomepage" bundle="EXPENDITURE_RESOURCES"/>
 			<a href="<%= request.getContextPath() %>"><bean:message key="messages.exception.backToHomepageLink" bundle="EXPENDITURE_RESOURCES"/></a>
 		</p>
+		
+		<logic:present name="exceptionInfo">
+			<bean:define id="exceptionInfo" name="exceptionInfo" type="java.lang.String"/>
+			<html:hidden property="exceptionInfo" value="<%= exceptionInfo %>"/>
+		</logic:present>
 	</div>
 </div>
 </body>
