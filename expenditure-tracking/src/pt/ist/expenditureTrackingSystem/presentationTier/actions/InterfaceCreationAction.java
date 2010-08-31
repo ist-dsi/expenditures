@@ -46,13 +46,13 @@ public class InterfaceCreationAction extends ContextBaseAction {
 		"resources.ExpenditureResources", "link.fundAllocations", pt.ist.expenditureTrackingSystem.domain.Role.getRole(
 			pt.ist.expenditureTrackingSystem.domain.RoleType.ACCOUNTING_MANAGER).getSystemRole());
 
-	final Node organizationNode = ActionNode.createActionNode(virtualHost, node, "/expenditureTrackingOrganization",
-		"viewLoggedPerson", "resources.ExpenditureResources", "link.topBar.organization", UserGroup.getInstance());
-	ActionNode.createActionNode(virtualHost, organizationNode, "/expenditureTrackingOrganization", "viewOrganization",
+//	final Node organizationNode = ActionNode.createActionNode(virtualHost, node, "/expenditureTrackingOrganization",
+//		"viewLoggedPerson", "resources.ExpenditureResources", "link.topBar.organization", UserGroup.getInstance());
+	ActionNode.createActionNode(virtualHost, aquisitionProcessNode, "/expenditureTrackingOrganization", "viewOrganization",
 		"resources.ExpenditureResources", "link.viewOrganization", UserGroup.getInstance());
-	ActionNode.createActionNode(virtualHost, organizationNode, "/expenditureTrackingOrganization", "searchUsers",
+	ActionNode.createActionNode(virtualHost, aquisitionProcessNode, "/expenditureTrackingOrganization", "searchUsers",
 		"resources.ExpenditureResources", "search.link.users", UserGroup.getInstance());
-	ActionNode.createActionNode(virtualHost, organizationNode, "/expenditureTrackingOrganization", "manageSuppliers",
+	ActionNode.createActionNode(virtualHost, aquisitionProcessNode, "/expenditureTrackingOrganization", "manageSuppliers",
 		"resources.ExpenditureOrganizationResources", "supplier.link.manage", UserGroup.getInstance());
 
 	final PersistentGroup statisticsGroup = pt.ist.expenditureTrackingSystem.domain.Role.getRole(
@@ -71,10 +71,10 @@ public class InterfaceCreationAction extends ContextBaseAction {
 	ActionNode.createActionNode(virtualHost, statisticsNode, "/statistics", "showStatisticsReports",
 		"resources.StatisticsResources", "label.statistics.reports", statisticsOrAcquisitionCentralManagerGroup);
 
-	final Node connectUnitsNode = ActionNode.createActionNode(virtualHost, node, "/connectUnits", "showUnits",
-		"resources.ExpenditureOrganizationResources", "link.topBar.connectUnits", Role.getRole(RoleType.MANAGER));
-	ActionNode.createActionNode(virtualHost, connectUnitsNode, "/connectUnits", "listUnconnectedUnits",
-		"resources.ExpenditureOrganizationResources", "label.listUnconnectedUnits", statisticsGroup);
+//	final Node connectUnitsNode = ActionNode.createActionNode(virtualHost, node, "/connectUnits", "showUnits",
+//		"resources.ExpenditureOrganizationResources", "link.topBar.connectUnits", Role.getRole(RoleType.MANAGER));
+//	ActionNode.createActionNode(virtualHost, connectUnitsNode, "/connectUnits", "listUnconnectedUnits",
+//		"resources.ExpenditureOrganizationResources", "label.listUnconnectedUnits", statisticsGroup);
 
 	return forwardToMuneConfiguration(request, virtualHost, node);
     }
