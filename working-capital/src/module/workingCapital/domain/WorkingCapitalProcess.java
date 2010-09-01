@@ -200,4 +200,9 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base {
         return fileTypes;
     }
 
+    @Override
+    public boolean isTicketSupportAvailable() {
+        return false;
+    }
+
 }
