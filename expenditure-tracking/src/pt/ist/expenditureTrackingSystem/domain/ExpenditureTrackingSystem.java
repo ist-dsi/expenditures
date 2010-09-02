@@ -7,13 +7,10 @@ import module.dashBoard.WidgetRegister.WidgetAditionPredicate;
 import module.dashBoard.domain.DashBoardPanel;
 import module.dashBoard.widgets.WidgetController;
 import module.organization.presentationTier.actions.OrganizationModelAction;
-import module.workflow.presentationTier.ProcessNodeSelectionMapper;
+import module.workflow.widgets.ProcessListWidget;
 import myorg.domain.ModuleInitializer;
 import myorg.domain.MyOrg;
 import myorg.domain.User;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.organization.OrganizationModelPlugin.ExpendituresView;
 import pt.ist.expenditureTrackingSystem.presentationTier.widgets.ActivateEmailNotificationWidget;
@@ -24,11 +21,18 @@ import pt.ist.expenditureTrackingSystem.presentationTier.widgets.PendingSimplifi
 import pt.ist.expenditureTrackingSystem.presentationTier.widgets.PrioritiesWidget;
 import pt.ist.expenditureTrackingSystem.presentationTier.widgets.TakenProcessesWidget;
 import pt.ist.expenditureTrackingSystem.presentationTier.widgets.UnreadCommentsWidget;
+import pt.ist.expenditureTrackingSystem.util.AquisitionsPendingProcessCounter;
+import pt.ist.expenditureTrackingSystem.util.RefundPendingProcessCounter;
 import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.RequestChecksumFilter;
 import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.RequestChecksumFilter.ChecksumPredicate;
 
 public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base implements ModuleInitializer {
 
+    static {
+	ProcessListWidget.register(new AquisitionsPendingProcessCounter());
+	ProcessListWidget.register(new RefundPendingProcessCounter());
+    }
+    
     public static WidgetAditionPredicate EXPENDITURE_TRACKING_PANEL_PREDICATE = new WidgetAditionPredicate() {
 	@Override
 	public boolean canBeAdded(DashBoardPanel panel, User userAdding) {

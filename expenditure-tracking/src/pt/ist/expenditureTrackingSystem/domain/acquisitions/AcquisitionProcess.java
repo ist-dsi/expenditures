@@ -7,6 +7,7 @@ import java.util.List;
 import myorg.domain.User;
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
+import myorg.util.ClassNameBundle;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
@@ -15,6 +16,7 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 
+@ClassNameBundle(bundle = "resources/ExpenditureResources")
 public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 
     public AcquisitionProcess() {
