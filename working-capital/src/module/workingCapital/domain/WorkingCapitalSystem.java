@@ -8,12 +8,18 @@ import module.organization.domain.Accountability;
 import module.organization.domain.AccountabilityType;
 import module.organization.domain.Person;
 import module.organization.domain.Unit;
+import module.workflow.widgets.ProcessListWidget;
+import module.workingCapital.domain.util.WorkingCapitalPendingProcessCounter;
 import myorg.domain.ModuleInitializer;
 import myorg.domain.MyOrg;
 import myorg.domain.User;
 import pt.ist.fenixWebFramework.services.Service;
 
 public class WorkingCapitalSystem extends WorkingCapitalSystem_Base implements ModuleInitializer {
+
+    static {
+	ProcessListWidget.register(new WorkingCapitalPendingProcessCounter());
+    }
 
     public static WorkingCapitalSystem getInstance() {
 	final MyOrg myOrg = MyOrg.getInstance();
