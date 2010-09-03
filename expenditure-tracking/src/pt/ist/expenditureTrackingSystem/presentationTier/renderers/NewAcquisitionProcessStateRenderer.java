@@ -2,6 +2,8 @@ package pt.ist.expenditureTrackingSystem.presentationTier.renderers;
 
 import java.util.List;
 
+import org.apache.struts.util.RequestUtils;
+
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.fenixWebFramework.renderers.OutputRenderer;
@@ -15,6 +17,8 @@ import pt.ist.fenixWebFramework.renderers.components.HtmlTableRow;
 import pt.ist.fenixWebFramework.renderers.components.HtmlText;
 import pt.ist.fenixWebFramework.renderers.components.HtmlTableCell.CellType;
 import pt.ist.fenixWebFramework.renderers.layouts.Layout;
+import pt.ist.fenixWebFramework.renderers.plugin.RenderersRequestProcessorImpl;
+import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 
 public class NewAcquisitionProcessStateRenderer extends OutputRenderer {
 
@@ -130,6 +134,12 @@ public class NewAcquisitionProcessStateRenderer extends OutputRenderer {
 		link.setContextRelative(true);
 		link.setUrl(JAVASCRIPT_PATH);
 		container.addChild(new HtmlScript("text/javaScript", link.calculateUrl()));
+		HtmlScript initScript = new HtmlScript();
+		initScript.setContentType("text/javaScript");
+		initScript.setScript("startStateTypeRenderer("
+			+ RenderersRequestProcessorImpl.getCurrentRequest().getContextPath() + "," + process.getExternalId()
+			+ ");");
+		container.addChild(initScript);
 		return container;
 	    }
 
