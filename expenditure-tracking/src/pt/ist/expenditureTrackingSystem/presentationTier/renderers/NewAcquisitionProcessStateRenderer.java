@@ -20,11 +20,20 @@ public class NewAcquisitionProcessStateRenderer extends OutputRenderer {
 
     public static String JAVASCRIPT_PATH = "/javaScript/stateTypeAjaxRequest.js";
 
+    private String cancelledClasses;
     private String numberClasses;
     private String gutterClasses;
     private String selectedClasses;
     private String descriptionClasses;
     private String ajaxRequestUrl;
+
+    public String getCancelledClasses() {
+	return cancelledClasses;
+    }
+
+    public void setCancelledClasses(String cancelledClasses) {
+	this.cancelledClasses = cancelledClasses;
+    }
 
     public String getSelectedClasses() {
 	return selectedClasses;
@@ -70,10 +79,12 @@ public class NewAcquisitionProcessStateRenderer extends OutputRenderer {
     protected Layout getLayout(Object arg0, Class arg1) {
 	return new Layout() {
 
+	    private SimplifiedProcedureProcess process;
+
 	    @Override
 	    public HtmlComponent createComponent(Object arg0, Class arg1) {
 
-		SimplifiedProcedureProcess process = (SimplifiedProcedureProcess) arg0;
+		this.process = (SimplifiedProcedureProcess) arg0;
 
 		HtmlBlockContainer container = new HtmlBlockContainer();
 
@@ -122,7 +133,15 @@ public class NewAcquisitionProcessStateRenderer extends OutputRenderer {
 		return container;
 	    }
 
+	    @Override
+	    public void applyStyle(HtmlComponent component) {
+		super.applyStyle(component);
+		if (!process.isActive()) {
+		    component.setClasses(getCancelledClasses());
+		}
+	    }
 	};
+
     }
 
 }

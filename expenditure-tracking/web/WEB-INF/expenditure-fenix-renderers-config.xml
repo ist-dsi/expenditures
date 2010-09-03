@@ -20,7 +20,8 @@
 	type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess"
 	layout="new-process-state"
 	class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.NewAcquisitionProcessStateRenderer">
-		<property name="classes" value="proccess-state" />
+	<property name="classes" value="process-state" />
+	<property name="cancelledClasses" value="process-state-canceled"/>
 	<property name="numberClasses" value="states" />
 	<property name="gutterClasses" value="states-cross"/>
 	<property name="selectedClasses" value="selected"/>

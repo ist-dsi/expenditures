@@ -8,6 +8,9 @@ $(".states th").mouseover(function() {
 
 $(".states").mouseout(function() {
 	var id = $(".states > .selected").attr('id');
+	if (id == null) {
+		id = "CANCELED";
+	}
 	$.getJSON("/workflow/expenditureProcesses.do?method=viewTypeDescription&type=" + id + "&processId=193273613435",function(data, textStatus) {dealWith(data)});
 });
 
