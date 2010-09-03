@@ -1,18 +1,21 @@
 
 
-$(".states th").mouseover(function() { 
-	var id = $(this).attr('id');
-	$.getJSON("/workflow/expenditureProcesses.do?method=viewTypeDescription&type=" + id + "&processId=193273613435",function(data, textStatus) {dealWith(data)});
-	
-});
+function startStateTypeRenderer(appContext, processId) {
+	$(".states th").mouseover(function() { 
+		var id = $(this).attr('id');
+		$.getJSON("/" + appContext + "/expenditureProcesses.do?method=viewTypeDescription&type=" + id + "&processId=" + processId,function(data, textStatus) {dealWith(data)});
+		
+	});
 
-$(".states").mouseout(function() {
-	var id = $(".states > .selected").attr('id');
-	if (id == null) {
-		id = "CANCELED";
-	}
-	$.getJSON("/workflow/expenditureProcesses.do?method=viewTypeDescription&type=" + id + "&processId=193273613435",function(data, textStatus) {dealWith(data)});
-});
+	$(".states").mouseout(function() {
+		var id = $(".states > .selected").attr('id');
+		if (id == null) {
+			id = "CANCELED";
+		}
+		$.getJSON("/" + appContext + "/expenditureProcesses.do?method=viewTypeDescription&type=" + id + "&processId=" + processId,function(data, textStatus) {dealWith(data)});
+	});
+	
+}
 
 function dealWith(data) {
 	
