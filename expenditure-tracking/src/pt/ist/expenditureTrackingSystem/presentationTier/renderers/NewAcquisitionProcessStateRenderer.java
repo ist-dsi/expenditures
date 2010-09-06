@@ -7,8 +7,10 @@ import org.apache.struts.util.RequestUtils;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.fenixWebFramework.renderers.OutputRenderer;
+import pt.ist.fenixWebFramework.renderers.components.Face;
 import pt.ist.fenixWebFramework.renderers.components.HtmlBlockContainer;
 import pt.ist.fenixWebFramework.renderers.components.HtmlComponent;
+import pt.ist.fenixWebFramework.renderers.components.HtmlInlineContainer;
 import pt.ist.fenixWebFramework.renderers.components.HtmlLink;
 import pt.ist.fenixWebFramework.renderers.components.HtmlScript;
 import pt.ist.fenixWebFramework.renderers.components.HtmlTable;
@@ -19,6 +21,7 @@ import pt.ist.fenixWebFramework.renderers.components.HtmlTableCell.CellType;
 import pt.ist.fenixWebFramework.renderers.layouts.Layout;
 import pt.ist.fenixWebFramework.renderers.plugin.RenderersRequestProcessorImpl;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
+import org.apache.commons.collections.Predicate;
 
 public class NewAcquisitionProcessStateRenderer extends OutputRenderer {
 
@@ -122,10 +125,13 @@ public class NewAcquisitionProcessStateRenderer extends OutputRenderer {
 			if (process.getAcquisitionProcessStateType().equals(stateType)) {
 			    cell.addClass(getSelectedClasses());
 			    gutterCell.setClasses(getSelectedClasses());
-			    descriptionCell
-				    .setBody(new HtmlText(stateType.getLocalizedName() + " " + stateType.getDescription()));
+			    addStateDescripton(descriptionCell, stateType);
 			}
 		    }
+		}
+
+		if (!process.isActive()) {
+		    addStateDescripton(descriptionCell, AcquisitionProcessStateType.CANCELED);
 		}
 
 		descriptionCell.setColspan(i - 1);
@@ -136,22 +142,38 @@ public class NewAcquisitionProcessStateRenderer extends OutputRenderer {
 		container.addChild(new HtmlScript("text/javaScript", link.calculateUrl()));
 		HtmlScript initScript = new HtmlScript();
 		initScript.setContentType("text/javaScript");
-		initScript.setScript("startStateTypeRenderer("
-			+ RenderersRequestProcessorImpl.getCurrentRequest().getContextPath() + "," + process.getExternalId()
-			+ ");");
+		initScript.setScript("startStateTypeRenderer(\""
+			+ RenderersRequestProcessorImpl.getCurrentRequest().getContextPath() + "\",\"" + process.getExternalId()
+			+ "\");");
 		container.addChild(initScript);
 		return container;
 	    }
 
+	    private void addStateDescripton(HtmlTableCell descriptionCell, AcquisitionProcessStateType stateType) {
+		HtmlText stateName = new HtmlText(stateType.getLocalizedName());
+		stateName.setFace(Face.H4);
+		HtmlText stateDescription = new HtmlText(stateType.getDescription());
+		HtmlInlineContainer stateContainer = new HtmlInlineContainer();
+		stateContainer.addChild(stateName);
+		stateContainer.addChild(stateDescription);
+		descriptionCell.setBody(stateContainer);
+	    }
+
 	    @Override
 	    public void applyStyle(HtmlComponent component) {
-		super.applyStyle(component);
+		HtmlComponent actualComponent = component.getChild(new Predicate() {
+
+		    @Override
+		    public boolean evaluate(Object arg0) {
+			return arg0 instanceof HtmlTable;
+		    }
+		});
+		super.applyStyle(actualComponent);
 		if (!process.isActive()) {
-		    component.setClasses(getCancelledClasses());
+		    actualComponent.setClasses(getCancelledClasses());
 		}
 	    }
 	};
 
     }
-
 }
