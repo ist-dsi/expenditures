@@ -1,10 +1,13 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.refund;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import org.apache.commons.lang.ArrayUtils;
 
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.ReleaseProcess;
@@ -66,6 +69,7 @@ import pt.ist.expenditureTrackingSystem.domain.dto.CreateRefundProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
+import pt.ist.expenditureTrackingSystem.presentationTier.renderers.PresentableAcquisitionProcessState;
 import pt.ist.fenixWebFramework.services.Service;
 
 @ClassNameBundle(bundle = "resources/ExpenditureResources", key = "label.process.refund")
@@ -444,5 +448,15 @@ public class RefundProcess extends RefundProcess_Base {
 
     public Boolean getShouldSkipSupplierFundAllocation() {
 	return !getUnderCCPRegime() || super.getSkipSupplierFundAllocation();
+    }
+
+    @Override
+    public PresentableAcquisitionProcessState getPresentableAcquisitionProcessState() {
+	return getProcessState().getRefundProcessStateType();
+    }
+
+    @Override
+    public List<? extends PresentableAcquisitionProcessState> getAvailablePresentableStates() {
+	return Arrays.asList(RefundProcessStateType.values());
     }
 }

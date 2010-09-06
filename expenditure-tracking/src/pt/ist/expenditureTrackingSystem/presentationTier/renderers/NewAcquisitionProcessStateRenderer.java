@@ -2,9 +2,10 @@ package pt.ist.expenditureTrackingSystem.presentationTier.renderers;
 
 import java.util.List;
 
-import org.apache.struts.util.RequestUtils;
+import org.apache.commons.collections.Predicate;
 
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.fenixWebFramework.renderers.OutputRenderer;
 import pt.ist.fenixWebFramework.renderers.components.Face;
@@ -20,8 +21,6 @@ import pt.ist.fenixWebFramework.renderers.components.HtmlText;
 import pt.ist.fenixWebFramework.renderers.components.HtmlTableCell.CellType;
 import pt.ist.fenixWebFramework.renderers.layouts.Layout;
 import pt.ist.fenixWebFramework.renderers.plugin.RenderersRequestProcessorImpl;
-import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
-import org.apache.commons.collections.Predicate;
 
 public class NewAcquisitionProcessStateRenderer extends OutputRenderer {
 
@@ -86,12 +85,12 @@ public class NewAcquisitionProcessStateRenderer extends OutputRenderer {
     protected Layout getLayout(Object arg0, Class arg1) {
 	return new Layout() {
 
-	    private SimplifiedProcedureProcess process;
+	    private PaymentProcess process;
 
 	    @Override
 	    public HtmlComponent createComponent(Object arg0, Class arg1) {
 
-		this.process = (SimplifiedProcedureProcess) arg0;
+		this.process = (PaymentProcess) arg0;
 
 		HtmlBlockContainer container = new HtmlBlockContainer();
 
@@ -108,11 +107,11 @@ public class NewAcquisitionProcessStateRenderer extends OutputRenderer {
 		descriptionRow.setClasses(getDescriptionClasses());
 		HtmlTableCell descriptionCell = descriptionRow.createCell();
 
-		final AcquisitionProcessStateType currentState = process.getAcquisitionProcessStateType();
-		final List<AcquisitionProcessStateType> types = process.getAvailableStates();
+		final PresentableAcquisitionProcessState currentState = process.getPresentableAcquisitionProcessState();
+		final List<? extends PresentableAcquisitionProcessState> types = process.getAvailablePresentableStates();
 		int i = 1;
 
-		for (final AcquisitionProcessStateType stateType : types) {
+		for (final PresentableAcquisitionProcessState stateType : types) {
 		    if (stateType.showFor(currentState)) {
 			HtmlBlockContainer numberContainer = new HtmlBlockContainer();
 			HtmlTableCell cell = numberRow.createCell();
@@ -120,9 +119,10 @@ public class NewAcquisitionProcessStateRenderer extends OutputRenderer {
 			numberContainer.addChild(new HtmlText(String.valueOf(i++)));
 			cell.setBody(numberContainer);
 			cell.setId(stateType.toString());
+			cell.setAttribute("name", stateType.getClass().getName());
 			HtmlTableCell gutterCell = gutterRow.createCell();
 			gutterCell.setType(CellType.HEADER);
-			if (process.getAcquisitionProcessStateType().equals(stateType)) {
+			if (currentState.equals(stateType)) {
 			    cell.addClass(getSelectedClasses());
 			    gutterCell.setClasses(getSelectedClasses());
 			    addStateDescripton(descriptionCell, stateType);
@@ -131,7 +131,7 @@ public class NewAcquisitionProcessStateRenderer extends OutputRenderer {
 		}
 
 		if (!process.isActive()) {
-		    addStateDescripton(descriptionCell, AcquisitionProcessStateType.CANCELED);
+		    addStateDescripton(descriptionCell, currentState);
 		}
 
 		descriptionCell.setColspan(i - 1);
@@ -149,7 +149,7 @@ public class NewAcquisitionProcessStateRenderer extends OutputRenderer {
 		return container;
 	    }
 
-	    private void addStateDescripton(HtmlTableCell descriptionCell, AcquisitionProcessStateType stateType) {
+	    private void addStateDescripton(HtmlTableCell descriptionCell, PresentableAcquisitionProcessState stateType) {
 		HtmlText stateName = new HtmlText(stateType.getLocalizedName());
 		stateName.setFace(Face.H4);
 		HtmlText stateDescription = new HtmlText(stateType.getDescription());
@@ -176,4 +176,5 @@ public class NewAcquisitionProcessStateRenderer extends OutputRenderer {
 	};
 
     }
+
 }

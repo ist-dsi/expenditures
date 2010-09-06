@@ -25,6 +25,7 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Project;
 import pt.ist.expenditureTrackingSystem.domain.organization.SubProject;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
+import pt.ist.expenditureTrackingSystem.presentationTier.renderers.PresentableAcquisitionProcessState;
 
 public abstract class PaymentProcess extends PaymentProcess_Base {
 
@@ -173,7 +174,7 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
     public Set<Financer> getFinancersWithFundsInitiallyAllocated() {
 	return getRequest().getFinancersWithFundsInitiallyAllocated();
     }
-    
+
     public Set<Financer> getFinancersWithFundsAllocated(Person person) {
 	return getRequest().getFinancersWithFundsAllocated(person);
     }
@@ -385,8 +386,17 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
 	if (missionProcess == null || missionProcess.isExpenditureAuthorized()) {
 	    super.setMissionProcess(missionProcess);
 	} else {
-	    throw new DomainException("error.cannot.connect.acquisition.to.unauthorized.mission", DomainException.getResourceFor("resources/AcquisitionResources"));
+	    throw new DomainException("error.cannot.connect.acquisition.to.unauthorized.mission", DomainException
+		    .getResourceFor("resources/AcquisitionResources"));
 	}
+    }
+
+    public PresentableAcquisitionProcessState getPresentableAcquisitionProcessState() {
+	return null;
+    }
+
+    public List<? extends PresentableAcquisitionProcessState> getAvailablePresentableStates() {
+	return Collections.emptyList();
     }
 
 }

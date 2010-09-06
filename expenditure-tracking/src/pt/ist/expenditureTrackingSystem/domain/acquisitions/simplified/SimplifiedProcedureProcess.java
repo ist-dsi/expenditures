@@ -1,6 +1,7 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import module.workflow.activities.ActivityInformation;
@@ -74,6 +75,7 @@ import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
+import pt.ist.expenditureTrackingSystem.presentationTier.renderers.PresentableAcquisitionProcessState;
 import pt.ist.fenixWebFramework.rendererExtensions.util.IPresentableEnum;
 import pt.ist.fenixWebFramework.services.Service;
 
@@ -244,7 +246,8 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	}
 	if (createAcquisitionProcessBean.isForMission()) {
 	    if (createAcquisitionProcessBean.getMissionProcess() == null) {
-		throw new DomainException("mission.process.is.mandatory", DomainException.getResourceFor("resources/AcquisitionResources"));
+		throw new DomainException("mission.process.is.mandatory", DomainException
+			.getResourceFor("resources/AcquisitionResources"));
 	    }
 	    process.setMissionProcess(createAcquisitionProcessBean.getMissionProcess());
 	}
@@ -374,5 +377,15 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 		&& !getAcquisitionRequest().hasAnnouncement()) {
 	    new RCISTAnnouncement(getAcquisitionRequest());
 	}
+    }
+
+    @Override
+    public PresentableAcquisitionProcessState getPresentableAcquisitionProcessState() {
+	return getLastAcquisitionProcessState().getAcquisitionProcessStateType();
+    }
+
+    @Override
+    public List<? extends PresentableAcquisitionProcessState> getAvailablePresentableStates() {
+	return getAvailableStates();
     }
 }

@@ -2,10 +2,11 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import java.util.ResourceBundle;
 
+import pt.ist.expenditureTrackingSystem.presentationTier.renderers.PresentableAcquisitionProcessState;
 import pt.ist.fenixWebFramework.rendererExtensions.util.IPresentableEnum;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 
-public enum AcquisitionProcessStateType implements IPresentableEnum {
+public enum AcquisitionProcessStateType implements IPresentableEnum, PresentableAcquisitionProcessState {
 
     IN_GENESIS {
 
@@ -125,6 +126,11 @@ public enum AcquisitionProcessStateType implements IPresentableEnum {
 
     public String getDescription() {
 	return getLocalizedName();
+    }
+
+    @Override
+    public boolean showFor(PresentableAcquisitionProcessState state) {
+	return showFor((AcquisitionProcessStateType) state);
     }
 
 }

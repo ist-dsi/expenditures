@@ -3,16 +3,18 @@
 function startStateTypeRenderer(appContext, processId) {
 	$(".states th").mouseover(function() { 
 		var id = $(this).attr('id');
-		$.getJSON("/" + appContext + "/expenditureProcesses.do?method=viewTypeDescription&type=" + id + "&processId=" + processId,function(data, textStatus) {dealWith(data)});
+		var classname = $(this).attr('name');
+		$.getJSON("/" + appContext + "/expenditureProcesses.do?method=viewTypeDescription&type=" + id + "&classname=" + classname + "&processId=" + processId,function(data, textStatus) {dealWith(data)});
 		
 	});
 
 	$(".states").mouseout(function() {
 		var id = $(".states > .selected").attr('id');
+		var classname = $(this).attr('name');
 		if (id == null) {
 			id = "CANCELED";
 		}
-		$.getJSON("/" + appContext + "/expenditureProcesses.do?method=viewTypeDescription&type=" + id + "&processId=" + processId,function(data, textStatus) {dealWith(data)});
+		$.getJSON("/" + appContext + "/expenditureProcesses.do?method=viewTypeDescription&type=" + id + "&classname=" + classname + "&processId=" + processId,function(data, textStatus) {dealWith(data)});
 	});
 	
 }
