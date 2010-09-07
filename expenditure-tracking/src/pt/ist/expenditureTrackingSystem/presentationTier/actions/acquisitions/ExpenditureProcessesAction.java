@@ -23,6 +23,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.A
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.CreateAcquisitionRequestItemActivityInformation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.CreateAcquisitionRequestItemActivityInformation.CreateItemSchemaType;
 import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean;
+import pt.ist.expenditureTrackingSystem.presentationTier.renderers.PresentableAcquisitionProcessState;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 import pt.ist.fenixWebFramework.servlets.json.JsonObject;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
@@ -101,7 +102,15 @@ public class ExpenditureProcessesAction extends ContextBaseAction {
 
     public ActionForward viewTypeDescription(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) throws IOException {
-	AcquisitionProcessStateType type = AcquisitionProcessStateType.valueOf(request.getParameter("type"));
+	String classname = request.getParameter("classname");
+	PresentableAcquisitionProcessState type;
+	try {
+	    Class<Enum> stateEnum = (Class<Enum>) Class.forName(classname);
+	    type = (PresentableAcquisitionProcessState) Enum.valueOf(stateEnum, request.getParameter("type"));
+	} catch (Exception e) {
+	    e.printStackTrace();
+	    return null;
+	}
 	request.setAttribute("name", type.getLocalizedName());
 
 	JsonObject reply = new JsonObject();
