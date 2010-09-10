@@ -24,6 +24,7 @@
 	
 <bean:define id="maxValue" name="information" property="item.realValue.roundedValue"/>
 
+
 <div class="dinline forminline">	
 	
 	<fr:form action='<%= "/workflowProcessManagement.do?method=process&processId=" + processId + "&activity=" + name %>'>
@@ -35,25 +36,29 @@
 				<th></th>
 				<th><bean:message key="acquisitionProcess.label.payingUnit" bundle="ACQUISITION_RESOURCES"/></th>
 				<th><bean:message key="acquisitionRequestItem.label.effectiveValue" bundle="ACQUISITION_RESOURCES"/></th>
-				<th><bean:message key="acquisitionRequestItem.label.estimatedValue" bundle="ACQUISITION_RESOURCES"/></th>
+				<th class="aleft" style="padding-left: 40px;"><bean:message key="acquisitionRequestItem.label.estimatedValue" bundle="ACQUISITION_RESOURCES"/></th>
 			</tr>
 			<logic:iterate id="bean" name="information" property="beans" indexId="id">
 					<tr  id='<%= "tr" + id %>'">
 					<td><input type="checkbox" checked="true" disabled="disabled"/></td>
 					<td><fr:view name="bean" property="unit.presentationName"/></td>
 					<td class="aright"><fr:view name="bean" property="shareValue"/></td>
-					<td><fr:edit name="bean" slot="realShareValue"/></td>
+					<td style="padding-left: 30px;">
+						<fr:edit name="bean" slot="realShareValue">
+					 		<fr:layout>
+								<fr:property name="size" value="15"/>
+							</fr:layout>
+				 		</fr:edit>
+					</td>
 				</tr>
 			</logic:iterate>
 				<tr>
 					<td colspan="3" class="aright">
 						<strong><bean:message key="label.total" bundle="EXPENDITURE_RESOURCES"/></strong>
 					</td>
-					<td class="aright">
+					<td class="aleft" style="padding-left: 55px;">
 						<span id="sum">
 						</span> 
-					</td>
-					<td>
 					</td>
 				</tr>
 		</table>

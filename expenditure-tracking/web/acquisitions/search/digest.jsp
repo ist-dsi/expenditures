@@ -7,6 +7,7 @@
 
 <h2> <bean:message key="link.sideBar.acquisitionProcess.digest" bundle="EXPENDITURE_RESOURCES"/> </h2>
 
+
 <%@page
 	import="pt.ist.fenixWebFramework.servlets.filters.SetUserViewFilter"%>
 	

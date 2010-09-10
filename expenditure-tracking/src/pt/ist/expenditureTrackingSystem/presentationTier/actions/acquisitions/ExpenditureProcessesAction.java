@@ -103,6 +103,10 @@ public class ExpenditureProcessesAction extends ContextBaseAction {
     public ActionForward viewTypeDescription(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) throws IOException {
 	String classname = request.getParameter("classname");
+	int indexOfInnerClassInEnum = classname.indexOf("$");
+	if (indexOfInnerClassInEnum > 0) {
+	    classname = classname.substring(0, indexOfInnerClassInEnum);
+	}
 	PresentableAcquisitionProcessState type;
 	try {
 	    Class<Enum> stateEnum = (Class<Enum>) Class.forName(classname);

@@ -10,7 +10,9 @@ import org.joda.time.LocalDate;
 
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
+import myorg.util.ClassNameBundle;
 
+@ClassNameBundle(bundle = "resources/AcquisitionResources")
 public class RefundableInvoiceFile extends RefundableInvoiceFile_Base {
 
     public RefundableInvoiceFile(String invoiceNumber, LocalDate invoiceDate, Money value, BigDecimal vatValue,

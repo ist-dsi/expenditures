@@ -4,7 +4,14 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
-<h2><bean:message key="acquisitionRequestItem.title.insertRealValues" bundle="ACQUISITION_RESOURCES"/></h2>
+
+	<!--
+	<bean:message key="acquisitionRequestItem.title.insertRealValues" bundle="ACQUISITION_RESOURCES"/>
+	-->
+	
+<p class="mtop15 mbottom0">
+	<b>Insira os custos efectivos:</b>
+</p>
 
 <bean:define id="processId" name="process" property="externalId" type="java.lang.String"/>
 <bean:define id="name" name="information" property="activityName"/>
@@ -23,7 +30,7 @@
 					<th>
 						<bean:message key="acquisitionRequestItem.label.estimatedValue" bundle="ACQUISITION_RESOURCES"/>
 					</th>
-					<th class="acenter">
+					<th class="aleft" style="padding-left: 20px;">
 						<bean:message key="acquisitionRequestItem.label.effectiveValue" bundle="ACQUISITION_RESOURCES"/>
 					</th>
 					<td class="tderror">
@@ -37,7 +44,11 @@
 						<fr:view name="item" property="quantity"/>
 					</td>
 					<td class="aleft">
-						<fr:edit id="realQuantity" name="information" slot="realQuantity" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+						<fr:edit id="realQuantity" name="information" slot="realQuantity" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+					 		<fr:layout>
+								<fr:property name="size" value="10"/>
+							</fr:layout>
+				 		</fr:edit>
 					</td>
 					<td class="tderror">
 						<fr:hasMessages for="realQuantity"><span><fr:message for="realQuantity"/></span></fr:hasMessages>
@@ -51,7 +62,12 @@
 						<fr:view name="item" property="unitValue"/>
 					</td>
 					<td class="aleft">
-						<fr:edit id="realUnitValue" name="information" slot="realUnitValue" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/> €
+						<fr:edit id="realUnitValue" name="information" slot="realUnitValue" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+							<fr:layout>
+								<fr:property name="size" value="10"/>
+							</fr:layout>
+				 		</fr:edit>
+				 		€
 					</td>
 					<td class="tderror">
 						<fr:hasMessages for="realUnitValue"><span><fr:message for="realUnitValue"/></span></fr:hasMessages>
@@ -65,7 +81,12 @@
 						<fr:view name="item" property="vatValue"/>%
 					</td>
 					<td class="aleft">
-						<fr:edit id="realVatValue" name="information" slot="realVatValue" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/> %
+						<fr:edit id="realVatValue" name="information" slot="realVatValue" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+							<fr:layout>
+								<fr:property name="size" value="10"/>
+							</fr:layout>
+				 		</fr:edit>
+						%
 					</td>
 					<td class="tderror">
 						<fr:hasMessages for="realVatValue"><span><fr:message for="realVatValue"/></span></fr:hasMessages>
@@ -83,7 +104,11 @@
 						</fr:view>
 					</td>
 					<td class="aleft">
-						<fr:edit name="information" slot="shipment" />
+						<fr:edit name="information" slot="shipment">
+							<fr:layout>
+								<fr:property name="size" value="10"/>
+							</fr:layout>
+				 		</fr:edit>
 					</td>
 					<td class="tderror"></td>
 				</tr>

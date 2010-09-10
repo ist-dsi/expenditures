@@ -9,34 +9,27 @@
 	<bean:message key="label.selectProcessType" bundle="EXPENDITURE_RESOURCES"/>:
 </p>
 
-
-<table class="mvert1">
+<table>
 	<tr>
-		<td style="vertical-align: top; padding-right: 10px; width: 49%; border: 1px solid #e0e0e0; background: #f7f7f7; padding: 0.5em 1em 1em 1em;">
-			<div>
-				<p class="mtop0">
-					<strong>
-						<bean:message key="label.ccp" bundle="EXPENDITURE_RESOURCES"/>
-					</strong>
-				</p>
-				<p>
-					<bean:message key="label.ccp.explanation" bundle="EXPENDITURE_RESOURCES"/>
-				</p>
-				<ul class="mvert05" style="padding-left: 0em; list-style: none;">
-					<li class="mbottom1">
-						<p class="mvert025">
+		<td style="width: 50%; vertical-align: top; padding-right: 10px;">
+		
+			<div class="infobox5" style="float: left;">
+				<h3><bean:message key="label.ccp" bundle="EXPENDITURE_RESOURCES"/></h3>
+				<div>
+					<p>
+						<bean:message key="label.ccp.explanation" bundle="EXPENDITURE_RESOURCES"/>
+					</p>
+					<ul class="list-reset">
+						<li style="padding-bottom: 10px;">
 							<strong>
 								<html:link styleClass="big" action="/acquisitionSimplifiedProcedureProcess.do?method=prepareCreateAcquisitionProcess">
 									<bean:message key="link.create.simplifiedAcquisitionProcedure" bundle="EXPENDITURE_RESOURCES"/>
 								</html:link>
 							</strong>
-						</p>
-						<p class="mvert025">
+							<br/>
 							<bean:message key="message.info.acquisitionSimplifiedProcessExplanation" bundle="EXPENDITURE_RESOURCES"/>
-						</p>
-					</li>
-					<li class="mbottom1">
-						<p class="mvert025">
+						</li>
+						<li style="padding-bottom: 10px;">
 							<strong>
 							<%-- 
 								<html:link styleClass="big" action="/acquisitionStandardProcedureProcess.do?method=prepareCreateAcquisitionStandardProcess">
@@ -46,83 +39,84 @@
 								</html:link>
 							 --%>
 							</strong>
-						</p>
-						<p class="mvert025">
+							<br/>
 							<bean:message key="message.info.acquisitionStandardProcessExplanation" bundle="EXPENDITURE_RESOURCES"/>
-						</p>
-					</li>
-					<li class="mbottom1">
-						<p class="mvert025">
+						</li>
+						<li style="padding-bottom: 10px;">
 							<strong>
 								<html:link styleClass="big" action="/acquisitionRefundProcess.do?method=prepareCreateRefundProcessUnderCCP">
 									<bean:message key="link.create.refundProcess" bundle="EXPENDITURE_RESOURCES"/>
 								</html:link>
 							</strong>
-						</p>
-						<p class="mvert025">
+							<br/>
 							<bean:message key="message.info.refundProcessExplanation" bundle="EXPENDITURE_RESOURCES"/>
-						</p>
-					</li>
-				</ul>
+						</li>
+					</ul>
+				</div>
 			</div>
+
+
+
+
+
 		</td>
 		
-		<td style="width: 2%;"></td>
-
-		<td style="vertical-align: top; padding-right: 10px; width: 49%; border: 1px solid #e0e0e0; background: #f7f7f7; padding: 0.5em 1em 1em 1em;">
-			<div>
-				<p class="mtop0">
-					<strong>
-						<bean:message key="label.ScienticeAndTechnologyProcesses" bundle="EXPENDITURE_RESOURCES"/>
-					</strong>
-				</p>
-				<p>
-					<bean:message key="label.ScienticeAndTechnologyProcesses.explanation" bundle="EXPENDITURE_RESOURCES"/>
-				</p>
-				
-				<ul class="mvert05" style="padding-left: 0em; list-style: none;">
-					<li class="mbottom1">
-						<p class="mvert025">
+		<td style="width: 50%; vertical-align: top; padding-left: 10px;">
+		
+			<div class="infobox5" style="float: right">
+				<h3><bean:message key="label.ScienticeAndTechnologyProcesses" bundle="EXPENDITURE_RESOURCES"/></h3>
+				<div>
+					<p class="mbottom5">
+						<bean:message key="label.ScienticeAndTechnologyProcesses.explanation" bundle="EXPENDITURE_RESOURCES"/>
+					</p>
+					<ul class="list-reset" class="mtop5">
+						<li style="padding-bottom: 10px;">
 							<strong>
 								<html:link styleClass="big" action="/acquisitionSimplifiedProcedureProcess.do?method=prepareCreateAcquisitionProcessCT10000">
 									<bean:message key="link.create.process.CT10000" bundle="EXPENDITURE_RESOURCES"/>
 								</html:link>
 							</strong>
-						</p>
-						<p class="mvert025">
+							<br/>
 							<bean:message key="message.info.processExplanation.CT10000" bundle="EXPENDITURE_RESOURCES"/>
-						</p>
-					</li>
-					<li class="mbottom1">
-						<p class="mvert025">
+						</li>
+						<li style="padding-bottom: 10px;">
 							<strong>
 								<html:link styleClass="big" action="/acquisitionSimplifiedProcedureProcess.do?method=prepareCreateAcquisitionProcessCT75000">
 									<bean:message key="link.create.process.CT75000" bundle="EXPENDITURE_RESOURCES"/>
 								</html:link>
 							</strong>
-						</p>
-						<p class="mvert025">
+							<br/>
 							<bean:message key="message.info.processExplanation.CT75000" bundle="EXPENDITURE_RESOURCES"/>
-						</p>
-					</li>
-					<li class="mbottom1">
-						<p class="mvert025">
+						</li>
+						<li style="padding-bottom: 10px;">
 							<strong>
 								<html:link styleClass="big" action="/acquisitionRefundProcess.do?method=prepareCreateRefundProcessUnderRCIST">
 									<bean:message key="link.create.refundProcess" bundle="EXPENDITURE_RESOURCES"/>
 								</html:link>
 							</strong>
-						</p>
-						<p class="mvert025">
+							<br/>
 							<bean:message key="message.info.refundProcessExplanation" bundle="EXPENDITURE_RESOURCES"/>
-						</p>
-					</li>
-				</ul>
+						</li>
+					</ul>
+				</div>
 			</div>
+		
+		
 		</td>
-				
 	</tr>
 </table>
+
+
+
+
+
+<!--
+<div class="clear"></div>
+-->
+
+
+
+
 
 
 			

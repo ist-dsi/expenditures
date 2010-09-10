@@ -11,107 +11,119 @@
 
 <bean:define id="needsSeparator" value="false" toScope="request"/>	
 	
-	
-	<wf:activityLink id="<%= "delete-" + itemId %>" processName="process" activityName="DeleteAcquisitionRequestItem" scope="request" paramName0="item" paramValue0="<%= itemId %>">
-		<bean:define id="needsSeparator" value="true" toScope="request"/>
-		<wf:activityName processName="process" activityName="DeleteAcquisitionRequestItem" scope="request"/>
-	</wf:activityLink>					
-		 	
-	<wf:isActive processName="process" activityName="EditAcquisitionRequestItem" scope="request">	 					
-		<logic:equal name="needsSeparator" value="true">
-			<bean:define id="needsSeparator" value="false" toScope="request"/>
-			| 
-		</logic:equal>
-	</wf:isActive>
-	
-	<wf:activityLink id="<%= "edit-" + itemId %>" processName="process" activityName="EditAcquisitionRequestItem" scope="request" paramName0="item" paramValue0="<%= itemId %>">
-		<bean:define id="needsSeparator" value="true" toScope="request"/>
-		<wf:activityName processName="process" activityName="EditAcquisitionRequestItem" scope="request"/>
-	</wf:activityLink>		
-	
-	<wf:isActive processName="process" activityName="GenericAssignPayingUnitToItem" scope="request">	 					
-		<logic:equal name="needsSeparator" value="true">
-			<bean:define id="needsSeparator" value="false" toScope="request"/>
-			| 
-		</logic:equal>
-	</wf:isActive>
-	
-	<wf:activityLink id="<%= "gaput-" + itemId %>" processName="process" activityName="GenericAssignPayingUnitToItem" scope="request" paramName0="item" paramValue0="<%= itemId %>">
-		<bean:define id="needsSeparator" value="true" toScope="request"/>
-		<wf:activityName processName="process" activityName="GenericAssignPayingUnitToItem" scope="request"/>
-	</wf:activityLink>		
-	
-	<wf:isActive processName="process" activityName="EditAcquisitionRequestItemRealValues" scope="request">	 					
-		<logic:equal name="needsSeparator" value="true">
-			<bean:define id="needsSeparator" value="false" toScope="request"/>
-			| 
-		</logic:equal>
-	</wf:isActive>
-	
-	<wf:activityLink id="<%= "realEdit-" + itemId %>" processName="process" activityName="EditAcquisitionRequestItemRealValues" scope="request" paramName0="item" paramValue0="<%= itemId %>">
-		<bean:define id="needsSeparator" value="true" toScope="request"/>
-		<wf:activityName processName="process" activityName="EditAcquisitionRequestItemRealValues" scope="request"/>
-	</wf:activityLink>	
-	
-	<wf:isActive processName="process" activityName="DistributeRealValuesForPayingUnits" scope="request">	 					
-		<logic:equal name="needsSeparator" value="true">
-			<bean:define id="needsSeparator" value="false" toScope="request"/>
-			| 
-		</logic:equal>
-	</wf:isActive>
-	
-	<wf:activityLink id="<%= "realDistribute-" + itemId %>" processName="process" activityName="DistributeRealValuesForPayingUnits" scope="request" paramName0="item" paramValue0="<%= itemId %>">
-		<bean:define id="needsSeparator" value="true" toScope="request"/>
-		<wf:activityName processName="process" activityName="DistributeRealValuesForPayingUnits" scope="request"/>
-	</wf:activityLink>		
-	
-<div class="infobox">
-	
-	<table class="tstyle1 thpadding02505" style="width: 100%;">
+	<bean:define id="currentIndex" name="currentIndex" />
+	<bean:define id="totalItems" name="totalItems" />
+
+	<tbody>
+		<tr>
+			<th>Item</th>
+			<th>Descrição</th>
+			<th></th>
+			<th></th>
+			<th name="effectiveValues">Efectivos</th>
+			<th name="operations"></th>
+		</tr>
 
 		<tr>
-			<th colspan="4" style="background: #eaeaea;"><bean:message key="acquisitionProcess.title.description" bundle="ACQUISITION_RESOURCES"/></th>
-		</tr>
-		<tr>
-			<th style="width: 12em;"><bean:message key="acquisitionRequestItem.label.proposalReference" bundle="ACQUISITION_RESOURCES"/>:</th>
-			<td colspan="3"><fr:view name="acquisitionRequestItem" property="proposalReference"/></td>
-		</tr>
-		<tr>
-			<th><bean:message key="acquisitionRequestItem.label.salesCode" bundle="ACQUISITION_RESOURCES"/>:</th>
-			<td colspan="3">
-				<fr:view name="acquisitionRequestItem" property="CPVReference">
-					<fr:layout name="format">
-						<fr:property name="format" value="${code} - ${description}"/>
+			<td rowspan="7"><fr:view name="currentIndex"/>/<fr:view name="totalItems"/></td>
+			<td rowspan="7" class="aleft">
+				<p class="mvert0"><fr:view name="acquisitionRequestItem" property="description"/></p>
+				<ul>
+					<li>
+						<bean:message key="acquisitionRequestItem.label.proposalReference" bundle="ACQUISITION_RESOURCES"/>:
+						<fr:view name="acquisitionRequestItem" property="proposalReference"/>
+					</li>									
+					<li>
+						<bean:message key="acquisitionRequestItem.label.salesCode" bundle="ACQUISITION_RESOURCES"/>:
+						<fr:view name="acquisitionRequestItem" property="CPVReference">
+							<fr:layout name="format">
+								<fr:property name="format" value="${code} - ${description}"/>
+							</fr:layout>
+						</fr:view>
+					</li>
+					<li class="extraInfo">
+						<bean:message key="label.address" bundle="ACQUISITION_RESOURCES"/>:
+						<fr:view name="acquisitionRequestItem" property="address">
+							<fr:layout name="format">
+									<fr:property name="format" value="${country}, ${line2}, ${location}, ${postalCode}"/>
+							</fr:layout>
+						</fr:view>
+					</li>
+					<li>
+						<bean:message key="acquisitionProcess.label.payingUnits" bundle="ACQUISITION_RESOURCES"/>:
+						<logic:notEmpty name="acquisitionRequestItem" property="unitItems">
+							<logic:iterate id="unitItem" name="acquisitionRequestItem" property="sortedUnitItems">
+								<p class="mvert0">
+									<fr:view name="unitItem" property="unit.presentationName"/>:
+									<logic:present name="unitItem" property="realShareValue">
+										<fr:view name="unitItem" property="realShareValue"/>
+									</logic:present>
+									<logic:notPresent name="unitItem" property="realShareValue">
+										<fr:view name="unitItem" property="shareValue"/>
+									</logic:notPresent>
+								</p>
+							</logic:iterate>
+						</logic:notEmpty>
+						<logic:empty name="acquisitionRequestItem" property="unitItems">
+							<em><bean:message key="label.notDefined" bundle="EXPENDITURE_RESOURCES"/></em>
+						</logic:empty>
+					</li>
+				</ul>
+			</td>
+			
+			
+			<td class="nowrap aleft"><bean:message key="acquisitionRequestItem.label.quantity" bundle="ACQUISITION_RESOURCES"/>:</td>
+			<td class="nowrap aright"><fr:view name="acquisitionRequestItem" property="quantity"/></td>
+			<td class="nowrap aright" name="effectiveValues">
+				<fr:view name="acquisitionRequestItem" property="realQuantity" type="java.lang.Integer">
+					<fr:layout name="null-as-label">
+						<fr:property name="subLayout" value="default"/>
 					</fr:layout>
 				</fr:view>
 			</td>
-		</tr>
-		<tr class="itemmbottom">
-			<th><bean:message key="acquisitionRequestItem.label.description" bundle="ACQUISITION_RESOURCES"/>:</th>
-			<td colspan="3"><fr:view name="acquisitionRequestItem" property="description"/></td>
-		</tr>
-
-
-
-		<tr>
-			<th colspan="4" style="background: #eaeaea;"><bean:message key="acquisitionProcess.title.quantityAndCosts.lowercase" bundle="ACQUISITION_RESOURCES"/></th>
-		</tr>	
-		<tr>
-			<th><bean:message key="acquisitionRequestItem.label.quantity" bundle="ACQUISITION_RESOURCES"/>:</th>
-			<td class="nowrap"><fr:view name="acquisitionRequestItem" property="quantity"/></td>
-			<th style="padding-left: 1em;"><bean:message key="acquisitionRequestItem.label.realQuantity" bundle="ACQUISITION_RESOURCES"/>:</th>
-			<td><fr:view name="acquisitionRequestItem" property="realQuantity" type="java.lang.Integer">
-						<fr:layout name="null-as-label">
-							<fr:property name="subLayout" value="default"/>
-						</fr:layout>
-					</fr:view>
+			
+			<td rowspan="7" class="nowrap aleft" name="operations">
+				<ul style="padding-top: 0;">						 	
+					<wf:activityLink id="<%= "edit-" + itemId %>" processName="process" activityName="EditAcquisitionRequestItem" scope="request" paramName0="item" paramValue0="<%= itemId %>">
+						<bean:define id="needsSeparator" value="true" toScope="request"/>
+						<li>
+							<wf:activityName processName="process" activityName="EditAcquisitionRequestItem" scope="request"/>
+						</li>
+					</wf:activityLink>		
+					
+					<wf:activityLink id="<%= "gaput-" + itemId %>" processName="process" activityName="GenericAssignPayingUnitToItem" scope="request" paramName0="item" paramValue0="<%= itemId %>">
+						<bean:define id="needsSeparator" value="true" toScope="request"/>
+						<li>
+							<wf:activityName processName="process" activityName="GenericAssignPayingUnitToItem" scope="request"/>
+						</li>
+					</wf:activityLink>		
+					
+					<wf:activityLink id="<%= "realEdit-" + itemId %>" processName="process" activityName="EditAcquisitionRequestItemRealValues" scope="request" paramName0="item" paramValue0="<%= itemId %>">
+						<bean:define id="needsSeparator" value="true" toScope="request"/>
+						<li>
+							<wf:activityName processName="process" activityName="EditAcquisitionRequestItemRealValues" scope="request"/>
+						</li>
+					</wf:activityLink>	
+					
+					<wf:activityLink id="<%= "realDistribute-" + itemId %>" processName="process" activityName="DistributeRealValuesForPayingUnits" scope="request" paramName0="item" paramValue0="<%= itemId %>">
+						<bean:define id="needsSeparator" value="true" toScope="request"/>
+						<li>
+							<wf:activityName processName="process" activityName="DistributeRealValuesForPayingUnits" scope="request"/>
+						</li>
+					</wf:activityLink>
+					<wf:activityLink id="<%= "delete-" + itemId %>" processName="process" activityName="DeleteAcquisitionRequestItem" scope="request" paramName0="item" paramValue0="<%= itemId %>">
+						<bean:define id="needsSeparator" value="true" toScope="request"/>
+						<li>
+							<wf:activityName processName="process" activityName="DeleteAcquisitionRequestItem" scope="request"/>
+						</li>
+					</wf:activityLink>					
+				</ul>
 			</td>
 		</tr>
 		<tr>
-			<th><bean:message key="acquisitionRequestItem.label.unitValue" bundle="ACQUISITION_RESOURCES"/>:</th>
-			<td class="nowrap"><fr:view name="acquisitionRequestItem" property="unitValue"/></td>
-			<th style="padding-left: 1em;"><bean:message key="acquisitionRequestItem.label.realUnitValue" bundle="ACQUISITION_RESOURCES"/>:</th>
-			<td class="nowrap">
+			<td class="nowrap aleft"><bean:message key="acquisitionRequestItem.label.unitValue" bundle="ACQUISITION_RESOURCES"/>:</td>
+			<td class="nowrap aright"><fr:view name="acquisitionRequestItem" property="unitValue"/></td>
+			<td class="nowrap aright" name="effectiveValues">
 				<fr:view name="acquisitionRequestItem" property="realUnitValue" type="myorg.domain.util.Money">
 					<fr:layout name="null-as-label">
 						<fr:property name="subLayout" value="default"/>
@@ -120,10 +132,9 @@
 			</td>
 		</tr>
 		<tr>
-			<th><bean:message key="acquisitionRequestItem.label.totalValue" bundle="ACQUISITION_RESOURCES"/>:</th>
-			<td class="nowrap"><span><fr:view name="acquisitionRequestItem" property="totalItemValue"/></span></td>
-			<th style="padding-left: 1em;"><bean:message key="acquisitionRequestItem.label.totalRealValue" bundle="ACQUISITION_RESOURCES"/>:</th>
-			<td class="nowrap">
+			<td class="nowrap aleft"><bean:message key="acquisitionRequestItem.label.totalValue" bundle="ACQUISITION_RESOURCES"/>:</td>
+			<td class="nowrap aright"><span><fr:view name="acquisitionRequestItem" property="totalItemValue"/></span></td>
+			<td class="nowrap aright" name="effectiveValues">
 				<span>
 					<fr:view name="acquisitionRequestItem" property="totalRealValue" type="myorg.domain.util.Money">
 						<fr:layout name="null-as-label">
@@ -134,10 +145,9 @@
 			</td>
 		</tr>
 		<tr>
-			<th><bean:message key="acquisitionRequestItem.label.vatValue" bundle="ACQUISITION_RESOURCES"/></th>
-			<td class="nowrap"><fr:view name="acquisitionRequestItem" property="vatValue"/></td>
-			<th style="padding-left: 1em;"><bean:message key="acquisitionRequestItem.label.realVatValue" bundle="ACQUISITION_RESOURCES"/>:</th>
-			<td class="nowrap">
+			<td class="nowrap aleft"><bean:message key="acquisitionRequestItem.label.vatValue" bundle="ACQUISITION_RESOURCES"/></td>
+			<td class="nowrap aright"><fr:view name="acquisitionRequestItem" property="vatValue"/></td>
+			<td class="nowrap aright" name="effectiveValues">
 				<fr:view name="acquisitionRequestItem" property="realVatValue" type="java.lang.String">
 					<fr:layout name="null-as-label">
 						<fr:property name="subLayout" value="default"/>
@@ -146,10 +156,9 @@
 			</td>
 		</tr>
 		<tr>
-			<th><bean:message key="acquisitionRequestItem.label.vat" bundle="ACQUISITION_RESOURCES"/></th>
-			<td class="nowrap"><fr:view name="acquisitionRequestItem" property="totalVatValue"/></td>
-			<th style="padding-left: 1em;"><bean:message key="acquisitionRequestItem.label.realVat" bundle="ACQUISITION_RESOURCES"/>:</th>
-			<td class="nowrap">
+			<td class="nowrap aleft"><bean:message key="acquisitionRequestItem.label.vat" bundle="ACQUISITION_RESOURCES"/></td>
+			<td class="nowrap aright"><fr:view name="acquisitionRequestItem" property="totalVatValue"/></td>
+			<td class="nowrap aright" name="effectiveValues">
 				<fr:view name="acquisitionRequestItem" property="totalRealVatValue" type="myorg.domain.util.Money">
 					<fr:layout name="null-as-label">
 						<fr:property name="subLayout" value="default"/>
@@ -157,17 +166,16 @@
 				</fr:view>
 			</td>
 		</tr>
-		<tr class="itemmbottom">
-			<th><bean:message key="acquisitionRequestItem.label.additionalCostValue" bundle="ACQUISITION_RESOURCES"/>:</th>
-			<td class="nowrap">
+		<tr class="extraInfo">
+			<td class="nowrap aleft"><bean:message key="acquisitionRequestItem.label.additionalCostValue" bundle="ACQUISITION_RESOURCES"/>:</td>
+			<td class="nowrap aright">
 				<fr:view name="acquisitionRequestItem" property="additionalCostValue" type="myorg.domain.util.Money">
 					<fr:layout name="null-as-label">
 						<fr:property name="subLayout" value="default"/>
 					</fr:layout>
 				</fr:view>
 			</td>
-			<th style="padding-left: 1em;"><bean:message key="acquisitionRequestItem.label.realAdditionalCostValue" bundle="ACQUISITION_RESOURCES"/>:</th>
-			<td class="nowrap">
+			<td class="nowrap aright" name="effectiveValues">
 				<fr:view name="acquisitionRequestItem" property="realAdditionalCostValue" type="myorg.domain.util.Money">
 					<fr:layout name="null-as-label">
 						<fr:property name="subLayout" value="default"/>
@@ -175,11 +183,10 @@
 				</fr:view>
 			</td>
 		</tr>
-		<tr class="itemmbottom">
-			<th><bean:message key="acquisitionRequestItem.label.totalValueWithAdditionalCostsAndVat" bundle="ACQUISITION_RESOURCES"/>:</th>
-			<td class="nowrap"><span><fr:view name="acquisitionRequestItem" property="totalItemValueWithAdditionalCostsAndVat"/></span></td>
-			<th style="padding-left: 1em;"><bean:message key="acquisitionRequestItem.label.totalRealValueWithAdditionalCostsAndVat" bundle="ACQUISITION_RESOURCES"/>:</th>
-			<td class="nowrap">
+		<tr>
+			<td class="nowrap aleft"><bean:message key="acquisitionRequestItem.label.totalValueWithAdditionalCostsAndVat" bundle="ACQUISITION_RESOURCES"/>:</td>
+			<td class="nowrap aright"><span><fr:view name="acquisitionRequestItem" property="totalItemValueWithAdditionalCostsAndVat"/></span></td>
+			<td class="nowrap aright" name="effectiveValues">
 				<span>
 					<fr:view name="acquisitionRequestItem" property="totalRealValueWithAdditionalCostsAndVat" type="myorg.domain.util.Money">
 						<fr:layout name="null-as-label">
@@ -189,47 +196,42 @@
 				</span>
 			</td>
 		</tr>
-		
-		<tr>
-			<th colspan="4" style="background: #eaeaea;"><bean:message key="acquisitionRequestItem.label.deliveryInfo" bundle="ACQUISITION_RESOURCES"/></th>
-		</tr>	
-		<tr>
-			<th style="padding-bottom: 1em;"><bean:message key="label.address" bundle="ACQUISITION_RESOURCES"/>:</th>
-			<td colspan="3" style="padding-bottom: 1em; padding-left: 10px;">
-				<fr:view name="acquisitionRequestItem" property="address"/>
-			</td>
-		</tr>
+	</tbody>	
+	
+	<script type="text/javascript">
+		<logic:equal name="acquisitionRequestItem" property="filledWithRealValues" value="false">
+			$("[name='effectiveValues']").hide();
+		</logic:equal>
+		<logic:equal name="acquisitionRequestItem" property="filledWithRealValues" value="true">
+			$("[name='effectiveValues']").show();
+		</logic:equal>
 
-		<tr>
-			<th colspan="4" style="background: #eaeaea;"><bean:message key="acquisitionProcess.label.payingUnits" bundle="ACQUISITION_RESOURCES"/></th>
-		</tr>
-		<tr>
-			<td colspan="4" style="padding-left: 5px;">
-				<logic:notEmpty name="acquisitionRequestItem" property="unitItems">
-					<table class="payingunits">
-						<logic:iterate id="unitItem" name="acquisitionRequestItem" property="sortedUnitItems">
-							<tr>
-								<td>
-									<fr:view name="unitItem" property="unit.presentationName"/>:
-								</td>
-								<td class="nowrap vatop">
-									<logic:present name="unitItem" property="realShareValue">
-										<fr:view name="unitItem" property="realShareValue"/>
-									</logic:present>
-									<logic:notPresent name="unitItem" property="realShareValue">
-										<fr:view name="unitItem" property="shareValue"/>
-									</logic:notPresent>
-								</td>
-							</tr>
-						</logic:iterate>
-					</table>
-				</logic:notEmpty>
-				<logic:empty name="acquisitionRequestItem" property="unitItems">
-					<em><bean:message key="label.notDefined" bundle="EXPENDITURE_RESOURCES"/></em>
-				</logic:empty>
-			</td>
-		</tr>
+		<bean:define id="hideOperations" value="true" toScope="request"/>
 
-	</table>
+		<wf:isActive processName="process" activityName="EditAcquisitionRequestItem" scope="request">
+			<bean:define id="hideOperations" value="false" toScope="request"/>
+			</wf:isActive>
+		<wf:isActive processName="process" activityName="GenericAssignPayingUnitToItem" scope="request">
+			<bean:define id="hideOperations" value="false" toScope="request"/>
+				</wf:isActive>
+		<wf:isActive processName="process" activityName="EditAcquisitionRequestItemRealValues" scope="request">
+			<bean:define id="hideOperations" value="false" toScope="request"/>
+			</wf:isActive>
+		<wf:isActive processName="process" activityName="DistributeRealValuesForPayingUnits" scope="request">
+			<bean:define id="hideOperations" value="false" toScope="request"/>
+			</wf:isActive>
+		<wf:isActive processName="process" activityName="DeleteAcquisitionRequestItem" scope="request">
+			<bean:define id="hideOperations" value="false" toScope="request"/>
+			</wf:isActive>
+
+		<logic:equal name="hideOperations" value="true">
+			$("[name='operations']").hide();
+		</logic:equal>
 		
-</div>
+		
+
+	</script>
+	
+	
+
+	

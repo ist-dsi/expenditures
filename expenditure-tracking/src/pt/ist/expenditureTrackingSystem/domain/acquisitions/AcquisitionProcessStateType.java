@@ -76,7 +76,7 @@ public enum AcquisitionProcessStateType implements IPresentableEnum, Presentable
 
 	@Override
 	public boolean showFor(final AcquisitionProcessStateType currentStateType) {
-	    return currentStateType == this;
+	    return false;
 	}
 
 	@Override
@@ -101,7 +101,7 @@ public enum AcquisitionProcessStateType implements IPresentableEnum, Presentable
     }
 
     public boolean showFor(final AcquisitionProcessStateType currentStateType) {
-	return currentStateType.isActive();
+	return true;
     }
 
     public boolean hasNextState() {
@@ -125,8 +125,10 @@ public enum AcquisitionProcessStateType implements IPresentableEnum, Presentable
     }
 
     public String getDescription() {
-	return getLocalizedName();
-    }
+    	final ResourceBundle resourceBundle = ResourceBundle.getBundle("resources.ExpenditureEnumerationResources", Language
+    			.getLocale());
+    		return resourceBundle.getString(AcquisitionProcessStateType.class.getSimpleName() + "." + name() + ".description");
+    } 
 
     @Override
     public boolean showFor(PresentableAcquisitionProcessState state) {

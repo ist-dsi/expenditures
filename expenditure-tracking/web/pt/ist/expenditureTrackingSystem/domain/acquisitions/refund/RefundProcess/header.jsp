@@ -5,6 +5,7 @@
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
 
+<%--
 	<bean:define id="currentState" name="process" property="processState.refundProcessStateType"/>
 	<fr:view name="process"> 
 		<fr:layout name="process-state">
@@ -15,9 +16,10 @@
 			<fr:property name="linkable" value="false"/>
 		</fr:layout>
 	</fr:view>
-<div class="wrapper">	
-	<h2>
-		<bean:message key="refundProcess.title.viewRefundRequest" bundle="ACQUISITION_RESOURCES"/> 
-		<span class="processNumber">(<fr:view name="process" property="acquisitionProcessId"/>)</span>
-	</h2>
-</div>
+--%>
+
+
+<h2>
+	<bean:message key="refundProcess.title.viewRefundRequest" bundle="ACQUISITION_RESOURCES"/> 
+	<span class="processNumber">(<fr:view name="process" property="acquisitionProcessId"/>)</span>
+</h2>

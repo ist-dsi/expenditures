@@ -3,11 +3,16 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
+import module.workflow.domain.WorkflowLog;
 import myorg.domain.User;
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
 import myorg.util.ClassNameBundle;
+
+import org.joda.time.DateTime;
+
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
@@ -283,5 +288,5 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 	    new AcquisitionProcessState(this, acquisitionProcessStateType);
 	}
     }
-
+    
 }

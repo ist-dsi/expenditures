@@ -9,6 +9,7 @@
 <bean:define id="processId" name="processRequest" property="process.externalId"/>
 
 <div class="infobox">
+
 	<fr:view name="processRequest"
 			type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest"
 			schema="viewAcquisitionRequest">

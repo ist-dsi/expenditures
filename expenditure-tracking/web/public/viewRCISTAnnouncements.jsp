@@ -16,6 +16,9 @@ margin-bottom: 20px;
 table.rcistTable th {
 width: 115px;
 }
+table.rcistTable th b {
+font-weight: normal;
+}
 table.rcistTable th, table.rcistTable td {
 background: #f5f5f5 !important;
 padding: 7px 10px;

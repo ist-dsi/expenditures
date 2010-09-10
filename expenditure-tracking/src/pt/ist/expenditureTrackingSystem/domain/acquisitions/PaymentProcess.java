@@ -15,6 +15,7 @@ import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
 import myorg.util.BundleUtil;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 import pt.ist.emailNotifier.domain.Email;
@@ -399,4 +400,9 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
 	return Collections.emptyList();
     }
 
+    public DateTime getCreationDate() {
+	Set<WorkflowLog> logs = getExecutionLogsSet();
+	return (logs.isEmpty()) ? new DateTime() : logs.iterator().next().getWhenOperationWasRan();
+
+    }
 }

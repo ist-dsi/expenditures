@@ -124,7 +124,7 @@
 
 	<fr:view name="results" schema="viewProcessesInList">
 			<fr:layout name="tabular-sortable">
-				<fr:property name="classes" value="plist mtop1 width100pc thsecondaryLink"/>
+				<fr:property name="classes" value="tview1 width100pc"/>
 				<fr:property name="columnClasses" value="width30px,,,,,,,,nowrap,,,,,,,,,,,,,,,"/>
 				<fr:property name="linkFormat(view)" value="/workflowProcessManagement.do?method=viewProcess&processId=${externalId}"/>
 				<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>

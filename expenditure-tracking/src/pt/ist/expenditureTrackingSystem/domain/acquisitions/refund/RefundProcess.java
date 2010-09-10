@@ -14,6 +14,7 @@ import module.workflow.activities.ReleaseProcess;
 import module.workflow.activities.StealProcess;
 import module.workflow.activities.TakeProcess;
 import module.workflow.activities.WorkflowActivity;
+import module.workflow.domain.ProcessFile;
 import module.workflow.domain.WorkflowProcess;
 import myorg.domain.User;
 import myorg.domain.exceptions.DomainException;
@@ -21,7 +22,11 @@ import myorg.util.BundleUtil;
 import myorg.util.ClassNameBundle;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionInvoice;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProposalDocument;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.CreditNoteDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.PurchaseOrderDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
@@ -459,4 +464,21 @@ public class RefundProcess extends RefundProcess_Base {
     public List<? extends PresentableAcquisitionProcessState> getAvailablePresentableStates() {
 	return Arrays.asList(RefundProcessStateType.values());
     }
+
+    @Override
+    public List<Class<? extends ProcessFile>> getAvailableFileTypes() {
+	List<Class<? extends ProcessFile>> availableFileTypes = new ArrayList<Class<? extends ProcessFile>>();
+	availableFileTypes.add(RefundableInvoiceFile.class);
+	availableFileTypes.addAll(super.getAvailableFileTypes());
+	return availableFileTypes;
+    }
+
+    
+    @Override
+    public List<Class<? extends ProcessFile>> getUploadableFileTypes() {
+	List<Class<? extends ProcessFile>> uploadableFileTypes = super.getUploadableFileTypes();
+	uploadableFileTypes.remove(RefundableInvoiceFile.class);
+	return uploadableFileTypes;
+    }
+
 }

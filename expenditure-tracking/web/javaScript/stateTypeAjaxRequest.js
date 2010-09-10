@@ -1,20 +1,23 @@
 
 
 function startStateTypeRenderer(appContext, processId) {
+
+	var url = appContext + "/expenditureProcesses.do?method=viewTypeDescription" + "&processId=" + processId;
+	
 	$(".states th").mouseover(function() { 
 		var id = $(this).attr('id');
 		var classname = $(this).attr('name');
-		$.getJSON("/" + appContext + "/expenditureProcesses.do?method=viewTypeDescription&type=" + id + "&classname=" + classname + "&processId=" + processId,function(data, textStatus) {dealWith(data)});
+		$.getJSON(url + "&type=" + id + "&classname=" + classname ,function(data, textStatus) {dealWith(data)});
 		
 	});
 
 	$(".states").mouseout(function() {
 		var id = $(".states > .selected").attr('id');
-		var classname = $(this).attr('name');
+		var classname = $(".states > .selected").attr('name');
 		if (id == null) {
 			id = "CANCELED";
 		}
-		$.getJSON("/" + appContext + "/expenditureProcesses.do?method=viewTypeDescription&type=" + id + "&classname=" + classname + "&processId=" + processId,function(data, textStatus) {dealWith(data)});
+		$.getJSON(url + "&type=" + id + "&classname=" + classname,function(data, textStatus) {dealWith(data)});
 	});
 	
 }

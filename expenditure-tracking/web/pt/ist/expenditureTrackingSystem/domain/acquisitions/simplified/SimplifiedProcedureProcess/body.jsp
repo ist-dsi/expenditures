@@ -11,13 +11,223 @@
 
 <bean:define id="acquisitionProcessOid"><bean:write name="process" property="externalId"/></bean:define>
 
-<div class="wrapper"> 
-<script type="text/javascript">
-	$("#processControl").addClass("wrapper");
-</script>
-
 <bean:define id="processRequest" name="process" property="request" toScope="request"/>
-<jsp:include page="/acquisitions/commons/viewAcquisitionRequest.jsp" flush="true"/>
+<bean:define id="processId" name="process" property="externalId"/>
+
+<div class="infobox3 col2-1">
+	<h3>Informação</h3>
+	<div>
+		<table class="process-info mbottom0">
+			<tr class="first">
+				<td><bean:message key="label.acquisitionProcessId" bundle="EXPENDITURE_RESOURCES"/>: <fr:view name="process" property="processNumber"/></td>
+			</tr>
+			<tr>
+				<td>
+					<bean:message key="label.processClassification" bundle="EXPENDITURE_RESOURCES"/>: <fr:view name="process" property="processClassification"/>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<bean:message key="label.requesterName" bundle="EXPENDITURE_RESOURCES"/>:
+					 <fr:view name="process" property="requestor.name" layout="link">
+						<fr:property name="useParent" value="true" />
+						<fr:property name="blankTarget" value="true" />
+						<fr:property name="linkFormat"
+							value="/expenditureTrackingOrganization.do?personOid=${requestor.externalId}&amp;method=viewPerson" />
+						<fr:property name="classes" value="secondaryLink" />
+					</fr:view>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<bean:message key="acquisitionProcess.label.requestingUnit" bundle="ACQUISITION_RESOURCES"/>: <fr:view name="process" property="requestingUnit.presentationName"/>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<bean:message key="label.supplier" bundle="EXPENDITURE_RESOURCES"/>: 
+					<fr:view name="process" property="acquisitionRequest.supplier">
+						<fr:layout name="null-as-label">
+							<fr:property name="subLayout" value="values" />
+							<fr:property name="subSchema" value="viewSupplierPresentationName.withLink" />
+							<fr:property name="classes" value="nobullet" />
+						</fr:layout>
+					</fr:view>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<bean:message key="label.skipingSupplierFundAllocation" bundle="EXPENDITURE_RESOURCES"/>: 
+					<fr:view name="process" property="skipSupplierFundAllocation"/>
+				</td>
+			</tr>
+		</table>
+
+
+
+		<p class="mver1"><span id="show1" class="link"><bean:message key="label.moreInfo" bundle="EXPENDITURE_RESOURCES"/></span></p>
+		<p class="mver1"><span id="show2" style="display: none" class="link"><bean:message key="label.lessInfo" bundle="EXPENDITURE_RESOURCES"/></span></p>
+		
+
+		
+		<div id="extraInfo" style="display: none; margin: 0;">
+
+			<fr:view name="processRequest"
+					type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest"
+					schema="viewAcquisitionRequest.extra">
+				<fr:layout name="tabular">
+					<fr:property name="classes" value="process-info lastnoborder firststrongborder mtop0 mbottom0"/>
+					<fr:property name="columnClasses" value="width165px,,"/>
+				</fr:layout>
+			</fr:view>
+
+			<table class="process-info firstnoborder mvert0">
+				<logic:empty name="processRequest" property="invoices">
+					<tr>
+						<th style="width: 165px;"><bean:message key="label.invoices" bundle="EXPENDITURE_RESOURCES"/>:</th>
+						<td>-</td>
+					</tr>
+				</logic:empty>
+			
+				<logic:notEmpty name="processRequest" property="invoices">
+					<tr>
+						<th style="width: 165px;"><bean:message key="label.invoices" bundle="EXPENDITURE_RESOURCES"/>:</th>
+						<td>
+							<logic:iterate id="invoice" name="processRequest" property="invoices">
+								<p class="mtop0 mbottom025">
+									<span><fr:view name="invoice" property="invoiceNumber"/></span> <span style="padding: 0 0.3em; color: #aaa;">|</span>
+									<span><fr:view name="invoice" property="invoiceDate"/></span> <span style="padding: 0 0.3em; color: #aaa;">|</span>
+									<span>
+										<html:link action="<%= "/workflowProcessManagement.do?method=downloadFile&processId=" + processId%>" paramId="fileId" paramName="invoice" paramProperty="externalId">
+												<fr:view name="invoice" property="filename"/>
+										</html:link>
+									</span>
+								</p>
+								<fr:view name="invoice" property="requestItems">
+									<fr:layout>
+										<fr:property name="eachLayout" value="values"/>
+										<fr:property name="eachSchema" value="itemDescription.descriptionOnly"/>
+										<fr:property name="style" value="margin: 0.25em 0 1em 0; padding-left: 1.0em;"/>
+									</fr:layout>
+								</fr:view>
+							</logic:iterate>			
+						</td>
+					</tr>
+				</logic:notEmpty>
+				
+				<logic:notEmpty name="processRequest" property="suppliers">
+					<tr>
+						<th>
+							<bean:message key="supplier.title.manage" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>:
+						</th>
+						<td>
+							<logic:iterate id="supplier" name="processRequest" property="suppliers">
+								<bean:define id="supplierName" name="supplier" property="name"/>
+								<p class="mvert0">
+									<logic:equal name="processRequest" property="process.allowedToViewSupplierExpenditures" value="true">
+										<logic:equal name="processRequest" property="process.processClassification" value="CCP">
+											<bean:message key="supplier.message.info.totalAllocated.withArgument" bundle="EXPENDITURE_ORGANIZATION_RESOURCES" arg0="<%= supplierName.toString() %>"/>:
+											<fr:view name="supplier" property="totalAllocated"/>
+										</logic:equal>
+			
+										<logic:notEqual name="processRequest" property="process.processClassification" value="CCP">
+											<fr:view name="supplierName"/>
+										</logic:notEqual>
+									</logic:equal>
+			
+									<logic:equal name="processRequest" property="process.allowedToViewSupplierExpenditures" value="false">
+										<fr:view name="supplierName"/>
+									</logic:equal>
+								</p>
+							</logic:iterate>
+						</td>
+					</tr>
+				</logic:notEmpty>
+			</table>
+		</div>
+		<!-- #extrainfo -->
+
+	
+	
+
+		
+		<script type="text/javascript">
+			$("#show1").click(
+					function() {
+						$('#extraInfo').slideToggle();
+						$('#show1').hide();
+						$('#show2').show();
+					}
+				);
+	
+			$("#show2").click(
+					function() {
+						$('#extraInfo').slideToggle();
+						$('#show2').hide();
+						$('#show1').show();
+					}
+				);
+		</script>
+
+	</div>
+</div>
+<!-- infobox3 -->		
+
+
+
+<div class="infobox2 col2-2">
+	<h3>Estado</h3>
+	<fr:view name="process" layout="new-process-state"/>
+</div>
+
+<div class="clear"></div>
+		
+
+
+<script type="text/javascript">
+                                        function close(target) {
+
+                                               if (!$("#" + target).hasClass("close")) {
+                                               var numberOfTrs = $("#" + target + " tr.extraInfo").length;
+                                               $("#" + target + " td[rowspan]").each(function() {
+                                                       var rowspan = $(this).attr('rowspan');
+                                                       $(this).attr('rowspan',rowspan - numberOfTrs);
+                                               });
+                                               $("#" + target).addClass("close");
+                                               $("#" + target).removeClass("open");
+                                               $("#" + target + " .extraInfo").hide();
+                                               $("#" + target + " .closeItem").hide();
+                                               $("#" + target + " .openItem").show();
+                                               }
+                                       }
+
+function open(target) {
+                                               if (!$("#" + target).hasClass("open")) {
+                                                 var numberOfTrs = $("#" + target + " tr.extraInfo").length;
+                                               $("#" + target + " td[rowspan]").each(function() {
+                                                       var rowspan = $(this).attr('rowspan');
+                                                       $(this).attr('rowspan',rowspan + numberOfTrs);
+                                               });
+                                       function openAll() {
+	                                               open("item2");
+	                                               open("item3");
+	                                       }
+	                                       function closeAll() {
+	                                               close("item2");
+	                                               close("item3");
+	                                       }
+	                                       $("#open").click(function() { openAll(); });
+	                                       $("#close").click(function() { closeAll(); });
+
+	                                       closeAll();
+		                               </script>
+
+
+
+
+	
+
+
 
 <logic:equal name="process" property="acquisitionRequest.partiallyApproved" value="true">
  <div class="infobox_warning mtop15">
@@ -27,6 +237,7 @@
 </div>
 </logic:equal>
 
+
 <logic:equal name="process" property="acquisitionRequest.partiallyAuthorized" value="true">
  <div class="infobox_warning mtop15">
  	<p class="mvert025">
@@ -35,6 +246,7 @@
 </div>
 </logic:equal>
 
+
 <logic:equal name="process" property="acquisitionRequest.withInvoicesPartiallyConfirmed" value="true">
  <div class="infobox_warning mtop15">
  	<p class="mvert025">
@@ -42,32 +254,38 @@
     </p>
 </div>
 </logic:equal>
-   
+ 
+
+<div class="clear"></div>
+
+ 
 <bean:define id="payingUnits" name="process" property="acquisitionRequest.totalAmountsForEachPayingUnit"/>
 <logic:notEmpty name="payingUnits">
 
-	<table class="tstyle4 mvert1 width100pc tdmiddle thnoborder">
-		<tr>	
-			<th class="aleft"><bean:message key="acquisitionProcess.label.payingUnits" bundle="ACQUISITION_RESOURCES"/></th>
-			<th></th>
-			<th class="acenter" style="width: 70px;">
-					<bean:message key="acquisitionProcess.label.accountingUnit" bundle="ACQUISITION_RESOURCES"/>
-			</th>
-			<th id="fundAllocationHeader">
-					<bean:message key="financer.label.fundAllocation.identification" bundle="ACQUISITION_RESOURCES"/>
-			</th>
-			<th id="effectiveFundAllocationHeader"> 
-					<bean:message key="financer.label.effectiveFundAllocation.identification" bundle="ACQUISITION_RESOURCES"/>
-			</th>
-			<th class="aright">
-				<bean:message key="acquisitionRequestItem.label.totalValueWithVAT" bundle="ACQUISITION_RESOURCES"/>
-				<script type="text/javascript">
-						$('#fundAllocationHeader').hide();
-						$('#effectiveFundAllocationHeader').hide();
-				</script>
-			</th>
-		</tr>
-	
+
+<h3>Unidades Pagadoras</h3>
+
+<table class="tview1" style="width: 100%;">
+	<tr>
+		<th class="aleft"><bean:message key="acquisitionProcess.label.payingUnits" bundle="ACQUISITION_RESOURCES"/></th>
+		<th></th>
+		<th class="acenter" style="width: 70px; white-space: nowrap;">
+			<bean:message key="acquisitionProcess.label.accountingUnit" bundle="ACQUISITION_RESOURCES"/>
+		</th>
+		<th id="fundAllocationHeader">
+			<bean:message key="financer.label.fundAllocation.identification" bundle="ACQUISITION_RESOURCES"/>
+		</th>
+		<th id="effectiveFundAllocationHeader"> 
+			<bean:message key="financer.label.effectiveFundAllocation.identification" bundle="ACQUISITION_RESOURCES"/>
+		</th>
+		<th class="aright">
+			<bean:message key="acquisitionRequestItem.label.totalValueWithVAT" bundle="ACQUISITION_RESOURCES"/>
+			<script type="text/javascript">
+					$('#fundAllocationHeader').hide();
+					$('#effectiveFundAllocationHeader').hide();
+			</script>
+		</th>
+	</tr>
 	<logic:iterate id="payingUnit" name="payingUnits">
 		<tr>
 			<td class="aleft">
@@ -82,7 +300,7 @@
 				<wf:isActive processName="process" activityName="GenericRemovePayingUnit" scope="request">)</wf:isActive>	
 			</td>
 			<bean:define id="financer" name="payingUnit" property="financer"/>
-			<td class="nowrap">
+			<td class="nowrap tooltipWidth400px">
 				<fr:view name="financer" layout="financer-status"/>
 			</td>
 			<td class="acenter" style="width: 80px;"><fr:view name="payingUnit" property="financer.accountingUnit.name"/></td>
@@ -108,8 +326,12 @@
 			<td class="aright nowrap" style="width: 80px;"><fr:view name="payingUnit" property="amount"/></td>
 		</tr>
 	</logic:iterate>
-	</table>
+</table> 
 </logic:notEmpty>
+
+
+
+
 
 
 <bean:define id="itemSet" name="process" property="acquisitionRequest.orderedRequestItemsSet"/> 
@@ -132,74 +354,73 @@
 				</div>
 			</logic:equal>
 		</logic:equal>
-	
+
+
 		<logic:notEmpty name="itemSet">
 			<bean:size id="size" name="itemSet"/>
-			<table class="tstyle4 mvert1 width100pc tdmiddle thnoborder" id="itemResume">
-				<tr>
-					<th></th>
-					<th class="aleft"><bean:message key="acquisitionRequestItem.label.description" bundle="ACQUISITION_RESOURCES"/></th>
-					<th><bean:message key="acquisitionRequestItem.label.quantity" bundle="ACQUISITION_RESOURCES"/></th>
-					<th class="aright"><bean:message key="acquisitionRequestItem.label.totalValueWithVAT" bundle="ACQUISITION_RESOURCES"/></th>
-				</tr>
-				<logic:iterate id="itemResume" name="itemSet" indexId="index">
-					<bean:define id="currentIndex" value="<%= String.valueOf(index + 1) %>"/>
-					<tr>
-						<td class="nowrap">
-							<%= ContentContextInjectionRewriter.BLOCK_HAS_CONTEXT_PREFIX %>
-							<%= GenericChecksumRewriter.NO_CHECKSUM_PREFIX %><a href="<%= "#item" + currentIndex%>">
-								Item <%= currentIndex %>
-							</a>
-							<%= ContentContextInjectionRewriter.END_BLOCK_HAS_CONTEXT_PREFIX %>
-						</td>
+			
+			<h3>Items</h3>
+	
+			<bean:size id="x" name="itemSet" />
+			<bean:define id="totalItems" name="x" toScope="request"/>
 
-						<td class="aleft"><fr:view name="itemResume" property="description"/></td>
-						<td class="acenter" style="width: 80px;"><fr:view name="itemResume" property="quantity"/></td>
-						<td class="aright nowrap" style="width: 80px;"><fr:view name="itemResume" property="currentTotalItemValueWithAdditionalCostsAndVat"/></td>
-					</tr>
-				</logic:iterate>
-				<logic:greaterThan value="1" name="size">
-					<tr>
-						<td colspan="4" class="aright"><span><b></b><fr:view name="process" property="acquisitionRequest.currentTotalRoundedValue"/></span></td>
-					</tr>
-				</logic:greaterThan>
-			</table>
-		</logic:notEmpty>
-		
-		<bean:size id="totalItems" name="itemSet"/>
-		<logic:iterate id="acquisitionRequestItem" name="itemSet" indexId="index">
-			<bean:define id="currentIndex" value="<%= String.valueOf(index + 1) %>"/>
-			<div class="item" id="<%= "item" + currentIndex %>">
-				<strong><bean:message key="acquisitionRequestItem.label.item" bundle="ACQUISITION_RESOURCES"/></strong> (<fr:view name="currentIndex"/>/<fr:view name="totalItems"/>)
-				<bean:define id="itemOID" name="acquisitionRequestItem" property="externalId" type="java.lang.String"/>
+
+			<table class="tview2" style="width: 100%;">
+
 				
+				
+				
+			<logic:iterate id="acquisitionRequestItem" name="itemSet" indexId="index">
+				<bean:define id="currentIndex" value="<%= String.valueOf(index + 1) %>" toScope="request"/>
+										
+				<bean:define id="itemOID" name="acquisitionRequestItem" property="externalId" type="java.lang.String"/>
+				 
 				<logic:equal name="acquisitionRequestItem" property="filledWithRealValues" value="false">
 					<logic:equal name="acquisitionRequestItem" property="valueFullyAttributedToUnits" value="false">
-						<div class="infobox_warning">
-							<strong><bean:message key="messages.info.attention" bundle="EXPENDITURE_RESOURCES"/>:</strong> <bean:message key="acquisitionRequestItem.message.info.valueNotFullyAttributed" bundle="ACQUISITION_RESOURCES"/>
-						</div>
+					<tr>
+						<td colspan="6">
+							<div class="infobox_warning">
+								<strong><bean:message key="messages.info.attention" bundle="EXPENDITURE_RESOURCES"/>:</strong> <bean:message key="acquisitionRequestItem.message.info.valueNotFullyAttributed" bundle="ACQUISITION_RESOURCES"/>
+							</div>
+						</td>
+					</tr>
 					</logic:equal>
 				</logic:equal>
 				
 				<logic:equal  name="process" property="acquisitionProcessState.invoiceConfirmed"  value="true">		
 					<logic:equal name="acquisitionRequestItem" property="filledWithRealValues" value="false">
-						<div class="infobox_warning">
-							<strong><bean:message key="messages.info.attention" bundle="EXPENDITURE_RESOURCES"/></strong>: <bean:message key="acquisitionRequestItem.message.info.valuesNotFilled" bundle="ACQUISITION_RESOURCES"/>
-						</div>
+					<tr>
+						<td colspan="6">
+							<div class="infobox_warning">
+								<strong><bean:message key="messages.info.attention" bundle="EXPENDITURE_RESOURCES"/></strong>: <bean:message key="acquisitionRequestItem.message.info.valuesNotFilled" bundle="ACQUISITION_RESOURCES"/>
+							</div>
+						</td>
+					</tr>
 					</logic:equal>
 				</logic:equal>
-			
+				
+				
 				<bean:define id="item" name="acquisitionRequestItem" toScope="request"/>
-				<jsp:include page="/acquisitions/commons/viewAcquisitionRequestItem.jsp"/>
-				<p class="aright">
-					<%= ContentContextInjectionRewriter.BLOCK_HAS_CONTEXT_PREFIX %>
-					<%= GenericChecksumRewriter.NO_CHECKSUM_PREFIX %><a href="#"><bean:message key="link.top" bundle="EXPENDITURE_RESOURCES"/></a>
-					<%= ContentContextInjectionRewriter.END_BLOCK_HAS_CONTEXT_PREFIX %>
-				</p>
-			</div>
-		</logic:iterate>
+			 	<jsp:include page="/acquisitions/commons/viewAcquisitionRequestItem.jsp" />
+							
+			</logic:iterate>
+
+			</table>
+					
+			
+			<p class="aright">
+				<%= ContentContextInjectionRewriter.BLOCK_HAS_CONTEXT_PREFIX %>
+				<%= GenericChecksumRewriter.NO_CHECKSUM_PREFIX %><a href="#"><bean:message key="link.top" bundle="EXPENDITURE_RESOURCES"/></a>
+				<%= ContentContextInjectionRewriter.END_BLOCK_HAS_CONTEXT_PREFIX %>
+			</p>
+			
+			
+		
+		</logic:notEmpty>
+		
+		
+		
 	</logic:present>
 </div>
 
-</div>
 

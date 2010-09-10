@@ -4,19 +4,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
-
-<bean:define id="currentState" name="process" property="acquisitionProcessStateType"/>
-<fr:view name="process"> 
-	<fr:layout name="process-state">
-		<fr:property name="stateParameterName" value="state"/>
-		<fr:property name="contextRelative" value="true"/>
-		<fr:property name="currentStateClass" value=""/>
-		<fr:property name="linkable" value="true"/>
-	</fr:layout>
-</fr:view>
 	
-<div class="wrapper">
-
 <h2>
 	<bean:message key="acquisitionProcess.title.viewAcquisitionRequest" bundle="ACQUISITION_RESOURCES"/>
 	<span class="processNumber">(<fr:view name="process" property="acquisitionRequest.acquisitionProcessId"/>)</span>	
@@ -46,4 +34,3 @@
 	 	</p>
 	 </div>
 </logic:equal>
-</div>

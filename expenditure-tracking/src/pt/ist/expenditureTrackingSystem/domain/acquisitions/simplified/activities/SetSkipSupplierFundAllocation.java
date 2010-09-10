@@ -40,4 +40,5 @@ public class SetSkipSupplierFundAllocation extends
     public String getUsedBundle() {
 	return "resources/AcquisitionResources";
     }
+    
 }

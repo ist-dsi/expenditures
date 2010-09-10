@@ -42,7 +42,7 @@
 		</th>
 	</tr>
 	<tr>
-		<td>
+		<td class="aleft">
 			<fr:edit id="<%= "id" + index %>" name="financerBean" slot="effectiveFundAllocationId" type="java.lang.String"/>
 			<bean:define id="financerOID" name="financerBean" property="financer.externalId" type="java.lang.String"/>
 			<logic:equal name="financerBean" property="allowedToAddNewFund" value="true">
