@@ -54,7 +54,10 @@ public class SavedSearch extends SavedSearch_Base {
 	removeRequestor();
 	removeAccountingUnit();
 	removeSupplier();
-	getPeople().clear();
+	SavedSearch ownProcessesSearch = MyOwnProcessesSearch.getOwnProcessesSearch();
+	for (Person person : getPeople()) {
+	    person.setDefaultSearch(ownProcessesSearch);
+	}
 	removeExpenditureTrackingSystemForSystemSearch();
 	removeExpenditureTrackingSystem();
 	deleteDomainObject();
