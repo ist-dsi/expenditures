@@ -4,14 +4,14 @@ function startStateTypeRenderer(appContext, processId) {
 
 	var url = appContext + "/expenditureProcesses.do?method=viewTypeDescription" + "&processId=" + processId;
 	
-	$(".states th").mouseover(function() { 
+	$(".states th").mouseenter(function() { 
 		var id = $(this).attr('id');
 		var classname = $(this).attr('name');
 		$.getJSON(url + "&type=" + id + "&classname=" + classname ,function(data, textStatus) {dealWith(data)});
 		
 	});
 
-	$(".states").mouseout(function() {
+	$(".states").mouseleave(function() {
 		var id = $(".states > .selected").attr('id');
 		var classname = $(".states > .selected").attr('name');
 		if (id == null) {
