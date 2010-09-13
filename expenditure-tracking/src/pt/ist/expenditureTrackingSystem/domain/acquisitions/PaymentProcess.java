@@ -400,9 +400,4 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
 	return Collections.emptyList();
     }
 
-    public DateTime getCreationDate() {
-	Set<WorkflowLog> logs = getExecutionLogsSet();
-	return (logs.isEmpty()) ? new DateTime() : logs.iterator().next().getWhenOperationWasRan();
-
-    }
 }
