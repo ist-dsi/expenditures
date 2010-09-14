@@ -11,25 +11,13 @@ public enum RefundProcessStateType implements IPresentableEnum, PresentableAcqui
     IN_GENESIS {
 
 	@Override
-	public boolean showFor(final RefundProcessStateType currentStateType) {
-	    return true;
-	}
-
-	@Override
 	public boolean isCompleted(final RefundProcessStateType currentStateType) {
 	    return currentStateType.ordinal() > ordinal();
 	}
 
     },
 
-    SUBMITTED_FOR_APPROVAL {
-
-	@Override
-	public boolean showFor(final RefundProcessStateType currentStateType) {
-	    return true;
-	}
-
-    },
+    SUBMITTED_FOR_APPROVAL,
 
     APPROVED,
 
@@ -54,7 +42,7 @@ public enum RefundProcessStateType implements IPresentableEnum, PresentableAcqui
 
 	@Override
 	public boolean showFor(final RefundProcessStateType currentStateType) {
-	    return currentStateType == this;
+	    return false;
 	}
 
 	@Override
@@ -79,7 +67,7 @@ public enum RefundProcessStateType implements IPresentableEnum, PresentableAcqui
     }
 
     public boolean showFor(final RefundProcessStateType currentStateType) {
-	return currentStateType.isActive();
+	return true;
     }
 
     public boolean hasNextState() {

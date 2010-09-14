@@ -14,7 +14,7 @@
 	<bean:define id="currentIndex" name="currentIndex" />
 	<bean:define id="totalItems" name="totalItems" />
 
-	<tbody>
+	<tbody id="<%= "item" + currentIndex %>">
 		<tr>
 			<th>Item</th>
 			<th>Descrição</th>
@@ -69,6 +69,18 @@
 						</logic:empty>
 					</li>
 				</ul>
+				
+				<p class="mver1"><span id="<%= "item" + currentIndex + "-more"%>" class="link"><bean:message key="label.moreInfo" bundle="EXPENDITURE_RESOURCES"/></span></p>
+				<p class="mver1"><span id="<%= "item" + currentIndex + "-less"%>" style="display: none" class="link"><bean:message key="label.lessInfo" bundle="EXPENDITURE_RESOURCES"/></span></p>
+		
+				<script type="text/javascript">
+				   $("#<%= "item" + currentIndex + "-more"%>").click(function() {  
+						open("<%= "item" + currentIndex %>");
+				   });
+				   $("#<%= "item" + currentIndex + "-less"%>").click(function() { 
+					close("<%= "item" + currentIndex %>");
+					});
+				</script>
 			</td>
 			
 			
@@ -227,9 +239,6 @@
 		<logic:equal name="hideOperations" value="true">
 			$("[name='operations']").hide();
 		</logic:equal>
-		
-		
-
 	</script>
 	
 	

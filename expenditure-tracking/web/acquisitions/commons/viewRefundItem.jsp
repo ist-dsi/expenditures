@@ -81,9 +81,34 @@
 				</wf:activityLink>
 
 			</ul>
+			
+			<script type="text/javascript">
+				<bean:define id="hideOperations" value="true" toScope="request"/>
+		
+				<wf:isActive processName="process" activityName="EditRefundItem" scope="request">
+					<bean:define id="hideOperations" value="false" toScope="request"/>
+				</wf:isActive>
+				<wf:isActive processName="process" activityName="GenericAssignPayingUnitToItem" scope="request">
+					<bean:define id="hideOperations" value="false" toScope="request"/>
+						</wf:isActive>
+				<wf:isActive processName="process" activityName="CreateRefundInvoice" scope="request">
+					<bean:define id="hideOperations" value="false" toScope="request"/>
+					</wf:isActive>
+				<wf:isActive processName="process" activityName="DistributeRealValuesForPayingUnits" scope="request">
+					<bean:define id="hideOperations" value="false" toScope="request"/>
+					</wf:isActive>
+				<wf:isActive processName="process" activityName="DeleteRefundItem" scope="request">
+					<bean:define id="hideOperations" value="false" toScope="request"/>
+					</wf:isActive>
+		
+				<logic:equal name="hideOperations" value="true">
+					$("[name='operations']").hide();
+				</logic:equal>
+			</script>
 		</td>
 	</tr>
 	<tr>
+
 		<td class="nowrap aleft"><bean:message key="label.refundValue" bundle="EXPENDITURE_RESOURCES"/>:</td>
 		<td class="nowrap aright"><fr:view name="item" property="realValue" type="myorg.domain.util.Money" layout="null-as-label"/></td>
 	</tr>

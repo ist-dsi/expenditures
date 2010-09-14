@@ -16,6 +16,7 @@ function startStateTypeRenderer(appContext, processId) {
 		var classname = $(".states > .selected").attr('name');
 		if (id == null) {
 			id = "CANCELED";
+			classname = $(".states > th:first").attr('name');
 		}
 		$.getJSON(url + "&type=" + id + "&classname=" + classname,function(data, textStatus) {dealWith(data)});
 	});

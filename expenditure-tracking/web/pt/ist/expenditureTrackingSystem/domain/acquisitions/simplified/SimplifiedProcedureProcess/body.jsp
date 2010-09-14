@@ -147,10 +147,6 @@
 		</div>
 		<!-- #extrainfo -->
 
-	
-	
-
-		
 		<script type="text/javascript">
 			$("#show1").click(
 					function() {
@@ -182,52 +178,8 @@
 
 <div class="clear"></div>
 		
-
-
-<script type="text/javascript">
-                                        function close(target) {
-
-                                               if (!$("#" + target).hasClass("close")) {
-                                               var numberOfTrs = $("#" + target + " tr.extraInfo").length;
-                                               $("#" + target + " td[rowspan]").each(function() {
-                                                       var rowspan = $(this).attr('rowspan');
-                                                       $(this).attr('rowspan',rowspan - numberOfTrs);
-                                               });
-                                               $("#" + target).addClass("close");
-                                               $("#" + target).removeClass("open");
-                                               $("#" + target + " .extraInfo").hide();
-                                               $("#" + target + " .closeItem").hide();
-                                               $("#" + target + " .openItem").show();
-                                               }
-                                       }
-
-function open(target) {
-                                               if (!$("#" + target).hasClass("open")) {
-                                                 var numberOfTrs = $("#" + target + " tr.extraInfo").length;
-                                               $("#" + target + " td[rowspan]").each(function() {
-                                                       var rowspan = $(this).attr('rowspan');
-                                                       $(this).attr('rowspan',rowspan + numberOfTrs);
-                                               });
-                                       function openAll() {
-	                                               open("item2");
-	                                               open("item3");
-	                                       }
-	                                       function closeAll() {
-	                                               close("item2");
-	                                               close("item3");
-	                                       }
-	                                       $("#open").click(function() { openAll(); });
-	                                       $("#close").click(function() { closeAll(); });
-
-	                                       closeAll();
-		                               </script>
-
-
-
-
-	
-
-
+<bean:define id="itemSet" name="process" property="acquisitionRequest.orderedRequestItemsSet"/> 
+<bean:size id="size" name="itemSet"/>
 
 <logic:equal name="process" property="acquisitionRequest.partiallyApproved" value="true">
  <div class="infobox_warning mtop15">
@@ -329,12 +281,6 @@ function open(target) {
 </table> 
 </logic:notEmpty>
 
-
-
-
-
-
-<bean:define id="itemSet" name="process" property="acquisitionRequest.orderedRequestItemsSet"/> 
 <logic:present name="itemSet">
 	
 		<logic:equal  name="process" property="pastInvoiceReceived"  value="true">		
@@ -357,12 +303,10 @@ function open(target) {
 
 
 		<logic:notEmpty name="itemSet">
-			<bean:size id="size" name="itemSet"/>
 			
 			<h3>Items</h3>
 	
-			<bean:size id="x" name="itemSet" />
-			<bean:define id="totalItems" name="x" toScope="request"/>
+			<bean:define id="totalItems" name="size" toScope="request"/>
 
 
 			<table class="tview2" style="width: 100%;">
@@ -421,6 +365,63 @@ function open(target) {
 		
 		
 	</logic:present>
-</div>
+	<p>
+	<a href="#" id="open"><bean:message key="label.viewMoreInfoForAllItems" bundle="ACQUISITION_RESOURCES"/></a>
+	| 
+	<a href="#" id="close"><bean:message key="label.viewLessInfoForAllItems" bundle="ACQUISITION_RESOURCES"/></a>
+	</p>
 
 
+<script type="text/javascript">
+                       					function close(target) {
+                                               if (!$("#" + target).hasClass("close")) {
+                                               var numberOfTrs = $("#" + target + " tr.extraInfo").length;
+                                               $("#" + target + " td[rowspan]").each(function() {
+                                                       var rowspan = $(this).attr('rowspan');
+                                                       $(this).attr('rowspan',rowspan - numberOfTrs);
+                                               });
+                                               $("#" + target).addClass("close");
+                                               $("#" + target).removeClass("open");
+                                               $("#" + target + " .extraInfo").hide();
+                                               $("#" + target + " .closeItem").hide();
+                                               $("#" + target + " .openItem").show();
+											   $("#" + target + "-less").hide();
+											   $("#" + target + "-more").show();
+	 
+                                               }
+                                       }
+
+										function open(target) {
+                                               if (!$("#" + target).hasClass("open")) {
+                                                 var numberOfTrs = $("#" + target + " tr.extraInfo").length;
+                                                 $("#" + target + " td[rowspan]").each(function() {
+                                                       var rowspan = $(this).attr('rowspan');
+                                                       $(this).attr('rowspan',rowspan + numberOfTrs);
+                                                  });
+ 											   $("#" + target).addClass("open");
+                                               $("#" + target).removeClass("close");
+                                               $("#" + target + " .extraInfo").show();
+                                               $("#" + target + " .closeItem").show();
+                                               $("#" + target + " .openItem").hide();
+											   $("#" + target + "-more").hide();
+											   $("#" + target + "-less").show();
+											}
+										}
+
+                                 	      function openAll() {
+	                                      	var itemSize = <%= size %>;
+											for (i = 1; i <= itemSize; i++) {
+												open("item" + i);
+											}
+									  	   }
+	                                       function closeAll() {
+	                                        var itemSize = <%= size %>;
+											for ( i = 1; i <= itemSize; i++) {
+												close("item" + i);
+											}
+										   }
+	                                       $("#open").click(function() { openAll(); });
+	                                       $("#close").click(function() { closeAll(); });
+
+	                                       closeAll();
+</script>

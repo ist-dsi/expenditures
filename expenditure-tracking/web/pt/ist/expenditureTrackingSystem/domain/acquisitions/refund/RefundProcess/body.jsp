@@ -147,7 +147,7 @@
 <logic:iterate id="refundItem" name="process" property="request.requestItems" indexId="index">
 <bean:define id="currentIndex" value="<%= String.valueOf(index + 1) %>" toScope="request"/>
 	
-	<tbody>
+	<tbody class="<%=  "item" + index %>">
 	
 		<logic:equal name="process" property="inGenesis" value="true">
 			<logic:equal name="refundItem" property="valueFullyAttributedToUnits" value="false">
