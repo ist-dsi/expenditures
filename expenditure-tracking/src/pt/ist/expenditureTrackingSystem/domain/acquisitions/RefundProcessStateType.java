@@ -88,7 +88,9 @@ public enum RefundProcessStateType implements IPresentableEnum, PresentableAcqui
 
     @Override
     public String getDescription() {
-	return getLocalizedName();
+	final ResourceBundle resourceBundle = ResourceBundle.getBundle("resources.ExpenditureEnumerationResources", Language
+		.getLocale());
+	return resourceBundle.getString(RefundProcessStateType.class.getSimpleName() + "." + name() + ".description");
     }
 
     @Override
