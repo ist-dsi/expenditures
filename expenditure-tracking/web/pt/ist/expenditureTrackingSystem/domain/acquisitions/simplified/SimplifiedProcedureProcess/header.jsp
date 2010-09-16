@@ -12,7 +12,7 @@
 
 
 <logic:equal name="process" property="warnRegardingProcessClassificationNeeded" value="true">
-	 <div class="infobox_warning mtop15">
+	 <div class="infobox_warning">
 	 	<p class="mvert025">
 	         <bean:message key="label.warning.mismatchBetweenClassificationAndUnitDefault" bundle="ACQUISITION_RESOURCES"/>
 	         
@@ -28,7 +28,7 @@
 </logic:equal>
 
 <logic:equal name="process" property="warnForLessSuppliersActive" value="true">
-	<div class="infobox_warning mtop15">
+	<div class="infobox_warning">
 	 	<p class="mvert025">
 	 		<bean:message key="label.warning.warnForLessSuppliers" bundle="ACQUISITION_RESOURCES"/>
 	 	</p>
