@@ -32,7 +32,7 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 	ProcessListWidget.register(new AquisitionsPendingProcessCounter());
 	ProcessListWidget.register(new RefundPendingProcessCounter());
     }
-    
+
     public static WidgetAditionPredicate EXPENDITURE_TRACKING_PANEL_PREDICATE = new WidgetAditionPredicate() {
 	@Override
 	public boolean canBeAdded(DashBoardPanel panel, User userAdding) {
@@ -116,9 +116,9 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 
 	RequestChecksumFilter.registerFilterRule(new ChecksumPredicate() {
 	    public boolean shouldFilter(HttpServletRequest httpServletRequest) {
-		return !(httpServletRequest.getRequestURI().endsWith("/expenditureProcesses.do"))
-			&& httpServletRequest.getQueryString() != null
-			&& httpServletRequest.getQueryString().contains("method=viewTypeDescription");
+		return !(httpServletRequest.getRequestURI().endsWith("/expenditureProcesses.do")
+			&& httpServletRequest.getQueryString() != null && httpServletRequest.getQueryString().contains(
+			"method=viewTypeDescription"));
 	    }
 	});
 
