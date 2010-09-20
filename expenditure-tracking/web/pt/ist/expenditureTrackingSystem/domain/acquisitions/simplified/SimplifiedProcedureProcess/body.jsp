@@ -121,8 +121,10 @@
 							<bean:message key="supplier.title.manage" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>:
 						</th>
 						<td>
+							<logic:notEmpty name="processRequest" property="suppliers">
+							<ul>
 							<logic:iterate id="supplier" name="processRequest" property="suppliers">
-								<bean:define id="supplierName" name="supplier" property="name"/>
+								<li><bean:define id="supplierName" name="supplier" property="name"/>
 								<p class="mvert0">
 									<logic:equal name="processRequest" property="process.allowedToViewSupplierExpenditures" value="true">
 										<logic:equal name="processRequest" property="process.processClassification" value="CCP">
@@ -138,8 +140,10 @@
 									<logic:equal name="processRequest" property="process.allowedToViewSupplierExpenditures" value="false">
 										<fr:view name="supplierName"/>
 									</logic:equal>
-								</p>
+								</p></li>
 							</logic:iterate>
+							</ul>
+							</logic:notEmpty>
 						</td>
 					</tr>
 				</logic:notEmpty>
