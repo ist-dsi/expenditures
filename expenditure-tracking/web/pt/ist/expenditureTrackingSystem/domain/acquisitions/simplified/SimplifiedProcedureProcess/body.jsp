@@ -45,16 +45,14 @@
 			</tr>
 			<tr>
 				<td>
-					<bean:message key="label.supplier" bundle="EXPENDITURE_RESOURCES"/>:
-					<logic:present name="process" property="acquisitionRequest.supplier">
-						<fr:view name="process" property="acquisitionRequest.supplier">
-							<fr:layout name="null-as-label">
-								<fr:property name="subLayout" value="values" />
-								<fr:property name="subSchema" value="viewSupplierPresentationName.withLink" />
-								<fr:property name="classes" value="nobullet" />
-							</fr:layout>
-						</fr:view>
-					</logic:present>
+					<bean:message key="label.supplier" bundle="EXPENDITURE_RESOURCES"/>: 
+					<fr:view name="process" property="acquisitionRequest.supplier" type="pt.ist.expenditureTrackingSystem.domain.organization.Supplier">
+						<fr:layout name="null-as-label">
+							<fr:property name="subLayout" value="values" />
+							<fr:property name="subSchema" value="viewSupplierPresentationName.withLink" />
+							<fr:property name="classes" value="nobullet" />
+						</fr:layout>
+					</fr:view>
 				</td>
 			</tr>
 			<tr>
