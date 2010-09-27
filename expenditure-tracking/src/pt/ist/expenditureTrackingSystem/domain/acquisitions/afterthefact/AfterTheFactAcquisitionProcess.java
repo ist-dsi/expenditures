@@ -7,8 +7,10 @@ import java.util.List;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.LabelLog;
+import module.workflow.domain.LabelLog_Base;
 import module.workflow.domain.ProcessFile;
 import module.workflow.domain.WorkflowProcess;
+import myorg.domain.User;
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
 import myorg.util.BundleUtil;
@@ -191,6 +193,11 @@ public class AfterTheFactAcquisitionProcess extends AfterTheFactAcquisitionProce
     @Override
     public String getLocalizedName() {
 	return BundleUtil.getStringFromResourceBundle("resources/AcquisitionResources", "label.AfterTheFactAcquisitionProcess");
+    }
+
+    @Override
+    public User getProcessCreator() {
+	return getExecutionLogs(LabelLog.class).iterator().next().getActivityExecutor();
     }
 
 }
