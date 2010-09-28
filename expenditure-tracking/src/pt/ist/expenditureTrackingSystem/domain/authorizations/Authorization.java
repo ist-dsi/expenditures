@@ -9,6 +9,7 @@ import org.joda.time.LocalDate;
 
 import myorg.domain.exceptions.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.dto.AuthorizationBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
@@ -68,7 +69,9 @@ public class Authorization extends Authorization_Base {
     }
 
     public boolean isPersonAbleToRevokeDelegatedAuthorization(Person person) {
-	return getPerson() == person;
+	return getPerson() == person
+		|| person.hasRoleType(RoleType.AQUISITIONS_UNIT_MANAGER)
+		|| person.hasRoleType(RoleType.MANAGER);
     }
 
     @Override

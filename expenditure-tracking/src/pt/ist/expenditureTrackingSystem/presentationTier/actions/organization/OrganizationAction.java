@@ -363,11 +363,22 @@ public class OrganizationAction extends BaseAction {
 	return viewPerson(mapping, request, person);
     }
 
+    public final ActionForward prepareCreateAuthorizationUnitWithoutPerson(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final Unit unit = getDomainObject(request, "unitOid");
+	return prepareCreateAuthorizationUnit(request, null, unit, true);
+    }
+
     public final ActionForward prepareCreateAuthorizationUnit(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final Person person = getDomainObject(request, "personOid");
 	final Unit unit = getDomainObject(request, "unitOid");
-	final AuthorizationBean authorizationBean = new AuthorizationBean(person, unit);
+	return prepareCreateAuthorizationUnit(request, person, unit, false);
+    }
+
+    public final ActionForward prepareCreateAuthorizationUnit(final HttpServletRequest request, 
+	    final Person person, final Unit unit, final boolean returnToUnitInterface) {
+	final AuthorizationBean authorizationBean = new AuthorizationBean(person, unit, returnToUnitInterface);
 	request.setAttribute("authorizationBean", authorizationBean);
 	request.setAttribute("person", person);
 	request.setAttribute("unit", unit);
@@ -378,6 +389,11 @@ public class OrganizationAction extends BaseAction {
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final AuthorizationBean authorizationBean = getRenderedObject();
 	authorizationBean.getPerson().createAuthorization(authorizationBean);
+	if (authorizationBean.isReturnToUnitInterface()) {
+	    final UnitBean unitBean = new UnitBean(authorizationBean.getUnit());;
+	    request.setAttribute("unitBean", unitBean);
+	    return viewOrganization(mapping, request, authorizationBean.getUnit());
+	}
 	return viewPerson(mapping, request, authorizationBean.getPerson());
     }
 

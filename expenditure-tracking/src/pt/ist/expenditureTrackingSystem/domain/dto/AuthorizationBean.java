@@ -19,13 +19,15 @@ public class AuthorizationBean implements Serializable {
     private LocalDate endDate;
     private Boolean canDelegate;
     private Money maxAmount;
+    private boolean returnToUnitInterface = false;
 
-    public AuthorizationBean(final Person person, final Unit unit) {
+    public AuthorizationBean(final Person person, final Unit unit, boolean returnToUnitInterface) {
 	setPerson(person);
 	setUnit(unit);
 	setAuthorization(null);
 	setStartDate(new LocalDate());
 	setCanDelegate(Boolean.FALSE);
+	setReturnToUnitInterface(returnToUnitInterface);
     }
 
     public AuthorizationBean(Authorization authorization) {
@@ -89,6 +91,14 @@ public class AuthorizationBean implements Serializable {
 
     public Money getMaxAmount() {
 	return maxAmount;
+    }
+
+    public boolean isReturnToUnitInterface() {
+        return returnToUnitInterface;
+    }
+
+    public void setReturnToUnitInterface(boolean returnToUnitInterface) {
+        this.returnToUnitInterface = returnToUnitInterface;
     }
 
 }

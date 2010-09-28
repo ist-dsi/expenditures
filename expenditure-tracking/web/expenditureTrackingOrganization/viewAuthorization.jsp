@@ -12,6 +12,11 @@
 <div class="infobox_dotted">
 	<ul>
 		<li>
+			<html:link action="/expenditureTrackingOrganization.do?method=viewOrganization" paramId="unitOid" paramName="authorization" paramProperty="unit.externalId">
+				<bean:message key="unit.label.view" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+			</html:link>
+		</li>
+		<li>
 			<html:link action="/expenditureTrackingOrganization.do?method=viewPerson" paramId="personOid" paramName="authorization" paramProperty="person.externalId">
 				<bean:message key="person.label.view" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 			</html:link>
@@ -26,6 +31,13 @@
 				</li>
 			</logic:equal>
 		</logic:equal>
+		<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.AQUISITIONS_UNIT_MANAGER">
+			<li>
+				<html:link action="/expenditureTrackingOrganization.do?method=editAuthorization" paramId="authorizationOid" paramName="authorization" paramProperty="externalId">
+					<bean:message key="authorizations.link.edit" bundle="EXPENDITURE_RESOURCES"/>
+				</html:link>
+			</li>
+		</logic:present>
 		<logic:equal name="authorization" property="currentUserAbleToRevoke" value="true">
 			<li>
 				<html:link styleId="revokeLink" action="/expenditureTrackingOrganization.do?method=revokeAuthorization" paramId="authorizationOid" paramName="authorization" paramProperty="externalId">
@@ -44,11 +56,6 @@
 			</li>
 		</logic:equal>
 		<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
-			<li>
-				<html:link action="/expenditureTrackingOrganization.do?method=editAuthorization" paramId="authorizationOid" paramName="authorization" paramProperty="externalId">
-					<bean:message key="authorizations.link.edit" bundle="EXPENDITURE_RESOURCES"/>
-				</html:link>
-			</li>
 			<li>
 				<html:link styleId="removeLink" action="/expenditureTrackingOrganization.do?method=deleteAuthorization" paramId="authorizationOid" paramName="authorization" paramProperty="externalId">
 					<bean:message key="authorizations.link.remove" bundle="EXPENDITURE_RESOURCES"/>

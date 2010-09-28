@@ -123,6 +123,12 @@
 
 	<logic:notEmpty name="unit" property="authorizations">
 		<h3 class="mtop15 mbottom05"><bean:message key="authorizations.label.responsibles" bundle="EXPENDITURE_RESOURCES"/></h3>
+		<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.AQUISITIONS_UNIT_MANAGER">
+			<html:link action="/expenditureTrackingOrganization.do?method=prepareCreateAuthorizationUnitWithoutPerson" paramId="unitOid" paramName="unit" paramProperty="externalId">
+				<bean:message key="label.add.authorization" bundle="EXPENDITURE_RESOURCES"/>
+			</html:link>
+			|
+		</logic:present>
 		<html:link action="/expenditureTrackingOrganization.do?method=viewAuthorizationLogs" paramId="unitOid" paramName="unit" paramProperty="externalId">
 			<bean:message key="authorizations.link.logs" bundle="EXPENDITURE_RESOURCES"/>
 		</html:link>
@@ -146,6 +152,8 @@
 				</th>
 				<th>
 					<bean:message bundle="EXPENDITURE_RESOURCES" key="authorizations.label.maxAmount"/>
+				</th>
+				<th>
 				</th>
 			</tr>
 			<logic:iterate id="authorization" name="unit" property="authorizations">
@@ -179,6 +187,11 @@
 					</td>
 					<td>
 						<fr:view name="authorization" property="maxAmount"/>
+					</td>
+					<td>
+						<html:link action="/expenditureTrackingOrganization.do?method=viewAuthorization" paramId="authorizationOid" paramName="authorization" paramProperty="externalId">
+							<bean:message key="label.view" bundle="EXPENDITURE_RESOURCES"/>
+						</html:link>
 					</td>
 				</tr>
 			</logic:iterate>
