@@ -3,11 +3,11 @@ package pt.ist.expenditureTrackingSystem.domain.authorizations;
 import java.util.Comparator;
 import java.util.Set;
 
+import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
 
 import org.joda.time.LocalDate;
 
-import myorg.domain.exceptions.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
@@ -111,6 +111,10 @@ public class Authorization extends Authorization_Base {
 
     public boolean isValid() {
 	return isValidFor(new LocalDate());
+    }
+
+    public boolean isValidAndIsCurrentUserResponsible() {
+	return isValid() && getUnit().isResponsible(Person.getLoggedPerson());
     }
 
     public boolean isCurrentUserAbleToRevoke() {

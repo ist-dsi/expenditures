@@ -170,7 +170,7 @@
 			<fr:property name="key(observers)" value="label.observers"/>
 			<fr:property name="param(observers)" value="unit.externalId/unitOid"/>
 			<fr:property name="order(observers)" value="2"/>
-			<fr:property name="visibleIf(observers)" value="valid"/>
+			<fr:property name="visibleIf(observers)" value="validAndIsCurrentUserResponsible"/>
 		</fr:layout>
 	</fr:view>
 </logic:notEmpty>
