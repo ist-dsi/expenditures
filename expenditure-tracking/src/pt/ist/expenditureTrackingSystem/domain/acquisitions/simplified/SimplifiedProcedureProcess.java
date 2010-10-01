@@ -1,7 +1,6 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import module.workflow.activities.ActivityInformation;
@@ -11,6 +10,7 @@ import module.workflow.activities.TakeProcess;
 import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.ProcessFile;
 import module.workflow.domain.WorkflowProcess;
+import module.workflow.util.PresentableProcessState;
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
 import myorg.util.BundleUtil;
@@ -75,7 +75,6 @@ import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
-import pt.ist.expenditureTrackingSystem.presentationTier.renderers.PresentableAcquisitionProcessState;
 import pt.ist.fenixWebFramework.rendererExtensions.util.IPresentableEnum;
 import pt.ist.fenixWebFramework.services.Service;
 
@@ -380,12 +379,12 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
     }
 
     @Override
-    public PresentableAcquisitionProcessState getPresentableAcquisitionProcessState() {
+    public PresentableProcessState getPresentableAcquisitionProcessState() {
 	return getLastAcquisitionProcessState().getAcquisitionProcessStateType();
     }
 
     @Override
-    public List<? extends PresentableAcquisitionProcessState> getAvailablePresentableStates() {
+    public List<? extends PresentableProcessState> getAvailablePresentableStates() {
 	return getAvailableStates();
     }
 }

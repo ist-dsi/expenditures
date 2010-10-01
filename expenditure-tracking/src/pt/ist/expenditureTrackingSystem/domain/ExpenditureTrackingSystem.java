@@ -114,14 +114,6 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 	    }
 	});
 
-	RequestChecksumFilter.registerFilterRule(new ChecksumPredicate() {
-	    public boolean shouldFilter(HttpServletRequest httpServletRequest) {
-		return !(httpServletRequest.getRequestURI().endsWith("/expenditureProcesses.do")
-			&& httpServletRequest.getQueryString() != null && httpServletRequest.getQueryString().contains(
-			"method=viewTypeDescription"));
-	    }
-	});
-
     }
 
     private static void initRoles() {

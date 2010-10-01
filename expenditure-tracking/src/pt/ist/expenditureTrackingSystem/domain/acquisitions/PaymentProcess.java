@@ -10,12 +10,13 @@ import java.util.Set;
 import module.mission.domain.MissionProcess;
 import module.workflow.domain.ProcessFile;
 import module.workflow.domain.WorkflowLog;
+import module.workflow.util.HasPresentableProcessState;
+import module.workflow.util.PresentableProcessState;
 import myorg.domain.User;
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
 import myorg.util.BundleUtil;
 
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 import pt.ist.emailNotifier.domain.Email;
@@ -26,9 +27,8 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Project;
 import pt.ist.expenditureTrackingSystem.domain.organization.SubProject;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
-import pt.ist.expenditureTrackingSystem.presentationTier.renderers.PresentableAcquisitionProcessState;
 
-public abstract class PaymentProcess extends PaymentProcess_Base {
+public abstract class PaymentProcess extends PaymentProcess_Base implements HasPresentableProcessState {
 
     public PaymentProcess() {
 	super();
@@ -392,11 +392,11 @@ public abstract class PaymentProcess extends PaymentProcess_Base {
 	}
     }
 
-    public PresentableAcquisitionProcessState getPresentableAcquisitionProcessState() {
+    public PresentableProcessState getPresentableAcquisitionProcessState() {
 	return null;
     }
 
-    public List<? extends PresentableAcquisitionProcessState> getAvailablePresentableStates() {
+    public List<? extends PresentableProcessState> getAvailablePresentableStates() {
 	return Collections.emptyList();
     }
 

@@ -1,6 +1,5 @@
 package pt.ist.expenditureTrackingSystem.presentationTier.actions.acquisitions;
 
-import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,16 +15,13 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.AbstractFundAllocationActivityInformation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.CreateAcquisitionRequestItemActivityInformation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.CreateAcquisitionRequestItemActivityInformation.CreateItemSchemaType;
 import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean;
-import pt.ist.expenditureTrackingSystem.presentationTier.renderers.PresentableAcquisitionProcessState;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
-import pt.ist.fenixWebFramework.servlets.json.JsonObject;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 import pt.ist.fenixframework.pstm.AbstractDomainObject;
 
@@ -98,33 +94,6 @@ public class ExpenditureProcessesAction extends ContextBaseAction {
 	request.setAttribute("process", process);
 
 	return ProcessManagement.performActivityPostback(activityInformation, request);
-    }
-
-    public ActionForward viewTypeDescription(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws IOException {
-	String classname = request.getParameter("classname");
-	int indexOfInnerClassInEnum = classname.indexOf("$");
-	if (indexOfInnerClassInEnum > 0) {
-	    classname = classname.substring(0, indexOfInnerClassInEnum);
-	}
-	PresentableAcquisitionProcessState type;
-	try {
-	    Class<Enum> stateEnum = (Class<Enum>) Class.forName(classname);
-	    type = (PresentableAcquisitionProcessState) Enum.valueOf(stateEnum, request.getParameter("type"));
-	} catch (Exception e) {
-	    e.printStackTrace();
-	    return null;
-	}
-	request.setAttribute("name", type.getLocalizedName());
-
-	JsonObject reply = new JsonObject();
-
-	reply.addAttribute("name", type.getLocalizedName());
-	reply.addAttribute("description", type.getDescription());
-
-	writeJsonReply(response, reply);
-
-	return null;
     }
 
     @Override

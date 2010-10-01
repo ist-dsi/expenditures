@@ -2,11 +2,11 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import java.util.ResourceBundle;
 
-import pt.ist.expenditureTrackingSystem.presentationTier.renderers.PresentableAcquisitionProcessState;
+import module.workflow.util.PresentableProcessState;
 import pt.ist.fenixWebFramework.rendererExtensions.util.IPresentableEnum;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 
-public enum RefundProcessStateType implements IPresentableEnum, PresentableAcquisitionProcessState {
+public enum RefundProcessStateType implements IPresentableEnum, PresentableProcessState {
 
     IN_GENESIS {
 
@@ -94,7 +94,7 @@ public enum RefundProcessStateType implements IPresentableEnum, PresentableAcqui
     }
 
     @Override
-    public boolean showFor(PresentableAcquisitionProcessState state) {
+    public boolean showFor(PresentableProcessState state) {
 	return showFor((RefundProcessStateType) state);
     }
 

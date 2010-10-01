@@ -177,7 +177,7 @@
 
 <div class="infobox2 col2-2">
 	<h3>Estado</h3>
-	<fr:view name="process" layout="new-process-state"/>
+	<fr:view name="process" layout="process-state-view"/>
 </div>
 
 <div class="clear"></div>

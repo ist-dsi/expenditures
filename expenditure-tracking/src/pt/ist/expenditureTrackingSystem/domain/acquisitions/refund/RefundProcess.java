@@ -7,8 +7,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.lang.ArrayUtils;
-
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.ReleaseProcess;
 import module.workflow.activities.StealProcess;
@@ -16,17 +14,14 @@ import module.workflow.activities.TakeProcess;
 import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.ProcessFile;
 import module.workflow.domain.WorkflowProcess;
+import module.workflow.util.PresentableProcessState;
 import myorg.domain.User;
 import myorg.domain.exceptions.DomainException;
 import myorg.util.BundleUtil;
 import myorg.util.ClassNameBundle;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionInvoice;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProposalDocument;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.CreditNoteDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.PurchaseOrderDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
@@ -74,7 +69,6 @@ import pt.ist.expenditureTrackingSystem.domain.dto.CreateRefundProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
-import pt.ist.expenditureTrackingSystem.presentationTier.renderers.PresentableAcquisitionProcessState;
 import pt.ist.fenixWebFramework.services.Service;
 
 @ClassNameBundle(bundle = "resources/ExpenditureResources", key = "label.process.refund")
@@ -456,12 +450,12 @@ public class RefundProcess extends RefundProcess_Base {
     }
 
     @Override
-    public PresentableAcquisitionProcessState getPresentableAcquisitionProcessState() {
+    public PresentableProcessState getPresentableAcquisitionProcessState() {
 	return getProcessState().getRefundProcessStateType();
     }
 
     @Override
-    public List<? extends PresentableAcquisitionProcessState> getAvailablePresentableStates() {
+    public List<? extends PresentableProcessState> getAvailablePresentableStates() {
 	return Arrays.asList(RefundProcessStateType.values());
     }
 
