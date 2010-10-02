@@ -215,7 +215,7 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base implements
 
     @Override
     public PresentableProcessState getPresentableAcquisitionProcessState() {
-	return WorkingCapitalProcessState.PENDING_ACCEPT_RESPONSIBILITY;
+	return getWorkingCapital().getPresentableAcquisitionProcessState();
     }
 
 }

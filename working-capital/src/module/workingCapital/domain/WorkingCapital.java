@@ -6,6 +6,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import module.organization.domain.Person;
+import module.workflow.util.PresentableProcessState;
 import myorg.domain.User;
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
@@ -131,26 +132,42 @@ public class WorkingCapital extends WorkingCapital_Base {
     }
 
     public boolean isPendingVerification(final User user) {
-	if (isAccountingResponsible(user)) {
-	    final WorkingCapitalInitialization workingCapitalInitialization = getWorkingCapitalInitialization();
-	    return workingCapitalInitialization != null && workingCapitalInitialization.isPendingVerification();
-	}
-	return false;
+	return isAccountingResponsible(user) && isPendingVerification();
+    }
+
+    public boolean isPendingVerification() {
+	final WorkingCapitalInitialization workingCapitalInitialization = getWorkingCapitalInitialization();
+	return workingCapitalInitialization != null && workingCapitalInitialization.isPendingVerification();
     }
 
     public boolean isPendingFundAllocation(final User user) {
-	if (isAccountingEmployee(user)) {
-	    final WorkingCapitalInitialization workingCapitalInitialization = getWorkingCapitalInitialization();
-	    return workingCapitalInitialization != null && workingCapitalInitialization.isPendingFundAllocation();
-	}
-	return false;
+	return isAccountingEmployee(user) && isPendingFundAllocation();
     }
 
-    public boolean isPendingAuthorization(User user) {
+    public boolean isPendingFundAllocation() {
+	final WorkingCapitalInitialization workingCapitalInitialization = getWorkingCapitalInitialization();
+	return workingCapitalInitialization != null && workingCapitalInitialization.isPendingFundAllocation();
+    }
+
+    public boolean isPendingAuthorization(final User user) {
 	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstance(); 
-	if (workingCapitalSystem.isManagementeMember(user)) {
-	    final WorkingCapitalInitialization workingCapitalInitialization = getWorkingCapitalInitialization();
-	    return workingCapitalInitialization != null && workingCapitalInitialization.isPendingAuthorization();
+	return workingCapitalSystem.isManagementeMember(user) && isPendingAuthorization();
+    }
+
+    public boolean isPendingAuthorization() {
+	final WorkingCapitalInitialization workingCapitalInitialization = getWorkingCapitalInitialization();
+	return workingCapitalInitialization != null && workingCapitalInitialization.isPendingAuthorization();
+    }
+
+    public boolean isPendingPayment(final User user) {
+	return isTreasuryMember(user) && isPendingPayment();
+    }
+
+    public boolean isPendingPayment() {
+	for (final WorkingCapitalRequest workingCapitalRequest : getWorkingCapitalRequestsSet()) {
+	    if (workingCapitalRequest.getProcessedByTreasury() == null) {
+		return true;
+	    }
 	}
 	return false;
     }
@@ -521,6 +538,30 @@ public class WorkingCapital extends WorkingCapital_Base {
     private boolean isTerminated() {
 	final WorkingCapitalInitialization workingCapitalInitialization = getWorkingCapitalInitialization();
 	return workingCapitalInitialization != null && workingCapitalInitialization.getLastSubmission() != null;
+    }
+
+    public boolean isPendingRefund() {
+	final WorkingCapitalInitialization workingCapitalInitialization = getWorkingCapitalInitialization();
+	return workingCapitalInitialization.getRefundRequested() != null && getBalance().isPositive();
+    }
+
+    public boolean isRefunded() {
+	final WorkingCapitalInitialization workingCapitalInitialization = getWorkingCapitalInitialization();
+	return workingCapitalInitialization.getRefundRequested() != null && getBalance().isZero();
+    }
+
+    public PresentableProcessState getPresentableAcquisitionProcessState() {
+	if (isCanceledOrRejected()) return WorkingCapitalProcessState.CANCELED;
+	if (isPendingAcceptResponsability()) return WorkingCapitalProcessState.PENDING_ACCEPT_RESPONSIBILITY;
+	if (isPendingAproval()) return WorkingCapitalProcessState.PENDING_APPROVAL;
+	if (isPendingVerification()) return WorkingCapitalProcessState.PENDING_VERIFICATION;
+	if (isPendingFundAllocation()) return WorkingCapitalProcessState.PENDING_FUND_ALLOCATION;
+	if (isPendingAuthorization()) return WorkingCapitalProcessState.PENDING_AUTHORIZATION;
+	if (isPendingPayment()) return WorkingCapitalProcessState.PENDING_PAYMENT;
+	if (isTerminated()) return WorkingCapitalProcessState.SENT_FOR_TERMINATION;
+	if (isPendingRefund()) return WorkingCapitalProcessState.SENT_FOR_FUND_REFUND;
+	if (isRefunded()) return WorkingCapitalProcessState.TERMINATED;
+	return WorkingCapitalProcessState.WORKING_CAPITAL_AVAILABLE;
     }
 
 }

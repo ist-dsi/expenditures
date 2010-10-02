@@ -20,16 +20,7 @@ public class PayCapitalActivity extends WorkflowActivity<WorkingCapitalProcess, 
     @Override
     public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
 	final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
-	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstance();
-	if (workingCapital.isCanceledOrRejected() || !workingCapital.isTreasuryMember(user)) {
-	    return false;
-	}
-	for (final WorkingCapitalRequest workingCapitalRequest : workingCapital.getWorkingCapitalRequestsSet()) {
-	    if (workingCapitalRequest.getProcessedByTreasury() == null) {
-		return true;
-	    }
-	}
-	return false;
+	return !workingCapital.isCanceledOrRejected() && workingCapital.isPendingPayment(user);
     }
 
     @Override

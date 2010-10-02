@@ -18,13 +18,7 @@ public class AllocateFundsActivity extends WorkflowActivity<WorkingCapitalProces
     @Override
     public boolean isActive(final WorkingCapitalProcess workingCapitalProcess, final User user) {
 	final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
-	if (workingCapital.isAccountingEmployee(user)) {
-	    final WorkingCapitalInitialization workingCapitalInitialization = workingCapital.getWorkingCapitalInitialization();
-	    if (workingCapitalInitialization != null && workingCapitalInitialization.isPendingFundAllocation()) {
-		return true;
-	    }
-	}
-	return false;
+	return workingCapital.isPendingFundAllocation(user);
     }
 
     @Override
