@@ -2,6 +2,7 @@ package module.workingCapital.domain;
 
 import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -10,6 +11,8 @@ import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.ProcessFile;
 import module.workflow.domain.WorkflowProcess;
+import module.workflow.util.HasPresentableProcessState;
+import module.workflow.util.PresentableProcessState;
 import module.workingCapital.domain.activity.AcceptResponsabilityForWorkingCapitalActivity;
 import module.workingCapital.domain.activity.AllocateFundsActivity;
 import module.workingCapital.domain.activity.ApproveActivity;
@@ -43,11 +46,11 @@ import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.RoleType;
 import myorg.domain.User;
 import myorg.util.BundleUtil;
-import pt.ist.emailNotifier.domain.Email;
 import myorg.util.ClassNameBundle;
+import pt.ist.emailNotifier.domain.Email;
 
 @ClassNameBundle(key="label.module.workingCapital", bundle="resources/WorkingCapitalResources")
-public class WorkingCapitalProcess extends WorkingCapitalProcess_Base {
+public class WorkingCapitalProcess extends WorkingCapitalProcess_Base implements HasPresentableProcessState {
 
     public static final Comparator<WorkingCapitalProcess> COMPARATOR_BY_UNIT_NAME = new Comparator<WorkingCapitalProcess>() {
 	@Override
@@ -203,6 +206,16 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base {
     @Override
     public boolean isTicketSupportAvailable() {
         return false;
+    }
+
+    @Override
+    public List<? extends PresentableProcessState> getAvailablePresentableStates() {
+	return Arrays.asList(WorkingCapitalProcessState.values());
+    }
+
+    @Override
+    public PresentableProcessState getPresentableAcquisitionProcessState() {
+	return WorkingCapitalProcessState.PENDING_ACCEPT_RESPONSIBILITY;
     }
 
 }

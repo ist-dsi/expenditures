@@ -15,7 +15,7 @@
 <bean:define id="workingCapitalOid" name="workingCapital" property="externalId"/>
 <bean:define id="workingCapitalInitializationOid" type="java.lang.String" name="workingCapitalInitialization" property="externalId"/>
 
-<div class="infobox mtop1 mbottom1">
+<div class="infobox col2-1">
 	<fr:view name="workingCapital" property="workingCapitalInitialization">
 		<fr:schema bundle="WORKING_CAPITAL_RESOURCES"  type="module.workingCapital.domain.WorkingCapitalInitialization">
 			<fr:slot name="workingCapital.accountingUnit.name" key="label.module.workingCapital.initialization.accountingUnit"/>
@@ -50,12 +50,17 @@
 			</logic:equal>
 		</fr:schema>
 		<fr:layout name="tabular">
+			<fr:property name="classes" value="process-info mbottom0"/>
 			<fr:property name="columnClasses" value="aleft width215px,,"/>
 		</fr:layout>
 	</fr:view>
 	<wf:activityLink processName="process" activityName="EditInitializationActivity" scope="request" paramName0="workingCapitalInitialization" paramValue0="<%= workingCapitalInitializationOid %>">
 		<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.EditInitializationActivity"/>
 	</wf:activityLink>
+</div>
+
+<div class="infobox2 col2-2">
+	<fr:view name="process" layout="process-state-view"/>
 </div>
 
 <bean:size id="capitalInitializationsCount" name="workingCapital"  property="workingCapitalInitializations"/>
