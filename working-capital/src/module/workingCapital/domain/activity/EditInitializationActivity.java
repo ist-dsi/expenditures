@@ -1,5 +1,7 @@
 package module.workingCapital.domain.activity;
 
+import org.joda.time.DateTime;
+
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workingCapital.domain.WorkingCapital;
@@ -29,6 +31,7 @@ public class EditInitializationActivity extends WorkflowActivity<WorkingCapitalP
 	workingCapitalInitialization.getWorkingCapital().setMovementResponsible(activityInformation.getMovementResponsible());
 	workingCapitalInitialization.setRequestedAnualValue(activityInformation.getRequestedAnualValue());
 	workingCapitalInitialization.setFiscalId(activityInformation.getFiscalId());
+	workingCapitalInitialization.setAcceptedResponsability(null);
 
 	final String banOrIban = activityInformation.getInternationalBankAccountNumber();
 	final String internationalBankAccountNumber = banOrIban == null || banOrIban.isEmpty() || !Character.isDigit(banOrIban.charAt(0))
