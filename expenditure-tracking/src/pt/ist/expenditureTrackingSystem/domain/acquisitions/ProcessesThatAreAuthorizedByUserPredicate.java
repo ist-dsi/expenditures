@@ -2,8 +2,6 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import java.util.List;
 
-import myorg.domain.util.Money;
-
 import org.apache.commons.collections.Predicate;
 
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
