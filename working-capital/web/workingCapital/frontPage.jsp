@@ -66,6 +66,17 @@
 			</td>
 			<td style="border: none; width: 2%; padding: 0;"></td>
 			<td style="border: 1px dotted #aaa; padding: 10px 15px; width: 48%; vertical-align: top;">
+<!-- Take and give is not an available operation for working capital processes.
+				<p class="mtop0 mbottom05">
+					<b>
+						<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.front.page.taken"/>
+					</b>
+				</p>
+				<bean:define id="processList" toScope="request" name="workingCapitalContext" property="workingCapitalYear.taken"/>
+				<jsp:include page="processList.jsp"/>
+
+				<br/>
+ -->
 				<p class="mtop0 mbottom05">
 					<b>
 						<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.front.page.mine"/>
