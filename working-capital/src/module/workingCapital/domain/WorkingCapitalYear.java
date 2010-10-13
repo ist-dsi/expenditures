@@ -9,8 +9,12 @@ import module.organization.domain.Accountability;
 import module.organization.domain.Party;
 import module.organization.domain.Person;
 import module.organization.domain.Unit;
+import module.workflow.domain.WorkflowProcess;
 import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.User;
+
+import org.joda.time.DateTime;
+
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 
 public class WorkingCapitalYear extends WorkingCapitalYear_Base {
@@ -95,10 +99,9 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
 	    @Override
 	    boolean shouldAdd(final WorkingCapitalProcess workingCapitalProcess, final User user) {
 		final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
-		final WorkingCapitalSystem workingCapitalSystem = workingCapital.getWorkingCapitalSystem();
 		return !workingCapital.isCanceledOrRejected()
-			&& ((workingCapital.isAccountingResponsible(user) && workingCapital.canRequestCapital())
-				|| (workingCapital.isTreasuryMember(user) && workingCapital.hasWorkingCapitalRequestPendingTreasuryProcessing()));
+			&& (/* (workingCapital.isAccountingResponsible(user) && workingCapital.canRequestCapital()) || */
+				(workingCapital.isTreasuryMember(user) && workingCapital.hasWorkingCapitalRequestPendingTreasuryProcessing()));
 	    }
 	}.search();
     }
@@ -271,6 +274,25 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
 
     public SortedSet<WorkingCapitalProcess> getForParty(final Party party) {
 	return party.isUnit() ? getForUnit((Unit) party) : getForPerson((Person) party);
+    }
+
+    public static WorkingCapitalYear getCurrentYear() {
+	final int year = new DateTime().getYear();
+	return findOrCreate(year);
+    }
+
+    public SortedSet<WorkingCapitalProcess> getTaken() {
+	final User user = UserView.getCurrentUser();
+	final SortedSet<WorkingCapitalProcess> result = new TreeSet<WorkingCapitalProcess>(WorkingCapitalProcess.COMPARATOR_BY_UNIT_NAME);
+	for (final WorkflowProcess workflowProcess : user.getUserProcessesSet()) {
+	    if (workflowProcess instanceof WorkingCapitalProcess) {
+		final WorkingCapitalProcess workingCapitalProcess = (WorkingCapitalProcess) workflowProcess;
+		if (workingCapitalProcess.getWorkingCapital().getWorkingCapitalYear() == this) {
+		    result.add(workingCapitalProcess);
+		}
+	    }
+	}
+	return result;
     }
 
 }

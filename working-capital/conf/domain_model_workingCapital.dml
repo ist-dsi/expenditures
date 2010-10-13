@@ -98,6 +98,9 @@ class WorkingCapitalTransaction {
 class WorkingCapitalInvoiceFile extends .module.workflow.domain.ProcessFile {
 }
 
+class EmailDigester extends .myorg.domain.scheduler.Task {
+}
+
 relation WorkingCapitalInvoiceFileWorkingCapitalTransaction {
 	WorkingCapitalInvoiceFile playsRole invoice;
 	WorkingCapitalTransaction playsRole transaction;
