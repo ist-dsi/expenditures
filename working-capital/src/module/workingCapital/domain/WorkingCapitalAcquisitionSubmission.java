@@ -36,4 +36,10 @@ public class WorkingCapitalAcquisitionSubmission extends WorkingCapitalAcquisiti
 	}	
     }
 
+    @Override
+    public void restoreDebt(Money debtValue, Money accumulatedValue) {
+        super.restoreDebt(debtValue, accumulatedValue);
+        setValue(getValue().subtract(debtValue));
+    }
+
 }
