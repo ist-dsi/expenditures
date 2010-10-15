@@ -49,12 +49,12 @@ public class InterfaceCreationAction extends ContextBaseAction {
 	final VirtualHost virtualHost = getDomainObject(request, "virtualHostToManageId");
 	final Node node = getDomainObject(request, "parentOfNodesToManageId");
 
-	LinkNode.createLinkNode(virtualHost, node, "https://fenix-ashes.ist.utl.pt/fenixWiki/Qualidade/FundoDeManeio?action=AttachFile&do=get&target=Manual_FM.pdf", 
-		"resources.WorkingCapitalResources", "link.sideBar.workingCapital.help", UserGroup.getInstance());
-
-/*	LinkNode.createLinkNode(virtualHost, node, "https://fenix-ashes.ist.utl.pt/fenixWiki/Qualidade/FundoDeManeio", 
+/*	LinkNode.createLinkNode(virtualHost, node, "https://fenix-ashes.ist.utl.pt/fenixWiki/Qualidade/FundoDeManeio?action=AttachFile&do=get&target=Manual_FM.pdf", 
 		"resources.WorkingCapitalResources", "link.sideBar.workingCapital.help", UserGroup.getInstance());
 */
+	LinkNode.createLinkNode(virtualHost, node, "https://fenix-ashes.ist.utl.pt/fenixWiki/Qualidade/FundoDeManeio", 
+		"resources.WorkingCapitalResources", "link.sideBar.workingCapital.help", UserGroup.getInstance());
+
 
 	return forwardToMuneConfiguration(request, virtualHost, node);
     }
