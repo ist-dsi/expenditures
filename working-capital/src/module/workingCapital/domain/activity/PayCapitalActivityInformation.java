@@ -8,6 +8,7 @@ import module.workingCapital.domain.WorkingCapitalRequest;
 public class PayCapitalActivityInformation extends ActivityInformation<WorkingCapitalProcess> {
 
     private WorkingCapitalRequest workingCapitalRequest;
+    private String paymentIdentification;
 
     public PayCapitalActivityInformation(final WorkingCapitalProcess workingCapitalProcess,
 	    final WorkflowActivity<WorkingCapitalProcess, ? extends ActivityInformation<WorkingCapitalProcess>> activity) {
@@ -24,7 +25,15 @@ public class PayCapitalActivityInformation extends ActivityInformation<WorkingCa
 
     @Override
     public boolean hasAllneededInfo() {
-	return getWorkingCapitalRequest() != null;
+	return getWorkingCapitalRequest() != null && getPaymentIdentification() != null && !getPaymentIdentification().isEmpty();
+    }
+
+    public String getPaymentIdentification() {
+        return paymentIdentification;
+    }
+
+    public void setPaymentIdentification(String paymentIdentification) {
+        this.paymentIdentification = paymentIdentification;
     }
 
 }

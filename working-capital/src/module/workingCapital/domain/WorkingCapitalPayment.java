@@ -9,7 +9,7 @@ public class WorkingCapitalPayment extends WorkingCapitalPayment_Base {
         super();
     }
 
-    public WorkingCapitalPayment(final WorkingCapitalRequest workingCapitalRequest, final Person person) {
+    public WorkingCapitalPayment(final WorkingCapitalRequest workingCapitalRequest, final Person person, final String paymentIdentification) {
 	this();
 	setWorkingCapital(workingCapitalRequest.getWorkingCapital());
 	setWorkingCapitalRequest(workingCapitalRequest);
@@ -17,11 +17,14 @@ public class WorkingCapitalPayment extends WorkingCapitalPayment_Base {
 	final Money value = workingCapitalRequest.getRequestedValue();
 	addDebt(value);
 	setValue(value);
+	setPaymentIdentification(paymentIdentification);
     }
 
     @Override
     public String getDescription() {
-	return getWorkingCapitalRequest().getPaymentMethod().getLocalizedName();
+	final String paymentMethod = getWorkingCapitalRequest().getPaymentMethod().getLocalizedName();
+	final String paymentIdentification = getPaymentIdentification();
+	return paymentIdentification == null || paymentIdentification.isEmpty() ? paymentMethod : paymentMethod + ": " + paymentIdentification;
     }
 
     @Override

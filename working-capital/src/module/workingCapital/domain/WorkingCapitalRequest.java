@@ -35,11 +35,11 @@ public class WorkingCapitalRequest extends WorkingCapitalRequest_Base {
 	return getProcessedByTreasury() != null;
     }
 
-    public void pay(final User user) {
+    public void pay(final User user, final String paymentIdentification) {
 	setProcessedByTreasury(new DateTime());
 	final Person person = user.getPerson();
 	setWorkingCapitalTreasuryProcessor(person);
-	new WorkingCapitalPayment(this, person);
+	new WorkingCapitalPayment(this, person, paymentIdentification);
     }
 
     @Override

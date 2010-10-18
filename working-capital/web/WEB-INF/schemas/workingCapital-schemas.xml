@@ -77,3 +77,8 @@
 		<property name="nullOptionHidden" value="true" />
 	</slot>
 </schema>		
+
+
+<schema name="activityInformation.PayCapitalActivity" type="module.workingCapital.domain.activity.PayCapitalActivityInformation" bundle="WORKING_CAPITAL_RESOURCES">
+	<slot name="paymentIdentification" key="label.module.workingCapital.paymentIdentification"/>
+</schema>		

@@ -26,17 +26,12 @@ public class PayCapitalActivity extends WorkflowActivity<WorkingCapitalProcess, 
     @Override
     protected void process(final PayCapitalActivityInformation payCapitalActivityInformation) {
 	final WorkingCapitalRequest workingCapitalRequest = payCapitalActivityInformation.getWorkingCapitalRequest();
-	workingCapitalRequest.pay(getLoggedPerson());
+	workingCapitalRequest.pay(getLoggedPerson(), payCapitalActivityInformation.getPaymentIdentification());
     }
 
     @Override
     public ActivityInformation<WorkingCapitalProcess> getActivityInformation(final WorkingCapitalProcess process) {
         return new PayCapitalActivityInformation(process, this);
-    }
-
-    @Override
-    public boolean isDefaultInputInterfaceUsed() {
-        return false;
     }
 
     @Override
