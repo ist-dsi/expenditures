@@ -19,9 +19,9 @@ public class ChangeAccountingUnitActivity extends WorkflowActivity<WorkingCapita
     public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
 	final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
 	return !workingCapital.isCanceledOrRejected()
-		&& workingCapital.isPendingAproval()
-		&& workingCapital.isRequester(user)
-		&& workingCapital.canChangeAccountingUnit();
+		&& workingCapital.canChangeAccountingUnit()
+		&& ((workingCapital.isRequester(user) && (workingCapital.isPendingAproval() || workingCapital.isPendingAcceptResponsability()))
+			|| workingCapital.isPendingVerification(user));
     }
 
     @Override
