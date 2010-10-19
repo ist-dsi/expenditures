@@ -593,11 +593,14 @@ public class StatisticsAction extends ContextBaseAction {
 	spreadsheet.setHeader("Estado");
 	spreadsheet.setHeader("Unidades");
 	spreadsheet.setHeader("CPV's");
+	spreadsheet.setHeader("Valor");
+	spreadsheet.setHeader("Valor Final");
 
 	final PaymentProcessYear paymentProcessYear = PaymentProcessYear.getPaymentProcessYearByYear(year);
 	for (final PaymentProcess paymentProcess : paymentProcessYear.getPaymentProcessSet()) {
 	    if (paymentProcess instanceof SimplifiedProcedureProcess) {
 		final SimplifiedProcedureProcess simplifiedProcedureProcess = (SimplifiedProcedureProcess) paymentProcess;
+		final AcquisitionRequest acquisitionRequest = simplifiedProcedureProcess.getRequest();
 
 		final Row row = spreadsheet.addRow();
 		row.setCell(simplifiedProcedureProcess.getProcessNumber());
@@ -616,7 +619,6 @@ public class StatisticsAction extends ContextBaseAction {
 		row.setCell(units.toString());
 
 		final Set<CPVReference> cpvReferences = new TreeSet<CPVReference>(CPVReference.COMPARATOR_BY_DESCRIPTION);
-		final AcquisitionRequest acquisitionRequest = simplifiedProcedureProcess.getRequest();
 		for (final RequestItem requestItem : acquisitionRequest.getRequestItemsSet()) {
 		    cpvReferences.add(requestItem.getCPVReference());
 		}
@@ -628,6 +630,9 @@ public class StatisticsAction extends ContextBaseAction {
 		    cpvs.append(cpvReference.getCode());
 		}
 		row.setCell(cpvs.toString());
+
+		row.setCell(acquisitionRequest.getTotalValue().toFormatStringWithoutCurrency());
+		row.setCell(acquisitionRequest.getRealTotalValue().toFormatStringWithoutCurrency());
 	    }
 	}
 
