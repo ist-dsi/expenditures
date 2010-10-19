@@ -5,9 +5,11 @@ import module.workflow.domain.WorkflowProcess;
 import module.workflow.util.FileUploadBeanResolver;
 import module.workflow.util.WorkflowFileUploadBean;
 import myorg.applicationTier.Authenticate.UserView;
+import myorg.util.BundleUtil;
 import myorg.util.ClassNameBundle;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.fileBeans.InvoiceFileBean;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.fileBeans.InvoiceFileBean.RequestItemHolder;
 
 @ClassNameBundle(bundle = "resources/AcquisitionResources")
 public class AcquisitionInvoice extends AcquisitionInvoice_Base {
@@ -38,10 +40,22 @@ public class AcquisitionInvoice extends AcquisitionInvoice_Base {
 	setInvoiceDate(fileBean.getInvoiceDate());
 
 	setInvoiceDate(fileBean.getInvoiceDate());
-	for (AcquisitionRequestItem item : fileBean.getItems()) {
-	    addRequestItems(item);
+	StringBuilder builder = new StringBuilder("<ul>");
+	for (RequestItemHolder itemHolder : fileBean.getItems()) {
+	    if (itemHolder.isAccountable()) {
+		addRequestItems(itemHolder.getItem());
+		builder.append("<li>");
+		builder.append(itemHolder.getDescription());
+		builder.append(" - ");
+		builder.append(BundleUtil.getFormattedStringFromResourceBundle("resources/AcquisitionResources",
+			"acquisitionRequestItem.label.quantity"));
+		builder.append(":");
+		builder.append(itemHolder.getAmount());
+		builder.append("</li>");
+	    }
 	}
-
+	builder.append("</ul>");
+	setConfirmationReport(builder.toString());
     }
 
     @Override

@@ -14,10 +14,14 @@
 <bean:define id="urlView">/workflowProcessManagement.do?method=viewProcess&amp;processId=<bean:write name="process" property="externalId"/></bean:define>
 <bean:define id="urlPostBack">/workflowProcessManagement.do?method=uploadPostBack&amp;processId=<bean:write name="process" property="externalId"/></bean:define>
 <bean:define id="urlInvalid">/workflowProcessManagement.do?method=invalidFileUpload&amp;processId=<bean:write name="process" property="externalId"/></bean:define>
-	
-<fr:edit name="bean" id="uploadFile" action='<%= "workflowProcessManagement.do?method=upload&processId=" + processOID %>' schema="<%= schema %>">
+
+<div class="dinline forminline">
+<fr:form action='<%= "/workflowProcessManagement.do?method=upload&processId=" + processOID %>' encoding="multipart/form-data">
+<fr:edit name="bean" id="uploadFile" visible="false"/>
+
+<fr:edit name="bean" id="form1"  schema="<%= schema %>">
 	<fr:layout name="tabular">
-		<fr:property name="classes" value="form"/>
+		<fr:property name="classes" value="form forminline"/>
 		<fr:property name="columnClasses" value=",,tderror"/>
 	</fr:layout>
 	<fr:destination name="cancel" path="<%= urlView %>" />
@@ -25,9 +29,31 @@
 	<fr:destination name="invalid" path="<%= urlInvalid %>"/>
 </fr:edit>
 
+<div id="form2">
+	<fr:edit name="bean" property="items" id="items" layout="tabular-editable" schema="itemDescription.and.amount">
+		<fr:layout>
+			<fr:property name="classes" value="forminline"/>
+		</fr:layout>
+	</fr:edit>
+</div>
+		
+		<html:submit styleClass="inputbutton">
+			<bean:message key="renderers.form.submit.name" bundle="RENDERER_RESOURCES"/>
+		</html:submit>
+	</fr:form>
+
+
+<fr:form action='<%= "/workflowProcessManagement.do?method=viewProcess&processId=" + processOID %>'>
+	<html:submit styleClass="inputbutton">
+		<bean:message key="renderers.form.cancel.name" bundle="RENDERER_RESOURCES"/>
+	</html:submit>
+
+</fr:form>
+</div>
+
 <script type="text/javascript">
 var checkBox = $("input[id$='hasMoreInvoices']");
-var itemList = $(checkBox).parents("tr").next("tr:last");
+var itemList = $("#form2");
 
 if (checkBox.attr('checked') == false) {
 	itemList.hide();
@@ -36,9 +62,10 @@ if (checkBox.attr('checked') == false) {
 checkBox.click(function(){	
 	itemList.toggle();
 	if (checkBox.attr('checked') == false) {
-		$("input[id*=items_]").each(function(){
+		$("input[name*=accountable]").each(function(){
 			$(this).attr('checked','true');
 		});
 	}
 });
+
 </script>

@@ -204,6 +204,7 @@ class authorizations.AuthorizationLog {
 	}
 	
 	class acquisitions.AcquisitionInvoice extends acquisitions.PaymentProcessInvoice {
+		String confirmationReport;
 	}
 	
 	class acquisitions.refund.RefundableInvoiceFile extends acquisitions.PaymentProcessInvoice {
