@@ -34,6 +34,11 @@
 				<bean:message key="label.processedDump.logs" bundle="STATISTICS_RESOURCES"/>
 			</html:link>
 		</li>
+		<li>
+			<html:link action="/statistics.do?method=downloadStatisticsForConfirmedProcesses" paramId="year" paramName="yearBean" paramProperty="year">
+				<bean:message key="label.statistics.report.confirmed.processes" bundle="STATISTICS_RESOURCES"/>
+			</html:link>
+		</li>
 	</ul>
 </div>
 

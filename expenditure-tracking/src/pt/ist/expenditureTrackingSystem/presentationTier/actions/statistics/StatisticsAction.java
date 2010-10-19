@@ -9,11 +9,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.util.Map.Entry;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -21,7 +21,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import module.workflow.domain.ActivityLog;
 import module.workflow.domain.WorkflowLog;
-import module.workflow.domain.WorkflowProcess;
 import myorg.domain.util.Money;
 import myorg.presentationTier.actions.ContextBaseAction;
 
@@ -32,15 +31,20 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess.ProcessClassification;
+import pt.ist.expenditureTrackingSystem.domain.organization.CostCenter;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
+import pt.ist.expenditureTrackingSystem.domain.organization.Project;
+import pt.ist.expenditureTrackingSystem.domain.organization.SubProject;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 import pt.ist.expenditureTrackingSystem.domain.statistics.AfterTheFactProcessTotalValueStatistics;
@@ -576,4 +580,82 @@ public class StatisticsAction extends ContextBaseAction {
 
 	return buffer.toString();
     }
+
+    public ActionForward downloadStatisticsForConfirmedProcesses(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) throws IOException {
+	final Integer year = Integer.valueOf((String) getAttribute(request, "year"));
+	return streamSpreadsheet(response, "confirmedProcesses", createStatisticsByCPV(year), year);
+    }
+
+    private Spreadsheet createStatisticsForConfirmedProcesses(final Integer year) {
+	final Spreadsheet spreadsheet = new Spreadsheet("ConfirmedProcesses " + year);
+	spreadsheet.setHeader("Processo");
+	spreadsheet.setHeader("Estado");
+	spreadsheet.setHeader("Unidades");
+	spreadsheet.setHeader("CPV's");
+
+	final PaymentProcessYear paymentProcessYear = PaymentProcessYear.getPaymentProcessYearByYear(year);
+	for (final PaymentProcess paymentProcess : paymentProcessYear.getPaymentProcessSet()) {
+	    if (paymentProcess instanceof SimplifiedProcedureProcess) {
+		final SimplifiedProcedureProcess simplifiedProcedureProcess = (SimplifiedProcedureProcess) paymentProcess;
+
+		final Row row = spreadsheet.addRow();
+		row.setCell(simplifiedProcedureProcess.getProcessNumber());
+
+		final AcquisitionProcessStateType acquisitionProcessStateType = simplifiedProcedureProcess.getAcquisitionProcessStateType();
+		row.setCell(acquisitionProcessStateType.getLocalizedName());
+
+		final StringBuilder units = new StringBuilder();
+		for (final Unit unit : simplifiedProcedureProcess.getFinancingUnits()) {
+		    final String unitCode = getUnitCode(unit);
+		    units.append(unitCode);
+		}
+		    if (units.length() > 1) {
+			units.append(", ");
+		    }
+		row.setCell(units.toString());
+
+		final Set<CPVReference> cpvReferences = new TreeSet<CPVReference>(CPVReference.COMPARATOR_BY_DESCRIPTION);
+		final AcquisitionRequest acquisitionRequest = simplifiedProcedureProcess.getRequest();
+		for (final RequestItem requestItem : acquisitionRequest.getRequestItemsSet()) {
+		    cpvReferences.add(requestItem.getCPVReference());
+		}
+		final StringBuilder cpvs = new StringBuilder();
+		for (final CPVReference cpvReference : cpvReferences) {
+		    if (cpvs.length() > 1) {
+			cpvs.append(", ");
+		    }
+		    cpvs.append(cpvReference.getCode());
+		}
+		row.setCell(cpvs.toString());
+	    }
+	}
+
+	for (final CPVReference reference : getMyOrg().getExpenditureTrackingSystem().getCPVReferencesSet()) {
+	    final Money money = reference.getTotalAmountAllocated(year);
+	    if (!money.isZero()) {
+		final Row row = spreadsheet.addRow();
+		row.setCell(reference.getCode());
+		row.setCell(reference.getDescription());
+		row.setCell(money.toFormatStringWithoutCurrency());
+	    }
+	}
+	return spreadsheet;
+    }
+
+    private String getUnitCode(final Unit unit) {
+	if (unit instanceof CostCenter) {
+	    final CostCenter costCenter = (CostCenter) unit;
+	    return "CC. " +  costCenter.getCostCenter();
+	}
+	if (unit instanceof Project) {
+	    final Project project = (Project) unit;
+	    return "P. " + project.getProjectCode();
+	}
+	if (unit instanceof SubProject) {
+	    return getUnitCode(unit.getParentUnit());
+	}
+	throw new Error("Unreachable Code.");
+    }
+
 }
