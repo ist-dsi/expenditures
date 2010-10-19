@@ -584,7 +584,7 @@ public class StatisticsAction extends ContextBaseAction {
     public ActionForward downloadStatisticsForConfirmedProcesses(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) throws IOException {
 	final Integer year = Integer.valueOf((String) getAttribute(request, "year"));
-	return streamSpreadsheet(response, "confirmedProcesses", createStatisticsByCPV(year), year);
+	return streamSpreadsheet(response, "confirmedProcesses", createStatisticsForConfirmedProcesses(year), year);
     }
 
     private Spreadsheet createStatisticsForConfirmedProcesses(final Integer year) {
@@ -611,12 +611,12 @@ public class StatisticsAction extends ContextBaseAction {
 		final StringBuilder units = new StringBuilder();
 		for (final Unit unit : simplifiedProcedureProcess.getFinancingUnits()) {
 		    final String unitCode = getUnitCode(unit);
-		    units.append(unitCode);
-		}
 		    if (units.length() > 1) {
 			units.append(", ");
 		    }
-		row.setCell(units.toString());
+		    units.append(unitCode);
+		}
+		row.setCell(units.length() == 0 ? " " : units.toString());
 
 		final Set<CPVReference> cpvReferences = new TreeSet<CPVReference>(CPVReference.COMPARATOR_BY_DESCRIPTION);
 		for (final RequestItem requestItem : acquisitionRequest.getRequestItemsSet()) {
@@ -629,22 +629,14 @@ public class StatisticsAction extends ContextBaseAction {
 		    }
 		    cpvs.append(cpvReference.getCode());
 		}
-		row.setCell(cpvs.toString());
+		row.setCell(cpvs.length() == 0 ? " " : cpvs.toString());
 
 		row.setCell(acquisitionRequest.getTotalValue().toFormatStringWithoutCurrency());
-		row.setCell(acquisitionRequest.getRealTotalValue().toFormatStringWithoutCurrency());
+		final Money realTotalValue = acquisitionRequest.getRealTotalValue();
+		row.setCell(realTotalValue == null ? " " : realTotalValue.toFormatStringWithoutCurrency());
 	    }
 	}
 
-	for (final CPVReference reference : getMyOrg().getExpenditureTrackingSystem().getCPVReferencesSet()) {
-	    final Money money = reference.getTotalAmountAllocated(year);
-	    if (!money.isZero()) {
-		final Row row = spreadsheet.addRow();
-		row.setCell(reference.getCode());
-		row.setCell(reference.getDescription());
-		row.setCell(money.toFormatStringWithoutCurrency());
-	    }
-	}
 	return spreadsheet;
     }
 
