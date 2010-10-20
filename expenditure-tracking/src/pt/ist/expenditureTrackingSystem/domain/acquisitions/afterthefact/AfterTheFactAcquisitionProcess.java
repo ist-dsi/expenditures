@@ -7,7 +7,6 @@ import java.util.List;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.LabelLog;
-import module.workflow.domain.LabelLog_Base;
 import module.workflow.domain.ProcessFile;
 import module.workflow.domain.WorkflowProcess;
 import myorg.domain.User;
@@ -198,6 +197,11 @@ public class AfterTheFactAcquisitionProcess extends AfterTheFactAcquisitionProce
     @Override
     public User getProcessCreator() {
 	return getExecutionLogs(LabelLog.class).iterator().next().getActivityExecutor();
+    }
+
+    @Override
+    public Money getTotalValue() {
+	return getAcquisitionAfterTheFact().getValue();
     }
 
 }

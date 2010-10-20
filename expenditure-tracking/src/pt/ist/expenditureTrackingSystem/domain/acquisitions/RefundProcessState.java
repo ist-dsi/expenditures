@@ -75,4 +75,12 @@ public class RefundProcessState extends RefundProcessState_Base {
 	return getRefundProcessStateType() == RefundProcessStateType.CANCELED;
     }
 
+    @Override
+    public boolean isInFinalStage() {
+	final RefundProcessStateType refundProcessStateType = getRefundProcessStateType();
+	return refundProcessStateType == RefundProcessStateType.INVOICES_CONFIRMED 
+		|| refundProcessStateType == RefundProcessStateType.FUNDS_ALLOCATED_PERMANENTLY
+		|| refundProcessStateType == RefundProcessStateType.REFUNDED;
+    }
+
 }

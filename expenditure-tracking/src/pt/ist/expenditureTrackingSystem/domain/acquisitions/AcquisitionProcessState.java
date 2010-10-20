@@ -120,4 +120,11 @@ public class AcquisitionProcessState extends AcquisitionProcessState_Base {
 	return isPendingFundAllocation(); 
     }
 
+    @Override
+    public boolean isInFinalStage() {
+	return isInState(AcquisitionProcessStateType.INVOICE_CONFIRMED)
+		|| isInState(AcquisitionProcessStateType.FUNDS_ALLOCATED_PERMANENTLY)
+		|| isInState(AcquisitionProcessStateType.ACQUISITION_PAYED);
+    }
+
 }

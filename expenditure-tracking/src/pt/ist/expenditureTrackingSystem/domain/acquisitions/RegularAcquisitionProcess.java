@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import myorg.domain.exceptions.DomainException;
+import myorg.domain.util.Money;
 
 import org.joda.time.LocalDate;
 
@@ -220,6 +221,11 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
     @Override
     public boolean isInAllocatedToUnitState() {
 	return getAcquisitionProcessState().isInAllocatedToUnitState();
+    }
+
+    @Override
+    public Money getTotalValue() {
+        return getAcquisitionRequest().getCurrentTotalValue();
     }
 
 }

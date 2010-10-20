@@ -400,4 +400,6 @@ public abstract class PaymentProcess extends PaymentProcess_Base implements HasP
 	return Collections.emptyList();
     }
 
+    public abstract Money getTotalValue();
+
 }

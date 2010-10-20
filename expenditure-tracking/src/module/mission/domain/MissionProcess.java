@@ -19,6 +19,7 @@ import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.WorkflowProcess;
 import module.workflow.domain.WorkflowProcessComment;
 import module.workflow.domain.WorkflowQueue;
+import module.workflow.util.PresentableProcessState;
 import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.RoleType;
 import myorg.domain.User;
@@ -29,6 +30,7 @@ import myorg.util.ClassNameBundle;
 import org.joda.time.DateTime;
 
 import pt.ist.emailNotifier.domain.Email;
+import pt.ist.expenditureTrackingSystem.domain.ProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 
 @ClassNameBundle(bundle = "resources/MissionResources")
@@ -451,8 +453,19 @@ public abstract class MissionProcess extends MissionProcess_Base {
 
     public boolean isReadyForMissionTermination() {
 	final Mission mission = getMission();
-	return mission.isReadyForMissionTermination()
-		&& (!hasAnyActivePaymentProcess() || false /* TODO: or it has payment processes but these already have final fund allocation values set. */);
+	return mission.isReadyForMissionTermination() && (!hasAnyActivePaymentProcess() || allPaymentProcessesAreConcluded());
+    }
+
+    private boolean allPaymentProcessesAreConcluded() {
+	for (final PaymentProcess paymentProcess : getPaymentProcessSet()) {
+	    if (paymentProcess.isActive()) {
+		final ProcessState currentProcessState = paymentProcess.getCurrentProcessState();
+		if (!currentProcessState.isInFinalStage()) {
+		    return false;
+		}
+	    }
+	}
+	return true;
     }
 
     public boolean isReadyForMissionTermination(final User user) {

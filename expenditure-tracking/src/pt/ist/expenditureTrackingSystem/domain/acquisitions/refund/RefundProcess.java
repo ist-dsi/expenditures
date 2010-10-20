@@ -17,6 +17,7 @@ import module.workflow.domain.WorkflowProcess;
 import module.workflow.util.PresentableProcessState;
 import myorg.domain.User;
 import myorg.domain.exceptions.DomainException;
+import myorg.domain.util.Money;
 import myorg.util.BundleUtil;
 import myorg.util.ClassNameBundle;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
@@ -473,6 +474,11 @@ public class RefundProcess extends RefundProcess_Base {
 	List<Class<? extends ProcessFile>> uploadableFileTypes = super.getUploadableFileTypes();
 	uploadableFileTypes.remove(RefundableInvoiceFile.class);
 	return uploadableFileTypes;
+    }
+
+    @Override
+    public Money getTotalValue() {
+	return getRequest().getCurrentTotalValue();
     }
 
 }

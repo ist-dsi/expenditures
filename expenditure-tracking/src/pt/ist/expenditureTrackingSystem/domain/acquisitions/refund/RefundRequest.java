@@ -7,10 +7,8 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import myorg.domain.util.Money;
-
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
-import pt.ist.expenditureTrackingSystem.domain.dto.RefundItemBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
@@ -92,6 +90,11 @@ public class RefundRequest extends RefundRequest_Base {
 	SortedSet<RefundItem> set = new TreeSet<RefundItem>(RefundItem.COMPARATOR);
 	set.addAll(getRefundItemsSet());
 	return set;
+    }
+
+    public Money getCurrentTotalValue() {
+	final Money realTotalValue = getRealTotalValue();
+	return realTotalValue == null ? getTotalValue() : realTotalValue;
     }
 
 }

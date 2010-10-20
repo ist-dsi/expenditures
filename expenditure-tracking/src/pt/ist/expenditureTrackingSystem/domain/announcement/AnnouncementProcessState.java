@@ -43,4 +43,9 @@ public class AnnouncementProcessState extends AnnouncementProcessState_Base {
 	return getAnnouncementProcessStateType().getLocalizedName();
     }
 
+    @Override
+    public boolean isInFinalStage() {
+	return true;
+    }
+
 }
