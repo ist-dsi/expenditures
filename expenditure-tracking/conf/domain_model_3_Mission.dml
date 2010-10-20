@@ -1,0 +1,640 @@
+package module.mission.domain;
+
+enum module.mission.domain.VehiclItemJustificationMotive as VehiclItemJustificationMotive;
+
+valueType java.math.BigDecimal as BigDecimal {
+    externalizeWith {
+        String toString();
+    }
+}
+
+valueType myorg.domain.util.Money as Money {
+    externalizeWith {
+        String exportAsString();
+    }
+
+    internalizeWith importFromString();
+}
+
+
+class MissionSystem {
+}
+
+
+class MissionFinancer {
+}
+
+class Mission {
+	String ojbConcreteClass;
+	String location;
+	String objective;
+	Boolean grantOwnerEquivalence;
+	Boolean isApprovedByMissionResponsible;
+	String fundAllocationLog;
+
+	/** Delete this after mission version refactor is complete */
+	DateTime daparture;
+	DateTime arrival;
+}
+
+	class ForeignMission extends Mission {
+	}
+
+	class NationalMission extends Mission {
+	}
+
+class MissionVersion {
+	DateTime sinceDateTime;
+	DateTime daparture;
+	DateTime arrival;
+	Boolean changesAfterArrival;
+	DateTime sentForTermination;
+	String descriptionOfChangesAfterArrival;
+	Boolean isArchived;
+}
+
+class MissionChangeDescription {
+	DateTime revertInstant;
+	String description;
+}
+
+class MissionItem {
+	String ojbConcreteClass;
+}
+
+	class AccommodationItem extends MissionItem {
+		Integer numberOfNights;
+		Money value;
+	}
+
+	class OtherMissionItem extends MissionItem {
+		String description;
+		Money value;
+	}
+
+		class ConferenceItem extends OtherMissionItem {
+		}
+
+	class PersonelExpenseItem extends MissionItem {
+		DateTime start;
+		DateTime end;
+	}
+
+		class NoPersonelExpenseItem extends PersonelExpenseItem {
+		}
+
+		class FullPersonelExpenseItem extends PersonelExpenseItem {
+		}
+
+		class OtherPersonelExpenseItem extends PersonelExpenseItem {
+			Money value;
+		}
+
+		class WithAccommodationPersonelExpenseItem extends PersonelExpenseItem {
+		}
+
+			class WithAccommodationAndOneMealPersonelExpenseItem extends WithAccommodationPersonelExpenseItem {
+			}
+
+			class WithAccommodationAndTwoMealsPersonelExpenseItem extends WithAccommodationPersonelExpenseItem {
+			}
+
+	class TransportationItem extends MissionItem {
+		String itinerary;
+		Money value;
+	}
+
+		class BoatItem extends TransportationItem {
+		}
+
+		class BusItem extends TransportationItem {
+		}
+
+		class OtherTransportationItem extends TransportationItem {
+			String typeOfTransportation;
+		}
+
+		class PlaneItem extends TransportationItem {
+		}
+
+		class TrainItem extends TransportationItem {
+		}
+
+		class VehiclItem extends TransportationItem {
+		}
+
+			class RentedVehiclItem extends VehiclItem {
+			}
+
+			class PersonalVehiclItem extends VehiclItem {
+				Integer kms;
+			}
+
+class MissionItemFinancer {
+	String ojbConcreteClass;
+	Money amount;
+	String fundAllocationId;
+}
+
+	class MissionItemProjectFinancer extends MissionItemFinancer {
+		String projectFundAllocationId;
+	}
+
+
+class MissionProcess extends .module.workflow.domain.WorkflowProcess {
+	Boolean isUnderConstruction;
+	Boolean isCanceled;
+}
+
+	class ForeignMissionProcess extends MissionProcess {
+	}
+
+	class NationalMissionProcess extends MissionProcess {
+	}
+
+class MissionProcessLateJustification {
+	String justification;
+	DateTime justificationDateTime;
+}
+
+class MissionYear {
+	Integer year;
+	Integer counter;
+}
+
+class PersonMissionAuthorization {
+	DateTime authorizationDateTime;
+}
+
+class VehiclItemJustification {
+	VehiclItemJustificationMotive motive;
+	String justification;
+}
+
+class TemporaryMissionItemEntry {
+	DateTime created;
+}
+
+class ClearTemporaryMissionItems extends .myorg.domain.scheduler.Task {	
+}
+
+class MissionAuthorizationAccountabilityType {
+}
+
+class DailyPersonelExpenseTable {
+	LocalDate aplicableSince;
+	String aplicableToMissionType;
+}
+
+class DailyPersonelExpenseCategory {
+	String description;
+	Money value;
+	BigDecimal minSalaryValue;
+}
+
+class Salary {
+	BigDecimal value;
+}
+
+class AccountabilityTypeQueue {
+}
+
+class EmailDigester extends .myorg.domain.scheduler.Task {
+}
+
+
+relation MyOrgMissionSystem {
+	.myorg.domain.MyOrg playsRole myOrg;
+	MissionSystem playsRole missionSystem;
+}
+
+relation MissionSystemMissionFinancer {
+	MissionSystem playsRole missionSystem;
+	MissionFinancer playsRole financer {
+		multiplicity *;
+	}
+}
+
+/** Delete this after mission version refactor is complete */
+relation MissionMissionFinancer {
+	Mission playsRole missions;
+	MissionFinancer playsRole financer {
+		multiplicity *;
+	}
+}
+
+relation MissionVersionMissionFinancer {
+	MissionVersion playsRole missionVersion;
+	MissionFinancer playsRole financer {
+		multiplicity *;
+	}
+}
+
+relation MissionSystemMissionProcess {
+	MissionSystem playsRole missionSystem;
+	MissionProcess playsRole missionProcesses {
+		multiplicity *;
+	}
+}
+
+relation MissionSystemMission {
+	MissionSystem playsRole missionSystem;
+	Mission playsRole missions {
+		multiplicity *;
+	}
+}
+
+relation MissionSystemMissionVersion {
+	MissionSystem playsRole missionSystem;
+	MissionVersion playsRole missionVersions {
+		multiplicity *;
+	}
+}
+
+relation MissionSystemMissionItem {
+	MissionSystem playsRole missionSystem;
+	MissionItem playsRole missionItems {
+		multiplicity *;
+	}
+}
+
+/** Delete this after mission version refactor is complete */
+relation MissionMissionItem {
+	Mission playsRole mission;
+	MissionItem playsRole missionItems {
+		multiplicity *;
+	}
+}
+
+relation MissionVersionMissionItem {
+	MissionVersion playsRole missionVersion;
+	MissionItem playsRole missionItems {
+		multiplicity *;
+	}
+}
+
+relation MissionProcessMission {
+	MissionProcess playsRole missionProcess;
+	Mission playsRole mission;
+}
+
+relation MissionMissionVersion {
+	Mission playsRole mission;
+	MissionVersion playsRole missionVersions {
+		multiplicity *;
+	}
+}
+
+relation MissionSystemPersonMissionAuthorization {
+	MissionSystem playsRole missionSystem;
+	PersonMissionAuthorization playsRole personMissionAuthorizations {
+		multiplicity *;
+	}
+}
+
+relation MissionPersonMissionAuthorization {
+	Mission playsRole mission;
+	PersonMissionAuthorization playsRole personMissionAuthorizations {
+		multiplicity *;
+	}
+}
+
+relation MissionRequestingUnit {
+	.pt.ist.expenditureTrackingSystem.domain.organization.Unit playsRole requestingUnit;
+	Mission playsRole missions {
+		multiplicity *;
+	}
+}
+
+relation MissionResponsible {
+	.module.organization.domain.Party playsRole missionResponsible;
+	Mission playsRole missionsFromResponsible {
+		multiplicity *;
+	}
+}
+
+relation MissionRequestingPerson {
+	.module.organization.domain.Person playsRole requestingPerson;
+	Mission playsRole requestedMissions {
+		multiplicity *;
+	}
+}
+
+relation MissionFinancerUnit {
+	.pt.ist.expenditureTrackingSystem.domain.organization.Unit playsRole unit;
+	MissionFinancer playsRole financers {
+		multiplicity *;
+	}
+}
+
+relation MissionFinancerApproval {
+	.pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization playsRole approval;
+	MissionFinancer playsRole approvedMissionFinancers {
+		multiplicity *;
+	}
+}
+
+relation MissionFinancerAuthorization {
+	.pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization playsRole authorization;
+	MissionFinancer playsRole authorizedMissionFinancers {
+		multiplicity *;
+	}
+}
+
+relation MissionItemPerson {
+	.module.organization.domain.Person playsRole people {
+		multiplicity *;
+	}
+	MissionItem playsRole missionItems {
+		multiplicity *;
+	}
+}
+
+relation PersonMissionAuthorizationUnit {
+	.module.organization.domain.Unit playsRole unit;
+	PersonMissionAuthorization playsRole personMissionAuthorization {
+		multiplicity *;
+	}
+}
+
+relation PersonMissionAuthorizationAuthority {
+	.module.organization.domain.Person playsRole authority;
+	PersonMissionAuthorization playsRole personMissionAuthorizationFromAuthority {
+		multiplicity *;
+	}
+}
+
+relation PersonMissionAuthorizationSubject {
+	.module.organization.domain.Person playsRole subject;
+	PersonMissionAuthorization playsRole personMissionAuthorizationFromSubject {
+		multiplicity *;
+	}
+}
+
+relation PersonMissionAuthorizationPersonMissionAuthorization {
+	PersonMissionAuthorization playsRole next;
+	PersonMissionAuthorization playsRole previous;
+}
+
+relation MissionPerson {
+	Mission playsRole missions {
+		multiplicity *;
+	}
+	.module.organization.domain.Person playsRole participantes {
+		multiplicity *;
+	}
+}
+
+relation MissionPersonSalary {
+	Mission playsRole missionsFromParticipantsWithoutSalary {
+		multiplicity *;
+	}
+	.module.organization.domain.Person playsRole participantesWithoutSalary {
+		multiplicity *;
+	}
+}
+
+relation MissionSystemMissionYear {
+	MissionSystem playsRole missionSystem;
+	MissionYear playsRole missionYear {
+		multiplicity *;
+	}
+}
+
+relation MissionProcessYearMission {
+	MissionYear playsRole missionYear;
+	MissionProcess playsRole missionProcess {
+		multiplicity *;
+	}
+}
+
+relation MissionSystemVehiclItemJustification {
+	MissionSystem playsRole missionSystem;
+	VehiclItemJustification playsRole vehiclItemJustification {
+		multiplicity *;
+	}
+}
+
+relation VehiclItemVehiclItemJustification {
+	VehiclItem playsRole vehiclItem;
+	VehiclItemJustification playsRole vehiclItemJustification;
+}
+
+relation MissionSystemTemporaryMissionItemEntry {
+	MissionSystem playsRole missionSystem;
+	TemporaryMissionItemEntry playsRole temporaryMissionItemEntries {
+		multiplicity *;
+	}
+}
+
+relation TemporaryMissionItemMissionItem {
+	TemporaryMissionItemEntry playsRole temporaryMissionItemEntry;
+	MissionItem playsRole missionItem;
+}
+
+relation TemporaryMissionItemUser {
+	.myorg.domain.User playsRole user;
+	TemporaryMissionItemEntry playsRole temporaryMissionItemEntries {
+		multiplicity *;
+	}
+}
+
+relation MissionSystemMissionItemFinancer {
+	MissionSystem playsRole missionSystem;
+	MissionItemFinancer playsRole missionItemFinancers {
+		multiplicity *;
+	}
+}
+
+relation MissionItemFinancerMissionItem {
+	MissionItem playsRole missionItem;
+	MissionItemFinancer playsRole missionItemFinancers {
+		multiplicity *;
+	}
+}
+
+relation MissionItemFinancerMissionFinancer {
+	MissionFinancer playsRole missionFinancer;
+	MissionItemFinancer playsRole missionItemFinancers {
+		multiplicity *;
+	}
+}
+
+relation MissionSystemOrganizationalModel {
+	MissionSystem playsRole missionSystem;
+	.module.organization.domain.OrganizationalModel playsRole organizationalModel;
+}
+
+relation MissionSystemMissionAuthorizationAccountabilityType {
+	MissionSystem playsRole missionSystem;
+	MissionAuthorizationAccountabilityType playsRole missionAuthorizationAccountabilityTypes {
+		multiplicity *;
+	}
+}
+
+relation MissionAuthorizationAccountabilityTypeAccountabilityType {
+	.module.organization.domain.AccountabilityType playsRole accountabilityType;
+	MissionAuthorizationAccountabilityType playsRole missionAuthorizationAccountabilityTypes {
+		multiplicity *;
+	}
+}
+
+relation MissionAuthorizationAccountabilityTypeAccountabilityTypes {
+	.module.organization.domain.AccountabilityType playsRole accountabilityTypes {
+		multiplicity *;
+	}
+	MissionAuthorizationAccountabilityType playsRole missionAuthorizationAccountabilityTypesFromAccountabilityTypes {
+		multiplicity *;
+	}
+}
+
+relation MissionWithNoFinancerApproval {
+	.pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization playsRole approvalForMissionWithNoFinancers;
+	Mission playsRole approvedMissions {
+		multiplicity *;
+	}
+}
+
+relation MissionSystemDailyPersonelExpenseTable {
+	MissionSystem playsRole missionSystem;
+	DailyPersonelExpenseTable playsRole dailyPersonelExpenseTables {
+		multiplicity *;
+	}
+}
+
+relation MissionSystemDailyPersonelExpenseCategory {
+	MissionSystem playsRole missionSystem;
+	DailyPersonelExpenseCategory playsRole dailyPersonelExpenseCategories {
+		multiplicity *;
+	}
+}
+
+relation DailyPersonelExpenseTableDailyPersonelExpenseCategory {
+	DailyPersonelExpenseTable playsRole dailyPersonelExpenseTable;
+	DailyPersonelExpenseCategory playsRole dailyPersonelExpenseCategories {
+		multiplicity *;
+	}
+}
+
+relation PersonelExpenseItemDailyPersonelExpenseCategory {
+	PersonelExpenseItem playsRole personelExpenseItems {
+		multiplicity *;
+	}
+	DailyPersonelExpenseCategory playsRole dailyPersonelExpenseCategory;
+}
+
+relation MissionSystemCountry {
+	MissionSystem playsRole missionSystem;
+	.module.geography.domain.Country playsRole country;
+}
+
+relation ForeignMissionCountry {
+	ForeignMission playsRole foreignMissions {
+		multiplicity *;
+	}
+	.module.geography.domain.Country playsRole country;
+}
+
+relation MissionSystemAccountabilityTypeQueue {
+	MissionSystem playsRole missionSystem;
+	AccountabilityTypeQueue playsRole accountabilityTypeQueues {
+		multiplicity *;
+	}
+}
+
+relation AccountabilityTypeQueueAccountabilityType {
+	AccountabilityTypeQueue playsRole accountabilityTypeQueue;
+	.module.organization.domain.AccountabilityType playsRole accountabilityType;
+}
+
+relation AccountabilityTypeQueueWorkflowQueue {
+	AccountabilityTypeQueue playsRole accountabilityTypeQueues {
+		multiplicity *;
+	}
+	.module.workflow.domain.WorkflowQueue playsRole workflowQueue;
+}
+
+relation MissionSystemMissionProcessLateJustification {
+	MissionSystem playsRole missionSystem;
+	MissionProcessLateJustification playsRole missionProcessLateJustification {
+		multiplicity *;
+	}
+}
+
+relation MissionProcessMissionProcessLateJustification {
+	MissionProcess playsRole missionProcess;
+	MissionProcessLateJustification playsRole missionProcessLateJustifications {
+		multiplicity *;
+	}
+}
+
+relation PersonMissionProcessLateJustification {
+	MissionProcessLateJustification playsRole missionProcessLateJustifications {
+		multiplicity *;
+	}
+	.module.organization.domain.Person playsRole person; 
+}
+
+relation MissionSystemSalary {
+	MissionSystem playsRole missionSystem;
+	Salary playsRole salaries {
+		multiplicity *;
+	}
+}
+
+relation PersonSalary {
+	.module.organization.domain.Person playsRole people {
+		multiplicity *;
+	}
+	Salary playsRole salary;
+}
+
+relation MissionSystemGovernmentMember {
+	MissionSystem playsRole missionSystemFromGovernmentMembership;
+	.module.organization.domain.Person playsRole governmentMembers {
+		multiplicity *;
+	}
+}
+
+relation MissionSystemMissionChangeDescription {
+	MissionSystem playsRole missionSystem;
+	MissionChangeDescription playsRole missionChangeDescription {
+		multiplicity *;
+	}
+}
+
+relation MissionMissionChangeDescription {
+	Mission playsRole mission;
+	MissionChangeDescription playsRole missionChangeDescription {
+		multiplicity *;
+	}
+}
+
+relation MissionSystemUnitWithResumedAuthorizations {
+	MissionSystem playsRole missionSystemFromUnitWithResumedAuthorizations;
+	.module.organization.domain.Unit playsRole unitsWithResumedAuthorizations {
+		multiplicity *;
+	}
+}
+
+relation MissionVersionTerminator {
+	MissionVersion playsRole missionVersion {
+		multiplicity *;
+	}
+	.module.organization.domain.Person playsRole terminator;
+}
+
+relation MissionVersionMissionItemFinancerArchive {
+	MissionVersion playsRole missionVersionFromArchive;
+	MissionItemFinancer playsRole archivedMissionItemFinancer {
+		multiplicity *;
+	}
+}
+
+relation MissionVersionMissionItemProjectFinancerArchive {
+	MissionVersion playsRole missionVersionFromProjectArchive;
+	MissionItemProjectFinancer playsRole archivedMissionItemProjectFinancer {
+		multiplicity *;
+	}
+}
+

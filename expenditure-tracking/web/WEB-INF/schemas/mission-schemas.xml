@@ -1,0 +1,434 @@
+<schema name="module.mission.domain.util.MissionProcessCreationBean" type="module.mission.domain.util.MissionProcessCreationBean" bundle="MISSION_RESOURCES">
+<!-- 
+	<slot name="missionResponsible" layout="autoComplete" key="label.mission.requester.unit" help="label.mission.requester.unit.help"
+			validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+        <property name="labelField" value="presentationName"/>
+		<property name="format" value="${presentationName}"/>
+		<property name="minChars" value="3"/>		
+		<property name="args" value="provider=module.organization.presentationTier.renderers.providers.PartiesAutoCompleteProvider"/>
+		<property name="classes" value="inputsize300px"/>
+	</slot>
+ -->
+	<slot name="country" key="label.mission.country" layout="autoComplete" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+        <property name="labelField" value="name.content"/>
+		<property name="format" value="${name.content}"/>
+		<property name="minChars" value="3"/>		
+		<property name="args" value="provider=module.geography.presentationTier.provider.CountryAutoCompleteProvider"/>
+		<property name="classes" value="inputsize300px"/>
+	</slot>
+	<slot name="location" key="label.mission.location" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="daparture" key="label.mission.departure" layout="picker" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="arrival" key="label.mission.arrival" layout="picker" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="objective" key="label.mission.objective" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="size" value="60"/>
+	</slot>
+<!-- 
+	<slot name="useRequestingUnitAsPayingUnit" key="label.mission.useRequestingUnitAsPayingUnit" help="label.mission.useRequestingUnitAsPayingUnit.help"/>
+ -->
+	<slot name="isCurrentUserAParticipant" key="label.mission.isCurrentUserAParticipant" help="label.mission.isCurrentUserAParticipant.help"/>
+</schema>
+
+<schema name="module.mission.domain.NationalMission" type="module.mission.domain.NationalMission" bundle="MISSION_RESOURCES">
+	<slot name="missionResponsible.presentationName" layout="link" key="label.mission.requester.unit">
+		<property name="useParent" value="true"/>
+		<property name="blankTarget" value="false"/>
+		<property name="linkFormat" value="/expenditureTrackingOrganization.do?unitOid=${missionResponsible.externalId}&amp;method=viewOrganization"/>
+		<property name="classes" value="secondaryLink"/>
+	</slot>	
+	<slot name="requestingPerson.name" layout="link" key="label.mission.requester.person">
+		<property name="useParent" value="true"/>
+		<property name="blankTarget" value="false"/>
+		<property name="linkFormat" value="/expenditureTrackingOrganization.do?personOid=${requestingPerson.externalId}&amp;method=viewPerson"/>
+		<property name="classes" value="secondaryLink"/>
+	</slot>
+	<slot name="location" key="label.mission.location"/>
+	<slot name="daparture" key="label.mission.departure"/>
+	<slot name="arrival" key="label.mission.arrival"/>
+	<slot name="objective" key="label.mission.objective"/>
+	<slot name="value" key="label.mission.value"/>
+</schema>
+
+<schema name="module.mission.domain.ForeignMission" type="module.mission.domain.ForeignMission" bundle="MISSION_RESOURCES">
+	<slot name="missionResponsible.presentationName" layout="link" key="label.mission.requester.unit">
+		<property name="useParent" value="true"/>
+		<property name="blankTarget" value="false"/>
+		<property name="linkFormat" value="/expenditureTrackingOrganization.do?unitOid=${missionResponsible.externalId}&amp;method=viewOrganization"/>
+		<property name="classes" value="secondaryLink"/>
+	</slot>	
+	<slot name="requestingPerson.name" layout="link" key="label.mission.requester.person">
+		<property name="useParent" value="true"/>
+		<property name="blankTarget" value="false"/>
+		<property name="linkFormat" value="/expenditureTrackingOrganization.do?personOid=${requestingPerson.externalId}&amp;method=viewPerson"/>
+		<property name="classes" value="secondaryLink"/>
+	</slot>
+	<slot name="country.name" key="label.mission.country"/>
+	<slot name="location" key="label.mission.location"/>
+	<slot name="daparture" key="label.mission.departure"/>
+	<slot name="arrival" key="label.mission.arrival"/>
+	<slot name="objective" key="label.mission.objective"/>
+	<slot name="value" key="label.mission.value"/>
+</schema>
+
+<schema name="activityInformation.ParticipantActivityInformation" type="module.mission.domain.activity.ParticipantActivityInformation" bundle="MISSION_RESOURCES">
+	<slot name="person" layout="autoComplete" key="label.person" bundle="EXPENDITURE_RESOURCES">
+        <property name="labelField" value="name"/>
+		<property name="format" value="${partyName} (${user.username})"/>
+		<property name="minChars" value="3"/>
+		<property name="args" value="provider=module.organization.presentationTier.renderers.providers.PersonAutoCompleteProvider"/>
+		<property name="size" value="60"/>
+	</slot>
+</schema>
+
+<schema name="activityInformation.AddParticipantActivity" type="module.mission.domain.activity.ParticipantActivityInformation" extends="activityInformation.ParticipantActivityInformation">
+</schema>
+
+<schema name="activityInformation.UpdateMissionDetailsActivityInformation" type="module.mission.domain.activity.UpdateMissionDetailsActivityInformation" bundle="MISSION_RESOURCES">
+	<slot name="location" key="label.mission.location" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="size" value="30"/>
+	</slot>
+	<slot name="daparture" layout="picker" key="label.mission.departure" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="arrival" layout="picker" key="label.mission.arrival" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="objective" key="label.mission.objective" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="size" value="50"/>
+	</slot>
+</schema>
+
+<schema name="activityInformation.UpdateMissionDetailsActivity" type="module.mission.domain.activity.UpdateMissionDetailsActivityInformation" extends="activityInformation.UpdateMissionDetailsActivityInformation">
+</schema>
+
+<schema name="activityInformation.UpdateForeignMissionDetailsActivity" type="module.mission.domain.activity.UpdateForeignMissionDetailsActivityInformation" bundle="MISSION_RESOURCES">
+	<slot name="country" key="label.mission.country" layout="autoComplete" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+        <property name="labelField" value="name.content"/>
+		<property name="format" value="${name.content}"/>
+		<property name="minChars" value="3"/>		
+		<property name="args" value="provider=module.geography.presentationTier.provider.CountryAutoCompleteProvider"/>
+		<property name="classes" value="inputsize300px"/>
+	</slot>
+	<slot name="location" key="label.mission.location" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="size" value="30"/>
+	</slot>
+	<slot name="daparture" layout="picker" key="label.mission.departure" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="arrival" layout="picker" key="label.mission.arrival" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="objective" key="label.mission.objective" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="size" value="50"/>
+	</slot>
+</schema>
+
+<schema name="module.mission.domain.activity.ItemActivityInformation" type="module.mission.domain.activity.ItemActivityInformation" bundle="MISSION_RESOURCES">
+	<slot name="topLevelMissionItemType" layout="radio-select-postback" key="label.mission.item.type" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="providerClass" value="module.mission.presentationTier.provider.TopLevelMissionItemTypeProvider"/>
+		<property name="eachLayout" value="label-for-missionItemClass"/>
+		<property name="key" value="true"/>
+		<property name="saveOptions" value="true"/>
+		<property name="classes" value="nobullet"/>
+	</slot>
+	<slot name="concreteMissionItemType" layout="radio-select-postback" key="label.mission.item.subtype">
+		<property name="providerClass" value="module.mission.presentationTier.provider.RelativeMissionItemTypeProvider"/>
+		<property name="eachLayout" value="label-for-missionItemClass"/>
+		<property name="key" value="true"/>
+		<property name="saveOptions" value="true"/>
+		<property name="classes" value="nobullet"/>
+	</slot>
+</schema>
+
+<schema name="module.mission.domain.activity.ItemActivityInformation.empty" type="module.mission.domain.activity.ItemActivityInformation" bundle="MISSION_RESOURCES">
+</schema>
+
+<schema name="person-name" type="pt.ist.expenditureTrackingSystem.domain.organization.Person" bundle="MISSION_RESOURCES">
+	<slot name="name"/>
+</schema>
+
+<schema name="module.mission.domain.activity.ItemActivityInformation.participants" type="module.mission.domain.activity.ItemActivityInformation" bundle="MISSION_RESOURCES">
+	<slot name="people" layout="option-select" key="label.mission.item.people">
+		<property name="choiceType" value="pt.ist.expenditureTrackingSystem.domain.organization.Person"/>
+		<property name="eachSchema" value="person-name"/>
+		<property name="eachLayout" value="values-dash"/>
+        <property name="providerClass" value="module.mission.presentationTier.provider.MissionItemParticipantProvider" />
+        <property name="classes" value="nobullet noindent"/>
+        <property name="sortBy" value="name"/>
+    </slot>
+</schema>
+
+<schema name="module.mission.domain.activity.DistributeItemCostsActivityInformation.MissionItemFinancerBean" type="module.mission.domain.activity.DistributeItemCostsActivityInformation$MissionItemFinancerBean" bundle="MISSION_RESOURCES">
+	<slot name="missionFinancer.unit.presentationName" key="label.mission.financer" read-only="true"/>
+	<slot name="missionFinancer.unit.accountingUnit.name" key="label.mission.financer.accounting.unit" read-only="true" />
+	<slot name="amount" key="label.mission.item.value" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+</schema>
+
+<schema name="module.mission.domain.AccommodationItem" type="module.mission.domain.AccommodationItem" bundle="MISSION_RESOURCES">
+	<slot name="numberOfNights" key="label.mission.item.accommodation.numberOfNights" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="value" key="label.mission.item.value" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+</schema>
+
+<schema name="module.mission.domain.OtherMissionItem" type="module.mission.domain.OtherMissionItem" bundle="MISSION_RESOURCES">
+	<slot name="description" key="label.mission.item.otherMissionItem.description" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="size" value="50"/>
+	</slot>
+	<slot name="value" key="label.mission.item.value" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+</schema>
+
+<schema name="module.mission.domain.ConferenceItem" type="module.mission.domain.ConferenceItem" bundle="MISSION_RESOURCES">
+	<slot name="description" key="label.mission.item.otherMissionItem.description" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="size" value="50"/>
+	</slot>
+	<slot name="value" key="label.mission.item.value" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+</schema>
+
+<schema name="module.mission.domain.FullPersonelExpenseItem" type="module.mission.domain.FullPersonelExpenseItem" bundle="MISSION_RESOURCES">
+	<slot name="start" layout="picker" key="label.mission.item.personel.expense.start" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="end" layout="picker" key="label.mission.item.personel.expense.end" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="dailyPersonelExpenseCategory" layout="menu-select" key="label.mission.item.personel.expense.dailyPersonelExpenseCategory" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="providerClass" value="module.mission.presentationTier.provider.DailyPersonalExpenseCategoryProvider"/>
+		<property name="format" value="${description}"/>
+		<property name="key" value="true"/>
+		<property name="saveOptions" value="true"/>
+		<property name="classes" value="nobullet"/>
+	</slot>
+</schema>
+
+<schema name="module.mission.domain.NoPersonelExpenseItem" type="module.mission.domain.NoPersonelExpenseItem" bundle="MISSION_RESOURCES">
+	<slot name="start" key="label.mission.item.personel.expense.start" layout="picker" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="end" key="label.mission.item.personel.expense.end" layout="picker" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+</schema>
+
+<schema name="module.mission.domain.OtherPersonelExpenseItem" type="module.mission.domain.OtherPersonelExpenseItem" bundle="MISSION_RESOURCES">
+	<slot name="start" key="label.mission.item.personel.expense.start" layout="picker" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="end" key="label.mission.item.personel.expense.end" layout="picker" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="value" key="label.mission.item.value" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+</schema>
+
+<schema name="module.mission.domain.WithAccommodationPersonelExpenseItem" type="module.mission.domain.WithAccommodationPersonelExpenseItem" bundle="MISSION_RESOURCES">
+	<slot name="start" key="label.mission.item.personel.expense.start" layout="picker" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="end" key="label.mission.item.personel.expense.end" layout="picker" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="dailyPersonelExpenseCategory" layout="menu-select" key="label.mission.item.personel.expense.dailyPersonelExpenseCategory" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="providerClass" value="module.mission.presentationTier.provider.DailyPersonalExpenseCategoryProvider"/>
+		<property name="format" value="${description}"/>
+		<property name="key" value="true"/>
+		<property name="saveOptions" value="true"/>
+		<property name="classes" value="nobullet"/>
+	</slot>
+</schema>
+
+<schema name="module.mission.domain.WithAccommodationAndOneMealPersonelExpenseItem" type="module.mission.domain.WithAccommodationAndOneMealPersonelExpenseItem" bundle="MISSION_RESOURCES">
+	<slot name="start" key="label.mission.item.personel.expense.start" layout="picker" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="end" key="label.mission.item.personel.expense.end" layout="picker" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="dailyPersonelExpenseCategory" layout="menu-select" key="label.mission.item.personel.expense.dailyPersonelExpenseCategory" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="providerClass" value="module.mission.presentationTier.provider.DailyPersonalExpenseCategoryProvider"/>
+		<property name="format" value="${description}"/>
+		<property name="key" value="true"/>
+		<property name="saveOptions" value="true"/>
+		<property name="classes" value="nobullet"/>
+	</slot>
+</schema>
+
+<schema name="module.mission.domain.WithAccommodationAndTwoMealsPersonelExpenseItem" type="module.mission.domain.WithAccommodationAndTwoMealsPersonelExpenseItem" bundle="MISSION_RESOURCES">
+	<slot name="start" key="label.mission.item.personel.expense.start" layout="picker" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="end" key="label.mission.item.personel.expense.end" layout="picker" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="dailyPersonelExpenseCategory" layout="menu-select" key="label.mission.item.personel.expense.dailyPersonelExpenseCategory" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="providerClass" value="module.mission.presentationTier.provider.DailyPersonalExpenseCategoryProvider"/>
+		<property name="format" value="${description}"/>
+		<property name="key" value="true"/>
+		<property name="saveOptions" value="true"/>
+		<property name="classes" value="nobullet"/>
+	</slot>
+</schema>
+
+<schema name="module.mission.domain.BoatItem" type="module.mission.domain.BoatItem" bundle="MISSION_RESOURCES">
+	<slot name="itinerary" key="label.mission.item.transportation.itinerary" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="size" value="50"/>
+	</slot>
+	<slot name="value" key="label.mission.item.value" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+</schema>
+
+<schema name="module.mission.domain.BusItem" type="module.mission.domain.BusItem" bundle="MISSION_RESOURCES">
+	<slot name="itinerary" key="label.mission.item.transportation.itinerary" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="size" value="50"/>
+	</slot>
+	<slot name="value" key="label.mission.item.value" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+</schema>
+
+<schema name="module.mission.domain.OtherTransportationItem" type="module.mission.domain.OtherTransportationItem" bundle="MISSION_RESOURCES">
+	<slot name="typeOfTransportation" key="label.mission.item.transportation.typeOfTransportation" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="itinerary" key="label.mission.item.transportation.itinerary" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="size" value="50"/>
+	</slot>
+	<slot name="value" key="label.mission.item.value" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+</schema>
+
+<schema name="module.mission.domain.PlaneItem" type="module.mission.domain.PlaneItem" bundle="MISSION_RESOURCES">
+	<slot name="itinerary" key="label.mission.item.transportation.itinerary" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="size" value="50"/>
+	</slot>
+	<slot name="value" key="label.mission.item.value" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+</schema>
+
+<schema name="module.mission.domain.TrainItem" type="module.mission.domain.TrainItem" bundle="MISSION_RESOURCES">
+	<slot name="itinerary" key="label.mission.item.transportation.itinerary" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="size" value="50"/>
+	</slot>
+	<slot name="value" key="label.mission.item.value" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+</schema>
+
+<schema name="module.mission.domain.RentedVehiclItem" type="module.mission.domain.RentedVehiclItem" bundle="MISSION_RESOURCES">
+	<slot name="itinerary" key="label.mission.item.transportation.itinerary" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="size" value="50"/>
+	</slot>
+	<slot name="value" key="label.mission.item.value" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="vehiclItemJustification.motive" layout="radio" key="label.mission.item.vehicle.justification.motive" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="vehiclItemJustification.justification" key="label.mission.item.vehicle.justification" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="size" value="50"/>
+	</slot>
+</schema>
+
+<schema name="module.mission.domain.PersonalVehiclItem" type="module.mission.domain.PersonalVehiclItem" bundle="MISSION_RESOURCES">
+	<slot name="itinerary" key="label.mission.item.transportation.itinerary" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="size" value="50"/>
+	</slot>
+	<slot name="kms" key="label.mission.item.vehicle.kms" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="value" key="label.mission.item.value" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="vehiclItemJustification.motive" layout="radio" key="label.mission.item.vehicle.justification.motive" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="vehiclItemJustification.justification" key="label.mission.item.vehicle.justification" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="size" value="50"/>
+	</slot>
+</schema>
+
+<schema name="activityInformation.AddFinancerActivityInformation" type="module.mission.domain.activity.AddFinancerActivityInformation" bundle="MISSION_RESOURCES">
+	<slot name="unit" layout="autoComplete" key="label.mission.financer">
+        <property name="labelField" value="presentationName"/>
+		<property name="format" value="${presentationName}"/>
+		<property name="minChars" value="3"/>		
+		<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.UnitAutoCompleteProvider" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+		<property name="classes" value="inputsize300px"/>
+		<validator class="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator">
+			<property name="message" value="label.pleaseSelectOne.unit"/>
+			<property name="bundle" value="MISSION_RESOURCES"/>
+			<property name="key" value="true"/>
+		</validator>
+	</slot>
+</schema>
+
+<schema name="activityInformation.AddFinancerActivity" type="module.mission.domain.activity.AddFinancerActivityInformation" extends="activityInformation.AddFinancerActivityInformation">
+</schema>
+
+<schema name="module.mission.domain.activity.FundAllocationActivityInformation.MissionItemFinancerFundAllocationBean" type="module.mission.domain.activity.FundAllocationActivityInformation$MissionItemFinancerFundAllocationBean" bundle="MISSION_RESOURCES">
+	<slot name="missionItemFinancer.missionFinancer.unit.presentationName" key="label.mission.financer" read-only="true"/>
+	<slot name="missionItemFinancer.missionFinancer.unit.accountingUnit.name" key="label.mission.financer.accounting.unit" read-only="true" />
+	<slot name="missionItemFinancer.amount" key="label.mission.financer.amount" read-only="true" />
+	<slot name="fundAllocationId" key="label.mission.financer.fundAllocationId" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="missionItemFinancer.description" key="label.mission.item.financer.description" read-only="true" />
+</schema>
+
+<schema name="module.mission.domain.activity.AllocateFundsActivityInformation.void" type="module.mission.domain.activity.AllocateFundsActivityInformation" bundle="MISSION_RESOURCES">
+</schema>
+
+<schema name="module.mission.domain.activity.AllocateProjectFundsActivityInformation.void" type="module.mission.domain.activity.AllocateProjectFundsActivityInformation" bundle="MISSION_RESOURCES">
+</schema>
+
+<schema name="module.mission.domain.MissionItemFinancer" type="module.mission.domain.MissionItemFinancer" bundle="MISSION_RESOURCES">
+	<slot name="missionFinancer.unit.presentationName" key="label.mission.financer"/>
+	<slot name="missionFinancer.unit.accountingUnit.name" key="label.mission.financer.accounting.unit"/>
+	<slot name="amount" key="label.mission.financer.amount"/>
+	<slot name="allFundAllocationId" key="label.mission.financer.fundAllocationId"/>
+</schema>
+
+<schema name="module.mission.search.default" type="module.mission.domain.util.SearchMissions" bundle="MISSION_RESOURCES">
+	<slot name="processNumber" key="label.mission.processNumber"/>
+	<slot name="missionResponsible" layout="autoComplete" key="label.mission.requester.unit">
+        <property name="labelField" value="name"/>
+		<property name="format" value="${name} (${user.username})"/>
+		<property name="minChars" value="3"/>		
+		<property name="args" value="provider=module.mission.presentationTier.provider.autoComplete.PersonAutoComplete"/>
+		<property name="size" value="50"/>
+	</slot>
+	<slot name="payingUnit" layout="autoComplete" key="label.mission.financer">
+        <property name="labelField" value="presentationName"/>
+		<property name="format" value="${presentationName}"/>
+		<property name="minChars" value="3"/>		
+		<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.UnitAutoCompleteProvider"/>
+		<property name="classes" value="inputsize300px"/>
+	</slot>	
+	<slot name="national" key="label.mission.national"/>
+	<slot name="foreign" key="label.mission.foreign"/>
+	<slot name="date" key="label.mission.date" layout="picker" />
+	<slot name="requestingPerson" layout="autoComplete" key="label.mission.requester.person">
+        <property name="labelField" value="name"/>
+		<property name="format" value="${name} (${user.username})"/>
+		<property name="minChars" value="3"/>		
+		<property name="args" value="provider=module.mission.presentationTier.provider.autoComplete.PersonAutoComplete"/>
+		<property name="size" value="50"/>
+	</slot>
+	<slot name="participant" layout="autoComplete" key="label.mission.participant">
+        <property name="labelField" value="name"/>
+		<property name="format" value="${name} (${user.username})"/>
+		<property name="minChars" value="3"/>		
+		<property name="args" value="provider=module.mission.presentationTier.provider.autoComplete.PersonAutoComplete"/>
+		<property name="size" value="50"/>
+	</slot>
+	<slot name="filterCanceledProcesses" key="label.mission.filterCanceledProcesses"/>
+</schema>
+
+<schema name="accountabilityType-name" type="module.organization.domain.AccountabilityType" bundle="MISSION_RESOURCES">
+	<slot name="name.content"/>
+</schema>
+
+<schema name="workflowQueue-name" type="module.workflow.domain.WorkflowQueue" bundle="MISSION_RESOURCES">
+	<slot name="name"/>
+</schema>
+
+<schema name="activityInformation.SubmitForApprovalActivity" type="module.mission.domain.activity.LateJustificationActivityInformation" bundle="MISSION_RESOURCES">
+	<slot name="justification" layout="longText" key="label.late.justification.motive" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="rows" value="6"/>
+		<property name="columns" value="60"/>
+		<property name="classes" value="form"/>		
+	</slot>
+</schema>
+
+<schema name="activityInformation.ApproveActivity" type="module.mission.domain.activity.LateJustificationActivityInformation" bundle="MISSION_RESOURCES">
+	<slot name="justification" layout="longText" key="label.late.justification.motive" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="rows" value="6"/>
+		<property name="columns" value="60"/>
+		<property name="classes" value="form"/>
+	</slot>
+</schema>
+<schema name="module.mission.domain.Mission.search" type="module.mission.domain.Mission" bundle="MISSION_RESOURCES">
+	<slot name="missionProcess.processIdentification" key="label.acquisitionProcessId" bundle="EXPENDITURE_RESOURCES" layout="link">
+		<property name="useParent" value="true"/>
+		<property name="blankTarget" value="false"/>
+		<property name="linkFormat" value="/workflowProcessManagement.do?method=viewProcess&amp;processId=${missionProcess.externalId}"/>		
+	</slot>
+	<slot name="destinationDescription" key="label.mission.destination"/>
+	<slot name="daparture" key="label.mission.departure"/>
+	<slot name="durationInDays" key="label.module.mission.front.page.list.duration"/>
+	<slot name="missionItemsCount" key="label.mission.items" layout="output-with-list-hover">
+		<property name="subLayout" value="default"/>
+		<property name="javascriptEnabled" value="true"/>
+		<property name="useParent" value="true"/>
+		<property name="list" value="missionItems"/>
+		<property name="prefix" value="Item"/>
+		<property name="prefixClasses" value="bold"/>
+		<property name="counterEnabled" value="yes"/>
+		<property name="key" value="false"/>
+		<property name="listFormat" value=" ${localizedName}"/>
+	</slot>	
+	<slot name="requestingPerson.firstAndLastName" key="label.mission.requester.person" layout="link">
+		<property name="useParent" value="true"/>
+		<property name="blankTarget" value="false"/>
+		<property name="linkFormat" value="/missionOrganization.do?personId=${requestingPerson.externalId}&amp;method=showPersonById"/>
+		<property name="classes" value="secondaryLink"/>
+	</slot>
+	<slot name="participantes" schema="module.organization.domain.Person.mission.participante" layout="values" key="label.mission.participants">
+		<property name="htmlSeparator" value="&lt;br/&gt;"/>
+	</slot>
+	<slot name="missionProcess.dateFromLastActivity" key="label.mission.inactiveSince"/>
+</schema>
+
+<schema name="module.organization.domain.Person.mission.participante" type="module.organization.domain.Person" bundle="MISSION_RESOURCES">
+	<slot name="partyName"/>
+</schema>
+<schema name="activityInformation.SendForProcessTerminationWithChangesActivity" type="module.mission.domain.activity.SendForProcessTerminationWithChangesActivity" bundle="MISSION_RESOURCES">
+	<slot name="descriptionOfChangesAfterArrival" key="label.descriptionOfChangesAfterArrival" layout="longText" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="rows" value="6"/>
+		<property name="columns" value="60"/>
+		<property name="classes" value="form"/>		
+	</slot>
+</schema>
