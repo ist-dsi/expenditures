@@ -25,27 +25,13 @@ public abstract class BaseAction extends ContextBaseAction {
 	return consumeInputStream(inputStream);
     }
 
-    protected ActionForward download(final HttpServletResponse response, final String filename, final byte[] bytes,
-	    final String contentType) throws IOException {
-	final OutputStream outputStream = response.getOutputStream();
-	response.setContentType(contentType);
-	response.setHeader("Content-disposition", "attachment; filename=" + filename.replace(" ", "_"));
-	response.setContentLength(bytes.length);
-	if (bytes != null) {
-	    outputStream.write(bytes);
-	}
-	outputStream.flush();
-	outputStream.close();
-	return null;
-    }
-
     protected ActionForward download(final HttpServletResponse response, final GenericFile file) throws IOException {
 	String filename = file.getFilename();
 	if (filename == null) {
 	    filename = file.getDisplayName();
 	}
-	return file != null && file.getContent() != null ? download(response, filename != null ? filename : "",
-		file.getContent(), file.getContentType()) : null;
+	return file != null && file.getContent() != null ? download(response, filename != null ? filename : "", file.getStream(),
+		file.getContentType()) : null;
     }
 
 }
