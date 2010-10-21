@@ -1,6 +1,5 @@
 package pt.ist.expenditureTrackingSystem.domain;
 
-import module.mission.domain.EmailDigesterUtil;
 import pt.ist.fenixWebFramework.services.Service;
 
 public class EmailDigester extends EmailDigester_Base {
