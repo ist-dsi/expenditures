@@ -2,12 +2,23 @@ package module.mission.domain;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
+import org.joda.time.LocalDate;
+
+import module.organization.domain.Party;
+import module.workingCapital.domain.WorkingCapital;
+import module.workingCapital.domain.WorkingCapitalYear;
 import myorg.applicationTier.Authenticate;
 import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.User;
 import pt.ist.emailNotifier.domain.Email;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.Role;
+import pt.ist.expenditureTrackingSystem.domain.RoleType;
+import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
+import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
@@ -22,9 +33,8 @@ public class EmailDigester extends EmailDigester_Base {
     @Service
     public void executeTask() {
 	Language.setLocale(Language.getDefaultLocale());
-	for (Person person : ExpenditureTrackingSystem.getInstance().getPeople()) {
+	for (Person person : getPeopleToProcess()) {
 
-	    if (person.getOptions().getReceiveNotificationsByEmail()) {
 	    	final User user = person.getUser();
 	    	if (user.hasPerson() && user.hasExpenditurePerson()) {
 	    	    final UserView userView = Authenticate.authenticate(user);
@@ -78,13 +88,67 @@ public class EmailDigester extends EmailDigester_Base {
 	    		pt.ist.fenixWebFramework.security.UserView.setUser(null);
 	    	    }
 	    	}
-	    }
 	}
     }
 
     @Override
     public String getLocalizedName() {
 	return getClass().getName();
+    }
+
+    private Collection<Person> getPeopleToProcess() {
+	final Set<Person> people = new HashSet<Person>();
+	final LocalDate today = new LocalDate();
+	final ExpenditureTrackingSystem instance = ExpenditureTrackingSystem.getInstance();
+	for (final Authorization authorization : instance.getAuthorizationsSet()) {
+	    if (authorization.isValidFor(today)) {
+		final Person person = authorization.getPerson();
+		if (person.getOptions().getReceiveNotificationsByEmail()) {
+		    people.add(person);
+		}
+	    }
+	}
+	for (final RoleType roleType : RoleType.values()) {
+	    addPeopleWithRole(people, roleType);
+	}
+	for (final AccountingUnit accountingUnit : instance.getAccountingUnitsSet()) {
+	    addPeople(people, accountingUnit.getPeopleSet());
+	    addPeople(people, accountingUnit.getProjectAccountantsSet());
+	    addPeople(people, accountingUnit.getResponsiblePeopleSet());
+	    addPeople(people, accountingUnit.getResponsibleProjectAccountantsSet());
+	    addPeople(people, accountingUnit.getTreasuryMembersSet());
+	}
+	final MissionYear missionYear = MissionYear.getCurrentYear();
+	for (final MissionProcess missionProcess : missionYear.getMissionProcessSet()) {
+	    final Mission mission = missionProcess.getMission();
+	    final Party missionResponsible = mission.getMissionResponsible();
+	    if (missionResponsible.isPerson()) {
+		final module.organization.domain.Person missionPerson = (module.organization.domain.Person) missionResponsible;
+		if (missionPerson.hasUser()) {
+		    final User user = missionPerson.getUser();
+		    if (user.hasExpenditurePerson()) {
+			final Person person = user.getExpenditurePerson();
+			if (person.getOptions().getReceiveNotificationsByEmail()) {
+			    people.add(person);
+			}
+		    }
+		}
+	    }
+	}
+	return people;
+    }
+
+    private void addPeopleWithRole(final Set<Person> people, final RoleType roleType) {
+	final Role role = Role.getRole(roleType);
+	addPeople(people, role.getPersonSet());
+    }
+
+    private void addPeople(final Set<Person> people, Collection<Person> unverified) {
+	for (final Person person : unverified) {
+	    if (person.getOptions().getReceiveNotificationsByEmail()) {
+		people.add(person);
+	    }
+	}
     }
 
 }
