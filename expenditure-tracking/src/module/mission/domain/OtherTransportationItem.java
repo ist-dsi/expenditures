@@ -13,6 +13,7 @@ public class OtherTransportationItem extends OtherTransportationItem_Base {
 
     @Override
     protected void setNewVersionInformation(final MissionItem missionItem) {
+	super.setNewVersionInformation(missionItem);
 	final OtherTransportationItem otherTransportationItem = (OtherTransportationItem) missionItem;
 	otherTransportationItem.setTypeOfTransportation(getTypeOfTransportation());
     }

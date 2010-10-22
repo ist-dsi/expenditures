@@ -13,6 +13,7 @@ public class OtherPersonelExpenseItem extends OtherPersonelExpenseItem_Base {
 
     @Override
     protected void setNewVersionInformation(final MissionItem missionItem) {
+	super.setNewVersionInformation(missionItem);
 	final OtherPersonelExpenseItem otherPersonelExpenseItem = (OtherPersonelExpenseItem) missionItem;
 	otherPersonelExpenseItem.setValue(getValue());
     }

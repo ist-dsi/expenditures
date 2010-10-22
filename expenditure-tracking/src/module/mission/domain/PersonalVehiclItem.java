@@ -14,6 +14,7 @@ public class PersonalVehiclItem extends PersonalVehiclItem_Base {
     @Override
     protected void setNewVersionInformation(final MissionItem missionItem) {
 	final PersonalVehiclItem personalVehiclItem = (PersonalVehiclItem) missionItem;
+	super.setNewVersionInformation(personalVehiclItem);
 	personalVehiclItem.setKms(getKms());
     }
 

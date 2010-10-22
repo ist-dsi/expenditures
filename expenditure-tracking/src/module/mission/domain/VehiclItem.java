@@ -24,6 +24,7 @@ public abstract class VehiclItem extends VehiclItem_Base {
 
     @Override
     protected void setNewVersionInformation(final MissionItem missionItem) {
+	super.setNewVersionInformation(missionItem);
 	final VehiclItem vehiclItem = (VehiclItem) missionItem;
 	vehiclItem.setVehiclItemJustification(getVehiclItemJustification());
     }
