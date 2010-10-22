@@ -116,8 +116,7 @@ public abstract class GenericProcess extends GenericProcess_Base {
 	for (Unit unit : units) {
 	    processes.addAll(unit.getProcesses(year));
 	}
-	return (Set<T>) GenericProcess.filter(processClass != null ? processClass : PaymentProcess.class,
-		new ProcessesThatAreAuthorizedByUserPredicate(person), processes);
+	return (Set<T>) GenericProcess.filter(processClass != null ? processClass : PaymentProcess.class, null, processes);
     }
 
     public static void evaluateProcessesForPerson(final Class processClass, final Person person, final PaymentProcessYear year,
@@ -158,16 +157,16 @@ public abstract class GenericProcess extends GenericProcess_Base {
 	    PaymentProcessYear year, final boolean userAwarness) {
 
 	Set<T> processes = null;
+	final User user = person.getUser();
 	if (person.hasAnyAuthorizations()
 		&& !(person.hasRoleType(RoleType.ACQUISITION_CENTRAL) || person.hasRoleType(RoleType.ACQUISITION_CENTRAL_MANAGER))) {
 	    processes = new HashSet<T>();
 	    for (T process : GenericProcess.getProcessesWithResponsible(processClass, person, year)) {
-		if (process.hasAnyAvailableActivity(userAwarness)) {
+		if (process.hasAnyAvailableActivity(user, userAwarness)) {
 		    processes.add(process);
 		}
 	    }
 	} else {
-	    final User user = person.getUser();
 	    processes = GenericProcess.getAllProcess(processClass, new Predicate() {
 
 		@Override

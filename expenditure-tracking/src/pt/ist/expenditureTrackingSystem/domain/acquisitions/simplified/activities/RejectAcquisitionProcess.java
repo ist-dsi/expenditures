@@ -43,4 +43,9 @@ public class RejectAcquisitionProcess extends
 	return "resources/AcquisitionResources";
     }
     
+    @Override
+    public boolean isUserAwarenessNeeded(RegularAcquisitionProcess process, User user) {
+	return false;
+    }
+
 }

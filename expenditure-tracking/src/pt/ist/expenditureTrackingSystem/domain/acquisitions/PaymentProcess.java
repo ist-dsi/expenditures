@@ -402,4 +402,14 @@ public abstract class PaymentProcess extends PaymentProcess_Base implements HasP
 
     public abstract Money getTotalValue();
 
+    public boolean isDirectResponsibleForUnit(final User user, final Money amount) {
+	final Person person = user.getExpenditurePerson();
+	for (final Unit unit : getPayingUnits()) {
+	    if (unit.isDirectResponsible(person, amount)) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
 }

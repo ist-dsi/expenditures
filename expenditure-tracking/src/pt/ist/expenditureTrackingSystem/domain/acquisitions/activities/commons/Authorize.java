@@ -3,9 +3,13 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import myorg.domain.User;
+import myorg.domain.util.Money;
 import myorg.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.UnitItem;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
+import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 
 public class Authorize<P extends PaymentProcess> extends WorkflowActivity<P, ActivityInformation<P>> {
 
@@ -30,6 +34,21 @@ public class Authorize<P extends PaymentProcess> extends WorkflowActivity<P, Act
     @Override
     public String getUsedBundle() {
 	return "resources/AcquisitionResources";
+    }
+
+    @Override
+    public boolean isUserAwarenessNeeded(final P process, final User user) {
+	final Person person = user.getExpenditurePerson();
+	final Money amount = process.getRequest().getTotalValue();
+	for (final RequestItem requestItem : process.getRequest().getRequestItemsSet()) {
+	    for (final UnitItem unitItem : requestItem.getUnitItemsSet()) {
+		final Unit unit = unitItem.getUnit();
+		if (!unitItem.getItemAuthorized().booleanValue() && unit.isDirectResponsible(person, amount)) {
+		    return true;
+		}
+	    }
+	}
+	return false;
     }
 
 }

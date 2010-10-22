@@ -30,7 +30,7 @@ public class PrioritiesWidget extends WidgetController {
 	for (MultiCounter<AcquisitionProcessStateType> multiCounter : simplifiedMap.values()) {
 	    Counter<AcquisitionProcessStateType> priorityCounter = ProcessMapGenerator.getPriorityCounter(multiCounter);
 
-	    if (priorityCounter != null) {
+	    if (priorityCounter != null && priorityCounter.getValue() > 0) {
 		priorityCounters.add(priorityCounter);
 	    }
 	}

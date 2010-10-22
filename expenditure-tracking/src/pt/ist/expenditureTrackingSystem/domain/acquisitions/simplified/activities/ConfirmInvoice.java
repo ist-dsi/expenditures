@@ -2,16 +2,21 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activiti
 
 import java.util.Set;
 
-import org.apache.commons.lang.StringUtils;
-
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.User;
 import myorg.util.BundleUtil;
+
+import org.apache.commons.lang.StringUtils;
+
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionInvoice;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.UnitItem;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
+import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 
 public class ConfirmInvoice extends WorkflowActivity<RegularAcquisitionProcess, ActivityInformation<RegularAcquisitionProcess>> {
 
@@ -60,6 +65,22 @@ public class ConfirmInvoice extends WorkflowActivity<RegularAcquisitionProcess, 
 	}
 
 	return builder.toString();
-
     }
+
+    @Override
+    public boolean isUserAwarenessNeeded(final RegularAcquisitionProcess process, final User user) {
+	final Person person = user.getExpenditurePerson();
+	for (final RequestItem requestItem : process.getRequest().getRequestItemsSet()) {
+	    for (PaymentProcessInvoice invoice : requestItem.getInvoicesFiles()) {
+		for (final UnitItem unitItem : invoice.getUnitItemsSet()) {
+		    final Unit unit = unitItem.getUnit();
+		    if (!unitItem.getConfirmedInvoices().contains(invoice) && unit.isDirectResponsible(person)) {
+			return true;
+		    }
+		}
+	    }
+	}
+	return false;
+    }
+
 }

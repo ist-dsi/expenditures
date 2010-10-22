@@ -42,4 +42,10 @@ public class CancelRefundProcess extends WorkflowActivity<RefundProcess, Activit
     public boolean isConfirmationNeeded(RefundProcess process) {
 	return true;
     }
+
+    @Override
+    public boolean isUserAwarenessNeeded(RefundProcess process, User user) {
+	return false;
+    }
+
 }

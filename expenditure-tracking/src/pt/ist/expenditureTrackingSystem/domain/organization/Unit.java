@@ -244,12 +244,33 @@ public class Unit extends Unit_Base implements Indexable, Searchable {
 
     public boolean isResponsible(final Person person, final Money amount) {
 	for (Authorization authorization : person.getAuthorizationsSet()) {
-	    if (authorization.isValid() && authorization.getMaxAmount().isGreaterThan(amount)
+	    if (authorization.isValid() && authorization.getMaxAmount().isGreaterThanOrEqual(amount)
 		    && isSubUnit(authorization.getUnit())) {
 		return true;
 	    }
 	}
 	return false;
+    }
+
+    public boolean isDirectResponsible(final Person person) {
+	return isDirectResponsible(person, Money.ZERO);
+    }
+
+    public boolean isDirectResponsible(final Person person, final Money amount) {
+	boolean hasSomeOtherValidAuthorization = false;
+	for (final Authorization authorization : getAuthorizationsSet()) {
+	    if (authorization.isValid() && authorization.getMaxAmount().isGreaterThanOrEqual(amount)) {
+		if (authorization.getPerson() == person) {
+		    return true;
+		}
+		hasSomeOtherValidAuthorization = true;
+	    }
+	}
+	if (hasSomeOtherValidAuthorization) {
+	    return false;
+	}
+	final Unit parentUnit = getParentUnit();
+	return parentUnit != null && parentUnit.isDirectResponsible(person, amount);
     }
 
     public Authorization findClosestAuthorization(final Person person, final Money money) {

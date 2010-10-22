@@ -34,4 +34,9 @@ public class UnSubmitForApproval extends WorkflowActivity<RefundProcess, Activit
 	return "resources/AcquisitionResources";
     }
 
+    @Override
+    public boolean isUserAwarenessNeeded(RefundProcess process, User user) {
+	return false;
+    }
+
 }
