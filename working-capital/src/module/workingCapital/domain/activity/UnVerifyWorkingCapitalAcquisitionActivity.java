@@ -40,4 +40,9 @@ public class UnVerifyWorkingCapitalAcquisitionActivity extends WorkflowActivity<
 	return false;
     }
 
+    @Override
+    public boolean isUserAwarenessNeeded(final WorkingCapitalProcess process, final User user) {
+        return false;
+    }
+
 }

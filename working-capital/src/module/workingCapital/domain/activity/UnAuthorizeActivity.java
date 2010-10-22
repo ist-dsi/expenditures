@@ -56,4 +56,9 @@ public class UnAuthorizeActivity extends WorkflowActivity<WorkingCapitalProcess,
 	return false;
     }
 
+    @Override
+    public boolean isUserAwarenessNeeded(final WorkingCapitalProcess process, final User user) {
+        return false;
+    }
+
 }

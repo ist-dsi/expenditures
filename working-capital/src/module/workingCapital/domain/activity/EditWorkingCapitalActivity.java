@@ -59,4 +59,9 @@ public class EditWorkingCapitalActivity extends WorkflowActivity<WorkingCapitalP
         return false;
     }
 
+    @Override
+    public boolean isUserAwarenessNeeded(final WorkingCapitalProcess process, final User user) {
+        return false;
+    }
+
 }

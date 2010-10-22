@@ -37,4 +37,9 @@ public class ChangeAccountingUnitActivity extends WorkflowActivity<WorkingCapita
         return new ChangeAccountingUnitActivityInformation(process, this);
     }
 
+    @Override
+    public boolean isUserAwarenessNeeded(final WorkingCapitalProcess process, final User user) {
+        return false;
+    }
+
 }

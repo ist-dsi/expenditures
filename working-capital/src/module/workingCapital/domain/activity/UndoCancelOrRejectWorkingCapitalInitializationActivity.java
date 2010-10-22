@@ -52,4 +52,9 @@ public class UndoCancelOrRejectWorkingCapitalInitializationActivity extends Work
 	return "resources/WorkingCapitalResources";
     }
 
+    @Override
+    public boolean isUserAwarenessNeeded(final WorkingCapitalProcess process, final User user) {
+        return false;
+    }
+
 }

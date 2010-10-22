@@ -46,4 +46,9 @@ public class SubmitForValidationActivity extends WorkflowActivity<WorkingCapital
         return new SubmitForValidationActivityInformation(process, this);
     }
 
+    @Override
+    public boolean isUserAwarenessNeeded(final WorkingCapitalProcess process, final User user) {
+        return false;
+    }
+
 }

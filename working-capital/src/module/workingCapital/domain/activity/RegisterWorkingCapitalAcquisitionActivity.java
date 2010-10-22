@@ -45,4 +45,9 @@ public class RegisterWorkingCapitalAcquisitionActivity extends
 	return new RegisterWorkingCapitalAcquisitionActivityInformation(process, this);
     }
 
+    @Override
+    public boolean isUserAwarenessNeeded(final WorkingCapitalProcess process, final User user) {
+        return false;
+    }
+
 }

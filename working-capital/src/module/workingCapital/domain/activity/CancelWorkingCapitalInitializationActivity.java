@@ -51,4 +51,9 @@ public class CancelWorkingCapitalInitializationActivity extends WorkflowActivity
 	return "resources/WorkingCapitalResources";
     }
 
+    @Override
+    public boolean isUserAwarenessNeeded(final WorkingCapitalProcess process, final User user) {
+        return false;
+    }
+
 }

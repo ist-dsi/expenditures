@@ -43,4 +43,9 @@ public class ReenforceWorkingCapitalInitializationActivity extends
 	return new ReenforceWorkingCapitalInitializationActivityInformation(process, this);
     }
 
+    @Override
+    public boolean isUserAwarenessNeeded(final WorkingCapitalProcess process, final User user) {
+        return false;
+    }
+
 }

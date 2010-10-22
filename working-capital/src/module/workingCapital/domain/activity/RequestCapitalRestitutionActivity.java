@@ -37,4 +37,9 @@ public class RequestCapitalRestitutionActivity extends WorkflowActivity<WorkingC
         return new ActivityInformation<WorkingCapitalProcess>(process, this);
     }
 
+    @Override
+    public boolean isUserAwarenessNeeded(final WorkingCapitalProcess process, final User user) {
+        return false;
+    }
+
 }

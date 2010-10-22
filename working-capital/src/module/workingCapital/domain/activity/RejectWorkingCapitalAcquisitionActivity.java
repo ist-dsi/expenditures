@@ -37,4 +37,9 @@ public class RejectWorkingCapitalAcquisitionActivity extends WorkflowActivity<Wo
 	return false;
     }
 
+    @Override
+    public boolean isUserAwarenessNeeded(final WorkingCapitalProcess process, final User user) {
+        return false;
+    }
+
 }
