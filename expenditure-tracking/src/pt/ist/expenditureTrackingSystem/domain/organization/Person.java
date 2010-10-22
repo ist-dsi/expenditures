@@ -379,4 +379,13 @@ public class Person extends Person_Base implements Indexable, Searchable {
 	return remotePerson == null ? super.getEmail() : remotePerson.getEmailForSendingEmails();
     }
 
+    public boolean hasAnyValidAuthorization() {
+	for (final Authorization authorization : getAuthorizationsSet()) {
+	    if (authorization.isValid()) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
 }

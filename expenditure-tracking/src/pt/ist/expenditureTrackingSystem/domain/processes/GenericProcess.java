@@ -158,7 +158,7 @@ public abstract class GenericProcess extends GenericProcess_Base {
 
 	Set<T> processes = null;
 	final User user = person.getUser();
-	if (person.hasAnyAuthorizations()
+	if (person.hasAnyValidAuthorization()
 		&& !(person.hasRoleType(RoleType.ACQUISITION_CENTRAL) || person.hasRoleType(RoleType.ACQUISITION_CENTRAL_MANAGER))) {
 	    processes = new HashSet<T>();
 	    for (T process : GenericProcess.getProcessesWithResponsible(processClass, person, year)) {

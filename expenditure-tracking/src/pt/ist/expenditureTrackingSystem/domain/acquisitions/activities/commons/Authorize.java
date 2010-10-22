@@ -39,12 +39,14 @@ public class Authorize<P extends PaymentProcess> extends WorkflowActivity<P, Act
     @Override
     public boolean isUserAwarenessNeeded(final P process, final User user) {
 	final Person person = user.getExpenditurePerson();
-	final Money amount = process.getRequest().getTotalValue();
-	for (final RequestItem requestItem : process.getRequest().getRequestItemsSet()) {
-	    for (final UnitItem unitItem : requestItem.getUnitItemsSet()) {
-		final Unit unit = unitItem.getUnit();
-		if (!unitItem.getItemAuthorized().booleanValue() && unit.isDirectResponsible(person, amount)) {
-		    return true;
+	if (person.hasAnyValidAuthorization()) {
+	    final Money amount = process.getRequest().getTotalValue();
+	    for (final RequestItem requestItem : process.getRequest().getRequestItemsSet()) {
+		for (final UnitItem unitItem : requestItem.getUnitItemsSet()) {
+		    final Unit unit = unitItem.getUnit();
+		    if (!unitItem.getItemAuthorized().booleanValue() && unit.isDirectResponsible(person, amount)) {
+			return true;
+		    }
 		}
 	    }
 	}

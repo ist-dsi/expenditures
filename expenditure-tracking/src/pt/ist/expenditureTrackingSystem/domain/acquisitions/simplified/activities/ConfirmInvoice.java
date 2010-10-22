@@ -70,12 +70,14 @@ public class ConfirmInvoice extends WorkflowActivity<RegularAcquisitionProcess, 
     @Override
     public boolean isUserAwarenessNeeded(final RegularAcquisitionProcess process, final User user) {
 	final Person person = user.getExpenditurePerson();
-	for (final RequestItem requestItem : process.getRequest().getRequestItemsSet()) {
-	    for (PaymentProcessInvoice invoice : requestItem.getInvoicesFiles()) {
-		for (final UnitItem unitItem : invoice.getUnitItemsSet()) {
-		    final Unit unit = unitItem.getUnit();
-		    if (!unitItem.getConfirmedInvoices().contains(invoice) && unit.isDirectResponsible(person)) {
-			return true;
+	if (person.hasAnyValidAuthorization()) {
+	    for (final RequestItem requestItem : process.getRequest().getRequestItemsSet()) {
+		for (PaymentProcessInvoice invoice : requestItem.getInvoicesFiles()) {
+		    for (final UnitItem unitItem : invoice.getUnitItemsSet()) {
+			final Unit unit = unitItem.getUnit();
+			if (!unitItem.getConfirmedInvoices().contains(invoice) && unit.isDirectResponsible(person)) {
+			    return true;
+			}
 		    }
 		}
 	    }

@@ -41,11 +41,13 @@ public class Approve<P extends PaymentProcess> extends WorkflowActivity<P, Activ
     @Override
     public boolean isUserAwarenessNeeded(final P process, final User user) {
 	final Person person = user.getExpenditurePerson();
-	for (final RequestItem requestItem : process.getRequest().getRequestItemsSet()) {
-	    for (final UnitItem unitItem : requestItem.getUnitItemsSet()) {
-		final Unit unit = unitItem.getUnit();
-		if (!unitItem.isApproved() && unit.isDirectResponsible(person)) {
-		    return true;
+	if (person.hasAnyValidAuthorization()) {
+	    for (final RequestItem requestItem : process.getRequest().getRequestItemsSet()) {
+		for (final UnitItem unitItem : requestItem.getUnitItemsSet()) {
+		    final Unit unit = unitItem.getUnit();
+		    if (!unitItem.isApproved() && unit.isDirectResponsible(person)) {
+			return true;
+		    }
 		}
 	    }
 	}
