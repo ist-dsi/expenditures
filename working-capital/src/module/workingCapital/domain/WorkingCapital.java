@@ -565,9 +565,9 @@ public class WorkingCapital extends WorkingCapital_Base {
 	if (isPendingFundAllocation()) return WorkingCapitalProcessState.PENDING_FUND_ALLOCATION;
 	if (isPendingAuthorization()) return WorkingCapitalProcessState.PENDING_AUTHORIZATION;
 	if (isPendingPayment()) return WorkingCapitalProcessState.PENDING_PAYMENT;
-	if (isTerminated()) return WorkingCapitalProcessState.SENT_FOR_TERMINATION;
 	if (isPendingRefund()) return WorkingCapitalProcessState.SENT_FOR_FUND_REFUND;
 	if (isRefunded()) return WorkingCapitalProcessState.TERMINATED;
+	if (isTerminated()) return WorkingCapitalProcessState.SENT_FOR_TERMINATION;
 	return WorkingCapitalProcessState.WORKING_CAPITAL_AVAILABLE;
     }
 
