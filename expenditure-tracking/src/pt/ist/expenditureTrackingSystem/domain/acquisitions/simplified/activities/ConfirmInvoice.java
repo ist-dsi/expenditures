@@ -72,9 +72,9 @@ public class ConfirmInvoice extends WorkflowActivity<RegularAcquisitionProcess, 
 	final Person person = user.getExpenditurePerson();
 	if (person.hasAnyValidAuthorization()) {
 	    for (final RequestItem requestItem : process.getRequest().getRequestItemsSet()) {
-		for (PaymentProcessInvoice invoice : requestItem.getInvoicesFiles()) {
-		    for (final UnitItem unitItem : invoice.getUnitItemsSet()) {
-			final Unit unit = unitItem.getUnit();
+		for (final UnitItem unitItem : requestItem.getUnitItemsSet()) {
+		    final Unit unit = unitItem.getUnit();
+		    for (final PaymentProcessInvoice invoice : requestItem.getInvoicesFilesSet()) {
 			if (!unitItem.getConfirmedInvoices().contains(invoice) && unit.isDirectResponsible(person)) {
 			    return true;
 			}
