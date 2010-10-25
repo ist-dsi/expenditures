@@ -43,6 +43,11 @@ public class RequestCapitalActivityInformation extends ActivityInformation<Worki
 		requestedValue = anualValue;
 	    }
 	}
+
+	final Money allocateableValue = workingCapital.calculateAllocateableValue();
+	if (requestedValue.isGreaterThan(allocateableValue)) {
+	    requestedValue = allocateableValue;
+	}
     }
 
     public PaymentMethod getPaymentMethod() {

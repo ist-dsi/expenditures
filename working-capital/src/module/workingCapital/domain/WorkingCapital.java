@@ -448,11 +448,18 @@ public class WorkingCapital extends WorkingCapital_Base {
 		&& workingCapitalInitialization.isAuthorized()) {
 	    final Money maxAuthorizedAnualValue = workingCapitalInitialization.getMaxAuthorizedAnualValue();
 	    final Money allocatedValue = calculateAllocatedValue();
-	    if (maxAuthorizedAnualValue.isGreaterThanOrEqual(allocatedValue)) {
+	    if (maxAuthorizedAnualValue.isGreaterThanOrEqual(allocatedValue.add(requestedValue))) {
 		return true;
 	    }
 	}
 	return false;
+    }
+
+    public Money calculateAllocateableValue() {
+	final WorkingCapitalInitialization workingCapitalInitialization = getWorkingCapitalInitialization();
+	final Money maxAuthorizedAnualValue = workingCapitalInitialization.getMaxAuthorizedAnualValue();
+	final Money allocatedValue = calculateAllocatedValue();
+	return maxAuthorizedAnualValue.subtract(allocatedValue);
     }
 
     private Money calculateAllocatedValue() {
