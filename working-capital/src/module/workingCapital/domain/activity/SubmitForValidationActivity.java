@@ -51,4 +51,9 @@ public class SubmitForValidationActivity extends WorkflowActivity<WorkingCapital
         return false;
     }
 
+    @Override
+    public boolean isDefaultInputInterfaceUsed() {
+        return false;
+    }
+
 }

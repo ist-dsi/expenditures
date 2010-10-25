@@ -60,10 +60,6 @@
 			help="label.module.workingCapital.internationalBankAccountNumber.help" validator="module.workingCapital.presentationTier.validator.IbanOfPTBanValidator"/>
 </schema>		
 
-<schema name="activityInformation.SubmitForValidationActivity" type="module.workingCapital.domain.activity.SubmitForValidationActivityInformation" bundle="WORKING_CAPITAL_RESOURCES">
-	<slot name="lastSubmission" key="label.module.workingCapital.lastSubmission"/>
-</schema>		
-
 
 <schema name="activityInformation.ReenforceWorkingCapitalInitializationActivity" type="module.workingCapital.domain.WorkingCapitalInitializationReenforcement" bundle="WORKING_CAPITAL_RESOURCES">
 	<slot name="amount" key="label.module.workingCapital.initialization.requestedReenforcementValue"/>

@@ -44,4 +44,14 @@ public class TerminateWorkingCapitalActivity extends WorkflowActivity<WorkingCap
         return false;
     }
 
+    @Override
+    public boolean isConfirmationNeeded(WorkingCapitalProcess process) {
+	return true;
+    }
+
+    @Override
+    public String getLocalizedConfirmationMessage(final WorkingCapitalProcess process) {
+        return BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources", "label.message.SubmitForValidationActivity.confirm");
+    }
+
 }
