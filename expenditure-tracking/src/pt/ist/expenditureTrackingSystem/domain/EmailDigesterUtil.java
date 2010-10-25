@@ -24,6 +24,7 @@ import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.util.ProcessMapGenerator;
+import pt.ist.fenixframework.plugins.remote.domain.exception.RemoteException;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 
 public class EmailDigesterUtil {
@@ -40,11 +41,16 @@ public class EmailDigesterUtil {
 
 	    if (!generateAcquisitionMap.isEmpty() || !generateRefundMap.isEmpty()) {
 		toAddress.clear();
-		final String email = person.getEmail();
-		if (email != null) {
-		    toAddress.add(email);
-		    new Email("Central de Compras", "noreply@ist.utl.pt", new String[] {}, toAddress, Collections.EMPTY_LIST,
-			    Collections.EMPTY_LIST, "Processos Pendentes", getBody(generateAcquisitionMap, generateRefundMap));
+		try {
+		    final String email = person.getEmail();
+		    if (email != null) {
+			toAddress.add(email);
+			new Email("Central de Compras", "noreply@ist.utl.pt", new String[] {}, toAddress, Collections.EMPTY_LIST,
+				Collections.EMPTY_LIST, "Processos Pendentes", getBody(generateAcquisitionMap, generateRefundMap));
+		    }
+		} catch (final RemoteException ex) {
+		    System.out.println("Unable to lookup email address for: " + person.getUsername());
+		    // skip this person... keep going to next.
 		}
 	    }
 	}
