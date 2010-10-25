@@ -43,13 +43,7 @@
 		</ol>
 	</li>
 	<li><!-- NO_CHECKSUM --><a href="#submitForApproval"><bean:message bundle="MISSION_RESOURCES" key="text.help.title.submitForApproval"/></a></li>
-	<li>
-		<!-- NO_CHECKSUM --><a href="#processApproval"><bean:message bundle="MISSION_RESOURCES" key="text.help.title.processApproval"/></a>
-		<ol>
-			<li><!-- NO_CHECKSUM --><a href="#processApprovalWithoutCosts"><bean:message bundle="MISSION_RESOURCES" key="text.help.title.processApproval.withoutCosts"/></a></li>
-			<li><!-- NO_CHECKSUM --><a href="#processApprovalWithCosts"><bean:message bundle="MISSION_RESOURCES" key="text.help.title.processApproval.withCosts"/></a></li>
-		</ol>
-	</li>
+	<li><!-- NO_CHECKSUM --><a href="#processApproval"><bean:message bundle="MISSION_RESOURCES" key="text.help.title.processApproval"/></a></li>
 	<li>
 		<!-- NO_CHECKSUM --><a href="#fundAllocationAndDislocationAuthorization"><bean:message bundle="MISSION_RESOURCES" key="text.help.title.fundAllocationAndDislocationAuthorization"/></a>
 		<ol>
@@ -202,9 +196,6 @@
 <p><bean:message bundle="MISSION_RESOURCES" key="text.help.content.submitForApproval.paragraph5"/></p>
 
 <h2><a name="processApproval"></a>7. <bean:message bundle="MISSION_RESOURCES" key="text.help.title.processApproval"/></h2>
-<p><bean:message bundle="MISSION_RESOURCES" key="text.help.content.processApproval"/></p>
-
-<h3><a name="processApprovalWithoutCosts"></a>7.1. <bean:message bundle="MISSION_RESOURCES" key="text.help.title.processApproval.withoutCosts"/></h3>
 <p><bean:message bundle="MISSION_RESOURCES" key="text.help.content.processApproval.withoutCosts.paragraph1"/></p>
 <p><bean:message bundle="MISSION_RESOURCES" key="text.help.content.processApproval.withoutCosts.paragraph2"/></p>
 <p><bean:message bundle="MISSION_RESOURCES" key="text.help.content.processApproval.withoutCosts.paragraph3"/></p>
@@ -214,18 +205,6 @@
 <p><bean:message bundle="MISSION_RESOURCES" key="text.help.content.processApproval.withoutCosts.paragraph7"/></p>
 <p><bean:message bundle="MISSION_RESOURCES" key="text.help.content.processApproval.withoutCosts.paragraph8"/></p>
 <p><bean:message bundle="MISSION_RESOURCES" key="text.help.content.processApproval.withoutCosts.paragraph9"/></p>
-
-<h3><a name="processApprovalWithCosts"></a>7.2. <bean:message bundle="MISSION_RESOURCES" key="text.help.title.processApproval.withCosts"/></h3>
-<p><bean:message bundle="MISSION_RESOURCES" key="text.help.content.processApproval.withCosts.paragraph1"/></p>
-<p><bean:message bundle="MISSION_RESOURCES" key="text.help.content.processApproval.withCosts.paragraph2"/></p>
-<p><bean:message bundle="MISSION_RESOURCES" key="text.help.content.processApproval.withCosts.paragraph3"/></p>
-<p><bean:message bundle="MISSION_RESOURCES" key="text.help.content.processApproval.withCosts.paragraph4"/></p>
-<p><bean:message bundle="MISSION_RESOURCES" key="text.help.content.processApproval.withCosts.paragraph5"/></p>
-<p><bean:message bundle="MISSION_RESOURCES" key="text.help.content.processApproval.withCosts.paragraph6"/></p>
-<p><bean:message bundle="MISSION_RESOURCES" key="text.help.content.processApproval.withCosts.paragraph7"/></p>
-<p><bean:message bundle="MISSION_RESOURCES" key="text.help.content.processApproval.withCosts.paragraph8"/></p>
-<p><bean:message bundle="MISSION_RESOURCES" key="text.help.content.processApproval.withCosts.paragraph9"/></p>
-<p><bean:message bundle="MISSION_RESOURCES" key="text.help.content.processApproval.withCosts.paragraph10"/></p>
 <p align="center"><img src="<%= request.getContextPath() + "/images/mission/help/Screen03_1.png" %>" alt="mission_approval" /></p>
 
 <h2><a name="fundAllocationAndDislocationAuthorization"></a>8. <bean:message bundle="MISSION_RESOURCES" key="text.help.title.fundAllocationAndDislocationAuthorization"/></h2>
