@@ -74,9 +74,11 @@ public class EmailDigesterUtil {
 	}
 	final PaymentProcessYear paymentProcessYear = PaymentProcessYear.getPaymentProcessYearByYear(Calendar.getInstance().get(Calendar.YEAR));
 	for (final PaymentProcess paymentProcess : paymentProcessYear.getPaymentProcessSet()) {
-	    final Person person = paymentProcess.getRequestor();
-	    if (person != null && person.getOptions().getReceiveNotificationsByEmail()) {
-		people.add(person);
+	    if (paymentProcess.getRequest() != null) {
+		final Person person = paymentProcess.getRequestor();
+	    	if (person != null && person.getOptions().getReceiveNotificationsByEmail()) {
+	    	    people.add(person);
+	    	}
 	    }
 	}
 	return people;
