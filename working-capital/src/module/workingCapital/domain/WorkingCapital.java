@@ -340,6 +340,12 @@ public class WorkingCapital extends WorkingCapital_Base {
 	}
     }
 
+    public void unsubmitAcquisitionsForValidation() {
+	for (final WorkingCapitalAcquisition workingCapitalAcquisition : getWorkingCapitalAcquisitionsSet()) {
+	    workingCapitalAcquisition.setSubmitedForVerification(null);
+	}
+    }
+
     public boolean canRequestCapital() {
 	final WorkingCapitalInitialization workingCapitalInitialization = getWorkingCapitalInitialization();
 	return workingCapitalInitialization != null

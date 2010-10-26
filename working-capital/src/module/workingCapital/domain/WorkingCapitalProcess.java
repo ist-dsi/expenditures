@@ -37,6 +37,7 @@ import module.workingCapital.domain.activity.TerminateWorkingCapitalActivity;
 import module.workingCapital.domain.activity.UnApproveActivity;
 import module.workingCapital.domain.activity.UnApproveWorkingCapitalAcquisitionActivity;
 import module.workingCapital.domain.activity.UnAuthorizeActivity;
+import module.workingCapital.domain.activity.UnTerminateWorkingCapitalActivity;
 import module.workingCapital.domain.activity.UnVerifyActivity;
 import module.workingCapital.domain.activity.UnVerifyWorkingCapitalAcquisitionActivity;
 import module.workingCapital.domain.activity.UndoCancelOrRejectWorkingCapitalInitializationActivity;
@@ -91,6 +92,7 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base implements
 	activitiesAux.add(new SubmitForValidationActivity());
 	activitiesAux.add(new RequestCapitalRestitutionActivity());
 	activitiesAux.add(new TerminateWorkingCapitalActivity());
+	activitiesAux.add(new UnTerminateWorkingCapitalActivity());
 	activitiesAux.add(new RegisterCapitalRefundActivity());
 	activitiesAux.add(new ReenforceWorkingCapitalInitializationActivity());
 	activities = Collections.unmodifiableList(activitiesAux);
@@ -193,6 +195,11 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base implements
     public void submitAcquisitionsForValidation() {
 	final WorkingCapital workingCapital = getWorkingCapital();
 	workingCapital.submitAcquisitionsForValidation();
+    }
+
+    public void unsubmitAcquisitionsForValidation() {
+	final WorkingCapital workingCapital = getWorkingCapital();
+	workingCapital.unsubmitAcquisitionsForValidation();
     }
 
     @Override
