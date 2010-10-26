@@ -18,6 +18,7 @@ import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
+import pt.ist.fenixframework.plugins.remote.domain.exception.RemoteException;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 
 public class EmailDigesterUtil {
@@ -41,38 +42,43 @@ public class EmailDigesterUtil {
 	    		final int totalPending = takenByUser + pendingApprovalCount + pendingVerificationnCount + pendingAuthorizationCount + pendingPaymentCount;
 
 	    		if (totalPending > 0) {
-	    		    final String email = user.getUsername() + "@nowhere.org";// person.getEmail();
-	    		    if (email != null) {
-	    			final StringBuilder body = new StringBuilder("Caro utilizador, possui processos de fundos de maneio pendentes nas aplicações centrais do IST, em http://dot.ist.utl.pt/.\n");
-	    			if (takenByUser > 0) {
-	    			    body.append("\n\tPendentes de Libertação\t");
-	    			    body.append(takenByUser);
-	    			}
-	    			if (pendingApprovalCount > 0) {
-	    			    body.append("\n\tPendentes de Aprovação\t");
-	    			    body.append(pendingApprovalCount);
-	    			}
-	    			if (pendingVerificationnCount > 0) {
-	    			    body.append("\n\tPendentes de Verificação\t");
-	    			    body.append(pendingVerificationnCount);
-	    			}
-	    			if (pendingAuthorizationCount > 0) {
-	    			    body.append("\n\tPendentes de Autorização\t");
-	    			    body.append(pendingAuthorizationCount);
-	    			}
-	    			if (pendingPaymentCount > 0) {
-	    			    body.append("\n\tPendentes de Pagamento\t");
-	    			    body.append(pendingPaymentCount);
-	    			}
-	    			body.append("\n\n\tTotal de Processos de Missão Pendentes\t");
-	    			body.append(totalPending);
+	    		    try {
+	    			final String email = person.getEmail();
+	    			if (email != null) {
+	    			    final StringBuilder body = new StringBuilder("Caro utilizador, possui processos de fundos de maneio pendentes nas aplicações centrais do IST, em http://dot.ist.utl.pt/.\n");
+	    			    if (takenByUser > 0) {
+	    				body.append("\n\tPendentes de Libertação\t");
+	    				body.append(takenByUser);
+	    			    }
+	    			    if (pendingApprovalCount > 0) {
+	    				body.append("\n\tPendentes de Aprovação\t");
+	    				body.append(pendingApprovalCount);
+	    			    }
+	    			    if (pendingVerificationnCount > 0) {
+	    				body.append("\n\tPendentes de Verificação\t");
+	    				body.append(pendingVerificationnCount);
+	    			    }
+	    			    if (pendingAuthorizationCount > 0) {
+	    				body.append("\n\tPendentes de Autorização\t");
+	    				body.append(pendingAuthorizationCount);
+	    			    }
+	    			    if (pendingPaymentCount > 0) {
+	    				body.append("\n\tPendentes de Pagamento\t");
+	    				body.append(pendingPaymentCount);
+	    			    }
+	    			    body.append("\n\n\tTotal de Processos de Missão Pendentes\t");
+	    			    body.append(totalPending);
 
-	    			body.append("\n\n---\n");
-	    			body.append("Esta mensagem foi enviada por meio das Aplicações Centrais do IST.\n");
+	    			    body.append("\n\n---\n");
+	    			    body.append("Esta mensagem foi enviada por meio das Aplicações Centrais do IST.\n");
 
-	    			final Collection<String> toAddress = Collections.singleton(email);
-	    			new Email("Aplicações Centrais do IST", "noreply@ist.utl.pt", new String[] {}, toAddress, Collections.EMPTY_LIST,
-	    				Collections.EMPTY_LIST, "Processos Pendentes - Fundos de Maneio", body.toString());
+	    			    final Collection<String> toAddress = Collections.singleton(email);
+	    			    new Email("Aplicações Centrais do IST", "noreply@ist.utl.pt", new String[] {}, toAddress, Collections.EMPTY_LIST,
+	    				    Collections.EMPTY_LIST, "Processos Pendentes - Fundos de Maneio", body.toString());
+	    			}
+	    		    } catch (final RemoteException ex) {
+	    			System.out.println("Unable to lookup email address for: " + person.getUsername());
+	    			// skip this person... keep going to next.
 	    		    }
 	    		}
 	    	    } finally {
