@@ -119,7 +119,7 @@ public class EmailDigesterUtil {
 		final module.organization.domain.Person missionPerson = (module.organization.domain.Person) missionResponsible;
 		if (missionPerson.hasUser()) {
 		    final User user = missionPerson.getUser();
-		    if (user.hasExpenditurePerson()) {
+		    if (user != null && user.hasExpenditurePerson()) {
 			final Person person = user.getExpenditurePerson();
 			if (person.getOptions().getReceiveNotificationsByEmail()) {
 			    people.add(person);
