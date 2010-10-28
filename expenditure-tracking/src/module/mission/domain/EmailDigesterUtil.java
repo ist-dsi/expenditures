@@ -115,7 +115,7 @@ public class EmailDigesterUtil {
 	for (final MissionProcess missionProcess : missionYear.getMissionProcessSet()) {
 	    final Mission mission = missionProcess.getMission();
 	    final Party missionResponsible = mission.getMissionResponsible();
-	    if (missionResponsible.isPerson()) {
+	    if (missionResponsible != null && missionResponsible.isPerson()) {
 		final module.organization.domain.Person missionPerson = (module.organization.domain.Person) missionResponsible;
 		if (missionPerson.hasUser()) {
 		    final User user = missionPerson.getUser();
