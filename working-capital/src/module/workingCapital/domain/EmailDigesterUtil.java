@@ -66,7 +66,7 @@ public class EmailDigesterUtil {
 	    				body.append("\n\tPendentes de Pagamento\t");
 	    				body.append(pendingPaymentCount);
 	    			    }
-	    			    body.append("\n\n\tTotal de Processos de Missão Pendentes\t");
+	    			    body.append("\n\n\tTotal de Processos de Fundos de Maneio Pendentes\t");
 	    			    body.append(totalPending);
 
 	    			    body.append("\n\n---\n");
