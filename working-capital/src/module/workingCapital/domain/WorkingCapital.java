@@ -110,7 +110,7 @@ public class WorkingCapital extends WorkingCapital_Base {
 	    }
 	    if (!hasAtLeastOneResponsible) {
 		final Unit parent = unit.getParentUnit();
-		return findUnitResponsible(person, amount, parent);
+		return findDirectUnitResponsible(person, amount, parent);
 	    }
 	}
 	return null; 
@@ -264,6 +264,11 @@ public class WorkingCapital extends WorkingCapital_Base {
     public boolean hasAcquisitionPendingApproval(final User user) {
 	final Money valueForAuthorization = Money.ZERO;
 	return hasAcquisitionPendingApproval() && findUnitResponsible(user.getPerson(), valueForAuthorization) != null;
+    }
+
+    public boolean hasAcquisitionPendingDirectApproval(final User user) {
+	final Money valueForAuthorization = Money.ZERO;
+	return hasAcquisitionPendingApproval() && findDirectUnitResponsible(user.getPerson(), valueForAuthorization) != null;
     }
 
     public boolean hasAcquisitionPendingVerification() {

@@ -16,8 +16,8 @@ public class ApproveWorkingCapitalAcquisitionActivity extends WorkflowActivity<W
     }
 
     @Override
-    public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
-	final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
+    public boolean isActive(final WorkingCapitalProcess process, final User user) {
+	final WorkingCapital workingCapital = process.getWorkingCapital();
 	return !workingCapital.isCanceledOrRejected() && workingCapital.hasAcquisitionPendingApproval(user);
     }
 
@@ -35,6 +35,12 @@ public class ApproveWorkingCapitalAcquisitionActivity extends WorkflowActivity<W
     @Override
     public boolean isVisible() {
 	return false;
+    }
+
+    @Override
+    public boolean isUserAwarenessNeeded(WorkingCapitalProcess process, User user) {
+	final WorkingCapital workingCapital = process.getWorkingCapital();
+        return !workingCapital.isCanceledOrRejected() && workingCapital.hasAcquisitionPendingDirectApproval(user);
     }
 
 }
