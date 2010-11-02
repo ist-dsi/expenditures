@@ -11,11 +11,13 @@
 	<br />
 </html:messages>
 
-<fr:edit name="missionProcessCreationBean" schema="module.mission.domain.util.MissionProcessCreationBean"
-		action="/missionProcess.do?method=newMissionCreation">
-	<fr:layout name="tabular">
-		<fr:property name="classes" value="form" />
-		<fr:property name="columnClasses" value=",,tderror" />
-		<fr:property name="requiredMarkShown" value="true"/>
-	</fr:layout>
-</fr:edit>
+<fr:form id="createForm" action="/missionProcess.do?method=newMissionCreation">
+	<fr:edit name="missionProcessCreationBean" schema="module.mission.domain.util.MissionProcessCreationBean">
+		<fr:layout name="tabular">
+			<fr:property name="classes" value="form" />
+			<fr:property name="columnClasses" value=",,tderror" />
+			<fr:property name="requiredMarkShown" value="true"/>
+		</fr:layout>
+	</fr:edit>
+	<html:submit styleClass="inputbutton"><bean:message key="button.submit" bundle="EXPENDITURE_RESOURCES"/></html:submit>
+</fr:form>
