@@ -92,4 +92,8 @@ public class MissionItemFinancer extends MissionItemFinancer_Base {
 	return !isArchived() && isCurrentUserAccountant();
     }
 
+    public void unArchive() {
+	setMissionVersionFromArchive(null);
+    }
+
 }

@@ -79,6 +79,12 @@ public class MissionVersion extends MissionVersion_Base {
 	}
     }
 
+    public void unArchive() {
+	for (final MissionItem missionItem : getMissionItemsSet()) {
+	    missionItem.unArchive();
+	}
+    }
+
     public boolean isTerminated() {
 	return getChangesAfterArrival() != null;
     }

@@ -1,11 +1,14 @@
 package module.mission.domain.activity;
 
+import module.mission.domain.Mission;
+import module.mission.domain.MissionItem;
 import module.mission.domain.MissionProcess;
+import module.mission.domain.MissionVersion;
 import module.workflow.activities.ActivityInformation;
 import myorg.domain.User;
 import myorg.util.BundleUtil;
 
-public class SendForProcessTerminationActivity extends MissionProcessActivity<MissionProcess, ActivityInformation<MissionProcess>> {
+public class RevertTerminationActivity extends MissionProcessActivity<MissionProcess, ActivityInformation<MissionProcess>> {
 
     @Override
     public String getLocalizedName() {
@@ -14,18 +17,30 @@ public class SendForProcessTerminationActivity extends MissionProcessActivity<Mi
 
     @Override
     public boolean isActive(final MissionProcess missionProcess, final User user) {
-	return super.isActive(missionProcess, user) && missionProcess.isReadyForMissionTermination(user);
+	return super.isActive(missionProcess, user)
+		&& missionProcess.isTerminated()
+		&& !missionProcess.isArchived()
+		&& missionProcess.canArchiveMission();
     }
 
     @Override
     protected void process(final ActivityInformation<MissionProcess> activityInformation) {
 	final MissionProcess missionProcess = activityInformation.getProcess();
-	missionProcess.sendForProcessTermination(null);
+	missionProcess.revertProcessTermination();
+    }
+
+    private boolean areAllMissionItemFinancersArchived(final MissionVersion missionVersion) {
+	for (final MissionItem missionItem : missionVersion.getMissionItemsSet()) {
+	    if (!missionItem.isArchived()) {
+		return false;
+	    }
+	}
+	return true;
     }
 
     @Override
-    public ActivityInformation<MissionProcess> getActivityInformation(MissionProcess process) {
-        return new ActivityInformation<MissionProcess>(process, this);
+    public ActivityInformation<MissionProcess> getActivityInformation(final MissionProcess process) {
+	return new ActivityInformation(process, this);
     }
 
     @Override
@@ -36,7 +51,7 @@ public class SendForProcessTerminationActivity extends MissionProcessActivity<Mi
     @Override
     public String getLocalizedConfirmationMessage() {
 	return BundleUtil.getFormattedStringFromResourceBundle("resources/MissionResources",
-		"label.module.mission.SendForProcessTerminationActivity.confirmation");
+		"label.module.mission.revert.termination");
     }
 
 }

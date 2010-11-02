@@ -23,6 +23,7 @@ import module.mission.domain.activity.RemoveFinancerActivity;
 import module.mission.domain.activity.RemoveItemActivity;
 import module.mission.domain.activity.RemoveParticipantActivity;
 import module.mission.domain.activity.RevertMissionForEditingActivity;
+import module.mission.domain.activity.RevertTerminationActivity;
 import module.mission.domain.activity.SendForProcessTerminationActivity;
 import module.mission.domain.activity.SendForProcessTerminationWithChangesActivity;
 import module.mission.domain.activity.SubmitForApprovalActivity;
@@ -82,6 +83,7 @@ public class NationalMissionProcess extends NationalMissionProcess_Base {
 	activitiesAux.add(new SendForProcessTerminationActivity());
 	activitiesAux.add(new RevertMissionForEditingActivity());
 	activitiesAux.add(new ArchiveItemActivity());
+	activitiesAux.add(new RevertTerminationActivity());
 
 	activitiesAux.add(new GiveProcess<MissionProcess>(new MissionGiveProcessUserNotifier()));
 	activitiesAux.add(new TakeProcess<MissionProcess>());

@@ -1145,4 +1145,18 @@ public abstract class Mission extends Mission_Base {
 	return false;
     }
 
+    public void revertProcessTermination() {
+	final MissionVersion missionVersion = getMissionVersion();
+	final String descriptionOfChangesAfterArrival = missionVersion.getDescriptionOfChangesAfterArrival();
+	if (descriptionOfChangesAfterArrival == null || descriptionOfChangesAfterArrival.isEmpty()) {
+	    missionVersion.setChangesAfterArrival(null);
+	} else {
+	    final MissionVersion newMissionVersion = new MissionVersion(this);
+	    newMissionVersion.setChangesAfterArrival(null);
+	    newMissionVersion.setDescriptionOfChangesAfterArrival(null);
+	}
+
+	missionVersion.unArchive();
+    }
+
 }

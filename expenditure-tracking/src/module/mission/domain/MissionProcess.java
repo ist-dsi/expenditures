@@ -502,4 +502,9 @@ public abstract class MissionProcess extends MissionProcess_Base {
 	return mission.hasNoItemsAndParticipantesAreAuthorized();
     }
 
+    public void revertProcessTermination() {
+	final Mission mission = getMission();
+	mission.revertProcessTermination();
+    }
+
 }

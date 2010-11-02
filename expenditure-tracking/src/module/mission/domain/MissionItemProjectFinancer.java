@@ -81,4 +81,10 @@ public class MissionItemProjectFinancer extends MissionItemProjectFinancer_Base 
 	return getMissionVersionFromProjectArchive() != null;
     }
 
+    @Override
+    public void unArchive() {
+        super.unArchive();
+        setMissionVersionFromProjectArchive(null);
+    }
+
 }
