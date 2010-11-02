@@ -17,7 +17,10 @@ public class UnconfirmInvoices extends WorkflowActivity<RefundProcess, ActivityI
 		&& ((process.isAccountingEmployee(person) && !process.hasProjectsAsPayingUnits()) || (process
 			.isProjectAccountingEmployee(person) && process.hasProjectsAsPayingUnits()))
 		&& !process.getRequest().getConfirmedInvoices().isEmpty()
-		&& !process.getRequest().hasAllocatedFundsPermanentlyForAnyProjectFinancer();
+		&& ((process.hasProjectsAsPayingUnits() && !process.getRequest()
+			.hasAllocatedFundsPermanentlyForAnyProjectFinancer()) || (!process.hasProjectsAsPayingUnits() && !process
+			.getRequest().hasAnyEffectiveFundAllocationId()));
+//		&& (!process.getRequest().hasAllocatedFundsPermanentlyForAnyProjectFinancer());
     }
 
     @Override
