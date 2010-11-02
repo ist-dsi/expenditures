@@ -163,7 +163,7 @@ public class MissionYear extends MissionYear_Base {
 	if (person != null) {
 	    for (final Mission mission : person.getRequestedMissionsSet()) {
 		final MissionProcess missionProcess = mission.getMissionProcess();
-		if (missionProcess.getMissionYear() == this && !missionProcess.getIsCanceled()) {
+		if (missionProcess.getMissionYear() == this && !missionProcess.getIsCanceled() && !missionProcess.isArchived()) {
 		    result.add(missionProcess);
 		}
 	    }
@@ -217,7 +217,7 @@ public class MissionYear extends MissionYear_Base {
 	if (user.hasExpenditurePerson()) {
 	    final Set<Authorization> authorizations = getAuthorizations(user);
 	    for (final MissionProcess missionProcess : getMissionProcessSet()) {
-		if (!missionProcess.getIsCanceled()) {
+		if (!missionProcess.getIsCanceled() && !missionProcess.isArchived()) {
 		    final Mission mission = missionProcess.getMission();
 		    final Party missionResponsible = mission.getMissionResponsible();
 		    if (missionResponsible != null) {
@@ -249,7 +249,7 @@ public class MissionYear extends MissionYear_Base {
 	if (person != null) {
 	    for (final Mission mission : person.getMissionsSet()) {
 		final MissionProcess missionProcess = mission.getMissionProcess();
-		if (missionProcess.getMissionYear() == this && !missionProcess.getIsCanceled()) {
+		if (missionProcess.getMissionYear() == this && !missionProcess.getIsCanceled() && !missionProcess.isArchived()) {
 		    result.add(missionProcess);
 		}
 	    }
