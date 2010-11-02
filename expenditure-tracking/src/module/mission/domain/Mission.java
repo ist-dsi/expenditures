@@ -1078,8 +1078,7 @@ public abstract class Mission extends Mission_Base {
     }
 
     private boolean areAllFundsAuthorized() {
-	return (!hasAnyFinancer() || hasAllAllocatedFunds())
-		&& (!hasAnyProjectFinancer() || hasAllAllocatedProjectFunds());
+	return isAuthorized();
     }
 
     private boolean sentForTermination() {
