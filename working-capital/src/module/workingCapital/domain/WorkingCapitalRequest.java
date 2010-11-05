@@ -54,4 +54,13 @@ public class WorkingCapitalRequest extends WorkingCapitalRequest_Base {
         super.setRequestedValue(requestedValue);
     }
 
+    public void delete() {
+	removeWorkingCapital();
+	removeWorkingCapitalPayment();
+	removeWorkingCapitalRequester();
+	removeWorkingCapitalTreasuryProcessor();
+	removeWorkingCapitalSystem();
+	super.deleteDomainObject();
+    }
+
 }

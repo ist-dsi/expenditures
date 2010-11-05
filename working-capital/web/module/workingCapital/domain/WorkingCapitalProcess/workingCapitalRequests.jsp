@@ -45,6 +45,9 @@
 								<wf:activityLink processName="process" activityName="PayCapitalActivity" scope="request" paramName0="workingCapitalRequest" paramValue0="<%= workingCapitalRequestOid %>">
 									<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.PayCapitalActivity"/>
 								</wf:activityLink>
+								<wf:activityLink processName="process" activityName="UnRequestCapitalActivity" scope="request" paramName0="workingCapitalRequest" paramValue0="<%= workingCapitalRequestOid %>">
+									<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.UnRequestCapitalActivity"/>
+								</wf:activityLink>
 							</logic:notPresent>	
 							</td>
 						</tr>

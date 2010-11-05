@@ -30,7 +30,10 @@ public class RequestCapitalActivityInformation extends ActivityInformation<Worki
 		final WorkingCapitalAcquisitionSubmission workingCapitalAcquisitionSubmission = (WorkingCapitalAcquisitionSubmission) workingCapitalTransaction;
 		requestedValue = workingCapitalAcquisitionSubmission.getValue();
 	    } else {
-		requestedValue = workingCapitalTransaction.getAccumulatedValue();
+		//requestedValue = workingCapitalTransaction.getAccumulatedValue();
+		final Money authorizedAnualValue = workingCapitalInitialization.getAuthorizedAnualValue();
+		final Money balance = workingCapitalTransaction.getBalance();
+		requestedValue = authorizedAnualValue.subtract(balance);
 	    }
 	    if (requestedValue.isGreaterThan(workingCapitalInitialization.getAuthorizedAnualValue())) {
 		requestedValue = workingCapitalInitialization.getAuthorizedAnualValue();
