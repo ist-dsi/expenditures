@@ -551,7 +551,7 @@ public class SyncProjectsAux {
 		final Person responsible = findPerson(responsibleString);
 		if (responsible != null) {
 		    if (projectResponsibles.contains(Integer.valueOf(responsibleString))) {
-			final Authorization authorization = new Authorization(responsible, unit);
+			final Authorization authorization = new Authorization(responsible, unit, "Imported from MGP");
 			authorization.setMaxAmount(AUTHORIZED_VALUE);
 		    } else {
 			// System.out.println("[" + responsibleString +
@@ -635,7 +635,7 @@ public class SyncProjectsAux {
 	    if (responsible != null) {
 		if (projectResponsibles.contains(Integer.valueOf(responsibleString))) {
 		    if (!hasAuthorization(project, responsible)) {
-			final Authorization authorization = new Authorization(responsible, project);
+			final Authorization authorization = new Authorization(responsible, project, "Imported from MGP");
 			authorization.setMaxAmount(AUTHORIZED_VALUE);
 		    }
 		} else {
@@ -643,7 +643,7 @@ public class SyncProjectsAux {
 		    // "] for project [" + acronym +
 		    // "] is not in project responsibles list");
 		    if (!hasAprovalAuthorization(project, responsible)) {
-			new Authorization(responsible, project);
+			new Authorization(responsible, project, "Imported from MGP");
 		    }
 		}
 	    }

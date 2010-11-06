@@ -146,7 +146,11 @@
 	</slot>
 	<slot name="canDelegate" key="authorizations.label.canDelegate" bundle="EXPENDITURE_RESOURCES"/>
 	<slot name="maxAmount" key="authorizations.label.maxAmount" bundle="EXPENDITURE_RESOURCES"/>
-	<setter signature="logEdit()" />
+	<slot name="justification" key="authorizations.label.justification" bundle="EXPENDITURE_RESOURCES" layout="longText">
+		<property name="rows" value="3"/>
+		<property name="columns" value="50"/>
+	</slot>
+	<setter signature="logEdit(justification)" />
 </schema>
 
 <schema name="viewDelegatedAuthorizations"
@@ -387,4 +391,5 @@
 	<slot name="endDate" key="authorizations.label.endDate" bundle="EXPENDITURE_RESOURCES"/>
 	<slot name="canDelegate" key="authorizations.label.canDelegate" bundle="EXPENDITURE_RESOURCES"/>
 	<slot name="maxAmount" key="authorizations.label.maxAmount" bundle="EXPENDITURE_RESOURCES" />
+	<slot name="justification" key="authorizations.label.justifications" bundle="EXPENDITURE_RESOURCES" />
 </schema>

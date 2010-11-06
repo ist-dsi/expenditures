@@ -120,13 +120,13 @@ public class Person extends Person_Base implements Indexable, Searchable {
     }
 
     @Service
-    public Authorization createAuthorization(final Unit unit) {
-	return new Authorization(this, unit);
+    public Authorization createAuthorization(final Unit unit, final String justification) {
+	return new Authorization(this, unit, justification);
     }
 
     @Service
-    public Authorization createAuthorization(final AuthorizationBean authorizationBean) {
-	return new Authorization(authorizationBean);
+    public Authorization createAuthorization(final AuthorizationBean authorizationBean, final String justification) {
+	return new Authorization(authorizationBean, justification);
     }
 
     public static Person findByUsername(final String username) {

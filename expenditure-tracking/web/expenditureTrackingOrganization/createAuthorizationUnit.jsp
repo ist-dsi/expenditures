@@ -35,6 +35,10 @@
 			<fr:slot name="canDelegate" key="authorizations.label.canDelegate" bundle="EXPENDITURE_RESOURCES"/>
 		</logic:present>
 		<fr:slot name="maxAmount" key="authorizations.label.maxAmount" bundle="EXPENDITURE_RESOURCES" />
+		<fr:slot name="justification" key="authorizations.label.justification" bundle="EXPENDITURE_RESOURCES" layout="longText">
+			<fr:property name="rows" value="3"/>
+			<fr:property name="columns" value="50"/>
+		</fr:slot>
 	</fr:schema>
 	<fr:layout name="tabular">
 		<fr:property name="classes" value="form"/>

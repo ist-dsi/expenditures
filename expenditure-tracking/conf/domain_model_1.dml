@@ -175,6 +175,7 @@ class authorizations.AuthorizationLog {
 	LocalDate startDate;
 	LocalDate endDate;
 	Money maxAmount;
+	String justification;
 }	
 
 	class acquisitions.afterthefact.ImportFile extends .pt.ist.fenixframework.plugins.fileSupport.domain.GenericFile {

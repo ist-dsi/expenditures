@@ -42,16 +42,16 @@ public class Authorization extends Authorization_Base {
 	setMaxAmount(Money.ZERO);
     }
 
-    public Authorization(final Person person, final Unit unit) {
+    public Authorization(final Person person, final Unit unit, final String justification) {
 	this();
 	setPerson(person);
 	setUnit(unit);
 	setCanDelegate(Boolean.FALSE);
-	AuthorizationOperation.CREATE.log(this);
+	AuthorizationOperation.CREATE.log(this, justification);
     }
 
-    public Authorization(final AuthorizationBean authorizationBean) {
-	this(authorizationBean.getPerson(), authorizationBean.getUnit());
+    public Authorization(final AuthorizationBean authorizationBean, final String justification) {
+	this(authorizationBean.getPerson(), authorizationBean.getUnit(), justification);
 	setStartDate(authorizationBean.getStartDate());
 	setEndDate(authorizationBean.getEndDate());
 	setCanDelegate(authorizationBean.getCanDelegate());
@@ -88,7 +88,7 @@ public class Authorization extends Authorization_Base {
 	for (DelegatedAuthorization authorization : getDelegatedAuthorizations()) {
 	    authorization.revoke();
 	}
-	AuthorizationOperation.EDIT.log(this);
+	AuthorizationOperation.EDIT.log(this, null);
     }
 
     @Override
@@ -124,7 +124,7 @@ public class Authorization extends Authorization_Base {
 
     @Service
     public void delete() {
-	AuthorizationOperation.DELETE.log(this);
+	AuthorizationOperation.DELETE.log(this, null);
 	for (final DelegatedAuthorization delegatedAuthorization : getDelegatedAuthorizationsSet()) {
 	    delegatedAuthorization.delete();
 	}
@@ -134,8 +134,18 @@ public class Authorization extends Authorization_Base {
 	deleteDomainObject();
     }
 
-    public void logEdit() {
-	AuthorizationOperation.EDIT.log(this);
+    private transient String justification;
+
+    public String getJustification() {
+        return justification;
+    }
+
+    public void setJustification(String justification) {
+        this.justification = justification;
+    }
+
+    public void logEdit(final String justification) {
+	AuthorizationOperation.EDIT.log(this, justification);
     }
 
 }

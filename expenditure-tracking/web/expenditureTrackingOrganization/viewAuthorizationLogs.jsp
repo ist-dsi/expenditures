@@ -50,8 +50,7 @@
 	<logic:notEmpty name="authorizationLogs">
 		<fr:view name="authorizationLogs" schema="pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationLog">
 			<fr:layout name="tabular">
-				<fr:property name="classes" value="tstyle1"/>
-				<fr:property name="columnClasses" value=",,tderror"/>
+				<fr:property name="classes" value="tstyle2"/>
 			</fr:layout>
 		</fr:view>
 	</logic:notEmpty>

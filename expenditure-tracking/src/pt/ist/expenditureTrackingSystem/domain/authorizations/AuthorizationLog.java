@@ -21,7 +21,7 @@ public class AuthorizationLog extends AuthorizationLog_Base {
 
     };
 
-    public AuthorizationLog(final AuthorizationOperation authorizationOperation, final Authorization authorization) {
+    public AuthorizationLog(final AuthorizationOperation authorizationOperation, final Authorization authorization, final String justification) {
         super();
         setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
         setWhenOperationWasRan(new DateTime());
@@ -35,6 +35,7 @@ public class AuthorizationLog extends AuthorizationLog_Base {
         setMaxAmount(authorization.getMaxAmount());
         setPerson(authorization.getPerson());
         setUnit(authorization.getUnit());
+        setJustification(justification);
     }
 
 }

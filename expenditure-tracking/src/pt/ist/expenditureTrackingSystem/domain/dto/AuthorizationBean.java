@@ -20,6 +20,7 @@ public class AuthorizationBean implements Serializable {
     private Boolean canDelegate;
     private Money maxAmount;
     private boolean returnToUnitInterface = false;
+    private String justification;
 
     public AuthorizationBean(final Person person, final Unit unit, boolean returnToUnitInterface) {
 	setPerson(person);
@@ -99,6 +100,14 @@ public class AuthorizationBean implements Serializable {
 
     public void setReturnToUnitInterface(boolean returnToUnitInterface) {
         this.returnToUnitInterface = returnToUnitInterface;
+    }
+
+    public String getJustification() {
+        return justification;
+    }
+
+    public void setJustification(String justification) {
+        this.justification = justification;
     }
 
 }

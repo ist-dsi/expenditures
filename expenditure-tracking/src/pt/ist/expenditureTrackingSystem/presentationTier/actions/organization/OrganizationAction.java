@@ -355,14 +355,14 @@ public class OrganizationAction extends BaseAction {
 	return forward(request, "/expenditureTrackingOrganization/changeAuthorizationUnit.jsp");
     }
 
-    public final ActionForward changeAuthorizationUnit(final ActionMapping mapping, final ActionForm form,
+/*    public final ActionForward changeAuthorizationUnit(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final Person person = getDomainObject(request, "personOid");
 	final Unit unit = getDomainObject(request, "unitOid");
 	person.createAuthorization(unit);
 	return viewPerson(mapping, request, person);
     }
-
+*/
     public final ActionForward prepareCreateAuthorizationUnitWithoutPerson(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final Unit unit = getDomainObject(request, "unitOid");
@@ -388,7 +388,7 @@ public class OrganizationAction extends BaseAction {
     public final ActionForward createAuthorizationUnit(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final AuthorizationBean authorizationBean = getRenderedObject();
-	authorizationBean.getPerson().createAuthorization(authorizationBean);
+	authorizationBean.getPerson().createAuthorization(authorizationBean, authorizationBean.getJustification());
 	if (authorizationBean.isReturnToUnitInterface()) {
 	    final UnitBean unitBean = new UnitBean(authorizationBean.getUnit());;
 	    request.setAttribute("unitBean", unitBean);
