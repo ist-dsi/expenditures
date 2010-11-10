@@ -4,10 +4,12 @@ import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.WorkflowProcess;
 import module.workingCapital.domain.WorkingCapitalProcess;
+import module.workingCapital.domain.util.PaymentMethod;
 
 public class RegisterCapitalRefundActivityInformation  extends ActivityInformation<WorkingCapitalProcess> {
 
     private boolean confirmed = false;
+    private PaymentMethod paymentMethod;
 
     public RegisterCapitalRefundActivityInformation(WorkingCapitalProcess process,
 	    WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity) {
@@ -22,9 +24,17 @@ public class RegisterCapitalRefundActivityInformation  extends ActivityInformati
         this.confirmed = confirmed;
     }
 
+    public PaymentMethod getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(PaymentMethod paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
     @Override
     public boolean hasAllneededInfo() {
-	return super.hasAllneededInfo() && isForwardedFromInput();
+	return super.hasAllneededInfo() && isForwardedFromInput() && paymentMethod != null;
     }
 
 }

@@ -7,6 +7,7 @@ import module.workingCapital.domain.WorkingCapital;
 import module.workingCapital.domain.WorkingCapitalInitialization;
 import module.workingCapital.domain.WorkingCapitalProcess;
 import module.workingCapital.domain.WorkingCapitalRefund;
+import module.workingCapital.domain.util.PaymentMethod;
 import myorg.domain.User;
 import myorg.util.BundleUtil;
 
@@ -33,7 +34,8 @@ public class RegisterCapitalRefundActivity extends WorkflowActivity<WorkingCapit
 	    final WorkingCapitalProcess process = activityInformation.getProcess();
 	    final WorkingCapital workingCapital = process.getWorkingCapital();
 	    final Person person = getLoggedPerson().getPerson();
-	    new WorkingCapitalRefund(workingCapital, person, workingCapital.getBalance());
+	    final PaymentMethod paymentMethod = activityInformation.getPaymentMethod();
+	    new WorkingCapitalRefund(workingCapital, person, workingCapital.getBalance(), paymentMethod);
 	}
     }
 
