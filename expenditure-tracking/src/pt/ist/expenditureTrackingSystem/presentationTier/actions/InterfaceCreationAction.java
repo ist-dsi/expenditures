@@ -3,18 +3,13 @@ package pt.ist.expenditureTrackingSystem.presentationTier.actions;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import module.contents.domain.Page;
-import module.contents.domain.Page.PageBean;
-import myorg.domain.RoleType;
 import myorg.domain.VirtualHost;
 import myorg.domain.contents.ActionNode;
 import myorg.domain.contents.Node;
 import myorg.domain.groups.PersistentGroup;
-import myorg.domain.groups.Role;
 import myorg.domain.groups.UnionGroup;
 import myorg.domain.groups.UserGroup;
 import myorg.presentationTier.actions.ContextBaseAction;
-import myorg.util.BundleUtil;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -22,7 +17,6 @@ import org.apache.struts.action.ActionMapping;
 
 import pt.ist.fenixWebFramework.servlets.functionalities.CreateNodeAction;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
-import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
 @Mapping(path = "/expendituresInterfaceCreationAction")
 public class InterfaceCreationAction extends ContextBaseAction {
@@ -110,11 +104,15 @@ public class InterfaceCreationAction extends ContextBaseAction {
 
     protected Node createNodeForPage(final VirtualHost virtualHost, final Node node, final String bundle, final String key,
 	    PersistentGroup userGroup) {
+/**
 	final PageBean pageBean = new PageBean(virtualHost, node, userGroup);
 	final MultiLanguageString statisticsLabel = BundleUtil.getMultilanguageString(bundle, key);
 	pageBean.setLink(statisticsLabel);
 	pageBean.setTitle(statisticsLabel);
 	return (Node) Page.createNewPage(pageBean);
+*/
+	throw new Error("Not implemented");
+	// TODO : reimplement this.
     }
 
 }
