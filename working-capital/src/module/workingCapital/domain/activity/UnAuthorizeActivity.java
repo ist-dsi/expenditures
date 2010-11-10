@@ -5,6 +5,7 @@ import module.workflow.activities.WorkflowActivity;
 import module.workingCapital.domain.WorkingCapital;
 import module.workingCapital.domain.WorkingCapitalInitialization;
 import module.workingCapital.domain.WorkingCapitalProcess;
+import module.workingCapital.domain.WorkingCapitalRequest;
 import module.workingCapital.domain.WorkingCapitalSystem;
 import myorg.domain.User;
 import myorg.util.BundleUtil;
@@ -18,13 +19,15 @@ public class UnAuthorizeActivity extends WorkflowActivity<WorkingCapitalProcess,
     }
 
     @Override
-    public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
+    public boolean isActive(final WorkingCapitalProcess workingCapitalProcess, final User user) {
 	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstance();
-	if (!missionProcess.getWorkingCapital().getWorkingCapitalRequestsSet().isEmpty()) {
-	    return false;
+	for (final WorkingCapitalRequest workingCapitalRequest : workingCapitalProcess.getWorkingCapital().getWorkingCapitalRequestsSet()) {
+	    if (workingCapitalRequest.getWorkingCapitalPayment() != null) {
+		return false;
+	    }
 	}
 	if (workingCapitalSystem.isManagementeMember(user)) {
-	    final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
+	    final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
 	    for (final WorkingCapitalInitialization workingCapitalInitialization : workingCapital
 		    .getWorkingCapitalInitializationsSet()) {
 		if (workingCapitalInitialization.hasResponsibleForUnitAuthorization()) {
@@ -39,6 +42,11 @@ public class UnAuthorizeActivity extends WorkflowActivity<WorkingCapitalProcess,
     protected void process(final WorkingCapitalInitializationInformation activityInformation) {
 	final WorkingCapitalInitialization workingCapitalInitialization = activityInformation.getWorkingCapitalInitialization();
 	workingCapitalInitialization.unauthorize();
+	final WorkingCapitalProcess workingCapitalProcess = activityInformation.getProcess();
+	final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
+	for (final WorkingCapitalRequest workingCapitalRequest : workingCapital.getWorkingCapitalRequestsSet()) {
+	    workingCapitalRequest.delete();
+	}
     }
 
     @Override
