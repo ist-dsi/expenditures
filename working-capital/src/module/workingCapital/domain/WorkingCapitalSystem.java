@@ -8,6 +8,8 @@ import module.organization.domain.Accountability;
 import module.organization.domain.AccountabilityType;
 import module.organization.domain.Person;
 import module.organization.domain.Unit;
+import module.workflow.presentationTier.actions.ProcessManagement;
+import module.workflow.util.SignatureProcessRequestHandler;
 import module.workflow.widgets.ProcessListWidget;
 import module.workingCapital.domain.util.WorkingCapitalPendingProcessCounter;
 import myorg.domain.ModuleInitializer;
@@ -43,7 +45,8 @@ public class WorkingCapitalSystem extends WorkingCapitalSystem_Base implements M
     }
 
     public SortedSet<Accountability> getManagementeMembers() {
-	final SortedSet<Accountability> accountingMembers = new TreeSet<Accountability>(Accountability.COMPARATOR_BY_CHILD_PARTY_NAMES);
+	final SortedSet<Accountability> accountingMembers = new TreeSet<Accountability>(
+		Accountability.COMPARATOR_BY_CHILD_PARTY_NAMES);
 	if (hasManagementUnit() && hasManagementAccountabilityType()) {
 	    final Unit accountingUnit = getManagementUnit();
 	    final AccountabilityType accountabilityType = getManagementAccountabilityType();
@@ -85,6 +88,9 @@ public class WorkingCapitalSystem extends WorkingCapitalSystem_Base implements M
     @Service
     public void init(final MyOrg root) {
 	WorkingCapitalYear.findOrCreate(Integer.valueOf(Calendar.getInstance().get(Calendar.YEAR)));
+
+	ProcessManagement.registerProcessRequestHandler(WorkingCapitalProcess.class,
+		new SignatureProcessRequestHandler<WorkingCapitalProcess>());
     }
 
 }
