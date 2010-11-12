@@ -59,9 +59,32 @@ public class ConfirmInvoice extends WorkflowActivity<RegularAcquisitionProcess, 
 	StringBuilder builder = new StringBuilder();
 	User currentUser = UserView.getCurrentUser();
 	Set<AcquisitionInvoice> unconfirmedInvoices = process.getUnconfirmedInvoices(currentUser.getExpenditurePerson());
+	final int invoiceCount = unconfirmedInvoices.size();
+	int column = 1;
+	if (invoiceCount > 1) {
+	    builder.append("<table>");
+	}
 	for (AcquisitionInvoice unconfirmedInvoice : unconfirmedInvoices) {
+	    if (invoiceCount > 1) {
+		if (column == 1) {
+		    builder.append("<tr>");
+		}
+		builder.append("<td>");
+	    }
 	    builder.append(BundleUtil.getFormattedStringFromResourceBundle(getUsedBundle(), "activity.confirmation."
 		    + getClass().getName(), unconfirmedInvoice.getInvoiceNumber(), unconfirmedInvoice.getConfirmationReport()));
+	    if (invoiceCount > 1) {
+		builder.append("</td>");
+		if (column == 2) {
+		    builder.append("</tr>");
+		    column = 0;
+		}
+	    }
+
+	    column++;
+	}
+	if (invoiceCount > 1) {
+	    builder.append("</table>");
 	}
 
 	return builder.toString();
