@@ -7,13 +7,10 @@ import module.dashBoard.WidgetRegister.WidgetAditionPredicate;
 import module.dashBoard.domain.DashBoardPanel;
 import module.dashBoard.widgets.WidgetController;
 import module.organization.presentationTier.actions.OrganizationModelAction;
-import module.workflow.presentationTier.actions.ProcessManagement;
-import module.workflow.util.SignatureProcessRequestHandler;
 import module.workflow.widgets.ProcessListWidget;
 import myorg.domain.ModuleInitializer;
 import myorg.domain.MyOrg;
 import myorg.domain.User;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.organization.OrganizationModelPlugin.ExpendituresView;
 import pt.ist.expenditureTrackingSystem.presentationTier.widgets.ActivateEmailNotificationWidget;
@@ -166,9 +163,6 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 	registerWidget(PendingSimplifiedWidget.class);
 	registerWidget(ActivateEmailNotificationWidget.class);
 	WidgetRegister.registerWidget(PrioritiesWidget.class, EXPENDITURE_SERVICES_ONLY_PREDICATE);
-
-	ProcessManagement.registerProcessRequestHandler(SimplifiedProcedureProcess.class,
-		new SignatureProcessRequestHandler<SimplifiedProcedureProcess>());
     }
 
     private static void registerWidget(Class<? extends WidgetController> widgetClass) {
