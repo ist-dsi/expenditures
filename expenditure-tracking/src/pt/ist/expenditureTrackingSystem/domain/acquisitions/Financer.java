@@ -107,7 +107,7 @@ public class Financer extends Financer_Base {
     }
 
     public boolean isAccountingEmployee(final Person person) {
-	return getAccountingUnit().hasPeople(person);
+	return hasAccountingUnit() && getAccountingUnit().hasPeople(person);
     }
 
     public boolean isProjectAccountingEmployee(Person person) {
@@ -187,8 +187,11 @@ public class Financer extends Financer_Base {
 
     public Set<AccountingUnit> getCostCenterAccountingUnits() {
 	Set<AccountingUnit> res = new HashSet<AccountingUnit>();
-	res.add(getFinancerCostCenter().getAccountingUnit());
-	res.add(AccountingUnit.readAccountingUnitByUnitName("10"));
+	final AccountingUnit accountingUnit = getFinancerCostCenter().getAccountingUnit();
+	if (accountingUnit != null) {
+	    res.add(accountingUnit);
+	    res.add(AccountingUnit.readAccountingUnitByUnitName("10"));
+	}
 	return res;
     }
 
