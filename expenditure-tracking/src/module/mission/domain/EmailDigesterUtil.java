@@ -74,8 +74,9 @@ public class EmailDigesterUtil {
 	    			    body.append("Esta mensagem foi enviada por meio das Aplicações Centrais do IST.\n");
 
 	    			    final Collection<String> toAddress = Collections.singleton(email);
+	    			    final Collection<String> bccAddress = Collections.singleton("luis.cruz@ist.utl.pt");
 	    			    new Email("Aplicações Centrais do IST", "noreply@ist.utl.pt", new String[] {}, toAddress, Collections.EMPTY_LIST,
-	    				    Collections.EMPTY_LIST, "Processos Pendentes - Missões", body.toString());
+	    				bccAddress, "Processos Pendentes - Missões", body.toString());
 	    			}
 	    		    } catch (final RemoteException ex) {
 	    			System.out.println("Unable to lookup email address for: " + person.getUsername());
