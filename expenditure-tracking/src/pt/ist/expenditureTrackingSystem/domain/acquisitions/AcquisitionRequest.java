@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -18,6 +19,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.Simplifie
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
+import pt.utl.ist.fenix.tools.util.i18n.Language;
 
 public class AcquisitionRequest extends AcquisitionRequest_Base {
 
@@ -534,7 +536,7 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     public void validateInvoiceNumber(String invoiceNumber) {
 	for (PaymentProcessInvoice invoice : getInvoices()) {
 	    if (invoice.getInvoiceNumber().equals(invoiceNumber)) {
-		throw new DomainException("acquisitionProcess.message.exception.InvoiceWithSameNumber");
+		throw new DomainException("acquisitionProcess.message.exception.InvoiceWithSameNumber", ResourceBundle.getBundle("resources.AcquisitionResources", Language.getLocale()));
 	    }
 	}
     }
