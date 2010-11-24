@@ -18,6 +18,7 @@ import module.workingCapital.domain.activity.AllocateFundsActivity;
 import module.workingCapital.domain.activity.ApproveActivity;
 import module.workingCapital.domain.activity.ApproveWorkingCapitalAcquisitionActivity;
 import module.workingCapital.domain.activity.AuthorizeActivity;
+import module.workingCapital.domain.activity.CancelReenforceWorkingCapitalInitializationActivity;
 import module.workingCapital.domain.activity.CancelWorkingCapitalAcquisitionActivity;
 import module.workingCapital.domain.activity.CancelWorkingCapitalInitializationActivity;
 import module.workingCapital.domain.activity.ChangeAccountingUnitActivity;
@@ -97,6 +98,7 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base implements
 	activitiesAux.add(new UnTerminateWorkingCapitalActivity());
 	activitiesAux.add(new RegisterCapitalRefundActivity());
 	activitiesAux.add(new ReenforceWorkingCapitalInitializationActivity());
+	activitiesAux.add(new CancelReenforceWorkingCapitalInitializationActivity());
 	activities = Collections.unmodifiableList(activitiesAux);
     }
 

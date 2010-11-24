@@ -181,7 +181,7 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
     @Override
     public AccountingUnit getAccountingUnit() {
 	final AccountingUnit accountingUnit = super.getAccountingUnit();
-	return accountingUnit == null ? getWorkingCapital().getUnit().getAccountingUnit() : accountingUnit;
+	return accountingUnit == null ? (hasWorkingCapital() ? getWorkingCapital().getUnit().getAccountingUnit() : null) : accountingUnit;
     }
 
     public boolean isPendingFundAllocation() {
@@ -189,6 +189,14 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
 		&& (getFundAllocationId() == null || getFundAllocationId().isEmpty())
 		&& hasResponsibleForAccountingVerification()
 		&& !hasResponsibleForUnitAuthorization();
+    }
+
+    public void delete() {
+	removeWorkingCapital();
+	removeWorkingCapitalSystem();
+	removeRequestor();
+	removeAccountingUnit();
+	deleteDomainObject();
     }
 
 }
