@@ -26,7 +26,6 @@ public class CancelReenforceWorkingCapitalInitializationActivity extends
 		&& workingCapital.getMovementResponsible().getUser() == user
 		&& !workingCapital.isCanceledOrRejected()
 		&& workingCapitalInitialization != null
-		&& workingCapitalInitialization instanceof WorkingCapitalInitializationReenforcement
 		&& workingCapitalInitialization.isPendingAproval()
 		&& !workingCapitalInitialization.isCanceledOrRejected()
 		&& workingCapital.getWorkingCapitalInitializationsCount() > 1;
