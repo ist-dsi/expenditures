@@ -19,6 +19,7 @@ import pt.ist.expenditureTrackingSystem.presentationTier.widgets.MySearchesWidge
 import pt.ist.expenditureTrackingSystem.presentationTier.widgets.PendingRefundWidget;
 import pt.ist.expenditureTrackingSystem.presentationTier.widgets.PendingSimplifiedWidget;
 import pt.ist.expenditureTrackingSystem.presentationTier.widgets.PrioritiesWidget;
+import pt.ist.expenditureTrackingSystem.presentationTier.widgets.SearchByInvoiceWidget;
 import pt.ist.expenditureTrackingSystem.presentationTier.widgets.TakenProcessesWidget;
 import pt.ist.expenditureTrackingSystem.presentationTier.widgets.UnreadCommentsWidget;
 import pt.ist.expenditureTrackingSystem.util.AquisitionsPendingProcessCounter;
@@ -101,6 +102,7 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 	});
 
 	RequestChecksumFilter.registerFilterRule(new ChecksumPredicate() {
+	    @Override
 	    public boolean shouldFilter(HttpServletRequest httpServletRequest) {
 		return !(httpServletRequest.getRequestURI().endsWith("/acquisitionSimplifiedProcedureProcess.do")
 			&& httpServletRequest.getQueryString() != null && httpServletRequest.getQueryString().contains(
@@ -109,6 +111,7 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 	});
 
 	RequestChecksumFilter.registerFilterRule(new ChecksumPredicate() {
+	    @Override
 	    public boolean shouldFilter(HttpServletRequest httpServletRequest) {
 		return !(httpServletRequest.getRequestURI().endsWith("/viewRCISTAnnouncements.do"));
 	    }
@@ -162,6 +165,7 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 	registerWidget(PendingRefundWidget.class);
 	registerWidget(PendingSimplifiedWidget.class);
 	registerWidget(ActivateEmailNotificationWidget.class);
+	registerWidget(SearchByInvoiceWidget.class);
 	WidgetRegister.registerWidget(PrioritiesWidget.class, EXPENDITURE_SERVICES_ONLY_PREDICATE);
     }
 
