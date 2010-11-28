@@ -4,7 +4,9 @@ import java.util.Collection;
 import java.util.Set;
 
 import module.mission.domain.util.ParticipantAuthorizationChain.AuthorizationChain;
+import module.organization.domain.Accountability;
 import module.organization.domain.AccountabilityType;
+import module.organization.domain.FunctionDelegation;
 import module.organization.domain.Person;
 import module.organization.domain.Unit;
 import myorg.applicationTier.Authenticate.UserView;
@@ -59,7 +61,7 @@ public class PersonMissionAuthorization extends PersonMissionAuthorization_Base 
 	final MissionSystem instance = MissionSystem.getInstance();
 	final Set<AccountabilityType> accountabilityTypes = instance.getAccountabilityTypesThatAuthorize();
 	//final AccountabilityType accountabilityType = IstAccountabilityType.PERSONNEL_RESPONSIBLE_MISSIONS.readAccountabilityType();
-	return (!hasAuthority() && getUnit().hasChildAccountabilityIncludingAncestry(accountabilityTypes, person))
+	return (!hasAuthority() && !hasDelegatedAuthority() && getUnit().hasChildAccountabilityIncludingAncestry(accountabilityTypes, person))
 		|| (hasNext() && getNext().canAuthoriseParticipantActivity(person));
     }
 
@@ -75,12 +77,13 @@ public class PersonMissionAuthorization extends PersonMissionAuthorization_Base 
 	final MissionSystem instance = MissionSystem.getInstance();
 	final Set<AccountabilityType> accountabilityTypes = instance.getAccountabilityTypesThatAuthorize();
 	//final AccountabilityType accountabilityType = IstAccountabilityType.PERSONNEL_RESPONSIBLE_MISSIONS.readAccountabilityType();
-	return hasAuthority() && canUnAuthorise(person, accountabilityTypes) && ((!hasNext()) || (!getNext().hasAuthority()));
+	return (hasAuthority() || hasDelegatedAuthority()) && canUnAuthorise(person, accountabilityTypes) && ((!hasNext()) || (!getNext().hasAuthority() && !getNext().hasDelegatedAuthority()));
     }
 
     private boolean canUnAuthorise(final Person person, final Collection<AccountabilityType> accountabilityTypes) {
-	return getUnit().hasChildAccountabilityIncludingAncestry(accountabilityTypes, person)
-		|| (hasNext() && getNext().canUnAuthorise(person, accountabilityTypes));
+	final Unit unitForAuthorizationCheck = hasDelegatedAuthority() && hasPrevious() ? getPrevious().getUnit() : getUnit();
+	return unitForAuthorizationCheck.hasChildAccountabilityIncludingAncestry(accountabilityTypes, person)
+			|| (hasNext() && getNext().canUnAuthorise(person, accountabilityTypes));
     }
 
     public boolean canUnAuthoriseSomeParticipantActivity(final Person person) {
@@ -92,14 +95,40 @@ public class PersonMissionAuthorization extends PersonMissionAuthorization_Base 
         super.setAuthority(authority);
         final DateTime authorizationDateTime = authority == null ? null : new DateTime();
         setAuthorizationDateTime(authorizationDateTime);
+        if (hasNext()) {
+            getNext().setDelegatedAuthority(authority);
+        }
+    }
+
+    private void setDelegatedAuthority(final Person authority) {
+	if (authority == null) {
+	    setDelegatedAuthority((FunctionDelegation) null);
+	} else {	    
+	    final Unit unit = getUnit();
+	    final MissionSystem instance = MissionSystem.getInstance();
+	    final Set<AccountabilityType> accountabilityTypes = instance.getAccountabilityTypesThatAuthorize();
+	    for (final Accountability accountability : authority.getParentAccountabilitiesSet()) {
+		final AccountabilityType accountabilityType = accountability.getAccountabilityType();
+		if (accountabilityTypes.contains(accountabilityType)) {
+		    final FunctionDelegation functionDelegation = accountability.getFunctionDelegationDelegator();
+		    if (functionDelegation != null) {
+			final Accountability parentAccountability = functionDelegation.getAccountabilityDelegator();
+			if (unit == parentAccountability.getParent()) {
+			    setDelegatedAuthority(functionDelegation);
+			    return ;
+			}
+		    }
+		}
+	    }
+	}
     }
 
     public boolean hasAnyAuthorization() {
-	return (getAuthorizationDateTime() != null && hasAuthority()) || (hasNext() && getNext().hasAnyAuthorization());
+	return (getAuthorizationDateTime() != null && (hasAuthority() || hasDelegatedAuthority())) || (hasNext() && getNext().hasAnyAuthorization());
     }
 
     public boolean isAuthorized() {
-	return (!hasNext() && hasAuthority()) || (hasNext() && getNext().isAuthorized());
+	return (!hasNext() && (hasAuthority() || hasDelegatedAuthority())) || (hasNext() && getNext().isAuthorized());
     }
 
     public int getChainSize() {

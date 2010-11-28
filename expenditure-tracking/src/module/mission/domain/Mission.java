@@ -822,7 +822,7 @@ public abstract class Mission extends Mission_Base {
     private boolean isPendingParticipantAuthorisationBy(Person person, PersonMissionAuthorization personMissionAuthorization) {
 	final LocalDate now = new LocalDate();
 	for (PersonMissionAuthorization p = personMissionAuthorization; p != null; p = p.getNext()) {
-	    if (!p.hasAuthority()) {
+	    if (!p.hasAuthority() && !p.hasDelegatedAuthority()) {
 		final module.organization.domain.Unit unit = p.getUnit();
 		for (final Accountability accountability : unit.getChildAccountabilitiesSet()) {
 		    if (accountability.isActive(now)) {

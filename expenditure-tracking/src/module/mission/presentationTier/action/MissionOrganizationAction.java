@@ -8,8 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import module.mission.domain.MissionSystem;
+import module.mission.domain.util.FunctionDelegationBean;
 import module.organization.domain.Accountability;
 import module.organization.domain.AccountabilityType;
+import module.organization.domain.FunctionDelegation;
 import module.organization.domain.Party;
 import module.organization.domain.Person;
 import module.organization.domain.Unit;
@@ -22,6 +24,7 @@ import myorg.presentationTier.component.OrganizationChart;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.joda.time.LocalDate;
 
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
@@ -113,5 +116,35 @@ public class MissionOrganizationAction extends ContextBaseAction {
 	return showUnit(unit, request);
     }
     
+    public ActionForward showDelegationsForAuthorization(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	final Accountability accountability = getDomainObject(request, "authorizationId");
+	return showDelegationsForAuthorization(request, accountability);
+    }
+
+    public ActionForward showDelegationsForAuthorization(final HttpServletRequest request, final Accountability accountability) {
+	request.setAttribute("accountability", accountability);
+	return forward(request, "/mission/showDelegationForAuthorization.jsp");
+    }
+
+    public ActionForward prepareAddDelegationsForAuthorization(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	final Accountability accountability = getDomainObject(request, "authorizationId");
+	final FunctionDelegationBean functionDelegationBean = new FunctionDelegationBean(accountability);
+	request.setAttribute("functionDelegationBean", functionDelegationBean);
+	return forward(request, "/mission/addDelegationForAuthorization.jsp");
+    }
+
+    public ActionForward addDelegationsForAuthorization(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	final FunctionDelegationBean functionDelegationBean = getRenderedObject();
+	final Accountability accountability = functionDelegationBean.getAccountability();
+	final Unit unit = functionDelegationBean.getUnit();
+	final Person person = functionDelegationBean.getPerson();
+	final LocalDate beginDate = functionDelegationBean.getBeginDate();
+	final LocalDate endDate = functionDelegationBean.getEndDate();
+	FunctionDelegation.create(accountability, unit, person, beginDate, endDate);
+	return showDelegationsForAuthorization(request, accountability);
+    }
 
 }

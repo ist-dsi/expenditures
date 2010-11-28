@@ -50,8 +50,10 @@ public class MissionAuthorizationMap implements Serializable {
 		personMissionAuthorizations[i] = new HashSet<PersonMissionAuthorization>();
 		for (final PersonMissionAuthorization personMissionAuthorization : unit.getPersonMissionAuthorizationSet()) {
 		    if (!personMissionAuthorization.hasAuthority()
+			    && !personMissionAuthorization.hasDelegatedAuthority()
 			    && personMissionAuthorization.hasPrevious()
-			    && personMissionAuthorization.getPrevious().hasAuthority()) {
+			    && (personMissionAuthorization.getPrevious().hasAuthority()
+				    || personMissionAuthorization.getPrevious().hasDelegatedAuthority())) {
 			personMissionAuthorizations[i].add(personMissionAuthorization);
 		    }
 		}

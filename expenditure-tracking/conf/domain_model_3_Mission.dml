@@ -364,6 +364,13 @@ relation PersonMissionAuthorizationAuthority {
 	}
 }
 
+relation PersonMissionAuthorizationFunctionDelegation {
+	.module.organization.domain.FunctionDelegation playsRole delegatedAuthority;
+	PersonMissionAuthorization playsRole personMissionAuthorization {
+		multiplicity *;
+	}
+}
+
 relation PersonMissionAuthorizationSubject {
 	.module.organization.domain.Person playsRole subject;
 	PersonMissionAuthorization playsRole personMissionAuthorizationFromSubject {

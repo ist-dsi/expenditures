@@ -84,6 +84,8 @@
 			<th>
 				<bean:message key="label.mission.authority.endDate" bundle="MISSION_RESOURCES"/>
 			</th>
+			<th>
+			</th>
 		</tr>
 		<logic:iterate id="authorityAccountability" name="authorityAccountabilities" type="module.organization.domain.Accountability">
 			<tr>
@@ -97,7 +99,17 @@
 					</html:link>
 				</td>
 				<td>
-					<fr:view name="authorityAccountability" property="accountabilityType.name"/>
+					<logic:notPresent name="authorityAccountability" property="functionDelegationDelegator">
+						<fr:view name="authorityAccountability" property="accountabilityType.name"/>
+					</logic:notPresent>
+					<logic:present name="authorityAccountability" property="functionDelegationDelegator">
+						<html:link styleClass="secondaryLink" page="/missionOrganization.do?method=showDelegationsForAuthorization" paramId="authorizationId" paramName="authorityAccountability" paramProperty="functionDelegationDelegator.accountabilityDelegator.externalId">
+							<fr:view name="authorityAccountability" property="accountabilityType.name"/>
+							<br/>
+							<bean:message key="label.delegation.by" bundle="MISSION_RESOURCES"/>
+							<fr:view name="authorityAccountability" property="functionDelegationDelegator.accountabilityDelegator.child.presentationName"/>
+						</html:link>
+					</logic:present>
 				</td>
 				<td>
 					<fr:view name="authorityAccountability" property="beginDate"/>
@@ -106,6 +118,12 @@
 					<logic:present name="authorityAccountability" property="endDate">
 						<fr:view name="authorityAccountability" property="endDate"/>
 					</logic:present>
+				</td>
+				<td>
+					<html:link page="/missionOrganization.do?method=showDelegationsForAuthorization" paramId="authorizationId" paramName="authorityAccountability" paramProperty="externalId">
+						<bean:size id="numberDelegations" name="authorityAccountability" property="functionDelegationDelegated"/>
+						<bean:message key="label.delegations" bundle="MISSION_RESOURCES" arg0="<%= numberDelegations.toString() %>"/>
+					</html:link>
 				</td>
 			</tr>
 		</logic:iterate>

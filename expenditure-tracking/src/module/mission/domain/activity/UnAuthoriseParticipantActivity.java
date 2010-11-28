@@ -15,7 +15,8 @@ public class UnAuthoriseParticipantActivity extends MissionProcessActivity<Missi
 
     @Override
     public boolean isActive(final MissionProcess missionProcess, final User user) {
-	return super.isActive(missionProcess, user) && missionProcess.canUnAuthoriseSomeParticipantActivity()
+	return super.isActive(missionProcess, user)
+		&& missionProcess.canUnAuthoriseSomeParticipantActivity()
 		&& missionProcess.hasAnyAuthorizedParticipants()
 		&& ((!missionProcess.hasCurrentQueue() && !missionProcess.areAllParticipantsAuthorized())
 			|| (missionProcess.hasCurrentQueue()))
@@ -26,6 +27,7 @@ public class UnAuthoriseParticipantActivity extends MissionProcessActivity<Missi
     protected void process(final AuthoriseParticipantActivityInformation authoriseParticipantActivityInformation) {
 	final PersonMissionAuthorization personMissionAuthorization = authoriseParticipantActivityInformation.getPersonMissionAuthorization();
 	personMissionAuthorization.setAuthority(null);
+	personMissionAuthorization.setDelegatedAuthority(null);
 	final MissionProcess missionProcess = authoriseParticipantActivityInformation.getProcess();
 	missionProcess.removeFromParticipantInformationQueues();
     }

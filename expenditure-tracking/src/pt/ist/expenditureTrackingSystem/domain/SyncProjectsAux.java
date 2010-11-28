@@ -9,9 +9,9 @@ import java.sql.Statement;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.Map.Entry;
 
 import module.organization.domain.Accountability;
 import module.organization.domain.Party;
@@ -22,8 +22,8 @@ import myorg.domain.util.Money;
 import org.joda.time.DateTime;
 
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestWithPayment;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.ProjectFinancer;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.UnitItem;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateUnitBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
