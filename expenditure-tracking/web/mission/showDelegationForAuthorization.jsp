@@ -10,9 +10,11 @@
 <h3>
 	<bean:message bundle="MISSION_RESOURCES" key="label.module.mission.person.mission.responsibilities.delegated"/>
 </h3>
-<html:link page="/missionOrganization.do?method=prepareAddDelegationsForAuthorization" paramId="authorizationId" paramName="accountability" paramProperty="externalId">
-	<bean:message key="label.delegations.add" bundle="MISSION_RESOURCES"/>
-</html:link>
+<logic:present role="myorg.domain.RoleType.MANAGER">
+	<html:link page="/missionOrganization.do?method=prepareAddDelegationsForAuthorization" paramId="authorizationId" paramName="accountability" paramProperty="externalId">
+		<bean:message key="label.delegations.add" bundle="MISSION_RESOURCES"/>
+	</html:link>
+</logic:present>
 <br/>
 <br/>
 <logic:empty name="accountability" property="functionDelegationDelegated">
