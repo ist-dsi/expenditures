@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessInvoice;
@@ -25,6 +27,9 @@ public class SearchByInvoiceBean implements Serializable {
 
     public ArrayList<PaymentProcess> search() {
 	ArrayList<PaymentProcess> resultsList = new ArrayList<PaymentProcess>();
+	if (StringUtils.isEmpty(invoiceId))
+	    return resultsList;
+
 	List<PaymentProcessYear> processesYears = ExpenditureTrackingSystem.getInstance().getPaymentProcessYears();
 	
 	for (PaymentProcessYear year : processesYears) {
