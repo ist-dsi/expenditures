@@ -34,11 +34,7 @@ public class SearchByInvoiceBean implements Serializable {
 	
 	for (PaymentProcessYear year : processesYears) {
 	    for (GenericProcess process : year.getPaymentProcessSet()) {
-		if (process instanceof PaymentProcess/*
-						      * PaymentProcess.class.
-						      * isAssignableFrom
-						      * (process.getClass())
-						      */) {
+		if (process instanceof PaymentProcess) {
 		    RequestWithPayment request = ((PaymentProcess) process).getRequest();
 		    if (request != null) {
 			for (PaymentProcessInvoice invoice : request.getInvoices()) {

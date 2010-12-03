@@ -1,16 +1,17 @@
 package pt.ist.expenditureTrackingSystem.presentationTier.widgets;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
+import module.dashBoard.presentationTier.DashBoardManagementAction;
 import module.dashBoard.presentationTier.WidgetRequest;
 import module.dashBoard.widgets.WidgetController;
 import module.workflow.presentationTier.ProcessNodeSelectionMapper;
 import module.workflow.presentationTier.actions.ProcessManagement;
-import module.workflow.widgets.QuickViewWidget;
 import myorg.domain.contents.Node;
 import myorg.presentationTier.actions.ContextBaseAction;
 import myorg.util.BundleUtil;
@@ -28,7 +29,9 @@ import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.GenericChecksumR
 @ClassNameBundle(bundle = "resources/ExpenditureResources", key = "title.widget.searchByInvoice")
 public class SearchByInvoiceWidget extends WidgetController {
 
-    public static String NOT_FOUND = "NF";
+    final public static String NOT_FOUND = "NF";
+    final public static String MULTIPLE_FOUND = "MF";
+    final public static String SINGLE_FOUND = "SF";
 
     @Override
     public void doView(WidgetRequest request) {
@@ -37,34 +40,37 @@ public class SearchByInvoiceWidget extends WidgetController {
 
     @Override
     public ActionForward doSubmit(WidgetRequest request) {
-
 	SearchByInvoiceBean searchBean = getRenderedObject("searchByInvoiceBean");
-	List<PaymentProcess> processesFound = searchBean.search();
+	List<PaymentProcess> processesFound = new ArrayList<PaymentProcess>();
 
-	HttpServletResponse response = request.getResponse();
-	response.setContentType("text");
-	ServletOutputStream stream = null;
+	for (PaymentProcess process : searchBean.search()) {
+	    if (process.isAccessibleToCurrentUser()) {
+		processesFound.add(process);
+	    }
+	}
 
 	try {
 	    String write = null;
 	    if (processesFound.size() == 0) {
-		write = QuickViewWidget.NOT_FOUND;
-	    } else {
-		for (PaymentProcess process : processesFound) {
-		    if (!process.isAccessibleToCurrentUser()) {
-			continue;
-		    }
-		    List<Node> nodes = ProcessNodeSelectionMapper.getForwardFor(process.getClass());
-		    write = GenericChecksumRewriter.injectChecksumInUrl(request.getContextPath(),
-			    ProcessManagement.workflowManagementURL + process.getExternalId() + "&"
-				    + ContextBaseAction.CONTEXT_PATH + "="
-				    + ((nodes.size() > 0) ? nodes.get(nodes.size() - 1).getContextPath() : ""));
-		    break;
-		}
+		write = SearchByInvoiceWidget.NOT_FOUND;
+	    } else if (processesFound.size() == 1) {
+		PaymentProcess process = processesFound.get(0);
 
+		List<Node> nodes = ProcessNodeSelectionMapper.getForwardFor(process.getClass());
+		String url = GenericChecksumRewriter.injectChecksumInUrl(request.getContextPath(),
+			ProcessManagement.workflowManagementURL + process.getExternalId() + "&" + ContextBaseAction.CONTEXT_PATH
+				+ "=" + ((nodes.size() > 0) ? nodes.get(nodes.size() - 1).getContextPath() : ""));
+
+		write = SearchByInvoiceWidget.SINGLE_FOUND + url;
+	    } else {
+		request.setAttribute("multipleProcessesFound", processesFound);
+		return DashBoardManagementAction.forwardToWidget(request);
 	    }
 
-	    stream = response.getOutputStream();
+	    HttpServletResponse response = request.getResponse();
+	    response.setContentType("text");
+	    ServletOutputStream stream = response.getOutputStream();
+
 	    response.setContentLength(write.length());
 	    stream.write(write.getBytes());
 	    stream.flush();
