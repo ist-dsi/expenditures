@@ -654,6 +654,13 @@ public abstract class Mission extends Mission_Base {
 	    }
 	}
 
+	// Check all financers have an accounting unit
+	for (final MissionFinancer missionFinancer : getFinancerSet()) {
+	    if (!missionFinancer.hasUnit() || !missionFinancer.getUnit().hasAccountingUnit()) {
+		return false;
+	    }
+	}
+
 	// Other basic checks
 	return !getParticipantesSet().isEmpty() && areAllParticipantAuthorizationChainsDefined() && areAllPrevisionaryCostsAreDistributed();
     }

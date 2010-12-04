@@ -50,9 +50,11 @@
 			</td>
 			<td class="acenter">
 				<logic:present name="financer" property="unit">
-					<html:link styleClass="secondaryLink" page="/expenditureTrackingOrganization.do?method=viewAccountingUnit" paramId="accountingUnitOid" paramName="financer" paramProperty="unit.accountingUnit.externalId">
-						<fr:view name="financer" property="unit.accountingUnit.name"/>
-					</html:link>
+					<logic:present name="financer" property="unit.accountingUnit">
+						<html:link styleClass="secondaryLink" page="/expenditureTrackingOrganization.do?method=viewAccountingUnit" paramId="accountingUnitOid" paramName="financer" paramProperty="unit.accountingUnit.externalId">
+							<fr:view name="financer" property="unit.accountingUnit.name"/>
+						</html:link>
+					</logic:present>
 				</logic:present>
 			</td>
 			<td class="acenter">
