@@ -21,6 +21,7 @@
 		</logic:iterate>
 		<logic:iterate id="missionProcessMessage" name="missionProcessMessages" offset="1">
 			<br/>
+			<br/>
 			<bean:write name="missionProcessMessage"/>
 		</logic:iterate>
 	</div>
