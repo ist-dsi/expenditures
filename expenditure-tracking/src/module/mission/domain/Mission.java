@@ -714,6 +714,14 @@ public abstract class Mission extends Mission_Base {
 	    }
 	}
 
+	// Check all financers have an accounting unit
+	for (final MissionFinancer missionFinancer : getFinancerSet()) {
+	    if (!missionFinancer.hasUnit() || !missionFinancer.getUnit().hasAccountingUnit()) {
+		final String unitName = missionFinancer.hasUnit() ? missionFinancer.getUnit().getPresentationName() : "";
+		result.add(BundleUtil.getFormattedStringFromResourceBundle("resources/MissionResources", "message.mission.financer.with.no.accounting.unit", unitName));
+	    }
+	}
+
 	return result;
     }
 
