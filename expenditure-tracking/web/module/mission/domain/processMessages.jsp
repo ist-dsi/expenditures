@@ -17,12 +17,12 @@
 <logic:notEmpty name="missionProcessMessages">
 	<div class="highlightBox">
 		<logic:iterate id="missionProcessMessage" name="missionProcessMessages" length="1">
-			<bean:write name="missionProcessMessage"/>
+			<bean:write name="missionProcessMessage" filter="false"/>
 		</logic:iterate>
 		<logic:iterate id="missionProcessMessage" name="missionProcessMessages" offset="1">
 			<br/>
 			<br/>
-			<bean:write name="missionProcessMessage"/>
+			<bean:write name="missionProcessMessage" filter="false"/>
 		</logic:iterate>
 	</div>
 </logic:notEmpty>
