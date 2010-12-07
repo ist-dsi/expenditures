@@ -11,7 +11,7 @@
 				<fr:view name="person">
 					<fr:schema type="module.organization.domain.Person" bundle="MISSION_RESOURCES">
 				    	<fr:slot name="name" key="label.organization.name"/>
-				    	<fr:slot name="user.username" key="label.organization.username"/>
+				    	<fr:slot name="userAliasses" key="label.organization.usernames"/>
 						<fr:slot name="user.expenditurePerson.email" key="label.organization.email"/>
 					</fr:schema>
 					<fr:layout name="tabular">

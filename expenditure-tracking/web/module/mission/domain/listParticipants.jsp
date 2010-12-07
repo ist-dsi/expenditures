@@ -35,13 +35,7 @@
 					</td>
 					<td colspan="4">
 						<html:link styleClass="secondaryLink" page="/missionOrganization.do?method=showPersonById" paramId="personId" paramName="person" paramProperty="externalId">
-							<fr:view name="person" property="name"/> (<%
-								try {
-									%><fr:view name="person" property="remotePerson.userAliass"/><%
-								} catch (Throwable t) {
-									%><fr:view name="person" property="user.username"/><%
-								}
-							%>)
+							<fr:view name="person" property="name"/> (<fr:view name="person" property="userAliasses"/>)
 						</html:link>
 						<wf:activityLink processName="process" activityName="RemoveParticipantActivity" scope="request" paramName0="person" paramValue0="<%= personOID %>">
 							<bean:message bundle="MYORG_RESOURCES" key="link.remove"/>

@@ -14,7 +14,6 @@ import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.MyOrg;
 import myorg.domain.User;
 import myorg.domain.util.Address;
-import net.sourceforge.fenixedu.domain.RemotePerson;
 
 import org.apache.commons.collections.Predicate;
 
@@ -373,10 +372,11 @@ public class Person extends Person_Base implements Indexable, Searchable {
 
     @Override
     public String getEmail() {
-	final User user = getUser();
-	final module.organization.domain.Person person = user == null ? null : user.getPerson();
-	final RemotePerson remotePerson = person == null ? null : person.getRemotePerson();
-	return remotePerson == null ? super.getEmail() : remotePerson.getEmailForSendingEmails();
+	try {
+	    return getUser().getPerson().getRemotePerson().getEmailForSendingEmails();
+	} catch (Throwable t) {
+	    return super.getEmail();
+	}
     }
 
     public boolean hasAnyValidAuthorization() {
