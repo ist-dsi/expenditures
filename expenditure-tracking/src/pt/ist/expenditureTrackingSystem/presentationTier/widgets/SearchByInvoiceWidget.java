@@ -30,7 +30,6 @@ import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.GenericChecksumR
 public class SearchByInvoiceWidget extends WidgetController {
 
     final public static String NOT_FOUND = "NF";
-    final public static String MULTIPLE_FOUND = "MF";
     final public static String SINGLE_FOUND = "SF";
 
     @Override

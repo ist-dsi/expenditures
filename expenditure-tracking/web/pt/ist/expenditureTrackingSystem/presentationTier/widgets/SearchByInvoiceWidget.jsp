@@ -51,7 +51,7 @@
 					warningDiv.empty();
 					warningDiv.append('<p class="mtop0"><em><bean:message key="widget.SearchByInvoiceWidget.noProcessFound" bundle="EXPENDITURE_RESOURCES"/>.</em></p>');
 			} else if (responseText.indexOf('<%=SearchByInvoiceWidget.SINGLE_FOUND%>') == 0) {
-					window.location.replace(<%= "\"" + request.getContextPath() + "\" + responseText.substring(2)" %>);
+					window.location.replace(<%= "\"" + request.getContextPath() + "\" + responseText.substring(" + SearchByInvoiceWidget.SINGLE_FOUND.length() + ")" %>);
 			} else {
 					warningDiv.empty();
 					warningDiv.append('<p><bean:message key="widget.SearchByInvoiceWidget.processesFound" bundle="EXPENDITURE_RESOURCES"/></p>' + responseText);
