@@ -210,6 +210,9 @@ public abstract class Mission extends Mission_Base {
 //		financer.approve(user);
 //	    }
 //	}
+
+	    setServiceGaranteePerson(user.getPerson());
+	    setServiceGaranteeInstante(new DateTime());
     }
 
     public void authorize(final User user) {

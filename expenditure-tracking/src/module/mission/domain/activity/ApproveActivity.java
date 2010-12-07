@@ -33,4 +33,15 @@ public class ApproveActivity extends MissionProcessActivity<MissionProcess, Late
         return new LateJustificationActivityInformation(process, this);
     }
 
+    @Override
+    public boolean isConfirmationNeeded(final MissionProcess process) {
+        return true;
+    }
+
+    @Override
+    public String getLocalizedConfirmationMessage() {
+	return BundleUtil.getFormattedStringFromResourceBundle("resources/MissionResources",
+		"label.module.mission.approve.confirm.service.is.assured");
+    }
+
 }

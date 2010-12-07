@@ -99,3 +99,15 @@
 	</div>
 </logic:notEmpty>
 </logic:notPresent>
+
+<logic:present name="process" property="mission.serviceGaranteePerson">
+	<div style="padding: 5px 10px; margin: 1em 0; border:1px solid #E0E0E0;">
+		<div class="infobox">
+			<bean:message key="label.module.mission.approve.confirm.service.is.assured" bundle="MISSION_RESOURCES"/>
+			<br/>
+			<fr:view name="process" property="mission.serviceGaranteeInstante"/>
+			-
+			<bean:write name="process" property="mission.serviceGaranteePerson.name"/>
+		</div>
+	</div>
+</logic:present>

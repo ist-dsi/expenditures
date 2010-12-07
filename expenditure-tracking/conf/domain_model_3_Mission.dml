@@ -31,6 +31,7 @@ class Mission {
 	Boolean grantOwnerEquivalence;
 	Boolean isApprovedByMissionResponsible;
 	String fundAllocationLog;
+	DateTime serviceGaranteeInstante;
 
 	/** Delete this after mission version refactor is complete */
 	DateTime daparture;
@@ -645,3 +646,9 @@ relation MissionVersionMissionItemProjectFinancerArchive {
 	}
 }
 
+relation MissionServiceGaranteePerson {
+	.module.organization.domain.Person playsRole serviceGaranteePerson;
+	Mission playsRole garanteedMissionService {
+		multiplicity *;
+	}
+}
