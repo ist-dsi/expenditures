@@ -279,6 +279,15 @@ public class Financer extends Financer_Base {
 
     public boolean isEffectiveFundAllocationPresent() {
 	return getEffectiveFundAllocationId() != null;
+/*	if (getEffectiveFundAllocationId() != null) {
+	    for (final String s : getEffectiveFundAllocationId()) {
+		if (!s.isEmpty()) {
+		    return true;
+		}
+	    }
+	}
+	return false;
+*/
     }
 
 }

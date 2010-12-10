@@ -263,10 +263,6 @@
 			<bean:define id="financer" name="payingUnit" property="financer"/>
 			<td class="nowrap tooltipWidth400px">
 				<fr:view name="financer" layout="financer-status"/>
-				<br/>
-				<bean:write name="payingUnit" property="financer.fundAllocationPresent"/>
-				<br/>
-				<bean:write name="payingUnit" property="financer.effectiveFundAllocationPresent"/>
 			</td>
 			<td class="acenter" style="width: 80px;"><fr:view name="payingUnit" property="financer.accountingUnit.name"/></td>
 			<logic:equal name="areFundAllocationPresent" value="true">
