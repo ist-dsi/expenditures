@@ -20,6 +20,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessSt
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProposalDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CreditNoteDocument;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PurchaseOrderDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.AllocateFundsPermanently;
@@ -387,4 +388,23 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
     public List<? extends PresentableProcessState> getAvailablePresentableStates() {
 	return getAvailableStates();
     }
+
+    public boolean getFundAllocationPresent() {
+	for (final Financer financer : getAcquisitionRequest().getFinancers()) {
+	    if (financer.isFundAllocationPresent()) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
+    public boolean getEffectiveFundAllocationPresent() {
+	for (final Financer financer : getAcquisitionRequest().getFinancers()) {
+	    if (financer.isEffectiveFundAllocationPresent()) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
 }

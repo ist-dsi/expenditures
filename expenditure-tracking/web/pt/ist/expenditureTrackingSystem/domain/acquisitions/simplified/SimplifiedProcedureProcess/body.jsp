@@ -223,25 +223,28 @@
 
 <h3>Unidades Pagadoras</h3>
 
+<bean:define id="areFundAllocationPresent" name="process" property="fundAllocationPresent"/>
+<bean:define id="areEffectiveFundAllocationPresent" name="process" property="effectiveFundAllocationPresent"/>
+
 <table class="tview1" style="width: 100%;">
 	<tr>
-		<th class="aleft"><bean:message key="acquisitionProcess.label.payingUnits" bundle="ACQUISITION_RESOURCES"/></th>
-		<th></th>
+		<th class="aleft"><bean:message key="acquisitionProcess.label.payingUnits" bundle="ACQUISITION_RESOURCES"/>1</th>
+		<th>2</th>
 		<th class="acenter" style="width: 70px; white-space: nowrap;">
 			<bean:message key="acquisitionProcess.label.accountingUnit" bundle="ACQUISITION_RESOURCES"/>
 		</th>
-		<th id="fundAllocationHeader">
-			<bean:message key="financer.label.fundAllocation.identification" bundle="ACQUISITION_RESOURCES"/>
-		</th>
-		<th id="effectiveFundAllocationHeader"> 
-			<bean:message key="financer.label.effectiveFundAllocation.identification" bundle="ACQUISITION_RESOURCES"/>
-		</th>
+		<logic:equal name="areFundAllocationPresent" value="true">
+			<th id="fundAllocationHeader">
+				<bean:message key="financer.label.fundAllocation.identification" bundle="ACQUISITION_RESOURCES"/>
+			</th>
+		</logic:equal>
+		<logic:equal name="areEffectiveFundAllocationPresent" value="true">
+			<th id="effectiveFundAllocationHeader">
+				<bean:message key="financer.label.effectiveFundAllocation.identification" bundle="ACQUISITION_RESOURCES"/>
+			</th>
+		</logic:equal>
 		<th class="aright">
 			<bean:message key="acquisitionRequestItem.label.totalValueWithVAT" bundle="ACQUISITION_RESOURCES"/>
-			<script type="text/javascript">
-					$('#fundAllocationHeader').hide();
-					$('#effectiveFundAllocationHeader').hide();
-			</script>
 		</th>
 	</tr>
 	<logic:iterate id="payingUnit" name="payingUnits">
@@ -260,28 +263,28 @@
 			<bean:define id="financer" name="payingUnit" property="financer"/>
 			<td class="nowrap tooltipWidth400px">
 				<fr:view name="financer" layout="financer-status"/>
+				<br/>
+				<bean:write name="payingUnit" property="financer.fundAllocationPresent"/>
+				<br/>
+				<bean:write name="payingUnit" property="financer.effectiveFundAllocationPresent"/>
 			</td>
 			<td class="acenter" style="width: 80px;"><fr:view name="payingUnit" property="financer.accountingUnit.name"/></td>
-			<td class="allocationCell" style="display: none;">
-				<logic:equal name="payingUnit" property="financer.fundAllocationPresent" value="true">
-					<fr:view name="payingUnit" property="financer.fundAllocationIds"/> 
-					<script type="text/javascript">
-						$('#fundAllocationHeader').show();
-						$('.allocationCell').show();
-					</script>
-				</logic:equal>
-			</td>
-			<td class="allocationCell" style="display: none;">
-				<logic:equal name="payingUnit" property="financer.effectiveFundAllocationPresent" value="true">
-					<fr:view name="payingUnit" property="financer.effectiveFundAllocationIds"/> 
-					<script type="text/javascript">
-						$('#effectiveFundAllocationHeader').show();
-						$('.allocationCell').show();
-					</script>
-				</logic:equal>
-			</td>
+			<logic:equal name="areFundAllocationPresent" value="true">
+				<td class="allocationCell" style="display: none;">
+					<logic:equal name="payingUnit" property="financer.fundAllocationPresent" value="true">
+						<fr:view name="payingUnit" property="financer.fundAllocationIds"/> 
+					</logic:equal>
+				</td>
+			</logic:equal>
+			<logic:equal name="areEffectiveFundAllocationPresent" value="true">
+				<td class="allocationCell" style="display: none;">
+					<logic:equal name="payingUnit" property="financer.effectiveFundAllocationPresent" value="true">
+						<fr:view name="payingUnit" property="financer.effectiveFundAllocationIds"/> 
+					</logic:equal>
+				</td>
+			</logic:equal>
 		
-			<td class="aright nowrap" style="width: 80px;"><fr:view name="payingUnit" property="amount"/></td>
+			<td class="aright nowrap" style="width: 80px;">6<fr:view name="payingUnit" property="amount"/></td>
 		</tr>
 	</logic:iterate>
 </table> 
