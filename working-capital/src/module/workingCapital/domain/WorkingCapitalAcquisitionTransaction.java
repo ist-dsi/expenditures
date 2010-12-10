@@ -2,27 +2,22 @@ package module.workingCapital.domain;
 
 import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.User;
-import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
 import myorg.util.BundleUtil;
 
 import org.joda.time.DateTime;
 
 public class WorkingCapitalAcquisitionTransaction extends WorkingCapitalAcquisitionTransaction_Base {
-    
+
     public WorkingCapitalAcquisitionTransaction() {
-        super();
-        setWorkingCapitalSystem(WorkingCapitalSystem.getInstance());
+	super();
+	setWorkingCapitalSystem(WorkingCapitalSystem.getInstance());
     }
 
     public WorkingCapitalAcquisitionTransaction(final WorkingCapitalAcquisition workingCapitalAcquisition, final Money value) {
 	setWorkingCapital(workingCapitalAcquisition.getWorkingCapital());
 	setWorkingCapitalAcquisition(workingCapitalAcquisition);
 	addValue(value);
-	if (getBalance().isNegative()) {
-	    throw new DomainException(BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources", "error.insufficient.funds"));
-	}
-	setDebt(getDebt().subtract(value));
     }
 
     @Override
@@ -40,16 +35,13 @@ public class WorkingCapitalAcquisitionTransaction extends WorkingCapitalAcquisit
     @Override
     public boolean isPendingApproval() {
 	final WorkingCapitalAcquisition workingCapitalAcquisition = getWorkingCapitalAcquisition();
-	return !isCanceledOrRejected()
-		&& workingCapitalAcquisition.getApproved() == null
+	return !isCanceledOrRejected() && workingCapitalAcquisition.getApproved() == null
 		&& workingCapitalAcquisition.getRejectedApproval() == null;
     }
 
     public boolean isPendingApprovalByUser() {
 	final User user = UserView.getCurrentUser();
-	return !isCanceledOrRejected()
-		&& isPendingApproval()
-		&& !getWorkingCapital().isCanceledOrRejected()
+	return !isCanceledOrRejected() && isPendingApproval() && !getWorkingCapital().isCanceledOrRejected()
 		&& getWorkingCapital().hasAcquisitionPendingApproval(user);
     }
 
@@ -61,16 +53,16 @@ public class WorkingCapitalAcquisitionTransaction extends WorkingCapitalAcquisit
 
     @Override
     public void approve(final User user) {
-        super.approve(user);
-        final WorkingCapitalAcquisition workingCapitalAcquisition = getWorkingCapitalAcquisition();
-        workingCapitalAcquisition.approve(user);
+	super.approve(user);
+	final WorkingCapitalAcquisition workingCapitalAcquisition = getWorkingCapitalAcquisition();
+	workingCapitalAcquisition.approve(user);
     }
 
     @Override
     public void reject(final User user) {
-        super.reject(user);
-        final WorkingCapitalAcquisition workingCapitalAcquisition = getWorkingCapitalAcquisition();
-        workingCapitalAcquisition.reject(user);
+	super.reject(user);
+	final WorkingCapitalAcquisition workingCapitalAcquisition = getWorkingCapitalAcquisition();
+	workingCapitalAcquisition.reject(user);
     }
 
     @Override
@@ -83,19 +75,19 @@ public class WorkingCapitalAcquisitionTransaction extends WorkingCapitalAcquisit
     @Override
     public boolean isPendingVerification() {
 	final WorkingCapitalAcquisition workingCapitalAcquisition = getWorkingCapitalAcquisition();
-	return !isCanceledOrRejected() && isApproved() && workingCapitalAcquisition.getSubmitedForVerification() != null && workingCapitalAcquisition.getVerifier() == null;
+	return !isCanceledOrRejected() && isApproved() && workingCapitalAcquisition.getSubmitedForVerification() != null
+		&& workingCapitalAcquisition.getVerifier() == null;
     }
 
+    @Override
     public boolean isPendingSubmission() {
 	final WorkingCapitalAcquisition workingCapitalAcquisition = getWorkingCapitalAcquisition();
 	return !isCanceledOrRejected() && isApproved() && workingCapitalAcquisition.getSubmitedForVerification() == null;
     }
 
-
     public boolean isPendingVerificationByUser() {
 	final User user = UserView.getCurrentUser();
-	return isPendingVerification()
-		&& !getWorkingCapital().isCanceledOrRejected()
+	return isPendingVerification() && !getWorkingCapital().isCanceledOrRejected()
 		&& getWorkingCapital().hasAcquisitionPendingVerification(user);
     }
 
@@ -107,16 +99,16 @@ public class WorkingCapitalAcquisitionTransaction extends WorkingCapitalAcquisit
 
     @Override
     public void verify(final User user) {
-        super.approve(user);
-        final WorkingCapitalAcquisition workingCapitalAcquisition = getWorkingCapitalAcquisition();
-        workingCapitalAcquisition.verify(user);
+	super.approve(user);
+	final WorkingCapitalAcquisition workingCapitalAcquisition = getWorkingCapitalAcquisition();
+	workingCapitalAcquisition.verify(user);
     }
 
     @Override
     public void rejectVerify(final User user) {
-        super.rejectVerify(user);
-        final WorkingCapitalAcquisition workingCapitalAcquisition = getWorkingCapitalAcquisition();
-        workingCapitalAcquisition.rejectVerify(user);
+	super.rejectVerify(user);
+	final WorkingCapitalAcquisition workingCapitalAcquisition = getWorkingCapitalAcquisition();
+	workingCapitalAcquisition.rejectVerify(user);
 
     }
 
