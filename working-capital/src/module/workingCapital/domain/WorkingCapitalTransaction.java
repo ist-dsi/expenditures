@@ -34,7 +34,15 @@ public class WorkingCapitalTransaction extends WorkingCapitalTransaction_Base {
 	return getBalance().isPositive();
     }
 
-    @ConsistencyPredicate
+    // This check cannot be a consistency predicate yet,
+    // because there are existing transactions that
+    // already have a balance different from the debt.
+    // This means that any change to these transactions
+    // would abort the operation, no matter what is done.
+    // This annotation can only be present when the
+    // consistency predicates are inconsistency-tolerant
+    // or all the data is corrected.
+    // @ConsistencyPredicate
     public boolean checkBalanceEqualsDebt() {
 	return getBalance().equals(getDebt());
     }
