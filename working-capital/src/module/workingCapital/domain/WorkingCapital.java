@@ -361,7 +361,7 @@ public class WorkingCapital extends WorkingCapital_Base {
 		&& hasCapitalPendingRequest();
     }
 
-    public boolean canRequestCapitalRefund() {
+    public boolean canRevertTermination() {
 	final WorkingCapitalInitialization workingCapitalInitialization = getWorkingCapitalInitialization();
 	return workingCapitalInitialization != null
 		&& !isCanceledOrRejected()
@@ -369,8 +369,11 @@ public class WorkingCapital extends WorkingCapital_Base {
 		&& workingCapitalInitialization.getRefundRequested() == null
 		&& workingCapitalInitialization.isAuthorized()
 		&& !hasAnyPendingWorkingCapitalRequests()
-		&& !hasAnyAquisitionPendingVerification()
-		&& hasCapitalToRefund();
+		&& !hasAnyAquisitionPendingVerification();
+    }
+
+    public boolean canRequestCapitalRefund() {
+	return canRevertTermination(); // && hasCapitalToRefund();
     }
 
     private boolean hasAnyAquisitionPendingVerification() {
