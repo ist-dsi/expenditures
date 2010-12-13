@@ -5,9 +5,9 @@ import myorg.domain.util.Money;
 import myorg.util.BundleUtil;
 
 public class WorkingCapitalAcquisitionSubmission extends WorkingCapitalAcquisitionSubmission_Base {
-    
+
     public WorkingCapitalAcquisitionSubmission() {
-        super();
+	super();
     }
 
     public WorkingCapitalAcquisitionSubmission(final WorkingCapital workingCapital, final Person person, final Money value) {
@@ -33,13 +33,13 @@ public class WorkingCapitalAcquisitionSubmission extends WorkingCapitalAcquisiti
 	final WorkingCapitalTransaction workingCapitalTransaction = getNext();
 	if (workingCapitalTransaction != null) {
 	    workingCapitalTransaction.restoreDebtOfFollowingTransactions(debtValue, Money.ZERO);
-	}	
+	}
     }
 
     @Override
     public void restoreDebt(Money debtValue, Money accumulatedValue) {
-        super.restoreDebt(debtValue, accumulatedValue);
-        setValue(getValue().subtract(debtValue));
+	super.restoreDebt(debtValue, accumulatedValue);
+	setValue(getValue().subtract(accumulatedValue));
     }
 
 }
