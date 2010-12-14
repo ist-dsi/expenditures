@@ -3,6 +3,7 @@ package module.workingCapital.domain;
 import java.util.Comparator;
 
 import jvstm.cps.ConsistencyException;
+import jvstm.cps.ConsistencyPredicate;
 import myorg.domain.User;
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
@@ -41,7 +42,7 @@ public class WorkingCapitalTransaction extends WorkingCapitalTransaction_Base {
     // Temporary hack: this comment should be removed after correcting data
     // @ConsistencyPredicate(BalancePositiveInconsistentException.class)
     public boolean checkBalancePositive() {
-	return getBalance().isPositive();
+	return !getBalance().isNegative();
     }
 
     // This check cannot be a consistency predicate yet,
