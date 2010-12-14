@@ -1,33 +1,3 @@
-<schema name="module.mission.domain.util.MissionProcessCreationBean" type="module.mission.domain.util.MissionProcessCreationBean" bundle="MISSION_RESOURCES">
-<!-- 
-	<slot name="missionResponsible" layout="autoComplete" key="label.mission.requester.unit" help="label.mission.requester.unit.help"
-			validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
-        <property name="labelField" value="presentationName"/>
-		<property name="format" value="${presentationName}"/>
-		<property name="minChars" value="3"/>		
-		<property name="args" value="provider=module.organization.presentationTier.renderers.providers.PartiesAutoCompleteProvider"/>
-		<property name="classes" value="inputsize300px"/>
-	</slot>
- -->
-	<slot name="country" key="label.mission.country" layout="autoComplete" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
-        <property name="labelField" value="name.content"/>
-		<property name="format" value="${name.content}"/>
-		<property name="minChars" value="3"/>		
-		<property name="args" value="provider=module.geography.presentationTier.provider.CountryAutoCompleteProvider"/>
-		<property name="classes" value="inputsize300px"/>
-	</slot>
-	<slot name="location" key="label.mission.location" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-	<slot name="daparture" key="label.mission.departure" layout="picker" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-	<slot name="arrival" key="label.mission.arrival" layout="picker" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-	<slot name="objective" key="label.mission.objective" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
-		<property name="size" value="60"/>
-	</slot>
-<!-- 
-	<slot name="useRequestingUnitAsPayingUnit" key="label.mission.useRequestingUnitAsPayingUnit" help="label.mission.useRequestingUnitAsPayingUnit.help"/>
- -->
-	<slot name="isCurrentUserAParticipant" key="label.mission.isCurrentUserAParticipant" help="label.mission.isCurrentUserAParticipant.help"/>
-</schema>
-
 <schema name="module.mission.domain.NationalMission" type="module.mission.domain.NationalMission" bundle="MISSION_RESOURCES">
 	<slot name="missionResponsible.presentationName" layout="link" key="label.mission.requester.unit">
 		<property name="useParent" value="true"/>

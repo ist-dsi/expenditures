@@ -7,6 +7,8 @@ import module.mission.domain.ForeignMissionProcess;
 import module.mission.domain.MissionProcess;
 import module.mission.domain.MissionSystem;
 import module.mission.domain.NationalMissionProcess;
+import myorg.applicationTier.Authenticate.UserView;
+import myorg.domain.User;
 
 import org.joda.time.DateTime;
 
@@ -80,6 +82,11 @@ public class MissionProcessCreationBean implements Serializable {
 		daparture, arrival, objective, isCurrentUserAParticipant, grantOwnerEquivalence)
 		: new ForeignMissionProcess(country, location, daparture, arrival, objective,
 			isCurrentUserAParticipant, grantOwnerEquivalence);
+    }
+
+    public String getCurrentUserName() {
+	final User currentUser = UserView.getCurrentUser();
+	return currentUser == null ? "" : currentUser.getPerson().getFirstAndLastName();
     }
 
 }
