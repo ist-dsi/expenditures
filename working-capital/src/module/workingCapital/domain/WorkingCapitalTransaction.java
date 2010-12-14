@@ -2,7 +2,7 @@ package module.workingCapital.domain;
 
 import java.util.Comparator;
 
-import jvstm.cps.ConsistencyPredicate;
+import jvstm.cps.ConsistencyException;
 import myorg.domain.User;
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
@@ -29,7 +29,17 @@ public class WorkingCapitalTransaction extends WorkingCapitalTransaction_Base {
 	setTransationInstant(new DateTime());
     }
 
-    @ConsistencyPredicate
+    public class BalancePositiveInconsistentException extends ConsistencyException {
+	private static final long serialVersionUID = 1L;
+
+	@Override
+	public String getMessage() {
+	    return BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources", "error.insufficient.funds");
+	}
+    }
+
+    // Temporary hack: this comment should be removed after correcting data
+    // @ConsistencyPredicate(BalancePositiveInconsistentException.class)
     public boolean checkBalancePositive() {
 	return getBalance().isPositive();
     }
@@ -133,7 +143,7 @@ public class WorkingCapitalTransaction extends WorkingCapitalTransaction_Base {
     public void approve(final User user) {
     }
 
-    protected WorkingCapitalTransaction getNext() {
+    public WorkingCapitalTransaction getNext() {
 	final int current = getNumber().intValue();
 	final WorkingCapital workingCapital = getWorkingCapital();
 	for (final WorkingCapitalTransaction workingCapitalTransaction : workingCapital.getWorkingCapitalTransactionsSet()) {
