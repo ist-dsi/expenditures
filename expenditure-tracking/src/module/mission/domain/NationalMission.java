@@ -85,4 +85,33 @@ public class NationalMission extends NationalMission_Base {
 	return country == null ? getLocation() : getLocation() + ", " + country.getName().getContent();
     }
 
+    @Override
+    protected boolean discountLunchDay(final DateTime dateTime) {
+	if (super.discountLunchDay(dateTime)) {
+	    if (isFirstDay(dateTime)) {
+		final Interval interval = new Interval(getDaparture(), dateTime.withTime(23, 59, 59, 0));
+		return overlapsMeal(interval, dateTime, 13);
+	    } else if (isLastDay(dateTime)) {
+		final Interval interval = new Interval(dateTime.withTime(0, 0, 0, 0), getArrival());
+		return overlapsMeal(interval, dateTime, 13);
+	    }
+	    return true;
+	}
+        return false;
+    }
+
+    private boolean isFirstDay(final DateTime dateTime) {
+	final DateTime departure = getDaparture();
+	return matchesDay(departure, dateTime);
+    }
+
+    private boolean isLastDay(final DateTime dateTime) {
+	final DateTime arrival = getArrival();
+	return matchesDay(arrival, dateTime);
+    }
+
+    private boolean matchesDay(final DateTime dateTime1, final DateTime dateTime2) {
+	return dateTime1.getYear() == dateTime2.getYear() && dateTime1.getDayOfYear() == dateTime2.getDayOfYear();
+    }
+
 }

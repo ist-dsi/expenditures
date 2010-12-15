@@ -30,6 +30,7 @@ import myorg.domain.util.Money;
 import myorg.util.BundleUtil;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeConstants;
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
 
@@ -748,14 +749,57 @@ public abstract class Mission extends Mission_Base {
     }
 
     public Integer getNunberOfLunchesToDiscount(final Person person) {
-	int result = 0;
-	for (final MissionItem missionItem : getMissionItemsSet()) {
-	    if (missionItem.isPersonelExpenseItem()) {
-		final PersonelExpenseItem personelExpenseItem = (PersonelExpenseItem) missionItem;
-		result += personelExpenseItem.getNunberOfLunchesToDiscount(person);
+	return getNunberOfLunchesToDiscount();
+/*	int result = 0;
+	if (hasAnyMissionItems()) {
+	    for (final MissionItem missionItem : getMissionItemsSet()) {
+		if (missionItem.isPersonelExpenseItem()) {
+		    final PersonelExpenseItem personelExpenseItem = (PersonelExpenseItem) missionItem;
+		    result += personelExpenseItem.getNunberOfLunchesToDiscount(person);
+		}
 	    }
+	} else {
+	    result = getNunberOfLunchesToDiscount();
 	}
 	return Integer.valueOf(result);
+*/
+    }
+
+    private int getNunberOfLunchesToDiscount() {
+	int result = 0;
+	for (DateTime dateTime = getDaparture();
+		!dateTime.toDateMidnight().isAfter(getArrival().toDateMidnight());
+		dateTime = dateTime.plusDays(1)) {
+	    if (discountLunchDay(dateTime)) {
+		result++;
+	    }
+	}
+	return result;
+    }
+	    
+    protected boolean discountLunchDay(final DateTime dateTime) {
+	final int dayOfWeek = dateTime.getDayOfWeek();
+	return dayOfWeek != DateTimeConstants.SATURDAY
+		&& dayOfWeek != DateTimeConstants.SUNDAY
+		&& !isHoliday(dateTime);
+    }
+
+    private boolean isHoliday(final DateTime dateTime) {
+	// TODO Possibly refactor this and place data in the repository...
+	//      also this does not yet account for mobile holidays and local 
+	//      holidays depending on the persons working place.
+	final int monthOfYear = dateTime.getMonthOfYear();
+	final int dayOfMonth = dateTime.getDayOfMonth();
+	return (monthOfYear == 1 && dayOfMonth == 1)
+		|| (monthOfYear == 4 && dayOfMonth == 25)
+		|| (monthOfYear == 5 && dayOfMonth == 1)
+		|| (monthOfYear == 6 && dayOfMonth == 10)
+		|| (monthOfYear == 8 && dayOfMonth == 15)
+		|| (monthOfYear == 10 && dayOfMonth == 5)
+		|| (monthOfYear == 11 && dayOfMonth == 1)
+		|| (monthOfYear == 12 && dayOfMonth == 1)
+		|| (monthOfYear == 12 && dayOfMonth == 8)
+		|| (monthOfYear == 12 && dayOfMonth == 25);
     }
 
     public int getNunberOfLunchesToDiscountOnFirstPersonelExpenseDay(final PersonelExpenseItem personelExpenseItem) {
