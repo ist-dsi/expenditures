@@ -2,12 +2,10 @@ package module.workingCapital.domain;
 
 import java.util.Comparator;
 
-import jvstm.cps.ConsistencyException;
 import jvstm.cps.ConsistencyPredicate;
+import module.workingCapital.WorkingCapitalConsistencyException;
 import myorg.domain.User;
-import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
-import myorg.util.BundleUtil;
 
 import org.apache.commons.lang.NotImplementedException;
 import org.joda.time.DateTime;
@@ -30,16 +28,7 @@ public class WorkingCapitalTransaction extends WorkingCapitalTransaction_Base {
 	setTransationInstant(new DateTime());
     }
 
-    public class BalancePositiveInconsistentException extends ConsistencyException {
-	private static final long serialVersionUID = 1L;
-
-	@Override
-	public String getMessage() {
-	    return BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources", "error.insufficient.funds");
-	}
-    }
-
-    @ConsistencyPredicate(BalancePositiveInconsistentException.class)
+    @ConsistencyPredicate(WorkingCapitalConsistencyException.class)
     public boolean checkBalancePositive() {
 	return !getBalance().isNegative();
     }
@@ -70,20 +59,12 @@ public class WorkingCapitalTransaction extends WorkingCapitalTransaction_Base {
     public void addDebt(final Money value) {
 	setBalance(getBalance().add(value));
 	setDebt(getDebt().add(value));
-	if (getBalance().isNegative() || getDebt().isNegative()) {
-	    throw new DomainException(BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources",
-		    "error.insufficient.funds"));
-	}
     }
 
     public void restoreDebt(final Money debtValue, final Money accumulatedValue) {
 	setAccumulatedValue(getAccumulatedValue().subtract(accumulatedValue));
 	setBalance(getBalance().add(debtValue));
 	setDebt(getDebt().add(debtValue));
-	if (getBalance().isNegative() || getDebt().isNegative()) {
-	    throw new DomainException(BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources",
-		    "error.insufficient.funds"));
-	}
     }
 
     public void addValue(final Money value) {
@@ -91,10 +72,6 @@ public class WorkingCapitalTransaction extends WorkingCapitalTransaction_Base {
 	setAccumulatedValue(getAccumulatedValue().add(value));
 	setBalance(getBalance().subtract(value));
 	setDebt(getDebt().subtract(value));
-	if (getBalance().isNegative() || getDebt().isNegative()) {
-	    throw new DomainException(BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources",
-		    "error.insufficient.funds"));
-	}
     }
 
     public void resetValue(final Money value) {
