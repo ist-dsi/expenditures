@@ -234,12 +234,12 @@
 			<bean:message key="acquisitionProcess.label.accountingUnit" bundle="ACQUISITION_RESOURCES"/>
 		</th>
 		<logic:equal name="areFundAllocationPresent" value="true">
-			<th id="fundAllocationHeader">
+			<th>
 				<bean:message key="financer.label.fundAllocation.identification" bundle="ACQUISITION_RESOURCES"/>
 			</th>
 		</logic:equal>
 		<logic:equal name="areEffectiveFundAllocationPresent" value="true">
-			<th id="effectiveFundAllocationHeader">
+			<th>
 				<bean:message key="financer.label.effectiveFundAllocation.identification" bundle="ACQUISITION_RESOURCES"/>
 			</th>
 		</logic:equal>
@@ -266,21 +266,20 @@
 			</td>
 			<td class="acenter" style="width: 80px;"><fr:view name="payingUnit" property="financer.accountingUnit.name"/></td>
 			<logic:equal name="areFundAllocationPresent" value="true">
-				<td class="allocationCell" style="display: none;">
+				<td>
 					<logic:equal name="payingUnit" property="financer.fundAllocationPresent" value="true">
 						<fr:view name="payingUnit" property="financer.fundAllocationIds"/> 
 					</logic:equal>
 				</td>
 			</logic:equal>
 			<logic:equal name="areEffectiveFundAllocationPresent" value="true">
-				<td class="allocationCell" style="display: none;">
+				<td>
 					<logic:equal name="payingUnit" property="financer.effectiveFundAllocationPresent" value="true">
 						<fr:view name="payingUnit" property="financer.effectiveFundAllocationIds"/> 
 					</logic:equal>
 				</td>
 			</logic:equal>
-		
-			<td class="aright nowrap" style="width: 80px;">6<fr:view name="payingUnit" property="amount"/></td>
+			<td class="aright nowrap" style="width: 80px;"><fr:view name="payingUnit" property="amount"/></td>
 		</tr>
 	</logic:iterate>
 </table> 
