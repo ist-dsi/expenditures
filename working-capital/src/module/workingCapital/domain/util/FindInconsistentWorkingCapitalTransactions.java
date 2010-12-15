@@ -1,4 +1,4 @@
-package module.workingCapital;
+package module.workingCapital.domain.util;
 
 import java.util.HashMap;
 

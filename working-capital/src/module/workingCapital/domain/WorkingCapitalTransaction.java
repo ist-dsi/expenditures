@@ -3,7 +3,7 @@ package module.workingCapital.domain;
 import java.util.Comparator;
 
 import jvstm.cps.ConsistencyPredicate;
-import module.workingCapital.WorkingCapitalConsistencyException;
+import module.workingCapital.domain.util.WorkingCapitalConsistencyException;
 import myorg.domain.User;
 import myorg.domain.util.Money;
 

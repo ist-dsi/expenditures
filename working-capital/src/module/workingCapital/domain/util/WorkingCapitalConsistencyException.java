@@ -1,4 +1,4 @@
-package module.workingCapital;
+package module.workingCapital.domain.util;
 
 import jvstm.cps.ConsistencyException;
 import myorg.util.BundleUtil;
