@@ -16,6 +16,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import pt.ist.bennu.vaadin.domain.contents.VaadinNode;
 import pt.ist.fenixWebFramework.servlets.functionalities.CreateNodeAction;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
@@ -63,6 +64,15 @@ public class InterfaceCreationAction extends ContextBaseAction {
 
 	LinkNode.createLinkNode(virtualHost, node, "https://fenix-ashes.ist.utl.pt/fenixWiki/Qualidade/Missoes", 
 		"resources.MissionResources", "link.sideBar.help", UserGroup.getInstance());
+
+	VaadinNode.createVaadinNode(virtualHost, node, "resources.ContentResources", "add.interface.vaadinWiki",
+		"PageView-322122547202", UserGroup.getInstance());
+
+	VaadinNode.createVaadinNode(virtualHost, node, "resources.ContentResources", "add.interface.vaadinWiki",
+		"SimplePageView-322122547202", UserGroup.getInstance());
+
+	ActionNode.createActionNode(virtualHost, node, "/traditionalPageViewer", "viewPage&pageID=322122547202", "resources.ContentResources",
+		"add.interface.vaadinWiki", UserGroup.getInstance());
 
 	return forwardToMuneConfiguration(request, virtualHost, node);
     }
