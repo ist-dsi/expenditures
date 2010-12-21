@@ -660,7 +660,7 @@ public abstract class Mission extends Mission_Base {
 
 	// Check all financers have an accounting unit
 	for (final MissionFinancer missionFinancer : getFinancerSet()) {
-	    if (!missionFinancer.hasUnit() || !missionFinancer.getUnit().hasAccountingUnit()) {
+	    if (!missionFinancer.hasUnit() || !missionFinancer.hasAccountingUnit()) {
 		return false;
 	    }
 	}
@@ -720,7 +720,7 @@ public abstract class Mission extends Mission_Base {
 
 	// Check all financers have an accounting unit
 	for (final MissionFinancer missionFinancer : getFinancerSet()) {
-	    if (!missionFinancer.hasUnit() || !missionFinancer.getUnit().hasAccountingUnit()) {
+	    if (!missionFinancer.hasUnit() || !missionFinancer.hasAccountingUnit()) {
 		final String unitName = missionFinancer.hasUnit() ? missionFinancer.getUnit().getPresentationName() : "";
 		result.add(BundleUtil.getFormattedStringFromResourceBundle("resources/MissionResources", "message.mission.financer.with.no.accounting.unit", unitName));
 	    }
@@ -929,8 +929,7 @@ public abstract class Mission extends Mission_Base {
 
     public boolean isAccountingEmployee(final pt.ist.expenditureTrackingSystem.domain.organization.Person expenditurePerson) {
 	for (final MissionFinancer missionFinancer : getFinancerSet()) {
-	    final Unit unit = missionFinancer.getUnit();
-	    final AccountingUnit accountingUnit = unit.getAccountingUnit();
+	    final AccountingUnit accountingUnit = missionFinancer.getAccountingUnit();
 	    if (accountingUnit.getPeopleSet().contains(expenditurePerson)) {
 		return true;
 	    }
@@ -941,8 +940,7 @@ public abstract class Mission extends Mission_Base {
     public boolean isProjectAccountingEmployee(final pt.ist.expenditureTrackingSystem.domain.organization.Person expenditurePerson) {
 	for (final MissionFinancer missionFinancer : getFinancerSet()) {
 	    if (missionFinancer.isProjectFinancer()) {
-		final Unit unit = missionFinancer.getUnit();
-		final AccountingUnit accountingUnit = unit.getAccountingUnit();
+		final AccountingUnit accountingUnit = missionFinancer.getAccountingUnit();
 		if (accountingUnit.getProjectAccountantsSet().contains(expenditurePerson)) {
 		    return true;
 		}
@@ -976,9 +974,8 @@ public abstract class Mission extends Mission_Base {
 
     public boolean isFinancerAccountant(final pt.ist.expenditureTrackingSystem.domain.organization.Person person) {
 	for (final MissionFinancer missionFinancer : getFinancerSet()) {
-	    final Unit unit = missionFinancer.getUnit();
-	    if (unit != null) {
-		final AccountingUnit accountingUnit = unit.getAccountingUnit();
+	    final AccountingUnit accountingUnit = missionFinancer.getAccountingUnit();
+	    if (accountingUnit != null) {
 		return accountingUnit.getPeopleSet().contains(person)
 	    		|| accountingUnit.getProjectAccountantsSet().contains(person)
 	    		|| accountingUnit.getTreasuryMembersSet().contains(person)

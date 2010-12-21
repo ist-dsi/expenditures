@@ -50,10 +50,14 @@
 			</td>
 			<td class="acenter">
 				<logic:present name="financer" property="unit">
-					<logic:present name="financer" property="unit.accountingUnit">
-						<html:link styleClass="secondaryLink" page="/expenditureTrackingOrganization.do?method=viewAccountingUnit" paramId="accountingUnitOid" paramName="financer" paramProperty="unit.accountingUnit.externalId">
-							<fr:view name="financer" property="unit.accountingUnit.name"/>
+					<logic:present name="financer" property="accountingUnit">
+						<html:link styleClass="secondaryLink" page="/expenditureTrackingOrganization.do?method=viewAccountingUnit" paramId="accountingUnitOid" paramName="financer" paramProperty="accountingUnit.externalId">
+							<fr:view name="financer" property="accountingUnit.name"/>
 						</html:link>
+						<br/>
+						<wf:activityLink processName="process" activityName="ChangeAccountingUnitActivity" scope="request" paramName0="financer" paramValue0="<%= financerOID %>">
+							<bean:message bundle="MISSION_RESOURCES" key="link.change"/>
+						</wf:activityLink>
 					</logic:present>
 				</logic:present>
 			</td>

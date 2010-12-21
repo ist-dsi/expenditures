@@ -121,7 +121,7 @@
 
 <schema name="module.mission.domain.activity.DistributeItemCostsActivityInformation.MissionItemFinancerBean" type="module.mission.domain.activity.DistributeItemCostsActivityInformation$MissionItemFinancerBean" bundle="MISSION_RESOURCES">
 	<slot name="missionFinancer.unit.presentationName" key="label.mission.financer" read-only="true"/>
-	<slot name="missionFinancer.unit.accountingUnit.name" key="label.mission.financer.accounting.unit" read-only="true" />
+	<slot name="missionFinancer.accountingUnit.name" key="label.mission.financer.accounting.unit" read-only="true" />
 	<slot name="amount" key="label.mission.item.value" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 </schema>
 
@@ -282,7 +282,7 @@
 
 <schema name="module.mission.domain.activity.FundAllocationActivityInformation.MissionItemFinancerFundAllocationBean" type="module.mission.domain.activity.FundAllocationActivityInformation$MissionItemFinancerFundAllocationBean" bundle="MISSION_RESOURCES">
 	<slot name="missionItemFinancer.missionFinancer.unit.presentationName" key="label.mission.financer" read-only="true"/>
-	<slot name="missionItemFinancer.missionFinancer.unit.accountingUnit.name" key="label.mission.financer.accounting.unit" read-only="true" />
+	<slot name="missionItemFinancer.missionFinancer.accountingUnit.name" key="label.mission.financer.accounting.unit" read-only="true" />
 	<slot name="missionItemFinancer.amount" key="label.mission.financer.amount" read-only="true" />
 	<slot name="fundAllocationId" key="label.mission.financer.fundAllocationId" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 	<slot name="missionItemFinancer.description" key="label.mission.item.financer.description" read-only="true" />
@@ -296,7 +296,7 @@
 
 <schema name="module.mission.domain.MissionItemFinancer" type="module.mission.domain.MissionItemFinancer" bundle="MISSION_RESOURCES">
 	<slot name="missionFinancer.unit.presentationName" key="label.mission.financer"/>
-	<slot name="missionFinancer.unit.accountingUnit.name" key="label.mission.financer.accounting.unit"/>
+	<slot name="missionFinancer.accountingUnit.name" key="label.mission.financer.accounting.unit"/>
 	<slot name="amount" key="label.mission.financer.amount"/>
 	<slot name="allFundAllocationId" key="label.mission.financer.fundAllocationId"/>
 </schema>
@@ -402,3 +402,12 @@
 		<property name="classes" value="form"/>		
 	</slot>
 </schema>
+
+<schema name="activityInformation.ChangeAccountingUnitActivity" type="module.mission.domain.activity.ChangeAccountingUnitActivityInformation" bundle="MISSION_RESOURCES">
+	<slot name="accountingUnit" key="label.module.workingCapital.initialization.accountingUnit" layout="menu-select"
+			validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="providerClass" value="module.mission.presentationTier.provider.ChangeAccountingUnitProvider"/>
+		<property name="format" value="${name}" />
+		<property name="nullOptionHidden" value="true" />
+	</slot>
+</schema>		

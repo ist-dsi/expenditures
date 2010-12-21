@@ -652,3 +652,10 @@ relation MissionServiceGaranteePerson {
 		multiplicity *;
 	}
 }
+
+relation MissionFinancerAccountingUnit {
+	MissionFinancer playsRole missionFinancer {
+		multiplicity *;
+	}
+	.pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit playsRole accountingUnit;
+}

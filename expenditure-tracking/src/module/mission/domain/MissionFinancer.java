@@ -5,6 +5,7 @@ import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.User;
 import myorg.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
+import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Project;
 import pt.ist.expenditureTrackingSystem.domain.organization.SubProject;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
@@ -184,11 +185,11 @@ public class MissionFinancer extends MissionFinancer_Base {
     }
 
     public boolean canAllocateFunds(final Person person) {
-	return person != null && hasUnit() && getUnit().isAccountingEmployee(person.getUser().getExpenditurePerson());
+	return person != null && hasAccountingUnit() && getAccountingUnit().hasPeople(person.getUser().getExpenditurePerson());
     }
 
     public boolean canAllocateProjectFunds(final Person person) {
-	return hasUnit() && getUnit().isProjectAccountingEmployee(person.getUser().getExpenditurePerson());
+	return person != null && hasAccountingUnit() && getAccountingUnit().hasProjectAccountants(person.getUser().getExpenditurePerson());
     }
 
     public void unAllocateFunds(final Person person) {
@@ -273,6 +274,12 @@ public class MissionFinancer extends MissionFinancer_Base {
 	final Unit unit = getUnit();
 	final User user = UserView.getCurrentUser();
 	return unit.isProjectAccountingEmployee(user.getExpenditurePerson());
+    }
+
+    @Override
+    public AccountingUnit getAccountingUnit() {
+	final AccountingUnit accountingUnit = super.getAccountingUnit();
+	return accountingUnit == null ? getUnit().getAccountingUnit() : accountingUnit;
     }
 
 }

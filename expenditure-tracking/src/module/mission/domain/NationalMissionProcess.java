@@ -14,6 +14,7 @@ import module.mission.domain.activity.ArchiveItemActivity;
 import module.mission.domain.activity.AuthoriseParticipantActivity;
 import module.mission.domain.activity.AuthorizeActivity;
 import module.mission.domain.activity.CancelProcessActivity;
+import module.mission.domain.activity.ChangeAccountingUnitActivity;
 import module.mission.domain.activity.DefineParticipantAuthorizationChainActivity;
 import module.mission.domain.activity.DistributeItemCostsActivity;
 import module.mission.domain.activity.EditItemActivity;
@@ -60,6 +61,7 @@ public class NationalMissionProcess extends NationalMissionProcess_Base {
 	activitiesAux.add(new DefineParticipantAuthorizationChainActivity());
 	activitiesAux.add(new AddFinancerActivity());
 	activitiesAux.add(new RemoveFinancerActivity());
+	activitiesAux.add(new ChangeAccountingUnitActivity());
 	activitiesAux.add(new AddItemActivity());
 	activitiesAux.add(new EditItemActivity());
 	activitiesAux.add(new DistributeItemCostsActivity());
