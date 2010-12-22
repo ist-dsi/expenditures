@@ -9,12 +9,14 @@ import module.workflow.activities.StealProcess;
 import module.workflow.activities.TakeProcess;
 import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.ProcessFile;
+import module.workflow.domain.SignatureProcess;
 import module.workflow.domain.WorkflowProcess;
 import module.workflow.util.PresentableProcessState;
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
 import myorg.util.BundleUtil;
 import myorg.util.ClassNameBundle;
+import pt.ist.expenditureTrackingSystem.domain.SimplifiedProcedureProcessSignature;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProposalDocument;
@@ -220,8 +222,8 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	inGenesis();
 	AcquisitionRequest acquisitionRequest = new AcquisitionRequest(this, suppliers, person);
 	if (suppliers.size() == 0) {
-	    throw new DomainException("acquisitionProcess.message.exception.needsMoreSuppliers", DomainException
-		    .getResourceFor("resources/AcquisitionResources"));
+	    throw new DomainException("acquisitionProcess.message.exception.needsMoreSuppliers",
+		    DomainException.getResourceFor("resources/AcquisitionResources"));
 	}
 	if (suppliers.size() == 1) {
 	    acquisitionRequest.setSelectedSupplier(suppliers.get(0));
@@ -246,8 +248,8 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	}
 	if (createAcquisitionProcessBean.isForMission()) {
 	    if (createAcquisitionProcessBean.getMissionProcess() == null) {
-		throw new DomainException("mission.process.is.mandatory", DomainException
-			.getResourceFor("resources/AcquisitionResources"));
+		throw new DomainException("mission.process.is.mandatory",
+			DomainException.getResourceFor("resources/AcquisitionResources"));
 	    }
 	    process.setMissionProcess(createAcquisitionProcessBean.getMissionProcess());
 	}
@@ -255,6 +257,7 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	return process;
     }
 
+    @Override
     public <T extends WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>> List<T> getActivities() {
 	return (List<T>) activities;
     }
@@ -311,8 +314,8 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	    unSkipSupplierFundAllocation();
 	}
 	if (processClassification.getLimit().isLessThan(this.getAcquisitionRequest().getCurrentValue())) {
-	    throw new DomainException("error.message.processValueExceedsLimitForClassification", DomainException
-		    .getResourceFor("resources/AcquisitionResources"));
+	    throw new DomainException("error.message.processValueExceedsLimitForClassification",
+		    DomainException.getResourceFor("resources/AcquisitionResources"));
 	}
 	super.setProcessClassification(processClassification);
     }
@@ -361,10 +364,12 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	return getProcessClassification().getLocalizedName();
     }
 
+    @Override
     public String getTypeDescription() {
 	return getProcessClassification().getLocalizedName();
     }
 
+    @Override
     public String getTypeShortDescription() {
 	return getProcessClassification().getShortDescription();
     }
@@ -388,6 +393,7 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
     public List<? extends PresentableProcessState> getAvailablePresentableStates() {
 	return getAvailableStates();
     }
+    
 
     public boolean getFundAllocationPresent() {
 	for (final Financer financer : getAcquisitionRequest().getFinancers()) {
@@ -405,6 +411,11 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	    }
 	}
 	return false;
+    }
+
+    @Override
+    public SignatureProcess signatureFactory() {
+	return SimplifiedProcedureProcessSignature.factory(this);
     }
 
 }
