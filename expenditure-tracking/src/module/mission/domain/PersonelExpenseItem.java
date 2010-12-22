@@ -75,7 +75,7 @@ public abstract class PersonelExpenseItem extends PersonelExpenseItem_Base {
 		numberOfDays--;
 		result += mission.getFirstDayPersonelDayExpensePercentage(this);
 	    }
-	    if (this == lastPersonelExpenseItem) {
+	    if (this == lastPersonelExpenseItem && numberOfDays > 0) {
 		numberOfDays--;
 		result += mission.getLastDayPersonelDayExpensePercentage(this);
 	    }
