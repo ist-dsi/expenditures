@@ -1,0 +1,3 @@
+package pt.ist.expenditureTrackingSystem.domain;
+
+class SimplifiedProcedureProcessSignature extends .module.workflow.domain.SignatureProcess { }
