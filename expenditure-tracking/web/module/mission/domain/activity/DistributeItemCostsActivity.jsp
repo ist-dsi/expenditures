@@ -30,7 +30,7 @@
 			<bean:message bundle="MISSION_RESOURCES" key="label.module.mission.domain.AccommodationItem.requirements.message"/>
 		</div>
 	</logic:equal>
-	<fr:form action="/missionProcess.do">
+	<fr:form id="distributeCostsForm" action="/missionProcess.do">
 		<html:hidden  property="method" value="distributeMissionItemCosts"/>
 		<bean:define id="processId" type="java.lang.String" name="process" property="externalId"/>
 		<html:hidden property="processId" value="<%= processId %>"/>
@@ -50,7 +50,7 @@
 				</fr:edit>
 
 				<p class="mtop05 mbottom2">
-					<a href="javascript:document.forms[0].method.value='distributeMissionItemFinancerValues'; document.forms[0].submit();">
+					<a href="javascript:document.getElementById('distributeCostsForm').method.value='distributeMissionItemFinancerValues'; document.getElementById('distributeCostsForm').submit();">
 						<bean:message key="label.mission.item.cost.distribution.automatically" bundle="MISSION_RESOURCES"/>
 					</a>
 				</p>

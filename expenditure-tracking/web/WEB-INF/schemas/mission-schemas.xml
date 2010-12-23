@@ -147,7 +147,7 @@
 <schema name="module.mission.domain.FullPersonelExpenseItem" type="module.mission.domain.FullPersonelExpenseItem" bundle="MISSION_RESOURCES">
 	<slot name="start" layout="picker" key="label.mission.item.personel.expense.start" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 	<slot name="end" layout="picker" key="label.mission.item.personel.expense.end" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-	<slot name="dailyPersonelExpenseCategory" layout="menu-select" key="label.mission.item.personel.expense.dailyPersonelExpenseCategory" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+	<slot name="dailyPersonelExpenseCategory" layout="menu-select" key="label.mission.item.personel.expense.dailyPersonelExpenseCategory" help="message.help.dailyPersonelExpenseCategory" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
 		<property name="providerClass" value="module.mission.presentationTier.provider.DailyPersonalExpenseCategoryProvider"/>
 		<property name="format" value="${description}"/>
 		<property name="key" value="true"/>
@@ -170,7 +170,7 @@
 <schema name="module.mission.domain.WithAccommodationPersonelExpenseItem" type="module.mission.domain.WithAccommodationPersonelExpenseItem" bundle="MISSION_RESOURCES">
 	<slot name="start" key="label.mission.item.personel.expense.start" layout="picker" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 	<slot name="end" key="label.mission.item.personel.expense.end" layout="picker" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-	<slot name="dailyPersonelExpenseCategory" layout="menu-select" key="label.mission.item.personel.expense.dailyPersonelExpenseCategory" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+	<slot name="dailyPersonelExpenseCategory" layout="menu-select" key="label.mission.item.personel.expense.dailyPersonelExpenseCategory" help="message.help.dailyPersonelExpenseCategory" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
 		<property name="providerClass" value="module.mission.presentationTier.provider.DailyPersonalExpenseCategoryProvider"/>
 		<property name="format" value="${description}"/>
 		<property name="key" value="true"/>
@@ -182,7 +182,7 @@
 <schema name="module.mission.domain.WithAccommodationAndOneMealPersonelExpenseItem" type="module.mission.domain.WithAccommodationAndOneMealPersonelExpenseItem" bundle="MISSION_RESOURCES">
 	<slot name="start" key="label.mission.item.personel.expense.start" layout="picker" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 	<slot name="end" key="label.mission.item.personel.expense.end" layout="picker" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-	<slot name="dailyPersonelExpenseCategory" layout="menu-select" key="label.mission.item.personel.expense.dailyPersonelExpenseCategory" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+	<slot name="dailyPersonelExpenseCategory" layout="menu-select" key="label.mission.item.personel.expense.dailyPersonelExpenseCategory" help="message.help.dailyPersonelExpenseCategory" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
 		<property name="providerClass" value="module.mission.presentationTier.provider.DailyPersonalExpenseCategoryProvider"/>
 		<property name="format" value="${description}"/>
 		<property name="key" value="true"/>
@@ -194,7 +194,7 @@
 <schema name="module.mission.domain.WithAccommodationAndTwoMealsPersonelExpenseItem" type="module.mission.domain.WithAccommodationAndTwoMealsPersonelExpenseItem" bundle="MISSION_RESOURCES">
 	<slot name="start" key="label.mission.item.personel.expense.start" layout="picker" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 	<slot name="end" key="label.mission.item.personel.expense.end" layout="picker" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-	<slot name="dailyPersonelExpenseCategory" layout="menu-select" key="label.mission.item.personel.expense.dailyPersonelExpenseCategory" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+	<slot name="dailyPersonelExpenseCategory" layout="menu-select" key="label.mission.item.personel.expense.dailyPersonelExpenseCategory" help="message.help.dailyPersonelExpenseCategory" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
 		<property name="providerClass" value="module.mission.presentationTier.provider.DailyPersonalExpenseCategoryProvider"/>
 		<property name="format" value="${description}"/>
 		<property name="key" value="true"/>
