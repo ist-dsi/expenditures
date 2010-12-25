@@ -6,11 +6,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import jvstm.TransactionalCommand;
 import myorg.domain.User;
 import myorg.domain.scheduler.WriteCustomTask;
 import net.sourceforge.fenixedu.domain.RemotePerson;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
-import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.plugins.remote.domain.RemoteHost;
 import pt.ist.fenixframework.plugins.remote.domain.RemoteSystem;
 import pt.ist.fenixframework.pstm.Transaction;
@@ -114,9 +114,14 @@ public class SyncUsers extends SyncUsers_Base {
 	final Thread thread = new Thread() {
 	    @Override
 	    public void run() {
-		final PersonCreatorTask personCreatorTask = new PersonCreatorTask(mlname, remotePersonOid, username);
-		personCreatorTask.doIt();
-		result[0] += personCreatorTask.result;
+		Transaction.withTransaction(true, new TransactionalCommand() {
+		    @Override
+		    public void doIt() {
+			final PersonCreatorTask personCreatorTask = new PersonCreatorTask(mlname, remotePersonOid, username);
+			personCreatorTask.doIt();
+			result[0] += personCreatorTask.result;
+		    }
+		});
 	    }
 	};
 	thread.start();
