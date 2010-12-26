@@ -11,6 +11,7 @@ import myorg.domain.User;
 import myorg.domain.scheduler.WriteCustomTask;
 import net.sourceforge.fenixedu.domain.RemotePerson;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
+import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.plugins.remote.domain.RemoteHost;
 import pt.ist.fenixframework.plugins.remote.domain.RemoteSystem;
 import pt.ist.fenixframework.pstm.Transaction;
@@ -114,14 +115,15 @@ public class SyncUsers extends SyncUsers_Base {
 	final Thread thread = new Thread() {
 	    @Override
 	    public void run() {
-		Transaction.withTransaction(true, new TransactionalCommand() {
-		    @Override
-		    public void doIt() {
-			final PersonCreatorTask personCreatorTask = new PersonCreatorTask(mlname, remotePersonOid, username);
-			personCreatorTask.doIt();
-			result[0] += personCreatorTask.result;
-		    }
-		});
+		try {
+		    Transaction.begin(true);
+		    Transaction.currentFenixTransaction().setReadOnly();
+		    final PersonCreatorTask personCreatorTask = new PersonCreatorTask(mlname, remotePersonOid, username);
+		    personCreatorTask.doIt();
+		    result[0] += personCreatorTask.result;
+		} finally {
+		    Transaction.forceFinish();
+		}
 	    }
 	};
 	thread.start();
