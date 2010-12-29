@@ -1,13 +1,21 @@
 package pt.ist.expenditureTrackingSystem.presentationTier.actions.acquisitions;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.MissingResourceException;
+import java.util.Set;
+import java.util.TreeSet;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import myorg.util.BundleUtil;
 
 import org.apache.commons.beanutils.BeanComparator;
 import org.apache.commons.collections.comparators.ComparatorChain;
@@ -16,6 +24,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.joda.time.DateTime;
 
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.SavedSearch;
@@ -25,6 +34,8 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPaymentProcess.SearchProcessValues;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
+import pt.ist.expenditureTrackingSystem.domain.dto.PayingUnitTotalBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.UserSearchBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.VariantBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
@@ -35,6 +46,7 @@ import pt.ist.expenditureTrackingSystem.presentationTier.actions.BaseAction;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 import pt.utl.ist.fenix.tools.util.CollectionPager;
+import pt.utl.ist.fenix.tools.util.excel.StyledExcelSpreadsheet;
 
 @Mapping(path = "/search")
 public class SearchPaymentProcessesAction extends BaseAction {
@@ -132,7 +144,17 @@ public class SearchPaymentProcessesAction extends BaseAction {
 	    searchBean.setSavedSearch(null);
 	    return search(mapping, request, searchBean, true);
 	}
+    }
 
+    public ActionForward exportCurrentSearchToExcel(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+	    HttpServletResponse response) {
+	SearchPaymentProcess searchBean = getRenderedObject("searchBean");
+	final Set<PaymentProcess> processes = searchBean.search();
+
+	exportInfoToExcel(processes, searchBean.getSearchProcess().getLocalizedName() + " - "
+		+ searchBean.getPaymentProcessYear().getYear(), response);
+
+	return null;
     }
 
     public ActionForward viewSearch(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -174,6 +196,111 @@ public class SearchPaymentProcessesAction extends BaseAction {
 	    RenderUtils.invalidateViewState("mySearches");
 	}
 	return search(mapping, request, new SearchPaymentProcess(search), false);
+    }
+
+    public ActionForward exportMySearchToExcel(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+	    HttpServletResponse response) {
+	UserSearchBean bean = getRenderedObject("mySearches");
+	SavedSearch search = bean.getSelectedSearch();
+	SearchPaymentProcess searchBean = new SearchPaymentProcess(search);
+	final Set<PaymentProcess> processes = searchBean.search();
+
+	exportInfoToExcel(processes, search.getSearchName(), response);
+
+	return null;
+    }
+
+    private void exportInfoToExcel(Set<PaymentProcess> processes, String filename, HttpServletResponse response) {
+	filename = filename.replace(' ', '_');
+	response.setContentType("application/vnd.ms-excel");
+	response.setHeader("Content-disposition", "attachment; filename=" + filename + ".xls");
+	final StyledExcelSpreadsheet spreadsheet = new StyledExcelSpreadsheet(filename);
+	try {
+	    ServletOutputStream writer = response.getOutputStream();
+	    fillXlsInfo(processes, spreadsheet, writer);
+	    spreadsheet.getWorkbook().write(writer);
+	    writer.flush();
+	    response.flushBuffer();
+	} catch (IOException e) {
+	    throw new RuntimeException();
+	}
+    }
+
+    private void fillXlsInfo(Set<PaymentProcess> processes, StyledExcelSpreadsheet spreadsheet, OutputStream outputStream)
+	    throws IOException {
+	spreadsheet.newRow();
+	spreadsheet.addCell(processes.size() + " " + getAcquisitionResourceMessage("label.processes"));
+	spreadsheet.newRow();
+
+	setHeaders(spreadsheet);
+	TreeSet<PaymentProcess> sortedProcesses = new TreeSet<PaymentProcess>(
+		PaymentProcess.COMPARATOR_BY_YEAR_AND_ACQUISITION_PROCESS_NUMBER);
+	sortedProcesses.addAll(processes);
+
+	for (PaymentProcess process : sortedProcesses) {
+	    spreadsheet.newRow();
+
+	    spreadsheet.addCell(process.getAcquisitionProcessId());
+	    spreadsheet.addCell(process.getTypeShortDescription());
+	    spreadsheet.addCell(process.getSuppliersDescription());
+	    spreadsheet.addCell(process.getRequest().getRequestItemsCount());
+	    spreadsheet.addCell(process.getProcessStateDescription());
+	    DateTime date = process.getDateFromLastActivity();
+	    spreadsheet.addCell((date == null) ? "" : date.getDayOfMonth() + "-" + date.getMonthOfYear() + "-" + date.getYear()
+		    + " " + date.getHourOfDay() + ":" + date.getMinuteOfHour());
+	    spreadsheet.addCell(process.getRequest().getRequester().getFirstAndLastName());
+	    spreadsheet.addCell(process.getRequest().getRequestingUnit().getName());
+
+	    if (process instanceof SimplifiedProcedureProcess) {
+		SimplifiedProcedureProcess simplifiedProcedureProcess = (SimplifiedProcedureProcess) process;
+		for (PayingUnitTotalBean payingUnitTotal : simplifiedProcedureProcess.getAcquisitionRequest()
+			.getTotalAmountsForEachPayingUnit()) {
+		    if ((simplifiedProcedureProcess.getFundAllocationPresent())
+			    && (payingUnitTotal.getFinancer().isFundAllocationPresent())) {
+			spreadsheet.addCell(payingUnitTotal.getFinancer().getFundAllocationIds());
+		    }
+
+		    if ((simplifiedProcedureProcess.getEffectiveFundAllocationPresent())
+			    && (payingUnitTotal.getFinancer().isEffectiveFundAllocationPresent())) {
+			spreadsheet.addCell(payingUnitTotal.getFinancer().getEffectiveFundAllocationIds());
+		    }
+		}
+	    }
+	}
+    }
+
+    private void setHeaders(StyledExcelSpreadsheet spreadsheet) {
+	spreadsheet.newHeaderRow();
+	spreadsheet.addHeader(getExpenditureResourceMessage("label.acquisitionProcessId"));
+	spreadsheet.addHeader(getAcquisitionResourceMessage("label.acquisitionType"));
+	spreadsheet.addHeader(getExpenditureResourceMessage("label.suppliersDescription"));
+	spreadsheet.addHeader(getExpenditureResourceMessage("label.itemsCount"));
+	spreadsheet.addHeader(getExpenditureResourceMessage("label.process.state.description"));
+	spreadsheet.addHeader(getExpenditureResourceMessage("label.inactiveSince"));
+	spreadsheet.addHeader(getExpenditureResourceMessage("label.requesterName"));
+	spreadsheet.addHeader(getAcquisitionResourceMessage("acquisitionProcess.label.requestingUnit"));
+	spreadsheet.addHeader(getAcquisitionResourceMessage("financer.label.fundAllocation.identification"));
+	spreadsheet.addHeader(getAcquisitionResourceMessage("financer.label.effectiveFundAllocation.identification"));
+    }
+
+    private static String getAcquisitionResourceMessage(String key) {
+	return getResourceMessage("resources/AcquisitionResources", key);
+    }
+
+    private static String getExpenditureResourceMessage(String key) {
+	return getResourceMessage("resources/ExpenditureResources", key);
+    }
+
+    private static String getResourceMessage(String bundle, String key) {
+	try {
+	    return replaceAllXMLTags(BundleUtil.getFormattedStringFromResourceBundle(bundle, key), " ");
+	} catch (MissingResourceException ex) {
+	    return key;
+	}
+    }
+
+    private static String replaceAllXMLTags(String source, String replacement) {
+	return source.replaceAll("<.*>", replacement);
     }
 
     public ActionForward configurateMySearches(final ActionMapping mapping, final ActionForm form,
@@ -362,7 +489,7 @@ public class SearchPaymentProcessesAction extends BaseAction {
 
 	return comparator;
     }
-    
+
     public static class NullResilientBeanComparator extends BeanComparator {
 
 	public NullResilientBeanComparator(String property) {

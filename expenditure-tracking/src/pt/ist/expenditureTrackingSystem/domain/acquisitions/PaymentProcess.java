@@ -3,6 +3,7 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -29,6 +30,28 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 
 public abstract class PaymentProcess extends PaymentProcess_Base implements HasPresentableProcessState {
+
+    public static Comparator<PaymentProcess> COMPARATOR_BY_YEAR_AND_ACQUISITION_PROCESS_NUMBER = new Comparator<PaymentProcess>() {
+	@Override
+	public int compare(PaymentProcess o1, PaymentProcess o2) {
+	    int yearComp = COMPARATOR_BY_YEAR.compare(o1, o2);
+	    return (yearComp != 0) ? yearComp : COMPARATOR_BY_ACQUISITION_PROCESS_NUMBER.compare(o1, o2);
+	}
+    };
+
+    public static Comparator<PaymentProcess> COMPARATOR_BY_YEAR = new Comparator<PaymentProcess>() {
+	@Override
+	public int compare(PaymentProcess o1, PaymentProcess o2) {
+	    return o1.getPaymentProcessYear().getYear().compareTo(o2.getPaymentProcessYear().getYear());
+	}
+    };
+
+    public static Comparator<PaymentProcess> COMPARATOR_BY_ACQUISITION_PROCESS_NUMBER = new Comparator<PaymentProcess>() {
+	@Override
+	public int compare(PaymentProcess o1, PaymentProcess o2) {
+	    return o1.getAcquisitionProcessNumber().compareTo(o2.getAcquisitionProcessNumber());
+	}
+    };
 
     public PaymentProcess() {
 	super();
@@ -347,10 +370,10 @@ public abstract class PaymentProcess extends PaymentProcess_Base implements HasP
 
 	    new Email("Central de Compras", "noreply@ist.utl.pt", new String[] {}, toAddress, Collections.EMPTY_LIST,
 		    Collections.EMPTY_LIST, BundleUtil.getFormattedStringFromResourceBundle("resources/AcquisitionResources",
-			    "label.email.commentCreated.subject", getAcquisitionProcessId()), BundleUtil
-			    .getFormattedStringFromResourceBundle("resources/AcquisitionResources",
-				    "label.email.commentCreated.body", Person.getLoggedPerson().getName(),
-				    getAcquisitionProcessId(), comment));
+			    "label.email.commentCreated.subject", getAcquisitionProcessId()),
+		    BundleUtil.getFormattedStringFromResourceBundle("resources/AcquisitionResources",
+			    "label.email.commentCreated.body", Person.getLoggedPerson().getName(), getAcquisitionProcessId(),
+			    comment));
 	}
     }
 
@@ -370,6 +393,7 @@ public abstract class PaymentProcess extends PaymentProcess_Base implements HasP
 	return false;
     }
 
+    @Override
     public User getProcessCreator() {
 	return getRequest().getRequester().getUser();
     }
@@ -387,15 +411,17 @@ public abstract class PaymentProcess extends PaymentProcess_Base implements HasP
 	if (missionProcess == null || missionProcess.isExpenditureAuthorized()) {
 	    super.setMissionProcess(missionProcess);
 	} else {
-	    throw new DomainException("error.cannot.connect.acquisition.to.unauthorized.mission", DomainException
-		    .getResourceFor("resources/AcquisitionResources"));
+	    throw new DomainException("error.cannot.connect.acquisition.to.unauthorized.mission",
+		    DomainException.getResourceFor("resources/AcquisitionResources"));
 	}
     }
 
+    @Override
     public PresentableProcessState getPresentableAcquisitionProcessState() {
 	return null;
     }
 
+    @Override
     public List<? extends PresentableProcessState> getAvailablePresentableStates() {
 	return Collections.emptyList();
     }

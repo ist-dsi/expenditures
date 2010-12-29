@@ -26,7 +26,8 @@
 	<table>
 		<tr>
 			<td>
-				<fr:form action="/search.do?method=mySearches">
+				<fr:form id="mySearchesForm" action="/search.do">
+					<html:hidden property="method" value="mySearches"/>
 					<fr:edit id="mySearches" name="mySearches" schema='viewMySavedSearches'>
 						<fr:layout name="tabular">
 							<fr:property name="classes" value=""/>
@@ -47,14 +48,15 @@
 	
 	<span class="color888 smalltxt">Para mais opções de pesquisa, seleccione o tipo de aquisição.</span>
 	
-	<fr:form action="/search.do?method=search">
+	<fr:form id="searchBeanForm" action="/search.do">
+		<html:hidden property="method" value="search"/>
 		<fr:edit id="searchBean" name="searchBean" schema='<%= schema %>' >
 			<fr:layout name="tabular">
 				<fr:property name="classes" value="form"/>
 			</fr:layout>
 			<fr:destination name="typeSelector" path="/search.do?method=changeSelectedClass"/>
 		</fr:edit>
-		<html:submit styleClass="inputbutton"><bean:message key="button.search" bundle="EXPENDITURE_RESOURCES"/> </html:submit> | <a href="#" onClick="javascript:document.getElementById('advancedSearch').style.display='none'"><bean:message key="link.closeAdvancedSearch" bundle="EXPENDITURE_RESOURCES"/></a>
+		<html:submit styleClass="inputbutton"><bean:message key="button.search" bundle="EXPENDITURE_RESOURCES"/> </html:submit> | <a href="#" onClick="javascript:document.getElementById('advancedSearch').style.display='none'">« <bean:message key="link.closeAdvancedSearch" bundle="EXPENDITURE_RESOURCES"/></a>
 	</fr:form>
 </div>
 </div>
@@ -69,6 +71,33 @@
 <logic:notEmpty name="results">
 	<bean:size id="listSize" name="collectionPager" property="collection"/>
 		<bean:define id="pagerString" name="pagerString"/>
+		
+	<p class="mvert05">
+		<logic:present name="mySearches" property="selectedSearch">
+			<a href="javascript:
+				var form = document.getElementById('mySearchesForm');
+				var oldMethod = form.method.value;
+				form.method.value='exportMySearchToExcel';
+				form.submit();
+				form.method.value=oldMethod">
+				
+				<img border="0" src="images/excel.gif">
+				<bean:message key="link.xlsFileToDownload" bundle="ACQUISITION_RESOURCES"/>
+			</a>
+		</logic:present>
+		<logic:notPresent name="mySearches" property="selectedSearch">
+			<a href="javascript:
+				var form = document.getElementById('searchBeanForm');
+				var oldMethod = form.method.value;
+				form.method.value='exportCurrentSearchToExcel';
+				form.submit();
+				form.method.value=oldMethod">
+				
+				<img border="0" src="images/excel.gif">
+				<bean:message key="link.xlsFileToDownload" bundle="ACQUISITION_RESOURCES"/>
+			</a>
+		</logic:notPresent>
+	</p>
 
 	<p class="mvert05">
 		<span style="background: #fff5dd; font-style: italic; color: #542;">
@@ -83,7 +112,6 @@
 		<logic:equal name="searchBean" property="searchObjectAvailable" value="false">
 			<a href="#" onClick="javascript:document.getElementById('saveSearch').style.display='block'"><bean:message key="label.saveSearch" bundle="EXPENDITURE_RESOURCES"/></a>
 		</logic:equal>
-	
 	</td>
 	<td class="aright">
 	<cp:collectionPages url="<%= "/search.do?method=searchJump" + pagerString + "&sortBy=" + (request.getParameter("sortBy") != null ? request.getParameter("sortBy") : "") %>" 
