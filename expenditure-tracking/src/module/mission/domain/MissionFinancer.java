@@ -279,7 +279,7 @@ public class MissionFinancer extends MissionFinancer_Base {
     @Override
     public AccountingUnit getAccountingUnit() {
 	final AccountingUnit accountingUnit = super.getAccountingUnit();
-	return accountingUnit == null ? getUnit().getAccountingUnit() : accountingUnit;
+	return accountingUnit == null && hasUnit() ? getUnit().getAccountingUnit() : accountingUnit;
     }
 
 }
