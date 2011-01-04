@@ -13,6 +13,7 @@ import myorg.applicationTier.Authenticate;
 import myorg.util.MultiCounter;
 
 import org.apache.commons.lang.StringUtils;
+import org.jfree.data.time.Month;
 import org.joda.time.LocalDate;
 
 import pt.ist.emailNotifier.domain.Email;
@@ -79,6 +80,15 @@ public class EmailDigesterUtil {
 	    addPeople(people, accountingUnit.getTreasuryMembersSet());
 	}
 	final PaymentProcessYear paymentProcessYear = PaymentProcessYear.getPaymentProcessYearByYear(Calendar.getInstance().get(Calendar.YEAR));
+	addRequestors(people, paymentProcessYear);
+	if (today.getMonthOfYear() == Month.JANUARY) {
+	    final PaymentProcessYear previousYear = PaymentProcessYear.getPaymentProcessYearByYear(Calendar.getInstance().get(Calendar.YEAR) - 1);
+	    addRequestors(people, previousYear);
+	}
+	return people;
+    }
+
+    private static void addRequestors(final Set<Person> people, final PaymentProcessYear paymentProcessYear) {
 	for (final PaymentProcess paymentProcess : paymentProcessYear.getPaymentProcessSet()) {
 	    if (paymentProcess.getRequest() != null) {
 		final Person person = paymentProcess.getRequestor();
@@ -87,7 +97,6 @@ public class EmailDigesterUtil {
 	    	}
 	    }
 	}
-	return people;
     }
 
     private static void addPeopleWithRole(final Set<Person> people, final RoleType roleType) {

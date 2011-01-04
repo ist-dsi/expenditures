@@ -10,6 +10,7 @@ import myorg.applicationTier.Authenticate;
 import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.User;
 
+import org.jfree.data.time.Month;
 import org.joda.time.LocalDate;
 
 import pt.ist.emailNotifier.domain.Email;
@@ -35,11 +36,14 @@ public class EmailDigesterUtil {
 
 	    	    try {
 	    		final MissionYear missionYear = MissionYear.getCurrentYear();
-	    		final int takenByUser = missionYear.getTaken().size();
-	    		final int pendingApprovalCount = missionYear.getPendingAproval().size();
-	    		final int pendingAuthorizationCount = missionYear.getPendingAuthorization().size();
-	    		final int pendingFundAllocationCount = missionYear.getPendingFundAllocation().size();
-	    		final int pendingProcessingCount = missionYear.getPendingProcessingPersonelInformation().size();
+	    		final LocalDate today = new LocalDate();
+	    		final MissionYear previousYear = today.getMonthOfYear() == Month.JANUARY ? MissionYear.findMissionYear(today.getYear() - 1) : null;
+
+	    		final int takenByUser = missionYear.getTaken().size() + (previousYear == null ? 0 : previousYear.getTaken().size());
+	    		final int pendingApprovalCount = missionYear.getPendingAproval().size() + (previousYear == null ? 0 : previousYear.getPendingAproval().size());
+	    		final int pendingAuthorizationCount = missionYear.getPendingAuthorization().size() + (previousYear == null ? 0 : previousYear.getPendingAuthorization().size());
+	    		final int pendingFundAllocationCount = missionYear.getPendingFundAllocation().size() + (previousYear == null ? 0 : previousYear.getPendingFundAllocation().size());
+	    		final int pendingProcessingCount = missionYear.getPendingProcessingPersonelInformation().size() + (previousYear == null ? 0 : previousYear.getPendingProcessingPersonelInformation().size());
 	    		final int totalPending = takenByUser + pendingApprovalCount + pendingAuthorizationCount + pendingFundAllocationCount + pendingProcessingCount;
 
 	    		if (totalPending > 0) {
@@ -113,6 +117,15 @@ public class EmailDigesterUtil {
 	    addPeople(people, accountingUnit.getTreasuryMembersSet());
 	}
 	final MissionYear missionYear = MissionYear.getCurrentYear();
+	addRequestorsAndResponsibles(people, missionYear);
+	if (today.getMonthOfYear() == Month.JANUARY) {
+	    final MissionYear previousYear = MissionYear.findMissionYear(today.getYear() - 1);
+	    addRequestorsAndResponsibles(people, previousYear);
+	}
+	return people;
+    }
+
+    private static void addRequestorsAndResponsibles(final Set<Person> people, final MissionYear missionYear) {
 	for (final MissionProcess missionProcess : missionYear.getMissionProcessSet()) {
 	    final Mission mission = missionProcess.getMission();
 	    final module.organization.domain.Person requestingPerson = mission.getRequestingPerson();
@@ -133,7 +146,6 @@ public class EmailDigesterUtil {
 		}
 	    }
 	}
-	return people;
     }
 
     private static void addPeopleWithRole(final Set<Person> people, final RoleType roleType) {
