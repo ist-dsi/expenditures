@@ -6,6 +6,7 @@ import module.mission.domain.PersonMissionAuthorization;
 import module.mission.domain.util.ParticipantAuthorizationChain.AuthorizationChain;
 import module.organization.domain.Person;
 import module.workflow.activities.ActivityInformation;
+import myorg.domain.RoleType;
 import myorg.domain.User;
 import myorg.util.BundleUtil;
 
@@ -18,7 +19,9 @@ public class DefineParticipantAuthorizationChainActivity extends MissionProcessA
 
     @Override
     public boolean isActive(final MissionProcess missionProcess, final User user) {
-	return super.isActive(missionProcess, user) && missionProcess.isUnderConstruction() && missionProcess.isRequestor(user);
+	return super.isActive(missionProcess, user) &&
+		((missionProcess.isUnderConstruction() && missionProcess.isRequestor(user))
+			|| user.hasRoleType(RoleType.MANAGER));
     }
 
     @Override
