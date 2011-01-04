@@ -39,6 +39,7 @@ public class SearchMissionsDTO extends SearchMissions {
     }
 
     public SearchMissionsDTO(final HttpServletRequest request) {
+	setProcessNumber(StringUtils.isEmpty(request.getParameter("processNumber")) ? "" : request.getParameter("processNumber"));
 	setMissionResponsible(StringUtils.isEmpty(request.getParameter("ruOID")) ? null : (Party) Party.fromExternalId(request
 		.getParameter("ruOID")));
 	setPayingUnit(StringUtils.isEmpty(request.getParameter("puOID")) ? null : (Unit) Unit.fromExternalId(request
@@ -79,9 +80,10 @@ public class SearchMissionsDTO extends SearchMissions {
     }
 
     public String getRequestParameters() {
-	return new Formatter().format("ruOID=%s&puOID=%s&f=%s&d=%s&rpOID=%s&pOID=%s", getRequestingUnitParameter(),
-		getPayingUnitParameter(), getForeignParameter(), getDateParameter(), getRequestingPersonParameter(),
-		getParticipantParameter(), getSortByParameter(), getOrderByParameter()).toString();
+	return new Formatter().format("processNumber=%s&ruOID=%s&puOID=%s&f=%s&d=%s&rpOID=%s&pOID=%s", getProcessNumber(),
+		getRequestingUnitParameter(), getPayingUnitParameter(), getForeignParameter(), getDateParameter(),
+		getRequestingPersonParameter(), getParticipantParameter(), getSortByParameter(), getOrderByParameter())
+		.toString();
     }
 
     public String getRequestParametersWithSort() {
