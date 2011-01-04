@@ -1056,6 +1056,7 @@ public abstract class Mission extends Mission_Base {
 
     public MissionVersion getMissionVersion() {
 	MissionVersion result = null;
+	MissionVersion last = null;
 	for (final MissionVersion missionVersion : getMissionVersionsSet()) {
 	    final DateTime since = missionVersion.getSinceDateTime();
 	    if (!since.isAfterNow()) {
@@ -1063,8 +1064,11 @@ public abstract class Mission extends Mission_Base {
 		    result = missionVersion;
 		}
 	    }
+	    if (last == null || last.getSinceDateTime().isAfter(since)) {
+		last = missionVersion;
+	    }
 	}
-	return result;
+	return result == null ? last : result;
     }
 
     public void migrate() {
