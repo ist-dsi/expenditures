@@ -9,6 +9,7 @@ import myorg.applicationTier.Authenticate;
 import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.User;
 
+import org.jfree.data.time.Month;
 import org.joda.time.LocalDate;
 
 import pt.ist.emailNotifier.domain.Email;
@@ -34,11 +35,14 @@ public class EmailDigesterUtil {
 
 	    	    try {
 	    		final WorkingCapitalYear workingCapitalYear = WorkingCapitalYear.getCurrentYear();
-	    		final int takenByUser = workingCapitalYear.getTaken().size();
-	    		final int pendingApprovalCount = workingCapitalYear.getPendingAproval().size();
-	    		final int pendingVerificationnCount = workingCapitalYear.getPendingVerification().size();
-	    		final int pendingAuthorizationCount = workingCapitalYear.getPendingAuthorization().size();
-	    		final int pendingPaymentCount = workingCapitalYear.getPendingPayment().size();
+	    		final LocalDate today = new LocalDate();
+	    		final WorkingCapitalYear previousYear = today.getMonthOfYear() == Month.JANUARY ? WorkingCapitalYear.findOrCreate(today.getYear() - 1) : null;
+
+	    		final int takenByUser = workingCapitalYear.getTaken().size() + (previousYear == null ? 0 : previousYear.getTaken().size());
+	    		final int pendingApprovalCount = workingCapitalYear.getPendingAproval().size() + (previousYear == null ? 0 : previousYear.getPendingAproval().size());
+	    		final int pendingVerificationnCount = workingCapitalYear.getPendingVerification().size() + (previousYear == null ? 0 : previousYear.getPendingVerification().size());
+	    		final int pendingAuthorizationCount = workingCapitalYear.getPendingAuthorization().size() + (previousYear == null ? 0 : previousYear.getPendingAuthorization().size());
+	    		final int pendingPaymentCount = workingCapitalYear.getPendingPayment().size() + (previousYear == null ? 0 : previousYear.getPendingPayment().size());
 	    		final int totalPending = takenByUser + pendingApprovalCount + pendingVerificationnCount + pendingAuthorizationCount + pendingPaymentCount;
 
 	    		if (totalPending > 0) {
@@ -112,6 +116,16 @@ public class EmailDigesterUtil {
 	    addPeople(people, accountingUnit.getTreasuryMembersSet());
 	}
 	final WorkingCapitalYear workingCapitalYear = WorkingCapitalYear.getCurrentYear();
+	addMovementResponsibles(people, workingCapitalYear);
+	if (today.getMonthOfYear() == Month.JANUARY) {
+	    final WorkingCapitalYear previousYear = WorkingCapitalYear.findOrCreate(today.getYear() - 1);
+	    addMovementResponsibles(people, previousYear);
+	}
+
+	return people;
+    }
+
+    private static void addMovementResponsibles(final Set<Person> people, final WorkingCapitalYear workingCapitalYear) {
 	for (final WorkingCapital workingCapital : workingCapitalYear.getWorkingCapitalsSet()) {
 	    final module.organization.domain.Person movementResponsible = workingCapital.getMovementResponsible();
 	    if (movementResponsible.hasUser()) {
@@ -124,7 +138,6 @@ public class EmailDigesterUtil {
 		}
 	    }
 	}
-	return people;
     }
 
     private static void addPeopleWithRole(final Set<Person> people, final RoleType roleType) {
