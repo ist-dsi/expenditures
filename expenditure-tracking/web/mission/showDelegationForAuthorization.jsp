@@ -17,21 +17,28 @@
 </logic:present>
 <br/>
 <br/>
-<logic:empty name="accountability" property="functionDelegationDelegated">
+<logic:empty name="functionDelegationDelegated">
 	<p>
 		<bean:message bundle="MISSION_RESOURCES" key="label.module.mission.person.mission.responsibilities.delegated.none"/>
 	</p>
 </logic:empty>
-<logic:notEmpty name="accountability" property="functionDelegationDelegated">
+<logic:notEmpty name="functionDelegationDelegated">
+	<bean:define id="accountability" name="accountability" type="module.organization.domain.Accountability"/>
+	<bean:define id="sortBy" name="sortBy" type="java.lang.String"/>
+	<bean:define id="order" name="order" type="java.lang.String"/>
 	<table class="tstyle3">
 		<tr>
 			<th>
 			</th>
 			<th>
-				<bean:message key="label.person" bundle="ORGANIZATION_RESOURCES"/>
+				<html:link page='<%= "/missionOrganization.do?method=showDelegationsForAuthorization&authorizationId=" + accountability.getExternalId() + "&sortBy=childPartyName&order=" + ((sortBy.equals("childPartyName") && order.equals("asc")) ? "desc" : "asc") %>'>
+					<bean:message key="label.person" bundle="ORGANIZATION_RESOURCES"/>
+				</html:link>
 			</th>
 			<th>
-				<bean:message key="label.unit" bundle="ORGANIZATION_RESOURCES"/>
+				<html:link page='<%= "/missionOrganization.do?method=showDelegationsForAuthorization&authorizationId=" + accountability.getExternalId() + "&sortBy=parentUnitName&order=" + ((sortBy.equals("parentUnitName") && order.equals("asc")) ? "desc" : "asc") %>'>
+					<bean:message key="label.unit" bundle="ORGANIZATION_RESOURCES"/>
+				</html:link>
 			</th>
 			<th>
 				<bean:message key="label.mission.authority.type" bundle="MISSION_RESOURCES"/>
@@ -45,7 +52,7 @@
 			<th>
 			</th>
 		</tr>
-		<logic:iterate id="functionDelegation" name="accountability" property="functionDelegationDelegated">
+		<logic:iterate id="functionDelegation" name="functionDelegationDelegated">
 			<bean:define id="childAccountability" name="functionDelegation" property="accountabilityDelegatee" type="module.organization.domain.Accountability"/>
 			<tr>
 				<td>

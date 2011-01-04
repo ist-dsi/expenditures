@@ -1,6 +1,7 @@
 package module.mission.presentationTier.action;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -21,6 +22,8 @@ import myorg.domain.User;
 import myorg.presentationTier.actions.ContextBaseAction;
 import myorg.presentationTier.component.OrganizationChart;
 
+import org.apache.commons.collections.ComparatorUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -56,10 +59,12 @@ public class MissionOrganizationAction extends ContextBaseAction {
 	request.setAttribute("person", person);
 
 	final MissionSystem missionSystem = MissionSystem.getInstance();
-	final Collection<Accountability> workingPlaceAccountabilities = person.getParentAccountabilities(missionSystem.getAccountabilityTypesRequireingAuthorization());
+	final Collection<Accountability> workingPlaceAccountabilities = person.getParentAccountabilities(missionSystem
+		.getAccountabilityTypesRequireingAuthorization());
 	request.setAttribute("workingPlaceAccountabilities", workingPlaceAccountabilities);
 
-	final Collection<Accountability> authorityAccountabilities = person.getParentAccountabilities(missionSystem.getAccountabilityTypesThatAuthorize());
+	final Collection<Accountability> authorityAccountabilities = person.getParentAccountabilities(missionSystem
+		.getAccountabilityTypesThatAuthorize());
 	request.setAttribute("authorityAccountabilities", authorityAccountabilities);
 
 	return forward(request, "/mission/showPerson.jsp");
@@ -81,10 +86,12 @@ public class MissionOrganizationAction extends ContextBaseAction {
 	OrganizationChart<Unit> chart = new OrganizationChart<Unit>(unit, parents, children, 3);
 	request.setAttribute("chart", chart);
 
-	final Collection<Accountability> authorityAccountabilities = sortChildren(unit.getChildrenAccountabilities(missionSystem.getAccountabilityTypesThatAuthorize()));
+	final Collection<Accountability> authorityAccountabilities = sortChildren(unit.getChildrenAccountabilities(missionSystem
+		.getAccountabilityTypesThatAuthorize()));
 	request.setAttribute("authorityAccountabilities", authorityAccountabilities);
 
-	final Collection<Accountability> workerAccountabilities = sortChildren(unit.getChildrenAccountabilities(missionSystem.getAccountabilityTypesRequireingAuthorization()));
+	final Collection<Accountability> workerAccountabilities = sortChildren(unit.getChildrenAccountabilities(missionSystem
+		.getAccountabilityTypesRequireingAuthorization()));
 	request.setAttribute("workerAccountabilities", workerAccountabilities);
 
 	return forward(request, "/mission/showUnit.jsp");
@@ -102,41 +109,59 @@ public class MissionOrganizationAction extends ContextBaseAction {
 	return result;
     }
 
-    public ActionForward addUnitWithResumedAuthorizations(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
+    public ActionForward addUnitWithResumedAuthorizations(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
 	final Unit unit = getDomainObject(request, "unitId");
 	MissionSystem.getInstance().addUnitWithResumedAuthorizations(unit);
 	return showUnit(unit, request);
     }
 
-    public ActionForward removeUnitWithResumedAuthorizations(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
+    public ActionForward removeUnitWithResumedAuthorizations(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
 	final Unit unit = getDomainObject(request, "unitId");
 	MissionSystem.getInstance().removeUnitWithResumedAuthorizations(unit);
 	return showUnit(unit, request);
     }
-    
-    public ActionForward showDelegationsForAuthorization(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
+
+    public ActionForward showDelegationsForAuthorization(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
 	final Accountability accountability = getDomainObject(request, "authorizationId");
 	return showDelegationsForAuthorization(request, accountability);
     }
 
     public ActionForward showDelegationsForAuthorization(final HttpServletRequest request, final Accountability accountability) {
+	String sortBy = request.getParameter("sortBy");
+	String order = request.getParameter("order");
+	request.setAttribute("sortBy", (sortBy == null) ? "parentUnitName" : sortBy);
+	request.setAttribute("order", (order == null) ? "asc" : order);
 	request.setAttribute("accountability", accountability);
+
+	Comparator<FunctionDelegation> comparator;
+	if (StringUtils.equals(sortBy, "childPartyName")) {
+	    comparator = FunctionDelegation.COMPARATOR_BY_DELEGATEE_CHILD_PARTY_NAME;
+	} else {
+	    comparator = FunctionDelegation.COMPARATOR_BY_DELEGATEE_PARENT_UNIT_NAME;
+	}
+	if (StringUtils.equals(order, "desc")) {
+	    comparator = ComparatorUtils.reversedComparator(comparator);
+	}
+	TreeSet<FunctionDelegation> functionDelegationDelegated = new TreeSet<FunctionDelegation>(comparator);
+	functionDelegationDelegated.addAll(accountability.getFunctionDelegationDelegated());
+	request.setAttribute("functionDelegationDelegated", functionDelegationDelegated);
+
 	return forward(request, "/mission/showDelegationForAuthorization.jsp");
     }
 
-    public ActionForward prepareAddDelegationsForAuthorization(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
+    public ActionForward prepareAddDelegationsForAuthorization(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
 	final Accountability accountability = getDomainObject(request, "authorizationId");
 	final FunctionDelegationBean functionDelegationBean = new FunctionDelegationBean(accountability);
 	request.setAttribute("functionDelegationBean", functionDelegationBean);
 	return forward(request, "/mission/addDelegationForAuthorization.jsp");
     }
 
-    public ActionForward addDelegationsForAuthorization(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
+    public ActionForward addDelegationsForAuthorization(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
 	final FunctionDelegationBean functionDelegationBean = getRenderedObject();
 	final Accountability accountability = functionDelegationBean.getAccountability();
 	final Unit unit = functionDelegationBean.getUnit();
