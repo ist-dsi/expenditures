@@ -118,7 +118,7 @@
 				</fr:view>
 				<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
 				 	<bean:define id="person" name="person" type="pt.ist.expenditureTrackingSystem.domain.organization.Person"/>
-					E-Mail:
+					E-Mail: <bean:write name="person" property="email"/>
 				</logic:present>
 			</td>
 			<td style="text-align: right;">
