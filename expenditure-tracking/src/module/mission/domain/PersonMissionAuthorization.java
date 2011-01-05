@@ -147,4 +147,8 @@ public class PersonMissionAuthorization extends PersonMissionAuthorization_Base 
 	removeAuthority();
     }
 
+    public MissionProcess getMissionProcess() {
+	return hasMission() ? getMission().getMissionProcess() : (hasPrevious() ? getPrevious().getMissionProcess() : null);
+    }
+
 }

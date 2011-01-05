@@ -53,7 +53,8 @@ public class MissionAuthorizationMap implements Serializable {
 			    && !personMissionAuthorization.hasDelegatedAuthority()
 			    && personMissionAuthorization.hasPrevious()
 			    && (personMissionAuthorization.getPrevious().hasAuthority()
-				    || personMissionAuthorization.getPrevious().hasDelegatedAuthority())) {
+				    || personMissionAuthorization.getPrevious().hasDelegatedAuthority())
+			    && !personMissionAuthorization.getMissionProcess().isCanceled()) {
 			personMissionAuthorizations[i].add(personMissionAuthorization);
 		    }
 		}
