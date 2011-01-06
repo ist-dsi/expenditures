@@ -19,7 +19,8 @@ public class ProcessPersonnelActivity extends MissionProcessActivity<MissionProc
 		&& !missionProcess.getIsCanceled().booleanValue()
 		&& missionProcess.hasCurrentQueue()
 		&& missionProcess.getCurrentQueue().isCurrentUserAbleToAccessQueue()
-		&& (missionProcess.isAuthorized() || missionProcess.hasNoItemsAndParticipantesAreAuthorized());
+		&& (missionProcess.isAuthorized() || missionProcess.hasNoItemsAndParticipantesAreAuthorized())
+		&& missionProcess.areAllParticipantsAuthorized();
     }
 
     @Override

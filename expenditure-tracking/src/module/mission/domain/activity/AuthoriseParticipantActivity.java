@@ -17,7 +17,10 @@ public class AuthoriseParticipantActivity extends MissionProcessActivity<Mission
 
     @Override
     public boolean isActive(final MissionProcess missionProcess, final User user) {
-	return super.isActive(missionProcess, user) && !missionProcess.getIsCanceled() && missionProcess.isApproved() && missionProcess.canAuthoriseParticipantActivity();
+	return super.isActive(missionProcess, user)
+		&& !missionProcess.getIsCanceled()
+		&& missionProcess.isApproved()
+		&& missionProcess.canAuthoriseParticipantActivity();
     }
 
     @Override

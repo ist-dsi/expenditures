@@ -17,7 +17,8 @@ public class ProcessCanceledPersonnelActivity extends ProcessPersonnelActivity {
 		&& missionProcess.getIsCanceled().booleanValue()
 		&& missionProcess.hasCurrentQueue()
 		&& missionProcess.getCurrentQueue().isCurrentUserAbleToAccessQueue()
-		&& missionProcess.isAuthorized();
+		&& missionProcess.isAuthorized()
+		&& missionProcess.areAllParticipantsAuthorized();
     }
 
 }

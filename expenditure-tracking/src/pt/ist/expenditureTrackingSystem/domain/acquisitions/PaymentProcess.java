@@ -408,7 +408,7 @@ public abstract class PaymentProcess extends PaymentProcess_Base implements HasP
 
     @Override
     public void setMissionProcess(final MissionProcess missionProcess) {
-	if (missionProcess == null || missionProcess.isExpenditureAuthorized()) {
+	if (missionProcess == null || (missionProcess.isExpenditureAuthorized() && missionProcess.areAllParticipantsAuthorized())) {
 	    super.setMissionProcess(missionProcess);
 	} else {
 	    throw new DomainException("error.cannot.connect.acquisition.to.unauthorized.mission",

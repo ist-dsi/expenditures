@@ -373,6 +373,11 @@ public abstract class MissionProcess extends MissionProcess_Base {
 	return areAllParticipantsAuthorized();
     }
 
+    public boolean areAllParticipantsAuthorizedForPhaseOne() {
+	final Mission mission = getMission();
+	return mission.areAllParticipantsAuthorizedForPhaseOne();
+    }
+
     public int getPersonAuthorizationChainSize(final Person person) {
 	final Mission mission = getMission();
 	return mission.getPersonAuthorizationChainSize(person);

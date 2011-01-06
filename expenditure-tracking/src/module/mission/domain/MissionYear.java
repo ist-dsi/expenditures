@@ -101,7 +101,7 @@ public class MissionYear extends MissionYear_Base {
 				&& missionProcess.isApproved()
 				&& !missionProcess.getIsCanceled()
 				&& (missionProcess.isPendingParticipantAuthorisationBy(user)
-					|| (missionProcess.areAllParticipantsAuthorized()
+					|| (missionProcess.areAllParticipantsAuthorizedForPhaseOne()
 						&& missionProcess.hasAllAllocatedFunds()
 						&& missionProcess.isPendingDirectAuthorizationBy(user)));
 	    }
@@ -147,7 +147,8 @@ public class MissionYear extends MissionYear_Base {
 		return (!missionProcess.hasCurrentOwner() || missionProcess.isTakenByCurrentUser()) &&
 			(missionProcess.hasCurrentQueue()
 				&& missionProcess.getCurrentQueue().isCurrentUserAbleToAccessQueue()
-				&& (missionProcess.isAuthorized() || missionProcess.hasNoItemsAndParticipantesAreAuthorized()))
+				&& (missionProcess.isAuthorized() || missionProcess.hasNoItemsAndParticipantesAreAuthorized())
+				&& missionProcess.areAllParticipantsAuthorized())
 			|| missionProcess.isReadyForMissionTermination(user)
 			|| (missionProcess.isTerminated()
 				&& !missionProcess.isArchived()

@@ -830,6 +830,18 @@ public abstract class Mission extends Mission_Base {
 	return true;
     }
 
+    public boolean areAllParticipantsAuthorizedForPhaseOne() {
+	if (getPersonMissionAuthorizationsCount() == 0) {
+	    return false;
+	}
+	for (final PersonMissionAuthorization personMissionAuthorization : getPersonMissionAuthorizationsSet()) {
+	    if (!personMissionAuthorization.isPreAuthorized()) {
+		return false;
+	    }
+	}
+	return true;
+    }
+
     public int getPersonAuthorizationChainSize(final Person person) {
 	final PersonMissionAuthorization personMissionAuthorization = getPersonMissionAuthorization(person);
 	return personMissionAuthorization == null ? 0 : personMissionAuthorization.getChainSize();
@@ -884,7 +896,7 @@ public abstract class Mission extends Mission_Base {
     private boolean isPendingParticipantAuthorisationBy(Person person, PersonMissionAuthorization personMissionAuthorization) {
 	final LocalDate now = new LocalDate();
 	for (PersonMissionAuthorization p = personMissionAuthorization; p != null; p = p.getNext()) {
-	    if (!p.hasAuthority() && !p.hasDelegatedAuthority()) {
+	    if (p.isAvailableForAuthorization() && !p.hasAuthority() && !p.hasDelegatedAuthority()) {
 		final module.organization.domain.Unit unit = p.getUnit();
 		for (final Accountability accountability : unit.getChildAccountabilitiesSet()) {
 		    if (accountability.isActive(now)) {
@@ -1195,7 +1207,7 @@ public abstract class Mission extends Mission_Base {
     }
 
     public boolean isReadyToHaveAssociatedPaymentProcesses() {
-	return isAuthorized() && hasAnyNonPersonalExpenseMissionItems();
+	return isAuthorized() && hasAnyNonPersonalExpenseMissionItems() && areAllParticipantsAuthorized();
     }
 
     private boolean hasAnyNonPersonalExpenseMissionItems() {

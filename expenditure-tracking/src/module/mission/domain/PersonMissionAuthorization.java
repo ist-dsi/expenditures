@@ -55,7 +55,7 @@ public class PersonMissionAuthorization extends PersonMissionAuthorization_Base 
     }
 
     public boolean canAuthoriseParticipantActivity(final Person person) {
-	if (person == getSubject()) {
+	if (person == getSubject() || !isAvailableForAuthorization()) {
 	    return false;
 	}
 	final MissionSystem instance = MissionSystem.getInstance();
@@ -63,6 +63,10 @@ public class PersonMissionAuthorization extends PersonMissionAuthorization_Base 
 	//final AccountabilityType accountabilityType = IstAccountabilityType.PERSONNEL_RESPONSIBLE_MISSIONS.readAccountabilityType();
 	return (!hasAuthority() && !hasDelegatedAuthority() && getUnit().hasChildAccountabilityIncludingAncestry(accountabilityTypes, person))
 		|| (hasNext() && getNext().canAuthoriseParticipantActivity(person));
+    }
+
+    public boolean isAvailableForAuthorization() {
+	return !getMissionProcess().hasAnyMissionItems() || (hasNext() && getNext().hasNext()) || getMissionProcess().isAuthorized();
     }
 
     public boolean canUnAuthoriseParticipantActivity() {
@@ -129,6 +133,10 @@ public class PersonMissionAuthorization extends PersonMissionAuthorization_Base 
 
     public boolean isAuthorized() {
 	return (!hasNext() && (hasAuthority() || hasDelegatedAuthority())) || (hasNext() && getNext().isAuthorized());
+    }
+
+    public boolean isPreAuthorized() {
+	return !hasNext() || !getNext().hasNext() || ((hasAuthority() || hasDelegatedAuthority()) && getNext().isPreAuthorized());
     }
 
     public int getChainSize() {
