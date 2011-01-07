@@ -26,14 +26,24 @@ public class MissionYear extends MissionYear_Base {
 	ProcessListWidget.register(new MissionPendingProcessCounter());
     }
 
+    public static Integer getBiggestYearCounter() {
+	int biggestCounter = 0;
+	for (MissionYear year : MissionSystem.getInstance().getMissionYearSet()) {
+	    if (year.getCounter() > biggestCounter) {
+		biggestCounter = year.getCounter();
+	    }
+	}
+	return biggestCounter;
+    }
+
     private MissionYear(final int year) {
-        super();
-        if (findMissionByYearAux(year) != null) {
-            throw new Error("There can only be one! (MissionYear object for each year)");
-        }
-        setMissionSystem(MissionSystem.getInstance());
-        setYear(new Integer(year));
-        setCounter(Integer.valueOf(0));
+	super();
+	if (findMissionByYearAux(year) != null) {
+	    throw new Error("There can only be one! (MissionYear object for each year)");
+	}
+	setMissionSystem(MissionSystem.getInstance());
+	setYear(new Integer(year));
+	setCounter(Integer.valueOf(0));
     }
 
     private static MissionYear findMissionByYearAux(final int year) {
@@ -53,10 +63,10 @@ public class MissionYear extends MissionYear_Base {
     }
 
     public Integer nextNumber() {
-	return getNextNumber();
+	return getAndIncreaseNextNumber();
     }
 
-    private Integer getNextNumber() {
+    private Integer getAndIncreaseNextNumber() {
 	setCounter(getCounter().intValue() + 1);
 	return getCounter();
     }
@@ -88,7 +98,8 @@ public class MissionYear extends MissionYear_Base {
 	    @Override
 	    boolean shouldAdd(final MissionProcess missionProcess, final User user) {
 		return (!missionProcess.hasCurrentOwner() || missionProcess.isTakenByCurrentUser())
-			&& !missionProcess.isUnderConstruction() && !missionProcess.getIsCanceled() && missionProcess.isPendingApprovalBy(user);
+			&& !missionProcess.isUnderConstruction() && !missionProcess.getIsCanceled()
+			&& missionProcess.isPendingApprovalBy(user);
 	    }
 	}.search();
     }
@@ -98,43 +109,38 @@ public class MissionYear extends MissionYear_Base {
 	    @Override
 	    boolean shouldAdd(final MissionProcess missionProcess, final User user) {
 		return (!missionProcess.hasCurrentOwner() || missionProcess.isTakenByCurrentUser())
-				&& missionProcess.isApproved()
-				&& !missionProcess.getIsCanceled()
-				&& (missionProcess.isPendingParticipantAuthorisationBy(user)
-					|| (//missionProcess.areAllParticipantsAuthorizedForPhaseOne()
-						missionProcess.areAllParticipantsAuthorized()
-						&& missionProcess.hasAllAllocatedFunds()
-						&& missionProcess.isPendingDirectAuthorizationBy(user)));
+			&& missionProcess.isApproved() && !missionProcess.getIsCanceled()
+			&& (missionProcess.isPendingParticipantAuthorisationBy(user) || (//missionProcess.areAllParticipantsAuthorizedForPhaseOne()
+			missionProcess.areAllParticipantsAuthorized() && missionProcess.hasAllAllocatedFunds() && missionProcess
+				.isPendingDirectAuthorizationBy(user)));
 	    }
 	}.search();
     }
 
     public SortedSet<MissionProcess> getPendingFundAllocation() {
 	try {
-	return new MissionProcessSearch() {
-	    @Override
-	    boolean shouldAdd(final MissionProcess missionProcess, final User user) {
-		return (!missionProcess.hasCurrentOwner() || missionProcess.isTakenByCurrentUser()) &&
-			(isPendingFundAllocation(missionProcess, user) || isPendingFundUnAllocation(missionProcess, user));
-	    }
+	    return new MissionProcessSearch() {
+		@Override
+		boolean shouldAdd(final MissionProcess missionProcess, final User user) {
+		    return (!missionProcess.hasCurrentOwner() || missionProcess.isTakenByCurrentUser())
+			    && (isPendingFundAllocation(missionProcess, user) || isPendingFundUnAllocation(missionProcess, user));
+		}
 
-	    private boolean isPendingFundAllocation(MissionProcess missionProcess, User user) {
-		return missionProcess.isApproved()
-			&& !missionProcess.getIsCanceled()
-			&& (
-				((!missionProcess.hasAnyProjectFinancer() || missionProcess.hasAllAllocatedProjectFunds())
-					&& !missionProcess.hasAllAllocatedFunds()
-					&& missionProcess.canAllocateFund())
-					||
-					(!missionProcess.hasAllAllocatedProjectFunds() && missionProcess.canAllocateProjectFund()));
-	    }
+		private boolean isPendingFundAllocation(MissionProcess missionProcess, User user) {
+		    return missionProcess.isApproved()
+			    && !missionProcess.getIsCanceled()
+			    && (((!missionProcess.hasAnyProjectFinancer() || missionProcess.hasAllAllocatedProjectFunds())
+				    && !missionProcess.hasAllAllocatedFunds() && missionProcess.canAllocateFund()) || (!missionProcess
+				    .hasAllAllocatedProjectFunds() && missionProcess.canAllocateProjectFund()));
+		}
 
-	    private boolean isPendingFundUnAllocation(final MissionProcess missionProcess, final User user) {
-		return missionProcess.getIsCanceled().booleanValue()
-			&& ((missionProcess.hasAnyAllocatedFunds() && missionProcess.isAccountingEmployee(user.getExpenditurePerson()))
-				|| (missionProcess.hasAnyAllocatedProjectFunds()) && missionProcess.isProjectAccountingEmployee(user.getExpenditurePerson()));
-	    }
-	}.search();
+		private boolean isPendingFundUnAllocation(final MissionProcess missionProcess, final User user) {
+		    return missionProcess.getIsCanceled().booleanValue()
+			    && ((missionProcess.hasAnyAllocatedFunds() && missionProcess.isAccountingEmployee(user
+				    .getExpenditurePerson())) || (missionProcess.hasAnyAllocatedProjectFunds())
+				    && missionProcess.isProjectAccountingEmployee(user.getExpenditurePerson()));
+		}
+	    }.search();
 	} catch (Throwable t) {
 	    t.printStackTrace();
 	    throw new Error(t);
@@ -145,15 +151,11 @@ public class MissionYear extends MissionYear_Base {
 	return new MissionProcessSearch() {
 	    @Override
 	    boolean shouldAdd(final MissionProcess missionProcess, final User user) {
-		return (!missionProcess.hasCurrentOwner() || missionProcess.isTakenByCurrentUser()) &&
-			(missionProcess.hasCurrentQueue()
-				&& missionProcess.getCurrentQueue().isCurrentUserAbleToAccessQueue()
-				&& (missionProcess.isAuthorized() || missionProcess.hasNoItemsAndParticipantesAreAuthorized())
-				&& missionProcess.areAllParticipantsAuthorized())
-			|| missionProcess.isReadyForMissionTermination(user)
-			|| (missionProcess.isTerminated()
-				&& !missionProcess.isArchived()
-				&& missionProcess.canArchiveMission());
+		return (!missionProcess.hasCurrentOwner() || missionProcess.isTakenByCurrentUser())
+			&& (missionProcess.hasCurrentQueue() && missionProcess.getCurrentQueue().isCurrentUserAbleToAccessQueue()
+				&& (missionProcess.isAuthorized() || missionProcess.hasNoItemsAndParticipantesAreAuthorized()) && missionProcess
+				.areAllParticipantsAuthorized()) || missionProcess.isReadyForMissionTermination(user)
+			|| (missionProcess.isTerminated() && !missionProcess.isArchived() && missionProcess.canArchiveMission());
 	    }
 	}.search();
     }
@@ -182,7 +184,8 @@ public class MissionYear extends MissionYear_Base {
 	return false;
     }
 
-    private boolean isDirectlyResponsibleFor(final Set<Authorization> authorizations, final pt.ist.expenditureTrackingSystem.domain.organization.Unit unit) {
+    private boolean isDirectlyResponsibleFor(final Set<Authorization> authorizations,
+	    final pt.ist.expenditureTrackingSystem.domain.organization.Unit unit) {
 	final Set<Authorization> authorizationsFromUnit = unit.getAuthorizationsSet();
 	if (intersect(authorizations, authorizationsFromUnit)) {
 	    return true;
@@ -228,7 +231,8 @@ public class MissionYear extends MissionYear_Base {
 				result.add(missionProcess);
 			    }
 			} else if (missionResponsible.isUnit() && !authorizations.isEmpty()) {
-			    final pt.ist.expenditureTrackingSystem.domain.organization.Unit unit = getExpenditureUnit(mission, (module.organization.domain.Unit) missionResponsible);
+			    final pt.ist.expenditureTrackingSystem.domain.organization.Unit unit = getExpenditureUnit(mission,
+				    (module.organization.domain.Unit) missionResponsible);
 			    if (unit != null && isDirectlyResponsibleFor(authorizations, unit)) {
 				result.add(missionProcess);
 			    }
@@ -241,7 +245,8 @@ public class MissionYear extends MissionYear_Base {
     }
 
     private Unit getExpenditureUnit(final Mission mission, final module.organization.domain.Unit unit) {
-	return unit.hasExpenditureUnit() ? unit.getExpenditureUnit() : getExpenditureUnit(mission, unit.getParentUnits().iterator().next());
+	return unit.hasExpenditureUnit() ? unit.getExpenditureUnit() : getExpenditureUnit(mission, unit.getParentUnits()
+		.iterator().next());
     }
 
     public SortedSet<MissionProcess> getParticipate() {

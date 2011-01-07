@@ -19,7 +19,6 @@ import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.WorkflowProcess;
 import module.workflow.domain.WorkflowProcessComment;
 import module.workflow.domain.WorkflowQueue;
-import module.workflow.util.PresentableProcessState;
 import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.RoleType;
 import myorg.domain.User;
@@ -53,18 +52,20 @@ public abstract class MissionProcess extends MissionProcess_Base {
 		if (email != null && !email.isEmpty()) {
 		    final MissionProcess missionProcess = (MissionProcess) process;
 		    final User currentUser = UserView.getCurrentUser();
-		    final pt.ist.expenditureTrackingSystem.domain.organization.Person currentPerson = currentUser == null ? null : currentUser.getExpenditurePerson();
+		    final pt.ist.expenditureTrackingSystem.domain.organization.Person currentPerson = currentUser == null ? null
+			    : currentUser.getExpenditurePerson();
 
 		    final StringBuilder body = new StringBuilder("Caro utilizador, foi-lhe passado o processo de missão ");
 		    body.append(missionProcess.getProcessIdentification());
 		    body.append(", que pode ser consultado em http://dot.ist.utl.pt/.");
 		    if (currentPerson != null) {
 			body.append(" A passagem do processo foi efectuado por ");
-		    	body.append(currentPerson.getName());
-		    	body.append(".\n\n");
+			body.append(currentPerson.getName());
+			body.append(".\n\n");
 		    }
 
-		    final Set<WorkflowProcessComment> commentsSet = new TreeSet<WorkflowProcessComment>(WorkflowProcessComment.REVERSE_COMPARATOR);
+		    final Set<WorkflowProcessComment> commentsSet = new TreeSet<WorkflowProcessComment>(
+			    WorkflowProcessComment.REVERSE_COMPARATOR);
 		    commentsSet.addAll(process.getCommentsSet());
 		    if (!commentsSet.isEmpty()) {
 			body.append("O processo contem os seguintes comentários:\n\n");
@@ -81,13 +82,14 @@ public abstract class MissionProcess extends MissionProcess_Base {
 			    body.append("\n\n");
 			}
 		    }
-		    
+
 		    body.append("\n---\n");
 		    body.append("Esta mensagem foi enviada por meio das Aplicações Centrais do IST.\n");
 
 		    final Collection<String> toAddress = Collections.singleton(email);
-		    new Email("Aplicações Centrais do IST", "noreply@ist.utl.pt", new String[] {}, toAddress, Collections.EMPTY_LIST,
-			    Collections.EMPTY_LIST, "Passagem de Processo Pendentes - Missões", body.toString());
+		    new Email("Aplicações Centrais do IST", "noreply@ist.utl.pt", new String[] {}, toAddress,
+			    Collections.EMPTY_LIST, Collections.EMPTY_LIST, "Passagem de Processo Pendentes - Missões",
+			    body.toString());
 		}
 	    }
 	}
@@ -106,6 +108,20 @@ public abstract class MissionProcess extends MissionProcess_Base {
 
     public String getProcessIdentification() {
 	return getMissionYear().getYear() + "/" + getProcessNumber();
+    }
+
+    public String getComparableProcessIdentification() {
+	int numberOfLeftHandZeroes = MissionYear.getBiggestYearCounter().toString().length() - getProcessNumber().length();
+
+	StringBuilder stringBuilder = new StringBuilder();
+	stringBuilder.append(getMissionYear().getYear());
+	stringBuilder.append("/");
+	while (numberOfLeftHandZeroes > 0) {
+	    stringBuilder.append("0");
+	    numberOfLeftHandZeroes--;
+	}
+	stringBuilder.append(getProcessNumber());
+	return stringBuilder.toString();
     }
 
     public WorkflowActivity getActivity(Class<? extends WorkflowActivity> clazz) {
@@ -278,9 +294,8 @@ public abstract class MissionProcess extends MissionProcess_Base {
 
     @Override
     public User getProcessCreator() {
-        return getMission().getRequestingPerson().getUser();
+	return getMission().getRequestingPerson().getUser();
     }
-
 
     @Override
     public void notifyUserDueToComment(final User user, final String comment) {
@@ -292,14 +307,11 @@ public abstract class MissionProcess extends MissionProcess_Base {
 
 	    final User loggedUser = UserView.getCurrentUser();
 	    new Email("Aplicações Centrais do IST", "noreply@ist.utl.pt", new String[] {}, toAddress, Collections.EMPTY_LIST,
-		    Collections.EMPTY_LIST,
-		    	BundleUtil.getFormattedStringFromResourceBundle("resources/MissionResources",
-			    "label.email.commentCreated.subject",
-			    getProcessIdentification()),
-			BundleUtil.getFormattedStringFromResourceBundle("resources/MissionResources",
-				    "label.email.commentCreated.body",
-				    loggedUser.getPerson().getName(),
-				    getProcessIdentification(), comment));
+		    Collections.EMPTY_LIST, BundleUtil.getFormattedStringFromResourceBundle("resources/MissionResources",
+			    "label.email.commentCreated.subject", getProcessIdentification()),
+		    BundleUtil.getFormattedStringFromResourceBundle("resources/MissionResources",
+			    "label.email.commentCreated.body", loggedUser.getPerson().getName(), getProcessIdentification(),
+			    comment));
 	}
     }
 
@@ -359,7 +371,8 @@ public abstract class MissionProcess extends MissionProcess_Base {
     }
 
     public SortedSet<MissionProcessLateJustification> getOrderedMissionProcessLateJustificationsSet() {
-	final SortedSet<MissionProcessLateJustification> result = new TreeSet<MissionProcessLateJustification>(MissionProcessLateJustification.COMPARATOR_BY_JUSTIFICATION_DATETIME);
+	final SortedSet<MissionProcessLateJustification> result = new TreeSet<MissionProcessLateJustification>(
+		MissionProcessLateJustification.COMPARATOR_BY_JUSTIFICATION_DATETIME);
 	result.addAll(getMissionProcessLateJustificationsSet());
 	return result;
     }
@@ -442,18 +455,14 @@ public abstract class MissionProcess extends MissionProcess_Base {
 	return false;
     }
 
+    @Override
     public boolean isAccessible(final User user) {
 	final Person person = user.getPerson();
 	final Mission mission = getMission();
-	return isTakenByPerson(user)
-		|| getProcessCreator() == user
-		|| mission.getRequestingPerson() == person
-		|| user.hasRoleType(RoleType.MANAGER)
-		|| (person != null && person.getMissionsSet().contains(mission))
-		|| mission.isParticipantResponsible(person)
-		|| mission.isFinancerResponsible(user.getExpenditurePerson())
-		|| mission.isFinancerAccountant(user.getExpenditurePerson())
-		|| mission.isPersonelSectionMember(user);
+	return isTakenByPerson(user) || getProcessCreator() == user || mission.getRequestingPerson() == person
+		|| user.hasRoleType(RoleType.MANAGER) || (person != null && person.getMissionsSet().contains(mission))
+		|| mission.isParticipantResponsible(person) || mission.isFinancerResponsible(user.getExpenditurePerson())
+		|| mission.isFinancerAccountant(user.getExpenditurePerson()) || mission.isPersonelSectionMember(user);
     }
 
     public boolean isReadyForMissionTermination() {
@@ -484,7 +493,7 @@ public abstract class MissionProcess extends MissionProcess_Base {
 
     public boolean isTerminated() {
 	final Mission mission = getMission();
-	return mission.isTerminated();	
+	return mission.isTerminated();
     }
 
     public boolean isTerminatedWithChanges() {
