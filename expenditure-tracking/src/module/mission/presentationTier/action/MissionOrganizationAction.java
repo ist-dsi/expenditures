@@ -19,6 +19,7 @@ import module.organization.domain.Unit;
 import module.organization.presentationTier.actions.OrganizationModelAction;
 import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.User;
+import myorg.domain.exceptions.DomainException;
 import myorg.presentationTier.actions.ContextBaseAction;
 import myorg.presentationTier.component.OrganizationChart;
 
@@ -168,7 +169,13 @@ public class MissionOrganizationAction extends ContextBaseAction {
 	final Person person = functionDelegationBean.getPerson();
 	final LocalDate beginDate = functionDelegationBean.getBeginDate();
 	final LocalDate endDate = functionDelegationBean.getEndDate();
-	FunctionDelegation.create(accountability, unit, person, beginDate, endDate);
+	try {
+	    FunctionDelegation.create(accountability, unit, person, beginDate, endDate);
+	} catch (DomainException ex) {
+	    request.setAttribute("errorMessage", ex.getLocalizedMessage());
+	    request.setAttribute("authorizationId", accountability.getExternalId());
+	    return prepareAddDelegationsForAuthorization(mapping, form, request, response);
+	}
 	return showDelegationsForAuthorization(request, accountability);
     }
 

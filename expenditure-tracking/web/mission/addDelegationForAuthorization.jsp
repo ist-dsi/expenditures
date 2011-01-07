@@ -5,9 +5,13 @@
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr"%>
 <%@ taglib uri="/WEB-INF/chart.tld" prefix="chart" %>
 
-<bean:define id="accountability" name="functionDelegationBean" property="accountability" toScope="request"/>
+<bean:define id="accountability" name="functionDelegationBean" property="accountability" toScope="request" type="module.organization.domain.Accountability"/>
 
 <jsp:include page="delegationForAuthorizationHeader.jsp"/>
+
+<logic:present name="errorMessage">
+	<span class="error0"><bean:write name="errorMessage"/></span>
+</logic:present>
 
 <h3>
 	<bean:message key="label.delegations.add" bundle="MISSION_RESOURCES"/>
@@ -36,4 +40,5 @@
 		<fr:property name="classes" value="form listInsideClear" />
 		<fr:property name="columnClasses" value="width100px,,tderror" />
 	</fr:layout>
+	<fr:destination name="cancel" path='<%="/missionOrganization.do?method=showDelegationsForAuthorization&authorizationId=" + accountability.getExternalId()%>' />
 </fr:edit>
