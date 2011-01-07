@@ -70,7 +70,10 @@ public class MissionStageView {
     }
 
     protected MissionStageState getExpenseAuthorizationState() {
-	return missionProcess.isApproved() && missionProcess.hasAllAllocatedFunds() && missionProcess.areAllParticipantsAuthorizedForPhaseOne() ?
+	return missionProcess.isApproved()
+		&& missionProcess.hasAllAllocatedFunds()
+		//&& missionProcess.areAllParticipantsAuthorizedForPhaseOne() ?
+		&& missionProcess.areAllParticipantsAuthorized() ?
 		getExpenseAuthorizationStateCompletedOrUnderWay() : MissionStageState.NOT_YET_UNDER_WAY;
     }
 

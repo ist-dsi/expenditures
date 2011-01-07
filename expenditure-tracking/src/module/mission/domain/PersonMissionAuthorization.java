@@ -55,7 +55,7 @@ public class PersonMissionAuthorization extends PersonMissionAuthorization_Base 
     }
 
     public boolean canAuthoriseParticipantActivity(final Person person) {
-	if (person == getSubject() || !isAvailableForAuthorization()) {
+	if (person == getSubject() /* || !isAvailableForAuthorization() */) {
 	    return false;
 	}
 	final MissionSystem instance = MissionSystem.getInstance();

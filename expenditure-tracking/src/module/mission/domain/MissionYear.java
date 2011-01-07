@@ -101,7 +101,8 @@ public class MissionYear extends MissionYear_Base {
 				&& missionProcess.isApproved()
 				&& !missionProcess.getIsCanceled()
 				&& (missionProcess.isPendingParticipantAuthorisationBy(user)
-					|| (missionProcess.areAllParticipantsAuthorizedForPhaseOne()
+					|| (//missionProcess.areAllParticipantsAuthorizedForPhaseOne()
+						missionProcess.areAllParticipantsAuthorized()
 						&& missionProcess.hasAllAllocatedFunds()
 						&& missionProcess.isPendingDirectAuthorizationBy(user)));
 	    }
