@@ -14,9 +14,16 @@
 			</td>
 			<td width="35%">
 				<logic:present name="process" property="mission.missionResponsible">
-					<html:link styleClass="secondaryLink" page="/missionOrganization.do?method=showUnitById" paramId="unitId" paramName="process" paramProperty="mission.missionResponsible.externalId">
-						<fr:view name="process" property="mission.missionResponsible.presentationName"/>
-					</html:link>
+					<logic:equal name="process" property="mission.missionResponsible.class.name" value="module.organization.domain.Unit">
+						<html:link styleClass="secondaryLink" page="/missionOrganization.do?method=showUnitById" paramId="unitId" paramName="process" paramProperty="mission.missionResponsible.externalId">
+							<fr:view name="process" property="mission.missionResponsible.presentationName"/>
+						</html:link>
+					</logic:equal>
+					<logic:equal name="process" property="mission.missionResponsible.class.name" value="module.organization.domain.Person">
+						<html:link styleClass="secondaryLink" page="/missionOrganization.do?method=showPersonById" paramId="personId" paramName="process" paramProperty="mission.missionResponsible.externalId">
+							<fr:view name="process" property="mission.missionResponsible.name"/>
+						</html:link>
+					</logic:equal>
 				</logic:present>
 				<logic:notPresent name="process" property="mission.missionResponsible">
 					<bean:message bundle="MISSION_RESOURCES" key="label.mission.requester.unit.not.defined"/>
