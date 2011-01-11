@@ -66,7 +66,7 @@ public class PersonMissionAuthorization extends PersonMissionAuthorization_Base 
     }
 
     public boolean isAvailableForAuthorization() {
-	return !getMissionProcess().hasAnyMissionItems() || (hasNext() && getNext().hasNext()) || getMissionProcess().isAuthorized();
+	return !getMissionProcess().hasAnyMissionItems(); // || (hasNext() && getNext().hasNext()) || getMissionProcess().isAuthorized();
     }
 
     public boolean canUnAuthoriseParticipantActivity() {
