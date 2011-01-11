@@ -14,6 +14,8 @@ import module.organization.domain.OrganizationalModel;
 import module.organization.domain.Party;
 import module.organization.domain.Person;
 import module.organization.domain.Unit;
+import myorg.applicationTier.Authenticate.UserView;
+import myorg.domain.User;
 
 import org.joda.time.LocalDate;
 
@@ -107,8 +109,33 @@ public class ParticipantAuthorizationChain implements Serializable {
         return authorizationChain;
     }
 
-    public void setAuthorizationChain(AuthorizationChain authorizationChain) {
-        this.authorizationChain = authorizationChain;
+    public void setAuthorizationChain(final AuthorizationChain authorizationChain) {
+        this.authorizationChain = removeSelfAuthorizationSteps(authorizationChain);
+    }
+
+    private AuthorizationChain removeSelfAuthorizationSteps(final AuthorizationChain authorizationChain) {
+	final AuthorizationChain next = authorizationChain.getNext();
+	if (next == null) {
+	    return authorizationChain;
+	}
+	if (canSelfAuthorize(authorizationChain.getUnit())) {
+	    return removeSelfAuthorizationSteps(next);
+	}
+	authorizationChain.setNext(removeSelfAuthorizationSteps(next));
+	return authorizationChain;
+    }
+
+    private boolean canSelfAuthorize(final Unit unit) {
+	final MissionSystem instance = MissionSystem.getInstance();
+	final Set<AccountabilityType> accountabilityTypes = instance.getAccountabilityTypesThatAuthorize();
+	for (final Accountability accountability : unit.getChildAccountabilitiesSet()) {
+	    if (accountabilityTypes.contains(accountability.getAccountabilityType())
+		    && accountability.getChild() == person
+		    && accountability.isActiveNow()) {
+		return true;
+	    }
+	}
+	return false;
     }
 
     private static Collection<AccountabilityType> getAccountabilityTypes() {
