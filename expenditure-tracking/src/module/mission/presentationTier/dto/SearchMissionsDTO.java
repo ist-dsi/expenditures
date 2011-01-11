@@ -76,7 +76,8 @@ public class SearchMissionsDTO extends SearchMissions {
 	    }
 	    return comparator;
 	}
-	return new BeanComparator("missionProcess.comparableProcessIdentification");
+	BeanComparator beanComparator = new BeanComparator("missionProcess.comparableProcessIdentification");
+	return new ReverseComparator(beanComparator);
     }
 
     public String getRequestParameters() {
