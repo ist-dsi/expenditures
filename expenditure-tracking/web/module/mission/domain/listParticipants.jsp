@@ -60,6 +60,7 @@
 							<%= process.getMission().getNunberOfLunchesToDiscount((module.organization.domain.Person) person) %>
 						</p>
 
+<!-- 
 						<logic:present role="myorg.domain.RoleType.MANAGER"> 
 							<p class="mtop05 mbottom05">
 								<bean:message bundle="MISSION_RESOURCES" key="label.mission.participant.salary"/>:
@@ -74,6 +75,7 @@
 								<%= Salary.getDefaultDailyPersonelExpenseCategory(process.getMission().getDailyPersonelExpenseTable(), (module.organization.domain.Person) person).getDescription() %>
 							</p>
 						</logic:present>
+ -->
 					</td>
 				</tr>
 				<tr>

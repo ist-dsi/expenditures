@@ -72,7 +72,7 @@
     			<fr:slot name="accountabilityTypesAsString" key="label.accountability.types.for.mission.authorization" bundle="MISSION_RESOURCES"/>
 			</fr:schema>    				
 			<fr:layout name="tabular">		
-				<fr:property name="classes" value="plist mtop05"/>
+				<fr:property name="classes" value="tview1"/>
 
 				<fr:property name="linkFormat(delete)" value="/configureMissions.do?method=deleteMissionAuthorizationAccountabilityType&missionAuthorizationAccountabilityTypeOid=${externalId}"/>
 				<fr:property name="bundle(delete)" value="MISSION_RESOURCES"/>
@@ -102,7 +102,7 @@
    			<fr:slot name="aplicableToMissionClass" layout="name-resolver" key="label.mission.type" bundle="MISSION_RESOURCES"/>
 		</fr:schema>    				
 		<fr:layout name="tabular">
-			<fr:property name="classes" value="plist mtop05"/>
+			<fr:property name="classes" value="tview1"/>
 			<fr:property name="linkFormat(view)" value="/configureMissions.do?method=viewDailyPersonelExpenseTable&dailyPersonelExpenseTableOid=${externalId}"/>
 			<fr:property name="bundle(view)" value="MISSION_RESOURCES"/>
 			<fr:property name="key(view)" value="link.view"/>
@@ -131,7 +131,7 @@
 			<fr:slot name="workflowQueue.name" key="label.queue" bundle="MISSION_RESOURCES"/>
 		</fr:schema>    				
 		<fr:layout name="tabular">
-			<fr:property name="classes" value="plist mtop05"/>
+			<fr:property name="classes" value="tview1"/>
 
 			<fr:property name="linkFormat(delete)" value="/configureMissions.do?method=deleteAccountabilityTypeQueue&accountabilityTypeQueue=${externalId}"/>
 			<fr:property name="bundle(delete)" value="MISSION_RESOURCES"/>

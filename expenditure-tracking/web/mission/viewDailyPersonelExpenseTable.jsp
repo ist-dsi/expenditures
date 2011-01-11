@@ -10,11 +10,11 @@
 
 <fr:view name="dailyPersonelExpenseTable">
 	<fr:schema type="module.mission.domain.util.DailyPersonelExpenseTableBean" bundle="MISSION_RESOURCES">
-    	<fr:slot name="aplicableSince" key="label.daily.personel.expense.table.since" bundle="MISSION_RESOURCES"/>
     	<fr:slot name="aplicableToMissionClass" layout="name-resolver" key="label.mission.type" bundle="MISSION_RESOURCES"/>
+    	<fr:slot name="aplicableSince" key="label.daily.personel.expense.table.since" bundle="MISSION_RESOURCES"/>
 	</fr:schema>
 	<fr:layout name="tabular">
-		<fr:property name="classes" value="plist mtop05" />
+		<fr:property name="classes" value="tview2" />
 	</fr:layout>
 </fr:view>
 
@@ -28,6 +28,7 @@
 
 <p>
 	<logic:iterate id="otherDailyPersonelExpenseTable" name="dailyPersonelExpenseTable" property="dailyPersonelExpenseTablesForSameType">
+		&nbsp;&nbsp;
 		<html:link action="/configureMissions.do?method=viewDailyPersonelExpenseTable" paramId="dailyPersonelExpenseTableOid" paramName="otherDailyPersonelExpenseTable" paramProperty="externalId">
 			<fr:view name="otherDailyPersonelExpenseTable" property="aplicableSince"/>
 		</html:link>
@@ -52,7 +53,7 @@
    			<fr:slot name="minSalaryValue" key="label.mission.missionConfiguration.daily.personel.expense.category.minSalaryValue" bundle="MISSION_RESOURCES"/>
 		</fr:schema>
 		<fr:layout name="tabular">
-			<fr:property name="classes" value="plist mtop05"/>
+			<fr:property name="classes" value="tview1"/>
 			<fr:property name="linkFormat(edit)" value="/configureMissions.do?method=editDailyPersonelExpenseCategory&dailyPersonelExpenseCategoryOid=${externalId}"/>
 			<fr:property name="bundle(edit)" value="MISSION_RESOURCES"/>
 			<fr:property name="key(edit)" value="link.edit"/>
