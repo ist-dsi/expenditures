@@ -33,7 +33,7 @@ public class WorkingCapitalTransaction extends WorkingCapitalTransaction_Base {
 	return !getBalance().isNegative();
     }
 
-    @ConsistencyPredicate
+    @ConsistencyPredicate(WorkingCapitalConsistencyException.class)
     public boolean checkBalanceEqualsDebt() {
 	return getBalance().equals(getDebt());
     }
