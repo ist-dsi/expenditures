@@ -174,7 +174,11 @@ public class MissionOrganizationAction extends ContextBaseAction {
 	try {
 	    FunctionDelegation.create(accountability, unit, person, beginDate, endDate);
 	} catch (DomainException ex) {
-	    request.setAttribute("errorMessage", ex.getLocalizedMessage());
+	    addLocalizedMessage(request, ex.getLocalizedMessage());
+	    request.setAttribute("authorizationId", accountability.getExternalId());
+	    return prepareAddDelegationsForAuthorization(mapping, form, request, response);
+	} catch (Error error) {
+	    displayConsistencyException(error, request);
 	    request.setAttribute("authorizationId", accountability.getExternalId());
 	    return prepareAddDelegationsForAuthorization(mapping, form, request, response);
 	}
@@ -200,7 +204,11 @@ public class MissionOrganizationAction extends ContextBaseAction {
 	try {
 	    functionDelegation.edit(beginDate, endDate);
 	} catch (DomainException ex) {
-	    request.setAttribute("errorMessage", ex.getLocalizedMessage());
+	    addLocalizedMessage(request, ex.getLocalizedMessage());
+	    request.setAttribute("functionDelegationId", functionDelegation.getExternalId());
+	    return prepareEditDelegation(mapping, form, request, response);
+	} catch (Error error) {
+	    displayConsistencyException(error, request);
 	    request.setAttribute("functionDelegationId", functionDelegation.getExternalId());
 	    return prepareEditDelegation(mapping, form, request, response);
 	}

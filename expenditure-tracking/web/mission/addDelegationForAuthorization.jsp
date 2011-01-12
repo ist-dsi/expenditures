@@ -9,9 +9,10 @@
 
 <jsp:include page="delegationForAuthorizationHeader.jsp"/>
 
-<logic:present name="errorMessage">
-	<span class="error0"><bean:write name="errorMessage"/></span>
-</logic:present>
+<html:messages id="message" message="true">
+	<span class="error0"> <bean:write name="message" /> </span>
+	<br />
+</html:messages>
 
 <h3>
 	<bean:message key="label.delegations.add" bundle="MISSION_RESOURCES"/>
