@@ -1,6 +1,7 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
 
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
@@ -69,4 +70,12 @@ public class AcquisitionAfterTheFact extends AcquisitionAfterTheFact_Base {
     public LocalDate getInvoiceDate() {
 	return getAfterTheFactAcquisitionProcess().getInvoiceDate();
     }
+
+    public boolean isInAllocationPeriod() {
+	final AfterTheFactAcquisitionProcess afterTheFactAcquisitionProcess = getAfterTheFactAcquisitionProcess();
+	final Integer year = afterTheFactAcquisitionProcess.getYear().intValue();
+	final int i = Calendar.getInstance().get(Calendar.YEAR);
+	return year == i || year == i - 1 || year == i - 2;
+    }
+
 }

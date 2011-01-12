@@ -1,6 +1,7 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -539,6 +540,13 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 		throw new DomainException("acquisitionProcess.message.exception.InvoiceWithSameNumber", ResourceBundle.getBundle("resources.AcquisitionResources", Language.getLocale()));
 	    }
 	}
+    }
+
+    public boolean isInAllocationPeriod() {
+	final AcquisitionProcess acquisitionProcess = getAcquisitionProcess();
+	final Integer year = acquisitionProcess.getYear().intValue();
+	final int i = Calendar.getInstance().get(Calendar.YEAR);
+	return year == i || year == i - 1 || year == i - 2;
     }
 
 }

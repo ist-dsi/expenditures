@@ -106,20 +106,26 @@ public class Supplier extends Supplier_Base implements Indexable, Searchable {
     public Money getTotalAllocated() {
 	Money result = Money.ZERO;
 	for (final AcquisitionRequest acquisitionRequest : getAcquisitionRequestsSet()) {
-	    final AcquisitionProcess acquisitionProcess = acquisitionRequest.getAcquisitionProcess();
-	    if (acquisitionProcess.isActive() && acquisitionProcess.isAllocatedToSupplier()) {
-		result = result.add(acquisitionRequest.getValueAllocated());
+	    if (acquisitionRequest.isInAllocationPeriod()) {
+		final AcquisitionProcess acquisitionProcess = acquisitionRequest.getAcquisitionProcess();
+		if (acquisitionProcess.isActive() && acquisitionProcess.isAllocatedToSupplier()) {
+		    result = result.add(acquisitionRequest.getValueAllocated());
+		}
 	    }
 	}
 	for (final AcquisitionAfterTheFact acquisitionAfterTheFact : getAcquisitionsAfterTheFactSet()) {
-	    if (!acquisitionAfterTheFact.getDeletedState().booleanValue()) {
-		result = result.add(acquisitionAfterTheFact.getValue());
+	    if (acquisitionAfterTheFact.isInAllocationPeriod()) {
+		if (!acquisitionAfterTheFact.getDeletedState().booleanValue()) {
+		    result = result.add(acquisitionAfterTheFact.getValue());
+		}
 	    }
 	}
 	for (final RefundableInvoiceFile refundInvoice : getRefundInvoicesSet()) {
-	    final RefundProcess refundProcess = refundInvoice.getRefundItem().getRequest().getProcess();
-	    if (refundProcess.isActive() && !refundProcess.getShouldSkipSupplierFundAllocation()) {
-		result = result.add(refundInvoice.getRefundableValue());
+	    if (refundInvoice.isInAllocationPeriod()) {
+		final RefundProcess refundProcess = refundInvoice.getRefundItem().getRequest().getProcess();
+		if (refundProcess.isActive() && !refundProcess.getShouldSkipSupplierFundAllocation()) {
+		    result = result.add(refundInvoice.getRefundableValue());
+		}
 	    }
 	}
 	return result;
@@ -131,14 +137,18 @@ public class Supplier extends Supplier_Base implements Indexable, Searchable {
 	result = result.add(getTotalAllocatedByAcquisitionProcesses(true));
 
 	for (final AcquisitionAfterTheFact acquisitionAfterTheFact : getAcquisitionsAfterTheFactSet()) {
-	    if (!acquisitionAfterTheFact.getDeletedState().booleanValue()) {
-		result = result.add(acquisitionAfterTheFact.getValue());
+	    if (acquisitionAfterTheFact.isInAllocationPeriod()) {
+		if (!acquisitionAfterTheFact.getDeletedState().booleanValue()) {
+		    result = result.add(acquisitionAfterTheFact.getValue());
+		}
 	    }
 	}
 	for (final RefundableInvoiceFile refundInvoice : getRefundInvoicesSet()) {
-	    final RefundProcess refundProcess = refundInvoice.getRefundItem().getRequest().getProcess();
-	    if (refundProcess.isActive()) {
-		result = result.add(refundInvoice.getRefundableValue());
+	    if (refundInvoice.isInAllocationPeriod()) {
+		final RefundProcess refundProcess = refundInvoice.getRefundItem().getRequest().getProcess();
+		if (refundProcess.isActive()) {
+		    result = result.add(refundInvoice.getRefundableValue());
+		}
 	    }
 	}
 	return result;
@@ -149,7 +159,9 @@ public class Supplier extends Supplier_Base implements Indexable, Searchable {
 	for (final AcquisitionRequest acquisitionRequest : getAcquisitionRequestsSet()) {
 	    if ((allProcesses && !acquisitionRequest.getProcess().getShouldSkipSupplierFundAllocation())
 		    || acquisitionRequest.getAcquisitionProcess().isAllocatedToSupplier()) {
-		result = result.add(acquisitionRequest.getValueAllocated());
+		if (acquisitionRequest.isInAllocationPeriod()) {
+		    result = result.add(acquisitionRequest.getValueAllocated());
+		}
 	    }
 	}
 	return result;
@@ -162,9 +174,11 @@ public class Supplier extends Supplier_Base implements Indexable, Searchable {
     public Money getTotalAllocatedByAfterTheFactAcquisitions(final AfterTheFactAcquisitionType afterTheFactAcquisitionType) {
 	Money result = Money.ZERO;
 	for (final AcquisitionAfterTheFact acquisitionAfterTheFact : getAcquisitionsAfterTheFactSet()) {
-	    if (!acquisitionAfterTheFact.getDeletedState().booleanValue()) {
-		if (acquisitionAfterTheFact.getAfterTheFactAcquisitionType() == afterTheFactAcquisitionType) {
-		    result = result.add(acquisitionAfterTheFact.getValue());
+	    if (acquisitionAfterTheFact.isInAllocationPeriod()) {
+		if (!acquisitionAfterTheFact.getDeletedState().booleanValue()) {
+		    if (acquisitionAfterTheFact.getAfterTheFactAcquisitionType() == afterTheFactAcquisitionType) {
+			result = result.add(acquisitionAfterTheFact.getValue());
+		    }
 		}
 	    }
 	}

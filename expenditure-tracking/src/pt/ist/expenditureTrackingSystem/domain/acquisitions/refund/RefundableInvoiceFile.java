@@ -1,16 +1,17 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.refund;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.List;
 
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
+import myorg.util.ClassNameBundle;
 
 import org.joda.time.LocalDate;
 
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
-import myorg.util.ClassNameBundle;
 
 @ClassNameBundle(bundle = "resources/AcquisitionResources")
 public class RefundableInvoiceFile extends RefundableInvoiceFile_Base {
@@ -83,6 +84,13 @@ public class RefundableInvoiceFile extends RefundableInvoiceFile_Base {
 	    throw new DomainException("acquisitionRequestItem.message.exception.thereShouldBeOnlyOneRefundItemAssociated");
 	}
 	return items != null ? (RefundItem) items.get(0) : null;
+    }
+
+    public boolean isInAllocationPeriod() {
+	final RefundProcess refundProcess = getRefundItem().getRequest().getProcess();
+	final Integer year = refundProcess.getYear().intValue();
+	final int i = Calendar.getInstance().get(Calendar.YEAR);
+	return year == i || year == i - 1 || year == i - 2;
     }
 
 }
