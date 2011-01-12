@@ -1,6 +1,7 @@
 package module.mission.domain;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Set;
 
 import module.mission.domain.util.ParticipantAuthorizationChain.AuthorizationChain;
@@ -16,6 +17,26 @@ import org.joda.time.DateTime;
 
 public class PersonMissionAuthorization extends PersonMissionAuthorization_Base {
     
+    public static final Comparator<PersonMissionAuthorization> COMPARATOR_BY_PROCESS_NUMBER = new Comparator<PersonMissionAuthorization>() {
+	@Override
+	public int compare(final PersonMissionAuthorization pma1, final PersonMissionAuthorization pma2) {
+	    final MissionProcess missionProcess1 = pma1.getMissionProcess();
+	    final MissionProcess missionProcess2 = pma2.getMissionProcess();
+
+	    final MissionYear missionYear1 = missionProcess1.getMissionYear();
+	    final MissionYear missionYear2 = missionProcess2.getMissionYear();
+
+	    final int y = missionYear1.getYear().compareTo(missionYear2.getYear());
+	    if (y != 0) {
+		return y;
+	    }
+
+	    final int n = missionProcess1.getProcessNumber().compareTo(missionProcess2.getProcessNumber());
+	    
+	    return n == 0 ? pma1.getExternalId().compareTo(pma2.getExternalId()) : n;
+	}
+    };
+
     public PersonMissionAuthorization() {
         super();
         setMissionSystem(MissionSystem.getInstance());

@@ -2,8 +2,8 @@ package module.mission.domain.util;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 import module.mission.domain.MissionAuthorizationAccountabilityType;
 import module.mission.domain.MissionSystem;
@@ -47,7 +47,7 @@ public class MissionAuthorizationMap implements Serializable {
 	for (int i = 0; i < levelsForUser.length; i++) {
 	    final Unit unit = levelsForUser[i];
 	    if (unit != null) {
-		personMissionAuthorizations[i] = new HashSet<PersonMissionAuthorization>();
+		personMissionAuthorizations[i] = new TreeSet<PersonMissionAuthorization>(PersonMissionAuthorization.COMPARATOR_BY_PROCESS_NUMBER);
 		for (final PersonMissionAuthorization personMissionAuthorization : unit.getPersonMissionAuthorizationSet()) {
 		    if (!personMissionAuthorization.hasAuthority()
 			    && !personMissionAuthorization.hasDelegatedAuthority()
