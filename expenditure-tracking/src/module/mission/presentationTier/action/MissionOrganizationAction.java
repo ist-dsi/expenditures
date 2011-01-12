@@ -157,6 +157,7 @@ public class MissionOrganizationAction extends ContextBaseAction {
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final Accountability accountability = getDomainObject(request, "authorizationId");
 	final FunctionDelegationBean functionDelegationBean = new FunctionDelegationBean(accountability);
+
 	request.setAttribute("functionDelegationBean", functionDelegationBean);
 	return forward(request, "/mission/addDelegationForAuthorization.jsp");
     }
@@ -169,6 +170,7 @@ public class MissionOrganizationAction extends ContextBaseAction {
 	final Person person = functionDelegationBean.getPerson();
 	final LocalDate beginDate = functionDelegationBean.getBeginDate();
 	final LocalDate endDate = functionDelegationBean.getEndDate();
+
 	try {
 	    FunctionDelegation.create(accountability, unit, person, beginDate, endDate);
 	} catch (DomainException ex) {
@@ -179,4 +181,39 @@ public class MissionOrganizationAction extends ContextBaseAction {
 	return showDelegationsForAuthorization(request, accountability);
     }
 
+    public ActionForward prepareEditDelegation(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final FunctionDelegation functionDelegation = getDomainObject(request, "functionDelegationId");
+	final FunctionDelegationBean functionDelegationBean = new FunctionDelegationBean(functionDelegation);
+
+	request.setAttribute("functionDelegationBean", functionDelegationBean);
+	return forward(request, "/mission/editDelegation.jsp");
+    }
+
+    public ActionForward editDelegation(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	final FunctionDelegationBean functionDelegationBean = getRenderedObject("functionDelegationBean");
+	final FunctionDelegation functionDelegation = functionDelegationBean.getFunctionDelegation();
+	final LocalDate beginDate = functionDelegationBean.getBeginDate();
+	final LocalDate endDate = functionDelegationBean.getEndDate();
+
+	try {
+	    functionDelegation.edit(beginDate, endDate);
+	} catch (DomainException ex) {
+	    request.setAttribute("errorMessage", ex.getLocalizedMessage());
+	    request.setAttribute("functionDelegationId", functionDelegation.getExternalId());
+	    return prepareEditDelegation(mapping, form, request, response);
+	}
+
+	return showDelegationsForAuthorization(request, functionDelegationBean.getAccountability());
+    }
+
+    public ActionForward removeDelegation(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	final FunctionDelegation functionDelegation = getDomainObject(request, "functionDelegationId");
+	Accountability accountabilityDelegator = functionDelegation.getAccountabilityDelegator();
+	functionDelegation.delete();
+
+	return showDelegationsForAuthorization(request, accountabilityDelegator);
+    }
 }

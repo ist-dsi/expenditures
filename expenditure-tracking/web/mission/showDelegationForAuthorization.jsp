@@ -49,8 +49,8 @@
 			<th>
 				<bean:message key="label.mission.authority.endDate" bundle="MISSION_RESOURCES"/>
 			</th>
-			<th>
-			</th>
+			<th></th>
+			<th></th>
 		</tr>
 		<logic:iterate id="functionDelegation" name="functionDelegationDelegated">
 			<bean:define id="childAccountability" name="functionDelegation" property="accountabilityDelegatee" type="module.organization.domain.Accountability"/>
@@ -80,13 +80,20 @@
 						<fr:view name="childAccountability" property="endDate"/>
 					</logic:present>
 				</td>
-<!--
-				<td>
-					<html:link page="/missionOrganization.do?method=showDelegationsForAuthorization" paramId="authorizationId" paramName="childAccountability" paramProperty="externalId">
-						<bean:message key="label.delegations" bundle="MISSION_RESOURCES" arg0="0"/>
-					</html:link>
-				</td>
- -->
+
+				<logic:present role="myorg.domain.RoleType.MANAGER">
+					<td>
+						<html:link page="/missionOrganization.do?method=prepareEditDelegation" paramId="functionDelegationId" paramName="functionDelegation" paramProperty="externalId">
+							<bean:message key="label.delegation.edit" bundle="MISSION_RESOURCES"/>
+						</html:link>
+					</td>
+	
+					<td>
+						<html:link page="/missionOrganization.do?method=removeDelegation" paramId="functionDelegationId" paramName="functionDelegation" paramProperty="externalId">
+							<bean:message key="label.delegation.remove" bundle="MISSION_RESOURCES"/>
+						</html:link>
+					</td>
+				</logic:present>
 			</tr>
 		</logic:iterate>
 	</table>
