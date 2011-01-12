@@ -12,5 +12,9 @@ public abstract class Provision extends Provision_Base {
     public abstract Money getValueAllocatedToSupplier();
 
     public abstract Money getValueAllocatedToSupplierForLimit();
+
+    public boolean isInAllocationPeriod() {
+	return true;
+    }
     
 }

@@ -35,7 +35,9 @@ public class Supplier extends Supplier_Base {
     public Money getAllocated() {
 	Money result = Money.ZERO;
 	for (final Provision provision : getProvisionsSet()) {
-	    result = result.add(provision.getValueAllocatedToSupplier());
+	    if (provision.isInAllocationPeriod()) {
+		result = result.add(provision.getValueAllocatedToSupplier());
+	    }
 	}
 	return result;
     }
@@ -43,7 +45,9 @@ public class Supplier extends Supplier_Base {
     public Money getAllocatedForLimit() {
 	Money result = Money.ZERO;
 	for (final Provision provision : getProvisionsSet()) {
-	    result = result.add(provision.getValueAllocatedToSupplierForLimit());
+	    if (provision.isInAllocationPeriod()) {
+		result = result.add(provision.getValueAllocatedToSupplierForLimit());
+	    }
 	}
 	return result;
     }
