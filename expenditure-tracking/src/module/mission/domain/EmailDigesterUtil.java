@@ -74,6 +74,11 @@ public class EmailDigesterUtil {
 	    			    body.append("\n\n\tTotal de Processos de Missão Pendentes\t");
 	    			    body.append(totalPending);
 
+	    			    if (takenByUser > 0) {
+	    				body.append("\n\n\n\tNão se esqueça de libertar todos os processos pendentes de si, após concluir as tarefas que nele tem para realizar.\t");
+	    				body.append(takenByUser);
+	    			    }
+
 	    			    body.append("\n\n---\n");
 	    			    body.append("Esta mensagem foi enviada por meio das Aplicações Centrais do IST.\n");
 
