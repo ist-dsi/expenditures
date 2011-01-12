@@ -7,7 +7,7 @@ import pt.utl.ist.fenix.tools.util.i18n.Language;
 
 public enum PaymentMethod implements IPresentableEnum {
 
-    CHECK, WIRETRANSFER;
+    CHECK, WIRETRANSFER, CASH;
 
     @Override
     public String getLocalizedName() {
