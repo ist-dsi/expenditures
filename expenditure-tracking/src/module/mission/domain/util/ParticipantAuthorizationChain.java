@@ -14,11 +14,12 @@ import module.organization.domain.OrganizationalModel;
 import module.organization.domain.Party;
 import module.organization.domain.Person;
 import module.organization.domain.Unit;
-import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.User;
 
 import org.joda.time.LocalDate;
 
+import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
+import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.pstm.AbstractDomainObject;
 
 public class ParticipantAuthorizationChain implements Serializable {
@@ -151,6 +152,48 @@ public class ParticipantAuthorizationChain implements Serializable {
 	    participantAuthorizationChains.add(participantAuthorizationChain);
 	}
 	return participantAuthorizationChains;
+    }
+
+    public static Collection<ParticipantAuthorizationChain> getParticipantAuthorizationChains(final Person person, final Unit unit) {
+	final Collection<ParticipantAuthorizationChain> participantAuthorizationChains = new ArrayList<ParticipantAuthorizationChain>();
+
+	final OrganizationalModel organizationalModel = MissionSystem.getInstance().getOrganizationalModel();
+	final Set<AccountabilityType> accountabilityTypes = organizationalModel.getAccountabilityTypesSet();
+	final Set<AccountabilityType> accountabilityTypesThatAuthorize = MissionSystem.getInstance().getAccountabilityTypesThatAuthorize();
+	for (final Party party : organizationalModel.getPartiesSet()) {
+	    if (party.isUnit()) {
+		final Unit topLevelUnot = (Unit) party;
+		for (final Unit childUnit : topLevelUnot.getChildUnits(accountabilityTypes)) {
+		    final AuthorizationChain topLevelUnitChain = new AuthorizationChain(topLevelUnot);
+		    final AuthorizationChain childChain = new AuthorizationChain(childUnit, topLevelUnitChain);
+		    final AuthorizationChain authorizationChain = new AuthorizationChain(unit, childChain);
+
+		    final ParticipantAuthorizationChain participantAuthorizationChain = new ParticipantAuthorizationChain(person, authorizationChain);
+		    participantAuthorizationChains.add(participantAuthorizationChain);
+
+		    if (unit.getChildPersons(accountabilityTypesThatAuthorize).isEmpty()) {
+			createResponsibleForUnit(accountabilityTypesThatAuthorize, unit);
+		    }
+		}
+	    }
+	}
+
+	return participantAuthorizationChains;
+    }
+
+    @Service
+    private static void createResponsibleForUnit(final Set<AccountabilityType> accountabilityTypesThatAuthorize, final Unit unit) {
+	for (final Authorization authorization : unit.getExpenditureUnit().getAuthorizationsSet()) {
+	    if (authorization.isValid()) {
+		final pt.ist.expenditureTrackingSystem.domain.organization.Person authority = authorization.getPerson();
+		final User user = authority.getUser();
+		if (user != null && user.hasPerson()) {
+		    for (final AccountabilityType accountabilityType : accountabilityTypesThatAuthorize) {
+			unit.addChild(user.getPerson(), accountabilityType, new LocalDate(), null);
+		    }
+		}
+	    }
+	}
     }
 
     public static ParticipantAuthorizationChain getMostLikelyParticipantAuthorizationChain(final Person person) {
