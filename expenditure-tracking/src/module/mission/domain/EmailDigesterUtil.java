@@ -75,7 +75,7 @@ public class EmailDigesterUtil {
 	    			    body.append(totalPending);
 
 	    			    if (takenByUser > 0) {
-	    				body.append("\n\n\n\tNão se esqueça de libertar todos os processos pendentes de si, após concluir as tarefas que nele tem para realizar.\t");
+	    				body.append("\n\n\n\tPor favor, proceda à libertação dos processos em \"acesso exclusivo\", após concluir as tarefas que nele tem para realizar.\t");
 	    				body.append(takenByUser);
 	    			    }
 
