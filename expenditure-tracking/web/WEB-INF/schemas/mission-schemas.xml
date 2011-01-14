@@ -381,12 +381,14 @@
 		<property name="key" value="false"/>
 		<property name="listFormat" value=" ${localizedName}"/>
 	</slot>	
-	<slot name="requestingPerson.firstAndLastName" key="label.mission.requester.person" layout="link">
+	<slot name="requestingPerson.firstAndLastName" key="label.mission.requester.person"/>
+<!-- 	 layout="link">
 		<property name="useParent" value="true"/>
 		<property name="blankTarget" value="false"/>
 		<property name="linkFormat" value="/missionOrganization.do?personId=${requestingPerson.externalId}&amp;method=showPersonById"/>
 		<property name="classes" value="secondaryLink"/>
 	</slot>
+ -->
 	<slot name="participantes" schema="module.organization.domain.Person.mission.participante" layout="values" key="label.mission.participants">
 		<property name="htmlSeparator" value="&lt;br/&gt;"/>
 	</slot>
