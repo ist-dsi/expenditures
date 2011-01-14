@@ -5,13 +5,16 @@ package module.mission.domain.util;
 
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import module.mission.domain.ForeignMission;
 import module.mission.domain.Mission;
 import module.mission.domain.MissionFinancer;
+import module.mission.domain.MissionProcess;
 import module.mission.domain.MissionSystem;
+import module.mission.domain.MissionYear;
 import module.mission.domain.NationalMission;
 import module.organization.domain.Party;
 import module.organization.domain.Person;
@@ -27,6 +30,99 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
  */
 public class SearchMissions extends Search<Mission> {
 
+    private static class MissionProcessMissionSet implements Set<Mission> {
+
+	private final Set<MissionProcess> missionProcesses;
+
+	private MissionProcessMissionSet(final Set<MissionProcess> missionProcesses) {
+	    this.missionProcesses = missionProcesses;
+	}
+
+	@Override
+	public Iterator<Mission> iterator() {
+	    return new Iterator<Mission>() {
+
+		private final Iterator<MissionProcess> iterator = missionProcesses.iterator();
+
+		@Override
+		public boolean hasNext() {
+		    return iterator.hasNext();
+		}
+
+		@Override
+		public Mission next() {
+		    return iterator.next().getMission();
+		}
+
+		@Override
+		public void remove() {
+		    throw new IllegalAccessError();
+		}
+	    };
+	}
+
+	@Override
+	public boolean add(final Mission e) {
+	    throw new IllegalAccessError();
+	}
+
+	@Override
+	public boolean addAll(Collection<? extends Mission> c) {
+	    throw new IllegalAccessError();
+	}
+
+	@Override
+	public void clear() {
+	    throw new IllegalAccessError();
+	}
+
+	@Override
+	public boolean contains(Object o) {
+	    throw new Error("not.implemented");
+	}
+
+	@Override
+	public boolean containsAll(Collection<?> c) {
+	    throw new Error("not.implemented");
+	}
+
+	@Override
+	public boolean isEmpty() {
+	    return missionProcesses.isEmpty();
+	}
+
+	@Override
+	public boolean remove(Object o) {
+	    throw new IllegalAccessError();
+	}
+
+	@Override
+	public boolean removeAll(Collection<?> c) {
+	    throw new IllegalAccessError();
+	}
+
+	@Override
+	public boolean retainAll(Collection<?> c) {
+	    throw new IllegalAccessError();
+	}
+
+	@Override
+	public int size() {
+	    return missionProcesses.size();
+	}
+
+	@Override
+	public Object[] toArray() {
+	    throw new Error("not.implemented");
+	}
+
+	@Override
+	public <T> T[] toArray(T[] a) {
+	    throw new Error("not.implemented");
+	}
+	
+    }
+
     private String processNumber = Integer.toString(Calendar.getInstance().get(Calendar.YEAR)) + '/';
     private Party missionResponsible;
     private Unit payingUnit;
@@ -39,7 +135,31 @@ public class SearchMissions extends Search<Mission> {
 
     @Override
     public Set<Mission> search() {
-	return new SearchResult(MissionSystem.getInstance().getMissions());
+	final Set<Mission> missions = limitSearchSet();
+	return new SearchResult(missions);
+    }
+
+    private Set<Mission> limitSearchSet() {
+	if (missionResponsible != null) {
+	    missionResponsible.getMissionsFromResponsibleSet();
+	}
+	if (requestingPerson != null) {
+	    return requestingPerson.getRequestedMissionsSet();
+	}
+	if (participant != null) {
+	    return participant.getMissionsSet();
+	}
+	if (processNumber != null && !processNumber.isEmpty()) {
+	    final int i = processNumber.indexOf('/');
+	    if (i > 0) {
+		final String year = processNumber.substring(0, i);
+		final MissionYear missionYear = MissionYear.findMissionYear(Integer.parseInt(year));
+		if (missionYear != null) {
+		    return new MissionProcessMissionSet(missionYear.getMissionProcessSet());
+		}
+	    }
+	}
+	return MissionSystem.getInstance().getMissionsSet();
     }
 
     protected class SearchResult extends SearchResultSet<Mission> {
@@ -56,7 +176,7 @@ public class SearchMissions extends Search<Mission> {
 	    	    && matchMissionTypeCriteria(mission)
 		    && matchDateCriteria(mission)
 		    && matchRequestingPersonCriteria(mission.getRequestingPerson())
-		    && matchParticipantCriteria(mission.getParticipantes())
+		    && matchParticipantCriteria(mission)
 		    && matchCanceledCriteria(mission)
 		    && mission.getMissionProcess().isAccessibleToCurrentUser();
 	}
@@ -72,18 +192,8 @@ public class SearchMissions extends Search<Mission> {
 	    		|| mission.getMissionProcess().getProcessIdentification().indexOf(processNumber) >= 0;
 	}
 
-	private boolean matchParticipantCriteria(List<Person> participantes) {
-	    if (participant == null) {
-		return true;
-	    }
-
-	    for (final Person person : participantes) {
-		if (person == participant) {
-		    return true;
-		}
-	    }
-
-	    return false;
+	private boolean matchParticipantCriteria(final Mission mission) {
+	    return participant == null || mission.getParticipantesSet().contains(participant);
 	}
 
 	private boolean matchRequestingPersonCriteria(Person rp) {
