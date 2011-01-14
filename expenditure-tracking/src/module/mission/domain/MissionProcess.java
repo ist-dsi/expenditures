@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -38,8 +39,20 @@ public abstract class MissionProcess extends MissionProcess_Base {
     public static final Comparator<MissionProcess> COMPARATOR_BY_PROCESS_NUMBER = new Comparator<MissionProcess>() {
 	@Override
 	public int compare(MissionProcess o1, MissionProcess o2) {
-	    return o1.getProcessIdentification().compareTo(o2.getProcessIdentification());
+	    final MissionYear missionYear1 = o1.getMissionYear();
+	    final MissionYear missionYear2 = o2.getMissionYear();
+
+	    final int year = MissionYear.COMPARATOR_BY_YEAR.compare(missionYear1, missionYear2);
+
+	    return year == 0 ? compareNumber(o1, o2) : year;
 	}
+
+	private int compareNumber(MissionProcess o1, MissionProcess o2) {
+	    final int n1 = Integer.parseInt(o1.getProcessNumber());
+	    final int n2 = Integer.parseInt(o2.getProcessNumber());
+	    return n2 - n1;
+	}
+
     };
 
     protected static class MissionGiveProcessUserNotifier extends NotifyUser {

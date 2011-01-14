@@ -1,5 +1,6 @@
 package module.mission.domain;
 
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.SortedSet;
@@ -25,6 +26,15 @@ public class MissionYear extends MissionYear_Base {
     static {
 	ProcessListWidget.register(new MissionPendingProcessCounter());
     }
+
+    public static final Comparator<MissionYear> COMPARATOR_BY_YEAR = new Comparator<MissionYear>() {
+	@Override
+	public int compare(MissionYear o1, MissionYear o2) {
+	    final Integer year1 = o1.getYear();
+	    final Integer year2 = o2.getYear();
+	    return year1.compareTo(year2);
+	}
+    };
 
     public static Integer getBiggestYearCounter() {
 	int biggestCounter = 0;

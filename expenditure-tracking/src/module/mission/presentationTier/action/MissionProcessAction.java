@@ -17,8 +17,8 @@ import module.mission.domain.activity.DefineParticipantAuthorizationChainActivit
 import module.mission.domain.activity.DefineParticipantAuthorizationChainActivityInformation;
 import module.mission.domain.activity.DistributeItemCostsActivityInformation;
 import module.mission.domain.activity.ItemActivityInformation;
+import module.mission.domain.util.AuthorizationChain;
 import module.mission.domain.util.MissionProcessCreationBean;
-import module.mission.domain.util.ParticipantAuthorizationChain.AuthorizationChain;
 import module.mission.presentationTier.action.util.MissionContext;
 import module.organization.domain.Person;
 import module.workflow.presentationTier.WorkflowLayoutContext;

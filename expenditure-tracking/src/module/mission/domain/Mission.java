@@ -2,6 +2,7 @@ package module.mission.domain;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.SortedMap;
@@ -15,8 +16,8 @@ import module.mission.domain.activity.DistributeItemCostsActivityInformation.Mis
 import module.mission.domain.activity.DistributeItemCostsActivityInformation.MissionItemFinancerBeanCollection;
 import module.mission.domain.activity.ItemActivityInformation;
 import module.mission.domain.activity.UpdateMissionDetailsActivityInformation;
+import module.mission.domain.util.AuthorizationChain;
 import module.mission.domain.util.ParticipantAuthorizationChain;
-import module.mission.domain.util.ParticipantAuthorizationChain.AuthorizationChain;
 import module.organization.domain.Accountability;
 import module.organization.domain.AccountabilityType;
 import module.organization.domain.Party;
@@ -40,7 +41,19 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 
 public abstract class Mission extends Mission_Base {
-    
+
+    public static final Comparator<Mission> COMPARATOR_BY_PROCESS_IDENTIFICATION = new Comparator<Mission>() {
+
+	@Override
+	public int compare(Mission o1, Mission o2) {
+	    final MissionProcess p1 = o1.getMissionProcess();
+	    final MissionProcess p2 = o2.getMissionProcess();
+
+	    return MissionProcess.COMPARATOR_BY_PROCESS_NUMBER.compare(p1, p2);
+	}
+	
+    };
+
     public Mission() {
         super();
         setOjbConcreteClass(getClass().getName());

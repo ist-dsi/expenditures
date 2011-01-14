@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Set;
 
-import module.mission.domain.util.ParticipantAuthorizationChain.AuthorizationChain;
+import module.mission.domain.util.AuthorizationChain;
 import module.organization.domain.Accountability;
 import module.organization.domain.AccountabilityType;
 import module.organization.domain.FunctionDelegation;

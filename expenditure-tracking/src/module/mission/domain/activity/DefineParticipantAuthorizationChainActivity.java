@@ -3,7 +3,7 @@ package module.mission.domain.activity;
 import module.mission.domain.Mission;
 import module.mission.domain.MissionProcess;
 import module.mission.domain.PersonMissionAuthorization;
-import module.mission.domain.util.ParticipantAuthorizationChain.AuthorizationChain;
+import module.mission.domain.util.AuthorizationChain;
 import module.organization.domain.Person;
 import module.workflow.activities.ActivityInformation;
 import myorg.domain.RoleType;

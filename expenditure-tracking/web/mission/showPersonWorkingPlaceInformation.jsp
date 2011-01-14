@@ -11,9 +11,8 @@
 <%@page import="java.util.Set"%>
 <%@page import="module.organization.domain.AccountabilityType"%>
 <%@page import="java.util.Collection"%>
-<%@page import="module.mission.domain.util.ParticipantAuthorizationChain.AuthorizationChain"%>
+<%@page import="module.mission.domain.util.AuthorizationChain"%>
 <%@page import="module.mission.domain.util.ParticipantAuthorizationChain"%>
-<%@page import="module.mission.domain.util.ParticipantAuthorizationChain.AuthorizationChain"%>
 <%@page import="module.organization.domain.Unit"%>
 <%@page import="java.util.Iterator"%>
 
@@ -36,7 +35,7 @@
 	<logic:iterate id="accountability" name="workingPlaceAccountabilities" type="module.organization.domain.Accountability">
 <%
 		final Set<AccountabilityType> accountabilityTypes = MissionSystem.getInstance().getAccountabilityTypesForAuthorization(accountability.getAccountabilityType());
-		final Collection<ParticipantAuthorizationChain.AuthorizationChain> participantAuthorizationChain = ParticipantAuthorizationChain.getParticipantAuthorizationChains(accountabilityTypes, accountability);
+		final Collection<AuthorizationChain> participantAuthorizationChain = ParticipantAuthorizationChain.getParticipantAuthorizationChains(accountabilityTypes, accountability);
 		request.setAttribute("participantAuthorizationChain", participantAuthorizationChain);
 %>
 		<h3>
@@ -70,7 +69,7 @@
 			</p>
 		</logic:empty>
 		<logic:notEmpty name="participantAuthorizationChain">
-			<logic:iterate id="participantAuthorization" name="participantAuthorizationChain" type="module.mission.domain.util.ParticipantAuthorizationChain.AuthorizationChain">
+			<logic:iterate id="participantAuthorization" name="participantAuthorizationChain" type="module.mission.domain.util.AuthorizationChain">
 				<table class="tstyle3 mvert1 width100pc tdmiddle punits">
 					<tr>
 						<th>
@@ -85,7 +84,7 @@
 					</tr>
 <%
 					int order = 0;
-					for (ParticipantAuthorizationChain.AuthorizationChain authorizationChain = participantAuthorization;
+					for (AuthorizationChain authorizationChain = participantAuthorization;
 							authorizationChain != null;
 							authorizationChain = authorizationChain.getNext()) {
 					    final Unit unit = authorizationChain.getUnit();
