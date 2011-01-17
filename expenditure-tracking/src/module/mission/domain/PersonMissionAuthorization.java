@@ -180,4 +180,9 @@ public class PersonMissionAuthorization extends PersonMissionAuthorization_Base 
 	return hasMission() ? getMission().getMissionProcess() : (hasPrevious() ? getPrevious().getMissionProcess() : null);
     }
 
+    public boolean isProcessTakenByOtherUser() {
+	final MissionProcess missionProcess = getMissionProcess();
+	return missionProcess.getCurrentOwner() != null && !missionProcess.isTakenByCurrentUser();
+    }
+
 }
