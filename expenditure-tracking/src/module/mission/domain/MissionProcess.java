@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -121,20 +120,6 @@ public abstract class MissionProcess extends MissionProcess_Base {
 
     public String getProcessIdentification() {
 	return getMissionYear().getYear() + "/" + getProcessNumber();
-    }
-
-    public String getComparableProcessIdentification() {
-	int numberOfLeftHandZeroes = MissionYear.getBiggestYearCounter().toString().length() - getProcessNumber().length();
-
-	StringBuilder stringBuilder = new StringBuilder();
-	stringBuilder.append(getMissionYear().getYear());
-	stringBuilder.append("/");
-	while (numberOfLeftHandZeroes > 0) {
-	    stringBuilder.append("0");
-	    numberOfLeftHandZeroes--;
-	}
-	stringBuilder.append(getProcessNumber());
-	return stringBuilder.toString();
     }
 
     public WorkflowActivity getActivity(Class<? extends WorkflowActivity> clazz) {
