@@ -31,9 +31,9 @@
 			
 			<fr:property name="sortParameter" value="sortBy"/>
        		<fr:property name="sortUrl" value="<%= "/searchMissions.do?method=search&" + searchParameters%>" />
-		    <fr:property name="sortBy" value="<%= request.getParameter("sortBy") == null ? "missionProcess.comparableProcessIdentification=desc" : request.getParameter("sortBy") %>"/>
+		    <fr:property name="sortBy" value="<%= request.getParameter("sortBy") == null ? "missionProcess.processIdentification=desc" : request.getParameter("sortBy") %>"/>
 			<fr:property name="sortIgnored" value="true"/>					
-			<fr:property name="sortableSlots" value="missionProcess.comparableProcessIdentification, country, daparture, arrival, missionItemsCount, missionProcess.dateFromLastActivity, requestingPerson" />
+			<fr:property name="sortableSlots" value="missionProcess.processIdentification, country, daparture, arrival, missionItemsCount, missionProcess.dateFromLastActivity, requestingPerson" />
 		</fr:layout>
 	</fr:view>
 	<p class="aright mtop05">

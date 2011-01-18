@@ -361,7 +361,7 @@
 	</slot>
 </schema>
 <schema name="module.mission.domain.Mission.search" type="module.mission.domain.Mission" bundle="MISSION_RESOURCES">
-	<slot name="missionProcess.comparableProcessIdentification" key="label.acquisitionProcessId" bundle="EXPENDITURE_RESOURCES" layout="link">
+	<slot name="missionProcess.processIdentification" key="label.acquisitionProcessId" bundle="EXPENDITURE_RESOURCES" layout="link">
 		<property name="useParent" value="true"/>
 		<property name="blankTarget" value="false"/>
 		<property name="linkFormat" value="/workflowProcessManagement.do?method=viewProcess&amp;processId=${missionProcess.externalId}"/>
