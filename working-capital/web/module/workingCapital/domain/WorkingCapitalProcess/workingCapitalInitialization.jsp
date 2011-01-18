@@ -5,13 +5,15 @@
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr"%>
 <%@ taglib uri="/WEB-INF/workflow.tld" prefix="wf"%>
 
+<%@ page import="java.math.BigDecimal" %>
+
 <bean:define id="workingCapital" name="process" property="workingCapital"/>
 
 <h3>
 	<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.initialization"/>
 </h3>
 
-<bean:define id="workingCapitalInitialization" name="workingCapital" property="workingCapitalInitialization"/>
+<bean:define id="workingCapitalInitialization" name="workingCapital" property="workingCapitalInitialization" type="module.workingCapital.domain.WorkingCapitalInitialization"/>
 <bean:define id="workingCapitalOid" name="workingCapital" property="externalId"/>
 <bean:define id="workingCapitalInitializationOid" type="java.lang.String" name="workingCapitalInitialization" property="externalId"/>
 
@@ -27,7 +29,10 @@
 			<fr:slot name="fiscalId"  key="label.module.workingCapital.fiscalId"/>
 			<fr:slot name="internationalBankAccountNumber"  key="label.module.workingCapital.internationalBankAccountNumber"/>
 			<fr:slot name="fundAllocationId" key="label.module.workingCapital.fundAllocationId"/>
-			<fr:slot name="requestedAnualValue"  key="label.module.workingCapital.requestedAnualValue.requested"/>
+			<fr:slot name="requestedAnualValue" key="label.module.workingCapital.requestedAnualValue.requested"/>
+			<fr:slot name="requestedAnualValue.roundedValue" layout="format" key="label.module.workingCapital.requestedMonthlyValue.requested">
+				<fr:property name="format" value="<%= workingCapitalInitialization.getRequestedAnualValue().divideAndRound(new BigDecimal(12)).toFormatString() %>"/>
+			</fr:slot>
 			<fr:slot name="authorizedAnualValue"  key="label.module.workingCapital.authorizedAnualValue" layout="null-as-label">
 				<fr:property name="subLayout" value=""/>
 				<fr:property name="classes" value="bold"/>

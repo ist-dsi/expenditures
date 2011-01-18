@@ -1,5 +1,7 @@
 package module.workingCapital.domain.activity;
 
+import java.math.BigDecimal;
+
 import module.organization.domain.Person;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
@@ -10,7 +12,7 @@ import myorg.domain.util.Money;
 public class EditInitializationActivityInformation extends WorkingCapitalInitializationInformation {
 
     private Person movementResponsible;
-    private Money requestedAnualValue;
+    private Money requestedMonthlyValue;
     private String fiscalId;
     private String internationalBankAccountNumber;
 
@@ -26,46 +28,45 @@ public class EditInitializationActivityInformation extends WorkingCapitalInitial
 
     @Override
     public void setWorkingCapitalInitialization(final WorkingCapitalInitialization workingCapitalInitialization) {
-        super.setWorkingCapitalInitialization(workingCapitalInitialization);
-        if (workingCapitalInitialization != null) {
-            movementResponsible = workingCapitalInitialization.getWorkingCapital().getMovementResponsible();
-            requestedAnualValue = workingCapitalInitialization.getRequestedAnualValue();
-            fiscalId = workingCapitalInitialization.getFiscalId();
-            internationalBankAccountNumber = workingCapitalInitialization.getInternationalBankAccountNumber();
-        }
+	super.setWorkingCapitalInitialization(workingCapitalInitialization);
+	if (workingCapitalInitialization != null) {
+	    movementResponsible = workingCapitalInitialization.getWorkingCapital().getMovementResponsible();
+	    requestedMonthlyValue = workingCapitalInitialization.getRequestedAnualValue().divideAndRound(new BigDecimal(12));
+	    fiscalId = workingCapitalInitialization.getFiscalId();
+	    internationalBankAccountNumber = workingCapitalInitialization.getInternationalBankAccountNumber();
+	}
     }
 
     public Person getMovementResponsible() {
-        return movementResponsible;
+	return movementResponsible;
     }
 
     public void setMovementResponsible(Person movementResponsible) {
-        this.movementResponsible = movementResponsible;
+	this.movementResponsible = movementResponsible;
     }
 
-    public Money getRequestedAnualValue() {
-        return requestedAnualValue;
+    public Money getRequestedMonthlyValue() {
+	return requestedMonthlyValue;
     }
 
-    public void setRequestedAnualValue(Money requestedAnualValue) {
-        this.requestedAnualValue = requestedAnualValue;
+    public void setRequestedMonthlyValue(Money requestedMonthlyValue) {
+	this.requestedMonthlyValue = requestedMonthlyValue;
     }
 
     public String getFiscalId() {
-        return fiscalId;
+	return fiscalId;
     }
 
     public void setFiscalId(String fiscalId) {
-        this.fiscalId = fiscalId;
+	this.fiscalId = fiscalId;
     }
 
     public String getInternationalBankAccountNumber() {
-        return internationalBankAccountNumber;
+	return internationalBankAccountNumber;
     }
 
     public void setInternationalBankAccountNumber(String internationalBankAccountNumber) {
-        this.internationalBankAccountNumber = internationalBankAccountNumber;
+	this.internationalBankAccountNumber = internationalBankAccountNumber;
     }
-
 
 }

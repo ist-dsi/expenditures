@@ -32,7 +32,7 @@
 			<fr:property name="args" value="provider=module.organization.presentationTier.renderers.providers.PersonAutoCompleteProvider" />
 			<fr:property name="size" value="60"/>
 		</fr:slot>
-		<fr:slot name="requestedAnualValue" key="label.module.workingCapital.requestedAnualValue" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+		<fr:slot name="requestedMonthlyValue" key="label.module.workingCapital.requestedMonthlyValue.requested" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 		<fr:slot name="fiscalId" key="label.module.workingCapital.fiscalId"
 				validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"
 				help="label.module.workingCapital.fiscalId.help">

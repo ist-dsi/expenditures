@@ -17,7 +17,7 @@ public class WorkingCapitalInitializationBean implements Serializable {
     private Person person = initPerson();
     private Integer year = Integer.valueOf(Calendar.getInstance().get(Calendar.YEAR));
 
-    private Money requestedAnualValue;
+    private Money requestedMonthlyValue;
     private String fiscalId;
     private String internationalBankAccountNumber;
 
@@ -27,49 +27,59 @@ public class WorkingCapitalInitializationBean implements Serializable {
     }
 
     public Unit getUnit() {
-        return unit;
+	return unit;
     }
+
     public void setUnit(Unit unit) {
-        this.unit = unit;
+	this.unit = unit;
     }
+
     public Person getPerson() {
-        return person;
+	return person;
     }
+
     public void setPerson(Person person) {
-        this.person = person;
+	this.person = person;
     }
+
     public Integer getYear() {
-        return year;
+	return year;
     }
+
     public void setYear(Integer year) {
-        this.year = year;
+	this.year = year;
     }
-    public Money getRequestedAnualValue() {
-        return requestedAnualValue;
+
+    public Money getRequestedMonthlyValue() {
+	return requestedMonthlyValue;
     }
-    public void setRequestedAnualValue(Money requestedAnualValue) {
-        this.requestedAnualValue = requestedAnualValue;
+
+    public void setRequestedMonthlyValue(Money requestedMonthlyValue) {
+	this.requestedMonthlyValue = requestedMonthlyValue;
     }
+
     public String getFiscalId() {
-        return fiscalId;
+	return fiscalId;
     }
+
     public void setFiscalId(String fiscalId) {
-        this.fiscalId = fiscalId;
+	this.fiscalId = fiscalId;
     }
+
     public String getInternationalBankAccountNumber() {
-        return internationalBankAccountNumber;
+	return internationalBankAccountNumber;
     }
+
     public void setInternationalBankAccountNumber(String internationalBankAccountNumber) {
-        this.internationalBankAccountNumber = internationalBankAccountNumber;
+	this.internationalBankAccountNumber = internationalBankAccountNumber;
     }
 
     @Service
     public WorkingCapitalInitialization create() {
-	String iban = internationalBankAccountNumber == null
-		|| internationalBankAccountNumber.isEmpty()
-		|| !Character.isDigit(internationalBankAccountNumber.charAt(0))
-		? internationalBankAccountNumber : "PT50" + internationalBankAccountNumber;
-	return new WorkingCapitalInitialization(year, unit, person, requestedAnualValue, fiscalId, iban);
+	String iban = internationalBankAccountNumber == null || internationalBankAccountNumber.isEmpty()
+		|| !Character.isDigit(internationalBankAccountNumber.charAt(0)) ? internationalBankAccountNumber : "PT50"
+		+ internationalBankAccountNumber;
+	return new WorkingCapitalInitialization(year, unit, person, requestedMonthlyValue.multiply(12), fiscalId, iban);
     }
 
 }
