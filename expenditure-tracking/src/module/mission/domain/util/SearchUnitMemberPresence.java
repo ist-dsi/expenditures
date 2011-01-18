@@ -1,7 +1,8 @@
 package module.mission.domain.util;
 
 import java.io.Serializable;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -21,7 +22,7 @@ public class SearchUnitMemberPresence implements Serializable {
 
     private Unit unit;
     private LocalDate day = new LocalDate();
-    private Set<AccountabilityType> accountabilityTypes = new TreeSet<AccountabilityType>(AccountabilityType.COMPARATORY_BY_NAME);
+    private List<AccountabilityType> accountabilityTypes = new ArrayList<AccountabilityType>();
     private boolean includeSubUnits = true;
     private boolean onMission = true;
 
@@ -38,11 +39,11 @@ public class SearchUnitMemberPresence implements Serializable {
         this.day = day;
     }
 
-    public Set<AccountabilityType> getAccountabilityTypes() {
+    public List<AccountabilityType> getAccountabilityTypes() {
         return accountabilityTypes;
     }
 
-    public void setAccountabilityTypes(final Set<AccountabilityType> accountabilityTypes) {
+    public void setAccountabilityTypes(final List<AccountabilityType> accountabilityTypes) {
         this.accountabilityTypes = accountabilityTypes;
     }
 

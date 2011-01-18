@@ -13,10 +13,18 @@
 <div class="infobox">
 	<fr:edit id="searchUnitMemberPresence" name="searchUnitMemberPresence"
 			action="/missionOrganization.do?method=viewPresences">
-		<fr:schema type="module.mission.domain.util.FunctionDelegationBean" bundle="MISSION_RESOURCES">
+		<fr:schema type="module.mission.domain.util.SearchUnitMemberPresence" bundle="MISSION_RESOURCES">
 			<fr:slot name="day" key="label.date" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 			<fr:slot name="includeSubUnits" key="label.includeSubUnits"/>
 			<fr:slot name="onMission" key="label.onMission"/>
+			<fr:slot name="accountabilityTypes" layout="option-select" key="label.mission.participants.accountabilityTypes" bundle="MISSION_RESOURCES">
+        		<fr:property name="providerClass" value="module.mission.presentationTier.provider.MissionAccountabilityTypesRequireingAuthorizationProvider" />
+	        	<fr:property name="eachSchema" value="accountabilityType-name"/>
+    	    	<fr:property name="eachLayout" value="values"/>
+        		<fr:property name="classes" value="nobullet"/>
+				<fr:property name="saveOptions" value="true"/>
+				<fr:property name="sortBy" value="name"/>
+			</fr:slot>
 		</fr:schema>
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="form listInsideClear" />
