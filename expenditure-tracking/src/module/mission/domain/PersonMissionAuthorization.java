@@ -31,7 +31,9 @@ public class PersonMissionAuthorization extends PersonMissionAuthorization_Base 
 		return y;
 	    }
 
-	    final int n = missionProcess1.getProcessNumber().compareTo(missionProcess2.getProcessNumber());
+	    final int number1 = Integer.parseInt(missionProcess1.getProcessNumber());
+	    final int number2 = Integer.parseInt(missionProcess2.getProcessNumber());
+	    final int n = number2 - number1;
 	    
 	    return n == 0 ? pma1.getExternalId().compareTo(pma2.getExternalId()) : n;
 	}
