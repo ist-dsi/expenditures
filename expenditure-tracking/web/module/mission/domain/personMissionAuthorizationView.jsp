@@ -53,6 +53,7 @@
 			%>
 				<fr:view name="personMissionAuthorization" property="authorizationDateTime"/>
 			<% } else { %>
+				<fr:view name="personMissionAuthorization" property="previous.authorizationDateTime"/>
 			<% } %>
 		</td>
 		<td>
