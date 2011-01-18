@@ -189,7 +189,23 @@ public class MissionFinancer extends MissionFinancer_Base {
     }
 
     public boolean canAllocateProjectFunds(final Person person) {
-	return person != null && hasAccountingUnit() && getAccountingUnit().hasProjectAccountants(person.getUser().getExpenditurePerson());
+	return person != null
+		&& hasAccountingUnit()
+		&& getAccountingUnit().hasProjectAccountants(person.getUser().getExpenditurePerson())
+		&& hasPendingProjectFundAllocations();
+    }
+
+    private boolean hasPendingProjectFundAllocations() {
+	for (final MissionItemFinancer missionItemFinancer : getMissionItemFinancersSet()) {
+	    if (missionItemFinancer instanceof MissionItemProjectFinancer) {
+		final MissionItemProjectFinancer missionItemProjectFinancer = (MissionItemProjectFinancer) missionItemFinancer;
+		final String allocationId = missionItemProjectFinancer.getProjectFundAllocationId();
+		if (allocationId == null || allocationId.isEmpty()) {
+		    return true;
+		}
+	    }
+	}
+	return false;
     }
 
     public void unAllocateFunds(final Person person) {
