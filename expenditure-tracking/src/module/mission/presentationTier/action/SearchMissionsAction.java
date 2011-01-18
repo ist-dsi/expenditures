@@ -41,6 +41,10 @@ public class SearchMissionsAction extends ContextBaseAction {
 	SearchMissionsDTO searchMissions = getRenderedObject("searchBean") != null ? (SearchMissionsDTO) getRenderedObject("searchBean")
 		: new SearchMissionsDTO(request);
 
+	return search(searchMissions, request);
+    }
+
+    public static ActionForward search(final SearchMissionsDTO searchMissions, final HttpServletRequest request) {
 	final Collection<Mission> results = doPagination(request, searchMissions.sortedSearch());
 
 	request.setAttribute("searchResults", results);
@@ -48,7 +52,7 @@ public class SearchMissionsAction extends ContextBaseAction {
 	return forward(request, "/mission/searchMissions.jsp");
     }
 
-    private Collection<Mission> doPagination(final HttpServletRequest request, Collection<Mission> allResults) {
+    private static Collection<Mission> doPagination(final HttpServletRequest request, Collection<Mission> allResults) {
 	final CollectionPager<Mission> pager = new CollectionPager<Mission>(allResults, RESULTS_PER_PAGE);
 	request.setAttribute("collectionPager", pager);
 	request.setAttribute("numberOfPages", Integer.valueOf(pager.getNumberOfPages()));

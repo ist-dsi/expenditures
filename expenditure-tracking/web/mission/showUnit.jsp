@@ -56,6 +56,16 @@
 	</logic:present>
 </logic:present>
 
+<html:link page="/missionOrganization.do?method=viewPresences" paramId="unitId" paramName="unit" paramProperty="externalId">
+	<bean:message bundle="MISSION_RESOURCES" key="label.module.mission.view.member.presence"/>
+</html:link>
+
+<html:messages id="message" message="true">
+	<span class="error0"> <bean:write name="message" /> </span>
+	<br />
+</html:messages>
+
+<br/>
 <br/>
 
 <h3>

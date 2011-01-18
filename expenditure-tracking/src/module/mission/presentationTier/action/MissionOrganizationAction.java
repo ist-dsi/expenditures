@@ -2,6 +2,7 @@ package module.mission.presentationTier.action;
 
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -10,18 +11,23 @@ import javax.servlet.http.HttpServletResponse;
 
 import module.mission.domain.MissionSystem;
 import module.mission.domain.util.FunctionDelegationBean;
+import module.mission.domain.util.SearchUnitMemberPresence;
+import module.mission.presentationTier.dto.SearchMissionsDTO;
 import module.organization.domain.Accountability;
 import module.organization.domain.AccountabilityType;
 import module.organization.domain.FunctionDelegation;
+import module.organization.domain.OrganizationalModel;
 import module.organization.domain.Party;
 import module.organization.domain.Person;
 import module.organization.domain.Unit;
 import module.organization.presentationTier.actions.OrganizationModelAction;
 import myorg.applicationTier.Authenticate.UserView;
+import myorg.domain.RoleType;
 import myorg.domain.User;
 import myorg.domain.exceptions.DomainException;
 import myorg.presentationTier.actions.ContextBaseAction;
 import myorg.presentationTier.component.OrganizationChart;
+import myorg.util.BundleUtil;
 
 import org.apache.commons.collections.ComparatorUtils;
 import org.apache.commons.lang.StringUtils;
@@ -224,4 +230,85 @@ public class MissionOrganizationAction extends ContextBaseAction {
 
 	return showDelegationsForAuthorization(request, accountabilityDelegator);
     }
+
+    public ActionForward viewPresences(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	SearchUnitMemberPresence searchUnitMemberPresence = getRenderedObject();
+	final Unit unit;
+	final boolean doSearch;
+	if (searchUnitMemberPresence == null) {
+	    unit = getDomainObject(request, "unitId");
+	    searchUnitMemberPresence = new SearchUnitMemberPresence(unit);
+	    doSearch = false;
+	} else {
+	    unit = searchUnitMemberPresence.getUnit();
+	    doSearch = true;
+	}
+
+	if (!hasPermission(unit)) {
+	    addLocalizedMessage(request, BundleUtil.getStringFromResourceBundle("resources/MissionResources", "label.not.authorized"));
+	    return showUnit(unit, request);
+	}
+
+	request.setAttribute("searchUnitMemberPresence", searchUnitMemberPresence);
+
+	if (doSearch) {
+	    final Set<Person> people = searchUnitMemberPresence.search();
+	    request.setAttribute("people", people);
+	}
+
+	return forward(request, "/mission/viewPresences.jsp");
+    }
+
+    private boolean hasPermission(final Unit unit) {
+	final UserView userView = UserView.getCurrentUserView();
+	if (userView == null) {
+	    return false;
+	}
+	final User user = userView.getUser();
+	if (user.hasRoleType(RoleType.MANAGER)) {
+	    return true;
+	}
+	final Person person = user == null ? null : user.getPerson();
+	if (person != null) {
+	    final Set<AccountabilityType> accountabilityTypesThatAuthorize = MissionSystem.getInstance().getAccountabilityTypesThatAuthorize();
+	    for (final Accountability accountability : person.getParentAccountabilitiesSet()) {
+		final AccountabilityType accountabilityType = accountability.getAccountabilityType();
+		if (accountabilityTypesThatAuthorize.contains(accountabilityType)) {
+		    final Party authorization = accountability.getParent();
+		    if (hasPermissionForParents(authorization, unit)) {
+			return true;
+		    }
+		}
+	    }
+	}
+	return false;
+    }
+
+    private boolean hasPermissionForParents(final Party authorization, final Unit unit) {
+	if (authorization == unit) {
+	    return true;
+	}
+	final OrganizationalModel organizationalModel = MissionSystem.getInstance().getOrganizationalModel();
+	for (final Accountability accountability : unit.getParentAccountabilitiesSet()) {
+	    final AccountabilityType accountabilityType = accountability.getAccountabilityType();
+	    if (organizationalModel.getAccountabilityTypesSet().contains(accountabilityType)) {
+		final Party parent = accountability.getParent();
+		if (parent.isUnit() && hasPermissionForParents(authorization, (Unit) parent)) {
+		    return true;
+		}
+	    }
+	}
+	return false;
+    }
+
+    public ActionForward searchMission(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final Person person = getDomainObject(request, "personId");
+	SearchMissionsDTO searchMissions = new SearchMissionsDTO();
+	searchMissions.setParticipant(person);
+	searchMissions.setProcessNumber("");
+	return SearchMissionsAction.search(searchMissions, request);
+    }
+
 }
