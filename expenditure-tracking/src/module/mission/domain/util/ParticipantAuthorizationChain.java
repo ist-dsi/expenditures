@@ -154,10 +154,12 @@ public class ParticipantAuthorizationChain implements Serializable {
     private static Collection<AuthorizationChain> getParticipantAuthorizationChains(final Collection<Accountability> accountabilities) {
 	final Collection<AuthorizationChain> result = new ArrayList<AuthorizationChain>();
 	for (final Accountability accountability : accountabilities) {
-	    final AccountabilityType accountabilityType = accountability.getAccountabilityType();
-	    final Set<AccountabilityType> accountabilityTypes = MissionSystem.getInstance().getAccountabilityTypesForAuthorization(accountabilityType);
-	    if (accountabilityTypes != null && !accountabilityTypes.isEmpty()) { 
-		result.addAll(getParticipantAuthorizationChains(accountabilityTypes, accountability));
+	    if (accountability.isActiveNow()) {
+		final AccountabilityType accountabilityType = accountability.getAccountabilityType();
+		final Set<AccountabilityType> accountabilityTypes = MissionSystem.getInstance().getAccountabilityTypesForAuthorization(accountabilityType);
+		if (accountabilityTypes != null && !accountabilityTypes.isEmpty()) { 
+		    result.addAll(getParticipantAuthorizationChains(accountabilityTypes, accountability));
+		}
 	    }
 	}
 	return result;
