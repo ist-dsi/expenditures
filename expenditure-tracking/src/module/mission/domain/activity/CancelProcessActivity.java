@@ -24,9 +24,7 @@ public class CancelProcessActivity extends MissionProcessActivity<MissionProcess
 		&& !missionProcess.isCanceled()
 		// && missionProcess.isUnderConstruction()
 		&& (missionProcess.isRequestor(user)
-			|| user.hasRoleType(RoleType.MANAGER)
-			|| missionProcess.canAuthoriseParticipantActivity()
-			|| missionProcess.isPendingAuthorizationBy(user))
+			|| user.hasRoleType(RoleType.MANAGER))
 		;
     }
 

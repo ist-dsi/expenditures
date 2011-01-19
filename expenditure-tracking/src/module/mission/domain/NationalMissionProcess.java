@@ -20,6 +20,7 @@ import module.mission.domain.activity.DistributeItemCostsActivity;
 import module.mission.domain.activity.EditItemActivity;
 import module.mission.domain.activity.ProcessCanceledPersonnelActivity;
 import module.mission.domain.activity.ProcessPersonnelActivity;
+import module.mission.domain.activity.RejectProcessActivity;
 import module.mission.domain.activity.RemoveFinancerActivity;
 import module.mission.domain.activity.RemoveItemActivity;
 import module.mission.domain.activity.RemoveParticipantActivity;
@@ -93,6 +94,7 @@ public class NationalMissionProcess extends NationalMissionProcess_Base {
 	activitiesAux.add(new StealProcess<MissionProcess>());
 
 	activitiesAux.add(new CancelProcessActivity());
+	activitiesAux.add(new RejectProcessActivity());
 
 	activities = Collections.unmodifiableList(activitiesAux);
     }
