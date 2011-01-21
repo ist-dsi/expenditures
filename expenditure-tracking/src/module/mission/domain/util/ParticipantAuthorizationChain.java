@@ -99,19 +99,36 @@ public class ParticipantAuthorizationChain implements Serializable {
 		for (final Unit childUnit : topLevelUnot.getChildUnits(accountabilityTypes)) {
 		    final AuthorizationChain topLevelUnitChain = new AuthorizationChain(topLevelUnot);
 		    final AuthorizationChain childChain = new AuthorizationChain(childUnit, topLevelUnitChain);
-		    final AuthorizationChain authorizationChain = new AuthorizationChain(unit, childChain);
+		    final Unit firstUnitWithResponsible = findFirstUnitWithResponsible(unit);
+		    final AuthorizationChain authorizationChain = new AuthorizationChain(firstUnitWithResponsible, childChain);
 
 		    final ParticipantAuthorizationChain participantAuthorizationChain = new ParticipantAuthorizationChain(person, authorizationChain);
 		    participantAuthorizationChains.add(participantAuthorizationChain);
 
 		    if (unit.getChildPersons(accountabilityTypesThatAuthorize).isEmpty()) {
-			createResponsibleForUnit(accountabilityTypesThatAuthorize, unit);
+			createResponsibleForUnit(accountabilityTypesThatAuthorize, firstUnitWithResponsible);
 		    }
 		}
 	    }
 	}
 
 	return participantAuthorizationChains;
+    }
+
+    private static Unit findFirstUnitWithResponsible(final Unit unit) {
+	final pt.ist.expenditureTrackingSystem.domain.organization.Unit expenditureUnit = unit.getExpenditureUnit();
+	if (expenditureUnit != null) {
+	    for (final Authorization authorization : expenditureUnit.getAuthorizationsSet()) {
+		if (authorization.isValid()) {
+		    return unit;
+		}
+	    }
+	    final pt.ist.expenditureTrackingSystem.domain.organization.Unit parentUnit = expenditureUnit.getParentUnit();
+	    if (parentUnit != null) {
+		return findFirstUnitWithResponsible(parentUnit.getUnit());
+	    }
+	}
+	return null;
     }
 
     @Service
