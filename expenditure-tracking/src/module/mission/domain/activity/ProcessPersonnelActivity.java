@@ -16,7 +16,7 @@ public class ProcessPersonnelActivity extends MissionProcessActivity<MissionProc
     @Override
     public boolean isActive(final MissionProcess missionProcess, final User user) {
 	return super.isActive(missionProcess, user)
-		&& !missionProcess.getIsCanceled().booleanValue()
+		//&& !missionProcess.getIsCanceled().booleanValue()
 		&& missionProcess.hasCurrentQueue()
 		&& missionProcess.getCurrentQueue().isCurrentUserAbleToAccessQueue()
 		&& (missionProcess.isAuthorized() || missionProcess.hasNoItemsAndParticipantesAreAuthorized())
