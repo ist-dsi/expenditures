@@ -155,6 +155,11 @@ public abstract class MissionProcess extends MissionProcess_Base {
 	return mission.hasAnyAproval();
     }
 
+    public boolean isPendingApproval() {
+	final Mission mission = getMission();
+	return mission.isPendingApproval();
+    }
+
     public boolean isPendingApprovalBy(final User user) {
 	final Mission mission = getMission();
 	return mission.isPendingApprovalBy(user);

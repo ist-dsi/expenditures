@@ -16,9 +16,13 @@ public class Authorize<P extends PaymentProcess> extends WorkflowActivity<P, Act
     @Override
     public boolean isActive(P process, User user) {
 	Person person = user.getExpenditurePerson();
-	return isUserProcessOwner(process, user) && process.isInAllocatedToUnitState()
+	return isUserProcessOwner(process, user)
+		&& process.isInAllocatedToUnitState()
 		&& process.isResponsibleForUnit(person, process.getRequest().getTotalValue())
-		&& !process.getRequest().hasBeenAuthorizedBy(person);
+		&& !process.getRequest().hasBeenAuthorizedBy(person)
+		&& (!process.hasMissionProcess()
+			|| (process.getMissionProcess().isExpenditureAuthorized()
+				&& process.getMissionProcess().areAllParticipantsAuthorized()));
     }
 
     @Override

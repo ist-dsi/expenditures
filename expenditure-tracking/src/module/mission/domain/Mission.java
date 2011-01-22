@@ -162,20 +162,13 @@ public abstract class Mission extends Mission_Base {
 	return false;
     }
 
+    public boolean isPendingApproval() {
+	return !hasApprovalForMissionWithNoFinancers()
+		&& (getIsApprovedByMissionResponsible() == null || !getIsApprovedByMissionResponsible().booleanValue());
+	}
+
     public boolean isPendingApprovalBy(final User user) {
-// If you uncomment the commented code the approver is each of the paying units responsible (if there are paying units)...
-// if the code is commented the approver is simply the first participant.
-//	if (getFinancerCount() == 0 && getMissionItemsCount() == 0) {
-	    return !hasApprovalForMissionWithNoFinancers()
-	    		&& (getIsApprovedByMissionResponsible() == null || !getIsApprovedByMissionResponsible().booleanValue())
-	    		&& isMissionResponsible(user);
-//	}
-//	for (final MissionFinancer financer : getFinancerSet()) {
-//	    if (financer.isPendingApprovalBy(user)) {
-//		return true;
-//	    }
-//	}
-//	return false;
+	return isPendingApproval() && isMissionResponsible(user);
     }
 
     private boolean isMissionResponsible(final User user) {
