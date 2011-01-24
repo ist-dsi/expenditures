@@ -6,7 +6,9 @@
 <%@page import="module.organization.domain.OrganizationalModel"%>
 <%@page import="myorg.domain.MyOrg"%>
 
+<%--
 <logic:equal name="process" property="mission.readyToHaveAssociatedPaymentProcesses" value="true">
+ --%>
 	<h4>
 		<bean:message bundle="MISSION_RESOURCES" key="label.mission.associated.payment.processes"/>
 	</h4>
@@ -64,4 +66,6 @@
 		</table>
 	</logic:notEmpty>
 	<br/>
+<%-- 
 </logic:equal>
+ --%>
