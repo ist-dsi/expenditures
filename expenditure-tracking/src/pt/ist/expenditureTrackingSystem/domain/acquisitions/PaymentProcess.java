@@ -412,7 +412,8 @@ public abstract class PaymentProcess extends PaymentProcess_Base implements HasP
 //		|| (missionProcess.isExpenditureAuthorized() && missionProcess.areAllParticipantsAuthorized())
 		|| (!missionProcess.isUnderConstruction()
 			&& !missionProcess.getIsCanceled()
-			&& missionProcess.getMission().isPendingApproval())) {
+			&& !missionProcess.isTerminated()
+			/*&& missionProcess.getMission().isPendingApproval()*/)) {
 	    super.setMissionProcess(missionProcess);
 	} else {
 //	    throw new DomainException("error.cannot.connect.acquisition.to.unauthorized.mission",
