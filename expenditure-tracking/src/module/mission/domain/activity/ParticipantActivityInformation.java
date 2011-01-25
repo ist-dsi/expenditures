@@ -23,6 +23,9 @@ public class ParticipantActivityInformation extends ActivityInformation<MissionP
 
     public void setPerson(final Person person) {
 	this.person = person;
+	if (person != null && person.hasUser()) {
+	    new ImportEmployeeInfoAndUpdateStructure(person.getUser().getUsername());
+	}
     }
 
     @Override
