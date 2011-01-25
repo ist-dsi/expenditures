@@ -197,8 +197,17 @@
 			</logic:iterate>
 		</table>
 	</logic:notEmpty>
+	<logic:empty name="unit" property="authorizations">
+		<p><em><bean:message key="authorizations.label.noResponsiblesDefinedForUnit" bundle="EXPENDITURE_RESOURCES"/>.</em></p>
+	</logic:empty>
+
+	<h3 class="mtop15 mbottom05"><bean:message key="label.observers" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/></h3>
+	<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.AQUISITIONS_UNIT_MANAGER">
+		<html:link action="/expenditureTrackingOrganization.do?method=manageObservers" paramId="unitOid" paramName="unit" paramProperty="externalId">
+			<bean:message key="label.observers.add" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/> ( <fr:view name="unit" property="observersCount"/>)
+		</html:link>
+	</logic:present>
 	<logic:notEmpty name="unit" property="observers">
-		<h3 class="mtop15 mbottom05"><bean:message key="label.observers" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/></h3>
 		<ul>
 			<logic:iterate name="unit" property="observers" id="person">
 				<li>
@@ -208,9 +217,11 @@
 				</li>
 			</logic:iterate>
 		</ul>
-	</logic:notEmpty>	
-	<logic:empty name="unit" property="authorizations">
-		<p><em><bean:message key="authorizations.label.noResponsiblesDefinedForUnit" bundle="EXPENDITURE_RESOURCES"/>.</em></p>
+	</logic:notEmpty>
+	<logic:empty name="unit" property="observers">
+		<p><em>
+			<bean:message key="label.noAssociatedPeople" bundle="EXPENDITURE_RESOURCES"/>
+		</em></p>
 	</logic:empty>
 
 	<logic:present name="unit" property="parentUnit">

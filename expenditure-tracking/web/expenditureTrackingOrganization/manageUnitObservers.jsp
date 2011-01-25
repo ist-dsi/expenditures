@@ -11,7 +11,7 @@
 
 <ul>
 	<li>
-		<html:link page="/expenditureTrackingOrganization.do?method=viewLoggedPerson">
+		<html:link page="/expenditureTrackingOrganization.do?method=viewOrganization" paramId="unitOid" paramName="unit" paramProperty="externalId">
 			<bean:message key="link.back" bundle="EXPENDITURE_RESOURCES"/>
 		</html:link>
 	</li>
