@@ -1,10 +1,13 @@
 package module.mission.domain.util;
 
+import java.util.Collection;
+
 import module.mission.domain.MissionSystem;
 import module.organization.domain.Accountability;
 import module.organization.domain.AccountabilityType;
 import module.organization.domain.OrganizationalModel;
 import module.organization.domain.Party;
+import module.organization.domain.Unit;
 import module.organizationIst.domain.IstAccountabilityType;
 import module.organizationIst.domain.task.ImportEmployeeInfo;
 import myorg.domain.MyOrg;
@@ -23,13 +26,21 @@ public class ImportEmployeeInfoAndUpdateStructure extends ImportEmployeeInfo {
 
 	final MissionSystem missionSystem = MissionSystem.getInstance();
 	final OrganizationalModel missionOrganizationalModel = missionSystem.getOrganizationalModel();
+	final AccountabilityType organizationalMissionAccountabilityType = IstAccountabilityType.ORGANIZATIONAL_MISSIONS.readAccountabilityType();
+	updateUnitInformation(missionOrganizationalModel, organizationalMissionAccountabilityType, unit);
+    }
+
+    private void updateUnitInformation(final OrganizationalModel missionOrganizationalModel, final AccountabilityType organizationalMissionAccountabilityType, final Unit unit) {
 	if (!missionOrganizationalModel.containsUnit(unit)) {
 	    final OrganizationalModel organizationalModel = findInstitutionalOrganizationalModel(missionOrganizationalModel);
 	    if (organizationalModel != null && organizationalModel.containsUnit(unit)) {
 		final AccountabilityType organizationalAccountabilityType = IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType();
-		final AccountabilityType organizationalMissionAccountabilityType = IstAccountabilityType.ORGANIZATIONAL_MISSIONS.readAccountabilityType();
 		updateStructure(unit, organizationalAccountabilityType, organizationalMissionAccountabilityType);
 	    }
+	}
+	final Collection<Unit> parentUnits = unit.getParentUnits(organizationalMissionAccountabilityType);
+	for (final Unit parentUnit : parentUnits) {
+	    updateUnitInformation(missionOrganizationalModel, organizationalMissionAccountabilityType, parentUnit);
 	}
     }
 
