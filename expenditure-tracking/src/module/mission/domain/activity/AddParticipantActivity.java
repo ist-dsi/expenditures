@@ -2,6 +2,7 @@ package module.mission.domain.activity;
 
 import module.mission.domain.Mission;
 import module.mission.domain.MissionProcess;
+import module.mission.domain.util.ImportEmployeeInfoAndUpdateStructure;
 import module.organization.domain.Person;
 import module.workflow.activities.ActivityInformation;
 import myorg.domain.User;
@@ -21,9 +22,13 @@ public class AddParticipantActivity extends MissionProcessActivity<MissionProces
 
     @Override
     protected void process(final ParticipantActivityInformation participantActivityInformation) {
+	final Person person = participantActivityInformation.getPerson();
+
+	final ImportEmployeeInfoAndUpdateStructure thread = new ImportEmployeeInfoAndUpdateStructure(person.getUser().getUsername());
+	thread.transactionalRun();
+
 	final MissionProcess missionProcess = participantActivityInformation.getProcess();
 	final Mission mission = missionProcess.getMission();
-	final Person person = participantActivityInformation.getPerson();
 	mission.addParticipantes(person);
     }
 
