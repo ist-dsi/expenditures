@@ -958,7 +958,10 @@ public class OrganizationAction extends BaseAction {
 	final Unit unit = getDomainObject(request, "unitOid");
 	request.setAttribute("unit", unit);
 
-	if (!unit.isResponsible(Person.getLoggedPerson())) {
+	final Person loggedPerson = Person.getLoggedPerson();
+	if (!unit.isResponsible(loggedPerson)
+		&& !loggedPerson.getUser().hasRoleType(myorg.domain.RoleType.MANAGER)
+		&& !loggedPerson.hasRoleType(RoleType.AQUISITIONS_UNIT_MANAGER)) {
 	    return viewLoggedPerson(mapping, form, request, response);
 	}
 
