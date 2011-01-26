@@ -18,4 +18,11 @@ public class PersonalVehiclItem extends PersonalVehiclItem_Base {
 	personalVehiclItem.setKms(getKms());
     }
 
+    @Override
+    public boolean isAvailableForEdit() {
+	final MissionVersion missionVersion = getMissionVersion();
+	final Mission mission = missionVersion.getMission();
+	return super.isAvailableForEdit() || mission.isTerminatedWithChanges();
+    }
+
 }
