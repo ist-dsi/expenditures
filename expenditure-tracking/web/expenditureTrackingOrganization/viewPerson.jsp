@@ -19,7 +19,7 @@
 					</html:link>
 				</li>
 			</logic:present>
-			<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
+			<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.AQUISITIONS_UNIT_MANAGER">
 				<li>
 					<html:link action="/expenditureTrackingOrganization.do?method=prepareAddResponsibleAccountingUnit" paramId="personOid" paramName="person" paramProperty="externalId">
 						<bean:message key="accountingUnit.link.add.responsible" bundle="EXPENDITURE_RESOURCES"/>
@@ -33,7 +33,7 @@
 					</html:link>
 				</li>
 			</logic:present>
-			<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
+			<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.AQUISITIONS_UNIT_MANAGER">
 				<li>
 					<html:link action="/expenditureTrackingOrganization.do?method=prepareAddResponsibleProjectAccountingUnit" paramId="personOid" paramName="person" paramProperty="externalId">
 						<bean:message key="project.accountingUnit.link.add.responsible" bundle="EXPENDITURE_RESOURCES"/>
