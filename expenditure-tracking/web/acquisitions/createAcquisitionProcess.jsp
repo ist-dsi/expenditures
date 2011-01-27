@@ -34,9 +34,6 @@
 			</fr:layout>
 		</fr:edit>
 	</fr:form>
-	<div class="infobox">
-		<bean:message key="label.aquisition.process.create.is.for.mission.subtext" bundle="ACQUISITION_RESOURCES" />
-	</div>
 <% } %>
 
 <fr:form id="createForm" action="/acquisitionSimplifiedProcedureProcess.do?method=createNewAcquisitionProcess">
