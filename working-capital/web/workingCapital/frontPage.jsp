@@ -154,9 +154,29 @@
 	<p>
 		<logic:present name="unitProcesses">
 			<bean:define id="processList" toScope="request" name="unitProcesses"/>
-			<jsp:include page="processList.jsp"/>
-		</logic:present>			
-   </p>     
+			<logic:empty name="processList">
+				<p>
+					<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.process.list.none"/>
+				</p>
+			</logic:empty>
+			<logic:notEmpty name="processList">
+				<fr:view name="processList">
+					<fr:schema bundle="WORKING_CAPITAL_RESOURCES" type="module.workingCapital.domain.WorkingCapitalProcess">
+					 	<fr:slot name="workingCapital.unit.presentationName" layout="link" key="label.module.workingCapital">
+						 	<fr:property name="useParent" value="true"/>
+						 	<fr:property name="linkFormat" value="/workflowProcessManagement.do?method=viewProcess&processId=${externalId}"/>
+					 	</fr:slot>
+					 	<fr:slot name="presentableAcquisitionProcessState.localizedName" key="WorkingCapitalProcessState"/>
+					 	<fr:slot name="workingCapital.accountingUnit.name" key="label.module.workingCapital.initialization.accountingUnit"/>
+					</fr:schema>
+					<fr:layout name="tabular">
+						<fr:property name="classes" value="tview1"/>
+						<fr:property name="columnClasses" value="aleft,,aleft"/>
+					</fr:layout>
+				</fr:view>
+			</logic:notEmpty>
+		</logic:present>
+   </p>
 </div>	
 		
 
