@@ -16,7 +16,7 @@ import pt.ist.fenixWebFramework.services.Service;
 
 public class MissionProcessCreationBean implements Serializable {
 
-    private Country country = MissionSystem.getInstance().getCountry();
+    private Country country ; //= MissionSystem.getInstance().getCountry();
     private String location;
     private DateTime daparture;
     private DateTime arrival;
