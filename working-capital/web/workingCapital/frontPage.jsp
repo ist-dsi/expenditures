@@ -170,8 +170,7 @@
 					 	<fr:slot name="workingCapital.accountingUnit.name" key="label.module.workingCapital.initialization.accountingUnit"/>
 					</fr:schema>
 					<fr:layout name="tabular">
-						<fr:property name="classes" value="tview1"/>
-						<fr:property name="columnClasses" value="aleft,,aleft"/>
+						<fr:property name="classes" value="tview2 tdleft"/>
 					</fr:layout>
 				</fr:view>
 			</logic:notEmpty>
