@@ -21,7 +21,9 @@ public class RejectWorkingCapitalInitializationActivity extends WorkflowActivity
 	return !workingCapital.isCanceledOrRejected()
 		&& (workingCapital.isPendingAproval(user)
 			|| workingCapital.isPendingVerification(user)
-			|| workingCapital.isPendingAuthorization(user));
+			|| workingCapital.isPendingAuthorization(user)
+			|| (!workingCapital.hasAnyWorkingCapitalTransactions()
+				&& workingCapital.isAccountingResponsible(user)));
     }
 
     @Override
