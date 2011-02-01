@@ -70,7 +70,8 @@ public class MissionStageView {
     }
 
     protected MissionStageState getExpenseAuthorizationState() {
-	return missionProcess.isApproved()
+	return !missionProcess.isCanceled()
+		&& missionProcess.isApproved()
 		&& missionProcess.hasAllAllocatedFunds()
 		//&& missionProcess.areAllParticipantsAuthorizedForPhaseOne() ?
 		&& missionProcess.areAllParticipantsAuthorized() ?

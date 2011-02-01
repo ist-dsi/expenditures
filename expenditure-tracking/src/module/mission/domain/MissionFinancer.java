@@ -196,16 +196,31 @@ public class MissionFinancer extends MissionFinancer_Base {
     }
 
     private boolean hasPendingProjectFundAllocations() {
-	for (final MissionItemFinancer missionItemFinancer : getMissionItemFinancersSet()) {
-	    if (missionItemFinancer instanceof MissionItemProjectFinancer) {
-		final MissionItemProjectFinancer missionItemProjectFinancer = (MissionItemProjectFinancer) missionItemFinancer;
-		final String allocationId = missionItemProjectFinancer.getProjectFundAllocationId();
-		if (allocationId == null || allocationId.isEmpty()) {
-		    return true;
+	final Mission mission = getMissionVersion().getMission();
+	final MissionProcess missionProcess = mission.getMissionProcess();
+	if (missionProcess.isCanceled()) {
+	    for (final MissionItemFinancer missionItemFinancer : getMissionItemFinancersSet()) {
+		if (missionItemFinancer instanceof MissionItemProjectFinancer) {
+		    final MissionItemProjectFinancer missionItemProjectFinancer = (MissionItemProjectFinancer) missionItemFinancer;
+		    final String allocationId = missionItemProjectFinancer.getProjectFundAllocationId();
+		    if (allocationId != null && !allocationId.isEmpty()) {
+			return true;
+		    }
 		}
 	    }
+	    return false;
+	} else {
+	    for (final MissionItemFinancer missionItemFinancer : getMissionItemFinancersSet()) {
+		if (missionItemFinancer instanceof MissionItemProjectFinancer) {
+		    final MissionItemProjectFinancer missionItemProjectFinancer = (MissionItemProjectFinancer) missionItemFinancer;
+		    final String allocationId = missionItemProjectFinancer.getProjectFundAllocationId();
+		    if (allocationId == null || allocationId.isEmpty()) {
+			return true;
+		    }
+		}
+	    }
+	    return false;
 	}
-	return false;
     }
 
     public void unAllocateFunds(final Person person) {
