@@ -39,6 +39,7 @@ import module.workingCapital.domain.activity.UnApproveActivity;
 import module.workingCapital.domain.activity.UnApproveWorkingCapitalAcquisitionActivity;
 import module.workingCapital.domain.activity.UnAuthorizeActivity;
 import module.workingCapital.domain.activity.UnRequestCapitalActivity;
+import module.workingCapital.domain.activity.UnRequestCapitalRestitutionActivity;
 import module.workingCapital.domain.activity.UnTerminateWorkingCapitalActivity;
 import module.workingCapital.domain.activity.UnVerifyActivity;
 import module.workingCapital.domain.activity.UnVerifyWorkingCapitalAcquisitionActivity;
@@ -94,6 +95,7 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base implements
 	activitiesAux.add(new UnVerifyWorkingCapitalAcquisitionActivity());
 	activitiesAux.add(new SubmitForValidationActivity());
 	activitiesAux.add(new RequestCapitalRestitutionActivity());
+	activitiesAux.add(new UnRequestCapitalRestitutionActivity());
 	activitiesAux.add(new TerminateWorkingCapitalActivity());
 	activitiesAux.add(new UnTerminateWorkingCapitalActivity());
 	activitiesAux.add(new RegisterCapitalRefundActivity());
