@@ -296,4 +296,8 @@ public class Financer extends Financer_Base {
         return accountingUnit == null ? getUnit().getAccountingUnit() : accountingUnit;
     }
 
+    public boolean isAccountManager(final Person accountManager) {
+	return getUnit().isAccountManager(accountManager);
+    }
+
 }

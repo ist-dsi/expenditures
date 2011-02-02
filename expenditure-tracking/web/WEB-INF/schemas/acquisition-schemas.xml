@@ -839,6 +839,15 @@
 			value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.PersonAutoComplete" />
 		<property name="size" value="50" />
 	</slot>
+	<slot name="accountManager" layout="autoComplete" key="unit.label.account.manager.name"
+		bundle="EXPENDITURE_ORGANIZATION_RESOURCES">
+		<property name="labelField" value="name" />
+		<property name="format" value="${name} (${username})" />
+		<property name="minChars" value="3" />
+		<property name="args"
+			value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.PersonAutoComplete" />
+		<property name="size" value="50" />
+	</slot>	
 	<slot name="accountingUnit" key="label.accountingUnit" bundle="EXPENDITURE_RESOURCES"
 		layout="menu-select">
 		<property name="providerClass"
@@ -1077,6 +1086,11 @@
 		<property name="subSchema" value="viewPeopleInList" />
 	</slot>
 	<slot name="takenBy" key="label.takenBy" bundle="EXPENDITURE_RESOURCES"
+		layout="null-as-label">
+		<property name="subLayout" value="values" />
+		<property name="subSchema" value="viewPeopleInList" />
+	</slot>
+	<slot name="accountManager" key="unit.label.account.manager.name" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"
 		layout="null-as-label">
 		<property name="subLayout" value="values" />
 		<property name="subSchema" value="viewPeopleInList" />

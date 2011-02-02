@@ -3,6 +3,7 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.search.predicates;
 import java.util.Set;
 
 import myorg.domain.User;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
@@ -32,6 +33,7 @@ public class RefundProcessPredicate extends SearchPredicate {
 	final RefundProcess process = refundRequest.getProcess();
 	User currentOwner = process.getCurrentOwner();
 	final Person taker = currentOwner != null ? currentOwner.getExpenditurePerson() : null;
+	final Person accountManager = searchBean.getAccountManager();
 	final Boolean showPrioritiesOnly = searchBean.getShowPriorityOnly();
 
 	Person loggedPerson = Person.getLoggedPerson();
@@ -46,6 +48,7 @@ public class RefundProcessPredicate extends SearchPredicate {
 		&& matchCriteria(searchBean.getAccountingUnit(), accountingUnits)
 		&& matchCriteria(searchBean.getRefundeeName(), refundeeName)
 		&& matchCriteria(searchBean.getTaker(), taker)
+		&& matchesProjectAccountManager(refundRequest, accountManager)
 		&& (!showOnlyWithUnreadComments || (!process.getUnreadCommentsForPerson(loggedPerson).isEmpty() && process
 			.hasActivitiesFromUser(loggedPerson)));
     }
@@ -58,4 +61,17 @@ public class RefundProcessPredicate extends SearchPredicate {
 	return hasAvailableAndAccessibleActivityForUser == null || !hasAvailableAndAccessibleActivityForUser.booleanValue()
 		|| refundRequest.getProcess().hasAnyAvailableActivity(true);
     }
+
+    private boolean matchesProjectAccountManager(final RefundRequest refundRequest, final Person accountManager) {
+	if (accountManager == null) {
+	    return true;
+	}
+	for (final Financer financer : refundRequest.getFinancersSet()) {
+	    if (financer.isAccountManager(accountManager)) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
 }

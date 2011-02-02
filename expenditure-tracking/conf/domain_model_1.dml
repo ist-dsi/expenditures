@@ -875,6 +875,13 @@ relation TakerSavedSearch {
 	}
 }
 
+relation AccountManagerSavedSearch {
+	organization.Person playsRole accountManager;
+	SavedSearch playsRole accountManagerSearches {
+		multiplicity *;
+	}
+}
+
 relation AccountingUnitSavedSearch {
 	organization.AccountingUnit playsRole accountingUnit;
 	SavedSearch playsRole accountingUnitsSearches {

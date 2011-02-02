@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Set;
 
 import myorg.util.BundleUtil;
-
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.SavedSearch;
 import pt.ist.expenditureTrackingSystem.domain.Search;
@@ -67,6 +66,7 @@ public class SearchPaymentProcess extends Search<PaymentProcess> {
     private String requestDocumentId;
     private Person requestingPerson;
     private Person taker;
+    private Person accountManager;
     private Unit requestingUnit;
     private Unit payingUnit;
     private AcquisitionProcessStateType acquisitionProcessStateType;
@@ -121,6 +121,7 @@ public class SearchPaymentProcess extends Search<PaymentProcess> {
 	setSavedSearch(savedSearch);
 	setPaymentProcessYear(savedSearch.getYear());
 	setTaker(savedSearch.getTakenBy());
+	setAccountManager(savedSearch.getAccountManager());
 	setShowOnlyWithUnreadComments(savedSearch.getShowOnlyWithUnreadComments());
 	setShowPriorityOnly(savedSearch.getShowPriorityOnly());
 	setSearchProcess(savedSearch.getSearchProcessValues());
@@ -354,6 +355,14 @@ public class SearchPaymentProcess extends Search<PaymentProcess> {
 
     public Boolean getShowPriorityOnly() {
 	return showPriorityOnly;
+    }
+
+    public Person getAccountManager() {
+        return accountManager;
+    }
+
+    public void setAccountManager(Person accountManager) {
+        this.accountManager = accountManager;
     }
 
 }

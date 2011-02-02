@@ -9,6 +9,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProposalDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPaymentProcess;
@@ -43,6 +44,7 @@ public class SimplifiedAcquisitionPredicate extends SearchPredicate {
 	final Set<AccountingUnit> accountingUnits = acquisitionRequest.getAccountingUnits();
 	User currentOwner = acquisitionProcess.getCurrentOwner();
 	final Person taker = currentOwner != null ? currentOwner.getExpenditurePerson() : null;
+	final Person accountManager = searchBean.getAccountManager();
 	final Boolean showOnlyWithUnreadComments = searchBean.getShowOnlyWithUnreadComments();
 	final SimplifiedProcedureProcess process = (SimplifiedProcedureProcess) acquisitionRequest.getProcess();
 	final Boolean showPrioritiesOnly = searchBean.getShowPriorityOnly();
@@ -65,6 +67,7 @@ public class SimplifiedAcquisitionPredicate extends SearchPredicate {
 		&& (!showPrioritiesOnly || process.isPriorityProcess())
 		&& matchShowOnlyCriteris(acquisitionRequest, searchBean)
 		&& matchCriteria(searchBean.getTaker(), taker)
+		&& matchesProjectAccountManager(acquisitionRequest, accountManager)
 		&& (!showOnlyWithUnreadComments || (!process.getUnreadCommentsForPerson(loggedPerson).isEmpty() && process
 			.hasActivitiesFromUser(loggedPerson)));
     }
@@ -110,4 +113,17 @@ public class SimplifiedAcquisitionPredicate extends SearchPredicate {
 	}
 	return true;
     }
+
+    private boolean matchesProjectAccountManager(final AcquisitionRequest acquisitionRequest, final Person accountManager) {
+	if (accountManager == null) {
+	    return true;
+	}
+	for (final Financer financer : acquisitionRequest.getFinancersSet()) {
+	    if (financer.isAccountManager(accountManager)) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
 }
