@@ -6,7 +6,7 @@
 
 <h2><bean:message key="title.viewOrganization" bundle="EXPENDITURE_RESOURCES"/></h2>
 
-<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.AQUISITIONS_UNIT_MANAGER.">
+<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.AQUISITIONS_UNIT_MANAGER">
 	<div class="infobox_dotted">
 		<ul>
 			<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
