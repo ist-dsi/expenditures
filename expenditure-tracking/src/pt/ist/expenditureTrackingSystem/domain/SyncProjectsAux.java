@@ -535,7 +535,7 @@ public class SyncProjectsAux {
 	String accountingUnitString = mgpProject.unidExploracao.replace("\"", "");
 	String type = mgpProject.type.replace("\"", "");
 	String accountManager = mgpProject.accountManager;
-	String subAccountingUnitString = mgpProject.subAccountingUnit.replace("\"", "");
+	String subAccountingUnitString = mgpProject.subAccountingUnit == null ? null : mgpProject.subAccountingUnit.replace("\"", "");
 
 	final Unit costCenter = findCostCenter(costCenterString);
 	if (costCenter != null) {
@@ -609,7 +609,7 @@ public class SyncProjectsAux {
 	String accountingUnitString = mgpProject.unidExploracao.replace("\"", "");
 	String type = mgpProject.type.replace("\"", "");
 	String accountManager = mgpProject.accountManager;
-	String subAccountingUnitString = mgpProject.subAccountingUnit.replace("\"", "");
+	String subAccountingUnitString = mgpProject.subAccountingUnit == null ? null : mgpProject.subAccountingUnit.replace("\"", "");
 	Person accountManagerPerson = findPersonByUsername(accountManager);
 
 	if (!acronym.equals(project.getName())) {
