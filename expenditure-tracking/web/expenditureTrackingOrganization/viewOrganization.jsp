@@ -6,12 +6,19 @@
 
 <h2><bean:message key="title.viewOrganization" bundle="EXPENDITURE_RESOURCES"/></h2>
 
-<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
+<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.AQUISITIONS_UNIT_MANAGER.">
 	<div class="infobox_dotted">
 		<ul>
+			<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
+				<li>
+					<html:link action="/expenditureTrackingOrganization.do?method=downloadMGPProjects">
+						<bean:message key="label.projects.mgp.download" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+					</html:link>
+				</li>
+			</logic:present>
 			<li>
-				<html:link action="/expenditureTrackingOrganization.do?method=downloadMGPProjects">
-					<bean:message key="label.projects.mgp.download" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+				<html:link action="/expenditureTrackingOrganization.do?method=downloadUnitResponsibles">
+					<bean:message key="label.unit.responsibilities.download" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 				</html:link>
 			</li>
 		</ul>

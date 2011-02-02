@@ -290,4 +290,10 @@ public class Financer extends Financer_Base {
 */
     }
 
+    @Override
+    public AccountingUnit getAccountingUnit() {
+        final AccountingUnit accountingUnit = super.getAccountingUnit();
+        return accountingUnit == null ? getUnit().getAccountingUnit() : accountingUnit;
+    }
+
 }

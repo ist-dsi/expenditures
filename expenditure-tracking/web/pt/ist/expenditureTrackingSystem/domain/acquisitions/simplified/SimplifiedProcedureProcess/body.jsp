@@ -277,7 +277,11 @@
 			<td class="nowrap tooltipWidth400px">
 				<fr:view name="financer" layout="financer-status"/>
 			</td>
-			<td class="acenter" style="width: 80px;"><fr:view name="payingUnit" property="financer.accountingUnit.name"/></td>
+			<td class="acenter" style="width: 80px;">
+				<logic:present name="payingUnit" property="financer.accountingUnit">
+					<fr:view name="payingUnit" property="financer.accountingUnit.name"/>
+				</logic:present>
+			</td>
 			<logic:equal name="areFundAllocationPresent" value="true">
 				<td>
 					<logic:equal name="payingUnit" property="financer.fundAllocationPresent" value="true">

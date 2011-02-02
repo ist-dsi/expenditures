@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
@@ -21,6 +23,12 @@ import myorg.domain.util.Money;
 import myorg.util.VariantBean;
 
 import org.apache.commons.beanutils.BeanComparator;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -49,6 +57,7 @@ import pt.ist.expenditureTrackingSystem.domain.dto.CreateUnitBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.SupplierBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.UnitBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
+import pt.ist.expenditureTrackingSystem.domain.organization.CostCenter;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Project;
 import pt.ist.expenditureTrackingSystem.domain.organization.SearchUsers;
@@ -58,6 +67,7 @@ import pt.ist.expenditureTrackingSystem.domain.organization.UserAcquisitionProce
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.BaseAction;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
+import pt.utl.ist.fenix.tools.util.excel.ExcelStyle;
 import pt.utl.ist.fenix.tools.util.excel.Spreadsheet;
 import pt.utl.ist.fenix.tools.util.excel.Spreadsheet.Row;
 
@@ -1021,6 +1031,173 @@ public class OrganizationAction extends BaseAction {
 	sortedCPVReferences.addAll(cvpReferences);
 	request.setAttribute("cvpReferences", sortedCPVReferences);
 	return forward(request, "/expenditureTrackingOrganization/listCPVReferences.jsp");
+    }
+
+    public final ActionForward downloadUnitResponsibles(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) throws IOException, SQLException {
+
+	response.setContentType("application/xls ");
+	response.setHeader("Content-disposition", "attachment; filename=ResponsaveisUnidades.xls");
+
+	final ServletOutputStream outputStream = response.getOutputStream();
+	final HSSFWorkbook workbook = new HSSFWorkbook();
+	final ExcelStyle excelStyle = new ExcelStyle(workbook);
+
+	final HSSFSheet sheet = workbook.createSheet("Responsaveis");
+	sheet.setDefaultColumnWidth(20);
+
+	final HSSFRow row = sheet.createRow(sheet.getLastRowNum());
+	createHeaderCell(excelStyle, row, 0, "Centro de Custo");
+	createHeaderCell(excelStyle, row, 1, "Unidade");
+	createHeaderCell(excelStyle, row, 2, "Responsável Aprovação");
+	createHeaderCell(excelStyle, row, 4, "Responsável Despesa");
+
+	sheet.addMergedRegion(new CellRangeAddress(0, 0, 2, 3));
+	sheet.addMergedRegion(new CellRangeAddress(0, 0, 4, 5));
+
+	for (final Unit unit : ExpenditureTrackingSystem.getInstance().getTopLevelUnitsSet()) {
+	    writeUnitResponsibleInfo(excelStyle, sheet, unit);
+	}
+
+	workbook.write(outputStream);
+
+	outputStream.flush();
+	outputStream.close();
+
+	return null;
+    }
+
+    private void writeUnitResponsibleInfo(final ExcelStyle excelStyle, final HSSFSheet sheet, final Unit unit) {
+	writeUnitResponsibleInfo(excelStyle, sheet, unit, new HashSet<Unit>());
+    }
+
+    private void writeUnitResponsibleInfo(final ExcelStyle excelStyle, final HSSFSheet sheet, final Unit unit, final Set<Unit> processed) {
+	final int rowIndex = sheet.getLastRowNum() + 1;
+	HSSFRow row = sheet.createRow(rowIndex);
+	if (unit instanceof CostCenter) {
+	    final CostCenter costCenter = (CostCenter) unit;
+	    createCell(excelStyle, row, 0, costCenter.getCostCenter());
+	}
+	createCell(excelStyle, row, 1, unit.getName());
+
+	final List<Person>[] approvalsAndAuthorizations = getApprovalsAndAuthorizations(unit);
+	final List<Person> approvals = approvalsAndAuthorizations[0];
+	final List<Person> authorizations = approvalsAndAuthorizations[1];
+
+	Collections.sort(approvals, Person.COMPARATOR_BY_NAME);
+	Collections.sort(authorizations, Person.COMPARATOR_BY_NAME);
+
+	for (int i = 0; i < approvals.size() || i < authorizations.size(); i++) {
+	    final Person approval = i < approvals.size() ? approvals.get(i) : null;
+	    final Person authorization = i < authorizations.size() ? authorizations.get(i) : null;
+
+	    if (i > 0) {
+		row = sheet.createRow(sheet.getLastRowNum() + 1);
+	    }
+
+	    if (approval != null) {
+		createCell(excelStyle, row, 2, approval.getUsername());
+		createCell(excelStyle, row, 3, approval.getName());		
+	    }
+	    if (authorization != null) {
+		createCell(excelStyle, row, 4, authorization.getUsername());
+		createCell(excelStyle, row, 5, authorization.getName());
+	    }
+	}
+
+	final int totalRows = Math.max(approvals.size(), authorizations.size());
+	if (totalRows > 0) {
+	    sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex + totalRows - 1, 0, 0));
+	    sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex + totalRows - 1, 1, 1));
+	}
+
+	for (final Unit subUnit : sortUnitsByCostCenter(unit.getSubUnitsSet())) {
+	    if (!processed.contains(subUnit)) {
+		processed.add(subUnit);
+		if (!(subUnit instanceof Project)) {
+		    writeUnitResponsibleInfo(excelStyle, sheet, subUnit, processed);
+		}
+	    }
+	}
+    }
+
+    private List<Person>[] getApprovalsAndAuthorizations(final Unit unit) {
+	final List<Person> approvals = new ArrayList<Person>();
+	final List<Person> authorizations = new ArrayList<Person>();
+
+	for (final Authorization authorization : unit.getAuthorizationsSet()) {
+	    if (authorization.isValid()) {
+		final Person person = authorization.getPerson();
+		if (authorization.getMaxAmount().isZero()) {
+		    approvals.add(person);
+		} else {
+		    authorizations.add(person);
+		}
+	    }
+	}
+
+	if (approvals.isEmpty() && authorizations.isEmpty()) {
+	    return getApprovalsAndAuthorizations(unit.getParentUnit());
+	}
+
+	if (approvals.isEmpty()) {
+	    approvals.addAll(authorizations);
+	} else if (authorizations.isEmpty()) {
+	    final List<Person>[] approvalsAndAuthorizations = getApprovalsAndAuthorizations(unit.getParentUnit());
+	    return new List[] { approvals, approvalsAndAuthorizations[1] };
+	}
+
+	return new List[] { approvals, authorizations };
+    }
+
+    private SortedSet<Unit> sortUnitsByCostCenter(final Set<Unit> units) {
+	final SortedSet<Unit> result = new TreeSet<Unit>(new Comparator<Unit>() {
+	    @Override
+	    public int compare(final Unit u1, final Unit u2) {
+		final int cc1 = getMinCostCenter(u1);
+		final int cc2 = getMinCostCenter(u2);
+		return cc1 - cc2;
+	    }
+
+	    private int getMinCostCenter(final Unit unit) {
+		if (unit instanceof CostCenter) {
+		    final CostCenter costCenter = (CostCenter) unit;
+		    return Integer.parseInt(costCenter.getCostCenter());
+		}
+		int min = Integer.MAX_VALUE;
+		for (final Unit subUnit : unit.getSubUnitsSet()) {
+		    final int cc = getMinCostCenter(subUnit);
+		    min = Math.min(min, cc);
+		}
+		return min;
+	    }
+	});
+	result.addAll(units);
+	return result;
+    }
+
+    private void createHeaderCell(final ExcelStyle excelStyle, final HSSFRow row, final int index, final String value) {
+	final HSSFCell hcell = createHeaderCell(excelStyle, row, index);
+	hcell.setCellValue(value);
+    }
+
+    private HSSFCell createHeaderCell(final ExcelStyle excelStyle, final HSSFRow row, final int index) {
+	return createCell(excelStyle.getHeaderStyle(), row, index);
+    }
+
+    private void createCell(final ExcelStyle excelStyle, final HSSFRow row, final int index, final String value) {
+	final HSSFCell hcell = createCell(excelStyle, row, index);
+	hcell.setCellValue(value);
+    }
+
+    private HSSFCell createCell(final ExcelStyle excelStyle, final HSSFRow row, final int index) {
+	return createCell(excelStyle.getStringStyle(), row, index);
+    }
+
+    private HSSFCell createCell(final HSSFCellStyle style, final HSSFRow row, final int index) {
+	final HSSFCell cell = row.createCell(index);
+	cell.setCellStyle(style);
+	return cell;
     }
 
 }
