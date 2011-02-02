@@ -25,4 +25,9 @@ public class PersonalVehiclItem extends PersonalVehiclItem_Base {
 	return super.isAvailableForEdit() || mission.isTerminatedWithChanges();
     }
 
+    @Override
+    protected boolean canAutoArchive() {
+	return false;
+    }
+
 }
