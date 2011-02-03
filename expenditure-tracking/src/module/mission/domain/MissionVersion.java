@@ -102,11 +102,36 @@ public class MissionVersion extends MissionVersion_Base {
 	return mission.isRequestorOrResponsible();
     }
 
+    public boolean canArchiveMissionDirect() {
+	if (hasAnyMissionItems()) {
+	    for (final MissionItem missionItem : getMissionItemsSet()) {
+		if (missionItem.isDirectAccountantForUnArchivedMissionItemFinancer()) {
+		    return true;
+		}
+	    }
+	    return !getIsArchived().booleanValue() && areAllItemsArchived() && isDirectAccountantOfProjectAccountant();
+	}
+	final Mission mission = getMission();
+	return mission.isRequestorOrResponsible();
+    }
+
     private boolean isAccountantOfProjectAccountant() {
 	for (final MissionItem missionItem : getMissionItemsSet()) {
 	    for (final MissionItemFinancer missionItemFinancer : missionItem.getMissionItemFinancersSet()) {
 		final MissionFinancer missionFinancer = missionItemFinancer.getMissionFinancer();
 		if (missionFinancer.isCurrentUserAccountant() || missionFinancer.isCurrentUserProjectAccountant()) {
+		    return true;
+		}
+	    }
+	}
+	return false;
+    }
+
+    private boolean isDirectAccountantOfProjectAccountant() {
+	for (final MissionItem missionItem : getMissionItemsSet()) {
+	    for (final MissionItemFinancer missionItemFinancer : missionItem.getMissionItemFinancersSet()) {
+		final MissionFinancer missionFinancer = missionItemFinancer.getMissionFinancer();
+		if (missionFinancer.isCurrentUserAccountant() || missionFinancer.isCurrentUserDirectProjectAccountant()) {
 		    return true;
 		}
 	    }

@@ -588,6 +588,23 @@ public abstract class Mission extends Mission_Base {
 	return false;
     }
 
+    public boolean isDirectResponsibleForPendingProjectFundAllocation() {
+	if (!hasAnyProjectFinancer()) {
+	    return false;
+	}
+	final User user = UserView.getCurrentUser();
+	if (user == null) {
+	    return false;
+	}
+	final Person person = user.getPerson();
+	for (final MissionFinancer financer : getFinancerSet()) {
+	    if (financer.hasAnyMissionItemProjectFinancers() && financer.isDirectResponsibleForPendingProjectFundAllocation(person)) {
+		return true;
+	    }
+	}
+	return false;
+    }
+    
     public boolean getHasVehicleItem() {
 	for (final MissionItem missionItem : getMissionItemsSet()) {
 	    if (missionItem.isVehicleItem()) {
@@ -967,6 +984,19 @@ public abstract class Mission extends Mission_Base {
 	return false;
     }
 
+    public boolean isDirectProjectAccountingEmployee(final pt.ist.expenditureTrackingSystem.domain.organization.Person expenditurePerson) {
+	for (final MissionFinancer missionFinancer : getFinancerSet()) {
+	    final Person person = expenditurePerson.hasUser() ? expenditurePerson.getUser().getPerson() : null;
+	    if (missionFinancer.isProjectFinancer() && missionFinancer.isAccountManager(person)) {
+		final AccountingUnit accountingUnit = missionFinancer.getAccountingUnit();
+		if (accountingUnit.getProjectAccountantsSet().contains(expenditurePerson)) {
+		    return true;
+		}
+	    }
+	}
+	return false;
+    }
+
     public boolean isParticipantResponsible(final Person person) {
 	if (person != null) {
 	    final LocalDate now = new LocalDate();
@@ -1199,6 +1229,11 @@ public abstract class Mission extends Mission_Base {
     public boolean canArchiveMission() {
 	final MissionVersion missionVersion = getMissionVersion();
 	return missionVersion.canArchiveMission();
+    }
+
+    public boolean canArchiveMissionDirect() {
+	final MissionVersion missionVersion = getMissionVersion();
+	return missionVersion.canArchiveMissionDirect();
     }
 
     public boolean isRequestorOrResponsible() {

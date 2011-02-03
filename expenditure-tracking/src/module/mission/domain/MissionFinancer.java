@@ -188,11 +188,20 @@ public class MissionFinancer extends MissionFinancer_Base {
 	return person != null && hasAccountingUnit() && getAccountingUnit().hasPeople(person.getUser().getExpenditurePerson());
     }
 
+    public boolean isAccountManager(final Person person) {
+	final Unit unit = getUnit();
+	return !unit.hasSomeAccountManager() || unit.isAccountManager(person.getUser().getExpenditurePerson());
+    }
+
     public boolean canAllocateProjectFunds(final Person person) {
 	return person != null
 		&& hasAccountingUnit()
 		&& getAccountingUnit().hasProjectAccountants(person.getUser().getExpenditurePerson())
 		&& hasPendingProjectFundAllocations();
+    }
+
+    public boolean isDirectResponsibleForPendingProjectFundAllocation(final Person person) {
+	return canAllocateProjectFunds(person) && isAccountManager(person);
     }
 
     private boolean hasPendingProjectFundAllocations() {
@@ -305,6 +314,13 @@ public class MissionFinancer extends MissionFinancer_Base {
 	final Unit unit = getUnit();
 	final User user = UserView.getCurrentUser();
 	return unit.isProjectAccountingEmployee(user.getExpenditurePerson());
+    }
+
+    public boolean isCurrentUserDirectProjectAccountant() {
+	final Unit unit = getUnit();
+	final User user = UserView.getCurrentUser();
+	return unit.isProjectAccountingEmployee(user.getExpenditurePerson()) &&
+		(!unit.hasSomeAccountManager() || unit.isAccountManager(user.getExpenditurePerson()));
     }
 
     @Override

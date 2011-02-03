@@ -77,6 +77,14 @@ public class MissionItemProjectFinancer extends MissionItemProjectFinancer_Base 
 		|| (!isProjectArchived() && isCurrentUserProjectAccountant());
     }
 
+    @Override
+    public boolean isDirectAccountantForUnArchivedMissionItemFinancer() {
+	final MissionFinancer missionFinancer = getMissionFinancer();
+	return (isProjectArchived() && super.isDirectAccountantForUnArchivedMissionItemFinancer())
+		|| (!isProjectArchived() && isCurrentUserProjectAccountant()
+			&& (missionFinancer.isCurrentUserDirectProjectAccountant()));
+    }
+
     private boolean isProjectArchived() {
 	return getMissionVersionFromProjectArchive() != null;
     }

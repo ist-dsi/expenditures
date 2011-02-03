@@ -140,15 +140,15 @@ public class MissionYear extends MissionYear_Base {
 		    return missionProcess.isApproved()
 			    && !missionProcess.getIsCanceled()
 			    && (((!missionProcess.hasAnyProjectFinancer() || missionProcess.hasAllAllocatedProjectFunds())
-				    && !missionProcess.hasAllAllocatedFunds() && missionProcess.canAllocateFund()) || (!missionProcess
-				    .hasAllAllocatedProjectFunds() && missionProcess.canAllocateProjectFund()));
+				    && !missionProcess.hasAllAllocatedFunds() && missionProcess.canAllocateFund())
+				|| (!missionProcess.hasAllAllocatedProjectFunds() && missionProcess.isDirectResponsibleForPendingProjectFundAllocation()));
 		}
 
 		private boolean isPendingFundUnAllocation(final MissionProcess missionProcess, final User user) {
 		    return missionProcess.getIsCanceled().booleanValue()
-			    && ((missionProcess.hasAnyAllocatedFunds() && missionProcess.isAccountingEmployee(user
-				    .getExpenditurePerson())) || (missionProcess.hasAnyAllocatedProjectFunds())
-				    && missionProcess.isProjectAccountingEmployee(user.getExpenditurePerson()));
+			    && ((missionProcess.hasAnyAllocatedFunds() && missionProcess.isAccountingEmployee(user.getExpenditurePerson()))
+				    || (missionProcess.hasAnyAllocatedProjectFunds())
+				    && missionProcess.isDirectProjectAccountingEmployee(user.getExpenditurePerson()));
 		}
 	    }.search();
 	} catch (Throwable t) {
@@ -165,7 +165,7 @@ public class MissionYear extends MissionYear_Base {
 			&& (missionProcess.hasCurrentQueue() && missionProcess.getCurrentQueue().isCurrentUserAbleToAccessQueue()
 				&& (missionProcess.isAuthorized() || missionProcess.hasNoItemsAndParticipantesAreAuthorized()) && missionProcess
 				.areAllParticipantsAuthorized()) || missionProcess.isReadyForMissionTermination(user)
-			|| (missionProcess.isTerminated() && !missionProcess.isArchived() && missionProcess.canArchiveMission());
+			|| (missionProcess.isTerminated() && !missionProcess.isArchived() && missionProcess.canArchiveMissionDirect());
 	    }
 	}.search();
     }

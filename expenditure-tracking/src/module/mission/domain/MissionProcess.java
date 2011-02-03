@@ -260,6 +260,11 @@ public abstract class MissionProcess extends MissionProcess_Base {
 	return mission.canAllocateProjectFund();
     }
 
+    public boolean isDirectResponsibleForPendingProjectFundAllocation() {
+	final Mission mission = getMission();
+	return mission.isDirectResponsibleForPendingProjectFundAllocation();
+    }
+
     public boolean hasAnyAuthorizedParticipants() {
 	final Mission mission = getMission();
 	return mission.hasAnyAuthorizedParticipants();
@@ -449,6 +454,11 @@ public abstract class MissionProcess extends MissionProcess_Base {
 	return mission.isProjectAccountingEmployee(expenditurePerson);
     }
 
+    public boolean isDirectProjectAccountingEmployee(final pt.ist.expenditureTrackingSystem.domain.organization.Person expenditurePerson) {
+	final Mission mission = getMission();
+	return mission.isDirectProjectAccountingEmployee(expenditurePerson);
+    }
+
     public boolean isCurrentUserAbleToAccessQueue() {
 	for (final WorkflowQueue workflowQueue : getQueueHistorySet()) {
 	    if (workflowQueue.isCurrentUserAbleToAccessQueue()) {
@@ -512,6 +522,11 @@ public abstract class MissionProcess extends MissionProcess_Base {
     public boolean canArchiveMission() {
 	final Mission mission = getMission();
 	return mission.canArchiveMission();
+    }
+
+    public boolean canArchiveMissionDirect() {
+	final Mission mission = getMission();
+	return mission.canArchiveMissionDirect();
     }
 
     public boolean hasNoItemsAndParticipantesAreAuthorized() {

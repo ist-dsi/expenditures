@@ -659,4 +659,8 @@ public class Unit extends Unit_Base implements Indexable, Searchable {
 	return getAccountManager() == accountManager || (hasParentUnit() && getParentUnit().isAccountManager(accountManager));
     }
 
+    public boolean hasSomeAccountManager() {
+	return hasAccountManager() || (hasParentUnit() && getParentUnit().hasSomeAccountManager());
+    }
+
 }

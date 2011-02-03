@@ -226,6 +226,15 @@ public abstract class MissionItem extends MissionItem_Base {
 	return false;
     }
 
+    public boolean isDirectAccountantForUnArchivedMissionItemFinancer() {
+	for (final MissionItemFinancer missionItemFinancer : getMissionItemFinancersSet()) {
+	    if (missionItemFinancer.isDirectAccountantForUnArchivedMissionItemFinancer()) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
     public void unArchive() {
 	for (final MissionItemFinancer missionItemFinancer : getMissionItemFinancersSet()) {
 	    missionItemFinancer.unArchive();
