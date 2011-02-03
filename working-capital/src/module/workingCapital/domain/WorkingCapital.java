@@ -144,6 +144,10 @@ public class WorkingCapital extends WorkingCapital_Base {
 	return isAccountingEmployee(user) && isPendingFundAllocation();
     }
 
+    public boolean isPendingDirectFundAllocation(final User user) {
+	return isDirectAccountingEmployee(user) && isPendingFundAllocation();
+    }
+
     public boolean isPendingFundAllocation() {
 	final WorkingCapitalInitialization workingCapitalInitialization = getWorkingCapitalInitialization();
 	return workingCapitalInitialization != null && workingCapitalInitialization.isPendingFundAllocation();
@@ -293,6 +297,10 @@ public class WorkingCapital extends WorkingCapital_Base {
 
     public boolean hasAcquisitionPendingVerification(final User user) {
 	return hasAcquisitionPendingVerification() && isAccountingEmployee(user);
+    }
+
+    public boolean hasAcquisitionPendingDirectVerification(final User user) {
+	return hasAcquisitionPendingVerification() && isDirectAccountingEmployee(user);
     }
 
     private boolean hasVerifiedAcquisition() {
@@ -515,6 +523,20 @@ public class WorkingCapital extends WorkingCapital_Base {
 	if (unit != null && accountingUnit != null && person != null) {
 	    if (unit instanceof Project || unit instanceof SubProject) {
 		return accountingUnit.hasProjectAccountants(person);
+	    }
+	    return accountingUnit.hasPeople(person);
+	}
+	return false;
+    }
+
+    public boolean isDirectAccountingEmployee(final User user) {
+	final Unit unit = getUnit();
+	final AccountingUnit accountingUnit = getAccountingUnit();
+	final pt.ist.expenditureTrackingSystem.domain.organization.Person person = user.getExpenditurePerson();
+	if (unit != null && accountingUnit != null && person != null) {
+	    if (unit instanceof Project || unit instanceof SubProject) {
+		return accountingUnit.hasProjectAccountants(person)
+			&& (!unit.hasSomeAccountManager() || unit.isAccountManager(person));
 	    }
 	    return accountingUnit.hasPeople(person);
 	}
