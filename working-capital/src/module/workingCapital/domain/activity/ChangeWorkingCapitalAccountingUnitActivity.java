@@ -8,7 +8,7 @@ import module.workingCapital.domain.WorkingCapitalProcess;
 import myorg.domain.User;
 import myorg.util.BundleUtil;
 
-public class ChangeAccountingUnitActivity extends WorkflowActivity<WorkingCapitalProcess, ChangeAccountingUnitActivityInformation> {
+public class ChangeWorkingCapitalAccountingUnitActivity extends WorkflowActivity<WorkingCapitalProcess, ChangeAccountingUnitActivityInformation> {
 
     @Override
     public String getLocalizedName() {

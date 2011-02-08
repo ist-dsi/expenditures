@@ -21,7 +21,7 @@ import module.workingCapital.domain.activity.AuthorizeActivity;
 import module.workingCapital.domain.activity.CancelReenforceWorkingCapitalInitializationActivity;
 import module.workingCapital.domain.activity.CancelWorkingCapitalAcquisitionActivity;
 import module.workingCapital.domain.activity.CancelWorkingCapitalInitializationActivity;
-import module.workingCapital.domain.activity.ChangeAccountingUnitActivity;
+import module.workingCapital.domain.activity.ChangeWorkingCapitalAccountingUnitActivity;
 import module.workingCapital.domain.activity.EditInitializationActivity;
 import module.workingCapital.domain.activity.EditWorkingCapitalActivity;
 import module.workingCapital.domain.activity.PayCapitalActivity;
@@ -71,7 +71,7 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base implements
 	activitiesAux.add(new AcceptResponsabilityForWorkingCapitalActivity());
 	activitiesAux.add(new CancelWorkingCapitalInitializationActivity());
 	activitiesAux.add(new EditInitializationActivity());
-	activitiesAux.add(new ChangeAccountingUnitActivity());
+	activitiesAux.add(new ChangeWorkingCapitalAccountingUnitActivity());
 	activitiesAux.add(new ApproveActivity());
 	activitiesAux.add(new UnApproveActivity());
 	activitiesAux.add(new VerifyActivity());
