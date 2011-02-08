@@ -151,8 +151,12 @@ public class SearchPaymentProcessesAction extends BaseAction {
 	SearchPaymentProcess searchBean = getRenderedObject("searchBean");
 	final Set<PaymentProcess> processes = searchBean.search();
 
-	exportInfoToExcel(processes, searchBean.getSearchProcess().getLocalizedName() + " - "
-		+ searchBean.getPaymentProcessYear().getYear(), response);
+/*	final SearchProcessValues searchProcess = searchBean.getSearchProcess();
+	final Integer year = searchBean.getPaymentProcessYear().getYear();
+	final String filename = searchProcess == null ? year.toString() : searchProcess.getLocalizedName() + " - " + year;
+*/
+	final String filename = "res";
+	exportInfoToExcel(processes, filename, response);
 
 	return null;
     }
