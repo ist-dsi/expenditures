@@ -149,7 +149,8 @@
 					</b>
 				</p>
 				<bean:define id="processList" toScope="request" name="missionContext" property="missionYear.pendingFundAllocation"/>
-				<jsp:include page="processList.jsp"/>
+				<bean:define id="directProcessList" toScope="request" name="missionContext" property="missionYear.directPendingFundAllocation"/>
+				<jsp:include page="processListDirect.jsp"/>
 
 				<br/>
 				<p class="mtop0 mbottom05">
@@ -158,7 +159,8 @@
 					</b>
 				</p>
 				<bean:define id="processList" toScope="request" name="missionContext" property="missionYear.pendingProcessingPersonelInformation"/>
-				<jsp:include page="processList.jsp"/>
+				<bean:define id="directProcessList" toScope="request" name="missionContext" property="missionYear.pendingDirectProcessingPersonelInformation"/>
+				<jsp:include page="processListDirect.jsp"/>
 			</td>
 			<td style="border: none; width: 2%; padding: 0;"></td>
 			<td style="border: 1px dotted #aaa; padding: 10px 15px; width: 48%; vertical-align: top;">

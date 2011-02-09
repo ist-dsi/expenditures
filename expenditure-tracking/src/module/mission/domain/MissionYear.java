@@ -140,6 +140,36 @@ public class MissionYear extends MissionYear_Base {
 		    return missionProcess.isApproved()
 			    && !missionProcess.getIsCanceled()
 			    && (((!missionProcess.hasAnyProjectFinancer() || missionProcess.hasAllAllocatedProjectFunds())
+				    && !missionProcess.hasAllAllocatedFunds() && missionProcess.canAllocateFund()) || (!missionProcess
+				    .hasAllAllocatedProjectFunds() && missionProcess.canAllocateProjectFund()));
+		}
+
+		private boolean isPendingFundUnAllocation(final MissionProcess missionProcess, final User user) {
+		    return missionProcess.getIsCanceled().booleanValue()
+			    && ((missionProcess.hasAnyAllocatedFunds() && missionProcess.isAccountingEmployee(user
+				    .getExpenditurePerson())) || (missionProcess.hasAnyAllocatedProjectFunds())
+				    && missionProcess.isProjectAccountingEmployee(user.getExpenditurePerson()));
+		}
+	    }.search();
+	} catch (Throwable t) {
+	    t.printStackTrace();
+	    throw new Error(t);
+	}
+    }
+
+    public SortedSet<MissionProcess> getDirectPendingFundAllocation() {
+	try {
+	    return new MissionProcessSearch() {
+		@Override
+		boolean shouldAdd(final MissionProcess missionProcess, final User user) {
+		    return (!missionProcess.hasCurrentOwner() || missionProcess.isTakenByCurrentUser())
+			    && (isPendingFundAllocation(missionProcess, user) || isPendingFundUnAllocation(missionProcess, user));
+		}
+
+		private boolean isPendingFundAllocation(MissionProcess missionProcess, User user) {
+		    return missionProcess.isApproved()
+			    && !missionProcess.getIsCanceled()
+			    && (((!missionProcess.hasAnyProjectFinancer() || missionProcess.hasAllAllocatedProjectFunds())
 				    && !missionProcess.hasAllAllocatedFunds() && missionProcess.canAllocateFund())
 				|| (!missionProcess.hasAllAllocatedProjectFunds() && missionProcess.isDirectResponsibleForPendingProjectFundAllocation()));
 		}
@@ -158,6 +188,19 @@ public class MissionYear extends MissionYear_Base {
     }
 
     public SortedSet<MissionProcess> getPendingProcessingPersonelInformation() {
+	return new MissionProcessSearch() {
+	    @Override
+	    boolean shouldAdd(final MissionProcess missionProcess, final User user) {
+		return (!missionProcess.hasCurrentOwner() || missionProcess.isTakenByCurrentUser())
+			&& (missionProcess.hasCurrentQueue() && missionProcess.getCurrentQueue().isCurrentUserAbleToAccessQueue()
+				&& (missionProcess.isAuthorized() || missionProcess.hasNoItemsAndParticipantesAreAuthorized()) && missionProcess
+				.areAllParticipantsAuthorized()) || missionProcess.isReadyForMissionTermination(user)
+			|| (missionProcess.isTerminated() && !missionProcess.isArchived() && missionProcess.canArchiveMission());
+	    }
+	}.search();
+    }
+
+    public SortedSet<MissionProcess> getPendingDirectProcessingPersonelInformation() {
 	return new MissionProcessSearch() {
 	    @Override
 	    boolean shouldAdd(final MissionProcess missionProcess, final User user) {
