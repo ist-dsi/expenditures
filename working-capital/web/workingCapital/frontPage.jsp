@@ -44,6 +44,7 @@
 					</b>
 				</p>
 				<bean:define id="processList" toScope="request" name="workingCapitalContext" property="workingCapitalYear.pendingVerification"/>
+				<bean:define id="processListDirect" toScope="request" name="workingCapitalContext" property="workingCapitalYear.pendingDirectVerification"/>
 				<jsp:include page="processList.jsp"/>
 
 				<br/>

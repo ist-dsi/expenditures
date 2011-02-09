@@ -85,6 +85,21 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
 	}.search();
     }
 
+    public SortedSet<WorkingCapitalProcess> getPendingDirectVerification() {
+	return new WorkingCapitalProcessSearch() {
+	    @Override
+	    boolean shouldAdd(final WorkingCapitalProcess workingCapitalProcess, final User user) {
+		final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
+		return !workingCapital.isCanceledOrRejected()
+			&& (workingCapitalProcess.isPendingVerification(user)
+				|| workingCapital.isPendingFundAllocation(user)
+				|| workingCapital.hasAcquisitionPendingVerification(user)
+				|| ((workingCapital.isAccountingResponsible(user) || workingCapital.isAccountingEmployee(user))
+					&& workingCapital.canRequestCapitalRefund()));
+	    }
+	}.search();
+    }
+
     public SortedSet<WorkingCapitalProcess> getPendingAuthorization() {
 	return new WorkingCapitalProcessSearch() {
 	    @Override
