@@ -20,7 +20,8 @@ public class AuthoriseParticipantActivity extends MissionProcessActivity<Mission
 	return super.isActive(missionProcess, user)
 		&& !missionProcess.getIsCanceled()
 		&& missionProcess.isApproved()
-		&& missionProcess.canAuthoriseParticipantActivity();
+		&& missionProcess.canAuthoriseParticipantActivity()
+		&& missionProcess.hasAllAllocatedFunds();
     }
 
     @Override

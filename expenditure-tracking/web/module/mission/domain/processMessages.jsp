@@ -13,6 +13,13 @@
 	</logic:equal>
 </logic:present>
 
+<bean:define id="missionProcess" name="process" type="module.mission.domain.MissionProcess"/>
+<% if (!missionProcess.getIsCanceled() && missionProcess.isApproved() && !missionProcess.hasAllAllocatedFunds()) { %>
+	<div class="infobox_warning">
+		<bean:message key="label.process.isPendingFundAllocation" bundle="MISSION_RESOURCES"/>:
+	</div>
+<% } %>
+
 <bean:define id="missionProcessMessages" name="process" property="mission.consistencyMessages"/>
 <logic:notEmpty name="missionProcessMessages">
 	<div class="highlightBox">

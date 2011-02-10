@@ -120,9 +120,12 @@ public class MissionYear extends MissionYear_Base {
 	    boolean shouldAdd(final MissionProcess missionProcess, final User user) {
 		return (!missionProcess.hasCurrentOwner() || missionProcess.isTakenByCurrentUser())
 			&& missionProcess.isApproved() && !missionProcess.getIsCanceled()
-			&& (missionProcess.isPendingParticipantAuthorisationBy(user) || (//missionProcess.areAllParticipantsAuthorizedForPhaseOne()
-			missionProcess.areAllParticipantsAuthorized() && missionProcess.hasAllAllocatedFunds() && missionProcess
-				.isPendingDirectAuthorizationBy(user)));
+			&& ((missionProcess.isPendingParticipantAuthorisationBy(user)
+					&& missionProcess.hasAllAllocatedFunds())
+				|| (//missionProcess.areAllParticipantsAuthorizedForPhaseOne()
+					missionProcess.areAllParticipantsAuthorized()
+					&& missionProcess.hasAllAllocatedFunds()
+					&& missionProcess.isPendingDirectAuthorizationBy(user)));
 	    }
 	}.search();
     }
