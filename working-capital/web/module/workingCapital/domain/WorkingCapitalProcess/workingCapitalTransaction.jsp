@@ -23,6 +23,21 @@
 	</tr>
 </table>
 
+<logic:equal name="workingCapitalTransaction" property="submission" value="true">
+	<p class="mtop15">
+	<h3>
+		<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.domain.WorkingCapitalAcquisitionSubmission"/>
+	</h3>
+	
+	<p>
+	
+	<fr:view name="workingCapitalTransaction">
+		<fr:schema bundle="WORKING_CAPITAL_RESOURCES" type="module.workingCapital.domain.WorkingCapitalAcquisitionSubmission">
+			<fr:slot name="paymentRequired" key="label.module.workingCapital.paymentRequired" />
+		</fr:schema>
+	</fr:view>
+</logic:equal>
+
 <logic:equal name="workingCapitalTransaction" property="payment" value="true">
 	<p class="mtop15">
 	<h3>

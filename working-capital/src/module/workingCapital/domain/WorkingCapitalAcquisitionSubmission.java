@@ -10,11 +10,18 @@ public class WorkingCapitalAcquisitionSubmission extends WorkingCapitalAcquisiti
 	super();
     }
 
-    public WorkingCapitalAcquisitionSubmission(final WorkingCapital workingCapital, final Person person, final Money value) {
+    public WorkingCapitalAcquisitionSubmission(final WorkingCapital workingCapital, final Person person, final Money value,
+	    final boolean isPaymentRequired) {
 	this();
 	setWorkingCapital(workingCapital);
 	setPerson(person);
 	setValue(value);
+	setPaymentRequired(isPaymentRequired);
+    }
+
+    @Override
+    public boolean isSubmission() {
+	return true;
     }
 
     @Override

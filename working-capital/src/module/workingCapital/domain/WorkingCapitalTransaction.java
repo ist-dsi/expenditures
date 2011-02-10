@@ -88,6 +88,10 @@ public class WorkingCapitalTransaction extends WorkingCapitalTransaction_Base {
 	return false;
     }
 
+    public boolean isSubmission() {
+	return false;
+    }
+
     public boolean isAcquisition() {
 	return false;
     }

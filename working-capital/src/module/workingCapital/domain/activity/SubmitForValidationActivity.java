@@ -16,16 +16,15 @@ public class SubmitForValidationActivity extends WorkflowActivity<WorkingCapital
 
     @Override
     public String getLocalizedName() {
-	return BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources", "activity." + getClass().getSimpleName());
+	return BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources", "activity."
+		+ getClass().getSimpleName());
     }
 
     @Override
     public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
 	final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
-	return !workingCapital.isCanceledOrRejected()
-		&& workingCapital.isMovementResponsible(user)
-		&& workingCapital.hasApprovedAndUnSubmittedAcquisitions()
-		&& !workingCapital.hasAcquisitionPendingApproval();
+	return !workingCapital.isCanceledOrRejected() && workingCapital.isMovementResponsible(user)
+		&& workingCapital.hasApprovedAndUnSubmittedAcquisitions() && !workingCapital.hasAcquisitionPendingApproval();
     }
 
     @Override
@@ -38,22 +37,23 @@ public class SubmitForValidationActivity extends WorkflowActivity<WorkingCapital
 	    workingCapitalInitialization.setLastSubmission(new DateTime());
 	}
 	final Money accumulatedValue = workingCapital.getLastTransaction().getAccumulatedValue();
-	new WorkingCapitalAcquisitionSubmission(workingCapital, getLoggedPerson().getPerson(), accumulatedValue);
+	new WorkingCapitalAcquisitionSubmission(workingCapital, getLoggedPerson().getPerson(), accumulatedValue,
+		activityInformation.isPaymentRequired());
     }
 
     @Override
     public ActivityInformation<WorkingCapitalProcess> getActivityInformation(final WorkingCapitalProcess process) {
-        return new SubmitForValidationActivityInformation(process, this);
+	return new SubmitForValidationActivityInformation(process, this);
     }
 
     @Override
     public boolean isUserAwarenessNeeded(final WorkingCapitalProcess process, final User user) {
-        return false;
+	return false;
     }
 
     @Override
     public boolean isDefaultInputInterfaceUsed() {
-        return false;
+	return false;
     }
 
 }

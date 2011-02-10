@@ -86,6 +86,7 @@ class WorkingCapitalTransaction {
 	}
 
 	class WorkingCapitalAcquisitionSubmission extends WorkingCapitalTransaction {
+		Boolean paymentRequired;
 	}
 
 	class WorkingCapitalPayment extends WorkingCapitalTransaction {
