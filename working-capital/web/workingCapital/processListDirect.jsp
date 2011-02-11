@@ -13,7 +13,7 @@
 <logic:notEmpty name="processList">
 	<ul class="operations mtop0">
 		<%
-		final Collection directProcessList = (Collection) request.getAttribute("directProcessList");
+		final Collection directProcessList = (Collection) request.getAttribute("processListDirect");
 		%>
 		<logic:iterate id="process" name="processList">
 			<li>

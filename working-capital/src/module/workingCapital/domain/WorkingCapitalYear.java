@@ -76,11 +76,12 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
 	    boolean shouldAdd(final WorkingCapitalProcess workingCapitalProcess, final User user) {
 		final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
 		return workingCapital.isPendingFundUnAllocation(user)
-			|| (!workingCapital.isCanceledOrRejected() && (workingCapitalProcess.isPendingVerification(user)
-				|| workingCapital.isPendingDirectFundAllocation(user)
-				|| workingCapital.hasAcquisitionPendingDirectVerification(user) || ((workingCapital
-				.isAccountingResponsible(user) || workingCapital.isDirectAccountingEmployee(user)) && workingCapital
-				.canRequestCapitalRefund())));
+			|| (!workingCapital.isCanceledOrRejected()
+				&& (workingCapitalProcess.isPendingVerification(user)
+				|| workingCapital.isPendingFundAllocation(user)
+				|| workingCapital.hasAcquisitionPendingVerification(user)
+				|| ((workingCapital.isAccountingResponsible(user) || workingCapital.isAccountingEmployee(user))
+					&& workingCapital.canRequestCapitalRefund())));
 	    }
 	}.search();
     }
@@ -91,10 +92,11 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
 	    boolean shouldAdd(final WorkingCapitalProcess workingCapitalProcess, final User user) {
 		final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
 		return !workingCapital.isCanceledOrRejected()
-			&& (workingCapitalProcess.isPendingVerification(user) || workingCapital.isPendingFundAllocation(user)
-				|| workingCapital.hasAcquisitionPendingVerification(user) || ((workingCapital
-				.isAccountingResponsible(user) || workingCapital.isAccountingEmployee(user)) && workingCapital
-				.canRequestCapitalRefund()));
+			&& (workingCapitalProcess.isPendingVerification(user)
+				|| workingCapital.isPendingDirectFundAllocation(user)
+				|| workingCapital.hasAcquisitionPendingDirectVerification(user)
+				|| ((workingCapital.isAccountingResponsible(user) || workingCapital.isDirectAccountingEmployee(user))
+					&& workingCapital.canRequestCapitalRefund()));
 	    }
 	}.search();
     }
