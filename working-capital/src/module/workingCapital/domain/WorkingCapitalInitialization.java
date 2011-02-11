@@ -32,14 +32,14 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
     };
 
     public WorkingCapitalInitialization() {
-        super();
-        setWorkingCapitalSystem(WorkingCapitalSystem.getInstance());
-        final Person person = UserView.getCurrentUser().getPerson();
-        if (person == null) {
-            throw new DomainException("message.working.capital.requestor.cannot.be.null");
-        }
-        setRequestor(person);
-        setRequestCreation(new DateTime());
+	super();
+	setWorkingCapitalSystem(WorkingCapitalSystem.getInstance());
+	final Person person = UserView.getCurrentUser().getPerson();
+	if (person == null) {
+	    throw new DomainException("message.working.capital.requestor.cannot.be.null");
+	}
+	setRequestor(person);
+	setRequestCreation(new DateTime());
     }
 
     public WorkingCapitalInitialization(final Integer year, final Unit unit, final Person person,
@@ -77,10 +77,11 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
 	removeResponsibleForUnitApproval();
     }
 
-    public void verify(final User user, final Money authorizedAnualValue, final Money maxAuthorizedAnualValue, final String fundAllocationId) {
+    public void verify(final User user, final Money authorizedAnualValue, final Money maxAuthorizedAnualValue,
+	    final String fundAllocationId) {
 	setAuthorizedAnualValue(authorizedAnualValue);
 	setMaxAuthorizedAnualValue(maxAuthorizedAnualValue);
-	
+
 	if (!isAccountingResponsible(user)) {
 	    throw new DomainException("person.cannot.verify.expense", user.getPerson().getName());
 	}
@@ -90,8 +91,7 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
     }
 
     public void allocateFunds(final String fundAllocationId) {
-	final String value = fundAllocationId != null && !fundAllocationId.isEmpty() ?
-		fundAllocationId : null;
+	final String value = fundAllocationId != null && !fundAllocationId.isEmpty() ? fundAllocationId : null;
 	setFundAllocationId(value);
     }
 
@@ -138,7 +138,8 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
 	if (getAcceptedResponsability() != null && !hasResponsibleForUnitApproval()) {
 	    //final Money valueForAuthorization = getRequestedAnualValue();
 	    final Money valueForAuthorization = Money.ZERO;
-	    final Authorization authorization = getWorkingCapital().findDirectUnitResponsible(user.getPerson(), valueForAuthorization);
+	    final Authorization authorization = getWorkingCapital().findDirectUnitResponsible(user.getPerson(),
+		    valueForAuthorization);
 	    if (authorization != null) {
 		return true;
 	    }
@@ -155,9 +156,7 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
     }
 
     public boolean isPendingAuthorization() {
-	return hasResponsibleForAccountingVerification()
-		&& getFundAllocationId() != null
-		&& !getFundAllocationId().isEmpty()
+	return hasResponsibleForAccountingVerification() && getFundAllocationId() != null && !getFundAllocationId().isEmpty()
 		&& !hasResponsibleForUnitAuthorization();
     }
 
@@ -181,14 +180,17 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
     @Override
     public AccountingUnit getAccountingUnit() {
 	final AccountingUnit accountingUnit = super.getAccountingUnit();
-	return accountingUnit == null ? (hasWorkingCapital() ? getWorkingCapital().getUnit().getAccountingUnit() : null) : accountingUnit;
+	return accountingUnit == null ? (hasWorkingCapital() ? getWorkingCapital().getUnit().getAccountingUnit() : null)
+		: accountingUnit;
     }
 
     public boolean isPendingFundAllocation() {
-	return !isCanceledOrRejected()
-		&& (getFundAllocationId() == null || getFundAllocationId().isEmpty())
-		&& hasResponsibleForAccountingVerification()
-		&& !hasResponsibleForUnitAuthorization();
+	return !isCanceledOrRejected() && (getFundAllocationId() == null || getFundAllocationId().isEmpty())
+		&& hasResponsibleForAccountingVerification() && !hasResponsibleForUnitAuthorization();
+    }
+
+    public boolean isPendingFundUnAllocation() {
+	return (isCanceledOrRejected() && (getFundAllocationId() != null) && (!getFundAllocationId().isEmpty()));
     }
 
     public void delete() {

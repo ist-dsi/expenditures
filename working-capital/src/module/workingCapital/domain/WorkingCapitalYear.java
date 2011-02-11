@@ -64,8 +64,8 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
 		final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
 		return !workingCapital.isCanceledOrRejected()
 			&& (workingCapitalProcess.isPendingDirectAproval(user)
-				|| workingCapital.hasAcquisitionPendingDirectApproval(user)
-				|| workingCapital.isPendingAcceptResponsability(user));
+				|| workingCapital.hasAcquisitionPendingDirectApproval(user) || workingCapital
+				.isPendingAcceptResponsability(user));
 	    }
 	}.search();
     }
@@ -75,12 +75,12 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
 	    @Override
 	    boolean shouldAdd(final WorkingCapitalProcess workingCapitalProcess, final User user) {
 		final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
-		return !workingCapital.isCanceledOrRejected()
-			&& (workingCapitalProcess.isPendingVerification(user)
+		return workingCapital.isPendingFundUnAllocation(user)
+			|| (!workingCapital.isCanceledOrRejected() && (workingCapitalProcess.isPendingVerification(user)
 				|| workingCapital.isPendingDirectFundAllocation(user)
-				|| workingCapital.hasAcquisitionPendingDirectVerification(user)
-				|| ((workingCapital.isAccountingResponsible(user) || workingCapital.isDirectAccountingEmployee(user))
-					&& workingCapital.canRequestCapitalRefund()));
+				|| workingCapital.hasAcquisitionPendingDirectVerification(user) || ((workingCapital
+				.isAccountingResponsible(user) || workingCapital.isDirectAccountingEmployee(user)) && workingCapital
+				.canRequestCapitalRefund())));
 	    }
 	}.search();
     }
@@ -91,11 +91,10 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
 	    boolean shouldAdd(final WorkingCapitalProcess workingCapitalProcess, final User user) {
 		final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
 		return !workingCapital.isCanceledOrRejected()
-			&& (workingCapitalProcess.isPendingVerification(user)
-				|| workingCapital.isPendingFundAllocation(user)
-				|| workingCapital.hasAcquisitionPendingVerification(user)
-				|| ((workingCapital.isAccountingResponsible(user) || workingCapital.isAccountingEmployee(user))
-					&& workingCapital.canRequestCapitalRefund()));
+			&& (workingCapitalProcess.isPendingVerification(user) || workingCapital.isPendingFundAllocation(user)
+				|| workingCapital.hasAcquisitionPendingVerification(user) || ((workingCapital
+				.isAccountingResponsible(user) || workingCapital.isAccountingEmployee(user)) && workingCapital
+				.canRequestCapitalRefund()));
 	    }
 	}.search();
     }
@@ -114,9 +113,8 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
 	    @Override
 	    boolean shouldAdd(final WorkingCapitalProcess workingCapitalProcess, final User user) {
 		final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
-		return !workingCapital.isCanceledOrRejected()
-			&& (/* (workingCapital.isAccountingResponsible(user) && workingCapital.canRequestCapital()) || */
-				(workingCapital.isTreasuryMember(user) && workingCapital.hasWorkingCapitalRequestPendingTreasuryProcessing()));
+		return !workingCapital.isCanceledOrRejected() && (/* (workingCapital.isAccountingResponsible(user) && workingCapital.canRequestCapital()) || */
+		(workingCapital.isTreasuryMember(user) && workingCapital.hasWorkingCapitalRequestPendingTreasuryProcessing()));
 	    }
 	}.search();
     }
@@ -169,23 +167,24 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
 		    }
 		}
 	    }
-//	    for (final Authorization authorization : user.getExpenditurePerson().getAuthorizationsSet()) {
-//		if (authorization.isValid()) {
-//		    final pt.ist.expenditureTrackingSystem.domain.organization.Unit unit = authorization.getUnit();
-//		    for (final WorkingCapital workingCapital : unit.getWorkingCapitalsSet()) {
-//			if (workingCapital.getWorkingCapitalYear() == this) {
-//			    final WorkingCapitalProcess workingCapitalProcess = workingCapital.getWorkingCapitalProcess();
-//			    result.add(workingCapitalProcess);
-//			}
-//		    }
-//		    addSubUnitWorkingCapitals(result, unit.getUnit());
-//		}
-//	    }
+	    //for (final Authorization authorization : user.getExpenditurePerson().getAuthorizationsSet()) {
+	    //	if (authorization.isValid()) {
+	    //	    final pt.ist.expenditureTrackingSystem.domain.organization.Unit unit = authorization.getUnit();
+	    //	    for (final WorkingCapital workingCapital : unit.getWorkingCapitalsSet()) {
+	    //		if (workingCapital.getWorkingCapitalYear() == this) {
+	    //		    final WorkingCapitalProcess workingCapitalProcess = workingCapital.getWorkingCapitalProcess();
+	    //		    result.add(workingCapitalProcess);
+	    //		}
+	    //	    }
+	    //	    addSubUnitWorkingCapitals(result, unit.getUnit());
+	    //	}
+	    //}
 	}
 	return result;
     }
 
-    private boolean isDirectlyResponsibleFor(final Set<Authorization> authorizations, final pt.ist.expenditureTrackingSystem.domain.organization.Unit unit) {
+    private boolean isDirectlyResponsibleFor(final Set<Authorization> authorizations,
+	    final pt.ist.expenditureTrackingSystem.domain.organization.Unit unit) {
 	final Set<Authorization> authorizationsFromUnit = unit.getAuthorizationsSet();
 	if (intersect(authorizations, authorizationsFromUnit)) {
 	    return true;
@@ -231,7 +230,8 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
 	    if (child.isUnit()) {
 		final Unit childUnit = (Unit) child;
 		if (childUnit.hasExpenditureUnit()) {
-		    final pt.ist.expenditureTrackingSystem.domain.organization.Unit expenditureUnit = childUnit.getExpenditureUnit();
+		    final pt.ist.expenditureTrackingSystem.domain.organization.Unit expenditureUnit = childUnit
+			    .getExpenditureUnit();
 		    if (!hasValidAuthorization(expenditureUnit)) {
 			for (WorkingCapital workingCapital : expenditureUnit.getWorkingCapitalsSet()) {
 			    if (workingCapital.getWorkingCapitalYear() == this) {
@@ -298,7 +298,8 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
 
     public SortedSet<WorkingCapitalProcess> getTaken() {
 	final User user = UserView.getCurrentUser();
-	final SortedSet<WorkingCapitalProcess> result = new TreeSet<WorkingCapitalProcess>(WorkingCapitalProcess.COMPARATOR_BY_UNIT_NAME);
+	final SortedSet<WorkingCapitalProcess> result = new TreeSet<WorkingCapitalProcess>(
+		WorkingCapitalProcess.COMPARATOR_BY_UNIT_NAME);
 	for (final WorkflowProcess workflowProcess : user.getUserProcessesSet()) {
 	    if (workflowProcess instanceof WorkingCapitalProcess) {
 		final WorkingCapitalProcess workingCapitalProcess = (WorkingCapitalProcess) workflowProcess;

@@ -40,8 +40,8 @@ public class WorkingCapital extends WorkingCapital_Base {
     }
 
     public WorkingCapital() {
-        super();
-        setWorkingCapitalSystem(WorkingCapitalSystem.getInstance());
+	super();
+	setWorkingCapitalSystem(WorkingCapitalSystem.getInstance());
     }
 
     public WorkingCapital(final WorkingCapitalYear workingCapitalYear, final Unit unit, final Person movementResponsible) {
@@ -63,7 +63,8 @@ public class WorkingCapital extends WorkingCapital_Base {
     }
 
     public SortedSet<WorkingCapitalInitialization> getSortedWorkingCapitalInitializations() {
-	final SortedSet<WorkingCapitalInitialization> result = new TreeSet<WorkingCapitalInitialization>(WorkingCapitalInitialization.COMPARATOR_BY_REQUEST_CREATION);
+	final SortedSet<WorkingCapitalInitialization> result = new TreeSet<WorkingCapitalInitialization>(
+		WorkingCapitalInitialization.COMPARATOR_BY_REQUEST_CREATION);
 	result.addAll(getWorkingCapitalInitializationsSet());
 	return result;
     }
@@ -80,21 +81,21 @@ public class WorkingCapital extends WorkingCapital_Base {
 
     private Authorization findUnitResponsible(final Person person, final Money amount, final Unit unit) {
 	if (unit != null && person != null) {
-//	    boolean hasAtLeastOneResponsible = false;
+	    //boolean hasAtLeastOneResponsible = false;
 	    for (final Authorization authorization : unit.getAuthorizationsSet()) {
 		if (authorization.isValid() && authorization.getMaxAmount().isGreaterThanOrEqual(amount)) {
-//		    hasAtLeastOneResponsible = true;
+		    //hasAtLeastOneResponsible = true;
 		    if (authorization.getPerson().getUser() == person.getUser()) {
 			return authorization;
 		    }
 		}
 	    }
-//	    if (!hasAtLeastOneResponsible) {
-		final Unit parent = unit.getParentUnit();
-		return findUnitResponsible(person, amount, parent);
-//	    }
+	    //if (!hasAtLeastOneResponsible) {
+	    final Unit parent = unit.getParentUnit();
+	    return findUnitResponsible(person, amount, parent);
+	    //}
 	}
-	return null; 
+	return null;
     }
 
     private Authorization findDirectUnitResponsible(final Person person, final Money amount, final Unit unit) {
@@ -113,7 +114,7 @@ public class WorkingCapital extends WorkingCapital_Base {
 		return findDirectUnitResponsible(person, amount, parent);
 	    }
 	}
-	return null; 
+	return null;
     }
 
     public boolean isPendingAproval() {
@@ -144,6 +145,10 @@ public class WorkingCapital extends WorkingCapital_Base {
 	return isAccountingEmployee(user) && isPendingFundAllocation();
     }
 
+    public boolean isPendingFundUnAllocation(final User user) {
+	return isAccountingEmployee(user) && isPendingFundUnAllocation();
+    }
+
     public boolean isPendingDirectFundAllocation(final User user) {
 	return isDirectAccountingEmployee(user) && isPendingFundAllocation();
     }
@@ -153,8 +158,13 @@ public class WorkingCapital extends WorkingCapital_Base {
 	return workingCapitalInitialization != null && workingCapitalInitialization.isPendingFundAllocation();
     }
 
+    public boolean isPendingFundUnAllocation() {
+	final WorkingCapitalInitialization workingCapitalInitialization = getWorkingCapitalInitialization();
+	return workingCapitalInitialization != null && workingCapitalInitialization.isPendingFundUnAllocation();
+    }
+
     public boolean isPendingAuthorization(final User user) {
-	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstance(); 
+	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstance();
 	return workingCapitalSystem.isManagementeMember(user) && isPendingAuthorization();
     }
 
@@ -181,11 +191,8 @@ public class WorkingCapital extends WorkingCapital_Base {
 	    return false;
 	}
 	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstance();
-	if ((hasMovementResponsible() && user == getMovementResponsible().getUser())
-		|| isAccountingResponsible(user)
-		|| isAccountingEmployee(user)
-		|| workingCapitalSystem.isManagementeMember(user)
-		|| isTreasuryMember(user)
+	if ((hasMovementResponsible() && user == getMovementResponsible().getUser()) || isAccountingResponsible(user)
+		|| isAccountingEmployee(user) || workingCapitalSystem.isManagementeMember(user) || isTreasuryMember(user)
 		|| findUnitResponsible(user.getPerson(), Money.ZERO) != null) {
 	    return true;
 	}
@@ -193,7 +200,8 @@ public class WorkingCapital extends WorkingCapital_Base {
     }
 
     public User getRequester() {
-	final WorkingCapitalInitialization workingCapitalInitialization = Collections.min(getWorkingCapitalInitializationsSet(), WorkingCapitalInitialization.COMPARATOR_BY_REQUEST_CREATION);
+	final WorkingCapitalInitialization workingCapitalInitialization = Collections.min(getWorkingCapitalInitializationsSet(),
+		WorkingCapitalInitialization.COMPARATOR_BY_REQUEST_CREATION);
 	return workingCapitalInitialization.getRequestor().getUser();
     }
 
@@ -212,7 +220,8 @@ public class WorkingCapital extends WorkingCapital_Base {
     }
 
     public WorkingCapitalInitialization getWorkingCapitalInitialization() {
-	return Collections.max(getWorkingCapitalInitializationsSet(), WorkingCapitalInitialization.COMPARATOR_BY_REQUEST_CREATION);
+	return Collections
+		.max(getWorkingCapitalInitializationsSet(), WorkingCapitalInitialization.COMPARATOR_BY_REQUEST_CREATION);
     }
 
     public boolean hasAnyPendingWorkingCapitalRequests() {
@@ -241,11 +250,13 @@ public class WorkingCapital extends WorkingCapital_Base {
 
     public WorkingCapitalTransaction getLastTransaction() {
 	final Set<WorkingCapitalTransaction> workingCapitalTransactionsSet = getWorkingCapitalTransactionsSet();
-	return workingCapitalTransactionsSet.isEmpty() ? null : Collections.max(workingCapitalTransactionsSet, WorkingCapitalTransaction.COMPARATOR_BY_NUMBER);
+	return workingCapitalTransactionsSet.isEmpty() ? null : Collections.max(workingCapitalTransactionsSet,
+		WorkingCapitalTransaction.COMPARATOR_BY_NUMBER);
     }
 
     public SortedSet<WorkingCapitalTransaction> getSortedWorkingCapitalTransactions() {
-	final SortedSet<WorkingCapitalTransaction> result = new TreeSet<WorkingCapitalTransaction>(WorkingCapitalTransaction.COMPARATOR_BY_NUMBER);
+	final SortedSet<WorkingCapitalTransaction> result = new TreeSet<WorkingCapitalTransaction>(
+		WorkingCapitalTransaction.COMPARATOR_BY_NUMBER);
 	result.addAll(getWorkingCapitalTransactionsSet());
 	return result;
     }
@@ -257,10 +268,11 @@ public class WorkingCapital extends WorkingCapital_Base {
 
     public boolean hasAcquisitionPendingApproval() {
 	for (final WorkingCapitalAcquisition workingCapitalAcquisition : getWorkingCapitalAcquisitionsSet()) {
-	    final WorkingCapitalTransaction workingCapitalTransaction = workingCapitalAcquisition.getWorkingCapitalAcquisitionTransaction();
+	    final WorkingCapitalTransaction workingCapitalTransaction = workingCapitalAcquisition
+		    .getWorkingCapitalAcquisitionTransaction();
 	    if (workingCapitalTransaction.isPendingApproval()) {
 		return true;
-	    }	    
+	    }
 	}
 	return false;
     }
@@ -277,20 +289,22 @@ public class WorkingCapital extends WorkingCapital_Base {
 
     public boolean hasAcquisitionPendingVerification() {
 	for (final WorkingCapitalAcquisition workingCapitalAcquisition : getWorkingCapitalAcquisitionsSet()) {
-	    final WorkingCapitalTransaction workingCapitalTransaction = workingCapitalAcquisition.getWorkingCapitalAcquisitionTransaction();
+	    final WorkingCapitalTransaction workingCapitalTransaction = workingCapitalAcquisition
+		    .getWorkingCapitalAcquisitionTransaction();
 	    if (workingCapitalTransaction.isPendingVerification()) {
 		return true;
-	    }	    
+	    }
 	}
 	return false;
     }
 
     public boolean hasAcquisitionPendingSubmission() {
 	for (final WorkingCapitalAcquisition workingCapitalAcquisition : getWorkingCapitalAcquisitionsSet()) {
-	    final WorkingCapitalTransaction workingCapitalTransaction = workingCapitalAcquisition.getWorkingCapitalAcquisitionTransaction();
+	    final WorkingCapitalTransaction workingCapitalTransaction = workingCapitalAcquisition
+		    .getWorkingCapitalAcquisitionTransaction();
 	    if (workingCapitalTransaction.isPendingSubmission()) {
 		return true;
-	    }	    
+	    }
 	}
 	return false;
     }
@@ -305,10 +319,11 @@ public class WorkingCapital extends WorkingCapital_Base {
 
     private boolean hasVerifiedAcquisition() {
 	for (final WorkingCapitalAcquisition workingCapitalAcquisition : getWorkingCapitalAcquisitionsSet()) {
-	    final WorkingCapitalTransaction workingCapitalTransaction = workingCapitalAcquisition.getWorkingCapitalAcquisitionTransaction();
+	    final WorkingCapitalTransaction workingCapitalTransaction = workingCapitalAcquisition
+		    .getWorkingCapitalAcquisitionTransaction();
 	    if (workingCapitalTransaction.isVerified()) {
 		return true;
-	    }	    
+	    }
 	}
 	return false;
     }
@@ -335,8 +350,10 @@ public class WorkingCapital extends WorkingCapital_Base {
 
     public boolean hasApprovedAndUnSubmittedAcquisitions() {
 	for (final WorkingCapitalAcquisition workingCapitalAcquisition : getWorkingCapitalAcquisitionsSet()) {
-	    final WorkingCapitalAcquisitionTransaction workingCapitalAcquisitionTransaction = workingCapitalAcquisition.getWorkingCapitalAcquisitionTransaction();
-	    if (workingCapitalAcquisitionTransaction.isApproved() && workingCapitalAcquisition.getSubmitedForVerification() == null) {
+	    final WorkingCapitalAcquisitionTransaction workingCapitalAcquisitionTransaction = workingCapitalAcquisition
+		    .getWorkingCapitalAcquisitionTransaction();
+	    if (workingCapitalAcquisitionTransaction.isApproved()
+		    && workingCapitalAcquisition.getSubmitedForVerification() == null) {
 		return true;
 	    }
 	}
@@ -346,8 +363,10 @@ public class WorkingCapital extends WorkingCapital_Base {
     public void submitAcquisitionsForValidation() {
 	final DateTime now = new DateTime();
 	for (final WorkingCapitalAcquisition workingCapitalAcquisition : getWorkingCapitalAcquisitionsSet()) {
-	    final WorkingCapitalAcquisitionTransaction workingCapitalAcquisitionTransaction = workingCapitalAcquisition.getWorkingCapitalAcquisitionTransaction();
-	    if (workingCapitalAcquisitionTransaction.isApproved() && workingCapitalAcquisition.getSubmitedForVerification() == null) {
+	    final WorkingCapitalAcquisitionTransaction workingCapitalAcquisitionTransaction = workingCapitalAcquisition
+		    .getWorkingCapitalAcquisitionTransaction();
+	    if (workingCapitalAcquisitionTransaction.isApproved()
+		    && workingCapitalAcquisition.getSubmitedForVerification() == null) {
 		workingCapitalAcquisition.setSubmitedForVerification(now);
 	    }
 	}
@@ -361,23 +380,17 @@ public class WorkingCapital extends WorkingCapital_Base {
 
     public boolean canRequestCapital() {
 	final WorkingCapitalInitialization workingCapitalInitialization = getWorkingCapitalInitialization();
-	return workingCapitalInitialization != null
-		&& !isCanceledOrRejected()
-		&& workingCapitalInitialization.getLastSubmission() == null
-		&& workingCapitalInitialization.isAuthorized()
-		&& !hasAnyPendingWorkingCapitalRequests()
-		&& hasCapitalPendingRequest();
+	return workingCapitalInitialization != null && !isCanceledOrRejected()
+		&& workingCapitalInitialization.getLastSubmission() == null && workingCapitalInitialization.isAuthorized()
+		&& !hasAnyPendingWorkingCapitalRequests() && hasCapitalPendingRequest();
     }
 
     public boolean canRevertTermination() {
 	final WorkingCapitalInitialization workingCapitalInitialization = getWorkingCapitalInitialization();
-	return workingCapitalInitialization != null
-		&& !isCanceledOrRejected()
+	return workingCapitalInitialization != null && !isCanceledOrRejected()
 		&& workingCapitalInitialization.getLastSubmission() != null
-		&& workingCapitalInitialization.getRefundRequested() == null
-		&& workingCapitalInitialization.isAuthorized()
-		&& !hasAnyPendingWorkingCapitalRequests()
-		&& !hasAnyAquisitionPendingVerification();
+		&& workingCapitalInitialization.getRefundRequested() == null && workingCapitalInitialization.isAuthorized()
+		&& !hasAnyPendingWorkingCapitalRequests() && !hasAnyAquisitionPendingVerification();
     }
 
     public boolean canRequestCapitalRefund() {
@@ -386,8 +399,7 @@ public class WorkingCapital extends WorkingCapital_Base {
 
     private boolean hasAnyAquisitionPendingVerification() {
 	for (final WorkingCapitalTransaction workingCapitalTransaction : getWorkingCapitalTransactionsSet()) {
-	    if (workingCapitalTransaction.isAcquisition()
-		    && !workingCapitalTransaction.isCanceledOrRejected()
+	    if (workingCapitalTransaction.isAcquisition() && !workingCapitalTransaction.isCanceledOrRejected()
 		    && !workingCapitalTransaction.isVerified()) {
 		return true;
 	    }
@@ -404,12 +416,12 @@ public class WorkingCapital extends WorkingCapital_Base {
 	final WorkingCapitalInitialization workingCapitalInitialization = getWorkingCapitalInitialization();
 	final WorkingCapitalTransaction lastWorkingCapitalTransaction = getLastTransaction();
 	if ((lastWorkingCapitalTransaction == null && workingCapitalInitialization.getAuthorizedAnualValue().isPositive())
-		|| (lastWorkingCapitalTransaction != null
-			&& lastWorkingCapitalTransaction.getDebt().isLessThan(workingCapitalInitialization.getAuthorizedAnualValue()))) {
+		|| (lastWorkingCapitalTransaction != null && lastWorkingCapitalTransaction.getDebt().isLessThan(
+			workingCapitalInitialization.getAuthorizedAnualValue()))) {
 	    return true;
 	}
 
-/*	for (final WorkingCapitalTransaction workingCapitalTransaction : getWorkingCapitalTransactionsSet()) {
+	/*for (final WorkingCapitalTransaction workingCapitalTransaction : getWorkingCapitalTransactionsSet()) {
 	    if (workingCapitalTransaction.isAcquisition() && !workingCapitalTransaction.isCanceledOrRejected()) {
 		final WorkingCapitalAcquisitionTransaction workingCapitalAcquisitionTransaction = (WorkingCapitalAcquisitionTransaction) workingCapitalTransaction;
 		if (!workingCapitalAcquisitionTransaction.isVerified()) {
@@ -418,20 +430,23 @@ public class WorkingCapital extends WorkingCapital_Base {
 	    }
 	}
 	return true;
-*/
+	*/
 	boolean hasSomeAcquisition = false;
 
 	DateTime lastPayment = null;
 	for (final WorkingCapitalTransaction workingCapitalTransaction : getWorkingCapitalTransactionsSet()) {
-	    if (workingCapitalTransaction.isPayment() && (lastPayment == null || lastPayment.isBefore(workingCapitalTransaction.getTransationInstant()))) {
+	    if (workingCapitalTransaction.isPayment()
+		    && (lastPayment == null || lastPayment.isBefore(workingCapitalTransaction.getTransationInstant()))) {
 		lastPayment = workingCapitalTransaction.getTransationInstant();
 	    }
 	}
 
 	for (final WorkingCapitalTransaction workingCapitalTransaction : getWorkingCapitalTransactionsSet()) {
-	    if (workingCapitalTransaction.isAcquisition() && workingCapitalTransaction.getTransationInstant().isAfter(lastPayment)) {
+	    if (workingCapitalTransaction.isAcquisition()
+		    && workingCapitalTransaction.getTransationInstant().isAfter(lastPayment)) {
 		final WorkingCapitalAcquisitionTransaction workingCapitalAcquisitionTransaction = (WorkingCapitalAcquisitionTransaction) workingCapitalTransaction;
-		final WorkingCapitalAcquisition workingCapitalAcquisition = workingCapitalAcquisitionTransaction.getWorkingCapitalAcquisition();
+		final WorkingCapitalAcquisition workingCapitalAcquisition = workingCapitalAcquisitionTransaction
+			.getWorkingCapitalAcquisition();
 		if (workingCapitalAcquisition.getSubmitedForVerification() != null) {
 		    if (workingCapitalTransaction.isVerified() && !workingCapitalAcquisition.isCanceledOrRejected()) {
 			hasSomeAcquisition = true;
@@ -453,7 +468,8 @@ public class WorkingCapital extends WorkingCapital_Base {
 
     public boolean isPendingAcceptResponsability() {
 	for (final WorkingCapitalInitialization workingCapitalInitialization : getWorkingCapitalInitializationsSet()) {
-	    if (!workingCapitalInitialization.isCanceledOrRejected() && workingCapitalInitialization.getAcceptedResponsability() == null) {
+	    if (!workingCapitalInitialization.isCanceledOrRejected()
+		    && workingCapitalInitialization.getAcceptedResponsability() == null) {
 		return true;
 	    }
 	}
@@ -508,7 +524,7 @@ public class WorkingCapital extends WorkingCapital_Base {
 	final pt.ist.expenditureTrackingSystem.domain.organization.Person person = user.getExpenditurePerson();
 	if (accountingUnit != null) {
 	    final Unit unit = getUnit();
-	    if (unit instanceof Project || unit instanceof SubProject) {		
+	    if (unit instanceof Project || unit instanceof SubProject) {
 		return accountingUnit.hasResponsibleProjectAccountants(person);
 	    }
 	    return accountingUnit.hasResponsiblePeople(person);
@@ -564,7 +580,8 @@ public class WorkingCapital extends WorkingCapital_Base {
 
     public AccountingUnit getAccountingUnit() {
 	final WorkingCapitalInitialization workingCapitalInitialization = getWorkingCapitalInitialization();
-	return workingCapitalInitialization == null ? getUnit().getAccountingUnit() : workingCapitalInitialization.getAccountingUnit();
+	return workingCapitalInitialization == null ? getUnit().getAccountingUnit() : workingCapitalInitialization
+		.getAccountingUnit();
     }
 
     public boolean canChangeAccountingUnit() {
@@ -575,7 +592,8 @@ public class WorkingCapital extends WorkingCapital_Base {
 
     public boolean canTerminateFund() {
 	final WorkingCapitalTransaction workingCapitalTransaction = getLastTransaction();
-	return workingCapitalTransaction != null && !isTerminated() && workingCapitalTransaction.getAccumulatedValue().equals(Money.ZERO);
+	return workingCapitalTransaction != null && !isTerminated()
+		&& workingCapitalTransaction.getAccumulatedValue().equals(Money.ZERO);
     }
 
     private boolean isTerminated() {
@@ -594,16 +612,26 @@ public class WorkingCapital extends WorkingCapital_Base {
     }
 
     public PresentableProcessState getPresentableAcquisitionProcessState() {
-	if (isCanceledOrRejected()) return WorkingCapitalProcessState.CANCELED;
-	if (isPendingAcceptResponsability()) return WorkingCapitalProcessState.PENDING_ACCEPT_RESPONSIBILITY;
-	if (isPendingAproval()) return WorkingCapitalProcessState.PENDING_APPROVAL;
-	if (isPendingVerification()) return WorkingCapitalProcessState.PENDING_VERIFICATION;
-	if (isPendingFundAllocation()) return WorkingCapitalProcessState.PENDING_FUND_ALLOCATION;
-	if (isPendingAuthorization()) return WorkingCapitalProcessState.PENDING_AUTHORIZATION;
-	if (isPendingPayment()) return WorkingCapitalProcessState.PENDING_PAYMENT;
-	if (isPendingRefund()) return WorkingCapitalProcessState.SENT_FOR_FUND_REFUND;
-	if (isRefunded()) return WorkingCapitalProcessState.TERMINATED;
-	if (isTerminated()) return WorkingCapitalProcessState.SENT_FOR_TERMINATION;
+	if (isCanceledOrRejected())
+	    return WorkingCapitalProcessState.CANCELED;
+	if (isPendingAcceptResponsability())
+	    return WorkingCapitalProcessState.PENDING_ACCEPT_RESPONSIBILITY;
+	if (isPendingAproval())
+	    return WorkingCapitalProcessState.PENDING_APPROVAL;
+	if (isPendingVerification())
+	    return WorkingCapitalProcessState.PENDING_VERIFICATION;
+	if (isPendingFundAllocation())
+	    return WorkingCapitalProcessState.PENDING_FUND_ALLOCATION;
+	if (isPendingAuthorization())
+	    return WorkingCapitalProcessState.PENDING_AUTHORIZATION;
+	if (isPendingPayment())
+	    return WorkingCapitalProcessState.PENDING_PAYMENT;
+	if (isPendingRefund())
+	    return WorkingCapitalProcessState.SENT_FOR_FUND_REFUND;
+	if (isRefunded())
+	    return WorkingCapitalProcessState.TERMINATED;
+	if (isTerminated())
+	    return WorkingCapitalProcessState.SENT_FOR_TERMINATION;
 	return WorkingCapitalProcessState.WORKING_CAPITAL_AVAILABLE;
     }
 

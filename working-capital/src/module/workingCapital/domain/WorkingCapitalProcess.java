@@ -35,6 +35,7 @@ import module.workingCapital.domain.activity.RequestCapitalActivity;
 import module.workingCapital.domain.activity.RequestCapitalRestitutionActivity;
 import module.workingCapital.domain.activity.SubmitForValidationActivity;
 import module.workingCapital.domain.activity.TerminateWorkingCapitalActivity;
+import module.workingCapital.domain.activity.UnAllocateFundsActivity;
 import module.workingCapital.domain.activity.UnApproveActivity;
 import module.workingCapital.domain.activity.UnApproveWorkingCapitalAcquisitionActivity;
 import module.workingCapital.domain.activity.UnAuthorizeActivity;
@@ -53,13 +54,14 @@ import myorg.util.BundleUtil;
 import myorg.util.ClassNameBundle;
 import pt.ist.emailNotifier.domain.Email;
 
-@ClassNameBundle(key="label.module.workingCapital", bundle="resources/WorkingCapitalResources")
+@ClassNameBundle(key = "label.module.workingCapital", bundle = "resources/WorkingCapitalResources")
 public class WorkingCapitalProcess extends WorkingCapitalProcess_Base implements HasPresentableProcessState {
 
     public static final Comparator<WorkingCapitalProcess> COMPARATOR_BY_UNIT_NAME = new Comparator<WorkingCapitalProcess>() {
 	@Override
 	public int compare(WorkingCapitalProcess o1, WorkingCapitalProcess o2) {
-	    final int c = Collator.getInstance().compare(o1.getWorkingCapital().getUnit().getName(), o2.getWorkingCapital().getUnit().getName());
+	    final int c = Collator.getInstance().compare(o1.getWorkingCapital().getUnit().getName(),
+		    o2.getWorkingCapital().getUnit().getName());
 	    return c == 0 ? o2.hashCode() - o1.hashCode() : c;
 	}
     };
@@ -77,6 +79,7 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base implements
 	activitiesAux.add(new VerifyActivity());
 	activitiesAux.add(new UnVerifyActivity());
 	activitiesAux.add(new AllocateFundsActivity());
+	activitiesAux.add(new UnAllocateFundsActivity());
 	activitiesAux.add(new AuthorizeActivity());
 	activitiesAux.add(new UnAuthorizeActivity());
 	activitiesAux.add(new RejectWorkingCapitalInitializationActivity());
@@ -108,7 +111,7 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base implements
 	super();
     }
 
-   public WorkingCapitalProcess(final WorkingCapital workingCapital) {
+    public WorkingCapitalProcess(final WorkingCapital workingCapital) {
 	this();
 	setWorkingCapital(workingCapital);
     }
@@ -126,16 +129,14 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base implements
     @Override
     public boolean isAccessible(final User user) {
 	final WorkingCapital workingCapital = getWorkingCapital();
-	return user != null && user.hasPerson() && (
-		user.hasRoleType(RoleType.MANAGER)
-		|| (workingCapital.hasMovementResponsible() && user.getPerson() == workingCapital.getMovementResponsible())
-		|| workingCapital.isRequester(user)
-		|| workingCapital.getWorkingCapitalSystem().isManagementeMember(user)
-		|| workingCapital.isAccountingEmployee(user)
-		|| workingCapital.isAccountingResponsible(user)
-		|| workingCapital.isTreasuryMember(user)
-		|| workingCapital.isResponsibleFor(user)
-		);
+	return user != null
+		&& user.hasPerson()
+		&& (user.hasRoleType(RoleType.MANAGER)
+			|| (workingCapital.hasMovementResponsible() && user.getPerson() == workingCapital
+				.getMovementResponsible()) || workingCapital.isRequester(user)
+			|| workingCapital.getWorkingCapitalSystem().isManagementeMember(user)
+			|| workingCapital.isAccountingEmployee(user) || workingCapital.isAccountingResponsible(user)
+			|| workingCapital.isTreasuryMember(user) || workingCapital.isResponsibleFor(user));
     }
 
     public boolean isPendingAproval(final User user) {
@@ -174,15 +175,12 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base implements
 	    final User loggedUser = UserView.getCurrentUser();
 	    final WorkingCapital workingCapital = getWorkingCapital();
 	    new Email("Aplicações Centrais do IST", "noreply@ist.utl.pt", new String[] {}, toAddress, Collections.EMPTY_LIST,
-		    Collections.EMPTY_LIST,
-		    	BundleUtil.getFormattedStringFromResourceBundle("resources/WorkingCapitalResources",
-			    "label.email.commentCreated.subject",
-			    workingCapital.getUnit().getPresentationName(),
-			    workingCapital.getWorkingCapitalYear().getYear().toString()),
-			BundleUtil.getFormattedStringFromResourceBundle("resources/WorkingCapitalResources",
-				    "label.email.commentCreated.body", loggedUser.getPerson().getName(),
-				    workingCapital.getUnit().getPresentationName(),
-				    workingCapital.getWorkingCapitalYear().getYear().toString(), comment));
+		    Collections.EMPTY_LIST, BundleUtil.getFormattedStringFromResourceBundle("resources/WorkingCapitalResources",
+			    "label.email.commentCreated.subject", workingCapital.getUnit().getPresentationName(), workingCapital
+				    .getWorkingCapitalYear().getYear().toString()),
+		    BundleUtil.getFormattedStringFromResourceBundle("resources/WorkingCapitalResources",
+			    "label.email.commentCreated.body", loggedUser.getPerson().getName(), workingCapital.getUnit()
+				    .getPresentationName(), workingCapital.getWorkingCapitalYear().getYear().toString(), comment));
 	}
     }
 
@@ -213,12 +211,12 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base implements
 	final List<Class<? extends ProcessFile>> fileTypes = new ArrayList<Class<? extends ProcessFile>>();
 	fileTypes.addAll(super.getDisplayableFileTypes());
 	fileTypes.remove(WorkingCapitalInvoiceFile.class);
-        return fileTypes;
+	return fileTypes;
     }
 
     @Override
     public boolean isTicketSupportAvailable() {
-        return false;
+	return false;
     }
 
     @Override
