@@ -27,8 +27,8 @@
 				<fr:property name="classes" value="inputsize300px"/>
 			</fr:slot>
 			<fr:slot name="location" key="label.mission.location" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-			<fr:slot name="daparture" key="label.mission.departure" layout="picker" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-			<fr:slot name="arrival" key="label.mission.arrival" layout="picker" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+			<fr:slot name="daparture" key="label.mission.departure" layout="picker" validator="pt.ist.fenixWebFramework.rendererExtensions.validators.DateTimeValidator"/>
+			<fr:slot name="arrival" key="label.mission.arrival" layout="picker" validator="pt.ist.fenixWebFramework.rendererExtensions.validators.DateTimeValidator"/>
 			<fr:slot name="objective" key="label.mission.objective" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
 				<fr:property name="size" value="60"/>
 			</fr:slot>
