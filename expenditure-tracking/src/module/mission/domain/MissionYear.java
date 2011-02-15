@@ -121,7 +121,7 @@ public class MissionYear extends MissionYear_Base {
 		return (!missionProcess.hasCurrentOwner() || missionProcess.isTakenByCurrentUser())
 			&& missionProcess.isApproved() && !missionProcess.getIsCanceled()
 			&& ((missionProcess.isPendingParticipantAuthorisationBy(user)
-					&& missionProcess.hasAllAllocatedFunds())
+					&& (!missionProcess.getMission().hasAnyFinancer() || missionProcess.hasAllAllocatedFunds()))
 				|| (//missionProcess.areAllParticipantsAuthorizedForPhaseOne()
 					missionProcess.areAllParticipantsAuthorized()
 					&& missionProcess.hasAllAllocatedFunds()
