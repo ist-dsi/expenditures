@@ -811,6 +811,7 @@ public abstract class Mission extends Mission_Base {
 	// TODO Possibly refactor this and place data in the repository...
 	//      also this does not yet account for mobile holidays and local 
 	//      holidays depending on the persons working place.
+	final int year = dateTime.getYear();
 	final int monthOfYear = dateTime.getMonthOfYear();
 	final int dayOfMonth = dateTime.getDayOfMonth();
 	return (monthOfYear == 1 && dayOfMonth == 1)
@@ -822,7 +823,10 @@ public abstract class Mission extends Mission_Base {
 		|| (monthOfYear == 11 && dayOfMonth == 1)
 		|| (monthOfYear == 12 && dayOfMonth == 1)
 		|| (monthOfYear == 12 && dayOfMonth == 8)
-		|| (monthOfYear == 12 && dayOfMonth == 25);
+		|| (monthOfYear == 12 && dayOfMonth == 25)
+		|| (year == 2011 && monthOfYear == 4 && dayOfMonth == 22)
+		|| (year == 2011 && monthOfYear == 6 && dayOfMonth == 13)
+		|| (year == 2011 && monthOfYear == 6 && dayOfMonth == 23);
     }
 
     public int getNunberOfLunchesToDiscountOnFirstPersonelExpenseDay(final PersonelExpenseItem personelExpenseItem) {
