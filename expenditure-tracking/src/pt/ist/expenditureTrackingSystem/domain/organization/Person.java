@@ -74,12 +74,14 @@ public class Person extends Person_Base implements Indexable, Searchable {
 
 	@Override
 	public void afterAdd(final User user, final MyOrg myOrg) {
-	    final String username = user.getUsername();
-	    Person person = Person.findByUsername(username);
-	    if (person == null) {
-		person = new Person(user.getUsername());
+	    if (user.hasMyOrg()) {
+		final String username = user.getUsername();
+		Person person = Person.findByUsername(username);
+		if (person == null) {
+		    person = new Person(user.getUsername());
+		}
+		user.setExpenditurePerson(person);
 	    }
-	    user.setExpenditurePerson(person);
 	}
 
     }
@@ -112,9 +114,16 @@ public class Person extends Person_Base implements Indexable, Searchable {
 
     @Service
     public void delete() {
+	if (hasDashBoard()) {
+	    getDashBoard().delete();
+	}
+	if (hasDefaultSearch()) {
+	    getDefaultSearch().delete();
+	}
 	removeExpenditureTrackingSystem();
 	getRoles().clear();
 	getOptions().delete();
+	removeUser();
 	deleteDomainObject();
     }
 
@@ -270,7 +279,7 @@ public class Person extends Person_Base implements Indexable, Searchable {
     @Override
     public DashBoard getDashBoard() {
 	DashBoard dashBoard = super.getDashBoard();
-	if (dashBoard == null) {
+	if (dashBoard == null && hasExpenditureTrackingSystem()) {
 	    dashBoard = DashBoard.newDashBoard(this);
 	    setDashBoard(dashBoard);
 	}

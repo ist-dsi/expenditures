@@ -3,10 +3,33 @@ package module.mission.domain;
 import java.math.BigDecimal;
 import java.util.Set;
 
+import module.organization.domain.Party;
 import module.organization.domain.Person;
+import module.organizationIst.domain.PartyImportRegister.PartyImportRegisterMyOrgListener;
+import myorg.domain.MyOrg;
+import dml.runtime.RelationAdapter;
 
 public class Salary extends Salary_Base {
-    
+
+    public static class SalaryPartyMyOrgListener extends RelationAdapter<Party, MyOrg> {
+
+	@Override
+	public void afterRemove(final Party o1, final MyOrg o2) {
+	    if (o1.isPerson()) {
+		final Person person = (Person) o1;
+		if (person.hasSalary()) {
+		    person.removeSalary();
+		}
+	    }
+	    super.afterRemove(o1, o2);
+	}
+
+    }
+
+    static {
+	Party.MyOrgParty.addListener(new SalaryPartyMyOrgListener());
+    }
+
     public Salary() {
         super();
         setMissionSystem(MissionSystem.getInstance());

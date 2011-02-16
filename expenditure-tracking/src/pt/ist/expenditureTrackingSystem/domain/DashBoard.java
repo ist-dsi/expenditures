@@ -46,4 +46,10 @@ public class DashBoard extends DashBoard_Base {
 	return new DashBoard(person);
     }
 
+    public void delete() {
+	removePerson();
+	removeExpenditureTrackingSystem();
+	deleteDomainObject();
+    }
+
 }
