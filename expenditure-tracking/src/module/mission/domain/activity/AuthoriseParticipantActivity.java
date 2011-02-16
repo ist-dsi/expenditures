@@ -21,7 +21,8 @@ public class AuthoriseParticipantActivity extends MissionProcessActivity<Mission
 		&& !missionProcess.getIsCanceled()
 		&& missionProcess.isApproved()
 		&& missionProcess.canAuthoriseParticipantActivity()
-		&& (!missionProcess.getMission().hasAnyFinancer() || missionProcess.hasAllAllocatedFunds());
+		&& (!missionProcess.getMission().hasAnyFinancer() || 
+			missionProcess.hasAllAllocatedFunds());
     }
 
     @Override
