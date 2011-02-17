@@ -14,6 +14,29 @@
 <bean:define id="processRequest" name="process" property="request" toScope="request"/>
 <bean:define id="processId" name="process" property="externalId"/>
 
+<logic:equal name="process" property="warnRegardingProcessClassificationNeeded" value="true">
+	 <div class="infobox_warning">
+	 	<p class="mvert025">
+	         <bean:message key="label.warning.mismatchBetweenClassificationAndUnitDefault" bundle="ACQUISITION_RESOURCES"/>
+	         
+	         <logic:equal name="process" property="acquisitionRequest.requestingUnit.defaultRegeimIsCCP" value="true">
+	        	<p>
+	        	<strong>
+	        			<bean:message key="label.warning.mismatchBetweenClassificationAndUnitDefault.ccpWarn" bundle="ACQUISITION_RESOURCES"/>
+	        	</strong>
+	        	</p>
+	         </logic:equal>
+	    </p>
+	</div>
+</logic:equal>
+
+<logic:equal name="process" property="warnForLessSuppliersActive" value="true">
+	<div class="infobox_warning">
+	 	<p class="mvert025">
+	 		<bean:message key="label.warning.warnForLessSuppliers" bundle="ACQUISITION_RESOURCES"/>
+	 	</p>
+	 </div>
+</logic:equal>
 <div class="infobox3 col2-1">
 	<h3>Informação</h3>
 	<div>

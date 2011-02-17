@@ -19,6 +19,8 @@ import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.WorkflowProcess;
 import module.workflow.domain.WorkflowProcessComment;
 import module.workflow.domain.WorkflowQueue;
+import module.workflow.domain.utils.WorkflowCommentCounter;
+import module.workflow.widgets.UnreadCommentsWidget;
 import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.RoleType;
 import myorg.domain.User;
@@ -34,6 +36,10 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 
 @ClassNameBundle(bundle = "resources/MissionResources")
 public abstract class MissionProcess extends MissionProcess_Base {
+
+    static {
+	UnreadCommentsWidget.register(new WorkflowCommentCounter(MissionProcess.class));
+    }
 
     public static final Comparator<MissionProcess> COMPARATOR_BY_PROCESS_NUMBER = new Comparator<MissionProcess>() {
 	@Override

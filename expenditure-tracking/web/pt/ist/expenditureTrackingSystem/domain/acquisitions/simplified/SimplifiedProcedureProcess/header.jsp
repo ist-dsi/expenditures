@@ -9,28 +9,3 @@
 	<bean:message key="acquisitionProcess.title.viewAcquisitionRequest" bundle="ACQUISITION_RESOURCES"/>
 	<span class="processNumber">(<fr:view name="process" property="acquisitionRequest.acquisitionProcessId"/>)</span>	
 </h2> 
-
-
-<logic:equal name="process" property="warnRegardingProcessClassificationNeeded" value="true">
-	 <div class="infobox_warning">
-	 	<p class="mvert025">
-	         <bean:message key="label.warning.mismatchBetweenClassificationAndUnitDefault" bundle="ACQUISITION_RESOURCES"/>
-	         
-	         <logic:equal name="process" property="acquisitionRequest.requestingUnit.defaultRegeimIsCCP" value="true">
-	        	<p>
-	        	<strong>
-	        			<bean:message key="label.warning.mismatchBetweenClassificationAndUnitDefault.ccpWarn" bundle="ACQUISITION_RESOURCES"/>
-	        	</strong>
-	        	</p>
-	         </logic:equal>
-	    </p>
-	</div>
-</logic:equal>
-
-<logic:equal name="process" property="warnForLessSuppliersActive" value="true">
-	<div class="infobox_warning">
-	 	<p class="mvert025">
-	 		<bean:message key="label.warning.warnForLessSuppliers" bundle="ACQUISITION_RESOURCES"/>
-	 	</p>
-	 </div>
-</logic:equal>

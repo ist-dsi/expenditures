@@ -59,7 +59,7 @@ public abstract class GenericProcess extends GenericProcess_Base {
 	final ProcessesThatAreAuthorizedByUserPredicate predicate = new ProcessesThatAreAuthorizedByUserPredicate(person);
 
 	final ProcessEvaluator<GenericProcess> genericProcessEvaluator = new ProcessEvaluator<GenericProcess>() {
-	    private Set<GenericProcess> processed = new HashSet<GenericProcess>();
+	    private final Set<GenericProcess> processed = new HashSet<GenericProcess>();
 
 	    {
 		next = processEvaluator;
@@ -195,6 +195,7 @@ public abstract class GenericProcess extends GenericProcess_Base {
 	return Person.getLoggedPerson();
     }
 
+    @Override
     public List<WorkflowProcessComment> getUnreadCommentsForCurrentUser() {
 	return getUnreadCommentsForPerson(Person.getLoggedPerson());
     }

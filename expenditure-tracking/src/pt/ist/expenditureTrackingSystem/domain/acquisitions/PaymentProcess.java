@@ -11,12 +11,15 @@ import java.util.Set;
 import module.mission.domain.MissionProcess;
 import module.workflow.domain.ProcessFile;
 import module.workflow.domain.WorkflowLog;
+import module.workflow.domain.utils.WorkflowCommentCounter;
 import module.workflow.util.HasPresentableProcessState;
 import module.workflow.util.PresentableProcessState;
+import module.workflow.widgets.UnreadCommentsWidget;
 import myorg.domain.User;
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
 import myorg.util.BundleUtil;
+import myorg.util.ClassNameBundle;
 
 import org.joda.time.LocalDate;
 
@@ -29,6 +32,7 @@ import pt.ist.expenditureTrackingSystem.domain.organization.SubProject;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 
+@ClassNameBundle(bundle = "resources/ExpenditureResources")
 public abstract class PaymentProcess extends PaymentProcess_Base implements HasPresentableProcessState {
 
     public static Comparator<PaymentProcess> COMPARATOR_BY_YEAR_AND_ACQUISITION_PROCESS_NUMBER = new Comparator<PaymentProcess>() {
@@ -52,6 +56,10 @@ public abstract class PaymentProcess extends PaymentProcess_Base implements HasP
 	    return o1.getAcquisitionProcessNumber().compareTo(o2.getAcquisitionProcessNumber());
 	}
     };
+
+    static {
+	UnreadCommentsWidget.register(new WorkflowCommentCounter(PaymentProcess.class));
+    }
 
     public PaymentProcess() {
 	super();
