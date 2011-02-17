@@ -8,6 +8,8 @@ import module.mission.domain.util.AuthorizationChain;
 import module.organization.domain.Accountability;
 import module.organization.domain.AccountabilityType;
 import module.organization.domain.FunctionDelegation;
+import module.organization.domain.OrganizationalModel;
+import module.organization.domain.Party;
 import module.organization.domain.Person;
 import module.organization.domain.Unit;
 import myorg.applicationTier.Authenticate.UserView;
@@ -78,7 +80,7 @@ public class PersonMissionAuthorization extends PersonMissionAuthorization_Base 
     }
 
     public boolean canAuthoriseParticipantActivity(final Person person) {
-	if (person == getSubject() /* || !isAvailableForAuthorization() */) {
+	if (person == getSubject() && !isHighestLevelAuthority(person) /* || !isAvailableForAuthorization() */) {
 	    return false;
 	}
 	final MissionSystem instance = MissionSystem.getInstance();
@@ -86,6 +88,20 @@ public class PersonMissionAuthorization extends PersonMissionAuthorization_Base 
 	//final AccountabilityType accountabilityType = IstAccountabilityType.PERSONNEL_RESPONSIBLE_MISSIONS.readAccountabilityType();
 	return (!hasAuthority() && !hasDelegatedAuthority() && getUnit().hasChildAccountabilityIncludingAncestry(accountabilityTypes, person))
 		|| (hasNext() && getNext().canAuthoriseParticipantActivity(person));
+    }
+
+    private boolean isHighestLevelAuthority(final Person person) {
+	final OrganizationalModel organizationalModel = MissionSystem.getInstance().getOrganizationalModel();
+	for (final Party party : organizationalModel.getPartiesSet()) {
+	    if (party.isUnit()) {
+		final MissionSystem instance = MissionSystem.getInstance();
+		final Set<AccountabilityType> accountabilityTypes = instance.getAccountabilityTypesThatAuthorize();
+		if (party.hasChildAccountabilityIncludingAncestry(accountabilityTypes, person)) {
+		    return true;
+		}
+	    }
+	}
+	return false;
     }
 
     public boolean isAvailableForAuthorization() {
