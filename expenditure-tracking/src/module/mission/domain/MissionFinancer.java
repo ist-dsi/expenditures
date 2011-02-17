@@ -272,7 +272,7 @@ public class MissionFinancer extends MissionFinancer_Base {
     }
 
     public void unAllocateProjectFunds(Person person) {
-	if (canAllocateProjectFunds(person)) {
+	if (getAccountingUnit().hasProjectAccountants(person.getUser().getExpenditurePerson())) {
 	    for (final MissionItemFinancer missionItemFinancer : getMissionItemFinancersSet()) {
 		if (missionItemFinancer instanceof MissionItemProjectFinancer) {
 		    final MissionItemProjectFinancer missionItemProjectFinancer = (MissionItemProjectFinancer) missionItemFinancer;
