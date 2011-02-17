@@ -11,8 +11,10 @@ import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.ProcessFile;
 import module.workflow.domain.WorkflowProcess;
+import module.workflow.domain.utils.WorkflowCommentCounter;
 import module.workflow.util.HasPresentableProcessState;
 import module.workflow.util.PresentableProcessState;
+import module.workflow.widgets.UnreadCommentsWidget;
 import module.workingCapital.domain.activity.AcceptResponsabilityForWorkingCapitalActivity;
 import module.workingCapital.domain.activity.AllocateFundsActivity;
 import module.workingCapital.domain.activity.ApproveActivity;
@@ -105,6 +107,8 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base implements
 	activitiesAux.add(new ReenforceWorkingCapitalInitializationActivity());
 	activitiesAux.add(new CancelReenforceWorkingCapitalInitializationActivity());
 	activities = Collections.unmodifiableList(activitiesAux);
+
+	UnreadCommentsWidget.register(new WorkflowCommentCounter(WorkingCapitalProcess.class));
     }
 
     public WorkingCapitalProcess() {
