@@ -1278,4 +1278,18 @@ public abstract class Mission extends Mission_Base {
 	missionVersion.unArchive();
     }
 
+    public boolean isUnitObserver(final User user) {
+	for (final MissionFinancer financer : getFinancerSet()) {
+	    if (financer.isUnitObserver(user)) {
+		return true;
+	    }
+	}
+	for (final PersonMissionAuthorization personMissionAuthorization : getPersonMissionAuthorizationsSet()) {
+	    if (personMissionAuthorization.isUnitObserver(user)) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
 }

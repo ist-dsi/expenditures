@@ -17,6 +17,7 @@ import module.organizationIst.domain.IstAccountabilityType;
 import module.organizationIst.domain.IstPartyType;
 import module.workflow.util.ProcessEvaluator;
 import myorg.domain.MyOrg;
+import myorg.domain.User;
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
 
@@ -661,6 +662,11 @@ public class Unit extends Unit_Base implements Indexable, Searchable {
 
     public boolean hasSomeAccountManager() {
 	return hasAccountManager() || (hasParentUnit() && getParentUnit().hasSomeAccountManager());
+    }
+
+    public boolean isUnitObserver(final User user) {
+	final Person person = user.getExpenditurePerson();
+	return getObserversSet().contains(person);
     }
 
 }

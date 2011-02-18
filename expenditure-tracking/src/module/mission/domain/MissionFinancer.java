@@ -329,4 +329,8 @@ public class MissionFinancer extends MissionFinancer_Base {
 	return accountingUnit == null && hasUnit() ? getUnit().getAccountingUnit() : accountingUnit;
     }
 
+    public boolean isUnitObserver(final User user) {
+	return getUnit().isUnitObserver(user);
+    }
+
 }

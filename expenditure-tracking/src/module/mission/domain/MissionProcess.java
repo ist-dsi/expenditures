@@ -478,10 +478,17 @@ public abstract class MissionProcess extends MissionProcess_Base {
     public boolean isAccessible(final User user) {
 	final Person person = user.getPerson();
 	final Mission mission = getMission();
-	return isTakenByPerson(user) || getProcessCreator() == user || mission.getRequestingPerson() == person
-		|| user.hasRoleType(RoleType.MANAGER) || (person != null && person.getMissionsSet().contains(mission))
-		|| mission.isParticipantResponsible(person) || mission.isFinancerResponsible(user.getExpenditurePerson())
-		|| mission.isFinancerAccountant(user.getExpenditurePerson()) || mission.isPersonelSectionMember(user);
+	return isTakenByPerson(user)
+		|| getProcessCreator() == user
+		|| mission.getRequestingPerson() == person
+		|| user.hasRoleType(RoleType.MANAGER)
+		|| (person != null && person.getMissionsSet().contains(mission))
+		|| mission.isParticipantResponsible(person)
+		|| mission.isFinancerResponsible(user.getExpenditurePerson())
+		|| mission.isFinancerAccountant(user.getExpenditurePerson())
+		|| mission.isPersonelSectionMember(user)
+		|| mission.getParticipantesSet().contains(person)
+		|| mission.isUnitObserver(user);
     }
 
     public boolean isReadyForMissionTermination() {

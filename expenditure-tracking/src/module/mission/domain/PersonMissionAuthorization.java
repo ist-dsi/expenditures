@@ -203,4 +203,13 @@ public class PersonMissionAuthorization extends PersonMissionAuthorization_Base 
 	return missionProcess.getCurrentOwner() != null && !missionProcess.isTakenByCurrentUser();
     }
 
+    public boolean isUnitObserver(final User user) {
+	final Unit unit = getUnit();
+	final pt.ist.expenditureTrackingSystem.domain.organization.Unit expenditureUnit = unit.getExpenditureUnit();
+	if (expenditureUnit != null && expenditureUnit.isUnitObserver(user)) {
+	    return true;
+	}
+	return hasNext() && getNext().isUnitObserver(user);
+    }
+
 }
