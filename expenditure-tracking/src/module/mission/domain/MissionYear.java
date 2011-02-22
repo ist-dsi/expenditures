@@ -338,4 +338,12 @@ public class MissionYear extends MissionYear_Base {
 	return result;
     }
 
+    public void delete() {
+	if (hasAnyMissionProcess()) {
+	    throw new Error("cannot.delete.because.mission.process.exist");
+	}
+	removeMissionSystem();
+	deleteDomainObject();
+    }
+
 }
