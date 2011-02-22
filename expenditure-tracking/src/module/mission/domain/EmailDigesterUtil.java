@@ -37,7 +37,7 @@ public class EmailDigesterUtil {
 	    	    try {
 	    		final MissionYear missionYear = MissionYear.getCurrentYear();
 	    		final LocalDate today = new LocalDate();
-	    		final MissionYear previousYear = today.getMonthOfYear() == Month.JANUARY ? MissionYear.findMissionYear(today.getYear() - 1) : null;
+	    		final MissionYear previousYear = today.getMonthOfYear() == Month.JANUARY ? MissionYear.findOrCreateMissionYear(today.getYear() - 1) : null;
 
 	    		final int takenByUser = missionYear.getTaken().size() + (previousYear == null ? 0 : previousYear.getTaken().size());
 	    		final int pendingApprovalCount = missionYear.getPendingAproval().size() + (previousYear == null ? 0 : previousYear.getPendingAproval().size());
@@ -124,7 +124,7 @@ public class EmailDigesterUtil {
 	final MissionYear missionYear = MissionYear.getCurrentYear();
 	addRequestorsAndResponsibles(people, missionYear);
 	if (today.getMonthOfYear() == Month.JANUARY) {
-	    final MissionYear previousYear = MissionYear.findMissionYear(today.getYear() - 1);
+	    final MissionYear previousYear = MissionYear.findOrCreateMissionYear(today.getYear() - 1);
 	    addRequestorsAndResponsibles(people, previousYear);
 	}
 	return people;

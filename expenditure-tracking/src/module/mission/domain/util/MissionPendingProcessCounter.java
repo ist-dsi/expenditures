@@ -23,7 +23,7 @@ public class MissionPendingProcessCounter extends ProcessCounter {
     public int getCount() {
 	final MissionYear missionYear = MissionYear.getCurrentYear();
 	final LocalDate today = new LocalDate();
-	final MissionYear previousYear = today.getMonthOfYear() == Month.JANUARY ? MissionYear.findMissionYear(today.getYear() - 1) : null;
+	final MissionYear previousYear = today.getMonthOfYear() == Month.JANUARY ? MissionYear.findOrCreateMissionYear(today.getYear() - 1) : null;
 
 	final int takenByUser = missionYear.getTaken().size() + (previousYear == null ? 0 : previousYear.getTaken().size());
 	final int pendingApprovalCount = missionYear.getPendingAproval().size() + (previousYear == null ? 0 : previousYear.getPendingAproval().size());

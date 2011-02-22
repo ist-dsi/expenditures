@@ -1,5 +1,6 @@
 package module.mission.domain;
 
+import java.util.Calendar;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
@@ -51,6 +52,10 @@ public class MissionYear extends MissionYear_Base {
 	if (findMissionByYearAux(year) != null) {
 	    throw new Error("There can only be one! (MissionYear object for each year)");
 	}
+	final int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+	if (year != currentYear && year != currentYear + 1) {
+	    throw new Error("There is absolutly no need to create a year other that the current and the next!");
+	}
 	setMissionSystem(MissionSystem.getInstance());
 	setYear(new Integer(year));
 	setCounter(Integer.valueOf(0));
@@ -66,8 +71,12 @@ public class MissionYear extends MissionYear_Base {
 	return null;
     }
 
-    @Service
     public static MissionYear findMissionYear(final int year) {
+	return findMissionByYearAux(year);
+    }
+
+    @Service
+    public static MissionYear findOrCreateMissionYear(final int year) {
 	final MissionYear missionYear = findMissionByYearAux(year);
 	return missionYear == null ? new MissionYear(year) : missionYear;
     }
@@ -83,7 +92,7 @@ public class MissionYear extends MissionYear_Base {
 
     public static MissionYear getCurrentYear() {
 	final int year = new DateTime().getYear();
-	return findMissionYear(year);
+	return findOrCreateMissionYear(year);
     }
 
     private abstract class MissionProcessSearch {
