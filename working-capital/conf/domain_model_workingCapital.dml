@@ -261,7 +261,7 @@ relation WorkingCapitalTransactionPerson {
 	}
 }
 
-relation WorkingCapitalTransactionWorkingCapitalPayment {
+relation WorkingCapitalRequestWorkingCapitalPayment {
 	WorkingCapitalRequest playsRole workingCapitalRequest;
 	WorkingCapitalPayment playsRole workingCapitalPayment;
 }
