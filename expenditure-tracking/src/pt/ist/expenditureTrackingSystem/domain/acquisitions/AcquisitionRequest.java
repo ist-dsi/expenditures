@@ -331,6 +331,13 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 		return false;
 	    }
 	}
+	for (final Financer financer : getFinancersSet()) {
+	    final Money amountAllocated = financer.getAmountAllocated();
+	    if (Money.ZERO.equals(amountAllocated)) {
+		return false;
+	    }
+	}
+	
 	return true;
     }
 

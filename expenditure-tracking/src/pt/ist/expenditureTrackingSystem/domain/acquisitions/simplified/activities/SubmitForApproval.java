@@ -11,8 +11,10 @@ public class SubmitForApproval extends
 
     @Override
     public boolean isActive(RegularAcquisitionProcess process, User user) {
-	return user.getExpenditurePerson() == process.getRequestor() && isUserProcessOwner(process, user)
-		&& process.getAcquisitionProcessState().isInGenesis() && process.getAcquisitionRequest().isFilled()
+	return user.getExpenditurePerson() == process.getRequestor()
+		&& isUserProcessOwner(process, user)
+		&& process.getAcquisitionProcessState().isInGenesis()
+		&& process.getAcquisitionRequest().isFilled()
 		&& process.getAcquisitionRequest().isEveryItemFullyAttributedToPayingUnits();
     }
 
