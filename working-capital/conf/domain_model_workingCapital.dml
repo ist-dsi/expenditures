@@ -285,6 +285,13 @@ relation WorkingCapitalAcquisitionWorkingCapitalAcquisitionTransaction {
 	WorkingCapitalAcquisitionTransaction playsRole workingCapitalAcquisitionTransaction;
 }
 
+relation WorkingCapitalAcquisitionSubmissionWorkingCapitalAcquisitionTransactions {
+	WorkingCapitalAcquisitionSubmission playsRole workingCapitalAcquisitionSubmission;
+	WorkingCapitalAcquisitionTransaction playsRole workingCapitalAcquisitionTransactions {
+		multiplicity *;
+	}
+}
+
 relation WorkingCapitalAcquisitionAcquisitionClassification {
 	WorkingCapitalAcquisition playsRole workingCapitalAcquisitions {
 		multiplicity *;

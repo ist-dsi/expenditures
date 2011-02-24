@@ -1,5 +1,8 @@
 package module.workingCapital.domain;
 
+import java.util.Set;
+import java.util.TreeSet;
+
 import module.organization.domain.Person;
 import myorg.domain.util.Money;
 import myorg.util.BundleUtil;
@@ -22,6 +25,13 @@ public class WorkingCapitalAcquisitionSubmission extends WorkingCapitalAcquisiti
     @Override
     public boolean isSubmission() {
 	return true;
+    }
+
+    public Set<WorkingCapitalAcquisitionTransaction> getWorkingCapitalAcquisitionTransactionsSorted() {
+	TreeSet<WorkingCapitalAcquisitionTransaction> sortedAcquisitions = new TreeSet<WorkingCapitalAcquisitionTransaction>(
+		COMPARATOR_BY_NUMBER);
+	sortedAcquisitions.addAll(getWorkingCapitalAcquisitionTransactionsSet());
+	return sortedAcquisitions;
     }
 
     @Override

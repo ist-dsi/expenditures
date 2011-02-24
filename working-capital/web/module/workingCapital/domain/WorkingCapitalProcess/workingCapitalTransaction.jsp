@@ -36,6 +36,31 @@
 			<fr:slot name="paymentRequired" key="label.module.workingCapital.paymentRequired" />
 		</fr:schema>
 	</fr:view>
+	
+	<p>
+	
+	<logic:notEmpty name="workingCapitalTransaction" property="workingCapitalAcquisitionTransactions">
+		<h3>
+			<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.domain.WorkingCapitalAcquisitionSubmission.transactionsSubmitted"/>
+		</h3>
+		
+		<p>
+		
+		<table class="tstyle3 width100pc">
+			<tr>
+				<jsp:include page="workingCapitalTransactionLineHeader.jsp"/>
+			</tr>
+			<bean:define id="workingCapitalSubmissionTransaction" name="workingCapitalTransaction"/>
+			<logic:iterate id="workingCapitalAcquisitionTransaction" name="workingCapitalSubmissionTransaction" property="workingCapitalAcquisitionTransactionsSorted">
+				<tr>
+					<bean:define id="workingCapitalTransaction" name="workingCapitalAcquisitionTransaction" toScope="request"/>
+					<jsp:include page="workingCapitalTransactionLine.jsp"/>
+				</tr>
+			</logic:iterate>
+			<bean:define id="workingCapitalTransaction" name="workingCapitalSubmissionTransaction" toScope="request"/>
+		</table>
+	</logic:notEmpty>
+	
 </logic:equal>
 
 <logic:equal name="workingCapitalTransaction" property="payment" value="true">

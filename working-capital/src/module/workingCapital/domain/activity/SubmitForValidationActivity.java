@@ -4,8 +4,10 @@ import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workingCapital.domain.WorkingCapital;
 import module.workingCapital.domain.WorkingCapitalAcquisitionSubmission;
+import module.workingCapital.domain.WorkingCapitalAcquisitionTransaction;
 import module.workingCapital.domain.WorkingCapitalInitialization;
 import module.workingCapital.domain.WorkingCapitalProcess;
+import module.workingCapital.domain.WorkingCapitalTransaction;
 import myorg.domain.User;
 import myorg.domain.util.Money;
 import myorg.util.BundleUtil;
@@ -37,8 +39,19 @@ public class SubmitForValidationActivity extends WorkflowActivity<WorkingCapital
 	    workingCapitalInitialization.setLastSubmission(new DateTime());
 	}
 	final Money accumulatedValue = workingCapital.getLastTransaction().getAccumulatedValue();
-	new WorkingCapitalAcquisitionSubmission(workingCapital, getLoggedPerson().getPerson(), accumulatedValue,
-		activityInformation.isPaymentRequired());
+	WorkingCapitalAcquisitionSubmission acquisitionSubmission = new WorkingCapitalAcquisitionSubmission(workingCapital,
+		getLoggedPerson().getPerson(), accumulatedValue, activityInformation.isPaymentRequired());
+	WorkingCapitalTransaction previousTransaction = acquisitionSubmission.getPreviousTransaction();
+	while (previousTransaction != null) {
+	    if (previousTransaction.isSubmission()) {
+		break;
+	    }
+	    if (previousTransaction.isAcquisition()) {
+		acquisitionSubmission
+			.addWorkingCapitalAcquisitionTransactions((WorkingCapitalAcquisitionTransaction) previousTransaction);
+	    }
+	    previousTransaction = previousTransaction.getPreviousTransaction();
+	}
     }
 
     @Override
