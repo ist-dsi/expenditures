@@ -31,7 +31,7 @@
 			<fr:slot name="fundAllocationId" key="label.module.workingCapital.fundAllocationId"/>
 			<fr:slot name="requestedAnualValue" key="label.module.workingCapital.requestedAnualValue.requested"/>
 			<fr:slot name="requestedAnualValue.roundedValue" layout="format" key="label.module.workingCapital.requestedMonthlyValue.requested">
-				<fr:property name="format" value="<%= workingCapitalInitialization.getRequestedAnualValue().divideAndRound(new BigDecimal(12)).toFormatString() %>"/>
+				<fr:property name="format" value="<%= workingCapitalInitialization.getRequestedAnualValue().divideAndRound(new BigDecimal(6)).toFormatString() %>"/>
 			</fr:slot>
 			<fr:slot name="authorizedAnualValue"  key="label.module.workingCapital.authorizedAnualValue" layout="null-as-label">
 				<fr:property name="subLayout" value=""/>
