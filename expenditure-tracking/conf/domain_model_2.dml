@@ -28,6 +28,9 @@ class pt.ist.expenditureTrackingSystem.domain.ExpenditureWidgetOptions extends m
 	Integer maxListSize;
 }
 
+class module.organizationIst.domain.task.ImportEmployeesAndResponsibles extends .myorg.domain.scheduler.Task {
+}
+
 relation MyOrgExpenditureTrackingSystem {
 	myorg.domain.MyOrg playsRole myOrg;
 	pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
