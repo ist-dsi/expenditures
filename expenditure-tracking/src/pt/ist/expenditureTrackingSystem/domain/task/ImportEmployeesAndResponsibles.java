@@ -1,4 +1,4 @@
-package module.organizationIst.domain.task;
+package pt.ist.expenditureTrackingSystem.domain.task;
 
 import pt.ist.fenixWebFramework.services.Service;
 
