@@ -1,5 +1,6 @@
 package pt.ist.expenditureTrackingSystem.domain.task;
 
+import module.organizationIst.domain.task.ImportEmployeesAndResponsiblesAux;
 import pt.ist.fenixWebFramework.services.Service;
 
 public class ImportEmployeesAndResponsibles extends ImportEmployeesAndResponsibles_Base {
