@@ -234,6 +234,10 @@ public class WorkingCapital extends WorkingCapital_Base {
     }
 
     public boolean isTreasuryMember(final User user) {
+	final AccountingUnit accountingUnit = getAccountingUnit();
+	if (accountingUnit != null) {
+	    return accountingUnit.getTreasuryMembersSet().contains(user.getExpenditurePerson());
+	}
 	final Unit unit = getUnit();
 	return unit.isTreasuryMember(user.getExpenditurePerson());
     }
