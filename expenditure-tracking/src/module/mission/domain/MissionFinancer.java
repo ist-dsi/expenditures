@@ -35,6 +35,7 @@ public class MissionFinancer extends MissionFinancer_Base {
 	removeMissions();
 	removeUnit();
 	removeMissionSystem();
+	removeAccountingUnit();
 	deleteDomainObject();
     }
 
