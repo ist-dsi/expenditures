@@ -27,8 +27,11 @@
 				<h4 class="mtop5"><bean:message key="messages.exception.contacts" bundle="EXPENDITURE_RESOURCES"/></h4>
 				
 				<ul>
+<!-- 
 					<li><bean:message key="messages.exception.processDoubt" bundle="EXPENDITURE_RESOURCES"/></li>
 					<li><bean:message key="messages.exception.technicalContact" bundle="EXPENDITURE_RESOURCES"/></li>
+ -->
+ 					<li><bean:message key="messages.exception.technicalContact" bundle="EXPENDITURE_RESOURCES"/></li>
 				</ul>
 				
 				<p class="mtop15">
