@@ -1189,7 +1189,7 @@ public abstract class Mission extends Mission_Base {
 	return getArrival().isBeforeNow()
 		&& !sentForTermination()
 		&& areAllParticipantsAuthorized()
-		&& areAllFundsAuthorized();
+		&& (!hasAnyFinancer() || areAllFundsAuthorized());
     }
 
     private boolean areAllFundsAuthorized() {

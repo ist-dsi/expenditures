@@ -61,7 +61,8 @@ public class MissionStageView {
     }
 
     protected MissionStageState getParticipationAuthorizationState() {
-	return missionProcess.isApproved() && missionProcess.hasAllAllocatedFunds() ? getParticipationAuthorizationStateForApproved() : MissionStageState.NOT_YET_UNDER_WAY;
+	return missionProcess.isApproved() && (!missionProcess.getMission().hasAnyFinancer() || missionProcess.hasAllAllocatedFunds())
+		? getParticipationAuthorizationStateForApproved() : MissionStageState.NOT_YET_UNDER_WAY;
     }
 
     private MissionStageState getParticipationAuthorizationStateForApproved() {
