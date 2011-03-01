@@ -5,6 +5,8 @@
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr"%>
 <%@ taglib uri="/WEB-INF/workflow.tld" prefix="wf"%>
 
+<%@ page import="module.workingCapital.domain.WorkingCapitalAcquisitionSubmission" %>
+
 <jsp:include page="shortBody.jsp"/>
 
 <bean:define id="processId" name="process" property="externalId"/>
@@ -39,6 +41,7 @@
 	
 	<p>
 	
+	<bean:define id="workingCapitalSubmissionTransaction" name="workingCapitalTransaction"/>
 	<logic:notEmpty name="workingCapitalTransaction" property="workingCapitalAcquisitionTransactions">
 		<h3>
 			<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.domain.WorkingCapitalAcquisitionSubmission.transactionsSubmitted"/>
@@ -48,18 +51,65 @@
 		
 		<table class="tstyle3 width100pc">
 			<tr>
-				<jsp:include page="workingCapitalTransactionLineHeader.jsp"/>
+				<th>
+					<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.transaction.number"/>
+				</th>
+				<th>
+					<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.transaction.description"/>
+				</th>
+				<th>
+					<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.transaction.approval"/>
+				</th>
+				<th>
+					<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.transaction.value"/>
+				</th>
+				<th>
+					<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.acquisition.acquisitionClassification"/>
+				</th>
+				<th>
+					<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.configuration.acquisition.classifications.economicClassification"/>
+				</th>
+				<th>
+					<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.configuration.acquisition.classifications.pocCode"/>
+				</th>
 			</tr>
-			<bean:define id="workingCapitalSubmissionTransaction" name="workingCapitalTransaction"/>
 			<logic:iterate id="workingCapitalAcquisitionTransaction" name="workingCapitalSubmissionTransaction" property="workingCapitalAcquisitionTransactionsSorted">
 				<tr>
-					<bean:define id="workingCapitalTransaction" name="workingCapitalAcquisitionTransaction" toScope="request"/>
-					<jsp:include page="workingCapitalTransactionLine.jsp"/>
+					<td>
+						<fr:view name="workingCapitalAcquisitionTransaction" property="number"/>
+					</td>
+					<td>
+						<fr:view name="workingCapitalAcquisitionTransaction" property="description"/>
+					</td>
+					<td>
+						<img src="<%= request.getContextPath() + "/workingCapital/image/accept.gif" %>">
+					</td>
+					<td>
+						<fr:view name="workingCapitalAcquisitionTransaction" property="value"/>
+					</td>
+					<td>
+						<fr:view name="workingCapitalAcquisitionTransaction" property="workingCapitalAcquisition.acquisitionClassification.description"/>
+					</td>
+					<td>
+						<fr:view name="workingCapitalAcquisitionTransaction" property="workingCapitalAcquisition.acquisitionClassification.economicClassification"/>
+					</td>
+					<td>
+						<fr:view name="workingCapitalAcquisitionTransaction" property="workingCapitalAcquisition.acquisitionClassification.pocCode"/>
+					</td>
 				</tr>
 			</logic:iterate>
-			<bean:define id="workingCapitalTransaction" name="workingCapitalSubmissionTransaction" toScope="request"/>
 		</table>
 	</logic:notEmpty>
+	
+	<p>
+	
+	<logic:present name="workingCapitalSubmissionTransaction" property="document">
+		<html:link  action="<%= "workflowProcessManagement.do?method=downloadFile&amp;fileId=" + ((WorkingCapitalAcquisitionSubmission) workingCapitalSubmissionTransaction).getDocument().getOid() + "&amp;processId=" + processId  %>" >
+			<bean:message key="label.module.workingCapital.domain.WorkingCapitalAcquisitionSubmission.document" bundle="WORKING_CAPITAL_RESOURCES" />
+		</html:link>
+	</logic:present>
+	
+	
 	
 </logic:equal>
 
