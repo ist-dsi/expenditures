@@ -35,6 +35,7 @@
 	<parameter name="submissionBalance" isForPrompting="false" class="myorg.domain.util.Money"/>
 	<parameter name="submissionDebt" isForPrompting="false" class="myorg.domain.util.Money"/>
 	<parameter name="paymentRequired" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="IBAN" isForPrompting="false" class="java.lang.String"/>
 
 	<field name="number" class="java.lang.Integer"/>
 	<field name="description" class="java.lang.String"/>
@@ -62,7 +63,7 @@
 				<staticText>
 					<reportElement
 						x="248"
-						y="70"
+						y="61"
 						width="139"
 						height="28"
 						key="staticText-1"/>
@@ -75,7 +76,7 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="386"
-						y="70"
+						y="61"
 						width="149"
 						height="28"
 						key="textField-1"/>
@@ -103,7 +104,7 @@
 				<staticText>
 					<reportElement
 						x="367"
-						y="227"
+						y="228"
 						width="64"
 						height="15"
 						key="staticText-24"/>
@@ -116,7 +117,7 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="439"
-						y="227"
+						y="228"
 						width="96"
 						height="15"
 						key="textField-25"/>
@@ -129,7 +130,7 @@
 				<staticText>
 					<reportElement
 						x="394"
-						y="242"
+						y="243"
 						width="0"
 						height="0"
 						key="staticText-25"/>
@@ -142,7 +143,7 @@
 				<staticText>
 					<reportElement
 						x="248"
-						y="98"
+						y="89"
 						width="139"
 						height="15"
 						key="staticText-30"/>
@@ -155,7 +156,7 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="386"
-						y="98"
+						y="89"
 						width="148"
 						height="15"
 						key="textField-29"/>
@@ -182,7 +183,7 @@
 				<staticText>
 					<reportElement
 						x="248"
-						y="113"
+						y="104"
 						width="139"
 						height="28"
 						key="staticText-39"/>
@@ -195,7 +196,7 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="386"
-						y="112"
+						y="103"
 						width="149"
 						height="28"
 						key="textField-31"/>
@@ -208,7 +209,7 @@
 				<staticText>
 					<reportElement
 						x="0"
-						y="252"
+						y="253"
 						width="306"
 						height="15"
 						key="staticText-41"/>
@@ -221,7 +222,7 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="306"
-						y="252"
+						y="253"
 						width="153"
 						height="15"
 						key="textField-42"/>
@@ -419,6 +420,58 @@
 					</textElement>
 				<text><![CDATA[Aquisições Enviadas:]]></text>
 				</staticText>
+				<staticText>
+					<reportElement
+						x="248"
+						y="131"
+						width="139"
+						height="15"
+						key="staticText-62"/>
+					<box></box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font pdfFontName="Helvetica-BoldOblique" isBold="true" isItalic="true"/>
+					</textElement>
+				<text><![CDATA[IBAN:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="386"
+						y="131"
+						width="148"
+						height="15"
+						key="textField-49"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{IBAN}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="248"
+						y="145"
+						width="139"
+						height="24"
+						key="staticText-63"/>
+					<box></box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font pdfFontName="Helvetica-BoldOblique" isBold="true" isItalic="true"/>
+					</textElement>
+				<text><![CDATA[Modo Esperado de Pagamento:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="387"
+						y="146"
+						width="148"
+						height="23"
+						key="textField-50"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[($P{IBAN}.isEmpty())? "Cheque" : "Transferência"]]></textFieldExpression>
+				</textField>
 			</band>
 		</title>
 		<pageHeader>

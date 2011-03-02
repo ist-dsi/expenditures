@@ -72,6 +72,8 @@ public class SubmitForValidationActivity extends WorkflowActivity<WorkingCapital
 	final Map<String, Object> paramMap = new HashMap<String, Object>();
 	paramMap.put("workingCapital", acquisitionSubmission.getWorkingCapital());
 	paramMap.put("responsibleName", acquisitionSubmission.getPerson().getName());
+	paramMap.put("IBAN", acquisitionSubmission.getWorkingCapital().getWorkingCapitalInitialization()
+		.getInternationalBankAccountNumber());
 
 	paramMap.put("submissionTransactionNumber", acquisitionSubmission.getNumber());
 	paramMap.put("submissionDescription", acquisitionSubmission.getDescription());
