@@ -30,6 +30,7 @@ import module.mission.domain.activity.RevertTerminationActivity;
 import module.mission.domain.activity.SendForProcessTerminationActivity;
 import module.mission.domain.activity.SendForProcessTerminationWithChangesActivity;
 import module.mission.domain.activity.SubmitForApprovalActivity;
+import module.mission.domain.activity.TogleMissionNatureActivity;
 import module.mission.domain.activity.TogleParticipantSalaryActivity;
 import module.mission.domain.activity.UnAllocateFundsActivity;
 import module.mission.domain.activity.UnAllocateProjectFundsActivity;
@@ -90,6 +91,7 @@ public class ForeignMissionProcess extends ForeignMissionProcess_Base {
 	activitiesAux.add(new RevertMissionForEditingActivity());
 	activitiesAux.add(new ArchiveItemActivity());
 	activitiesAux.add(new RevertTerminationActivity());
+	activitiesAux.add(new TogleMissionNatureActivity());
 
 	activitiesAux.add(new GiveProcess<MissionProcess>(new MissionGiveProcessUserNotifier()));
 	activitiesAux.add(new TakeProcess<MissionProcess>());
