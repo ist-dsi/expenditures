@@ -136,6 +136,8 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base implements
 	return user != null
 		&& user.hasPerson()
 		&& (user.hasRoleType(RoleType.MANAGER)
+			|| (user.hasExpenditurePerson()
+				&& user.getExpenditurePerson().hasRoleType(pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_PROCESS_AUDITOR))
 			|| (workingCapital.hasMovementResponsible() && user.getPerson() == workingCapital
 				.getMovementResponsible()) || workingCapital.isRequester(user)
 			|| workingCapital.getWorkingCapitalSystem().isManagementeMember(user)
