@@ -9,6 +9,7 @@ import java.util.TreeSet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import jvstm.cps.ConsistencyException;
 import module.mission.domain.MissionSystem;
 import module.mission.domain.util.FunctionDelegationBean;
 import module.mission.domain.util.SearchUnitMemberPresence;
@@ -183,8 +184,8 @@ public class MissionOrganizationAction extends ContextBaseAction {
 	    addLocalizedMessage(request, ex.getLocalizedMessage());
 	    request.setAttribute("authorizationId", accountability.getExternalId());
 	    return prepareAddDelegationsForAuthorization(mapping, form, request, response);
-	} catch (Error error) {
-	    displayConsistencyException(error, request);
+	} catch (ConsistencyException exc) {
+	    displayConsistencyException(exc, request);
 	    request.setAttribute("authorizationId", accountability.getExternalId());
 	    return prepareAddDelegationsForAuthorization(mapping, form, request, response);
 	}
@@ -213,8 +214,8 @@ public class MissionOrganizationAction extends ContextBaseAction {
 	    addLocalizedMessage(request, ex.getLocalizedMessage());
 	    request.setAttribute("functionDelegationId", functionDelegation.getExternalId());
 	    return prepareEditDelegation(mapping, form, request, response);
-	} catch (Error error) {
-	    displayConsistencyException(error, request);
+	} catch (ConsistencyException exc) {
+	    displayConsistencyException(exc, request);
 	    request.setAttribute("functionDelegationId", functionDelegation.getExternalId());
 	    return prepareEditDelegation(mapping, form, request, response);
 	}
@@ -231,8 +232,8 @@ public class MissionOrganizationAction extends ContextBaseAction {
 	return showDelegationsForAuthorization(request, accountabilityDelegator);
     }
 
-    public ActionForward viewPresences(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
+    public ActionForward viewPresences(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
 	SearchUnitMemberPresence searchUnitMemberPresence = getRenderedObject();
 	final Unit unit;
 	final boolean doSearch;
@@ -246,7 +247,8 @@ public class MissionOrganizationAction extends ContextBaseAction {
 	}
 
 	if (!hasPermission(unit)) {
-	    addLocalizedMessage(request, BundleUtil.getStringFromResourceBundle("resources/MissionResources", "label.not.authorized"));
+	    addLocalizedMessage(request,
+		    BundleUtil.getStringFromResourceBundle("resources/MissionResources", "label.not.authorized"));
 	    return showUnit(unit, request);
 	}
 
@@ -271,7 +273,8 @@ public class MissionOrganizationAction extends ContextBaseAction {
 	}
 	final Person person = user == null ? null : user.getPerson();
 	if (person != null) {
-	    final Set<AccountabilityType> accountabilityTypesThatAuthorize = MissionSystem.getInstance().getAccountabilityTypesThatAuthorize();
+	    final Set<AccountabilityType> accountabilityTypesThatAuthorize = MissionSystem.getInstance()
+		    .getAccountabilityTypesThatAuthorize();
 	    for (final Accountability accountability : person.getParentAccountabilitiesSet()) {
 		final AccountabilityType accountabilityType = accountability.getAccountabilityType();
 		if (accountabilityTypesThatAuthorize.contains(accountabilityType)) {
@@ -302,8 +305,8 @@ public class MissionOrganizationAction extends ContextBaseAction {
 	return false;
     }
 
-    public ActionForward searchMission(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
+    public ActionForward searchMission(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
 	final Person person = getDomainObject(request, "personId");
 	SearchMissionsDTO searchMissions = new SearchMissionsDTO();
 	searchMissions.setParticipant(person);
