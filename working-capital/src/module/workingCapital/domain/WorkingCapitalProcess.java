@@ -24,6 +24,7 @@ import module.workingCapital.domain.activity.CancelReenforceWorkingCapitalInitia
 import module.workingCapital.domain.activity.CancelWorkingCapitalAcquisitionActivity;
 import module.workingCapital.domain.activity.CancelWorkingCapitalInitializationActivity;
 import module.workingCapital.domain.activity.ChangeWorkingCapitalAccountingUnitActivity;
+import module.workingCapital.domain.activity.CorrectWorkingCapitalAcquisitionClassificationActivity;
 import module.workingCapital.domain.activity.EditInitializationActivity;
 import module.workingCapital.domain.activity.EditWorkingCapitalActivity;
 import module.workingCapital.domain.activity.PayCapitalActivity;
@@ -92,6 +93,7 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base implements
 	activitiesAux.add(new RegisterWorkingCapitalAcquisitionActivity());
 	activitiesAux.add(new CancelWorkingCapitalAcquisitionActivity());
 	activitiesAux.add(new EditWorkingCapitalActivity());
+	activitiesAux.add(new CorrectWorkingCapitalAcquisitionClassificationActivity());
 	activitiesAux.add(new ApproveWorkingCapitalAcquisitionActivity());
 	activitiesAux.add(new RejectWorkingCapitalAcquisitionActivity());
 	activitiesAux.add(new UnApproveWorkingCapitalAcquisitionActivity());
@@ -136,8 +138,8 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base implements
 	return user != null
 		&& user.hasPerson()
 		&& (user.hasRoleType(RoleType.MANAGER)
-			|| (user.hasExpenditurePerson()
-				&& user.getExpenditurePerson().hasRoleType(pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_PROCESS_AUDITOR))
+			|| (user.hasExpenditurePerson() && user.getExpenditurePerson().hasRoleType(
+				pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_PROCESS_AUDITOR))
 			|| (workingCapital.hasMovementResponsible() && user.getPerson() == workingCapital
 				.getMovementResponsible()) || workingCapital.isRequester(user)
 			|| workingCapital.getWorkingCapitalSystem().isManagementeMember(user)

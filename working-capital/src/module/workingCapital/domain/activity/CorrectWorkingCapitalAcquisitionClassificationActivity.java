@@ -8,9 +8,9 @@ import module.workingCapital.domain.WorkingCapitalAcquisitionTransaction;
 import module.workingCapital.domain.WorkingCapitalProcess;
 import myorg.domain.User;
 import myorg.util.BundleUtil;
-import myorg.util.InputStreamUtil;
 
-public class EditWorkingCapitalActivity extends WorkflowActivity<WorkingCapitalProcess, EditWorkingCapitalActivityInformation> {
+public class CorrectWorkingCapitalAcquisitionClassificationActivity extends
+	WorkflowActivity<WorkingCapitalProcess, EditWorkingCapitalActivityInformation> {
 
     @Override
     public String getLocalizedName() {
@@ -21,31 +21,20 @@ public class EditWorkingCapitalActivity extends WorkflowActivity<WorkingCapitalP
     @Override
     public boolean isActive(final WorkingCapitalProcess workingCapitalProcess, final User user) {
 	final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
-	return workingCapital.hasMovementResponsible()
-		&& workingCapital.getMovementResponsible().getUser() == user
-		&& !workingCapital.isCanceledOrRejected();
+	return !workingCapital.isCanceledOrRejected() && workingCapital.hasAcquisitionPendingVerification(user);
     }
 
     @Override
     protected void process(final EditWorkingCapitalActivityInformation activityInformation) {
 	final WorkingCapitalAcquisitionTransaction workingCapitalAcquisitionTransaction = activityInformation
 		.getWorkingCapitalAcquisitionTransaction();
-	if (workingCapitalAcquisitionTransaction.isPendingApproval()) {
+	if (workingCapitalAcquisitionTransaction.isPendingVerificationByUser()) {
 	    final WorkingCapitalAcquisition workingCapitalAcquisition = workingCapitalAcquisitionTransaction
 		    .getWorkingCapitalAcquisition();
 
-	    if (activityInformation.getInputStream() != null) {
-		workingCapitalAcquisition.edit(activityInformation.getDocumentNumber(), activityInformation.getSupplier(),
-			activityInformation.getDescription(), activityInformation.getAcquisitionClassification(),
-			activityInformation.getValueWithoutVat(), activityInformation.getMoney(), InputStreamUtil
-				.consumeInputStream(activityInformation.getInputStream()), activityInformation.getDisplayName(),
-			activityInformation.getFilename());
-	    } else {
-		workingCapitalAcquisition.edit(activityInformation.getDocumentNumber(), activityInformation.getSupplier(),
-			activityInformation.getDescription(), activityInformation.getAcquisitionClassification(),
-			activityInformation.getValueWithoutVat(), activityInformation.getMoney());
-	    }
-
+	    workingCapitalAcquisition.edit(activityInformation.getDocumentNumber(), activityInformation.getSupplier(),
+		    activityInformation.getDescription(), activityInformation.getAcquisitionClassification(),
+		    activityInformation.getValueWithoutVat());
 	}
     }
 
@@ -56,12 +45,17 @@ public class EditWorkingCapitalActivity extends WorkflowActivity<WorkingCapitalP
 
     @Override
     public boolean isVisible() {
-        return false;
+	return false;
     }
 
     @Override
     public boolean isUserAwarenessNeeded(final WorkingCapitalProcess process, final User user) {
-        return false;
+	return false;
+    }
+
+    @Override
+    public boolean isDefaultInputInterfaceUsed() {
+	return false;
     }
 
 }

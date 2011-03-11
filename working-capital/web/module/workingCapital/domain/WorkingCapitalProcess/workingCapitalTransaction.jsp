@@ -297,6 +297,10 @@
 			<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.RejectVerifyWorkingCapitalAcquisitionActivity"/>
 		</wf:activityLink>
 		&nbsp;&nbsp;&nbsp;
+		<wf:activityLink processName="process" activityName="CorrectWorkingCapitalAcquisitionClassificationActivity" scope="request" paramName0="workingCapitalAcquisitionTransaction" paramValue0="<%= workingCapitalTransactionOid %>">
+			<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.CorrectWorkingCapitalAcquisitionClassificationActivity"/>
+		</wf:activityLink>
+		&nbsp;&nbsp;&nbsp;
 	</logic:equal>
 	<logic:equal name="workingCapitalTransaction" property="paymentRequested" value="false">
 		<logic:equal name="workingCapitalTransaction" property="verified" value="true">
