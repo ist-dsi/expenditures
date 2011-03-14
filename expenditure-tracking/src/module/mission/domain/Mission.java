@@ -1028,11 +1028,14 @@ public abstract class Mission extends Mission_Base {
 	for (final MissionFinancer missionFinancer : getFinancerSet()) {
 	    final AccountingUnit accountingUnit = missionFinancer.getAccountingUnit();
 	    if (accountingUnit != null) {
-		return accountingUnit.getPeopleSet().contains(person)
+		final boolean isAssociatedToAccountingUnit = accountingUnit.getPeopleSet().contains(person)
 	    		|| accountingUnit.getProjectAccountantsSet().contains(person)
 	    		|| accountingUnit.getTreasuryMembersSet().contains(person)
 	    		|| accountingUnit.getResponsiblePeopleSet().contains(person)
 	    		|| accountingUnit.getResponsibleProjectAccountantsSet().contains(person);
+		if (isAssociatedToAccountingUnit) {
+		    return true;
+		}
 	    }
 	}
 	return false;
