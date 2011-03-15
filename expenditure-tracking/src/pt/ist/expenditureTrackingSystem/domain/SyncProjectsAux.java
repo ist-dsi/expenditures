@@ -472,7 +472,7 @@ public class SyncProjectsAux {
 	try {
 	    statementQuery = connection.createStatement();
 	    resultSetQuery = statementQuery
-		    .executeQuery("select fenix.USER.USER_U_ID, fenix.TEACHER.TEACHER_NUMBER from fenix.TEACHER inner join fenix.USER on fenix.USER.KEY_PERSON = fenix.TEACHER.KEY_PERSON;");
+		    .executeQuery("select fenix.USER.USER_U_ID, fenix.TEACHER.TEACHER_NUMBER from fenix.TEACHER inner join fenix.USER on fenix.USER.OID_PERSON = fenix.TEACHER.OID_PERSON;");
 	    int c = 0;
 	    while (resultSetQuery.next()) {
 		final String username = resultSetQuery.getString(1);
@@ -499,7 +499,7 @@ public class SyncProjectsAux {
 	try {
 	    statementQuery = connection.createStatement();
 	    resultSetQuery = statementQuery
-		    .executeQuery("select fenix.USER.USER_U_ID, fenix.EMPLOYEE.EMPLOYEE_NUMBER from fenix.EMPLOYEE inner join fenix.USER on fenix.USER.KEY_PERSON = fenix.EMPLOYEE.KEY_PERSON;");
+		    .executeQuery("select fenix.USER.USER_U_ID, fenix.EMPLOYEE.EMPLOYEE_NUMBER from fenix.EMPLOYEE inner join fenix.USER on fenix.USER.OID_PERSON = fenix.EMPLOYEE.OID_PERSON;");
 	    int c = 0;
 	    while (resultSetQuery.next()) {
 		final String username = resultSetQuery.getString(1);
@@ -735,6 +735,9 @@ public class SyncProjectsAux {
 	}
 	for (Financer financer : unit.getFinancedItems()) {
 	    financer.setAccountingUnit(accountingUnit);
+	}
+	for (final Unit subUnit : unit.getSubUnitsSet()) {
+	    changeAccountingUnit(subUnit, accountingUnit);
 	}
     }
 
