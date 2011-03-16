@@ -284,6 +284,21 @@ public class MissionOrganizationAction extends ContextBaseAction {
 		    }
 		}
 	    }
+	    if (user.hasExpenditurePerson() && unit.hasExpenditureUnit()) {
+		if (user.getExpenditurePerson().getObservableUnitsSet().contains(unit.getExpenditureUnit())) {
+		    return true;
+		}
+	    }
+	}
+	
+	final Collection<Party> parents = unit.getParents(MissionSystem.getInstance().getAccountabilityTypesForUnits());
+	for (final Party party : parents) {
+	    if (party.isUnit()) {
+		final Unit parent = (Unit) party;
+		if (hasPermission(parent)) {
+		    return true;
+		}
+	    }
 	}
 	return false;
     }
