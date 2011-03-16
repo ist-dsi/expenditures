@@ -1072,6 +1072,7 @@ public abstract class Mission extends Mission_Base {
 	    missionFinancer.removeApproval();
 	}
 	removeApprovalForMissionWithNoFinancers();
+	setIsApprovedByMissionResponsible(null);
     }
 
     public SortedSet<MissionChangeDescription> getSortedMissionChangeDescriptions() {
