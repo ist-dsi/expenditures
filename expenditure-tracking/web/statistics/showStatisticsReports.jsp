@@ -39,5 +39,10 @@
                 <bean:message key="label.statistics.report.afterTheFactTotalValuesByType" bundle="STATISTICS_RESOURCES"/>
             </html:link>
         </li>
+        <li>
+            <html:link action="/statistics.do?method=downloadInformationForExpenseReports" paramId="year" paramName="yearBean" paramProperty="year">
+                <bean:message key="label.statistics.report.informationForExpenseReports" bundle="STATISTICS_RESOURCES"/>
+            </html:link>
+        </li>
 	</ul>
 </div>
