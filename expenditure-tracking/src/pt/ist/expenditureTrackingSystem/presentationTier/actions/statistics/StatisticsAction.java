@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import module.workflow.domain.ActivityLog;
+import module.workflow.domain.ProcessFile;
 import module.workflow.domain.WorkflowLog;
 import myorg.domain.util.Money;
 import myorg.presentationTier.actions.ContextBaseAction;
@@ -29,10 +30,13 @@ import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.Invoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
@@ -41,6 +45,9 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTh
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess.ProcessClassification;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SendPurchaseOrderToSupplier;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SkipPurchaseOrderDocument;
+import pt.ist.expenditureTrackingSystem.domain.announcements.OperationLog;
 import pt.ist.expenditureTrackingSystem.domain.organization.CostCenter;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Project;
@@ -653,6 +660,110 @@ public class StatisticsAction extends ContextBaseAction {
 	    return getUnitCode(unit.getParentUnit());
 	}
 	throw new Error("Unreachable Code.");
+    }
+
+    public ActionForward downloadInformationForExpenseReports(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) throws IOException {
+	final Integer year = Integer.valueOf((String) getAttribute(request, "year"));
+	return streamSpreadsheet(response, "expenseReport", createInformationForExpenseReports(year), year);
+    }
+
+    private Spreadsheet createInformationForExpenseReports(final Integer year) {
+	final Spreadsheet spreadsheet = new Spreadsheet("ExpenseReport " + year);
+	spreadsheet.setHeader("Ano");
+	spreadsheet.setHeader("Processo");
+	spreadsheet.setHeader("Classificação");
+	spreadsheet.setHeader("Caso de excepção");
+	spreadsheet.setHeader("Estado");
+	spreadsheet.setHeader("CPV");
+	spreadsheet.setHeader("Valor sem IVA");
+	spreadsheet.setHeader("Valor com IVA");
+	spreadsheet.setHeader("Data envio nota de encomenda");
+	spreadsheet.setHeader("Data salto envio nota de encomenda");
+	spreadsheet.setHeader("Data factura");
+
+	final PaymentProcessYear paymentProcessYear = PaymentProcessYear.getPaymentProcessYearByYear(year);
+	for (final PaymentProcess paymentProcess : paymentProcessYear.getPaymentProcessSet()) {
+	    if (paymentProcess instanceof SimplifiedProcedureProcess) {
+		final SimplifiedProcedureProcess simplifiedProcedureProcess = (SimplifiedProcedureProcess) paymentProcess;
+		final AcquisitionRequest acquisitionRequest = simplifiedProcedureProcess.getRequest();
+
+		final Row row = spreadsheet.addRow();
+		row.setCell(simplifiedProcedureProcess.getYear());
+		row.setCell(simplifiedProcedureProcess.getProcessNumber());
+		row.setCell(simplifiedProcedureProcess.getProcessClassification().getLocalizedName());
+
+		final boolean isException = simplifiedProcedureProcess.getSkipSupplierFundAllocation().booleanValue();
+		row.setCell(isException ? "Sim" : "Não");
+
+		final AcquisitionProcessStateType acquisitionProcessStateType = simplifiedProcedureProcess.getAcquisitionProcessStateType();
+		row.setCell(acquisitionProcessStateType.getLocalizedName());
+
+		final Set<CPVReference> cpvReferences = new TreeSet<CPVReference>(CPVReference.COMPARATOR_BY_DESCRIPTION);
+		for (final RequestItem requestItem : acquisitionRequest.getRequestItemsSet()) {
+		    cpvReferences.add(requestItem.getCPVReference());
+		}
+		final StringBuilder cpvs = new StringBuilder();
+		for (final CPVReference cpvReference : cpvReferences) {
+		    if (cpvs.length() > 1) {
+			cpvs.append(", ");
+		    }
+		    cpvs.append(cpvReference.getCode());
+		}
+		row.setCell(cpvs.length() == 0 ? " " : cpvs.toString());
+
+		final Money currentValue = acquisitionRequest.getCurrentValue();
+		row.setCell(currentValue == null ? " " : currentValue.toFormatStringWithoutCurrency());
+
+		final Money currentTotalValue = acquisitionRequest.getCurrentTotalItemValueWithAdditionalCostsAndVat();
+		row.setCell(currentTotalValue == null ? " " : currentTotalValue.toFormatStringWithoutCurrency());
+
+		final DateTime sendDate = findSendDate(simplifiedProcedureProcess, SendPurchaseOrderToSupplier.class);
+		row.setCell(sendDate == null ? " " : sendDate.toString("yyyy-MM-dd"));
+
+		final DateTime skipDate = findSendDate(simplifiedProcedureProcess, SkipPurchaseOrderDocument.class);
+		row.setCell(skipDate == null ? " " : skipDate.toString("yyyy-MM-dd"));
+
+		final StringBuilder invoiceDateStringBuilder = new StringBuilder();
+		for (final LocalDate localDate : getInvoiceDates(simplifiedProcedureProcess)) {
+		    if (invoiceDateStringBuilder.length() > 0) {
+			invoiceDateStringBuilder.append(", ");
+		    }
+		    invoiceDateStringBuilder.append(localDate.toString("yyyy-MM-dd"));
+		}
+		row.setCell(invoiceDateStringBuilder.toString());
+	    }
+	}
+
+	return spreadsheet;
+    }
+
+    private DateTime findSendDate(final SimplifiedProcedureProcess process, final Class clazz) {
+	final List<WorkflowLog> logs = new ArrayList<WorkflowLog>(process.getExecutionLogsSet());
+	Collections.sort(logs, WorkflowLog.COMPARATOR_BY_WHEN_REVERSED);
+
+	for (final WorkflowLog workflowLog : logs) {
+	    if (workflowLog instanceof ActivityLog) {
+		final ActivityLog operationLog = (ActivityLog) workflowLog;
+		if (clazz.getSimpleName().equals(operationLog.getOperation())) {
+		    return operationLog.getWhenOperationWasRan();
+		}
+	    }
+	}
+
+	return null;
+    }
+
+    private SortedSet<LocalDate> getInvoiceDates(final SimplifiedProcedureProcess process) {
+	final SortedSet<LocalDate> invoiceDates = new TreeSet<LocalDate>();
+	for (final ProcessFile file : process.getFilesSet()) {
+	    if (file instanceof Invoice) {
+		final Invoice invoice = (Invoice) file;
+		final LocalDate invoiceDate = invoice.getInvoiceDate();
+		invoiceDates.add(invoiceDate);
+	    }
+	}
+	return invoiceDates;
     }
 
 }
