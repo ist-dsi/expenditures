@@ -221,7 +221,10 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     public Money getRealTotalValueWithAdditionalCosts() {
 	Money result = Money.ZERO;
 	for (final AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
-	    result = result.add(acquisitionRequestItem.getTotalRealValueWithAdditionalCosts());
+	    final Money money = acquisitionRequestItem.getTotalRealValueWithAdditionalCosts();
+	    if (money != null) {
+		result = result.add(money);
+	    }
 	}
 	return result;
     }
@@ -229,7 +232,10 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     public Money getRealTotalValueWithAdditionalCostsAndVat() {
 	Money result = Money.ZERO;
 	for (final AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
-	    result = result.addAndRound(acquisitionRequestItem.getTotalRealValueWithAdditionalCostsAndVat());
+	    final Money money = acquisitionRequestItem.getTotalRealValueWithAdditionalCostsAndVat();
+	    if (money != null) {
+		result = result.addAndRound(money);
+	    }
 	}
 	return result;
     }
@@ -237,8 +243,9 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     public Money getCurrentTotalAdditionalCostsValue() {
 	Money result = Money.ZERO;
 	for (final AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
-	    if (acquisitionRequestItem.getCurrentAdditionalCostValue() != null) {
-		result = result.add(acquisitionRequestItem.getCurrentAdditionalCostValue());
+	    final Money money = acquisitionRequestItem.getCurrentAdditionalCostValue();
+	    if (money != null) {
+		result = result.add(money);
 	    }
 	}
 	return result;
