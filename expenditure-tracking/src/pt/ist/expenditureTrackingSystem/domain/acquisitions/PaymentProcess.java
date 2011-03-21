@@ -31,6 +31,7 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Project;
 import pt.ist.expenditureTrackingSystem.domain.organization.SubProject;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
+import pt.ist.fenixframework.DomainObject;
 
 @ClassNameBundle(bundle = "resources/ExpenditureResources")
 public abstract class PaymentProcess extends PaymentProcess_Base implements HasPresentableProcessState {
@@ -451,5 +452,7 @@ public abstract class PaymentProcess extends PaymentProcess_Base implements HasP
 	}
 	return false;
     }
+
+    public abstract Set<CPVReference> getCPVReferences();
 
 }

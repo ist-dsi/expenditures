@@ -2,7 +2,9 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
@@ -18,6 +20,7 @@ import myorg.util.ClassNameBundle;
 import org.joda.time.LocalDate;
 
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Invoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.activities.DeleteAfterTheFactAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.activities.EditAfterTheFactAcquisition;
@@ -202,6 +205,11 @@ public class AfterTheFactAcquisitionProcess extends AfterTheFactAcquisitionProce
     @Override
     public Money getTotalValue() {
 	return getAcquisitionAfterTheFact().getValue();
+    }
+
+    @Override
+    public Set<CPVReference> getCPVReferences() {
+	return Collections.emptySet();
     }
 
 }

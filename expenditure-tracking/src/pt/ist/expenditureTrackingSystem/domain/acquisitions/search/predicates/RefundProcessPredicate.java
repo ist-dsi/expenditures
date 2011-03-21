@@ -45,12 +45,13 @@ public class RefundProcessPredicate extends SearchPredicate {
 		&& matchCriteria(searchBean.getHasAvailableAndAccessibleActivityForUser(), refundRequest)
 		&& matchCriteria(searchBean.getRefundProcessStateType(), type)
 		&& (!showPrioritiesOnly || process.isPriorityProcess())
-		&& matchCriteria(searchBean.getAccountingUnit(), accountingUnits)
+		&& matchContainsCriteria(searchBean.getAccountingUnit(), accountingUnits)
 		&& matchCriteria(searchBean.getRefundeeName(), refundeeName)
 		&& matchCriteria(searchBean.getTaker(), taker)
 		&& matchesProjectAccountManager(refundRequest, accountManager)
 		&& (!showOnlyWithUnreadComments || (!process.getUnreadCommentsForPerson(loggedPerson).isEmpty() && process
-			.hasActivitiesFromUser(loggedPerson)));
+			.hasActivitiesFromUser(loggedPerson)))
+		&& matchContainsCriteria(searchBean.getCpvReference(), refundRequest.getProcess().getCPVReferences());
     }
 
     private boolean matchCriteria(RefundProcessStateType refundProcessStateType, RefundProcessStateType type) {

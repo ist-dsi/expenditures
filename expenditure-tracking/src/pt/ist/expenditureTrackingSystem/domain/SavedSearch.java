@@ -39,6 +39,7 @@ public class SavedSearch extends SavedSearch_Base {
 	setAccountManager(searchBean.getAccountManager());
 	setShowOnlyWithUnreadComments(searchBean.getShowOnlyWithUnreadComments());
 	setShowPriorityOnly(searchBean.getShowPriorityOnly());
+	setCpvReference(searchBean.getCpvReference());
     }
 
     public SearchPaymentProcess getSearch() {
@@ -55,6 +56,7 @@ public class SavedSearch extends SavedSearch_Base {
 	removeRequestor();
 	removeAccountingUnit();
 	removeSupplier();
+	removeCpvReference();
 	SavedSearch ownProcessesSearch = MyOwnProcessesSearch.getOwnProcessesSearch();
 	for (Person person : getPeople()) {
 	    person.setDefaultSearch(ownProcessesSearch);

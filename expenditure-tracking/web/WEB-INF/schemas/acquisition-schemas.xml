@@ -875,6 +875,16 @@
 			validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
 		<property name="size" value="50" />
 	</slot>
+	<slot name="cpvReference" layout="autoComplete"
+		key="acquisitionRequestItem.label.salesCode" bundle="ACQUISITION_RESOURCES"
+		help="message.help.CPVReference">
+		<property name="labelField" value="fullDescription" />
+		<property name="format" value="${code} - ${description}" />
+		<property name="minChars" value="1" />
+		<property name="args"
+			value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.CPVAutoCompleteProvider" />
+		<property name="classes" value="inputsize350px" />
+	</slot>
 	<slot name="hasAvailableAndAccessibleActivityForUser" key="label.option.hasAvailableAndAccessibleActivityForUser"
 		bundle="ACQUISITION_RESOURCES" />
 	<slot name="responsibleUnitSetOnly" key="label.option.responsibleUnitSetOnly"

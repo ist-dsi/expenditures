@@ -29,6 +29,7 @@ import org.joda.time.DateTime;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.SavedSearch;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
@@ -427,6 +428,11 @@ public class SearchPaymentProcessesAction extends BaseAction {
 	    builder.append(searchBean.getSearchProcess().name());
 	}
 
+	builder.append("&cpvReference=");
+	if (searchBean.getCpvReference() != null) {
+	    builder.append(searchBean.getCpvReference().getCode());
+	}
+
 	return builder.toString();
     }
 
@@ -470,6 +476,11 @@ public class SearchPaymentProcessesAction extends BaseAction {
 	type = request.getParameter("refundProcessStateType");
 	if (!StringUtils.isEmpty(type)) {
 	    bean.setRefundProcessStateType(RefundProcessStateType.valueOf(type));
+	}
+
+	String cpvReference = request.getParameter("cpvReference");
+	if (!StringUtils.isEmpty(cpvReference)) {
+	    bean.setCpvReference(CPVReference.getCPVCode(cpvReference));
 	}
 
 	return bean;

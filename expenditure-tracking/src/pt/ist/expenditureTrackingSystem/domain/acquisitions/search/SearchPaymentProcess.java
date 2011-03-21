@@ -10,6 +10,7 @@ import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.SavedSearch;
 import pt.ist.expenditureTrackingSystem.domain.Search;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
@@ -82,6 +83,7 @@ public class SearchPaymentProcess extends Search<PaymentProcess> {
     private String refundeeName;
     private PaymentProcessYear year;
     private Boolean showPriorityOnly = Boolean.FALSE;
+    private CPVReference cpvReference;
 
     private final static Map<Class<? extends PaymentProcess>, SearchPredicate> predicateMap = new HashMap<Class<? extends PaymentProcess>, SearchPredicate>();
     private final static SearchPredicate defaultPredicate = new DefaultPredicate();
@@ -101,6 +103,7 @@ public class SearchPaymentProcess extends Search<PaymentProcess> {
 	setSavedSearch(null);
 	setPaymentProcessYear(null);
 	setTaker(null);
+	setCpvReference(null);
     }
 
     public SearchPaymentProcess(SavedSearch savedSearch) {
@@ -125,6 +128,7 @@ public class SearchPaymentProcess extends Search<PaymentProcess> {
 	setShowOnlyWithUnreadComments(savedSearch.getShowOnlyWithUnreadComments());
 	setShowPriorityOnly(savedSearch.getShowPriorityOnly());
 	setSearchProcess(savedSearch.getSearchProcessValues());
+	setCpvReference(savedSearch.getCpvReference());
     }
 
     @Override
@@ -363,6 +367,14 @@ public class SearchPaymentProcess extends Search<PaymentProcess> {
 
     public void setAccountManager(Person accountManager) {
         this.accountManager = accountManager;
+    }
+
+    public CPVReference getCpvReference() {
+        return cpvReference;
+    }
+
+    public void setCpvReference(CPVReference cpvReference) {
+        this.cpvReference = cpvReference;
     }
 
 }

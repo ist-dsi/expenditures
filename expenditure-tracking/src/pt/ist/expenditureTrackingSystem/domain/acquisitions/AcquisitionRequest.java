@@ -563,4 +563,12 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	return year == i || year == i - 1 || year == i - 2;
     }
 
+    public Set<CPVReference> getCPVReferences() {
+	final Set<CPVReference> result = new HashSet<CPVReference>();
+	for (final AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
+	    result.add(acquisitionRequestItem.getCPVReference());
+	}
+	return result;
+    }
+
 }

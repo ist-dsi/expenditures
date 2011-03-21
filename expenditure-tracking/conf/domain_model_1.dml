@@ -875,6 +875,13 @@ relation TakerSavedSearch {
 	}
 }
 
+relation CPVReferenceSavedSearch {
+	acquisitions.CPVReference playsRole cpvReference;
+	SavedSearch playsRole savedSearch {
+		multiplicity *;
+	}
+}
+
 relation AccountManagerSavedSearch {
 	organization.Person playsRole accountManager;
 	SavedSearch playsRole accountManagerSearches {

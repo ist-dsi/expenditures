@@ -1,5 +1,6 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.search.predicates;
 
+import java.util.Collection;
 import java.util.Set;
 
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
@@ -8,6 +9,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPayment
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
+import pt.ist.fenixframework.DomainObject;
 
 public class DefaultPredicate extends SearchPredicate {
 
@@ -24,9 +26,11 @@ public class DefaultPredicate extends SearchPredicate {
 	final Unit requestingUnit = request.getRequestingUnit();
 
 	return matchCriteria(searchBean.getRequestingPerson(), person)
-		&& matchCriteria(searchBean.getAccountingUnit(), accountingUnits)
+		&& matchContainsCriteria(searchBean.getAccountingUnit(), accountingUnits)
 		&& matchCriteria(searchBean.getRequestingUnit(), requestingUnit)
 		&& matchCriteria(searchBean.getPayingUnit(), request.getFinancersSet())
-		&& matchCriteria(searchBean.getProcessId(), request.getProcess().getAcquisitionProcessId());
+		&& matchCriteria(searchBean.getProcessId(), request.getProcess().getAcquisitionProcessId())
+		&& matchContainsCriteria(searchBean.getCpvReference(), request.getProcess().getCPVReferences());
     }
+
 }

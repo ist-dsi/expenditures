@@ -97,4 +97,12 @@ public class RefundRequest extends RefundRequest_Base {
 	return realTotalValue == null ? getTotalValue() : realTotalValue;
     }
 
+    public Set<CPVReference> getCPVReferences() {
+	final Set<CPVReference> result = new HashSet<CPVReference>();
+	for (final RequestItem requestItem : getRequestItemsSet()) {
+	    result.add(requestItem.getCPVReference());
+	}
+	return result;
+    }
+
 }

@@ -58,18 +58,19 @@ public class SimplifiedAcquisitionPredicate extends SearchPredicate {
 		&& matchCriteria(searchBean.getRequestingPerson(), person)
 		&& (matchCriteria(searchBean.getRequestingUnit(), acquisitionRequest.getRequestingUnit()))
 		&& (matchCriteria(searchBean.getPayingUnit(), acquisitionRequest.getFinancersSet()))
-		&& matchCriteria(searchBean.getSupplier(), suppliers)
+		&& matchContainsCriteria(searchBean.getSupplier(), suppliers)
 		&& matchAcquisitionProposalId(searchBean.getProposalId(), acquisitionRequest.getAcquisitionProcess())
 		&& matchCriteria(searchBean.getHasAvailableAndAccessibleActivityForUser(), acquisitionRequest)
 		&& matchCriteria(searchBean.getAcquisitionProcessStateType(), type)
-		&& matchCriteria(searchBean.getAccountingUnit(), accountingUnits)
+		&& matchContainsCriteria(searchBean.getAccountingUnit(), accountingUnits)
 		&& matchCriteria(searchBean.getRequestDocumentId(), acquisitionRequestDocumentID)
 		&& (!showPrioritiesOnly || process.isPriorityProcess())
 		&& matchShowOnlyCriteris(acquisitionRequest, searchBean)
 		&& matchCriteria(searchBean.getTaker(), taker)
 		&& matchesProjectAccountManager(acquisitionRequest, accountManager)
 		&& (!showOnlyWithUnreadComments || (!process.getUnreadCommentsForPerson(loggedPerson).isEmpty() && process
-			.hasActivitiesFromUser(loggedPerson)));
+			.hasActivitiesFromUser(loggedPerson)))
+		&& matchContainsCriteria(searchBean.getCpvReference(), acquisitionRequest.getProcess().getCPVReferences());
     }
 
     private boolean matchCriteria(ProcessClassification searchClassification, ProcessClassification processClassification) {

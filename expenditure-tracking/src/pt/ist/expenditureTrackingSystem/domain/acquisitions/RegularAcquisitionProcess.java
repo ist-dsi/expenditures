@@ -228,4 +228,10 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
         return getAcquisitionRequest().getCurrentTotalValue();
     }
 
+    @Override
+    public Set<CPVReference> getCPVReferences() {
+	final AcquisitionRequest acquisitionRequest = getRequest();
+	return acquisitionRequest.getCPVReferences();
+    }
+
 }
