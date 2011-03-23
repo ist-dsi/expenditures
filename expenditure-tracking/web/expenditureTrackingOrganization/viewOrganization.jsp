@@ -128,18 +128,17 @@
 		</html:link>
 	</logic:present>
 
-	<logic:notEmpty name="unit" property="authorizations">
-		<h3 class="mtop15 mbottom05"><bean:message key="authorizations.label.responsibles" bundle="EXPENDITURE_RESOURCES"/></h3>
-		<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.AQUISITIONS_UNIT_MANAGER">
-			<html:link action="/expenditureTrackingOrganization.do?method=prepareCreateAuthorizationUnitWithoutPerson" paramId="unitOid" paramName="unit" paramProperty="externalId">
-				<bean:message key="label.add.authorization" bundle="EXPENDITURE_RESOURCES"/>
-			</html:link>
-			|
-		</logic:present>
-		<html:link action="/expenditureTrackingOrganization.do?method=viewAuthorizationLogs" paramId="unitOid" paramName="unit" paramProperty="externalId">
-			<bean:message key="authorizations.link.logs" bundle="EXPENDITURE_RESOURCES"/>
+	<h3 class="mtop15 mbottom05"><bean:message key="authorizations.label.responsibles" bundle="EXPENDITURE_RESOURCES"/></h3>
+	<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.AQUISITIONS_UNIT_MANAGER">
+		<html:link action="/expenditureTrackingOrganization.do?method=prepareCreateAuthorizationUnitWithoutPerson" paramId="unitOid" paramName="unit" paramProperty="externalId">
+			<bean:message key="label.add.authorization" bundle="EXPENDITURE_RESOURCES"/>
 		</html:link>
-
+		|
+	</logic:present>
+	<html:link action="/expenditureTrackingOrganization.do?method=viewAuthorizationLogs" paramId="unitOid" paramName="unit" paramProperty="externalId">
+		<bean:message key="authorizations.link.logs" bundle="EXPENDITURE_RESOURCES"/>
+	</html:link>
+	<logic:notEmpty name="unit" property="authorizations">
 		<table class="tstyle2 mtop05">
 			<tr>
 				<th>
