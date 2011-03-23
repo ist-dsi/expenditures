@@ -8,6 +8,7 @@ import java.util.TreeSet;
 
 import myorg.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
@@ -95,6 +96,15 @@ public class RefundRequest extends RefundRequest_Base {
     public Money getCurrentTotalValue() {
 	final Money realTotalValue = getRealTotalValue();
 	return realTotalValue == null ? getTotalValue() : realTotalValue;
+    }
+
+    public boolean allPayingUnitsHaveAccountingUnit() {
+	for (final Financer financer : getFinancersSet()) {
+	    if (financer.getAccountingUnit() == null) {
+		return false;
+	    }
+	}
+	return true;
     }
 
     public Set<CPVReference> getCPVReferences() {

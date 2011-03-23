@@ -13,9 +13,12 @@ public class SubmitForApproval extends WorkflowActivity<RefundProcess, ActivityI
     public boolean isActive(RefundProcess process, User user) {
 	final RefundRequest refundRequest = process.getRequest();
 
-	return isUserProcessOwner(process, user) && process.getRequestor() == user.getExpenditurePerson()
-		&& process.getProcessState().isInGenesis() && refundRequest.hasAnyRequestItems()
-		&& refundRequest.isEveryItemFullyAttributedToPayingUnits();
+	return isUserProcessOwner(process, user)
+		&& process.getRequestor() == user.getExpenditurePerson()
+		&& process.getProcessState().isInGenesis()
+		&& refundRequest.hasAnyRequestItems()
+		&& refundRequest.isEveryItemFullyAttributedToPayingUnits()
+		&& refundRequest.allPayingUnitsHaveAccountingUnit();
     }
 
     @Override

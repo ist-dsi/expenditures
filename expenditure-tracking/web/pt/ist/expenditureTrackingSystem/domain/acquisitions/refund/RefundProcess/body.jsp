@@ -95,7 +95,11 @@
 				</html:link>
 			</td>
 			<bean:define id="financer" name="payingUnit" property="financer"/>
-			<td class="acenter" style="width: 80px;"><fr:view name="payingUnit" property="financer.accountingUnit.name"/></td>
+			<td class="acenter" style="width: 80px;">
+				<logic:present name="payingUnit" property="financer.accountingUnit">
+					<fr:view name="payingUnit" property="financer.accountingUnit.name"/>
+				</logic:present>
+			</td>
 			<td class="allocationCell" style="display: none;">
 				<logic:equal name="payingUnit" property="financer.fundAllocationPresent" value="true">
 					<fr:view name="payingUnit" property="financer.fundAllocationIds"/> 
