@@ -20,7 +20,7 @@
 			<fr:property name="saveOptions" value="true"/>
     	</fr:slot>
     	<fr:slot name="workflowQueue" layout="menu-select" key="label.queue" bundle="MISSION_RESOURCES">
-        	<fr:property name="providerClass" value="module.mission.presentationTier.provider.WorkflowQueueProvider" />
+        	<fr:property name="providerClass" value="module.workflow.presentationTier.provider.WorkflowQueueProvider" />
         	<fr:property name="eachSchema" value="workflowQueue-name"/>
         	<fr:property name="eachLayout" value="values"/>
         	<fr:property name="classes" value="nobullet noindent"/>
