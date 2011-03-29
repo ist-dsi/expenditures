@@ -2,6 +2,7 @@ package module.organizationIst.domain.task;
 
 import module.organization.domain.Accountability;
 import module.organization.domain.AccountabilityType;
+import module.organization.domain.Party;
 import module.organization.domain.Person;
 import module.organizationIst.domain.IstAccountabilityType;
 import myorg.domain.User;
@@ -43,7 +44,7 @@ public class ImportEmployeesAndResponsiblesAux {
 		final String username = allInformation.substring(i, sep1);
 		final String costCenterCode = allInformation.substring(sep2 + 1, sep3);
 
-		updateInformation(now, accountabilityType, username, costCenterCode);
+		updateInformation(now, accountabilityType, username, costCenterCode, allInformation);
 		i = sep3 + 1;
 	    } else {
 		i++;
@@ -51,14 +52,15 @@ public class ImportEmployeesAndResponsiblesAux {
 	}
     }
 
-    private static void updateInformation(final LocalDate now, final AccountabilityType accountabilityType, final String username, final String costCenterCode) {
+    private static void updateInformation(final LocalDate now, final AccountabilityType accountabilityType, 
+	    final String username, final String costCenterCode, final String allInformation) {
 	final User user = User.findByUsername(username);
 	if (user != null) {
 	    final Person person = user.getPerson();
 	    if (person != null) {
 		final Unit unit = CostCenter.findUnitByCostCenter(costCenterCode);
 		if (unit != null) {
-		    updateInformation(now, accountabilityType, person, unit.getUnit());
+		    updateInformation(now, accountabilityType, person, unit.getUnit(), allInformation, username);
 		} else {
 		    System.out.println("Did not find cost center with code: " + costCenterCode);
 		}
@@ -70,17 +72,46 @@ public class ImportEmployeesAndResponsiblesAux {
 	}
     }
 
-    private static void updateInformation(final LocalDate now, final AccountabilityType accountabilityType, final Person person, final module.organization.domain.Unit unit) {
+    private static void updateInformation(final LocalDate now, final AccountabilityType accountabilityType,
+	    final Person person, final module.organization.domain.Unit unit, final String allInformation, final String username) {
 	for (final Accountability accountability : person.getParentAccountabilitiesSet()) {
 	    if (accountability.getAccountabilityType() == accountabilityType && accountability.isActive(now)) {
 		if (accountability.getParent() == unit) {
 		    return;
 		} else {
-		    accountability.setEndDate(now.minusDays(1));
+		    final Unit expenditureUnit = ((module.organization.domain.Unit) accountability.getParent()).getExpenditureUnit();
+		    if (expenditureUnit instanceof CostCenter) {
+			final CostCenter center = (CostCenter) expenditureUnit;
+			final String checkString = username + ':' + getAccountabilityTypeString(accountabilityType) + ':' + center.getCostCenter();
+			if (allInformation.indexOf(checkString) < 0) {
+			    accountability.setEndDate(now);
+			}
+		    } else {
+			accountability.setEndDate(now);
+		    }
 		}
 	    }
 	}
 	unit.addChild(person, accountabilityType, now, null);
+    }
+
+    private static String getAccountabilityTypeString(final AccountabilityType accountabilityType) {
+	if (accountabilityType == IstAccountabilityType.TEACHING_PERSONNEL.readAccountabilityType()) {
+	    return "TEACHER";
+	}
+	if (accountabilityType == IstAccountabilityType.RESEARCH_PERSONNEL.readAccountabilityType()) {
+	    return "RESEARCHER";
+	}
+	if (accountabilityType == IstAccountabilityType.PERSONNEL.readAccountabilityType()) {
+	    return "EMPLOYEE";
+	}
+	if (accountabilityType == IstAccountabilityType.GRANT_OWNER_PERSONNEL.readAccountabilityType()) {
+	    return "GRANT_OWNER";
+	}
+	if (accountabilityType == IstAccountabilityType.EXTERNAL_RESEARCH_PERSONNEL.readAccountabilityType()) {
+	    return "RESEARCHER";
+	}
+	return null;
     }
 
 }

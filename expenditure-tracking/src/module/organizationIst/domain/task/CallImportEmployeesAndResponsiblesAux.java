@@ -21,21 +21,16 @@ public class CallImportEmployeesAndResponsiblesAux extends WriteCustomTask {
 	final Person somePerson = user.getPerson();
 	final RemotePerson someRemotePerson = somePerson.getRemotePerson();
 
-//	final String allTeacherInformation = someRemotePerson.readAllTeacherInformation();
-//	updateInformation(IstAccountabilityType.TEACHING_PERSONNEL, allTeacherInformation);
-//	final String allResearcherInformation = someRemotePerson.readAllResearcherInformation();
-//	updateInformation(IstAccountabilityType.RESEARCH_PERSONNEL, allResearcherInformation);
-//	final String allEmployeeInformation = someRemotePerson.readAllEmployeeInformation();
-//	updateInformation(IstAccountabilityType.PERSONNEL, allEmployeeInformation);
-//	final String allGrantOwnerInformation = someRemotePerson.readAllGrantOwnerInformation();
-//	updateInformation(IstAccountabilityType.GRANT_OWNER_PERSONNEL, allGrantOwnerInformation);
-
+	final String allTeacherInformation = someRemotePerson.readAllTeacherInformation();
+	updateInformation(IstAccountabilityType.TEACHING_PERSONNEL, allTeacherInformation);
+	final String allResearcherInformation = someRemotePerson.readAllResearcherInformation();
+	updateInformation(IstAccountabilityType.RESEARCH_PERSONNEL, allResearcherInformation);
+	final String allEmployeeInformation = someRemotePerson.readAllEmployeeInformation();
+	updateInformation(IstAccountabilityType.PERSONNEL, allEmployeeInformation);
+	final String allGrantOwnerInformation = someRemotePerson.readAllGrantOwnerInformation();
+	updateInformation(IstAccountabilityType.GRANT_OWNER_PERSONNEL, allGrantOwnerInformation);
   	final String allExternalResearcherInformation = someRemotePerson.readAllExternalResearcherInformation();
-	System.out.println("########################################");
-	System.out.println(allExternalResearcherInformation);
-	System.out.println("-----------------------------------------");
 	updateInformation(IstAccountabilityType.EXTERNAL_RESEARCH_PERSONNEL, allExternalResearcherInformation + '|');
-
     }
 
     private static void updateInformation(final IstAccountabilityType istAccountabilityType, final String allInformation) {
@@ -50,11 +45,7 @@ public class CallImportEmployeesAndResponsiblesAux extends WriteCustomTask {
 		final String username = allInformation.substring(i, sep1);
 		final String costCenterCode = allInformation.substring(sep2 + 1, sep3);
 
-		System.out.println("   " + username);
-		System.out.println("   " + costCenterCode);
-		System.out.println();
-		
-		updateInformation(now, accountabilityType, username, costCenterCode);
+		updateInformation(now, accountabilityType, username, costCenterCode, allInformation);
 		i = sep3 + 1;
 	    } else {
 		i++;
@@ -62,14 +53,15 @@ public class CallImportEmployeesAndResponsiblesAux extends WriteCustomTask {
 	}
     }
 
-    private static void updateInformation(final LocalDate now, final AccountabilityType accountabilityType, final String username, final String costCenterCode) {
+    private static void updateInformation(final LocalDate now, final AccountabilityType accountabilityType, 
+	    final String username, final String costCenterCode, final String allInformation) {
 	final User user = User.findByUsername(username);
 	if (user != null) {
 	    final Person person = user.getPerson();
 	    if (person != null) {
 		final Unit unit = CostCenter.findUnitByCostCenter(costCenterCode);
 		if (unit != null) {
-		    updateInformation(now, accountabilityType, person, unit.getUnit());
+		    updateInformation(now, accountabilityType, person, unit.getUnit(), allInformation, username);
 		} else {
 		    System.out.println("Did not find cost center with code: " + costCenterCode);
 		}
@@ -81,21 +73,46 @@ public class CallImportEmployeesAndResponsiblesAux extends WriteCustomTask {
 	}
     }
 
-    private static void updateInformation(final LocalDate now, final AccountabilityType accountabilityType, final Person person, final module.organization.domain.Unit unit) {
+    private static void updateInformation(final LocalDate now, final AccountabilityType accountabilityType,
+	    final Person person, final module.organization.domain.Unit unit, final String allInformation, final String username) {
 	for (final Accountability accountability : person.getParentAccountabilitiesSet()) {
-	    System.out.println("      processing " + accountability.getAccountabilityType().getName().getContent() + " of " + accountability.getBeginDate().toString());
 	    if (accountability.getAccountabilityType() == accountabilityType && accountability.isActive(now)) {
-		System.out.println("      found mathing type that is active now.");
 		if (accountability.getParent() == unit) {
-		    System.out.println("      matched unit... nothing to do: " + unit.getPresentationName());
 		    return;
 		} else {
-		    accountability.setEndDate(now.minusDays(1));
+		    final Unit expenditureUnit = ((module.organization.domain.Unit) accountability.getParent()).getExpenditureUnit();
+		    if (expenditureUnit instanceof CostCenter) {
+			final CostCenter center = (CostCenter) expenditureUnit;
+			final String checkString = username + ':' + getAccountabilityTypeString(accountabilityType) + ':' + center.getCostCenter();
+			if (allInformation.indexOf(checkString) < 0) {
+			    accountability.setEndDate(now);
+			}
+		    } else {
+			accountability.setEndDate(now);
+		    }
 		}
 	    }
 	}
-	System.out.println("Creating accountability for: " + person.getPresentationName() + " of type: " + accountabilityType.getName().getContent());
 	unit.addChild(person, accountabilityType, now, null);
+    }
+
+    private static String getAccountabilityTypeString(final AccountabilityType accountabilityType) {
+	if (accountabilityType == IstAccountabilityType.TEACHING_PERSONNEL.readAccountabilityType()) {
+	    return "TEACHER";
+	}
+	if (accountabilityType == IstAccountabilityType.RESEARCH_PERSONNEL.readAccountabilityType()) {
+	    return "RESEARCHER";
+	}
+	if (accountabilityType == IstAccountabilityType.PERSONNEL.readAccountabilityType()) {
+	    return "EMPLOYEE";
+	}
+	if (accountabilityType == IstAccountabilityType.GRANT_OWNER_PERSONNEL.readAccountabilityType()) {
+	    return "GRANT_OWNER";
+	}
+	if (accountabilityType == IstAccountabilityType.EXTERNAL_RESEARCH_PERSONNEL.readAccountabilityType()) {
+	    return "RESEARCHER";
+	}
+	return null;
     }
 
 }
