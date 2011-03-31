@@ -1,6 +1,5 @@
 package module.mission.domain.activity;
 
-import module.mission.domain.Mission;
 import module.mission.domain.MissionItem;
 import module.mission.domain.MissionProcess;
 import module.mission.domain.MissionVersion;
@@ -19,7 +18,8 @@ public class RevertTerminationActivity extends MissionProcessActivity<MissionPro
     public boolean isActive(final MissionProcess missionProcess, final User user) {
 	return super.isActive(missionProcess, user)
 		&& missionProcess.isTerminated()
-		&& !missionProcess.isArchived()
+		&& (!missionProcess.isArchived()
+			|| (missionProcess.isArchived() && !missionProcess.getMission().hasAnyFinancer()))
 		&& missionProcess.canArchiveMission();
     }
 
