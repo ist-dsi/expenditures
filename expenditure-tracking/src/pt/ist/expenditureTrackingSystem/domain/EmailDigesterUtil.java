@@ -21,6 +21,8 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessSt
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
@@ -35,10 +37,10 @@ public class EmailDigesterUtil {
 	Language.setLocale(Language.getDefaultLocale());
 	for (Person person : getPeopleToProcess()) {
 	    Authenticate.authenticate(person.getUsername(), StringUtils.EMPTY);
-	    Map<AcquisitionProcessStateType, MultiCounter<AcquisitionProcessStateType>> generateAcquisitionMap = ProcessMapGenerator
-	    		.generateAcquisitionMap(person);
-	    Map<RefundProcessStateType, MultiCounter<RefundProcessStateType>> generateRefundMap = ProcessMapGenerator
-			.generateRefundMap(person);
+	    Map<AcquisitionProcessStateType, MultiCounter<AcquisitionProcessStateType>> generateAcquisitionMap =
+		ProcessMapGenerator.generateAcquisitionMap(person, true);
+	    Map<RefundProcessStateType, MultiCounter<RefundProcessStateType>> generateRefundMap =
+		ProcessMapGenerator.generateRefundMap(person, true);
 
 	    if (!generateAcquisitionMap.isEmpty() || !generateRefundMap.isEmpty()) {
 		toAddress.clear();
@@ -118,22 +120,38 @@ public class EmailDigesterUtil {
 	StringBuilder builder = new StringBuilder("Caro utilizador, possui processos pendentes na central de compras.\n\n");
 	if (!acquisitionMap.isEmpty()) {
 	    builder.append("Regime simplificado\n");
-	    for (MultiCounter<AcquisitionProcessStateType> multiCounter : acquisitionMap.values()) {
+	    for (final MultiCounter<AcquisitionProcessStateType> multiCounter : acquisitionMap.values()) {
 		builder.append("\t");
 		builder.append(multiCounter.getCountableObject().getLocalizedName());
 		builder.append("\t");
 		builder.append(ProcessMapGenerator.getDefaultCounter(multiCounter).getValue());
 		builder.append("\n");
+		final Set<SimplifiedProcedureProcess> processes = (Set) ProcessMapGenerator.getDefaultCounter(multiCounter).getObjects();
+		if (processes.size() < 25) {
+		    for (final SimplifiedProcedureProcess process : processes) {
+			builder.append("\t\t");
+			builder.append(process.getProcessNumber());
+			builder.append("\n");			
+		    }
+		}
 	    }
 	}
 	if (!refundMap.isEmpty()) {
 	    builder.append("Processos de reembolso\n");
-	    for (MultiCounter<RefundProcessStateType> multiCounter : refundMap.values()) {
+	    for (final MultiCounter<RefundProcessStateType> multiCounter : refundMap.values()) {
 		builder.append("\t");
 		builder.append(multiCounter.getCountableObject().getLocalizedName());
 		builder.append("\t");
 		builder.append(ProcessMapGenerator.getDefaultCounter(multiCounter).getValue());
 		builder.append("\n");
+		final Set<RefundProcess> processes = (Set) ProcessMapGenerator.getDefaultCounter(multiCounter).getObjects();
+		if (processes.size() < 25) {
+		    for (final RefundProcess process : processes) {
+			builder.append("\t\t");
+			builder.append(process.getProcessNumber());
+			builder.append("\n");			
+		    }
+		}
 	    }
 	}
 	builder.append("\n\n---\n");

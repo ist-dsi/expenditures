@@ -97,11 +97,20 @@ public class MissionYear extends MissionYear_Base {
 
     private abstract class MissionProcessSearch {
 
+	private final SortedSet<MissionProcess> result;
+
 	abstract boolean shouldAdd(final MissionProcess missionProcess, final User user);
+
+	private MissionProcessSearch() {
+	    result = new TreeSet<MissionProcess>(MissionProcess.COMPARATOR_BY_PROCESS_NUMBER);
+	}
+
+	private MissionProcessSearch(final SortedSet<MissionProcess> result) {
+	    this.result = result;
+	}
 
 	SortedSet<MissionProcess> search() {
 	    final User user = UserView.getCurrentUser();
-	    final SortedSet<MissionProcess> result = new TreeSet<MissionProcess>(MissionProcess.COMPARATOR_BY_PROCESS_NUMBER);
 	    for (final MissionProcess missionProcess : getMissionProcessSet()) {
 		if (shouldAdd(missionProcess, user)) {
 		    result.add(missionProcess);
@@ -112,57 +121,128 @@ public class MissionYear extends MissionYear_Base {
 
     }
 
+    private class PendingAprovalSearch extends MissionProcessSearch {
+
+	private PendingAprovalSearch() {
+	}
+
+	private PendingAprovalSearch(final SortedSet<MissionProcess> result) {
+	    super(result);
+	}
+
+	@Override
+	boolean shouldAdd(final MissionProcess missionProcess, final User user) {
+	    return (!missionProcess.hasCurrentOwner() || missionProcess.isTakenByCurrentUser())
+	    && !missionProcess.isUnderConstruction() && !missionProcess.getIsCanceled()
+	    && missionProcess.isPendingApprovalBy(user);
+	}
+	
+    }
+
+    private class PendingAuthorizationSearch extends MissionProcessSearch {
+
+	private PendingAuthorizationSearch() {
+	}
+
+	private PendingAuthorizationSearch(final SortedSet<MissionProcess> result) {
+	    super(result);
+	}
+
+	@Override
+	boolean shouldAdd(final MissionProcess missionProcess, final User user) {
+	    return (!missionProcess.hasCurrentOwner() || missionProcess.isTakenByCurrentUser())
+	    && missionProcess.isApproved() && !missionProcess.getIsCanceled()
+	    && ((missionProcess.isPendingParticipantAuthorisationBy(user)
+		    && (!missionProcess.getMission().hasAnyFinancer() || missionProcess.hasAllAllocatedFunds()))
+		    || (//missionProcess.areAllParticipantsAuthorizedForPhaseOne()
+			    missionProcess.areAllParticipantsAuthorized()
+			    && missionProcess.hasAllAllocatedFunds()
+			    && missionProcess.isPendingDirectAuthorizationBy(user)));
+	}
+	
+    }
+
+    private class PendingFundAllocationSearch extends MissionProcessSearch {
+
+	private PendingFundAllocationSearch() {
+	}
+
+	private PendingFundAllocationSearch(final SortedSet<MissionProcess> result) {
+	    super(result);
+	}
+
+	@Override
+	boolean shouldAdd(final MissionProcess missionProcess, final User user) {
+	    return (!missionProcess.hasCurrentOwner() || missionProcess.isTakenByCurrentUser())
+	    && (isPendingFundAllocation(missionProcess, user) || isPendingFundUnAllocation(missionProcess, user));
+	}
+	
+	private boolean isPendingFundAllocation(MissionProcess missionProcess, User user) {
+	    return missionProcess.isApproved()
+	    && !missionProcess.getIsCanceled()
+	    && (((!missionProcess.hasAnyProjectFinancer() || missionProcess.hasAllAllocatedProjectFunds())
+		    && !missionProcess.hasAllAllocatedFunds() && missionProcess.canAllocateFund()) || (!missionProcess
+			    .hasAllAllocatedProjectFunds() && missionProcess.canAllocateProjectFund()));
+	}
+	
+	private boolean isPendingFundUnAllocation(final MissionProcess missionProcess, final User user) {
+	    return missionProcess.getIsCanceled().booleanValue()
+	    && ((missionProcess.hasAnyAllocatedFunds() && missionProcess.isAccountingEmployee(user
+		    .getExpenditurePerson())) || (missionProcess.hasAnyAllocatedProjectFunds())
+		    && missionProcess.isProjectAccountingEmployee(user.getExpenditurePerson()));
+	}
+
+    }
+
+    private class PendingProcessingPersonelInformationSearch extends MissionProcessSearch {
+
+	private PendingProcessingPersonelInformationSearch() {
+	}
+
+	private PendingProcessingPersonelInformationSearch(final SortedSet<MissionProcess> result) {
+	    super(result);
+	}
+
+	@Override
+	boolean shouldAdd(final MissionProcess missionProcess, final User user) {
+	    return (!missionProcess.hasCurrentOwner() || missionProcess.isTakenByCurrentUser())
+	    && (missionProcess.hasCurrentQueue() && missionProcess.getCurrentQueue().isCurrentUserAbleToAccessQueue()
+		    && (missionProcess.isAuthorized() || missionProcess.hasNoItemsAndParticipantesAreAuthorized()) && missionProcess
+		    .areAllParticipantsAuthorized()) || missionProcess.isReadyForMissionTermination(user)
+		    || (missionProcess.isTerminated() && !missionProcess.isArchived() && missionProcess.canArchiveMission());
+	}
+	
+    }
+
+
     public SortedSet<MissionProcess> getPendingAproval() {
-	return new MissionProcessSearch() {
-	    @Override
-	    boolean shouldAdd(final MissionProcess missionProcess, final User user) {
-		return (!missionProcess.hasCurrentOwner() || missionProcess.isTakenByCurrentUser())
-			&& !missionProcess.isUnderConstruction() && !missionProcess.getIsCanceled()
-			&& missionProcess.isPendingApprovalBy(user);
-	    }
-	}.search();
+	return new PendingAprovalSearch().search();
+    }
+
+    public SortedSet<MissionProcess> getPendingAproval(final SortedSet<MissionProcess> result) {
+	return new PendingAprovalSearch(result).search();
     }
 
     public SortedSet<MissionProcess> getPendingAuthorization() {
-	return new MissionProcessSearch() {
-	    @Override
-	    boolean shouldAdd(final MissionProcess missionProcess, final User user) {
-		return (!missionProcess.hasCurrentOwner() || missionProcess.isTakenByCurrentUser())
-			&& missionProcess.isApproved() && !missionProcess.getIsCanceled()
-			&& ((missionProcess.isPendingParticipantAuthorisationBy(user)
-					&& (!missionProcess.getMission().hasAnyFinancer() || missionProcess.hasAllAllocatedFunds()))
-				|| (//missionProcess.areAllParticipantsAuthorizedForPhaseOne()
-					missionProcess.areAllParticipantsAuthorized()
-					&& missionProcess.hasAllAllocatedFunds()
-					&& missionProcess.isPendingDirectAuthorizationBy(user)));
-	    }
-	}.search();
+	return new PendingAuthorizationSearch().search();
+    }
+
+    public SortedSet<MissionProcess> getPendingAuthorization(final SortedSet<MissionProcess> result) {
+	return new PendingAuthorizationSearch(result).search();
     }
 
     public SortedSet<MissionProcess> getPendingFundAllocation() {
 	try {
-	    return new MissionProcessSearch() {
-		@Override
-		boolean shouldAdd(final MissionProcess missionProcess, final User user) {
-		    return (!missionProcess.hasCurrentOwner() || missionProcess.isTakenByCurrentUser())
-			    && (isPendingFundAllocation(missionProcess, user) || isPendingFundUnAllocation(missionProcess, user));
-		}
+	    return new PendingFundAllocationSearch().search();
+	} catch (Throwable t) {
+	    t.printStackTrace();
+	    throw new Error(t);
+	}
+    }
 
-		private boolean isPendingFundAllocation(MissionProcess missionProcess, User user) {
-		    return missionProcess.isApproved()
-			    && !missionProcess.getIsCanceled()
-			    && (((!missionProcess.hasAnyProjectFinancer() || missionProcess.hasAllAllocatedProjectFunds())
-				    && !missionProcess.hasAllAllocatedFunds() && missionProcess.canAllocateFund()) || (!missionProcess
-				    .hasAllAllocatedProjectFunds() && missionProcess.canAllocateProjectFund()));
-		}
-
-		private boolean isPendingFundUnAllocation(final MissionProcess missionProcess, final User user) {
-		    return missionProcess.getIsCanceled().booleanValue()
-			    && ((missionProcess.hasAnyAllocatedFunds() && missionProcess.isAccountingEmployee(user
-				    .getExpenditurePerson())) || (missionProcess.hasAnyAllocatedProjectFunds())
-				    && missionProcess.isProjectAccountingEmployee(user.getExpenditurePerson()));
-		}
-	    }.search();
+    public SortedSet<MissionProcess> getPendingFundAllocation(final SortedSet<MissionProcess> result) {
+	try {
+	    return new PendingFundAllocationSearch(result).search();
 	} catch (Throwable t) {
 	    t.printStackTrace();
 	    throw new Error(t);
@@ -200,16 +280,11 @@ public class MissionYear extends MissionYear_Base {
     }
 
     public SortedSet<MissionProcess> getPendingProcessingPersonelInformation() {
-	return new MissionProcessSearch() {
-	    @Override
-	    boolean shouldAdd(final MissionProcess missionProcess, final User user) {
-		return (!missionProcess.hasCurrentOwner() || missionProcess.isTakenByCurrentUser())
-			&& (missionProcess.hasCurrentQueue() && missionProcess.getCurrentQueue().isCurrentUserAbleToAccessQueue()
-				&& (missionProcess.isAuthorized() || missionProcess.hasNoItemsAndParticipantesAreAuthorized()) && missionProcess
-				.areAllParticipantsAuthorized()) || missionProcess.isReadyForMissionTermination(user)
-			|| (missionProcess.isTerminated() && !missionProcess.isArchived() && missionProcess.canArchiveMission());
-	    }
-	}.search();
+	return new PendingProcessingPersonelInformationSearch().search();
+    }
+
+    public SortedSet<MissionProcess> getPendingProcessingPersonelInformation(final SortedSet<MissionProcess> result) {
+	return new PendingProcessingPersonelInformationSearch(result).search();
     }
 
     public SortedSet<MissionProcess> getPendingDirectProcessingPersonelInformation() {
@@ -334,8 +409,12 @@ public class MissionYear extends MissionYear_Base {
     }
 
     public SortedSet<MissionProcess> getTaken() {
-	final User user = UserView.getCurrentUser();
 	final SortedSet<MissionProcess> result = new TreeSet<MissionProcess>(MissionProcess.COMPARATOR_BY_PROCESS_NUMBER);
+	return getTaken(result);
+    }
+
+    public SortedSet<MissionProcess> getTaken(final SortedSet<MissionProcess> result) {
+	final User user = UserView.getCurrentUser();
 	for (final WorkflowProcess workflowProcess : user.getUserProcessesSet()) {
 	    if (workflowProcess instanceof MissionProcess) {
 		final MissionProcess missionProcess = (MissionProcess) workflowProcess;

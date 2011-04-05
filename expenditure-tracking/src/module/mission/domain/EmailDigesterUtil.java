@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.SortedSet;
 
 import module.organization.domain.Party;
 import myorg.applicationTier.Authenticate;
@@ -39,21 +40,31 @@ public class EmailDigesterUtil {
 	    		final LocalDate today = new LocalDate();
 	    		final MissionYear previousYear = today.getMonthOfYear() == Month.JANUARY ? MissionYear.findOrCreateMissionYear(today.getYear() - 1) : null;
 
-	    		final int takenByUser = missionYear.getTaken().size() + (previousYear == null ? 0 : previousYear.getTaken().size());
-	    		final int pendingApprovalCount = missionYear.getPendingAproval().size() + (previousYear == null ? 0 : previousYear.getPendingAproval().size());
-	    		final int pendingAuthorizationCount = missionYear.getPendingAuthorization().size() + (previousYear == null ? 0 : previousYear.getPendingAuthorization().size());
-	    		final int pendingFundAllocationCount = missionYear.getPendingFundAllocation().size() + (previousYear == null ? 0 : previousYear.getPendingFundAllocation().size());
-	    		final int pendingProcessingCount = missionYear.getPendingProcessingPersonelInformation().size() + (previousYear == null ? 0 : previousYear.getPendingProcessingPersonelInformation().size());
-	    		final int totalPending = takenByUser + pendingApprovalCount + pendingAuthorizationCount + pendingFundAllocationCount + pendingProcessingCount;
+	    		final SortedSet<MissionProcess> takenByUser = previousYear == null ? 
+	    			missionYear.getTaken() : previousYear.getTaken(missionYear.getTaken());
+	    		final int takenByUserCount = takenByUser.size();
+	    		final SortedSet<MissionProcess> pendingApproval = previousYear == null ? 
+	    			missionYear.getPendingAproval() : previousYear.getPendingAproval(missionYear.getPendingAproval());
+	    		final int pendingApprovalCount = pendingApproval.size();
+	    		final SortedSet<MissionProcess> pendingAuthorization = previousYear == null ?
+	    			missionYear.getPendingAuthorization() : previousYear.getPendingAuthorization(missionYear.getPendingAuthorization());
+	    		final int pendingAuthorizationCount = pendingAuthorization.size();
+	    		final SortedSet<MissionProcess> pendingFundAllocation = previousYear == null ?
+	    			missionYear.getPendingFundAllocation() : previousYear.getPendingFundAllocation(missionYear.getPendingFundAllocation());
+	    		final int pendingFundAllocationCount = pendingFundAllocation.size();
+	    		final SortedSet<MissionProcess> pendingProcessing = previousYear == null ?
+	    			missionYear.getPendingProcessingPersonelInformation() : previousYear.getPendingProcessingPersonelInformation(missionYear.getPendingProcessingPersonelInformation());
+	    		final int pendingProcessingCount = pendingProcessing.size();
+	    		final int totalPending = takenByUserCount + pendingApprovalCount + pendingAuthorizationCount + pendingFundAllocationCount + pendingProcessingCount;
 
 	    		if (totalPending > 0) {
 	    		    try {
 	    			final String email = person.getEmail();
 	    			if (email != null) {
 	    			    final StringBuilder body = new StringBuilder("Caro utilizador, possui processos de missão pendentes nas aplicações centrais do IST, em http://dot.ist.utl.pt/.\n");
-	    			    if (takenByUser > 0) {
+	    			    if (takenByUserCount > 0) {
 	    				body.append("\n\tPendentes de Libertação\t");
-	    				body.append(takenByUser);
+	    				body.append(takenByUserCount);
 	    			    }
 	    			    if (pendingApprovalCount > 0) {
 	    				body.append("\n\tPendentes de Aprovação\t");
@@ -74,9 +85,29 @@ public class EmailDigesterUtil {
 	    			    body.append("\n\n\tTotal de Processos de Missão Pendentes\t");
 	    			    body.append(totalPending);
 
-	    			    if (takenByUser > 0) {
+	    			    if (takenByUserCount > 0) {
 	    				body.append("\n\n\n\tPor favor, proceda à libertação dos processos em \"acesso exclusivo\", após concluir as tarefas que nele tem para realizar.\t");
-	    				body.append(takenByUser);
+	    				body.append(takenByUserCount);
+	    			    }
+
+	    			    body.append("\n\nSegue um resumo detalhado dos processos pendentes.\n");
+	    			    if (takenByUserCount > 0) {
+	    				report(body, "Pendentes de Libertação", takenByUser);
+	    			    }
+	    			    if (pendingApprovalCount > 0) {
+	    				report(body, "Pendentes de Aprovação", pendingApproval);
+	    			    }
+	    			    if (pendingAuthorizationCount > 0) {
+	    				report(body, "Pendentes de Autorização", pendingAuthorization);
+	    			    }
+	    			    if (pendingFundAllocationCount > 0) {
+	    				report(body, "Pendentes de Cabimentação", pendingFundAllocation);
+	    			    }
+	    			    if (pendingProcessingCount > 0) {
+	    				report(body, "Pendentes de Processamento por Mim", pendingProcessing);
+	    			    }
+	    			    if (takenByUserCount > 0) {
+	    				report(body, "Processos em \"acesso exclusivo\"", takenByUser);
 	    			    }
 
 	    			    body.append("\n\n---\n");
@@ -96,6 +127,24 @@ public class EmailDigesterUtil {
 	    		pt.ist.fenixWebFramework.security.UserView.setUser(null);
 	    	    }
 	    	}
+	}
+    }
+
+    private static void report(final StringBuilder body, final String title, final SortedSet<MissionProcess> processes) {
+	body.append("\n\t");
+	body.append(title);
+	body.append(":");
+	for (final MissionProcess missionProcess : processes) {
+	    final Mission mission = missionProcess.getMission();
+	    body.append("\n\t\t");
+	    body.append(missionProcess.getProcessIdentification());
+	    body.append(" - ");
+	    body.append(mission.getDestinationDescription());
+	    body.append(" (");
+	    body.append(mission.getDaparture().toString("yyyy-MM-dd"));
+	    body.append(" - ");
+	    body.append(mission.getArrival().toString("yyyy-MM-dd"));
+	    body.append(")");
 	}
     }
 

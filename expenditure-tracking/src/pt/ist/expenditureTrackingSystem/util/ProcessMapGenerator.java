@@ -25,7 +25,8 @@ public class ProcessMapGenerator {
 	return multiCounter.getCounter(PRIORITY_COUNTER);
     }
 
-    public static Map<AcquisitionProcessStateType, MultiCounter<AcquisitionProcessStateType>> generateAcquisitionMap(Person person) {
+    public static Map<AcquisitionProcessStateType, MultiCounter<AcquisitionProcessStateType>> generateAcquisitionMap(
+	    final Person person, final boolean holdElements) {
 	Map<AcquisitionProcessStateType, MultiCounter<AcquisitionProcessStateType>> map = new HashMap<AcquisitionProcessStateType, MultiCounter<AcquisitionProcessStateType>>();
 
 	for (SimplifiedProcedureProcess process : GenericProcess.getProcessesForPerson(SimplifiedProcedureProcess.class, person,
@@ -34,18 +35,23 @@ public class ProcessMapGenerator {
 	    AcquisitionProcessStateType type = process.getAcquisitionProcessStateType();
 	    MultiCounter<AcquisitionProcessStateType> counter = map.get(type);
 	    if (counter == null) {
-		counter = new MultiCounter<AcquisitionProcessStateType>(type, new String[] { DEFAULT_COUNTER, PRIORITY_COUNTER });
+		counter = new MultiCounter<AcquisitionProcessStateType>(type, holdElements, new String[] { DEFAULT_COUNTER, PRIORITY_COUNTER });
 		map.put(type, counter);
 	    }
-	    counter.increment(DEFAULT_COUNTER);
+	    counter.increment(DEFAULT_COUNTER, process);
 	    if (process.isPriorityProcess()) {
-		counter.increment(PRIORITY_COUNTER);
+		counter.increment(PRIORITY_COUNTER, process);
 	    }
 	}
 	return map;
     }
 
-    public static Map<RefundProcessStateType, MultiCounter<RefundProcessStateType>> generateRefundMap(Person person) {
+    public static Map<AcquisitionProcessStateType, MultiCounter<AcquisitionProcessStateType>> generateAcquisitionMap(Person person) {
+	return generateAcquisitionMap(person, false);
+    }
+
+    public static Map<RefundProcessStateType, MultiCounter<RefundProcessStateType>> generateRefundMap(
+	    final Person person, final boolean holdElements) {
 	Map<RefundProcessStateType, MultiCounter<RefundProcessStateType>> map = new HashMap<RefundProcessStateType, MultiCounter<RefundProcessStateType>>();
 
 	for (RefundProcess process : GenericProcess.getProcessesForPerson(RefundProcess.class, person, null,true)) {
@@ -53,14 +59,19 @@ public class ProcessMapGenerator {
 	    RefundProcessStateType type = process.getProcessState().getRefundProcessStateType();
 	    MultiCounter<RefundProcessStateType> counter = map.get(type);
 	    if (counter == null) {
-		counter = new MultiCounter<RefundProcessStateType>(type, new String[] { DEFAULT_COUNTER, PRIORITY_COUNTER });
+		counter = new MultiCounter<RefundProcessStateType>(type, holdElements, new String[] { DEFAULT_COUNTER, PRIORITY_COUNTER });
 		map.put(type, counter);
 	    }
-	    counter.increment(DEFAULT_COUNTER);
+	    counter.increment(DEFAULT_COUNTER, process);
 	    if (process.isPriorityProcess()) {
-		counter.increment(PRIORITY_COUNTER);
+		counter.increment(PRIORITY_COUNTER, process);
 	    }
 	}
 	return map;
     }
+
+    public static Map<RefundProcessStateType, MultiCounter<RefundProcessStateType>> generateRefundMap(final Person person) {
+	return generateRefundMap(person, false);
+    }
+
 }
