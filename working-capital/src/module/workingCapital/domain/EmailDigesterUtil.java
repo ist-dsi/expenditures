@@ -4,10 +4,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.SortedSet;
 
 import myorg.applicationTier.Authenticate;
 import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.User;
+import myorg.util.BundleUtil;
 
 import org.jfree.data.time.Month;
 import org.joda.time.LocalDate;
@@ -38,19 +40,29 @@ public class EmailDigesterUtil {
 	    		final LocalDate today = new LocalDate();
 	    		final WorkingCapitalYear previousYear = today.getMonthOfYear() == Month.JANUARY ? WorkingCapitalYear.findOrCreate(today.getYear() - 1) : null;
 
-	    		final int takenByUser = workingCapitalYear.getTaken().size() + (previousYear == null ? 0 : previousYear.getTaken().size());
-	    		final int pendingApprovalCount = workingCapitalYear.getPendingAproval().size() + (previousYear == null ? 0 : previousYear.getPendingAproval().size());
-	    		final int pendingVerificationnCount = workingCapitalYear.getPendingVerification().size() + (previousYear == null ? 0 : previousYear.getPendingVerification().size());
-	    		final int pendingAuthorizationCount = workingCapitalYear.getPendingAuthorization().size() + (previousYear == null ? 0 : previousYear.getPendingAuthorization().size());
-	    		final int pendingPaymentCount = workingCapitalYear.getPendingPayment().size() + (previousYear == null ? 0 : previousYear.getPendingPayment().size());
-	    		final int totalPending = takenByUser + pendingApprovalCount + pendingVerificationnCount + pendingAuthorizationCount + pendingPaymentCount;
+	    		final SortedSet<WorkingCapitalProcess> takenByUser = previousYear == null ?
+	    			workingCapitalYear.getTaken() : previousYear.getTaken(workingCapitalYear.getTaken());
+	    		final int takenByUserCount = takenByUser.size();
+	    		final SortedSet<WorkingCapitalProcess> pendingApproval = previousYear == null ?
+	    			workingCapitalYear.getPendingAproval() : previousYear.getPendingAproval(workingCapitalYear.getPendingAproval());
+	    		final int pendingApprovalCount = pendingApproval.size();
+	    		final SortedSet<WorkingCapitalProcess> pendingVerificationn = previousYear == null ?
+	    			workingCapitalYear.getPendingVerification() : previousYear.getPendingVerification(workingCapitalYear.getPendingVerification());
+	    		final int pendingVerificationnCount = pendingVerificationn.size();
+	    		final SortedSet<WorkingCapitalProcess> pendingAuthorization = previousYear == null ?
+	    			workingCapitalYear.getPendingAuthorization() : previousYear.getPendingAuthorization(workingCapitalYear.getPendingAuthorization());
+	    		final int pendingAuthorizationCount = pendingAuthorization.size();
+	    		final SortedSet<WorkingCapitalProcess> pendingPayment = previousYear == null ?
+	    			workingCapitalYear.getPendingPayment() : previousYear.getPendingPayment(workingCapitalYear.getPendingPayment());
+	    		final int pendingPaymentCount = pendingPayment.size();
+	    		final int totalPending = takenByUserCount + pendingApprovalCount + pendingVerificationnCount + pendingAuthorizationCount + pendingPaymentCount;
 
 	    		if (totalPending > 0) {
 	    		    try {
 	    			final String email = person.getEmail();
 	    			if (email != null) {
 	    			    final StringBuilder body = new StringBuilder("Caro utilizador, possui processos de fundos de maneio pendentes nas aplicações centrais do IST, em http://dot.ist.utl.pt/.\n");
-	    			    if (takenByUser > 0) {
+	    			    if (takenByUserCount > 0) {
 	    				body.append("\n\tPendentes de Libertação\t");
 	    				body.append(takenByUser);
 	    			    }
@@ -73,6 +85,23 @@ public class EmailDigesterUtil {
 	    			    body.append("\n\n\tTotal de Processos de Fundos de Maneio Pendentes\t");
 	    			    body.append(totalPending);
 
+	    			    body.append("\n\nSegue um resumo detalhado dos processos pendentes.\n");
+	    			    if (takenByUserCount > 0) {
+	    				report(body, "Pendentes de Libertação", takenByUser);
+	    			    }
+	    			    if (pendingApprovalCount > 0) {
+	    				report(body, "Pendentes de Aprovação", pendingApproval);
+	    			    }
+	    			    if (pendingVerificationnCount > 0) {
+	    				report(body, "Pendentes de Verificação", pendingVerificationn);
+	    			    }
+	    			    if (pendingAuthorizationCount > 0) {
+	    				report(body, "Pendentes de Autorização", pendingAuthorization);
+	    			    }
+	    			    if (pendingPaymentCount > 0) {
+	    				report(body, "Pendentes de Pagamento", pendingPayment);
+	    			    }
+
 	    			    body.append("\n\n---\n");
 	    			    body.append("Esta mensagem foi enviada por meio das Aplicações Centrais do IST.\n");
 
@@ -91,6 +120,29 @@ public class EmailDigesterUtil {
 	    	    }
 	    	}
 	}
+    }
+
+    private static void report(final StringBuilder body, final String title, final SortedSet<WorkingCapitalProcess> processes) {
+	body.append("\n\t");
+	body.append(title);
+	body.append(":");
+	for (final WorkingCapitalProcess workingCapitalProcess : processes) {
+	    final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
+	    body.append("\n\t\t");
+	    body.append(workingCapital.getUnit().getPresentationName());
+	    body.append(" - ");
+	    body.append(BundleUtil.getStringFromResourceBundle("resources.WorkingCapitalResources", "label.module.workingCapital.year"));
+	    body.append(" ");
+	    body.append(workingCapital.getWorkingCapitalYear().getYear());
+	}
+    }
+
+    protected String getBundle() {
+	return "resources.ContentResources";
+    }
+
+    protected String getMessage(final String key) {
+	return BundleUtil.getStringFromResourceBundle(getBundle(), key);
     }
 
     private static Collection<Person> getPeopleToProcess() {

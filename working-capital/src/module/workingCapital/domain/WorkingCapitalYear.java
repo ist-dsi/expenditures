@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import module.mission.domain.MissionProcess;
 import module.organization.domain.Accountability;
 import module.organization.domain.Party;
 import module.organization.domain.Person;
@@ -40,12 +41,20 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
 
     private abstract class WorkingCapitalProcessSearch {
 
+	private final SortedSet<WorkingCapitalProcess> result;
+
 	abstract boolean shouldAdd(final WorkingCapitalProcess workingCapitalProcess, final User user);
+
+	WorkingCapitalProcessSearch() {
+	    result = new TreeSet<WorkingCapitalProcess>(WorkingCapitalProcess.COMPARATOR_BY_UNIT_NAME);
+	}
+
+	WorkingCapitalProcessSearch(final SortedSet<WorkingCapitalProcess> result) {
+	    this.result = result;
+	}
 
 	SortedSet<WorkingCapitalProcess> search() {
 	    final User user = UserView.getCurrentUser();
-	    final SortedSet<WorkingCapitalProcess> result = new TreeSet<WorkingCapitalProcess>(
-		    WorkingCapitalProcess.COMPARATOR_BY_UNIT_NAME);
 	    for (final WorkingCapital workingCapital : getWorkingCapitalsSet()) {
 		final WorkingCapitalProcess workingCapitalProcess = workingCapital.getWorkingCapitalProcess();
 		if (shouldAdd(workingCapitalProcess, user)) {
@@ -57,33 +66,63 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
 
     }
 
+    private class PendingAprovalSearch extends WorkingCapitalProcessSearch {
+
+	PendingAprovalSearch() {
+	}
+
+	PendingAprovalSearch(final SortedSet<WorkingCapitalProcess> result) {
+	    super(result);
+	}
+
+	@Override
+	boolean shouldAdd(final WorkingCapitalProcess workingCapitalProcess, final User user) {
+	    final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
+	    return !workingCapital.isCanceledOrRejected()
+	    && (workingCapitalProcess.isPendingDirectAproval(user)
+		    || workingCapital.hasAcquisitionPendingDirectApproval(user) || workingCapital
+		    .isPendingAcceptResponsability(user));
+	}
+
+    }
+
     public SortedSet<WorkingCapitalProcess> getPendingAproval() {
-	return new WorkingCapitalProcessSearch() {
-	    @Override
-	    boolean shouldAdd(final WorkingCapitalProcess workingCapitalProcess, final User user) {
-		final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
-		return !workingCapital.isCanceledOrRejected()
-			&& (workingCapitalProcess.isPendingDirectAproval(user)
-				|| workingCapital.hasAcquisitionPendingDirectApproval(user) || workingCapital
-				.isPendingAcceptResponsability(user));
-	    }
-	}.search();
+	return new PendingAprovalSearch().search();
+    }
+
+    public SortedSet<WorkingCapitalProcess> getPendingAproval(final SortedSet<WorkingCapitalProcess> result) {
+	return new PendingAprovalSearch(result).search();
+    }
+
+    private class PendingVerificationSearch extends WorkingCapitalProcessSearch {
+
+	PendingVerificationSearch() {
+	}
+
+	PendingVerificationSearch(final SortedSet<WorkingCapitalProcess> result) {
+	    super(result);
+	}
+
+	@Override
+	boolean shouldAdd(final WorkingCapitalProcess workingCapitalProcess, final User user) {
+	    final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
+	    return workingCapital.isPendingFundUnAllocation(user)
+	    || (!workingCapital.isCanceledOrRejected()
+		    && (workingCapitalProcess.isPendingVerification(user)
+			    || workingCapital.isPendingFundAllocation(user)
+			    || workingCapital.hasAcquisitionPendingVerification(user)
+			    || ((workingCapital.isAccountingResponsible(user) || workingCapital.isAccountingEmployee(user))
+				    && workingCapital.canRequestCapitalRefund())));
+	}
+
     }
 
     public SortedSet<WorkingCapitalProcess> getPendingVerification() {
-	return new WorkingCapitalProcessSearch() {
-	    @Override
-	    boolean shouldAdd(final WorkingCapitalProcess workingCapitalProcess, final User user) {
-		final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
-		return workingCapital.isPendingFundUnAllocation(user)
-			|| (!workingCapital.isCanceledOrRejected()
-				&& (workingCapitalProcess.isPendingVerification(user)
-				|| workingCapital.isPendingFundAllocation(user)
-				|| workingCapital.hasAcquisitionPendingVerification(user)
-				|| ((workingCapital.isAccountingResponsible(user) || workingCapital.isAccountingEmployee(user))
-					&& workingCapital.canRequestCapitalRefund())));
-	    }
-	}.search();
+	return new PendingVerificationSearch().search();
+    }
+
+    public SortedSet<WorkingCapitalProcess> getPendingVerification(final SortedSet<WorkingCapitalProcess> result) {
+	return new PendingVerificationSearch(result).search();
     }
 
     public SortedSet<WorkingCapitalProcess> getPendingDirectVerification() {
@@ -101,24 +140,54 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
 	}.search();
     }
 
+    private class PendingAuthorizationSearch extends WorkingCapitalProcessSearch {
+
+	PendingAuthorizationSearch() {
+	}
+
+	PendingAuthorizationSearch(final SortedSet<WorkingCapitalProcess> result) {
+	    super(result);
+	}
+
+	@Override
+	boolean shouldAdd(WorkingCapitalProcess workingCapitalProcess, User user) {
+	    return workingCapitalProcess.isPendingAuthorization(user);
+	}
+
+    }
+
     public SortedSet<WorkingCapitalProcess> getPendingAuthorization() {
-	return new WorkingCapitalProcessSearch() {
-	    @Override
-	    boolean shouldAdd(WorkingCapitalProcess workingCapitalProcess, User user) {
-		return workingCapitalProcess.isPendingAuthorization(user);
-	    }
-	}.search();
+	return new PendingAuthorizationSearch().search();
+    }
+
+    public SortedSet<WorkingCapitalProcess> getPendingAuthorization(final SortedSet<WorkingCapitalProcess> result) {
+	return new PendingAuthorizationSearch(result).search();
+    }
+
+    private class PendingPaymentSearch extends WorkingCapitalProcessSearch {
+
+	PendingPaymentSearch() {
+	}
+
+	PendingPaymentSearch(final SortedSet<WorkingCapitalProcess> result) {
+	    super(result);
+	}
+
+	@Override
+	boolean shouldAdd(final WorkingCapitalProcess workingCapitalProcess, final User user) {
+	    final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
+	    return !workingCapital.isCanceledOrRejected() && (/* (workingCapital.isAccountingResponsible(user) && workingCapital.canRequestCapital()) || */
+		    (workingCapital.isTreasuryMember(user) && workingCapital.hasWorkingCapitalRequestPendingTreasuryProcessing()));
+	}
+
     }
 
     public SortedSet<WorkingCapitalProcess> getPendingPayment() {
-	return new WorkingCapitalProcessSearch() {
-	    @Override
-	    boolean shouldAdd(final WorkingCapitalProcess workingCapitalProcess, final User user) {
-		final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
-		return !workingCapital.isCanceledOrRejected() && (/* (workingCapital.isAccountingResponsible(user) && workingCapital.canRequestCapital()) || */
-		(workingCapital.isTreasuryMember(user) && workingCapital.hasWorkingCapitalRequestPendingTreasuryProcessing()));
-	    }
-	}.search();
+	return new PendingPaymentSearch().search();
+    }
+
+    public SortedSet<WorkingCapitalProcess> getPendingPayment(final SortedSet<WorkingCapitalProcess> result) {
+	return new PendingPaymentSearch(result).search();
     }
 
     public SortedSet<WorkingCapitalProcess> getMyWorkingCapital() {
@@ -299,9 +368,13 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
     }
 
     public SortedSet<WorkingCapitalProcess> getTaken() {
-	final User user = UserView.getCurrentUser();
 	final SortedSet<WorkingCapitalProcess> result = new TreeSet<WorkingCapitalProcess>(
 		WorkingCapitalProcess.COMPARATOR_BY_UNIT_NAME);
+	return getTaken(result);
+    }
+
+    public SortedSet<WorkingCapitalProcess> getTaken(final SortedSet<WorkingCapitalProcess> result) {
+	final User user = UserView.getCurrentUser();
 	for (final WorkflowProcess workflowProcess : user.getUserProcessesSet()) {
 	    if (workflowProcess instanceof WorkingCapitalProcess) {
 		final WorkingCapitalProcess workingCapitalProcess = (WorkingCapitalProcess) workflowProcess;
