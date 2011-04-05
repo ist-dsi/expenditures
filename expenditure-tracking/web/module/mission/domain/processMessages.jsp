@@ -22,6 +22,17 @@
 		<bean:message key="label.process.isPendingFundAllocation" bundle="MISSION_RESOURCES"/>:
 	</div>
 <% } %>
+<% if (!missionProcess.getIsCanceled()
+	&& missionProcess.isTerminated()
+	&& !missionProcess.isArchived()
+	&& missionProcess.canArchiveMission()) { %>
+	<div class="infobox_warning">
+		<bean:message key="label.process.isPendingArchive" bundle="MISSION_RESOURCES"/>:
+	</div>
+<% } %>
+
+	return ;
+
 
 <bean:define id="missionProcessMessages" name="process" property="mission.consistencyMessages"/>
 <logic:notEmpty name="missionProcessMessages">
