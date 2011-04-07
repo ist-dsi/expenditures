@@ -31,9 +31,6 @@
 	</div>
 <% } %>
 
-	return ;
-
-
 <bean:define id="missionProcessMessages" name="process" property="mission.consistencyMessages"/>
 <logic:notEmpty name="missionProcessMessages">
 	<div class="highlightBox">
