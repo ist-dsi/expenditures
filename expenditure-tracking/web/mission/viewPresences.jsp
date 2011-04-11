@@ -10,6 +10,13 @@
 	<fr:view name="searchUnitMemberPresence" property="unit.presentationName"/>
 </h2>
 
+<!--
+<bean:define id="url" type="java.lang.String">/vaadinContext.do?method=forwardToVaadin#MissionParticipationMap-<%= unit.getExternalId() %></bean:define>
+<html:link page="<%= url %>">
+	xxx
+</html:link>
+-->
+
 <div class="infobox">
 	<fr:edit id="searchUnitMemberPresence" name="searchUnitMemberPresence"
 			action="/missionOrganization.do?method=viewPresences">
