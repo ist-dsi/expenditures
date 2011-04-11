@@ -59,11 +59,14 @@
 <html:link page="/missionOrganization.do?method=viewPresences" paramId="unitId" paramName="unit" paramProperty="externalId">
 	<bean:message bundle="MISSION_RESOURCES" key="label.module.mission.view.member.presence"/>
 </html:link>
-
 <html:messages id="message" message="true">
 	<span class="error0"> <bean:write name="message" /> </span>
-	<br />
 </html:messages>
+<br/>
+<bean:define id="urlByMonth" type="java.lang.String">/vaadinContext.do?method=forwardToVaadin#MissionParticipationMap-<bean:write name="unit" property="externalId"/></bean:define>
+<html:link page="<%= urlByMonth %>">
+	<bean:message bundle="MISSION_RESOURCES" key="label.module.mission.view.member.presence.by.month"/>
+</html:link>
 
 <br/>
 <br/>

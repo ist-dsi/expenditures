@@ -10,13 +10,6 @@
 	<fr:view name="searchUnitMemberPresence" property="unit.presentationName"/>
 </h2>
 
-<!--
-<bean:define id="url" type="java.lang.String">/vaadinContext.do?method=forwardToVaadin#MissionParticipationMap-<%= unit.getExternalId() %></bean:define>
-<html:link page="<%= url %>">
-	xxx
-</html:link>
--->
-
 <div class="infobox">
 	<fr:edit id="searchUnitMemberPresence" name="searchUnitMemberPresence"
 			action="/missionOrganization.do?method=viewPresences">
@@ -53,9 +46,9 @@
 		</logic:notEqual>
 	</logic:empty>
 	<logic:notEmpty name="people">
-		<table class="tstyle3">
+		<table class="tstyle3" style="text-align:left;">
 			<tr>
-				<th>
+				<th style="color: graytext;">
 				</th>
 				<th>
 					<bean:message key="label.person" bundle="ORGANIZATION_RESOURCES"/>

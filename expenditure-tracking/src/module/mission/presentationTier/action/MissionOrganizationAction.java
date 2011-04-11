@@ -262,7 +262,7 @@ public class MissionOrganizationAction extends ContextBaseAction {
 	return forward(request, "/mission/viewPresences.jsp");
     }
 
-    private boolean hasPermission(final Unit unit) {
+    public static boolean hasPermission(final Unit unit) {
 	final UserView userView = UserView.getCurrentUserView();
 	if (userView == null) {
 	    return false;
@@ -303,7 +303,7 @@ public class MissionOrganizationAction extends ContextBaseAction {
 	return false;
     }
 
-    private boolean hasPermissionForParents(final Party authorization, final Unit unit) {
+    private static boolean hasPermissionForParents(final Party authorization, final Unit unit) {
 	if (authorization == unit) {
 	    return true;
 	}

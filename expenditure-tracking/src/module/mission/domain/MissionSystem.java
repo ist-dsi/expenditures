@@ -16,6 +16,7 @@ import module.workflow.domain.ProcessCounter;
 import module.workflow.domain.WorkflowProcess;
 import module.workflow.widgets.ProcessListWidget;
 import myorg.domain.MyOrg;
+import myorg.util.BundleUtil;
 import pt.ist.fenixWebFramework.services.Service;
 
 public class MissionSystem extends MissionSystem_Base {
@@ -136,6 +137,14 @@ public class MissionSystem extends MissionSystem_Base {
 	final SortedSet<Unit> result = new TreeSet<Unit>(Unit.COMPARATOR_BY_PRESENTATION_NAME);
 	result.addAll(getUnitsWithResumedAuthorizationsSet());
 	return result;
+    }
+
+    public static String getBundle() {
+	return "resources.MissionResources";
+    }
+
+    public static String getMessage(final String key, String... args) {
+	return BundleUtil.getFormattedStringFromResourceBundle(getBundle(), key, args);
     }
 
 }
