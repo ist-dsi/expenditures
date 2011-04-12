@@ -11,6 +11,8 @@ import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.User;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 
 import pt.ist.fenixWebFramework.services.Service;
 
@@ -26,6 +28,12 @@ public class MissionProcessCreationBean implements Serializable {
 
     public MissionProcessCreationBean(final Boolean grantOwnerEquivalence) {
 	this.grantOwnerEquivalence = grantOwnerEquivalence;
+
+	final LocalDate today = new LocalDate().plusDays(16);
+	final LocalTime defaultStart = new LocalTime(9, 0, 0);
+	final LocalTime defaultEnd = new LocalTime(18, 0, 0);
+	daparture = today.toDateTime(defaultStart);
+	arrival = today.toDateTime(defaultEnd);
     }
 
     public Country getCountry() {
