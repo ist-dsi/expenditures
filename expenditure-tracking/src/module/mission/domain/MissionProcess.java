@@ -48,14 +48,24 @@ public abstract class MissionProcess extends MissionProcess_Base {
 	    final MissionYear missionYear2 = o2.getMissionYear();
 
 	    final int year = MissionYear.COMPARATOR_BY_YEAR.compare(missionYear1, missionYear2);
+	    if (year != 0) {
+		return year;
+	    }
 
-	    return year == 0 ? compareNumber(o1, o2) : year;
+	    final int number = compareNumber(o1, o2);
+	    return number == 0 ? o1.getExternalId().compareTo(o2.getExternalId()) : number;
 	}
 
 	private int compareNumber(MissionProcess o1, MissionProcess o2) {
-	    final int n1 = Integer.parseInt(o1.getProcessNumber());
-	    final int n2 = Integer.parseInt(o2.getProcessNumber());
+	    final int n1 = toNum(o1.getProcessNumber());
+	    final int n2 = toNum(o2.getProcessNumber());
 	    return n2 - n1;
+	}
+
+	private int toNum(final String processNumber) {
+	    final String relevantPart = Character.isDigit(processNumber.charAt(processNumber.length() - 1))
+	    		? processNumber : processNumber.substring(0, processNumber.length() - 1);
+	    return Integer.parseInt(relevantPart);
 	}
 
     };
