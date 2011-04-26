@@ -104,8 +104,11 @@ public class PersonMissionAuthorization extends PersonMissionAuthorization_Base 
 	return false;
     }
 
+
     public boolean isAvailableForAuthorization() {
-	return !getMissionProcess().hasAnyMissionItems(); // || (hasNext() && getNext().hasNext()) || getMissionProcess().isAuthorized();
+	final PersonMissionAuthorization next = getNext();
+	return !hasAuthority() && !hasDelegatedAuthority() &&
+		(next == null || next.isAvailableForAuthorization());
     }
 
     public boolean canUnAuthoriseParticipantActivity() {
