@@ -493,6 +493,8 @@ public abstract class MissionProcess extends MissionProcess_Base {
 		|| mission.getRequestingPerson() == person
 		|| user.hasRoleType(RoleType.MANAGER)
 		|| (user.hasExpenditurePerson()
+			&& user.getExpenditurePerson().hasRoleType(pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL))
+		|| (user.hasExpenditurePerson()
 			&& user.getExpenditurePerson().hasRoleType(pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_PROCESS_AUDITOR))
 		|| (person != null && person.getMissionsSet().contains(mission))
 		|| mission.isParticipantResponsible(person)
