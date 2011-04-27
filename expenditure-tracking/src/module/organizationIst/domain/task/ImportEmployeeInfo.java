@@ -55,7 +55,7 @@ public class ImportEmployeeInfo extends TransactionalThread {
 		if (accountability.getParent() == unit) {
 		    return;
 		} else {
-		    accountability.setEndDate(now.minusDays(1));
+		    accountability.editDates(accountability.getBeginDate(), now.minusDays(1));
 		}
 	    }
 	}
@@ -72,7 +72,7 @@ public class ImportEmployeeInfo extends TransactionalThread {
 	accountabilityTypes.add(IstAccountabilityType.EXTERNAL_RESEARCH_PERSONNEL.readAccountabilityType());
 	for (final Accountability accountability : person.getParentAccountabilitiesSet()) {
 	    if (accountabilityTypes.contains(accountability.getAccountabilityType()) && accountability.isActive(now)) {
-		accountability.setEndDate(now.minusDays(1));
+		accountability.editDates(accountability.getBeginDate(), now.minusDays(1));
 	    }
 	}
     }

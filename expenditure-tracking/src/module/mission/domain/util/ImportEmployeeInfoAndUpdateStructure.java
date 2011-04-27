@@ -62,7 +62,7 @@ public class ImportEmployeeInfoAndUpdateStructure extends ImportEmployeeInfo {
     private void close(final Party unit, final AccountabilityType accountabilityType) {
 	for (final Accountability accountability : unit.getParentAccountabilitiesSet()) {
 	    if (accountability.isActiveNow() && accountability.getAccountabilityType() == accountabilityType) {
-		accountability.setEndDate(new LocalDate().minusDays(1));
+		accountability.editDates(accountability.getBeginDate(), new LocalDate().minusDays(1));
 	    }
 	}
     }

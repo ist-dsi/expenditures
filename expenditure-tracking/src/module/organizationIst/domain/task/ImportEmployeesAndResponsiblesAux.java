@@ -2,7 +2,6 @@ package module.organizationIst.domain.task;
 
 import module.organization.domain.Accountability;
 import module.organization.domain.AccountabilityType;
-import module.organization.domain.Party;
 import module.organization.domain.Person;
 import module.organizationIst.domain.IstAccountabilityType;
 import myorg.domain.User;
@@ -84,10 +83,10 @@ public class ImportEmployeesAndResponsiblesAux {
 			final CostCenter center = (CostCenter) expenditureUnit;
 			final String checkString = username + ':' + getAccountabilityTypeString(accountabilityType) + ':' + center.getCostCenter();
 			if (allInformation.indexOf(checkString) < 0) {
-			    accountability.setEndDate(now);
+			    accountability.editDates(accountability.getBeginDate(), now);
 			}
 		    } else {
-			accountability.setEndDate(now);
+			accountability.editDates(accountability.getBeginDate(), now);
 		    }
 		}
 	    }

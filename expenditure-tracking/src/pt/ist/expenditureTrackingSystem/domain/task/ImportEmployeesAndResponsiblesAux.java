@@ -76,7 +76,7 @@ public class ImportEmployeesAndResponsiblesAux {
 		if (accountability.getParent() == unit) {
 		    return;
 		} else {
-		    accountability.setEndDate(now.minusDays(1));
+		    accountability.editDates(accountability.getBeginDate(), now.minusDays(1));
 		}
 	    }
 	}
