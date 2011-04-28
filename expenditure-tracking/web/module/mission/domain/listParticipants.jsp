@@ -4,6 +4,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr"%>
 <%@ taglib uri="/WEB-INF/workflow.tld" prefix="wf"%>
+<%@page import="module.organizationIst.domain.OrganizationIstSystem"%>
 <%@page import="module.mission.domain.Salary"%>
 <%@page import="module.organization.domain.Person"%>
 
@@ -35,7 +36,7 @@
 					</td>
 					<td colspan="4">
 						<html:link styleClass="secondaryLink" page="/missionOrganization.do?method=showPersonById" paramId="personId" paramName="person" paramProperty="externalId">
-							<fr:view name="person" property="name"/> (<fr:view name="person" property="userAliasses"/>)
+							<fr:view name="person" property="name"/> (<%= OrganizationIstSystem.getInstance().getUserAliasses((Person) request.getAttribute("person")) %>)
 						</html:link>
 						<wf:activityLink processName="process" activityName="RemoveParticipantActivity" scope="request" paramName0="person" paramValue0="<%= personOID %>">
 							<bean:message bundle="MYORG_RESOURCES" key="link.remove"/>

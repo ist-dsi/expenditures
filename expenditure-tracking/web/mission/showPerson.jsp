@@ -4,21 +4,27 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr"%>
 
+<%@page import="module.organization.domain.Person"%>
+<%@page import="module.organizationIst.domain.OrganizationIstSystem"%>
+
 <div class="infobox">
 	<table style="width: 100%;">
 		<tr>
 			<td style="vertical-align: top;">
-				<fr:view name="person">
-					<fr:schema type="module.organization.domain.Person" bundle="MISSION_RESOURCES">
-				    	<fr:slot name="name" key="label.organization.name"/>
-				    	<fr:slot name="userAliasses" key="label.organization.usernames"/>
-						<fr:slot name="user.expenditurePerson.email" key="label.organization.email"/>
-					</fr:schema>
-					<fr:layout name="tabular">
-						<fr:property name="classes" value="tstyle1"/>
-						<fr:property name="columnClasses" value=",,tderror"/>
-					</fr:layout>
-				</fr:view>
+				<table class="tstyle1">
+					<tr>
+						<td><bean:message bundle="MISSION_RESOURCES" key="label.organization.name"/></td>
+						<td><bean:write name="person" property="name" /></td>
+					</tr>
+					<tr>
+						<td><bean:message bundle="MISSION_RESOURCES" key="label.organization.usernames"/></td>
+						<td><%= OrganizationIstSystem.getInstance().getUserAliasses((Person) request.getAttribute("person")) %></td>
+					</tr>
+					<tr>
+						<td><bean:message bundle="MISSION_RESOURCES" key="label.organization.email"/></td>
+						<td><bean:write name="person" property="user.expenditurePerson.email" /></td>
+					</tr>
+				</table>
 			</td>
 			<td style="text-align: right;">
 				<html:img src="https://fenix.ist.utl.pt/publico/retrievePersonalPhoto.do?method=retrieveByUUID&amp;contentContextPath_PATH=/homepage"
