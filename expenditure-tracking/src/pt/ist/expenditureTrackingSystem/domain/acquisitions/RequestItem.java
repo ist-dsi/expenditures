@@ -8,13 +8,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import module.signature.util.Signable;
 import myorg.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 
-public abstract class RequestItem extends RequestItem_Base implements Signable {
+public abstract class RequestItem extends RequestItem_Base {
 
     public RequestItem() {
 	super();
@@ -198,6 +197,7 @@ public abstract class RequestItem extends RequestItem_Base implements Signable {
 	List<UnitItem> unitItems = new ArrayList<UnitItem>(getUnitItems());
 	Collections.sort(unitItems, new Comparator<UnitItem>() {
 
+	    @Override
 	    public int compare(UnitItem unitItem1, UnitItem unitItem2) {
 		return unitItem1.getUnit().getPresentationName().compareTo(unitItem2.getUnit().getPresentationName());
 	    }
@@ -332,13 +332,4 @@ public abstract class RequestItem extends RequestItem_Base implements Signable {
 	return getInvoicesFiles().isEmpty() ? true : isRealValueFullyAttributedToUnits();
     }
 
-    @Override
-    public String getIdentification() {
-	return super.getExternalId();
-    }
-
-    @Override
-    public String getSignatureDescription() {
-	return "Item " + getDescription();
-    }
 }

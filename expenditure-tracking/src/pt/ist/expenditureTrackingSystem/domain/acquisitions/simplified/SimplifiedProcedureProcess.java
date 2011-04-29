@@ -9,14 +9,12 @@ import module.workflow.activities.StealProcess;
 import module.workflow.activities.TakeProcess;
 import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.ProcessFile;
-import module.workflow.domain.SignatureProcess;
 import module.workflow.domain.WorkflowProcess;
 import module.workflow.util.PresentableProcessState;
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
 import myorg.util.BundleUtil;
 import myorg.util.ClassNameBundle;
-import pt.ist.expenditureTrackingSystem.domain.SimplifiedProcedureProcessSignature;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProposalDocument;
@@ -286,6 +284,7 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	return availableStates;
     }
 
+    @Override
     public boolean isSimplifiedProcedureProcess() {
 	return true;
     }
@@ -300,6 +299,7 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	return getLastAcquisitionProcessState().getLocalizedName();
     }
 
+    @Override
     public boolean isAppiableForYear(final int year) {
 	return Util.isAppiableForYear(year, this);
     }
@@ -413,9 +413,5 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	return false;
     }
 
-    @Override
-    public SignatureProcess signatureFactory() {
-	return SimplifiedProcedureProcessSignature.factory(this);
-    }
 
 }
