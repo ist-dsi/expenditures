@@ -25,15 +25,11 @@ import pt.ist.expenditureTrackingSystem.presentationTier.widgets.TakenProcessesW
 import pt.ist.expenditureTrackingSystem.presentationTier.widgets.UnreadCommentsWidget;
 import pt.ist.expenditureTrackingSystem.util.AquisitionsPendingProcessCounter;
 import pt.ist.expenditureTrackingSystem.util.RefundPendingProcessCounter;
+import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.RequestChecksumFilter;
 import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.RequestChecksumFilter.ChecksumPredicate;
 
 public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base implements ModuleInitializer {
-
-    static {
-	ProcessListWidget.register(new AquisitionsPendingProcessCounter());
-	ProcessListWidget.register(new RefundPendingProcessCounter());
-    }
 
     public static WidgetAditionPredicate EXPENDITURE_TRACKING_PANEL_PREDICATE = new WidgetAditionPredicate() {
 	@Override
@@ -53,43 +49,28 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 	}
     };
 
-    private static boolean isInitialized = false;
+    static {
+	ProcessListWidget.register(new AquisitionsPendingProcessCounter());
+	ProcessListWidget.register(new RefundPendingProcessCounter());
 
-    private static ThreadLocal<ExpenditureTrackingSystem> init = null;
+	registerWidget(MySearchesWidget.class);
+	registerWidget(UnreadCommentsWidget.class);
+	registerWidget(TakenProcessesWidget.class);
+	registerWidget(MyProcessesWidget.class);
+	registerWidget(PendingRefundWidget.class);
+	registerWidget(PendingSimplifiedWidget.class);
+	registerWidget(ActivateEmailNotificationWidget.class);
+	registerWidget(SearchByInvoiceWidget.class);
+	WidgetRegister.registerWidget(PrioritiesWidget.class, EXPENDITURE_SERVICES_ONLY_PREDICATE);
 
-    public static ExpenditureTrackingSystem getInstance() {
-	if (init != null) {
-	    return init.get();
-	}
-
-	if (!isInitialized) {
-	    initialize();
-	}
-	final MyOrg myOrg = MyOrg.getInstance();
-	return myOrg.getExpenditureTrackingSystem();
+	registerChecksumFilterException();
+	OrganizationModelAction.partyViewHookManager.register(new ExpendituresView());
     }
 
-    public static void initialize() {
-	if (!isInitialized) {
-	    try {
-		final MyOrg myOrg = MyOrg.getInstance();
-		final ExpenditureTrackingSystem expendituretrackingSystem = myOrg.getExpenditureTrackingSystem();
-		if (expendituretrackingSystem == null) {
-		    new ExpenditureTrackingSystem();
-		}
-		init = new ThreadLocal<ExpenditureTrackingSystem>();
-		init.set(myOrg.getExpenditureTrackingSystem());
-
-		initVirtualHosts();
-		initRoles();
-		initSystemSearches();
-		registerChecksumFilterException();
-		OrganizationModelAction.partyViewHookManager.register(new ExpendituresView());
-		isInitialized = true;
-	    } finally {
-		init = null;
-	    }
-	}
+    public static ExpenditureTrackingSystem getInstance() {
+	final VirtualHost virtualHostForThread = VirtualHost.getVirtualHostForThread();
+	return virtualHostForThread == null ? MyOrg.getInstance().getExpenditureTrackingSystem()
+		: virtualHostForThread.getExpenditureTrackingSystem();
     }
 
     private static void registerChecksumFilterException() {
@@ -121,34 +102,23 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 
     }
 
-    private static void initVirtualHosts() {
-	final ExpenditureTrackingSystem expendituretrackingSystem = getInstance();
-	for (final VirtualHost virtualHost : MyOrg.getInstance().getVirtualHostsSet()) {
-	    virtualHost.setExpenditureTrackingSystem(expendituretrackingSystem);
-	}
-    }
-
     private static void initRoles() {
 	for (final RoleType roleType : RoleType.values()) {
 	    Role.getRole(roleType);
 	}
     }
 
-    protected static void initSystemSearches() {
-	final ExpenditureTrackingSystem expendituretrackingSystem = getInstance();
-	if (expendituretrackingSystem.getSystemSearches().isEmpty()) {
-	    new MyOwnProcessesSearch();
-	    final SavedSearch savedSearch = new PendingProcessesSearch();
-	    for (final Person person : expendituretrackingSystem.getPeopleSet()) {
-		person.setDefaultSearch(savedSearch);
-	    }
-	}
-    }
-
-    private ExpenditureTrackingSystem() {
+    private ExpenditureTrackingSystem(final VirtualHost virtualHost) {
 	super();
-	setMyOrg(MyOrg.getInstance());
+//	setMyOrg(MyOrg.getInstance());
 	setAcquisitionRequestDocumentCounter(0);
+	virtualHost.setExpenditureTrackingSystem(this);
+
+	new MyOwnProcessesSearch();
+	final SavedSearch savedSearch = new PendingProcessesSearch();
+	for (final Person person : getPeopleSet()) {
+	    person.setDefaultSearch(savedSearch);
+	}
     }
 
     public String nextAcquisitionRequestDocumentID() {
@@ -166,20 +136,26 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 
     @Override
     public void init(final MyOrg root) {
-	initialize();
-	registerWidget(MySearchesWidget.class);
-	registerWidget(UnreadCommentsWidget.class);
-	registerWidget(TakenProcessesWidget.class);
-	registerWidget(MyProcessesWidget.class);
-	registerWidget(PendingRefundWidget.class);
-	registerWidget(PendingSimplifiedWidget.class);
-	registerWidget(ActivateEmailNotificationWidget.class);
-	registerWidget(SearchByInvoiceWidget.class);
-	WidgetRegister.registerWidget(PrioritiesWidget.class, EXPENDITURE_SERVICES_ONLY_PREDICATE);
+	final ExpenditureTrackingSystem expenditureTrackingSystem = root.getExpenditureTrackingSystem();
+	if (expenditureTrackingSystem != null) {
+	    for (final VirtualHost virtualHost : MyOrg.getInstance().getVirtualHostsSet()) {
+		if (!virtualHost.hasExpenditureTrackingSystem()) {
+		    virtualHost.setExpenditureTrackingSystem(expenditureTrackingSystem);
+		}
+	    }
+	}
     }
 
     private static void registerWidget(Class<? extends WidgetController> widgetClass) {
 	WidgetRegister.registerWidget(widgetClass, EXPENDITURE_TRACKING_PANEL_PREDICATE);
+    }
+
+    @Service
+    public static void createSystem(final VirtualHost virtualHost) {
+	if (!virtualHost.hasExpenditureTrackingSystem()) {
+	    new ExpenditureTrackingSystem(virtualHost);
+	    initRoles();
+	}
     }
 
 }

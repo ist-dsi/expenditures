@@ -15,6 +15,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.fenixWebFramework.servlets.functionalities.CreateNodeAction;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
@@ -26,6 +27,10 @@ public class InterfaceCreationAction extends ContextBaseAction {
 	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
 	final VirtualHost virtualHost = getDomainObject(request, "virtualHostToManageId");
 	final Node node = getDomainObject(request, "parentOfNodesToManageId");
+
+	if (!virtualHost.hasExpenditureTrackingSystem()) {
+	    ExpenditureTrackingSystem.createSystem(virtualHost);
+	}
 
 	final Node aquisitionProcessNode = ActionNode.createActionNode(virtualHost, node, "/search", "search",
 		"resources.ExpenditureResources", "link.topBar.acquisitionProcesses", UserGroup.getInstance());
