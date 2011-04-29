@@ -11,6 +11,7 @@ import module.workflow.widgets.ProcessListWidget;
 import myorg.domain.ModuleInitializer;
 import myorg.domain.MyOrg;
 import myorg.domain.User;
+import myorg.domain.VirtualHost;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.organization.OrganizationModelPlugin.ExpendituresView;
 import pt.ist.expenditureTrackingSystem.presentationTier.widgets.ActivateEmailNotificationWidget;
@@ -79,6 +80,7 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 		init = new ThreadLocal<ExpenditureTrackingSystem>();
 		init.set(myOrg.getExpenditureTrackingSystem());
 
+		initVirtualHosts();
 		initRoles();
 		initSystemSearches();
 		registerChecksumFilterException();
@@ -117,6 +119,13 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 	    }
 	});
 
+    }
+
+    private static void initVirtualHosts() {
+	final ExpenditureTrackingSystem expendituretrackingSystem = getInstance();
+	for (final VirtualHost virtualHost : MyOrg.getInstance().getVirtualHostsSet()) {
+	    virtualHost.setExpenditureTrackingSystem(expendituretrackingSystem);
+	}
     }
 
     private static void initRoles() {
