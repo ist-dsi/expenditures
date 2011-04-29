@@ -960,3 +960,12 @@ relation UnitAccountManager {
 	}
 	organization.Person playsRole accountManager;
 }
+
+relation VirtualHostExpenditureTrackingSystem {
+	.myorg.domain.VirtualHost playsRole virtualHost {
+		multiplicity *;
+	}
+	ExpenditureTrackingSystem playsRole expenditureTrackingSystem {
+		multiplicity 0..1;
+	}
+}
