@@ -8,19 +8,25 @@ import java.util.ListIterator;
 import java.util.Set;
 
 public class VirtualHostFilterCollectionWrapper<Type extends VirtualHostAware> implements Set<Type>, List<Type> {
+
     public class WrapperIterator implements Iterator<Type> {
+
 	private final Iterator<Type> iterator;
 	private Type next;
 
-	public WrapperIterator(Iterator<Type> iterator) {
+	public WrapperIterator(final Iterator<Type> iterator) {
 	    this.iterator = iterator;
 	}
 
 	@Override
 	public boolean hasNext() {
+	    if (next != null) {
+		return true;
+	    }
 	    while (iterator.hasNext()) {
-		next = iterator.next();
-		if (((VirtualHostAware) next).isConnectedToCurrentHost()) {
+		final Type type = iterator.next();
+		if (type.isConnectedToCurrentHost()) {
+		    next = type;
 		    return true;
 		}
 	    }
@@ -29,7 +35,14 @@ public class VirtualHostFilterCollectionWrapper<Type extends VirtualHostAware> i
 
 	@Override
 	public Type next() {
-	    return next != null ? next : iterator.next();
+	    if (next == null) {
+		hasNext();
+		return next;
+	    } else {
+		final Type type = next;
+		next = null;
+		return type;
+	    }
 	}
 
 	@Override
@@ -37,6 +50,7 @@ public class VirtualHostFilterCollectionWrapper<Type extends VirtualHostAware> i
 	    iterator.remove();
 	}
     }
+
 
     private final Collection<Type> wrapped;
 
@@ -76,7 +90,12 @@ public class VirtualHostFilterCollectionWrapper<Type extends VirtualHostAware> i
 
     @Override
     public boolean isEmpty() {
-	return filter().isEmpty();
+	for (final Type type : wrapped) {
+	    if (type.isConnectedToCurrentHost()) {
+		return false;
+	    }
+	}
+	return true;
     }
 
     @Override
@@ -111,7 +130,13 @@ public class VirtualHostFilterCollectionWrapper<Type extends VirtualHostAware> i
 
     @Override
     public int size() {
-	return filter().size();
+	int count = 0;
+	for (final Type type : wrapped) {
+	    if (type.isConnectedToCurrentHost()) {
+		count++;
+	    }
+	}
+	return count;
     }
 
     @Override
