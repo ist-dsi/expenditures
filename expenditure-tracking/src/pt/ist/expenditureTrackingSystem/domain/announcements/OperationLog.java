@@ -5,6 +5,8 @@ import myorg.domain.User;
 import myorg.util.BundleUtil;
 
 import org.joda.time.DateTime;
+
+import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 import myorg.domain.exceptions.DomainException;
 
 public class OperationLog extends OperationLog_Base {
@@ -51,4 +53,11 @@ public class OperationLog extends OperationLog_Base {
     public String getDescription() {
 	return BundleUtil.getFormattedStringFromResourceBundle("resources/AnnouncementsResources", "label." + getOperation());
     }
+
+    @Override
+    public boolean isConnectedToCurrentHost() {
+	final GenericProcess genericProcess = (GenericProcess) getProcess();
+	return genericProcess != null && genericProcess.isConnectedToCurrentHost();
+    }
+
 }

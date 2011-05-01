@@ -15,6 +15,7 @@ import myorg.domain.User;
 
 import org.apache.commons.collections.Predicate;
 
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
@@ -219,6 +220,11 @@ public abstract class GenericProcess extends GenericProcess_Base {
 	    }
 	}
 	return false;
+    }
+
+    @Override
+    public boolean isConnectedToCurrentHost() {
+	return getExpenditureTrackingSystem() == ExpenditureTrackingSystem.getInstance();
     }
 
 }

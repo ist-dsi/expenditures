@@ -37,5 +37,10 @@ public class PaymentProcessYear extends PaymentProcessYear_Base {
 	}
 	return null;
     }
-    
+
+    @Override
+    public boolean isConnectedToCurrentHost() {
+	return getExpenditureTrackingSystem() == ExpenditureTrackingSystem.getInstance();
+    }
+
 }

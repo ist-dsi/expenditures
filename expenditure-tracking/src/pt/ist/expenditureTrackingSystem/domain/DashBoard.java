@@ -52,4 +52,9 @@ public class DashBoard extends DashBoard_Base {
 	deleteDomainObject();
     }
 
+    @Override
+    public boolean isConnectedToCurrentHost() {
+	return getExpenditureTrackingSystem() == ExpenditureTrackingSystem.getInstance();
+    }
+
 }

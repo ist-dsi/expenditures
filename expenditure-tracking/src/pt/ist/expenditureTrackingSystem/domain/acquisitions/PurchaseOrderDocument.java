@@ -1,5 +1,6 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
+import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 import myorg.util.ClassNameBundle;
 
 @ClassNameBundle(bundle = "resources/AcquisitionResources")
@@ -36,4 +37,11 @@ public class PurchaseOrderDocument extends PurchaseOrderDocument_Base {
     public String getDisplayName() {
 	return getFilename();
     }
+
+    @Override
+    public boolean isConnectedToCurrentHost() {
+	final GenericProcess genericProcess = (GenericProcess) getProcess();
+	return genericProcess != null && genericProcess.isConnectedToCurrentHost();
+    }
+
 }

@@ -669,4 +669,9 @@ public class Unit extends Unit_Base implements Indexable, Searchable {
 	return getObserversSet().contains(person);
     }
 
+    @Override
+    public boolean isConnectedToCurrentHost() {
+	return getExpenditureTrackingSystem() == ExpenditureTrackingSystem.getInstance();
+    }
+
 }

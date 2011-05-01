@@ -300,4 +300,9 @@ public class Financer extends Financer_Base {
 	return getUnit().isAccountManager(accountManager);
     }
 
+    @Override
+    public boolean isConnectedToCurrentHost() {
+	return getExpenditureTrackingSystem() == ExpenditureTrackingSystem.getInstance();
+    }
+
 }

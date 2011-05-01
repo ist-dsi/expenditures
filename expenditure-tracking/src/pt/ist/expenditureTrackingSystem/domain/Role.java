@@ -63,4 +63,9 @@ public class Role extends Role_Base {
 	return createRole(roleType);
     }
 
+    @Override
+    public boolean isConnectedToCurrentHost() {
+	return getExpenditureTrackingSystem() == ExpenditureTrackingSystem.getInstance();
+    }
+
 }

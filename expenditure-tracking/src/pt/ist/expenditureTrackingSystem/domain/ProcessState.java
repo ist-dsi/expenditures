@@ -43,4 +43,9 @@ public abstract class ProcessState extends ProcessState_Base {
 
     public abstract boolean isInFinalStage();
 
+    @Override
+    public boolean isConnectedToCurrentHost() {
+	return getExpenditureTrackingSystem() == ExpenditureTrackingSystem.getInstance();
+    }
+
 }

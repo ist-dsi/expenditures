@@ -93,4 +93,9 @@ public class AccountingUnit extends AccountingUnit_Base {
 	return null;
     }
 
+    @Override
+    public boolean isConnectedToCurrentHost() {
+	return getExpenditureTrackingSystem() == ExpenditureTrackingSystem.getInstance();
+    }
+
 }

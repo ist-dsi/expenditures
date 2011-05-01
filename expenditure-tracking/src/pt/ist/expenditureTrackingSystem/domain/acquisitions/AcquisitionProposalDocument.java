@@ -10,6 +10,7 @@ import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess.ProcessClassification;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.fileBeans.AcquisitionProposalDocumentFileBean;
+import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 
 @ClassNameBundle(bundle = "resources/AcquisitionResources")
 public class AcquisitionProposalDocument extends AcquisitionProposalDocument_Base {
@@ -70,4 +71,11 @@ public class AcquisitionProposalDocument extends AcquisitionProposalDocument_Bas
 		.isAcquisitionProcessed())
 		&& UserView.getCurrentUser().getExpenditurePerson().hasRoleType(RoleType.ACQUISITION_CENTRAL);
     }
+
+    @Override
+    public boolean isConnectedToCurrentHost() {
+	final GenericProcess genericProcess = (GenericProcess) getProcess();
+	return genericProcess != null && genericProcess.isConnectedToCurrentHost();
+    }
+
 }

@@ -89,4 +89,10 @@ public class SavedSearch extends SavedSearch_Base {
 	Boolean value = super.getShowPriorityOnly();
 	return value != null ? value : Boolean.FALSE;
     }
+
+    @Override
+    public boolean isConnectedToCurrentHost() {
+	return getExpenditureTrackingSystem() == ExpenditureTrackingSystem.getInstance();
+    }
+
 }

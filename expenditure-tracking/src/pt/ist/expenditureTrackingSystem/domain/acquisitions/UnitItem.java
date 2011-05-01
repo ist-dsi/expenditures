@@ -108,4 +108,10 @@ public class UnitItem extends UnitItem_Base {
 	return !invoicesFiles.isEmpty() && confirmedInvoices.containsAll(invoicesFiles);
 
     }
+
+    @Override
+    public boolean isConnectedToCurrentHost() {
+	return hasFinancer() && getFinancer().isConnectedToCurrentHost();
+    }
+
 }

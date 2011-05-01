@@ -56,7 +56,7 @@ class ExpenditureTrackingSystem {
 }
 
 
-class acquisitions.Acquisition {
+class acquisitions.Acquisition implements .myorg.domain.VirtualHostAware {
 	String ojbConcreteClass;
 }
 
@@ -86,7 +86,7 @@ class acquisitions.CPVReference {
 	String description;
 }
 
-class announcements.Announcement {
+class announcements.Announcement implements .myorg.domain.VirtualHostAware {
 	String description;
 	Money totalPrice;
 	DateTime creationDate;
@@ -94,48 +94,48 @@ class announcements.Announcement {
 	String ojbConcreteClass;
 }
 
-class announcements.CCPAnnouncement extends announcements.Announcement {
-	Integer executionDays;
-	String executionAddress;
-	String choiceCriteria;
-}
+	class announcements.CCPAnnouncement extends announcements.Announcement {
+		Integer executionDays;
+		String executionAddress;
+		String choiceCriteria;
+	}
 
-class announcements.RCISTAnnouncement extends announcements.Announcement {
-}
+	class announcements.RCISTAnnouncement extends announcements.Announcement {
+	}
 
-class acquisitions.PaymentProcessYear {
+class acquisitions.PaymentProcessYear implements .myorg.domain.VirtualHostAware {
 	Integer year;
 	Integer counter;
 }
 
-class acquisitions.RequestItem {
+class acquisitions.RequestItem implements .myorg.domain.VirtualHostAware {
 	String ojbConcreteClass;
 	String description;
 }
  
-class acquisitions.refund.RefundItem extends acquisitions.RequestItem {
-	Money valueEstimation;
-	Boolean itemNotExecuted;
-}
+	class acquisitions.refund.RefundItem extends acquisitions.RequestItem {
+		Money valueEstimation;
+		Boolean itemNotExecuted;
+	}
 
-class acquisitions.AcquisitionRequestItem extends acquisitions.RequestItem {
-	Integer quantity;
-	Money unitValue;
-	BigDecimal vatValue;
-	Money additionalCostValue;
-	String proposalReference;
-	String recipient;
-	String recipientPhone;
-	String recipientEmail;
-	Address address;
+	class acquisitions.AcquisitionRequestItem extends acquisitions.RequestItem {
+		Integer quantity;
+		Money unitValue;
+		BigDecimal vatValue;
+		Money additionalCostValue;
+		String proposalReference;
+		String recipient;
+		String recipientPhone;
+		String recipientEmail;
+		Address address;
 	
-	Integer realQuantity;
-	BigDecimal realVatValue;
-	Money realUnitValue;
-	Money realAdditionalCostValue;
-}
+		Integer realQuantity;
+		BigDecimal realVatValue;
+		Money realUnitValue;
+		Money realAdditionalCostValue;
+	}
 
-class acquisitions.UnitItem {
+class acquisitions.UnitItem implements .myorg.domain.VirtualHostAware {
 	Boolean submitedForFundsAllocation;
 	Boolean itemAuthorized;
 	Boolean invoiceConfirmed;
@@ -143,7 +143,7 @@ class acquisitions.UnitItem {
 	Money realShareValue;
 }
 
-class acquisitions.Financer {
+class acquisitions.Financer implements .myorg.domain.VirtualHostAware {
 	String ojbConcreteClass;
 	String fundAllocationId;
 	Strings effectiveFundAllocationId;
@@ -154,7 +154,7 @@ class acquisitions.Financer {
 		Strings effectiveProjectFundAllocationId;
 	}
 
-class authorizations.Authorization {
+class authorizations.Authorization implements .myorg.domain.VirtualHostAware {
 	String ojbConcreteClass;
 	AuthorizationType authorizationType;
 	Boolean canDelegate;
@@ -167,7 +167,7 @@ class authorizations.Authorization {
 	class authorizations.DelegatedAuthorization extends authorizations.Authorization {
 	}
 
-class authorizations.AuthorizationLog {
+class authorizations.AuthorizationLog implements .myorg.domain.VirtualHostAware {
 	DateTime whenOperationWasRan;
 	AuthorizationOperation authorizationOperation;
 	AuthorizationType authorizationType;
@@ -178,25 +178,25 @@ class authorizations.AuthorizationLog {
 	String justification;
 }	
 
-	class acquisitions.afterthefact.ImportFile extends .pt.ist.fenixframework.plugins.fileSupport.domain.GenericFile {
-		Boolean active;
-	}
+class acquisitions.afterthefact.ImportFile extends .pt.ist.fenixframework.plugins.fileSupport.domain.GenericFile implements .myorg.domain.VirtualHostAware {
+	Boolean active;
+}
 	
-	class acquisitions.AcquisitionProposalDocument extends .module.workflow.domain.ProcessFile {
-		String proposalId;
-	}
+class acquisitions.AcquisitionProposalDocument extends .module.workflow.domain.ProcessFile implements .myorg.domain.VirtualHostAware {
+	String proposalId;
+}
 
-	class acquisitions.CreditNoteDocument extends .module.workflow.domain.ProcessFile {
-	}
+class acquisitions.CreditNoteDocument extends .module.workflow.domain.ProcessFile implements .myorg.domain.VirtualHostAware {
+}
 	
-	class acquisitions.PurchaseOrderDocument extends .module.workflow.domain.ProcessFile {
-		String requestId;
-	}
+class acquisitions.PurchaseOrderDocument extends .module.workflow.domain.ProcessFile implements .myorg.domain.VirtualHostAware {
+	String requestId;
+}
 	
-	class acquisitions.Invoice extends .module.workflow.domain.ProcessFile {
-		String invoiceNumber;
-		LocalDate invoiceDate;
-	}
+class acquisitions.Invoice extends .module.workflow.domain.ProcessFile implements .myorg.domain.VirtualHostAware {
+	String invoiceNumber;
+	LocalDate invoiceDate;
+}
 	
 	class acquisitions.afterthefact.AfterTheFactInvoice extends acquisitions.Invoice {
 	}
@@ -204,23 +204,23 @@ class authorizations.AuthorizationLog {
 	class acquisitions.PaymentProcessInvoice extends acquisitions.Invoice {
 	}
 	
-	class acquisitions.AcquisitionInvoice extends acquisitions.PaymentProcessInvoice {
-		String confirmationReport;
-	}
+		class acquisitions.AcquisitionInvoice extends acquisitions.PaymentProcessInvoice {
+			String confirmationReport;
+		}
 	
-	class acquisitions.refund.RefundableInvoiceFile extends acquisitions.PaymentProcessInvoice {
-		Money value;
-		BigDecimal vatValue;
-		Money refundableValue;
-	}
+		class acquisitions.refund.RefundableInvoiceFile extends acquisitions.PaymentProcessInvoice {
+			Money value;
+			BigDecimal vatValue;
+			Money refundableValue;
+		}
 	
-class Options {
+class Options implements .myorg.domain.VirtualHostAware {
 	Boolean displayAuthorizationPending;
 	Boolean recurseAuthorizationPendingUnits;
 	Boolean receiveNotificationsByEmail;
 }
 
-class organization.AccountingUnit {
+class organization.AccountingUnit implements .myorg.domain.VirtualHostAware {
 	String name;
 }
 
@@ -232,7 +232,7 @@ class organization.Person {
 	DateTime logoutDateTime;
 }
 
-class SavedSearch {
+class SavedSearch implements .myorg.domain.VirtualHostAware {
 	String ojbConcreteClass;
 	String searchName;
 	SearchProcessValues searchProcessValues;
@@ -250,13 +250,11 @@ class SavedSearch {
 	Boolean showPriorityOnly;
 }
 
-class MyOwnProcessesSearch extends SavedSearch {
+	class MyOwnProcessesSearch extends SavedSearch {
+	}
 
-}
-
-class PendingProcessesSearch extends SavedSearch {
-
-}
+	class PendingProcessesSearch extends SavedSearch {
+	}
 
 class organization.DeliveryInfo {
 	String recipient;
@@ -268,7 +266,7 @@ class organization.DeliveryInfo {
 class organization.Supplier extends .module.finance.domain.Supplier {
 }
 
-class organization.Unit {
+class organization.Unit implements .myorg.domain.VirtualHostAware {
 	String ojbConcreteClass;
 	Boolean defaultRegeimIsCCP;
 }
@@ -282,11 +280,11 @@ class organization.Unit {
 	class organization.SubProject extends organization.Unit {
 	}
 
-	class announcements.OperationLog extends .module.workflow.domain.ActivityLog {
-		AnnouncementProcessStateType state;
-	}
+class announcements.OperationLog extends .module.workflow.domain.ActivityLog implements .myorg.domain.VirtualHostAware {
+	AnnouncementProcessStateType state;
+}
 
-class processes.GenericProcess extends .module.workflow.domain.WorkflowProcess {
+class processes.GenericProcess extends .module.workflow.domain.WorkflowProcess implements .myorg.domain.VirtualHostAware {
 }
 
 	class acquisitions.PaymentProcess extends processes.GenericProcess {
@@ -318,12 +316,12 @@ class processes.GenericProcess extends .module.workflow.domain.WorkflowProcess {
 		Boolean underCCPRegime;
 	}
 	
-	class acquisitions.refund.Refundee {
-		String name;
-		String fiscalCode;
-	} 
+class acquisitions.refund.Refundee implements .myorg.domain.VirtualHostAware {
+	String name;
+	String fiscalCode;
+} 
 	
-class ProcessState {
+class ProcessState implements .myorg.domain.VirtualHostAware {
 	String ojbConcreteClass;
 	DateTime whenDateTime;
 	String justification;
@@ -342,11 +340,11 @@ class ProcessState {
 	}
 
 
-class Role {
+class Role implements .myorg.domain.VirtualHostAware {
 	RoleType roleType;
 }
 
-class DashBoard {
+class DashBoard implements .myorg.domain.VirtualHostAware {
 	Strings column1;
 	Strings column2;
 	Strings column3;

@@ -332,4 +332,9 @@ public abstract class RequestItem extends RequestItem_Base {
 	return getInvoicesFiles().isEmpty() ? true : isRealValueFullyAttributedToUnits();
     }
 
+    @Override
+    public boolean isConnectedToCurrentHost() {
+	return getExpenditureTrackingSystem() == ExpenditureTrackingSystem.getInstance();
+    }
+
 }

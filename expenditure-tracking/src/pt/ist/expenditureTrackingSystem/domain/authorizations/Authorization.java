@@ -148,4 +148,9 @@ public class Authorization extends Authorization_Base {
 	AuthorizationOperation.EDIT.log(this, justification);
     }
 
+    @Override
+    public boolean isConnectedToCurrentHost() {
+	return getExpenditureTrackingSystem() == ExpenditureTrackingSystem.getInstance();
+    }
+
 }

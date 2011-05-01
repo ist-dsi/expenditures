@@ -38,4 +38,10 @@ public class Refundee extends Refundee_Base {
     public String getName() {
 	return hasPerson() ? getPerson().getName() : super.getName();
     }
+
+    @Override
+    public boolean isConnectedToCurrentHost() {
+	return getExpenditureTrackingSystem() == ExpenditureTrackingSystem.getInstance();
+    }
+
 }

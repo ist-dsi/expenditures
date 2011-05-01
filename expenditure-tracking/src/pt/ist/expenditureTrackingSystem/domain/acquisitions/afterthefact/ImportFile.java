@@ -43,4 +43,12 @@ public class ImportFile extends ImportFile_Base {
 
     }
 
+    @Override
+    public boolean isConnectedToCurrentHost() {
+	for (final AfterTheFactAcquisitionProcess process : getAfterTheFactAcquisitionProcesses()) {
+		return process != null && process.isConnectedToCurrentHost();
+	}
+	return false;
+    }
+
 }

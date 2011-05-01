@@ -5,6 +5,7 @@ import module.workflow.domain.WorkflowProcess;
 import myorg.applicationTier.Authenticate.UserView;
 import myorg.util.ClassNameBundle;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
+import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 
 @ClassNameBundle(bundle = "resources/AcquisitionResources")
 public class CreditNoteDocument extends CreditNoteDocument_Base {
@@ -24,6 +25,12 @@ public class CreditNoteDocument extends CreditNoteDocument_Base {
     @Override
     public boolean isPossibleToArchieve() {
 	return UserView.getCurrentUser().getExpenditurePerson().hasRoleType(RoleType.ACQUISITION_CENTRAL);
+    }
+
+    @Override
+    public boolean isConnectedToCurrentHost() {
+	final GenericProcess genericProcess = (GenericProcess) getProcess();
+	return genericProcess != null && genericProcess.isConnectedToCurrentHost();
     }
 
 }
