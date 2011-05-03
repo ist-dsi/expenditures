@@ -107,44 +107,168 @@
 <div class="infobox">
 	<table style="width: 100%;">
 		<tr>
-			<td style="vertical-align: top;">				
-				<fr:view name="person"
-						type="pt.ist.expenditureTrackingSystem.domain.organization.Person"
-						schema="viewPerson">
-					<fr:layout name="tabular">
-						<fr:property name="classes" value="tstyle1"/>
-						<fr:property name="columnClasses" value=",,tderror"/>
-					</fr:layout>
-				</fr:view>
-				<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
-				 	<bean:define id="person" name="person" type="pt.ist.expenditureTrackingSystem.domain.organization.Person"/>
-					E-Mail: <bean:write name="person" property="email"/>
-				</logic:present>
+			<td>
+				<bean:message bundle="EXPENDITURE_ORGANIZATION_RESOURCES" key="person.label.name"/>: 
 			</td>
-			<td style="text-align: right;">
+			<td>
+				<bean:write name="person" property="name"/>
+			</td>
+			<td style="text-align: right;" rowspan="3">
 				<html:img src="https://fenix.ist.utl.pt/publico/retrievePersonalPhoto.do?method=retrieveByUUID&amp;contentContextPath_PATH=/homepage"
 					paramId="uuid" paramName="person" paramProperty="username"
 					align="middle" styleClass="float: right; border: 1px solid #aaa; padding: 3px;" />
 			</td>
 		</tr>
+		<tr>
+			<td>
+				<logic:present role="myorg.domain.RoleType.MANAGER">
+					<bean:message bundle="EXPENDITURE_ORGANIZATION_RESOURCES" key="label.email"/>:
+				</logic:present>
+			</td>
+			<td>
+				<logic:present role="myorg.domain.RoleType.MANAGER">
+					<bean:write name="person" property="email"/>
+				</logic:present>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<bean:message bundle="EXPENDITURE_ORGANIZATION_RESOURCES" key="role.label.roles"/>: 
+			</td>
+			<td>
+				<logic:iterate id="persistentGroup" name="person" property="expenditurePersistentGroups" length="1">
+					<bean:write name="persistentGroup" property="name"/>
+				</logic:iterate>
+				<logic:iterate id="persistentGroup" name="person" property="expenditurePersistentGroups" offset="1">
+					<br/>
+					<bean:write name="persistentGroup" property="name"/>
+				</logic:iterate>
+			</td>
+		</tr>
 	</table>
 </div>
 
-<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
-	<logic:iterate id="role" name="availableRoles">
-		<p class="mvert05">
-			<span>
-				<fr:view name="role"/>: 
-				<html:link action='<%= "/expenditureTrackingOrganization.do?method=addRole&role=" + role %>' paramId="personOid" paramName="person" paramProperty="externalId">
-					<bean:message key="role.label.add" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
-				</html:link>
-				|
-				<html:link action='<%= "/expenditureTrackingOrganization.do?method=removeRole&role=" + role %>' paramId="personOid" paramName="person" paramProperty="externalId">
-					<bean:message key="role.label.remove" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
-				</html:link>
-			</span>
-		</p>
-	</logic:iterate>
+<logic:present role="myorg.domain.RoleType.MANAGER">
+	<p class="mvert05">
+		<span>
+			<bean:message bundle="EXPENDITURE_ENUMERATION_RESOURCES" key="RoleType.ACQUISITION_CENTRAL"/>
+			<html:link action="/expenditureTrackingOrganization.do?method=addRoleAcquisitionCentralGroup" paramId="personOid" paramName="person" paramProperty="externalId">
+				<bean:message key="role.label.add" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+			</html:link>
+			|
+			<html:link action="/expenditureTrackingOrganization.do?method=removeRoleAcquisitionCentralGroup" paramId="personOid" paramName="person" paramProperty="externalId">
+				<bean:message key="role.label.remove" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+			</html:link>
+		</span>
+	</p>
+	<p class="mvert05">
+		<span>
+			<bean:message bundle="EXPENDITURE_ENUMERATION_RESOURCES" key="RoleType.ACQUISITION_CENTRAL_MANAGER"/>
+			<html:link action="/expenditureTrackingOrganization.do?method=addRoleAcquisitionCentralManagerGroup" paramId="personOid" paramName="person" paramProperty="externalId">
+				<bean:message key="role.label.add" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+			</html:link>
+			|
+			<html:link action="/expenditureTrackingOrganization.do?method=removeRoleAcquisitionCentralManagerGroup" paramId="personOid" paramName="person" paramProperty="externalId">
+				<bean:message key="role.label.remove" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+			</html:link>
+		</span>
+	</p>
+	<p class="mvert05">
+		<span>
+			<bean:message bundle="EXPENDITURE_ENUMERATION_RESOURCES" key="RoleType.ACCOUNTING_MANAGER"/>
+			<html:link action="/expenditureTrackingOrganization.do?method=addRoleAccountingManagerGroup" paramId="personOid" paramName="person" paramProperty="externalId">
+				<bean:message key="role.label.add" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+			</html:link>
+			|
+			<html:link action="/expenditureTrackingOrganization.do?method=removeRoleAccountingManagerGroup" paramId="personOid" paramName="person" paramProperty="externalId">
+				<bean:message key="role.label.remove" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+			</html:link>
+		</span>
+	</p>
+	<p class="mvert05">
+		<span>
+			<bean:message bundle="EXPENDITURE_ENUMERATION_RESOURCES" key="RoleType.PROJECT_ACCOUNTING_MANAGER"/>
+			<html:link action="/expenditureTrackingOrganization.do?method=addRoleProjectAccountingManagerGroup" paramId="personOid" paramName="person" paramProperty="externalId">
+				<bean:message key="role.label.add" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+			</html:link>
+			|
+			<html:link action="/expenditureTrackingOrganization.do?method=removeRoleProjectAccountingManagerGroup" paramId="personOid" paramName="person" paramProperty="externalId">
+				<bean:message key="role.label.remove" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+			</html:link>
+		</span>
+	</p>
+	<p class="mvert05">
+		<span>
+			<bean:message bundle="EXPENDITURE_ENUMERATION_RESOURCES" key="RoleType.TREASURY_MANAGER"/>
+			<html:link action="/expenditureTrackingOrganization.do?method=addRoleTreasuryMemberGroup" paramId="personOid" paramName="person" paramProperty="externalId">
+				<bean:message key="role.label.add" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+			</html:link>
+			|
+			<html:link action="/expenditureTrackingOrganization.do?method=removeRoleTreasuryMemberGroup" paramId="personOid" paramName="person" paramProperty="externalId">
+				<bean:message key="role.label.remove" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+			</html:link>
+		</span>
+	</p>
+	<p class="mvert05">
+		<span>
+			<bean:message bundle="EXPENDITURE_ENUMERATION_RESOURCES" key="RoleType.SUPPLIER_MANAGER"/>
+			<html:link action="/expenditureTrackingOrganization.do?method=addRoleSupplierManagerGroup" paramId="personOid" paramName="person" paramProperty="externalId">
+				<bean:message key="role.label.add" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+			</html:link>
+			|
+			<html:link action="/expenditureTrackingOrganization.do?method=removeRoleSupplierManagerGroup" paramId="personOid" paramName="person" paramProperty="externalId">
+				<bean:message key="role.label.remove" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+			</html:link>
+		</span>
+	</p>
+	<p class="mvert05">
+		<span>
+			<bean:message bundle="EXPENDITURE_ENUMERATION_RESOURCES" key="RoleType.SUPPLIER_FUND_ALLOCATION_MANAGER"/>
+			<html:link action="/expenditureTrackingOrganization.do?method=addRoleSupplierFundAllocationManagerGroup" paramId="personOid" paramName="person" paramProperty="externalId">
+				<bean:message key="role.label.add" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+			</html:link>
+			|
+			<html:link action="/expenditureTrackingOrganization.do?method=removeRoleSupplierFundAllocationManagerGroup" paramId="personOid" paramName="person" paramProperty="externalId">
+				<bean:message key="role.label.remove" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+			</html:link>
+		</span>
+	</p>
+	<p class="mvert05">
+		<span>
+			<bean:message bundle="EXPENDITURE_ENUMERATION_RESOURCES" key="RoleType.STATISTICS_VIEWER"/>
+			<html:link action="/expenditureTrackingOrganization.do?method=addRoleStatisticsViewerGroup" paramId="personOid" paramName="person" paramProperty="externalId">
+				<bean:message key="role.label.add" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+			</html:link>
+			|
+			<html:link action="/expenditureTrackingOrganization.do?method=removeRoleStatisticsViewerGroup" paramId="personOid" paramName="person" paramProperty="externalId">
+				<bean:message key="role.label.remove" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+			</html:link>
+		</span>
+	</p>
+	<p class="mvert05">
+		<span>
+			<bean:message bundle="EXPENDITURE_ENUMERATION_RESOURCES" key="RoleType.AQUISITIONS_UNIT_MANAGER"/>
+			<html:link action="/expenditureTrackingOrganization.do?method=addRoleAcquisitionsUnitManagerGroup" paramId="personOid" paramName="person" paramProperty="externalId">
+				<bean:message key="role.label.add" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+			</html:link>
+			|
+			<html:link action="/expenditureTrackingOrganization.do?method=removeRoleAcquisitionsUnitManagerGroup" paramId="personOid" paramName="person" paramProperty="externalId">
+				<bean:message key="role.label.remove" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+			</html:link>
+		</span>
+	</p>
+	<p class="mvert05">
+		<span>
+			<bean:message bundle="EXPENDITURE_ENUMERATION_RESOURCES" key="RoleType.ACQUISITION_PROCESS_AUDITOR"/>
+			<html:link action="/expenditureTrackingOrganization.do?method=addRoleAcquisitionsProcessAuditorGroup" paramId="personOid" paramName="person" paramProperty="externalId">
+				<bean:message key="role.label.add" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+			</html:link>
+			|
+			<html:link action="/expenditureTrackingOrganization.do?method=removeRoleAcquisitionsProcessAuditorGroup" paramId="personOid" paramName="person" paramProperty="externalId">
+				<bean:message key="role.label.remove" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+			</html:link>
+		</span>
+	</p>
 </logic:present>
 
 

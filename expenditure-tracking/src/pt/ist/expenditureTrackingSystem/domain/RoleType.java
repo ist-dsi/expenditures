@@ -5,6 +5,12 @@ import java.util.ResourceBundle;
 import myorg.domain.groups.IRoleEnum;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 
+/**
+ * This class is now discontinued you should use the persistent groups
+ * connected to the expenditure tracking system instead.
+ *
+ */
+@Deprecated
 public enum RoleType implements IRoleEnum {
 
     ACQUISITION_CENTRAL,

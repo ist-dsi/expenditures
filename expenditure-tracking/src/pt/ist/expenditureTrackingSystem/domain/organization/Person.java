@@ -13,6 +13,7 @@ import module.workflow.domain.WorkflowProcess;
 import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.MyOrg;
 import myorg.domain.User;
+import myorg.domain.groups.PersistentGroup;
 import myorg.domain.util.Address;
 
 import org.apache.commons.collections.Predicate;
@@ -165,20 +166,6 @@ public class Person extends Person_Base implements Indexable, Searchable {
 	    }
 	}
 	return false;
-    }
-
-    @Service
-    @Override
-    public void addRoles(Role role) {
-	if (!hasRoles(role)) {
-	    super.addRoles(role);
-	}
-    }
-
-    @Service
-    @Override
-    public void removeRoles(Role roles) {
-	super.removeRoles(roles);
     }
 
     public void createNewDeliveryInfo(String recipient, Address address, String phone, String email) {
@@ -395,6 +382,42 @@ public class Person extends Person_Base implements Indexable, Searchable {
 	    }
 	}
 	return false;
+    }
+
+    public List<PersistentGroup> getExpenditurePersistentGroups() {
+	final User user = getUser();
+	final List<PersistentGroup> result = new ArrayList<PersistentGroup>();
+	if (ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user)) {
+	    result.add(ExpenditureTrackingSystem.getInstance().getAcquisitionCentralGroup());
+	}
+	if (ExpenditureTrackingSystem.isAcquisitionCentralManagerGroupMember(user)) {
+	    result.add(ExpenditureTrackingSystem.getInstance().getAcquisitionCentralManagerGroup());
+	}
+	if (ExpenditureTrackingSystem.isAccountingManagerGroupMember(user)) {
+	    result.add(ExpenditureTrackingSystem.getInstance().getAccountingManagerGroup());
+	}
+	if (ExpenditureTrackingSystem.isProjectAccountingManagerGroupMember(user)) {
+	    result.add(ExpenditureTrackingSystem.getInstance().getProjectAccountingManagerGroup());
+	}
+	if (ExpenditureTrackingSystem.isTreasuryMemberGroupMember(user)) {
+	    result.add(ExpenditureTrackingSystem.getInstance().getTreasuryMemberGroup());
+	}
+	if (ExpenditureTrackingSystem.isSupplierManagerGroupMember(user)) {
+	    result.add(ExpenditureTrackingSystem.getInstance().getSupplierManagerGroup());
+	}
+	if (ExpenditureTrackingSystem.isSupplierFundAllocationManagerGroupMember(user)) {
+	    result.add(ExpenditureTrackingSystem.getInstance().getSupplierFundAllocationManagerGroup());
+	}
+	if (ExpenditureTrackingSystem.isStatisticsViewerGroupMember(user)) {
+	    result.add(ExpenditureTrackingSystem.getInstance().getStatisticsViewerGroup());
+	}
+	if (ExpenditureTrackingSystem.isAcquisitionsUnitManagerGroupMember(user)) {
+	    result.add(ExpenditureTrackingSystem.getInstance().getAcquisitionsUnitManagerGroup());
+	}
+	if (ExpenditureTrackingSystem.isAcquisitionsProcessAuditorGroupMember(user)) {
+	    result.add(ExpenditureTrackingSystem.getInstance().getAcquisitionsProcessAuditorGroup());
+	}
+	return result;
     }
 
 }
