@@ -4,6 +4,7 @@ import module.workflow.domain.ProcessFileValidationException;
 import module.workflow.domain.WorkflowProcess;
 import myorg.applicationTier.Authenticate.UserView;
 import myorg.util.ClassNameBundle;
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 
@@ -17,14 +18,14 @@ public class CreditNoteDocument extends CreditNoteDocument_Base {
 
     @Override
     public void validateUpload(WorkflowProcess workflowProcess) {
-	if (!UserView.getCurrentUser().getExpenditurePerson().hasRoleType(RoleType.ACQUISITION_CENTRAL)) {
+	if (!ExpenditureTrackingSystem.isAcquisitionCentralGroupMember()) {
 	    throw new ProcessFileValidationException("resources/AcquisitionResources", "error.creditNoteDocument.upload.invalid");
 	}
     }
 
     @Override
     public boolean isPossibleToArchieve() {
-	return UserView.getCurrentUser().getExpenditurePerson().hasRoleType(RoleType.ACQUISITION_CENTRAL);
+	return ExpenditureTrackingSystem.isAcquisitionCentralGroupMember();
     }
 
     @Override

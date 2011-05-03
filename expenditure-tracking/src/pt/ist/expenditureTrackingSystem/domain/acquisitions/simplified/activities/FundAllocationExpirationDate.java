@@ -9,7 +9,7 @@ import myorg.util.BundleUtil;
 
 import org.joda.time.LocalDate;
 
-import pt.ist.expenditureTrackingSystem.domain.RoleType;
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
@@ -38,7 +38,7 @@ public class FundAllocationExpirationDate extends
     @Override
     public boolean isActive(RegularAcquisitionProcess process, User user) {
 	return isUserProcessOwner(process, user)
-		&& user.getExpenditurePerson().hasRoleType(RoleType.ACQUISITION_CENTRAL)
+		&& ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user)
 		&& process.getAcquisitionProcessState().isActive()
 		&& !process.isPendingFundAllocation() && !process.getAcquisitionRequest().hasAnyFundAllocationId()
 		&& process.getAcquisitionRequest().isSubmittedForFundsAllocationByAllResponsibles();

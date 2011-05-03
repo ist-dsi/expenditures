@@ -5,6 +5,7 @@ import module.workflow.activities.WorkflowActivity;
 import myorg.domain.User;
 import myorg.domain.util.Address;
 import myorg.util.BundleUtil;
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
@@ -23,7 +24,8 @@ public class EditAcquisitionRequestItem extends
 		&& ((process.getRequestor() == person && process.getAcquisitionProcessState().isInGenesis() && process
 			.getAcquisitionRequest().hasAnyRequestItems()) || (process.isSimplifiedAcquisitionProcess()
 			&& ((SimplifiedProcedureProcess) process).getProcessClassification() == ProcessClassification.CT75000
-			&& person.hasRoleType(RoleType.ACQUISITION_CENTRAL) && process.getAcquisitionProcessState()
+			&& ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user)
+			&& process.getAcquisitionProcessState()
 			.isAuthorized()));
     }
 

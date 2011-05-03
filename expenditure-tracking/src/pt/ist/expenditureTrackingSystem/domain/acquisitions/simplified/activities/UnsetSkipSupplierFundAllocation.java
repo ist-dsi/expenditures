@@ -4,7 +4,7 @@ import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import myorg.domain.User;
 import myorg.util.BundleUtil;
-import pt.ist.expenditureTrackingSystem.domain.RoleType;
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
@@ -17,10 +17,10 @@ public class UnsetSkipSupplierFundAllocation extends
 	return isUserProcessOwner(process, user)
 		&& process.getSkipSupplierFundAllocation().booleanValue()
 		&& (((process.getAcquisitionProcessState().isInGenesis() && person == process.getRequestor())
-			|| (person.hasRoleType(RoleType.ACQUISITION_CENTRAL) && (process.getAcquisitionProcessState().isAuthorized()
+			|| (ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user) && (process.getAcquisitionProcessState().isAuthorized()
 										|| process.getAcquisitionProcessState().isAcquisitionProcessed()
 										|| process.isInvoiceReceived())))
-			|| person.hasRoleType(RoleType.SUPPLIER_FUND_ALLOCATION_MANAGER))
+			|| ExpenditureTrackingSystem.isSupplierFundAllocationManagerGroupMember(user))
 		;
     }
 

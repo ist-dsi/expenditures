@@ -4,6 +4,7 @@ import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import myorg.domain.User;
 import myorg.util.BundleUtil;
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
@@ -19,10 +20,11 @@ public class SetSkipSupplierFundAllocation extends
 		&& !process.getShouldSkipSupplierFundAllocation().booleanValue()
 		&& (process instanceof SimplifiedProcedureProcess && ((SimplifiedProcedureProcess) process)
 			.getProcessClassification().isCCP())
-		&& ((process.getAcquisitionProcessState().isInGenesis() && person == process.getRequestor() || (person
-			.hasRoleType(RoleType.ACQUISITION_CENTRAL) && (process.getAcquisitionProcessState().isAuthorized()
-			|| process.getAcquisitionProcessState().isAcquisitionProcessed() || process.isInvoiceReceived()))) || person
-			.hasRoleType(RoleType.SUPPLIER_FUND_ALLOCATION_MANAGER))
+		&& ((process.getAcquisitionProcessState().isInGenesis() && person == process.getRequestor()
+			|| (ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user)
+				&& (process.getAcquisitionProcessState().isAuthorized()
+			|| process.getAcquisitionProcessState().isAcquisitionProcessed() || process.isInvoiceReceived())))
+			|| ExpenditureTrackingSystem.isSupplierFundAllocationManagerGroupMember())
 		;
     }
 

@@ -19,6 +19,7 @@ import myorg.util.ClassNameBundle;
 
 import org.joda.time.LocalDate;
 
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Invoice;
@@ -75,8 +76,10 @@ public class AfterTheFactAcquisitionProcess extends AfterTheFactAcquisitionProce
     }
 
     @Override
-    public boolean isAvailableForPerson(Person person) {
-	return person.hasRoleType(RoleType.ACQUISITION_CENTRAL) || person.hasRoleType(RoleType.ACQUISITION_CENTRAL_MANAGER);
+    public boolean isAvailableForPerson(final Person person) {
+	final User user = person.getUser();
+	return ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user)
+		|| ExpenditureTrackingSystem.isAcquisitionCentralManagerGroupMember(user);
     }
 
     public void cancel() {

@@ -4,6 +4,7 @@ import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import myorg.domain.User;
 import myorg.util.BundleUtil;
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
@@ -17,14 +18,15 @@ public class CancelAcquisitionRequest extends
 	AcquisitionProcessState acquisitionProcessState = process.getAcquisitionProcessState();
 	Person person = user.getExpenditurePerson();
 	return isUserProcessOwner(process, user)
-		&& ((acquisitionProcessState.isAcquisitionProcessed() && person.hasRoleType(RoleType.ACQUISITION_CENTRAL))
+		&& ((acquisitionProcessState.isAcquisitionProcessed()
+			&& ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user))
 			|| (acquisitionProcessState.isInGenesis() && process.getRequestor() == person)
 			|| (acquisitionProcessState.isInAllocatedToUnitState() && isUserResponsibleForAuthorizingPayment(process,
 				person))
 		// Por indicação da Iria em 22-03-2010
 		// || (acquisitionProcessState.isPendingInvoiceConfirmation() &&
 		// isUserResponsibleForUnit(process, person))
-		|| (acquisitionProcessState.isInvoiceReceived() && person.hasRoleType(RoleType.ACQUISITION_CENTRAL)));
+		|| (acquisitionProcessState.isInvoiceReceived() && ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user)));
     }
 
     private boolean isUserResponsibleForAuthorizingPayment(RegularAcquisitionProcess process, Person person) {

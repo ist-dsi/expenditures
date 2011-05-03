@@ -4,7 +4,7 @@ import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import myorg.domain.User;
 import myorg.util.BundleUtil;
-import pt.ist.expenditureTrackingSystem.domain.RoleType;
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
@@ -36,7 +36,8 @@ public class RemoveFundAllocationExpirationDate extends
 		&& (checkActiveConditions(process) || checkCanceledConditions(process))
 		&& !process.hasAnyAllocatedFunds()
 		&& ((process.isAccountingEmployee(person) && !hasAnyAssociatedProject(process))
-			|| process.isProjectAccountingEmployee(person) || person.hasRoleType(RoleType.ACQUISITION_CENTRAL))
+			|| process.isProjectAccountingEmployee(person)
+			|| ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user))
 		&& ((!process.getShouldSkipSupplierFundAllocation() && process.getFundAllocationExpirationDate() != null) || (process
 			.getShouldSkipSupplierFundAllocation() && process.isPendingFundAllocation()));
     }

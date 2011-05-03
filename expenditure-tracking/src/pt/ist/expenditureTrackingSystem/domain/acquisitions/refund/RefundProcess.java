@@ -20,15 +20,13 @@ import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
 import myorg.util.BundleUtil;
 import myorg.util.ClassNameBundle;
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
-import pt.ist.expenditureTrackingSystem.domain.RoleType;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestWithPayment;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.AllocateFundsPermanently;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.AllocateProjectFundsPermanently;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.Approve;
@@ -375,13 +373,21 @@ public class RefundProcess extends RefundProcess_Base {
 	return loggedPerson != null && isAvailableForPerson(loggedPerson);
     }
 
-    public boolean isAvailableForPerson(Person person) {
-	return person.hasRoleType(RoleType.ACQUISITION_CENTRAL) || person.hasRoleType(RoleType.ACQUISITION_CENTRAL_MANAGER)
-		|| person.hasRoleType(RoleType.ACCOUNTING_MANAGER) || person.hasRoleType(RoleType.PROJECT_ACCOUNTING_MANAGER)
-		|| person.hasRoleType(RoleType.TREASURY_MANAGER) || person.hasRoleType(RoleType.ACQUISITION_PROCESS_AUDITOR)
-		|| getRequestor() == person || getRequest().getRequestingUnit().isResponsible(person)
-		|| isResponsibleForAtLeastOnePayingUnit(person) || isAccountingEmployee(person)
-		|| isProjectAccountingEmployee(person) || isTreasuryMember(person) || isObserver(person);
+    public boolean isAvailableForPerson(final Person person) {
+	final User user = person.getUser();
+	return ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user)
+		|| ExpenditureTrackingSystem.isAcquisitionCentralManagerGroupMember(user)
+		|| ExpenditureTrackingSystem.isAccountingManagerGroupMember(user)
+		|| ExpenditureTrackingSystem.isProjectAccountingManagerGroupMember(user)
+		|| ExpenditureTrackingSystem.isTreasuryMemberGroupMember(user)
+		|| ExpenditureTrackingSystem.isAcquisitionsProcessAuditorGroupMember(user)
+		|| getRequestor() == person
+		|| getRequest().getRequestingUnit().isResponsible(person)
+		|| isResponsibleForAtLeastOnePayingUnit(person)
+		|| isAccountingEmployee(person)
+		|| isProjectAccountingEmployee(person)
+		|| isTreasuryMember(person)
+		|| isObserver(person);
     }
 
     @Override

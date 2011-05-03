@@ -971,7 +971,7 @@ public class OrganizationAction extends BaseAction {
 	final Person loggedPerson = Person.getLoggedPerson();
 	if (!unit.isResponsible(loggedPerson)
 		&& !loggedPerson.getUser().hasRoleType(myorg.domain.RoleType.MANAGER)
-		&& !loggedPerson.hasRoleType(RoleType.AQUISITIONS_UNIT_MANAGER)) {
+		&& !ExpenditureTrackingSystem.isAcquisitionsUnitManagerGroupMember()) {
 	    return viewLoggedPerson(mapping, form, request, response);
 	}
 

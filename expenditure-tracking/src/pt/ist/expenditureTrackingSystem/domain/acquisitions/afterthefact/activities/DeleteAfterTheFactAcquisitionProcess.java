@@ -4,6 +4,7 @@ import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import myorg.domain.User;
 import myorg.util.BundleUtil;
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AcquisitionAfterTheFact;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionProcess;
@@ -18,8 +19,8 @@ public class DeleteAfterTheFactAcquisitionProcess extends
 	final AcquisitionAfterTheFact acquisitionAfterTheFact = process.getAcquisitionAfterTheFact();
 
 	return loggedPerson != null
-		&& ((loggedPerson.hasRoleType(RoleType.ACQUISITION_CENTRAL) || loggedPerson
-			.hasRoleType(RoleType.ACQUISITION_CENTRAL_MANAGER)))
+		&& ((ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user)
+			|| ExpenditureTrackingSystem.isAcquisitionCentralManagerGroupMember(user)))
 		&& !acquisitionAfterTheFact.getDeletedState().booleanValue();
     }
 

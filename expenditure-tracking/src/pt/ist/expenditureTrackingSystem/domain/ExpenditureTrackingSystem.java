@@ -8,6 +8,7 @@ import module.dashBoard.domain.DashBoardPanel;
 import module.dashBoard.widgets.WidgetController;
 import module.organization.presentationTier.actions.OrganizationModelAction;
 import module.workflow.widgets.ProcessListWidget;
+import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.ModuleInitializer;
 import myorg.domain.MyOrg;
 import myorg.domain.User;
@@ -43,7 +44,7 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 	@Override
 	public boolean canBeAdded(DashBoardPanel panel, User userAdding) {
 	    return EXPENDITURE_TRACKING_PANEL_PREDICATE.canBeAdded(panel, userAdding)
-		    && (userAdding.getExpenditurePerson().hasRoleType(RoleType.ACQUISITION_CENTRAL)
+		    && (isAcquisitionCentralGroupMember(userAdding)
 			    || !userAdding.getExpenditurePerson().getAccountingUnits().isEmpty() || !userAdding
 			    .getExpenditurePerson().getProjectAccountingUnits().isEmpty());
 	}
@@ -143,6 +144,56 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 		    virtualHost.setExpenditureTrackingSystem(expenditureTrackingSystem);
 		}
 	    }
+
+	    if (!expenditureTrackingSystem.hasAcquisitionCentralGroup()) {
+		final myorg.domain.groups.Role group = myorg.domain.groups.Role.getRole(RoleType.ACQUISITION_CENTRAL);
+		expenditureTrackingSystem.setAcquisitionCentralGroup(group);
+	    }
+
+	    if (!expenditureTrackingSystem.hasAcquisitionCentralManagerGroup()) {
+		final myorg.domain.groups.Role group = myorg.domain.groups.Role.getRole(RoleType.ACQUISITION_CENTRAL_MANAGER);
+		expenditureTrackingSystem.setAcquisitionCentralManagerGroup(group);
+	    }
+
+	    if (!expenditureTrackingSystem.hasAccountingManagerGroup()) {
+		final myorg.domain.groups.Role group = myorg.domain.groups.Role.getRole(RoleType.ACCOUNTING_MANAGER);
+		expenditureTrackingSystem.setAccountingManagerGroup(group);
+	    }
+
+	    if (!expenditureTrackingSystem.hasProjectAccountingManagerGroup()) {
+		final myorg.domain.groups.Role group = myorg.domain.groups.Role.getRole(RoleType.PROJECT_ACCOUNTING_MANAGER);
+		expenditureTrackingSystem.setProjectAccountingManagerGroup(group);
+	    }
+
+	    if (!expenditureTrackingSystem.hasTreasuryMemberGroup()) {
+		final myorg.domain.groups.Role group = myorg.domain.groups.Role.getRole(RoleType.TREASURY_MANAGER);
+		expenditureTrackingSystem.setTreasuryMemberGroup(group);
+	    }
+
+	    if (!expenditureTrackingSystem.hasSupplierManagerGroup()) {
+		final myorg.domain.groups.Role group = myorg.domain.groups.Role.getRole(RoleType.SUPPLIER_MANAGER);
+		expenditureTrackingSystem.setSupplierManagerGroup(group);		
+	    }
+
+	    if (!expenditureTrackingSystem.hasSupplierFundAllocationManagerGroup()) {
+		final myorg.domain.groups.Role group = myorg.domain.groups.Role.getRole(RoleType.SUPPLIER_FUND_ALLOCATION_MANAGER);
+		expenditureTrackingSystem.setSupplierFundAllocationManagerGroup(group);
+	    }
+
+	    if (!expenditureTrackingSystem.hasStatisticsViewerGroup()) {
+		final myorg.domain.groups.Role group = myorg.domain.groups.Role.getRole(RoleType.STATISTICS_VIEWER);
+		expenditureTrackingSystem.setStatisticsViewerGroup(group);
+	    }
+
+	    if (!expenditureTrackingSystem.hasAcquisitionsUnitManagerGroup()) {
+		final myorg.domain.groups.Role group = myorg.domain.groups.Role.getRole(RoleType.AQUISITIONS_UNIT_MANAGER);
+		expenditureTrackingSystem.setAcquisitionsUnitManagerGroup(group);		
+	    }
+
+	    if (!expenditureTrackingSystem.hasAcquisitionsProcessAuditorGroup()) {
+		final myorg.domain.groups.Role group = myorg.domain.groups.Role.getRole(RoleType.ACQUISITION_PROCESS_AUDITOR);
+		expenditureTrackingSystem.setAcquisitionsProcessAuditorGroup(group);
+	    }
 	}
     }
 
@@ -156,6 +207,112 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 	    new ExpenditureTrackingSystem(virtualHost);
 	    initRoles();
 	}
+    }
+
+    public static boolean isAcquisitionCentralGroupMember(final User user) {
+	final ExpenditureTrackingSystem system = getInstance();
+	return system != null && system.hasAcquisitionCentralGroup() && system.getAcquisitionCentralGroup().isMember(user);
+    }
+
+    public static boolean isAcquisitionCentralManagerGroupMember(final User user) {
+	final ExpenditureTrackingSystem system = getInstance();
+	return system != null && system.hasAcquisitionCentralManagerGroup() && system.getAcquisitionCentralManagerGroup().isMember(user);
+    }
+
+    public static boolean isAccountingManagerGroupMember(final User user) {
+	final ExpenditureTrackingSystem system = getInstance();
+	return system != null && system.hasAccountingManagerGroup() && system.getAccountingManagerGroup().isMember(user);
+    }
+
+    public static boolean isProjectAccountingManagerGroupMember(final User user) {
+	final ExpenditureTrackingSystem system = getInstance();
+	return system != null && system.hasProjectAccountingManagerGroup() && system.getProjectAccountingManagerGroup().isMember(user);
+    }
+
+    public static boolean isTreasuryMemberGroupMember(final User user) {
+	final ExpenditureTrackingSystem system = getInstance();
+	return system != null && system.hasTreasuryMemberGroup() && system.getTreasuryMemberGroup().isMember(user);
+    }
+
+    public static boolean isSupplierManagerGroupMember(final User user) {
+	final ExpenditureTrackingSystem system = getInstance();
+	return system != null && system.hasSupplierManagerGroup() && system.getSupplierManagerGroup().isMember(user);
+    }
+
+    public static boolean isSupplierFundAllocationManagerGroupMember(final User user) {
+	final ExpenditureTrackingSystem system = getInstance();
+	return system != null && system.hasSupplierFundAllocationManagerGroup() && system.getSupplierFundAllocationManagerGroup().isMember(user);
+    }
+
+    public static boolean isStatisticsViewerGroupMember(final User user) {
+	final ExpenditureTrackingSystem system = getInstance();
+	return system != null && system.hasStatisticsViewerGroup() && system.getStatisticsViewerGroup().isMember(user);
+    }
+
+    public static boolean isAcquisitionsUnitManagerGroupMember(final User user) {
+	final ExpenditureTrackingSystem system = getInstance();
+	return system != null && system.hasAcquisitionsUnitManagerGroup() && system.getAcquisitionsUnitManagerGroup().isMember(user);
+    }
+
+    public static boolean isAcquisitionsProcessAuditorGroupMember(final User user) {
+	final ExpenditureTrackingSystem system = getInstance();
+	return system != null && system.hasAcquisitionsProcessAuditorGroup() && system.getAcquisitionsProcessAuditorGroup().isMember(user);
+    }
+
+    public static boolean isAcquisitionCentralGroupMember() {
+	final User user = UserView.getCurrentUser();
+	return isAcquisitionCentralGroupMember(user);
+    }
+
+    public static boolean isAcquisitionCentralManagerGroupMember() {
+	final User user = UserView.getCurrentUser();
+	return isAcquisitionCentralManagerGroupMember(user);
+    }
+
+    public static boolean isAccountingManagerGroupMember() {
+	final User user = UserView.getCurrentUser();
+	return isAccountingManagerGroupMember(user);
+    }
+
+    public static boolean isProjectAccountingManagerGroupMember() {
+	final User user = UserView.getCurrentUser();
+	return isProjectAccountingManagerGroupMember(user);
+    }
+
+    public static boolean isTreasuryMemberGroupMember() {
+	final User user = UserView.getCurrentUser();
+	return isTreasuryMemberGroupMember(user);
+    }
+
+    public static boolean isSupplierManagerGroupMember() {
+	final User user = UserView.getCurrentUser();
+	return isSupplierManagerGroupMember(user);
+    }
+
+    public static boolean isSupplierFundAllocationManagerGroupMember() {
+	final User user = UserView.getCurrentUser();
+	return isSupplierFundAllocationManagerGroupMember(user);
+    }
+
+    public static boolean isStatisticsViewerGroupMember() {
+	final User user = UserView.getCurrentUser();
+	return isStatisticsViewerGroupMember(user);
+    }
+
+    public static boolean isAcquisitionsUnitManagerGroupMember() {
+	final User user = UserView.getCurrentUser();
+	return isAcquisitionsUnitManagerGroupMember(user);
+    }
+
+    public static boolean isAcquisitionsProcessAuditorGroupMember() {
+	final User user = UserView.getCurrentUser();
+	return isAcquisitionsProcessAuditorGroupMember(user);
+    }
+
+    public static boolean isManager() {
+	final User user = UserView.getCurrentUser();
+	final myorg.domain.groups.Role role = myorg.domain.groups.Role.getRole(myorg.domain.RoleType.MANAGER);
+	return role.isMember(user);
     }
 
 }

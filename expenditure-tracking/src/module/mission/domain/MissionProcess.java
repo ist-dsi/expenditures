@@ -31,6 +31,7 @@ import myorg.util.ClassNameBundle;
 import org.joda.time.DateTime;
 
 import pt.ist.emailNotifier.domain.Email;
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 
@@ -493,9 +494,9 @@ public abstract class MissionProcess extends MissionProcess_Base {
 		|| mission.getRequestingPerson() == person
 		|| user.hasRoleType(RoleType.MANAGER)
 		|| (user.hasExpenditurePerson()
-			&& user.getExpenditurePerson().hasRoleType(pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL))
+			&& ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user))
 		|| (user.hasExpenditurePerson()
-			&& user.getExpenditurePerson().hasRoleType(pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_PROCESS_AUDITOR))
+			&& ExpenditureTrackingSystem.isAcquisitionsProcessAuditorGroupMember(user))
 		|| (person != null && person.getMissionsSet().contains(mission))
 		|| mission.isParticipantResponsible(person)
 		|| mission.isFinancerResponsible(user.getExpenditurePerson())

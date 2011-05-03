@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import myorg.util.BundleUtil;
-import pt.ist.expenditureTrackingSystem.domain.RoleType;
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.SavedSearch;
 import pt.ist.expenditureTrackingSystem.domain.Search;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
@@ -179,8 +179,8 @@ public class SearchPaymentProcess extends Search<PaymentProcess> {
     }
 
     private boolean personBelongsToAcquisitionCentral() {
-	Person person = Person.getLoggedPerson();
-	return person.hasRoleType(RoleType.ACQUISITION_CENTRAL) || person.hasRoleType(RoleType.ACQUISITION_CENTRAL_MANAGER);
+	return ExpenditureTrackingSystem.isAcquisitionCentralGroupMember()
+		|| ExpenditureTrackingSystem.isAcquisitionCentralManagerGroupMember();
     }
 
     @Override

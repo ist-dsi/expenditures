@@ -4,7 +4,7 @@ import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import myorg.domain.User;
 import myorg.util.BundleUtil;
-import pt.ist.expenditureTrackingSystem.domain.RoleType;
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
@@ -15,7 +15,8 @@ public class PayAcquisition extends WorkflowActivity<RegularAcquisitionProcess, 
 	Person person = user.getExpenditurePerson();
 	return isUserProcessOwner(process, user)
 		&& process.getAcquisitionProcessState().isAllocatedPermanently()
-		&& (person.hasRoleType(RoleType.TREASURY_MANAGER) || process.isTreasuryMember(person));
+		&& (ExpenditureTrackingSystem.isTreasuryMemberGroupMember(user)
+			|| process.isTreasuryMember(person));
     }
 
     @Override

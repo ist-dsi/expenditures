@@ -7,6 +7,7 @@ import module.workflow.util.WorkflowFileUploadBean;
 import myorg.applicationTier.Authenticate.UserView;
 import myorg.util.BundleUtil;
 import myorg.util.ClassNameBundle;
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.fileBeans.InvoiceFileBean;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.fileBeans.InvoiceFileBean.RequestItemHolder;
@@ -62,7 +63,7 @@ public class AcquisitionInvoice extends AcquisitionInvoice_Base {
     public void validateUpload(WorkflowProcess workflowProcess) {
 	RegularAcquisitionProcess process = (RegularAcquisitionProcess) workflowProcess;
 	if (!process.isAcquisitionProcessed()
-		|| !UserView.getCurrentUser().getExpenditurePerson().hasRoleType(RoleType.ACQUISITION_CENTRAL)) {
+		|| !ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(UserView.getCurrentUser())) {
 	    throw new ProcessFileValidationException("resources/AcquisitionResources", "error.acquisitionInvoice.upload.invalid");
 	}
     }
@@ -81,7 +82,7 @@ public class AcquisitionInvoice extends AcquisitionInvoice_Base {
     public boolean isPossibleToArchieve() {
 	RegularAcquisitionProcess process = (RegularAcquisitionProcess) getProcess();
 	return (process.isAcquisitionProcessed() || process.isInvoiceReceived())
-		&& UserView.getCurrentUser().getExpenditurePerson().hasRoleType(RoleType.ACQUISITION_CENTRAL);
+		&& ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(UserView.getCurrentUser());
     }
 
     @Override

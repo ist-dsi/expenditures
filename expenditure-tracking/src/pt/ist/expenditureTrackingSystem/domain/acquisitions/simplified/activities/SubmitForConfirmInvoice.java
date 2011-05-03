@@ -4,7 +4,7 @@ import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import myorg.domain.User;
 import myorg.util.BundleUtil;
-import pt.ist.expenditureTrackingSystem.domain.RoleType;
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 
@@ -13,7 +13,8 @@ public class SubmitForConfirmInvoice extends
 
     @Override
     public boolean isActive(RegularAcquisitionProcess process, User user) {
-	return isUserProcessOwner(process, user) && user.getExpenditurePerson().hasRoleType(RoleType.ACQUISITION_CENTRAL)
+	return isUserProcessOwner(process, user)
+		&& ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user)
 		&& process.isInvoiceReceived() && !process.getFiles(AcquisitionInvoice.class).isEmpty()
 		&& process.getRequest().isCurrentTotalRealValueFullyDistributed();
     }

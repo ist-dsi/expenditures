@@ -12,7 +12,6 @@ import myorg.domain.exceptions.DomainException;
 import myorg.util.ClassNameBundle;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
-import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.announcement.AnnouncementProcessState;
 import pt.ist.expenditureTrackingSystem.domain.dto.AnnouncementBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
@@ -70,9 +69,11 @@ public class AnnouncementProcess extends AnnouncementProcess_Base {
     }
 
     public boolean isVisible(Person person) {
+	final User user = person == null ? null : person.getUser();
 	return getLastAnnouncementProcessState().equals(AnnouncementProcessStateType.APPROVED)
-		|| getAnnouncement().getPublisher() == person || person.hasRoleType(RoleType.ACQUISITION_CENTRAL)
-		|| person.hasRoleType(RoleType.ACQUISITION_CENTRAL_MANAGER);
+		|| getAnnouncement().getPublisher() == person
+		|| ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user)
+		|| ExpenditureTrackingSystem.isAcquisitionCentralManagerGroupMember(user);
     }
 
     @Override

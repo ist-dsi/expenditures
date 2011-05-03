@@ -4,6 +4,7 @@ import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import myorg.domain.User;
 import myorg.util.BundleUtil;
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
@@ -14,9 +15,10 @@ public class SetSkipSupplierFundAllocation extends WorkflowActivity<RefundProces
     public boolean isActive(RefundProcess process, User user) {
 	return isUserProcessOwner(process, user)
 		&& !process.getSkipSupplierFundAllocation()
-		&& (((process.isInGenesis() || process.getProcessState().getRefundProcessStateType() == RefundProcessStateType.AUTHORIZED) && process
-			.getRequestor() == user.getExpenditurePerson()) || user.getExpenditurePerson().hasRoleType(
-			RoleType.SUPPLIER_FUND_ALLOCATION_MANAGER));
+		&& (((process.isInGenesis()
+			|| process.getProcessState().getRefundProcessStateType() == RefundProcessStateType.AUTHORIZED)
+			&& process.getRequestor() == user.getExpenditurePerson())
+			|| ExpenditureTrackingSystem.isSupplierFundAllocationManagerGroupMember(user));
 
     }
 

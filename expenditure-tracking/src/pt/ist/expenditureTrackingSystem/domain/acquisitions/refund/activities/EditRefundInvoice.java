@@ -3,7 +3,7 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities;
 import module.workflow.activities.WorkflowActivity;
 import myorg.domain.User;
 import myorg.util.BundleUtil;
-import pt.ist.expenditureTrackingSystem.domain.RoleType;
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundableInvoiceFile;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
@@ -16,10 +16,13 @@ public class EditRefundInvoice extends WorkflowActivity<RefundProcess, EditRefun
 	return isUserProcessOwner(process, user)
 
 		&& process.isAnyRefundInvoiceAvailable()
-		&& ((person == process.getRequestor() && process.isInAuthorizedState()) || (process
-			.isPendingInvoicesConfirmation() && ((person.hasRoleType(RoleType.ACCOUNTING_MANAGER) && !process
-			.hasProjectsAsPayingUnits()) || (person.hasRoleType(RoleType.PROJECT_ACCOUNTING_MANAGER) && process
-			.hasProjectsAsPayingUnits()))));
+		&& ((person == process.getRequestor()
+			&& process.isInAuthorizedState())
+			|| (process.isPendingInvoicesConfirmation()
+				&& ((ExpenditureTrackingSystem.isAccountingManagerGroupMember(user)
+					&& !process.hasProjectsAsPayingUnits())
+					|| (ExpenditureTrackingSystem.isProjectAccountingManagerGroupMember(user)
+						&& process.hasProjectsAsPayingUnits()))));
     }
 
     @Override

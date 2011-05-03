@@ -16,7 +16,6 @@ import myorg.domain.User;
 import org.apache.commons.collections.Predicate;
 
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
-import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.ProcessesThatAreAuthorizedByUserPredicate;
@@ -160,7 +159,8 @@ public abstract class GenericProcess extends GenericProcess_Base {
 	Set<T> processes = null;
 	final User user = person.getUser();
 	if (person.hasAnyValidAuthorization()
-		&& !(person.hasRoleType(RoleType.ACQUISITION_CENTRAL) || person.hasRoleType(RoleType.ACQUISITION_CENTRAL_MANAGER))) {
+		&& !(ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user)
+			|| ExpenditureTrackingSystem.isAcquisitionCentralManagerGroupMember(user))) {
 	    processes = new HashSet<T>();
 	    for (T process : GenericProcess.getProcessesWithResponsible(processClass, person, year)) {
 		if (process.hasAnyAvailableActivity(user, userAwarness)) {

@@ -4,7 +4,7 @@ import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import myorg.domain.User;
 import myorg.util.BundleUtil;
-import pt.ist.expenditureTrackingSystem.domain.RoleType;
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
@@ -16,7 +16,7 @@ public class RevertInvoiceSubmission extends
 	Person person = user.getExpenditurePerson();
 	return isUserProcessOwner(process, user)
 		&& process.getAcquisitionProcessState().isPendingInvoiceConfirmation()
-		&& (person.hasRoleType(RoleType.ACQUISITION_CENTRAL) || process.isResponsibleForUnit(person));
+		&& (ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user) || process.isResponsibleForUnit(person));
     }
 
     @Override

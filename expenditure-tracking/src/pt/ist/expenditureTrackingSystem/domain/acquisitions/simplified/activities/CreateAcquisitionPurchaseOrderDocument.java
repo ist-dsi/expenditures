@@ -13,6 +13,7 @@ import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Address;
 import myorg.util.BundleUtil;
 import net.sf.jasperreports.engine.JRException;
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
@@ -28,7 +29,7 @@ public class CreateAcquisitionPurchaseOrderDocument extends
     @Override
     public boolean isActive(RegularAcquisitionProcess process, User user) {
 	return isUserProcessOwner(process, user) && process.getAcquisitionProcessState().isAuthorized()
-		&& user.getExpenditurePerson().hasRoleType(RoleType.ACQUISITION_CENTRAL)
+		&& ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user)
 		&& process.getRequest().hasSelectedSupplier();
     }
 

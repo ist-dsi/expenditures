@@ -6,6 +6,7 @@ import module.workflow.util.FileUploadBeanResolver;
 import module.workflow.util.WorkflowFileUploadBean;
 import myorg.applicationTier.Authenticate.UserView;
 import myorg.util.ClassNameBundle;
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess.ProcessClassification;
@@ -54,8 +55,8 @@ public class AcquisitionProposalDocument extends AcquisitionProposalDocument_Bas
 		    "error.acquisitionProposalDocument.upload.invalid");
 	}
 	if (process.getProcessClassification() == ProcessClassification.CT75000
-		&& !((process.isAuthorized() || process.isAcquisitionProcessed()) && UserView.getCurrentUser()
-			.getExpenditurePerson().hasRoleType(RoleType.ACQUISITION_CENTRAL))) {
+		&& !((process.isAuthorized() || process.isAcquisitionProcessed())
+			&& ExpenditureTrackingSystem.isAcquisitionCentralGroupMember())) {
 	    throw new ProcessFileValidationException("resources/AcquisitionResources",
 		    "error.acquisitionProposalDocument.ct75000.upload.invalid");
 	}
@@ -69,7 +70,7 @@ public class AcquisitionProposalDocument extends AcquisitionProposalDocument_Bas
 	return process.getProcessClassification() != ProcessClassification.CT75000 ? process.isInGenesis()
 		&& process.getProcessCreator() == UserView.getCurrentUser() : (process.isAuthorized() || process
 		.isAcquisitionProcessed())
-		&& UserView.getCurrentUser().getExpenditurePerson().hasRoleType(RoleType.ACQUISITION_CENTRAL);
+		&& ExpenditureTrackingSystem.isAcquisitionCentralGroupMember();
     }
 
     @Override

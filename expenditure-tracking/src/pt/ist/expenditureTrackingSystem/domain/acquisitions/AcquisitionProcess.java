@@ -3,19 +3,13 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
-import module.workflow.domain.WorkflowLog;
 import myorg.domain.User;
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
 import myorg.util.ClassNameBundle;
-
-import org.joda.time.DateTime;
-
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
-import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.dto.PayingUnitTotalBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
@@ -37,13 +31,21 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 	return loggedPerson != null && isAvailableForPerson(loggedPerson);
     }
 
-    public boolean isAvailableForPerson(Person person) {
-	return person.hasRoleType(RoleType.ACQUISITION_CENTRAL) || person.hasRoleType(RoleType.ACQUISITION_CENTRAL_MANAGER)
-		|| person.hasRoleType(RoleType.ACCOUNTING_MANAGER) || person.hasRoleType(RoleType.PROJECT_ACCOUNTING_MANAGER)
-		|| person.hasRoleType(RoleType.TREASURY_MANAGER) || person.hasRoleType(RoleType.ACQUISITION_PROCESS_AUDITOR)
-		|| getRequestor() == person || isTakenByPerson(person.getUser())
-		|| getRequestingUnit().isResponsible(person) || isResponsibleForAtLeastOnePayingUnit(person)
-		|| isAccountingEmployee(person) || isProjectAccountingEmployee(person) || isTreasuryMember(person)
+    public boolean isAvailableForPerson(final Person person) {
+	final User user = person.getUser();
+	return ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user)
+		|| ExpenditureTrackingSystem.isAcquisitionCentralManagerGroupMember(user)
+		|| ExpenditureTrackingSystem.isAccountingManagerGroupMember(user)
+		|| ExpenditureTrackingSystem.isProjectAccountingManagerGroupMember(user)
+		|| ExpenditureTrackingSystem.isTreasuryMemberGroupMember(user)
+		|| ExpenditureTrackingSystem.isAcquisitionsProcessAuditorGroupMember(user)
+		|| getRequestor() == person
+		|| isTakenByPerson(person.getUser())
+		|| getRequestingUnit().isResponsible(person)
+		|| isResponsibleForAtLeastOnePayingUnit(person)
+		|| isAccountingEmployee(person)
+		|| isProjectAccountingEmployee(person)
+		|| isTreasuryMember(person)
 		|| isObserver(person);
     }
 
@@ -131,23 +133,22 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 
     public boolean isAllowedToViewCostCenterExpenditures() {
 	try {
-	    return (getUnit() != null && isResponsibleForUnit()) || userHasRole(RoleType.ACCOUNTING_MANAGER)
-		    || userHasRole(RoleType.PROJECT_ACCOUNTING_MANAGER) || isAccountingEmployee()
-		    || isProjectAccountingEmployee() || userHasRole(RoleType.MANAGER);
+	    return (getUnit() != null && isResponsibleForUnit())
+	    	|| ExpenditureTrackingSystem.isAccountingManagerGroupMember()
+	    	|| ExpenditureTrackingSystem.isProjectAccountingManagerGroupMember()
+	    	|| isAccountingEmployee()
+	    	|| isProjectAccountingEmployee()
+	    	|| ExpenditureTrackingSystem.isManager();
 	} catch (Exception e) {
 	    e.printStackTrace();
 	    throw new Error(e);
 	}
     }
 
-    protected boolean userHasRole(final RoleType roleType) {
-	final Person loggedPerson = getLoggedPerson();
-	return loggedPerson != null && loggedPerson.hasRoleType(roleType);
-    }
-
     public boolean isAllowedToViewSupplierExpenditures() {
-	return userHasRole(RoleType.ACQUISITION_CENTRAL) || userHasRole(RoleType.ACQUISITION_CENTRAL_MANAGER)
-		|| userHasRole(RoleType.MANAGER);
+	return ExpenditureTrackingSystem.isAcquisitionCentralGroupMember()
+		|| ExpenditureTrackingSystem.isAcquisitionCentralManagerGroupMember()
+		|| ExpenditureTrackingSystem.isManager();
     }
 
     public boolean checkRealValues() {

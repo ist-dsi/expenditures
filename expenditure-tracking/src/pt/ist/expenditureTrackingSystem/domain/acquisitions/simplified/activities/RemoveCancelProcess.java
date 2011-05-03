@@ -8,6 +8,7 @@ import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import myorg.domain.User;
 import myorg.util.BundleUtil;
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessState;
@@ -18,7 +19,8 @@ public class RemoveCancelProcess extends
 
     @Override
     public boolean isActive(RegularAcquisitionProcess process, User user) {
-	return user.getExpenditurePerson().hasRoleType(RoleType.MANAGER) && isUserProcessOwner(process, user)
+	return ExpenditureTrackingSystem.isManager()
+		&& isUserProcessOwner(process, user)
 		&& process.getAcquisitionProcessState().isCanceled();
     }
 

@@ -5,6 +5,7 @@ import java.util.List;
 import module.workflow.activities.WorkflowActivity;
 import myorg.domain.User;
 import myorg.util.BundleUtil;
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
@@ -22,7 +23,8 @@ public class GenericAssignPayingUnitToItem<P extends PaymentProcess> extends
 	return isUserProcessOwner(process, user)
 		&& ((person == process.getRequestor() && process.isInGenesis()) || ((process instanceof SimplifiedProcedureProcess)
 			&& ((SimplifiedProcedureProcess) process).getProcessClassification() == ProcessClassification.CT75000
-			&& person.hasRoleType(RoleType.ACQUISITION_CENTRAL) && process.isAuthorized()));
+			&& ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user)
+			&& process.isAuthorized()));
     }
 
     @Override

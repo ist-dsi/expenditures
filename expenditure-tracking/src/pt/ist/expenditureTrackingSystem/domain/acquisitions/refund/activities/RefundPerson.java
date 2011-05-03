@@ -4,7 +4,7 @@ import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import myorg.domain.User;
 import myorg.util.BundleUtil;
-import pt.ist.expenditureTrackingSystem.domain.RoleType;
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
@@ -13,8 +13,11 @@ public class RefundPerson extends WorkflowActivity<RefundProcess, RefundPersonAc
     @Override
     public boolean isActive(RefundProcess process, User user) {
 	Person person = user.getExpenditurePerson();
-	return (person.hasRoleType(RoleType.TREASURY_MANAGER) || process.isTreasuryMember(person))
-		&& isUserProcessOwner(process, user) && process.hasFundsAllocatedPermanently() && !process.isPayed();
+	return (ExpenditureTrackingSystem.isTreasuryMemberGroupMember(user)
+		|| process.isTreasuryMember(person))
+		&& isUserProcessOwner(process, user)
+		&& process.hasFundsAllocatedPermanently()
+		&& !process.isPayed();
     }
 
     @Override
