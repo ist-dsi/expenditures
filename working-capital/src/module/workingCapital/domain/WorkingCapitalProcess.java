@@ -56,6 +56,7 @@ import myorg.domain.User;
 import myorg.util.BundleUtil;
 import myorg.util.ClassNameBundle;
 import pt.ist.emailNotifier.domain.Email;
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 
 @ClassNameBundle(key = "label.module.workingCapital", bundle = "resources/WorkingCapitalResources")
 public class WorkingCapitalProcess extends WorkingCapitalProcess_Base implements HasPresentableProcessState {
@@ -138,8 +139,8 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base implements
 	return user != null
 		&& user.hasPerson()
 		&& (user.hasRoleType(RoleType.MANAGER)
-			|| (user.hasExpenditurePerson() && user.getExpenditurePerson().hasRoleType(
-				pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_PROCESS_AUDITOR))
+			|| (user.hasExpenditurePerson() &&
+				ExpenditureTrackingSystem.isAcquisitionsProcessAuditorGroupMember(user))
 			|| (workingCapital.hasMovementResponsible() && user.getPerson() == workingCapital
 				.getMovementResponsible()) || workingCapital.isRequester(user)
 			|| workingCapital.getWorkingCapitalSystem().isManagementeMember(user)
