@@ -65,6 +65,7 @@ valueType pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchProc
 class ExpenditureTrackingSystem {
 	Integer acquisitionRequestDocumentCounter;
 	SearchProcessValuesArray searchProcessValuesArray;
+	String acquisitionCreationWizardJsp;
 }
 
 

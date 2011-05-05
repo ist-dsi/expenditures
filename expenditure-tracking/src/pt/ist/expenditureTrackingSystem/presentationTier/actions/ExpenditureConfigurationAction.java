@@ -23,7 +23,7 @@ public class ExpenditureConfigurationAction extends BaseAction {
 	return forward(request, "/expenditureConfiguration.jsp");
     }
 
-    public final ActionForward saveSelectedSearchProcessValues(final ActionMapping mapping, final ActionForm form,
+    public final ActionForward saveConfiguration(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 
 	final Set<SearchProcessValues> valuesToSet = new HashSet<SearchProcessValues>();
@@ -34,7 +34,10 @@ public class ExpenditureConfigurationAction extends BaseAction {
 	    }
 	}
 	final SearchProcessValuesArray array = SearchProcessValuesArray.importFromString(valuesToSet);
-	ExpenditureTrackingSystem.getInstance().setSearchProcessValuesService(array);
+
+	final String acquisitionCreationWizardJsp = request.getParameter("acquisitionCreationWizardJsp");
+
+	ExpenditureTrackingSystem.getInstance().saveConfiguration(acquisitionCreationWizardJsp, array);
 
 	return viewConfiguration(mapping, form, request, response);
     }

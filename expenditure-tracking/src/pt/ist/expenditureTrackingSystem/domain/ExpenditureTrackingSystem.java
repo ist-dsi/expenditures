@@ -200,6 +200,11 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 	    if (expenditureTrackingSystem.getSearchProcessValuesArray() == null) {
 		expenditureTrackingSystem.setSearchProcessValuesArray(new SearchProcessValuesArray(SearchProcessValues.values()));
 	    }
+
+	    if (expenditureTrackingSystem.getAcquisitionCreationWizardJsp() == null
+		    || expenditureTrackingSystem.getAcquisitionCreationWizardJsp().isEmpty()) {
+		expenditureTrackingSystem.setAcquisitionCreationWizardJsp("creationWizardPublicInstitution.jsp");
+	    }
 	}
     }
 
@@ -326,7 +331,8 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
     }
 
     @Service
-    public void setSearchProcessValuesService(final SearchProcessValuesArray array) {
+    public void saveConfiguration(final String acquisitionCreationWizardJsp, final SearchProcessValuesArray array) {
+	setAcquisitionCreationWizardJsp(acquisitionCreationWizardJsp);
 	setSearchProcessValuesArray(array);
     }
 

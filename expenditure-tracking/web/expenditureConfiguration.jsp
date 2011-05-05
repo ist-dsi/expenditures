@@ -6,18 +6,35 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
+<%
+	final ExpenditureTrackingSystem expenditureTrackingSystem = ExpenditureTrackingSystem.getInstance();
+%>
+
 <h2><bean:message key="link.topBar.configuration" bundle="EXPENDITURE_RESOURCES"/></h2>
+
+<form action="<%= request.getContextPath() + "/expenditureConfiguration.do" %>" method="post">
+	<html:hidden property="method" value="saveConfiguration"/>
+
+	<h4>
+		<bean:message key="label.configuration.process.creation.interface" bundle="EXPENDITURE_RESOURCES"/>
+	</h4>
+	<input type="text" name="acquisitionCreationWizardJsp" size="50"
+		<%
+			if (expenditureTrackingSystem.getAcquisitionCreationWizardJsp() != null && !expenditureTrackingSystem.getAcquisitionCreationWizardJsp().isEmpty()) {
+		%>
+				value="<%= expenditureTrackingSystem.getAcquisitionCreationWizardJsp() %>"
+		<%
+			}
+		%>
+	/>
 
 <h4>
 	<bean:message key="label.configuration.process.search.types" bundle="EXPENDITURE_RESOURCES"/>
 </h4>
 
-<form action="<%= request.getContextPath() + "/expenditureConfiguration.do" %>" method="post">
-	<html:hidden property="method" value="saveSelectedSearchProcessValues"/>
 
 	<table>
 	<%
-		final ExpenditureTrackingSystem expenditureTrackingSystem = ExpenditureTrackingSystem.getInstance();
 		for (final SearchProcessValues value : SearchProcessValues.values()) {
 	%>
 			<tr>

@@ -55,6 +55,16 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 	return forward(request, "/acquisitions/createAcqusitionProcessCT75000.jsp");
     }
 
+    public ActionForward prepareCreateAcquisitionProcessNormal(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	CreateAcquisitionProcessBean acquisitionProcessBean = getRenderedObject();
+	if (acquisitionProcessBean == null) {
+	    acquisitionProcessBean = new CreateAcquisitionProcessBean(ProcessClassification.NORMAL);
+	}
+	request.setAttribute("acquisitionProcessBean", acquisitionProcessBean);
+	return forward(request, "/acquisitions/createAcquisitionProcessNormal.jsp");
+    }
+
     public ActionForward createNewAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	CreateAcquisitionProcessBean createAcquisitionProcessBean = getRenderedObject();
