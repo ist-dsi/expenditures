@@ -34,7 +34,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPaymentProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPaymentProcess.SearchProcessValues;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchProcessValues;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.dto.PayingUnitTotalBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.UserSearchBean;

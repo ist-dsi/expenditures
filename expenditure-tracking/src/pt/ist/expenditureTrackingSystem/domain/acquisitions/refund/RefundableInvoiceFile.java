@@ -83,7 +83,7 @@ public class RefundableInvoiceFile extends RefundableInvoiceFile_Base {
 	if (items.size() > 1) {
 	    throw new DomainException("acquisitionRequestItem.message.exception.thereShouldBeOnlyOneRefundItemAssociated");
 	}
-	return items != null ? (RefundItem) items.get(0) : null;
+	return items != null ? (RefundItem) items.iterator().next() : null;
     }
 
     public boolean isInAllocationPeriod() {

@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import myorg.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.SavedSearch;
 import pt.ist.expenditureTrackingSystem.domain.Search;
@@ -21,45 +20,13 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.predicates.Re
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.predicates.SearchPredicate;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.predicates.SimplifiedAcquisitionPredicate;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess.ProcessClassification;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
-import pt.ist.fenixWebFramework.rendererExtensions.util.IPresentableEnum;
 
 public class SearchPaymentProcess extends Search<PaymentProcess> {
-
-    public static enum SearchProcessValues implements IPresentableEnum {
-	RS5000(SimplifiedProcedureProcess.class, ProcessClassification.CCP), CT1000(SimplifiedProcedureProcess.class,
-		ProcessClassification.CT10000), CT75000(SimplifiedProcedureProcess.class, ProcessClassification.CT75000), ACQUISITIONS(
-		SimplifiedProcedureProcess.class, null), REFUND(RefundProcess.class, null);
-
-	private Class<? extends PaymentProcess> searchClass;
-	private ProcessClassification searchClassification;
-
-	private SearchProcessValues(Class<? extends PaymentProcess> searchClass, ProcessClassification searchClassification) {
-	    this.searchClass = searchClass;
-	    this.searchClassification = searchClassification;
-	}
-
-	@Override
-	public String getLocalizedName() {
-	    return (searchClassification != null) ? searchClassification.getLocalizedName() : BundleUtil
-		    .getStringFromResourceBundle("resources/ExpenditureResources", "label.search." + searchClass.getSimpleName()
-			    + ".description");
-	}
-
-	public Class<? extends PaymentProcess> getSearchClass() {
-	    return searchClass;
-	}
-
-	public ProcessClassification getSearchClassification() {
-	    return searchClassification;
-	}
-
-    }
 
     private SavedSearch savedSearch;
     private SearchProcessValues searchProcess;

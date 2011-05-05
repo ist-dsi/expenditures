@@ -13,6 +13,8 @@ import myorg.domain.ModuleInitializer;
 import myorg.domain.MyOrg;
 import myorg.domain.User;
 import myorg.domain.VirtualHost;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchProcessValues;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchProcessValuesArray;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.organization.OrganizationModelPlugin.ExpendituresView;
 import pt.ist.expenditureTrackingSystem.presentationTier.widgets.ActivateEmailNotificationWidget;
@@ -194,6 +196,10 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 		final myorg.domain.groups.Role group = myorg.domain.groups.Role.getRole(RoleType.ACQUISITION_PROCESS_AUDITOR);
 		expenditureTrackingSystem.setAcquisitionsProcessAuditorGroup(group);
 	    }
+
+	    if (expenditureTrackingSystem.getSearchProcessValuesArray() == null) {
+		expenditureTrackingSystem.setSearchProcessValuesArray(new SearchProcessValuesArray(SearchProcessValues.values()));
+	    }
 	}
     }
 
@@ -313,6 +319,15 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 	final User user = UserView.getCurrentUser();
 	final myorg.domain.groups.Role role = myorg.domain.groups.Role.getRole(myorg.domain.RoleType.MANAGER);
 	return role.isMember(user);
+    }
+
+    public boolean contains(final SearchProcessValues values) {
+	return getSearchProcessValuesArray() != null && getSearchProcessValuesArray().contains(values);
+    }
+
+    @Service
+    public void setSearchProcessValuesService(final SearchProcessValuesArray array) {
+	setSearchProcessValuesArray(array);
     }
 
 }

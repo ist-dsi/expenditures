@@ -11,8 +11,11 @@ enum pt.ist.expenditureTrackingSystem.domain.RoleType as RoleType;
 enum pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationOperation as AuthorizationOperation;
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess.ProcessClassification as ProcessClassification;
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPaymentProcess.SearchProcessValues as SearchProcessValues;
+enum pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchProcessValues as SearchProcessValues;
+
 
 external class .pt.ist.fenixframework.plugins.fileSupport.domain.GenericFile;
+
 
 valueType pt.utl.ist.fenix.tools.util.Strings as Strings {
     externalizeWith {
@@ -50,9 +53,18 @@ valueType java.math.BigDecimal as BigDecimal {
     }
 }
 
+valueType pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchProcessValuesArray as SearchProcessValuesArray {
+    externalizeWith {
+        String exportAsString();
+    }
+
+    internalizeWith importFromString();
+}
+
 
 class ExpenditureTrackingSystem {
 	Integer acquisitionRequestDocumentCounter;
+	SearchProcessValuesArray searchProcessValuesArray;
 }
 
 
