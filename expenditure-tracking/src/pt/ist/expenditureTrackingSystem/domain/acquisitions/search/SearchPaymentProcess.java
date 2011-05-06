@@ -344,4 +344,18 @@ public class SearchPaymentProcess extends Search<PaymentProcess> {
         this.cpvReference = cpvReference;
     }
 
+    public String getSearchProcessTypesToExclude() {
+	final StringBuilder result = new StringBuilder();
+	final ExpenditureTrackingSystem instance = ExpenditureTrackingSystem.getInstance();
+	for (final SearchProcessValues s : SearchProcessValues.values()) {
+	    if (!instance.contains(s)) {
+		if (result.length() > 0) {
+		    result.append(",");
+		}
+		result.append(s.name());
+	    }
+	}
+	return result.toString();
+    }
+
 }

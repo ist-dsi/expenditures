@@ -813,7 +813,7 @@
 		layout="menu-postback">
 		<property name="destination" value="typeSelector" />
 		<property name="eachLayout" value="" />
-
+		<property name="excludedValues" value="${searchProcessTypesToExclude}" />
 		<property name="defaultText" value="label.all" />
 		<property name="defaultTextBundle" value="EXPENDITURE_RESOURCES" />
 		<property name="key" value="true" />
