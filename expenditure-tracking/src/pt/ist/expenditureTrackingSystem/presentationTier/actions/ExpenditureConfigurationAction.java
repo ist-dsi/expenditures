@@ -6,6 +6,8 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import myorg.domain.VirtualHost;
+
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -18,12 +20,12 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 @Mapping(path = "/expenditureConfiguration")
 public class ExpenditureConfigurationAction extends BaseAction {
 
-    public final ActionForward viewConfiguration(final ActionMapping mapping, final ActionForm form,
+    public ActionForward viewConfiguration(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	return forward(request, "/expenditureConfiguration.jsp");
     }
 
-    public final ActionForward saveConfiguration(final ActionMapping mapping, final ActionForm form,
+    public ActionForward saveConfiguration(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 
 	final Set<SearchProcessValues> valuesToSet = new HashSet<SearchProcessValues>();
@@ -38,6 +40,25 @@ public class ExpenditureConfigurationAction extends BaseAction {
 	final String acquisitionCreationWizardJsp = request.getParameter("acquisitionCreationWizardJsp");
 
 	ExpenditureTrackingSystem.getInstance().saveConfiguration(acquisitionCreationWizardJsp, array);
+
+	return viewConfiguration(mapping, form, request, response);
+    }
+
+    public ActionForward createNewSystem(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+
+	final VirtualHost virtualHost = VirtualHost.getVirtualHostForThread();
+	ExpenditureTrackingSystem.createSystem(virtualHost);
+
+	return viewConfiguration(mapping, form, request, response);
+    }
+
+    public ActionForward useSystem(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+
+	final ExpenditureTrackingSystem expenditureTrackingSystem = getDomainObject(request, "systemId");
+	final VirtualHost virtualHost = VirtualHost.getVirtualHostForThread();
+	expenditureTrackingSystem.setForVirtualHost(virtualHost);
 
 	return viewConfiguration(mapping, form, request, response);
     }

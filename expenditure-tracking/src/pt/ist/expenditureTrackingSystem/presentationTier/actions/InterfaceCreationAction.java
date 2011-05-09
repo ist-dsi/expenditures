@@ -30,11 +30,8 @@ public class InterfaceCreationAction extends ContextBaseAction {
 	final VirtualHost virtualHost = getDomainObject(request, "virtualHostToManageId");
 	final Node node = getDomainObject(request, "parentOfNodesToManageId");
 
-	if (!virtualHost.hasExpenditureTrackingSystem()) {
-	    ExpenditureTrackingSystem.createSystem(virtualHost);
-	}
-
 	final ExpenditureTrackingSystem expenditureTrackingSystem = ExpenditureTrackingSystem.getInstance();
+	if (expenditureTrackingSystem != null) {
 	final PersistentGroup acquisitionCentralGroup = expenditureTrackingSystem.getAcquisitionCentralGroup();
 	final PersistentGroup acquisitionCentralManagerGroup = expenditureTrackingSystem.getAcquisitionCentralManagerGroup();
 	final PersistentGroup accountingManagerGroup = expenditureTrackingSystem.getAccountingManagerGroup();
@@ -75,6 +72,8 @@ public class InterfaceCreationAction extends ContextBaseAction {
 //		"resources.ExpenditureOrganizationResources", "link.topBar.connectUnits", Role.getRole(RoleType.MANAGER));
 //	ActionNode.createActionNode(virtualHost, connectUnitsNode, "/connectUnits", "listUnconnectedUnits",
 //		"resources.ExpenditureOrganizationResources", "label.listUnconnectedUnits", statisticsGroup);
+
+	}
 
 	return forwardToMuneConfiguration(request, virtualHost, node);
     }

@@ -72,8 +72,7 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 
     public static ExpenditureTrackingSystem getInstance() {
 	final VirtualHost virtualHostForThread = VirtualHost.getVirtualHostForThread();
-	return virtualHostForThread == null ? MyOrg.getInstance().getExpenditureTrackingSystem()
-		: virtualHostForThread.getExpenditureTrackingSystem();
+	return virtualHostForThread == null ? null : virtualHostForThread.getExpenditureTrackingSystem();
     }
 
     private static void registerChecksumFilterException() {
@@ -122,6 +121,31 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 	for (final Person person : getPeopleSet()) {
 	    person.setDefaultSearch(savedSearch);
 	}
+
+	setAcquisitionCentralGroup(myorg.domain.groups.Role.getRole(RoleType.ACQUISITION_CENTRAL));
+
+	setAcquisitionCentralManagerGroup(myorg.domain.groups.Role.getRole(RoleType.ACQUISITION_CENTRAL_MANAGER));
+
+	setAccountingManagerGroup(myorg.domain.groups.Role.getRole(RoleType.ACCOUNTING_MANAGER));
+
+	setProjectAccountingManagerGroup(myorg.domain.groups.Role.getRole(RoleType.PROJECT_ACCOUNTING_MANAGER));
+
+	setTreasuryMemberGroup(myorg.domain.groups.Role.getRole(RoleType.TREASURY_MANAGER));
+
+	setSupplierManagerGroup(myorg.domain.groups.Role.getRole(RoleType.SUPPLIER_MANAGER));		
+
+	setSupplierFundAllocationManagerGroup(myorg.domain.groups.Role.getRole(RoleType.SUPPLIER_FUND_ALLOCATION_MANAGER));
+
+	setStatisticsViewerGroup(myorg.domain.groups.Role.getRole(RoleType.STATISTICS_VIEWER));
+
+	setAcquisitionsUnitManagerGroup(myorg.domain.groups.Role.getRole(RoleType.AQUISITIONS_UNIT_MANAGER));		
+
+	setAcquisitionsProcessAuditorGroup(myorg.domain.groups.Role.getRole(RoleType.ACQUISITION_PROCESS_AUDITOR));
+
+	setSearchProcessValuesArray(new SearchProcessValuesArray(SearchProcessValues.values()));
+
+	setAcquisitionCreationWizardJsp("creationWizardPublicInstitution.jsp");
+
     }
 
     public String nextAcquisitionRequestDocumentID() {
@@ -141,70 +165,6 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
     public void init(final MyOrg root) {
 	final ExpenditureTrackingSystem expenditureTrackingSystem = root.getExpenditureTrackingSystem();
 	if (expenditureTrackingSystem != null) {
-	    for (final VirtualHost virtualHost : MyOrg.getInstance().getVirtualHostsSet()) {
-		if (!virtualHost.hasExpenditureTrackingSystem()) {
-		    virtualHost.setExpenditureTrackingSystem(expenditureTrackingSystem);
-		}
-	    }
-
-	    if (!expenditureTrackingSystem.hasAcquisitionCentralGroup()) {
-		final myorg.domain.groups.Role group = myorg.domain.groups.Role.getRole(RoleType.ACQUISITION_CENTRAL);
-		expenditureTrackingSystem.setAcquisitionCentralGroup(group);
-	    }
-
-	    if (!expenditureTrackingSystem.hasAcquisitionCentralManagerGroup()) {
-		final myorg.domain.groups.Role group = myorg.domain.groups.Role.getRole(RoleType.ACQUISITION_CENTRAL_MANAGER);
-		expenditureTrackingSystem.setAcquisitionCentralManagerGroup(group);
-	    }
-
-	    if (!expenditureTrackingSystem.hasAccountingManagerGroup()) {
-		final myorg.domain.groups.Role group = myorg.domain.groups.Role.getRole(RoleType.ACCOUNTING_MANAGER);
-		expenditureTrackingSystem.setAccountingManagerGroup(group);
-	    }
-
-	    if (!expenditureTrackingSystem.hasProjectAccountingManagerGroup()) {
-		final myorg.domain.groups.Role group = myorg.domain.groups.Role.getRole(RoleType.PROJECT_ACCOUNTING_MANAGER);
-		expenditureTrackingSystem.setProjectAccountingManagerGroup(group);
-	    }
-
-	    if (!expenditureTrackingSystem.hasTreasuryMemberGroup()) {
-		final myorg.domain.groups.Role group = myorg.domain.groups.Role.getRole(RoleType.TREASURY_MANAGER);
-		expenditureTrackingSystem.setTreasuryMemberGroup(group);
-	    }
-
-	    if (!expenditureTrackingSystem.hasSupplierManagerGroup()) {
-		final myorg.domain.groups.Role group = myorg.domain.groups.Role.getRole(RoleType.SUPPLIER_MANAGER);
-		expenditureTrackingSystem.setSupplierManagerGroup(group);		
-	    }
-
-	    if (!expenditureTrackingSystem.hasSupplierFundAllocationManagerGroup()) {
-		final myorg.domain.groups.Role group = myorg.domain.groups.Role.getRole(RoleType.SUPPLIER_FUND_ALLOCATION_MANAGER);
-		expenditureTrackingSystem.setSupplierFundAllocationManagerGroup(group);
-	    }
-
-	    if (!expenditureTrackingSystem.hasStatisticsViewerGroup()) {
-		final myorg.domain.groups.Role group = myorg.domain.groups.Role.getRole(RoleType.STATISTICS_VIEWER);
-		expenditureTrackingSystem.setStatisticsViewerGroup(group);
-	    }
-
-	    if (!expenditureTrackingSystem.hasAcquisitionsUnitManagerGroup()) {
-		final myorg.domain.groups.Role group = myorg.domain.groups.Role.getRole(RoleType.AQUISITIONS_UNIT_MANAGER);
-		expenditureTrackingSystem.setAcquisitionsUnitManagerGroup(group);		
-	    }
-
-	    if (!expenditureTrackingSystem.hasAcquisitionsProcessAuditorGroup()) {
-		final myorg.domain.groups.Role group = myorg.domain.groups.Role.getRole(RoleType.ACQUISITION_PROCESS_AUDITOR);
-		expenditureTrackingSystem.setAcquisitionsProcessAuditorGroup(group);
-	    }
-
-	    if (expenditureTrackingSystem.getSearchProcessValuesArray() == null) {
-		expenditureTrackingSystem.setSearchProcessValuesArray(new SearchProcessValuesArray(SearchProcessValues.values()));
-	    }
-
-	    if (expenditureTrackingSystem.getAcquisitionCreationWizardJsp() == null
-		    || expenditureTrackingSystem.getAcquisitionCreationWizardJsp().isEmpty()) {
-		expenditureTrackingSystem.setAcquisitionCreationWizardJsp("creationWizardPublicInstitution.jsp");
-	    }
 	}
     }
 
@@ -214,7 +174,7 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 
     @Service
     public static void createSystem(final VirtualHost virtualHost) {
-	if (!virtualHost.hasExpenditureTrackingSystem()) {
+	if (!virtualHost.hasExpenditureTrackingSystem() || virtualHost.getExpenditureTrackingSystem().getVirtualHostCount() > 1) { 
 	    new ExpenditureTrackingSystem(virtualHost);
 	    initRoles();
 	}
@@ -334,6 +294,11 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
     public void saveConfiguration(final String acquisitionCreationWizardJsp, final SearchProcessValuesArray array) {
 	setAcquisitionCreationWizardJsp(acquisitionCreationWizardJsp);
 	setSearchProcessValuesArray(array);
+    }
+
+    @Service
+    public void setForVirtualHost(final VirtualHost virtualHost) {
+	virtualHost.setExpenditureTrackingSystem(this);
     }
 
 }
