@@ -28,7 +28,7 @@ public class WorkingCapitalContext implements Serializable {
     public void setYear(final Integer year) {
 	this.year = year;
 	if (year != null) {
-	    for (final WorkingCapitalYear workingCapitalYear : WorkingCapitalSystem.getInstance().getWorkingCapitalYearsSet()) {
+	    for (final WorkingCapitalYear workingCapitalYear : WorkingCapitalSystem.getInstanceForCurrentHost().getWorkingCapitalYearsSet()) {
 		if (workingCapitalYear.getYear().intValue() == year.intValue()) {
 		    this.workingCapitalYear = workingCapitalYear;
 		}

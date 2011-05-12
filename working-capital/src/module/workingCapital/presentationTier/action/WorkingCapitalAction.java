@@ -80,7 +80,7 @@ public class WorkingCapitalAction extends ContextBaseAction {
 
     public ActionForward configuration(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) {
-	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstance();
+	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstanceForCurrentHost();
 	request.setAttribute("workingCapitalSystem", workingCapitalSystem);
 	return forward(request, "/workingCapital/configuration.jsp");
     }
@@ -126,7 +126,7 @@ public class WorkingCapitalAction extends ContextBaseAction {
 
     public ActionForward configureManagementUnit(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
-	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstance();
+	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstanceForCurrentHost();
 	request.setAttribute("workingCapitalSystem", workingCapitalSystem);
 	return forward(request, "/workingCapital/configureManagementUnit.jsp");
     }

@@ -13,18 +13,19 @@ import org.joda.time.DateTime;
 public class WorkingCapitalRequest extends WorkingCapitalRequest_Base {
 
     public WorkingCapitalRequest() {
-        super();
-        final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstance();
-        setWorkingCapitalSystem(workingCapitalSystem);
-        setRequestCreation(new DateTime());
-        final User user = UserView.getCurrentUser();
-        if (user == null || !user.hasPerson()) {
-            throw new Error("error.requester.must.be.specified");
-        }
-        setWorkingCapitalRequester(user.getPerson());
+	super();
+	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstanceForCurrentHost();
+	setWorkingCapitalSystem(workingCapitalSystem);
+	setRequestCreation(new DateTime());
+	final User user = UserView.getCurrentUser();
+	if (user == null || !user.hasPerson()) {
+	    throw new Error("error.requester.must.be.specified");
+	}
+	setWorkingCapitalRequester(user.getPerson());
     }
 
-    public WorkingCapitalRequest(final WorkingCapital workingCapital, final Money requestedValue, final PaymentMethod paymentMethod) {
+    public WorkingCapitalRequest(final WorkingCapital workingCapital, final Money requestedValue,
+	    final PaymentMethod paymentMethod) {
 	this();
 	setWorkingCapital(workingCapital);
 	setRequestedValue(requestedValue);
@@ -49,9 +50,10 @@ public class WorkingCapitalRequest extends WorkingCapitalRequest_Base {
 	    throw new NullPointerException();
 	}
 	if (!workingCapital.canRequestValue(requestedValue)) {
-	    throw new DomainException(BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources", "error.insufficient.authorized.funds"));
+	    throw new DomainException(BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources",
+		    "error.insufficient.authorized.funds"));
 	}
-        super.setRequestedValue(requestedValue);
+	super.setRequestedValue(requestedValue);
     }
 
     public void delete() {
@@ -63,4 +65,8 @@ public class WorkingCapitalRequest extends WorkingCapitalRequest_Base {
 	super.deleteDomainObject();
     }
 
+    @Override
+    public boolean isConnectedToCurrentHost() {
+	return getWorkingCapitalSystem() == WorkingCapitalSystem.getInstanceForCurrentHost();
+    }
 }

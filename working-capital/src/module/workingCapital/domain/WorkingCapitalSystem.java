@@ -13,6 +13,7 @@ import module.workingCapital.domain.util.WorkingCapitalPendingProcessCounter;
 import myorg.domain.ModuleInitializer;
 import myorg.domain.MyOrg;
 import myorg.domain.User;
+import myorg.domain.VirtualHost;
 import pt.ist.fenixWebFramework.services.Service;
 
 public class WorkingCapitalSystem extends WorkingCapitalSystem_Base implements ModuleInitializer {
@@ -21,20 +22,18 @@ public class WorkingCapitalSystem extends WorkingCapitalSystem_Base implements M
 	ProcessListWidget.register(new WorkingCapitalPendingProcessCounter());
     }
 
+    @Deprecated
+    /**
+     * This class is no longer a singleton
+     */
     public static WorkingCapitalSystem getInstance() {
-	final MyOrg myOrg = MyOrg.getInstance();
-	if (!myOrg.hasWorkingCapitalSystem()) {
-	    initialize();
-	}
-	return myOrg.getWorkingCapitalSystem();
+	return getInstanceForCurrentHost();
     }
 
-    @Service
-    public synchronized static void initialize() {
-	final MyOrg myOrg = MyOrg.getInstance();
-	if (!myOrg.hasWorkingCapitalSystem()) {
-	    new WorkingCapitalSystem(myOrg);
-	}
+    public static WorkingCapitalSystem getInstanceForCurrentHost() {
+	final VirtualHost virtualHostForThread = VirtualHost.getVirtualHostForThread();
+	return (virtualHostForThread == null) ? MyOrg.getInstance().getWorkingCapitalSystem() : virtualHostForThread
+		.getWorkingCapitalSystem();
     }
 
     private WorkingCapitalSystem(final MyOrg myOrg) {
@@ -85,7 +84,19 @@ public class WorkingCapitalSystem extends WorkingCapitalSystem_Base implements M
     @Override
     @Service
     public void init(final MyOrg root) {
-	WorkingCapitalYear.findOrCreate(Integer.valueOf(Calendar.getInstance().get(Calendar.YEAR)));
+	final WorkingCapitalSystem workingCapitalSystem = root.getWorkingCapitalSystem();
+	if (workingCapitalSystem != null) {
+	    for (final VirtualHost virtualHost : MyOrg.getInstance().getVirtualHostsSet()) {
+		if (!virtualHost.hasWorkingCapitalSystem()) {
+		    virtualHost.setWorkingCapitalSystem(workingCapitalSystem);
+		}
+	    }
+	    if (workingCapitalSystem.getManagingAccountabilityType() == null) {
+		workingCapitalSystem.setManagingAccountabilityType(getManagementAccountabilityType());
+	    }
+
+	    WorkingCapitalYear.findOrCreate(Integer.valueOf(Calendar.getInstance().get(Calendar.YEAR)));
+	}
     }
 
 }

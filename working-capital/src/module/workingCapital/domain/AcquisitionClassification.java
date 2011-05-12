@@ -15,12 +15,12 @@ public class AcquisitionClassification extends AcquisitionClassification_Base {
 	    final int c = o1.getDescription().compareTo(o2.getDescription());
 	    return c == 0 ? o1.getExternalId().compareTo(o2.getExternalId()) : c;
 	}
-	
+
     };
 
     public AcquisitionClassification() {
-        super();
-        setWorkingCapitalSystem(WorkingCapitalSystem.getInstance());
+	super();
+	setWorkingCapitalSystem(WorkingCapitalSystem.getInstanceForCurrentHost());
     }
 
     public AcquisitionClassification(final String description, final String economicClassification, final String pocCode) {
@@ -32,7 +32,7 @@ public class AcquisitionClassification extends AcquisitionClassification_Base {
 
     public static SortedSet<AcquisitionClassification> getAvailableClassifications() {
 	final SortedSet<AcquisitionClassification> result = new TreeSet<AcquisitionClassification>(COMPARATOR_BY_DESCRIPTION);
-	result.addAll(WorkingCapitalSystem.getInstance().getAcquisitionClassificationsSet());
+	result.addAll(WorkingCapitalSystem.getInstanceForCurrentHost().getAcquisitionClassificationsSet());
 	return result;
     }
 
@@ -43,5 +43,9 @@ public class AcquisitionClassification extends AcquisitionClassification_Base {
 	    deleteDomainObject();
 	}
     }
-    
+
+    @Override
+    public boolean isConnectedToCurrentHost() {
+	return getWorkingCapitalSystem() == WorkingCapitalSystem.getInstanceForCurrentHost();
+    }
 }

@@ -41,7 +41,7 @@ public class WorkingCapital extends WorkingCapital_Base {
 
     public WorkingCapital() {
 	super();
-	setWorkingCapitalSystem(WorkingCapitalSystem.getInstance());
+	setWorkingCapitalSystem(WorkingCapitalSystem.getInstanceForCurrentHost());
     }
 
     public WorkingCapital(final WorkingCapitalYear workingCapitalYear, final Unit unit, final Person movementResponsible) {
@@ -164,7 +164,7 @@ public class WorkingCapital extends WorkingCapital_Base {
     }
 
     public boolean isPendingAuthorization(final User user) {
-	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstance();
+	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstanceForCurrentHost();
 	return workingCapitalSystem.isManagementeMember(user) && isPendingAuthorization();
     }
 
@@ -190,7 +190,7 @@ public class WorkingCapital extends WorkingCapital_Base {
 	if (user == null) {
 	    return false;
 	}
-	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstance();
+	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstanceForCurrentHost();
 	if ((hasMovementResponsible() && user == getMovementResponsible().getUser()) || isAccountingResponsible(user)
 		|| isAccountingEmployee(user) || workingCapitalSystem.isManagementeMember(user) || isTreasuryMember(user)
 		|| findUnitResponsible(user.getPerson(), Money.ZERO) != null) {
@@ -637,6 +637,11 @@ public class WorkingCapital extends WorkingCapital_Base {
 	if (isTerminated())
 	    return WorkingCapitalProcessState.SENT_FOR_TERMINATION;
 	return WorkingCapitalProcessState.WORKING_CAPITAL_AVAILABLE;
+    }
+
+    @Override
+    public boolean isConnectedToCurrentHost() {
+	return getWorkingCapitalSystem() == WorkingCapitalSystem.getInstanceForCurrentHost();
     }
 
 }

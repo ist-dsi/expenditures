@@ -16,14 +16,14 @@ valueType myorg.domain.util.Money as Money {
 class WorkingCapitalSystem {
 }
 
-class WorkingCapitalYear {
+class WorkingCapitalYear implements .myorg.domain.VirtualHostAware {
 	Integer year;
 }
 
-class WorkingCapital {
+class WorkingCapital implements .myorg.domain.VirtualHostAware {
 }
 
-class WorkingCapitalInitialization {
+class WorkingCapitalInitialization implements .myorg.domain.VirtualHostAware {
 	DateTime requestCreation;
 	Money requestedAnualValue;
 	Money authorizedAnualValue;
@@ -45,23 +45,23 @@ class WorkingCapitalInitialization {
 		Money authorizedReenforcementValue;
 	}
 
-class WorkingCapitalProcess extends .module.workflow.domain.WorkflowProcess {
+class WorkingCapitalProcess extends .module.workflow.domain.WorkflowProcess implements .myorg.domain.VirtualHostAware {
 }
 
-class WorkingCapitalRequest {
+class WorkingCapitalRequest implements .myorg.domain.VirtualHostAware {
 	DateTime requestCreation;
 	Money requestedValue;
 	PaymentMethod paymentMethod;
 	DateTime processedByTreasury;
 }
 
-class AcquisitionClassification {
+class AcquisitionClassification implements .myorg.domain.VirtualHostAware {
 	String description;
 	String economicClassification;
 	String pocCode;
 }
 
-class WorkingCapitalAcquisition extends .module.finance.domain.Provision {
+class WorkingCapitalAcquisition extends .module.finance.domain.Provision implements .myorg.domain.VirtualHostAware {
     String documentNumber;
     String description;
     Money valueWithoutVat;
@@ -73,7 +73,7 @@ class WorkingCapitalAcquisition extends .module.finance.domain.Provision {
     Boolean isCanceled;
 }
 
-class WorkingCapitalTransaction {
+class WorkingCapitalTransaction implements .myorg.domain.VirtualHostAware {
 	Integer number;
 	DateTime transationInstant;
 	Money value;
@@ -104,6 +104,13 @@ class WorkingCapitalAcquisitionSubmissionDocument extends .module.workflow.domai
 }
 
 class EmailDigester extends .myorg.domain.scheduler.Task {
+}
+
+relation VirtualHostWorkingCapitalSystem {
+	WorkingCapitalSystem playsRole workingCapitalSystem;
+	.myorg.domain.VirtualHost playsRole virtualHosts {
+		multiplicity *;
+	}
 }
 
 relation WorkingCapitalInvoiceFileWorkingCapitalTransaction {
@@ -211,6 +218,13 @@ relation WorkingCapitalSystemManagementUnit {
 relation WorkingCapitalSystemManagementAccountabilityType {
 	WorkingCapitalSystem playsRole workingCapitalSystemFromManagementeAccountabilityType;
 	.module.organization.domain.AccountabilityType playsRole managementAccountabilityType;
+}
+
+relation WorkingCapitalSystemsManagingAccountabilityType {
+	.module.organization.domain.AccountabilityType playsRole managingAccountabilityType;
+	WorkingCapitalSystem playsRole workingCapitalSystemsFromManagingAccountabilityType {
+		multiplicity *;
+	}
 }
 
 relation WorkingCapitalSystemWorkingCapitalRequest {

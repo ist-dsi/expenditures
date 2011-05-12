@@ -33,7 +33,7 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
 
     public WorkingCapitalInitialization() {
 	super();
-	setWorkingCapitalSystem(WorkingCapitalSystem.getInstance());
+	setWorkingCapitalSystem(WorkingCapitalSystem.getInstanceForCurrentHost());
 	final Person person = UserView.getCurrentUser().getPerson();
 	if (person == null) {
 	    throw new DomainException("message.working.capital.requestor.cannot.be.null");
@@ -108,7 +108,7 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
     }
 
     public void authorize(final User user) {
-	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstance();
+	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstanceForCurrentHost();
 	final Accountability accountability = workingCapitalSystem.getManagementeAccountability(user);
 	if (accountability == null) {
 	    throw new DomainException("person.cannot.authorize.expense", user.getPerson().getName());
@@ -199,6 +199,11 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
 	removeRequestor();
 	removeAccountingUnit();
 	deleteDomainObject();
+    }
+
+    @Override
+    public boolean isConnectedToCurrentHost() {
+	return getWorkingCapitalSystem() == WorkingCapitalSystem.getInstanceForCurrentHost();
     }
 
 }

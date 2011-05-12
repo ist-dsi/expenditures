@@ -139,8 +139,8 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base implements
 	return user != null
 		&& user.hasPerson()
 		&& (user.hasRoleType(RoleType.MANAGER)
-			|| (user.hasExpenditurePerson() &&
-				ExpenditureTrackingSystem.isAcquisitionsProcessAuditorGroupMember(user))
+			|| (user.hasExpenditurePerson() && ExpenditureTrackingSystem
+				.isAcquisitionsProcessAuditorGroupMember(user))
 			|| (workingCapital.hasMovementResponsible() && user.getPerson() == workingCapital
 				.getMovementResponsible()) || workingCapital.isRequester(user)
 			|| workingCapital.getWorkingCapitalSystem().isManagementeMember(user)
@@ -238,4 +238,12 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base implements
 	return getWorkingCapital().getPresentableAcquisitionProcessState();
     }
 
+    @Override
+    public boolean isConnectedToCurrentHost() {
+	return getWorkingCapitalSystem() == WorkingCapitalSystem.getInstanceForCurrentHost();
+    }
+
+    public WorkingCapitalSystem getWorkingCapitalSystem() {
+	return getWorkingCapital().getWorkingCapitalSystem();
+    }
 }

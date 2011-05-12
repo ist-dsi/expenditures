@@ -20,7 +20,7 @@ public class UnAuthorizeActivity extends WorkflowActivity<WorkingCapitalProcess,
 
     @Override
     public boolean isActive(final WorkingCapitalProcess workingCapitalProcess, final User user) {
-	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstance();
+	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstanceForCurrentHost();
 	for (final WorkingCapitalRequest workingCapitalRequest : workingCapitalProcess.getWorkingCapital().getWorkingCapitalRequestsSet()) {
 	    if (workingCapitalRequest.getWorkingCapitalPayment() != null) {
 		return false;

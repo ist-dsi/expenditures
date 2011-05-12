@@ -20,8 +20,8 @@ public class FindInconsistentWorkingCapitalTransactions extends WriteCustomTask 
 	out.println();
 	out.println("################################################################################################");
 	out.println();
-	out.println("Processing " + WorkingCapitalSystem.getInstance().getWorkingCapitalsCount() + " working capitals.");
-	for (WorkingCapital workingCapital : WorkingCapitalSystem.getInstance().getWorkingCapitals()) {
+	out.println("Processing " + WorkingCapitalSystem.getInstanceForCurrentHost().getWorkingCapitalsCount() + " working capitals.");
+	for (WorkingCapital workingCapital : WorkingCapitalSystem.getInstanceForCurrentHost().getWorkingCapitals()) {
 	    isNewWorkingCapital = true;
 
 	    if (workingCapital.getWorkingCapitalTransactionsCount() == 0) {

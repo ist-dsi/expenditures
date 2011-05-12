@@ -24,7 +24,7 @@ public class WorkingCapitalTransaction extends WorkingCapitalTransaction_Base {
 
     public WorkingCapitalTransaction() {
 	super();
-	setWorkingCapitalSystem(WorkingCapitalSystem.getInstance());
+	setWorkingCapitalSystem(WorkingCapitalSystem.getInstanceForCurrentHost());
 	setTransationInstant(new DateTime());
     }
 
@@ -193,4 +193,8 @@ public class WorkingCapitalTransaction extends WorkingCapitalTransaction_Base {
 	return previous;
     }
 
+    @Override
+    public boolean isConnectedToCurrentHost() {
+	return getWorkingCapitalSystem() == WorkingCapitalSystem.getInstanceForCurrentHost();
+    }
 }

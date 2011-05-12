@@ -13,7 +13,7 @@ public class WorkingCapitalYearProvider implements DataProvider {
 
     @Override
     public Object provide(Object arg0, Object arg1) {
-	return WorkingCapitalSystem.getInstance().getWorkingCapitalYears();
+	return WorkingCapitalSystem.getInstanceForCurrentHost().getWorkingCapitalYears();
     }
 
 }

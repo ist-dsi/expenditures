@@ -5,7 +5,6 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import module.mission.domain.MissionProcess;
 import module.organization.domain.Accountability;
 import module.organization.domain.Party;
 import module.organization.domain.Person;
@@ -22,7 +21,7 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
 
     public WorkingCapitalYear() {
 	super();
-	setWorkingCapitalSystem(WorkingCapitalSystem.getInstance());
+	setWorkingCapitalSystem(WorkingCapitalSystem.getInstanceForCurrentHost());
     }
 
     public WorkingCapitalYear(final Integer year) {
@@ -31,7 +30,7 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
     }
 
     public static WorkingCapitalYear findOrCreate(final Integer year) {
-	for (final WorkingCapitalYear workingCapitalYear : WorkingCapitalSystem.getInstance().getWorkingCapitalYearsSet()) {
+	for (final WorkingCapitalYear workingCapitalYear : WorkingCapitalSystem.getInstanceForCurrentHost().getWorkingCapitalYearsSet()) {
 	    if (workingCapitalYear.getYear().intValue() == year.intValue()) {
 		return workingCapitalYear;
 	    }
@@ -79,9 +78,9 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
 	boolean shouldAdd(final WorkingCapitalProcess workingCapitalProcess, final User user) {
 	    final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
 	    return !workingCapital.isCanceledOrRejected()
-	    && (workingCapitalProcess.isPendingDirectAproval(user)
-		    || workingCapital.hasAcquisitionPendingDirectApproval(user) || workingCapital
-		    .isPendingAcceptResponsability(user));
+		    && (workingCapitalProcess.isPendingDirectAproval(user)
+			    || workingCapital.hasAcquisitionPendingDirectApproval(user) || workingCapital
+			    .isPendingAcceptResponsability(user));
 	}
 
     }
@@ -107,12 +106,11 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
 	boolean shouldAdd(final WorkingCapitalProcess workingCapitalProcess, final User user) {
 	    final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
 	    return workingCapital.isPendingFundUnAllocation(user)
-	    || (!workingCapital.isCanceledOrRejected()
-		    && (workingCapitalProcess.isPendingVerification(user)
+		    || (!workingCapital.isCanceledOrRejected() && (workingCapitalProcess.isPendingVerification(user)
 			    || workingCapital.isPendingFundAllocation(user)
-			    || workingCapital.hasAcquisitionPendingVerification(user)
-			    || ((workingCapital.isAccountingResponsible(user) || workingCapital.isAccountingEmployee(user))
-				    && workingCapital.canRequestCapitalRefund())));
+			    || workingCapital.hasAcquisitionPendingVerification(user) || ((workingCapital
+			    .isAccountingResponsible(user) || workingCapital.isAccountingEmployee(user)) && workingCapital
+			    .canRequestCapitalRefund())));
 	}
 
     }
@@ -133,9 +131,9 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
 		return !workingCapital.isCanceledOrRejected()
 			&& (workingCapitalProcess.isPendingVerification(user)
 				|| workingCapital.isPendingDirectFundAllocation(user)
-				|| workingCapital.hasAcquisitionPendingDirectVerification(user)
-				|| ((workingCapital.isAccountingResponsible(user) || workingCapital.isDirectAccountingEmployee(user))
-					&& workingCapital.canRequestCapitalRefund()));
+				|| workingCapital.hasAcquisitionPendingDirectVerification(user) || ((workingCapital
+				.isAccountingResponsible(user) || workingCapital.isDirectAccountingEmployee(user)) && workingCapital
+				.canRequestCapitalRefund()));
 	    }
 	}.search();
     }
@@ -177,7 +175,7 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
 	boolean shouldAdd(final WorkingCapitalProcess workingCapitalProcess, final User user) {
 	    final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
 	    return !workingCapital.isCanceledOrRejected() && (/* (workingCapital.isAccountingResponsible(user) && workingCapital.canRequestCapital()) || */
-		    (workingCapital.isTreasuryMember(user) && workingCapital.hasWorkingCapitalRequestPendingTreasuryProcessing()));
+	    (workingCapital.isTreasuryMember(user) && workingCapital.hasWorkingCapitalRequestPendingTreasuryProcessing()));
 	}
 
     }
@@ -384,6 +382,11 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
 	    }
 	}
 	return result;
+    }
+
+    @Override
+    public boolean isConnectedToCurrentHost() {
+	return getWorkingCapitalSystem() == WorkingCapitalSystem.getInstanceForCurrentHost();
     }
 
 }

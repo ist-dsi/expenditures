@@ -12,7 +12,7 @@ public class WorkingCapitalAcquisition extends WorkingCapitalAcquisition_Base {
 
     public WorkingCapitalAcquisition() {
 	super();
-	setWorkingCapitalSystem(WorkingCapitalSystem.getInstance());
+	setWorkingCapitalSystem(WorkingCapitalSystem.getInstanceForCurrentHost());
     }
 
     public WorkingCapitalAcquisition(final WorkingCapital workingCapital, final String documentNumber, final Supplier supplier,
@@ -21,7 +21,8 @@ public class WorkingCapitalAcquisition extends WorkingCapitalAcquisition_Base {
 	this();
 	setWorkingCapital(workingCapital);
 	edit(documentNumber, supplier, description, acquisitionClassification, valueWithoutVat);
-	final WorkingCapitalAcquisitionTransaction workingCapitalAcquisitionTransaction = new WorkingCapitalAcquisitionTransaction(this, money);
+	final WorkingCapitalAcquisitionTransaction workingCapitalAcquisitionTransaction = new WorkingCapitalAcquisitionTransaction(
+		this, money);
 	if (invoiceContent != null) {
 	    WorkingCapitalInvoiceFile workingCapitalInvoiceFile = new WorkingCapitalInvoiceFile(displayName, fileName,
 		    invoiceContent, workingCapitalAcquisitionTransaction);
@@ -94,7 +95,8 @@ public class WorkingCapitalAcquisition extends WorkingCapitalAcquisition_Base {
     }
 
     public boolean isCanceledOrRejected() {
-	return (getIsCanceled() != null && getIsCanceled().booleanValue()) || getRejectedApproval() != null || getNotVerified() != null;
+	return (getIsCanceled() != null && getIsCanceled().booleanValue()) || getRejectedApproval() != null
+		|| getNotVerified() != null;
     }
 
     public void cancel() {
@@ -115,4 +117,8 @@ public class WorkingCapitalAcquisition extends WorkingCapitalAcquisition_Base {
 	return isCanceledOrRejected() ? Money.ZERO : getValueWithoutVat();
     }
 
+    @Override
+    public boolean isConnectedToCurrentHost() {
+	return getWorkingCapitalSystem() == WorkingCapitalSystem.getInstanceForCurrentHost();
+    }
 }

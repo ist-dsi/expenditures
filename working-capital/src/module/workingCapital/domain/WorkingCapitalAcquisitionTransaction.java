@@ -11,7 +11,7 @@ public class WorkingCapitalAcquisitionTransaction extends WorkingCapitalAcquisit
 
     public WorkingCapitalAcquisitionTransaction() {
 	super();
-	setWorkingCapitalSystem(WorkingCapitalSystem.getInstance());
+	setWorkingCapitalSystem(WorkingCapitalSystem.getInstanceForCurrentHost());
     }
 
     public WorkingCapitalAcquisitionTransaction(final WorkingCapitalAcquisition workingCapitalAcquisition, final Money value) {
