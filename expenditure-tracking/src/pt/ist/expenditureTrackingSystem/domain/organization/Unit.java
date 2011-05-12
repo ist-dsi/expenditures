@@ -381,8 +381,8 @@ public class Unit extends Unit_Base implements Indexable, Searchable {
 	return hasAuthorizationsFor(person, null);
     }
 
-    public boolean hasAuthorizationsFor(Person person, Money money) {
-	for (Authorization authorization : getAuthorizations()) {
+    public boolean hasAuthorizationsFor(final Person person, final Money money) {
+	for (final Authorization authorization : getAuthorizations()) {
 	    if (authorization.getPerson() == person
 		    && (money == null || authorization.getMaxAmount().isGreaterThanOrEqual(money))) {
 		return true;
@@ -391,9 +391,28 @@ public class Unit extends Unit_Base implements Indexable, Searchable {
 	return false;
     }
 
-    public boolean hasAnyAuthorizationForAmount(Money money) {
-	for (Authorization authorization : getAuthorizations()) {
+    public boolean hasActiveAuthorizationsFor(final Person person, final Money money) {
+	for (final Authorization authorization : getAuthorizations()) {
+	    if (authorization.isValid() && authorization.getPerson() == person
+		    && (money == null || authorization.getMaxAmount().isGreaterThanOrEqual(money))) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
+    public boolean hasAnyAuthorizationForAmount(final Money money) {
+	for (final Authorization authorization : getAuthorizations()) {
 	    if (authorization.getMaxAmount().isGreaterThanOrEqual(money)) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
+    public boolean hasAnyActiveAuthorizationForAmount(final Money money) {
+	for (final Authorization authorization : getAuthorizations()) {
+	    if (authorization.isValid() && authorization.getMaxAmount().isGreaterThanOrEqual(money)) {
 		return true;
 	    }
 	}
@@ -402,7 +421,7 @@ public class Unit extends Unit_Base implements Indexable, Searchable {
 
     public boolean isMostDirectAuthorization(Person person, Money money) {
 	return !hasAnyAuthorizations() ? hasParentUnit() && getParentUnit().isMostDirectAuthorization(person, money)
-		: hasAnyAuthorizationForAmount(money) ? hasAuthorizationsFor(person, money) : hasParentUnit()
+		: hasAnyActiveAuthorizationForAmount(money) ? hasActiveAuthorizationsFor(person, money) : hasParentUnit()
 			&& getParentUnit().isMostDirectAuthorization(person, money);
     }
 
