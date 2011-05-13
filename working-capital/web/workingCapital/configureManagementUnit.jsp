@@ -17,7 +17,7 @@
 			<fr:property name="args" value="provider=module.organization.presentationTier.renderers.providers.UnitAutoCompleteProvider"/>
 			<fr:property name="size" value="60"/>
 		</fr:slot>
-    	<fr:slot name="managementAccountabilityType" layout="menu-select" key="label.accountability.type" bundle="ORGANIZATION_RESOURCES">
+    	<fr:slot name="managingAccountabilityType" layout="menu-select" key="label.accountability.type" bundle="ORGANIZATION_RESOURCES">
         	<fr:property name="providerClass" value="module.organization.presentationTier.renderers.providers.AccountabilityTypesProvider"/>
         	<fr:property name="eachSchema" value="accountabilityType-name"/>
         	<fr:property name="eachLayout" value="values"/>

@@ -165,7 +165,7 @@ public class WorkingCapital extends WorkingCapital_Base {
 
     public boolean isPendingAuthorization(final User user) {
 	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstanceForCurrentHost();
-	return workingCapitalSystem.isManagementeMember(user) && isPendingAuthorization();
+	return workingCapitalSystem.isManagementMember(user) && isPendingAuthorization();
     }
 
     public boolean isPendingAuthorization() {
@@ -192,7 +192,7 @@ public class WorkingCapital extends WorkingCapital_Base {
 	}
 	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstanceForCurrentHost();
 	if ((hasMovementResponsible() && user == getMovementResponsible().getUser()) || isAccountingResponsible(user)
-		|| isAccountingEmployee(user) || workingCapitalSystem.isManagementeMember(user) || isTreasuryMember(user)
+		|| isAccountingEmployee(user) || workingCapitalSystem.isManagementMember(user) || isTreasuryMember(user)
 		|| findUnitResponsible(user.getPerson(), Money.ZERO) != null) {
 	    return true;
 	}

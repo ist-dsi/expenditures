@@ -26,7 +26,7 @@ public class UnAuthorizeActivity extends WorkflowActivity<WorkingCapitalProcess,
 		return false;
 	    }
 	}
-	if (workingCapitalSystem.isManagementeMember(user)) {
+	if (workingCapitalSystem.isManagementMember(user)) {
 	    final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
 	    for (final WorkingCapitalInitialization workingCapitalInitialization : workingCapital
 		    .getWorkingCapitalInitializationsSet()) {

@@ -31,13 +31,13 @@
 			</logic:present>
 		</td>
 		<td>
-			<logic:present name="workingCapitalSystem" property="managementAccountabilityType">
-				<fr:view name="workingCapitalSystem" property="managementAccountabilityType.name"/>
+			<logic:present name="workingCapitalSystem" property="managingAccountabilityType">
+				<fr:view name="workingCapitalSystem" property="managingAccountabilityType.name"/>
 			</logic:present>
 		</td>
 		<td>
 			<html:link action="/workingCapital.do?method=configureManagementUnit">
-				<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.configuration.managemente.configure"/>
+				<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.configuration.management.configure"/>
 			</html:link>
 		</td>
 	</tr>
@@ -48,7 +48,7 @@
 	<h3>
 		<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.configuration.management.members"/>
 	</h3>
-	<fr:view name="workingCapitalSystem" property="managementeMembers" schema="module.organization.domain.Accountability.with.child.info">
+	<fr:view name="workingCapitalSystem" property="managementMembers" schema="module.organization.domain.Accountability.with.child.info">
 		<fr:schema type="module.organization.domain.Accountability" bundle="ORGANIZATION_RESOURCES">
 			<fr:slot name="child.partyName" key="label.name"/>
 			<fr:slot name="child.user.username" key="label.username"/>

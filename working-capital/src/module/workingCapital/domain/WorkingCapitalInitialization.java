@@ -109,7 +109,7 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
 
     public void authorize(final User user) {
 	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstanceForCurrentHost();
-	final Accountability accountability = workingCapitalSystem.getManagementeAccountability(user);
+	final Accountability accountability = workingCapitalSystem.getManagementAccountability(user);
 	if (accountability == null) {
 	    throw new DomainException("person.cannot.authorize.expense", user.getPerson().getName());
 	}

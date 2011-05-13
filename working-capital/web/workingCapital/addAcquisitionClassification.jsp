@@ -18,4 +18,5 @@
 		<fr:property name="classes" value="form listInsideClear" />
 		<fr:property name="columnClasses" value="width100px,,tderror" />
 	</fr:layout>
+	<fr:destination name="cancel" path="/workingCapital.do?method=configuration" />
 </fr:edit>

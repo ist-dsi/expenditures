@@ -143,7 +143,7 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base implements
 				.isAcquisitionsProcessAuditorGroupMember(user))
 			|| (workingCapital.hasMovementResponsible() && user.getPerson() == workingCapital
 				.getMovementResponsible()) || workingCapital.isRequester(user)
-			|| workingCapital.getWorkingCapitalSystem().isManagementeMember(user)
+			|| workingCapital.getWorkingCapitalSystem().isManagementMember(user)
 			|| workingCapital.isAccountingEmployee(user) || workingCapital.isAccountingResponsible(user)
 			|| workingCapital.isTreasuryMember(user) || workingCapital.isResponsibleFor(user));
     }

@@ -15,16 +15,29 @@ import myorg.domain.MyOrg;
 import myorg.domain.User;
 import myorg.domain.VirtualHost;
 import pt.ist.fenixWebFramework.services.Service;
+import dml.runtime.RelationAdapter;
 
 public class WorkingCapitalSystem extends WorkingCapitalSystem_Base implements ModuleInitializer {
 
+    public static class VirtualHostMyOrgRelationListener extends RelationAdapter<VirtualHost, MyOrg> {
+
+	@Override
+	public void beforeRemove(VirtualHost vh, MyOrg myorg) {
+	    vh.removeWorkingCapitalSystem();
+	    super.beforeRemove(vh, myorg);
+	}
+    }
+
     static {
+	VirtualHost.MyOrgVirtualHost.addListener(new VirtualHostMyOrgRelationListener());
+
 	ProcessListWidget.register(new WorkingCapitalPendingProcessCounter());
     }
 
     @Deprecated
     /**
-     * This class is no longer a singleton
+     * This class is no longer a singleton.
+     * Use getInstanceForCurrentHost() instead.
      */
     public static WorkingCapitalSystem getInstance() {
 	return getInstanceForCurrentHost();
@@ -41,12 +54,12 @@ public class WorkingCapitalSystem extends WorkingCapitalSystem_Base implements M
 	setMyOrg(myOrg);
     }
 
-    public SortedSet<Accountability> getManagementeMembers() {
+    public SortedSet<Accountability> getManagementMembers() {
 	final SortedSet<Accountability> accountingMembers = new TreeSet<Accountability>(
 		Accountability.COMPARATOR_BY_CHILD_PARTY_NAMES);
-	if (hasManagementUnit() && hasManagementAccountabilityType()) {
+	if (hasManagementUnit() && hasManagingAccountabilityType()) {
 	    final Unit accountingUnit = getManagementUnit();
-	    final AccountabilityType accountabilityType = getManagementAccountabilityType();
+	    final AccountabilityType accountabilityType = getManagingAccountabilityType();
 	    for (final Accountability accountability : accountingUnit.getChildAccountabilitiesSet()) {
 		if (accountability.getAccountabilityType() == accountabilityType && accountability.getChild().isPerson()) {
 		    accountingMembers.add(accountability);
@@ -56,15 +69,15 @@ public class WorkingCapitalSystem extends WorkingCapitalSystem_Base implements M
 	return accountingMembers;
     }
 
-    public boolean isManagementeMember(final User user) {
-	return getManagementeAccountability(user) != null;
+    public boolean isManagementMember(final User user) {
+	return getManagementAccountability(user) != null;
     }
 
-    public Accountability getManagementeAccountability(final User user) {
-	if (hasManagementUnit() && hasManagementAccountabilityType()) {
-	    final Unit managementeUnit = getManagementUnit();
-	    final AccountabilityType accountabilityType = getManagementAccountabilityType();
-	    return findAccountability(user, accountabilityType, managementeUnit);
+    public Accountability getManagementAccountability(final User user) {
+	if (hasManagementUnit() && hasManagingAccountabilityType()) {
+	    final Unit managementUnit = getManagementUnit();
+	    final AccountabilityType accountabilityType = getManagingAccountabilityType();
+	    return findAccountability(user, accountabilityType, managementUnit);
 	}
 	return null;
     }
@@ -86,15 +99,6 @@ public class WorkingCapitalSystem extends WorkingCapitalSystem_Base implements M
     public void init(final MyOrg root) {
 	final WorkingCapitalSystem workingCapitalSystem = root.getWorkingCapitalSystem();
 	if (workingCapitalSystem != null) {
-	    for (final VirtualHost virtualHost : MyOrg.getInstance().getVirtualHostsSet()) {
-		if (!virtualHost.hasWorkingCapitalSystem()) {
-		    virtualHost.setWorkingCapitalSystem(workingCapitalSystem);
-		}
-	    }
-	    if (workingCapitalSystem.getManagingAccountabilityType() == null) {
-		workingCapitalSystem.setManagingAccountabilityType(getManagementAccountabilityType());
-	    }
-
 	    WorkingCapitalYear.findOrCreate(Integer.valueOf(Calendar.getInstance().get(Calendar.YEAR)));
 	}
     }

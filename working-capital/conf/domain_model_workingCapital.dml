@@ -56,9 +56,9 @@ class WorkingCapitalRequest implements .myorg.domain.VirtualHostAware {
 }
 
 class AcquisitionClassification implements .myorg.domain.VirtualHostAware {
-	String description;
-	String economicClassification;
-	String pocCode;
+	String description (REQUIRED);
+	String economicClassification (REQUIRED);
+	String pocCode (REQUIRED);
 }
 
 class WorkingCapitalAcquisition extends .module.finance.domain.Provision implements .myorg.domain.VirtualHostAware {
@@ -213,11 +213,6 @@ relation WorkingCapitalInitializationResponsibleForAccountingVerification {
 relation WorkingCapitalSystemManagementUnit {
 	WorkingCapitalSystem playsRole workingCapitalSystemFromManagmentUnit;
 	.module.organization.domain.Unit playsRole managementUnit;
-}
-
-relation WorkingCapitalSystemManagementAccountabilityType {
-	WorkingCapitalSystem playsRole workingCapitalSystemFromManagementeAccountabilityType;
-	.module.organization.domain.AccountabilityType playsRole managementAccountabilityType;
 }
 
 relation WorkingCapitalSystemsManagingAccountabilityType {
