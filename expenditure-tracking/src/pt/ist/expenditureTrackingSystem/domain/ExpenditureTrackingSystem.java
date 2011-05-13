@@ -31,8 +31,18 @@ import pt.ist.expenditureTrackingSystem.util.RefundPendingProcessCounter;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.RequestChecksumFilter;
 import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.RequestChecksumFilter.ChecksumPredicate;
+import dml.runtime.RelationAdapter;
 
 public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base implements ModuleInitializer {
+
+    public static class VirtualHostMyOrgRelationListener extends RelationAdapter<VirtualHost, MyOrg> {
+
+	@Override
+	public void beforeRemove(VirtualHost vh, MyOrg myorg) {
+	    vh.removeExpenditureTrackingSystem();
+	    super.beforeRemove(vh, myorg);
+	}
+    }
 
     public static WidgetAditionPredicate EXPENDITURE_TRACKING_PANEL_PREDICATE = new WidgetAditionPredicate() {
 	@Override
@@ -53,6 +63,8 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
     };
 
     static {
+	VirtualHost.MyOrgVirtualHost.addListener(new VirtualHostMyOrgRelationListener());
+
 	ProcessListWidget.register(new AquisitionsPendingProcessCounter());
 	ProcessListWidget.register(new RefundPendingProcessCounter());
 
@@ -132,13 +144,13 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 
 	setTreasuryMemberGroup(myorg.domain.groups.Role.getRole(RoleType.TREASURY_MANAGER));
 
-	setSupplierManagerGroup(myorg.domain.groups.Role.getRole(RoleType.SUPPLIER_MANAGER));		
+	setSupplierManagerGroup(myorg.domain.groups.Role.getRole(RoleType.SUPPLIER_MANAGER));
 
 	setSupplierFundAllocationManagerGroup(myorg.domain.groups.Role.getRole(RoleType.SUPPLIER_FUND_ALLOCATION_MANAGER));
 
 	setStatisticsViewerGroup(myorg.domain.groups.Role.getRole(RoleType.STATISTICS_VIEWER));
 
-	setAcquisitionsUnitManagerGroup(myorg.domain.groups.Role.getRole(RoleType.AQUISITIONS_UNIT_MANAGER));		
+	setAcquisitionsUnitManagerGroup(myorg.domain.groups.Role.getRole(RoleType.AQUISITIONS_UNIT_MANAGER));
 
 	setAcquisitionsProcessAuditorGroup(myorg.domain.groups.Role.getRole(RoleType.ACQUISITION_PROCESS_AUDITOR));
 
@@ -174,7 +186,7 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 
     @Service
     public static void createSystem(final VirtualHost virtualHost) {
-	if (!virtualHost.hasExpenditureTrackingSystem() || virtualHost.getExpenditureTrackingSystem().getVirtualHostCount() > 1) { 
+	if (!virtualHost.hasExpenditureTrackingSystem() || virtualHost.getExpenditureTrackingSystem().getVirtualHostCount() > 1) {
 	    new ExpenditureTrackingSystem(virtualHost);
 	    initRoles();
 	}
@@ -187,7 +199,8 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 
     public static boolean isAcquisitionCentralManagerGroupMember(final User user) {
 	final ExpenditureTrackingSystem system = getInstance();
-	return system != null && system.hasAcquisitionCentralManagerGroup() && system.getAcquisitionCentralManagerGroup().isMember(user);
+	return system != null && system.hasAcquisitionCentralManagerGroup()
+		&& system.getAcquisitionCentralManagerGroup().isMember(user);
     }
 
     public static boolean isAccountingManagerGroupMember(final User user) {
@@ -197,7 +210,8 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 
     public static boolean isProjectAccountingManagerGroupMember(final User user) {
 	final ExpenditureTrackingSystem system = getInstance();
-	return system != null && system.hasProjectAccountingManagerGroup() && system.getProjectAccountingManagerGroup().isMember(user);
+	return system != null && system.hasProjectAccountingManagerGroup()
+		&& system.getProjectAccountingManagerGroup().isMember(user);
     }
 
     public static boolean isTreasuryMemberGroupMember(final User user) {
@@ -212,7 +226,8 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 
     public static boolean isSupplierFundAllocationManagerGroupMember(final User user) {
 	final ExpenditureTrackingSystem system = getInstance();
-	return system != null && system.hasSupplierFundAllocationManagerGroup() && system.getSupplierFundAllocationManagerGroup().isMember(user);
+	return system != null && system.hasSupplierFundAllocationManagerGroup()
+		&& system.getSupplierFundAllocationManagerGroup().isMember(user);
     }
 
     public static boolean isStatisticsViewerGroupMember(final User user) {
@@ -222,12 +237,14 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 
     public static boolean isAcquisitionsUnitManagerGroupMember(final User user) {
 	final ExpenditureTrackingSystem system = getInstance();
-	return system != null && system.hasAcquisitionsUnitManagerGroup() && system.getAcquisitionsUnitManagerGroup().isMember(user);
+	return system != null && system.hasAcquisitionsUnitManagerGroup()
+		&& system.getAcquisitionsUnitManagerGroup().isMember(user);
     }
 
     public static boolean isAcquisitionsProcessAuditorGroupMember(final User user) {
 	final ExpenditureTrackingSystem system = getInstance();
-	return system != null && system.hasAcquisitionsProcessAuditorGroup() && system.getAcquisitionsProcessAuditorGroup().isMember(user);
+	return system != null && system.hasAcquisitionsProcessAuditorGroup()
+		&& system.getAcquisitionsProcessAuditorGroup().isMember(user);
     }
 
     public static boolean isAcquisitionCentralGroupMember() {
