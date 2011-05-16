@@ -4,6 +4,7 @@ import module.mission.domain.Mission;
 import module.mission.domain.MissionFinancer;
 import module.mission.domain.MissionProcess;
 import module.workflow.activities.ActivityInformation;
+import myorg.domain.RoleType;
 import myorg.domain.User;
 import myorg.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
@@ -18,7 +19,10 @@ public class ChangeAccountingUnitActivity extends MissionProcessActivity<Mission
     @Override
     public boolean isActive(final MissionProcess missionProcess, final User user) {
 	final Mission mission = missionProcess.getMission();
-	return super.isActive(missionProcess, user) && missionProcess.isUnderConstruction() && missionProcess.isRequestor(user) && mission.getFinancerCount() > 0;
+	return super.isActive(missionProcess, user)
+		&& (missionProcess.isUnderConstruction() && missionProcess.isRequestor(user)
+			|| user.hasRoleType(RoleType.MANAGER))
+		&& mission.getFinancerCount() > 0;
     }
 
     @Override
