@@ -37,9 +37,10 @@ public class ExpenditureConfigurationAction extends BaseAction {
 	}
 	final SearchProcessValuesArray array = SearchProcessValuesArray.importFromString(valuesToSet);
 
-	final String acquisitionCreationWizardJsp = request.getParameter("acquisitionCreationWizardJsp");
+	final String acquisitionCreationWizardJsp = request.getParameter("institutionalProcessNumberPrefix");
+	final String institutionalProcessNumberPrefix = request.getParameter("acquisitionCreationWizardJsp");
 
-	ExpenditureTrackingSystem.getInstance().saveConfiguration(acquisitionCreationWizardJsp, array);
+	ExpenditureTrackingSystem.getInstance().saveConfiguration(institutionalProcessNumberPrefix, acquisitionCreationWizardJsp, array);
 
 	return viewConfiguration(mapping, form, request, response);
     }

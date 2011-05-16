@@ -101,6 +101,19 @@
 	<html:hidden property="method" value="saveConfiguration"/>
 
 	<h4>
+		<bean:message key="label.configuration.process.institutionalProcessNumberPrefix" bundle="EXPENDITURE_RESOURCES"/>
+	</h4>
+	<input type="text" name="institutionalProcessNumberPrefix" size="50"
+		<%
+			if (expenditureTrackingSystem.getInstitutionalProcessNumberPrefix() != null && !expenditureTrackingSystem.getInstitutionalProcessNumberPrefix().isEmpty()) {
+		%>
+				value="<%= expenditureTrackingSystem.getInstitutionalProcessNumberPrefix() %>"
+		<%
+			}
+		%>
+	/>
+
+	<h4>
 		<bean:message key="label.configuration.process.creation.interface" bundle="EXPENDITURE_RESOURCES"/>
 	</h4>
 	<input type="text" name="acquisitionCreationWizardJsp" size="50"

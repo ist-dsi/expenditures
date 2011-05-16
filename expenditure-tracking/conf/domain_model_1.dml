@@ -66,6 +66,7 @@ class ExpenditureTrackingSystem {
 	Integer acquisitionRequestDocumentCounter;
 	SearchProcessValuesArray searchProcessValuesArray;
 	String acquisitionCreationWizardJsp;
+	String institutionalProcessNumberPrefix;
 }
 
 

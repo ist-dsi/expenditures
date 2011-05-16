@@ -308,7 +308,8 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
     }
 
     @Service
-    public void saveConfiguration(final String acquisitionCreationWizardJsp, final SearchProcessValuesArray array) {
+    public void saveConfiguration(final String institutionalProcessNumberPrefix, final String acquisitionCreationWizardJsp, final SearchProcessValuesArray array) {
+	setInstitutionalProcessNumberPrefix(institutionalProcessNumberPrefix);
 	setAcquisitionCreationWizardJsp(acquisitionCreationWizardJsp);
 	setSearchProcessValuesArray(array);
     }
