@@ -4,11 +4,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
 
 import org.apache.commons.lang.StringUtils;
 
-import myorg.domain.exceptions.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Project;
@@ -197,6 +197,22 @@ public class ProjectFinancer extends ProjectFinancer_Base {
 	    }
 	}
 	return true;
+    }
+
+    @Override
+    public void createFundAllocationRequest(final boolean isFinalFundAllocation) {
+	final RequestWithPayment fundedRequest = getFundedRequest();
+	final PaymentProcess process = fundedRequest.getProcess();
+	final Unit unit = getUnit();
+	final AccountingUnit accountingUnit = unit.getAccountingUnit();
+
+	new FinancerFundAllocationRequest(this,
+		process.getProcessNumber(),
+		process.getProcessUrl(),
+		unit.getUnitNumber(),
+		accountingUnit.getName(),
+		getAmountAllocated(),
+		Boolean.valueOf(isFinalFundAllocation));
     }
 
 }

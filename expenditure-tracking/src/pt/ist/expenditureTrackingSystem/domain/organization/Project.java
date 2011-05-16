@@ -156,4 +156,9 @@ public class Project extends Project_Base {
 	return accountingUnit != null && person != null && accountingUnit.hasResponsibleProjectAccountants(person);
     }
 
+    @Override
+    public Integer getUnitNumber() {
+	return Integer.valueOf(getProjectCode());
+    }
+
 }

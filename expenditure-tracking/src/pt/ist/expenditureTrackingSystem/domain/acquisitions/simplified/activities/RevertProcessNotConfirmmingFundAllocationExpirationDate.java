@@ -25,6 +25,9 @@ public class RevertProcessNotConfirmmingFundAllocationExpirationDate extends
 	RegularAcquisitionProcess process = activityInformation.getProcess();
 	process.getAcquisitionRequest().unSubmitForFundsAllocation();
 	process.inGenesis();
+
+	// TODO : only uncomment this line when we want to integrate with MGP
+	//process.cancelFundAllocationRequest(false);
     }
 
     @Override

@@ -571,4 +571,16 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	return result;
     }
 
+    public void createFundAllocationRequest(final boolean isFinalFundAllocation) {
+	for (final Financer financer : getFinancersSet()) {
+	    financer.createFundAllocationRequest(isFinalFundAllocation);
+	}
+    }
+
+    public void cancelFundAllocationRequest(final boolean isFinalFundAllocation) {
+	for (final Financer financer : getFinancersSet()) {
+	    financer.cancelFundAllocationRequest(isFinalFundAllocation);
+	}
+    }
+
 }

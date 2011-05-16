@@ -95,4 +95,10 @@ public class SubProject extends SubProject_Base {
 	return project.isAccountingResponsible(person);
     }
 
+    @Override
+    public Integer getUnitNumber() {
+	final Unit parentUnit = getParentUnit();
+	return parentUnit == null ? null : parentUnit.getUnitNumber();
+    }
+
 }

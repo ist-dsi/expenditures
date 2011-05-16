@@ -29,7 +29,11 @@ public class ConfirmInvoice extends WorkflowActivity<RegularAcquisitionProcess, 
 
     @Override
     protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
-	activityInformation.getProcess().confirmInvoiceBy(UserView.getCurrentUser().getExpenditurePerson());
+	final RegularAcquisitionProcess process = activityInformation.getProcess();
+	process.confirmInvoiceBy(UserView.getCurrentUser().getExpenditurePerson());
+
+	// TODO : only uncomment this line when we want to integrate with MGP
+	//process.createFundAllocationRequest(true);
     }
 
     @Override

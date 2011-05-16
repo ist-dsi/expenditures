@@ -693,4 +693,8 @@ public class Unit extends Unit_Base implements Indexable, Searchable {
 	return getExpenditureTrackingSystem() == ExpenditureTrackingSystem.getInstance();
     }
 
+    public Integer getUnitNumber() {
+	return null;
+    }
+
 }

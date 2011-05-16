@@ -59,6 +59,8 @@ public class FundAllocationExpirationDate extends
 
 	process.allocateFundsToSupplier();
 
+	// TODO : only uncomment this line when we want to integrate with MGP
+	//process.createFundAllocationRequest(false);
     }
 
     @Override

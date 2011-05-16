@@ -98,4 +98,10 @@ public class CostCenter extends CostCenter_Base {
 	document.indexField(UnitIndexFields.NUMBER_INDEX, getCostCenter());
 	return document;
     }
+
+    @Override
+    public Integer getUnitNumber() {
+	return Integer.valueOf(getCostCenter());
+    }
+
 }

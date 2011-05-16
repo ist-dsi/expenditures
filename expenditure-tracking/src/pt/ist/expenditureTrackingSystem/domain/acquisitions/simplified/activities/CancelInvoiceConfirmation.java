@@ -24,7 +24,11 @@ public class CancelInvoiceConfirmation extends
 
     @Override
     protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
-	activityInformation.getProcess().cancelInvoiceConfirmationBy(UserView.getCurrentUser().getExpenditurePerson());
+	final RegularAcquisitionProcess process = activityInformation.getProcess();
+	process.cancelInvoiceConfirmationBy(UserView.getCurrentUser().getExpenditurePerson());
+
+	// TODO : only uncomment this line when we want to integrate with MGP
+	//process.cancelFundAllocationRequest(true);
     }
 
     @Override

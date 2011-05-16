@@ -234,4 +234,14 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
 	return acquisitionRequest.getCPVReferences();
     }
 
+    public void createFundAllocationRequest(final boolean isFinalFundAllocation) {
+	final AcquisitionRequest acquisitionRequest = getAcquisitionRequest();
+	acquisitionRequest.createFundAllocationRequest(isFinalFundAllocation);
+    }
+
+    public void cancelFundAllocationRequest(final boolean isFinalFundAllocation) {
+	final AcquisitionRequest acquisitionRequest = getAcquisitionRequest();
+	acquisitionRequest.cancelFundAllocationRequest(isFinalFundAllocation);
+    }
+
 }

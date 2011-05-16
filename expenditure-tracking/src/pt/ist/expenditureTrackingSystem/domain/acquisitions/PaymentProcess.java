@@ -456,4 +456,9 @@ public abstract class PaymentProcess extends PaymentProcess_Base implements HasP
 
     public abstract void migrateProcessNumber();
 
+    // TODO : Implement this properly
+    public String getProcessUrl() {
+	return "dot.ist.utl.pt";
+    }
+
 }
