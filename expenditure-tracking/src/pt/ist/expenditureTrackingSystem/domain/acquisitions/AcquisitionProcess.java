@@ -21,9 +21,22 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
     public AcquisitionProcess() {
 	super();
 	setOjbConcreteClass(getClass().getName());
-	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
+	final ExpenditureTrackingSystem instance = ExpenditureTrackingSystem.getInstance();
+	setExpenditureTrackingSystem(instance);
 	super.setSkipSupplierFundAllocation(Boolean.FALSE);
-	setProcessNumber(getYear() + "/" + getAcquisitionProcessNumber());
+	setProcessNumber(constructProcessNumber());
+    }
+
+    protected String constructProcessNumber() {
+	// TODO : Only uncomment this when ADIST an IST-ID are to be placed in production
+	//final ExpenditureTrackingSystem instance = ExpenditureTrackingSystem.getInstance();
+	//return instance.getInstitutionalProcessNumberPrefix() + "/" + getYear() + "/" + getAcquisitionProcessNumber();
+	return getYear() + "/" + getAcquisitionProcessNumber();
+    }
+
+    @Override
+    public void migrateProcessNumber() {
+	setProcessNumber(constructProcessNumber());
     }
 
     public boolean isAvailableForCurrentUser() {
@@ -164,7 +177,7 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
      */
     @Deprecated
     public String getAcquisitionProcessId() {
-	return getYear() + "/" + getAcquisitionProcessNumber();
+	return getProcessNumber();
     }
 
     public boolean isProcessFlowCharAvailable() {

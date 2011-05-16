@@ -13,6 +13,8 @@ import myorg.domain.ModuleInitializer;
 import myorg.domain.MyOrg;
 import myorg.domain.User;
 import myorg.domain.VirtualHost;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchProcessValues;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchProcessValuesArray;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
@@ -82,9 +84,47 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 	OrganizationModelAction.partyViewHookManager.register(new ExpendituresView());
     }
 
+    private static boolean isInitialized = false;
+
     public static ExpenditureTrackingSystem getInstance() {
+	if (!isInitialized) {
+	    initialize();
+	}
 	final VirtualHost virtualHostForThread = VirtualHost.getVirtualHostForThread();
 	return virtualHostForThread == null ? null : virtualHostForThread.getExpenditureTrackingSystem();
+    }
+
+    private static synchronized void initialize() {
+	// TODO : Only uncomment this when ADIST an IST-ID are to be placed in production
+	if (!isInitialized /* && migrateProcessNumbers().booleanValue() */ ) {
+	    isInitialized = true;
+	}
+    }
+
+    @Service
+    private static Boolean migrateProcessNumbers() {
+	final VirtualHost virtualHostForThread = VirtualHost.getVirtualHostForThread();
+	if (virtualHostForThread == null) {
+	    return Boolean.FALSE; 
+	}
+	final ExpenditureTrackingSystem expenditureTrackingSystem = virtualHostForThread.getExpenditureTrackingSystem();
+	if (expenditureTrackingSystem == null) {
+	    return Boolean.FALSE;
+	}
+	final String prefix = expenditureTrackingSystem.getInstitutionalProcessNumberPrefix();
+	if (prefix == null || prefix.isEmpty()) {
+	    final long start = System.currentTimeMillis();
+	    System.out.println("Migrating acquisition process numbers.");
+	    expenditureTrackingSystem.setInstitutionalProcessNumberPrefix("IST");
+	    for (final PaymentProcessYear paymentProcessYear : expenditureTrackingSystem.getPaymentProcessYearsSet()) {
+		for (final PaymentProcess paymentProcess : paymentProcessYear.getPaymentProcessSet()) {
+		    paymentProcess.migrateProcessNumber();
+		}
+	    }
+	    final long end = System.currentTimeMillis();
+	    System.out.println("Completed migration in: " + (end - start) + "ms.");
+	}
+	return Boolean.TRUE;
     }
 
     private static void registerChecksumFilterException() {

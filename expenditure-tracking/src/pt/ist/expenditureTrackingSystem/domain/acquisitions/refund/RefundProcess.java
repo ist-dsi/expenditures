@@ -128,7 +128,7 @@ public class RefundProcess extends RefundProcess_Base {
 	new RefundRequest(this, requestor, refundeeName, refundeeFiscalCode, requestingUnit);
 	new RefundProcessState(this, RefundProcessStateType.IN_GENESIS);
 	setSkipSupplierFundAllocation(Boolean.FALSE);
-	setProcessNumber(getYear() + "/" + getAcquisitionProcessNumber());
+	setProcessNumber(constructProcessNumber());
     }
 
     public RefundProcess(Person requestor, Person refundee, Unit requestingUnit) {
@@ -136,7 +136,19 @@ public class RefundProcess extends RefundProcess_Base {
 	new RefundRequest(this, requestor, refundee, requestingUnit);
 	new RefundProcessState(this, RefundProcessStateType.IN_GENESIS);
 	setSkipSupplierFundAllocation(Boolean.FALSE);
-	setProcessNumber(getYear() + "/" + getAcquisitionProcessNumber());
+	setProcessNumber(constructProcessNumber());
+    }
+
+    protected String constructProcessNumber() {
+	// TODO : Only uncomment this when ADIST an IST-ID are to be placed in production
+	//final ExpenditureTrackingSystem instance = ExpenditureTrackingSystem.getInstance();
+	//return instance.getInstitutionalProcessNumberPrefix() + "/" + getYear() + "/" + getAcquisitionProcessNumber();
+	return getYear() + "/" + getAcquisitionProcessNumber();
+    }
+
+    @Override
+    public void migrateProcessNumber() {
+	setProcessNumber(constructProcessNumber());
     }
 
     @Service
@@ -312,7 +324,7 @@ public class RefundProcess extends RefundProcess_Base {
      */
     @Deprecated
     public String getAcquisitionProcessId() {
-	return getYear() + "/" + getAcquisitionProcessNumber();
+	return getProcessNumber();
     }
 
     @Override

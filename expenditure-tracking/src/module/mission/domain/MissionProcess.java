@@ -44,7 +44,7 @@ public abstract class MissionProcess extends MissionProcess_Base {
 
     public static final Comparator<MissionProcess> COMPARATOR_BY_PROCESS_NUMBER = new Comparator<MissionProcess>() {
 	@Override
-	public int compare(MissionProcess o1, MissionProcess o2) {
+	public int compare(final MissionProcess o1, final MissionProcess o2) {
 	    final MissionYear missionYear1 = o1.getMissionYear();
 	    final MissionYear missionYear2 = o2.getMissionYear();
 
@@ -57,7 +57,7 @@ public abstract class MissionProcess extends MissionProcess_Base {
 	    return number == 0 ? o1.getExternalId().compareTo(o2.getExternalId()) : number;
 	}
 
-	private int compareNumber(MissionProcess o1, MissionProcess o2) {
+	private int compareNumber(final MissionProcess o1, final MissionProcess o2) {
 	    final int n1 = toNum(o1.getProcessNumber());
 	    final int n2 = toNum(o2.getProcessNumber());
 	    return n2 - n1;
@@ -136,7 +136,10 @@ public abstract class MissionProcess extends MissionProcess_Base {
     }
 
     public String getProcessIdentification() {
-	return getMissionYear().getYear() + "/" + getProcessNumber();
+	// TODO : Only uncomment this when ADIST an IST-ID are to be placed in production
+	//final ExpenditureTrackingSystem instance = ExpenditureTrackingSystem.getInstance();
+	//return instance.getInstitutionalProcessNumberPrefix() + "/" + getMissionYear().getYear() + "/M" + getProcessNumber();
+	return getMissionYear().getYear() + "/M" + getProcessNumber();
     }
 
     public WorkflowActivity getActivity(Class<? extends WorkflowActivity> clazz) {
