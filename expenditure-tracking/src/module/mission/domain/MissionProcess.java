@@ -139,7 +139,7 @@ public abstract class MissionProcess extends MissionProcess_Base {
 	// TODO : Only uncomment this when ADIST an IST-ID are to be placed in production
 	//final ExpenditureTrackingSystem instance = ExpenditureTrackingSystem.getInstance();
 	//return instance.getInstitutionalProcessNumberPrefix() + "/" + getMissionYear().getYear() + "/M" + getProcessNumber();
-	return getMissionYear().getYear() + "/M" + getProcessNumber();
+	return getMissionYear().getYear() + "/" + getProcessNumber();
     }
 
     public WorkflowActivity getActivity(Class<? extends WorkflowActivity> clazz) {
