@@ -364,9 +364,8 @@ class DashBoard implements .myorg.domain.VirtualHostAware {
 	Strings column3;
 }
 
-class acquisitions.FinancerFundAllocationRequest extends .module.externalAccountingIntegration.domain.FundAllocationRequest {
+class acquisitions.ProjectAcquisitionFundAllocationRequest extends .module.externalAccountingIntegration.domain.FundAllocationRequest {
 }
-
 
 
 relation ExpenditureTrackingSystemDashBoard {
@@ -1077,11 +1076,11 @@ relation ExpenditureTrackingSystemAcquisitionsProcessAuditorGroup {
 	}
 }
 
-relation FinancerFundAllocationRequestFinancer {
-	acquisitions.FinancerFundAllocationRequest playsRole financerFundAllocationRequest {
+relation ProjectAcquisitionFundAllocationRequestUnitItem {
+	acquisitions.ProjectAcquisitionFundAllocationRequest playsRole projectAcquisitionFundAllocationRequest {
 		multiplicity *;
 	}
-	acquisitions.Financer playsRole financer {
+	acquisitions.UnitItem playsRole unitItem {
 		multiplicity 1..1;
 	}
 }

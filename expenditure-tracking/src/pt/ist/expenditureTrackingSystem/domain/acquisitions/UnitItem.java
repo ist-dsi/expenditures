@@ -3,9 +3,8 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 import java.math.BigDecimal;
 import java.util.List;
 
-import myorg.domain.util.Money;
 import myorg.domain.exceptions.DomainException;
-import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import myorg.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 
@@ -112,6 +111,26 @@ public class UnitItem extends UnitItem_Base {
     @Override
     public boolean isConnectedToCurrentHost() {
 	return hasFinancer() && getFinancer().isConnectedToCurrentHost();
+    }
+
+    public String getProjectFundAllocationId() {
+	for (final ProjectAcquisitionFundAllocationRequest request : getProjectAcquisitionFundAllocationRequestSet()) {
+	    if (!request.isCanceled()) {
+		final String result = request.getFundAllocationNumber();
+		if (result != null && !result.isEmpty()) {
+		    return result;
+		}
+	    }
+	}
+	return null;
+    }
+
+    public void cancelFundAllocationRequest(final boolean isFinalFundAllocation) {
+	if (!isFinalFundAllocation) {
+	    for (final ProjectAcquisitionFundAllocationRequest request : getProjectAcquisitionFundAllocationRequestSet()) {
+		request.cancelFundAllocationRequest();
+	    }
+	}
     }
 
 }

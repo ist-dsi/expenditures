@@ -5,17 +5,17 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
 
-import module.externalAccountingIntegration.domain.FundAllocationRequest;
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
 
 import org.apache.commons.lang.StringUtils;
 
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.AllocateFundsPermanently;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.FundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.CostCenter;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
-import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.utl.ist.fenix.tools.util.Strings;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 
@@ -308,14 +308,16 @@ public class Financer extends Financer_Base {
     }
 
     public void createFundAllocationRequest(final boolean isFinalFundAllocation) {
-	// Nothing to do for cost centers... for now.
     }
 
-    public void cancelFundAllocationRequest(boolean isFinalFundAllocation) {
-	for (final FinancerFundAllocationRequest financerFundAllocationRequest : getFinancerFundAllocationRequestSet()) {
-	    if (financerFundAllocationRequest.getFinalFundAllocation().booleanValue() == isFinalFundAllocation) {
-		financerFundAllocationRequest.cancelFundAllocationRequest();
-	    }
+    public PaymentProcess getProcess() {
+	final RequestWithPayment fundedRequest = getFundedRequest();
+	return fundedRequest.getProcess();
+    }
+
+    public void cancelFundAllocationRequest(final boolean isFinalFundAllocation) {
+	for (final UnitItem unitItem : getUnitItemsSet()) {
+	    unitItem.cancelFundAllocationRequest(isFinalFundAllocation);
 	}
     }
 

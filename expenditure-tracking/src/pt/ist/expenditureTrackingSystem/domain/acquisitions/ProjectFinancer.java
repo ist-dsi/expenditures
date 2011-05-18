@@ -9,6 +9,8 @@ import myorg.domain.util.Money;
 
 import org.apache.commons.lang.StringUtils;
 
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.AllocateProjectFundsPermanently;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.ProjectFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Project;
@@ -201,18 +203,33 @@ public class ProjectFinancer extends ProjectFinancer_Base {
 
     @Override
     public void createFundAllocationRequest(final boolean isFinalFundAllocation) {
-	final RequestWithPayment fundedRequest = getFundedRequest();
-	final PaymentProcess process = fundedRequest.getProcess();
-	final Unit unit = getUnit();
-	final AccountingUnit accountingUnit = unit.getAccountingUnit();
+	for (final UnitItem unitItem : getUnitItemsSet()) {
+	    final RequestWithPayment fundedRequest = getFundedRequest();
+	    final PaymentProcess process = fundedRequest.getProcess();
+	    final Unit unit = getUnit();
+	    final AccountingUnit accountingUnit = unit.getAccountingUnit();
+	    
+	    new ProjectAcquisitionFundAllocationRequest(unitItem,
+		    process.getProcessNumber(),
+		    process.getProcessUrl(),
+		    unit.getUnitNumber(),
+		    accountingUnit.getName(),
+		    getAmountAllocated(),
+		    Boolean.valueOf(isFinalFundAllocation));
+	}
+    }
 
-	new FinancerFundAllocationRequest(this,
-		process.getProcessNumber(),
-		process.getProcessUrl(),
-		unit.getUnitNumber(),
-		accountingUnit.getName(),
-		getAmountAllocated(),
-		Boolean.valueOf(isFinalFundAllocation));
+    public String getProjectFundAllocationIdsForAllUnitItems() {
+	final StringBuilder result = new StringBuilder();
+	for (final UnitItem unitItem : getUnitItemsSet()) {
+	    final String projectFundAllocationId = unitItem.getProjectFundAllocationId();
+	    if (projectFundAllocationId == null) {
+		return null;
+	    }
+	    result.append(", ");
+	    result.append(projectFundAllocationId);
+	}
+	return result.toString();
     }
 
 }
