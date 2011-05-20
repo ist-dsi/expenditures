@@ -23,7 +23,7 @@ public class SyncSalary extends Thread implements ServicePredicate {
 	return employeeNumberFormat.format(number);
     }
 
-    private static class GovernmentMemberQuery extends ExternalDbQuery {
+    private static class GovernmentMemberQuery implements ExternalDbQuery {
 
 	private final Integer number;
 	private boolean isGovernmentMember = false;
@@ -33,7 +33,7 @@ public class SyncSalary extends Thread implements ServicePredicate {
 	}
 
 	@Override
-	protected String getQueryString() {
+	public String getQueryString() {
 	    return "select emp_num, data_inicio, data_fim from ( "
 	    		+ "SELECT distinct empregado.EMP_NUM, empregado.dt_inic as DATA_INICIO, max(empregado.dt_fim) as DATA_FIM "
 	    		+ "FROM SLTSIT situacao, SLDEMP24 empregado "
@@ -44,7 +44,7 @@ public class SyncSalary extends Thread implements ServicePredicate {
 	}
 
 	@Override
-	protected void processResultSet(final ResultSet resultSet) throws SQLException {
+	public void processResultSet(final ResultSet resultSet) throws SQLException {
 	    if (resultSet.next()) {
 		isGovernmentMember = true;
 	    }
@@ -77,7 +77,7 @@ public class SyncSalary extends Thread implements ServicePredicate {
 	}
     }
 
-    private static class SalaryQuery extends ExternalDbQuery {
+    private static class SalaryQuery implements ExternalDbQuery {
 
 	private final Integer number;
 	private BigDecimal value = null;
@@ -87,12 +87,12 @@ public class SyncSalary extends Thread implements ServicePredicate {
 	}
 
 	@Override
-	protected String getQueryString() {
+	public String getQueryString() {
 	    return "SELECT EMP_VENC FROM SLDEMP04 WHERE EMP_NUM = '" + hackEmployeeNumber(number) + "'";
 	}
 
 	@Override
-	protected void processResultSet(final ResultSet resultSet) throws SQLException {
+	public void processResultSet(final ResultSet resultSet) throws SQLException {
 	    if (resultSet.next()) {
 		value = resultSet.getBigDecimal(1);
 	    }

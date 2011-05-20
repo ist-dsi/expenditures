@@ -266,19 +266,19 @@ public class SyncProjectsAux {
     }
 */
 
-    private static class ProjectQuery extends ExternalDbQuery {
+    private static class ProjectQuery implements ExternalDbQuery {
 
 	private final Set<MgpProject> mgpProjects = new HashSet<MgpProject>();
 
 	@Override
-	protected String getQueryString() {
+	public String getQueryString() {
 	    return "SELECT v_projectos.unid_exploracao, v_projectos.projectcode, v_projectos.title,"
 		    + " v_projectos.idcoord, v_projectos.costcenter, v_projectos.inicio, v_projectos.duracao,"
 		    + " v_projectos.status, v_projectos.tipo, v_projectos.gestor, v_projectos.grupo" + " FROM v_projectos";
 	}
 
 	@Override
-	protected void processResultSet(final ResultSet resultSet) throws SQLException {
+	public void processResultSet(final ResultSet resultSet) throws SQLException {
 	    while (resultSet.next()) {
 		final MgpProject mgpProject = new MgpProject(resultSet);
 		mgpProjects.add(mgpProject);
@@ -290,7 +290,7 @@ public class SyncProjectsAux {
 	}
     }
 
-    private static class OtherProjectCoordinatorsQuery extends ExternalDbQuery {
+    private static class OtherProjectCoordinatorsQuery implements ExternalDbQuery {
 
 	private final Set<MgpProject> mgpProjects;
 
@@ -299,12 +299,12 @@ public class SyncProjectsAux {
 	}
 
 	@Override
-	protected String getQueryString() {
+	public String getQueryString() {
 	    return "SELECT a.idproj, a.idautorizado, a.inicio, a.fim FROM autorizacoes a";
 	}
 
 	@Override
-	protected void processResultSet(final ResultSet resultSet) throws SQLException {
+	public void processResultSet(final ResultSet resultSet) throws SQLException {
 	    while (resultSet.next()) {
 		final String idproj = resultSet.getString(1);
 		final String idautorizado = resultSet.getString(2);
@@ -378,7 +378,7 @@ public class SyncProjectsAux {
 	}
     }
 
-    private static class SubProjectQuery extends ExternalDbQuery {
+    private static class SubProjectQuery implements ExternalDbQuery {
 
 	private final Set<MgpProject> mgpProjects;
 
@@ -387,12 +387,12 @@ public class SyncProjectsAux {
 	}
 
 	@Override
-	protected String getQueryString() {
+	public String getQueryString() {
 	    return "SELECT a.projecto, a.instituicao, a.descricaoinstituicao FROM v_membros_consorcio a";
 	}
 
 	@Override
-	protected void processResultSet(final ResultSet resultSet) throws SQLException {
+	public void processResultSet(final ResultSet resultSet) throws SQLException {
 	    while (resultSet.next()) {
 		final String projectCode = resultSet.getString(1);
 		final String institution = resultSet.getString(2);

@@ -1,5 +1,7 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
 
@@ -77,6 +79,25 @@ public class ProjectAcquisitionFundAllocationRequest extends ProjectAcquisitionF
     private <T extends WorkflowProcess> WorkflowActivity<T, ActivityInformation<T>> getActivity(
 	    final WorkflowProcess process, final String activityName) {
 	return process.getActivity(activityName);
+    }
+
+    @Override
+    public String getQueryString() {
+	if (getExternalRegistrationDate() == null) {
+	    // TODO insert info into remote table
+	    return "select 1";	    
+	}
+	// TODO check fund allocation value
+	return "select 1";
+    }
+
+    @Override
+    public void processResultSet(final ResultSet resultSet) throws SQLException {
+	if (getExternalRegistrationDate() == null) {
+	    // TODO check if insert went well
+	} else {
+	    // TODO register fund allocation value
+	}
     }
 
 }

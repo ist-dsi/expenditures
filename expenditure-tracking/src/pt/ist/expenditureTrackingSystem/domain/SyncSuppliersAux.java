@@ -134,7 +134,7 @@ public class SyncSuppliersAux {
 	}
     }
 
-    private static class CountryQuery extends ExternalDbQuery {
+    private static class CountryQuery implements ExternalDbQuery {
 
 	private final Set<GiafCountry> giafCountries;
 
@@ -143,7 +143,7 @@ public class SyncSuppliersAux {
 	}
 
 	@Override
-	protected String getQueryString() {
+	public String getQueryString() {
 	    return "SELECT " +
 		"a.pais_cod_pai," +
 		"a.pais_dsg_com," +
@@ -171,7 +171,7 @@ public class SyncSuppliersAux {
 	}
 
 	@Override
-	protected void processResultSet(final ResultSet resultSet) throws SQLException {
+	public void processResultSet(final ResultSet resultSet) throws SQLException {
 	    while (resultSet.next()) {
 		final GiafCountry giafCountry = new GiafCountry(resultSet);
 		giafCountries.add(giafCountry);
@@ -180,7 +180,7 @@ public class SyncSuppliersAux {
 
     }
 
-    private static class SupplierQuery extends ExternalDbQuery {
+    private static class SupplierQuery implements ExternalDbQuery {
 
 	private final SupplierMap supplierMap;
 
@@ -189,13 +189,13 @@ public class SyncSuppliersAux {
 	}
 
 	@Override
-	protected String getQueryString() {
+	public String getQueryString() {
 	    return "SELECT GIDFORN.forn_cod_ent, GIDENTGER.num_fis, GIDENTGER.nom_ent, GIDENTGER.nom_ent_abv"
 		    + " FROM GIDFORN, GIDENTGER where GIDFORN.forn_cod_ent = GIDENTGER.cod_ent";
 	}
 
 	@Override
-	protected void processResultSet(final ResultSet resultSet) throws SQLException {
+	public void processResultSet(final ResultSet resultSet) throws SQLException {
 	    while (resultSet.next()) {
 		final GiafSupplier giafSupplier = new GiafSupplier(resultSet);
 		supplierMap.index(giafSupplier);
@@ -204,7 +204,7 @@ public class SyncSuppliersAux {
 
     }
 
-    private static class SupplierContactQuery extends ExternalDbQuery {
+    private static class SupplierContactQuery implements ExternalDbQuery {
 
 	private final SupplierMap supplierMap;
 
@@ -213,12 +213,12 @@ public class SyncSuppliersAux {
 	}
 
 	@Override
-	protected String getQueryString() {
+	public String getQueryString() {
 	    return "SELECT cod_ent, rua_ent, loc_ent, cod_pos, cod_pai, tel_ent, fax_ent, email FROM GIDMORADA";
 	}
 
 	@Override
-	protected void processResultSet(final ResultSet resultSet) throws SQLException {
+	public void processResultSet(final ResultSet resultSet) throws SQLException {
 	    while (resultSet.next()) {
 		final String codEnt = resultSet.getString(1);
 		final GiafSupplier giafSupplier = findRemoteSupplier(codEnt);
@@ -238,7 +238,7 @@ public class SyncSuppliersAux {
 	}
     }
 
-    private static class CanceledSupplierQuery extends ExternalDbQuery {
+    private static class CanceledSupplierQuery implements ExternalDbQuery {
 
 	private final SupplierMap supplierMap;
 
@@ -247,13 +247,13 @@ public class SyncSuppliersAux {
 	}
 
 	@Override
-	protected String getQueryString() {
+	public String getQueryString() {
 	    return "select * from (" + "SELECT ENTC_COD_ENT, max(ENTC_DAT_CAN) as cancelamento, max(ENTC_DAT_ACT) as activacao "
 		    + "FROM GIDENTCAN group by ENTC_COD_ENT) " + "where activacao is null or activacao < cancelamento";
 	}
 
 	@Override
-	protected void processResultSet(final ResultSet resultSet) throws SQLException {
+	public void processResultSet(final ResultSet resultSet) throws SQLException {
 	    while (resultSet.next()) {
 		final String codEnt = resultSet.getString(1);
 		final GiafSupplier giafSupplier = findRemoteSupplier(codEnt);
