@@ -17,6 +17,7 @@ import module.workingCapital.domain.WorkingCapitalYear;
 import module.workingCapital.domain.util.AcquisitionClassificationBean;
 import module.workingCapital.domain.util.WorkingCapitalInitializationBean;
 import module.workingCapital.presentationTier.action.util.WorkingCapitalContext;
+import myorg.domain.VirtualHost;
 import myorg.domain.exceptions.DomainException;
 import myorg.presentationTier.actions.ContextBaseAction;
 import myorg.util.BundleUtil;
@@ -66,9 +67,10 @@ public class WorkingCapitalAction extends ContextBaseAction {
     public ActionForward listProcesses(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) {
 	final WorkingCapitalYear workingCapitalYear = getDomainObject(request, "workingCapitalYearOid");
-	final WorkingCapitalContext workingCapitalContext = new WorkingCapitalContext();;
+	final WorkingCapitalContext workingCapitalContext = new WorkingCapitalContext();
 	workingCapitalContext.setWorkingCapitalYear(workingCapitalYear);
-	final SortedSet<WorkingCapitalProcess> unitProcesses = new TreeSet<WorkingCapitalProcess>(WorkingCapitalProcess.COMPARATOR_BY_UNIT_NAME);
+	final SortedSet<WorkingCapitalProcess> unitProcesses = new TreeSet<WorkingCapitalProcess>(
+		WorkingCapitalProcess.COMPARATOR_BY_UNIT_NAME);
 	for (final WorkingCapital workingCapital : workingCapitalYear.getWorkingCapitalsSet()) {
 	    final WorkingCapitalProcess workingCapitalProcess = workingCapital.getWorkingCapitalProcess();
 	    if (workingCapitalProcess.isAccessibleToCurrentUser()) {
@@ -81,8 +83,28 @@ public class WorkingCapitalAction extends ContextBaseAction {
     public ActionForward configuration(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) {
 	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstanceForCurrentHost();
-	request.setAttribute("workingCapitalSystem", workingCapitalSystem);
+	request.setAttribute("currentWorkingCapitalSystem", workingCapitalSystem);
+	request.setAttribute("currentVirtualHost", VirtualHost.getVirtualHostForThread());
 	return forward(request, "/workingCapital/configuration.jsp");
+    }
+
+    public ActionForward createNewSystem(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+
+	final VirtualHost virtualHost = VirtualHost.getVirtualHostForThread();
+	WorkingCapitalSystem.createSystem(virtualHost);
+
+	return configuration(mapping, form, request, response);
+    }
+
+    public ActionForward useSystem(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+
+	final WorkingCapitalSystem workingCapitalSystem = getDomainObject(request, "systemId");
+	final VirtualHost virtualHost = VirtualHost.getVirtualHostForThread();
+	workingCapitalSystem.setForVirtualHost(virtualHost);
+
+	return configuration(mapping, form, request, response);
     }
 
     public ActionForward prepareCreateWorkingCapitalInitialization(final ActionMapping mapping, final ActionForm form,
@@ -108,7 +130,7 @@ public class WorkingCapitalAction extends ContextBaseAction {
 	} catch (final DomainException domainException) {
 	    RenderUtils.invalidateViewState();
 	    addLocalizedMessage(request, BundleUtil.getFormattedStringFromResourceBundle("resources.WorkingCapitalResources",
-		    	domainException.getKey()));
+		    domainException.getKey()));
 	    return prepareCreateWorkingCapitalInitialization(request, workingCapitalInitializationBean);
 	}
     }

@@ -34,8 +34,10 @@
 						<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.front.page.pending.my.aproval"/>
 					</b>
 				</p>
-				<bean:define id="processList" toScope="request" name="workingCapitalContext" property="workingCapitalYear.pendingAproval"/>
-				<jsp:include page="processList.jsp"/>
+				<logic:present name="workingCapitalContext" property="workingCapitalYear">
+					<bean:define id="processList" toScope="request" name="workingCapitalContext" property="workingCapitalYear.pendingAproval"/>
+					<jsp:include page="processList.jsp"/>
+				</logic:present>
 
 				<br/>
 				<p class="mtop0 mbottom05">
@@ -43,9 +45,11 @@
 						<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.front.page.pending.my.verification"/>
 					</b>
 				</p>
-				<bean:define id="processList" toScope="request" name="workingCapitalContext" property="workingCapitalYear.pendingVerification"/>
-				<bean:define id="processListDirect" toScope="request" name="workingCapitalContext" property="workingCapitalYear.pendingDirectVerification"/>
-				<jsp:include page="processListDirect.jsp"/>
+				<logic:present name="workingCapitalContext" property="workingCapitalYear">
+					<bean:define id="processList" toScope="request" name="workingCapitalContext" property="workingCapitalYear.pendingVerification"/>
+					<bean:define id="processListDirect" toScope="request" name="workingCapitalContext" property="workingCapitalYear.pendingDirectVerification"/>
+					<jsp:include page="processListDirect.jsp"/>
+				</logic:present>
 
 				<br/>
 				<p class="mtop0 mbottom05">
@@ -53,8 +57,10 @@
 						<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.front.page.pending.my.authorization"/>
 					</b>
 				</p>
-				<bean:define id="processList" toScope="request" name="workingCapitalContext" property="workingCapitalYear.pendingAuthorization"/>
-				<jsp:include page="processList.jsp"/>
+				<logic:present name="workingCapitalContext" property="workingCapitalYear">
+					<bean:define id="processList" toScope="request" name="workingCapitalContext" property="workingCapitalYear.pendingAuthorization"/>
+					<jsp:include page="processList.jsp"/>
+				</logic:present>
 
 				<br/>
 				<p class="mtop0 mbottom05">
@@ -62,8 +68,10 @@
 						<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.front.page.pending.payment"/>
 					</b>
 				</p>
-				<bean:define id="processList" toScope="request" name="workingCapitalContext" property="workingCapitalYear.pendingPayment"/>
-				<jsp:include page="processList.jsp"/>
+				<logic:present name="workingCapitalContext" property="workingCapitalYear">
+					<bean:define id="processList" toScope="request" name="workingCapitalContext" property="workingCapitalYear.pendingPayment"/>
+					<jsp:include page="processList.jsp"/>
+				</logic:present>
 			</td>
 			<td style="border: none; width: 2%; padding: 0;"></td>
 			<td style="border: 1px dotted #aaa; padding: 10px 15px; width: 48%; vertical-align: top;">
@@ -73,8 +81,10 @@
 						<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.front.page.taken"/>
 					</b>
 				</p>
-				<bean:define id="processList" toScope="request" name="workingCapitalContext" property="workingCapitalYear.taken"/>
-				<jsp:include page="processList.jsp"/>
+				<logic:present name="workingCapitalContext" property="workingCapitalYear">
+					<bean:define id="processList" toScope="request" name="workingCapitalContext" property="workingCapitalYear.taken"/>
+					<jsp:include page="processList.jsp"/>
+				</logic:present>
 
 				<br/>
  -->
@@ -83,8 +93,10 @@
 						<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.front.page.mine"/>
 					</b>
 				</p>
-				<bean:define id="processList" toScope="request" name="workingCapitalContext" property="workingCapitalYear.myWorkingCapital"/>
-				<jsp:include page="processList.jsp"/>
+				<logic:present name="workingCapitalContext" property="workingCapitalYear">
+					<bean:define id="processList" toScope="request" name="workingCapitalContext" property="workingCapitalYear.myWorkingCapital"/>
+					<jsp:include page="processList.jsp"/>
+				</logic:present>
 
 				<br/>
 				<p class="mtop0 mbottom05">
@@ -92,8 +104,10 @@
 						<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.front.page.requested"/>
 					</b>
 				</p>
-				<bean:define id="processList" toScope="request" name="workingCapitalContext" property="workingCapitalYear.requestedWorkingCapital"/>
-				<jsp:include page="processList.jsp"/>
+				<logic:present name="workingCapitalContext" property="workingCapitalYear">
+					<bean:define id="processList" toScope="request" name="workingCapitalContext" property="workingCapitalYear.requestedWorkingCapital"/>
+					<jsp:include page="processList.jsp"/>
+				</logic:present>
 
 				<br/>
 				<p class="mtop0 mbottom05">
@@ -101,8 +115,10 @@
 						<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.front.page.aprovalResponsible"/>
 					</b>
 				</p>
-				<bean:define id="processList" toScope="request" name="workingCapitalContext" property="workingCapitalYear.aprovalResponsibleWorkingCapital"/>
-				<jsp:include page="processList.jsp"/>
+				<logic:present name="workingCapitalContext" property="workingCapitalYear">
+					<bean:define id="processList" toScope="request" name="workingCapitalContext" property="workingCapitalYear.aprovalResponsibleWorkingCapital"/>
+					<jsp:include page="processList.jsp"/>
+				</logic:present>
 
 			</td>
 		</tr>
@@ -147,9 +163,11 @@
 		</fr:edit>
 		<html:submit styleClass="inputbutton"><bean:message key="renderers.form.submit.name" bundle="RENDERER_RESOURCES"/></html:submit>
 		&nbsp;&nbsp; 
-		<html:link action="/workingCapital.do?method=listProcesses" paramId="workingCapitalYearOid" paramName="workingCapitalContext" paramProperty="workingCapitalYear.externalId">
-			<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.list.all"/>
-		</html:link>
+		<logic:present name="workingCapitalContext" property="workingCapitalYear">
+			<html:link action="/workingCapital.do?method=listProcesses" paramId="workingCapitalYearOid" paramName="workingCapitalContext" paramProperty="workingCapitalYear.externalId">
+				<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.list.all"/>
+			</html:link>
+		</logic:present>
 	</fr:form>
 
 	<p>

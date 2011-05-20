@@ -49,12 +49,23 @@ public class InterfaceCreationAction extends ContextBaseAction {
 	final VirtualHost virtualHost = getDomainObject(request, "virtualHostToManageId");
 	final Node node = getDomainObject(request, "parentOfNodesToManageId");
 
-/*	LinkNode.createLinkNode(virtualHost, node, "https://fenix-ashes.ist.utl.pt/fenixWiki/Qualidade/FundoDeManeio?action=AttachFile&do=get&target=Manual_FM.pdf", 
-		"resources.WorkingCapitalResources", "link.sideBar.workingCapital.help", UserGroup.getInstance());
-*/
-	LinkNode.createLinkNode(virtualHost, node, "https://fenix-ashes.ist.utl.pt/fenixWiki/Qualidade/FundoDeManeio", 
+	/*	LinkNode.createLinkNode(virtualHost, node, "https://fenix-ashes.ist.utl.pt/fenixWiki/Qualidade/FundoDeManeio?action=AttachFile&do=get&target=Manual_FM.pdf", 
+			"resources.WorkingCapitalResources", "link.sideBar.workingCapital.help", UserGroup.getInstance());
+	*/
+	LinkNode.createLinkNode(virtualHost, node, "https://fenix-ashes.ist.utl.pt/fenixWiki/Qualidade/FundoDeManeio",
 		"resources.WorkingCapitalResources", "link.sideBar.workingCapital.help", UserGroup.getInstance());
 
+	return forwardToMuneConfiguration(request, virtualHost, node);
+    }
+
+    @CreateNodeAction(bundle = "WORKING_CAPITAL_RESOURCES", key = "add.node.workingCapital.interface.configuration", groupKey = "label.module.workingCapital")
+    public final ActionForward createConfigurationNode(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+	final VirtualHost virtualHost = getDomainObject(request, "virtualHostToManageId");
+	final Node node = getDomainObject(request, "parentOfNodesToManageId");
+
+	ActionNode.createActionNode(virtualHost, node, "/workingCapital", "configuration", "resources.WorkingCapitalResources",
+		"link.sideBar.workingCapitalConfiguration", Role.getRole(RoleType.MANAGER));
 
 	return forwardToMuneConfiguration(request, virtualHost, node);
     }

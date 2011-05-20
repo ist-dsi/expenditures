@@ -1,6 +1,5 @@
 package module.workingCapital.domain;
 
-import java.util.Calendar;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -49,9 +48,17 @@ public class WorkingCapitalSystem extends WorkingCapitalSystem_Base implements M
 		.getWorkingCapitalSystem();
     }
 
-    private WorkingCapitalSystem(final MyOrg myOrg) {
+    private WorkingCapitalSystem(final VirtualHost virtualHost) {
 	super();
-	setMyOrg(myOrg);
+	//setMyOrg(Myorg.getInstance());
+	virtualHost.setWorkingCapitalSystem(this);
+    }
+
+    @Service
+    public static void createSystem(final VirtualHost virtualHost) {
+	if (!virtualHost.hasWorkingCapitalSystem() || virtualHost.getWorkingCapitalSystem().getVirtualHostsCount() > 1) {
+	    new WorkingCapitalSystem(virtualHost);
+	}
     }
 
     public SortedSet<Accountability> getManagementMembers() {
@@ -99,8 +106,12 @@ public class WorkingCapitalSystem extends WorkingCapitalSystem_Base implements M
     public void init(final MyOrg root) {
 	final WorkingCapitalSystem workingCapitalSystem = root.getWorkingCapitalSystem();
 	if (workingCapitalSystem != null) {
-	    WorkingCapitalYear.findOrCreate(Integer.valueOf(Calendar.getInstance().get(Calendar.YEAR)));
 	}
+    }
+
+    @Service
+    public void setForVirtualHost(final VirtualHost virtualHost) {
+	virtualHost.setWorkingCapitalSystem(this);
     }
 
 }
