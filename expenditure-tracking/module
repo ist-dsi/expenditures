@@ -1,2 +1,2 @@
 name=expenditure-tracking
-depends=core, email-module, content, fileSupport, workflow-module, metaWorkflow, geography, organization, organization-ist, finance, dashBoard, bennu-vaadin, external-accounting-integration
+depends=core, email-module, content, fileSupport, workflow-module, metaWorkflow, geography, organization, organization-ist, finance, dashBoard, bennu-vaadin, external-accounting-integration, db-utils

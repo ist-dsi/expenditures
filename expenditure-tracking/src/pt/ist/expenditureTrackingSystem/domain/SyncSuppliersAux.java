@@ -11,9 +11,9 @@ import java.util.Set;
 
 import myorg.domain.util.Address;
 import myorg.domain.util.Money;
+import pt.ist.dbUtils.ExternalDbOperation;
+import pt.ist.dbUtils.ExternalDbQuery;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
-import pt.ist.expenditureTrackingSystem.persistenceTier.ExternalDbOperation;
-import pt.ist.expenditureTrackingSystem.persistenceTier.ExternalDbQuery;
 
 public class SyncSuppliersAux {
 

@@ -9,8 +9,8 @@ import java.text.DecimalFormat;
 
 import jvstm.TransactionalCommand;
 import module.organization.domain.Person;
-import pt.ist.expenditureTrackingSystem.persistenceTier.ExternalDbOperation;
-import pt.ist.expenditureTrackingSystem.persistenceTier.ExternalDbQuery;
+import pt.ist.dbUtils.ExternalDbOperation;
+import pt.ist.dbUtils.ExternalDbQuery;
 import pt.ist.fenixWebFramework.services.ServiceManager;
 import pt.ist.fenixWebFramework.services.ServicePredicate;
 import pt.ist.fenixframework.pstm.Transaction;
@@ -72,11 +72,7 @@ public class SyncSalary extends Thread implements ServicePredicate {
 	}
 
 	private boolean isGovernmentMember() {
-	    try {
-		execute();
-	    } catch (final SQLException e) {
-		throw new Error(e);
-	    }
+	    execute();
 	    return governmentMemberQuery.isGovernmentMember;
 	}
     }
@@ -123,11 +119,7 @@ public class SyncSalary extends Thread implements ServicePredicate {
 	}
 
 	private BigDecimal getSalary() {
-	    try {
-		execute();
-	    } catch (final SQLException e) {
-		throw new Error(e);
-	    }
+	    execute();
 	    return salaryQuery.value;
 	}
     }
