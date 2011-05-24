@@ -7,6 +7,7 @@ import module.dashBoard.WidgetRegister.WidgetAditionPredicate;
 import module.dashBoard.domain.DashBoardPanel;
 import module.dashBoard.widgets.WidgetController;
 import module.organization.presentationTier.actions.OrganizationModelAction;
+import module.organizationIst.errorHandleing.EmailAndVirtualHostAwareErrorHandler;
 import module.workflow.widgets.ProcessListWidget;
 import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.ModuleInitializer;
@@ -33,6 +34,7 @@ import pt.ist.expenditureTrackingSystem.util.RefundPendingProcessCounter;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.RequestChecksumFilter;
 import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.RequestChecksumFilter.ChecksumPredicate;
+import pt.ist.vaadinframework.EmbeddedApplication;
 import dml.runtime.RelationAdapter;
 
 public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base implements ModuleInitializer {
@@ -82,6 +84,8 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 
 	registerChecksumFilterException();
 	OrganizationModelAction.partyViewHookManager.register(new ExpendituresView());
+
+	EmbeddedApplication.registerErrorListener(new EmailAndVirtualHostAwareErrorHandler());
     }
 
     private static boolean isInitialized = false;
