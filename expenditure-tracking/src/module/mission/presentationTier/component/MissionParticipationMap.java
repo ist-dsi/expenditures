@@ -29,7 +29,7 @@ import org.joda.time.LocalDate;
 import pt.ist.fenixframework.pstm.AbstractDomainObject;
 import pt.ist.vaadinframework.ui.EmbeddedComponentContainer;
 import pt.utl.ist.fenix.tools.util.excel.Spreadsheet;
-import vaadin.annotation.EmbeddedComponent;
+import pt.ist.vaadinframework.annotation.EmbeddedComponent;
 
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
