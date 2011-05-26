@@ -4,6 +4,8 @@
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 
+<bean:define id="dashBoardId" name="widget" property="dashBoardPanel.externalId" type="java.lang.String"/>
+
 <table>
 	<tr>
 		<td>
@@ -12,9 +14,10 @@
 	</tr>
 	<tr>
 		<td>
-		<fr:form action="/dashBoardManagement.do?method=doTest">
+		<fr:form action="/dashBoardManagement.do">
+			<html:hidden property="method" value="viewDashBoardPanel"/>
+			<html:hidden property="dashBoardId" value="<%= dashBoardId %>"/>
 			<bean:define id="options" name="person" property="options"/>
-
 			<fr:edit name="options" slot="receiveNotificationsByEmail">
 				<fr:layout name="radio-postback">
 					<fr:property name="classes" value="nobullet liinline"/>
