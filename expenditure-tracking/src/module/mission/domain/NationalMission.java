@@ -28,6 +28,11 @@ public class NationalMission extends NationalMission_Base {
 	double result = 0.0;
 	final DateTime departure = personelExpenseItem.getStart();
 	final DateTime arrival = personelExpenseItem.getEnd();
+
+	if (!arrival.isAfter(departure)) {
+	    return Double.MAX_VALUE;
+	}
+
 	final Interval interval = new Interval(departure, arrival);
 	// Check if include lunch period
 	if (overlapsMeal(interval, departure, 13)) {
