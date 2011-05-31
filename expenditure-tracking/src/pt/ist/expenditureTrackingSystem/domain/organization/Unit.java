@@ -64,6 +64,7 @@ public class Unit extends Unit_Base implements Indexable, Searchable {
 
     public static final Comparator<Unit> COMPARATOR_BY_PRESENTATION_NAME = new Comparator<Unit>() {
 
+	@Override
 	public int compare(final Unit unit1, Unit unit2) {
 	    return unit1.getPresentationName().compareTo(unit2.getPresentationName());
 	}
@@ -148,8 +149,8 @@ public class Unit extends Unit_Base implements Indexable, Searchable {
 	    return new CostCenter(createUnitBean.getParentUnit(), createUnitBean.getName(), createUnitBean.getCostCenter());
 	}
 	if (createUnitBean.getProjectCode() != null) {
-	    final Unit unit = createRealUnit(createUnitBean.getParentUnit(), IstPartyType.PROJECT, createUnitBean
-		    .getProjectCode(), createUnitBean.getName());
+	    final Unit unit = createRealUnit(createUnitBean.getParentUnit(), IstPartyType.PROJECT,
+		    createUnitBean.getProjectCode(), createUnitBean.getName());
 	    final Project project = (Project) unit;
 	    project.setName(createUnitBean.getName());
 	    project.setProjectCode(createUnitBean.getProjectCode());
@@ -157,6 +158,16 @@ public class Unit extends Unit_Base implements Indexable, Searchable {
 	    return project;
 	}
 	return new Unit(createUnitBean.getParentUnit(), createUnitBean.getName());
+    }
+
+    @Service
+    public static Unit createTopLevelUnit(final module.organization.domain.Unit organizationUnit,
+	    ExpenditureTrackingSystem expenditureTrackingSystem) {
+	Unit newUnit = new Unit();
+	newUnit.setUnit(organizationUnit);
+	newUnit.setExpenditureTrackingSystem(expenditureTrackingSystem);
+	newUnit.setExpenditureTrackingSystemFromTopLevelUnit(expenditureTrackingSystem);
+	return newUnit;
     }
 
     @Service

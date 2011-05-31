@@ -2,10 +2,16 @@ package pt.ist.expenditureTrackingSystem.presentationTier.actions;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import module.organization.domain.OrganizationalModel;
+import module.organization.domain.Party;
+import module.organization.domain.Unit;
+import module.organization.presentationTier.actions.OrganizationModelAction.OrganizationalModelChart;
+import myorg.domain.MyOrg;
 import myorg.domain.VirtualHost;
 
 import org.apache.struts.action.ActionForm;
@@ -20,13 +26,13 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 @Mapping(path = "/expenditureConfiguration")
 public class ExpenditureConfigurationAction extends BaseAction {
 
-    public ActionForward viewConfiguration(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
+    public ActionForward viewConfiguration(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
 	return forward(request, "/expenditureConfiguration.jsp");
     }
 
-    public ActionForward saveConfiguration(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
+    public ActionForward saveConfiguration(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
 
 	final Set<SearchProcessValues> valuesToSet = new HashSet<SearchProcessValues>();
 	for (final SearchProcessValues values : SearchProcessValues.values()) {
@@ -40,13 +46,14 @@ public class ExpenditureConfigurationAction extends BaseAction {
 	final String acquisitionCreationWizardJsp = request.getParameter("acquisitionCreationWizardJsp");
 	final String institutionalProcessNumberPrefix = request.getParameter("institutionalProcessNumberPrefix");
 
-	ExpenditureTrackingSystem.getInstance().saveConfiguration(institutionalProcessNumberPrefix, acquisitionCreationWizardJsp, array);
+	ExpenditureTrackingSystem.getInstance().saveConfiguration(institutionalProcessNumberPrefix, acquisitionCreationWizardJsp,
+		array);
 
 	return viewConfiguration(mapping, form, request, response);
     }
 
-    public ActionForward createNewSystem(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
+    public ActionForward createNewSystem(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
 
 	final VirtualHost virtualHost = VirtualHost.getVirtualHostForThread();
 	ExpenditureTrackingSystem.createSystem(virtualHost);
@@ -54,8 +61,43 @@ public class ExpenditureConfigurationAction extends BaseAction {
 	return viewConfiguration(mapping, form, request, response);
     }
 
-    public ActionForward useSystem(final ActionMapping mapping, final ActionForm form,
+    public ActionForward prepareCreateTopLevelUnits(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
+
+	final ExpenditureTrackingSystem expenditureTrackingSystem = getDomainObject(request, "systemId");
+	request.setAttribute("systemId", expenditureTrackingSystem.getExternalId());
+
+	final Set<OrganizationalModel> organizationalModels = new TreeSet<OrganizationalModel>(
+		OrganizationalModel.COMPARATORY_BY_NAME);
+	organizationalModels.addAll(MyOrg.getInstance().getOrganizationalModelsSet());
+	request.setAttribute("organizationalModels", organizationalModels);
+	final OrganizationalModelChart organizationalModelChart = new OrganizationalModelChart(organizationalModels);
+	request.setAttribute("organizationalModelChart", organizationalModelChart);
+
+	return forward(request, "/createTopLevelUnits.jsp");
+    }
+
+    public ActionForward createTopLevelUnits(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+
+	final OrganizationalModel organizationModel = getDomainObject(request, "organizationalModelOid");
+	final ExpenditureTrackingSystem expenditureTrackingSystem = getDomainObject(request, "systemId");
+	for (Party party : organizationModel.getParties()) {
+	    if (!party.isUnit()) {
+		continue;
+	    }
+	    Unit unit = (Unit) party;
+	    if (unit.hasExpenditureUnit()) {
+		throw new RuntimeException("error.configuration.organization.already.has.system");
+	    }
+	    pt.ist.expenditureTrackingSystem.domain.organization.Unit
+		    .createTopLevelUnit(unit, expenditureTrackingSystem);
+	}
+	return viewConfiguration(mapping, form, request, response);
+    }
+
+    public ActionForward useSystem(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
 
 	final ExpenditureTrackingSystem expenditureTrackingSystem = getDomainObject(request, "systemId");
 	final VirtualHost virtualHost = VirtualHost.getVirtualHostForThread();

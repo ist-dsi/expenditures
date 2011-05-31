@@ -84,6 +84,14 @@
 							</html:link>
 					<%
 						}
+						if (!someExpenditureTrackingSystem.hasAnyTopLevelUnits()) {
+					%>
+							<br/>
+							<html:link action="<%= "/expenditureConfiguration.do?method=prepareCreateTopLevelUnits&amp;systemId=" + someExpenditureTrackingSystem.getExternalId() %>">
+								<bean:message key="link.topBar.configuration.virtual.hosts.create.top.level.units" bundle="EXPENDITURE_RESOURCES"/>
+							</html:link>
+					<%
+						}
 					%>
 				</td>
 			</tr>
