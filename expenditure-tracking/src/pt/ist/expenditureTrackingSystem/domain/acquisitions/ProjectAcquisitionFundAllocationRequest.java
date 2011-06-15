@@ -2,6 +2,7 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -11,10 +12,12 @@ import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.WorkflowProcess;
 import myorg.applicationTier.Authenticate;
 import myorg.domain.User;
+import myorg.domain.VirtualHost;
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.AbstractFundAllocationActivityInformation;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.AllocateProjectFundsPermanently;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.ProjectFundAllocation;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.ProjectFundAllocationActivityInformation;
 import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Project;
@@ -48,18 +51,20 @@ public class ProjectAcquisitionFundAllocationRequest extends ProjectAcquisitionF
 	final UnitItem unitItem = getUnitItem();
 	final ProjectFinancer financer = (ProjectFinancer) unitItem.getFinancer();
 
+	final String activityName = isFinalFundAllocation() ?
+		AllocateProjectFundsPermanently.class.getSimpleName()
+		: ProjectFundAllocation.class.getSimpleName();
+
 	final String projectFundAllocationIdsForAllUnitItems = financer.getProjectFundAllocationIdsForAllUnitItems();
 
 	final PaymentProcess process = financer.getProcess();
-
-	final String activityName = ProjectFundAllocation.class.getSimpleName();
+	
 	final WorkflowActivity activity = getActivity(process, activityName);
-
+	
 	final ActivityInformation activityInformation = activity.getActivityInformation(process);
-
-	final ProjectFundAllocationActivityInformation information = (ProjectFundAllocationActivityInformation) activity
-		.getActivityInformation(process);
-
+	
+	final ActivityInformation information = activity.getActivityInformation(process);
+	
 	final List<FundAllocationBean> args;
 	if (projectFundAllocationIdsForAllUnitItems == null) {
 	    args = Collections.emptyList();
@@ -68,7 +73,7 @@ public class ProjectAcquisitionFundAllocationRequest extends ProjectAcquisitionF
 	    fundAllocationBean.setFundAllocationId(projectFundAllocationIdsForAllUnitItems);
 	    args = Collections.singletonList(fundAllocationBean);
 	}
-	information.setBeans(args);
+	((AbstractFundAllocationActivityInformation) information).setBeans(args);
 
 	final myorg.applicationTier.Authenticate.UserView currentUserView = UserView.getUser();
 	final User user = User.findByUsername(operatorUsername);
@@ -104,7 +109,7 @@ public class ProjectAcquisitionFundAllocationRequest extends ProjectAcquisitionF
 	    final Money shareValueWithVat = unitItem.getShareValueWithVat();
 	    final Money shareVat = shareValueWithVat.subtract(shareValue);
 
-	    final String q = insertQuery("CABIMENTOS", 
+	    Object[] insertArgs = new Object[] {
 		    "INTERACT_ID", Long.valueOf(getInteractionId()),
 		    "PROCESS_ID", getProcessId(),
 		    "ITEM_ID", unitItem.getExternalId(),
@@ -119,14 +124,37 @@ public class ProjectAcquisitionFundAllocationRequest extends ProjectAcquisitionF
 		    "MOV_DESCRIPTION", limitStringSize(Integer.toString(item.getUnitItemsCount()) + " - " + item.getDescription(), 4000),
 		    "MOV_PCT_IVA", item.getVatValue(),
 		    "MOV_VALUE", shareValue,
-		    "MOV_VALUE_IVA", shareVat
-	    	);
+		    "MOV_VALUE_IVA", shareVat,
+//,
+//		    "CALLBACK_URL", getCallbackUrl()
+	    };
+	    if (isFinalFundAllocation()) {
+		final int l = insertArgs.length;
+		insertArgs = Arrays.copyOf(insertArgs, l + 2);
+		insertArgs[l] = "NTERACT_PARENT_ID";
+		insertArgs[l + 1] = getInitialInteractionId(unitItem);
+	    }
+
+	    final String q = insertQuery(insertArgs);
 	    System.out.println(q);
 	    return q;
 	}
-	final String q = selectQuery("CABIMENTOS", "INTERACT_ID", Long.valueOf(getInteractionId()),
-		"MGP_DESP_ID", "MGP_DESP_TYPE", "MPG_DESP_DATE", "MGP_DESP_OPERATOR");
+	final String q = isFinalFundAllocation() ?
+		selectQuery("INTERACT_ID", Long.valueOf(getInteractionId()),
+			"MGP_DESP_ID", "MGP_DESP_TYPE", "MPG_DESP_DATE", "MGP_DESP_OPERATOR") :
+		selectQuery("INTERACT_ID", Long.valueOf(getInteractionId()),
+			"MGP_DIST_ID", "MGP_DIST_TYPE", "MPG_DIST_DATE", "MGP_DESP_OPERATOR");
+	System.out.println(q);
 	return q;
+    }
+
+    private Object getInitialInteractionId(final UnitItem unitItem) {
+	for (final ProjectAcquisitionFundAllocationRequest request : unitItem.getProjectAcquisitionFundAllocationRequestSet()) {
+	    if (!request.isCanceled() && !request.isFinalFundAllocation()) {
+		return request.getInteractionId();
+	    }
+	}
+	return null;
     }
 
     @Override
@@ -188,6 +216,19 @@ public class ProjectAcquisitionFundAllocationRequest extends ProjectAcquisitionF
 	return null;
     }
 
-    
+    @Override
+    protected String getTableName() {
+	return isFinalFundAllocation() ? "JUSTIFICACOES" : "CABIMENTOS";
+    }
+
+    private String getCallbackUrl() {
+	final StringBuilder result = new StringBuilder();
+	result.append("http://");
+	result.append(VirtualHost.getVirtualHostForThread().getHostname());
+	result.append("/webservice/fundAllocationResultService/registerResult/");
+	result.append(getInteractionId());
+	result.append("/");
+	return result.toString();
+    }
 
 }
