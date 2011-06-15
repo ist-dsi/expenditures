@@ -72,6 +72,9 @@ public class ProjectAcquisitionFundAllocationRequest extends ProjectAcquisitionF
 
 	final myorg.applicationTier.Authenticate.UserView currentUserView = UserView.getUser();
 	final User user = User.findByUsername(operatorUsername);
+	if (user == null) {
+	    throw new NullPointerException("No user found for: " + operatorUsername);
+	}
 	final myorg.applicationTier.Authenticate.UserView userView = Authenticate.authenticate(user);
 	try {
 	    UserView.setUser(userView);
@@ -101,27 +104,29 @@ public class ProjectAcquisitionFundAllocationRequest extends ProjectAcquisitionF
 	    final Money shareValueWithVat = unitItem.getShareValueWithVat();
 	    final Money shareVat = shareValueWithVat.subtract(shareValue);
 
-	    return insertQuery("CABIMENTOS", 
+	    final String q = insertQuery("CABIMENTOS", 
 		    "INTERACT_ID", Long.valueOf(getInteractionId()),
 		    "PROCESS_ID", getProcessId(),
 		    "ITEM_ID", unitItem.getExternalId(),
 		    "PROJ_ID", getProjectId(unit),
 		    "PROJ_MEMBER", getSubProjectId(unit),
-//		    "!!!FALTA A UNIDADE DE EXPLORAÇÃO", accountingUnit.getName(),
-		    "SUPPLIER_ID", supplier == null ? null : supplier.getFiscalIdentificationCode(),
+//		    "!!!FALTA A UNIDADE DE EXPLORAÇÃO", accountingUnit.getName().substring(0, 2),
+		    "SUPPLIER_ID", supplier == null ? null : supplier.getGiafKey(),
 		    "SUPPLIER_DOC_TYPE", supplier == null ? null : "Proposta",
 		    "SUPPLIER_DOC_ID", supplier == null ? null : getProposalNumber(request),
 		    "CPV_ID", cpvReference.getCode(),
 		    "CPV_DESCRIPTION", cpvReference.getDescription(),
-		    "MOV_DESCRIPTION", Integer.toString(item.getUnitItemsCount()) + item.getDescription(),
+		    "MOV_DESCRIPTION", limitStringSize(Integer.toString(item.getUnitItemsCount()) + " - " + item.getDescription(), 4000),
 		    "MOV_PCT_IVA", item.getVatValue(),
 		    "MOV_VALUE", shareValue,
 		    "MOV_VALUE_IVA", shareVat
 	    	);
+	    System.out.println(q);
+	    return q;
 	}
-
-	return selectQuery("CABIMENTOS", "INTERACT_ID", Long.valueOf(getInteractionId()),
+	final String q = selectQuery("CABIMENTOS", "INTERACT_ID", Long.valueOf(getInteractionId()),
 		"MGP_DESP_ID", "MGP_DESP_TYPE", "MPG_DESP_DATE", "MGP_DESP_OPERATOR");
+	return q;
     }
 
     @Override
@@ -132,7 +137,11 @@ public class ProjectAcquisitionFundAllocationRequest extends ProjectAcquisitionF
 	    if (resultSet.next()) {
 		final String fundAllocationNumber = resultSet.getString(1);
 		final String operatorUsername = resultSet.getString(4);
-		removeExternalAccountingIntegrationSystemFromPendingResult();
+		if (fundAllocationNumber != null && operatorUsername != null) {
+		    System.out.println("fundAllocationNumber: " + fundAllocationNumber);
+		    System.out.println("operatorUsername: " + operatorUsername);
+		    registerFundAllocation(fundAllocationNumber, operatorUsername);
+		}
 	    }
 	}
     }
@@ -152,7 +161,11 @@ public class ProjectAcquisitionFundAllocationRequest extends ProjectAcquisitionF
     public String getSubProjectId(final Unit unit) {
 	if (unit instanceof SubProject) {
 	    final SubProject subProject = (SubProject) unit;
-	    return subProject.getName();
+	    final Project project = (Project) subProject.getParentUnit();
+	    final String projectName = project.getName();
+	    final String description = subProject.getName().substring(projectName.length() + 3);
+	    final int i = description.indexOf(" - ");
+	    return description.substring(0, i);
 	}
 	return null;
     }
