@@ -25,7 +25,7 @@ public class AllocateProjectFundsPermanently<P extends PaymentProcess> extends
     }
 
     public AllocateProjectFundsPermanentlyActivityInformation<P> getActivityInformation(P process) {
-	return new AllocateProjectFundsPermanentlyActivityInformation<P>(process, this);
+	return getActivityInformation(process, true);
     }
 
     @Override
@@ -41,6 +41,10 @@ public class AllocateProjectFundsPermanently<P extends PaymentProcess> extends
     @Override
     public String getUsedBundle() {
 	return "resources/AcquisitionResources";
+    }
+
+    public AllocateProjectFundsPermanentlyActivityInformation<P> getActivityInformation(P process, boolean takeProcess) {
+	return new AllocateProjectFundsPermanentlyActivityInformation<P>(process, this, takeProcess);
     }
 
 }

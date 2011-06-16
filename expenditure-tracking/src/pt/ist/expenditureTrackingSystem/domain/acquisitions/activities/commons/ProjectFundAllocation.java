@@ -22,7 +22,7 @@ public class ProjectFundAllocation<P extends PaymentProcess> extends
     }
 
     public ProjectFundAllocationActivityInformation<P> getActivityInformation(P process) {
-	return new ProjectFundAllocationActivityInformation<P>(process, this);
+	return getActivityInformation(process, true);
     }
 
     @Override
@@ -48,4 +48,9 @@ public class ProjectFundAllocation<P extends PaymentProcess> extends
     public boolean isDefaultInputInterfaceUsed() {
 	return false;
     }
+
+    public ProjectFundAllocationActivityInformation<P> getActivityInformation(P process, boolean takeProcess) {
+	return new ProjectFundAllocationActivityInformation<P>(process, this, takeProcess);
+    }
+
 }

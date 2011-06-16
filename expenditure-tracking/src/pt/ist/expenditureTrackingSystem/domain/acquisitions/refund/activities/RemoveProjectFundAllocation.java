@@ -4,6 +4,7 @@ import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import myorg.domain.User;
 import myorg.util.BundleUtil;
+import pt.ist.expenditureTrackingSystem._development.ExternalIntegration;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
@@ -19,7 +20,13 @@ public class RemoveProjectFundAllocation extends WorkflowActivity<RefundProcess,
 
     @Override
     protected void process(ActivityInformation<RefundProcess> activityInformation) {
-	activityInformation.getProcess().getRequest().resetProjectFundAllocationId(Person.getLoggedPerson());
+	final RefundProcess process = activityInformation.getProcess();
+	process.getRequest().resetProjectFundAllocationId(Person.getLoggedPerson());
+
+	if (ExternalIntegration.ACTIVE) {
+	    // TODO : only uncomment this line when we want to integrate with MGP
+	    //process.cancelFundAllocationRequest(false);
+	}
     }
 
     @Override

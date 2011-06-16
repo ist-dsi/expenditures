@@ -4,6 +4,7 @@ import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import myorg.domain.User;
 import myorg.util.BundleUtil;
+import pt.ist.expenditureTrackingSystem._development.ExternalIntegration;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
@@ -49,6 +50,11 @@ public class RemoveFundAllocationExpirationDate extends
 	process.getRequest().unSubmitForFundsAllocation();
 	if (!process.getAcquisitionProcessState().isCanceled()) {
 	    process.submitForApproval();
+	}
+
+	if (ExternalIntegration.ACTIVE) {
+	    // TODO : only uncomment this line when we want to integrate with MGP
+	    process.cancelFundAllocationRequest(false);
 	}
     }
 

@@ -9,6 +9,7 @@ import myorg.util.BundleUtil;
 
 import org.joda.time.LocalDate;
 
+import pt.ist.expenditureTrackingSystem._development.ExternalIntegration;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
@@ -59,8 +60,10 @@ public class FundAllocationExpirationDate extends
 
 	process.allocateFundsToSupplier();
 
-	// TODO : only uncomment this line when we want to integrate with MGP
-	//process.createFundAllocationRequest(false);
+	if (ExternalIntegration.ACTIVE) {
+	    // TODO : only uncomment this line when we want to integrate with MGP
+	    process.createFundAllocationRequest(false);
+	}
     }
 
     @Override

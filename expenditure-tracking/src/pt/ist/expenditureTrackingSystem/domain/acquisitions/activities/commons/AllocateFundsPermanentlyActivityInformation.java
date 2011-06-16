@@ -16,13 +16,9 @@ public class AllocateFundsPermanentlyActivityInformation<P extends PaymentProces
 	AbstractFundAllocationActivityInformation<P> {
 
     public AllocateFundsPermanentlyActivityInformation(P process,
-	    WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity) {
-	super(process, activity);
-	beans = new ArrayList<FundAllocationBean>();
-	if (process.getCurrentOwner() == null) {
-	    process.takeProcess();
-	}
-	generateBeans();
+	    WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity,
+	    final boolean takeProcess) {
+	super(process, activity, takeProcess);
     }
 
     @Override

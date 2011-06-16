@@ -10,6 +10,7 @@ import myorg.util.BundleUtil;
 
 import org.apache.commons.lang.StringUtils;
 
+import pt.ist.expenditureTrackingSystem._development.ExternalIntegration;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
@@ -32,8 +33,10 @@ public class ConfirmInvoice extends WorkflowActivity<RegularAcquisitionProcess, 
 	final RegularAcquisitionProcess process = activityInformation.getProcess();
 	process.confirmInvoiceBy(UserView.getCurrentUser().getExpenditurePerson());
 
-	// TODO : only uncomment this line when we want to integrate with MGP
-	//process.createFundAllocationRequest(true);
+	if (ExternalIntegration.ACTIVE) {
+	    // TODO : only uncomment this line when we want to integrate with MGP
+	    process.createFundAllocationRequest(true);
+	}
     }
 
     @Override

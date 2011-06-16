@@ -13,8 +13,9 @@ public class ProjectFundAllocationActivityInformation<T extends PaymentProcess> 
 	AbstractFundAllocationActivityInformation<T> {
 
     public ProjectFundAllocationActivityInformation(T process,
-	    WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity) {
-	super(process, activity);
+	    WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity,
+	    final boolean takeProcess) {
+	super(process, activity, takeProcess);
     }
 
     @Override

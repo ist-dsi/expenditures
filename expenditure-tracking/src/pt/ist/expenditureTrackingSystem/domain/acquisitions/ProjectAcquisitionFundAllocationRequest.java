@@ -51,28 +51,25 @@ public class ProjectAcquisitionFundAllocationRequest extends ProjectAcquisitionF
 	final UnitItem unitItem = getUnitItem();
 	final ProjectFinancer financer = (ProjectFinancer) unitItem.getFinancer();
 
-	final String activityName = isFinalFundAllocation() ?
-		AllocateProjectFundsPermanently.class.getSimpleName()
-		: ProjectFundAllocation.class.getSimpleName();
-
-	final String projectFundAllocationIdsForAllUnitItems = financer.getProjectFundAllocationIdsForAllUnitItems();
-
 	final PaymentProcess process = financer.getProcess();
-	
-	final WorkflowActivity activity = getActivity(process, activityName);
-	
-	final ActivityInformation activityInformation = activity.getActivityInformation(process);
-	
-	final ActivityInformation information = activity.getActivityInformation(process);
-	
+
+	final WorkflowActivity activity;
+	final ActivityInformation information;
+
 	final List<FundAllocationBean> args;
-	if (projectFundAllocationIdsForAllUnitItems == null) {
-	    args = Collections.emptyList();
+	final FundAllocationBean fundAllocationBean = new FundAllocationBean(financer);
+	if (isFinalFundAllocation()) {
+	    activity = getActivity(process, AllocateProjectFundsPermanently.class.getSimpleName());
+	    information = ((AllocateProjectFundsPermanently) activity).getActivityInformation(process, false);
+	    fundAllocationBean.setEffectiveFundAllocationId(fundAllocationNumber);
 	} else {
-	    final FundAllocationBean fundAllocationBean = new FundAllocationBean(financer);
-	    fundAllocationBean.setFundAllocationId(projectFundAllocationIdsForAllUnitItems);
-	    args = Collections.singletonList(fundAllocationBean);
+	    activity = getActivity(process, ProjectFundAllocation.class.getSimpleName());
+	    information = ((ProjectFundAllocation) activity).getActivityInformation(process, false);
+	    fundAllocationBean.setFundAllocationId(fundAllocationNumber);
 	}
+
+	args = Collections.singletonList(fundAllocationBean);
+
 	((AbstractFundAllocationActivityInformation) information).setBeans(args);
 
 	final myorg.applicationTier.Authenticate.UserView currentUserView = UserView.getUser();

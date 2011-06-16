@@ -5,6 +5,7 @@ import module.workflow.activities.WorkflowActivity;
 import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.User;
 import myorg.util.BundleUtil;
+import pt.ist.expenditureTrackingSystem._development.ExternalIntegration;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
@@ -27,8 +28,10 @@ public class CancelInvoiceConfirmation extends
 	final RegularAcquisitionProcess process = activityInformation.getProcess();
 	process.cancelInvoiceConfirmationBy(UserView.getCurrentUser().getExpenditurePerson());
 
-	// TODO : only uncomment this line when we want to integrate with MGP
-	//process.cancelFundAllocationRequest(true);
+	if (ExternalIntegration.ACTIVE) {
+	    // TODO : only uncomment this line when we want to integrate with MGP
+	    process.cancelFundAllocationRequest(true);
+	}
     }
 
     @Override

@@ -21,7 +21,7 @@ public class FundAllocation<P extends PaymentProcess> extends WorkflowActivity<P
     }
 
     public FundAllocationActivityInformation<P> getActivityInformation(P process) {
-	return new FundAllocationActivityInformation<P>(process, this);
+	return new FundAllocationActivityInformation<P>(process, this, true);
     }
 
     @Override

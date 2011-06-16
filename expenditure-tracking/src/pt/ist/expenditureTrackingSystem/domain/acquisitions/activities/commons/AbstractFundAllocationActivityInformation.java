@@ -15,11 +15,12 @@ public abstract class AbstractFundAllocationActivityInformation<T extends Paymen
 
     protected List<FundAllocationBean> beans;
 
-    public AbstractFundAllocationActivityInformation(T process,
-	    WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity) {
+    public AbstractFundAllocationActivityInformation(final T process,
+	    final WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity,
+	    final boolean takeProcess) {
 	super(process, activity);
 	beans = new ArrayList<FundAllocationBean>();
-	if (process.getCurrentOwner() == null) {
+	if (takeProcess && process.getCurrentOwner() == null) {
 	    process.takeProcess();
 	}
 	generateBeans();

@@ -12,8 +12,9 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 public class FundAllocationActivityInformation<T extends PaymentProcess> extends AbstractFundAllocationActivityInformation<T> {
 
     public FundAllocationActivityInformation(T process,
-	    WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity) {
-	super(process, activity);
+	    WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity,
+	    final boolean takeProcess) {
+	super(process, activity, takeProcess);
     }
 
     @Override
