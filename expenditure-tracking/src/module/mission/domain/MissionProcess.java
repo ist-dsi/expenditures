@@ -527,7 +527,9 @@ public abstract class MissionProcess extends MissionProcess_Base {
     }
 
     public boolean isReadyForMissionTermination(final User user) {
-	return (isRequestor(user) || isMissionResponsible(user)) && isReadyForMissionTermination();
+	return !isCanceled()
+		&& (isRequestor(user) || isMissionResponsible(user))
+		&& isReadyForMissionTermination();
     }
 
     public void sendForProcessTermination(final String descriptionOfChangesAfterArrival) {
