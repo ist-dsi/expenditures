@@ -206,10 +206,14 @@ public class MissionYear extends MissionYear_Base {
 	@Override
 	boolean shouldAdd(final MissionProcess missionProcess, final User user) {
 	    return (!missionProcess.hasCurrentOwner() || missionProcess.isTakenByCurrentUser())
-	    && (missionProcess.hasCurrentQueue() && missionProcess.getCurrentQueue().isCurrentUserAbleToAccessQueue()
-		    && (missionProcess.isAuthorized() || missionProcess.hasNoItemsAndParticipantesAreAuthorized()) && missionProcess
-		    .areAllParticipantsAuthorized()) || missionProcess.isReadyForMissionTermination(user)
-		    || (missionProcess.isTerminated() && !missionProcess.isArchived() && missionProcess.canArchiveMission());
+	    	&& (missionProcess.hasCurrentQueue()
+    	    		&& missionProcess.getCurrentQueue().isCurrentUserAbleToAccessQueue()
+    	    		&& (missionProcess.isAuthorized() || missionProcess.hasNoItemsAndParticipantesAreAuthorized())
+    	    		&& missionProcess.areAllParticipantsAuthorized())
+    	    	|| missionProcess.isReadyForMissionTermination(user)
+    	    	|| (missionProcess.isTerminated()
+    	    		&& !missionProcess.isArchived()
+    	    		&& missionProcess.canArchiveMission());
 	}
 	
     }
