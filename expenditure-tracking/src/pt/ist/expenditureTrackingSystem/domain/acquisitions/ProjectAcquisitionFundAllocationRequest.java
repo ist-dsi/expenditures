@@ -138,9 +138,9 @@ public class ProjectAcquisitionFundAllocationRequest extends ProjectAcquisitionF
 	}
 	final String q = isFinalFundAllocation() ?
 		selectQuery("INTERACT_ID", Long.valueOf(getInteractionId()),
-			"MGP_DESP_ID", "MGP_DESP_TYPE", "MPG_DESP_DATE", "MGP_DESP_OPERATOR") :
+			"MGP_DIST_ID", "MGP_DIST_TYPE", "MPG_DIST_DATE", "MGP_DESP_OPERATOR") :
 		selectQuery("INTERACT_ID", Long.valueOf(getInteractionId()),
-			"MGP_DIST_ID", "MGP_DIST_TYPE", "MPG_DIST_DATE", "MGP_DESP_OPERATOR");
+			"MGP_DESP_ID", "MGP_DESP_TYPE", "MPG_DESP_DATE", "MGP_DESP_OPERATOR");
 	System.out.println(q);
 	return q;
     }
