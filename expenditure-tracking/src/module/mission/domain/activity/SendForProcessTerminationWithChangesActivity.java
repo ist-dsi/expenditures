@@ -5,7 +5,8 @@ import module.workflow.activities.ActivityInformation;
 import myorg.domain.User;
 import myorg.util.BundleUtil;
 
-public class SendForProcessTerminationWithChangesActivity extends MissionProcessActivity<MissionProcess, SendForProcessTerminationWithChangesActivityInformation> {
+public class SendForProcessTerminationWithChangesActivity extends
+	MissionProcessActivity<MissionProcess, SendForProcessTerminationWithChangesActivityInformation> {
 
     @Override
     public String getLocalizedName() {
@@ -25,7 +26,7 @@ public class SendForProcessTerminationWithChangesActivity extends MissionProcess
 
     @Override
     public ActivityInformation<MissionProcess> getActivityInformation(MissionProcess process) {
-        return new SendForProcessTerminationWithChangesActivityInformation(process, this);
+	return new SendForProcessTerminationWithChangesActivityInformation(process, this);
     }
 
     @Override
@@ -36,7 +37,11 @@ public class SendForProcessTerminationWithChangesActivity extends MissionProcess
     @Override
     public String getLocalizedConfirmationMessage() {
 	return BundleUtil.getFormattedStringFromResourceBundle("resources/MissionResources",
-		"label.module.mission.SendForProcessTerminationWithChangesActivity.confirmation");
+		"label.module.mission.SendForProcessTerminationWithChangesActivity.confirmation")
+		+ "<br/>"
+		+ "<br/>"
+		+ BundleUtil.getFormattedStringFromResourceBundle("resources/MissionResources",
+			"label.module.mission.SendForProcessTerminationWithChangesActivity.confirmation.next.page");
     }
 
 }
