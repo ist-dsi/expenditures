@@ -93,6 +93,7 @@ public class Person extends Person_Base implements Indexable, Searchable {
 
     protected Person() {
 	super();
+	setMyOrg(MyOrg.getInstance());
 	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
 	new Options(this);
     }
