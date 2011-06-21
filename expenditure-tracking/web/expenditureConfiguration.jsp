@@ -84,7 +84,7 @@
 							</html:link>
 					<%
 						}
-						if (!someExpenditureTrackingSystem.hasAnyTopLevelUnits()) {
+						if (someExpenditureTrackingSystem != null && !someExpenditureTrackingSystem.hasAnyTopLevelUnits()) {
 					%>
 							<br/>
 							<html:link action="<%= "/expenditureConfiguration.do?method=prepareCreateTopLevelUnits&amp;systemId=" + someExpenditureTrackingSystem.getExternalId() %>">
