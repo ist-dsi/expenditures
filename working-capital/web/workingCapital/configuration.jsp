@@ -14,6 +14,10 @@
 
 <h3><bean:message key="link.topBar.configuration.all.virtual.hosts" bundle="WORKING_CAPITAL_RESOURCES"/></h3>
 
+<%
+	final WorkingCapitalSystem currentWorkingCapitalSystem = WorkingCapitalSystem.getInstanceForCurrentHost();
+%>
+
 <table class="tstyle2">
 	<tr>
 		<th>
@@ -29,7 +33,6 @@
 		</th>
 	</tr>
 	<bean:define id="currentVirtualHost" name="currentVirtualHost"/>
-	<bean:define id="currentWorkingCapitalSystem" name="currentWorkingCapitalSystem"/>
 	<%
 		for (final VirtualHost virtualHost : MyOrg.getInstance().getVirtualHostsSet()) {
 	%>
