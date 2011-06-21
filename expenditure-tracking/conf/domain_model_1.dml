@@ -462,6 +462,13 @@ relation ExpenditureTrackingSystemPerson {
 	}
 }
 
+relation MyOrgExpenditureTrackingSystemPerson {
+	.myorg.domain.MyOrg playsRole myOrg;
+	organization.Person playsRole peopleFromExpenditureTackingSystem {
+		multiplicity *;
+	}
+}
+
 relation ExpenditureTrackingSystemUnit {
 	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
 	organization.Unit playsRole units {
