@@ -50,7 +50,9 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
 	    workingCapital = new WorkingCapital(year, unit, person);
 	} else {
 	    final WorkingCapitalInitialization workingCapitalInitialization = workingCapital.getWorkingCapitalInitialization();
-	    if (workingCapitalInitialization != null && !workingCapitalInitialization.isCanceledOrRejected()) {
+	    if (workingCapitalInitialization != null
+		    && !workingCapitalInitialization.isCanceledOrRejected()
+		    && !workingCapital.isRefunded()) {
 		throw new DomainException("message.working.capital.exists.for.year.and.unit");
 	    }
 	}
