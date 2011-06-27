@@ -27,13 +27,13 @@ import pt.ist.fenixWebFramework.security.UserView;
 
 public class ProjectAcquisitionFundAllocationRequest extends ProjectAcquisitionFundAllocationRequest_Base {
 
-    public ProjectAcquisitionFundAllocationRequest(final UnitItem unitItem, final String processId, final String processUrl,
+    public ProjectAcquisitionFundAllocationRequest(final UnitItem unitItem, final String processId, final PaymentProcess process,
 	    final Integer payingUnitNumber, final String payingAccountingUnit, final Money totalValue,
 	    final Boolean finalFundAllocation) {
 	super();
 	setUnitItem(unitItem);
 	setProcessId(processId);
-	setProcessUrl(processUrl);
+	setProcessUrl(getProcessUrl(process));
 	setPayingUnitNumber(payingUnitNumber);
 	setPayingAccountingUnit(payingAccountingUnit);
 	setTotalValue(totalValue);
@@ -101,6 +101,7 @@ public class ProjectAcquisitionFundAllocationRequest extends ProjectAcquisitionF
 	    final CPVReference cpvReference = item.getCPVReference();
 	    final RequestWithPayment request = item.getRequest();
 	    final Supplier supplier = getSupplier(request);
+	    final PaymentProcess process = request.getProcess();
 
 	    final Money shareValue = unitItem.getShareValue();
 	    final Money shareValueWithVat = unitItem.getShareValueWithVat();
@@ -122,8 +123,8 @@ public class ProjectAcquisitionFundAllocationRequest extends ProjectAcquisitionF
 		    "MOV_PCT_IVA", item.getVatValue(),
 		    "MOV_VALUE", shareValue,
 		    "MOV_VALUE_IVA", shareVat,
-//,
-//		    "CALLBACK_URL", getCallbackUrl()
+//,		    "CALLBACK_URL", getCallbackUrl()
+		    "PROCESS_URL", getProcessUrl(process)
 	    };
 	    if (isFinalFundAllocation()) {
 		final int l = insertArgs.length;
@@ -220,7 +221,7 @@ public class ProjectAcquisitionFundAllocationRequest extends ProjectAcquisitionF
 
     private String getCallbackUrl() {
 	final StringBuilder result = new StringBuilder();
-	result.append("http://");
+	result.append("https://");
 	result.append(VirtualHost.getVirtualHostForThread().getHostname());
 	result.append("/webservice/fundAllocationResultService/registerResult/");
 	result.append(getInteractionId());

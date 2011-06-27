@@ -211,7 +211,7 @@ public class ProjectFinancer extends ProjectFinancer_Base {
 	    
 	    new ProjectAcquisitionFundAllocationRequest(unitItem,
 		    process.getProcessNumber(),
-		    process.getProcessUrl(),
+		    process,
 		    unit.getUnitNumber(),
 		    accountingUnit.getName(),
 		    getAmountAllocated(),
