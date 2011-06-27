@@ -352,15 +352,21 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
     }
 
     @Service
-    public void saveConfiguration(final String institutionalProcessNumberPrefix, final String acquisitionCreationWizardJsp, final SearchProcessValuesArray array) {
+    public void saveConfiguration(final String institutionalProcessNumberPrefix, final String acquisitionCreationWizardJsp, final SearchProcessValuesArray array, final Boolean invoiveAllowedToStartAcquisitionProcess) {
 	setInstitutionalProcessNumberPrefix(institutionalProcessNumberPrefix);
 	setAcquisitionCreationWizardJsp(acquisitionCreationWizardJsp);
 	setSearchProcessValuesArray(array);
+	setInvoiveAllowedToStartAcquisitionProcess(invoiveAllowedToStartAcquisitionProcess);
     }
 
     @Service
     public void setForVirtualHost(final VirtualHost virtualHost) {
 	virtualHost.setExpenditureTrackingSystem(this);
+    }
+
+    public static boolean isInvoiveAllowedToStartAcquisitionProcess() {
+	final ExpenditureTrackingSystem system = getInstance();
+	return system.getInvoiveAllowedToStartAcquisitionProcess().booleanValue();
     }
 
 }

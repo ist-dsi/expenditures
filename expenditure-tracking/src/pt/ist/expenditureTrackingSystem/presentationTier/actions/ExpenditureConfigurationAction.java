@@ -46,8 +46,14 @@ public class ExpenditureConfigurationAction extends BaseAction {
 	final String acquisitionCreationWizardJsp = request.getParameter("acquisitionCreationWizardJsp");
 	final String institutionalProcessNumberPrefix = request.getParameter("institutionalProcessNumberPrefix");
 
-	ExpenditureTrackingSystem.getInstance().saveConfiguration(institutionalProcessNumberPrefix, acquisitionCreationWizardJsp,
-		array);
+	final String invoiveAllowedToStartAcquisitionProcessParam = request.getParameter("invoiveAllowedToStartAcquisitionProcess");
+	final Boolean invoiveAllowedToStartAcquisitionProcess = Boolean.valueOf("on".equals(invoiveAllowedToStartAcquisitionProcessParam));
+
+	ExpenditureTrackingSystem.getInstance().saveConfiguration(
+		institutionalProcessNumberPrefix,
+		acquisitionCreationWizardJsp,
+		array,
+		invoiveAllowedToStartAcquisitionProcess);
 
 	return viewConfiguration(mapping, form, request, response);
     }

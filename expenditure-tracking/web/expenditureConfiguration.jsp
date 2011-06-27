@@ -158,6 +158,25 @@
 	%>
 	</table>
 
+	<h4>
+		<bean:message key="label.configuration.process.flow" bundle="EXPENDITURE_RESOURCES"/>
+	</h4>
+	<table>
+		<tr>
+			<td>
+				<bean:message key="label.configuration.process.flow.start.with.invoive" bundle="EXPENDITURE_RESOURCES"/>
+			</td>
+			<td>
+				<input type="checkbox" name="invoiveAllowedToStartAcquisitionProcess"
+					<% if (expenditureTrackingSystem.getInvoiveAllowedToStartAcquisitionProcess() != null
+								&& expenditureTrackingSystem.getInvoiveAllowedToStartAcquisitionProcess().booleanValue()) {%>
+							checked="checked"
+					<% } %>
+				/>
+			</td>
+		</tr>
+	</table>
+
 	<html:submit styleClass="inputbutton">
 		<bean:message key="renderers.form.submit.name" bundle="RENDERER_RESOURCES"/>
 	</html:submit>
