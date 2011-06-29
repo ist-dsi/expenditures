@@ -56,7 +56,7 @@ public class ExportStructureService {
 	final String eUsername = PropertiesManager.getProperty(keyUsername);
 	final String ePassword = PropertiesManager.getProperty(keyPassword);
 
-	if (!match(username, eUsername) && match(password, ePassword)) {
+	if (!match(username, eUsername) || !match(password, ePassword)) {
 	    throw new Error("unauthorized.access");
 	}
     }
