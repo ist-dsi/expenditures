@@ -16,7 +16,7 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 public class ExportStructureService {
 
     @GET
-    @Path("listCostCenters/{username}/{password}")
+    @Path("{username}/{password}/listCostCenters.csv")
     @Produces("text/csv")
     public Response listCostCenters(@PathParam("username") final String username,
 	    @PathParam("password") final String password) {
