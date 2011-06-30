@@ -463,6 +463,28 @@ public class Unit extends Unit_Base implements Indexable, Searchable {
 	return hasParentUnit(getUnit());
     }
 
+    protected static boolean isActive(final module.organization.domain.Unit unit) {
+	for (final Accountability accountability : unit.getParentAccountabilitiesSet()) {
+	    if (accountability.getAccountabilityType() == IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType()
+		    && accountability.isActiveNow()) {
+		final Party parent = accountability.getParent();
+		if (parent.getOrganizationalModelsSet().isEmpty()) {
+		    if (parent.isUnit() && isActive((module.organization.domain.Unit) parent)) {
+			return true;
+		    }
+		} else {
+		    return true;
+		}
+	    }
+	}
+	return false;
+    }
+
+    public boolean isActive() {
+	final module.organization.domain.Unit unit = getUnit();
+	return isActive(unit);
+    }
+
     private static boolean hasParentUnit(final module.organization.domain.Unit unit) {
 	for (final Accountability accountability : unit.getParentAccountabilitiesSet()) {
 	    if (accountability.getAccountabilityType() == IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType()) {

@@ -42,8 +42,7 @@ public class ExportStructureService {
     }
 
     private boolean isActive(final CostCenter costCenter) {
-	// TODO : review this...
-	return true;
+	return costCenter.isActive();
     }
 
     private void check(final String username, final String password) {
