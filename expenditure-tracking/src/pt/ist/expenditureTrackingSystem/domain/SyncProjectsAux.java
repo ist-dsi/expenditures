@@ -15,6 +15,7 @@ import module.organization.domain.Accountability;
 import module.organization.domain.Party;
 import module.organizationIst.domain.IstAccountabilityType;
 import module.organizationIst.domain.IstPartyType;
+import myorg.domain.VirtualHost;
 import myorg.domain.util.Money;
 import pt.ist.dbUtils.ExternalDbOperation;
 import pt.ist.dbUtils.ExternalDbQuery;
@@ -31,7 +32,7 @@ import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.pstm.Transaction;
 import pt.utl.ist.fenix.tools.util.FileUtils;
 
-public class SyncProjectsAux {
+public abstract class SyncProjectsAux {
 
     public static class MgpSubProject {
 	private String institution;
@@ -73,57 +74,6 @@ public class SyncProjectsAux {
 	}
 
     }
-
-/*
-    public static class SubAccountingUnit {
-	private String username;
-	private String groupName;
-	private String start;
-	private String end;
-
-	SubAccountingUnit(final ResultSet resultSet) throws SQLException {
-	    username = resultSet.getString(1).replace("\"", "").trim();
-	    groupName = resultSet.getString(2).replace("\"", "").trim();
-	    start = resultSet.getString(3);
-	    end = resultSet.getString(4);
-	}
-
-	public String getUsername() {
-	    return username;
-	}
-
-	public String getGroupName() {
-	    return groupName;
-	}
-
-	public String getStart() {
-	    return start;
-	}
-
-	public String getEnd() {
-	    return end;
-	}
-
-	public DateTime getStartDate() {
-	    return getDate(start);
-	}
-
-	public DateTime getEndDate() {
-	    return getDate(end);
-	}
-
-	protected static DateTime getDate(final String dateString) {
-	    if (dateString == null || dateString.isEmpty()) {
-		return null;
-	    }
-	    final int year = Integer.parseInt(dateString.substring(0, 4));
-	    final int month = Integer.parseInt(dateString.substring(5, 7));
-	    final int day = Integer.parseInt(dateString.substring(8, 10));
-	    return new DateTime(year, month, day, 0, 0, 0, 0);
-	}
-
-    }
-*/
 
     public static class MgpProject {
 	private String projectCode;
@@ -221,52 +171,7 @@ public class SyncProjectsAux {
 
     }
 
-/*
-    private static class SubAccountingUnitQuery extends ExternalDbQuery {
-
-	private final Map<String, SubAccountingUnit> subAccountingUnits = new TreeMap<String, SubAccountingUnit>();
-
-	@Override
-	protected String getQueryString() {
-	    return "SELECT a.utilizador, a.grupo, a.inicio, a.fim FROM utilizadores2grupo a";
-	}
-
-	@Override
-	protected void processResultSet(final ResultSet resultSet) throws SQLException {
-	    int i = 0;
-	    while (resultSet.next()) {
-		i++;
-		final SubAccountingUnit subAccountingUnit = new SubAccountingUnit(resultSet);
-		if (isValid(subAccountingUnit)) {
-		    subAccountingUnits.put(subAccountingUnit.getUsername(), subAccountingUnit);
-		    System.out.println("Putting: " + subAccountingUnit.username + " " + subAccountingUnit.groupName);
-		} else {
-		    System.out.println("Invalid subaccounting unit: " + subAccountingUnit.groupName + " "
-			    + subAccountingUnit.start + " " + subAccountingUnit.end);
-		}
-	    }
-	    System.out.println("Result set has " + i + " elements projects with subAccountingUnits.");
-	    System.out.println("Loaded " + subAccountingUnits.size() + " projects with subAccountingUnits.");
-
-	    for (final Entry<String, SubAccountingUnit> entry : subAccountingUnits.entrySet()) {
-		System.out.println("   " + entry.getKey() + " -> " + entry.getValue().groupName + " : "
-			+ entry.getValue().getStart() + " - " + entry.getValue().getEnd());
-	    }
-	}
-
-	private boolean isValid(final SubAccountingUnit subAccountingUnit) {
-	    final DateTime start = subAccountingUnit.getStartDate();
-	    final DateTime end = subAccountingUnit.getEndDate();
-	    return (start == null || !start.isAfterNow()) && (end == null || !end.isBeforeNow());
-	}
-
-	Map<String, SubAccountingUnit> getSubAccountingUnits() {
-	    return subAccountingUnits;
-	}
-    }
-*/
-
-    private static class ProjectQuery implements ExternalDbQuery {
+    public static class ProjectQuery implements ExternalDbQuery {
 
 	private final Set<MgpProject> mgpProjects = new HashSet<MgpProject>();
 
@@ -290,11 +195,11 @@ public class SyncProjectsAux {
 	}
     }
 
-    private static class OtherProjectCoordinatorsQuery implements ExternalDbQuery {
+    public static class OtherProjectCoordinatorsQuery implements ExternalDbQuery {
 
 	private final Set<MgpProject> mgpProjects;
 
-	private OtherProjectCoordinatorsQuery(final Set<MgpProject> mgpProjects) {
+	public OtherProjectCoordinatorsQuery(final Set<MgpProject> mgpProjects) {
 	    this.mgpProjects = mgpProjects;
 	}
 
@@ -330,36 +235,19 @@ public class SyncProjectsAux {
 	}
     }
 
-/*
-    public static class SubAccountingUnitReader extends ExternalDbOperation {
-
-	private Map<String, SubAccountingUnit> subAccountingUnit = null;
-
-	@Override
-	protected String getDbPropertyPrefix() {
-	    return "db.mgp";
-	}
-
-	@Override
-	protected void doOperation() throws SQLException {
-	    final SubAccountingUnitQuery subAccountingUnitQuery = new SubAccountingUnitQuery();
-	    executeQuery(subAccountingUnitQuery);
-	    subAccountingUnit = subAccountingUnitQuery.getSubAccountingUnits();
-	}
-
-	public Map<String, SubAccountingUnit> getSubAccountingUnits() {
-	    return subAccountingUnit;
-	}
-    }
-*/
-
     public static class ProjectReader extends ExternalDbOperation {
 
 	private Set<MgpProject> mgpProjects = null;
 
+	private final String dbPrefix;
+
+	public ProjectReader(final String dbPrefix) {
+	    this.dbPrefix = dbPrefix;
+	}
+
 	@Override
 	protected String getDbPropertyPrefix() {
-	    return "db.mgp";
+	    return dbPrefix;
 	}
 
 	@Override
@@ -378,7 +266,7 @@ public class SyncProjectsAux {
 	}
     }
 
-    private static class SubProjectQuery implements ExternalDbQuery {
+    public static class SubProjectQuery implements ExternalDbQuery {
 
 	private final Set<MgpProject> mgpProjects;
 
@@ -427,41 +315,48 @@ public class SyncProjectsAux {
     int updatedSubProjects = 0;
     int disconnectedSubProjects = 0;
     private Map<String, String> employees = new HashMap<String, String>();
-    private Set<Integer> projectResponsibles = new HashSet<Integer>();
+    protected Set<Integer> projectResponsibles = new HashSet<Integer>();
+
+    protected abstract String getDbPropertyPrefix();
+
+    protected abstract String getVirtualHost();
 
     @Service
     public void syncData() throws IOException, SQLException {
-//	final SubAccountingUnitReader subAccountingUnitReader = new SubAccountingUnitReader();
-//	subAccountingUnitReader.execute();
-//	final Map<String, SubAccountingUnit> subAccountingUnits = subAccountingUnitReader.getSubAccountingUnits();
+	try {
+	    System.out.println("Running sync for: " + getVirtualHost());
+	    VirtualHost.setVirtualHostForThread(getVirtualHost());
 
-	final ProjectReader projectReader = new ProjectReader();
-	projectReader.execute();
-	final Set<MgpProject> mgpProjects = projectReader.getMgpProjects();
+	    final ProjectReader projectReader = new ProjectReader(getDbPropertyPrefix());
+	    projectReader.execute();
+	    final Set<MgpProject> mgpProjects = projectReader.getMgpProjects();
 
-	System.out.println("Read " + mgpProjects.size() + " projects from mgp.");
+	    System.out.println("Read " + mgpProjects.size() + " projects from mgp.");
 
-	loadEmployees();
-	loadTeachers();
-	loadProjectResponsiblesSet();
+	    loadEmployees();
+	    loadTeachers();
+	    loadProjectResponsiblesSet();
 
-	for (final MgpProject mgpProject : mgpProjects) {
-	    Project project = Project.findProjectByCode(mgpProject.projectCode);
-	    if (project == null) {
-		createdProjects++;
-		createProject(/* subAccountingUnits, */ mgpProject);
-	    } else {
-		updatedProjects++;
-		updateProject(/* subAccountingUnits, */ mgpProject, project);
+	    for (final MgpProject mgpProject : mgpProjects) {
+		Project project = Project.findProjectByCode(mgpProject.projectCode);
+		if (project == null) {
+		    createdProjects++;
+		    createProject(mgpProject);
+		} else {
+		    updatedProjects++;
+		    updateProject(mgpProject, project);
+		}
 	    }
-	}
 
-	System.out.println("Created " + createdProjects + " projects.");
-	System.out.println("Created " + createdSubProjects + " sub-projects.");
-	System.out.println("Updated " + updatedProjects + " projects.");
-	System.out.println("Updated " + updatedSubProjects + " sub-projects.");
-	System.out.println("Found   " + disconnectedSubProjects + " diconnected sub-projects.");
-	System.out.println("Did not find " + notFoundCostCenters.size() + " cost centers.");
+	    System.out.println("Created " + createdProjects + " projects.");
+	    System.out.println("Created " + createdSubProjects + " sub-projects.");
+	    System.out.println("Updated " + updatedProjects + " projects.");
+	    System.out.println("Updated " + updatedSubProjects + " sub-projects.");
+	    System.out.println("Found   " + disconnectedSubProjects + " diconnected sub-projects.");
+	    System.out.println("Did not find " + notFoundCostCenters.size() + " cost centers.");
+	} finally {
+	    VirtualHost.releaseVirtualHostFromThread();
+	}
     }
 
     private void loadTeachers() throws SQLException {
@@ -556,7 +451,7 @@ public class SyncProjectsAux {
 	    for (final String responsibleString : responsibleStrings) {
 		final Person responsible = findPerson(responsibleString);
 		if (responsible != null) {
-		    if (projectResponsibles.contains(Integer.valueOf(responsibleString))) {
+		    if (isResponsabilityAllowed(responsibleString)) {
 			final Authorization authorization = new Authorization(responsible, unit, "Imported from MGP");
 			authorization.setMaxAmount(AUTHORIZED_VALUE);
 		    } else {
@@ -581,21 +476,11 @@ public class SyncProjectsAux {
 		}
 	    }
 
-/*
-	    if (accountManagerPerson != null) {
-		final SubAccountingUnit subAccountingUnitRemote = subAccountingUnits.get(accountManagerPerson.getUsername());
-		if (subAccountingUnitRemote != null) {
-		    final String subName = "20 - " + subAccountingUnitRemote.getGroupName();
-		    final AccountingUnit subAccountingUnit = AccountingUnit.readAccountingUnitByUnitName(subName);
-		    if (subAccountingUnit != null) {
-			unit.setAccountingUnit(accountingUnit);
-		    } else {
-			System.out.println("Unable to find accounting unit with name: " + subAccountingUnitRemote.getGroupName());
-		    }
-		}
-	    }
-*/
 	}
+    }
+
+    protected boolean isResponsabilityAllowed(final String responsibleString) {
+	return true;
     }
 
     final static Money AUTHORIZED_VALUE = new Money("75000");
@@ -618,18 +503,6 @@ public class SyncProjectsAux {
 
 	project.setAccountManager(accountManagerPerson);
 
-	// if (type.equalsIgnoreCase("i")) {
-	// if (project.getDefaultRegeimIsCCP().booleanValue()) {
-	// project.setDefaultRegeimIsCCP(Boolean.FALSE);
-	// System.out.println("Updatiny: " + projectCodeString + " to r and d");
-	// }
-	// } else {
-	// if (!project.getDefaultRegeimIsCCP()) {
-	// project.setDefaultRegeimIsCCP(Boolean.TRUE);
-	// System.out.println("Updatiny: " + projectCodeString + " to ccp");
-	// }
-	// }
-
 	AccountingUnit accountingUnit = AccountingUnit.readAccountingUnitByUnitName(accountingUnitString);
 	if (subAccountingUnitString != null && !subAccountingUnitString.isEmpty()) {
 	    final AccountingUnit subAccountingUnit = AccountingUnit.readAccountingUnitByUnitName("20 - " + subAccountingUnitString);
@@ -644,22 +517,6 @@ public class SyncProjectsAux {
 	if (changeAccountingUnit) {
 	    changeAccountingUnit(project, accountingUnit);
 	}
-
-/*
-	if (accountManagerPerson != null) {
-	    final SubAccountingUnit subAccountingUnitRemote = subAccountingUnits.get(accountManagerPerson.getUsername());
-	    if (subAccountingUnitRemote != null) {
-		final String subName = "20 - " + subAccountingUnitRemote.getGroupName();
-		final AccountingUnit subAccountingUnit = AccountingUnit.readAccountingUnitByUnitName(subName);
-		if (subAccountingUnit != null) {
-		    changeAccountingUnit(project, subAccountingUnit);
-		} else {
-		    System.out.println("Unable to find accounting unit with name: [" + subAccountingUnitRemote.getGroupName()
-			    + "]");
-		}
-	    }
-	}
-*/
 
 	for (final String responsibleString : responsibleStrings) {
 	    final Person responsible = findPerson(responsibleString);
@@ -692,11 +549,6 @@ public class SyncProjectsAux {
 	    final SubProject subProject = project.findSubProjectByNamePrefix(mgpSubProject.institution);
 	    if (subProject == null) {
 		createdSubProjects++;
-		// System.out.println("Creating subproject: " +
-		// mgpSubProject.getInstitution() + " - " +
-		// mgpSubProject.getInstitutionDescription()
-		// + " for project: " + mgpProject.getProjectCode() + " - " +
-		// mgpProject.getTitle());
 		createSubProject(project, mgpSubProject);
 	    } else {
 		updatedSubProjects++;
