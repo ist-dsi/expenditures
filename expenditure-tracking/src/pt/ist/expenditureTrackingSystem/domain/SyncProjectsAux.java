@@ -641,7 +641,7 @@ public abstract class SyncProjectsAux {
 
     private final Set<String> notFoundCostCenters = new HashSet<String>();
 
-    private Unit findCostCenter(final String costCenterString) {
+    protected Unit findCostCenter(final String costCenterString) {
 	final String costCenter = cdCostCenters.contains(costCenterString) ? "0003" : costCenterString;
 	final Integer cc = Integer.valueOf(costCenter);
 	final String ccString = cc.toString();

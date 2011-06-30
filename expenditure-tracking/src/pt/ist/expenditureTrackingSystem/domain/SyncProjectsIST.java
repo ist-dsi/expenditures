@@ -1,6 +1,7 @@
 package pt.ist.expenditureTrackingSystem.domain;
 
 
+
 public class SyncProjectsIST extends SyncProjectsAux {
 
     @Override
