@@ -62,8 +62,14 @@ public class AcquisitionInvoice extends AcquisitionInvoice_Base {
     @Override
     public void validateUpload(WorkflowProcess workflowProcess) {
 	RegularAcquisitionProcess process = (RegularAcquisitionProcess) workflowProcess;
-	if (!process.isAcquisitionProcessed()
-		|| !ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(UserView.getCurrentUser())) {
+	if ((!process.isAcquisitionProcessed()
+		|| !ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(UserView.getCurrentUser()))
+		// TODO : work in progress...
+//		&&
+//		(!ExpenditureTrackingSystem.isInvoiveAllowedToStartAcquisitionProcess()
+//			|| (ExpenditureTrackingSystem.isInvoiveAllowedToStartAcquisitionProcess()
+//				&& process.isInGenesis()))
+			) {
 	    throw new ProcessFileValidationException("resources/AcquisitionResources", "error.acquisitionInvoice.upload.invalid");
 	}
     }
