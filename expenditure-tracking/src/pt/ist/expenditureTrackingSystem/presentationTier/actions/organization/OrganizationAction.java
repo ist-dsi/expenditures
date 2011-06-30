@@ -900,7 +900,7 @@ public class OrganizationAction extends BaseAction {
 	spreadsheet.setHeader("tipo");
 	spreadsheet.setHeader("regime");
 
-	final ProjectReader projectReader = new ProjectReader();
+	final ProjectReader projectReader = new ProjectReader("db.mgp.ist");
 	projectReader.execute();
 	final Set<MgpProject> mgpProjects = projectReader.getMgpProjects();
 
