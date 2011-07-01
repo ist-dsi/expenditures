@@ -46,14 +46,18 @@ public class ExpenditureConfigurationAction extends BaseAction {
 	final String acquisitionCreationWizardJsp = request.getParameter("acquisitionCreationWizardJsp");
 	final String institutionalProcessNumberPrefix = request.getParameter("institutionalProcessNumberPrefix");
 
-	final String invoiveAllowedToStartAcquisitionProcessParam = request.getParameter("invoiveAllowedToStartAcquisitionProcess");
-	final Boolean invoiveAllowedToStartAcquisitionProcess = Boolean.valueOf("on".equals(invoiveAllowedToStartAcquisitionProcessParam));
+	final String invoiceAllowedToStartAcquisitionProcessParam = request.getParameter("invoiceAllowedToStartAcquisitionProcess");
+	final Boolean invoiceAllowedToStartAcquisitionProcess = Boolean.valueOf("on".equals(invoiceAllowedToStartAcquisitionProcessParam));
+
+	final String requireFundAllocationPriorToAcquisitionRequestParam = request.getParameter("requireFundAllocationPriorToAcquisitionRequest");
+	final Boolean requireFundAllocationPriorToAcquisitionRequest = Boolean.valueOf("on".equals(requireFundAllocationPriorToAcquisitionRequestParam));
 
 	ExpenditureTrackingSystem.getInstance().saveConfiguration(
 		institutionalProcessNumberPrefix,
 		acquisitionCreationWizardJsp,
 		array,
-		invoiveAllowedToStartAcquisitionProcess);
+		invoiceAllowedToStartAcquisitionProcess,
+		requireFundAllocationPriorToAcquisitionRequest);
 
 	return viewConfiguration(mapping, form, request, response);
     }

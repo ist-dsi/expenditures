@@ -23,7 +23,6 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchProcess
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchProcessValuesArray;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess.ProcessClassification;
-import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.organization.OrganizationModelPlugin.ExpendituresView;
 import pt.ist.expenditureTrackingSystem.presentationTier.widgets.ActivateEmailNotificationWidget;
 import pt.ist.expenditureTrackingSystem.presentationTier.widgets.MyProcessesWidget;
@@ -109,11 +108,25 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 		/* && migrateProcessNumbers().booleanValue() */
 		&& migrateSuppliers()
 		&& migrateCPVs()
-		&& migratePeople()) {
+		&& migratePeople()
+		&& checkISTOptions()) {
 	    isInitialized = true;
 	}
     }
 
+    @Service
+    private static Boolean checkISTOptions() {
+	final MyOrg myOrg = MyOrg.getInstance();
+	for (final VirtualHost virtualHost : myOrg.getVirtualHostsSet()) {
+	    if (virtualHost.getHostname().equals("dot.ist.utl.pt")) {
+		final ExpenditureTrackingSystem ets = virtualHost.getExpenditureTrackingSystem();
+		ets.setRequireFundAllocationPriorToAcquisitionRequest(Boolean.TRUE);
+	    }
+	}
+	return false;
+    }
+
+    @Service
     private static Boolean migratePeople() {
 	final MyOrg myOrg = MyOrg.getInstance();
 	if (!myOrg.hasAnyPeopleFromExpenditureTackingSystem()) {
@@ -418,11 +431,14 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
     }
 
     @Service
-    public void saveConfiguration(final String institutionalProcessNumberPrefix, final String acquisitionCreationWizardJsp, final SearchProcessValuesArray array, final Boolean invoiveAllowedToStartAcquisitionProcess) {
+    public void saveConfiguration(final String institutionalProcessNumberPrefix, final String acquisitionCreationWizardJsp,
+	    final SearchProcessValuesArray array, final Boolean invoiceAllowedToStartAcquisitionProcess,
+	    final Boolean requireFundAllocationPriorToAcquisitionRequest) {
 	setInstitutionalProcessNumberPrefix(institutionalProcessNumberPrefix);
 	setAcquisitionCreationWizardJsp(acquisitionCreationWizardJsp);
 	setSearchProcessValuesArray(array);
-	setInvoiveAllowedToStartAcquisitionProcess(invoiveAllowedToStartAcquisitionProcess);
+	setInvoiceAllowedToStartAcquisitionProcess(invoiceAllowedToStartAcquisitionProcess);
+	setRequireFundAllocationPriorToAcquisitionRequest(requireFundAllocationPriorToAcquisitionRequest);
     }
 
     @Service
@@ -430,9 +446,9 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 	virtualHost.setExpenditureTrackingSystem(this);
     }
 
-    public static boolean isInvoiveAllowedToStartAcquisitionProcess() {
+    public static boolean isInvoiceAllowedToStartAcquisitionProcess() {
 	final ExpenditureTrackingSystem system = getInstance();
-	return system.getInvoiveAllowedToStartAcquisitionProcess().booleanValue();
+	return system.getInvoiceAllowedToStartAcquisitionProcess().booleanValue();
     }
 
 }

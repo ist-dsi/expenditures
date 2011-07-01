@@ -164,12 +164,26 @@
 	<table>
 		<tr>
 			<td>
-				<bean:message key="label.configuration.process.flow.start.with.invoive" bundle="EXPENDITURE_RESOURCES"/>
+				<bean:message key="label.configuration.process.flow.start.with.invoice" bundle="EXPENDITURE_RESOURCES"/>
 			</td>
 			<td>
-				<input type="checkbox" name="invoiveAllowedToStartAcquisitionProcess"
-					<% if (expenditureTrackingSystem.getInvoiveAllowedToStartAcquisitionProcess() != null
-								&& expenditureTrackingSystem.getInvoiveAllowedToStartAcquisitionProcess().booleanValue()) {%>
+				<input type="checkbox" name="invoiceAllowedToStartAcquisitionProcess"
+					<% if (expenditureTrackingSystem.getInvoiceAllowedToStartAcquisitionProcess() != null
+								&& expenditureTrackingSystem.getInvoiceAllowedToStartAcquisitionProcess().booleanValue()) {%>
+							checked="checked"
+					<% } %>
+				/>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<bean:message key="label.configuration.process.flow.require.fund.allocation.prior.to.acquisition.request"
+						bundle="EXPENDITURE_RESOURCES"/>
+			</td>
+			<td>
+				<input type="checkbox" name="requireFundAllocationPriorToAcquisitionRequest"
+					<% if (expenditureTrackingSystem.getRequireFundAllocationPriorToAcquisitionRequest() != null
+								&& expenditureTrackingSystem.getRequireFundAllocationPriorToAcquisitionRequest().booleanValue()) {%>
 							checked="checked"
 					<% } %>
 				/>

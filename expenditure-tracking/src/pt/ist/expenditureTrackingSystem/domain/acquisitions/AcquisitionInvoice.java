@@ -66,8 +66,8 @@ public class AcquisitionInvoice extends AcquisitionInvoice_Base {
 		|| !ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(UserView.getCurrentUser()))
 		// TODO : work in progress...
 //		&&
-//		(!ExpenditureTrackingSystem.isInvoiveAllowedToStartAcquisitionProcess()
-//			|| (ExpenditureTrackingSystem.isInvoiveAllowedToStartAcquisitionProcess()
+//		(!ExpenditureTrackingSystem.isInvoiceAllowedToStartAcquisitionProcess()
+//			|| (ExpenditureTrackingSystem.isInvoiceAllowedToStartAcquisitionProcess()
 //				&& process.isInGenesis()))
 			) {
 	    throw new ProcessFileValidationException("resources/AcquisitionResources", "error.acquisitionInvoice.upload.invalid");
