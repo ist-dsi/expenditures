@@ -33,7 +33,7 @@ public class ConfirmInvoice extends WorkflowActivity<RegularAcquisitionProcess, 
 	final RegularAcquisitionProcess process = activityInformation.getProcess();
 	process.confirmInvoiceBy(UserView.getCurrentUser().getExpenditurePerson());
 
-	if (ExternalIntegration.ACTIVE) {
+	if (ExternalIntegration.isActive()) {
 	    // TODO : only uncomment this line when we want to integrate with MGP
 	    process.createFundAllocationRequest(true);
 	}

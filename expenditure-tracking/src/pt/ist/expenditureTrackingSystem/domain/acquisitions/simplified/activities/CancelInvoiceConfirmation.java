@@ -28,7 +28,7 @@ public class CancelInvoiceConfirmation extends
 	final RegularAcquisitionProcess process = activityInformation.getProcess();
 	process.cancelInvoiceConfirmationBy(UserView.getCurrentUser().getExpenditurePerson());
 
-	if (ExternalIntegration.ACTIVE) {
+	if (ExternalIntegration.isActive()) {
 	    // TODO : only uncomment this line when we want to integrate with MGP
 	    process.cancelFundAllocationRequest(true);
 	}

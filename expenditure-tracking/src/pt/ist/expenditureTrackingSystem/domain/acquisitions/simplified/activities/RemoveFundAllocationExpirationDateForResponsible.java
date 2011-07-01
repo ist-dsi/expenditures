@@ -27,7 +27,7 @@ public class RemoveFundAllocationExpirationDateForResponsible extends
 	UnApprove<RegularAcquisitionProcess> unApprove = new UnApprove<RegularAcquisitionProcess>();
 	unApprove.execute(unApprove.getActivityInformation(activityInformation.getProcess()));
 
-	if (ExternalIntegration.ACTIVE) {
+	if (ExternalIntegration.isActive()) {
 	    // TODO : only uncomment this line when we want to integrate with MGP
 	    process.cancelFundAllocationRequest(false);
 	}

@@ -23,7 +23,7 @@ public class RemoveProjectFundAllocation extends WorkflowActivity<RefundProcess,
 	final RefundProcess process = activityInformation.getProcess();
 	process.getRequest().resetProjectFundAllocationId(Person.getLoggedPerson());
 
-	if (ExternalIntegration.ACTIVE) {
+	if (ExternalIntegration.isActive()) {
 	    // TODO : only uncomment this line when we want to integrate with MGP
 	    //process.cancelFundAllocationRequest(false);
 	}
