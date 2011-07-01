@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 
+import myorg.domain.MyOrg;
+
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.Search;
 
@@ -27,7 +29,7 @@ public class SearchSuppliers extends Search<Supplier> {
 
     @Override
     public Set<Supplier> search() {
-	final Set<Supplier> suppliers = fiscalCode != null || name != null ? ExpenditureTrackingSystem.getInstance()
+	final Set<Supplier> suppliers = fiscalCode != null || name != null ? MyOrg.getInstance()
 		.getSuppliersSet() : Collections.EMPTY_SET;
 	return new SearchResult(suppliers);
     }

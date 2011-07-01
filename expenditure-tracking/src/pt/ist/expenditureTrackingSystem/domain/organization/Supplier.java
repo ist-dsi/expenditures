@@ -3,6 +3,7 @@ package pt.ist.expenditureTrackingSystem.domain.organization;
 import java.util.HashSet;
 import java.util.Set;
 
+import myorg.domain.MyOrg;
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Address;
 import myorg.domain.util.Money;
@@ -46,6 +47,7 @@ public class Supplier extends Supplier_Base implements Indexable, Searchable {
 
     private Supplier() {
 	super();
+	setMyOrg(MyOrg.getInstance());
 	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
     }
 
@@ -85,7 +87,7 @@ public class Supplier extends Supplier_Base implements Indexable, Searchable {
     }
 
     public static Supplier readSupplierByFiscalIdentificationCode(String fiscalIdentificationCode) {
-	for (Supplier supplier : ExpenditureTrackingSystem.getInstance().getSuppliersSet()) {
+	for (Supplier supplier : MyOrg.getInstance().getSuppliersSet()) {
 	    if (supplier.getFiscalIdentificationCode().equals(fiscalIdentificationCode)) {
 		return supplier;
 	    }
@@ -94,7 +96,7 @@ public class Supplier extends Supplier_Base implements Indexable, Searchable {
     }
 
     public static Supplier readSupplierByName(final String name) {
-	for (Supplier supplier : ExpenditureTrackingSystem.getInstance().getSuppliersSet()) {
+	for (Supplier supplier : MyOrg.getInstance().getSuppliersSet()) {
 	    if (supplier.getName().equalsIgnoreCase(name)) {
 		return supplier;
 	    }

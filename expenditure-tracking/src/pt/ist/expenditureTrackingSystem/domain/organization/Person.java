@@ -141,7 +141,7 @@ public class Person extends Person_Base implements Indexable, Searchable {
 
     public static Person findByUsername(final String username) {
 	if (username != null && username.length() > 0) {
-	    for (final Person person : ExpenditureTrackingSystem.getInstance().getPeopleSet()) {
+	    for (final Person person : MyOrg.getInstance().getPeopleFromExpenditureTackingSystemSet()) {
 		if (username.equalsIgnoreCase(person.getUsername())) {
 		    return person;
 		}

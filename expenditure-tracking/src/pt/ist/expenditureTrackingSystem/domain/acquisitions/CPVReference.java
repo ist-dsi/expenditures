@@ -4,6 +4,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 
+import myorg.domain.MyOrg;
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
@@ -58,7 +59,7 @@ public class CPVReference extends CPVReference_Base implements Indexable, Search
     }
 
     public static CPVReference getCPVCode(String code) {
-	for (CPVReference reference : ExpenditureTrackingSystem.getInstance().getCPVReferences()) {
+	for (CPVReference reference : MyOrg.getInstance().getCPVReferences()) {
 	    if (reference.getCode().equals(code)) {
 		return reference;
 	    }

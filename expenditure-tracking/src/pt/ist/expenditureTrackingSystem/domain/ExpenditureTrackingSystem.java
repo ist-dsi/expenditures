@@ -1,5 +1,8 @@
 package pt.ist.expenditureTrackingSystem.domain;
 
+import java.util.SortedSet;
+import java.util.TreeSet;
+
 import javax.servlet.http.HttpServletRequest;
 
 import module.dashBoard.WidgetRegister;
@@ -18,6 +21,8 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchProcessValues;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchProcessValuesArray;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess.ProcessClassification;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.organization.OrganizationModelPlugin.ExpendituresView;
 import pt.ist.expenditureTrackingSystem.presentationTier.widgets.ActivateEmailNotificationWidget;
@@ -100,9 +105,60 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 
     private static synchronized void initialize() {
 	// TODO : Only uncomment this when ADIST an IST-ID are to be placed in production
-	if (!isInitialized /* && migrateProcessNumbers().booleanValue() */ ) {
+	if (!isInitialized
+		/* && migrateProcessNumbers().booleanValue() */
+		&& migrateSuppliers()
+		&& migrateCPVs()
+		&& migratePeople()) {
 	    isInitialized = true;
 	}
+    }
+
+    private static Boolean migratePeople() {
+	final MyOrg myOrg = MyOrg.getInstance();
+	if (!myOrg.hasAnyPeopleFromExpenditureTackingSystem()) {
+	    final long start = System.currentTimeMillis();
+	    System.out.println("Migrating people..");
+	    for (final VirtualHost virtualHost : myOrg.getVirtualHostsSet()) {
+		final ExpenditureTrackingSystem ets = virtualHost.getExpenditureTrackingSystem();
+		myOrg.getPeopleFromExpenditureTackingSystemSet().addAll(ets.getPeopleSet());
+	    }
+	    final long end = System.currentTimeMillis();
+	    System.out.println("Completed migration in: " + (end - start) + "ms.");
+	}
+	return Boolean.TRUE;
+    }
+
+    @Service
+    private static Boolean migrateCPVs() {
+	final MyOrg myOrg = MyOrg.getInstance();
+	if (!myOrg.hasAnyCPVReferences()) {
+	    final long start = System.currentTimeMillis();
+	    System.out.println("Migrating cpv references..");
+	    for (final VirtualHost virtualHost : myOrg.getVirtualHostsSet()) {
+		final ExpenditureTrackingSystem ets = virtualHost.getExpenditureTrackingSystem();
+		myOrg.getCPVReferencesSet().addAll(ets.getCPVReferencesSet());
+	    }
+	    final long end = System.currentTimeMillis();
+	    System.out.println("Completed migration in: " + (end - start) + "ms.");
+	}
+	return Boolean.TRUE;
+    }
+
+    @Service
+    private static Boolean migrateSuppliers() {
+	final MyOrg myOrg = MyOrg.getInstance();
+	if (!myOrg.hasAnySuppliers()) {
+	    final long start = System.currentTimeMillis();
+	    System.out.println("Migrating suppliers.");
+	    for (final VirtualHost virtualHost : myOrg.getVirtualHostsSet()) {
+		final ExpenditureTrackingSystem ets = virtualHost.getExpenditureTrackingSystem();
+		myOrg.getSuppliersSet().addAll(ets.getSuppliersSet());
+	    }
+	    final long end = System.currentTimeMillis();
+	    System.out.println("Completed migration in: " + (end - start) + "ms.");
+	}
+	return Boolean.TRUE;
     }
 
     @Service
@@ -173,10 +229,10 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 	virtualHost.setExpenditureTrackingSystem(this);
 
 	new MyOwnProcessesSearch();
-	final SavedSearch savedSearch = new PendingProcessesSearch();
-	for (final Person person : getPeopleSet()) {
-	    person.setDefaultSearch(savedSearch);
-	}
+//	final SavedSearch savedSearch = new PendingProcessesSearch();
+//	for (final Person person : getPeopleSet()) {
+//	    person.setDefaultSearch(savedSearch);
+//	}
 
 	setAcquisitionCentralGroup(myorg.domain.groups.Role.getRole(RoleType.ACQUISITION_CENTRAL));
 
@@ -349,6 +405,16 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 
     public boolean contains(final SearchProcessValues values) {
 	return getSearchProcessValuesArray() != null && getSearchProcessValuesArray().contains(values);
+    }
+
+    public SortedSet<ProcessClassification> getAllowdProcessClassifications(final Class processType) {
+	final SortedSet<ProcessClassification> classifications = new TreeSet<SimplifiedProcedureProcess.ProcessClassification>();
+	for (final SearchProcessValues searchProcessValues : getSearchProcessValuesArray().getSearchProcessValues()) {
+	    if (processType == searchProcessValues.getSearchClass()) {
+		classifications.add(searchProcessValues.getSearchClassification());
+	    }
+	}
+	return classifications;
     }
 
     @Service

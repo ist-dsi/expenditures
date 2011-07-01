@@ -3,6 +3,8 @@ package pt.ist.expenditureTrackingSystem;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import myorg.domain.MyOrg;
+
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.fenixWebFramework.services.Service;
@@ -29,7 +31,7 @@ public class DumpUnSyncedSuppliers {
     @Service
     public static void dump() throws IOException {
 	final PrintWriter printWriter = new PrintWriter("/tmp/fornecedores.csv");
-	for (final Supplier supplier : ExpenditureTrackingSystem.getInstance().getSuppliersSet()) {
+	for (final Supplier supplier : MyOrg.getInstance().getSuppliersSet()) {
 	    if (supplier.getGiafKey() == null || supplier.getGiafKey().isEmpty()) {
 		printWriter.append(supplier.getFiscalIdentificationCode());
 		printWriter.append("\t");

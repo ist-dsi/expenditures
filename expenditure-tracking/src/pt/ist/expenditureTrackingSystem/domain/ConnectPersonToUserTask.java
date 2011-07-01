@@ -1,5 +1,6 @@
 package pt.ist.expenditureTrackingSystem.domain;
 
+import myorg.domain.MyOrg;
 import myorg.domain.User;
 import myorg.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
@@ -12,7 +13,7 @@ public class ConnectPersonToUserTask extends ConnectPersonToUserTask_Base {
 
     @Override
     public void executeTask() {
-	for (Person person : ExpenditureTrackingSystem.getInstance().getPeople()) {
+	for (Person person : MyOrg.getInstance().getPeopleFromExpenditureTackingSystemSet()) {
 	    if (!person.hasUser()) {
 		String username = person.getUsername();
 		User user = User.findByUsername(username);

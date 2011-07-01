@@ -4,6 +4,7 @@ import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import myorg.domain.User;
 import myorg.util.BundleUtil;
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
@@ -13,7 +14,10 @@ public class ChangeProcessClassification extends
     @Override
     public boolean isActive(SimplifiedProcedureProcess process, User user) {
 	Person loggedPerson = user.getExpenditurePerson();
-	return loggedPerson == process.getRequestor() && process.getAcquisitionProcessState().isInGenesis();
+	return loggedPerson == process.getRequestor()
+		&& process.getAcquisitionProcessState().isInGenesis()
+		&& ExpenditureTrackingSystem.getInstance()
+			.getAllowdProcessClassifications(SimplifiedProcedureProcess.class).size() > 1;
     }
 
     @Override

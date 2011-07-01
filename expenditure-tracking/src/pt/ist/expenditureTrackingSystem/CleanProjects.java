@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.Map.Entry;
 
+import myorg.domain.MyOrg;
 import myorg.domain.util.Money;
 
 import org.joda.time.LocalDate;
@@ -75,7 +76,7 @@ public class CleanProjects {
 	int maintained = 0;
 	int deleted = 0;
 
-	for (final Person person : ExpenditureTrackingSystem.getInstance().getPeopleSet()) {
+	for (final Person person : MyOrg.getInstance().getPeopleFromExpenditureTackingSystemSet()) {
 	    final Map<Unit, Set<Authorization>> authorizationMap = new HashMap<Unit, Set<Authorization>>();
 	    for (final Authorization authorization : person.getAuthorizationsSet()) {
 		final Unit unit = authorization.getUnit();

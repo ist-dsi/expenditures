@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import myorg.domain.MyOrg;
 import myorg.presentationTier.renderers.autoCompleteProvider.AutoCompleteProvider;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
@@ -15,7 +16,7 @@ public class PersonAutoComplete implements AutoCompleteProvider {
     public Collection getSearchResults(Map<String, String> argsMap, String value, int maxCount) {
 	Set<Person> people = new HashSet<Person> ();
 	String[] values = StringNormalizer.normalize(value).toLowerCase().split(" ");
-	for (Person person : ExpenditureTrackingSystem.getInstance().getPeople()) {
+	for (Person person : MyOrg.getInstance().getPeopleFromExpenditureTackingSystemSet()) {
 	    final String normalizedName = StringNormalizer.normalize(person.getName()).toLowerCase();
 	    if (hasMatch(values, normalizedName)) {
 		people.add(person);

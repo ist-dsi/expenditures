@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import myorg.domain.MyOrg;
 import myorg.presentationTier.renderers.autoCompleteProvider.AutoCompleteProvider;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
@@ -15,7 +16,7 @@ public class CPVAutoCompleteProvider implements AutoCompleteProvider {
 	List<CPVReference> result = new ArrayList<CPVReference>();
 	
 	String[] values = value.toLowerCase().split(" ");
-	for (final CPVReference cpvCode : ExpenditureTrackingSystem.getInstance().getCPVReferences()) {
+	for (final CPVReference cpvCode : MyOrg.getInstance().getCPVReferences()) {
 	    if (cpvCode.getCode().startsWith(value) || match(cpvCode.getDescription().toLowerCase(), values)) {
 		result.add(cpvCode);
 	    }

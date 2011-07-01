@@ -5,8 +5,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import myorg.domain.MyOrg;
 import myorg.presentationTier.renderers.autoCompleteProvider.AutoCompleteProvider;
-import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.utl.ist.fenix.tools.util.StringNormalizer;
 
@@ -17,7 +17,7 @@ public class NIFSupplierAutoCompleteProvider implements AutoCompleteProvider {
 	final String[] input = value.split(" ");
 	StringNormalizer.normalize(input);
 
-	for (final Supplier supplier : ExpenditureTrackingSystem.getInstance().getSuppliers()) {
+	for (final Supplier supplier : MyOrg.getInstance().getSuppliers()) {
 	    if (supplier.getFiscalIdentificationCode().startsWith(value)) {
 		addResult(result, supplier);
 	    } else {

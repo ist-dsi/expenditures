@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Locale;
 
 import myorg._development.PropertiesManager;
+import myorg.domain.MyOrg;
 import pt.ist.expenditureTrackingSystem.domain.DashBoard;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
@@ -54,7 +55,7 @@ public class DashBoardResetter {
     @Service
     private static void reset() {
 	final ExpenditureTrackingSystem expenditureTrackingSystem = ExpenditureTrackingSystem.getInstance();
-	for (final Person person : expenditureTrackingSystem.getPeopleSet()) {
+	for (final Person person : MyOrg.getInstance().getPeopleFromExpenditureTackingSystemSet()) {
 	    final DashBoard dashBoard = person.getDashBoard();
 	    dashBoard.setExpenditureTrackingSystem(expenditureTrackingSystem);
 	    addWidget1("widgetUnreadComments", dashBoard);

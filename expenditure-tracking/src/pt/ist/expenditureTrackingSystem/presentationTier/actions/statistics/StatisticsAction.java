@@ -47,7 +47,6 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.Simplifie
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess.ProcessClassification;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SendPurchaseOrderToSupplier;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SkipPurchaseOrderDocument;
-import pt.ist.expenditureTrackingSystem.domain.announcements.OperationLog;
 import pt.ist.expenditureTrackingSystem.domain.organization.CostCenter;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Project;
@@ -379,7 +378,7 @@ public class StatisticsAction extends ContextBaseAction {
 	spreadsheet.setHeader("CPV");
 	spreadsheet.setHeader("CPV desc.");
 	spreadsheet.setHeader("Montante");
-	for (final CPVReference reference : getMyOrg().getExpenditureTrackingSystem().getCPVReferencesSet()) {
+	for (final CPVReference reference : getMyOrg().getCPVReferencesSet()) {
 	    final Money money = reference.getTotalAmountAllocated(year);
 	    if (!money.isZero()) {
 		final Row row = spreadsheet.addRow();

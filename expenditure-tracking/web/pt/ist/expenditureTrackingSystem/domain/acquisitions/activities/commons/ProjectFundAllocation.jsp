@@ -91,4 +91,3 @@
 		<html:submit styleClass="inputbutton"><bean:message key="renderers.form.cancel.name" bundle="RENDERER_RESOURCES"/> </html:submit>
 	</fr:form>
 </div>
-9

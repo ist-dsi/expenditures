@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import myorg.domain.MyOrg;
 import myorg.domain.util.Address;
 import myorg.domain.util.Money;
 import pt.ist.dbUtils.ExternalDbOperation;
@@ -363,8 +364,7 @@ public class SyncSuppliersAux {
     }
 
     private static void closeLocalSuppliers(final Set<Supplier> suppliersFromGiaf) {
-	final ExpenditureTrackingSystem expenditureTrackingSystem = ExpenditureTrackingSystem.getInstance();
-	for (final Supplier supplier : expenditureTrackingSystem.getSuppliersSet()) {
+	for (final Supplier supplier : MyOrg.getInstance().getSuppliersSet()) {
 	    if (!suppliersFromGiaf.contains(supplier)) {
 //		System.out.println("Closing supplier not in GIAF: " + supplier.getExternalId());
 		if (supplier.getTotalAllocated().isZero()) {
@@ -433,7 +433,7 @@ public class SyncSuppliersAux {
     }
 
     private static Supplier findSupplierByGiafKey(final String codEnt) {
-	for (final Supplier supplier : ExpenditureTrackingSystem.getInstance().getSuppliersSet()) {
+	for (final Supplier supplier : MyOrg.getInstance().getSuppliersSet()) {
 	    final String giafKey = supplier.getGiafKey();
 	    if (codEnt.equals(giafKey)) {
 		return supplier;

@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import myorg.domain.MyOrg;
+
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.Search;
@@ -42,8 +44,8 @@ public class SearchUsers extends Search<Person> {
 	    people.add(person);
 	    return people;
 	}
-	final Set<Person> people = username != null || name != null || roleType != null ? ExpenditureTrackingSystem.getInstance()
-		.getPeopleSet() : Collections.EMPTY_SET;
+	final Set<Person> people = username != null || name != null || roleType != null ? MyOrg.getInstance()
+		.getPeopleFromExpenditureTackingSystemSet() : Collections.EMPTY_SET;
 	return new SearchResult(people);
     }
 

@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import myorg.applicationTier.Authenticate.UserView;
+import myorg.domain.MyOrg;
 import myorg.domain.User;
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.groups.People;
@@ -770,7 +771,7 @@ public class OrganizationAction extends BaseAction {
 	spreadsheet.setHeader("Reembolsos");
 	spreadsheet.setHeader("Por outras Vias");
 
-	for (Supplier supplier : ExpenditureTrackingSystem.getInstance().getSuppliers()) {
+	for (Supplier supplier : MyOrg.getInstance().getSuppliers()) {
 	    Row row = spreadsheet.addRow();
 	    row.setCell(supplier.getName());
 	    row.setCell(supplier.getFiscalIdentificationCode());
@@ -1130,7 +1131,7 @@ public class OrganizationAction extends BaseAction {
 
     public ActionForward listCPVReferences(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
-	final Set<CPVReference> cvpReferences = ExpenditureTrackingSystem.getInstance().getCPVReferencesSet();
+	final Set<CPVReference> cvpReferences = MyOrg.getInstance().getCPVReferencesSet();
 	final SortedSet<CPVReference> sortedCPVReferences = new TreeSet<CPVReference>(CPVReference.COMPARATOR_BY_DESCRIPTION);
 	sortedCPVReferences.addAll(cvpReferences);
 	request.setAttribute("cvpReferences", sortedCPVReferences);
