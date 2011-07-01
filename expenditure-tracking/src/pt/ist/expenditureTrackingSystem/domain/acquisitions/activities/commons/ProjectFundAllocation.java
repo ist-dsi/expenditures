@@ -3,6 +3,7 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons;
 import module.workflow.activities.WorkflowActivity;
 import myorg.domain.User;
 import myorg.util.BundleUtil;
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.ProjectFinancer;
 import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean;
@@ -25,13 +26,24 @@ public class ProjectFundAllocation<P extends PaymentProcess> extends
 	return getActivityInformation(process, true);
     }
 
+    protected boolean requiresPriorFundAllocation() {
+	final ExpenditureTrackingSystem instance = ExpenditureTrackingSystem.getInstance();
+	final Boolean b = instance.getRequireFundAllocationPriorToAcquisitionRequest();
+	return b != null && b.booleanValue();
+    }
+
     @Override
     protected void process(ProjectFundAllocationActivityInformation<P> activityInformation) {
-
 	for (FundAllocationBean fundAllocationBean : activityInformation.getBeans()) {
 	    final ProjectFinancer projectFinancer = (ProjectFinancer) fundAllocationBean.getFinancer();
 	    projectFinancer.setProjectFundAllocationId(fundAllocationBean.getFundAllocationId());
 	}
+
+	final P process = activityInformation.getProcess();
+	if (!requiresPriorFundAllocation() && process.hasAllocatedFundsForAllProjectFinancers()) {
+	    process.allocateFundsToUnit();
+	}
+
     }
 
     @Override
