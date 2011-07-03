@@ -89,7 +89,14 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
     }
 
     protected void authorize() {
-	new AcquisitionProcessState(this, AcquisitionProcessStateType.AUTHORIZED);
+	final AcquisitionProcessStateType type;
+	if (ExpenditureTrackingSystem.isInvoiceAllowedToStartAcquisitionProcess() && hasInvoiceFile()) {
+	    type = AcquisitionProcessStateType.INVOICE_RECEIVED;
+	    getRequest().processReceivedInvoice();
+	} else {
+	    type = AcquisitionProcessStateType.AUTHORIZED;
+	}
+	new AcquisitionProcessState(this, type);
     }
 
     protected void cancelInvoiceConfirmation() {
