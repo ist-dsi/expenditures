@@ -8,7 +8,6 @@ import myorg.applicationTier.Authenticate.UserView;
 import myorg.util.BundleUtil;
 import myorg.util.ClassNameBundle;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
-import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.fileBeans.InvoiceFileBean;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.fileBeans.InvoiceFileBean.RequestItemHolder;
 
@@ -62,26 +61,33 @@ public class AcquisitionInvoice extends AcquisitionInvoice_Base {
     @Override
     public void validateUpload(WorkflowProcess workflowProcess) {
 	RegularAcquisitionProcess process = (RegularAcquisitionProcess) workflowProcess;
-	if ((!process.isAcquisitionProcessed()
-		|| !ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(UserView.getCurrentUser()))
-		// TODO : work in progress...
-//		&&
-//		(!ExpenditureTrackingSystem.isInvoiceAllowedToStartAcquisitionProcess()
-//			|| (ExpenditureTrackingSystem.isInvoiceAllowedToStartAcquisitionProcess()
-//				&& process.isInGenesis()))
-			) {
-	    throw new ProcessFileValidationException("resources/AcquisitionResources", "error.acquisitionInvoice.upload.invalid");
+
+	if (process.isAcquisitionProcessed() && ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(UserView.getCurrentUser())) {
+	    return;
 	}
+
+	if (ExpenditureTrackingSystem.isInvoiceAllowedToStartAcquisitionProcess()) {
+	    if (process.isInGenesis() && process.getRequestor() == UserView.getCurrentUser().getExpenditurePerson()) {
+		return;
+	    }
+	    throw new ProcessFileValidationException("resources/AcquisitionResources", "error.acquisitionInvoice.upload.invalid.or.in.construction");
+	}
+
+	throw new ProcessFileValidationException("resources/AcquisitionResources", "error.acquisitionInvoice.upload.invalid");
     }
 
     @Override
-    public void postProcess(WorkflowFileUploadBean bean) {
-	InvoiceFileBean fileBean = (InvoiceFileBean) bean;
-	AcquisitionRequest request = fileBean.getRequest();
-	if (!fileBean.getHasMoreInvoices()) {
-	    ((RegularAcquisitionProcess) request.getProcess()).invoiceReceived();
+    public void postProcess(final WorkflowFileUploadBean bean) {
+	final InvoiceFileBean fileBean = (InvoiceFileBean) bean;
+	final AcquisitionRequest request = fileBean.getRequest();
+	final AcquisitionProcess process = request.getProcess();
+	if (!ExpenditureTrackingSystem.isInvoiceAllowedToStartAcquisitionProcess()
+		|| !process.isInGenesis()) {
+	    if (!fileBean.getHasMoreInvoices()) {
+		((RegularAcquisitionProcess) request.getProcess()).invoiceReceived();
+	    }
+	    request.processReceivedInvoice();
 	}
-	request.processReceivedInvoice();
     }
 
     @Override

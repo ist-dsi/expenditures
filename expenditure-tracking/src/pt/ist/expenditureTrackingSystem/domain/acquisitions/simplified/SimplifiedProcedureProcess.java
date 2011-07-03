@@ -416,5 +416,19 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	return false;
     }
 
+    public boolean hasSomeInvoice() {
+	return isInvoiceReceived() || (getExpenditureTrackingSystem().isInvoiceAllowedToStartAcquisitionProcess()
+		&& hasInvoiceFile());
+    }
+
+    @Override
+    public boolean hasInvoiceFile() {
+	for (final ProcessFile processFile : getFilesSet()) {
+	    if (processFile instanceof AcquisitionInvoice && !processFile.isArchieved()) {
+		return true;
+	    }
+	}
+	return false;
+    }
 
 }

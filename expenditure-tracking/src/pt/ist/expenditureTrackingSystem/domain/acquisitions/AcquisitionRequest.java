@@ -327,9 +327,11 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     public boolean isFilled() {
 	AcquisitionProcess process = getProcess();
 	return hasAnyRequestItems()
-		&& ((!process.isSimplifiedProcedureProcess() && hasAcquisitionProcess()) || (process
-			.isSimplifiedProcedureProcess() && (((SimplifiedProcedureProcess) process).getProcessClassification() == ProcessClassification.CT75000 || process
-			.hasAcquisitionProposalDocument())));
+		&& ((!process.isSimplifiedProcedureProcess() && hasAcquisitionProcess())
+		    || (process.isSimplifiedProcedureProcess() &&
+			    (((SimplifiedProcedureProcess) process).getProcessClassification() == ProcessClassification.CT75000
+				    || process.hasAcquisitionProposalDocument()
+				    || ((SimplifiedProcedureProcess) process).hasInvoiceFile())));
     }
 
     public boolean isEveryItemFullyAttributedToPayingUnits() {

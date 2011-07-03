@@ -28,7 +28,7 @@ import pt.ist.fenixWebFramework.security.UserView;
 public class ProjectAcquisitionFundAllocationRequest extends ProjectAcquisitionFundAllocationRequest_Base {
 
     public ProjectAcquisitionFundAllocationRequest(final UnitItem unitItem, final String processId, final PaymentProcess process,
-	    final Integer payingUnitNumber, final String payingAccountingUnit, final Money totalValue,
+	    final String payingUnitNumber, final String payingAccountingUnit, final Money totalValue,
 	    final Boolean finalFundAllocation) {
 	super();
 	setUnitItem(unitItem);

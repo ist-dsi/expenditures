@@ -10,6 +10,8 @@ import myorg.domain.util.Money;
 
 import org.joda.time.LocalDate;
 
+import pt.ist.expenditureTrackingSystem._development.ExternalIntegration;
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
@@ -143,7 +145,17 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
     }
 
     public void submitForFundAllocation() {
-	new AcquisitionProcessState(this, AcquisitionProcessStateType.SUBMITTED_FOR_FUNDS_ALLOCATION);
+	final AcquisitionProcessStateType type;
+	if (ExpenditureTrackingSystem.isInvoiceAllowedToStartAcquisitionProcess() && hasInvoiceFile()) {
+	    type = AcquisitionProcessStateType.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER;
+	    if (ExternalIntegration.isActive()) {
+		// TODO : only uncomment this line when we want to integrate with MGP
+		createFundAllocationRequest(false);
+	    }
+	} else {
+	    type = AcquisitionProcessStateType.SUBMITTED_FOR_FUNDS_ALLOCATION;
+	}
+	new AcquisitionProcessState(this, type);
     }
 
     public void skipFundAllocation() {
@@ -211,6 +223,10 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
 	return getAcquisitionProcessState().isAuthorized();
     }
 
+    public boolean isPendingInvoiceConfirmation() {
+	return getAcquisitionProcessState().isPendingInvoiceConfirmation();
+    }
+
     public void removeFundAllocationExpirationDate() {
 	setFundAllocationExpirationDate(null);
 	if (!getAcquisitionProcessState().isCanceled()) {
@@ -242,6 +258,10 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
     public void cancelFundAllocationRequest(final boolean isFinalFundAllocation) {
 	final AcquisitionRequest acquisitionRequest = getAcquisitionRequest();
 	acquisitionRequest.cancelFundAllocationRequest(isFinalFundAllocation);
+    }
+
+    public boolean hasInvoiceFile() {
+	return false;
     }
 
 }

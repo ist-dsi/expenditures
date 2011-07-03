@@ -157,8 +157,8 @@ public class Project extends Project_Base {
     }
 
     @Override
-    public Integer getUnitNumber() {
-	return Integer.valueOf(getProjectCode());
+    public String getUnitNumber() {
+	return getProjectCode();
     }
 
 }

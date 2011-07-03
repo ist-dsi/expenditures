@@ -100,8 +100,8 @@ public class CostCenter extends CostCenter_Base {
     }
 
     @Override
-    public Integer getUnitNumber() {
-	return Integer.valueOf(getCostCenter());
+    public String getUnitNumber() {
+	return getCostCenter();
     }
 
 }

@@ -96,7 +96,7 @@ public class SubProject extends SubProject_Base {
     }
 
     @Override
-    public Integer getUnitNumber() {
+    public String getUnitNumber() {
 	final Unit parentUnit = getParentUnit();
 	return parentUnit == null ? null : parentUnit.getUnitNumber();
     }

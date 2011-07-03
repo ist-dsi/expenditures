@@ -11,6 +11,7 @@ import myorg.util.BundleUtil;
 import org.apache.commons.lang.StringUtils;
 
 import pt.ist.expenditureTrackingSystem._development.ExternalIntegration;
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
@@ -24,8 +25,14 @@ public class ConfirmInvoice extends WorkflowActivity<RegularAcquisitionProcess, 
     @Override
     public boolean isActive(RegularAcquisitionProcess process, User user) {
 	Person person = user.getExpenditurePerson();
-	return isUserProcessOwner(process, user) && person != null && process.isActive() && !process.isInvoiceReceived()
-		&& !process.getUnconfirmedInvoices(person).isEmpty() && process.isResponsibleForUnit(person);
+	return isUserProcessOwner(process, user)
+		&& person != null
+		&& process.isActive()
+		&& !process.isInvoiceReceived()
+		&& !process.getUnconfirmedInvoices(person).isEmpty()
+		&& process.isResponsibleForUnit(person)
+		&& (!ExpenditureTrackingSystem.isInvoiceAllowedToStartAcquisitionProcess()
+			|| process.isPendingInvoiceConfirmation());
     }
 
     @Override
