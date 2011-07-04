@@ -69,6 +69,7 @@ class ExpenditureTrackingSystem {
 	String institutionalProcessNumberPrefix;
 	Boolean invoiceAllowedToStartAcquisitionProcess;
 	Boolean requireFundAllocationPriorToAcquisitionRequest;
+	Money maxValueStartedWithInvoive;
 }
 
 

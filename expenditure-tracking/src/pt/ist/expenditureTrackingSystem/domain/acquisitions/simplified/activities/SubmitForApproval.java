@@ -3,8 +3,12 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activiti
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import myorg.domain.User;
+import myorg.domain.exceptions.DomainException;
 import myorg.util.BundleUtil;
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess.ProcessClassification;
 
 public class SubmitForApproval extends
 	WorkflowActivity<RegularAcquisitionProcess, ActivityInformation<RegularAcquisitionProcess>> {
@@ -20,7 +24,19 @@ public class SubmitForApproval extends
 
     @Override
     protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
-	activityInformation.getProcess().submitForApproval();
+	final RegularAcquisitionProcess process = activityInformation.getProcess();
+	if (process.isSimplifiedProcedureProcess()
+		&& ((SimplifiedProcedureProcess) process).getProcessClassification() != ProcessClassification.CT75000
+		&& !process.hasAcquisitionProposalDocument()
+		&& ((SimplifiedProcedureProcess) process).hasInvoiceFile()
+		&& process.getTotalValue().isGreaterThan(ExpenditureTrackingSystem.getInstance().getMaxValueStartedWithInvoive())
+		) {
+	    final String message = BundleUtil.getStringFromResourceBundle(getUsedBundle(),
+		    "activities.message.exception.exceeded.limit.to.start.process.with.invoice");
+	    throw new DomainException(message);
+	}
+
+	process.submitForApproval();
     }
 
     @Override

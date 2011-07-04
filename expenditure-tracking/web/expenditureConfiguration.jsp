@@ -175,6 +175,17 @@
 				/>
 			</td>
 		</tr>
+			<td>
+				<bean:message key="label.configuration.process.flow.start.with.invoice.limit" bundle="EXPENDITURE_RESOURCES"/>
+			</td>
+			<td>
+				<input type="text" name="maxValueStartedWithInvoive"
+					<% if (expenditureTrackingSystem.getMaxValueStartedWithInvoive() != null) {%>
+							value="<%= expenditureTrackingSystem.getMaxValueStartedWithInvoive().getValue() %>"
+					<% } %>
+						/>
+			</td>
+		</tr>
 		<tr>
 			<td>
 				<bean:message key="label.configuration.process.flow.require.fund.allocation.prior.to.acquisition.request"

@@ -17,6 +17,7 @@ import myorg.domain.ModuleInitializer;
 import myorg.domain.MyOrg;
 import myorg.domain.User;
 import myorg.domain.VirtualHost;
+import myorg.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchProcessValues;
@@ -96,22 +97,28 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 
     public static ExpenditureTrackingSystem getInstance() {
 	if (!isInitialized) {
-	    initialize();
+	    if (initialize()) {
+		callInitScripts();
+	    }
 	}
 	final VirtualHost virtualHostForThread = VirtualHost.getVirtualHostForThread();
 	return virtualHostForThread == null ? null : virtualHostForThread.getExpenditureTrackingSystem();
     }
 
-    private static synchronized void initialize() {
-	if (!isInitialized
-		//&& migrateProcessNumbers().booleanValue()
-		//&& migrateSuppliers()
-		//&& migrateCPVs()
-		//&& migratePeople()
-		//&& checkISTOptions()
-		) {
+    private static synchronized boolean initialize() {
+	if (!isInitialized) {
 	    isInitialized = true;
+	    return true;
 	}
+	return false;
+    }
+
+    private static void callInitScripts() {
+	migrateProcessNumbers();
+	migrateSuppliers();
+	migrateCPVs();
+	migratePeople();
+	checkISTOptions();
     }
 
     @Service
@@ -432,12 +439,13 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
     @Service
     public void saveConfiguration(final String institutionalProcessNumberPrefix, final String acquisitionCreationWizardJsp,
 	    final SearchProcessValuesArray array, final Boolean invoiceAllowedToStartAcquisitionProcess,
-	    final Boolean requireFundAllocationPriorToAcquisitionRequest) {
+	    final Boolean requireFundAllocationPriorToAcquisitionRequest, final Money maxValueStartedWithInvoive) {
 	setInstitutionalProcessNumberPrefix(institutionalProcessNumberPrefix);
 	setAcquisitionCreationWizardJsp(acquisitionCreationWizardJsp);
 	setSearchProcessValuesArray(array);
 	setInvoiceAllowedToStartAcquisitionProcess(invoiceAllowedToStartAcquisitionProcess);
 	setRequireFundAllocationPriorToAcquisitionRequest(requireFundAllocationPriorToAcquisitionRequest);
+	setMaxValueStartedWithInvoive(maxValueStartedWithInvoive);
     }
 
     @Service
@@ -447,7 +455,8 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 
     public static boolean isInvoiceAllowedToStartAcquisitionProcess() {
 	final ExpenditureTrackingSystem system = getInstance();
-	return system.getInvoiceAllowedToStartAcquisitionProcess().booleanValue();
+	final Boolean invoiceAllowedToStartAcquisitionProcess = system.getInvoiceAllowedToStartAcquisitionProcess();
+	return invoiceAllowedToStartAcquisitionProcess != null && invoiceAllowedToStartAcquisitionProcess.booleanValue();
     }
 
     public boolean hasProcessPrefix() {

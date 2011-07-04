@@ -13,6 +13,7 @@ import module.organization.domain.Unit;
 import module.organization.presentationTier.actions.OrganizationModelAction.OrganizationalModelChart;
 import myorg.domain.MyOrg;
 import myorg.domain.VirtualHost;
+import myorg.domain.util.Money;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -52,12 +53,16 @@ public class ExpenditureConfigurationAction extends BaseAction {
 	final String requireFundAllocationPriorToAcquisitionRequestParam = request.getParameter("requireFundAllocationPriorToAcquisitionRequest");
 	final Boolean requireFundAllocationPriorToAcquisitionRequest = Boolean.valueOf("on".equals(requireFundAllocationPriorToAcquisitionRequestParam));
 
+	final String maxValueStartedWithInvoiveParam = request.getParameter("maxValueStartedWithInvoive");
+	final Money maxValueStartedWithInvoive = new Money(maxValueStartedWithInvoiveParam);
+
 	ExpenditureTrackingSystem.getInstance().saveConfiguration(
 		institutionalProcessNumberPrefix,
 		acquisitionCreationWizardJsp,
 		array,
 		invoiceAllowedToStartAcquisitionProcess,
-		requireFundAllocationPriorToAcquisitionRequest);
+		requireFundAllocationPriorToAcquisitionRequest,
+		maxValueStartedWithInvoive);
 
 	return viewConfiguration(mapping, form, request, response);
     }
