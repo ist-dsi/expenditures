@@ -104,11 +104,12 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 
     private static synchronized void initialize() {
 	if (!isInitialized
-		&& migrateProcessNumbers().booleanValue()
-		&& migrateSuppliers()
-		&& migrateCPVs()
-		&& migratePeople()
-		&& checkISTOptions()) {
+		//&& migrateProcessNumbers().booleanValue()
+		//&& migrateSuppliers()
+		//&& migrateCPVs()
+		//&& migratePeople()
+		//&& checkISTOptions()
+		) {
 	    isInitialized = true;
 	}
     }
