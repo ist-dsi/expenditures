@@ -140,15 +140,19 @@ public class RefundProcess extends RefundProcess_Base {
     }
 
     protected String constructProcessNumber() {
-	// TODO : Only uncomment this when ADIST an IST-ID are to be placed in production
-	//final ExpenditureTrackingSystem instance = ExpenditureTrackingSystem.getInstance();
-	//return instance.getInstitutionalProcessNumberPrefix() + "/" + getYear() + "/" + getAcquisitionProcessNumber();
+	final ExpenditureTrackingSystem instance = getExpenditureTrackingSystem();
+	if (instance.hasProcessPrefix()) {
+	    return instance.getInstitutionalProcessNumberPrefix() + "/" + getYear() + "/" + getAcquisitionProcessNumber();
+	}
 	return getYear() + "/" + getAcquisitionProcessNumber();
     }
 
     @Override
     public void migrateProcessNumber() {
-	setProcessNumber(constructProcessNumber());
+	final ExpenditureTrackingSystem instance = getExpenditureTrackingSystem();
+	if (!getProcessNumber().startsWith(instance.getInstitutionalProcessNumberPrefix())) {
+	    setProcessNumber(constructProcessNumber());
+	}
     }
 
     @Service

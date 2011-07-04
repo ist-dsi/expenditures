@@ -156,7 +156,6 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
 	if (ExpenditureTrackingSystem.isInvoiceAllowedToStartAcquisitionProcess() && hasInvoiceFile()) {
 	    type = AcquisitionProcessStateType.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER;
 	    if (ExternalIntegration.isActive()) {
-		// TODO : only uncomment this line when we want to integrate with MGP
 		createFundAllocationRequest(false);
 	    }
 	} else {

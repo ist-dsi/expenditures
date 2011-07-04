@@ -10,10 +10,7 @@ public class ExternalIntegration {
     }
 
     private static boolean isActive(final String hostname) {
-	return false
-		//"dot.ist-id.ist.utl.pt".equals(hostname)
-		//|| "dot.ist.utl.pt".equals(hostname)
-	;
+	return "dot.ist-id.ist.utl.pt".equals(hostname);
     }
 
 }

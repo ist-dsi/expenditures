@@ -103,9 +103,8 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
     }
 
     private static synchronized void initialize() {
-	// TODO : Only uncomment this when ADIST an IST-ID are to be placed in production
 	if (!isInitialized
-		/* && migrateProcessNumbers().booleanValue() */
+		&& migrateProcessNumbers().booleanValue()
 		&& migrateSuppliers()
 		&& migrateCPVs()
 		&& migratePeople()
@@ -185,10 +184,9 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 	    return Boolean.FALSE;
 	}
 	final String prefix = expenditureTrackingSystem.getInstitutionalProcessNumberPrefix();
-	if (prefix == null || prefix.isEmpty()) {
+	if (prefix != null && !prefix.isEmpty()) {
 	    final long start = System.currentTimeMillis();
 	    System.out.println("Migrating acquisition process numbers.");
-	    expenditureTrackingSystem.setInstitutionalProcessNumberPrefix("IST");
 	    for (final PaymentProcessYear paymentProcessYear : expenditureTrackingSystem.getPaymentProcessYearsSet()) {
 		for (final PaymentProcess paymentProcess : paymentProcessYear.getPaymentProcessSet()) {
 		    paymentProcess.migrateProcessNumber();
@@ -449,6 +447,11 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
     public static boolean isInvoiceAllowedToStartAcquisitionProcess() {
 	final ExpenditureTrackingSystem system = getInstance();
 	return system.getInvoiceAllowedToStartAcquisitionProcess().booleanValue();
+    }
+
+    public boolean hasProcessPrefix() {
+	final String prefix = getInstitutionalProcessNumberPrefix();
+	return prefix != null && !prefix.isEmpty();
     }
 
 }

@@ -29,7 +29,6 @@ public class CancelInvoiceConfirmation extends
 	process.cancelInvoiceConfirmationBy(UserView.getCurrentUser().getExpenditurePerson());
 
 	if (ExternalIntegration.isActive()) {
-	    // TODO : only uncomment this line when we want to integrate with MGP
 	    process.cancelFundAllocationRequest(true);
 	}
     }
