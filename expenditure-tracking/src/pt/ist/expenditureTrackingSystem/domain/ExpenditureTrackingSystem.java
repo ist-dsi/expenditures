@@ -429,7 +429,7 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
     public SortedSet<ProcessClassification> getAllowdProcessClassifications(final Class processType) {
 	final SortedSet<ProcessClassification> classifications = new TreeSet<SimplifiedProcedureProcess.ProcessClassification>();
 	for (final SearchProcessValues searchProcessValues : getSearchProcessValuesArray().getSearchProcessValues()) {
-	    if (processType == searchProcessValues.getSearchClass()) {
+	    if (processType != null && processType == searchProcessValues.getSearchClass()) {
 		classifications.add(searchProcessValues.getSearchClassification());
 	    }
 	}
