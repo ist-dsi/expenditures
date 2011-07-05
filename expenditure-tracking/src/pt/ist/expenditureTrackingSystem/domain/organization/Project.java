@@ -3,10 +3,14 @@ package pt.ist.expenditureTrackingSystem.domain.organization;
 import java.util.Set;
 
 import module.organization.domain.Accountability;
+import module.organization.domain.AccountabilityType;
 import module.organization.domain.Party;
 import module.organization.domain.PartyType;
 import module.organizationIst.domain.IstAccountabilityType;
 import module.organizationIst.domain.IstPartyType;
+
+import org.joda.time.LocalDate;
+
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
@@ -159,6 +163,28 @@ public class Project extends Project_Base {
     @Override
     public String getUnitNumber() {
 	return getProjectCode();
+    }
+
+    public boolean isOpen() {
+	final AccountabilityType accountabilityType = IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType();
+	for (final Accountability accountability : getUnit().getParentAccountabilitiesSet()) {
+	    if (accountability.getAccountabilityType() == accountabilityType
+		    && accountability.isActiveNow()) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
+    public void close() {
+	final module.organization.domain.Unit unit = getUnit();
+	final AccountabilityType accountabilityType = IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType();
+	for (final Accountability accountability : getUnit().getParentAccountabilitiesSet()) {
+	    if (accountability.getAccountabilityType() == accountabilityType && accountability.isActiveNow()) {
+		final LocalDate beginDate = accountability.getBeginDate();
+		accountability.editDates(beginDate, new LocalDate());
+	    }
+	}
     }
 
 }

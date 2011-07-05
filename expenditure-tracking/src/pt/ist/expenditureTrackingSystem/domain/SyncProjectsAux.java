@@ -501,6 +501,13 @@ public abstract class SyncProjectsAux {
 	    project.setName(acronym);
 	}
 
+	// V 3 I A F E f
+	if (mgpProject.getStatus() != null && !"V".equals(mgpProject.getStatus())) {
+	    if (project.isOpen()) {
+		project.close();
+	    }
+	}
+
 	project.setAccountManager(accountManagerPerson);
 
 	AccountingUnit accountingUnit = AccountingUnit.readAccountingUnitByUnitName(accountingUnitString);
