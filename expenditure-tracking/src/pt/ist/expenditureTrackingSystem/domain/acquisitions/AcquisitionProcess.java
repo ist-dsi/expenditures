@@ -21,8 +21,6 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
     public AcquisitionProcess() {
 	super();
 	setOjbConcreteClass(getClass().getName());
-	final ExpenditureTrackingSystem instance = ExpenditureTrackingSystem.getInstance();
-	setExpenditureTrackingSystem(instance);
 	super.setSkipSupplierFundAllocation(Boolean.FALSE);
 	setProcessNumber(constructProcessNumber());
     }

@@ -24,6 +24,7 @@ import myorg.util.ClassNameBundle;
 import org.joda.time.LocalDate;
 
 import pt.ist.emailNotifier.domain.Email;
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
@@ -63,6 +64,8 @@ public abstract class PaymentProcess extends PaymentProcess_Base implements HasP
 
     public PaymentProcess() {
 	super();
+	final ExpenditureTrackingSystem instance = ExpenditureTrackingSystem.getInstance();
+	setExpenditureTrackingSystem(instance);
 	final PaymentProcessYear acquisitionProcessYear = getPaymentProcessYearForConstruction();
 	setPaymentProcessYear(acquisitionProcessYear);
 	setAcquisitionProcessNumber(acquisitionProcessYear.nextAcquisitionProcessYearNumber());

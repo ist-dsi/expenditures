@@ -27,6 +27,8 @@ public abstract class GenericProcess extends GenericProcess_Base {
 
     public GenericProcess() {
 	super();
+	final ExpenditureTrackingSystem instance = ExpenditureTrackingSystem.getInstance();
+	setExpenditureTrackingSystem(instance);
     }
 
     public static <T extends GenericProcess> Set<T> getAllProcesses(Class<T> processClass, PaymentProcessYear year) {
