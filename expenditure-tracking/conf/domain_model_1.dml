@@ -70,6 +70,7 @@ class ExpenditureTrackingSystem {
 	Boolean invoiceAllowedToStartAcquisitionProcess;
 	Boolean requireFundAllocationPriorToAcquisitionRequest;
 	Money maxValueStartedWithInvoive;
+	Money valueRequireingTopLevelAuthorization;
 }
 
 

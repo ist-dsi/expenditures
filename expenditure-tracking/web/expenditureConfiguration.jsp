@@ -175,6 +175,7 @@
 				/>
 			</td>
 		</tr>
+		<tr>
 			<td>
 				<bean:message key="label.configuration.process.flow.start.with.invoice.limit" bundle="EXPENDITURE_RESOURCES"/>
 			</td>
@@ -198,6 +199,18 @@
 							checked="checked"
 					<% } %>
 				/>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<bean:message key="label.configuration.process.value.requireing.top.level.authorization" bundle="EXPENDITURE_RESOURCES"/>
+			</td>
+			<td>
+				<input type="text" name="valueRequireingTopLevelAuthorization"
+					<% if (expenditureTrackingSystem.getValueRequireingTopLevelAuthorization() != null) {%>
+							value="<%= expenditureTrackingSystem.getValueRequireingTopLevelAuthorization().getValue() %>"
+					<% } %>
+						/>
 			</td>
 		</tr>
 	</table>

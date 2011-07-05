@@ -441,13 +441,15 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
     @Service
     public void saveConfiguration(final String institutionalProcessNumberPrefix, final String acquisitionCreationWizardJsp,
 	    final SearchProcessValuesArray array, final Boolean invoiceAllowedToStartAcquisitionProcess,
-	    final Boolean requireFundAllocationPriorToAcquisitionRequest, final Money maxValueStartedWithInvoive) {
+	    final Boolean requireFundAllocationPriorToAcquisitionRequest, final Money maxValueStartedWithInvoive,
+	    final Money valueRequireingTopLevelAuthorization) {
 	setInstitutionalProcessNumberPrefix(institutionalProcessNumberPrefix);
 	setAcquisitionCreationWizardJsp(acquisitionCreationWizardJsp);
 	setSearchProcessValuesArray(array);
 	setInvoiceAllowedToStartAcquisitionProcess(invoiceAllowedToStartAcquisitionProcess);
 	setRequireFundAllocationPriorToAcquisitionRequest(requireFundAllocationPriorToAcquisitionRequest);
 	setMaxValueStartedWithInvoive(maxValueStartedWithInvoive);
+	setValueRequireingTopLevelAuthorization(valueRequireingTopLevelAuthorization);
     }
 
     @Service

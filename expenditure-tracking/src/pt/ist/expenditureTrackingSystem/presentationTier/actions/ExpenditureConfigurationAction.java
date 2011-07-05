@@ -56,13 +56,17 @@ public class ExpenditureConfigurationAction extends BaseAction {
 	final String maxValueStartedWithInvoiveParam = request.getParameter("maxValueStartedWithInvoive");
 	final Money maxValueStartedWithInvoive = new Money(maxValueStartedWithInvoiveParam);
 
+	final String valueRequireingTopLevelAuthorizationParam = request.getParameter("valueRequireingTopLevelAuthorization");
+	final Money valueRequireingTopLevelAuthorization = new Money(valueRequireingTopLevelAuthorizationParam);
+
 	ExpenditureTrackingSystem.getInstance().saveConfiguration(
 		institutionalProcessNumberPrefix,
 		acquisitionCreationWizardJsp,
 		array,
 		invoiceAllowedToStartAcquisitionProcess,
 		requireFundAllocationPriorToAcquisitionRequest,
-		maxValueStartedWithInvoive);
+		maxValueStartedWithInvoive,
+		valueRequireingTopLevelAuthorization);
 
 	return viewConfiguration(mapping, form, request, response);
     }

@@ -431,4 +431,9 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	return false;
     }
 
+    @Override
+    protected boolean isProcessessStartedWithInvoive() {
+	return hasInvoiceFile() && !hasAcquisitionProposalDocument();
+    }
+
 }

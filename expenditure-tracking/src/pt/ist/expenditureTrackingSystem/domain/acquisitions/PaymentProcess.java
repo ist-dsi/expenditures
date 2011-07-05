@@ -247,10 +247,20 @@ public abstract class PaymentProcess extends PaymentProcess_Base implements HasP
 	for (Unit unit : getPayingUnits()) {
 	    for (Authorization authorization : validAuthorizations) {
 		if (authorization.getMaxAmount().isGreaterThanOrEqual(amount) && unit.isSubUnit(authorization.getUnit())) {
-		    return true;
+		    final ExpenditureTrackingSystem instance = ExpenditureTrackingSystem.getInstance();
+		    if (!authorization.getUnit().hasParentUnit() ||
+			    (!isProcessessStartedWithInvoive() && (
+				    instance.getValueRequireingTopLevelAuthorization() == null ||
+				    instance.getValueRequireingTopLevelAuthorization().isGreaterThan(amount)))) {
+			return true;
+		    }
 		}
 	    }
 	}
+	return false;
+    }
+
+    protected boolean isProcessessStartedWithInvoive() {
 	return false;
     }
 
