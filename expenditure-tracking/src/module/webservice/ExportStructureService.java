@@ -4,6 +4,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
 import myorg._development.PropertiesManager;
@@ -23,6 +24,14 @@ public class ExportStructureService {
 	check(username, password);
 	final String content = generateCostCenterList();
 	return Response.ok(content, "text/csv").build();
+    }
+
+    @GET
+    @Path("listCostCenters.csv")
+    @Produces("text/csv")
+    public Response listCostCentersParams(@QueryParam("username") final String username,
+	    @QueryParam("password") final String password) {
+	return listCostCenters(username, password);
     }
 
     private String generateCostCenterList() {
