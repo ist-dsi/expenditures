@@ -53,6 +53,7 @@ import module.workingCapital.domain.activity.VerifyWorkingCapitalAcquisitionActi
 import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.RoleType;
 import myorg.domain.User;
+import myorg.domain.VirtualHost;
 import myorg.util.BundleUtil;
 import myorg.util.ClassNameBundle;
 import pt.ist.emailNotifier.domain.Email;
@@ -183,7 +184,9 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base implements
 
 	    final User loggedUser = UserView.getCurrentUser();
 	    final WorkingCapital workingCapital = getWorkingCapital();
-	    new Email("Aplicações Centrais do IST", "noreply@ist.utl.pt", new String[] {}, toAddress, Collections.EMPTY_LIST,
+	    final VirtualHost virtualHost = VirtualHost.getVirtualHostForThread();
+	    new Email(virtualHost.getApplicationSubTitle().getContent(),
+			    virtualHost.getSystemEmailAddress(), new String[] {}, toAddress, Collections.EMPTY_LIST,
 		    Collections.EMPTY_LIST, BundleUtil.getFormattedStringFromResourceBundle("resources/WorkingCapitalResources",
 			    "label.email.commentCreated.subject", workingCapital.getUnit().getPresentationName(), workingCapital
 				    .getWorkingCapitalYear().getYear().toString()),

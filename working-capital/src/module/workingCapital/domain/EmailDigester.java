@@ -1,17 +1,26 @@
 package module.workingCapital.domain;
 
+import myorg.domain.MyOrg;
+import myorg.domain.VirtualHost;
 import pt.ist.fenixWebFramework.services.Service;
 
 public class EmailDigester extends EmailDigester_Base {
-    
+
     public EmailDigester() {
-        super();
+	super();
     }
 
     @Override
     @Service
     public void executeTask() {
-	EmailDigesterUtil.executeTask();
+	for (final VirtualHost virtualHost : MyOrg.getInstance().getVirtualHostsSet()) {
+	    try {
+		VirtualHost.setVirtualHostForThread(virtualHost);
+		EmailDigesterUtil.executeTask();
+	    } finally {
+		VirtualHost.releaseVirtualHostFromThread();
+	    }
+	}
     }
 
     @Override

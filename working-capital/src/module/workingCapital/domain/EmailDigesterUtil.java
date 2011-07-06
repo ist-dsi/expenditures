@@ -9,6 +9,7 @@ import java.util.SortedSet;
 import myorg.applicationTier.Authenticate;
 import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.User;
+import myorg.domain.VirtualHost;
 import myorg.util.BundleUtil;
 
 import org.jfree.data.time.Month;
@@ -27,6 +28,8 @@ import pt.utl.ist.fenix.tools.util.i18n.Language;
 public class EmailDigesterUtil {
     
     public static void executeTask() {
+	final VirtualHost virtualHost = VirtualHost.getVirtualHostForThread();
+
 	Language.setLocale(Language.getDefaultLocale());
 	for (Person person : getPeopleToProcess()) {
 
@@ -107,8 +110,14 @@ public class EmailDigesterUtil {
 
 	    			    final Collection<String> toAddress = Collections.singleton(email);
 	    			    final Collection<String> bccAddress = Collections.EMPTY_LIST;
-	    			    new Email("Aplicações Centrais do IST", "noreply@ist.utl.pt", new String[] {}, toAddress, Collections.EMPTY_LIST,
-	    				    bccAddress, "Processos Pendentes - Fundos de Maneio", body.toString());
+	    			    new Email(virtualHost.getApplicationSubTitle().getContent(),
+	    				    virtualHost.getSystemEmailAddress(),
+	    				    new String[] {},
+	    				    toAddress,
+	    				    Collections.EMPTY_LIST,
+	    				    bccAddress,
+	    				    "Processos Pendentes - Fundos de Maneio",
+	    				    body.toString());
 	    			}
 	    		    } catch (final RemoteException ex) {
 	    			System.out.println("Unable to lookup email address for: " + person.getUsername());
