@@ -127,7 +127,9 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 	for (final VirtualHost virtualHost : myOrg.getVirtualHostsSet()) {
 	    if (virtualHost.getHostname().equals("dot.ist.utl.pt")) {
 		final ExpenditureTrackingSystem ets = virtualHost.getExpenditureTrackingSystem();
-		ets.setRequireFundAllocationPriorToAcquisitionRequest(Boolean.TRUE);
+		if (ets != null) {
+		    ets.setRequireFundAllocationPriorToAcquisitionRequest(Boolean.TRUE);
+		}
 	    }
 	}
 	return false;
@@ -141,7 +143,9 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 	    System.out.println("Migrating people..");
 	    for (final VirtualHost virtualHost : myOrg.getVirtualHostsSet()) {
 		final ExpenditureTrackingSystem ets = virtualHost.getExpenditureTrackingSystem();
-		myOrg.getPeopleFromExpenditureTackingSystemSet().addAll(ets.getPeopleSet());
+		if (ets != null) {
+		    myOrg.getPeopleFromExpenditureTackingSystemSet().addAll(ets.getPeopleSet());
+		}
 	    }
 	    final long end = System.currentTimeMillis();
 	    System.out.println("Completed migration in: " + (end - start) + "ms.");
@@ -157,7 +161,9 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 	    System.out.println("Migrating cpv references..");
 	    for (final VirtualHost virtualHost : myOrg.getVirtualHostsSet()) {
 		final ExpenditureTrackingSystem ets = virtualHost.getExpenditureTrackingSystem();
-		myOrg.getCPVReferencesSet().addAll(ets.getCPVReferencesSet());
+		if (ets != null) {
+		    myOrg.getCPVReferencesSet().addAll(ets.getCPVReferencesSet());
+		}
 	    }
 	    final long end = System.currentTimeMillis();
 	    System.out.println("Completed migration in: " + (end - start) + "ms.");
@@ -173,7 +179,9 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 	    System.out.println("Migrating suppliers.");
 	    for (final VirtualHost virtualHost : myOrg.getVirtualHostsSet()) {
 		final ExpenditureTrackingSystem ets = virtualHost.getExpenditureTrackingSystem();
-		myOrg.getSuppliersSet().addAll(ets.getSuppliersSet());
+		if (ets != null) {
+		    myOrg.getSuppliersSet().addAll(ets.getSuppliersSet());
+		}
 	    }
 	    final long end = System.currentTimeMillis();
 	    System.out.println("Completed migration in: " + (end - start) + "ms.");
