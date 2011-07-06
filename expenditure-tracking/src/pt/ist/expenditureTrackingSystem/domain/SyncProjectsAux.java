@@ -193,6 +193,7 @@ public abstract class SyncProjectsAux {
 	Set<MgpProject> getMgpProjects() {
 	    return mgpProjects;
 	}
+
     }
 
     public static class OtherProjectCoordinatorsQuery implements ExternalDbQuery {
@@ -233,6 +234,7 @@ public abstract class SyncProjectsAux {
 	Set<MgpProject> getMgpProjects() {
 	    return mgpProjects;
 	}
+
     }
 
     public static class ProjectReader extends ExternalDbOperation {
@@ -307,6 +309,7 @@ public abstract class SyncProjectsAux {
 	Set<MgpProject> getMgpProjects() {
 	    return mgpProjects;
 	}
+
     }
 
     int createdProjects = 0;

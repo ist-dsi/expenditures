@@ -237,6 +237,7 @@ public class SyncSuppliersAux {
 	    }
 	    return null;
 	}
+
     }
 
     private static class CanceledSupplierQuery implements ExternalDbQuery {
@@ -272,6 +273,7 @@ public class SyncSuppliersAux {
 	    }
 	    return null;
 	}
+
     }
 
     public static class CountryReader extends ExternalDbOperation {
