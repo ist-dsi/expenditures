@@ -24,6 +24,7 @@ import module.workflow.widgets.UnreadCommentsWidget;
 import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.RoleType;
 import myorg.domain.User;
+import myorg.domain.VirtualHost;
 import myorg.domain.exceptions.DomainException;
 import myorg.util.BundleUtil;
 import myorg.util.ClassNameBundle;
@@ -116,7 +117,9 @@ public abstract class MissionProcess extends MissionProcess_Base {
 		    body.append("Esta mensagem foi enviada por meio das Aplicações Centrais do IST.\n");
 
 		    final Collection<String> toAddress = Collections.singleton(email);
-		    new Email("Aplicações Centrais do IST", "noreply@ist.utl.pt", new String[] {}, toAddress,
+		    final VirtualHost virtualHost = VirtualHost.getVirtualHostForThread();
+		    new Email(virtualHost.getApplicationSubTitle().getContent(),
+				    virtualHost.getSystemEmailAddress(), new String[] {}, toAddress,
 			    Collections.EMPTY_LIST, Collections.EMPTY_LIST, "Passagem de Processo Pendentes - Missões",
 			    body.toString());
 		}
@@ -335,7 +338,9 @@ public abstract class MissionProcess extends MissionProcess_Base {
 	    toAddress.add(email);
 
 	    final User loggedUser = UserView.getCurrentUser();
-	    new Email("Aplicações Centrais do IST", "noreply@ist.utl.pt", new String[] {}, toAddress, Collections.EMPTY_LIST,
+	    final VirtualHost virtualHost = VirtualHost.getVirtualHostForThread();
+	    new Email(virtualHost.getApplicationSubTitle().getContent(),
+			    virtualHost.getSystemEmailAddress(), new String[] {}, toAddress, Collections.EMPTY_LIST,
 		    Collections.EMPTY_LIST, BundleUtil.getFormattedStringFromResourceBundle("resources/MissionResources",
 			    "label.email.commentCreated.subject", getProcessIdentification()),
 		    BundleUtil.getFormattedStringFromResourceBundle("resources/MissionResources",

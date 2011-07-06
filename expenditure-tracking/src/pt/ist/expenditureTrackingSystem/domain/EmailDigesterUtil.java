@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 import myorg.applicationTier.Authenticate;
+import myorg.domain.VirtualHost;
 import myorg.util.MultiCounter;
 
 import org.apache.commons.lang.StringUtils;
@@ -33,6 +34,8 @@ import pt.utl.ist.fenix.tools.util.i18n.Language;
 public class EmailDigesterUtil {
 
     public static void executeTask() {
+	final VirtualHost virtualHost = VirtualHost.getVirtualHostForThread();
+
 	List<String> toAddress = new ArrayList<String>();
 	Language.setLocale(Language.getDefaultLocale());
 	for (Person person : getPeopleToProcess()) {
@@ -48,8 +51,14 @@ public class EmailDigesterUtil {
 		    final String email = person.getEmail();
 		    if (email != null) {
 			toAddress.add(email);
-			new Email("Central de Compras", "noreply@ist.utl.pt", new String[] {}, toAddress, Collections.EMPTY_LIST,
-				Collections.EMPTY_LIST, "Processos Pendentes", getBody(generateAcquisitionMap, generateRefundMap));
+			new Email(virtualHost.getApplicationSubTitle().getContent(),
+				virtualHost.getSystemEmailAddress(),
+				new String[] {},
+				toAddress,
+				Collections.EMPTY_LIST,
+				Collections.EMPTY_LIST,
+				"Processos Pendentes",
+				getBody(generateAcquisitionMap, generateRefundMap));
 		    }
 		} catch (final RemoteException ex) {
 		    System.out.println("Unable to lookup email address for: " + person.getUsername());

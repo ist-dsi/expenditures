@@ -16,6 +16,7 @@ import module.workflow.util.HasPresentableProcessState;
 import module.workflow.util.PresentableProcessState;
 import module.workflow.widgets.UnreadCommentsWidget;
 import myorg.domain.User;
+import myorg.domain.VirtualHost;
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
 import myorg.util.BundleUtil;
@@ -387,7 +388,9 @@ public abstract class PaymentProcess extends PaymentProcess_Base implements HasP
 	if (email != null) {
 	    toAddress.add(email);
 
-	    new Email("Central de Compras", "noreply@ist.utl.pt", new String[] {}, toAddress, Collections.EMPTY_LIST,
+	    final VirtualHost virtualHost = VirtualHost.getVirtualHostForThread();
+	    new Email(virtualHost.getApplicationSubTitle().getContent(),
+			    virtualHost.getSystemEmailAddress(), new String[] {}, toAddress, Collections.EMPTY_LIST,
 		    Collections.EMPTY_LIST, BundleUtil.getFormattedStringFromResourceBundle("resources/AcquisitionResources",
 			    "label.email.commentCreated.subject", getAcquisitionProcessId()),
 		    BundleUtil.getFormattedStringFromResourceBundle("resources/AcquisitionResources",
