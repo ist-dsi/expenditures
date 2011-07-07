@@ -334,6 +334,13 @@
 		<property name="args" value="provider=module.mission.presentationTier.provider.autoComplete.PersonAutoComplete"/>
 		<property name="size" value="50"/>
 	</slot>
+	<slot name="accountManager" layout="autoComplete" key="label.mission.accountManager">
+        <property name="labelField" value="name"/>
+		<property name="format" value="${name} (${user.username})"/>
+		<property name="minChars" value="3"/>		
+		<property name="args" value="provider=module.mission.presentationTier.provider.autoComplete.PersonAutoComplete"/>
+		<property name="size" value="50"/>
+	</slot>
 	<slot name="filterCanceledProcesses" key="label.mission.filterCanceledProcesses"/>
 </schema>
 

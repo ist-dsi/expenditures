@@ -131,6 +131,7 @@ public class SearchMissions extends Search<Mission> {
     private LocalDate date;
     private Person requestingPerson;
     private Person participant;
+    private Person accountManager;
     private Boolean filterCanceledProcesses = Boolean.TRUE;
 
     @Override
@@ -177,6 +178,7 @@ public class SearchMissions extends Search<Mission> {
 		    && matchDateCriteria(mission)
 		    && matchRequestingPersonCriteria(mission.getRequestingPerson())
 		    && matchParticipantCriteria(mission)
+		    && matchAccountManagerCriteria(mission)
 		    && matchCanceledCriteria(mission)
 		    && mission.getMissionProcess().isAccessibleToCurrentUser();
 	}
@@ -198,6 +200,10 @@ public class SearchMissions extends Search<Mission> {
 
 	private boolean matchRequestingPersonCriteria(Person rp) {
 	    return requestingPerson == null || requestingPerson == rp;
+	}
+
+	private boolean matchAccountManagerCriteria(final Mission mission) {
+	    return accountManager == null || mission.containsAccountManager(accountManager);
 	}
 
 	private boolean matchDateCriteria(Mission mission) {
@@ -303,4 +309,13 @@ public class SearchMissions extends Search<Mission> {
         this.missionResponsible = missionResponsible;
     }
 
+    public Person getAccountManager() {
+        return accountManager;
+    }
+
+    public void setAccountManager(Person accountManager) {
+        this.accountManager = accountManager;
+    }
+
+    
 }

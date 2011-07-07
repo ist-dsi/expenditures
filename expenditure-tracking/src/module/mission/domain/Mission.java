@@ -1296,4 +1296,22 @@ public abstract class Mission extends Mission_Base {
 	return false;
     }
 
+    public boolean containsAccountManager(final Person accountManager) {
+	if (accountManager != null) {
+	    final User user = accountManager.getUser();
+	    if (user != null) {
+		final pt.ist.expenditureTrackingSystem.domain.organization.Person person = user.getExpenditurePerson();
+		if (person != null) {
+		    for (final MissionFinancer financer : getFinancerSet()) {
+			final Unit unit = financer.getUnit();
+			if (unit.getAccountManager() == accountManager.getUser().getExpenditurePerson()) {
+			    return true;
+			}
+		    }
+		}
+	    }
+	}
+	return false;
+    }
+
 }
