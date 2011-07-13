@@ -75,6 +75,7 @@ public class Supplier extends Supplier_Base implements Indexable, Searchable {
     @Service
     public void delete() {
 	if (checkIfCanBeDeleted()) {
+	    removeMyOrg();
 	    removeExpenditureTrackingSystem();
 	    super.delete();
 	}
