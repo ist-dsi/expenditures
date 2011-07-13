@@ -65,6 +65,14 @@ public class UnitItem extends UnitItem_Base {
     public void delete() {
 	removeFinancer();
 	removeItem();
+	getConfirmedInvoicesSet().clear();
+	for (final ProjectAcquisitionFundAllocationRequest request : getProjectAcquisitionFundAllocationRequestSet()) {
+	    if (request.isCanceled()) {
+		request.removeUnitItem();
+	    } else {
+		throw new Error("request.must.be.canceled.first");
+	    }
+	}
 	deleteDomainObject();
     }
 

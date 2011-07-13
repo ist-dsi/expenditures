@@ -49,40 +49,42 @@ public class ProjectAcquisitionFundAllocationRequest extends ProjectAcquisitionF
 	super.registerFundAllocation(fundAllocationNumber, operatorUsername);
 
 	final UnitItem unitItem = getUnitItem();
-	final ProjectFinancer financer = (ProjectFinancer) unitItem.getFinancer();
+	if (unitItem != null) {
+	    final ProjectFinancer financer = (ProjectFinancer) unitItem.getFinancer();
 
-	final PaymentProcess process = financer.getProcess();
+	    final PaymentProcess process = financer.getProcess();
 
-	final WorkflowActivity activity;
-	final ActivityInformation information;
+	    final WorkflowActivity activity;
+	    final ActivityInformation information;
 
-	final List<FundAllocationBean> args;
-	final FundAllocationBean fundAllocationBean = new FundAllocationBean(financer);
-	if (isFinalFundAllocation()) {
-	    activity = getActivity(process, AllocateProjectFundsPermanently.class.getSimpleName());
-	    information = ((AllocateProjectFundsPermanently) activity).getActivityInformation(process, false);
-	    fundAllocationBean.setEffectiveFundAllocationId(fundAllocationNumber);
-	} else {
-	    activity = getActivity(process, ProjectFundAllocation.class.getSimpleName());
-	    information = ((ProjectFundAllocation) activity).getActivityInformation(process, false);
-	    fundAllocationBean.setFundAllocationId(fundAllocationNumber);
-	}
+	    final List<FundAllocationBean> args;
+	    final FundAllocationBean fundAllocationBean = new FundAllocationBean(financer);
+	    if (isFinalFundAllocation()) {
+		activity = getActivity(process, AllocateProjectFundsPermanently.class.getSimpleName());
+		information = ((AllocateProjectFundsPermanently) activity).getActivityInformation(process, false);
+		fundAllocationBean.setEffectiveFundAllocationId(fundAllocationNumber);
+	    } else {
+		activity = getActivity(process, ProjectFundAllocation.class.getSimpleName());
+		information = ((ProjectFundAllocation) activity).getActivityInformation(process, false);
+		fundAllocationBean.setFundAllocationId(fundAllocationNumber);
+	    }
 
-	args = Collections.singletonList(fundAllocationBean);
+	    args = Collections.singletonList(fundAllocationBean);
 
-	((AbstractFundAllocationActivityInformation) information).setBeans(args);
+	    ((AbstractFundAllocationActivityInformation) information).setBeans(args);
 
-	final myorg.applicationTier.Authenticate.UserView currentUserView = UserView.getUser();
-	final User user = User.findByUsername(operatorUsername);
-	if (user == null) {
-	    throw new NullPointerException("No user found for: " + operatorUsername);
-	}
-	final myorg.applicationTier.Authenticate.UserView userView = Authenticate.authenticate(user);
-	try {
-	    UserView.setUser(userView);
-	    activity.execute(information);
-	} finally {
-	    UserView.setUser(currentUserView);
+	    final myorg.applicationTier.Authenticate.UserView currentUserView = UserView.getUser();
+	    final User user = User.findByUsername(operatorUsername);
+	    if (user == null) {
+		throw new NullPointerException("No user found for: " + operatorUsername);
+	    }
+	    final myorg.applicationTier.Authenticate.UserView userView = Authenticate.authenticate(user);
+	    try {
+		UserView.setUser(userView);
+		activity.execute(information);
+	    } finally {
+		UserView.setUser(currentUserView);
+	    }
 	}
     }
 

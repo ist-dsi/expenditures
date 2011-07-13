@@ -1106,7 +1106,7 @@ relation ProjectAcquisitionFundAllocationRequestUnitItem {
 		multiplicity *;
 	}
 	acquisitions.UnitItem playsRole unitItem {
-		multiplicity 1..1;
+		multiplicity 0..1;
 	}
 }
 
