@@ -77,13 +77,14 @@ public class Supplier extends Supplier_Base implements Indexable, Searchable {
 	if (checkIfCanBeDeleted()) {
 	    removeExpenditureTrackingSystem();
 	    super.delete();
-	    deleteDomainObject();
 	}
     }
 
-    private boolean checkIfCanBeDeleted() {
+    @Override
+    protected boolean checkIfCanBeDeleted() {
 	return !hasAnyAcquisitionRequests() && !hasAnyAcquisitionsAfterTheFact() && !hasAnyRefundInvoices()
-		&& !hasAnyAnnouncements() && !hasAnySupplierSearches();
+		&& !hasAnyAnnouncements() && !hasAnySupplierSearches() && !hasAnyPossibleAcquisitionRequests()
+		&& super.checkIfCanBeDeleted();
     }
 
     public static Supplier readSupplierByFiscalIdentificationCode(String fiscalIdentificationCode) {
@@ -201,14 +202,15 @@ public class Supplier extends Supplier_Base implements Indexable, Searchable {
 
     @Service
     public static Supplier createNewSupplier(CreateSupplierBean createSupplierBean) {
-	return new Supplier(createSupplierBean.getName(), createSupplierBean.getAbbreviatedName(), createSupplierBean
-		.getFiscalIdentificationCode(), createSupplierBean.getAddress(), createSupplierBean.getPhone(),
+	return new Supplier(createSupplierBean.getName(), createSupplierBean.getAbbreviatedName(),
+		createSupplierBean.getFiscalIdentificationCode(), createSupplierBean.getAddress(), createSupplierBean.getPhone(),
 		createSupplierBean.getFax(), createSupplierBean.getEmail(), createSupplierBean.getNib());
     }
 
+    @Override
     public boolean isFundAllocationAllowed(final Money value) {
 	final Money totalAllocated = getTotalAllocated();
-	final Money totalValue = totalAllocated; //.add(value);
+	final Money totalValue = totalAllocated; // .add(value);
 	return totalValue.isLessThan(SUPPLIER_LIMIT) && totalValue.isLessThan(getSupplierLimit());
     }
 
