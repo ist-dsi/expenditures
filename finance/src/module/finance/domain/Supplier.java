@@ -9,16 +9,20 @@ public class Supplier extends Supplier_Base {
     public static Money SOFT_SUPPLIER_LIMIT = new Money("60000");
 
     public Supplier() {
-        super();
-        setFinanceSystem(FinanceSystem.getInstance());
-        setSupplierLimit(SOFT_SUPPLIER_LIMIT);
+	super();
+	setFinanceSystem(FinanceSystem.getInstance());
+	setSupplierLimit(SOFT_SUPPLIER_LIMIT);
     }
 
     public void delete() {
-	if (!hasAnyProvisions()) {
+	if (checkIfCanBeDeleted()) {
 	    removeFinanceSystem();
 	    deleteDomainObject();
 	}
+    }
+
+    protected boolean checkIfCanBeDeleted() {
+	return !hasAnyProvisions();
     }
 
     public String getPresentationName() {
@@ -30,7 +34,6 @@ public class Supplier extends Supplier_Base {
 	final Money newLimit = supplierLimit.isGreaterThanOrEqual(SUPPLIER_LIMIT) ? SUPPLIER_LIMIT : supplierLimit;
 	super.setSupplierLimit(newLimit);
     }
-
 
     public Money getAllocated() {
 	Money result = Money.ZERO;
