@@ -1,5 +1,6 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -106,8 +107,10 @@ public class ProjectAcquisitionFundAllocationRequest extends ProjectAcquisitionF
 	    final PaymentProcess process = request.getProcess();
 
 	    final Money shareValue = unitItem.getShareValue();
-	    final Money shareValueWithVat = unitItem.getShareValueWithVat();
-	    final Money shareVat = shareValueWithVat.subtract(shareValue);
+
+	    final BigDecimal d = new BigDecimal(1).add(unitItem.getVatValue().divide(new BigDecimal(100)));
+	    final Money shareWithoutVat = shareValue.divideAndRound(d);
+	    final Money shareVat = shareValue.subtract(shareWithoutVat);
 
 	    Object[] insertArgs = new Object[] {
 		    "INTERACT_ID", Long.valueOf(getInteractionId()),
@@ -122,7 +125,7 @@ public class ProjectAcquisitionFundAllocationRequest extends ProjectAcquisitionF
 		    "CPV_ID", cpvReference.getCode(),
 		    "CPV_DESCRIPTION", cpvReference.getDescription(),
 		    "MOV_DESCRIPTION", limitStringSize(Integer.toString(item.getUnitItemsCount()) + " - " + item.getDescription(), 4000),
-		    "MOV_PCT_IVA", item.getVatValue(),
+		    "MOV_PCT_IVA", unitItem.getVatValue(),
 		    "MOV_VALUE", shareValue,
 		    "MOV_VALUE_IVA", shareVat,
 //,		    "CALLBACK_URL", getCallbackUrl()

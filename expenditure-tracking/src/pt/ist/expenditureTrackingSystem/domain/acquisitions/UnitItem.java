@@ -58,8 +58,8 @@ public class UnitItem extends UnitItem_Base {
 	return getItem().getVatValue();
     }
 
-    public Money getShareValueWithVat() {
-	return getShareValue().addPercentage(getVatValue());
+    public Money getShareVatValue() {
+	return getShareValue().multiplyAndRound(getVatValue());
     }
 
     public void delete() {
