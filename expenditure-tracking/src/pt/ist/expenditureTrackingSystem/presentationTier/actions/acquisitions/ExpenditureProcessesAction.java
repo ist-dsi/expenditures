@@ -20,7 +20,9 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.AbstractFundAllocationActivityInformation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.CreateAcquisitionRequestItemActivityInformation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.CreateAcquisitionRequestItemActivityInformation.CreateItemSchemaType;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.PayAcquisitionActivityInformation;
 import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean;
+import pt.ist.expenditureTrackingSystem.domain.dto.PaymentReferenceBean;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 import pt.ist.fenixframework.pstm.AbstractDomainObject;
@@ -58,6 +60,41 @@ public class ExpenditureProcessesAction extends ContextBaseAction {
 	request.setAttribute("information", activityInformation);
 
 	List<FundAllocationBean> fundAllocationBeans = activityInformation.getBeans();
+	int index = Integer.valueOf(request.getParameter("index")).intValue();
+
+	fundAllocationBeans.remove(index);
+	RenderUtils.invalidateViewState();
+	return ProcessManagement.performActivityPostback(activityInformation, request);
+    }
+
+    public ActionForward addDiaryNumber(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+
+	PayAcquisitionActivityInformation<PaymentProcess> activityInformation = getRenderedObject("activityBean");
+	final PaymentProcess process = activityInformation.getProcess();
+	request.setAttribute("process", process);
+	request.setAttribute("information", activityInformation);
+
+	List<PaymentReferenceBean> fundAllocationBeans = activityInformation.getBeans();
+	Integer index = Integer.valueOf(request.getParameter("index"));
+
+	Financer financer = getDomainObject(request, "financerOID");
+	PaymentReferenceBean fundAllocationBean = new PaymentReferenceBean(financer);
+	fundAllocationBean.setDiaryNumber(null);
+
+	fundAllocationBeans.add(index + 1, fundAllocationBean);
+	RenderUtils.invalidateViewState();
+	return ProcessManagement.performActivityPostback(activityInformation, request);
+    }
+
+    public ActionForward removeDiaryNumber(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	PayAcquisitionActivityInformation<PaymentProcess> activityInformation = getRenderedObject("activityBean");
+	final PaymentProcess process = activityInformation.getProcess();
+	request.setAttribute("process", process);
+	request.setAttribute("information", activityInformation);
+
+	List<PaymentReferenceBean> fundAllocationBeans = activityInformation.getBeans();
 	int index = Integer.valueOf(request.getParameter("index")).intValue();
 
 	fundAllocationBeans.remove(index);

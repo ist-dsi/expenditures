@@ -1,17 +1,21 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities;
 
-import module.workflow.activities.ActivityInformation;
+import java.util.Set;
+
 import module.workflow.activities.WorkflowActivity;
 import myorg.domain.User;
 import myorg.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
+import pt.ist.expenditureTrackingSystem.domain.dto.PaymentReferenceBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
-public class PayAcquisition extends WorkflowActivity<RegularAcquisitionProcess, PayAcquisitionActivityInformation> {
+public class PayAcquisition<P extends RegularAcquisitionProcess>
+	extends WorkflowActivity<P, PayAcquisitionActivityInformation<P>> {
 
     @Override
-    public boolean isActive(RegularAcquisitionProcess process, User user) {
+    public boolean isActive(P process, User user) {
 	Person person = user.getExpenditurePerson();
 	return isUserProcessOwner(process, user)
 		&& process.getAcquisitionProcessState().isAllocatedPermanently()
@@ -20,15 +24,35 @@ public class PayAcquisition extends WorkflowActivity<RegularAcquisitionProcess, 
     }
 
     @Override
-    protected void process(PayAcquisitionActivityInformation activityInformation) {
-	RegularAcquisitionProcess process = activityInformation.getProcess();
+    protected void process(PayAcquisitionActivityInformation<P> activityInformation) {
+	P process = activityInformation.getProcess();
 	process.getAcquisitionRequest().setPaymentReference(activityInformation.getPaymentReference());
-	process.acquisitionPayed();
+	for (final PaymentReferenceBean bean : activityInformation.getBeans()) {
+	    final Financer financer = bean.getFinancer();
+	    final String diaryNumber = bean.getDiaryNumber();
+	    financer.addPaymentDiaryNumber(diaryNumber);
+	}
+	if (hasAllDiaryNumbers(process)) {
+	    process.acquisitionPayed();
+	}
+    }
+
+    private boolean hasAllDiaryNumbers(final P process) {
+	final Set<Financer> financers = process.getFinancersWithFundsAllocated();
+	if (financers.isEmpty()) {
+	    return false;
+	}
+	for (final Financer financer : financers) {
+	    if (financer.getPaymentDiaryNumber() == null || financer.getPaymentDiaryNumber().isEmpty()) {
+		return false;
+	    }
+	}
+	return true;
     }
 
     @Override
-    public ActivityInformation<RegularAcquisitionProcess> getActivityInformation(RegularAcquisitionProcess process) {
-	return new PayAcquisitionActivityInformation(process, this);
+    public PayAcquisitionActivityInformation<P> getActivityInformation(P process) {
+	return new PayAcquisitionActivityInformation<P>(process, this);
     }
 
     @Override
@@ -40,4 +64,10 @@ public class PayAcquisition extends WorkflowActivity<RegularAcquisitionProcess, 
     public String getUsedBundle() {
 	return "resources/AcquisitionResources";
     }
+
+    @Override
+    public boolean isDefaultInputInterfaceUsed() {
+        return false;
+    }
+
 }

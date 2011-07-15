@@ -1,17 +1,33 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities;
 
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
+import java.util.ArrayList;
+import java.util.List;
+
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.WorkflowProcess;
+import myorg.applicationTier.Authenticate.UserView;
+import myorg.domain.User;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
+import pt.ist.expenditureTrackingSystem.domain.dto.PaymentReferenceBean;
 
-public class PayAcquisitionActivityInformation extends ActivityInformation<RegularAcquisitionProcess> {
+public class PayAcquisitionActivityInformation<P extends PaymentProcess>
+	extends ActivityInformation<P> {
 
     String paymentReference;
+    protected List<PaymentReferenceBean> beans;
 
-    public PayAcquisitionActivityInformation(RegularAcquisitionProcess process,
+    public PayAcquisitionActivityInformation(P process,
 	    WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity) {
 	super(process, activity);
+	beans = new ArrayList<PaymentReferenceBean>();
+	for (final Financer financer : process.getFinancersWithFundsAllocated()) {
+	    final User currentUser = UserView.getCurrentUser();
+	    if (financer.isTreasuryMember(currentUser.getExpenditurePerson())) {
+		beans.add(new PaymentReferenceBean(financer));
+	    }
+	}
     }
 
     public String getPaymentReference() {
@@ -24,7 +40,24 @@ public class PayAcquisitionActivityInformation extends ActivityInformation<Regul
 
     @Override
     public boolean hasAllneededInfo() {
-	return isForwardedFromInput() && getPaymentReference() != null;
+	return isForwardedFromInput() && getPaymentReference() != null && hasPaymentRefences();
+    }
+
+    private boolean hasPaymentRefences() {
+	for (final PaymentReferenceBean referenceBean : beans) {
+	    if (referenceBean.getDiaryNumber() != null && !referenceBean.getDiaryNumber().isEmpty()) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
+    public List<PaymentReferenceBean> getBeans() {
+        return beans;
+    }
+
+    public void setBeans(List<PaymentReferenceBean> beans) {
+        this.beans = beans;
     }
 
 }

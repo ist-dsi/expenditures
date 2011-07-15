@@ -11,8 +11,6 @@ import myorg.domain.util.Money;
 import org.apache.commons.lang.StringUtils;
 
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.AllocateFundsPermanently;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.FundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.CostCenter;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
@@ -172,6 +170,20 @@ public class Financer extends Financer_Base {
 
 	allocateInvoices();
 
+    }
+
+    public void addPaymentDiaryNumber(String paymentReference) {
+	if (StringUtils.isEmpty(paymentReference)) {
+	    throw new DomainException("acquisitionProcess.message.exception.paymentReferenceCannotBeNull");
+	}
+	Strings strings = getEffectiveFundAllocationId();
+	if (strings == null) {
+	    strings = new Strings(paymentReference);
+	}
+	if (!strings.contains(paymentReference)) {
+	    strings.add(paymentReference);
+	}
+	setPaymentDiaryNumber(strings);
     }
 
     private void allocateInvoices() {
