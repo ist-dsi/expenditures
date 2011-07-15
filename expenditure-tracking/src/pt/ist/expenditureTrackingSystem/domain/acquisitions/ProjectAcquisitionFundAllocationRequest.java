@@ -231,4 +231,9 @@ public class ProjectAcquisitionFundAllocationRequest extends ProjectAcquisitionF
 	return result.toString();
     }
 
+    @Override
+    public boolean isReadOnly() {
+        return getExternalRegistrationDate() != null;
+    }
+
 }
