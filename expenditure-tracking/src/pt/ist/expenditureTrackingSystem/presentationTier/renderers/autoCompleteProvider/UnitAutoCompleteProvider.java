@@ -24,37 +24,34 @@ public class UnitAutoCompleteProvider implements AutoCompleteProvider {
 
 	final String trimmedValue = value.trim();
 
-	if (isNumeric(trimmedValue)) {
-	    final int code = Integer.parseInt(trimmedValue);
-	    for (final Unit unit : ExpenditureTrackingSystem.getInstance().getUnits()) {
-		if (unit instanceof CostCenter) {
-		    final CostCenter costCenter = (CostCenter) unit;
-		    final String unitCode = costCenter.getCostCenter();
-		    if (!StringUtils.isEmpty(unitCode) && code == Integer.parseInt(unitCode)) {
+	for (final Unit unit : ExpenditureTrackingSystem.getInstance().getUnits()) {
+	    if (unit instanceof CostCenter) {
+		final CostCenter costCenter = (CostCenter) unit;
+		final String unitCode = costCenter.getCostCenter();
+		if (!StringUtils.isEmpty(unitCode) && trimmedValue.equalsIgnoreCase(unitCode)) {
+		    units.add(unit);
+		}
+	    } else if (unit instanceof Project) {
+		final Project project = (Project) unit;
+		final String unitCode = project.getProjectCode();
+		if (!StringUtils.isEmpty(unitCode) && trimmedValue.equalsIgnoreCase(unitCode)) {
+		    if (unit.hasAnySubUnits()) {
+			addAllSubUnits(units, unit);
+		    } else {
 			units.add(unit);
-		    }
-		} else if (unit instanceof Project) {
-		    final Project project = (Project) unit;
-		    final String unitCode = project.getProjectCode();
-		    if (!StringUtils.isEmpty(unitCode) && code == Integer.parseInt(unitCode)) {
-			if (unit.hasAnySubUnits()) {
-			    addAllSubUnits(units, unit);
-			} else {
-			    units.add(unit);
-			}
 		    }
 		}
 	    }
-	} else {
-	    final String[] input = trimmedValue.split(" ");
-	    StringNormalizer.normalize(input);
+	}
 
-	    for (final Unit unit : ExpenditureTrackingSystem.getInstance().getUnits()) {
-		if (unit instanceof CostCenter || unit instanceof Project || unit instanceof SubProject) {
-		    final String unitName = StringNormalizer.normalize(unit.getName());
-		    if (hasMatch(input, unitName)) {
-			units.add(unit);
-		    }
+	final String[] input = trimmedValue.split(" ");
+	StringNormalizer.normalize(input);
+
+	for (final Unit unit : ExpenditureTrackingSystem.getInstance().getUnits()) {
+	    if (unit instanceof CostCenter || unit instanceof Project || unit instanceof SubProject) {
+		final String unitName = StringNormalizer.normalize(unit.getName());
+		if (hasMatch(input, unitName)) {
+		    units.add(unit);
 		}
 	    }
 	}
