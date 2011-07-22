@@ -13,6 +13,10 @@
 	<parameter name="deliveryLocals" class="java.util.Collection" isForPrompting="false"/>
 	<parameter name="requestID" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="responsibleName" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="institutionSocialSecurityNumber" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="cae" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="logoFilename" isForPrompting="false" class="java.lang.String"/>
+
 	<field name="identification" class="java.lang.String"/>
 	<field name="acquisitionRequestItem" class="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem"/>
 	<group name="dummy">
@@ -52,7 +56,7 @@
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{requestID}.toString()]]></textFieldExpression>
 			</textField>
-			<image>
+			<image vAlign="Middle">
 				<reportElement key="image-1" x="19" y="9" width="87" height="181"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -60,7 +64,7 @@
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<imageExpression class="java.lang.String"><![CDATA["images/Logo_IST_color.png"]]></imageExpression>
+				<imageExpression class="java.lang.String"><![CDATA["images/" + $P{logoFilename}]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement key="staticText-20" x="349" y="218" width="80" height="16"/>
@@ -308,14 +312,13 @@ Portugal]]></text>
 				<text><![CDATA[Tel. 214 417 210
 Fax 218 498 678]]></text>
 			</staticText>
-			<staticText>
+			<textField>
 				<reportElement key="staticText-36" x="177" y="0" width="91" height="43" forecolor="#00427B"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<text><![CDATA[Contr. Nº 501 507 930
-CAE 931 400]]></text>
-			</staticText>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Contr. Nº " + $P{institutionSocialSecurityNumber} + "\nCAE " + $P{cae}]]></textFieldExpression>
+			</textField>
 		</band>
 	</pageFooter>
 	<lastPageFooter>
@@ -407,14 +410,13 @@ Portugal]]></text>
 				<text><![CDATA[Tel. 218 419 716
 Fax 218 417 717]]></text>
 			</staticText>
-			<staticText>
+			<textField>
 				<reportElement key="staticText-33" x="177" y="144" width="91" height="43" forecolor="#00427B"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<text><![CDATA[Contr. Nº 501 507 930
-CAE 931 400]]></text>
-			</staticText>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Contr. Nº " + $P{institutionSocialSecurityNumber} + "\nCAE " + $P{cae}]]></textFieldExpression>
+			</textField>
 		</band>
 	</lastPageFooter>
 	<summary>
