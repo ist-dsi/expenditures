@@ -56,8 +56,8 @@
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{requestID}.toString()]]></textFieldExpression>
 			</textField>
-			<image vAlign="Middle">
-				<reportElement key="image-1" x="19" y="9" width="87" height="181"/>
+			<image vAlign="Top">
+				<reportElement key="image-1" x="19" y="9" width="180" height="181"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
