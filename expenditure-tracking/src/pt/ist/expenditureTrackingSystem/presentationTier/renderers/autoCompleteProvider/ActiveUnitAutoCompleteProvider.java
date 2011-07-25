@@ -40,7 +40,7 @@ public class ActiveUnitAutoCompleteProvider implements AutoCompleteProvider {
 		    if (unit.hasAnySubUnits()) {
 			addAllSubUnits(units, unit);
 		    } else {
-			addUnit(units, unit);
+//			addUnit(units, unit);
 		    }
 		}
 	    }
@@ -50,7 +50,7 @@ public class ActiveUnitAutoCompleteProvider implements AutoCompleteProvider {
 	StringNormalizer.normalize(input);
 
 	for (final Unit unit : ExpenditureTrackingSystem.getInstance().getUnits()) {
-	    if (unit instanceof CostCenter || unit instanceof Project || unit instanceof SubProject) {
+	    if (unit instanceof CostCenter /* || unit instanceof Project */ || unit instanceof SubProject) {
 		final String unitName = StringNormalizer.normalize(unit.getName());
 		if (hasMatch(input, unitName)) {
 		    addUnit(units, unit);
@@ -99,18 +99,5 @@ public class ActiveUnitAutoCompleteProvider implements AutoCompleteProvider {
 	    }
 	}
 	return true;
-    }
-
-    private boolean isNumeric(String someString) {
-	boolean isNumeric = StringUtils.isNumeric(someString);
-	if (isNumeric) {
-	    try {
-		int i = Integer.parseInt(someString);
-	    } catch (NumberFormatException e) {
-		return false;
-	    }
-	    return true;
-	}
-	return false;
     }
 }
