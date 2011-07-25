@@ -92,7 +92,7 @@ public class ProjectAcquisitionFundAllocationRequest extends ProjectAcquisitionF
 	    System.out.println("Got activity exception exception...");
 	    ex.printStackTrace();
 	    if (ex.getMessage().equals("activities.messages.exception.notActive")) {
-		addExternalAccountingIntegrationSystemFromManuallyForwardedProcesses(getExternalAccountingIntegrationSystemFromPendingResult());
+		getExternalAccountingIntegrationSystemFromManuallyForwardedProcesses().add(getExternalAccountingIntegrationSystemFromPendingResult());
 		removeExternalAccountingIntegrationSystemFromPendingResult();
 	    }
 	}
