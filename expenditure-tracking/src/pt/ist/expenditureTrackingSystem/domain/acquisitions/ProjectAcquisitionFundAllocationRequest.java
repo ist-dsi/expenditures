@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.List;
 
 import module.finance.domain.Supplier;
+import module.workflow.activities.ActivityException;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.WorkflowProcess;
@@ -47,44 +48,50 @@ public class ProjectAcquisitionFundAllocationRequest extends ProjectAcquisitionF
 	    throw new DomainException("error.cannot.allocate.funds.because.request.has.been.canceled");
 	}
 
-	super.registerFundAllocation(fundAllocationNumber, operatorUsername);
+	try {
+	    final UnitItem unitItem = getUnitItem();
+	    if (unitItem != null) {
+		final ProjectFinancer financer = (ProjectFinancer) unitItem.getFinancer();
 
-	final UnitItem unitItem = getUnitItem();
-	if (unitItem != null) {
-	    final ProjectFinancer financer = (ProjectFinancer) unitItem.getFinancer();
+		final PaymentProcess process = financer.getProcess();
 
-	    final PaymentProcess process = financer.getProcess();
+		final WorkflowActivity activity;
+		final ActivityInformation information;
 
-	    final WorkflowActivity activity;
-	    final ActivityInformation information;
+		final List<FundAllocationBean> args;
+		final FundAllocationBean fundAllocationBean = new FundAllocationBean(financer);
+		if (isFinalFundAllocation()) {
+		    activity = getActivity(process, AllocateProjectFundsPermanently.class.getSimpleName());
+		    information = ((AllocateProjectFundsPermanently) activity).getActivityInformation(process, false);
+		    fundAllocationBean.setEffectiveFundAllocationId(fundAllocationNumber);
+		} else {
+		    activity = getActivity(process, ProjectFundAllocation.class.getSimpleName());
+		    information = ((ProjectFundAllocation) activity).getActivityInformation(process, false);
+		    fundAllocationBean.setFundAllocationId(fundAllocationNumber);
+		}
 
-	    final List<FundAllocationBean> args;
-	    final FundAllocationBean fundAllocationBean = new FundAllocationBean(financer);
-	    if (isFinalFundAllocation()) {
-		activity = getActivity(process, AllocateProjectFundsPermanently.class.getSimpleName());
-		information = ((AllocateProjectFundsPermanently) activity).getActivityInformation(process, false);
-		fundAllocationBean.setEffectiveFundAllocationId(fundAllocationNumber);
-	    } else {
-		activity = getActivity(process, ProjectFundAllocation.class.getSimpleName());
-		information = ((ProjectFundAllocation) activity).getActivityInformation(process, false);
-		fundAllocationBean.setFundAllocationId(fundAllocationNumber);
+		args = Collections.singletonList(fundAllocationBean);
+
+		((AbstractFundAllocationActivityInformation) information).setBeans(args);
+
+		final myorg.applicationTier.Authenticate.UserView currentUserView = UserView.getUser();
+		final User user = User.findByUsername(operatorUsername);
+		if (user == null) {
+		    throw new NullPointerException("No user found for: " + operatorUsername);
+		}
+		final myorg.applicationTier.Authenticate.UserView userView = Authenticate.authenticate(user);
+		try {
+		    UserView.setUser(userView);
+		    activity.execute(information);
+		} finally {
+		    UserView.setUser(currentUserView);
+		}
 	    }
-
-	    args = Collections.singletonList(fundAllocationBean);
-
-	    ((AbstractFundAllocationActivityInformation) information).setBeans(args);
-
-	    final myorg.applicationTier.Authenticate.UserView currentUserView = UserView.getUser();
-	    final User user = User.findByUsername(operatorUsername);
-	    if (user == null) {
-		throw new NullPointerException("No user found for: " + operatorUsername);
-	    }
-	    final myorg.applicationTier.Authenticate.UserView userView = Authenticate.authenticate(user);
-	    try {
-		UserView.setUser(userView);
-		activity.execute(information);
-	    } finally {
-		UserView.setUser(currentUserView);
+	    super.registerFundAllocation(fundAllocationNumber, operatorUsername);
+	} catch (final ActivityException ex) {
+	    if (ex.getMessage().equals("activities.messages.exception.notActive")) {
+		addExternalAccountingIntegrationSystemFromManuallyForwardedProcesses(getExternalAccountingIntegrationSystemFromPendingResult());
+		removeExternalAccountingIntegrationSystemFromPendingResult();
 	    }
 	}
     }
@@ -166,15 +173,29 @@ public class ProjectAcquisitionFundAllocationRequest extends ProjectAcquisitionF
 	    registerOnExternalSystem();
 	} else {
 	    if (resultSet.next()) {
-		final String fundAllocationNumber = resultSet.getString(1);
-		final String operatorUsername = resultSet.getString(4);
-		if (fundAllocationNumber != null && operatorUsername != null) {
-		    System.out.println("fundAllocationNumber: " + fundAllocationNumber);
-		    System.out.println("operatorUsername: " + operatorUsername);
-		    registerFundAllocation(fundAllocationNumber, operatorUsername);
+		if (isManuallyForwarded()) {
+		    
+		} else {
+		    final String fundAllocationNumber = resultSet.getString(1);
+		    final String operatorUsername = resultSet.getString(4);
+		    if (fundAllocationNumber != null && operatorUsername != null) {
+			System.out.println("fundAllocationNumber: " + fundAllocationNumber);
+			System.out.println("operatorUsername: " + operatorUsername);
+			registerFundAllocation(fundAllocationNumber, operatorUsername);
+		    }
 		}
 	    }
 	}
+    }
+
+    private boolean isManuallyForwarded() {
+	final UnitItem unitItem = getUnitItem();
+	if (unitItem != null) {
+	    final ProjectFinancer financer = (ProjectFinancer) unitItem.getFinancer();
+	    final PaymentProcess process = financer.getProcess();
+	    process.get
+	}
+	return false;
     }
 
     public String getProjectId(final Unit unit) {
