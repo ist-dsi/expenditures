@@ -293,7 +293,8 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 
     @Override
     public boolean isCanceled() {
-	return getLastAcquisitionProcessState().isCanceled();
+	return getLastAcquisitionProcessState().isCanceled()
+		|| getLastAcquisitionProcessState().isRejected();
     }
 
     @Override

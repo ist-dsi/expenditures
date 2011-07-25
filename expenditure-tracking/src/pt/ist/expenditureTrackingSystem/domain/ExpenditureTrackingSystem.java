@@ -288,7 +288,8 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
     }
 
     public String nextAcquisitionRequestDocumentID() {
-	return "D" + getAndUpdateNextAcquisitionRequestDocumentCountNumber();
+	final String prefix = getInstitutionalRequestDocumentPrefix();
+	return prefix + getAndUpdateNextAcquisitionRequestDocumentCountNumber();
     }
 
     public Integer nextAcquisitionRequestDocumentCountNumber() {
@@ -447,11 +448,13 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
     }
 
     @Service
-    public void saveConfiguration(final String institutionalProcessNumberPrefix, final String acquisitionCreationWizardJsp,
+    public void saveConfiguration(final String institutionalProcessNumberPrefix,
+	    final String institutionalRequestDocumentPrefix, final String acquisitionCreationWizardJsp,
 	    final SearchProcessValuesArray array, final Boolean invoiceAllowedToStartAcquisitionProcess,
 	    final Boolean requireFundAllocationPriorToAcquisitionRequest, final Money maxValueStartedWithInvoive,
 	    final Money valueRequireingTopLevelAuthorization) {
 	setInstitutionalProcessNumberPrefix(institutionalProcessNumberPrefix);
+	setInstitutionalRequestDocumentPrefix(institutionalRequestDocumentPrefix);
 	setAcquisitionCreationWizardJsp(acquisitionCreationWizardJsp);
 	setSearchProcessValuesArray(array);
 	setInvoiceAllowedToStartAcquisitionProcess(invoiceAllowedToStartAcquisitionProcess);

@@ -122,6 +122,19 @@
 	/>
 
 	<h4>
+		<bean:message key="label.configuration.process.institutionalRequestDocumentPrefix" bundle="EXPENDITURE_RESOURCES"/>
+	</h4>
+	<input type="text" name="institutionalRequestDocumentPrefix" size="50"
+		<%
+			if (expenditureTrackingSystem.getInstitutionalRequestDocumentPrefix() != null && !expenditureTrackingSystem.getInstitutionalRequestDocumentPrefix().isEmpty()) {
+		%>
+				value="<%= expenditureTrackingSystem.getInstitutionalRequestDocumentPrefix() %>"
+		<%
+			}
+		%>
+	/>
+
+	<h4>
 		<bean:message key="label.configuration.process.creation.interface" bundle="EXPENDITURE_RESOURCES"/>
 	</h4>
 	<input type="text" name="acquisitionCreationWizardJsp" size="50"

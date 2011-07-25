@@ -67,6 +67,7 @@ class ExpenditureTrackingSystem {
 	SearchProcessValuesArray searchProcessValuesArray;
 	String acquisitionCreationWizardJsp;
 	String institutionalProcessNumberPrefix;
+	String institutionalRequestDocumentPrefix;
 	Boolean invoiceAllowedToStartAcquisitionProcess;
 	Boolean requireFundAllocationPriorToAcquisitionRequest;
 	Money maxValueStartedWithInvoive;
