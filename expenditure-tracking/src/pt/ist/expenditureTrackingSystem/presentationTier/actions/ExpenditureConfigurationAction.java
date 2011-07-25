@@ -55,10 +55,10 @@ public class ExpenditureConfigurationAction extends BaseAction {
 	final Boolean requireFundAllocationPriorToAcquisitionRequest = Boolean.valueOf("on".equals(requireFundAllocationPriorToAcquisitionRequestParam));
 
 	final String maxValueStartedWithInvoiveParam = request.getParameter("maxValueStartedWithInvoive");
-	final Money maxValueStartedWithInvoive = new Money(maxValueStartedWithInvoiveParam);
+	final Money maxValueStartedWithInvoive = maxValueStartedWithInvoiveParam == null || maxValueStartedWithInvoiveParam.isEmpty() ? null : new Money(maxValueStartedWithInvoiveParam);
 
 	final String valueRequireingTopLevelAuthorizationParam = request.getParameter("valueRequireingTopLevelAuthorization");
-	final Money valueRequireingTopLevelAuthorization = new Money(valueRequireingTopLevelAuthorizationParam);
+	final Money valueRequireingTopLevelAuthorization = valueRequireingTopLevelAuthorizationParam == null || valueRequireingTopLevelAuthorizationParam.isEmpty() ? null : new Money(valueRequireingTopLevelAuthorizationParam);
 
 	ExpenditureTrackingSystem.getInstance().saveConfiguration(
 		institutionalProcessNumberPrefix,
