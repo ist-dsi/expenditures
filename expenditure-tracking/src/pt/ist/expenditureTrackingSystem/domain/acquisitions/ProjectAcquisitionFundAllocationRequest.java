@@ -89,6 +89,8 @@ public class ProjectAcquisitionFundAllocationRequest extends ProjectAcquisitionF
 	    }
 	    super.registerFundAllocation(fundAllocationNumber, operatorUsername);
 	} catch (final ActivityException ex) {
+	    System.out.println("Got activity exception exception...");
+	    ex.printStackTrace();
 	    if (ex.getMessage().equals("activities.messages.exception.notActive")) {
 		addExternalAccountingIntegrationSystemFromManuallyForwardedProcesses(getExternalAccountingIntegrationSystemFromPendingResult());
 		removeExternalAccountingIntegrationSystemFromPendingResult();
@@ -173,29 +175,15 @@ public class ProjectAcquisitionFundAllocationRequest extends ProjectAcquisitionF
 	    registerOnExternalSystem();
 	} else {
 	    if (resultSet.next()) {
-		if (isManuallyForwarded()) {
-		    
-		} else {
-		    final String fundAllocationNumber = resultSet.getString(1);
-		    final String operatorUsername = resultSet.getString(4);
-		    if (fundAllocationNumber != null && operatorUsername != null) {
-			System.out.println("fundAllocationNumber: " + fundAllocationNumber);
-			System.out.println("operatorUsername: " + operatorUsername);
-			registerFundAllocation(fundAllocationNumber, operatorUsername);
-		    }
+		final String fundAllocationNumber = resultSet.getString(1);
+		final String operatorUsername = resultSet.getString(4);
+		if (fundAllocationNumber != null && operatorUsername != null) {
+		    System.out.println("fundAllocationNumber: " + fundAllocationNumber);
+		    System.out.println("operatorUsername: " + operatorUsername);
+		    registerFundAllocation(fundAllocationNumber, operatorUsername);
 		}
 	    }
 	}
-    }
-
-    private boolean isManuallyForwarded() {
-	final UnitItem unitItem = getUnitItem();
-	if (unitItem != null) {
-	    final ProjectFinancer financer = (ProjectFinancer) unitItem.getFinancer();
-	    final PaymentProcess process = financer.getProcess();
-	    process.get
-	}
-	return false;
     }
 
     public String getProjectId(final Unit unit) {
