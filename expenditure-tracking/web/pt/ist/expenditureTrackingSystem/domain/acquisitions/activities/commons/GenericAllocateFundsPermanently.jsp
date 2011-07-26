@@ -43,6 +43,7 @@
 	</tr>
 	<tr>
 		<td class="aleft">
+			<bean:message key="financer.label.fundAllocation.identification" bundle="ACQUISITION_RESOURCES"/>
 			<fr:edit id="<%= "id" + index %>" name="financerBean" slot="effectiveFundAllocationId" type="java.lang.String"/>
 			<bean:define id="financerOID" name="financerBean" property="financer.externalId" type="java.lang.String"/>
 			<logic:equal name="financerBean" property="allowedToAddNewFund" value="true">
@@ -55,6 +56,12 @@
 					<bean:message key="financer.link.removeEffectiveAllocationId" bundle="ACQUISITION_RESOURCES"/>
 				</a>
 			</logic:equal>
+		</td>
+	</tr>
+	<tr>
+		<td class="aleft">
+			<bean:message key="financer.label.diaryNumber" bundle="ACQUISITION_RESOURCES"/>
+			<fr:edit id="<%= "idDN" + index %>" name="financerBean" slot="diaryNumber" type="java.lang.String"/>
 		</td>
 	</tr>
 </logic:iterate>

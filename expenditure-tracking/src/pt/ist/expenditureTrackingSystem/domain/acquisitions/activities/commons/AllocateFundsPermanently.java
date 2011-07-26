@@ -3,6 +3,7 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons;
 import module.workflow.activities.WorkflowActivity;
 import myorg.domain.User;
 import myorg.util.BundleUtil;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean;
 
@@ -19,6 +20,11 @@ public class AllocateFundsPermanently<P extends PaymentProcess> extends
     protected void process(AllocateFundsPermanentlyActivityInformation<P> activityInformation) {
 	for (FundAllocationBean fundAllocationBean : activityInformation.getBeans()) {
 	    fundAllocationBean.getFinancer().addEffectiveFundAllocationId(fundAllocationBean.getEffectiveFundAllocationId());
+	}
+	for (final FundAllocationBean bean : activityInformation.getBeans()) {
+	    final Financer financer = bean.getFinancer();
+	    final String diaryNumber = bean.getDiaryNumber();
+	    financer.addPaymentDiaryNumber(diaryNumber);
 	}
 	P process = activityInformation.getProcess();
 	if (process.isInvoiceConfirmed()) {

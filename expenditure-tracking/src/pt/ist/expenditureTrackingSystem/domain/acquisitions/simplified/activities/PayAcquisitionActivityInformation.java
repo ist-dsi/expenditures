@@ -40,7 +40,7 @@ public class PayAcquisitionActivityInformation<P extends PaymentProcess>
 
     @Override
     public boolean hasAllneededInfo() {
-	return isForwardedFromInput() && getPaymentReference() != null && hasPaymentRefences();
+	return isForwardedFromInput() && getPaymentReference() != null /* && hasPaymentRefences() */ ;
     }
 
     private boolean hasPaymentRefences() {

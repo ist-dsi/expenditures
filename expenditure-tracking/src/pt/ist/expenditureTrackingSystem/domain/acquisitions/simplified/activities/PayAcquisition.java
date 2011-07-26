@@ -27,14 +27,14 @@ public class PayAcquisition<P extends RegularAcquisitionProcess>
     protected void process(PayAcquisitionActivityInformation<P> activityInformation) {
 	P process = activityInformation.getProcess();
 	process.getAcquisitionRequest().setPaymentReference(activityInformation.getPaymentReference());
-	for (final PaymentReferenceBean bean : activityInformation.getBeans()) {
-	    final Financer financer = bean.getFinancer();
-	    final String diaryNumber = bean.getDiaryNumber();
-	    financer.addPaymentDiaryNumber(diaryNumber);
-	}
-	if (hasAllDiaryNumbers(process)) {
+//	for (final PaymentReferenceBean bean : activityInformation.getBeans()) {
+//	    final Financer financer = bean.getFinancer();
+//	    final String diaryNumber = bean.getDiaryNumber();
+//	    financer.addPaymentDiaryNumber(diaryNumber);
+//	}
+//	if (hasAllDiaryNumbers(process)) {
 	    process.acquisitionPayed();
-	}
+//	}
     }
 
     private boolean hasAllDiaryNumbers(final P process) {

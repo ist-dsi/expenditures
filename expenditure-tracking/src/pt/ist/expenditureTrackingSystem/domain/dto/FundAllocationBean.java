@@ -10,6 +10,7 @@ public class FundAllocationBean implements Serializable {
     private String fundAllocationId;
     private String effectiveFundAllocationId;
     private boolean allowedToAddNewFund;
+    private String diaryNumber;
 
     public FundAllocationBean(final Financer financer) {
 	setFinancer(financer);
@@ -46,6 +47,14 @@ public class FundAllocationBean implements Serializable {
 
     public void setAllowedToAddNewFund(boolean allowedToAddNewFund) {
 	this.allowedToAddNewFund = allowedToAddNewFund;
+    }
+
+    public String getDiaryNumber() {
+        return diaryNumber;
+    }
+
+    public void setDiaryNumber(String diaryNumber) {
+        this.diaryNumber = diaryNumber;
     }
 
 }

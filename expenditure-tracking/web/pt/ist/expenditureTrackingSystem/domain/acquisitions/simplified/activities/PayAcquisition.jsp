@@ -32,6 +32,7 @@
 	<html:hidden property="index" value=""/>
 
 
+<%--
 <p class="mtop15 mbottom0"><bean:message key="acquisitionProcess.label.diaryNumbers" bundle="ACQUISITION_RESOURCES"/></p>
 
 <table class="tstyle2">
@@ -55,6 +56,8 @@
 </logic:iterate>
 </table>
 
+ --%>
+ 
 <html:submit styleClass="inputbutton"><bean:message key="button.submit" bundle="EXPENDITURE_RESOURCES"/> </html:submit>
 </fr:form>
 
