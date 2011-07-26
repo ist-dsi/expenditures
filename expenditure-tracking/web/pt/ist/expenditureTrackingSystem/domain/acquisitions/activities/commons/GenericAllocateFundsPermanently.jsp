@@ -1,3 +1,4 @@
+<%@page import="myorg.domain.VirtualHost"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
@@ -58,12 +59,18 @@
 			</logic:equal>
 		</td>
 	</tr>
+<%
+	if (VirtualHost.getVirtualHostForThread() != null && VirtualHost.getVirtualHostForThread().getHostname().equals("dot.ist-id.ist.utl.pt")) {
+%>
 	<tr>
 		<td class="aleft">
 			<bean:message key="financer.label.diaryNumber" bundle="ACQUISITION_RESOURCES"/>
 			<fr:edit id="<%= "idDN" + index %>" name="financerBean" slot="diaryNumber" type="java.lang.String"/>
 		</td>
 	</tr>
+<%
+	}
+%>
 </logic:iterate>
 </table>
 
