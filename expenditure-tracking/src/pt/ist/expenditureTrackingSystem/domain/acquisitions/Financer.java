@@ -177,7 +177,7 @@ public class Financer extends Financer_Base {
 	    return;
 	    // throw new DomainException("acquisitionProcess.message.exception.paymentReferenceCannotBeNull");
 	}
-	Strings strings = getEffectiveFundAllocationId();
+	Strings strings = getPaymentDiaryNumber();
 	if (strings == null) {
 	    strings = new Strings(paymentReference);
 	}
