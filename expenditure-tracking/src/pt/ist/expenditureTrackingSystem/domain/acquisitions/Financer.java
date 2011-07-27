@@ -174,7 +174,8 @@ public class Financer extends Financer_Base {
 
     public void addPaymentDiaryNumber(String paymentReference) {
 	if (StringUtils.isEmpty(paymentReference)) {
-	    throw new DomainException("acquisitionProcess.message.exception.paymentReferenceCannotBeNull");
+	    return;
+	    // throw new DomainException("acquisitionProcess.message.exception.paymentReferenceCannotBeNull");
 	}
 	Strings strings = getEffectiveFundAllocationId();
 	if (strings == null) {
