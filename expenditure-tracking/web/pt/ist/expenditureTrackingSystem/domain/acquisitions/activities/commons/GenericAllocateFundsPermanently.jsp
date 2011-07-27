@@ -13,7 +13,7 @@
 </logic:present>
 
 <bean:define id="processId" name="process" property="externalId"/>
-<bean:define id="name" name="information" property="activityName"/>
+<bean:define id="name" name="information" property="activityName" type="java.lang.String"/>
 
 <bean:define id="urlActivity" value='<%= "/workflowProcessManagement.do?method=process&processId=" + processId + "&activity=" + name %>'/>
 <bean:define id="urlView" value='<%= "/workflowProcessManagement.do?method=viewProcess&amp;processId=" + processId%>'/>
@@ -60,7 +60,9 @@
 		</td>
 	</tr>
 <%
-	if (VirtualHost.getVirtualHostForThread() != null && VirtualHost.getVirtualHostForThread().getHostname().equals("dot.ist-id.ist.utl.pt")) {
+	if (VirtualHost.getVirtualHostForThread() != null
+			&& VirtualHost.getVirtualHostForThread().getHostname().equals("dot.ist-id.ist.utl.pt")
+			&& !name.equals("AllocateProjectFundsPermanently")) {
 %>
 	<tr>
 		<td class="aleft">
