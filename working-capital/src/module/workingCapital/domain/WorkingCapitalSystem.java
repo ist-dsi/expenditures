@@ -55,6 +55,11 @@ public class WorkingCapitalSystem extends WorkingCapitalSystem_Base implements M
     }
 
     @Service
+    public void resetAcquisitionValueLimit() {
+	setAcquisitionValueLimit(null);
+    }
+
+    @Service
     public static void createSystem(final VirtualHost virtualHost) {
 	if (!virtualHost.hasWorkingCapitalSystem() || virtualHost.getWorkingCapitalSystem().getVirtualHostsCount() > 1) {
 	    new WorkingCapitalSystem(virtualHost);

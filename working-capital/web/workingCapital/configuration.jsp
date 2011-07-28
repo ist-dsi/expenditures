@@ -172,7 +172,6 @@
 			</fr:schema>
 			<fr:layout name="tabular">
 				<fr:property name="classes" value="tstyle2 tdleft thleft"/>
-	
 				<fr:property name="link(delete)" value="/workingCapital.do?method=deleteAcquisitionClassification"/>
 				<fr:property name="bundle(delete)" value="WORKING_CAPITAL_RESOURCES"/>
 				<fr:property name="key(delete)" value="link.delete"/>
@@ -180,5 +179,31 @@
 				<fr:property name="order(delete)" value="1"/>
 			</fr:layout>
 		</fr:view>
+		
+	<h3>
+		<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.configuration.acquisition.limit"/>
+	</h3>
+	
+	<table><tr>
+	<td>
+		<logic:present name="currentWorkingCapitalSystem" property="acquisitionValueLimit">
+			<fr:view name="currentWorkingCapitalSystem">
+				<fr:schema bundle="WORKING_CAPITAL_RESOURCES" type="module.workingCapital.domain.WorkingCapitalSystem">
+					<fr:slot name="acquisitionValueLimit" key="label.module.workingCapital.configuration.acquisition.limit.short" bundle="WORKING_CAPITAL_RESOURCES"/>
+				</fr:schema>
+			</fr:view>
+		</logic:present>
+		<logic:notPresent name="currentWorkingCapitalSystem" property="acquisitionValueLimit">
+			<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.configuration.acquisition.no.limit"/>
+		</logic:notPresent>
+	</td>
+	<td>-</td>
+	<td>
+		<html:link action="/workingCapital.do?method=configureAcquisitionLimit">
+			<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.configuration.management.configure"/>
+		</html:link>
+	</td>
+	</tr></table>
+	
 	</logic:present>
 </logic:present>

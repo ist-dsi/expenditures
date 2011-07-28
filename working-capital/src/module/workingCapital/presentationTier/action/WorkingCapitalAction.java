@@ -153,6 +153,20 @@ public class WorkingCapitalAction extends ContextBaseAction {
 	return forward(request, "/workingCapital/configureManagementUnit.jsp");
     }
 
+    public ActionForward configureAcquisitionLimit(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstanceForCurrentHost();
+	request.setAttribute("workingCapitalSystem", workingCapitalSystem);
+	return forward(request, "/workingCapital/configureAcquisitionLimit.jsp");
+    }
+
+    public ActionForward resetAcquisitionLimit(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstanceForCurrentHost();
+	workingCapitalSystem.resetAcquisitionValueLimit();
+	return configuration(mapping, form, request, response);
+    }
+
     public ActionForward prepareAddAcquisitionClassification(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	final AcquisitionClassificationBean acquisitionClassificationBean = new AcquisitionClassificationBean();

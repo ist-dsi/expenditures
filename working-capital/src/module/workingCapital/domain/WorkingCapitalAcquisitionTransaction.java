@@ -2,12 +2,15 @@ package module.workingCapital.domain;
 
 import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.User;
+import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
 import myorg.util.BundleUtil;
 
 import org.joda.time.DateTime;
 
 public class WorkingCapitalAcquisitionTransaction extends WorkingCapitalAcquisitionTransaction_Base {
+
+    private static final String WORKING_CAPITAL_RESOURCES = "resources/WorkingCapitalResources";
 
     public WorkingCapitalAcquisitionTransaction() {
 	super();
@@ -23,8 +26,8 @@ public class WorkingCapitalAcquisitionTransaction extends WorkingCapitalAcquisit
     @Override
     public String getDescription() {
 	final WorkingCapitalAcquisition workingCapitalAcquisition = getWorkingCapitalAcquisition();
-	return BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources", "label." + getClass().getName())
-		+ ": " + workingCapitalAcquisition.getAcquisitionClassification().getDescription();
+	return BundleUtil.getStringFromResourceBundle(WORKING_CAPITAL_RESOURCES, "label." + getClass().getName()) + ": "
+		+ workingCapitalAcquisition.getAcquisitionClassification().getDescription();
     }
 
     @Override
@@ -145,6 +148,26 @@ public class WorkingCapitalAcquisitionTransaction extends WorkingCapitalAcquisit
 	final WorkingCapitalAcquisition workingCapitalAcquisition = getWorkingCapitalAcquisition();
 	workingCapitalAcquisition.cancel();
 	restoreDebtOfFollowingTransactions();
+    }
+
+    @Override
+    public void addValue(final Money value) {
+	Money limit = getWorkingCapitalSystem().getAcquisitionValueLimit();
+	if ((limit != null) && (getValue().add(value).compareTo(limit) == 1)) {
+	    throw new DomainException(BundleUtil.getStringFromResourceBundle(WORKING_CAPITAL_RESOURCES,
+		    "error.acquisition.limit.exceeded"));
+	}
+	super.addValue(value);
+    }
+
+    @Override
+    public void resetValue(final Money value) {
+	Money limit = getWorkingCapitalSystem().getAcquisitionValueLimit();
+	if ((limit != null) && (value.compareTo(limit) == 1)) {
+	    throw new DomainException(BundleUtil.getStringFromResourceBundle(WORKING_CAPITAL_RESOURCES,
+		    "error.acquisition.limit.exceeded"));
+	}
+	super.resetValue(value);
     }
 
 }
