@@ -39,4 +39,10 @@ public class ChangeAcquisitionRequestItemClassification extends
     public String getUsedBundle() {
 	return "resources/AcquisitionResources";
     }
+
+    @Override
+    public boolean isUserAwarenessNeeded(RegularAcquisitionProcess process, User user) {
+	return false;
+    }
+
 }
