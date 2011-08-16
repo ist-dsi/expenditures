@@ -64,9 +64,9 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     public AcquisitionRequestItem createAcquisitionRequestItem(final AcquisitionRequest acquisitionRequest,
 	    final String description, final Integer quantity, final Money unitValue, final BigDecimal vatValue,
 	    final Money additionalCostValue, final String proposalReference, CPVReference reference, String recipient,
-	    Address address, String phone, String email) {
+	    Address address, String phone, String email, AcquisitionItemClassification classification) {
 	return new AcquisitionRequestItem(acquisitionRequest, description, quantity, unitValue, vatValue, additionalCostValue,
-		proposalReference, reference, recipient, address, phone, email);
+		proposalReference, reference, recipient, address, phone, email, classification);
     }
 
     public String getFiscalIdentificationCode() {
@@ -199,6 +199,7 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	return result;
     }
 
+    @Override
     public Money getRealTotalValue() {
 	Money result = Money.ZERO;
 	for (final AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
@@ -327,11 +328,9 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     public boolean isFilled() {
 	AcquisitionProcess process = getProcess();
 	return hasAnyRequestItems()
-		&& ((!process.isSimplifiedProcedureProcess() && hasAcquisitionProcess())
-		    || (process.isSimplifiedProcedureProcess() &&
-			    (((SimplifiedProcedureProcess) process).getProcessClassification() == ProcessClassification.CT75000
-				    || process.hasAcquisitionProposalDocument()
-				    || ((SimplifiedProcedureProcess) process).hasInvoiceFile())));
+		&& ((!process.isSimplifiedProcedureProcess() && hasAcquisitionProcess()) || (process
+			.isSimplifiedProcedureProcess() && (((SimplifiedProcedureProcess) process).getProcessClassification() == ProcessClassification.CT75000
+			|| process.hasAcquisitionProposalDocument() || ((SimplifiedProcedureProcess) process).hasInvoiceFile())));
     }
 
     public boolean isEveryItemFullyAttributedToPayingUnits() {
@@ -346,7 +345,7 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 		return false;
 	    }
 	}
-	
+
 	return true;
     }
 
@@ -429,6 +428,7 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	return totalValue.isLessThanOrEqual(getAcquisitionProcess().getAcquisitionRequestValueLimit());
     }
 
+    @Override
     public void unSubmitForFundsAllocation() {
 	for (AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
 	    acquisitionRequestItem.unapprove();
@@ -553,7 +553,8 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     public void validateInvoiceNumber(String invoiceNumber) {
 	for (PaymentProcessInvoice invoice : getInvoices()) {
 	    if (invoice.getInvoiceNumber().equals(invoiceNumber)) {
-		throw new DomainException("acquisitionProcess.message.exception.InvoiceWithSameNumber", ResourceBundle.getBundle("resources.AcquisitionResources", Language.getLocale()));
+		throw new DomainException("acquisitionProcess.message.exception.InvoiceWithSameNumber", ResourceBundle.getBundle(
+			"resources.AcquisitionResources", Language.getLocale()));
 	    }
 	}
     }

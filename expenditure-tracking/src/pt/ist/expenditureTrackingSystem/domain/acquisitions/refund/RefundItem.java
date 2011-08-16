@@ -6,17 +6,16 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
+import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
 
 import org.joda.time.LocalDate;
 
-import myorg.domain.exceptions.DomainException;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionItemClassification;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestWithPayment;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.UnitItem;
-import pt.ist.expenditureTrackingSystem.domain.dto.RefundInvoiceBean;
-import pt.ist.expenditureTrackingSystem.domain.dto.RefundItemBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
@@ -26,6 +25,7 @@ public class RefundItem extends RefundItem_Base {
 
     public static final Comparator<RefundItem> COMPARATOR = new Comparator<RefundItem>() {
 
+	@Override
 	public int compare(RefundItem arg0, RefundItem arg1) {
 	    final int c = arg0.getDescription().compareTo(arg1.getDescription());
 	    return c == 0 ? arg0.getExternalId().compareTo(arg1.getExternalId()) : c;
@@ -33,11 +33,13 @@ public class RefundItem extends RefundItem_Base {
 
     };
 
-    public RefundItem(RefundRequest request, Money valueEstimation, CPVReference reference, String description) {
+    public RefundItem(RefundRequest request, Money valueEstimation, CPVReference reference,
+	    AcquisitionItemClassification classification, String description) {
 	super();
 	if (description == null || reference == null || valueEstimation == null || valueEstimation.equals(Money.ZERO)) {
 	    throw new DomainException("refundProcess.message.exception.refundItem.invalidArguments");
 	}
+	setClassification(classification);
 	setDescription(description);
 	setCPVReference(reference);
 	setValueEstimation(valueEstimation);
@@ -59,8 +61,10 @@ public class RefundItem extends RefundItem_Base {
 	return null;
     }
 
-    public void edit(Money valueEstimation, CPVReference reference, String description) {
+    public void edit(Money valueEstimation, CPVReference reference, AcquisitionItemClassification classification,
+	    String description) {
 	setDescription(description);
+	setClassification(classification);
 	setCPVReference(reference);
 	setValueEstimation(valueEstimation);
     }
@@ -207,6 +211,7 @@ public class RefundItem extends RefundItem_Base {
 	return !getRefundableInvoices().isEmpty();
     }
 
+    @Override
     public boolean isRealValueFullyAttributedToUnits() {
 	Money realValue = getRealValue();
 	if (realValue == null) {

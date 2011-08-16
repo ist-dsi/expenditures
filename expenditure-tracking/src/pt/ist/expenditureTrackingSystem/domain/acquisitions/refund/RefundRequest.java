@@ -7,6 +7,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import myorg.domain.util.Money;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionItemClassification;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
@@ -35,8 +36,9 @@ public class RefundRequest extends RefundRequest_Base {
 	setRequestingUnit(requestingUnit);
     }
 
-    public void createRefundItem(Money valueEstimation, CPVReference reference, String description) {
-	RefundItem refundItem = new RefundItem(this, valueEstimation, reference, description);
+    public void createRefundItem(Money valueEstimation, CPVReference reference, AcquisitionItemClassification classification,
+	    String description) {
+	RefundItem refundItem = new RefundItem(this, valueEstimation, reference, classification, description);
 	List<Unit> payingUnits = this.getProcess().getPayingUnits();
 	if (payingUnits.size() == 1) {
 	    refundItem.createUnitItem(payingUnits.get(0), valueEstimation);

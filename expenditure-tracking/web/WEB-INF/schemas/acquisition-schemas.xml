@@ -205,6 +205,10 @@
 			<property name="key" value="true" />
 		</validator>
 	</slot>
+	<slot name="classification" key="label.pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionItemClassification"
+		bundle="ACQUISITION_RESOURCES">
+			<property name="defaultOptionHidden" value="true" />
+	</slot>
 	<slot name="description" key="acquisitionRequestItem.label.description"
 		bundle="ACQUISITION_RESOURCES"
 		validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"
@@ -756,6 +760,24 @@
 		bundle="ACQUISITION_RESOURCES" />
 </schema>
 
+<schema name="activityInformation.ChangeAcquisitionRequestItemClassification"
+	type="pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.EditAcquisitionRequestItemActivityInformation"
+	bundle="ACQUISITION_RESOURCES">
+	<slot name="classification" key="label.pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionItemClassification"
+		bundle="ACQUISITION_RESOURCES">
+			<property name="defaultOptionHidden" value="true" />
+	</slot>
+</schema>
+
+<schema name="activityInformation.ChangeRefundItemClassification"
+	type="pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.EditAcquisitionRequestItemActivityInformation"
+	bundle="ACQUISITION_RESOURCES">
+	<slot name="classification" key="label.pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionItemClassification"
+		bundle="ACQUISITION_RESOURCES">
+			<property name="defaultOptionHidden" value="true" />
+	</slot>
+</schema>
+
 <schema name="activityInformation.CreateRefundItem"
 	type="pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.CreateRefundItemActivityInformation"
 	bundle="ACQUISITION_RESOURCES">
@@ -779,6 +801,12 @@
 			<property name="bundle" value="EXPENDITURE_RESOURCES" />
 			<property name="key" value="true" />
 		</validator>
+	</slot>
+	<slot name="valueEstimation" key="refundItem.valueEstimation">
+	</slot>
+	<slot name="classification" key="label.pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionItemClassification"
+		bundle="ACQUISITION_RESOURCES">
+			<property name="defaultOptionHidden" value="true" />
 	</slot>
 	<slot name="description" key="refundItem.label.description"
 		bundle="ACQUISITION_RESOURCES"

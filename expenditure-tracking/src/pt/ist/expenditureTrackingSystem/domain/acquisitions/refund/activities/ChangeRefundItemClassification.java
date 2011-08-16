@@ -4,20 +4,19 @@ import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import myorg.domain.User;
 import myorg.util.BundleUtil;
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 
-public class EditRefundItem extends WorkflowActivity<RefundProcess, EditRefundItemActivityInformation> {
+public class ChangeRefundItemClassification extends WorkflowActivity<RefundProcess, EditRefundItemActivityInformation> {
 
     @Override
     public boolean isActive(RefundProcess process, User user) {
-	return process.getRequestor() == user.getExpenditurePerson() && isUserProcessOwner(process, user)
-		&& process.isInGenesis();
+	return ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user);
     }
 
     @Override
     protected void process(EditRefundItemActivityInformation activityInformation) {
-	activityInformation.getItem().edit(activityInformation.getValueEstimation(), activityInformation.getCPVReference(),
-		activityInformation.getClassification(), activityInformation.getDescription());
+	activityInformation.getItem().setClassification(activityInformation.getClassification());
     }
 
     @Override

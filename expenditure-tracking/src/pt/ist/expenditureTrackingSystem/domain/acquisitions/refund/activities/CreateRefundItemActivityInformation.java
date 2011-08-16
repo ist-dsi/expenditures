@@ -4,6 +4,7 @@ import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.WorkflowProcess;
 import myorg.domain.util.Money;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionItemClassification;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 
@@ -12,6 +13,7 @@ public class CreateRefundItemActivityInformation extends ActivityInformation<Ref
     private Money valueEstimation;
     private CPVReference reference;
     private String description;
+    private AcquisitionItemClassification classification;
 
     public CreateRefundItemActivityInformation(RefundProcess refundProcess,
 	    WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity) {
@@ -40,6 +42,14 @@ public class CreateRefundItemActivityInformation extends ActivityInformation<Ref
 
     public void setDescription(String description) {
 	this.description = description;
+    }
+
+    public void setClassification(AcquisitionItemClassification classification) {
+	this.classification = classification;
+    }
+
+    public AcquisitionItemClassification getClassification() {
+	return classification;
     }
 
     @Override

@@ -29,9 +29,10 @@ public class EditAcquisitionRequestItemActivityInformation extends CreateAcquisi
 	setAdditionalCostValue(item.getAdditionalCostValue());
 	setProposalReference(item.getProposalReference());
 	setAcquisitionRequest(item.getAcquisitionRequest());
+	setClassification(item.getClassification());
 	setCPVReference(item.getCPVReference());
-	setDeliveryInfo(UserView.getCurrentUser().getExpenditurePerson().getDeliveryInfoByRecipientAndAddress(
-		item.getRecipient(), item.getAddress()));
+	setDeliveryInfo(UserView.getCurrentUser().getExpenditurePerson()
+		.getDeliveryInfoByRecipientAndAddress(item.getRecipient(), item.getAddress()));
     }
 
     @Override

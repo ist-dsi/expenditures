@@ -1,6 +1,7 @@
 package pt.ist.expenditureTrackingSystem.domain;
 
 
+enum pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionItemClassification as AcquisitionItemClassification;
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType as AcquisitionProcessStateType;
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType as RefundProcessStateType;
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.StandardAcquisitionProcessStateType as StandardAcquisitionProcessStateType;
@@ -130,6 +131,7 @@ class acquisitions.PaymentProcessYear implements .myorg.domain.VirtualHostAware 
 class acquisitions.RequestItem implements .myorg.domain.VirtualHostAware {
 	String ojbConcreteClass;
 	String description;
+	AcquisitionItemClassification classification;
 }
  
 	class acquisitions.refund.RefundItem extends acquisitions.RequestItem {

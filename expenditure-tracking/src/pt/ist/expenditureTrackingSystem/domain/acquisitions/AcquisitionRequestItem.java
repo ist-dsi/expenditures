@@ -46,13 +46,15 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 
     public AcquisitionRequestItem(final AcquisitionRequest acquisitionRequest, final String description, final Integer quantity,
 	    final Money unitValue, final BigDecimal vatValue, final Money additionalCostValue, final String proposalReference,
-	    CPVReference reference, String recipient, Address address, String phone, String email) {
+	    CPVReference reference, String recipient, Address address, String phone, String email,
+	    AcquisitionItemClassification classification) {
 	this(acquisitionRequest, description, quantity, unitValue, vatValue, proposalReference, reference);
 	setAdditionalCostValue(additionalCostValue);
 	setRecipient(recipient);
 	setAddress(address);
 	setRecipientEmail(email);
 	setRecipientPhone(phone);
+	setClassification(classification);
 
 	createUnitItem();
     }
@@ -66,15 +68,15 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	}
 
 	if (!checkAcquisitionRequestValueLimit(acquisitionRequest, totalValue)) {
-	    throw new DomainException("acquisitionRequestItem.message.exception.totalValueExceed", DomainException
-		    .getResourceFor("resources/AcquisitionResources"), acquisitionRequest.getAcquisitionProcess()
-		    .getAcquisitionRequestValueLimit().toFormatString());
+	    throw new DomainException("acquisitionRequestItem.message.exception.totalValueExceed",
+		    DomainException.getResourceFor("resources/AcquisitionResources"), acquisitionRequest.getAcquisitionProcess()
+			    .getAcquisitionRequestValueLimit().toFormatString());
 	}
 
 	if (!acquisitionRequest.getAcquisitionProcess().getShouldSkipSupplierFundAllocation()
 		&& !checkSupplierFundAllocation(acquisitionRequest, totalValue)) {
-	    throw new DomainException("acquisitionRequestItem.message.exception.fundAllocationNotAllowed", DomainException
-		    .getResourceFor("resources/AcquisitionResources"));
+	    throw new DomainException("acquisitionRequestItem.message.exception.fundAllocationNotAllowed",
+		    DomainException.getResourceFor("resources/AcquisitionResources"));
 	}
     }
 
@@ -138,7 +140,8 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 
     public void edit(final AcquisitionRequest acquisitionRequest, final String description, final Integer quantity,
 	    final Money unitValue, final BigDecimal vatValue, final Money additionalCostValue, final String proposalReference,
-	    CPVReference reference, String recipient, Address address, String phone, String email) {
+	    CPVReference reference, String recipient, Address address, String phone, String email,
+	    AcquisitionItemClassification classification) {
 
 	checkLimits(getAcquisitionRequest(), quantity, unitValue);
 	setDescription(description);
@@ -152,6 +155,7 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	setRecipientEmail(email);
 	setRecipientPhone(phone);
 	setCPVReference(reference);
+	setClassification(classification);
     }
 
     public void editRealValues(Integer realQuantity, Money realUnitValue, Money shipment, BigDecimal realVatValue) {

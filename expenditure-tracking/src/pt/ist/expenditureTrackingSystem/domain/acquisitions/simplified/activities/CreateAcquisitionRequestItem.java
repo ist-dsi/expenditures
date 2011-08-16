@@ -43,7 +43,7 @@ public class CreateAcquisitionRequestItem extends
 		activityInformation.getDescription(), activityInformation.getQuantity(), activityInformation.getUnitValue(),
 		activityInformation.getVatValue(), activityInformation.getAdditionalCostValue(),
 		activityInformation.getProposalReference(), activityInformation.getCPVReference(), recipient, address, phone,
-		email);
+		email, activityInformation.getClassification());
     }
 
     @Override
@@ -65,6 +65,5 @@ public class CreateAcquisitionRequestItem extends
     public boolean isDefaultInputInterfaceUsed() {
 	return false;
     }
-
 
 }

@@ -37,6 +37,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.U
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.UnAuthorize;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.CancelAcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.CancelInvoiceConfirmation;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ChangeAcquisitionRequestItemClassification;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ChangeFinancersAccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ChangeProcessClassification;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ConfirmInvoice;
@@ -84,10 +85,8 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 
     public static enum ProcessClassification implements IPresentableEnum {
 
-	CCP(new Money("5000"), true, "RS 5000"),
-	CT10000(new Money("10000"), "CT 10000"),
-	CT75000(new Money("75000"), "CT 75000"),
-	NORMAL(new Money("75000"), "NORMAL");
+	CCP(new Money("5000"), true, "RS 5000"), CT10000(new Money("10000"), "CT 10000"), CT75000(new Money("75000"), "CT 75000"), NORMAL(
+		new Money("75000"), "NORMAL");
 
 	final private Money value;
 	final private String shortDescription;
@@ -179,6 +178,7 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	activities.add(new SelectSupplier());
 
 	activities.add(new ChangeProcessClassification());
+	activities.add(new ChangeAcquisitionRequestItemClassification());
 	activities.add(new CreateAcquisitionRequestItem());
 	activities.add(new PayAcquisition());
 	activities.add(new DeleteAcquisitionRequestItem());
@@ -396,7 +396,6 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
     public List<? extends PresentableProcessState> getAvailablePresentableStates() {
 	return getAvailableStates();
     }
-    
 
     public boolean getFundAllocationPresent() {
 	for (final Financer financer : getAcquisitionRequest().getFinancers()) {
@@ -417,8 +416,8 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
     }
 
     public boolean hasSomeInvoice() {
-	return isInvoiceReceived() || (getExpenditureTrackingSystem().isInvoiceAllowedToStartAcquisitionProcess()
-		&& hasInvoiceFile());
+	return isInvoiceReceived()
+		|| (getExpenditureTrackingSystem().isInvoiceAllowedToStartAcquisitionProcess() && hasInvoiceFile());
     }
 
     @Override

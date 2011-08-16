@@ -33,6 +33,15 @@
 						</fr:layout>
 					</fr:view>
 				</li>
+				<li>
+					<bean:message key="label.pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionItemClassification" bundle="ACQUISITION_RESOURCES"/>:
+					<logic:present name="item" property="classification">
+						<fr:view name="item" property="classification"/>
+					</logic:present>
+					<logic:notPresent name="item" property="classification">
+						-
+					</logic:notPresent>
+				</li>
 				<logic:notEmpty name="item" property="unitItems">
 					<li>
 						<bean:message key="acquisitionProcess.label.payingUnits" bundle="ACQUISITION_RESOURCES"/>:<br/>
@@ -79,6 +88,10 @@
 					<bean:define id="needsSeparator" value="true" toScope="request"/>
 					<li><wf:activityName processName="process" activityName="DeleteRefundItem" scope="request"/></li>
 				</wf:activityLink>
+				<wf:activityLink id="<%= "change-" + itemID %>" processName="process" activityName="ChangeRefundItemClassification" scope="request" paramName0="item" paramValue0="<%= itemID %>">
+					<bean:define id="needsSeparator" value="true" toScope="request"/>
+					<li><wf:activityName processName="process" activityName="ChangeRefundItemClassification" scope="request"/></li>
+				</wf:activityLink>
 
 			</ul>
 			
@@ -90,16 +103,19 @@
 				</wf:isActive>
 				<wf:isActive processName="process" activityName="GenericAssignPayingUnitToItem" scope="request">
 					<bean:define id="hideOperations" value="false" toScope="request"/>
-						</wf:isActive>
+				</wf:isActive>
 				<wf:isActive processName="process" activityName="CreateRefundInvoice" scope="request">
 					<bean:define id="hideOperations" value="false" toScope="request"/>
-					</wf:isActive>
+				</wf:isActive>
 				<wf:isActive processName="process" activityName="DistributeRealValuesForPayingUnits" scope="request">
 					<bean:define id="hideOperations" value="false" toScope="request"/>
-					</wf:isActive>
+				</wf:isActive>
 				<wf:isActive processName="process" activityName="DeleteRefundItem" scope="request">
 					<bean:define id="hideOperations" value="false" toScope="request"/>
-					</wf:isActive>
+				</wf:isActive>
+				<wf:isActive processName="process" activityName="ChangeRefundItemClassification" scope="request">
+					<bean:define id="hideOperations" value="false" toScope="request"/>
+				</wf:isActive>
 		
 				<logic:equal name="hideOperations" value="true">
 					$("[name='operations']").hide();

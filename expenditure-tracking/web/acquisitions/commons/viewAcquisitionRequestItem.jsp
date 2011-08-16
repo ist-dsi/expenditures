@@ -49,6 +49,15 @@
 							</fr:layout>
 						</fr:view>
 					</li>
+					<li class="extraInfo">
+						<bean:message key="label.pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionItemClassification" bundle="ACQUISITION_RESOURCES"/>:
+						<logic:present name="acquisitionRequestItem" property="classification">
+							<fr:view name="acquisitionRequestItem" property="classification"/>
+						</logic:present>
+						<logic:notPresent name="acquisitionRequestItem" property="classification">
+							-
+						</logic:notPresent>
+					</li>
 					<li>
 						<bean:message key="acquisitionProcess.label.payingUnits" bundle="ACQUISITION_RESOURCES"/>:
 						<logic:notEmpty name="acquisitionRequestItem" property="unitItems">
@@ -95,13 +104,13 @@
 			</td>
 			
 			<td rowspan="7" class="nowrap aleft" name="operations">
-				<ul style="padding-top: 0;">						 	
+				<ul style="padding-top: 0;">
 					<wf:activityLink id="<%= "edit-" + itemId %>" processName="process" activityName="EditAcquisitionRequestItem" scope="request" paramName0="item" paramValue0="<%= itemId %>">
 						<bean:define id="needsSeparator" value="true" toScope="request"/>
 						<li>
 							<wf:activityName processName="process" activityName="EditAcquisitionRequestItem" scope="request"/>
 						</li>
-					</wf:activityLink>		
+					</wf:activityLink>
 					
 					<wf:activityLink id="<%= "gaput-" + itemId %>" processName="process" activityName="GenericAssignPayingUnitToItem" scope="request" paramName0="item" paramValue0="<%= itemId %>">
 						<bean:define id="needsSeparator" value="true" toScope="request"/>
@@ -128,7 +137,13 @@
 						<li>
 							<wf:activityName processName="process" activityName="DeleteAcquisitionRequestItem" scope="request"/>
 						</li>
-					</wf:activityLink>					
+					</wf:activityLink>
+					<wf:activityLink id="<%= "change-" + itemId %>" processName="process" activityName="ChangeAcquisitionRequestItemClassification" scope="request" paramName0="item" paramValue0="<%= itemId %>">
+						<bean:define id="needsSeparator" value="true" toScope="request"/>
+						<li>
+							<wf:activityName processName="process" activityName="ChangeAcquisitionRequestItemClassification" scope="request"/>
+						</li>
+					</wf:activityLink>
 				</ul>
 			</td>
 		</tr>
@@ -222,19 +237,22 @@
 
 		<wf:isActive processName="process" activityName="EditAcquisitionRequestItem" scope="request">
 			<bean:define id="hideOperations" value="false" toScope="request"/>
-			</wf:isActive>
+		</wf:isActive>
 		<wf:isActive processName="process" activityName="GenericAssignPayingUnitToItem" scope="request">
 			<bean:define id="hideOperations" value="false" toScope="request"/>
-				</wf:isActive>
+		</wf:isActive>
 		<wf:isActive processName="process" activityName="EditAcquisitionRequestItemRealValues" scope="request">
 			<bean:define id="hideOperations" value="false" toScope="request"/>
-			</wf:isActive>
+		</wf:isActive>
 		<wf:isActive processName="process" activityName="DistributeRealValuesForPayingUnits" scope="request">
 			<bean:define id="hideOperations" value="false" toScope="request"/>
-			</wf:isActive>
+		</wf:isActive>
 		<wf:isActive processName="process" activityName="DeleteAcquisitionRequestItem" scope="request">
 			<bean:define id="hideOperations" value="false" toScope="request"/>
-			</wf:isActive>
+		</wf:isActive>
+		<wf:isActive processName="process" activityName="ChangeAcquisitionRequestItemClassification" scope="request">
+			<bean:define id="hideOperations" value="false" toScope="request"/>
+		</wf:isActive>
 
 		<logic:equal name="hideOperations" value="true">
 			$("[name='operations']").hide();

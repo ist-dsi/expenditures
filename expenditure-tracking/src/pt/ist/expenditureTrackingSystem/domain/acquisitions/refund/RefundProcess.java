@@ -44,6 +44,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.U
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.CancelRefundProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.ChangeFinancersAccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.ChangeProcessRequester;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.ChangeRefundItemClassification;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.ConfirmInvoices;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.CreateRefundInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.CreateRefundItem;
@@ -117,6 +118,7 @@ public class RefundProcess extends RefundProcess_Base {
 	activities.add(new AllocateFundsPermanently<RefundProcess>());
 	activities.add(new ChangeFinancersAccountingUnit());
 	activities.add(new ChangeProcessRequester());
+	activities.add(new ChangeRefundItemClassification());
 	activities.add(new RemoveCancelProcess<RefundProcess>());
 	activities.add(new RefundPerson());
 	activities.add(new MarkProcessAsCCPProcess());
@@ -158,9 +160,9 @@ public class RefundProcess extends RefundProcess_Base {
     @Service
     public static RefundProcess createNewRefundProcess(CreateRefundProcessBean bean) {
 
-	RefundProcess process = bean.isExternalPerson() ? new RefundProcess(bean.getRequestor(), bean.getRefundeeName(), bean
-		.getRefundeeFiscalCode(), bean.getRequestingUnit()) : new RefundProcess(bean.getRequestor(), bean.getRefundee(),
-		bean.getRequestingUnit());
+	RefundProcess process = bean.isExternalPerson() ? new RefundProcess(bean.getRequestor(), bean.getRefundeeName(),
+		bean.getRefundeeFiscalCode(), bean.getRequestingUnit()) : new RefundProcess(bean.getRequestor(),
+		bean.getRefundee(), bean.getRequestingUnit());
 
 	process.setUnderCCPRegime(bean.isUnderCCP());
 
@@ -190,6 +192,7 @@ public class RefundProcess extends RefundProcess_Base {
 	return getProcessState().isInGenesis();
     }
 
+    @Override
     public Person getRequestor() {
 	return getRequest().getRequester();
     }
@@ -199,6 +202,7 @@ public class RefundProcess extends RefundProcess_Base {
 	new RefundProcessState(this, RefundProcessStateType.SUBMITTED_FOR_APPROVAL);
     }
 
+    @Override
     public List<Unit> getPayingUnits() {
 	List<Unit> res = new ArrayList<Unit>();
 	for (Financer financer : getRequest().getFinancers()) {
@@ -207,6 +211,7 @@ public class RefundProcess extends RefundProcess_Base {
 	return res;
     }
 
+    @Override
     public boolean isResponsibleForUnit(final Person person) {
 	Set<Authorization> validAuthorizations = person.getValidAuthorizations();
 	for (Unit unit : getPayingUnits()) {
@@ -231,6 +236,7 @@ public class RefundProcess extends RefundProcess_Base {
 	return refundProcessState.isPendingApproval();
     }
 
+    @Override
     public void submitForFundAllocation() {
 	new RefundProcessState(this, RefundProcessStateType.APPROVED);
     }
@@ -326,6 +332,7 @@ public class RefundProcess extends RefundProcess_Base {
     /*
      * use getProcessNumber() instead
      */
+    @Override
     @Deprecated
     public String getAcquisitionProcessId() {
 	return getProcessNumber();
@@ -396,13 +403,9 @@ public class RefundProcess extends RefundProcess_Base {
 		|| ExpenditureTrackingSystem.isAccountingManagerGroupMember(user)
 		|| ExpenditureTrackingSystem.isProjectAccountingManagerGroupMember(user)
 		|| ExpenditureTrackingSystem.isTreasuryMemberGroupMember(user)
-		|| ExpenditureTrackingSystem.isAcquisitionsProcessAuditorGroupMember(user)
-		|| getRequestor() == person
-		|| getRequest().getRequestingUnit().isResponsible(person)
-		|| isResponsibleForAtLeastOnePayingUnit(person)
-		|| isAccountingEmployee(person)
-		|| isProjectAccountingEmployee(person)
-		|| isTreasuryMember(person)
+		|| ExpenditureTrackingSystem.isAcquisitionsProcessAuditorGroupMember(user) || getRequestor() == person
+		|| getRequest().getRequestingUnit().isResponsible(person) || isResponsibleForAtLeastOnePayingUnit(person)
+		|| isAccountingEmployee(person) || isProjectAccountingEmployee(person) || isTreasuryMember(person)
 		|| isObserver(person);
     }
 
@@ -411,6 +414,7 @@ public class RefundProcess extends RefundProcess_Base {
 	return super.isAuthorized() && getRefundableInvoices().isEmpty();
     }
 
+    @Override
     public boolean isCanceled() {
 	return getProcessState().isCanceled();
     }
@@ -438,6 +442,7 @@ public class RefundProcess extends RefundProcess_Base {
 	return suppliers;
     }
 
+    @Override
     public boolean isAppiableForYear(final int year) {
 	return Util.isAppiableForYear(year, this);
     }
@@ -493,7 +498,6 @@ public class RefundProcess extends RefundProcess_Base {
 	return availableFileTypes;
     }
 
-    
     @Override
     public List<Class<? extends ProcessFile>> getUploadableFileTypes() {
 	List<Class<? extends ProcessFile>> uploadableFileTypes = super.getUploadableFileTypes();

@@ -8,6 +8,7 @@ import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.WorkflowProcess;
 import myorg.domain.util.Address;
 import myorg.domain.util.Money;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionItemClassification;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
@@ -47,6 +48,7 @@ public class CreateAcquisitionRequestItemActivityInformation extends ActivityInf
     private String email;
     private Address address;
     private DeliveryInfo deliveryInfo;
+    private AcquisitionItemClassification classification;
     private CreateItemSchemaType createItemSchemaType;
     private CPVReference cPVReference;
 
@@ -173,6 +175,14 @@ public class CreateAcquisitionRequestItemActivityInformation extends ActivityInf
 
     public String getEmail() {
 	return email;
+    }
+
+    public void setClassification(AcquisitionItemClassification classification) {
+	this.classification = classification;
+    }
+
+    public AcquisitionItemClassification getClassification() {
+	return classification;
     }
 
     @Override
