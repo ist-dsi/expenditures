@@ -37,4 +37,9 @@ public class CreateRefundItem extends WorkflowActivity<RefundProcess, CreateRefu
     public String getUsedBundle() {
 	return "resources/AcquisitionResources";
     }
+
+    @Override
+    public boolean isDefaultInputInterfaceUsed() {
+	return false;
+    }
 }

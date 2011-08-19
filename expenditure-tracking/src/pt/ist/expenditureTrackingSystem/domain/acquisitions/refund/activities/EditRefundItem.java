@@ -39,4 +39,9 @@ public class EditRefundItem extends WorkflowActivity<RefundProcess, EditRefundIt
     public String getUsedBundle() {
 	return "resources/AcquisitionResources";
     }
+
+    @Override
+    public boolean isDefaultInputInterfaceUsed() {
+	return false;
+    }
 }
