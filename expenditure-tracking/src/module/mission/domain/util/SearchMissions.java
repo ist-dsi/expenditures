@@ -22,6 +22,7 @@ import myorg.domain.util.Search;
 
 import org.joda.time.LocalDate;
 
+import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 
 /**
@@ -120,12 +121,13 @@ public class SearchMissions extends Search<Mission> {
 	public <T> T[] toArray(T[] a) {
 	    throw new Error("not.implemented");
 	}
-	
+
     }
 
     private String processNumber = Integer.toString(Calendar.getInstance().get(Calendar.YEAR)) + '/';
     private Party missionResponsible;
     private Unit payingUnit;
+    private AccountingUnit accountingUnit;
     private Boolean national = Boolean.TRUE;
     private Boolean foreign = Boolean.TRUE;
     private LocalDate date;
@@ -171,27 +173,23 @@ public class SearchMissions extends Search<Mission> {
 
 	@Override
 	protected boolean matchesSearchCriteria(Mission mission) {
-	    return matchProcessNumberCriteria(mission)
-	    	    && matchRequestingUnitCriteria(mission.getMissionResponsible())
-	    	    && matchPayingUnitCriteria(mission.getMissionVersion().getFinancer())
-	    	    && matchMissionTypeCriteria(mission)
-		    && matchDateCriteria(mission)
-		    && matchRequestingPersonCriteria(mission.getRequestingPerson())
-		    && matchParticipantCriteria(mission)
-		    && matchAccountManagerCriteria(mission)
-		    && matchCanceledCriteria(mission)
+	    return matchProcessNumberCriteria(mission) && matchRequestingUnitCriteria(mission.getMissionResponsible())
+		    && matchPayingUnitCriteria(mission.getMissionVersion().getFinancer())
+		    && matchAccountingUnitCriteria(mission.getMissionVersion().getFinancer())
+		    && matchMissionTypeCriteria(mission) && matchDateCriteria(mission)
+		    && matchRequestingPersonCriteria(mission.getRequestingPerson()) && matchParticipantCriteria(mission)
+		    && matchAccountManagerCriteria(mission) && matchCanceledCriteria(mission)
 		    && mission.getMissionProcess().isAccessibleToCurrentUser();
 	}
 
 	private boolean matchCanceledCriteria(final Mission mission) {
 	    return filterCanceledProcesses == null || !filterCanceledProcesses.booleanValue()
-	    		|| !mission.getMissionProcess().isProcessCanceled();
+		    || !mission.getMissionProcess().isProcessCanceled();
 	}
 
 	private boolean matchProcessNumberCriteria(final Mission mission) {
-	    return processNumber == null
-	    		|| processNumber.isEmpty()
-	    		|| mission.getMissionProcess().getProcessIdentification().indexOf(processNumber) >= 0;
+	    return processNumber == null || processNumber.isEmpty()
+		    || mission.getMissionProcess().getProcessIdentification().indexOf(processNumber) >= 0;
 	}
 
 	private boolean matchParticipantCriteria(final Mission mission) {
@@ -214,7 +212,7 @@ public class SearchMissions extends Search<Mission> {
 
 	private boolean matchMissionTypeCriteria(Mission mission) {
 	    return (national != null && national.booleanValue() && mission instanceof NationalMission)
-	    		|| (foreign != null && foreign.booleanValue() && mission instanceof ForeignMission);
+		    || (foreign != null && foreign.booleanValue() && mission instanceof ForeignMission);
 	}
 
 	private boolean matchPayingUnitCriteria(List<MissionFinancer> financers) {
@@ -224,6 +222,20 @@ public class SearchMissions extends Search<Mission> {
 
 	    for (final MissionFinancer missionFinancer : financers) {
 		if (missionFinancer.getUnit() == payingUnit) {
+		    return true;
+		}
+	    }
+
+	    return false;
+	}
+
+	private boolean matchAccountingUnitCriteria(List<MissionFinancer> financers) {
+	    if (getAccountingUnit() == null) {
+		return true;
+	    }
+
+	    for (final MissionFinancer missionFinancer : financers) {
+		if (missionFinancer.getAccountingUnit() == getAccountingUnit()) {
 		    return true;
 		}
 	    }
@@ -278,44 +290,51 @@ public class SearchMissions extends Search<Mission> {
     }
 
     public String getProcessNumber() {
-        return processNumber;
+	return processNumber;
     }
 
     public void setProcessNumber(String processNumber) {
-        this.processNumber = processNumber;
+	this.processNumber = processNumber;
     }
 
     public Boolean getNational() {
-        return national;
+	return national;
     }
 
     public void setNational(Boolean national) {
-        this.national = national;
+	this.national = national;
     }
 
     public Boolean getFilterCanceledProcesses() {
-        return filterCanceledProcesses;
+	return filterCanceledProcesses;
     }
 
     public void setFilterCanceledProcesses(Boolean filterCanceledProcesses) {
-        this.filterCanceledProcesses = filterCanceledProcesses;
+	this.filterCanceledProcesses = filterCanceledProcesses;
     }
 
     public Party getMissionResponsible() {
-        return missionResponsible;
+	return missionResponsible;
     }
 
     public void setMissionResponsible(Party missionResponsible) {
-        this.missionResponsible = missionResponsible;
+	this.missionResponsible = missionResponsible;
     }
 
     public Person getAccountManager() {
-        return accountManager;
+	return accountManager;
     }
 
     public void setAccountManager(Person accountManager) {
-        this.accountManager = accountManager;
+	this.accountManager = accountManager;
     }
 
-    
+    public void setAccountingUnit(AccountingUnit accountingUnit) {
+	this.accountingUnit = accountingUnit;
+    }
+
+    public AccountingUnit getAccountingUnit() {
+	return accountingUnit;
+    }
+
 }
