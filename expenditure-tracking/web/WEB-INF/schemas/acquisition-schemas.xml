@@ -782,10 +782,8 @@
 	type="pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.CreateRefundItemActivityInformation"
 	bundle="ACQUISITION_RESOURCES">
 	<slot name="valueEstimation" key="refundItem.valueEstimation">
-		<validator
-			class="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
-		<validator
-			class="myorg.presentationTier.renderers.validator.MoneyValidator" />
+		<validator class="myorg.presentationTier.renderers.validator.MoneyValidator"/>
+		<validator class="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 	</slot>
 	<slot name="CPVReference" layout="autoComplete" key="refundItem.label.salesCode"
 		bundle="ACQUISITION_RESOURCES" help="message.help.CPVReference">
@@ -801,8 +799,6 @@
 			<property name="bundle" value="EXPENDITURE_RESOURCES" />
 			<property name="key" value="true" />
 		</validator>
-	</slot>
-	<slot name="valueEstimation" key="refundItem.valueEstimation">
 	</slot>
 	<slot name="classification" key="label.pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionItemClassification"
 		bundle="ACQUISITION_RESOURCES">
