@@ -41,6 +41,24 @@ public class PersonMissionAuthorization extends PersonMissionAuthorization_Base 
 	}
     };
 
+    public static final Comparator<PersonMissionAuthorization> COMPARATOR_BY_DEPARTURE_DATE = new Comparator<PersonMissionAuthorization>() {
+	@Override
+	public int compare(final PersonMissionAuthorization pma1, final PersonMissionAuthorization pma2) {
+	    final MissionProcess missionProcess1 = pma1.getMissionProcess();
+	    final MissionProcess missionProcess2 = pma2.getMissionProcess();
+
+	    final Mission mission1 = missionProcess1.getMission();
+	    final Mission mission2 = missionProcess2.getMission();
+
+	    final DateTime departure1 = mission1.getDaparture();
+	    final DateTime departure2 = mission2.getDaparture();
+
+	    final int c = departure1.compareTo(departure2);
+
+	    return c == 0 ? pma1.getExternalId().compareTo(pma2.getExternalId()) : c;
+	}
+    };
+
     public PersonMissionAuthorization() {
         super();
         setMissionSystem(MissionSystem.getInstance());

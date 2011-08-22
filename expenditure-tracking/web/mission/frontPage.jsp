@@ -1,3 +1,5 @@
+<%@page import="java.util.TreeSet"%>
+<%@page import="java.util.SortedSet"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
@@ -68,7 +70,9 @@
 									<th><bean:message bundle="MISSION_RESOURCES" key="label.module.mission.front.page.list.process"/></th>
 								</tr>
 								<%
-									for (final module.mission.domain.PersonMissionAuthorization personMissionAuthorization : personMissionAuthorizations) {
+									final SortedSet<module.mission.domain.PersonMissionAuthorization> sortedSet = new TreeSet<module.mission.domain.PersonMissionAuthorization>(module.mission.domain.PersonMissionAuthorization.COMPARATOR_BY_DEPARTURE_DATE);
+									sortedSet.addAll(personMissionAuthorizations);
+									for (final module.mission.domain.PersonMissionAuthorization personMissionAuthorization : sortedSet) {
 					    				final Mission mission = personMissionAuthorization.getAssociatedMission();
 					    				final MissionProcess missionProcess = mission.getMissionProcess();
 					    				request.setAttribute("missionProcess", missionProcess);
