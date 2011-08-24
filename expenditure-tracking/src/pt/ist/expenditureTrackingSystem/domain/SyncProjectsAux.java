@@ -456,7 +456,7 @@ public abstract class SyncProjectsAux {
 		if (responsible != null) {
 		    if (isResponsabilityAllowed(responsibleString)) {
 			final Authorization authorization = new Authorization(responsible, unit, "Imported from MGP");
-			authorization.setMaxAmount(AUTHORIZED_VALUE);
+			authorization.setMaxAmount(getAuthorizationValue());
 		    } else {
 			// System.out.println("[" + responsibleString +
 			// "] for project [" + acronym
@@ -482,11 +482,13 @@ public abstract class SyncProjectsAux {
 	}
     }
 
+    protected abstract Money getAuthorizationValue();
+
     protected boolean isResponsabilityAllowed(final String responsibleString) {
 	return true;
     }
 
-    final static Money AUTHORIZED_VALUE = new Money("75000");
+    //final static Money AUTHORIZED_VALUE = new Money("75000");
 
     private void updateProject(/* final Map<String, SubAccountingUnit> subAccountingUnits, */ final MgpProject mgpProject,
 	    final Project project) {
@@ -534,7 +536,7 @@ public abstract class SyncProjectsAux {
 		if (projectResponsibles.contains(Integer.valueOf(responsibleString))) {
 		    if (!hasAuthorization(project, responsible)) {
 			final Authorization authorization = new Authorization(responsible, project, "Imported from MGP");
-			authorization.setMaxAmount(AUTHORIZED_VALUE);
+			authorization.setMaxAmount(getAuthorizationValue());
 		    }
 		} else {
 		    // System.out.println("[" + responsibleString +
@@ -627,7 +629,7 @@ public abstract class SyncProjectsAux {
 
     private boolean hasAuthorization(final Project project, final Person responsible) {
 	for (final Authorization authorization : project.getAuthorizationsSet()) {
-	    if (authorization.getPerson() == responsible && authorization.getMaxAmount().isGreaterThanOrEqual(AUTHORIZED_VALUE)) {
+	    if (authorization.getPerson() == responsible && authorization.getMaxAmount().isGreaterThanOrEqual(getAuthorizationValue())) {
 		return true;
 	    }
 	}

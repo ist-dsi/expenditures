@@ -1,10 +1,13 @@
 package pt.ist.expenditureTrackingSystem.domain;
 
+import myorg.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.organization.CostCenter;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 
 
 public class SyncProjectsISTid extends SyncProjectsAux {
+
+    private final static Money AUTHORIZED_VALUE = new Money("5000");
 
     @Override
     protected String getDbPropertyPrefix() {
@@ -34,6 +37,11 @@ public class SyncProjectsISTid extends SyncProjectsAux {
 
 	System.out.println("No top level unit configured for virtual host: " + getVirtualHost());
 	return null;
+    }
+
+    @Override
+    protected Money getAuthorizationValue() {
+	return AUTHORIZED_VALUE;
     }
 
 
