@@ -132,7 +132,7 @@ public class ProjectAcquisitionFundAllocationRequest extends ProjectAcquisitionF
 //		    "!!!FALTA A UNIDADE DE EXPLORAÇÃO", accountingUnit.getName().substring(0, 2),
 		    "SUPPLIER_ID", supplier == null ? null : supplier.getGiafKey(),
 		    "SUPPLIER_DOC_TYPE", supplier == null ? null : (hasProposal(request) ? "Proposta" : "Factura"),
-		    "SUPPLIER_DOC_ID", supplier == null ? null : getProposalNumber(request),
+		    "SUPPLIER_DOC_ID", supplier == null ? null : limitStringSize(getProposalNumber(request), 24),
 		    "CPV_ID", cpvReference.getCode(),
 		    "CPV_DESCRIPTION", cpvReference.getDescription(),
 		    "MOV_DESCRIPTION", limitStringSize(Integer.toString(item.getUnitItemsCount()) + " - " + item.getDescription(), 4000),
