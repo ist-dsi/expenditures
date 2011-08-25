@@ -121,6 +121,7 @@ public class ProjectAcquisitionFundAllocationRequest extends ProjectAcquisitionF
 	    final Money shareWithoutVat = shareValue.divideAndRound(d);
 	    final Money shareVat = shareValue.subtract(shareWithoutVat);
 
+	    System.out.println(getProcessId());
 	    Object[] insertArgs = new Object[] {
 		    "INTERACT_ID", Long.valueOf(getInteractionId()),
 		    "PROCESS_ID", getProcessId(),
