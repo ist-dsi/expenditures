@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import module.finance.domain.Supplier;
 import module.workflow.activities.ActivityException;
@@ -130,7 +131,7 @@ public class ProjectAcquisitionFundAllocationRequest extends ProjectAcquisitionF
 		    "PROJ_MEMBER", getSubProjectId(unit),
 //		    "!!!FALTA A UNIDADE DE EXPLORAÇÃO", accountingUnit.getName().substring(0, 2),
 		    "SUPPLIER_ID", supplier == null ? null : supplier.getGiafKey(),
-		    "SUPPLIER_DOC_TYPE", supplier == null ? null : "Proposta",
+		    "SUPPLIER_DOC_TYPE", supplier == null ? null : (hasProposal(request) ? "Proposta" : "Factura"),
 		    "SUPPLIER_DOC_ID", supplier == null ? null : getProposalNumber(request),
 		    "CPV_ID", cpvReference.getCode(),
 		    "CPV_DESCRIPTION", cpvReference.getDescription(),
@@ -224,9 +225,27 @@ public class ProjectAcquisitionFundAllocationRequest extends ProjectAcquisitionF
 	    final AcquisitionRequest acquisitionRequest = (AcquisitionRequest) request;
 	    final AcquisitionProcess process = acquisitionRequest.getProcess();
 	    final AcquisitionProposalDocument acquisitionProposalDocument = process.getAcquisitionProposalDocument();
-	    return acquisitionProposalDocument.getProposalId();
+	    if (acquisitionProposalDocument != null) {
+		return acquisitionProposalDocument.getProposalId();
+	    }
+	    final Set<PaymentProcessInvoice> invoices = request.getInvoices();
+	    if (!invoices.isEmpty()) {
+		return invoices.iterator().next().getInvoiceNumber();
+	    }
 	}
 	return null;
+    }
+
+    private boolean hasProposal(final RequestWithPayment request) {
+	if (request instanceof AcquisitionRequest) {
+	    final AcquisitionRequest acquisitionRequest = (AcquisitionRequest) request;
+	    final AcquisitionProcess process = acquisitionRequest.getProcess();
+	    final AcquisitionProposalDocument acquisitionProposalDocument = process.getAcquisitionProposalDocument();
+	    if (acquisitionProposalDocument != null) {
+		return true;
+	    }
+	}
+	return false;
     }
 
     @Override
