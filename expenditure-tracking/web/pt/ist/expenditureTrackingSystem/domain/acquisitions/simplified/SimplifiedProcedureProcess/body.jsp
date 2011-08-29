@@ -264,8 +264,8 @@
 
 <table class="tview1" style="width: 100%;">
 	<tr>
-		<th class="aleft"><bean:message key="acquisitionProcess.label.payingUnits" bundle="ACQUISITION_RESOURCES"/>1</th>
-		<th>2</th>
+		<th class="aleft"><bean:message key="acquisitionProcess.label.payingUnits" bundle="ACQUISITION_RESOURCES"/></th>
+		<th></th>
 		<th class="acenter" style="width: 70px; white-space: nowrap;">
 			<bean:message key="acquisitionProcess.label.accountingUnit" bundle="ACQUISITION_RESOURCES"/>
 		</th>
