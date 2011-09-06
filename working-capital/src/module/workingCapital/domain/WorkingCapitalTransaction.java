@@ -100,6 +100,10 @@ public class WorkingCapitalTransaction extends WorkingCapitalTransaction_Base {
 	return false;
     }
 
+    public boolean isExceptionalRefund() {
+	return false;
+    }
+
     public boolean isLastTransaction() {
 	final WorkingCapital workingCapital = getWorkingCapital();
 	return workingCapital.getLastTransaction() == this;

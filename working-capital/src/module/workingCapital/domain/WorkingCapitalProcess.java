@@ -27,6 +27,7 @@ import module.workingCapital.domain.activity.ChangeWorkingCapitalAccountingUnitA
 import module.workingCapital.domain.activity.CorrectWorkingCapitalAcquisitionClassificationActivity;
 import module.workingCapital.domain.activity.EditInitializationActivity;
 import module.workingCapital.domain.activity.EditWorkingCapitalActivity;
+import module.workingCapital.domain.activity.ExceptionalCapitalRestitutionActivity;
 import module.workingCapital.domain.activity.PayCapitalActivity;
 import module.workingCapital.domain.activity.ReenforceWorkingCapitalInitializationActivity;
 import module.workingCapital.domain.activity.RegisterCapitalRefundActivity;
@@ -110,6 +111,7 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base implements
 	activitiesAux.add(new RegisterCapitalRefundActivity());
 	activitiesAux.add(new ReenforceWorkingCapitalInitializationActivity());
 	activitiesAux.add(new CancelReenforceWorkingCapitalInitializationActivity());
+	activitiesAux.add(new ExceptionalCapitalRestitutionActivity());
 	activities = Collections.unmodifiableList(activitiesAux);
 
 	UnreadCommentsWidget.register(new WorkflowCommentCounter(WorkingCapitalProcess.class));
@@ -185,11 +187,10 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base implements
 	    final User loggedUser = UserView.getCurrentUser();
 	    final WorkingCapital workingCapital = getWorkingCapital();
 	    final VirtualHost virtualHost = VirtualHost.getVirtualHostForThread();
-	    new Email(virtualHost.getApplicationSubTitle().getContent(),
-			    virtualHost.getSystemEmailAddress(), new String[] {}, toAddress, Collections.EMPTY_LIST,
-		    Collections.EMPTY_LIST, BundleUtil.getFormattedStringFromResourceBundle("resources/WorkingCapitalResources",
-			    "label.email.commentCreated.subject", workingCapital.getUnit().getPresentationName(), workingCapital
-				    .getWorkingCapitalYear().getYear().toString()),
+	    new Email(virtualHost.getApplicationSubTitle().getContent(), virtualHost.getSystemEmailAddress(), new String[] {},
+		    toAddress, Collections.EMPTY_LIST, Collections.EMPTY_LIST, BundleUtil.getFormattedStringFromResourceBundle(
+			    "resources/WorkingCapitalResources", "label.email.commentCreated.subject", workingCapital.getUnit()
+				    .getPresentationName(), workingCapital.getWorkingCapitalYear().getYear().toString()),
 		    BundleUtil.getFormattedStringFromResourceBundle("resources/WorkingCapitalResources",
 			    "label.email.commentCreated.body", loggedUser.getPerson().getName(), workingCapital.getUnit()
 				    .getPresentationName(), workingCapital.getWorkingCapitalYear().getYear().toString(), comment));

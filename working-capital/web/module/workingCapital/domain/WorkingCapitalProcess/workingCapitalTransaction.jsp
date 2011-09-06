@@ -159,10 +159,26 @@
 			<tr>
 				<td><fr:view name="workingCapitalTransaction" property="origin.firstAndLastName"/></td>
 				<td><fr:view name="workingCapitalTransaction" property="refundedValue"/></td>
-				<td><fr:view name="workingCapitalTransaction" property="person.firstAndLastName"/></td>
+				<td>
+					<logic:equal name="workingCapitalTransaction" property="exceptionalRefund" value="true">
+						-
+					</logic:equal>
+					<logic:equal name="workingCapitalTransaction" property="exceptionalRefund" value="false">
+						<fr:view name="workingCapitalTransaction" property="person.firstAndLastName"/>
+					</logic:equal>
+				</td>
 				<td><fr:view name="workingCapitalTransaction" property="transationInstant"/></td>
 			</tr>
 		</table>
+	</p>
+	<logic:equal name="workingCapitalTransaction" property="exceptionalRefund" value="true">
+		<h3>
+			<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.transaction.ExceptionalWorkingCapitalRefund.caseDescription"/>
+		</h3>
+		
+		<fr:view name="workingCapitalTransaction" property="caseDescription">
+		</fr:view>
+	</logic:equal>
 	</p>
 </logic:equal>
 

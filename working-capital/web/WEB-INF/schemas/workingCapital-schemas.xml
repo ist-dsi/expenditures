@@ -61,6 +61,10 @@
 			help="label.module.workingCapital.internationalBankAccountNumber.help" validator="module.workingCapital.presentationTier.validator.IbanOfPTBanValidator"/>
 </schema>		
 
+<schema name="activityInformation.ExceptionalCapitalRestitutionActivity" type="module.workingCapital.domain.activity.ExceptionalCapitalRestitutionInfo" bundle="WORKING_CAPITAL_RESOURCES">
+	<slot name="value" key="label.module.workingCapital.refund.value" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="caseDescription" layout="longText" key="label.module.workingCapital.domain.ExceptionalWorkingCapitalRefund.caseDescription" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+</schema>
 
 <schema name="activityInformation.ReenforceWorkingCapitalInitializationActivity" type="module.workingCapital.domain.WorkingCapitalInitializationReenforcement" bundle="WORKING_CAPITAL_RESOURCES">
 	<slot name="amount" key="label.module.workingCapital.initialization.requestedReenforcementValue"/>
