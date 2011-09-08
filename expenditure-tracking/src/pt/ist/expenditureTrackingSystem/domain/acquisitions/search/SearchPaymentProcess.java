@@ -92,7 +92,8 @@ public class SearchPaymentProcess extends Search<PaymentProcess> {
 	setPaymentProcessYear(savedSearch.getYear());
 	setTaker(savedSearch.getTakenBy());
 	setAccountManager(savedSearch.getAccountManager());
-	setShowOnlyWithUnreadComments(savedSearch.getShowOnlyWithUnreadComments());
+	final Boolean showOnlyWithUnreadComments = savedSearch.getShowOnlyWithUnreadComments();
+	setShowOnlyWithUnreadComments(showOnlyWithUnreadComments == null ? Boolean.FALSE : showOnlyWithUnreadComments);
 	setShowPriorityOnly(savedSearch.getShowPriorityOnly());
 	setSearchProcess(savedSearch.getSearchProcessValues());
 	setCpvReference(savedSearch.getCpvReference());
