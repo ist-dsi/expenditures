@@ -205,7 +205,10 @@ public class Financer extends Financer_Base {
 	final AccountingUnit accountingUnit = getFinancerCostCenter().getAccountingUnit();
 	if (accountingUnit != null) {
 	    res.add(accountingUnit);
-	    res.add(AccountingUnit.readAccountingUnitByUnitName("10"));
+	    AccountingUnit tenAccountingUnit = AccountingUnit.readAccountingUnitByUnitName("10");
+	    if (tenAccountingUnit != null) {
+		res.add(tenAccountingUnit);
+	    }
 	}
 	return res;
     }
