@@ -32,6 +32,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
+import pt.ist.fenixWebFramework.servlets.functionalities.Functionality;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 import pt.ist.fenixframework.pstm.AbstractDomainObject;
 
@@ -42,7 +43,8 @@ public class MissionProcessAction extends ContextBaseAction {
 	    final HttpServletResponse response) {
 	return forward(request, "/module/mission/help/manual.jsp");
     }
-
+    
+    @Functionality(relativeLink="/pagina-inicial")
     public ActionForward frontPage(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) {
 	MissionContext missionContext = getRenderedObject("missionContext");
@@ -70,7 +72,8 @@ public class MissionProcessAction extends ContextBaseAction {
 	request.setAttribute("missionProcesses", missionProcesses);
 	return forward(request, "/mission/showProcesses.jsp");
     }
-
+    
+    @Functionality(relativeLink="/criar-missoes")
     public ActionForward missionCreationInstructions(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	return forward(request, "/mission/missionCreationInstructions.jsp");
