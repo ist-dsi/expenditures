@@ -23,6 +23,7 @@ import module.organization.domain.AccountabilityType;
 import module.organization.domain.Person;
 import module.organization.domain.Unit;
 
+import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
@@ -50,7 +51,7 @@ import com.vaadin.ui.Window.Notification;
 import com.vaadin.ui.themes.BaseTheme;
 
 @SuppressWarnings("serial")
-@EmbeddedComponent(path = { "MissionParticipationMap" } , args= {"units"})
+@EmbeddedComponent(path = { "MissionParticipationMap" }, args = { "unit", "year", "month" })
 public class MissionParticipationMap extends CustomComponent implements EmbeddedComponentContainer {
 
     private class ContextForm extends Form {
@@ -73,7 +74,8 @@ public class MissionParticipationMap extends CustomComponent implements Embedded
 		    year = calendar.get(Calendar.YEAR);
 		    month = calendar.get(Calendar.MONTH) + 1;
 
-		    final Collection<AccountabilityType> selectedAccountabilityTypes = (Collection<AccountabilityType>) accountabilityTypesField.getValue();
+		    final Collection<AccountabilityType> selectedAccountabilityTypes = (Collection<AccountabilityType>) accountabilityTypesField
+			    .getValue();
 		    accountabilityTypes.clear();
 		    accountabilityTypes.addAll(selectedAccountabilityTypes);
 
@@ -89,7 +91,8 @@ public class MissionParticipationMap extends CustomComponent implements Embedded
 	}
 
 	private final InlineDateField yearMonthField = new InlineDateField(MissionSystem.getMessage("label.select.year.month"));
-	private final ListSelect accountabilityTypesField = new ListSelect(MissionSystem.getMessage("label.select.accountabilityTypes"));
+	private final ListSelect accountabilityTypesField = new ListSelect(
+		MissionSystem.getMessage("label.select.accountabilityTypes"));
 
 	private ContextForm() {
 	    setWriteThrough(false);
@@ -99,7 +102,8 @@ public class MissionParticipationMap extends CustomComponent implements Embedded
 	    addField("yearMonth", yearMonthField);
 
 	    accountabilityTypesField.addContainerProperty("name", String.class, null);
-	    final Set<AccountabilityType> accountabilityTypes = MissionSystem.getInstance().getAccountabilityTypesRequireingAuthorization();
+	    final Set<AccountabilityType> accountabilityTypes = MissionSystem.getInstance()
+		    .getAccountabilityTypesRequireingAuthorization();
 	    for (final AccountabilityType accountabilityType : accountabilityTypes) {
 		final Item item = accountabilityTypesField.addItem(accountabilityType);
 		final Property itemProperty = item.getItemProperty("name");
@@ -144,7 +148,8 @@ public class MissionParticipationMap extends CustomComponent implements Embedded
 	@Override
 	public void buttonClick(final ClickEvent event) {
 	    final ExportButton streamSource = this;
-	    final String filename = MissionSystem.getMessage("label.excel.mission.filename", Integer.toString(year), Integer.toString(month));
+	    final String filename = MissionSystem.getMessage("label.excel.mission.filename", Integer.toString(year),
+		    Integer.toString(month));
 	    final StreamResource resource = new StreamResource(streamSource, filename, getApplication());
 	    resource.setMIMEType("application/vnd.ms-excel");
 	    getWindow().open(resource);
@@ -165,20 +170,19 @@ public class MissionParticipationMap extends CustomComponent implements Embedded
     }
 
     @Override
-    public void setArguments(Map<String,String> arguments) {
-	    final String arg = arguments.get("units");
-	    if (arg == null) {
-		return;
-	    }
-	    int index = arg.indexOf('-');
-	    final String actualArgs = arg.substring(index + 1);
-	    final String[] argParts = actualArgs.split(",");
-	    final String unitOID = argParts[0];
-	    if (unitOID != null && !unitOID.isEmpty()) {
-		unit = AbstractDomainObject.fromExternalId(unitOID);
-	    }
-	    year = argParts.length > 1 ? Integer.parseInt(argParts[1]) : new DateTime().getYear();
-	    month = argParts.length > 2 ? Integer.parseInt(argParts[2]) : new DateTime().getMonthOfYear();
+    public void setArguments(Map<String, String> arguments) {
+	final String unitOID = arguments.get("unit");
+	final String yearArg = arguments.get("year");
+	final String monthArg = arguments.get("month");
+
+	unit = AbstractDomainObject.fromExternalId(unitOID);
+
+	if (unit == null) {
+	    return;
+	}
+
+	year = StringUtils.isEmpty(yearArg) ? new DateTime().getYear() : Integer.parseInt(yearArg);
+	month = StringUtils.isEmpty(monthArg) ? new DateTime().getMonthOfYear() : Integer.parseInt(monthArg);
     }
 
     @Override
@@ -196,17 +200,18 @@ public class MissionParticipationMap extends CustomComponent implements Embedded
 	if (MissionOrganizationAction.hasPermission(unit)) {
 	    final ContextForm contextForm = new ContextForm();
 	    layout.addComponent(contextForm);
-	    
+
 	    final ContextForm.FormButtons formButtons = contextForm.getFormButtons();
 	    layout.addComponent(formButtons);
-	    
+
 	    final ExportButton exportButton = new ExportButton();
 	    layout.addComponent(exportButton);
 	    layout.setComponentAlignment(exportButton, Alignment.MIDDLE_RIGHT);
-	    
+
 	    setTimeTable();
 	} else {
-	    getWindow().showNotification(MissionSystem.getMessage("label.not.authorized"), null, Notification.TYPE_WARNING_MESSAGE);
+	    getWindow().showNotification(MissionSystem.getMessage("label.not.authorized"), null,
+		    Notification.TYPE_WARNING_MESSAGE);
 	}
     }
 
@@ -274,7 +279,7 @@ public class MissionParticipationMap extends CustomComponent implements Embedded
 		    final Unit parent = (Unit) accountability.getParent();
 		    if (hasParentUnit(parent, localDate)) {
 			return true;
-		    }		    
+		    }
 		}
 	    }
 	}
@@ -307,4 +312,3 @@ public class MissionParticipationMap extends CustomComponent implements Embedded
 	return localDate.getYear() == year && localDate.getMonthOfYear() == month;
     }
 }
-
