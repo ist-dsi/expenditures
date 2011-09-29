@@ -63,7 +63,7 @@
 	<span class="error0"> <bean:write name="message" /> </span>
 </html:messages>
 <br/>
-<bean:define id="urlByMonth" type="java.lang.String">/vaadinContext.do?method=forwardToVaadin#MissionParticipationMap-<bean:write name="unit" property="externalId"/></bean:define>
+<bean:define id="urlByMonth" type="java.lang.String">/vaadinContext.do?method=forwardToVaadin#MissionParticipationMap?unit=<bean:write name="unit" property="externalId"/></bean:define>
 <html:link page="<%= urlByMonth %>">
 	<bean:message bundle="MISSION_RESOURCES" key="label.module.mission.view.member.presence.by.month"/>
 </html:link>
