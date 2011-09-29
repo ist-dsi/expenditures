@@ -11,7 +11,7 @@ public class MissionStageView {
     private final MissionProcess missionProcess;
 
     public MissionStageView(final MissionProcess missionProcess) {
-	this.missionProcess = missionProcess;;
+	this.missionProcess = missionProcess;
     }
 
     public SortedMap<MissionStage, MissionStageState> getMissionStageStates() {
@@ -42,8 +42,8 @@ public class MissionStageView {
     }
 
     protected MissionStageState getApprovalStateUnderConstruction() {
-	return !missionProcess.isUnderConstruction() && !missionProcess.getIsCanceled() ?
-		MissionStageState.UNDER_WAY : MissionStageState.NOT_YET_UNDER_WAY;
+	return !missionProcess.isUnderConstruction() && !missionProcess.getIsCanceled() ? MissionStageState.UNDER_WAY
+		: MissionStageState.NOT_YET_UNDER_WAY;
     }
 
     protected MissionStageState getFundAllocationState() {
@@ -52,31 +52,30 @@ public class MissionStageView {
 
     protected MissionStageState getFundAllocationStateForApproved() {
 	if (missionProcess.getIsCanceled().booleanValue()) {
-	    return missionProcess.hasAnyAllocatedFunds() || missionProcess.hasAnyAllocatedProjectFunds() ? 
-		    MissionStageState.UNDER_WAY : MissionStageState.NOT_YET_UNDER_WAY;
+	    return missionProcess.hasAnyAllocatedFunds() || missionProcess.hasAnyAllocatedProjectFunds() ? MissionStageState.UNDER_WAY
+		    : MissionStageState.NOT_YET_UNDER_WAY;
 	}
-	return missionProcess.hasAllAllocatedFunds() && (!missionProcess.hasAnyProjectFinancer()
-		|| missionProcess.hasAllAllocatedProjectFunds()) ? 
-			MissionStageState.COMPLETED : MissionStageState.UNDER_WAY;
+	return missionProcess.hasAllAllocatedFunds()
+		&& (!missionProcess.hasAnyProjectFinancer() || missionProcess.hasAllAllocatedProjectFunds()) ? MissionStageState.COMPLETED
+		: MissionStageState.UNDER_WAY;
     }
 
     protected MissionStageState getParticipationAuthorizationState() {
-	return missionProcess.isApproved() && (!missionProcess.getMission().hasAnyFinancer() || missionProcess.hasAllAllocatedFunds())
-		? getParticipationAuthorizationStateForApproved() : MissionStageState.NOT_YET_UNDER_WAY;
+	return missionProcess.isApproved()
+		&& (!missionProcess.getMission().hasAnyFinancer() || missionProcess.hasAllAllocatedFunds()) ? getParticipationAuthorizationStateForApproved()
+		: MissionStageState.NOT_YET_UNDER_WAY;
     }
 
     private MissionStageState getParticipationAuthorizationStateForApproved() {
-	return missionProcess.getIsCanceled().booleanValue() ? MissionStageState.NOT_YET_UNDER_WAY :
-	    (missionProcess.areAllParticipantsAuthorized() ? MissionStageState.COMPLETED : MissionStageState.UNDER_WAY);
+	return missionProcess.getIsCanceled().booleanValue() ? MissionStageState.NOT_YET_UNDER_WAY : (missionProcess
+		.areAllParticipantsAuthorized() ? MissionStageState.COMPLETED : MissionStageState.UNDER_WAY);
     }
 
     protected MissionStageState getExpenseAuthorizationState() {
-	return !missionProcess.isCanceled()
-		&& missionProcess.isApproved()
-		&& missionProcess.hasAllAllocatedFunds()
-		//&& missionProcess.areAllParticipantsAuthorizedForPhaseOne() ?
-		&& missionProcess.areAllParticipantsAuthorized() ?
-		getExpenseAuthorizationStateCompletedOrUnderWay() : MissionStageState.NOT_YET_UNDER_WAY;
+	return !missionProcess.isCanceled() && missionProcess.isApproved() && missionProcess.hasAllAllocatedFunds()
+	//&& missionProcess.areAllParticipantsAuthorizedForPhaseOne() ?
+		&& missionProcess.areAllParticipantsAuthorized() ? getExpenseAuthorizationStateCompletedOrUnderWay()
+		: MissionStageState.NOT_YET_UNDER_WAY;
     }
 
     private MissionStageState getExpenseAuthorizationStateCompletedOrUnderWay() {
@@ -84,13 +83,14 @@ public class MissionStageView {
     }
 
     protected MissionStageState getPersonelInformationProcessingState() {
-	return missionProcess.areAllParticipantsAuthorized() && (missionProcess.isAuthorized() || missionProcess.hasNoItemsAndParticipantesAreAuthorized()) ?
-		getPersonelInformationProcessingStateForAuthorizedParticipantes() : MissionStageState.NOT_YET_UNDER_WAY;
+	return missionProcess.areAllParticipantsAuthorized()
+		&& (missionProcess.isAuthorized() || missionProcess.hasNoItemsAndParticipantesAreAuthorized()) ? getPersonelInformationProcessingStateForAuthorizedParticipantes()
+		: MissionStageState.NOT_YET_UNDER_WAY;
     }
 
     protected MissionStageState getPersonelInformationProcessingStateForAuthorizedParticipantes() {
-	return missionProcess.hasCurrentQueue() ? MissionStageState.UNDER_WAY : 
-	    (missionProcess.getIsCanceled().booleanValue() ? MissionStageState.NOT_YET_UNDER_WAY : MissionStageState.COMPLETED);
+	return missionProcess.hasAnyCurrentQueues() ? MissionStageState.UNDER_WAY : (missionProcess.getIsCanceled()
+		.booleanValue() ? MissionStageState.NOT_YET_UNDER_WAY : MissionStageState.COMPLETED);
     }
 
     protected MissionStageState getArchivedState() {

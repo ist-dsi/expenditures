@@ -133,10 +133,10 @@ public class MissionYear extends MissionYear_Base {
 	@Override
 	boolean shouldAdd(final MissionProcess missionProcess, final User user) {
 	    return (!missionProcess.hasCurrentOwner() || missionProcess.isTakenByCurrentUser())
-	    && !missionProcess.isUnderConstruction() && !missionProcess.getIsCanceled()
-	    && missionProcess.isPendingApprovalBy(user);
+		    && !missionProcess.isUnderConstruction() && !missionProcess.getIsCanceled()
+		    && missionProcess.isPendingApprovalBy(user);
 	}
-	
+
     }
 
     private class PendingAuthorizationSearch extends MissionProcessSearch {
@@ -151,15 +151,14 @@ public class MissionYear extends MissionYear_Base {
 	@Override
 	boolean shouldAdd(final MissionProcess missionProcess, final User user) {
 	    return (!missionProcess.hasCurrentOwner() || missionProcess.isTakenByCurrentUser())
-	    && missionProcess.isApproved() && !missionProcess.getIsCanceled()
-	    && ((missionProcess.isPendingParticipantAuthorisationBy(user)
-		    && (!missionProcess.getMission().hasAnyFinancer() || missionProcess.hasAllAllocatedFunds()))
-		    || (//missionProcess.areAllParticipantsAuthorizedForPhaseOne()
-			    missionProcess.areAllParticipantsAuthorized()
-			    && missionProcess.hasAllAllocatedFunds()
-			    && missionProcess.isPendingDirectAuthorizationBy(user)));
+		    && missionProcess.isApproved()
+		    && !missionProcess.getIsCanceled()
+		    && ((missionProcess.isPendingParticipantAuthorisationBy(user) && (!missionProcess.getMission()
+			    .hasAnyFinancer() || missionProcess.hasAllAllocatedFunds())) || (//missionProcess.areAllParticipantsAuthorizedForPhaseOne()
+		    missionProcess.areAllParticipantsAuthorized() && missionProcess.hasAllAllocatedFunds() && missionProcess
+			    .isPendingDirectAuthorizationBy(user)));
 	}
-	
+
     }
 
     private class PendingFundAllocationSearch extends MissionProcessSearch {
@@ -174,22 +173,22 @@ public class MissionYear extends MissionYear_Base {
 	@Override
 	boolean shouldAdd(final MissionProcess missionProcess, final User user) {
 	    return (!missionProcess.hasCurrentOwner() || missionProcess.isTakenByCurrentUser())
-	    && (isPendingFundAllocation(missionProcess, user) || isPendingFundUnAllocation(missionProcess, user));
+		    && (isPendingFundAllocation(missionProcess, user) || isPendingFundUnAllocation(missionProcess, user));
 	}
-	
+
 	private boolean isPendingFundAllocation(MissionProcess missionProcess, User user) {
 	    return missionProcess.isApproved()
-	    && !missionProcess.getIsCanceled()
-	    && (((!missionProcess.hasAnyProjectFinancer() || missionProcess.hasAllAllocatedProjectFunds())
-		    && !missionProcess.hasAllAllocatedFunds() && missionProcess.canAllocateFund()) || (!missionProcess
+		    && !missionProcess.getIsCanceled()
+		    && (((!missionProcess.hasAnyProjectFinancer() || missionProcess.hasAllAllocatedProjectFunds())
+			    && !missionProcess.hasAllAllocatedFunds() && missionProcess.canAllocateFund()) || (!missionProcess
 			    .hasAllAllocatedProjectFunds() && missionProcess.canAllocateProjectFund()));
 	}
-	
+
 	private boolean isPendingFundUnAllocation(final MissionProcess missionProcess, final User user) {
 	    return missionProcess.getIsCanceled().booleanValue()
-	    && ((missionProcess.hasAnyAllocatedFunds() && missionProcess.isAccountingEmployee(user
-		    .getExpenditurePerson())) || (missionProcess.hasAnyAllocatedProjectFunds())
-		    && missionProcess.isProjectAccountingEmployee(user.getExpenditurePerson()));
+		    && ((missionProcess.hasAnyAllocatedFunds() && missionProcess
+			    .isAccountingEmployee(user.getExpenditurePerson())) || (missionProcess.hasAnyAllocatedProjectFunds())
+			    && missionProcess.isProjectAccountingEmployee(user.getExpenditurePerson()));
 	}
 
     }
@@ -206,18 +205,13 @@ public class MissionYear extends MissionYear_Base {
 	@Override
 	boolean shouldAdd(final MissionProcess missionProcess, final User user) {
 	    return (!missionProcess.hasCurrentOwner() || missionProcess.isTakenByCurrentUser())
-	    	&& (missionProcess.hasCurrentQueue()
-    	    		&& missionProcess.getCurrentQueue().isCurrentUserAbleToAccessQueue()
-    	    		&& (missionProcess.isAuthorized() || missionProcess.hasNoItemsAndParticipantesAreAuthorized())
-    	    		&& missionProcess.areAllParticipantsAuthorized())
-    	    	|| missionProcess.isReadyForMissionTermination(user)
-    	    	|| (missionProcess.isTerminated()
-    	    		&& !missionProcess.isArchived()
-    	    		&& missionProcess.canArchiveMission());
+		    && (missionProcess.hasAnyCurrentQueues() && missionProcess.isCurrentUserAbleToAccessAnyQueues()
+			    && (missionProcess.isAuthorized() || missionProcess.hasNoItemsAndParticipantesAreAuthorized()) && missionProcess
+			    .areAllParticipantsAuthorized()) || missionProcess.isReadyForMissionTermination(user)
+		    || (missionProcess.isTerminated() && !missionProcess.isArchived() && missionProcess.canArchiveMission());
 	}
-	
-    }
 
+    }
 
     public SortedSet<MissionProcess> getPendingAproval() {
 	return new PendingAprovalSearch().search();
@@ -266,14 +260,15 @@ public class MissionYear extends MissionYear_Base {
 		    return missionProcess.isApproved()
 			    && !missionProcess.getIsCanceled()
 			    && (((!missionProcess.hasAnyProjectFinancer() || missionProcess.hasAllAllocatedProjectFunds())
-				    && !missionProcess.hasAllAllocatedFunds() && missionProcess.canAllocateFund())
-				|| (!missionProcess.hasAllAllocatedProjectFunds() && missionProcess.isDirectResponsibleForPendingProjectFundAllocation()));
+				    && !missionProcess.hasAllAllocatedFunds() && missionProcess.canAllocateFund()) || (!missionProcess
+				    .hasAllAllocatedProjectFunds() && missionProcess
+				    .isDirectResponsibleForPendingProjectFundAllocation()));
 		}
 
 		private boolean isPendingFundUnAllocation(final MissionProcess missionProcess, final User user) {
 		    return missionProcess.getIsCanceled().booleanValue()
-			    && ((missionProcess.hasAnyAllocatedFunds() && missionProcess.isAccountingEmployee(user.getExpenditurePerson()))
-				    || (missionProcess.hasAnyAllocatedProjectFunds())
+			    && ((missionProcess.hasAnyAllocatedFunds() && missionProcess.isAccountingEmployee(user
+				    .getExpenditurePerson())) || (missionProcess.hasAnyAllocatedProjectFunds())
 				    && missionProcess.isDirectProjectAccountingEmployee(user.getExpenditurePerson()));
 		}
 	    }.search();
@@ -296,10 +291,12 @@ public class MissionYear extends MissionYear_Base {
 	    @Override
 	    boolean shouldAdd(final MissionProcess missionProcess, final User user) {
 		return (!missionProcess.hasCurrentOwner() || missionProcess.isTakenByCurrentUser())
-			&& (missionProcess.hasCurrentQueue() && missionProcess.getCurrentQueue().isCurrentUserAbleToAccessQueue()
+			&& (missionProcess.hasAnyCurrentQueues() && missionProcess.isCurrentUserAbleToAccessAnyQueues()
 				&& (missionProcess.isAuthorized() || missionProcess.hasNoItemsAndParticipantesAreAuthorized()) && missionProcess
-				.areAllParticipantsAuthorized()) || missionProcess.isReadyForMissionTermination(user)
-			|| (missionProcess.isTerminated() && !missionProcess.isArchived() && missionProcess.canArchiveMissionDirect());
+				.areAllParticipantsAuthorized())
+			|| missionProcess.isReadyForMissionTermination(user)
+			|| (missionProcess.isTerminated() && !missionProcess.isArchived() && missionProcess
+				.canArchiveMissionDirect());
 	    }
 	}.search();
     }

@@ -14,10 +14,8 @@ public class ProcessCanceledPersonnelActivity extends ProcessPersonnelActivity {
     @Override
     public boolean isActive(final MissionProcess missionProcess, final User user) {
 	return (!missionProcess.hasCurrentOwner() || missionProcess.isTakenByCurrentUser())
-		&& missionProcess.getIsCanceled().booleanValue()
-		&& missionProcess.hasCurrentQueue()
-		&& missionProcess.getCurrentQueue().isCurrentUserAbleToAccessQueue()
-		&& missionProcess.isAuthorized()
+		&& missionProcess.getIsCanceled().booleanValue() && missionProcess.hasAnyCurrentQueues()
+		&& missionProcess.isCurrentUserAbleToAccessAnyQueues() && missionProcess.isAuthorized()
 		&& missionProcess.areAllParticipantsAuthorized();
     }
 

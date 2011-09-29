@@ -65,8 +65,8 @@ public abstract class MissionProcess extends MissionProcess_Base {
 	}
 
 	private int toNum(final String processNumber) {
-	    final String relevantPart = Character.isDigit(processNumber.charAt(processNumber.length() - 1))
-	    		? processNumber : processNumber.substring(0, processNumber.length() - 1);
+	    final String relevantPart = Character.isDigit(processNumber.charAt(processNumber.length() - 1)) ? processNumber
+		    : processNumber.substring(0, processNumber.length() - 1);
 	    return Integer.parseInt(relevantPart);
 	}
 
@@ -118,10 +118,9 @@ public abstract class MissionProcess extends MissionProcess_Base {
 
 		    final Collection<String> toAddress = Collections.singleton(email);
 		    final VirtualHost virtualHost = VirtualHost.getVirtualHostForThread();
-		    new Email(virtualHost.getApplicationSubTitle().getContent(),
-				    virtualHost.getSystemEmailAddress(), new String[] {}, toAddress,
-			    Collections.EMPTY_LIST, Collections.EMPTY_LIST, "Passagem de Processo Pendentes - Missões",
-			    body.toString());
+		    new Email(virtualHost.getApplicationSubTitle().getContent(), virtualHost.getSystemEmailAddress(),
+			    new String[] {}, toAddress, Collections.EMPTY_LIST, Collections.EMPTY_LIST,
+			    "Passagem de Processo Pendentes - Missões", body.toString());
 		}
 	    }
 	}
@@ -339,10 +338,9 @@ public abstract class MissionProcess extends MissionProcess_Base {
 
 	    final User loggedUser = UserView.getCurrentUser();
 	    final VirtualHost virtualHost = VirtualHost.getVirtualHostForThread();
-	    new Email(virtualHost.getApplicationSubTitle().getContent(),
-			    virtualHost.getSystemEmailAddress(), new String[] {}, toAddress, Collections.EMPTY_LIST,
-		    Collections.EMPTY_LIST, BundleUtil.getFormattedStringFromResourceBundle("resources/MissionResources",
-			    "label.email.commentCreated.subject", getProcessIdentification()),
+	    new Email(virtualHost.getApplicationSubTitle().getContent(), virtualHost.getSystemEmailAddress(), new String[] {},
+		    toAddress, Collections.EMPTY_LIST, Collections.EMPTY_LIST, BundleUtil.getFormattedStringFromResourceBundle(
+			    "resources/MissionResources", "label.email.commentCreated.subject", getProcessIdentification()),
 		    BundleUtil.getFormattedStringFromResourceBundle("resources/MissionResources",
 			    "label.email.commentCreated.body", loggedUser.getPerson().getName(), getProcessIdentification(),
 			    comment));
@@ -370,7 +368,7 @@ public abstract class MissionProcess extends MissionProcess_Base {
 	for (final AccountabilityTypeQueue accountabilityTypeQueue : MissionSystem.getInstance().getAccountabilityTypeQueuesSet()) {
 	    if (accountabilityTypes.contains(accountabilityTypeQueue.getAccountabilityType())) {
 		final WorkflowQueue workflowQueue = accountabilityTypeQueue.getWorkflowQueue();
-		workflowQueue.addProcess(this);
+		addCurrentQueues(workflowQueue);
 	    }
 	}
     }
@@ -378,7 +376,7 @@ public abstract class MissionProcess extends MissionProcess_Base {
     public void removeFromParticipantInformationQueues() {
 	for (final AccountabilityTypeQueue accountabilityTypeQueue : MissionSystem.getInstance().getAccountabilityTypeQueuesSet()) {
 	    final WorkflowQueue workflowQueue = accountabilityTypeQueue.getWorkflowQueue();
-	    workflowQueue.removeProcess(this);
+	    removeCurrentQueues(workflowQueue);
 	}
     }
 
@@ -480,12 +478,13 @@ public abstract class MissionProcess extends MissionProcess_Base {
 	return mission.isProjectAccountingEmployee(expenditurePerson);
     }
 
-    public boolean isDirectProjectAccountingEmployee(final pt.ist.expenditureTrackingSystem.domain.organization.Person expenditurePerson) {
+    public boolean isDirectProjectAccountingEmployee(
+	    final pt.ist.expenditureTrackingSystem.domain.organization.Person expenditurePerson) {
 	final Mission mission = getMission();
 	return mission.isDirectProjectAccountingEmployee(expenditurePerson);
     }
 
-    public boolean isCurrentUserAbleToAccessQueue() {
+    public boolean isCurrentUserAbleToAccessQueueHistory() {
 	for (final WorkflowQueue workflowQueue : getQueueHistorySet()) {
 	    if (workflowQueue.isCurrentUserAbleToAccessQueue()) {
 		return true;
@@ -498,21 +497,14 @@ public abstract class MissionProcess extends MissionProcess_Base {
     public boolean isAccessible(final User user) {
 	final Person person = user.getPerson();
 	final Mission mission = getMission();
-	return isTakenByPerson(user)
-		|| getProcessCreator() == user
-		|| mission.getRequestingPerson() == person
+	return isTakenByPerson(user) || getProcessCreator() == user || mission.getRequestingPerson() == person
 		|| user.hasRoleType(RoleType.MANAGER)
-		|| (user.hasExpenditurePerson()
-			&& ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user))
-		|| (user.hasExpenditurePerson()
-			&& ExpenditureTrackingSystem.isAcquisitionsProcessAuditorGroupMember(user))
-		|| (person != null && person.getMissionsSet().contains(mission))
-		|| mission.isParticipantResponsible(person)
+		|| (user.hasExpenditurePerson() && ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user))
+		|| (user.hasExpenditurePerson() && ExpenditureTrackingSystem.isAcquisitionsProcessAuditorGroupMember(user))
+		|| (person != null && person.getMissionsSet().contains(mission)) || mission.isParticipantResponsible(person)
 		|| mission.isFinancerResponsible(user.getExpenditurePerson())
-		|| mission.isFinancerAccountant(user.getExpenditurePerson())
-		|| mission.isPersonelSectionMember(user)
-		|| mission.getParticipantesSet().contains(person)
-		|| mission.isUnitObserver(user);
+		|| mission.isFinancerAccountant(user.getExpenditurePerson()) || mission.isPersonelSectionMember(user)
+		|| mission.getParticipantesSet().contains(person) || mission.isUnitObserver(user);
     }
 
     public boolean isReadyForMissionTermination() {
@@ -533,9 +525,7 @@ public abstract class MissionProcess extends MissionProcess_Base {
     }
 
     public boolean isReadyForMissionTermination(final User user) {
-	return !isCanceled()
-		&& (isRequestor(user) || isMissionResponsible(user))
-		&& isReadyForMissionTermination();
+	return !isCanceled() && (isRequestor(user) || isMissionResponsible(user)) && isReadyForMissionTermination();
     }
 
     public void sendForProcessTermination(final String descriptionOfChangesAfterArrival) {

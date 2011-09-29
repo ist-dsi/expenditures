@@ -14,10 +14,8 @@ public class UnProcessPersonnelActivity extends MissionProcessActivity<MissionPr
 
     @Override
     public boolean isActive(final MissionProcess missionProcess, final User user) {
-	return super.isActive(missionProcess, user)
-		&& !missionProcess.hasCurrentQueue()
-		&& missionProcess.areAllParticipantsAuthorized()
-		&& missionProcess.isCurrentUserAbleToAccessQueue();
+	return super.isActive(missionProcess, user) && !missionProcess.hasAnyCurrentQueues()
+		&& missionProcess.areAllParticipantsAuthorized() && missionProcess.isCurrentUserAbleToAccessQueueHistory();
     }
 
     @Override

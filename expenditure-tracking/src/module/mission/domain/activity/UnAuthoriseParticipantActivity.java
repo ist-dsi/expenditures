@@ -6,7 +6,8 @@ import module.workflow.activities.ActivityInformation;
 import myorg.domain.User;
 import myorg.util.BundleUtil;
 
-public class UnAuthoriseParticipantActivity extends MissionProcessActivity<MissionProcess, AuthoriseParticipantActivityInformation> {
+public class UnAuthoriseParticipantActivity extends
+	MissionProcessActivity<MissionProcess, AuthoriseParticipantActivityInformation> {
 
     @Override
     public String getLocalizedName() {
@@ -19,14 +20,14 @@ public class UnAuthoriseParticipantActivity extends MissionProcessActivity<Missi
 		&& !missionProcess.isCanceled()
 		&& missionProcess.canUnAuthoriseSomeParticipantActivity()
 		&& missionProcess.hasAnyAuthorizedParticipants()
-		&& ((!missionProcess.hasCurrentQueue() && !missionProcess.areAllParticipantsAuthorized())
-			|| (missionProcess.hasCurrentQueue()))
-		&& !missionProcess.isTerminated();
+		&& ((!missionProcess.hasAnyCurrentQueues() && !missionProcess.areAllParticipantsAuthorized()) || (missionProcess
+			.hasAnyCurrentQueues())) && !missionProcess.isTerminated();
     }
 
     @Override
     protected void process(final AuthoriseParticipantActivityInformation authoriseParticipantActivityInformation) {
-	final PersonMissionAuthorization personMissionAuthorization = authoriseParticipantActivityInformation.getPersonMissionAuthorization();
+	final PersonMissionAuthorization personMissionAuthorization = authoriseParticipantActivityInformation
+		.getPersonMissionAuthorization();
 	personMissionAuthorization.setAuthority(null);
 	personMissionAuthorization.setDelegatedAuthority(null);
 	final MissionProcess missionProcess = authoriseParticipantActivityInformation.getProcess();

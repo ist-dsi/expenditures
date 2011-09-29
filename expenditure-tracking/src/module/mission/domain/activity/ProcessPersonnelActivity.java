@@ -2,8 +2,8 @@ package module.mission.domain.activity;
 
 import module.mission.domain.MissionProcess;
 import module.workflow.activities.ActivityInformation;
-import module.workflow.domain.WorkflowQueue;
 import myorg.domain.User;
+import myorg.domain.exceptions.DomainException;
 import myorg.util.BundleUtil;
 
 public class ProcessPersonnelActivity extends MissionProcessActivity<MissionProcess, ActivityInformation<MissionProcess>> {
@@ -17,8 +17,7 @@ public class ProcessPersonnelActivity extends MissionProcessActivity<MissionProc
     public boolean isActive(final MissionProcess missionProcess, final User user) {
 	return super.isActive(missionProcess, user)
 		//&& !missionProcess.getIsCanceled().booleanValue()
-		&& missionProcess.hasCurrentQueue()
-		&& missionProcess.getCurrentQueue().isCurrentUserAbleToAccessQueue()
+		&& missionProcess.hasAnyCurrentQueues() && missionProcess.isCurrentUserAbleToAccessAnyQueues()
 		&& (missionProcess.isAuthorized() || missionProcess.hasNoItemsAndParticipantesAreAuthorized())
 		&& missionProcess.areAllParticipantsAuthorized();
     }
@@ -26,9 +25,11 @@ public class ProcessPersonnelActivity extends MissionProcessActivity<MissionProc
     @Override
     protected void process(final ActivityInformation activityInformation) {
 	final MissionProcess missionProcess = (MissionProcess) activityInformation.getProcess();
-	final WorkflowQueue workflowQueue = missionProcess.getCurrentQueue();
-	missionProcess.removeCurrentQueue();
-	workflowQueue.addProcessesHistory(missionProcess);
+	if (missionProcess.getCurrentQueuesCount() > 1) {
+	    throw new DomainException(
+		    "Cannot determine which queue to remove because the mission process is associated to several queues.");
+	}
+	missionProcess.removeCurrentQueues(missionProcess.getCurrentQueues().get(0));
     }
 
 }
