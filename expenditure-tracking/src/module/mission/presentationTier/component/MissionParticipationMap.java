@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import module.mission.domain.Mission;
@@ -21,15 +22,14 @@ import module.organization.domain.Accountability;
 import module.organization.domain.AccountabilityType;
 import module.organization.domain.Person;
 import module.organization.domain.Unit;
-import myorg.util.BundleUtil;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 import pt.ist.fenixframework.pstm.AbstractDomainObject;
+import pt.ist.vaadinframework.annotation.EmbeddedComponent;
 import pt.ist.vaadinframework.ui.EmbeddedComponentContainer;
 import pt.utl.ist.fenix.tools.util.excel.Spreadsheet;
-import pt.ist.vaadinframework.annotation.EmbeddedComponent;
 
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
@@ -50,7 +50,7 @@ import com.vaadin.ui.Window.Notification;
 import com.vaadin.ui.themes.BaseTheme;
 
 @SuppressWarnings("serial")
-@EmbeddedComponent(path = { "MissionParticipationMap-(.*)" })
+@EmbeddedComponent(path = { "MissionParticipationMap" } , args= {"units"})
 public class MissionParticipationMap extends CustomComponent implements EmbeddedComponentContainer {
 
     private class ContextForm extends Form {
@@ -165,10 +165,13 @@ public class MissionParticipationMap extends CustomComponent implements Embedded
     }
 
     @Override
-    public void setArguments(final String... args) {
-	if (args.length > 0) {
-	    int index = args[0].indexOf('-');
-	    final String actualArgs = args[0].substring(index + 1);
+    public void setArguments(Map<String,String> arguments) {
+	    final String arg = arguments.get("units");
+	    if (arg == null) {
+		return;
+	    }
+	    int index = arg.indexOf('-');
+	    final String actualArgs = arg.substring(index + 1);
 	    final String[] argParts = actualArgs.split(",");
 	    final String unitOID = argParts[0];
 	    if (unitOID != null && !unitOID.isEmpty()) {
@@ -176,7 +179,6 @@ public class MissionParticipationMap extends CustomComponent implements Embedded
 	    }
 	    year = argParts.length > 1 ? Integer.parseInt(argParts[1]) : new DateTime().getYear();
 	    month = argParts.length > 2 ? Integer.parseInt(argParts[2]) : new DateTime().getMonthOfYear();
-	}
     }
 
     @Override
