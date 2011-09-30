@@ -15,6 +15,7 @@ import myorg.util.MultiCounter;
 
 import org.apache.commons.lang.StringUtils;
 import org.jfree.data.time.Month;
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 import pt.ist.emailNotifier.domain.Email;
@@ -34,6 +35,7 @@ import pt.utl.ist.fenix.tools.util.i18n.Language;
 public class EmailDigesterUtil {
 
     public static void executeTask() {
+	final String ts = new DateTime().toString("yyyy-MM-dd HH:mm:ss");
 	final VirtualHost virtualHost = VirtualHost.getVirtualHostForThread();
 
 	List<String> toAddress = new ArrayList<String>();
@@ -51,6 +53,7 @@ public class EmailDigesterUtil {
 		    final String email = person.getEmail();
 		    if (email != null) {
 			toAddress.add(email);
+			System.out.println("Sending aquisition email digest for: " + person.getUser().getUsername() + " to: " + email + " - " + ts);
 			new Email(virtualHost.getApplicationSubTitle().getContent(),
 				virtualHost.getSystemEmailAddress(),
 				new String[] {},
