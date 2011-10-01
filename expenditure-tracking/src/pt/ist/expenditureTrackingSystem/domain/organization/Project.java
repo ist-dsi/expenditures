@@ -187,4 +187,14 @@ public class Project extends Project_Base {
 	}
     }
 
+    public void open() {
+	final Unit parentProject = getParentUnit();
+	if (parentProject != null) {
+	    final module.organization.domain.Unit parentUnit = getParentUnit().getUnit();
+	    final module.organization.domain.Unit unit = getUnit();
+	    final AccountabilityType accountabilityType = IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType();
+	    parentUnit.addChild(unit, accountabilityType, new LocalDate(), null);
+	}
+    }
+
 }

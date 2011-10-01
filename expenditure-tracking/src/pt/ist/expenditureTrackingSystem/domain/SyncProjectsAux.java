@@ -511,6 +511,8 @@ public abstract class SyncProjectsAux {
 	    if (project.isOpen()) {
 		project.close();
 	    }
+	} else if (!project.isOpen()) {
+	    project.open();
 	}
 
 	project.setAccountManager(accountManagerPerson);
