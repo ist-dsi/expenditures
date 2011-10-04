@@ -15,8 +15,7 @@ public class ExceptionalCapitalRestitutionActivity extends
 
     @Override
     public String getLocalizedName() {
-	return BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources", "activity."
-		+ getClass().getSimpleName());
+	return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "activity." + getClass().getSimpleName());
     }
 
     @Override
