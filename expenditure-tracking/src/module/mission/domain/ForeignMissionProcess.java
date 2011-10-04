@@ -19,6 +19,7 @@ import module.mission.domain.activity.ChangeAccountingUnitActivity;
 import module.mission.domain.activity.DefineParticipantAuthorizationChainActivity;
 import module.mission.domain.activity.DistributeItemCostsActivity;
 import module.mission.domain.activity.EditItemActivity;
+import module.mission.domain.activity.ExceptionalChangeRequestingPerson;
 import module.mission.domain.activity.ProcessCanceledPersonnelActivity;
 import module.mission.domain.activity.ProcessPersonnelActivity;
 import module.mission.domain.activity.RejectProcessActivity;
@@ -53,7 +54,7 @@ import org.joda.time.DateTime;
 
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
-@ClassNameBundle(key="label.module.mission.domain.ForeignMissions", bundle="resources/MissionResources")
+@ClassNameBundle(key = "label.module.mission.domain.ForeignMissions", bundle = "resources/MissionResources")
 public class ForeignMissionProcess extends ForeignMissionProcess_Base {
 
     private static final List<WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>> activities;
@@ -97,6 +98,7 @@ public class ForeignMissionProcess extends ForeignMissionProcess_Base {
 	activitiesAux.add(new TakeProcess<MissionProcess>());
 	activitiesAux.add(new ReleaseProcess<MissionProcess>());
 	activitiesAux.add(new StealProcess<MissionProcess>());
+	activitiesAux.add(new ExceptionalChangeRequestingPerson());
 
 	activitiesAux.add(new CancelProcessActivity());
 	activitiesAux.add(new RejectProcessActivity());
@@ -104,9 +106,8 @@ public class ForeignMissionProcess extends ForeignMissionProcess_Base {
 	activities = Collections.unmodifiableList(activitiesAux);
     }
 
-    public ForeignMissionProcess(final Country country, final String location,
-	    final DateTime daparture, final DateTime arrival, final String objective, final Boolean isCurrentUserAParticipant,
-	    final Boolean grantOwnerEquivalence) {
+    public ForeignMissionProcess(final Country country, final String location, final DateTime daparture, final DateTime arrival,
+	    final String objective, final Boolean isCurrentUserAParticipant, final Boolean grantOwnerEquivalence) {
 	new ForeignMission(this, country, location, daparture, arrival, objective, isCurrentUserAParticipant,
 		grantOwnerEquivalence);
     }
@@ -127,7 +128,7 @@ public class ForeignMissionProcess extends ForeignMissionProcess_Base {
 	final Country country = mission.getCountry();
 	final MultiLanguageString name = country == null ? null : country.getName();
 	final String countryName = name == null ? "" : name.getContent();
-        return super.getPresentationName() + countryName + ", " + mission.getLocation();
+	return super.getPresentationName() + countryName + ", " + mission.getLocation();
     }
 
 }

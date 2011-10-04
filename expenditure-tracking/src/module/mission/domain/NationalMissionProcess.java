@@ -18,6 +18,7 @@ import module.mission.domain.activity.ChangeAccountingUnitActivity;
 import module.mission.domain.activity.DefineParticipantAuthorizationChainActivity;
 import module.mission.domain.activity.DistributeItemCostsActivity;
 import module.mission.domain.activity.EditItemActivity;
+import module.mission.domain.activity.ExceptionalChangeRequestingPerson;
 import module.mission.domain.activity.ProcessCanceledPersonnelActivity;
 import module.mission.domain.activity.ProcessPersonnelActivity;
 import module.mission.domain.activity.RejectProcessActivity;
@@ -50,7 +51,7 @@ import myorg.util.ClassNameBundle;
 
 import org.joda.time.DateTime;
 
-@ClassNameBundle(key="label.module.mission.domain.NationalMissions", bundle="resources/MissionResources")
+@ClassNameBundle(key = "label.module.mission.domain.NationalMissions", bundle = "resources/MissionResources")
 public class NationalMissionProcess extends NationalMissionProcess_Base {
 
     private static final List<WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>> activities;
@@ -94,6 +95,7 @@ public class NationalMissionProcess extends NationalMissionProcess_Base {
 	activitiesAux.add(new TakeProcess<MissionProcess>());
 	activitiesAux.add(new ReleaseProcess<MissionProcess>());
 	activitiesAux.add(new StealProcess<MissionProcess>());
+	activitiesAux.add(new ExceptionalChangeRequestingPerson());
 
 	activitiesAux.add(new CancelProcessActivity());
 	activitiesAux.add(new RejectProcessActivity());
@@ -101,9 +103,8 @@ public class NationalMissionProcess extends NationalMissionProcess_Base {
 	activities = Collections.unmodifiableList(activitiesAux);
     }
 
-    public NationalMissionProcess(final String location, final DateTime daparture,
-	    final DateTime arrival, final String objective, final Boolean isCurrentUserAParticipant,
-	    final Boolean grantOwnerEquivalence) {
+    public NationalMissionProcess(final String location, final DateTime daparture, final DateTime arrival,
+	    final String objective, final Boolean isCurrentUserAParticipant, final Boolean grantOwnerEquivalence) {
 	new NationalMission(this, location, daparture, arrival, objective, isCurrentUserAParticipant, grantOwnerEquivalence);
     }
 
@@ -119,7 +120,7 @@ public class NationalMissionProcess extends NationalMissionProcess_Base {
 
     @Override
     public String getPresentationName() {
-        return super.getPresentationName() + getMission().getLocation();
+	return super.getPresentationName() + getMission().getLocation();
     }
 
 }

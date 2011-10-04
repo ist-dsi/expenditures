@@ -66,6 +66,18 @@
 <schema name="activityInformation.UpdateMissionDetailsActivity" type="module.mission.domain.activity.UpdateMissionDetailsActivityInformation" extends="activityInformation.UpdateMissionDetailsActivityInformation">
 </schema>
 
+<schema name="activityInformation.ExceptionalChangeRequestingPerson" type="module.mission.domain.activity.ExceptionalChangeRequestingPersonInfo">
+	<slot name="requester" layout="autoComplete" key="label.mission.requester.person" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" bundle="MISSION_RESOURCES">
+        <property name="labelField" value="name"/>
+		<property name="format" value="${partyName} (${user.username})"/>
+		<property name="minChars" value="3"/>
+		<property name="args" value="provider=module.organization.presentationTier.renderers.providers.PersonAutoCompleteProvider"/>
+		<property name="size" value="60"/>
+	</slot>
+	<slot name="comment" layout="longText" key="title.comment"  bundle="EXPENDITURE_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+	</slot>
+</schema>
+
 <schema name="activityInformation.UpdateForeignMissionDetailsActivity" type="module.mission.domain.activity.UpdateForeignMissionDetailsActivityInformation" bundle="MISSION_RESOURCES">
 	<slot name="country" key="label.mission.country" layout="autoComplete" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
         <property name="labelField" value="name.content"/>
