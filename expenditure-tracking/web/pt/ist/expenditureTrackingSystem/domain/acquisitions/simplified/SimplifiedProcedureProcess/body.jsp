@@ -52,14 +52,16 @@
 			<tr>
 				<td>
 					<bean:message key="label.requesterName" bundle="EXPENDITURE_RESOURCES"/>:
-					 <fr:view name="process" property="requestor.name">
-						<fr:layout name="link">
-							<fr:property name="useParent" value="true" />
-							<fr:property name="blankTarget" value="true" />
-							<fr:property name="linkFormat"
-								value="/expenditureTrackingOrganization.do?personOid=${requestor.externalId}&amp;method=viewPerson" />
-							<fr:property name="classes" value="secondaryLink" />
-						</fr:layout>
+					 <fr:view name="process" property="requestor" layout="values">
+					 	<fr:schema type="pt.ist.expenditureTrackingSystem.domain.organization.Person" bundle="EXPENDITURE_RESOURCES">
+						 	<fr:slot name="name" layout="link" >
+								<fr:property name="useParent" value="true" />
+								<fr:property name="blankTarget" value="true" />
+								<fr:property name="linkFormat"
+									value="/expenditureTrackingOrganization.do?personOid=${externalId}&method=viewPerson" />
+								<fr:property name="classes" value="secondaryLink" />
+							</fr:slot>
+						</fr:schema>
 					</fr:view>
 				</td>
 			</tr>
