@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 import myorg.domain.MyOrg;
+import myorg.domain.VirtualHost;
 import myorg.domain.util.Address;
 import myorg.domain.util.Money;
 import pt.ist.dbUtils.ExternalDbOperation;
@@ -369,14 +370,27 @@ public class SyncSuppliersAux {
 	for (final Supplier supplier : MyOrg.getInstance().getSuppliersSet()) {
 	    if (!suppliersFromGiaf.contains(supplier)) {
 //		System.out.println("Closing supplier not in GIAF: " + supplier.getExternalId());
-		if (supplier.getTotalAllocated().isZero()) {
-		    System.out.println("Deleting supplier " + supplier.getExternalId());
-		    supplier.delete();
-		} else if (!supplier.getSupplierLimit().equals(Money.ZERO)) {
+		//if (isAllocatedAmountNull(supplier)) {
+		//    System.out.println("Deleting supplier " + supplier.getExternalId());
+		//    supplier.delete();
+		if (!supplier.getSupplierLimit().equals(Money.ZERO)) {
 		    supplier.setSupplierLimit(Money.ZERO);
 		}
 	    }
 	}
+    }
+
+    private static boolean isAllocatedAmountNull(final Supplier supplier) {
+	boolean result = true;
+	for (final VirtualHost virtualHost : MyOrg.getInstance().getVirtualHostsSet()) {
+	    try {
+		VirtualHost.setVirtualHostForThread(virtualHost);
+		result &= supplier.getTotalAllocated().isZero();
+	    } finally {
+		VirtualHost.releaseVirtualHostFromThread();
+	    }
+	}
+	return result;
     }
 
     private static boolean shouldDiscard(final GiafSupplier giafSupplier) {
@@ -391,15 +405,15 @@ public class SyncSuppliersAux {
 	    } else {
 		System.out.println("Closing discared supplier: " + supplier.getExternalId());
 	    }
-	    if (supplier.getTotalAllocated().isZero()) {
-		System.out.println("Deleting supplier " + supplier.getExternalId());
-		supplier.delete();
-	    } else {
+	    //if (isAllocatedAmountNull(supplier)) {
+	    //  System.out.println("Deleting supplier " + supplier.getExternalId());
+	    //  supplier.delete();
+	    //} else {
 		updateSupplierInformationAux(giafCountries, supplier, giafSupplier);
 		if (!supplier.getSupplierLimit().equals(Money.ZERO)) {
 		    supplier.setSupplierLimit(Money.ZERO);
 		}
-	    }
+	    //}
 	} else {
 	    updateSupplierInformationAux(giafCountries, supplier, giafSupplier);
 	    if (supplier.getSupplierLimit().equals(Money.ZERO)) {
