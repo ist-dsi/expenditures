@@ -67,7 +67,7 @@
 </schema>
 
 <schema name="activityInformation.ExceptionalChangeRequestingPerson" type="module.mission.domain.activity.ExceptionalChangeRequestingPersonInfo">
-	<slot name="requester" layout="autoComplete" key="label.mission.requester.person" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" bundle="MISSION_RESOURCES">
+	<slot name="requester" layout="autoComplete" key="label.requester" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" bundle="EXPENDITURE_RESOURCES">
         <property name="labelField" value="name"/>
 		<property name="format" value="${partyName} (${user.username})"/>
 		<property name="minChars" value="3"/>
