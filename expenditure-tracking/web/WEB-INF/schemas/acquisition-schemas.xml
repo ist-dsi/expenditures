@@ -1364,6 +1364,20 @@
 	</slot>
 </schema>
 
+<schema name="activityInformation.ExceptionalChangeRequestingPerson"
+	type="pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ExceptionalChangeRequestingPersonInfo"
+	bundle="ACQUISITION_RESOURCES">
+	<slot name="requester" layout="autoComplete" key="label.requester" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" bundle="EXPENDITURE_RESOURCES">
+        <property name="labelField" value="name"/>
+		<property name="format" value="${partyName} (${user.username})"/>
+		<property name="minChars" value="3"/>
+		<property name="args" value="provider=module.organization.presentationTier.renderers.providers.PersonAutoCompleteProvider"/>
+		<property name="size" value="60"/>
+	</slot>
+	<slot name="comment" layout="longText" key="title.comment" bundle="EXPENDITURE_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+	</slot>
+</schema>
+
 <schema name="addFile-AcquisitionProposalDocument"
 	type="pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.fileBeans.AcquisitionProposalDocumentFileBean"
 	bundle="ACQUISITION_RESOURCES">

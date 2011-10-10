@@ -48,6 +48,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activitie
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.EditAcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.EditAcquisitionRequestItemRealValues;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.EditSimpleContractDescription;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ExceptionalChangeRequestingPerson;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.FundAllocationExpirationDate;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.JumpToProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.LockInvoiceReceiving;
@@ -189,6 +190,8 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 	activities.add(new StealProcess<RegularAcquisitionProcess>());
 	activities.add(new JumpToProcessState());
 	activities.add(new EditSimpleContractDescription());
+
+	activities.add(new ExceptionalChangeRequestingPerson());
 
 	availableStates.add(AcquisitionProcessStateType.IN_GENESIS);
 	availableStates.add(AcquisitionProcessStateType.SUBMITTED_FOR_APPROVAL);
