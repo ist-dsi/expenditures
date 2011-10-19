@@ -1,2 +1,2 @@
 name=workingCapital
-depends=core, workflow-module, finance, expenditure-tracking
+depends=core, workflow-module, finance, expenditure-tracking, scheduler
