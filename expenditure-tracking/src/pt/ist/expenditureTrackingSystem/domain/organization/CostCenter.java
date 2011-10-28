@@ -92,13 +92,14 @@ public class CostCenter extends CostCenter_Base {
 	return this;
     }
 
+/*
     @Override
     public IndexDocument getDocumentToIndex() {
 	IndexDocument document = super.getDocumentToIndex();
 	document.indexField(UnitIndexFields.NUMBER_INDEX, getCostCenter());
 	return document;
     }
-
+*/
     @Override
     public String getUnitNumber() {
 	return getCostCenter();

@@ -15,7 +15,7 @@ import pt.ist.fenixframework.plugins.luceneIndexing.domain.interfaces.Indexable;
 import pt.ist.fenixframework.plugins.luceneIndexing.domain.interfaces.Searchable;
 import pt.utl.ist.fenix.tools.util.StringNormalizer;
 
-public class CPVReference extends CPVReference_Base implements Indexable, Searchable {
+public class CPVReference extends CPVReference_Base /* implements Indexable, Searchable */ {
 
     public static enum CPVIndexes implements IndexableField {
 	CODE("code"), DESCRIPTION("desc");
@@ -93,6 +93,7 @@ public class CPVReference extends CPVReference_Base implements Indexable, Search
 	setExpenditureTrackingSystemForPriorities(null);
     }
 
+/*
     @Override
     public IndexDocument getDocumentToIndex() {
 	IndexDocument indexDocument = new IndexDocument(this);
@@ -107,5 +108,5 @@ public class CPVReference extends CPVReference_Base implements Indexable, Search
 	set.add(this);
 	return set;
     }
-
+*/
 }

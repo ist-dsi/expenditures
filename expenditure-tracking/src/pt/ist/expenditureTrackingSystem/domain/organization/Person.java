@@ -41,7 +41,7 @@ import pt.ist.fenixframework.plugins.luceneIndexing.domain.interfaces.Searchable
 import pt.utl.ist.fenix.tools.util.StringNormalizer;
 import dml.runtime.RelationAdapter;
 
-public class Person extends Person_Base implements Indexable, Searchable {
+public class Person extends Person_Base /* implements Indexable, Searchable */ {
 
     public static enum PersonIndexes implements IndexableField {
 
@@ -315,6 +315,7 @@ public class Person extends Person_Base implements Indexable, Searchable {
 	return authorizationLogs;
     }
 
+/*
     @Override
     public IndexDocument getDocumentToIndex() {
 	IndexDocument document = new IndexDocument(this);
@@ -329,6 +330,7 @@ public class Person extends Person_Base implements Indexable, Searchable {
 	set.add(this);
 	return set;
     }
+*/
 
     // @Service
     // private static void setPersonInUser(final User user) {

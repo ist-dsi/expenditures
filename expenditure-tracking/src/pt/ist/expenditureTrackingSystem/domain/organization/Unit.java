@@ -43,7 +43,7 @@ import pt.utl.ist.fenix.tools.util.StringNormalizer;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
-public class Unit extends Unit_Base implements Indexable, Searchable {
+public class Unit extends Unit_Base /* implements Indexable, Searchable */ {
 
     public static enum UnitIndexFields implements IndexableField {
 
@@ -689,6 +689,7 @@ public class Unit extends Unit_Base implements Indexable, Searchable {
 	}
     }
 
+/*
     @Override
     public IndexDocument getDocumentToIndex() {
 	IndexDocument document = new IndexDocument(this);
@@ -702,7 +703,8 @@ public class Unit extends Unit_Base implements Indexable, Searchable {
 	set.add(this);
 	return set;
     }
-
+*/
+    
     public boolean isAccountingResponsible(final Person person) {
 	final AccountingUnit accountingUnit = getAccountingUnit();
 	return accountingUnit != null && person != null && accountingUnit.hasResponsiblePeople(person);

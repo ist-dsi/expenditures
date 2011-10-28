@@ -27,7 +27,7 @@ import pt.ist.fenixframework.plugins.luceneIndexing.domain.interfaces.Indexable;
 import pt.ist.fenixframework.plugins.luceneIndexing.domain.interfaces.Searchable;
 import pt.utl.ist.fenix.tools.util.StringNormalizer;
 
-public class Supplier extends Supplier_Base implements Indexable, Searchable {
+public class Supplier extends Supplier_Base /* implements Indexable, Searchable */ {
 
     public static enum SupplierIndexes implements IndexableField {
 	FISCAL_CODE("nif"), NAME("supplierName");
@@ -246,6 +246,7 @@ public class Supplier extends Supplier_Base implements Indexable, Searchable {
 	}
     }
 
+/*
     @Override
     public IndexDocument getDocumentToIndex() {
 	IndexDocument indexDocument = new IndexDocument(this);
@@ -262,5 +263,6 @@ public class Supplier extends Supplier_Base implements Indexable, Searchable {
 	set.add(this);
 	return set;
     }
+*/
 
 }

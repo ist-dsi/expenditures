@@ -81,14 +81,14 @@ public class SubProject extends SubProject_Base {
     public Financer finance(final RequestWithPayment acquisitionRequest) {
 	return new ProjectFinancer(acquisitionRequest, this);
     }
-
+/*
     @Override
     public IndexDocument getDocumentToIndex() {
 	IndexDocument document = super.getDocumentToIndex();
 	document.indexField(UnitIndexFields.NUMBER_INDEX, getUnit().getAcronym());
 	return document;
     }
-
+*/
     @Override
     public boolean isAccountingResponsible(final Person person) {
 	final Project project = (Project) getParentUnit();
