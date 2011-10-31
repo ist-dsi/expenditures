@@ -45,7 +45,8 @@ public class PayAcquisitionActivityInformation<P extends PaymentProcess>
 
     private boolean hasPaymentRefences() {
 	for (final PaymentReferenceBean referenceBean : beans) {
-	    if (referenceBean.getDiaryNumber() != null && !referenceBean.getDiaryNumber().isEmpty()) {
+	    if (referenceBean.getDiaryNumber() != null && !referenceBean.getDiaryNumber().isEmpty()
+		    && referenceBean.getTransactionNumber() != null && !referenceBean.getTransactionNumber().isEmpty()) {
 		return true;
 	    }
 	}

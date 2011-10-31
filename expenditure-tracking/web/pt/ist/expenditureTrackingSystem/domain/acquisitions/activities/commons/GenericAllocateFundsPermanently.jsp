@@ -39,9 +39,37 @@
 		</logic:equal>
 		<th class="<%= usedClass %>">			
 			<h4 class="dinline"><fr:view name="financerBean" property="financer.unit.presentationName"/></h4>
+<%
+	if (!(VirtualHost.getVirtualHostForThread() != null
+			&& VirtualHost.getVirtualHostForThread().getHostname().equals("dot.ist-id.ist.utl.pt")
+			&& !name.equals("AllocateProjectFundsPermanently"))) {
+%>
 			<span style="padding-left: 1em;">(<bean:message key="financer.label.fundAllocation.identification" bundle="ACQUISITION_RESOURCES"/>: <fr:view name="financerBean" property="fundAllocationId" type="java.lang.String"/>)</span>
+<%
+	}
+%>
 		</th>
 	</tr>
+<%
+	if (VirtualHost.getVirtualHostForThread() != null
+			&& VirtualHost.getVirtualHostForThread().getHostname().equals("dot.ist-id.ist.utl.pt")
+			&& !name.equals("AllocateProjectFundsPermanently")) {
+%>
+	<tr>
+		<td class="aleft">
+			<bean:message key="financer.label.diaryNumber" bundle="ACQUISITION_RESOURCES"/>
+			<fr:edit id="<%= "idDN" + index %>" name="financerBean" slot="diaryNumber" type="java.lang.String"/>
+		</td>
+	</tr>
+	<tr>
+		<td class="aleft">
+			<bean:message key="financer.label.transactionNumber" bundle="ACQUISITION_RESOURCES"/>
+			<fr:edit id="<%= "idDN" + index %>" name="financerBean" slot="transactionNumber" type="java.lang.String"/>
+		</td>
+	</tr>
+<%
+	} else {
+%>
 	<tr>
 		<td class="aleft">
 			<bean:message key="financer.label.fundAllocation.identification" bundle="ACQUISITION_RESOURCES"/>
@@ -57,17 +85,6 @@
 					<bean:message key="financer.link.removeEffectiveAllocationId" bundle="ACQUISITION_RESOURCES"/>
 				</a>
 			</logic:equal>
-		</td>
-	</tr>
-<%
-	if (VirtualHost.getVirtualHostForThread() != null
-			&& VirtualHost.getVirtualHostForThread().getHostname().equals("dot.ist-id.ist.utl.pt")
-			&& !name.equals("AllocateProjectFundsPermanently")) {
-%>
-	<tr>
-		<td class="aleft">
-			<bean:message key="financer.label.diaryNumber" bundle="ACQUISITION_RESOURCES"/>
-			<fr:edit id="<%= "idDN" + index %>" name="financerBean" slot="diaryNumber" type="java.lang.String"/>
 		</td>
 	</tr>
 <%

@@ -8,7 +8,6 @@ import myorg.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.dto.PaymentReferenceBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
 public class PayAcquisition<P extends RegularAcquisitionProcess>
@@ -46,6 +45,10 @@ public class PayAcquisition<P extends RegularAcquisitionProcess>
 	    if (financer.getPaymentDiaryNumber() == null || financer.getPaymentDiaryNumber().isEmpty()) {
 		return false;
 	    }
+	    if (financer.getTransactionNumber() == null || financer.getTransactionNumber().isEmpty()) {
+		return false;
+	    }
+	    
 	}
 	return true;
     }

@@ -157,7 +157,8 @@ public class Financer extends Financer_Base {
 
     public void addEffectiveFundAllocationId(String effectiveFundAllocationId) {
 	if (StringUtils.isEmpty(effectiveFundAllocationId)) {
-	    throw new DomainException("acquisitionProcess.message.exception.effectiveFundAllocationCannotBeNull");
+	    // throw new DomainException("acquisitionProcess.message.exception.effectiveFundAllocationCannotBeNull");
+	    return;
 	}
 	Strings strings = getEffectiveFundAllocationId();
 	if (strings == null) {
@@ -185,6 +186,21 @@ public class Financer extends Financer_Base {
 	    strings.add(paymentReference);
 	}
 	setPaymentDiaryNumber(strings);
+    }
+
+    public void addTransactionNumber(String transactionNumber) {
+	if (StringUtils.isEmpty(transactionNumber)) {
+	    return;
+	    // throw new DomainException("acquisitionProcess.message.exception.paymentReferenceCannotBeNull");
+	}
+	Strings strings = getTransactionNumber();
+	if (strings == null) {
+	    strings = new Strings(transactionNumber);
+	}
+	if (!strings.contains(transactionNumber)) {
+	    strings.add(transactionNumber);
+	}
+	setTransactionNumber(strings);
     }
 
     private void allocateInvoices() {
@@ -258,6 +274,8 @@ public class Financer extends Financer_Base {
 
     public void resetEffectiveFundAllocationId() {
 	setEffectiveFundAllocationId(null);
+	setPaymentDiaryNumber(null);
+	setTransactionNumber(null);
 	getAllocatedInvoices().clear();
     }
 
@@ -335,6 +353,30 @@ public class Financer extends Financer_Base {
 	for (final UnitItem unitItem : getUnitItemsSet()) {
 	    unitItem.cancelFundAllocationRequest(isFinalFundAllocation);
 	}
+    }
+
+    public boolean areAllFundsPermanentlyAllocated() {
+	final Strings fundAllocationId = getEffectiveFundAllocationId();
+	if (hasStringValue(fundAllocationId)) {
+	    return true;
+	}
+	final Strings paymentDiaryNumber = getPaymentDiaryNumber();
+	final Strings transactionNumber = getTransactionNumber();
+	if (hasStringValue(paymentDiaryNumber) && hasStringValue(transactionNumber)) {
+	    return true;
+	}
+	return false;
+    }
+
+    private boolean hasStringValue(final Strings strings) {
+	if (strings != null) {
+	    for (final String s : strings) {
+		if (s != null && !s.trim().isEmpty()) {
+		    return true;
+		}
+	    }
+	}
+	return false;
     }
 
 }

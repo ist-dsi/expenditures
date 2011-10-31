@@ -102,6 +102,41 @@ public class ExpenditureProcessesAction extends ContextBaseAction {
 	return ProcessManagement.performActivityPostback(activityInformation, request);
     }
 
+    public ActionForward addTransactionNumber(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+
+	PayAcquisitionActivityInformation<PaymentProcess> activityInformation = getRenderedObject("activityBean");
+	final PaymentProcess process = activityInformation.getProcess();
+	request.setAttribute("process", process);
+	request.setAttribute("information", activityInformation);
+
+	List<PaymentReferenceBean> fundAllocationBeans = activityInformation.getBeans();
+	Integer index = Integer.valueOf(request.getParameter("index"));
+
+	Financer financer = getDomainObject(request, "financerOID");
+	PaymentReferenceBean fundAllocationBean = new PaymentReferenceBean(financer);
+	fundAllocationBean.setTransactionNumber(null);
+
+	fundAllocationBeans.add(index + 1, fundAllocationBean);
+	RenderUtils.invalidateViewState();
+	return ProcessManagement.performActivityPostback(activityInformation, request);
+    }
+
+    public ActionForward removeTransactionNumber(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	PayAcquisitionActivityInformation<PaymentProcess> activityInformation = getRenderedObject("activityBean");
+	final PaymentProcess process = activityInformation.getProcess();
+	request.setAttribute("process", process);
+	request.setAttribute("information", activityInformation);
+
+	List<PaymentReferenceBean> fundAllocationBeans = activityInformation.getBeans();
+	int index = Integer.valueOf(request.getParameter("index")).intValue();
+
+	fundAllocationBeans.remove(index);
+	RenderUtils.invalidateViewState();
+	return ProcessManagement.performActivityPostback(activityInformation, request);
+    }
+
     public ActionForward itemPostBack(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) {
 	CreateAcquisitionRequestItemActivityInformation activityInformation = getRenderedObject("activityBean");

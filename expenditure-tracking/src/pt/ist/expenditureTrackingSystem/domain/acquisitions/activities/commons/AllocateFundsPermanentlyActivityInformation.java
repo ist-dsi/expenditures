@@ -49,6 +49,8 @@ public class AllocateFundsPermanentlyActivityInformation<P extends PaymentProces
 	    fundAllocationBean.setEffectiveFundAllocationId(financer.getFundAllocationId());
 	    fundAllocationBean.setAllowedToAddNewFund(true);
 //	    fundAllocationBean.setDiaryNumber(financer.getPaymentDiaryNumber());
+//	    fundAllocationBean.setTransactionNumber(financer.getTransactionNumber());
+	    
 	    beans.add(fundAllocationBean);
 	} else {
 	    int i = 0;
@@ -58,6 +60,7 @@ public class AllocateFundsPermanentlyActivityInformation<P extends PaymentProces
 		fundAllocationBean.setEffectiveFundAllocationId(effectiveFund);
 		fundAllocationBean.setAllowedToAddNewFund(i++ == 0);
 //		fundAllocationBean.setDiaryNumber(financer.getPaymentDiaryNumber());
+//		fundAllocationBean.setTransactionNumber(financer.getTransactionNumber());
 		beans.add(fundAllocationBean);
 	    }
 	}

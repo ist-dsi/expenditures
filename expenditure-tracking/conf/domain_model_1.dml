@@ -169,6 +169,7 @@ class acquisitions.Financer implements .myorg.domain.VirtualHostAware {
 	String fundAllocationId;
 	Strings effectiveFundAllocationId;
 	Strings paymentDiaryNumber;
+	Strings transactionNumber;
 }
 
 	class acquisitions.ProjectFinancer extends acquisitions.Financer {

@@ -6,10 +6,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 
-import org.joda.time.LocalDate;
-
-import myorg.domain.exceptions.DomainException;
-import myorg.domain.util.ByteArray;
 import myorg.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.dto.PayingUnitTotalBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
@@ -148,7 +144,6 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
 	for (Financer financer : getFinancersSet()) {
 	    financer.resetEffectiveFundAllocationId();
 	}
-
     }
 
     public boolean hasAllFundAllocationId() {
@@ -580,5 +575,16 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
     }
 
     public abstract SortedSet<? extends RequestItem> getOrderedRequestItemsSet();
+
+    public boolean areAllFundsPermanentlyAllocated() {
+	for (final Financer financer : getFinancersSet()) {
+//	    if (financer.getRealShareValue().isPositive()) {
+		if (!financer.areAllFundsPermanentlyAllocated()) {
+		    return false;
+		}
+//	    }
+	}
+	return true;
+    }
 
 }

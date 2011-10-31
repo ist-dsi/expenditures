@@ -8,6 +8,7 @@ public class PaymentReferenceBean implements Serializable {
 
     private Financer financer;
     private String diaryNumber;
+    private String transactionNumber;
 
     public PaymentReferenceBean(final Financer financer) {
 	setFinancer(financer);
@@ -27,6 +28,14 @@ public class PaymentReferenceBean implements Serializable {
 
     public void setDiaryNumber(String diaryNumber) {
         this.diaryNumber = diaryNumber;
+    }
+
+    public String getTransactionNumber() {
+        return transactionNumber;
+    }
+
+    public void setTransactionNumber(String transactionNumber) {
+        this.transactionNumber = transactionNumber;
     }
 
 }

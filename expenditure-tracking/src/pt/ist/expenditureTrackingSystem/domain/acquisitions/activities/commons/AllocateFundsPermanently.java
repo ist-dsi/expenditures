@@ -12,8 +12,11 @@ public class AllocateFundsPermanently<P extends PaymentProcess> extends
 
     @Override
     public boolean isActive(P process, User user) {
-	return process.isAccountingEmployee(user.getExpenditurePerson()) && isUserProcessOwner(process, user)
-		&& process.hasAllocatedFundsPermanentlyForAllProjectFinancers() && !process.hasAllInvoicesAllocated();
+	return process.isAccountingEmployee(user.getExpenditurePerson())
+		&& isUserProcessOwner(process, user)
+		&& process.hasAllocatedFundsPermanentlyForAllProjectFinancers()
+		&& process.isInvoiceConfirmed()
+		&& !process.hasAllInvoicesAllocated();
     }
 
     @Override
@@ -25,9 +28,11 @@ public class AllocateFundsPermanently<P extends PaymentProcess> extends
 	    final Financer financer = bean.getFinancer();
 	    final String diaryNumber = bean.getDiaryNumber();
 	    financer.addPaymentDiaryNumber(diaryNumber);
+	    final String transactionNumber = bean.getTransactionNumber();
+	    financer.addTransactionNumber(transactionNumber);	    
 	}
 	P process = activityInformation.getProcess();
-	if (process.isInvoiceConfirmed()) {
+	if (process.isInvoiceConfirmed() && process.areAllFundsPermanentlyAllocated()) {
 	    process.allocateFundsPermanently();
 	}
 

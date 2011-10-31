@@ -283,6 +283,9 @@
 			<th>
 				<bean:message key="financer.label.diaryNumber" bundle="ACQUISITION_RESOURCES"/>
 			</th>
+			<th>
+				<bean:message key="financer.label.transactionNumber" bundle="ACQUISITION_RESOURCES"/>
+			</th>
 		</logic:equal>
 		<th class="aright">
 			<bean:message key="acquisitionRequestItem.label.totalValueWithVAT" bundle="ACQUISITION_RESOURCES"/>
@@ -329,6 +332,20 @@
 							<bean:define id="paymentDiaryNumber" name="payingUnit" property="financer.paymentDiaryNumber" type="pt.utl.ist.fenix.tools.util.Strings"/>
 							<%
 								for (final String s : paymentDiaryNumber) {
+							%>
+									<%= s %>
+							<%
+								}
+							%>
+						</logic:present> 
+					</logic:equal>
+				</td>
+				<td>
+					<logic:equal name="payingUnit" property="financer.effectiveFundAllocationPresent" value="true">
+						<logic:present name="payingUnit" property="financer.paymentDiaryNumber">
+							<bean:define id="transactionNumber" name="payingUnit" property="financer.transactionNumber" type="pt.utl.ist.fenix.tools.util.Strings"/>
+							<%
+								for (final String s : transactionNumber) {
 							%>
 									<%= s %>
 							<%

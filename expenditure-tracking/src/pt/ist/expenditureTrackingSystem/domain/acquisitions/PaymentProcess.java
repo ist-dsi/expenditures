@@ -28,6 +28,7 @@ import pt.ist.emailNotifier.domain.Email;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
+import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Project;
 import pt.ist.expenditureTrackingSystem.domain.organization.SubProject;
@@ -302,6 +303,11 @@ public abstract class PaymentProcess extends PaymentProcess_Base implements HasP
     public boolean hasAllocatedFundsPermanentlyForAnyProjectFinancers() {
 	final RequestWithPayment requestWithPayment = getRequest();
 	return requestWithPayment.hasAllocatedFundsPermanentlyForAnyProjectFinancer();
+    }
+
+    public boolean areAllFundsPermanentlyAllocated() {
+	final RequestWithPayment requestWithPayment = getRequest();
+	return requestWithPayment.areAllFundsPermanentlyAllocated();
     }
 
     public void allocateFundsPermanently() {
