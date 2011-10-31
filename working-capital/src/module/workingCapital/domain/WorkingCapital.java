@@ -7,12 +7,14 @@ import java.util.TreeSet;
 
 import module.organization.domain.Person;
 import module.workflow.util.PresentableProcessState;
+import myorg.domain.RoleType;
 import myorg.domain.User;
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
 
 import org.joda.time.DateTime;
 
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Project;
@@ -191,8 +193,11 @@ public class WorkingCapital extends WorkingCapital_Base {
 	    return false;
 	}
 	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstanceForCurrentHost();
-	if ((hasMovementResponsible() && user == getMovementResponsible().getUser()) || isAccountingResponsible(user)
-		|| isAccountingEmployee(user) || workingCapitalSystem.isManagementMember(user) || isTreasuryMember(user)
+	if ((hasMovementResponsible() && user == getMovementResponsible().getUser())
+		|| isAccountingResponsible(user)
+		|| isAccountingEmployee(user)
+		|| workingCapitalSystem.isManagementMember(user)
+		|| isTreasuryMember(user)
 		|| findUnitResponsible(user.getPerson(), Money.ZERO) != null) {
 	    return true;
 	}
