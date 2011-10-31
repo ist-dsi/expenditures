@@ -549,6 +549,14 @@ public class WorkingCapital extends WorkingCapital_Base {
 	return false;
     }
 
+    public boolean isAnyAccountingEmployee(final User user) {
+	final Unit unit = getUnit();
+	final AccountingUnit accountingUnit = getAccountingUnit();
+	final pt.ist.expenditureTrackingSystem.domain.organization.Person person = user.getExpenditurePerson();
+	return unit != null && accountingUnit != null && person != null
+		&& (accountingUnit.hasProjectAccountants(person) || accountingUnit.hasPeople(person));
+    }
+
     public boolean isDirectAccountingEmployee(final User user) {
 	final Unit unit = getUnit();
 	final AccountingUnit accountingUnit = getAccountingUnit();

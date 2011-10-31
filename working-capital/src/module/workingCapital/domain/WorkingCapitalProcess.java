@@ -147,7 +147,7 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base implements
 			|| (workingCapital.hasMovementResponsible() && user.getPerson() == workingCapital
 				.getMovementResponsible()) || workingCapital.isRequester(user)
 			|| workingCapital.getWorkingCapitalSystem().isManagementMember(user)
-			|| workingCapital.isAccountingEmployee(user) || workingCapital.isAccountingResponsible(user)
+			|| workingCapital.isAnyAccountingEmployee(user) || workingCapital.isAccountingResponsible(user)
 			|| workingCapital.isTreasuryMember(user) || workingCapital.isResponsibleFor(user));
     }
 
