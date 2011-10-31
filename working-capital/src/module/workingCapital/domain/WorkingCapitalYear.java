@@ -329,7 +329,7 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
 		WorkingCapitalProcess.COMPARATOR_BY_UNIT_NAME);
 	if (unit.hasExpenditureUnit()) {
 	    for (final WorkingCapital workingCapital : unit.getExpenditureUnit().getWorkingCapitalsSet()) {
-		if (workingCapital.getWorkingCapitalYear() == this && workingCapital.isAvailable(user)) {
+		if (workingCapital.getWorkingCapitalYear() == this /* && workingCapital.isAvailable(user) */) {
 		    final WorkingCapitalProcess workingCapitalProcess = workingCapital.getWorkingCapitalProcess();
 		    if (workingCapitalProcess.isAccessibleToCurrentUser()) {
 			result.add(workingCapitalProcess);
