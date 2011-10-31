@@ -106,11 +106,7 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
 	boolean shouldAdd(final WorkingCapitalProcess workingCapitalProcess, final User user) {
 	    final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
 	    return workingCapital.isPendingFundUnAllocation(user)
-		    || (!workingCapital.isCanceledOrRejected() && (workingCapitalProcess.isPendingVerification(user)
-			    || workingCapital.isPendingFundAllocation(user)
-			    || workingCapital.hasAcquisitionPendingVerification(user) || ((workingCapital
-			    .isAccountingResponsible(user) || workingCapital.isAccountingEmployee(user)) && workingCapital
-			    .canRequestCapitalRefund())));
+		    || (!workingCapital.isCanceledOrRejected() && workingCapitalProcess.isPendingVerification(user));
 	}
 
     }
@@ -121,6 +117,36 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
 
     public SortedSet<WorkingCapitalProcess> getPendingVerification(final SortedSet<WorkingCapitalProcess> result) {
 	return new PendingVerificationSearch(result).search();
+    }
+
+    private class PendingProcessingSearch extends WorkingCapitalProcessSearch {
+
+	PendingProcessingSearch() {
+	}
+
+	PendingProcessingSearch(final SortedSet<WorkingCapitalProcess> result) {
+	    super(result);
+	}
+
+	@Override
+	boolean shouldAdd(final WorkingCapitalProcess workingCapitalProcess, final User user) {
+	    final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
+	    return workingCapital.isPendingFundUnAllocation(user)
+		    || (!workingCapital.isCanceledOrRejected() && (
+			    workingCapital.isPendingFundAllocation(user)
+			    || workingCapital.hasAcquisitionPendingVerification(user)
+			    || ((workingCapital.isAccountingResponsible(user) || workingCapital.isAccountingEmployee(user))
+				    && workingCapital.canRequestCapitalRefund())));
+	}
+
+    }
+
+    public SortedSet<WorkingCapitalProcess> getPendingProcessing() {
+	return new PendingProcessingSearch().search();
+    }
+
+    public SortedSet<WorkingCapitalProcess> getPendingProcessing(final SortedSet<WorkingCapitalProcess> result) {
+	return new PendingProcessingSearch(result).search();
     }
 
     public SortedSet<WorkingCapitalProcess> getPendingDirectVerification() {

@@ -52,6 +52,9 @@ public class EmailDigesterUtil {
 	    		final SortedSet<WorkingCapitalProcess> pendingVerificationn = previousYear == null ?
 	    			workingCapitalYear.getPendingVerification() : previousYear.getPendingVerification(workingCapitalYear.getPendingVerification());
 	    		final int pendingVerificationnCount = pendingVerificationn.size();
+	    		final SortedSet<WorkingCapitalProcess> pendingProcessing = previousYear == null ?
+	    			workingCapitalYear.getPendingProcessing() : previousYear.getPendingProcessing(workingCapitalYear.getPendingVerification());
+	    		final int pendingProcessingCount = pendingProcessing.size();
 	    		final SortedSet<WorkingCapitalProcess> pendingAuthorization = previousYear == null ?
 	    			workingCapitalYear.getPendingAuthorization() : previousYear.getPendingAuthorization(workingCapitalYear.getPendingAuthorization());
 	    		final int pendingAuthorizationCount = pendingAuthorization.size();
@@ -76,6 +79,10 @@ public class EmailDigesterUtil {
 	    			    if (pendingVerificationnCount > 0) {
 	    				body.append("\n\tPendentes de Verificação\t");
 	    				body.append(pendingVerificationnCount);
+	    			    }
+	    			    if (pendingVerificationnCount > 0) {
+	    				body.append("\n\tPendentes de Processamento\t");
+	    				body.append(pendingProcessingCount);
 	    			    }
 	    			    if (pendingAuthorizationCount > 0) {
 	    				body.append("\n\tPendentes de Autorização\t");
