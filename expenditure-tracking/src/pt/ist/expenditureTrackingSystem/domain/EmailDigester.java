@@ -14,6 +14,9 @@ public class EmailDigester extends EmailDigester_Base {
     @Service
     public void executeTask() {
 	for (final VirtualHost virtualHost : MyOrg.getInstance().getVirtualHostsSet()) {
+	    if (!virtualHost.getHostname().startsWith("dot")) {
+		continue;
+	    }
 	    try {
 		VirtualHost.setVirtualHostForThread(virtualHost);
 		EmailDigesterUtil.executeTask();
