@@ -134,7 +134,7 @@ public class Financer extends Financer_Base {
 	if (strings != null && !strings.isEmpty()) {
 	    StringBuilder buffer = new StringBuilder("");
 
-	    for (String allocationId : strings) {
+	    for (String allocationId : strings.getUnmodifiableList()) {
 		buffer.append(getAllocationIds(allocationId, "financer.label.allocation.id.prefix.giaf"));
 		buffer.append(' ');
 	    }
@@ -165,7 +165,7 @@ public class Financer extends Financer_Base {
 	    strings = new Strings(effectiveFundAllocationId);
 	}
 	if (!strings.contains(effectiveFundAllocationId)) {
-	    strings.add(effectiveFundAllocationId);
+	    strings = new Strings(strings, effectiveFundAllocationId);
 	}
 	setEffectiveFundAllocationId(strings);
 
@@ -183,7 +183,7 @@ public class Financer extends Financer_Base {
 	    strings = new Strings(paymentReference);
 	}
 	if (!strings.contains(paymentReference)) {
-	    strings.add(paymentReference);
+	    strings = new Strings(strings, paymentReference);
 	}
 	setPaymentDiaryNumber(strings);
     }
@@ -198,7 +198,7 @@ public class Financer extends Financer_Base {
 	    strings = new Strings(transactionNumber);
 	}
 	if (!strings.contains(transactionNumber)) {
-	    strings.add(transactionNumber);
+	    strings = new Strings(strings, transactionNumber);
 	}
 	setTransactionNumber(strings);
     }
@@ -261,7 +261,7 @@ public class Financer extends Financer_Base {
     public boolean hasAllInvoicesAllocatedInProject() {
 	return true;
     }
-    
+
     public boolean hasAllInvoicesAllocated() {
 	List<PaymentProcessInvoice> allocatedInvoices = getAllocatedInvoices();
 	for (UnitItem unitItem : getUnitItems()) {
@@ -315,21 +315,21 @@ public class Financer extends Financer_Base {
 
     public boolean isEffectiveFundAllocationPresent() {
 	return getEffectiveFundAllocationId() != null;
-/*	if (getEffectiveFundAllocationId() != null) {
-	    for (final String s : getEffectiveFundAllocationId()) {
-		if (!s.isEmpty()) {
-		    return true;
+	/*	if (getEffectiveFundAllocationId() != null) {
+		    for (final String s : getEffectiveFundAllocationId()) {
+			if (!s.isEmpty()) {
+			    return true;
+			}
+		    }
 		}
-	    }
-	}
-	return false;
-*/
+		return false;
+	*/
     }
 
     @Override
     public AccountingUnit getAccountingUnit() {
-        final AccountingUnit accountingUnit = super.getAccountingUnit();
-        return accountingUnit == null && hasUnit() ? getUnit().getAccountingUnit() : accountingUnit;
+	final AccountingUnit accountingUnit = super.getAccountingUnit();
+	return accountingUnit == null && hasUnit() ? getUnit().getAccountingUnit() : accountingUnit;
     }
 
     public boolean isAccountManager(final Person accountManager) {
@@ -370,7 +370,7 @@ public class Financer extends Financer_Base {
 
     private boolean hasStringValue(final Strings strings) {
 	if (strings != null) {
-	    for (final String s : strings) {
+	    for (final String s : strings.getUnmodifiableList()) {
 		if (s != null && !s.trim().isEmpty()) {
 		    return true;
 		}

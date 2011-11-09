@@ -17,11 +17,11 @@ public class AllocateProjectFundsPermanentlyActivityInformation<P extends Paymen
 	AbstractFundAllocationActivityInformation<P> {
 
     public AllocateProjectFundsPermanentlyActivityInformation(P process,
-	    WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity,
-	    final boolean takeProcess) {
+	    WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity, final boolean takeProcess) {
 	super(process, activity, takeProcess);
     }
 
+    @Override
     public void generateBeans() {
 	for (Financer financer : getFinancers()) {
 	    if (financer.isProjectFinancer()) {
@@ -47,7 +47,7 @@ public class AllocateProjectFundsPermanentlyActivityInformation<P extends Paymen
 	    beans.add(fundAllocationBean);
 	} else {
 	    int i = 0;
-	    for (String effectiveFund : effectiveFunds) {
+	    for (String effectiveFund : effectiveFunds.getUnmodifiableList()) {
 		FundAllocationBean fundAllocationBean = new FundAllocationBean(projectFinancer);
 		fundAllocationBean.setFundAllocationId(projectFinancer.getProjectFundAllocationId());
 		fundAllocationBean.setEffectiveFundAllocationId(effectiveFund);

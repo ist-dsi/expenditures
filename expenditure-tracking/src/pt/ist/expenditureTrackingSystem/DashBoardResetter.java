@@ -66,7 +66,7 @@ public class DashBoardResetter {
     private static void addWidget1(final String widgetName, final DashBoard dashBoard) {
 	if (!hasWidget(widgetName, dashBoard)) {
 	    final List<String> column1 = new ArrayList<String>();
-	    for (final String string : dashBoard.getColumn1()) {
+	    for (final String string : dashBoard.getColumn1().getUnmodifiableList()) {
 		column1.add(string);
 	    }
 	    column1.add(widgetName);
@@ -77,7 +77,7 @@ public class DashBoardResetter {
     private static void addWidget2(final String widgetName, final DashBoard dashBoard) {
 	if (!hasWidget(widgetName, dashBoard)) {
 	    final List<String> column2 = new ArrayList<String>();
-	    for (final String string : dashBoard.getColumn2()) {
+	    for (final String string : dashBoard.getColumn2().getUnmodifiableList()) {
 		column2.add(string);
 	    }
 	    column2.add(widgetName);
@@ -88,7 +88,7 @@ public class DashBoardResetter {
     private static void addWidget3(final String widgetName, final DashBoard dashBoard) {
 	if (!hasWidget(widgetName, dashBoard)) {
 	    final List<String> column3 = new ArrayList<String>();
-	    for (final String string : dashBoard.getColumn3()) {
+	    for (final String string : dashBoard.getColumn3().getUnmodifiableList()) {
 		column3.add(string);
 	    }
 	    column3.add(widgetName);

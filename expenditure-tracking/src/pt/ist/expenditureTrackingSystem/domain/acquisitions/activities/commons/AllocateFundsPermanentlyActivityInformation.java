@@ -16,8 +16,7 @@ public class AllocateFundsPermanentlyActivityInformation<P extends PaymentProces
 	AbstractFundAllocationActivityInformation<P> {
 
     public AllocateFundsPermanentlyActivityInformation(P process,
-	    WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity,
-	    final boolean takeProcess) {
+	    WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity, final boolean takeProcess) {
 	super(process, activity, takeProcess);
     }
 
@@ -48,19 +47,19 @@ public class AllocateFundsPermanentlyActivityInformation<P extends PaymentProces
 	    fundAllocationBean.setFundAllocationId(financer.getFundAllocationId());
 	    fundAllocationBean.setEffectiveFundAllocationId(financer.getFundAllocationId());
 	    fundAllocationBean.setAllowedToAddNewFund(true);
-//	    fundAllocationBean.setDiaryNumber(financer.getPaymentDiaryNumber());
-//	    fundAllocationBean.setTransactionNumber(financer.getTransactionNumber());
-	    
+	    //	    fundAllocationBean.setDiaryNumber(financer.getPaymentDiaryNumber());
+	    //	    fundAllocationBean.setTransactionNumber(financer.getTransactionNumber());
+
 	    beans.add(fundAllocationBean);
 	} else {
 	    int i = 0;
-	    for (String effectiveFund : effectiveFunds) {
+	    for (String effectiveFund : effectiveFunds.getUnmodifiableList()) {
 		FundAllocationBean fundAllocationBean = new FundAllocationBean(financer);
 		fundAllocationBean.setFundAllocationId(financer.getFundAllocationId());
 		fundAllocationBean.setEffectiveFundAllocationId(effectiveFund);
 		fundAllocationBean.setAllowedToAddNewFund(i++ == 0);
-//		fundAllocationBean.setDiaryNumber(financer.getPaymentDiaryNumber());
-//		fundAllocationBean.setTransactionNumber(financer.getTransactionNumber());
+		//fundAllocationBean.setDiaryNumber(financer.getPaymentDiaryNumber());
+		//fundAllocationBean.setTransactionNumber(financer.getTransactionNumber());
 		beans.add(fundAllocationBean);
 	    }
 	}

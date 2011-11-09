@@ -9,8 +9,6 @@ import myorg.domain.util.Money;
 
 import org.apache.commons.lang.StringUtils;
 
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.AllocateProjectFundsPermanently;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.ProjectFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Project;
@@ -57,7 +55,7 @@ public class ProjectFinancer extends ProjectFinancer_Base {
 	final StringBuilder financerString = new StringBuilder(super.getEffectiveFundAllocationIds());
 	Strings strings = getEffectiveProjectFundAllocationId();
 	if (strings != null && !strings.isEmpty()) {
-	    for (String allocationId : strings) {
+	    for (String allocationId : strings.getUnmodifiableList()) {
 		financerString.append(getAllocationIds(allocationId, "financer.label.allocation.id.prefix.mgp"));
 		financerString.append(' ');
 	    }
@@ -120,7 +118,7 @@ public class ProjectFinancer extends ProjectFinancer_Base {
 	    strings = new Strings(effectiveProjectFundAllocationId);
 	}
 	if (!strings.contains(effectiveProjectFundAllocationId)) {
-	    strings.add(effectiveProjectFundAllocationId);
+	    strings = new Strings(strings, effectiveProjectFundAllocationId);
 	}
 	setEffectiveProjectFundAllocationId(strings);
 
@@ -191,6 +189,7 @@ public class ProjectFinancer extends ProjectFinancer_Base {
 	getAllocatedInvoicesInProject().clear();
     }
 
+    @Override
     public boolean hasAllInvoicesAllocatedInProject() {
 	List<PaymentProcessInvoice> allocatedInvoices = getAllocatedInvoicesInProject();
 	for (UnitItem unitItem : getUnitItems()) {
@@ -208,14 +207,9 @@ public class ProjectFinancer extends ProjectFinancer_Base {
 	    final PaymentProcess process = fundedRequest.getProcess();
 	    final Unit unit = getUnit();
 	    final AccountingUnit accountingUnit = unit.getAccountingUnit();
-	    
-	    new ProjectAcquisitionFundAllocationRequest(unitItem,
-		    process.getProcessNumber(),
-		    process,
-		    unit.getUnitNumber(),
-		    accountingUnit.getName(),
-		    getAmountAllocated(),
-		    Boolean.valueOf(isFinalFundAllocation));
+
+	    new ProjectAcquisitionFundAllocationRequest(unitItem, process.getProcessNumber(), process, unit.getUnitNumber(),
+		    accountingUnit.getName(), getAmountAllocated(), Boolean.valueOf(isFinalFundAllocation));
 	}
     }
 
