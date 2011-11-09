@@ -16,7 +16,9 @@ public class TogleMissionNatureActivity extends MissionProcessActivity<MissionPr
 
     @Override
     public boolean isActive(final MissionProcess missionProcess, final User user) {
-	return super.isActive(missionProcess, user) && user.hasRoleType(RoleType.MANAGER);
+	return super.isActive(missionProcess, user)
+		&& user.hasRoleType(RoleType.MANAGER)
+		&& missionProcess.canTogleMissionNature();
     }
 
     @Override

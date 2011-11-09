@@ -386,12 +386,25 @@ public abstract class MissionProcess extends MissionProcess_Base {
 
     public void justifyLateSubmission(final String justification) {
 	if (justification == null || justification.isEmpty()) {
-	    throw new DomainException("justification.cannot.be.null");
+	    throw new DomainException(BundleUtil.getStringFromResourceBundle("resources/MissionResources", "justification.cannot.be.null"));
+	}
+	if (!insufficient(justification)) {
+	    throw new DomainException(BundleUtil.getStringFromResourceBundle("resources/MissionResources", "justification.is.not.sufficient"));
 	}
 	final MissionProcessLateJustification lastJustification = getLastMissionProcessLateJustification();
 	if (lastJustification == null || !lastJustification.getJustification().equals(justification)) {
 	    new MissionProcessLateJustification(this, justification);
 	}
+    }
+
+    private boolean insufficient(final String justification) {
+	int count = 0;
+	for (final char c : justification.toCharArray()) {
+	    if ((c > 'a' && c < 'z') || (c > 'A' && c < 'Z')) {
+		count++;
+	    }
+	}
+	return count > 5;
     }
 
     public MissionProcessLateJustification getLastMissionProcessLateJustification() {
@@ -568,4 +581,23 @@ public abstract class MissionProcess extends MissionProcess_Base {
 	mission.revertProcessTermination();
     }
 
+    public boolean getAreAccomodationItemsAvailable() {
+	final Mission mission = getMission();
+	return mission.getAreAccomodationItemsAvailable();
+    }
+
+    public boolean getPersonelExpenseItemsAvailable() {
+	final Mission mission = getMission();
+	return mission.getAreAccomodationItemsAvailable();
+    }
+
+    public boolean canTogleMissionNature() {
+	final Mission mission = getMission();
+	return mission.canTogleMissionNature();
+    }
+
+    public int getNumberOfDays() {
+	final Mission mission = getMission();
+	return mission.getNumberOfDays();
+    }
 }

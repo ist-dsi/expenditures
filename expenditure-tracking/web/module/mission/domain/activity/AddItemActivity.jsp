@@ -66,49 +66,56 @@
 				</ul>
 			</td>
 			<td valign="top" style="text-align: left;">
-				<ul>
-					<li>
-						<html:link page="/missionProcess.do?method=addMissionItemSelectType&amp;missionItemType=module.mission.domain.FullPersonelExpenseItem"
-								paramId="processId" paramName="process" paramProperty="externalId">
-							<bean:message bundle="MISSION_RESOURCES" key="label.module.mission.domain.FullPersonelExpenseItem"/>
-						</html:link>
-					</li>
-					<logic:equal name="process" property="class.name" value="module.mission.domain.ForeignMissionProcess">
+				<logic:equal name="process" property="personelExpenseItemsAvailable" value="true">
+					<ul>
 						<li>
-							<html:link page="/missionProcess.do?method=addMissionItemSelectType&amp;missionItemType=module.mission.domain.WithAccommodationPersonelExpenseItem"
+							<html:link page="/missionProcess.do?method=addMissionItemSelectType&amp;missionItemType=module.mission.domain.FullPersonelExpenseItem"
 									paramId="processId" paramName="process" paramProperty="externalId">
-								<bean:message bundle="MISSION_RESOURCES" key="label.module.mission.domain.WithAccommodationPersonelExpenseItem"/>
+								<bean:message bundle="MISSION_RESOURCES" key="label.module.mission.domain.FullPersonelExpenseItem"/>
+							</html:link>
+						</li>
+						<logic:equal name="process" property="class.name" value="module.mission.domain.ForeignMissionProcess">
+							<li>
+								<html:link page="/missionProcess.do?method=addMissionItemSelectType&amp;missionItemType=module.mission.domain.WithAccommodationPersonelExpenseItem"
+										paramId="processId" paramName="process" paramProperty="externalId">
+									<bean:message bundle="MISSION_RESOURCES" key="label.module.mission.domain.WithAccommodationPersonelExpenseItem"/>
+								</html:link>
+							</li>
+							<li>
+								<html:link page="/missionProcess.do?method=addMissionItemSelectType&amp;missionItemType=module.mission.domain.WithAccommodationAndOneMealPersonelExpenseItem"
+										paramId="processId" paramName="process" paramProperty="externalId">
+									<bean:message bundle="MISSION_RESOURCES" key="label.module.mission.domain.WithAccommodationAndOneMealPersonelExpenseItem"/>
+								</html:link>
+							</li>
+							<li>
+								<html:link page="/missionProcess.do?method=addMissionItemSelectType&amp;missionItemType=module.mission.domain.WithAccommodationAndTwoMealsPersonelExpenseItem"
+										paramId="processId" paramName="process" paramProperty="externalId">
+									<bean:message bundle="MISSION_RESOURCES" key="label.module.mission.domain.WithAccommodationAndTwoMealsPersonelExpenseItem"/>
+								</html:link>
+							</li>
+						</logic:equal>
+						<li>
+							<html:link page="/missionProcess.do?method=addMissionItemSelectType&amp;missionItemType=module.mission.domain.NoPersonelExpenseItem"
+									paramId="processId" paramName="process" paramProperty="externalId">
+								<bean:message bundle="MISSION_RESOURCES" key="label.module.mission.domain.NoPersonelExpenseItem"/>
 							</html:link>
 						</li>
 						<li>
-							<html:link page="/missionProcess.do?method=addMissionItemSelectType&amp;missionItemType=module.mission.domain.WithAccommodationAndOneMealPersonelExpenseItem"
+							<html:link page="/missionProcess.do?method=addMissionItemSelectType&amp;missionItemType=module.mission.domain.OtherPersonelExpenseItem"
 									paramId="processId" paramName="process" paramProperty="externalId">
-								<bean:message bundle="MISSION_RESOURCES" key="label.module.mission.domain.WithAccommodationAndOneMealPersonelExpenseItem"/>
+								<bean:message bundle="MISSION_RESOURCES" key="label.module.mission.domain.OtherPersonelExpenseItem"/>
 							</html:link>
 						</li>
-						<li>
-							<html:link page="/missionProcess.do?method=addMissionItemSelectType&amp;missionItemType=module.mission.domain.WithAccommodationAndTwoMealsPersonelExpenseItem"
-									paramId="processId" paramName="process" paramProperty="externalId">
-								<bean:message bundle="MISSION_RESOURCES" key="label.module.mission.domain.WithAccommodationAndTwoMealsPersonelExpenseItem"/>
-							</html:link>
-						</li>
-					</logic:equal>
-					<li>
-						<html:link page="/missionProcess.do?method=addMissionItemSelectType&amp;missionItemType=module.mission.domain.NoPersonelExpenseItem"
-								paramId="processId" paramName="process" paramProperty="externalId">
-							<bean:message bundle="MISSION_RESOURCES" key="label.module.mission.domain.NoPersonelExpenseItem"/>
-						</html:link>
-					</li>
-					<li>
-						<html:link page="/missionProcess.do?method=addMissionItemSelectType&amp;missionItemType=module.mission.domain.OtherPersonelExpenseItem"
-								paramId="processId" paramName="process" paramProperty="externalId">
-							<bean:message bundle="MISSION_RESOURCES" key="label.module.mission.domain.OtherPersonelExpenseItem"/>
-						</html:link>
-					</li>
-				</ul>
+					</ul>
+				</logic:equal>
+				<logic:notEqual name="process" property="personelExpenseItemsAvailable" value="true">
+					<p align="center">
+						<bean:message bundle="MISSION_RESOURCES" key="label.module.mission.domain.AccommodationItem.not.available"/>
+					</p>
+				</logic:notEqual>
 			</td>
 			<td valign="top" style="text-align: left;">
-				<logic:equal name="process" property="class.name" value="module.mission.domain.ForeignMissionProcess">
+				<logic:equal name="process" property="areAccomodationItemsAvailable" value="true">
 					<ul>
 						<li>
 							<html:link page="/missionProcess.do?method=addMissionItemSelectType&amp;missionItemType=module.mission.domain.AccommodationItem"
@@ -118,11 +125,11 @@
 						</li>
 					</ul>
 				</logic:equal>
-				<logic:equal name="process" property="class.name" value="module.mission.domain.NationalMissionProcess">
+				<logic:notEqual name="process" property="areAccomodationItemsAvailable" value="true">
 					<p align="center">
 						<bean:message bundle="MISSION_RESOURCES" key="label.module.mission.domain.AccommodationItem.not.available"/>
 					</p>
-				</logic:equal>
+				</logic:notEqual>
 			</td>
 			<td valign="top" style="text-align: left;">
 				<ul>

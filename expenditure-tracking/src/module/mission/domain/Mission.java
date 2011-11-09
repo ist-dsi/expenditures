@@ -1314,4 +1314,36 @@ public abstract class Mission extends Mission_Base {
 	return false;
     }
 
+    public boolean getAreAccomodationItemsAvailable() {
+	return !getGrantOwnerEquivalence().booleanValue() && this instanceof ForeignMission;
+    }
+
+    public boolean getPersonelExpenseItemsAvailable() {
+	return !getGrantOwnerEquivalence().booleanValue();
+    }
+
+    public boolean canTogleMissionNature() {
+	return (getGrantOwnerEquivalence().booleanValue()) || (!hasAnyPersonalExpenseOrAccomodationItemns());
+    }
+
+    private boolean hasAnyPersonalExpenseOrAccomodationItemns() {
+	for (final MissionItem missionItem : getMissionItemsSet()) {
+	    if (missionItem instanceof AccommodationItem) {
+		return true;
+	    }
+	    if (missionItem instanceof PersonelExpenseItem && !(missionItem instanceof NoPersonelExpenseItem)) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
+    public int getNumberOfDays() {
+	int result = 1;
+	for (DateTime d = getDaparture(); d.isBefore(getArrival()); d = d.plusDays(1)) {
+	    result++;
+	}
+	return result;
+    }
+
 }

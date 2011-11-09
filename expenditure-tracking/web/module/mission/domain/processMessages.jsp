@@ -30,6 +30,20 @@
 		<bean:message key="label.process.isPendingArchive" bundle="MISSION_RESOURCES"/>:
 	</div>
 <% } %>
+<% if (!missionProcess.getIsCanceled()
+	&& !missionProcess.getMission().getGrantOwnerEquivalence().booleanValue()
+	&& missionProcess.getNumberOfDays() >= 30) { %>
+	<div class="infobox_warning">
+		<bean:message key="label.process.not.grantOwnerEquivalence.exceeds30Days" bundle="MISSION_RESOURCES"/>:
+	</div>
+<% } %>
+<% if (!missionProcess.getIsCanceled()
+	&& missionProcess.getMission().getGrantOwnerEquivalence().booleanValue()
+	&& missionProcess.getNumberOfDays() <= 30) { %>
+	<div class="infobox_warning">
+		<bean:message key="label.process.grantOwnerEquivalence.not.exceeds30Days" bundle="MISSION_RESOURCES"/>:
+	</div>
+<% } %>
 
 <bean:define id="missionProcessMessages" name="process" property="mission.consistencyMessages"/>
 <logic:notEmpty name="missionProcessMessages">
