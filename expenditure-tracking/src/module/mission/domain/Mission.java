@@ -33,6 +33,7 @@ import myorg.util.BundleUtil;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
 import org.joda.time.Days;
+import org.joda.time.Interval;
 import org.joda.time.LocalDate;
 
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
@@ -1344,6 +1345,30 @@ public abstract class Mission extends Mission_Base {
 	    result++;
 	}
 	return result;
+    }
+
+    public void checkForAnyOverlappingParticipations() {
+	for (final Person person : getParticipantesSet()) {
+	    for (final Mission mission : person.getMissionsSet()) {
+		final MissionProcess process = mission.getMissionProcess();
+		if (mission != this && !process.isCanceled() && overlaps(mission)) {
+		    throw new DomainException(BundleUtil.getFormattedStringFromResourceBundle(
+			    "resources/MissionResources", "error.mission.overlaps.participation",
+			    person.getPresentationName(), process.getProcessIdentification()));
+		}
+	    }
+	}
+    }
+
+    public Interval getInterval() {
+	final DateTime departure = getDaparture();
+	final DateTime arrival = getArrival();
+	return new Interval(departure, arrival);
+    }
+
+    private boolean overlaps(final Mission mission) {
+	final Interval interval = mission.getInterval();
+	return getInterval().overlaps(interval);
     }
 
 }

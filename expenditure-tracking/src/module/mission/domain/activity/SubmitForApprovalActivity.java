@@ -14,12 +14,16 @@ public class SubmitForApprovalActivity extends MissionProcessActivity<MissionPro
 
     @Override
     public boolean isActive(final MissionProcess missionProcess, final User user) {
-	return super.isActive(missionProcess, user) && missionProcess.isUnderConstruction() && missionProcess.isRequestor(user) && missionProcess.isConsistent();
+	return super.isActive(missionProcess, user)
+		&& missionProcess.isUnderConstruction()
+		&& missionProcess.isRequestor(user)
+		&& missionProcess.isConsistent();
     }
 
     @Override
     protected void process(final LateJustificationActivityInformation activityInformation) {
 	final MissionProcess missionProcess = (MissionProcess) activityInformation.getProcess();
+	missionProcess.checkForAnyOverlappingParticipations();
 	missionProcess.setIsUnderConstruction(Boolean.FALSE);
 	if (!missionProcess.isOnTime()) {
 	    missionProcess.justifyLateSubmission(activityInformation.getJustification());

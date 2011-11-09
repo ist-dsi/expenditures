@@ -600,4 +600,10 @@ public abstract class MissionProcess extends MissionProcess_Base {
 	final Mission mission = getMission();
 	return mission.getNumberOfDays();
     }
+
+    public void checkForAnyOverlappingParticipations() {
+	final Mission mission = getMission();
+	mission.checkForAnyOverlappingParticipations();
+    }
+
 }
