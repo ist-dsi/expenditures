@@ -28,4 +28,10 @@ public class RevertInvoiceConfirmationSubmition extends WorkflowActivity<RefundP
     public String getUsedBundle() {
 	return "resources/AcquisitionResources";
     }
+
+    @Override
+    public boolean isUserAwarenessNeeded(final RefundProcess process, final User user) {
+	return false;
+    }
+
 }
