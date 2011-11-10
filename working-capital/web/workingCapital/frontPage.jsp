@@ -164,7 +164,7 @@
 		        	<fr:property name="labelField" value="partyName.content"/>
 					<fr:property name="format" value="${presentationName}"/>
 					<fr:property name="minChars" value="3"/>
-					<fr:property name="args" value="provider=module.organization.presentationTier.renderers.providers.PartiesAutoCompleteProvider"/>
+					<fr:property name="args" value="provider=module.workingCapital.presentationTier.provider.PartiesWithWorkingCapitalFundsAutoCompleteProvider"/>
 					<fr:property name="size" value="60"/>
 				</fr:slot>
 			</fr:schema>
