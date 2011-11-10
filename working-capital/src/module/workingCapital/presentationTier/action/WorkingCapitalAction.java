@@ -1,11 +1,15 @@
 package module.workingCapital.presentationTier.action;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import module.organization.domain.Party;
 import module.workflow.presentationTier.actions.ProcessManagement;
 import module.workingCapital.domain.AcquisitionClassification;
 import module.workingCapital.domain.WorkingCapital;
@@ -22,6 +26,7 @@ import myorg.domain.exceptions.DomainException;
 import myorg.presentationTier.actions.ContextBaseAction;
 import myorg.util.BundleUtil;
 
+import org.apache.commons.beanutils.BeanComparator;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -53,13 +58,38 @@ public class WorkingCapitalAction extends ContextBaseAction {
 	return showList(request, workingCapitalContext, unitProcesses);
     }
 
+    public ActionForward sort(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	final WorkingCapitalContext workingCapitalContext = new WorkingCapitalContext();
+	final String partyId = request.getParameter("partyId");
+	if (partyId != null && !partyId.isEmpty() && !partyId.equals("null")) {
+	    workingCapitalContext.setParty((Party) getDomainObject(partyId));
+	    final SortedSet<WorkingCapitalProcess> unitProcesses = workingCapitalContext.getWorkingCapitalSearchByUnit();
+	    return showList(request, workingCapitalContext, unitProcesses);
+	}
+	return listProcesses(mapping, form, request, response);
+    }
+
     private ActionForward showList(final HttpServletRequest request, final WorkingCapitalContext workingCapitalContext,
 	    final SortedSet<WorkingCapitalProcess> unitProcesses) {
 	if (unitProcesses.size() == 1) {
 	    final WorkingCapitalProcess workingCapitalProcess = unitProcesses.first();
 	    return ProcessManagement.forwardToProcess(workingCapitalProcess);
 	} else {
-	    request.setAttribute("unitProcesses", unitProcesses);
+	    final List<WorkingCapitalProcess> list = new ArrayList<WorkingCapitalProcess>(unitProcesses);
+	    final String sortByArg = request.getParameter("sortBy");
+	    if (sortByArg != null && !sortByArg.isEmpty()) {
+		final int i = sortByArg.indexOf('=');
+		if (i > 0) {
+		    final BeanComparator comparator = new BeanComparator(sortByArg.substring(0, i));
+		    Collections.sort(list, comparator);
+		    final char c = sortByArg.charAt(i + 1);
+		    if (c == 'd' || c == 'D') {
+			Collections.reverse(list);
+		    }
+		}
+	    }
+	    request.setAttribute("unitProcesses", list);
 	    return frontPage(request, workingCapitalContext);
 	}
     }

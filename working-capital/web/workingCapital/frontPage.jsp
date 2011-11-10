@@ -200,8 +200,21 @@
 					 	<fr:slot name="presentableAcquisitionProcessState.localizedName" key="WorkingCapitalProcessState"/>
 					 	<fr:slot name="workingCapital.accountingUnit.name" key="label.module.workingCapital.initialization.accountingUnit"/>
 					</fr:schema>
-					<fr:layout name="tabular">
+					<fr:layout name="tabular-sortable">
 						<fr:property name="classes" value="tview2 tdleft"/>
+
+						<fr:property name="sortParameter" value="sortBy"/>
+						<bean:define id="workingCapitalYearOid" name="workingCapitalContext" property="workingCapitalYear.externalId" type="java.lang.String"/>
+						<logic:present name="workingCapitalContext" property="party">
+							<bean:define id="partyId" name="workingCapitalContext" property="party.externalId" type="java.lang.String"/>
+							<fr:property name="sortUrl" value="<%= "/workingCapital.do?method=sort&partyId=" + partyId + "&workingCapitalYearOid=" + workingCapitalYearOid %>" />
+						</logic:present>
+						<logic:notPresent name="workingCapitalContext" property="party">
+							<fr:property name="sortUrl" value="<%= "/workingCapital.do?method=sort&workingCapitalYearOid=" + workingCapitalYearOid %>" />
+						</logic:notPresent>
+						<fr:property name="sortBy" value="workingCapital.unit.presentationName=asc"/>
+						<fr:property name="sortIgnored" value="true"/>					
+						<fr:property name="sortableSlots" value="workingCapital.unit.presentationName, presentableAcquisitionProcessState.localizedName, workingCapital.accountingUnit.name" />
 					</fr:layout>
 				</fr:view>
 			</logic:notEmpty>
