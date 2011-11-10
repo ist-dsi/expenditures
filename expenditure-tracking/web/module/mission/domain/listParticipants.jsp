@@ -30,7 +30,7 @@
 					<%
 						int chainSize = process.getPersonAuthorizationChainSize(person);
 					%>
-					<td rowspan="<%= Integer.toString(chainSize + 4) %>">
+					<td rowspan="<%= Integer.toString(chainSize + 5) %>">
 						<bean:define id="url" type="java.lang.String">https://fenix.ist.utl.pt/publico/retrievePersonalPhoto.do?method=retrieveByUUID&amp;contentContextPath_PATH=/homepage&amp;uuid=<bean:write name="person" property="user.username"/></bean:define>
 						<img src="<%= url %>">
 					</td>
@@ -41,6 +41,18 @@
 						<wf:activityLink processName="process" activityName="RemoveParticipantActivity" scope="request" paramName0="person" paramValue0="<%= personOID %>">
 							<bean:message bundle="MYORG_RESOURCES" key="link.remove"/>
 						</wf:activityLink>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="4">
+						<bean:message bundle="MISSION_RESOURCES" key="label.mission.participant.current.relation.to.institution"/>:
+						<% if (process.getMission().hasAnyCurrentRelationToInstitution((module.organization.domain.Person) person)) { %>
+							<%= process.getMission().getCurrentRelationToInstitution((module.organization.domain.Person) person) %>
+						<% } else { %>
+							<span style="color: red;">
+								<%= process.getMission().getCurrentRelationToInstitution((module.organization.domain.Person) person) %>
+							</span>
+						<% } %>
 					</td>
 				</tr>
 				<tr>

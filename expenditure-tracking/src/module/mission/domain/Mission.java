@@ -706,6 +706,9 @@ public abstract class Mission extends Mission_Base {
 		if (personMissionAuthorization == null) {
 		    result.add(BundleUtil.getFormattedStringFromResourceBundle("resources/MissionResources", "message.mission.participant.authorization.chain.not.defined", person.getName()));
 		}
+		if (!hasAnyCurrentRelationToInstitution(person) && hasAnyPersonelExpenseItems(person)) {
+		    result.add(BundleUtil.getFormattedStringFromResourceBundle("resources/MissionResources", "message.mission.participant.with.no.relation.to.institution.has.personel.expense.items", person.getName()));
+		}
 	    }
 	}
 
@@ -751,6 +754,17 @@ public abstract class Mission extends Mission_Base {
 	}
 
 	return result;
+    }
+
+    private boolean hasAnyPersonelExpenseItems(final Person person) {
+	for (final MissionItem missionItem : getMissionItemsSet()) {
+	    if (missionItem instanceof PersonelExpenseItem && !(missionItem instanceof NoPersonelExpenseItem)) {
+		if (missionItem.getPeopleSet().contains(person)) {
+		    return true;
+		}
+	    }
+	}
+	return false;
     }
 
     public int calculateNumberOfNights() {
@@ -1369,6 +1383,36 @@ public abstract class Mission extends Mission_Base {
     private boolean overlaps(final Mission mission) {
 	final Interval interval = mission.getInterval();
 	return getInterval().overlaps(interval);
+    }
+
+    public boolean hasAnyCurrentRelationToInstitution(final Person person) {
+	final Set<AccountabilityType> accountabilityTypesRequireingAuthorization = MissionSystem.getInstance().getAccountabilityTypesRequireingAuthorization();
+	for (final Accountability accountability : person.getParentAccountabilitiesSet()) {
+	    final AccountabilityType accountabilityType = accountability.getAccountabilityType();
+	    if (accountability.isActiveNow() && accountability.isValid()
+		    && accountabilityTypesRequireingAuthorization.contains(accountabilityType)) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
+    public String getCurrentRelationToInstitution(final Person person) {
+	final Set<AccountabilityType> accountabilityTypesRequireingAuthorization = MissionSystem.getInstance().getAccountabilityTypesRequireingAuthorization();
+	final StringBuilder builder = new StringBuilder();
+	for (final Accountability accountability : person.getParentAccountabilitiesSet()) {
+	    final AccountabilityType accountabilityType = accountability.getAccountabilityType();
+	    if (accountability.isActiveNow() && accountability.isValid()
+		    && accountabilityTypesRequireingAuthorization.contains(accountabilityType)) {
+		if (builder.length() > 0) {
+		    builder.append(", ");
+		}
+		builder.append(accountabilityType.getName().toString());
+	    }
+	}
+	return builder.length() == 0 ? BundleUtil.getFormattedStringFromResourceBundle(
+		"resources/MissionResources", "label.participant.no.relation.to.institution")
+		: builder.toString();
     }
 
 }

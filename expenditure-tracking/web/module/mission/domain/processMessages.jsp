@@ -107,7 +107,7 @@
 	</logic:iterate>
 </logic:notEmpty>
 
-<logic:notPresent name="process" property="mission.missionVersion.changesAfterArrival">
+<!--<logic:notPresent name="process" property="mission.missionVersion.changesAfterArrival">-->
 <logic:notEmpty name="process" property="missionProcessLateJustifications">
 	<div style="padding: 5px 10px; margin: 1em 0; border:1px solid #E0E0E0;">
 		<h4>
@@ -130,7 +130,7 @@
 		</logic:iterate>
 	</div>
 </logic:notEmpty>
-</logic:notPresent>
+<!--</logic:notPresent>-->
 
 <logic:present name="process" property="mission.serviceGaranteePerson">
 	<div style="padding: 5px 10px; margin: 1em 0; border:1px solid #E0E0E0;">
