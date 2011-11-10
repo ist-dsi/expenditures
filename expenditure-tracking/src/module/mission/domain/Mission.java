@@ -1380,7 +1380,7 @@ public abstract class Mission extends Mission_Base {
 	return new Interval(departure, arrival);
     }
 
-    private boolean overlaps(final Mission mission) {
+    public boolean overlaps(final Mission mission) {
 	final Interval interval = mission.getInterval();
 	return getInterval().overlaps(interval);
     }
