@@ -331,7 +331,7 @@
 						<logic:present name="payingUnit" property="financer.paymentDiaryNumber">
 							<bean:define id="paymentDiaryNumber" name="payingUnit" property="financer.paymentDiaryNumber" type="pt.utl.ist.fenix.tools.util.Strings"/>
 							<%
-								for (final String s : paymentDiaryNumber) {
+								for (final String s : paymentDiaryNumber.getUnmodifiableList()) {
 							%>
 									<%= s %>
 							<%
@@ -345,7 +345,7 @@
 						<logic:present name="payingUnit" property="financer.paymentDiaryNumber">
 							<bean:define id="transactionNumber" name="payingUnit" property="financer.transactionNumber" type="pt.utl.ist.fenix.tools.util.Strings"/>
 							<%
-								for (final String s : transactionNumber) {
+								for (final String s : transactionNumber.getUnmodifiableList()) {
 							%>
 									<%= s %>
 							<%
