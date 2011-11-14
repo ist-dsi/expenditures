@@ -24,6 +24,7 @@ public class SubmitForApprovalActivity extends MissionProcessActivity<MissionPro
     protected void process(final LateJustificationActivityInformation activityInformation) {
 	final MissionProcess missionProcess = (MissionProcess) activityInformation.getProcess();
 	missionProcess.checkForAnyOverlappingParticipations();
+	missionProcess.checkForSupportDocuments();
 	missionProcess.setIsUnderConstruction(Boolean.FALSE);
 	if (!missionProcess.isOnTime()) {
 	    missionProcess.justifyLateSubmission(activityInformation.getJustification());

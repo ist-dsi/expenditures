@@ -606,4 +606,11 @@ public abstract class MissionProcess extends MissionProcess_Base {
 	mission.checkForAnyOverlappingParticipations();
     }
 
+    public void checkForSupportDocuments() {
+	if (getFilesCount() == 0) {
+	    throw new DomainException(BundleUtil.getFormattedStringFromResourceBundle(
+		    "resources/MissionResources", "error.mission.must.have.a.support.file"));
+	}
+    }
+
 }
