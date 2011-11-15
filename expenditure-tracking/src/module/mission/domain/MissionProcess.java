@@ -588,7 +588,7 @@ public abstract class MissionProcess extends MissionProcess_Base {
 
     public boolean getPersonelExpenseItemsAvailable() {
 	final Mission mission = getMission();
-	return mission.getAreAccomodationItemsAvailable();
+	return mission.getPersonelExpenseItemsAvailable();
     }
 
     public boolean canTogleMissionNature() {
