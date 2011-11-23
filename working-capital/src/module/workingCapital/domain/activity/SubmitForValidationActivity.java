@@ -14,6 +14,7 @@ import module.workingCapital.domain.WorkingCapitalInitialization;
 import module.workingCapital.domain.WorkingCapitalProcess;
 import module.workingCapital.domain.WorkingCapitalTransaction;
 import myorg.domain.User;
+import myorg.domain.VirtualHost;
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
 import myorg.util.BundleUtil;
@@ -74,6 +75,7 @@ public class SubmitForValidationActivity extends WorkflowActivity<WorkingCapital
 	paramMap.put("responsibleName", acquisitionSubmission.getPerson().getName());
 	paramMap.put("IBAN", acquisitionSubmission.getWorkingCapital().getWorkingCapitalInitialization()
 		.getInternationalBankAccountNumber());
+	paramMap.put("logoFilename", "Logo_" + VirtualHost.getVirtualHostForThread().getHostname() + ".png");
 
 	paramMap.put("submissionTransactionNumber", acquisitionSubmission.getNumber());
 	paramMap.put("submissionDescription", acquisitionSubmission.getDescription());

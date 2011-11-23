@@ -36,6 +36,7 @@
 	<parameter name="submissionDebt" isForPrompting="false" class="myorg.domain.util.Money"/>
 	<parameter name="paymentRequired" isForPrompting="false" class="java.lang.String"/>
 	<parameter name="IBAN" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="logoFilename" isForPrompting="false" class="java.lang.String"/>
 
 	<field name="number" class="java.lang.Integer"/>
 	<field name="description" class="java.lang.String"/>
@@ -99,7 +100,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 </box>
 					<graphicElement stretchType="NoStretch"/>
-					<imageExpression class="java.lang.String"><![CDATA["images/Logo_IST_color.png"]]></imageExpression>
+					<imageExpression class="java.lang.String"><![CDATA["images/" + $P{logoFilename}]]></imageExpression>
 				</image>
 				<staticText>
 					<reportElement
