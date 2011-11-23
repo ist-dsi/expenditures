@@ -342,7 +342,7 @@
 				</td>
 				<td>
 					<logic:equal name="payingUnit" property="financer.effectiveFundAllocationPresent" value="true">
-						<logic:present name="payingUnit" property="financer.paymentDiaryNumber">
+						<logic:present name="payingUnit" property="financer.transactionNumber">
 							<bean:define id="transactionNumber" name="payingUnit" property="financer.transactionNumber" type="pt.utl.ist.fenix.tools.util.Strings"/>
 							<%
 								for (final String s : transactionNumber.getUnmodifiableList()) {
