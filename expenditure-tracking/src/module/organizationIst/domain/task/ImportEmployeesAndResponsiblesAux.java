@@ -1,9 +1,13 @@
 package module.organizationIst.domain.task;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import module.organization.domain.Accountability;
 import module.organization.domain.AccountabilityType;
 import module.organization.domain.Person;
 import module.organizationIst.domain.IstAccountabilityType;
+import myorg.domain.MyOrg;
 import myorg.domain.User;
 import net.sourceforge.fenixedu.domain.RemotePerson;
 
@@ -32,6 +36,8 @@ public class ImportEmployeesAndResponsiblesAux {
     }
 
     private static void updateInformation(final IstAccountabilityType istAccountabilityType, final String allInformation) {
+	final Set<String> usernames = new HashSet<String>();
+
 	final AccountabilityType accountabilityType = istAccountabilityType.readAccountabilityType();
 	final LocalDate now = new LocalDate();
 	for (int i = 0; i < allInformation.length(); ) {
@@ -41,12 +47,29 @@ public class ImportEmployeesAndResponsiblesAux {
 
 	    if (sep1 > i && sep2 > sep1 && sep3 > sep2) {
 		final String username = allInformation.substring(i, sep1);
+		usernames.add(username);
 		final String costCenterCode = allInformation.substring(sep2 + 1, sep3);
 
 		updateInformation(now, accountabilityType, username, costCenterCode, allInformation);
 		i = sep3 + 1;
 	    } else {
 		i++;
+	    }
+	}
+
+	for (final User user : MyOrg.getInstance().getUserSet()) {
+	    final String username = user.getUsername();
+	    if (!usernames.contains(username)) {
+		closeAccountabilities(user, accountabilityType, now);
+	    }
+	}
+    }
+
+    private static void closeAccountabilities(final User user, final AccountabilityType accountabilityType, final LocalDate now) {
+	final Person person = user.getPerson();
+	for (final Accountability accountability : person.getParentAccountabilitiesSet()) {
+	    if (accountability.getAccountabilityType() == accountabilityType && accountability.isActive(now)) {
+		accountability.editDates(accountability.getBeginDate(), now);
 	    }
 	}
     }
