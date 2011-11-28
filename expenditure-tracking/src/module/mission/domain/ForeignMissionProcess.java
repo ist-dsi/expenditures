@@ -31,6 +31,7 @@ import module.mission.domain.activity.RevertTerminationActivity;
 import module.mission.domain.activity.SendForProcessTerminationActivity;
 import module.mission.domain.activity.SendForProcessTerminationWithChangesActivity;
 import module.mission.domain.activity.SubmitForApprovalActivity;
+import module.mission.domain.activity.SubmitForApprovalByManagerOrManagementCouncilActivity;
 import module.mission.domain.activity.TogleMissionNatureActivity;
 import module.mission.domain.activity.TogleParticipantSalaryActivity;
 import module.mission.domain.activity.UnAllocateFundsActivity;
@@ -73,6 +74,7 @@ public class ForeignMissionProcess extends ForeignMissionProcess_Base {
 	activitiesAux.add(new DistributeItemCostsActivity());
 	activitiesAux.add(new RemoveItemActivity());
 	activitiesAux.add(new SubmitForApprovalActivity());
+	activitiesAux.add(new SubmitForApprovalByManagerOrManagementCouncilActivity());
 	activitiesAux.add(new UnSubmitForApprovalActivity());
 	activitiesAux.add(new ApproveActivity());
 	activitiesAux.add(new UnApproveActivity());
