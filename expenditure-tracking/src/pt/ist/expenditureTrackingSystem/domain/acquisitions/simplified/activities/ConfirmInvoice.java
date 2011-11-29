@@ -31,7 +31,7 @@ public class ConfirmInvoice extends WorkflowActivity<RegularAcquisitionProcess, 
 		&& !process.isInvoiceReceived()
 		&& !process.getUnconfirmedInvoices(person).isEmpty()
 		&& process.isResponsibleForUnit(person)
-		&& (!ExpenditureTrackingSystem.isInvoiceAllowedToStartAcquisitionProcess()
+		&& (process.isAcquisitionProcessed() // !ExpenditureTrackingSystem.isInvoiceAllowedToStartAcquisitionProcess()
 			|| process.isPendingInvoiceConfirmation());
     }
 
