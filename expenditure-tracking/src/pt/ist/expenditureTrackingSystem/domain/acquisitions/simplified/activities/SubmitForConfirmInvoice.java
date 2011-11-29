@@ -15,7 +15,8 @@ public class SubmitForConfirmInvoice extends
     public boolean isActive(RegularAcquisitionProcess process, User user) {
 	return isUserProcessOwner(process, user)
 		&& ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user)
-		&& process.isInvoiceReceived() && !process.getFiles(AcquisitionInvoice.class).isEmpty()
+		&& process.isInvoiceReceived()
+		&& !process.getFiles(AcquisitionInvoice.class).isEmpty()
 		&& process.getRequest().isCurrentTotalRealValueFullyDistributed();
     }
 
