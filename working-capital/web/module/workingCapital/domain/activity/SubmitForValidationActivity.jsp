@@ -8,9 +8,9 @@
 <bean:define id="processId" name="process" property="externalId" type="java.lang.String"/>
 <bean:define id="name" name="information" property="activityName"/>
 
-<script type="text/javascript" src="/bennu/javaScript/jquery.ui.draggable.js"></script>
-<script type="text/javascript" src="/bennu/javaScript/jquery.alerts.js"></script>
-<script type="text/javascript" src="/bennu/javaScript/alertHandlers.js"></script>
+<script type="text/javascript" src="<%= request.getContextPath() + "/javaScript/jquery.ui.draggable.js" %>"></script>
+<script type="text/javascript" src="<%= request.getContextPath() + "/javaScript/jquery.alerts.js" %>"></script>
+<script type="text/javascript" src="<%= request.getContextPath() + "/javaScript/alertHandlers.js" %>"></script>
 
 <div class="dinline forminline">
 	
