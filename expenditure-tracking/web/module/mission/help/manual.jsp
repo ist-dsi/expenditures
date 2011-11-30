@@ -3,7 +3,7 @@
 
 <h2><bean:message bundle="MISSION_RESOURCES" key="text.help.title.index"/></h2>
 
-<!-- BLOCK_HAS_CONTEXT -->
+<%= pt.ist.fenixWebFramework.servlets.filters.contentRewrite.RequestRewriter.BLOCK_HAS_CONTEXT_PREFIX %>
 
 <ol>
 	<li><!-- NO_CHECKSUM --><a href="#introduction"><bean:message bundle="MISSION_RESOURCES" key="text.help.title.introduction"/></a></li>
@@ -339,4 +339,4 @@
 <p align="center"><img src="<%= request.getContextPath() + "/images/mission/help/Screen08_01.png" %>" alt="archieve_process" /></p>
 <p><bean:message bundle="MISSION_RESOURCES" key="text.help.content.archieveProcess.withChanges.paragraph19"/></p>
 
-<!-- END_BLOCK_HAS_CONTEXT -->
+<%= pt.ist.fenixWebFramework.servlets.filters.contentRewrite.RequestRewriter.END_BLOCK_HAS_CONTEXT_PREFIX %>

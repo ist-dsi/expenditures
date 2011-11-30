@@ -433,9 +433,9 @@
 					
 			
 			<p class="aright">
-				<%= ContentContextInjectionRewriter.BLOCK_HAS_CONTEXT_PREFIX %>
+				<%= pt.ist.fenixWebFramework.servlets.filters.contentRewrite.RequestRewriter.BLOCK_HAS_CONTEXT_PREFIX %>
 				<%= GenericChecksumRewriter.NO_CHECKSUM_PREFIX %><a href="#"><bean:message key="link.top" bundle="EXPENDITURE_RESOURCES"/></a>
-				<%= ContentContextInjectionRewriter.END_BLOCK_HAS_CONTEXT_PREFIX %>
+				<%= pt.ist.fenixWebFramework.servlets.filters.contentRewrite.RequestRewriter.END_BLOCK_HAS_CONTEXT_PREFIX %>
 			</p>
 			
 			

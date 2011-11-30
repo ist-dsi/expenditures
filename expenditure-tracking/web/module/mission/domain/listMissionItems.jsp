@@ -15,7 +15,7 @@
 
 <h3 class="mtop15 mbottom1"><bean:message key="label.mission.items" bundle="MISSION_RESOURCES"/></h3>
 
-<%= ContentContextInjectionRewriter.BLOCK_HAS_CONTEXT_PREFIX %>
+<%= pt.ist.fenixWebFramework.servlets.filters.contentRewrite.RequestRewriter.BLOCK_HAS_CONTEXT_PREFIX %>
 
 <table class="tstyle3 thleft tdleft mbottom2" style="width: 100%;" id="itemResume">
 	<tr>
@@ -83,7 +83,7 @@
 	
 </table>
 
-<%= ContentContextInjectionRewriter.END_BLOCK_HAS_CONTEXT_PREFIX %>
+<%= pt.ist.fenixWebFramework.servlets.filters.contentRewrite.RequestRewriter.END_BLOCK_HAS_CONTEXT_PREFIX %>
 
 <wf:activityLink processName="process" activityName="AddItemActivity" scope="request">
 	<bean:message bundle="MISSION_RESOURCES" key="activity.AddItemActivity"/>
