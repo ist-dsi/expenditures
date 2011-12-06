@@ -66,10 +66,12 @@ public class ImportEmployeesAndResponsiblesAux {
     }
 
     private static void closeAccountabilities(final User user, final AccountabilityType accountabilityType, final LocalDate now) {
-	final Person person = user.getPerson();
-	for (final Accountability accountability : person.getParentAccountabilitiesSet()) {
-	    if (accountability.getAccountabilityType() == accountabilityType && accountability.isActive(now)) {
-		accountability.editDates(accountability.getBeginDate(), now);
+	if (user.hasPerson()) {
+	    final Person person = user.getPerson();
+	    for (final Accountability accountability : person.getParentAccountabilitiesSet()) {
+		if (accountability.getAccountabilityType() == accountabilityType && accountability.isActive(now)) {
+		    accountability.editDates(accountability.getBeginDate(), now);
+		}
 	    }
 	}
     }
