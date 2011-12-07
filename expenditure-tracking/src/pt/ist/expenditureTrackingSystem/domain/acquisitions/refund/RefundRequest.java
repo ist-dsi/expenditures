@@ -117,4 +117,26 @@ public class RefundRequest extends RefundRequest_Base {
 	return result;
     }
 
+    public void createFundAllocationRequest(final boolean isFinalFundAllocation) {
+	for (final Financer financer : getFinancersSet()) {
+	    financer.createFundAllocationRequest(isFinalFundAllocation);
+	}
+    }
+
+    @Override
+    public void unapprove(final Person person) {
+        super.unapprove(person);
+        cancelFundAllocationRequest(false);
+    }
+
+    public void cancel() {
+	cancelFundAllocationRequest(false);
+    }
+
+    public void cancelFundAllocationRequest(final boolean isFinalFundAllocation) {
+	for (final Financer financer : getFinancersSet()) {
+	    financer.cancelFundAllocationRequest(isFinalFundAllocation);
+	}
+    }
+
 }

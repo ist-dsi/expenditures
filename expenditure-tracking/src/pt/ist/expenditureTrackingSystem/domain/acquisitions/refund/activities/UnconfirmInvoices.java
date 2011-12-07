@@ -4,6 +4,7 @@ import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import myorg.domain.User;
 import myorg.util.BundleUtil;
+import pt.ist.expenditureTrackingSystem._development.ExternalIntegration;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
@@ -25,7 +26,11 @@ public class UnconfirmInvoices extends WorkflowActivity<RefundProcess, ActivityI
 
     @Override
     protected void process(ActivityInformation<RefundProcess> activityInformation) {
-	activityInformation.getProcess().unconfirmInvoicesByPerson(Person.getLoggedPerson());
+	final RefundProcess process = activityInformation.getProcess();
+	process.unconfirmInvoicesByPerson(Person.getLoggedPerson());
+	if (ExternalIntegration.isActive()) {
+	    process.getRequest().cancelFundAllocationRequest(true);
+	}
     }
 
     @Override

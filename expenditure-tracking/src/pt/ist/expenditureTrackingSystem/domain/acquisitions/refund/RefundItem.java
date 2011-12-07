@@ -12,6 +12,7 @@ import myorg.domain.util.Money;
 import org.joda.time.LocalDate;
 
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionItemClassification;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestWithPayment;
@@ -234,4 +235,5 @@ public class RefundItem extends RefundItem_Base {
 	}
 	return invoices;
     }
+
 }

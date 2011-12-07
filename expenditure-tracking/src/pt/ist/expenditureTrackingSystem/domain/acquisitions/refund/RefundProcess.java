@@ -20,6 +20,7 @@ import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
 import myorg.util.BundleUtil;
 import myorg.util.ClassNameBundle;
+import pt.ist.expenditureTrackingSystem._development.ExternalIntegration;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
@@ -238,7 +239,15 @@ public class RefundProcess extends RefundProcess_Base {
 
     @Override
     public void submitForFundAllocation() {
+	if (ExternalIntegration.isActive()) {
+	    createFundAllocationRequest(false);
+	}
 	new RefundProcessState(this, RefundProcessStateType.APPROVED);
+    }
+
+    public void createFundAllocationRequest(final boolean isFinalFundAllocation) {
+	final RefundRequest refundRequest = getRequest();
+	refundRequest.createFundAllocationRequest(isFinalFundAllocation);
     }
 
     @Override
@@ -293,6 +302,7 @@ public class RefundProcess extends RefundProcess_Base {
 	}
 
 	if (getRequest().isConfirmedForAllInvoices()) {
+	    createFundAllocationRequest(true);
 	    confirmInvoices();
 	}
     }
@@ -425,6 +435,7 @@ public class RefundProcess extends RefundProcess_Base {
     }
 
     public void cancel() {
+	getRequest().cancel();
 	new RefundProcessState(this, RefundProcessStateType.CANCELED);
     }
 
