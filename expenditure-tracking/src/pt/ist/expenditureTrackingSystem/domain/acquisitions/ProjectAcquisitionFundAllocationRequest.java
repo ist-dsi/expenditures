@@ -270,4 +270,16 @@ public class ProjectAcquisitionFundAllocationRequest extends ProjectAcquisitionF
         return getExternalRegistrationDate() != null;
     }
 
+    @Override
+    public void handle(final SQLException e) {
+	// TODO : Check and improve this
+	if (e.getMessage().indexOf("duplicate") >= 0) {
+	    if (getExternalRegistrationDate() == null) {
+		registerOnExternalSystem();
+	    }
+	} else {
+	    super.handle(e);
+	}
+    }
+
 }
