@@ -41,7 +41,7 @@ public class EmailDigesterUtil {
 	List<String> toAddress = new ArrayList<String>();
 	Language.setLocale(Language.getDefaultLocale());
 	for (Person person : getPeopleToProcess()) {
-	    Authenticate.authenticate(person.getUsername(), StringUtils.EMPTY);
+	    Authenticate.authenticate(person.getUsername(), StringUtils.EMPTY, false);
 	    Map<AcquisitionProcessStateType, MultiCounter<AcquisitionProcessStateType>> generateAcquisitionMap =
 		ProcessMapGenerator.generateAcquisitionMap(person, true);
 	    Map<RefundProcessStateType, MultiCounter<RefundProcessStateType>> generateRefundMap =
