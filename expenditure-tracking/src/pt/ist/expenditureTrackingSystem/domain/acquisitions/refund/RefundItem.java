@@ -12,7 +12,6 @@ import myorg.domain.util.Money;
 import org.joda.time.LocalDate;
 
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionItemClassification;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestWithPayment;
@@ -59,7 +58,7 @@ public class RefundItem extends RefundItem_Base {
 
     @Override
     public BigDecimal getVatValue() {
-	return null;
+	return BigDecimal.ZERO;
     }
 
     public void edit(Money valueEstimation, CPVReference reference, AcquisitionItemClassification classification,
