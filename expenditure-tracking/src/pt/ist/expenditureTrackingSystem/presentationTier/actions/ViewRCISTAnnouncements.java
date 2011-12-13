@@ -28,7 +28,7 @@ import pt.utl.ist.fenix.tools.util.CollectionPager;
 public class ViewRCISTAnnouncements extends ContextBaseAction {
 
     private static final int REQUESTS_PER_PAGE = 10;
-    private static final String PUBLIC_LAYOUT = "/public/rcistAnnouncementsLayout.jsp";
+    private static final String PUBLIC_LAYOUT = "/layout/rcistAnnouncements";
 
     public final ActionForward viewRCIST(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) throws Exception {
