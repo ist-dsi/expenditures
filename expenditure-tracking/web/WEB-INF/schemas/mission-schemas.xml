@@ -122,7 +122,6 @@
 
 <schema name="module.mission.domain.activity.ItemActivityInformation.participants" type="module.mission.domain.activity.ItemActivityInformation" bundle="MISSION_RESOURCES">
 	<slot name="people" layout="option-select" key="label.mission.item.people">
-		<property name="choiceType" value="pt.ist.expenditureTrackingSystem.domain.organization.Person"/>
 		<property name="eachSchema" value="person-name"/>
 		<property name="eachLayout" value="values-dash"/>
         <property name="providerClass" value="module.mission.presentationTier.provider.MissionItemParticipantProvider" />
