@@ -278,6 +278,8 @@ public class ProjectAcquisitionFundAllocationRequest extends ProjectAcquisitionF
 		registerOnExternalSystem();
 	    }
 	} else {
+	    e.printStackTrace();
+	    System.out.println(e.getMessage());
 	    super.handle(e);
 	}
     }
