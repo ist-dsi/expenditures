@@ -272,14 +272,11 @@ public class ProjectAcquisitionFundAllocationRequest extends ProjectAcquisitionF
 
     @Override
     public void handle(final SQLException e) {
-	// TODO : Check and improve this
-	if (e.getMessage().indexOf("duplicate") >= 0) {
+	if (e.getMessage().indexOf("unique") >= 0) {
 	    if (getExternalRegistrationDate() == null) {
 		registerOnExternalSystem();
 	    }
 	} else {
-	    e.printStackTrace();
-	    System.out.println(e.getMessage());
 	    super.handle(e);
 	}
     }
