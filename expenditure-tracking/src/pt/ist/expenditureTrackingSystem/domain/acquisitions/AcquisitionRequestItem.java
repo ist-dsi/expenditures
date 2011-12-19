@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import module.workflow.domain.ProcessFile;
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Address;
 import myorg.domain.util.Money;
@@ -57,6 +58,13 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 	setClassification(classification);
 
 	createUnitItem();
+
+	for (final ProcessFile processFile : acquisitionRequest.getProcess().getFilesSet()) {
+	    if (processFile instanceof AcquisitionInvoice && !processFile.isArchieved()) {
+		final AcquisitionInvoice acquisitionInvoice = (AcquisitionInvoice) processFile;
+		acquisitionInvoice.addRequestItems(this);
+	    }
+	}
     }
 
     private void checkLimits(AcquisitionRequest acquisitionRequest, Integer quantity, Money unitValue) {
