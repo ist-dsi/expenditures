@@ -4,9 +4,16 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
+
+<%@page import="myorg.presentationTier.LayoutContext"%>
+<%@page import="myorg.presentationTier.actions.ContextBaseAction"%>
+
 <html:html xhtml="true">
 <head>
-	<tiles:insert page="layout/head.jsp"/>
+	<% final LayoutContext layoutContext = (LayoutContext) ContextBaseAction.getContext(request); %>
+	<logic:iterate id="head" collection="<%= layoutContext.getHead() %>" type="java.lang.String">
+		<jsp:include page="<%= head %>"/>
+	</logic:iterate>
 </head>
 
 <body>
