@@ -10,7 +10,6 @@ import module.dashBoard.WidgetRegister.WidgetAditionPredicate;
 import module.dashBoard.domain.DashBoardPanel;
 import module.dashBoard.widgets.WidgetController;
 import module.organization.presentationTier.actions.OrganizationModelAction;
-import module.organizationIst.errorHandling.EmailAndVirtualHostAwareErrorHandler;
 import module.workflow.widgets.ProcessListWidget;
 import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.ModuleInitializer;
@@ -89,8 +88,6 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 
 	registerChecksumFilterException();
 	OrganizationModelAction.partyViewHookManager.register(new ExpendituresView());
-
-	EmbeddedApplication.registerErrorListener(new EmailAndVirtualHostAwareErrorHandler());
     }
 
     private static boolean isInitialized = false;
