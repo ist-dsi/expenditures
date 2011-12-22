@@ -100,6 +100,21 @@ public class SubmitForValidationActivity extends WorkflowActivity<WorkingCapital
     }
 
     @Override
+    public String getUsedBundle() {
+	return "resources/WorkingCapitalResources";
+    }
+
+    @Override
+    protected String[] getArgumentsDescription(SubmitForValidationActivityInformation activityInformation) {
+	if (activityInformation.isLastSubmission()) {
+	    return new String[] { "("
+		    + BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources",
+			    "label.module.workingCapital.initialization.lastSubmission") + ")" };
+	}
+	return new String[] { "" };
+    }
+
+    @Override
     public ActivityInformation<WorkingCapitalProcess> getActivityInformation(final WorkingCapitalProcess process) {
 	return new SubmitForValidationActivityInformation(process, this);
     }
