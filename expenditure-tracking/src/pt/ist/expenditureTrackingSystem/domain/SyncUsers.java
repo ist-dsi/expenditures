@@ -108,7 +108,7 @@ public class SyncUsers extends SyncUsers_Base {
 	    final module.organization.domain.Person organizationPerson = user.getPerson();
 	    if (organizationPerson != null) {
 		if (!localizedName.equals(organizationPerson.getName())) {
-		    organizationPerson.setName(name.getContent());
+		    organizationPerson.setPartyName(name);
 		    result = 1;
 		}
 		syncEmail(organizationPerson, remotePersonOid);
