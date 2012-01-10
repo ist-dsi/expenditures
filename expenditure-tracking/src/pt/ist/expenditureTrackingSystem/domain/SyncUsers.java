@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import jvstm.TransactionalCommand;
 import myorg.domain.User;
 import myorg.domain.scheduler.WriteCustomTask;
 import net.sourceforge.fenixedu.domain.RemotePerson;
@@ -93,10 +92,11 @@ public class SyncUsers extends SyncUsers_Base {
 	@Override
 	protected void doService() {
 	    final User user = User.findByUsername(username);
+	    final MultiLanguageString name = MultiLanguageString.importFromString(mlname);
+	    final String localizedName = name.getContent();
+
 	    final Person person = user.getExpenditurePerson();
 	    if (person != null) {
-		final MultiLanguageString name = MultiLanguageString.importFromString(mlname);
-		final String localizedName = name.getContent();
 		if (!localizedName.equals(person.getName())) {
 		    person.setName(name.getContent());
 		    result = 1;
@@ -104,7 +104,14 @@ public class SyncUsers extends SyncUsers_Base {
 		// if (email != null && !email.equals(person.getEmail())) {
 		// person.setEmail(email);
 		// }
-		syncEmail(person, remotePersonOid);
+	    }
+	    final module.organization.domain.Person organizationPerson = user.getPerson();
+	    if (organizationPerson != null) {
+		if (!localizedName.equals(organizationPerson.getName())) {
+		    organizationPerson.setName(name.getContent());
+		    result = 1;
+		}
+		syncEmail(organizationPerson, remotePersonOid);
 	    }
 	}
     }
@@ -131,9 +138,7 @@ public class SyncUsers extends SyncUsers_Base {
 	return result[0];
     }
 
-    private static void syncEmail(final Person exPerson, final String remotePersonOid) {
-	final User user = exPerson.getUser();
-	final module.organization.domain.Person person = user.getPerson();
+    private static void syncEmail(final module.organization.domain.Person person, final String remotePersonOid) {
 	if (person != null) {
 	    RemotePerson remotePerson = person.getRemotePerson();
 	    final RemoteHost remoteHost = getRemoteHost();
@@ -153,8 +158,6 @@ public class SyncUsers extends SyncUsers_Base {
 		// exPerson.setEmail(null);
 		// }
 	    }
-	} else {
-	    System.out.println("No person found for expenditure person: " + user.getUsername());
 	}
     }
 
