@@ -3,6 +3,7 @@ package pt.ist.expenditureTrackingSystem.domain;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -75,6 +76,31 @@ public class SyncSuppliersAux {
 
     }
 
+    public static class GiafAddress {
+	public String ruaEnt = " ";
+	public String locEnt = " ";
+	public String codPos = " ";
+	public String codPai = " ";
+	public String telEnt = " ";
+	public String faxEnt = " ";
+	public String email = " ";
+
+	public GiafAddress(final ResultSet resultSet) throws SQLException {
+	    ruaEnt = get(resultSet, 2);
+	    locEnt = get(resultSet, 3);
+	    codPos = get(resultSet, 4);
+	    codPai = get(resultSet, 5);
+	    telEnt = get(resultSet, 6);
+	    faxEnt = get(resultSet, 7);
+	    email = get(resultSet, 8);
+	}
+
+	private String get(final ResultSet resultSet, final int i) throws SQLException {
+	    final String string = resultSet.getString(i);
+	    return string == null || string.length() == 0 ? " " : string.replace('\n', ' ').replace('\t', ' ');
+	}
+    }
+
     public static class GiafSupplier {
 	public String codEnt;
 	public String numFis;
@@ -82,6 +108,7 @@ public class SyncSuppliersAux {
 	public String nom_ent_abv;
 	public boolean canceled = false;
 
+	final Collection<GiafAddress> addresses = new ArrayList<GiafAddress>();
 	public String ruaEnt = " ";
 	public String locEnt = " ";
 	public String codPos = " ";
@@ -98,13 +125,7 @@ public class SyncSuppliersAux {
 	}
 
 	public void setContactInformation(final ResultSet resultSet) throws SQLException {
-	    ruaEnt = get(resultSet, 2);
-	    locEnt = get(resultSet, 3);
-	    codPos = get(resultSet, 4);
-	    codPai = get(resultSet, 5);
-	    telEnt = get(resultSet, 6);
-	    faxEnt = get(resultSet, 7);
-	    email = get(resultSet, 8);
+	    addresses.add(new GiafAddress(resultSet));
 	}
 
 	private String get(final ResultSet resultSet, final int i) throws SQLException {
@@ -216,7 +237,7 @@ public class SyncSuppliersAux {
 
 	@Override
 	public String getQueryString() {
-	    return "SELECT cod_ent, rua_ent, loc_ent, cod_pos, cod_pai, tel_ent, fax_ent, email FROM GIDMORADA";
+	    return "SELECT cod_ent, rua_ent, loc_ent, cod_pos, cod_pai, tel_ent, fax_ent, email, num_mor FROM GIDMORADA";
 	}
 
 	@Override
