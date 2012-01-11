@@ -125,7 +125,14 @@ public class SyncSuppliersAux {
 	}
 
 	public void setContactInformation(final ResultSet resultSet) throws SQLException {
-	    addresses.add(new GiafAddress(resultSet));
+	    //addresses.add(new GiafAddress(resultSet));
+	    ruaEnt = get(resultSet, 2);
+	    locEnt = get(resultSet, 3);
+	    codPos = get(resultSet, 4);
+	    codPai = get(resultSet, 5);
+	    telEnt = get(resultSet, 6);
+	    faxEnt = get(resultSet, 7);
+	    email = get(resultSet, 8);
 	}
 
 	private String get(final ResultSet resultSet, final int i) throws SQLException {
