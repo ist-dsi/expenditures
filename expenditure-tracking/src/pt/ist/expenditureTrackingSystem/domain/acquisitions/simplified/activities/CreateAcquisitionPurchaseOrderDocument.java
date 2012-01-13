@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import module.finance.domain.SupplierContact;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import myorg._development.PropertiesManager;
@@ -23,7 +24,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionPr
 import pt.ist.expenditureTrackingSystem.util.ReportUtils;
 
 public class CreateAcquisitionPurchaseOrderDocument extends
-WorkflowActivity<RegularAcquisitionProcess, ActivityInformation<RegularAcquisitionProcess>> {
+	WorkflowActivity<RegularAcquisitionProcess, CreateAcquisitionPurchaseOrderDocumentInformation> {
 
     private static final String EXTENSION_PDF = "pdf";
 
@@ -34,11 +35,16 @@ WorkflowActivity<RegularAcquisitionProcess, ActivityInformation<RegularAcquisiti
     }
 
     @Override
-    protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
+    protected void process(CreateAcquisitionPurchaseOrderDocumentInformation activityInformation) {
 	RegularAcquisitionProcess process = activityInformation.getProcess();
 	String requestID = process.getAcquisitionRequestDocumentID();
-	byte[] file = createPurchaseOrderDocument(process.getAcquisitionRequest(), requestID);
+	byte[] file = createPurchaseOrderDocument(process.getAcquisitionRequest(), requestID, activityInformation.getSupplierContact());
 	new PurchaseOrderDocument(process, file, requestID + "." + EXTENSION_PDF, requestID);
+    }
+
+    @Override
+    public ActivityInformation<RegularAcquisitionProcess> getActivityInformation(RegularAcquisitionProcess process) {
+	return new CreateAcquisitionPurchaseOrderDocumentInformation(process, this);
     }
 
     @Override
@@ -56,9 +62,10 @@ WorkflowActivity<RegularAcquisitionProcess, ActivityInformation<RegularAcquisiti
 	return !process.getFiles(PurchaseOrderDocument.class).isEmpty();
     }
 
-    protected byte[] createPurchaseOrderDocument(final AcquisitionRequest acquisitionRequest, final String requestID) {
+    protected byte[] createPurchaseOrderDocument(final AcquisitionRequest acquisitionRequest, final String requestID, final SupplierContact supplierContact) {
 	final Map<String, Object> paramMap = new HashMap<String, Object>();
 	paramMap.put("acquisitionRequest", acquisitionRequest);
+	paramMap.put("supplierContact", supplierContact);
 	paramMap.put("requestID", requestID);
 	paramMap.put("responsibleName", getLoggedPerson().getExpenditurePerson().getName());
 	DeliveryLocalList deliveryLocalList = new DeliveryLocalList();
@@ -193,6 +200,11 @@ WorkflowActivity<RegularAcquisitionProcess, ActivityInformation<RegularAcquisiti
 	    this.address = address;
 	}
 
+    }
+
+    @Override
+    public boolean isDefaultInputInterfaceUsed() {
+        return false;
     }
 
 }

@@ -1,15 +1,12 @@
 package pt.ist.expenditureTrackingSystem.domain.organization;
 
-import java.util.HashSet;
 import java.util.Set;
 
+import module.finance.domain.SupplierContact;
 import myorg.domain.MyOrg;
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Address;
 import myorg.domain.util.Money;
-
-import org.apache.commons.lang.StringUtils;
-
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.SavedSearch;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
@@ -22,10 +19,6 @@ import pt.ist.expenditureTrackingSystem.domain.announcements.CCPAnnouncement;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateSupplierBean;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.plugins.luceneIndexing.IndexableField;
-import pt.ist.fenixframework.plugins.luceneIndexing.domain.IndexDocument;
-import pt.ist.fenixframework.plugins.luceneIndexing.domain.interfaces.Indexable;
-import pt.ist.fenixframework.plugins.luceneIndexing.domain.interfaces.Searchable;
-import pt.utl.ist.fenix.tools.util.StringNormalizer;
 
 public class Supplier extends Supplier_Base /* implements Indexable, Searchable */ {
 
@@ -59,15 +52,10 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
 	setFiscalIdentificationCode(fiscalCode);
     }
 
-    public Supplier(String name, String abbreviatedName, String fiscalCode, Address address, String phone, String fax,
-	    String email, String nib) {
+    public Supplier(String name, String abbreviatedName, String fiscalCode, String nib) {
 	this(fiscalCode);
 	setName(name);
 	setAbbreviatedName(abbreviatedName);
-	setAddress(address);
-	setPhone(phone);
-	setFax(fax);
-	setEmail(email);
 	setNib(nib);
     }
 
@@ -202,10 +190,12 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
     }
 
     @Service
-    public static Supplier createNewSupplier(CreateSupplierBean createSupplierBean) {
-	return new Supplier(createSupplierBean.getName(), createSupplierBean.getAbbreviatedName(),
-		createSupplierBean.getFiscalIdentificationCode(), createSupplierBean.getAddress(), createSupplierBean.getPhone(),
-		createSupplierBean.getFax(), createSupplierBean.getEmail(), createSupplierBean.getNib());
+    public static Supplier createNewSupplier(final CreateSupplierBean createSupplierBean) {
+	final Supplier supplier = new Supplier(createSupplierBean.getName(), createSupplierBean.getAbbreviatedName(),
+		createSupplierBean.getFiscalIdentificationCode(), createSupplierBean.getNib());
+	supplier.registerContact(createSupplierBean.getAddress(), createSupplierBean.getPhone(),
+		createSupplierBean.getFax(), createSupplierBean.getEmail());
+	return supplier;
     }
 
     @Override
@@ -246,6 +236,20 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
 	}
     }
 
+    public SupplierContact registerContact(final Address address, final String phone, final String fax, final String email) {
+	final SupplierContact contact = getSupplierContact(address, phone, fax, email);
+	return contact == null ? new SupplierContact(this, address, phone, fax, email) : contact;
+    }
+
+    private SupplierContact getSupplierContact(final Address address, String phone, String fax, String email) {
+	for (final SupplierContact contact : getSupplierContactSet()) {
+	    if (contact.matches(address, phone, fax, email)) {
+		return contact;
+	    }
+	}
+	return null;
+    }
+
 /*
     @Override
     public IndexDocument getDocumentToIndex() {
@@ -264,5 +268,25 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
 	return set;
     }
 */
+
+    @Override
+    public Address getAddress() {
+	return hasAnySupplierContact() ? getSupplierContactIterator().next().getAddress() : super.getAddress();
+    }
+
+    @Override
+    public String getPhone() {
+	return hasAnySupplierContact() ? getSupplierContactIterator().next().getPhone() : super.getPhone();
+    }
+
+    @Override
+    public String getFax() {
+	return hasAnySupplierContact() ? getSupplierContactIterator().next().getFax() : super.getFax();
+    }
+
+    @Override
+    public String getEmail() {
+	return hasAnySupplierContact() ? getSupplierContactIterator().next().getEmail() : super.getEmail();
+    }
 
 }

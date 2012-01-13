@@ -60,6 +60,32 @@
 				</font>
 			</logic:notPresent>
 		</logic:present>
+		<br/>
+		<br/>
+		<h3><bean:message key="supplier.contacts.title" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/></h3>
+		<logic:empty name="supplierBean" property="supplier.supplierContactSet">
+			<span>
+				<bean:message key="supplier.contacts.none" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+			</span>
+		</logic:empty>
+		<logic:iterate id="supplierContact" name="supplierBean" property="supplier.supplierContactSet">
+			<div class="ruler1">
+			<fr:view name="supplierContact" type="module.finance.domain.SupplierContact">
+				<fr:schema type="module.finance.domain.SupplierContact" bundle="EXPENDITURE_ORGANIZATION_RESOURCES">
+					<fr:slot name="address" key="supplier.label.address" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+					<fr:slot name="phone" key="supplier.label.phone" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+					<fr:slot name="fax" key="supplier.label.fax" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+					<fr:slot name="email" key="supplier.label.email" bundle="EXPENDITURE_ORGANIZATION_RESOURCES">
+						<fr:property name="size" value="40"/>
+					</fr:slot>
+				</fr:schema>
+				<fr:layout name="tabular">
+					<fr:property name="classes" value="tstyle1"/>
+					<fr:property name="rowClasses" value=",,,,,,,,"/>
+				</fr:layout>
+			</fr:view>
+			</div>
+		</logic:iterate>
 	</div>
 
 	<bean:define id="supplierOID" name="supplier" property="externalId" type="java.lang.String"/>

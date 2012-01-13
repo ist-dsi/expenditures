@@ -187,12 +187,6 @@
 	</slot>
 	<slot name="abbreviatedName" key="supplier.label.abbreviatedName" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 	<slot name="nib" key="supplier.label.nib" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
-	<slot name="address" key="supplier.label.address" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
-	<slot name="phone" key="supplier.label.phone" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
-	<slot name="fax" key="supplier.label.fax" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
-	<slot name="email" key="supplier.label.email" bundle="EXPENDITURE_ORGANIZATION_RESOURCES">
-		<property name="size" value="40"/>
-	</slot>
 </schema>
 
 <schema name="editSupplier"

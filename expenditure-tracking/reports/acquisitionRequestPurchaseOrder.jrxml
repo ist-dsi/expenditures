@@ -9,6 +9,7 @@
 	<import value="java.util.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
 	<parameter name="acquisitionRequest" class="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest" isForPrompting="false"/>
+	<parameter name="supplierContact" class="module.finance.domain.SupplierContact" isForPrompting="false"/>
 	<parameter name="path" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="deliveryLocals" class="java.util.Collection" isForPrompting="false"/>
 	<parameter name="requestID" class="java.lang.String" isForPrompting="false"/>
@@ -134,19 +135,19 @@ $P{acquisitionRequest}.getProcess().getAcquisitionProposalDocument().getProposal
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA["<style isBold=\"true\" pdfFontName=\"Helvetica-Bold\">" + org.apache.commons.lang.StringEscapeUtils.escapeXml($P{acquisitionRequest}.getSupplier().getName()) + "</style>\n" +
 
-($P{acquisitionRequest}.getSupplier().getAddress() != null ?
+($P{supplierContact}.getAddress() != null ?
 
-(($P{acquisitionRequest}.getSupplier().getAddress().getLine1() != null &&
-!$P{acquisitionRequest}.getSupplier().getAddress().getLine1().isEmpty() ?
-$P{acquisitionRequest}.getSupplier().getAddress().getLine1() + "\n" : "") +
+(($P{supplierContact}.getAddress().getLine1() != null &&
+!$P{supplierContact}.getAddress().getLine1().isEmpty() ?
+$P{supplierContact}.getAddress().getLine1() + "\n" : "") +
 
-($P{acquisitionRequest}.getSupplier().getAddress().getLine2() != null &&
-!$P{acquisitionRequest}.getSupplier().getAddress().getLine2().isEmpty() ?
-$P{acquisitionRequest}.getSupplier().getAddress().getLine2() + "\n" : "") +
+($P{supplierContact}.getAddress().getLine2() != null &&
+!$P{supplierContact}.getAddress().getLine2().isEmpty() ?
+$P{supplierContact}.getAddress().getLine2() + "\n" : "") +
 
-$P{acquisitionRequest}.getSupplier().getAddress().getPostalCode() + ", " +
-$P{acquisitionRequest}.getSupplier().getAddress().getLocation() + "\n" +
-$P{acquisitionRequest}.getSupplier().getAddress().getCountry())
+$P{supplierContact}.getAddress().getPostalCode() + ", " +
+$P{supplierContact}.getAddress().getLocation() + "\n" +
+$P{supplierContact}.getAddress().getCountry())
 
 : "")]]></textFieldExpression>
 			</textField>

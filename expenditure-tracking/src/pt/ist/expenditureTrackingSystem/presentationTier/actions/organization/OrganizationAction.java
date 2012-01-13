@@ -808,13 +808,6 @@ public class OrganizationAction extends BaseAction {
 	spreadsheet.setHeader("nom_ent");
 	spreadsheet.setHeader("nom_ent_abv");
 	spreadsheet.setHeader("canceled");
-	spreadsheet.setHeader("rua_ent");
-	spreadsheet.setHeader("loc_ent");
-	spreadsheet.setHeader("cod_pos");
-	spreadsheet.setHeader("cod_pai");
-	spreadsheet.setHeader("tel_ent");
-	spreadsheet.setHeader("fax_ent");
-	spreadsheet.setHeader("email");
 
 	final SupplierMap supplierMap = new SupplierMap();
 	final SupplierReader supplierReader = new SupplierReader(supplierMap);
@@ -827,13 +820,6 @@ public class OrganizationAction extends BaseAction {
 	    row.setCell(giafSupplier.nom_ent == null ? "" : giafSupplier.nom_ent);
 	    row.setCell(giafSupplier.nom_ent_abv == null ? "" : giafSupplier.nom_ent_abv);
 	    row.setCell(Boolean.toString(giafSupplier.canceled));
-	    row.setCell(giafSupplier.ruaEnt == null ? "" : giafSupplier.ruaEnt);
-	    row.setCell(giafSupplier.locEnt == null ? "" : giafSupplier.locEnt);
-	    row.setCell(giafSupplier.codPos == null ? "" : giafSupplier.codPos);
-	    row.setCell(giafSupplier.codPai == null ? "" : giafSupplier.codPai);
-	    row.setCell(giafSupplier.telEnt == null ? "" : giafSupplier.telEnt);
-	    row.setCell(giafSupplier.faxEnt == null ? "" : giafSupplier.faxEnt);
-	    row.setCell(giafSupplier.email == null ? "" : giafSupplier.email);
 	}
 
 	return spreadsheet;

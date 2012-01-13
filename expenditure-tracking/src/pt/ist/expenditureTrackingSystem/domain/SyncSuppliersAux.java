@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import module.finance.domain.SupplierContact;
 import myorg.domain.MyOrg;
 import myorg.domain.VirtualHost;
 import myorg.domain.util.Address;
@@ -85,6 +86,8 @@ public class SyncSuppliersAux {
 	public String faxEnt = " ";
 	public String email = " ";
 
+	private Address address = null;
+
 	public GiafAddress(final ResultSet resultSet) throws SQLException {
 	    ruaEnt = get(resultSet, 2);
 	    locEnt = get(resultSet, 3);
@@ -99,6 +102,14 @@ public class SyncSuppliersAux {
 	    final String string = resultSet.getString(i);
 	    return string == null || string.length() == 0 ? " " : string.replace('\n', ' ').replace('\t', ' ');
 	}
+
+	public Address getAddress(final Set<GiafCountry> giafCountries) {
+	    if (address == null) {
+		final String country = getCountry(giafCountries, this);
+		address = new Address(ruaEnt, null, codPos, locEnt, country);
+	    }
+	    return address;
+	}
     }
 
     public static class GiafSupplier {
@@ -109,13 +120,6 @@ public class SyncSuppliersAux {
 	public boolean canceled = false;
 
 	final Collection<GiafAddress> addresses = new ArrayList<GiafAddress>();
-	public String ruaEnt = " ";
-	public String locEnt = " ";
-	public String codPos = " ";
-	public String codPai = " ";
-	public String telEnt = " ";
-	public String faxEnt = " ";
-	public String email = " ";
 
 	GiafSupplier(final ResultSet resultSet) throws SQLException {
 	    codEnt = get(resultSet, 1);
@@ -125,14 +129,7 @@ public class SyncSuppliersAux {
 	}
 
 	public void setContactInformation(final ResultSet resultSet) throws SQLException {
-	    //addresses.add(new GiafAddress(resultSet));
-	    ruaEnt = get(resultSet, 2);
-	    locEnt = get(resultSet, 3);
-	    codPos = get(resultSet, 4);
-	    codPai = get(resultSet, 5);
-	    telEnt = get(resultSet, 6);
-	    faxEnt = get(resultSet, 7);
-	    email = get(resultSet, 8);
+	    addresses.add(new GiafAddress(resultSet));
 	}
 
 	private String get(final ResultSet resultSet, final int i) throws SQLException {
@@ -374,11 +371,9 @@ public class SyncSuppliersAux {
 	    }
 	    Supplier supplier = findSupplierByGiafKey(giafSupplier.codEnt);
 	    if (supplier == null && !giafSupplier.canceled && !shouldDiscard(giafSupplier)) {
-		final String country = getCountry(giafCountries, giafSupplier);
-		final Address address = new Address(giafSupplier.ruaEnt, null, giafSupplier.codPos, giafSupplier.locEnt, country);
-		supplier = new Supplier(giafSupplier.nom_ent, giafSupplier.nom_ent_abv, giafSupplier.numFis, address,
-			giafSupplier.telEnt, giafSupplier.faxEnt, giafSupplier.email, null);
+		supplier = new Supplier(giafSupplier.nom_ent, giafSupplier.nom_ent_abv, giafSupplier.numFis, null);
 		supplier.setGiafKey(giafSupplier.codEnt);
+		updateAddressInformation(giafCountries, supplier, giafSupplier);
 		created++;
 	    } else if (supplier != null) {
 		matched++;
@@ -450,8 +445,8 @@ public class SyncSuppliersAux {
 	}
     }
 
-    private static void updateSupplierInformationAux(final Set<GiafCountry> giafCountries, final Supplier supplier, final GiafSupplier giafSupplier) {
-	final String country = getCountry(giafCountries, giafSupplier);
+    private static void updateSupplierInformationAux(final Set<GiafCountry> giafCountries, final Supplier supplier, 
+	    final GiafSupplier giafSupplier) {
 	if (!giafSupplier.numFis.equals(supplier.getFiscalIdentificationCode())) {
 	    supplier.setFiscalIdentificationCode(giafSupplier.numFis);
 	}
@@ -461,19 +456,32 @@ public class SyncSuppliersAux {
 	if (!giafSupplier.nom_ent_abv.equals(supplier.getAbbreviatedName())) {
 	    supplier.setAbbreviatedName(giafSupplier.nom_ent_abv);
 	}
-	if (!giafSupplier.telEnt.equals(supplier.getPhone())) {
-	    supplier.setPhone(giafSupplier.telEnt);
+	updateAddressInformation(giafCountries, supplier, giafSupplier);
+    }
+
+    private static void updateAddressInformation(final Set<GiafCountry> giafCountries, final Supplier supplier, final GiafSupplier giafSupplier) {
+	for (final GiafAddress giafAddress : giafSupplier.addresses) {
+	    final Address address = giafAddress.getAddress(giafCountries);
+	    supplier.registerContact(address, giafAddress.telEnt, giafAddress.faxEnt, giafAddress.email);
 	}
-	if (!giafSupplier.faxEnt.equals(supplier.getFax())) {
-	    supplier.setFax(giafSupplier.faxEnt);
+	for (final SupplierContact contact : supplier.getSupplierContactSet()) {
+	    if (!containsContact(giafSupplier, contact)) {
+		contact.delete();
+	    }
 	}
-	if (!giafSupplier.email.equals(supplier.getEmail())) {
-	    supplier.setEmail(giafSupplier.email);
+    }
+
+    private static boolean containsContact(final GiafSupplier giafSupplier, SupplierContact contact) {
+	for (final GiafAddress giafAddress : giafSupplier.addresses) {
+	    final Address address = giafAddress.address;
+	    if (address.equals(contact.getAddress())
+		    && giafAddress.telEnt.equals(contact.getPhone())
+		    && giafAddress.faxEnt.equals(contact.getFax())
+		    && giafAddress.email.equals(contact.getEmail())) {
+		return true;
+	    }
 	}
-	final Address address = new Address(giafSupplier.ruaEnt, null, giafSupplier.codPos, giafSupplier.locEnt, country);
-	if (!address.equals(supplier.getAddress())) {
-	    supplier.setAddress(address);
-	}
+	return false;
     }
 
     private static Supplier findSupplierByGiafKey(final String codEnt) {
@@ -486,10 +494,10 @@ public class SyncSuppliersAux {
 	return null;
     }
 
-    private static String getCountry(final Set<GiafCountry> giafCountries, final GiafSupplier giafSupplier) {
-	if (giafSupplier.codPai != null) {
+    private static String getCountry(final Set<GiafCountry> giafCountries, final GiafAddress giafAddress) {
+	if (giafAddress.codPai != null) {
 	    for (final GiafCountry giafCountry : giafCountries) {
-		if (giafSupplier.codPai.equals(giafCountry.pais_cod_pai)) {
+		if (giafAddress.codPai.equals(giafCountry.pais_cod_pai)) {
 		    return giafCountry.pais_dsg_com;
 		}
 	    }
