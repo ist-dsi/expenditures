@@ -26,12 +26,20 @@ class Supplier {
 	String name;
 	String abbreviatedName;
 	String fiscalIdentificationCode;
+	String nib;
+	Money supplierLimit;
+
+	Address address; // TODO: campo a remover
+	String phone; // TODO: campo a remover
+	String fax; // TODO: campo a remover
+	String email; // TODO: campo a remover
+}
+
+class SupplierContact {
 	Address address;
 	String phone;
 	String fax;
 	String email;
-	String nib;
-	Money supplierLimit;
 }
 
 class Provision {
@@ -64,19 +72,10 @@ relation SupplierProvision {
 	}
 }
 
-/**
-// Think about moving name and abbreviatedName slots from Supplier
-// to Party. This means that a supplier is just some Party. I'm not
-// sure if it should have a relation with the some entity or if
-// they can just be top level beings in some domain model. If so, 
-// then we can't determine when they exist and seese to exist. On
-// the other hand, if we want to relate them to some entity, then 
-// to which entity do we connect them? To the institution they are
-// suppliers for? That may be one possibility... I still need to 
-// about this... 
-relation SupplierParty {
+relation SupplierSupplierContact {
 	Supplier playsRole supplier;
-	.module.organization.domain.Party playsRole party;
+	SupplierContact playsRole supplierContact {
+		multiplicity *;
+	}
 }
-*/
 
