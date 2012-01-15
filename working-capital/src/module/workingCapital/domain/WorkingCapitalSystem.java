@@ -96,7 +96,9 @@ public class WorkingCapitalSystem extends WorkingCapitalSystem_Base implements M
 
     private Accountability findAccountability(final User user, final AccountabilityType accountabilityType, final Unit unit) {
 	for (final Accountability accountability : unit.getChildAccountabilitiesSet()) {
-	    if (accountability.getAccountabilityType() == accountabilityType && accountability.getChild().isPerson()) {
+	    if (accountability.isValid()
+		    && accountability.getAccountabilityType() == accountabilityType
+		    && accountability.getChild().isPerson()) {
 		final Person person = (Person) accountability.getChild();
 		if (person.getUser() == user) {
 		    return accountability;
