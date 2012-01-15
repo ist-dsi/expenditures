@@ -376,6 +376,12 @@ class DashBoard implements .myorg.domain.VirtualHostAware {
 class acquisitions.ProjectAcquisitionFundAllocationRequest extends .module.externalAccountingIntegration.domain.FundAllocationRequest {
 }
 
+class organization.UnitActiveResponsibleGroup extends .myorg.domain.groups.PersistentGroup { }
+
+	class organization.ProjectActiveResponsibleGroup extends organization.UnitActiveResponsibleGroup { }
+
+	class organization.CostCenterActiveResponsiblesGroup extends organization.UnitActiveResponsibleGroup { }
+
 
 relation ExpenditureTrackingSystemDashBoard {
 	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
