@@ -58,20 +58,8 @@ public class EmailDigesterUtil {
 			final Sender sender = virtualHost.getSystemSender();
 			final PersistentGroup group = SingleUserGroup.getOrCreateGroup(person.getUser());
 			new Message(sender, Collections.EMPTY_SET, Collections.singleton(group), Collections.EMPTY_SET, Collections.EMPTY_SET,
-				"Processos Pendentes - Aquisições", getBody(generateAcquisitionMap, generateRefundMap), Collections.EMPTY_SET);
-
-/*
-			toAddress.add(email);
-			System.out.println("Sending aquisition email digest for: " + person.getUser().getUsername() + " to: " + email + " - " + ts);
-			new Email(virtualHost.getApplicationSubTitle().getContent(),
-				virtualHost.getSystemEmailAddress(),
-				new String[] {},
-				toAddress,
-				Collections.EMPTY_LIST,
-				Collections.EMPTY_LIST,
-				"Processos Pendentes",
-				getBody(generateAcquisitionMap, generateRefundMap));
-*/
+				null, "Processos Pendentes - Aquisições",
+				getBody(generateAcquisitionMap, generateRefundMap, virtualHost), null);
 		    }
 		} catch (final RemoteException ex) {
 		    System.out.println("Unable to lookup email address for: " + person.getUsername());
@@ -137,9 +125,14 @@ public class EmailDigesterUtil {
     }
 
     private static String getBody(Map<AcquisitionProcessStateType, MultiCounter<AcquisitionProcessStateType>> acquisitionMap,
-	    Map<RefundProcessStateType, MultiCounter<RefundProcessStateType>> refundMap) {
+	    Map<RefundProcessStateType, MultiCounter<RefundProcessStateType>> refundMap, final VirtualHost virtualHost) {
 
-	StringBuilder builder = new StringBuilder("Caro utilizador, possui processos pendentes na central de compras.\n\n");
+	final StringBuilder builder = new StringBuilder("Caro utilizador, possui processos de aquisições pendentes nas ");
+	builder.append(virtualHost.getApplicationSubTitle().getContent());
+	builder.append(", em https://");
+	builder.append(virtualHost.getHostname());
+	builder.append("/.\n");
+
 	if (!acquisitionMap.isEmpty()) {
 	    builder.append("Regime simplificado\n");
 	    for (final MultiCounter<AcquisitionProcessStateType> multiCounter : acquisitionMap.values()) {

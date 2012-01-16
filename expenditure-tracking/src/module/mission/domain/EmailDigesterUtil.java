@@ -26,6 +26,7 @@ import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.fenixframework.plugins.remote.domain.exception.RemoteException;
 import pt.ist.messaging.domain.Message;
+import pt.ist.messaging.domain.ReplyTo;
 import pt.ist.messaging.domain.Sender;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 
@@ -67,7 +68,12 @@ public class EmailDigesterUtil {
 	    		    try {
 	    			final String email = person.getEmail();
 	    			if (email != null) {
-	    			    final StringBuilder body = new StringBuilder("Caro utilizador, possui processos de missão pendentes nas aplicações centrais do IST, em http://dot.ist.utl.pt/.\n");
+	    			    final StringBuilder body = new StringBuilder("Caro utilizador, possui processos de missão pendentes nas ");
+	    			    body.append(virtualHost.getApplicationSubTitle().getContent());
+	    			    body.append(", em https://");
+	    			    body.append(virtualHost.getHostname());
+	    			    body.append("/.\n");
+
 	    			    if (takenByUserCount > 0) {
 	    				body.append("\n\tPendentes de Libertação\t");
 	    				body.append(takenByUserCount);
@@ -119,20 +125,8 @@ public class EmailDigesterUtil {
 
 	    			    final Sender sender = virtualHost.getSystemSender();
 	    			    final PersistentGroup group = SingleUserGroup.getOrCreateGroup(person.getUser());
-	    			    new Message(sender, Collections.EMPTY_SET, Collections.singleton(group), Collections.EMPTY_SET, Collections.EMPTY_SET,
-	    					"Processos Pendentes - Missões", body.toString(), Collections.EMPTY_SET);
-	    			    
-
-	    			    final Collection<String> toAddress = Collections.singleton(email);
-	    			    final Collection<String> bccAddress = Collections.EMPTY_LIST;
-	    			    new Email(virtualHost.getApplicationSubTitle().getContent(),
-	    				    virtualHost.getSystemEmailAddress(),
-	    				    new String[] {},
-	    				    toAddress,
-	    				    Collections.EMPTY_LIST,
-	    				    bccAddress,
-	    				    "Processos Pendentes - Missões",
-	    				    body.toString());
+	    			    new Message(sender, Collections.EMPTY_SET, Collections.singleton(group), Collections.EMPTY_SET,
+	    				    Collections.EMPTY_SET, null, "Processos Pendentes - Missões", body.toString(), null);
 	    			}
 	    		    } catch (final RemoteException ex) {
 	    			System.out.println("Unable to lookup email address for: " + person.getUsername());
