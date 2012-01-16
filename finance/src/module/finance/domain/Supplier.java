@@ -1,5 +1,6 @@
 package module.finance.domain;
 
+import myorg.domain.util.Address;
 import myorg.domain.util.Money;
 
 public class Supplier extends Supplier_Base {
@@ -59,6 +60,20 @@ public class Supplier extends Supplier_Base {
 	final Money allocated = getAllocated();
 	final Money totalValue = allocated.add(value);
 	return totalValue.isLessThanOrEqual(SUPPLIER_LIMIT) && totalValue.isLessThan(getSupplierLimit());
+    }
+
+    public SupplierContact registerContact(final Address address, final String phone, final String fax, final String email) {
+	final SupplierContact contact = getSupplierContact(address, phone, fax, email);
+	return contact == null ? new SupplierContact(this, address, phone, fax, email) : contact;
+    }
+
+    private SupplierContact getSupplierContact(final Address address, String phone, String fax, String email) {
+	for (final SupplierContact contact : getSupplierContactSet()) {
+	    if (contact.matches(address, phone, fax, email)) {
+		return contact;
+	    }
+	}
+	return null;
     }
 
 }
