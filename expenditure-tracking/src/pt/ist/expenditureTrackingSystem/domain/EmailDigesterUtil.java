@@ -11,6 +11,8 @@ import java.util.Set;
 
 import myorg.applicationTier.Authenticate;
 import myorg.domain.VirtualHost;
+import myorg.domain.groups.PersistentGroup;
+import myorg.domain.groups.SingleUserGroup;
 import myorg.util.MultiCounter;
 
 import org.apache.commons.lang.StringUtils;
@@ -18,7 +20,6 @@ import org.jfree.data.time.Month;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
-import pt.ist.emailNotifier.domain.Email;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
@@ -30,6 +31,8 @@ import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.util.ProcessMapGenerator;
 import pt.ist.fenixframework.plugins.remote.domain.exception.RemoteException;
+import pt.ist.messaging.domain.Message;
+import pt.ist.messaging.domain.Sender;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 
 public class EmailDigesterUtil {
@@ -52,6 +55,12 @@ public class EmailDigesterUtil {
 		try {
 		    final String email = person.getEmail();
 		    if (email != null) {
+			final Sender sender = virtualHost.getSystemSender();
+			final PersistentGroup group = SingleUserGroup.getOrCreateGroup(person.getUser());
+			new Message(sender, Collections.EMPTY_SET, Collections.singleton(group), Collections.EMPTY_SET, Collections.EMPTY_SET,
+				"Processos Pendentes - Aquisições", getBody(generateAcquisitionMap, generateRefundMap), Collections.EMPTY_SET);
+
+/*
 			toAddress.add(email);
 			System.out.println("Sending aquisition email digest for: " + person.getUser().getUsername() + " to: " + email + " - " + ts);
 			new Email(virtualHost.getApplicationSubTitle().getContent(),
@@ -62,6 +71,7 @@ public class EmailDigesterUtil {
 				Collections.EMPTY_LIST,
 				"Processos Pendentes",
 				getBody(generateAcquisitionMap, generateRefundMap));
+*/
 		    }
 		} catch (final RemoteException ex) {
 		    System.out.println("Unable to lookup email address for: " + person.getUsername());
@@ -166,10 +176,6 @@ public class EmailDigesterUtil {
 		}
 	    }
 	}
-	builder.append("\n\n---\n");
-	builder.append("Esta mensagem foi enviada por meio do sistema Central de Compras.\n");
-	builder
-		.append("Pode desactivar o envio destes e-mails fazendo login em http://compras.ist.utl.pt/, aceder à página de resumo seleccionando \"Aquisições\" e desactivando a opção \"Notificação por e-mail\"");
 	return builder.toString();
     }
 
