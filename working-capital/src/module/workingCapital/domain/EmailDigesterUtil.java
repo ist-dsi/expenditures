@@ -10,6 +10,8 @@ import myorg.applicationTier.Authenticate;
 import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.User;
 import myorg.domain.VirtualHost;
+import myorg.domain.groups.PersistentGroup;
+import myorg.domain.groups.SingleUserGroup;
 import myorg.util.BundleUtil;
 
 import org.jfree.data.time.Month;
@@ -23,6 +25,8 @@ import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.fenixframework.plugins.remote.domain.exception.RemoteException;
+import pt.ist.messaging.domain.Message;
+import pt.ist.messaging.domain.Sender;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 
 public class EmailDigesterUtil {
@@ -112,19 +116,10 @@ public class EmailDigesterUtil {
 	    				report(body, "Pendentes de Pagamento", pendingPayment);
 	    			    }
 
-	    			    body.append("\n\n---\n");
-	    			    body.append("Esta mensagem foi enviada por meio das Aplicações Centrais do IST.\n");
-
-	    			    final Collection<String> toAddress = Collections.singleton(email);
-	    			    final Collection<String> bccAddress = Collections.EMPTY_LIST;
-	    			    new Email(virtualHost.getApplicationSubTitle().getContent(),
-	    				    virtualHost.getSystemEmailAddress(),
-	    				    new String[] {},
-	    				    toAddress,
-	    				    Collections.EMPTY_LIST,
-	    				    bccAddress,
-	    				    "Processos Pendentes - Fundos de Maneio",
-	    				    body.toString());
+	    			    final Sender sender = virtualHost.getSystemSender();
+	    			    final PersistentGroup group = SingleUserGroup.getOrCreateGroup(person.getUser());
+	    			    new Message(sender, Collections.EMPTY_SET, Collections.singleton(group), Collections.EMPTY_SET, Collections.EMPTY_SET,
+	    					"Processos Pendentes - Fundos de Maneio", body.toString(), Collections.EMPTY_SET);
 	    			}
 	    		    } catch (final RemoteException ex) {
 	    			System.out.println("Unable to lookup email address for: " + person.getUsername());
