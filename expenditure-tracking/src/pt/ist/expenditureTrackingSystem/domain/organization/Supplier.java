@@ -236,20 +236,6 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
 	}
     }
 
-    public SupplierContact registerContact(final Address address, final String phone, final String fax, final String email) {
-	final SupplierContact contact = getSupplierContact(address, phone, fax, email);
-	return contact == null ? new SupplierContact(this, address, phone, fax, email) : contact;
-    }
-
-    private SupplierContact getSupplierContact(final Address address, String phone, String fax, String email) {
-	for (final SupplierContact contact : getSupplierContactSet()) {
-	    if (contact.matches(address, phone, fax, email)) {
-		return contact;
-	    }
-	}
-	return null;
-    }
-
 /*
     @Override
     public IndexDocument getDocumentToIndex() {
