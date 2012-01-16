@@ -71,7 +71,11 @@ public class EmailDigesterUtil {
 	    		    try {
 	    			final String email = person.getEmail();
 	    			if (email != null) {
-	    			    final StringBuilder body = new StringBuilder("Caro utilizador, possui processos de fundos de maneio pendentes nas aplicações centrais do IST, em http://dot.ist.utl.pt/.\n");
+	    			    final StringBuilder body = new StringBuilder("Caro utilizador, possui processos de fundos de maneio pendentes nas ");
+	    			    body.append(virtualHost.getApplicationSubTitle().getContent());
+	    			    body.append(", em https://");
+	    			    body.append(virtualHost.getHostname());
+	    			    body.append("/.\n");
 	    			    if (takenByUserCount > 0) {
 	    				body.append("\n\tPendentes de Libertação\t");
 	    				body.append(takenByUser);
@@ -118,8 +122,9 @@ public class EmailDigesterUtil {
 
 	    			    final Sender sender = virtualHost.getSystemSender();
 	    			    final PersistentGroup group = SingleUserGroup.getOrCreateGroup(person.getUser());
-	    			    new Message(sender, Collections.EMPTY_SET, Collections.singleton(group), Collections.EMPTY_SET, Collections.EMPTY_SET,
-	    					"Processos Pendentes - Fundos de Maneio", body.toString(), Collections.EMPTY_SET);
+	    			    new Message(sender, Collections.EMPTY_SET, Collections.singleton(group), Collections.EMPTY_SET, 
+	    				    Collections.EMPTY_SET, null, "Processos Pendentes - Fundos de Maneio",
+	    				    body.toString(), null);
 	    			}
 	    		    } catch (final RemoteException ex) {
 	    			System.out.println("Unable to lookup email address for: " + person.getUsername());
