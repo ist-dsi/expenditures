@@ -160,13 +160,18 @@ public class MissionParticipationMap extends CustomComponent implements Embedded
     private Unit unit;
     private int year;
     private int month;
-    private List<AccountabilityType> accountabilityTypes = new ArrayList<AccountabilityType>();
-    private boolean includeSubUnits = true;
+    private final List<AccountabilityType> accountabilityTypes = new ArrayList<AccountabilityType>();
+    private final boolean includeSubUnits = true;
 
     private TimeTable timeTable = null;
 
     public MissionParticipationMap() {
 	accountabilityTypes.addAll(MissionSystem.getInstance().getAccountabilityTypesRequireingAuthorization());
+    }
+
+    @Override
+    public boolean isAllowedToOpen(Map<String, String> arguments) {
+	return true;
     }
 
     @Override
