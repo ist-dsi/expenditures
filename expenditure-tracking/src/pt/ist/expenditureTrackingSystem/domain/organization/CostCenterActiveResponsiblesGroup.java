@@ -1,5 +1,6 @@
 package pt.ist.expenditureTrackingSystem.domain.organization;
 
+import myorg.domain.MyOrg;
 import myorg.domain.groups.PersistentGroup;
 import pt.ist.fenixWebFramework.services.Service;
 
@@ -7,6 +8,7 @@ public class CostCenterActiveResponsiblesGroup extends CostCenterActiveResponsib
 
     protected CostCenterActiveResponsiblesGroup() {
         super();
+	setSystemGroupMyOrg(MyOrg.getInstance());
     }
 
     @Override
