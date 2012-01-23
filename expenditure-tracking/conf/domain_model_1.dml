@@ -376,6 +376,14 @@ class DashBoard implements .myorg.domain.VirtualHostAware {
 class acquisitions.ProjectAcquisitionFundAllocationRequest extends .module.externalAccountingIntegration.domain.FundAllocationRequest {
 }
 
+class acquisitions.AcquisitionFundAllocationDiaryAndTransactionReportRequest extends .module.externalAccountingIntegration.domain.ExternalRequest {
+	String processId;
+	String payingUnitNumber;
+	String payingAccountingUnit;
+	String diaryNumber;
+	String transactionNumber;
+}
+
 class organization.UnitActiveResponsibleGroup extends .myorg.domain.groups.PersistentGroup { }
 
 	class organization.ProjectActiveResponsibleGroup extends organization.UnitActiveResponsibleGroup { }
@@ -1121,3 +1129,11 @@ relation ProjectAcquisitionFundAllocationRequestUnitItem {
 	}
 }
 
+relation AcquisitionFundAllocationDiaryAndTransactionReportRequestFinancer {
+	acquisitions.AcquisitionFundAllocationDiaryAndTransactionReportRequest playsRole acquisitionFundAllocationDiaryAndTransactionReportRequest {
+		multiplicity *;
+	}
+	acquisitions.UnitItem playsRole unitItem {
+		multiplicity 1..1;
+	}
+}
