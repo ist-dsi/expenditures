@@ -8,7 +8,6 @@ import java.util.Set;
 import module.finance.domain.Supplier;
 import myorg.domain.VirtualHost;
 import myorg.domain.util.Money;
-import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Project;
 import pt.ist.expenditureTrackingSystem.domain.organization.SubProject;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
@@ -99,6 +98,7 @@ public class AcquisitionFundAllocationDiaryAndTransactionReportRequest extends A
     @Override
     public void processResultSet(final ResultSet resultSet) throws SQLException {
 	registerOnExternalSystem();
+	removeExternalAccountingIntegrationSystemFromPendingResult();
     }
 
     @Override
