@@ -55,6 +55,7 @@ public class SavedSearch extends SavedSearch_Base {
 	removeUnit();
 	removeRequestor();
 	removeAccountingUnit();
+	removeAccountManager();
 	removeSupplier();
 	removeCpvReference();
 	SavedSearch ownProcessesSearch = MyOwnProcessesSearch.getOwnProcessesSearch();
