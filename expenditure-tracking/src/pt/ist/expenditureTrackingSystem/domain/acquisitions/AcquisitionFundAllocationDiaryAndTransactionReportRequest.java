@@ -151,4 +151,14 @@ public class AcquisitionFundAllocationDiaryAndTransactionReportRequest extends A
 	return result.toString();
     }
 
+    @Override
+    public void handle(final SQLException e) {
+	if (e.getMessage().indexOf("unique") >= 0) {
+	    registerOnExternalSystem();
+	    removeExternalAccountingIntegrationSystemFromPendingResult();
+	} else {
+	    super.handle(e);
+	}
+    }
+
 }
