@@ -1,6 +1,7 @@
 package pt.ist.expenditureTrackingSystem.domain;
 
 import myorg.domain.util.Money;
+import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 
 
 public class SyncProjectsADIST extends SyncProjectsAux {
@@ -22,5 +23,15 @@ public class SyncProjectsADIST extends SyncProjectsAux {
 	return AUTHORIZED_VALUE;
     }
 
+    @Override
+    protected Unit findCostCenter(final String costCenterString) {
+	final ExpenditureTrackingSystem ets = ExpenditureTrackingSystem.getInstance();
+	if (ets.hasAnyTopLevelUnits()) {
+	    return ets.getTopLevelUnitsIterator().next();
+	}
+
+	System.out.println("No top level unit configured for virtual host: " + getVirtualHost());
+	return null;
+    }
 
 }
