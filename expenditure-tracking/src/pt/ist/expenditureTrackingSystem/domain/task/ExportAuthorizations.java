@@ -112,7 +112,7 @@ public abstract class ExportAuthorizations extends ExportAuthorizations_Base {
 		CostCenter costCenter = (CostCenter) unit;
 		Set<Person> persons = getCostCenterAuthorizedPersons(costCenter);
 		for (Person person : persons) {
-		    String employeeNumber = employees.get(person);
+		    String employeeNumber = employees.get(person.getUsername());
 		    if (!StringUtils.isEmpty(employeeNumber)) {
 			final InsertAuthorizationQuery insertAuthorizationQuery = new InsertAuthorizationQuery(employeeNumber,
 				costCenter.getCostCenter());
