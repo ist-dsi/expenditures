@@ -1,6 +1,6 @@
 package pt.ist.expenditureTrackingSystem.domain.task;
 
-public class ExportAuthorizationsIST extends ExportAuthorizations {
+public class ExportAuthorizationsIST extends ExportAuthorizationsIST_Base {
 
     @Override
     public String getVirtualHost() {
