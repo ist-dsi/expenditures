@@ -31,6 +31,9 @@ class pt.ist.expenditureTrackingSystem.domain.ExpenditureWidgetOptions extends m
 class pt.ist.expenditureTrackingSystem.domain.task.ImportEmployeesAndResponsibles extends .myorg.domain.scheduler.Task {
 }
 
+class pt.ist.expenditureTrackingSystem.domain.task.ExportAuthorizations extends .pt.ist.dbUtils.TaskWithExternalDbOperation {
+}
+
 relation MyOrgExpenditureTrackingSystem {
 	myorg.domain.MyOrg playsRole myOrg;
 	pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
