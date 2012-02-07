@@ -129,7 +129,7 @@ public abstract class ExportAuthorizations extends ExportAuthorizations_Base {
 	    System.out.println("Running sync for: " + getVirtualHost());
 	    VirtualHost.setVirtualHostForThread(getVirtualHost());
 
-	    employees.clear();
+	    employees = new HashMap<String, String>();
 	    try {
 		loadEmployees();
 	    } catch (SQLException e) {

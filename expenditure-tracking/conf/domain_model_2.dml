@@ -37,6 +37,12 @@ class pt.ist.expenditureTrackingSystem.domain.task.ExportAuthorizations extends 
 class pt.ist.expenditureTrackingSystem.domain.task.ExportAuthorizationsIST extends pt.ist.expenditureTrackingSystem.domain.task.ExportAuthorizations {
 }
 
+class pt.ist.expenditureTrackingSystem.domain.task.ExportAuthorizationsADIST extends pt.ist.expenditureTrackingSystem.domain.task.ExportAuthorizations {
+}
+
+class pt.ist.expenditureTrackingSystem.domain.task.ExportAuthorizationsISTID extends pt.ist.expenditureTrackingSystem.domain.task.ExportAuthorizations {
+}
+
 relation MyOrgExpenditureTrackingSystem {
 	myorg.domain.MyOrg playsRole myOrg;
 	pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
