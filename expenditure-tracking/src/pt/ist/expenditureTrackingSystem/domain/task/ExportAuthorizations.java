@@ -145,7 +145,9 @@ public abstract class ExportAuthorizations extends ExportAuthorizations_Base {
     private Set<Person> getCostCenterAuthorizedPersons(Unit costCenter) {
 	Set<Person> persons = new HashSet<Person>();
 	for (Authorization authorization : costCenter.getAuthorizations()) {
-	    persons.add(authorization.getPerson());
+	    if (authorization.isValid()) {
+		persons.add(authorization.getPerson());
+	    }
 	}
 	Unit parentUnit = costCenter.getParentUnit();
 	if (parentUnit != null) {
