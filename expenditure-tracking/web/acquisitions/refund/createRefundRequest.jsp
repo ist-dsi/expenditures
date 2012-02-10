@@ -27,7 +27,7 @@
 <bean:define id="underCCP" type="java.lang.Boolean" name="bean" property="underCCP"/>
 <% String actionUrl = underCCP ? "/acquisitionRefundProcess.do?method=prepareCreateRefundProcessUnderCCP" : "/acquisitionRefundProcess.do?method=prepareCreateRefundProcessUnderRCIST"; %>
 
-<% if (MissionSystem.getInstance().hasAnyMissions()) { %>
+<% if (MissionSystem.getInstance().hasAnyMissionProcesses()) { %>
 	<fr:form id="createForm" action="<%= actionUrl %>">
 		<fr:edit id="selectMissionBean" name="bean">
 			<fr:schema type="pt.ist.expenditureTrackingSystem.domain.dto.CreateRefundProcessBean" bundle="ACQUISITION_RESOURCES">

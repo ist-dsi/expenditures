@@ -71,6 +71,7 @@ class ExpenditureTrackingSystem {
 	String institutionalRequestDocumentPrefix;
 	Boolean invoiceAllowedToStartAcquisitionProcess;
 	Boolean requireFundAllocationPriorToAcquisitionRequest;
+	Boolean registerDiaryNumbersAndTransactionNumbers;
 	Money maxValueStartedWithInvoive;
 	Money valueRequireingTopLevelAuthorization;
 }

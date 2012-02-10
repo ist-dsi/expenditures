@@ -54,6 +54,9 @@ public class ExpenditureConfigurationAction extends BaseAction {
 	final String requireFundAllocationPriorToAcquisitionRequestParam = request.getParameter("requireFundAllocationPriorToAcquisitionRequest");
 	final Boolean requireFundAllocationPriorToAcquisitionRequest = Boolean.valueOf("on".equals(requireFundAllocationPriorToAcquisitionRequestParam));
 
+	final String registerDiaryNumbersAndTransactionNumbersParam = request.getParameter("registerDiaryNumbersAndTransactionNumbers");
+	final Boolean registerDiaryNumbersAndTransactionNumbers = Boolean.valueOf("on".equals(registerDiaryNumbersAndTransactionNumbersParam));
+
 	final String maxValueStartedWithInvoiveParam = request.getParameter("maxValueStartedWithInvoive");
 	final Money maxValueStartedWithInvoive = maxValueStartedWithInvoiveParam == null || maxValueStartedWithInvoiveParam.isEmpty() ? null : new Money(maxValueStartedWithInvoiveParam);
 
@@ -67,6 +70,7 @@ public class ExpenditureConfigurationAction extends BaseAction {
 		array,
 		invoiceAllowedToStartAcquisitionProcess,
 		requireFundAllocationPriorToAcquisitionRequest,
+		registerDiaryNumbersAndTransactionNumbers,
 		maxValueStartedWithInvoive,
 		valueRequireingTopLevelAuthorization);
 

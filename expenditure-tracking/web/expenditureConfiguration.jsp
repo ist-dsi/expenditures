@@ -216,6 +216,20 @@
 		</tr>
 		<tr>
 			<td>
+				<bean:message key="label.configuration.process.flow.register.diary.numbers.and.transaction.numbers"
+						bundle="EXPENDITURE_RESOURCES"/>
+			</td>
+			<td>
+				<input type="checkbox" name="registerDiaryNumbersAndTransactionNumbers"
+					<% if (expenditureTrackingSystem.getRegisterDiaryNumbersAndTransactionNumbers() != null
+								&& expenditureTrackingSystem.getRegisterDiaryNumbersAndTransactionNumbers().booleanValue()) {%>
+							checked="checked"
+					<% } %>
+				/>
+			</td>
+		</tr>
+		<tr>
+			<td>
 				<bean:message key="label.configuration.process.value.requireing.top.level.authorization" bundle="EXPENDITURE_RESOURCES"/>
 			</td>
 			<td>

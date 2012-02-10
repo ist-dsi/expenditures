@@ -38,7 +38,6 @@ import pt.ist.expenditureTrackingSystem.util.RefundPendingProcessCounter;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.RequestChecksumFilter;
 import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.RequestChecksumFilter.ChecksumPredicate;
-import pt.ist.vaadinframework.EmbeddedApplication;
 import dml.runtime.RelationAdapter;
 
 public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base implements ModuleInitializer {
@@ -122,10 +121,14 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
     private static Boolean checkISTOptions() {
 	final MyOrg myOrg = MyOrg.getInstance();
 	for (final VirtualHost virtualHost : myOrg.getVirtualHostsSet()) {
-	    if (virtualHost.getHostname().equals("dot.ist.utl.pt")) {
-		final ExpenditureTrackingSystem ets = virtualHost.getExpenditureTrackingSystem();
-		if (ets != null) {
+	    final ExpenditureTrackingSystem ets = virtualHost.getExpenditureTrackingSystem();
+	    if (ets != null) {
+		if (virtualHost.getHostname().equals("dot.ist.utl.pt")
+			|| virtualHost.getHostname().equals("compras.ist.utl.pt")) {
 		    ets.setRequireFundAllocationPriorToAcquisitionRequest(Boolean.TRUE);
+		    ets.setRegisterDiaryNumbersAndTransactionNumbers(Boolean.FALSE);
+		} else {
+		    ets.setRegisterDiaryNumbersAndTransactionNumbers(Boolean.TRUE);
 		}
 	    }
 	}
@@ -448,14 +451,15 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
     public void saveConfiguration(final String institutionalProcessNumberPrefix,
 	    final String institutionalRequestDocumentPrefix, final String acquisitionCreationWizardJsp,
 	    final SearchProcessValuesArray array, final Boolean invoiceAllowedToStartAcquisitionProcess,
-	    final Boolean requireFundAllocationPriorToAcquisitionRequest, final Money maxValueStartedWithInvoive,
-	    final Money valueRequireingTopLevelAuthorization) {
+	    final Boolean requireFundAllocationPriorToAcquisitionRequest, final Boolean registerDiaryNumbersAndTransactionNumbers,
+	    final Money maxValueStartedWithInvoive, final Money valueRequireingTopLevelAuthorization) {
 	setInstitutionalProcessNumberPrefix(institutionalProcessNumberPrefix);
 	setInstitutionalRequestDocumentPrefix(institutionalRequestDocumentPrefix);
 	setAcquisitionCreationWizardJsp(acquisitionCreationWizardJsp);
 	setSearchProcessValuesArray(array);
 	setInvoiceAllowedToStartAcquisitionProcess(invoiceAllowedToStartAcquisitionProcess);
 	setRequireFundAllocationPriorToAcquisitionRequest(requireFundAllocationPriorToAcquisitionRequest);
+	setRegisterDiaryNumbersAndTransactionNumbers(registerDiaryNumbersAndTransactionNumbers);
 	setMaxValueStartedWithInvoive(maxValueStartedWithInvoive);
 	setValueRequireingTopLevelAuthorization(valueRequireingTopLevelAuthorization);
     }

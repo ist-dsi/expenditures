@@ -1,3 +1,4 @@
+<%@page import="pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
@@ -10,7 +11,7 @@
 <h2><bean:message key="acquisitionProcess.title.createAcquisitionRequest" bundle="ACQUISITION_RESOURCES"/></h2>
 
 <div class="infobox">
-	<bean:message key="acquisitionProcess.message.note" bundle="ACQUISITION_RESOURCES" />
+	<bean:message key="acquisitionProcess.message.note" bundle="ACQUISITION_RESOURCES" arg0="<%= ExpenditureTrackingSystem.getInstance().getTopLevelUnitsSet().iterator().next().getUnit().getAcronym() %>"/>
 </div>
 
 <html:messages id="message" message="true" bundle="MISSION_RESOURCES">
@@ -20,7 +21,7 @@
 
 <p class="mtop15 mbottom05"><strong><fr:view name="acquisitionProcessBean" property="classification"/></strong></p>
 
-<% if (MissionSystem.getInstance().hasAnyMissions()) { %>
+<% if (MissionSystem.getInstance().hasAnyMissionProcesses()) { %>
 	<fr:form id="selectMissionBeanForm" action="/acquisitionSimplifiedProcedureProcess.do?method=prepareCreateAcquisitionProcess">
 		<fr:edit id="selectMissionBean" name="acquisitionProcessBean">
 			<fr:schema type="pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean" bundle="ACQUISITION_RESOURCES">

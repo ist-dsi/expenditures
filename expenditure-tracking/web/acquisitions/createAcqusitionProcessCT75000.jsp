@@ -40,7 +40,7 @@
 	</table>
 </logic:notEmpty>
 
-<% if (MissionSystem.getInstance().hasAnyMissions()) { %>
+<% if (MissionSystem.getInstance().hasAnyMissionProcesses()) { %>
 	<fr:form id="createForm" action="/acquisitionSimplifiedProcedureProcess.do?method=prepareCreateAcquisitionProcessCT75000">
 		<fr:edit id="selectMissionBean" name="acquisitionProcessBean">
 			<fr:schema type="pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean" bundle="ACQUISITION_RESOURCES">
