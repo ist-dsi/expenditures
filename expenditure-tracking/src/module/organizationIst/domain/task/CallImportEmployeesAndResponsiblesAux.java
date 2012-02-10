@@ -85,10 +85,10 @@ public class CallImportEmployeesAndResponsiblesAux extends WriteCustomTask {
 			final CostCenter center = (CostCenter) expenditureUnit;
 			final String checkString = username + ':' + getAccountabilityTypeString(accountabilityType) + ':' + center.getCostCenter();
 			if (allInformation.indexOf(checkString) < 0) {
-			    accountability.editDates(accountability.getBeginDate(), now);
+			    accountability.setEndDate(now);
 			}
 		    } else {
-			accountability.editDates(accountability.getBeginDate(), now);
+			accountability.setEndDate(now);
 		    }
 		}
 	    }
