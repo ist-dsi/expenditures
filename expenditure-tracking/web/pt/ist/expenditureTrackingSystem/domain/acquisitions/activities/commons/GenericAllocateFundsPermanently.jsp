@@ -1,3 +1,4 @@
+<%@page import="pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem"%>
 <%@page import="myorg.domain.VirtualHost"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
@@ -51,8 +52,8 @@
 		</th>
 	</tr>
 <%
-	if (VirtualHost.getVirtualHostForThread() != null
-			&& VirtualHost.getVirtualHostForThread().getHostname().equals("dot.ist-id.ist.utl.pt")
+	if (ExpenditureTrackingSystem.getInstance().getRegisterDiaryNumbersAndTransactionNumbers() != null
+			&& ExpenditureTrackingSystem.getInstance().getRegisterDiaryNumbersAndTransactionNumbers().booleanValue()
 			&& !name.equals("AllocateProjectFundsPermanently")) {
 %>
 	<tr>
