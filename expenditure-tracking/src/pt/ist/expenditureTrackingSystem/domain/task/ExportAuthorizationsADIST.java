@@ -13,6 +13,6 @@ public class ExportAuthorizationsADIST extends ExportAuthorizationsADIST_Base {
 
     @Override
     protected String getVirtualHost() {
-	throw new Error("dot.adist.ist.utl.pt");
+	return "dot.adist.ist.utl.pt";
     }
 }
