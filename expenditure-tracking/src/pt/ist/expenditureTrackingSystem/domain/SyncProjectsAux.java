@@ -444,7 +444,7 @@ public abstract class SyncProjectsAux {
 	    createUnitBean.setProjectCode(projectCodeString);
 	    createUnitBean.setName(acronym);
 	    final Unit unit = Unit.createNewUnit(createUnitBean);
-	    unit.setDefaultRegeimIsCCP(isDefaultRegeimIsCCP());
+	    unit.setDefaultRegeimIsCCP(isDefaultRegeimIsCCP(type));
 
 	    final AccountingUnit accountingUnit = AccountingUnit.readAccountingUnitByUnitName(accountingUnitString);
 	    if (accountingUnit != null) {
