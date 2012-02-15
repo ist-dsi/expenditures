@@ -425,6 +425,8 @@ public abstract class SyncProjectsAux {
 	}
     }
 
+    protected abstract Boolean isDefaultRegeimIsCCP(final String type);
+
     private void createProject(/* final Map<String, SubAccountingUnit> subAccountingUnits, */ final MgpProject mgpProject) {
 	String projectCodeString = mgpProject.projectCode;
 	String costCenterString = mgpProject.costCenter.replace("\"", "");
@@ -442,7 +444,7 @@ public abstract class SyncProjectsAux {
 	    createUnitBean.setProjectCode(projectCodeString);
 	    createUnitBean.setName(acronym);
 	    final Unit unit = Unit.createNewUnit(createUnitBean);
-	    unit.setDefaultRegeimIsCCP(!type.equalsIgnoreCase("i"));
+	    unit.setDefaultRegeimIsCCP(isDefaultRegeimIsCCP());
 
 	    final AccountingUnit accountingUnit = AccountingUnit.readAccountingUnitByUnitName(accountingUnitString);
 	    if (accountingUnit != null) {

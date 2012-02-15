@@ -28,4 +28,9 @@ public class SyncProjectsIST extends SyncProjectsAux {
 	return AUTHORIZED_VALUE;
     }
 
+    @Override
+    protected Boolean isDefaultRegeimIsCCP(final String type) {
+	return !type.equalsIgnoreCase("i");
+    }
+
 }

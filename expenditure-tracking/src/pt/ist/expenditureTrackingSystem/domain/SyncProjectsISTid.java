@@ -44,5 +44,9 @@ public class SyncProjectsISTid extends SyncProjectsAux {
 	return AUTHORIZED_VALUE;
     }
 
+    @Override
+    protected Boolean isDefaultRegeimIsCCP(final String type) {
+	return Boolean.FALSE;
+    }
 
 }

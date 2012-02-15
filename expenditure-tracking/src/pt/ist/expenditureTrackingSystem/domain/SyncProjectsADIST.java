@@ -34,4 +34,9 @@ public class SyncProjectsADIST extends SyncProjectsAux {
 	return null;
     }
 
+    @Override
+    protected Boolean isDefaultRegeimIsCCP(final String type) {
+	return Boolean.FALSE;
+    }
+
 }
