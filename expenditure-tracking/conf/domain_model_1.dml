@@ -74,6 +74,8 @@ class ExpenditureTrackingSystem {
 	Boolean registerDiaryNumbersAndTransactionNumbers;
 	Money maxValueStartedWithInvoive;
 	Money valueRequireingTopLevelAuthorization;
+	String documentationUrl;
+	String documentationLabel;
 }
 
 

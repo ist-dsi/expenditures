@@ -242,6 +242,36 @@
 		</tr>
 	</table>
 
+	<h4>
+		<bean:message key="label.configuration.process.documentation" bundle="EXPENDITURE_RESOURCES"/>
+	</h4>
+	<table>
+		<tr>
+			<td>
+				<bean:message key="label.configuration.process.documentation.documentationUrl" bundle="EXPENDITURE_RESOURCES"/>
+			</td>
+			<td>
+				<input type="text" name="documentationUrl" size="50"
+					<% if (expenditureTrackingSystem.getDocumentationUrl() != null) {%>
+							value="<%= expenditureTrackingSystem.getDocumentationUrl() %>"
+					<% } %>
+						/>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<bean:message key="label.configuration.process.documentation.documentationLabel" bundle="EXPENDITURE_RESOURCES"/>
+			</td>
+			<td>
+				<input type="text" name="documentationLabel" size="50"
+					<% if (expenditureTrackingSystem.getDocumentationLabel() != null) {%>
+							value="<%= expenditureTrackingSystem.getDocumentationLabel() %>"
+					<% } %>
+						/>
+			</td>
+		</tr>
+	</table>
+
 	<html:submit styleClass="inputbutton">
 		<bean:message key="renderers.form.submit.name" bundle="RENDERER_RESOURCES"/>
 	</html:submit>

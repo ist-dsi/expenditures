@@ -1,3 +1,4 @@
+<%@page import="pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
@@ -16,7 +17,10 @@
 </logic:messagesPresent>
 
 <div class="infobox">
-	<bean:message key="acquisitionProcess.message.note" bundle="ACQUISITION_RESOURCES" />
+	<bean:message key="acquisitionProcess.message.note" bundle="ACQUISITION_RESOURCES"
+		arg0="<%= ExpenditureTrackingSystem.getInstance().getTopLevelUnitsSet().iterator().next().getUnit().getAcronym() %>"
+		arg1="<%= ExpenditureTrackingSystem.getInstance().getDocumentationUrl() %>"
+		arg2="<%= pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem.getInstance().getDocumentationLabel() %>"/>
 </div>
 
 <p class="mtop15 mbottom05"><strong><fr:view name="acquisitionProcessBean" property="classification"/></strong></p>

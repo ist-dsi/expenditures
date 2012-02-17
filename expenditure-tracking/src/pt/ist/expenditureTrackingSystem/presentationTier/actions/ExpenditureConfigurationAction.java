@@ -48,6 +48,9 @@ public class ExpenditureConfigurationAction extends BaseAction {
 	final String institutionalProcessNumberPrefix = request.getParameter("institutionalProcessNumberPrefix");
 	final String institutionalRequestDocumentPrefix = request.getParameter("institutionalRequestDocumentPrefix");
 
+	final String documentationUrl = request.getParameter("documentationUrl");
+	final String documentationLabel = request.getParameter("documentationLabel");
+
 	final String invoiceAllowedToStartAcquisitionProcessParam = request.getParameter("invoiceAllowedToStartAcquisitionProcess");
 	final Boolean invoiceAllowedToStartAcquisitionProcess = Boolean.valueOf("on".equals(invoiceAllowedToStartAcquisitionProcessParam));
 
@@ -72,7 +75,9 @@ public class ExpenditureConfigurationAction extends BaseAction {
 		requireFundAllocationPriorToAcquisitionRequest,
 		registerDiaryNumbersAndTransactionNumbers,
 		maxValueStartedWithInvoive,
-		valueRequireingTopLevelAuthorization);
+		valueRequireingTopLevelAuthorization,
+		documentationUrl,
+		documentationLabel);
 
 	return viewConfiguration(mapping, form, request, response);
     }

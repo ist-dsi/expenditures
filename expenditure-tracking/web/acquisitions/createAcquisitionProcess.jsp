@@ -11,7 +11,10 @@
 <h2><bean:message key="acquisitionProcess.title.createAcquisitionRequest" bundle="ACQUISITION_RESOURCES"/></h2>
 
 <div class="infobox">
-	<bean:message key="acquisitionProcess.message.note" bundle="ACQUISITION_RESOURCES" arg0="<%= ExpenditureTrackingSystem.getInstance().getTopLevelUnitsSet().iterator().next().getUnit().getAcronym() %>"/>
+	<bean:message key="acquisitionProcess.message.note" bundle="ACQUISITION_RESOURCES"
+		arg0="<%= ExpenditureTrackingSystem.getInstance().getTopLevelUnitsSet().iterator().next().getUnit().getAcronym() %>"
+		arg1="<%= ExpenditureTrackingSystem.getInstance().getDocumentationUrl() %>"
+		arg2="<%= ExpenditureTrackingSystem.getInstance().getDocumentationLabel() %>"/>
 </div>
 
 <html:messages id="message" message="true" bundle="MISSION_RESOURCES">

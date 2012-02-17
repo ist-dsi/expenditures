@@ -452,7 +452,8 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 	    final String institutionalRequestDocumentPrefix, final String acquisitionCreationWizardJsp,
 	    final SearchProcessValuesArray array, final Boolean invoiceAllowedToStartAcquisitionProcess,
 	    final Boolean requireFundAllocationPriorToAcquisitionRequest, final Boolean registerDiaryNumbersAndTransactionNumbers,
-	    final Money maxValueStartedWithInvoive, final Money valueRequireingTopLevelAuthorization) {
+	    final Money maxValueStartedWithInvoive, final Money valueRequireingTopLevelAuthorization,
+	    final String documentationUrl, final String documentationLabel) {
 	setInstitutionalProcessNumberPrefix(institutionalProcessNumberPrefix);
 	setInstitutionalRequestDocumentPrefix(institutionalRequestDocumentPrefix);
 	setAcquisitionCreationWizardJsp(acquisitionCreationWizardJsp);
@@ -462,6 +463,8 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 	setRegisterDiaryNumbersAndTransactionNumbers(registerDiaryNumbersAndTransactionNumbers);
 	setMaxValueStartedWithInvoive(maxValueStartedWithInvoive);
 	setValueRequireingTopLevelAuthorization(valueRequireingTopLevelAuthorization);
+	setDocumentationUrl(documentationUrl);
+	setDocumentationLabel(documentationLabel);
     }
 
     @Service

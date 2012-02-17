@@ -6,6 +6,7 @@
 <%@page import="java.util.ResourceBundle"%>
 <%@page import="myorg.util.BundleUtil"%>
 <%@page import="module.mission.domain.MissionSystem"%>
+<%@page import="pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem"%>
 
 <h2><bean:message key="acquisitionProcess.title.createAcquisitionRequest" bundle="ACQUISITION_RESOURCES"/></h2>
 
