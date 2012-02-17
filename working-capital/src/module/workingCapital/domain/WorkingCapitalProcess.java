@@ -192,8 +192,11 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base implements
 			    "resources/WorkingCapitalResources", "label.email.commentCreated.subject", workingCapital.getUnit()
 				    .getPresentationName(), workingCapital.getWorkingCapitalYear().getYear().toString()),
 		    BundleUtil.getFormattedStringFromResourceBundle("resources/WorkingCapitalResources",
-			    "label.email.commentCreated.body", loggedUser.getPerson().getName(), workingCapital.getUnit()
-				    .getPresentationName(), workingCapital.getWorkingCapitalYear().getYear().toString(), comment));
+			    "label.email.commentCreated.body",
+			    loggedUser.getPerson().getName(),
+			    workingCapital.getUnit().getPresentationName(),
+			    workingCapital.getWorkingCapitalYear().getYear().toString(), comment),
+			    VirtualHost.getVirtualHostForThread().getHostname());
 	}
     }
 
