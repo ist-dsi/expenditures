@@ -37,6 +37,8 @@
 	<parameter name="paymentRequired" isForPrompting="false" class="java.lang.String"/>
 	<parameter name="IBAN" isForPrompting="false" class="java.lang.String"/>
 	<parameter name="logoFilename" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="cae" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="institutionSocialSecurityNumber" isForPrompting="false" class="java.lang.String"/>
 
 	<field name="number" class="java.lang.Integer"/>
 	<field name="description" class="java.lang.String"/>
@@ -725,7 +727,7 @@ Portugal]]></text>
 				<text><![CDATA[Tel. 214 417 210
 Fax 218 498 678]]></text>
 				</staticText>
-				<staticText>
+				<textField>
 					<reportElement
 						x="177"
 						y="0"
@@ -737,9 +739,8 @@ Fax 218 498 678]]></text>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font size="8"/>
 					</textElement>
-				<text><![CDATA[Contr. Nº 501 507 930
-CAE 931 400]]></text>
-				</staticText>
+					<textFieldExpression   class="java.lang.String"><![CDATA["Contr. Nº " + $P{institutionSocialSecurityNumber} + "\nCAE " + $P{cae}]]></textFieldExpression>
+				</textField>
 			</band>
 		</pageFooter>
 		<lastPageFooter>
@@ -788,21 +789,20 @@ Portugal]]></text>
 				<text><![CDATA[Tel. 218 419 716
 Fax 218 417 717]]></text>
 				</staticText>
-				<staticText>
+				<textField>
 					<reportElement
 						x="177"
 						y="0"
 						width="91"
 						height="43"
 						forecolor="#00427B"
-						key="staticText-33"/>
+						key="staticText-36"/>
 					<box></box>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font size="8"/>
 					</textElement>
-				<text><![CDATA[Contr. Nº 501 507 930
-CAE 931 400]]></text>
-				</staticText>
+					<textFieldExpression   class="java.lang.String"><![CDATA["Contr. Nº " + $P{institutionSocialSecurityNumber} + "\nCAE " + $P{cae}]]></textFieldExpression>
+				</textField>
 			</band>
 		</lastPageFooter>
 		<summary>

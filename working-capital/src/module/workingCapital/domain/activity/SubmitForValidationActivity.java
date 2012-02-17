@@ -13,6 +13,7 @@ import module.workingCapital.domain.WorkingCapitalAcquisitionTransaction;
 import module.workingCapital.domain.WorkingCapitalInitialization;
 import module.workingCapital.domain.WorkingCapitalProcess;
 import module.workingCapital.domain.WorkingCapitalTransaction;
+import myorg._development.PropertiesManager;
 import myorg.domain.User;
 import myorg.domain.VirtualHost;
 import myorg.domain.exceptions.DomainException;
@@ -83,6 +84,9 @@ public class SubmitForValidationActivity extends WorkflowActivity<WorkingCapital
 	paramMap.put("submissionAccumulatedValue", acquisitionSubmission.getAccumulatedValue());
 	paramMap.put("submissionBalance", acquisitionSubmission.getBalance());
 	paramMap.put("submissionDebt", acquisitionSubmission.getDebt());
+	paramMap.put("institutionSocialSecurityNumber",
+		PropertiesManager.getProperty(VirtualHost.getVirtualHostForThread().getHostname() + ".ssn"));
+	paramMap.put("cae", PropertiesManager.getProperty(VirtualHost.getVirtualHostForThread().getHostname() + ".cae"));
 
 	paramMap.put("paymentRequired", BundleUtil.getStringFromResourceBundle("resources/MyorgResources", acquisitionSubmission
 		.getPaymentRequired().toString()));
