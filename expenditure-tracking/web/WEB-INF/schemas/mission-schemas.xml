@@ -265,7 +265,10 @@
 	<slot name="itinerary" key="label.mission.item.transportation.itinerary" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
 		<property name="size" value="50"/>
 	</slot>
-	<slot name="kms" key="label.mission.item.vehicle.kms" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="kms" key="label.mission.item.vehicle.kms">
+		<validator class="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+		<validator class="pt.ist.fenixWebFramework.renderers.validators.NumberValidator" />
+	</slot>
 	<slot name="value" key="label.mission.item.value" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 	<slot name="vehiclItemJustification.motive" layout="radio" key="label.mission.item.vehicle.justification.motive" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
 	<slot name="vehiclItemJustification.justification" key="label.mission.item.vehicle.justification" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
