@@ -1,6 +1,11 @@
 package module.mission.domain.activity;
 
 import module.mission.domain.MissionProcess;
+import module.mission.domain.MissionSystem;
+import module.organization.domain.Accountability;
+import module.organization.domain.OrganizationalModel;
+import module.organization.domain.Party;
+import module.organization.domain.Unit;
 import module.workflow.activities.ActivityInformation;
 import myorg.domain.RoleType;
 import myorg.domain.User;
@@ -17,8 +22,13 @@ public class SubmitForApprovalByManagerOrManagementCouncilActivity extends Missi
     public boolean isActive(final MissionProcess missionProcess, final User user) {
 	return super.isActive(missionProcess, user)
 		&& missionProcess.isUnderConstruction()
-		&& user.hasRoleType(RoleType.MANAGER)
+		&& (user.hasRoleType(RoleType.MANAGER) || isManagementCouncilMember(user))
 		;
+    }
+
+    private boolean isManagementCouncilMember(final User user) {
+	final MissionSystem system = MissionSystem.getInstance();
+	return system.isManagementCouncilMember(user);
     }
 
     @Override

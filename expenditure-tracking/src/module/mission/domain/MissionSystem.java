@@ -9,13 +9,16 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import module.organization.domain.Accountability;
 import module.organization.domain.AccountabilityType;
 import module.organization.domain.OrganizationalModel;
+import module.organization.domain.Party;
 import module.organization.domain.Unit;
 import module.workflow.domain.ProcessCounter;
 import module.workflow.domain.WorkflowProcess;
 import module.workflow.widgets.ProcessListWidget;
 import myorg.domain.MyOrg;
+import myorg.domain.User;
 import myorg.util.BundleUtil;
 import pt.ist.fenixWebFramework.services.Service;
 
@@ -145,6 +148,31 @@ public class MissionSystem extends MissionSystem_Base {
 
     public static String getMessage(final String key, String... args) {
 	return BundleUtil.getFormattedStringFromResourceBundle(getBundle(), key, args);
+    }
+
+    public boolean isManagementCouncilMember(final User user) {
+	final OrganizationalModel model = getOrganizationalModel();
+	for (final Party party : model.getPartiesSet()) {
+	    if (party.isUnit() && isManagementCouncilMember(user, model, (Unit) party, true)) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
+    private boolean isManagementCouncilMember(final User user, final OrganizationalModel model,
+	    final Unit unit, final boolean recurseOverChildren) {
+	for (final Accountability accountability : unit.getChildAccountabilitiesSet()) {
+	    final AccountabilityType accountabilityType = accountability.getAccountabilityType();
+	    if (model.getAccountabilityTypesSet().contains(accountabilityType)) {
+		final Party child = accountability.getChild();
+		if ((isAccountabilityTypesThatAuthorize(accountabilityType) && child == user.getPerson())
+			|| (recurseOverChildren && child.isUnit() && isManagementCouncilMember(user, model, (Unit) child, false))){
+		    return true;
+		}
+	    }
+	}
+	return false;
     }
 
 }
