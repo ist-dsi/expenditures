@@ -171,7 +171,8 @@ public class ProjectFinancer extends ProjectFinancer_Base {
 
     @Override
     public boolean isProjectAccountingEmployee(Person person) {
-	return getAccountingUnit().hasProjectAccountants(person);
+	final AccountingUnit accountingUnit = getAccountingUnit();
+	return accountingUnit == null ? false : accountingUnit.hasProjectAccountants(person);
     }
 
     @Override
