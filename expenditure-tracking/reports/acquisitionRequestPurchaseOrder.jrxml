@@ -310,8 +310,8 @@ Portugal]]></text>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<text><![CDATA[Tel. 214 417 210
-Fax 218 498 678]]></text>
+				<text><![CDATA[Tel. 218 419 716
+Fax 218 417 717]]></text>
 			</staticText>
 			<textField>
 				<reportElement key="staticText-36" x="177" y="0" width="91" height="43" forecolor="#00427B"/>
