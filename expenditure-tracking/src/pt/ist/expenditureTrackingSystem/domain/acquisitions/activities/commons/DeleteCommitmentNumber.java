@@ -46,4 +46,9 @@ public class DeleteCommitmentNumber extends WorkflowActivity<RegularAcquisitionP
 	return false;
     }
 
+    @Override
+    public boolean isUserAwarenessNeeded(RegularAcquisitionProcess process, User user) {
+	return false;
+    }
+
 }

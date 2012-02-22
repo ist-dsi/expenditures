@@ -3,6 +3,7 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 import java.util.ResourceBundle;
 
 import module.workflow.util.PresentableProcessState;
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.fenixWebFramework.rendererExtensions.util.IPresentableEnum;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 
@@ -25,7 +26,14 @@ public enum AcquisitionProcessStateType implements IPresentableEnum, Presentable
 
     FUNDS_ALLOCATED,
 
-    AUTHORIZED,
+    AUTHORIZED {
+	@Override
+	public String getDescriptionKey() {
+	    final ExpenditureTrackingSystem instance = ExpenditureTrackingSystem.getInstance();
+	    return instance.getRequireCommitmentNumber() != null && instance.getRequireCommitmentNumber().booleanValue() ?
+		    super.getDescriptionKey() + ".requireCommitmentNumber" : super.getDescriptionKey();
+	}
+    },
 
     INVITES_SENT,
 
@@ -124,10 +132,13 @@ public enum AcquisitionProcessStateType implements IPresentableEnum, Presentable
 	return ordinal() >= acquisitionProcessStateType.ordinal();
     }
 
+    public String getDescriptionKey() {
+	return AcquisitionProcessStateType.class.getSimpleName() + "." + name() + ".description";
+    }
+
     public String getDescription() {
-    	final ResourceBundle resourceBundle = ResourceBundle.getBundle("resources.ExpenditureEnumerationResources", Language
-    			.getLocale());
-    		return resourceBundle.getString(AcquisitionProcessStateType.class.getSimpleName() + "." + name() + ".description");
+    	final ResourceBundle resourceBundle = ResourceBundle.getBundle("resources.ExpenditureEnumerationResources", Language.getLocale());
+    	return resourceBundle.getString(getDescriptionKey());
     } 
 
     @Override
