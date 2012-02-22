@@ -361,6 +361,24 @@
 </table> 
 </logic:notEmpty>
 
+<h4><bean:message key="label.commitmentNumbers" bundle="EXPENDITURE_RESOURCES"/></h>
+
+<ul>
+	<logic:iterate id="financer" name="process" property="acquisitionRequest.financersSet">
+		<li>
+			<bean:write name="financer" property="unit.presentationName"/>
+			:
+			<bean:write name="financer" property="commitmentNumber"/>
+
+			<bean:define id="financerId" name="financer" property="externalId" type="java.lang.String"/>
+			<wf:activityLink id="<%= "deleteCommitmentNumber-" + financerId %>" processName="process" activityName="DeleteCommitmentNumber" scope="request" paramName0="financer" paramValue0="<%= financerId %>">
+				<bean:message key="label.delete" bundle="EXPENDITURE_RESOURCES"/>
+			</wf:activityLink>
+		</li>
+	</logic:iterate>
+</ul>
+
+
 <logic:present name="itemSet">
 	
 		<logic:equal  name="process" property="pastInvoiceReceived"  value="true">		

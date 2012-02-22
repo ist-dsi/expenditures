@@ -127,8 +127,10 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 			|| virtualHost.getHostname().equals("compras.ist.utl.pt")) {
 		    ets.setRequireFundAllocationPriorToAcquisitionRequest(Boolean.TRUE);
 		    ets.setRegisterDiaryNumbersAndTransactionNumbers(Boolean.FALSE);
+		    ets.setRequireCommitmentNumber(Boolean.TRUE);
 		} else {
 		    ets.setRegisterDiaryNumbersAndTransactionNumbers(Boolean.TRUE);
+		    ets.setRequireCommitmentNumber(Boolean.FALSE);
 		}
 	    }
 	}
@@ -453,7 +455,7 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 	    final SearchProcessValuesArray array, final Boolean invoiceAllowedToStartAcquisitionProcess,
 	    final Boolean requireFundAllocationPriorToAcquisitionRequest, final Boolean registerDiaryNumbersAndTransactionNumbers,
 	    final Money maxValueStartedWithInvoive, final Money valueRequireingTopLevelAuthorization,
-	    final String documentationUrl, final String documentationLabel) {
+	    final String documentationUrl, final String documentationLabel, final Boolean requireCommitmentNumber) {
 	setInstitutionalProcessNumberPrefix(institutionalProcessNumberPrefix);
 	setInstitutionalRequestDocumentPrefix(institutionalRequestDocumentPrefix);
 	setAcquisitionCreationWizardJsp(acquisitionCreationWizardJsp);
@@ -465,6 +467,7 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 	setValueRequireingTopLevelAuthorization(valueRequireingTopLevelAuthorization);
 	setDocumentationUrl(documentationUrl);
 	setDocumentationLabel(documentationLabel);
+	setRequireCommitmentNumber(requireCommitmentNumber);
     }
 
     @Service

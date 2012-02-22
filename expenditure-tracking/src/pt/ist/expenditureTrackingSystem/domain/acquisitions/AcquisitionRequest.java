@@ -586,4 +586,54 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	}
     }
 
+    public boolean isCommitted() {
+	if (!hasAnyFinancers()) {
+	    return false;
+	}
+	for (final Financer financer : getFinancersSet()) {
+	    if (!financer.isCommitted()) {
+		return false;
+	    }
+	}
+	return true;
+    }
+
+    public boolean isPendingCommitmentByUser(final Person person) {
+	if (!hasAnyFinancers()) {
+	    return false;
+	}
+	for (final Financer financer : getFinancersSet()) {
+	    if (!financer.isCommitted() && financer.isAccountingEmployee(person)) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
+    public boolean hasCommitmentByUser(final Person person) {
+	if (!hasAnyFinancers()) {
+	    return false;
+	}
+	for (final Financer financer : getFinancersSet()) {
+	    if (financer.isCommitted() && financer.isAccountingEmployee(person)) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
+    public String getCommitmentNumbers() {
+	final StringBuilder builder = new StringBuilder();
+	for (final Financer financer : getFinancersSet()) {
+	    final String commitmentNumber = financer.getCommitmentNumber();
+	    if (commitmentNumber != null && !commitmentNumber.isEmpty()) {
+		if (builder.length() > 0) {
+		    builder.append(", ");
+		}
+		builder.append(commitmentNumber);
+	    }
+	}
+	return builder.toString();
+    }
+
 }

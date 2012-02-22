@@ -66,6 +66,10 @@ public class ExpenditureConfigurationAction extends BaseAction {
 	final String valueRequireingTopLevelAuthorizationParam = request.getParameter("valueRequireingTopLevelAuthorization");
 	final Money valueRequireingTopLevelAuthorization = valueRequireingTopLevelAuthorizationParam == null || valueRequireingTopLevelAuthorizationParam.isEmpty() ? null : new Money(valueRequireingTopLevelAuthorizationParam);
 
+	
+	final String requireCommitmentNumberParam = request.getParameter("requireCommitmentNumber");
+	final Boolean requireCommitmentNumber = Boolean.valueOf("on".equals(requireCommitmentNumberParam));
+
 	ExpenditureTrackingSystem.getInstance().saveConfiguration(
 		institutionalProcessNumberPrefix,
 		institutionalRequestDocumentPrefix,
@@ -77,7 +81,8 @@ public class ExpenditureConfigurationAction extends BaseAction {
 		maxValueStartedWithInvoive,
 		valueRequireingTopLevelAuthorization,
 		documentationUrl,
-		documentationLabel);
+		documentationLabel,
+		requireCommitmentNumber);
 
 	return viewConfiguration(mapping, form, request, response);
     }

@@ -379,4 +379,9 @@ public class Financer extends Financer_Base {
 	return false;
     }
 
+    public boolean isCommitted() {
+	final String commitmentNumber = getCommitmentNumber();
+	return commitmentNumber != null && !commitmentNumber.isEmpty();
+    }
+
 }

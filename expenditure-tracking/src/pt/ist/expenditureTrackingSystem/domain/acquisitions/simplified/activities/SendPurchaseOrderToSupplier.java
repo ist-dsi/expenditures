@@ -13,9 +13,10 @@ public class SendPurchaseOrderToSupplier extends
     @Override
     public boolean isActive(RegularAcquisitionProcess process, User user) {
 	return isUserProcessOwner(process, user)
-		&& ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user)
 		&& process.getAcquisitionProcessState().isAuthorized()
-		&& process.hasPurchaseOrderDocument();
+		&& ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user)
+		&& process.hasPurchaseOrderDocument()
+		&& process.isCommitted();
     }
 
     @Override

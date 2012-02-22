@@ -26,6 +26,8 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionPr
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.AllocateFundsPermanently;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.AllocateProjectFundsPermanently;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.Authorize;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.CommitFunds;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.DeleteCommitmentNumber;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.FundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.GenericAddPayingUnit;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.GenericAssignPayingUnitToItem;
@@ -127,6 +129,8 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
     private static List<WorkflowActivity<? extends RegularAcquisitionProcess, ? extends ActivityInformation<? extends RegularAcquisitionProcess>>> activities = new ArrayList<WorkflowActivity<? extends RegularAcquisitionProcess, ? extends ActivityInformation<? extends RegularAcquisitionProcess>>>();
 
     static {
+	activities.add(new CommitFunds());
+	activities.add(new DeleteCommitmentNumber());
 	activities.add(new CreateAcquisitionPurchaseOrderDocument());
 	activities.add(new SendPurchaseOrderToSupplier());
 	activities.add(new SkipPurchaseOrderDocument());

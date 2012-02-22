@@ -240,6 +240,20 @@
 						/>
 			</td>
 		</tr>
+		<tr>
+			<td>
+				<bean:message key="label.configuration.process.flow.register.diary.numbers.and.transaction.numbers"
+						bundle="EXPENDITURE_RESOURCES"/>
+			</td>
+			<td>
+				<input type="checkbox" name="requireCommitmentNumber"
+					<% if (expenditureTrackingSystem.getRequireCommitmentNumber() != null
+								&& expenditureTrackingSystem.getRequireCommitmentNumber().booleanValue()) {%>
+							checked="checked"
+					<% } %>
+				/>
+			</td>
+		</tr>
 	</table>
 
 	<h4>
@@ -260,7 +274,7 @@
 		</tr>
 		<tr>
 			<td>
-				<bean:message key="label.configuration.process.documentation.documentationLabel" bundle="EXPENDITURE_RESOURCES"/>
+				<bean:message key="label.pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.CommitFunds" bundle="EXPENDITURE_RESOURCES"/>
 			</td>
 			<td>
 				<input type="text" name="documentationLabel" size="50"

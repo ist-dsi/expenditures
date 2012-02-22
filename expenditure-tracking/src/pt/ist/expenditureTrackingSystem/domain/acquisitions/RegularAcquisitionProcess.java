@@ -270,4 +270,31 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
 	return false;
     }
 
+    public boolean isCommitted() {
+	final ExpenditureTrackingSystem instance = ExpenditureTrackingSystem.getInstance();
+	if (instance.getRequireCommitmentNumber() != null && instance.getRequireCommitmentNumber().booleanValue()) {
+	    final AcquisitionRequest acquisitionRequest = getAcquisitionRequest();
+	    return acquisitionRequest.isCommitted();
+	}
+	return true;
+    }
+
+    public boolean isPendingCommitmentByUser(final Person person) {
+	final ExpenditureTrackingSystem instance = ExpenditureTrackingSystem.getInstance();
+	if (instance.getRequireCommitmentNumber() != null && instance.getRequireCommitmentNumber().booleanValue()) {
+	    final AcquisitionRequest acquisitionRequest = getAcquisitionRequest();
+	    return acquisitionRequest.isPendingCommitmentByUser(person);
+	}
+	return false;
+    }
+
+    public boolean hasCommitmentByUser(final Person person) {
+	final ExpenditureTrackingSystem instance = ExpenditureTrackingSystem.getInstance();
+	if (instance.getRequireCommitmentNumber() != null && instance.getRequireCommitmentNumber().booleanValue()) {
+	    final AcquisitionRequest acquisitionRequest = getAcquisitionRequest();
+	    return acquisitionRequest.hasCommitmentByUser(person);
+	}
+	return false;
+    }
+
 }

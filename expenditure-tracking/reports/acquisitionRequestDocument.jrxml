@@ -13,6 +13,7 @@
 	<parameter name="path" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="deliveryLocals" class="java.util.Collection" isForPrompting="false"/>
 	<parameter name="requestID" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="commitmentNumbers" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="responsibleName" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="institutionSocialSecurityNumber" isForPrompting="false" class="java.lang.String"/>
 	<parameter name="cae" isForPrompting="false" class="java.lang.String"/>
@@ -90,6 +91,18 @@
 				<reportElement key="textField-25" x="403" y="46" width="132" height="15"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression class="java.lang.String"><![CDATA[new SimpleDateFormat("yyyy/MM/dd").format(new Date())]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-98" x="285" y="63" width="117" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" isItalic="true" pdfFontName="Helvetica-BoldOblique"/>
+				</textElement>
+				<text><![CDATA[Nº Compromisso:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false" isStretchWithOverflow="true">
+				<reportElement key="textField-99" x="403" y="63" width="132" height="15"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{commitmentNumbers}.toString()]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement key="staticText-25" x="394" y="251" width="0" height="0"/>

@@ -30,8 +30,11 @@ public class CreateAcquisitionPurchaseOrderDocument extends
 
     @Override
     public boolean isActive(RegularAcquisitionProcess process, User user) {
-	return isUserProcessOwner(process, user) && process.getAcquisitionProcessState().isAuthorized()
-		&& ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user) && process.getRequest().hasSelectedSupplier();
+	return isUserProcessOwner(process, user)
+		&& process.getAcquisitionProcessState().isAuthorized()
+		&& ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user)
+		&& process.getRequest().hasSelectedSupplier()
+		&& process.isCommitted();
     }
 
     @Override
@@ -76,11 +79,12 @@ public class CreateAcquisitionPurchaseOrderDocument extends
 		PropertiesManager.getProperty(VirtualHost.getVirtualHostForThread().getHostname() + ".ssn"));
 	paramMap.put("cae", PropertiesManager.getProperty(VirtualHost.getVirtualHostForThread().getHostname() + ".cae"));
 	paramMap.put("logoFilename", "Logo_" + VirtualHost.getVirtualHostForThread().getHostname() + ".png");
+	paramMap.put("commitmentNumbers", acquisitionRequest.getCommitmentNumbers());
 
 	final ResourceBundle resourceBundle = ResourceBundle.getBundle("resources/AcquisitionResources");
 	try {
 	    final VirtualHost virtualHost = VirtualHost.getVirtualHostForThread();
-	    final String documentName = virtualHost.getHostname().equals("dot.ist.utl.pt") ?
+	    final String documentName = virtualHost.getHostname().equals("dot.ist.utl.pt") || true ?
 		    "acquisitionRequestDocument" : "acquisitionRequestPurchaseOrder";
 	    byte[] byteArray = ReportUtils.exportToPdfFileAsByteArray(documentName, paramMap,
 		    resourceBundle, acquisitionRequestItemBeans);
