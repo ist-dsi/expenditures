@@ -242,7 +242,7 @@
 		</tr>
 		<tr>
 			<td>
-				<bean:message key="label.configuration.process.flow.register.diary.numbers.and.transaction.numbers"
+				<bean:message key="label.configuration.process.flow.requireCommitmentNumber"
 						bundle="EXPENDITURE_RESOURCES"/>
 			</td>
 			<td>
@@ -274,7 +274,7 @@
 		</tr>
 		<tr>
 			<td>
-				<bean:message key="label.pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.CommitFunds" bundle="EXPENDITURE_RESOURCES"/>
+				<bean:message key="label.pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.CommitFunds" bundle="ACQUISITION_RESOURCES"/>
 			</td>
 			<td>
 				<input type="text" name="documentationLabel" size="50"
