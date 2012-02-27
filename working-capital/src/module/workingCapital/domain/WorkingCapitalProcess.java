@@ -195,8 +195,9 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base implements
 			    "label.email.commentCreated.body",
 			    loggedUser.getPerson().getName(),
 			    workingCapital.getUnit().getPresentationName(),
-			    workingCapital.getWorkingCapitalYear().getYear().toString(), comment),
-			    VirtualHost.getVirtualHostForThread().getHostname());
+			    workingCapital.getWorkingCapitalYear().getYear().toString(),
+			    comment,
+			    VirtualHost.getVirtualHostForThread().getHostname()));
 	}
     }
 
