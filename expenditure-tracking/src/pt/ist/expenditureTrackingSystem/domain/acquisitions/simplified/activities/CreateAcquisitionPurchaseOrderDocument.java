@@ -84,7 +84,7 @@ public class CreateAcquisitionPurchaseOrderDocument extends
 	final ResourceBundle resourceBundle = ResourceBundle.getBundle("resources/AcquisitionResources");
 	try {
 	    final VirtualHost virtualHost = VirtualHost.getVirtualHostForThread();
-	    final String documentName = virtualHost.getHostname().equals("dot.ist.utl.pt") || true ?
+	    final String documentName = virtualHost.getHostname().equals("dot.ist.utl.pt") ?
 		    "acquisitionRequestDocument" : "acquisitionRequestPurchaseOrder";
 	    byte[] byteArray = ReportUtils.exportToPdfFileAsByteArray(documentName, paramMap,
 		    resourceBundle, acquisitionRequestItemBeans);
