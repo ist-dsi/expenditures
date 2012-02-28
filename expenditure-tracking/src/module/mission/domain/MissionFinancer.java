@@ -334,4 +334,9 @@ public class MissionFinancer extends MissionFinancer_Base {
 	return getUnit().isUnitObserver(user);
     }
 
+    public pt.ist.expenditureTrackingSystem.domain.organization.Person getAccountManager() {
+	final Unit unit = getUnit();
+	return unit == null ? null : unit.getAccountManager();
+    }
+
 }

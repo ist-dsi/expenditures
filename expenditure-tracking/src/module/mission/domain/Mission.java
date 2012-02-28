@@ -11,28 +11,6 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import module.geography.domain.Country;
-import module.mission.domain.AccommodationItem;
-import module.mission.domain.AccountabilityTypeQueue;
-import module.mission.domain.DailyPersonelExpenseCategory;
-import module.mission.domain.DailyPersonelExpenseTable;
-import module.mission.domain.ForeignMission;
-import module.mission.domain.FullPersonelExpenseItem;
-import module.mission.domain.MissionAuthorizationAccountabilityType;
-import module.mission.domain.MissionChangeDescription;
-import module.mission.domain.MissionFinancer;
-import module.mission.domain.MissionItem;
-import module.mission.domain.MissionItemFinancer;
-import module.mission.domain.MissionItemProjectFinancer;
-import module.mission.domain.MissionProcess;
-import module.mission.domain.MissionSystem;
-import module.mission.domain.MissionVersion;
-import module.mission.domain.Mission_Base;
-import module.mission.domain.NoPersonelExpenseItem;
-import module.mission.domain.OtherMissionItem;
-import module.mission.domain.PersonMissionAuthorization;
-import module.mission.domain.PersonelExpenseItem;
-import module.mission.domain.SyncSalary;
-import module.mission.domain.TransportationItem;
 import module.mission.domain.activity.DistributeItemCostsActivityInformation;
 import module.mission.domain.activity.DistributeItemCostsActivityInformation.MissionItemFinancerBean;
 import module.mission.domain.activity.DistributeItemCostsActivityInformation.MissionItemFinancerBeanCollection;
@@ -1340,8 +1318,7 @@ public abstract class Mission extends Mission_Base {
 		final pt.ist.expenditureTrackingSystem.domain.organization.Person person = user.getExpenditurePerson();
 		if (person != null) {
 		    for (final MissionFinancer financer : getFinancerSet()) {
-			final Unit unit = financer.getUnit();
-			if (unit.getAccountManager() == accountManager.getUser().getExpenditurePerson()) {
+			if (financer.getAccountManager() == accountManager.getUser().getExpenditurePerson()) {
 			    return true;
 			}
 		    }
