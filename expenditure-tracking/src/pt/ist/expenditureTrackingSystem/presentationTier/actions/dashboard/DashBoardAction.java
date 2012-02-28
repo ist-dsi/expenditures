@@ -32,13 +32,14 @@ import pt.ist.expenditureTrackingSystem.presentationTier.widgets.UnreadCommentsW
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixWebFramework.servlets.functionalities.CreateNodeAction;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
+import pt.utl.ist.fenix.tools.util.i18n.Language;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
 @Mapping(path = "/dashBoard")
 public class DashBoardAction extends ContextBaseAction {
 
-    public static MultiLanguageString dashBoardTitle = MultiLanguageString.i18n().add("pt", "Resumo").add("en", "Resume")
-	    .finish();
+    public static MultiLanguageString dashBoardTitle = new MultiLanguageString().with(Language.pt, "Resumo").with(Language.en,
+	    "Resume");
 
     public ActionForward viewDigest(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) {
