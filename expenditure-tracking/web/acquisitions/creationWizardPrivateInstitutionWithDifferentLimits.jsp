@@ -16,26 +16,37 @@
 		
 			<div class="infobox5" style="float: left; width: 98%">
 				<div>
+<%--
 					<ul class="list-reset" class="mtop5">
 						<li style="padding-bottom: 10px;">
+ --%>
 							<strong>
 								<html:link styleClass="big" action="/acquisitionSimplifiedProcedureProcess.do?method=prepareCreateAcquisitionProcessCT10000">
 									<bean:message key="link.create.process.CT10000" bundle="EXPENDITURE_RESOURCES"/>
 								</html:link>
 							</strong>
 							<br/>
-							<bean:message key="message.info.processExplanation.CT10000" bundle="EXPENDITURE_RESOURCES"/>
+							<bean:message key="message.info.processExplanation.CT10000.private.variation" bundle="EXPENDITURE_RESOURCES"/>
+							<br/>
+							<br/>
+
+<%--
 						</li>
 						<li style="padding-bottom: 10px;">
+--%>
 							<strong>
 								<html:link styleClass="big" action="/acquisitionSimplifiedProcedureProcess.do?method=prepareCreateAcquisitionProcessCT75000">
 									<bean:message key="link.create.process.CT75000" bundle="EXPENDITURE_RESOURCES"/>
 								</html:link>
 							</strong>
 							<br/>
-							<bean:message key="message.info.processExplanation.CT75000" bundle="EXPENDITURE_RESOURCES" arg0="<%= ExpenditureTrackingSystem.getInstance().getTopLevelUnitsSet().iterator().next().getUnit().getAcronym() %>"/>
+							<bean:message key="message.info.processExplanation.CT75000.private.variation" bundle="EXPENDITURE_RESOURCES" arg0="<%= ExpenditureTrackingSystem.getInstance().getTopLevelUnitsSet().iterator().next().getUnit().getAcronym() %>"/>
+							<br/>
+							<br/>
+<%--
 						</li>
 						<li style="padding-bottom: 10px;">
+--%>
 							<strong>
 								<html:link styleClass="big" action="/acquisitionRefundProcess.do?method=prepareCreateRefundProcessUnderRCIST">
 									<bean:message key="link.create.refundProcess" bundle="EXPENDITURE_RESOURCES"/>
@@ -43,8 +54,10 @@
 							</strong>
 							<br/>
 							<bean:message key="message.info.refundProcessExplanation" bundle="EXPENDITURE_RESOURCES"/>
+<%--
 						</li>
 					</ul>
+--%>
 				</div>
 			</div>
 		
