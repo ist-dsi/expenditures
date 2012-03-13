@@ -29,6 +29,8 @@ import java.util.Set;
 
 import module.organization.domain.Accountability;
 import module.organization.domain.AccountabilityType;
+import module.organization.domain.OrganizationalModel;
+import module.organization.domain.Party;
 import module.organization.domain.Person;
 import module.organizationIst.domain.IstAccountabilityType;
 import myorg.domain.MyOrg;
@@ -54,18 +56,19 @@ public class ImportEmployeesAndResponsiblesAux {
 	final RemotePerson someRemotePerson = somePerson.getRemotePerson();
 
 	final String allTeacherInformation = someRemotePerson.readAllTeacherInformation();
-	updateInformation(IstAccountabilityType.TEACHING_PERSONNEL, allTeacherInformation);
+	updateInformation(IstAccountabilityType.TEACHING_PERSONNEL, allTeacherInformation, true);
 	final String allResearcherInformation = someRemotePerson.readAllResearcherInformation();
-	updateInformation(IstAccountabilityType.RESEARCH_PERSONNEL, allResearcherInformation);
+	updateInformation(IstAccountabilityType.RESEARCH_PERSONNEL, allResearcherInformation, true);
 	final String allEmployeeInformation = someRemotePerson.readAllEmployeeInformation();
-	updateInformation(IstAccountabilityType.PERSONNEL, allEmployeeInformation);
+	updateInformation(IstAccountabilityType.PERSONNEL, allEmployeeInformation, true);
 	final String allGrantOwnerInformation = someRemotePerson.readAllGrantOwnerInformation();
-	updateInformation(IstAccountabilityType.GRANT_OWNER_PERSONNEL, allGrantOwnerInformation);
+	updateInformation(IstAccountabilityType.GRANT_OWNER_PERSONNEL, allGrantOwnerInformation, true);
 	final String allExternalResearcherInformation = someRemotePerson.readAllExternalResearcherInformation();
-	updateInformation(IstAccountabilityType.EXTERNAL_RESEARCH_PERSONNEL, allExternalResearcherInformation);
+	updateInformation(IstAccountabilityType.EXTERNAL_RESEARCH_PERSONNEL, allExternalResearcherInformation, false);
     }
 
-    private static void updateInformation(final IstAccountabilityType istAccountabilityType, final String allInformation) {
+    private static void updateInformation(final IstAccountabilityType istAccountabilityType, final String allInformation,
+	    final boolean updateEmploymentInfo) {
 	final Set<String> usernames = new HashSet<String>();
 
 	final AccountabilityType accountabilityType = istAccountabilityType.readAccountabilityType();
@@ -73,15 +76,17 @@ public class ImportEmployeesAndResponsiblesAux {
 	for (int i = 0; i < allInformation.length(); ) {
 	    final int sep1 = allInformation.indexOf(':', i);
 	    final int sep2 = allInformation.indexOf(':', sep1 + 1);
-	    final int sep3 = allInformation.indexOf('|', sep2 + 1);
+	    final int sep3 = allInformation.indexOf(':', sep2 + 1);
+	    final int sep4 = allInformation.indexOf('|', sep3 + 1);
 
-	    if (sep1 > i && sep2 > sep1 && sep3 > sep2) {
+	    if (sep1 > i && sep2 > sep1 && sep3 > sep2 && sep4 > sep3) {
 		final String username = allInformation.substring(i, sep1);
 		usernames.add(username);
 		final String costCenterCode = allInformation.substring(sep2 + 1, sep3);
+		final String institution = allInformation.substring(sep3 + 1, sep4);
 
-		updateInformation(now, accountabilityType, username, costCenterCode, allInformation);
-		i = sep3 + 1;
+		updateInformation(now, accountabilityType, username, costCenterCode, allInformation, institution, updateEmploymentInfo);
+		i = sep4 + 1;
 	    } else {
 		i++;
 	    }
@@ -107,7 +112,8 @@ public class ImportEmployeesAndResponsiblesAux {
     }
 
     private static void updateInformation(final LocalDate now, final AccountabilityType accountabilityType, 
-	    final String username, final String costCenterCode, final String allInformation) {
+	    final String username, final String costCenterCode, final String allInformation,
+	    final String employer, final boolean updateEmploymentInfo) {
 	final User user = User.findByUsername(username);
 	if (user != null) {
 	    final Person person = user.getPerson();
@@ -118,12 +124,52 @@ public class ImportEmployeesAndResponsiblesAux {
 		} else {
 		    System.out.println("Did not find cost center with code: " + costCenterCode);
 		}
+		if (updateEmploymentInfo) {
+		    updateEmployerInformation(person, now, employer);
+		}
 	    } else {
 		System.out.println("User with username: " + username + " has no person");
 	    }
 	} else {
 	    System.out.println("Did not find user with username: " + username);
 	}
+    }
+
+    private static void updateEmployerInformation(final Person person, final LocalDate now, final String employer) {
+	if (employer != null) {
+	    final AccountabilityType accountabilityType = IstAccountabilityType.EMPLOYMENT.readAccountabilityType();
+	    for (final Accountability accountability : person.getParentAccountabilitiesSet()) {
+		if (accountability.getAccountabilityType() == accountabilityType && accountability.isActive(now)) {
+		    final Party parent = accountability.getParent();
+		    if (parent.isUnit()) {
+			final module.organization.domain.Unit unit = (module.organization.domain.Unit) parent;
+			final String acronym = unit.getAcronym();
+			if (employer.equals(acronym)) {
+			    return;
+			} else {
+			    accountability.editDates(accountability.getBeginDate(), now);
+			}
+		    }
+		}
+	    }
+	    final module.organization.domain.Unit unit = findUnit(employer);
+	    unit.addChild(person, accountabilityType, now, null);
+	}
+    }
+
+    private static module.organization.domain.Unit findUnit(final String employer) {
+	for (final OrganizationalModel organizationalModel : MyOrg.getInstance().getOrganizationalModelsSet()) {
+	    for (final Party party : organizationalModel.getPartiesSet()) {
+		if (party.isUnit()) {
+		    final module.organization.domain.Unit unit = (module.organization.domain.Unit) party;
+		    final String acronym = unit.getAcronym();
+		    if (employer.equals(acronym)) {
+			return unit;
+		    }
+		}
+	    }
+	}
+	return null;
     }
 
     private static void updateInformation(final LocalDate now, final AccountabilityType accountabilityType,
