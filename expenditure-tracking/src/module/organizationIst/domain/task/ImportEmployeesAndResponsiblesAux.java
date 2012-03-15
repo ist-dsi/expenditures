@@ -153,7 +153,11 @@ public class ImportEmployeesAndResponsiblesAux {
 		}
 	    }
 	    final module.organization.domain.Unit unit = findUnit(employer);
-	    unit.addChild(person, accountabilityType, now, null);
+	    if (unit != null) {
+		unit.addChild(person, accountabilityType, now, null);
+	    } else {
+		System.out.println("No unit with name: " + employer + " was found!");
+	    }
 	}
     }
 
