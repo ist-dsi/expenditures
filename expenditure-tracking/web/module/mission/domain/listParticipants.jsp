@@ -1,3 +1,8 @@
+<%@page import="module.organization.domain.AccountabilityType"%>
+<%@page import="module.mission.domain.MissionSystem"%>
+<%@page import="module.organizationIst.domain.IstAccountabilityType"%>
+<%@page import="module.organization.domain.Unit"%>
+<%@page import="module.organization.domain.Accountability"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
@@ -45,6 +50,36 @@
 				</tr>
 				<tr>
 					<td colspan="4">
+						Entidade Patornal: 
+						<%
+							boolean hasEmployer = false;
+							final AccountabilityType type = IstAccountabilityType.EMPLOYMENT.readAccountabilityType();
+							for (final Accountability accountability : ((module.organization.domain.Person) person).getParentAccountabilitiesSet()) {
+							    if (accountability.isActiveNow() && accountability.isValid() && type == accountability.getAccountabilityType()) {
+									final Unit unit = (Unit) accountability.getParent();
+									hasEmployer = true;
+									if (unit == MissionSystem.getInstance().getOrganizationalModel().getPartiesIterator().next()) {
+									%>
+										<%= unit.getAcronym() %>
+									<%
+									} else {
+									%>
+										<span style="color: red;">
+											<%= unit.getAcronym() %>
+										</span>
+									<%
+									}
+							    }
+							}
+							if (!hasEmployer) {
+						%>
+								<span style="color: red;">
+									Não Tem Entidade Patornal.
+								</span>
+						<%
+							}
+						%>
+
 						<bean:message bundle="MISSION_RESOURCES" key="label.mission.participant.current.relation.to.institution"/>:
 						<% if (process.getMission().hasAnyCurrentRelationToInstitution((module.organization.domain.Person) person)) { %>
 							<%= process.getMission().getCurrentRelationToInstitution((module.organization.domain.Person) person) %>
