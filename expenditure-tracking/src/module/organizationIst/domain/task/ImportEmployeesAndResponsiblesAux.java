@@ -65,6 +65,66 @@ public class ImportEmployeesAndResponsiblesAux {
 	updateInformation(IstAccountabilityType.GRANT_OWNER_PERSONNEL, allGrantOwnerInformation, true);
 	final String allExternalResearcherInformation = someRemotePerson.readAllExternalResearcherInformation();
 	updateInformation(IstAccountabilityType.EXTERNAL_RESEARCH_PERSONNEL, allExternalResearcherInformation, false);
+
+	final String allEmployerInfo = someRemotePerson.readAllEmployerRelations();
+	updateEmployerInformation(allEmployerInfo);
+    }
+
+    private static void updateEmployerInformation(final String allEmployerInfo) {
+	final AccountabilityType accountabilityType = IstAccountabilityType.EMPLOYMENT.readAccountabilityType();
+	final LocalDate now = new LocalDate();
+
+	for (int i = 0; i < allEmployerInfo.length(); ) {
+	    final int sep1 = allEmployerInfo.indexOf(':', i);
+	    int sep2 = allEmployerInfo.indexOf('|', sep1 + 1);
+	    if (sep2 < 0) {
+		sep2 = allEmployerInfo.length();
+	    }
+
+	    if (sep1 > i && sep2 > sep1) {
+		final String username = allEmployerInfo.substring(i, sep1);
+		final String institution = allEmployerInfo.substring(sep1 + 1, sep2);
+
+		updateInformation(now, accountabilityType, username, institution);
+		i = sep2 + 1;
+	    } else {
+		i++;
+	    }
+	}
+
+	clearClosedEmploymentRelations("IST", allEmployerInfo, accountabilityType, now);
+	clearClosedEmploymentRelations("IST-ID", allEmployerInfo, accountabilityType, now);
+	clearClosedEmploymentRelations("ADIST", allEmployerInfo, accountabilityType, now);
+    }
+
+    private static void clearClosedEmploymentRelations(final String institution, final String allEmployerInfo,
+	    final AccountabilityType accountabilityType, final LocalDate now) {
+	for (final OrganizationalModel model : MyOrg.getInstance().getOrganizationalModelsSet()) {
+	    for (final Party party : model.getPartiesSet()) {
+		if (party.isUnit()) {
+		    final module.organization.domain.Unit unit = (module.organization.domain.Unit) party;
+		    if (unit.getAcronym().equals(institution)) {
+			for (final Accountability accountability : unit.getChildAccountabilitiesSet()) {
+			    if (accountability.isActiveNow() && accountability.getAccountabilityType() == accountabilityType) {
+				final Party child = accountability.getChild();
+				if (child.isPerson()) {
+				    final Person person = (Person) child;
+				    if (person != null) {
+					final User user = person.getUser();
+					final String username = user.getUsername();
+					final String searchString = username + ':' + institution;
+					if (allEmployerInfo.indexOf(searchString) < 0) {
+					    accountability.editDates(accountability.getBeginDate(), now);
+					}
+				    }
+				}
+			    }
+			}
+			return;
+		    }
+		}
+	    }
+	}
     }
 
     private static void updateInformation(final IstAccountabilityType istAccountabilityType, final String allInformation,
@@ -112,6 +172,21 @@ public class ImportEmployeesAndResponsiblesAux {
     }
 
     private static void updateInformation(final LocalDate now, final AccountabilityType accountabilityType, 
+	    final String username, final String institution) {
+	final User user = User.findByUsername(username);
+	if (user != null) {
+	    final Person person = user.getPerson();
+	    if (person != null) {
+		updateEmployerInformation(person, now, institution);
+	    } else {
+		System.out.println("User with username: " + username + " has no person");
+	    }
+	} else {
+	    System.out.println("Did not find user with username: " + username);
+	}
+    }
+    
+    private static void updateInformation(final LocalDate now, final AccountabilityType accountabilityType, 
 	    final String username, final String costCenterCode, final String allInformation,
 	    final String employer, final boolean updateEmploymentInfo) {
 	final User user = User.findByUsername(username);
@@ -147,7 +222,7 @@ public class ImportEmployeesAndResponsiblesAux {
 			if (employer.equals(acronym)) {
 			    return;
 			} else {
-			    accountability.editDates(accountability.getBeginDate(), now);
+			    //accountability.editDates(accountability.getBeginDate(), now);
 			}
 		    }
 		}
