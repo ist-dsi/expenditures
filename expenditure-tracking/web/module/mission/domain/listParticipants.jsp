@@ -50,7 +50,7 @@
 				</tr>
 				<tr>
 					<td colspan="4">
-						Entidade Patornal: 
+						Entidade Patronal: 
 						<%
 							boolean hasEmployer = false;
 							final AccountabilityType type = IstAccountabilityType.EMPLOYMENT.readAccountabilityType();
@@ -74,7 +74,7 @@
 							if (!hasEmployer) {
 						%>
 								<span style="color: red;">
-									Não Tem Entidade Patornal.
+									Não Tem Entidade Patronal.
 								</span>
 						<%
 							}
