@@ -27,6 +27,7 @@ package module.mission.domain.activity;
 import java.util.ResourceBundle;
 
 import module.mission.domain.MissionProcess;
+import module.mission.domain.MissionSystem;
 import module.workflow.activities.ActivityInformation;
 import myorg.domain.RoleType;
 import myorg.domain.User;
@@ -53,7 +54,8 @@ public class CancelProcessActivity extends MissionProcessActivity<MissionProcess
 		&& !missionProcess.isCanceled()
 		// && missionProcess.isUnderConstruction()
 		&& (missionProcess.isRequestor(user)
-			|| user.hasRoleType(RoleType.MANAGER))
+			|| user.hasRoleType(RoleType.MANAGER)
+			|| MissionSystem.getInstance().getUsersWhoCanCancelMissionSet().contains(user))
 		;
     }
 

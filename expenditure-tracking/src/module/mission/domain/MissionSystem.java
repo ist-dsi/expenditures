@@ -204,4 +204,16 @@ public class MissionSystem extends MissionSystem_Base {
 	return false;
     }
 
+    @Service
+    @Override
+    public void addUsersWhoCanCancelMission(User usersWhoCanCancelMission) {
+        super.addUsersWhoCanCancelMission(usersWhoCanCancelMission);
+    }
+
+    @Service
+    @Override
+    public void removeUsersWhoCanCancelMission(User usersWhoCanCancelMission) {
+        super.removeUsersWhoCanCancelMission(usersWhoCanCancelMission);
+    }
+
 }

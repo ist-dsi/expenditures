@@ -659,3 +659,10 @@ relation MissionFinancerAccountingUnit {
 	}
 	.pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit playsRole accountingUnit;
 }
+
+relation MissionSystemUsersWhoCanCancelMission {
+	MissionSystem playsRole missionSystemFromUsersWhoCanCancel;
+	.myorg.domain.User playsRole usersWhoCanCancelMission {
+		multiplicity *;
+	}
+}

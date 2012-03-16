@@ -12,15 +12,16 @@ import module.mission.domain.util.AccountabilityTypeQueueBean;
 import module.mission.domain.util.DailyPersonelExpenseCategoryBean;
 import module.mission.domain.util.DailyPersonelExpenseTableBean;
 import module.mission.domain.util.MissionAuthorizationAccountabilityTypeBean;
-import module.mission.domain.util.MissionProcessCreationBean;
 import module.organization.domain.OrganizationalModel;
 import module.organization.presentationTier.actions.OrganizationModelAction;
+import myorg.domain.User;
 import myorg.presentationTier.actions.ContextBaseAction;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
 @Mapping(path = "/configureMissions")
@@ -185,4 +186,26 @@ public class MissionsConfigurationAction extends ContextBaseAction {
 	return prepare(mapping, form, request, response);
     }
 
+    public ActionForward prepareAddUserWhoCanCancelMissions(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	return forward(request, "/mission/addUserWhoCanCancelMissions.jsp");
+    }
+
+    public ActionForward addUserWhoCanCancelMissions(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	final String username = getAttribute(request, "username");
+	final User user = User.findByUsername(username);
+	if (user != null) {
+	    MissionSystem.getInstance().addUsersWhoCanCancelMission(user);
+	}
+	return prepare(mapping, form, request, response);
+    }
+
+    public ActionForward removeUserWhoCanCancelMissions(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	final User user = getDomainObject(request, "userOid");
+	MissionSystem.getInstance().removeUsersWhoCanCancelMission(user);
+	return prepare(mapping, form, request, response);
+    }
+    
 }
