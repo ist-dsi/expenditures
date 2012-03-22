@@ -27,6 +27,7 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons;
 import module.workflow.activities.WorkflowActivity;
 import myorg.domain.User;
 import myorg.util.BundleUtil;
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.ProjectFinancer;
 import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean;
@@ -42,8 +43,11 @@ public class AllocateProjectFundsPermanently<P extends PaymentProcess> extends
 
     @Override
     public boolean isActive(P process, User user) {
-	return process.isProjectAccountingEmployee(user.getExpenditurePerson()) && isUserProcessOwner(process, user)
-		&& !process.hasAllocatedFundsPermanentlyForAllProjectFinancers() && !process.hasAllInvoicesAllocatedInProject();
+	return process.isProjectAccountingEmployee(user.getExpenditurePerson())
+		&& isUserProcessOwner(process, user)
+		&& !process.hasAllocatedFundsPermanentlyForAllProjectFinancers()
+		&& (!process.hasAllInvoicesAllocatedInProject() ||
+			(ExpenditureTrackingSystem.isInvoiceAllowedToStartAcquisitionProcess() && !process.getRequest().hasProposalDocument()));
     }
 
     @Override

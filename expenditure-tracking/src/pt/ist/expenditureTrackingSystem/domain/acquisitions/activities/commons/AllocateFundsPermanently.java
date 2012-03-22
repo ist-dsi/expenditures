@@ -27,6 +27,7 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons;
 import module.workflow.activities.WorkflowActivity;
 import myorg.domain.User;
 import myorg.util.BundleUtil;
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionFundAllocationDiaryAndTransactionReportRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
@@ -51,7 +52,8 @@ public class AllocateFundsPermanently<P extends PaymentProcess> extends
 		&& isUserProcessOwner(process, user)
 		&& process.hasAllocatedFundsPermanentlyForAllProjectFinancers()
 		&& process.isInvoiceConfirmed()
-		&& !process.hasAllInvoicesAllocated();
+		&& (!process.hasAllInvoicesAllocated() ||
+			(ExpenditureTrackingSystem.isInvoiceAllowedToStartAcquisitionProcess() && !process.getRequest().hasProposalDocument()));
     }
 
     @Override

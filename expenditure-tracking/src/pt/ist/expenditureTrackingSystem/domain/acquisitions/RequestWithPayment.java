@@ -618,4 +618,8 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
 	return true;
     }
 
+    public boolean hasProposalDocument() {
+	return true;
+    }
+
 }

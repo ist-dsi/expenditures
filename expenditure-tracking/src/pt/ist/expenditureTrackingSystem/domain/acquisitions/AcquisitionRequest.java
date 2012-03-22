@@ -668,4 +668,9 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	return builder.toString();
     }
 
+    @Override
+    public boolean hasProposalDocument() {
+	return getProcess().hasAcquisitionProposalDocument();
+    }
+
 }
