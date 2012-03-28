@@ -36,6 +36,7 @@ import module.finance.domain.Supplier;
 import module.workflow.activities.ActivityException;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
+import module.workflow.activities.WorkflowActivity.NotActiveActivityException;
 import module.workflow.domain.WorkflowProcess;
 import myorg.applicationTier.Authenticate;
 import myorg.domain.User;
@@ -118,13 +119,12 @@ public class ProjectAcquisitionFundAllocationRequest extends ProjectAcquisitionF
 		}
 	    }
 	    super.registerFundAllocation(fundAllocationNumber, operatorUsername);
+	} catch (final NotActiveActivityException ex) {
+	    setExternalSystemFromManuallyForwardedProcesses(getExternalAccountingIntegrationSystemFromPendingResult());
+	    removeExternalAccountingIntegrationSystemFromPendingResult();	    
 	} catch (final ActivityException ex) {
 	    System.out.println("Got activity exception exception...");
 	    ex.printStackTrace();
-	    if (ex.getMessage().equals("activities.messages.exception.notActive")) {
-		setExternalSystemFromManuallyForwardedProcesses(getExternalAccountingIntegrationSystemFromPendingResult());
-		removeExternalAccountingIntegrationSystemFromPendingResult();
-	    }
 	}
     }
 
