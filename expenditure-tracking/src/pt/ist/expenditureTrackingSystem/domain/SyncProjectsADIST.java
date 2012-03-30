@@ -35,7 +35,7 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
  */
 public class SyncProjectsADIST extends SyncProjectsAux {
 
-    private final static Money AUTHORIZED_VALUE = new Money("0");
+    private final static Money AUTHORIZED_VALUE = new Money("5000");
 
     @Override
     protected String getDbPropertyPrefix() {
