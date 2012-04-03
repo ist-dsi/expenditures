@@ -68,4 +68,9 @@ public class SyncProjectsADIST extends SyncProjectsAux {
 	return Boolean.FALSE;
     }
 
+    @Override
+    protected boolean hasExpenditureAuthorizationDelegation(final String responsibleString) {
+	return true;
+    }
+
 }

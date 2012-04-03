@@ -567,7 +567,7 @@ public abstract class SyncProjectsAux {
 	for (final String responsibleString : responsibleStrings) {
 	    final Person responsible = findPerson(responsibleString);
 	    if (responsible != null) {
-		if (projectResponsibles.contains(Integer.valueOf(responsibleString))) {
+		if (hasExpenditureAuthorizationDelegation(responsibleString)) {
 		    if (!hasAuthorization(project, responsible)) {
 			final Authorization authorization = new Authorization(responsible, project, "Imported from MGP");
 			authorization.setMaxAmount(getAuthorizationValue());
@@ -625,6 +625,10 @@ public abstract class SyncProjectsAux {
 		}
 	    }
 	}
+    }
+
+    protected boolean hasExpenditureAuthorizationDelegation(final String responsibleString) {
+	return projectResponsibles.contains(Integer.valueOf(responsibleString));
     }
 
     private void changeAccountingUnit(final Unit unit, final AccountingUnit accountingUnit) {
