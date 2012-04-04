@@ -26,14 +26,16 @@ package pt.ist.expenditureTrackingSystem.domain.announcements;
 
 import module.workflow.domain.WorkflowProcess;
 import myorg.domain.User;
+import myorg.domain.exceptions.DomainException;
 import myorg.util.BundleUtil;
 
 import org.joda.time.DateTime;
 
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
-import myorg.domain.exceptions.DomainException;
 
 /**
+ * WorkflowLog is a generalization of this class - first version of the a
+ * logging class that came with the expenditureTrackingSystem
  * 
  * @author Luis Cruz
  * @author Paulo Abrantes
