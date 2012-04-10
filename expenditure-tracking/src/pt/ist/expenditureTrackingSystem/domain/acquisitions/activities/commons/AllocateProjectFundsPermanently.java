@@ -46,6 +46,7 @@ public class AllocateProjectFundsPermanently<P extends PaymentProcess> extends
 	return process.isProjectAccountingEmployee(user.getExpenditurePerson())
 		&& isUserProcessOwner(process, user)
 		&& !process.hasAllocatedFundsPermanentlyForAllProjectFinancers()
+		&& process.isInvoiceConfirmed()
 		&& (!process.hasAllInvoicesAllocatedInProject() ||
 			(ExpenditureTrackingSystem.isInvoiceAllowedToStartAcquisitionProcess() && !process.getRequest().hasProposalDocument()));
     }
