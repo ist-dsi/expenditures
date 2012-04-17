@@ -924,6 +924,7 @@ public class OrganizationAction extends BaseAction {
 	final int d1 = hostname.indexOf('.');
 	final int d2 = hostname.indexOf('.', d1 + 1);
 	final String projectPrefix = hostname.substring(0,  d1) + ".mgp." + hostname.substring(d1 + 1, d2);
+	System.out.println("projectPrefix: " + projectPrefix);
 
 	final ProjectReader projectReader = new ProjectReader(projectPrefix);
 	projectReader.execute();
