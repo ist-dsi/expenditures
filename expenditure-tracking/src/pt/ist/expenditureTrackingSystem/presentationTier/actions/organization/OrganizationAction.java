@@ -43,6 +43,7 @@ import javax.servlet.http.HttpServletResponse;
 import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.MyOrg;
 import myorg.domain.User;
+import myorg.domain.VirtualHost;
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.groups.People;
 import myorg.domain.groups.PersistentGroup;
@@ -918,7 +919,13 @@ public class OrganizationAction extends BaseAction {
 	spreadsheet.setHeader("tipo");
 	spreadsheet.setHeader("regime");
 
-	final ProjectReader projectReader = new ProjectReader("db.mgp.ist");
+	final VirtualHost virtualHost = VirtualHost.getVirtualHostForThread();
+	final String hostname = virtualHost.getHostname();
+	final int d1 = hostname.indexOf('.');
+	final int d2 = hostname.indexOf('.', d1 + 1);
+	final String projectPrefix = hostname.substring(0,  d1) + ".mgp." + hostname.substring(d1 + 1, d2);
+
+	final ProjectReader projectReader = new ProjectReader(projectPrefix);
 	projectReader.execute();
 	final Set<MgpProject> mgpProjects = projectReader.getMgpProjects();
 
