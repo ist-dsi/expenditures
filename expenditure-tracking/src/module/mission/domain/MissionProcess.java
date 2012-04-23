@@ -374,7 +374,7 @@ public abstract class MissionProcess extends MissionProcess_Base {
 			    "resources/MissionResources", "label.email.commentCreated.subject", getProcessIdentification()),
 		    BundleUtil.getFormattedStringFromResourceBundle("resources/MissionResources",
 			    "label.email.commentCreated.body", loggedUser.getPerson().getName(), getProcessIdentification(),
-			    comment));
+			    comment, virtualHost.getHostname()));
 	}
     }
 

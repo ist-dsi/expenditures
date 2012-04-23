@@ -434,8 +434,11 @@ public abstract class PaymentProcess extends PaymentProcess_Base implements HasP
 		    Collections.EMPTY_LIST, BundleUtil.getFormattedStringFromResourceBundle("resources/AcquisitionResources",
 			    "label.email.commentCreated.subject", getAcquisitionProcessId()),
 		    BundleUtil.getFormattedStringFromResourceBundle("resources/AcquisitionResources",
-			    "label.email.commentCreated.body", Person.getLoggedPerson().getName(), getAcquisitionProcessId(),
-			    comment));
+			    "label.email.commentCreated.body",
+			    Person.getLoggedPerson().getName(),
+			    getAcquisitionProcessId(),
+			    comment,
+			    virtualHost.getHostname()));
 	}
     }
 
