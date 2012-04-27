@@ -56,8 +56,8 @@ public class SubmitForApproval extends
     protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
 	final RegularAcquisitionProcess process = activityInformation.getProcess();
 	if (process.isSimplifiedProcedureProcess()
-		&& ((SimplifiedProcedureProcess) process).getProcessClassification() != ProcessClassification.CT75000
-		&& !process.hasAcquisitionProposalDocument()
+		//&& ((SimplifiedProcedureProcess) process).getProcessClassification() != ProcessClassification.CT75000
+		//&& !process.hasAcquisitionProposalDocument()
 		&& ((SimplifiedProcedureProcess) process).hasInvoiceFile()
 		&& process.getTotalValue().isGreaterThan(ExpenditureTrackingSystem.getInstance().getMaxValueStartedWithInvoive())
 		) {
