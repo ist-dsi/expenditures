@@ -47,11 +47,16 @@ public class WorkingCapitalPendingProcessCounter extends ProcessCounter {
     public int getCount() {
 	int result = 0;
 	final User user = UserView.getCurrentUser();
-	for (final WorkingCapital workingCapital : WorkingCapitalSystem.getInstanceForCurrentHost().getWorkingCapitalsSet()) {
-	    final WorkingCapitalProcess workingCapitalProcess = workingCapital.getWorkingCapitalProcess();
-	    if (shouldCountProcess(workingCapitalProcess, user)) {
-		result++;
+	try {
+	    for (final WorkingCapital workingCapital : WorkingCapitalSystem.getInstanceForCurrentHost().getWorkingCapitalsSet()) {
+		final WorkingCapitalProcess workingCapitalProcess = workingCapital.getWorkingCapitalProcess();
+		if (shouldCountProcess(workingCapitalProcess, user)) {
+		    result++;
+		}
 	    }
+	} catch (final Throwable t) {
+	    t.printStackTrace();
+	    //throw new Error(t);
 	}
 	return result;
     }
