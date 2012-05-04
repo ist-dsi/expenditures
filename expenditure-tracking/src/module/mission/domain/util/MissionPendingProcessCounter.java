@@ -50,17 +50,23 @@ public class MissionPendingProcessCounter extends ProcessCounter {
 
     @Override
     public int getCount() {
-	final MissionYear missionYear = MissionYear.getCurrentYear();
-	final LocalDate today = new LocalDate();
-	final MissionYear previousYear = today.getMonthOfYear() == Month.JANUARY ? MissionYear.findOrCreateMissionYear(today.getYear() - 1) : null;
-
-	final int takenByUser = missionYear.getTaken().size() + (previousYear == null ? 0 : previousYear.getTaken().size());
-	final int pendingApprovalCount = missionYear.getPendingAproval().size() + (previousYear == null ? 0 : previousYear.getPendingAproval().size());
-	final int pendingAuthorizationCount = missionYear.getPendingAuthorization().size() + (previousYear == null ? 0 : previousYear.getPendingAuthorization().size());
-	final int pendingFundAllocationCount = missionYear.getPendingFundAllocation().size() + (previousYear == null ? 0 : previousYear.getPendingFundAllocation().size());
-    	final int pendingProcessingCount = missionYear.getPendingProcessingPersonelInformation().size() + (previousYear == null ? 0 : previousYear.getPendingProcessingPersonelInformation().size());
-
-	return takenByUser + pendingApprovalCount + pendingAuthorizationCount + pendingFundAllocationCount + pendingProcessingCount;
+	try {
+	    final MissionYear missionYear = MissionYear.getCurrentYear();
+	    final LocalDate today = new LocalDate();
+	    final MissionYear previousYear = today.getMonthOfYear() == Month.JANUARY ? MissionYear.findOrCreateMissionYear(today.getYear() - 1) : null;
+	    
+	    final int takenByUser = missionYear.getTaken().size() + (previousYear == null ? 0 : previousYear.getTaken().size());
+	    final int pendingApprovalCount = missionYear.getPendingAproval().size() + (previousYear == null ? 0 : previousYear.getPendingAproval().size());
+	    final int pendingAuthorizationCount = missionYear.getPendingAuthorization().size() + (previousYear == null ? 0 : previousYear.getPendingAuthorization().size());
+	    final int pendingFundAllocationCount = missionYear.getPendingFundAllocation().size() + (previousYear == null ? 0 : previousYear.getPendingFundAllocation().size());
+	    final int pendingProcessingCount = missionYear.getPendingProcessingPersonelInformation().size() + (previousYear == null ? 0 : previousYear.getPendingProcessingPersonelInformation().size());
+	    
+	    return takenByUser + pendingApprovalCount + pendingAuthorizationCount + pendingFundAllocationCount + pendingProcessingCount;
+	} catch (final Throwable t) {
+	    t.printStackTrace();
+	    //throw new Error(t);
+	    return 0;
+	}
     }
 
 }

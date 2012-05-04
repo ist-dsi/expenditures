@@ -53,15 +53,20 @@ public class AquisitionsPendingProcessCounter extends ProcessCounter {
     public int getCount() {
 	int result = 0;
 	final User user = UserView.getCurrentUser();
-	
-	for (final Acquisition acquisition : ExpenditureTrackingSystem.getInstance().getAcquisitionsSet()) {
-	    if (acquisition instanceof AcquisitionRequest) {
-		final AcquisitionRequest acquisitionRequest = (AcquisitionRequest) acquisition;
-		final AcquisitionProcess acquisitionProcess = acquisitionRequest.getAcquisitionProcess();
-		if (shouldCountProcess(acquisitionProcess, user)) {
-		    result++;
+
+	try {
+	    for (final Acquisition acquisition : ExpenditureTrackingSystem.getInstance().getAcquisitionsSet()) {
+		if (acquisition instanceof AcquisitionRequest) {
+		    final AcquisitionRequest acquisitionRequest = (AcquisitionRequest) acquisition;
+		    final AcquisitionProcess acquisitionProcess = acquisitionRequest.getAcquisitionProcess();
+		    if (shouldCountProcess(acquisitionProcess, user)) {
+			result++;
+		    }
 		}
 	    }
+	} catch (final Throwable t) {
+	    t.printStackTrace();
+	    //throw new Error(t);
 	}
 	return result;
     }

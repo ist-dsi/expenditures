@@ -48,14 +48,19 @@ public class RefundPendingProcessCounter extends ProcessCounter {
 	int result = 0;
 	final User user = UserView.getCurrentUser();
 	
-	for (final Acquisition acquisition : ExpenditureTrackingSystem.getInstance().getAcquisitionsSet()) {
-	    if (acquisition instanceof RefundRequest) {
-		final RefundRequest refundRequest = (RefundRequest) acquisition;
-		final RefundProcess process = refundRequest.getProcess();
-		if (shouldCountProcess(process, user)) {
-		    result++;
+	try {
+	    for (final Acquisition acquisition : ExpenditureTrackingSystem.getInstance().getAcquisitionsSet()) {
+		if (acquisition instanceof RefundRequest) {
+		    final RefundRequest refundRequest = (RefundRequest) acquisition;
+		    final RefundProcess process = refundRequest.getProcess();
+		    if (shouldCountProcess(process, user)) {
+			result++;
+		    }
 		}
 	    }
+	} catch (final Throwable t) {
+	    t.printStackTrace();
+	    //throw new Error(t);
 	}
 	return result;
     }
