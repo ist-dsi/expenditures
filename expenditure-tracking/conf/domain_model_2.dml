@@ -3,13 +3,7 @@
 class pt.ist.expenditureTrackingSystem.domain.SyncSuppliers extends myorg.domain.scheduler.Task {	
 }
 
-class pt.ist.expenditureTrackingSystem.domain.SyncProjects extends myorg.domain.scheduler.Task {	
-}
-
 class pt.ist.expenditureTrackingSystem.domain.SetRoleTypes extends myorg.domain.scheduler.Task {	
-}
-
-class pt.ist.expenditureTrackingSystem.domain.SyncUsers extends myorg.domain.scheduler.Task {	
 }
 
 class pt.ist.expenditureTrackingSystem.domain.ConnectPersonToUserTask extends myorg.domain.scheduler.Task {	
@@ -26,9 +20,6 @@ class pt.ist.expenditureTrackingSystem.domain.ExpenditureUserDashBoardPanel exte
 
 class pt.ist.expenditureTrackingSystem.domain.ExpenditureWidgetOptions extends module.dashBoard.domain.WidgetOptions {
 	Integer maxListSize;
-}
-
-class pt.ist.expenditureTrackingSystem.domain.task.ImportEmployeesAndResponsibles extends .myorg.domain.scheduler.Task {
 }
 
 class pt.ist.expenditureTrackingSystem.domain.task.ExportAuthorizations extends .pt.ist.dbUtils.TaskWithExternalDbOperation {

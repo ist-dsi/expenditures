@@ -37,8 +37,6 @@ import module.organization.domain.Accountability;
 import module.organization.domain.Party;
 import module.organization.domain.PartyType;
 import module.organization.domain.UnitBean;
-import module.organizationIst.domain.IstAccountabilityType;
-import module.organizationIst.domain.IstPartyType;
 import module.workflow.util.ProcessEvaluator;
 import myorg.domain.MyOrg;
 import myorg.domain.User;
@@ -110,7 +108,7 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */ {
     public Unit(final Unit parentUnit, final String name) {
 	this();
 	final String acronym = StringUtils.abbreviate(name, 5);
-	createRealUnit(this, parentUnit, IstPartyType.UNIT, acronym, name);
+	createRealUnit(this, parentUnit, ExpenditureTrackingSystem.getInstance().getUnitPartyType(), acronym, name);
 
 	// TODO : After this object is refactored to retrieve the name and
 	// parent from the real unit,
@@ -128,29 +126,29 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */ {
     }
 
     protected static void createRealUnit(final Unit expenditureUnit, final Unit parentExpenditureUnit,
-	    final IstPartyType istPartyType, final String acronym, final String name) {
+	    final PartyType partyType, final String acronym, final String name) {
 	final UnitBean unitBean = new UnitBean();
 	unitBean.setParent(parentExpenditureUnit.getUnit());
-	unitBean.setAccountabilityType(IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType());
+	unitBean.setAccountabilityType(ExpenditureTrackingSystem.getInstance().getOrganizationalAccountabilityType());
 	unitBean.setAcronym(acronym);
 	unitBean.setBegin(new LocalDate());
 	unitBean.setEnd(null);
 	unitBean.setName(new MultiLanguageString(name));
-	unitBean.setPartyType(PartyType.readBy(istPartyType.getType()));
+	unitBean.setPartyType(partyType);
 	final module.organization.domain.Unit createdUnit = unitBean.createUnit();
 	expenditureUnit.setUnit(createdUnit);
     }
 
-    public static final Unit createRealUnit(final Unit parentExpenditureUnit, final IstPartyType istPartyType,
+    public static final Unit createRealUnit(final Unit parentExpenditureUnit, final PartyType partyType,
 	    final String acronym, final String name) {
 	final UnitBean unitBean = new UnitBean();
 	unitBean.setParent(parentExpenditureUnit.getUnit());
-	unitBean.setAccountabilityType(IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType());
+	unitBean.setAccountabilityType(ExpenditureTrackingSystem.getInstance().getOrganizationalAccountabilityType());
 	unitBean.setAcronym(acronym);
 	unitBean.setBegin(new LocalDate());
 	unitBean.setEnd(null);
 	unitBean.setName(new MultiLanguageString(name));
-	unitBean.setPartyType(PartyType.readBy(istPartyType.getType()));
+	unitBean.setPartyType(partyType);
 	final module.organization.domain.Unit createdUnit = unitBean.createUnit();
 	return createdUnit.getExpenditureUnit();
     }
@@ -158,9 +156,9 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */ {
     public void setParentUnit(final Unit parentUnit) {
 	if (parentUnit == null) {
 	    setExpenditureTrackingSystemFromTopLevelUnit(ExpenditureTrackingSystem.getInstance());
-	    getUnit().closeAllParentAccountabilitiesByType(IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType());
+	    getUnit().closeAllParentAccountabilitiesByType(ExpenditureTrackingSystem.getInstance().getOrganizationalAccountabilityType());
 	} else {
-	    parentUnit.getUnit().addChild(getUnit(), IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType(),
+	    parentUnit.getUnit().addChild(getUnit(), ExpenditureTrackingSystem.getInstance().getOrganizationalAccountabilityType(),
 		    new LocalDate(), null);
 	}
     }
@@ -177,7 +175,7 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */ {
 	    return new CostCenter(createUnitBean.getParentUnit(), createUnitBean.getName(), createUnitBean.getCostCenter());
 	}
 	if (createUnitBean.getProjectCode() != null) {
-	    final Unit unit = createRealUnit(createUnitBean.getParentUnit(), IstPartyType.PROJECT,
+	    final Unit unit = createRealUnit(createUnitBean.getParentUnit(), ExpenditureTrackingSystem.getInstance().getProjectPartyType(),
 		    createUnitBean.getProjectCode(), createUnitBean.getName());
 	    final Project project = (Project) unit;
 	    project.setName(createUnitBean.getName());
@@ -241,8 +239,8 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */ {
 
     public static Unit findUnitByCostCenter(final String costCenter) {
 	final Party party = Party.findPartyByPartyTypeAndAcronymForAccountabilityTypeLink((Set) MyOrg.getInstance()
-		.getTopUnitsSet(), IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType(), PartyType
-		.readBy(IstPartyType.COST_CENTER.getType()), "CC. " + costCenter);
+		.getTopUnitsSet(), ExpenditureTrackingSystem.getInstance().getOrganizationalAccountabilityType(),
+		ExpenditureTrackingSystem.getInstance().getCostCenterPartyType(), "CC. " + costCenter);
 	return party == null || !party.isUnit() ? null : ((module.organization.domain.Unit) party).getExpenditureUnit();
     }
 
@@ -271,7 +269,7 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */ {
 	    }
 
 	    for (final Accountability accountability : unit.getParentAccountabilitiesSet()) {
-		if (accountability.getAccountabilityType() == IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType()) {
+		if (accountability.getAccountabilityType() == ExpenditureTrackingSystem.getInstance().getOrganizationalAccountabilityType()) {
 		    final Party parent = accountability.getParent();
 		    if (isResponsible(accountability.getParent(), person)) {
 			return true;
@@ -331,7 +329,7 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */ {
 	    }
 
 	    for (final Accountability accountability : unit.getParentAccountabilitiesSet()) {
-		if (accountability.getAccountabilityType() == IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType()) {
+		if (accountability.getAccountabilityType() == ExpenditureTrackingSystem.getInstance().getOrganizationalAccountabilityType()) {
 		    final Party parent = accountability.getParent();
 		    final Authorization authorization = findClosestAuthorization(accountability.getParent(), person, money);
 		    if (authorization != null) {
@@ -369,7 +367,7 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */ {
 	    return true;
 	}
 	for (final Accountability accountability : parentUnit.getParentAccountabilitiesSet()) {
-	    if (accountability.getAccountabilityType() == IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType()) {
+	    if (accountability.getAccountabilityType() == ExpenditureTrackingSystem.getInstance().getOrganizationalAccountabilityType()) {
 		final Party parent = accountability.getParent();
 		if (isSubUnit(parent, unit)) {
 		    return true;
@@ -399,7 +397,7 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */ {
 
     public boolean hasResponsibleInSubUnits() {
 	for (final Accountability accountability : getUnit().getChildAccountabilitiesSet()) {
-	    if (accountability.getAccountabilityType() == IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType()) {
+	    if (accountability.getAccountabilityType() == ExpenditureTrackingSystem.getInstance().getOrganizationalAccountabilityType()) {
 		final Party child = accountability.getChild();
 		if (child.isUnit()) {
 		    final module.organization.domain.Unit unit = (module.organization.domain.Unit) child;
@@ -470,7 +468,7 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */ {
 
     private static Unit getParentUnit(final module.organization.domain.Unit unit) {
 	for (final Accountability accountability : unit.getParentAccountabilitiesSet()) {
-	    if (accountability.getAccountabilityType() == IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType()) {
+	    if (accountability.getAccountabilityType() == ExpenditureTrackingSystem.getInstance().getOrganizationalAccountabilityType()) {
 		final Party parent = accountability.getParent();
 		if (parent.isUnit()) {
 		    final module.organization.domain.Unit parentUnit = (module.organization.domain.Unit) parent;
@@ -493,7 +491,7 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */ {
 
     protected static boolean isActive(final module.organization.domain.Unit unit) {
 	for (final Accountability accountability : unit.getParentAccountabilitiesSet()) {
-	    if (accountability.getAccountabilityType() == IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType()
+	    if (accountability.getAccountabilityType() == ExpenditureTrackingSystem.getInstance().getOrganizationalAccountabilityType()
 		    && accountability.isActiveNow()) {
 		final Party parent = accountability.getParent();
 		if (parent.getOrganizationalModelsSet().isEmpty()) {
@@ -515,7 +513,7 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */ {
 
     private static boolean hasParentUnit(final module.organization.domain.Unit unit) {
 	for (final Accountability accountability : unit.getParentAccountabilitiesSet()) {
-	    if (accountability.getAccountabilityType() == IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType()) {
+	    if (accountability.getAccountabilityType() == ExpenditureTrackingSystem.getInstance().getOrganizationalAccountabilityType()) {
 		final Party parent = accountability.getParent();
 		if (parent.isUnit()) {
 		    final module.organization.domain.Unit parentUnit = (module.organization.domain.Unit) parent;
@@ -547,7 +545,7 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */ {
 		}
 	    }
 	    for (final Accountability accountability : party.getParentAccountabilitiesSet()) {
-		if (accountability.getAccountabilityType() == IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType()) {
+		if (accountability.getAccountabilityType() == ExpenditureTrackingSystem.getInstance().getOrganizationalAccountabilityType()) {
 		    final AccountingUnit accountingUnit = getAccountingUnit(accountability.getParent(), person);
 		    if (accountingUnit != null) {
 			return accountingUnit;
@@ -587,7 +585,7 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */ {
 	    }
 
 	    for (final Accountability accountability : unit.getChildAccountabilitiesSet()) {
-		if (accountability.getAccountabilityType() == IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType()) {
+		if (accountability.getAccountabilityType() == ExpenditureTrackingSystem.getInstance().getOrganizationalAccountabilityType()) {
 		    final Party child = accountability.getChild();
 		    addAllSubUnits(result, child);
 		}

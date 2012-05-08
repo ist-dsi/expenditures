@@ -10,11 +10,13 @@
 	<div class="infobox_dotted">
 		<ul>
 			<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
+<%--
 				<li>
 					<html:link action="/expenditureTrackingOrganization.do?method=downloadMGPProjects">
 						<bean:message key="label.projects.mgp.download" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 					</html:link>
 				</li>
+ --%>
 			</logic:present>
 			<li>
 				<html:link action="/expenditureTrackingOrganization.do?method=downloadUnitResponsibles">

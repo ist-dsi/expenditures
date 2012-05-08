@@ -59,10 +59,6 @@ import pt.ist.expenditureTrackingSystem.domain.dto.CreatePersonBean;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.plugins.luceneIndexing.IndexableField;
-import pt.ist.fenixframework.plugins.luceneIndexing.domain.IndexDocument;
-import pt.ist.fenixframework.plugins.luceneIndexing.domain.interfaces.Indexable;
-import pt.ist.fenixframework.plugins.luceneIndexing.domain.interfaces.Searchable;
-import pt.utl.ist.fenix.tools.util.StringNormalizer;
 import dml.runtime.RelationAdapter;
 
 /**
@@ -402,11 +398,7 @@ public class Person extends Person_Base /* implements Indexable, Searchable */ {
 
     @Override
     public String getEmail() {
-	try {
-	    return getUser().getPerson().getRemotePerson().getEmailForSendingEmails();
-	} catch (Throwable t) {
-	    return super.getEmail();
-	}
+	return getUser().getEmail();
     }
 
     public boolean hasAnyValidAuthorization() {

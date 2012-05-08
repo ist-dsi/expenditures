@@ -26,14 +26,13 @@ package pt.ist.expenditureTrackingSystem.domain.organization;
 
 import module.organization.domain.Party;
 import module.organization.domain.PartyType;
-import module.organizationIst.domain.IstPartyType;
 
 import org.apache.commons.lang.StringUtils;
 
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.ProjectFinancer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestWithPayment;
-import pt.ist.fenixframework.plugins.luceneIndexing.domain.IndexDocument;
 import dml.runtime.RelationAdapter;
 
 /**
@@ -48,7 +47,7 @@ public class SubProject extends SubProject_Base {
 
 	@Override
 	public void afterAdd(final Party party, final PartyType partyType) {
-	    if (party.isUnit() && partyType != null && partyType == PartyType.readBy(IstPartyType.SUB_PROJECT.getType())) {
+	    if (party.isUnit() && partyType != null && partyType == ExpenditureTrackingSystem.getInstance().getSubProjectPartyType()) {
 		new SubProject((module.organization.domain.Unit) party);
 	    }
 	}
@@ -67,7 +66,7 @@ public class SubProject extends SubProject_Base {
     public SubProject(final Project parentUnit, final String name) {
 	super();
 	final String acronym = StringUtils.abbreviate(name, 5);
-	createRealUnit(this, parentUnit, IstPartyType.SUB_PROJECT, acronym, name);
+	createRealUnit(this, parentUnit, ExpenditureTrackingSystem.getInstance().getSubProjectPartyType(), acronym, name);
 
 	// TODO : After this object is refactored to retrieve the name and
 	// parent from the real unit,

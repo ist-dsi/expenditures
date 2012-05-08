@@ -1142,3 +1142,45 @@ relation AcquisitionFundAllocationDiaryAndTransactionReportRequestFinancer {
 		multiplicity 1..1;
 	}
 }
+
+relation ExpenditureTrackingSystemOrganizationalAccountabilityType {
+	ExpenditureTrackingSystem playsRole expenditureTrackingSystemFromOrganizationalAccountabilityType {
+		multiplicity *;
+	}
+	.module.organization.domain.AccountabilityType playsRole organizationalAccountabilityType;
+}
+
+relation ExpenditureTrackingSystemOrganizationalMissionAccountabilityType {
+	ExpenditureTrackingSystem playsRole expenditureTrackingSystemFromOrganizationalMissionAccountabilityType {
+		multiplicity *;
+	}
+	.module.organization.domain.AccountabilityType playsRole organizationalMissionAccountabilityType;
+}
+
+relation ExpenditureTrackingSystemUnitPartyType {
+	ExpenditureTrackingSystem playsRole expenditureTrackingSystemFromUnitPartyType {
+		multiplicity *;
+	}
+	.module.organization.domain.PartyType playsRole unitPartyType;
+}
+
+relation ExpenditureTrackingSystemCostCenterPartyType {
+	ExpenditureTrackingSystem playsRole expenditureTrackingSystemFromCostCenterPartyType {
+		multiplicity *;
+	}
+	.module.organization.domain.PartyType playsRole costCenterPartyType;
+}
+
+relation ExpenditureTrackingSystemProjectPartyType {
+	ExpenditureTrackingSystem playsRole expenditureTrackingSystemFromProjectPartyType {
+		multiplicity *;
+	}
+	.module.organization.domain.PartyType playsRole projectPartyType;
+}
+
+relation ExpenditureTrackingSystemSubProjectPartyType {
+	ExpenditureTrackingSystem playsRole expenditureTrackingSystemFromSubProjectPartyType {
+		multiplicity *;
+	}
+	.module.organization.domain.PartyType playsRole subProjectPartyType;
+}

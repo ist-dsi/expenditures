@@ -28,13 +28,12 @@ import java.util.Set;
 
 import module.organization.domain.Party;
 import module.organization.domain.PartyType;
-import module.organizationIst.domain.IstPartyType;
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestWithPayment;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
-import pt.ist.fenixframework.plugins.luceneIndexing.domain.IndexDocument;
 import dml.runtime.RelationAdapter;
 
 /**
@@ -49,7 +48,7 @@ public class CostCenter extends CostCenter_Base {
 
 	@Override
 	public void afterAdd(final Party party, final PartyType partyType) {
-	    if (party.isUnit() && partyType != null && partyType == PartyType.readBy(IstPartyType.COST_CENTER.getType())) {
+	    if (party.isUnit() && partyType != null && partyType == ExpenditureTrackingSystem.getInstance().getCostCenterPartyType()) {
 		new CostCenter((module.organization.domain.Unit) party);
 	    }
 	}
@@ -67,7 +66,7 @@ public class CostCenter extends CostCenter_Base {
 
     public CostCenter(final Unit parentUnit, final String name, final String costCenter) {
 	super();
-	createRealUnit(this, parentUnit, IstPartyType.COST_CENTER, costCenter, name);
+	createRealUnit(this, parentUnit, ExpenditureTrackingSystem.getInstance().getCostCenterPartyType(), costCenter, name);
 
 	// TODO : After this object is refactored to retrieve the name and
 	// parent from the real unit,

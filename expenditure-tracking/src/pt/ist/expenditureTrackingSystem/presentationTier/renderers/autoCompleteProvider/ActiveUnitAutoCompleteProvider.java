@@ -30,7 +30,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import module.organizationIst.domain.IstAccountabilityType;
 import myorg.presentationTier.renderers.autoCompleteProvider.AutoCompleteProvider;
 
 import org.apache.commons.lang.StringUtils;
@@ -105,14 +104,14 @@ public class ActiveUnitAutoCompleteProvider implements AutoCompleteProvider {
     private boolean isActive(final Unit unit) {
 	final module.organization.domain.Unit orgUnit = unit.getUnit();
 	return orgUnit != null
-		&& orgUnit.hasActiveAncestry(IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType(), new LocalDate());
+		&& orgUnit.hasActiveAncestry(ExpenditureTrackingSystem.getInstance().getOrganizationalAccountabilityType(), new LocalDate());
     }
 
     private boolean isActive(final Project project) {
 	final module.organization.domain.Unit orgUnit = project.getUnit();
 	return orgUnit != null
 		&& orgUnit
-			.hasDirectActiveAncestry(IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType(), new LocalDate());
+			.hasDirectActiveAncestry(ExpenditureTrackingSystem.getInstance().getOrganizationalAccountabilityType(), new LocalDate());
 
     }
 

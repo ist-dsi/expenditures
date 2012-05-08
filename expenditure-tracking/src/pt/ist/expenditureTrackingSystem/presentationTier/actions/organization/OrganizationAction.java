@@ -43,7 +43,6 @@ import javax.servlet.http.HttpServletResponse;
 import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.MyOrg;
 import myorg.domain.User;
-import myorg.domain.VirtualHost;
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.groups.People;
 import myorg.domain.groups.PersistentGroup;
@@ -64,8 +63,6 @@ import org.apache.struts.action.ActionMapping;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.Role;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
-import pt.ist.expenditureTrackingSystem.domain.SyncProjectsAux.MgpProject;
-import pt.ist.expenditureTrackingSystem.domain.SyncProjectsAux.ProjectReader;
 import pt.ist.expenditureTrackingSystem.domain.SyncSuppliersAux.GiafSupplier;
 import pt.ist.expenditureTrackingSystem.domain.SyncSuppliersAux.SupplierMap;
 import pt.ist.expenditureTrackingSystem.domain.SyncSuppliersAux.SupplierReader;
@@ -890,6 +887,7 @@ public class OrganizationAction extends BaseAction {
 	return manageSuppliers(mapping, request, supplierBean);
     }
 
+/*
     public final ActionForward downloadMGPProjects(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) throws IOException, SQLException {
 
@@ -953,6 +951,7 @@ public class OrganizationAction extends BaseAction {
 
 	return spreadsheet;
     }
+*/
 
     private String determineProjectRegime(final String projectCode) {
 	final Project project = Project.findProjectByCode(projectCode);

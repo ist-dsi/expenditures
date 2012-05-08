@@ -27,7 +27,6 @@ package module.mission.domain.activity;
 import java.io.Serializable;
 
 import module.mission.domain.MissionProcess;
-import module.mission.domain.util.ImportEmployeeInfoAndUpdateStructure;
 import module.organization.domain.Person;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
@@ -52,9 +51,6 @@ public class ParticipantActivityInformation extends ActivityInformation<MissionP
 
     public void setPerson(final Person person) {
 	this.person = person;
-	if (person != null && person.hasUser()) {
-	    new ImportEmployeeInfoAndUpdateStructure(person.getUser().getUsername());
-	}
     }
 
     @Override

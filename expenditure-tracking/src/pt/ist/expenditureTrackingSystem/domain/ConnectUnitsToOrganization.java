@@ -27,7 +27,6 @@ package pt.ist.expenditureTrackingSystem.domain;
 import java.util.Collection;
 
 import module.organization.domain.PartyType;
-import module.organizationIst.domain.IstPartyType;
 import myorg.domain.MyOrg;
 import pt.ist.expenditureTrackingSystem.domain.organization.CostCenter;
 import pt.ist.expenditureTrackingSystem.domain.organization.Project;
@@ -72,19 +71,14 @@ public class ConnectUnitsToOrganization extends ConnectUnitsToOrganization_Base 
     }
 
     private PartyType getPartyType(final Unit unit) {
-	final IstPartyType istPartyType = getIstPartyType(unit);
-	return PartyType.readBy(istPartyType.getType());
-    }
-
-    private IstPartyType getIstPartyType(final Unit unit) {
 	if (unit instanceof SubProject) {
-	    return IstPartyType.SUB_PROJECT;
+	    return ExpenditureTrackingSystem.getInstance().getSubProjectPartyType();
 	} else if (unit instanceof Project) {
-	    return IstPartyType.PROJECT;
+	    return ExpenditureTrackingSystem.getInstance().getProjectPartyType();
 	} else if (unit instanceof CostCenter) {
-	    return IstPartyType.COST_CENTER;
+	    return ExpenditureTrackingSystem.getInstance().getCostCenterPartyType();
 	} else {
-	    return IstPartyType.UNIT;	    
+	    return ExpenditureTrackingSystem.getInstance().getUnitPartyType();
 	}
     }
 

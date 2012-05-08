@@ -105,6 +105,31 @@
 	if (expenditureTrackingSystem != null) {
 %>
 
+<br/>
+
+<h2>
+	<bean:message key="label.configuration.server" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+	<%
+		boolean b = false;
+		for (final VirtualHost host : expenditureTrackingSystem.getVirtualHostSet()) {
+	%>
+			<%= host.getHostname() %>
+	<%
+			if (b) {
+	%>
+				, 
+	<%
+			} else {
+				b = true;
+			}
+		}
+	%>
+</h2>
+
+<h3>
+	<bean:message key="label.configuration.general" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+</h3>
+
 <form action="<%= request.getContextPath() + "/expenditureConfiguration.do" %>" method="post">
 	<html:hidden property="method" value="saveConfiguration"/>
 
@@ -290,5 +315,70 @@
 		<bean:message key="renderers.form.submit.name" bundle="RENDERER_RESOURCES"/>
 	</html:submit>
 </form>
+
+<br/>
+<br/>
+
+<h3>
+	<bean:message key="label.configuration.organizational.estructure" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+</h3>
+
+<fr:form action="/expenditureConfiguration.do?method=viewConfiguration">
+
+	<fr:edit id="expenditureTrackingSystem" name="virtualHost" property="expenditureTrackingSystem">
+		<fr:schema type="pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem" bundle="EXPENDITURE_ORGANIZATION_RESOURCES">
+			<fr:slot name="organizationalAccountabilityType" layout="menu-select" key="label.organizationalAccountabilityType" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"
+					validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+				<fr:property name="providerClass" value="module.organization.presentationTier.renderers.providers.AccountabilityTypesProvider" />
+				<fr:property name="format" value="${name}" />
+				<fr:property name="sortBy" value="name" />
+				<fr:property name="saveOptions" value="true"/>
+			</fr:slot>
+			<fr:slot name="organizationalMissionAccountabilityType" layout="menu-select" key="label.organizationalMissionAccountabilityType" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"
+					validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+				<fr:property name="providerClass" value="module.organization.presentationTier.renderers.providers.AccountabilityTypesProvider" />
+				<fr:property name="format" value="${name}" />
+				<fr:property name="sortBy" value="name" />
+				<fr:property name="saveOptions" value="true"/>
+			</fr:slot>
+			<fr:slot name="unitPartyType" layout="menu-select" key="label.unitPartyType" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"
+					validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+				<fr:property name="providerClass" value="module.organization.presentationTier.renderers.providers.PartyTypesProvider" />
+				<fr:property name="format" value="${name}" />
+				<fr:property name="sortBy" value="name" />
+			</fr:slot>
+			<fr:slot name="costCenterPartyType" layout="menu-select" key="label.costCenterPartyType" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"
+					validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+				<fr:property name="providerClass" value="module.organization.presentationTier.renderers.providers.PartyTypesProvider" />
+				<fr:property name="format" value="${name}" />
+				<fr:property name="sortBy" value="name" />
+			</fr:slot>
+			<fr:slot name="projectPartyType" layout="menu-select" key="label.projectPartyType" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"
+					validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+				<fr:property name="providerClass" value="module.organization.presentationTier.renderers.providers.PartyTypesProvider" />
+				<fr:property name="format" value="${name}" />
+				<fr:property name="sortBy" value="name" />
+			</fr:slot>
+			<fr:slot name="subProjectPartyType" layout="menu-select" key="label.subProjectPartyType" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"
+					validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+				<fr:property name="providerClass" value="module.organization.presentationTier.renderers.providers.PartyTypesProvider" />
+				<fr:property name="format" value="${name}" />
+				<fr:property name="sortBy" value="name" />
+			</fr:slot>
+		</fr:schema>
+		<fr:layout name="tabular">
+			<fr:property name="classes" value="form mbottom0 mtop15"/>
+			<fr:property name="columnClasses" value=",,tderror"/>
+		</fr:layout>
+	</fr:edit>
+
+	<p class="mtop05">
+		<html:submit styleClass="inputbutton">
+			<bean:message key="renderers.form.submit.name" bundle="RENDERER_RESOURCES"/>
+		</html:submit>
+	</p>
+
+</fr:form>
+
 
 <% } %>

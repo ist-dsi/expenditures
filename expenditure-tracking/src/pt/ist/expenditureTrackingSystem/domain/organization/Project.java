@@ -30,8 +30,6 @@ import module.organization.domain.Accountability;
 import module.organization.domain.AccountabilityType;
 import module.organization.domain.Party;
 import module.organization.domain.PartyType;
-import module.organizationIst.domain.IstAccountabilityType;
-import module.organizationIst.domain.IstPartyType;
 
 import org.joda.time.LocalDate;
 
@@ -56,7 +54,7 @@ public class Project extends Project_Base {
 
 	@Override
 	public void afterAdd(final Party party, final PartyType partyType) {
-	    if (party.isUnit() && partyType != null && partyType == PartyType.readBy(IstPartyType.PROJECT.getType())) {
+	    if (party.isUnit() && partyType != null && partyType == ExpenditureTrackingSystem.getInstance().getProjectPartyType()) {
 		new Project((module.organization.domain.Unit) party);
 	    }
 	}
@@ -74,7 +72,7 @@ public class Project extends Project_Base {
 
     public Project(final Unit parentUnit, final String name, final String projectCode) {
 	super();
-	createRealUnit(this, parentUnit, IstPartyType.PROJECT, projectCode, name);
+	createRealUnit(this, parentUnit, ExpenditureTrackingSystem.getInstance().getProjectPartyType(), projectCode, name);
 
 	// TODO : After this object is refactored to retrieve the name and parent from the real unit,
 	//        the following three lines may be deleted.
@@ -143,7 +141,7 @@ public class Project extends Project_Base {
 
     public SubProject findSubProjectByName(final String institution) {
 	for (final Accountability accountability : getUnit().getChildAccountabilitiesSet()) {
-	    if (accountability.getAccountabilityType() == IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType()) {
+	    if (accountability.getAccountabilityType() == ExpenditureTrackingSystem.getInstance().getOrganizationalAccountabilityType()) {
 		final Party party = accountability.getChild();
 		if (party.isUnit()) {
 		    final module.organization.domain.Unit child = (module.organization.domain.Unit) party;
@@ -164,7 +162,7 @@ public class Project extends Project_Base {
 
     public SubProject findSubProjectByNamePrefix(final String institution) {
 	for (final Accountability accountability : getUnit().getChildAccountabilitiesSet()) {
-	    if (accountability.getAccountabilityType() == IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType()) {
+	    if (accountability.getAccountabilityType() == ExpenditureTrackingSystem.getInstance().getOrganizationalAccountabilityType()) {
 		final Party party = accountability.getChild();
 		if (party.isUnit()) {
 		    final module.organization.domain.Unit child = (module.organization.domain.Unit) party;
@@ -196,7 +194,7 @@ public class Project extends Project_Base {
     }
 
     public boolean isOpen() {
-	final AccountabilityType accountabilityType = IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType();
+	final AccountabilityType accountabilityType = ExpenditureTrackingSystem.getInstance().getOrganizationalAccountabilityType();
 	for (final Accountability accountability : getUnit().getParentAccountabilitiesSet()) {
 	    if (accountability.getAccountabilityType() == accountabilityType
 		    && accountability.isActiveNow()) {
@@ -208,7 +206,7 @@ public class Project extends Project_Base {
 
     public void close() {
 	final module.organization.domain.Unit unit = getUnit();
-	final AccountabilityType accountabilityType = IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType();
+	final AccountabilityType accountabilityType = ExpenditureTrackingSystem.getInstance().getOrganizationalAccountabilityType();
 	for (final Accountability accountability : getUnit().getParentAccountabilitiesSet()) {
 	    if (accountability.getAccountabilityType() == accountabilityType && accountability.isActiveNow()) {
 		final LocalDate beginDate = accountability.getBeginDate();
@@ -222,7 +220,7 @@ public class Project extends Project_Base {
 	if (parentProject != null) {
 	    final module.organization.domain.Unit parentUnit = getParentUnit().getUnit();
 	    final module.organization.domain.Unit unit = getUnit();
-	    final AccountabilityType accountabilityType = IstAccountabilityType.ORGANIZATIONAL.readAccountabilityType();
+	    final AccountabilityType accountabilityType = ExpenditureTrackingSystem.getInstance().getOrganizationalAccountabilityType();
 	    parentUnit.addChild(unit, accountabilityType, new LocalDate(), null);
 	}
     }
