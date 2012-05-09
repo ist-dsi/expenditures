@@ -103,7 +103,13 @@ public class SubProject extends SubProject_Base {
     @Override
     public AccountingUnit getAccountingUnit() {
 	final AccountingUnit accountingUnit = super.getAccountingUnit();
-	return accountingUnit == null ? getParentUnit().getAccountingUnit() : accountingUnit;
+	if (accountingUnit == null) {
+	    final Unit parentUnit = getParentUnit();
+	    if (parentUnit != null) {
+		return parentUnit.getAccountingUnit();
+	    }
+	}
+	return accountingUnit;
     }
 
     @Override
