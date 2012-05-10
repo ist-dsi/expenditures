@@ -1013,7 +1013,7 @@ public abstract class Mission extends Mission_Base {
     public boolean isAccountingEmployee(final pt.ist.expenditureTrackingSystem.domain.organization.Person expenditurePerson) {
 	for (final MissionFinancer missionFinancer : getFinancerSet()) {
 	    final AccountingUnit accountingUnit = missionFinancer.getAccountingUnit();
-	    if (accountingUnit.getPeopleSet().contains(expenditurePerson)) {
+	    if (accountingUnit != null && accountingUnit.getPeopleSet().contains(expenditurePerson)) {
 		return true;
 	    }
 	}
