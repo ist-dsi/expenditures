@@ -402,7 +402,9 @@
 
 		<logic:notEmpty name="itemSet">
 			
-			<h3>Items</h3>
+			<h3>
+				<bean:message key="label.items" bundle="EXPENDITURE_RESOURCES"/>
+			</h3>
 	
 			<bean:define id="totalItems" name="size" toScope="request"/>
 
