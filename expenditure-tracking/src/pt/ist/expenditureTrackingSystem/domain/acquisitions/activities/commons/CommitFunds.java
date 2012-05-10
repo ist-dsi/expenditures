@@ -31,7 +31,6 @@ import myorg.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.dto.CommitmentNumberBean;
-import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
 /**
  * 
@@ -42,10 +41,9 @@ public class CommitFunds extends WorkflowActivity<RegularAcquisitionProcess, Com
 
     @Override
     public boolean isActive(final RegularAcquisitionProcess process, final User user) {
-	Person person = user.getExpenditurePerson();
 	return isUserProcessOwner(process, user)
 		&& process.getAcquisitionProcessState().isAuthorized()
-		&& process.isPendingCommitmentByUser(person);
+		&& process.isPendingCommitmentByUser(user);
     }
 
     @Override

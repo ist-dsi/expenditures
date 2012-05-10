@@ -300,6 +300,8 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 
 	setAcquisitionCentralGroup(myorg.domain.groups.Role.getRole(RoleType.ACQUISITION_CENTRAL));
 
+	setFundCommitmentManagerGroup(myorg.domain.groups.Role.getRole(RoleType.FUND_COMMITMENT_MANAGER));
+	
 	setAcquisitionCentralManagerGroup(myorg.domain.groups.Role.getRole(RoleType.ACQUISITION_CENTRAL_MANAGER));
 
 	setAccountingManagerGroup(myorg.domain.groups.Role.getRole(RoleType.ACCOUNTING_MANAGER));
@@ -362,6 +364,11 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 	return system != null && system.hasAcquisitionCentralGroup() && system.getAcquisitionCentralGroup().isMember(user);
     }
 
+    public static boolean isFundCommitmentManagerGroupMember(final User user) {
+	final ExpenditureTrackingSystem system = getInstance();
+	return system != null && system.hasFundCommitmentManagerGroup() && system.getFundCommitmentManagerGroup().isMember(user);
+    }
+
     public static boolean isAcquisitionCentralManagerGroupMember(final User user) {
 	final ExpenditureTrackingSystem system = getInstance();
 	return system != null && system.hasAcquisitionCentralManagerGroup()
@@ -415,6 +422,11 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
     public static boolean isAcquisitionCentralGroupMember() {
 	final User user = UserView.getCurrentUser();
 	return isAcquisitionCentralGroupMember(user);
+    }
+
+    public static boolean isFundCommitmentManagerGroupMember() {
+	final User user = UserView.getCurrentUser();
+	return isFundCommitmentManagerGroupMember(user);
     }
 
     public static boolean isAcquisitionCentralManagerGroupMember() {

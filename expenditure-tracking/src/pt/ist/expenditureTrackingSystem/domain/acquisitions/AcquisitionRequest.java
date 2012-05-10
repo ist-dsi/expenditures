@@ -35,6 +35,7 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import myorg.domain.User;
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Address;
 import myorg.domain.util.Money;
@@ -630,24 +631,24 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	return true;
     }
 
-    public boolean isPendingCommitmentByUser(final Person person) {
+    public boolean isPendingCommitmentByUser(final User user) {
 	if (!hasAnyFinancers()) {
 	    return false;
 	}
 	for (final Financer financer : getFinancersSet()) {
-	    if (!financer.isCommitted() && financer.isAccountingEmployee(person)) {
+	    if (!financer.isCommitted() && ExpenditureTrackingSystem.getInstance().isFundCommitmentManagerGroupMember(user)) {
 		return true;
 	    }
 	}
 	return false;
     }
 
-    public boolean hasCommitmentByUser(final Person person) {
+    public boolean hasCommitmentByUser(final User user) {
 	if (!hasAnyFinancers()) {
 	    return false;
 	}
 	for (final Financer financer : getFinancersSet()) {
-	    if (financer.isCommitted() && financer.isAccountingEmployee(person)) {
+	    if (financer.isCommitted() && ExpenditureTrackingSystem.getInstance().isFundCommitmentManagerGroupMember(user)) {
 		return true;
 	    }
 	}

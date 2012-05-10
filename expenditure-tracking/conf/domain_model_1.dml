@@ -1053,6 +1053,15 @@ relation ExpenditureTrackingSystemAcquisitionCentralManagerGroup {
 	}
 }
 
+relation ExpenditureTrackingSystemFundCommitmentManagerGroupp {
+	ExpenditureTrackingSystem playsRole expenditureTrackingSystemFromFundCommitmentManagerGroup {
+		multiplicity *;
+	}
+	.myorg.domain.groups.PersistentGroup playsRole fundCommitmentManagerGroup {
+		multiplicity 0..1;
+	}
+}
+
 relation ExpenditureTrackingSystemAccountingManagerGroup {
 	ExpenditureTrackingSystem playsRole expenditureTrackingSystemFromAccountingManagerGroup {
 		multiplicity *;

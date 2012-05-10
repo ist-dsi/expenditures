@@ -52,7 +52,8 @@ public enum RoleType implements IRoleEnum {
     SUPPLIER_FUND_ALLOCATION_MANAGER,
     STATISTICS_VIEWER,
     AQUISITIONS_UNIT_MANAGER,
-    ACQUISITION_PROCESS_AUDITOR;
+    ACQUISITION_PROCESS_AUDITOR,
+    FUND_COMMITMENT_MANAGER;
 
     @Override
     public String getRoleName() {

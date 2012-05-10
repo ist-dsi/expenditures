@@ -29,6 +29,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import myorg.domain.User;
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.util.Money;
 
@@ -309,20 +310,20 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
 	return true;
     }
 
-    public boolean isPendingCommitmentByUser(final Person person) {
+    public boolean isPendingCommitmentByUser(final User user) {
 	final ExpenditureTrackingSystem instance = ExpenditureTrackingSystem.getInstance();
 	if (instance.getRequireCommitmentNumber() != null && instance.getRequireCommitmentNumber().booleanValue()) {
 	    final AcquisitionRequest acquisitionRequest = getAcquisitionRequest();
-	    return acquisitionRequest.isPendingCommitmentByUser(person);
+	    return acquisitionRequest.isPendingCommitmentByUser(user);
 	}
 	return false;
     }
 
-    public boolean hasCommitmentByUser(final Person person) {
+    public boolean hasCommitmentByUser(final User user) {
 	final ExpenditureTrackingSystem instance = ExpenditureTrackingSystem.getInstance();
 	if (instance.getRequireCommitmentNumber() != null && instance.getRequireCommitmentNumber().booleanValue()) {
 	    final AcquisitionRequest acquisitionRequest = getAcquisitionRequest();
-	    return acquisitionRequest.hasCommitmentByUser(person);
+	    return acquisitionRequest.hasCommitmentByUser(user);
 	}
 	return false;
     }

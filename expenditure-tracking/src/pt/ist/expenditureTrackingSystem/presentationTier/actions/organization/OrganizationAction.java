@@ -234,6 +234,16 @@ public class OrganizationAction extends BaseAction {
 	return removeRole(ExpenditureTrackingSystem.getInstance().getAcquisitionCentralGroup(), mapping, request);
     }
 
+    public final ActionForward addRoleFundCommitmentManagerGroup(final ActionMapping mapping,
+	    final ActionForm form, final HttpServletRequest request, final HttpServletResponse response) {
+	return addRole(ExpenditureTrackingSystem.getInstance().getFundCommitmentManagerGroup(), mapping, request);
+    }
+
+    public final ActionForward removeFundCommitmentManagerGroup(final ActionMapping mapping,
+	    final ActionForm form, final HttpServletRequest request, final HttpServletResponse response) {
+	return removeRole(ExpenditureTrackingSystem.getInstance().getFundCommitmentManagerGroup(), mapping, request);
+    }
+
     public final ActionForward addRoleAcquisitionCentralManagerGroup(final ActionMapping mapping,
 	    final ActionForm form, final HttpServletRequest request, final HttpServletResponse response) {
 	return addRole(ExpenditureTrackingSystem.getInstance().getAcquisitionCentralManagerGroup(), mapping, request);

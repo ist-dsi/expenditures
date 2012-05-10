@@ -269,6 +269,18 @@
 			</html:link>
 		</span>
 	</p>
+	<p class="mvert05">
+		<span>
+			<bean:message bundle="EXPENDITURE_ENUMERATION_RESOURCES" key="RoleType.FUND_COMMITMENT_MANAGER"/>
+			<html:link action="/expenditureTrackingOrganization.do?method=addRoleFundCommitmentManagerGroup" paramId="personOid" paramName="person" paramProperty="externalId">
+				<bean:message key="role.label.add" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+			</html:link>
+			|
+			<html:link action="/expenditureTrackingOrganization.do?method=removeFundCommitmentManagerGroup" paramId="personOid" paramName="person" paramProperty="externalId">
+				<bean:message key="role.label.remove" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+			</html:link>
+		</span>
+	</p>
 </logic:present>
 
 

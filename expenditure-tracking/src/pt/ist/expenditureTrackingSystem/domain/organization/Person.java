@@ -443,6 +443,9 @@ public class Person extends Person_Base /* implements Indexable, Searchable */ {
 	if (ExpenditureTrackingSystem.isAcquisitionsProcessAuditorGroupMember(user)) {
 	    result.add(ExpenditureTrackingSystem.getInstance().getAcquisitionsProcessAuditorGroup());
 	}
+	if (ExpenditureTrackingSystem.isFundCommitmentManagerGroupMember(user)) {
+	    result.add(ExpenditureTrackingSystem.getInstance().getFundCommitmentManagerGroup());
+	}
 	return result;
     }
 
