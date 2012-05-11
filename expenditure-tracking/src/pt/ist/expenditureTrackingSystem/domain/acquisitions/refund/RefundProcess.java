@@ -445,7 +445,9 @@ public class RefundProcess extends RefundProcess_Base {
 		|| ExpenditureTrackingSystem.isAccountingManagerGroupMember(user)
 		|| ExpenditureTrackingSystem.isProjectAccountingManagerGroupMember(user)
 		|| ExpenditureTrackingSystem.isTreasuryMemberGroupMember(user)
-		|| ExpenditureTrackingSystem.isAcquisitionsProcessAuditorGroupMember(user) || getRequestor() == person
+		|| ExpenditureTrackingSystem.isAcquisitionsProcessAuditorGroupMember(user)
+		|| ExpenditureTrackingSystem.isFundCommitmentManagerGroupMember(user)
+		|| getRequestor() == person
 		|| getRequest().getRequestingUnit().isResponsible(person) || isResponsibleForAtLeastOnePayingUnit(person)
 		|| isAccountingEmployee(person) || isProjectAccountingEmployee(person) || isTreasuryMember(person)
 		|| isObserver(person);

@@ -85,6 +85,7 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 		|| ExpenditureTrackingSystem.isProjectAccountingManagerGroupMember(user)
 		|| ExpenditureTrackingSystem.isTreasuryMemberGroupMember(user)
 		|| ExpenditureTrackingSystem.isAcquisitionsProcessAuditorGroupMember(user)
+		|| ExpenditureTrackingSystem.isFundCommitmentManagerGroupMember(user)
 		|| getRequestor() == person
 		|| isTakenByPerson(person.getUser())
 		|| getRequestingUnit().isResponsible(person)
