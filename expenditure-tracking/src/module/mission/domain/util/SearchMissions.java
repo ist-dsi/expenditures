@@ -41,6 +41,7 @@ import module.organization.domain.Party;
 import module.organization.domain.Person;
 import myorg.domain.util.Search;
 
+import org.joda.time.Interval;
 import org.joda.time.LocalDate;
 
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
@@ -154,6 +155,8 @@ public class SearchMissions extends Search<Mission> {
     private Boolean national = Boolean.TRUE;
     private Boolean foreign = Boolean.TRUE;
     private LocalDate date;
+    private Interval interval;
+
     private Person requestingPerson;
     private Person participant;
     private Person accountManager;
@@ -196,12 +199,17 @@ public class SearchMissions extends Search<Mission> {
 
 	@Override
 	protected boolean matchesSearchCriteria(Mission mission) {
-	    return matchProcessNumberCriteria(mission) && matchRequestingUnitCriteria(mission.getMissionResponsible())
+	    return matchProcessNumberCriteria(mission)
+		    && matchRequestingUnitCriteria(mission.getMissionResponsible())
 		    && matchPayingUnitCriteria(mission.getMissionVersion().getFinancer())
 		    && matchAccountingUnitCriteria(mission.getMissionVersion().getFinancer())
-		    && matchMissionTypeCriteria(mission) && matchDateCriteria(mission)
-		    && matchRequestingPersonCriteria(mission.getRequestingPerson()) && matchParticipantCriteria(mission)
-		    && matchAccountManagerCriteria(mission) && matchCanceledCriteria(mission)
+		    && matchMissionTypeCriteria(mission)
+		    && matchDateCriteria(mission)
+		    && matchIntervalCriteria(mission)
+		    && matchRequestingPersonCriteria(mission.getRequestingPerson())
+		    && matchParticipantCriteria(mission)
+		    && matchAccountManagerCriteria(mission)
+		    && matchCanceledCriteria(mission)
 		    && mission.getMissionProcess().isAccessibleToCurrentUser();
 	}
 
@@ -227,10 +235,16 @@ public class SearchMissions extends Search<Mission> {
 	    return accountManager == null || mission.containsAccountManager(accountManager);
 	}
 
-	private boolean matchDateCriteria(Mission mission) {
+	private boolean matchDateCriteria(final Mission mission) {
 	    return date == null
 		    || (mission.getDaparture().isBefore(date.plusDays(1).toDateTimeAtStartOfDay()) && mission.getArrival()
 			    .isAfter(date.toDateTimeAtStartOfDay()));
+	}
+
+	private boolean matchIntervalCriteria(final Mission mission) {
+	    return interval == null
+		    || interval.contains(mission.getDaparture())
+		    || interval.contains(mission.getArrival());
 	}
 
 	private boolean matchMissionTypeCriteria(Mission mission) {
@@ -358,6 +372,14 @@ public class SearchMissions extends Search<Mission> {
 
     public AccountingUnit getAccountingUnit() {
 	return accountingUnit;
+    }
+
+    public Interval getInterval() {
+        return interval;
+    }
+
+    public void setInterval(Interval interval) {
+        this.interval = interval;
     }
 
 }

@@ -41,6 +41,7 @@ import org.apache.commons.beanutils.BeanComparator;
 import org.apache.commons.collections.comparators.NullComparator;
 import org.apache.commons.collections.comparators.ReverseComparator;
 import org.apache.commons.lang.StringUtils;
+import org.joda.time.Interval;
 import org.joda.time.LocalDate;
 
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
@@ -69,6 +70,7 @@ public class SearchMissionsDTO extends SearchMissions {
 		.getParameter("puOID")));
 	setForeign(StringUtils.isEmpty(request.getParameter("f")) ? null : Boolean.valueOf(request.getParameter("f")));
 	setDate(StringUtils.isEmpty(request.getParameter("d")) ? null : new LocalDate(Long.valueOf(request.getParameter("d"))));
+	setInterval(StringUtils.isEmpty(request.getParameter("i")) ? null : new Interval(request.getParameter("i")));
 	setRequestingPerson(StringUtils.isEmpty(request.getParameter("rpOID")) ? null : (Person) Person.fromExternalId(request
 		.getParameter("rpOID")));
 	setParticipant(StringUtils.isEmpty(request.getParameter("pOID")) ? null : (Person) Person.fromExternalId(request
@@ -103,8 +105,8 @@ public class SearchMissionsDTO extends SearchMissions {
     }
 
     public String getRequestParameters() {
-	return new Formatter().format("processNumber=%s&ruOID=%s&puOID=%s&f=%s&d=%s&rpOID=%s&pOID=%s", getProcessNumber(),
-		getRequestingUnitParameter(), getPayingUnitParameter(), getForeignParameter(), getDateParameter(),
+	return new Formatter().format("processNumber=%s&ruOID=%s&puOID=%s&f=%s&d=%s&i=%s&rpOID=%s&pOID=%s", getProcessNumber(),
+		getRequestingUnitParameter(), getPayingUnitParameter(), getForeignParameter(), getDateParameter(), getIntervalParameter(),
 		getRequestingPersonParameter(), getParticipantParameter(), getSortByParameter(), getOrderByParameter())
 		.toString();
     }
@@ -136,6 +138,10 @@ public class SearchMissionsDTO extends SearchMissions {
 
     public String getDateParameter() {
 	return getDate() != null ? String.valueOf(getDate().toDateTimeAtStartOfDay().getMillis()) : StringUtils.EMPTY;
+    }
+
+    public String getIntervalParameter() {
+	return getInterval() != null ? String.valueOf(getInterval().toString()) : StringUtils.EMPTY;
     }
 
     public String getRequestingPersonParameter() {

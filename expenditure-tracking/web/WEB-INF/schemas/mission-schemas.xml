@@ -338,6 +338,7 @@
 	<slot name="national" key="label.mission.national"/>
 	<slot name="foreign" key="label.mission.foreign"/>
 	<slot name="date" key="label.mission.date" layout="picker" />
+	<slot name="interval" key="label.mission.interval" layout="picker" />
 	<slot name="requestingPerson" layout="autoComplete" key="label.mission.requester.person">
         <property name="labelField" value="name"/>
 		<property name="format" value="${name} (${user.username})"/>
