@@ -15,7 +15,6 @@ enum pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPaymentPr
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchProcessValues as SearchProcessValues;
 
 
-external class .pt.ist.fenixframework.plugins.fileSupport.domain.GenericFile;
 
 
 valueType pt.utl.ist.fenix.tools.util.Strings as Strings {
@@ -26,7 +25,7 @@ valueType pt.utl.ist.fenix.tools.util.Strings as Strings {
     internalizeWith importFromString();
 }
 
-valueType myorg.domain.util.ByteArray as ByteArray {
+valueType pt.utl.ist.fenix.tools.util.ByteArray as ByteArray {
     externalizeWith {
         bytearray getBytes();
     }
