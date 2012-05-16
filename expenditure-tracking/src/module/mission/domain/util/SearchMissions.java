@@ -161,6 +161,7 @@ public class SearchMissions extends Search<Mission> {
     private Person participant;
     private Person accountManager;
     private Boolean filterCanceledProcesses = Boolean.TRUE;
+    private MissionStage pendingStage;
 
     @Override
     public Set<Mission> search() {
@@ -210,7 +211,8 @@ public class SearchMissions extends Search<Mission> {
 		    && matchParticipantCriteria(mission)
 		    && matchAccountManagerCriteria(mission)
 		    && matchCanceledCriteria(mission)
-		    && mission.getMissionProcess().isAccessibleToCurrentUser();
+		    && mission.getMissionProcess().isAccessibleToCurrentUser()
+		    && matchStage(mission);
 	}
 
 	private boolean matchCanceledCriteria(final Mission mission) {
@@ -245,6 +247,15 @@ public class SearchMissions extends Search<Mission> {
 	    return interval == null
 		    || interval.contains(mission.getDaparture())
 		    || interval.contains(mission.getArrival());
+	}
+
+	private boolean matchStage(final Mission mission) {
+	    if (pendingStage == null) {
+		return true;
+	    }
+	    final MissionStageView missionStageView = new MissionStageView(mission.getMissionProcess());
+	    final MissionStageState missionStageState = missionStageView.getMissionStageStates().get(pendingStage);
+	    return missionStageState == MissionStageState.UNDER_WAY;
 	}
 
 	private boolean matchMissionTypeCriteria(Mission mission) {
@@ -380,6 +391,14 @@ public class SearchMissions extends Search<Mission> {
 
     public void setInterval(Interval interval) {
         this.interval = interval;
+    }
+
+    public MissionStage getPendingStage() {
+        return pendingStage;
+    }
+
+    public void setPendingStage(MissionStage pendingStage) {
+        this.pendingStage = pendingStage;
     }
 
 }

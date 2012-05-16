@@ -33,6 +33,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import module.mission.domain.Mission;
+import module.mission.domain.util.MissionStage;
 import module.mission.domain.util.SearchMissions;
 import module.organization.domain.Party;
 import module.organization.domain.Person;
@@ -75,6 +76,7 @@ public class SearchMissionsDTO extends SearchMissions {
 		.getParameter("rpOID")));
 	setParticipant(StringUtils.isEmpty(request.getParameter("pOID")) ? null : (Person) Person.fromExternalId(request
 		.getParameter("pOID")));
+	setPendingStage(StringUtils.isEmpty(request.getParameter("ps")) ? null : MissionStage.valueOf(request.getParameter("ps")));
 
 	final String sortByParameter = request.getParameter("sortBy");
 	if (!StringUtils.isEmpty(sortByParameter) && sortByParameter.indexOf('=') != -1) {
@@ -105,10 +107,10 @@ public class SearchMissionsDTO extends SearchMissions {
     }
 
     public String getRequestParameters() {
-	return new Formatter().format("processNumber=%s&ruOID=%s&puOID=%s&f=%s&d=%s&i=%s&rpOID=%s&pOID=%s", getProcessNumber(),
+	return new Formatter().format("processNumber=%s&ruOID=%s&puOID=%s&f=%s&d=%s&i=%s&rpOID=%s&pOID=%s&ps=%s", getProcessNumber(),
 		getRequestingUnitParameter(), getPayingUnitParameter(), getForeignParameter(), getDateParameter(), getIntervalParameter(),
-		getRequestingPersonParameter(), getParticipantParameter(), getSortByParameter(), getOrderByParameter())
-		.toString();
+		getRequestingPersonParameter(), getParticipantParameter(), getSortByParameter(), getOrderByParameter(),
+		getPendingStage().name()).toString();
     }
 
     public String getRequestParametersWithSort() {

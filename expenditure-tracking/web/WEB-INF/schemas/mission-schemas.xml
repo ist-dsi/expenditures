@@ -361,6 +361,9 @@
 		<property name="size" value="50"/>
 	</slot>
 	<slot name="filterCanceledProcesses" key="label.mission.filterCanceledProcesses"/>
+	<slot name="pendingStage" key="label.mission.pending.stage">
+		<property name="format" value="${localizedName}" />
+	</slot>
 </schema>
 
 <schema name="accountabilityType-name" type="module.organization.domain.AccountabilityType" bundle="MISSION_RESOURCES">
@@ -406,7 +409,8 @@
 		<property name="counterEnabled" value="yes"/>
 		<property name="key" value="false"/>
 		<property name="listFormat" value=" ${localizedName}"/>
-	</slot>	
+	</slot>
+	<slot name="value" key="label.mission.value"/>
 	<slot name="requestingPerson.firstAndLastName" key="label.mission.requester.person"/>
 <!-- 	 layout="link">
 		<property name="useParent" value="true"/>
