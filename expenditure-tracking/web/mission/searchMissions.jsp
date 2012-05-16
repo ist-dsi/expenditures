@@ -21,6 +21,10 @@
 	<bean:define id="searchParametersWithSort"><c:out value="${searchBean.requestParametersWithSort}" /></bean:define>
 	<bean:define id="searchParameters"><c:out value="${searchBean.requestParameters}" /></bean:define>
 	<br/>
+	<html:link action="<%= "/searchMissions.do?method=downloadSearchResult&" + searchParametersWithSort %>">
+		<img border="0" src="images/excel.gif">
+		<bean:message key="link.xlsFileToDownload" bundle="ACQUISITION_RESOURCES"/>
+	</html:link>
 	<p class="aright mtop05">
 		<cp:collectionPages url="<%= "/searchMissions.do?method=search&" + searchParametersWithSort %>" pageNumberAttributeName="pageNumber" numberOfPagesAttributeName="numberOfPages" numberOfVisualizedPages="10"/>
 	</p>

@@ -109,8 +109,8 @@ public class SearchMissionsDTO extends SearchMissions {
     public String getRequestParameters() {
 	return new Formatter().format("processNumber=%s&ruOID=%s&puOID=%s&f=%s&d=%s&i=%s&rpOID=%s&pOID=%s&ps=%s", getProcessNumber(),
 		getRequestingUnitParameter(), getPayingUnitParameter(), getForeignParameter(), getDateParameter(), getIntervalParameter(),
-		getRequestingPersonParameter(), getParticipantParameter(), getSortByParameter(), getOrderByParameter(),
-		getPendingStage().name()).toString();
+		getRequestingPersonParameter(), getParticipantParameter(), getPendingStageParameter(),
+		getSortByParameter(), getOrderByParameter()).toString();
     }
 
     public String getRequestParametersWithSort() {
@@ -152,6 +152,11 @@ public class SearchMissionsDTO extends SearchMissions {
 
     public String getParticipantParameter() {
 	return getParticipant() != null ? getParticipant().getExternalId() : StringUtils.EMPTY;
+    }
+
+    private String getPendingStageParameter() {
+	final MissionStage pendingStage = getPendingStage();
+	return pendingStage == null ? StringUtils.EMPTY : pendingStage.name();
     }
 
 }
