@@ -40,6 +40,9 @@ public class CommitmentNumberBean implements Serializable {
 
     public CommitmentNumberBean(final Financer financer) {
 	setFinancer(financer);
+	if (financer != null) {
+	    commitmentNumber = financer.getCommitmentNumber();
+	}
     }
 
     public void setFinancer(final Financer financer) {

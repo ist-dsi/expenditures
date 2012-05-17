@@ -27,6 +27,8 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons;
 import java.util.ArrayList;
 import java.util.List;
 
+import module.mission.domain.MissionFinancer;
+import module.mission.domain.MissionProcess;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.WorkflowProcess;
@@ -57,14 +59,33 @@ public class CommitFundsActivityInformation extends ActivityInformation<RegularA
 	final AcquisitionRequest acquisitionRequest = process.getAcquisitionRequest();
 	for (final Financer financer : acquisitionRequest.getFinancersSet()) {
 	    if (!financer.isCommitted() && financer.isAccountingEmployee(person)) {
-		commitmentNumberBeans.add(new CommitmentNumberBean(financer));
+		final CommitmentNumberBean bean = new CommitmentNumberBean(financer);
+		commitmentNumberBeans.add(bean);
+		if (bean.getCommitmentNumber() == null || bean.getCommitmentNumber().isEmpty()) {
+		    final MissionProcess missionProcess = process.getMissionProcess();
+		    if (missionProcess != null) {
+			final MissionFinancer missionFinancer = findMissionFinance(missionProcess, financer);
+			if (missionFinancer != null) {
+			    bean.setCommitmentNumber(missionFinancer.getCommitmentNumber());
+			}
+		    }
+		}
 	    }
 	}
     }
 
+    private MissionFinancer findMissionFinance(final MissionProcess missionProcess, final Financer financer) {
+	for (final MissionFinancer missionFinancer : missionProcess.getMission().getFinancerSet()) {
+	    if (missionFinancer.getUnit() == financer.getUnit()) {
+		return missionFinancer;
+	    }
+	}
+	return null;
+    }
+
     @Override
     public boolean hasAllneededInfo() {
-	return super.hasAllneededInfo() && hasAllCommitmentNumbers();
+	return isForwardedFromInput() && super.hasAllneededInfo() && hasAllCommitmentNumbers();
     }
 
     private boolean hasAllCommitmentNumbers() {
