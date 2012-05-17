@@ -636,7 +636,8 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	    return false;
 	}
 	for (final Financer financer : getFinancersSet()) {
-	    if (!financer.isCommitted() && ExpenditureTrackingSystem.getInstance().isFundCommitmentManagerGroupMember(user)) {
+	    //if (!financer.isCommitted() && ExpenditureTrackingSystem.getInstance().isFundCommitmentManagerGroupMember(user)) {
+	    if (!financer.isCommitted() && financer.isAccountingEmployee(user.getExpenditurePerson())) {
 		return true;
 	    }
 	}
@@ -648,7 +649,8 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	    return false;
 	}
 	for (final Financer financer : getFinancersSet()) {
-	    if (financer.isCommitted() && ExpenditureTrackingSystem.getInstance().isFundCommitmentManagerGroupMember(user)) {
+	    //if (financer.isCommitted() && ExpenditureTrackingSystem.getInstance().isFundCommitmentManagerGroupMember(user)) {
+	    if (financer.isCommitted() && financer.isAccountingEmployee(user.getExpenditurePerson())) {
 		return true;
 	    }
 	}
