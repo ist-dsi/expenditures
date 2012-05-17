@@ -18,7 +18,7 @@ public class UnAllocateFundsActivity extends MissionProcessActivity<MissionProce
     public boolean isActive(final MissionProcess missionProcess, final User user) {
 	return super.isActive(missionProcess, user)
 		&& missionProcess.hasAnyAllocatedFunds()
-		&& (!missionProcess.hasAnyAuthorization() || missionProcess.getIsCanceled().booleanValue())
+		&& ((!missionProcess.hasAnyAuthorization() && !missionProcess.hasCommitmentNumber()) || missionProcess.getIsCanceled().booleanValue())
 		&& missionProcess.isAccountingEmployee(user.getExpenditurePerson());
     }
 

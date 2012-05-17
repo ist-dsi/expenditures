@@ -51,7 +51,7 @@ public class AuthoriseParticipantActivity extends MissionProcessActivity<Mission
 		&& missionProcess.isApproved()
 		&& missionProcess.canAuthoriseParticipantActivity()
 		&& (!missionProcess.getMission().hasAnyFinancer() || 
-			missionProcess.hasAllAllocatedFunds());
+			(missionProcess.hasAllAllocatedFunds() && missionProcess.hasAllCommitmentNumbers()));
     }
 
     @Override

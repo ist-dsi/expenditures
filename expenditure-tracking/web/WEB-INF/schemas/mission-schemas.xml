@@ -294,6 +294,14 @@
 <schema name="activityInformation.AddFinancerActivity" type="module.mission.domain.activity.AddFinancerActivityInformation" extends="activityInformation.AddFinancerActivityInformation">
 </schema>
 
+<schema name="module.mission.domain.activity.CommitFundsActivityInformation.MissionFinancerCommitFundAllocationBeans" type="module.mission.domain.activity.CommitFundsActivityInformation$MissionFinancerCommitFundAllocationBean" bundle="MISSION_RESOURCES">
+	<slot name="missionFinancer.unit.presentationName" key="label.mission.financer" read-only="true"/>
+	<slot name="missionFinancer.accountingUnit.name" key="label.mission.financer.accounting.unit" read-only="true" />
+	<slot name="missionFinancer.amount" key="label.mission.financer.amount" read-only="true" />
+	<slot name="commitmentNumber" key="label.commitmentNumber" bundle="EXPENDITURE_RESOURCES" 
+		validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+</schema>
+
 <schema name="module.mission.domain.activity.FundAllocationActivityInformation.MissionItemFinancerFundAllocationBean" type="module.mission.domain.activity.FundAllocationActivityInformation$MissionItemFinancerFundAllocationBean" bundle="MISSION_RESOURCES">
 	<slot name="missionItemFinancer.missionFinancer.unit.presentationName" key="label.mission.financer" read-only="true"/>
 	<slot name="missionItemFinancer.missionFinancer.accountingUnit.name" key="label.mission.financer.accounting.unit" read-only="true" />

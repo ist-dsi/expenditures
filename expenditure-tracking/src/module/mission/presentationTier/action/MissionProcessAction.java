@@ -37,6 +37,7 @@ import module.mission.domain.PersonMissionAuthorization;
 import module.mission.domain.activity.AddItemActivity;
 import module.mission.domain.activity.AllocateFundsActivityInformation;
 import module.mission.domain.activity.AllocateProjectFundsActivityInformation;
+import module.mission.domain.activity.CommitFundsActivityInformation;
 import module.mission.domain.activity.DefineParticipantAuthorizationChainActivity;
 import module.mission.domain.activity.DefineParticipantAuthorizationChainActivityInformation;
 import module.mission.domain.activity.DistributeItemCostsActivityInformation;
@@ -180,10 +181,17 @@ public class MissionProcessAction extends ContextBaseAction {
 	activityInformation.execute();
 	return ProcessManagement.forwardToProcess(activityInformation.getProcess());
     }
-    
+
     public ActionForward allocateProjectFunds(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) {
 	final AllocateProjectFundsActivityInformation activityInformation = getRenderedObject("information");
+	activityInformation.execute();
+	return ProcessManagement.forwardToProcess(activityInformation.getProcess());
+    }
+
+    public ActionForward commitFunds(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	final CommitFundsActivityInformation activityInformation = getRenderedObject("information");
 	activityInformation.execute();
 	return ProcessManagement.forwardToProcess(activityInformation.getProcess());
     }

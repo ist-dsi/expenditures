@@ -18,6 +18,9 @@
 			<th class="acenter">
 				<bean:message bundle="MISSION_RESOURCES" key="label.mission.financer.fundAllocationId"/>
 			</th>
+			<th class="acenter">
+				<bean:message bundle="EXPENDITURE_RESOURCES" key="label.commitmentNumbers"/>
+			</th>
 			<th class="aright">
 				<bean:message bundle="MISSION_RESOURCES" key="label.mission.financer.amount"/>
 			</th>
@@ -82,6 +85,13 @@
 						</logic:notEqual>
 					</logic:notEmpty>
 				</logic:present>
+			</td>
+			<td class="acenter">
+				<bean:write name="financer" property="commitmentNumber"/>
+				<wf:activityLink processName="process" activityName="UnCommitFundsActivity" scope="request" paramName0="missionFinancer" paramValue0="<%= financerOID %>">
+					<br/>
+					<bean:message bundle="MISSION_RESOURCES" key="link.remove"/>
+				</wf:activityLink>
 			</td>
 			<td class="aright">
 				<fr:view name="financer" property="amount"/>

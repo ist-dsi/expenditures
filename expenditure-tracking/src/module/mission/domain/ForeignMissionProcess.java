@@ -29,6 +29,7 @@ import java.util.Collections;
 import java.util.List;
 
 import module.geography.domain.Country;
+import module.mission.domain.MissionProcess.MissionGiveProcessUserNotifier;
 import module.mission.domain.activity.AddFinancerActivity;
 import module.mission.domain.activity.AddItemActivity;
 import module.mission.domain.activity.AddParticipantActivity;
@@ -40,6 +41,7 @@ import module.mission.domain.activity.AuthoriseParticipantActivity;
 import module.mission.domain.activity.AuthorizeActivity;
 import module.mission.domain.activity.CancelProcessActivity;
 import module.mission.domain.activity.ChangeAccountingUnitActivity;
+import module.mission.domain.activity.CommitFundsActivity;
 import module.mission.domain.activity.DefineParticipantAuthorizationChainActivity;
 import module.mission.domain.activity.DistributeItemCostsActivity;
 import module.mission.domain.activity.EditItemActivity;
@@ -63,6 +65,7 @@ import module.mission.domain.activity.UnAllocateProjectFundsActivity;
 import module.mission.domain.activity.UnApproveActivity;
 import module.mission.domain.activity.UnAuthoriseParticipantActivity;
 import module.mission.domain.activity.UnAuthorizeActivity;
+import module.mission.domain.activity.UnCommitFundsActivity;
 import module.mission.domain.activity.UnProcessPersonnelActivity;
 import module.mission.domain.activity.UnSubmitForApprovalActivity;
 import module.mission.domain.activity.UpdateForeignMissionDetailsActivity;
@@ -108,10 +111,14 @@ public class ForeignMissionProcess extends ForeignMissionProcess_Base {
 	activitiesAux.add(new UnSubmitForApprovalActivity());
 	activitiesAux.add(new ApproveActivity());
 	activitiesAux.add(new UnApproveActivity());
+
 	activitiesAux.add(new AllocateFundsActivity());
 	activitiesAux.add(new AllocateProjectFundsActivity());
 	activitiesAux.add(new UnAllocateFundsActivity());
 	activitiesAux.add(new UnAllocateProjectFundsActivity());
+	activitiesAux.add(new CommitFundsActivity());
+	activitiesAux.add(new UnCommitFundsActivity());
+
 	activitiesAux.add(new AuthorizeActivity());
 	activitiesAux.add(new UnAuthorizeActivity());
 	activitiesAux.add(new AuthoriseParticipantActivity());

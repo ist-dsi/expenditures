@@ -644,4 +644,14 @@ public abstract class MissionProcess extends MissionProcess_Base {
 	}
     }
 
+    public boolean hasCommitmentNumber() {
+	final Mission mission = getMission();
+	return mission.hasCommitmentNumber();
+    }
+
+    public boolean hasAllCommitmentNumbers() {
+	final Mission mission = getMission();
+	return mission.hasAllCommitmentNumbers();
+    }
+
 }

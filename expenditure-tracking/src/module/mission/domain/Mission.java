@@ -1443,4 +1443,22 @@ public abstract class Mission extends Mission_Base {
 		: builder.toString();
     }
 
+    public boolean hasCommitmentNumber() {
+	for (final MissionFinancer financer : getFinancerSet()) {
+	    if (financer.getCommitmentNumber() != null && !financer.getCommitmentNumber().isEmpty()) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
+    public boolean hasAllCommitmentNumbers() {
+	for (final MissionFinancer financer : getFinancerSet()) {
+	    if (financer.getCommitmentNumber() == null || financer.getCommitmentNumber().isEmpty()) {
+		return false;
+	    }
+	}
+	return true;
+    }
+
 }

@@ -85,15 +85,15 @@ public class MissionStageView {
 	    return missionProcess.hasAnyAllocatedFunds() || missionProcess.hasAnyAllocatedProjectFunds() ? MissionStageState.UNDER_WAY
 		    : MissionStageState.NOT_YET_UNDER_WAY;
 	}
-	return missionProcess.hasAllAllocatedFunds()
+	return missionProcess.hasAllAllocatedFunds() && missionProcess.hasAllCommitmentNumbers()
 		&& (!missionProcess.hasAnyProjectFinancer() || missionProcess.hasAllAllocatedProjectFunds()) ? MissionStageState.COMPLETED
 		: MissionStageState.UNDER_WAY;
     }
 
     protected MissionStageState getParticipationAuthorizationState() {
 	return missionProcess.isApproved()
-		&& (!missionProcess.getMission().hasAnyFinancer() || missionProcess.hasAllAllocatedFunds()) ? getParticipationAuthorizationStateForApproved()
-		: MissionStageState.NOT_YET_UNDER_WAY;
+		&& (!missionProcess.getMission().hasAnyFinancer() || (missionProcess.hasAllAllocatedFunds() && missionProcess.hasAllCommitmentNumbers()))
+			? getParticipationAuthorizationStateForApproved() : MissionStageState.NOT_YET_UNDER_WAY;
     }
 
     private MissionStageState getParticipationAuthorizationStateForApproved() {
