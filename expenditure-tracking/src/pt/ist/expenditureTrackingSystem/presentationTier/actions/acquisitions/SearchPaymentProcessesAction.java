@@ -39,6 +39,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import myorg.domain.util.Money;
 import myorg.util.BundleUtil;
 
 import org.apache.commons.beanutils.BeanComparator;
@@ -303,6 +304,9 @@ public class SearchPaymentProcessesAction extends BaseAction {
 		    }
 		}
 	    }
+
+	    final Money totalValue = process.getTotalValue();
+	    spreadsheet.addCell((totalValue == null ? Money.ZERO : totalValue).toFormatString());
 	}
     }
 
@@ -318,6 +322,7 @@ public class SearchPaymentProcessesAction extends BaseAction {
 	spreadsheet.addHeader(getAcquisitionResourceMessage("acquisitionProcess.label.requestingUnit"));
 	spreadsheet.addHeader(getAcquisitionResourceMessage("financer.label.fundAllocation.identification"));
 	spreadsheet.addHeader(getAcquisitionResourceMessage("financer.label.effectiveFundAllocation.identification"));
+	spreadsheet.addHeader(getExpenditureResourceMessage("label.value"));
     }
 
     private static String getAcquisitionResourceMessage(String key) {
