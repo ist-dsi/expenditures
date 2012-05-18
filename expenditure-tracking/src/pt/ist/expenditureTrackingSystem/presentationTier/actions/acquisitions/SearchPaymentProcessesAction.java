@@ -55,6 +55,7 @@ import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.SavedSearch;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
@@ -307,6 +308,18 @@ public class SearchPaymentProcessesAction extends BaseAction {
 
 	    final Money totalValue = process.getTotalValue();
 	    spreadsheet.addCell((totalValue == null ? Money.ZERO : totalValue).toFormatString());
+
+	    final StringBuilder builder = new StringBuilder();
+	    for (final Financer financer : process.getFinancersWithFundsAllocated()) {
+		final AccountingUnit accountingUnit = financer.getAccountingUnit();
+		if (accountingUnit != null) {
+		    if (builder.length() > 0) {
+			builder.append(", ");
+		    }
+		    builder.append(accountingUnit.getName());
+		}
+	    }
+	    spreadsheet.addCell(builder.toString());
 	}
     }
 
@@ -323,6 +336,7 @@ public class SearchPaymentProcessesAction extends BaseAction {
 	spreadsheet.addHeader(getAcquisitionResourceMessage("financer.label.fundAllocation.identification"));
 	spreadsheet.addHeader(getAcquisitionResourceMessage("financer.label.effectiveFundAllocation.identification"));
 	spreadsheet.addHeader(getExpenditureResourceMessage("label.value"));
+	spreadsheet.addHeader(getExpenditureResourceMessage("label.accounting.units"));
     }
 
     private static String getAcquisitionResourceMessage(String key) {

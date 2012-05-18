@@ -1461,4 +1461,18 @@ public abstract class Mission extends Mission_Base {
 	return true;
     }
 
+    public String getAccountingUnitsAsString() {
+	final StringBuilder builder = new StringBuilder();
+	for (final MissionFinancer financer : getFinancerSet()) {
+	    final AccountingUnit accountingUnit = financer.getAccountingUnit();
+	    if (accountingUnit != null) {
+		if (builder.length() > 0) {
+		    builder.append(", ");
+		}
+		builder.append(accountingUnit.getName());
+	    }
+	}
+	return builder.toString();
+    }
+
 }

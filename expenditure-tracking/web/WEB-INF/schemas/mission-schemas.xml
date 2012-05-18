@@ -419,6 +419,7 @@
 		<property name="listFormat" value=" ${localizedName}"/>
 	</slot>
 	<slot name="value" key="label.mission.value"/>
+	<slot name="accountingUnitsAsString" key="label.accounting.units" bundle="EXPENDITURE_RESOURCES"/>
 	<slot name="requestingPerson.firstAndLastName" key="label.mission.requester.person"/>
 <!-- 	 layout="link">
 		<property name="useParent" value="true"/>

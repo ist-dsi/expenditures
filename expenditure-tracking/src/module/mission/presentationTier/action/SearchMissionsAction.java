@@ -33,6 +33,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import module.mission.domain.Mission;
+import module.mission.domain.MissionFinancer;
 import module.mission.domain.MissionProcess;
 import module.mission.presentationTier.dto.SearchMissionsDTO;
 import module.organization.domain.Person;
@@ -45,6 +46,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.joda.time.DateTime;
 
+import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 import pt.utl.ist.fenix.tools.util.CollectionPager;
 import pt.utl.ist.fenix.tools.util.excel.Spreadsheet;
@@ -108,6 +110,7 @@ public class SearchMissionsAction extends ContextBaseAction {
 	spreadsheet.setHeader(BundleUtil.getStringFromResourceBundle("resources.MissionResources", "label.module.mission.front.page.list.duration"));
 	spreadsheet.setHeader(BundleUtil.getStringFromResourceBundle("resources.MissionResources", "label.mission.items"));
 	spreadsheet.setHeader(BundleUtil.getStringFromResourceBundle("resources.MissionResources", "label.mission.value"));
+	spreadsheet.setHeader(BundleUtil.getStringFromResourceBundle("resources.ExpenditureResources", "label.accounting.units"));
 	spreadsheet.setHeader(BundleUtil.getStringFromResourceBundle("resources.MissionResources", "label.mission.requester.person"));
 	spreadsheet.setHeader(BundleUtil.getStringFromResourceBundle("resources.MissionResources", "label.mission.participants"));
 	spreadsheet.setHeader(BundleUtil.getStringFromResourceBundle("resources.MissionResources", "label.mission.inactiveSince"));
@@ -122,6 +125,7 @@ public class SearchMissionsAction extends ContextBaseAction {
 	    row.setCell(mission.getDurationInDays());
 	    row.setCell(mission.getMissionItemsCount());
 	    row.setCell(mission.getValue().toFormatString());
+	    row.setCell(getAccountingUnits(mission));
 	    row.setCell(mission.getRequestingPerson().getFirstAndLastName());
 	    final StringBuilder builder = new StringBuilder();
 	    for (final Person person : mission.getParticipantesSet()) {
@@ -143,6 +147,20 @@ public class SearchMissionsAction extends ContextBaseAction {
 	}
 
 	return null;
+    }
+
+    private String getAccountingUnits(final Mission mission) {
+	final StringBuilder builder = new StringBuilder();
+	for (final MissionFinancer financer : mission.getFinancerSet()) {
+	    final AccountingUnit accountingUnit = financer.getAccountingUnit();
+	    if (accountingUnit != null) {
+		if (builder.length() > 0) {
+		    builder.append(", ");
+		}
+		builder.append(accountingUnit.getName());
+	    }
+	}
+	return builder.toString();
     }
 
 }

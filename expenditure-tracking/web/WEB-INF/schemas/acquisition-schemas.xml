@@ -1097,6 +1097,7 @@
 	<slot name="request" layout="fund-allocation-status"
 		key="acquisitionProcess.label.fundAllocationStatus" bundle="ACQUISITION_RESOURCES" />
 	<slot name="totalValue" key="label.value" bundle="EXPENDITURE_RESOURCES" />
+	<slot name="accountingUnitsAsString" key="label.accounting.units" bundle="EXPENDITURE_RESOURCES" />
 </schema>
 
 

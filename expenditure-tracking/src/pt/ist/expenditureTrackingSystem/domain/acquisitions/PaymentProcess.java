@@ -53,6 +53,7 @@ import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean;
+import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Project;
 import pt.ist.expenditureTrackingSystem.domain.organization.SubProject;
@@ -512,5 +513,19 @@ public abstract class PaymentProcess extends PaymentProcess_Base implements HasP
     public abstract Set<CPVReference> getCPVReferences();
 
     public abstract void migrateProcessNumber();
+
+    public String getAccountingUnitsAsString() {
+	final StringBuilder builder = new StringBuilder();
+	for (final Financer financer : getFinancersWithFundsAllocated()) {
+	    final AccountingUnit accountingUnit = financer.getAccountingUnit();
+	    if (accountingUnit != null) {
+		if (builder.length() > 0) {
+		    builder.append(", ");
+		}
+		builder.append(accountingUnit.getName());
+	    }
+	}
+	return builder.toString();
+    }
 
 }
