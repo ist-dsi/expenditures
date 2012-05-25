@@ -47,6 +47,7 @@ import org.apache.struts.action.ActionMapping;
 import org.joda.time.DateTime;
 
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
+import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 import pt.utl.ist.fenix.tools.util.CollectionPager;
 import pt.utl.ist.fenix.tools.util.excel.Spreadsheet;
@@ -110,6 +111,7 @@ public class SearchMissionsAction extends ContextBaseAction {
 	spreadsheet.setHeader(BundleUtil.getStringFromResourceBundle("resources.MissionResources", "label.module.mission.front.page.list.duration"));
 	spreadsheet.setHeader(BundleUtil.getStringFromResourceBundle("resources.MissionResources", "label.mission.items"));
 	spreadsheet.setHeader(BundleUtil.getStringFromResourceBundle("resources.MissionResources", "label.mission.value"));
+	spreadsheet.setHeader(BundleUtil.getStringFromResourceBundle("resources.MissionResources", "label.mission.financer"));
 	spreadsheet.setHeader(BundleUtil.getStringFromResourceBundle("resources.ExpenditureResources", "label.accounting.units"));
 	spreadsheet.setHeader(BundleUtil.getStringFromResourceBundle("resources.MissionResources", "label.mission.requester.person"));
 	spreadsheet.setHeader(BundleUtil.getStringFromResourceBundle("resources.MissionResources", "label.mission.participants"));
@@ -125,6 +127,7 @@ public class SearchMissionsAction extends ContextBaseAction {
 	    row.setCell(mission.getDurationInDays());
 	    row.setCell(mission.getMissionItemsCount());
 	    row.setCell(mission.getValue().toFormatString());
+	    row.setCell(getFinancingUnits(mission));
 	    row.setCell(getAccountingUnits(mission));
 	    row.setCell(mission.getRequestingPerson().getFirstAndLastName());
 	    final StringBuilder builder = new StringBuilder();
@@ -147,6 +150,20 @@ public class SearchMissionsAction extends ContextBaseAction {
 	}
 
 	return null;
+    }
+
+    private String getFinancingUnits(Mission mission) {
+	final StringBuilder builder = new StringBuilder();
+	for (final MissionFinancer financer : mission.getFinancerSet()) {
+	    final Unit unit = financer.getUnit();
+	    if (unit != null) {
+		if (builder.length() > 0) {
+		    builder.append(", ");
+		}
+		builder.append(unit.getUnit().getAcronym());
+	    }
+	}
+	return builder.toString();
     }
 
     private String getAccountingUnits(final Mission mission) {

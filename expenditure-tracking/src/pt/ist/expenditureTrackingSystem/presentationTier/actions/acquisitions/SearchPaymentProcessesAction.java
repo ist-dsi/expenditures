@@ -290,6 +290,30 @@ public class SearchPaymentProcessesAction extends BaseAction {
 	    spreadsheet.addCell(process.getRequest().getRequester().getFirstAndLastName());
 	    spreadsheet.addCell(process.getRequest().getRequestingUnit().getName());
 
+	    final StringBuilder builderAccountingUnit = new StringBuilder();
+	    final StringBuilder builderUnits = new StringBuilder();
+	    for (final Financer financer : process.getFinancersWithFundsAllocated()) {
+		final AccountingUnit accountingUnit = financer.getAccountingUnit();
+		if (accountingUnit != null) {
+		    if (builderAccountingUnit.length() > 0) {
+			builderAccountingUnit.append(", ");
+		    }
+		    builderAccountingUnit.append(accountingUnit.getName());
+		}
+		final Unit unit = financer.getUnit();
+		if (unit != null) {
+		    if (builderUnits.length() > 0) {
+			builderUnits.append(", ");
+		    }
+		    builderUnits.append(unit.getUnit().getAcronym());
+		}
+	    }
+	    spreadsheet.addCell(builderAccountingUnit.length() == 0 ? " " : builderAccountingUnit.toString());
+	    spreadsheet.addCell(builderUnits.length() == 0 ? " " : builderUnits.toString());
+
+	    final Money totalValue = process.getTotalValue();
+	    spreadsheet.addCell((totalValue == null ? Money.ZERO : totalValue).toFormatString());
+
 	    if (process instanceof SimplifiedProcedureProcess) {
 		SimplifiedProcedureProcess simplifiedProcedureProcess = (SimplifiedProcedureProcess) process;
 		for (PayingUnitTotalBean payingUnitTotal : simplifiedProcedureProcess.getAcquisitionRequest()
@@ -305,21 +329,6 @@ public class SearchPaymentProcessesAction extends BaseAction {
 		    }
 		}
 	    }
-
-	    final Money totalValue = process.getTotalValue();
-	    spreadsheet.addCell((totalValue == null ? Money.ZERO : totalValue).toFormatString());
-
-	    final StringBuilder builder = new StringBuilder();
-	    for (final Financer financer : process.getFinancersWithFundsAllocated()) {
-		final AccountingUnit accountingUnit = financer.getAccountingUnit();
-		if (accountingUnit != null) {
-		    if (builder.length() > 0) {
-			builder.append(", ");
-		    }
-		    builder.append(accountingUnit.getName());
-		}
-	    }
-	    spreadsheet.addCell(builder.toString());
 	}
     }
 
@@ -333,10 +342,11 @@ public class SearchPaymentProcessesAction extends BaseAction {
 	spreadsheet.addHeader(getExpenditureResourceMessage("label.inactiveSince"));
 	spreadsheet.addHeader(getExpenditureResourceMessage("label.requesterName"));
 	spreadsheet.addHeader(getAcquisitionResourceMessage("acquisitionProcess.label.requestingUnit"));
+	spreadsheet.addHeader(getExpenditureResourceMessage("label.accounting.units"));
+	spreadsheet.addHeader(getExpenditureResourceMessage("label.financing.units"));
+	spreadsheet.addHeader(getExpenditureResourceMessage("label.value"));
 	spreadsheet.addHeader(getAcquisitionResourceMessage("financer.label.fundAllocation.identification"));
 	spreadsheet.addHeader(getAcquisitionResourceMessage("financer.label.effectiveFundAllocation.identification"));
-	spreadsheet.addHeader(getExpenditureResourceMessage("label.value"));
-	spreadsheet.addHeader(getExpenditureResourceMessage("label.accounting.units"));
     }
 
     private static String getAcquisitionResourceMessage(String key) {
