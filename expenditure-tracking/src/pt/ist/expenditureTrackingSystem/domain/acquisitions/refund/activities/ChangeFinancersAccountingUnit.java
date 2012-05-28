@@ -56,4 +56,10 @@ public class ChangeFinancersAccountingUnit extends AbstractChangeFinancersAccoun
     public String getUsedBundle() {
 	return "resources/AcquisitionResources";
     }
+
+    @Override
+    public boolean isUserAwarenessNeeded(RefundProcess process) {
+	return false;
+    }
+
 }
