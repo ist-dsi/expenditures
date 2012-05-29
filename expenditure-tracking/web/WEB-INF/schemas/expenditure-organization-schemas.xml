@@ -1,16 +1,16 @@
 <schema name="createUnit"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.CreateUnitBean"
 		bundle="EXPENDITURE_ORGANIZATION_RESOURCES">
-	<slot name="name" key="unit.label.name" bundle="EXPENDITURE_ORGANIZATION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+	<slot name="name" key="unit.label.name" bundle="EXPENDITURE_ORGANIZATION_RESOURCES" required="true">
 		<property name="size" value="40"/>
 	</slot>
-	<slot name="costCenter" key="unit.label.costCenter" bundle="EXPENDITURE_ORGANIZATION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="costCenter" key="unit.label.costCenter" bundle="EXPENDITURE_ORGANIZATION_RESOURCES" required="true"/>
 </schema>
 
 <schema name="createAccountingUnit"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.AccountingUnitBean"
 		bundle="EXPENDITURE_ORGANIZATION_RESOURCES">
-	<slot name="name" key="unit.label.name" bundle="EXPENDITURE_ORGANIZATION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+	<slot name="name" key="unit.label.name" bundle="EXPENDITURE_ORGANIZATION_RESOURCES" required="true">
 		<property name="size" value="40"/>
 	</slot>
 </schema>
@@ -138,7 +138,7 @@
 
 <schema name="editAuthorization" type="pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization"
 		bundle="ACQUISITION_RESOURCES">
-	<slot name="startDate" key="authorizations.label.startDate" bundle="EXPENDITURE_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+	<slot name="startDate" key="authorizations.label.startDate" bundle="EXPENDITURE_RESOURCES" required="true">
 		<property name="subLayout" value="default"/>
 	</slot>
 	<slot name="endDate" key="authorizations.label.endDate" bundle="EXPENDITURE_RESOURCES">
@@ -215,14 +215,14 @@
 <schema name="createSupplier"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.CreateSupplierBean"
 		bundle="EXPENDITURE_ORGANIZATION_RESOURCES">
-	<slot name="fiscalIdentificationCode" key="supplier.label.fiscalCode" bundle="EXPENDITURE_ORGANIZATION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-	<slot name="name" key="supplier.label.name" bundle="EXPENDITURE_ORGANIZATION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+	<slot name="fiscalIdentificationCode" key="supplier.label.fiscalCode" bundle="EXPENDITURE_ORGANIZATION_RESOURCES" required="true"/>
+	<slot name="name" key="supplier.label.name" bundle="EXPENDITURE_ORGANIZATION_RESOURCES" required="true">
 		<property name="size" value="50"/>
 	</slot>
 	<slot name="abbreviatedName" key="supplier.label.abbreviatedName" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
-	<slot name="nib" key="supplier.label.nib" bundle="EXPENDITURE_ORGANIZATION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="nib" key="supplier.label.nib" bundle="EXPENDITURE_ORGANIZATION_RESOURCES" required="true"/>
 	<slot name="address" key="supplier.label.address" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
-	<slot name="phone" key="supplier.label.phone" bundle="EXPENDITURE_ORGANIZATION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="phone" key="supplier.label.phone" bundle="EXPENDITURE_ORGANIZATION_RESOURCES" required="true"/>
 	<slot name="fax" key="supplier.label.fax" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 	<slot name="email" key="supplier.label.email" bundle="EXPENDITURE_ORGANIZATION_RESOURCES">
 		<property name="size" value="40"/>
@@ -288,7 +288,7 @@
         <property name="labelField" value="presentationName"/>
 		<property name="format" value="${presentationName}"/>
 		<property name="minChars" value="3"/>		
-		<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.UnitAutoCompleteProvider" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+		<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.UnitAutoCompleteProvider" required="true"/>
 		<property name="size" value="60"/>
 		<validator class="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator">
 			<property name="message" value="label.pleaseSelectOne.unit"/>
@@ -328,7 +328,7 @@
 <schema name="create.authorization.unit" type="pt.ist.expenditureTrackingSystem.domain.dto.AuthorizationBean"
 		bundle="EXPENDITURE_ORGANIZATION_RESOURCES">
 	<slot name="unit.name" key="label.unit" read-only="true" bundle="EXPENDITURE_RESOURCES"/>
-	<slot name="startDate" key="authorizations.label.startDate" bundle="EXPENDITURE_RESOURCES" layout="null-as-label" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+	<slot name="startDate" key="authorizations.label.startDate" bundle="EXPENDITURE_RESOURCES" layout="null-as-label" required="true">
 		<property name="subLayout" value="default"/>
 	</slot>
 	<slot name="endDate" key="authorizations.label.endDate" bundle="EXPENDITURE_RESOURCES" layout="null-as-label">

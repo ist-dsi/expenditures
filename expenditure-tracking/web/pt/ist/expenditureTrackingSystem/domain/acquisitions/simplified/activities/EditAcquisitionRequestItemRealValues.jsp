@@ -44,7 +44,7 @@
 						<fr:view name="item" property="quantity"/>
 					</td>
 					<td class="aleft">
-						<fr:edit id="realQuantity" name="information" slot="realQuantity" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+						<fr:edit id="realQuantity" name="information" slot="realQuantity" required="true">
 					 		<fr:layout>
 								<fr:property name="size" value="10"/>
 							</fr:layout>
@@ -62,7 +62,7 @@
 						<fr:view name="item" property="unitValue"/>
 					</td>
 					<td class="aleft">
-						<fr:edit id="realUnitValue" name="information" slot="realUnitValue" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+						<fr:edit id="realUnitValue" name="information" slot="realUnitValue" required="true">
 							<fr:layout>
 								<fr:property name="size" value="10"/>
 							</fr:layout>
@@ -81,7 +81,7 @@
 						<fr:view name="item" property="vatValue"/>%
 					</td>
 					<td class="aleft">
-						<fr:edit id="realVatValue" name="information" slot="realVatValue" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+						<fr:edit id="realVatValue" name="information" slot="realVatValue" required="true">
 							<fr:layout>
 								<fr:property name="size" value="10"/>
 							</fr:layout>

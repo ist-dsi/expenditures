@@ -37,7 +37,7 @@
 	
 	<fr:edit id="functionDelegationBean" name="functionDelegationBean">
 		<fr:schema type="module.mission.domain.util.FunctionDelegationBean" bundle="ORGANIZATION_RESOURCES">
-			<fr:slot name="beginDate" key="label.begin" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+			<fr:slot name="beginDate" key="label.begin" required="true"/>
 			<fr:slot name="endDate" key="label.end"/>
 		</fr:schema>
 		<fr:layout name="tabular">

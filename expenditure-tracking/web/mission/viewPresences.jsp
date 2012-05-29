@@ -14,7 +14,7 @@
 	<fr:edit id="searchUnitMemberPresence" name="searchUnitMemberPresence"
 			action="/missionOrganization.do?method=viewPresences">
 		<fr:schema type="module.mission.domain.util.SearchUnitMemberPresence" bundle="MISSION_RESOURCES">
-			<fr:slot name="day" key="label.date" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+			<fr:slot name="day" key="label.date" required="true"/>
 			<fr:slot name="includeSubUnits" key="label.includeSubUnits"/>
 			<fr:slot name="onMission" key="label.onMission"/>
 			<fr:slot name="accountabilityTypes" layout="option-select" key="label.mission.participants.accountabilityTypes" bundle="MISSION_RESOURCES">

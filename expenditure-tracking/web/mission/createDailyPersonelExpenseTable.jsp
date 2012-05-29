@@ -11,8 +11,8 @@
 <fr:edit id="dailyPersonelExpenseTableBean" name="dailyPersonelExpenseTableBean"
 		action="/configureMissions.do?method=createDailyPersonelExpenseTable">
 	<fr:schema type="module.mission.domain.util.DailyPersonelExpenseTableBean" bundle="MISSION_RESOURCES">
-    	<fr:slot name="aplicableSince" key="label.daily.personel.expense.table.since" bundle="MISSION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-    	<fr:slot name="aplicableToMissionType" layout="menu-select" key="label.mission.type" bundle="MISSION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+    	<fr:slot name="aplicableSince" key="label.daily.personel.expense.table.since" bundle="MISSION_RESOURCES" required="true"/>
+    	<fr:slot name="aplicableToMissionType" layout="menu-select" key="label.mission.type" bundle="MISSION_RESOURCES" required="true">
         	<fr:property name="providerClass" value="module.mission.presentationTier.provider.MissionClassProvider" />
         	<fr:property name="eachLayout" value="name-resolver"/>
         	<fr:property name="bundle" value="MISSION_RESOURCES"/>

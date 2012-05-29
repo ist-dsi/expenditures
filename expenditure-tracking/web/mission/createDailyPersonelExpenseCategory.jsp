@@ -11,9 +11,9 @@
 <bean:define id="url" type="java.lang.String">/configureMissions.do?method=createDailyPersonelExpenseCategory&amp;dailyPersonelExpenseTableOid=<bean:write name="dailyPersonelExpenseCategoryBean" property="dailyPersonelExpenseTable.externalId"/></bean:define>
 <fr:edit id="dailyPersonelExpenseCategoryBean" name="dailyPersonelExpenseCategoryBean" action="<%= url %>">
 	<fr:schema type="module.mission.domain.util.DailyPersonelExpenseCategoryBean" bundle="MISSION_RESOURCES">
-    	<fr:slot name="description" key="label.mission.missionConfiguration.daily.personel.expense.category.description" bundle="MISSION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-    	<fr:slot name="value" key="label.mission.missionConfiguration.daily.personel.expense.category.value" bundle="MISSION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-    	<fr:slot name="minSalaryValue" key="label.mission.missionConfiguration.daily.personel.expense.category.minSalaryValue" bundle="MISSION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+    	<fr:slot name="description" key="label.mission.missionConfiguration.daily.personel.expense.category.description" bundle="MISSION_RESOURCES" required="true"/>
+    	<fr:slot name="value" key="label.mission.missionConfiguration.daily.personel.expense.category.value" bundle="MISSION_RESOURCES" required="true"/>
+    	<fr:slot name="minSalaryValue" key="label.mission.missionConfiguration.daily.personel.expense.category.minSalaryValue" bundle="MISSION_RESOURCES" required="true"/>
 	</fr:schema>
 	<fr:layout name="tabular">
 		<fr:property name="classes" value="form listInsideClear" />

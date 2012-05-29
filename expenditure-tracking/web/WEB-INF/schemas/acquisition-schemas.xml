@@ -40,7 +40,7 @@
 	type="pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean"
 	extends="createAcquisitionRequest.CCP"
 	bundle="ACQUISITION_RESOURCES">
-	<slot name="contractSimpleDescription" layout="longText" key="label.simpleContractDescription" help="help.simpleContractDescription" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+	<slot name="contractSimpleDescription" layout="longText" key="label.simpleContractDescription" help="help.simpleContractDescription" required="true">
 		<property name="rows" value="3"/>
 		<property name="columns" value="50"/>
 	</slot>
@@ -50,7 +50,7 @@
 	type="pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean"
 	extends="createAcquisitionRequest.CCP"
 	bundle="ACQUISITION_RESOURCES">
-	<slot name="contractSimpleDescription" layout="longText" key="label.simpleContractDescription" help="help.simpleContractDescription" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+	<slot name="contractSimpleDescription" layout="longText" key="label.simpleContractDescription" help="help.simpleContractDescription" required="true">
 		<property name="rows" value="3"/>
 		<property name="columns" value="50"/>
 	</slot>
@@ -87,7 +87,7 @@
 		<property name="minChars" value="3" />
 		<property name="args"
 			value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.ActiveUnitAutoCompleteProvider"
-			validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+			required="true" />
 		<property name="classes" value="inputsize250px" />
 		<validator
 			class="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator">
@@ -98,7 +98,7 @@
 	</slot>
 	<slot name="requestUnitPayingUnit"
 		key="acquisitionProcess.label.addRequestUnitAlsoHasPayingUnit" bundle="ACQUISITION_RESOURCES" />
-	<slot name="contractSimpleDescription" layout="longText" key="label.simpleContractDescription" help="help.simpleContractDescription" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+	<slot name="contractSimpleDescription" layout="longText" key="label.simpleContractDescription" help="help.simpleContractDescription" required="true">
 		<property name="rows" value="3"/>
 		<property name="columns" value="50"/>
 	</slot>
@@ -162,7 +162,7 @@
 	</slot>
 	<slot name="contractSimpleDescription"
 		key="label.simpleContractDescription" bundle="ACQUISITION_RESOURCES"
-		layout="null-as-label" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		layout="null-as-label" required="true">
 		<property name="subLayout" value="default" />
 	</slot>
 </schema>
@@ -211,7 +211,7 @@
 	</slot>
 	<slot name="description" key="acquisitionRequestItem.label.description"
 		bundle="ACQUISITION_RESOURCES"
-		validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"
+		required="true"
 		layout="longText">
 		<property name="columns" value="60" />
 		<property name="rows" value="6" />
@@ -223,7 +223,7 @@
 	bundle="ACQUISITION_RESOURCES">
 	<slot name="quantity" key="acquisitionRequestItem.label.quantity"
 		bundle="ACQUISITION_RESOURCES"
-		validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		required="true">
 		<property name="size" value="10" />
 	</slot>
 	<slot name="unitValue" key="acquisitionRequestItem.label.unitValue"
@@ -236,7 +236,7 @@
 	</slot>
 	<slot name="vatValue" key="acquisitionRequestItem.label.vatValue"
 		bundle="ACQUISITION_RESOURCES"
-		validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		required="true">
 		<property name="size" value="10" />
 	</slot>
 	<!--
@@ -253,16 +253,16 @@
 	bundle="ACQUISITION_RESOURCES">
 	<slot name="createItemSchemaType" layout="radio-postback"
 		key="acquisitionRequestItem.label.deliveryInfo" bundle="ACQUISITION_RESOURCES"
-		validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		required="true">
 		<property name="classes" value="liinline nobullet" />
 	</slot>
 	<slot name="recipient" key="label.recipient" bundle="EXPENDITURE_RESOURCES"
-		validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"
+		required="true"
 		help="message.help.recipient">
 		<property name="size" value="60" />
 	</slot>
 	<slot name="address" key="label.receptionAddress" bundle="EXPENDITURE_RESOURCES" 
-	validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	required="true"/>
 	<slot name="phone" key="label.phone.optional" bundle="EXPENDITURE_RESOURCES">
 		<property name="size" value="20" />
 	</slot>
@@ -276,12 +276,12 @@
 	bundle="ACQUISITION_RESOURCES">
 	<slot name="createItemSchemaType" layout="radio-postback"
 		key="acquisitionRequestItem.label.deliveryInfo" bundle="ACQUISITION_RESOURCES"
-		validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		required="true">
 		<property name="classes" value="liinline nobullet" />
 	</slot>
 	<slot name="deliveryInfo" layout="menu-select"
 		key="acquisitionRequestItem.label.deliveryInfo" bundle="ACQUISITION_RESOURCES"
-		validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		required="true">
 		<property name="providerClass"
 			value="pt.ist.expenditureTrackingSystem.presentationTier.renderers.dataProvider.DeliveryInfoProvider" />
 		<property name="eachLayout" value="nonNullValues-commaSeparated" />
@@ -296,13 +296,13 @@
 		bundle="ACQUISITION_RESOURCES" />
 	<slot name="quantity" key="acquisitionRequestItem.label.quantity"
 		bundle="ACQUISITION_RESOURCES"
-		validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+		required="true" />
 	<slot name="unitValue" key="acquisitionRequestItem.label.unitValue"
 		bundle="ACQUISITION_RESOURCES"
-		validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+		required="true" />
 	<slot name="vatValue" key="acquisitionRequestItem.label.vatValue"
 		bundle="ACQUISITION_RESOURCES"
-		validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+		required="true" />
 	<!--
 		<slot name="additionalCostValue"
 		key="acquisitionRequestItem.label.additionalCostValue"
@@ -325,14 +325,14 @@
 	</slot>
 	<slot name="description" key="acquisitionRequestItem.label.description"
 		bundle="ACQUISITION_RESOURCES"
-		validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"
+		required="true"
 		layout="longText">
 		<property name="columns" value="45" />
 		<property name="rows" value="6" />
 	</slot>
 	<slot name="createItemSchemaType" layout="radio-postback"
 		key="acquisitionRequestItem.label.deliveryInfo" bundle="ACQUISITION_RESOURCES"
-		validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		required="true">
 		<property name="classes" value="liinline nobullet" />
 	</slot>
 </schema>
@@ -342,11 +342,11 @@
 	type="pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.CreateAcquisitionRequestItemActivityInformation"
 	bundle="ACQUISITION_RESOURCES">
 	<slot name="recipient" key="label.recipient" bundle="EXPENDITURE_RESOURCES"
-		validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		required="true">
 		<property name="size" value="60" />
 	</slot>
 	<slot name="address" key="label.receptionAddress" bundle="EXPENDITURE_RESOURCES"
-		validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+		required="true" />
 	<slot name="phone" key="label.phone" bundle="EXPENDITURE_RESOURCES">
 		<property name="size" value="20" />
 	</slot>
@@ -361,7 +361,7 @@
 	bundle="ACQUISITION_RESOURCES">
 	<slot name="deliveryInfo" layout="menu-select"
 		key="acquisitionRequestItem.label.deliveryInfo" bundle="ACQUISITION_RESOURCES"
-		validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		required="true">
 		<property name="providerClass"
 			value="pt.ist.expenditureTrackingSystem.presentationTier.renderers.dataProvider.DeliveryInfoProvider" />
 		<property name="eachLayout" value="nonNullValues-commaSeparated" />
@@ -393,7 +393,7 @@
 	bundle="ACQUISITION_RESOURCES">
 	<slot name="fundAllocationId"
 		key="acquisitionProcess.label.fundAllocation.identification" bundle="ACQUISITION_RESOURCES"
-		validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+		required="true" />
 </schema>
 
 <schema name="allocateFundsToServiceProvider"
@@ -485,7 +485,7 @@
 	</slot>
 	<slot name="afterTheFactAcquisitionType" key="label.afterTheFactAcquisitionType"
 		bundle="ACQUISITION_RESOURCES"
-		validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+		required="true" />
 	<slot name="supplier" layout="autoComplete" key="label.supplier"
 		bundle="EXPENDITURE_RESOURCES">
 		<property name="labelField" value="presentationName" />
@@ -502,9 +502,9 @@
 		</validator>
 	</slot>
 	<slot name="value" key="label.value" bundle="EXPENDITURE_RESOURCES"
-		validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+		required="true" />
 	<slot name="vatValue" key="label.vatValue" bundle="EXPENDITURE_RESOURCES"
-		validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+		required="true" />
 	<slot name="description" key="label.description" bundle="EXPENDITURE_RESOURCES"
 		layout="longText">
 		<property name="columns" value="50" />
@@ -536,10 +536,10 @@
 	</slot>
 	<slot name="afterTheFactAcquisitionType" key="label.afterTheFactAcquisitionType"
 		bundle="ACQUISITION_RESOURCES"
-		validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+		required="true" />
 	<slot name="inputStream" key="label.afterTheFactAcquisition.import"
 		bundle="ACQUISITION_RESOURCES"
-		validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		required="true">
 		<property name="fileNameSlot" value="filename" />
 		<property name="size" value="30" />
 	</slot>
@@ -555,7 +555,7 @@
 	<slot name="financer.amountAllocated" key="financer.label.value"
 		read-only="true" />
 	<slot name="fundAllocationId" key="financer.label.fundAllocation.identification"
-		validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+		required="true" />
 </schema>
 
 <schema name="editFinancerFundAllocationId"
@@ -568,7 +568,7 @@
 	<slot name="financer.amountAllocated" key="financer.label.value"
 		read-only="true" />
 	<slot name="fundAllocationId" key="financer.label.fundAllocation.identification"
-		validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+		required="true" />
 </schema>
 
 <schema name="editFinancerEffectiveFundAllocationId"
@@ -579,7 +579,7 @@
 	<slot name="fundAllocationId" read-only="true"
 		key="financer.label.fundAllocation.identification" />
 	<slot name="effectiveFundAllocationId" key="financer.label.effectiveFundAllocation.identification"
-		validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+		required="true" />
 </schema>
 
 <schema name="addAcquisitionRequestDocument"
@@ -671,7 +671,7 @@
 		<property name="minChars" value="3" />
 		<property name="args"
 			value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.ActiveUnitAutoCompleteProvider"
-			validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+			required="true" />
 		<property name="classes" value="inputsize300px" />
 		<validator
 			class="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator">
@@ -695,12 +695,12 @@
 		<property name="bundle" value="EXPENDITURE_RESOURCES" />
 	</slot>
 	<slot name="refundeeName" key="label.refundeeName" bundle="EXPENDITURE_RESOURCES"
-		validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		required="true">
 		<property name="size" value="50" />
 	</slot>
 	<slot name="refundeeFiscalCode" key="label.refundeeFiscalCode"
 		bundle="EXPENDITURE_RESOURCES"
-		validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+		required="true" />
 	<slot name="requestingUnit" layout="autoComplete"
 		key="acquisitionProcess.label.requestingUnit" bundle="ACQUISITION_RESOURCES"
 		help="message.help.requestingUnit">
@@ -709,7 +709,7 @@
 		<property name="minChars" value="3" />
 		<property name="args"
 			value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.ActiveUnitAutoCompleteProvider"
-			validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+			required="true" />
 		<property name="classes" value="inputsize300px" />
 		<validator
 			class="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator">
@@ -806,7 +806,7 @@
 	</slot>
 	<slot name="description" key="refundItem.label.description"
 		bundle="ACQUISITION_RESOURCES"
-		validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"
+		required="true"
 		layout="longText">
 		<property name="columns" value="60" />
 		<property name="rows" value="6" />
@@ -896,7 +896,7 @@
 		<property name="minChars" value="3" />
 		<property name="args"
 			value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.UnitAutoCompleteProvider"
-			validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+			required="true" />
 		<property name="size" value="50" />
 	</slot>
 	<slot name="payingUnit" layout="autoComplete" key="label.payingUnit"
@@ -906,7 +906,7 @@
 		<property name="minChars" value="3" />
 		<property name="args"
 			value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.UnitAutoCompleteProvider"
-			validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+			required="true" />
 		<property name="size" value="50" />
 	</slot>
 	<slot name="cpvReference" layout="autoComplete"
@@ -960,7 +960,7 @@
 		<property name="minChars" value="3" />
 		<property name="args"
 			value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.UnitAutoCompleteProvider"
-			validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+			required="true" />
 		<property name="size" value="50" />
 	</slot>
 	<slot name="payingUnit" layout="autoComplete" key="label.payingUnit"
@@ -970,7 +970,7 @@
 		<property name="minChars" value="3" />
 		<property name="args"
 			value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.UnitAutoCompleteProvider"
-			validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+			required="true" />
 		<property name="size" value="50" />
 	</slot>
 	<slot name="supplier" layout="autoComplete" key="label.supplier"
@@ -1028,7 +1028,7 @@
 		<property name="minChars" value="3" />
 		<property name="args"
 			value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.UnitAutoCompleteProvider"
-			validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+			required="true" />
 		<property name="size" value="50" />
 	</slot>
 	<slot name="payingUnit" layout="autoComplete" key="label.payingUnit"
@@ -1038,7 +1038,7 @@
 		<property name="minChars" value="3" />
 		<property name="args"
 			value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.UnitAutoCompleteProvider"
-			validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+			required="true" />
 		<property name="size" value="50" />
 	</slot>
 	<slot name="refundeeName" key="label.refundee" bundle="EXPENDITURE_RESOURCES" />
@@ -1200,7 +1200,7 @@
 	</slot>
 	<slot name="invoiceNumber" key="acquisitionProcess.label.invoice.number"
 		bundle="ACQUISITION_RESOURCES"
-		validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+		required="true" />
 	<slot name="invoiceDate" layout="picker"
 		key="acquisitionProcess.label.invoice.date" bundle="ACQUISITION_RESOURCES">
 		<property name="format" value="dd-MM-yyyy" />
@@ -1235,13 +1235,13 @@
 	type="pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.CreateRefundInvoiceActivityInformation"
 	bundle="ACQUISITION_RESOURCES">
 	<slot name="invoiceNumber"
-		validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"
+		required="true"
 		key="acquisitionProcess.label.invoice.number" bundle="ACQUISITION_RESOURCES" />
 	<slot name="invoiceDate" layout="picker"
-		validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"
+		required="true"
 		key="acquisitionProcess.label.invoice.date" />
 	<slot name="inputStream" key="acquisitionProcess.label.invoice.file"
-		bundle="ACQUISITION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		bundle="ACQUISITION_RESOURCES" required="true">
 		<property name="fileNameSlot" value="filename" />
 		<property name="size" value="30" />
 	</slot>
@@ -1303,11 +1303,11 @@
 	type="pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.EditRefundInvoiceActivityInformation"
 	bundle="EXPENDITURE_RESOURCES">
 	<slot name="value" key="label.value"
-		validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+		required="true" />
 	<slot name="vatValue" key="label.vatValue"
-		validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+		required="true" />
 	<slot name="refundableValue" key="label.refundValue"
-		validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+		required="true" />
 </schema>
 
 
@@ -1318,7 +1318,7 @@
 		read-only="true" bundle="EXPENDITURE_ORGANIZATION_RESOURCES" />
 	<slot name="accountingUnit" layout="menu-select"
 		key="acquisitionProcess.label.accountingUnit" bundle="ACQUISITION_RESOURCES"
-		validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		required="true">
 		<property name="providerClass"
 			value="pt.ist.expenditureTrackingSystem.presentationTier.renderers.dataProvider.UnitAccountingUnitsProvider" />
 		<property name="format" value="${name}" />
@@ -1332,7 +1332,7 @@
 	type="pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SelectSupplierActivityInformation"
 	bundle="ACQUISITION_RESOURCES">
 	<slot name="supplier" key="label.suppliers" layout="menu-select"
-		validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		required="true">
 		<property name="providerClass"
 			value="pt.ist.expenditureTrackingSystem.presentationTier.renderers.dataProvider.SuppliersForRegularAcquisitionProcess" />
 		<property name="format" value="${fiscalIdentificationCode} - ${name}" />
@@ -1369,14 +1369,14 @@
 <schema name="activityInformation.ExceptionalChangeRequestingPerson"
 	type="pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ExceptionalChangeRequestingPersonInfo"
 	bundle="ACQUISITION_RESOURCES">
-	<slot name="requester" layout="autoComplete" key="label.requester" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" bundle="EXPENDITURE_RESOURCES">
+	<slot name="requester" layout="autoComplete" key="label.requester" required="true" bundle="EXPENDITURE_RESOURCES">
         <property name="labelField" value="name"/>
 		<property name="format" value="${partyName} (${user.username})"/>
 		<property name="minChars" value="3"/>
 		<property name="args" value="provider=module.organization.presentationTier.renderers.providers.PersonAutoCompleteProvider"/>
 		<property name="size" value="60"/>
 	</slot>
-	<slot name="comment" layout="longText" key="title.comment" bundle="EXPENDITURE_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+	<slot name="comment" layout="longText" key="title.comment" bundle="EXPENDITURE_RESOURCES" required="true">
 	</slot>
 </schema>
 
@@ -1392,7 +1392,7 @@
 	</slot>
 	<slot name="proposalID" key="acquisitionProcess.label.proposalID.optional"
 		bundle="ACQUISITION_RESOURCES"
-		validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+		required="true" />
 	<slot name="inputStream" key="label.document" bundle="WORKFLOW_RESOURCES">
 		<property name="fileNameSlot" value="filename" />
 		<property name="size" value="50" />
@@ -1411,7 +1411,7 @@
 	</slot>
 	<slot name="invoiceNumber" key="acquisitionProcess.label.invoice.number"
 		bundle="ACQUISITION_RESOURCES"
-		validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+		required="true" />
 	<slot name="invoiceDate" layout="picker"
 		key="acquisitionProcess.label.invoice.date" bundle="ACQUISITION_RESOURCES">
 		<property name="format" value="dd-MM-yyyy" />
@@ -1424,7 +1424,7 @@
 	</slot>
 	<slot name="inputStream" key="acquisitionProcess.label.invoice.file"
 		bundle="ACQUISITION_RESOURCES"
-		validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		required="true">
 		<property name="fileNameSlot" value="filename" />
 		<property name="size" value="30" />
 	</slot>
@@ -1442,7 +1442,7 @@ bundle="ACQUISITION_RESOURCES">
 <schema name="activityInformation.ChangeProcessRequester"
 		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.ChangeProcessRequester"
 		bundle="ACQUISITION_RESOURCES">
-	<slot name="person" layout="autoComplete" key="label.person" bundle="EXPENDITURE_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+	<slot name="person" layout="autoComplete" key="label.person" bundle="EXPENDITURE_RESOURCES" required="true">
         <property name="labelField" value="name"/>
 		<property name="format" value="${name} (${username})"/>
 		<property name="minChars" value="3"/>		
@@ -1475,7 +1475,7 @@ bundle="ACQUISITION_RESOURCES">
 <schema name="activityInformation.EditSimpleContractDescription"
 	type="pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.EditSimpleContractDescriptionActivityInformation"
 	bundle="ACQUISITION_RESOURCES">
-	<slot name="contractSimpleDescription" layout="longText" key="label.simpleContractDescription" help="help.simpleContractDescription" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"> 
+	<slot name="contractSimpleDescription" layout="longText" key="label.simpleContractDescription" help="help.simpleContractDescription" required="true"> 
 		<property name="rows" value="3"/>
 		<property name="columns" value="50"/>
 	</slot>

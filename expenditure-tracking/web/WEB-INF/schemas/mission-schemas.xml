@@ -53,12 +53,12 @@
 </schema>
 
 <schema name="activityInformation.UpdateMissionDetailsActivityInformation" type="module.mission.domain.activity.UpdateMissionDetailsActivityInformation" bundle="MISSION_RESOURCES">
-	<slot name="location" key="label.mission.location" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+	<slot name="location" key="label.mission.location" required="true">
 		<property name="size" value="30"/>
 	</slot>
-	<slot name="daparture" layout="picker" key="label.mission.departure" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-	<slot name="arrival" layout="picker" key="label.mission.arrival" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-	<slot name="objective" key="label.mission.objective" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+	<slot name="daparture" layout="picker" key="label.mission.departure" required="true"/>
+	<slot name="arrival" layout="picker" key="label.mission.arrival" required="true"/>
+	<slot name="objective" key="label.mission.objective" required="true">
 		<property name="size" value="50"/>
 	</slot>
 </schema>
@@ -67,37 +67,37 @@
 </schema>
 
 <schema name="activityInformation.ExceptionalChangeRequestingPerson" type="module.mission.domain.activity.ExceptionalChangeRequestingPersonInfo">
-	<slot name="requester" layout="autoComplete" key="label.requester" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" bundle="EXPENDITURE_RESOURCES">
+	<slot name="requester" layout="autoComplete" key="label.requester" required="true" bundle="EXPENDITURE_RESOURCES">
         <property name="labelField" value="name"/>
 		<property name="format" value="${partyName} (${user.username})"/>
 		<property name="minChars" value="3"/>
 		<property name="args" value="provider=module.organization.presentationTier.renderers.providers.PersonAutoCompleteProvider"/>
 		<property name="size" value="60"/>
 	</slot>
-	<slot name="comment" layout="longText" key="title.comment"  bundle="EXPENDITURE_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+	<slot name="comment" layout="longText" key="title.comment"  bundle="EXPENDITURE_RESOURCES" required="true">
 	</slot>
 </schema>
 
 <schema name="activityInformation.UpdateForeignMissionDetailsActivity" type="module.mission.domain.activity.UpdateForeignMissionDetailsActivityInformation" bundle="MISSION_RESOURCES">
-	<slot name="country" key="label.mission.country" layout="autoComplete" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+	<slot name="country" key="label.mission.country" layout="autoComplete" required="true">
         <property name="labelField" value="name.content"/>
 		<property name="format" value="${name.content}"/>
 		<property name="minChars" value="3"/>		
 		<property name="args" value="provider=module.geography.presentationTier.provider.CountryAutoCompleteProvider"/>
 		<property name="classes" value="inputsize300px"/>
 	</slot>
-	<slot name="location" key="label.mission.location" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+	<slot name="location" key="label.mission.location" required="true">
 		<property name="size" value="30"/>
 	</slot>
-	<slot name="daparture" layout="picker" key="label.mission.departure" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-	<slot name="arrival" layout="picker" key="label.mission.arrival" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-	<slot name="objective" key="label.mission.objective" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+	<slot name="daparture" layout="picker" key="label.mission.departure" required="true"/>
+	<slot name="arrival" layout="picker" key="label.mission.arrival" required="true"/>
+	<slot name="objective" key="label.mission.objective" required="true">
 		<property name="size" value="50"/>
 	</slot>
 </schema>
 
 <schema name="module.mission.domain.activity.ItemActivityInformation" type="module.mission.domain.activity.ItemActivityInformation" bundle="MISSION_RESOURCES">
-	<slot name="topLevelMissionItemType" layout="radio-select-postback" key="label.mission.item.type" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+	<slot name="topLevelMissionItemType" layout="radio-select-postback" key="label.mission.item.type" required="true">
 		<property name="providerClass" value="module.mission.presentationTier.provider.TopLevelMissionItemTypeProvider"/>
 		<property name="eachLayout" value="label-for-missionItemClass"/>
 		<property name="key" value="true"/>
@@ -133,32 +133,32 @@
 <schema name="module.mission.domain.activity.DistributeItemCostsActivityInformation.MissionItemFinancerBean" type="module.mission.domain.activity.DistributeItemCostsActivityInformation$MissionItemFinancerBean" bundle="MISSION_RESOURCES">
 	<slot name="missionFinancer.unit.presentationName" key="label.mission.financer" read-only="true"/>
 	<slot name="missionFinancer.accountingUnit.name" key="label.mission.financer.accounting.unit" read-only="true" />
-	<slot name="amount" key="label.mission.item.value" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="amount" key="label.mission.item.value" required="true"/>
 </schema>
 
 <schema name="module.mission.domain.AccommodationItem" type="module.mission.domain.AccommodationItem" bundle="MISSION_RESOURCES">
-	<slot name="numberOfNights" key="label.mission.item.accommodation.numberOfNights" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-	<slot name="value" key="label.mission.item.value" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="numberOfNights" key="label.mission.item.accommodation.numberOfNights" required="true"/>
+	<slot name="value" key="label.mission.item.value" required="true"/>
 </schema>
 
 <schema name="module.mission.domain.OtherMissionItem" type="module.mission.domain.OtherMissionItem" bundle="MISSION_RESOURCES">
-	<slot name="description" key="label.mission.item.otherMissionItem.description" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+	<slot name="description" key="label.mission.item.otherMissionItem.description" required="true">
 		<property name="size" value="50"/>
 	</slot>
-	<slot name="value" key="label.mission.item.value" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="value" key="label.mission.item.value" required="true"/>
 </schema>
 
 <schema name="module.mission.domain.ConferenceItem" type="module.mission.domain.ConferenceItem" bundle="MISSION_RESOURCES">
-	<slot name="description" key="label.mission.item.otherMissionItem.description" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+	<slot name="description" key="label.mission.item.otherMissionItem.description" required="true">
 		<property name="size" value="50"/>
 	</slot>
-	<slot name="value" key="label.mission.item.value" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="value" key="label.mission.item.value" required="true"/>
 </schema>
 
 <schema name="module.mission.domain.FullPersonelExpenseItem" type="module.mission.domain.FullPersonelExpenseItem" bundle="MISSION_RESOURCES">
-	<slot name="start" layout="picker" key="label.mission.item.personel.expense.start" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-	<slot name="end" layout="picker" key="label.mission.item.personel.expense.end" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-	<slot name="dailyPersonelExpenseCategory" layout="menu-select" key="label.mission.item.personel.expense.dailyPersonelExpenseCategory" help="message.help.dailyPersonelExpenseCategory" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+	<slot name="start" layout="picker" key="label.mission.item.personel.expense.start" required="true"/>
+	<slot name="end" layout="picker" key="label.mission.item.personel.expense.end" required="true"/>
+	<slot name="dailyPersonelExpenseCategory" layout="menu-select" key="label.mission.item.personel.expense.dailyPersonelExpenseCategory" help="message.help.dailyPersonelExpenseCategory" required="true">
 		<property name="providerClass" value="module.mission.presentationTier.provider.DailyPersonalExpenseCategoryProvider"/>
 		<property name="format" value="${description}"/>
 		<property name="key" value="true"/>
@@ -168,20 +168,20 @@
 </schema>
 
 <schema name="module.mission.domain.NoPersonelExpenseItem" type="module.mission.domain.NoPersonelExpenseItem" bundle="MISSION_RESOURCES">
-	<slot name="start" key="label.mission.item.personel.expense.start" layout="picker" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-	<slot name="end" key="label.mission.item.personel.expense.end" layout="picker" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="start" key="label.mission.item.personel.expense.start" layout="picker" required="true"/>
+	<slot name="end" key="label.mission.item.personel.expense.end" layout="picker" required="true"/>
 </schema>
 
 <schema name="module.mission.domain.OtherPersonelExpenseItem" type="module.mission.domain.OtherPersonelExpenseItem" bundle="MISSION_RESOURCES">
-	<slot name="start" key="label.mission.item.personel.expense.start" layout="picker" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-	<slot name="end" key="label.mission.item.personel.expense.end" layout="picker" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-	<slot name="value" key="label.mission.item.value" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="start" key="label.mission.item.personel.expense.start" layout="picker" required="true"/>
+	<slot name="end" key="label.mission.item.personel.expense.end" layout="picker" required="true"/>
+	<slot name="value" key="label.mission.item.value" required="true"/>
 </schema>
 
 <schema name="module.mission.domain.WithAccommodationPersonelExpenseItem" type="module.mission.domain.WithAccommodationPersonelExpenseItem" bundle="MISSION_RESOURCES">
-	<slot name="start" key="label.mission.item.personel.expense.start" layout="picker" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-	<slot name="end" key="label.mission.item.personel.expense.end" layout="picker" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-	<slot name="dailyPersonelExpenseCategory" layout="menu-select" key="label.mission.item.personel.expense.dailyPersonelExpenseCategory" help="message.help.dailyPersonelExpenseCategory" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+	<slot name="start" key="label.mission.item.personel.expense.start" layout="picker" required="true"/>
+	<slot name="end" key="label.mission.item.personel.expense.end" layout="picker" required="true"/>
+	<slot name="dailyPersonelExpenseCategory" layout="menu-select" key="label.mission.item.personel.expense.dailyPersonelExpenseCategory" help="message.help.dailyPersonelExpenseCategory" required="true">
 		<property name="providerClass" value="module.mission.presentationTier.provider.DailyPersonalExpenseCategoryProvider"/>
 		<property name="format" value="${description}"/>
 		<property name="key" value="true"/>
@@ -191,9 +191,9 @@
 </schema>
 
 <schema name="module.mission.domain.WithAccommodationAndOneMealPersonelExpenseItem" type="module.mission.domain.WithAccommodationAndOneMealPersonelExpenseItem" bundle="MISSION_RESOURCES">
-	<slot name="start" key="label.mission.item.personel.expense.start" layout="picker" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-	<slot name="end" key="label.mission.item.personel.expense.end" layout="picker" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-	<slot name="dailyPersonelExpenseCategory" layout="menu-select" key="label.mission.item.personel.expense.dailyPersonelExpenseCategory" help="message.help.dailyPersonelExpenseCategory" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+	<slot name="start" key="label.mission.item.personel.expense.start" layout="picker" required="true"/>
+	<slot name="end" key="label.mission.item.personel.expense.end" layout="picker" required="true"/>
+	<slot name="dailyPersonelExpenseCategory" layout="menu-select" key="label.mission.item.personel.expense.dailyPersonelExpenseCategory" help="message.help.dailyPersonelExpenseCategory" required="true">
 		<property name="providerClass" value="module.mission.presentationTier.provider.DailyPersonalExpenseCategoryProvider"/>
 		<property name="format" value="${description}"/>
 		<property name="key" value="true"/>
@@ -203,9 +203,9 @@
 </schema>
 
 <schema name="module.mission.domain.WithAccommodationAndTwoMealsPersonelExpenseItem" type="module.mission.domain.WithAccommodationAndTwoMealsPersonelExpenseItem" bundle="MISSION_RESOURCES">
-	<slot name="start" key="label.mission.item.personel.expense.start" layout="picker" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-	<slot name="end" key="label.mission.item.personel.expense.end" layout="picker" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-	<slot name="dailyPersonelExpenseCategory" layout="menu-select" key="label.mission.item.personel.expense.dailyPersonelExpenseCategory" help="message.help.dailyPersonelExpenseCategory" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+	<slot name="start" key="label.mission.item.personel.expense.start" layout="picker" required="true"/>
+	<slot name="end" key="label.mission.item.personel.expense.end" layout="picker" required="true"/>
+	<slot name="dailyPersonelExpenseCategory" layout="menu-select" key="label.mission.item.personel.expense.dailyPersonelExpenseCategory" help="message.help.dailyPersonelExpenseCategory" required="true">
 		<property name="providerClass" value="module.mission.presentationTier.provider.DailyPersonalExpenseCategoryProvider"/>
 		<property name="format" value="${description}"/>
 		<property name="key" value="true"/>
@@ -215,63 +215,63 @@
 </schema>
 
 <schema name="module.mission.domain.BoatItem" type="module.mission.domain.BoatItem" bundle="MISSION_RESOURCES">
-	<slot name="itinerary" key="label.mission.item.transportation.itinerary" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+	<slot name="itinerary" key="label.mission.item.transportation.itinerary" required="true">
 		<property name="size" value="50"/>
 	</slot>
-	<slot name="value" key="label.mission.item.value" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="value" key="label.mission.item.value" required="true"/>
 </schema>
 
 <schema name="module.mission.domain.BusItem" type="module.mission.domain.BusItem" bundle="MISSION_RESOURCES">
-	<slot name="itinerary" key="label.mission.item.transportation.itinerary" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+	<slot name="itinerary" key="label.mission.item.transportation.itinerary" required="true">
 		<property name="size" value="50"/>
 	</slot>
-	<slot name="value" key="label.mission.item.value" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="value" key="label.mission.item.value" required="true"/>
 </schema>
 
 <schema name="module.mission.domain.OtherTransportationItem" type="module.mission.domain.OtherTransportationItem" bundle="MISSION_RESOURCES">
-	<slot name="typeOfTransportation" key="label.mission.item.transportation.typeOfTransportation" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-	<slot name="itinerary" key="label.mission.item.transportation.itinerary" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+	<slot name="typeOfTransportation" key="label.mission.item.transportation.typeOfTransportation" required="true"/>
+	<slot name="itinerary" key="label.mission.item.transportation.itinerary" required="true">
 		<property name="size" value="50"/>
 	</slot>
-	<slot name="value" key="label.mission.item.value" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="value" key="label.mission.item.value" required="true"/>
 </schema>
 
 <schema name="module.mission.domain.PlaneItem" type="module.mission.domain.PlaneItem" bundle="MISSION_RESOURCES">
-	<slot name="itinerary" key="label.mission.item.transportation.itinerary" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+	<slot name="itinerary" key="label.mission.item.transportation.itinerary" required="true">
 		<property name="size" value="50"/>
 	</slot>
-	<slot name="value" key="label.mission.item.value" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="value" key="label.mission.item.value" required="true"/>
 </schema>
 
 <schema name="module.mission.domain.TrainItem" type="module.mission.domain.TrainItem" bundle="MISSION_RESOURCES">
-	<slot name="itinerary" key="label.mission.item.transportation.itinerary" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+	<slot name="itinerary" key="label.mission.item.transportation.itinerary" required="true">
 		<property name="size" value="50"/>
 	</slot>
-	<slot name="value" key="label.mission.item.value" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="value" key="label.mission.item.value" required="true"/>
 </schema>
 
 <schema name="module.mission.domain.RentedVehiclItem" type="module.mission.domain.RentedVehiclItem" bundle="MISSION_RESOURCES">
-	<slot name="itinerary" key="label.mission.item.transportation.itinerary" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+	<slot name="itinerary" key="label.mission.item.transportation.itinerary" required="true">
 		<property name="size" value="50"/>
 	</slot>
-	<slot name="value" key="label.mission.item.value" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-	<slot name="vehiclItemJustification.motive" layout="radio" key="label.mission.item.vehicle.justification.motive" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-	<slot name="vehiclItemJustification.justification" key="label.mission.item.vehicle.justification" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+	<slot name="value" key="label.mission.item.value" required="true"/>
+	<slot name="vehiclItemJustification.motive" layout="radio" key="label.mission.item.vehicle.justification.motive" required="true"/>
+	<slot name="vehiclItemJustification.justification" key="label.mission.item.vehicle.justification" required="true">
 		<property name="size" value="50"/>
 	</slot>
 </schema>
 
 <schema name="module.mission.domain.PersonalVehiclItem" type="module.mission.domain.PersonalVehiclItem" bundle="MISSION_RESOURCES">
-	<slot name="itinerary" key="label.mission.item.transportation.itinerary" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+	<slot name="itinerary" key="label.mission.item.transportation.itinerary" required="true">
 		<property name="size" value="50"/>
 	</slot>
 	<slot name="kms" key="label.mission.item.vehicle.kms">
 		<validator class="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
 		<validator class="pt.ist.fenixWebFramework.renderers.validators.NumberValidator" />
 	</slot>
-	<slot name="value" key="label.mission.item.value" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-	<slot name="vehiclItemJustification.motive" layout="radio" key="label.mission.item.vehicle.justification.motive" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-	<slot name="vehiclItemJustification.justification" key="label.mission.item.vehicle.justification" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+	<slot name="value" key="label.mission.item.value" required="true"/>
+	<slot name="vehiclItemJustification.motive" layout="radio" key="label.mission.item.vehicle.justification.motive" required="true"/>
+	<slot name="vehiclItemJustification.justification" key="label.mission.item.vehicle.justification" required="true">
 		<property name="size" value="50"/>
 	</slot>
 </schema>
@@ -281,7 +281,7 @@
         <property name="labelField" value="presentationName"/>
 		<property name="format" value="${presentationName}"/>
 		<property name="minChars" value="3"/>		
-		<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.UnitAutoCompleteProvider" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+		<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.UnitAutoCompleteProvider" required="true"/>
 		<property name="classes" value="inputsize300px"/>
 		<validator class="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator">
 			<property name="message" value="label.pleaseSelectOne.unit"/>
@@ -299,14 +299,14 @@
 	<slot name="missionFinancer.accountingUnit.name" key="label.mission.financer.accounting.unit" read-only="true" />
 	<slot name="missionFinancer.amount" key="label.mission.financer.amount" read-only="true" />
 	<slot name="commitmentNumber" key="label.commitmentNumber" bundle="EXPENDITURE_RESOURCES" 
-		validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+		required="true"/>
 </schema>
 
 <schema name="module.mission.domain.activity.FundAllocationActivityInformation.MissionItemFinancerFundAllocationBean" type="module.mission.domain.activity.FundAllocationActivityInformation$MissionItemFinancerFundAllocationBean" bundle="MISSION_RESOURCES">
 	<slot name="missionItemFinancer.missionFinancer.unit.presentationName" key="label.mission.financer" read-only="true"/>
 	<slot name="missionItemFinancer.missionFinancer.accountingUnit.name" key="label.mission.financer.accounting.unit" read-only="true" />
 	<slot name="missionItemFinancer.amount" key="label.mission.financer.amount" read-only="true" />
-	<slot name="fundAllocationId" key="label.mission.financer.fundAllocationId" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+	<slot name="fundAllocationId" key="label.mission.financer.fundAllocationId" required="true"/>
 	<slot name="missionItemFinancer.description" key="label.mission.item.financer.description" read-only="true" />
 </schema>
 
@@ -383,7 +383,7 @@
 </schema>
 
 <schema name="activityInformation.SubmitForApprovalActivity" type="module.mission.domain.activity.LateJustificationActivityInformation" bundle="MISSION_RESOURCES">
-	<slot name="justification" layout="longText" key="label.late.justification.motive" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+	<slot name="justification" layout="longText" key="label.late.justification.motive" required="true">
 		<property name="rows" value="6"/>
 		<property name="columns" value="60"/>
 		<property name="classes" value="form"/>		
@@ -391,7 +391,7 @@
 </schema>
 
 <schema name="activityInformation.ApproveActivity" type="module.mission.domain.activity.LateJustificationActivityInformation" bundle="MISSION_RESOURCES">
-	<slot name="justification" layout="longText" key="label.late.justification.motive" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+	<slot name="justification" layout="longText" key="label.late.justification.motive" required="true">
 		<property name="rows" value="6"/>
 		<property name="columns" value="60"/>
 		<property name="classes" value="form"/>
@@ -438,7 +438,7 @@
 	<slot name="partyName"/>
 </schema>
 <schema name="activityInformation.SendForProcessTerminationWithChangesActivity" type="module.mission.domain.activity.SendForProcessTerminationWithChangesActivity" bundle="MISSION_RESOURCES">
-	<slot name="descriptionOfChangesAfterArrival" key="label.descriptionOfChangesAfterArrival" layout="longText" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+	<slot name="descriptionOfChangesAfterArrival" key="label.descriptionOfChangesAfterArrival" layout="longText" required="true">
 		<property name="rows" value="6"/>
 		<property name="columns" value="60"/>
 		<property name="classes" value="form"/>		
@@ -447,7 +447,7 @@
 
 <schema name="activityInformation.ChangeAccountingUnitActivity" type="module.mission.domain.activity.ChangeAccountingUnitActivityInformation" bundle="MISSION_RESOURCES">
 	<slot name="accountingUnit" key="label.module.workingCapital.initialization.accountingUnit" layout="menu-select"
-			validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+			required="true">
 		<property name="providerClass" value="module.mission.presentationTier.provider.ChangeAccountingUnitProvider"/>
 		<property name="format" value="${name}" />
 		<property name="nullOptionHidden" value="true" />

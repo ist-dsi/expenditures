@@ -10,7 +10,7 @@
 
 <fr:edit id="missionSystem" name="missionSystem" action="/configureMissions.do?method=prepare">
 	<fr:schema type="module.mission.domain.MissionSystem" bundle="MISSION_RESOURCES">
-		<fr:slot name="country" key="label.mission.country" layout="autoComplete" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<fr:slot name="country" key="label.mission.country" layout="autoComplete" required="true">
     	    <fr:property name="labelField" value="name.content"/>
 			<fr:property name="format" value="${name.content}"/>
 			<fr:property name="minChars" value="3"/>		

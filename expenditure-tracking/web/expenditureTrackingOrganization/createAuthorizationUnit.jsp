@@ -25,7 +25,7 @@
 			<fr:property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.PersonAutoComplete" />
 			<fr:property name="size" value="60"/>
 		</fr:slot>
-		<fr:slot name="startDate" key="authorizations.label.startDate" bundle="EXPENDITURE_RESOURCES" layout="null-as-label" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<fr:slot name="startDate" key="authorizations.label.startDate" bundle="EXPENDITURE_RESOURCES" layout="null-as-label" required="true">
 			<fr:property name="subLayout" value="default"/>
 		</fr:slot>
 		<fr:slot name="endDate" key="authorizations.label.endDate" bundle="EXPENDITURE_RESOURCES" layout="null-as-label">

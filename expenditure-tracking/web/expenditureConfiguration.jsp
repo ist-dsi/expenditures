@@ -328,39 +328,39 @@
 	<fr:edit id="expenditureTrackingSystem" name="virtualHost" property="expenditureTrackingSystem">
 		<fr:schema type="pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem" bundle="EXPENDITURE_ORGANIZATION_RESOURCES">
 			<fr:slot name="organizationalAccountabilityType" layout="menu-select" key="label.organizationalAccountabilityType" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"
-					validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+					required="true">
 				<fr:property name="providerClass" value="module.organization.presentationTier.renderers.providers.AccountabilityTypesProvider" />
 				<fr:property name="format" value="${name}" />
 				<fr:property name="sortBy" value="name" />
 				<fr:property name="saveOptions" value="true"/>
 			</fr:slot>
 			<fr:slot name="organizationalMissionAccountabilityType" layout="menu-select" key="label.organizationalMissionAccountabilityType" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"
-					validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+					required="true">
 				<fr:property name="providerClass" value="module.organization.presentationTier.renderers.providers.AccountabilityTypesProvider" />
 				<fr:property name="format" value="${name}" />
 				<fr:property name="sortBy" value="name" />
 				<fr:property name="saveOptions" value="true"/>
 			</fr:slot>
 			<fr:slot name="unitPartyType" layout="menu-select" key="label.unitPartyType" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"
-					validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+					required="true">
 				<fr:property name="providerClass" value="module.organization.presentationTier.renderers.providers.PartyTypesProvider" />
 				<fr:property name="format" value="${name}" />
 				<fr:property name="sortBy" value="name" />
 			</fr:slot>
 			<fr:slot name="costCenterPartyType" layout="menu-select" key="label.costCenterPartyType" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"
-					validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+					required="true">
 				<fr:property name="providerClass" value="module.organization.presentationTier.renderers.providers.PartyTypesProvider" />
 				<fr:property name="format" value="${name}" />
 				<fr:property name="sortBy" value="name" />
 			</fr:slot>
 			<fr:slot name="projectPartyType" layout="menu-select" key="label.projectPartyType" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"
-					validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+					required="true">
 				<fr:property name="providerClass" value="module.organization.presentationTier.renderers.providers.PartyTypesProvider" />
 				<fr:property name="format" value="${name}" />
 				<fr:property name="sortBy" value="name" />
 			</fr:slot>
 			<fr:slot name="subProjectPartyType" layout="menu-select" key="label.subProjectPartyType" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"
-					validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+					required="true">
 				<fr:property name="providerClass" value="module.organization.presentationTier.renderers.providers.PartyTypesProvider" />
 				<fr:property name="format" value="${name}" />
 				<fr:property name="sortBy" value="name" />

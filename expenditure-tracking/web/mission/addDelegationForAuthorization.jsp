@@ -34,7 +34,7 @@
 			<fr:property name="args" value="provider=module.organization.presentationTier.renderers.providers.PartiesAutoCompleteProvider"/>
 			<fr:property name="size" value="60"/>
 		</fr:slot>
-		<fr:slot name="beginDate" key="label.begin" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+		<fr:slot name="beginDate" key="label.begin" required="true"/>
 		<fr:slot name="endDate" key="label.end"/>
 	</fr:schema>
 	<fr:layout name="tabular">

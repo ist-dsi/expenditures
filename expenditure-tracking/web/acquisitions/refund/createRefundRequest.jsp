@@ -48,7 +48,7 @@
 		<fr:edit id="acquisitionProcessBeanMissionProcess" name="bean">
 			<fr:schema type="pt.ist.expenditureTrackingSystem.domain.dto.CreateRefundProcessBean" bundle="ACQUISITION_RESOURCES">
     			<fr:slot name="missionProcess" layout="autoComplete" key="label.mission.process" bundle="ACQUISITION_RESOURCES"
-    					validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+    					required="true">
         			<fr:property name="args" value="provider=module.mission.presentationTier.provider.MissionProcessProvider" />
         			<fr:property name="labelField" value="processIdentification"/>
         			<fr:property name="format" value="${processIdentification}"/>

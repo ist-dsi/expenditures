@@ -20,7 +20,7 @@
 <fr:form action="/missionProcess.do?method=frontPage">
 	<fr:edit id="missionContext" name="missionContext">
 		<fr:schema type="module.mission.presentationTier.action.util.MissionContext" bundle="MISSION_RESOURCES">
-			<fr:slot name="missionYear" key="label.module.mission.seeYear" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" layout="menu-select-postback">
+			<fr:slot name="missionYear" key="label.module.mission.seeYear" required="true" layout="menu-select-postback">
 				<fr:property name="providerClass" value="module.mission.presentationTier.provider.MissionYearProvider"/>
 				<fr:property name="saveOptions" value="true"/>
 				<fr:property name="format" value="${year}"/>
