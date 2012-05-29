@@ -56,7 +56,7 @@
 	
 		<fr:edit id="workingCapitalInitialization" name="information">
 			<fr:schema type="module.workingCapital.domain.WorkingCapitalInitialization" bundle="WORKING_CAPITAL_RESOURCES">
-				<fr:slot name="fundAllocationId" key="label.module.workingCapital.fundAllocationId" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+				<fr:slot name="fundAllocationId" key="label.module.workingCapital.fundAllocationId" required="true"/>
 			</fr:schema>
 			<fr:layout name="tabular">
 				<fr:property name="classes" value="form listInsideClear" />

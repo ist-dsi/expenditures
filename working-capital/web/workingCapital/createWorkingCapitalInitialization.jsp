@@ -15,7 +15,7 @@
 
 <fr:edit id="workingCapitalInitializationBean" name="workingCapitalInitializationBean" action="/workingCapital.do?method=createWorkingCapitalInitialization">
 	<fr:schema type="module.workingCapital.domain.util.WorkingCapitalInitializationBean" bundle="WORKING_CAPITAL_RESOURCES">
-		<fr:slot name="year" key="label.module.workingCapital.year" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+		<fr:slot name="year" key="label.module.workingCapital.year" required="true"/>
 		<fr:slot name="unit" layout="autoComplete" key="label.module.workingCapital.unit" validator="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator">
         	<fr:property name="labelField" value="presentationName"/>
 			<fr:property name="format" value="${presentationName}"/>
@@ -32,9 +32,9 @@
 			<fr:property name="args" value="provider=module.organization.presentationTier.renderers.providers.PersonAutoCompleteProvider" />
 			<fr:property name="size" value="60"/>
 		</fr:slot>
-		<fr:slot name="requestedMonthlyValue" key="label.module.workingCapital.requestedMonthlyValue.requested" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+		<fr:slot name="requestedMonthlyValue" key="label.module.workingCapital.requestedMonthlyValue.requested" required="true"/>
 		<fr:slot name="fiscalId" key="label.module.workingCapital.fiscalId"
-				validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"
+				required="true"
 				help="label.module.workingCapital.fiscalId.help">
  			<fr:validator name="pt.ist.fenixWebFramework.rendererExtensions.validators.NumberRangeValidator">
        			<fr:property name="upperBound" value="999999999"/>

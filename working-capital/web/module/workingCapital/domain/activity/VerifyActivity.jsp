@@ -55,10 +55,10 @@
 	
 		<fr:edit id="workingCapitalInitialization" name="information">
 			<fr:schema type="module.workingCapital.domain.WorkingCapitalInitialization" bundle="WORKING_CAPITAL_RESOURCES">
-				<fr:slot name="authorizedAnualValue" key="label.module.workingCapital.authorizedAnualValue" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-				<fr:slot name="maxAuthorizedAnualValue" key="label.module.workingCapital.maxAuthorizedAnualValue" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+				<fr:slot name="authorizedAnualValue" key="label.module.workingCapital.authorizedAnualValue" required="true"/>
+				<fr:slot name="maxAuthorizedAnualValue" key="label.module.workingCapital.maxAuthorizedAnualValue" required="true"/>
 				<logic:equal name="workingCapitalInitialization" property="class.name" value="module.workingCapital.domain.WorkingCapitalInitializationReenforcement">
-					<fr:slot name="authorizedReenforcementValue" key="label.module.workingCapital.initialization.authorizedReenforcementValue" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+					<fr:slot name="authorizedReenforcementValue" key="label.module.workingCapital.initialization.authorizedReenforcementValue" required="true"/>
 				</logic:equal>
 				<fr:slot name="fundAllocationId" key="label.module.workingCapital.fundAllocationId"/>
 			</fr:schema>

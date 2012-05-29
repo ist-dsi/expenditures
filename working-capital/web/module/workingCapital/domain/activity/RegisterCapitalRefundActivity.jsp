@@ -21,8 +21,8 @@
 
 		<fr:edit id="activityBean" name="information">
 			<fr:schema type="module.workingCapital.domain.activity.RequestCapitalActivityInformation" bundle="WORKING_CAPITAL_RESOURCES">
-				<fr:slot name="confirmed" key="label.module.workingCapital.confirmed" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-				<fr:slot name="paymentMethod" key="label.module.workingCapital.paymentMethod" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+				<fr:slot name="confirmed" key="label.module.workingCapital.confirmed" required="true"/>
+				<fr:slot name="paymentMethod" key="label.module.workingCapital.paymentMethod" required="true"/>
 			</fr:schema>
 			<fr:layout name="tabular">
 				<fr:property name="classes" value="form listInsideClear" />

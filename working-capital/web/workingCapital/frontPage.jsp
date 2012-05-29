@@ -11,7 +11,7 @@
 <fr:form action="/workingCapital.do?method=frontPage">
 <fr:edit id="workingCapitalContext" name="workingCapitalContext" >
 	<fr:schema type="module.workingCapital.presentationTier.action.util.WorkingCapitalContext" bundle="WORKING_CAPITAL_RESOURCES">
-		<fr:slot name="workingCapitalYear" key="label.module.workingCapital.seeYear" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" layout="menu-select-postback">
+		<fr:slot name="workingCapitalYear" key="label.module.workingCapital.seeYear" required="true" layout="menu-select-postback">
 			<fr:property name="providerClass" value="module.workingCapital.presentationTier.provider.WorkingCapitalYearProvider"/>
 			<fr:property name="saveOptions" value="true"/>
 			<fr:property name="format" value="${year}"/>
@@ -152,7 +152,7 @@
 	<fr:form action="/workingCapital.do?method=search">
 		<fr:edit id="workingCapitalInitializationBean" name="workingCapitalContext" >
 			<fr:schema type="module.workingCapital.presentationTier.action.util.WorkingCapitalContext" bundle="WORKING_CAPITAL_RESOURCES">
-				<fr:slot name="workingCapitalYear" key="label.module.workingCapital.year" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" layout="menu-select">
+				<fr:slot name="workingCapitalYear" key="label.module.workingCapital.year" required="true" layout="menu-select">
 					<fr:property name="providerClass" value="module.workingCapital.presentationTier.provider.WorkingCapitalYearProvider"/>
 					<fr:property name="saveOptions" value="true"/>
 					<fr:property name="format" value="${year}"/>
