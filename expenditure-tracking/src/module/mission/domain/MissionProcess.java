@@ -547,7 +547,9 @@ public abstract class MissionProcess extends MissionProcess_Base {
 		|| (user.hasExpenditurePerson() && ExpenditureTrackingSystem.isAcquisitionsProcessAuditorGroupMember(user))
 		|| (person != null && person.getMissionsSet().contains(mission)) || mission.isParticipantResponsible(person)
 		|| mission.isFinancerResponsible(user.getExpenditurePerson())
-		|| mission.isFinancerAccountant(user.getExpenditurePerson()) || mission.isPersonelSectionMember(user)
+		|| mission.isFinancerAccountant(user.getExpenditurePerson())
+		|| mission.isPersonelSectionMember(user)
+		|| ExpenditureTrackingSystem.isFundCommitmentManagerGroupMember(user)
 		|| mission.getParticipantesSet().contains(person) || mission.isUnitObserver(user);
     }
 
