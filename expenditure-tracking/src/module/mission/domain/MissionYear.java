@@ -183,10 +183,13 @@ public class MissionYear extends MissionYear_Base {
 	    return (!missionProcess.hasCurrentOwner() || missionProcess.isTakenByCurrentUser())
 		    && missionProcess.isApproved()
 		    && !missionProcess.getIsCanceled()
-		    && ((missionProcess.isPendingParticipantAuthorisationBy(user) && (!missionProcess.getMission()
-			    .hasAnyFinancer() || missionProcess.hasAllAllocatedFunds())) || (//missionProcess.areAllParticipantsAuthorizedForPhaseOne()
-		    missionProcess.areAllParticipantsAuthorized() && missionProcess.hasAllAllocatedFunds() && missionProcess
-			    .isPendingDirectAuthorizationBy(user)));
+		    && ((missionProcess.isPendingParticipantAuthorisationBy(user)
+			    && (!missionProcess.getMission().hasAnyFinancer()
+				    || (missionProcess.hasAllAllocatedFunds() && missionProcess.hasAllCommitmentNumbers())))
+			|| (//missionProcess.areAllParticipantsAuthorizedForPhaseOne()
+				missionProcess.areAllParticipantsAuthorized()
+					&& missionProcess.hasAllAllocatedFunds()
+					&& missionProcess.isPendingDirectAuthorizationBy(user)));
 	}
 
     }
