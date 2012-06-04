@@ -34,6 +34,7 @@ import myorg.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionItemClassification;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
@@ -127,8 +128,16 @@ public class RefundRequest extends RefundRequest_Base {
     }
 
     public Money getCurrentTotalValue() {
-	final Money realTotalValue = getRealTotalValue();
-	return realTotalValue == null ? getTotalValue() : realTotalValue;
+	return hasAnyInvoice() ? getRealTotalValue() : getTotalValue();
+    }
+
+    private boolean hasAnyInvoice() {
+	for (final RefundItem refundItem : getRefundItemsSet()) {
+	    for (final PaymentProcessInvoice invoice : refundItem.getInvoicesFiles()) {
+		return true;
+	    }
+	}
+	return false;
     }
 
     public boolean allPayingUnitsHaveAccountingUnit() {
