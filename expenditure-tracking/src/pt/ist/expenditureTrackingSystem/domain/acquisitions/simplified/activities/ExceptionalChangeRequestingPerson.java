@@ -74,11 +74,6 @@ public class ExceptionalChangeRequestingPerson extends
     }
 
     @Override
-    public boolean isUserAwarenessNeeded(RegularAcquisitionProcess process) {
-	return false;
-    }
-
-    @Override
     public boolean isConfirmationNeeded(RegularAcquisitionProcess process) {
 	return true;
     }
@@ -89,4 +84,10 @@ public class ExceptionalChangeRequestingPerson extends
 	return new String[] { (oldRequester == null) ? "-" : oldRequester.getUser().getPresentationName(),
 		activityInformation.getRequester().getUser().getPresentationName() };
     }
+
+    @Override
+    public boolean isUserAwarenessNeeded(RegularAcquisitionProcess process, User user) {
+	return false;
+    }
+
 }
