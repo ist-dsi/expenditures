@@ -84,4 +84,9 @@ public class UnAllocateFundsActivity extends WorkflowActivity<WorkingCapitalProc
 	return true;
     }
 
+    @Override
+    public boolean isUserAwarenessNeeded(WorkingCapitalProcess process, User user) {
+        return false;
+    }
+
 }

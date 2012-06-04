@@ -71,12 +71,13 @@ public class ExceptionalCapitalRestitutionActivity extends
     }
 
     @Override
-    public boolean isUserAwarenessNeeded(WorkingCapitalProcess process) {
-	return false;
-    }
-
-    @Override
     public boolean isConfirmationNeeded(WorkingCapitalProcess process) {
 	return true;
     }
+
+    @Override
+    public boolean isUserAwarenessNeeded(WorkingCapitalProcess process, User user) {
+	return false;
+    }
+
 }
