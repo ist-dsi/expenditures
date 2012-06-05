@@ -274,7 +274,8 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 	RequestChecksumFilter.registerFilterRule(new ChecksumPredicate() {
 	    @Override
 	    public boolean shouldFilter(HttpServletRequest httpServletRequest) {
-		return !(httpServletRequest.getRequestURI().endsWith("/viewRCISTAnnouncements.do"));
+		return !(httpServletRequest.getRequestURI().endsWith("/viewRCISTAnnouncements.do"))
+			&& !(httpServletRequest.getRequestURI().endsWith("/viewAcquisitionAnnouncements.do"));
 	    }
 	});
 
