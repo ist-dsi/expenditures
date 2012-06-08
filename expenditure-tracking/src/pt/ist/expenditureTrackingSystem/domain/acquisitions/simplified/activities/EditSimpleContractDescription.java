@@ -47,7 +47,8 @@ public class EditSimpleContractDescription extends
 	ProcessClassification processClassification = process.getProcessClassification();
 	return (processClassification == ProcessClassification.CT10000 || processClassification == ProcessClassification.CT75000)
 		&& (process.isInAuthorizedState()
-			&& ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user))
+			&& ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user)
+			&& process.isCommitted())
 		|| (process.isInGenesis() && process.getProcessCreator() == user);
     }
 

@@ -53,8 +53,8 @@ public class SetSkipSupplierFundAllocation extends
 			.getProcessClassification().isCCP())
 		&& ((process.getAcquisitionProcessState().isInGenesis() && person == process.getRequestor()
 			|| (ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user)
-				&& (process.getAcquisitionProcessState().isAuthorized()
-			|| process.getAcquisitionProcessState().isAcquisitionProcessed() || process.isInvoiceReceived())))
+				&& ((process.getAcquisitionProcessState().isAuthorized() && process.isCommitted())
+					|| process.getAcquisitionProcessState().isAcquisitionProcessed() || process.isInvoiceReceived())))
 			|| ExpenditureTrackingSystem.isSupplierFundAllocationManagerGroupMember())
 		;
     }
