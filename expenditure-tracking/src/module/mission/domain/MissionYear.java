@@ -213,8 +213,12 @@ public class MissionYear extends MissionYear_Base {
 	    return missionProcess.isApproved()
 		    && !missionProcess.getIsCanceled()
 		    && (((!missionProcess.hasAnyProjectFinancer() || missionProcess.hasAllAllocatedProjectFunds())
-			    && !missionProcess.hasAllAllocatedFunds() && missionProcess.canAllocateFund()) || (!missionProcess
-			    .hasAllAllocatedProjectFunds() && missionProcess.canAllocateProjectFund()));
+			    	&& !missionProcess.hasAllAllocatedFunds() && missionProcess.canAllocateFund())
+			    || (!missionProcess.hasAllAllocatedProjectFunds() && missionProcess.canAllocateProjectFund())
+			    || (missionProcess.getMission().hasAnyFinancer()
+				    && missionProcess.hasAllAllocatedFunds()
+				    && !missionProcess.hasAllCommitmentNumbers()
+				    && missionProcess.isAccountingEmployee(user.getExpenditurePerson())));
 	}
 
 	private boolean isPendingFundUnAllocation(final MissionProcess missionProcess, final User user) {
