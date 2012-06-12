@@ -4,7 +4,15 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="pt-PT" xml:lang="pt-PT">
 	<head>
-		<title></title> 
+		<title></title>
+		<%
+			final String css = request.getParameter("css");
+			if (css != null && !css.isEmpty()) {
+		%>
+				<link rel="stylesheet" type="text/css" media="screen" href="<%= css %>" />
+		<%
+			}
+		%>
 	</head>
 	<body>
 		<%
