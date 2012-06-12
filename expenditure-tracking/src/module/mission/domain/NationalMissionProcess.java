@@ -161,4 +161,9 @@ public class NationalMissionProcess extends NationalMissionProcess_Base {
 	return super.getPresentationName() + getMission().getLocation();
     }
 
+    @Override
+    protected String notificationSubjectHeader() {
+	return "label.email.mission.participation.authorized.subject.nationalMission";
+    }
+
 }

@@ -378,10 +378,32 @@ public abstract class MissionProcess extends MissionProcess_Base {
 	}
     }
 
+    protected abstract String notificationSubjectHeader();
+
+    private void notifyAllParticipants() {
+	final VirtualHost virtualHost = VirtualHost.getVirtualHostForThread();
+
+	final Mission mission = getMission();
+	for (final Person person : mission.getParticipantesSet()) {
+	    final User user = person.getUser();
+	    if (user.getEmail() != null && !user.getEmail().isEmpty()) {
+		new Email(virtualHost.getApplicationSubTitle().getContent(), virtualHost.getSystemEmailAddress(), new String[] {},
+			Collections.singletonList(user.getEmail()), Collections.EMPTY_LIST, Collections.EMPTY_LIST,
+			BundleUtil.getFormattedStringFromResourceBundle("resources/MissionResources",
+				notificationSubjectHeader(), 
+				getProcessIdentification(), mission.getLocation(), 
+				mission.getCountry().getName().getContent()),
+			BundleUtil.getFormattedStringFromResourceBundle("resources/MissionResources",
+				"label.email.mission.participation.authorized.body"));
+	    }
+	}
+    }
+
     public void setProcessParticipantInformationQueue() {
 	final Mission mission = getMission();
 	if (mission.allParticipantsAreAuthorized()) {
 	    addToProcessParticipantInformationQueue();
+	    notifyAllParticipants();
 	}
     }
 

@@ -170,4 +170,9 @@ public class ForeignMissionProcess extends ForeignMissionProcess_Base {
 	return super.getPresentationName() + countryName + ", " + mission.getLocation();
     }
 
+    @Override
+    protected String notificationSubjectHeader() {
+	return "label.email.mission.participation.authorized.subject.foreignMission";
+    }
+
 }
