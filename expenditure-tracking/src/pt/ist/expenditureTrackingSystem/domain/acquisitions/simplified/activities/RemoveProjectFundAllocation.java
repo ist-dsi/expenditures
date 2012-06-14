@@ -96,7 +96,8 @@ public class RemoveProjectFundAllocation extends
     }
 
     @Override
-    public boolean isUserAwarenessNeeded(RegularAcquisitionProcess process, User user) {
-	return false;
+    public boolean isUserAwarenessNeeded(final RegularAcquisitionProcess process, final User user) {
+	return process.isCanceled();
     }
+
 }

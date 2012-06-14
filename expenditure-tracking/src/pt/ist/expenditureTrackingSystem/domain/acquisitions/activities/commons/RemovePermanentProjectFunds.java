@@ -67,7 +67,8 @@ public class RemovePermanentProjectFunds<P extends PaymentProcess> extends Workf
     }
 
     @Override
-    public boolean isUserAwarenessNeeded(P process, User user) {
-	return false;
+    public boolean isUserAwarenessNeeded(final P process, final User user) {
+	return process.isCanceled();
     }
+
 }

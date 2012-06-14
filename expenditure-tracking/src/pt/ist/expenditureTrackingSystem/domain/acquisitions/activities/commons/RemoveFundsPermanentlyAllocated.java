@@ -60,7 +60,8 @@ public class RemoveFundsPermanentlyAllocated<P extends PaymentProcess> extends W
     }
 
     @Override
-    public boolean isUserAwarenessNeeded(P process, User user) {
-	return false;
+    public boolean isUserAwarenessNeeded(final P process, final User user) {
+	return process.isCanceled();
     }
+
 }
