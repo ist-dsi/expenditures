@@ -314,21 +314,47 @@ public class SearchPaymentProcessesAction extends BaseAction {
 	    final Money totalValue = process.getTotalValue();
 	    spreadsheet.addCell((totalValue == null ? Money.ZERO : totalValue).toFormatString());
 
+	    final StringBuilder fundAllocationNumbers = new StringBuilder();
+	    final StringBuilder commitmentNumbers = new StringBuilder();
+	    final StringBuilder efectiveFundAllocationNumbers = new StringBuilder();
+
 	    if (process instanceof SimplifiedProcedureProcess) {
 		SimplifiedProcedureProcess simplifiedProcedureProcess = (SimplifiedProcedureProcess) process;
 		for (PayingUnitTotalBean payingUnitTotal : simplifiedProcedureProcess.getAcquisitionRequest()
 			.getTotalAmountsForEachPayingUnit()) {
 		    if ((simplifiedProcedureProcess.getFundAllocationPresent())
 			    && (payingUnitTotal.getFinancer().isFundAllocationPresent())) {
-			spreadsheet.addCell(payingUnitTotal.getFinancer().getFundAllocationIds());
+			if (fundAllocationNumbers.length() > 0) {
+			    fundAllocationNumbers.append(", ");
+			}
+			fundAllocationNumbers.append(payingUnitTotal.getFinancer().getFundAllocationIds().trim());
+		    }
+
+		    if (commitmentNumbers.length() > 0) {
+			fundAllocationNumbers.append(", ");
+		    }
+		    String commitmentNumber = payingUnitTotal.getFinancer().getCommitmentNumber();
+		    if (commitmentNumber != null) {
+			commitmentNumber = commitmentNumber.trim();
+			if (commitmentNumber.length() > 0) {
+			    commitmentNumbers.append(commitmentNumber);
+			}
 		    }
 
 		    if ((simplifiedProcedureProcess.getEffectiveFundAllocationPresent())
 			    && (payingUnitTotal.getFinancer().isEffectiveFundAllocationPresent())) {
-			spreadsheet.addCell(payingUnitTotal.getFinancer().getEffectiveFundAllocationIds());
+			if (efectiveFundAllocationNumbers.length() > 0) {
+			    efectiveFundAllocationNumbers.append(", ");
+			}
+			efectiveFundAllocationNumbers.append(payingUnitTotal.getFinancer().getEffectiveFundAllocationIds().trim());
 		    }
 		}
 	    }
+
+	    spreadsheet.addCell(fundAllocationNumbers.length() == 0 ? " " : fundAllocationNumbers.toString());
+	    spreadsheet.addCell(commitmentNumbers.length() == 0 ? " " : commitmentNumbers.toString());
+	    spreadsheet.addCell(efectiveFundAllocationNumbers.length() == 0 ? " " : efectiveFundAllocationNumbers.toString());
+
 	}
     }
 
@@ -346,6 +372,7 @@ public class SearchPaymentProcessesAction extends BaseAction {
 	spreadsheet.addHeader(getExpenditureResourceMessage("label.financing.units"));
 	spreadsheet.addHeader(getExpenditureResourceMessage("label.value"));
 	spreadsheet.addHeader(getAcquisitionResourceMessage("financer.label.fundAllocation.identification"));
+	spreadsheet.addHeader(getExpenditureResourceMessage("label.commitmentNumbers"));
 	spreadsheet.addHeader(getAcquisitionResourceMessage("financer.label.effectiveFundAllocation.identification"));
     }
 
