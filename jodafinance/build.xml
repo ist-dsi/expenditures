@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project basedir="." default="compile" name="Compilation Scripts">
+
+	<property environment="env"/>
+
+	<property name="src" location="src"/>
+
+	<!-- Directories for compiled code -->
+	<property name="build.home" location="build"/>
+
+	<!-- Directories for deploy -->
+	<property name="deploy.home" location="deploy"/>
+
+	<!-- Directories with libraries (JARs) -->
+	<property name="lib" location="lib" />
+	
+	<!-- Compilation options -->
+	<property name="compile.debug" value="on"/>
+	<property name="compile.deprecation" value="off"/>
+	<property name="compile.optimize" value="on"/>
+	
+	<target name="clean" description="Removes any generated files">
+		<delete dir="${build.home}"/>
+		<delete dir="${deploy.home}"/>
+	</target>
+
+	<target name="compile" description="Compile java code" >
+		<mkdir dir="${build.home}"/>
+		<copy todir="${build.home}" failonerror="false" overwrite="true">
+			<fileset dir="${src}">
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+		<javac destdir="${build.home}"
+				extdirs="${lib}"
+				debug="${compile.debug}"
+				optimize="${compile.optimize}"
+				deprecation="${compile.deprecation}"
+				target="1.6"
+				nowarn="true">
+			<src path="${src}"/>
+		</javac>
+	</target>
+
+	<target name="jar" description="Generates a java archive of compiled java code."
+				depends="compile">
+		<mkdir dir="${deploy.home}"/>
+		<jar destfile="${deploy.home}/jodaplace.jar">
+			<fileset dir="${build.home}"/>
+		</jar>
+	</target>
+
+</project>
