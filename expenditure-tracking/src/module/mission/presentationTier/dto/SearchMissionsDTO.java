@@ -45,6 +45,7 @@ import org.apache.commons.lang.StringUtils;
 import org.joda.time.Interval;
 import org.joda.time.LocalDate;
 
+import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 
 /**
@@ -77,6 +78,7 @@ public class SearchMissionsDTO extends SearchMissions {
 	setParticipant(StringUtils.isEmpty(request.getParameter("pOID")) ? null : (Person) Person.fromExternalId(request
 		.getParameter("pOID")));
 	setPendingStage(StringUtils.isEmpty(request.getParameter("ps")) ? null : MissionStage.valueOf(request.getParameter("ps")));
+	setAccountingUnit(StringUtils.isEmpty(request.getParameter("auOID")) ? null : (AccountingUnit) AccountingUnit.fromExternalId(request.getParameter("auOID")));
 
 	final String sortByParameter = request.getParameter("sortBy");
 	if (!StringUtils.isEmpty(sortByParameter) && sortByParameter.indexOf('=') != -1) {
@@ -107,9 +109,9 @@ public class SearchMissionsDTO extends SearchMissions {
     }
 
     public String getRequestParameters() {
-	return new Formatter().format("processNumber=%s&ruOID=%s&puOID=%s&f=%s&d=%s&i=%s&rpOID=%s&pOID=%s&ps=%s", getProcessNumber(),
+	return new Formatter().format("processNumber=%s&ruOID=%s&puOID=%s&f=%s&d=%s&i=%s&rpOID=%s&pOID=%s&ps=%s&auOID=%s", getProcessNumber(),
 		getRequestingUnitParameter(), getPayingUnitParameter(), getForeignParameter(), getDateParameter(), getIntervalParameter(),
-		getRequestingPersonParameter(), getParticipantParameter(), getPendingStageParameter(),
+		getRequestingPersonParameter(), getParticipantParameter(), getPendingStageParameter(), getAccountingUnitParameter(),
 		getSortByParameter(), getOrderByParameter()).toString();
     }
 
@@ -136,6 +138,10 @@ public class SearchMissionsDTO extends SearchMissions {
 
     public String getForeignParameter() {
 	return getForeign() != null ? getForeign().toString() : StringUtils.EMPTY;
+    }
+
+    private String getAccountingUnitParameter() {
+	return getAccountingUnit() == null ? StringUtils.EMPTY : getAccountingUnit().getExternalId();
     }
 
     public String getDateParameter() {
