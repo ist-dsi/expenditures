@@ -1,5 +1,5 @@
 /*
- * @(#)Provision.java
+ * @(#)FinanceSystem.java
  *
  * Copyright 2010 Instituto Superior Tecnico
  * Founding Authors: Luis Cruz
@@ -24,26 +24,35 @@
  */
 package module.finance.domain;
 
-import myorg.domain.util.Money;
+import pt.ist.bennu.core.domain.MyOrg;
+import pt.ist.fenixWebFramework.services.Service;
 
 /**
  * 
  * @author Luis Cruz
  * 
  */
-public abstract class Provision extends Provision_Base {
+public class FinanceSystem extends FinanceSystem_Base {
     
-    public Provision() {
-        super();
-        setFinanceSystem(FinanceSystem.getInstance());
+    public static FinanceSystem getInstance() {
+	final MyOrg myOrg = MyOrg.getInstance();
+	if (!myOrg.hasFinanceSystem()) {
+	    initialize();
+	}
+	return myOrg.getFinanceSystem();
     }
 
-    public abstract Money getValueAllocatedToSupplier();
-
-    public abstract Money getValueAllocatedToSupplierForLimit();
-
-    public boolean isInAllocationPeriod() {
-	return true;
+    @Service
+    public synchronized static void initialize() {
+	final MyOrg myOrg = MyOrg.getInstance();
+	if (!myOrg.hasFinanceSystem()) {
+	    new FinanceSystem(myOrg);
+	}
     }
-    
+
+    private FinanceSystem(final MyOrg myOrg) {
+	super();
+	setMyOrg(myOrg);
+    }
+
 }
