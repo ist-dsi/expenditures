@@ -1,0 +1,155 @@
+/*
+ * @(#)WorkingCapitalAcquisition.java
+ *
+ * Copyright 2010 Instituto Superior Tecnico
+ * Founding Authors: Luis Cruz
+ * 
+ *      https://fenix-ashes.ist.utl.pt/
+ * 
+ *   This file is part of the Working Capital Module.
+ *
+ *   The Working Capital Module is free software: you can
+ *   redistribute it and/or modify it under the terms of the GNU Lesser General
+ *   Public License as published by the Free Software Foundation, either version 
+ *   3 of the License, or (at your option) any later version.
+ *
+ *   The Working Capital Module is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU Lesser General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Lesser General Public License
+ *   along with the Working Capital Module. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ */
+package module.workingCapital.domain;
+
+import module.finance.domain.Supplier;
+import pt.ist.bennu.core.domain.User;
+import pt.ist.bennu.core.domain.util.Money;
+
+import org.joda.time.DateTime;
+
+import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
+
+/**
+ * 
+ * @author João Neves
+ * @author Paulo Abrantes
+ * @author Luis Cruz
+ * 
+ */
+public class WorkingCapitalAcquisition extends WorkingCapitalAcquisition_Base {
+
+    public WorkingCapitalAcquisition() {
+	super();
+	setWorkingCapitalSystem(WorkingCapitalSystem.getInstanceForCurrentHost());
+    }
+
+    public WorkingCapitalAcquisition(final WorkingCapital workingCapital, final String documentNumber, final Supplier supplier,
+	    final String description, final AcquisitionClassification acquisitionClassification, final Money valueWithoutVat,
+	    final Money money, final byte[] invoiceContent, String displayName, String fileName) {
+	this();
+	setWorkingCapital(workingCapital);
+	edit(documentNumber, supplier, description, acquisitionClassification, valueWithoutVat);
+	final WorkingCapitalAcquisitionTransaction workingCapitalAcquisitionTransaction = new WorkingCapitalAcquisitionTransaction(
+		this, money);
+	if (invoiceContent != null) {
+	    WorkingCapitalInvoiceFile workingCapitalInvoiceFile = new WorkingCapitalInvoiceFile(displayName, fileName,
+		    invoiceContent, workingCapitalAcquisitionTransaction);
+	    workingCapital.getWorkingCapitalProcess().addFiles(workingCapitalInvoiceFile);
+	}
+    }
+
+    public void edit(String documentNumber, Supplier supplier, String description,
+	    AcquisitionClassification acquisitionClassification, Money valueWithoutVat) {
+	setDocumentNumber(documentNumber);
+	setAcquisitionClassification(acquisitionClassification);
+	setSupplier(supplier);
+	setDescription(description);
+	setValueWithoutVat(valueWithoutVat);
+    }
+
+    public void edit(String documentNumber, Supplier supplier, String description,
+	    AcquisitionClassification acquisitionClassification, Money valueWithoutVat, Money value) {
+	edit(documentNumber, supplier, description, acquisitionClassification, valueWithoutVat);
+	final WorkingCapitalAcquisitionTransaction workingCapitalAcquisitionTransaction = getWorkingCapitalAcquisitionTransaction();
+	workingCapitalAcquisitionTransaction.resetValue(value);
+    }
+
+    public void edit(String documentNumber, Supplier supplier, String description,
+	    AcquisitionClassification acquisitionClassification, Money valueWithoutVat, Money value, byte[] invoiceContent,
+	    String displayName, String fileName) {
+	edit(documentNumber, supplier, description, acquisitionClassification, valueWithoutVat, value);
+	getWorkingCapitalAcquisitionTransaction().getInvoice().delete();
+
+	WorkingCapitalInvoiceFile workingCapitalInvoiceFile = new WorkingCapitalInvoiceFile(displayName, fileName,
+		invoiceContent, getWorkingCapitalAcquisitionTransaction());
+	getWorkingCapital().getWorkingCapitalProcess().addFiles(workingCapitalInvoiceFile);
+
+    }
+
+    public void approve(final User user) {
+	setApproved(new DateTime());
+	final Money valueForAuthorization = Money.ZERO;
+	final WorkingCapital workingCapital = getWorkingCapital();
+	final Authorization authorization = workingCapital.findUnitResponsible(user.getPerson(), valueForAuthorization);
+	setApprover(authorization);
+    }
+
+    public void reject(final User user) {
+	setRejectedApproval(new DateTime());
+	final Money valueForAuthorization = Money.ZERO;
+	final WorkingCapital workingCapital = getWorkingCapital();
+	final Authorization authorization = workingCapital.findUnitResponsible(user.getPerson(), valueForAuthorization);
+	setApprover(authorization);
+    }
+
+    public void unApprove() {
+	setApproved(null);
+	removeApprover();
+    }
+
+    public void verify(User user) {
+	setVerified(new DateTime());
+	setVerifier(user.getPerson());
+    }
+
+    public void rejectVerify(final User user) {
+	setNotVerified(new DateTime());
+	setVerifier(user.getPerson());
+    }
+
+    public void unVerify() {
+	setVerified(null);
+	removeVerifier();
+    }
+
+    public boolean isCanceledOrRejected() {
+	return (getIsCanceled() != null && getIsCanceled().booleanValue()) || getRejectedApproval() != null
+		|| getNotVerified() != null;
+    }
+
+    public void cancel() {
+	setIsCanceled(Boolean.TRUE);
+    }
+
+    public Money getValue() {
+	return getWorkingCapitalAcquisitionTransaction().getValue();
+    }
+
+    @Override
+    public Money getValueAllocatedToSupplier() {
+	return isCanceledOrRejected() ? Money.ZERO : getValue();
+    }
+
+    @Override
+    public Money getValueAllocatedToSupplierForLimit() {
+	return isCanceledOrRejected() ? Money.ZERO : getValueWithoutVat();
+    }
+
+    @Override
+    public boolean isConnectedToCurrentHost() {
+	return getWorkingCapitalSystem() == WorkingCapitalSystem.getInstanceForCurrentHost();
+    }
+}

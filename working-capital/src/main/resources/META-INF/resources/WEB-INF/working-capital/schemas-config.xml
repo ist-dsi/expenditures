@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE schemas SYSTEM "../fenix-renderers-schemas.dtd" []>
+<schemas>
+<schema name="workingCapital.acquisition.approver" type="pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization" bundle="WORKING_CAPITAL_RESOURCES">
+	<slot name="person.name" key="label.module.workingCapital.acquisition.approver"/>
+</schema>
+
+<schema name="workingCapital.acquisition.verifier" type="module.organization.domain.Accountability" bundle="WORKING_CAPITAL_RESOURCES">
+	<slot name="child.name" key="label.module.workingCapital.acquisition.verifier"/>
+</schema>
+
+<schema name="activityInformation.RegisterWorkingCapitalAcquisitionActivity" type="module.workingCapital.domain.activity.RegisterWorkingCapitalAcquisitionActivityInformation"  bundle="WORKING_CAPITAL_RESOURCES">
+	<slot name="supplier" key="label.module.workingCapital.acquisition.supplier" layout="autoComplete"
+			help="message.help.supplier"
+			validator="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator">
+		<property name="labelField" value="presentationName" />
+		<property name="format" value="${presentationName}" />
+		<property name="minChars" value="1" />
+		<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.OpenNIFSupplierAutoCompleteProvider" />
+		<property name="classes" value="inputsize300px" />
+	</slot>
+	<slot name="documentNumber" key="label.module.workingCapital.acquisition.documentNumber" required="true"/>
+	<slot name="description" key="label.module.workingCapital.acquisition.description" layout="longText"
+			required="true"/>
+	<slot name="acquisitionClassification" key="label.module.workingCapital.acquisition.acquisitionClassification" layout="menu-select"
+			required="true">
+		<property name="providerClass" value="module.workingCapital.presentationTier.provider.AcquisitionClassificationProvider"/>
+		<property name="format" value="${description}"/>
+		<property name="key" value="true"/>
+		<property name="saveOptions" value="true"/>
+		<property name="classes" value="nobullet"/>
+	</slot>
+	<slot name="valueWithoutVat" key="label.module.workingCapital.acquisition.valueWithoutVat" required="true"/>
+	<slot name="money" key="label.module.workingCapital.acquisition.money" required="true"/>
+	<slot name="inputStream" key="label.module.workingCapital.acquisition.invoice" required="true">
+		<property name="fileNameSlot" value="filename" />
+		<property name="size" value="50"/>
+	</slot>
+</schema>
+
+<schema name="activityInformation.EditWorkingCapitalActivity" extends="activityInformation.RegisterWorkingCapitalAcquisitionActivity" type="module.workingCapital.domain.activity.EditWorkingCapitalActivityInformation"  bundle="WORKING_CAPITAL_RESOURCES">
+</schema>		
+
+<schema name="activityInformation.EditInitializationActivity" type="module.workingCapital.domain.activity.EditInitializationActivityInformation"  bundle="WORKING_CAPITAL_RESOURCES">
+	<slot name="movementResponsible" layout="autoComplete" key="label.module.workingCapital.movementResponsible"
+			validator="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator"
+			help="label.module.workingCapital.movementResponsible.help">
+		<property name="labelField" value="name"/>
+		<property name="format" value="${partyName} (${user.username})"/>
+		<property name="minChars" value="3"/>
+		<property name="args" value="provider=module.organization.presentationTier.renderers.providers.PersonAutoCompleteProvider" />
+		<property name="size" value="60"/>
+	</slot>
+	<slot name="requestedMonthlyValue" key="label.module.workingCapital.requestedMonthlyValue.requested" required="true"/>
+	<slot name="fiscalId" key="label.module.workingCapital.fiscalId"
+			required="true"
+			help="label.module.workingCapital.fiscalId.help">
+ 		<validator class="pt.ist.fenixWebFramework.rendererExtensions.validators.NumberRangeValidator">
+    		<property name="upperBound" value="999999999"/>
+    		<property name="lowerBound" value="1"/>
+   		</validator>
+	</slot>
+	<slot name="internationalBankAccountNumber" key="label.module.workingCapital.ibanOrBan"
+			help="label.module.workingCapital.internationalBankAccountNumber.help" validator="module.workingCapital.presentationTier.validator.IbanOfPTBanValidator"/>
+</schema>		
+
+<schema name="activityInformation.ExceptionalCapitalRestitutionActivity" type="module.workingCapital.domain.activity.ExceptionalCapitalRestitutionInfo" bundle="WORKING_CAPITAL_RESOURCES">
+	<slot name="value" key="label.module.workingCapital.refund.value" required="true"/>
+	<slot name="caseDescription" layout="longText" key="label.module.workingCapital.domain.ExceptionalWorkingCapitalRefund.caseDescription" required="true"/>
+</schema>
+
+<schema name="activityInformation.ReenforceWorkingCapitalInitializationActivity" type="module.workingCapital.domain.WorkingCapitalInitializationReenforcement" bundle="WORKING_CAPITAL_RESOURCES">
+	<slot name="amount" key="label.module.workingCapital.initialization.requestedReenforcementValue"/>
+</schema>		
+
+<schema name="activityInformation.ChangeWorkingCapitalAccountingUnitActivity" type="module.workingCapital.domain.activity.ChangeWorkingCapitalAccountingUnitActivity" bundle="WORKING_CAPITAL_RESOURCES">
+	<slot name="accountingUnit" key="label.module.workingCapital.initialization.accountingUnit" layout="menu-select"
+			required="true">
+		<property name="providerClass" value="module.workingCapital.presentationTier.provider.ChangeAccountingUnitProvider"/>
+		<property name="format" value="${name}" />
+		<property name="nullOptionHidden" value="true" />
+	</slot>
+</schema>		
+
+
+<schema name="activityInformation.PayCapitalActivity" type="module.workingCapital.domain.activity.PayCapitalActivityInformation" bundle="WORKING_CAPITAL_RESOURCES">
+	<slot name="paymentIdentification" key="label.module.workingCapital.paymentIdentification"/>
+</schema>		
+</schemas>
