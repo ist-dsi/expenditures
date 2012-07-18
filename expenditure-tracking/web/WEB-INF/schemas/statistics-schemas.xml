@@ -1,8 +1,0 @@
-<schema name="pt.ist.expenditureTrackingSystem.presentationTier.actions.statistics.YearBean"
-		type="pt.ist.expenditureTrackingSystem.presentationTier.actions.statistics.YearBean"
-		bundle="EXPENDITURE_RESOURCES">
-	<slot name="year" key="label.year" bundle="STATISTICS_RESOURCES">
-		<validator class="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-		<validator class="pt.ist.fenixWebFramework.renderers.validators.NumberValidator"/>
-	</slot>
-</schema>

@@ -1,6 +1,0 @@
-
-<renderer type="java.lang.Class" layout="label-for-missionItemClass"
-	class="pt.ist.fenixWebFramework.renderers.ClassAsLabelRenderer">
-	<property name="escape" value="true" />
-	<property name="bundle" value="MISSION_RESOURCES" />
-</renderer>

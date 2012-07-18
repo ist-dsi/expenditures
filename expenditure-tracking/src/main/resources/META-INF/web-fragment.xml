@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-fragment xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-fragment_3_0.xsd"
+	version="3.0">
+	<name>expenditure-tracking</name>
+
+	<ordering>
+		<after>
+			<!-- [START OF BENNU GENERATED FRAGMENT] -->
+   <name>bennu-core</name>
+   <name>fenix-web-framework</name>
+   <name>lucene</name>
+   <name>lucene-indexing-plugin</name>
+   <name>email-dispatch</name>
+   <name>content</name>
+   <name>file-support</name>
+   <name>file-support-plugin</name>
+   <name>workflow</name>
+   <name>file-management</name>
+   <name>meta-workflow</name>
+   <name>remote</name>
+   <name>remote-plugin</name>
+   <name>geography</name>
+   <name>organization</name>
+   <name>finance</name>
+   <name>dashboard</name>
+   <name>bennu-vaadin</name>
+   <name>external-accounting-integration</name>
+   <name>db-utils</name>
+   <name>web-service-utils</name>
+   <name>scheduler</name>
+   <name>scheduler-plugin</name>
+   <name>messaging</name>
+   <!-- [END OF BENNU GENERATED FRAGMENT] -->
+		</after>
+		<before>
+			<others/>
+		</before>
+	</ordering>
+</web-fragment>
