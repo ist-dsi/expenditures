@@ -37,17 +37,17 @@ import module.workingCapital.domain.WorkingCapitalAcquisitionTransaction;
 import module.workingCapital.domain.WorkingCapitalInitialization;
 import module.workingCapital.domain.WorkingCapitalProcess;
 import module.workingCapital.domain.WorkingCapitalTransaction;
+import net.sf.jasperreports.engine.JRException;
+
+import org.joda.time.DateTime;
+
 import pt.ist.bennu.core._development.PropertiesManager;
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.domain.VirtualHost;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.ist.bennu.core.domain.util.Money;
 import pt.ist.bennu.core.util.BundleUtil;
-import net.sf.jasperreports.engine.JRException;
-
-import org.joda.time.DateTime;
-
-import pt.ist.expenditureTrackingSystem.util.ReportUtils;
+import pt.ist.bennu.core.util.ReportUtils;
 
 /**
  * 
@@ -123,8 +123,9 @@ public class SubmitForValidationActivity extends WorkflowActivity<WorkingCapital
 
 	final ResourceBundle resourceBundle = ResourceBundle.getBundle("resources/WorkingCapitalResources");
 	try {
-	    byte[] byteArray = ReportUtils.exportToPdfFileAsByteArray("workingCapitalAcquisitionSubmissionDocument", paramMap,
-		    resourceBundle, acquisitionSubmission.getWorkingCapitalAcquisitionTransactionsSorted());
+	    byte[] byteArray = ReportUtils.exportToPdfFileAsByteArray(
+		    "/reports/workingCapitalAcquisitionSubmissionDocument.jasper", paramMap, resourceBundle,
+		    acquisitionSubmission.getWorkingCapitalAcquisitionTransactionsSorted());
 	    return byteArray;
 	} catch (JRException e) {
 	    e.printStackTrace();
