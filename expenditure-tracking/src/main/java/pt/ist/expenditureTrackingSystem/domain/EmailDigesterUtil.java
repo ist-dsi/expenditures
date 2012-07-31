@@ -33,17 +33,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import pt.ist.bennu.core.applicationTier.Authenticate;
-import pt.ist.bennu.core.domain.VirtualHost;
-import pt.ist.bennu.core.domain.groups.PersistentGroup;
-import pt.ist.bennu.core.domain.groups.SingleUserGroup;
-import pt.ist.bennu.core.util.MultiCounter;
-
 import org.apache.commons.lang.StringUtils;
 import org.jfree.data.time.Month;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
+import pt.ist.bennu.core.applicationTier.Authenticate;
+import pt.ist.bennu.core.domain.VirtualHost;
+import pt.ist.bennu.core.domain.groups.PersistentGroup;
+import pt.ist.bennu.core.domain.groups.SingleUserGroup;
+import pt.ist.bennu.core.util.MultiCounter;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
@@ -54,7 +53,6 @@ import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.util.ProcessMapGenerator;
-import pt.ist.fenixframework.plugins.remote.domain.exception.RemoteException;
 import pt.ist.messaging.domain.Message;
 import pt.ist.messaging.domain.Sender;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
@@ -74,10 +72,10 @@ public class EmailDigesterUtil {
 	Language.setLocale(Language.getDefaultLocale());
 	for (Person person : getPeopleToProcess()) {
 	    Authenticate.authenticate(person.getUsername(), StringUtils.EMPTY, false);
-	    Map<AcquisitionProcessStateType, MultiCounter<AcquisitionProcessStateType>> generateAcquisitionMap =
-		ProcessMapGenerator.generateAcquisitionMap(person, true);
-	    Map<RefundProcessStateType, MultiCounter<RefundProcessStateType>> generateRefundMap =
-		ProcessMapGenerator.generateRefundMap(person, true);
+	    Map<AcquisitionProcessStateType, MultiCounter<AcquisitionProcessStateType>> generateAcquisitionMap = ProcessMapGenerator
+		    .generateAcquisitionMap(person, true);
+	    Map<RefundProcessStateType, MultiCounter<RefundProcessStateType>> generateRefundMap = ProcessMapGenerator
+		    .generateRefundMap(person, true);
 
 	    if (!generateAcquisitionMap.isEmpty() || !generateRefundMap.isEmpty()) {
 		toAddress.clear();
@@ -86,11 +84,11 @@ public class EmailDigesterUtil {
 		    if (email != null) {
 			final Sender sender = virtualHost.getSystemSender();
 			final PersistentGroup group = SingleUserGroup.getOrCreateGroup(person.getUser());
-			new Message(sender, Collections.EMPTY_SET, Collections.singleton(group), Collections.EMPTY_SET, Collections.EMPTY_SET,
-				null, "Processos Pendentes - Aquisições",
-				getBody(generateAcquisitionMap, generateRefundMap, virtualHost), null);
+			new Message(sender, Collections.EMPTY_SET, Collections.singleton(group), Collections.EMPTY_SET,
+				Collections.EMPTY_SET, null, "Processos Pendentes - Aquisições", getBody(generateAcquisitionMap,
+					generateRefundMap, virtualHost), null);
 		    }
-		} catch (final RemoteException ex) {
+		} catch (final Throwable ex) {
 		    System.out.println("Unable to lookup email address for: " + person.getUsername());
 		    // skip this person... keep going to next.
 		}
@@ -120,10 +118,12 @@ public class EmailDigesterUtil {
 	    addPeople(people, accountingUnit.getResponsibleProjectAccountantsSet());
 	    addPeople(people, accountingUnit.getTreasuryMembersSet());
 	}
-	final PaymentProcessYear paymentProcessYear = PaymentProcessYear.getPaymentProcessYearByYear(Calendar.getInstance().get(Calendar.YEAR));
+	final PaymentProcessYear paymentProcessYear = PaymentProcessYear.getPaymentProcessYearByYear(Calendar.getInstance().get(
+		Calendar.YEAR));
 	addRequestors(people, paymentProcessYear);
 	if (today.getMonthOfYear() == Month.JANUARY) {
-	    final PaymentProcessYear previousYear = PaymentProcessYear.getPaymentProcessYearByYear(Calendar.getInstance().get(Calendar.YEAR) - 1);
+	    final PaymentProcessYear previousYear = PaymentProcessYear.getPaymentProcessYearByYear(Calendar.getInstance().get(
+		    Calendar.YEAR) - 1);
 	    addRequestors(people, previousYear);
 	}
 	return people;
@@ -133,9 +133,9 @@ public class EmailDigesterUtil {
 	for (final PaymentProcess paymentProcess : paymentProcessYear.getPaymentProcessSet()) {
 	    if (paymentProcess.getRequest() != null) {
 		final Person person = paymentProcess.getRequestor();
-	    	if (person != null && person.getOptions().getReceiveNotificationsByEmail()) {
-	    	    people.add(person);
-	    	}
+		if (person != null && person.getOptions().getReceiveNotificationsByEmail()) {
+		    people.add(person);
+		}
 	    }
 	}
     }
@@ -170,12 +170,13 @@ public class EmailDigesterUtil {
 		builder.append("\t");
 		builder.append(ProcessMapGenerator.getDefaultCounter(multiCounter).getValue());
 		builder.append("\n");
-		final Set<SimplifiedProcedureProcess> processes = (Set) ProcessMapGenerator.getDefaultCounter(multiCounter).getObjects();
+		final Set<SimplifiedProcedureProcess> processes = (Set) ProcessMapGenerator.getDefaultCounter(multiCounter)
+			.getObjects();
 		if (processes.size() < 25) {
 		    for (final SimplifiedProcedureProcess process : processes) {
 			builder.append("\t\t");
 			builder.append(process.getProcessNumber());
-			builder.append("\n");			
+			builder.append("\n");
 		    }
 		}
 	    }
@@ -193,7 +194,7 @@ public class EmailDigesterUtil {
 		    for (final RefundProcess process : processes) {
 			builder.append("\t\t");
 			builder.append(process.getProcessNumber());
-			builder.append("\n");			
+			builder.append("\n");
 		    }
 		}
 	    }

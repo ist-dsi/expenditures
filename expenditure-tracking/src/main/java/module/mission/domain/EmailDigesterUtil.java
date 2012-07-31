@@ -30,29 +30,26 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.SortedSet;
 
-import module.organization.domain.Party;
+import org.jfree.data.time.Month;
+import org.joda.time.LocalDate;
+
 import pt.ist.bennu.core.applicationTier.Authenticate;
 import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.domain.VirtualHost;
 import pt.ist.bennu.core.domain.groups.PersistentGroup;
 import pt.ist.bennu.core.domain.groups.SingleUserGroup;
-
-import org.jfree.data.time.Month;
-import org.joda.time.LocalDate;
-
-import pt.ist.emailNotifier.domain.Email;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.Role;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
-import pt.ist.fenixframework.plugins.remote.domain.exception.RemoteException;
 import pt.ist.messaging.domain.Message;
-import pt.ist.messaging.domain.ReplyTo;
 import pt.ist.messaging.domain.Sender;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
+
+import module.organization.domain.Party;
 
 /**
  * 
@@ -60,112 +57,117 @@ import pt.utl.ist.fenix.tools.util.i18n.Language;
  * 
  */
 public class EmailDigesterUtil {
-    
+
     public static void executeTask() {
 	final VirtualHost virtualHost = VirtualHost.getVirtualHostForThread();
 	Language.setLocale(Language.getDefaultLocale());
 	for (Person person : getPeopleToProcess()) {
 
-	    	final User user = person.getUser();
-	    	if (user.hasPerson() && user.hasExpenditurePerson()) {
-	    	    final UserView userView = Authenticate.authenticate(user);
-	    	    pt.ist.fenixWebFramework.security.UserView.setUser(userView);
+	    final User user = person.getUser();
+	    if (user.hasPerson() && user.hasExpenditurePerson()) {
+		final UserView userView = Authenticate.authenticate(user);
+		pt.ist.fenixWebFramework.security.UserView.setUser(userView);
 
-	    	    try {
-	    		final MissionYear missionYear = MissionYear.getCurrentYear();
-	    		final LocalDate today = new LocalDate();
-	    		final MissionYear previousYear = today.getMonthOfYear() == Month.JANUARY ? MissionYear.findOrCreateMissionYear(today.getYear() - 1) : null;
+		try {
+		    final MissionYear missionYear = MissionYear.getCurrentYear();
+		    final LocalDate today = new LocalDate();
+		    final MissionYear previousYear = today.getMonthOfYear() == Month.JANUARY ? MissionYear
+			    .findOrCreateMissionYear(today.getYear() - 1) : null;
 
-	    		final SortedSet<MissionProcess> takenByUser = previousYear == null ? 
-	    			missionYear.getTaken() : previousYear.getTaken(missionYear.getTaken());
-	    		final int takenByUserCount = takenByUser.size();
-	    		final SortedSet<MissionProcess> pendingApproval = previousYear == null ? 
-	    			missionYear.getPendingAproval() : previousYear.getPendingAproval(missionYear.getPendingAproval());
-	    		final int pendingApprovalCount = pendingApproval.size();
-	    		final SortedSet<MissionProcess> pendingAuthorization = previousYear == null ?
-	    			missionYear.getPendingAuthorization() : previousYear.getPendingAuthorization(missionYear.getPendingAuthorization());
-	    		final int pendingAuthorizationCount = pendingAuthorization.size();
-	    		final SortedSet<MissionProcess> pendingFundAllocation = previousYear == null ?
-	    			missionYear.getPendingFundAllocation() : previousYear.getPendingFundAllocation(missionYear.getPendingFundAllocation());
-	    		final int pendingFundAllocationCount = pendingFundAllocation.size();
-	    		final SortedSet<MissionProcess> pendingProcessing = previousYear == null ?
-	    			missionYear.getPendingProcessingPersonelInformation() : previousYear.getPendingProcessingPersonelInformation(missionYear.getPendingProcessingPersonelInformation());
-	    		final int pendingProcessingCount = pendingProcessing.size();
-	    		final int totalPending = takenByUserCount + pendingApprovalCount + pendingAuthorizationCount + pendingFundAllocationCount + pendingProcessingCount;
+		    final SortedSet<MissionProcess> takenByUser = previousYear == null ? missionYear.getTaken() : previousYear
+			    .getTaken(missionYear.getTaken());
+		    final int takenByUserCount = takenByUser.size();
+		    final SortedSet<MissionProcess> pendingApproval = previousYear == null ? missionYear.getPendingAproval()
+			    : previousYear.getPendingAproval(missionYear.getPendingAproval());
+		    final int pendingApprovalCount = pendingApproval.size();
+		    final SortedSet<MissionProcess> pendingAuthorization = previousYear == null ? missionYear
+			    .getPendingAuthorization() : previousYear.getPendingAuthorization(missionYear
+			    .getPendingAuthorization());
+		    final int pendingAuthorizationCount = pendingAuthorization.size();
+		    final SortedSet<MissionProcess> pendingFundAllocation = previousYear == null ? missionYear
+			    .getPendingFundAllocation() : previousYear.getPendingFundAllocation(missionYear
+			    .getPendingFundAllocation());
+		    final int pendingFundAllocationCount = pendingFundAllocation.size();
+		    final SortedSet<MissionProcess> pendingProcessing = previousYear == null ? missionYear
+			    .getPendingProcessingPersonelInformation() : previousYear
+			    .getPendingProcessingPersonelInformation(missionYear.getPendingProcessingPersonelInformation());
+		    final int pendingProcessingCount = pendingProcessing.size();
+		    final int totalPending = takenByUserCount + pendingApprovalCount + pendingAuthorizationCount
+			    + pendingFundAllocationCount + pendingProcessingCount;
 
-	    		if (totalPending > 0) {
-	    		    try {
-	    			final String email = person.getEmail();
-	    			if (email != null) {
-	    			    final StringBuilder body = new StringBuilder("Caro utilizador, possui processos de missão pendentes nas ");
-	    			    body.append(virtualHost.getApplicationSubTitle().getContent());
-	    			    body.append(", em https://");
-	    			    body.append(virtualHost.getHostname());
-	    			    body.append("/.\n");
+		    if (totalPending > 0) {
+			try {
+			    final String email = person.getEmail();
+			    if (email != null) {
+				final StringBuilder body = new StringBuilder(
+					"Caro utilizador, possui processos de missão pendentes nas ");
+				body.append(virtualHost.getApplicationSubTitle().getContent());
+				body.append(", em https://");
+				body.append(virtualHost.getHostname());
+				body.append("/.\n");
 
-	    			    if (takenByUserCount > 0) {
-	    				body.append("\n\tPendentes de Libertação\t");
-	    				body.append(takenByUserCount);
-	    			    }
-	    			    if (pendingApprovalCount > 0) {
-	    				body.append("\n\tPendentes de Aprovação\t");
-	    				body.append(pendingApprovalCount);
-	    			    }
-	    			    if (pendingAuthorizationCount > 0) {
-	    				body.append("\n\tPendentes de Autorização\t");
-	    				body.append(pendingAuthorizationCount);
-	    			    }
-	    			    if (pendingFundAllocationCount > 0) {
-	    				body.append("\n\tPendentes de Cabimentação\t");
-	    				body.append(pendingFundAllocationCount);
-	    			    }
-	    			    if (pendingProcessingCount > 0) {
-	    				body.append("\n\tPendentes de Processamento por Mim\t");
-	    				body.append(pendingProcessingCount);
-	    			    }
-	    			    body.append("\n\n\tTotal de Processos de Missão Pendentes\t");
-	    			    body.append(totalPending);
+				if (takenByUserCount > 0) {
+				    body.append("\n\tPendentes de Libertação\t");
+				    body.append(takenByUserCount);
+				}
+				if (pendingApprovalCount > 0) {
+				    body.append("\n\tPendentes de Aprovação\t");
+				    body.append(pendingApprovalCount);
+				}
+				if (pendingAuthorizationCount > 0) {
+				    body.append("\n\tPendentes de Autorização\t");
+				    body.append(pendingAuthorizationCount);
+				}
+				if (pendingFundAllocationCount > 0) {
+				    body.append("\n\tPendentes de Cabimentação\t");
+				    body.append(pendingFundAllocationCount);
+				}
+				if (pendingProcessingCount > 0) {
+				    body.append("\n\tPendentes de Processamento por Mim\t");
+				    body.append(pendingProcessingCount);
+				}
+				body.append("\n\n\tTotal de Processos de Missão Pendentes\t");
+				body.append(totalPending);
 
-	    			    if (takenByUserCount > 0) {
-	    				body.append("\n\n\n\tPor favor, proceda à libertação dos processos em \"acesso exclusivo\", após concluir as tarefas que nele tem para realizar.\t");
-	    				body.append(takenByUserCount);
-	    			    }
+				if (takenByUserCount > 0) {
+				    body.append("\n\n\n\tPor favor, proceda à libertação dos processos em \"acesso exclusivo\", após concluir as tarefas que nele tem para realizar.\t");
+				    body.append(takenByUserCount);
+				}
 
-	    			    body.append("\n\nSegue um resumo detalhado dos processos pendentes.\n");
-	    			    if (takenByUserCount > 0) {
-	    				report(body, "Pendentes de Libertação", takenByUser);
-	    			    }
-	    			    if (pendingApprovalCount > 0) {
-	    				report(body, "Pendentes de Aprovação", pendingApproval);
-	    			    }
-	    			    if (pendingAuthorizationCount > 0) {
-	    				report(body, "Pendentes de Autorização", pendingAuthorization);
-	    			    }
-	    			    if (pendingFundAllocationCount > 0) {
-	    				report(body, "Pendentes de Cabimentação", pendingFundAllocation);
-	    			    }
-	    			    if (pendingProcessingCount > 0) {
-	    				report(body, "Pendentes de Processamento por Mim", pendingProcessing);
-	    			    }
-	    			    if (takenByUserCount > 0) {
-	    				report(body, "Processos em \"acesso exclusivo\"", takenByUser);
-	    			    }
+				body.append("\n\nSegue um resumo detalhado dos processos pendentes.\n");
+				if (takenByUserCount > 0) {
+				    report(body, "Pendentes de Libertação", takenByUser);
+				}
+				if (pendingApprovalCount > 0) {
+				    report(body, "Pendentes de Aprovação", pendingApproval);
+				}
+				if (pendingAuthorizationCount > 0) {
+				    report(body, "Pendentes de Autorização", pendingAuthorization);
+				}
+				if (pendingFundAllocationCount > 0) {
+				    report(body, "Pendentes de Cabimentação", pendingFundAllocation);
+				}
+				if (pendingProcessingCount > 0) {
+				    report(body, "Pendentes de Processamento por Mim", pendingProcessing);
+				}
+				if (takenByUserCount > 0) {
+				    report(body, "Processos em \"acesso exclusivo\"", takenByUser);
+				}
 
-
-	    			    final Sender sender = virtualHost.getSystemSender();
-	    			    final PersistentGroup group = SingleUserGroup.getOrCreateGroup(person.getUser());
-	    			    new Message(sender, Collections.EMPTY_SET, Collections.singleton(group), Collections.EMPTY_SET,
-	    				    Collections.EMPTY_SET, null, "Processos Pendentes - Missões", body.toString(), null);
-	    			}
-	    		    } catch (final RemoteException ex) {
-	    			System.out.println("Unable to lookup email address for: " + person.getUsername());
-	    			// skip this person... keep going to next.
-	    		    }
-	    		}
-	    	    } finally {
-	    		pt.ist.fenixWebFramework.security.UserView.setUser(null);
-	    	    }
-	    	}
+				final Sender sender = virtualHost.getSystemSender();
+				final PersistentGroup group = SingleUserGroup.getOrCreateGroup(person.getUser());
+				new Message(sender, Collections.EMPTY_SET, Collections.singleton(group), Collections.EMPTY_SET,
+					Collections.EMPTY_SET, null, "Processos Pendentes - Missões", body.toString(), null);
+			    }
+			} catch (final Throwable ex) {
+			    System.out.println("Unable to lookup email address for: " + person.getUsername());
+			    // skip this person... keep going to next.
+			}
+		    }
+		} finally {
+		    pt.ist.fenixWebFramework.security.UserView.setUser(null);
+		}
+	    }
 	}
     }
 
