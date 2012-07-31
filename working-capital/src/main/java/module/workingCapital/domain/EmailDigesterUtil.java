@@ -30,6 +30,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.SortedSet;
 
+import org.jfree.data.time.Month;
+import org.joda.time.LocalDate;
+
 import pt.ist.bennu.core.applicationTier.Authenticate;
 import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
 import pt.ist.bennu.core.domain.User;
@@ -37,18 +40,12 @@ import pt.ist.bennu.core.domain.VirtualHost;
 import pt.ist.bennu.core.domain.groups.PersistentGroup;
 import pt.ist.bennu.core.domain.groups.SingleUserGroup;
 import pt.ist.bennu.core.util.BundleUtil;
-
-import org.jfree.data.time.Month;
-import org.joda.time.LocalDate;
-
-import pt.ist.emailNotifier.domain.Email;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.Role;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
-import pt.ist.fenixframework.plugins.remote.domain.exception.RemoteException;
 import pt.ist.messaging.domain.Message;
 import pt.ist.messaging.domain.Sender;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
@@ -59,111 +56,117 @@ import pt.utl.ist.fenix.tools.util.i18n.Language;
  * 
  */
 public class EmailDigesterUtil {
-    
+
     public static void executeTask() {
 	final VirtualHost virtualHost = VirtualHost.getVirtualHostForThread();
 
 	Language.setLocale(Language.getDefaultLocale());
 	for (Person person : getPeopleToProcess()) {
 
-	    	final User user = person.getUser();
-	    	if (user.hasPerson() && user.hasExpenditurePerson()) {
-	    	    final UserView userView = Authenticate.authenticate(user);
-	    	    pt.ist.fenixWebFramework.security.UserView.setUser(userView);
+	    final User user = person.getUser();
+	    if (user.hasPerson() && user.hasExpenditurePerson()) {
+		final UserView userView = Authenticate.authenticate(user);
+		pt.ist.fenixWebFramework.security.UserView.setUser(userView);
 
-	    	    try {
-	    		final WorkingCapitalYear workingCapitalYear = WorkingCapitalYear.getCurrentYear();
-	    		final LocalDate today = new LocalDate();
-	    		final WorkingCapitalYear previousYear = today.getMonthOfYear() == Month.JANUARY ? WorkingCapitalYear.findOrCreate(today.getYear() - 1) : null;
+		try {
+		    final WorkingCapitalYear workingCapitalYear = WorkingCapitalYear.getCurrentYear();
+		    final LocalDate today = new LocalDate();
+		    final WorkingCapitalYear previousYear = today.getMonthOfYear() == Month.JANUARY ? WorkingCapitalYear
+			    .findOrCreate(today.getYear() - 1) : null;
 
-	    		final SortedSet<WorkingCapitalProcess> takenByUser = previousYear == null ?
-	    			workingCapitalYear.getTaken() : previousYear.getTaken(workingCapitalYear.getTaken());
-	    		final int takenByUserCount = takenByUser.size();
-	    		final SortedSet<WorkingCapitalProcess> pendingApproval = previousYear == null ?
-	    			workingCapitalYear.getPendingAproval() : previousYear.getPendingAproval(workingCapitalYear.getPendingAproval());
-	    		final int pendingApprovalCount = pendingApproval.size();
-	    		final SortedSet<WorkingCapitalProcess> pendingVerificationn = previousYear == null ?
-	    			workingCapitalYear.getPendingVerification() : previousYear.getPendingVerification(workingCapitalYear.getPendingVerification());
-	    		final int pendingVerificationnCount = pendingVerificationn.size();
-	    		final SortedSet<WorkingCapitalProcess> pendingProcessing = previousYear == null ?
-	    			workingCapitalYear.getPendingProcessing() : previousYear.getPendingProcessing(workingCapitalYear.getPendingVerification());
-	    		final int pendingProcessingCount = pendingProcessing.size();
-	    		final SortedSet<WorkingCapitalProcess> pendingAuthorization = previousYear == null ?
-	    			workingCapitalYear.getPendingAuthorization() : previousYear.getPendingAuthorization(workingCapitalYear.getPendingAuthorization());
-	    		final int pendingAuthorizationCount = pendingAuthorization.size();
-	    		final SortedSet<WorkingCapitalProcess> pendingPayment = previousYear == null ?
-	    			workingCapitalYear.getPendingPayment() : previousYear.getPendingPayment(workingCapitalYear.getPendingPayment());
-	    		final int pendingPaymentCount = pendingPayment.size();
-	    		final int totalPending = takenByUserCount + pendingApprovalCount + pendingVerificationnCount + pendingAuthorizationCount + pendingPaymentCount;
+		    final SortedSet<WorkingCapitalProcess> takenByUser = previousYear == null ? workingCapitalYear.getTaken()
+			    : previousYear.getTaken(workingCapitalYear.getTaken());
+		    final int takenByUserCount = takenByUser.size();
+		    final SortedSet<WorkingCapitalProcess> pendingApproval = previousYear == null ? workingCapitalYear
+			    .getPendingAproval() : previousYear.getPendingAproval(workingCapitalYear.getPendingAproval());
+		    final int pendingApprovalCount = pendingApproval.size();
+		    final SortedSet<WorkingCapitalProcess> pendingVerificationn = previousYear == null ? workingCapitalYear
+			    .getPendingVerification() : previousYear.getPendingVerification(workingCapitalYear
+			    .getPendingVerification());
+		    final int pendingVerificationnCount = pendingVerificationn.size();
+		    final SortedSet<WorkingCapitalProcess> pendingProcessing = previousYear == null ? workingCapitalYear
+			    .getPendingProcessing() : previousYear.getPendingProcessing(workingCapitalYear
+			    .getPendingVerification());
+		    final int pendingProcessingCount = pendingProcessing.size();
+		    final SortedSet<WorkingCapitalProcess> pendingAuthorization = previousYear == null ? workingCapitalYear
+			    .getPendingAuthorization() : previousYear.getPendingAuthorization(workingCapitalYear
+			    .getPendingAuthorization());
+		    final int pendingAuthorizationCount = pendingAuthorization.size();
+		    final SortedSet<WorkingCapitalProcess> pendingPayment = previousYear == null ? workingCapitalYear
+			    .getPendingPayment() : previousYear.getPendingPayment(workingCapitalYear.getPendingPayment());
+		    final int pendingPaymentCount = pendingPayment.size();
+		    final int totalPending = takenByUserCount + pendingApprovalCount + pendingVerificationnCount
+			    + pendingAuthorizationCount + pendingPaymentCount;
 
-	    		if (totalPending > 0) {
-	    		    try {
-	    			final String email = person.getEmail();
-	    			if (email != null) {
-	    			    final StringBuilder body = new StringBuilder("Caro utilizador, possui processos de fundos de maneio pendentes nas ");
-	    			    body.append(virtualHost.getApplicationSubTitle().getContent());
-	    			    body.append(", em https://");
-	    			    body.append(virtualHost.getHostname());
-	    			    body.append("/.\n");
-	    			    if (takenByUserCount > 0) {
-	    				body.append("\n\tPendentes de Libertação\t");
-	    				body.append(takenByUser);
-	    			    }
-	    			    if (pendingApprovalCount > 0) {
-	    				body.append("\n\tPendentes de Aprovação\t");
-	    				body.append(pendingApprovalCount);
-	    			    }
-	    			    if (pendingVerificationnCount > 0) {
-	    				body.append("\n\tPendentes de Verificação\t");
-	    				body.append(pendingVerificationnCount);
-	    			    }
-	    			    if (pendingVerificationnCount > 0) {
-	    				body.append("\n\tPendentes de Processamento\t");
-	    				body.append(pendingProcessingCount);
-	    			    }
-	    			    if (pendingAuthorizationCount > 0) {
-	    				body.append("\n\tPendentes de Autorização\t");
-	    				body.append(pendingAuthorizationCount);
-	    			    }
-	    			    if (pendingPaymentCount > 0) {
-	    				body.append("\n\tPendentes de Pagamento\t");
-	    				body.append(pendingPaymentCount);
-	    			    }
-	    			    body.append("\n\n\tTotal de Processos de Fundos de Maneio Pendentes\t");
-	    			    body.append(totalPending);
+		    if (totalPending > 0) {
+			try {
+			    final String email = person.getEmail();
+			    if (email != null) {
+				final StringBuilder body = new StringBuilder(
+					"Caro utilizador, possui processos de fundos de maneio pendentes nas ");
+				body.append(virtualHost.getApplicationSubTitle().getContent());
+				body.append(", em https://");
+				body.append(virtualHost.getHostname());
+				body.append("/.\n");
+				if (takenByUserCount > 0) {
+				    body.append("\n\tPendentes de Libertação\t");
+				    body.append(takenByUser);
+				}
+				if (pendingApprovalCount > 0) {
+				    body.append("\n\tPendentes de Aprovação\t");
+				    body.append(pendingApprovalCount);
+				}
+				if (pendingVerificationnCount > 0) {
+				    body.append("\n\tPendentes de Verificação\t");
+				    body.append(pendingVerificationnCount);
+				}
+				if (pendingVerificationnCount > 0) {
+				    body.append("\n\tPendentes de Processamento\t");
+				    body.append(pendingProcessingCount);
+				}
+				if (pendingAuthorizationCount > 0) {
+				    body.append("\n\tPendentes de Autorização\t");
+				    body.append(pendingAuthorizationCount);
+				}
+				if (pendingPaymentCount > 0) {
+				    body.append("\n\tPendentes de Pagamento\t");
+				    body.append(pendingPaymentCount);
+				}
+				body.append("\n\n\tTotal de Processos de Fundos de Maneio Pendentes\t");
+				body.append(totalPending);
 
-	    			    body.append("\n\nSegue um resumo detalhado dos processos pendentes.\n");
-	    			    if (takenByUserCount > 0) {
-	    				report(body, "Pendentes de Libertação", takenByUser);
-	    			    }
-	    			    if (pendingApprovalCount > 0) {
-	    				report(body, "Pendentes de Aprovação", pendingApproval);
-	    			    }
-	    			    if (pendingVerificationnCount > 0) {
-	    				report(body, "Pendentes de Verificação", pendingVerificationn);
-	    			    }
-	    			    if (pendingAuthorizationCount > 0) {
-	    				report(body, "Pendentes de Autorização", pendingAuthorization);
-	    			    }
-	    			    if (pendingPaymentCount > 0) {
-	    				report(body, "Pendentes de Pagamento", pendingPayment);
-	    			    }
+				body.append("\n\nSegue um resumo detalhado dos processos pendentes.\n");
+				if (takenByUserCount > 0) {
+				    report(body, "Pendentes de Libertação", takenByUser);
+				}
+				if (pendingApprovalCount > 0) {
+				    report(body, "Pendentes de Aprovação", pendingApproval);
+				}
+				if (pendingVerificationnCount > 0) {
+				    report(body, "Pendentes de Verificação", pendingVerificationn);
+				}
+				if (pendingAuthorizationCount > 0) {
+				    report(body, "Pendentes de Autorização", pendingAuthorization);
+				}
+				if (pendingPaymentCount > 0) {
+				    report(body, "Pendentes de Pagamento", pendingPayment);
+				}
 
-	    			    final Sender sender = virtualHost.getSystemSender();
-	    			    final PersistentGroup group = SingleUserGroup.getOrCreateGroup(person.getUser());
-	    			    new Message(sender, Collections.EMPTY_SET, Collections.singleton(group), Collections.EMPTY_SET, 
-	    				    Collections.EMPTY_SET, null, "Processos Pendentes - Fundos de Maneio",
-	    				    body.toString(), null);
-	    			}
-	    		    } catch (final RemoteException ex) {
-	    			System.out.println("Unable to lookup email address for: " + person.getUsername());
-	    			// skip this person... keep going to next.
-	    		    }
-	    		}
-	    	    } finally {
-	    		pt.ist.fenixWebFramework.security.UserView.setUser(null);
-	    	    }
-	    	}
+				final Sender sender = virtualHost.getSystemSender();
+				final PersistentGroup group = SingleUserGroup.getOrCreateGroup(person.getUser());
+				new Message(sender, Collections.EMPTY_SET, Collections.singleton(group), Collections.EMPTY_SET,
+					Collections.EMPTY_SET, null, "Processos Pendentes - Fundos de Maneio", body.toString(),
+					null);
+			    }
+			} catch (final Throwable ex) {
+			    System.out.println("Unable to lookup email address for: " + person.getUsername());
+			    // skip this person... keep going to next.
+			}
+		    }
+		} finally {
+		    pt.ist.fenixWebFramework.security.UserView.setUser(null);
+		}
+	    }
 	}
     }
 
@@ -176,7 +179,8 @@ public class EmailDigesterUtil {
 	    body.append("\n\t\t");
 	    body.append(workingCapital.getUnit().getPresentationName());
 	    body.append(" - ");
-	    body.append(BundleUtil.getStringFromResourceBundle("resources.WorkingCapitalResources", "label.module.workingCapital.year"));
+	    body.append(BundleUtil.getStringFromResourceBundle("resources.WorkingCapitalResources",
+		    "label.module.workingCapital.year"));
 	    body.append(" ");
 	    body.append(workingCapital.getWorkingCapitalYear().getYear());
 	}
