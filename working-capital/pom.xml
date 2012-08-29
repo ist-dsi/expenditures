@@ -72,10 +72,10 @@
 				</executions>
 				<dependencies>
 					<dependency>
-						<groupId>jasperreports</groupId>
-						<artifactId>jasperreports</artifactId>
-						<version>3.5.3</version>
-					</dependency>
+                                                <groupId>jasperreports-javaflow</groupId>
+                                                <artifactId>jasperreports-javaflow</artifactId>
+                                                <version>3.1.0</version>
+                                        </dependency>
 					<dependency>
 						<groupId>log4j</groupId>
 						<artifactId>log4j</artifactId>
