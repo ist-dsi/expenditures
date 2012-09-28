@@ -215,6 +215,8 @@ class acquisitions.AcquisitionProposalDocument extends .module.workflow.domain.P
 
 class acquisitions.CreditNoteDocument extends .module.workflow.domain.ProcessFile implements .pt.ist.bennu.core.domain.VirtualHostAware {
 }
+
+//class acquisitions.AcqCentralWFDocsWriteGroup extends .module.workflow.domain.WFDocsDefaultWriteGroup { } 
 	
 class acquisitions.PurchaseOrderDocument extends .module.workflow.domain.ProcessFile implements .pt.ist.bennu.core.domain.VirtualHostAware {
 	String requestId;
