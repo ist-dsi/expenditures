@@ -99,7 +99,6 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */ {
 
     public Unit() {
 	super();
-	setOjbConcreteClass(getClass().getName());
 	final ExpenditureTrackingSystem expenditureTrackingSystem = ExpenditureTrackingSystem.getInstance();
 	setExpenditureTrackingSystem(expenditureTrackingSystem);
 	setDefaultRegeimIsCCP(Boolean.TRUE);

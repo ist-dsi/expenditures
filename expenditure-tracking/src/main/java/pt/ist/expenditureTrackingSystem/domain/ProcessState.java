@@ -44,7 +44,6 @@ public abstract class ProcessState extends ProcessState_Base {
 
     public ProcessState() {
 	super();
-	setOjbConcreteClass(getClass().getName());
 	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
     }
 

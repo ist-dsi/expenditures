@@ -65,7 +65,6 @@ public class Authorization extends Authorization_Base {
 
     public Authorization() {
 	super();
-	setOjbConcreteClass(getClass().getName());
 	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
 	setStartDate(new LocalDate());
 	setMaxAmount(Money.ZERO);

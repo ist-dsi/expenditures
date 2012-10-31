@@ -49,7 +49,6 @@ public abstract class RequestItem extends RequestItem_Base {
 
     public RequestItem() {
 	super();
-	setOjbConcreteClass(getClass().getName());
 	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
     }
 

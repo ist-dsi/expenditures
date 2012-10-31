@@ -80,7 +80,6 @@ class ExpenditureTrackingSystem {
 
 
 class acquisitions.Acquisition implements .pt.ist.bennu.core.domain.VirtualHostAware {
-	String ojbConcreteClass;
 }
 
 	class acquisitions.RequestWithPayment extends acquisitions.Acquisition {
@@ -114,7 +113,6 @@ class announcements.Announcement implements .pt.ist.bennu.core.domain.VirtualHos
 	Money totalPrice;
 	DateTime creationDate;
 	Boolean active;
-	String ojbConcreteClass;
 }
 
 	class announcements.CCPAnnouncement extends announcements.Announcement {
@@ -132,7 +130,6 @@ class acquisitions.PaymentProcessYear implements .pt.ist.bennu.core.domain.Virtu
 }
 
 class acquisitions.RequestItem implements .pt.ist.bennu.core.domain.VirtualHostAware {
-	String ojbConcreteClass;
 	String description;
 	AcquisitionItemClassification classification;
 }
@@ -168,7 +165,6 @@ class acquisitions.UnitItem implements .pt.ist.bennu.core.domain.VirtualHostAwar
 }
 
 class acquisitions.Financer implements .pt.ist.bennu.core.domain.VirtualHostAware {
-	String ojbConcreteClass;
 	String fundAllocationId;
 	Strings effectiveFundAllocationId;
 	Strings paymentDiaryNumber;
@@ -182,7 +178,6 @@ class acquisitions.Financer implements .pt.ist.bennu.core.domain.VirtualHostAwar
 	}
 
 class authorizations.Authorization implements .pt.ist.bennu.core.domain.VirtualHostAware {
-	String ojbConcreteClass;
 	AuthorizationType authorizationType;
 	Boolean canDelegate;
 	LocalDate startDate;
@@ -262,7 +257,6 @@ class organization.Person {
 }
 
 class SavedSearch implements .pt.ist.bennu.core.domain.VirtualHostAware {
-	String ojbConcreteClass;
 	String searchName;
 	SearchProcessValues searchProcessValues;
 	String processId;
@@ -296,7 +290,6 @@ class organization.Supplier extends .module.finance.domain.Supplier {
 }
 
 class organization.Unit implements .pt.ist.bennu.core.domain.VirtualHostAware {
-	String ojbConcreteClass;
 	Boolean defaultRegeimIsCCP;
 }
 
@@ -351,7 +344,6 @@ class acquisitions.refund.Refundee implements .pt.ist.bennu.core.domain.VirtualH
 } 
 	
 class ProcessState implements .pt.ist.bennu.core.domain.VirtualHostAware {
-	String ojbConcreteClass;
 	DateTime whenDateTime;
 	String justification;
 }

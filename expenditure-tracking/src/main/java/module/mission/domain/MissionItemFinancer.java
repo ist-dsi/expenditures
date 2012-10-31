@@ -36,7 +36,6 @@ public class MissionItemFinancer extends MissionItemFinancer_Base {
     public MissionItemFinancer() {
         super();
         setMissionSystem(MissionSystem.getInstance());
-        setOjbConcreteClass(getClass().getName());
         setAmount(Money.ZERO);
     }
 

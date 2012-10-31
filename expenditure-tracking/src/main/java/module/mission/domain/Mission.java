@@ -86,7 +86,6 @@ public abstract class Mission extends Mission_Base {
 
     public Mission() {
         super();
-        setOjbConcreteClass(getClass().getName());
         setMissionSystem(MissionSystem.getInstance());
         setIsApprovedByMissionResponsible(Boolean.FALSE);
 	final User user = UserView.getCurrentUser();

@@ -53,7 +53,6 @@ public abstract class MissionItem extends MissionItem_Base {
 
     public MissionItem() {
 	super();
-	setOjbConcreteClass(getClass().getName());
 	setMissionSystem(MissionSystem.getInstance());
 	new TemporaryMissionItemEntry(this);
     }

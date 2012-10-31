@@ -39,7 +39,6 @@ import pt.ist.fenixWebFramework.services.Service;
 public class SavedSearch extends SavedSearch_Base {
 
     protected SavedSearch() {
-	setOjbConcreteClass(this.getClass().getName());
 	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
     }
 

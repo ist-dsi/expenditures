@@ -53,7 +53,6 @@ public class Financer extends Financer_Base {
 
     protected Financer() {
 	super();
-	setOjbConcreteClass(getClass().getName());
 	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
     }
 

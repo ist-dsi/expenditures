@@ -26,7 +26,6 @@ class MissionFinancer {
 }
 
 class Mission {
-	String ojbConcreteClass;
 	String location;
 	String objective;
 	Boolean grantOwnerEquivalence;
@@ -61,7 +60,6 @@ class MissionChangeDescription {
 }
 
 class MissionItem {
-	String ojbConcreteClass;
 }
 
 	class AccommodationItem extends MissionItem {
@@ -133,7 +131,6 @@ class MissionItem {
 			}
 
 class MissionItemFinancer {
-	String ojbConcreteClass;
 	Money amount;
 	String fundAllocationId;
 }

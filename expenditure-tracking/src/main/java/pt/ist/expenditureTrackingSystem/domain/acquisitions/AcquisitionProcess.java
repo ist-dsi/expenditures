@@ -51,7 +51,6 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 
     public AcquisitionProcess() {
 	super();
-	setOjbConcreteClass(getClass().getName());
 	super.setSkipSupplierFundAllocation(Boolean.FALSE);
 	setProcessNumber(constructProcessNumber());
     }
