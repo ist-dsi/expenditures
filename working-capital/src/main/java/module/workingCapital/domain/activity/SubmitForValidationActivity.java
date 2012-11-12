@@ -96,7 +96,7 @@ public class SubmitForValidationActivity extends WorkflowActivity<WorkingCapital
 
 	byte[] contents = createAcquisitionSubmissionDocument(acquisitionSubmission);
 	WorkingCapitalAcquisitionSubmissionDocument document = new WorkingCapitalAcquisitionSubmissionDocument(
-		acquisitionSubmission, contents, ".pdf");
+		acquisitionSubmission, contents, ".pdf", activityInformation.getProcess());
 	document.setFilename("Submission" + document.getOid() + document.getFilename());
     }
 

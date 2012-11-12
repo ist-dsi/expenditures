@@ -30,10 +30,15 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Nonnull;
 
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
+import module.workflow.domain.ProcessDocumentMetaDataResolver;
 import module.workflow.domain.ProcessFile;
+import module.workflow.domain.WFDocsDefaultWriteGroup;
 import module.workflow.domain.WorkflowProcess;
 import module.workflow.domain.utils.WorkflowCommentCounter;
 import module.workflow.util.HasPresentableProcessState;
@@ -161,6 +166,26 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base implements
     @Override
     public <T extends WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>> List<T> getActivities() {
 	return (List) activities;
+    }
+
+    public static class WorkingCapitalProcessFileMetadataResolver extends
+	    ProcessDocumentMetaDataResolver<ProcessFile> {
+
+	private final static String WORKING_CAPITAL = "Fundo de maneio";
+
+	@Override
+	public @Nonnull
+	Class<? extends module.workflow.domain.AbstractWFDocsGroup> getWriteGroupClass() {
+	    return WFDocsDefaultWriteGroup.class;
+	}
+
+	@Override
+	public Map<String, String> getMetadataKeysAndValuesMap(ProcessFile processDocument) {
+	    WorkingCapitalProcess workingCapitalProcess = (WorkingCapitalProcess) processDocument.getProcess();
+	    Map<String, String> metadataKeysAndValuesMap = super.getMetadataKeysAndValuesMap(processDocument);
+	    metadataKeysAndValuesMap.put(WORKING_CAPITAL, workingCapitalProcess.getWorkingCapital().getUnit().getPresentationName());
+	    return metadataKeysAndValuesMap;
+	}
     }
 
     @Override
