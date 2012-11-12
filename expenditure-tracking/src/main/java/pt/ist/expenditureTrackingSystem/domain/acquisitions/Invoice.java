@@ -24,6 +24,15 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
+import java.util.Map;
+
+import javax.annotation.Nonnull;
+
+import module.workflow.domain.AbstractWFDocsGroup;
+import module.workflow.domain.ProcessDocumentMetaDataResolver;
+import module.workflow.domain.ProcessFile;
+import module.workflow.domain.WFDocsDefaultWriteGroup;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess.AcquisitionProcessBasedMetadataResolver;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 
 
@@ -45,6 +54,7 @@ public class Invoice extends Invoice_Base {
 	return getInvoiceNumber() != null && getInvoiceNumber().length() > 0 && getInvoiceDate() != null;
     }
 
+    @Override
     public void delete() {
 	super.delete();
     }
@@ -53,6 +63,35 @@ public class Invoice extends Invoice_Base {
     public boolean isConnectedToCurrentHost() {
 	final GenericProcess genericProcess = (GenericProcess) getProcess();
 	return genericProcess != null && genericProcess.isConnectedToCurrentHost();
+    }
+
+    public static class InvoiceMetadaResolver extends AcquisitionProcessBasedMetadataResolver<Invoice> {
+	public static final String INVOICE_NUMBER = "Número da factura";
+	public static final String INVOICE_DATE = "Data da factura";
+
+	@Override
+	public Map<String, String> getMetadataKeysAndValuesMap(ProcessFile processFile) {
+	    Invoice processDocument = (Invoice) processFile;
+	    Map<String, String> metadataKeysAndValuesMap = super.getMetadataKeysAndValuesMap(processDocument);
+
+	    metadataKeysAndValuesMap.put(INVOICE_NUMBER, processDocument.getInvoiceNumber());
+	    metadataKeysAndValuesMap.put(INVOICE_DATE, processDocument.getInvoiceDate().toString());
+
+	    return metadataKeysAndValuesMap;
+	}
+
+	@Override
+	public @Nonnull
+	Class<? extends AbstractWFDocsGroup> getWriteGroupClass() {
+	    //TODO probably review it case by case, but for now let it be like this
+	    return WFDocsDefaultWriteGroup.class;
+	}
+
+    }
+
+    @Override
+    public ProcessDocumentMetaDataResolver<ProcessFile> getMetaDataResolver() {
+	return new InvoiceMetadaResolver();
     }
 
 }

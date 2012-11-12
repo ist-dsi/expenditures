@@ -24,6 +24,8 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
+import module.workflow.domain.ProcessDocumentMetaDataResolver;
+import module.workflow.domain.ProcessFile;
 import module.workflow.domain.ProcessFileValidationException;
 import module.workflow.domain.WorkflowProcess;
 import module.workflow.util.FileUploadBeanResolver;
@@ -86,6 +88,11 @@ public class AcquisitionInvoice extends AcquisitionInvoice_Base {
 	}
 	builder.append("</ul>");
 	setConfirmationReport(builder.toString());
+    }
+    
+    @Override
+    public ProcessDocumentMetaDataResolver<ProcessFile> getMetaDataResolver() {
+	return new InvoiceMetadaResolver();
     }
 
     @Override

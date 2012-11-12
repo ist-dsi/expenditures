@@ -77,6 +77,7 @@
 			<logic:iterate id="supplier" name="processRequest" property="suppliers">
 				<bean:define id="supplierName" name="supplier" property="name"/>
 				<p>
+				bla
 					<logic:equal name="processRequest" property="process.allowedToViewSupplierExpenditures" value="true">
 						<logic:equal name="processRequest" property="process.processClassification" value="CCP">
 							<bean:message key="supplier.message.info.totalAllocated.withArgument" bundle="EXPENDITURE_ORGANIZATION_RESOURCES" arg0="<%= supplierName.toString() %>"/>:

@@ -24,11 +24,14 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact;
 
+import module.workflow.domain.ProcessDocumentMetaDataResolver;
+import module.workflow.domain.ProcessFile;
 import module.workflow.domain.ProcessFileValidationException;
 import module.workflow.domain.WorkflowProcess;
 import module.workflow.util.FileUploadBeanResolver;
 import module.workflow.util.WorkflowFileUploadBean;
 import pt.ist.bennu.core.util.ClassNameBundle;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.Invoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.fileBeans.AfterTheFactInvoiceBean;
 import pt.ist.fenixWebFramework.services.Service;
 
@@ -56,6 +59,12 @@ public class AfterTheFactInvoice extends AfterTheFactInvoice_Base {
 
     public AfterTheFactInvoice() {
 	super();
+    }
+
+    @Override
+    public ProcessDocumentMetaDataResolver<ProcessFile> getMetaDataResolver() {
+	//TODO confirm that we have no extra fields to use
+	return new Invoice.InvoiceMetadaResolver();
     }
 
     @Override
