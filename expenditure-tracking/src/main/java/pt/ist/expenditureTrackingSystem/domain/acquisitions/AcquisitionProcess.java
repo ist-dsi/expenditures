@@ -27,15 +27,6 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Nonnull;
-
-import module.workflow.domain.ProcessDocumentMetaDataResolver;
-import module.workflow.domain.ProcessFile;
-import module.workflow.domain.WFDocsDefaultWriteGroup;
-
-import org.apache.commons.lang.StringUtils;
 
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
@@ -57,58 +48,6 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
  * 
  */
 public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
-
-    /**
-     * Field that describes the suppliers, used in classes/subclasses of
-     * {@link ProcessDocumentMetaDataResolver}
-     */
-    public final static String SUPPLIER_METADATA_KEY = "Fornecedor";
-
-    /**
-     * {@link ProcessDocumentMetaDataResolver} that resolves all of the typical
-     * metadata associated with a {@link AcquisitionProcess}
-     * 
-     * So, instead of repeating code, documents that can/are used in a
-     * {@link AcquisitionProcess}, can extend/use this class safely (if the
-     * document is not used by an {@link AcquisitionProcess}, a call to
-     * {@link #getMetadataKeysAndValuesMap(ProcessFile)} returns an empty map)
-     * 
-     * @author João Antunes (joao.antunes@tagus.ist.utl.pt) - 22 de Out de 2012
-     * 
-     * 
-     * @param <P>
-     */
-    public static class AcquisitionProcessBasedMetadataResolver<P extends ProcessFile> extends
-	    ProcessDocumentMetaDataResolver<ProcessFile> {
-
-	@Override
-	public Map<String, String> getMetadataKeysAndValuesMap(ProcessFile processDocument) {
-	    Map<String, String> metadataKeysAndValuesMap = super.getMetadataKeysAndValuesMap(processDocument);
-	    AcquisitionProcess process = null;
-	    try {
-		process = (AcquisitionProcess) processDocument.getProcess();
-	    } catch (ClassCastException ex) {
-		//ok, so this process is not an acquistion one. returning empty metadataset
-		return metadataKeysAndValuesMap;
-	    }
-	    if (process.getRequest() != null && process.getRequest().getSupplier() != null) {
-
-		String supplier = process.getRequest().getSupplier().getPresentationName();
-		if (StringUtils.isNotBlank(supplier)) {
-		    metadataKeysAndValuesMap.put(AcquisitionProcess.SUPPLIER_METADATA_KEY, supplier);
-		}
-	    }
-
-	    return metadataKeysAndValuesMap;
-	}
-
-	@Override
-	public @Nonnull
-	Class<? extends module.workflow.domain.AbstractWFDocsGroup> getWriteGroupClass() {
-	    return WFDocsDefaultWriteGroup.class;
-	}
-
-    }
 
     public AcquisitionProcess() {
 	super();
@@ -145,10 +84,15 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 		|| ExpenditureTrackingSystem.isProjectAccountingManagerGroupMember(user)
 		|| ExpenditureTrackingSystem.isTreasuryMemberGroupMember(user)
 		|| ExpenditureTrackingSystem.isAcquisitionsProcessAuditorGroupMember(user)
-		|| ExpenditureTrackingSystem.isFundCommitmentManagerGroupMember(user) || getRequestor() == person
-		|| isTakenByPerson(person.getUser()) || getRequestingUnit().isResponsible(person)
-		|| isResponsibleForAtLeastOnePayingUnit(person) || isAccountingEmployee(person)
-		|| isProjectAccountingEmployee(person) || isTreasuryMember(person) || isObserver(person);
+		|| ExpenditureTrackingSystem.isFundCommitmentManagerGroupMember(user)
+		|| getRequestor() == person
+		|| isTakenByPerson(person.getUser())
+		|| getRequestingUnit().isResponsible(person)
+		|| isResponsibleForAtLeastOnePayingUnit(person)
+		|| isAccountingEmployee(person)
+		|| isProjectAccountingEmployee(person)
+		|| isTreasuryMember(person)
+		|| isObserver(person);
     }
 
     @Override
@@ -156,7 +100,6 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 	return isAvailableForPerson(user.getExpenditurePerson());
     }
 
-    @Override
     public boolean isActive() {
 	return getLastAcquisitionProcessState().isActive();
     }
@@ -196,7 +139,6 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 	return getLastAcquisitionProcessState().isAllocatedToUnit();
     }
 
-    @Override
     public boolean isPayed() {
 	return getLastAcquisitionProcessState().isPayed();
     }
@@ -237,9 +179,12 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 
     public boolean isAllowedToViewCostCenterExpenditures() {
 	try {
-	    return (getUnit() != null && isResponsibleForUnit()) || ExpenditureTrackingSystem.isAccountingManagerGroupMember()
-		    || ExpenditureTrackingSystem.isProjectAccountingManagerGroupMember() || isAccountingEmployee()
-		    || isProjectAccountingEmployee() || ExpenditureTrackingSystem.isManager();
+	    return (getUnit() != null && isResponsibleForUnit())
+	    	|| ExpenditureTrackingSystem.isAccountingManagerGroupMember()
+	    	|| ExpenditureTrackingSystem.isProjectAccountingManagerGroupMember()
+	    	|| isAccountingEmployee()
+	    	|| isProjectAccountingEmployee()
+	    	|| ExpenditureTrackingSystem.isManager();
 	} catch (Exception e) {
 	    e.printStackTrace();
 	    throw new Error(e);
@@ -248,7 +193,8 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 
     public boolean isAllowedToViewSupplierExpenditures() {
 	return ExpenditureTrackingSystem.isAcquisitionCentralGroupMember()
-		|| ExpenditureTrackingSystem.isAcquisitionCentralManagerGroupMember() || ExpenditureTrackingSystem.isManager();
+		|| ExpenditureTrackingSystem.isAcquisitionCentralManagerGroupMember()
+		|| ExpenditureTrackingSystem.isManager();
     }
 
     public boolean checkRealValues() {
@@ -262,7 +208,6 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
     /*
      * use getProcessNumber() instead
      */
-    @Override
     @Deprecated
     public String getAcquisitionProcessId() {
 	return getProcessNumber();
@@ -292,7 +237,6 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 	return builder.toString();
     }
 
-    @Override
     public AcquisitionRequest getRequest() {
 	return getAcquisitionRequest();
     }
@@ -380,7 +324,8 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 
     @Override
     public boolean isCanceled() {
-	return getLastAcquisitionProcessState().isCanceled() || getLastAcquisitionProcessState().isRejected();
+	return getLastAcquisitionProcessState().isCanceled()
+		|| getLastAcquisitionProcessState().isRejected();
     }
 
     @Override
@@ -391,5 +336,5 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 	    new AcquisitionProcessState(this, acquisitionProcessStateType);
 	}
     }
-
+    
 }

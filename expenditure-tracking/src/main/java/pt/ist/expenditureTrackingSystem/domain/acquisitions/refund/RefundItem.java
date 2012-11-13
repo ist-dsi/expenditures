@@ -30,12 +30,11 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
-import module.workflow.domain.WorkflowProcess;
+import pt.ist.bennu.core.domain.exceptions.DomainException;
+import pt.ist.bennu.core.domain.util.Money;
 
 import org.joda.time.LocalDate;
 
-import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.bennu.core.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionItemClassification;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessInvoice;
@@ -134,10 +133,9 @@ public class RefundItem extends RefundItem_Base {
 
     @Service
     public RefundableInvoiceFile createRefundInvoice(String invoiceNumber, LocalDate invoiceDate, Money value,
-	    BigDecimal vatValue, Money refundableValue, byte[] invoiceFile, String filename, Supplier supplier,
-	    WorkflowProcess process) {
+	    BigDecimal vatValue, Money refundableValue, byte[] invoiceFile, String filename, Supplier supplier) {
 	RefundableInvoiceFile invoice = new RefundableInvoiceFile(invoiceNumber, invoiceDate, value, vatValue, refundableValue,
-		invoiceFile, filename, this, supplier, process);
+		invoiceFile, filename, this, supplier);
 
 	Set<Unit> payingUnits = getRequest().getPayingUnits();
 	if (payingUnits.size() == 1) {

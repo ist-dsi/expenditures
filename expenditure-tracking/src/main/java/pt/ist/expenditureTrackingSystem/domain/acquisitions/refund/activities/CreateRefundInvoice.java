@@ -48,7 +48,7 @@ public class CreateRefundInvoice extends WorkflowActivity<RefundProcess, CreateR
 	activityInformation.getItem().createRefundInvoice(activityInformation.getInvoiceNumber(),
 		activityInformation.getInvoiceDate(), activityInformation.getValue(), activityInformation.getVatValue(),
 		activityInformation.getRefundableValue(), activityInformation.getBytes(), activityInformation.getFilename(),
-		activityInformation.getSupplier(), activityInformation.getProcess());
+		activityInformation.getSupplier());
 
     }
 
