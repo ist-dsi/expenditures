@@ -21,6 +21,15 @@
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.0.2</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+			<plugin>
 				<groupId>dml</groupId>
 				<artifactId>dml-maven-plugin</artifactId>
 				<version>1.1.0</version>
@@ -47,34 +56,22 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.5.1</version>
-				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>jasperreports-maven-plugin</artifactId>
-				<version>1.0-beta-2</version>
-				<configuration>
-					<outputDirectory>${project.build.outputDirectory}/reports</outputDirectory>
-				</configuration>
+				<groupId>com.alexnederlof</groupId>
+				<artifactId>jasperreports-plugin</artifactId>
+				<version>1.5-SNAPSHOT</version>
 				<executions>
 					<execution>
-						<goals>
-							<goal>compile-reports</goal>
-						</goals>
 						<phase>compile</phase>
+						<goals>
+							<goal>jasper</goal>
+						</goals>
 					</execution>
 				</executions>
 				<dependencies>
 					<dependency>
-						<groupId>jasperreports-javaflow</groupId>
-						<artifactId>jasperreports-javaflow</artifactId>
-						<version>3.1.0</version>
+						<groupId>net.sf.jasperreports</groupId>
+						<artifactId>jasperreports</artifactId>
+						<version>3.6.0</version>
 					</dependency>
 					<dependency>
 						<groupId>log4j</groupId>
@@ -82,6 +79,10 @@
 						<version>1.2.16</version>
 					</dependency>
 				</dependencies>
+				<configuration>
+					<outputDirectory>${project.build.outputDirectory}/reports</outputDirectory>
+					<numberOfThreads>1</numberOfThreads>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -206,6 +207,17 @@
 			<groupId>jfree</groupId>
 			<artifactId>jfreechart</artifactId>
 			<version>0.9.18</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.jasperreports</groupId>
+			<artifactId>jasperreports</artifactId>
+			<version>3.6.0</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>jdtcore</artifactId>
+					<groupId>eclipse</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 	</dependencies>
 
