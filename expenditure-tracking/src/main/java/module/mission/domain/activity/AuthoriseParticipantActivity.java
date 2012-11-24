@@ -24,6 +24,7 @@
  */
 package module.mission.domain.activity;
 
+import module.mission.domain.Mission;
 import module.mission.domain.MissionProcess;
 import module.mission.domain.PersonMissionAuthorization;
 import module.organization.domain.Person;
@@ -62,6 +63,10 @@ public class AuthoriseParticipantActivity extends MissionProcessActivity<Mission
 	personMissionAuthorization.setAuthority(person);
 	final MissionProcess missionProcess = authoriseParticipantActivityInformation.getProcess();
 	missionProcess.setProcessParticipantInformationQueue();
+	final Mission mission = missionProcess.getMission();
+	if (mission.allParticipantsAreAuthorized()) {
+	    missionProcess.notifyAllParticipants();
+	}
     }
 
     @Override

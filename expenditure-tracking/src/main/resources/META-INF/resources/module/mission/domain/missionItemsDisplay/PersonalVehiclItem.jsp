@@ -36,6 +36,17 @@
 			</td>
 		</tr>
 		<tr>
+			<th><bean:message key="label.mission.item.driver" bundle="MISSION_RESOURCES"/>:</th>
+			<td>
+				<logic:present name="missionItem" property="driver">
+					<fr:view name="missionItem" property="driver" schema="person-name" layout="values"/>
+				</logic:present>
+				<logic:notPresent name="missionItem" property="driver">
+					-
+				</logic:notPresent>
+			</td>
+		</tr>
+		<tr>
 			<th><bean:message key="label.mission.item.financers" bundle="MISSION_RESOURCES"/>:</th>
 			<td>
 				<fr:view name="missionItem" property="missionItemFinancers">

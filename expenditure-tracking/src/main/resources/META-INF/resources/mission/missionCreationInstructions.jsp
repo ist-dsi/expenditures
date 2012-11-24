@@ -1,3 +1,4 @@
+<%@page import="module.mission.domain.MissionSystem"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html" %>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-bean" prefix="bean" %>
@@ -38,6 +39,9 @@
 		
 		<td style="width: 2%;"></td>
 
+		<%
+			if (MissionSystem.getInstance().allowGrantOwnerEquivalence()) {
+		%>
 		<td style="vertical-align: top; padding-right: 10px; width: 49%; border: 1px solid #e0e0e0; background: #f7f7f7; padding: 0.5em 1em 1em 1em;">
 			<div>
 				<p class="mtop0">
@@ -60,6 +64,8 @@
 						</p>
 					</li>
 			</div>
-		</td>				
+		</td>
+		<% } %>
+
 	</tr>
 </table>

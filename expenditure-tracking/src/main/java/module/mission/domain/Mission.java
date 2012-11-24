@@ -48,11 +48,6 @@ import module.organization.domain.Party;
 import module.organization.domain.Person;
 import module.workflow.domain.WorkflowLog;
 import module.workflow.domain.WorkflowQueue;
-import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.bennu.core.domain.util.Money;
-import pt.ist.bennu.core.util.BundleUtil;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
@@ -60,6 +55,13 @@ import org.joda.time.Days;
 import org.joda.time.Interval;
 import org.joda.time.LocalDate;
 
+import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
+import pt.ist.bennu.core.domain.User;
+import pt.ist.bennu.core.domain.VirtualHost;
+import pt.ist.bennu.core.domain.exceptions.DomainException;
+import pt.ist.bennu.core.domain.util.Money;
+import pt.ist.bennu.core.util.BundleUtil;
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
@@ -131,11 +133,13 @@ public abstract class Mission extends Mission_Base {
 	updateMissionDetailsActivityInformation.setObjective(getObjective());
     }
 
+    @Override
     public DateTime getDaparture() {
 	final MissionVersion missionVersion = getMissionVersion();
 	return missionVersion.getDaparture();
     }
 
+    @Override
     public DateTime getArrival() {
 	final MissionVersion missionVersion = getMissionVersion();
 	return missionVersion.getArrival();
@@ -1202,31 +1206,37 @@ public abstract class Mission extends Mission_Base {
 	return min == null ? new DateTime() : min.getWhenOperationWasRan();
     }
 
+    @Override
     public int getFinancerCount() {
 	final MissionVersion missionVersion = getMissionVersion();
 	return missionVersion.getFinancerCount();
     }
 
+    @Override
     public boolean hasAnyFinancer() {
 	final MissionVersion missionVersion = getMissionVersion();
 	return missionVersion.hasAnyFinancer();
     }
 
+    @Override
     public Set<MissionFinancer> getFinancerSet() {
 	final MissionVersion missionVersion = getMissionVersion();
 	return missionVersion.getFinancerSet();
     }
 
+    @Override
     public int getMissionItemsCount() {
 	final MissionVersion missionVersion = getMissionVersion();
 	return missionVersion.getMissionItemsCount();
     }
     
+    @Override
     public boolean hasAnyMissionItems() {
 	final MissionVersion missionVersion = getMissionVersion();
 	return missionVersion.hasAnyMissionItems();
     }
 
+    @Override
     public Set<MissionItem> getMissionItemsSet() {
 	final MissionVersion missionVersion = getMissionVersion();
 	return missionVersion.getMissionItemsSet();
@@ -1365,7 +1375,8 @@ public abstract class Mission extends Mission_Base {
     }
 
     public boolean canTogleMissionNature() {
-	return (getGrantOwnerEquivalence().booleanValue()) || (!hasAnyPersonalExpenseOrAccomodationItemns());
+	return (getGrantOwnerEquivalence().booleanValue())
+		|| (MissionSystem.getInstance().allowGrantOwnerEquivalence() && !hasAnyPersonalExpenseOrAccomodationItemns());
     }
 
     private boolean hasAnyPersonalExpenseOrAccomodationItemns() {
@@ -1452,6 +1463,10 @@ public abstract class Mission extends Mission_Base {
     }
 
     public boolean hasAllCommitmentNumbers() {
+	final Boolean requireCommitmentNumber = ExpenditureTrackingSystem.getInstance().getRequireCommitmentNumber();
+	if (requireCommitmentNumber != null && !requireCommitmentNumber.booleanValue()) {
+	    return true;
+	}
 	for (final MissionFinancer financer : getFinancerSet()) {
 	    if (financer.getCommitmentNumber() == null || financer.getCommitmentNumber().isEmpty()) {
 		return false;
@@ -1472,6 +1487,11 @@ public abstract class Mission extends Mission_Base {
 	    }
 	}
 	return builder.toString();
+    }
+
+    @Override
+    public boolean isConnectedToCurrentHost() {
+	return getMissionSystem() == VirtualHost.getVirtualHostForThread().getMissionSystem();
     }
 
 }

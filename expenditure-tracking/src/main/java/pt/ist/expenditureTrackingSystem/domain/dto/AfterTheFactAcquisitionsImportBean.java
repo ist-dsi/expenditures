@@ -162,9 +162,6 @@ public class AfterTheFactAcquisitionsImportBean extends FileUploadBean implement
 			    }
 			    importedLines++;
 			} else {
-			    System.out.println(supplier.getName());
-			    System.out.println("   total allocated:" + supplier.getTotalAllocated().getValue());
-			    System.out.println("   trying to allocate value: " + value.getValue());
 			    registerIssue(IssueType.CANNOT_ALLOCATE_MONEY_TO_SUPPLIER, i, supplierNif, supplierName, valueString);
 			}
 		    }

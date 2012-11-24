@@ -528,4 +528,6 @@ public abstract class PaymentProcess extends PaymentProcess_Base implements HasP
 	return builder.toString();
     }
 
+    public abstract AcquisitionItemClassification getGoodsOrServiceClassification();
+
 }

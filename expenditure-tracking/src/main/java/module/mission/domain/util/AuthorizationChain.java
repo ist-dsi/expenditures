@@ -26,6 +26,7 @@ package module.mission.domain.util;
 
 import java.io.Serializable;
 
+import module.mission.domain.MissionSystem;
 import module.organization.domain.Unit;
 import pt.ist.fenixframework.pstm.AbstractDomainObject;
 
@@ -104,4 +105,9 @@ public class AuthorizationChain implements Serializable {
 	return next == null ? 1 : next.getChainSize() + 1;
     }
 
+    public boolean isForCurrentInstitution() {
+	return next == null ?
+		MissionSystem.getInstance().getOrganizationalModel().getPartiesSet().contains(getUnit())
+		: next.isForCurrentInstitution();
+    }
 }

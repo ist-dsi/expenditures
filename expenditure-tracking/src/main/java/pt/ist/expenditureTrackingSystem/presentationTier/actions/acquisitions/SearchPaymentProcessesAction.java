@@ -26,6 +26,7 @@ package pt.ist.expenditureTrackingSystem.presentationTier.actions.acquisitions;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -33,14 +34,15 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.MissingResourceException;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import pt.ist.bennu.core.domain.util.Money;
-import pt.ist.bennu.core.util.BundleUtil;
+import module.workflow.domain.ActivityLog;
+import module.workflow.domain.WorkflowLog;
 
 import org.apache.commons.beanutils.BeanComparator;
 import org.apache.commons.collections.comparators.ComparatorChain;
@@ -50,18 +52,29 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
+import pt.ist.bennu.core.domain.util.Money;
+import pt.ist.bennu.core.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.SavedSearch;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionItemClassification;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.Invoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.Approve;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.Authorize;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchProcessValues;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SubmitForFundAllocation;
+import pt.ist.expenditureTrackingSystem.domain.announcements.OperationLog;
 import pt.ist.expenditureTrackingSystem.domain.dto.PayingUnitTotalBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.UserSearchBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.VariantBean;
@@ -281,6 +294,8 @@ public class SearchPaymentProcessesAction extends BaseAction {
 
 	    spreadsheet.addCell(process.getAcquisitionProcessId());
 	    spreadsheet.addCell(process.getTypeShortDescription());
+	    final AcquisitionItemClassification classification = process.getGoodsOrServiceClassification();
+	    spreadsheet.addCell(classification == null ? " " : classification.getLocalizedName());
 	    spreadsheet.addCell(process.getSuppliersDescription());
 	    spreadsheet.addCell(process.getRequest().getRequestItemsCount());
 	    spreadsheet.addCell(process.getProcessStateDescription());
@@ -317,11 +332,13 @@ public class SearchPaymentProcessesAction extends BaseAction {
 	    final StringBuilder fundAllocationNumbers = new StringBuilder();
 	    final StringBuilder commitmentNumbers = new StringBuilder();
 	    final StringBuilder efectiveFundAllocationNumbers = new StringBuilder();
+	    LocalDate invoiceDate = null;
+	    Money invoiceValue = Money.ZERO;
 
 	    if (process instanceof SimplifiedProcedureProcess) {
 		SimplifiedProcedureProcess simplifiedProcedureProcess = (SimplifiedProcedureProcess) process;
-		for (PayingUnitTotalBean payingUnitTotal : simplifiedProcedureProcess.getAcquisitionRequest()
-			.getTotalAmountsForEachPayingUnit()) {
+		final AcquisitionRequest acquisitionRequest = simplifiedProcedureProcess.getAcquisitionRequest();
+		for (PayingUnitTotalBean payingUnitTotal : acquisitionRequest.getTotalAmountsForEachPayingUnit()) {
 		    if ((simplifiedProcedureProcess.getFundAllocationPresent())
 			    && (payingUnitTotal.getFinancer().isFundAllocationPresent())) {
 			if (fundAllocationNumbers.length() > 0) {
@@ -349,19 +366,103 @@ public class SearchPaymentProcessesAction extends BaseAction {
 			efectiveFundAllocationNumbers.append(payingUnitTotal.getFinancer().getEffectiveFundAllocationIds().trim());
 		    }
 		}
+
+		boolean hasFullInvoice = false;
+		for (final Invoice invoice : acquisitionRequest.getInvoices()) {
+//		    final AcquisitionInvoice acquisitionInvoice = (AcquisitionInvoice) invoice;
+		    final LocalDate localDate = invoice.getInvoiceDate();
+		    if (invoiceDate == null || invoiceDate.isBefore(localDate)) {
+			invoiceDate = localDate;
+		    }
+
+		    hasFullInvoice = true;
+//		    if (!hasFullInvoice) {
+//			final String confirmationReport = acquisitionInvoice.getConfirmationReport();
+//			if (confirmationReport == null) {
+//			    hasFullInvoice = true;
+//			} else {
+//			    for (int i = 0; i < confirmationReport.length(); ) {
+//				final int ulli = confirmationReport.indexOf("<ul><li>", i);
+//				final int q = confirmationReport.indexOf(" - Quantidade:", ulli);
+//				final int ulliClose = confirmationReport.indexOf("</li></ul>", q);
+//				final String itemDescription = confirmationReport.substring(i + "<ul><li>".length(), q);
+//				final int quantity = Integer.parseInt(confirmationReport.substring(q + " - Quantidade:".length(), ulliClose));
+//
+//				invoiceValue = invoiceValue.add(calculate(acquisitionRequest, itemDescription, quantity));
+//			    }
+//			}
+//		    }
+		}
+
+		if (hasFullInvoice) {
+		    invoiceValue = totalValue;
+		}
 	    }
 
 	    spreadsheet.addCell(fundAllocationNumbers.length() == 0 ? " " : fundAllocationNumbers.toString());
 	    spreadsheet.addCell(commitmentNumbers.length() == 0 ? " " : commitmentNumbers.toString());
 	    spreadsheet.addCell(efectiveFundAllocationNumbers.length() == 0 ? " " : efectiveFundAllocationNumbers.toString());
 
+	    spreadsheet.addCell(invoiceDate == null ? " " : invoiceDate.toString("yyyy-MM-dd"));
+	    spreadsheet.addCell(invoiceValue.toFormatString());
+
+	    final DateTime creationDate = process.getCreationDate();
+	    spreadsheet.addCell(creationDate == null ? " " : creationDate.toString("yyyy-MM-dd"));
+	    final SortedSet<WorkflowLog> executionLogsSet = new TreeSet<WorkflowLog>(WorkflowLog.COMPARATOR_BY_WHEN_REVERSED);
+	    executionLogsSet.addAll(process.getExecutionLogsSet());
+	    final DateTime approvalDate = getApprovalDate(process, executionLogsSet);
+	    spreadsheet.addCell(approvalDate == null ? " " : approvalDate.toString("yyyy-MM-dd"));
+	    final DateTime authorizationDate = getAuthorizationDate(process, executionLogsSet);
+	    spreadsheet.addCell(authorizationDate == null ? " " : authorizationDate.toString("yyyy-MM-dd"));
 	}
+    }
+
+    private DateTime getApprovalDate(final PaymentProcess process, final SortedSet<WorkflowLog> executionLogsSet) {
+	for (final WorkflowLog log : executionLogsSet) {
+	    if (log instanceof ActivityLog) {
+		final ActivityLog activityLog = (ActivityLog) log;
+		if (SubmitForFundAllocation.class.getSimpleName().equals(activityLog.getOperation())
+			|| Approve.class.getSimpleName().equals(activityLog.getOperation())) {
+		    return log.getWhenOperationWasRan();
+		}
+	    }
+	    if (log instanceof OperationLog) {
+	    }
+	}
+
+	return null;
+    }
+
+    private DateTime getAuthorizationDate(final PaymentProcess process, final SortedSet<WorkflowLog> executionLogsSet) {
+	for (final WorkflowLog log : executionLogsSet) {
+	    if (log instanceof ActivityLog) {
+		final ActivityLog activityLog = (ActivityLog) log;
+		if (Authorize.class.getSimpleName().equals(activityLog.getOperation())) {
+		    return log.getWhenOperationWasRan();
+		}
+	    }
+	}
+
+	return null;
+    }
+
+    private Money calculate(final AcquisitionRequest acquisitionRequest, final String itemDescription, final int quantity) {
+	for (final AcquisitionRequestItem requestItem : acquisitionRequest.getAcquisitionRequestItemsSet()) {
+	    if (requestItem.getDescription().equals(itemDescription)) {
+		final Money unitValue = requestItem.getCurrentUnitValue();
+		//final Integer currentQuantity = requestItem.getCurrentQuantity();
+		final BigDecimal currentVatValue = requestItem.getCurrentVatValue();
+		return unitValue.multiply(quantity).addPercentage(currentVatValue);
+	    }
+	}
+	return Money.ZERO;
     }
 
     private void setHeaders(StyledExcelSpreadsheet spreadsheet) {
 	spreadsheet.newHeaderRow();
 	spreadsheet.addHeader(getExpenditureResourceMessage("label.acquisitionProcessId"));
 	spreadsheet.addHeader(getAcquisitionResourceMessage("label.acquisitionType"));
+	spreadsheet.addHeader(getAcquisitionResourceMessage("label.classification"));
 	spreadsheet.addHeader(getExpenditureResourceMessage("label.suppliersDescription"));
 	spreadsheet.addHeader(getExpenditureResourceMessage("label.itemsCount"));
 	spreadsheet.addHeader(getExpenditureResourceMessage("label.process.state.description"));
@@ -374,6 +475,11 @@ public class SearchPaymentProcessesAction extends BaseAction {
 	spreadsheet.addHeader(getAcquisitionResourceMessage("financer.label.fundAllocation.identification"));
 	spreadsheet.addHeader(getExpenditureResourceMessage("label.commitmentNumbers"));
 	spreadsheet.addHeader(getAcquisitionResourceMessage("financer.label.effectiveFundAllocation.identification"));
+	spreadsheet.addHeader(getAcquisitionResourceMessage("label.invoice.date"));
+	spreadsheet.addHeader(getAcquisitionResourceMessage("label.invoice.value.acumulated"));
+	spreadsheet.addHeader(getAcquisitionResourceMessage("label.creation.date"));
+	spreadsheet.addHeader(getAcquisitionResourceMessage("label.approval.date"));
+	spreadsheet.addHeader(getAcquisitionResourceMessage("label.authorization.date"));
     }
 
     private static String getAcquisitionResourceMessage(String key) {

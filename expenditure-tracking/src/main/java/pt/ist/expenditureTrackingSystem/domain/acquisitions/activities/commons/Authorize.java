@@ -49,7 +49,7 @@ public class Authorize<P extends PaymentProcess> extends WorkflowActivity<P, Act
 	Person person = user.getExpenditurePerson();
 	return isUserProcessOwner(process, user)
 		&& process.isInAllocatedToUnitState()
-		&& process.isResponsibleForUnit(person, process.getRequest().getTotalValue())
+		&& process.isResponsibleForUnit(person, process.getRequest().getTotalValueWithoutVat())
 		&& !process.getRequest().hasBeenAuthorizedBy(person)
 		&& (!process.hasMissionProcess()
 			|| (process.getMissionProcess().isExpenditureAuthorized()
@@ -75,7 +75,7 @@ public class Authorize<P extends PaymentProcess> extends WorkflowActivity<P, Act
     public boolean isUserAwarenessNeeded(final P process, final User user) {
 	final Person person = user.getExpenditurePerson();
 	if (person.hasAnyValidAuthorization()) {
-	    final Money amount = process.getRequest().getTotalValue();
+	    final Money amount = process.getRequest().getTotalValueWithoutVat();
 	    for (final RequestItem requestItem : process.getRequest().getRequestItemsSet()) {
 		for (final UnitItem unitItem : requestItem.getUnitItemsSet()) {
 		    final Unit unit = unitItem.getUnit();

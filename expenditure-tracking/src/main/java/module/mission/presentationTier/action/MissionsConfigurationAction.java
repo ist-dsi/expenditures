@@ -208,4 +208,11 @@ public class MissionsConfigurationAction extends ContextBaseAction {
 	return prepare(mapping, form, request, response);
     }
     
+    public ActionForward togleAllowGrantOwnerMissionProcessNature(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	final MissionSystem missionSystem = MissionSystem.getInstance();
+	missionSystem.toggleAllowGrantOwnerEquivalence();
+	return prepare(mapping, form, request, response);
+    }
+
 }

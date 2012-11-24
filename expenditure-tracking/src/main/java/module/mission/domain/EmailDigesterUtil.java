@@ -30,6 +30,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.SortedSet;
 
+import module.organization.domain.Party;
+
 import org.jfree.data.time.Month;
 import org.joda.time.LocalDate;
 
@@ -48,8 +50,6 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.messaging.domain.Message;
 import pt.ist.messaging.domain.Sender;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
-
-import module.organization.domain.Party;
 
 /**
  * 

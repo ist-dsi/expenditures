@@ -61,8 +61,10 @@ public class CreateAcquisitionPurchaseOrderDocument extends
 
     @Override
     public boolean isActive(RegularAcquisitionProcess process, User user) {
-	return isUserProcessOwner(process, user) && process.getAcquisitionProcessState().isAuthorized()
-		&& ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user) && process.getRequest().hasSelectedSupplier()
+	return isUserProcessOwner(process, user)
+		&& process.getAcquisitionProcessState().isAuthorized()
+		&& ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user)
+		&& process.getRequest().hasSelectedSupplier()
 		&& process.isCommitted();
     }
 
@@ -70,8 +72,7 @@ public class CreateAcquisitionPurchaseOrderDocument extends
     protected void process(CreateAcquisitionPurchaseOrderDocumentInformation activityInformation) {
 	RegularAcquisitionProcess process = activityInformation.getProcess();
 	String requestID = process.getAcquisitionRequestDocumentID();
-	byte[] file = createPurchaseOrderDocument(process.getAcquisitionRequest(), requestID,
-		activityInformation.getSupplierContact());
+	byte[] file = createPurchaseOrderDocument(process.getAcquisitionRequest(), requestID, activityInformation.getSupplierContact());
 	new PurchaseOrderDocument(process, file, requestID + "." + EXTENSION_PDF, requestID);
     }
 
@@ -95,8 +96,7 @@ public class CreateAcquisitionPurchaseOrderDocument extends
 	return !process.getFiles(PurchaseOrderDocument.class).isEmpty();
     }
 
-    protected byte[] createPurchaseOrderDocument(final AcquisitionRequest acquisitionRequest, final String requestID,
-	    final SupplierContact supplierContact) {
+    protected byte[] createPurchaseOrderDocument(final AcquisitionRequest acquisitionRequest, final String requestID, final SupplierContact supplierContact) {
 	final Map<String, Object> paramMap = new HashMap<String, Object>();
 	paramMap.put("acquisitionRequest", acquisitionRequest);
 	paramMap.put("supplierContact", supplierContact);
@@ -115,10 +115,10 @@ public class CreateAcquisitionPurchaseOrderDocument extends
 	final ResourceBundle resourceBundle = ResourceBundle.getBundle("resources/AcquisitionResources");
 	try {
 	    final VirtualHost virtualHost = VirtualHost.getVirtualHostForThread();
-	    final String documentName = virtualHost.getHostname().equals("dot.ist.utl.pt") ? "/reports/acquisitionRequestDocument.jasper"
-		    : "/reports/acquisitionRequestPurchaseOrder.jasper";
-	    byte[] byteArray = ReportUtils.exportToPdfFileAsByteArray(documentName, paramMap, resourceBundle,
-		    acquisitionRequestItemBeans);
+	    final String documentName = virtualHost.getHostname().equals("dot.ist.utl.pt") ?
+		    "acquisitionRequestDocument" : "acquisitionRequestPurchaseOrder";
+	    byte[] byteArray = ReportUtils.exportToPdfFileAsByteArray(documentName, paramMap,
+		    resourceBundle, acquisitionRequestItemBeans);
 	    return byteArray;
 	} catch (JRException e) {
 	    e.printStackTrace();

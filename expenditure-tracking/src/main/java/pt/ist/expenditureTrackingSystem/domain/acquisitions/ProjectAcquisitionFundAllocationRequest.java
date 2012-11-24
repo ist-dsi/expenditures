@@ -123,7 +123,6 @@ public class ProjectAcquisitionFundAllocationRequest extends ProjectAcquisitionF
 	    setExternalSystemFromManuallyForwardedProcesses(getExternalAccountingIntegrationSystemFromPendingResult());
 	    removeExternalAccountingIntegrationSystemFromPendingResult();	    
 	} catch (final ActivityException ex) {
-	    System.out.println("Got activity exception exception...");
 	    ex.printStackTrace();
 	}
     }
@@ -151,7 +150,6 @@ public class ProjectAcquisitionFundAllocationRequest extends ProjectAcquisitionF
 	    final Money shareWithoutVat = shareValue.divideAndRound(d);
 	    final Money shareVat = shareValue.subtract(shareWithoutVat);
 
-	    System.out.println(getProcessId());
 	    Object[] insertArgs = new Object[] {
 		    "INTERACT_ID", Long.valueOf(getInteractionId()),
 		    "PROCESS_ID", getProcessId(),
@@ -180,17 +178,13 @@ public class ProjectAcquisitionFundAllocationRequest extends ProjectAcquisitionF
 		insertArgs[l + 1] = getInitialInteractionId(unitItem);
 	    }
 
-	    final String q = insertQuery(insertArgs);
-	    System.out.println(q);
-	    return q;
+	    return insertQuery(insertArgs);
 	}
-	final String q = isFinalFundAllocation() ?
+	return isFinalFundAllocation() ?
 		selectQuery("INTERACT_ID", Long.valueOf(getInteractionId()),
 			"MGP_DIST_ID", "MGP_DIST_TYPE", "MPG_DIST_DATE", "MGP_DIST_OPERATOR") :
 		selectQuery("INTERACT_ID", Long.valueOf(getInteractionId()),
 			"MGP_DESP_ID", "MGP_DESP_TYPE", "MPG_DESP_DATE", "MGP_DESP_OPERATOR");
-	System.out.println(q);
-	return q;
     }
 
     private Object getInitialInteractionId(final UnitItem unitItem) {
@@ -211,8 +205,6 @@ public class ProjectAcquisitionFundAllocationRequest extends ProjectAcquisitionF
 		final String fundAllocationNumber = resultSet.getString(1);
 		final String operatorUsername = resultSet.getString(4);
 		if (fundAllocationNumber != null && operatorUsername != null) {
-		    System.out.println("fundAllocationNumber: " + fundAllocationNumber);
-		    System.out.println("operatorUsername: " + operatorUsername);
 		    registerFundAllocation(fundAllocationNumber, operatorUsername);
 		}
 	    }

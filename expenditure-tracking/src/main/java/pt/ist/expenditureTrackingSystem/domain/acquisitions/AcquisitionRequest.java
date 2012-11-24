@@ -521,9 +521,12 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 	return null;
     }
 
-    public boolean isFundAllocationAllowed(Money totalValue) {
+    public boolean isFundAllocationAllowed(final CPVReference cpvReference, final Money totalValue) {
+	final boolean checkSupplierLimitsByCPV = ExpenditureTrackingSystem.getInstance().checkSupplierLimitsByCPV();
+
 	for (Supplier supplier : getSuppliers()) {
-	    if (!supplier.isFundAllocationAllowed(totalValue)) {
+	    if ((checkSupplierLimitsByCPV && !supplier.isFundAllocationAllowed(cpvReference.getCode(), totalValue)
+		    || (!checkSupplierLimitsByCPV && !supplier.isFundAllocationAllowed(totalValue)))) {
 		return false;
 	    }
 	}
@@ -658,15 +661,20 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     }
 
     public String getCommitmentNumbers() {
+	final Set<String> numbers = new HashSet<String>();
+
 	final StringBuilder builder = new StringBuilder();
 	for (final Financer financer : getFinancersSet()) {
 	    final String commitmentNumber = financer.getCommitmentNumber();
 	    if (commitmentNumber != null && !commitmentNumber.isEmpty()) {
+		if (!numbers.contains(commitmentNumber)) {
+		    numbers.add(commitmentNumber);
 		if (builder.length() > 0) {
 		    builder.append(", ");
 		}
 		builder.append(commitmentNumber);
 	    }
+	}
 	}
 	return builder.toString();
     }
@@ -674,6 +682,32 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     @Override
     public boolean hasProposalDocument() {
 	return getProcess().hasAcquisitionProposalDocument();
+    }
+
+    public AcquisitionItemClassification getGoodsOrServiceClassification() {
+	Money goodsValue = Money.ZERO;
+	Money servicesValue = Money.ZERO;
+	for (final RequestItem requestItem : getRequestItemsSet()) {
+	    final AcquisitionItemClassification classification = requestItem.getClassification();
+	    final Money realValue = requestItem.getRealValue();
+	    if (realValue != null) {
+		if (classification == AcquisitionItemClassification.GOODS) {
+		    if (goodsValue == Money.ZERO) {
+			goodsValue = requestItem.getRealValue();
+		    } else {
+			goodsValue = goodsValue.add(requestItem.getRealValue());
+		    }
+		} else if (classification == AcquisitionItemClassification.SERVICES) {
+		    if (servicesValue == Money.ZERO) {
+			servicesValue = requestItem.getRealValue();
+		    } else {
+			servicesValue = servicesValue.add(requestItem.getRealValue());
+		    }
+		}
+	    }
+	}
+	return goodsValue.isGreaterThan(servicesValue) ? AcquisitionItemClassification.GOODS
+		: AcquisitionItemClassification.SERVICES;
     }
 
 }

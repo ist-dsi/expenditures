@@ -57,13 +57,7 @@ public class FundAllocationExpirationDate extends
     }
 
     private void checkSupplierLimit(final RegularAcquisitionProcess process) {
-	final AcquisitionRequest acquisitionRequest = process.getAcquisitionRequest();
-	final Money forSupplierLimit = acquisitionRequest.getCurrentSupplierAllocationValue();
-	for (final Supplier supplier : process.getSuppliers()) {
-	    if (!supplier.isFundAllocationAllowed(forSupplierLimit)) {
-		throw new FundAllocationNotAllowedException();
-	    }
-	}
+	process.checkSupplierLimit();
     }
 
     @Override

@@ -25,18 +25,21 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
+
+import org.joda.time.LocalDate;
 
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.ist.bennu.core.domain.util.Money;
-
-import org.joda.time.LocalDate;
-
 import pt.ist.expenditureTrackingSystem._development.ExternalIntegration;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.FundAllocationExpirationDate.FundAllocationNotAllowedException;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
@@ -216,12 +219,7 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
     }
 
     public void unSkipSupplierFundAllocation() {
-	for (Supplier supplier : getAcquisitionRequest().getSuppliers()) {
-	    if (!supplier.isFundAllocationAllowed(getAcquisitionRequest().getTotalItemValue())) {
-		throw new DomainException("acquisitionProcess.message.exception.SupplierDoesNotAlloweAmount", DomainException
-			.getResourceFor("resources/AcquisitionResources"));
-	    }
-	}
+	checkSupplierLimit();
 	super.setSkipSupplierFundAllocation(Boolean.FALSE);
 	if (!getAcquisitionProcessState().isInGenesis()) {
 	    LocalDate now = new LocalDate();
@@ -326,6 +324,50 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
 	    return acquisitionRequest.hasCommitmentByUser(user);
 	}
 	return false;
+    }
+
+    public void checkSupplierLimit() {
+	final Map<Supplier, Map<CPVReference, Money>> allocationMap = new HashMap<Supplier, Map<CPVReference, Money>>();
+
+	for (final RequestItem requestItem : getRequest().getRequestItemsSet()) {
+	    final AcquisitionRequestItem acquisitionRequestItem = (AcquisitionRequestItem) requestItem;
+	    final CPVReference cpvReference = requestItem.getCPVReference();
+	    final Money value = acquisitionRequestItem.getCurrentSupplierAllocationValue();
+
+	    for (final Supplier supplier : getSuppliers()) {
+		final String key = cpvReference.getExternalId() + supplier.getExternalId();
+		
+		if (!allocationMap.containsKey(supplier)) {
+		    allocationMap.put(supplier, new HashMap<CPVReference, Money>());
+		}
+		final Map<CPVReference, Money> map = allocationMap.get(supplier);
+		if (map.containsKey(cpvReference)) {
+		    map.put(cpvReference, value.add(map.get(cpvReference)));
+		} else {
+		    map.put(cpvReference, value);
+		}
+	    }
+	}
+
+	final boolean checkSupplierLimitsByCPV = ExpenditureTrackingSystem.getInstance().checkSupplierLimitsByCPV();
+
+	for (final Entry<Supplier, Map<CPVReference, Money>> entry : allocationMap.entrySet()) {
+	    final Supplier supplier = entry.getKey();
+	    final Map<CPVReference, Money> map = entry.getValue();
+
+	    Money total = Money.ZERO;
+	    for (final Entry<CPVReference, Money> centry : map.entrySet()) {
+		final CPVReference cpvReference = centry.getKey();
+		final Money value = centry.getValue();
+		if (checkSupplierLimitsByCPV && !supplier.isFundAllocationAllowed(cpvReference.getCode(), value)) {
+		    throw new FundAllocationNotAllowedException();
+		}
+		total = total.add(value);
+	    }
+	    if (!checkSupplierLimitsByCPV && !supplier.isFundAllocationAllowed(total)) {
+		throw new FundAllocationNotAllowedException();
+	    }		
+	}
     }
 
 }

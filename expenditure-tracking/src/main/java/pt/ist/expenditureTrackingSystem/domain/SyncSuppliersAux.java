@@ -24,7 +24,6 @@
  */
 package pt.ist.expenditureTrackingSystem.domain;
 
-import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -37,6 +36,7 @@ import java.util.Set;
 import module.finance.domain.SupplierContact;
 import pt.ist.bennu.core.domain.MyOrg;
 import pt.ist.bennu.core.domain.VirtualHost;
+import pt.ist.bennu.core.domain.scheduler.TransactionalThread;
 import pt.ist.bennu.core.domain.util.Address;
 import pt.ist.bennu.core.domain.util.Money;
 import pt.ist.dbUtils.ExternalDbOperation;
@@ -188,6 +188,20 @@ public class SyncSuppliersAux {
 	public Collection<GiafSupplier> getGiafSuppliers() {
 	    return giafCodEntMap.values();
 	}
+
+	public Collection<Collection<GiafSupplier>> getGiafSuppliersChunks() {
+	    final Collection<Collection<GiafSupplier>> result = new ArrayList<Collection<GiafSupplier>>();
+	    Collection<GiafSupplier> chunk = new ArrayList<GiafSupplier>();
+	    result.add(chunk);
+	    for (final GiafSupplier giafSuppliers : giafCodEntMap.values()) {
+		if (chunk.size() == 50) {
+		    chunk = new ArrayList<GiafSupplier>();
+		    result.add(chunk);
+		}
+		chunk.add(giafSuppliers);
+	    }
+	    return result;
+	}
     }
 
     private static class CountryQuery implements ExternalDbQuery {
@@ -200,30 +214,11 @@ public class SyncSuppliersAux {
 
 	@Override
 	public String getQueryString() {
-	    return "SELECT " +
-		"a.pais_cod_pai," +
-		"a.pais_dsg_com," +
-		"a.pais_dsg_abv," +
-		"a.pais_cod_idi," +
-		"a.pais_cod_moe," +
-		"a.pais_flg_cee," +
-		"a.pais_dsg_iva," +
-		"a.pais_pai_iva," +
-		"a.pais_num_dig," +
-		"a.pais_flg_val," +
-		"a.pais_num_frm," +
-		"a.pais_portugal," +
-		"a.tipo_cod_post," +
-		"a.num_digito_cod_post," +
-		"a.iso_3166," +
-		"a.iso_4217," +
-		"a.utilizador_criacao," +
-		"a.utilizador_alteracao," +
-		"a.data_criacao," +
-		"a.data_alteracao," +
-		"a.pais_dsg_ing," +
-		"a.pais_area_geo" +
-		" FROM gidpaises a";
+	    return "SELECT " + "a.pais_cod_pai," + "a.pais_dsg_com," + "a.pais_dsg_abv," + "a.pais_cod_idi," + "a.pais_cod_moe,"
+		    + "a.pais_flg_cee," + "a.pais_dsg_iva," + "a.pais_pai_iva," + "a.pais_num_dig," + "a.pais_flg_val,"
+		    + "a.pais_num_frm," + "a.pais_portugal," + "a.tipo_cod_post," + "a.num_digito_cod_post," + "a.iso_3166,"
+		    + "a.iso_4217," + "a.utilizador_criacao," + "a.utilizador_alteracao," + "a.data_criacao,"
+		    + "a.data_alteracao," + "a.pais_dsg_ing," + "a.pais_area_geo" + " FROM gidpaises a";
 	}
 
 	@Override
@@ -379,52 +374,9 @@ public class SyncSuppliersAux {
 
     }
 
-    public static void syncData() throws IOException, SQLException {
-	final Set<GiafCountry> giafCountries = new HashSet<GiafCountry>();
-	final CountryReader countryReader = new CountryReader(giafCountries);
-	countryReader.execute();
-
-	final SupplierMap supplierMap = new SupplierMap();
-	final SupplierReader supplierReader = new SupplierReader(supplierMap);
-	supplierReader.execute();
-
-	System.out.println("Read " + supplierMap.giafCodEntMap.size() + " suppliers from giaf.");
-
-	int matched = 0;
-	int created = 0;
-	int discarded = 0;
-	final Set<Supplier> suppliersFromGiaf = new HashSet<Supplier>();
-	for (final GiafSupplier giafSupplier : supplierMap.getGiafSuppliers()) {
-	    if (giafSupplier.canceled || shouldDiscard(giafSupplier)) {
-		discarded++;
-	    }
-	    Supplier supplier = findSupplierByGiafKey(giafSupplier.codEnt);
-	    if (supplier == null && !giafSupplier.canceled && !shouldDiscard(giafSupplier)) {
-		supplier = new Supplier(giafSupplier.nom_ent, giafSupplier.nom_ent_abv, giafSupplier.numFis, null);
-		supplier.setGiafKey(giafSupplier.codEnt);
-		updateAddressInformation(giafCountries, supplier, giafSupplier);
-		created++;
-	    } else if (supplier != null) {
-		matched++;
-		updateSupplierInformation(giafCountries, supplier, giafSupplier);
-	    }
-	    suppliersFromGiaf.add(supplier);
-	}
-
-	closeLocalSuppliers(suppliersFromGiaf);
-
-	System.out.println("Matched: " + matched + " suppliers.");
-	System.out.println("Created: " + created + " suppliers.");
-	System.out.println("Discarded: " + discarded + " suppliers.");
-    }
-
     private static void closeLocalSuppliers(final Set<Supplier> suppliersFromGiaf) {
 	for (final Supplier supplier : MyOrg.getInstance().getSuppliersSet()) {
 	    if (!suppliersFromGiaf.contains(supplier)) {
-//		System.out.println("Closing supplier not in GIAF: " + supplier.getExternalId());
-		//if (isAllocatedAmountNull(supplier)) {
-		//    System.out.println("Deleting supplier " + supplier.getExternalId());
-		//    supplier.delete();
 		if (!supplier.getSupplierLimit().equals(Money.ZERO)) {
 		    supplier.setSupplierLimit(Money.ZERO);
 		}
@@ -450,17 +402,9 @@ public class SyncSuppliersAux {
 	return (giafKey.length() == 6 && giafKey.charAt(0) == '1') || (giafKey.length() == 10 && giafKey.charAt(0) == 'E');
     }
 
-    private static void updateSupplierInformation(final Set<GiafCountry> giafCountries, final Supplier supplier, final GiafSupplier giafSupplier) {
+    private static void updateSupplierInformation(final Set<GiafCountry> giafCountries, final Supplier supplier,
+	    final GiafSupplier giafSupplier) {
 	if (giafSupplier.canceled || shouldDiscard(giafSupplier)) {
-	    if (giafSupplier.canceled) {
-		System.out.println("Closing canceled supplier: " + supplier.getExternalId());
-	    } else {
-		System.out.println("Closing discared supplier: " + supplier.getExternalId());
-	    }
-	    //if (isAllocatedAmountNull(supplier)) {
-	    //  System.out.println("Deleting supplier " + supplier.getExternalId());
-	    //  supplier.delete();
-	    //} else {
 		updateSupplierInformationAux(giafCountries, supplier, giafSupplier);
 		if (!supplier.getSupplierLimit().equals(Money.ZERO)) {
 		    supplier.setSupplierLimit(Money.ZERO);
@@ -488,7 +432,8 @@ public class SyncSuppliersAux {
 	updateAddressInformation(giafCountries, supplier, giafSupplier);
     }
 
-    private static void updateAddressInformation(final Set<GiafCountry> giafCountries, final Supplier supplier, final GiafSupplier giafSupplier) {
+    private static void updateAddressInformation(final Set<GiafCountry> giafCountries, final Supplier supplier,
+	    final GiafSupplier giafSupplier) {
 	for (final GiafAddress giafAddress : giafSupplier.addresses) {
 	    final Address address = giafAddress.getAddress(giafCountries);
 	    supplier.registerContact(address, giafAddress.telEnt, giafAddress.faxEnt, giafAddress.email);
@@ -503,10 +448,8 @@ public class SyncSuppliersAux {
     private static boolean containsContact(final GiafSupplier giafSupplier, SupplierContact contact) {
 	for (final GiafAddress giafAddress : giafSupplier.addresses) {
 	    final Address address = giafAddress.address;
-	    if (address.equals(contact.getAddress())
-		    && giafAddress.telEnt.equals(contact.getPhone())
-		    && giafAddress.faxEnt.equals(contact.getFax())
-		    && giafAddress.email.equals(contact.getEmail())) {
+	    if (address.equals(contact.getAddress()) && giafAddress.telEnt.equals(contact.getPhone())
+		    && giafAddress.faxEnt.equals(contact.getFax()) && giafAddress.email.equals(contact.getEmail())) {
 		return true;
 	    }
 	}
@@ -532,7 +475,105 @@ public class SyncSuppliersAux {
 	    }
 	}
 	return "?";
-//	return giafSupplier.codPai != null && giafSupplier.codPai.equals("P") ? "Portugal" : "?";
+	// return giafSupplier.codPai != null && giafSupplier.codPai.equals("P")
+	// ? "Portugal" : "?";
+    }
+
+    private static class UodateSuppliersThread extends TransactionalThread {
+
+	private final Collection<GiafSupplier> giafSuppliers;
+	private final Set<GiafCountry> giafCountries;
+
+	int matched = 0;
+	int created = 0;
+	int discarded = 0;
+
+	UodateSuppliersThread(final Collection<GiafSupplier> giafSuppliers, final Set<GiafCountry> giafCountries) {
+	    this.giafSuppliers = giafSuppliers;
+	    this.giafCountries = giafCountries;
+	}
+
+	@Override
+	public void transactionalRun() {
+	    for (final GiafSupplier giafSupplier : giafSuppliers) {
+		if (giafSupplier.canceled || shouldDiscard(giafSupplier)) {
+		    discarded++;
+		}
+		Supplier supplier = findSupplierByGiafKey(giafSupplier.codEnt);
+		if (supplier == null && !giafSupplier.canceled && !shouldDiscard(giafSupplier)) {
+		    supplier = new Supplier(giafSupplier.nom_ent, giafSupplier.nom_ent_abv, giafSupplier.numFis, null);
+		    supplier.setGiafKey(giafSupplier.codEnt);
+		    updateAddressInformation(giafCountries, supplier, giafSupplier);
+		    created++;
+		} else if (supplier != null) {
+		    matched++;
+		    updateSupplierInformation(giafCountries, supplier, giafSupplier);
+		}
+	    }
+	}
+
+    }
+
+    private static class CloseSuppliersThread extends TransactionalThread {
+
+	private final Set<Supplier> suppliersToClose;
+
+	CloseSuppliersThread(final Set<Supplier> suppliersToClose) {
+	    this.suppliersToClose = suppliersToClose;
+	}
+
+	@Override
+	public void transactionalRun() {
+	    for (final Supplier supplier : suppliersToClose) {
+		if (!supplier.getSupplierLimit().equals(Money.ZERO)) {
+		    supplier.setSupplierLimit(Money.ZERO);
+		}
+	    }
+	}
+
+    }
+
+    public static void syncData() {
+	final Set<GiafCountry> giafCountries = new HashSet<GiafCountry>();
+	final CountryReader countryReader = new CountryReader(giafCountries);
+	countryReader.execute();
+
+	final SupplierMap supplierMap = new SupplierMap();
+	final SupplierReader supplierReader = new SupplierReader(supplierMap);
+	supplierReader.execute();
+
+	final Set<Supplier> suppliersFromGiaf = new HashSet<Supplier>();
+	for (final GiafSupplier giafSupplier : supplierMap.getGiafSuppliers()) {
+	    Supplier supplier = findSupplierByGiafKey(giafSupplier.codEnt);
+	    if (supplier != null) {
+		suppliersFromGiaf.add(supplier);
+	    }
+	}
+	final Set<Supplier> suppliersToClose = new HashSet<Supplier>();
+	for (final Supplier supplier : MyOrg.getInstance().getSuppliersSet()) {
+	    if (!suppliersFromGiaf.contains(supplier)) {
+		if (!supplier.getSupplierLimit().equals(Money.ZERO)) {
+		    suppliersToClose.add(supplier);
+		}
+	    }
+	}
+	final CloseSuppliersThread closeSuppliersThread = new CloseSuppliersThread(suppliersToClose);
+	closeSuppliersThread.start();
+	try {
+	    closeSuppliersThread.join();
+	} catch (InterruptedException e) {
+	    throw new Error(e);
+	}
+
+	for (final Collection<GiafSupplier> giafSuppliers : supplierMap.getGiafSuppliersChunks()) {
+	    final UodateSuppliersThread updateSuppliersThread = new UodateSuppliersThread(giafSuppliers, giafCountries);
+	    updateSuppliersThread.start();
+	    try {
+		updateSuppliersThread.join();
+	    } catch (InterruptedException e) {
+		throw new Error(e);
+	    }
+	}
     }
 
 }

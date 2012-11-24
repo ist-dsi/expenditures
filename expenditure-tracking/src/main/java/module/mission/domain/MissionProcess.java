@@ -53,6 +53,7 @@ import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.ist.bennu.core.util.BundleUtil;
 import pt.ist.bennu.core.util.ClassNameBundle;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.joda.time.DateTime;
 
 import pt.ist.emailNotifier.domain.Email;
@@ -169,9 +170,9 @@ public abstract class MissionProcess extends MissionProcess_Base {
     }
 
     public String getProcessIdentification() {
-	final ExpenditureTrackingSystem instance = ExpenditureTrackingSystem.getInstance();
-	if (instance.hasProcessPrefix()) {
-	    return instance.getInstitutionalProcessNumberPrefix() + "/" + getMissionYear().getYear() + "/M" + getProcessNumber();
+	final ExpenditureTrackingSystem system = getMissionSystem().getExpenditureTrackingSystem();
+	if (system.hasProcessPrefix()) {
+	    return system.getInstitutionalProcessNumberPrefix() + "/" + getMissionYear().getYear() + "/M" + getProcessNumber();
 	}
 	return getMissionYear().getYear() + "/" + getProcessNumber();
     }
@@ -380,7 +381,7 @@ public abstract class MissionProcess extends MissionProcess_Base {
 
     protected abstract String notificationSubjectHeader();
 
-    private void notifyAllParticipants() {
+    public void notifyAllParticipants() {
 	final VirtualHost virtualHost = VirtualHost.getVirtualHostForThread();
 
 	final Mission mission = getMission();
@@ -678,4 +679,53 @@ public abstract class MissionProcess extends MissionProcess_Base {
 	return mission.hasAllCommitmentNumbers();
     }
 
+    @Override
+    public boolean isConnectedToCurrentHost() {
+	return getMissionSystem() == VirtualHost.getVirtualHostForThread().getMissionSystem();
+    }
+
+    public Collection<MissionProcess> getAssociatedMissionProcesses() {
+	if (!hasMissionProcessAssociation()) {
+	    return CollectionUtils.EMPTY_COLLECTION;
+	}
+	List<MissionProcess> associatedProcesses = new ArrayList<MissionProcess>();
+	associatedProcesses.addAll(getMissionProcessAssociation().getMissionProcesses());
+	associatedProcesses.remove(this);
+
+	return associatedProcesses;
+    }
+
+    public void addAssociatedMissionProcess(MissionProcess processToAdd) {
+	if (getAssociatedMissionProcesses().contains(processToAdd)) {
+	    throw new DomainException(BundleUtil.getStringFromResourceBundle("resources/MissionResources",
+		    "error.cannot.associate.MissionProcesses.already.associated"));
+	}
+	if (hasMissionProcessAssociation() && processToAdd.hasMissionProcessAssociation()) {
+	    throw new DomainException(BundleUtil.getStringFromResourceBundle("resources/MissionResources",
+		    "error.cannot.merge.MissionProcessAssociations"));
+	}
+
+	if (hasMissionProcessAssociation()) {
+	    getMissionProcessAssociation().addMissionProcesses(processToAdd);
+	} else if (processToAdd.hasMissionProcessAssociation()) {
+	    processToAdd.getMissionProcessAssociation().addMissionProcesses(this);
+	} else {
+	    new MissionProcessAssociation(this, processToAdd);
+	}
+    }
+
+    public void removeAssociatedMissionProcess(MissionProcess processToRem) {
+	if (processToRem == this) {
+	    throw new DomainException("error.cannot.remove.MissionProcesses.this");
+	}
+	if (!hasMissionProcessAssociation()) {
+	    return;
+	}
+
+	MissionProcessAssociation association = getMissionProcessAssociation();
+	association.removeMissionProcesses(processToRem);
+	if (association.getMissionProcessesCount() < 2) {
+	    association.delete();
+	}
+    }
 }

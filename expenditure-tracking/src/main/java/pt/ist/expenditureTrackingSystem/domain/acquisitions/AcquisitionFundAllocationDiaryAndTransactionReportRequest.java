@@ -72,7 +72,6 @@ public class AcquisitionFundAllocationDiaryAndTransactionReportRequest extends A
 	final Money shareWithoutVat = shareValue.divideAndRound(d);
 	final Money shareVat = shareValue.subtract(shareWithoutVat);
 
-	System.out.println(getProcessId());
 	Object[] insertArgs = new Object[] {
 		"INTERACT_ID", Long.valueOf(getInteractionId()),
 		"PROCESS_ID", getProcessId(),
@@ -95,9 +94,7 @@ public class AcquisitionFundAllocationDiaryAndTransactionReportRequest extends A
 		"GIAF_DIARIO", getDiaryNumber(),
 		"GIAF_NUM_REG", getTransactionNumber(),
 	    };
-	final String q = insertQuery(insertArgs);
-	System.out.println(q);
-	return q;
+	return insertQuery(insertArgs);
     }
 
     public String getProjectId(final Unit unit) {

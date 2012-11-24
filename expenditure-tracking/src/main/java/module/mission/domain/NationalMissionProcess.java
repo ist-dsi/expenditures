@@ -35,6 +35,7 @@ import module.mission.domain.activity.AllocateFundsActivity;
 import module.mission.domain.activity.AllocateProjectFundsActivity;
 import module.mission.domain.activity.ApproveActivity;
 import module.mission.domain.activity.ArchiveItemActivity;
+import module.mission.domain.activity.AssociateMissionProcessActivity;
 import module.mission.domain.activity.AuthoriseParticipantActivity;
 import module.mission.domain.activity.AuthorizeActivity;
 import module.mission.domain.activity.CancelProcessActivity;
@@ -107,6 +108,7 @@ public class NationalMissionProcess extends NationalMissionProcess_Base {
 	activitiesAux.add(new UnSubmitForApprovalActivity());
 	activitiesAux.add(new ApproveActivity());
 	activitiesAux.add(new UnApproveActivity());
+	activitiesAux.add(new AssociateMissionProcessActivity());
 
 	activitiesAux.add(new AllocateFundsActivity());
 	activitiesAux.add(new AllocateProjectFundsActivity());

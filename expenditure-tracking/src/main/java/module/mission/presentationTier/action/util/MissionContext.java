@@ -29,6 +29,10 @@ public class MissionContext implements Serializable {
 		}
 	    }
 	}
+
+	if (missionYear == null) {
+	    missionYear = MissionYear.getCurrentYear();
+	}
     }
 
     public MissionYear getMissionYear() {

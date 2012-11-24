@@ -70,7 +70,6 @@ public abstract class ExportAuthorizations extends ExportAuthorizations_Base {
 		employees.put(username, employeeNumber);
 		c++;
 	    }
-	    System.out.println("Processed: " + c + " employees.");
 	} finally {
 	    if (resultSetQuery != null) {
 		resultSetQuery.close();
@@ -155,7 +154,6 @@ public abstract class ExportAuthorizations extends ExportAuthorizations_Base {
     @Override
     public void executeTask() {
 	try {
-	    System.out.println("Running sync for: " + getVirtualHost());
 	    VirtualHost.setVirtualHostForThread(getVirtualHost());
 
 	    employees = new HashMap<String, String>();

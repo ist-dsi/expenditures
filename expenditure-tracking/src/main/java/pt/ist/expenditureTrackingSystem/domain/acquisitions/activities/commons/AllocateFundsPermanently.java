@@ -48,14 +48,17 @@ public class AllocateFundsPermanently<P extends PaymentProcess> extends
 
     @Override
     public boolean isActive(P process, User user) {
+	final ExpenditureTrackingSystem instance = ExpenditureTrackingSystem.getInstance();
 	return process.isAccountingEmployee(user.getExpenditurePerson())
 		&& isUserProcessOwner(process, user)
-		&& process.hasAllocatedFundsPermanentlyForAllProjectFinancers()
+		&& (process.hasAllocatedFundsPermanentlyForAllProjectFinancers()
+			|| (instance.getRequireFundAllocationPriorToAcquisitionRequest() != null
+				&& !instance.getRequireFundAllocationPriorToAcquisitionRequest()))
 		&& !process.isAllocatedPermanently()
 		&& !process.isPayed()
 		&& ((!process.hasAllInvoicesAllocated() && process.getRequest().hasProposalDocument())
-			|| (ExpenditureTrackingSystem.isInvoiceAllowedToStartAcquisitionProcess()
-				&& !process.getRequest().hasProposalDocument()
+			|| (//ExpenditureTrackingSystem.isInvoiceAllowedToStartAcquisitionProcess()
+				/*&&*/ !process.getRequest().hasProposalDocument()
 				&& process.isInvoiceConfirmed()));
     }
 

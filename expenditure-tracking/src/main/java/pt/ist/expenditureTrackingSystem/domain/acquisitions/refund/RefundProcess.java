@@ -27,8 +27,11 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.refund;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import module.workflow.activities.ActivityInformation;
@@ -47,6 +50,7 @@ import pt.ist.bennu.core.util.ClassNameBundle;
 import pt.ist.expenditureTrackingSystem._development.ExternalIntegration;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionItemClassification;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessState;
@@ -77,7 +81,6 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.De
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.DistributeRealValuesForPayingUnits;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.EditRefundInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.EditRefundItem;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.MarkProcessAsCCPProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.RefundPerson;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.RemoveFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.RemoveProjectFundAllocation;
@@ -89,7 +92,6 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.Su
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.UnSubmitForApproval;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.UnSubmitForFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.UnconfirmInvoices;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.UnmarkProcessAsCCPProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.UnsetSkipSupplierFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.Util;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
@@ -154,8 +156,8 @@ public class RefundProcess extends RefundProcess_Base {
 	activities.add(new ChangeRefundItemClassification());
 	activities.add(new RemoveCancelProcess<RefundProcess>());
 	activities.add(new RefundPerson());
-	activities.add(new MarkProcessAsCCPProcess());
-	activities.add(new UnmarkProcessAsCCPProcess());
+//	activities.add(new MarkProcessAsCCPProcess());
+//	activities.add(new UnmarkProcessAsCCPProcess());
     }
 
     public RefundProcess(Person requestor, String refundeeName, String refundeeFiscalCode, Unit requestingUnit) {
@@ -559,6 +561,60 @@ public class RefundProcess extends RefundProcess_Base {
     public Set<CPVReference> getCPVReferences() {
 	final RefundRequest request = getRequest();
 	return request.getCPVReferences();
+    }
+
+    public void checkIsFundAllocationAllowed() {
+	final Map<Supplier, Map<CPVReference, Money>> allocationMap = new HashMap<Supplier, Map<CPVReference, Money>>();
+
+	for (final RefundItem refundItem : getRequest().getRefundItemsSet()) {
+	    final CPVReference cpvReference = refundItem.getCPVReference();
+
+	    for (final RefundableInvoiceFile refundInvoice : refundItem.getRefundableInvoices()) {
+		final Supplier supplier = refundInvoice.getSupplier();
+		if (supplier != null) {
+		    final String key = cpvReference.getExternalId() + supplier.getExternalId();
+		    final Money refundableValue = refundInvoice.getRefundableValue();
+
+		    if (!allocationMap.containsKey(supplier)) {
+			allocationMap.put(supplier, new HashMap<CPVReference, Money>());
+		    }
+		    final Map<CPVReference, Money> map = allocationMap.get(supplier);
+		    if (map.containsKey(cpvReference)) {
+			map.put(cpvReference, refundableValue.add(map.get(cpvReference)));
+		    } else {
+			map.put(cpvReference, refundableValue);
+		    }
+		}
+	    }
+	}
+
+	final boolean checkSupplierLimitsByCPV = ExpenditureTrackingSystem.getInstance().checkSupplierLimitsByCPV();
+
+	for (final Entry<Supplier, Map<CPVReference, Money>> entry : allocationMap.entrySet()) {
+	    final Supplier supplier = entry.getKey();
+	    final Map<CPVReference, Money> map = entry.getValue();
+
+	    Money total = Money.ZERO;
+	    for (final Entry<CPVReference, Money> centry : map.entrySet()) {
+		final CPVReference cpvReference = centry.getKey();
+		final Money value = centry.getValue();
+		if (checkSupplierLimitsByCPV && !supplier.isFundAllocationAllowed(cpvReference.getCode(), value)) {
+		    throw new DomainException("acquisitionProcess.message.exception.SupplierDoesNotAlloweAmount", DomainException
+			    .getResourceFor("resources/AcquisitionResources"));
+		}
+		total = total.add(value);
+	    }
+	    if (!checkSupplierLimitsByCPV && !supplier.isFundAllocationAllowed(total)) {
+		    throw new DomainException("acquisitionProcess.message.exception.SupplierDoesNotAlloweAmount", DomainException
+			    .getResourceFor("resources/AcquisitionResources"));
+	    }		
+	}
+    }
+
+    @Override
+    public AcquisitionItemClassification getGoodsOrServiceClassification() {
+	final RefundRequest request = getRequest();
+	return request.getGoodsOrServiceClassification();
     }
 
 }

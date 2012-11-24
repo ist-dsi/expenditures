@@ -29,7 +29,9 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.TreeSet;
 
+import module.mission.domain.Mission;
 import module.mission.domain.MissionAuthorizationAccountabilityType;
+import module.mission.domain.MissionProcess;
 import module.mission.domain.MissionSystem;
 import module.mission.domain.MissionYear;
 import module.mission.domain.PersonMissionAuthorization;
@@ -38,10 +40,11 @@ import module.organization.domain.AccountabilityType;
 import module.organization.domain.OrganizationalModel;
 import module.organization.domain.Party;
 import module.organization.domain.Unit;
-import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
-import pt.ist.bennu.core.domain.User;
 
 import org.joda.time.LocalDate;
+
+import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
+import pt.ist.bennu.core.domain.User;
 
 /**
  * 
@@ -61,6 +64,9 @@ public class MissionAuthorizationMap implements Serializable {
     public MissionAuthorizationMap(final MissionYear missionYear) {
 	final MissionSystem missionSystem = MissionSystem.getInstance();
 	final OrganizationalModel organizationalModel = missionSystem.getOrganizationalModel();
+	if (organizationalModel == null) {
+	    return;
+	}
 	final Set<Party> partiesSet = organizationalModel.getPartiesSet();
 	findLevel(0, partiesSet);
 	if (levels[0] != null) {
@@ -78,11 +84,21 @@ public class MissionAuthorizationMap implements Serializable {
 	    if (unit != null) {
 		personMissionAuthorizations[i] = new TreeSet<PersonMissionAuthorization>(PersonMissionAuthorization.COMPARATOR_BY_PROCESS_NUMBER);
 		for (final PersonMissionAuthorization personMissionAuthorization : unit.getPersonMissionAuthorizationSet()) {
+		    final Mission mission = personMissionAuthorization.getAssociatedMission();
+		    final MissionProcess missionProcess = mission.getMissionProcess();
 		    if (!personMissionAuthorization.hasAuthority()
 			    && !personMissionAuthorization.hasDelegatedAuthority()
-			    && personMissionAuthorization.hasPrevious()
+
+			    && (!personMissionAuthorization.hasPrevious()
+				    || (personMissionAuthorization.hasPrevious()
 			    && (personMissionAuthorization.getPrevious().hasAuthority()
-				    || personMissionAuthorization.getPrevious().hasDelegatedAuthority())
+						    || personMissionAuthorization.getPrevious().hasDelegatedAuthority())))
+
+                            && missionProcess.isApproved()
+                            && missionProcess.canAuthoriseParticipantActivity()
+                            && (!missionProcess.getMission().hasAnyFinancer() || 
+				(missionProcess.hasAllAllocatedFunds() && missionProcess.hasAllCommitmentNumbers()))
+
 			    && !personMissionAuthorization.getMissionProcess().isCanceled()
 			    && !personMissionAuthorization.isProcessTakenByOtherUser()
 			    && (personMissionAuthorization.getMissionProcess().hasAllAllocatedFunds()

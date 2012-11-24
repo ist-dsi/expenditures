@@ -24,15 +24,20 @@
  */
 package module.mission.domain;
 
+import java.util.ResourceBundle;
+
 import module.organization.domain.Person;
 import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
 import pt.ist.bennu.core.domain.User;
+import pt.ist.bennu.core.domain.VirtualHost;
+import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.ist.bennu.core.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Project;
 import pt.ist.expenditureTrackingSystem.domain.organization.SubProject;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
+import pt.utl.ist.fenix.tools.util.i18n.Language;
 
 /**
  * 
@@ -52,8 +57,15 @@ public class MissionFinancer extends MissionFinancer_Base {
 
     public MissionFinancer(final MissionVersion missionVersion, final Unit unit) {
 	this();
+	checkUnitIsActive(unit);
 	setMissionVersion(missionVersion);
 	setUnit(unit);
+    }
+
+    private void checkUnitIsActive(final Unit unit) {
+	if (!unit.isActive()) {
+	    throw new DomainException("error.mission.financer.closed", ResourceBundle.getBundle("resources/MissionResources", Language.getLocale()));
+	}
     }
 
     public void delete() {
@@ -366,6 +378,11 @@ public class MissionFinancer extends MissionFinancer_Base {
     public pt.ist.expenditureTrackingSystem.domain.organization.Person getAccountManager() {
 	final Unit unit = getUnit();
 	return unit == null ? null : unit.getAccountManager();
+    }
+
+    @Override
+    public boolean isConnectedToCurrentHost() {
+	return getMissionSystem() == VirtualHost.getVirtualHostForThread().getMissionSystem();
     }
 
 }

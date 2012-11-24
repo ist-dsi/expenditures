@@ -34,6 +34,7 @@ import module.workflow.domain.WorkflowProcess;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.ist.bennu.core.domain.util.Money;
 import pt.ist.bennu.core.util.BundleUtil;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionItemClassification;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean;
@@ -133,6 +134,11 @@ public class StandardProcedureProcess extends StandardProcedureProcess_Base {
     @Override
     public String getLocalizedName() {
 	return BundleUtil.getStringFromResourceBundle("resources/AcquisitionResources", "label.StandardProcedureProcess");
+    }
+
+    @Override
+    public AcquisitionItemClassification getGoodsOrServiceClassification() {
+	return null;
     }
 
 }

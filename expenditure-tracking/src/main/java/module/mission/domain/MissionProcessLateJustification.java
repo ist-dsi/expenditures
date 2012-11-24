@@ -2,9 +2,10 @@ package module.mission.domain;
 
 import java.util.Comparator;
 
-import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
-
 import org.joda.time.DateTime;
+
+import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
+import pt.ist.bennu.core.domain.VirtualHost;
 
 public class MissionProcessLateJustification extends MissionProcessLateJustification_Base {
 
@@ -30,4 +31,9 @@ public class MissionProcessLateJustification extends MissionProcessLateJustifica
 	setJustification(justification);
     }
     
+    @Override
+    public boolean isConnectedToCurrentHost() {
+	return getMissionSystem() == VirtualHost.getVirtualHostForThread().getMissionSystem();
+    }
+
 }

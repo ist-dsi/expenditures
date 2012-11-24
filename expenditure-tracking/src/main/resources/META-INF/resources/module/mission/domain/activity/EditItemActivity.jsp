@@ -5,6 +5,7 @@
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/fenix-renderers" prefix="fr"%>
 <%@page import="pt.ist.fenixWebFramework.renderers.utils.RenderUtils"%>
 
+<bean:define id="information" name="information" type="module.mission.domain.activity.ItemActivityInformation"/>
 <bean:define id="process" name="information" property="process"/>
 
 <br/>
@@ -51,7 +52,25 @@
 					<bean:message bundle="MISSION_RESOURCES" key="label.mission.item.participants"/>
 				</h4>
 
-				<fr:edit id="information.participants" name="information" schema="module.mission.domain.activity.ItemActivityInformation.participants">
+				<fr:edit id="information.participants" name="information">
+					<fr:schema type="module.mission.domain.activity.ItemActivityInformation" bundle="MISSION_RESOURCES">
+						<fr:slot name="people" layout="option-select" key="label.mission.item.people">
+							<fr:property name="eachSchema" value="person-name"/>
+							<fr:property name="eachLayout" value="values-dash"/>
+					        <fr:property name="providerClass" value="module.mission.presentationTier.provider.MissionItemParticipantProvider" />
+					        <fr:property name="classes" value="nobullet noindent"/>
+					        <fr:property name="sortBy" value="name"/>
+					    </fr:slot>
+					<% if(information.getMissionItem().isVehicleItem()) { %>
+						<fr:slot name="driver" layout="radio-select" key="label.mission.item.driver" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+							<fr:property name="eachSchema" value="person-name"/>
+							<fr:property name="eachLayout" value="values-dash"/>
+						    <fr:property name="providerClass" value="module.mission.presentationTier.provider.MissionItemParticipantProvider" />
+						    <fr:property name="classes" value="nobullet noindent"/>
+						    <fr:property name="sortBy" value="name"/>
+						</fr:slot>
+					<% } %>
+					</fr:schema>
 					<fr:layout name="tabular">
 						<fr:property name="classes" value="form listInsideClear" />
 						<fr:property name="columnClasses" value="width100px,,tderror" />

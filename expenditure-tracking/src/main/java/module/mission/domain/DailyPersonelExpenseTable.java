@@ -6,11 +6,11 @@ import java.util.Comparator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.bennu.core.domain.util.Money;
-
 import org.joda.time.LocalDate;
 
+import pt.ist.bennu.core.domain.VirtualHost;
+import pt.ist.bennu.core.domain.exceptions.DomainException;
+import pt.ist.bennu.core.domain.util.Money;
 import pt.ist.fenixWebFramework.services.Service;
 
 public class DailyPersonelExpenseTable extends DailyPersonelExpenseTable_Base {
@@ -134,6 +134,12 @@ public class DailyPersonelExpenseTable extends DailyPersonelExpenseTable_Base {
 
     public DailyPersonelExpenseCategory getMinDailyPersonelExpenseCategory() {
 	return Collections.max(getDailyPersonelExpenseCategoriesSet(), DailyPersonelExpenseCategory.COMPARATOR_BY_VALUE);
+    }
+    
+
+    @Override
+    public boolean isConnectedToCurrentHost() {
+	return getMissionSystem() == VirtualHost.getVirtualHostForThread().getMissionSystem();
     }
 
 }

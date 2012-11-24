@@ -37,11 +37,12 @@ import module.organization.domain.Party;
 import module.organization.domain.Person;
 import module.workflow.domain.WorkflowProcess;
 import module.workflow.widgets.ProcessListWidget;
-import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
-import pt.ist.bennu.core.domain.User;
 
 import org.joda.time.DateTime;
 
+import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
+import pt.ist.bennu.core.domain.User;
+import pt.ist.bennu.core.domain.VirtualHost;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.fenixWebFramework.services.Service;
@@ -470,6 +471,11 @@ public class MissionYear extends MissionYear_Base {
 	}
 	removeMissionSystem();
 	deleteDomainObject();
+    }
+
+    @Override
+    public boolean isConnectedToCurrentHost() {
+	return getMissionSystem() == VirtualHost.getVirtualHostForThread().getMissionSystem();
     }
 
 }

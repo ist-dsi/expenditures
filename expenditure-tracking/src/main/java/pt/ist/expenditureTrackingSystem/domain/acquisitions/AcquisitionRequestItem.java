@@ -125,7 +125,8 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
     }
 
     private boolean checkSupplierFundAllocation(AcquisitionRequest acquisitionRequest, Money totalValue) {
-	return acquisitionRequest.isFundAllocationAllowed(totalValue);
+	final CPVReference cpvReference = getCPVReference();
+	return acquisitionRequest.isFundAllocationAllowed(cpvReference, totalValue);
     }
 
     private void createUnitItem() {
@@ -310,6 +311,11 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
     @Override
     public Money getValue() {
 	return getTotalItemValueWithAdditionalCostsAndVat();
+    }
+
+    @Override
+    public Money getValueWithoutVat() {
+	return getTotalItemValueWithAdditionalCosts();
     }
 
     public AcquisitionRequest getAcquisitionRequest() {

@@ -36,10 +36,12 @@ import module.organization.domain.OrganizationalModel;
 import module.organization.domain.Party;
 import module.organization.domain.Person;
 import module.organization.domain.Unit;
-import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
-import pt.ist.bennu.core.domain.User;
 
 import org.joda.time.DateTime;
+
+import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
+import pt.ist.bennu.core.domain.User;
+import pt.ist.bennu.core.domain.VirtualHost;
 
 /**
  * 
@@ -260,6 +262,11 @@ public class PersonMissionAuthorization extends PersonMissionAuthorization_Base 
 	    return true;
 	}
 	return hasNext() && getNext().isUnitObserver(user);
+    }
+
+    @Override
+    public boolean isConnectedToCurrentHost() {
+	return getMissionSystem() == VirtualHost.getVirtualHostForThread().getMissionSystem();
     }
 
 }

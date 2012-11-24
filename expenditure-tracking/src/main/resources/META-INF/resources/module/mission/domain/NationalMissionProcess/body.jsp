@@ -4,14 +4,4 @@
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-logic" prefix="logic"%>
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/fenix-renderers" prefix="fr"%>
 
-<jsp:include page="summary.jsp"/>
-
-<jsp:include page="../processMessages.jsp"/>
-
-<jsp:include page="../processStageView.jsp"/>
-
-<jsp:include page="../listFinancers.jsp"/>
-
-<jsp:include page="../listParticipants.jsp"/>
-
-<jsp:include page="../listMissionItems.jsp"/>
+<jsp:include page="../body.jsp"/>

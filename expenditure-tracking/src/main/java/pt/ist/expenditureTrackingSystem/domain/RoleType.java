@@ -26,6 +26,7 @@ package pt.ist.expenditureTrackingSystem.domain;
 
 import java.util.ResourceBundle;
 
+import pt.ist.bennu.core.domain.VirtualHost;
 import pt.ist.bennu.core.domain.groups.IRoleEnum;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 
@@ -57,7 +58,8 @@ public enum RoleType implements IRoleEnum {
 
     @Override
     public String getRoleName() {
-	return name();
+	final VirtualHost virtualHost = VirtualHost.getVirtualHostForThread();
+	return virtualHost == null ? name() : name() + '@' + virtualHost.getHostname();
     }
 
     @Override

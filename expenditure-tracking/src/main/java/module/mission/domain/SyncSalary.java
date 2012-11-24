@@ -87,7 +87,6 @@ public class SyncSalary extends Thread implements ServicePredicate {
 
 	private GovernmentMemberReader(final Integer number) {
 	    governmentMemberQuery = new GovernmentMemberQuery(number);
-	    System.out.println(governmentMemberQuery.getQueryString());
 	}
 
 	@Override

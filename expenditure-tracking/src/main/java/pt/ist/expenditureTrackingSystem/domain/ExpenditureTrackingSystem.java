@@ -534,4 +534,8 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 	return prefix != null && !prefix.isEmpty();
     }
 
+    public boolean checkSupplierLimitsByCPV() {
+	return getCheckSupplierLimitsByCPV() != null && getCheckSupplierLimitsByCPV().booleanValue();
+    }
+
 }

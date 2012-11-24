@@ -24,6 +24,9 @@
  */
 package pt.ist.expenditureTrackingSystem.presentationTier.webservice;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -31,9 +34,13 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
 import pt.ist.bennu.core._development.PropertiesManager;
+import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.domain.VirtualHost;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
+import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.CostCenter;
+import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 
 @Path("/exportStructureService")
@@ -60,14 +67,97 @@ public class ExportStructureService {
 	    if (unit instanceof CostCenter) {
 		final CostCenter costCenter = (CostCenter) unit;
 		if (isActive(costCenter)) {
+		    final Set<User> authorities = getActiveAuthorizationSet(costCenter);
+
+		    if (authorities.isEmpty()) {
 		    stringBuilder.append(costCenter.getCostCenter());
 		    stringBuilder.append("\t");
 		    stringBuilder.append(costCenter.getName());
+			    stringBuilder.append("\t");
+			    final AccountingUnit accountingUnit = costCenter.getAccountingUnit();
+			    if (accountingUnit == null) {
+				stringBuilder.append(" ");
+			    } else {
+				stringBuilder.append(accountingUnit.getName());
+			    }
+			    stringBuilder.append("\t");
+			    final CostCenter parent = getParent(costCenter);
+			    if (parent == null) {
+				stringBuilder.append(" ");
+			    } else {
+				stringBuilder.append(parent.getCostCenter());
+			    }
+			    stringBuilder.append("\t");
+			    
+			    // responsáveis
+			    stringBuilder.append(" ");
+			    stringBuilder.append("\t");
+
+			    // e-mail
+			    stringBuilder.append(" ");
+
 		    stringBuilder.append("\n");
+			
+		    } else {
+			for (final User user : authorities) {
+			    stringBuilder.append(costCenter.getCostCenter());
+			    stringBuilder.append("\t");
+			    stringBuilder.append(costCenter.getName());
+			    stringBuilder.append("\t");
+			    final AccountingUnit accountingUnit = costCenter.getAccountingUnit();
+			    if (accountingUnit == null) {
+				stringBuilder.append(" ");
+			    } else {
+				stringBuilder.append(accountingUnit.getName());
+			    }
+			    stringBuilder.append("\t");
+			    final CostCenter parent = getParent(costCenter);
+			    if (parent == null) {
+				stringBuilder.append(" ");
+			    } else {
+				stringBuilder.append(parent.getCostCenter());
+			    }
+			    stringBuilder.append("\t");
+			    
+			    // responsáveis
+			    stringBuilder.append(user.getUsername());
+			    stringBuilder.append("\t");
+
+			    // e-mail
+			    final String email = user.getEmail();
+			    stringBuilder.append(email == null ? " " : email);
+			    
+			    stringBuilder.append("\n");
 		}
 	    }
 	}
+	    }
+	}
 	return stringBuilder.toString();
+    }
+
+    private Set<User> getActiveAuthorizationSet(final Unit unit) {
+	final Set<User> result = new HashSet<User>();
+	for (final Authorization authorization : unit.getAuthorizationsSet()) {
+	    if (authorization.isValid()) {
+		final Person person = authorization.getPerson();
+		final User user = person.getUser();
+		result.add(user);
+	    }
+	}
+	if (result.isEmpty()) {
+	    final Unit parentUnit = unit.getParentUnit();
+	    if (parentUnit != null) {
+		return getActiveAuthorizationSet(parentUnit);
+	    }
+	}
+	return result;
+    }
+
+    private CostCenter getParent(final Unit unit) {
+	final Unit parent = unit.getParentUnit();
+	return parent == null || parent instanceof CostCenter
+		? (CostCenter) parent : getParent(parent);
     }
 
     private boolean isActive(final CostCenter costCenter) {

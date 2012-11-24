@@ -14,6 +14,7 @@
 <bean:define id="processRequest" name="process" property="request" toScope="request"/>
 <bean:define id="processId" name="process" property="externalId"/>
 
+<%--
 <logic:equal name="process" property="warnRegardingProcessClassificationNeeded" value="true">
 	 <div class="infobox_warning">
 	 	<p class="mvert025">
@@ -29,7 +30,8 @@
 	    </p>
 	</div>
 </logic:equal>
-
+ --%>
+ 
 <logic:equal name="process" property="warnForLessSuppliersActive" value="true">
 	<div class="infobox_warning">
 	 	<p class="mvert025">
@@ -381,12 +383,14 @@
 
 <logic:present name="itemSet">
 	
-		<logic:equal  name="process" property="pastInvoiceReceived"  value="true">		
-			<logic:equal name="process" property="acquisitionRequest.realValueLessThanTotalValue" value="false">
-				<div class="infobox_warning">
-					<strong><bean:message key="messages.info.attention" bundle="EXPENDITURE_RESOURCES"/>:</strong> <bean:message key="acquisitionRequestItem.message.info.realValueLessThanTotalValue" bundle="ACQUISITION_RESOURCES"/>
-				</div>
-			</logic:equal>
+		<logic:equal  name="process" property="pastInvoiceReceived"  value="true">
+			<logic:present name="process" property="acquisitionRequest.realTotalValue">
+				<logic:equal name="process" property="acquisitionRequest.realValueLessThanTotalValue" value="false">
+					<div class="infobox_warning">
+						<strong><bean:message key="messages.info.attention" bundle="EXPENDITURE_RESOURCES"/>:</strong> <bean:message key="acquisitionRequestItem.message.info.realValueLessThanTotalValue" bundle="ACQUISITION_RESOURCES"/>
+					</div>
+				</logic:equal>
+			</logic:present>
 			<logic:equal name="process" property="acquisitionRequest.realUnitShareValueLessThanUnitShareValue" value="false">
 				<div class="infobox_warning">
 					<strong><bean:message key="messages.info.attention" bundle="EXPENDITURE_RESOURCES"/>:</strong> <bean:message key="acquisitionRequestItem.message.info.realUnitShareValueLessThanUnitShareValue" bundle="ACQUISITION_RESOURCES"/>

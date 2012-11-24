@@ -28,13 +28,16 @@ import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.List;
 
+import org.joda.time.LocalDate;
+
 import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.ist.bennu.core.domain.util.Money;
 import pt.ist.bennu.core.util.ClassNameBundle;
-
-import org.joda.time.LocalDate;
-
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestWithPayment;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 
 @ClassNameBundle(bundle = "resources/AcquisitionResources")
@@ -73,7 +76,7 @@ public class RefundableInvoiceFile extends RefundableInvoiceFile_Base {
 
     private void check(RequestItem item, Supplier supplier, Money value, BigDecimal vatValue, Money refundableValue) {
 	RefundProcess process = item.getRequest().getProcess();
-	if (!process.getShouldSkipSupplierFundAllocation() && !supplier.isFundAllocationAllowed(value)) {
+	if (!process.getShouldSkipSupplierFundAllocation() && isFundAllocationAllowed(supplier, item.getCPVReference(), value)) {
 	    throw new DomainException("acquisitionRequestItem.message.exception.fundAllocationNotAllowed", DomainException
 		    .getResourceFor("resources/AcquisitionResources"));
 	}
@@ -90,6 +93,11 @@ public class RefundableInvoiceFile extends RefundableInvoiceFile_Base {
 	    throw new DomainException("refundItem.message.info.refundableValueCannotBeBiggerThanInvoiceValue", DomainException
 		    .getResourceFor("resources/AcquisitionResources"));
 	}
+    }
+
+    private boolean isFundAllocationAllowed(final Supplier supplier, final CPVReference cpvReference, final Money value) {
+	return ExpenditureTrackingSystem.getInstance().checkSupplierLimitsByCPV() ?
+		!supplier.isFundAllocationAllowed(cpvReference.getCode(), value) : !supplier.isFundAllocationAllowed(value);
     }
 
     public void editValues(Money value, BigDecimal vatValue, Money refundableValue) {
@@ -122,6 +130,19 @@ public class RefundableInvoiceFile extends RefundableInvoiceFile_Base {
 	final Integer year = refundProcess.getYear().intValue();
 	final int i = Calendar.getInstance().get(Calendar.YEAR);
 	return year == i || year == i - 1 || year == i - 2;
+    }
+
+    @Override
+    public boolean isConnectedToCurrentHost() {
+	final RefundItem refundItem = getRefundItem();
+	if (refundItem != null) {
+	    final RequestWithPayment request = refundItem.getRequest();
+	    if (request != null) {
+		final PaymentProcess process = request.getProcess();
+		return process != null && process.isConnectedToCurrentHost();
+	    }
+	}
+	return false;
     }
 
 }

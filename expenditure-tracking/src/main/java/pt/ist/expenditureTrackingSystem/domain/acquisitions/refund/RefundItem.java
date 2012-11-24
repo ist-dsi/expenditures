@@ -89,6 +89,11 @@ public class RefundItem extends RefundItem_Base {
     }
 
     @Override
+    public Money getValueWithoutVat() {
+	return getValueEstimation();
+    }
+
+    @Override
     public BigDecimal getVatValue() {
 	return BigDecimal.ZERO;
     }

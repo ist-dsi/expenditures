@@ -10,6 +10,7 @@ import module.mission.domain.MissionItem;
 import module.mission.domain.MissionProcess;
 import module.mission.domain.PersonelExpenseItem;
 import module.mission.domain.Salary;
+import module.mission.domain.VehiclItem;
 import module.organization.domain.Person;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
@@ -24,7 +25,8 @@ public class ItemActivityInformation extends ActivityInformation<MissionProcess>
     private Class topLevelMissionItemType;
     private Class concreteMissionItemType;
     private MissionItem missionItem;
-    private Collection<Person> people = new ArrayList<Person>();
+    private final Collection<Person> people = new ArrayList<Person>();
+    private Person driver;
 
     public ItemActivityInformation(final MissionProcess missionProcess,
 	    final WorkflowActivity<MissionProcess, ? extends ActivityInformation<MissionProcess>> activity) {
@@ -44,6 +46,9 @@ public class ItemActivityInformation extends ActivityInformation<MissionProcess>
 	this.missionItem = missionItem;
 	if (missionItem != null) {
 	    setPeople(missionItem.getPeopleSet());
+	    if (missionItem instanceof VehiclItem) {
+		setDriver(((VehiclItem) missionItem).getDriver());
+	    }
 	}
     }
 
@@ -126,6 +131,14 @@ public class ItemActivityInformation extends ActivityInformation<MissionProcess>
     public void setPeople(final Collection<Person> people) {
 	this.people.clear();
 	this.people.addAll(people);
+    }
+
+    public Person getDriver() {
+	return driver;
+    }
+
+    public void setDriver(Person driver) {
+	this.driver = driver;
     }
 
 }

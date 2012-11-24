@@ -19,9 +19,10 @@ public class DistributeItemCostsActivity extends MissionProcessActivity<MissionP
 		&& missionProcess.getMission().hasAnyMissionItems()
 		&& missionProcess.getMission().getFinancerSet().size() > 1
 		&& ((missionProcess.isUnderConstruction() && missionProcess.isRequestor(user))
-			|| (missionProcess.isTerminatedWithChanges()
-				&& !missionProcess.isArchived()
-				&& missionProcess.canArchiveMission()));
+//			|| (missionProcess.isTerminatedWithChanges()
+//				&& !missionProcess.isArchived()
+//				&& missionProcess.canArchiveMission())
+				);
     }
 
     @Override

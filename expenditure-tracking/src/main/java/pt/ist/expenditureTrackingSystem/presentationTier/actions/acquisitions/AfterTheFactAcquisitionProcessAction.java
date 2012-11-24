@@ -25,18 +25,20 @@
 package pt.ist.expenditureTrackingSystem.presentationTier.actions.acquisitions;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import module.workflow.presentationTier.actions.ProcessManagement;
-import pt.ist.bennu.core.domain.exceptions.DomainException;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.ImportFile;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.activities.EditAfterTheFactProcessActivityInformation.AfterTheFactAcquisitionProcessBean;
@@ -111,7 +113,13 @@ public class AfterTheFactAcquisitionProcessAction extends BaseAction {
     public ActionForward listImports(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) {
 
-	List<ImportFile> files = GenericFile.getFiles(ImportFile.class);
+	List<ImportFile> files = new ArrayList(GenericFile.getFiles(ImportFile.class));
+	for (final Iterator<ImportFile> i = files.iterator(); i.hasNext(); ) {
+	    final ImportFile importFile = i.next();
+	    if (!importFile.isConnectedToCurrentHost()) {
+		i.remove();
+	    }
+	}
 	request.setAttribute("files", files);
 	return forward(request, "/acquisitions/listImportAfterTheFactAcquisitionsResult.jsp");
     }

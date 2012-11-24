@@ -63,6 +63,14 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
 	return money;
     }
 
+    public Money getTotalValueWithoutVat() {
+	Money money = Money.ZERO;
+	for (RequestItem item : getRequestItems()) {
+	    money = money.add(item.getValueWithoutVat());
+	}
+	return money;
+    }
+
     public Money getRealTotalValue() {
 	Money money = Money.ZERO;
 	for (RequestItem item : getRequestItems()) {

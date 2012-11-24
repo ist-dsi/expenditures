@@ -24,6 +24,9 @@
  */
 package module.mission.domain;
 
+import module.mission.domain.activity.ItemActivityInformation;
+import pt.ist.bennu.core.domain.exceptions.DomainException;
+
 
 /**
  * 
@@ -49,6 +52,17 @@ public abstract class VehiclItem extends VehiclItem_Base {
     @Override
     public boolean isVehicleItem() {
         return true;
+    }
+
+    @Override
+    public void setInfo(final ItemActivityInformation itemActivityInformation) {
+	if (itemActivityInformation.getDriver() == null) {
+	    throw new DomainException("A vehicle item must have a driver");
+	}
+
+	super.setInfo(itemActivityInformation);
+	setDriver(itemActivityInformation.getDriver());
+	addPeople(itemActivityInformation.getDriver());
     }
 
     @Override

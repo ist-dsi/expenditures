@@ -27,9 +27,10 @@ package module.mission.domain;
 import java.util.HashMap;
 import java.util.Map;
 
-import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
-
 import org.joda.time.DateTime;
+
+import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
+import pt.ist.bennu.core.domain.VirtualHost;
 
 /**
  * 
@@ -72,6 +73,7 @@ public class MissionVersion extends MissionVersion_Base {
 
 	    for (final MissionFinancer previousMissionFinancer : previous.getFinancerSet()) {
 		final MissionFinancer missionFinancer = missionFinancerMap.get(previousMissionFinancer);
+		missionFinancer.setCommitmentNumber(previousMissionFinancer.getCommitmentNumber());
 
 		for (final MissionItemFinancer previousMissionItemFinancer : previousMissionFinancer.getMissionItemFinancersSet()) {
 
@@ -181,6 +183,11 @@ public class MissionVersion extends MissionVersion_Base {
 
     public boolean hasNoItemsAndParticipantesAreAuthorized() {
 	return !hasAnyMissionItems() && getMission().allParticipantsAreAuthorized();
+    }
+
+    @Override
+    public boolean isConnectedToCurrentHost() {
+	return getMissionSystem() == VirtualHost.getVirtualHostForThread().getMissionSystem();
     }
 
 }

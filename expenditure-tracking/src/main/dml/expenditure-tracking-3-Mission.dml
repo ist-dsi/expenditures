@@ -18,14 +18,15 @@ valueType pt.ist.bennu.core.domain.util.Money as Money {
 
 
 class MissionSystem {
+	Boolean allowGrantOwnerEquivalence;
 }
 
 
-class MissionFinancer {
+class MissionFinancer implements .pt.ist.bennu.core.domain.VirtualHostAware {
 	String commitmentNumber;
 }
 
-class Mission {
+class Mission implements .pt.ist.bennu.core.domain.VirtualHostAware {
 	String location;
 	String objective;
 	Boolean grantOwnerEquivalence;
@@ -44,7 +45,7 @@ class Mission {
 	class NationalMission extends Mission {
 	}
 
-class MissionVersion {
+class MissionVersion implements .pt.ist.bennu.core.domain.VirtualHostAware {
 	DateTime sinceDateTime;
 	DateTime daparture;
 	DateTime arrival;
@@ -54,12 +55,12 @@ class MissionVersion {
 	Boolean isArchived;
 }
 
-class MissionChangeDescription {
+class MissionChangeDescription implements .pt.ist.bennu.core.domain.VirtualHostAware {
 	DateTime revertInstant;
 	String description;
 }
 
-class MissionItem {
+class MissionItem implements .pt.ist.bennu.core.domain.VirtualHostAware {
 }
 
 	class AccommodationItem extends MissionItem {
@@ -130,7 +131,7 @@ class MissionItem {
 				Integer kms;
 			}
 
-class MissionItemFinancer {
+class MissionItemFinancer implements .pt.ist.bennu.core.domain.VirtualHostAware {
 	Money amount;
 	String fundAllocationId;
 }
@@ -140,7 +141,7 @@ class MissionItemFinancer {
 	}
 
 
-class MissionProcess extends .module.workflow.domain.WorkflowProcess {
+class MissionProcess extends .module.workflow.domain.WorkflowProcess implements .pt.ist.bennu.core.domain.VirtualHostAware {
 	Boolean isUnderConstruction;
 	Boolean isCanceled;
 }
@@ -150,52 +151,55 @@ class MissionProcess extends .module.workflow.domain.WorkflowProcess {
 
 	class NationalMissionProcess extends MissionProcess {
 	}
+	
+class MissionProcessAssociation implements .pt.ist.bennu.core.domain.VirtualHostAware {
+}
 
-class MissionProcessLateJustification {
+class MissionProcessLateJustification implements .pt.ist.bennu.core.domain.VirtualHostAware {
 	String justification;
 	DateTime justificationDateTime;
 }
 
-class MissionYear {
+class MissionYear implements .pt.ist.bennu.core.domain.VirtualHostAware {
 	Integer year;
 	Integer counter;
 }
 
-class PersonMissionAuthorization {
+class PersonMissionAuthorization implements .pt.ist.bennu.core.domain.VirtualHostAware {
 	DateTime authorizationDateTime;
 }
 
-class VehiclItemJustification {
+class VehiclItemJustification implements .pt.ist.bennu.core.domain.VirtualHostAware {
 	VehiclItemJustificationMotive motive;
 	String justification;
 }
 
-class TemporaryMissionItemEntry {
+class TemporaryMissionItemEntry implements .pt.ist.bennu.core.domain.VirtualHostAware {
 	DateTime created;
 }
 
 class ClearTemporaryMissionItems extends .pt.ist.bennu.core.domain.scheduler.Task {	
 }
 
-class MissionAuthorizationAccountabilityType {
+class MissionAuthorizationAccountabilityType implements .pt.ist.bennu.core.domain.VirtualHostAware {
 }
 
-class DailyPersonelExpenseTable {
+class DailyPersonelExpenseTable implements .pt.ist.bennu.core.domain.VirtualHostAware {
 	LocalDate aplicableSince;
 	String aplicableToMissionType;
 }
 
-class DailyPersonelExpenseCategory {
+class DailyPersonelExpenseCategory implements .pt.ist.bennu.core.domain.VirtualHostAware {
 	String description;
 	Money value;
 	BigDecimal minSalaryValue;
 }
 
-class Salary {
+class Salary implements .pt.ist.bennu.core.domain.VirtualHostAware {
 	BigDecimal value;
 }
 
-class AccountabilityTypeQueue {
+class AccountabilityTypeQueue implements .pt.ist.bennu.core.domain.VirtualHostAware {
 }
 
 class EmailDigester extends .pt.ist.bennu.core.domain.scheduler.Task {
@@ -205,6 +209,15 @@ class EmailDigester extends .pt.ist.bennu.core.domain.scheduler.Task {
 relation MyOrgMissionSystem {
 	.pt.ist.bennu.core.domain.MyOrg playsRole myOrg;
 	MissionSystem playsRole missionSystem;
+}
+
+relation VirtualHostMissionSystem {
+	.pt.ist.bennu.core.domain.VirtualHost playsRole virtualHost {
+		multiplicity *;
+	}
+	MissionSystem playsRole missionSystem {
+		multiplicity 0..1;
+	}
 }
 
 relation MissionSystemMissionFinancer {
@@ -277,6 +290,20 @@ relation MissionProcessMission {
 	Mission playsRole mission;
 }
 
+relation MissionProcessAssociationMissionProcess {
+	MissionProcessAssociation playsRole missionProcessAssociation;
+	MissionProcess playsRole missionProcesses {
+		multiplicity *;
+	}
+}
+
+relation MissionProcessAssociationMyOrg {
+	.pt.ist.bennu.core.domain.MyOrg playsRole myOrg;
+	MissionProcessAssociation playsRole missionProcessAssociation {
+		multiplicity *;
+	}
+}
+
 relation MissionMissionVersion {
 	Mission playsRole mission;
 	MissionVersion playsRole missionVersions {
@@ -345,6 +372,13 @@ relation MissionItemPerson {
 		multiplicity *;
 	}
 	MissionItem playsRole missionItems {
+		multiplicity *;
+	}
+}
+
+relation VehiclItemDriver {
+	.module.organization.domain.Person playsRole driver;
+	VehiclItem playsRole vehiclItemsDriven {
 		multiplicity *;
 	}
 }
@@ -530,7 +564,9 @@ relation PersonelExpenseItemDailyPersonelExpenseCategory {
 }
 
 relation MissionSystemCountry {
-	MissionSystem playsRole missionSystem;
+	MissionSystem playsRole missionSystem {
+		multiplicity *;
+	}
 	.module.geography.domain.Country playsRole country;
 }
 
@@ -549,7 +585,9 @@ relation MissionSystemAccountabilityTypeQueue {
 }
 
 relation AccountabilityTypeQueueAccountabilityType {
-	AccountabilityTypeQueue playsRole accountabilityTypeQueue;
+	AccountabilityTypeQueue playsRole accountabilityTypeQueue {
+		multiplicity *;
+	}
 	.module.organization.domain.AccountabilityType playsRole accountabilityType;
 }
 
@@ -659,7 +697,9 @@ relation MissionFinancerAccountingUnit {
 }
 
 relation MissionSystemUsersWhoCanCancelMission {
-	MissionSystem playsRole missionSystemFromUsersWhoCanCancel;
+	MissionSystem playsRole missionSystemFromUsersWhoCanCancel  {
+		multiplicity *;
+	}
 	.pt.ist.bennu.core.domain.User playsRole usersWhoCanCancelMission {
 		multiplicity *;
 	}

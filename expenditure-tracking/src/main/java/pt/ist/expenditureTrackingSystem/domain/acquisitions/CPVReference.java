@@ -71,6 +71,21 @@ public class CPVReference extends CPVReference_Base /* implements Indexable, Sea
 
     };
 
+    public static Comparator<CPVReference> COMPARATOR_BY_CODE = new Comparator<CPVReference>() {
+
+	@Override
+	public int compare(final CPVReference o1, final CPVReference o2) {
+	    if (o1 == null && o2 == null) {
+		return 0;
+	    }
+	    if (o1 == null) {
+		return 1;
+	    }
+	    return o2 == null ? -1 : o1.getCode().compareTo(o2.getCode());
+	}
+
+    };
+
     public CPVReference(String code, String description) {
 	checkParameters(code, description);
 

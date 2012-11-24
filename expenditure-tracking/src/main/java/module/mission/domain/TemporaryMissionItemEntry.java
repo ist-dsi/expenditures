@@ -1,8 +1,9 @@
 package module.mission.domain;
 
-import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
-
 import org.joda.time.DateTime;
+
+import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
+import pt.ist.bennu.core.domain.VirtualHost;
 
 public class TemporaryMissionItemEntry extends TemporaryMissionItemEntry_Base {
     
@@ -40,6 +41,11 @@ public class TemporaryMissionItemEntry extends TemporaryMissionItemEntry_Base {
 	final DateTime dateTime = hasUser() ? getUser().getLastLogoutDateTime() : null;
 	final DateTime threashold = dateTime == null ? new DateTime().minusDays(1) : dateTime;
 	return getCreated().isBefore(threashold);
+    }
+
+    @Override
+    public boolean isConnectedToCurrentHost() {
+	return getMissionSystem() == VirtualHost.getVirtualHostForThread().getMissionSystem();
     }
 
 }

@@ -107,6 +107,9 @@ public class ParticipantAuthorizationChain implements Serializable {
     }
 
     public static Collection<ParticipantAuthorizationChain> getParticipantAuthorizationChains(final Person person) {
+	if (!isEmployeeOfInstitution(person)) {
+	    return Collections.emptySet();
+	}
 	final Collection<Accountability> parentAccountabilities = person.getParentAccountabilities(MissionSystem.getInstance().getAccountabilityTypesRequireingAuthorization());
 	final Collection<ParticipantAuthorizationChain> participantAuthorizationChains = new ArrayList<ParticipantAuthorizationChain>();
 	for (final AuthorizationChain authorizationChain : getParticipantAuthorizationChains(parentAccountabilities)) {
@@ -193,6 +196,19 @@ public class ParticipantAuthorizationChain implements Serializable {
 	return null;
     }
 
+    public static boolean isEmployeeOfInstitution(final Person person) {
+	final OrganizationalModel model = MissionSystem.getInstance().getOrganizationalModel();
+	// TODO: Remove this hard-coded hack. It should be configured in the mission system
+	final AccountabilityType employeeType = AccountabilityType.readBy("Employment");
+	for (final Accountability accountability : person.getParentAccountabilitiesSet()) {
+	    final AccountabilityType accountabilityType = accountability.getAccountabilityType();
+	    if (accountabilityType == employeeType && model.getPartiesSet().contains(accountability.getParent())) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
     protected int getChainSize() {
 	return getAuthorizationChain().getChainSize();
     }
@@ -204,7 +220,11 @@ public class ParticipantAuthorizationChain implements Serializable {
 		final AccountabilityType accountabilityType = accountability.getAccountabilityType();
 		final Set<AccountabilityType> accountabilityTypes = MissionSystem.getInstance().getAccountabilityTypesForAuthorization(accountabilityType);
 		if (accountabilityTypes != null && !accountabilityTypes.isEmpty()) { 
-		    result.addAll(getParticipantAuthorizationChains(accountabilityTypes, accountability));
+		    for (final AuthorizationChain chain : getParticipantAuthorizationChains(accountabilityTypes, accountability)) {
+			if (chain.isForCurrentInstitution()) {
+			    result.add(chain);
+			}
+		    }
 		}
 	    }
 	}

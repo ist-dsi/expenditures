@@ -3,12 +3,12 @@
 <!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
 <jasperReport
 		 name="acquisitionRequestDeliveryLocals"
-		 columnCount="2"
+		 columnCount="1"
 		 printOrder="Horizontal"
 		 orientation="Portrait"
 		 pageWidth="535"
 		 pageHeight="842"
-		 columnWidth="262"
+		 columnWidth="512"
 		 columnSpacing="10"
 		 leftMargin="0"
 		 rightMargin="0"
@@ -65,7 +65,7 @@
 					<reportElement
 						x="0"
 						y="5"
-						width="258"
+						width="516"
 						height="66"
 						key="rectangle-1"/>
 					<graphicElement stretchType="NoStretch">
@@ -89,7 +89,7 @@
 					<reportElement
 						x="30"
 						y="10"
-						width="228"
+						width="456"
 						height="10"
 						key="textField-2"/>
 					<box>					<pen lineWidth="0.0" lineStyle="Double"/>
@@ -107,7 +107,7 @@
 					<reportElement
 						x="30"
 						y="21"
-						width="228"
+						width="456"
 						height="10"
 						key="textField-3"/>
 					<box></box>
@@ -120,7 +120,7 @@
 					<reportElement
 						x="30"
 						y="41"
-						width="228"
+						width="456"
 						height="10"
 						key="textField-5"/>
 					<box></box>
@@ -133,7 +133,7 @@
 					<reportElement
 						x="30"
 						y="51"
-						width="228"
+						width="456"
 						height="10"
 						key="textField-7"/>
 					<box></box>
@@ -146,7 +146,7 @@
 					<reportElement
 						x="30"
 						y="61"
-						width="228"
+						width="456"
 						height="10"
 						key="textField-8"/>
 					<box></box>
@@ -159,7 +159,7 @@
 					<reportElement
 						x="30"
 						y="31"
-						width="228"
+						width="456"
 						height="10"
 						key="textField-3"/>
 					<box></box>

@@ -28,6 +28,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
@@ -38,12 +39,11 @@ import module.organization.domain.AccountabilityType;
 import module.organization.domain.OrganizationalModel;
 import module.organization.domain.Party;
 import module.organization.domain.Unit;
-import module.workflow.domain.ProcessCounter;
-import module.workflow.domain.WorkflowProcess;
-import module.workflow.widgets.ProcessListWidget;
 import pt.ist.bennu.core.domain.MyOrg;
 import pt.ist.bennu.core.domain.User;
+import pt.ist.bennu.core.domain.VirtualHost;
 import pt.ist.bennu.core.util.BundleUtil;
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.fenixWebFramework.services.Service;
 
 /**
@@ -53,47 +53,67 @@ import pt.ist.fenixWebFramework.services.Service;
  */
 public class MissionSystem extends MissionSystem_Base {
 
-    static boolean migrated = false;
-
     public static MissionSystem getInstance() {
-	final MyOrg myOrg = MyOrg.getInstance();
-	if (!myOrg.hasMissionSystem()) {
-	    initialize();
+	final VirtualHost virtualHostForThread = VirtualHost.getVirtualHostForThread();
+	if (!virtualHostForThread.hasMissionSystem()) {
+	    initialize(virtualHostForThread);
 	}
 
-	// The following code is some migration stuff it only has to run once after this code has been deleted.
-	if (!migrated) {
-	    synchronized (myOrg.getMissionSystem()) {
-		if (!migrated) {
-		    migrated = true;
-		    migrate(myOrg);
-		}
+	// The following code is some migration stuff; it only has to run once.
+	// TODO: Afterwards, this code can be been deleted.
+	if (!isMigrated()) {
+	    migrate();
+	}
+
+	return virtualHostForThread == null ? null : virtualHostForThread.getMissionSystem();
+    }
+
+    @Service
+    public synchronized static void initialize(VirtualHost virtualHost) {
+	if (!virtualHost.hasMissionSystem()) {
+	    new MissionSystem(virtualHost);
+	}
+    }
+
+    private static boolean isMigrated() {
+	return MyOrg.getInstance().getMissionSystem().hasAnyVirtualHost();
+    }
+
+    @Service
+    public static void migrate() {
+	System.out.println("Migrating mission stuff...");
+	MyOrg myOrg = MyOrg.getInstance();
+	VirtualHost comprasHost = null;
+	VirtualHost dotHost = null;
+	for (VirtualHost vHost : myOrg.getVirtualHosts()) {
+	    if (vHost.getExternalId().equals("395136991233")) {
+		comprasHost = vHost;
+	    } else if (vHost.getExternalId().equals("395136991834")) {
+		dotHost = vHost;
 	    }
 	}
-
-	return myOrg.getMissionSystem();
-    }
-
-    @Service
-    public synchronized static void initialize() {
-	final MyOrg myOrg = MyOrg.getInstance();
-	if (!myOrg.hasMissionSystem()) {
-	    new MissionSystem(myOrg);
+	if (comprasHost == null || dotHost == null) {
+	    throw new RuntimeException("Mission migration error: dot or compras VirtualHosts not found");
 	}
+	myOrg.getMissionSystem().addVirtualHost(comprasHost);
+	myOrg.getMissionSystem().addVirtualHost(dotHost);
     }
 
-    @Service
-    public static void migrate(final MyOrg myOrg) {
-	System.out.println("Migrating mission stuff...");
-	// The following code is some migration stuff it only has to run once after this code has been deleted.
-	for (final Mission mission : myOrg.getMissionSystem().getMissionsSet()) {
-	    mission.migrate();
-	}
-    }
-
-    private MissionSystem(final MyOrg myOrg) {
+    private MissionSystem(final VirtualHost virtualHost) {
 	super();
-	setMyOrg(myOrg);
+	addVirtualHost(virtualHost);
+    }
+
+    public ExpenditureTrackingSystem getExpenditureTrackingSystem() {
+	return getVirtualHost().get(0).getExpenditureTrackingSystem();
+    }
+
+    public List<pt.ist.expenditureTrackingSystem.domain.organization.Unit> getTopLevelUnitsFromExpenditureSystem() {
+	return getExpenditureTrackingSystem().getTopLevelUnits();
+    }
+
+    public pt.ist.expenditureTrackingSystem.domain.organization.Unit getFirstTopLevelUnitFromExpenditureSystem() {
+	return getExpenditureTrackingSystem().getTopLevelUnits().get(0);
     }
 
     public Set<AccountabilityType> getAccountabilityTypesThatAuthorize() {
@@ -214,6 +234,27 @@ public class MissionSystem extends MissionSystem_Base {
     @Override
     public void removeUsersWhoCanCancelMission(User usersWhoCanCancelMission) {
         super.removeUsersWhoCanCancelMission(usersWhoCanCancelMission);
+    }
+
+    public static Set<MissionSystem> readAllMissionSystems() {
+	Set<MissionSystem> systems = new HashSet<MissionSystem>();
+	for (VirtualHost vh : MyOrg.getInstance().getVirtualHosts()) {
+	    if (vh.hasMissionSystem()) {
+		systems.add(vh.getMissionSystem());
+	    }
+	}
+	return systems;
+    }
+
+    public boolean allowGrantOwnerEquivalence() {
+	final Boolean b = getAllowGrantOwnerEquivalence();
+	return b != null && b.booleanValue();
+    }
+
+    @Service
+    public void toggleAllowGrantOwnerEquivalence() {
+	final Boolean b = getAllowGrantOwnerEquivalence();
+	setAllowGrantOwnerEquivalence(b == null ? Boolean.TRUE : Boolean.valueOf(!b.booleanValue()));
     }
 
 }

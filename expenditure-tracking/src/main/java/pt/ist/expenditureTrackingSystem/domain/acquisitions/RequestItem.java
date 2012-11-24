@@ -54,6 +54,8 @@ public abstract class RequestItem extends RequestItem_Base {
 
     public abstract Money getValue();
 
+    public abstract Money getValueWithoutVat();
+
     public abstract Money getRealValue();
 
     public abstract BigDecimal getVatValue();

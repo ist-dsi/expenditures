@@ -44,7 +44,7 @@ import pt.ist.bennu.core.util.ClassNameBundle;
 import org.joda.time.LocalDate;
 
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
-import pt.ist.expenditureTrackingSystem.domain.RoleType;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionItemClassification;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Invoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.activities.DeleteAfterTheFactAcquisitionProcess;
@@ -243,6 +243,11 @@ public class AfterTheFactAcquisitionProcess extends AfterTheFactAcquisitionProce
     @Override
     public Set<CPVReference> getCPVReferences() {
 	return Collections.emptySet();
+    }
+
+    @Override
+    public AcquisitionItemClassification getGoodsOrServiceClassification() {
+	return null;
     }
 
 }

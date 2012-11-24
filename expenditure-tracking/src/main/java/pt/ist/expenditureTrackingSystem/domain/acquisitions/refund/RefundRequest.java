@@ -179,4 +179,29 @@ public class RefundRequest extends RefundRequest_Base {
 	}
     }
 
+    public AcquisitionItemClassification getGoodsOrServiceClassification() {
+	Money goods = Money.ZERO;
+	Money services = Money.ZERO;
+	for (final RequestItem requestItem : getRequestItemsSet()) {
+	    final RefundItem refundItem = (RefundItem) requestItem;
+	    final AcquisitionItemClassification classification = refundItem.getClassification();
+	    if (classification != null) {
+		final Money realValue = refundItem.getRealValue();
+		if (realValue != null) {
+		    if (classification == AcquisitionItemClassification.GOODS) {
+			goods = goods.add(realValue);
+		    } else if (classification == AcquisitionItemClassification.SERVICES) {
+			services = services.add(realValue);
+		    } else {
+			throw new Error("unreachable.code");
+		    }
+		}
+	    }
+	}
+	if (goods.isZero() && services.isZero()) {
+	    return null;
+	}
+	return goods.isGreaterThan(services) ? AcquisitionItemClassification.GOODS : AcquisitionItemClassification.SERVICES;
+    }
+
 }

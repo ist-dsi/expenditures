@@ -24,14 +24,22 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
+import pt.ist.bennu.core.domain.util.Money;
 import pt.ist.bennu.core.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundableInvoiceFile;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 
@@ -60,12 +68,8 @@ public class UnsetSkipSupplierFundAllocation extends WorkflowActivity<RefundProc
     protected void process(ActivityInformation<RefundProcess> activityInformation) {
 	RefundProcess process = activityInformation.getProcess();
 
-	for (Supplier supplier : process.getRequest().getSuppliers()) {
-	    if (!supplier.isFundAllocationAllowed(process.getRequest().getTotalValue())) {
-		throw new DomainException("acquisitionProcess.message.exception.SupplierDoesNotAlloweAmount", DomainException
-			.getResourceFor("resources/AcquisitionResources"));
-	    }
-	}
+	process.checkIsFundAllocationAllowed();
+	    
 	process.setSkipSupplierFundAllocation(Boolean.FALSE);
 
     }

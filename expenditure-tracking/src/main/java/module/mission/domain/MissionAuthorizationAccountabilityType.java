@@ -1,6 +1,7 @@
 package module.mission.domain;
 
 import module.organization.domain.AccountabilityType;
+import pt.ist.bennu.core.domain.VirtualHost;
 import pt.ist.fenixWebFramework.services.Service;
 
 public class MissionAuthorizationAccountabilityType extends MissionAuthorizationAccountabilityType_Base {
@@ -37,6 +38,11 @@ public class MissionAuthorizationAccountabilityType extends MissionAuthorization
 	getAccountabilityTypesSet().clear();
 	removeMissionSystem();
 	deleteDomainObject();
+    }
+
+    @Override
+    public boolean isConnectedToCurrentHost() {
+	return getMissionSystem() == VirtualHost.getVirtualHostForThread().getMissionSystem();
     }
 
 }

@@ -32,6 +32,7 @@ import module.mission.domain.activity.DistributeItemCostsActivityInformation.Mis
 import module.mission.domain.activity.DistributeItemCostsActivityInformation.MissionItemFinancerBeanCollection;
 import module.mission.domain.activity.ItemActivityInformation;
 import module.organization.domain.Person;
+import pt.ist.bennu.core.domain.VirtualHost;
 import pt.ist.bennu.core.domain.util.Money;
 import pt.ist.bennu.core.util.BundleUtil;
 
@@ -57,6 +58,7 @@ public abstract class MissionItem extends MissionItem_Base {
 	new TemporaryMissionItemEntry(this);
     }
 
+    @Override
     @Deprecated
     public void setMission(final Mission mission) {
 	setMissionVersion(mission);
@@ -267,6 +269,11 @@ public abstract class MissionItem extends MissionItem_Base {
 	for (final MissionItemFinancer missionItemFinancer : getMissionItemFinancersSet()) {
 	    missionItemFinancer.unArchive();
 	}
+    }
+
+    @Override
+    public boolean isConnectedToCurrentHost() {
+	return getMissionSystem() == VirtualHost.getVirtualHostForThread().getMissionSystem();
     }
 
 }

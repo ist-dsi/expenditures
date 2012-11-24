@@ -26,6 +26,7 @@ package module.mission.domain.activity;
 
 import module.mission.domain.Mission;
 import module.mission.domain.MissionProcess;
+import module.mission.domain.MissionSystem;
 import module.workflow.activities.ActivityInformation;
 import pt.ist.bennu.core.domain.RoleType;
 import pt.ist.bennu.core.domain.User;

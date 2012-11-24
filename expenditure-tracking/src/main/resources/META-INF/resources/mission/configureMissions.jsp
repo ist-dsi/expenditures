@@ -1,3 +1,4 @@
+<%@page import="module.mission.domain.MissionSystem"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html"%>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-bean" prefix="bean"%>
@@ -82,6 +83,24 @@
 		</fr:view>
 	</logic:notEmpty>
 </logic:present>
+
+
+<form action="<%= request.getContextPath() + "/configureMissions.do" %>" method="post">
+	<html:hidden property="method" value="togleAllowGrantOwnerMissionProcessNature"/>
+
+	<bean:message key="label.configuration.allowGrantOwnerEquivalence" bundle="MISSION_RESOURCES"/>
+
+	<input type="checkbox" name="allowGrantOwnerEquivalence"
+		<% if (MissionSystem.getInstance().allowGrantOwnerEquivalence()) {%>
+				checked="checked"
+		<% } %>
+	/>
+
+	<html:submit styleClass="inputbutton">
+		<bean:message key="renderers.form.submit.name" bundle="RENDERER_RESOURCES"/>
+	</html:submit>
+</form>
+
 
 <br/>
 

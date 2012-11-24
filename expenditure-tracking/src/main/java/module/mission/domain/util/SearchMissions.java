@@ -26,6 +26,7 @@ package module.mission.domain.util;
 
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -37,6 +38,7 @@ import module.mission.domain.MissionProcess;
 import module.mission.domain.MissionSystem;
 import module.mission.domain.MissionYear;
 import module.mission.domain.NationalMission;
+import module.mission.domain.PersonMissionAuthorization;
 import module.organization.domain.Party;
 import module.organization.domain.Person;
 import pt.ist.bennu.core.domain.util.Search;
@@ -162,6 +164,7 @@ public class SearchMissions extends Search<Mission> {
     private Person accountManager;
     private Boolean filterCanceledProcesses = Boolean.TRUE;
     private MissionStage pendingStage;
+    private Person participantAuthorizationAuthority;
 
     @Override
     public Set<Mission> search() {
@@ -179,6 +182,9 @@ public class SearchMissions extends Search<Mission> {
 	if (participant != null) {
 	    return participant.getMissionsSet();
 	}
+	if (participantAuthorizationAuthority != null) {
+	    return getMissionsFromParticipantAuthorizationAuthority(participantAuthorizationAuthority);
+	}
 	if (processNumber != null && !processNumber.isEmpty()) {
 	    final int i = processNumber.indexOf('/');
 	    if (i > 0) {
@@ -190,6 +196,15 @@ public class SearchMissions extends Search<Mission> {
 	    }
 	}
 	return MissionSystem.getInstance().getMissionsSet();
+    }
+
+    private Set<Mission> getMissionsFromParticipantAuthorizationAuthority(final Person person) {
+	final Set<Mission> result = new HashSet<Mission>();
+	for (final PersonMissionAuthorization authorization : person.getPersonMissionAuthorizationFromAuthoritySet()) {
+	    final Mission mission = authorization.getAssociatedMission();
+	    result.add(mission);
+	}
+	return result;
     }
 
     protected class SearchResult extends SearchResultSet<Mission> {
@@ -209,6 +224,7 @@ public class SearchMissions extends Search<Mission> {
 		    && matchIntervalCriteria(mission)
 		    && matchRequestingPersonCriteria(mission.getRequestingPerson())
 		    && matchParticipantCriteria(mission)
+		    && matchParticipantAuthorizationAuthorityCriteria(mission)
 		    && matchAccountManagerCriteria(mission)
 		    && matchCanceledCriteria(mission)
 		    && mission.getMissionProcess().isAccessibleToCurrentUser()
@@ -227,6 +243,18 @@ public class SearchMissions extends Search<Mission> {
 
 	private boolean matchParticipantCriteria(final Mission mission) {
 	    return participant == null || mission.getParticipantesSet().contains(participant);
+	}
+
+	private boolean matchParticipantAuthorizationAuthorityCriteria(final Mission mission) {
+	    if (participantAuthorizationAuthority == null) {
+		return true;
+	    }
+	    for (final PersonMissionAuthorization authorization : participantAuthorizationAuthority.getPersonMissionAuthorizationFromAuthoritySet()) {
+		if (mission == authorization.getAssociatedMission()) {
+		    return true;
+		}
+	    }
+	    return false;
 	}
 
 	private boolean matchRequestingPersonCriteria(Person rp) {
@@ -399,6 +427,14 @@ public class SearchMissions extends Search<Mission> {
 
     public void setPendingStage(MissionStage pendingStage) {
         this.pendingStage = pendingStage;
+    }
+
+    public Person getParticipantAuthorizationAuthority() {
+        return participantAuthorizationAuthority;
+    }
+
+    public void setParticipantAuthorizationAuthority(Person participantAuthorizationAuthority) {
+        this.participantAuthorizationAuthority = participantAuthorizationAuthority;
     }
 
 }

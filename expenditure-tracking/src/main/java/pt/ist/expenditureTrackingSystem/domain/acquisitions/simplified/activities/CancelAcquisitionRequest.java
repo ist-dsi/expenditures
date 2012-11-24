@@ -56,7 +56,8 @@ public class CancelAcquisitionRequest extends
 		// Por indicação da Iria em 22-03-2010
 		// || (acquisitionProcessState.isPendingInvoiceConfirmation() &&
 		// isUserResponsibleForUnit(process, person))
-		|| (acquisitionProcessState.isInvoiceReceived() && ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user)));
+		|| (acquisitionProcessState.isInvoiceReceived() && ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user))
+		|| (process.getAcquisitionProcessState().isAuthorized() && process.isPendingCommitmentByUser(user)));
     }
 
     private boolean isUserResponsibleForAuthorizingPayment(RegularAcquisitionProcess process, Person person) {

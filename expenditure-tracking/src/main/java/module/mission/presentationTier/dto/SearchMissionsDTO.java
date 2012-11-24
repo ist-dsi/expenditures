@@ -79,6 +79,8 @@ public class SearchMissionsDTO extends SearchMissions {
 		.getParameter("pOID")));
 	setPendingStage(StringUtils.isEmpty(request.getParameter("ps")) ? null : MissionStage.valueOf(request.getParameter("ps")));
 	setAccountingUnit(StringUtils.isEmpty(request.getParameter("auOID")) ? null : (AccountingUnit) AccountingUnit.fromExternalId(request.getParameter("auOID")));
+	setParticipantAuthorizationAuthority(StringUtils.isEmpty(request.getParameter("paaOID")) ? null : (Person) Person.fromExternalId(request
+		.getParameter("paaOID")));
 
 	final String sortByParameter = request.getParameter("sortBy");
 	if (!StringUtils.isEmpty(sortByParameter) && sortByParameter.indexOf('=') != -1) {
@@ -109,9 +111,10 @@ public class SearchMissionsDTO extends SearchMissions {
     }
 
     public String getRequestParameters() {
-	return new Formatter().format("processNumber=%s&ruOID=%s&puOID=%s&f=%s&d=%s&i=%s&rpOID=%s&pOID=%s&ps=%s&auOID=%s", getProcessNumber(),
+	return new Formatter().format("processNumber=%s&ruOID=%s&puOID=%s&f=%s&d=%s&i=%s&rpOID=%s&pOID=%s&ps=%s&auOID=%s&paaOID=%s", getProcessNumber(),
 		getRequestingUnitParameter(), getPayingUnitParameter(), getForeignParameter(), getDateParameter(), getIntervalParameter(),
 		getRequestingPersonParameter(), getParticipantParameter(), getPendingStageParameter(), getAccountingUnitParameter(),
+		getParticipantAuthorizationAuthorityParameter(),
 		getSortByParameter(), getOrderByParameter()).toString();
     }
 
@@ -158,6 +161,10 @@ public class SearchMissionsDTO extends SearchMissions {
 
     public String getParticipantParameter() {
 	return getParticipant() != null ? getParticipant().getExternalId() : StringUtils.EMPTY;
+    }
+
+    public String getParticipantAuthorizationAuthorityParameter() {
+	return getParticipantAuthorizationAuthority() != null ? getParticipantAuthorizationAuthority().getExternalId() : StringUtils.EMPTY;
     }
 
     private String getPendingStageParameter() {

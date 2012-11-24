@@ -40,6 +40,7 @@ import pt.ist.bennu.core.domain.util.Money;
 import pt.ist.bennu.core.util.BundleUtil;
 import pt.ist.bennu.core.util.ClassNameBundle;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionInvoice;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionItemClassification;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProposalDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
@@ -473,6 +474,12 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
     @Override
     protected boolean isProcessessStartedWithInvoive() {
 	return hasInvoiceFile() && !hasAcquisitionProposalDocument();
+    }
+
+    @Override
+    public AcquisitionItemClassification getGoodsOrServiceClassification() {
+	final AcquisitionRequest request = getRequest();
+	return request.getGoodsOrServiceClassification();
     }
 
 }

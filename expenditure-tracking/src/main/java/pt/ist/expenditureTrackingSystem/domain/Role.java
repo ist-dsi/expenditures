@@ -77,7 +77,7 @@ public class Role extends Role_Base {
     @Service
     public static Role getRole(final RoleType roleType) {
 	for (final Role role : ExpenditureTrackingSystem.getInstance().getRoles()) {
-	    if (role.getRoleType().equals(roleType)) {
+	    if (role.getRoleType().equals(roleType) && role.isConnectedToCurrentHost()) {
 		if (!role.hasSystemRole()) {
 		    role.setSystemRole(pt.ist.bennu.core.domain.groups.Role.getRole(roleType));
 		}

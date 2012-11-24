@@ -2022,6 +2022,18 @@ bundle="ACQUISITION_RESOURCES">
 	<slot name="value" key="label.mission.value"/>
 </schema>
 
+<schema name="activityInformation.AssociateMissionProcessActivity" type="module.mission.domain.activity.AssociateMissionProcessActivityInfo" bundle="MISSION_RESOURCES">
+	<slot name="missionProcessToAssociate" key="label.process.number" layout="autoComplete" required="true">		
+  		<property name="args" value="provider=module.mission.presentationTier.provider.MissionProcessFromOtherSystemsProvider" />
+  		<property name="labelField" value="processIdentification"/>
+  		<property name="format" value="${processIdentification}"/>
+  		<property name="classes" value="inputsize100px"/>
+  		<property name="minChars" value="1"/>
+  		<property name="sortBy" value="processIdentification"/>
+		<property name="saveOptions" value="true"/>
+	</slot>
+</schema>
+
 <schema name="activityInformation.ParticipantActivityInformation" type="module.mission.domain.activity.ParticipantActivityInformation" bundle="MISSION_RESOURCES">
 	<slot name="person" layout="autoComplete" key="label.person" bundle="EXPENDITURE_RESOURCES">
         <property name="labelField" value="name"/>
@@ -2101,16 +2113,6 @@ bundle="ACQUISITION_RESOURCES">
 
 <schema name="person-name" type="pt.ist.expenditureTrackingSystem.domain.organization.Person" bundle="MISSION_RESOURCES">
 	<slot name="name"/>
-</schema>
-
-<schema name="module.mission.domain.activity.ItemActivityInformation.participants" type="module.mission.domain.activity.ItemActivityInformation" bundle="MISSION_RESOURCES">
-	<slot name="people" layout="option-select" key="label.mission.item.people">
-		<property name="eachSchema" value="person-name"/>
-		<property name="eachLayout" value="values-dash"/>
-        <property name="providerClass" value="module.mission.presentationTier.provider.MissionItemParticipantProvider" />
-        <property name="classes" value="nobullet noindent"/>
-        <property name="sortBy" value="name"/>
-    </slot>
 </schema>
 
 <schema name="module.mission.domain.activity.DistributeItemCostsActivityInformation.MissionItemFinancerBean" type="module.mission.domain.activity.DistributeItemCostsActivityInformation$MissionItemFinancerBean" bundle="MISSION_RESOURCES">
@@ -2355,6 +2357,13 @@ bundle="ACQUISITION_RESOURCES">
 	<slot name="pendingStage" key="label.mission.pending.stage">
 		<property name="format" value="${localizedName}" />
 	</slot>
+	<slot name="participantAuthorizationAuthority" layout="autoComplete" key="label.mission.participantAuthorizationAuthority">
+        <property name="labelField" value="name"/>
+		<property name="format" value="${name} (${user.username})"/>
+		<property name="minChars" value="3"/>		
+		<property name="args" value="provider=module.mission.presentationTier.provider.autoComplete.PersonAutoComplete"/>
+		<property name="size" value="50"/>
+	</slot>
 </schema>
 
 <schema name="accountabilityType-name" type="module.organization.domain.AccountabilityType" bundle="MISSION_RESOURCES">
@@ -2436,12 +2445,3 @@ bundle="ACQUISITION_RESOURCES">
 		<property name="nullOptionHidden" value="true" />
 	</slot>
 </schema>		
-<schema name="pt.ist.expenditureTrackingSystem.presentationTier.actions.statistics.YearBean"
-		type="pt.ist.expenditureTrackingSystem.presentationTier.actions.statistics.YearBean"
-		bundle="EXPENDITURE_RESOURCES">
-	<slot name="year" key="label.year" bundle="STATISTICS_RESOURCES">
-		<validator class="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
-		<validator class="pt.ist.fenixWebFramework.renderers.validators.NumberValidator"/>
-	</slot>
-</schema>
-</schemas>
