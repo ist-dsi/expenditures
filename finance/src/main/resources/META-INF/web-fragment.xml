@@ -17,6 +17,7 @@
    <name>scheduler-plugin</name>
    <name>lucene-indexing-plugin</name>
    <name>file-support-plugin</name>
+   <name>bennu-vaadin</name>
    <!-- [END OF BENNU GENERATED FRAGMENT] -->
 		</after>
 		<before>

@@ -40,6 +40,8 @@ public abstract class Provision extends Provision_Base {
 
     public abstract Money getValueAllocatedToSupplier();
 
+    public abstract Money getValueAllocatedToSupplier(final String cpvReference);
+
     public abstract Money getValueAllocatedToSupplierForLimit();
 
     public boolean isInAllocationPeriod() {

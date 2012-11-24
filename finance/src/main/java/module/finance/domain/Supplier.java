@@ -76,6 +76,16 @@ public class Supplier extends Supplier_Base {
 	return result;
     }
 
+    public Money getAllocated(final String cpvReference) {
+	Money result = Money.ZERO;
+	for (final Provision provision : getProvisionsSet()) {
+	    if (provision.isInAllocationPeriod()) {
+		result = result.add(provision.getValueAllocatedToSupplier(cpvReference));
+	    }
+	}
+	return result;
+    }
+
     public Money getAllocatedForLimit() {
 	Money result = Money.ZERO;
 	for (final Provision provision : getProvisionsSet()) {
@@ -90,6 +100,12 @@ public class Supplier extends Supplier_Base {
 	final Money allocated = getAllocated();
 	final Money totalValue = allocated.add(value);
 	return totalValue.isLessThanOrEqual(SUPPLIER_LIMIT) && totalValue.isLessThan(getSupplierLimit());
+    }
+
+    public boolean isFundAllocationAllowed(final String cpvReference, final Money value) {
+	final Money allocated = getAllocated(cpvReference);
+	final Money totalValue = allocated.add(value);
+	return totalValue.isLessThanOrEqual(SUPPLIER_LIMIT) && totalValue.isLessThan(getSupplierLimit());	
     }
 
     public SupplierContact registerContact(final Address address, final String phone, final String fax, final String email) {
