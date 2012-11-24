@@ -25,11 +25,11 @@
 package module.workingCapital.domain;
 
 import module.finance.domain.Supplier;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.domain.util.Money;
 
 import org.joda.time.DateTime;
 
+import pt.ist.bennu.core.domain.User;
+import pt.ist.bennu.core.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 
 /**
@@ -140,6 +140,11 @@ public class WorkingCapitalAcquisition extends WorkingCapitalAcquisition_Base {
 
     @Override
     public Money getValueAllocatedToSupplier() {
+	return isCanceledOrRejected() ? Money.ZERO : getValue();
+    }
+
+    @Override
+    public Money getValueAllocatedToSupplier(final String cpvReference) {
 	return isCanceledOrRejected() ? Money.ZERO : getValue();
     }
 
