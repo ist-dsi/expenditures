@@ -1,4 +1,4 @@
-<%@page import="myorg.domain.util.Money"%>
+<%@page import="pt.ist.bennu.core.domain.util.Money"%>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference"%>
 <%@page import="java.util.Map.Entry"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>

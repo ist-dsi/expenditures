@@ -1,12 +1,12 @@
-<%@page import="myorg.presentationTier.actions.ContextBaseAction"%>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html" %>
+<%@ taglib uri="http://jakarta.apache.org/struts/tags-bean" prefix="bean" %>
+<%@ taglib uri="http://jakarta.apache.org/struts/tags-logic" prefix="logic"%>
+<%@ taglib uri="http://fenix-ashes.ist.utl.pt/fenix-renderers" prefix="fr" %>
+<%@ taglib uri="http://fenix-ashes.ist.utl.pt/workflow" prefix="wf"%>
+<%@page import="pt.ist.bennu.core.presentationTier.actions.ContextBaseAction"%>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.organization.Unit"%>
 <%@page import="module.mission.domain.MissionSystem"%>
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
-<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
-<%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
-<%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr"%>
-<%@ taglib uri="/WEB-INF/workflow.tld" prefix="wf"%>
 
 <h4>
 	<bean:message bundle="MISSION_RESOURCES" key="label.mission.associated.mission.processes"/>
