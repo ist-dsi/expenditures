@@ -2444,4 +2444,5 @@ bundle="ACQUISITION_RESOURCES">
 		<property name="format" value="${name}" />
 		<property name="nullOptionHidden" value="true" />
 	</slot>
-</schema>		
+</schema>
+</schemas>
