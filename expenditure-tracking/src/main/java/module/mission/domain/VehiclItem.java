@@ -56,13 +56,19 @@ public abstract class VehiclItem extends VehiclItem_Base {
 
     @Override
     public void setInfo(final ItemActivityInformation itemActivityInformation) {
-	if (itemActivityInformation.getDriver() == null) {
-	    throw new DomainException("A vehicle item must have a driver");
-	}
+	final Mission mission = itemActivityInformation.getProcess().getMission();
+	if (mission.getParticipantesCount() == 1) {
+	    super.setInfo(itemActivityInformation);
+	    setDriver(mission.getParticipantes().get(0));
+	} else {
+	    if (itemActivityInformation.getDriver() == null) {
+		throw new DomainException("A vehicle item must have a driver");
+	    }
 
-	super.setInfo(itemActivityInformation);
-	setDriver(itemActivityInformation.getDriver());
-	addPeople(itemActivityInformation.getDriver());
+	    super.setInfo(itemActivityInformation);
+	    setDriver(itemActivityInformation.getDriver());
+	    addPeople(itemActivityInformation.getDriver());
+	}
     }
 
     @Override
