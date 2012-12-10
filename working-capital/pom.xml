@@ -69,8 +69,8 @@
 				</executions>
 				<dependencies>
 					<dependency>
-						<groupId>net.sf.jasperreports</groupId>
-						<artifactId>jasperreports</artifactId>
+						<groupId>jasperreports</groupId>
+						<artifactId>jasperreports-javaflow</artifactId>
 						<version>3.6.0</version>
 					</dependency>
 					<dependency>
