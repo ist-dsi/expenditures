@@ -42,6 +42,7 @@ public class ImportFile extends ImportFile_Base {
 	setActive(Boolean.TRUE);
     }
 
+    @Override
     @Service
     public void delete() {
 	if (getAfterTheFactAcquisitionProcessesCount() > 0) {

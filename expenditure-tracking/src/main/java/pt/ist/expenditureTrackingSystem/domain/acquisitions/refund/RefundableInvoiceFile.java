@@ -63,12 +63,14 @@ public class RefundableInvoiceFile extends RefundableInvoiceFile_Base {
 	this.setSupplier(supplier);
 	this.setFilename(filename);
 	this.setContent(invoiceFile);
+	init(filename, filename, invoiceFile);
     }
 
     public void delete() {
 	for (RequestItem item : getRequestItems()) {
 	    item.clearRealShareValues();
 	}
+	removeProcess();
 	getRequestItems().clear();
 	removeSupplier();
 	super.delete();

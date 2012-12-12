@@ -33,6 +33,8 @@ import java.util.Set;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.ist.bennu.core.domain.util.Money;
 
+import module.workflow.domain.WorkflowProcess;
+
 import org.joda.time.LocalDate;
 
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionItemClassification;
@@ -138,7 +140,8 @@ public class RefundItem extends RefundItem_Base {
 
     @Service
     public RefundableInvoiceFile createRefundInvoice(String invoiceNumber, LocalDate invoiceDate, Money value,
-	    BigDecimal vatValue, Money refundableValue, byte[] invoiceFile, String filename, Supplier supplier) {
+	    BigDecimal vatValue, Money refundableValue, byte[] invoiceFile, String filename, Supplier supplier,
+	    WorkflowProcess process) {
 	RefundableInvoiceFile invoice = new RefundableInvoiceFile(invoiceNumber, invoiceDate, value, vatValue, refundableValue,
 		invoiceFile, filename, this, supplier);
 
@@ -152,6 +155,9 @@ public class RefundItem extends RefundItem_Base {
 	    clearRealShareValues();
 	    unitItemFor.setRealShareValue(amount);
 	}
+
+	process.addFiles(invoice);
+
 	return invoice;
     }
 
