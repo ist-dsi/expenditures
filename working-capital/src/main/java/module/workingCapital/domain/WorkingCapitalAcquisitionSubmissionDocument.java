@@ -24,6 +24,8 @@
  */
 package module.workingCapital.domain;
 
+import module.workflow.domain.WorkflowProcess;
+
 /**
  * 
  * @author João Neves
@@ -32,11 +34,13 @@ package module.workingCapital.domain;
 public class WorkingCapitalAcquisitionSubmissionDocument extends WorkingCapitalAcquisitionSubmissionDocument_Base {
 
     public WorkingCapitalAcquisitionSubmissionDocument(final WorkingCapitalAcquisitionSubmission submissionTransaction,
-	    final byte[] contents, final String fileName) {
+	    final byte[] contents, final String fileName, WorkflowProcess process) {
 	super();
 	setTransaction(submissionTransaction);
 	setContent(contents);
 	setFilename(fileName);
+	init(fileName, fileName, contents);
+	process.addFiles(this);
     }
 
 }

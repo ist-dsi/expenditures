@@ -94,9 +94,10 @@ public class SubmitForValidationActivity extends WorkflowActivity<WorkingCapital
 	    previousTransaction = previousTransaction.getPreviousTransaction();
 	}
 
+	String txNumber = String.valueOf(acquisitionSubmission.getNumber());
 	byte[] contents = createAcquisitionSubmissionDocument(acquisitionSubmission);
 	WorkingCapitalAcquisitionSubmissionDocument document = new WorkingCapitalAcquisitionSubmissionDocument(
-		acquisitionSubmission, contents, ".pdf");
+		acquisitionSubmission, contents, "SubmissionDocument" + txNumber + ".pdf", activityInformation.getProcess());
 	document.setFilename("Submission" + document.getOid() + document.getFilename());
     }
 
