@@ -9,6 +9,8 @@
 
 <jsp:include page="shortBody.jsp"/>
 
+<bean:define id="theme" name="virtualHost" property="theme.name"/>
+
 <bean:define id="processId" name="process" property="externalId"/>
 <html:link page='<%= "/workflowProcessManagement.do?method=viewProcess&processId=" + processId %>'> 
 	<bean:message key="link.back" bundle="MYORG_RESOURCES"/>
@@ -82,7 +84,7 @@
 						<fr:view name="workingCapitalAcquisitionTransaction" property="description"/>
 					</td>
 					<td>
-						<img src="<%= request.getContextPath() + "/workingCapital/image/accept.gif" %>">
+						<img src="<%= request.getContextPath() + "/CSS/" + theme + "/images/accept.gif"%>"/>
 					</td>
 					<td>
 						<fr:view name="workingCapitalAcquisitionTransaction" property="value"/>

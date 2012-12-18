@@ -9,6 +9,8 @@
 
 <bean:define id="process" name="workingCapitalTransaction" property="workingCapital.workingCapitalProcess" toScope="request"/>
 
+<bean:define id="theme" name="virtualHost" property="theme.name"/>
+
 <td>
 	<fr:view name="workingCapitalTransaction" property="number"/>
 </td>
@@ -25,7 +27,7 @@
 <td>
 	<logic:equal name="workingCapitalTransaction" property="acquisition" value="true">
 		<logic:notEmpty name="workingCapitalTransaction" property="workingCapitalAcquisition.approved">
-			<img src="<%= request.getContextPath() + "/workingCapital/image/accept.gif" %>">
+			<img src="<%= request.getContextPath() + "/CSS/" + theme + "/images/accept.gif"%>"/>
 		</logic:notEmpty>
 		<logic:notEmpty name="workingCapitalTransaction" property="workingCapitalAcquisition.rejectedApproval">
 			<img src="<%= request.getContextPath() + "/workingCapital/image/incorrect.gif" %>">
@@ -50,7 +52,7 @@
 <td>
 	<logic:equal name="workingCapitalTransaction" property="acquisition" value="true">
 		<logic:notEmpty name="workingCapitalTransaction" property="workingCapitalAcquisition.verified">
-			<img src="<%= request.getContextPath() + "/workingCapital/image/accept.gif" %>">
+			<img src="<%= request.getContextPath() + "/CSS/" + theme + "/images/accept.gif"%>"/>
 		</logic:notEmpty>
 		<logic:notEmpty name="workingCapitalTransaction" property="workingCapitalAcquisition.notVerified">
 			<img src="<%= request.getContextPath() + "/workingCapital/image/incorrect.gif" %>">
