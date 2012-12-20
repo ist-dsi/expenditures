@@ -232,7 +232,13 @@ public class MissionFinancer extends MissionFinancer_Base {
 
     public boolean isAccountManager(final Person person) {
 	final Unit unit = getUnit();
-	return !unit.hasSomeAccountManager() || unit.isAccountManager(person.getUser().getExpenditurePerson());
+	if (!unit.hasSomeAccountManager()) {
+	    return true;
+	} else if (person == null) {
+	    return false;
+	} else {
+	    return unit.isAccountManager(person.getUser().getExpenditurePerson());
+	}
     }
 
     public boolean canAllocateProjectFunds(final Person person) {
