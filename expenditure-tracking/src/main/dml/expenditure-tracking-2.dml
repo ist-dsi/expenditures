@@ -46,8 +46,12 @@ relation MyOrgRoleExpendituresRole {
 }
 
 relation UserExpenditurePerson {
-	pt.ist.expenditureTrackingSystem.domain.organization.Person playsRole expenditurePerson;
-	pt.ist.bennu.core.domain.User playsRole user;
+	pt.ist.expenditureTrackingSystem.domain.organization.Person playsRole expenditurePerson {
+		multiplicity 1..1;
+	}
+	pt.ist.bennu.core.domain.User playsRole user {
+		multiplicity 1..1;
+	}
 }
 
 relation UnitExpenditureUnit {
