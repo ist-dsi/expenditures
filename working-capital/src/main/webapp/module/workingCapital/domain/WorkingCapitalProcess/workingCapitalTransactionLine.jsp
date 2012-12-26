@@ -30,7 +30,7 @@
 			<img src="<%= request.getContextPath() + "/CSS/" + theme + "/images/accept.gif"%>"/>
 		</logic:notEmpty>
 		<logic:notEmpty name="workingCapitalTransaction" property="workingCapitalAcquisition.rejectedApproval">
-			<img src="<%= request.getContextPath() + "/workingCapital/image/incorrect.gif" %>">
+			<img src="<%= request.getContextPath() + "/CSS/" + theme + "/images/incorrect.gif" %>">
 		</logic:notEmpty>
 		<logic:notPresent name="viewWorkingCapitalTransaction">
 			<logic:equal name="workingCapitalTransaction" property="pendingApprovalByUser" value="true">
@@ -55,7 +55,7 @@
 			<img src="<%= request.getContextPath() + "/CSS/" + theme + "/images/accept.gif"%>"/>
 		</logic:notEmpty>
 		<logic:notEmpty name="workingCapitalTransaction" property="workingCapitalAcquisition.notVerified">
-			<img src="<%= request.getContextPath() + "/workingCapital/image/incorrect.gif" %>">
+			<img src="<%= request.getContextPath() + "/CSS/" + theme + "/images/incorrect.gif" %>">
 		</logic:notEmpty>
 		<logic:notPresent name="viewWorkingCapitalTransaction">
 			<logic:equal name="workingCapitalTransaction" property="pendingVerificationByUser" value="true">
