@@ -28,6 +28,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Set;
 
+import jvstm.cps.ConsistencyPredicate;
 import module.mission.domain.activity.DistributeItemCostsActivityInformation.MissionItemFinancerBean;
 import module.mission.domain.activity.DistributeItemCostsActivityInformation.MissionItemFinancerBeanCollection;
 import module.mission.domain.activity.ItemActivityInformation;
@@ -276,4 +277,14 @@ public abstract class MissionItem extends MissionItem_Base {
 	return getMissionSystem() == VirtualHost.getVirtualHostForThread().getMissionSystem();
     }
 
+    @ConsistencyPredicate
+    public boolean checkIsTemporaryOrHasMissionVersion() {
+	if (!hasTemporaryMissionItemEntry() && hasMissionVersion()) {
+	    return true;
+	}
+	if (hasTemporaryMissionItemEntry() && !hasMissionVersion()) {
+	    return true;
+	}
+	return false;
+    }
 }
