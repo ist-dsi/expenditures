@@ -45,6 +45,10 @@ import module.workflow.domain.WorkflowProcessComment;
 import module.workflow.domain.WorkflowQueue;
 import module.workflow.domain.utils.WorkflowCommentCounter;
 import module.workflow.widgets.UnreadCommentsWidget;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.joda.time.DateTime;
+
 import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
 import pt.ist.bennu.core.domain.RoleType;
 import pt.ist.bennu.core.domain.User;
@@ -52,10 +56,6 @@ import pt.ist.bennu.core.domain.VirtualHost;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.ist.bennu.core.util.BundleUtil;
 import pt.ist.bennu.core.util.ClassNameBundle;
-
-import org.apache.commons.collections.CollectionUtils;
-import org.joda.time.DateTime;
-
 import pt.ist.emailNotifier.domain.Email;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
@@ -174,7 +174,7 @@ public abstract class MissionProcess extends MissionProcess_Base {
 	if (system.hasProcessPrefix()) {
 	    return system.getInstitutionalProcessNumberPrefix() + "/" + getMissionYear().getYear() + "/M" + getProcessNumber();
 	}
-	return getMissionYear().getYear() + "/" + getProcessNumber();
+	return getMissionYear().getYear() + "/M" + getProcessNumber();
     }
 
     public WorkflowActivity getActivity(Class<? extends WorkflowActivity> clazz) {
@@ -261,8 +261,7 @@ public abstract class MissionProcess extends MissionProcess_Base {
     }
 
     public boolean isApproved() {
-	final Mission mission = getMission();
-	return mission.isApproved();
+	return getMission().isApproved();
     }
 
     public boolean hasAllAllocatedFunds() {
