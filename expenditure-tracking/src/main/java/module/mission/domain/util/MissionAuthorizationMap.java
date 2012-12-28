@@ -67,8 +67,7 @@ public class MissionAuthorizationMap implements Serializable {
 	if (organizationalModel == null) {
 	    return;
 	}
-	final Set<Party> partiesSet = organizationalModel.getPartiesSet();
-	findLevel(0, partiesSet);
+	findLevel(0, organizationalModel.getParties());
 	if (levels[0] != null) {
 	    findLevel(1, levels[0].getChildren(organizationalModel.getAccountabilityTypesSet()));
 	    if (levels[1] != null) {
@@ -112,8 +111,8 @@ public class MissionAuthorizationMap implements Serializable {
 	}
     }
 
-    private void findLevel(final int index, final Collection<Party> partiesSet) {
-	for (final Party party : partiesSet) {
+    private void findLevel(final int index, final Collection<Party> parties) {
+	for (final Party party : parties) {
 	    if (party.isUnit()) {
 		final Unit unit = (Unit) party;
 		if (unit.getMissionSystemFromUnitWithResumedAuthorizations() != null) {

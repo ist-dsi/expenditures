@@ -41,11 +41,11 @@ import module.mission.domain.NationalMission;
 import module.mission.domain.PersonMissionAuthorization;
 import module.organization.domain.Party;
 import module.organization.domain.Person;
-import pt.ist.bennu.core.domain.util.Search;
 
 import org.joda.time.Interval;
 import org.joda.time.LocalDate;
 
+import pt.ist.bennu.core.domain.util.Search;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 
@@ -186,9 +186,9 @@ public class SearchMissions extends Search<Mission> {
 	    return getMissionsFromParticipantAuthorizationAuthority(participantAuthorizationAuthority);
 	}
 	if (processNumber != null && !processNumber.isEmpty()) {
-	    final int i = processNumber.indexOf('/');
-	    if (i > 0) {
-		final String year = processNumber.substring(0, i);
+	    String[] processIdParts = processNumber.split("/");
+	    if (processIdParts.length >= 2) {
+		String year = processIdParts[processIdParts.length - 2];
 		final MissionYear missionYear = MissionYear.findMissionYear(Integer.parseInt(year));
 		if (missionYear != null) {
 		    return new MissionProcessMissionSet(missionYear.getMissionProcessSet());

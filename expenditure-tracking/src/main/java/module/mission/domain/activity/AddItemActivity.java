@@ -15,7 +15,8 @@ public class AddItemActivity extends MissionProcessActivity<MissionProcess, Item
 
     @Override
     public boolean isActive(final MissionProcess missionProcess, final User user) {
-	return super.isActive(missionProcess, user) && super.isActive(missionProcess, user) && missionProcess.isUnderConstruction() && missionProcess.isRequestor(user) && missionProcess.hasAnyParticipantes() && missionProcess.getMission().hasAnyFinancer();
+	return super.isActive(missionProcess, user) && missionProcess.isUnderConstruction() && missionProcess.isRequestor(user)
+		&& missionProcess.hasAnyParticipantes() && missionProcess.getMission().hasAnyFinancer();
     }
 
     @Override
