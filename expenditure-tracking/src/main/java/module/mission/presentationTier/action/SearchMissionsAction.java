@@ -37,8 +37,6 @@ import module.mission.domain.MissionFinancer;
 import module.mission.domain.MissionProcess;
 import module.mission.presentationTier.dto.SearchMissionsDTO;
 import module.organization.domain.Person;
-import pt.ist.bennu.core.presentationTier.actions.ContextBaseAction;
-import pt.ist.bennu.core.util.BundleUtil;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForm;
@@ -46,6 +44,8 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.joda.time.DateTime;
 
+import pt.ist.bennu.core.presentationTier.actions.ContextBaseAction;
+import pt.ist.bennu.core.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
@@ -106,6 +106,7 @@ public class SearchMissionsAction extends ContextBaseAction {
 
 	final Spreadsheet spreadsheet = new Spreadsheet("SearchResult");
 	spreadsheet.setHeader(BundleUtil.getStringFromResourceBundle("resources.ExpenditureResources", "label.acquisitionProcessId"));
+	spreadsheet.setHeader(BundleUtil.getStringFromResourceBundle("resources.MissionResources", "label.mission.type"));
 	spreadsheet.setHeader(BundleUtil.getStringFromResourceBundle("resources.MissionResources", "label.mission.destination"));
 	spreadsheet.setHeader(BundleUtil.getStringFromResourceBundle("resources.MissionResources", "label.mission.departure"));
 	spreadsheet.setHeader(BundleUtil.getStringFromResourceBundle("resources.MissionResources", "label.module.mission.front.page.list.duration"));
@@ -122,6 +123,11 @@ public class SearchMissionsAction extends ContextBaseAction {
 
 	    final Row row = spreadsheet.addRow();
 	    row.setCell(missionProcess.getProcessIdentification());
+
+	    String missionTypeLabel = mission.getGrantOwnerEquivalence() ? "title.mission.process.type.grantOwnerEquivalence"
+		    : "title.mission.process.type.dislocation";
+	    row.setCell(BundleUtil.getStringFromResourceBundle("resources.MissionResources", missionTypeLabel));
+
 	    row.setCell(mission.getDestinationDescription());
 	    row.setCell(mission.getDaparture().toString("yyyy-MM-dd HH:mm"));
 	    row.setCell(mission.getDurationInDays());
