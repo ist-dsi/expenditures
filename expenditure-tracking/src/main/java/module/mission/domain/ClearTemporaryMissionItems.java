@@ -1,5 +1,8 @@
 package module.mission.domain;
 
+import pt.ist.bennu.core.domain.MyOrg;
+import pt.ist.bennu.core.domain.VirtualHost;
+
 public class ClearTemporaryMissionItems extends ClearTemporaryMissionItems_Base {
     
     public ClearTemporaryMissionItems() {
@@ -8,8 +11,12 @@ public class ClearTemporaryMissionItems extends ClearTemporaryMissionItems_Base 
 
     @Override
     public void executeTask() {
-	for (final TemporaryMissionItemEntry temporaryMissionItemEntry : MissionSystem.getInstance().getTemporaryMissionItemEntriesSet()) {
-	    temporaryMissionItemEntry.gc();
+	for (VirtualHost vHost : MyOrg.getInstance().getVirtualHosts()) {
+	    VirtualHost.setVirtualHostForThread(vHost);
+	    for (final TemporaryMissionItemEntry temporaryMissionItemEntry : MissionSystem.getInstance()
+		    .getTemporaryMissionItemEntriesSet()) {
+		temporaryMissionItemEntry.gc();
+	    }
 	}
     }
 
