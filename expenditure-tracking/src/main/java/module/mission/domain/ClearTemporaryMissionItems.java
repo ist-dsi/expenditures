@@ -12,10 +12,14 @@ public class ClearTemporaryMissionItems extends ClearTemporaryMissionItems_Base 
     @Override
     public void executeTask() {
 	for (VirtualHost vHost : MyOrg.getInstance().getVirtualHosts()) {
-	    VirtualHost.setVirtualHostForThread(vHost);
-	    for (final TemporaryMissionItemEntry temporaryMissionItemEntry : MissionSystem.getInstance()
-		    .getTemporaryMissionItemEntriesSet()) {
-		temporaryMissionItemEntry.gc();
+	    try {
+		VirtualHost.setVirtualHostForThread(vHost);
+		for (final TemporaryMissionItemEntry temporaryMissionItemEntry : MissionSystem.getInstance()
+			.getTemporaryMissionItemEntriesSet()) {
+		    temporaryMissionItemEntry.gc();
+		}
+	    } finally {
+		VirtualHost.releaseVirtualHostFromThread();
 	    }
 	}
     }
