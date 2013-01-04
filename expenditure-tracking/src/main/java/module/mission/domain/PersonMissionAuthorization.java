@@ -28,6 +28,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Set;
 
+import jvstm.cps.ConsistencyPredicate;
 import module.mission.domain.util.AuthorizationChain;
 import module.organization.domain.Accountability;
 import module.organization.domain.AccountabilityType;
@@ -269,4 +270,8 @@ public class PersonMissionAuthorization extends PersonMissionAuthorization_Base 
 	return getMissionSystem() == VirtualHost.getVirtualHostForThread().getMissionSystem();
     }
 
+    @ConsistencyPredicate
+    public boolean checkIsConnectedToList() {
+	return ((hasMission() && !hasPrevious()) || (!hasMission() && hasPrevious()));
+    }
 }
