@@ -78,7 +78,7 @@ public class DefineParticipantAuthorizationChainActivityInformation extends Part
 		    final Mission mission = missionProcess.getMission();
 		    final Collection<ParticipantAuthorizationChain> temp = new ArrayList<ParticipantAuthorizationChain>();
 		    for (final MissionFinancer missionFinancer : mission.getFinancerSet()) {
-			final Unit unit = getFirstValidUnit(missionFinancer.getUnit());
+			final Unit unit = getFirstValidUnit(missionFinancer.getUnit(), person);
 			temp.addAll(ParticipantAuthorizationChain.getParticipantAuthorizationChains(person, unit.getUnit()));
 		    }		    
 		    participantAuthorizationChainss.put(person, temp);
@@ -92,8 +92,9 @@ public class DefineParticipantAuthorizationChainActivityInformation extends Part
 	return participantAuthorizationChainss;
     }
 
-    private Unit getFirstValidUnit(final Unit unit) {
-	return unit.hasResponsiblesInUnit() && unit.hasUnit() ? unit : getFirstValidUnit(unit.getParentUnit());
+    private Unit getFirstValidUnit(final Unit unit, final Person person) {
+	return unit.hasResponsiblesInUnit() && unit.hasUnit() && !unit.isResponsible(person.getUser().getExpenditurePerson())
+		? unit : getFirstValidUnit(unit.getParentUnit(), person);
     }
 
 }
