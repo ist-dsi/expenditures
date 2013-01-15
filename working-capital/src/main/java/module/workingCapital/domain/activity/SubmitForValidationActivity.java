@@ -79,6 +79,7 @@ public class SubmitForValidationActivity extends WorkflowActivity<WorkingCapital
 	    final WorkingCapitalInitialization workingCapitalInitialization = workingCapital.getWorkingCapitalInitialization();
 	    workingCapitalInitialization.setLastSubmission(new DateTime());
 	}
+
 	final Money accumulatedValue = workingCapital.getLastTransaction().getAccumulatedValue();
 	WorkingCapitalAcquisitionSubmission acquisitionSubmission = new WorkingCapitalAcquisitionSubmission(workingCapital,
 		getLoggedPerson().getPerson(), accumulatedValue, activityInformation.isPaymentRequired());

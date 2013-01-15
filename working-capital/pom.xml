@@ -7,14 +7,14 @@
   </parent>
   <groupId>pt.ist</groupId>
   <artifactId>working-capital</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.1-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>working-capital</name>
   <properties>
     <version.pt.ist.bennu.core>1.0-SNAPSHOT</version.pt.ist.bennu.core>
-    <version.pt.ist.workflow>1.0-SNAPSHOT</version.pt.ist.workflow>
+    <version.pt.ist.workflow>2.0-SNAPSHOT</version.pt.ist.workflow>
     <version.pt.ist.finance>1.0-SNAPSHOT</version.pt.ist.finance>
-    <version.pt.ist.expenditure.tracking>1.0-SNAPSHOT</version.pt.ist.expenditure.tracking>
+    <version.pt.ist.expenditure.tracking>1.1-SNAPSHOT</version.pt.ist.expenditure.tracking>
     <version.pt.ist.scheduler>1.0-SNAPSHOT</version.pt.ist.scheduler>
     <version.pt.ist.messaging>1.0-SNAPSHOT</version.pt.ist.messaging>
   </properties>

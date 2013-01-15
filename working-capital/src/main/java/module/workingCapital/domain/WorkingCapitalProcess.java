@@ -30,10 +30,15 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Nonnull;
 
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
+import module.workflow.domain.ProcessDocumentMetaDataResolver;
 import module.workflow.domain.ProcessFile;
+import module.workflow.domain.WFDocsDefaultWriteGroup;
 import module.workflow.domain.WorkflowProcess;
 import module.workflow.domain.utils.WorkflowCommentCounter;
 import module.workflow.util.HasPresentableProcessState;
@@ -163,9 +168,37 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base implements
 	return (List) activities;
     }
 
+    public static class WorkingCapitalProcessFileMetadataResolver extends ProcessDocumentMetaDataResolver<ProcessFile> {
+
+	private final static String WORKING_CAPITAL = "Fundo de maneio";
+
+	@Override
+	public @Nonnull
+	Class<? extends module.workflow.domain.AbstractWFDocsGroup> getWriteGroupClass() {
+	    return WFDocsDefaultWriteGroup.class;
+	}
+
+	@Override
+	public Map<String, String> getMetadataKeysAndValuesMap(ProcessFile processDocument) {
+	    WorkingCapitalProcess workingCapitalProcess = (WorkingCapitalProcess) processDocument.getProcess();
+	    Map<String, String> metadataKeysAndValuesMap = super.getMetadataKeysAndValuesMap(processDocument);
+	    metadataKeysAndValuesMap.put(WORKING_CAPITAL, workingCapitalProcess.getWorkingCapital().getUnit()
+		    .getPresentationName());
+	    return metadataKeysAndValuesMap;
+	}
+    }
+
     @Override
     public boolean isActive() {
 	return true;
+    }
+
+    @Override
+    public String getProcessNumber() {
+	return getWorkingCapital().getUnit().getPresentationName() + " - "
+		+ BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources", "label.module.workingCapital.year")
+		+ " " + getWorkingCapital().getWorkingCapitalYear().getYear();
+	
     }
 
     @Override
@@ -224,11 +257,8 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base implements
 			    "resources/WorkingCapitalResources", "label.email.commentCreated.subject", workingCapital.getUnit()
 				    .getPresentationName(), workingCapital.getWorkingCapitalYear().getYear().toString()),
 		    BundleUtil.getFormattedStringFromResourceBundle("resources/WorkingCapitalResources",
-			    "label.email.commentCreated.body",
-			    loggedUser.getPerson().getName(),
-			    workingCapital.getUnit().getPresentationName(),
-			    workingCapital.getWorkingCapitalYear().getYear().toString(),
-			    comment,
+			    "label.email.commentCreated.body", loggedUser.getPerson().getName(), workingCapital.getUnit()
+				    .getPresentationName(), workingCapital.getWorkingCapitalYear().getYear().toString(), comment,
 			    VirtualHost.getVirtualHostForThread().getHostname()));
 	}
     }

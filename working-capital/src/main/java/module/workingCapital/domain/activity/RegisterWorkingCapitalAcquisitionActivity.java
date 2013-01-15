@@ -63,10 +63,13 @@ public class RegisterWorkingCapitalAcquisitionActivity extends
     protected void process(final RegisterWorkingCapitalAcquisitionActivityInformation activityInformation) {
 	final WorkingCapitalProcess workingCapitalProcess = activityInformation.getProcess();
 	final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
+	String displayName = activityInformation.getDisplayName();
+	if (displayName == null)
+	    displayName = activityInformation.getFilename();
 	new WorkingCapitalAcquisition(workingCapital, activityInformation.getDocumentNumber(), activityInformation.getSupplier(),
 		activityInformation.getDescription(), activityInformation.getAcquisitionClassification(), activityInformation
 			.getValueWithoutVat(), activityInformation.getMoney(), InputStreamUtil
-			.consumeInputStream(activityInformation.getInputStream()), activityInformation.getDisplayName(),
+.consumeInputStream(activityInformation.getInputStream()), displayName,
 		activityInformation.getFilename());
     }
 
