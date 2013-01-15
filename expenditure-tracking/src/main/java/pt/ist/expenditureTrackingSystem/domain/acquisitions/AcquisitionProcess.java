@@ -27,6 +27,15 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Nonnull;
+
+import module.workflow.domain.ProcessDocumentMetaDataResolver;
+import module.workflow.domain.ProcessFile;
+import module.workflow.domain.WFDocsDefaultWriteGroup;
+
+import org.apache.commons.lang.StringUtils;
 
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
@@ -48,6 +57,58 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
  * 
  */
 public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
+
+    /**
+     * Field that describes the suppliers, used in classes/subclasses of
+     * {@link ProcessDocumentMetaDataResolver}
+     */
+    public final static String SUPPLIER_METADATA_KEY = "Fornecedor";
+
+    /**
+     * {@link ProcessDocumentMetaDataResolver} that resolves all of the typical
+     * metadata associated with a {@link AcquisitionProcess}
+     * 
+     * So, instead of repeating code, documents that can/are used in a
+     * {@link AcquisitionProcess}, can extend/use this class safely (if the
+     * document is not used by an {@link AcquisitionProcess}, a call to
+     * {@link #getMetadataKeysAndValuesMap(ProcessFile)} returns an empty map)
+     * 
+     * @author João Antunes (joao.antunes@tagus.ist.utl.pt) - 22 de Out de 2012
+     * 
+     * 
+     * @param <P>
+     */
+    public static class AcquisitionProcessBasedMetadataResolver<P extends ProcessFile> extends
+	    ProcessDocumentMetaDataResolver<ProcessFile> {
+
+	@Override
+	public Map<String, String> getMetadataKeysAndValuesMap(ProcessFile processDocument) {
+	    Map<String, String> metadataKeysAndValuesMap = super.getMetadataKeysAndValuesMap(processDocument);
+	    AcquisitionProcess process = null;
+	    try {
+		process = (AcquisitionProcess) processDocument.getProcess();
+	    } catch (ClassCastException ex) {
+		//ok, so this process is not an acquistion one. returning empty metadataset
+		return metadataKeysAndValuesMap;
+	    }
+	    if (process.getRequest() != null && process.getRequest().getSupplier() != null) {
+
+		String supplier = process.getRequest().getSupplier().getPresentationName();
+		if (StringUtils.isNotBlank(supplier)) {
+		    metadataKeysAndValuesMap.put(AcquisitionProcess.SUPPLIER_METADATA_KEY, supplier);
+		}
+	    }
+
+	    return metadataKeysAndValuesMap;
+	}
+
+	@Override
+	public @Nonnull
+	Class<? extends module.workflow.domain.AbstractWFDocsGroup> getWriteGroupClass() {
+	    return WFDocsDefaultWriteGroup.class;
+	}
+
+    }
 
     public AcquisitionProcess() {
 	super();

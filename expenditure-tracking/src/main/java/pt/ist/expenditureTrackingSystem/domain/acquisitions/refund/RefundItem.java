@@ -30,13 +30,14 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
-import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.bennu.core.domain.util.Money;
+import module.workflow.domain.WorkflowProcess;
 
 import module.workflow.domain.WorkflowProcess;
 
 import org.joda.time.LocalDate;
 
+import pt.ist.bennu.core.domain.exceptions.DomainException;
+import pt.ist.bennu.core.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionItemClassification;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessInvoice;

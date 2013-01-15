@@ -24,8 +24,10 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
-import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
+import module.workflow.domain.ProcessDocumentMetaDataResolver;
+import module.workflow.domain.ProcessFile;
 import pt.ist.bennu.core.util.ClassNameBundle;
+import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 
 @ClassNameBundle(bundle = "resources/AcquisitionResources")
 /**
@@ -47,14 +49,19 @@ public class PurchaseOrderDocument extends PurchaseOrderDocument_Base {
 	    process.getPurchaseOrderDocument().delete();
 	}
 
-	setProcess(process);
 	setContent(contents);
 	setFilename(fileName);
+	process.addFiles(this);
+    }
+
+    @Override
+    public ProcessDocumentMetaDataResolver<? extends ProcessFile> getMetaDataResolver() {
+	return new AcquisitionProcess.AcquisitionProcessBasedMetadataResolver<PurchaseOrderDocument>();
     }
 
     @Override
     public void delete() {
-	removeProcess();
+
 	super.delete();
     }
 

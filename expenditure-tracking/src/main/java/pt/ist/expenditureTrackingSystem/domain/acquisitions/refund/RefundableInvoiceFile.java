@@ -27,15 +27,21 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.refund;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
 import org.joda.time.LocalDate;
 
 import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.ist.bennu.core.domain.util.Money;
 import pt.ist.bennu.core.util.ClassNameBundle;
+import module.workflow.domain.ProcessDocumentMetaDataResolver;
+import module.workflow.domain.ProcessFile;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
+import pt.ist.bennu.core.domain.exceptions.DomainException;
+import pt.ist.bennu.core.domain.util.Money;
+import pt.ist.bennu.core.util.ClassNameBundle;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestWithPayment;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
@@ -67,12 +73,17 @@ public class RefundableInvoiceFile extends RefundableInvoiceFile_Base {
     }
 
     public void delete() {
+	//let's also remove the fileNode and document, if they aren't used elsewhere
+	moveToTrash();
+
 	for (RequestItem item : getRequestItems()) {
 	    item.clearRealShareValues();
 	}
 	removeProcess();
 	getRequestItems().clear();
 	removeSupplier();
+
+
 	super.delete();
     }
 
@@ -102,11 +113,51 @@ public class RefundableInvoiceFile extends RefundableInvoiceFile_Base {
 		!supplier.isFundAllocationAllowed(cpvReference.getCode(), value) : !supplier.isFundAllocationAllowed(value);
     }
 
+    public static class RefundableInvoiceFileMetadataResolver extends InvoiceMetadaResolver {
+
+	public final static String VALUE = "Valor (€)";
+	public final static String VAT_VALUE = "Taxa do IVA (%)";
+	public final static String REFUNDABLE_VALUE = "Valor a reembolsar (€)";
+	public final static String SUPPLIER = "Fornecedor";
+
+	@Override
+	public Map<String, String> getMetadataKeysAndValuesMap(ProcessFile processFile) {
+	    RefundableInvoiceFile refundableInvoiceFile = (RefundableInvoiceFile) processFile;
+	    Map<String, String> metadataKeysAndValuesMap = super.getMetadataKeysAndValuesMap(processFile);
+
+	    Money value = refundableInvoiceFile.getValue();
+
+	    if (value != null)
+		metadataKeysAndValuesMap.put(VALUE, value.exportAsString());
+
+	    BigDecimal vatValue = refundableInvoiceFile.getVatValue();
+	    if (vatValue != null)
+		metadataKeysAndValuesMap.put(VAT_VALUE, vatValue.toPlainString());
+
+	    Money refundableValue = refundableInvoiceFile.getRefundableValue();
+	    if (refundableValue != null)
+		metadataKeysAndValuesMap.put(REFUNDABLE_VALUE, refundableValue.exportAsString());
+
+	    Supplier supplier = refundableInvoiceFile.getSupplier();
+	    if (supplier != null)
+		metadataKeysAndValuesMap.put(SUPPLIER, supplier.getPresentationName());
+
+	    return metadataKeysAndValuesMap;
+	}
+
+    }
+
+    @Override
+    public ProcessDocumentMetaDataResolver<ProcessFile> getMetaDataResolver() {
+	return new RefundableInvoiceFileMetadataResolver();
+    }
+
     public void editValues(Money value, BigDecimal vatValue, Money refundableValue) {
 	check(getRefundItem(), getSupplier(), value, vatValue, refundableValue);
 	this.setValue(value);
 	this.setVatValue(vatValue);
 	this.setRefundableValue(refundableValue);
+	getMetaDataResolver().fillMetaDataBasedOnDocument(this);
     }
 
     public void resetValues() {
