@@ -29,6 +29,8 @@ import module.workflow.activities.WorkflowActivity;
 import module.workingCapital.domain.WorkingCapital;
 import module.workingCapital.domain.WorkingCapitalInitialization;
 import module.workingCapital.domain.WorkingCapitalProcess;
+import module.workingCapital.domain.WorkingCapitalSystem;
+import pt.ist.bennu.core.domain.RoleType;
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.util.BundleUtil;
 
@@ -50,7 +52,9 @@ public class TerminateWorkingCapitalActivity extends WorkflowActivity<WorkingCap
     public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
 	final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
 	return !workingCapital.isCanceledOrRejected()
-		&& workingCapital.isMovementResponsible(user)
+		&& (workingCapital.isMovementResponsible(user)
+			|| WorkingCapitalSystem.getInstanceForCurrentHost().isManagementMember(user)
+			|| user.hasRoleType(RoleType.MANAGER))
 		&& workingCapital.canTerminateFund();
     }
 
