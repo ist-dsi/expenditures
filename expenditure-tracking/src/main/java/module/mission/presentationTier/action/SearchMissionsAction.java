@@ -27,6 +27,7 @@ package module.mission.presentationTier.action;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -35,6 +36,9 @@ import javax.servlet.http.HttpServletResponse;
 import module.mission.domain.Mission;
 import module.mission.domain.MissionFinancer;
 import module.mission.domain.MissionProcess;
+import module.mission.domain.util.MissionStage;
+import module.mission.domain.util.MissionStageState;
+import module.mission.domain.util.MissionStageView;
 import module.mission.presentationTier.dto.SearchMissionsDTO;
 import module.organization.domain.Person;
 
@@ -118,6 +122,7 @@ public class SearchMissionsAction extends ContextBaseAction {
 	spreadsheet.setHeader(getMissionsMessage("label.mission.participants"));
 	spreadsheet.setHeader(getMissionsMessage("label.mission.inactiveSince"));
 	spreadsheet.setHeader(getMissionsMessage("label.mission.canceled"));
+	addMissionStageHeaders(spreadsheet);
 
 	for (final Mission mission : searchResult) {
 	    final MissionProcess missionProcess = mission.getMissionProcess();
@@ -145,6 +150,7 @@ public class SearchMissionsAction extends ContextBaseAction {
 	    final DateTime lastActivity = missionProcess.getDateFromLastActivity();
 	    row.setCell(lastActivity == null ? "" : lastActivity.toString("yyyy-MM-dd HH:mm"));
 	    row.setCell(getExpendituresMessage(missionProcess.isCanceled() ? "button.yes" : "button.no"));
+	    addMissionStageContent(row, missionProcess);
 	}
 
 	try {
@@ -155,6 +161,25 @@ public class SearchMissionsAction extends ContextBaseAction {
 	}
 
 	return null;
+    }
+
+    private void addMissionStageHeaders(Spreadsheet spreadsheet) {
+	for (MissionStage stage : MissionStage.values()) {
+	    spreadsheet.setHeader(stage.getLocalizedName());
+	}
+    }
+
+    private void addMissionStageContent(Row row, MissionProcess process) {
+	MissionStageView stageView = new MissionStageView(process);
+	Map<MissionStage, MissionStageState> stageStates = stageView.getMissionStageStates();
+	for (MissionStage stage : MissionStage.values()) {
+	    MissionStageState state = stageStates.get(stage);
+	    if (state == null) {
+		row.setCell("-");
+	    } else {
+		row.setCell(state.getLocalizedName());
+	    }
+	}
     }
 
     private String getMissionsMessage(String label) {
