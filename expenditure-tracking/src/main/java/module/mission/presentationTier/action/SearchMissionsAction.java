@@ -96,8 +96,8 @@ public class SearchMissionsAction extends ContextBaseAction {
 	return pager.getPage(page);
     }
 
-    public ActionForward downloadSearchResult(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
+    public ActionForward downloadSearchResult(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
 	final SearchMissionsDTO searchMissions = new SearchMissionsDTO(request);
 	final List<Mission> searchResult = searchMissions.sortedSearch();
 
@@ -105,29 +105,27 @@ public class SearchMissionsAction extends ContextBaseAction {
 	response.setHeader("Content-disposition", "attachment; filename=searchResult.xls");
 
 	final Spreadsheet spreadsheet = new Spreadsheet("SearchResult");
-	spreadsheet.setHeader(BundleUtil.getStringFromResourceBundle("resources.ExpenditureResources", "label.acquisitionProcessId"));
-	spreadsheet.setHeader(BundleUtil.getStringFromResourceBundle("resources.MissionResources", "label.mission.type"));
-	spreadsheet.setHeader(BundleUtil.getStringFromResourceBundle("resources.MissionResources", "label.mission.destination"));
-	spreadsheet.setHeader(BundleUtil.getStringFromResourceBundle("resources.MissionResources", "label.mission.departure"));
-	spreadsheet.setHeader(BundleUtil.getStringFromResourceBundle("resources.MissionResources", "label.module.mission.front.page.list.duration"));
-	spreadsheet.setHeader(BundleUtil.getStringFromResourceBundle("resources.MissionResources", "label.mission.items"));
-	spreadsheet.setHeader(BundleUtil.getStringFromResourceBundle("resources.MissionResources", "label.mission.value"));
-	spreadsheet.setHeader(BundleUtil.getStringFromResourceBundle("resources.MissionResources", "label.mission.financer"));
-	spreadsheet.setHeader(BundleUtil.getStringFromResourceBundle("resources.ExpenditureResources", "label.accounting.units"));
-	spreadsheet.setHeader(BundleUtil.getStringFromResourceBundle("resources.MissionResources", "label.mission.requester.person"));
-	spreadsheet.setHeader(BundleUtil.getStringFromResourceBundle("resources.MissionResources", "label.mission.participants"));
-	spreadsheet.setHeader(BundleUtil.getStringFromResourceBundle("resources.MissionResources", "label.mission.inactiveSince"));
+	spreadsheet.setHeader(getExpendituresMessage("label.acquisitionProcessId"));
+	spreadsheet.setHeader(getMissionsMessage("label.mission.type"));
+	spreadsheet.setHeader(getMissionsMessage("label.mission.destination"));
+	spreadsheet.setHeader(getMissionsMessage("label.mission.departure"));
+	spreadsheet.setHeader(getMissionsMessage("label.module.mission.front.page.list.duration"));
+	spreadsheet.setHeader(getMissionsMessage("label.mission.items"));
+	spreadsheet.setHeader(getMissionsMessage("label.mission.value"));
+	spreadsheet.setHeader(getMissionsMessage("label.mission.financer"));
+	spreadsheet.setHeader(getExpendituresMessage("label.accounting.units"));
+	spreadsheet.setHeader(getMissionsMessage("label.mission.requester.person"));
+	spreadsheet.setHeader(getMissionsMessage("label.mission.participants"));
+	spreadsheet.setHeader(getMissionsMessage("label.mission.inactiveSince"));
+	spreadsheet.setHeader(getMissionsMessage("label.mission.canceled"));
 
 	for (final Mission mission : searchResult) {
 	    final MissionProcess missionProcess = mission.getMissionProcess();
 
 	    final Row row = spreadsheet.addRow();
 	    row.setCell(missionProcess.getProcessIdentification());
-
-	    String missionTypeLabel = mission.getGrantOwnerEquivalence() ? "title.mission.process.type.grantOwnerEquivalence"
-		    : "title.mission.process.type.dislocation";
-	    row.setCell(BundleUtil.getStringFromResourceBundle("resources.MissionResources", missionTypeLabel));
-
+	    row.setCell(getMissionsMessage(mission.getGrantOwnerEquivalence() ? "title.mission.process.type.grantOwnerEquivalence"
+		    : "title.mission.process.type.dislocation"));
 	    row.setCell(mission.getDestinationDescription());
 	    row.setCell(mission.getDaparture().toString("yyyy-MM-dd HH:mm"));
 	    row.setCell(mission.getDurationInDays());
@@ -146,6 +144,7 @@ public class SearchMissionsAction extends ContextBaseAction {
 	    row.setCell(builder.toString());
 	    final DateTime lastActivity = missionProcess.getDateFromLastActivity();
 	    row.setCell(lastActivity == null ? "" : lastActivity.toString("yyyy-MM-dd HH:mm"));
+	    row.setCell(getExpendituresMessage(missionProcess.isCanceled() ? "button.yes" : "button.no"));
 	}
 
 	try {
@@ -156,6 +155,14 @@ public class SearchMissionsAction extends ContextBaseAction {
 	}
 
 	return null;
+    }
+
+    private String getMissionsMessage(String label) {
+	return BundleUtil.getStringFromResourceBundle("resources.MissionResources", label);
+    }
+
+    private String getExpendituresMessage(String label) {
+	return BundleUtil.getStringFromResourceBundle("resources.ExpenditureResources", label);
     }
 
     private String getFinancingUnits(Mission mission) {

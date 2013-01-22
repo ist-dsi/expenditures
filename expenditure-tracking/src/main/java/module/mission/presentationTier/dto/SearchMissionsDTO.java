@@ -78,9 +78,11 @@ public class SearchMissionsDTO extends SearchMissions {
 	setParticipant(StringUtils.isEmpty(request.getParameter("pOID")) ? null : (Person) Person.fromExternalId(request
 		.getParameter("pOID")));
 	setPendingStage(StringUtils.isEmpty(request.getParameter("ps")) ? null : MissionStage.valueOf(request.getParameter("ps")));
-	setAccountingUnit(StringUtils.isEmpty(request.getParameter("auOID")) ? null : (AccountingUnit) AccountingUnit.fromExternalId(request.getParameter("auOID")));
-	setParticipantAuthorizationAuthority(StringUtils.isEmpty(request.getParameter("paaOID")) ? null : (Person) Person.fromExternalId(request
-		.getParameter("paaOID")));
+	setAccountingUnit(StringUtils.isEmpty(request.getParameter("auOID")) ? null : (AccountingUnit) AccountingUnit
+		.fromExternalId(request.getParameter("auOID")));
+	setParticipantAuthorizationAuthority(StringUtils.isEmpty(request.getParameter("paaOID")) ? null : (Person) Person
+		.fromExternalId(request.getParameter("paaOID")));
+	setFilterCanceledProcesses(Boolean.valueOf(request.getParameter("fc")));
 
 	final String sortByParameter = request.getParameter("sortBy");
 	if (!StringUtils.isEmpty(sortByParameter) && sortByParameter.indexOf('=') != -1) {
@@ -111,11 +113,12 @@ public class SearchMissionsDTO extends SearchMissions {
     }
 
     public String getRequestParameters() {
-	return new Formatter().format("processNumber=%s&ruOID=%s&puOID=%s&f=%s&d=%s&i=%s&rpOID=%s&pOID=%s&ps=%s&auOID=%s&paaOID=%s", getProcessNumber(),
-		getRequestingUnitParameter(), getPayingUnitParameter(), getForeignParameter(), getDateParameter(), getIntervalParameter(),
-		getRequestingPersonParameter(), getParticipantParameter(), getPendingStageParameter(), getAccountingUnitParameter(),
-		getParticipantAuthorizationAuthorityParameter(),
-		getSortByParameter(), getOrderByParameter()).toString();
+	return new Formatter().format(
+		"processNumber=%s&ruOID=%s&puOID=%s&f=%s&d=%s&i=%s&rpOID=%s&pOID=%s&ps=%s&auOID=%s&paaOID=%s&fc=%s",
+		getProcessNumber(), getRequestingUnitParameter(), getPayingUnitParameter(), getForeignParameter(),
+		getDateParameter(), getIntervalParameter(), getRequestingPersonParameter(), getParticipantParameter(),
+		getPendingStageParameter(), getAccountingUnitParameter(), getParticipantAuthorizationAuthorityParameter(),
+		getFilterCanceledProcesses()).toString();
     }
 
     public String getRequestParametersWithSort() {
@@ -164,7 +167,8 @@ public class SearchMissionsDTO extends SearchMissions {
     }
 
     public String getParticipantAuthorizationAuthorityParameter() {
-	return getParticipantAuthorizationAuthority() != null ? getParticipantAuthorizationAuthority().getExternalId() : StringUtils.EMPTY;
+	return getParticipantAuthorizationAuthority() != null ? getParticipantAuthorizationAuthority().getExternalId()
+		: StringUtils.EMPTY;
     }
 
     private String getPendingStageParameter() {
