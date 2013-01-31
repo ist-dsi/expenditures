@@ -31,34 +31,35 @@ import java.io.UnsupportedEncodingException;
 
 /**
  * 
- * @author  Luis Cruz
- * @author  Susana Fernandes
+ * @author Luis Cruz
+ * @author Susana Fernandes
  * 
-*/
+ */
 public class FileUtil {
 
-    public static String[] readResource(final String resource) {
-	final InputStream inputStream = FileUtil.class.getResourceAsStream(resource);
-	try {
-	    final InputStreamReader fileReader = new InputStreamReader(inputStream, "UTF-8");
-	    try {
-		char[] buffer = new char[4096];
-		final StringBuilder fileContents = new StringBuilder();
-		for (int n = 0; (n = fileReader.read(buffer)) != -1; fileContents.append(buffer, 0, n))
-		    ;
-		return fileContents.toString().split("\n");
-	    } catch (final IOException ex) {
-		throw new Error(ex);
-	    } finally {
+	public static String[] readResource(final String resource) {
+		final InputStream inputStream = FileUtil.class.getResourceAsStream(resource);
 		try {
-		    fileReader.close();
-		} catch (final IOException ex) {
-		    throw new Error(ex);
+			final InputStreamReader fileReader = new InputStreamReader(inputStream, "UTF-8");
+			try {
+				char[] buffer = new char[4096];
+				final StringBuilder fileContents = new StringBuilder();
+				for (int n = 0; (n = fileReader.read(buffer)) != -1; fileContents.append(buffer, 0, n)) {
+					;
+				}
+				return fileContents.toString().split("\n");
+			} catch (final IOException ex) {
+				throw new Error(ex);
+			} finally {
+				try {
+					fileReader.close();
+				} catch (final IOException ex) {
+					throw new Error(ex);
+				}
+			}
+		} catch (final UnsupportedEncodingException ex) {
+			throw new Error(ex);
 		}
-	    }
-	} catch (final UnsupportedEncodingException ex) {
-	    throw new Error(ex);
 	}
-    }
 
 }

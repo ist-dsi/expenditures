@@ -28,38 +28,38 @@ import java.io.Serializable;
 
 /**
  * 
- * @author  Luis Cruz
- * @author  Susana Fernandes
+ * @author Luis Cruz
+ * @author Susana Fernandes
  * 
-*/
+ */
 public abstract class EconomicActivityClassification implements Comparable<EconomicActivityClassification>, Serializable {
 
-    public final String code;
-    public final String description;
+	public final String code;
+	public final String description;
 
-    public EconomicActivityClassification(final String code, final String description) {
-	this.code = code;
-	this.description = description;
-    }
+	public EconomicActivityClassification(final String code, final String description) {
+		this.code = code;
+		this.description = description;
+	}
 
-    @Override
-    public int compareTo(final EconomicActivityClassification eac) {
-	return code.compareTo(eac.code);
-    }
+	@Override
+	public int compareTo(final EconomicActivityClassification eac) {
+		return code.compareTo(eac.code);
+	}
 
-    public String exportAsString() {
-	return code;
-    }
+	public String exportAsString() {
+		return code;
+	}
 
-    public String getCode() {
-        return code;
-    }
+	public String getCode() {
+		return code;
+	}
 
-    public String getDescription() {
-        return description;
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    public String getExportAsString() {
-	return exportAsString();
-    }
+	public String getExportAsString() {
+		return exportAsString();
+	}
 }
