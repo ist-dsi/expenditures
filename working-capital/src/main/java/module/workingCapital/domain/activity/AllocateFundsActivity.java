@@ -39,36 +39,37 @@ import pt.ist.bennu.core.util.BundleUtil;
  */
 public class AllocateFundsActivity extends WorkflowActivity<WorkingCapitalProcess, AllocateFundsActivityInformation> {
 
-    @Override
-    public String getLocalizedName() {
-	return BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources", "activity." + getClass().getSimpleName());
-    }
+	@Override
+	public String getLocalizedName() {
+		return BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources", "activity."
+				+ getClass().getSimpleName());
+	}
 
-    @Override
-    public boolean isActive(final WorkingCapitalProcess workingCapitalProcess, final User user) {
-	final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
-	return workingCapital.isPendingFundAllocation(user);
-    }
+	@Override
+	public boolean isActive(final WorkingCapitalProcess workingCapitalProcess, final User user) {
+		final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
+		return workingCapital.isPendingFundAllocation(user);
+	}
 
-    @Override
-    protected void process(final AllocateFundsActivityInformation activityInformation) {
-	final WorkingCapitalInitialization workingCapitalInitialization = activityInformation.getWorkingCapitalInitialization();
-	workingCapitalInitialization.allocateFunds(activityInformation.getFundAllocationId());
-    }
+	@Override
+	protected void process(final AllocateFundsActivityInformation activityInformation) {
+		final WorkingCapitalInitialization workingCapitalInitialization = activityInformation.getWorkingCapitalInitialization();
+		workingCapitalInitialization.allocateFunds(activityInformation.getFundAllocationId());
+	}
 
-    @Override
-    public ActivityInformation<WorkingCapitalProcess> getActivityInformation(final WorkingCapitalProcess process) {
-        return new AllocateFundsActivityInformation(process, this);
-    }
+	@Override
+	public ActivityInformation<WorkingCapitalProcess> getActivityInformation(final WorkingCapitalProcess process) {
+		return new AllocateFundsActivityInformation(process, this);
+	}
 
-    @Override
-    public boolean isDefaultInputInterfaceUsed() {
-	return false;
-    }
+	@Override
+	public boolean isDefaultInputInterfaceUsed() {
+		return false;
+	}
 
-    @Override
-    public boolean isVisible() {
-	return true;
-    }
+	@Override
+	public boolean isVisible() {
+		return true;
+	}
 
 }

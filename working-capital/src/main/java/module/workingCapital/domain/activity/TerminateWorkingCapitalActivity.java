@@ -30,61 +30,64 @@ import module.workingCapital.domain.WorkingCapital;
 import module.workingCapital.domain.WorkingCapitalInitialization;
 import module.workingCapital.domain.WorkingCapitalProcess;
 import module.workingCapital.domain.WorkingCapitalSystem;
+
+import org.joda.time.DateTime;
+
 import pt.ist.bennu.core.domain.RoleType;
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.util.BundleUtil;
-
-import org.joda.time.DateTime;
 
 /**
  * 
  * @author Luis Cruz
  * 
  */
-public class TerminateWorkingCapitalActivity extends WorkflowActivity<WorkingCapitalProcess, ActivityInformation<WorkingCapitalProcess>> {
+public class TerminateWorkingCapitalActivity extends
+		WorkflowActivity<WorkingCapitalProcess, ActivityInformation<WorkingCapitalProcess>> {
 
-    @Override
-    public String getLocalizedName() {
-	return BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources", "activity." + getClass().getSimpleName());
-    }
+	@Override
+	public String getLocalizedName() {
+		return BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources", "activity."
+				+ getClass().getSimpleName());
+	}
 
-    @Override
-    public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
-	final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
-	return !workingCapital.isCanceledOrRejected()
-		&& (workingCapital.isMovementResponsible(user)
-			|| WorkingCapitalSystem.getInstanceForCurrentHost().isManagementMember(user)
-			|| user.hasRoleType(RoleType.MANAGER))
-		&& workingCapital.canTerminateFund();
-    }
+	@Override
+	public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
+		final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
+		return !workingCapital.isCanceledOrRejected()
+				&& (workingCapital.isMovementResponsible(user)
+						|| WorkingCapitalSystem.getInstanceForCurrentHost().isManagementMember(user) || user
+							.hasRoleType(RoleType.MANAGER)) && workingCapital.canTerminateFund();
+	}
 
-    @Override
-    protected void process(final ActivityInformation<WorkingCapitalProcess> activityInformation) {
-	final WorkingCapitalProcess workingCapitalProcess = activityInformation.getProcess();
-	workingCapitalProcess.submitAcquisitionsForValidation();
-	final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
-	final WorkingCapitalInitialization workingCapitalInitialization = workingCapital.getWorkingCapitalInitialization();
-	workingCapitalInitialization.setLastSubmission(new DateTime());
-    }
+	@Override
+	protected void process(final ActivityInformation<WorkingCapitalProcess> activityInformation) {
+		final WorkingCapitalProcess workingCapitalProcess = activityInformation.getProcess();
+		workingCapitalProcess.submitAcquisitionsForValidation();
+		final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
+		final WorkingCapitalInitialization workingCapitalInitialization = workingCapital.getWorkingCapitalInitialization();
+		workingCapitalInitialization.setLastSubmission(new DateTime());
+	}
 
-    @Override
-    public ActivityInformation<WorkingCapitalProcess> getActivityInformation(final WorkingCapitalProcess process) {
-        return new ActivityInformation<WorkingCapitalProcess>(process, this);
-    }
+	@Override
+	public ActivityInformation<WorkingCapitalProcess> getActivityInformation(final WorkingCapitalProcess process) {
+		return new ActivityInformation<WorkingCapitalProcess>(process, this);
+	}
 
-    @Override
-    public boolean isUserAwarenessNeeded(final WorkingCapitalProcess process, final User user) {
-        return false;
-    }
+	@Override
+	public boolean isUserAwarenessNeeded(final WorkingCapitalProcess process, final User user) {
+		return false;
+	}
 
-    @Override
-    public boolean isConfirmationNeeded(WorkingCapitalProcess process) {
-	return true;
-    }
+	@Override
+	public boolean isConfirmationNeeded(WorkingCapitalProcess process) {
+		return true;
+	}
 
-    @Override
-    public String getLocalizedConfirmationMessage(final WorkingCapitalProcess process) {
-        return BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources", "label.message.SubmitForValidationActivity.confirm");
-    }
+	@Override
+	public String getLocalizedConfirmationMessage(final WorkingCapitalProcess process) {
+		return BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources",
+				"label.message.SubmitForValidationActivity.confirm");
+	}
 
 }

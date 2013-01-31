@@ -40,44 +40,44 @@ import pt.ist.bennu.core.util.BundleUtil;
  * 
  */
 public class ExceptionalCapitalRestitutionActivity extends
-	WorkflowActivity<WorkingCapitalProcess, ExceptionalCapitalRestitutionInfo> {
+		WorkflowActivity<WorkingCapitalProcess, ExceptionalCapitalRestitutionInfo> {
 
-    @Override
-    public String getLocalizedName() {
-	return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "activity." + getClass().getSimpleName());
-    }
+	@Override
+	public String getLocalizedName() {
+		return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "activity." + getClass().getSimpleName());
+	}
 
-    @Override
-    public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
-	return user.hasRoleType(RoleType.MANAGER);
-    }
+	@Override
+	public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
+		return user.hasRoleType(RoleType.MANAGER);
+	}
 
-    @Override
-    protected void process(final ExceptionalCapitalRestitutionInfo activityInformation) {
-	final WorkingCapital workingCapital = activityInformation.getProcess().getWorkingCapital();
-	final Money value = activityInformation.getValue();
-	final String description = activityInformation.getCaseDescription();
-	new ExceptionalWorkingCapitalRefund(workingCapital, getLoggedPerson().getPerson(), value, description);
-    }
+	@Override
+	protected void process(final ExceptionalCapitalRestitutionInfo activityInformation) {
+		final WorkingCapital workingCapital = activityInformation.getProcess().getWorkingCapital();
+		final Money value = activityInformation.getValue();
+		final String description = activityInformation.getCaseDescription();
+		new ExceptionalWorkingCapitalRefund(workingCapital, getLoggedPerson().getPerson(), value, description);
+	}
 
-    @Override
-    public ActivityInformation<WorkingCapitalProcess> getActivityInformation(final WorkingCapitalProcess process) {
-	return new ExceptionalCapitalRestitutionInfo(process, this);
-    }
+	@Override
+	public ActivityInformation<WorkingCapitalProcess> getActivityInformation(final WorkingCapitalProcess process) {
+		return new ExceptionalCapitalRestitutionInfo(process, this);
+	}
 
-    @Override
-    public String getUsedBundle() {
-	return "resources/WorkingCapitalResources";
-    }
+	@Override
+	public String getUsedBundle() {
+		return "resources/WorkingCapitalResources";
+	}
 
-    @Override
-    public boolean isConfirmationNeeded(WorkingCapitalProcess process) {
-	return true;
-    }
+	@Override
+	public boolean isConfirmationNeeded(WorkingCapitalProcess process) {
+		return true;
+	}
 
-    @Override
-    public boolean isUserAwarenessNeeded(WorkingCapitalProcess process, User user) {
-	return false;
-    }
+	@Override
+	public boolean isUserAwarenessNeeded(WorkingCapitalProcess process, User user) {
+		return false;
+	}
 
 }

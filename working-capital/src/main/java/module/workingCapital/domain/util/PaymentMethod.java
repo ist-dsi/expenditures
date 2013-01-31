@@ -36,12 +36,12 @@ import pt.utl.ist.fenix.tools.util.i18n.Language;
  */
 public enum PaymentMethod implements IPresentableEnum {
 
-    CHECK, WIRETRANSFER, CASH;
+	CHECK, WIRETRANSFER, CASH;
 
-    @Override
-    public String getLocalizedName() {
-	final ResourceBundle resourceBundle = ResourceBundle.getBundle("resources.WorkingCapitalResources", Language.getLocale());
-	return resourceBundle.getString(PaymentMethod.class.getSimpleName() + "." + name());
-    }
+	@Override
+	public String getLocalizedName() {
+		final ResourceBundle resourceBundle = ResourceBundle.getBundle("resources.WorkingCapitalResources", Language.getLocale());
+		return resourceBundle.getString(PaymentMethod.class.getSimpleName() + "." + name());
+	}
 
 }

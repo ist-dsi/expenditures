@@ -40,47 +40,46 @@ import pt.ist.bennu.core.util.InputStreamUtil;
  * 
  */
 public class RegisterWorkingCapitalAcquisitionActivity extends
-	WorkflowActivity<WorkingCapitalProcess, RegisterWorkingCapitalAcquisitionActivityInformation> {
+		WorkflowActivity<WorkingCapitalProcess, RegisterWorkingCapitalAcquisitionActivityInformation> {
 
-    @Override
-    public String getLocalizedName() {
-	return BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources", "activity."
-		+ getClass().getSimpleName());
-    }
+	@Override
+	public String getLocalizedName() {
+		return BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources", "activity."
+				+ getClass().getSimpleName());
+	}
 
-    @Override
-    public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
-	final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
-	return workingCapital.hasMovementResponsible()
-		&& workingCapital.getMovementResponsible().getUser() == user
-		&& !workingCapital.isCanceledOrRejected()
-		&& workingCapital.getBalance().isPositive()
-		&& workingCapital.getWorkingCapitalInitialization() != null
-		&& workingCapital.getWorkingCapitalInitialization().getLastSubmission() == null;
-    }
+	@Override
+	public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
+		final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
+		return workingCapital.hasMovementResponsible() && workingCapital.getMovementResponsible().getUser() == user
+				&& !workingCapital.isCanceledOrRejected() && workingCapital.getBalance().isPositive()
+				&& workingCapital.getWorkingCapitalInitialization() != null
+				&& workingCapital.getWorkingCapitalInitialization().getLastSubmission() == null;
+	}
 
-    @Override
-    protected void process(final RegisterWorkingCapitalAcquisitionActivityInformation activityInformation) {
-	final WorkingCapitalProcess workingCapitalProcess = activityInformation.getProcess();
-	final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
-	String displayName = activityInformation.getDisplayName();
-	if (displayName == null)
-	    displayName = activityInformation.getFilename();
-	new WorkingCapitalAcquisition(workingCapital, activityInformation.getDocumentNumber(), activityInformation.getSupplier(),
-		activityInformation.getDescription(), activityInformation.getAcquisitionClassification(), activityInformation
-			.getValueWithoutVat(), activityInformation.getMoney(), InputStreamUtil
-.consumeInputStream(activityInformation.getInputStream()), displayName,
-		activityInformation.getFilename());
-    }
+	@Override
+	protected void process(final RegisterWorkingCapitalAcquisitionActivityInformation activityInformation) {
+		final WorkingCapitalProcess workingCapitalProcess = activityInformation.getProcess();
+		final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
+		String displayName = activityInformation.getDisplayName();
+		if (displayName == null) {
+			displayName = activityInformation.getFilename();
+		}
+		new WorkingCapitalAcquisition(workingCapital, activityInformation.getDocumentNumber(), activityInformation.getSupplier(),
+				activityInformation.getDescription(), activityInformation.getAcquisitionClassification(),
+				activityInformation.getValueWithoutVat(), activityInformation.getMoney(),
+				InputStreamUtil.consumeInputStream(activityInformation.getInputStream()), displayName,
+				activityInformation.getFilename());
+	}
 
-    @Override
-    public ActivityInformation<WorkingCapitalProcess> getActivityInformation(final WorkingCapitalProcess process) {
-	return new RegisterWorkingCapitalAcquisitionActivityInformation(process, this);
-    }
+	@Override
+	public ActivityInformation<WorkingCapitalProcess> getActivityInformation(final WorkingCapitalProcess process) {
+		return new RegisterWorkingCapitalAcquisitionActivityInformation(process, this);
+	}
 
-    @Override
-    public boolean isUserAwarenessNeeded(final WorkingCapitalProcess process, final User user) {
-        return false;
-    }
+	@Override
+	public boolean isUserAwarenessNeeded(final WorkingCapitalProcess process, final User user) {
+		return false;
+	}
 
 }

@@ -39,52 +39,52 @@ import pt.ist.bennu.core.util.BundleUtil;
  * 
  */
 public class CorrectWorkingCapitalAcquisitionClassificationActivity extends
-	WorkflowActivity<WorkingCapitalProcess, EditWorkingCapitalActivityInformation> {
+		WorkflowActivity<WorkingCapitalProcess, EditWorkingCapitalActivityInformation> {
 
-    @Override
-    public String getLocalizedName() {
-	return BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources", "activity."
-		+ getClass().getSimpleName());
-    }
-
-    @Override
-    public boolean isActive(final WorkingCapitalProcess workingCapitalProcess, final User user) {
-	final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
-	return !workingCapital.isCanceledOrRejected() && workingCapital.hasAcquisitionPendingVerification(user);
-    }
-
-    @Override
-    protected void process(final EditWorkingCapitalActivityInformation activityInformation) {
-	final WorkingCapitalAcquisitionTransaction workingCapitalAcquisitionTransaction = activityInformation
-		.getWorkingCapitalAcquisitionTransaction();
-	if (workingCapitalAcquisitionTransaction.isPendingVerificationByUser()) {
-	    final WorkingCapitalAcquisition workingCapitalAcquisition = workingCapitalAcquisitionTransaction
-		    .getWorkingCapitalAcquisition();
-
-	    workingCapitalAcquisition.edit(activityInformation.getDocumentNumber(), activityInformation.getSupplier(),
-		    activityInformation.getDescription(), activityInformation.getAcquisitionClassification(),
-		    activityInformation.getValueWithoutVat());
+	@Override
+	public String getLocalizedName() {
+		return BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources", "activity."
+				+ getClass().getSimpleName());
 	}
-    }
 
-    @Override
-    public ActivityInformation<WorkingCapitalProcess> getActivityInformation(final WorkingCapitalProcess process) {
-	return new EditWorkingCapitalActivityInformation(process, this);
-    }
+	@Override
+	public boolean isActive(final WorkingCapitalProcess workingCapitalProcess, final User user) {
+		final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
+		return !workingCapital.isCanceledOrRejected() && workingCapital.hasAcquisitionPendingVerification(user);
+	}
 
-    @Override
-    public boolean isVisible() {
-	return false;
-    }
+	@Override
+	protected void process(final EditWorkingCapitalActivityInformation activityInformation) {
+		final WorkingCapitalAcquisitionTransaction workingCapitalAcquisitionTransaction =
+				activityInformation.getWorkingCapitalAcquisitionTransaction();
+		if (workingCapitalAcquisitionTransaction.isPendingVerificationByUser()) {
+			final WorkingCapitalAcquisition workingCapitalAcquisition =
+					workingCapitalAcquisitionTransaction.getWorkingCapitalAcquisition();
 
-    @Override
-    public boolean isUserAwarenessNeeded(final WorkingCapitalProcess process, final User user) {
-	return false;
-    }
+			workingCapitalAcquisition.edit(activityInformation.getDocumentNumber(), activityInformation.getSupplier(),
+					activityInformation.getDescription(), activityInformation.getAcquisitionClassification(),
+					activityInformation.getValueWithoutVat());
+		}
+	}
 
-    @Override
-    public boolean isDefaultInputInterfaceUsed() {
-	return false;
-    }
+	@Override
+	public ActivityInformation<WorkingCapitalProcess> getActivityInformation(final WorkingCapitalProcess process) {
+		return new EditWorkingCapitalActivityInformation(process, this);
+	}
+
+	@Override
+	public boolean isVisible() {
+		return false;
+	}
+
+	@Override
+	public boolean isUserAwarenessNeeded(final WorkingCapitalProcess process, final User user) {
+		return false;
+	}
+
+	@Override
+	public boolean isDefaultInputInterfaceUsed() {
+		return false;
+	}
 
 }

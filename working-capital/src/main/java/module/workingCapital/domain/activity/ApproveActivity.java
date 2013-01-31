@@ -40,43 +40,44 @@ import pt.ist.bennu.core.util.BundleUtil;
  */
 public class ApproveActivity extends WorkflowActivity<WorkingCapitalProcess, WorkingCapitalInitializationInformation> {
 
-    @Override
-    public String getLocalizedName() {
-	return BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources", "activity." + getClass().getSimpleName());
-    }
+	@Override
+	public String getLocalizedName() {
+		return BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources", "activity."
+				+ getClass().getSimpleName());
+	}
 
-    @Override
-    public boolean isActive(final WorkingCapitalProcess process, final User user) {
-	final WorkingCapital workingCapital = process.getWorkingCapital();
-	return !workingCapital.isCanceledOrRejected() && workingCapital.isPendingAproval(user);
-    }
+	@Override
+	public boolean isActive(final WorkingCapitalProcess process, final User user) {
+		final WorkingCapital workingCapital = process.getWorkingCapital();
+		return !workingCapital.isCanceledOrRejected() && workingCapital.isPendingAproval(user);
+	}
 
-    @Override
-    protected void process(final WorkingCapitalInitializationInformation activityInformation) {
-	final WorkingCapitalInitialization workingCapitalInitialization = activityInformation.getWorkingCapitalInitialization();
-	final User user = getLoggedPerson();
-	final Person person = user.getPerson();
-	workingCapitalInitialization.approve(person);
-    }
+	@Override
+	protected void process(final WorkingCapitalInitializationInformation activityInformation) {
+		final WorkingCapitalInitialization workingCapitalInitialization = activityInformation.getWorkingCapitalInitialization();
+		final User user = getLoggedPerson();
+		final Person person = user.getPerson();
+		workingCapitalInitialization.approve(person);
+	}
 
-    @Override
-    public ActivityInformation<WorkingCapitalProcess> getActivityInformation(final WorkingCapitalProcess process) {
-        return new WorkingCapitalInitializationInformation(process, this);
-    }
+	@Override
+	public ActivityInformation<WorkingCapitalProcess> getActivityInformation(final WorkingCapitalProcess process) {
+		return new WorkingCapitalInitializationInformation(process, this);
+	}
 
-    @Override
-    public boolean isDefaultInputInterfaceUsed() {
-	return true;
-    }
+	@Override
+	public boolean isDefaultInputInterfaceUsed() {
+		return true;
+	}
 
-    @Override
-    public boolean isVisible() {
-	return false;
-    }
+	@Override
+	public boolean isVisible() {
+		return false;
+	}
 
-    @Override
-    public boolean isUserAwarenessNeeded(WorkingCapitalProcess process, User user) {
-	final WorkingCapital workingCapital = process.getWorkingCapital();
-        return !workingCapital.isCanceledOrRejected() && workingCapital.isPendingDirectAproval(user);
-    }
+	@Override
+	public boolean isUserAwarenessNeeded(WorkingCapitalProcess process, User user) {
+		final WorkingCapital workingCapital = process.getWorkingCapital();
+		return !workingCapital.isCanceledOrRejected() && workingCapital.isPendingDirectAproval(user);
+	}
 }

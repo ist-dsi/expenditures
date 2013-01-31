@@ -39,26 +39,26 @@ import pt.ist.bennu.core.domain.User;
  */
 public class WorkingCapitalPendingProcessCounter extends ProcessCounter {
 
-    public WorkingCapitalPendingProcessCounter() {
-	super(WorkingCapitalProcess.class);
-    }
-
-    @Override
-    public int getCount() {
-	int result = 0;
-	final User user = UserView.getCurrentUser();
-	try {
-	    for (final WorkingCapital workingCapital : WorkingCapitalSystem.getInstanceForCurrentHost().getWorkingCapitalsSet()) {
-		final WorkingCapitalProcess workingCapitalProcess = workingCapital.getWorkingCapitalProcess();
-		if (shouldCountProcess(workingCapitalProcess, user)) {
-		    result++;
-		}
-	    }
-	} catch (final Throwable t) {
-	    t.printStackTrace();
-	    //throw new Error(t);
+	public WorkingCapitalPendingProcessCounter() {
+		super(WorkingCapitalProcess.class);
 	}
-	return result;
-    }
+
+	@Override
+	public int getCount() {
+		int result = 0;
+		final User user = UserView.getCurrentUser();
+		try {
+			for (final WorkingCapital workingCapital : WorkingCapitalSystem.getInstanceForCurrentHost().getWorkingCapitalsSet()) {
+				final WorkingCapitalProcess workingCapitalProcess = workingCapital.getWorkingCapitalProcess();
+				if (shouldCountProcess(workingCapitalProcess, user)) {
+					result++;
+				}
+			}
+		} catch (final Throwable t) {
+			t.printStackTrace();
+			//throw new Error(t);
+		}
+		return result;
+	}
 
 }

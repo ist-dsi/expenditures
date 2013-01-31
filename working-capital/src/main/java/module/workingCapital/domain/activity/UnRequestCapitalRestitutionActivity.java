@@ -37,39 +37,40 @@ import pt.ist.bennu.core.util.BundleUtil;
  * @author Luis Cruz
  * 
  */
-public class UnRequestCapitalRestitutionActivity extends WorkflowActivity<WorkingCapitalProcess, ActivityInformation<WorkingCapitalProcess>> {
+public class UnRequestCapitalRestitutionActivity extends
+		WorkflowActivity<WorkingCapitalProcess, ActivityInformation<WorkingCapitalProcess>> {
 
-    @Override
-    public String getLocalizedName() {
-	return BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources", "activity." + getClass().getSimpleName());
-    }
+	@Override
+	public String getLocalizedName() {
+		return BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources", "activity."
+				+ getClass().getSimpleName());
+	}
 
-    @Override
-    public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
-	final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
-	final WorkingCapitalInitialization workingCapitalInitialization = workingCapital.getWorkingCapitalInitialization();
-	return (workingCapital.isAccountingResponsible(user) || workingCapital.isAccountingEmployee(user))
-		&& workingCapitalInitialization != null
-		&& workingCapitalInitialization.getRefundRequested() != null
-		&& workingCapital.getBalance().isPositive();
-    }
+	@Override
+	public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
+		final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
+		final WorkingCapitalInitialization workingCapitalInitialization = workingCapital.getWorkingCapitalInitialization();
+		return (workingCapital.isAccountingResponsible(user) || workingCapital.isAccountingEmployee(user))
+				&& workingCapitalInitialization != null && workingCapitalInitialization.getRefundRequested() != null
+				&& workingCapital.getBalance().isPositive();
+	}
 
-    @Override
-    protected void process(final ActivityInformation<WorkingCapitalProcess> activityInformation) {
-	final WorkingCapitalProcess workingCapitalProcess = activityInformation.getProcess();
-	final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
-	final WorkingCapitalInitialization workingCapitalInitialization = workingCapital.getWorkingCapitalInitialization();
-	workingCapitalInitialization.setRefundRequested(null);
-    }
+	@Override
+	protected void process(final ActivityInformation<WorkingCapitalProcess> activityInformation) {
+		final WorkingCapitalProcess workingCapitalProcess = activityInformation.getProcess();
+		final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
+		final WorkingCapitalInitialization workingCapitalInitialization = workingCapital.getWorkingCapitalInitialization();
+		workingCapitalInitialization.setRefundRequested(null);
+	}
 
-    @Override
-    public ActivityInformation<WorkingCapitalProcess> getActivityInformation(final WorkingCapitalProcess process) {
-        return new ActivityInformation<WorkingCapitalProcess>(process, this);
-    }
+	@Override
+	public ActivityInformation<WorkingCapitalProcess> getActivityInformation(final WorkingCapitalProcess process) {
+		return new ActivityInformation<WorkingCapitalProcess>(process, this);
+	}
 
-    @Override
-    public boolean isUserAwarenessNeeded(final WorkingCapitalProcess process, final User user) {
-        return false;
-    }
+	@Override
+	public boolean isUserAwarenessNeeded(final WorkingCapitalProcess process, final User user) {
+		return false;
+	}
 
 }

@@ -33,10 +33,10 @@ import pt.ist.bennu.core.util.BundleUtil;
  * 
  */
 public class WorkingCapitalConsistencyException extends ConsistencyException {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    @Override
-    public String getLocalizedMessage() {
-	return BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources", "error." + getMethodFullname());
-    }
+	@Override
+	public String getLocalizedMessage() {
+		return BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources", "error." + getMethodFullname());
+	}
 }

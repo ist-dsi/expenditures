@@ -24,17 +24,12 @@
  */
 package module.workingCapital.domain;
 
-
-import module.workflow.domain.WorkflowProcess;
-
-
 import java.util.Map;
 
 import module.workflow.domain.ProcessDocumentMetaDataResolver;
 import module.workflow.domain.ProcessFile;
 import module.workflow.domain.WorkflowProcess;
 import module.workingCapital.domain.WorkingCapitalProcess.WorkingCapitalProcessFileMetadataResolver;
-
 
 /**
  * 
@@ -43,38 +38,38 @@ import module.workingCapital.domain.WorkingCapitalProcess.WorkingCapitalProcessF
  */
 public class WorkingCapitalAcquisitionSubmissionDocument extends WorkingCapitalAcquisitionSubmissionDocument_Base {
 
-    public WorkingCapitalAcquisitionSubmissionDocument(final WorkingCapitalAcquisitionSubmission submissionTransaction,
-	    final byte[] contents, final String fileName, WorkflowProcess process) {
-	super();
-	setTransaction(submissionTransaction);
-	setContent(contents);
-	setFilename(fileName);
-	init(fileName, fileName, contents);
-	process.addFiles(this);
-    }
-
-    @Override
-    public ProcessDocumentMetaDataResolver<? extends ProcessFile> getMetaDataResolver() {
-	return new WorkingCapitalAcquisitionSubmissionDocumentMetadataResolver();
-    }
-
-    public static class WorkingCapitalAcquisitionSubmissionDocumentMetadataResolver extends
-	    WorkingCapitalProcessFileMetadataResolver {
-
-	private static final String TX_NUMBER = "Número de Tx";
-	private static final String VALUE = "Valor";
-
-	@Override
-	public Map<String, String> getMetadataKeysAndValuesMap(ProcessFile processDocument) {
-	    Map<String, String> metadataKeysAndValuesMap = super.getMetadataKeysAndValuesMap(processDocument);
-	    WorkingCapitalAcquisitionSubmission transaction = ((WorkingCapitalAcquisitionSubmissionDocument) processDocument)
-		    .getTransaction();
-	    metadataKeysAndValuesMap.put(TX_NUMBER, String.valueOf(transaction.getNumber()));
-	    metadataKeysAndValuesMap.put(VALUE, transaction.getValue().toFormatString());
-
-	    return metadataKeysAndValuesMap;
+	public WorkingCapitalAcquisitionSubmissionDocument(final WorkingCapitalAcquisitionSubmission submissionTransaction,
+			final byte[] contents, final String fileName, WorkflowProcess process) {
+		super();
+		setTransaction(submissionTransaction);
+		setContent(contents);
+		setFilename(fileName);
+		init(fileName, fileName, contents);
+		process.addFiles(this);
 	}
 
-    }
+	@Override
+	public ProcessDocumentMetaDataResolver<? extends ProcessFile> getMetaDataResolver() {
+		return new WorkingCapitalAcquisitionSubmissionDocumentMetadataResolver();
+	}
+
+	public static class WorkingCapitalAcquisitionSubmissionDocumentMetadataResolver extends
+			WorkingCapitalProcessFileMetadataResolver {
+
+		private static final String TX_NUMBER = "Número de Tx";
+		private static final String VALUE = "Valor";
+
+		@Override
+		public Map<String, String> getMetadataKeysAndValuesMap(ProcessFile processDocument) {
+			Map<String, String> metadataKeysAndValuesMap = super.getMetadataKeysAndValuesMap(processDocument);
+			WorkingCapitalAcquisitionSubmission transaction =
+					((WorkingCapitalAcquisitionSubmissionDocument) processDocument).getTransaction();
+			metadataKeysAndValuesMap.put(TX_NUMBER, String.valueOf(transaction.getNumber()));
+			metadataKeysAndValuesMap.put(VALUE, transaction.getValue().toFormatString());
+
+			return metadataKeysAndValuesMap;
+		}
+
+	}
 
 }

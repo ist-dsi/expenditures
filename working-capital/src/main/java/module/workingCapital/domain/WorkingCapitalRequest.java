@@ -26,13 +26,14 @@ package module.workingCapital.domain;
 
 import module.organization.domain.Person;
 import module.workingCapital.domain.util.PaymentMethod;
+
+import org.joda.time.DateTime;
+
 import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.ist.bennu.core.domain.util.Money;
 import pt.ist.bennu.core.util.BundleUtil;
-
-import org.joda.time.DateTime;
 
 /**
  * 
@@ -42,61 +43,61 @@ import org.joda.time.DateTime;
  */
 public class WorkingCapitalRequest extends WorkingCapitalRequest_Base {
 
-    public WorkingCapitalRequest() {
-	super();
-	final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstanceForCurrentHost();
-	setWorkingCapitalSystem(workingCapitalSystem);
-	setRequestCreation(new DateTime());
-	final User user = UserView.getCurrentUser();
-	if (user == null || !user.hasPerson()) {
-	    throw new Error("error.requester.must.be.specified");
+	public WorkingCapitalRequest() {
+		super();
+		final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstanceForCurrentHost();
+		setWorkingCapitalSystem(workingCapitalSystem);
+		setRequestCreation(new DateTime());
+		final User user = UserView.getCurrentUser();
+		if (user == null || !user.hasPerson()) {
+			throw new Error("error.requester.must.be.specified");
+		}
+		setWorkingCapitalRequester(user.getPerson());
 	}
-	setWorkingCapitalRequester(user.getPerson());
-    }
 
-    public WorkingCapitalRequest(final WorkingCapital workingCapital, final Money requestedValue,
-	    final PaymentMethod paymentMethod) {
-	this();
-	setWorkingCapital(workingCapital);
-	setRequestedValue(requestedValue);
-	setPaymentMethod(paymentMethod);
-    }
-
-    public boolean isRequestProcessedByTreasury() {
-	return getProcessedByTreasury() != null;
-    }
-
-    public void pay(final User user, final String paymentIdentification) {
-	setProcessedByTreasury(new DateTime());
-	final Person person = user.getPerson();
-	setWorkingCapitalTreasuryProcessor(person);
-	new WorkingCapitalPayment(this, person, paymentIdentification);
-    }
-
-    @Override
-    public void setRequestedValue(final Money requestedValue) {
-	final WorkingCapital workingCapital = getWorkingCapital();
-	if (workingCapital == null) {
-	    throw new NullPointerException();
+	public WorkingCapitalRequest(final WorkingCapital workingCapital, final Money requestedValue,
+			final PaymentMethod paymentMethod) {
+		this();
+		setWorkingCapital(workingCapital);
+		setRequestedValue(requestedValue);
+		setPaymentMethod(paymentMethod);
 	}
-	if (!workingCapital.canRequestValue(requestedValue)) {
-	    throw new DomainException(BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources",
-		    "error.insufficient.authorized.funds"));
+
+	public boolean isRequestProcessedByTreasury() {
+		return getProcessedByTreasury() != null;
 	}
-	super.setRequestedValue(requestedValue);
-    }
 
-    public void delete() {
-	removeWorkingCapital();
-	removeWorkingCapitalPayment();
-	removeWorkingCapitalRequester();
-	removeWorkingCapitalTreasuryProcessor();
-	removeWorkingCapitalSystem();
-	super.deleteDomainObject();
-    }
+	public void pay(final User user, final String paymentIdentification) {
+		setProcessedByTreasury(new DateTime());
+		final Person person = user.getPerson();
+		setWorkingCapitalTreasuryProcessor(person);
+		new WorkingCapitalPayment(this, person, paymentIdentification);
+	}
 
-    @Override
-    public boolean isConnectedToCurrentHost() {
-	return getWorkingCapitalSystem() == WorkingCapitalSystem.getInstanceForCurrentHost();
-    }
+	@Override
+	public void setRequestedValue(final Money requestedValue) {
+		final WorkingCapital workingCapital = getWorkingCapital();
+		if (workingCapital == null) {
+			throw new NullPointerException();
+		}
+		if (!workingCapital.canRequestValue(requestedValue)) {
+			throw new DomainException(BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources",
+					"error.insufficient.authorized.funds"));
+		}
+		super.setRequestedValue(requestedValue);
+	}
+
+	public void delete() {
+		removeWorkingCapital();
+		removeWorkingCapitalPayment();
+		removeWorkingCapitalRequester();
+		removeWorkingCapitalTreasuryProcessor();
+		removeWorkingCapitalSystem();
+		super.deleteDomainObject();
+	}
+
+	@Override
+	public boolean isConnectedToCurrentHost() {
+		return getWorkingCapitalSystem() == WorkingCapitalSystem.getInstanceForCurrentHost();
+	}
 }

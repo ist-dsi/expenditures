@@ -36,17 +36,17 @@ import module.organization.presentationTier.renderers.providers.PartiesAutoCompl
  */
 public class PartiesWithWorkingCapitalFundsAutoCompleteProvider extends PartiesAutoCompleteProvider {
 
-    @Override
-    protected boolean allowResult(final Party party) {
-	return party.isUnit() ? allowResultUnit((Unit) party) : allowResultPerson((Person) party);
-    }
+	@Override
+	protected boolean allowResult(final Party party) {
+		return party.isUnit() ? allowResultUnit((Unit) party) : allowResultPerson((Person) party);
+	}
 
-    private boolean allowResultUnit(final Unit unit) {
-	return unit.hasExpenditureUnit() && unit.getExpenditureUnit().getWorkingCapitalsCount() > 0;
-    }
+	private boolean allowResultUnit(final Unit unit) {
+		return unit.hasExpenditureUnit() && unit.getExpenditureUnit().getWorkingCapitalsCount() > 0;
+	}
 
-    private boolean allowResultPerson(final Person person) {
-	return person.getMovementResponsibleWorkingCapitalsCount() > 0;
-    }
+	private boolean allowResultPerson(final Person person) {
+		return person.getMovementResponsibleWorkingCapitalsCount() > 0;
+	}
 
 }

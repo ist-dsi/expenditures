@@ -39,43 +39,41 @@ import pt.ist.bennu.core.util.BundleUtil;
  * 
  */
 public class ReenforceWorkingCapitalInitializationActivity extends
-	WorkflowActivity<WorkingCapitalProcess, ReenforceWorkingCapitalInitializationActivityInformation> {
+		WorkflowActivity<WorkingCapitalProcess, ReenforceWorkingCapitalInitializationActivityInformation> {
 
-    @Override
-    public String getLocalizedName() {
-	return BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources", "activity."
-		+ getClass().getSimpleName());
-    }
+	@Override
+	public String getLocalizedName() {
+		return BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources", "activity."
+				+ getClass().getSimpleName());
+	}
 
-    @Override
-    public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
-	final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
-	final WorkingCapitalInitialization workingCapitalInitialization = workingCapital.getWorkingCapitalInitialization();
-	return workingCapital.hasMovementResponsible()
-		&& (workingCapital.getMovementResponsible().getUser() == user
-			|| workingCapital.isAccountingResponsible(user))
-		&& !workingCapital.isCanceledOrRejected()
-		&& workingCapitalInitialization != null
-		&& workingCapitalInitialization.getLastSubmission() == null
-		&& (workingCapitalInitialization.isAuthorized() || workingCapitalInitialization.isCanceledOrRejected());
-    }
+	@Override
+	public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
+		final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
+		final WorkingCapitalInitialization workingCapitalInitialization = workingCapital.getWorkingCapitalInitialization();
+		return workingCapital.hasMovementResponsible()
+				&& (workingCapital.getMovementResponsible().getUser() == user || workingCapital.isAccountingResponsible(user))
+				&& !workingCapital.isCanceledOrRejected() && workingCapitalInitialization != null
+				&& workingCapitalInitialization.getLastSubmission() == null
+				&& (workingCapitalInitialization.isAuthorized() || workingCapitalInitialization.isCanceledOrRejected());
+	}
 
-    @Override
-    protected void process(final ReenforceWorkingCapitalInitializationActivityInformation activityInformation) {
-	final WorkingCapitalProcess workingCapitalProcess = activityInformation.getProcess();
-	final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
-	final WorkingCapitalInitialization workingCapitalInitialization = workingCapital.getWorkingCapitalInitialization();
-	new WorkingCapitalInitializationReenforcement(workingCapitalInitialization, activityInformation.getAmount());
-    }
+	@Override
+	protected void process(final ReenforceWorkingCapitalInitializationActivityInformation activityInformation) {
+		final WorkingCapitalProcess workingCapitalProcess = activityInformation.getProcess();
+		final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
+		final WorkingCapitalInitialization workingCapitalInitialization = workingCapital.getWorkingCapitalInitialization();
+		new WorkingCapitalInitializationReenforcement(workingCapitalInitialization, activityInformation.getAmount());
+	}
 
-    @Override
-    public ActivityInformation<WorkingCapitalProcess> getActivityInformation(final WorkingCapitalProcess process) {
-	return new ReenforceWorkingCapitalInitializationActivityInformation(process, this);
-    }
+	@Override
+	public ActivityInformation<WorkingCapitalProcess> getActivityInformation(final WorkingCapitalProcess process) {
+		return new ReenforceWorkingCapitalInitializationActivityInformation(process, this);
+	}
 
-    @Override
-    public boolean isUserAwarenessNeeded(final WorkingCapitalProcess process, final User user) {
-        return false;
-    }
+	@Override
+	public boolean isUserAwarenessNeeded(final WorkingCapitalProcess process, final User user) {
+		return false;
+	}
 
 }

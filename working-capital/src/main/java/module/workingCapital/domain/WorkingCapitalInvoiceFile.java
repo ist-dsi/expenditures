@@ -44,60 +44,57 @@ import pt.ist.bennu.core.util.ClassNameBundle;
  */
 public class WorkingCapitalInvoiceFile extends WorkingCapitalInvoiceFile_Base {
 
-    public WorkingCapitalInvoiceFile(String displayName, String filename, byte[] content, WorkingCapitalTransaction transaction) {
-	super();
-	if (content != null) {
-	    init(displayName, filename, content);
-	}
-	setTransaction(transaction);
-    }
-
-    @Override
-    public ProcessDocumentMetaDataResolver<? extends ProcessFile> getMetaDataResolver() {
-	return new WorkingCapitalInvoiceFileMetadataResolver();
-    }
-
-    public static class WorkingCapitalInvoiceFileMetadataResolver extends
- WorkingCapitalProcessFileMetadataResolver {
-
-	private static final String SUPPLIER = "Fornecedor";
-	private static final String DOCUMENT_NR = "Número do Documento";
-	private static final String DESCRIPTION = "Descrição";
-	private static final String CLASSIFICATION = "Classificação";
-	private static final String VALUE_WITHOUT_VAT = "Valor sem IVA";
-	private static final String VALUE_WITH_VAT = "Valor com IVA";
-
-	@Override
-	public @Nonnull
-	Class<? extends AbstractWFDocsGroup> getWriteGroupClass() {
-	    return WFDocsDefaultWriteGroup.class;
+	public WorkingCapitalInvoiceFile(String displayName, String filename, byte[] content, WorkingCapitalTransaction transaction) {
+		super();
+		if (content != null) {
+			init(displayName, filename, content);
+		}
+		setTransaction(transaction);
 	}
 
 	@Override
-	public Map<String, String> getMetadataKeysAndValuesMap(ProcessFile processDocument) {
-	    Map<String, String> metadataKeysAndValuesMap = super.getMetadataKeysAndValuesMap(processDocument);
-	    WorkingCapitalAcquisitionTransaction transaction = ((WorkingCapitalAcquisitionTransaction) ((WorkingCapitalInvoiceFile) processDocument)
-		    .getTransaction());
-	    WorkingCapitalAcquisition workingCapitalAcquisition = transaction.getWorkingCapitalAcquisition();
-
-	    metadataKeysAndValuesMap
-.put(SUPPLIER, workingCapitalAcquisition.getSupplier().getPresentationName());
-	    metadataKeysAndValuesMap
-.put(DOCUMENT_NR, workingCapitalAcquisition.getDocumentNumber());
-	    metadataKeysAndValuesMap.put(DESCRIPTION, workingCapitalAcquisition.getDescription());
-	    metadataKeysAndValuesMap.put(CLASSIFICATION, workingCapitalAcquisition.getAcquisitionClassification()
-		    .getDescription());
-	    metadataKeysAndValuesMap.put(VALUE_WITHOUT_VAT, workingCapitalAcquisition.getValueWithoutVat().toFormatString());
-	    metadataKeysAndValuesMap.put(VALUE_WITH_VAT, transaction.getValue().toFormatString());
-
-	    return metadataKeysAndValuesMap;
+	public ProcessDocumentMetaDataResolver<? extends ProcessFile> getMetaDataResolver() {
+		return new WorkingCapitalInvoiceFileMetadataResolver();
 	}
 
-    }
+	public static class WorkingCapitalInvoiceFileMetadataResolver extends WorkingCapitalProcessFileMetadataResolver {
 
-    @Override
-    public void delete() {
-	removeTransaction();
-	super.delete();
-    }
+		private static final String SUPPLIER = "Fornecedor";
+		private static final String DOCUMENT_NR = "Número do Documento";
+		private static final String DESCRIPTION = "Descrição";
+		private static final String CLASSIFICATION = "Classificação";
+		private static final String VALUE_WITHOUT_VAT = "Valor sem IVA";
+		private static final String VALUE_WITH_VAT = "Valor com IVA";
+
+		@Override
+		public @Nonnull
+		Class<? extends AbstractWFDocsGroup> getWriteGroupClass() {
+			return WFDocsDefaultWriteGroup.class;
+		}
+
+		@Override
+		public Map<String, String> getMetadataKeysAndValuesMap(ProcessFile processDocument) {
+			Map<String, String> metadataKeysAndValuesMap = super.getMetadataKeysAndValuesMap(processDocument);
+			WorkingCapitalAcquisitionTransaction transaction =
+					((WorkingCapitalAcquisitionTransaction) ((WorkingCapitalInvoiceFile) processDocument).getTransaction());
+			WorkingCapitalAcquisition workingCapitalAcquisition = transaction.getWorkingCapitalAcquisition();
+
+			metadataKeysAndValuesMap.put(SUPPLIER, workingCapitalAcquisition.getSupplier().getPresentationName());
+			metadataKeysAndValuesMap.put(DOCUMENT_NR, workingCapitalAcquisition.getDocumentNumber());
+			metadataKeysAndValuesMap.put(DESCRIPTION, workingCapitalAcquisition.getDescription());
+			metadataKeysAndValuesMap.put(CLASSIFICATION, workingCapitalAcquisition.getAcquisitionClassification()
+					.getDescription());
+			metadataKeysAndValuesMap.put(VALUE_WITHOUT_VAT, workingCapitalAcquisition.getValueWithoutVat().toFormatString());
+			metadataKeysAndValuesMap.put(VALUE_WITH_VAT, transaction.getValue().toFormatString());
+
+			return metadataKeysAndValuesMap;
+		}
+
+	}
+
+	@Override
+	public void delete() {
+		removeTransaction();
+		super.delete();
+	}
 }
