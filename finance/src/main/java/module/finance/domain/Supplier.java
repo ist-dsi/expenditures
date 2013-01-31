@@ -35,91 +35,91 @@ import pt.ist.bennu.core.domain.util.Money;
  */
 public class Supplier extends Supplier_Base {
 
-    public static Money SUPPLIER_LIMIT = new Money("75000");
+	public static Money SUPPLIER_LIMIT = new Money("75000");
 
-    public static Money SOFT_SUPPLIER_LIMIT = new Money("60000");
+	public static Money SOFT_SUPPLIER_LIMIT = new Money("60000");
 
-    public Supplier() {
-	super();
-	setFinanceSystem(FinanceSystem.getInstance());
-	setSupplierLimit(SOFT_SUPPLIER_LIMIT);
-    }
-
-    public void delete() {
-	if (checkIfCanBeDeleted()) {
-	    removeFinanceSystem();
-	    deleteDomainObject();
+	public Supplier() {
+		super();
+		setFinanceSystem(FinanceSystem.getInstance());
+		setSupplierLimit(SOFT_SUPPLIER_LIMIT);
 	}
-    }
 
-    protected boolean checkIfCanBeDeleted() {
-	return !hasAnyProvisions();
-    }
-
-    public String getPresentationName() {
-	return getFiscalIdentificationCode() + " - " + getName();
-    }
-
-    @Override
-    public void setSupplierLimit(final Money supplierLimit) {
-	final Money newLimit = supplierLimit.isGreaterThanOrEqual(SUPPLIER_LIMIT) ? SUPPLIER_LIMIT : supplierLimit;
-	super.setSupplierLimit(newLimit);
-    }
-
-    public Money getAllocated() {
-	Money result = Money.ZERO;
-	for (final Provision provision : getProvisionsSet()) {
-	    if (provision.isInAllocationPeriod()) {
-		result = result.add(provision.getValueAllocatedToSupplier());
-	    }
+	public void delete() {
+		if (checkIfCanBeDeleted()) {
+			removeFinanceSystem();
+			deleteDomainObject();
+		}
 	}
-	return result;
-    }
 
-    public Money getAllocated(final String cpvReference) {
-	Money result = Money.ZERO;
-	for (final Provision provision : getProvisionsSet()) {
-	    if (provision.isInAllocationPeriod()) {
-		result = result.add(provision.getValueAllocatedToSupplier(cpvReference));
-	    }
+	protected boolean checkIfCanBeDeleted() {
+		return !hasAnyProvisions();
 	}
-	return result;
-    }
 
-    public Money getAllocatedForLimit() {
-	Money result = Money.ZERO;
-	for (final Provision provision : getProvisionsSet()) {
-	    if (provision.isInAllocationPeriod()) {
-		result = result.add(provision.getValueAllocatedToSupplierForLimit());
-	    }
+	public String getPresentationName() {
+		return getFiscalIdentificationCode() + " - " + getName();
 	}
-	return result;
-    }
 
-    public boolean isFundAllocationAllowed(final Money value) {
-	final Money allocated = getAllocated();
-	final Money totalValue = allocated.add(value);
-	return totalValue.isLessThanOrEqual(SUPPLIER_LIMIT) && totalValue.isLessThan(getSupplierLimit());
-    }
-
-    public boolean isFundAllocationAllowed(final String cpvReference, final Money value) {
-	final Money allocated = getAllocated(cpvReference);
-	final Money totalValue = allocated.add(value);
-	return totalValue.isLessThanOrEqual(SUPPLIER_LIMIT) && totalValue.isLessThan(getSupplierLimit());	
-    }
-
-    public SupplierContact registerContact(final Address address, final String phone, final String fax, final String email) {
-	final SupplierContact contact = getSupplierContact(address, phone, fax, email);
-	return contact == null ? new SupplierContact(this, address, phone, fax, email) : contact;
-    }
-
-    private SupplierContact getSupplierContact(final Address address, String phone, String fax, String email) {
-	for (final SupplierContact contact : getSupplierContactSet()) {
-	    if (contact.matches(address, phone, fax, email)) {
-		return contact;
-	    }
+	@Override
+	public void setSupplierLimit(final Money supplierLimit) {
+		final Money newLimit = supplierLimit.isGreaterThanOrEqual(SUPPLIER_LIMIT) ? SUPPLIER_LIMIT : supplierLimit;
+		super.setSupplierLimit(newLimit);
 	}
-	return null;
-    }
+
+	public Money getAllocated() {
+		Money result = Money.ZERO;
+		for (final Provision provision : getProvisionsSet()) {
+			if (provision.isInAllocationPeriod()) {
+				result = result.add(provision.getValueAllocatedToSupplier());
+			}
+		}
+		return result;
+	}
+
+	public Money getAllocated(final String cpvReference) {
+		Money result = Money.ZERO;
+		for (final Provision provision : getProvisionsSet()) {
+			if (provision.isInAllocationPeriod()) {
+				result = result.add(provision.getValueAllocatedToSupplier(cpvReference));
+			}
+		}
+		return result;
+	}
+
+	public Money getAllocatedForLimit() {
+		Money result = Money.ZERO;
+		for (final Provision provision : getProvisionsSet()) {
+			if (provision.isInAllocationPeriod()) {
+				result = result.add(provision.getValueAllocatedToSupplierForLimit());
+			}
+		}
+		return result;
+	}
+
+	public boolean isFundAllocationAllowed(final Money value) {
+		final Money allocated = getAllocated();
+		final Money totalValue = allocated.add(value);
+		return totalValue.isLessThanOrEqual(SUPPLIER_LIMIT) && totalValue.isLessThan(getSupplierLimit());
+	}
+
+	public boolean isFundAllocationAllowed(final String cpvReference, final Money value) {
+		final Money allocated = getAllocated(cpvReference);
+		final Money totalValue = allocated.add(value);
+		return totalValue.isLessThanOrEqual(SUPPLIER_LIMIT) && totalValue.isLessThan(getSupplierLimit());
+	}
+
+	public SupplierContact registerContact(final Address address, final String phone, final String fax, final String email) {
+		final SupplierContact contact = getSupplierContact(address, phone, fax, email);
+		return contact == null ? new SupplierContact(this, address, phone, fax, email) : contact;
+	}
+
+	private SupplierContact getSupplierContact(final Address address, String phone, String fax, String email) {
+		for (final SupplierContact contact : getSupplierContactSet()) {
+			if (contact.matches(address, phone, fax, email)) {
+				return contact;
+			}
+		}
+		return null;
+	}
 
 }

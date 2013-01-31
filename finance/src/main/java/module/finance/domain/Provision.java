@@ -32,20 +32,20 @@ import pt.ist.bennu.core.domain.util.Money;
  * 
  */
 public abstract class Provision extends Provision_Base {
-    
-    public Provision() {
-        super();
-        setFinanceSystem(FinanceSystem.getInstance());
-    }
 
-    public abstract Money getValueAllocatedToSupplier();
+	public Provision() {
+		super();
+		setFinanceSystem(FinanceSystem.getInstance());
+	}
 
-    public abstract Money getValueAllocatedToSupplier(final String cpvReference);
+	public abstract Money getValueAllocatedToSupplier();
 
-    public abstract Money getValueAllocatedToSupplierForLimit();
+	public abstract Money getValueAllocatedToSupplier(final String cpvReference);
 
-    public boolean isInAllocationPeriod() {
-	return true;
-    }
-    
+	public abstract Money getValueAllocatedToSupplierForLimit();
+
+	public boolean isInAllocationPeriod() {
+		return true;
+	}
+
 }
