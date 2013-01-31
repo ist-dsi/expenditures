@@ -40,41 +40,41 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
  * 
  */
 public class CancelInvoiceConfirmation extends
-	WorkflowActivity<RegularAcquisitionProcess, ActivityInformation<RegularAcquisitionProcess>> {
+		WorkflowActivity<RegularAcquisitionProcess, ActivityInformation<RegularAcquisitionProcess>> {
 
-    @Override
-    public boolean isActive(RegularAcquisitionProcess process, User user) {
-	Person person = user.getExpenditurePerson();
-	return isUserProcessOwner(process, user)
-		&& process.isResponsibleForUnit(person)
-		&& !process.getConfirmedInvoices(person).isEmpty()
-		&& ((process.hasProjectsAsPayingUnits() && !process.getRequest()
-			.hasAllocatedFundsPermanentlyForAnyProjectFinancer()) || (!process.hasProjectsAsPayingUnits() && !process
-			.getRequest().hasAnyEffectiveFundAllocationId()));
-    }
-
-    @Override
-    protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
-	final RegularAcquisitionProcess process = activityInformation.getProcess();
-	process.cancelInvoiceConfirmationBy(UserView.getCurrentUser().getExpenditurePerson());
-
-	if (ExternalIntegration.isActive()) {
-	    process.cancelFundAllocationRequest(true);
+	@Override
+	public boolean isActive(RegularAcquisitionProcess process, User user) {
+		Person person = user.getExpenditurePerson();
+		return isUserProcessOwner(process, user)
+				&& process.isResponsibleForUnit(person)
+				&& !process.getConfirmedInvoices(person).isEmpty()
+				&& ((process.hasProjectsAsPayingUnits() && !process.getRequest()
+						.hasAllocatedFundsPermanentlyForAnyProjectFinancer()) || (!process.hasProjectsAsPayingUnits() && !process
+						.getRequest().hasAnyEffectiveFundAllocationId()));
 	}
-    }
 
-    @Override
-    public String getLocalizedName() {
-	return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
-    }
+	@Override
+	protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
+		final RegularAcquisitionProcess process = activityInformation.getProcess();
+		process.cancelInvoiceConfirmationBy(UserView.getCurrentUser().getExpenditurePerson());
 
-    @Override
-    public String getUsedBundle() {
-	return "resources/AcquisitionResources";
-    }
+		if (ExternalIntegration.isActive()) {
+			process.cancelFundAllocationRequest(true);
+		}
+	}
 
-    @Override
-    public boolean isUserAwarenessNeeded(RegularAcquisitionProcess process, User user) {
-	return false;
-    }
+	@Override
+	public String getLocalizedName() {
+		return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+	}
+
+	@Override
+	public String getUsedBundle() {
+		return "resources/AcquisitionResources";
+	}
+
+	@Override
+	public boolean isUserAwarenessNeeded(RegularAcquisitionProcess process, User user) {
+		return false;
+	}
 }

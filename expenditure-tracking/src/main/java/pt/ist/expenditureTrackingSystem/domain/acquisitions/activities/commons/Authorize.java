@@ -44,48 +44,47 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
  */
 public class Authorize<P extends PaymentProcess> extends WorkflowActivity<P, ActivityInformation<P>> {
 
-    @Override
-    public boolean isActive(P process, User user) {
-	Person person = user.getExpenditurePerson();
-	return isUserProcessOwner(process, user)
-		&& process.isInAllocatedToUnitState()
-		&& process.isResponsibleForUnit(person, process.getRequest().getTotalValueWithoutVat())
-		&& !process.getRequest().hasBeenAuthorizedBy(person)
-		&& (!process.hasMissionProcess()
-			|| (process.getMissionProcess().isExpenditureAuthorized()
-				&& process.getMissionProcess().areAllParticipantsAuthorized()));
-    }
-
-    @Override
-    protected void process(ActivityInformation<P> activityInformation) {
-	activityInformation.getProcess().authorizeBy(Person.getLoggedPerson());
-    }
-
-    @Override
-    public String getLocalizedName() {
-	return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
-    }
-
-    @Override
-    public String getUsedBundle() {
-	return "resources/AcquisitionResources";
-    }
-
-    @Override
-    public boolean isUserAwarenessNeeded(final P process, final User user) {
-	final Person person = user.getExpenditurePerson();
-	if (person.hasAnyValidAuthorization()) {
-	    final Money amount = process.getRequest().getTotalValueWithoutVat();
-	    for (final RequestItem requestItem : process.getRequest().getRequestItemsSet()) {
-		for (final UnitItem unitItem : requestItem.getUnitItemsSet()) {
-		    final Unit unit = unitItem.getUnit();
-		    if (!unitItem.getItemAuthorized().booleanValue() && unit.isDirectResponsible(person, amount)) {
-			return true;
-		    }
-		}
-	    }
+	@Override
+	public boolean isActive(P process, User user) {
+		Person person = user.getExpenditurePerson();
+		return isUserProcessOwner(process, user)
+				&& process.isInAllocatedToUnitState()
+				&& process.isResponsibleForUnit(person, process.getRequest().getTotalValueWithoutVat())
+				&& !process.getRequest().hasBeenAuthorizedBy(person)
+				&& (!process.hasMissionProcess() || (process.getMissionProcess().isExpenditureAuthorized() && process
+						.getMissionProcess().areAllParticipantsAuthorized()));
 	}
-	return false;
-    }
+
+	@Override
+	protected void process(ActivityInformation<P> activityInformation) {
+		activityInformation.getProcess().authorizeBy(Person.getLoggedPerson());
+	}
+
+	@Override
+	public String getLocalizedName() {
+		return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+	}
+
+	@Override
+	public String getUsedBundle() {
+		return "resources/AcquisitionResources";
+	}
+
+	@Override
+	public boolean isUserAwarenessNeeded(final P process, final User user) {
+		final Person person = user.getExpenditurePerson();
+		if (person.hasAnyValidAuthorization()) {
+			final Money amount = process.getRequest().getTotalValueWithoutVat();
+			for (final RequestItem requestItem : process.getRequest().getRequestItemsSet()) {
+				for (final UnitItem unitItem : requestItem.getUnitItemsSet()) {
+					final Unit unit = unitItem.getUnit();
+					if (!unitItem.getItemAuthorized().booleanValue() && unit.isDirectResponsible(person, amount)) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
 
 }

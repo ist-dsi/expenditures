@@ -40,80 +40,80 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
  */
 public class UnitItemBean implements Serializable {
 
-    private Unit unit;
-    private RequestItem item;
-    private Money shareValue;
-    private Money realShareValue;
-    private Boolean approved;
-    private Boolean assigned;
+	private Unit unit;
+	private RequestItem item;
+	private Money shareValue;
+	private Money realShareValue;
+	private Boolean approved;
+	private Boolean assigned;
 
-    public UnitItemBean(UnitItem unitItem) {
-	setUnit(unitItem.getUnit());
-	setItem(unitItem.getItem());
-	setShareValue(unitItem.getShareValue());
-	setRealShareValue(unitItem.getRealShareValue());
-	setAssigned(Boolean.TRUE);
-    }
-
-    public UnitItemBean(Unit unit, RequestItem item) {
-	setItem(item);
-	setUnit(unit);
-	setAssigned(Boolean.FALSE);
-
-	UnitItem unitItem = item.getUnitItemFor(unit);
-	if (unitItem != null) {
-	    setAssigned(Boolean.TRUE);
-	    setApproved(unitItem.getItemAuthorized());
-	    setShareValue(unitItem.getShareValue());
-	    setRealShareValue(unitItem.getRealShareValue());
+	public UnitItemBean(UnitItem unitItem) {
+		setUnit(unitItem.getUnit());
+		setItem(unitItem.getItem());
+		setShareValue(unitItem.getShareValue());
+		setRealShareValue(unitItem.getRealShareValue());
+		setAssigned(Boolean.TRUE);
 	}
-    }
 
-    public Unit getUnit() {
-	return unit;
-    }
+	public UnitItemBean(Unit unit, RequestItem item) {
+		setItem(item);
+		setUnit(unit);
+		setAssigned(Boolean.FALSE);
 
-    public void setUnit(Unit unit) {
-	this.unit = unit;
-    }
+		UnitItem unitItem = item.getUnitItemFor(unit);
+		if (unitItem != null) {
+			setAssigned(Boolean.TRUE);
+			setApproved(unitItem.getItemAuthorized());
+			setShareValue(unitItem.getShareValue());
+			setRealShareValue(unitItem.getRealShareValue());
+		}
+	}
 
-    public RequestItem getItem() {
-	return item;
-    }
+	public Unit getUnit() {
+		return unit;
+	}
 
-    public void setItem(RequestItem item) {
-	this.item = item;
-    }
+	public void setUnit(Unit unit) {
+		this.unit = unit;
+	}
 
-    public Money getShareValue() {
-	return shareValue;
-    }
+	public RequestItem getItem() {
+		return item;
+	}
 
-    public void setShareValue(Money shareValue) {
-	this.shareValue = shareValue;
-    }
+	public void setItem(RequestItem item) {
+		this.item = item;
+	}
 
-    public Boolean getApproved() {
-	return approved;
-    }
+	public Money getShareValue() {
+		return shareValue;
+	}
 
-    public void setApproved(Boolean isApproved) {
-	this.approved = isApproved;
-    }
+	public void setShareValue(Money shareValue) {
+		this.shareValue = shareValue;
+	}
 
-    public Boolean getAssigned() {
-	return assigned;
-    }
+	public Boolean getApproved() {
+		return approved;
+	}
 
-    public void setAssigned(Boolean assigned) {
-	this.assigned = assigned;
-    }
+	public void setApproved(Boolean isApproved) {
+		this.approved = isApproved;
+	}
 
-    public Money getRealShareValue() {
-	return realShareValue;
-    }
+	public Boolean getAssigned() {
+		return assigned;
+	}
 
-    public void setRealShareValue(Money realShareValue) {
-	this.realShareValue = realShareValue;
-    }
+	public void setAssigned(Boolean assigned) {
+		this.assigned = assigned;
+	}
+
+	public Money getRealShareValue() {
+		return realShareValue;
+	}
+
+	public void setRealShareValue(Money realShareValue) {
+		this.realShareValue = realShareValue;
+	}
 }

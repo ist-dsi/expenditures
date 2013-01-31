@@ -36,81 +36,81 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
  */
 public class RefundProcessState extends RefundProcessState_Base {
 
-    protected RefundProcessState(final RefundProcess process) {
-	super();
-	final Person person = getPerson();
-	super.checkArguments(process, person);
-	super.initFields(process, person);
-	process.systemProcessRelease();
+	protected RefundProcessState(final RefundProcess process) {
+		super();
+		final Person person = getPerson();
+		super.checkArguments(process, person);
+		super.initFields(process, person);
+		process.systemProcessRelease();
 
-    }
-
-    public RefundProcessState(final RefundProcess refundProcess, final RefundProcessStateType refundProcessStateType) {
-	this(refundProcess);
-	if (refundProcessStateType == null) {
-	    throw new DomainException("error.wrong.ProcessState.arguments");
 	}
-	setRefundProcessStateType(refundProcessStateType);
-    }
 
-    public String getLocalizedName() {
-	return getRefundProcessStateType().getLocalizedName();
-    }
+	public RefundProcessState(final RefundProcess refundProcess, final RefundProcessStateType refundProcessStateType) {
+		this(refundProcess);
+		if (refundProcessStateType == null) {
+			throw new DomainException("error.wrong.ProcessState.arguments");
+		}
+		setRefundProcessStateType(refundProcessStateType);
+	}
 
-    public boolean isInGenesis() {
-	return getRefundProcessStateType() == RefundProcessStateType.IN_GENESIS;
-    }
+	public String getLocalizedName() {
+		return getRefundProcessStateType().getLocalizedName();
+	}
 
-    public boolean isPendingApproval() {
-	return getRefundProcessStateType() == RefundProcessStateType.SUBMITTED_FOR_APPROVAL;
-    }
+	public boolean isInGenesis() {
+		return getRefundProcessStateType() == RefundProcessStateType.IN_GENESIS;
+	}
 
-    public boolean isInApprovedState() {
-	return getRefundProcessStateType() == RefundProcessStateType.APPROVED;
-    }
+	public boolean isPendingApproval() {
+		return getRefundProcessStateType() == RefundProcessStateType.SUBMITTED_FOR_APPROVAL;
+	}
 
-    public boolean isInAllocatedToUnitState() {
-	return getRefundProcessStateType() == RefundProcessStateType.FUNDS_ALLOCATED;
-    }
+	public boolean isInApprovedState() {
+		return getRefundProcessStateType() == RefundProcessStateType.APPROVED;
+	}
 
-    public boolean isAuthorized() {
-	return getRefundProcessStateType() == RefundProcessStateType.AUTHORIZED;
-    }
+	public boolean isInAllocatedToUnitState() {
+		return getRefundProcessStateType() == RefundProcessStateType.FUNDS_ALLOCATED;
+	}
 
-    public boolean isPendingInvoicesConfirmation() {
-	return getRefundProcessStateType() == RefundProcessStateType.SUBMITTED_FOR_INVOICE_CONFIRMATION;
-    }
+	public boolean isAuthorized() {
+		return getRefundProcessStateType() == RefundProcessStateType.AUTHORIZED;
+	}
 
-    public boolean isActive() {
-	return getRefundProcessStateType().isActive();
-    }
+	public boolean isPendingInvoicesConfirmation() {
+		return getRefundProcessStateType() == RefundProcessStateType.SUBMITTED_FOR_INVOICE_CONFIRMATION;
+	}
 
-    public boolean isInvoiceConfirmed() {
-	return getRefundProcessStateType() == RefundProcessStateType.INVOICES_CONFIRMED;
-    }
+	public boolean isActive() {
+		return getRefundProcessStateType().isActive();
+	}
 
-    public boolean isAllocatedPermanently() {
-	return getRefundProcessStateType() == RefundProcessStateType.FUNDS_ALLOCATED_PERMANENTLY;
-    }
+	public boolean isInvoiceConfirmed() {
+		return getRefundProcessStateType() == RefundProcessStateType.INVOICES_CONFIRMED;
+	}
 
-    public boolean isInSubmittedForInvoiceConfirmationState() {
-	return getRefundProcessStateType() == RefundProcessStateType.SUBMITTED_FOR_INVOICE_CONFIRMATION;
-    }
+	public boolean isAllocatedPermanently() {
+		return getRefundProcessStateType() == RefundProcessStateType.FUNDS_ALLOCATED_PERMANENTLY;
+	}
 
-    public boolean hasFundsAllocatedPermanently() {
-	return getRefundProcessStateType() == RefundProcessStateType.FUNDS_ALLOCATED_PERMANENTLY;
-    }
+	public boolean isInSubmittedForInvoiceConfirmationState() {
+		return getRefundProcessStateType() == RefundProcessStateType.SUBMITTED_FOR_INVOICE_CONFIRMATION;
+	}
 
-    public boolean isCanceled() {
-	return getRefundProcessStateType() == RefundProcessStateType.CANCELED;
-    }
+	public boolean hasFundsAllocatedPermanently() {
+		return getRefundProcessStateType() == RefundProcessStateType.FUNDS_ALLOCATED_PERMANENTLY;
+	}
 
-    @Override
-    public boolean isInFinalStage() {
-	final RefundProcessStateType refundProcessStateType = getRefundProcessStateType();
-	return refundProcessStateType == RefundProcessStateType.INVOICES_CONFIRMED 
-		|| refundProcessStateType == RefundProcessStateType.FUNDS_ALLOCATED_PERMANENTLY
-		|| refundProcessStateType == RefundProcessStateType.REFUNDED;
-    }
+	public boolean isCanceled() {
+		return getRefundProcessStateType() == RefundProcessStateType.CANCELED;
+	}
+
+	@Override
+	public boolean isInFinalStage() {
+		final RefundProcessStateType refundProcessStateType = getRefundProcessStateType();
+		return refundProcessStateType == RefundProcessStateType.INVOICES_CONFIRMED
+				|| refundProcessStateType == RefundProcessStateType.FUNDS_ALLOCATED_PERMANENTLY
+				|| refundProcessStateType == RefundProcessStateType.REFUNDED;
+	}
 
 }

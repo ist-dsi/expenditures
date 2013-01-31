@@ -9,24 +9,24 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 
 public class AddFinancerActivityInformation extends ActivityInformation<MissionProcess> implements Serializable {
 
-    private Unit unit;
+	private Unit unit;
 
-    public AddFinancerActivityInformation(final MissionProcess missionProcess,
-	    final WorkflowActivity<MissionProcess, ? extends ActivityInformation<MissionProcess>> activity) {
-	super(missionProcess, activity);
-    }
+	public AddFinancerActivityInformation(final MissionProcess missionProcess,
+			final WorkflowActivity<MissionProcess, ? extends ActivityInformation<MissionProcess>> activity) {
+		super(missionProcess, activity);
+	}
 
-    @Override
-    public boolean hasAllneededInfo() {
-	return getUnit() != null;
-    }
+	@Override
+	public boolean hasAllneededInfo() {
+		return getUnit() != null;
+	}
 
-    public Unit getUnit() {
-	return unit;
-    }
+	public Unit getUnit() {
+		return unit;
+	}
 
-    public void setUnit(final Unit unit) {
-	this.unit = unit;
-    }
+	public void setUnit(final Unit unit) {
+		this.unit = unit;
+	}
 
 }

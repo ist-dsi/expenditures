@@ -34,53 +34,53 @@ import module.workflow.domain.ProcessFile;
  */
 public class PaymentProcessInvoice extends PaymentProcessInvoice_Base {
 
-    public PaymentProcessInvoice() {
-	super();
-    }
+	public PaymentProcessInvoice() {
+		super();
+	}
 
-    //    public static class PaymentProcessInvoiceMetadataResolver extends InvoiceMetadaResolver {
-    ////
-    ////	public final static String REQUEST_ITEMS = "Itens do pedido";
-    ////
-    ////	public final static String UNIT_ITEMS = "Itens de unidade";
-    ////	public final static String FINANCERS = "Unidades pagadoras";
-    ////	public final static String PROJECT_FINANCERS = "Financiadores do projecto";
-    //
-    //	@Override
-    //	public Map<String, String> getMetadataKeysAndValuesMap(ProcessFile processFile) {
-    //	    PaymentProcessInvoice processDocument = (PaymentProcessInvoice) processFile;
-    //	    Map<String, String> metadataKeysAndValuesMap = super.getMetadataKeysAndValuesMap(processFile);
-    //
-    //	    //Actually, nothing should be done with these fields
-    ////	    List<RequestItem> requestItems = processDocument.getRequestItems();
-    ////	    
-    ////	    if (requestItems != null && !requestItems.isEmpty())
-    ////	    {
-    ////		metadataKeysAndValuesMap.put(key, value)
-    ////	    }
-    ////
-    ////	    List<UnitItem> unitItems = processDocument.getUnitItems();
-    ////
-    ////	    List<Financer> financers = processDocument.getFinancers();
-    ////
-    ////	    List<ProjectFinancer> projectFinancers = processDocument.getProjectFinancers();
-    //
-    //	    return metadataKeysAndValuesMap;
-    //	}
-    //
-    //    }
+	//    public static class PaymentProcessInvoiceMetadataResolver extends InvoiceMetadaResolver {
+	////
+	////	public final static String REQUEST_ITEMS = "Itens do pedido";
+	////
+	////	public final static String UNIT_ITEMS = "Itens de unidade";
+	////	public final static String FINANCERS = "Unidades pagadoras";
+	////	public final static String PROJECT_FINANCERS = "Financiadores do projecto";
+	//
+	//	@Override
+	//	public Map<String, String> getMetadataKeysAndValuesMap(ProcessFile processFile) {
+	//	    PaymentProcessInvoice processDocument = (PaymentProcessInvoice) processFile;
+	//	    Map<String, String> metadataKeysAndValuesMap = super.getMetadataKeysAndValuesMap(processFile);
+	//
+	//	    //Actually, nothing should be done with these fields
+	////	    List<RequestItem> requestItems = processDocument.getRequestItems();
+	////	    
+	////	    if (requestItems != null && !requestItems.isEmpty())
+	////	    {
+	////		metadataKeysAndValuesMap.put(key, value)
+	////	    }
+	////
+	////	    List<UnitItem> unitItems = processDocument.getUnitItems();
+	////
+	////	    List<Financer> financers = processDocument.getFinancers();
+	////
+	////	    List<ProjectFinancer> projectFinancers = processDocument.getProjectFinancers();
+	//
+	//	    return metadataKeysAndValuesMap;
+	//	}
+	//
+	//    }
 
-    @Override
-    public ProcessDocumentMetaDataResolver<ProcessFile> getMetaDataResolver() {
-	return new InvoiceMetadaResolver();
-    }
+	@Override
+	public ProcessDocumentMetaDataResolver<ProcessFile> getMetaDataResolver() {
+		return new InvoiceMetadaResolver();
+	}
 
-    @Override
-    public void delete() {
-	getUnitItems().clear();
-	getRequestItems().clear();
-	getProjectFinancers().clear();
-	getFinancers().clear();
-	super.delete();
-    }
+	@Override
+	public void delete() {
+		getUnitItems().clear();
+		getRequestItems().clear();
+		getProjectFinancers().clear();
+		getFinancers().clear();
+		super.delete();
+	}
 }

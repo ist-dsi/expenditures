@@ -15,22 +15,22 @@ import pt.ist.bennu.core.presentationTier.renderers.autoCompleteProvider.AutoCom
 
 public class MissionProcessFromOtherSystemsProvider implements AutoCompleteProvider {
 
-    @Override
-    public Collection getSearchResults(Map<String, String> argsMap, String value, int maxCount) {
-	final String currentValue = StringUtils.trim(value);
+	@Override
+	public Collection getSearchResults(Map<String, String> argsMap, String value, int maxCount) {
+		final String currentValue = StringUtils.trim(value);
 
-	final List<MissionProcess> result = new ArrayList<MissionProcess>();
-	final Set<MissionSystem> otherSystems = MissionSystem.readAllMissionSystems();
-	otherSystems.remove(MissionSystem.getInstance());
-	for (MissionSystem otherSystem : otherSystems) {
-	    for (final MissionProcess missionProcess : otherSystem.getMissionProcessesSet()) {
-		if (missionProcess.getProcessIdentification().equals(currentValue)
-			|| missionProcess.getProcessNumber().equals(currentValue)) {
-		    result.add(missionProcess);
+		final List<MissionProcess> result = new ArrayList<MissionProcess>();
+		final Set<MissionSystem> otherSystems = MissionSystem.readAllMissionSystems();
+		otherSystems.remove(MissionSystem.getInstance());
+		for (MissionSystem otherSystem : otherSystems) {
+			for (final MissionProcess missionProcess : otherSystem.getMissionProcessesSet()) {
+				if (missionProcess.getProcessIdentification().equals(currentValue)
+						|| missionProcess.getProcessNumber().equals(currentValue)) {
+					result.add(missionProcess);
+				}
+			}
 		}
-	    }
+		return result;
 	}
-	return result;
-    }
 
 }

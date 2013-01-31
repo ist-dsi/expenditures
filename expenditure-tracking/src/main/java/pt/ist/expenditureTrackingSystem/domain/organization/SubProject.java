@@ -43,79 +43,81 @@ import dml.runtime.RelationAdapter;
  */
 public class SubProject extends SubProject_Base {
 
-    public static class SubProjectPartyTypeListener extends RelationAdapter<Party, PartyType> {
+	public static class SubProjectPartyTypeListener extends RelationAdapter<Party, PartyType> {
+
+		@Override
+		public void afterAdd(final Party party, final PartyType partyType) {
+			if (party.isUnit() && partyType != null
+					&& partyType == ExpenditureTrackingSystem.getInstance().getSubProjectPartyType()) {
+				new SubProject((module.organization.domain.Unit) party);
+			}
+		}
+
+	}
+
+	static {
+		Party.PartyTypeParty.addListener(new SubProjectPartyTypeListener());
+	}
+
+	public SubProject(final module.organization.domain.Unit unit) {
+		super();
+		setUnit(unit);
+	}
+
+	public SubProject(final Project parentUnit, final String name) {
+		super();
+		final String acronym = StringUtils.abbreviate(name, 5);
+		createRealUnit(this, parentUnit, ExpenditureTrackingSystem.getInstance().getSubProjectPartyType(), acronym, name);
+
+		// TODO : After this object is refactored to retrieve the name and
+		// parent from the real unit,
+		// the following two lines may be deleted.
+		setName(name);
+		setParentUnit(parentUnit);
+	}
 
 	@Override
-	public void afterAdd(final Party party, final PartyType partyType) {
-	    if (party.isUnit() && partyType != null && partyType == ExpenditureTrackingSystem.getInstance().getSubProjectPartyType()) {
-		new SubProject((module.organization.domain.Unit) party);
-	    }
+	public void setName(final String name) {
+		super.setName(name);
+		final Project project = (Project) getParentUnit();
+		if (project == null) {
+			final String acronym = StringUtils.abbreviate(name, 5);
+			getUnit().setAcronym(acronym);
+		} else {
+			getUnit().setAcronym(project.getUnit().getAcronym());
+		}
 	}
 
-    }
-
-    static {
-	Party.PartyTypeParty.addListener(new SubProjectPartyTypeListener());
-    }
-
-    public SubProject(final module.organization.domain.Unit unit) {
-	super();
-	setUnit(unit);
-    }
-
-    public SubProject(final Project parentUnit, final String name) {
-	super();
-	final String acronym = StringUtils.abbreviate(name, 5);
-	createRealUnit(this, parentUnit, ExpenditureTrackingSystem.getInstance().getSubProjectPartyType(), acronym, name);
-
-	// TODO : After this object is refactored to retrieve the name and
-	// parent from the real unit,
-	// the following two lines may be deleted.
-	setName(name);
-	setParentUnit(parentUnit);
-    }
-
-    @Override
-    public void setName(final String name) {
-	super.setName(name);
-	final Project project = (Project) getParentUnit();
-	if (project == null) {
-	    final String acronym = StringUtils.abbreviate(name, 5);
-	    getUnit().setAcronym(acronym);
-	} else {
-	    getUnit().setAcronym(project.getUnit().getAcronym());
+	@Override
+	public String getPresentationName() {
+		return "(" + getUnit().getAcronym() + ") " + " - " + super.getPresentationName();
 	}
-    }
 
-    @Override
-    public String getPresentationName() {
-	return "(" + getUnit().getAcronym() + ") " + " - " + super.getPresentationName();
-    }
-
-    @Override
-    public void setParentUnit(final Unit parentUnit) {
-	super.setParentUnit(parentUnit);
-	if (parentUnit != null && hasUnit()) {
-	    getUnit().setAcronym(parentUnit.getUnit().getAcronym());
+	@Override
+	public void setParentUnit(final Unit parentUnit) {
+		super.setParentUnit(parentUnit);
+		if (parentUnit != null && hasUnit()) {
+			getUnit().setAcronym(parentUnit.getUnit().getAcronym());
+		}
 	}
-    }
 
-    @Override
-    public AccountingUnit getAccountingUnit() {
-	final AccountingUnit accountingUnit = super.getAccountingUnit();
-	if (accountingUnit == null) {
-	    final Unit parentUnit = getParentUnit();
-	    if (parentUnit != null) {
-		return parentUnit.getAccountingUnit();
-	    }
+	@Override
+	public AccountingUnit getAccountingUnit() {
+		final AccountingUnit accountingUnit = super.getAccountingUnit();
+		if (accountingUnit == null) {
+			final Unit parentUnit = getParentUnit();
+			if (parentUnit != null) {
+				return parentUnit.getAccountingUnit();
+			}
+		}
+		return accountingUnit;
 	}
-	return accountingUnit;
-    }
 
-    @Override
-    public Financer finance(final RequestWithPayment acquisitionRequest) {
-	return new ProjectFinancer(acquisitionRequest, this);
-    }
+	@Override
+	public Financer finance(final RequestWithPayment acquisitionRequest) {
+		return new ProjectFinancer(acquisitionRequest, this);
+	}
+
 /*
     @Override
     public IndexDocument getDocumentToIndex() {
@@ -124,16 +126,16 @@ public class SubProject extends SubProject_Base {
 	return document;
     }
 */
-    @Override
-    public boolean isAccountingResponsible(final Person person) {
-	final Project project = (Project) getParentUnit();
-	return project.isAccountingResponsible(person);
-    }
+	@Override
+	public boolean isAccountingResponsible(final Person person) {
+		final Project project = (Project) getParentUnit();
+		return project.isAccountingResponsible(person);
+	}
 
-    @Override
-    public String getUnitNumber() {
-	final Unit parentUnit = getParentUnit();
-	return parentUnit == null ? null : parentUnit.getUnitNumber();
-    }
+	@Override
+	public String getUnitNumber() {
+		final Unit parentUnit = getParentUnit();
+		return parentUnit == null ? null : parentUnit.getUnitNumber();
+	}
 
 }

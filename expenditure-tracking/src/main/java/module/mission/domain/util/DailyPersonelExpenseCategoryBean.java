@@ -10,50 +10,50 @@ import pt.ist.fenixWebFramework.services.Service;
 
 public class DailyPersonelExpenseCategoryBean implements Serializable {
 
-    private DailyPersonelExpenseTable dailyPersonelExpenseTable;
-    private String description;
-    private Money value;
-    private BigDecimal minSalaryValue;
+	private DailyPersonelExpenseTable dailyPersonelExpenseTable;
+	private String description;
+	private Money value;
+	private BigDecimal minSalaryValue;
 
-    public DailyPersonelExpenseCategoryBean(final DailyPersonelExpenseTable dailyPersonelExpenseTable) {
-	this.dailyPersonelExpenseTable = dailyPersonelExpenseTable;
-    }
+	public DailyPersonelExpenseCategoryBean(final DailyPersonelExpenseTable dailyPersonelExpenseTable) {
+		this.dailyPersonelExpenseTable = dailyPersonelExpenseTable;
+	}
 
-    public DailyPersonelExpenseTable getDailyPersonelExpenseTable() {
-        return dailyPersonelExpenseTable;
-    }
+	public DailyPersonelExpenseTable getDailyPersonelExpenseTable() {
+		return dailyPersonelExpenseTable;
+	}
 
-    public void setDailyPersonelExpenseTable(DailyPersonelExpenseTable dailyPersonelExpenseTable) {
-        this.dailyPersonelExpenseTable = dailyPersonelExpenseTable;
-    }
+	public void setDailyPersonelExpenseTable(DailyPersonelExpenseTable dailyPersonelExpenseTable) {
+		this.dailyPersonelExpenseTable = dailyPersonelExpenseTable;
+	}
 
-    public String getDescription() {
-        return description;
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    public Money getValue() {
-        return value;
-    }
+	public Money getValue() {
+		return value;
+	}
 
-    public void setValue(Money value) {
-        this.value = value;
-    }
+	public void setValue(Money value) {
+		this.value = value;
+	}
 
-    public BigDecimal getMinSalaryValue() {
-        return minSalaryValue;
-    }
+	public BigDecimal getMinSalaryValue() {
+		return minSalaryValue;
+	}
 
-    public void setMinSalaryValue(BigDecimal minSalaryValue) {
-        this.minSalaryValue = minSalaryValue;
-    }
+	public void setMinSalaryValue(BigDecimal minSalaryValue) {
+		this.minSalaryValue = minSalaryValue;
+	}
 
-    @Service
-    public DailyPersonelExpenseCategory createDailyPersonelExpenseCategory() {
-	return dailyPersonelExpenseTable.createDailyPersonelExpenseCategory(description, value, minSalaryValue);
-    }
+	@Service
+	public DailyPersonelExpenseCategory createDailyPersonelExpenseCategory() {
+		return dailyPersonelExpenseTable.createDailyPersonelExpenseCategory(description, value, minSalaryValue);
+	}
 
 }

@@ -37,46 +37,46 @@ import pt.ist.bennu.core.util.BundleUtil;
  * 
  */
 public class UnAuthoriseParticipantActivity extends
-	MissionProcessActivity<MissionProcess, AuthoriseParticipantActivityInformation> {
+		MissionProcessActivity<MissionProcess, AuthoriseParticipantActivityInformation> {
 
-    @Override
-    public String getLocalizedName() {
-	return BundleUtil.getStringFromResourceBundle("resources/MissionResources", "activity." + getClass().getSimpleName());
-    }
+	@Override
+	public String getLocalizedName() {
+		return BundleUtil.getStringFromResourceBundle("resources/MissionResources", "activity." + getClass().getSimpleName());
+	}
 
-    @Override
-    public boolean isActive(final MissionProcess missionProcess, final User user) {
-	return super.isActive(missionProcess, user)
-		&& !missionProcess.isCanceled()
-		&& missionProcess.canUnAuthoriseSomeParticipantActivity()
-		&& missionProcess.hasAnyAuthorizedParticipants()
-		&& ((!missionProcess.hasAnyCurrentQueues() && !missionProcess.areAllParticipantsAuthorized()) || (missionProcess
-			.hasAnyCurrentQueues())) && !missionProcess.isTerminated();
-    }
+	@Override
+	public boolean isActive(final MissionProcess missionProcess, final User user) {
+		return super.isActive(missionProcess, user)
+				&& !missionProcess.isCanceled()
+				&& missionProcess.canUnAuthoriseSomeParticipantActivity()
+				&& missionProcess.hasAnyAuthorizedParticipants()
+				&& ((!missionProcess.hasAnyCurrentQueues() && !missionProcess.areAllParticipantsAuthorized()) || (missionProcess
+						.hasAnyCurrentQueues())) && !missionProcess.isTerminated();
+	}
 
-    @Override
-    protected void process(final AuthoriseParticipantActivityInformation authoriseParticipantActivityInformation) {
-	final PersonMissionAuthorization personMissionAuthorization = authoriseParticipantActivityInformation
-		.getPersonMissionAuthorization();
-	personMissionAuthorization.setAuthority(null);
-	personMissionAuthorization.setDelegatedAuthority(null);
-	final MissionProcess missionProcess = authoriseParticipantActivityInformation.getProcess();
-	missionProcess.removeFromParticipantInformationQueues();
-    }
+	@Override
+	protected void process(final AuthoriseParticipantActivityInformation authoriseParticipantActivityInformation) {
+		final PersonMissionAuthorization personMissionAuthorization =
+				authoriseParticipantActivityInformation.getPersonMissionAuthorization();
+		personMissionAuthorization.setAuthority(null);
+		personMissionAuthorization.setDelegatedAuthority(null);
+		final MissionProcess missionProcess = authoriseParticipantActivityInformation.getProcess();
+		missionProcess.removeFromParticipantInformationQueues();
+	}
 
-    @Override
-    public ActivityInformation<MissionProcess> getActivityInformation(final MissionProcess process) {
-	return new AuthoriseParticipantActivityInformation(process, this);
-    }
+	@Override
+	public ActivityInformation<MissionProcess> getActivityInformation(final MissionProcess process) {
+		return new AuthoriseParticipantActivityInformation(process, this);
+	}
 
-    @Override
-    public boolean isDefaultInputInterfaceUsed() {
-	return true;
-    }
+	@Override
+	public boolean isDefaultInputInterfaceUsed() {
+		return true;
+	}
 
-    @Override
-    public boolean isVisible() {
-	return false;
-    }
+	@Override
+	public boolean isVisible() {
+		return false;
+	}
 
 }

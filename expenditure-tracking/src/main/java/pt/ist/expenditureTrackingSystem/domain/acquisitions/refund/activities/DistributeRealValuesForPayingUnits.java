@@ -38,17 +38,15 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
  */
 public class DistributeRealValuesForPayingUnits extends AbstractDistributeRealValuesForPayingUnits<RefundProcess> {
 
-    @Override
-    public boolean isActive(RefundProcess process, User user) {
-	Person person = user.getExpenditurePerson();
-	return isUserProcessOwner(process, user)
-		&& process.isAnyRefundInvoiceAvailable()
-		&& ((process.getRequestor() == person && process.isInAuthorizedState())
-			|| (process.isPendingInvoicesConfirmation()
-				&& ((ExpenditureTrackingSystem.isAccountingManagerGroupMember(user)
-					&& !process.hasProjectsAsPayingUnits())
-				|| (ExpenditureTrackingSystem.isProjectAccountingManagerGroupMember(user)
-					&& process.hasProjectsAsPayingUnits()))));
-    }
+	@Override
+	public boolean isActive(RefundProcess process, User user) {
+		Person person = user.getExpenditurePerson();
+		return isUserProcessOwner(process, user)
+				&& process.isAnyRefundInvoiceAvailable()
+				&& ((process.getRequestor() == person && process.isInAuthorizedState()) || (process
+						.isPendingInvoicesConfirmation() && ((ExpenditureTrackingSystem.isAccountingManagerGroupMember(user) && !process
+						.hasProjectsAsPayingUnits()) || (ExpenditureTrackingSystem.isProjectAccountingManagerGroupMember(user) && process
+						.hasProjectsAsPayingUnits()))));
+	}
 
 }

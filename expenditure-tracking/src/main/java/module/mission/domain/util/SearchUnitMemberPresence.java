@@ -49,100 +49,100 @@ import org.joda.time.LocalDate;
  */
 public class SearchUnitMemberPresence implements Serializable {
 
-    private Unit unit;
-    private LocalDate day = new LocalDate();
-    private List<AccountabilityType> accountabilityTypes = new ArrayList<AccountabilityType>();
-    private boolean includeSubUnits = true;
-    private boolean onMission = true;
+	private Unit unit;
+	private LocalDate day = new LocalDate();
+	private List<AccountabilityType> accountabilityTypes = new ArrayList<AccountabilityType>();
+	private boolean includeSubUnits = true;
+	private boolean onMission = true;
 
-    public SearchUnitMemberPresence(final Unit unit) {
-	this.unit = unit;
-	accountabilityTypes.addAll(MissionSystem.getInstance().getAccountabilityTypesRequireingAuthorization());
-    }
+	public SearchUnitMemberPresence(final Unit unit) {
+		this.unit = unit;
+		accountabilityTypes.addAll(MissionSystem.getInstance().getAccountabilityTypesRequireingAuthorization());
+	}
 
-    public LocalDate getDay() {
-        return day;
-    }
+	public LocalDate getDay() {
+		return day;
+	}
 
-    public void setDay(final LocalDate day) {
-        this.day = day;
-    }
+	public void setDay(final LocalDate day) {
+		this.day = day;
+	}
 
-    public List<AccountabilityType> getAccountabilityTypes() {
-        return accountabilityTypes;
-    }
+	public List<AccountabilityType> getAccountabilityTypes() {
+		return accountabilityTypes;
+	}
 
-    public void setAccountabilityTypes(final List<AccountabilityType> accountabilityTypes) {
-        this.accountabilityTypes = accountabilityTypes;
-    }
+	public void setAccountabilityTypes(final List<AccountabilityType> accountabilityTypes) {
+		this.accountabilityTypes = accountabilityTypes;
+	}
 
-    public Unit getUnit() {
-        return unit;
-    }
+	public Unit getUnit() {
+		return unit;
+	}
 
-    public void setUnit(final Unit unit) {
-        this.unit = unit;
-    }
+	public void setUnit(final Unit unit) {
+		this.unit = unit;
+	}
 
-    public boolean isIncludeSubUnits() {
-        return includeSubUnits;
-    }
+	public boolean isIncludeSubUnits() {
+		return includeSubUnits;
+	}
 
-    public void setIncludeSubUnits(final boolean includeSubUnits) {
-        this.includeSubUnits = includeSubUnits;
-    }
+	public void setIncludeSubUnits(final boolean includeSubUnits) {
+		this.includeSubUnits = includeSubUnits;
+	}
 
-    public boolean isOnMission() {
-        return onMission;
-    }
+	public boolean isOnMission() {
+		return onMission;
+	}
 
-    public void setOnMission(boolean onMission) {
-        this.onMission = onMission;
-    }
+	public void setOnMission(boolean onMission) {
+		this.onMission = onMission;
+	}
 
-    public Set<Person> search() {
-	final Set<Person> result = new TreeSet<Person>(Person.COMPARATOR_BY_NAME);
-	search(result, unit);
-	return result;
-    }
+	public Set<Person> search() {
+		final Set<Person> result = new TreeSet<Person>(Person.COMPARATOR_BY_NAME);
+		search(result, unit);
+		return result;
+	}
 
-    private void search(final Set<Person> result, final Unit unit) {
-	final OrganizationalModel organizationalModel = MissionSystem.getInstance().getOrganizationalModel();
-	final Set<AccountabilityType> accountabilityTypesSet = organizationalModel.getAccountabilityTypesSet();
-	for (final Accountability accountability : unit.getChildAccountabilitiesSet()) {
-	    final AccountabilityType accountabilityType = accountability.getAccountabilityType();
-	    if (accountabilityTypesSet.contains(accountabilityType) && accountability.isActiveNow()) {
-		final Party child = accountability.getChild();
-		if (child.isUnit()) {
-		    if (includeSubUnits) {
-			search(result, (Unit) child);
-		    }
-		} else {
-		    if (accountabilityTypes.contains(accountabilityType)) {
-			final Person person = (Person) child;
-			final boolean hasMission = hasMissionOnDay(person);
-			//if (onMission && hasMission || !onMission && !hasMission) {
-			if (!(onMission ^ hasMission)) {
-			    result.add(person);
+	private void search(final Set<Person> result, final Unit unit) {
+		final OrganizationalModel organizationalModel = MissionSystem.getInstance().getOrganizationalModel();
+		final Set<AccountabilityType> accountabilityTypesSet = organizationalModel.getAccountabilityTypesSet();
+		for (final Accountability accountability : unit.getChildAccountabilitiesSet()) {
+			final AccountabilityType accountabilityType = accountability.getAccountabilityType();
+			if (accountabilityTypesSet.contains(accountabilityType) && accountability.isActiveNow()) {
+				final Party child = accountability.getChild();
+				if (child.isUnit()) {
+					if (includeSubUnits) {
+						search(result, (Unit) child);
+					}
+				} else {
+					if (accountabilityTypes.contains(accountabilityType)) {
+						final Person person = (Person) child;
+						final boolean hasMission = hasMissionOnDay(person);
+						//if (onMission && hasMission || !onMission && !hasMission) {
+						if (!(onMission ^ hasMission)) {
+							result.add(person);
+						}
+					}
+				}
 			}
-		    }
 		}
-	    }
 	}
-    }
 
-    private boolean hasMissionOnDay(final Person person) {
-	for (final Mission mission : person.getMissionsSet()) {
-	    final LocalDate departure = mission.getDaparture().toLocalDate();
-	    final LocalDate arrival = mission.getArrival().toLocalDate();
-	    if (!day.isBefore(departure) && !day.isAfter(arrival)) {
-		final MissionProcess missionProcess = mission.getMissionProcess();
-		if (!missionProcess.isCanceled() && !missionProcess.isUnderConstruction()) {
-		    return true;
+	private boolean hasMissionOnDay(final Person person) {
+		for (final Mission mission : person.getMissionsSet()) {
+			final LocalDate departure = mission.getDaparture().toLocalDate();
+			final LocalDate arrival = mission.getArrival().toLocalDate();
+			if (!day.isBefore(departure) && !day.isAfter(arrival)) {
+				final MissionProcess missionProcess = mission.getMissionProcess();
+				if (!missionProcess.isCanceled() && !missionProcess.isUnderConstruction()) {
+					return true;
+				}
+			}
 		}
-	    }
+		return false;
 	}
-	return false;
-    }
 
 }

@@ -38,30 +38,28 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionPr
  * 
  */
 public class SendPurchaseOrderToSupplier extends
-	WorkflowActivity<RegularAcquisitionProcess, ActivityInformation<RegularAcquisitionProcess>> {
+		WorkflowActivity<RegularAcquisitionProcess, ActivityInformation<RegularAcquisitionProcess>> {
 
-    @Override
-    public boolean isActive(RegularAcquisitionProcess process, User user) {
-	return isUserProcessOwner(process, user)
-		&& process.getAcquisitionProcessState().isAuthorized()
-		&& ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user)
-		&& process.hasPurchaseOrderDocument()
-		&& process.isCommitted();
-    }
+	@Override
+	public boolean isActive(RegularAcquisitionProcess process, User user) {
+		return isUserProcessOwner(process, user) && process.getAcquisitionProcessState().isAuthorized()
+				&& ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user) && process.hasPurchaseOrderDocument()
+				&& process.isCommitted();
+	}
 
-    @Override
-    protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
-	activityInformation.getProcess().processAcquisition();
-    }
+	@Override
+	protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
+		activityInformation.getProcess().processAcquisition();
+	}
 
-    @Override
-    public String getLocalizedName() {
-	return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
-    }
+	@Override
+	public String getLocalizedName() {
+		return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+	}
 
-    @Override
-    public String getUsedBundle() {
-	return "resources/AcquisitionResources";
-    }
+	@Override
+	public String getUsedBundle() {
+		return "resources/AcquisitionResources";
+	}
 
 }

@@ -29,7 +29,6 @@ import module.workflow.activities.WorkflowActivity;
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
-import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 
@@ -40,30 +39,28 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionPr
  * 
  */
 public class LockInvoiceReceiving extends
-	WorkflowActivity<RegularAcquisitionProcess, ActivityInformation<RegularAcquisitionProcess>> {
+		WorkflowActivity<RegularAcquisitionProcess, ActivityInformation<RegularAcquisitionProcess>> {
 
-    @Override
-    public boolean isActive(RegularAcquisitionProcess process, User user) {
-	AcquisitionProcessState acquisitionProcessState = process.getAcquisitionProcessState();
+	@Override
+	public boolean isActive(RegularAcquisitionProcess process, User user) {
+		AcquisitionProcessState acquisitionProcessState = process.getAcquisitionProcessState();
 
-	return isUserProcessOwner(process, user)
-		&& ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user)
-		&& acquisitionProcessState.isAcquisitionProcessed()
-		&& !process.getRequest().getInvoices().isEmpty();
-    }
+		return isUserProcessOwner(process, user) && ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user)
+				&& acquisitionProcessState.isAcquisitionProcessed() && !process.getRequest().getInvoices().isEmpty();
+	}
 
-    @Override
-    protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
-	activityInformation.getProcess().invoiceReceived();
-    }
+	@Override
+	protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
+		activityInformation.getProcess().invoiceReceived();
+	}
 
-    @Override
-    public String getLocalizedName() {
-	return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
-    }
+	@Override
+	public String getLocalizedName() {
+		return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+	}
 
-    @Override
-    public String getUsedBundle() {
-	return "resources/AcquisitionResources";
-    }
+	@Override
+	public String getUsedBundle() {
+		return "resources/AcquisitionResources";
+	}
 }

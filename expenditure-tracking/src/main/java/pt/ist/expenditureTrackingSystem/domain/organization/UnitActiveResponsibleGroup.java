@@ -41,52 +41,53 @@ import pt.ist.fenixWebFramework.services.Service;
  */
 public class UnitActiveResponsibleGroup extends UnitActiveResponsibleGroup_Base {
 
-    protected UnitActiveResponsibleGroup() {
-        super();
-        setSystemGroupMyOrg(getMyOrg());
-    }
+	protected UnitActiveResponsibleGroup() {
+		super();
+		setSystemGroupMyOrg(getMyOrg());
+	}
 
-    protected String getNameLable() {
-	return "label.persistent.group.unitActiveResponsible.name";
-    }
+	protected String getNameLable() {
+		return "label.persistent.group.unitActiveResponsible.name";
+	}
 
-    @Override
-    public String getName() {
-	return BundleUtil.getStringFromResourceBundle("resources/ExpenditureOrganizationResources", getNameLable());
-    }
+	@Override
+	public String getName() {
+		return BundleUtil.getStringFromResourceBundle("resources/ExpenditureOrganizationResources", getNameLable());
+	}
 
-    protected boolean isExpectedUnitType(final Unit unit) {
-	return true;
-    }
+	protected boolean isExpectedUnitType(final Unit unit) {
+		return true;
+	}
 
-    @Override
-    public boolean isMember(final User user) {
-	if (user.hasExpenditurePerson()) {
-	    final Person person = user.getExpenditurePerson();
-	    for (final Authorization authorization : person.getAuthorizationsSet()) {
-		if (authorization.isValid() && isExpectedUnitType(authorization.getUnit())) {
-		    return true;
+	@Override
+	public boolean isMember(final User user) {
+		if (user.hasExpenditurePerson()) {
+			final Person person = user.getExpenditurePerson();
+			for (final Authorization authorization : person.getAuthorizationsSet()) {
+				if (authorization.isValid() && isExpectedUnitType(authorization.getUnit())) {
+					return true;
+				}
+			}
 		}
-	    }
+		return false;
 	}
-	return false;
-    }
 
-    @Override
-    public Set<User> getMembers() {
-	final Set<User> members = new HashSet<User>();
-	for (final Authorization authorization : ExpenditureTrackingSystem.getInstance().getAuthorizationsSet()) {
-	    if (authorization.isValid() && isExpectedUnitType(authorization.getUnit())) {
-		members.add(authorization.getPerson().getUser());
-	    }
+	@Override
+	public Set<User> getMembers() {
+		final Set<User> members = new HashSet<User>();
+		for (final Authorization authorization : ExpenditureTrackingSystem.getInstance().getAuthorizationsSet()) {
+			if (authorization.isValid() && isExpectedUnitType(authorization.getUnit())) {
+				members.add(authorization.getPerson().getUser());
+			}
+		}
+		return members;
 	}
-	return members;
-    }
 
-    @Service
-    public static UnitActiveResponsibleGroup getInstance() {
-	final UnitActiveResponsibleGroup group = (UnitActiveResponsibleGroup) PersistentGroup.getSystemGroup(UnitActiveResponsibleGroup.class);
-	return group == null ? new UnitActiveResponsibleGroup() : group;
-    }
+	@Service
+	public static UnitActiveResponsibleGroup getInstance() {
+		final UnitActiveResponsibleGroup group =
+				(UnitActiveResponsibleGroup) PersistentGroup.getSystemGroup(UnitActiveResponsibleGroup.class);
+		return group == null ? new UnitActiveResponsibleGroup() : group;
+	}
 
 }

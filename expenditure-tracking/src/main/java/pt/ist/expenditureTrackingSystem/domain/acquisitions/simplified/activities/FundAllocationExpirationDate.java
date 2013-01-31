@@ -26,18 +26,15 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activiti
 
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.bennu.core.domain.util.Money;
-import pt.ist.bennu.core.util.BundleUtil;
 
 import org.joda.time.LocalDate;
 
+import pt.ist.bennu.core.domain.User;
+import pt.ist.bennu.core.domain.exceptions.DomainException;
+import pt.ist.bennu.core.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem._development.ExternalIntegration;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 
 /**
  * 
@@ -46,57 +43,56 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
  * 
  */
 public class FundAllocationExpirationDate extends
-	WorkflowActivity<RegularAcquisitionProcess, ActivityInformation<RegularAcquisitionProcess>> {
+		WorkflowActivity<RegularAcquisitionProcess, ActivityInformation<RegularAcquisitionProcess>> {
 
-    public static class FundAllocationNotAllowedException extends DomainException {
+	public static class FundAllocationNotAllowedException extends DomainException {
 
-	public FundAllocationNotAllowedException() {
-	    super("acquisitionRequestItem.message.exception.fundAllocationNotAllowed", DomainException
-		    .getResourceFor("resources/AcquisitionResources"));
-	}
-    }
-
-    private void checkSupplierLimit(final RegularAcquisitionProcess process) {
-	process.checkSupplierLimit();
-    }
-
-    @Override
-    public boolean isActive(RegularAcquisitionProcess process, User user) {
-	return isUserProcessOwner(process, user)
-		&& ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user)
-		&& process.getAcquisitionProcessState().isActive()
-		&& !process.isPendingFundAllocation() && !process.getAcquisitionRequest().hasAnyFundAllocationId()
-		&& process.getAcquisitionRequest().isSubmittedForFundsAllocationByAllResponsibles();
-    }
-
-    @Override
-    protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
-	RegularAcquisitionProcess process = activityInformation.getProcess();
-	if (process.getAcquisitionRequest().isSubmittedForFundsAllocationByAllResponsibles()) {
-	    if (!process.getShouldSkipSupplierFundAllocation()) {
-		checkSupplierLimit(process);
-		LocalDate now = new LocalDate();
-		process.setFundAllocationExpirationDate(now.plusDays(90));
-	    } else {
-		process.skipFundAllocation();
-	    }
+		public FundAllocationNotAllowedException() {
+			super("acquisitionRequestItem.message.exception.fundAllocationNotAllowed", DomainException
+					.getResourceFor("resources/AcquisitionResources"));
+		}
 	}
 
-	process.allocateFundsToSupplier();
-
-	if (ExternalIntegration.isActive()) {
-	    process.createFundAllocationRequest(false);
+	private void checkSupplierLimit(final RegularAcquisitionProcess process) {
+		process.checkSupplierLimit();
 	}
-    }
 
-    @Override
-    public String getLocalizedName() {
-	return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
-    }
+	@Override
+	public boolean isActive(RegularAcquisitionProcess process, User user) {
+		return isUserProcessOwner(process, user) && ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user)
+				&& process.getAcquisitionProcessState().isActive() && !process.isPendingFundAllocation()
+				&& !process.getAcquisitionRequest().hasAnyFundAllocationId()
+				&& process.getAcquisitionRequest().isSubmittedForFundsAllocationByAllResponsibles();
+	}
 
-    @Override
-    public String getUsedBundle() {
-	return "resources/AcquisitionResources";
-    }
+	@Override
+	protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
+		RegularAcquisitionProcess process = activityInformation.getProcess();
+		if (process.getAcquisitionRequest().isSubmittedForFundsAllocationByAllResponsibles()) {
+			if (!process.getShouldSkipSupplierFundAllocation()) {
+				checkSupplierLimit(process);
+				LocalDate now = new LocalDate();
+				process.setFundAllocationExpirationDate(now.plusDays(90));
+			} else {
+				process.skipFundAllocation();
+			}
+		}
+
+		process.allocateFundsToSupplier();
+
+		if (ExternalIntegration.isActive()) {
+			process.createFundAllocationRequest(false);
+		}
+	}
+
+	@Override
+	public String getLocalizedName() {
+		return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+	}
+
+	@Override
+	public String getUsedBundle() {
+		return "resources/AcquisitionResources";
+	}
 
 }

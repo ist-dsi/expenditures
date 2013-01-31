@@ -40,42 +40,42 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
  * 
  */
 public class EditAfterTheFactAcquisition extends
-	WorkflowActivity<AfterTheFactAcquisitionProcess, EditAfterTheFactProcessActivityInformation> {
+		WorkflowActivity<AfterTheFactAcquisitionProcess, EditAfterTheFactProcessActivityInformation> {
 
-    @Override
-    public boolean isActive(AfterTheFactAcquisitionProcess process, User user) {
-	final Person loggedPerson = Person.getLoggedPerson();
-	final AcquisitionAfterTheFact acquisitionAfterTheFact = process.getAcquisitionAfterTheFact();
-	return loggedPerson != null
-		&& (ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user)
-			|| ExpenditureTrackingSystem.isAcquisitionCentralManagerGroupMember(user))
-		&& !acquisitionAfterTheFact.getDeletedState().booleanValue();
-    }
+	@Override
+	public boolean isActive(AfterTheFactAcquisitionProcess process, User user) {
+		final Person loggedPerson = Person.getLoggedPerson();
+		final AcquisitionAfterTheFact acquisitionAfterTheFact = process.getAcquisitionAfterTheFact();
+		return loggedPerson != null
+				&& (ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user) || ExpenditureTrackingSystem
+						.isAcquisitionCentralManagerGroupMember(user))
+				&& !acquisitionAfterTheFact.getDeletedState().booleanValue();
+	}
 
-    @Override
-    public ActivityInformation<AfterTheFactAcquisitionProcess> getActivityInformation(AfterTheFactAcquisitionProcess process) {
-	return new EditAfterTheFactProcessActivityInformation(process, this);
-    }
+	@Override
+	public ActivityInformation<AfterTheFactAcquisitionProcess> getActivityInformation(AfterTheFactAcquisitionProcess process) {
+		return new EditAfterTheFactProcessActivityInformation(process, this);
+	}
 
-    @Override
-    protected void process(EditAfterTheFactProcessActivityInformation activityInformation) {
-	activityInformation.getProcess().edit(activityInformation.getAfterTheFactAcquisitionType(),
-		activityInformation.getValue(), activityInformation.getVatValue(), activityInformation.getSupplier(),
-		activityInformation.getDescription());
-    }
+	@Override
+	protected void process(EditAfterTheFactProcessActivityInformation activityInformation) {
+		activityInformation.getProcess().edit(activityInformation.getAfterTheFactAcquisitionType(),
+				activityInformation.getValue(), activityInformation.getVatValue(), activityInformation.getSupplier(),
+				activityInformation.getDescription());
+	}
 
-    @Override
-    public String getLocalizedName() {
-	return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
-    }
+	@Override
+	public String getLocalizedName() {
+		return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+	}
 
-    @Override
-    public String getUsedBundle() {
-	return "resources/AcquisitionResources";
-    }
+	@Override
+	public String getUsedBundle() {
+		return "resources/AcquisitionResources";
+	}
 
-    @Override
-    public boolean isUserAwarenessNeeded(AfterTheFactAcquisitionProcess process, User user) {
-	return false;
-    }
+	@Override
+	public boolean isUserAwarenessNeeded(AfterTheFactAcquisitionProcess process, User user) {
+		return false;
+	}
 }

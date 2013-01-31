@@ -43,36 +43,36 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
  */
 public class GenericAssignPayingUnitToItemActivityInformation<P extends PaymentProcess> extends ActivityInformation<P> {
 
-    protected RequestItem item;
-    protected List<UnitItemBean> beans;
+	protected RequestItem item;
+	protected List<UnitItemBean> beans;
 
-    public GenericAssignPayingUnitToItemActivityInformation(P process,
-	    WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity) {
-	super(process, activity);
-	this.beans = new ArrayList<UnitItemBean>();
-    }
-
-    public RequestItem getItem() {
-	return item;
-    }
-
-    public void setItem(RequestItem item) {
-	this.item = item;
-	for (Unit unit : getProcess().getPayingUnits()) {
-	    this.beans.add(new UnitItemBean(unit, item));
+	public GenericAssignPayingUnitToItemActivityInformation(P process,
+			WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity) {
+		super(process, activity);
+		this.beans = new ArrayList<UnitItemBean>();
 	}
-    }
 
-    public List<UnitItemBean> getBeans() {
-	return beans;
-    }
+	public RequestItem getItem() {
+		return item;
+	}
 
-    public void setBeans(List<UnitItemBean> beans) {
-	this.beans = beans;
-    }
+	public void setItem(RequestItem item) {
+		this.item = item;
+		for (Unit unit : getProcess().getPayingUnits()) {
+			this.beans.add(new UnitItemBean(unit, item));
+		}
+	}
 
-    @Override
-    public boolean hasAllneededInfo() {
-	return getItem() != null && isForwardedFromInput();
-    }
+	public List<UnitItemBean> getBeans() {
+		return beans;
+	}
+
+	public void setBeans(List<UnitItemBean> beans) {
+		this.beans = beans;
+	}
+
+	@Override
+	public boolean hasAllneededInfo() {
+		return getItem() != null && isForwardedFromInput();
+	}
 }

@@ -5,44 +5,45 @@ import pt.ist.bennu.core.domain.VirtualHost;
 import pt.ist.fenixWebFramework.services.Service;
 
 public class MissionAuthorizationAccountabilityType extends MissionAuthorizationAccountabilityType_Base {
-    
-    public MissionAuthorizationAccountabilityType(final AccountabilityType accountabilityType) {
-	super();
-	setMissionSystem(MissionSystem.getInstance());
-	setAccountabilityType(accountabilityType);
-    }
 
-    public static MissionAuthorizationAccountabilityType find(final AccountabilityType accountabilityType) {
-	for (final MissionAuthorizationAccountabilityType missionAuthorizationAccountabilityType : MissionSystem.getInstance().getMissionAuthorizationAccountabilityTypesSet()) {
-	    if (missionAuthorizationAccountabilityType.getAccountabilityType() == accountabilityType) {
-		return missionAuthorizationAccountabilityType;
-	    }
+	public MissionAuthorizationAccountabilityType(final AccountabilityType accountabilityType) {
+		super();
+		setMissionSystem(MissionSystem.getInstance());
+		setAccountabilityType(accountabilityType);
 	}
-	return null;
-    }
 
-    public String getAccountabilityTypesAsString() {
-	final StringBuilder stringBuilder = new StringBuilder();
-	for (final AccountabilityType accountabilityType : getAccountabilityTypesSet()) {
-	    if (stringBuilder.length() > 0) {
-		stringBuilder.append(", ");
-	    }
-	    stringBuilder.append(accountabilityType.getName().getContent());
+	public static MissionAuthorizationAccountabilityType find(final AccountabilityType accountabilityType) {
+		for (final MissionAuthorizationAccountabilityType missionAuthorizationAccountabilityType : MissionSystem.getInstance()
+				.getMissionAuthorizationAccountabilityTypesSet()) {
+			if (missionAuthorizationAccountabilityType.getAccountabilityType() == accountabilityType) {
+				return missionAuthorizationAccountabilityType;
+			}
+		}
+		return null;
 	}
-	return stringBuilder.toString();
-    }
 
-    @Service
-    public void delete() {
-	removeAccountabilityType();
-	getAccountabilityTypesSet().clear();
-	removeMissionSystem();
-	deleteDomainObject();
-    }
+	public String getAccountabilityTypesAsString() {
+		final StringBuilder stringBuilder = new StringBuilder();
+		for (final AccountabilityType accountabilityType : getAccountabilityTypesSet()) {
+			if (stringBuilder.length() > 0) {
+				stringBuilder.append(", ");
+			}
+			stringBuilder.append(accountabilityType.getName().getContent());
+		}
+		return stringBuilder.toString();
+	}
 
-    @Override
-    public boolean isConnectedToCurrentHost() {
-	return getMissionSystem() == VirtualHost.getVirtualHostForThread().getMissionSystem();
-    }
+	@Service
+	public void delete() {
+		removeAccountabilityType();
+		getAccountabilityTypesSet().clear();
+		removeMissionSystem();
+		deleteDomainObject();
+	}
+
+	@Override
+	public boolean isConnectedToCurrentHost() {
+		return getMissionSystem() == VirtualHost.getVirtualHostForThread().getMissionSystem();
+	}
 
 }

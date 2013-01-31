@@ -38,24 +38,24 @@ import module.workflow.activities.WorkflowActivity;
  */
 public class ParticipantActivityInformation extends ActivityInformation<MissionProcess> implements Serializable {
 
-    private Person person;
+	private Person person;
 
-    public ParticipantActivityInformation(final MissionProcess missionProcess,
-	    final WorkflowActivity<MissionProcess, ? extends ActivityInformation<MissionProcess>> activity) {
-	super(missionProcess, activity);
-    }
+	public ParticipantActivityInformation(final MissionProcess missionProcess,
+			final WorkflowActivity<MissionProcess, ? extends ActivityInformation<MissionProcess>> activity) {
+		super(missionProcess, activity);
+	}
 
-    public Person getPerson() {
-	return person;
-    }
+	public Person getPerson() {
+		return person;
+	}
 
-    public void setPerson(final Person person) {
-	this.person = person;
-    }
+	public void setPerson(final Person person) {
+		this.person = person;
+	}
 
-    @Override
-    public boolean hasAllneededInfo() {
-	return person != null;
-    }
+	@Override
+	public boolean hasAllneededInfo() {
+		return person != null;
+	}
 
 }

@@ -38,33 +38,33 @@ import module.workflow.activities.WorkflowActivity;
  */
 public class ExceptionalChangeRequestingPersonInfo extends ActivityInformation<MissionProcess> implements Serializable {
 
-    private Person requester;
-    private String comment;
+	private Person requester;
+	private String comment;
 
-    public ExceptionalChangeRequestingPersonInfo(final MissionProcess missionProcess,
-	    final WorkflowActivity<MissionProcess, ? extends ActivityInformation<MissionProcess>> activity) {
-	super(missionProcess, activity);
-    }
+	public ExceptionalChangeRequestingPersonInfo(final MissionProcess missionProcess,
+			final WorkflowActivity<MissionProcess, ? extends ActivityInformation<MissionProcess>> activity) {
+		super(missionProcess, activity);
+	}
 
-    @Override
-    public boolean hasAllneededInfo() {
-	return isForwardedFromInput() && getRequester() != null && getComment() != null;
-    }
+	@Override
+	public boolean hasAllneededInfo() {
+		return isForwardedFromInput() && getRequester() != null && getComment() != null;
+	}
 
-    public void setRequester(Person requester) {
-	this.requester = requester;
-    }
+	public void setRequester(Person requester) {
+		this.requester = requester;
+	}
 
-    public Person getRequester() {
-	return requester;
-    }
+	public Person getRequester() {
+		return requester;
+	}
 
-    public void setComment(String comment) {
-	this.comment = comment;
-    }
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
 
-    public String getComment() {
-	return comment;
-    }
+	public String getComment() {
+		return comment;
+	}
 
 }

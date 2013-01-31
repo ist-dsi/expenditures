@@ -24,24 +24,14 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.bennu.core.domain.util.Money;
 import pt.ist.bennu.core.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundableInvoiceFile;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
-import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 
 /**
  * 
@@ -51,36 +41,34 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
  */
 public class UnsetSkipSupplierFundAllocation extends WorkflowActivity<RefundProcess, ActivityInformation<RefundProcess>> {
 
-    @Override
-    public boolean isActive(RefundProcess process, User user) {
-	Person person = user.getExpenditurePerson();
+	@Override
+	public boolean isActive(RefundProcess process, User user) {
+		Person person = user.getExpenditurePerson();
 
-	return isUserProcessOwner(process, user)
-		&& process.getSkipSupplierFundAllocation()
-		&& (((process.isInGenesis()
-			|| process.getProcessState().getRefundProcessStateType() == RefundProcessStateType.AUTHORIZED)
-			&& person == process.getRequestor())
-			|| ExpenditureTrackingSystem.isSupplierFundAllocationManagerGroupMember(user));
+		return isUserProcessOwner(process, user)
+				&& process.getSkipSupplierFundAllocation()
+				&& (((process.isInGenesis() || process.getProcessState().getRefundProcessStateType() == RefundProcessStateType.AUTHORIZED) && person == process
+						.getRequestor()) || ExpenditureTrackingSystem.isSupplierFundAllocationManagerGroupMember(user));
 
-    }
+	}
 
-    @Override
-    protected void process(ActivityInformation<RefundProcess> activityInformation) {
-	RefundProcess process = activityInformation.getProcess();
+	@Override
+	protected void process(ActivityInformation<RefundProcess> activityInformation) {
+		RefundProcess process = activityInformation.getProcess();
 
-	process.checkIsFundAllocationAllowed();
-	    
-	process.setSkipSupplierFundAllocation(Boolean.FALSE);
+		process.checkIsFundAllocationAllowed();
 
-    }
+		process.setSkipSupplierFundAllocation(Boolean.FALSE);
 
-    @Override
-    public String getLocalizedName() {
-	return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
-    }
+	}
 
-    @Override
-    public String getUsedBundle() {
-	return "resources/AcquisitionResources";
-    }
+	@Override
+	public String getLocalizedName() {
+		return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+	}
+
+	@Override
+	public String getUsedBundle() {
+		return "resources/AcquisitionResources";
+	}
 }

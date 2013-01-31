@@ -39,36 +39,36 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
  */
 public class RemovePermanentProjectFunds<P extends PaymentProcess> extends WorkflowActivity<P, ActivityInformation<P>> {
 
-    @Override
-    public boolean isActive(P process, User user) {
-	return process.isProjectAccountingEmployee(user.getExpenditurePerson()) && isUserProcessOwner(process, user)
-		&& isInAPossibleState(process) && process.hasAllocatedFundsPermanentlyForAllProjectFinancers();
-    }
+	@Override
+	public boolean isActive(P process, User user) {
+		return process.isProjectAccountingEmployee(user.getExpenditurePerson()) && isUserProcessOwner(process, user)
+				&& isInAPossibleState(process) && process.hasAllocatedFundsPermanentlyForAllProjectFinancers();
+	}
 
-    private boolean isInAPossibleState(P process) {
-	return process.isInvoiceConfirmed()
-		|| (process instanceof SimplifiedProcedureProcess && !process.getRequest().getInvoices().isEmpty() && ((SimplifiedProcedureProcess) process)
-			.getAcquisitionProcessState().isAcquisitionProcessed());
-    }
+	private boolean isInAPossibleState(P process) {
+		return process.isInvoiceConfirmed()
+				|| (process instanceof SimplifiedProcedureProcess && !process.getRequest().getInvoices().isEmpty() && ((SimplifiedProcedureProcess) process)
+						.getAcquisitionProcessState().isAcquisitionProcessed());
+	}
 
-    @Override
-    protected void process(ActivityInformation<P> activityInformation) {
-	activityInformation.getProcess().getRequest().resetPermanentProjectFundAllocationId(Person.getLoggedPerson());
-    }
+	@Override
+	protected void process(ActivityInformation<P> activityInformation) {
+		activityInformation.getProcess().getRequest().resetPermanentProjectFundAllocationId(Person.getLoggedPerson());
+	}
 
-    @Override
-    public String getLocalizedName() {
-	return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
-    }
+	@Override
+	public String getLocalizedName() {
+		return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+	}
 
-    @Override
-    public String getUsedBundle() {
-	return "resources/AcquisitionResources";
-    }
+	@Override
+	public String getUsedBundle() {
+		return "resources/AcquisitionResources";
+	}
 
-    @Override
-    public boolean isUserAwarenessNeeded(final P process, final User user) {
-	return process.isCanceled();
-    }
+	@Override
+	public boolean isUserAwarenessNeeded(final P process, final User user) {
+		return process.isCanceled();
+	}
 
 }

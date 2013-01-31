@@ -44,43 +44,43 @@ import pt.utl.ist.fenix.tools.util.i18n.Language;
  */
 public class CheckLimits {
 
-    public static void init() {
-	Language.setDefaultLocale(new Locale("pt", "PT"));
-	Language.setLocale(Language.getDefaultLocale());
+	public static void init() {
+		Language.setDefaultLocale(new Locale("pt", "PT"));
+		Language.setLocale(Language.getDefaultLocale());
 
-	FenixWebFramework.initialize(PropertiesManager.getFenixFrameworkConfig());
-    }
-
-    public static void main(String[] args) {
-	init();
-	check();
-	System.out.println("Done.");
-    }
-
-    @Service
-    private static void check() {
-	final ImportFile importFile = AbstractDomainObject.fromExternalId("240518175783");
-	System.out.println("Found: " + importFile.getDisplayName() + " - " + importFile.getFilename());
-	System.out.println("   isActive ? " + importFile.getActive());
-	System.out.println("   associated processes: " + importFile.getAfterTheFactAcquisitionProcessesCount());
-
-	for (final AfterTheFactAcquisitionProcess afterTheFactAcquisitionProcess : importFile
-		.getAfterTheFactAcquisitionProcessesSet()) {
-	    final AcquisitionAfterTheFact acquisitionAfterTheFact = afterTheFactAcquisitionProcess.getAcquisitionAfterTheFact();
-	    final Supplier supplier = acquisitionAfterTheFact.getSupplier();
-
-	    final Money total = supplier.getTotalAllocated();
-	    final Money softTotal = supplier.getSoftTotalAllocated();
-	    if (softTotal.isGreaterThanOrEqual(Supplier.SOFT_SUPPLIER_LIMIT)) {
-		System.out.println("Exceeded soft limit: " + softTotal.toFormatString() + " by: "
-			+ supplier.getPresentationName());
-	    }
-	    if (total.isGreaterThanOrEqual(Supplier.SOFT_SUPPLIER_LIMIT)) {
-		System.out.println("Exceeded limit: " + total.toFormatString() + " by: " + supplier.getPresentationName());
-	    }
-
-	    // https://compras.ist.utl.pt/acquisitionAfterTheFactAcquisitionProcess.do?method=cancelImportFile&fileOID=240518175783&_CONTEXT_PATH_=335007449493,335007449497&_request_checksum_=6afd34b872ef755dc059b5f2c371672c1ea54e81
+		FenixWebFramework.initialize(PropertiesManager.getFenixFrameworkConfig());
 	}
-    }
+
+	public static void main(String[] args) {
+		init();
+		check();
+		System.out.println("Done.");
+	}
+
+	@Service
+	private static void check() {
+		final ImportFile importFile = AbstractDomainObject.fromExternalId("240518175783");
+		System.out.println("Found: " + importFile.getDisplayName() + " - " + importFile.getFilename());
+		System.out.println("   isActive ? " + importFile.getActive());
+		System.out.println("   associated processes: " + importFile.getAfterTheFactAcquisitionProcessesCount());
+
+		for (final AfterTheFactAcquisitionProcess afterTheFactAcquisitionProcess : importFile
+				.getAfterTheFactAcquisitionProcessesSet()) {
+			final AcquisitionAfterTheFact acquisitionAfterTheFact = afterTheFactAcquisitionProcess.getAcquisitionAfterTheFact();
+			final Supplier supplier = acquisitionAfterTheFact.getSupplier();
+
+			final Money total = supplier.getTotalAllocated();
+			final Money softTotal = supplier.getSoftTotalAllocated();
+			if (softTotal.isGreaterThanOrEqual(Supplier.SOFT_SUPPLIER_LIMIT)) {
+				System.out.println("Exceeded soft limit: " + softTotal.toFormatString() + " by: "
+						+ supplier.getPresentationName());
+			}
+			if (total.isGreaterThanOrEqual(Supplier.SOFT_SUPPLIER_LIMIT)) {
+				System.out.println("Exceeded limit: " + total.toFormatString() + " by: " + supplier.getPresentationName());
+			}
+
+			// https://compras.ist.utl.pt/acquisitionAfterTheFactAcquisitionProcess.do?method=cancelImportFile&fileOID=240518175783&_CONTEXT_PATH_=335007449493,335007449497&_request_checksum_=6afd34b872ef755dc059b5f2c371672c1ea54e81
+		}
+	}
 
 }

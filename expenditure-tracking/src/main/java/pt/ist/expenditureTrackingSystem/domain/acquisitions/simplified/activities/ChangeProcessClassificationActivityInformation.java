@@ -37,29 +37,29 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.Simplifie
  */
 public class ChangeProcessClassificationActivityInformation extends ActivityInformation<SimplifiedProcedureProcess> {
 
-    private ProcessClassification classification;
+	private ProcessClassification classification;
 
-    public ChangeProcessClassificationActivityInformation(SimplifiedProcedureProcess process,
-	    WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity) {
-	super(process, activity);
-    }
+	public ChangeProcessClassificationActivityInformation(SimplifiedProcedureProcess process,
+			WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity) {
+		super(process, activity);
+	}
 
-    public ProcessClassification getClassification() {
-	return classification;
-    }
+	public ProcessClassification getClassification() {
+		return classification;
+	}
 
-    public void setClassification(ProcessClassification classification) {
-	this.classification = classification;
-    }
+	public void setClassification(ProcessClassification classification) {
+		this.classification = classification;
+	}
 
-    @Override
-    public void setProcess(SimplifiedProcedureProcess process) {
-	super.setProcess(process);
-	setClassification(process.getProcessClassification());
-    }
+	@Override
+	public void setProcess(SimplifiedProcedureProcess process) {
+		super.setProcess(process);
+		setClassification(process.getProcessClassification());
+	}
 
-    @Override
-    public boolean hasAllneededInfo() {
-	return isForwardedFromInput() && getClassification() != null;
-    }
+	@Override
+	public boolean hasAllneededInfo() {
+		return isForwardedFromInput() && getClassification() != null;
+	}
 }

@@ -15,60 +15,61 @@ import pt.ist.bennu.core.domain.User;
 
 public class CommitFundsActivityInformation extends ActivityInformation<MissionProcess> implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-
-    public static class MissionFinancerCommitFundAllocationBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private final MissionFinancer missionFinancer;
-	private String commitmentNumber;
+	public static class MissionFinancerCommitFundAllocationBean implements Serializable {
+		private static final long serialVersionUID = 1L;
 
-	public MissionFinancerCommitFundAllocationBean(final MissionFinancer missionFinancer) {
-	    this.missionFinancer = missionFinancer;
-	    if (missionFinancer != null) {
-		commitmentNumber = missionFinancer.getCommitmentNumber();
-	    }
+		private final MissionFinancer missionFinancer;
+		private String commitmentNumber;
+
+		public MissionFinancerCommitFundAllocationBean(final MissionFinancer missionFinancer) {
+			this.missionFinancer = missionFinancer;
+			if (missionFinancer != null) {
+				commitmentNumber = missionFinancer.getCommitmentNumber();
+			}
+		}
+
+		public String getCommitmentNumber() {
+			return commitmentNumber;
+		}
+
+		public void setCommitmentNumber(String commitmentNumber) {
+			this.commitmentNumber = commitmentNumber;
+		}
+
+		public MissionFinancer getMissionFinancer() {
+			return missionFinancer;
+		}
 	}
 
-	public String getCommitmentNumber() {
-	    return commitmentNumber;
+	private final Collection<MissionFinancerCommitFundAllocationBean> missionFinancerCommitFundAllocationBeans =
+			new ArrayList<MissionFinancerCommitFundAllocationBean>();
+
+	public CommitFundsActivityInformation(final MissionProcess missionProcess,
+			final WorkflowActivity<MissionProcess, ? extends ActivityInformation<MissionProcess>> activity) {
+		super(missionProcess, activity);
+		final Mission mission = missionProcess.getMission();
+		for (final MissionFinancer financer : mission.getFinancerSet()) {
+			if (canAllocateFunds(financer)) {
+				missionFinancerCommitFundAllocationBeans.add(new MissionFinancerCommitFundAllocationBean(financer));
+			}
+		}
 	}
 
-	public void setCommitmentNumber(String commitmentNumber) {
-	    this.commitmentNumber = commitmentNumber;
+	public Collection<MissionFinancerCommitFundAllocationBean> getMissionFinancerCommitFundAllocationBeans() {
+		return missionFinancerCommitFundAllocationBeans;
 	}
 
-	public MissionFinancer getMissionFinancer() {
-	    return missionFinancer;
+	@Override
+	public boolean hasAllneededInfo() {
+		return isForwardedFromInput();
 	}
-    }
 
-    private final Collection<MissionFinancerCommitFundAllocationBean> missionFinancerCommitFundAllocationBeans = new ArrayList<MissionFinancerCommitFundAllocationBean>();
-
-    public CommitFundsActivityInformation(final MissionProcess missionProcess,
-	    final WorkflowActivity<MissionProcess, ? extends ActivityInformation<MissionProcess>> activity) {
-	super(missionProcess, activity);
-	final Mission mission = missionProcess.getMission();
-	for (final MissionFinancer financer : mission.getFinancerSet()) {
-	    if (canAllocateFunds(financer)) {
-		missionFinancerCommitFundAllocationBeans.add(new MissionFinancerCommitFundAllocationBean(financer));
-	    }
+	protected boolean canAllocateFunds(final MissionFinancer missionFinancer) {
+		final User user = UserView.getCurrentUser();
+		final Person person = user.getPerson();
+		return missionFinancer.canAllocateFunds(person);
 	}
-    }
-
-    public Collection<MissionFinancerCommitFundAllocationBean> getMissionFinancerCommitFundAllocationBeans() {
-	return missionFinancerCommitFundAllocationBeans;
-    }
-
-    @Override
-    public boolean hasAllneededInfo() {
-	return isForwardedFromInput();
-    }
-
-    protected boolean canAllocateFunds(final MissionFinancer missionFinancer) {
-	final User user = UserView.getCurrentUser();
-	final Person person = user.getPerson();
-	return missionFinancer.canAllocateFunds(person);
-    }
 
 }

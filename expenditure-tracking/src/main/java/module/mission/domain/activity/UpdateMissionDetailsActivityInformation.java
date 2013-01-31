@@ -11,54 +11,54 @@ import org.joda.time.DateTime;
 
 public class UpdateMissionDetailsActivityInformation extends ActivityInformation<MissionProcess> implements Serializable {
 
-    private String location;
-    private DateTime daparture;
-    private DateTime arrival;
-    private String objective;
+	private String location;
+	private DateTime daparture;
+	private DateTime arrival;
+	private String objective;
 
-    public UpdateMissionDetailsActivityInformation(final MissionProcess missionProcess,
-	    final WorkflowActivity<MissionProcess, ? extends ActivityInformation<MissionProcess>> activity) {
-	super(missionProcess, activity);
-	final Mission mission = missionProcess.getMission();
-	mission.fill(this);
-    }
+	public UpdateMissionDetailsActivityInformation(final MissionProcess missionProcess,
+			final WorkflowActivity<MissionProcess, ? extends ActivityInformation<MissionProcess>> activity) {
+		super(missionProcess, activity);
+		final Mission mission = missionProcess.getMission();
+		mission.fill(this);
+	}
 
-    @Override
-    public boolean hasAllneededInfo() {
-	return getLocation() != null && getDaparture() != null && getArrival() != null && getObjective() != null
-		&& isForwardedFromInput();
-    }
+	@Override
+	public boolean hasAllneededInfo() {
+		return getLocation() != null && getDaparture() != null && getArrival() != null && getObjective() != null
+				&& isForwardedFromInput();
+	}
 
-    public String getLocation() {
-	return location;
-    }
+	public String getLocation() {
+		return location;
+	}
 
-    public void setLocation(String location) {
-	this.location = location;
-    }
+	public void setLocation(String location) {
+		this.location = location;
+	}
 
-    public DateTime getDaparture() {
-	return daparture;
-    }
+	public DateTime getDaparture() {
+		return daparture;
+	}
 
-    public void setDaparture(DateTime daparture) {
-	this.daparture = daparture;
-    }
+	public void setDaparture(DateTime daparture) {
+		this.daparture = daparture;
+	}
 
-    public DateTime getArrival() {
-	return arrival;
-    }
+	public DateTime getArrival() {
+		return arrival;
+	}
 
-    public void setArrival(DateTime arrival) {
-	this.arrival = arrival;
-    }
+	public void setArrival(DateTime arrival) {
+		this.arrival = arrival;
+	}
 
-    public String getObjective() {
-	return objective;
-    }
+	public String getObjective() {
+		return objective;
+	}
 
-    public void setObjective(String objective) {
-	this.objective = objective;
-    }
+	public void setObjective(String objective) {
+		this.objective = objective;
+	}
 
 }

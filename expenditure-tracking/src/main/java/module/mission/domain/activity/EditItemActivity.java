@@ -8,44 +8,44 @@ import pt.ist.bennu.core.util.BundleUtil;
 
 public class EditItemActivity extends MissionProcessActivity<MissionProcess, ItemActivityInformation> {
 
-    @Override
-    public String getLocalizedName() {
-	return BundleUtil.getStringFromResourceBundle("resources/MissionResources", "activity." + getClass().getSimpleName());
-    }
+	@Override
+	public String getLocalizedName() {
+		return BundleUtil.getStringFromResourceBundle("resources/MissionResources", "activity." + getClass().getSimpleName());
+	}
 
-    @Override
-    public boolean isActive(final MissionProcess missionProcess, final User user) {
-	return super.isActive(missionProcess, user) && missionProcess.getMission().hasAnyMissionItems()
-		&& ((missionProcess.isUnderConstruction() && missionProcess.isRequestor(user))
+	@Override
+	public boolean isActive(final MissionProcess missionProcess, final User user) {
+		return super.isActive(missionProcess, user) && missionProcess.getMission().hasAnyMissionItems()
+				&& ((missionProcess.isUnderConstruction() && missionProcess.isRequestor(user))
 //			|| (missionProcess.isTerminatedWithChanges()
 //				&& !missionProcess.isArchived()
 //				&& missionProcess.canArchiveMission())
 				);
-    }
-
-    @Override
-    protected void process(final ItemActivityInformation itemActivityInformation) {
-	final MissionItem missionItem = itemActivityInformation.getMissionItem();
-	missionItem.setInfo(itemActivityInformation);
-	if (!missionItem.areAllCostsDistributed()) {
-	    missionItem.distributeCosts();
 	}
-	missionItem.hookAfterChanges();
-    }
 
-    @Override
-    public ActivityInformation<MissionProcess> getActivityInformation(final MissionProcess process) {
-	return new ItemActivityInformation(process, this);
-    }
+	@Override
+	protected void process(final ItemActivityInformation itemActivityInformation) {
+		final MissionItem missionItem = itemActivityInformation.getMissionItem();
+		missionItem.setInfo(itemActivityInformation);
+		if (!missionItem.areAllCostsDistributed()) {
+			missionItem.distributeCosts();
+		}
+		missionItem.hookAfterChanges();
+	}
 
-    @Override
-    public boolean isDefaultInputInterfaceUsed() {
-	return false;
-    }
+	@Override
+	public ActivityInformation<MissionProcess> getActivityInformation(final MissionProcess process) {
+		return new ItemActivityInformation(process, this);
+	}
 
-    @Override
-    public boolean isVisible() {
-	return false;
-    }
+	@Override
+	public boolean isDefaultInputInterfaceUsed() {
+		return false;
+	}
+
+	@Override
+	public boolean isVisible() {
+		return false;
+	}
 
 }

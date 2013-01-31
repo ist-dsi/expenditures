@@ -37,24 +37,24 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
  */
 public class SelectSupplierActivityInformation extends ActivityInformation<RegularAcquisitionProcess> {
 
-    private Supplier supplier;
+	private Supplier supplier;
 
-    public SelectSupplierActivityInformation(RegularAcquisitionProcess process,
-	    WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity) {
-	super(process, activity);
-    }
+	public SelectSupplierActivityInformation(RegularAcquisitionProcess process,
+			WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity) {
+		super(process, activity);
+	}
 
-    public Supplier getSupplier() {
-	return supplier;
-    }
+	public Supplier getSupplier() {
+		return supplier;
+	}
 
-    public void setSupplier(Supplier supplier) {
-	this.supplier = supplier;
-    }
+	public void setSupplier(Supplier supplier) {
+		this.supplier = supplier;
+	}
 
-    @Override
-    public boolean hasAllneededInfo() {
-	return isForwardedFromInput() && getSupplier() != null;
-    }
+	@Override
+	public boolean hasAllneededInfo() {
+		return isForwardedFromInput() && getSupplier() != null;
+	}
 
 }

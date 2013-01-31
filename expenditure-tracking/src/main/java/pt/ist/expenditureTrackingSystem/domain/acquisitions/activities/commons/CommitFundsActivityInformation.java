@@ -47,66 +47,66 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
  */
 public class CommitFundsActivityInformation extends ActivityInformation<RegularAcquisitionProcess> {
 
-    private List<CommitmentNumberBean> commitmentNumberBeans = new ArrayList<CommitmentNumberBean>();
+	private List<CommitmentNumberBean> commitmentNumberBeans = new ArrayList<CommitmentNumberBean>();
 
-    public CommitFundsActivityInformation(final RegularAcquisitionProcess process,
-	    final WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity) {
-	super(process, activity);
-	process.takeProcess();
+	public CommitFundsActivityInformation(final RegularAcquisitionProcess process,
+			final WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity) {
+		super(process, activity);
+		process.takeProcess();
 
-	final User user = UserView.getCurrentUser();
-	Person person = user.getExpenditurePerson();
-	final AcquisitionRequest acquisitionRequest = process.getAcquisitionRequest();
-	for (final Financer financer : acquisitionRequest.getFinancersSet()) {
-	    if (!financer.isCommitted() && financer.isAccountingEmployee(person)) {
-		final CommitmentNumberBean bean = new CommitmentNumberBean(financer);
-		commitmentNumberBeans.add(bean);
-		if (bean.getCommitmentNumber() == null || bean.getCommitmentNumber().isEmpty()) {
-		    final MissionProcess missionProcess = process.getMissionProcess();
-		    if (missionProcess != null) {
-			final MissionFinancer missionFinancer = findMissionFinance(missionProcess, financer);
-			if (missionFinancer != null) {
-			    bean.setCommitmentNumber(missionFinancer.getCommitmentNumber());
+		final User user = UserView.getCurrentUser();
+		Person person = user.getExpenditurePerson();
+		final AcquisitionRequest acquisitionRequest = process.getAcquisitionRequest();
+		for (final Financer financer : acquisitionRequest.getFinancersSet()) {
+			if (!financer.isCommitted() && financer.isAccountingEmployee(person)) {
+				final CommitmentNumberBean bean = new CommitmentNumberBean(financer);
+				commitmentNumberBeans.add(bean);
+				if (bean.getCommitmentNumber() == null || bean.getCommitmentNumber().isEmpty()) {
+					final MissionProcess missionProcess = process.getMissionProcess();
+					if (missionProcess != null) {
+						final MissionFinancer missionFinancer = findMissionFinance(missionProcess, financer);
+						if (missionFinancer != null) {
+							bean.setCommitmentNumber(missionFinancer.getCommitmentNumber());
+						}
+					}
+				}
 			}
-		    }
 		}
-	    }
 	}
-    }
 
-    private MissionFinancer findMissionFinance(final MissionProcess missionProcess, final Financer financer) {
-	for (final MissionFinancer missionFinancer : missionProcess.getMission().getFinancerSet()) {
-	    if (missionFinancer.getUnit() == financer.getUnit()) {
-		return missionFinancer;
-	    }
+	private MissionFinancer findMissionFinance(final MissionProcess missionProcess, final Financer financer) {
+		for (final MissionFinancer missionFinancer : missionProcess.getMission().getFinancerSet()) {
+			if (missionFinancer.getUnit() == financer.getUnit()) {
+				return missionFinancer;
+			}
+		}
+		return null;
 	}
-	return null;
-    }
 
-    @Override
-    public boolean hasAllneededInfo() {
-	return isForwardedFromInput() && super.hasAllneededInfo() && hasAllCommitmentNumbers();
-    }
-
-    private boolean hasAllCommitmentNumbers() {
-	if (commitmentNumberBeans.isEmpty()) {
-	    return false;
+	@Override
+	public boolean hasAllneededInfo() {
+		return isForwardedFromInput() && super.hasAllneededInfo() && hasAllCommitmentNumbers();
 	}
-	for (final CommitmentNumberBean commitmentNumberBean : commitmentNumberBeans) {
-	    final String commitmentNumber = commitmentNumberBean.getCommitmentNumber();
-	    if (commitmentNumber == null || commitmentNumber.isEmpty()) {
-		return false;
-	    }
+
+	private boolean hasAllCommitmentNumbers() {
+		if (commitmentNumberBeans.isEmpty()) {
+			return false;
+		}
+		for (final CommitmentNumberBean commitmentNumberBean : commitmentNumberBeans) {
+			final String commitmentNumber = commitmentNumberBean.getCommitmentNumber();
+			if (commitmentNumber == null || commitmentNumber.isEmpty()) {
+				return false;
+			}
+		}
+		return true;
 	}
-	return true;
-    }
 
-    public List<CommitmentNumberBean> getCommitmentNumberBeans() {
-        return commitmentNumberBeans;
-    }
+	public List<CommitmentNumberBean> getCommitmentNumberBeans() {
+		return commitmentNumberBeans;
+	}
 
-    public void setCommitmentNumberBeans(List<CommitmentNumberBean> commitmentNumberBeans) {
-        this.commitmentNumberBeans = commitmentNumberBeans;
-    }
+	public void setCommitmentNumberBeans(List<CommitmentNumberBean> commitmentNumberBeans) {
+		this.commitmentNumberBeans = commitmentNumberBeans;
+	}
 
 }

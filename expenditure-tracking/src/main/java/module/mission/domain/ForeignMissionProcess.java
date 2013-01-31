@@ -29,7 +29,6 @@ import java.util.Collections;
 import java.util.List;
 
 import module.geography.domain.Country;
-import module.mission.domain.MissionProcess.MissionGiveProcessUserNotifier;
 import module.mission.domain.activity.AddFinancerActivity;
 import module.mission.domain.activity.AddItemActivity;
 import module.mission.domain.activity.AddParticipantActivity;
@@ -77,10 +76,10 @@ import module.workflow.activities.StealProcess;
 import module.workflow.activities.TakeProcess;
 import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.WorkflowProcess;
-import pt.ist.bennu.core.util.ClassNameBundle;
 
 import org.joda.time.DateTime;
 
+import pt.ist.bennu.core.util.ClassNameBundle;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
 @ClassNameBundle(key = "label.module.mission.domain.ForeignMissions", bundle = "resources/MissionResources")
@@ -92,89 +91,90 @@ import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
  */
 public class ForeignMissionProcess extends ForeignMissionProcess_Base {
 
-    private static final List<WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>> activities;
-    static {
-	final List<WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>> activitiesAux = new ArrayList<WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>>();
-	activitiesAux.add(new UpdateForeignMissionDetailsActivity());
-	activitiesAux.add(new AddParticipantActivity());
-	activitiesAux.add(new RemoveParticipantActivity());
-	activitiesAux.add(new TogleParticipantSalaryActivity());
-	activitiesAux.add(new DefineParticipantAuthorizationChainActivity());
-	activitiesAux.add(new AddFinancerActivity());
-	activitiesAux.add(new RemoveFinancerActivity());
-	activitiesAux.add(new ChangeAccountingUnitActivity());
-	activitiesAux.add(new AddItemActivity());
-	activitiesAux.add(new EditItemActivity());
-	activitiesAux.add(new DistributeItemCostsActivity());
-	activitiesAux.add(new RemoveItemActivity());
-	activitiesAux.add(new SubmitForApprovalActivity());
-	activitiesAux.add(new SubmitForApprovalByManagerOrManagementCouncilActivity());
-	activitiesAux.add(new UnSubmitForApprovalActivity());
-	activitiesAux.add(new ApproveActivity());
-	activitiesAux.add(new UnApproveActivity());
-	activitiesAux.add(new AssociateMissionProcessActivity());
+	private static final List<WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>> activities;
+	static {
+		final List<WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>> activitiesAux =
+				new ArrayList<WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>>();
+		activitiesAux.add(new UpdateForeignMissionDetailsActivity());
+		activitiesAux.add(new AddParticipantActivity());
+		activitiesAux.add(new RemoveParticipantActivity());
+		activitiesAux.add(new TogleParticipantSalaryActivity());
+		activitiesAux.add(new DefineParticipantAuthorizationChainActivity());
+		activitiesAux.add(new AddFinancerActivity());
+		activitiesAux.add(new RemoveFinancerActivity());
+		activitiesAux.add(new ChangeAccountingUnitActivity());
+		activitiesAux.add(new AddItemActivity());
+		activitiesAux.add(new EditItemActivity());
+		activitiesAux.add(new DistributeItemCostsActivity());
+		activitiesAux.add(new RemoveItemActivity());
+		activitiesAux.add(new SubmitForApprovalActivity());
+		activitiesAux.add(new SubmitForApprovalByManagerOrManagementCouncilActivity());
+		activitiesAux.add(new UnSubmitForApprovalActivity());
+		activitiesAux.add(new ApproveActivity());
+		activitiesAux.add(new UnApproveActivity());
+		activitiesAux.add(new AssociateMissionProcessActivity());
 
-	activitiesAux.add(new AllocateFundsActivity());
-	activitiesAux.add(new AllocateProjectFundsActivity());
-	activitiesAux.add(new UnAllocateFundsActivity());
-	activitiesAux.add(new UnAllocateProjectFundsActivity());
-	activitiesAux.add(new CommitFundsActivity());
-	activitiesAux.add(new UnCommitFundsActivity());
+		activitiesAux.add(new AllocateFundsActivity());
+		activitiesAux.add(new AllocateProjectFundsActivity());
+		activitiesAux.add(new UnAllocateFundsActivity());
+		activitiesAux.add(new UnAllocateProjectFundsActivity());
+		activitiesAux.add(new CommitFundsActivity());
+		activitiesAux.add(new UnCommitFundsActivity());
 
-	activitiesAux.add(new AuthorizeActivity());
-	activitiesAux.add(new UnAuthorizeActivity());
-	activitiesAux.add(new AuthoriseParticipantActivity());
-	activitiesAux.add(new UnAuthoriseParticipantActivity());
-	activitiesAux.add(new ProcessPersonnelActivity());
-	activitiesAux.add(new UnProcessPersonnelActivity());
-	activitiesAux.add(new ProcessCanceledPersonnelActivity());
-	activitiesAux.add(new SendForProcessTerminationWithChangesActivity());
-	activitiesAux.add(new SendForProcessTerminationActivity());
-	activitiesAux.add(new RevertMissionForEditingActivity());
-	activitiesAux.add(new ArchiveItemActivity());
-	activitiesAux.add(new RevertTerminationActivity());
-	activitiesAux.add(new TogleMissionNatureActivity());
+		activitiesAux.add(new AuthorizeActivity());
+		activitiesAux.add(new UnAuthorizeActivity());
+		activitiesAux.add(new AuthoriseParticipantActivity());
+		activitiesAux.add(new UnAuthoriseParticipantActivity());
+		activitiesAux.add(new ProcessPersonnelActivity());
+		activitiesAux.add(new UnProcessPersonnelActivity());
+		activitiesAux.add(new ProcessCanceledPersonnelActivity());
+		activitiesAux.add(new SendForProcessTerminationWithChangesActivity());
+		activitiesAux.add(new SendForProcessTerminationActivity());
+		activitiesAux.add(new RevertMissionForEditingActivity());
+		activitiesAux.add(new ArchiveItemActivity());
+		activitiesAux.add(new RevertTerminationActivity());
+		activitiesAux.add(new TogleMissionNatureActivity());
 
-	activitiesAux.add(new GiveProcess<MissionProcess>(new MissionGiveProcessUserNotifier()));
-	activitiesAux.add(new TakeProcess<MissionProcess>());
-	activitiesAux.add(new ReleaseProcess<MissionProcess>());
-	activitiesAux.add(new StealProcess<MissionProcess>());
-	activitiesAux.add(new ExceptionalChangeRequestingPerson());
+		activitiesAux.add(new GiveProcess<MissionProcess>(new MissionGiveProcessUserNotifier()));
+		activitiesAux.add(new TakeProcess<MissionProcess>());
+		activitiesAux.add(new ReleaseProcess<MissionProcess>());
+		activitiesAux.add(new StealProcess<MissionProcess>());
+		activitiesAux.add(new ExceptionalChangeRequestingPerson());
 
-	activitiesAux.add(new CancelProcessActivity());
-	activitiesAux.add(new RejectProcessActivity());
+		activitiesAux.add(new CancelProcessActivity());
+		activitiesAux.add(new RejectProcessActivity());
 
-	activities = Collections.unmodifiableList(activitiesAux);
-    }
+		activities = Collections.unmodifiableList(activitiesAux);
+	}
 
-    public ForeignMissionProcess(final Country country, final String location, final DateTime daparture, final DateTime arrival,
-	    final String objective, final Boolean isCurrentUserAParticipant, final Boolean grantOwnerEquivalence) {
-	new ForeignMission(this, country, location, daparture, arrival, objective, isCurrentUserAParticipant,
-		grantOwnerEquivalence);
-    }
+	public ForeignMissionProcess(final Country country, final String location, final DateTime daparture, final DateTime arrival,
+			final String objective, final Boolean isCurrentUserAParticipant, final Boolean grantOwnerEquivalence) {
+		new ForeignMission(this, country, location, daparture, arrival, objective, isCurrentUserAParticipant,
+				grantOwnerEquivalence);
+	}
 
-    @Override
-    public <T extends WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>> List<T> getActivities() {
-	return (List) activities;
-    }
+	@Override
+	public <T extends WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>> List<T> getActivities() {
+		return (List) activities;
+	}
 
-    @Override
-    public boolean isActive() {
-	return true;
-    }
+	@Override
+	public boolean isActive() {
+		return true;
+	}
 
-    @Override
-    public String getPresentationName() {
-	final Mission mission = getMission();
-	final Country country = mission.getCountry();
-	final MultiLanguageString name = country == null ? null : country.getName();
-	final String countryName = name == null ? "" : name.getContent();
-	return super.getPresentationName() + countryName + ", " + mission.getLocation();
-    }
+	@Override
+	public String getPresentationName() {
+		final Mission mission = getMission();
+		final Country country = mission.getCountry();
+		final MultiLanguageString name = country == null ? null : country.getName();
+		final String countryName = name == null ? "" : name.getContent();
+		return super.getPresentationName() + countryName + ", " + mission.getLocation();
+	}
 
-    @Override
-    protected String notificationSubjectHeader() {
-	return "label.email.mission.participation.authorized.subject.foreignMission";
-    }
+	@Override
+	protected String notificationSubjectHeader() {
+		return "label.email.mission.participation.authorized.subject.foreignMission";
+	}
 
 }

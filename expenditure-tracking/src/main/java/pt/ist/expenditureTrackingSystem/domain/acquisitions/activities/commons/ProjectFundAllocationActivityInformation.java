@@ -40,17 +40,16 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
  * 
  */
 public class ProjectFundAllocationActivityInformation<T extends PaymentProcess> extends
-	AbstractFundAllocationActivityInformation<T> {
+		AbstractFundAllocationActivityInformation<T> {
 
-    public ProjectFundAllocationActivityInformation(T process,
-	    WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity,
-	    final boolean takeProcess) {
-	super(process, activity, takeProcess);
-    }
+	public ProjectFundAllocationActivityInformation(T process,
+			WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity, final boolean takeProcess) {
+		super(process, activity, takeProcess);
+	}
 
-    @Override
-    public Set<ProjectFinancer> getFinancers() {
-	return getProcess().getProjectFinancersWithFundsAllocated(Person.getLoggedPerson());
-    }
+	@Override
+	public Set<ProjectFinancer> getFinancers() {
+		return getProcess().getProjectFinancersWithFundsAllocated(Person.getLoggedPerson());
+	}
 
 }

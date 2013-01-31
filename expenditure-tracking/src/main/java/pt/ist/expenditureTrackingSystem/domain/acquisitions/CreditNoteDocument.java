@@ -49,59 +49,59 @@ import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
  */
 public class CreditNoteDocument extends CreditNoteDocument_Base {
 
-    public CreditNoteDocument(String displayName, String filename, byte[] content) {
-	super();
-	init(displayName, filename, content);
-    }
-
-    @Override
-    public void validateUpload(WorkflowProcess workflowProcess) {
-	if (!ExpenditureTrackingSystem.isAcquisitionCentralGroupMember()) {
-	    throw new ProcessFileValidationException("resources/AcquisitionResources", "error.creditNoteDocument.upload.invalid");
-	}
-    }
-
-    public static class CreditNoteMetaDataResolver extends AcquisitionProcessBasedMetadataResolver<CreditNoteDocument> {
-
-	@Override
-	public Map<String, String> getMetadataKeysAndValuesMap(ProcessFile processFile) {
-	    CreditNoteDocument processDocument = (CreditNoteDocument) processFile;
-	    Map<String,String> metadataMap = super.getMetadataKeysAndValuesMap(processDocument);
-	    SimplifiedProcedureProcess simplifiedProcedureProcess = (SimplifiedProcedureProcess) processDocument.getProcess();
-	    
-	    //not needed, right?
-	    //	    String suppliersDescription = simplifiedProcedureProcess.getSuppliersDescription();
-	    //	    if (StringUtils.isNotBlank(suppliersDescription)) {
-	    //		metadataMap.put(AcquisitionProcess.SUPPLIERS_METADATA_KEY, suppliersDescription);
-	    //	    }
-	    //	    
-	    return metadataMap;
+	public CreditNoteDocument(String displayName, String filename, byte[] content) {
+		super();
+		init(displayName, filename, content);
 	}
 
 	@Override
-	public @Nonnull
-	Class<? extends AbstractWFDocsGroup> getWriteGroupClass() {
-	    // TODO confirm that the default is what we want
-	    return WFDocsDefaultWriteGroup.class;
+	public void validateUpload(WorkflowProcess workflowProcess) {
+		if (!ExpenditureTrackingSystem.isAcquisitionCentralGroupMember()) {
+			throw new ProcessFileValidationException("resources/AcquisitionResources", "error.creditNoteDocument.upload.invalid");
+		}
 	}
 
-    }
+	public static class CreditNoteMetaDataResolver extends AcquisitionProcessBasedMetadataResolver<CreditNoteDocument> {
 
-    @Override
-    public ProcessDocumentMetaDataResolver<? extends ProcessFile> getMetaDataResolver() {
-	// TODO Auto-generated method stub
-	return super.getMetaDataResolver();
-    }
+		@Override
+		public Map<String, String> getMetadataKeysAndValuesMap(ProcessFile processFile) {
+			CreditNoteDocument processDocument = (CreditNoteDocument) processFile;
+			Map<String, String> metadataMap = super.getMetadataKeysAndValuesMap(processDocument);
+			SimplifiedProcedureProcess simplifiedProcedureProcess = (SimplifiedProcedureProcess) processDocument.getProcess();
 
-    @Override
-    public boolean isPossibleToArchieve() {
-	return ExpenditureTrackingSystem.isAcquisitionCentralGroupMember();
-    }
+			//not needed, right?
+			//	    String suppliersDescription = simplifiedProcedureProcess.getSuppliersDescription();
+			//	    if (StringUtils.isNotBlank(suppliersDescription)) {
+			//		metadataMap.put(AcquisitionProcess.SUPPLIERS_METADATA_KEY, suppliersDescription);
+			//	    }
+			//	    
+			return metadataMap;
+		}
 
-    @Override
-    public boolean isConnectedToCurrentHost() {
-	final GenericProcess genericProcess = (GenericProcess) getProcess();
-	return genericProcess != null && genericProcess.isConnectedToCurrentHost();
-    }
+		@Override
+		public @Nonnull
+		Class<? extends AbstractWFDocsGroup> getWriteGroupClass() {
+			// TODO confirm that the default is what we want
+			return WFDocsDefaultWriteGroup.class;
+		}
+
+	}
+
+	@Override
+	public ProcessDocumentMetaDataResolver<? extends ProcessFile> getMetaDataResolver() {
+		// TODO Auto-generated method stub
+		return super.getMetaDataResolver();
+	}
+
+	@Override
+	public boolean isPossibleToArchieve() {
+		return ExpenditureTrackingSystem.isAcquisitionCentralGroupMember();
+	}
+
+	@Override
+	public boolean isConnectedToCurrentHost() {
+		final GenericProcess genericProcess = (GenericProcess) getProcess();
+		return genericProcess != null && genericProcess.isConnectedToCurrentHost();
+	}
 
 }

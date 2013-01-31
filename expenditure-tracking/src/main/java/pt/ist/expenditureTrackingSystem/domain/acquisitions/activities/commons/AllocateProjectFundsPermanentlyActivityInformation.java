@@ -45,54 +45,54 @@ import pt.utl.ist.fenix.tools.util.Strings;
  * 
  */
 public class AllocateProjectFundsPermanentlyActivityInformation<P extends PaymentProcess> extends
-	AbstractFundAllocationActivityInformation<P> {
+		AbstractFundAllocationActivityInformation<P> {
 
-    public AllocateProjectFundsPermanentlyActivityInformation(P process,
-	    WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity, final boolean takeProcess) {
-	super(process, activity, takeProcess);
-    }
-
-    @Override
-    public void generateBeans() {
-	for (Financer financer : getFinancers()) {
-	    if (financer.isProjectFinancer()) {
-		beans.addAll(getProjectFundAllocationBeans((ProjectFinancer) financer));
-	    }
-	}
-    }
-
-    @Override
-    public boolean hasAllneededInfo() {
-	return isForwardedFromInput();
-    }
-
-    private List<FundAllocationBean> getProjectFundAllocationBeans(ProjectFinancer projectFinancer) {
-	List<FundAllocationBean> beans = new ArrayList<FundAllocationBean>();
-	Strings effectiveFunds = projectFinancer.getEffectiveProjectFundAllocationId();
-
-	if (effectiveFunds == null) {
-	    FundAllocationBean fundAllocationBean = new FundAllocationBean(projectFinancer);
-	    fundAllocationBean.setFundAllocationId(projectFinancer.getProjectFundAllocationId());
-	    fundAllocationBean.setEffectiveFundAllocationId(projectFinancer.getProjectFundAllocationId());
-	    fundAllocationBean.setAllowedToAddNewFund(true);
-	    beans.add(fundAllocationBean);
-	} else {
-	    int i = 0;
-	    for (String effectiveFund : effectiveFunds.getUnmodifiableList()) {
-		FundAllocationBean fundAllocationBean = new FundAllocationBean(projectFinancer);
-		fundAllocationBean.setFundAllocationId(projectFinancer.getProjectFundAllocationId());
-		fundAllocationBean.setEffectiveFundAllocationId(effectiveFund);
-		fundAllocationBean.setAllowedToAddNewFund(i++ == 0);
-		beans.add(fundAllocationBean);
-	    }
+	public AllocateProjectFundsPermanentlyActivityInformation(P process,
+			WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity, final boolean takeProcess) {
+		super(process, activity, takeProcess);
 	}
 
-	return beans;
-    }
+	@Override
+	public void generateBeans() {
+		for (Financer financer : getFinancers()) {
+			if (financer.isProjectFinancer()) {
+				beans.addAll(getProjectFundAllocationBeans((ProjectFinancer) financer));
+			}
+		}
+	}
 
-    @Override
-    public Set<? extends Financer> getFinancers() {
-	return getProcess().getFinancersWithFundsInitiallyAllocated();
-    }
+	@Override
+	public boolean hasAllneededInfo() {
+		return isForwardedFromInput();
+	}
+
+	private List<FundAllocationBean> getProjectFundAllocationBeans(ProjectFinancer projectFinancer) {
+		List<FundAllocationBean> beans = new ArrayList<FundAllocationBean>();
+		Strings effectiveFunds = projectFinancer.getEffectiveProjectFundAllocationId();
+
+		if (effectiveFunds == null) {
+			FundAllocationBean fundAllocationBean = new FundAllocationBean(projectFinancer);
+			fundAllocationBean.setFundAllocationId(projectFinancer.getProjectFundAllocationId());
+			fundAllocationBean.setEffectiveFundAllocationId(projectFinancer.getProjectFundAllocationId());
+			fundAllocationBean.setAllowedToAddNewFund(true);
+			beans.add(fundAllocationBean);
+		} else {
+			int i = 0;
+			for (String effectiveFund : effectiveFunds.getUnmodifiableList()) {
+				FundAllocationBean fundAllocationBean = new FundAllocationBean(projectFinancer);
+				fundAllocationBean.setFundAllocationId(projectFinancer.getProjectFundAllocationId());
+				fundAllocationBean.setEffectiveFundAllocationId(effectiveFund);
+				fundAllocationBean.setAllowedToAddNewFund(i++ == 0);
+				beans.add(fundAllocationBean);
+			}
+		}
+
+		return beans;
+	}
+
+	@Override
+	public Set<? extends Financer> getFinancers() {
+		return getProcess().getFinancersWithFundsInitiallyAllocated();
+	}
 
 }

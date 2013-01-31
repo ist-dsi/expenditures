@@ -37,12 +37,12 @@ import pt.ist.fenixWebFramework.renderers.components.converters.Converter;
  */
 public class AcquisitionProcessStateTypeProvider implements DataProvider {
 
-    public Converter getConverter() {
-	return null;
-    }
+	public Converter getConverter() {
+		return null;
+	}
 
-    public Object provide(Object arg0, Object arg1) {
-	return Arrays.asList(AcquisitionProcessStateType.values());
-    }
+	public Object provide(Object arg0, Object arg1) {
+		return Arrays.asList(AcquisitionProcessStateType.values());
+	}
 
 }

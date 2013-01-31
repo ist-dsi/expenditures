@@ -26,14 +26,12 @@ package pt.ist.expenditureTrackingSystem.presentationTier.actions;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 
 import javax.servlet.http.HttpServletResponse;
 
-import pt.ist.bennu.core.presentationTier.actions.ContextBaseAction;
-
 import org.apache.struts.action.ActionForward;
 
+import pt.ist.bennu.core.presentationTier.actions.ContextBaseAction;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.presentationTier.util.FileUploadBean;
 import pt.ist.fenixframework.plugins.fileSupport.domain.GenericFile;
@@ -47,22 +45,22 @@ import pt.ist.fenixframework.plugins.fileSupport.domain.GenericFile;
  */
 public abstract class BaseAction extends ContextBaseAction {
 
-    protected Person getLoggedPerson() {
-	return Person.getLoggedPerson();
-    }
-
-    protected byte[] consumeInputStream(final FileUploadBean fileUploadBean) {
-	final InputStream inputStream = fileUploadBean.getInputStream();
-	return consumeInputStream(inputStream);
-    }
-
-    protected ActionForward download(final HttpServletResponse response, final GenericFile file) throws IOException {
-	String filename = file.getFilename();
-	if (filename == null) {
-	    filename = file.getDisplayName();
+	protected Person getLoggedPerson() {
+		return Person.getLoggedPerson();
 	}
-	return file != null && file.getContent() != null ? download(response, filename != null ? filename : "", file.getStream(),
-		file.getContentType()) : null;
-    }
+
+	protected byte[] consumeInputStream(final FileUploadBean fileUploadBean) {
+		final InputStream inputStream = fileUploadBean.getInputStream();
+		return consumeInputStream(inputStream);
+	}
+
+	protected ActionForward download(final HttpServletResponse response, final GenericFile file) throws IOException {
+		String filename = file.getFilename();
+		if (filename == null) {
+			filename = file.getDisplayName();
+		}
+		return file != null && file.getContent() != null ? download(response, filename != null ? filename : "", file.getStream(),
+				file.getContentType()) : null;
+	}
 
 }

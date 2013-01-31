@@ -27,11 +27,10 @@ package pt.ist.expenditureTrackingSystem.domain.authorizations;
 import java.util.Comparator;
 import java.util.Set;
 
-import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.bennu.core.domain.util.Money;
-
 import org.joda.time.LocalDate;
 
+import pt.ist.bennu.core.domain.exceptions.DomainException;
+import pt.ist.bennu.core.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.dto.AuthorizationBean;
@@ -47,138 +46,137 @@ import pt.ist.fenixWebFramework.services.Service;
  */
 public class Authorization extends Authorization_Base {
 
-    public static final Comparator<Authorization> COMPARATOR_BY_NAME_AND_DATE = new Comparator<Authorization>() {
+	public static final Comparator<Authorization> COMPARATOR_BY_NAME_AND_DATE = new Comparator<Authorization>() {
+
+		@Override
+		public int compare(final Authorization o1, final Authorization o2) {
+			final Person p1 = o1.getPerson();
+			final Person p2 = o2.getPerson();
+			final int p = p1.getName().compareTo(p2.getName());
+			if (p == 0) {
+				final int d = o1.getStartDate().compareTo(o2.getStartDate());
+				return d == 0 ? o1.hashCode() - o2.hashCode() : d;
+			}
+			return p;
+		}
+
+	};
+
+	public Authorization() {
+		super();
+		setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
+		setStartDate(new LocalDate());
+		setMaxAmount(Money.ZERO);
+	}
+
+	public Authorization(final Person person, final Unit unit, final String justification) {
+		this();
+		setPerson(person);
+		setUnit(unit);
+		setCanDelegate(Boolean.FALSE);
+		AuthorizationOperation.CREATE.log(this, justification);
+	}
+
+	public Authorization(final AuthorizationBean authorizationBean, final String justification) {
+		this(authorizationBean.getPerson(), authorizationBean.getUnit(), justification);
+		setStartDate(authorizationBean.getStartDate());
+		setEndDate(authorizationBean.getEndDate());
+		setCanDelegate(authorizationBean.getCanDelegate());
+		setMaxAmount(authorizationBean.getMaxAmount() != null ? authorizationBean.getMaxAmount() : Money.ZERO);
+	}
+
+	@Service
+	public void changeUnit(final Unit unit) {
+		setUnit(unit);
+	}
+
+	public void findAcquisitionProcessesPendingAuthorization(final Set<AcquisitionProcess> result, final boolean recurseSubUnits) {
+		final Unit unit = getUnit();
+		unit.findAcquisitionProcessesPendingAuthorization(result, recurseSubUnits);
+	}
+
+	public boolean isPersonAbleToRevokeDelegatedAuthorization(Person person) {
+		return getPerson() == person || ExpenditureTrackingSystem.isAcquisitionsUnitManagerGroupMember()
+				|| ExpenditureTrackingSystem.isManager();
+	}
 
 	@Override
-	public int compare(final Authorization o1, final Authorization o2) {
-	    final Person p1 = o1.getPerson();
-	    final Person p2 = o2.getPerson();
-	    final int p = p1.getName().compareTo(p2.getName());
-	    if (p == 0) {
-		final int d = o1.getStartDate().compareTo(o2.getStartDate());
-		return d == 0 ? o1.hashCode() - o2.hashCode() : d;
-	    }
-	    return p;
+	public Boolean getCanDelegate() {
+		return super.getCanDelegate() && isValid();
 	}
 
-    };
-
-    public Authorization() {
-	super();
-	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
-	setStartDate(new LocalDate());
-	setMaxAmount(Money.ZERO);
-    }
-
-    public Authorization(final Person person, final Unit unit, final String justification) {
-	this();
-	setPerson(person);
-	setUnit(unit);
-	setCanDelegate(Boolean.FALSE);
-	AuthorizationOperation.CREATE.log(this, justification);
-    }
-
-    public Authorization(final AuthorizationBean authorizationBean, final String justification) {
-	this(authorizationBean.getPerson(), authorizationBean.getUnit(), justification);
-	setStartDate(authorizationBean.getStartDate());
-	setEndDate(authorizationBean.getEndDate());
-	setCanDelegate(authorizationBean.getCanDelegate());
-	setMaxAmount(authorizationBean.getMaxAmount() != null ? authorizationBean.getMaxAmount() : Money.ZERO);
-    }
-
-    @Service
-    public void changeUnit(final Unit unit) {
-	setUnit(unit);
-    }
-
-    public void findAcquisitionProcessesPendingAuthorization(final Set<AcquisitionProcess> result, final boolean recurseSubUnits) {
-	final Unit unit = getUnit();
-	unit.findAcquisitionProcessesPendingAuthorization(result, recurseSubUnits);
-    }
-
-    public boolean isPersonAbleToRevokeDelegatedAuthorization(Person person) {
-	return getPerson() == person
-		|| ExpenditureTrackingSystem.isAcquisitionsUnitManagerGroupMember()
-		|| ExpenditureTrackingSystem.isManager();
-    }
-
-    @Override
-    public Boolean getCanDelegate() {
-	return super.getCanDelegate() && isValid();
-    }
-
-    @Service
-    public void revoke() {
-	if (!isCurrentUserAbleToRevoke()) {
-	    throw new DomainException("error.person.not.authorized.to.revoke");
-	}
-	setEndDate(new LocalDate());
-	for (DelegatedAuthorization authorization : getDelegatedAuthorizations()) {
-	    authorization.revoke();
-	}
-	AuthorizationOperation.EDIT.log(this, null);
-    }
-
-    @Override
-    public void setEndDate(LocalDate endDate) {
-
-	super.setEndDate(endDate);
-
-	if (endDate != null && (super.getEndDate() == null || super.getEndDate().isAfter(endDate))) {
-	    for (Authorization delegatedAuthorization : getDelegatedAuthorizations()) {
-		if (delegatedAuthorization.getEndDate() == null || delegatedAuthorization.getEndDate().isAfter(endDate)) {
-		    delegatedAuthorization.setEndDate(endDate);
+	@Service
+	public void revoke() {
+		if (!isCurrentUserAbleToRevoke()) {
+			throw new DomainException("error.person.not.authorized.to.revoke");
 		}
-	    }
+		setEndDate(new LocalDate());
+		for (DelegatedAuthorization authorization : getDelegatedAuthorizations()) {
+			authorization.revoke();
+		}
+		AuthorizationOperation.EDIT.log(this, null);
 	}
-    }
 
-    public boolean isValidFor(LocalDate date) {
-	return getEndDate() == null || getEndDate().isAfter(date);
-    }
+	@Override
+	public void setEndDate(LocalDate endDate) {
 
-    public boolean isValid() {
-	return isValidFor(new LocalDate());
-    }
+		super.setEndDate(endDate);
 
-    public boolean isValidAndIsCurrentUserResponsible() {
-	return isValid() && getUnit().isResponsible(Person.getLoggedPerson());
-    }
-
-    public boolean isCurrentUserAbleToRevoke() {
-	final Person loggedPerson = Person.getLoggedPerson();
-	return loggedPerson != null && isValid() && isPersonAbleToRevokeDelegatedAuthorization(loggedPerson);
-    }
-
-    @Service
-    public void delete() {
-	AuthorizationOperation.DELETE.log(this, null);
-	for (final DelegatedAuthorization delegatedAuthorization : getDelegatedAuthorizationsSet()) {
-	    delegatedAuthorization.delete();
+		if (endDate != null && (super.getEndDate() == null || super.getEndDate().isAfter(endDate))) {
+			for (Authorization delegatedAuthorization : getDelegatedAuthorizations()) {
+				if (delegatedAuthorization.getEndDate() == null || delegatedAuthorization.getEndDate().isAfter(endDate)) {
+					delegatedAuthorization.setEndDate(endDate);
+				}
+			}
+		}
 	}
-	removePerson();
-	removeUnit();
-	removeExpenditureTrackingSystem();
-	deleteDomainObject();
-    }
 
-    private transient String justification;
+	public boolean isValidFor(LocalDate date) {
+		return getEndDate() == null || getEndDate().isAfter(date);
+	}
 
-    public String getJustification() {
-        return justification;
-    }
+	public boolean isValid() {
+		return isValidFor(new LocalDate());
+	}
 
-    public void setJustification(String justification) {
-        this.justification = justification;
-    }
+	public boolean isValidAndIsCurrentUserResponsible() {
+		return isValid() && getUnit().isResponsible(Person.getLoggedPerson());
+	}
 
-    public void logEdit(final String justification) {
-	AuthorizationOperation.EDIT.log(this, justification);
-    }
+	public boolean isCurrentUserAbleToRevoke() {
+		final Person loggedPerson = Person.getLoggedPerson();
+		return loggedPerson != null && isValid() && isPersonAbleToRevokeDelegatedAuthorization(loggedPerson);
+	}
 
-    @Override
-    public boolean isConnectedToCurrentHost() {
-	return getExpenditureTrackingSystem() == ExpenditureTrackingSystem.getInstance();
-    }
+	@Service
+	public void delete() {
+		AuthorizationOperation.DELETE.log(this, null);
+		for (final DelegatedAuthorization delegatedAuthorization : getDelegatedAuthorizationsSet()) {
+			delegatedAuthorization.delete();
+		}
+		removePerson();
+		removeUnit();
+		removeExpenditureTrackingSystem();
+		deleteDomainObject();
+	}
+
+	private transient String justification;
+
+	public String getJustification() {
+		return justification;
+	}
+
+	public void setJustification(String justification) {
+		this.justification = justification;
+	}
+
+	public void logEdit(final String justification) {
+		AuthorizationOperation.EDIT.log(this, justification);
+	}
+
+	@Override
+	public boolean isConnectedToCurrentHost() {
+		return getExpenditureTrackingSystem() == ExpenditureTrackingSystem.getInstance();
+	}
 
 }

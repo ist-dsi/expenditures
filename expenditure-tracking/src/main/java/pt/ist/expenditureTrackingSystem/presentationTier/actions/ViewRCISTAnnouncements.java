@@ -31,10 +31,6 @@ import java.util.Collections;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import pt.ist.bennu.core.presentationTier.Context;
-import pt.ist.bennu.core.presentationTier.LayoutContext;
-import pt.ist.bennu.core.presentationTier.actions.ContextBaseAction;
-
 import org.apache.commons.beanutils.BeanComparator;
 import org.apache.commons.collections.Predicate;
 import org.apache.commons.collections.comparators.ReverseComparator;
@@ -43,6 +39,9 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import pt.ist.bennu.core.presentationTier.Context;
+import pt.ist.bennu.core.presentationTier.LayoutContext;
+import pt.ist.bennu.core.presentationTier.actions.ContextBaseAction;
 import pt.ist.expenditureTrackingSystem.domain.announcements.Announcement;
 import pt.ist.expenditureTrackingSystem.domain.announcements.RCISTAnnouncement;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
@@ -57,43 +56,43 @@ import pt.utl.ist.fenix.tools.util.CollectionPager;
  */
 public class ViewRCISTAnnouncements extends ContextBaseAction {
 
-    private static final int REQUESTS_PER_PAGE = 10;
-    private static final String PUBLIC_LAYOUT = "rcistAnnouncements";
+	private static final int REQUESTS_PER_PAGE = 10;
+	private static final String PUBLIC_LAYOUT = "rcistAnnouncements";
 
-    public final ActionForward viewRCIST(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) throws Exception {
+	public final ActionForward viewRCIST(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+			final HttpServletResponse response) throws Exception {
 
-	ArrayList<RCISTAnnouncement> approvedList = new ArrayList<RCISTAnnouncement>();
-	approvedList.addAll(Announcement.getAnnouncements(RCISTAnnouncement.class, new Predicate() {
+		ArrayList<RCISTAnnouncement> approvedList = new ArrayList<RCISTAnnouncement>();
+		approvedList.addAll(Announcement.getAnnouncements(RCISTAnnouncement.class, new Predicate() {
 
-	    @Override
-	    public boolean evaluate(Object arg0) {
-		RCISTAnnouncement announcement = (RCISTAnnouncement) arg0;
-		return announcement.getActive();
-	    }
+			@Override
+			public boolean evaluate(Object arg0) {
+				RCISTAnnouncement announcement = (RCISTAnnouncement) arg0;
+				return announcement.getActive();
+			}
 
-	}));
+		}));
 
-	Collections.sort(approvedList, new ReverseComparator(new BeanComparator("creationDate")));
+		Collections.sort(approvedList, new ReverseComparator(new BeanComparator("creationDate")));
 
-	final CollectionPager<Announcement> pager = new CollectionPager<Announcement>((Collection) approvedList,
-		REQUESTS_PER_PAGE);
+		final CollectionPager<Announcement> pager =
+				new CollectionPager<Announcement>((Collection) approvedList, REQUESTS_PER_PAGE);
 
-	request.setAttribute("collectionPager", pager);
-	request.setAttribute("numberOfPages", Integer.valueOf(pager.getNumberOfPages()));
+		request.setAttribute("collectionPager", pager);
+		request.setAttribute("numberOfPages", Integer.valueOf(pager.getNumberOfPages()));
 
-	final String pageParameter = request.getParameter("pageNumber");
-	final Integer page = StringUtils.isEmpty(pageParameter) ? Integer.valueOf(1) : Integer.valueOf(pageParameter);
-	request.setAttribute("pageNumber", page);
-	request.setAttribute("announcements", pager.getPage(page));
+		final String pageParameter = request.getParameter("pageNumber");
+		final Integer page = StringUtils.isEmpty(pageParameter) ? Integer.valueOf(1) : Integer.valueOf(pageParameter);
+		request.setAttribute("pageNumber", page);
+		request.setAttribute("announcements", pager.getPage(page));
 
-	return forward(request, "/public/viewRCISTAnnouncements.jsp");
-    }
+		return forward(request, "/public/viewRCISTAnnouncements.jsp");
+	}
 
-    @Override
-    public Context createContext(final String contextPathString, HttpServletRequest request) {
-	LayoutContext layout = new LayoutContext(contextPathString);
-	layout.setLayout(PUBLIC_LAYOUT);
-	return layout;
-    }
+	@Override
+	public Context createContext(final String contextPathString, HttpServletRequest request) {
+		LayoutContext layout = new LayoutContext(contextPathString);
+		layout.setLayout(PUBLIC_LAYOUT);
+		return layout;
+	}
 }

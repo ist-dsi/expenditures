@@ -32,102 +32,102 @@ import pt.utl.ist.fenix.tools.util.PropertiesManager;
 
 public class ReportUtils extends PropertiesManager {
 
-    static final private Map<String, JasperReport> reportsMap = new ConcurrentHashMap<String, JasperReport>();
+	static final private Map<String, JasperReport> reportsMap = new ConcurrentHashMap<String, JasperReport>();
 
-    static final private Properties properties = new Properties();
+	static final private Properties properties = new Properties();
 
-    static final private String reportsPropertiesFile = "/reports.properties";
+	static final private String reportsPropertiesFile = "/reports.properties";
 
-    static {
-	try {
-	    loadProperties(properties, reportsPropertiesFile);
-	} catch (IOException e) {
-	    throw new RuntimeException("Unable to load properties files.", e);
-	}
-    }
-
-    static public boolean exportToPdfFile(String key, Map parameters, ResourceBundle bundle, Collection dataSource,
-	    String destination) {
-	try {
-	    final JasperPrint jasperPrint = createJasperPrint(key, parameters, bundle, dataSource);
-	    if (jasperPrint != null) {
-		JasperExportManager.exportReportToPdfFile(jasperPrint, destination);
-		return true;
-	    } else {
-		return false;
-	    }
-	} catch (JRException e) {
-	    return false;
-	}
-    }
-
-    static public byte[] exportToPdfFileAsByteArray(final String key, final Map parameters, final ResourceBundle bundle,
-	    final Collection dataSource) throws JRException {
-	final JasperPrint jasperPrint = createJasperPrint(key, parameters, bundle, dataSource);
-
-	if (jasperPrint != null) {
-	    final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-	    export(new JRPdfExporter(), Collections.singletonList(jasperPrint), baos, (PrintService) null,
-		    (PrintRequestAttributeSet) null);
-	    return baos.toByteArray();
+	static {
+		try {
+			loadProperties(properties, reportsPropertiesFile);
+		} catch (IOException e) {
+			throw new RuntimeException("Unable to load properties files.", e);
+		}
 	}
 
-	return null;
-    }
-
-    static private JasperPrint createJasperPrint(final String key, final Map parameters, final ResourceBundle bundle,
-	    Collection dataSource) throws JRException {
-	JasperReport report = reportsMap.get(key);
-
-	if (report == null) {
-	    final String reportFileName = properties.getProperty(key);
-	    if (reportFileName != null) {
-		report = (JasperReport) JRLoader.loadObject(ReportUtils.class.getResourceAsStream(reportFileName));
-		reportsMap.put(key, report);
-	    }
+	static public boolean exportToPdfFile(String key, Map parameters, ResourceBundle bundle, Collection dataSource,
+			String destination) {
+		try {
+			final JasperPrint jasperPrint = createJasperPrint(key, parameters, bundle, dataSource);
+			if (jasperPrint != null) {
+				JasperExportManager.exportReportToPdfFile(jasperPrint, destination);
+				return true;
+			} else {
+				return false;
+			}
+		} catch (JRException e) {
+			return false;
+		}
 	}
 
-	if (report != null) {
-	    if (parameters != null && bundle != null) {
-		parameters.put(JRParameter.REPORT_RESOURCE_BUNDLE, bundle);
-	    }
+	static public byte[] exportToPdfFileAsByteArray(final String key, final Map parameters, final ResourceBundle bundle,
+			final Collection dataSource) throws JRException {
+		final JasperPrint jasperPrint = createJasperPrint(key, parameters, bundle, dataSource);
 
-	    if (dataSource == null || dataSource.isEmpty()) {
-		// dummy, engine seems to work not very well with empty data
-		// sources
-		dataSource = Collections.singletonList(StringUtils.EMPTY);
-	    }
+		if (jasperPrint != null) {
+			final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			export(new JRPdfExporter(), Collections.singletonList(jasperPrint), baos, (PrintService) null,
+					(PrintRequestAttributeSet) null);
+			return baos.toByteArray();
+		}
 
-	    return JasperFillManager.fillReport(report, parameters, new JRBeanCollectionDataSource(dataSource));
+		return null;
 	}
 
-	return null;
-    }
+	static private JasperPrint createJasperPrint(final String key, final Map parameters, final ResourceBundle bundle,
+			Collection dataSource) throws JRException {
+		JasperReport report = reportsMap.get(key);
 
-    static private void export(final JRAbstractExporter exporter, final List<JasperPrint> prints,
-	    final ByteArrayOutputStream stream, final PrintService printService,
-	    final PrintRequestAttributeSet printRequestAttributeSet) throws JRException {
+		if (report == null) {
+			final String reportFileName = properties.getProperty(key);
+			if (reportFileName != null) {
+				report = (JasperReport) JRLoader.loadObject(ReportUtils.class.getResourceAsStream(reportFileName));
+				reportsMap.put(key, report);
+			}
+		}
 
-	if (prints.size() == 1) {
-	    exporter.setParameter(JRExporterParameter.JASPER_PRINT, prints.iterator().next());
-	} else {
-	    exporter.setParameter(JRExporterParameter.JASPER_PRINT_LIST, prints);
+		if (report != null) {
+			if (parameters != null && bundle != null) {
+				parameters.put(JRParameter.REPORT_RESOURCE_BUNDLE, bundle);
+			}
+
+			if (dataSource == null || dataSource.isEmpty()) {
+				// dummy, engine seems to work not very well with empty data
+				// sources
+				dataSource = Collections.singletonList(StringUtils.EMPTY);
+			}
+
+			return JasperFillManager.fillReport(report, parameters, new JRBeanCollectionDataSource(dataSource));
+		}
+
+		return null;
 	}
 
-	if (stream != null) {
-	    exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, stream);
-	}
+	static private void export(final JRAbstractExporter exporter, final List<JasperPrint> prints,
+			final ByteArrayOutputStream stream, final PrintService printService,
+			final PrintRequestAttributeSet printRequestAttributeSet) throws JRException {
 
-	if (printService != null) {
-	    exporter.setParameter(JRPrintServiceExporterParameter.PRINT_SERVICE, printService);
-	}
+		if (prints.size() == 1) {
+			exporter.setParameter(JRExporterParameter.JASPER_PRINT, prints.iterator().next());
+		} else {
+			exporter.setParameter(JRExporterParameter.JASPER_PRINT_LIST, prints);
+		}
 
-	if (printRequestAttributeSet != null) {
-	    exporter.setParameter(JRPrintServiceExporterParameter.PRINT_REQUEST_ATTRIBUTE_SET, printRequestAttributeSet);
-	}
+		if (stream != null) {
+			exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, stream);
+		}
 
-	exporter.exportReport();
-	return;
-    }
+		if (printService != null) {
+			exporter.setParameter(JRPrintServiceExporterParameter.PRINT_SERVICE, printService);
+		}
+
+		if (printRequestAttributeSet != null) {
+			exporter.setParameter(JRPrintServiceExporterParameter.PRINT_REQUEST_ATTRIBUTE_SET, printRequestAttributeSet);
+		}
+
+		exporter.exportReport();
+		return;
+	}
 
 }

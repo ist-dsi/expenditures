@@ -30,7 +30,6 @@ import module.workflow.activities.WorkflowActivity;
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
-import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
@@ -45,54 +44,52 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
  * 
  */
 public class GenericAssignPayingUnitToItem<P extends PaymentProcess> extends
-	WorkflowActivity<P, GenericAssignPayingUnitToItemActivityInformation<P>> {
+		WorkflowActivity<P, GenericAssignPayingUnitToItemActivityInformation<P>> {
 
-    @Override
-    public boolean isActive(P process, User user) {
-	Person person = user.getExpenditurePerson();
-	return isUserProcessOwner(process, user)
-		&& ((person == process.getRequestor() && process.isInGenesis()) || ((process instanceof SimplifiedProcedureProcess)
-			&& ((SimplifiedProcedureProcess) process).getProcessClassification() == ProcessClassification.CT75000
-			&& ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user)
-			&& process.isAuthorized()));
-    }
-
-    @Override
-    protected void process(GenericAssignPayingUnitToItemActivityInformation<P> activityInformation) {
-	RequestItem item = activityInformation.getItem();
-	List<UnitItemBean> beans = activityInformation.getBeans();
-
-	for (; !item.getUnitItems().isEmpty(); item.getUnitItems().get(0).delete())
-	    ;
-
-	for (UnitItemBean bean : beans) {
-	    if (bean.getAssigned()) {
-		item.createUnitItem(bean.getUnit(), bean.getShareValue());
-	    }
+	@Override
+	public boolean isActive(P process, User user) {
+		Person person = user.getExpenditurePerson();
+		return isUserProcessOwner(process, user)
+				&& ((person == process.getRequestor() && process.isInGenesis()) || ((process instanceof SimplifiedProcedureProcess)
+						&& ((SimplifiedProcedureProcess) process).getProcessClassification() == ProcessClassification.CT75000
+						&& ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user) && process.isAuthorized()));
 	}
-    }
 
-    public GenericAssignPayingUnitToItemActivityInformation<P> getActivityInformation(P process) {
-	return new GenericAssignPayingUnitToItemActivityInformation<P>(process, this);
-    }
+	@Override
+	protected void process(GenericAssignPayingUnitToItemActivityInformation<P> activityInformation) {
+		RequestItem item = activityInformation.getItem();
+		List<UnitItemBean> beans = activityInformation.getBeans();
 
-    @Override
-    public String getLocalizedName() {
-	return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
-    }
+		for (; !item.getUnitItems().isEmpty(); item.getUnitItems().get(0).delete());
 
-    @Override
-    public String getUsedBundle() {
-	return "resources/AcquisitionResources";
-    }
+		for (UnitItemBean bean : beans) {
+			if (bean.getAssigned()) {
+				item.createUnitItem(bean.getUnit(), bean.getShareValue());
+			}
+		}
+	}
 
-    @Override
-    public boolean isDefaultInputInterfaceUsed() {
-	return false;
-    }
+	public GenericAssignPayingUnitToItemActivityInformation<P> getActivityInformation(P process) {
+		return new GenericAssignPayingUnitToItemActivityInformation<P>(process, this);
+	}
 
-    @Override
-    public boolean isVisible() {
-	return false;
-    }
+	@Override
+	public String getLocalizedName() {
+		return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+	}
+
+	@Override
+	public String getUsedBundle() {
+		return "resources/AcquisitionResources";
+	}
+
+	@Override
+	public boolean isDefaultInputInterfaceUsed() {
+		return false;
+	}
+
+	@Override
+	public boolean isVisible() {
+		return false;
+	}
 }

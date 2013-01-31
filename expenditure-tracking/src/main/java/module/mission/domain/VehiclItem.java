@@ -27,55 +27,54 @@ package module.mission.domain;
 import module.mission.domain.activity.ItemActivityInformation;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
 
-
 /**
  * 
  * @author Luis Cruz
  * 
  */
 public abstract class VehiclItem extends VehiclItem_Base {
-    
-    public VehiclItem() {
-        super();
-        new VehiclItemJustification(this);
-    }
 
-    @Override
-    public void delete() {
-	final VehiclItemJustification vehiclItemJustification =getVehiclItemJustification();
-	if (vehiclItemJustification != null) {
-	    vehiclItemJustification.delete();
+	public VehiclItem() {
+		super();
+		new VehiclItemJustification(this);
 	}
-	super.delete();
-    }
 
-    @Override
-    public boolean isVehicleItem() {
-        return true;
-    }
-
-    @Override
-    public void setInfo(final ItemActivityInformation itemActivityInformation) {
-	final Mission mission = itemActivityInformation.getProcess().getMission();
-	if (mission.getParticipantesCount() == 1) {
-	    super.setInfo(itemActivityInformation);
-	    setDriver(mission.getParticipantes().get(0));
-	} else {
-	    if (itemActivityInformation.getDriver() == null) {
-		throw new DomainException("A vehicle item must have a driver");
-	    }
-
-	    super.setInfo(itemActivityInformation);
-	    setDriver(itemActivityInformation.getDriver());
-	    addPeople(itemActivityInformation.getDriver());
+	@Override
+	public void delete() {
+		final VehiclItemJustification vehiclItemJustification = getVehiclItemJustification();
+		if (vehiclItemJustification != null) {
+			vehiclItemJustification.delete();
+		}
+		super.delete();
 	}
-    }
 
-    @Override
-    protected void setNewVersionInformation(final MissionItem missionItem) {
-	super.setNewVersionInformation(missionItem);
-	final VehiclItem vehiclItem = (VehiclItem) missionItem;
-	vehiclItem.setVehiclItemJustification(getVehiclItemJustification());
-    }
+	@Override
+	public boolean isVehicleItem() {
+		return true;
+	}
+
+	@Override
+	public void setInfo(final ItemActivityInformation itemActivityInformation) {
+		final Mission mission = itemActivityInformation.getProcess().getMission();
+		if (mission.getParticipantesCount() == 1) {
+			super.setInfo(itemActivityInformation);
+			setDriver(mission.getParticipantes().get(0));
+		} else {
+			if (itemActivityInformation.getDriver() == null) {
+				throw new DomainException("A vehicle item must have a driver");
+			}
+
+			super.setInfo(itemActivityInformation);
+			setDriver(itemActivityInformation.getDriver());
+			addPeople(itemActivityInformation.getDriver());
+		}
+	}
+
+	@Override
+	protected void setNewVersionInformation(final MissionItem missionItem) {
+		super.setNewVersionInformation(missionItem);
+		final VehiclItem vehiclItem = (VehiclItem) missionItem;
+		vehiclItem.setVehiclItemJustification(getVehiclItemJustification());
+	}
 
 }

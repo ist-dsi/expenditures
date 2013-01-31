@@ -37,24 +37,24 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionPr
  */
 public class DeleteAcquisitionRequestItemActivityInformation extends ActivityInformation<RegularAcquisitionProcess> {
 
-    private AcquisitionRequestItem item;
+	private AcquisitionRequestItem item;
 
-    public DeleteAcquisitionRequestItemActivityInformation(RegularAcquisitionProcess process,
-	    WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity) {
-	super(process, activity);
-    }
+	public DeleteAcquisitionRequestItemActivityInformation(RegularAcquisitionProcess process,
+			WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity) {
+		super(process, activity);
+	}
 
-    public AcquisitionRequestItem getItem() {
-	return item;
-    }
+	public AcquisitionRequestItem getItem() {
+		return item;
+	}
 
-    public void setItem(AcquisitionRequestItem item) {
-	this.item = item;
-    }
+	public void setItem(AcquisitionRequestItem item) {
+		this.item = item;
+	}
 
-    @Override
-    public boolean hasAllneededInfo() {
-	return getItem() != null;
-    }
-   
+	@Override
+	public boolean hasAllneededInfo() {
+		return getItem() != null;
+	}
+
 }

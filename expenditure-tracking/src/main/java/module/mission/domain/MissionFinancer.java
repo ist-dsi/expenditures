@@ -45,350 +45,354 @@ import pt.utl.ist.fenix.tools.util.i18n.Language;
  * 
  */
 public class MissionFinancer extends MissionFinancer_Base {
-    
-    public MissionFinancer() {
-        super();
-        setMissionSystem(MissionSystem.getInstance());
-    }
 
-    public MissionFinancer(final Mission mission, final Unit unit) {
-	this(mission.getMissionVersion(), unit);
-    }
-
-    public MissionFinancer(final MissionVersion missionVersion, final Unit unit) {
-	this();
-	checkUnitIsActive(unit);
-	setMissionVersion(missionVersion);
-	setUnit(unit);
-    }
-
-    private void checkUnitIsActive(final Unit unit) {
-	if (!unit.isActive()) {
-	    throw new DomainException("error.mission.financer.closed", ResourceBundle.getBundle("resources/MissionResources", Language.getLocale()));
+	public MissionFinancer() {
+		super();
+		setMissionSystem(MissionSystem.getInstance());
 	}
-    }
 
-    public void delete() {
-	for (final MissionItemFinancer missionItemFinancer : getMissionItemFinancersSet()) {
-	    missionItemFinancer.delete();
+	public MissionFinancer(final Mission mission, final Unit unit) {
+		this(mission.getMissionVersion(), unit);
 	}
-	removeMissionVersion();
-	removeMissions();
-	removeUnit();
-	removeMissionSystem();
-	removeAccountingUnit();
-	deleteDomainObject();
-    }
 
-    public Money getAmount() {
-	Money result = Money.ZERO;
-	for (final MissionItemFinancer missionItemFinancer : getMissionItemFinancersSet()) {
-	    final Money amount = missionItemFinancer.getAmount();
-	    if (amount != null) {
-		result = result.add(amount);
-	    }
+	public MissionFinancer(final MissionVersion missionVersion, final Unit unit) {
+		this();
+		checkUnitIsActive(unit);
+		setMissionVersion(missionVersion);
+		setUnit(unit);
 	}
-	return result;
-    }
 
-    public boolean isPendingApprovalBy(final User user) {
-	return !hasApproval() && canApprove(user);
-    }
-
-    public boolean isPendingAuthorizationBy(final User user) {
-	return !hasAuthorization() && canAuthorize(user);
-    }
-
-    public boolean isPendingDirectAuthorizationBy(final User user) {
-	return !hasAuthorization() && canAuthorizeDirect(user);
-    }
-
-    public boolean canApprove(final User user) {
-	final Unit unit = getUnit();
-	return unit.isResponsible(user.getExpenditurePerson());
-    }
-
-    public boolean canAuthorize(final User user) {
-	final Unit unit = getUnit();
-	return unit.isResponsible(user.getExpenditurePerson(), getAmount());
-    }
-
-    public boolean canAuthorizeDirect(final User user) {
-	final Unit unit = getUnit();
-	return unit.isMostDirectAuthorization(user.getExpenditurePerson(), getAmount());
-    }
-
-    public void approve(final User user) {
-	if (!hasApproval()) {
-	    final Authorization authorization = findAuthorizationForApproval(user);
-	    if (authorization != null) {
-		setApproval(authorization);
-	    }
-	}
-    }
-
-    public void authorize(final User user) {
-	if (!hasAuthorization()) {
-	    final Authorization authorization = findAuthorizationForAuthorization(user);
-	    if (authorization != null) {
-		setAuthorization(authorization);
-	    }
-	}
-    }
-
-    private Authorization findAuthorizationForApproval(final User user) {
-	return findAuthorization(user, Money.ZERO);
-    }
-
-    private Authorization findAuthorizationForAuthorization(final User user) {
-	return findAuthorization(user, getAmount());
-    }
-
-    private Authorization findAuthorization(final User user, final Money amount) {
-	final Unit unit = getUnit();
-	return unit.findClosestAuthorization(user.getExpenditurePerson(), amount);
-    }
-
-    public void unapprove(final User user) {
-	if (hasApproval() && canApprove(user)) {
-	    removeApproval();
-	}
-    }
-
-    public void unauthorize(final User user) {
-	if (hasAuthorization() && canAuthorize(user)) {
-	    removeAuthorization();
-	}
-    }
-
-    public boolean canRemoveApproval(final User user) {
-	return !hasAnyAllocatedFunds() && hasApproval() && canApprove(user);
-    }
-
-    public boolean canRemoveAuthorization(final User user) {
-	return hasAuthorization() && canAuthorize(user);
-    }
-
-    public boolean hasAllAllocatedFunds() {
-	if (!hasAnyMissionItemFinancers()) {
-	    return false;
-	}
-	for (final MissionItemFinancer missionItemFinancer : getMissionItemFinancersSet()) {
-	    final MissionItem missionItem = missionItemFinancer.getMissionItem();
-	    if (missionItem.requiresFundAllocation()) {
-		final Money amount = missionItemFinancer.getAmount();
-		if (amount != null && amount.isPositive() && missionItemFinancer.getFundAllocationId() == null) {
-		    return false;
+	private void checkUnitIsActive(final Unit unit) {
+		if (!unit.isActive()) {
+			throw new DomainException("error.mission.financer.closed", ResourceBundle.getBundle("resources/MissionResources",
+					Language.getLocale()));
 		}
-	    }
 	}
-	return true;
-    }
 
-    public boolean hasAnyAllocatedFunds() {
-	if (!hasAnyMissionItemFinancers()) {
-	    return false;
-	}
-	for (final MissionItemFinancer missionItemFinancer : getMissionItemFinancersSet()) {
-	    final MissionItem missionItem = missionItemFinancer.getMissionItem();
-	    if (missionItem.requiresFundAllocation()) {
-		final Money amount = missionItemFinancer.getAmount();
-		if (amount != null && amount.isPositive() && missionItemFinancer.getFundAllocationId() != null && !missionItemFinancer.getFundAllocationId().isEmpty()) {
-		    return true;
+	public void delete() {
+		for (final MissionItemFinancer missionItemFinancer : getMissionItemFinancersSet()) {
+			missionItemFinancer.delete();
 		}
-	    }
+		removeMissionVersion();
+		removeMissions();
+		removeUnit();
+		removeMissionSystem();
+		removeAccountingUnit();
+		deleteDomainObject();
 	}
-	return false;
-    }
 
-    public boolean hasAllocatedProjectFunds() {
-	if (!hasAnyMissionItemProjectFinancers()) {
-	    return false;
-	}
-	for (final MissionItemFinancer missionItemFinancer : getMissionItemFinancersSet()) {
-	    if (missionItemFinancer instanceof MissionItemProjectFinancer) {
-		final MissionItemProjectFinancer missionItemProjectFinancer = (MissionItemProjectFinancer) missionItemFinancer;
-		final Money amount = missionItemProjectFinancer.getAmount();
-		if (amount != null && amount.isPositive() && missionItemProjectFinancer.getProjectFundAllocationId() == null) {
-		    return false;
+	public Money getAmount() {
+		Money result = Money.ZERO;
+		for (final MissionItemFinancer missionItemFinancer : getMissionItemFinancersSet()) {
+			final Money amount = missionItemFinancer.getAmount();
+			if (amount != null) {
+				result = result.add(amount);
+			}
 		}
-	    }
+		return result;
 	}
-	return true;
-    }
 
-    public boolean hasAnyMissionItemProjectFinancers() {
-	for (final MissionItemFinancer missionItemFinancer : getMissionItemFinancersSet()) {
-	    if (missionItemFinancer instanceof MissionItemProjectFinancer) {
+	public boolean isPendingApprovalBy(final User user) {
+		return !hasApproval() && canApprove(user);
+	}
+
+	public boolean isPendingAuthorizationBy(final User user) {
+		return !hasAuthorization() && canAuthorize(user);
+	}
+
+	public boolean isPendingDirectAuthorizationBy(final User user) {
+		return !hasAuthorization() && canAuthorizeDirect(user);
+	}
+
+	public boolean canApprove(final User user) {
+		final Unit unit = getUnit();
+		return unit.isResponsible(user.getExpenditurePerson());
+	}
+
+	public boolean canAuthorize(final User user) {
+		final Unit unit = getUnit();
+		return unit.isResponsible(user.getExpenditurePerson(), getAmount());
+	}
+
+	public boolean canAuthorizeDirect(final User user) {
+		final Unit unit = getUnit();
+		return unit.isMostDirectAuthorization(user.getExpenditurePerson(), getAmount());
+	}
+
+	public void approve(final User user) {
+		if (!hasApproval()) {
+			final Authorization authorization = findAuthorizationForApproval(user);
+			if (authorization != null) {
+				setApproval(authorization);
+			}
+		}
+	}
+
+	public void authorize(final User user) {
+		if (!hasAuthorization()) {
+			final Authorization authorization = findAuthorizationForAuthorization(user);
+			if (authorization != null) {
+				setAuthorization(authorization);
+			}
+		}
+	}
+
+	private Authorization findAuthorizationForApproval(final User user) {
+		return findAuthorization(user, Money.ZERO);
+	}
+
+	private Authorization findAuthorizationForAuthorization(final User user) {
+		return findAuthorization(user, getAmount());
+	}
+
+	private Authorization findAuthorization(final User user, final Money amount) {
+		final Unit unit = getUnit();
+		return unit.findClosestAuthorization(user.getExpenditurePerson(), amount);
+	}
+
+	public void unapprove(final User user) {
+		if (hasApproval() && canApprove(user)) {
+			removeApproval();
+		}
+	}
+
+	public void unauthorize(final User user) {
+		if (hasAuthorization() && canAuthorize(user)) {
+			removeAuthorization();
+		}
+	}
+
+	public boolean canRemoveApproval(final User user) {
+		return !hasAnyAllocatedFunds() && hasApproval() && canApprove(user);
+	}
+
+	public boolean canRemoveAuthorization(final User user) {
+		return hasAuthorization() && canAuthorize(user);
+	}
+
+	public boolean hasAllAllocatedFunds() {
+		if (!hasAnyMissionItemFinancers()) {
+			return false;
+		}
+		for (final MissionItemFinancer missionItemFinancer : getMissionItemFinancersSet()) {
+			final MissionItem missionItem = missionItemFinancer.getMissionItem();
+			if (missionItem.requiresFundAllocation()) {
+				final Money amount = missionItemFinancer.getAmount();
+				if (amount != null && amount.isPositive() && missionItemFinancer.getFundAllocationId() == null) {
+					return false;
+				}
+			}
+		}
 		return true;
-	    }
 	}
-	return false;
-    }
 
-    public boolean canAllocateFunds(final Person person) {
-	return person != null && hasAccountingUnit() && getAccountingUnit().hasPeople(person.getUser().getExpenditurePerson());
-    }
-
-    public boolean isAccountManager(final Person person) {
-	final Unit unit = getUnit();
-	if (!unit.hasSomeAccountManager()) {
-	    return true;
-	} else if (person == null) {
-	    return false;
-	} else {
-	    return unit.isAccountManager(person.getUser().getExpenditurePerson());
+	public boolean hasAnyAllocatedFunds() {
+		if (!hasAnyMissionItemFinancers()) {
+			return false;
+		}
+		for (final MissionItemFinancer missionItemFinancer : getMissionItemFinancersSet()) {
+			final MissionItem missionItem = missionItemFinancer.getMissionItem();
+			if (missionItem.requiresFundAllocation()) {
+				final Money amount = missionItemFinancer.getAmount();
+				if (amount != null && amount.isPositive() && missionItemFinancer.getFundAllocationId() != null
+						&& !missionItemFinancer.getFundAllocationId().isEmpty()) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
-    }
 
-    public boolean canAllocateProjectFunds(final Person person) {
-	return person != null
-		&& hasAccountingUnit()
-		&& getAccountingUnit().hasProjectAccountants(person.getUser().getExpenditurePerson())
-		&& hasPendingProjectFundAllocations();
-    }
+	public boolean hasAllocatedProjectFunds() {
+		if (!hasAnyMissionItemProjectFinancers()) {
+			return false;
+		}
+		for (final MissionItemFinancer missionItemFinancer : getMissionItemFinancersSet()) {
+			if (missionItemFinancer instanceof MissionItemProjectFinancer) {
+				final MissionItemProjectFinancer missionItemProjectFinancer = (MissionItemProjectFinancer) missionItemFinancer;
+				final Money amount = missionItemProjectFinancer.getAmount();
+				if (amount != null && amount.isPositive() && missionItemProjectFinancer.getProjectFundAllocationId() == null) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
 
-    public boolean isDirectResponsibleForPendingProjectFundAllocation(final Person person) {
-	return canAllocateProjectFunds(person) && isAccountManager(person);
-    }
+	public boolean hasAnyMissionItemProjectFinancers() {
+		for (final MissionItemFinancer missionItemFinancer : getMissionItemFinancersSet()) {
+			if (missionItemFinancer instanceof MissionItemProjectFinancer) {
+				return true;
+			}
+		}
+		return false;
+	}
 
-    private boolean hasPendingProjectFundAllocations() {
-	final Mission mission = getMissionVersion().getMission();
-	final MissionProcess missionProcess = mission.getMissionProcess();
-	if (missionProcess.isCanceled()) {
-	    for (final MissionItemFinancer missionItemFinancer : getMissionItemFinancersSet()) {
-		if (missionItemFinancer instanceof MissionItemProjectFinancer) {
-		    final MissionItemProjectFinancer missionItemProjectFinancer = (MissionItemProjectFinancer) missionItemFinancer;
-		    final String allocationId = missionItemProjectFinancer.getProjectFundAllocationId();
-		    if (allocationId != null && !allocationId.isEmpty()) {
+	public boolean canAllocateFunds(final Person person) {
+		return person != null && hasAccountingUnit() && getAccountingUnit().hasPeople(person.getUser().getExpenditurePerson());
+	}
+
+	public boolean isAccountManager(final Person person) {
+		final Unit unit = getUnit();
+		if (!unit.hasSomeAccountManager()) {
 			return true;
-		    }
+		} else if (person == null) {
+			return false;
+		} else {
+			return unit.isAccountManager(person.getUser().getExpenditurePerson());
 		}
-	    }
-	    return false;
-	} else {
-	    for (final MissionItemFinancer missionItemFinancer : getMissionItemFinancersSet()) {
-		if (missionItemFinancer instanceof MissionItemProjectFinancer) {
-		    final MissionItemProjectFinancer missionItemProjectFinancer = (MissionItemProjectFinancer) missionItemFinancer;
-		    final String allocationId = missionItemProjectFinancer.getProjectFundAllocationId();
-		    if (allocationId == null || allocationId.isEmpty()) {
-			return true;
-		    }
+	}
+
+	public boolean canAllocateProjectFunds(final Person person) {
+		return person != null && hasAccountingUnit()
+				&& getAccountingUnit().hasProjectAccountants(person.getUser().getExpenditurePerson())
+				&& hasPendingProjectFundAllocations();
+	}
+
+	public boolean isDirectResponsibleForPendingProjectFundAllocation(final Person person) {
+		return canAllocateProjectFunds(person) && isAccountManager(person);
+	}
+
+	private boolean hasPendingProjectFundAllocations() {
+		final Mission mission = getMissionVersion().getMission();
+		final MissionProcess missionProcess = mission.getMissionProcess();
+		if (missionProcess.isCanceled()) {
+			for (final MissionItemFinancer missionItemFinancer : getMissionItemFinancersSet()) {
+				if (missionItemFinancer instanceof MissionItemProjectFinancer) {
+					final MissionItemProjectFinancer missionItemProjectFinancer =
+							(MissionItemProjectFinancer) missionItemFinancer;
+					final String allocationId = missionItemProjectFinancer.getProjectFundAllocationId();
+					if (allocationId != null && !allocationId.isEmpty()) {
+						return true;
+					}
+				}
+			}
+			return false;
+		} else {
+			for (final MissionItemFinancer missionItemFinancer : getMissionItemFinancersSet()) {
+				if (missionItemFinancer instanceof MissionItemProjectFinancer) {
+					final MissionItemProjectFinancer missionItemProjectFinancer =
+							(MissionItemProjectFinancer) missionItemFinancer;
+					final String allocationId = missionItemProjectFinancer.getProjectFundAllocationId();
+					if (allocationId == null || allocationId.isEmpty()) {
+						return true;
+					}
+				}
+			}
+			return false;
 		}
-	    }
-	    return false;
 	}
-    }
 
-    public void unAllocateFunds(final Person person) {
-	if (canAllocateFunds(person)) {
-	    for (final MissionItemFinancer missionItemFinancer : getMissionItemFinancersSet()) {
-		missionItemFinancer.setFundAllocationId(null);
-	    }
-	}
-    }
-
-    public String getFundAllocationId() {
-	final StringBuilder stringBuilder = new StringBuilder();
-	for (final MissionItemFinancer missionItemFinancer : getMissionItemFinancersSet()) {
-	    final String fundAllocationId = missionItemFinancer.getFundAllocationId();
-	    if (fundAllocationId != null) {
-		if (stringBuilder.length() > 0) {
-		    stringBuilder.append(", ");
+	public void unAllocateFunds(final Person person) {
+		if (canAllocateFunds(person)) {
+			for (final MissionItemFinancer missionItemFinancer : getMissionItemFinancersSet()) {
+				missionItemFinancer.setFundAllocationId(null);
+			}
 		}
-		stringBuilder.append(fundAllocationId);
-	    }
 	}
-	return stringBuilder.toString();
-    }
 
-    public String getProjectFundAllocationId() {
-	final StringBuilder stringBuilder = new StringBuilder();
-	for (final MissionItemFinancer missionItemFinancer : getMissionItemFinancersSet()) {
-	    if (missionItemFinancer instanceof MissionItemProjectFinancer) {
-		final MissionItemProjectFinancer missionItemProjectFinancer = (MissionItemProjectFinancer) missionItemFinancer;
-		final String projectFundAllocationId = missionItemProjectFinancer.getProjectFundAllocationId();
-		if (projectFundAllocationId != null) {
-		    if (stringBuilder.length() > 0) {
-			stringBuilder.append(", ");
-		    }
-		    stringBuilder.append(missionItemProjectFinancer.getProjectFundAllocationId());
+	public String getFundAllocationId() {
+		final StringBuilder stringBuilder = new StringBuilder();
+		for (final MissionItemFinancer missionItemFinancer : getMissionItemFinancersSet()) {
+			final String fundAllocationId = missionItemFinancer.getFundAllocationId();
+			if (fundAllocationId != null) {
+				if (stringBuilder.length() > 0) {
+					stringBuilder.append(", ");
+				}
+				stringBuilder.append(fundAllocationId);
+			}
 		}
-	    }
+		return stringBuilder.toString();
 	}
-	return stringBuilder.toString();
-    }
 
-    public void unAllocateProjectFunds(Person person) {
-	if (getAccountingUnit().hasProjectAccountants(person.getUser().getExpenditurePerson())) {
-	    for (final MissionItemFinancer missionItemFinancer : getMissionItemFinancersSet()) {
-		if (missionItemFinancer instanceof MissionItemProjectFinancer) {
-		    final MissionItemProjectFinancer missionItemProjectFinancer = (MissionItemProjectFinancer) missionItemFinancer;
-		    missionItemProjectFinancer.setProjectFundAllocationId(null);
+	public String getProjectFundAllocationId() {
+		final StringBuilder stringBuilder = new StringBuilder();
+		for (final MissionItemFinancer missionItemFinancer : getMissionItemFinancersSet()) {
+			if (missionItemFinancer instanceof MissionItemProjectFinancer) {
+				final MissionItemProjectFinancer missionItemProjectFinancer = (MissionItemProjectFinancer) missionItemFinancer;
+				final String projectFundAllocationId = missionItemProjectFinancer.getProjectFundAllocationId();
+				if (projectFundAllocationId != null) {
+					if (stringBuilder.length() > 0) {
+						stringBuilder.append(", ");
+					}
+					stringBuilder.append(missionItemProjectFinancer.getProjectFundAllocationId());
+				}
+			}
 		}
-	    }
+		return stringBuilder.toString();
 	}
-    }
 
-    public boolean isProjectFinancer() {
-	final Unit unit = getUnit();
-	return unit instanceof Project || unit instanceof SubProject;
-    }
-
-    public boolean isAuthorized() {
-	return hasAuthorization();
-    }
-
-    public void clearFundAllocations() {
-	for (final MissionItemFinancer missionItemFinancer : getMissionItemFinancersSet()) {
-	    missionItemFinancer.clearFundAllocations();
+	public void unAllocateProjectFunds(Person person) {
+		if (getAccountingUnit().hasProjectAccountants(person.getUser().getExpenditurePerson())) {
+			for (final MissionItemFinancer missionItemFinancer : getMissionItemFinancersSet()) {
+				if (missionItemFinancer instanceof MissionItemProjectFinancer) {
+					final MissionItemProjectFinancer missionItemProjectFinancer =
+							(MissionItemProjectFinancer) missionItemFinancer;
+					missionItemProjectFinancer.setProjectFundAllocationId(null);
+				}
+			}
+		}
 	}
-    }
 
-    MissionFinancer createNewVersion(final MissionVersion missionVersion) {
-	final MissionFinancer missionFinancer = new MissionFinancer(missionVersion, getUnit());
-	missionFinancer.setApproval(getApproval());
-	missionFinancer.setAuthorization(getAuthorization());
-	return missionFinancer;
-    }
+	public boolean isProjectFinancer() {
+		final Unit unit = getUnit();
+		return unit instanceof Project || unit instanceof SubProject;
+	}
 
-    public boolean isCurrentUserAccountant() {
-	final Unit unit = getUnit();
-	final User user = UserView.getCurrentUser();
-	return unit.isAccountingEmployee(user.getExpenditurePerson());
-    }
+	public boolean isAuthorized() {
+		return hasAuthorization();
+	}
 
-    public boolean isCurrentUserProjectAccountant() {
-	final Unit unit = getUnit();
-	final User user = UserView.getCurrentUser();
-	return unit.isProjectAccountingEmployee(user.getExpenditurePerson());
-    }
+	public void clearFundAllocations() {
+		for (final MissionItemFinancer missionItemFinancer : getMissionItemFinancersSet()) {
+			missionItemFinancer.clearFundAllocations();
+		}
+	}
 
-    public boolean isCurrentUserDirectProjectAccountant() {
-	final Unit unit = getUnit();
-	final User user = UserView.getCurrentUser();
-	return unit.isProjectAccountingEmployee(user.getExpenditurePerson()) &&
-		(!unit.hasSomeAccountManager() || unit.isAccountManager(user.getExpenditurePerson()));
-    }
+	MissionFinancer createNewVersion(final MissionVersion missionVersion) {
+		final MissionFinancer missionFinancer = new MissionFinancer(missionVersion, getUnit());
+		missionFinancer.setApproval(getApproval());
+		missionFinancer.setAuthorization(getAuthorization());
+		return missionFinancer;
+	}
 
-    @Override
-    public AccountingUnit getAccountingUnit() {
-	final AccountingUnit accountingUnit = super.getAccountingUnit();
-	return accountingUnit == null && hasUnit() ? getUnit().getAccountingUnit() : accountingUnit;
-    }
+	public boolean isCurrentUserAccountant() {
+		final Unit unit = getUnit();
+		final User user = UserView.getCurrentUser();
+		return unit.isAccountingEmployee(user.getExpenditurePerson());
+	}
 
-    public boolean isUnitObserver(final User user) {
-	return getUnit().isUnitObserver(user);
-    }
+	public boolean isCurrentUserProjectAccountant() {
+		final Unit unit = getUnit();
+		final User user = UserView.getCurrentUser();
+		return unit.isProjectAccountingEmployee(user.getExpenditurePerson());
+	}
 
-    public pt.ist.expenditureTrackingSystem.domain.organization.Person getAccountManager() {
-	final Unit unit = getUnit();
-	return unit == null ? null : unit.getAccountManager();
-    }
+	public boolean isCurrentUserDirectProjectAccountant() {
+		final Unit unit = getUnit();
+		final User user = UserView.getCurrentUser();
+		return unit.isProjectAccountingEmployee(user.getExpenditurePerson())
+				&& (!unit.hasSomeAccountManager() || unit.isAccountManager(user.getExpenditurePerson()));
+	}
 
-    @Override
-    public boolean isConnectedToCurrentHost() {
-	return getMissionSystem() == VirtualHost.getVirtualHostForThread().getMissionSystem();
-    }
+	@Override
+	public AccountingUnit getAccountingUnit() {
+		final AccountingUnit accountingUnit = super.getAccountingUnit();
+		return accountingUnit == null && hasUnit() ? getUnit().getAccountingUnit() : accountingUnit;
+	}
+
+	public boolean isUnitObserver(final User user) {
+		return getUnit().isUnitObserver(user);
+	}
+
+	public pt.ist.expenditureTrackingSystem.domain.organization.Person getAccountManager() {
+		final Unit unit = getUnit();
+		return unit == null ? null : unit.getAccountManager();
+	}
+
+	@Override
+	public boolean isConnectedToCurrentHost() {
+		return getMissionSystem() == VirtualHost.getVirtualHostForThread().getMissionSystem();
+	}
 
 }

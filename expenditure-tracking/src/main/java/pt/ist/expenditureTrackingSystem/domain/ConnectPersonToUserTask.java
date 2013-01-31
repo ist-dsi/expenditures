@@ -37,28 +37,28 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
  */
 public class ConnectPersonToUserTask extends ConnectPersonToUserTask_Base {
 
-    public ConnectPersonToUserTask() {
-	super();
-    }
-
-    @Override
-    public void executeTask() {
-	for (Person person : MyOrg.getInstance().getPeopleFromExpenditureTackingSystemSet()) {
-	    if (!person.hasUser()) {
-		String username = person.getUsername();
-		User user = User.findByUsername(username);
-		if (user == null) {
-		    user = new User(username);
-		}
-		person.setUser(user);
-	    }
+	public ConnectPersonToUserTask() {
+		super();
 	}
 
-    }
+	@Override
+	public void executeTask() {
+		for (Person person : MyOrg.getInstance().getPeopleFromExpenditureTackingSystemSet()) {
+			if (!person.hasUser()) {
+				String username = person.getUsername();
+				User user = User.findByUsername(username);
+				if (user == null) {
+					user = new User(username);
+				}
+				person.setUser(user);
+			}
+		}
 
-    @Override
-    public String getLocalizedName() {
-	return BundleUtil.getStringFromResourceBundle("resources/ExpenditureResources", "label.task.connectPersonToUserTask");
-    }
+	}
+
+	@Override
+	public String getLocalizedName() {
+		return BundleUtil.getStringFromResourceBundle("resources/ExpenditureResources", "label.task.connectPersonToUserTask");
+	}
 
 }

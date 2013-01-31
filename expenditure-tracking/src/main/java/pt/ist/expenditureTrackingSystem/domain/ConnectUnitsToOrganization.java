@@ -41,89 +41,89 @@ import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
  * 
  */
 public class ConnectUnitsToOrganization extends ConnectUnitsToOrganization_Base {
-    
-    public ConnectUnitsToOrganization() {
-        super();
-    }
 
-    @Override
-    public String getLocalizedName() {
-	return getClass().getName();
-    }
-
-    @Override
-    @Service
-    public void executeTask() {
-	for (final Unit unit : ExpenditureTrackingSystem.getInstance().getUnitsSet()) {
-	    connect(unit);
+	public ConnectUnitsToOrganization() {
+		super();
 	}
-    }
 
-    private void connect(final Unit unit) {
-	if (!unit.hasUnit()) {
-	    final module.organization.domain.Unit organizationUnit = findUnit(unit);
-	    if (organizationUnit != null) {
-		final PartyType partyType = getPartyType(unit);
-		organizationUnit.addPartyTypes(partyType);
-		unit.setUnit(organizationUnit);
-	    }
+	@Override
+	public String getLocalizedName() {
+		return getClass().getName();
 	}
-    }
 
-    private PartyType getPartyType(final Unit unit) {
-	if (unit instanceof SubProject) {
-	    return ExpenditureTrackingSystem.getInstance().getSubProjectPartyType();
-	} else if (unit instanceof Project) {
-	    return ExpenditureTrackingSystem.getInstance().getProjectPartyType();
-	} else if (unit instanceof CostCenter) {
-	    return ExpenditureTrackingSystem.getInstance().getCostCenterPartyType();
-	} else {
-	    return ExpenditureTrackingSystem.getInstance().getUnitPartyType();
+	@Override
+	@Service
+	public void executeTask() {
+		for (final Unit unit : ExpenditureTrackingSystem.getInstance().getUnitsSet()) {
+			connect(unit);
+		}
 	}
-    }
 
-    private module.organization.domain.Unit findUnit(final Unit unit) {
-	if (unit instanceof SubProject) {
-	    return null;
-	} else if (unit instanceof Project) {
-	    return null;
-	} else if (unit instanceof CostCenter) {
-	    final module.organization.domain.Unit organizationUnit = findUnit(unit, MyOrg.getInstance().getTopUnitsSet());
-	    if (organizationUnit != null) {
-		return organizationUnit;
-	    }
-	} else {
-	    final module.organization.domain.Unit organizationUnit = findUnit(unit, MyOrg.getInstance().getTopUnitsSet());
-	    if (organizationUnit != null) {
-		return organizationUnit;
-	    }
+	private void connect(final Unit unit) {
+		if (!unit.hasUnit()) {
+			final module.organization.domain.Unit organizationUnit = findUnit(unit);
+			if (organizationUnit != null) {
+				final PartyType partyType = getPartyType(unit);
+				organizationUnit.addPartyTypes(partyType);
+				unit.setUnit(organizationUnit);
+			}
+		}
 	}
-	final StringBuilder stringBuilder = new StringBuilder();
-	stringBuilder.append("Unable to find org unit for: ");
-	stringBuilder.append(unit.getClass().getSimpleName());
-	stringBuilder.append(" ");
-	stringBuilder.append(unit.getPresentationName());
-	stringBuilder.append(".");
-	logInfo(stringBuilder.toString());
-	return null;
-    }
 
-    private module.organization.domain.Unit findUnit(final Unit unit, final Collection<module.organization.domain.Unit> units) {
-	for (final module.organization.domain.Unit organizationUnit : units) {
-	    if (match(organizationUnit.getPartyName(), unit.getName())) {
-		logInfo("Matched: " + unit.getPresentationName() + " with: " + organizationUnit.getPresentationName());
-		return organizationUnit;
-	    }
-	    final module.organization.domain.Unit result = findUnit(unit, organizationUnit.getChildUnits());
-	    if (result != null) {
-		return result;
-	    }
+	private PartyType getPartyType(final Unit unit) {
+		if (unit instanceof SubProject) {
+			return ExpenditureTrackingSystem.getInstance().getSubProjectPartyType();
+		} else if (unit instanceof Project) {
+			return ExpenditureTrackingSystem.getInstance().getProjectPartyType();
+		} else if (unit instanceof CostCenter) {
+			return ExpenditureTrackingSystem.getInstance().getCostCenterPartyType();
+		} else {
+			return ExpenditureTrackingSystem.getInstance().getUnitPartyType();
+		}
 	}
-	return null;
-    }
 
-    private boolean match(final MultiLanguageString multiLanguageString, final String string) {
-	return multiLanguageString.getContent().equalsIgnoreCase(string);
-    }
-    
+	private module.organization.domain.Unit findUnit(final Unit unit) {
+		if (unit instanceof SubProject) {
+			return null;
+		} else if (unit instanceof Project) {
+			return null;
+		} else if (unit instanceof CostCenter) {
+			final module.organization.domain.Unit organizationUnit = findUnit(unit, MyOrg.getInstance().getTopUnitsSet());
+			if (organizationUnit != null) {
+				return organizationUnit;
+			}
+		} else {
+			final module.organization.domain.Unit organizationUnit = findUnit(unit, MyOrg.getInstance().getTopUnitsSet());
+			if (organizationUnit != null) {
+				return organizationUnit;
+			}
+		}
+		final StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append("Unable to find org unit for: ");
+		stringBuilder.append(unit.getClass().getSimpleName());
+		stringBuilder.append(" ");
+		stringBuilder.append(unit.getPresentationName());
+		stringBuilder.append(".");
+		logInfo(stringBuilder.toString());
+		return null;
+	}
+
+	private module.organization.domain.Unit findUnit(final Unit unit, final Collection<module.organization.domain.Unit> units) {
+		for (final module.organization.domain.Unit organizationUnit : units) {
+			if (match(organizationUnit.getPartyName(), unit.getName())) {
+				logInfo("Matched: " + unit.getPresentationName() + " with: " + organizationUnit.getPresentationName());
+				return organizationUnit;
+			}
+			final module.organization.domain.Unit result = findUnit(unit, organizationUnit.getChildUnits());
+			if (result != null) {
+				return result;
+			}
+		}
+		return null;
+	}
+
+	private boolean match(final MultiLanguageString multiLanguageString, final String string) {
+		return multiLanguageString.getContent().equalsIgnoreCase(string);
+	}
+
 }

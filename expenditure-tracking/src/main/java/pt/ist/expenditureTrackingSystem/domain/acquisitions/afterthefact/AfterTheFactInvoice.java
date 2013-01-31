@@ -43,50 +43,50 @@ import pt.ist.fenixWebFramework.services.Service;
  */
 public class AfterTheFactInvoice extends AfterTheFactInvoice_Base {
 
-    static {
-	FileUploadBeanResolver.registerBeanForProcessFile(AfterTheFactInvoice.class, AfterTheFactInvoiceBean.class);
-    }
-
-    public AfterTheFactInvoice(String displayName, String filename, byte[] content) {
-	super();
-	init(displayName, filename, content);
-    }
-
-    public AfterTheFactInvoice(final AfterTheFactAcquisitionProcess process) {
-	super();
-	process.addFiles(this);
-    }
-
-    public AfterTheFactInvoice() {
-	super();
-    }
-
-    @Override
-    public ProcessDocumentMetaDataResolver<ProcessFile> getMetaDataResolver() {
-	//TODO confirm that we have no extra fields to use
-	return new Invoice.InvoiceMetadaResolver();
-    }
-
-    @Override
-    public void fillInNonDefaultFields(WorkflowFileUploadBean bean) {
-	AfterTheFactInvoiceBean invoiceBean = (AfterTheFactInvoiceBean) bean;
-	setInvoiceDate(invoiceBean.getInvoiceDate());
-	setInvoiceNumber(invoiceBean.getInvoiceNumber());
-    }
-
-    @Override
-    public void validateUpload(WorkflowProcess workflowProcess) {
-	AfterTheFactAcquisitionProcess process = (AfterTheFactAcquisitionProcess) workflowProcess;
-	if (process.getInvoice() != null) {
-	    throw new ProcessFileValidationException("resources/AcquisitionResources",
-		    "error.message.cannotHaveMoreThanOneInvoice");
+	static {
+		FileUploadBeanResolver.registerBeanForProcessFile(AfterTheFactInvoice.class, AfterTheFactInvoiceBean.class);
 	}
-    }
 
-    @Override
-    @Service
-    public void delete() {
-	removeProcess();
-	super.delete();
-    }
+	public AfterTheFactInvoice(String displayName, String filename, byte[] content) {
+		super();
+		init(displayName, filename, content);
+	}
+
+	public AfterTheFactInvoice(final AfterTheFactAcquisitionProcess process) {
+		super();
+		process.addFiles(this);
+	}
+
+	public AfterTheFactInvoice() {
+		super();
+	}
+
+	@Override
+	public ProcessDocumentMetaDataResolver<ProcessFile> getMetaDataResolver() {
+		//TODO confirm that we have no extra fields to use
+		return new Invoice.InvoiceMetadaResolver();
+	}
+
+	@Override
+	public void fillInNonDefaultFields(WorkflowFileUploadBean bean) {
+		AfterTheFactInvoiceBean invoiceBean = (AfterTheFactInvoiceBean) bean;
+		setInvoiceDate(invoiceBean.getInvoiceDate());
+		setInvoiceNumber(invoiceBean.getInvoiceNumber());
+	}
+
+	@Override
+	public void validateUpload(WorkflowProcess workflowProcess) {
+		AfterTheFactAcquisitionProcess process = (AfterTheFactAcquisitionProcess) workflowProcess;
+		if (process.getInvoice() != null) {
+			throw new ProcessFileValidationException("resources/AcquisitionResources",
+					"error.message.cannotHaveMoreThanOneInvoice");
+		}
+	}
+
+	@Override
+	@Service
+	public void delete() {
+		removeProcess();
+		super.delete();
+	}
 }

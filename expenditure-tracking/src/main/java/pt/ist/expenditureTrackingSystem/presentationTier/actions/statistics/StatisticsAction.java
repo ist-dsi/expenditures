@@ -46,8 +46,6 @@ import javax.servlet.http.HttpServletResponse;
 import module.workflow.domain.ActivityLog;
 import module.workflow.domain.ProcessFile;
 import module.workflow.domain.WorkflowLog;
-import pt.ist.bennu.core.domain.util.Money;
-import pt.ist.bennu.core.presentationTier.actions.ContextBaseAction;
 
 import org.apache.commons.collections.comparators.ComparatorChain;
 import org.apache.log4j.Logger;
@@ -57,6 +55,8 @@ import org.apache.struts.action.ActionMapping;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
+import pt.ist.bennu.core.domain.util.Money;
+import pt.ist.bennu.core.presentationTier.actions.ContextBaseAction;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
@@ -108,692 +108,694 @@ import pt.utl.ist.fenix.tools.util.excel.Spreadsheet.Row;
  */
 public class StatisticsAction extends ContextBaseAction {
 
-    private Logger logger = Logger.getLogger(StatisticsAction.class);
+	private Logger logger = Logger.getLogger(StatisticsAction.class);
 
-    public ActionForward showStatistics(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
-	return forward(request, "/statistics/showStatistics.jsp");
-    }
-
-    public ActionForward showSimplifiedProcessStatistics(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-	YearBean yearBean = getRenderedObject();
-	if (yearBean == null) {
-	    yearBean = new YearBean();
+	public ActionForward showStatistics(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+			final HttpServletResponse response) {
+		return forward(request, "/statistics/showStatistics.jsp");
 	}
-	request.setAttribute("yearBean", yearBean);
 
-	final SimplifiedProcessStatistics simplifiedProcessStatistics = SimplifiedProcessStatistics.create(yearBean.getYear());
-	request.setAttribute("simplifiedProcessStatistics", simplifiedProcessStatistics);
+	public ActionForward showSimplifiedProcessStatistics(final ActionMapping mapping, final ActionForm form,
+			final HttpServletRequest request, final HttpServletResponse response) {
+		YearBean yearBean = getRenderedObject();
+		if (yearBean == null) {
+			yearBean = new YearBean();
+		}
+		request.setAttribute("yearBean", yearBean);
 
-	return forward(request, "/statistics/showStatisticsSimplifiedProcess.jsp");
-    }
+		final SimplifiedProcessStatistics simplifiedProcessStatistics = SimplifiedProcessStatistics.create(yearBean.getYear());
+		request.setAttribute("simplifiedProcessStatistics", simplifiedProcessStatistics);
 
-    protected ActionForward generateChart(final HttpServletResponse response, final ChartData chartData, final long t1) {
-	OutputStream outputStream = null;
-	try {
-	    final byte[] image = ChartGenerator.createBarChartImage(chartData);
-	    long t2 = System.currentTimeMillis();
-	    System.out.println(chartData.getTitle() + ": " + (t2 - t1) + "ms");
-	    outputStream = response.getOutputStream();
-	    response.setContentType("image/jpeg");
-	    outputStream.write(image);
-	    outputStream.flush();
-	} catch (final FileNotFoundException e) {
-	    e.printStackTrace();
-	    throw new Error(e);
-	} catch (final RuntimeException e) {
-	    e.printStackTrace();
-	    throw new Error(e);
-	} catch (final IOException e) {
-	    e.printStackTrace();
-	    throw new Error(e);
-	} finally {
-	    if (outputStream != null) {
+		return forward(request, "/statistics/showStatisticsSimplifiedProcess.jsp");
+	}
+
+	protected ActionForward generateChart(final HttpServletResponse response, final ChartData chartData, final long t1) {
+		OutputStream outputStream = null;
 		try {
-		    outputStream.close();
+			final byte[] image = ChartGenerator.createBarChartImage(chartData);
+			long t2 = System.currentTimeMillis();
+			System.out.println(chartData.getTitle() + ": " + (t2 - t1) + "ms");
+			outputStream = response.getOutputStream();
+			response.setContentType("image/jpeg");
+			outputStream.write(image);
+			outputStream.flush();
+		} catch (final FileNotFoundException e) {
+			e.printStackTrace();
+			throw new Error(e);
+		} catch (final RuntimeException e) {
+			e.printStackTrace();
+			throw new Error(e);
 		} catch (final IOException e) {
-		    e.printStackTrace();
-		    throw new Error(e);
+			e.printStackTrace();
+			throw new Error(e);
+		} finally {
+			if (outputStream != null) {
+				try {
+					outputStream.close();
+				} catch (final IOException e) {
+					e.printStackTrace();
+					throw new Error(e);
+				}
+				try {
+					response.flushBuffer();
+				} catch (IOException e) {
+					e.printStackTrace();
+					throw new Error(e);
+				}
+			}
 		}
-		try {
-		    response.flushBuffer();
-		} catch (IOException e) {
-		    e.printStackTrace();
-		    throw new Error(e);
+
+		return null;
+	}
+
+	public ActionForward simplifiedProcessStatisticsStateChart(final ActionMapping mapping, final ActionForm form,
+			final HttpServletRequest request, final HttpServletResponse response) {
+		final String year = request.getParameter("year");
+
+		long t1 = System.currentTimeMillis();
+		final PaymentProcessYear paymentProcessYear = PaymentProcessYear.getPaymentProcessYearByYear(Integer.valueOf(year));
+		final SimplifiedProcedureProcessStateCountChartData chartData =
+				new SimplifiedProcedureProcessStateCountChartData(paymentProcessYear);
+		chartData.calculateData();
+		return generateChart(response, chartData, t1);
+	}
+
+	public ActionForward simplifiedProcessStatisticsStateTimeChart(final ActionMapping mapping, final ActionForm form,
+			final HttpServletRequest request, final HttpServletResponse response) {
+		final String year = request.getParameter("year");
+
+		long t1 = System.currentTimeMillis();
+		final PaymentProcessYear paymentProcessYear = PaymentProcessYear.getPaymentProcessYearByYear(Integer.valueOf(year));
+		final SimplifiedProcedureProcessStateTimeChartData chartData =
+				new SimplifiedProcedureProcessStateTimeChartData(paymentProcessYear);
+		chartData.calculateData();
+		return generateChart(response, chartData, t1);
+	}
+
+	public ActionForward simplifiedProcessStatisticsStateTimeAverageChart(final ActionMapping mapping, final ActionForm form,
+			final HttpServletRequest request, final HttpServletResponse response) {
+		final String year = request.getParameter("year");
+
+		long t1 = System.currentTimeMillis();
+		final PaymentProcessYear paymentProcessYear = PaymentProcessYear.getPaymentProcessYearByYear(Integer.valueOf(year));
+		final SimplifiedProcedureProcessStateTimeAverageChartData chartData =
+				new SimplifiedProcedureProcessStateTimeAverageChartData(paymentProcessYear);
+		chartData.calculateData();
+		return generateChart(response, chartData, t1);
+	}
+
+	public ActionForward simplifiedProcessStatisticsActivityTimeChart(final ActionMapping mapping, final ActionForm form,
+			final HttpServletRequest request, final HttpServletResponse response) {
+		final String year = request.getParameter("year");
+
+		long t1 = System.currentTimeMillis();
+		final PaymentProcessYear paymentProcessYear = PaymentProcessYear.getPaymentProcessYearByYear(Integer.valueOf(year));
+		final SimplifiedProcedureProcessActivityTimeChartData chartData =
+				new SimplifiedProcedureProcessActivityTimeChartData(paymentProcessYear);
+		chartData.calculateData();
+		return generateChart(response, chartData, t1);
+	}
+
+	public ActionForward simplifiedProcessStatistics(final ActionMapping mapping, final ActionForm form,
+			final HttpServletRequest request, final HttpServletResponse response) throws IOException {
+		final Integer year = Integer.valueOf((String) request.getParameter("year"));
+		return streamSpreadsheet(response, "simplifiedProcedure", simplifiedProcessStatistics(year), year);
+	}
+
+	private Spreadsheet simplifiedProcessStatistics(final Integer year) {
+		final PaymentProcessYear paymentProcessYear = PaymentProcessYear.getPaymentProcessYearByYear(Integer.valueOf(year));
+		final SimplifiedProcedureProcessStateCountChartData countData =
+				new SimplifiedProcedureProcessStateCountChartData(paymentProcessYear);
+		countData.calculateData();
+		final SimplifiedProcedureProcessStateTimeChartData medianData =
+				new SimplifiedProcedureProcessStateTimeChartData(paymentProcessYear);
+		medianData.calculateData();
+		final SimplifiedProcedureProcessStateTimeAverageChartData averageData =
+				new SimplifiedProcedureProcessStateTimeAverageChartData(paymentProcessYear);
+		averageData.calculateData();
+		final SortedMap<Object, BigDecimal> sumMap = (SortedMap) countData.getResults(Operation.SUM);
+		final SortedMap<Object, BigDecimal> averageMap = (SortedMap) averageData.getResults(Operation.AVERAGE);
+		final SortedMap<Object, BigDecimal> medianMap = (SortedMap) medianData.getResults(Operation.MEDIAN);
+		final SortedMap<Object, BigDecimal> minsMap = (SortedMap) medianData.getMinResults();
+		final SortedMap<Object, BigDecimal> maxsMap = (SortedMap) medianData.getMaxResults();
+		return generateSpreadSheet(sumMap, medianMap, averageMap, minsMap, maxsMap);
+	}
+
+	public ActionForward refundProcessStatistics(final ActionMapping mapping, final ActionForm form,
+			final HttpServletRequest request, final HttpServletResponse response) throws IOException {
+		final Integer year = Integer.valueOf((String) request.getParameter("year"));
+		return streamSpreadsheet(response, "refund", refundProcessStatistics(year), year);
+	}
+
+	private Spreadsheet refundProcessStatistics(final Integer year) {
+		final PaymentProcessYear paymentProcessYear = PaymentProcessYear.getPaymentProcessYearByYear(Integer.valueOf(year));
+		final RefundProcessStateCountChartData countData = new RefundProcessStateCountChartData(paymentProcessYear);
+		countData.calculateData();
+		final RefundProcessStateTimeChartData medianData = new RefundProcessStateTimeChartData(paymentProcessYear);
+		medianData.calculateData();
+		final RefundProcessStateTimeAverageChartData averageData = new RefundProcessStateTimeAverageChartData(paymentProcessYear);
+		averageData.calculateData();
+		final SortedMap<Object, BigDecimal> sumMap = (SortedMap) countData.getResults(Operation.SUM);
+		final SortedMap<Object, BigDecimal> averageMap = (SortedMap) averageData.getResults(Operation.AVERAGE);
+		final SortedMap<Object, BigDecimal> medianMap = (SortedMap) medianData.getResults(Operation.MEDIAN);
+		final SortedMap<Object, BigDecimal> minsMap = (SortedMap) medianData.getMinResults();
+		final SortedMap<Object, BigDecimal> maxsMap = (SortedMap) medianData.getMaxResults();
+		return generateSpreadSheet(sumMap, medianMap, averageMap, minsMap, maxsMap);
+	}
+
+	private Spreadsheet generateSpreadSheet(final SortedMap<Object, BigDecimal> sumMap,
+			final SortedMap<Object, BigDecimal> medianMap, final SortedMap<Object, BigDecimal> averageMap,
+			final SortedMap<Object, BigDecimal> minsMap, final SortedMap<Object, BigDecimal> maxsMap) {
+		final Spreadsheet spreadsheet = new Spreadsheet("Estatísticas");
+		spreadsheet.setHeader("Estado");
+		spreadsheet.setHeader("Soma");
+		spreadsheet.setHeader("Mediana Tempo (em dias)");
+		spreadsheet.setHeader("Média Tempo (em dias)");
+		spreadsheet.setHeader("Tempo Mínimo (em dias)");
+		spreadsheet.setHeader("Tempo Máximo (em dias)");
+		final SortedSet<Object> types = new TreeSet<Object>();
+		types.addAll(sumMap.keySet());
+		types.addAll(medianMap.keySet());
+		types.addAll(averageMap.keySet());
+		BigDecimal DAYS_CONST = new BigDecimal(1000 * 3600 * 24);
+		for (final Object type : types) {
+			final BigDecimal sum = sumMap.get(type);
+			final BigDecimal median = medianMap.get(type);
+			final BigDecimal average = averageMap.get(type);
+			final BigDecimal min = minsMap.get(type);
+			final BigDecimal max = maxsMap.get(type);
+
+			final Row row = spreadsheet.addRow();
+			row.setCell(((IPresentableEnum) type).getLocalizedName());
+			row.setCell(sum == null ? "0" : sum.toString());
+			row.setCell(median == null ? "" : median.divide(DAYS_CONST, 2, BigDecimal.ROUND_HALF_UP).toString());
+			row.setCell(average == null ? "" : average.divide(DAYS_CONST, 2, BigDecimal.ROUND_HALF_UP).toString());
+			row.setCell(min == null ? "" : min.divide(DAYS_CONST, 2, BigDecimal.ROUND_HALF_UP).toString());
+			row.setCell(max == null ? "" : max.divide(DAYS_CONST, 2, BigDecimal.ROUND_HALF_UP).toString());
 		}
-	    }
+		return spreadsheet;
 	}
 
-	return null;
-    }
+	public ActionForward showRefundProcessStatistics(final ActionMapping mapping, final ActionForm form,
+			final HttpServletRequest request, final HttpServletResponse response) {
+		YearBean yearBean = getRenderedObject();
+		if (yearBean == null) {
+			yearBean = new YearBean();
+		}
+		request.setAttribute("yearBean", yearBean);
 
-    public ActionForward simplifiedProcessStatisticsStateChart(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-	final String year = request.getParameter("year");
+		final RefundProcessStatistics refundProcessStatistics = RefundProcessStatistics.create(yearBean.getYear());
+		request.setAttribute("refundProcessStatistics", refundProcessStatistics);
 
-	long t1 = System.currentTimeMillis();
-	final PaymentProcessYear paymentProcessYear = PaymentProcessYear.getPaymentProcessYearByYear(Integer.valueOf(year));
-	final SimplifiedProcedureProcessStateCountChartData chartData = new SimplifiedProcedureProcessStateCountChartData(
-		paymentProcessYear);
-	chartData.calculateData();
-	return generateChart(response, chartData, t1);
-    }
-
-    public ActionForward simplifiedProcessStatisticsStateTimeChart(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-	final String year = request.getParameter("year");
-
-	long t1 = System.currentTimeMillis();
-	final PaymentProcessYear paymentProcessYear = PaymentProcessYear.getPaymentProcessYearByYear(Integer.valueOf(year));
-	final SimplifiedProcedureProcessStateTimeChartData chartData = new SimplifiedProcedureProcessStateTimeChartData(
-		paymentProcessYear);
-	chartData.calculateData();
-	return generateChart(response, chartData, t1);
-    }
-
-    public ActionForward simplifiedProcessStatisticsStateTimeAverageChart(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-	final String year = request.getParameter("year");
-
-	long t1 = System.currentTimeMillis();
-	final PaymentProcessYear paymentProcessYear = PaymentProcessYear.getPaymentProcessYearByYear(Integer.valueOf(year));
-	final SimplifiedProcedureProcessStateTimeAverageChartData chartData = new SimplifiedProcedureProcessStateTimeAverageChartData(
-		paymentProcessYear);
-	chartData.calculateData();
-	return generateChart(response, chartData, t1);
-    }
-
-    public ActionForward simplifiedProcessStatisticsActivityTimeChart(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-	final String year = request.getParameter("year");
-
-	long t1 = System.currentTimeMillis();
-	final PaymentProcessYear paymentProcessYear = PaymentProcessYear.getPaymentProcessYearByYear(Integer.valueOf(year));
-	final SimplifiedProcedureProcessActivityTimeChartData chartData = new SimplifiedProcedureProcessActivityTimeChartData(
-		paymentProcessYear);
-	chartData.calculateData();
-	return generateChart(response, chartData, t1);
-    }
-
-    public ActionForward simplifiedProcessStatistics(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws IOException {
-	final Integer year = Integer.valueOf((String) request.getParameter("year"));
-	return streamSpreadsheet(response, "simplifiedProcedure", simplifiedProcessStatistics(year), year);
-    }
-
-    private Spreadsheet simplifiedProcessStatistics(final Integer year) {
-	final PaymentProcessYear paymentProcessYear = PaymentProcessYear.getPaymentProcessYearByYear(Integer.valueOf(year));
-	final SimplifiedProcedureProcessStateCountChartData countData = new SimplifiedProcedureProcessStateCountChartData(
-		paymentProcessYear);
-	countData.calculateData();
-	final SimplifiedProcedureProcessStateTimeChartData medianData = new SimplifiedProcedureProcessStateTimeChartData(
-		paymentProcessYear);
-	medianData.calculateData();
-	final SimplifiedProcedureProcessStateTimeAverageChartData averageData = new SimplifiedProcedureProcessStateTimeAverageChartData(
-		paymentProcessYear);
-	averageData.calculateData();
-	final SortedMap<Object, BigDecimal> sumMap = (SortedMap) countData.getResults(Operation.SUM);
-	final SortedMap<Object, BigDecimal> averageMap = (SortedMap) averageData.getResults(Operation.AVERAGE);
-	final SortedMap<Object, BigDecimal> medianMap = (SortedMap) medianData.getResults(Operation.MEDIAN);
-	final SortedMap<Object, BigDecimal> minsMap = (SortedMap) medianData.getMinResults();
-	final SortedMap<Object, BigDecimal> maxsMap = (SortedMap) medianData.getMaxResults();
-	return generateSpreadSheet(sumMap, medianMap, averageMap, minsMap, maxsMap);
-    }
-
-    public ActionForward refundProcessStatistics(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws IOException {
-	final Integer year = Integer.valueOf((String) request.getParameter("year"));
-	return streamSpreadsheet(response, "refund", refundProcessStatistics(year), year);
-    }
-
-    private Spreadsheet refundProcessStatistics(final Integer year) {
-	final PaymentProcessYear paymentProcessYear = PaymentProcessYear.getPaymentProcessYearByYear(Integer.valueOf(year));
-	final RefundProcessStateCountChartData countData = new RefundProcessStateCountChartData(paymentProcessYear);
-	countData.calculateData();
-	final RefundProcessStateTimeChartData medianData = new RefundProcessStateTimeChartData(paymentProcessYear);
-	medianData.calculateData();
-	final RefundProcessStateTimeAverageChartData averageData = new RefundProcessStateTimeAverageChartData(paymentProcessYear);
-	averageData.calculateData();
-	final SortedMap<Object, BigDecimal> sumMap = (SortedMap) countData.getResults(Operation.SUM);
-	final SortedMap<Object, BigDecimal> averageMap = (SortedMap) averageData.getResults(Operation.AVERAGE);
-	final SortedMap<Object, BigDecimal> medianMap = (SortedMap) medianData.getResults(Operation.MEDIAN);
-	final SortedMap<Object, BigDecimal> minsMap = (SortedMap) medianData.getMinResults();
-	final SortedMap<Object, BigDecimal> maxsMap = (SortedMap) medianData.getMaxResults();
-	return generateSpreadSheet(sumMap, medianMap, averageMap, minsMap, maxsMap);
-    }
-
-    private Spreadsheet generateSpreadSheet(final SortedMap<Object, BigDecimal> sumMap,
-	    final SortedMap<Object, BigDecimal> medianMap, final SortedMap<Object, BigDecimal> averageMap,
-	    final SortedMap<Object, BigDecimal> minsMap, final SortedMap<Object, BigDecimal> maxsMap) {
-	final Spreadsheet spreadsheet = new Spreadsheet("Estatísticas");
-	spreadsheet.setHeader("Estado");
-	spreadsheet.setHeader("Soma");
-	spreadsheet.setHeader("Mediana Tempo (em dias)");
-	spreadsheet.setHeader("Média Tempo (em dias)");
-	spreadsheet.setHeader("Tempo Mínimo (em dias)");
-	spreadsheet.setHeader("Tempo Máximo (em dias)");
-	final SortedSet<Object> types = new TreeSet<Object>();
-	types.addAll(sumMap.keySet());
-	types.addAll(medianMap.keySet());
-	types.addAll(averageMap.keySet());
-	BigDecimal DAYS_CONST = new BigDecimal(1000 * 3600 * 24);
-	for (final Object type : types) {
-	    final BigDecimal sum = sumMap.get(type);
-	    final BigDecimal median = medianMap.get(type);
-	    final BigDecimal average = averageMap.get(type);
-	    final BigDecimal min = minsMap.get(type);
-	    final BigDecimal max = maxsMap.get(type);
-
-	    final Row row = spreadsheet.addRow();
-	    row.setCell(((IPresentableEnum) type).getLocalizedName());
-	    row.setCell(sum == null ? "0" : sum.toString());
-	    row.setCell(median == null ? "" : median.divide(DAYS_CONST, 2, BigDecimal.ROUND_HALF_UP).toString());
-	    row.setCell(average == null ? "" : average.divide(DAYS_CONST, 2, BigDecimal.ROUND_HALF_UP).toString());
-	    row.setCell(min == null ? "" : min.divide(DAYS_CONST, 2, BigDecimal.ROUND_HALF_UP).toString());
-	    row.setCell(max == null ? "" : max.divide(DAYS_CONST, 2, BigDecimal.ROUND_HALF_UP).toString());
+		return forward(request, "/statistics/showStatisticsRefundProcess.jsp");
 	}
-	return spreadsheet;
-    }
 
-    public ActionForward showRefundProcessStatistics(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-	YearBean yearBean = getRenderedObject();
-	if (yearBean == null) {
-	    yearBean = new YearBean();
+	public ActionForward refundProcessStatisticsChart(final ActionMapping mapping, final ActionForm form,
+			final HttpServletRequest request, final HttpServletResponse response) {
+		final String year = request.getParameter("year");
+
+		long t1 = System.currentTimeMillis();
+		final PaymentProcessYear paymentProcessYear = PaymentProcessYear.getPaymentProcessYearByYear(Integer.valueOf(year));
+		final RefundProcessStateCountChartData chartData = new RefundProcessStateCountChartData(paymentProcessYear);
+		chartData.calculateData();
+		return generateChart(response, chartData, t1);
 	}
-	request.setAttribute("yearBean", yearBean);
 
-	final RefundProcessStatistics refundProcessStatistics = RefundProcessStatistics.create(yearBean.getYear());
-	request.setAttribute("refundProcessStatistics", refundProcessStatistics);
+	public ActionForward refundProcessStatisticsStateTimeChart(final ActionMapping mapping, final ActionForm form,
+			final HttpServletRequest request, final HttpServletResponse response) {
+		final String year = request.getParameter("year");
 
-	return forward(request, "/statistics/showStatisticsRefundProcess.jsp");
-    }
+		long t1 = System.currentTimeMillis();
+		final PaymentProcessYear paymentProcessYear = PaymentProcessYear.getPaymentProcessYearByYear(Integer.valueOf(year));
+		final RefundProcessStateTimeChartData chartData = new RefundProcessStateTimeChartData(paymentProcessYear);
+		chartData.calculateData();
+		return generateChart(response, chartData, t1);
+	}
 
-    public ActionForward refundProcessStatisticsChart(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-	final String year = request.getParameter("year");
+	public ActionForward refundProcessStatisticsStateTimeAverageChart(final ActionMapping mapping, final ActionForm form,
+			final HttpServletRequest request, final HttpServletResponse response) {
+		final String year = request.getParameter("year");
 
-	long t1 = System.currentTimeMillis();
-	final PaymentProcessYear paymentProcessYear = PaymentProcessYear.getPaymentProcessYearByYear(Integer.valueOf(year));
-	final RefundProcessStateCountChartData chartData = new RefundProcessStateCountChartData(paymentProcessYear);
-	chartData.calculateData();
-	return generateChart(response, chartData, t1);
-    }
+		long t1 = System.currentTimeMillis();
+		final PaymentProcessYear paymentProcessYear = PaymentProcessYear.getPaymentProcessYearByYear(Integer.valueOf(year));
+		final RefundProcessStateTimeAverageChartData chartData = new RefundProcessStateTimeAverageChartData(paymentProcessYear);
+		chartData.calculateData();
+		return generateChart(response, chartData, t1);
+	}
 
-    public ActionForward refundProcessStatisticsStateTimeChart(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-	final String year = request.getParameter("year");
+	public ActionForward refundProcessStatisticsActivityTimeChartForProcess(final ActionMapping mapping, final ActionForm form,
+			final HttpServletRequest request, final HttpServletResponse response) {
+		final RefundProcess refundProcess = getDomainObject(request, "processId");
 
-	long t1 = System.currentTimeMillis();
-	final PaymentProcessYear paymentProcessYear = PaymentProcessYear.getPaymentProcessYearByYear(Integer.valueOf(year));
-	final RefundProcessStateTimeChartData chartData = new RefundProcessStateTimeChartData(paymentProcessYear);
-	chartData.calculateData();
-	return generateChart(response, chartData, t1);
-    }
+		final RefundProcessActivityLogStatistics refundProcessActivityLogStatistics =
+				RefundProcessActivityLogStatistics.create(refundProcess);
 
-    public ActionForward refundProcessStatisticsStateTimeAverageChart(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-	final String year = request.getParameter("year");
-
-	long t1 = System.currentTimeMillis();
-	final PaymentProcessYear paymentProcessYear = PaymentProcessYear.getPaymentProcessYearByYear(Integer.valueOf(year));
-	final RefundProcessStateTimeAverageChartData chartData = new RefundProcessStateTimeAverageChartData(paymentProcessYear);
-	chartData.calculateData();
-	return generateChart(response, chartData, t1);
-    }
-
-    public ActionForward refundProcessStatisticsActivityTimeChartForProcess(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-	final RefundProcess refundProcess = getDomainObject(request, "processId");
-
-	final RefundProcessActivityLogStatistics refundProcessActivityLogStatistics = RefundProcessActivityLogStatistics
-		.create(refundProcess);
-
-	OutputStream outputStream = null;
-	try {
-	    final byte[] image = ChartGenerator.refundProcessStatisticsActivityTimeImage(refundProcessActivityLogStatistics);
-	    outputStream = response.getOutputStream();
-	    response.setContentType("image/jpeg");
-	    outputStream.write(image);
-	    outputStream.flush();
-	} catch (final FileNotFoundException e) {
-	    e.printStackTrace();
-	    throw new Error(e);
-	} catch (final RuntimeException e) {
-	    e.printStackTrace();
-	    throw new Error(e);
-	} catch (final IOException e) {
-	    e.printStackTrace();
-	    throw new Error(e);
-	} finally {
-	    if (outputStream != null) {
+		OutputStream outputStream = null;
 		try {
-		    outputStream.close();
+			final byte[] image = ChartGenerator.refundProcessStatisticsActivityTimeImage(refundProcessActivityLogStatistics);
+			outputStream = response.getOutputStream();
+			response.setContentType("image/jpeg");
+			outputStream.write(image);
+			outputStream.flush();
+		} catch (final FileNotFoundException e) {
+			e.printStackTrace();
+			throw new Error(e);
+		} catch (final RuntimeException e) {
+			e.printStackTrace();
+			throw new Error(e);
 		} catch (final IOException e) {
-		    e.printStackTrace();
-		    throw new Error(e);
+			e.printStackTrace();
+			throw new Error(e);
+		} finally {
+			if (outputStream != null) {
+				try {
+					outputStream.close();
+				} catch (final IOException e) {
+					e.printStackTrace();
+					throw new Error(e);
+				}
+				try {
+					response.flushBuffer();
+				} catch (IOException e) {
+					e.printStackTrace();
+					throw new Error(e);
+				}
+			}
 		}
-		try {
-		    response.flushBuffer();
-		} catch (IOException e) {
-		    e.printStackTrace();
-		    throw new Error(e);
+
+		return null;
+	}
+
+	public ActionForward showStatisticsReports(final ActionMapping mapping, final ActionForm form,
+			final HttpServletRequest request, final HttpServletResponse response) {
+		YearBean yearBean = getRenderedObject();
+		if (yearBean == null) {
+			yearBean = new YearBean();
 		}
-	    }
+		request.setAttribute("yearBean", yearBean);
+
+		return forward(request, "/statistics/showStatisticsReports.jsp");
 	}
 
-	return null;
-    }
+	public ActionForward downloadStatisticsByCPV(final ActionMapping mapping, final ActionForm form,
+			final HttpServletRequest request, final HttpServletResponse response) throws IOException {
 
-    public ActionForward showStatisticsReports(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-	YearBean yearBean = getRenderedObject();
-	if (yearBean == null) {
-	    yearBean = new YearBean();
-	}
-	request.setAttribute("yearBean", yearBean);
-
-	return forward(request, "/statistics/showStatisticsReports.jsp");
-    }
-
-    public ActionForward downloadStatisticsByCPV(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws IOException {
-
-	final Integer year = Integer.valueOf((String) getAttribute(request, "year"));
-	return streamSpreadsheet(response, "cvp", createStatisticsByCPV(year), year);
-    }
-
-    private Spreadsheet createStatisticsByCPV(final Integer year) {
-	final Spreadsheet spreadsheet = new Spreadsheet("CPV " + year);
-	spreadsheet.setHeader("CPV");
-	spreadsheet.setHeader("CPV desc.");
-	spreadsheet.setHeader("Montante");
-	for (final CPVReference reference : getMyOrg().getCPVReferencesSet()) {
-	    final Money money = reference.getTotalAmountAllocated(year);
-	    if (!money.isZero()) {
-		final Row row = spreadsheet.addRow();
-		row.setCell(reference.getCode());
-		row.setCell(reference.getDescription());
-		row.setCell(money.toFormatStringWithoutCurrency());
-	    }
-	}
-	return spreadsheet;
-    }
-
-    public ActionForward downloadTotalValuesStatistics(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws IOException {
-
-	final Integer year = Integer.valueOf((String) getAttribute(request, "year"));
-	return streamSpreadsheet(response, "values", createTotalValuesStatistics(year), year);
-    }
-
-    private Spreadsheet createTotalValuesStatistics(final Integer year) {
-	final Spreadsheet spreadsheet = new Spreadsheet("Valores por Tipo - " + year);
-	spreadsheet.setHeader("Tipo");
-	spreadsheet.setHeader("Montante");
-
-	final Map<AcquisitionProcessStateType, Money> values = SimplifiedProcessTotalValueStatistics.create(year)
-		.getTotalValuesOfProcessesByAcquisitionProcessStateType();
-	for (final Entry<AcquisitionProcessStateType, Money> valueEntry : values.entrySet()) {
-	    final Row row = spreadsheet.addRow();
-	    row.setCell(valueEntry.getKey().getLocalizedName());
-	    row.setCell(valueEntry.getValue().toFormatStringWithoutCurrency());
+		final Integer year = Integer.valueOf((String) getAttribute(request, "year"));
+		return streamSpreadsheet(response, "cvp", createStatisticsByCPV(year), year);
 	}
 
-	return spreadsheet;
-    }
-
-    public ActionForward downloadRefundTotalValuesStatistics(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws IOException {
-
-	final Integer year = Integer.valueOf((String) getAttribute(request, "year"));
-	return streamSpreadsheet(response, "refundValues", createRefundTotalValuesStatistics(year), year);
-    }
-
-    private Spreadsheet createRefundTotalValuesStatistics(final Integer year) {
-	final Spreadsheet spreadsheet = new Spreadsheet("Valores por Tipo - " + year);
-	spreadsheet.setHeader("Tipo");
-	spreadsheet.setHeader("Montante");
-
-	final Map<RefundProcessStateType, Money> values = RefundProcessTotalValueStatistics.create(year)
-		.getTotalValuesOfProcessesByRefundProcessStateType();
-	for (final Entry<RefundProcessStateType, Money> valueEntry : values.entrySet()) {
-	    final Row row = spreadsheet.addRow();
-	    row.setCell(valueEntry.getKey().getLocalizedName());
-	    row.setCell(valueEntry.getValue().toFormatStringWithoutCurrency());
-	}
-
-	return spreadsheet;
-    }
-
-    private ActionForward streamSpreadsheet(final HttpServletResponse response, final String fileName,
-	    final Spreadsheet resultSheet, final Integer year) throws IOException {
-
-	response.setContentType("application/xls ");
-	response.setHeader("Content-disposition", "attachment; filename=" + fileName + year + ".xls");
-
-	ServletOutputStream outputStream = response.getOutputStream();
-
-	resultSheet.exportToXLSSheet(outputStream);
-	outputStream.flush();
-	outputStream.close();
-
-	return null;
-    }
-
-    private ActionForward streamCSV(final HttpServletResponse response, final String fileName, final String csvContent)
-	    throws IOException {
-
-	response.setContentType("application/csv");
-	response.setHeader("Content-disposition", "attachment; filename=" + fileName + ".csv");
-
-	ServletOutputStream outputStream = response.getOutputStream();
-
-	outputStream.write(csvContent.getBytes());
-	outputStream.flush();
-	outputStream.close();
-
-	return null;
-    }
-
-    public ActionForward downloadAfterTheFactTotalValuesStatistics(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws IOException {
-
-	final Integer year = Integer.valueOf((String) getAttribute(request, "year"));
-	return streamSpreadsheet(response, "afterTheFact", createAfterTheFactTotalValuesStatistics(year), year);
-    }
-
-    private Spreadsheet createAfterTheFactTotalValuesStatistics(final Integer year) {
-	final Spreadsheet spreadsheet = new Spreadsheet("Valores por Tipo - " + year);
-	spreadsheet.setHeader("Tipo");
-	spreadsheet.setHeader("Montante");
-
-	final Map<AfterTheFactAcquisitionType, Money> values = AfterTheFactProcessTotalValueStatistics.create(year)
-		.getTotalValuesOfProcessesByAquisitionProcessStateType();
-	for (final Entry<AfterTheFactAcquisitionType, Money> valueEntry : values.entrySet()) {
-	    final Row row = spreadsheet.addRow();
-	    row.setCell(valueEntry.getKey().getLocalizedName());
-	    row.setCell(valueEntry.getValue().toFormatStringWithoutCurrency());
-	}
-
-	return spreadsheet;
-    }
-
-    private static final ComparatorChain DEFAULT_COMPARATOR = new ComparatorChain();
-
-    static {
-	DEFAULT_COMPARATOR.addComparator(new Comparator<PaymentProcess>() {
-
-	    @Override
-	    public int compare(PaymentProcess process1, PaymentProcess process2) {
-		return process1.getPaymentProcessYear().getYear().compareTo(process2.getPaymentProcessYear().getYear());
-	    }
-
-	});
-	DEFAULT_COMPARATOR.addComparator(new Comparator<PaymentProcess>() {
-
-	    @Override
-	    public int compare(PaymentProcess process1, PaymentProcess process2) {
-		return process1.getAcquisitionProcessNumber().compareTo(process2.getAcquisitionProcessNumber());
-
-	    }
-
-	});
-
-    }
-
-    private List<SimplifiedProcedureProcess> collectInterestingProcessesForCSVStats(HttpServletRequest request) {
-	List<SimplifiedProcedureProcess> processes = new ArrayList<SimplifiedProcedureProcess>();
-	final Integer year = Integer.valueOf((String) getAttribute(request, "year"));
-	PaymentProcessYear paymentYear = PaymentProcessYear.getPaymentProcessYearByYear(year);
-
-	for (SimplifiedProcedureProcess process : GenericProcess.getAllProcesses(SimplifiedProcedureProcess.class, paymentYear)) {
-	    ProcessClassification classification = process.getProcessClassification();
-	    if (classification == ProcessClassification.CCP || classification == ProcessClassification.CT10000) {
-		processes.add(process);
-	    }
-	}
-
-	Collections.sort(processes, DEFAULT_COMPARATOR);
-	return processes;
-    }
-
-    public ActionForward generateProcessesStatsCSV(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws IOException {
-	String year = (String) getAttribute(request, "year");
-	return streamCSV(response, "processos-" + year, generateProcessesFile(collectInterestingProcessesForCSVStats(request)));
-    }
-
-    public ActionForward generateLogStatsCSV(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws IOException {
-	String year = (String) getAttribute(request, "year");
-
-	return streamCSV(response, "actividades-" + year,
-		generateProcessActivities(collectInterestingProcessesForCSVStats(request)));
-    }
-
-    private String generateProcessesFile(List<SimplifiedProcedureProcess> processes) {
-
-	StringBuilder buffer = new StringBuilder();
-
-	for (SimplifiedProcedureProcess process : processes) {
-	    for (Unit unit : process.getPayingUnits()) {
-		buffer.append(process.getProcessNumber() + "\t" + process.getProcessClassification() + "\t"
-			+ unit.getPresentationName() + "\t" + unit.getAccountingUnit().getName() + "\t"
-			+ process.isPriorityProcess() + "\n");
-	    }
-	}
-
-	return buffer.toString();
-
-    }
-
-    private String generateProcessActivities(List<SimplifiedProcedureProcess> processes) {
-
-	StringBuilder buffer = new StringBuilder();
-
-	for (SimplifiedProcedureProcess process : processes) {
-	    Set<WorkflowLog> logs = new TreeSet<WorkflowLog>(WorkflowLog.COMPARATOR_BY_WHEN);
-	    logs.addAll(process.getExecutionLogs());
-	    for (WorkflowLog log : logs) {
-
-		String description = null;
-		try {
-		    description = log.getDescription();
-		} catch (NullPointerException e) {
-		    logger.warn("No description for: " + ((ActivityLog) log).getOperation());
+	private Spreadsheet createStatisticsByCPV(final Integer year) {
+		final Spreadsheet spreadsheet = new Spreadsheet("CPV " + year);
+		spreadsheet.setHeader("CPV");
+		spreadsheet.setHeader("CPV desc.");
+		spreadsheet.setHeader("Montante");
+		for (final CPVReference reference : getMyOrg().getCPVReferencesSet()) {
+			final Money money = reference.getTotalAmountAllocated(year);
+			if (!money.isZero()) {
+				final Row row = spreadsheet.addRow();
+				row.setCell(reference.getCode());
+				row.setCell(reference.getDescription());
+				row.setCell(money.toFormatStringWithoutCurrency());
+			}
 		}
-		if (description != null) {
-		    Person expenditurePerson = log.getActivityExecutor().getExpenditurePerson();
-		    buffer.append(process.getProcessNumber() + "\t" + process.getProcessClassification() + "\t"
-			    + log.getWhenOperationWasRan().toString("dd-MM-yyyy HH:mm") + "\t" + expenditurePerson.getName()
-			    + "\t" + expenditurePerson.getUsername() + "\t"
-			    + StringNormalizer.normalize(description.replaceAll("<span.*", "")) + "\n");
+		return spreadsheet;
+	}
+
+	public ActionForward downloadTotalValuesStatistics(final ActionMapping mapping, final ActionForm form,
+			final HttpServletRequest request, final HttpServletResponse response) throws IOException {
+
+		final Integer year = Integer.valueOf((String) getAttribute(request, "year"));
+		return streamSpreadsheet(response, "values", createTotalValuesStatistics(year), year);
+	}
+
+	private Spreadsheet createTotalValuesStatistics(final Integer year) {
+		final Spreadsheet spreadsheet = new Spreadsheet("Valores por Tipo - " + year);
+		spreadsheet.setHeader("Tipo");
+		spreadsheet.setHeader("Montante");
+
+		final Map<AcquisitionProcessStateType, Money> values =
+				SimplifiedProcessTotalValueStatistics.create(year).getTotalValuesOfProcessesByAcquisitionProcessStateType();
+		for (final Entry<AcquisitionProcessStateType, Money> valueEntry : values.entrySet()) {
+			final Row row = spreadsheet.addRow();
+			row.setCell(valueEntry.getKey().getLocalizedName());
+			row.setCell(valueEntry.getValue().toFormatStringWithoutCurrency());
 		}
-	    }
+
+		return spreadsheet;
+	}
+
+	public ActionForward downloadRefundTotalValuesStatistics(final ActionMapping mapping, final ActionForm form,
+			final HttpServletRequest request, final HttpServletResponse response) throws IOException {
+
+		final Integer year = Integer.valueOf((String) getAttribute(request, "year"));
+		return streamSpreadsheet(response, "refundValues", createRefundTotalValuesStatistics(year), year);
+	}
+
+	private Spreadsheet createRefundTotalValuesStatistics(final Integer year) {
+		final Spreadsheet spreadsheet = new Spreadsheet("Valores por Tipo - " + year);
+		spreadsheet.setHeader("Tipo");
+		spreadsheet.setHeader("Montante");
+
+		final Map<RefundProcessStateType, Money> values =
+				RefundProcessTotalValueStatistics.create(year).getTotalValuesOfProcessesByRefundProcessStateType();
+		for (final Entry<RefundProcessStateType, Money> valueEntry : values.entrySet()) {
+			final Row row = spreadsheet.addRow();
+			row.setCell(valueEntry.getKey().getLocalizedName());
+			row.setCell(valueEntry.getValue().toFormatStringWithoutCurrency());
+		}
+
+		return spreadsheet;
+	}
+
+	private ActionForward streamSpreadsheet(final HttpServletResponse response, final String fileName,
+			final Spreadsheet resultSheet, final Integer year) throws IOException {
+
+		response.setContentType("application/xls ");
+		response.setHeader("Content-disposition", "attachment; filename=" + fileName + year + ".xls");
+
+		ServletOutputStream outputStream = response.getOutputStream();
+
+		resultSheet.exportToXLSSheet(outputStream);
+		outputStream.flush();
+		outputStream.close();
+
+		return null;
+	}
+
+	private ActionForward streamCSV(final HttpServletResponse response, final String fileName, final String csvContent)
+			throws IOException {
+
+		response.setContentType("application/csv");
+		response.setHeader("Content-disposition", "attachment; filename=" + fileName + ".csv");
+
+		ServletOutputStream outputStream = response.getOutputStream();
+
+		outputStream.write(csvContent.getBytes());
+		outputStream.flush();
+		outputStream.close();
+
+		return null;
+	}
+
+	public ActionForward downloadAfterTheFactTotalValuesStatistics(final ActionMapping mapping, final ActionForm form,
+			final HttpServletRequest request, final HttpServletResponse response) throws IOException {
+
+		final Integer year = Integer.valueOf((String) getAttribute(request, "year"));
+		return streamSpreadsheet(response, "afterTheFact", createAfterTheFactTotalValuesStatistics(year), year);
+	}
+
+	private Spreadsheet createAfterTheFactTotalValuesStatistics(final Integer year) {
+		final Spreadsheet spreadsheet = new Spreadsheet("Valores por Tipo - " + year);
+		spreadsheet.setHeader("Tipo");
+		spreadsheet.setHeader("Montante");
+
+		final Map<AfterTheFactAcquisitionType, Money> values =
+				AfterTheFactProcessTotalValueStatistics.create(year).getTotalValuesOfProcessesByAquisitionProcessStateType();
+		for (final Entry<AfterTheFactAcquisitionType, Money> valueEntry : values.entrySet()) {
+			final Row row = spreadsheet.addRow();
+			row.setCell(valueEntry.getKey().getLocalizedName());
+			row.setCell(valueEntry.getValue().toFormatStringWithoutCurrency());
+		}
+
+		return spreadsheet;
+	}
+
+	private static final ComparatorChain DEFAULT_COMPARATOR = new ComparatorChain();
+
+	static {
+		DEFAULT_COMPARATOR.addComparator(new Comparator<PaymentProcess>() {
+
+			@Override
+			public int compare(PaymentProcess process1, PaymentProcess process2) {
+				return process1.getPaymentProcessYear().getYear().compareTo(process2.getPaymentProcessYear().getYear());
+			}
+
+		});
+		DEFAULT_COMPARATOR.addComparator(new Comparator<PaymentProcess>() {
+
+			@Override
+			public int compare(PaymentProcess process1, PaymentProcess process2) {
+				return process1.getAcquisitionProcessNumber().compareTo(process2.getAcquisitionProcessNumber());
+
+			}
+
+		});
 
 	}
 
-	return buffer.toString();
-    }
+	private List<SimplifiedProcedureProcess> collectInterestingProcessesForCSVStats(HttpServletRequest request) {
+		List<SimplifiedProcedureProcess> processes = new ArrayList<SimplifiedProcedureProcess>();
+		final Integer year = Integer.valueOf((String) getAttribute(request, "year"));
+		PaymentProcessYear paymentYear = PaymentProcessYear.getPaymentProcessYearByYear(year);
 
-    public ActionForward downloadStatisticsForConfirmedProcesses(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws IOException {
-	final Integer year = Integer.valueOf((String) getAttribute(request, "year"));
-	return streamSpreadsheet(response, "confirmedProcesses", createStatisticsForConfirmedProcesses(year), year);
-    }
-
-    private Spreadsheet createStatisticsForConfirmedProcesses(final Integer year) {
-	final Spreadsheet spreadsheet = new Spreadsheet("ConfirmedProcesses " + year);
-	spreadsheet.setHeader("Processo");
-	spreadsheet.setHeader("Estado");
-	spreadsheet.setHeader("Unidades");
-	spreadsheet.setHeader("CPV's");
-	spreadsheet.setHeader("Valor");
-	spreadsheet.setHeader("Valor Final");
-
-	final PaymentProcessYear paymentProcessYear = PaymentProcessYear.getPaymentProcessYearByYear(year);
-	for (final PaymentProcess paymentProcess : paymentProcessYear.getPaymentProcessSet()) {
-	    if (paymentProcess instanceof SimplifiedProcedureProcess) {
-		final SimplifiedProcedureProcess simplifiedProcedureProcess = (SimplifiedProcedureProcess) paymentProcess;
-		final AcquisitionRequest acquisitionRequest = simplifiedProcedureProcess.getRequest();
-
-		final Row row = spreadsheet.addRow();
-		row.setCell(simplifiedProcedureProcess.getProcessNumber());
-
-		final AcquisitionProcessStateType acquisitionProcessStateType = simplifiedProcedureProcess.getAcquisitionProcessStateType();
-		row.setCell(acquisitionProcessStateType.getLocalizedName());
-
-		final StringBuilder units = new StringBuilder();
-		for (final Unit unit : simplifiedProcedureProcess.getFinancingUnits()) {
-		    final String unitCode = getUnitCode(unit);
-		    if (units.length() > 1) {
-			units.append(", ");
-		    }
-		    units.append(unitCode);
+		for (SimplifiedProcedureProcess process : GenericProcess.getAllProcesses(SimplifiedProcedureProcess.class, paymentYear)) {
+			ProcessClassification classification = process.getProcessClassification();
+			if (classification == ProcessClassification.CCP || classification == ProcessClassification.CT10000) {
+				processes.add(process);
+			}
 		}
-		row.setCell(units.length() == 0 ? " " : units.toString());
 
-		final Set<CPVReference> cpvReferences = new TreeSet<CPVReference>(CPVReference.COMPARATOR_BY_DESCRIPTION);
-		for (final RequestItem requestItem : acquisitionRequest.getRequestItemsSet()) {
-		    cpvReferences.add(requestItem.getCPVReference());
-		}
-		final StringBuilder cpvs = new StringBuilder();
-		for (final CPVReference cpvReference : cpvReferences) {
-		    if (cpvs.length() > 1) {
-			cpvs.append(", ");
-		    }
-		    cpvs.append(cpvReference.getCode());
-		}
-		row.setCell(cpvs.length() == 0 ? " " : cpvs.toString());
-
-		row.setCell(acquisitionRequest.getTotalValue().toFormatStringWithoutCurrency());
-		final Money realTotalValue = acquisitionRequest.getRealTotalValue();
-		row.setCell(realTotalValue == null ? " " : realTotalValue.toFormatStringWithoutCurrency());
-	    }
+		Collections.sort(processes, DEFAULT_COMPARATOR);
+		return processes;
 	}
 
-	return spreadsheet;
-    }
-
-    private String getUnitCode(final Unit unit) {
-	if (unit instanceof CostCenter) {
-	    final CostCenter costCenter = (CostCenter) unit;
-	    return "CC. " +  costCenter.getCostCenter();
+	public ActionForward generateProcessesStatsCSV(final ActionMapping mapping, final ActionForm form,
+			final HttpServletRequest request, final HttpServletResponse response) throws IOException {
+		String year = (String) getAttribute(request, "year");
+		return streamCSV(response, "processos-" + year, generateProcessesFile(collectInterestingProcessesForCSVStats(request)));
 	}
-	if (unit instanceof Project) {
-	    final Project project = (Project) unit;
-	    return "P. " + project.getProjectCode();
+
+	public ActionForward generateLogStatsCSV(final ActionMapping mapping, final ActionForm form,
+			final HttpServletRequest request, final HttpServletResponse response) throws IOException {
+		String year = (String) getAttribute(request, "year");
+
+		return streamCSV(response, "actividades-" + year,
+				generateProcessActivities(collectInterestingProcessesForCSVStats(request)));
 	}
-	if (unit instanceof SubProject) {
-	    return getUnitCode(unit.getParentUnit());
-	}
-	throw new Error("Unreachable Code.");
-    }
 
-    public ActionForward downloadInformationForExpenseReports(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws IOException {
-	final Integer year = Integer.valueOf((String) getAttribute(request, "year"));
-	return streamSpreadsheet(response, "expenseReport", createInformationForExpenseReports(year), year);
-    }
+	private String generateProcessesFile(List<SimplifiedProcedureProcess> processes) {
 
-    private Spreadsheet createInformationForExpenseReports(final Integer year) {
-	final Spreadsheet spreadsheet = new Spreadsheet("ExpenseReport " + year);
-	spreadsheet.setHeader("Ano");
-	spreadsheet.setHeader("Processo");
-	spreadsheet.setHeader("Classificação");
-	spreadsheet.setHeader("Caso de excepção");
-	spreadsheet.setHeader("Estado");
-	spreadsheet.setHeader("CPV");
-	spreadsheet.setHeader("Valor sem IVA");
-	spreadsheet.setHeader("Valor com IVA");
-	spreadsheet.setHeader("Data envio nota de encomenda");
-	spreadsheet.setHeader("Data salto envio nota de encomenda");
-	spreadsheet.setHeader("Data factura");
+		StringBuilder buffer = new StringBuilder();
 
-	final PaymentProcessYear paymentProcessYear = PaymentProcessYear.getPaymentProcessYearByYear(year);
-	for (final PaymentProcess paymentProcess : paymentProcessYear.getPaymentProcessSet()) {
-	    if (paymentProcess instanceof SimplifiedProcedureProcess) {
-		final SimplifiedProcedureProcess simplifiedProcedureProcess = (SimplifiedProcedureProcess) paymentProcess;
-		final AcquisitionRequest acquisitionRequest = simplifiedProcedureProcess.getRequest();
-
-		final Row row = spreadsheet.addRow();
-		row.setCell(simplifiedProcedureProcess.getYear());
-		row.setCell(simplifiedProcedureProcess.getProcessNumber());
-		row.setCell(simplifiedProcedureProcess.getProcessClassification().getLocalizedName());
-
-		final boolean isException = simplifiedProcedureProcess.getSkipSupplierFundAllocation().booleanValue();
-		row.setCell(isException ? "Sim" : "Não");
-
-		final AcquisitionProcessStateType acquisitionProcessStateType = simplifiedProcedureProcess.getAcquisitionProcessStateType();
-		row.setCell(acquisitionProcessStateType.getLocalizedName());
-
-		final Set<CPVReference> cpvReferences = new TreeSet<CPVReference>(CPVReference.COMPARATOR_BY_DESCRIPTION);
-		for (final RequestItem requestItem : acquisitionRequest.getRequestItemsSet()) {
-		    cpvReferences.add(requestItem.getCPVReference());
+		for (SimplifiedProcedureProcess process : processes) {
+			for (Unit unit : process.getPayingUnits()) {
+				buffer.append(process.getProcessNumber() + "\t" + process.getProcessClassification() + "\t"
+						+ unit.getPresentationName() + "\t" + unit.getAccountingUnit().getName() + "\t"
+						+ process.isPriorityProcess() + "\n");
+			}
 		}
-		final StringBuilder cpvs = new StringBuilder();
-		for (final CPVReference cpvReference : cpvReferences) {
-		    if (cpvs.length() > 1) {
-			cpvs.append(", ");
-		    }
-		    cpvs.append(cpvReference.getCode());
-		}
-		row.setCell(cpvs.length() == 0 ? " " : cpvs.toString());
 
-		final Money currentValue = acquisitionRequest.getCurrentValue();
-		row.setCell(currentValue == null ? " " : currentValue.toFormatStringWithoutCurrency());
+		return buffer.toString();
 
-		final Money currentTotalValue = acquisitionRequest.getCurrentTotalItemValueWithAdditionalCostsAndVat();
-		row.setCell(currentTotalValue == null ? " " : currentTotalValue.toFormatStringWithoutCurrency());
-
-		final DateTime sendDate = findSendDate(simplifiedProcedureProcess, SendPurchaseOrderToSupplier.class);
-		row.setCell(sendDate == null ? " " : sendDate.toString("yyyy-MM-dd"));
-
-		final DateTime skipDate = findSendDate(simplifiedProcedureProcess, SkipPurchaseOrderDocument.class);
-		row.setCell(skipDate == null ? " " : skipDate.toString("yyyy-MM-dd"));
-
-		final StringBuilder invoiceDateStringBuilder = new StringBuilder();
-		for (final LocalDate localDate : getInvoiceDates(simplifiedProcedureProcess)) {
-		    if (invoiceDateStringBuilder.length() > 0) {
-			invoiceDateStringBuilder.append(", ");
-		    }
-		    invoiceDateStringBuilder.append(localDate.toString("yyyy-MM-dd"));
-		}
-		row.setCell(invoiceDateStringBuilder.toString());
-	    }
 	}
 
-	return spreadsheet;
-    }
+	private String generateProcessActivities(List<SimplifiedProcedureProcess> processes) {
 
-    private DateTime findSendDate(final SimplifiedProcedureProcess process, final Class clazz) {
-	final List<WorkflowLog> logs = new ArrayList<WorkflowLog>(process.getExecutionLogsSet());
-	Collections.sort(logs, WorkflowLog.COMPARATOR_BY_WHEN_REVERSED);
+		StringBuilder buffer = new StringBuilder();
 
-	for (final WorkflowLog workflowLog : logs) {
-	    if (workflowLog instanceof ActivityLog) {
-		final ActivityLog operationLog = (ActivityLog) workflowLog;
-		if (clazz.getSimpleName().equals(operationLog.getOperation())) {
-		    return operationLog.getWhenOperationWasRan();
+		for (SimplifiedProcedureProcess process : processes) {
+			Set<WorkflowLog> logs = new TreeSet<WorkflowLog>(WorkflowLog.COMPARATOR_BY_WHEN);
+			logs.addAll(process.getExecutionLogs());
+			for (WorkflowLog log : logs) {
+
+				String description = null;
+				try {
+					description = log.getDescription();
+				} catch (NullPointerException e) {
+					logger.warn("No description for: " + ((ActivityLog) log).getOperation());
+				}
+				if (description != null) {
+					Person expenditurePerson = log.getActivityExecutor().getExpenditurePerson();
+					buffer.append(process.getProcessNumber() + "\t" + process.getProcessClassification() + "\t"
+							+ log.getWhenOperationWasRan().toString("dd-MM-yyyy HH:mm") + "\t" + expenditurePerson.getName()
+							+ "\t" + expenditurePerson.getUsername() + "\t"
+							+ StringNormalizer.normalize(description.replaceAll("<span.*", "")) + "\n");
+				}
+			}
+
 		}
-	    }
+
+		return buffer.toString();
 	}
 
-	return null;
-    }
-
-    private SortedSet<LocalDate> getInvoiceDates(final SimplifiedProcedureProcess process) {
-	final SortedSet<LocalDate> invoiceDates = new TreeSet<LocalDate>();
-	for (final ProcessFile file : process.getFilesSet()) {
-	    if (file instanceof Invoice) {
-		final Invoice invoice = (Invoice) file;
-		final LocalDate invoiceDate = invoice.getInvoiceDate();
-		invoiceDates.add(invoiceDate);
-	    }
+	public ActionForward downloadStatisticsForConfirmedProcesses(final ActionMapping mapping, final ActionForm form,
+			final HttpServletRequest request, final HttpServletResponse response) throws IOException {
+		final Integer year = Integer.valueOf((String) getAttribute(request, "year"));
+		return streamSpreadsheet(response, "confirmedProcesses", createStatisticsForConfirmedProcesses(year), year);
 	}
-	return invoiceDates;
-    }
+
+	private Spreadsheet createStatisticsForConfirmedProcesses(final Integer year) {
+		final Spreadsheet spreadsheet = new Spreadsheet("ConfirmedProcesses " + year);
+		spreadsheet.setHeader("Processo");
+		spreadsheet.setHeader("Estado");
+		spreadsheet.setHeader("Unidades");
+		spreadsheet.setHeader("CPV's");
+		spreadsheet.setHeader("Valor");
+		spreadsheet.setHeader("Valor Final");
+
+		final PaymentProcessYear paymentProcessYear = PaymentProcessYear.getPaymentProcessYearByYear(year);
+		for (final PaymentProcess paymentProcess : paymentProcessYear.getPaymentProcessSet()) {
+			if (paymentProcess instanceof SimplifiedProcedureProcess) {
+				final SimplifiedProcedureProcess simplifiedProcedureProcess = (SimplifiedProcedureProcess) paymentProcess;
+				final AcquisitionRequest acquisitionRequest = simplifiedProcedureProcess.getRequest();
+
+				final Row row = spreadsheet.addRow();
+				row.setCell(simplifiedProcedureProcess.getProcessNumber());
+
+				final AcquisitionProcessStateType acquisitionProcessStateType =
+						simplifiedProcedureProcess.getAcquisitionProcessStateType();
+				row.setCell(acquisitionProcessStateType.getLocalizedName());
+
+				final StringBuilder units = new StringBuilder();
+				for (final Unit unit : simplifiedProcedureProcess.getFinancingUnits()) {
+					final String unitCode = getUnitCode(unit);
+					if (units.length() > 1) {
+						units.append(", ");
+					}
+					units.append(unitCode);
+				}
+				row.setCell(units.length() == 0 ? " " : units.toString());
+
+				final Set<CPVReference> cpvReferences = new TreeSet<CPVReference>(CPVReference.COMPARATOR_BY_DESCRIPTION);
+				for (final RequestItem requestItem : acquisitionRequest.getRequestItemsSet()) {
+					cpvReferences.add(requestItem.getCPVReference());
+				}
+				final StringBuilder cpvs = new StringBuilder();
+				for (final CPVReference cpvReference : cpvReferences) {
+					if (cpvs.length() > 1) {
+						cpvs.append(", ");
+					}
+					cpvs.append(cpvReference.getCode());
+				}
+				row.setCell(cpvs.length() == 0 ? " " : cpvs.toString());
+
+				row.setCell(acquisitionRequest.getTotalValue().toFormatStringWithoutCurrency());
+				final Money realTotalValue = acquisitionRequest.getRealTotalValue();
+				row.setCell(realTotalValue == null ? " " : realTotalValue.toFormatStringWithoutCurrency());
+			}
+		}
+
+		return spreadsheet;
+	}
+
+	private String getUnitCode(final Unit unit) {
+		if (unit instanceof CostCenter) {
+			final CostCenter costCenter = (CostCenter) unit;
+			return "CC. " + costCenter.getCostCenter();
+		}
+		if (unit instanceof Project) {
+			final Project project = (Project) unit;
+			return "P. " + project.getProjectCode();
+		}
+		if (unit instanceof SubProject) {
+			return getUnitCode(unit.getParentUnit());
+		}
+		throw new Error("Unreachable Code.");
+	}
+
+	public ActionForward downloadInformationForExpenseReports(final ActionMapping mapping, final ActionForm form,
+			final HttpServletRequest request, final HttpServletResponse response) throws IOException {
+		final Integer year = Integer.valueOf((String) getAttribute(request, "year"));
+		return streamSpreadsheet(response, "expenseReport", createInformationForExpenseReports(year), year);
+	}
+
+	private Spreadsheet createInformationForExpenseReports(final Integer year) {
+		final Spreadsheet spreadsheet = new Spreadsheet("ExpenseReport " + year);
+		spreadsheet.setHeader("Ano");
+		spreadsheet.setHeader("Processo");
+		spreadsheet.setHeader("Classificação");
+		spreadsheet.setHeader("Caso de excepção");
+		spreadsheet.setHeader("Estado");
+		spreadsheet.setHeader("CPV");
+		spreadsheet.setHeader("Valor sem IVA");
+		spreadsheet.setHeader("Valor com IVA");
+		spreadsheet.setHeader("Data envio nota de encomenda");
+		spreadsheet.setHeader("Data salto envio nota de encomenda");
+		spreadsheet.setHeader("Data factura");
+
+		final PaymentProcessYear paymentProcessYear = PaymentProcessYear.getPaymentProcessYearByYear(year);
+		for (final PaymentProcess paymentProcess : paymentProcessYear.getPaymentProcessSet()) {
+			if (paymentProcess instanceof SimplifiedProcedureProcess) {
+				final SimplifiedProcedureProcess simplifiedProcedureProcess = (SimplifiedProcedureProcess) paymentProcess;
+				final AcquisitionRequest acquisitionRequest = simplifiedProcedureProcess.getRequest();
+
+				final Row row = spreadsheet.addRow();
+				row.setCell(simplifiedProcedureProcess.getYear());
+				row.setCell(simplifiedProcedureProcess.getProcessNumber());
+				row.setCell(simplifiedProcedureProcess.getProcessClassification().getLocalizedName());
+
+				final boolean isException = simplifiedProcedureProcess.getSkipSupplierFundAllocation().booleanValue();
+				row.setCell(isException ? "Sim" : "Não");
+
+				final AcquisitionProcessStateType acquisitionProcessStateType =
+						simplifiedProcedureProcess.getAcquisitionProcessStateType();
+				row.setCell(acquisitionProcessStateType.getLocalizedName());
+
+				final Set<CPVReference> cpvReferences = new TreeSet<CPVReference>(CPVReference.COMPARATOR_BY_DESCRIPTION);
+				for (final RequestItem requestItem : acquisitionRequest.getRequestItemsSet()) {
+					cpvReferences.add(requestItem.getCPVReference());
+				}
+				final StringBuilder cpvs = new StringBuilder();
+				for (final CPVReference cpvReference : cpvReferences) {
+					if (cpvs.length() > 1) {
+						cpvs.append(", ");
+					}
+					cpvs.append(cpvReference.getCode());
+				}
+				row.setCell(cpvs.length() == 0 ? " " : cpvs.toString());
+
+				final Money currentValue = acquisitionRequest.getCurrentValue();
+				row.setCell(currentValue == null ? " " : currentValue.toFormatStringWithoutCurrency());
+
+				final Money currentTotalValue = acquisitionRequest.getCurrentTotalItemValueWithAdditionalCostsAndVat();
+				row.setCell(currentTotalValue == null ? " " : currentTotalValue.toFormatStringWithoutCurrency());
+
+				final DateTime sendDate = findSendDate(simplifiedProcedureProcess, SendPurchaseOrderToSupplier.class);
+				row.setCell(sendDate == null ? " " : sendDate.toString("yyyy-MM-dd"));
+
+				final DateTime skipDate = findSendDate(simplifiedProcedureProcess, SkipPurchaseOrderDocument.class);
+				row.setCell(skipDate == null ? " " : skipDate.toString("yyyy-MM-dd"));
+
+				final StringBuilder invoiceDateStringBuilder = new StringBuilder();
+				for (final LocalDate localDate : getInvoiceDates(simplifiedProcedureProcess)) {
+					if (invoiceDateStringBuilder.length() > 0) {
+						invoiceDateStringBuilder.append(", ");
+					}
+					invoiceDateStringBuilder.append(localDate.toString("yyyy-MM-dd"));
+				}
+				row.setCell(invoiceDateStringBuilder.toString());
+			}
+		}
+
+		return spreadsheet;
+	}
+
+	private DateTime findSendDate(final SimplifiedProcedureProcess process, final Class clazz) {
+		final List<WorkflowLog> logs = new ArrayList<WorkflowLog>(process.getExecutionLogsSet());
+		Collections.sort(logs, WorkflowLog.COMPARATOR_BY_WHEN_REVERSED);
+
+		for (final WorkflowLog workflowLog : logs) {
+			if (workflowLog instanceof ActivityLog) {
+				final ActivityLog operationLog = (ActivityLog) workflowLog;
+				if (clazz.getSimpleName().equals(operationLog.getOperation())) {
+					return operationLog.getWhenOperationWasRan();
+				}
+			}
+		}
+
+		return null;
+	}
+
+	private SortedSet<LocalDate> getInvoiceDates(final SimplifiedProcedureProcess process) {
+		final SortedSet<LocalDate> invoiceDates = new TreeSet<LocalDate>();
+		for (final ProcessFile file : process.getFilesSet()) {
+			if (file instanceof Invoice) {
+				final Invoice invoice = (Invoice) file;
+				final LocalDate invoiceDate = invoice.getInvoiceDate();
+				invoiceDates.add(invoiceDate);
+			}
+		}
+		return invoiceDates;
+	}
 
 }

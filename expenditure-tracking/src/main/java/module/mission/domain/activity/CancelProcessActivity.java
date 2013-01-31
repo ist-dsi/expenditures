@@ -43,81 +43,80 @@ import pt.utl.ist.fenix.tools.util.i18n.Language;
  */
 public class CancelProcessActivity extends MissionProcessActivity<MissionProcess, ActivityInformation<MissionProcess>> {
 
-    @Override
-    public String getLocalizedName() {
-	return BundleUtil.getStringFromResourceBundle("resources/MissionResources", "activity." + getClass().getSimpleName());
-    }
-
-    @Override
-    public boolean isActive(final MissionProcess missionProcess, final User user) {
-	return super.isActive(missionProcess, user)
-		&& !missionProcess.isCanceled()
-		// && missionProcess.isUnderConstruction()
-		&& (missionProcess.isRequestor(user)
-			|| user.hasRoleType(RoleType.MANAGER)
-			|| MissionSystem.getInstance().getUsersWhoCanCancelMissionSet().contains(user))
-		;
-    }
-
-    @Override
-    protected void process(final ActivityInformation<MissionProcess> activityInformation) {
-	final MissionProcess missionProcess = activityInformation.getProcess();
-
-	if (hasConnectedPaymentProcess(missionProcess)) {
-	    final String processes = getConnectedPaymentProcess(missionProcess);
-	    throw new DomainException("error.mission.has.active.payment.processes.cannot.cancel", ResourceBundle.getBundle("resources/MissionResources", Language.getLocale()), processes);
+	@Override
+	public String getLocalizedName() {
+		return BundleUtil.getStringFromResourceBundle("resources/MissionResources", "activity." + getClass().getSimpleName());
 	}
 
-	missionProcess.cancel();
-	missionProcess.addToProcessParticipantInformationQueue();
-    }
-
-    private boolean hasConnectedPaymentProcess(final MissionProcess missionProcess) {
-	for (final PaymentProcess paymentProcess : missionProcess.getPaymentProcessSet()) {
-	    if (!paymentProcess.isCanceled()) {
-		return true;
-	    }
+	@Override
+	public boolean isActive(final MissionProcess missionProcess, final User user) {
+		return super.isActive(missionProcess, user)
+				&& !missionProcess.isCanceled()
+				// && missionProcess.isUnderConstruction()
+				&& (missionProcess.isRequestor(user) || user.hasRoleType(RoleType.MANAGER) || MissionSystem.getInstance()
+						.getUsersWhoCanCancelMissionSet().contains(user));
 	}
-	return false;
-    }
 
-    private String getConnectedPaymentProcess(final MissionProcess missionProcess) {
-	final StringBuilder stringBuilder = new StringBuilder();
-	for (final PaymentProcess paymentProcess : missionProcess.getPaymentProcessSet()) {
-	    if (!paymentProcess.isCanceled()) {
-		if (stringBuilder.length() > 0) {
-		    stringBuilder.append(", ");
+	@Override
+	protected void process(final ActivityInformation<MissionProcess> activityInformation) {
+		final MissionProcess missionProcess = activityInformation.getProcess();
+
+		if (hasConnectedPaymentProcess(missionProcess)) {
+			final String processes = getConnectedPaymentProcess(missionProcess);
+			throw new DomainException("error.mission.has.active.payment.processes.cannot.cancel", ResourceBundle.getBundle(
+					"resources/MissionResources", Language.getLocale()), processes);
 		}
-		stringBuilder.append(paymentProcess.getAcquisitionProcessId());
-	    }
+
+		missionProcess.cancel();
+		missionProcess.addToProcessParticipantInformationQueue();
 	}
-	return stringBuilder.toString();
-    }
 
-    @Override
-    public ActivityInformation<MissionProcess> getActivityInformation(final MissionProcess process) {
-	return new ActivityInformation<MissionProcess>(process, this);
-    }
+	private boolean hasConnectedPaymentProcess(final MissionProcess missionProcess) {
+		for (final PaymentProcess paymentProcess : missionProcess.getPaymentProcessSet()) {
+			if (!paymentProcess.isCanceled()) {
+				return true;
+			}
+		}
+		return false;
+	}
 
-    @Override
-    public boolean isUserAwarenessNeeded(MissionProcess process, User user) {
-        return false;
-    }
+	private String getConnectedPaymentProcess(final MissionProcess missionProcess) {
+		final StringBuilder stringBuilder = new StringBuilder();
+		for (final PaymentProcess paymentProcess : missionProcess.getPaymentProcessSet()) {
+			if (!paymentProcess.isCanceled()) {
+				if (stringBuilder.length() > 0) {
+					stringBuilder.append(", ");
+				}
+				stringBuilder.append(paymentProcess.getAcquisitionProcessId());
+			}
+		}
+		return stringBuilder.toString();
+	}
 
-    @Override
-    public boolean isConfirmationNeeded(final MissionProcess process) {
-	return true;
-    }
+	@Override
+	public ActivityInformation<MissionProcess> getActivityInformation(final MissionProcess process) {
+		return new ActivityInformation<MissionProcess>(process, this);
+	}
 
-    @Override
-    public String getLocalizedConfirmationMessage() {
-	return BundleUtil.getFormattedStringFromResourceBundle("resources/MissionResources",
-		"label.module.mission.cancel.process.confirm");
-    }
+	@Override
+	public boolean isUserAwarenessNeeded(MissionProcess process, User user) {
+		return false;
+	}
 
-    @Override
-    public String getUsedBundle() {
-	return "resources/MissionResources";
-    }
+	@Override
+	public boolean isConfirmationNeeded(final MissionProcess process) {
+		return true;
+	}
+
+	@Override
+	public String getLocalizedConfirmationMessage() {
+		return BundleUtil.getFormattedStringFromResourceBundle("resources/MissionResources",
+				"label.module.mission.cancel.process.confirm");
+	}
+
+	@Override
+	public String getUsedBundle() {
+		return "resources/MissionResources";
+	}
 
 }

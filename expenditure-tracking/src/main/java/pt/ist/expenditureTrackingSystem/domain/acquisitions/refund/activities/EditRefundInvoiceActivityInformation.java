@@ -40,53 +40,53 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundableInv
  */
 public class EditRefundInvoiceActivityInformation extends ActivityInformation<RefundProcess> {
 
-    RefundableInvoiceFile invoice;
-    Money value;
-    BigDecimal vatValue;
-    Money refundableValue;
+	RefundableInvoiceFile invoice;
+	Money value;
+	BigDecimal vatValue;
+	Money refundableValue;
 
-    public EditRefundInvoiceActivityInformation(RefundProcess process,
-	    WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity) {
-	super(process, activity);
-    }
+	public EditRefundInvoiceActivityInformation(RefundProcess process,
+			WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity) {
+		super(process, activity);
+	}
 
-    public RefundableInvoiceFile getInvoice() {
-	return invoice;
-    }
+	public RefundableInvoiceFile getInvoice() {
+		return invoice;
+	}
 
-    public void setInvoice(RefundableInvoiceFile invoice) {
-	this.invoice = invoice;
-	setValue(invoice.getValue());
-	setVatValue(invoice.getVatValue());
-	setRefundableValue(invoice.getRefundableValue());
-    }
+	public void setInvoice(RefundableInvoiceFile invoice) {
+		this.invoice = invoice;
+		setValue(invoice.getValue());
+		setVatValue(invoice.getVatValue());
+		setRefundableValue(invoice.getRefundableValue());
+	}
 
-    public Money getValue() {
-	return value;
-    }
+	public Money getValue() {
+		return value;
+	}
 
-    public void setValue(Money value) {
-	this.value = value;
-    }
+	public void setValue(Money value) {
+		this.value = value;
+	}
 
-    public BigDecimal getVatValue() {
-	return vatValue;
-    }
+	public BigDecimal getVatValue() {
+		return vatValue;
+	}
 
-    public void setVatValue(BigDecimal vatValue) {
-	this.vatValue = vatValue;
-    }
+	public void setVatValue(BigDecimal vatValue) {
+		this.vatValue = vatValue;
+	}
 
-    public Money getRefundableValue() {
-	return refundableValue;
-    }
+	public Money getRefundableValue() {
+		return refundableValue;
+	}
 
-    public void setRefundableValue(Money refundableValue) {
-	this.refundableValue = refundableValue;
-    }
+	public void setRefundableValue(Money refundableValue) {
+		this.refundableValue = refundableValue;
+	}
 
-    @Override
-    public boolean hasAllneededInfo() {
-	return isForwardedFromInput() && getValue() != null && getVatValue() != null && getRefundableValue() != null;
-    }
+	@Override
+	public boolean hasAllneededInfo() {
+		return isForwardedFromInput() && getValue() != null && getVatValue() != null && getRefundableValue() != null;
+	}
 }

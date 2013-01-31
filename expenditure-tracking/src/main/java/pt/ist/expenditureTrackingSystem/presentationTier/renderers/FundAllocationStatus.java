@@ -42,143 +42,143 @@ import pt.ist.fenixWebFramework.renderers.layouts.Layout;
  */
 public class FundAllocationStatus extends OutputRenderer {
 
-    private String onClass;
-    private String offClass;
-    private String middleClass;
+	private String onClass;
+	private String offClass;
+	private String middleClass;
 
-    public String getMiddleClass() {
-	return middleClass;
-    }
+	public String getMiddleClass() {
+		return middleClass;
+	}
 
-    public void setMiddleClass(String middleClass) {
-	this.middleClass = middleClass;
-    }
+	public void setMiddleClass(String middleClass) {
+		this.middleClass = middleClass;
+	}
 
-    private String state1;
-    private String state2;
-    private String state3;
-    private String state4;
+	private String state1;
+	private String state2;
+	private String state3;
+	private String state4;
 
-    public String getState1() {
-	return state1;
-    }
+	public String getState1() {
+		return state1;
+	}
 
-    public void setState1(String state1) {
-	this.state1 = state1;
-    }
+	public void setState1(String state1) {
+		this.state1 = state1;
+	}
 
-    public String getState2() {
-	return state2;
-    }
+	public String getState2() {
+		return state2;
+	}
 
-    public void setState2(String state2) {
-	this.state2 = state2;
-    }
+	public void setState2(String state2) {
+		this.state2 = state2;
+	}
 
-    public String getState3() {
-	return state3;
-    }
+	public String getState3() {
+		return state3;
+	}
 
-    public void setState3(String state3) {
-	this.state3 = state3;
-    }
+	public void setState3(String state3) {
+		this.state3 = state3;
+	}
 
-    public String getState4() {
-	return state4;
-    }
+	public String getState4() {
+		return state4;
+	}
 
-    public void setState4(String start4) {
-	this.state4 = start4;
-    }
+	public void setState4(String start4) {
+		this.state4 = start4;
+	}
 
-    public void setOnClass(String onClass) {
-	this.onClass = onClass;
-    }
+	public void setOnClass(String onClass) {
+		this.onClass = onClass;
+	}
 
-    public String getOnClass() {
-	return onClass;
-    }
+	public String getOnClass() {
+		return onClass;
+	}
 
-    public void setOffClass(String offClass) {
-	this.offClass = offClass;
-    }
+	public void setOffClass(String offClass) {
+		this.offClass = offClass;
+	}
 
-    public String getOffClass() {
-	return offClass;
-    }
+	public String getOffClass() {
+		return offClass;
+	}
 
-    @Override
-    protected Layout getLayout(Object object, Class type) {
-	return new Layout() {
+	@Override
+	protected Layout getLayout(Object object, Class type) {
+		return new Layout() {
 
-	    @Override
-	    public HtmlComponent createComponent(Object object, Class type) {
-		// AcquisitionRequest request = (AcquisitionRequest) object;
-		RequestWithPayment request = (RequestWithPayment) object;
+			@Override
+			public HtmlComponent createComponent(Object object, Class type) {
+				// AcquisitionRequest request = (AcquisitionRequest) object;
+				RequestWithPayment request = (RequestWithPayment) object;
 
-		HtmlBlockContainer container = new HtmlBlockContainer();
+				HtmlBlockContainer container = new HtmlBlockContainer();
 
-		boolean hasProjectFinancers = request.hasAnyProjectFinancers();
+				boolean hasProjectFinancers = request.hasAnyProjectFinancers();
 
-		if (hasProjectFinancers) {
-		    HtmlInlineContainer inlineStatus1 = new HtmlInlineContainer();
-		    inlineStatus1.addChild(new HtmlText(getState1()));
-		    inlineStatus1.setClasses(request.hasAllocatedFundsForAllProjectFinancers() ? getOnClass() : getOffClass());
-		    container.addChild(inlineStatus1);
-		}
-		HtmlInlineContainer inlineStatus2 = new HtmlInlineContainer();
-		inlineStatus2.addChild(new HtmlText(getState2()));
-		inlineStatus2.setClasses(request.hasAllFundAllocationId() ? getOnClass() : getOffClass());
-		container.addChild(inlineStatus2);
+				if (hasProjectFinancers) {
+					HtmlInlineContainer inlineStatus1 = new HtmlInlineContainer();
+					inlineStatus1.addChild(new HtmlText(getState1()));
+					inlineStatus1.setClasses(request.hasAllocatedFundsForAllProjectFinancers() ? getOnClass() : getOffClass());
+					container.addChild(inlineStatus1);
+				}
+				HtmlInlineContainer inlineStatus2 = new HtmlInlineContainer();
+				inlineStatus2.addChild(new HtmlText(getState2()));
+				inlineStatus2.setClasses(request.hasAllFundAllocationId() ? getOnClass() : getOffClass());
+				container.addChild(inlineStatus2);
 
-		if (hasProjectFinancers) {
-		    HtmlInlineContainer inlineStatus3 = new HtmlInlineContainer();
-		    inlineStatus3.addChild(new HtmlText(getState3()));
-		    boolean hasAllocatedFundsPermanentlyForAllProjectFinancers = request
-			    .hasAllocatedFundsPermanentlyForAllProjectFinancers();
-		    if (hasAllocatedFundsPermanentlyForAllProjectFinancers) {
-			if (request instanceof AcquisitionRequest) {
-			    AcquisitionProcessStateType stateType = ((AcquisitionRequest) request).getProcess()
-				    .getAcquisitionProcessStateType();
+				if (hasProjectFinancers) {
+					HtmlInlineContainer inlineStatus3 = new HtmlInlineContainer();
+					inlineStatus3.addChild(new HtmlText(getState3()));
+					boolean hasAllocatedFundsPermanentlyForAllProjectFinancers =
+							request.hasAllocatedFundsPermanentlyForAllProjectFinancers();
+					if (hasAllocatedFundsPermanentlyForAllProjectFinancers) {
+						if (request instanceof AcquisitionRequest) {
+							AcquisitionProcessStateType stateType =
+									((AcquisitionRequest) request).getProcess().getAcquisitionProcessStateType();
 
-			    if (stateType != AcquisitionProcessStateType.ACQUISITION_PROCESSED) {
-				inlineStatus3.setClasses(getOnClass());
-			    } else {
-				inlineStatus3.setClasses(getMiddleClass());
-			    }
-			} else {
-			    inlineStatus3.setClasses(getOnClass());
+							if (stateType != AcquisitionProcessStateType.ACQUISITION_PROCESSED) {
+								inlineStatus3.setClasses(getOnClass());
+							} else {
+								inlineStatus3.setClasses(getMiddleClass());
+							}
+						} else {
+							inlineStatus3.setClasses(getOnClass());
+						}
+					} else {
+						inlineStatus3.setClasses(getOffClass());
+					}
+
+					container.addChild(inlineStatus3);
+				}
+				HtmlInlineContainer inlineStatus4 = new HtmlInlineContainer();
+				inlineStatus4.addChild(new HtmlText(getState4()));
+				boolean hasAllEffectiveFundAllocationId = request.hasAllEffectiveFundAllocationId();
+				if (hasAllEffectiveFundAllocationId) {
+					if (request instanceof AcquisitionRequest) {
+						AcquisitionProcessStateType stateType =
+								((AcquisitionRequest) request).getProcess().getAcquisitionProcessStateType();
+						if (stateType != AcquisitionProcessStateType.ACQUISITION_PROCESSED) {
+							inlineStatus4.setClasses(getOnClass());
+						} else {
+							inlineStatus4.setClasses(getMiddleClass());
+						}
+					} else {
+						inlineStatus4.setClasses(getOnClass());
+					}
+				} else {
+					inlineStatus4.setClasses(getOffClass());
+				}
+
+				container.addChild(inlineStatus4);
+				return container;
 			}
-		    } else {
-			inlineStatus3.setClasses(getOffClass());
-		    }
 
-		    container.addChild(inlineStatus3);
-		}
-		HtmlInlineContainer inlineStatus4 = new HtmlInlineContainer();
-		inlineStatus4.addChild(new HtmlText(getState4()));
-		boolean hasAllEffectiveFundAllocationId = request.hasAllEffectiveFundAllocationId();
-		if (hasAllEffectiveFundAllocationId) {
-		    if (request instanceof AcquisitionRequest) {
-			AcquisitionProcessStateType stateType = ((AcquisitionRequest) request).getProcess()
-				.getAcquisitionProcessStateType();
-			if (stateType != AcquisitionProcessStateType.ACQUISITION_PROCESSED) {
-			    inlineStatus4.setClasses(getOnClass());
-			} else {
-			    inlineStatus4.setClasses(getMiddleClass());
-			}
-		    } else {
-			inlineStatus4.setClasses(getOnClass());
-		    }
-		} else {
-		    inlineStatus4.setClasses(getOffClass());
-		}
-
-		container.addChild(inlineStatus4);
-		return container;
-	    }
-
-	};
-    }
+		};
+	}
 
 }

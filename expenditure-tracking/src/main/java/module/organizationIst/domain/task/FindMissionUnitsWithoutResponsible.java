@@ -45,257 +45,257 @@ import pt.ist.fenixframework.pstm.AbstractDomainObject;
  */
 public class FindMissionUnitsWithoutResponsible extends ReadCustomTask {
 
-    private class UnitsExpendituresResponsibles extends HashMap<Unit, HashSet<Person>> {
-	private static final long serialVersionUID = 1L;
+	private class UnitsExpendituresResponsibles extends HashMap<Unit, HashSet<Person>> {
+		private static final long serialVersionUID = 1L;
 
-	public HashSet<Person> get(Unit unit) {
-	    HashSet<Person> responsibles = super.get(unit);
-	    if (responsibles == null) {
-		responsibles = new HashSet<Person>();
-		put(unit, responsibles);
-	    }
-	    return responsibles;
+		public HashSet<Person> get(Unit unit) {
+			HashSet<Person> responsibles = super.get(unit);
+			if (responsibles == null) {
+				responsibles = new HashSet<Person>();
+				put(unit, responsibles);
+			}
+			return responsibles;
+		}
+
+		public void put(Unit unit, Person responsible) {
+			get(unit).add(responsible);
+		}
+
+		@Override
+		public int size() {
+			int size = 0;
+			for (Unit unit : keySet()) {
+				if (!get(unit).isEmpty()) {
+					++size;
+				}
+			}
+			return size;
+		}
 	}
 
-	public void put(Unit unit, Person responsible) {
-	    get(unit).add(responsible);
-	}
+	private static final String MISSIONS_ORGANIZATIONAL_MODEL_OID = "545460846594";
+	private static final String MISSIONS_ACCOUNTABILITY_TYPE_OID = "403726926028";
+
+	private static final String PERSONNEL_ACCOUNTABILITY_TYPE_OID = "403726926029";
+	private static final String TEACHER_PERSONNEL_ACCOUNTABILITY_TYPE_OID = "403726926030";
+	private static final String INVESTIGATOR_PERSONNEL_ACCOUNTABILITY_TYPE_OID = "403726926031";
+
+	private static final String RESPONSIBLE_ACCOUNTABILITY_TYPE_OID = "403726925827";
+	private static final String TEACHER_RESPONSIBLE_ACCOUNTABILITY_TYPE_OID = "403726926228";
+
+	private static final String ACADEMIC_UNITS_PARTY_OID = "450971566087";
+
+	private OrganizationalModel missionsOrganizationalModel;
+
+	private final HashSet<AccountabilityType> personnelTypeList = new HashSet<AccountabilityType>();
+	private final HashSet<AccountabilityType> responsibleTypeList = new HashSet<AccountabilityType>();
+	private AccountabilityType missionAccType;
+
+	private final HashSet<Unit> unitsWithResponsible = new HashSet<Unit>();
+	private final HashSet<Unit> unitsWithoutResponsible = new HashSet<Unit>();
+
+	private final HashSet<Unit> unitsWithExpendituresResponsible = new HashSet<Unit>();
+	private final HashSet<Unit> unitsWithoutExpendituresResponsible = new HashSet<Unit>();
+
+	private final UnitsExpendituresResponsibles unitsZeroAmountsExpendituresResponsibles = new UnitsExpendituresResponsibles();
+	private final UnitsExpendituresResponsibles unitsNonZeroAmountsExpendituresResponsibles = new UnitsExpendituresResponsibles();
+
+	private Unit academicUnitsUnit;
 
 	@Override
-	public int size() {
-	    int size = 0;
-	    for (Unit unit : keySet()) {
-		if (!get(unit).isEmpty()) {
-		    ++size;
+	public void doIt() {
+
+		init();
+
+		for (Party party : missionsOrganizationalModel.getParties()) {
+			if (!Unit.class.isAssignableFrom(party.getClass())) {
+				continue;
+			}
+
+			Unit unit = (Unit) party;
+			recursiveCheckUnit(unit);
 		}
-	    }
-	    return size;
-	}
-    }
 
-    private static final String MISSIONS_ORGANIZATIONAL_MODEL_OID = "545460846594";
-    private static final String MISSIONS_ACCOUNTABILITY_TYPE_OID = "403726926028";
-
-    private static final String PERSONNEL_ACCOUNTABILITY_TYPE_OID = "403726926029";
-    private static final String TEACHER_PERSONNEL_ACCOUNTABILITY_TYPE_OID = "403726926030";
-    private static final String INVESTIGATOR_PERSONNEL_ACCOUNTABILITY_TYPE_OID = "403726926031";
-
-    private static final String RESPONSIBLE_ACCOUNTABILITY_TYPE_OID = "403726925827";
-    private static final String TEACHER_RESPONSIBLE_ACCOUNTABILITY_TYPE_OID = "403726926228";
-
-    private static final String ACADEMIC_UNITS_PARTY_OID = "450971566087";
-
-    private OrganizationalModel missionsOrganizationalModel;
-
-    private final HashSet<AccountabilityType> personnelTypeList = new HashSet<AccountabilityType>();
-    private final HashSet<AccountabilityType> responsibleTypeList = new HashSet<AccountabilityType>();
-    private AccountabilityType missionAccType;
-
-    private final HashSet<Unit> unitsWithResponsible = new HashSet<Unit>();
-    private final HashSet<Unit> unitsWithoutResponsible = new HashSet<Unit>();
-
-    private final HashSet<Unit> unitsWithExpendituresResponsible = new HashSet<Unit>();
-    private final HashSet<Unit> unitsWithoutExpendituresResponsible = new HashSet<Unit>();
-
-    private final UnitsExpendituresResponsibles unitsZeroAmountsExpendituresResponsibles = new UnitsExpendituresResponsibles();
-    private final UnitsExpendituresResponsibles unitsNonZeroAmountsExpendituresResponsibles = new UnitsExpendituresResponsibles();
-
-    private Unit academicUnitsUnit;
-
-    @Override
-    public void doIt() {
-
-	init();
-
-	for (Party party : missionsOrganizationalModel.getParties()) {
-	    if (!Unit.class.isAssignableFrom(party.getClass())) {
-		continue;
-	    }
-
-	    Unit unit = (Unit) party;
-	    recursiveCheckUnit(unit);
+		printResults();
 	}
 
-	printResults();
-    }
+	private void recursiveCheckUnit(Unit unit) {
+		Collection<module.organization.domain.Person> personnel = unit.getChildPersons(personnelTypeList);
+		Collection<module.organization.domain.Person> responsibles = unit.getChildPersons(responsibleTypeList);
+		if ((!personnel.isEmpty()) && (responsibles.isEmpty())) {
+			unitsWithoutResponsible.add(unit);
+			checkExpenditureAuthorizations(unit);
+		} else {
+			unitsWithResponsible.add(unit);
+		}
 
-    private void recursiveCheckUnit(Unit unit) {
-	Collection<module.organization.domain.Person> personnel = unit.getChildPersons(personnelTypeList);
-	Collection<module.organization.domain.Person> responsibles = unit.getChildPersons(responsibleTypeList);
-	if ((!personnel.isEmpty()) && (responsibles.isEmpty())) {
-	    unitsWithoutResponsible.add(unit);
-	    checkExpenditureAuthorizations(unit);
-	} else {
-	    unitsWithResponsible.add(unit);
+		for (Unit descendentUnit : unit.getChildUnits(missionAccType)) {
+			recursiveCheckUnit(descendentUnit);
+		}
 	}
 
-	for (Unit descendentUnit : unit.getChildUnits(missionAccType)) {
-	    recursiveCheckUnit(descendentUnit);
+	private void checkExpenditureAuthorizations(Unit unit) {
+		pt.ist.expenditureTrackingSystem.domain.organization.Unit expenditureUnit = unit.getExpenditureUnit();
+		if (expenditureUnit == null) {
+			printUnitHasNoExpenditureUnit(unit);
+			unitsWithoutExpendituresResponsible.add(unit);
+			return;
+		}
+
+		for (Authorization authorization : expenditureUnit.getAuthorizations()) {
+			if (authorization.getPerson() == null) {
+				printAuthorizationHasNoPerson(authorization);
+			}
+			if (authorization.getMaxAmount().equals(new Money("0"))) {
+				unitsZeroAmountsExpendituresResponsibles.put(unit, authorization.getPerson());
+			} else {
+				unitsNonZeroAmountsExpendituresResponsibles.put(unit, authorization.getPerson());
+			}
+		}
+
+		if (unitsZeroAmountsExpendituresResponsibles.get(unit).isEmpty()
+				&& unitsNonZeroAmountsExpendituresResponsibles.get(unit).isEmpty()) {
+			unitsWithoutExpendituresResponsible.add(unit);
+		} else {
+			unitsWithExpendituresResponsible.add(unit);
+		}
 	}
-    }
 
-    private void checkExpenditureAuthorizations(Unit unit) {
-	pt.ist.expenditureTrackingSystem.domain.organization.Unit expenditureUnit = unit.getExpenditureUnit();
-	if (expenditureUnit == null) {
-	    printUnitHasNoExpenditureUnit(unit);
-	    unitsWithoutExpendituresResponsible.add(unit);
-	    return;
+	private void printUnitHasNoExpenditureUnit(Unit unit) {
+		out.println("WARNING!");
+		printUnit(unit);
+		out.println("has no expenditure unit.");
+		out.println();
 	}
 
-	for (Authorization authorization : expenditureUnit.getAuthorizations()) {
-	    if (authorization.getPerson() == null) {
-		printAuthorizationHasNoPerson(authorization);
-	    }
-	    if (authorization.getMaxAmount().equals(new Money("0"))) {
-		unitsZeroAmountsExpendituresResponsibles.put(unit, authorization.getPerson());
-	    } else {
-		unitsNonZeroAmountsExpendituresResponsibles.put(unit, authorization.getPerson());
-	    }
+	private void printAuthorizationHasNoPerson(Authorization authorization) {
+		out.println("WARNING!");
+		out.println("Authorization: " + authorization.getJustification() + " [ " + authorization.getExternalId() + " ] ");
+		out.println("has no associated person.");
+		out.println();
 	}
 
-	if (unitsZeroAmountsExpendituresResponsibles.get(unit).isEmpty()
-		&& unitsNonZeroAmountsExpendituresResponsibles.get(unit).isEmpty()) {
-	    unitsWithoutExpendituresResponsible.add(unit);
-	} else {
-	    unitsWithExpendituresResponsible.add(unit);
+	private void init() {
+		missionsOrganizationalModel = AbstractDomainObject.fromExternalId(MISSIONS_ORGANIZATIONAL_MODEL_OID);
+
+		missionAccType = AbstractDomainObject.fromExternalId(MISSIONS_ACCOUNTABILITY_TYPE_OID);
+
+		AccountabilityType personnelType = AbstractDomainObject.fromExternalId(PERSONNEL_ACCOUNTABILITY_TYPE_OID);
+		AccountabilityType teacherPersonnelType = AbstractDomainObject.fromExternalId(TEACHER_PERSONNEL_ACCOUNTABILITY_TYPE_OID);
+		AccountabilityType investigatorPersonnelType =
+				AbstractDomainObject.fromExternalId(INVESTIGATOR_PERSONNEL_ACCOUNTABILITY_TYPE_OID);
+		personnelTypeList.add(personnelType);
+		personnelTypeList.add(teacherPersonnelType);
+		personnelTypeList.add(investigatorPersonnelType);
+
+		AccountabilityType responsibleType = AbstractDomainObject.fromExternalId(RESPONSIBLE_ACCOUNTABILITY_TYPE_OID);
+		AccountabilityType teacherResponsibleType =
+				AbstractDomainObject.fromExternalId(TEACHER_RESPONSIBLE_ACCOUNTABILITY_TYPE_OID);
+		responsibleTypeList.add(responsibleType);
+		responsibleTypeList.add(teacherResponsibleType);
+
+		academicUnitsUnit = AbstractDomainObject.fromExternalId(ACADEMIC_UNITS_PARTY_OID);
 	}
-    }
 
-    private void printUnitHasNoExpenditureUnit(Unit unit) {
-	out.println("WARNING!");
-	printUnit(unit);
-	out.println("has no expenditure unit.");
-	out.println();
-    }
+	private void printResults() {
+		out.println("Found " + unitsWithoutResponsible.size() + " cases without responsible, in a total of "
+				+ (unitsWithoutResponsible.size() + unitsWithResponsible.size()));
 
-    private void printAuthorizationHasNoPerson(Authorization authorization) {
-	out.println("WARNING!");
-	out.println("Authorization: " + authorization.getJustification() + " [ " + authorization.getExternalId() + " ] ");
-	out.println("has no associated person.");
-	out.println();
-    }
+		out.println("Of the " + unitsWithoutResponsible.size() + " cases without responsible "
+				+ unitsWithExpendituresResponsible.size() + " have expenditures responsibles, and "
+				+ unitsWithoutExpendituresResponsible.size() + " have not.");
 
-    private void init() {
-	missionsOrganizationalModel = AbstractDomainObject.fromExternalId(MISSIONS_ORGANIZATIONAL_MODEL_OID);
+		out.println();
+		out.println();
+		out.println();
+		out.println();
+		out.println();
 
-	missionAccType = AbstractDomainObject.fromExternalId(MISSIONS_ACCOUNTABILITY_TYPE_OID);
+		out.println("The following " + unitsWithoutExpendituresResponsible.size() + " units have no expenditures responsible: ");
+		out.println();
+		printUnitsWithoutExpendituresResponsible();
 
-	AccountabilityType personnelType = AbstractDomainObject.fromExternalId(PERSONNEL_ACCOUNTABILITY_TYPE_OID);
-	AccountabilityType teacherPersonnelType = AbstractDomainObject.fromExternalId(TEACHER_PERSONNEL_ACCOUNTABILITY_TYPE_OID);
-	AccountabilityType investigatorPersonnelType = AbstractDomainObject
-		.fromExternalId(INVESTIGATOR_PERSONNEL_ACCOUNTABILITY_TYPE_OID);
-	personnelTypeList.add(personnelType);
-	personnelTypeList.add(teacherPersonnelType);
-	personnelTypeList.add(investigatorPersonnelType);
+		out.println();
+		out.println();
+		out.println();
+		out.println();
+		out.println();
 
-	AccountabilityType responsibleType = AbstractDomainObject.fromExternalId(RESPONSIBLE_ACCOUNTABILITY_TYPE_OID);
-	AccountabilityType teacherResponsibleType = AbstractDomainObject
-		.fromExternalId(TEACHER_RESPONSIBLE_ACCOUNTABILITY_TYPE_OID);
-	responsibleTypeList.add(responsibleType);
-	responsibleTypeList.add(teacherResponsibleType);
+		out.println("The following " + unitsNonZeroAmountsExpendituresResponsibles.size()
+				+ " units have at least one Non-Zero-Amount expenditures responsible: ");
+		printUnitsWithExpendituresNonZeroAmountResponsibles();
 
-	academicUnitsUnit = AbstractDomainObject.fromExternalId(ACADEMIC_UNITS_PARTY_OID);
-    }
+		out.println();
+		out.println();
+		out.println();
+		out.println();
+		out.println();
 
-    private void printResults() {
-	out.println("Found " + unitsWithoutResponsible.size() + " cases without responsible, in a total of "
-		+ (unitsWithoutResponsible.size() + unitsWithResponsible.size()));
-
-	out.println("Of the " + unitsWithoutResponsible.size() + " cases without responsible "
-		+ unitsWithExpendituresResponsible.size() + " have expenditures responsibles, and "
-		+ unitsWithoutExpendituresResponsible.size() + " have not.");
-
-	out.println();
-	out.println();
-	out.println();
-	out.println();
-	out.println();
-
-	out.println("The following " + unitsWithoutExpendituresResponsible.size() + " units have no expenditures responsible: ");
-	out.println();
-	printUnitsWithoutExpendituresResponsible();
-
-	out.println();
-	out.println();
-	out.println();
-	out.println();
-	out.println();
-
-	out.println("The following " + unitsNonZeroAmountsExpendituresResponsibles.size()
-		+ " units have at least one Non-Zero-Amount expenditures responsible: ");
-	printUnitsWithExpendituresNonZeroAmountResponsibles();
-
-	out.println();
-	out.println();
-	out.println();
-	out.println();
-	out.println();
-
-	out.println("The following "
-		+ (unitsWithExpendituresResponsible.size() - unitsNonZeroAmountsExpendituresResponsibles.size())
-		+ " units only have Zero-Amount expenditures responsible: ");
-	printUnitsWithExpendituresZeroAmountResponsibles();
-    }
-
-    private void printUnitsWithoutExpendituresResponsible() {
-	for (Unit unit : unitsWithoutExpendituresResponsible) {
-	    printUnit(unit);
-	    recursiveCheckParentsForAcademicUnits(unit.getParentUnits(missionAccType));
+		out.println("The following "
+				+ (unitsWithExpendituresResponsible.size() - unitsNonZeroAmountsExpendituresResponsibles.size())
+				+ " units only have Zero-Amount expenditures responsible: ");
+		printUnitsWithExpendituresZeroAmountResponsibles();
 	}
-    }
 
-    private void recursiveCheckParentsForAcademicUnits(Collection<Unit> parentUnits) {
-	if (parentUnits.contains(academicUnitsUnit)) {
-	    out.println(" - WARNING: This unit is an academic unit!");
-	} else {
-	    for (Unit parentUnit : parentUnits) {
-		recursiveCheckParentsForAcademicUnits(parentUnit.getParentUnits(missionAccType));
-	    }
+	private void printUnitsWithoutExpendituresResponsible() {
+		for (Unit unit : unitsWithoutExpendituresResponsible) {
+			printUnit(unit);
+			recursiveCheckParentsForAcademicUnits(unit.getParentUnits(missionAccType));
+		}
 	}
-    }
 
-    private void printUnitsWithExpendituresNonZeroAmountResponsibles() {
-	for (Unit unit : unitsWithExpendituresResponsible) {
-	    if (unitsNonZeroAmountsExpendituresResponsibles.get(unit).size() == 0) {
-		continue;
-	    }
-	    out.println();
-	    printUnit(unit);
-	    out.println(unitsNonZeroAmountsExpendituresResponsibles.get(unit).size()
-		    + " Non-Zero-Amount Expenditures Responsibles:");
-	    for (Person person : unitsNonZeroAmountsExpendituresResponsibles.get(unit)) {
-		printExpendituresResponsible(person);
-	    }
-
-	    if (unitsZeroAmountsExpendituresResponsibles.get(unit).size() == 0) {
-		continue;
-	    }
-	    out.println(unitsZeroAmountsExpendituresResponsibles.get(unit).size() + " Zero-Amount Expenditures Responsibles:");
-	    for (Person person : unitsZeroAmountsExpendituresResponsibles.get(unit)) {
-		printExpendituresResponsible(person);
-	    }
+	private void recursiveCheckParentsForAcademicUnits(Collection<Unit> parentUnits) {
+		if (parentUnits.contains(academicUnitsUnit)) {
+			out.println(" - WARNING: This unit is an academic unit!");
+		} else {
+			for (Unit parentUnit : parentUnits) {
+				recursiveCheckParentsForAcademicUnits(parentUnit.getParentUnits(missionAccType));
+			}
+		}
 	}
-    }
 
-    private void printUnitsWithExpendituresZeroAmountResponsibles() {
-	for (Unit unit : unitsWithExpendituresResponsible) {
-	    if (unitsNonZeroAmountsExpendituresResponsibles.get(unit).size() != 0) {
-		continue;
-	    }
-	    out.println();
-	    printUnit(unit);
-	    out.println(unitsZeroAmountsExpendituresResponsibles.get(unit).size() + " Zero-Amount Expenditures Responsibles:");
-	    for (Person person : unitsZeroAmountsExpendituresResponsibles.get(unit)) {
-		printExpendituresResponsible(person);
-	    }
+	private void printUnitsWithExpendituresNonZeroAmountResponsibles() {
+		for (Unit unit : unitsWithExpendituresResponsible) {
+			if (unitsNonZeroAmountsExpendituresResponsibles.get(unit).size() == 0) {
+				continue;
+			}
+			out.println();
+			printUnit(unit);
+			out.println(unitsNonZeroAmountsExpendituresResponsibles.get(unit).size()
+					+ " Non-Zero-Amount Expenditures Responsibles:");
+			for (Person person : unitsNonZeroAmountsExpendituresResponsibles.get(unit)) {
+				printExpendituresResponsible(person);
+			}
+
+			if (unitsZeroAmountsExpendituresResponsibles.get(unit).size() == 0) {
+				continue;
+			}
+			out.println(unitsZeroAmountsExpendituresResponsibles.get(unit).size() + " Zero-Amount Expenditures Responsibles:");
+			for (Person person : unitsZeroAmountsExpendituresResponsibles.get(unit)) {
+				printExpendituresResponsible(person);
+			}
+		}
 	}
-    }
 
-    private void printExpendituresResponsible(Person person) {
-	out.println("Person: " + person.getName() + " [ " + person.getExternalId() + " ] ");
-    }
+	private void printUnitsWithExpendituresZeroAmountResponsibles() {
+		for (Unit unit : unitsWithExpendituresResponsible) {
+			if (unitsNonZeroAmountsExpendituresResponsibles.get(unit).size() != 0) {
+				continue;
+			}
+			out.println();
+			printUnit(unit);
+			out.println(unitsZeroAmountsExpendituresResponsibles.get(unit).size() + " Zero-Amount Expenditures Responsibles:");
+			for (Person person : unitsZeroAmountsExpendituresResponsibles.get(unit)) {
+				printExpendituresResponsible(person);
+			}
+		}
+	}
 
-    private void printUnit(Unit unit) {
-	out.println("Unit: " + unit.getPresentationName() + " [ " + unit.getExternalId() + " ] ");
-    }
+	private void printExpendituresResponsible(Person person) {
+		out.println("Person: " + person.getName() + " [ " + person.getExternalId() + " ] ");
+	}
+
+	private void printUnit(Unit unit) {
+		out.println("Unit: " + unit.getPresentationName() + " [ " + unit.getExternalId() + " ] ");
+	}
 }

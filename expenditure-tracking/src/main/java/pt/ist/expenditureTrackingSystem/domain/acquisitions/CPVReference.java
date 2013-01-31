@@ -25,8 +25,6 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Set;
 
 import pt.ist.bennu.core.domain.MyOrg;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
@@ -34,10 +32,6 @@ import pt.ist.bennu.core.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.plugins.luceneIndexing.IndexableField;
-import pt.ist.fenixframework.plugins.luceneIndexing.domain.IndexDocument;
-import pt.ist.fenixframework.plugins.luceneIndexing.domain.interfaces.Indexable;
-import pt.ist.fenixframework.plugins.luceneIndexing.domain.interfaces.Searchable;
-import pt.utl.ist.fenix.tools.util.StringNormalizer;
 
 /**
  * 
@@ -45,98 +39,98 @@ import pt.utl.ist.fenix.tools.util.StringNormalizer;
  * @author Luis Cruz
  * 
  */
-public class CPVReference extends CPVReference_Base /* implements Indexable, Searchable */ {
+public class CPVReference extends CPVReference_Base /* implements Indexable, Searchable */{
 
-    public static enum CPVIndexes implements IndexableField {
-	CODE("code"), DESCRIPTION("desc");
+	public static enum CPVIndexes implements IndexableField {
+		CODE("code"), DESCRIPTION("desc");
 
-	private String name;
+		private String name;
 
-	private CPVIndexes(String name) {
-	    this.name = name;
+		private CPVIndexes(String name) {
+			this.name = name;
+		}
+
+		@Override
+		public String getFieldName() {
+			return this.name;
+		}
 	}
 
-	@Override
-	public String getFieldName() {
-	    return this.name;
+	public static Comparator<CPVReference> COMPARATOR_BY_DESCRIPTION = new Comparator<CPVReference>() {
+
+		@Override
+		public int compare(final CPVReference o1, final CPVReference o2) {
+			return o1.getDescription().compareTo(o2.getDescription());
+		}
+
+	};
+
+	public static Comparator<CPVReference> COMPARATOR_BY_CODE = new Comparator<CPVReference>() {
+
+		@Override
+		public int compare(final CPVReference o1, final CPVReference o2) {
+			if (o1 == null && o2 == null) {
+				return 0;
+			}
+			if (o1 == null) {
+				return 1;
+			}
+			return o2 == null ? -1 : o1.getCode().compareTo(o2.getCode());
+		}
+
+	};
+
+	public CPVReference(String code, String description) {
+		checkParameters(code, description);
+
+		setCode(code);
+		setDescription(description);
+		setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
 	}
-    }
 
-    public static Comparator<CPVReference> COMPARATOR_BY_DESCRIPTION = new Comparator<CPVReference>() {
-
-	@Override
-	public int compare(final CPVReference o1, final CPVReference o2) {
-	    return o1.getDescription().compareTo(o2.getDescription());
+	private void checkParameters(String code, String description) {
+		if (code == null || description == null) {
+			throw new DomainException("error.code.and.description.are.required");
+		}
+		if (getCPVCode(code) != null) {
+			throw new DomainException("error.cpv.code.already.exists");
+		}
 	}
 
-    };
-
-    public static Comparator<CPVReference> COMPARATOR_BY_CODE = new Comparator<CPVReference>() {
-
-	@Override
-	public int compare(final CPVReference o1, final CPVReference o2) {
-	    if (o1 == null && o2 == null) {
-		return 0;
-	    }
-	    if (o1 == null) {
-		return 1;
-	    }
-	    return o2 == null ? -1 : o1.getCode().compareTo(o2.getCode());
+	public static CPVReference getCPVCode(String code) {
+		for (CPVReference reference : MyOrg.getInstance().getCPVReferences()) {
+			if (reference.getCode().equals(code)) {
+				return reference;
+			}
+		}
+		return null;
 	}
 
-    };
-
-    public CPVReference(String code, String description) {
-	checkParameters(code, description);
-
-	setCode(code);
-	setDescription(description);
-	setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
-    }
-
-    private void checkParameters(String code, String description) {
-	if (code == null || description == null) {
-	    throw new DomainException("error.code.and.description.are.required");
+	public String getFullDescription() {
+		return getCode() + " - " + getDescription();
 	}
-	if (getCPVCode(code) != null) {
-	    throw new DomainException("error.cpv.code.already.exists");
+
+	public Money getTotalAmountAllocated(final int year) {
+		Money money = Money.ZERO;
+		for (final RequestItem requestItem : getAcquisitionItemsSet()) {
+			money = money.add(requestItem.getTotalAmountForCPV(year));
+		}
+		return money;
 	}
-    }
 
-    public static CPVReference getCPVCode(String code) {
-	for (CPVReference reference : MyOrg.getInstance().getCPVReferences()) {
-	    if (reference.getCode().equals(code)) {
-		return reference;
-	    }
+	public boolean isPriorityCode() {
+		return getExpenditureTrackingSystemForPriorities() != null;
 	}
-	return null;
-    }
 
-    public String getFullDescription() {
-	return getCode() + " - " + getDescription();
-    }
-
-    public Money getTotalAmountAllocated(final int year) {
-	Money money = Money.ZERO;
-	for (final RequestItem requestItem : getAcquisitionItemsSet()) {
-	    money = money.add(requestItem.getTotalAmountForCPV(year));
+	@Service
+	public void markAsPriority() {
+		setExpenditureTrackingSystemForPriorities(ExpenditureTrackingSystem.getInstance());
 	}
-	return money;
-    }
 
-    public boolean isPriorityCode() {
-	return getExpenditureTrackingSystemForPriorities() != null;
-    }
-
-    @Service
-    public void markAsPriority() {
-	setExpenditureTrackingSystemForPriorities(ExpenditureTrackingSystem.getInstance());
-    }
-
-    @Service
-    public void unmarkAsPriority() {
-	setExpenditureTrackingSystemForPriorities(null);
-    }
+	@Service
+	public void unmarkAsPriority() {
+		setExpenditureTrackingSystemForPriorities(null);
+	}
 
 /*
     @Override

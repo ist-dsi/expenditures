@@ -41,32 +41,30 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.Simplifie
  */
 public class SelectSupplier extends WorkflowActivity<RegularAcquisitionProcess, SelectSupplierActivityInformation> {
 
-    @Override
-    public boolean isActive(RegularAcquisitionProcess process, User user) {
-	return ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user)
-		&& isUserProcessOwner(process, user)
-		&& process.isSimplifiedAcquisitionProcess()
-		&& process.getAcquisitionProcessState().isAuthorized()
-		&& ((SimplifiedProcedureProcess) process).getProcessClassification() == ProcessClassification.CT75000;
-    }
+	@Override
+	public boolean isActive(RegularAcquisitionProcess process, User user) {
+		return ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user) && isUserProcessOwner(process, user)
+				&& process.isSimplifiedAcquisitionProcess() && process.getAcquisitionProcessState().isAuthorized()
+				&& ((SimplifiedProcedureProcess) process).getProcessClassification() == ProcessClassification.CT75000;
+	}
 
-    @Override
-    public ActivityInformation<RegularAcquisitionProcess> getActivityInformation(RegularAcquisitionProcess process) {
-	return new SelectSupplierActivityInformation(process, this);
-    }
+	@Override
+	public ActivityInformation<RegularAcquisitionProcess> getActivityInformation(RegularAcquisitionProcess process) {
+		return new SelectSupplierActivityInformation(process, this);
+	}
 
-    @Override
-    protected void process(SelectSupplierActivityInformation activityInformation) {
-	activityInformation.getProcess().getRequest().setSelectedSupplier(activityInformation.getSupplier());
-    }
+	@Override
+	protected void process(SelectSupplierActivityInformation activityInformation) {
+		activityInformation.getProcess().getRequest().setSelectedSupplier(activityInformation.getSupplier());
+	}
 
-    @Override
-    public String getLocalizedName() {
-	return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
-    }
+	@Override
+	public String getLocalizedName() {
+		return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+	}
 
-    @Override
-    public String getUsedBundle() {
-	return "resources/AcquisitionResources";
-    }
+	@Override
+	public String getUsedBundle() {
+		return "resources/AcquisitionResources";
+	}
 }

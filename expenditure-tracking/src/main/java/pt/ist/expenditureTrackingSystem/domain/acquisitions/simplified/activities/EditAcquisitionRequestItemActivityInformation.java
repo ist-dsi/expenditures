@@ -39,35 +39,35 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionPr
  */
 public class EditAcquisitionRequestItemActivityInformation extends CreateAcquisitionRequestItemActivityInformation {
 
-    private AcquisitionRequestItem item;
+	private AcquisitionRequestItem item;
 
-    public EditAcquisitionRequestItemActivityInformation(RegularAcquisitionProcess process,
-	    WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity) {
-	super(process, activity);
-    }
+	public EditAcquisitionRequestItemActivityInformation(RegularAcquisitionProcess process,
+			WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity) {
+		super(process, activity);
+	}
 
-    public AcquisitionRequestItem getItem() {
-	return item;
-    }
+	public AcquisitionRequestItem getItem() {
+		return item;
+	}
 
-    public void setItem(AcquisitionRequestItem item) {
-	this.item = item;
-	setDescription(item.getDescription());
-	setQuantity(item.getQuantity());
-	setUnitValue(item.getUnitValue());
-	setVatValue(item.getVatValue());
-	setAdditionalCostValue(item.getAdditionalCostValue());
-	setProposalReference(item.getProposalReference());
-	setAcquisitionRequest(item.getAcquisitionRequest());
-	setClassification(item.getClassification());
-	setCPVReference(item.getCPVReference());
-	setDeliveryInfo(UserView.getCurrentUser().getExpenditurePerson()
-		.getDeliveryInfoByRecipientAndAddress(item.getRecipient(), item.getAddress()));
-    }
+	public void setItem(AcquisitionRequestItem item) {
+		this.item = item;
+		setDescription(item.getDescription());
+		setQuantity(item.getQuantity());
+		setUnitValue(item.getUnitValue());
+		setVatValue(item.getVatValue());
+		setAdditionalCostValue(item.getAdditionalCostValue());
+		setProposalReference(item.getProposalReference());
+		setAcquisitionRequest(item.getAcquisitionRequest());
+		setClassification(item.getClassification());
+		setCPVReference(item.getCPVReference());
+		setDeliveryInfo(UserView.getCurrentUser().getExpenditurePerson()
+				.getDeliveryInfoByRecipientAndAddress(item.getRecipient(), item.getAddress()));
+	}
 
-    @Override
-    public boolean hasAllneededInfo() {
-	return isForwardedFromInput() && getItem() != null && super.hasAllneededInfo();
-    }
+	@Override
+	public boolean hasAllneededInfo() {
+		return isForwardedFromInput() && getItem() != null && super.hasAllneededInfo();
+	}
 
 }

@@ -38,44 +38,43 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionPr
  */
 public class DeleteCommitmentNumber extends WorkflowActivity<RegularAcquisitionProcess, DeleteCommitmentNumberInformation> {
 
-    @Override
-    public boolean isActive(final RegularAcquisitionProcess process, final User user) {
-	return isUserProcessOwner(process, user)
-		&& process.getAcquisitionProcessState().isAuthorized()
-		&& process.hasCommitmentByUser(user);
-    }
-
-    @Override
-    protected void process(final DeleteCommitmentNumberInformation activityInformation) {
-	final Financer financer = activityInformation.getFinancer();
-	if (financer != null) {
-	    financer.setCommitmentNumber(null);
+	@Override
+	public boolean isActive(final RegularAcquisitionProcess process, final User user) {
+		return isUserProcessOwner(process, user) && process.getAcquisitionProcessState().isAuthorized()
+				&& process.hasCommitmentByUser(user);
 	}
-    }
 
-    @Override
-    public ActivityInformation<RegularAcquisitionProcess> getActivityInformation(final RegularAcquisitionProcess process) {
-        return new DeleteCommitmentNumberInformation(process, this);
-    }
+	@Override
+	protected void process(final DeleteCommitmentNumberInformation activityInformation) {
+		final Financer financer = activityInformation.getFinancer();
+		if (financer != null) {
+			financer.setCommitmentNumber(null);
+		}
+	}
 
-    @Override
-    public String getLocalizedName() {
-	return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
-    }
+	@Override
+	public ActivityInformation<RegularAcquisitionProcess> getActivityInformation(final RegularAcquisitionProcess process) {
+		return new DeleteCommitmentNumberInformation(process, this);
+	}
 
-    @Override
-    public String getUsedBundle() {
-	return "resources/AcquisitionResources";
-    }
+	@Override
+	public String getLocalizedName() {
+		return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+	}
 
-    @Override
-    public boolean isVisible() {
-	return false;
-    }
+	@Override
+	public String getUsedBundle() {
+		return "resources/AcquisitionResources";
+	}
 
-    @Override
-    public boolean isUserAwarenessNeeded(RegularAcquisitionProcess process, User user) {
-	return false;
-    }
+	@Override
+	public boolean isVisible() {
+		return false;
+	}
+
+	@Override
+	public boolean isUserAwarenessNeeded(RegularAcquisitionProcess process, User user) {
+		return false;
+	}
 
 }

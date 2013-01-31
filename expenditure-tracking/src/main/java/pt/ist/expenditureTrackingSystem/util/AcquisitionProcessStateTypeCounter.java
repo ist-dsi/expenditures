@@ -33,8 +33,8 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessSt
  */
 public class AcquisitionProcessStateTypeCounter extends PaymentProcessStateTypeCounter<AcquisitionProcessStateType> {
 
-    public AcquisitionProcessStateTypeCounter() {
-	super();
-    }
+	public AcquisitionProcessStateTypeCounter() {
+		super();
+	}
 
 }

@@ -7,43 +7,43 @@ import pt.ist.bennu.core.domain.VirtualHost;
 import pt.ist.fenixWebFramework.services.Service;
 
 public class AccountabilityTypeQueue extends AccountabilityTypeQueue_Base {
-    
-    public AccountabilityTypeQueue() {
-        super();
-        setMissionSystem(MissionSystem.getInstance());
-    }
 
-    public AccountabilityTypeQueue(final AccountabilityType accountabilityType, final WorkflowQueue workflowQueue) {
-        this();
-        setAccountabilityType(accountabilityType);
-        setWorkflowQueue(workflowQueue);
-    }
+	public AccountabilityTypeQueue() {
+		super();
+		setMissionSystem(MissionSystem.getInstance());
+	}
 
-    @Service
-    public void delete() {
-	removeWorkflowQueue();
-	removeAccountabilityType();
-	removeMissionSystem();
-	deleteDomainObject();
-    }
+	public AccountabilityTypeQueue(final AccountabilityType accountabilityType, final WorkflowQueue workflowQueue) {
+		this();
+		setAccountabilityType(accountabilityType);
+		setWorkflowQueue(workflowQueue);
+	}
 
-    @Override
-    public boolean isConnectedToCurrentHost() {
-	return getMissionSystem() == VirtualHost.getVirtualHostForThread().getMissionSystem();
-    }
-    
-    @ConsistencyPredicate
-    public boolean checkHasMissionSystem() {
-	return hasMissionSystem();
-    }
+	@Service
+	public void delete() {
+		removeWorkflowQueue();
+		removeAccountabilityType();
+		removeMissionSystem();
+		deleteDomainObject();
+	}
 
-    @ConsistencyPredicate
-    public boolean checkHasAccountabilityType() {
-	return hasAccountabilityType();
-    }
+	@Override
+	public boolean isConnectedToCurrentHost() {
+		return getMissionSystem() == VirtualHost.getVirtualHostForThread().getMissionSystem();
+	}
 
-    @ConsistencyPredicate
-    public boolean checkHasWorkflowQueue() {
-	return hasWorkflowQueue();
-    }
+	@ConsistencyPredicate
+	public boolean checkHasMissionSystem() {
+		return hasMissionSystem();
+	}
+
+	@ConsistencyPredicate
+	public boolean checkHasAccountabilityType() {
+		return hasAccountabilityType();
+	}
+
+	@ConsistencyPredicate
+	public boolean checkHasWorkflowQueue() {
+		return hasWorkflowQueue();
+	}
 }

@@ -39,49 +39,52 @@ import pt.ist.bennu.core.util.BundleUtil;
  * @author Luis Cruz
  * 
  */
-public class DefineParticipantAuthorizationChainActivity extends MissionProcessActivity<MissionProcess, DefineParticipantAuthorizationChainActivityInformation> {
+public class DefineParticipantAuthorizationChainActivity extends
+		MissionProcessActivity<MissionProcess, DefineParticipantAuthorizationChainActivityInformation> {
 
-    @Override
-    public String getLocalizedName() {
-	return BundleUtil.getStringFromResourceBundle("resources/MissionResources", "activity." + getClass().getSimpleName());
-    }
-
-    @Override
-    public boolean isActive(final MissionProcess missionProcess, final User user) {
-	return super.isActive(missionProcess, user) &&
-		((missionProcess.isUnderConstruction() && missionProcess.isRequestor(user))
-			|| user.hasRoleType(RoleType.MANAGER));
-    }
-
-    @Override
-    protected void process(final DefineParticipantAuthorizationChainActivityInformation defineParticipantAuthorizationChainActivityInformation) {
-	final MissionProcess missionProcess = defineParticipantAuthorizationChainActivityInformation.getProcess();
-	final Mission mission = missionProcess.getMission();
-	final Person person = defineParticipantAuthorizationChainActivityInformation.getPerson();
-	final AuthorizationChain authorizationChain = defineParticipantAuthorizationChainActivityInformation.getAuthorizationChain();
-
-	for (final PersonMissionAuthorization personMissionAuthorization : mission.getPersonMissionAuthorizationsSet()) {
-	    if (personMissionAuthorization.getSubject() == person) {
-		personMissionAuthorization.delete();
-	    }
+	@Override
+	public String getLocalizedName() {
+		return BundleUtil.getStringFromResourceBundle("resources/MissionResources", "activity." + getClass().getSimpleName());
 	}
 
-	new PersonMissionAuthorization(mission, person, authorizationChain);
-    }
+	@Override
+	public boolean isActive(final MissionProcess missionProcess, final User user) {
+		return super.isActive(missionProcess, user)
+				&& ((missionProcess.isUnderConstruction() && missionProcess.isRequestor(user)) || user
+						.hasRoleType(RoleType.MANAGER));
+	}
 
-    @Override
-    public ActivityInformation<MissionProcess> getActivityInformation(final MissionProcess process) {
-	return new DefineParticipantAuthorizationChainActivityInformation(process, this);
-    }
+	@Override
+	protected void process(
+			final DefineParticipantAuthorizationChainActivityInformation defineParticipantAuthorizationChainActivityInformation) {
+		final MissionProcess missionProcess = defineParticipantAuthorizationChainActivityInformation.getProcess();
+		final Mission mission = missionProcess.getMission();
+		final Person person = defineParticipantAuthorizationChainActivityInformation.getPerson();
+		final AuthorizationChain authorizationChain =
+				defineParticipantAuthorizationChainActivityInformation.getAuthorizationChain();
 
-    @Override
-    public boolean isDefaultInputInterfaceUsed() {
-	return false;
-    }
+		for (final PersonMissionAuthorization personMissionAuthorization : mission.getPersonMissionAuthorizationsSet()) {
+			if (personMissionAuthorization.getSubject() == person) {
+				personMissionAuthorization.delete();
+			}
+		}
 
-    @Override
-    public boolean isVisible() {
-        return false;
-    }
+		new PersonMissionAuthorization(mission, person, authorizationChain);
+	}
+
+	@Override
+	public ActivityInformation<MissionProcess> getActivityInformation(final MissionProcess process) {
+		return new DefineParticipantAuthorizationChainActivityInformation(process, this);
+	}
+
+	@Override
+	public boolean isDefaultInputInterfaceUsed() {
+		return false;
+	}
+
+	@Override
+	public boolean isVisible() {
+		return false;
+	}
 
 }

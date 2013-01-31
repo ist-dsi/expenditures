@@ -27,11 +27,10 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact;
 import java.math.BigDecimal;
 import java.util.Calendar;
 
-import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.bennu.core.domain.util.Money;
-
 import org.joda.time.LocalDate;
 
+import pt.ist.bennu.core.domain.exceptions.DomainException;
+import pt.ist.bennu.core.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 
 /**
@@ -43,70 +42,70 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
  */
 public class AcquisitionAfterTheFact extends AcquisitionAfterTheFact_Base {
 
-    public AcquisitionAfterTheFact(final AfterTheFactAcquisitionProcess afterTheFactAcquisitionProcess) {
-	super();
-	setAfterTheFactAcquisitionProcess(afterTheFactAcquisitionProcess);
-    }
-
-    public void edit(AfterTheFactAcquisitionType type, Money value, BigDecimal vatValue, Supplier supplier, String description) {
-	setDeletedState(Boolean.FALSE);
-	setAfterTheFactAcquisitionType(type);
-	setValue(value);
-	setVatValue(vatValue);
-	setSupplier(supplier);
-	setDescription(description);
-    }
-
-    public void delete() {
-	setDeletedState(Boolean.TRUE);
-    }
-
-    public String getAcquisitionProcessId() {
-	return getAfterTheFactAcquisitionProcess().getAcquisitionProcessId();
-    }
-
-    @Override
-    public void setSupplier(final Supplier supplier) {
-	if (supplier != getSupplier()) {
-	    super.setSupplier(supplier);
-	    setValue(getValue());
+	public AcquisitionAfterTheFact(final AfterTheFactAcquisitionProcess afterTheFactAcquisitionProcess) {
+		super();
+		setAfterTheFactAcquisitionProcess(afterTheFactAcquisitionProcess);
 	}
-    }
 
-    @Override
-    public void setValue(final Money value) {
-	if (getValue() == null || value.isGreaterThan(getValue())) {
-	    super.setValue(Money.ZERO);
-	    if (getSupplier() != null && !getSupplier().isFundAllocationAllowed(Money.ZERO)) {
-		throw new DomainException("acquisitionProcess.message.exception.SupplierDoesNotAlloweAmount", DomainException
-			.getResourceFor("resources/AcquisitionResources"));
-	    }
+	public void edit(AfterTheFactAcquisitionType type, Money value, BigDecimal vatValue, Supplier supplier, String description) {
+		setDeletedState(Boolean.FALSE);
+		setAfterTheFactAcquisitionType(type);
+		setValue(value);
+		setVatValue(vatValue);
+		setSupplier(supplier);
+		setDescription(description);
 	}
-	super.setValue(value);
-    }
 
-    public boolean isAppiableForYear(final int year) {
-	final LocalDate localDate = getAfterTheFactAcquisitionProcess().getInvoice().getInvoiceDate();
-	return localDate != null && localDate.getYear() == year;
-    }
+	public void delete() {
+		setDeletedState(Boolean.TRUE);
+	}
 
-    public AfterTheFactInvoice receiveInvoice(String filename, byte[] bytes, String invoiceNumber, LocalDate invoiceDate) {
-	return getAfterTheFactAcquisitionProcess().receiveInvoice(filename, bytes, invoiceNumber, invoiceDate);
-    }
+	public String getAcquisitionProcessId() {
+		return getAfterTheFactAcquisitionProcess().getAcquisitionProcessId();
+	}
 
-    public String getInvoiceNumber() {
-	return getAfterTheFactAcquisitionProcess().getInvoiceNumber();
-    }
+	@Override
+	public void setSupplier(final Supplier supplier) {
+		if (supplier != getSupplier()) {
+			super.setSupplier(supplier);
+			setValue(getValue());
+		}
+	}
 
-    public LocalDate getInvoiceDate() {
-	return getAfterTheFactAcquisitionProcess().getInvoiceDate();
-    }
+	@Override
+	public void setValue(final Money value) {
+		if (getValue() == null || value.isGreaterThan(getValue())) {
+			super.setValue(Money.ZERO);
+			if (getSupplier() != null && !getSupplier().isFundAllocationAllowed(Money.ZERO)) {
+				throw new DomainException("acquisitionProcess.message.exception.SupplierDoesNotAlloweAmount",
+						DomainException.getResourceFor("resources/AcquisitionResources"));
+			}
+		}
+		super.setValue(value);
+	}
 
-    public boolean isInAllocationPeriod() {
-	final AfterTheFactAcquisitionProcess afterTheFactAcquisitionProcess = getAfterTheFactAcquisitionProcess();
-	final Integer year = afterTheFactAcquisitionProcess.getYear().intValue();
-	final int i = Calendar.getInstance().get(Calendar.YEAR);
-	return year == i || year == i - 1 || year == i - 2;
-    }
+	public boolean isAppiableForYear(final int year) {
+		final LocalDate localDate = getAfterTheFactAcquisitionProcess().getInvoice().getInvoiceDate();
+		return localDate != null && localDate.getYear() == year;
+	}
+
+	public AfterTheFactInvoice receiveInvoice(String filename, byte[] bytes, String invoiceNumber, LocalDate invoiceDate) {
+		return getAfterTheFactAcquisitionProcess().receiveInvoice(filename, bytes, invoiceNumber, invoiceDate);
+	}
+
+	public String getInvoiceNumber() {
+		return getAfterTheFactAcquisitionProcess().getInvoiceNumber();
+	}
+
+	public LocalDate getInvoiceDate() {
+		return getAfterTheFactAcquisitionProcess().getInvoiceDate();
+	}
+
+	public boolean isInAllocationPeriod() {
+		final AfterTheFactAcquisitionProcess afterTheFactAcquisitionProcess = getAfterTheFactAcquisitionProcess();
+		final Integer year = afterTheFactAcquisitionProcess.getYear().intValue();
+		final int i = Calendar.getInstance().get(Calendar.YEAR);
+		return year == i || year == i - 1 || year == i - 2;
+	}
 
 }

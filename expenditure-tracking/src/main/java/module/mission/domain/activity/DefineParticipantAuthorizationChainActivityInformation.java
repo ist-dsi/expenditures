@@ -46,55 +46,57 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
  */
 public class DefineParticipantAuthorizationChainActivityInformation extends ParticipantActivityInformation {
 
-    private AuthorizationChain authorizationChain;
+	private AuthorizationChain authorizationChain;
 
-    public DefineParticipantAuthorizationChainActivityInformation(final MissionProcess missionProcess,
-	    final WorkflowActivity<MissionProcess, ? extends ActivityInformation<MissionProcess>> activity) {
-	super(missionProcess, activity);
-    }
-
-    @Override
-    public boolean hasAllneededInfo() {
-	return super.hasAllneededInfo() && false;
-    }
-
-    public AuthorizationChain getAuthorizationChain() {
-        return authorizationChain;
-    }
-
-    public void setAuthorizationChain(AuthorizationChain authorizationChain) {
-        this.authorizationChain = authorizationChain;
-    }
-
-    public SortedMap<Person, Collection<ParticipantAuthorizationChain>> getPossibleParticipantAuthorizationChains() {
-	final Person selected = getPerson();
-	final SortedMap<Person, Collection<ParticipantAuthorizationChain>> participantAuthorizationChainss = new TreeMap<Person, Collection<ParticipantAuthorizationChain>>(Person.COMPARATOR_BY_NAME);
-	for (final Person person : getProcess().getMission().getParticipantesSet()) {
-	    if (selected == null || selected == person) {
-		final Collection<ParticipantAuthorizationChain> participantAuthorizationChain = ParticipantAuthorizationChain.getParticipantAuthorizationChains(person);
-		if (participantAuthorizationChain.isEmpty()) {
-		    // this case if for students and other ad-hoc cases.
-		    final MissionProcess missionProcess = getProcess();
-		    final Mission mission = missionProcess.getMission();
-		    final Collection<ParticipantAuthorizationChain> temp = new ArrayList<ParticipantAuthorizationChain>();
-		    for (final MissionFinancer missionFinancer : mission.getFinancerSet()) {
-			final Unit unit = getFirstValidUnit(missionFinancer.getUnit(), person);
-			temp.addAll(ParticipantAuthorizationChain.getParticipantAuthorizationChains(person, unit.getUnit()));
-		    }		    
-		    participantAuthorizationChainss.put(person, temp);
-		} else {
-		    // teachers, employees, researchers and grant owners should go here.
-		    participantAuthorizationChainss.put(person, participantAuthorizationChain);
-		}
-	    }
+	public DefineParticipantAuthorizationChainActivityInformation(final MissionProcess missionProcess,
+			final WorkflowActivity<MissionProcess, ? extends ActivityInformation<MissionProcess>> activity) {
+		super(missionProcess, activity);
 	}
 
-	return participantAuthorizationChainss;
-    }
+	@Override
+	public boolean hasAllneededInfo() {
+		return super.hasAllneededInfo() && false;
+	}
 
-    private Unit getFirstValidUnit(final Unit unit, final Person person) {
-	return unit.hasResponsiblesInUnit() && unit.hasUnit() && !unit.isResponsible(person.getUser().getExpenditurePerson())
-		? unit : getFirstValidUnit(unit.getParentUnit(), person);
-    }
+	public AuthorizationChain getAuthorizationChain() {
+		return authorizationChain;
+	}
+
+	public void setAuthorizationChain(AuthorizationChain authorizationChain) {
+		this.authorizationChain = authorizationChain;
+	}
+
+	public SortedMap<Person, Collection<ParticipantAuthorizationChain>> getPossibleParticipantAuthorizationChains() {
+		final Person selected = getPerson();
+		final SortedMap<Person, Collection<ParticipantAuthorizationChain>> participantAuthorizationChainss =
+				new TreeMap<Person, Collection<ParticipantAuthorizationChain>>(Person.COMPARATOR_BY_NAME);
+		for (final Person person : getProcess().getMission().getParticipantesSet()) {
+			if (selected == null || selected == person) {
+				final Collection<ParticipantAuthorizationChain> participantAuthorizationChain =
+						ParticipantAuthorizationChain.getParticipantAuthorizationChains(person);
+				if (participantAuthorizationChain.isEmpty()) {
+					// this case if for students and other ad-hoc cases.
+					final MissionProcess missionProcess = getProcess();
+					final Mission mission = missionProcess.getMission();
+					final Collection<ParticipantAuthorizationChain> temp = new ArrayList<ParticipantAuthorizationChain>();
+					for (final MissionFinancer missionFinancer : mission.getFinancerSet()) {
+						final Unit unit = getFirstValidUnit(missionFinancer.getUnit(), person);
+						temp.addAll(ParticipantAuthorizationChain.getParticipantAuthorizationChains(person, unit.getUnit()));
+					}
+					participantAuthorizationChainss.put(person, temp);
+				} else {
+					// teachers, employees, researchers and grant owners should go here.
+					participantAuthorizationChainss.put(person, participantAuthorizationChain);
+				}
+			}
+		}
+
+		return participantAuthorizationChainss;
+	}
+
+	private Unit getFirstValidUnit(final Unit unit, final Person person) {
+		return unit.hasResponsiblesInUnit() && unit.hasUnit() && !unit.isResponsible(person.getUser().getExpenditurePerson()) ? unit : getFirstValidUnit(
+				unit.getParentUnit(), person);
+	}
 
 }

@@ -30,8 +30,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import pt.ist.bennu.core.domain.MyOrg;
-
-import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.Search;
 
@@ -43,72 +41,73 @@ import pt.ist.expenditureTrackingSystem.domain.Search;
  */
 public class SearchUsers extends Search<Person> {
 
-    private String username;
-    private String name;
-    private Person person;
-    private RoleType roleType;
+	private String username;
+	private String name;
+	private Person person;
+	private RoleType roleType;
 
-    protected class SearchResult extends SearchResultSet<Person> {
+	protected class SearchResult extends SearchResultSet<Person> {
 
-	public SearchResult(final Collection<? extends Person> c) {
-	    super(c);
+		public SearchResult(final Collection<? extends Person> c) {
+			super(c);
+		}
+
+		@Override
+		protected boolean matchesSearchCriteria(final Person person) {
+			return matchCriteria(username, person.getUsername()) && matchCriteria(name, person.getName())
+					&& matchCriteria(roleType, person);
+		}
+
+		private boolean matchCriteria(final RoleType roleType, final Person person) {
+			return roleType == null || person.hasRoleType(roleType);
+		}
+
 	}
 
 	@Override
-	protected boolean matchesSearchCriteria(final Person person) {
-	    return matchCriteria(username, person.getUsername()) && matchCriteria(name, person.getName())
-		    && matchCriteria(roleType, person);
+	public Set<Person> search() {
+		final Person person = getPerson();
+		if (person != null) {
+			final Set<Person> people = new HashSet<Person>();
+			people.add(person);
+			return people;
+		}
+		final Set<Person> people =
+				username != null || name != null || roleType != null ? MyOrg.getInstance()
+						.getPeopleFromExpenditureTackingSystemSet() : Collections.EMPTY_SET;
+		return new SearchResult(people);
 	}
 
-	private boolean matchCriteria(final RoleType roleType, final Person person) {
-	    return roleType == null || person.hasRoleType(roleType);
+	public String getUsername() {
+		return username;
 	}
 
-    }
-
-    @Override
-    public Set<Person> search() {
-	final Person person = getPerson();
-	if (person != null) {
-	    final Set<Person> people = new HashSet<Person>();
-	    people.add(person);
-	    return people;
+	public void setUsername(String username) {
+		this.username = username;
 	}
-	final Set<Person> people = username != null || name != null || roleType != null ? MyOrg.getInstance()
-		.getPeopleFromExpenditureTackingSystemSet() : Collections.EMPTY_SET;
-	return new SearchResult(people);
-    }
 
-    public String getUsername() {
-	return username;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setUsername(String username) {
-	this.username = username;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public String getName() {
-	return name;
-    }
+	public RoleType getRoleType() {
+		return roleType;
+	}
 
-    public void setName(String name) {
-	this.name = name;
-    }
+	public void setRoleType(RoleType roleType) {
+		this.roleType = roleType;
+	}
 
-    public RoleType getRoleType() {
-	return roleType;
-    }
+	public Person getPerson() {
+		return person;
+	}
 
-    public void setRoleType(RoleType roleType) {
-	this.roleType = roleType;
-    }
-
-    public Person getPerson() {
-	return person;
-    }
-
-    public void setPerson(final Person person) {
-	this.person = person;
-    }
+	public void setPerson(final Person person) {
+		this.person = person;
+	}
 
 }

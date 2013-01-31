@@ -41,24 +41,24 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class ExceptionHandlerFilter implements Filter {
 
-    public void destroy() {
-    }
-
-    public void init(FilterConfig arg0) throws ServletException {
-    }
-
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException,
-	    ServletException {
-	HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-	try {
-	    filterChain.doFilter(request, response);
-	} catch (ServletException servletException) {
-	    servletException.getRootCause().printStackTrace();
-	    httpServletRequest.getRequestDispatcher("/error.jsp").forward(request, response);
-	} catch (Throwable throwable) {
-	    throwable.printStackTrace();
-	    httpServletRequest.getRequestDispatcher("/error.jsp").forward(request, response);
+	public void destroy() {
 	}
 
-    }
+	public void init(FilterConfig arg0) throws ServletException {
+	}
+
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException,
+			ServletException {
+		HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+		try {
+			filterChain.doFilter(request, response);
+		} catch (ServletException servletException) {
+			servletException.getRootCause().printStackTrace();
+			httpServletRequest.getRequestDispatcher("/error.jsp").forward(request, response);
+		} catch (Throwable throwable) {
+			throwable.printStackTrace();
+			httpServletRequest.getRequestDispatcher("/error.jsp").forward(request, response);
+		}
+
+	}
 }

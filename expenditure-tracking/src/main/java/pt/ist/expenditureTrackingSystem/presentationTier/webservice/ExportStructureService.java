@@ -51,137 +51,135 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
  */
 public class ExportStructureService {
 
-    @GET
-    @Path("listCostCenters/{username}/{password}")
-    @Produces("text/csv")
-    public Response listCostCenters(@PathParam("username") final String username,
-	    @PathParam("password") final String password) {
-	check(username, password);
-	final String content = generateCostCenterList();
-	return Response.ok(content, "text/csv").build();
-    }
+	@GET
+	@Path("listCostCenters/{username}/{password}")
+	@Produces("text/csv")
+	public Response listCostCenters(@PathParam("username") final String username, @PathParam("password") final String password) {
+		check(username, password);
+		final String content = generateCostCenterList();
+		return Response.ok(content, "text/csv").build();
+	}
 
-    private String generateCostCenterList() {
-	final StringBuilder stringBuilder = new StringBuilder();
-	for (final Unit unit : ExpenditureTrackingSystem.getInstance().getUnitsSet()) {
-	    if (unit instanceof CostCenter) {
-		final CostCenter costCenter = (CostCenter) unit;
-		if (isActive(costCenter)) {
-		    final Set<User> authorities = getActiveAuthorizationSet(costCenter);
+	private String generateCostCenterList() {
+		final StringBuilder stringBuilder = new StringBuilder();
+		for (final Unit unit : ExpenditureTrackingSystem.getInstance().getUnitsSet()) {
+			if (unit instanceof CostCenter) {
+				final CostCenter costCenter = (CostCenter) unit;
+				if (isActive(costCenter)) {
+					final Set<User> authorities = getActiveAuthorizationSet(costCenter);
 
-		    if (authorities.isEmpty()) {
-		    stringBuilder.append(costCenter.getCostCenter());
-		    stringBuilder.append("\t");
-		    stringBuilder.append(costCenter.getName());
-			    stringBuilder.append("\t");
-			    final AccountingUnit accountingUnit = costCenter.getAccountingUnit();
-			    if (accountingUnit == null) {
-				stringBuilder.append(" ");
-			    } else {
-				stringBuilder.append(accountingUnit.getName());
-			    }
-			    stringBuilder.append("\t");
-			    final CostCenter parent = getParent(costCenter);
-			    if (parent == null) {
-				stringBuilder.append(" ");
-			    } else {
-				stringBuilder.append(parent.getCostCenter());
-			    }
-			    stringBuilder.append("\t");
-			    
-			    // responsáveis
-			    stringBuilder.append(" ");
-			    stringBuilder.append("\t");
+					if (authorities.isEmpty()) {
+						stringBuilder.append(costCenter.getCostCenter());
+						stringBuilder.append("\t");
+						stringBuilder.append(costCenter.getName());
+						stringBuilder.append("\t");
+						final AccountingUnit accountingUnit = costCenter.getAccountingUnit();
+						if (accountingUnit == null) {
+							stringBuilder.append(" ");
+						} else {
+							stringBuilder.append(accountingUnit.getName());
+						}
+						stringBuilder.append("\t");
+						final CostCenter parent = getParent(costCenter);
+						if (parent == null) {
+							stringBuilder.append(" ");
+						} else {
+							stringBuilder.append(parent.getCostCenter());
+						}
+						stringBuilder.append("\t");
 
-			    // e-mail
-			    stringBuilder.append(" ");
+						// responsáveis
+						stringBuilder.append(" ");
+						stringBuilder.append("\t");
 
-		    stringBuilder.append("\n");
-			
-		    } else {
-			for (final User user : authorities) {
-			    stringBuilder.append(costCenter.getCostCenter());
-			    stringBuilder.append("\t");
-			    stringBuilder.append(costCenter.getName());
-			    stringBuilder.append("\t");
-			    final AccountingUnit accountingUnit = costCenter.getAccountingUnit();
-			    if (accountingUnit == null) {
-				stringBuilder.append(" ");
-			    } else {
-				stringBuilder.append(accountingUnit.getName());
-			    }
-			    stringBuilder.append("\t");
-			    final CostCenter parent = getParent(costCenter);
-			    if (parent == null) {
-				stringBuilder.append(" ");
-			    } else {
-				stringBuilder.append(parent.getCostCenter());
-			    }
-			    stringBuilder.append("\t");
-			    
-			    // responsáveis
-			    stringBuilder.append(user.getUsername());
-			    stringBuilder.append("\t");
+						// e-mail
+						stringBuilder.append(" ");
 
-			    // e-mail
-			    final String email = user.getEmail();
-			    stringBuilder.append(email == null ? " " : email);
-			    
-			    stringBuilder.append("\n");
+						stringBuilder.append("\n");
+
+					} else {
+						for (final User user : authorities) {
+							stringBuilder.append(costCenter.getCostCenter());
+							stringBuilder.append("\t");
+							stringBuilder.append(costCenter.getName());
+							stringBuilder.append("\t");
+							final AccountingUnit accountingUnit = costCenter.getAccountingUnit();
+							if (accountingUnit == null) {
+								stringBuilder.append(" ");
+							} else {
+								stringBuilder.append(accountingUnit.getName());
+							}
+							stringBuilder.append("\t");
+							final CostCenter parent = getParent(costCenter);
+							if (parent == null) {
+								stringBuilder.append(" ");
+							} else {
+								stringBuilder.append(parent.getCostCenter());
+							}
+							stringBuilder.append("\t");
+
+							// responsáveis
+							stringBuilder.append(user.getUsername());
+							stringBuilder.append("\t");
+
+							// e-mail
+							final String email = user.getEmail();
+							stringBuilder.append(email == null ? " " : email);
+
+							stringBuilder.append("\n");
+						}
+					}
+				}
+			}
 		}
-	    }
+		return stringBuilder.toString();
 	}
-	    }
+
+	private Set<User> getActiveAuthorizationSet(final Unit unit) {
+		final Set<User> result = new HashSet<User>();
+		for (final Authorization authorization : unit.getAuthorizationsSet()) {
+			if (authorization.isValid()) {
+				final Person person = authorization.getPerson();
+				final User user = person.getUser();
+				result.add(user);
+			}
+		}
+		if (result.isEmpty()) {
+			final Unit parentUnit = unit.getParentUnit();
+			if (parentUnit != null) {
+				return getActiveAuthorizationSet(parentUnit);
+			}
+		}
+		return result;
 	}
-	return stringBuilder.toString();
-    }
 
-    private Set<User> getActiveAuthorizationSet(final Unit unit) {
-	final Set<User> result = new HashSet<User>();
-	for (final Authorization authorization : unit.getAuthorizationsSet()) {
-	    if (authorization.isValid()) {
-		final Person person = authorization.getPerson();
-		final User user = person.getUser();
-		result.add(user);
-	    }
+	private CostCenter getParent(final Unit unit) {
+		final Unit parent = unit.getParentUnit();
+		return parent == null || parent instanceof CostCenter ? (CostCenter) parent : getParent(parent);
 	}
-	if (result.isEmpty()) {
-	    final Unit parentUnit = unit.getParentUnit();
-	    if (parentUnit != null) {
-		return getActiveAuthorizationSet(parentUnit);
-	    }
+
+	private boolean isActive(final CostCenter costCenter) {
+		// TODO : review this...
+		return true;
 	}
-	return result;
-    }
 
-    private CostCenter getParent(final Unit unit) {
-	final Unit parent = unit.getParentUnit();
-	return parent == null || parent instanceof CostCenter
-		? (CostCenter) parent : getParent(parent);
-    }
+	private void check(final String username, final String password) {
+		final VirtualHost virtualHost = VirtualHost.getVirtualHostForThread();
+		final String hostname = virtualHost.getHostname();
 
-    private boolean isActive(final CostCenter costCenter) {
-	// TODO : review this...
-	return true;
-    }
+		final String keyUsername = "exportStructureService.username." + hostname;
+		final String keyPassword = "exportStructureService.password." + hostname;
 
-    private void check(final String username, final String password) {
-	final VirtualHost virtualHost = VirtualHost.getVirtualHostForThread();
-	final String hostname = virtualHost.getHostname();
+		final String eUsername = PropertiesManager.getProperty(keyUsername);
+		final String ePassword = PropertiesManager.getProperty(keyPassword);
 
-	final String keyUsername = "exportStructureService.username." + hostname;
-	final String keyPassword = "exportStructureService.password." + hostname;
-
-	final String eUsername = PropertiesManager.getProperty(keyUsername);
-	final String ePassword = PropertiesManager.getProperty(keyPassword);
-
-	if (!match(username, eUsername) && match(password, ePassword)) {
-	    throw new Error("unauthorized.access");
+		if (!match(username, eUsername) && match(password, ePassword)) {
+			throw new Error("unauthorized.access");
+		}
 	}
-    }
 
-    private boolean match(final String s1, final String s2) {
-	return s1 != null && s1.equals(s2);
-    }
+	private boolean match(final String s1, final String s2) {
+		return s1 != null && s1.equals(s2);
+	}
 
 }

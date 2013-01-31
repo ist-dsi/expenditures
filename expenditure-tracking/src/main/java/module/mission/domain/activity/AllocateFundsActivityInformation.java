@@ -10,16 +10,16 @@ import pt.ist.bennu.core.domain.User;
 
 public class AllocateFundsActivityInformation extends FundAllocationActivityInformation {
 
-    public AllocateFundsActivityInformation(final MissionProcess missionProcess,
-	    final WorkflowActivity<MissionProcess, ? extends ActivityInformation<MissionProcess>> activity) {
-	super(missionProcess, activity);
-    }
+	public AllocateFundsActivityInformation(final MissionProcess missionProcess,
+			final WorkflowActivity<MissionProcess, ? extends ActivityInformation<MissionProcess>> activity) {
+		super(missionProcess, activity);
+	}
 
-    @Override
-    protected boolean canAllocateFunds(final MissionFinancer missionFinancer) {
-	final User user = UserView.getCurrentUser();
-	final Person person = user.getPerson();
-	return missionFinancer.canAllocateFunds(person);
-    }
+	@Override
+	protected boolean canAllocateFunds(final MissionFinancer missionFinancer) {
+		final User user = UserView.getCurrentUser();
+		final Person person = user.getPerson();
+		return missionFinancer.canAllocateFunds(person);
+	}
 
 }

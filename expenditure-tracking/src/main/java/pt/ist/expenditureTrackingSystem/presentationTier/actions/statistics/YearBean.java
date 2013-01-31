@@ -6,14 +6,14 @@ import org.joda.time.LocalDate;
 
 public class YearBean implements Serializable {
 
-    private Integer year = new Integer(new LocalDate().getYear());
+	private Integer year = new Integer(new LocalDate().getYear());
 
-    public Integer getYear() {
-        return year;
-    }
+	public Integer getYear() {
+		return year;
+	}
 
-    public void setYear(Integer year) {
-        this.year = year;
-    }
+	public void setYear(Integer year) {
+		this.year = year;
+	}
 
 }

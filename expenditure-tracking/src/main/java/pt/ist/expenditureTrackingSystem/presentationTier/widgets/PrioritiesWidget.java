@@ -31,13 +31,13 @@ import java.util.Map;
 
 import module.dashBoard.presentationTier.WidgetRequest;
 import module.dashBoard.widgets.WidgetController;
+
+import org.apache.commons.beanutils.BeanComparator;
+
 import pt.ist.bennu.core.util.BundleUtil;
 import pt.ist.bennu.core.util.ClassNameBundle;
 import pt.ist.bennu.core.util.Counter;
 import pt.ist.bennu.core.util.MultiCounter;
-
-import org.apache.commons.beanutils.BeanComparator;
-
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.util.ProcessMapGenerator;
@@ -52,26 +52,26 @@ import pt.ist.expenditureTrackingSystem.util.ProcessMapGenerator;
  */
 public class PrioritiesWidget extends WidgetController {
 
-    @Override
-    public void doView(WidgetRequest request) {
-	Map<AcquisitionProcessStateType, MultiCounter<AcquisitionProcessStateType>> simplifiedMap = ProcessMapGenerator
-		.generateAcquisitionMap(Person.getLoggedPerson());
-	List<Counter<AcquisitionProcessStateType>> priorityCounters = new ArrayList<Counter<AcquisitionProcessStateType>>();
+	@Override
+	public void doView(WidgetRequest request) {
+		Map<AcquisitionProcessStateType, MultiCounter<AcquisitionProcessStateType>> simplifiedMap =
+				ProcessMapGenerator.generateAcquisitionMap(Person.getLoggedPerson());
+		List<Counter<AcquisitionProcessStateType>> priorityCounters = new ArrayList<Counter<AcquisitionProcessStateType>>();
 
-	for (MultiCounter<AcquisitionProcessStateType> multiCounter : simplifiedMap.values()) {
-	    Counter<AcquisitionProcessStateType> priorityCounter = ProcessMapGenerator.getPriorityCounter(multiCounter);
+		for (MultiCounter<AcquisitionProcessStateType> multiCounter : simplifiedMap.values()) {
+			Counter<AcquisitionProcessStateType> priorityCounter = ProcessMapGenerator.getPriorityCounter(multiCounter);
 
-	    if (priorityCounter != null && priorityCounter.getValue() > 0) {
-		priorityCounters.add(priorityCounter);
-	    }
+			if (priorityCounter != null && priorityCounter.getValue() > 0) {
+				priorityCounters.add(priorityCounter);
+			}
+		}
+
+		Collections.sort(priorityCounters, new BeanComparator("countableObject"));
+		request.setAttribute("simplifiedCounters-priority", priorityCounters);
 	}
 
-	Collections.sort(priorityCounters, new BeanComparator("countableObject"));
-	request.setAttribute("simplifiedCounters-priority", priorityCounters);
-    }
-
-    @Override
-    public String getWidgetDescription() {
-	return BundleUtil.getStringFromResourceBundle("resources/ExpenditureResources", "widget.description.PrioritiesWidget");
-    }
+	@Override
+	public String getWidgetDescription() {
+		return BundleUtil.getStringFromResourceBundle("resources/ExpenditureResources", "widget.description.PrioritiesWidget");
+	}
 }

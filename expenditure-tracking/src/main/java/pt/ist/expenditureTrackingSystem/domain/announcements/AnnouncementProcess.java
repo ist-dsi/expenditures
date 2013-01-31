@@ -53,87 +53,86 @@ import pt.ist.fenixWebFramework.services.Service;
  */
 public class AnnouncementProcess extends AnnouncementProcess_Base {
 
-    public boolean isProcessInState(AnnouncementProcessStateType state) {
-	return getAnnouncementProcessStateType().equals(state);
-    }
-
-    public AnnouncementProcessStateType getAnnouncementProcessState() {
-	return getAnnouncementProcessStateType();
-    }
-
-    protected AnnouncementProcessState getLastAnnouncementProcessState() {
-	return (AnnouncementProcessState) Collections.max(getProcessStates(), ProcessState.COMPARATOR_BY_WHEN);
-    }
-
-    public AnnouncementProcessStateType getAnnouncementProcessStateType() {
-	return getLastAnnouncementProcessState().getAnnouncementProcessStateType();
-    }
-
-    @Service
-    public static AnnouncementProcess createNewAnnouncementProcess(Person publisher, AnnouncementBean announcementBean) {
-	if (!isCreateNewProcessAvailable()) {
-	    throw new DomainException("announcementProcess.message.exception.invalidStateToRun.create");
+	public boolean isProcessInState(AnnouncementProcessStateType state) {
+		return getAnnouncementProcessStateType().equals(state);
 	}
 
-	announcementBean.setBuyingUnit(ExpenditureTrackingSystem.getInstance().getTopLevelUnitsSet().iterator().next());
-	return new AnnouncementProcess(publisher, announcementBean);
-    }
-
-    private AnnouncementProcess(final Person publisher, AnnouncementBean announcementBean) {
-	super();
-	// new AnnouncementProcessState(this,
-	// AnnouncementProcessStateType.IN_GENESIS);
-	// new Announcement(this, publisher, announcementBean);
-    }
-
-    @Override
-    public boolean hasAnyAvailableActivitity() {
-	return false;
-    }
-
-    public String getRejectionJustification() {
-	if (getLastAnnouncementProcessState().getAnnouncementProcessStateType().equals(AnnouncementProcessStateType.REJECTED)) {
-	    return getLastAnnouncementProcessState().getJustification();
+	public AnnouncementProcessStateType getAnnouncementProcessState() {
+		return getAnnouncementProcessStateType();
 	}
-	return null;
-    }
 
-    public boolean isVisible(Person person) {
-	final User user = person == null ? null : person.getUser();
-	return getLastAnnouncementProcessState().equals(AnnouncementProcessStateType.APPROVED)
-		|| getAnnouncement().getPublisher() == person
-		|| ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user)
-		|| ExpenditureTrackingSystem.isAcquisitionCentralManagerGroupMember(user);
-    }
+	protected AnnouncementProcessState getLastAnnouncementProcessState() {
+		return (AnnouncementProcessState) Collections.max(getProcessStates(), ProcessState.COMPARATOR_BY_WHEN);
+	}
 
-    @Override
-    public <T extends ActivityLog> T logExecution(User user, String operationName, String... args) {
-	return (T) new OperationLog(this, user, operationName, getAnnouncementProcessStateType());
-    }
+	public AnnouncementProcessStateType getAnnouncementProcessStateType() {
+		return getLastAnnouncementProcessState().getAnnouncementProcessStateType();
+	}
 
-    @Override
-    public User getProcessCreator() {
-	return getAnnouncement().getPublisher().getUser();
-    }
+	@Service
+	public static AnnouncementProcess createNewAnnouncementProcess(Person publisher, AnnouncementBean announcementBean) {
+		if (!isCreateNewProcessAvailable()) {
+			throw new DomainException("announcementProcess.message.exception.invalidStateToRun.create");
+		}
 
-    @Override
-    public void notifyUserDueToComment(User user, String comment) {
-	// no nothing
-    }
+		announcementBean.setBuyingUnit(ExpenditureTrackingSystem.getInstance().getTopLevelUnitsSet().iterator().next());
+		return new AnnouncementProcess(publisher, announcementBean);
+	}
 
-    @Override
-    public boolean isAccessible(User user) {
-	return user == getProcessCreator();
-    }
+	private AnnouncementProcess(final Person publisher, AnnouncementBean announcementBean) {
+		super();
+		// new AnnouncementProcessState(this,
+		// AnnouncementProcessStateType.IN_GENESIS);
+		// new Announcement(this, publisher, announcementBean);
+	}
 
-    /*
-     * TODO: Implement this methods correctly
-     */
-    public <T extends WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>> List<T> getActivities() {
-	return Collections.EMPTY_LIST;
-    }
+	@Override
+	public boolean hasAnyAvailableActivitity() {
+		return false;
+	}
 
-    public boolean isActive() {
-	return true;
-    }
+	public String getRejectionJustification() {
+		if (getLastAnnouncementProcessState().getAnnouncementProcessStateType().equals(AnnouncementProcessStateType.REJECTED)) {
+			return getLastAnnouncementProcessState().getJustification();
+		}
+		return null;
+	}
+
+	public boolean isVisible(Person person) {
+		final User user = person == null ? null : person.getUser();
+		return getLastAnnouncementProcessState().equals(AnnouncementProcessStateType.APPROVED)
+				|| getAnnouncement().getPublisher() == person || ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user)
+				|| ExpenditureTrackingSystem.isAcquisitionCentralManagerGroupMember(user);
+	}
+
+	@Override
+	public <T extends ActivityLog> T logExecution(User user, String operationName, String... args) {
+		return (T) new OperationLog(this, user, operationName, getAnnouncementProcessStateType());
+	}
+
+	@Override
+	public User getProcessCreator() {
+		return getAnnouncement().getPublisher().getUser();
+	}
+
+	@Override
+	public void notifyUserDueToComment(User user, String comment) {
+		// no nothing
+	}
+
+	@Override
+	public boolean isAccessible(User user) {
+		return user == getProcessCreator();
+	}
+
+	/*
+	 * TODO: Implement this methods correctly
+	 */
+	public <T extends WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>> List<T> getActivities() {
+		return Collections.EMPTY_LIST;
+	}
+
+	public boolean isActive() {
+		return true;
+	}
 }

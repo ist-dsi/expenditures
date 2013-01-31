@@ -24,11 +24,11 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities;
 
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.util.BundleUtil;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 
 /**
  * 
@@ -37,24 +37,24 @@ import pt.ist.bennu.core.util.BundleUtil;
  */
 public class MarkProcessAsCCPProcess extends WorkflowActivity<RefundProcess, ActivityInformation<RefundProcess>> {
 
-    @Override
-    public boolean isActive(RefundProcess process, User user) {
-	return user == process.getProcessCreator() && !process.getUnderCCPRegime()
-		&& (process.isInGenesis() || process.isInAuthorizedState());
-    }
+	@Override
+	public boolean isActive(RefundProcess process, User user) {
+		return user == process.getProcessCreator() && !process.getUnderCCPRegime()
+				&& (process.isInGenesis() || process.isInAuthorizedState());
+	}
 
-    @Override
-    protected void process(ActivityInformation<RefundProcess> activityInformation) {
-	activityInformation.getProcess().setUnderCCPRegime(Boolean.TRUE);
-    }
+	@Override
+	protected void process(ActivityInformation<RefundProcess> activityInformation) {
+		activityInformation.getProcess().setUnderCCPRegime(Boolean.TRUE);
+	}
 
-    @Override
-    public String getLocalizedName() {
-	return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
-    }
+	@Override
+	public String getLocalizedName() {
+		return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+	}
 
-    @Override
-    public String getUsedBundle() {
-	return "resources/AcquisitionResources";
-    }
+	@Override
+	public String getUsedBundle() {
+		return "resources/AcquisitionResources";
+	}
 }

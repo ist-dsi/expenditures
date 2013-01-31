@@ -6,14 +6,14 @@ import pt.ist.fenixWebFramework.renderers.components.converters.Converter;
 
 public class MissionYearProvider implements DataProvider {
 
-    @Override
-    public Converter getConverter() {
-	return null;
-    }
+	@Override
+	public Converter getConverter() {
+		return null;
+	}
 
-    @Override
-    public Object provide(Object arg0, Object arg1) {
-	return MissionSystem.getInstance().getMissionYearSet();
-    }
+	@Override
+	public Object provide(Object arg0, Object arg1) {
+		return MissionSystem.getInstance().getMissionYearSet();
+	}
 
 }

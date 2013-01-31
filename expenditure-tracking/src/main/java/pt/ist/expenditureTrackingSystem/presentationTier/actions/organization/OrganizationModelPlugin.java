@@ -39,27 +39,27 @@ import pt.ist.expenditureTrackingSystem.presentationTier.actions.BaseAction;
  */
 public class OrganizationModelPlugin extends BaseAction {
 
-    public static class ExpendituresView extends PartyViewHook {
+	public static class ExpendituresView extends PartyViewHook {
 
-	@Override
-	public String hook(final HttpServletRequest request, final OrganizationalModel organizationalModel, final Party party) {
-	    return "/expenditureTrackingOrganization/expendituresView.jsp";
-	}
+		@Override
+		public String hook(final HttpServletRequest request, final OrganizationalModel organizationalModel, final Party party) {
+			return "/expenditureTrackingOrganization/expendituresView.jsp";
+		}
 
-	@Override
-	public String getViewName() {
-	    return "04_expendituresView";
-	}
+		@Override
+		public String getViewName() {
+			return "04_expendituresView";
+		}
 
-	@Override
-	public String getPresentationName() {
-	    return BundleUtil.getStringFromResourceBundle("resources.ExpenditureOrganizationResources", "label.expendituresView");
-	}
+		@Override
+		public String getPresentationName() {
+			return BundleUtil.getStringFromResourceBundle("resources.ExpenditureOrganizationResources", "label.expendituresView");
+		}
 
-	@Override
-	public boolean isAvailableFor(final Party party) {
-	    return party != null && party.isUnit();
+		@Override
+		public boolean isAvailableFor(final Party party) {
+			return party != null && party.isUnit();
+		}
 	}
-    }
 
 }

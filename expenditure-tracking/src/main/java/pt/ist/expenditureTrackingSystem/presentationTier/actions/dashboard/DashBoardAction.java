@@ -33,17 +33,17 @@ import module.dashBoard.domain.DashBoardPanel;
 import module.dashBoard.domain.DashBoardWidget;
 import module.dashBoard.presentationTier.DashBoardManagementAction;
 import module.workflow.widgets.QuickViewWidget;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.domain.VirtualHost;
 import pt.ist.bennu.core.domain.contents.ActionNode;
 import pt.ist.bennu.core.domain.contents.Node;
 import pt.ist.bennu.core.domain.groups.UserGroup;
 import pt.ist.bennu.core.presentationTier.actions.ContextBaseAction;
-
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureUserDashBoardPanel;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.presentationTier.widgets.ActivateEmailNotificationWidget;
@@ -69,46 +69,49 @@ import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
  */
 public class DashBoardAction extends ContextBaseAction {
 
-    public static MultiLanguageString dashBoardTitle = new MultiLanguageString().with(Language.pt, "Resumo").with(Language.en,
-	    "Resume");
+	public static MultiLanguageString dashBoardTitle = new MultiLanguageString().with(Language.pt, "Resumo").with(Language.en,
+			"Resume");
 
-    public ActionForward viewDigest(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
+	public ActionForward viewDigest(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+			final HttpServletResponse response) {
 
-	Person loggedPerson = Person.getLoggedPerson();
-	User user = loggedPerson.getUser();
-	List<ExpenditureUserDashBoardPanel> panelsForUser = DashBoardPanel.getPanelsForUser(user,
-		ExpenditureUserDashBoardPanel.class);
-	DashBoardPanel panel = panelsForUser.isEmpty() ? createDashBoardPanel(user) : panelsForUser.get(0);
-	return DashBoardManagementAction.forwardToDashBoard(panel, request);
-    }
+		Person loggedPerson = Person.getLoggedPerson();
+		User user = loggedPerson.getUser();
+		List<ExpenditureUserDashBoardPanel> panelsForUser =
+				DashBoardPanel.getPanelsForUser(user, ExpenditureUserDashBoardPanel.class);
+		DashBoardPanel panel = panelsForUser.isEmpty() ? createDashBoardPanel(user) : panelsForUser.get(0);
+		return DashBoardManagementAction.forwardToDashBoard(panel, request);
+	}
 
-    @Service
-    private DashBoardPanel createDashBoardPanel(User user) {
-	ExpenditureUserDashBoardPanel expenditureUserDashBoardPanel = new ExpenditureUserDashBoardPanel(dashBoardTitle, user);
-	expenditureUserDashBoardPanel.addWidgetToColumn(0, new DashBoardWidget(UnreadCommentsWidget.class));
-	expenditureUserDashBoardPanel.addWidgetToColumn(0, new DashBoardWidget(MySearchesWidget.class));
-	expenditureUserDashBoardPanel.addWidgetToColumn(0, new DashBoardWidget(MyProcessesWidget.class));
-	expenditureUserDashBoardPanel.addWidgetToColumn(1, new DashBoardWidget(PendingRefundWidget.class));
-	expenditureUserDashBoardPanel.addWidgetToColumn(1, new DashBoardWidget(PendingSimplifiedWidget.class));
-	expenditureUserDashBoardPanel.addWidgetToColumn(2, new DashBoardWidget(ActivateEmailNotificationWidget.class));
-	expenditureUserDashBoardPanel.addWidgetToColumn(2, new DashBoardWidget(QuickViewWidget.class));
-	expenditureUserDashBoardPanel.addWidgetToColumn(2, new DashBoardWidget(TakenProcessesWidget.class));
-	return expenditureUserDashBoardPanel;
-    }
+	@Service
+	private DashBoardPanel createDashBoardPanel(User user) {
+		ExpenditureUserDashBoardPanel expenditureUserDashBoardPanel = new ExpenditureUserDashBoardPanel(dashBoardTitle, user);
+		expenditureUserDashBoardPanel.addWidgetToColumn(0, new DashBoardWidget(UnreadCommentsWidget.class));
+		expenditureUserDashBoardPanel.addWidgetToColumn(0, new DashBoardWidget(MySearchesWidget.class));
+		expenditureUserDashBoardPanel.addWidgetToColumn(0, new DashBoardWidget(MyProcessesWidget.class));
+		expenditureUserDashBoardPanel.addWidgetToColumn(1, new DashBoardWidget(PendingRefundWidget.class));
+		expenditureUserDashBoardPanel.addWidgetToColumn(1, new DashBoardWidget(PendingSimplifiedWidget.class));
+		expenditureUserDashBoardPanel.addWidgetToColumn(2, new DashBoardWidget(ActivateEmailNotificationWidget.class));
+		expenditureUserDashBoardPanel.addWidgetToColumn(2, new DashBoardWidget(QuickViewWidget.class));
+		expenditureUserDashBoardPanel.addWidgetToColumn(2, new DashBoardWidget(TakenProcessesWidget.class));
+		return expenditureUserDashBoardPanel;
+	}
 
-    @CreateNodeAction(bundle = "EXPENDITURE_RESOURCES", key = "add.node.expenditure-tracking.interface.dashboard", groupKey = "label.module.dashboard")
-    public ActionForward createDashBoardLink(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
+	@CreateNodeAction(
+			bundle = "EXPENDITURE_RESOURCES",
+			key = "add.node.expenditure-tracking.interface.dashboard",
+			groupKey = "label.module.dashboard")
+	public ActionForward createDashBoardLink(final ActionMapping mapping, final ActionForm form,
+			final HttpServletRequest request, final HttpServletResponse response) {
 
-	final VirtualHost virtualHost = getDomainObject(request, "virtualHostToManageId");
-	final Node node = getDomainObject(request, "parentOfNodesToManageId");
+		final VirtualHost virtualHost = getDomainObject(request, "virtualHostToManageId");
+		final Node node = getDomainObject(request, "parentOfNodesToManageId");
 
-	ActionNode.createActionNode(virtualHost, node, "/dashBoard", "viewDigest", "resources.ExpenditureResources",
-		"link.sideBar.acquisitionProcess.digest", UserGroup.getInstance());
+		ActionNode.createActionNode(virtualHost, node, "/dashBoard", "viewDigest", "resources.ExpenditureResources",
+				"link.sideBar.acquisitionProcess.digest", UserGroup.getInstance());
 
-	return forwardToMuneConfiguration(request, virtualHost, node);
+		return forwardToMuneConfiguration(request, virtualHost, node);
 
-    }
+	}
 
 }

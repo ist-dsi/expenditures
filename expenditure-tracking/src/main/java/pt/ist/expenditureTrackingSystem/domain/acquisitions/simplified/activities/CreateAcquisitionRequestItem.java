@@ -42,60 +42,60 @@ import pt.ist.expenditureTrackingSystem.domain.organization.DeliveryInfo;
  * 
  */
 public class CreateAcquisitionRequestItem extends
-	WorkflowActivity<RegularAcquisitionProcess, CreateAcquisitionRequestItemActivityInformation> {
+		WorkflowActivity<RegularAcquisitionProcess, CreateAcquisitionRequestItemActivityInformation> {
 
-    @Override
-    public boolean isActive(RegularAcquisitionProcess process, User user) {
-	return isUserProcessOwner(process, user) && process.getRequestor() == user.getExpenditurePerson()
-		&& process.getAcquisitionProcessState().isInGenesis();
-    }
-
-    @Override
-    protected void process(CreateAcquisitionRequestItemActivityInformation activityInformation) {
-	final AcquisitionRequest acquisitionRequest = activityInformation.getProcess().getAcquisitionRequest();
-
-	DeliveryInfo deliveryInfo = activityInformation.getDeliveryInfo();
-	String recipient;
-	String email;
-	String phone;
-	Address address;
-	if (deliveryInfo != null) {
-	    recipient = deliveryInfo.getRecipient();
-	    email = deliveryInfo.getEmail();
-	    phone = deliveryInfo.getPhone();
-	    address = deliveryInfo.getAddress();
-	} else {
-	    recipient = activityInformation.getRecipient();
-	    email = activityInformation.getEmail();
-	    phone = activityInformation.getPhone();
-	    address = activityInformation.getAddress();
-	    acquisitionRequest.getRequester().createNewDeliveryInfo(recipient, address, phone, email);
+	@Override
+	public boolean isActive(RegularAcquisitionProcess process, User user) {
+		return isUserProcessOwner(process, user) && process.getRequestor() == user.getExpenditurePerson()
+				&& process.getAcquisitionProcessState().isInGenesis();
 	}
-	acquisitionRequest.createAcquisitionRequestItem(activityInformation.getAcquisitionRequest(),
-		activityInformation.getDescription(), activityInformation.getQuantity(), activityInformation.getUnitValue(),
-		activityInformation.getVatValue(), activityInformation.getAdditionalCostValue(),
-		activityInformation.getProposalReference(), activityInformation.getCPVReference(), recipient, address, phone,
-		email, activityInformation.getClassification());
-    }
 
-    @Override
-    public ActivityInformation<RegularAcquisitionProcess> getActivityInformation(RegularAcquisitionProcess process) {
-	return new CreateAcquisitionRequestItemActivityInformation(process, this);
-    }
+	@Override
+	protected void process(CreateAcquisitionRequestItemActivityInformation activityInformation) {
+		final AcquisitionRequest acquisitionRequest = activityInformation.getProcess().getAcquisitionRequest();
 
-    @Override
-    public String getLocalizedName() {
-	return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
-    }
+		DeliveryInfo deliveryInfo = activityInformation.getDeliveryInfo();
+		String recipient;
+		String email;
+		String phone;
+		Address address;
+		if (deliveryInfo != null) {
+			recipient = deliveryInfo.getRecipient();
+			email = deliveryInfo.getEmail();
+			phone = deliveryInfo.getPhone();
+			address = deliveryInfo.getAddress();
+		} else {
+			recipient = activityInformation.getRecipient();
+			email = activityInformation.getEmail();
+			phone = activityInformation.getPhone();
+			address = activityInformation.getAddress();
+			acquisitionRequest.getRequester().createNewDeliveryInfo(recipient, address, phone, email);
+		}
+		acquisitionRequest.createAcquisitionRequestItem(activityInformation.getAcquisitionRequest(),
+				activityInformation.getDescription(), activityInformation.getQuantity(), activityInformation.getUnitValue(),
+				activityInformation.getVatValue(), activityInformation.getAdditionalCostValue(),
+				activityInformation.getProposalReference(), activityInformation.getCPVReference(), recipient, address, phone,
+				email, activityInformation.getClassification());
+	}
 
-    @Override
-    public String getUsedBundle() {
-	return "resources/AcquisitionResources";
-    }
+	@Override
+	public ActivityInformation<RegularAcquisitionProcess> getActivityInformation(RegularAcquisitionProcess process) {
+		return new CreateAcquisitionRequestItemActivityInformation(process, this);
+	}
 
-    @Override
-    public boolean isDefaultInputInterfaceUsed() {
-	return false;
-    }
+	@Override
+	public String getLocalizedName() {
+		return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+	}
+
+	@Override
+	public String getUsedBundle() {
+		return "resources/AcquisitionResources";
+	}
+
+	@Override
+	public boolean isDefaultInputInterfaceUsed() {
+		return false;
+	}
 
 }

@@ -39,48 +39,47 @@ import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean;
  * 
  */
 public class AllocateProjectFundsPermanently<P extends PaymentProcess> extends
-	WorkflowActivity<P, AllocateProjectFundsPermanentlyActivityInformation<P>> {
+		WorkflowActivity<P, AllocateProjectFundsPermanentlyActivityInformation<P>> {
 
-    @Override
-    public boolean isActive(P process, User user) {
-	return process.isProjectAccountingEmployee(user.getExpenditurePerson())
-		&& isUserProcessOwner(process, user)
-		&& !process.hasAllocatedFundsPermanentlyForAllProjectFinancers()
-		&& ((!process.hasAllInvoicesAllocatedInProject() && process.getRequest().hasProposalDocument())
-			|| (ExpenditureTrackingSystem.isInvoiceAllowedToStartAcquisitionProcess()
-				&& process.isInvoiceConfirmed()
-				&& !process.getRequest().hasProposalDocument()));
-    }
-
-    @Override
-    protected void process(AllocateProjectFundsPermanentlyActivityInformation<P> activityInformation) {
-	for (FundAllocationBean fundAllocationBean : activityInformation.getBeans()) {
-	    final ProjectFinancer projectFinancer = (ProjectFinancer) fundAllocationBean.getFinancer();
-	    projectFinancer.addEffectiveProjectFundAllocationId(fundAllocationBean.getEffectiveFundAllocationId());
+	@Override
+	public boolean isActive(P process, User user) {
+		return process.isProjectAccountingEmployee(user.getExpenditurePerson())
+				&& isUserProcessOwner(process, user)
+				&& !process.hasAllocatedFundsPermanentlyForAllProjectFinancers()
+				&& ((!process.hasAllInvoicesAllocatedInProject() && process.getRequest().hasProposalDocument()) || (ExpenditureTrackingSystem
+						.isInvoiceAllowedToStartAcquisitionProcess() && process.isInvoiceConfirmed() && !process.getRequest()
+						.hasProposalDocument()));
 	}
-    }
 
-    public AllocateProjectFundsPermanentlyActivityInformation<P> getActivityInformation(P process) {
-	return getActivityInformation(process, true);
-    }
+	@Override
+	protected void process(AllocateProjectFundsPermanentlyActivityInformation<P> activityInformation) {
+		for (FundAllocationBean fundAllocationBean : activityInformation.getBeans()) {
+			final ProjectFinancer projectFinancer = (ProjectFinancer) fundAllocationBean.getFinancer();
+			projectFinancer.addEffectiveProjectFundAllocationId(fundAllocationBean.getEffectiveFundAllocationId());
+		}
+	}
 
-    @Override
-    public boolean isDefaultInputInterfaceUsed() {
-	return false;
-    }
+	public AllocateProjectFundsPermanentlyActivityInformation<P> getActivityInformation(P process) {
+		return getActivityInformation(process, true);
+	}
 
-    @Override
-    public String getLocalizedName() {
-	return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
-    }
+	@Override
+	public boolean isDefaultInputInterfaceUsed() {
+		return false;
+	}
 
-    @Override
-    public String getUsedBundle() {
-	return "resources/AcquisitionResources";
-    }
+	@Override
+	public String getLocalizedName() {
+		return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+	}
 
-    public AllocateProjectFundsPermanentlyActivityInformation<P> getActivityInformation(P process, boolean takeProcess) {
-	return new AllocateProjectFundsPermanentlyActivityInformation<P>(process, this, takeProcess);
-    }
+	@Override
+	public String getUsedBundle() {
+		return "resources/AcquisitionResources";
+	}
+
+	public AllocateProjectFundsPermanentlyActivityInformation<P> getActivityInformation(P process, boolean takeProcess) {
+		return new AllocateProjectFundsPermanentlyActivityInformation<P>(process, this, takeProcess);
+	}
 
 }

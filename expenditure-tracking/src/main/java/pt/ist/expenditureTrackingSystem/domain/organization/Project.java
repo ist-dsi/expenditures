@@ -50,179 +50,183 @@ import dml.runtime.RelationAdapter;
  */
 public class Project extends Project_Base {
 
-    public static class ProjectPartyTypeListener extends RelationAdapter<Party, PartyType> {
+	public static class ProjectPartyTypeListener extends RelationAdapter<Party, PartyType> {
+
+		@Override
+		public void afterAdd(final Party party, final PartyType partyType) {
+			if (party.isUnit() && partyType != null && partyType == ExpenditureTrackingSystem.getInstance().getProjectPartyType()) {
+				new Project((module.organization.domain.Unit) party);
+			}
+		}
+
+	}
+
+	static {
+		Party.PartyTypeParty.addListener(new ProjectPartyTypeListener());
+	}
+
+	public Project(final module.organization.domain.Unit unit) {
+		super();
+		setUnit(unit);
+	}
+
+	public Project(final Unit parentUnit, final String name, final String projectCode) {
+		super();
+		createRealUnit(this, parentUnit, ExpenditureTrackingSystem.getInstance().getProjectPartyType(), projectCode, name);
+
+		// TODO : After this object is refactored to retrieve the name and parent from the real unit,
+		//        the following three lines may be deleted.
+		setName(name);
+		setProjectCode(projectCode);
+		setParentUnit(parentUnit);
+	}
+
+	public void setProjectCode(final String projectCode) {
+		getUnit().setAcronym("P. " + projectCode);
+	}
+
+	public String getProjectCode() {
+		return getUnit().getAcronym().substring(3);
+	}
 
 	@Override
-	public void afterAdd(final Party party, final PartyType partyType) {
-	    if (party.isUnit() && partyType != null && partyType == ExpenditureTrackingSystem.getInstance().getProjectPartyType()) {
-		new Project((module.organization.domain.Unit) party);
-	    }
-	}
-
-    }
-
-    static {
-	Party.PartyTypeParty.addListener(new ProjectPartyTypeListener());
-    }
-
-    public Project(final module.organization.domain.Unit unit) {
-	super();
-	setUnit(unit);
-    }
-
-    public Project(final Unit parentUnit, final String name, final String projectCode) {
-	super();
-	createRealUnit(this, parentUnit, ExpenditureTrackingSystem.getInstance().getProjectPartyType(), projectCode, name);
-
-	// TODO : After this object is refactored to retrieve the name and parent from the real unit,
-	//        the following three lines may be deleted.
-	setName(name);
-	setProjectCode(projectCode);
-	setParentUnit(parentUnit);
-    }
-
-    public void setProjectCode(final String projectCode) {
-        getUnit().setAcronym("P. " + projectCode);
-    }
-
-    public String getProjectCode() {
-	return getUnit().getAcronym().substring(3);
-    }
-
-    @Override
-    public void findAcquisitionProcessesPendingAuthorization(final Set<AcquisitionProcess> result, final boolean recurseSubUnits) {
-	final String projectCode = getProjectCode();
-	if (projectCode != null) {
-	    for (final AcquisitionProcess acquisitionProcess : GenericProcess.getAllProcesses(RegularAcquisitionProcess.class)) {
-		if (acquisitionProcess.getPayingUnits().contains(this) && acquisitionProcess.isPendingApproval())
-		    result.add(acquisitionProcess);
-	    }
-	}
-    }
-
-    @Override
-    public String getPresentationName() {
-	return "(P. " + getProjectCode() + ") " + super.getPresentationName();
-    }
-
-    @Override
-    public String getShortIdentifier() {
-	return getProjectCode();
-    }
-
-    @Override
-    public Financer finance(final RequestWithPayment acquisitionRequest) {
-	return new ProjectFinancer(acquisitionRequest, this);
-    }
-
-    @Override
-    public boolean isProjectAccountingEmployee(final Person person) {
-	final AccountingUnit accountingUnit = getAccountingUnit();
-	return accountingUnit != null && accountingUnit.hasProjectAccountants(person);
-    }
-
-    @Override
-    public boolean isAccountingEmployee(final Person person) {
-	final AccountingUnit accountingUnit = getAccountingUnit();
-	return (accountingUnit != null && accountingUnit.hasPeople(person))
-		|| (accountingUnit == null && super.isAccountingEmployee(person));
-    }
-
-    public static Project findProjectByCode(String projectCode) {
-	for (Unit unit : ExpenditureTrackingSystem.getInstance().getUnits()) {
-	    if (unit instanceof Project) {
-		if (((Project) unit).getProjectCode().equals(projectCode)) {
-		    return (Project) unit;
-		}
-	    }
-	}
-	return null;
-    }
-
-    public SubProject findSubProjectByName(final String institution) {
-	for (final Accountability accountability : getUnit().getChildAccountabilitiesSet()) {
-	    if (accountability.getAccountabilityType() == ExpenditureTrackingSystem.getInstance().getOrganizationalAccountabilityType()) {
-		final Party party = accountability.getChild();
-		if (party.isUnit()) {
-		    final module.organization.domain.Unit child = (module.organization.domain.Unit) party;
-		    if (child.hasExpenditureUnit()) {
-			final Unit unit = child.getExpenditureUnit();
-			if (unit instanceof SubProject) {
-			    final SubProject subProject = (SubProject) unit;
-			    if (subProject.getName().equals(institution)) {
-				return subProject;
-			    }
+	public void findAcquisitionProcessesPendingAuthorization(final Set<AcquisitionProcess> result, final boolean recurseSubUnits) {
+		final String projectCode = getProjectCode();
+		if (projectCode != null) {
+			for (final AcquisitionProcess acquisitionProcess : GenericProcess.getAllProcesses(RegularAcquisitionProcess.class)) {
+				if (acquisitionProcess.getPayingUnits().contains(this) && acquisitionProcess.isPendingApproval())
+					result.add(acquisitionProcess);
 			}
-		    }
 		}
-	    }
 	}
-	return null;
-    }
 
-    public SubProject findSubProjectByNamePrefix(final String institution) {
-	for (final Accountability accountability : getUnit().getChildAccountabilitiesSet()) {
-	    if (accountability.getAccountabilityType() == ExpenditureTrackingSystem.getInstance().getOrganizationalAccountabilityType()) {
-		final Party party = accountability.getChild();
-		if (party.isUnit()) {
-		    final module.organization.domain.Unit child = (module.organization.domain.Unit) party;
-		    if (child.hasExpenditureUnit()) {
-			final Unit unit = child.getExpenditureUnit();
-			if (unit instanceof SubProject) {
-			    final SubProject subProject = (SubProject) unit;
-			    final String name = subProject.getName();
-			    if (name.indexOf(institution) >= 0) {
-				return subProject;
-			    }
+	@Override
+	public String getPresentationName() {
+		return "(P. " + getProjectCode() + ") " + super.getPresentationName();
+	}
+
+	@Override
+	public String getShortIdentifier() {
+		return getProjectCode();
+	}
+
+	@Override
+	public Financer finance(final RequestWithPayment acquisitionRequest) {
+		return new ProjectFinancer(acquisitionRequest, this);
+	}
+
+	@Override
+	public boolean isProjectAccountingEmployee(final Person person) {
+		final AccountingUnit accountingUnit = getAccountingUnit();
+		return accountingUnit != null && accountingUnit.hasProjectAccountants(person);
+	}
+
+	@Override
+	public boolean isAccountingEmployee(final Person person) {
+		final AccountingUnit accountingUnit = getAccountingUnit();
+		return (accountingUnit != null && accountingUnit.hasPeople(person))
+				|| (accountingUnit == null && super.isAccountingEmployee(person));
+	}
+
+	public static Project findProjectByCode(String projectCode) {
+		for (Unit unit : ExpenditureTrackingSystem.getInstance().getUnits()) {
+			if (unit instanceof Project) {
+				if (((Project) unit).getProjectCode().equals(projectCode)) {
+					return (Project) unit;
+				}
 			}
-		    }
 		}
-	    }
+		return null;
 	}
-	return null;
-    }
 
-    @Override
-    public boolean isAccountingResponsible(Person person) {
-	final AccountingUnit accountingUnit = getAccountingUnit();
-	return accountingUnit != null && person != null && accountingUnit.hasResponsibleProjectAccountants(person);
-    }
-
-    @Override
-    public String getUnitNumber() {
-	return getProjectCode();
-    }
-
-    public boolean isOpen() {
-	final AccountabilityType accountabilityType = ExpenditureTrackingSystem.getInstance().getOrganizationalAccountabilityType();
-	for (final Accountability accountability : getUnit().getParentAccountabilitiesSet()) {
-	    if (accountability.getAccountabilityType() == accountabilityType
-		    && accountability.isActiveNow()) {
-		return true;
-	    }
+	public SubProject findSubProjectByName(final String institution) {
+		for (final Accountability accountability : getUnit().getChildAccountabilitiesSet()) {
+			if (accountability.getAccountabilityType() == ExpenditureTrackingSystem.getInstance()
+					.getOrganizationalAccountabilityType()) {
+				final Party party = accountability.getChild();
+				if (party.isUnit()) {
+					final module.organization.domain.Unit child = (module.organization.domain.Unit) party;
+					if (child.hasExpenditureUnit()) {
+						final Unit unit = child.getExpenditureUnit();
+						if (unit instanceof SubProject) {
+							final SubProject subProject = (SubProject) unit;
+							if (subProject.getName().equals(institution)) {
+								return subProject;
+							}
+						}
+					}
+				}
+			}
+		}
+		return null;
 	}
-	return false;
-    }
 
-    public void close() {
-	final module.organization.domain.Unit unit = getUnit();
-	final AccountabilityType accountabilityType = ExpenditureTrackingSystem.getInstance().getOrganizationalAccountabilityType();
-	for (final Accountability accountability : getUnit().getParentAccountabilitiesSet()) {
-	    if (accountability.getAccountabilityType() == accountabilityType && accountability.isActiveNow()) {
-		final LocalDate beginDate = accountability.getBeginDate();
-		accountability.editDates(beginDate, new LocalDate());
-	    }
+	public SubProject findSubProjectByNamePrefix(final String institution) {
+		for (final Accountability accountability : getUnit().getChildAccountabilitiesSet()) {
+			if (accountability.getAccountabilityType() == ExpenditureTrackingSystem.getInstance()
+					.getOrganizationalAccountabilityType()) {
+				final Party party = accountability.getChild();
+				if (party.isUnit()) {
+					final module.organization.domain.Unit child = (module.organization.domain.Unit) party;
+					if (child.hasExpenditureUnit()) {
+						final Unit unit = child.getExpenditureUnit();
+						if (unit instanceof SubProject) {
+							final SubProject subProject = (SubProject) unit;
+							final String name = subProject.getName();
+							if (name.indexOf(institution) >= 0) {
+								return subProject;
+							}
+						}
+					}
+				}
+			}
+		}
+		return null;
 	}
-    }
 
-    public void open() {
-	final Unit parentProject = getParentUnit();
-	if (parentProject != null) {
-	    final module.organization.domain.Unit parentUnit = getParentUnit().getUnit();
-	    final module.organization.domain.Unit unit = getUnit();
-	    final AccountabilityType accountabilityType = ExpenditureTrackingSystem.getInstance().getOrganizationalAccountabilityType();
-	    parentUnit.addChild(unit, accountabilityType, new LocalDate(), null);
+	@Override
+	public boolean isAccountingResponsible(Person person) {
+		final AccountingUnit accountingUnit = getAccountingUnit();
+		return accountingUnit != null && person != null && accountingUnit.hasResponsibleProjectAccountants(person);
 	}
-    }
+
+	@Override
+	public String getUnitNumber() {
+		return getProjectCode();
+	}
+
+	public boolean isOpen() {
+		final AccountabilityType accountabilityType =
+				ExpenditureTrackingSystem.getInstance().getOrganizationalAccountabilityType();
+		for (final Accountability accountability : getUnit().getParentAccountabilitiesSet()) {
+			if (accountability.getAccountabilityType() == accountabilityType && accountability.isActiveNow()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public void close() {
+		final module.organization.domain.Unit unit = getUnit();
+		final AccountabilityType accountabilityType =
+				ExpenditureTrackingSystem.getInstance().getOrganizationalAccountabilityType();
+		for (final Accountability accountability : getUnit().getParentAccountabilitiesSet()) {
+			if (accountability.getAccountabilityType() == accountabilityType && accountability.isActiveNow()) {
+				final LocalDate beginDate = accountability.getBeginDate();
+				accountability.editDates(beginDate, new LocalDate());
+			}
+		}
+	}
+
+	public void open() {
+		final Unit parentProject = getParentUnit();
+		if (parentProject != null) {
+			final module.organization.domain.Unit parentUnit = getParentUnit().getUnit();
+			final module.organization.domain.Unit unit = getUnit();
+			final AccountabilityType accountabilityType =
+					ExpenditureTrackingSystem.getInstance().getOrganizationalAccountabilityType();
+			parentUnit.addChild(unit, accountabilityType, new LocalDate(), null);
+		}
+	}
 
 }

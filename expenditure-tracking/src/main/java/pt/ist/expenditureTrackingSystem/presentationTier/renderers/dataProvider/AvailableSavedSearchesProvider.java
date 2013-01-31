@@ -12,16 +12,16 @@ import pt.ist.fenixWebFramework.renderers.components.converters.Converter;
 
 public class AvailableSavedSearchesProvider implements DataProvider {
 
-    public Converter getConverter() {
-	return new DomainObjectKeyConverter();
-    }
+	public Converter getConverter() {
+		return new DomainObjectKeyConverter();
+	}
 
-    public Object provide(Object source, Object currentValue) {
-	UserSearchBean bean = (UserSearchBean) source;
-	List<SavedSearch> searches = new ArrayList<SavedSearch>();
-	searches.addAll(ExpenditureTrackingSystem.getInstance().getSystemSearches());
-	searches.addAll(bean.getUser().getSaveSearches());
-	return searches;
-    }
+	public Object provide(Object source, Object currentValue) {
+		UserSearchBean bean = (UserSearchBean) source;
+		List<SavedSearch> searches = new ArrayList<SavedSearch>();
+		searches.addAll(ExpenditureTrackingSystem.getInstance().getSystemSearches());
+		searches.addAll(bean.getUser().getSaveSearches());
+		return searches;
+	}
 
 }

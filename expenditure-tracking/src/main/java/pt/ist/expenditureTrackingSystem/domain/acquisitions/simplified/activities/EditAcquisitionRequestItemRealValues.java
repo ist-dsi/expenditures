@@ -38,43 +38,42 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionPr
  * 
  */
 public class EditAcquisitionRequestItemRealValues extends
-	WorkflowActivity<RegularAcquisitionProcess, EditAcquisitionRequestItemRealValuesActivityInformation> {
+		WorkflowActivity<RegularAcquisitionProcess, EditAcquisitionRequestItemRealValuesActivityInformation> {
 
-    @Override
-    public boolean isActive(RegularAcquisitionProcess process, User user) {
-	return isUserProcessOwner(process, user)
-		&& ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user)
-		&& process.getAcquisitionProcessState().isInvoiceReceived();
-    }
+	@Override
+	public boolean isActive(RegularAcquisitionProcess process, User user) {
+		return isUserProcessOwner(process, user) && ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user)
+				&& process.getAcquisitionProcessState().isInvoiceReceived();
+	}
 
-    @Override
-    protected void process(EditAcquisitionRequestItemRealValuesActivityInformation activityInformation) {
-	activityInformation.getItem().editRealValues(activityInformation.getRealQuantity(),
-		activityInformation.getRealUnitValue(), activityInformation.getShipment(), activityInformation.getRealVatValue());
-    }
+	@Override
+	protected void process(EditAcquisitionRequestItemRealValuesActivityInformation activityInformation) {
+		activityInformation.getItem().editRealValues(activityInformation.getRealQuantity(),
+				activityInformation.getRealUnitValue(), activityInformation.getShipment(), activityInformation.getRealVatValue());
+	}
 
-    @Override
-    public ActivityInformation<RegularAcquisitionProcess> getActivityInformation(RegularAcquisitionProcess process) {
-	return new EditAcquisitionRequestItemRealValuesActivityInformation(process, this);
-    }
+	@Override
+	public ActivityInformation<RegularAcquisitionProcess> getActivityInformation(RegularAcquisitionProcess process) {
+		return new EditAcquisitionRequestItemRealValuesActivityInformation(process, this);
+	}
 
-    @Override
-    public String getLocalizedName() {
-	return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
-    }
+	@Override
+	public String getLocalizedName() {
+		return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+	}
 
-    @Override
-    public String getUsedBundle() {
-	return "resources/AcquisitionResources";
-    }
+	@Override
+	public String getUsedBundle() {
+		return "resources/AcquisitionResources";
+	}
 
-    @Override
-    public boolean isDefaultInputInterfaceUsed() {
-	return false;
-    }
+	@Override
+	public boolean isDefaultInputInterfaceUsed() {
+		return false;
+	}
 
-    @Override
-    public boolean isVisible() {
-	return false;
-    }
+	@Override
+	public boolean isVisible() {
+		return false;
+	}
 }

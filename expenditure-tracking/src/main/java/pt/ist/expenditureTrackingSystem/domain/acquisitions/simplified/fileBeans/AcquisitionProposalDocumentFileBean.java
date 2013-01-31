@@ -34,18 +34,18 @@ import module.workflow.util.WorkflowFileUploadBean;
  */
 public class AcquisitionProposalDocumentFileBean extends WorkflowFileUploadBean {
 
-    private String proposalID;
+	private String proposalID;
 
-    public AcquisitionProposalDocumentFileBean(WorkflowProcess process) {
-	super(process);
-    }
+	public AcquisitionProposalDocumentFileBean(WorkflowProcess process) {
+		super(process);
+	}
 
-    public String getProposalID() {
-	return proposalID;
-    }
+	public String getProposalID() {
+		return proposalID;
+	}
 
-    public void setProposalID(String proposalID) {
-	this.proposalID = proposalID;
-    }
+	public void setProposalID(String proposalID) {
+		this.proposalID = proposalID;
+	}
 
 }
