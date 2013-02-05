@@ -32,22 +32,22 @@ package pt.ist.jpdafinance.pt;
  */
 public class EconomicActivityClassificationLeaf extends EconomicActivityClassification {
 
-	public final EconomicActivityClassificationGroup group;
+    public final EconomicActivityClassificationGroup group;
 
-	public EconomicActivityClassificationLeaf(final String code, final String description,
-			final EconomicActivityClassificationGroup group) {
-		super(code, description);
-		this.group = group;
-		group.classifications.add(this);
-	}
+    public EconomicActivityClassificationLeaf(final String code, final String description,
+            final EconomicActivityClassificationGroup group) {
+        super(code, description);
+        this.group = group;
+        group.classifications.add(this);
+    }
 
-	@Override
-	public String exportAsString() {
-		return group.exportAsString() + ":" + super.exportAsString();
-	}
+    @Override
+    public String exportAsString() {
+        return group.exportAsString() + ":" + super.exportAsString();
+    }
 
-	public EconomicActivityClassificationGroup getGroup() {
-		return group;
-	}
+    public EconomicActivityClassificationGroup getGroup() {
+        return group;
+    }
 
 }
