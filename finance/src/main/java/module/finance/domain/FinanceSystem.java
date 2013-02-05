@@ -34,25 +34,25 @@ import pt.ist.fenixWebFramework.services.Service;
  */
 public class FinanceSystem extends FinanceSystem_Base {
 
-	public static FinanceSystem getInstance() {
-		final MyOrg myOrg = MyOrg.getInstance();
-		if (!myOrg.hasFinanceSystem()) {
-			initialize();
-		}
-		return myOrg.getFinanceSystem();
-	}
+    public static FinanceSystem getInstance() {
+        final MyOrg myOrg = MyOrg.getInstance();
+        if (!myOrg.hasFinanceSystem()) {
+            initialize();
+        }
+        return myOrg.getFinanceSystem();
+    }
 
-	@Service
-	public synchronized static void initialize() {
-		final MyOrg myOrg = MyOrg.getInstance();
-		if (!myOrg.hasFinanceSystem()) {
-			new FinanceSystem(myOrg);
-		}
-	}
+    @Service
+    public synchronized static void initialize() {
+        final MyOrg myOrg = MyOrg.getInstance();
+        if (!myOrg.hasFinanceSystem()) {
+            new FinanceSystem(myOrg);
+        }
+    }
 
-	private FinanceSystem(final MyOrg myOrg) {
-		super();
-		setMyOrg(myOrg);
-	}
+    private FinanceSystem(final MyOrg myOrg) {
+        super();
+        setMyOrg(myOrg);
+    }
 
 }
