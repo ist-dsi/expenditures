@@ -35,16 +35,16 @@ import pt.ist.bennu.core.util.BundleUtil;
  */
 public class RejectProcessActivity extends CancelProcessActivity {
 
-	@Override
-	public String getLocalizedName() {
-		return BundleUtil.getStringFromResourceBundle("resources/MissionResources", "activity." + getClass().getSimpleName());
-	}
+    @Override
+    public String getLocalizedName() {
+        return BundleUtil.getStringFromResourceBundle("resources/MissionResources", "activity." + getClass().getSimpleName());
+    }
 
-	@Override
-	public boolean isActive(final MissionProcess missionProcess, final User user) {
-		return !missionProcess.isCanceled()
-		// && missionProcess.isUnderConstruction()
-				&& (missionProcess.canAuthoriseParticipantActivity() || missionProcess.isPendingAuthorizationBy(user));
-	}
+    @Override
+    public boolean isActive(final MissionProcess missionProcess, final User user) {
+        return !missionProcess.isCanceled()
+        // && missionProcess.isUnderConstruction()
+                && (missionProcess.canAuthoriseParticipantActivity() || missionProcess.isPendingAuthorizationBy(user));
+    }
 
 }

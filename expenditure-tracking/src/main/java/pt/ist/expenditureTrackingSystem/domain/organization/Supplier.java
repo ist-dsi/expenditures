@@ -60,366 +60,366 @@ import pt.ist.fenixframework.plugins.luceneIndexing.IndexableField;
  */
 public class Supplier extends Supplier_Base /* implements Indexable, Searchable */{
 
-	public static enum SupplierIndexes implements IndexableField {
-		FISCAL_CODE("nif"), NAME("supplierName");
+    public static enum SupplierIndexes implements IndexableField {
+        FISCAL_CODE("nif"), NAME("supplierName");
 
-		private String name;
+        private String name;
 
-		private SupplierIndexes(String name) {
-			this.name = name;
-		}
+        private SupplierIndexes(String name) {
+            this.name = name;
+        }
 
-		@Override
-		public String getFieldName() {
-			return this.name;
-		}
+        @Override
+        public String getFieldName() {
+            return this.name;
+        }
 
-	}
+    }
 
-	private Supplier() {
-		super();
-		setMyOrg(MyOrg.getInstance());
-		setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
-	}
+    private Supplier() {
+        super();
+        setMyOrg(MyOrg.getInstance());
+        setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
+    }
 
-	public Supplier(String fiscalCode) {
-		this();
-		if (fiscalCode == null || fiscalCode.length() == 0) {
-			throw new DomainException("error.fiscal.code.cannot.be.empty");
-		}
-		setFiscalIdentificationCode(fiscalCode);
-	}
+    public Supplier(String fiscalCode) {
+        this();
+        if (fiscalCode == null || fiscalCode.length() == 0) {
+            throw new DomainException("error.fiscal.code.cannot.be.empty");
+        }
+        setFiscalIdentificationCode(fiscalCode);
+    }
 
-	public Supplier(String name, String abbreviatedName, String fiscalCode, String nib) {
-		this(fiscalCode);
-		setName(name);
-		setAbbreviatedName(abbreviatedName);
-		setNib(nib);
-	}
+    public Supplier(String name, String abbreviatedName, String fiscalCode, String nib) {
+        this(fiscalCode);
+        setName(name);
+        setAbbreviatedName(abbreviatedName);
+        setNib(nib);
+    }
 
-	@Override
-	@Service
-	public void delete() {
-		if (checkIfCanBeDeleted()) {
-			removeMyOrg();
-			removeExpenditureTrackingSystem();
-			super.delete();
-		}
-	}
+    @Override
+    @Service
+    public void delete() {
+        if (checkIfCanBeDeleted()) {
+            removeMyOrg();
+            removeExpenditureTrackingSystem();
+            super.delete();
+        }
+    }
 
-	@Override
-	protected boolean checkIfCanBeDeleted() {
-		return !hasAnyAcquisitionRequests() && !hasAnyAcquisitionsAfterTheFact() && !hasAnyRefundInvoices()
-				&& !hasAnyAnnouncements() && !hasAnySupplierSearches() && !hasAnyPossibleAcquisitionRequests()
-				&& super.checkIfCanBeDeleted();
-	}
+    @Override
+    protected boolean checkIfCanBeDeleted() {
+        return !hasAnyAcquisitionRequests() && !hasAnyAcquisitionsAfterTheFact() && !hasAnyRefundInvoices()
+                && !hasAnyAnnouncements() && !hasAnySupplierSearches() && !hasAnyPossibleAcquisitionRequests()
+                && super.checkIfCanBeDeleted();
+    }
 
-	public static Supplier readSupplierByFiscalIdentificationCode(String fiscalIdentificationCode) {
-		for (Supplier supplier : MyOrg.getInstance().getSuppliersSet()) {
-			if (supplier.getFiscalIdentificationCode().equals(fiscalIdentificationCode)) {
-				return supplier;
-			}
-		}
-		return null;
-	}
+    public static Supplier readSupplierByFiscalIdentificationCode(String fiscalIdentificationCode) {
+        for (Supplier supplier : MyOrg.getInstance().getSuppliersSet()) {
+            if (supplier.getFiscalIdentificationCode().equals(fiscalIdentificationCode)) {
+                return supplier;
+            }
+        }
+        return null;
+    }
 
-	public static Supplier readSupplierByName(final String name) {
-		for (Supplier supplier : MyOrg.getInstance().getSuppliersSet()) {
-			if (supplier.getName().equalsIgnoreCase(name)) {
-				return supplier;
-			}
-		}
-		return null;
-	}
+    public static Supplier readSupplierByName(final String name) {
+        for (Supplier supplier : MyOrg.getInstance().getSuppliersSet()) {
+            if (supplier.getName().equalsIgnoreCase(name)) {
+                return supplier;
+            }
+        }
+        return null;
+    }
 
-	@Deprecated
-	public Money getTotalAllocated() {
-		Money result = getAllocated();
-		for (final AcquisitionRequest acquisitionRequest : getAcquisitionRequestsSet()) {
-			if (acquisitionRequest.isInAllocationPeriod()) {
-				final AcquisitionProcess acquisitionProcess = acquisitionRequest.getAcquisitionProcess();
-				if (acquisitionProcess.isActive() && acquisitionProcess.isAllocatedToSupplier()) {
-					result = result.add(acquisitionRequest.getValueAllocated());
-				}
-			}
-		}
-		for (final AcquisitionAfterTheFact acquisitionAfterTheFact : getAcquisitionsAfterTheFactSet()) {
-			if (acquisitionAfterTheFact.isInAllocationPeriod()) {
-				if (!acquisitionAfterTheFact.getDeletedState().booleanValue()) {
-					result = result.add(acquisitionAfterTheFact.getValue());
-				}
-			}
-		}
-		for (final RefundableInvoiceFile refundInvoice : getRefundInvoicesSet()) {
-			if (refundInvoice.isInAllocationPeriod()) {
-				final RefundProcess refundProcess = refundInvoice.getRefundItem().getRequest().getProcess();
-				if (refundProcess.isActive() && !refundProcess.getShouldSkipSupplierFundAllocation()) {
-					result = result.add(refundInvoice.getRefundableValue());
-				}
-			}
-		}
-		return result;
-	}
+    @Deprecated
+    public Money getTotalAllocated() {
+        Money result = getAllocated();
+        for (final AcquisitionRequest acquisitionRequest : getAcquisitionRequestsSet()) {
+            if (acquisitionRequest.isInAllocationPeriod()) {
+                final AcquisitionProcess acquisitionProcess = acquisitionRequest.getAcquisitionProcess();
+                if (acquisitionProcess.isActive() && acquisitionProcess.isAllocatedToSupplier()) {
+                    result = result.add(acquisitionRequest.getValueAllocated());
+                }
+            }
+        }
+        for (final AcquisitionAfterTheFact acquisitionAfterTheFact : getAcquisitionsAfterTheFactSet()) {
+            if (acquisitionAfterTheFact.isInAllocationPeriod()) {
+                if (!acquisitionAfterTheFact.getDeletedState().booleanValue()) {
+                    result = result.add(acquisitionAfterTheFact.getValue());
+                }
+            }
+        }
+        for (final RefundableInvoiceFile refundInvoice : getRefundInvoicesSet()) {
+            if (refundInvoice.isInAllocationPeriod()) {
+                final RefundProcess refundProcess = refundInvoice.getRefundItem().getRequest().getProcess();
+                if (refundProcess.isActive() && !refundProcess.getShouldSkipSupplierFundAllocation()) {
+                    result = result.add(refundInvoice.getRefundableValue());
+                }
+            }
+        }
+        return result;
+    }
 
-	@Deprecated
-	public Money getTotalAllocated(final CPVReference cpvReference) {
-		Money result = getAllocated();
-		for (final AcquisitionRequest acquisitionRequest : getAcquisitionRequestsSet()) {
-			if (acquisitionRequest.isInAllocationPeriod()) {
-				final AcquisitionProcess acquisitionProcess = acquisitionRequest.getAcquisitionProcess();
-				if (acquisitionProcess.isActive() && acquisitionProcess.isAllocatedToSupplier()) {
-					final boolean hasBeenAllocatedPermanently =
-							acquisitionProcess.getAcquisitionProcessState().hasBeenAllocatedPermanently();
-					for (final RequestItem requestItem : acquisitionRequest.getRequestItemsSet()) {
-						if (requestItem.getCPVReference().getCode().equals(cpvReference.getCode())) {
-							final Money valueToAdd =
-									hasBeenAllocatedPermanently ? requestItem.getTotalRealAssigned() : requestItem
-											.getTotalAssigned();
-							result = result.add(valueToAdd);
-						}
-					}
-				}
-			}
-		}
-		for (final AcquisitionAfterTheFact acquisitionAfterTheFact : getAcquisitionsAfterTheFactSet()) {
-			if (acquisitionAfterTheFact.isInAllocationPeriod()) {
-				if (!acquisitionAfterTheFact.getDeletedState().booleanValue()) {
-					// TODO : eventually check CPV stuff
-					result = result.add(acquisitionAfterTheFact.getValue());
-				}
-			}
-		}
-		for (final RefundableInvoiceFile refundInvoice : getRefundInvoicesSet()) {
-			if (refundInvoice.isInAllocationPeriod()) {
-				final RefundProcess refundProcess = refundInvoice.getRefundItem().getRequest().getProcess();
-				if (refundProcess.isActive() && !refundProcess.getShouldSkipSupplierFundAllocation()) {
-					final RefundRequest refundRequest = refundProcess.getRequest();
-					if (refundProcess.hasFundsAllocatedPermanently()) {
-						for (final PaymentProcessInvoice paymentProcessInvoice : refundRequest.getInvoices()) {
-							final RefundableInvoiceFile refundableInvoiceFile = (RefundableInvoiceFile) paymentProcessInvoice;
-							for (final RequestItem requestItem : refundableInvoiceFile.getRequestItemsSet()) {
-								final RefundItem refundItem = (RefundItem) requestItem;
-								if (refundItem.getCPVReference().getCode().equals(cpvReference.getCode())) {
-									result = result.add(refundableInvoiceFile.getRefundableValue());
-								}
-							}
-						}
-					} else {
-						for (final RefundItem refundItem : refundRequest.getRefundItemsSet()) {
-							if (refundItem.getCPVReference().getCode().equals(cpvReference.getCode())) {
-								result = result.add(refundItem.getValueEstimation());
-							}
-						}
-					}
-				}
-			}
-		}
-		return result;
-	}
+    @Deprecated
+    public Money getTotalAllocated(final CPVReference cpvReference) {
+        Money result = getAllocated();
+        for (final AcquisitionRequest acquisitionRequest : getAcquisitionRequestsSet()) {
+            if (acquisitionRequest.isInAllocationPeriod()) {
+                final AcquisitionProcess acquisitionProcess = acquisitionRequest.getAcquisitionProcess();
+                if (acquisitionProcess.isActive() && acquisitionProcess.isAllocatedToSupplier()) {
+                    final boolean hasBeenAllocatedPermanently =
+                            acquisitionProcess.getAcquisitionProcessState().hasBeenAllocatedPermanently();
+                    for (final RequestItem requestItem : acquisitionRequest.getRequestItemsSet()) {
+                        if (requestItem.getCPVReference().getCode().equals(cpvReference.getCode())) {
+                            final Money valueToAdd =
+                                    hasBeenAllocatedPermanently ? requestItem.getTotalRealAssigned() : requestItem
+                                            .getTotalAssigned();
+                            result = result.add(valueToAdd);
+                        }
+                    }
+                }
+            }
+        }
+        for (final AcquisitionAfterTheFact acquisitionAfterTheFact : getAcquisitionsAfterTheFactSet()) {
+            if (acquisitionAfterTheFact.isInAllocationPeriod()) {
+                if (!acquisitionAfterTheFact.getDeletedState().booleanValue()) {
+                    // TODO : eventually check CPV stuff
+                    result = result.add(acquisitionAfterTheFact.getValue());
+                }
+            }
+        }
+        for (final RefundableInvoiceFile refundInvoice : getRefundInvoicesSet()) {
+            if (refundInvoice.isInAllocationPeriod()) {
+                final RefundProcess refundProcess = refundInvoice.getRefundItem().getRequest().getProcess();
+                if (refundProcess.isActive() && !refundProcess.getShouldSkipSupplierFundAllocation()) {
+                    final RefundRequest refundRequest = refundProcess.getRequest();
+                    if (refundProcess.hasFundsAllocatedPermanently()) {
+                        for (final PaymentProcessInvoice paymentProcessInvoice : refundRequest.getInvoices()) {
+                            final RefundableInvoiceFile refundableInvoiceFile = (RefundableInvoiceFile) paymentProcessInvoice;
+                            for (final RequestItem requestItem : refundableInvoiceFile.getRequestItemsSet()) {
+                                final RefundItem refundItem = (RefundItem) requestItem;
+                                if (refundItem.getCPVReference().getCode().equals(cpvReference.getCode())) {
+                                    result = result.add(refundableInvoiceFile.getRefundableValue());
+                                }
+                            }
+                        }
+                    } else {
+                        for (final RefundItem refundItem : refundRequest.getRefundItemsSet()) {
+                            if (refundItem.getCPVReference().getCode().equals(cpvReference.getCode())) {
+                                result = result.add(refundItem.getValueEstimation());
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return result;
+    }
 
-	public Map<CPVReference, Money> getAllocationsByCPVReference() {
-		final SortedMap<CPVReference, Money> result = new TreeMap<CPVReference, Money>(CPVReference.COMPARATOR_BY_CODE);
+    public Map<CPVReference, Money> getAllocationsByCPVReference() {
+        final SortedMap<CPVReference, Money> result = new TreeMap<CPVReference, Money>(CPVReference.COMPARATOR_BY_CODE);
 
-		for (final AcquisitionRequest acquisitionRequest : getAcquisitionRequestsSet()) {
-			if (acquisitionRequest.isInAllocationPeriod()) {
-				final AcquisitionProcess acquisitionProcess = acquisitionRequest.getAcquisitionProcess();
-				if (acquisitionProcess.isActive() && acquisitionProcess.isAllocatedToSupplier()) {
-					final boolean hasBeenAllocatedPermanently =
-							acquisitionProcess.getAcquisitionProcessState().hasBeenAllocatedPermanently();
-					for (final RequestItem requestItem : acquisitionRequest.getRequestItemsSet()) {
-						final CPVReference cpvReference = requestItem.getCPVReference();
-						final Money valueToAdd =
-								hasBeenAllocatedPermanently ? requestItem.getTotalRealAssigned() : requestItem.getTotalAssigned();
-						if (!result.containsKey(cpvReference)) {
-							result.put(cpvReference, valueToAdd);
-						} else {
-							result.put(cpvReference, result.get(cpvReference).add(valueToAdd));
-						}
-					}
-				}
-			}
-		}
-		for (final AcquisitionAfterTheFact acquisitionAfterTheFact : getAcquisitionsAfterTheFactSet()) {
-			if (acquisitionAfterTheFact.isInAllocationPeriod()) {
-				if (!acquisitionAfterTheFact.getDeletedState().booleanValue()) {
-					final Money valueToAdd = acquisitionAfterTheFact.getValue();
-					if (!result.containsKey(null)) {
-						result.put(null, valueToAdd);
-					} else {
-						result.put(null, result.get(null).add(valueToAdd));
-					}
-				}
-			}
-		}
-		for (final RefundableInvoiceFile refundInvoice : getRefundInvoicesSet()) {
-			if (refundInvoice.isInAllocationPeriod()) {
-				final RefundProcess refundProcess = refundInvoice.getRefundItem().getRequest().getProcess();
-				if (refundProcess.isActive() && !refundProcess.getShouldSkipSupplierFundAllocation()) {
-					final RefundRequest refundRequest = refundProcess.getRequest();
-					if (refundProcess.hasFundsAllocatedPermanently()) {
-						for (final PaymentProcessInvoice paymentProcessInvoice : refundRequest.getInvoices()) {
-							final RefundableInvoiceFile refundableInvoiceFile = (RefundableInvoiceFile) paymentProcessInvoice;
-							for (final RequestItem requestItem : refundableInvoiceFile.getRequestItemsSet()) {
-								final RefundItem refundItem = (RefundItem) requestItem;
-								final CPVReference cpvReference = refundItem.getCPVReference();
-								final Money valueToAdd = refundableInvoiceFile.getRefundableValue();
-								if (!result.containsKey(cpvReference)) {
-									result.put(cpvReference, valueToAdd);
-								} else {
-									result.put(cpvReference, result.get(cpvReference).add(valueToAdd));
-								}
-							}
-						}
-					} else {
-						for (final RefundItem refundItem : refundRequest.getRefundItemsSet()) {
-							final CPVReference cpvReference = refundItem.getCPVReference();
-							final Money valueToAdd = refundItem.getValueEstimation();
-							if (!result.containsKey(cpvReference)) {
-								result.put(cpvReference, valueToAdd);
-							} else {
-								result.put(cpvReference, result.get(cpvReference).add(valueToAdd));
-							}
-						}
-					}
-				}
-			}
-		}
+        for (final AcquisitionRequest acquisitionRequest : getAcquisitionRequestsSet()) {
+            if (acquisitionRequest.isInAllocationPeriod()) {
+                final AcquisitionProcess acquisitionProcess = acquisitionRequest.getAcquisitionProcess();
+                if (acquisitionProcess.isActive() && acquisitionProcess.isAllocatedToSupplier()) {
+                    final boolean hasBeenAllocatedPermanently =
+                            acquisitionProcess.getAcquisitionProcessState().hasBeenAllocatedPermanently();
+                    for (final RequestItem requestItem : acquisitionRequest.getRequestItemsSet()) {
+                        final CPVReference cpvReference = requestItem.getCPVReference();
+                        final Money valueToAdd =
+                                hasBeenAllocatedPermanently ? requestItem.getTotalRealAssigned() : requestItem.getTotalAssigned();
+                        if (!result.containsKey(cpvReference)) {
+                            result.put(cpvReference, valueToAdd);
+                        } else {
+                            result.put(cpvReference, result.get(cpvReference).add(valueToAdd));
+                        }
+                    }
+                }
+            }
+        }
+        for (final AcquisitionAfterTheFact acquisitionAfterTheFact : getAcquisitionsAfterTheFactSet()) {
+            if (acquisitionAfterTheFact.isInAllocationPeriod()) {
+                if (!acquisitionAfterTheFact.getDeletedState().booleanValue()) {
+                    final Money valueToAdd = acquisitionAfterTheFact.getValue();
+                    if (!result.containsKey(null)) {
+                        result.put(null, valueToAdd);
+                    } else {
+                        result.put(null, result.get(null).add(valueToAdd));
+                    }
+                }
+            }
+        }
+        for (final RefundableInvoiceFile refundInvoice : getRefundInvoicesSet()) {
+            if (refundInvoice.isInAllocationPeriod()) {
+                final RefundProcess refundProcess = refundInvoice.getRefundItem().getRequest().getProcess();
+                if (refundProcess.isActive() && !refundProcess.getShouldSkipSupplierFundAllocation()) {
+                    final RefundRequest refundRequest = refundProcess.getRequest();
+                    if (refundProcess.hasFundsAllocatedPermanently()) {
+                        for (final PaymentProcessInvoice paymentProcessInvoice : refundRequest.getInvoices()) {
+                            final RefundableInvoiceFile refundableInvoiceFile = (RefundableInvoiceFile) paymentProcessInvoice;
+                            for (final RequestItem requestItem : refundableInvoiceFile.getRequestItemsSet()) {
+                                final RefundItem refundItem = (RefundItem) requestItem;
+                                final CPVReference cpvReference = refundItem.getCPVReference();
+                                final Money valueToAdd = refundableInvoiceFile.getRefundableValue();
+                                if (!result.containsKey(cpvReference)) {
+                                    result.put(cpvReference, valueToAdd);
+                                } else {
+                                    result.put(cpvReference, result.get(cpvReference).add(valueToAdd));
+                                }
+                            }
+                        }
+                    } else {
+                        for (final RefundItem refundItem : refundRequest.getRefundItemsSet()) {
+                            final CPVReference cpvReference = refundItem.getCPVReference();
+                            final Money valueToAdd = refundItem.getValueEstimation();
+                            if (!result.containsKey(cpvReference)) {
+                                result.put(cpvReference, valueToAdd);
+                            } else {
+                                result.put(cpvReference, result.get(cpvReference).add(valueToAdd));
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
-		return result;
-	}
+        return result;
+    }
 
-	@Deprecated
-	public Money getSoftTotalAllocated() {
-		Money result = Money.ZERO;
-		result = result.add(getTotalAllocatedByAcquisitionProcesses(true));
+    @Deprecated
+    public Money getSoftTotalAllocated() {
+        Money result = Money.ZERO;
+        result = result.add(getTotalAllocatedByAcquisitionProcesses(true));
 
-		for (final AcquisitionAfterTheFact acquisitionAfterTheFact : getAcquisitionsAfterTheFactSet()) {
-			if (acquisitionAfterTheFact.isInAllocationPeriod()) {
-				if (!acquisitionAfterTheFact.getDeletedState().booleanValue()) {
-					result = result.add(acquisitionAfterTheFact.getValue());
-				}
-			}
-		}
-		for (final RefundableInvoiceFile refundInvoice : getRefundInvoicesSet()) {
-			if (refundInvoice.isInAllocationPeriod()) {
-				final RefundProcess refundProcess = refundInvoice.getRefundItem().getRequest().getProcess();
-				if (refundProcess.isActive() && !refundProcess.getShouldSkipSupplierFundAllocation()) {
-					final RefundRequest refundRequest = refundProcess.getRequest();
-					if (refundProcess.hasFundsAllocatedPermanently()) {
-						for (final PaymentProcessInvoice paymentProcessInvoice : refundRequest.getInvoices()) {
-							final RefundableInvoiceFile refundableInvoiceFile = (RefundableInvoiceFile) paymentProcessInvoice;
-							final Money valueToAdd = refundableInvoiceFile.getRefundableValue();
-							result = result.add(valueToAdd);
-						}
-					} else {
-						for (final RefundItem refundItem : refundRequest.getRefundItemsSet()) {
-							final Money valueToAdd = refundItem.getValueEstimation();
-							result = result.add(valueToAdd);
-						}
-					}
-				}
-			}
-		}
-		return result;
-	}
+        for (final AcquisitionAfterTheFact acquisitionAfterTheFact : getAcquisitionsAfterTheFactSet()) {
+            if (acquisitionAfterTheFact.isInAllocationPeriod()) {
+                if (!acquisitionAfterTheFact.getDeletedState().booleanValue()) {
+                    result = result.add(acquisitionAfterTheFact.getValue());
+                }
+            }
+        }
+        for (final RefundableInvoiceFile refundInvoice : getRefundInvoicesSet()) {
+            if (refundInvoice.isInAllocationPeriod()) {
+                final RefundProcess refundProcess = refundInvoice.getRefundItem().getRequest().getProcess();
+                if (refundProcess.isActive() && !refundProcess.getShouldSkipSupplierFundAllocation()) {
+                    final RefundRequest refundRequest = refundProcess.getRequest();
+                    if (refundProcess.hasFundsAllocatedPermanently()) {
+                        for (final PaymentProcessInvoice paymentProcessInvoice : refundRequest.getInvoices()) {
+                            final RefundableInvoiceFile refundableInvoiceFile = (RefundableInvoiceFile) paymentProcessInvoice;
+                            final Money valueToAdd = refundableInvoiceFile.getRefundableValue();
+                            result = result.add(valueToAdd);
+                        }
+                    } else {
+                        for (final RefundItem refundItem : refundRequest.getRefundItemsSet()) {
+                            final Money valueToAdd = refundItem.getValueEstimation();
+                            result = result.add(valueToAdd);
+                        }
+                    }
+                }
+            }
+        }
+        return result;
+    }
 
-	private Money getTotalAllocatedByAcquisitionProcesses(boolean allProcesses) {
-		Money result = Money.ZERO;
-		for (final AcquisitionRequest acquisitionRequest : getAcquisitionRequestsSet()) {
-			if ((allProcesses && !acquisitionRequest.getProcess().getShouldSkipSupplierFundAllocation())
-					|| acquisitionRequest.getAcquisitionProcess().isAllocatedToSupplier()) {
-				if (acquisitionRequest.isInAllocationPeriod()) {
-					result = result.add(acquisitionRequest.getValueAllocated());
-				}
-			}
-		}
-		return result;
-	}
+    private Money getTotalAllocatedByAcquisitionProcesses(boolean allProcesses) {
+        Money result = Money.ZERO;
+        for (final AcquisitionRequest acquisitionRequest : getAcquisitionRequestsSet()) {
+            if ((allProcesses && !acquisitionRequest.getProcess().getShouldSkipSupplierFundAllocation())
+                    || acquisitionRequest.getAcquisitionProcess().isAllocatedToSupplier()) {
+                if (acquisitionRequest.isInAllocationPeriod()) {
+                    result = result.add(acquisitionRequest.getValueAllocated());
+                }
+            }
+        }
+        return result;
+    }
 
-	public Money getTotalAllocatedByAcquisitionProcesses() {
-		return getTotalAllocatedByAcquisitionProcesses(false);
-	}
+    public Money getTotalAllocatedByAcquisitionProcesses() {
+        return getTotalAllocatedByAcquisitionProcesses(false);
+    }
 
-	public Money getTotalAllocatedByAfterTheFactAcquisitions(final AfterTheFactAcquisitionType afterTheFactAcquisitionType) {
-		Money result = Money.ZERO;
-		for (final AcquisitionAfterTheFact acquisitionAfterTheFact : getAcquisitionsAfterTheFactSet()) {
-			if (acquisitionAfterTheFact.isInAllocationPeriod()) {
-				if (!acquisitionAfterTheFact.getDeletedState().booleanValue()) {
-					if (acquisitionAfterTheFact.getAfterTheFactAcquisitionType() == afterTheFactAcquisitionType) {
-						result = result.add(acquisitionAfterTheFact.getValue());
-					}
-				}
-			}
-		}
-		return result;
-	}
+    public Money getTotalAllocatedByAfterTheFactAcquisitions(final AfterTheFactAcquisitionType afterTheFactAcquisitionType) {
+        Money result = Money.ZERO;
+        for (final AcquisitionAfterTheFact acquisitionAfterTheFact : getAcquisitionsAfterTheFactSet()) {
+            if (acquisitionAfterTheFact.isInAllocationPeriod()) {
+                if (!acquisitionAfterTheFact.getDeletedState().booleanValue()) {
+                    if (acquisitionAfterTheFact.getAfterTheFactAcquisitionType() == afterTheFactAcquisitionType) {
+                        result = result.add(acquisitionAfterTheFact.getValue());
+                    }
+                }
+            }
+        }
+        return result;
+    }
 
-	public Money getTotalAllocatedByPurchases() {
-		return getTotalAllocatedByAfterTheFactAcquisitions(AfterTheFactAcquisitionType.PURCHASE);
-	}
+    public Money getTotalAllocatedByPurchases() {
+        return getTotalAllocatedByAfterTheFactAcquisitions(AfterTheFactAcquisitionType.PURCHASE);
+    }
 
-	public Money getTotalAllocatedByWorkingCapitals() {
-		return getTotalAllocatedByAfterTheFactAcquisitions(AfterTheFactAcquisitionType.WORKING_CAPITAL);
-	}
+    public Money getTotalAllocatedByWorkingCapitals() {
+        return getTotalAllocatedByAfterTheFactAcquisitions(AfterTheFactAcquisitionType.WORKING_CAPITAL);
+    }
 
-	public Money getTotalAllocatedByRefunds() {
-		return getTotalAllocatedByAfterTheFactAcquisitions(AfterTheFactAcquisitionType.REFUND);
-	}
+    public Money getTotalAllocatedByRefunds() {
+        return getTotalAllocatedByAfterTheFactAcquisitions(AfterTheFactAcquisitionType.REFUND);
+    }
 
-	@Service
-	public static Supplier createNewSupplier(final CreateSupplierBean createSupplierBean) {
-		final Supplier supplier =
-				new Supplier(createSupplierBean.getName(), createSupplierBean.getAbbreviatedName(),
-						createSupplierBean.getFiscalIdentificationCode(), createSupplierBean.getNib());
-		supplier.registerContact(createSupplierBean.getAddress(), createSupplierBean.getPhone(), createSupplierBean.getFax(),
-				createSupplierBean.getEmail());
-		return supplier;
-	}
+    @Service
+    public static Supplier createNewSupplier(final CreateSupplierBean createSupplierBean) {
+        final Supplier supplier =
+                new Supplier(createSupplierBean.getName(), createSupplierBean.getAbbreviatedName(),
+                        createSupplierBean.getFiscalIdentificationCode(), createSupplierBean.getNib());
+        supplier.registerContact(createSupplierBean.getAddress(), createSupplierBean.getPhone(), createSupplierBean.getFax(),
+                createSupplierBean.getEmail());
+        return supplier;
+    }
 
-	@Override
-	public boolean isFundAllocationAllowed(final Money value) {
-		final Money totalAllocated = getTotalAllocated();
-		final Money totalValue = totalAllocated; // .add(value);
-		return totalValue.isLessThan(SUPPLIER_LIMIT) && totalValue.isLessThan(getSupplierLimit());
-	}
+    @Override
+    public boolean isFundAllocationAllowed(final Money value) {
+        final Money totalAllocated = getTotalAllocated();
+        final Money totalValue = totalAllocated; // .add(value);
+        return totalValue.isLessThan(SUPPLIER_LIMIT) && totalValue.isLessThan(getSupplierLimit());
+    }
 
-	@Override
-	public boolean isFundAllocationAllowed(final String cpvReference, final Money value) {
-		final Money totalAllocated = getTotalAllocated(CPVReference.getCPVCode(cpvReference));
-		final Money totalValue = totalAllocated; // .add(value);
-		return totalValue.isLessThan(SUPPLIER_LIMIT) && totalValue.isLessThan(getSupplierLimit());
-	}
+    @Override
+    public boolean isFundAllocationAllowed(final String cpvReference, final Money value) {
+        final Money totalAllocated = getTotalAllocated(CPVReference.getCPVCode(cpvReference));
+        final Money totalValue = totalAllocated; // .add(value);
+        return totalValue.isLessThan(SUPPLIER_LIMIT) && totalValue.isLessThan(getSupplierLimit());
+    }
 
-	@Service
-	public void merge(final Supplier supplier) {
-		if (supplier != this) {
-			final Set<AcquisitionAfterTheFact> acquisitionAfterTheFacts = supplier.getAcquisitionsAfterTheFactSet();
-			getAcquisitionsAfterTheFactSet().addAll(acquisitionAfterTheFacts);
-			acquisitionAfterTheFacts.clear();
+    @Service
+    public void merge(final Supplier supplier) {
+        if (supplier != this) {
+            final Set<AcquisitionAfterTheFact> acquisitionAfterTheFacts = supplier.getAcquisitionsAfterTheFactSet();
+            getAcquisitionsAfterTheFactSet().addAll(acquisitionAfterTheFacts);
+            acquisitionAfterTheFacts.clear();
 
-			final Set<RefundableInvoiceFile> refundInvoices = supplier.getRefundInvoicesSet();
-			getRefundInvoicesSet().addAll(refundInvoices);
-			refundInvoices.clear();
+            final Set<RefundableInvoiceFile> refundInvoices = supplier.getRefundInvoicesSet();
+            getRefundInvoicesSet().addAll(refundInvoices);
+            refundInvoices.clear();
 
-			final Set<CCPAnnouncement> announcements = supplier.getAnnouncementsSet();
-			getAnnouncementsSet().addAll(announcements);
-			announcements.clear();
+            final Set<CCPAnnouncement> announcements = supplier.getAnnouncementsSet();
+            getAnnouncementsSet().addAll(announcements);
+            announcements.clear();
 
-			final Set<SavedSearch> savedSearches = supplier.getSupplierSearchesSet();
-			getSupplierSearchesSet().addAll(savedSearches);
-			savedSearches.clear();
+            final Set<SavedSearch> savedSearches = supplier.getSupplierSearchesSet();
+            getSupplierSearchesSet().addAll(savedSearches);
+            savedSearches.clear();
 
-			final Set<AcquisitionRequest> acquisitionRequests = supplier.getAcquisitionRequestsSet();
-			getAcquisitionRequestsSet().addAll(acquisitionRequests);
-			acquisitionRequests.clear();
+            final Set<AcquisitionRequest> acquisitionRequests = supplier.getAcquisitionRequestsSet();
+            getAcquisitionRequestsSet().addAll(acquisitionRequests);
+            acquisitionRequests.clear();
 
-			final Set<AcquisitionRequest> possibleAcquisitionRequests = supplier.getPossibleAcquisitionRequestsSet();
-			getPossibleAcquisitionRequestsSet().addAll(possibleAcquisitionRequests);
-			possibleAcquisitionRequests.clear();
+            final Set<AcquisitionRequest> possibleAcquisitionRequests = supplier.getPossibleAcquisitionRequestsSet();
+            getPossibleAcquisitionRequestsSet().addAll(possibleAcquisitionRequests);
+            possibleAcquisitionRequests.clear();
 
-			supplier.delete();
-		}
-	}
+            supplier.delete();
+        }
+    }
 
 /*
     @Override
@@ -440,24 +440,24 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
     }
 */
 
-	@Override
-	public Address getAddress() {
-		return hasAnySupplierContact() ? getSupplierContactIterator().next().getAddress() : super.getAddress();
-	}
+    @Override
+    public Address getAddress() {
+        return hasAnySupplierContact() ? getSupplierContactIterator().next().getAddress() : super.getAddress();
+    }
 
-	@Override
-	public String getPhone() {
-		return hasAnySupplierContact() ? getSupplierContactIterator().next().getPhone() : super.getPhone();
-	}
+    @Override
+    public String getPhone() {
+        return hasAnySupplierContact() ? getSupplierContactIterator().next().getPhone() : super.getPhone();
+    }
 
-	@Override
-	public String getFax() {
-		return hasAnySupplierContact() ? getSupplierContactIterator().next().getFax() : super.getFax();
-	}
+    @Override
+    public String getFax() {
+        return hasAnySupplierContact() ? getSupplierContactIterator().next().getFax() : super.getFax();
+    }
 
-	@Override
-	public String getEmail() {
-		return hasAnySupplierContact() ? getSupplierContactIterator().next().getEmail() : super.getEmail();
-	}
+    @Override
+    public String getEmail() {
+        return hasAnySupplierContact() ? getSupplierContactIterator().next().getEmail() : super.getEmail();
+    }
 
 }

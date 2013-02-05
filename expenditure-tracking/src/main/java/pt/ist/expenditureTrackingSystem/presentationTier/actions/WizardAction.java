@@ -41,14 +41,14 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
  */
 public class WizardAction extends BaseAction {
 
-	public ActionForward newAcquisitionWizard(final ActionMapping mapping, final ActionForm form,
-			final HttpServletRequest request, final HttpServletResponse response) {
-		return forward(request, "/acquisitions/creationWizard.jsp");
-	}
+    public ActionForward newAcquisitionWizard(final ActionMapping mapping, final ActionForm form,
+            final HttpServletRequest request, final HttpServletResponse response) {
+        return forward(request, "/acquisitions/creationWizard.jsp");
+    }
 
-	public ActionForward afterTheFactOperationsWizard(final ActionMapping mapping, final ActionForm form,
-			final HttpServletRequest request, final HttpServletResponse response) {
-		return forward(request, "/acquisitions/afterTheFactOperationsWizard.jsp");
-	}
+    public ActionForward afterTheFactOperationsWizard(final ActionMapping mapping, final ActionForm form,
+            final HttpServletRequest request, final HttpServletResponse response) {
+        return forward(request, "/acquisitions/afterTheFactOperationsWizard.jsp");
+    }
 
 }

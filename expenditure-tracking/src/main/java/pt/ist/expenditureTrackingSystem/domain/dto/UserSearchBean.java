@@ -36,28 +36,28 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
  */
 public class UserSearchBean implements Serializable {
 
-	private SavedSearch selectedSearch;
-	private Person user;
+    private SavedSearch selectedSearch;
+    private Person user;
 
-	public UserSearchBean(Person person) {
-		setUser(person);
-		setSelectedSearch(null);
-	}
+    public UserSearchBean(Person person) {
+        setUser(person);
+        setSelectedSearch(null);
+    }
 
-	public SavedSearch getSelectedSearch() {
-		return selectedSearch;
-	}
+    public SavedSearch getSelectedSearch() {
+        return selectedSearch;
+    }
 
-	public void setSelectedSearch(SavedSearch selectedSearch) {
-		this.selectedSearch = selectedSearch;
-	}
+    public void setSelectedSearch(SavedSearch selectedSearch) {
+        this.selectedSearch = selectedSearch;
+    }
 
-	public Person getUser() {
-		return user;
-	}
+    public Person getUser() {
+        return user;
+    }
 
-	public void setUser(Person user) {
-		this.user = user;
-	}
+    public void setUser(Person user) {
+        this.user = user;
+    }
 
 }

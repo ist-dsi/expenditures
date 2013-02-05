@@ -47,66 +47,66 @@ import pt.utl.ist.fenix.tools.util.i18n.Language;
  */
 public class DashBoardResetter {
 
-	public static void init() {
-		Language.setDefaultLocale(new Locale("pt", "PT"));
-		Language.setLocale(Language.getDefaultLocale());
+    public static void init() {
+        Language.setDefaultLocale(new Locale("pt", "PT"));
+        Language.setLocale(Language.getDefaultLocale());
 
-		FenixWebFramework.initialize(PropertiesManager.getFenixFrameworkConfig());
-	}
+        FenixWebFramework.initialize(PropertiesManager.getFenixFrameworkConfig());
+    }
 
-	public static void main(String[] args) {
-		init();
-		reset();
-		System.out.println("Done.");
-	}
+    public static void main(String[] args) {
+        init();
+        reset();
+        System.out.println("Done.");
+    }
 
-	@Service
-	private static void reset() {
-		final ExpenditureTrackingSystem expenditureTrackingSystem = ExpenditureTrackingSystem.getInstance();
-		for (final Person person : MyOrg.getInstance().getPeopleFromExpenditureTackingSystemSet()) {
-			final DashBoard dashBoard = person.getDashBoard();
-			dashBoard.setExpenditureTrackingSystem(expenditureTrackingSystem);
-			addWidget1("widgetUnreadComments", dashBoard);
-			addWidget3("widgetActivateEmailNotification", dashBoard);
-		}
-	}
+    @Service
+    private static void reset() {
+        final ExpenditureTrackingSystem expenditureTrackingSystem = ExpenditureTrackingSystem.getInstance();
+        for (final Person person : MyOrg.getInstance().getPeopleFromExpenditureTackingSystemSet()) {
+            final DashBoard dashBoard = person.getDashBoard();
+            dashBoard.setExpenditureTrackingSystem(expenditureTrackingSystem);
+            addWidget1("widgetUnreadComments", dashBoard);
+            addWidget3("widgetActivateEmailNotification", dashBoard);
+        }
+    }
 
-	private static void addWidget1(final String widgetName, final DashBoard dashBoard) {
-		if (!hasWidget(widgetName, dashBoard)) {
-			final List<String> column1 = new ArrayList<String>();
-			for (final String string : dashBoard.getColumn1().getUnmodifiableList()) {
-				column1.add(string);
-			}
-			column1.add(widgetName);
-			dashBoard.setColumn1(new Strings(column1));
-		}
-	}
+    private static void addWidget1(final String widgetName, final DashBoard dashBoard) {
+        if (!hasWidget(widgetName, dashBoard)) {
+            final List<String> column1 = new ArrayList<String>();
+            for (final String string : dashBoard.getColumn1().getUnmodifiableList()) {
+                column1.add(string);
+            }
+            column1.add(widgetName);
+            dashBoard.setColumn1(new Strings(column1));
+        }
+    }
 
-	private static void addWidget2(final String widgetName, final DashBoard dashBoard) {
-		if (!hasWidget(widgetName, dashBoard)) {
-			final List<String> column2 = new ArrayList<String>();
-			for (final String string : dashBoard.getColumn2().getUnmodifiableList()) {
-				column2.add(string);
-			}
-			column2.add(widgetName);
-			dashBoard.setColumn2(new Strings(column2));
-		}
-	}
+    private static void addWidget2(final String widgetName, final DashBoard dashBoard) {
+        if (!hasWidget(widgetName, dashBoard)) {
+            final List<String> column2 = new ArrayList<String>();
+            for (final String string : dashBoard.getColumn2().getUnmodifiableList()) {
+                column2.add(string);
+            }
+            column2.add(widgetName);
+            dashBoard.setColumn2(new Strings(column2));
+        }
+    }
 
-	private static void addWidget3(final String widgetName, final DashBoard dashBoard) {
-		if (!hasWidget(widgetName, dashBoard)) {
-			final List<String> column3 = new ArrayList<String>();
-			for (final String string : dashBoard.getColumn3().getUnmodifiableList()) {
-				column3.add(string);
-			}
-			column3.add(widgetName);
-			dashBoard.setColumn3(new Strings(column3));
-		}
-	}
+    private static void addWidget3(final String widgetName, final DashBoard dashBoard) {
+        if (!hasWidget(widgetName, dashBoard)) {
+            final List<String> column3 = new ArrayList<String>();
+            for (final String string : dashBoard.getColumn3().getUnmodifiableList()) {
+                column3.add(string);
+            }
+            column3.add(widgetName);
+            dashBoard.setColumn3(new Strings(column3));
+        }
+    }
 
-	private static boolean hasWidget(String string, DashBoard dashBoard) {
-		return dashBoard.getColumn1().contains(string) || dashBoard.getColumn2().contains(string)
-				|| dashBoard.getColumn3().contains(string);
-	}
+    private static boolean hasWidget(String string, DashBoard dashBoard) {
+        return dashBoard.getColumn1().contains(string) || dashBoard.getColumn2().contains(string)
+                || dashBoard.getColumn3().contains(string);
+    }
 
 }

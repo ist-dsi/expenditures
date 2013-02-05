@@ -5,9 +5,9 @@ import pt.ist.bennu.core.presentationTier.renderers.providers.AbstractDomainClas
 
 public class MissionClassProvider extends AbstractDomainClassProvider {
 
-	@Override
-	protected Class getSuperClass() {
-		return Mission.class;
-	}
+    @Override
+    protected Class getSuperClass() {
+        return Mission.class;
+    }
 
 }

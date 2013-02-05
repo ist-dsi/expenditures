@@ -44,38 +44,38 @@ import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
  */
 public class SearchByInvoiceBean implements Serializable {
 
-	String invoiceId;
+    String invoiceId;
 
-	public String getInvoiceId() {
-		return invoiceId;
-	}
+    public String getInvoiceId() {
+        return invoiceId;
+    }
 
-	public void setInvoiceId(String invoiceId) {
-		this.invoiceId = invoiceId.trim();
-	}
+    public void setInvoiceId(String invoiceId) {
+        this.invoiceId = invoiceId.trim();
+    }
 
-	public ArrayList<PaymentProcess> search() {
-		ArrayList<PaymentProcess> resultsList = new ArrayList<PaymentProcess>();
-		if (StringUtils.isEmpty(invoiceId))
-			return resultsList;
+    public ArrayList<PaymentProcess> search() {
+        ArrayList<PaymentProcess> resultsList = new ArrayList<PaymentProcess>();
+        if (StringUtils.isEmpty(invoiceId))
+            return resultsList;
 
-		List<PaymentProcessYear> processesYears = ExpenditureTrackingSystem.getInstance().getPaymentProcessYears();
+        List<PaymentProcessYear> processesYears = ExpenditureTrackingSystem.getInstance().getPaymentProcessYears();
 
-		for (PaymentProcessYear year : processesYears) {
-			for (GenericProcess process : year.getPaymentProcessSet()) {
-				if (process instanceof PaymentProcess) {
-					RequestWithPayment request = ((PaymentProcess) process).getRequest();
-					if (request != null) {
-						for (PaymentProcessInvoice invoice : request.getInvoices()) {
-							if (invoice.getInvoiceNumber().equals(invoiceId)) {
-								resultsList.add((PaymentProcess) process);
-								break;
-							}
-						}
-					}
-				}
-			}
-		}
-		return resultsList;
-	}
+        for (PaymentProcessYear year : processesYears) {
+            for (GenericProcess process : year.getPaymentProcessSet()) {
+                if (process instanceof PaymentProcess) {
+                    RequestWithPayment request = ((PaymentProcess) process).getRequest();
+                    if (request != null) {
+                        for (PaymentProcessInvoice invoice : request.getInvoices()) {
+                            if (invoice.getInvoiceNumber().equals(invoiceId)) {
+                                resultsList.add((PaymentProcess) process);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return resultsList;
+    }
 }

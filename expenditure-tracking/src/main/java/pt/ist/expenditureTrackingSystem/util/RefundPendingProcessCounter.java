@@ -39,30 +39,30 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundRequest
  */
 public class RefundPendingProcessCounter extends ProcessCounter {
 
-	public RefundPendingProcessCounter() {
-		super(RefundProcess.class);
-	}
+    public RefundPendingProcessCounter() {
+        super(RefundProcess.class);
+    }
 
-	@Override
-	public int getCount() {
-		int result = 0;
-		final User user = UserView.getCurrentUser();
+    @Override
+    public int getCount() {
+        int result = 0;
+        final User user = UserView.getCurrentUser();
 
-		try {
-			for (final Acquisition acquisition : ExpenditureTrackingSystem.getInstance().getAcquisitionsSet()) {
-				if (acquisition instanceof RefundRequest) {
-					final RefundRequest refundRequest = (RefundRequest) acquisition;
-					final RefundProcess process = refundRequest.getProcess();
-					if (shouldCountProcess(process, user)) {
-						result++;
-					}
-				}
-			}
-		} catch (final Throwable t) {
-			t.printStackTrace();
-			//throw new Error(t);
-		}
-		return result;
-	}
+        try {
+            for (final Acquisition acquisition : ExpenditureTrackingSystem.getInstance().getAcquisitionsSet()) {
+                if (acquisition instanceof RefundRequest) {
+                    final RefundRequest refundRequest = (RefundRequest) acquisition;
+                    final RefundProcess process = refundRequest.getProcess();
+                    if (shouldCountProcess(process, user)) {
+                        result++;
+                    }
+                }
+            }
+        } catch (final Throwable t) {
+            t.printStackTrace();
+            //throw new Error(t);
+        }
+        return result;
+    }
 
 }

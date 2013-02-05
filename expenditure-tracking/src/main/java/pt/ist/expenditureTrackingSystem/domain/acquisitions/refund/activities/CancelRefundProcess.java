@@ -39,43 +39,43 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
  */
 public class CancelRefundProcess extends WorkflowActivity<RefundProcess, ActivityInformation<RefundProcess>> {
 
-	@Override
-	public boolean isActive(RefundProcess process, User user) {
-		final Person executor = user.getExpenditurePerson();
+    @Override
+    public boolean isActive(RefundProcess process, User user) {
+        final Person executor = user.getExpenditurePerson();
 
-		return isUserProcessOwner(process, user)
-				&& (((process.isInGenesis() || process.isInAuthorizedState()) && process.getRequestor() == executor)
-						|| (process.isPendingApproval() && process.isResponsibleForAtLeastOnePayingUnit(executor))
-						|| ((process.isPendingInvoicesConfirmation() || process.isPendingFundAllocation()) && ((process
-								.isAccountingEmployee(executor) && !process.hasProjectsAsPayingUnits()) || (process
-								.isProjectAccountingEmployee(executor) && process.hasProjectsAsPayingUnits()))) || (process
-						.isResponsibleForUnit(executor, process.getRequest().getTotalValue())
-						&& !process.getRequest().hasBeenAuthorizedBy(executor) && process.isInAllocatedToUnitState()));
-	}
+        return isUserProcessOwner(process, user)
+                && (((process.isInGenesis() || process.isInAuthorizedState()) && process.getRequestor() == executor)
+                        || (process.isPendingApproval() && process.isResponsibleForAtLeastOnePayingUnit(executor))
+                        || ((process.isPendingInvoicesConfirmation() || process.isPendingFundAllocation()) && ((process
+                                .isAccountingEmployee(executor) && !process.hasProjectsAsPayingUnits()) || (process
+                                .isProjectAccountingEmployee(executor) && process.hasProjectsAsPayingUnits()))) || (process
+                        .isResponsibleForUnit(executor, process.getRequest().getTotalValue())
+                        && !process.getRequest().hasBeenAuthorizedBy(executor) && process.isInAllocatedToUnitState()));
+    }
 
-	@Override
-	protected void process(ActivityInformation<RefundProcess> activityInformation) {
-		activityInformation.getProcess().cancel();
-	}
+    @Override
+    protected void process(ActivityInformation<RefundProcess> activityInformation) {
+        activityInformation.getProcess().cancel();
+    }
 
-	@Override
-	public String getLocalizedName() {
-		return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
-	}
+    @Override
+    public String getLocalizedName() {
+        return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+    }
 
-	@Override
-	public String getUsedBundle() {
-		return "resources/AcquisitionResources";
-	}
+    @Override
+    public String getUsedBundle() {
+        return "resources/AcquisitionResources";
+    }
 
-	@Override
-	public boolean isConfirmationNeeded(RefundProcess process) {
-		return true;
-	}
+    @Override
+    public boolean isConfirmationNeeded(RefundProcess process) {
+        return true;
+    }
 
-	@Override
-	public boolean isUserAwarenessNeeded(RefundProcess process, User user) {
-		return false;
-	}
+    @Override
+    public boolean isUserAwarenessNeeded(RefundProcess process, User user) {
+        return false;
+    }
 
 }

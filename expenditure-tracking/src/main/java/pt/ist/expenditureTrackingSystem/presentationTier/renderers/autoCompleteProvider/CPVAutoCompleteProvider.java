@@ -41,29 +41,29 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
  */
 public class CPVAutoCompleteProvider implements AutoCompleteProvider {
 
-	public Collection getSearchResults(Map<String, String> argsMap, String value, int maxCount) {
-		List<CPVReference> result = new ArrayList<CPVReference>();
+    public Collection getSearchResults(Map<String, String> argsMap, String value, int maxCount) {
+        List<CPVReference> result = new ArrayList<CPVReference>();
 
-		String[] values = value.toLowerCase().split(" ");
-		for (final CPVReference cpvCode : MyOrg.getInstance().getCPVReferences()) {
-			if (cpvCode.getCode().startsWith(value) || match(cpvCode.getDescription().toLowerCase(), values)) {
-				result.add(cpvCode);
-			}
-			if (result.size() >= maxCount) {
-				break;
-			}
-		}
-		return result;
-	}
+        String[] values = value.toLowerCase().split(" ");
+        for (final CPVReference cpvCode : MyOrg.getInstance().getCPVReferences()) {
+            if (cpvCode.getCode().startsWith(value) || match(cpvCode.getDescription().toLowerCase(), values)) {
+                result.add(cpvCode);
+            }
+            if (result.size() >= maxCount) {
+                break;
+            }
+        }
+        return result;
+    }
 
-	private boolean match(String description, String[] inputParts) {
+    private boolean match(String description, String[] inputParts) {
 
-		for (final String namePart : inputParts) {
-			if (description.indexOf(namePart) == -1) {
-				return false;
-			}
-		}
-		return true;
-	}
+        for (final String namePart : inputParts) {
+            if (description.indexOf(namePart) == -1) {
+                return false;
+            }
+        }
+        return true;
+    }
 
 }

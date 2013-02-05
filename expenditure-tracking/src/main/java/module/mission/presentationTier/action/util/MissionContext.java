@@ -8,39 +8,39 @@ import module.mission.domain.MissionYear;
 
 public class MissionContext implements Serializable {
 
-	private Integer year;
-	private MissionYear missionYear;
+    private Integer year;
+    private MissionYear missionYear;
 
-	public MissionContext() {
-		super();
-		setYear(Integer.valueOf(Calendar.getInstance().get(Calendar.YEAR)));
-	}
+    public MissionContext() {
+        super();
+        setYear(Integer.valueOf(Calendar.getInstance().get(Calendar.YEAR)));
+    }
 
-	public Integer getYear() {
-		return year;
-	}
+    public Integer getYear() {
+        return year;
+    }
 
-	public void setYear(Integer year) {
-		this.year = year;
-		if (year != null) {
-			for (final MissionYear missionYear : MissionSystem.getInstance().getMissionYearSet()) {
-				if (missionYear.getYear().intValue() == year.intValue()) {
-					this.missionYear = missionYear;
-				}
-			}
-		}
+    public void setYear(Integer year) {
+        this.year = year;
+        if (year != null) {
+            for (final MissionYear missionYear : MissionSystem.getInstance().getMissionYearSet()) {
+                if (missionYear.getYear().intValue() == year.intValue()) {
+                    this.missionYear = missionYear;
+                }
+            }
+        }
 
-		if (missionYear == null) {
-			missionYear = MissionYear.getCurrentYear();
-		}
-	}
+        if (missionYear == null) {
+            missionYear = MissionYear.getCurrentYear();
+        }
+    }
 
-	public MissionYear getMissionYear() {
-		return missionYear;
-	}
+    public MissionYear getMissionYear() {
+        return missionYear;
+    }
 
-	public void setMissionYear(MissionYear missionYear) {
-		this.missionYear = missionYear;
-	}
+    public void setMissionYear(MissionYear missionYear) {
+        this.missionYear = missionYear;
+    }
 
 }

@@ -35,12 +35,12 @@ import pt.ist.fenixWebFramework.renderers.components.converters.Converter;
  * 
  */
 public class PaymentProcessYearProvider implements DataProvider {
-	public Converter getConverter() {
-		return new DomainObjectKeyConverter();
-	}
+    public Converter getConverter() {
+        return new DomainObjectKeyConverter();
+    }
 
-	public Object provide(Object arg0, Object arg1) {
-		return ExpenditureTrackingSystem.getInstance().getPaymentProcessYears();
-	}
+    public Object provide(Object arg0, Object arg1) {
+        return ExpenditureTrackingSystem.getInstance().getPaymentProcessYears();
+    }
 
 }

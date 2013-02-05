@@ -51,27 +51,27 @@ import pt.ist.expenditureTrackingSystem.util.ProcessMapGenerator;
  */
 public class PendingRefundWidget extends WidgetController {
 
-	@Override
-	public void doView(WidgetRequest request) {
-		Person loggedPerson = Person.getLoggedPerson();
-		Map<RefundProcessStateType, MultiCounter<RefundProcessStateType>> refundMap =
-				ProcessMapGenerator.generateRefundMap(loggedPerson);
-		List<Counter<RefundProcessStateType>> refundCounters = new ArrayList<Counter<RefundProcessStateType>>();
+    @Override
+    public void doView(WidgetRequest request) {
+        Person loggedPerson = Person.getLoggedPerson();
+        Map<RefundProcessStateType, MultiCounter<RefundProcessStateType>> refundMap =
+                ProcessMapGenerator.generateRefundMap(loggedPerson);
+        List<Counter<RefundProcessStateType>> refundCounters = new ArrayList<Counter<RefundProcessStateType>>();
 
-		for (MultiCounter<RefundProcessStateType> multiCounter : refundMap.values()) {
-			Counter<RefundProcessStateType> defaultCounter = ProcessMapGenerator.getDefaultCounter(multiCounter);
-			if (defaultCounter != null) {
-				refundCounters.add(defaultCounter);
-			}
-		}
+        for (MultiCounter<RefundProcessStateType> multiCounter : refundMap.values()) {
+            Counter<RefundProcessStateType> defaultCounter = ProcessMapGenerator.getDefaultCounter(multiCounter);
+            if (defaultCounter != null) {
+                refundCounters.add(defaultCounter);
+            }
+        }
 
-		Collections.sort(refundCounters, new BeanComparator("countableObject"));
-		request.setAttribute("refundCounters", refundCounters);
-		request.setAttribute("person", loggedPerson);
-	}
+        Collections.sort(refundCounters, new BeanComparator("countableObject"));
+        request.setAttribute("refundCounters", refundCounters);
+        request.setAttribute("person", loggedPerson);
+    }
 
-	@Override
-	public String getWidgetDescription() {
-		return BundleUtil.getStringFromResourceBundle("resources/ExpenditureResources", "widget.description.PendingRefundWidget");
-	}
+    @Override
+    public String getWidgetDescription() {
+        return BundleUtil.getStringFromResourceBundle("resources/ExpenditureResources", "widget.description.PendingRefundWidget");
+    }
 }

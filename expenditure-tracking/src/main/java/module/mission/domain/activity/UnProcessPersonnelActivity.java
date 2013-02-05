@@ -36,21 +36,21 @@ import pt.ist.bennu.core.util.BundleUtil;
  */
 public class UnProcessPersonnelActivity extends MissionProcessActivity<MissionProcess, ActivityInformation<MissionProcess>> {
 
-	@Override
-	public String getLocalizedName() {
-		return BundleUtil.getStringFromResourceBundle("resources/MissionResources", "activity." + getClass().getSimpleName());
-	}
+    @Override
+    public String getLocalizedName() {
+        return BundleUtil.getStringFromResourceBundle("resources/MissionResources", "activity." + getClass().getSimpleName());
+    }
 
-	@Override
-	public boolean isActive(final MissionProcess missionProcess, final User user) {
-		return super.isActive(missionProcess, user) && !missionProcess.hasAnyCurrentQueues()
-				&& missionProcess.areAllParticipantsAuthorized() && missionProcess.isCurrentUserAbleToAccessQueueHistory();
-	}
+    @Override
+    public boolean isActive(final MissionProcess missionProcess, final User user) {
+        return super.isActive(missionProcess, user) && !missionProcess.hasAnyCurrentQueues()
+                && missionProcess.areAllParticipantsAuthorized() && missionProcess.isCurrentUserAbleToAccessQueueHistory();
+    }
 
-	@Override
-	protected void process(final ActivityInformation<MissionProcess> activityInformation) {
-		final MissionProcess missionProcess = activityInformation.getProcess();
-		missionProcess.setProcessParticipantInformationQueue();
-	}
+    @Override
+    protected void process(final ActivityInformation<MissionProcess> activityInformation) {
+        final MissionProcess missionProcess = activityInformation.getProcess();
+        missionProcess.setProcessParticipantInformationQueue();
+    }
 
 }

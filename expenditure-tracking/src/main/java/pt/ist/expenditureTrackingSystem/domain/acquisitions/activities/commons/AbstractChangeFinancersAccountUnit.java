@@ -35,33 +35,33 @@ import pt.ist.expenditureTrackingSystem.domain.dto.ChangeFinancerAccountingUnitB
  * 
  */
 public abstract class AbstractChangeFinancersAccountUnit<P extends PaymentProcess> extends
-		WorkflowActivity<P, AbstractChangeFinancersAccountUnitActivityInformation<P>> {
+        WorkflowActivity<P, AbstractChangeFinancersAccountUnitActivityInformation<P>> {
 
-	@Override
-	protected void process(AbstractChangeFinancersAccountUnitActivityInformation<P> activityInformation) {
-		for (ChangeFinancerAccountingUnitBean changeFinancerAccountingUnitBean : activityInformation.getBeans()) {
-			changeFinancerAccountingUnitBean.getFinancer()
-					.setAccountingUnit(changeFinancerAccountingUnitBean.getAccountingUnit());
-		}
-	}
+    @Override
+    protected void process(AbstractChangeFinancersAccountUnitActivityInformation<P> activityInformation) {
+        for (ChangeFinancerAccountingUnitBean changeFinancerAccountingUnitBean : activityInformation.getBeans()) {
+            changeFinancerAccountingUnitBean.getFinancer()
+                    .setAccountingUnit(changeFinancerAccountingUnitBean.getAccountingUnit());
+        }
+    }
 
-	public AbstractChangeFinancersAccountUnitActivityInformation<P> getActivityInformation(P process) {
-		return new AbstractChangeFinancersAccountUnitActivityInformation<P>(process, this);
-	}
+    public AbstractChangeFinancersAccountUnitActivityInformation<P> getActivityInformation(P process) {
+        return new AbstractChangeFinancersAccountUnitActivityInformation<P>(process, this);
+    }
 
-	@Override
-	public String getLocalizedName() {
-		return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
-	}
+    @Override
+    public String getLocalizedName() {
+        return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+    }
 
-	@Override
-	public String getUsedBundle() {
-		return "resources/AcquisitionResources";
-	}
+    @Override
+    public String getUsedBundle() {
+        return "resources/AcquisitionResources";
+    }
 
-	@Override
-	public boolean isDefaultInputInterfaceUsed() {
-		return false;
-	}
+    @Override
+    public boolean isDefaultInputInterfaceUsed() {
+        return false;
+    }
 
 }

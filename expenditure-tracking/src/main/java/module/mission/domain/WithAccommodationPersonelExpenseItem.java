@@ -6,25 +6,25 @@ import pt.ist.bennu.core.domain.util.Money;
 
 public class WithAccommodationPersonelExpenseItem extends WithAccommodationPersonelExpenseItem_Base {
 
-	public WithAccommodationPersonelExpenseItem() {
-		super();
-	}
+    public WithAccommodationPersonelExpenseItem() {
+        super();
+    }
 
-	@Override
-	public double getWeightedExpenseFactor() {
-		return getExpenseFactor() * 0.7;
-	}
+    @Override
+    public double getWeightedExpenseFactor() {
+        return getExpenseFactor() * 0.7;
+    }
 
-	@Override
-	public Money getValue() {
-		final DailyPersonelExpenseCategory dailyPersonelExpenseCategory = getDailyPersonelExpenseCategory();
-		final double expenseFactor = getWeightedExpenseFactor();
-		return dailyPersonelExpenseCategory.getValue().multiplyAndRound(new BigDecimal(expenseFactor));
-	}
+    @Override
+    public Money getValue() {
+        final DailyPersonelExpenseCategory dailyPersonelExpenseCategory = getDailyPersonelExpenseCategory();
+        final double expenseFactor = getWeightedExpenseFactor();
+        return dailyPersonelExpenseCategory.getValue().multiplyAndRound(new BigDecimal(expenseFactor));
+    }
 
-	@Override
-	protected MissionItem createNewVersionInstance(final MissionVersion missionVersion) {
-		return new WithAccommodationPersonelExpenseItem();
-	}
+    @Override
+    protected MissionItem createNewVersionInstance(final MissionVersion missionVersion) {
+        return new WithAccommodationPersonelExpenseItem();
+    }
 
 }

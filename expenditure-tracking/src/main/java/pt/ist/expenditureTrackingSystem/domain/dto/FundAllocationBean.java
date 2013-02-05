@@ -36,64 +36,64 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
  */
 public class FundAllocationBean implements Serializable {
 
-	private Financer financer;
-	private String fundAllocationId;
-	private String effectiveFundAllocationId;
-	private boolean allowedToAddNewFund;
-	private String diaryNumber;
-	private String transactionNumber;
+    private Financer financer;
+    private String fundAllocationId;
+    private String effectiveFundAllocationId;
+    private boolean allowedToAddNewFund;
+    private String diaryNumber;
+    private String transactionNumber;
 
-	public FundAllocationBean(final Financer financer) {
-		setFinancer(financer);
-		setAllowedToAddNewFund(true);
-	}
+    public FundAllocationBean(final Financer financer) {
+        setFinancer(financer);
+        setAllowedToAddNewFund(true);
+    }
 
-	public void setFinancer(Financer financer) {
-		this.financer = financer;
-	}
+    public void setFinancer(Financer financer) {
+        this.financer = financer;
+    }
 
-	public Financer getFinancer() {
-		return this.financer;
-	}
+    public Financer getFinancer() {
+        return this.financer;
+    }
 
-	public String getFundAllocationId() {
-		return fundAllocationId;
-	}
+    public String getFundAllocationId() {
+        return fundAllocationId;
+    }
 
-	public void setFundAllocationId(final String fundAllocationId) {
-		this.fundAllocationId = fundAllocationId;
-	}
+    public void setFundAllocationId(final String fundAllocationId) {
+        this.fundAllocationId = fundAllocationId;
+    }
 
-	public void setEffectiveFundAllocationId(String effectiveFundAllocationId) {
-		this.effectiveFundAllocationId = effectiveFundAllocationId;
-	}
+    public void setEffectiveFundAllocationId(String effectiveFundAllocationId) {
+        this.effectiveFundAllocationId = effectiveFundAllocationId;
+    }
 
-	public String getEffectiveFundAllocationId() {
-		return effectiveFundAllocationId;
-	}
+    public String getEffectiveFundAllocationId() {
+        return effectiveFundAllocationId;
+    }
 
-	public boolean isAllowedToAddNewFund() {
-		return allowedToAddNewFund;
-	}
+    public boolean isAllowedToAddNewFund() {
+        return allowedToAddNewFund;
+    }
 
-	public void setAllowedToAddNewFund(boolean allowedToAddNewFund) {
-		this.allowedToAddNewFund = allowedToAddNewFund;
-	}
+    public void setAllowedToAddNewFund(boolean allowedToAddNewFund) {
+        this.allowedToAddNewFund = allowedToAddNewFund;
+    }
 
-	public String getDiaryNumber() {
-		return diaryNumber;
-	}
+    public String getDiaryNumber() {
+        return diaryNumber;
+    }
 
-	public void setDiaryNumber(String diaryNumber) {
-		this.diaryNumber = diaryNumber;
-	}
+    public void setDiaryNumber(String diaryNumber) {
+        this.diaryNumber = diaryNumber;
+    }
 
-	public String getTransactionNumber() {
-		return transactionNumber;
-	}
+    public String getTransactionNumber() {
+        return transactionNumber;
+    }
 
-	public void setTransactionNumber(String transactionNumber) {
-		this.transactionNumber = transactionNumber;
-	}
+    public void setTransactionNumber(String transactionNumber) {
+        this.transactionNumber = transactionNumber;
+    }
 
 }

@@ -37,20 +37,20 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionPr
  * 
  */
 public class UnApproveAcquisitionProcess extends
-		WorkflowActivity<RegularAcquisitionProcess, ActivityInformation<RegularAcquisitionProcess>> {
+        WorkflowActivity<RegularAcquisitionProcess, ActivityInformation<RegularAcquisitionProcess>> {
 
-	@Override
-	public boolean isActive(RegularAcquisitionProcess process, User user) {
-		return isUserProcessOwner(process, user) && process.getFundAllocationExpirationDate() == null
-				&& process.getAcquisitionRequest().hasBeenApprovedBy(user.getExpenditurePerson());
-	}
+    @Override
+    public boolean isActive(RegularAcquisitionProcess process, User user) {
+        return isUserProcessOwner(process, user) && process.getFundAllocationExpirationDate() == null
+                && process.getAcquisitionRequest().hasBeenApprovedBy(user.getExpenditurePerson());
+    }
 
-	@Override
-	protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
-		RegularAcquisitionProcess process = activityInformation.getProcess();
-		process.getAcquisitionRequest().unapprove(UserView.getCurrentUser().getExpenditurePerson());
-		process.submitForApproval();
+    @Override
+    protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
+        RegularAcquisitionProcess process = activityInformation.getProcess();
+        process.getAcquisitionRequest().unapprove(UserView.getCurrentUser().getExpenditurePerson());
+        process.submitForApproval();
 
-	}
+    }
 
 }

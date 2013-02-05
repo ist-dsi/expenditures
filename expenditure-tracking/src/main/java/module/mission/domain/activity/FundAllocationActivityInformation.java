@@ -14,65 +14,65 @@ import module.workflow.activities.WorkflowActivity;
 
 public abstract class FundAllocationActivityInformation extends ActivityInformation<MissionProcess> implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public static class MissionItemFinancerFundAllocationBean implements Serializable {
-		private static final long serialVersionUID = 1L;
+    public static class MissionItemFinancerFundAllocationBean implements Serializable {
+        private static final long serialVersionUID = 1L;
 
-		private final MissionItemFinancer missionItemFinancer;
-		private String fundAllocationId;
+        private final MissionItemFinancer missionItemFinancer;
+        private String fundAllocationId;
 
-		public MissionItemFinancerFundAllocationBean(final MissionItemFinancer missionItemFinancer) {
-			this.missionItemFinancer = missionItemFinancer;
-		}
+        public MissionItemFinancerFundAllocationBean(final MissionItemFinancer missionItemFinancer) {
+            this.missionItemFinancer = missionItemFinancer;
+        }
 
-		public String getFundAllocationId() {
-			return fundAllocationId;
-		}
+        public String getFundAllocationId() {
+            return fundAllocationId;
+        }
 
-		public void setFundAllocationId(String fundAllocationId) {
-			this.fundAllocationId = fundAllocationId;
-		}
+        public void setFundAllocationId(String fundAllocationId) {
+            this.fundAllocationId = fundAllocationId;
+        }
 
-		public MissionItemFinancer getMissionItemFinancer() {
-			return missionItemFinancer;
-		}
+        public MissionItemFinancer getMissionItemFinancer() {
+            return missionItemFinancer;
+        }
 
-	}
+    }
 
-	protected abstract boolean canAllocateFunds(final MissionFinancer missionFinancer);
+    protected abstract boolean canAllocateFunds(final MissionFinancer missionFinancer);
 
-	private final Collection<MissionItemFinancerFundAllocationBean> missionItemFinancerFundAllocationBeans =
-			new ArrayList<MissionItemFinancerFundAllocationBean>();
+    private final Collection<MissionItemFinancerFundAllocationBean> missionItemFinancerFundAllocationBeans =
+            new ArrayList<MissionItemFinancerFundAllocationBean>();
 
-	public FundAllocationActivityInformation(final MissionProcess missionProcess,
-			final WorkflowActivity<MissionProcess, ? extends ActivityInformation<MissionProcess>> activity) {
-		super(missionProcess, activity);
-		final Mission mission = missionProcess.getMission();
-		for (final MissionFinancer financer : mission.getFinancerSet()) {
-			if (canAllocateFunds(financer)) {
-				for (final MissionItemFinancer missionItemFinancer : financer.getMissionItemFinancersSet()) {
-					final MissionItem missionItem = missionItemFinancer.getMissionItem();
-					if (!checkIfRequiresFundAllocation() || missionItem.requiresFundAllocation()) {
-						missionItemFinancerFundAllocationBeans
-								.add(new MissionItemFinancerFundAllocationBean(missionItemFinancer));
-					}
-				}
-			}
-		}
-	}
+    public FundAllocationActivityInformation(final MissionProcess missionProcess,
+            final WorkflowActivity<MissionProcess, ? extends ActivityInformation<MissionProcess>> activity) {
+        super(missionProcess, activity);
+        final Mission mission = missionProcess.getMission();
+        for (final MissionFinancer financer : mission.getFinancerSet()) {
+            if (canAllocateFunds(financer)) {
+                for (final MissionItemFinancer missionItemFinancer : financer.getMissionItemFinancersSet()) {
+                    final MissionItem missionItem = missionItemFinancer.getMissionItem();
+                    if (!checkIfRequiresFundAllocation() || missionItem.requiresFundAllocation()) {
+                        missionItemFinancerFundAllocationBeans
+                                .add(new MissionItemFinancerFundAllocationBean(missionItemFinancer));
+                    }
+                }
+            }
+        }
+    }
 
-	public Collection<MissionItemFinancerFundAllocationBean> getMissionItemFinancerFundAllocationBeans() {
-		return missionItemFinancerFundAllocationBeans;
-	}
+    public Collection<MissionItemFinancerFundAllocationBean> getMissionItemFinancerFundAllocationBeans() {
+        return missionItemFinancerFundAllocationBeans;
+    }
 
-	@Override
-	public boolean hasAllneededInfo() {
-		return isForwardedFromInput();
-	}
+    @Override
+    public boolean hasAllneededInfo() {
+        return isForwardedFromInput();
+    }
 
-	protected boolean checkIfRequiresFundAllocation() {
-		return true;
-	}
+    protected boolean checkIfRequiresFundAllocation() {
+        return true;
+    }
 
 }

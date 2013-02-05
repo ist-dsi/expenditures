@@ -40,44 +40,44 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
  */
 public class EditRefundInvoice extends WorkflowActivity<RefundProcess, EditRefundInvoiceActivityInformation> {
 
-	@Override
-	public boolean isActive(RefundProcess process, User user) {
-		Person person = user.getExpenditurePerson();
-		return isUserProcessOwner(process, user)
+    @Override
+    public boolean isActive(RefundProcess process, User user) {
+        Person person = user.getExpenditurePerson();
+        return isUserProcessOwner(process, user)
 
-				&& process.isAnyRefundInvoiceAvailable()
-				&& ((person == process.getRequestor() && process.isInAuthorizedState()) || (process
-						.isPendingInvoicesConfirmation() && ((ExpenditureTrackingSystem.isAccountingManagerGroupMember(user) && !process
-						.hasProjectsAsPayingUnits()) || (ExpenditureTrackingSystem.isProjectAccountingManagerGroupMember(user) && process
-						.hasProjectsAsPayingUnits()))));
-	}
+                && process.isAnyRefundInvoiceAvailable()
+                && ((person == process.getRequestor() && process.isInAuthorizedState()) || (process
+                        .isPendingInvoicesConfirmation() && ((ExpenditureTrackingSystem.isAccountingManagerGroupMember(user) && !process
+                        .hasProjectsAsPayingUnits()) || (ExpenditureTrackingSystem.isProjectAccountingManagerGroupMember(user) && process
+                        .hasProjectsAsPayingUnits()))));
+    }
 
-	@Override
-	public EditRefundInvoiceActivityInformation getActivityInformation(RefundProcess process) {
-		return new EditRefundInvoiceActivityInformation(process, this);
-	}
+    @Override
+    public EditRefundInvoiceActivityInformation getActivityInformation(RefundProcess process) {
+        return new EditRefundInvoiceActivityInformation(process, this);
+    }
 
-	@Override
-	protected void process(EditRefundInvoiceActivityInformation activityInformation) {
-		RefundableInvoiceFile invoice = activityInformation.getInvoice();
-		invoice.resetValues();
-		invoice.editValues(activityInformation.getValue(), activityInformation.getVatValue(),
-				activityInformation.getRefundableValue());
-	}
+    @Override
+    protected void process(EditRefundInvoiceActivityInformation activityInformation) {
+        RefundableInvoiceFile invoice = activityInformation.getInvoice();
+        invoice.resetValues();
+        invoice.editValues(activityInformation.getValue(), activityInformation.getVatValue(),
+                activityInformation.getRefundableValue());
+    }
 
-	@Override
-	public String getLocalizedName() {
-		return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
-	}
+    @Override
+    public String getLocalizedName() {
+        return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+    }
 
-	@Override
-	public String getUsedBundle() {
-		return "resources/AcquisitionResources";
-	}
+    @Override
+    public String getUsedBundle() {
+        return "resources/AcquisitionResources";
+    }
 
-	@Override
-	public boolean isVisible() {
-		return false;
-	}
+    @Override
+    public boolean isVisible() {
+        return false;
+    }
 
 }

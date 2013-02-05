@@ -37,10 +37,10 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.A
  */
 public class DistributeRealValuesForPayingUnits extends AbstractDistributeRealValuesForPayingUnits<RegularAcquisitionProcess> {
 
-	@Override
-	public boolean isActive(RegularAcquisitionProcess process, User user) {
-		return ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user) && isUserProcessOwner(process, user)
-				&& process.getAcquisitionProcessState().isInvoiceReceived();
-	}
+    @Override
+    public boolean isActive(RegularAcquisitionProcess process, User user) {
+        return ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user) && isUserProcessOwner(process, user)
+                && process.getAcquisitionProcessState().isInvoiceReceived();
+    }
 
 }

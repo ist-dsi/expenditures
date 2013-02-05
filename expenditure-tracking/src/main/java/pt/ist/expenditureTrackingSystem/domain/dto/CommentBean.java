@@ -38,37 +38,37 @@ import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
  */
 public class CommentBean implements Serializable {
 
-	private GenericProcess process;
-	private String comment;
-	private List<Person> peopleToNotify;
+    private GenericProcess process;
+    private String comment;
+    private List<Person> peopleToNotify;
 
-	public CommentBean(GenericProcess process) {
-		this.process = process;
-		this.peopleToNotify = Collections.emptyList();
-	}
+    public CommentBean(GenericProcess process) {
+        this.process = process;
+        this.peopleToNotify = Collections.emptyList();
+    }
 
-	public GenericProcess getProcess() {
-		return process;
-	}
+    public GenericProcess getProcess() {
+        return process;
+    }
 
-	public void setProcess(GenericProcess process) {
-		this.process = process;
-	}
+    public void setProcess(GenericProcess process) {
+        this.process = process;
+    }
 
-	public String getComment() {
-		return comment;
-	}
+    public String getComment() {
+        return comment;
+    }
 
-	public void setComment(String comment) {
-		this.comment = comment;
-	}
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
 
-	public List<Person> getPeopleToNotify() {
-		return peopleToNotify;
-	}
+    public List<Person> getPeopleToNotify() {
+        return peopleToNotify;
+    }
 
-	public void setPeopleToNotify(List<Person> peopleToNotify) {
-		this.peopleToNotify = peopleToNotify;
-	}
+    public void setPeopleToNotify(List<Person> peopleToNotify) {
+        this.peopleToNotify = peopleToNotify;
+    }
 
 }

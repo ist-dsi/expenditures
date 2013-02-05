@@ -6,22 +6,22 @@ import org.joda.time.LocalDate;
 
 public class DateIntervalBean implements Serializable {
 
-	LocalDate begin;
-	LocalDate end;
+    LocalDate begin;
+    LocalDate end;
 
-	public LocalDate getBegin() {
-		return begin;
-	}
+    public LocalDate getBegin() {
+        return begin;
+    }
 
-	public void setBegin(LocalDate begin) {
-		this.begin = begin;
-	}
+    public void setBegin(LocalDate begin) {
+        this.begin = begin;
+    }
 
-	public LocalDate getEnd() {
-		return end;
-	}
+    public LocalDate getEnd() {
+        return end;
+    }
 
-	public void setEnd(LocalDate end) {
-		this.end = end;
-	}
+    public void setEnd(LocalDate end) {
+        this.end = end;
+    }
 }

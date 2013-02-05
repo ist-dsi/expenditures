@@ -41,53 +41,53 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
  * 
  */
 public class ExceptionalChangeRequestingPerson extends
-		WorkflowActivity<RegularAcquisitionProcess, ExceptionalChangeRequestingPersonInfo> {
+        WorkflowActivity<RegularAcquisitionProcess, ExceptionalChangeRequestingPersonInfo> {
 
-	@Override
-	public String getLocalizedName() {
-		return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "activity." + getClass().getSimpleName());
-	}
+    @Override
+    public String getLocalizedName() {
+        return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "activity." + getClass().getSimpleName());
+    }
 
-	@Override
-	public boolean isActive(final RegularAcquisitionProcess process, final User user) {
-		return user.hasRoleType(RoleType.MANAGER);
-	}
+    @Override
+    public boolean isActive(final RegularAcquisitionProcess process, final User user) {
+        return user.hasRoleType(RoleType.MANAGER);
+    }
 
-	@Override
-	protected void process(final ExceptionalChangeRequestingPersonInfo activityInformation) {
-		PaymentProcess process = activityInformation.getProcess();
-		process.getRequest().setRequester(activityInformation.getRequester().getUser().getExpenditurePerson());
+    @Override
+    protected void process(final ExceptionalChangeRequestingPersonInfo activityInformation) {
+        PaymentProcess process = activityInformation.getProcess();
+        process.getRequest().setRequester(activityInformation.getRequester().getUser().getExpenditurePerson());
 
-		CommentBean commentBean = new CommentBean(process);
-		commentBean.setComment(activityInformation.getComment());
-		process.createComment(UserView.getCurrentUser(), commentBean);
-	}
+        CommentBean commentBean = new CommentBean(process);
+        commentBean.setComment(activityInformation.getComment());
+        process.createComment(UserView.getCurrentUser(), commentBean);
+    }
 
-	@Override
-	public ActivityInformation<RegularAcquisitionProcess> getActivityInformation(final RegularAcquisitionProcess process) {
-		return new ExceptionalChangeRequestingPersonInfo(process, this);
-	}
+    @Override
+    public ActivityInformation<RegularAcquisitionProcess> getActivityInformation(final RegularAcquisitionProcess process) {
+        return new ExceptionalChangeRequestingPersonInfo(process, this);
+    }
 
-	@Override
-	public String getUsedBundle() {
-		return "resources/AcquisitionResources";
-	}
+    @Override
+    public String getUsedBundle() {
+        return "resources/AcquisitionResources";
+    }
 
-	@Override
-	public boolean isConfirmationNeeded(RegularAcquisitionProcess process) {
-		return true;
-	}
+    @Override
+    public boolean isConfirmationNeeded(RegularAcquisitionProcess process) {
+        return true;
+    }
 
-	@Override
-	protected String[] getArgumentsDescription(ExceptionalChangeRequestingPersonInfo activityInformation) {
-		Person oldRequester = activityInformation.getProcess().getRequestor();
-		return new String[] { (oldRequester == null) ? "-" : oldRequester.getUser().getPresentationName(),
-				activityInformation.getRequester().getUser().getPresentationName() };
-	}
+    @Override
+    protected String[] getArgumentsDescription(ExceptionalChangeRequestingPersonInfo activityInformation) {
+        Person oldRequester = activityInformation.getProcess().getRequestor();
+        return new String[] { (oldRequester == null) ? "-" : oldRequester.getUser().getPresentationName(),
+                activityInformation.getRequester().getUser().getPresentationName() };
+    }
 
-	@Override
-	public boolean isUserAwarenessNeeded(RegularAcquisitionProcess process, User user) {
-		return false;
-	}
+    @Override
+    public boolean isUserAwarenessNeeded(RegularAcquisitionProcess process, User user) {
+        return false;
+    }
 
 }

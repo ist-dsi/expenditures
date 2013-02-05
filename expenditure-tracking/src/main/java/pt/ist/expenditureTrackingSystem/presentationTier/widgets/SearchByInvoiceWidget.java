@@ -58,78 +58,78 @@ import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.GenericChecksumR
  */
 public class SearchByInvoiceWidget extends WidgetController {
 
-	final public static String NOT_FOUND = "NF";
-	final public static String SINGLE_FOUND = "SF";
+    final public static String NOT_FOUND = "NF";
+    final public static String SINGLE_FOUND = "SF";
 
-	@Override
-	public void doView(WidgetRequest request) {
-		request.setAttribute("searchBean", new SearchByInvoiceBean());
-	}
+    @Override
+    public void doView(WidgetRequest request) {
+        request.setAttribute("searchBean", new SearchByInvoiceBean());
+    }
 
-	@Override
-	public ActionForward doSubmit(WidgetRequest request) {
-		SearchByInvoiceBean searchBean = getRenderedObject("searchByInvoiceBean");
-		List<PaymentProcess> processesFound = new ArrayList<PaymentProcess>();
+    @Override
+    public ActionForward doSubmit(WidgetRequest request) {
+        SearchByInvoiceBean searchBean = getRenderedObject("searchByInvoiceBean");
+        List<PaymentProcess> processesFound = new ArrayList<PaymentProcess>();
 
-		for (PaymentProcess process : searchBean.search()) {
-			if (process.isAccessibleToCurrentUser()) {
-				processesFound.add(process);
-			}
-		}
+        for (PaymentProcess process : searchBean.search()) {
+            if (process.isAccessibleToCurrentUser()) {
+                processesFound.add(process);
+            }
+        }
 
-		try {
-			String write = null;
-			if (processesFound.size() == 0) {
-				write = SearchByInvoiceWidget.NOT_FOUND;
-			} else if (processesFound.size() == 1) {
-				PaymentProcess process = processesFound.get(0);
+        try {
+            String write = null;
+            if (processesFound.size() == 0) {
+                write = SearchByInvoiceWidget.NOT_FOUND;
+            } else if (processesFound.size() == 1) {
+                PaymentProcess process = processesFound.get(0);
 
-				List<Node> nodes = ProcessNodeSelectionMapper.getForwardFor(process.getClass());
-				String url =
-						GenericChecksumRewriter.injectChecksumInUrl(request.getContextPath(),
-								ProcessManagement.workflowManagementURL + process.getExternalId() + "&"
-										+ ContextBaseAction.CONTEXT_PATH + "="
-										+ ((nodes.size() > 0) ? nodes.get(nodes.size() - 1).getContextPath() : ""));
+                List<Node> nodes = ProcessNodeSelectionMapper.getForwardFor(process.getClass());
+                String url =
+                        GenericChecksumRewriter.injectChecksumInUrl(request.getContextPath(),
+                                ProcessManagement.workflowManagementURL + process.getExternalId() + "&"
+                                        + ContextBaseAction.CONTEXT_PATH + "="
+                                        + ((nodes.size() > 0) ? nodes.get(nodes.size() - 1).getContextPath() : ""));
 
-				write = SearchByInvoiceWidget.SINGLE_FOUND + url;
-			} else {
-				request.setAttribute("multipleProcessesFound", processesFound);
-				return DashBoardManagementAction.forwardToWidget(request);
-			}
+                write = SearchByInvoiceWidget.SINGLE_FOUND + url;
+            } else {
+                request.setAttribute("multipleProcessesFound", processesFound);
+                return DashBoardManagementAction.forwardToWidget(request);
+            }
 
-			HttpServletResponse response = request.getResponse();
-			response.setContentType("text");
-			ServletOutputStream stream = response.getOutputStream();
+            HttpServletResponse response = request.getResponse();
+            response.setContentType("text");
+            ServletOutputStream stream = response.getOutputStream();
 
-			response.setContentLength(write.length());
-			stream.write(write.getBytes());
-			stream.flush();
-			stream.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+            response.setContentLength(write.length());
+            stream.write(write.getBytes());
+            stream.flush();
+            stream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	protected <T extends Object> T getRenderedObject(final String id) {
-		final IViewState viewState = RenderUtils.getViewState(id);
-		return (T) getRenderedObject(viewState);
-	}
+    protected <T extends Object> T getRenderedObject(final String id) {
+        final IViewState viewState = RenderUtils.getViewState(id);
+        return (T) getRenderedObject(viewState);
+    }
 
-	protected <T extends Object> T getRenderedObject(final IViewState viewState) {
-		if (viewState != null) {
-			MetaObject metaObject = viewState.getMetaObject();
-			if (metaObject != null) {
-				return (T) metaObject.getObject();
-			}
-		}
-		return null;
-	}
+    protected <T extends Object> T getRenderedObject(final IViewState viewState) {
+        if (viewState != null) {
+            MetaObject metaObject = viewState.getMetaObject();
+            if (metaObject != null) {
+                return (T) metaObject.getObject();
+            }
+        }
+        return null;
+    }
 
-	@Override
-	public String getWidgetDescription() {
-		return BundleUtil.getStringFromResourceBundle("resources/ExpenditureResources",
-				"widget.description.SearchByInvoiceWidget");
-	}
+    @Override
+    public String getWidgetDescription() {
+        return BundleUtil.getStringFromResourceBundle("resources/ExpenditureResources",
+                "widget.description.SearchByInvoiceWidget");
+    }
 }

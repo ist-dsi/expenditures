@@ -44,66 +44,66 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
  * 
  */
 public class AllocateFundsPermanently<P extends PaymentProcess> extends
-		WorkflowActivity<P, AllocateFundsPermanentlyActivityInformation<P>> {
+        WorkflowActivity<P, AllocateFundsPermanentlyActivityInformation<P>> {
 
-	@Override
-	public boolean isActive(P process, User user) {
-		final ExpenditureTrackingSystem instance = ExpenditureTrackingSystem.getInstance();
-		return process.isAccountingEmployee(user.getExpenditurePerson())
-				&& isUserProcessOwner(process, user)
-				&& (process.hasAllocatedFundsPermanentlyForAllProjectFinancers() || (instance
-						.getRequireFundAllocationPriorToAcquisitionRequest() != null && !instance
-						.getRequireFundAllocationPriorToAcquisitionRequest())) && !process.isAllocatedPermanently()
-				&& !process.isPayed() && ((!process.hasAllInvoicesAllocated() && process.getRequest().hasProposalDocument()) || (//ExpenditureTrackingSystem.isInvoiceAllowedToStartAcquisitionProcess()
-				/*&&*/!process.getRequest().hasProposalDocument() && process.isInvoiceConfirmed()));
-	}
+    @Override
+    public boolean isActive(P process, User user) {
+        final ExpenditureTrackingSystem instance = ExpenditureTrackingSystem.getInstance();
+        return process.isAccountingEmployee(user.getExpenditurePerson())
+                && isUserProcessOwner(process, user)
+                && (process.hasAllocatedFundsPermanentlyForAllProjectFinancers() || (instance
+                        .getRequireFundAllocationPriorToAcquisitionRequest() != null && !instance
+                        .getRequireFundAllocationPriorToAcquisitionRequest())) && !process.isAllocatedPermanently()
+                && !process.isPayed() && ((!process.hasAllInvoicesAllocated() && process.getRequest().hasProposalDocument()) || (//ExpenditureTrackingSystem.isInvoiceAllowedToStartAcquisitionProcess()
+                /*&&*/!process.getRequest().hasProposalDocument() && process.isInvoiceConfirmed()));
+    }
 
-	@Override
-	protected void process(AllocateFundsPermanentlyActivityInformation<P> activityInformation) {
-		for (FundAllocationBean fundAllocationBean : activityInformation.getBeans()) {
-			fundAllocationBean.getFinancer().addEffectiveFundAllocationId(fundAllocationBean.getEffectiveFundAllocationId());
-		}
-		PaymentProcess process = activityInformation.getProcess();
-		for (final FundAllocationBean bean : activityInformation.getBeans()) {
-			final Financer financer = bean.getFinancer();
-			final String diaryNumber = bean.getDiaryNumber();
-			financer.addPaymentDiaryNumber(diaryNumber);
-			final String transactionNumber = bean.getTransactionNumber();
-			financer.addTransactionNumber(transactionNumber);
+    @Override
+    protected void process(AllocateFundsPermanentlyActivityInformation<P> activityInformation) {
+        for (FundAllocationBean fundAllocationBean : activityInformation.getBeans()) {
+            fundAllocationBean.getFinancer().addEffectiveFundAllocationId(fundAllocationBean.getEffectiveFundAllocationId());
+        }
+        PaymentProcess process = activityInformation.getProcess();
+        for (final FundAllocationBean bean : activityInformation.getBeans()) {
+            final Financer financer = bean.getFinancer();
+            final String diaryNumber = bean.getDiaryNumber();
+            financer.addPaymentDiaryNumber(diaryNumber);
+            final String transactionNumber = bean.getTransactionNumber();
+            financer.addTransactionNumber(transactionNumber);
 
-			if (financer instanceof ProjectFinancer) {
-				final Unit unit = financer.getUnit();
-				final AccountingUnit accountingUnit = financer.getAccountingUnit();
+            if (financer instanceof ProjectFinancer) {
+                final Unit unit = financer.getUnit();
+                final AccountingUnit accountingUnit = financer.getAccountingUnit();
 
-				for (final UnitItem unitItem : financer.getUnitItemsSet()) {
-					new AcquisitionFundAllocationDiaryAndTransactionReportRequest(unitItem, process.getProcessNumber(),
-							unit.getUnitNumber(), accountingUnit.getName(), diaryNumber, transactionNumber);
-				}
-			}
-		}
-		if (process.isInvoiceConfirmed() && process.areAllFundsPermanentlyAllocated()) {
-			process.allocateFundsPermanently();
-		}
+                for (final UnitItem unitItem : financer.getUnitItemsSet()) {
+                    new AcquisitionFundAllocationDiaryAndTransactionReportRequest(unitItem, process.getProcessNumber(),
+                            unit.getUnitNumber(), accountingUnit.getName(), diaryNumber, transactionNumber);
+                }
+            }
+        }
+        if (process.isInvoiceConfirmed() && process.areAllFundsPermanentlyAllocated()) {
+            process.allocateFundsPermanently();
+        }
 
-	}
+    }
 
-	public AllocateFundsPermanentlyActivityInformation<P> getActivityInformation(P process) {
-		return new AllocateFundsPermanentlyActivityInformation<P>(process, this, true);
-	}
+    public AllocateFundsPermanentlyActivityInformation<P> getActivityInformation(P process) {
+        return new AllocateFundsPermanentlyActivityInformation<P>(process, this, true);
+    }
 
-	@Override
-	public boolean isDefaultInputInterfaceUsed() {
-		return false;
-	}
+    @Override
+    public boolean isDefaultInputInterfaceUsed() {
+        return false;
+    }
 
-	@Override
-	public String getLocalizedName() {
-		return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
-	}
+    @Override
+    public String getLocalizedName() {
+        return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+    }
 
-	@Override
-	public String getUsedBundle() {
-		return "resources/AcquisitionResources";
-	}
+    @Override
+    public String getUsedBundle() {
+        return "resources/AcquisitionResources";
+    }
 
 }

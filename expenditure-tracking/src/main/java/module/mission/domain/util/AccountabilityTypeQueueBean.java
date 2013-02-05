@@ -10,33 +10,33 @@ import pt.ist.fenixWebFramework.services.Service;
 
 public class AccountabilityTypeQueueBean implements Serializable {
 
-	private AccountabilityType accountabilityType;
-	private WorkflowQueue workflowQueue;
+    private AccountabilityType accountabilityType;
+    private WorkflowQueue workflowQueue;
 
-	public AccountabilityType getAccountabilityType() {
-		return accountabilityType;
-	}
+    public AccountabilityType getAccountabilityType() {
+        return accountabilityType;
+    }
 
-	public void setAccountabilityType(AccountabilityType accountabilityType) {
-		this.accountabilityType = accountabilityType;
-	}
+    public void setAccountabilityType(AccountabilityType accountabilityType) {
+        this.accountabilityType = accountabilityType;
+    }
 
-	public WorkflowQueue getWorkflowQueue() {
-		return workflowQueue;
-	}
+    public WorkflowQueue getWorkflowQueue() {
+        return workflowQueue;
+    }
 
-	public void setWorkflowQueue(WorkflowQueue workflowQueue) {
-		this.workflowQueue = workflowQueue;
-	}
+    public void setWorkflowQueue(WorkflowQueue workflowQueue) {
+        this.workflowQueue = workflowQueue;
+    }
 
-	@Service
-	public AccountabilityTypeQueue create() {
-		for (final AccountabilityTypeQueue accountabilityTypeQueue : MissionSystem.getInstance().getAccountabilityTypeQueuesSet()) {
-			if (accountabilityTypeQueue.getAccountabilityType() == accountabilityType) {
-				accountabilityTypeQueue.setWorkflowQueue(workflowQueue);
-			}
-		}
-		return new AccountabilityTypeQueue(accountabilityType, workflowQueue);
-	}
+    @Service
+    public AccountabilityTypeQueue create() {
+        for (final AccountabilityTypeQueue accountabilityTypeQueue : MissionSystem.getInstance().getAccountabilityTypeQueuesSet()) {
+            if (accountabilityTypeQueue.getAccountabilityType() == accountabilityType) {
+                accountabilityTypeQueue.setWorkflowQueue(workflowQueue);
+            }
+        }
+        return new AccountabilityTypeQueue(accountabilityType, workflowQueue);
+    }
 
 }

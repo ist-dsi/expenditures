@@ -42,38 +42,38 @@ import pt.utl.ist.fenix.tools.util.StringNormalizer;
  */
 public class NIFSupplierAutoCompleteProvider implements AutoCompleteProvider {
 
-	public Collection getSearchResults(Map<String, String> argsMap, String value, int maxCount) {
-		final List<Supplier> result = new ArrayList<Supplier>();
-		final String[] input = value.split(" ");
-		StringNormalizer.normalize(input);
+    public Collection getSearchResults(Map<String, String> argsMap, String value, int maxCount) {
+        final List<Supplier> result = new ArrayList<Supplier>();
+        final String[] input = value.split(" ");
+        StringNormalizer.normalize(input);
 
-		for (final Supplier supplier : MyOrg.getInstance().getSuppliers()) {
-			if (supplier.getFiscalIdentificationCode().startsWith(value)) {
-				addResult(result, supplier);
-			} else {
-				final String name = StringNormalizer.normalize(supplier.getName());
-				if (hasMatch(input, name)) {
-					addResult(result, supplier);
-				}
-			}
-			if (result.size() >= maxCount) {
-				break;
-			}
-		}
-		return result;
-	}
+        for (final Supplier supplier : MyOrg.getInstance().getSuppliers()) {
+            if (supplier.getFiscalIdentificationCode().startsWith(value)) {
+                addResult(result, supplier);
+            } else {
+                final String name = StringNormalizer.normalize(supplier.getName());
+                if (hasMatch(input, name)) {
+                    addResult(result, supplier);
+                }
+            }
+            if (result.size() >= maxCount) {
+                break;
+            }
+        }
+        return result;
+    }
 
-	protected void addResult(final List<Supplier> result, final Supplier supplier) {
-		result.add(supplier);
-	}
+    protected void addResult(final List<Supplier> result, final Supplier supplier) {
+        result.add(supplier);
+    }
 
-	private boolean hasMatch(final String[] input, final String unitNameParts) {
-		for (final String namePart : input) {
-			if (unitNameParts.indexOf(namePart) == -1) {
-				return false;
-			}
-		}
-		return true;
-	}
+    private boolean hasMatch(final String[] input, final String unitNameParts) {
+        for (final String namePart : input) {
+            if (unitNameParts.indexOf(namePart) == -1) {
+                return false;
+            }
+        }
+        return true;
+    }
 
 }

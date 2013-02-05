@@ -4,17 +4,17 @@ import java.io.Serializable;
 
 public class AccountingUnitBean implements Serializable {
 
-	private String name;
+    private String name;
 
-	public AccountingUnitBean() {
-	}
+    public AccountingUnitBean() {
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
 }

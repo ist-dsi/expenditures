@@ -40,46 +40,46 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess
  */
 public class RefundProcessActivityLogStatistics extends ProcessActivityLogStatistics implements Serializable {
 
-	public RefundProcessActivityLogStatistics(final RefundProcess refundProcess) {
-		register(refundProcess);
-	}
+    public RefundProcessActivityLogStatistics(final RefundProcess refundProcess) {
+        register(refundProcess);
+    }
 
-	public RefundProcessActivityLogStatistics(final PaymentProcessYear paymentProcessYear) {
-		register(paymentProcessYear);
-	}
+    public RefundProcessActivityLogStatistics(final PaymentProcessYear paymentProcessYear) {
+        register(paymentProcessYear);
+    }
 
-	public static RefundProcessActivityLogStatistics create(final RefundProcess refundProcess) {
-		return new RefundProcessActivityLogStatistics(refundProcess);
-	}
+    public static RefundProcessActivityLogStatistics create(final RefundProcess refundProcess) {
+        return new RefundProcessActivityLogStatistics(refundProcess);
+    }
 
-	public static RefundProcessActivityLogStatistics create(final PaymentProcessYear paymentProcessYear) {
-		return new RefundProcessActivityLogStatistics(paymentProcessYear);
-	}
+    public static RefundProcessActivityLogStatistics create(final PaymentProcessYear paymentProcessYear) {
+        return new RefundProcessActivityLogStatistics(paymentProcessYear);
+    }
 
-	public static RefundProcessActivityLogStatistics create(final Integer year) {
-		if (year != null) {
-			final int y = year.intValue();
-			for (final PaymentProcessYear paymentProcessYear : ExpenditureTrackingSystem.getInstance()
-					.getPaymentProcessYearsSet()) {
-				if (paymentProcessYear.getYear().intValue() == y) {
-					return create(paymentProcessYear);
-				}
-			}
-		}
-		return null;
-	}
+    public static RefundProcessActivityLogStatistics create(final Integer year) {
+        if (year != null) {
+            final int y = year.intValue();
+            for (final PaymentProcessYear paymentProcessYear : ExpenditureTrackingSystem.getInstance()
+                    .getPaymentProcessYearsSet()) {
+                if (paymentProcessYear.getYear().intValue() == y) {
+                    return create(paymentProcessYear);
+                }
+            }
+        }
+        return null;
+    }
 
-	public List<LogEntry> getLogEntries() {
-		return logEntries;
-	}
+    public List<LogEntry> getLogEntries() {
+        return logEntries;
+    }
 
-	protected void register(final PaymentProcessYear paymentProcessYear) {
-		for (final PaymentProcess paymentProcess : paymentProcessYear.getPaymentProcessSet()) {
-			if (paymentProcess.isRefundProcess()) {
-				final RefundProcess refundProcess = (RefundProcess) paymentProcess;
-				register(refundProcess);
-			}
-		}
-	}
+    protected void register(final PaymentProcessYear paymentProcessYear) {
+        for (final PaymentProcess paymentProcess : paymentProcessYear.getPaymentProcessSet()) {
+            if (paymentProcess.isRefundProcess()) {
+                final RefundProcess refundProcess = (RefundProcess) paymentProcess;
+                register(refundProcess);
+            }
+        }
+    }
 
 }

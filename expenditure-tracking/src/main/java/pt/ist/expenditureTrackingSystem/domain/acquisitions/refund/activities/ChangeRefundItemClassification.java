@@ -38,33 +38,33 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess
  */
 public class ChangeRefundItemClassification extends WorkflowActivity<RefundProcess, EditRefundItemActivityInformation> {
 
-	@Override
-	public boolean isActive(RefundProcess process, User user) {
-		return ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user);
-	}
+    @Override
+    public boolean isActive(RefundProcess process, User user) {
+        return ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user);
+    }
 
-	@Override
-	protected void process(EditRefundItemActivityInformation activityInformation) {
-		activityInformation.getItem().setClassification(activityInformation.getClassification());
-	}
+    @Override
+    protected void process(EditRefundItemActivityInformation activityInformation) {
+        activityInformation.getItem().setClassification(activityInformation.getClassification());
+    }
 
-	@Override
-	public ActivityInformation<RefundProcess> getActivityInformation(RefundProcess process) {
-		return new EditRefundItemActivityInformation(process, this);
-	}
+    @Override
+    public ActivityInformation<RefundProcess> getActivityInformation(RefundProcess process) {
+        return new EditRefundItemActivityInformation(process, this);
+    }
 
-	@Override
-	public boolean isVisible() {
-		return false;
-	}
+    @Override
+    public boolean isVisible() {
+        return false;
+    }
 
-	@Override
-	public String getLocalizedName() {
-		return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
-	}
+    @Override
+    public String getLocalizedName() {
+        return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+    }
 
-	@Override
-	public String getUsedBundle() {
-		return "resources/AcquisitionResources";
-	}
+    @Override
+    public String getUsedBundle() {
+        return "resources/AcquisitionResources";
+    }
 }

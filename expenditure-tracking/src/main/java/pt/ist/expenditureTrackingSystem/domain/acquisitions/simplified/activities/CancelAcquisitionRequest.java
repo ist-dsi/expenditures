@@ -40,60 +40,60 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
  * 
  */
 public class CancelAcquisitionRequest extends
-		WorkflowActivity<RegularAcquisitionProcess, ActivityInformation<RegularAcquisitionProcess>> {
+        WorkflowActivity<RegularAcquisitionProcess, ActivityInformation<RegularAcquisitionProcess>> {
 
-	@Override
-	public boolean isActive(RegularAcquisitionProcess process, User user) {
-		AcquisitionProcessState acquisitionProcessState = process.getAcquisitionProcessState();
-		Person person = user.getExpenditurePerson();
-		return isUserProcessOwner(process, user)
-				&& ((acquisitionProcessState.isAcquisitionProcessed() && ExpenditureTrackingSystem
-						.isAcquisitionCentralGroupMember(user))
-						|| (acquisitionProcessState.isInGenesis() && process.getRequestor() == person)
-						|| (acquisitionProcessState.isInAllocatedToUnitState() && isUserResponsibleForAuthorizingPayment(process,
-								person))
-						// Por indicação da Iria em 22-03-2010
-						// || (acquisitionProcessState.isPendingInvoiceConfirmation() &&
-						// isUserResponsibleForUnit(process, person))
-						|| (acquisitionProcessState.isInvoiceReceived() && ExpenditureTrackingSystem
-								.isAcquisitionCentralGroupMember(user)) || (process.getAcquisitionProcessState().isAuthorized() && process
-						.isPendingCommitmentByUser(user)));
-	}
+    @Override
+    public boolean isActive(RegularAcquisitionProcess process, User user) {
+        AcquisitionProcessState acquisitionProcessState = process.getAcquisitionProcessState();
+        Person person = user.getExpenditurePerson();
+        return isUserProcessOwner(process, user)
+                && ((acquisitionProcessState.isAcquisitionProcessed() && ExpenditureTrackingSystem
+                        .isAcquisitionCentralGroupMember(user))
+                        || (acquisitionProcessState.isInGenesis() && process.getRequestor() == person)
+                        || (acquisitionProcessState.isInAllocatedToUnitState() && isUserResponsibleForAuthorizingPayment(process,
+                                person))
+                        // Por indicação da Iria em 22-03-2010
+                        // || (acquisitionProcessState.isPendingInvoiceConfirmation() &&
+                        // isUserResponsibleForUnit(process, person))
+                        || (acquisitionProcessState.isInvoiceReceived() && ExpenditureTrackingSystem
+                                .isAcquisitionCentralGroupMember(user)) || (process.getAcquisitionProcessState().isAuthorized() && process
+                        .isPendingCommitmentByUser(user)));
+    }
 
-	private boolean isUserResponsibleForAuthorizingPayment(RegularAcquisitionProcess process, Person person) {
+    private boolean isUserResponsibleForAuthorizingPayment(RegularAcquisitionProcess process, Person person) {
 
-		return person != null
-				&& process.isResponsibleForUnit(person, process.getAcquisitionRequest()
-						.getTotalItemValueWithAdditionalCostsAndVat())
-				&& !process.getAcquisitionRequest().hasBeenAuthorizedBy(person);
-	}
+        return person != null
+                && process.isResponsibleForUnit(person, process.getAcquisitionRequest()
+                        .getTotalItemValueWithAdditionalCostsAndVat())
+                && !process.getAcquisitionRequest().hasBeenAuthorizedBy(person);
+    }
 
-	private boolean isUserResponsibleForUnit(RegularAcquisitionProcess process, Person person) {
-		return person != null && process.isResponsibleForUnit(person);
-	}
+    private boolean isUserResponsibleForUnit(RegularAcquisitionProcess process, Person person) {
+        return person != null && process.isResponsibleForUnit(person);
+    }
 
-	@Override
-	protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
-		activityInformation.getProcess().cancel();
-	}
+    @Override
+    protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
+        activityInformation.getProcess().cancel();
+    }
 
-	@Override
-	public String getLocalizedName() {
-		return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
-	}
+    @Override
+    public String getLocalizedName() {
+        return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+    }
 
-	@Override
-	public String getUsedBundle() {
-		return "resources/AcquisitionResources";
-	}
+    @Override
+    public String getUsedBundle() {
+        return "resources/AcquisitionResources";
+    }
 
-	@Override
-	public boolean isConfirmationNeeded(RegularAcquisitionProcess process) {
-		return true;
-	}
+    @Override
+    public boolean isConfirmationNeeded(RegularAcquisitionProcess process) {
+        return true;
+    }
 
-	@Override
-	public boolean isUserAwarenessNeeded(RegularAcquisitionProcess process, User user) {
-		return false;
-	}
+    @Override
+    public boolean isUserAwarenessNeeded(RegularAcquisitionProcess process, User user) {
+        return false;
+    }
 }

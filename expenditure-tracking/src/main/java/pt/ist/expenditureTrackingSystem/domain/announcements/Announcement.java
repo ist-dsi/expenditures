@@ -43,41 +43,41 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
  */
 public abstract class Announcement extends Announcement_Base {
 
-	protected Announcement() {
-		super();
-		setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
-		setCreationDate(new DateTime());
-	}
+    protected Announcement() {
+        super();
+        setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
+        setCreationDate(new DateTime());
+    }
 
-	public abstract Set<Unit> getBuyingUnits();
+    public abstract Set<Unit> getBuyingUnits();
 
-	public abstract Supplier getSupplier();
+    public abstract Supplier getSupplier();
 
-	public abstract Unit getRequestingUnit();
+    public abstract Unit getRequestingUnit();
 
-	public static <T extends Announcement> List<T> getAnnouncements(Class<T> clazz) {
-		List<T> announcements = new ArrayList<T>();
-		for (Announcement announcement : ExpenditureTrackingSystem.getInstance().getAnnouncements()) {
-			if (clazz.isAssignableFrom(announcement.getClass())) {
-				announcements.add((T) announcement);
-			}
-		}
-		return announcements;
-	}
+    public static <T extends Announcement> List<T> getAnnouncements(Class<T> clazz) {
+        List<T> announcements = new ArrayList<T>();
+        for (Announcement announcement : ExpenditureTrackingSystem.getInstance().getAnnouncements()) {
+            if (clazz.isAssignableFrom(announcement.getClass())) {
+                announcements.add((T) announcement);
+            }
+        }
+        return announcements;
+    }
 
-	public static <T extends Announcement> List<T> getAnnouncements(Class<T> clazz, Predicate predicate) {
-		List<T> announcements = new ArrayList<T>();
-		for (Announcement announcement : ExpenditureTrackingSystem.getInstance().getAnnouncements()) {
-			if (clazz.isAssignableFrom(announcement.getClass()) && predicate.evaluate(announcement)) {
-				announcements.add((T) announcement);
-			}
-		}
-		return announcements;
-	}
+    public static <T extends Announcement> List<T> getAnnouncements(Class<T> clazz, Predicate predicate) {
+        List<T> announcements = new ArrayList<T>();
+        for (Announcement announcement : ExpenditureTrackingSystem.getInstance().getAnnouncements()) {
+            if (clazz.isAssignableFrom(announcement.getClass()) && predicate.evaluate(announcement)) {
+                announcements.add((T) announcement);
+            }
+        }
+        return announcements;
+    }
 
-	@Override
-	public boolean isConnectedToCurrentHost() {
-		return getExpenditureTrackingSystem() == ExpenditureTrackingSystem.getInstance();
-	}
+    @Override
+    public boolean isConnectedToCurrentHost() {
+        return getExpenditureTrackingSystem() == ExpenditureTrackingSystem.getInstance();
+    }
 
 }

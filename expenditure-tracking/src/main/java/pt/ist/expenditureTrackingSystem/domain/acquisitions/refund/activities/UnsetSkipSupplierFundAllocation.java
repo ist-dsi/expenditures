@@ -41,34 +41,34 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
  */
 public class UnsetSkipSupplierFundAllocation extends WorkflowActivity<RefundProcess, ActivityInformation<RefundProcess>> {
 
-	@Override
-	public boolean isActive(RefundProcess process, User user) {
-		Person person = user.getExpenditurePerson();
+    @Override
+    public boolean isActive(RefundProcess process, User user) {
+        Person person = user.getExpenditurePerson();
 
-		return isUserProcessOwner(process, user)
-				&& process.getSkipSupplierFundAllocation()
-				&& (((process.isInGenesis() || process.getProcessState().getRefundProcessStateType() == RefundProcessStateType.AUTHORIZED) && person == process
-						.getRequestor()) || ExpenditureTrackingSystem.isSupplierFundAllocationManagerGroupMember(user));
+        return isUserProcessOwner(process, user)
+                && process.getSkipSupplierFundAllocation()
+                && (((process.isInGenesis() || process.getProcessState().getRefundProcessStateType() == RefundProcessStateType.AUTHORIZED) && person == process
+                        .getRequestor()) || ExpenditureTrackingSystem.isSupplierFundAllocationManagerGroupMember(user));
 
-	}
+    }
 
-	@Override
-	protected void process(ActivityInformation<RefundProcess> activityInformation) {
-		RefundProcess process = activityInformation.getProcess();
+    @Override
+    protected void process(ActivityInformation<RefundProcess> activityInformation) {
+        RefundProcess process = activityInformation.getProcess();
 
-		process.checkIsFundAllocationAllowed();
+        process.checkIsFundAllocationAllowed();
 
-		process.setSkipSupplierFundAllocation(Boolean.FALSE);
+        process.setSkipSupplierFundAllocation(Boolean.FALSE);
 
-	}
+    }
 
-	@Override
-	public String getLocalizedName() {
-		return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
-	}
+    @Override
+    public String getLocalizedName() {
+        return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+    }
 
-	@Override
-	public String getUsedBundle() {
-		return "resources/AcquisitionResources";
-	}
+    @Override
+    public String getUsedBundle() {
+        return "resources/AcquisitionResources";
+    }
 }

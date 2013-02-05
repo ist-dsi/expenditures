@@ -36,17 +36,17 @@ import pt.ist.fenixWebFramework.renderers.components.converters.Converter;
  */
 public class ItemsFromProcess implements DataProvider {
 
-	@Override
-	public Converter getConverter() {
-		return null;
-	}
+    @Override
+    public Converter getConverter() {
+        return null;
+    }
 
-	@Override
-	public Object provide(Object source, Object currentValue) {
-		InvoiceFileBean form = (InvoiceFileBean) source;
-		AcquisitionRequest request = form.getRequest();
+    @Override
+    public Object provide(Object source, Object currentValue) {
+        InvoiceFileBean form = (InvoiceFileBean) source;
+        AcquisitionRequest request = form.getRequest();
 
-		return request.getRequestItems();
-	}
+        return request.getRequestItems();
+    }
 
 }

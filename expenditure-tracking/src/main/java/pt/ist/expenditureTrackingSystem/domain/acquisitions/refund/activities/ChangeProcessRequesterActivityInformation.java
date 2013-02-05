@@ -37,24 +37,24 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
  */
 public class ChangeProcessRequesterActivityInformation extends ActivityInformation<RefundProcess> {
 
-	private Person person;
+    private Person person;
 
-	public ChangeProcessRequesterActivityInformation(RefundProcess process,
-			WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity) {
-		super(process, activity);
-	}
+    public ChangeProcessRequesterActivityInformation(RefundProcess process,
+            WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity) {
+        super(process, activity);
+    }
 
-	public Person getPerson() {
-		return person;
-	}
+    public Person getPerson() {
+        return person;
+    }
 
-	public void setPerson(Person person) {
-		this.person = person;
-	}
+    public void setPerson(Person person) {
+        this.person = person;
+    }
 
-	@Override
-	public boolean hasAllneededInfo() {
-		return isForwardedFromInput() && getPerson() != null;
-	}
+    @Override
+    public boolean hasAllneededInfo() {
+        return isForwardedFromInput() && getPerson() != null;
+    }
 
 }

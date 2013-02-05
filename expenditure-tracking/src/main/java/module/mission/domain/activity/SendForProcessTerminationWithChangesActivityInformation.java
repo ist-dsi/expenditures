@@ -7,27 +7,27 @@ import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 
 public class SendForProcessTerminationWithChangesActivityInformation extends ActivityInformation<MissionProcess> implements
-		Serializable {
+        Serializable {
 
-	private String descriptionOfChangesAfterArrival;
+    private String descriptionOfChangesAfterArrival;
 
-	public SendForProcessTerminationWithChangesActivityInformation(final MissionProcess missionProcess,
-			final WorkflowActivity<MissionProcess, ? extends ActivityInformation<MissionProcess>> activity) {
-		super(missionProcess, activity);
-	}
+    public SendForProcessTerminationWithChangesActivityInformation(final MissionProcess missionProcess,
+            final WorkflowActivity<MissionProcess, ? extends ActivityInformation<MissionProcess>> activity) {
+        super(missionProcess, activity);
+    }
 
-	@Override
-	public boolean hasAllneededInfo() {
-		return super.hasAllneededInfo() && descriptionOfChangesAfterArrival != null
-				&& !descriptionOfChangesAfterArrival.isEmpty();
-	}
+    @Override
+    public boolean hasAllneededInfo() {
+        return super.hasAllneededInfo() && descriptionOfChangesAfterArrival != null
+                && !descriptionOfChangesAfterArrival.isEmpty();
+    }
 
-	public String getDescriptionOfChangesAfterArrival() {
-		return descriptionOfChangesAfterArrival;
-	}
+    public String getDescriptionOfChangesAfterArrival() {
+        return descriptionOfChangesAfterArrival;
+    }
 
-	public void setDescriptionOfChangesAfterArrival(String descriptionOfChangesAfterArrival) {
-		this.descriptionOfChangesAfterArrival = descriptionOfChangesAfterArrival;
-	}
+    public void setDescriptionOfChangesAfterArrival(String descriptionOfChangesAfterArrival) {
+        this.descriptionOfChangesAfterArrival = descriptionOfChangesAfterArrival;
+    }
 
 }

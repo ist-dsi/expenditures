@@ -35,15 +35,15 @@ import pt.ist.fenixWebFramework.renderers.components.converters.Converter;
  */
 public class SuppliersForRegularAcquisitionProcess implements DataProvider {
 
-	@Override
-	public Converter getConverter() {
-		return null;
-	}
+    @Override
+    public Converter getConverter() {
+        return null;
+    }
 
-	@Override
-	public Object provide(Object source, Object currentValue) {
-		SelectSupplierActivityInformation information = (SelectSupplierActivityInformation) source;
-		return information.getProcess().getRequest().getSuppliers();
-	}
+    @Override
+    public Object provide(Object source, Object currentValue) {
+        SelectSupplierActivityInformation information = (SelectSupplierActivityInformation) source;
+        return information.getProcess().getRequest().getSuppliers();
+    }
 
 }

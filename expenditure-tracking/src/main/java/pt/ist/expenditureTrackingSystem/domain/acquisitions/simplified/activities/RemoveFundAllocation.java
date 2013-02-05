@@ -38,50 +38,50 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionPr
  * 
  */
 public class RemoveFundAllocation extends
-		WorkflowActivity<RegularAcquisitionProcess, ActivityInformation<RegularAcquisitionProcess>> {
+        WorkflowActivity<RegularAcquisitionProcess, ActivityInformation<RegularAcquisitionProcess>> {
 
-	@Override
-	public boolean isActive(RegularAcquisitionProcess process, User user) {
-		return isUserProcessOwner(process, user) && process.isAccountingEmployee(user.getExpenditurePerson())
-				&& (checkActiveConditions(process) || checkCanceledConditions(process))
-				&& process.getAcquisitionRequest().hasAnyFundAllocationId(user.getExpenditurePerson());
-	}
+    @Override
+    public boolean isActive(RegularAcquisitionProcess process, User user) {
+        return isUserProcessOwner(process, user) && process.isAccountingEmployee(user.getExpenditurePerson())
+                && (checkActiveConditions(process) || checkCanceledConditions(process))
+                && process.getAcquisitionRequest().hasAnyFundAllocationId(user.getExpenditurePerson());
+    }
 
-	private boolean checkActiveConditions(RegularAcquisitionProcess process) {
-		return process.getAcquisitionProcessState().isInAllocatedToUnitState();
-	}
+    private boolean checkActiveConditions(RegularAcquisitionProcess process) {
+        return process.getAcquisitionProcessState().isInAllocatedToUnitState();
+    }
 
-	private boolean checkCanceledConditions(RegularAcquisitionProcess process) {
-		return process.getAcquisitionProcessState().isCanceled();
-	}
+    private boolean checkCanceledConditions(RegularAcquisitionProcess process) {
+        return process.getAcquisitionProcessState().isCanceled();
+    }
 
-	@Override
-	protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
-		RegularAcquisitionProcess process = activityInformation.getProcess();
-		process.getAcquisitionRequest().resetFundAllocationId(UserView.getCurrentUser().getExpenditurePerson());
-		if (!process.getAcquisitionProcessState().isCanceled()) {
-			process.allocateFundsToSupplier();
-		} else {
-			RemoveFundAllocationExpirationDate removeFundAllocationExpirationDate = new RemoveFundAllocationExpirationDate();
-			if (!process.hasAnyAllocatedFunds() && removeFundAllocationExpirationDate.isActive(process)) {
-				removeFundAllocationExpirationDate.execute(removeFundAllocationExpirationDate.getActivityInformation(process));
-			}
-		}
-	}
+    @Override
+    protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
+        RegularAcquisitionProcess process = activityInformation.getProcess();
+        process.getAcquisitionRequest().resetFundAllocationId(UserView.getCurrentUser().getExpenditurePerson());
+        if (!process.getAcquisitionProcessState().isCanceled()) {
+            process.allocateFundsToSupplier();
+        } else {
+            RemoveFundAllocationExpirationDate removeFundAllocationExpirationDate = new RemoveFundAllocationExpirationDate();
+            if (!process.hasAnyAllocatedFunds() && removeFundAllocationExpirationDate.isActive(process)) {
+                removeFundAllocationExpirationDate.execute(removeFundAllocationExpirationDate.getActivityInformation(process));
+            }
+        }
+    }
 
-	@Override
-	public String getLocalizedName() {
-		return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
-	}
+    @Override
+    public String getLocalizedName() {
+        return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+    }
 
-	@Override
-	public String getUsedBundle() {
-		return "resources/AcquisitionResources";
-	}
+    @Override
+    public String getUsedBundle() {
+        return "resources/AcquisitionResources";
+    }
 
-	@Override
-	public boolean isUserAwarenessNeeded(final RegularAcquisitionProcess process, final User user) {
-		return process.isCanceled();
-	}
+    @Override
+    public boolean isUserAwarenessNeeded(final RegularAcquisitionProcess process, final User user) {
+        return process.isCanceled();
+    }
 
 }

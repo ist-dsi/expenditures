@@ -65,157 +65,157 @@ import pt.utl.ist.fenix.tools.util.excel.Spreadsheet.Row;
 @Mapping(path = "/searchMissions")
 public class SearchMissionsAction extends ContextBaseAction {
 
-	private static final int RESULTS_PER_PAGE = 50;
+    private static final int RESULTS_PER_PAGE = 50;
 
-	public ActionForward prepare(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-			final HttpServletResponse response) {
-		request.setAttribute("searchBean", new SearchMissionsDTO());
-		return forward(request, "/mission/searchMissions.jsp");
-	}
+    public ActionForward prepare(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+            final HttpServletResponse response) {
+        request.setAttribute("searchBean", new SearchMissionsDTO());
+        return forward(request, "/mission/searchMissions.jsp");
+    }
 
-	public ActionForward search(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-			final HttpServletResponse response) {
+    public ActionForward search(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+            final HttpServletResponse response) {
 
-		SearchMissionsDTO searchMissions =
-				getRenderedObject("searchBean") != null ? (SearchMissionsDTO) getRenderedObject("searchBean") : new SearchMissionsDTO(
-						request);
+        SearchMissionsDTO searchMissions =
+                getRenderedObject("searchBean") != null ? (SearchMissionsDTO) getRenderedObject("searchBean") : new SearchMissionsDTO(
+                        request);
 
-		return search(searchMissions, request);
-	}
+        return search(searchMissions, request);
+    }
 
-	public static ActionForward search(final SearchMissionsDTO searchMissions, final HttpServletRequest request) {
-		final Collection<Mission> results = doPagination(request, searchMissions.sortedSearch());
+    public static ActionForward search(final SearchMissionsDTO searchMissions, final HttpServletRequest request) {
+        final Collection<Mission> results = doPagination(request, searchMissions.sortedSearch());
 
-		request.setAttribute("searchResults", results);
-		request.setAttribute("searchBean", searchMissions);
-		return forward(request, "/mission/searchMissions.jsp");
-	}
+        request.setAttribute("searchResults", results);
+        request.setAttribute("searchBean", searchMissions);
+        return forward(request, "/mission/searchMissions.jsp");
+    }
 
-	private static Collection<Mission> doPagination(final HttpServletRequest request, Collection<Mission> allResults) {
-		final CollectionPager<Mission> pager = new CollectionPager<Mission>(allResults, RESULTS_PER_PAGE);
-		request.setAttribute("collectionPager", pager);
-		request.setAttribute("numberOfPages", Integer.valueOf(pager.getNumberOfPages()));
-		final String pageParameter = request.getParameter("pageNumber");
-		final Integer page = StringUtils.isEmpty(pageParameter) ? Integer.valueOf(1) : Integer.valueOf(pageParameter);
-		request.setAttribute("pageNumber", page);
-		return pager.getPage(page);
-	}
+    private static Collection<Mission> doPagination(final HttpServletRequest request, Collection<Mission> allResults) {
+        final CollectionPager<Mission> pager = new CollectionPager<Mission>(allResults, RESULTS_PER_PAGE);
+        request.setAttribute("collectionPager", pager);
+        request.setAttribute("numberOfPages", Integer.valueOf(pager.getNumberOfPages()));
+        final String pageParameter = request.getParameter("pageNumber");
+        final Integer page = StringUtils.isEmpty(pageParameter) ? Integer.valueOf(1) : Integer.valueOf(pageParameter);
+        request.setAttribute("pageNumber", page);
+        return pager.getPage(page);
+    }
 
-	public ActionForward downloadSearchResult(final ActionMapping mapping, final ActionForm form,
-			final HttpServletRequest request, final HttpServletResponse response) {
-		final SearchMissionsDTO searchMissions = new SearchMissionsDTO(request);
-		final List<Mission> searchResult = searchMissions.sortedSearch();
+    public ActionForward downloadSearchResult(final ActionMapping mapping, final ActionForm form,
+            final HttpServletRequest request, final HttpServletResponse response) {
+        final SearchMissionsDTO searchMissions = new SearchMissionsDTO(request);
+        final List<Mission> searchResult = searchMissions.sortedSearch();
 
-		response.setContentType("application/vnd.ms-excel");
-		response.setHeader("Content-disposition", "attachment; filename=searchResult.xls");
+        response.setContentType("application/vnd.ms-excel");
+        response.setHeader("Content-disposition", "attachment; filename=searchResult.xls");
 
-		final Spreadsheet spreadsheet = new Spreadsheet("SearchResult");
-		spreadsheet.setHeader(getExpendituresMessage("label.acquisitionProcessId"));
-		spreadsheet.setHeader(getMissionsMessage("label.mission.type"));
-		spreadsheet.setHeader(getMissionsMessage("label.mission.destination"));
-		spreadsheet.setHeader(getMissionsMessage("label.mission.departure"));
-		spreadsheet.setHeader(getMissionsMessage("label.module.mission.front.page.list.duration"));
-		spreadsheet.setHeader(getMissionsMessage("label.mission.items"));
-		spreadsheet.setHeader(getMissionsMessage("label.mission.value"));
-		spreadsheet.setHeader(getMissionsMessage("label.mission.financer"));
-		spreadsheet.setHeader(getExpendituresMessage("label.accounting.units"));
-		spreadsheet.setHeader(getMissionsMessage("label.mission.requester.person"));
-		spreadsheet.setHeader(getMissionsMessage("label.mission.participants"));
-		spreadsheet.setHeader(getMissionsMessage("label.mission.inactiveSince"));
-		spreadsheet.setHeader(getMissionsMessage("label.mission.canceled"));
-		addMissionStageHeaders(spreadsheet);
+        final Spreadsheet spreadsheet = new Spreadsheet("SearchResult");
+        spreadsheet.setHeader(getExpendituresMessage("label.acquisitionProcessId"));
+        spreadsheet.setHeader(getMissionsMessage("label.mission.type"));
+        spreadsheet.setHeader(getMissionsMessage("label.mission.destination"));
+        spreadsheet.setHeader(getMissionsMessage("label.mission.departure"));
+        spreadsheet.setHeader(getMissionsMessage("label.module.mission.front.page.list.duration"));
+        spreadsheet.setHeader(getMissionsMessage("label.mission.items"));
+        spreadsheet.setHeader(getMissionsMessage("label.mission.value"));
+        spreadsheet.setHeader(getMissionsMessage("label.mission.financer"));
+        spreadsheet.setHeader(getExpendituresMessage("label.accounting.units"));
+        spreadsheet.setHeader(getMissionsMessage("label.mission.requester.person"));
+        spreadsheet.setHeader(getMissionsMessage("label.mission.participants"));
+        spreadsheet.setHeader(getMissionsMessage("label.mission.inactiveSince"));
+        spreadsheet.setHeader(getMissionsMessage("label.mission.canceled"));
+        addMissionStageHeaders(spreadsheet);
 
-		for (final Mission mission : searchResult) {
-			final MissionProcess missionProcess = mission.getMissionProcess();
+        for (final Mission mission : searchResult) {
+            final MissionProcess missionProcess = mission.getMissionProcess();
 
-			final Row row = spreadsheet.addRow();
-			row.setCell(missionProcess.getProcessIdentification());
-			row.setCell(getMissionsMessage(mission.getGrantOwnerEquivalence() ? "title.mission.process.type.grantOwnerEquivalence" : "title.mission.process.type.dislocation"));
-			row.setCell(mission.getDestinationDescription());
-			row.setCell(mission.getDaparture().toString("yyyy-MM-dd HH:mm"));
-			row.setCell(mission.getDurationInDays());
-			row.setCell(mission.getMissionItemsCount());
-			row.setCell(mission.getValue().toFormatString());
-			row.setCell(getFinancingUnits(mission));
-			row.setCell(getAccountingUnits(mission));
-			row.setCell(mission.getRequestingPerson().getFirstAndLastName());
-			final StringBuilder builder = new StringBuilder();
-			for (final Person person : mission.getParticipantesSet()) {
-				if (builder.length() > 0) {
-					builder.append(", ");
-				}
-				builder.append(person.getName());
-			}
-			row.setCell(builder.toString());
-			final DateTime lastActivity = missionProcess.getDateFromLastActivity();
-			row.setCell(lastActivity == null ? "" : lastActivity.toString("yyyy-MM-dd HH:mm"));
-			row.setCell(getExpendituresMessage(missionProcess.isCanceled() ? "button.yes" : "button.no"));
-			addMissionStageContent(row, missionProcess);
-		}
+            final Row row = spreadsheet.addRow();
+            row.setCell(missionProcess.getProcessIdentification());
+            row.setCell(getMissionsMessage(mission.getGrantOwnerEquivalence() ? "title.mission.process.type.grantOwnerEquivalence" : "title.mission.process.type.dislocation"));
+            row.setCell(mission.getDestinationDescription());
+            row.setCell(mission.getDaparture().toString("yyyy-MM-dd HH:mm"));
+            row.setCell(mission.getDurationInDays());
+            row.setCell(mission.getMissionItemsCount());
+            row.setCell(mission.getValue().toFormatString());
+            row.setCell(getFinancingUnits(mission));
+            row.setCell(getAccountingUnits(mission));
+            row.setCell(mission.getRequestingPerson().getFirstAndLastName());
+            final StringBuilder builder = new StringBuilder();
+            for (final Person person : mission.getParticipantesSet()) {
+                if (builder.length() > 0) {
+                    builder.append(", ");
+                }
+                builder.append(person.getName());
+            }
+            row.setCell(builder.toString());
+            final DateTime lastActivity = missionProcess.getDateFromLastActivity();
+            row.setCell(lastActivity == null ? "" : lastActivity.toString("yyyy-MM-dd HH:mm"));
+            row.setCell(getExpendituresMessage(missionProcess.isCanceled() ? "button.yes" : "button.no"));
+            addMissionStageContent(row, missionProcess);
+        }
 
-		try {
-			ServletOutputStream writer = response.getOutputStream();
-			spreadsheet.exportToXLSSheet(writer);
-		} catch (final IOException e) {
-			throw new Error(e);
-		}
+        try {
+            ServletOutputStream writer = response.getOutputStream();
+            spreadsheet.exportToXLSSheet(writer);
+        } catch (final IOException e) {
+            throw new Error(e);
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	private void addMissionStageHeaders(Spreadsheet spreadsheet) {
-		for (MissionStage stage : MissionStage.values()) {
-			spreadsheet.setHeader(stage.getLocalizedName());
-		}
-	}
+    private void addMissionStageHeaders(Spreadsheet spreadsheet) {
+        for (MissionStage stage : MissionStage.values()) {
+            spreadsheet.setHeader(stage.getLocalizedName());
+        }
+    }
 
-	private void addMissionStageContent(Row row, MissionProcess process) {
-		MissionStageView stageView = new MissionStageView(process);
-		Map<MissionStage, MissionStageState> stageStates = stageView.getMissionStageStates();
-		for (MissionStage stage : MissionStage.values()) {
-			MissionStageState state = stageStates.get(stage);
-			if (state == null) {
-				row.setCell("-");
-			} else {
-				row.setCell(state.getLocalizedName());
-			}
-		}
-	}
+    private void addMissionStageContent(Row row, MissionProcess process) {
+        MissionStageView stageView = new MissionStageView(process);
+        Map<MissionStage, MissionStageState> stageStates = stageView.getMissionStageStates();
+        for (MissionStage stage : MissionStage.values()) {
+            MissionStageState state = stageStates.get(stage);
+            if (state == null) {
+                row.setCell("-");
+            } else {
+                row.setCell(state.getLocalizedName());
+            }
+        }
+    }
 
-	private String getMissionsMessage(String label) {
-		return BundleUtil.getStringFromResourceBundle("resources.MissionResources", label);
-	}
+    private String getMissionsMessage(String label) {
+        return BundleUtil.getStringFromResourceBundle("resources.MissionResources", label);
+    }
 
-	private String getExpendituresMessage(String label) {
-		return BundleUtil.getStringFromResourceBundle("resources.ExpenditureResources", label);
-	}
+    private String getExpendituresMessage(String label) {
+        return BundleUtil.getStringFromResourceBundle("resources.ExpenditureResources", label);
+    }
 
-	private String getFinancingUnits(Mission mission) {
-		final StringBuilder builder = new StringBuilder();
-		for (final MissionFinancer financer : mission.getFinancerSet()) {
-			final Unit unit = financer.getUnit();
-			if (unit != null) {
-				if (builder.length() > 0) {
-					builder.append(", ");
-				}
-				builder.append(unit.getUnit().getAcronym());
-			}
-		}
-		return builder.toString();
-	}
+    private String getFinancingUnits(Mission mission) {
+        final StringBuilder builder = new StringBuilder();
+        for (final MissionFinancer financer : mission.getFinancerSet()) {
+            final Unit unit = financer.getUnit();
+            if (unit != null) {
+                if (builder.length() > 0) {
+                    builder.append(", ");
+                }
+                builder.append(unit.getUnit().getAcronym());
+            }
+        }
+        return builder.toString();
+    }
 
-	private String getAccountingUnits(final Mission mission) {
-		final StringBuilder builder = new StringBuilder();
-		for (final MissionFinancer financer : mission.getFinancerSet()) {
-			final AccountingUnit accountingUnit = financer.getAccountingUnit();
-			if (accountingUnit != null) {
-				if (builder.length() > 0) {
-					builder.append(", ");
-				}
-				builder.append(accountingUnit.getName());
-			}
-		}
-		return builder.toString();
-	}
+    private String getAccountingUnits(final Mission mission) {
+        final StringBuilder builder = new StringBuilder();
+        for (final MissionFinancer financer : mission.getFinancerSet()) {
+            final AccountingUnit accountingUnit = financer.getAccountingUnit();
+            if (accountingUnit != null) {
+                if (builder.length() > 0) {
+                    builder.append(", ");
+                }
+                builder.append(accountingUnit.getName());
+            }
+        }
+        return builder.toString();
+    }
 
 }

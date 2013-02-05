@@ -9,24 +9,24 @@ import module.workflow.activities.WorkflowActivity;
 
 public class RemoveItemActivityInformation extends ActivityInformation<MissionProcess> implements Serializable {
 
-	private MissionItem missionItem;
+    private MissionItem missionItem;
 
-	public RemoveItemActivityInformation(final MissionProcess missionProcess,
-			final WorkflowActivity<MissionProcess, ? extends ActivityInformation<MissionProcess>> activity) {
-		super(missionProcess, activity);
-	}
+    public RemoveItemActivityInformation(final MissionProcess missionProcess,
+            final WorkflowActivity<MissionProcess, ? extends ActivityInformation<MissionProcess>> activity) {
+        super(missionProcess, activity);
+    }
 
-	@Override
-	public boolean hasAllneededInfo() {
-		return missionItem != null;
-	}
+    @Override
+    public boolean hasAllneededInfo() {
+        return missionItem != null;
+    }
 
-	public MissionItem getMissionItem() {
-		return missionItem;
-	}
+    public MissionItem getMissionItem() {
+        return missionItem;
+    }
 
-	public void setMissionItem(final MissionItem missionItem) {
-		this.missionItem = missionItem;
-	}
+    public void setMissionItem(final MissionItem missionItem) {
+        this.missionItem = missionItem;
+    }
 
 }

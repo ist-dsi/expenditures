@@ -41,34 +41,34 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
  * 
  */
 public class SetSkipSupplierFundAllocation extends
-		WorkflowActivity<RegularAcquisitionProcess, ActivityInformation<RegularAcquisitionProcess>> {
+        WorkflowActivity<RegularAcquisitionProcess, ActivityInformation<RegularAcquisitionProcess>> {
 
-	@Override
-	public boolean isActive(RegularAcquisitionProcess process, User user) {
-		Person person = user.getExpenditurePerson();
-		return isUserProcessOwner(process, user)
-				&& !process.getShouldSkipSupplierFundAllocation().booleanValue()
-				&& (process instanceof SimplifiedProcedureProcess && ((SimplifiedProcedureProcess) process)
-						.getProcessClassification().isCCP())
-				&& ((process.getAcquisitionProcessState().isInGenesis() && person == process.getRequestor() || (ExpenditureTrackingSystem
-						.isAcquisitionCentralGroupMember(user) && ((process.getAcquisitionProcessState().isAuthorized() && process
-						.isCommitted()) || process.getAcquisitionProcessState().isAcquisitionProcessed() || process
-							.isInvoiceReceived()))) || ExpenditureTrackingSystem.isSupplierFundAllocationManagerGroupMember());
-	}
+    @Override
+    public boolean isActive(RegularAcquisitionProcess process, User user) {
+        Person person = user.getExpenditurePerson();
+        return isUserProcessOwner(process, user)
+                && !process.getShouldSkipSupplierFundAllocation().booleanValue()
+                && (process instanceof SimplifiedProcedureProcess && ((SimplifiedProcedureProcess) process)
+                        .getProcessClassification().isCCP())
+                && ((process.getAcquisitionProcessState().isInGenesis() && person == process.getRequestor() || (ExpenditureTrackingSystem
+                        .isAcquisitionCentralGroupMember(user) && ((process.getAcquisitionProcessState().isAuthorized() && process
+                        .isCommitted()) || process.getAcquisitionProcessState().isAcquisitionProcessed() || process
+                            .isInvoiceReceived()))) || ExpenditureTrackingSystem.isSupplierFundAllocationManagerGroupMember());
+    }
 
-	@Override
-	protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
-		activityInformation.getProcess().skipSupplierFundAllocation();
-	}
+    @Override
+    protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
+        activityInformation.getProcess().skipSupplierFundAllocation();
+    }
 
-	@Override
-	public String getLocalizedName() {
-		return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
-	}
+    @Override
+    public String getLocalizedName() {
+        return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+    }
 
-	@Override
-	public String getUsedBundle() {
-		return "resources/AcquisitionResources";
-	}
+    @Override
+    public String getUsedBundle() {
+        return "resources/AcquisitionResources";
+    }
 
 }

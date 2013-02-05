@@ -39,40 +39,40 @@ import pt.ist.expenditureTrackingSystem.domain.dto.CommitmentNumberBean;
  */
 public class CommitFunds extends WorkflowActivity<RegularAcquisitionProcess, CommitFundsActivityInformation> {
 
-	@Override
-	public boolean isActive(final RegularAcquisitionProcess process, final User user) {
-		return isUserProcessOwner(process, user) && process.getAcquisitionProcessState().isAuthorized()
-				&& process.isPendingCommitmentByUser(user);
-	}
+    @Override
+    public boolean isActive(final RegularAcquisitionProcess process, final User user) {
+        return isUserProcessOwner(process, user) && process.getAcquisitionProcessState().isAuthorized()
+                && process.isPendingCommitmentByUser(user);
+    }
 
-	@Override
-	protected void process(final CommitFundsActivityInformation activityInformation) {
-		for (final CommitmentNumberBean commitmentNumberBean : activityInformation.getCommitmentNumberBeans()) {
-			final Financer financer = commitmentNumberBean.getFinancer();
-			final String commitmentNumber = commitmentNumberBean.getCommitmentNumber();
-			financer.setCommitmentNumber(commitmentNumber);
-		}
-		activityInformation.getProcess().releaseProcess();
-	}
+    @Override
+    protected void process(final CommitFundsActivityInformation activityInformation) {
+        for (final CommitmentNumberBean commitmentNumberBean : activityInformation.getCommitmentNumberBeans()) {
+            final Financer financer = commitmentNumberBean.getFinancer();
+            final String commitmentNumber = commitmentNumberBean.getCommitmentNumber();
+            financer.setCommitmentNumber(commitmentNumber);
+        }
+        activityInformation.getProcess().releaseProcess();
+    }
 
-	@Override
-	public ActivityInformation<RegularAcquisitionProcess> getActivityInformation(final RegularAcquisitionProcess process) {
-		return new CommitFundsActivityInformation(process, this);
-	}
+    @Override
+    public ActivityInformation<RegularAcquisitionProcess> getActivityInformation(final RegularAcquisitionProcess process) {
+        return new CommitFundsActivityInformation(process, this);
+    }
 
-	@Override
-	public String getLocalizedName() {
-		return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
-	}
+    @Override
+    public String getLocalizedName() {
+        return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+    }
 
-	@Override
-	public String getUsedBundle() {
-		return "resources/AcquisitionResources";
-	}
+    @Override
+    public String getUsedBundle() {
+        return "resources/AcquisitionResources";
+    }
 
-	@Override
-	public boolean isDefaultInputInterfaceUsed() {
-		return false;
-	}
+    @Override
+    public boolean isDefaultInputInterfaceUsed() {
+        return false;
+    }
 
 }

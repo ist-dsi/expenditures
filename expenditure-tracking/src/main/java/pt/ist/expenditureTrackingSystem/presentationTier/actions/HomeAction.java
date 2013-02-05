@@ -54,43 +54,43 @@ import pt.utl.ist.fenix.tools.util.CollectionPager;
  */
 public class HomeAction extends BaseAction {
 
-	private static final int REQUESTS_PER_PAGE = 25;
+    private static final int REQUESTS_PER_PAGE = 25;
 
-	public final ActionForward firstPage(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-			final HttpServletResponse response) throws Exception {
-		final Person person = getLoggedPerson();
-		if (person != null) {
-			final Set<AcquisitionProcess> pendingAuthorizationAcquisitionProcesses =
-					person.findAcquisitionProcessesPendingAuthorization();
-			request.setAttribute("pendingAuthorizationAcquisitionProcesses", pendingAuthorizationAcquisitionProcesses);
-		} else {
-			return showAcquisitionAnnouncements(mapping, form, request, response);
-		}
-		return forward(request, "/hello.jsp");
-	}
+    public final ActionForward firstPage(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+            final HttpServletResponse response) throws Exception {
+        final Person person = getLoggedPerson();
+        if (person != null) {
+            final Set<AcquisitionProcess> pendingAuthorizationAcquisitionProcesses =
+                    person.findAcquisitionProcessesPendingAuthorization();
+            request.setAttribute("pendingAuthorizationAcquisitionProcesses", pendingAuthorizationAcquisitionProcesses);
+        } else {
+            return showAcquisitionAnnouncements(mapping, form, request, response);
+        }
+        return forward(request, "/hello.jsp");
+    }
 
-	public final ActionForward showAcquisitionAnnouncements(final ActionMapping mapping, final ActionForm form,
-			final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+    public final ActionForward showAcquisitionAnnouncements(final ActionMapping mapping, final ActionForm form,
+            final HttpServletRequest request, final HttpServletResponse response) throws Exception {
 
-		ArrayList<Announcement> approvedList = new ArrayList<Announcement>();
-		for (CCPAnnouncement announcement : Announcement.getAnnouncements(CCPAnnouncement.class)) {
-			if (announcement.getAnnouncementProcess().isProcessInState(AnnouncementProcessStateType.APPROVED)) {
-				approvedList.add(announcement);
-			}
-		}
+        ArrayList<Announcement> approvedList = new ArrayList<Announcement>();
+        for (CCPAnnouncement announcement : Announcement.getAnnouncements(CCPAnnouncement.class)) {
+            if (announcement.getAnnouncementProcess().isProcessInState(AnnouncementProcessStateType.APPROVED)) {
+                approvedList.add(announcement);
+            }
+        }
 
-		final CollectionPager<Announcement> pager =
-				new CollectionPager<Announcement>((Collection) approvedList, REQUESTS_PER_PAGE);
+        final CollectionPager<Announcement> pager =
+                new CollectionPager<Announcement>((Collection) approvedList, REQUESTS_PER_PAGE);
 
-		request.setAttribute("collectionPager", pager);
-		request.setAttribute("numberOfPages", Integer.valueOf(pager.getNumberOfPages()));
+        request.setAttribute("collectionPager", pager);
+        request.setAttribute("numberOfPages", Integer.valueOf(pager.getNumberOfPages()));
 
-		final String pageParameter = request.getParameter("pageNumber");
-		final Integer page = StringUtils.isEmpty(pageParameter) ? Integer.valueOf(1) : Integer.valueOf(pageParameter);
-		request.setAttribute("pageNumber", page);
-		request.setAttribute("announcements", pager.getPage(page));
+        final String pageParameter = request.getParameter("pageNumber");
+        final Integer page = StringUtils.isEmpty(pageParameter) ? Integer.valueOf(1) : Integer.valueOf(pageParameter);
+        request.setAttribute("pageNumber", page);
+        request.setAttribute("announcements", pager.getPage(page));
 
-		return forward(request, "/public/viewAnnouncements.jsp");
-	}
+        return forward(request, "/public/viewAnnouncements.jsp");
+    }
 
 }

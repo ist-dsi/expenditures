@@ -39,13 +39,13 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
  */
 public class MySearchesWidget extends WidgetController {
 
-	@Override
-	public void doView(WidgetRequest request) {
-		request.setAttribute("person", Person.getLoggedPerson());
-	}
+    @Override
+    public void doView(WidgetRequest request) {
+        request.setAttribute("person", Person.getLoggedPerson());
+    }
 
-	@Override
-	public String getWidgetDescription() {
-		return BundleUtil.getStringFromResourceBundle("resources/ExpenditureResources", "widget.description.MySearchesWidget");
-	}
+    @Override
+    public String getWidgetDescription() {
+        return BundleUtil.getStringFromResourceBundle("resources/ExpenditureResources", "widget.description.MySearchesWidget");
+    }
 }

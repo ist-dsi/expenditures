@@ -9,24 +9,24 @@ import module.workflow.activities.WorkflowActivity;
 
 public class AuthoriseParticipantActivityInformation extends ActivityInformation<MissionProcess> implements Serializable {
 
-	private PersonMissionAuthorization personMissionAuthorization;
+    private PersonMissionAuthorization personMissionAuthorization;
 
-	public AuthoriseParticipantActivityInformation(final MissionProcess missionProcess,
-			final WorkflowActivity<MissionProcess, ? extends ActivityInformation<MissionProcess>> activity) {
-		super(missionProcess, activity);
-	}
+    public AuthoriseParticipantActivityInformation(final MissionProcess missionProcess,
+            final WorkflowActivity<MissionProcess, ? extends ActivityInformation<MissionProcess>> activity) {
+        super(missionProcess, activity);
+    }
 
-	@Override
-	public boolean hasAllneededInfo() {
-		return super.hasAllneededInfo() && personMissionAuthorization != null;
-	}
+    @Override
+    public boolean hasAllneededInfo() {
+        return super.hasAllneededInfo() && personMissionAuthorization != null;
+    }
 
-	public PersonMissionAuthorization getPersonMissionAuthorization() {
-		return personMissionAuthorization;
-	}
+    public PersonMissionAuthorization getPersonMissionAuthorization() {
+        return personMissionAuthorization;
+    }
 
-	public void setPersonMissionAuthorization(final PersonMissionAuthorization personMissionAuthorization) {
-		this.personMissionAuthorization = personMissionAuthorization;
-	}
+    public void setPersonMissionAuthorization(final PersonMissionAuthorization personMissionAuthorization) {
+        this.personMissionAuthorization = personMissionAuthorization;
+    }
 
 }

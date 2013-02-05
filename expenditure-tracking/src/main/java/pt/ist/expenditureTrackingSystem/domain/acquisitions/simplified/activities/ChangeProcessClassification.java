@@ -38,36 +38,36 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
  * 
  */
 public class ChangeProcessClassification extends
-		WorkflowActivity<SimplifiedProcedureProcess, ChangeProcessClassificationActivityInformation> {
+        WorkflowActivity<SimplifiedProcedureProcess, ChangeProcessClassificationActivityInformation> {
 
-	@Override
-	public boolean isActive(SimplifiedProcedureProcess process, User user) {
-		Person loggedPerson = user.getExpenditurePerson();
-		return loggedPerson != null
-				&& (loggedPerson.getUsername().equals("ist23742") || loggedPerson.getUsername().equals("ist24439"));
+    @Override
+    public boolean isActive(SimplifiedProcedureProcess process, User user) {
+        Person loggedPerson = user.getExpenditurePerson();
+        return loggedPerson != null
+                && (loggedPerson.getUsername().equals("ist23742") || loggedPerson.getUsername().equals("ist24439"));
 //	return loggedPerson == process.getRequestor()
 //		&& process.getAcquisitionProcessState().isInGenesis()
 //		&& ExpenditureTrackingSystem.getInstance()
 //			.getAllowdProcessClassifications(SimplifiedProcedureProcess.class).size() > 1;
-	}
+    }
 
-	@Override
-	protected void process(ChangeProcessClassificationActivityInformation activityInformation) {
-		activityInformation.getProcess().setProcessClassification(activityInformation.getClassification());
-	}
+    @Override
+    protected void process(ChangeProcessClassificationActivityInformation activityInformation) {
+        activityInformation.getProcess().setProcessClassification(activityInformation.getClassification());
+    }
 
-	@Override
-	public ActivityInformation<SimplifiedProcedureProcess> getActivityInformation(SimplifiedProcedureProcess process) {
-		return new ChangeProcessClassificationActivityInformation(process, this);
-	}
+    @Override
+    public ActivityInformation<SimplifiedProcedureProcess> getActivityInformation(SimplifiedProcedureProcess process) {
+        return new ChangeProcessClassificationActivityInformation(process, this);
+    }
 
-	@Override
-	public String getLocalizedName() {
-		return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
-	}
+    @Override
+    public String getLocalizedName() {
+        return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+    }
 
-	@Override
-	public String getUsedBundle() {
-		return "resources/AcquisitionResources";
-	}
+    @Override
+    public String getUsedBundle() {
+        return "resources/AcquisitionResources";
+    }
 }

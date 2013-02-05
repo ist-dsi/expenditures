@@ -43,56 +43,56 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionPr
  * 
  */
 public class FundAllocationExpirationDate extends
-		WorkflowActivity<RegularAcquisitionProcess, ActivityInformation<RegularAcquisitionProcess>> {
+        WorkflowActivity<RegularAcquisitionProcess, ActivityInformation<RegularAcquisitionProcess>> {
 
-	public static class FundAllocationNotAllowedException extends DomainException {
+    public static class FundAllocationNotAllowedException extends DomainException {
 
-		public FundAllocationNotAllowedException() {
-			super("acquisitionRequestItem.message.exception.fundAllocationNotAllowed", DomainException
-					.getResourceFor("resources/AcquisitionResources"));
-		}
-	}
+        public FundAllocationNotAllowedException() {
+            super("acquisitionRequestItem.message.exception.fundAllocationNotAllowed", DomainException
+                    .getResourceFor("resources/AcquisitionResources"));
+        }
+    }
 
-	private void checkSupplierLimit(final RegularAcquisitionProcess process) {
-		process.checkSupplierLimit();
-	}
+    private void checkSupplierLimit(final RegularAcquisitionProcess process) {
+        process.checkSupplierLimit();
+    }
 
-	@Override
-	public boolean isActive(RegularAcquisitionProcess process, User user) {
-		return isUserProcessOwner(process, user) && ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user)
-				&& process.getAcquisitionProcessState().isActive() && !process.isPendingFundAllocation()
-				&& !process.getAcquisitionRequest().hasAnyFundAllocationId()
-				&& process.getAcquisitionRequest().isSubmittedForFundsAllocationByAllResponsibles();
-	}
+    @Override
+    public boolean isActive(RegularAcquisitionProcess process, User user) {
+        return isUserProcessOwner(process, user) && ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user)
+                && process.getAcquisitionProcessState().isActive() && !process.isPendingFundAllocation()
+                && !process.getAcquisitionRequest().hasAnyFundAllocationId()
+                && process.getAcquisitionRequest().isSubmittedForFundsAllocationByAllResponsibles();
+    }
 
-	@Override
-	protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
-		RegularAcquisitionProcess process = activityInformation.getProcess();
-		if (process.getAcquisitionRequest().isSubmittedForFundsAllocationByAllResponsibles()) {
-			if (!process.getShouldSkipSupplierFundAllocation()) {
-				checkSupplierLimit(process);
-				LocalDate now = new LocalDate();
-				process.setFundAllocationExpirationDate(now.plusDays(90));
-			} else {
-				process.skipFundAllocation();
-			}
-		}
+    @Override
+    protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
+        RegularAcquisitionProcess process = activityInformation.getProcess();
+        if (process.getAcquisitionRequest().isSubmittedForFundsAllocationByAllResponsibles()) {
+            if (!process.getShouldSkipSupplierFundAllocation()) {
+                checkSupplierLimit(process);
+                LocalDate now = new LocalDate();
+                process.setFundAllocationExpirationDate(now.plusDays(90));
+            } else {
+                process.skipFundAllocation();
+            }
+        }
 
-		process.allocateFundsToSupplier();
+        process.allocateFundsToSupplier();
 
-		if (ExternalIntegration.isActive()) {
-			process.createFundAllocationRequest(false);
-		}
-	}
+        if (ExternalIntegration.isActive()) {
+            process.createFundAllocationRequest(false);
+        }
+    }
 
-	@Override
-	public String getLocalizedName() {
-		return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
-	}
+    @Override
+    public String getLocalizedName() {
+        return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+    }
 
-	@Override
-	public String getUsedBundle() {
-		return "resources/AcquisitionResources";
-	}
+    @Override
+    public String getUsedBundle() {
+        return "resources/AcquisitionResources";
+    }
 
 }

@@ -40,35 +40,35 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess
  */
 public class SubmitForInvoiceConfirmation extends WorkflowActivity<RefundProcess, ActivityInformation<RefundProcess>> {
 
-	private boolean isRealValueFullyAttributeToItems(Set<RefundItem> requestItems) {
-		for (RefundItem item : requestItems) {
-			if (item.isAnyRefundInvoiceAvailable() && !item.isRealValueFullyAttributedToUnits()) {
-				return false;
-			}
-		}
-		return true;
-	}
+    private boolean isRealValueFullyAttributeToItems(Set<RefundItem> requestItems) {
+        for (RefundItem item : requestItems) {
+            if (item.isAnyRefundInvoiceAvailable() && !item.isRealValueFullyAttributedToUnits()) {
+                return false;
+            }
+        }
+        return true;
+    }
 
-	@Override
-	public boolean isActive(RefundProcess process, User user) {
-		return process.getRequestor() == user.getExpenditurePerson() && isUserProcessOwner(process, user)
-				&& process.isInAuthorizedState() && !process.getRefundableInvoices().isEmpty()
-				&& isRealValueFullyAttributeToItems(process.getRequest().getRefundItemsSet());
-	}
+    @Override
+    public boolean isActive(RefundProcess process, User user) {
+        return process.getRequestor() == user.getExpenditurePerson() && isUserProcessOwner(process, user)
+                && process.isInAuthorizedState() && !process.getRefundableInvoices().isEmpty()
+                && isRealValueFullyAttributeToItems(process.getRequest().getRefundItemsSet());
+    }
 
-	@Override
-	protected void process(ActivityInformation<RefundProcess> activityInformation) {
-		activityInformation.getProcess().submitForInvoiceConfirmation();
-	}
+    @Override
+    protected void process(ActivityInformation<RefundProcess> activityInformation) {
+        activityInformation.getProcess().submitForInvoiceConfirmation();
+    }
 
-	@Override
-	public String getLocalizedName() {
-		return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
-	}
+    @Override
+    public String getLocalizedName() {
+        return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+    }
 
-	@Override
-	public String getUsedBundle() {
-		return "resources/AcquisitionResources";
-	}
+    @Override
+    public String getUsedBundle() {
+        return "resources/AcquisitionResources";
+    }
 
 }

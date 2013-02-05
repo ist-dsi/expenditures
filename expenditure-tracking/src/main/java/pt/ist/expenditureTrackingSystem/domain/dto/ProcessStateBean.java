@@ -4,16 +4,16 @@ import java.io.Serializable;
 
 public class ProcessStateBean implements Serializable {
 
-	private String justification;
+    private String justification;
 
-	public ProcessStateBean() {
-	}
+    public ProcessStateBean() {
+    }
 
-	public String getJustification() {
-		return justification;
-	}
+    public String getJustification() {
+        return justification;
+    }
 
-	public void setJustification(String justification) {
-		this.justification = justification;
-	}
+    public void setJustification(String justification) {
+        this.justification = justification;
+    }
 }

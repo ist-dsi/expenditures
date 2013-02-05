@@ -57,96 +57,96 @@ import pt.ist.fenixframework.plugins.fileSupport.domain.GenericFile;
  */
 public class AfterTheFactAcquisitionProcessAction extends BaseAction {
 
-	public ActionForward prepareCreateAfterTheFactAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
-			final HttpServletRequest request, final HttpServletResponse response) {
-		final AfterTheFactAcquisitionProcessBean afterTheFactAcquisitionProcessBean = new AfterTheFactAcquisitionProcessBean();
-		request.setAttribute("afterTheFactAcquisitionProcessBean", afterTheFactAcquisitionProcessBean);
-		return forward(request, "/acquisitions/createAfterTheFactAcquisitionProcess.jsp");
-	}
+    public ActionForward prepareCreateAfterTheFactAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
+            final HttpServletRequest request, final HttpServletResponse response) {
+        final AfterTheFactAcquisitionProcessBean afterTheFactAcquisitionProcessBean = new AfterTheFactAcquisitionProcessBean();
+        request.setAttribute("afterTheFactAcquisitionProcessBean", afterTheFactAcquisitionProcessBean);
+        return forward(request, "/acquisitions/createAfterTheFactAcquisitionProcess.jsp");
+    }
 
-	public ActionForward createNewAfterTheFactAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
-			final HttpServletRequest request, final HttpServletResponse response) {
-		AfterTheFactAcquisitionProcessBean afterTheFactAcquisitionProcessBean = getRenderedObject();
-		final AfterTheFactAcquisitionProcess afterTheFactAcquisitionProcess;
-		try {
-			afterTheFactAcquisitionProcess =
-					AfterTheFactAcquisitionProcess.createNewAfterTheFactAcquisitionProcess(afterTheFactAcquisitionProcessBean);
-		} catch (DomainException e) {
-			addMessage(request, e.getMessage());
-			return prepareCreateAfterTheFactAcquisitionProcess(mapping, form, request, response);
-		}
-		return ProcessManagement.forwardToProcess(afterTheFactAcquisitionProcess);
-	}
+    public ActionForward createNewAfterTheFactAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
+            final HttpServletRequest request, final HttpServletResponse response) {
+        AfterTheFactAcquisitionProcessBean afterTheFactAcquisitionProcessBean = getRenderedObject();
+        final AfterTheFactAcquisitionProcess afterTheFactAcquisitionProcess;
+        try {
+            afterTheFactAcquisitionProcess =
+                    AfterTheFactAcquisitionProcess.createNewAfterTheFactAcquisitionProcess(afterTheFactAcquisitionProcessBean);
+        } catch (DomainException e) {
+            addMessage(request, e.getMessage());
+            return prepareCreateAfterTheFactAcquisitionProcess(mapping, form, request, response);
+        }
+        return ProcessManagement.forwardToProcess(afterTheFactAcquisitionProcess);
+    }
 
-	public ActionForward prepareImport(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-			final HttpServletResponse response) {
-		final AfterTheFactAcquisitionsImportBean afterTheFactAcquisitionsImportBean = new AfterTheFactAcquisitionsImportBean();
-		request.setAttribute("afterTheFactAcquisitionsImportBean", afterTheFactAcquisitionsImportBean);
-		return forward(request, "/acquisitions/importAfterTheFactAcquisitions.jsp");
-	}
+    public ActionForward prepareImport(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+            final HttpServletResponse response) {
+        final AfterTheFactAcquisitionsImportBean afterTheFactAcquisitionsImportBean = new AfterTheFactAcquisitionsImportBean();
+        request.setAttribute("afterTheFactAcquisitionsImportBean", afterTheFactAcquisitionsImportBean);
+        return forward(request, "/acquisitions/importAfterTheFactAcquisitions.jsp");
+    }
 
-	public ActionForward processImport(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-			final HttpServletResponse response) {
-		final AfterTheFactAcquisitionsImportBean afterTheFactAcquisitionsImportBean = getRenderedObject();
-		final byte[] contents = consumeInputStream(afterTheFactAcquisitionsImportBean);
-		afterTheFactAcquisitionsImportBean.setFileContents(contents);
-		afterTheFactAcquisitionsImportBean.setCreateData(false);
-		afterTheFactAcquisitionsImportBean.importAcquisitions();
-		request.setAttribute("afterTheFactAcquisitionsImportBean", afterTheFactAcquisitionsImportBean);
-		return forward(request, "/acquisitions/viewImportAfterTheFactAcquisitionsResult.jsp");
-	}
+    public ActionForward processImport(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+            final HttpServletResponse response) {
+        final AfterTheFactAcquisitionsImportBean afterTheFactAcquisitionsImportBean = getRenderedObject();
+        final byte[] contents = consumeInputStream(afterTheFactAcquisitionsImportBean);
+        afterTheFactAcquisitionsImportBean.setFileContents(contents);
+        afterTheFactAcquisitionsImportBean.setCreateData(false);
+        afterTheFactAcquisitionsImportBean.importAcquisitions();
+        request.setAttribute("afterTheFactAcquisitionsImportBean", afterTheFactAcquisitionsImportBean);
+        return forward(request, "/acquisitions/viewImportAfterTheFactAcquisitionsResult.jsp");
+    }
 
-	public ActionForward importAcquisitions(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-			final HttpServletResponse response) {
-		final AfterTheFactAcquisitionsImportBean afterTheFactAcquisitionsImportBean = getRenderedObject();
-		try {
-			afterTheFactAcquisitionsImportBean.reset();
-			afterTheFactAcquisitionsImportBean.setCreateData(true);
-			afterTheFactAcquisitionsImportBean.importAcquisitions();
-		} catch (ImportError ex) {
-			// just show the page...
-		}
-		request.setAttribute("afterTheFactAcquisitionsImportBean", afterTheFactAcquisitionsImportBean);
-		return forward(request, "/acquisitions/viewImportAfterTheFactAcquisitionsResult.jsp");
-	}
+    public ActionForward importAcquisitions(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+            final HttpServletResponse response) {
+        final AfterTheFactAcquisitionsImportBean afterTheFactAcquisitionsImportBean = getRenderedObject();
+        try {
+            afterTheFactAcquisitionsImportBean.reset();
+            afterTheFactAcquisitionsImportBean.setCreateData(true);
+            afterTheFactAcquisitionsImportBean.importAcquisitions();
+        } catch (ImportError ex) {
+            // just show the page...
+        }
+        request.setAttribute("afterTheFactAcquisitionsImportBean", afterTheFactAcquisitionsImportBean);
+        return forward(request, "/acquisitions/viewImportAfterTheFactAcquisitionsResult.jsp");
+    }
 
-	public ActionForward listImports(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-			final HttpServletResponse response) {
+    public ActionForward listImports(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+            final HttpServletResponse response) {
 
-		List<ImportFile> files = new ArrayList(GenericFile.getFiles(ImportFile.class));
-		for (final Iterator<ImportFile> i = files.iterator(); i.hasNext();) {
-			final ImportFile importFile = i.next();
-			if (!importFile.isConnectedToCurrentHost()) {
-				i.remove();
-			}
-		}
-		request.setAttribute("files", files);
-		return forward(request, "/acquisitions/listImportAfterTheFactAcquisitionsResult.jsp");
-	}
+        List<ImportFile> files = new ArrayList(GenericFile.getFiles(ImportFile.class));
+        for (final Iterator<ImportFile> i = files.iterator(); i.hasNext();) {
+            final ImportFile importFile = i.next();
+            if (!importFile.isConnectedToCurrentHost()) {
+                i.remove();
+            }
+        }
+        request.setAttribute("files", files);
+        return forward(request, "/acquisitions/listImportAfterTheFactAcquisitionsResult.jsp");
+    }
 
-	public ActionForward downloadImportFile(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-			final HttpServletResponse response) throws IOException {
+    public ActionForward downloadImportFile(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+            final HttpServletResponse response) throws IOException {
 
-		ImportFile file = getDomainObject(request, "fileOID");
-		return download(response, file);
-	}
+        ImportFile file = getDomainObject(request, "fileOID");
+        return download(response, file);
+    }
 
-	public ActionForward cancelImportFile(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-			final HttpServletResponse response) {
+    public ActionForward cancelImportFile(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+            final HttpServletResponse response) {
 
-		ImportFile file = getDomainObject(request, "fileOID");
-		file.cancel();
+        ImportFile file = getDomainObject(request, "fileOID");
+        file.cancel();
 
-		return listImports(mapping, form, request, response);
-	}
+        return listImports(mapping, form, request, response);
+    }
 
-	public ActionForward enableImportFile(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-			final HttpServletResponse response) {
+    public ActionForward enableImportFile(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+            final HttpServletResponse response) {
 
-		ImportFile file = getDomainObject(request, "fileOID");
-		file.reenable();
+        ImportFile file = getDomainObject(request, "fileOID");
+        file.reenable();
 
-		return listImports(mapping, form, request, response);
-	}
+        return listImports(mapping, form, request, response);
+    }
 
 }

@@ -85,266 +85,266 @@ import com.vaadin.ui.themes.BaseTheme;
  */
 public class MissionParticipationMap extends CustomComponent implements EmbeddedComponentContainer {
 
-	private class ContextForm extends Form {
+    private class ContextForm extends Form {
 
-		private class FormButtons extends HorizontalLayout {
+        private class FormButtons extends HorizontalLayout {
 
-			private class SubmitButton extends Button implements Button.ClickListener {
+            private class SubmitButton extends Button implements Button.ClickListener {
 
-				private SubmitButton() {
-					super(MissionSystem.getMessage("label.submit"));
-					final ClickListener listener = this;
-					addListener(listener);
-				}
+                private SubmitButton() {
+                    super(MissionSystem.getMessage("label.submit"));
+                    final ClickListener listener = this;
+                    addListener(listener);
+                }
 
-				@Override
-				public void buttonClick(final ClickEvent event) {
-					final Date date = (Date) yearMonthField.getValue();
-					final Calendar calendar = Calendar.getInstance();
-					calendar.setTime(date);
-					year = calendar.get(Calendar.YEAR);
-					month = calendar.get(Calendar.MONTH) + 1;
+                @Override
+                public void buttonClick(final ClickEvent event) {
+                    final Date date = (Date) yearMonthField.getValue();
+                    final Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(date);
+                    year = calendar.get(Calendar.YEAR);
+                    month = calendar.get(Calendar.MONTH) + 1;
 
-					final Collection<AccountabilityType> selectedAccountabilityTypes =
-							(Collection<AccountabilityType>) accountabilityTypesField.getValue();
-					accountabilityTypes.clear();
-					accountabilityTypes.addAll(selectedAccountabilityTypes);
+                    final Collection<AccountabilityType> selectedAccountabilityTypes =
+                            (Collection<AccountabilityType>) accountabilityTypesField.getValue();
+                    accountabilityTypes.clear();
+                    accountabilityTypes.addAll(selectedAccountabilityTypes);
 
-					resetTimeTable();
-				}
-			}
+                    resetTimeTable();
+                }
+            }
 
-			private FormButtons() {
-				setSpacing(true);
-				setMargin(false);
-				addComponent(new SubmitButton());
-			}
-		}
+            private FormButtons() {
+                setSpacing(true);
+                setMargin(false);
+                addComponent(new SubmitButton());
+            }
+        }
 
-		private final InlineDateField yearMonthField = new InlineDateField(MissionSystem.getMessage("label.select.year.month"));
-		private final ListSelect accountabilityTypesField = new ListSelect(
-				MissionSystem.getMessage("label.select.accountabilityTypes"));
+        private final InlineDateField yearMonthField = new InlineDateField(MissionSystem.getMessage("label.select.year.month"));
+        private final ListSelect accountabilityTypesField = new ListSelect(
+                MissionSystem.getMessage("label.select.accountabilityTypes"));
 
-		private ContextForm() {
-			setWriteThrough(false);
+        private ContextForm() {
+            setWriteThrough(false);
 
-			yearMonthField.setValue(new DateTime(year, month, 1, 0, 0, 0, 0).toDate());
-			yearMonthField.setResolution(InlineDateField.RESOLUTION_MONTH);
-			addField("yearMonth", yearMonthField);
+            yearMonthField.setValue(new DateTime(year, month, 1, 0, 0, 0, 0).toDate());
+            yearMonthField.setResolution(InlineDateField.RESOLUTION_MONTH);
+            addField("yearMonth", yearMonthField);
 
-			accountabilityTypesField.addContainerProperty("name", String.class, null);
-			final Set<AccountabilityType> accountabilityTypes =
-					MissionSystem.getInstance().getAccountabilityTypesRequireingAuthorization();
-			for (final AccountabilityType accountabilityType : accountabilityTypes) {
-				final Item item = accountabilityTypesField.addItem(accountabilityType);
-				final Property itemProperty = item.getItemProperty("name");
-				itemProperty.setValue(accountabilityType.getName().toString());
-			}
-			accountabilityTypesField.setRows(accountabilityTypes.size());
-			accountabilityTypesField.setNullSelectionAllowed(false);
-			accountabilityTypesField.setMultiSelect(true);
-			accountabilityTypesField.setValue(Collections.unmodifiableSet(accountabilityTypes));
-			addField("accountabilityTypes", accountabilityTypesField);
-		}
+            accountabilityTypesField.addContainerProperty("name", String.class, null);
+            final Set<AccountabilityType> accountabilityTypes =
+                    MissionSystem.getInstance().getAccountabilityTypesRequireingAuthorization();
+            for (final AccountabilityType accountabilityType : accountabilityTypes) {
+                final Item item = accountabilityTypesField.addItem(accountabilityType);
+                final Property itemProperty = item.getItemProperty("name");
+                itemProperty.setValue(accountabilityType.getName().toString());
+            }
+            accountabilityTypesField.setRows(accountabilityTypes.size());
+            accountabilityTypesField.setNullSelectionAllowed(false);
+            accountabilityTypesField.setMultiSelect(true);
+            accountabilityTypesField.setValue(Collections.unmodifiableSet(accountabilityTypes));
+            addField("accountabilityTypes", accountabilityTypesField);
+        }
 
-		private FormButtons getFormButtons() {
-			return new FormButtons();
-		}
+        private FormButtons getFormButtons() {
+            return new FormButtons();
+        }
 
-	}
+    }
 
-	private class ExportButton extends Button implements Button.ClickListener, StreamSource {
+    private class ExportButton extends Button implements Button.ClickListener, StreamSource {
 
-		private ExportButton() {
-			super(MissionSystem.getMessage("label.export"));
-			setStyleName(BaseTheme.BUTTON_LINK);
-			final ClickListener listener = this;
-			addListener(listener);
-			final Resource icon = new ThemeResource("../../../images/fileManagement/fileicons/odc.png");
-			setIcon(icon);
-		}
+        private ExportButton() {
+            super(MissionSystem.getMessage("label.export"));
+            setStyleName(BaseTheme.BUTTON_LINK);
+            final ClickListener listener = this;
+            addListener(listener);
+            final Resource icon = new ThemeResource("../../../images/fileManagement/fileicons/odc.png");
+            setIcon(icon);
+        }
 
-		@Override
-		public InputStream getStream() {
-			final Spreadsheet spreadsheet = timeTable.export();
-			final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-			try {
-				spreadsheet.exportToXLSSheet(outputStream);
-			} catch (final IOException e) {
-				throw new Error(e);
-			}
-			return new ByteArrayInputStream(outputStream.toByteArray());
-		}
+        @Override
+        public InputStream getStream() {
+            final Spreadsheet spreadsheet = timeTable.export();
+            final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            try {
+                spreadsheet.exportToXLSSheet(outputStream);
+            } catch (final IOException e) {
+                throw new Error(e);
+            }
+            return new ByteArrayInputStream(outputStream.toByteArray());
+        }
 
-		@Override
-		public void buttonClick(final ClickEvent event) {
-			final ExportButton streamSource = this;
-			final String filename =
-					MissionSystem.getMessage("label.excel.mission.filename", Integer.toString(year), Integer.toString(month));
-			final StreamResource resource = new StreamResource(streamSource, filename, getApplication());
-			resource.setMIMEType("application/vnd.ms-excel");
-			getWindow().open(resource);
-		}
+        @Override
+        public void buttonClick(final ClickEvent event) {
+            final ExportButton streamSource = this;
+            final String filename =
+                    MissionSystem.getMessage("label.excel.mission.filename", Integer.toString(year), Integer.toString(month));
+            final StreamResource resource = new StreamResource(streamSource, filename, getApplication());
+            resource.setMIMEType("application/vnd.ms-excel");
+            getWindow().open(resource);
+        }
 
-	}
+    }
 
-	private Unit unit;
-	private int year;
-	private int month;
-	private final List<AccountabilityType> accountabilityTypes = new ArrayList<AccountabilityType>();
-	private final boolean includeSubUnits = true;
+    private Unit unit;
+    private int year;
+    private int month;
+    private final List<AccountabilityType> accountabilityTypes = new ArrayList<AccountabilityType>();
+    private final boolean includeSubUnits = true;
 
-	private TimeTable timeTable = null;
+    private TimeTable timeTable = null;
 
-	public MissionParticipationMap() {
-		accountabilityTypes.addAll(MissionSystem.getInstance().getAccountabilityTypesRequireingAuthorization());
-	}
+    public MissionParticipationMap() {
+        accountabilityTypes.addAll(MissionSystem.getInstance().getAccountabilityTypesRequireingAuthorization());
+    }
 
-	@Override
-	public boolean isAllowedToOpen(Map<String, String> arguments) {
-		return true;
-	}
+    @Override
+    public boolean isAllowedToOpen(Map<String, String> arguments) {
+        return true;
+    }
 
-	@Override
-	public void setArguments(Map<String, String> arguments) {
-		final String unitOID = arguments.get("unit");
-		final String yearArg = arguments.get("year");
-		final String monthArg = arguments.get("month");
+    @Override
+    public void setArguments(Map<String, String> arguments) {
+        final String unitOID = arguments.get("unit");
+        final String yearArg = arguments.get("year");
+        final String monthArg = arguments.get("month");
 
-		unit = AbstractDomainObject.fromExternalId(unitOID);
+        unit = AbstractDomainObject.fromExternalId(unitOID);
 
-		if (unit == null) {
-			return;
-		}
+        if (unit == null) {
+            return;
+        }
 
-		year = StringUtils.isEmpty(yearArg) ? new DateTime().getYear() : Integer.parseInt(yearArg);
-		month = StringUtils.isEmpty(monthArg) ? new DateTime().getMonthOfYear() : Integer.parseInt(monthArg);
-	}
+        year = StringUtils.isEmpty(yearArg) ? new DateTime().getYear() : Integer.parseInt(yearArg);
+        month = StringUtils.isEmpty(monthArg) ? new DateTime().getMonthOfYear() : Integer.parseInt(monthArg);
+    }
 
-	@Override
-	public void attach() {
-		super.attach();
+    @Override
+    public void attach() {
+        super.attach();
 
-		final VerticalLayout layout = new VerticalLayout();
-		setCompositionRoot(layout);
-		layout.setSpacing(false);
-		layout.setMargin(false);
+        final VerticalLayout layout = new VerticalLayout();
+        setCompositionRoot(layout);
+        layout.setSpacing(false);
+        layout.setMargin(false);
 
-		final Label title = new Label("<h2>" + unit.getPresentationName() + "</h2>", Label.CONTENT_XHTML);
-		layout.addComponent(title);
+        final Label title = new Label("<h2>" + unit.getPresentationName() + "</h2>", Label.CONTENT_XHTML);
+        layout.addComponent(title);
 
-		if (MissionOrganizationAction.hasPermission(unit)) {
-			final ContextForm contextForm = new ContextForm();
-			layout.addComponent(contextForm);
+        if (MissionOrganizationAction.hasPermission(unit)) {
+            final ContextForm contextForm = new ContextForm();
+            layout.addComponent(contextForm);
 
-			final ContextForm.FormButtons formButtons = contextForm.getFormButtons();
-			layout.addComponent(formButtons);
+            final ContextForm.FormButtons formButtons = contextForm.getFormButtons();
+            layout.addComponent(formButtons);
 
-			final ExportButton exportButton = new ExportButton();
-			layout.addComponent(exportButton);
-			layout.setComponentAlignment(exportButton, Alignment.MIDDLE_RIGHT);
+            final ExportButton exportButton = new ExportButton();
+            layout.addComponent(exportButton);
+            layout.setComponentAlignment(exportButton, Alignment.MIDDLE_RIGHT);
 
-			setTimeTable();
-		} else {
-			getWindow().showNotification(MissionSystem.getMessage("label.not.authorized"), null,
-					Notification.TYPE_WARNING_MESSAGE);
-		}
-	}
+            setTimeTable();
+        } else {
+            getWindow().showNotification(MissionSystem.getMessage("label.not.authorized"), null,
+                    Notification.TYPE_WARNING_MESSAGE);
+        }
+    }
 
-	private void resetTimeTable() {
-		final VerticalLayout layout = (VerticalLayout) getCompositionRoot();
-		layout.removeComponent(timeTable);
-		setTimeTable();
-	}
+    private void resetTimeTable() {
+        final VerticalLayout layout = (VerticalLayout) getCompositionRoot();
+        layout.removeComponent(timeTable);
+        setTimeTable();
+    }
 
-	private void setTimeTable() {
-		final VerticalLayout layout = (VerticalLayout) getCompositionRoot();
-		timeTable = new TimeTable(year, month, "");
-		fillTableInfo(timeTable);
-		layout.addComponent(timeTable);
-	}
+    private void setTimeTable() {
+        final VerticalLayout layout = (VerticalLayout) getCompositionRoot();
+        timeTable = new TimeTable(year, month, "");
+        fillTableInfo(timeTable);
+        layout.addComponent(timeTable);
+    }
 
-	private void fillTableInfo(final TimeTable timeTable) {
-		final MissionYear missionYear = MissionYear.findMissionYear(year);
-		for (final MissionProcess missionProcess : missionYear.getMissionProcessSet()) {
-			if (!missionProcess.isCanceled()) {
-				final Mission mission = missionProcess.getMission();
-				final LocalDate daparture = mission.getDaparture().toLocalDate();
-				final LocalDate arrival = mission.getArrival().toLocalDate();
-				final LocalDate nextDay = arrival.plusDays(1);
-				if (containsMission(daparture, arrival)) {
-					if (missionProcess.areAllParticipantsAuthorized()) {
-						for (LocalDate localDate = daparture; localDate.isBefore(nextDay); localDate = localDate.plusDays(1)) {
-							if (containsDay(localDate)) {
-								for (final Person person : mission.getParticipantesSet()) {
-									if (hasParentUnit(person, localDate)) {
-										timeTable.fillSlot(person.getPartyName().getContent(), localDate.getDayOfMonth());
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
+    private void fillTableInfo(final TimeTable timeTable) {
+        final MissionYear missionYear = MissionYear.findMissionYear(year);
+        for (final MissionProcess missionProcess : missionYear.getMissionProcessSet()) {
+            if (!missionProcess.isCanceled()) {
+                final Mission mission = missionProcess.getMission();
+                final LocalDate daparture = mission.getDaparture().toLocalDate();
+                final LocalDate arrival = mission.getArrival().toLocalDate();
+                final LocalDate nextDay = arrival.plusDays(1);
+                if (containsMission(daparture, arrival)) {
+                    if (missionProcess.areAllParticipantsAuthorized()) {
+                        for (LocalDate localDate = daparture; localDate.isBefore(nextDay); localDate = localDate.plusDays(1)) {
+                            if (containsDay(localDate)) {
+                                for (final Person person : mission.getParticipantesSet()) {
+                                    if (hasParentUnit(person, localDate)) {
+                                        timeTable.fillSlot(person.getPartyName().getContent(), localDate.getDayOfMonth());
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 
-	private boolean hasParentUnit(final Person person, final LocalDate localDate) {
-		for (final Accountability accountability : person.getParentAccountabilitiesSet()) {
-			if (accountability.contains(localDate)) {
-				final AccountabilityType accountabilityType = accountability.getAccountabilityType();
-				if (accountabilityTypes.contains(accountabilityType)) {
-					final Unit unit = (Unit) accountability.getParent();
-					if (hasParentUnit(unit, localDate)) {
-						return true;
-					}
-				}
-			}
-		}
-		return false;
-	}
+    private boolean hasParentUnit(final Person person, final LocalDate localDate) {
+        for (final Accountability accountability : person.getParentAccountabilitiesSet()) {
+            if (accountability.contains(localDate)) {
+                final AccountabilityType accountabilityType = accountability.getAccountabilityType();
+                if (accountabilityTypes.contains(accountabilityType)) {
+                    final Unit unit = (Unit) accountability.getParent();
+                    if (hasParentUnit(unit, localDate)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
 
-	private boolean hasParentUnit(final Unit unit, final LocalDate localDate) {
-		if (unit == this.unit) {
-			return true;
-		}
-		for (final Accountability accountability : unit.getParentAccountabilitiesSet()) {
-			if (accountability.contains(localDate)) {
-				final AccountabilityType accountabilityType = accountability.getAccountabilityType();
-				if (MissionSystem.getInstance().getAccountabilityTypesForUnits().contains(accountabilityType)) {
-					final Unit parent = (Unit) accountability.getParent();
-					if (hasParentUnit(parent, localDate)) {
-						return true;
-					}
-				}
-			}
-		}
-		return false;
-	}
+    private boolean hasParentUnit(final Unit unit, final LocalDate localDate) {
+        if (unit == this.unit) {
+            return true;
+        }
+        for (final Accountability accountability : unit.getParentAccountabilitiesSet()) {
+            if (accountability.contains(localDate)) {
+                final AccountabilityType accountabilityType = accountability.getAccountabilityType();
+                if (MissionSystem.getInstance().getAccountabilityTypesForUnits().contains(accountabilityType)) {
+                    final Unit parent = (Unit) accountability.getParent();
+                    if (hasParentUnit(parent, localDate)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
 
-	private boolean containsMission(final LocalDate start, final LocalDate end) {
-		final int yearStart = start.getYear();
-		final int yearEnd = start.getYear();
+    private boolean containsMission(final LocalDate start, final LocalDate end) {
+        final int yearStart = start.getYear();
+        final int yearEnd = start.getYear();
 
-		if (yearStart > year || yearEnd < year) {
-			return false;
-		}
+        if (yearStart > year || yearEnd < year) {
+            return false;
+        }
 
-		if (yearStart != yearEnd) {
-			return true;
-		}
+        if (yearStart != yearEnd) {
+            return true;
+        }
 
-		final int monthStart = start.getMonthOfYear();
-		final int monthEnd = end.getMonthOfYear();
+        final int monthStart = start.getMonthOfYear();
+        final int monthEnd = end.getMonthOfYear();
 
-		if (monthStart > month || monthEnd < month) {
-			return false;
-		}
+        if (monthStart > month || monthEnd < month) {
+            return false;
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	private boolean containsDay(final LocalDate localDate) {
-		return localDate.getYear() == year && localDate.getMonthOfYear() == month;
-	}
+    private boolean containsDay(final LocalDate localDate) {
+        return localDate.getYear() == year && localDate.getMonthOfYear() == month;
+    }
 }

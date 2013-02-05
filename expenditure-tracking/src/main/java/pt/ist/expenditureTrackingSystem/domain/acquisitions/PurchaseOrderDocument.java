@@ -38,47 +38,47 @@ import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
  */
 public class PurchaseOrderDocument extends PurchaseOrderDocument_Base {
 
-	protected PurchaseOrderDocument(String requestId) {
-		super();
-		setRequestId(requestId);
-	}
+    protected PurchaseOrderDocument(String requestId) {
+        super();
+        setRequestId(requestId);
+    }
 
-	public PurchaseOrderDocument(final AcquisitionProcess process, final byte[] contents, final String fileName, String requestID) {
-		this(requestID);
-		if (process.hasPurchaseOrderDocument()) {
-			process.getPurchaseOrderDocument().delete();
-		}
+    public PurchaseOrderDocument(final AcquisitionProcess process, final byte[] contents, final String fileName, String requestID) {
+        this(requestID);
+        if (process.hasPurchaseOrderDocument()) {
+            process.getPurchaseOrderDocument().delete();
+        }
 
-		setContent(contents);
-		setFilename(fileName);
-		process.addFiles(this);
-	}
+        setContent(contents);
+        setFilename(fileName);
+        process.addFiles(this);
+    }
 
-	@Override
-	public ProcessDocumentMetaDataResolver<? extends ProcessFile> getMetaDataResolver() {
-		return new AcquisitionProcess.AcquisitionProcessBasedMetadataResolver<PurchaseOrderDocument>();
-	}
+    @Override
+    public ProcessDocumentMetaDataResolver<? extends ProcessFile> getMetaDataResolver() {
+        return new AcquisitionProcess.AcquisitionProcessBasedMetadataResolver<PurchaseOrderDocument>();
+    }
 
-	@Override
-	public void delete() {
+    @Override
+    public void delete() {
 
-		super.delete();
-	}
+        super.delete();
+    }
 
-	@Override
-	public boolean isPossibleToArchieve() {
-		return false;
-	}
+    @Override
+    public boolean isPossibleToArchieve() {
+        return false;
+    }
 
-	@Override
-	public String getDisplayName() {
-		return getFilename();
-	}
+    @Override
+    public String getDisplayName() {
+        return getFilename();
+    }
 
-	@Override
-	public boolean isConnectedToCurrentHost() {
-		final GenericProcess genericProcess = (GenericProcess) getProcess();
-		return genericProcess != null && genericProcess.isConnectedToCurrentHost();
-	}
+    @Override
+    public boolean isConnectedToCurrentHost() {
+        final GenericProcess genericProcess = (GenericProcess) getProcess();
+        return genericProcess != null && genericProcess.isConnectedToCurrentHost();
+    }
 
 }

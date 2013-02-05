@@ -38,41 +38,41 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionPr
  * 
  */
 public class ChangeAcquisitionRequestItemClassification extends
-		WorkflowActivity<RegularAcquisitionProcess, ChangeAcquisitionRequestItemClassificationInfo> {
+        WorkflowActivity<RegularAcquisitionProcess, ChangeAcquisitionRequestItemClassificationInfo> {
 
-	@Override
-	public boolean isActive(RegularAcquisitionProcess process, User user) {
-		return ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user);
-	}
+    @Override
+    public boolean isActive(RegularAcquisitionProcess process, User user) {
+        return ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user);
+    }
 
-	@Override
-	public boolean isVisible() {
-		return false;
-	}
+    @Override
+    public boolean isVisible() {
+        return false;
+    }
 
-	@Override
-	protected void process(ChangeAcquisitionRequestItemClassificationInfo activityInformation) {
-		activityInformation.getItem().setClassification(activityInformation.getClassification());
-	}
+    @Override
+    protected void process(ChangeAcquisitionRequestItemClassificationInfo activityInformation) {
+        activityInformation.getItem().setClassification(activityInformation.getClassification());
+    }
 
-	@Override
-	public ActivityInformation<RegularAcquisitionProcess> getActivityInformation(RegularAcquisitionProcess process) {
-		return new ChangeAcquisitionRequestItemClassificationInfo(process, this);
-	}
+    @Override
+    public ActivityInformation<RegularAcquisitionProcess> getActivityInformation(RegularAcquisitionProcess process) {
+        return new ChangeAcquisitionRequestItemClassificationInfo(process, this);
+    }
 
-	@Override
-	public String getLocalizedName() {
-		return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
-	}
+    @Override
+    public String getLocalizedName() {
+        return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+    }
 
-	@Override
-	public String getUsedBundle() {
-		return "resources/AcquisitionResources";
-	}
+    @Override
+    public String getUsedBundle() {
+        return "resources/AcquisitionResources";
+    }
 
-	@Override
-	public boolean isUserAwarenessNeeded(RegularAcquisitionProcess process, User user) {
-		return false;
-	}
+    @Override
+    public boolean isUserAwarenessNeeded(RegularAcquisitionProcess process, User user) {
+        return false;
+    }
 
 }

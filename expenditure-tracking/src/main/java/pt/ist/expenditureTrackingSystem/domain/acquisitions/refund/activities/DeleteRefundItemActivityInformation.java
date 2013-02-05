@@ -37,18 +37,18 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess
  */
 public class DeleteRefundItemActivityInformation extends ActivityInformation<RefundProcess> {
 
-	private RefundItem item;
+    private RefundItem item;
 
-	public DeleteRefundItemActivityInformation(RefundProcess process,
-			WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity) {
-		super(process, activity);
-	}
+    public DeleteRefundItemActivityInformation(RefundProcess process,
+            WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity) {
+        super(process, activity);
+    }
 
-	public RefundItem getItem() {
-		return item;
-	}
+    public RefundItem getItem() {
+        return item;
+    }
 
-	public void setItem(RefundItem item) {
-		this.item = item;
-	}
+    public void setItem(RefundItem item) {
+        this.item = item;
+    }
 }

@@ -39,41 +39,41 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.Simplifie
  */
 public class JumpToProcessState extends WorkflowActivity<SimplifiedProcedureProcess, JumpToProcessStateInformation> {
 
-	@Override
-	public boolean isActive(SimplifiedProcedureProcess process, User user) {
-		return user.hasRoleType(RoleType.MANAGER);
-	}
+    @Override
+    public boolean isActive(SimplifiedProcedureProcess process, User user) {
+        return user.hasRoleType(RoleType.MANAGER);
+    }
 
-	@Override
-	protected void process(JumpToProcessStateInformation activityInformation) {
-		final SimplifiedProcedureProcess simplifiedProcedureProcess = activityInformation.getProcess();
-		final AcquisitionProcessStateType acquisitionProcessStateType = activityInformation.getAcquisitionProcessStateType();
-		new AcquisitionProcessState(simplifiedProcedureProcess, acquisitionProcessStateType);
-	}
+    @Override
+    protected void process(JumpToProcessStateInformation activityInformation) {
+        final SimplifiedProcedureProcess simplifiedProcedureProcess = activityInformation.getProcess();
+        final AcquisitionProcessStateType acquisitionProcessStateType = activityInformation.getAcquisitionProcessStateType();
+        new AcquisitionProcessState(simplifiedProcedureProcess, acquisitionProcessStateType);
+    }
 
-	@Override
-	public ActivityInformation<SimplifiedProcedureProcess> getActivityInformation(SimplifiedProcedureProcess process) {
-		return new JumpToProcessStateInformation(process, this);
-	}
+    @Override
+    public ActivityInformation<SimplifiedProcedureProcess> getActivityInformation(SimplifiedProcedureProcess process) {
+        return new JumpToProcessStateInformation(process, this);
+    }
 
-	@Override
-	protected String[] getArgumentsDescription(JumpToProcessStateInformation activityInformation) {
-		return new String[] { activityInformation.getAcquisitionProcessStateType().getLocalizedName() };
-	}
+    @Override
+    protected String[] getArgumentsDescription(JumpToProcessStateInformation activityInformation) {
+        return new String[] { activityInformation.getAcquisitionProcessStateType().getLocalizedName() };
+    }
 
-	@Override
-	public boolean isUserAwarenessNeeded(SimplifiedProcedureProcess process, User user) {
-		return false;
-	}
+    @Override
+    public boolean isUserAwarenessNeeded(SimplifiedProcedureProcess process, User user) {
+        return false;
+    }
 
-	@Override
-	public String getUsedBundle() {
-		return "resources/AcquisitionResources";
-	}
+    @Override
+    public String getUsedBundle() {
+        return "resources/AcquisitionResources";
+    }
 
-	@Override
-	public boolean isDefaultInputInterfaceUsed() {
-		return false;
-	}
+    @Override
+    public boolean isDefaultInputInterfaceUsed() {
+        return false;
+    }
 
 }

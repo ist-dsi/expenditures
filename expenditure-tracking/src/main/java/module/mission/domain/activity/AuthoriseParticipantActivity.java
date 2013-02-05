@@ -40,49 +40,49 @@ import pt.ist.bennu.core.util.BundleUtil;
  */
 public class AuthoriseParticipantActivity extends MissionProcessActivity<MissionProcess, AuthoriseParticipantActivityInformation> {
 
-	@Override
-	public String getLocalizedName() {
-		return BundleUtil.getStringFromResourceBundle("resources/MissionResources", "activity." + getClass().getSimpleName());
-	}
+    @Override
+    public String getLocalizedName() {
+        return BundleUtil.getStringFromResourceBundle("resources/MissionResources", "activity." + getClass().getSimpleName());
+    }
 
-	@Override
-	public boolean isActive(final MissionProcess missionProcess, final User user) {
-		return super.isActive(missionProcess, user)
-				&& !missionProcess.getIsCanceled()
-				&& missionProcess.isApproved()
-				&& missionProcess.canAuthoriseParticipantActivity()
-				&& (!missionProcess.getMission().hasAnyFinancer() || (missionProcess.hasAllAllocatedFunds() && missionProcess
-						.hasAllCommitmentNumbers()));
-	}
+    @Override
+    public boolean isActive(final MissionProcess missionProcess, final User user) {
+        return super.isActive(missionProcess, user)
+                && !missionProcess.getIsCanceled()
+                && missionProcess.isApproved()
+                && missionProcess.canAuthoriseParticipantActivity()
+                && (!missionProcess.getMission().hasAnyFinancer() || (missionProcess.hasAllAllocatedFunds() && missionProcess
+                        .hasAllCommitmentNumbers()));
+    }
 
-	@Override
-	protected void process(final AuthoriseParticipantActivityInformation authoriseParticipantActivityInformation) {
-		final PersonMissionAuthorization personMissionAuthorization =
-				authoriseParticipantActivityInformation.getPersonMissionAuthorization();
-		final User user = UserView.getCurrentUser();
-		final Person person = user.getPerson();
-		personMissionAuthorization.setAuthority(person);
-		final MissionProcess missionProcess = authoriseParticipantActivityInformation.getProcess();
-		missionProcess.setProcessParticipantInformationQueue();
-		final Mission mission = missionProcess.getMission();
-		if (mission.allParticipantsAreAuthorized()) {
-			missionProcess.notifyAllParticipants();
-		}
-	}
+    @Override
+    protected void process(final AuthoriseParticipantActivityInformation authoriseParticipantActivityInformation) {
+        final PersonMissionAuthorization personMissionAuthorization =
+                authoriseParticipantActivityInformation.getPersonMissionAuthorization();
+        final User user = UserView.getCurrentUser();
+        final Person person = user.getPerson();
+        personMissionAuthorization.setAuthority(person);
+        final MissionProcess missionProcess = authoriseParticipantActivityInformation.getProcess();
+        missionProcess.setProcessParticipantInformationQueue();
+        final Mission mission = missionProcess.getMission();
+        if (mission.allParticipantsAreAuthorized()) {
+            missionProcess.notifyAllParticipants();
+        }
+    }
 
-	@Override
-	public ActivityInformation<MissionProcess> getActivityInformation(final MissionProcess process) {
-		return new AuthoriseParticipantActivityInformation(process, this);
-	}
+    @Override
+    public ActivityInformation<MissionProcess> getActivityInformation(final MissionProcess process) {
+        return new AuthoriseParticipantActivityInformation(process, this);
+    }
 
-	@Override
-	public boolean isDefaultInputInterfaceUsed() {
-		return true;
-	}
+    @Override
+    public boolean isDefaultInputInterfaceUsed() {
+        return true;
+    }
 
-	@Override
-	public boolean isVisible() {
-		return false;
-	}
+    @Override
+    public boolean isVisible() {
+        return false;
+    }
 
 }

@@ -51,28 +51,28 @@ import pt.ist.expenditureTrackingSystem.util.ProcessMapGenerator;
  */
 public class PendingSimplifiedWidget extends WidgetController {
 
-	@Override
-	public void doView(WidgetRequest request) {
-		Person loggedPerson = Person.getLoggedPerson();
-		Map<AcquisitionProcessStateType, MultiCounter<AcquisitionProcessStateType>> simplifiedMap =
-				ProcessMapGenerator.generateAcquisitionMap(loggedPerson);
-		List<Counter<AcquisitionProcessStateType>> counters = new ArrayList<Counter<AcquisitionProcessStateType>>();
+    @Override
+    public void doView(WidgetRequest request) {
+        Person loggedPerson = Person.getLoggedPerson();
+        Map<AcquisitionProcessStateType, MultiCounter<AcquisitionProcessStateType>> simplifiedMap =
+                ProcessMapGenerator.generateAcquisitionMap(loggedPerson);
+        List<Counter<AcquisitionProcessStateType>> counters = new ArrayList<Counter<AcquisitionProcessStateType>>();
 
-		for (MultiCounter<AcquisitionProcessStateType> multiCounter : simplifiedMap.values()) {
-			Counter<AcquisitionProcessStateType> defaultCounter = ProcessMapGenerator.getDefaultCounter(multiCounter);
-			if (defaultCounter != null) {
-				counters.add(defaultCounter);
-			}
-		}
+        for (MultiCounter<AcquisitionProcessStateType> multiCounter : simplifiedMap.values()) {
+            Counter<AcquisitionProcessStateType> defaultCounter = ProcessMapGenerator.getDefaultCounter(multiCounter);
+            if (defaultCounter != null) {
+                counters.add(defaultCounter);
+            }
+        }
 
-		Collections.sort(counters, new BeanComparator("countableObject"));
-		request.setAttribute("simplifiedCounters", counters);
-		request.setAttribute("person", loggedPerson);
-	}
+        Collections.sort(counters, new BeanComparator("countableObject"));
+        request.setAttribute("simplifiedCounters", counters);
+        request.setAttribute("person", loggedPerson);
+    }
 
-	@Override
-	public String getWidgetDescription() {
-		return BundleUtil.getStringFromResourceBundle("resources/ExpenditureResources",
-				"widget.description.PendingSimplifiedWidget");
-	}
+    @Override
+    public String getWidgetDescription() {
+        return BundleUtil.getStringFromResourceBundle("resources/ExpenditureResources",
+                "widget.description.PendingSimplifiedWidget");
+    }
 }

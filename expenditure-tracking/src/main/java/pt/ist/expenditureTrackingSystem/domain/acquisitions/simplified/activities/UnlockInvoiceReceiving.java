@@ -39,27 +39,27 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionPr
  * 
  */
 public class UnlockInvoiceReceiving extends
-		WorkflowActivity<RegularAcquisitionProcess, ActivityInformation<RegularAcquisitionProcess>> {
+        WorkflowActivity<RegularAcquisitionProcess, ActivityInformation<RegularAcquisitionProcess>> {
 
-	@Override
-	public boolean isActive(RegularAcquisitionProcess process, User user) {
-		AcquisitionProcessState acquisitionProcessState = process.getAcquisitionProcessState();
-		return ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user) && isUserProcessOwner(process, user)
-				&& (acquisitionProcessState.isInvoiceReceived() || acquisitionProcessState.isPendingInvoiceConfirmation());
-	}
+    @Override
+    public boolean isActive(RegularAcquisitionProcess process, User user) {
+        AcquisitionProcessState acquisitionProcessState = process.getAcquisitionProcessState();
+        return ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user) && isUserProcessOwner(process, user)
+                && (acquisitionProcessState.isInvoiceReceived() || acquisitionProcessState.isPendingInvoiceConfirmation());
+    }
 
-	@Override
-	protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
-		activityInformation.getProcess().processAcquisition();
-	}
+    @Override
+    protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
+        activityInformation.getProcess().processAcquisition();
+    }
 
-	@Override
-	public String getLocalizedName() {
-		return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
-	}
+    @Override
+    public String getLocalizedName() {
+        return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+    }
 
-	@Override
-	public String getUsedBundle() {
-		return "resources/AcquisitionResources";
-	}
+    @Override
+    public String getUsedBundle() {
+        return "resources/AcquisitionResources";
+    }
 }

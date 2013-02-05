@@ -61,153 +61,153 @@ import pt.ist.fenixframework.pstm.AbstractDomainObject;
  */
 public class ExpenditureProcessesAction extends ContextBaseAction {
 
-	public ActionForward addAllocationFundGeneric(final ActionMapping mapping, final ActionForm form,
-			final HttpServletRequest request, final HttpServletResponse response) {
+    public ActionForward addAllocationFundGeneric(final ActionMapping mapping, final ActionForm form,
+            final HttpServletRequest request, final HttpServletResponse response) {
 
-		AbstractFundAllocationActivityInformation<PaymentProcess> activityInformation = getRenderedObject("activityBean");
-		final PaymentProcess process = activityInformation.getProcess();
-		request.setAttribute("process", process);
-		request.setAttribute("information", activityInformation);
+        AbstractFundAllocationActivityInformation<PaymentProcess> activityInformation = getRenderedObject("activityBean");
+        final PaymentProcess process = activityInformation.getProcess();
+        request.setAttribute("process", process);
+        request.setAttribute("information", activityInformation);
 
-		List<FundAllocationBean> fundAllocationBeans = activityInformation.getBeans();
-		Integer index = Integer.valueOf(request.getParameter("index"));
+        List<FundAllocationBean> fundAllocationBeans = activityInformation.getBeans();
+        Integer index = Integer.valueOf(request.getParameter("index"));
 
-		Financer financer = getDomainObject(request, "financerOID");
-		FundAllocationBean fundAllocationBean = new FundAllocationBean(financer);
-		fundAllocationBean.setFundAllocationId(null);
-		fundAllocationBean.setEffectiveFundAllocationId(null);
-		fundAllocationBean.setAllowedToAddNewFund(false);
+        Financer financer = getDomainObject(request, "financerOID");
+        FundAllocationBean fundAllocationBean = new FundAllocationBean(financer);
+        fundAllocationBean.setFundAllocationId(null);
+        fundAllocationBean.setEffectiveFundAllocationId(null);
+        fundAllocationBean.setAllowedToAddNewFund(false);
 
-		fundAllocationBeans.add(index + 1, fundAllocationBean);
-		RenderUtils.invalidateViewState();
-		return ProcessManagement.performActivityPostback(activityInformation, request);
-	}
+        fundAllocationBeans.add(index + 1, fundAllocationBean);
+        RenderUtils.invalidateViewState();
+        return ProcessManagement.performActivityPostback(activityInformation, request);
+    }
 
-	public ActionForward removeAllocationFundGeneric(final ActionMapping mapping, final ActionForm form,
-			final HttpServletRequest request, final HttpServletResponse response) {
-		AbstractFundAllocationActivityInformation<PaymentProcess> activityInformation = getRenderedObject("activityBean");
-		final PaymentProcess process = activityInformation.getProcess();
-		request.setAttribute("process", process);
-		request.setAttribute("information", activityInformation);
+    public ActionForward removeAllocationFundGeneric(final ActionMapping mapping, final ActionForm form,
+            final HttpServletRequest request, final HttpServletResponse response) {
+        AbstractFundAllocationActivityInformation<PaymentProcess> activityInformation = getRenderedObject("activityBean");
+        final PaymentProcess process = activityInformation.getProcess();
+        request.setAttribute("process", process);
+        request.setAttribute("information", activityInformation);
 
-		List<FundAllocationBean> fundAllocationBeans = activityInformation.getBeans();
-		int index = Integer.valueOf(request.getParameter("index")).intValue();
+        List<FundAllocationBean> fundAllocationBeans = activityInformation.getBeans();
+        int index = Integer.valueOf(request.getParameter("index")).intValue();
 
-		fundAllocationBeans.remove(index);
-		RenderUtils.invalidateViewState();
-		return ProcessManagement.performActivityPostback(activityInformation, request);
-	}
+        fundAllocationBeans.remove(index);
+        RenderUtils.invalidateViewState();
+        return ProcessManagement.performActivityPostback(activityInformation, request);
+    }
 
-	public ActionForward addDiaryNumber(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-			final HttpServletResponse response) {
+    public ActionForward addDiaryNumber(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+            final HttpServletResponse response) {
 
-		PayAcquisitionActivityInformation<PaymentProcess> activityInformation = getRenderedObject("activityBean");
-		final PaymentProcess process = activityInformation.getProcess();
-		request.setAttribute("process", process);
-		request.setAttribute("information", activityInformation);
+        PayAcquisitionActivityInformation<PaymentProcess> activityInformation = getRenderedObject("activityBean");
+        final PaymentProcess process = activityInformation.getProcess();
+        request.setAttribute("process", process);
+        request.setAttribute("information", activityInformation);
 
-		List<PaymentReferenceBean> fundAllocationBeans = activityInformation.getBeans();
-		Integer index = Integer.valueOf(request.getParameter("index"));
+        List<PaymentReferenceBean> fundAllocationBeans = activityInformation.getBeans();
+        Integer index = Integer.valueOf(request.getParameter("index"));
 
-		Financer financer = getDomainObject(request, "financerOID");
-		PaymentReferenceBean fundAllocationBean = new PaymentReferenceBean(financer);
-		fundAllocationBean.setDiaryNumber(null);
+        Financer financer = getDomainObject(request, "financerOID");
+        PaymentReferenceBean fundAllocationBean = new PaymentReferenceBean(financer);
+        fundAllocationBean.setDiaryNumber(null);
 
-		fundAllocationBeans.add(index + 1, fundAllocationBean);
-		RenderUtils.invalidateViewState();
-		return ProcessManagement.performActivityPostback(activityInformation, request);
-	}
+        fundAllocationBeans.add(index + 1, fundAllocationBean);
+        RenderUtils.invalidateViewState();
+        return ProcessManagement.performActivityPostback(activityInformation, request);
+    }
 
-	public ActionForward removeDiaryNumber(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-			final HttpServletResponse response) {
-		PayAcquisitionActivityInformation<PaymentProcess> activityInformation = getRenderedObject("activityBean");
-		final PaymentProcess process = activityInformation.getProcess();
-		request.setAttribute("process", process);
-		request.setAttribute("information", activityInformation);
+    public ActionForward removeDiaryNumber(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+            final HttpServletResponse response) {
+        PayAcquisitionActivityInformation<PaymentProcess> activityInformation = getRenderedObject("activityBean");
+        final PaymentProcess process = activityInformation.getProcess();
+        request.setAttribute("process", process);
+        request.setAttribute("information", activityInformation);
 
-		List<PaymentReferenceBean> fundAllocationBeans = activityInformation.getBeans();
-		int index = Integer.valueOf(request.getParameter("index")).intValue();
+        List<PaymentReferenceBean> fundAllocationBeans = activityInformation.getBeans();
+        int index = Integer.valueOf(request.getParameter("index")).intValue();
 
-		fundAllocationBeans.remove(index);
-		RenderUtils.invalidateViewState();
-		return ProcessManagement.performActivityPostback(activityInformation, request);
-	}
+        fundAllocationBeans.remove(index);
+        RenderUtils.invalidateViewState();
+        return ProcessManagement.performActivityPostback(activityInformation, request);
+    }
 
-	public ActionForward addTransactionNumber(final ActionMapping mapping, final ActionForm form,
-			final HttpServletRequest request, final HttpServletResponse response) {
+    public ActionForward addTransactionNumber(final ActionMapping mapping, final ActionForm form,
+            final HttpServletRequest request, final HttpServletResponse response) {
 
-		PayAcquisitionActivityInformation<PaymentProcess> activityInformation = getRenderedObject("activityBean");
-		final PaymentProcess process = activityInformation.getProcess();
-		request.setAttribute("process", process);
-		request.setAttribute("information", activityInformation);
+        PayAcquisitionActivityInformation<PaymentProcess> activityInformation = getRenderedObject("activityBean");
+        final PaymentProcess process = activityInformation.getProcess();
+        request.setAttribute("process", process);
+        request.setAttribute("information", activityInformation);
 
-		List<PaymentReferenceBean> fundAllocationBeans = activityInformation.getBeans();
-		Integer index = Integer.valueOf(request.getParameter("index"));
+        List<PaymentReferenceBean> fundAllocationBeans = activityInformation.getBeans();
+        Integer index = Integer.valueOf(request.getParameter("index"));
 
-		Financer financer = getDomainObject(request, "financerOID");
-		PaymentReferenceBean fundAllocationBean = new PaymentReferenceBean(financer);
-		fundAllocationBean.setTransactionNumber(null);
+        Financer financer = getDomainObject(request, "financerOID");
+        PaymentReferenceBean fundAllocationBean = new PaymentReferenceBean(financer);
+        fundAllocationBean.setTransactionNumber(null);
 
-		fundAllocationBeans.add(index + 1, fundAllocationBean);
-		RenderUtils.invalidateViewState();
-		return ProcessManagement.performActivityPostback(activityInformation, request);
-	}
+        fundAllocationBeans.add(index + 1, fundAllocationBean);
+        RenderUtils.invalidateViewState();
+        return ProcessManagement.performActivityPostback(activityInformation, request);
+    }
 
-	public ActionForward removeTransactionNumber(final ActionMapping mapping, final ActionForm form,
-			final HttpServletRequest request, final HttpServletResponse response) {
-		PayAcquisitionActivityInformation<PaymentProcess> activityInformation = getRenderedObject("activityBean");
-		final PaymentProcess process = activityInformation.getProcess();
-		request.setAttribute("process", process);
-		request.setAttribute("information", activityInformation);
+    public ActionForward removeTransactionNumber(final ActionMapping mapping, final ActionForm form,
+            final HttpServletRequest request, final HttpServletResponse response) {
+        PayAcquisitionActivityInformation<PaymentProcess> activityInformation = getRenderedObject("activityBean");
+        final PaymentProcess process = activityInformation.getProcess();
+        request.setAttribute("process", process);
+        request.setAttribute("information", activityInformation);
 
-		List<PaymentReferenceBean> fundAllocationBeans = activityInformation.getBeans();
-		int index = Integer.valueOf(request.getParameter("index")).intValue();
+        List<PaymentReferenceBean> fundAllocationBeans = activityInformation.getBeans();
+        int index = Integer.valueOf(request.getParameter("index")).intValue();
 
-		fundAllocationBeans.remove(index);
-		RenderUtils.invalidateViewState();
-		return ProcessManagement.performActivityPostback(activityInformation, request);
-	}
+        fundAllocationBeans.remove(index);
+        RenderUtils.invalidateViewState();
+        return ProcessManagement.performActivityPostback(activityInformation, request);
+    }
 
-	public ActionForward itemPostBack(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-			final HttpServletResponse response) {
-		CreateAcquisitionRequestItemActivityInformation activityInformation = getRenderedObject("activityBean");
-		WorkflowProcess process = AbstractDomainObject.fromExternalId(request.getParameter("processId"));
-		RenderUtils.invalidateViewState();
-		activityInformation.setRecipient(null);
-		activityInformation.setAddress(null);
+    public ActionForward itemPostBack(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+            final HttpServletResponse response) {
+        CreateAcquisitionRequestItemActivityInformation activityInformation = getRenderedObject("activityBean");
+        WorkflowProcess process = AbstractDomainObject.fromExternalId(request.getParameter("processId"));
+        RenderUtils.invalidateViewState();
+        activityInformation.setRecipient(null);
+        activityInformation.setAddress(null);
 
-		if (activityInformation.getCreateItemSchemaType().equals(CreateItemSchemaType.EXISTING_DELIVERY_INFO)) {
-			activityInformation.setDeliveryInfo(activityInformation.getAcquisitionRequest().getRequester()
-					.getDeliveryInfoByRecipientAndAddress(activityInformation.getRecipient(), activityInformation.getAddress()));
-		} else {
-			activityInformation.setDeliveryInfo(null);
-		}
+        if (activityInformation.getCreateItemSchemaType().equals(CreateItemSchemaType.EXISTING_DELIVERY_INFO)) {
+            activityInformation.setDeliveryInfo(activityInformation.getAcquisitionRequest().getRequester()
+                    .getDeliveryInfoByRecipientAndAddress(activityInformation.getRecipient(), activityInformation.getAddress()));
+        } else {
+            activityInformation.setDeliveryInfo(null);
+        }
 
-		request.setAttribute("information", activityInformation);
-		request.setAttribute("process", process);
-		return ProcessManagement.performActivityPostback(activityInformation, request);
-	}
+        request.setAttribute("information", activityInformation);
+        request.setAttribute("process", process);
+        return ProcessManagement.performActivityPostback(activityInformation, request);
+    }
 
-	public ActionForward itemInvalidInfo(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-			final HttpServletResponse response) {
-		CreateAcquisitionRequestItemActivityInformation activityInformation = getRenderedObject("activityBean");
-		WorkflowProcess process = AbstractDomainObject.fromExternalId(request.getParameter("processId"));
+    public ActionForward itemInvalidInfo(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+            final HttpServletResponse response) {
+        CreateAcquisitionRequestItemActivityInformation activityInformation = getRenderedObject("activityBean");
+        WorkflowProcess process = AbstractDomainObject.fromExternalId(request.getParameter("processId"));
 
-		request.setAttribute("information", activityInformation);
-		request.setAttribute("process", process);
+        request.setAttribute("information", activityInformation);
+        request.setAttribute("process", process);
 
-		return ProcessManagement.performActivityPostback(activityInformation, request);
-	}
+        return ProcessManagement.performActivityPostback(activityInformation, request);
+    }
 
-	@Override
-	public Context createContext(String contextPathString, HttpServletRequest request) {
-		WorkflowProcess process = getProcess(request);
-		WorkflowLayoutContext layout = process.getLayout();
-		layout.setElements(contextPathString);
-		return layout;
-	}
+    @Override
+    public Context createContext(String contextPathString, HttpServletRequest request) {
+        WorkflowProcess process = getProcess(request);
+        WorkflowLayoutContext layout = process.getLayout();
+        layout.setElements(contextPathString);
+        return layout;
+    }
 
-	protected <T extends WorkflowProcess> T getProcess(HttpServletRequest request) {
-		return (T) getDomainObject(request, "processId");
-	}
+    protected <T extends WorkflowProcess> T getProcess(HttpServletRequest request) {
+        return (T) getDomainObject(request, "processId");
+    }
 }

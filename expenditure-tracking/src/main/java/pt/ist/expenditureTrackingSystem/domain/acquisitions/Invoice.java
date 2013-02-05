@@ -44,52 +44,52 @@ import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
  */
 public class Invoice extends Invoice_Base {
 
-	public Invoice() {
-		super();
-	}
+    public Invoice() {
+        super();
+    }
 
-	public boolean isInvoiceReceived() {
-		return getInvoiceNumber() != null && getInvoiceNumber().length() > 0 && getInvoiceDate() != null;
-	}
+    public boolean isInvoiceReceived() {
+        return getInvoiceNumber() != null && getInvoiceNumber().length() > 0 && getInvoiceDate() != null;
+    }
 
-	@Override
-	public void delete() {
-		super.delete();
-	}
+    @Override
+    public void delete() {
+        super.delete();
+    }
 
-	@Override
-	public boolean isConnectedToCurrentHost() {
-		final GenericProcess genericProcess = (GenericProcess) getProcess();
-		return genericProcess != null && genericProcess.isConnectedToCurrentHost();
-	}
+    @Override
+    public boolean isConnectedToCurrentHost() {
+        final GenericProcess genericProcess = (GenericProcess) getProcess();
+        return genericProcess != null && genericProcess.isConnectedToCurrentHost();
+    }
 
-	public static class InvoiceMetadaResolver extends AcquisitionProcessBasedMetadataResolver<Invoice> {
-		public static final String INVOICE_NUMBER = "Número da factura";
-		public static final String INVOICE_DATE = "Data da factura";
+    public static class InvoiceMetadaResolver extends AcquisitionProcessBasedMetadataResolver<Invoice> {
+        public static final String INVOICE_NUMBER = "Número da factura";
+        public static final String INVOICE_DATE = "Data da factura";
 
-		@Override
-		public Map<String, String> getMetadataKeysAndValuesMap(ProcessFile processFile) {
-			Invoice processDocument = (Invoice) processFile;
-			Map<String, String> metadataKeysAndValuesMap = super.getMetadataKeysAndValuesMap(processDocument);
+        @Override
+        public Map<String, String> getMetadataKeysAndValuesMap(ProcessFile processFile) {
+            Invoice processDocument = (Invoice) processFile;
+            Map<String, String> metadataKeysAndValuesMap = super.getMetadataKeysAndValuesMap(processDocument);
 
-			metadataKeysAndValuesMap.put(INVOICE_NUMBER, processDocument.getInvoiceNumber());
-			metadataKeysAndValuesMap.put(INVOICE_DATE, processDocument.getInvoiceDate().toString());
+            metadataKeysAndValuesMap.put(INVOICE_NUMBER, processDocument.getInvoiceNumber());
+            metadataKeysAndValuesMap.put(INVOICE_DATE, processDocument.getInvoiceDate().toString());
 
-			return metadataKeysAndValuesMap;
-		}
+            return metadataKeysAndValuesMap;
+        }
 
-		@Override
-		public @Nonnull
-		Class<? extends AbstractWFDocsGroup> getWriteGroupClass() {
-			//TODO probably review it case by case, but for now let it be like this
-			return WFDocsDefaultWriteGroup.class;
-		}
+        @Override
+        public @Nonnull
+        Class<? extends AbstractWFDocsGroup> getWriteGroupClass() {
+            //TODO probably review it case by case, but for now let it be like this
+            return WFDocsDefaultWriteGroup.class;
+        }
 
-	}
+    }
 
-	@Override
-	public ProcessDocumentMetaDataResolver<ProcessFile> getMetaDataResolver() {
-		return new InvoiceMetadaResolver();
-	}
+    @Override
+    public ProcessDocumentMetaDataResolver<ProcessFile> getMetaDataResolver() {
+        return new InvoiceMetadaResolver();
+    }
 
 }

@@ -37,23 +37,23 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundableInv
  */
 public class RemoveRefundInvoiceActivityInformation extends ActivityInformation<RefundProcess> {
 
-	RefundableInvoiceFile refundInvoice;
+    RefundableInvoiceFile refundInvoice;
 
-	public RemoveRefundInvoiceActivityInformation(RefundProcess process,
-			WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity) {
-		super(process, activity);
-	}
+    public RemoveRefundInvoiceActivityInformation(RefundProcess process,
+            WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity) {
+        super(process, activity);
+    }
 
-	public RefundableInvoiceFile getRefundInvoice() {
-		return refundInvoice;
-	}
+    public RefundableInvoiceFile getRefundInvoice() {
+        return refundInvoice;
+    }
 
-	public void setRefundInvoice(RefundableInvoiceFile refundInvoice) {
-		this.refundInvoice = refundInvoice;
-	}
+    public void setRefundInvoice(RefundableInvoiceFile refundInvoice) {
+        this.refundInvoice = refundInvoice;
+    }
 
-	@Override
-	public boolean hasAllneededInfo() {
-		return getRefundInvoice() != null;
-	}
+    @Override
+    public boolean hasAllneededInfo() {
+        return getRefundInvoice() != null;
+    }
 }

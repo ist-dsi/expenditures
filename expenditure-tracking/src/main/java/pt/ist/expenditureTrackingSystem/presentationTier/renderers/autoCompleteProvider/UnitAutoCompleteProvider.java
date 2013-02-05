@@ -48,74 +48,74 @@ import pt.utl.ist.fenix.tools.util.StringNormalizer;
  */
 public class UnitAutoCompleteProvider implements AutoCompleteProvider {
 
-	public Collection getSearchResults(Map<String, String> argsMap, String value, int maxCount) {
-		final List<Unit> units = new ArrayList<Unit>();
+    public Collection getSearchResults(Map<String, String> argsMap, String value, int maxCount) {
+        final List<Unit> units = new ArrayList<Unit>();
 
-		final String trimmedValue = value.trim();
+        final String trimmedValue = value.trim();
 
-		for (final Unit unit : ExpenditureTrackingSystem.getInstance().getUnits()) {
-			if (unit instanceof CostCenter) {
-				final CostCenter costCenter = (CostCenter) unit;
-				final String unitCode = costCenter.getCostCenter();
-				if (!StringUtils.isEmpty(unitCode) && trimmedValue.equalsIgnoreCase(unitCode)) {
-					units.add(unit);
-				}
-			} else if (unit instanceof Project) {
-				final Project project = (Project) unit;
-				final String unitCode = project.getProjectCode();
-				if (!StringUtils.isEmpty(unitCode) && trimmedValue.equalsIgnoreCase(unitCode)) {
-					if (unit.hasAnySubUnits()) {
-						addAllSubUnits(units, unit);
-					} else {
-						units.add(unit);
-					}
-				}
-			}
-		}
+        for (final Unit unit : ExpenditureTrackingSystem.getInstance().getUnits()) {
+            if (unit instanceof CostCenter) {
+                final CostCenter costCenter = (CostCenter) unit;
+                final String unitCode = costCenter.getCostCenter();
+                if (!StringUtils.isEmpty(unitCode) && trimmedValue.equalsIgnoreCase(unitCode)) {
+                    units.add(unit);
+                }
+            } else if (unit instanceof Project) {
+                final Project project = (Project) unit;
+                final String unitCode = project.getProjectCode();
+                if (!StringUtils.isEmpty(unitCode) && trimmedValue.equalsIgnoreCase(unitCode)) {
+                    if (unit.hasAnySubUnits()) {
+                        addAllSubUnits(units, unit);
+                    } else {
+                        units.add(unit);
+                    }
+                }
+            }
+        }
 
-		final String[] input = trimmedValue.split(" ");
-		StringNormalizer.normalize(input);
+        final String[] input = trimmedValue.split(" ");
+        StringNormalizer.normalize(input);
 
-		for (final Unit unit : ExpenditureTrackingSystem.getInstance().getUnits()) {
-			if (unit instanceof CostCenter || unit instanceof Project || unit instanceof SubProject) {
-				final String unitName = StringNormalizer.normalize(unit.getName());
-				if (hasMatch(input, unitName)) {
-					units.add(unit);
-				}
-			}
-		}
+        for (final Unit unit : ExpenditureTrackingSystem.getInstance().getUnits()) {
+            if (unit instanceof CostCenter || unit instanceof Project || unit instanceof SubProject) {
+                final String unitName = StringNormalizer.normalize(unit.getName());
+                if (hasMatch(input, unitName)) {
+                    units.add(unit);
+                }
+            }
+        }
 
-		Collections.sort(units, Unit.COMPARATOR_BY_PRESENTATION_NAME);
+        Collections.sort(units, Unit.COMPARATOR_BY_PRESENTATION_NAME);
 
-		return units;
-	}
+        return units;
+    }
 
-	private void addAllSubUnits(final List<Unit> units, final Unit unit) {
-		for (final Unit subUnit : unit.getSubUnitsSet()) {
-			units.add(subUnit);
-			addAllSubUnits(units, subUnit);
-		}
-	}
+    private void addAllSubUnits(final List<Unit> units, final Unit unit) {
+        for (final Unit subUnit : unit.getSubUnitsSet()) {
+            units.add(subUnit);
+            addAllSubUnits(units, subUnit);
+        }
+    }
 
-	private boolean hasMatch(final String[] input, final String unitNameParts) {
-		for (final String namePart : input) {
-			if (unitNameParts.indexOf(namePart) == -1) {
-				return false;
-			}
-		}
-		return true;
-	}
+    private boolean hasMatch(final String[] input, final String unitNameParts) {
+        for (final String namePart : input) {
+            if (unitNameParts.indexOf(namePart) == -1) {
+                return false;
+            }
+        }
+        return true;
+    }
 
-	private boolean isNumeric(String someString) {
-		boolean isNumeric = StringUtils.isNumeric(someString);
-		if (isNumeric) {
-			try {
-				int i = Integer.parseInt(someString);
-			} catch (NumberFormatException e) {
-				return false;
-			}
-			return true;
-		}
-		return false;
-	}
+    private boolean isNumeric(String someString) {
+        boolean isNumeric = StringUtils.isNumeric(someString);
+        if (isNumeric) {
+            try {
+                int i = Integer.parseInt(someString);
+            } catch (NumberFormatException e) {
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
 }

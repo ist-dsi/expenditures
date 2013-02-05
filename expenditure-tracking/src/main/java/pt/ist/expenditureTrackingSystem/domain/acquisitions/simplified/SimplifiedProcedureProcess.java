@@ -120,368 +120,368 @@ import pt.ist.fenixWebFramework.services.Service;
  */
 public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base {
 
-	public static enum ProcessClassification implements IPresentableEnum {
+    public static enum ProcessClassification implements IPresentableEnum {
 
-		CCP(new Money("5000"), true, "RS 5000"), CT10000(new Money("10000"), "CT 10000"),
-		CT75000(new Money("75000"), "CT 75000"), NORMAL(new Money("75000"), "NORMAL");
+        CCP(new Money("5000"), true, "RS 5000"), CT10000(new Money("10000"), "CT 10000"),
+        CT75000(new Money("75000"), "CT 75000"), NORMAL(new Money("75000"), "NORMAL");
 
-		final private Money value;
-		final private String shortDescription;
-		final private boolean ccp;
+        final private Money value;
+        final private String shortDescription;
+        final private boolean ccp;
 
-		ProcessClassification(Money value, String shortDescription) {
-			this(value, false, shortDescription);
-		}
+        ProcessClassification(Money value, String shortDescription) {
+            this(value, false, shortDescription);
+        }
 
-		ProcessClassification(Money value, boolean ccp, String shortDescription) {
-			this.value = value;
-			this.ccp = ccp;
-			this.shortDescription = shortDescription;
-		}
+        ProcessClassification(Money value, boolean ccp, String shortDescription) {
+            this.value = value;
+            this.ccp = ccp;
+            this.shortDescription = shortDescription;
+        }
 
-		public Money getLimit() {
-			return value;
-		}
+        public Money getLimit() {
+            return value;
+        }
 
-		public boolean isCCP() {
-			return ccp;
-		}
+        public boolean isCCP() {
+            return ccp;
+        }
 
-		public String getShortDescription() {
-			return shortDescription;
-		}
+        public String getShortDescription() {
+            return shortDescription;
+        }
 
-		@Override
-		public String getLocalizedName() {
-			return BundleUtil.getFormattedStringFromResourceBundle("resources/ExpenditureResources",
-					"label.processClassification." + name());
-		}
-	}
+        @Override
+        public String getLocalizedName() {
+            return BundleUtil.getFormattedStringFromResourceBundle("resources/ExpenditureResources",
+                    "label.processClassification." + name());
+        }
+    }
 
-	private static List<AcquisitionProcessStateType> availableStates = new ArrayList<AcquisitionProcessStateType>();
+    private static List<AcquisitionProcessStateType> availableStates = new ArrayList<AcquisitionProcessStateType>();
 
-	private static List<WorkflowActivity<? extends RegularAcquisitionProcess, ? extends ActivityInformation<? extends RegularAcquisitionProcess>>> activities =
-			new ArrayList<WorkflowActivity<? extends RegularAcquisitionProcess, ? extends ActivityInformation<? extends RegularAcquisitionProcess>>>();
+    private static List<WorkflowActivity<? extends RegularAcquisitionProcess, ? extends ActivityInformation<? extends RegularAcquisitionProcess>>> activities =
+            new ArrayList<WorkflowActivity<? extends RegularAcquisitionProcess, ? extends ActivityInformation<? extends RegularAcquisitionProcess>>>();
 
-	static {
-		activities.add(new CommitFunds());
-		activities.add(new DeleteCommitmentNumber());
-		activities.add(new CreateAcquisitionPurchaseOrderDocument());
-		activities.add(new SendPurchaseOrderToSupplier());
-		activities.add(new SkipPurchaseOrderDocument());
-		activities.add(new RevertSkipPurchaseOrderDocument());
-		activities.add(new GenericAddPayingUnit<RegularAcquisitionProcess>());
-		activities.add(new GenericRemovePayingUnit<RegularAcquisitionProcess>());
-		activities.add(new SubmitForApproval());
-		activities.add(new SubmitForFundAllocation());
-		activities.add(new RejectAcquisitionProcess());
-		activities.add(new UnApprove<RegularAcquisitionProcess>());
-		activities.add(new FundAllocationExpirationDate());
-		activities.add(new RevertProcessNotConfirmmingFundAllocationExpirationDate());
-		activities.add(new RevertToInvoiceConfirmation());
-		activities.add(new Authorize<RegularAcquisitionProcess>());
-		activities.add(new UnAuthorize<RegularAcquisitionProcess>());
+    static {
+        activities.add(new CommitFunds());
+        activities.add(new DeleteCommitmentNumber());
+        activities.add(new CreateAcquisitionPurchaseOrderDocument());
+        activities.add(new SendPurchaseOrderToSupplier());
+        activities.add(new SkipPurchaseOrderDocument());
+        activities.add(new RevertSkipPurchaseOrderDocument());
+        activities.add(new GenericAddPayingUnit<RegularAcquisitionProcess>());
+        activities.add(new GenericRemovePayingUnit<RegularAcquisitionProcess>());
+        activities.add(new SubmitForApproval());
+        activities.add(new SubmitForFundAllocation());
+        activities.add(new RejectAcquisitionProcess());
+        activities.add(new UnApprove<RegularAcquisitionProcess>());
+        activities.add(new FundAllocationExpirationDate());
+        activities.add(new RevertProcessNotConfirmmingFundAllocationExpirationDate());
+        activities.add(new RevertToInvoiceConfirmation());
+        activities.add(new Authorize<RegularAcquisitionProcess>());
+        activities.add(new UnAuthorize<RegularAcquisitionProcess>());
 
-		activities.add(new AllocateProjectFundsPermanently<RegularAcquisitionProcess>());
-		activities.add(new AllocateFundsPermanently<RegularAcquisitionProcess>());
-		activities.add(new RemovePermanentProjectFunds<RegularAcquisitionProcess>());
-		activities.add(new RemoveFundsPermanentlyAllocated<RegularAcquisitionProcess>());
+        activities.add(new AllocateProjectFundsPermanently<RegularAcquisitionProcess>());
+        activities.add(new AllocateFundsPermanently<RegularAcquisitionProcess>());
+        activities.add(new RemovePermanentProjectFunds<RegularAcquisitionProcess>());
+        activities.add(new RemoveFundsPermanentlyAllocated<RegularAcquisitionProcess>());
 
-		activities.add(new ProjectFundAllocation<RegularAcquisitionProcess>());
-		activities.add(new FundAllocation<RegularAcquisitionProcess>());
-		activities.add(new RemoveFundAllocation());
-		activities.add(new RemoveProjectFundAllocation());
-		activities.add(new RemoveFundAllocationExpirationDate());
-		activities.add(new RemoveFundAllocationExpirationDateForResponsible());
-		activities.add(new CancelAcquisitionRequest());
+        activities.add(new ProjectFundAllocation<RegularAcquisitionProcess>());
+        activities.add(new FundAllocation<RegularAcquisitionProcess>());
+        activities.add(new RemoveFundAllocation());
+        activities.add(new RemoveProjectFundAllocation());
+        activities.add(new RemoveFundAllocationExpirationDate());
+        activities.add(new RemoveFundAllocationExpirationDateForResponsible());
+        activities.add(new CancelAcquisitionRequest());
 
-		activities.add(new UnlockInvoiceReceiving());
-		activities.add(new LockInvoiceReceiving());
+        activities.add(new UnlockInvoiceReceiving());
+        activities.add(new LockInvoiceReceiving());
 
-		activities.add(new SubmitForConfirmInvoice());
-		activities.add(new ConfirmInvoice());
-		activities.add(new CancelInvoiceConfirmation());
+        activities.add(new SubmitForConfirmInvoice());
+        activities.add(new ConfirmInvoice());
+        activities.add(new CancelInvoiceConfirmation());
 
-		activities.add(new UnSubmitForApproval());
+        activities.add(new UnSubmitForApproval());
 
-		activities.add(new SetSkipSupplierFundAllocation());
-		activities.add(new UnsetSkipSupplierFundAllocation());
+        activities.add(new SetSkipSupplierFundAllocation());
+        activities.add(new UnsetSkipSupplierFundAllocation());
 
-		activities.add(new RevertInvoiceSubmission());
-		activities.add(new RemoveCancelProcess());
+        activities.add(new RevertInvoiceSubmission());
+        activities.add(new RemoveCancelProcess());
 
-		activities.add(new GenericAssignPayingUnitToItem<RegularAcquisitionProcess>());
+        activities.add(new GenericAssignPayingUnitToItem<RegularAcquisitionProcess>());
 
-		activities.add(new DistributeRealValuesForPayingUnits());
+        activities.add(new DistributeRealValuesForPayingUnits());
 
-		activities.add(new ChangeFinancersAccountingUnit());
-		activities.add(new SelectSupplier());
+        activities.add(new ChangeFinancersAccountingUnit());
+        activities.add(new SelectSupplier());
 
-		activities.add(new ChangeProcessClassification());
-		activities.add(new ChangeAcquisitionRequestItemClassification());
-		activities.add(new CreateAcquisitionRequestItem());
-		activities.add(new PayAcquisition());
-		activities.add(new DeleteAcquisitionRequestItem());
-		activities.add(new EditAcquisitionRequestItem());
-		activities.add(new EditAcquisitionRequestItemRealValues());
-		activities.add(new TakeProcess<RegularAcquisitionProcess>());
-		activities.add(new ReleaseProcess<RegularAcquisitionProcess>());
-		activities.add(new StealProcess<RegularAcquisitionProcess>());
-		activities.add(new JumpToProcessState());
-		activities.add(new EditSimpleContractDescription());
+        activities.add(new ChangeProcessClassification());
+        activities.add(new ChangeAcquisitionRequestItemClassification());
+        activities.add(new CreateAcquisitionRequestItem());
+        activities.add(new PayAcquisition());
+        activities.add(new DeleteAcquisitionRequestItem());
+        activities.add(new EditAcquisitionRequestItem());
+        activities.add(new EditAcquisitionRequestItemRealValues());
+        activities.add(new TakeProcess<RegularAcquisitionProcess>());
+        activities.add(new ReleaseProcess<RegularAcquisitionProcess>());
+        activities.add(new StealProcess<RegularAcquisitionProcess>());
+        activities.add(new JumpToProcessState());
+        activities.add(new EditSimpleContractDescription());
 
-		activities.add(new ExceptionalChangeRequestingPerson());
+        activities.add(new ExceptionalChangeRequestingPerson());
 
-		availableStates.add(AcquisitionProcessStateType.IN_GENESIS);
-		availableStates.add(AcquisitionProcessStateType.SUBMITTED_FOR_APPROVAL);
-		availableStates.add(AcquisitionProcessStateType.SUBMITTED_FOR_FUNDS_ALLOCATION);
-		availableStates.add(AcquisitionProcessStateType.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER);
-		availableStates.add(AcquisitionProcessStateType.FUNDS_ALLOCATED);
-		availableStates.add(AcquisitionProcessStateType.AUTHORIZED);
-		availableStates.add(AcquisitionProcessStateType.ACQUISITION_PROCESSED);
-		availableStates.add(AcquisitionProcessStateType.INVOICE_RECEIVED);
-		availableStates.add(AcquisitionProcessStateType.SUBMITTED_FOR_CONFIRM_INVOICE);
-		availableStates.add(AcquisitionProcessStateType.INVOICE_CONFIRMED);
-		availableStates.add(AcquisitionProcessStateType.FUNDS_ALLOCATED_PERMANENTLY);
-		availableStates.add(AcquisitionProcessStateType.ACQUISITION_PAYED);
-		availableStates.add(AcquisitionProcessStateType.REJECTED);
-		availableStates.add(AcquisitionProcessStateType.CANCELED);
-	}
+        availableStates.add(AcquisitionProcessStateType.IN_GENESIS);
+        availableStates.add(AcquisitionProcessStateType.SUBMITTED_FOR_APPROVAL);
+        availableStates.add(AcquisitionProcessStateType.SUBMITTED_FOR_FUNDS_ALLOCATION);
+        availableStates.add(AcquisitionProcessStateType.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER);
+        availableStates.add(AcquisitionProcessStateType.FUNDS_ALLOCATED);
+        availableStates.add(AcquisitionProcessStateType.AUTHORIZED);
+        availableStates.add(AcquisitionProcessStateType.ACQUISITION_PROCESSED);
+        availableStates.add(AcquisitionProcessStateType.INVOICE_RECEIVED);
+        availableStates.add(AcquisitionProcessStateType.SUBMITTED_FOR_CONFIRM_INVOICE);
+        availableStates.add(AcquisitionProcessStateType.INVOICE_CONFIRMED);
+        availableStates.add(AcquisitionProcessStateType.FUNDS_ALLOCATED_PERMANENTLY);
+        availableStates.add(AcquisitionProcessStateType.ACQUISITION_PAYED);
+        availableStates.add(AcquisitionProcessStateType.REJECTED);
+        availableStates.add(AcquisitionProcessStateType.CANCELED);
+    }
 
-	protected SimplifiedProcedureProcess(final Person requester) {
-		super();
-		inGenesis();
-		new AcquisitionRequest(this, requester);
-	}
+    protected SimplifiedProcedureProcess(final Person requester) {
+        super();
+        inGenesis();
+        new AcquisitionRequest(this, requester);
+    }
 
-	protected SimplifiedProcedureProcess(Supplier supplier, Person person) {
-		super();
-		inGenesis();
-		new AcquisitionRequest(this, supplier, person);
-	}
+    protected SimplifiedProcedureProcess(Supplier supplier, Person person) {
+        super();
+        inGenesis();
+        new AcquisitionRequest(this, supplier, person);
+    }
 
-	protected SimplifiedProcedureProcess(ProcessClassification classification, List<Supplier> suppliers, Person person) {
-		super();
-		inGenesis();
-		AcquisitionRequest acquisitionRequest = new AcquisitionRequest(this, suppliers, person);
-		if (suppliers.size() == 0) {
-			throw new DomainException("acquisitionProcess.message.exception.needsMoreSuppliers",
-					DomainException.getResourceFor("resources/AcquisitionResources"));
-		}
-		if (suppliers.size() == 1) {
-			acquisitionRequest.setSelectedSupplier(suppliers.get(0));
-		}
-		setProcessClassification(classification);
-	}
+    protected SimplifiedProcedureProcess(ProcessClassification classification, List<Supplier> suppliers, Person person) {
+        super();
+        inGenesis();
+        AcquisitionRequest acquisitionRequest = new AcquisitionRequest(this, suppliers, person);
+        if (suppliers.size() == 0) {
+            throw new DomainException("acquisitionProcess.message.exception.needsMoreSuppliers",
+                    DomainException.getResourceFor("resources/AcquisitionResources"));
+        }
+        if (suppliers.size() == 1) {
+            acquisitionRequest.setSelectedSupplier(suppliers.get(0));
+        }
+        setProcessClassification(classification);
+    }
 
-	@Service
-	public static SimplifiedProcedureProcess createNewAcquisitionProcess(
-			final CreateAcquisitionProcessBean createAcquisitionProcessBean) {
-		if (!isCreateNewProcessAvailable()) {
-			throw new DomainException("acquisitionProcess.message.exception.invalidStateToRun.create");
-		}
-		SimplifiedProcedureProcess process =
-				new SimplifiedProcedureProcess(createAcquisitionProcessBean.getClassification(),
-						createAcquisitionProcessBean.getSuppliers(), createAcquisitionProcessBean.getRequester());
-		AcquisitionRequest acquisitionRequest = process.getAcquisitionRequest();
-		acquisitionRequest.setRequestingUnit(createAcquisitionProcessBean.getRequestingUnit());
-		acquisitionRequest.setContractSimpleDescription(createAcquisitionProcessBean.getContractSimpleDescription());
-		if (createAcquisitionProcessBean.isRequestUnitPayingUnit()) {
-			final Unit unit = createAcquisitionProcessBean.getRequestingUnit();
-			acquisitionRequest.addFinancers(unit.finance(acquisitionRequest));
-		}
-		if (createAcquisitionProcessBean.isForMission()) {
-			if (createAcquisitionProcessBean.getMissionProcess() == null) {
-				throw new DomainException("mission.process.is.mandatory",
-						DomainException.getResourceFor("resources/AcquisitionResources"));
-			}
-			process.setMissionProcess(createAcquisitionProcessBean.getMissionProcess());
-		}
+    @Service
+    public static SimplifiedProcedureProcess createNewAcquisitionProcess(
+            final CreateAcquisitionProcessBean createAcquisitionProcessBean) {
+        if (!isCreateNewProcessAvailable()) {
+            throw new DomainException("acquisitionProcess.message.exception.invalidStateToRun.create");
+        }
+        SimplifiedProcedureProcess process =
+                new SimplifiedProcedureProcess(createAcquisitionProcessBean.getClassification(),
+                        createAcquisitionProcessBean.getSuppliers(), createAcquisitionProcessBean.getRequester());
+        AcquisitionRequest acquisitionRequest = process.getAcquisitionRequest();
+        acquisitionRequest.setRequestingUnit(createAcquisitionProcessBean.getRequestingUnit());
+        acquisitionRequest.setContractSimpleDescription(createAcquisitionProcessBean.getContractSimpleDescription());
+        if (createAcquisitionProcessBean.isRequestUnitPayingUnit()) {
+            final Unit unit = createAcquisitionProcessBean.getRequestingUnit();
+            acquisitionRequest.addFinancers(unit.finance(acquisitionRequest));
+        }
+        if (createAcquisitionProcessBean.isForMission()) {
+            if (createAcquisitionProcessBean.getMissionProcess() == null) {
+                throw new DomainException("mission.process.is.mandatory",
+                        DomainException.getResourceFor("resources/AcquisitionResources"));
+            }
+            process.setMissionProcess(createAcquisitionProcessBean.getMissionProcess());
+        }
 
-		return process;
-	}
+        return process;
+    }
 
-	@Override
-	public <T extends WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>> List<T> getActivities() {
-		return (List<T>) activities;
-	}
+    @Override
+    public <T extends WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>> List<T> getActivities() {
+        return (List<T>) activities;
+    }
 
-	public boolean isEditRequestItemAvailable() {
-		final Person loggedPerson = getLoggedPerson();
-		return loggedPerson != null && loggedPerson.equals(getRequestor()) && getLastAcquisitionProcessState().isInGenesis();
-	}
+    public boolean isEditRequestItemAvailable() {
+        final Person loggedPerson = getLoggedPerson();
+        return loggedPerson != null && loggedPerson.equals(getRequestor()) && getLastAcquisitionProcessState().isInGenesis();
+    }
 
-	@Override
-	public Money getAcquisitionRequestValueLimit() {
-		return getProcessClassification().getLimit();
-	}
+    @Override
+    public Money getAcquisitionRequestValueLimit() {
+        return getProcessClassification().getLimit();
+    }
 
-	@Override
-	public boolean isSimplifiedAcquisitionProcess() {
-		return true;
-	}
+    @Override
+    public boolean isSimplifiedAcquisitionProcess() {
+        return true;
+    }
 
-	@Override
-	public List<AcquisitionProcessStateType> getAvailableStates() {
-		return availableStates;
-	}
+    @Override
+    public List<AcquisitionProcessStateType> getAvailableStates() {
+        return availableStates;
+    }
 
-	public static List<AcquisitionProcessStateType> getAvailableStatesForSimplifiedProcedureProcess() {
-		return availableStates;
-	}
+    public static List<AcquisitionProcessStateType> getAvailableStatesForSimplifiedProcedureProcess() {
+        return availableStates;
+    }
 
-	@Override
-	public boolean isSimplifiedProcedureProcess() {
-		return true;
-	}
+    @Override
+    public boolean isSimplifiedProcedureProcess() {
+        return true;
+    }
 
-	@Override
-	public boolean isPayed() {
-		return getRequest().isPayed();
-	}
+    @Override
+    public boolean isPayed() {
+        return getRequest().isPayed();
+    }
 
-	@Override
-	public String getProcessStateDescription() {
-		return getLastAcquisitionProcessState().getLocalizedName();
-	}
+    @Override
+    public String getProcessStateDescription() {
+        return getLastAcquisitionProcessState().getLocalizedName();
+    }
 
-	@Override
-	public boolean isAppiableForYear(final int year) {
-		return Util.isAppiableForYear(year, this);
-	}
+    @Override
+    public boolean isAppiableForYear(final int year) {
+        return Util.isAppiableForYear(year, this);
+    }
 
-	public boolean isCCP() {
-		return getProcessClassification().isCCP();
-	}
+    public boolean isCCP() {
+        return getProcessClassification().isCCP();
+    }
 
-	@Override
-	public void setProcessClassification(ProcessClassification processClassification) {
-		if (getSkipSupplierFundAllocation()) {
-			unSkipSupplierFundAllocation();
-		}
-		if (processClassification.getLimit().isLessThan(this.getAcquisitionRequest().getCurrentValue())) {
-			throw new DomainException("error.message.processValueExceedsLimitForClassification",
-					DomainException.getResourceFor("resources/AcquisitionResources"));
-		}
-		super.setProcessClassification(processClassification);
-	}
+    @Override
+    public void setProcessClassification(ProcessClassification processClassification) {
+        if (getSkipSupplierFundAllocation()) {
+            unSkipSupplierFundAllocation();
+        }
+        if (processClassification.getLimit().isLessThan(this.getAcquisitionRequest().getCurrentValue())) {
+            throw new DomainException("error.message.processValueExceedsLimitForClassification",
+                    DomainException.getResourceFor("resources/AcquisitionResources"));
+        }
+        super.setProcessClassification(processClassification);
+    }
 
-	public void setProcessClassificationWithoutChecks(ProcessClassification processClassification) {
-		if (processClassification.getLimit().isLessThan(this.getAcquisitionRequest().getCurrentValue())) {
-			System.out.println("Process: " + getAcquisitionProcessId() + " exceed limit with: "
-					+ getAcquisitionRequest().getCurrentValue().toFormatString());
-		}
-		super.setProcessClassification(processClassification);
-	}
+    public void setProcessClassificationWithoutChecks(ProcessClassification processClassification) {
+        if (processClassification.getLimit().isLessThan(this.getAcquisitionRequest().getCurrentValue())) {
+            System.out.println("Process: " + getAcquisitionProcessId() + " exceed limit with: "
+                    + getAcquisitionRequest().getCurrentValue().toFormatString());
+        }
+        super.setProcessClassification(processClassification);
+    }
 
-	public boolean isWarnRegardingProcessClassificationNeeded() {
-		return getProcessClassification().isCCP() != getRequestingUnit().getDefaultRegeimIsCCP();
-	}
+    public boolean isWarnRegardingProcessClassificationNeeded() {
+        return getProcessClassification().isCCP() != getRequestingUnit().getDefaultRegeimIsCCP();
+    }
 
-	@Override
-	public Boolean getShouldSkipSupplierFundAllocation() {
-		return !this.isCCP() || super.getShouldSkipSupplierFundAllocation();
-	}
+    @Override
+    public Boolean getShouldSkipSupplierFundAllocation() {
+        return !this.isCCP() || super.getShouldSkipSupplierFundAllocation();
+    }
 
-	public boolean isWarnForLessSuppliersActive() {
-		return getProcessClassification() == ProcessClassification.CT75000 && getSuppliers().size() < 3;
-	}
+    public boolean isWarnForLessSuppliersActive() {
+        return getProcessClassification() == ProcessClassification.CT75000 && getSuppliers().size() < 3;
+    }
 
-	@Override
-	public List<Class<? extends ProcessFile>> getAvailableFileTypes() {
-		List<Class<? extends ProcessFile>> availableFileTypes = new ArrayList<Class<? extends ProcessFile>>();
-		availableFileTypes.add(AcquisitionProposalDocument.class);
-		availableFileTypes.add(PurchaseOrderDocument.class);
-		availableFileTypes.add(AcquisitionInvoice.class);
-		availableFileTypes.add(CreditNoteDocument.class);
-		availableFileTypes.addAll(super.getAvailableFileTypes());
-		return availableFileTypes;
-	}
+    @Override
+    public List<Class<? extends ProcessFile>> getAvailableFileTypes() {
+        List<Class<? extends ProcessFile>> availableFileTypes = new ArrayList<Class<? extends ProcessFile>>();
+        availableFileTypes.add(AcquisitionProposalDocument.class);
+        availableFileTypes.add(PurchaseOrderDocument.class);
+        availableFileTypes.add(AcquisitionInvoice.class);
+        availableFileTypes.add(CreditNoteDocument.class);
+        availableFileTypes.addAll(super.getAvailableFileTypes());
+        return availableFileTypes;
+    }
 
-	@Override
-	public List<Class<? extends ProcessFile>> getUploadableFileTypes() {
-		List<Class<? extends ProcessFile>> uploadableFileTypes = super.getUploadableFileTypes();
-		uploadableFileTypes.remove(PurchaseOrderDocument.class);
-		return uploadableFileTypes;
-	}
+    @Override
+    public List<Class<? extends ProcessFile>> getUploadableFileTypes() {
+        List<Class<? extends ProcessFile>> uploadableFileTypes = super.getUploadableFileTypes();
+        uploadableFileTypes.remove(PurchaseOrderDocument.class);
+        return uploadableFileTypes;
+    }
 
-	@Override
-	public String getLocalizedName() {
-		return getProcessClassification().getLocalizedName();
-	}
+    @Override
+    public String getLocalizedName() {
+        return getProcessClassification().getLocalizedName();
+    }
 
-	@Override
-	public String getTypeDescription() {
-		return getProcessClassification().getLocalizedName();
-	}
+    @Override
+    public String getTypeDescription() {
+        return getProcessClassification().getLocalizedName();
+    }
 
-	@Override
-	public String getTypeShortDescription() {
-		return getProcessClassification().getShortDescription();
-	}
+    @Override
+    public String getTypeShortDescription() {
+        return getProcessClassification().getShortDescription();
+    }
 
-	@Override
-	public void processAcquisition() {
-		super.processAcquisition();
-		ProcessClassification processClassification = getProcessClassification();
-		if ((processClassification == ProcessClassification.CT75000 || processClassification == ProcessClassification.CT10000)
-				&& !getAcquisitionRequest().hasAnnouncement()) {
-			new RCISTAnnouncement(getAcquisitionRequest());
-		}
-	}
+    @Override
+    public void processAcquisition() {
+        super.processAcquisition();
+        ProcessClassification processClassification = getProcessClassification();
+        if ((processClassification == ProcessClassification.CT75000 || processClassification == ProcessClassification.CT10000)
+                && !getAcquisitionRequest().hasAnnouncement()) {
+            new RCISTAnnouncement(getAcquisitionRequest());
+        }
+    }
 
-	@Override
-	public PresentableProcessState getPresentableAcquisitionProcessState() {
-		return getLastAcquisitionProcessState().getAcquisitionProcessStateType();
-	}
+    @Override
+    public PresentableProcessState getPresentableAcquisitionProcessState() {
+        return getLastAcquisitionProcessState().getAcquisitionProcessStateType();
+    }
 
-	@Override
-	public List<? extends PresentableProcessState> getAvailablePresentableStates() {
-		return getAvailableStates();
-	}
+    @Override
+    public List<? extends PresentableProcessState> getAvailablePresentableStates() {
+        return getAvailableStates();
+    }
 
-	public boolean getFundAllocationPresent() {
-		for (final Financer financer : getAcquisitionRequest().getFinancers()) {
-			if (financer.isFundAllocationPresent()) {
-				return true;
-			}
-		}
-		return false;
-	}
+    public boolean getFundAllocationPresent() {
+        for (final Financer financer : getAcquisitionRequest().getFinancers()) {
+            if (financer.isFundAllocationPresent()) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	public boolean getEffectiveFundAllocationPresent() {
-		for (final Financer financer : getAcquisitionRequest().getFinancers()) {
-			if (financer.isEffectiveFundAllocationPresent()) {
-				return true;
-			}
-		}
-		return false;
-	}
+    public boolean getEffectiveFundAllocationPresent() {
+        for (final Financer financer : getAcquisitionRequest().getFinancers()) {
+            if (financer.isEffectiveFundAllocationPresent()) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	public boolean hasSomeInvoice() {
-		return isInvoiceReceived()
-				|| (getExpenditureTrackingSystem().isInvoiceAllowedToStartAcquisitionProcess() && hasInvoiceFile());
-	}
+    public boolean hasSomeInvoice() {
+        return isInvoiceReceived()
+                || (getExpenditureTrackingSystem().isInvoiceAllowedToStartAcquisitionProcess() && hasInvoiceFile());
+    }
 
-	@Override
-	public boolean hasInvoiceFile() {
-		for (final ProcessFile processFile : getFilesSet()) {
-			if (processFile instanceof AcquisitionInvoice && !processFile.isArchieved()) {
-				return true;
-			}
-		}
-		return false;
-	}
+    @Override
+    public boolean hasInvoiceFile() {
+        for (final ProcessFile processFile : getFilesSet()) {
+            if (processFile instanceof AcquisitionInvoice && !processFile.isArchieved()) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	@Override
-	protected boolean isProcessessStartedWithInvoive() {
-		return hasInvoiceFile() && !hasAcquisitionProposalDocument();
-	}
+    @Override
+    protected boolean isProcessessStartedWithInvoive() {
+        return hasInvoiceFile() && !hasAcquisitionProposalDocument();
+    }
 
-	@Override
-	public AcquisitionItemClassification getGoodsOrServiceClassification() {
-		final AcquisitionRequest request = getRequest();
-		return request.getGoodsOrServiceClassification();
-	}
+    @Override
+    public AcquisitionItemClassification getGoodsOrServiceClassification() {
+        final AcquisitionRequest request = getRequest();
+        return request.getGoodsOrServiceClassification();
+    }
 
 }

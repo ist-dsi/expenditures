@@ -41,64 +41,64 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
  * 
  */
 public class RemoveProjectFundAllocation extends
-		WorkflowActivity<RegularAcquisitionProcess, ActivityInformation<RegularAcquisitionProcess>> {
+        WorkflowActivity<RegularAcquisitionProcess, ActivityInformation<RegularAcquisitionProcess>> {
 
-	@Override
-	public boolean isActive(RegularAcquisitionProcess process, User user) {
-		Person person = user.getExpenditurePerson();
-		return isUserProcessOwner(process, user)
-				&& process.isProjectAccountingEmployee(person)
-				&& process.hasAllocatedFundsForAllProjectFinancers(person)
-				&& ((checkActiveConditions(process) || checkCanceledConditions(process))
-						&& !process.hasAnyNonProjectFundAllocationId() || (!requiresPriorFundAllocation() && process
-						.isInAllocatedToUnitState()));
-	}
+    @Override
+    public boolean isActive(RegularAcquisitionProcess process, User user) {
+        Person person = user.getExpenditurePerson();
+        return isUserProcessOwner(process, user)
+                && process.isProjectAccountingEmployee(person)
+                && process.hasAllocatedFundsForAllProjectFinancers(person)
+                && ((checkActiveConditions(process) || checkCanceledConditions(process))
+                        && !process.hasAnyNonProjectFundAllocationId() || (!requiresPriorFundAllocation() && process
+                        .isInAllocatedToUnitState()));
+    }
 
-	protected boolean requiresPriorFundAllocation() {
-		final ExpenditureTrackingSystem instance = ExpenditureTrackingSystem.getInstance();
-		final Boolean b = instance.getRequireFundAllocationPriorToAcquisitionRequest();
-		return b != null && b.booleanValue();
-	}
+    protected boolean requiresPriorFundAllocation() {
+        final ExpenditureTrackingSystem instance = ExpenditureTrackingSystem.getInstance();
+        final Boolean b = instance.getRequireFundAllocationPriorToAcquisitionRequest();
+        return b != null && b.booleanValue();
+    }
 
-	private boolean checkActiveConditions(RegularAcquisitionProcess process) {
-		return process.getAcquisitionProcessState().isInAllocatedToSupplierState();
-	}
+    private boolean checkActiveConditions(RegularAcquisitionProcess process) {
+        return process.getAcquisitionProcessState().isInAllocatedToSupplierState();
+    }
 
-	private boolean checkCanceledConditions(RegularAcquisitionProcess process) {
-		return process.getAcquisitionProcessState().isCanceled();
-	}
+    private boolean checkCanceledConditions(RegularAcquisitionProcess process) {
+        return process.getAcquisitionProcessState().isCanceled();
+    }
 
-	@Override
-	protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
-		RegularAcquisitionProcess process = activityInformation.getProcess();
-		if (process.isInAllocatedToUnitState() && !process.isCanceled()) {
-			process.allocateFundsToSupplier();
-		}
-		process.getAcquisitionRequest().resetProjectFundAllocationId(UserView.getCurrentUser().getExpenditurePerson());
-		RemoveFundAllocationExpirationDate removeFundAllocationExpirationDate = new RemoveFundAllocationExpirationDate();
-		if (process.getAcquisitionProcessState().isCanceled() && !process.getAcquisitionRequest().hasAllFundAllocationId()
-				&& removeFundAllocationExpirationDate.isActive(process)) {
-			removeFundAllocationExpirationDate.process(removeFundAllocationExpirationDate.getActivityInformation(process));
-		}
+    @Override
+    protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
+        RegularAcquisitionProcess process = activityInformation.getProcess();
+        if (process.isInAllocatedToUnitState() && !process.isCanceled()) {
+            process.allocateFundsToSupplier();
+        }
+        process.getAcquisitionRequest().resetProjectFundAllocationId(UserView.getCurrentUser().getExpenditurePerson());
+        RemoveFundAllocationExpirationDate removeFundAllocationExpirationDate = new RemoveFundAllocationExpirationDate();
+        if (process.getAcquisitionProcessState().isCanceled() && !process.getAcquisitionRequest().hasAllFundAllocationId()
+                && removeFundAllocationExpirationDate.isActive(process)) {
+            removeFundAllocationExpirationDate.process(removeFundAllocationExpirationDate.getActivityInformation(process));
+        }
 
-		if (ExternalIntegration.isActive()) {
-			process.cancelFundAllocationRequest(false);
-		}
-	}
+        if (ExternalIntegration.isActive()) {
+            process.cancelFundAllocationRequest(false);
+        }
+    }
 
-	@Override
-	public String getLocalizedName() {
-		return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
-	}
+    @Override
+    public String getLocalizedName() {
+        return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+    }
 
-	@Override
-	public String getUsedBundle() {
-		return "resources/AcquisitionResources";
-	}
+    @Override
+    public String getUsedBundle() {
+        return "resources/AcquisitionResources";
+    }
 
-	@Override
-	public boolean isUserAwarenessNeeded(final RegularAcquisitionProcess process, final User user) {
-		return process.isCanceled();
-	}
+    @Override
+    public boolean isUserAwarenessNeeded(final RegularAcquisitionProcess process, final User user) {
+        return process.isCanceled();
+    }
 
 }

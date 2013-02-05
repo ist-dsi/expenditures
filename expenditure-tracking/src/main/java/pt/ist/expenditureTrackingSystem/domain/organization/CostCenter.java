@@ -44,83 +44,83 @@ import dml.runtime.RelationAdapter;
  */
 public class CostCenter extends CostCenter_Base {
 
-	public static class CostCenterPartyTypeListener extends RelationAdapter<Party, PartyType> {
+    public static class CostCenterPartyTypeListener extends RelationAdapter<Party, PartyType> {
 
-		@Override
-		public void afterAdd(final Party party, final PartyType partyType) {
-			if (party.isUnit() && partyType != null
-					&& partyType == ExpenditureTrackingSystem.getInstance().getCostCenterPartyType()) {
-				new CostCenter((module.organization.domain.Unit) party);
-			}
-		}
+        @Override
+        public void afterAdd(final Party party, final PartyType partyType) {
+            if (party.isUnit() && partyType != null
+                    && partyType == ExpenditureTrackingSystem.getInstance().getCostCenterPartyType()) {
+                new CostCenter((module.organization.domain.Unit) party);
+            }
+        }
 
-	}
+    }
 
-	static {
-		Party.PartyTypeParty.addListener(new CostCenterPartyTypeListener());
-	}
+    static {
+        Party.PartyTypeParty.addListener(new CostCenterPartyTypeListener());
+    }
 
-	public CostCenter(final module.organization.domain.Unit unit) {
-		super();
-		setUnit(unit);
-	}
+    public CostCenter(final module.organization.domain.Unit unit) {
+        super();
+        setUnit(unit);
+    }
 
-	public CostCenter(final Unit parentUnit, final String name, final String costCenter) {
-		super();
-		createRealUnit(this, parentUnit, ExpenditureTrackingSystem.getInstance().getCostCenterPartyType(), costCenter, name);
+    public CostCenter(final Unit parentUnit, final String name, final String costCenter) {
+        super();
+        createRealUnit(this, parentUnit, ExpenditureTrackingSystem.getInstance().getCostCenterPartyType(), costCenter, name);
 
-		// TODO : After this object is refactored to retrieve the name and
-		// parent from the real unit,
-		// the following three lines may be deleted.
-		setName(name);
-		setCostCenter(costCenter);
-		setParentUnit(parentUnit);
-	}
+        // TODO : After this object is refactored to retrieve the name and
+        // parent from the real unit,
+        // the following three lines may be deleted.
+        setName(name);
+        setCostCenter(costCenter);
+        setParentUnit(parentUnit);
+    }
 
-	public void setCostCenter(final String costCenter) {
-		getUnit().setAcronym("CC. " + costCenter);
-	}
+    public void setCostCenter(final String costCenter) {
+        getUnit().setAcronym("CC. " + costCenter);
+    }
 
-	public String getCostCenter() {
-		return getUnit().getAcronym().substring(4);
-	}
+    public String getCostCenter() {
+        return getUnit().getAcronym().substring(4);
+    }
 
-	@Override
-	public void findAcquisitionProcessesPendingAuthorization(final Set<AcquisitionProcess> result, final boolean recurseSubUnits) {
-		final String costCenter = getCostCenter();
-		if (costCenter != null) {
-			for (final AcquisitionProcess acquisitionProcess : GenericProcess.getAllProcesses(RegularAcquisitionProcess.class)) {
-				if (acquisitionProcess.getPayingUnits().contains(this) && acquisitionProcess.isPendingApproval())
-					result.add(acquisitionProcess);
-			}
-		}
-	}
+    @Override
+    public void findAcquisitionProcessesPendingAuthorization(final Set<AcquisitionProcess> result, final boolean recurseSubUnits) {
+        final String costCenter = getCostCenter();
+        if (costCenter != null) {
+            for (final AcquisitionProcess acquisitionProcess : GenericProcess.getAllProcesses(RegularAcquisitionProcess.class)) {
+                if (acquisitionProcess.getPayingUnits().contains(this) && acquisitionProcess.isPendingApproval())
+                    result.add(acquisitionProcess);
+            }
+        }
+    }
 
-	@Override
-	public String getPresentationName() {
-		return "(CC. " + getCostCenter() + ") " + super.getPresentationName();
-	}
+    @Override
+    public String getPresentationName() {
+        return "(CC. " + getCostCenter() + ") " + super.getPresentationName();
+    }
 
-	@Override
-	public String getShortIdentifier() {
-		return getCostCenter();
-	}
+    @Override
+    public String getShortIdentifier() {
+        return getCostCenter();
+    }
 
-	@Override
-	public boolean isAccountingEmployee(final Person person) {
-		final AccountingUnit accountingUnit = getAccountingUnit();
-		return accountingUnit != null && accountingUnit.hasPeople(person);
-	}
+    @Override
+    public boolean isAccountingEmployee(final Person person) {
+        final AccountingUnit accountingUnit = getAccountingUnit();
+        return accountingUnit != null && accountingUnit.hasPeople(person);
+    }
 
-	@Override
-	public Financer finance(final RequestWithPayment acquisitionRequest) {
-		return new Financer(acquisitionRequest, this);
-	}
+    @Override
+    public Financer finance(final RequestWithPayment acquisitionRequest) {
+        return new Financer(acquisitionRequest, this);
+    }
 
-	@Override
-	public CostCenter getCostCenterUnit() {
-		return this;
-	}
+    @Override
+    public CostCenter getCostCenterUnit() {
+        return this;
+    }
 
 /*
     @Override
@@ -130,9 +130,9 @@ public class CostCenter extends CostCenter_Base {
 	return document;
     }
 */
-	@Override
-	public String getUnitNumber() {
-		return getCostCenter();
-	}
+    @Override
+    public String getUnitNumber() {
+        return getCostCenter();
+    }
 
 }

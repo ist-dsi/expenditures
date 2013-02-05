@@ -8,24 +8,24 @@ import module.workflow.activities.WorkflowActivity;
 
 public class RevertMissionForEditingActivityInformation extends ActivityInformation<MissionProcess> implements Serializable {
 
-	private String description;
+    private String description;
 
-	public RevertMissionForEditingActivityInformation(final MissionProcess missionProcess,
-			final WorkflowActivity<MissionProcess, ? extends ActivityInformation<MissionProcess>> activity) {
-		super(missionProcess, activity);
-	}
+    public RevertMissionForEditingActivityInformation(final MissionProcess missionProcess,
+            final WorkflowActivity<MissionProcess, ? extends ActivityInformation<MissionProcess>> activity) {
+        super(missionProcess, activity);
+    }
 
-	@Override
-	public boolean hasAllneededInfo() {
-		return super.hasAllneededInfo() && description != null && !description.trim().isEmpty() && isForwardedFromInput();
-	}
+    @Override
+    public boolean hasAllneededInfo() {
+        return super.hasAllneededInfo() && description != null && !description.trim().isEmpty() && isForwardedFromInput();
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public void setDescription(final String description) {
-		this.description = description;
-	}
+    public void setDescription(final String description) {
+        this.description = description;
+    }
 
 }

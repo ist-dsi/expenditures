@@ -51,15 +51,15 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 @Mapping(path = "/missionInterfaceCreationAction")
 public class InterfaceCreationAction extends ContextBaseAction {
 
-	@CreateNodeAction(bundle = "MISSION_RESOURCES", key = "add.node.mission.interface", groupKey = "label.module.mission")
-	public final ActionForward createAnnouncmentNodes(final ActionMapping mapping, final ActionForm form,
-			final HttpServletRequest request, final HttpServletResponse response) throws Exception {
-		final VirtualHost virtualHost = getDomainObject(request, "virtualHostToManageId");
-		final Node node = getDomainObject(request, "parentOfNodesToManageId");
+    @CreateNodeAction(bundle = "MISSION_RESOURCES", key = "add.node.mission.interface", groupKey = "label.module.mission")
+    public final ActionForward createAnnouncmentNodes(final ActionMapping mapping, final ActionForm form,
+            final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+        final VirtualHost virtualHost = getDomainObject(request, "virtualHostToManageId");
+        final Node node = getDomainObject(request, "parentOfNodesToManageId");
 
-		ActionNode homeNode =
-				ActionNode.createActionNode(virtualHost, node, "/missionProcess", "frontPage", "resources.MissionResources",
-						"link.sideBar.missionProcess", UserGroup.getInstance());
+        ActionNode homeNode =
+                ActionNode.createActionNode(virtualHost, node, "/missionProcess", "frontPage", "resources.MissionResources",
+                        "link.sideBar.missionProcess", UserGroup.getInstance());
 
 //	ActionNode homeNode = ActionNode.createActionNode(virtualHost, node, "/searchMissions", "prepare",
 //		"resources.MissionResources", "link.sideBar.missionProcess", Role.getRole(RoleType.MANAGER));
@@ -67,43 +67,43 @@ public class InterfaceCreationAction extends ContextBaseAction {
 //	ActionNode homeNode = ActionNode.createActionNode(virtualHost, node, "/missionProcess", "showProcesses",
 //		"resources.MissionResources", "link.sideBar.missionProcess", UserGroup.getInstance());
 
-		ActionNode.createActionNode(virtualHost, homeNode, "/missionProcess", "missionCreationInstructions",
-				"resources.MissionResources", "link.sideBar.newMission", UserGroup.getInstance());
+        ActionNode.createActionNode(virtualHost, homeNode, "/missionProcess", "missionCreationInstructions",
+                "resources.MissionResources", "link.sideBar.newMission", UserGroup.getInstance());
 
-		ActionNode.createActionNode(virtualHost, homeNode, "/searchMissions", "prepare", "resources.MissionResources",
-				"link.sideBar.missionSearch", UserGroup.getInstance());
+        ActionNode.createActionNode(virtualHost, homeNode, "/searchMissions", "prepare", "resources.MissionResources",
+                "link.sideBar.missionSearch", UserGroup.getInstance());
 
-		ActionNode.createActionNode(virtualHost, homeNode, "/missionOrganization", "showPerson", "resources.MissionResources",
-				"link.sideBar.organization", UserGroup.getInstance());
+        ActionNode.createActionNode(virtualHost, homeNode, "/missionOrganization", "showPerson", "resources.MissionResources",
+                "link.sideBar.organization", UserGroup.getInstance());
 
-		ActionNode.createActionNode(virtualHost, homeNode, "/configureMissions", "prepare", "resources.MissionResources",
-				"link.sideBar.missionConfiguration", Role.getRole(RoleType.MANAGER));
+        ActionNode.createActionNode(virtualHost, homeNode, "/configureMissions", "prepare", "resources.MissionResources",
+                "link.sideBar.missionConfiguration", Role.getRole(RoleType.MANAGER));
 
-		ActionNode.createActionNode(virtualHost, homeNode, "/missionProcess", "help", "resources.MissionResources",
-				"link.sideBar.help", UserGroup.getInstance());
+        ActionNode.createActionNode(virtualHost, homeNode, "/missionProcess", "help", "resources.MissionResources",
+                "link.sideBar.help", UserGroup.getInstance());
 
-		return forwardToMuneConfiguration(request, virtualHost, node);
-	}
+        return forwardToMuneConfiguration(request, virtualHost, node);
+    }
 
-	@CreateNodeAction(bundle = "MISSION_RESOURCES", key = "add.node.mission.interface.help", groupKey = "label.module.mission")
-	public final ActionForward createHelpLinkNode(final ActionMapping mapping, final ActionForm form,
-			final HttpServletRequest request, final HttpServletResponse response) throws Exception {
-		final VirtualHost virtualHost = getDomainObject(request, "virtualHostToManageId");
-		final Node node = getDomainObject(request, "parentOfNodesToManageId");
+    @CreateNodeAction(bundle = "MISSION_RESOURCES", key = "add.node.mission.interface.help", groupKey = "label.module.mission")
+    public final ActionForward createHelpLinkNode(final ActionMapping mapping, final ActionForm form,
+            final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+        final VirtualHost virtualHost = getDomainObject(request, "virtualHostToManageId");
+        final Node node = getDomainObject(request, "parentOfNodesToManageId");
 
-		LinkNode.createLinkNode(virtualHost, node, "https://fenix-ashes.ist.utl.pt/fenixWiki/Qualidade/Missoes",
-				"resources.MissionResources", "link.sideBar.help", UserGroup.getInstance());
+        LinkNode.createLinkNode(virtualHost, node, "https://fenix-ashes.ist.utl.pt/fenixWiki/Qualidade/Missoes",
+                "resources.MissionResources", "link.sideBar.help", UserGroup.getInstance());
 
-		VaadinNode.createVaadinNode(virtualHost, node, "resources.ContentResources", "add.interface.vaadinWiki",
-				"PageView-322122547202", UserGroup.getInstance());
+        VaadinNode.createVaadinNode(virtualHost, node, "resources.ContentResources", "add.interface.vaadinWiki",
+                "PageView-322122547202", UserGroup.getInstance());
 
-		VaadinNode.createVaadinNode(virtualHost, node, "resources.ContentResources", "add.interface.vaadinWiki",
-				"SimplePageView-322122547202", UserGroup.getInstance());
+        VaadinNode.createVaadinNode(virtualHost, node, "resources.ContentResources", "add.interface.vaadinWiki",
+                "SimplePageView-322122547202", UserGroup.getInstance());
 
-		ActionNode.createActionNode(virtualHost, node, "/traditionalPageViewer", "viewPage&pageID=322122547202",
-				"resources.ContentResources", "add.interface.vaadinWiki", UserGroup.getInstance());
+        ActionNode.createActionNode(virtualHost, node, "/traditionalPageViewer", "viewPage&pageID=322122547202",
+                "resources.ContentResources", "add.interface.vaadinWiki", UserGroup.getInstance());
 
-		return forwardToMuneConfiguration(request, virtualHost, node);
-	}
+        return forwardToMuneConfiguration(request, virtualHost, node);
+    }
 
 }

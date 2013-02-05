@@ -8,18 +8,18 @@ import pt.ist.fenixWebFramework.services.Service;
 
 public class AuthorizeDislocationService {
 
-	@Service
-	public static void authorizeDislocation(final Set<PersonMissionAuthorization> personMissionAuthorizations) {
-		for (final PersonMissionAuthorization personMissionAuthorization : personMissionAuthorizations) {
-			final Mission mission = personMissionAuthorization.getAssociatedMission();
-			final MissionProcess missionProcess = mission.getMissionProcess();
-			final AuthoriseParticipantActivity activity =
-					(AuthoriseParticipantActivity) missionProcess.getActivity(AuthoriseParticipantActivity.class);
-			final AuthoriseParticipantActivityInformation activityInformation =
-					(AuthoriseParticipantActivityInformation) activity.getActivityInformation(missionProcess);
-			activityInformation.setPersonMissionAuthorization(personMissionAuthorization);
-			activity.execute(activityInformation);
-		}
-	}
+    @Service
+    public static void authorizeDislocation(final Set<PersonMissionAuthorization> personMissionAuthorizations) {
+        for (final PersonMissionAuthorization personMissionAuthorization : personMissionAuthorizations) {
+            final Mission mission = personMissionAuthorization.getAssociatedMission();
+            final MissionProcess missionProcess = mission.getMissionProcess();
+            final AuthoriseParticipantActivity activity =
+                    (AuthoriseParticipantActivity) missionProcess.getActivity(AuthoriseParticipantActivity.class);
+            final AuthoriseParticipantActivityInformation activityInformation =
+                    (AuthoriseParticipantActivityInformation) activity.getActivityInformation(missionProcess);
+            activityInformation.setPersonMissionAuthorization(personMissionAuthorization);
+            activity.execute(activityInformation);
+        }
+    }
 
 }

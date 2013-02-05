@@ -37,31 +37,31 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
  * 
  */
 public class GenericAddPayingUnit<P extends PaymentProcess> extends
-		WorkflowActivity<P, GenericAddPayingUnitActivityInformation<P>> {
+        WorkflowActivity<P, GenericAddPayingUnitActivityInformation<P>> {
 
-	@Override
-	public boolean isActive(P process, User user) {
-		return isUserProcessOwner(process, user) && process.isInGenesis()
-				&& process.getRequestor() == user.getExpenditurePerson();
-	}
+    @Override
+    public boolean isActive(P process, User user) {
+        return isUserProcessOwner(process, user) && process.isInGenesis()
+                && process.getRequestor() == user.getExpenditurePerson();
+    }
 
-	@Override
-	protected void process(GenericAddPayingUnitActivityInformation<P> activityInformation) {
-		activityInformation.getProcess().getRequest().addPayingUnit(activityInformation.getPayingUnit());
-	}
+    @Override
+    protected void process(GenericAddPayingUnitActivityInformation<P> activityInformation) {
+        activityInformation.getProcess().getRequest().addPayingUnit(activityInformation.getPayingUnit());
+    }
 
-	public GenericAddPayingUnitActivityInformation<P> getActivityInformation(P process) {
-		return new GenericAddPayingUnitActivityInformation<P>(process, this);
-	}
+    public GenericAddPayingUnitActivityInformation<P> getActivityInformation(P process) {
+        return new GenericAddPayingUnitActivityInformation<P>(process, this);
+    }
 
-	@Override
-	public String getLocalizedName() {
-		return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
-	}
+    @Override
+    public String getLocalizedName() {
+        return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+    }
 
-	@Override
-	public String getUsedBundle() {
-		return "resources/AcquisitionResources";
-	}
+    @Override
+    public String getUsedBundle() {
+        return "resources/AcquisitionResources";
+    }
 
 }

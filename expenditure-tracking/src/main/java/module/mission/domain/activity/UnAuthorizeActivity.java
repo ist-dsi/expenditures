@@ -37,23 +37,23 @@ import pt.ist.bennu.core.util.BundleUtil;
  */
 public class UnAuthorizeActivity extends MissionProcessActivity<MissionProcess, ActivityInformation<MissionProcess>> {
 
-	@Override
-	public String getLocalizedName() {
-		return BundleUtil.getStringFromResourceBundle("resources/MissionResources", "activity." + getClass().getSimpleName());
-	}
+    @Override
+    public String getLocalizedName() {
+        return BundleUtil.getStringFromResourceBundle("resources/MissionResources", "activity." + getClass().getSimpleName());
+    }
 
-	@Override
-	public boolean isActive(final MissionProcess missionProcess, final User user) {
-		return super.isActive(missionProcess, user) && !missionProcess.getIsCanceled()
-				&& missionProcess.canRemoveAuthorization(user) && !missionProcess.areAllParticipantsAuthorized()
-				&& !missionProcess.hasAnyActivePaymentProcess();
-	}
+    @Override
+    public boolean isActive(final MissionProcess missionProcess, final User user) {
+        return super.isActive(missionProcess, user) && !missionProcess.getIsCanceled()
+                && missionProcess.canRemoveAuthorization(user) && !missionProcess.areAllParticipantsAuthorized()
+                && !missionProcess.hasAnyActivePaymentProcess();
+    }
 
-	@Override
-	protected void process(final ActivityInformation activityInformation) {
-		final MissionProcess missionProcess = (MissionProcess) activityInformation.getProcess();
-		final User user = UserView.getCurrentUser();
-		missionProcess.unauthorize(user);
-	}
+    @Override
+    protected void process(final ActivityInformation activityInformation) {
+        final MissionProcess missionProcess = (MissionProcess) activityInformation.getProcess();
+        final User user = UserView.getCurrentUser();
+        missionProcess.unauthorize(user);
+    }
 
 }

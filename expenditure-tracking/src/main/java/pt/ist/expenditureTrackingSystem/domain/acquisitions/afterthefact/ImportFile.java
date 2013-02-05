@@ -35,51 +35,51 @@ import pt.ist.fenixWebFramework.services.Service;
  */
 public class ImportFile extends ImportFile_Base {
 
-	public ImportFile(byte[] bytes, String displayName) {
-		super();
-		setContent(bytes);
-		setDisplayName(displayName);
-		setActive(Boolean.TRUE);
-	}
+    public ImportFile(byte[] bytes, String displayName) {
+        super();
+        setContent(bytes);
+        setDisplayName(displayName);
+        setActive(Boolean.TRUE);
+    }
 
-	@Override
-	@Service
-	public void delete() {
-		if (getAfterTheFactAcquisitionProcessesCount() > 0) {
-			throw new DomainException("exception.domain.ImportFile.cannotDeleteImportFileWithProcesses");
-		}
+    @Override
+    @Service
+    public void delete() {
+        if (getAfterTheFactAcquisitionProcessesCount() > 0) {
+            throw new DomainException("exception.domain.ImportFile.cannotDeleteImportFileWithProcesses");
+        }
 
-		deleteDomainObject();
-	}
+        deleteDomainObject();
+    }
 
-	@Service
-	public void cancel() {
-		if (getAfterTheFactAcquisitionProcessesCount() == 0) {
-			delete();
+    @Service
+    public void cancel() {
+        if (getAfterTheFactAcquisitionProcessesCount() == 0) {
+            delete();
 
-		} else {
-			for (AfterTheFactAcquisitionProcess process : getAfterTheFactAcquisitionProcesses()) {
-				process.cancel();
-			}
-			setActive(Boolean.FALSE);
-		}
-	}
+        } else {
+            for (AfterTheFactAcquisitionProcess process : getAfterTheFactAcquisitionProcesses()) {
+                process.cancel();
+            }
+            setActive(Boolean.FALSE);
+        }
+    }
 
-	@Service
-	public void reenable() {
-		setActive(Boolean.TRUE);
-		for (AfterTheFactAcquisitionProcess process : getAfterTheFactAcquisitionProcesses()) {
-			process.renable();
-		}
+    @Service
+    public void reenable() {
+        setActive(Boolean.TRUE);
+        for (AfterTheFactAcquisitionProcess process : getAfterTheFactAcquisitionProcesses()) {
+            process.renable();
+        }
 
-	}
+    }
 
-	@Override
-	public boolean isConnectedToCurrentHost() {
-		for (final AfterTheFactAcquisitionProcess process : getAfterTheFactAcquisitionProcesses()) {
-			return process != null && process.isConnectedToCurrentHost();
-		}
-		return false;
-	}
+    @Override
+    public boolean isConnectedToCurrentHost() {
+        for (final AfterTheFactAcquisitionProcess process : getAfterTheFactAcquisitionProcesses()) {
+            return process != null && process.isConnectedToCurrentHost();
+        }
+        return false;
+    }
 
 }

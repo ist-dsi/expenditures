@@ -37,29 +37,29 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
  */
 public class ChangeFinancersAccountingUnit extends AbstractChangeFinancersAccountUnit<RefundProcess> {
 
-	@Override
-	public boolean isActive(RefundProcess process, User user) {
-		Person person = user.getExpenditurePerson();
-		return isUserProcessOwner(process, user)
-				&& process.isPendingFundAllocation()
-				&& (process.isAccountingEmployeeForOnePossibleUnit(person) || process
-						.isProjectAccountingEmployeeForOnePossibleUnit(person))
-				&& process.getRequest().hasAnyAccountingUnitFinancerWithNoFundsAllocated(person);
-	}
+    @Override
+    public boolean isActive(RefundProcess process, User user) {
+        Person person = user.getExpenditurePerson();
+        return isUserProcessOwner(process, user)
+                && process.isPendingFundAllocation()
+                && (process.isAccountingEmployeeForOnePossibleUnit(person) || process
+                        .isProjectAccountingEmployeeForOnePossibleUnit(person))
+                && process.getRequest().hasAnyAccountingUnitFinancerWithNoFundsAllocated(person);
+    }
 
-	@Override
-	public String getLocalizedName() {
-		return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
-	}
+    @Override
+    public String getLocalizedName() {
+        return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+    }
 
-	@Override
-	public String getUsedBundle() {
-		return "resources/AcquisitionResources";
-	}
+    @Override
+    public String getUsedBundle() {
+        return "resources/AcquisitionResources";
+    }
 
-	@Override
-	public boolean isUserAwarenessNeeded(RefundProcess process) {
-		return false;
-	}
+    @Override
+    public boolean isUserAwarenessNeeded(RefundProcess process) {
+        return false;
+    }
 
 }

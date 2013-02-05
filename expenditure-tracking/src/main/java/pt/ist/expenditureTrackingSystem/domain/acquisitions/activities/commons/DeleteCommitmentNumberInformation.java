@@ -37,24 +37,24 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionPr
  */
 public class DeleteCommitmentNumberInformation extends ActivityInformation<RegularAcquisitionProcess> {
 
-	private Financer financer;
+    private Financer financer;
 
-	public DeleteCommitmentNumberInformation(final RegularAcquisitionProcess process,
-			final WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity) {
-		super(process, activity);
-	}
+    public DeleteCommitmentNumberInformation(final RegularAcquisitionProcess process,
+            final WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity) {
+        super(process, activity);
+    }
 
-	@Override
-	public boolean hasAllneededInfo() {
-		return super.hasAllneededInfo() && financer != null;
-	}
+    @Override
+    public boolean hasAllneededInfo() {
+        return super.hasAllneededInfo() && financer != null;
+    }
 
-	public Financer getFinancer() {
-		return financer;
-	}
+    public Financer getFinancer() {
+        return financer;
+    }
 
-	public void setFinancer(Financer financer) {
-		this.financer = financer;
-	}
+    public void setFinancer(Financer financer) {
+        this.financer = financer;
+    }
 
 }

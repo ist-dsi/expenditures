@@ -38,94 +38,94 @@ import pt.utl.ist.fenix.tools.util.i18n.Language;
  */
 public enum RefundProcessStateType implements IPresentableEnum, PresentableProcessState {
 
-	IN_GENESIS {
+    IN_GENESIS {
 
-		@Override
-		public boolean isCompleted(final RefundProcessStateType currentStateType) {
-			return currentStateType.ordinal() > ordinal();
-		}
+        @Override
+        public boolean isCompleted(final RefundProcessStateType currentStateType) {
+            return currentStateType.ordinal() > ordinal();
+        }
 
-	},
+    },
 
-	SUBMITTED_FOR_APPROVAL,
+    SUBMITTED_FOR_APPROVAL,
 
-	APPROVED,
+    APPROVED,
 
-	FUNDS_ALLOCATED,
+    FUNDS_ALLOCATED,
 
-	AUTHORIZED,
+    AUTHORIZED,
 
-	SUBMITTED_FOR_INVOICE_CONFIRMATION,
+    SUBMITTED_FOR_INVOICE_CONFIRMATION,
 
-	INVOICES_CONFIRMED,
+    INVOICES_CONFIRMED,
 
-	FUNDS_ALLOCATED_PERMANENTLY,
+    FUNDS_ALLOCATED_PERMANENTLY,
 
-	REFUNDED {
-		@Override
-		public boolean hasNextState() {
-			return false;
-		}
-	},
+    REFUNDED {
+        @Override
+        public boolean hasNextState() {
+            return false;
+        }
+    },
 
-	CANCELED {
+    CANCELED {
 
-		@Override
-		public boolean showFor(final RefundProcessStateType currentStateType) {
-			return false;
-		}
+        @Override
+        public boolean showFor(final RefundProcessStateType currentStateType) {
+            return false;
+        }
 
-		@Override
-		public boolean hasNextState() {
-			return false;
-		}
+        @Override
+        public boolean hasNextState() {
+            return false;
+        }
 
-		@Override
-		public boolean isBlocked(final RefundProcessStateType currentStateType) {
-			return true;
-		}
+        @Override
+        public boolean isBlocked(final RefundProcessStateType currentStateType) {
+            return true;
+        }
 
-	};
+    };
 
-	private RefundProcessStateType() {
-	}
+    private RefundProcessStateType() {
+    }
 
-	public String getLocalizedName() {
-		final ResourceBundle resourceBundle =
-				ResourceBundle.getBundle("resources.ExpenditureEnumerationResources", Language.getLocale());
-		return resourceBundle.getString(RefundProcessStateType.class.getSimpleName() + "." + name());
-	}
+    public String getLocalizedName() {
+        final ResourceBundle resourceBundle =
+                ResourceBundle.getBundle("resources.ExpenditureEnumerationResources", Language.getLocale());
+        return resourceBundle.getString(RefundProcessStateType.class.getSimpleName() + "." + name());
+    }
 
-	public boolean showFor(final RefundProcessStateType currentStateType) {
-		return true;
-	}
+    public boolean showFor(final RefundProcessStateType currentStateType) {
+        return true;
+    }
 
-	public boolean hasNextState() {
-		return true;
-	}
+    public boolean hasNextState() {
+        return true;
+    }
 
-	public boolean isCompleted(final RefundProcessStateType currentStateType) {
-		return currentStateType.ordinal() >= ordinal();
-	}
+    public boolean isCompleted(final RefundProcessStateType currentStateType) {
+        return currentStateType.ordinal() >= ordinal();
+    }
 
-	public boolean isBlocked(final RefundProcessStateType currentStateType) {
-		return false;
-	}
+    public boolean isBlocked(final RefundProcessStateType currentStateType) {
+        return false;
+    }
 
-	public boolean isActive() {
-		return (this != CANCELED);
-	}
+    public boolean isActive() {
+        return (this != CANCELED);
+    }
 
-	@Override
-	public String getDescription() {
-		final ResourceBundle resourceBundle =
-				ResourceBundle.getBundle("resources.ExpenditureEnumerationResources", Language.getLocale());
-		return resourceBundle.getString(RefundProcessStateType.class.getSimpleName() + "." + name() + ".description");
-	}
+    @Override
+    public String getDescription() {
+        final ResourceBundle resourceBundle =
+                ResourceBundle.getBundle("resources.ExpenditureEnumerationResources", Language.getLocale());
+        return resourceBundle.getString(RefundProcessStateType.class.getSimpleName() + "." + name() + ".description");
+    }
 
-	@Override
-	public boolean showFor(PresentableProcessState state) {
-		return showFor((RefundProcessStateType) state);
-	}
+    @Override
+    public boolean showFor(PresentableProcessState state) {
+        return showFor((RefundProcessStateType) state);
+    }
 
 }

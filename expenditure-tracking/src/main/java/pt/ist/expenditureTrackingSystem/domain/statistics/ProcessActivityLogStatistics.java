@@ -49,52 +49,52 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
  */
 public abstract class ProcessActivityLogStatistics {
 
-	protected final List<LogEntry> logEntries = new ArrayList<LogEntry>();
+    protected final List<LogEntry> logEntries = new ArrayList<LogEntry>();
 
-	protected abstract void register(final PaymentProcessYear paymentProcessYear);
+    protected abstract void register(final PaymentProcessYear paymentProcessYear);
 
-	protected void register(final PaymentProcess process) {
-		final List<WorkflowLog> operationLogs = new ArrayList<WorkflowLog>(process.getExecutionLogs(ActivityLog.class));
-		Collections.sort(operationLogs, WorkflowLog.COMPARATOR_BY_WHEN);
+    protected void register(final PaymentProcess process) {
+        final List<WorkflowLog> operationLogs = new ArrayList<WorkflowLog>(process.getExecutionLogs(ActivityLog.class));
+        Collections.sort(operationLogs, WorkflowLog.COMPARATOR_BY_WHEN);
 
-		final Set<LogEntry> logEntrySet = new HashSet<LogEntry>();
+        final Set<LogEntry> logEntrySet = new HashSet<LogEntry>();
 
-		for (int i = 1; i < operationLogs.size(); i++) {
-			final WorkflowLog operationLog = operationLogs.get(i);
-			final WorkflowLog previousLog = operationLogs.get(i - 1);
+        for (int i = 1; i < operationLogs.size(); i++) {
+            final WorkflowLog operationLog = operationLogs.get(i);
+            final WorkflowLog previousLog = operationLogs.get(i - 1);
 
-			final long duration = calculateDuration(operationLog, previousLog);
+            final long duration = calculateDuration(operationLog, previousLog);
 
-			final WorkflowActivity abstractActivity = getActivity(process, (ActivityLog) operationLog);
-			final LogEntry logEntry = getLogEntry(abstractActivity);
-			if (!logEntrySet.contains(logEntry)) {
-				logEntrySet.add(logEntry);
-				logEntry.countProcess();
-			}
-			logEntry.register(duration);
-		}
-	}
+            final WorkflowActivity abstractActivity = getActivity(process, (ActivityLog) operationLog);
+            final LogEntry logEntry = getLogEntry(abstractActivity);
+            if (!logEntrySet.contains(logEntry)) {
+                logEntrySet.add(logEntry);
+                logEntry.countProcess();
+            }
+            logEntry.register(duration);
+        }
+    }
 
-	protected WorkflowActivity<WorkflowProcess, ActivityInformation<WorkflowProcess>> getActivity(PaymentProcess process,
-			ActivityLog operationLog) {
-		return process.getActivity(operationLog.getOperation());
-	}
+    protected WorkflowActivity<WorkflowProcess, ActivityInformation<WorkflowProcess>> getActivity(PaymentProcess process,
+            ActivityLog operationLog) {
+        return process.getActivity(operationLog.getOperation());
+    }
 
-	protected long calculateDuration(final WorkflowLog operationLog, final WorkflowLog previousLog) {
-		final DateTime dateTime = operationLog.getWhenOperationWasRan();
-		final DateTime previousDateTime = previousLog.getWhenOperationWasRan();
-		return dateTime.getMillis() - previousDateTime.getMillis();
-	}
+    protected long calculateDuration(final WorkflowLog operationLog, final WorkflowLog previousLog) {
+        final DateTime dateTime = operationLog.getWhenOperationWasRan();
+        final DateTime previousDateTime = previousLog.getWhenOperationWasRan();
+        return dateTime.getMillis() - previousDateTime.getMillis();
+    }
 
-	protected LogEntry getLogEntry(final WorkflowActivity abstractActivity) {
-		for (final LogEntry logEntry : logEntries) {
-			if (logEntry.getAbstractActivity() == abstractActivity) {
-				return logEntry;
-			}
-		}
-		final LogEntry logEntry = new LogEntry(abstractActivity);
-		logEntries.add(logEntry);
-		return logEntry;
-	}
+    protected LogEntry getLogEntry(final WorkflowActivity abstractActivity) {
+        for (final LogEntry logEntry : logEntries) {
+            if (logEntry.getAbstractActivity() == abstractActivity) {
+                return logEntry;
+            }
+        }
+        final LogEntry logEntry = new LogEntry(abstractActivity);
+        logEntries.add(logEntry);
+        return logEntry;
+    }
 
 }

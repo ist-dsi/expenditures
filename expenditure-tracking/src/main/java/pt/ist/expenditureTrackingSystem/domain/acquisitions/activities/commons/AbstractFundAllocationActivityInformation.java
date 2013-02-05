@@ -43,36 +43,36 @@ import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean;
  */
 public abstract class AbstractFundAllocationActivityInformation<T extends PaymentProcess> extends ActivityInformation<T> {
 
-	protected List<FundAllocationBean> beans;
+    protected List<FundAllocationBean> beans;
 
-	public AbstractFundAllocationActivityInformation(final T process,
-			final WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity, final boolean takeProcess) {
-		super(process, activity);
-		beans = new ArrayList<FundAllocationBean>();
-		if (takeProcess && process.getCurrentOwner() == null) {
-			process.takeProcess();
-		}
-		generateBeans();
-	}
+    public AbstractFundAllocationActivityInformation(final T process,
+            final WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity, final boolean takeProcess) {
+        super(process, activity);
+        beans = new ArrayList<FundAllocationBean>();
+        if (takeProcess && process.getCurrentOwner() == null) {
+            process.takeProcess();
+        }
+        generateBeans();
+    }
 
-	public void generateBeans() {
-		for (Financer financer : getFinancers()) {
-			beans.add(new FundAllocationBean(financer));
-		}
-	}
+    public void generateBeans() {
+        for (Financer financer : getFinancers()) {
+            beans.add(new FundAllocationBean(financer));
+        }
+    }
 
-	public List<FundAllocationBean> getBeans() {
-		return beans;
-	}
+    public List<FundAllocationBean> getBeans() {
+        return beans;
+    }
 
-	public void setBeans(List<FundAllocationBean> beans) {
-		this.beans = beans;
-	}
+    public void setBeans(List<FundAllocationBean> beans) {
+        this.beans = beans;
+    }
 
-	@Override
-	public boolean hasAllneededInfo() {
-		return isForwardedFromInput();
-	}
+    @Override
+    public boolean hasAllneededInfo() {
+        return isForwardedFromInput();
+    }
 
-	public abstract Set<? extends Financer> getFinancers();
+    public abstract Set<? extends Financer> getFinancers();
 }

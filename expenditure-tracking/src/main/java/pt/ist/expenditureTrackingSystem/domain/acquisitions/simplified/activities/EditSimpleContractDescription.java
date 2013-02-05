@@ -39,35 +39,35 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.Simplifie
  * 
  */
 public class EditSimpleContractDescription extends
-		WorkflowActivity<SimplifiedProcedureProcess, EditSimpleContractDescriptionActivityInformation> {
+        WorkflowActivity<SimplifiedProcedureProcess, EditSimpleContractDescriptionActivityInformation> {
 
-	@Override
-	public boolean isActive(SimplifiedProcedureProcess process, User user) {
-		ProcessClassification processClassification = process.getProcessClassification();
-		return (processClassification == ProcessClassification.CT10000 || processClassification == ProcessClassification.CT75000)
-				&& (process.isInAuthorizedState() && ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user) && process
-						.isCommitted()) || (process.isInGenesis() && process.getProcessCreator() == user);
-	}
+    @Override
+    public boolean isActive(SimplifiedProcedureProcess process, User user) {
+        ProcessClassification processClassification = process.getProcessClassification();
+        return (processClassification == ProcessClassification.CT10000 || processClassification == ProcessClassification.CT75000)
+                && (process.isInAuthorizedState() && ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user) && process
+                        .isCommitted()) || (process.isInGenesis() && process.getProcessCreator() == user);
+    }
 
-	@Override
-	public ActivityInformation<SimplifiedProcedureProcess> getActivityInformation(SimplifiedProcedureProcess process) {
-		return new EditSimpleContractDescriptionActivityInformation(process, this);
-	}
+    @Override
+    public ActivityInformation<SimplifiedProcedureProcess> getActivityInformation(SimplifiedProcedureProcess process) {
+        return new EditSimpleContractDescriptionActivityInformation(process, this);
+    }
 
-	@Override
-	protected void process(EditSimpleContractDescriptionActivityInformation activityInformation) {
-		activityInformation.getProcess().getAcquisitionRequest()
-				.setContractSimpleDescription(activityInformation.getContractSimpleDescription());
-	}
+    @Override
+    protected void process(EditSimpleContractDescriptionActivityInformation activityInformation) {
+        activityInformation.getProcess().getAcquisitionRequest()
+                .setContractSimpleDescription(activityInformation.getContractSimpleDescription());
+    }
 
-	@Override
-	public String getLocalizedName() {
-		return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
-	}
+    @Override
+    public String getLocalizedName() {
+        return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+    }
 
-	@Override
-	public String getUsedBundle() {
-		return "resources/AcquisitionResources";
-	}
+    @Override
+    public String getUsedBundle() {
+        return "resources/AcquisitionResources";
+    }
 
 }

@@ -44,33 +44,33 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
  */
 public class AbstractChangeFinancersAccountUnitActivityInformation<P extends PaymentProcess> extends ActivityInformation<P> {
 
-	private List<ChangeFinancerAccountingUnitBean> beans;
+    private List<ChangeFinancerAccountingUnitBean> beans;
 
-	public AbstractChangeFinancersAccountUnitActivityInformation(P process,
-			WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity) {
-		super(process, activity);
-		Set<Financer> financersWithFundsAllocated =
-				process.getRequest().getAccountingUnitFinancerWithNoFundsAllocated(Person.getLoggedPerson());
-		Set<ChangeFinancerAccountingUnitBean> financersBean =
-				new HashSet<ChangeFinancerAccountingUnitBean>(financersWithFundsAllocated.size());
-		for (Financer financer : financersWithFundsAllocated) {
-			financersBean.add(new ChangeFinancerAccountingUnitBean(financer, financer.getAccountingUnit()));
-		}
-		beans = new ArrayList<ChangeFinancerAccountingUnitBean>();
-		beans.addAll(financersBean);
-	}
+    public AbstractChangeFinancersAccountUnitActivityInformation(P process,
+            WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity) {
+        super(process, activity);
+        Set<Financer> financersWithFundsAllocated =
+                process.getRequest().getAccountingUnitFinancerWithNoFundsAllocated(Person.getLoggedPerson());
+        Set<ChangeFinancerAccountingUnitBean> financersBean =
+                new HashSet<ChangeFinancerAccountingUnitBean>(financersWithFundsAllocated.size());
+        for (Financer financer : financersWithFundsAllocated) {
+            financersBean.add(new ChangeFinancerAccountingUnitBean(financer, financer.getAccountingUnit()));
+        }
+        beans = new ArrayList<ChangeFinancerAccountingUnitBean>();
+        beans.addAll(financersBean);
+    }
 
-	public List<ChangeFinancerAccountingUnitBean> getBeans() {
-		return beans;
-	}
+    public List<ChangeFinancerAccountingUnitBean> getBeans() {
+        return beans;
+    }
 
-	public void setBeans(List<ChangeFinancerAccountingUnitBean> beans) {
-		this.beans = beans;
-	}
+    public void setBeans(List<ChangeFinancerAccountingUnitBean> beans) {
+        this.beans = beans;
+    }
 
-	@Override
-	public boolean hasAllneededInfo() {
-		return isForwardedFromInput();
-	}
+    @Override
+    public boolean hasAllneededInfo() {
+        return isForwardedFromInput();
+    }
 
 }

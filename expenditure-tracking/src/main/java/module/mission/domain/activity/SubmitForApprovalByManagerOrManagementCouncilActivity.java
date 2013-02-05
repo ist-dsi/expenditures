@@ -37,36 +37,36 @@ import pt.ist.bennu.core.util.BundleUtil;
  * 
  */
 public class SubmitForApprovalByManagerOrManagementCouncilActivity extends
-		MissionProcessActivity<MissionProcess, ActivityInformation<MissionProcess>> {
+        MissionProcessActivity<MissionProcess, ActivityInformation<MissionProcess>> {
 
-	@Override
-	public String getLocalizedName() {
-		return BundleUtil.getStringFromResourceBundle("resources/MissionResources",
-				"activity." + SubmitForApprovalActivity.class.getSimpleName());
-	}
+    @Override
+    public String getLocalizedName() {
+        return BundleUtil.getStringFromResourceBundle("resources/MissionResources",
+                "activity." + SubmitForApprovalActivity.class.getSimpleName());
+    }
 
-	@Override
-	public boolean isActive(final MissionProcess missionProcess, final User user) {
-		return super.isActive(missionProcess, user) && missionProcess.isUnderConstruction()
-				&& (user.hasRoleType(RoleType.MANAGER) || isManagementCouncilMember(user));
-	}
+    @Override
+    public boolean isActive(final MissionProcess missionProcess, final User user) {
+        return super.isActive(missionProcess, user) && missionProcess.isUnderConstruction()
+                && (user.hasRoleType(RoleType.MANAGER) || isManagementCouncilMember(user));
+    }
 
-	private boolean isManagementCouncilMember(final User user) {
-		final MissionSystem system = MissionSystem.getInstance();
-		return system.isManagementCouncilMember(user);
-	}
+    private boolean isManagementCouncilMember(final User user) {
+        final MissionSystem system = MissionSystem.getInstance();
+        return system.isManagementCouncilMember(user);
+    }
 
-	@Override
-	protected void process(final ActivityInformation<MissionProcess> activityInformation) {
-		final MissionProcess missionProcess = (MissionProcess) activityInformation.getProcess();
-		//missionProcess.checkForAnyOverlappingParticipations();
-		missionProcess.checkForSupportDocuments();
-		missionProcess.setIsUnderConstruction(Boolean.FALSE);
-	}
+    @Override
+    protected void process(final ActivityInformation<MissionProcess> activityInformation) {
+        final MissionProcess missionProcess = (MissionProcess) activityInformation.getProcess();
+        //missionProcess.checkForAnyOverlappingParticipations();
+        missionProcess.checkForSupportDocuments();
+        missionProcess.setIsUnderConstruction(Boolean.FALSE);
+    }
 
-	@Override
-	public ActivityInformation<MissionProcess> getActivityInformation(MissionProcess process) {
-		return new ActivityInformation<MissionProcess>(process, this);
-	}
+    @Override
+    public ActivityInformation<MissionProcess> getActivityInformation(MissionProcess process) {
+        return new ActivityInformation<MissionProcess>(process, this);
+    }
 
 }

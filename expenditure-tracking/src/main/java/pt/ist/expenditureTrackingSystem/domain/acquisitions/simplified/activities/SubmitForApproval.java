@@ -40,39 +40,39 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.Simplifie
  * 
  */
 public class SubmitForApproval extends
-		WorkflowActivity<RegularAcquisitionProcess, ActivityInformation<RegularAcquisitionProcess>> {
+        WorkflowActivity<RegularAcquisitionProcess, ActivityInformation<RegularAcquisitionProcess>> {
 
-	@Override
-	public boolean isActive(RegularAcquisitionProcess process, User user) {
-		return user.getExpenditurePerson() == process.getRequestor() && isUserProcessOwner(process, user)
-				&& process.getAcquisitionProcessState().isInGenesis() && process.getAcquisitionRequest().isFilled()
-				&& process.getAcquisitionRequest().isEveryItemFullyAttributedToPayingUnits();
-	}
+    @Override
+    public boolean isActive(RegularAcquisitionProcess process, User user) {
+        return user.getExpenditurePerson() == process.getRequestor() && isUserProcessOwner(process, user)
+                && process.getAcquisitionProcessState().isInGenesis() && process.getAcquisitionRequest().isFilled()
+                && process.getAcquisitionRequest().isEveryItemFullyAttributedToPayingUnits();
+    }
 
-	@Override
-	protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
-		final RegularAcquisitionProcess process = activityInformation.getProcess();
-		if (process.isSimplifiedProcedureProcess()
-				//&& ((SimplifiedProcedureProcess) process).getProcessClassification() != ProcessClassification.CT75000
-				//&& !process.hasAcquisitionProposalDocument()
-				&& ((SimplifiedProcedureProcess) process).hasInvoiceFile()
-				&& process.getTotalValue().isGreaterThan(ExpenditureTrackingSystem.getInstance().getMaxValueStartedWithInvoive())) {
-			final String message =
-					BundleUtil.getStringFromResourceBundle(getUsedBundle(),
-							"activities.message.exception.exceeded.limit.to.start.process.with.invoice");
-			throw new DomainException(message);
-		}
+    @Override
+    protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
+        final RegularAcquisitionProcess process = activityInformation.getProcess();
+        if (process.isSimplifiedProcedureProcess()
+                //&& ((SimplifiedProcedureProcess) process).getProcessClassification() != ProcessClassification.CT75000
+                //&& !process.hasAcquisitionProposalDocument()
+                && ((SimplifiedProcedureProcess) process).hasInvoiceFile()
+                && process.getTotalValue().isGreaterThan(ExpenditureTrackingSystem.getInstance().getMaxValueStartedWithInvoive())) {
+            final String message =
+                    BundleUtil.getStringFromResourceBundle(getUsedBundle(),
+                            "activities.message.exception.exceeded.limit.to.start.process.with.invoice");
+            throw new DomainException(message);
+        }
 
-		process.submitForApproval();
-	}
+        process.submitForApproval();
+    }
 
-	@Override
-	public String getLocalizedName() {
-		return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
-	}
+    @Override
+    public String getLocalizedName() {
+        return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+    }
 
-	@Override
-	public String getUsedBundle() {
-		return "resources/AcquisitionResources";
-	}
+    @Override
+    public String getUsedBundle() {
+        return "resources/AcquisitionResources";
+    }
 }

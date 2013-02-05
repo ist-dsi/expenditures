@@ -40,49 +40,49 @@ import pt.ist.expenditureTrackingSystem.domain.dto.UnitItemBean;
  * 
  */
 public abstract class AbstractDistributeRealValuesForPayingUnits<P extends PaymentProcess> extends
-		WorkflowActivity<P, AbstractDistributeRealValuesForPayingUnitsActivityInformation<P>> {
+        WorkflowActivity<P, AbstractDistributeRealValuesForPayingUnitsActivityInformation<P>> {
 
-	@Override
-	protected void process(AbstractDistributeRealValuesForPayingUnitsActivityInformation<P> activityInformation) {
-		List<UnitItemBean> beans = activityInformation.getBeans();
-		RequestItem item = activityInformation.getItem();
-		Money amount = Money.ZERO;
+    @Override
+    protected void process(AbstractDistributeRealValuesForPayingUnitsActivityInformation<P> activityInformation) {
+        List<UnitItemBean> beans = activityInformation.getBeans();
+        RequestItem item = activityInformation.getItem();
+        Money amount = Money.ZERO;
 
-		item.clearRealShareValues();
+        item.clearRealShareValues();
 
-		for (UnitItemBean bean : beans) {
-			Money share = bean.getRealShareValue();
-			if (share == null) {
-				throw new DomainException("activities.message.exception.monetaryValueMustBeFilled", getName());
-			}
-			amount = amount.add(share);
-			item.getUnitItemFor(bean.getUnit()).setRealShareValue(share);
-		}
+        for (UnitItemBean bean : beans) {
+            Money share = bean.getRealShareValue();
+            if (share == null) {
+                throw new DomainException("activities.message.exception.monetaryValueMustBeFilled", getName());
+            }
+            amount = amount.add(share);
+            item.getUnitItemFor(bean.getUnit()).setRealShareValue(share);
+        }
 
-	}
+    }
 
-	public AbstractDistributeRealValuesForPayingUnitsActivityInformation<P> getActivityInformation(P process) {
-		return new AbstractDistributeRealValuesForPayingUnitsActivityInformation<P>(process, this);
-	}
+    public AbstractDistributeRealValuesForPayingUnitsActivityInformation<P> getActivityInformation(P process) {
+        return new AbstractDistributeRealValuesForPayingUnitsActivityInformation<P>(process, this);
+    }
 
-	@Override
-	public String getLocalizedName() {
-		return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
-	}
+    @Override
+    public String getLocalizedName() {
+        return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+    }
 
-	@Override
-	public String getUsedBundle() {
-		return "resources/AcquisitionResources";
-	}
+    @Override
+    public String getUsedBundle() {
+        return "resources/AcquisitionResources";
+    }
 
-	@Override
-	public boolean isDefaultInputInterfaceUsed() {
-		return false;
-	}
+    @Override
+    public boolean isDefaultInputInterfaceUsed() {
+        return false;
+    }
 
-	@Override
-	public boolean isVisible() {
-		return false;
-	}
+    @Override
+    public boolean isVisible() {
+        return false;
+    }
 
 }

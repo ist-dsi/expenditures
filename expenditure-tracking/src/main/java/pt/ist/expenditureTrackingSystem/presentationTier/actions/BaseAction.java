@@ -45,22 +45,22 @@ import pt.ist.fenixframework.plugins.fileSupport.domain.GenericFile;
  */
 public abstract class BaseAction extends ContextBaseAction {
 
-	protected Person getLoggedPerson() {
-		return Person.getLoggedPerson();
-	}
+    protected Person getLoggedPerson() {
+        return Person.getLoggedPerson();
+    }
 
-	protected byte[] consumeInputStream(final FileUploadBean fileUploadBean) {
-		final InputStream inputStream = fileUploadBean.getInputStream();
-		return consumeInputStream(inputStream);
-	}
+    protected byte[] consumeInputStream(final FileUploadBean fileUploadBean) {
+        final InputStream inputStream = fileUploadBean.getInputStream();
+        return consumeInputStream(inputStream);
+    }
 
-	protected ActionForward download(final HttpServletResponse response, final GenericFile file) throws IOException {
-		String filename = file.getFilename();
-		if (filename == null) {
-			filename = file.getDisplayName();
-		}
-		return file != null && file.getContent() != null ? download(response, filename != null ? filename : "", file.getStream(),
-				file.getContentType()) : null;
-	}
+    protected ActionForward download(final HttpServletResponse response, final GenericFile file) throws IOException {
+        String filename = file.getFilename();
+        if (filename == null) {
+            filename = file.getDisplayName();
+        }
+        return file != null && file.getContent() != null ? download(response, filename != null ? filename : "", file.getStream(),
+                file.getContentType()) : null;
+    }
 
 }

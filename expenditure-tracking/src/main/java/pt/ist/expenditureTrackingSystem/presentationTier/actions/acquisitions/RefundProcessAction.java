@@ -48,59 +48,59 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
  */
 public class RefundProcessAction extends PaymentProcessAction {
 
-	public ActionForward prepareCreateRefundProcessUnderCCP(final ActionMapping mapping, final ActionForm form,
-			final HttpServletRequest request, final HttpServletResponse response) {
+    public ActionForward prepareCreateRefundProcessUnderCCP(final ActionMapping mapping, final ActionForm form,
+            final HttpServletRequest request, final HttpServletResponse response) {
 
-		CreateRefundProcessBean bean = getRenderedObject();
-		if (bean == null) {
-			bean = new CreateRefundProcessBean(getLoggedPerson(), true);
-		}
-		request.setAttribute("bean", bean);
-		return forward(request, "/acquisitions/refund/createRefundRequest.jsp");
-	}
+        CreateRefundProcessBean bean = getRenderedObject();
+        if (bean == null) {
+            bean = new CreateRefundProcessBean(getLoggedPerson(), true);
+        }
+        request.setAttribute("bean", bean);
+        return forward(request, "/acquisitions/refund/createRefundRequest.jsp");
+    }
 
-	public ActionForward prepareCreateRefundProcessUnderRCIST(final ActionMapping mapping, final ActionForm form,
-			final HttpServletRequest request, final HttpServletResponse response) {
+    public ActionForward prepareCreateRefundProcessUnderRCIST(final ActionMapping mapping, final ActionForm form,
+            final HttpServletRequest request, final HttpServletResponse response) {
 
-		CreateRefundProcessBean bean = getRenderedObject();
-		if (bean == null) {
-			bean = new CreateRefundProcessBean(getLoggedPerson(), false);
-		}
-		request.setAttribute("bean", bean);
-		return forward(request, "/acquisitions/refund/createRefundRequest.jsp");
-	}
+        CreateRefundProcessBean bean = getRenderedObject();
+        if (bean == null) {
+            bean = new CreateRefundProcessBean(getLoggedPerson(), false);
+        }
+        request.setAttribute("bean", bean);
+        return forward(request, "/acquisitions/refund/createRefundRequest.jsp");
+    }
 
-	public ActionForward prepareCreateRefundProcessUnderNormal(final ActionMapping mapping, final ActionForm form,
-			final HttpServletRequest request, final HttpServletResponse response) {
+    public ActionForward prepareCreateRefundProcessUnderNormal(final ActionMapping mapping, final ActionForm form,
+            final HttpServletRequest request, final HttpServletResponse response) {
 
-		CreateRefundProcessBean bean = getRenderedObject();
-		if (bean == null) {
-			bean = new CreateRefundProcessBean(getLoggedPerson(), false);
-		}
-		request.setAttribute("bean", bean);
-		return forward(request, "/acquisitions/refund/createRefundRequestNormal.jsp");
-	}
+        CreateRefundProcessBean bean = getRenderedObject();
+        if (bean == null) {
+            bean = new CreateRefundProcessBean(getLoggedPerson(), false);
+        }
+        request.setAttribute("bean", bean);
+        return forward(request, "/acquisitions/refund/createRefundRequestNormal.jsp");
+    }
 
-	public ActionForward createRefundProcess(final ActionMapping mapping, final ActionForm form,
-			final HttpServletRequest request, final HttpServletResponse response) {
-		CreateRefundProcessBean bean = getRenderedObject("createRefundProcess");
-		try {
-			RefundProcess process = RefundProcess.createNewRefundProcess(bean);
-			return ProcessManagement.forwardToProcess(process);
-		} catch (DomainException e) {
-			addLocalizedMessage(request, e.getLocalizedMessage());
-			request.setAttribute("bean", bean);
-			RenderUtils.invalidateViewState("createRefundProcess");
-			return forward(request, "/acquisitions/refund/createRefundRequest.jsp");
-		}
-	}
+    public ActionForward createRefundProcess(final ActionMapping mapping, final ActionForm form,
+            final HttpServletRequest request, final HttpServletResponse response) {
+        CreateRefundProcessBean bean = getRenderedObject("createRefundProcess");
+        try {
+            RefundProcess process = RefundProcess.createNewRefundProcess(bean);
+            return ProcessManagement.forwardToProcess(process);
+        } catch (DomainException e) {
+            addLocalizedMessage(request, e.getLocalizedMessage());
+            request.setAttribute("bean", bean);
+            RenderUtils.invalidateViewState("createRefundProcess");
+            return forward(request, "/acquisitions/refund/createRefundRequest.jsp");
+        }
+    }
 
-	public ActionForward createRefundProcessPostBack(final ActionMapping mapping, final ActionForm form,
-			final HttpServletRequest request, final HttpServletResponse response) {
-		CreateRefundProcessBean bean = getRenderedObject("createRefundProcess");
-		request.setAttribute("bean", bean);
-		RenderUtils.invalidateViewState("createRefundProcess");
-		return forward(request, "/acquisitions/refund/createRefundRequest.jsp");
-	}
+    public ActionForward createRefundProcessPostBack(final ActionMapping mapping, final ActionForm form,
+            final HttpServletRequest request, final HttpServletResponse response) {
+        CreateRefundProcessBean bean = getRenderedObject("createRefundProcess");
+        request.setAttribute("bean", bean);
+        RenderUtils.invalidateViewState("createRefundProcess");
+        return forward(request, "/acquisitions/refund/createRefundRequest.jsp");
+    }
 
 }

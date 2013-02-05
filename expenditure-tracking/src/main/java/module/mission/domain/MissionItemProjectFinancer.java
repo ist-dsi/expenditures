@@ -31,103 +31,103 @@ package module.mission.domain;
  */
 public class MissionItemProjectFinancer extends MissionItemProjectFinancer_Base {
 
-	public MissionItemProjectFinancer() {
-		super();
-	}
+    public MissionItemProjectFinancer() {
+        super();
+    }
 
-	public MissionItemProjectFinancer(final MissionItem missionItem, final MissionFinancer missionFinancer) {
-		this();
-		setMissionItem(missionItem);
-		setMissionFinancer(missionFinancer);
-	}
+    public MissionItemProjectFinancer(final MissionItem missionItem, final MissionFinancer missionFinancer) {
+        this();
+        setMissionItem(missionItem);
+        setMissionFinancer(missionFinancer);
+    }
 
-	@Override
-	public String getAllFundAllocationId() {
-		final String fundAllocationId = getFundAllocationId();
-		final String projectFundAllocationId = getProjectFundAllocationId();
-		if (fundAllocationId == null || fundAllocationId.isEmpty()) {
-			return projectFundAllocationId;
-		} else if (projectFundAllocationId == null || projectFundAllocationId.isEmpty()) {
-			return fundAllocationId;
-		} else {
-			return projectFundAllocationId + ", " + fundAllocationId;
-		}
-	}
+    @Override
+    public String getAllFundAllocationId() {
+        final String fundAllocationId = getFundAllocationId();
+        final String projectFundAllocationId = getProjectFundAllocationId();
+        if (fundAllocationId == null || fundAllocationId.isEmpty()) {
+            return projectFundAllocationId;
+        } else if (projectFundAllocationId == null || projectFundAllocationId.isEmpty()) {
+            return fundAllocationId;
+        } else {
+            return projectFundAllocationId + ", " + fundAllocationId;
+        }
+    }
 
-	@Override
-	public void clearFundAllocations() {
-		super.clearFundAllocations();
-		final String projectFundAllocationId = getProjectFundAllocationId();
-		if (projectFundAllocationId != null && !projectFundAllocationId.isEmpty()) {
-			getMission().registerFundAllocation(projectFundAllocationId);
-		}
-		setProjectFundAllocationId(null);
-	}
+    @Override
+    public void clearFundAllocations() {
+        super.clearFundAllocations();
+        final String projectFundAllocationId = getProjectFundAllocationId();
+        if (projectFundAllocationId != null && !projectFundAllocationId.isEmpty()) {
+            getMission().registerFundAllocation(projectFundAllocationId);
+        }
+        setProjectFundAllocationId(null);
+    }
 
-	@Override
-	protected void setNewVersionInformation(final MissionItemFinancer missionItemFinancer) {
-		super.setNewVersionInformation(missionItemFinancer);
-		final MissionItemProjectFinancer missionItemProjectFinancer = (MissionItemProjectFinancer) missionItemFinancer;
-		missionItemProjectFinancer.setProjectFundAllocationId(getProjectFundAllocationId());
-	}
+    @Override
+    protected void setNewVersionInformation(final MissionItemFinancer missionItemFinancer) {
+        super.setNewVersionInformation(missionItemFinancer);
+        final MissionItemProjectFinancer missionItemProjectFinancer = (MissionItemProjectFinancer) missionItemFinancer;
+        missionItemProjectFinancer.setProjectFundAllocationId(getProjectFundAllocationId());
+    }
 
-	@Override
-	protected MissionItemFinancer createNewVersionInstance(final MissionItem missionItem, final MissionFinancer missionFinancer) {
-		return new MissionItemProjectFinancer(missionItem, missionFinancer);
-	}
+    @Override
+    protected MissionItemFinancer createNewVersionInstance(final MissionItem missionItem, final MissionFinancer missionFinancer) {
+        return new MissionItemProjectFinancer(missionItem, missionFinancer);
+    }
 
-	@Override
-	public void autoArchive() {
-		super.autoArchive();
-		archiveProject();
-	}
+    @Override
+    public void autoArchive() {
+        super.autoArchive();
+        archiveProject();
+    }
 
-	private void archiveProject() {
-		final MissionVersion missionVersion = getMissionItem().getMissionVersion();
-		setMissionVersionFromProjectArchive(missionVersion);
-	}
+    private void archiveProject() {
+        final MissionVersion missionVersion = getMissionItem().getMissionVersion();
+        setMissionVersionFromProjectArchive(missionVersion);
+    }
 
-	@Override
-	public void archiveForAccountingUnit() {
-		super.archiveForAccountingUnit();
-		if (isCurrentUserProjectAccountant()) {
-			archiveProject();
-		}
-	}
+    @Override
+    public void archiveForAccountingUnit() {
+        super.archiveForAccountingUnit();
+        if (isCurrentUserProjectAccountant()) {
+            archiveProject();
+        }
+    }
 
-	private boolean isCurrentUserProjectAccountant() {
-		final MissionFinancer missionFinancer = getMissionFinancer();
-		return missionFinancer.isCurrentUserProjectAccountant();
-	}
+    private boolean isCurrentUserProjectAccountant() {
+        final MissionFinancer missionFinancer = getMissionFinancer();
+        return missionFinancer.isCurrentUserProjectAccountant();
+    }
 
-	@Override
-	public boolean isAccountantForUnArchivedMissionItemFinancer() {
-		return (isProjectArchived() && super.isAccountantForUnArchivedMissionItemFinancer())
-				|| (!isProjectArchived() && isCurrentUserProjectAccountant());
-	}
+    @Override
+    public boolean isAccountantForUnArchivedMissionItemFinancer() {
+        return (isProjectArchived() && super.isAccountantForUnArchivedMissionItemFinancer())
+                || (!isProjectArchived() && isCurrentUserProjectAccountant());
+    }
 
-	@Override
-	public boolean isDirectAccountantForUnArchivedMissionItemFinancer() {
-		final MissionFinancer missionFinancer = getMissionFinancer();
-		return (isProjectArchived() && super.isDirectAccountantForUnArchivedMissionItemFinancer())
-				|| (!isProjectArchived() && isCurrentUserProjectAccountant() && (missionFinancer
-						.isCurrentUserDirectProjectAccountant()));
-	}
+    @Override
+    public boolean isDirectAccountantForUnArchivedMissionItemFinancer() {
+        final MissionFinancer missionFinancer = getMissionFinancer();
+        return (isProjectArchived() && super.isDirectAccountantForUnArchivedMissionItemFinancer())
+                || (!isProjectArchived() && isCurrentUserProjectAccountant() && (missionFinancer
+                        .isCurrentUserDirectProjectAccountant()));
+    }
 
-	private boolean isProjectArchived() {
-		return getMissionVersionFromProjectArchive() != null;
-	}
+    private boolean isProjectArchived() {
+        return getMissionVersionFromProjectArchive() != null;
+    }
 
-	@Override
-	public void unArchive() {
-		super.unArchive();
-		setMissionVersionFromProjectArchive(null);
-	}
+    @Override
+    public void unArchive() {
+        super.unArchive();
+        setMissionVersionFromProjectArchive(null);
+    }
 
-	@Override
-	public void delete() {
-		removeMissionVersionFromProjectArchive();
-		super.delete();
-	}
+    @Override
+    public void delete() {
+        removeMissionVersionFromProjectArchive();
+        super.delete();
+    }
 
 }

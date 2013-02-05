@@ -36,23 +36,23 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionPr
  */
 public class RejectAcquisitionProcessActivityInformation extends ActivityInformation<RegularAcquisitionProcess> {
 
-	private String rejectionJustification;
+    private String rejectionJustification;
 
-	public RejectAcquisitionProcessActivityInformation(RegularAcquisitionProcess process,
-			WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity) {
-		super(process, activity);
-	}
+    public RejectAcquisitionProcessActivityInformation(RegularAcquisitionProcess process,
+            WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity) {
+        super(process, activity);
+    }
 
-	public String getRejectionJustification() {
-		return rejectionJustification;
-	}
+    public String getRejectionJustification() {
+        return rejectionJustification;
+    }
 
-	public void setRejectionJustification(String rejectionJustification) {
-		this.rejectionJustification = rejectionJustification;
-	}
+    public void setRejectionJustification(String rejectionJustification) {
+        this.rejectionJustification = rejectionJustification;
+    }
 
-	@Override
-	public boolean hasAllneededInfo() {
-		return isForwardedFromInput() && getRejectionJustification() != null;
-	}
+    @Override
+    public boolean hasAllneededInfo() {
+        return isForwardedFromInput() && getRejectionJustification() != null;
+    }
 }

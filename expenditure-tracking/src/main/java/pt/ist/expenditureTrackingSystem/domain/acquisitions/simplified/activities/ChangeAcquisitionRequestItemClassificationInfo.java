@@ -36,14 +36,14 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionPr
  */
 public class ChangeAcquisitionRequestItemClassificationInfo extends EditAcquisitionRequestItemActivityInformation {
 
-	public ChangeAcquisitionRequestItemClassificationInfo(RegularAcquisitionProcess process,
-			WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity) {
-		super(process, activity);
-	}
+    public ChangeAcquisitionRequestItemClassificationInfo(RegularAcquisitionProcess process,
+            WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity) {
+        super(process, activity);
+    }
 
-	@Override
-	public boolean hasAllneededInfo() {
-		return isForwardedFromInput();
-	}
+    @Override
+    public boolean hasAllneededInfo() {
+        return isForwardedFromInput();
+    }
 
 }

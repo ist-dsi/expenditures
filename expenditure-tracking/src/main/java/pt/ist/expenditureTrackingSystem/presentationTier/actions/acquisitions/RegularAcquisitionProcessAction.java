@@ -57,36 +57,36 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
  */
 public class RegularAcquisitionProcessAction extends PaymentProcessAction {
 
-	public ActionForward checkFundAllocations(final ActionMapping mapping, final ActionForm form,
-			final HttpServletRequest request, final HttpServletResponse response) {
+    public ActionForward checkFundAllocations(final ActionMapping mapping, final ActionForm form,
+            final HttpServletRequest request, final HttpServletResponse response) {
 
-		IViewState viewState = RenderUtils.getViewState("dateSelection");
+        IViewState viewState = RenderUtils.getViewState("dateSelection");
 
-		DateIntervalBean bean =
-				viewState == null ? new DateIntervalBean() : (DateIntervalBean) viewState.getMetaObject().getObject();
+        DateIntervalBean bean =
+                viewState == null ? new DateIntervalBean() : (DateIntervalBean) viewState.getMetaObject().getObject();
 
-		if (viewState == null) {
-			LocalDate today = new LocalDate();
-			bean.setBegin(today);
-			bean.setEnd(today);
-		}
+        if (viewState == null) {
+            LocalDate today = new LocalDate();
+            bean.setBegin(today);
+            bean.setEnd(today);
+        }
 
-		DateTime begin = bean.getBegin().toDateTimeAtStartOfDay();
-		DateTime end = bean.getEnd().plusDays(1).toDateTimeAtStartOfDay();
+        DateTime begin = bean.getBegin().toDateTimeAtStartOfDay();
+        DateTime end = bean.getEnd().plusDays(1).toDateTimeAtStartOfDay();
 
-		List<AcquisitionProcess> processes = new ArrayList<AcquisitionProcess>();
+        List<AcquisitionProcess> processes = new ArrayList<AcquisitionProcess>();
 
-		for (AcquisitionProcess process : GenericProcess.getAllProcesses(AcquisitionProcess.class)) {
-			if (!process.getExecutionLogs(begin, end, FundAllocation.class, ProjectFundAllocation.class,
-					AllocateFundsPermanently.class, AllocateProjectFundsPermanently.class).isEmpty()) {
-				processes.add(process);
-			}
-		}
-		RenderUtils.invalidateViewState();
-		request.setAttribute("processes", processes);
-		request.setAttribute("bean", bean);
+        for (AcquisitionProcess process : GenericProcess.getAllProcesses(AcquisitionProcess.class)) {
+            if (!process.getExecutionLogs(begin, end, FundAllocation.class, ProjectFundAllocation.class,
+                    AllocateFundsPermanently.class, AllocateProjectFundsPermanently.class).isEmpty()) {
+                processes.add(process);
+            }
+        }
+        RenderUtils.invalidateViewState();
+        request.setAttribute("processes", processes);
+        request.setAttribute("bean", bean);
 
-		return forward(request, "/acquisitions/viewFundAllocations.jsp");
-	}
+        return forward(request, "/acquisitions/viewFundAllocations.jsp");
+    }
 
 }

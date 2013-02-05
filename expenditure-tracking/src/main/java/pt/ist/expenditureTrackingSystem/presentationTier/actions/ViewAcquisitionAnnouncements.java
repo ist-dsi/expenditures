@@ -59,78 +59,78 @@ import pt.utl.ist.fenix.tools.util.CollectionPager;
  */
 public class ViewAcquisitionAnnouncements extends ContextBaseAction {
 
-	private static final int REQUESTS_PER_PAGE = 10;
-	private static final String PUBLIC_LAYOUT = "publicAcquisitionAnnouncements";
+    private static final int REQUESTS_PER_PAGE = 10;
+    private static final String PUBLIC_LAYOUT = "publicAcquisitionAnnouncements";
 
-	public final ActionForward list(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-			final HttpServletResponse response) throws Exception {
+    public final ActionForward list(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+            final HttpServletResponse response) throws Exception {
 
-		final ProcessClassification processClassification = getProcessClassification(request);
+        final ProcessClassification processClassification = getProcessClassification(request);
 
-		ArrayList<RCISTAnnouncement> approvedList = new ArrayList<RCISTAnnouncement>();
-		approvedList.addAll(Announcement.getAnnouncements(RCISTAnnouncement.class, new Predicate() {
+        ArrayList<RCISTAnnouncement> approvedList = new ArrayList<RCISTAnnouncement>();
+        approvedList.addAll(Announcement.getAnnouncements(RCISTAnnouncement.class, new Predicate() {
 
-			@Override
-			public boolean evaluate(Object arg0) {
-				RCISTAnnouncement announcement = (RCISTAnnouncement) arg0;
-				if (announcement.getActive() && matchesProcessClassificationCriteria(announcement)) {
-					return true;
-				}
-				return false;
-			}
+            @Override
+            public boolean evaluate(Object arg0) {
+                RCISTAnnouncement announcement = (RCISTAnnouncement) arg0;
+                if (announcement.getActive() && matchesProcessClassificationCriteria(announcement)) {
+                    return true;
+                }
+                return false;
+            }
 
-			private boolean matchesProcessClassificationCriteria(final RCISTAnnouncement announcement) {
-				return processClassification == null || processClassification == getProcessClassification(announcement);
-			}
+            private boolean matchesProcessClassificationCriteria(final RCISTAnnouncement announcement) {
+                return processClassification == null || processClassification == getProcessClassification(announcement);
+            }
 
-			private ProcessClassification getProcessClassification(final RCISTAnnouncement announcement) {
-				final AcquisitionRequest acquisition = announcement.getAcquisition();
-				final AcquisitionProcess process = acquisition.getProcess();
-				if (process instanceof SimplifiedProcedureProcess) {
-					final SimplifiedProcedureProcess simplifiedProcedureProcess = (SimplifiedProcedureProcess) process;
-					return simplifiedProcedureProcess.getProcessClassification();
-				}
-				return null;
-			}
+            private ProcessClassification getProcessClassification(final RCISTAnnouncement announcement) {
+                final AcquisitionRequest acquisition = announcement.getAcquisition();
+                final AcquisitionProcess process = acquisition.getProcess();
+                if (process instanceof SimplifiedProcedureProcess) {
+                    final SimplifiedProcedureProcess simplifiedProcedureProcess = (SimplifiedProcedureProcess) process;
+                    return simplifiedProcedureProcess.getProcessClassification();
+                }
+                return null;
+            }
 
-		}));
+        }));
 
-		Collections.sort(approvedList, new ReverseComparator(new BeanComparator("creationDate")));
+        Collections.sort(approvedList, new ReverseComparator(new BeanComparator("creationDate")));
 
-		final CollectionPager<Announcement> pager =
-				new CollectionPager<Announcement>((Collection) approvedList, REQUESTS_PER_PAGE);
+        final CollectionPager<Announcement> pager =
+                new CollectionPager<Announcement>((Collection) approvedList, REQUESTS_PER_PAGE);
 
-		request.setAttribute("collectionPager", pager);
-		request.setAttribute("numberOfPages", Integer.valueOf(pager.getNumberOfPages()));
+        request.setAttribute("collectionPager", pager);
+        request.setAttribute("numberOfPages", Integer.valueOf(pager.getNumberOfPages()));
 
-		final String pageParameter = request.getParameter("pageNumber");
-		final Integer page = StringUtils.isEmpty(pageParameter) ? Integer.valueOf(1) : Integer.valueOf(pageParameter);
-		request.setAttribute("pageNumber", page);
-		request.setAttribute("announcements", pager.getPage(page));
+        final String pageParameter = request.getParameter("pageNumber");
+        final Integer page = StringUtils.isEmpty(pageParameter) ? Integer.valueOf(1) : Integer.valueOf(pageParameter);
+        request.setAttribute("pageNumber", page);
+        request.setAttribute("announcements", pager.getPage(page));
 
-		return forward(request, "/public/viewAcquisitionAnnouncements.jsp");
-	}
+        return forward(request, "/public/viewAcquisitionAnnouncements.jsp");
+    }
 
-	@Override
-	public Context createContext(final String contextPathString, HttpServletRequest request) {
-		LayoutContext layout = new LayoutContext(contextPathString);
-		layout.setLayout(PUBLIC_LAYOUT);
-		return layout;
-	}
+    @Override
+    public Context createContext(final String contextPathString, HttpServletRequest request) {
+        LayoutContext layout = new LayoutContext(contextPathString);
+        layout.setLayout(PUBLIC_LAYOUT);
+        return layout;
+    }
 
-	private ProcessClassification getProcessClassification(final HttpServletRequest request) {
-		final String parameter = request.getParameter("processClassification");
-		if (parameter != null && !parameter.isEmpty()) {
-			return ProcessClassification.valueOf(parameter);
-		}
-		final Object attribute = request.getAttribute("processClassification");
-		if (attribute != null && attribute instanceof String) {
-			final String string = (String) attribute;
-			if (!string.isEmpty()) {
-				return ProcessClassification.valueOf(string);
-			}
-		}
-		return null;
-	}
+    private ProcessClassification getProcessClassification(final HttpServletRequest request) {
+        final String parameter = request.getParameter("processClassification");
+        if (parameter != null && !parameter.isEmpty()) {
+            return ProcessClassification.valueOf(parameter);
+        }
+        final Object attribute = request.getAttribute("processClassification");
+        if (attribute != null && attribute instanceof String) {
+            final String string = (String) attribute;
+            if (!string.isEmpty()) {
+                return ProcessClassification.valueOf(string);
+            }
+        }
+        return null;
+    }
 
 }
