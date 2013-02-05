@@ -37,24 +37,24 @@ import pt.ist.bennu.core.domain.util.Money;
  */
 public class ReenforceWorkingCapitalInitializationActivityInformation extends ActivityInformation<WorkingCapitalProcess> {
 
-	private Money amount = null;
+    private Money amount = null;
 
-	public ReenforceWorkingCapitalInitializationActivityInformation(WorkingCapitalProcess process,
-			WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity) {
-		super(process, activity);
-	}
+    public ReenforceWorkingCapitalInitializationActivityInformation(WorkingCapitalProcess process,
+            WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity) {
+        super(process, activity);
+    }
 
-	@Override
-	public boolean hasAllneededInfo() {
-		return super.hasAllneededInfo() && isForwardedFromInput() && amount != null && amount.isPositive();
-	}
+    @Override
+    public boolean hasAllneededInfo() {
+        return super.hasAllneededInfo() && isForwardedFromInput() && amount != null && amount.isPositive();
+    }
 
-	public Money getAmount() {
-		return amount;
-	}
+    public Money getAmount() {
+        return amount;
+    }
 
-	public void setAmount(Money amount) {
-		this.amount = amount;
-	}
+    public void setAmount(Money amount) {
+        this.amount = amount;
+    }
 
 }

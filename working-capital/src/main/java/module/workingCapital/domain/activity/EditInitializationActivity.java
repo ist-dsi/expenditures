@@ -40,52 +40,52 @@ import pt.ist.bennu.core.util.BundleUtil;
  */
 public class EditInitializationActivity extends WorkflowActivity<WorkingCapitalProcess, EditInitializationActivityInformation> {
 
-	@Override
-	public String getLocalizedName() {
-		return BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources", "activity."
-				+ getClass().getSimpleName());
-	}
+    @Override
+    public String getLocalizedName() {
+        return BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources", "activity."
+                + getClass().getSimpleName());
+    }
 
-	@Override
-	public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
-		final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
-		return !workingCapital.isCanceledOrRejected() && workingCapital.isPendingAproval() && workingCapital.isRequester(user);
-	}
+    @Override
+    public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
+        final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
+        return !workingCapital.isCanceledOrRejected() && workingCapital.isPendingAproval() && workingCapital.isRequester(user);
+    }
 
-	@Override
-	protected void process(final EditInitializationActivityInformation activityInformation) {
-		final WorkingCapitalInitialization workingCapitalInitialization = activityInformation.getWorkingCapitalInitialization();
-		workingCapitalInitialization.getWorkingCapital().setMovementResponsible(activityInformation.getMovementResponsible());
-		workingCapitalInitialization.setRequestedAnualValue(activityInformation.getRequestedMonthlyValue().multiply(12));
-		workingCapitalInitialization.setFiscalId(activityInformation.getFiscalId());
-		workingCapitalInitialization.setAcceptedResponsability(null);
+    @Override
+    protected void process(final EditInitializationActivityInformation activityInformation) {
+        final WorkingCapitalInitialization workingCapitalInitialization = activityInformation.getWorkingCapitalInitialization();
+        workingCapitalInitialization.getWorkingCapital().setMovementResponsible(activityInformation.getMovementResponsible());
+        workingCapitalInitialization.setRequestedAnualValue(activityInformation.getRequestedMonthlyValue().multiply(12));
+        workingCapitalInitialization.setFiscalId(activityInformation.getFiscalId());
+        workingCapitalInitialization.setAcceptedResponsability(null);
 
-		final String banOrIban = activityInformation.getInternationalBankAccountNumber();
-		final String internationalBankAccountNumber =
-				banOrIban == null || banOrIban.isEmpty() || !Character.isDigit(banOrIban.charAt(0)) ? banOrIban : "PT50"
-						+ banOrIban;
+        final String banOrIban = activityInformation.getInternationalBankAccountNumber();
+        final String internationalBankAccountNumber =
+                banOrIban == null || banOrIban.isEmpty() || !Character.isDigit(banOrIban.charAt(0)) ? banOrIban : "PT50"
+                        + banOrIban;
 
-		workingCapitalInitialization.setInternationalBankAccountNumber(internationalBankAccountNumber);
-	}
+        workingCapitalInitialization.setInternationalBankAccountNumber(internationalBankAccountNumber);
+    }
 
-	@Override
-	public ActivityInformation<WorkingCapitalProcess> getActivityInformation(final WorkingCapitalProcess process) {
-		return new EditInitializationActivityInformation(process, this);
-	}
+    @Override
+    public ActivityInformation<WorkingCapitalProcess> getActivityInformation(final WorkingCapitalProcess process) {
+        return new EditInitializationActivityInformation(process, this);
+    }
 
-	@Override
-	public boolean isDefaultInputInterfaceUsed() {
-		return true;
-	}
+    @Override
+    public boolean isDefaultInputInterfaceUsed() {
+        return true;
+    }
 
-	@Override
-	public boolean isVisible() {
-		return false;
-	}
+    @Override
+    public boolean isVisible() {
+        return false;
+    }
 
-	@Override
-	public boolean isUserAwarenessNeeded(final WorkingCapitalProcess process, final User user) {
-		return false;
-	}
+    @Override
+    public boolean isUserAwarenessNeeded(final WorkingCapitalProcess process, final User user) {
+        return false;
+    }
 
 }

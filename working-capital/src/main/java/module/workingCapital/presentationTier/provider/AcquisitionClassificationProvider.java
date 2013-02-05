@@ -35,14 +35,14 @@ import pt.ist.fenixWebFramework.renderers.components.converters.Converter;
  */
 public class AcquisitionClassificationProvider implements DataProvider {
 
-	@Override
-	public Converter getConverter() {
-		return null;
-	}
+    @Override
+    public Converter getConverter() {
+        return null;
+    }
 
-	@Override
-	public Object provide(final Object source, final Object currentValue) {
-		return AcquisitionClassification.getAvailableClassifications();
-	}
+    @Override
+    public Object provide(final Object source, final Object currentValue) {
+        return AcquisitionClassification.getAvailableClassifications();
+    }
 
 }

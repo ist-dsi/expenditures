@@ -39,54 +39,54 @@ import pt.ist.bennu.core.util.BundleUtil;
  */
 public class UnAllocateFundsActivity extends WorkflowActivity<WorkingCapitalProcess, WorkingCapitalInitializationInformation> {
 
-	@Override
-	public String getLocalizedName() {
-		return BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources", "activity."
-				+ getClass().getSimpleName());
-	}
+    @Override
+    public String getLocalizedName() {
+        return BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources", "activity."
+                + getClass().getSimpleName());
+    }
 
-	@Override
-	public boolean isActive(final WorkingCapitalProcess workingCapitalProcess, final User user) {
-		final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
-		return workingCapital.isPendingFundUnAllocation(user);
-	}
+    @Override
+    public boolean isActive(final WorkingCapitalProcess workingCapitalProcess, final User user) {
+        final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
+        return workingCapital.isPendingFundUnAllocation(user);
+    }
 
-	@Override
-	protected void process(final WorkingCapitalInitializationInformation activityInformation) {
-		WorkingCapitalProcess process = activityInformation.getProcess();
-		final WorkingCapitalInitialization workingCapitalInitialization =
-				process.getWorkingCapital().getWorkingCapitalInitialization();
-		workingCapitalInitialization.setFundAllocationId(null);
-	}
+    @Override
+    protected void process(final WorkingCapitalInitializationInformation activityInformation) {
+        WorkingCapitalProcess process = activityInformation.getProcess();
+        final WorkingCapitalInitialization workingCapitalInitialization =
+                process.getWorkingCapital().getWorkingCapitalInitialization();
+        workingCapitalInitialization.setFundAllocationId(null);
+    }
 
-	@Override
-	public ActivityInformation<WorkingCapitalProcess> getActivityInformation(final WorkingCapitalProcess process) {
-		return new WorkingCapitalInitializationInformation(process, this) {
-			@Override
-			public boolean hasAllneededInfo() {
-				return true;
-			}
-		};
-	}
+    @Override
+    public ActivityInformation<WorkingCapitalProcess> getActivityInformation(final WorkingCapitalProcess process) {
+        return new WorkingCapitalInitializationInformation(process, this) {
+            @Override
+            public boolean hasAllneededInfo() {
+                return true;
+            }
+        };
+    }
 
-	@Override
-	public boolean isConfirmationNeeded(WorkingCapitalProcess process) {
-		return true;
-	}
+    @Override
+    public boolean isConfirmationNeeded(WorkingCapitalProcess process) {
+        return true;
+    }
 
-	@Override
-	public String getUsedBundle() {
-		return "resources/WorkingCapitalResources";
-	}
+    @Override
+    public String getUsedBundle() {
+        return "resources/WorkingCapitalResources";
+    }
 
-	@Override
-	public boolean isVisible() {
-		return true;
-	}
+    @Override
+    public boolean isVisible() {
+        return true;
+    }
 
-	@Override
-	public boolean isUserAwarenessNeeded(WorkingCapitalProcess process, User user) {
-		return false;
-	}
+    @Override
+    public boolean isUserAwarenessNeeded(WorkingCapitalProcess process, User user) {
+        return false;
+    }
 
 }

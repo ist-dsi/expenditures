@@ -36,14 +36,14 @@ import pt.ist.fenixWebFramework.renderers.components.converters.Converter;
  */
 public class WorkingCapitalYearProvider implements DataProvider {
 
-	@Override
-	public Converter getConverter() {
-		return null;
-	}
+    @Override
+    public Converter getConverter() {
+        return null;
+    }
 
-	@Override
-	public Object provide(Object arg0, Object arg1) {
-		return WorkingCapitalSystem.getInstanceForCurrentHost().getWorkingCapitalYears();
-	}
+    @Override
+    public Object provide(Object arg0, Object arg1) {
+        return WorkingCapitalSystem.getInstanceForCurrentHost().getWorkingCapitalYears();
+    }
 
 }
