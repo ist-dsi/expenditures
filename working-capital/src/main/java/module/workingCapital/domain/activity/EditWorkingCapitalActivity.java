@@ -10,7 +10,7 @@
  *
  *   The Working Capital Module is free software: you can
  *   redistribute it and/or modify it under the terms of the GNU Lesser General
- *   Public License as published by the Free Software Foundation, either version 
+ *   Public License as published by the Free Software Foundation, either version
  *   3 of the License, or (at your option) any later version.
  *
  *   The Working Capital Module is distributed in the hope that it will be useful,
@@ -65,11 +65,15 @@ public class EditWorkingCapitalActivity extends WorkflowActivity<WorkingCapitalP
                     workingCapitalAcquisitionTransaction.getWorkingCapitalAcquisition();
 
             if (activityInformation.getInputStream() != null) {
+                String displayName = activityInformation.getDisplayName();
+                if (displayName == null) {
+                    displayName = activityInformation.getFilename();
+                }
                 workingCapitalAcquisition.edit(activityInformation.getDocumentNumber(), activityInformation.getSupplier(),
                         activityInformation.getDescription(), activityInformation.getAcquisitionClassification(),
                         activityInformation.getValueWithoutVat(), activityInformation.getMoney(),
-                        InputStreamUtil.consumeInputStream(activityInformation.getInputStream()),
-                        activityInformation.getDisplayName(), activityInformation.getFilename());
+                        InputStreamUtil.consumeInputStream(activityInformation.getInputStream()), displayName,
+                        activityInformation.getFilename());
             } else {
                 workingCapitalAcquisition.edit(activityInformation.getDocumentNumber(), activityInformation.getSupplier(),
                         activityInformation.getDescription(), activityInformation.getAcquisitionClassification(),
