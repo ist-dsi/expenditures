@@ -106,12 +106,12 @@
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$P{requestID}.toString()]]></textFieldExpression>
 				</textField>
-				<image  vAlign="Top" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<image  scaleImage="FillFrame" vAlign="Top" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="19"
-						y="9"
-						width="180"
-						height="181"
+						x="0"
+						y="12"
+						width="116"
+						height="44"
 						key="image-1"/>
 					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -333,15 +333,15 @@ $P{supplierContact}.getAddress().getCountry())
 				</textField>
 				<staticText>
 					<reportElement
-						x="19"
+						x="0"
 						y="191"
-						width="80"
+						width="140"
 						height="38"
-						forecolor="#00427B"
+						forecolor="#000000"
 						key="staticText-37"/>
 					<box></box>
 					<textElement textAlignment="Left" verticalAlignment="Top" lineSpacing="1_1_2">
-						<font size="10"/>
+						<font size="12"/>
 					</textElement>
 				<text><![CDATA[Central de Compras]]></text>
 				</staticText>
