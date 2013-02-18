@@ -37,7 +37,7 @@
 			</fr:layout>
 		</fr:edit>
 
-		<bean:define id="submitButton"><bean:message key="button.atribute" bundle="EXPENDITURE_RESOURCES"/></bean:define>
+		<bean:define id="submitButton"><bean:message key="label.module.workingCapital.submit" bundle="WORKING_CAPITAL_RESOURCES"/></bean:define>
 		<input type="button" id="submitButton" class="inputbutton" value="<%= submitButton %>"
 				onclick="requestConfirmationSubmitForValidationActivityForm()"/>
 
