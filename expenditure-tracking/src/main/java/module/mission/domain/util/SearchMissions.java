@@ -150,7 +150,7 @@ public class SearchMissions extends Search<Mission> {
 
     }
 
-    private String processNumber = Integer.toString(Calendar.getInstance().get(Calendar.YEAR)) + '/';
+    private String processNumber = Integer.toString(Calendar.getInstance().get(Calendar.YEAR)) + "/M";
     private Party missionResponsible;
     private Unit payingUnit;
     private AccountingUnit accountingUnit;
@@ -363,7 +363,7 @@ public class SearchMissions extends Search<Mission> {
     }
 
     public void setProcessNumber(String processNumber) {
-        this.processNumber = processNumber;
+        this.processNumber = processNumber.trim();
     }
 
     public Boolean getNational() {
