@@ -85,6 +85,10 @@ public class WorkingCapitalAction extends ContextBaseAction {
     public ActionForward search(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
             final HttpServletResponse response) {
         final WorkingCapitalContext workingCapitalContext = getRenderedObject("workingCapitalInitializationBean");
+        if(workingCapitalContext.getParty() == null) {
+        	request.setAttribute("workingCapitalYearOid", workingCapitalContext.getWorkingCapitalYear().getExternalId());
+        	return listProcesses(mapping, form, request, response);
+        }
         final SortedSet<WorkingCapitalProcess> unitProcesses = workingCapitalContext.getWorkingCapitalSearchByUnit();
         return showList(request, workingCapitalContext, unitProcesses);
     }

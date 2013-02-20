@@ -159,7 +159,6 @@
 					<fr:property name="nullOptionHidden" value="true"/>
 				</fr:slot>
 				<fr:slot name="party" layout="autoComplete" key="label.party" bundle="WORKING_CAPITAL_RESOURCES"
-						validator="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator"
 						help="label.module.workingCapital.selectParty.help">
 		        	<fr:property name="labelField" value="partyName.content"/>
 					<fr:property name="format" value="${presentationName}"/>
@@ -174,12 +173,7 @@
 			</fr:layout>
 		</fr:edit>
 		<html:submit styleClass="inputbutton"><bean:message key="renderers.form.submit.name" bundle="RENDERER_RESOURCES"/></html:submit>
-		&nbsp;&nbsp; 
-		<logic:present name="workingCapitalContext" property="workingCapitalYear">
-			<html:link action="/workingCapital.do?method=listProcesses" paramId="workingCapitalYearOid" paramName="workingCapitalContext" paramProperty="workingCapitalYear.externalId">
-				<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.list.all"/>
-			</html:link>
-		</logic:present>
+		&nbsp;&nbsp;
 	</fr:form>
 
 	<p>
