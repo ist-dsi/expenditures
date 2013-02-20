@@ -27,6 +27,9 @@ package module.workingCapital.domain;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeConstants;
+
 import module.organization.domain.Accountability;
 import module.organization.domain.AccountabilityType;
 import module.organization.domain.Person;
@@ -149,6 +152,10 @@ public class WorkingCapitalSystem extends WorkingCapitalSystem_Base implements M
     @Service
     public void setForVirtualHost(final VirtualHost virtualHost) {
         virtualHost.setWorkingCapitalSystem(this);
+    }
+    
+    public static boolean isLastMonthForWorkingCapitalTermination(){
+    	return  new DateTime().monthOfYear().get() == DateTimeConstants.DECEMBER;
     }
 
 }

@@ -75,10 +75,6 @@ public class SubmitForValidationActivity extends WorkflowActivity<WorkingCapital
         final WorkingCapitalProcess workingCapitalProcess = activityInformation.getProcess();
         workingCapitalProcess.submitAcquisitionsForValidation();
         final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
-        if (activityInformation.isLastSubmission()) {
-            final WorkingCapitalInitialization workingCapitalInitialization = workingCapital.getWorkingCapitalInitialization();
-            workingCapitalInitialization.setLastSubmission(new DateTime());
-        }
 
         final Money accumulatedValue = workingCapital.getLastTransaction().getAccumulatedValue();
         WorkingCapitalAcquisitionSubmission acquisitionSubmission =
@@ -102,6 +98,12 @@ public class SubmitForValidationActivity extends WorkflowActivity<WorkingCapital
                 new WorkingCapitalAcquisitionSubmissionDocument(acquisitionSubmission, contents, "SubmissionDocument" + txNumber
                         + ".pdf", activityInformation.getProcess());
         document.setFilename("Submission" + document.getOid() + document.getFilename());
+        
+        if (activityInformation.isLastSubmission()) {
+        	TerminateWorkingCapitalActivity terminateWorkingCapitalActivity = new TerminateWorkingCapitalActivity();
+        	if(terminateWorkingCapitalActivity.isActive(workingCapitalProcess))
+        		terminateWorkingCapitalActivity.process(activityInformation);
+        }
     }
 
     private byte[] createAcquisitionSubmissionDocument(WorkingCapitalAcquisitionSubmission acquisitionSubmission) {

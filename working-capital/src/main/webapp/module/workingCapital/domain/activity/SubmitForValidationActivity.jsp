@@ -1,3 +1,5 @@
+<%@page import="module.workingCapital.domain.WorkingCapitalSystem"%>
+<%@page import="module.workingCapital.domain.WorkingCapital"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html"%>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-bean" prefix="bean"%>
@@ -28,7 +30,7 @@
 
 		<fr:edit id="activityBean" name="information">
 			<fr:schema type="module.workingCapital.domain.activity.SubmitForValidationActivityInformation" bundle="WORKING_CAPITAL_RESOURCES">
-				<fr:slot name="lastSubmission" key="label.module.workingCapital.lastSubmission"/>
+				<% if(WorkingCapitalSystem.isLastMonthForWorkingCapitalTermination()){%><fr:slot name="lastSubmission" key="label.module.workingCapital.lastSubmission"/><%}%>
 				<fr:slot name="paymentRequired" key="label.module.workingCapital.paymentRequired"/>
 			</fr:schema>
 			<fr:layout name="tabular">
