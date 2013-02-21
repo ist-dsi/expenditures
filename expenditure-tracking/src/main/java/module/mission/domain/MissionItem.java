@@ -60,13 +60,24 @@ public abstract class MissionItem extends MissionItem_Base {
     }
 
     @Override
-    @Deprecated
-    public void setMission(final Mission mission) {
-        setMissionVersion(mission);
+    public Mission getMission() {
+        return getMissionVersion().getMission();
     }
 
-    public void setMissionVersion(final Mission mission) {
-        setMissionVersion(mission.getMissionVersion());
+    //Only include these two methods to run some cleanup scripts.
+    //Afterwards, they should be removed.
+    @Deprecated
+    public Mission getMissionForReal() {
+        return super.getMission();
+    }
+
+    @Deprecated
+    public boolean hasMissionForReal() {
+        return getMissionForReal() != null;
+    }
+
+    public boolean isTemporary() {
+        return hasTemporaryMissionItemEntry();
     }
 
     @Override
@@ -157,7 +168,7 @@ public abstract class MissionItem extends MissionItem_Base {
         final MissionProcess missionProcess = itemActivityInformation.getProcess();
         final Mission mission = missionProcess.getMission();
 
-        setMission(mission);
+        setMissionVersion(mission.getMissionVersion());
 
         final Collection<Person> people = itemActivityInformation.getPeople();
         final Set<Person> participants = getPeopleSet();
