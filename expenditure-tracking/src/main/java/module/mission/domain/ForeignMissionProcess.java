@@ -44,6 +44,7 @@ import module.mission.domain.activity.CancelProcessActivity;
 import module.mission.domain.activity.ChangeAccountingUnitActivity;
 import module.mission.domain.activity.CommitFundsActivity;
 import module.mission.domain.activity.DefineParticipantAuthorizationChainActivity;
+import module.mission.domain.activity.DisassociateMissionProcessActivity;
 import module.mission.domain.activity.DistributeItemCostsActivity;
 import module.mission.domain.activity.EditItemActivity;
 import module.mission.domain.activity.ExceptionalChangeRequestingPerson;
@@ -115,7 +116,8 @@ public class ForeignMissionProcess extends ForeignMissionProcess_Base {
         activitiesAux.add(new ApproveActivity());
         activitiesAux.add(new UnApproveActivity());
         activitiesAux.add(new AssociateMissionProcessActivity());
-
+        activitiesAux.add(new DisassociateMissionProcessActivity());
+        
         activitiesAux.add(new AllocateFundsActivity());
         activitiesAux.add(new AllocateProjectFundsActivity());
         activitiesAux.add(new UnAllocateFundsActivity());

@@ -24,6 +24,9 @@
 					%>">
 				<bean:write name="associatedProcess" property="processIdentification"/></a>
 			(<%= associatedProcess.getMissionSystem().getFirstTopLevelUnitFromExpenditureSystem().getPresentationName() %>)
+			<wf:activityLink id="disassociate" processName="process" activityName="DisassociateMissionProcessActivity" paramName0="missionProcessToAssociate" paramValue0="<%=associatedProcess.getExternalId() %>" scope="request">
+			<bean:message bundle="MISSION_RESOURCES" key="activity.DisassociateMissionProcessActivity"/>
+			</wf:activityLink>
 		</li>
 		</logic:iterate>
 	</ul>
