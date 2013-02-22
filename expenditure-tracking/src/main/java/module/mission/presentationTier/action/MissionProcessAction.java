@@ -34,6 +34,7 @@ import module.mission.domain.AuthorizeDislocationService;
 import module.mission.domain.MissionProcess;
 import module.mission.domain.MissionSystem;
 import module.mission.domain.PersonMissionAuthorization;
+import module.mission.domain.VehiclItem;
 import module.mission.domain.activity.AddItemActivity;
 import module.mission.domain.activity.AllocateFundsActivityInformation;
 import module.mission.domain.activity.AllocateProjectFundsActivityInformation;
@@ -236,6 +237,20 @@ public class MissionProcessAction extends ContextBaseAction {
             personMissionAuthorizations.add(personMissionAuthorization);
         }
         AuthorizeDislocationService.authorizeDislocation(personMissionAuthorizations);
+
+        return frontPage(mapping, form, request, response);
+    }
+
+    public ActionForward massAuthorizeVehicles(final ActionMapping mapping, final ActionForm form,
+            final HttpServletRequest request, final HttpServletResponse response) {
+        final String[] vehicleItemIds = request.getParameterValues("vehicleItemIds");
+        final Set<VehiclItem> vehicleItems = new HashSet<VehiclItem>();
+        for (final String id : vehicleItemIds) {
+            final VehiclItem vehicleItem = AbstractDomainObject.fromExternalId(id);
+            vehicleItems.add(vehicleItem);
+        }
+        MissionSystem.massAuthorizeVehicles(vehicleItems);
+
         return frontPage(mapping, form, request, response);
     }
 }

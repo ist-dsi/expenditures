@@ -221,4 +221,26 @@ public class MissionsConfigurationAction extends ContextBaseAction {
         return prepare(mapping, form, request, response);
     }
 
+    public ActionForward prepareAddVehicleAuthorizer(final ActionMapping mapping, final ActionForm form,
+            final HttpServletRequest request, final HttpServletResponse response) {
+        return forward(request, "/mission/addVehicleAuthorizer.jsp");
+    }
+
+    public ActionForward addVehicleAuthorizer(final ActionMapping mapping, final ActionForm form,
+            final HttpServletRequest request, final HttpServletResponse response) {
+        final String username = getAttribute(request, "username");
+        final User user = User.findByUsername(username);
+        if (user != null) {
+            MissionSystem.getInstance().addVehicleAuthorizers(user);
+        }
+        return prepare(mapping, form, request, response);
+    }
+
+    public ActionForward removeVehicleAuthorizer(final ActionMapping mapping, final ActionForm form,
+            final HttpServletRequest request, final HttpServletResponse response) {
+        final User user = getDomainObject(request, "userOid");
+        MissionSystem.getInstance().removeVehicleAuthorizers(user);
+        return prepare(mapping, form, request, response);
+    }
+
 }

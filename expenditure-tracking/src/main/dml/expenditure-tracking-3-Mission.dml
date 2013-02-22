@@ -122,6 +122,7 @@ class MissionItem implements .pt.ist.bennu.core.domain.VirtualHostAware {
 		}
 
 		class VehiclItem extends TransportationItem {
+			Boolean authorized;
 		}
 
 			class RentedVehiclItem extends VehiclItem {
@@ -701,6 +702,15 @@ relation MissionSystemUsersWhoCanCancelMission {
 		multiplicity *;
 	}
 	.pt.ist.bennu.core.domain.User playsRole usersWhoCanCancelMission {
+		multiplicity *;
+	}
+}
+
+relation MissionSystemVehicleAuthorizers {
+	MissionSystem playsRole missionSystemFromVehicleAuthorizers  {
+		multiplicity *;
+	}
+	.pt.ist.bennu.core.domain.User playsRole vehicleAuthorizers {
 		multiplicity *;
 	}
 }

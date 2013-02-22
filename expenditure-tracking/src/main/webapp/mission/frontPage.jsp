@@ -1,3 +1,4 @@
+<%@page import="module.mission.domain.MissionSystem"%>
 <%@page import="java.util.TreeSet"%>
 <%@page import="java.util.SortedSet"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
@@ -34,6 +35,9 @@
 	</fr:edit>
 </fr:form>
 
+<% if (MissionSystem.getInstance().isCurrentUserVehicleAuthorizer()) { %>
+	<jsp:include page="vehiclesToAuthorizeSummary.jsp"/>
+<% } %>
 
 	<bean:define id="missionAuthorizationMap" toScope="request" name="missionContext" property="missionYear.missionAuthorizationMap" type="module.mission.domain.util.MissionAuthorizationMap"/>
 	<%
@@ -64,7 +68,7 @@
 									<th><bean:message bundle="MISSION_RESOURCES" key="label.module.mission.front.page.list.participant"/></th>
 									<th><bean:message bundle="MISSION_RESOURCES" key="label.module.mission.front.page.list.destination"/></th>
 									<th><bean:message bundle="MISSION_RESOURCES" key="label.module.mission.front.page.list.start"/></th>
-									<th><bean:message bundle="MISSION_RESOURCES" key="label.module.mission.front.page.list.duration"/></th>
+									<th><bean:message bundle="MISSION_RESOURCES" key="label.module.mission.front.page.list.duration.short"/></th>
 									<th><bean:message bundle="MISSION_RESOURCES" key="label.module.mission.front.page.list.objective"/></th>
 									<th><bean:message bundle="MISSION_RESOURCES" key="label.module.mission.front.page.list.totalCost"/></th>
 									<th><bean:message bundle="MISSION_RESOURCES" key="label.module.mission.front.page.list.process"/></th>
@@ -113,7 +117,7 @@
 										}
 								%>
 							</table>
-							<html:submit styleClass="inputbutton"><bean:message key="button.aprove" bundle="MISSION_RESOURCES"/></html:submit>
+							<html:submit styleClass="inputbutton"><bean:message key="button.approve.participants" bundle="MISSION_RESOURCES"/></html:submit>
 						</form>
 				<%
 					}

@@ -261,6 +261,10 @@ public abstract class MissionProcess extends MissionProcess_Base {
         mission.unauthorize(user);
     }
 
+    public boolean isApprovedByResponsible() {
+        return getMission().isApprovedByResponsible();
+    }
+
     public boolean isApproved() {
         return getMission().isApproved();
     }
@@ -288,6 +292,11 @@ public abstract class MissionProcess extends MissionProcess_Base {
     public boolean hasAnyAuthorization() {
         final Mission mission = getMission();
         return mission.hasAnyAuthorization();
+    }
+
+    public boolean canAuthorizeVehicles() {
+        return (!hasCurrentOwner() || isTakenByCurrentUser()) && isApprovedByResponsible() && !isCanceled()
+                && !areAllParticipantsAuthorized();
     }
 
     public boolean canAuthoriseParticipantActivity() {

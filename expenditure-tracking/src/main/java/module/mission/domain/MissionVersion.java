@@ -24,7 +24,9 @@
  */
 package module.mission.domain;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.joda.time.DateTime;
@@ -114,6 +116,20 @@ public class MissionVersion extends MissionVersion_Base {
         for (final MissionItem missionItem : getMissionItemsSet()) {
             missionItem.unArchive();
         }
+    }
+
+    public List<VehiclItem> getVehicleItems() {
+        List<VehiclItem> items = new ArrayList<VehiclItem>();
+        for (MissionItem item : getMissionItems()) {
+            if (item instanceof VehiclItem) {
+                items.add((VehiclItem) item);
+            }
+        }
+        return items;
+    }
+
+    public boolean hasAnyVehicleItems() {
+        return !getVehicleItems().isEmpty();
     }
 
     public boolean isTerminated() {

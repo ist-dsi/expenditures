@@ -34,11 +34,14 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import module.mission.domain.activity.AuthorizeVehicleItemActivity;
+import module.mission.domain.activity.ItemActivityInformation;
 import module.organization.domain.Accountability;
 import module.organization.domain.AccountabilityType;
 import module.organization.domain.OrganizationalModel;
 import module.organization.domain.Party;
 import module.organization.domain.Unit;
+import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
 import pt.ist.bennu.core.domain.MyOrg;
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.domain.VirtualHost;
@@ -168,6 +171,26 @@ public class MissionSystem extends MissionSystem_Base {
         super.setOrganizationalModel(organizationalModel);
     }
 
+    public boolean isCurrentUserVehicleAuthorizer() {
+        return getVehicleAuthorizers().contains(UserView.getCurrentUser());
+    }
+
+    public Collection<VehiclItem> getVehicleItemsPendingAuthorization() {
+        Collection<VehiclItem> pendingVehicles = new HashSet<VehiclItem>();
+        for (MissionProcess process : getMissionProcesses()) {
+            if (!process.canAuthorizeVehicles()) {
+                continue;
+            }
+
+            for (VehiclItem vehicle : process.getMission().getVehicleItems()) {
+                if (!vehicle.isAuthorized()) {
+                    pendingVehicles.add(vehicle);
+                }
+            }
+        }
+        return pendingVehicles;
+    }
+
     public boolean isAccountabilityTypesThatAuthorize(final AccountabilityType accountabilityType) {
         for (final MissionAuthorizationAccountabilityType missionAuthorizationAccountabilityType : getMissionAuthorizationAccountabilityTypesSet()) {
             if (missionAuthorizationAccountabilityType.getAccountabilityTypesSet().contains(accountabilityType)) {
@@ -238,6 +261,18 @@ public class MissionSystem extends MissionSystem_Base {
         super.removeUsersWhoCanCancelMission(usersWhoCanCancelMission);
     }
 
+    @Service
+    @Override
+    public void addVehicleAuthorizers(User vehicleAuthorizers) {
+        super.addVehicleAuthorizers(vehicleAuthorizers);
+    }
+
+    @Service
+    @Override
+    public void removeVehicleAuthorizers(User vehicleAuthorizers) {
+        super.removeVehicleAuthorizers(vehicleAuthorizers);
+    }
+
     public static Set<MissionSystem> readAllMissionSystems() {
         Set<MissionSystem> systems = new HashSet<MissionSystem>();
         for (VirtualHost vh : MyOrg.getInstance().getVirtualHosts()) {
@@ -259,4 +294,16 @@ public class MissionSystem extends MissionSystem_Base {
         setAllowGrantOwnerEquivalence(b == null ? Boolean.TRUE : Boolean.valueOf(!b.booleanValue()));
     }
 
+    @Service
+    public static void massAuthorizeVehicles(Collection<VehiclItem> items) {
+        for (final VehiclItem item : items) {
+            final Mission mission = item.getMission();
+            final MissionProcess missionProcess = mission.getMissionProcess();
+            final AuthorizeVehicleItemActivity activity =
+                    (AuthorizeVehicleItemActivity) missionProcess.getActivity(AuthorizeVehicleItemActivity.class);
+            final ItemActivityInformation activityInfo = activity.getActivityInformation(missionProcess);
+            activityInfo.setMissionItem(item);
+            activity.execute(activityInfo);
+        }
+    }
 }

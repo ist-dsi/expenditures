@@ -51,6 +51,10 @@ public class MissionStageView {
         result.put(MissionStage.PROCESS_APPROVAL, getApprovalState());
 
         if (mission.hasAnyMissionItems()) {
+            if (mission.hasAnyVehicleItems()) {
+                result.put(MissionStage.VEHICLE_APPROVAL, getVehicleApprovalState());
+            }
+
             result.put(MissionStage.FUND_ALLOCATION, getFundAllocationState());
         }
 
@@ -68,11 +72,24 @@ public class MissionStageView {
     }
 
     protected MissionStageState getApprovalState() {
-        return missionProcess.isApproved() ? MissionStageState.COMPLETED : getApprovalStateUnderConstruction();
+        return missionProcess.isApprovedByResponsible() ? MissionStageState.COMPLETED : getApprovalStateUnderConstruction();
     }
 
     protected MissionStageState getApprovalStateUnderConstruction() {
         return !missionProcess.isUnderConstruction() && !missionProcess.getIsCanceled() ? MissionStageState.UNDER_WAY : MissionStageState.NOT_YET_UNDER_WAY;
+    }
+
+    protected MissionStageState getVehicleApprovalState() {
+        if (getApprovalState() != MissionStageState.COMPLETED) {
+            return MissionStageState.NOT_YET_UNDER_WAY;
+        }
+        if (getParticipationAuthorizationState() == MissionStageState.COMPLETED) {
+            return MissionStageState.COMPLETED;
+        }
+        if (missionProcess.getMission().areAllVehicleItemsAuthorized()) {
+            return MissionStageState.COMPLETED;
+        }
+        return MissionStageState.UNDER_WAY;
     }
 
     protected MissionStageState getFundAllocationState() {
@@ -94,7 +111,7 @@ public class MissionStageView {
     }
 
     private MissionStageState getParticipationAuthorizationStateForApproved() {
-        return missionProcess.getIsCanceled().booleanValue() ? MissionStageState.NOT_YET_UNDER_WAY : (missionProcess
+        return missionProcess.getIsCanceled() ? MissionStageState.NOT_YET_UNDER_WAY : (missionProcess
                 .areAllParticipantsAuthorized() ? MissionStageState.COMPLETED : MissionStageState.UNDER_WAY);
     }
 

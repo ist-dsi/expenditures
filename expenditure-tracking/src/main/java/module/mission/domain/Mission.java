@@ -27,6 +27,7 @@ package module.mission.domain;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.SortedMap;
@@ -153,7 +154,7 @@ public abstract class Mission extends Mission_Base {
 
     public void add(final ItemActivityInformation itemActivityInformation) {
         final MissionItem missionItem = itemActivityInformation.getMissionItem();
-        missionItem.setMission(this);
+        missionItem.setMissionVersion(getMissionVersion());
 
         final Collection<Person> people = itemActivityInformation.getPeople();
         final Set<Person> participants = missionItem.getPeopleSet();
@@ -317,21 +318,38 @@ public abstract class Mission extends Mission_Base {
         }
     }
 
+    public boolean isApprovedByResponsible() {
+        // If you uncomment the commented code the approver is each of the paying units responsible (if there are paying units)...
+        // if the code is commented the approver is simply the first participant.
+        //		if (getFinancerCount() == 0 && getMissionItemsCount() == 0) {
+        return getIsApprovedByMissionResponsible() != null && getIsApprovedByMissionResponsible();
+        //		} else if (getFinancerCount() == 0 || getMissionItemsCount() == 0) {
+        //		    return false;
+        //		} else {
+        //		    for (final MissionFinancer financer : getFinancerSet()) {
+        //			if (!financer.hasApproval()) {
+        //			    return false;
+        //			}
+        //		    }
+        //		    return true;
+        //		}
+    }
+
     public boolean isApproved() {
-// If you uncomment the commented code the approver is each of the paying units responsible (if there are paying units)...
-// if the code is commented the approver is simply the first participant.
-//	if (getFinancerCount() == 0 && getMissionItemsCount() == 0) {
-        return getIsApprovedByMissionResponsible() != null && getIsApprovedByMissionResponsible().booleanValue();
-//	} else if (getFinancerCount() == 0 || getMissionItemsCount() == 0) {
-//	    return false;
-//	} else {
-//	    for (final MissionFinancer financer : getFinancerSet()) {
-//		if (!financer.hasApproval()) {
-//		    return false;
-//		}
-//	    }
-//	    return true;
-//	}
+        return isApprovedByResponsible() && areAllVehicleItemsAuthorized();
+    }
+
+    public boolean areAllVehicleItemsAuthorized() {
+        for (VehiclItem item : getVehicleItems()) {
+            if (!item.isAuthorized()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public List<VehiclItem> getVehicleItems() {
+        return getMissionVersion().getVehicleItems();
     }
 
     public boolean hasAllAllocatedFunds() {
@@ -1252,6 +1270,11 @@ public abstract class Mission extends Mission_Base {
     public boolean hasAnyMissionItems() {
         final MissionVersion missionVersion = getMissionVersion();
         return missionVersion.hasAnyMissionItems();
+    }
+
+    public boolean hasAnyVehicleItems() {
+        final MissionVersion missionVersion = getMissionVersion();
+        return missionVersion.hasAnyVehicleItems();
     }
 
     @Override

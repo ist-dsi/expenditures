@@ -24,8 +24,10 @@
  */
 package module.mission.domain;
 
+import jvstm.cps.ConsistencyPredicate;
 import module.mission.domain.activity.ItemActivityInformation;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
+import pt.ist.fenixWebFramework.services.Service;
 
 /**
  * 
@@ -53,6 +55,20 @@ public abstract class VehiclItem extends VehiclItem_Base {
         return true;
     }
 
+    public boolean isAuthorized() {
+        return getAuthorized() != null && getAuthorized();
+    }
+
+    @Service
+    public void authorize() {
+        setAuthorized(true);
+    }
+
+    @Service
+    public void unauthorize() {
+        setAuthorized(false);
+    }
+
     @Override
     public void setInfo(final ItemActivityInformation itemActivityInformation) {
         final Mission mission = itemActivityInformation.getProcess().getMission();
@@ -77,4 +93,14 @@ public abstract class VehiclItem extends VehiclItem_Base {
         vehiclItem.setVehiclItemJustification(getVehiclItemJustification());
     }
 
+    @ConsistencyPredicate
+    public boolean checkIsTemporaryXorHasDriver() {
+        if (!isTemporary() && hasDriver()) {
+            return true;
+        }
+        if (isTemporary() && !hasDriver()) {
+            return true;
+        }
+        return false;
+    }
 }

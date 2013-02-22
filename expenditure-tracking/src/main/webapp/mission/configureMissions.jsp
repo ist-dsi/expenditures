@@ -200,7 +200,7 @@
 </logic:empty>
 <logic:notEmpty name="missionSystem" property="usersWhoCanCancelMission">
 	<fr:view name="missionSystem" property="usersWhoCanCancelMission">
-		<fr:schema type="module.mission.domain.AccountabilityTypeQueue" bundle="MISSION_RESOURCES">
+		<fr:schema type="module.organization.domain.Person" bundle="MISSION_RESOURCES">
 			<fr:slot name="presentationName" key="label.user" bundle="ORGANIZATION_RESOURCES"/>
 		</fr:schema>
 		<fr:layout name="tabular">
@@ -209,6 +209,34 @@
 			<fr:property name="linkFormat(remove)" value="/configureMissions.do?method=removeUserWhoCanCancelMissions&userOid=${externalId}"/>
 			<fr:property name="bundle(remove)" value="MISSION_RESOURCES"/>
 			<fr:property name="key(remove)" value="label.mission.missionConfiguration.users.who.can.cancelMissions.remove"/>
+			<fr:property name="order(remove)" value="1"/>
+		</fr:layout>
+	</fr:view>
+</logic:notEmpty>
+
+<br/>
+
+<h3><bean:message key="label.mission.missionConfiguration.vehicle.authorizers" bundle="MISSION_RESOURCES"/></h3>
+<p>
+	<html:link action="/configureMissions.do?method=prepareAddVehicleAuthorizer">
+		<bean:message key="label.mission.missionConfiguration.vehicle.authorizers.addUser" bundle="MISSION_RESOURCES"/>
+	</html:link>
+</p>
+<logic:empty name="missionSystem" property="vehicleAuthorizers">
+	<p>
+		<bean:message key="label.mission.missionConfiguration.vehicle.authorizers.none" bundle="MISSION_RESOURCES"/>
+	</p>
+</logic:empty>
+<logic:notEmpty name="missionSystem" property="vehicleAuthorizers">
+	<fr:view name="missionSystem" property="vehicleAuthorizers">
+		<fr:schema type="module.organization.domain.Person" bundle="MISSION_RESOURCES">
+			<fr:slot name="presentationName" key="label.user" bundle="ORGANIZATION_RESOURCES"/>
+		</fr:schema>
+		<fr:layout name="tabular">
+			<fr:property name="classes" value="tview1"/>
+			<fr:property name="linkFormat(remove)" value="/configureMissions.do?method=removeVehicleAuthorizer&userOid=${externalId}"/>
+			<fr:property name="bundle(remove)" value="MISSION_RESOURCES"/>
+			<fr:property name="key(remove)" value="label.mission.missionConfiguration.vehicle.authorizers.remove"/>
 			<fr:property name="order(remove)" value="1"/>
 		</fr:layout>
 	</fr:view>

@@ -64,18 +64,6 @@ public abstract class MissionItem extends MissionItem_Base {
         return getMissionVersion().getMission();
     }
 
-    //Only include these two methods to run some cleanup scripts.
-    //Afterwards, they should be removed.
-    @Deprecated
-    public Mission getMissionForReal() {
-        return super.getMission();
-    }
-
-    @Deprecated
-    public boolean hasMissionForReal() {
-        return getMissionForReal() != null;
-    }
-
     public boolean isTemporary() {
         return hasTemporaryMissionItemEntry();
     }
@@ -290,11 +278,11 @@ public abstract class MissionItem extends MissionItem_Base {
     }
 
     @ConsistencyPredicate
-    public boolean checkIsTemporaryOrHasMissionVersion() {
-        if (!hasTemporaryMissionItemEntry() && hasMissionVersion()) {
+    public boolean checkIsTemporaryXorHasMissionVersion() {
+        if (!isTemporary() && hasMissionVersion()) {
             return true;
         }
-        if (hasTemporaryMissionItemEntry() && !hasMissionVersion()) {
+        if (isTemporary() && !hasMissionVersion()) {
             return true;
         }
         return false;
