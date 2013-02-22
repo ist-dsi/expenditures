@@ -34,13 +34,9 @@ import module.workingCapital.domain.WorkingCapital;
 import module.workingCapital.domain.WorkingCapitalAcquisitionSubmission;
 import module.workingCapital.domain.WorkingCapitalAcquisitionSubmissionDocument;
 import module.workingCapital.domain.WorkingCapitalAcquisitionTransaction;
-import module.workingCapital.domain.WorkingCapitalInitialization;
 import module.workingCapital.domain.WorkingCapitalProcess;
 import module.workingCapital.domain.WorkingCapitalTransaction;
 import net.sf.jasperreports.engine.JRException;
-
-import org.joda.time.DateTime;
-
 import pt.ist.bennu.core._development.PropertiesManager;
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.domain.VirtualHost;
@@ -98,11 +94,10 @@ public class SubmitForValidationActivity extends WorkflowActivity<WorkingCapital
                 new WorkingCapitalAcquisitionSubmissionDocument(acquisitionSubmission, contents, "SubmissionDocument" + txNumber
                         + ".pdf", activityInformation.getProcess());
         document.setFilename("Submission" + document.getOid() + document.getFilename());
-        
+
         if (activityInformation.isLastSubmission()) {
-        	TerminateWorkingCapitalActivity terminateWorkingCapitalActivity = new TerminateWorkingCapitalActivity();
-        	if(terminateWorkingCapitalActivity.isActive(workingCapitalProcess))
-        		terminateWorkingCapitalActivity.process(activityInformation);
+            TerminateWorkingCapitalActivity terminateWorkingCapitalActivity = new TerminateWorkingCapitalActivity();
+            terminateWorkingCapitalActivity.execute(activityInformation);
         }
     }
 
