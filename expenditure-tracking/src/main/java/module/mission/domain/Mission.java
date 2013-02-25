@@ -1528,4 +1528,9 @@ public abstract class Mission extends Mission_Base {
         return getMissionSystem() == VirtualHost.getVirtualHostForThread().getMissionSystem();
     }
 
+    public List<MissionItem> getMissionItems() {
+	final MissionVersion missionVersion = getMissionVersion();
+	return missionVersion == null ? Collections.EMPTY_LIST : missionVersion.getMissionItems();
+    }
+
 }
