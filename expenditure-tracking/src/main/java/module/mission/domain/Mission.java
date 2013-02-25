@@ -1219,7 +1219,7 @@ public abstract class Mission extends Mission_Base {
             missionVersion.setDates(super.getDaparture(), super.getArrival());
 
             //missionVersion.getMissionItemsSet().addAll(super.getMissionItemsSet());
-            missionVersion.getFinancerSet().addAll(super.getFinancerSet());
+            //missionVersion.getFinancerSet().addAll(super.getFinancerSet());
         }
 
         for (final MissionVersion missionVersion : getMissionVersionsSet()) {
@@ -1242,19 +1242,16 @@ public abstract class Mission extends Mission_Base {
         return min == null ? new DateTime() : min.getWhenOperationWasRan();
     }
 
-    @Override
     public int getFinancerCount() {
         final MissionVersion missionVersion = getMissionVersion();
         return missionVersion.getFinancerCount();
     }
 
-    @Override
     public boolean hasAnyFinancer() {
         final MissionVersion missionVersion = getMissionVersion();
         return missionVersion.hasAnyFinancer();
     }
 
-    @Override
     public Set<MissionFinancer> getFinancerSet() {
         final MissionVersion missionVersion = getMissionVersion();
         return missionVersion.getFinancerSet();

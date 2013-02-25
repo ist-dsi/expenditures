@@ -228,14 +228,6 @@ relation MissionSystemMissionFinancer {
 	}
 }
 
-/** Delete this after mission version refactor is complete */
-relation MissionMissionFinancer {
-	Mission playsRole missions;
-	MissionFinancer playsRole financer {
-		multiplicity *;
-	}
-}
-
 relation MissionVersionMissionFinancer {
 	MissionVersion playsRole missionVersion;
 	MissionFinancer playsRole financer {

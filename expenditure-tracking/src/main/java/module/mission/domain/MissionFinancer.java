@@ -74,7 +74,6 @@ public class MissionFinancer extends MissionFinancer_Base {
             missionItemFinancer.delete();
         }
         removeMissionVersion();
-        removeMissions();
         removeUnit();
         removeMissionSystem();
         removeAccountingUnit();
