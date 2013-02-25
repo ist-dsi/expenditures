@@ -59,7 +59,6 @@ public abstract class MissionItem extends MissionItem_Base {
         new TemporaryMissionItemEntry(this);
     }
 
-    @Override
     public Mission getMission() {
         return getMissionVersion().getMission();
     }

@@ -271,14 +271,6 @@ relation MissionSystemMissionItem {
 	}
 }
 
-/** Delete this after mission version refactor is complete */
-relation MissionMissionItem {
-	Mission playsRole mission;
-	MissionItem playsRole missionItems {
-		multiplicity *;
-	}
-}
-
 relation MissionVersionMissionItem {
 	MissionVersion playsRole missionVersion;
 	MissionItem playsRole missionItems {

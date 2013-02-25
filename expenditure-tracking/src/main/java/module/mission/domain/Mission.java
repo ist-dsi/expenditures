@@ -1218,7 +1218,7 @@ public abstract class Mission extends Mission_Base {
             missionVersion.setSinceDateTime(firstOperation);
             missionVersion.setDates(super.getDaparture(), super.getArrival());
 
-            missionVersion.getMissionItemsSet().addAll(super.getMissionItemsSet());
+            //missionVersion.getMissionItemsSet().addAll(super.getMissionItemsSet());
             missionVersion.getFinancerSet().addAll(super.getFinancerSet());
         }
 
@@ -1260,13 +1260,11 @@ public abstract class Mission extends Mission_Base {
         return missionVersion.getFinancerSet();
     }
 
-    @Override
     public int getMissionItemsCount() {
         final MissionVersion missionVersion = getMissionVersion();
         return missionVersion.getMissionItemsCount();
     }
 
-    @Override
     public boolean hasAnyMissionItems() {
         final MissionVersion missionVersion = getMissionVersion();
         return missionVersion.hasAnyMissionItems();
@@ -1277,7 +1275,6 @@ public abstract class Mission extends Mission_Base {
         return missionVersion.hasAnyVehicleItems();
     }
 
-    @Override
     public Set<MissionItem> getMissionItemsSet() {
         final MissionVersion missionVersion = getMissionVersion();
         return missionVersion.getMissionItemsSet();
