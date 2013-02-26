@@ -10,7 +10,7 @@
  *
  *   The Expenditure Tracking Module is free software: you can
  *   redistribute it and/or modify it under the terms of the GNU Lesser General
- *   Public License as published by the Free Software Foundation, either version 
+ *   Public License as published by the Free Software Foundation, either version
  *   3 of the License, or (at your option) any later version.
  *
  *   The Expenditure Tracking Module is distributed in the hope that it will be useful,
@@ -125,6 +125,10 @@ public abstract class Mission extends Mission_Base {
         missionVersion.setDates(daparture, arrival);
 
         setObjective(objective);
+    }
+
+    public List<MissionFinancer> getFinancer() {
+        return getMissionVersion().getFinancer();
     }
 
     public void fill(final UpdateMissionDetailsActivityInformation updateMissionDetailsActivityInformation) {
@@ -872,7 +876,7 @@ public abstract class Mission extends Mission_Base {
 	    result = getNunberOfLunchesToDiscount();
 	}
 	return Integer.valueOf(result);
-*/
+ */
     }
 
     private int getNunberOfLunchesToDiscount() {
@@ -893,7 +897,7 @@ public abstract class Mission extends Mission_Base {
 
     private boolean isHoliday(final DateTime dateTime) {
         // TODO Possibly refactor this and place data in the repository...
-        //      also this does not yet account for mobile holidays and local 
+        //      also this does not yet account for mobile holidays and local
         //      holidays depending on the persons working place.
         final int year = dateTime.getYear();
         final int monthOfYear = dateTime.getMonthOfYear();
@@ -1112,10 +1116,10 @@ public abstract class Mission extends Mission_Base {
             if (accountingUnit != null) {
                 final boolean isAssociatedToAccountingUnit =
                         accountingUnit.getPeopleSet().contains(person)
-                                || accountingUnit.getProjectAccountantsSet().contains(person)
-                                || accountingUnit.getTreasuryMembersSet().contains(person)
-                                || accountingUnit.getResponsiblePeopleSet().contains(person)
-                                || accountingUnit.getResponsibleProjectAccountantsSet().contains(person);
+                        || accountingUnit.getProjectAccountantsSet().contains(person)
+                        || accountingUnit.getTreasuryMembersSet().contains(person)
+                        || accountingUnit.getResponsiblePeopleSet().contains(person)
+                        || accountingUnit.getResponsibleProjectAccountantsSet().contains(person);
                 if (isAssociatedToAccountingUnit) {
                     return true;
                 }
@@ -1529,8 +1533,8 @@ public abstract class Mission extends Mission_Base {
     }
 
     public List<MissionItem> getMissionItems() {
-	final MissionVersion missionVersion = getMissionVersion();
-	return missionVersion == null ? Collections.EMPTY_LIST : missionVersion.getMissionItems();
+        final MissionVersion missionVersion = getMissionVersion();
+        return missionVersion == null ? Collections.EMPTY_LIST : missionVersion.getMissionItems();
     }
 
 }
