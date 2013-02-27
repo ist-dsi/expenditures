@@ -27,8 +27,10 @@ package module.mission.domain.activity;
 import module.mission.domain.Mission;
 import module.mission.domain.MissionProcess;
 import module.workflow.activities.ActivityInformation;
+import module.workflow.domain.ActivityLog;
 import pt.ist.bennu.core.domain.RoleType;
 import pt.ist.bennu.core.domain.User;
+import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.ist.bennu.core.util.BundleUtil;
 
 /**
@@ -55,6 +57,24 @@ public class TogleMissionNatureActivity extends MissionProcessActivity<MissionPr
         final Mission mission = missionProcess.getMission();
         final boolean booleanValue = mission.getGrantOwnerEquivalence().booleanValue();
         mission.setGrantOwnerEquivalence(Boolean.valueOf(!booleanValue));
+        for (MissionProcess associatedProcess : missionProcess.getAssociatedMissionProcesses()) {
+            Mission associatedMission = associatedProcess.getMission();
+            if (isActive(associatedProcess)) {
+                associatedMission.setGrantOwnerEquivalence(Boolean.valueOf(!booleanValue));
+            } else {
+                throw new DomainException("The associated process do not have toggle permissions.");
+            }
+
+        }
+    }
+
+    @Override
+    protected ActivityLog logExecution(MissionProcess thisProcess, String operationName, User user,
+            ActivityInformation<MissionProcess> activityInfo, String... argumentsDescription) {
+        for (MissionProcess associatedProcess : thisProcess.getAssociatedMissionProcesses()) {
+            super.logExecution(associatedProcess, operationName, user, activityInfo, argumentsDescription);
+        }
+        return super.logExecution(thisProcess, operationName, user, activityInfo, argumentsDescription);
     }
 
     @Override
