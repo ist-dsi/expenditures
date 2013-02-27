@@ -93,10 +93,14 @@ public class MissionStageView {
     }
 
     protected MissionStageState getFundAllocationState() {
-        return missionProcess.isApproved() ? getFundAllocationStateForApproved() : MissionStageState.NOT_YET_UNDER_WAY;
-    }
+        if (getApprovalState() != MissionStageState.COMPLETED) {
+            return MissionStageState.NOT_YET_UNDER_WAY;
+        }
 
-    protected MissionStageState getFundAllocationStateForApproved() {
+        if (getVehicleApprovalState() == MissionStageState.UNDER_WAY) {
+            return MissionStageState.NOT_YET_UNDER_WAY;
+        }
+
         if (missionProcess.getIsCanceled().booleanValue()) {
             return missionProcess.hasAnyAllocatedFunds() || missionProcess.hasAnyAllocatedProjectFunds() ? MissionStageState.UNDER_WAY : MissionStageState.NOT_YET_UNDER_WAY;
         }
@@ -105,19 +109,17 @@ public class MissionStageView {
     }
 
     protected MissionStageState getParticipationAuthorizationState() {
-        return missionProcess.isApproved()
+        return missionProcess.isApprovedByResponsible()
                 && (!missionProcess.getMission().hasAnyFinancer() || (missionProcess.hasAllAllocatedFunds() && missionProcess
                         .hasAllCommitmentNumbers())) ? getParticipationAuthorizationStateForApproved() : MissionStageState.NOT_YET_UNDER_WAY;
     }
 
     private MissionStageState getParticipationAuthorizationStateForApproved() {
-        return missionProcess.getIsCanceled() ? MissionStageState.NOT_YET_UNDER_WAY : (missionProcess
-                .areAllParticipantsAuthorized() ? MissionStageState.COMPLETED : MissionStageState.UNDER_WAY);
+        return missionProcess.isCanceled() ? MissionStageState.NOT_YET_UNDER_WAY : (missionProcess.areAllParticipantsAuthorized() ? MissionStageState.COMPLETED : MissionStageState.UNDER_WAY);
     }
 
     protected MissionStageState getExpenseAuthorizationState() {
-        return !missionProcess.isCanceled() && missionProcess.isApproved() && missionProcess.hasAllAllocatedFunds()
-        //&& missionProcess.areAllParticipantsAuthorizedForPhaseOne() ?
+        return !missionProcess.isCanceled() && missionProcess.isApprovedByResponsible() && missionProcess.hasAllAllocatedFunds()
                 && missionProcess.areAllParticipantsAuthorized() ? getExpenseAuthorizationStateCompletedOrUnderWay() : MissionStageState.NOT_YET_UNDER_WAY;
     }
 
