@@ -54,13 +54,19 @@
 <script type="text/javaScript">
 
 $("#submitButton").click(function() {
+	<% if(WorkingCapitalSystem.isLastMonthForWorkingCapitalTermination()){%>
 	var formToSubmit = $("#submitForValidationForm");
 	if ($("#submitForValidationForm input[type=checkbox]").attr("checked") == true) {
 		requestConfirmationForJQueryForm(formToSubmit,'<bean:message key="label.message.SubmitForValidationActivity.confirm" bundle="WORKING_CAPITAL_RESOURCES"/>', '<bean:message key="label.message.SubmitForValidationActivity.confirm.title" bundle="WORKING_CAPITAL_RESOURCES"/>');
 	}
 	else {
 		formToSubmit.submit();
-	}	
+	}
+	<%}else{%>
+		var formToSubmit = $("#submitForValidationForm");
+		formToSubmit.submit();
+	<%}%>
 });
+
 
 </script>
