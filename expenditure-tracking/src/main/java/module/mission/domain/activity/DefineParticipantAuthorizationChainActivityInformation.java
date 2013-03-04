@@ -95,7 +95,7 @@ public class DefineParticipantAuthorizationChainActivityInformation extends Part
     }
 
     private Unit getFirstValidUnit(final Unit unit, final Person person) {
-        return unit.hasResponsiblesInUnit() && unit.hasUnit() && !unit.isResponsible(person.getUser().getExpenditurePerson()) ? unit : getFirstValidUnit(
+        return unit.hasResponsiblesInUnit() && unit.hasUnit() ? unit : getFirstValidUnit(
                 unit.getParentUnit(), person);
     }
 
