@@ -185,21 +185,21 @@ public class PersonMissionAuthorization extends PersonMissionAuthorization_Base 
     private void setDelegatedAuthority(final Person authority) {
         if (authority == null) {
             setDelegatedAuthority((FunctionDelegation) null);
-        } else {
-            final Unit unit = getUnit();
-            final MissionSystem instance = MissionSystem.getInstance();
-            final Set<AccountabilityType> accountabilityTypes = instance.getAccountabilityTypesThatAuthorize();
-            for (final Accountability accountability : authority.getParentAccountabilitiesSet()) {
-                final AccountabilityType accountabilityType = accountability.getAccountabilityType();
-                if (accountabilityTypes.contains(accountabilityType)) {
-                    final FunctionDelegation functionDelegation = accountability.getFunctionDelegationDelegator();
-                    if (functionDelegation != null) {
-                        final Accountability parentAccountability = functionDelegation.getAccountabilityDelegator();
-                        if (unit == parentAccountability.getParent()) {
-                            setDelegatedAuthority(functionDelegation);
-                            return;
-                        }
-                    }
+            return;
+        }
+
+        final Set<AccountabilityType> accountabilityTypes = MissionSystem.getInstance().getAccountabilityTypesThatAuthorize();
+        for (final Accountability accountability : authority.getParentAccountabilitiesSet()) {
+            if (!accountability.isActiveNow() || !accountabilityTypes.contains(accountability.getAccountabilityType())) {
+                continue;
+            }
+
+            final FunctionDelegation functionDelegation = accountability.getFunctionDelegationDelegator();
+            if (functionDelegation != null) {
+                final Accountability parentAccountability = functionDelegation.getAccountabilityDelegator();
+                if (getUnit() == parentAccountability.getParent()) {
+                    setDelegatedAuthority(functionDelegation);
+                    return;
                 }
             }
         }
