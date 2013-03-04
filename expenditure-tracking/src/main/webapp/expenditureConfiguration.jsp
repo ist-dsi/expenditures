@@ -365,6 +365,8 @@
 				<fr:property name="format" value="${name}" />
 				<fr:property name="sortBy" value="name" />
 			</fr:slot>
+			<fr:slot name="institutionManagementEmail" key="label.institutionManagementEmail" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"
+					required="true"/>
 		</fr:schema>
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="form mbottom0 mtop15"/>

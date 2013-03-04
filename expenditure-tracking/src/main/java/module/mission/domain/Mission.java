@@ -1443,7 +1443,8 @@ public abstract class Mission extends Mission_Base {
                 if (mission != this && !process.isCanceled() && overlaps(mission)) {
                     throw new DomainException(BundleUtil.getFormattedStringFromResourceBundle("resources/MissionResources",
                             "error.mission.overlaps.participation", person.getPresentationName(),
-                            process.getProcessIdentification()));
+                            process.getProcessIdentification(),
+                            ExpenditureTrackingSystem.getInstance().getInstitutionManagementEmail()));
                 }
             }
         }
