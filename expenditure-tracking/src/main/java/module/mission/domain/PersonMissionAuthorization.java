@@ -132,9 +132,11 @@ public class PersonMissionAuthorization extends PersonMissionAuthorization_Base 
     public boolean canAuthoriseParticipantActivity(final Person person) {
         final MissionSystem instance = MissionSystem.getInstance();
         final Set<AccountabilityType> accountabilityTypes = instance.getAccountabilityTypesThatAuthorize();
-        //final AccountabilityType accountabilityType = IstAccountabilityType.PERSONNEL_RESPONSIBLE_MISSIONS.readAccountabilityType();
-        return (!hasAuthority() && !hasDelegatedAuthority() && getUnit().hasChildAccountabilityIncludingAncestry(
-                accountabilityTypes, person))
+
+        if (hasAuthority() || hasDelegatedAuthority()) {
+            return false;
+        }
+        return (getUnit().hasChildAccountabilityIncludingAncestry(accountabilityTypes, person))
                 || (hasNext() && getNext().canAuthoriseParticipantActivity(person));
     }
 

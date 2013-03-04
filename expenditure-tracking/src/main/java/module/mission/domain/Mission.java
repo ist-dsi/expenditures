@@ -574,13 +574,13 @@ public abstract class Mission extends Mission_Base {
     }
 
     public boolean canAuthoriseParticipantActivity() {
-        final User user = UserView.getCurrentUser();
-        if (user == null || !user.hasPerson()) {
+        final User currentUser = UserView.getCurrentUser();
+        if (currentUser == null || !currentUser.hasPerson()) {
             return false;
         }
-        final Person person = user.getPerson();
+
         for (final PersonMissionAuthorization personMissionAuthorization : getPersonMissionAuthorizationsSet()) {
-            if (personMissionAuthorization.canAuthoriseParticipantActivity(person)) {
+            if (personMissionAuthorization.canAuthoriseParticipantActivity(currentUser.getPerson())) {
                 return true;
             }
         }
@@ -588,13 +588,13 @@ public abstract class Mission extends Mission_Base {
     }
 
     public boolean canUnAuthoriseParticipantActivity() {
-        final User user = UserView.getCurrentUser();
-        if (user == null || !user.hasPerson()) {
+        final User currentUser = UserView.getCurrentUser();
+        if (currentUser == null || !currentUser.hasPerson()) {
             return false;
         }
-        final Person person = user.getPerson();
+
         for (final PersonMissionAuthorization personMissionAuthorization : getPersonMissionAuthorizationsSet()) {
-            if (personMissionAuthorization.canUnAuthoriseParticipantActivity(person)) {
+            if (personMissionAuthorization.canUnAuthoriseParticipantActivity(currentUser.getPerson())) {
                 return true;
             }
         }
@@ -602,13 +602,13 @@ public abstract class Mission extends Mission_Base {
     }
 
     public boolean canUnAuthoriseSomeParticipantActivity() {
-        final User user = UserView.getCurrentUser();
-        if (user == null || !user.hasPerson()) {
+        final User currentUser = UserView.getCurrentUser();
+        if (currentUser == null || !currentUser.hasPerson()) {
             return false;
         }
-        final Person person = user.getPerson();
+
         for (final PersonMissionAuthorization personMissionAuthorization : getPersonMissionAuthorizationsSet()) {
-            if (personMissionAuthorization.canUnAuthoriseSomeParticipantActivity(person)) {
+            if (personMissionAuthorization.canUnAuthoriseSomeParticipantActivity(currentUser.getPerson())) {
                 return true;
             }
         }
@@ -623,9 +623,9 @@ public abstract class Mission extends Mission_Base {
         if (user == null) {
             return false;
         }
-        final Person person = user.getPerson();
+
         for (final MissionFinancer financer : getFinancerSet()) {
-            if (financer.canAllocateFunds(person)) {
+            if (financer.canAllocateFunds(user.getPerson())) {
                 return true;
             }
         }
@@ -640,9 +640,9 @@ public abstract class Mission extends Mission_Base {
         if (user == null) {
             return false;
         }
-        final Person person = user.getPerson();
+
         for (final MissionFinancer financer : getFinancerSet()) {
-            if (financer.hasAnyMissionItemProjectFinancers() && financer.canAllocateProjectFunds(person)) {
+            if (financer.hasAnyMissionItemProjectFinancers() && financer.canAllocateProjectFunds(user.getPerson())) {
                 return true;
             }
         }
@@ -657,10 +657,10 @@ public abstract class Mission extends Mission_Base {
         if (user == null) {
             return false;
         }
-        final Person person = user.getPerson();
+
         for (final MissionFinancer financer : getFinancerSet()) {
             if (financer.hasAnyMissionItemProjectFinancers()
-                    && financer.isDirectResponsibleForPendingProjectFundAllocation(person)) {
+                    && financer.isDirectResponsibleForPendingProjectFundAllocation(user.getPerson())) {
                 return true;
             }
         }
@@ -1114,13 +1114,10 @@ public abstract class Mission extends Mission_Base {
         for (final MissionFinancer missionFinancer : getFinancerSet()) {
             final AccountingUnit accountingUnit = missionFinancer.getAccountingUnit();
             if (accountingUnit != null) {
-                final boolean isAssociatedToAccountingUnit =
-                        accountingUnit.getPeopleSet().contains(person)
-                        || accountingUnit.getProjectAccountantsSet().contains(person)
+                if (accountingUnit.getPeopleSet().contains(person) || accountingUnit.getProjectAccountantsSet().contains(person)
                         || accountingUnit.getTreasuryMembersSet().contains(person)
                         || accountingUnit.getResponsiblePeopleSet().contains(person)
-                        || accountingUnit.getResponsibleProjectAccountantsSet().contains(person);
-                if (isAssociatedToAccountingUnit) {
+                        || accountingUnit.getResponsibleProjectAccountantsSet().contains(person)) {
                     return true;
                 }
             }
@@ -1442,9 +1439,9 @@ public abstract class Mission extends Mission_Base {
                 final MissionProcess process = mission.getMissionProcess();
                 if (mission != this && !process.isCanceled() && overlaps(mission)) {
                     throw new DomainException(BundleUtil.getFormattedStringFromResourceBundle("resources/MissionResources",
-                            "error.mission.overlaps.participation", person.getPresentationName(),
-                            process.getProcessIdentification(),
-                            ExpenditureTrackingSystem.getInstance().getInstitutionManagementEmail()));
+                            "error.mission.overlaps.participation", person.getPresentationName(), process
+                                    .getProcessIdentification(), ExpenditureTrackingSystem.getInstance()
+                                    .getInstitutionManagementEmail()));
                 }
             }
         }
