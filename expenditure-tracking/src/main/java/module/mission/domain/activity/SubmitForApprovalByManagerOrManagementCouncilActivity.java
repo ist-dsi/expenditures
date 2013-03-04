@@ -42,7 +42,7 @@ public class SubmitForApprovalByManagerOrManagementCouncilActivity extends
     @Override
     public String getLocalizedName() {
         return BundleUtil.getStringFromResourceBundle("resources/MissionResources",
-                "activity." + SubmitForApprovalActivity.class.getSimpleName());
+                "activity." + getClass().getSimpleName());
     }
 
     @Override
