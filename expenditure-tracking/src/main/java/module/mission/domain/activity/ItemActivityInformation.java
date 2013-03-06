@@ -8,8 +8,10 @@ import java.util.Collection;
 import module.mission.domain.Mission;
 import module.mission.domain.MissionItem;
 import module.mission.domain.MissionProcess;
+import module.mission.domain.MissionSystem;
 import module.mission.domain.PersonelExpenseItem;
 import module.mission.domain.Salary;
+import module.mission.domain.TemporaryMissionItemEntry;
 import module.mission.domain.VehiclItem;
 import module.organization.domain.Person;
 import module.workflow.activities.ActivityInformation;
@@ -91,6 +93,7 @@ public class ItemActivityInformation extends ActivityInformation<MissionProcess>
                         personelExpenseItem.setDailyPersonelExpenseCategory(Salary.getDefaultDailyPersonelExpenseCategory(
                                 mission.getDailyPersonelExpenseTable(), missionItem.getPeopleSet()));
                     }
+                    partiallyGC();
                     return missionItem;
                 } catch (final ClassNotFoundException e) {
                     throw new Error(e);
@@ -139,6 +142,22 @@ public class ItemActivityInformation extends ActivityInformation<MissionProcess>
 
     public void setDriver(Person driver) {
         this.driver = driver;
+    }
+
+    public static int NUMBER_OF_OBJECTS_TO_GC = 10;
+
+    protected void partiallyGC() {
+        int cleanedObjects = 0;
+
+        for (final TemporaryMissionItemEntry temporaryMissionItemEntry : MissionSystem.getInstance()
+                .getTemporaryMissionItemEntriesSet()) {
+            if (temporaryMissionItemEntry != null) {
+                cleanedObjects += temporaryMissionItemEntry.gc() ? 1 : 0;
+                if (cleanedObjects >= NUMBER_OF_OBJECTS_TO_GC) {
+                    break;
+                }
+            }
+        }
     }
 
 }

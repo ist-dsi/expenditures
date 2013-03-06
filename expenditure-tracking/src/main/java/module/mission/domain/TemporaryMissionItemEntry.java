@@ -28,15 +28,18 @@ public class TemporaryMissionItemEntry extends TemporaryMissionItemEntry_Base {
         deleteDomainObject();
     }
 
-    public void gc() {
+    public boolean gc() {
         final MissionItem missionItem = getMissionItem();
         if (missionItem == null) {
             delete();
+            return true;
         } else if (missionItem.hasMissionVersion()) {
             throw new Error("This should never happen!!!");
         } else if (hasPastThresholdToDelete()) {
             missionItem.delete();
+            return true;
         }
+        return false;
     }
 
     private boolean hasPastThresholdToDelete() {
