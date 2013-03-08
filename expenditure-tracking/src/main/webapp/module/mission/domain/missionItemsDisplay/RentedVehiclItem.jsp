@@ -90,9 +90,6 @@
 				<% if (missionItem.isAuthorized()) { %>
 					<img src="<%= request.getContextPath() + "/CSS/" + theme + "/images/accept.gif"%>"/>
 					<bean:message key="label.authorized" bundle="MISSION_RESOURCES"/>
-				<% } else { %>
-					<img src="<%= request.getContextPath() + "/CSS/" + theme + "/images/icon_error.png"%>"/>
-					<bean:message key="label.authorized.not" bundle="MISSION_RESOURCES"/>
 				<% } %>
 			</td>
 		</tr>
