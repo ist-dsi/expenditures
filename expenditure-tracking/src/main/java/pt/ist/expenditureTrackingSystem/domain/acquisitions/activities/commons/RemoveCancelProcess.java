@@ -71,6 +71,7 @@ public class RemoveCancelProcess<P extends PaymentProcess> extends WorkflowActiv
         return "resources/AcquisitionResources";
     }
 
+    @Override
     public boolean isUserAwarenessNeeded(P process, User user) {
         return false;
     }

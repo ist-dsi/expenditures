@@ -142,10 +142,16 @@ public class AcquisitionInvoice extends AcquisitionInvoice_Base {
 
     @Override
     public void processRemoval() {
-        for (; !getFinancers().isEmpty(); getFinancers().get(0).removeAllocatedInvoices(this));
+        for (; !getFinancers().isEmpty(); getFinancers().get(0).removeAllocatedInvoices(this)) {
+            ;
+        }
         getProjectFinancers().clear();
-        for (; !getRequestItems().isEmpty(); getRequestItems().get(0).removeInvoicesFiles(this));
-        for (; !getUnitItems().isEmpty(); getUnitItems().get(0).removeConfirmedInvoices(this));
+        for (; !getRequestItems().isEmpty(); getRequestItems().get(0).removeInvoicesFiles(this)) {
+            ;
+        }
+        for (; !getUnitItems().isEmpty(); getUnitItems().get(0).removeConfirmedInvoices(this)) {
+            ;
+        }
     }
 
 }

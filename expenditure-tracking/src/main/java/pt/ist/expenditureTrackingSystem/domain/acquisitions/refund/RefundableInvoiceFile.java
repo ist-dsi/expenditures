@@ -70,6 +70,7 @@ public class RefundableInvoiceFile extends RefundableInvoiceFile_Base {
         init(filename, filename, invoiceFile);
     }
 
+    @Override
     public void delete() {
         //let's also remove the fileNode and document, if they aren't used elsewhere
         moveToTrash();
@@ -124,20 +125,24 @@ public class RefundableInvoiceFile extends RefundableInvoiceFile_Base {
 
             Money value = refundableInvoiceFile.getValue();
 
-            if (value != null)
+            if (value != null) {
                 metadataKeysAndValuesMap.put(VALUE, value.exportAsString());
+            }
 
             BigDecimal vatValue = refundableInvoiceFile.getVatValue();
-            if (vatValue != null)
+            if (vatValue != null) {
                 metadataKeysAndValuesMap.put(VAT_VALUE, vatValue.toPlainString());
+            }
 
             Money refundableValue = refundableInvoiceFile.getRefundableValue();
-            if (refundableValue != null)
+            if (refundableValue != null) {
                 metadataKeysAndValuesMap.put(REFUNDABLE_VALUE, refundableValue.exportAsString());
+            }
 
             Supplier supplier = refundableInvoiceFile.getSupplier();
-            if (supplier != null)
+            if (supplier != null) {
                 metadataKeysAndValuesMap.put(SUPPLIER, supplier.getPresentationName());
+            }
 
             return metadataKeysAndValuesMap;
         }

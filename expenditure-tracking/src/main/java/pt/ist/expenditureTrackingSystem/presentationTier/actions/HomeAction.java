@@ -25,7 +25,6 @@
 package pt.ist.expenditureTrackingSystem.presentationTier.actions;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -79,8 +78,7 @@ public class HomeAction extends BaseAction {
             }
         }
 
-        final CollectionPager<Announcement> pager =
-                new CollectionPager<Announcement>((Collection) approvedList, REQUESTS_PER_PAGE);
+        final CollectionPager<Announcement> pager = new CollectionPager<Announcement>(approvedList, REQUESTS_PER_PAGE);
 
         request.setAttribute("collectionPager", pager);
         request.setAttribute("numberOfPages", Integer.valueOf(pager.getNumberOfPages()));

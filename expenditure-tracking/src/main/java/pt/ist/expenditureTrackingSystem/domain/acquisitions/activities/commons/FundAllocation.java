@@ -47,6 +47,7 @@ public class FundAllocation<P extends PaymentProcess> extends WorkflowActivity<P
                 && (!process.hasMissionProcess() || process.getMissionProcess().hasAllAllocatedFunds());
     }
 
+    @Override
     public FundAllocationActivityInformation<P> getActivityInformation(P process) {
         return new FundAllocationActivityInformation<P>(process, this, true);
     }

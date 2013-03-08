@@ -50,7 +50,7 @@ public class ApproveActivity extends MissionProcessActivity<MissionProcess, Late
 
     @Override
     protected void process(final LateJustificationActivityInformation activityInformation) {
-        final MissionProcess missionProcess = (MissionProcess) activityInformation.getProcess();
+        final MissionProcess missionProcess = activityInformation.getProcess();
         final User user = UserView.getCurrentUser();
         missionProcess.approve(user);
         if (!missionProcess.isOnTime()) {

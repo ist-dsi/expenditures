@@ -45,6 +45,7 @@ public abstract class AbstractChangeFinancersAccountUnit<P extends PaymentProces
         }
     }
 
+    @Override
     public AbstractChangeFinancersAccountUnitActivityInformation<P> getActivityInformation(P process) {
         return new AbstractChangeFinancersAccountUnitActivityInformation<P>(process, this);
     }

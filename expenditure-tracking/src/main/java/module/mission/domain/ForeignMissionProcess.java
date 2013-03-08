@@ -117,7 +117,7 @@ public class ForeignMissionProcess extends ForeignMissionProcess_Base {
         activitiesAux.add(new UnApproveActivity());
         activitiesAux.add(new AssociateMissionProcessActivity());
         activitiesAux.add(new DisassociateMissionProcessActivity());
-        
+
         activitiesAux.add(new AllocateFundsActivity());
         activitiesAux.add(new AllocateProjectFundsActivity());
         activitiesAux.add(new UnAllocateFundsActivity());

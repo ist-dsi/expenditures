@@ -73,6 +73,7 @@ public class RefundProcessActivityLogStatistics extends ProcessActivityLogStatis
         return logEntries;
     }
 
+    @Override
     protected void register(final PaymentProcessYear paymentProcessYear) {
         for (final PaymentProcess paymentProcess : paymentProcessYear.getPaymentProcessSet()) {
             if (paymentProcess.isRefundProcess()) {

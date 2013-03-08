@@ -42,6 +42,7 @@ import pt.utl.ist.fenix.tools.util.StringNormalizer;
  */
 public class UnitNameAutoCompleteProvider implements AutoCompleteProvider {
 
+    @Override
     public Collection getSearchResults(Map<String, String> argsMap, String value, int maxCount) {
         List<Unit> units = new ArrayList<Unit>();
         String[] input = value.split(" ");

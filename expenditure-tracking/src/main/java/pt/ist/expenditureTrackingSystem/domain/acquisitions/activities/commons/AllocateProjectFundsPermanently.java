@@ -59,6 +59,7 @@ public class AllocateProjectFundsPermanently<P extends PaymentProcess> extends
         }
     }
 
+    @Override
     public AllocateProjectFundsPermanentlyActivityInformation<P> getActivityInformation(P process) {
         return getActivityInformation(process, true);
     }

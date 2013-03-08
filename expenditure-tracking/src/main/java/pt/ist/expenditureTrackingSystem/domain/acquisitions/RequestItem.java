@@ -81,8 +81,12 @@ public abstract class RequestItem extends RequestItem_Base {
     protected void delete() {
         removeCPVReference();
         removeExpenditureTrackingSystem();
-        for (; !getUnitItems().isEmpty(); getUnitItems().get(0).delete());
-        for (; !getInvoicesFiles().isEmpty(); getInvoicesFiles().remove(0));
+        for (; !getUnitItems().isEmpty(); getUnitItems().get(0).delete()) {
+            ;
+        }
+        for (; !getInvoicesFiles().isEmpty(); getInvoicesFiles().remove(0)) {
+            ;
+        }
 
         deleteDomainObject();
     }

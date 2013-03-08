@@ -7,6 +7,7 @@ import org.joda.time.LocalDate;
 
 public class LocalDate2SqlFieldConverter implements FieldConversion {
 
+    @Override
     public Object javaToSql(Object arg0) throws ConversionException {
         LocalDate localDate = (LocalDate) arg0;
         if (localDate != null) {
@@ -17,6 +18,7 @@ public class LocalDate2SqlFieldConverter implements FieldConversion {
         return null;
     }
 
+    @Override
     public Object sqlToJava(Object arg0) throws ConversionException {
         String value = (String) arg0;
         if (!StringUtils.isEmpty(value)) {

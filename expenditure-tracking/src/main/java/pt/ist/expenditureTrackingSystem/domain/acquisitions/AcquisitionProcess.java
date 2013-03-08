@@ -155,6 +155,7 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
         return isAvailableForPerson(user.getExpenditurePerson());
     }
 
+    @Override
     public boolean isActive() {
         return getLastAcquisitionProcessState().isActive();
     }
@@ -194,6 +195,7 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
         return getLastAcquisitionProcessState().isAllocatedToUnit();
     }
 
+    @Override
     public boolean isPayed() {
         return getLastAcquisitionProcessState().isPayed();
     }
@@ -259,6 +261,7 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
     /*
      * use getProcessNumber() instead
      */
+    @Override
     @Deprecated
     public String getAcquisitionProcessId() {
         return getProcessNumber();
@@ -288,6 +291,7 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
         return builder.toString();
     }
 
+    @Override
     public AcquisitionRequest getRequest() {
         return getAcquisitionRequest();
     }

@@ -36,10 +36,12 @@ import pt.ist.fenixWebFramework.renderers.components.converters.Converter;
  */
 public class DeliveryInfoProvider implements DataProvider {
 
+    @Override
     public Converter getConverter() {
         return new DomainObjectKeyConverter();
     }
 
+    @Override
     public Object provide(Object source, Object currentValue) {
         CreateAcquisitionRequestItemActivityInformation information = (CreateAcquisitionRequestItemActivityInformation) source;
         return information.getAcquisitionRequest().getRequester().getDeliveryInfosSet();

@@ -57,6 +57,7 @@ public class AnnouncementProcessState extends AnnouncementProcessState_Base {
         setJustification(justification);
     }
 
+    @Override
     protected Person getPerson() {
         return Person.getLoggedPerson();
     }

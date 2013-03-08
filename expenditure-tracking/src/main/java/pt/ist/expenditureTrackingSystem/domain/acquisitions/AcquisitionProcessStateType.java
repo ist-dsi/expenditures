@@ -133,6 +133,7 @@ public enum AcquisitionProcessStateType implements IPresentableEnum, Presentable
     private AcquisitionProcessStateType() {
     }
 
+    @Override
     public String getLocalizedName() {
         final ResourceBundle resourceBundle =
                 ResourceBundle.getBundle("resources.ExpenditureEnumerationResources", Language.getLocale());
@@ -167,6 +168,7 @@ public enum AcquisitionProcessStateType implements IPresentableEnum, Presentable
         return AcquisitionProcessStateType.class.getSimpleName() + "." + name() + ".description";
     }
 
+    @Override
     public String getDescription() {
         final ResourceBundle resourceBundle =
                 ResourceBundle.getBundle("resources.ExpenditureEnumerationResources", Language.getLocale());

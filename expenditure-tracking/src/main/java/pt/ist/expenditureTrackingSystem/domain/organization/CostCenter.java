@@ -90,8 +90,9 @@ public class CostCenter extends CostCenter_Base {
         final String costCenter = getCostCenter();
         if (costCenter != null) {
             for (final AcquisitionProcess acquisitionProcess : GenericProcess.getAllProcesses(RegularAcquisitionProcess.class)) {
-                if (acquisitionProcess.getPayingUnits().contains(this) && acquisitionProcess.isPendingApproval())
+                if (acquisitionProcess.getPayingUnits().contains(this) && acquisitionProcess.isPendingApproval()) {
                     result.add(acquisitionProcess);
+                }
             }
         }
     }

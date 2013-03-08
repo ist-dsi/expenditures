@@ -56,8 +56,9 @@ public class SearchByInvoiceBean implements Serializable {
 
     public ArrayList<PaymentProcess> search() {
         ArrayList<PaymentProcess> resultsList = new ArrayList<PaymentProcess>();
-        if (StringUtils.isEmpty(invoiceId))
+        if (StringUtils.isEmpty(invoiceId)) {
             return resultsList;
+        }
 
         List<PaymentProcessYear> processesYears = ExpenditureTrackingSystem.getInstance().getPaymentProcessYears();
 

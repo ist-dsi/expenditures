@@ -41,12 +41,15 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class ExceptionHandlerFilter implements Filter {
 
+    @Override
     public void destroy() {
     }
 
+    @Override
     public void init(FilterConfig arg0) throws ServletException {
     }
 
+    @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException,
             ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;

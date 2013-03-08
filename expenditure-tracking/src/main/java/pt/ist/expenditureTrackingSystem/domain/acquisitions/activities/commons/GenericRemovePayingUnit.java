@@ -48,6 +48,7 @@ public class GenericRemovePayingUnit<P extends PaymentProcess> extends
         activityInformation.getProcess().getRequest().removePayingUnit(activityInformation.getPayingUnit());
     }
 
+    @Override
     public GenericRemovePayingUnitActivityInformation<P> getActivityInformation(P process) {
         return new GenericRemovePayingUnitActivityInformation<P>(process, this);
     }

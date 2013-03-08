@@ -128,10 +128,12 @@ public class AnnouncementProcess extends AnnouncementProcess_Base {
     /*
      * TODO: Implement this methods correctly
      */
+    @Override
     public <T extends WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>> List<T> getActivities() {
         return Collections.EMPTY_LIST;
     }
 
+    @Override
     public boolean isActive() {
         return true;
     }

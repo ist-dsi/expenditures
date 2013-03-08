@@ -49,7 +49,7 @@ public class SendForProcessTerminationWithChangesActivity extends
 
     @Override
     protected void process(final SendForProcessTerminationWithChangesActivityInformation activityInformation) {
-        final MissionProcess missionProcess = (MissionProcess) activityInformation.getProcess();
+        final MissionProcess missionProcess = activityInformation.getProcess();
         missionProcess.sendForProcessTermination(activityInformation.getDescriptionOfChangesAfterArrival());
     }
 

@@ -3,12 +3,12 @@ package module.mission.domain.activity;
 import module.mission.domain.MissionProcess;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.domain.ActivityLog;
-import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.util.BundleUtil;
 import pt.ist.fenixWebFramework.services.Service;
 
-public class DisassociateMissionProcessActivity extends MissionProcessActivity<MissionProcess, AssociateMissionProcessActivityInfo> {
+public class DisassociateMissionProcessActivity extends
+        MissionProcessActivity<MissionProcess, AssociateMissionProcessActivityInfo> {
 
     @Override
     public String getLocalizedName() {
@@ -43,7 +43,7 @@ public class DisassociateMissionProcessActivity extends MissionProcessActivity<M
         for (MissionProcess otherProcess : thisProcess.getAssociatedMissionProcesses()) {
             super.logExecution(otherProcess, operationName, user, activityInfo, argumentsDescription);
         }
-        
+
         return super.logExecution(thisProcess, operationName, user, activityInfo, argumentsDescription);
     }
 

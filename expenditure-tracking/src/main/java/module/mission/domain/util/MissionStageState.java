@@ -10,6 +10,7 @@ public enum MissionStageState implements IPresentableEnum {
     private static final String BUNDLE = "resources.MissionResources";
     private static final String KEY_PREFIX = "label.MissionStageState.";
 
+    @Override
     public String getLocalizedName() {
         final String key = KEY_PREFIX + name();
         return BundleUtil.getStringFromResourceBundle(BUNDLE, key);

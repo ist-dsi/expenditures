@@ -64,6 +64,7 @@ public abstract class ProcessState extends ProcessState_Base {
     }
 
     public static final Comparator<ProcessState> COMPARATOR_BY_WHEN = new Comparator<ProcessState>() {
+        @Override
         public int compare(ProcessState o1, ProcessState o2) {
             int r = o1.getWhenDateTime().compareTo(o2.getWhenDateTime());
             return r == 0 ? o1.getExternalId().compareTo(o2.getExternalId()) : r;

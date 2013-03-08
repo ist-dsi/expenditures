@@ -42,6 +42,7 @@ import pt.utl.ist.fenix.tools.util.StringNormalizer;
  */
 public class PersonAutoComplete implements AutoCompleteProvider {
 
+    @Override
     public Collection getSearchResults(Map<String, String> argsMap, String value, int maxCount) {
         Set<Person> people = new HashSet<Person>();
         String[] values = StringNormalizer.normalize(value).toLowerCase().split(" ");

@@ -60,7 +60,9 @@ public class GenericAssignPayingUnitToItem<P extends PaymentProcess> extends
         RequestItem item = activityInformation.getItem();
         List<UnitItemBean> beans = activityInformation.getBeans();
 
-        for (; !item.getUnitItems().isEmpty(); item.getUnitItems().get(0).delete());
+        for (; !item.getUnitItems().isEmpty(); item.getUnitItems().get(0).delete()) {
+            ;
+        }
 
         for (UnitItemBean bean : beans) {
             if (bean.getAssigned()) {
@@ -69,6 +71,7 @@ public class GenericAssignPayingUnitToItem<P extends PaymentProcess> extends
         }
     }
 
+    @Override
     public GenericAssignPayingUnitToItemActivityInformation<P> getActivityInformation(P process) {
         return new GenericAssignPayingUnitToItemActivityInformation<P>(process, this);
     }

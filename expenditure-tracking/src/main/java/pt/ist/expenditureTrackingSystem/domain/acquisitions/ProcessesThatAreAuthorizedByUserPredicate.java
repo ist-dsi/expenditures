@@ -46,6 +46,7 @@ public class ProcessesThatAreAuthorizedByUserPredicate implements Predicate {
         this.person = person;
     }
 
+    @Override
     public boolean evaluate(Object arg0) {
         PaymentProcess process = (PaymentProcess) arg0;
         if (process.getRequest() == null) {

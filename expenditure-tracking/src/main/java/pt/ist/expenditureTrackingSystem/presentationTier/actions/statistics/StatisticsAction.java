@@ -218,7 +218,7 @@ public class StatisticsAction extends ContextBaseAction {
 
     public ActionForward simplifiedProcessStatistics(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) throws IOException {
-        final Integer year = Integer.valueOf((String) request.getParameter("year"));
+        final Integer year = Integer.valueOf(request.getParameter("year"));
         return streamSpreadsheet(response, "simplifiedProcedure", simplifiedProcessStatistics(year), year);
     }
 
@@ -243,7 +243,7 @@ public class StatisticsAction extends ContextBaseAction {
 
     public ActionForward refundProcessStatistics(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) throws IOException {
-        final Integer year = Integer.valueOf((String) request.getParameter("year"));
+        final Integer year = Integer.valueOf(request.getParameter("year"));
         return streamSpreadsheet(response, "refund", refundProcessStatistics(year), year);
     }
 

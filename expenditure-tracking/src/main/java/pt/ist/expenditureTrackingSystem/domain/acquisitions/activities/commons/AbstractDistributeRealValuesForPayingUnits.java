@@ -61,6 +61,7 @@ public abstract class AbstractDistributeRealValuesForPayingUnits<P extends Payme
 
     }
 
+    @Override
     public AbstractDistributeRealValuesForPayingUnitsActivityInformation<P> getActivityInformation(P process) {
         return new AbstractDistributeRealValuesForPayingUnitsActivityInformation<P>(process, this);
     }

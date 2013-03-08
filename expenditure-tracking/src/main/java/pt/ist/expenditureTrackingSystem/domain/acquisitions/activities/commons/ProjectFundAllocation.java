@@ -50,6 +50,7 @@ public class ProjectFundAllocation<P extends PaymentProcess> extends
                 && (!process.hasMissionProcess() || process.getMissionProcess().hasAllAllocatedProjectFunds());
     }
 
+    @Override
     public ProjectFundAllocationActivityInformation<P> getActivityInformation(P process) {
         return getActivityInformation(process, true);
     }

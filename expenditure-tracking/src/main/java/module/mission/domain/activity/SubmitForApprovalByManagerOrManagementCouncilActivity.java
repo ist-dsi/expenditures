@@ -41,8 +41,7 @@ public class SubmitForApprovalByManagerOrManagementCouncilActivity extends
 
     @Override
     public String getLocalizedName() {
-        return BundleUtil.getStringFromResourceBundle("resources/MissionResources",
-                "activity." + getClass().getSimpleName());
+        return BundleUtil.getStringFromResourceBundle("resources/MissionResources", "activity." + getClass().getSimpleName());
     }
 
     @Override
@@ -58,7 +57,7 @@ public class SubmitForApprovalByManagerOrManagementCouncilActivity extends
 
     @Override
     protected void process(final ActivityInformation<MissionProcess> activityInformation) {
-        final MissionProcess missionProcess = (MissionProcess) activityInformation.getProcess();
+        final MissionProcess missionProcess = activityInformation.getProcess();
         //missionProcess.checkForAnyOverlappingParticipations();
         missionProcess.checkForSupportDocuments();
         missionProcess.setIsUnderConstruction(Boolean.FALSE);

@@ -50,6 +50,7 @@ public class GenericAddPayingUnit<P extends PaymentProcess> extends
         activityInformation.getProcess().getRequest().addPayingUnit(activityInformation.getPayingUnit());
     }
 
+    @Override
     public GenericAddPayingUnitActivityInformation<P> getActivityInformation(P process) {
         return new GenericAddPayingUnitActivityInformation<P>(process, this);
     }

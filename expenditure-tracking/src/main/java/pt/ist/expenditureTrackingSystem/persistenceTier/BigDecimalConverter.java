@@ -35,10 +35,12 @@ import org.apache.ojb.broker.accesslayer.conversions.FieldConversion;
  */
 public class BigDecimalConverter implements FieldConversion {
 
+    @Override
     public Object javaToSql(Object source) {
         return source instanceof BigDecimal ? source.toString() : source;
     }
 
+    @Override
     public Object sqlToJava(Object source) {
         if (source == null || source.equals("")) {
             return null;

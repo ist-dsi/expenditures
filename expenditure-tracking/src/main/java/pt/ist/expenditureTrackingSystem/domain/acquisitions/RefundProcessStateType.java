@@ -90,6 +90,7 @@ public enum RefundProcessStateType implements IPresentableEnum, PresentableProce
     private RefundProcessStateType() {
     }
 
+    @Override
     public String getLocalizedName() {
         final ResourceBundle resourceBundle =
                 ResourceBundle.getBundle("resources.ExpenditureEnumerationResources", Language.getLocale());

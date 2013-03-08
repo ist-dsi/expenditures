@@ -159,8 +159,8 @@ public class MissionAuthorizationMap implements Serializable {
     }
 
     public boolean hasSomeUnit() {
-        for (int i = 0; i < levelsForUser.length; i++) {
-            if (levelsForUser[i] != null) {
+        for (Unit element : levelsForUser) {
+            if (element != null) {
                 return true;
             }
         }

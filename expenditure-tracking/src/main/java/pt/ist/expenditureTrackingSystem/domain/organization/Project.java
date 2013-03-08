@@ -94,8 +94,9 @@ public class Project extends Project_Base {
         final String projectCode = getProjectCode();
         if (projectCode != null) {
             for (final AcquisitionProcess acquisitionProcess : GenericProcess.getAllProcesses(RegularAcquisitionProcess.class)) {
-                if (acquisitionProcess.getPayingUnits().contains(this) && acquisitionProcess.isPendingApproval())
+                if (acquisitionProcess.getPayingUnits().contains(this) && acquisitionProcess.isPendingApproval()) {
                     result.add(acquisitionProcess);
+                }
             }
         }
     }

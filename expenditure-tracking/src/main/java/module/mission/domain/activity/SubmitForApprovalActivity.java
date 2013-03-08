@@ -49,7 +49,7 @@ public class SubmitForApprovalActivity extends MissionProcessActivity<MissionPro
 
     @Override
     protected void process(final LateJustificationActivityInformation activityInformation) {
-        final MissionProcess missionProcess = (MissionProcess) activityInformation.getProcess();
+        final MissionProcess missionProcess = activityInformation.getProcess();
         missionProcess.checkForAnyOverlappingParticipations();
         missionProcess.checkForSupportDocuments();
         missionProcess.setIsUnderConstruction(Boolean.FALSE);

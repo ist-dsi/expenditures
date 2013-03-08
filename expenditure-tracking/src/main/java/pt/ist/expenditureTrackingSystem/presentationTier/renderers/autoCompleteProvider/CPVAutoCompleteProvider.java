@@ -41,6 +41,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
  */
 public class CPVAutoCompleteProvider implements AutoCompleteProvider {
 
+    @Override
     public Collection getSearchResults(Map<String, String> argsMap, String value, int maxCount) {
         List<CPVReference> result = new ArrayList<CPVReference>();
 

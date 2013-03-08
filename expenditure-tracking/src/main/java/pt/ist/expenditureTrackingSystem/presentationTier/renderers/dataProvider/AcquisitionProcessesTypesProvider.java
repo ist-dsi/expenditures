@@ -11,6 +11,7 @@ import pt.ist.fenixWebFramework.renderers.components.converters.Converter;
 
 public class AcquisitionProcessesTypesProvider implements DataProvider {
 
+    @Override
     public Converter getConverter() {
         return new BiDirectionalConverter() {
 
@@ -32,6 +33,7 @@ public class AcquisitionProcessesTypesProvider implements DataProvider {
         };
     }
 
+    @Override
     public Object provide(Object arg0, Object arg1) {
         List<Class> classes = new ArrayList<Class>();
         classes.add(RefundProcess.class);

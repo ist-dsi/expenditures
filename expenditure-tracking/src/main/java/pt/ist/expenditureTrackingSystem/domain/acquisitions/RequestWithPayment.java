@@ -51,6 +51,7 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
         super();
     }
 
+    @Override
     public boolean hasAnyRequestItems() {
         return getRequestItems().size() > 0;
     }

@@ -42,6 +42,7 @@ import pt.utl.ist.fenix.tools.util.StringNormalizer;
  */
 public class NIFSupplierAutoCompleteProvider implements AutoCompleteProvider {
 
+    @Override
     public Collection getSearchResults(Map<String, String> argsMap, String value, int maxCount) {
         final List<Supplier> result = new ArrayList<Supplier>();
         final String[] input = value.split(" ");

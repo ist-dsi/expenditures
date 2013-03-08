@@ -61,10 +61,12 @@ public class SimplifiedProcedureProcessActivityTimeChartData extends PaymentProc
         super(paymentProcessYear, Operation.MEDIAN);
     }
 
+    @Override
     protected String getTitleKey() {
         return "label.activity.times.average";
     }
 
+    @Override
     protected String[] getCategories() {
         Set<WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>> activities =
                 new TreeSet<WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>>(
@@ -89,6 +91,7 @@ public class SimplifiedProcedureProcessActivityTimeChartData extends PaymentProc
         return catagories;
     }
 
+    @Override
     protected String getLabel(final String c) {
         return c;
     }

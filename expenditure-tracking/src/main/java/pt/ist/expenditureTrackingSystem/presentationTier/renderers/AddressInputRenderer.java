@@ -75,10 +75,12 @@ public class AddressInputRenderer extends InputRenderer {
     private String locationSize;
     private String countrySize;
 
+    @Override
     public String getClasses() {
         return classes;
     }
 
+    @Override
     public void setClasses(String classes) {
         this.classes = classes;
     }

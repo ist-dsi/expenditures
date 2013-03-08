@@ -56,10 +56,12 @@ public class FinancerStatusRenderer extends AbstractToolTipRenderer {
         this.explanationMessage = stateMessage;
     }
 
+    @Override
     public String getBundle() {
         return bundle;
     }
 
+    @Override
     public void setBundle(String bundle) {
         this.bundle = bundle;
     }

@@ -122,6 +122,7 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
         new AcquisitionProcessState(this, AcquisitionProcessStateType.CANCELED);
     }
 
+    @Override
     protected void authorize() {
         final AcquisitionProcessStateType type;
         if (ExpenditureTrackingSystem.isInvoiceAllowedToStartAcquisitionProcess() && hasInvoiceFile()) {
@@ -141,6 +142,7 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
         new AcquisitionProcessState(this, AcquisitionProcessStateType.INVOICE_CONFIRMED);
     }
 
+    @Override
     public void allocateFundsToUnit() {
         new AcquisitionProcessState(this, AcquisitionProcessStateType.FUNDS_ALLOCATED);
     }
@@ -185,6 +187,7 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
         }
     }
 
+    @Override
     public void submitForFundAllocation() {
         final AcquisitionProcessStateType type;
         if (ExpenditureTrackingSystem.isInvoiceAllowedToStartAcquisitionProcess() && hasInvoiceFile()) {
@@ -254,6 +257,7 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
         return units;
     }
 
+    @Override
     public boolean isInAuthorizedState() {
         return getAcquisitionProcessState().isAuthorized();
     }

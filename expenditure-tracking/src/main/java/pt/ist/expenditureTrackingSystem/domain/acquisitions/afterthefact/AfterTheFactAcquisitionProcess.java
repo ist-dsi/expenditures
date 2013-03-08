@@ -93,6 +93,7 @@ public class AfterTheFactAcquisitionProcess extends AfterTheFactAcquisitionProce
         return afterTheFactAcquisitionProcess;
     }
 
+    @Override
     protected int getYearForConstruction() {
         return threadLocal.get().getYear().intValue();
     }
@@ -153,6 +154,7 @@ public class AfterTheFactAcquisitionProcess extends AfterTheFactAcquisitionProce
         // nothing to do here...
     }
 
+    @Override
     public boolean isAppiableForYear(final int year) {
         return getAcquisitionAfterTheFact().isAppiableForYear(year);
     }

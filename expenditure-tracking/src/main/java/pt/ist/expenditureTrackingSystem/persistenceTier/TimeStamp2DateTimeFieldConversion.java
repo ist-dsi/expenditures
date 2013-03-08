@@ -36,6 +36,7 @@ import org.joda.time.DateTime;
  */
 public class TimeStamp2DateTimeFieldConversion implements FieldConversion {
 
+    @Override
     public Object javaToSql(Object source) {
         if (source instanceof DateTime) {
             return new Timestamp(((DateTime) source).getMillis());
@@ -43,6 +44,7 @@ public class TimeStamp2DateTimeFieldConversion implements FieldConversion {
         return source;
     }
 
+    @Override
     public Object sqlToJava(Object source) {
         if (source == null || source.equals("")) {
             return null;
