@@ -47,6 +47,7 @@ public abstract class VehiclItem extends VehiclItem_Base {
         if (vehiclItemJustification != null) {
             vehiclItemJustification.delete();
         }
+        removeDriver();
         super.delete();
     }
 
