@@ -149,7 +149,8 @@
 		<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.front.page.search.text"/>
 	</p>
         
-	<fr:form action="/workingCapital.do?method=search">
+	<fr:form id="workCapSearchForm" action="/workingCapital.do?method=search">
+		
 		<fr:edit id="workingCapitalInitializationBean" name="workingCapitalContext" >
 			<fr:schema type="module.workingCapital.presentationTier.action.util.WorkingCapitalContext" bundle="WORKING_CAPITAL_RESOURCES">
 				<fr:slot name="workingCapitalYear" key="label.module.workingCapital.year" required="true" layout="menu-select">
@@ -185,6 +186,22 @@
 				</p>
 			</logic:empty>
 			<logic:notEmpty name="processList">
+			<p>
+			<bean:define id="yearOid" name="workingCapitalContext" property="workingCapitalYear.externalId" type="java.lang.String"/>
+			<bean:define id="partyOid" type="java.lang.String" > 
+				<logic:empty name="workingCapitalContext" property="party">
+					blank
+				</logic:empty>
+				<logic:notEmpty name="workingCapitalContext" property="party">
+					<bean:write name="workingCapitalContext" property="party.externalId"/>
+				</logic:notEmpty>
+			</bean:define>
+			<html:link action="<%="/workingCapital.do?method=exportSearchToExcel&yearOid="+yearOid+"&party0id="+partyOid%>">
+			<img border="0" src="images/excel.gif">
+				<bean:message key="link.xlsFileToDownload" bundle="WORKING_CAPITAL_RESOURCES" />
+			</html:link>
+		
+	</p>
 				<fr:view name="processList">
 					<fr:schema bundle="WORKING_CAPITAL_RESOURCES" type="module.workingCapital.domain.WorkingCapitalProcess">
 					 	<fr:slot name="workingCapital.unit.presentationName" layout="link" key="label.module.workingCapital">

@@ -24,12 +24,15 @@
  */
 package module.workingCapital.presentationTier.action;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -50,6 +53,7 @@ import org.apache.commons.beanutils.BeanComparator;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.joda.time.LocalDate;
 
 import pt.ist.bennu.core.domain.VirtualHost;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
@@ -57,6 +61,9 @@ import pt.ist.bennu.core.presentationTier.actions.ContextBaseAction;
 import pt.ist.bennu.core.util.BundleUtil;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
+import pt.utl.ist.fenix.tools.spreadsheet.SheetData;
+import pt.utl.ist.fenix.tools.spreadsheet.SpreadsheetBuilder;
+import pt.utl.ist.fenix.tools.spreadsheet.WorkbookExportFormat;
 
 @Mapping(path = "/workingCapital")
 /**
@@ -85,9 +92,9 @@ public class WorkingCapitalAction extends ContextBaseAction {
     public ActionForward search(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
             final HttpServletResponse response) {
         final WorkingCapitalContext workingCapitalContext = getRenderedObject("workingCapitalInitializationBean");
-        if(workingCapitalContext.getParty() == null) {
-        	request.setAttribute("workingCapitalYearOid", workingCapitalContext.getWorkingCapitalYear().getExternalId());
-        	return listProcesses(mapping, form, request, response);
+        if (workingCapitalContext.getParty() == null) {
+            request.setAttribute("workingCapitalYearOid", workingCapitalContext.getWorkingCapitalYear().getExternalId());
+            return listProcesses(mapping, form, request, response);
         }
         final SortedSet<WorkingCapitalProcess> unitProcesses = workingCapitalContext.getWorkingCapitalSearchByUnit();
         return showList(request, workingCapitalContext, unitProcesses);
@@ -131,9 +138,14 @@ public class WorkingCapitalAction extends ContextBaseAction {
 
     public ActionForward listProcesses(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
             final HttpServletResponse response) {
-        final WorkingCapitalYear workingCapitalYear = getDomainObject(request, "workingCapitalYearOid");
         final WorkingCapitalContext workingCapitalContext = new WorkingCapitalContext();
+        final WorkingCapitalYear workingCapitalYear = getDomainObject(request, "workingCapitalYearOid");
         workingCapitalContext.setWorkingCapitalYear(workingCapitalYear);
+        final SortedSet<WorkingCapitalProcess> unitProcesses = getAllProcesses(workingCapitalYear);
+        return showList(request, workingCapitalContext, unitProcesses);
+    }
+
+    private SortedSet<WorkingCapitalProcess> getAllProcesses(final WorkingCapitalYear workingCapitalYear) {
         final SortedSet<WorkingCapitalProcess> unitProcesses =
                 new TreeSet<WorkingCapitalProcess>(WorkingCapitalProcess.COMPARATOR_BY_UNIT_NAME);
         for (final WorkingCapital workingCapital : workingCapitalYear.getWorkingCapitalsSet()) {
@@ -142,7 +154,7 @@ public class WorkingCapitalAction extends ContextBaseAction {
                 unitProcesses.add(workingCapitalProcess);
             }
         }
-        return showList(request, workingCapitalContext, unitProcesses);
+        return unitProcesses;
     }
 
     public ActionForward configuration(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -268,6 +280,66 @@ public class WorkingCapitalAction extends ContextBaseAction {
         request.setAttribute("workingCapital", workingCapital);
 
         return forward(request, "/workingCapital/viewAllWorkingCapitalInitializations.jsp");
+    }
+
+    public final ActionForward exportSearchToExcel(final ActionMapping mapping, final ActionForm form,
+            final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+        final String yearid = request.getParameter("yearOid");
+        final String partyid = request.getParameter("party0id");
+        final WorkingCapitalContext workingCapitalContext = new WorkingCapitalContext();
+
+        if (!partyid.equals("blank")) {
+            workingCapitalContext.setParty((Party) getDomainObject(partyid));
+        }
+        workingCapitalContext.setWorkingCapitalYear((WorkingCapitalYear) getDomainObject(yearid));
+        final SortedSet<WorkingCapitalProcess> unitProcesses;
+        if (workingCapitalContext.getParty() == null) {
+            unitProcesses = getAllProcesses(workingCapitalContext.getWorkingCapitalYear());
+        } else {
+            unitProcesses = workingCapitalContext.getWorkingCapitalSearchByUnit();
+        }
+        return exportInfoToExcel(unitProcesses, workingCapitalContext, response);
+    }
+
+    private ActionForward exportInfoToExcel(Set<WorkingCapitalProcess> processes, WorkingCapitalContext context,
+            HttpServletResponse response) throws Exception {
+
+        final Integer year = context.getWorkingCapitalYear().getYear();
+        SheetData<WorkingCapitalProcess> sheetData = new SheetData<WorkingCapitalProcess>(processes) {
+            @Override
+            protected void makeLine(WorkingCapitalProcess workingCapitalProcess) {
+                if (workingCapitalProcess == null) {
+                    return;
+                }
+                addCell("Fundo de Maneio " + year, workingCapitalProcess.getWorkingCapital().getUnit().getPresentationName());
+                addCell("Estado", workingCapitalProcess.getPresentableAcquisitionProcessState().getLocalizedName());
+                addCell("Unidade de Exploração", workingCapitalProcess.getProcessCreator());
+                addCell("Valor Anual Requerido", workingCapitalProcess.getWorkingCapital().getWorkingCapitalInitialization()
+                        .getRequestedAnualValue().getValue());
+            }
+
+        };
+
+        LocalDate currentLocalDate = new LocalDate();
+
+        return streamSpreadsheet(response, "FundosManeio_" + year + "-" + currentLocalDate.getDayOfMonth() + "-"
+                + currentLocalDate.getMonthOfYear() + "-" + currentLocalDate.getYear(),
+                new SpreadsheetBuilder().addSheet("Fundos de Maneio - " + year + " - " + currentLocalDate.toString(), sheetData));
+
+    }
+
+    private ActionForward streamSpreadsheet(final HttpServletResponse response, final String fileName,
+            final SpreadsheetBuilder spreadSheetBuilder) throws IOException {
+        response.setContentType("application/xls ");
+        response.setHeader("Content-disposition", "attachment; filename=" + fileName + ".xls");
+
+        ServletOutputStream outputStream = response.getOutputStream();
+
+        spreadSheetBuilder.build(WorkbookExportFormat.EXCEL, outputStream);
+        outputStream.flush();
+        outputStream.close();
+
+        return null;
     }
 
 }
