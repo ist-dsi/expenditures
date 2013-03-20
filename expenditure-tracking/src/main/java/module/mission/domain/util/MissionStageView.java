@@ -109,7 +109,7 @@ public class MissionStageView {
     }
 
     protected MissionStageState getParticipationAuthorizationState() {
-        return missionProcess.isApprovedByResponsible()
+        return missionProcess.isApproved()
                 && (!missionProcess.getMission().hasAnyFinancer() || (missionProcess.hasAllAllocatedFunds() && missionProcess
                         .hasAllCommitmentNumbers())) ? getParticipationAuthorizationStateForApproved() : MissionStageState.NOT_YET_UNDER_WAY;
     }
@@ -119,7 +119,7 @@ public class MissionStageView {
     }
 
     protected MissionStageState getExpenseAuthorizationState() {
-        return !missionProcess.isCanceled() && missionProcess.isApprovedByResponsible() && missionProcess.hasAllAllocatedFunds()
+        return !missionProcess.isCanceled() && missionProcess.isApproved() && missionProcess.hasAllAllocatedFunds()
                 && missionProcess.areAllParticipantsAuthorized() ? getExpenseAuthorizationStateCompletedOrUnderWay() : MissionStageState.NOT_YET_UNDER_WAY;
     }
 

@@ -340,7 +340,11 @@ public abstract class Mission extends Mission_Base {
     }
 
     public boolean isApproved() {
-        return isApprovedByResponsible() && areAllVehicleItemsAuthorized();
+        return isApprovedByResponsible() && (areAllVehicleItemsAuthorized() || !isVehicleAuthorizationNeeded());
+    }
+
+    private boolean isVehicleAuthorizationNeeded() {
+        return !areAllParticipantsAuthorized();
     }
 
     public boolean areAllVehicleItemsAuthorized() {
