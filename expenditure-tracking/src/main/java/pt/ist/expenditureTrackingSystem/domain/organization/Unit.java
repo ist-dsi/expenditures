@@ -88,6 +88,10 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
 
     }
 
+    public boolean isProject() {
+        return false;
+    }
+
     public static final Comparator<Unit> COMPARATOR_BY_PRESENTATION_NAME = new Comparator<Unit>() {
 
         @Override

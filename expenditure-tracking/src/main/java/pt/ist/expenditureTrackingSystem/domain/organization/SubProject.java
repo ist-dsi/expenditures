@@ -138,4 +138,9 @@ public class SubProject extends SubProject_Base {
         return parentUnit == null ? null : parentUnit.getUnitNumber();
     }
 
+    @Override
+    public boolean isProject() {
+        return true;
+    }
+
 }

@@ -81,6 +81,11 @@ public class Project extends Project_Base {
         setParentUnit(parentUnit);
     }
 
+    @Override
+    public boolean isProject() {
+        return true;
+    }
+
     public void setProjectCode(final String projectCode) {
         getUnit().setAcronym("P. " + projectCode);
     }
