@@ -43,7 +43,7 @@ public class EmailDigester extends EmailDigester_Base {
     @Service
     public void executeTask() {
         for (final VirtualHost virtualHost : MyOrg.getInstance().getVirtualHostsSet()) {
-            if (!virtualHost.getHostname().startsWith("dot")) {
+            if (!virtualHost.getHostname().startsWith("dot") && !virtualHost.getHostname().equals("localhost")) {
                 continue;
             }
             try {

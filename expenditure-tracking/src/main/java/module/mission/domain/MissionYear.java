@@ -170,6 +170,32 @@ public class MissionYear extends MissionYear_Base {
 
     }
 
+    private class PendingVehicleAuthorizationSearch extends MissionProcessSearch {
+
+        private PendingVehicleAuthorizationSearch() {
+        }
+
+        private PendingVehicleAuthorizationSearch(final SortedSet<MissionProcess> result) {
+            super(result);
+        }
+
+        @Override
+        boolean shouldAdd(final MissionProcess missionProcess, final User user) {
+            if (missionProcess.isCanceled()) {
+                return false;
+            }
+            if (!missionProcess.isApprovedByResponsible()) {
+                return false;
+            }
+            if (missionProcess.hasCurrentOwner() && !missionProcess.isTakenByCurrentUser()) {
+                return false;
+            }
+
+            return missionProcess.getMission().isVehicleAuthorizationNeeded()
+                    && !missionProcess.getMission().areAllVehicleItemsAuthorized();
+        }
+    }
+
     private class PendingAuthorizationSearch extends MissionProcessSearch {
 
         private PendingAuthorizationSearch() {
@@ -255,6 +281,14 @@ public class MissionYear extends MissionYear_Base {
 
     public SortedSet<MissionProcess> getPendingAproval(final SortedSet<MissionProcess> result) {
         return new PendingAprovalSearch(result).search();
+    }
+
+    public SortedSet<MissionProcess> getPendingVehicleAuthorization() {
+        return new PendingVehicleAuthorizationSearch().search();
+    }
+
+    public SortedSet<MissionProcess> getPendingVehicleAuthorization(final SortedSet<MissionProcess> result) {
+        return new PendingVehicleAuthorizationSearch(result).search();
     }
 
     public SortedSet<MissionProcess> getPendingAuthorization() {

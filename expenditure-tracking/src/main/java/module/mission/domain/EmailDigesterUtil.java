@@ -77,26 +77,36 @@ public class EmailDigesterUtil {
                     final SortedSet<MissionProcess> takenByUser =
                             previousYear == null ? missionYear.getTaken() : previousYear.getTaken(missionYear.getTaken());
                     final int takenByUserCount = takenByUser.size();
+
                     final SortedSet<MissionProcess> pendingApproval =
                             previousYear == null ? missionYear.getPendingAproval() : previousYear.getPendingAproval(missionYear
                                     .getPendingAproval());
                     final int pendingApprovalCount = pendingApproval.size();
+
+                    final SortedSet<MissionProcess> pendingVehicleAuthorization =
+                            previousYear == null ? missionYear.getPendingVehicleAuthorization() : previousYear
+                                    .getPendingVehicleAuthorization(missionYear.getPendingVehicleAuthorization());
+                    final int pendingVehicleAuthorizationCount = pendingVehicleAuthorization.size();
+
                     final SortedSet<MissionProcess> pendingAuthorization =
                             previousYear == null ? missionYear.getPendingAuthorization() : previousYear
                                     .getPendingAuthorization(missionYear.getPendingAuthorization());
                     final int pendingAuthorizationCount = pendingAuthorization.size();
+
                     final SortedSet<MissionProcess> pendingFundAllocation =
                             previousYear == null ? missionYear.getPendingFundAllocation() : previousYear
                                     .getPendingFundAllocation(missionYear.getPendingFundAllocation());
                     final int pendingFundAllocationCount = pendingFundAllocation.size();
+
                     final SortedSet<MissionProcess> pendingProcessing =
                             previousYear == null ? missionYear.getPendingProcessingPersonelInformation() : previousYear
                                     .getPendingProcessingPersonelInformation(missionYear
                                             .getPendingProcessingPersonelInformation());
                     final int pendingProcessingCount = pendingProcessing.size();
+
                     final int totalPending =
-                            takenByUserCount + pendingApprovalCount + pendingAuthorizationCount + pendingFundAllocationCount
-                                    + pendingProcessingCount;
+                            takenByUserCount + pendingApprovalCount + pendingVehicleAuthorizationCount
+                                    + pendingAuthorizationCount + pendingFundAllocationCount + pendingProcessingCount;
 
                     if (totalPending > 0) {
                         try {
@@ -116,6 +126,10 @@ public class EmailDigesterUtil {
                                 if (pendingApprovalCount > 0) {
                                     body.append("\n\tPendentes de Aprovação\t");
                                     body.append(pendingApprovalCount);
+                                }
+                                if (pendingVehicleAuthorizationCount > 0) {
+                                    body.append("\n\tPendentes de Autorização de Viatura(s)\t");
+                                    body.append(pendingVehicleAuthorizationCount);
                                 }
                                 if (pendingAuthorizationCount > 0) {
                                     body.append("\n\tPendentes de Autorização\t");
@@ -143,6 +157,9 @@ public class EmailDigesterUtil {
                                 }
                                 if (pendingApprovalCount > 0) {
                                     report(body, "Pendentes de Aprovação", pendingApproval);
+                                }
+                                if (pendingVehicleAuthorizationCount > 0) {
+                                    report(body, "Pendentes de Autorização de Viatura(s)", pendingVehicleAuthorization);
                                 }
                                 if (pendingAuthorizationCount > 0) {
                                     report(body, "Pendentes de Autorização", pendingAuthorization);
@@ -195,8 +212,12 @@ public class EmailDigesterUtil {
     private static Collection<Person> getPeopleToProcess() {
         final Set<Person> people = new HashSet<Person>();
         final LocalDate today = new LocalDate();
-        final ExpenditureTrackingSystem instance = ExpenditureTrackingSystem.getInstance();
-        for (final Authorization authorization : instance.getAuthorizationsSet()) {
+        final ExpenditureTrackingSystem expendituresSystem = ExpenditureTrackingSystem.getInstance();
+        for (User user : MissionSystem.getInstance().getVehicleAuthorizers()) {
+            people.add(user.getExpenditurePerson());
+        }
+
+        for (final Authorization authorization : expendituresSystem.getAuthorizationsSet()) {
             if (authorization.isValidFor(today)) {
                 final Person person = authorization.getPerson();
                 if (person.getOptions().getReceiveNotificationsByEmail()) {
@@ -207,7 +228,7 @@ public class EmailDigesterUtil {
         for (final RoleType roleType : RoleType.values()) {
             addPeopleWithRole(people, roleType);
         }
-        for (final AccountingUnit accountingUnit : instance.getAccountingUnitsSet()) {
+        for (final AccountingUnit accountingUnit : expendituresSystem.getAccountingUnitsSet()) {
             addPeople(people, accountingUnit.getPeopleSet());
             addPeople(people, accountingUnit.getProjectAccountantsSet());
             addPeople(people, accountingUnit.getResponsiblePeopleSet());
