@@ -4,6 +4,30 @@
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-logic" prefix="logic"%>
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/fenix-renderers" prefix="fr"%>
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/chart" prefix="chart" %>
+<script type="text/javascript" src="<%= request.getContextPath() + "/javaScript/moment.min.js"%>">
+</script>
+<script type="text/javascript">
+function toggleInactiveEntities() {
+	$('.filterableInactiveAccountabilityTable').each(function(index) {
+		var currentDate = moment('<%= new org.joda.time.LocalDate().toString("YYYY-MM-dd") %>','YYYY-MM-DD');
+		$(this).children().children().each(function(tableRowIndex) {
+			if(tableRowIndex > 0) {
+				if( $('#toggleInactiveChbox').attr('checked')) {
+					$(this).show();
+				} else {
+					var endDateStr = $($(this).children('.endDateColumn')).html().trim();
+					if(endDateStr.length > 0 && moment(endDateStr,'DD-MM-YYYY').isBefore(currentDate)) {
+						$(this).hide();
+					}
+				}
+			}
+		});
+	});
+}</script>
+<script type="text/javascript">
+$(toggleInactiveEntities);
+</script>
+
 
 <h2>
 	<fr:view name="unit" property="presentationName"/>
@@ -68,8 +92,31 @@
 	<bean:message bundle="MISSION_RESOURCES" key="label.module.mission.view.member.presence.by.month"/>
 </html:link>
 
-<br/>
-<br/>
+<div style="background-color: rgb(245, 245, 245);
+border-bottom-color: rgb(221, 221, 221);
+border-bottom-style: solid;
+border-bottom-width: 1px;
+border-collapse: collapse;
+border-left-color: rgb(68, 68, 68);
+border-left-style: none;
+border-left-width: 0px;
+border-right-color: rgb(68, 68, 68);
+border-right-style: none;
+border-right-width: 0px;
+border-top-color: rgb(221, 221, 221);
+border-top-style: solid;
+border-top-width: 1px;
+color: rgb(68, 68, 68);
+padding: 4px 0px 4px 4px;
+margin-top:15px;
+font-weight: bold;
+width: 719px;
+">
+<label for="toggleInactiveChbox">
+Mostrar pessoas inactivas </label>
+<input style="vertical-align: bottom;" type="checkbox" name="toggleInactive" id="toggleInactiveChbox" onclick="toggleInactiveEntities()">
+</div>
+
 
 <h3>
 	<bean:message bundle="MISSION_RESOURCES" key="label.module.mission.person.mission.responsibilities"/>
@@ -81,7 +128,7 @@
 	</p>
 </logic:empty>
 <logic:notEmpty name="authorityAccountabilities">
-	<table class="tstyle3">
+	<table class="tstyle3 filterableInactiveAccountabilityTable">
 		<tr>
 			<th>
 			</th>
@@ -127,7 +174,7 @@
 				<td>
 					<fr:view name="authorityAccountability" property="beginDate"/>
 				</td>
-				<td>
+				<td class="endDateColumn">
 					<logic:present name="authorityAccountability" property="endDate">
 						<fr:view name="authorityAccountability" property="endDate"/>
 					</logic:present>
@@ -155,7 +202,7 @@
 	</p>
 </logic:empty>
 <logic:notEmpty name="workerAccountabilities">
-	<table class="tstyle3">
+	<table class="tstyle3 filterableInactiveAccountabilityTable">
 		<tr>
 			<th>
 			</th>
@@ -189,7 +236,7 @@
 				<td>
 					<fr:view name="authorityAccountability" property="beginDate"/>
 				</td>
-				<td>
+				<td class="endDateColumn">
 					<logic:present name="authorityAccountability" property="endDate">
 						<fr:view name="authorityAccountability" property="endDate"/>
 					</logic:present>
