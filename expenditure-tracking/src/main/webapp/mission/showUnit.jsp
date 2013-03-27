@@ -7,27 +7,40 @@
 <script type="text/javascript" src="<%= request.getContextPath() + "/javaScript/moment.min.js"%>">
 </script>
 <script type="text/javascript">
-function toggleInactiveEntities() {
+
+var currentDate = moment('2013-03-27','YYYY-MM-DD');
+
+function inactiveEntities(func) {
 	$('.filterableInactiveAccountabilityTable').each(function(index) {
-		var currentDate = moment('<%= new org.joda.time.LocalDate().toString("YYYY-MM-dd") %>','YYYY-MM-DD');
 		$(this).children().children().each(function(tableRowIndex) {
 			if(tableRowIndex > 0) {
-				if( $('#toggleInactiveChbox').attr('checked')) {
-					$(this).show();
-				} else {
-					var endDateStr = $($(this).children('.endDateColumn')).html().trim();
-					if(endDateStr.length > 0 && moment(endDateStr,'DD-MM-YYYY').isBefore(currentDate)) {
-						$(this).hide();
-					}
+				var endDateStr = $($(this).find('.endDateColumn')).children().html().trim();
+				if(endDateStr.length > 0 && !moment(endDateStr,'DD-MM-YYYY').isAfter(currentDate)) {
+					func($(this));
 				}
 			}
 		});
 	});
-}</script>
-<script type="text/javascript">
-$(toggleInactiveEntities);
-</script>
+}
 
+function toggleInactive(elem){
+	if( $('#toggleInactiveChbox').attr('checked')) {
+		elem.show();
+	} else {
+		elem.hide();
+	}
+}
+
+function highlightInactive(elem){
+	elem.find('.endDateColumn').children().css({'background-color': '#fcfbad','padding':'3px'});
+}
+</script>
+<script type="text/javascript">
+$(function() {
+	inactiveEntities(toggleInactive);
+	inactiveEntities(highlightInactive);
+});
+</script>
 
 <h2>
 	<fr:view name="unit" property="presentationName"/>
@@ -114,7 +127,7 @@ width: 719px;
 ">
 <label for="toggleInactiveChbox">
 Mostrar pessoas inactivas </label>
-<input style="vertical-align: bottom;" type="checkbox" name="toggleInactive" id="toggleInactiveChbox" onclick="toggleInactiveEntities()">
+<input style="vertical-align: bottom;" type="checkbox" name="toggleInactive" id="toggleInactiveChbox" onclick="inactiveEntities(toggleInactive)">
 </div>
 
 
@@ -175,9 +188,11 @@ Mostrar pessoas inactivas </label>
 					<fr:view name="authorityAccountability" property="beginDate"/>
 				</td>
 				<td class="endDateColumn">
+					<span>
 					<logic:present name="authorityAccountability" property="endDate">
 						<fr:view name="authorityAccountability" property="endDate"/>
 					</logic:present>
+					</span>
 				</td>
 				<td>
 					<html:link page="/missionOrganization.do?method=showDelegationsForAuthorization" paramId="authorizationId" paramName="authorityAccountability" paramProperty="externalId">
@@ -237,9 +252,11 @@ Mostrar pessoas inactivas </label>
 					<fr:view name="authorityAccountability" property="beginDate"/>
 				</td>
 				<td class="endDateColumn">
+					<span>
 					<logic:present name="authorityAccountability" property="endDate">
 						<fr:view name="authorityAccountability" property="endDate"/>
 					</logic:present>
+					</span>
 				</td>
 			</tr>
 		</logic:iterate>
