@@ -311,21 +311,30 @@ public class WorkingCapitalAction extends ContextBaseAction {
                 if (workingCapitalProcess == null) {
                     return;
                 }
-                addCell("Fundo de Maneio " + year, workingCapitalProcess.getWorkingCapital().getUnit().getPresentationName());
-                addCell("Estado", workingCapitalProcess.getPresentableAcquisitionProcessState().getLocalizedName());
-                addCell("Unidade de Exploração", workingCapitalProcess.getProcessCreator());
-                addCell("Valor Anual Requerido", workingCapitalProcess.getWorkingCapital().getWorkingCapitalInitialization()
-                        .getRequestedAnualValue().getValue());
+                addCell(getLocalizedMessate("label.module.workingCapital") + " " + year, workingCapitalProcess
+                        .getWorkingCapital().getUnit().getPresentationName());
+                addCell(getLocalizedMessate("WorkingCapitalProcessState"), workingCapitalProcess
+                        .getPresentableAcquisitionProcessState().getLocalizedName());
+                addCell(getLocalizedMessate("label.module.workingCapital.initialization.accountingUnit"),
+                        workingCapitalProcess.getProcessCreator());
+                addCell(getLocalizedMessate("label.module.workingCapital.requestedAnualValue.requested"), workingCapitalProcess
+                        .getWorkingCapital().getWorkingCapitalInitialization().getRequestedAnualValue().getValue());
             }
 
         };
 
         LocalDate currentLocalDate = new LocalDate();
 
-        return streamSpreadsheet(response, "FundosManeio_" + year + "-" + currentLocalDate.getDayOfMonth() + "-"
-                + currentLocalDate.getMonthOfYear() + "-" + currentLocalDate.getYear(),
-                new SpreadsheetBuilder().addSheet("Fundos de Maneio - " + year + " - " + currentLocalDate.toString(), sheetData));
+        return streamSpreadsheet(
+                response,
+                "FundosManeio_" + year + "-" + currentLocalDate.getDayOfMonth() + "-" + currentLocalDate.getMonthOfYear() + "-"
+                        + currentLocalDate.getYear(),
+                new SpreadsheetBuilder().addSheet(getLocalizedMessate("label.module.workingCapital") + " " + year + " - "
+                        + currentLocalDate.toString(), sheetData));
+    }
 
+    private String getLocalizedMessate(String msg) {
+        return BundleUtil.getStringFromResourceBundle(WorkingCapital.bundleResource, msg);
     }
 
     private ActionForward streamSpreadsheet(final HttpServletResponse response, final String fileName,

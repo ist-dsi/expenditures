@@ -51,6 +51,8 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
  */
 public class WorkingCapital extends WorkingCapital_Base {
 
+    public static final String bundleResource = "resources/WorkingCapitalResources";
+
     public static WorkingCapital find(final WorkingCapitalYear workingCapitalYear, final Unit unit) {
         for (final WorkingCapital workingCapital : unit.getWorkingCapitalsSet()) {
             if (workingCapital.getWorkingCapitalYear() == workingCapitalYear) {
