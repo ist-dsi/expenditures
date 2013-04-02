@@ -186,10 +186,9 @@ public abstract class MissionItem extends MissionItem_Base {
     }
 
     public void distributeCosts() {
-        final Money money = getValue();
         final Mission mission = getMissionVersion().getMission();
         int numberFinancers = mission.getFinancerSet().size();
-        final Money shareValues[] = money.allocate(numberFinancers);
+        final Money shareValues[] = getValue().allocate(numberFinancers);
         int i = 0;
         for (final MissionFinancer missionFinancer : mission.getFinancerSet()) {
             final MissionItemFinancer missionItemFinancer = findOrCreateMissionItemFinancer(missionFinancer);
@@ -214,10 +213,7 @@ public abstract class MissionItem extends MissionItem_Base {
     protected abstract void setNewVersionInformation(final MissionItem missionItem);
 
     public boolean isAvailableForEdit() {
-        final MissionVersion missionVersion = getMissionVersion();
-        final Mission mission = missionVersion.getMission();
-        final MissionProcess missionProcess = mission.getMissionProcess();
-        return missionProcess.isUnderConstruction();
+        return getMissionVersion().getMission().getMissionProcess().isUnderConstruction();
     }
 
     public void autoArchive() {

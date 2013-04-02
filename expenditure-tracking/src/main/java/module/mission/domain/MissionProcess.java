@@ -188,13 +188,11 @@ public abstract class MissionProcess extends MissionProcess_Base {
     }
 
     public boolean isRequestor(final User user) {
-        final Mission mission = getMission();
-        return mission.getRequestingPerson() == user.getPerson();
+        return getMission().getRequestingPerson() == user.getPerson();
     }
 
     public boolean isMissionResponsible(User user) {
-        final Mission mission = getMission();
-        return mission.getMissionResponsible() == user.getPerson();
+        return getMission().getMissionResponsible() == user.getPerson();
     }
 
     public boolean isUnderConstruction() {
@@ -207,58 +205,47 @@ public abstract class MissionProcess extends MissionProcess_Base {
     }
 
     public boolean hasAnyAproval() {
-        final Mission mission = getMission();
-        return mission.hasAnyAproval();
+        return getMission().hasAnyAproval();
     }
 
     public boolean isPendingApproval() {
-        final Mission mission = getMission();
-        return mission.isPendingApproval();
+        return getMission().isPendingApproval();
     }
 
     public boolean isPendingApprovalBy(final User user) {
-        final Mission mission = getMission();
-        return mission.isPendingApprovalBy(user);
+        return getMission().isPendingApprovalBy(user);
     }
 
     public boolean isPendingAuthorizationBy(final User user) {
-        final Mission mission = getMission();
-        return mission.isPendingAuthorizationBy(user);
+        return getMission().isPendingAuthorizationBy(user);
     }
 
     public boolean isPendingDirectAuthorizationBy(final User user) {
-        final Mission mission = getMission();
-        return mission.isPendingDirectAuthorizationBy(user);
+        return getMission().isPendingDirectAuthorizationBy(user);
     }
 
     public boolean canRemoveApproval(final User user) {
-        final Mission mission = getMission();
-        return mission.canRemoveApproval(user);
+        return getMission().canRemoveApproval(user);
     }
 
     public boolean canRemoveAuthorization(final User user) {
-        final Mission mission = getMission();
-        return mission.canRemoveAuthorization(user);
+        return getMission().canRemoveAuthorization(user);
     }
 
     public void approve(final User user) {
-        final Mission mission = getMission();
-        mission.approve(user);
+        getMission().approve(user);
     }
 
     public void authorize(final User user) {
-        final Mission mission = getMission();
-        mission.authorize(user);
+        getMission().authorize(user);
     }
 
     public void unapprove(final User user) {
-        final Mission mission = getMission();
-        mission.unapprove(user);
+        getMission().unapprove(user);
     }
 
     public void unauthorize(final User user) {
-        final Mission mission = getMission();
-        mission.unauthorize(user);
+        getMission().unauthorize(user);
     }
 
     public boolean isApprovedByResponsible() {
@@ -270,28 +257,23 @@ public abstract class MissionProcess extends MissionProcess_Base {
     }
 
     public boolean hasAllAllocatedFunds() {
-        final Mission mission = getMission();
-        return mission.hasAllAllocatedFunds();
+        return getMission().hasAllAllocatedFunds();
     }
 
     public boolean hasAllAllocatedProjectFunds() {
-        final Mission mission = getMission();
-        return mission.hasAllAllocatedProjectFunds();
+        return getMission().hasAllAllocatedProjectFunds();
     }
 
     public boolean hasAnyAllocatedFunds() {
-        final Mission mission = getMission();
-        return mission.hasAnyAllocatedFunds();
+        return getMission().hasAnyAllocatedFunds();
     }
 
     public void unAllocateFunds(final Person person) {
-        final Mission mission = getMission();
-        mission.unAllocateFunds(person);
+        getMission().unAllocateFunds(person);
     }
 
     public boolean hasAnyAuthorization() {
-        final Mission mission = getMission();
-        return mission.hasAnyAuthorization();
+        return getMission().hasAnyAuthorization();
     }
 
     public boolean canAuthorizeVehicles() {
@@ -300,68 +282,55 @@ public abstract class MissionProcess extends MissionProcess_Base {
     }
 
     public boolean canAuthoriseParticipantActivity() {
-        final Mission mission = getMission();
-        return mission.canAuthoriseParticipantActivity();
+        return getMission().canAuthoriseParticipantActivity();
     }
 
     public boolean canUnAuthoriseParticipantActivity() {
-        final Mission mission = getMission();
-        return mission.canUnAuthoriseParticipantActivity();
+        return getMission().canUnAuthoriseParticipantActivity();
     }
 
     public boolean canUnAuthoriseSomeParticipantActivity() {
-        final Mission mission = getMission();
-        return mission.canUnAuthoriseSomeParticipantActivity();
+        return getMission().canUnAuthoriseSomeParticipantActivity();
     }
 
     public boolean canAllocateFund() {
-        final Mission mission = getMission();
-        return mission.canAllocateFund();
+        return getMission().canAllocateFund();
     }
 
     public boolean canAllocateProjectFund() {
-        final Mission mission = getMission();
-        return mission.canAllocateProjectFund();
+        return getMission().canAllocateProjectFund();
     }
 
     public boolean isDirectResponsibleForPendingProjectFundAllocation() {
-        final Mission mission = getMission();
-        return mission.isDirectResponsibleForPendingProjectFundAllocation();
+        return getMission().isDirectResponsibleForPendingProjectFundAllocation();
     }
 
     public boolean hasAnyAuthorizedParticipants() {
-        final Mission mission = getMission();
-        return mission.hasAnyAuthorizedParticipants();
+        return getMission().hasAnyAuthorizedParticipants();
     }
 
     public boolean hasAnyParticipantes() {
-        final Mission mission = getMission();
-        return mission.hasAnyParticipantes();
+        return getMission().hasAnyParticipantes();
     }
 
     public boolean hasAnyMissionItems() {
-        final Mission mission = getMission();
-        return mission.hasAnyMissionItems();
+        return getMission().hasAnyMissionItems();
     }
 
     public boolean hasAnyAllocatedProjectFunds() {
-        final Mission mission = getMission();
-        return mission.hasAnyAllocatedProjectFunds();
+        return getMission().hasAnyAllocatedProjectFunds();
     }
 
     public void unAllocateProjectFunds(Person person) {
-        final Mission mission = getMission();
-        mission.unAllocateProjectFunds(person);
+        getMission().unAllocateProjectFunds(person);
     }
 
     public boolean hasAnyProjectFinancer() {
-        final Mission mission = getMission();
-        return mission.hasAnyProjectFinancer();
+        return getMission().hasAnyProjectFinancer();
     }
 
     public boolean isConsistent() {
-        final Mission mission = getMission();
-        return mission.isConsistent();
+        return getMission().isConsistent();
     }
 
     @Override
@@ -408,17 +377,15 @@ public abstract class MissionProcess extends MissionProcess_Base {
     }
 
     public void setProcessParticipantInformationQueue() {
-        final Mission mission = getMission();
-        if (mission.allParticipantsAreAuthorized()) {
+        if (getMission().allParticipantsAreAuthorized()) {
             addToProcessParticipantInformationQueue();
             notifyAllParticipants();
         }
     }
 
     public void addToProcessParticipantInformationQueue() {
-        final Mission mission = getMission();
         final Set<AccountabilityType> accountabilityTypes = new HashSet<AccountabilityType>();
-        for (final Person person : mission.getParticipantesSet()) {
+        for (final Person person : getMission().getParticipantesSet()) {
             for (final Accountability accountability : person.getParentAccountabilitiesSet()) {
                 if (accountability.isValid()) {
                     final AccountabilityType accountabilityType = accountability.getAccountabilityType();
@@ -486,8 +453,7 @@ public abstract class MissionProcess extends MissionProcess_Base {
     }
 
     public boolean areAllParticipantsAuthorized() {
-        final Mission mission = getMission();
-        return mission.areAllParticipantsAuthorized();
+        return getMission().areAllParticipantsAuthorized();
     }
 
     public boolean getAreAllParticipantsAuthorized() {
@@ -495,13 +461,11 @@ public abstract class MissionProcess extends MissionProcess_Base {
     }
 
     public boolean areAllParticipantsAuthorizedForPhaseOne() {
-        final Mission mission = getMission();
-        return mission.areAllParticipantsAuthorizedForPhaseOne();
+        return getMission().areAllParticipantsAuthorizedForPhaseOne();
     }
 
     public int getPersonAuthorizationChainSize(final Person person) {
-        final Mission mission = getMission();
-        return mission.getPersonAuthorizationChainSize(person);
+        return getMission().getPersonAuthorizationChainSize(person);
     }
 
     public boolean hasAnyActivePaymentProcess() {
@@ -514,8 +478,7 @@ public abstract class MissionProcess extends MissionProcess_Base {
     }
 
     public boolean isExpenditureAuthorized() {
-        final Mission mission = getMission();
-        return mission.isExpenditureAuthorized();
+        return getMission().isExpenditureAuthorized();
     }
 
     public void cancel() {
@@ -531,13 +494,11 @@ public abstract class MissionProcess extends MissionProcess_Base {
     }
 
     public boolean isPendingParticipantAuthorisationBy(final User user) {
-        final Mission mission = getMission();
-        return mission.isPendingParticipantAuthorisationBy(user);
+        return getMission().isPendingParticipantAuthorisationBy(user);
     }
 
     public boolean isAuthorized() {
-        final Mission mission = getMission();
-        return mission.isAuthorized();
+        return getMission().isAuthorized();
     }
 
     public MissionStageView getMissionStageView() {
@@ -545,19 +506,16 @@ public abstract class MissionProcess extends MissionProcess_Base {
     }
 
     public boolean isAccountingEmployee(final pt.ist.expenditureTrackingSystem.domain.organization.Person expenditurePerson) {
-        final Mission mission = getMission();
-        return mission.isAccountingEmployee(expenditurePerson);
+        return getMission().isAccountingEmployee(expenditurePerson);
     }
 
     public boolean isProjectAccountingEmployee(final pt.ist.expenditureTrackingSystem.domain.organization.Person expenditurePerson) {
-        final Mission mission = getMission();
-        return mission.isProjectAccountingEmployee(expenditurePerson);
+        return getMission().isProjectAccountingEmployee(expenditurePerson);
     }
 
     public boolean isDirectProjectAccountingEmployee(
             final pt.ist.expenditureTrackingSystem.domain.organization.Person expenditurePerson) {
-        final Mission mission = getMission();
-        return mission.isDirectProjectAccountingEmployee(expenditurePerson);
+        return getMission().isDirectProjectAccountingEmployee(expenditurePerson);
     }
 
     public boolean isCurrentUserAbleToAccessQueueHistory() {
@@ -585,8 +543,8 @@ public abstract class MissionProcess extends MissionProcess_Base {
     }
 
     public boolean isReadyForMissionTermination() {
-        final Mission mission = getMission();
-        return mission.isReadyForMissionTermination() && (!hasAnyActivePaymentProcess() || allPaymentProcessesAreConcluded());
+        return getMission().isReadyForMissionTermination()
+                && (!hasAnyActivePaymentProcess() || allPaymentProcessesAreConcluded());
     }
 
     private boolean allPaymentProcessesAreConcluded() {
@@ -606,68 +564,55 @@ public abstract class MissionProcess extends MissionProcess_Base {
     }
 
     public void sendForProcessTermination(final String descriptionOfChangesAfterArrival) {
-        final Mission mission = getMission();
-        mission.sendForProcessTermination(descriptionOfChangesAfterArrival);
+        getMission().sendForProcessTermination(descriptionOfChangesAfterArrival);
     }
 
     public boolean isTerminated() {
-        final Mission mission = getMission();
-        return mission.isTerminated();
+        return getMission().isTerminated();
     }
 
     public boolean isTerminatedWithChanges() {
-        final Mission mission = getMission();
-        return mission.isTerminatedWithChanges();
+        return getMission().isTerminatedWithChanges();
     }
 
     public boolean isArchived() {
-        final Mission mission = getMission();
-        return mission.isArchived();
+        return getMission().isArchived();
     }
 
     public boolean canArchiveMission() {
-        final Mission mission = getMission();
-        return mission.canArchiveMission();
+        return getMission().canArchiveMission();
     }
 
     public boolean canArchiveMissionDirect() {
-        final Mission mission = getMission();
-        return mission.canArchiveMissionDirect();
+        return getMission().canArchiveMissionDirect();
     }
 
     public boolean hasNoItemsAndParticipantesAreAuthorized() {
-        final Mission mission = getMission();
-        return mission.hasNoItemsAndParticipantesAreAuthorized();
+        return getMission().hasNoItemsAndParticipantesAreAuthorized();
     }
 
     public void revertProcessTermination() {
-        final Mission mission = getMission();
-        mission.revertProcessTermination();
+        getMission().revertProcessTermination();
     }
 
     public boolean getAreAccomodationItemsAvailable() {
-        final Mission mission = getMission();
-        return mission.getAreAccomodationItemsAvailable();
+        return getMission().getAreAccomodationItemsAvailable();
     }
 
     public boolean getPersonelExpenseItemsAvailable() {
-        final Mission mission = getMission();
-        return mission.getPersonelExpenseItemsAvailable();
+        return getMission().getPersonelExpenseItemsAvailable();
     }
 
     public boolean canTogleMissionNature() {
-        final Mission mission = getMission();
-        return mission.canTogleMissionNature();
+        return getMission().canTogleMissionNature();
     }
 
     public int getNumberOfDays() {
-        final Mission mission = getMission();
-        return mission.getNumberOfDays();
+        return getMission().getNumberOfDays();
     }
 
     public void checkForAnyOverlappingParticipations() {
-        final Mission mission = getMission();
-        mission.checkForAnyOverlappingParticipations();
+        getMission().checkForAnyOverlappingParticipations();
     }
 
     public void checkForSupportDocuments() {
@@ -678,13 +623,11 @@ public abstract class MissionProcess extends MissionProcess_Base {
     }
 
     public boolean hasCommitmentNumber() {
-        final Mission mission = getMission();
-        return mission.hasCommitmentNumber();
+        return getMission().hasCommitmentNumber();
     }
 
     public boolean hasAllCommitmentNumbers() {
-        final Mission mission = getMission();
-        return mission.hasAllCommitmentNumbers();
+        return getMission().hasAllCommitmentNumbers();
     }
 
     @Override
