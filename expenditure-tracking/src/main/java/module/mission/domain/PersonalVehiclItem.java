@@ -48,13 +48,6 @@ public class PersonalVehiclItem extends PersonalVehiclItem_Base {
     }
 
     @Override
-    public boolean isAvailableForEdit() {
-        final MissionVersion missionVersion = getMissionVersion();
-        final Mission mission = missionVersion.getMission();
-        return super.isAvailableForEdit() || mission.isTerminatedWithChanges();
-    }
-
-    @Override
     protected boolean canAutoArchive() {
         return false;
     }
