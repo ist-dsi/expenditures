@@ -24,8 +24,9 @@ public class MissionProcessFromOtherSystemsProvider implements AutoCompleteProvi
         otherSystems.remove(MissionSystem.getInstance());
         for (MissionSystem otherSystem : otherSystems) {
             for (final MissionProcess missionProcess : otherSystem.getMissionProcessesSet()) {
+                String[] processIdParts = missionProcess.getProcessNumber().split("/M");
                 if (missionProcess.getProcessIdentification().equals(currentValue)
-                        || missionProcess.getProcessNumber().equals(currentValue)) {
+                        || processIdParts[processIdParts.length - 1].equals(currentValue)) {
                     result.add(missionProcess);
                 }
             }

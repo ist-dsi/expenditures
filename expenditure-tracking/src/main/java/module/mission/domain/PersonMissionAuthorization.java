@@ -64,11 +64,21 @@ public class PersonMissionAuthorization extends PersonMissionAuthorization_Base 
                         return y;
                     }
 
-                    final int number1 = Integer.parseInt(missionProcess1.getProcessNumber());
-                    final int number2 = Integer.parseInt(missionProcess2.getProcessNumber());
-                    final int n = number2 - number1;
+                    String[] process1IdParts = missionProcess1.getProcessNumber().split("/M");
+                    String[] process2IdParts = missionProcess2.getProcessNumber().split("/M");
 
-                    return n == 0 ? pma1.getExternalId().compareTo(pma2.getExternalId()) : n;
+                    final int compareResult = process1IdParts[0].compareTo(process2IdParts[0]);
+
+                    if (compareResult == 0) {
+                        final int process1Num = Integer.parseInt(process1IdParts[process1IdParts.length - 1]);
+                        final int process2Num = Integer.parseInt(process2IdParts[process2IdParts.length - 1]);
+                        final int compareNumResult = process2Num - process1Num;
+
+                        return compareNumResult == 0 ? pma1.getExternalId().compareTo(pma2.getExternalId()) : compareNumResult;
+                    } else {
+                        return compareResult;
+                    }
+
                 }
             };
 

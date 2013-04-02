@@ -86,21 +86,20 @@ public abstract class MissionProcess extends MissionProcess_Base {
                 return year;
             }
 
-            final int number = compareNumber(o1, o2);
-            return number == 0 ? o1.getExternalId().compareTo(o2.getExternalId()) : number;
-        }
+            String[] process1IdParts = o1.getProcessNumber().split("/M");
+            String[] process2IdParts = o2.getProcessNumber().split("/M");
 
-        private int compareNumber(final MissionProcess o1, final MissionProcess o2) {
-            final int n1 = toNum(o1.getProcessNumber());
-            final int n2 = toNum(o2.getProcessNumber());
-            return n2 - n1;
-        }
+            final int compareResult = process1IdParts[0].compareTo(process2IdParts[0]);
 
-        private int toNum(final String processNumber) {
-            final String relevantPart =
-                    Character.isDigit(processNumber.charAt(processNumber.length() - 1)) ? processNumber : processNumber
-                            .substring(0, processNumber.length() - 1);
-            return Integer.parseInt(relevantPart);
+            if (compareResult == 0) {
+                final int process1Num = Integer.parseInt(process1IdParts[process1IdParts.length - 1]);
+                final int process2Num = Integer.parseInt(process2IdParts[process2IdParts.length - 1]);
+                final int compareNumResult = process2Num - process1Num;
+
+                return compareNumResult == 0 ? o1.getExternalId().compareTo(o2.getExternalId()) : compareNumResult;
+            } else {
+                return compareResult;
+            }
         }
 
     };
@@ -170,12 +169,19 @@ public abstract class MissionProcess extends MissionProcess_Base {
         setIsCanceled(Boolean.FALSE);
     }
 
+    @Deprecated
     public String getProcessIdentification() {
+        return getProcessNumber();
+    }
+
+    @Override
+    public String getProcessNumber() {
         final ExpenditureTrackingSystem system = getMissionSystem().getExpenditureTrackingSystem();
         if (system.hasProcessPrefix()) {
-            return system.getInstitutionalProcessNumberPrefix() + "/" + getMissionYear().getYear() + "/M" + getProcessNumber();
+            return system.getInstitutionalProcessNumberPrefix() + "/" + getMissionYear().getYear() + "/M"
+                    + super.getProcessNumber();
         }
-        return getMissionYear().getYear() + "/M" + getProcessNumber();
+        return getMissionYear().getYear() + "/M" + super.getProcessNumber();
     }
 
     public WorkflowActivity getActivity(Class<? extends WorkflowActivity> clazz) {

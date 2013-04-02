@@ -21,11 +21,13 @@ public class MissionProcessProvider implements AutoCompleteProvider {
         final List<MissionProcess> result = new ArrayList<MissionProcess>();
         final MissionSystem missionSystem = MissionSystem.getInstance();
         for (final MissionProcess missionProcess : missionSystem.getMissionProcessesSet()) {
+            String[] processIdParts = missionProcess.getProcessNumber().split("/M");
             if (missionProcess.getProcessIdentification().equals(currentValue)
-                    || missionProcess.getProcessNumber().equals(currentValue)) {
+                    || processIdParts[processIdParts.length - 1].equals(currentValue)) {
                 result.add(missionProcess);
             }
         }
+
         return result;
     }
 

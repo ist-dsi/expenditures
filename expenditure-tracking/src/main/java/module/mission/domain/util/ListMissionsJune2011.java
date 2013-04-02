@@ -61,7 +61,7 @@ public class ListMissionsJune2011 extends ReadCustomTask {
                 continue;
             }
 
-            out.print(process.getMissionYear().getYear() + "/" + process.getProcessNumber() + "\t");
+            out.print(process.getProcessNumber() + "\t");
             out.print(process.getCreationDate().getYear() + "/" + process.getCreationDate().getMonthOfYear() + "/"
                     + process.getCreationDate().getDayOfMonth() + "\t");
 
