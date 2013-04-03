@@ -30,7 +30,6 @@ import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
 /**
  * 
@@ -43,13 +42,8 @@ public class UnsetSkipSupplierFundAllocation extends
 
     @Override
     public boolean isActive(RegularAcquisitionProcess process, User user) {
-        Person person = user.getExpenditurePerson();
-        return isUserProcessOwner(process, user)
-                && process.getSkipSupplierFundAllocation().booleanValue()
-                && (((process.getAcquisitionProcessState().isInGenesis() && person == process.getRequestor()) || (ExpenditureTrackingSystem
-                        .isAcquisitionCentralGroupMember(user) && (process.getAcquisitionProcessState().isAuthorized()
-                        || process.getAcquisitionProcessState().isAcquisitionProcessed() || process.isInvoiceReceived()))) || ExpenditureTrackingSystem
-                        .isSupplierFundAllocationManagerGroupMember(user));
+        return isUserProcessOwner(process, user) && process.getSkipSupplierFundAllocation().booleanValue()
+                && ExpenditureTrackingSystem.isSupplierFundAllocationManagerGroupMember(user);
     }
 
     @Override

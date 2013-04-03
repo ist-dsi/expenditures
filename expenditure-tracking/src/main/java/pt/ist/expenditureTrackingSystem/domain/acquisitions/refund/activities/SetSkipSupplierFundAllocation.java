@@ -29,7 +29,6 @@ import module.workflow.activities.WorkflowActivity;
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 
 /**
@@ -42,11 +41,8 @@ public class SetSkipSupplierFundAllocation extends WorkflowActivity<RefundProces
 
     @Override
     public boolean isActive(RefundProcess process, User user) {
-        return isUserProcessOwner(process, user)
-                && !process.getSkipSupplierFundAllocation()
-                && (((process.isInGenesis() || process.getProcessState().getRefundProcessStateType() == RefundProcessStateType.AUTHORIZED) && process
-                        .getRequestor() == user.getExpenditurePerson()) || ExpenditureTrackingSystem
-                        .isSupplierFundAllocationManagerGroupMember(user));
+        return isUserProcessOwner(process, user) && !process.getSkipSupplierFundAllocation()
+                && ExpenditureTrackingSystem.isSupplierFundAllocationManagerGroupMember(user);
 
     }
 
