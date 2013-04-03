@@ -181,6 +181,9 @@ public class MissionYear extends MissionYear_Base {
 
         @Override
         boolean shouldAdd(final MissionProcess missionProcess, final User user) {
+            if (!MissionSystem.getInstance().getVehicleAuthorizers().contains(user)) {
+                return false;
+            }
             if (missionProcess.isCanceled()) {
                 return false;
             }
