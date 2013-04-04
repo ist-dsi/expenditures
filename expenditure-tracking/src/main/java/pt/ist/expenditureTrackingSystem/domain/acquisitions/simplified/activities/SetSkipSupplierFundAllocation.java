@@ -48,7 +48,7 @@ public class SetSkipSupplierFundAllocation extends
                 && !process.getShouldSkipSupplierFundAllocation().booleanValue()
                 && (process instanceof SimplifiedProcedureProcess && ((SimplifiedProcedureProcess) process)
                         .getProcessClassification().isCCP())
-                && ExpenditureTrackingSystem.isSupplierFundAllocationManagerGroupMember(user);
+                && ExpenditureTrackingSystem.isAcquisitionCentralGroupMember();
     }
 
     @Override

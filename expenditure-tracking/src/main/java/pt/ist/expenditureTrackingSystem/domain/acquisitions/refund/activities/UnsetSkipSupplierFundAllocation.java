@@ -42,8 +42,7 @@ public class UnsetSkipSupplierFundAllocation extends WorkflowActivity<RefundProc
     @Override
     public boolean isActive(RefundProcess process, User user) {
         return isUserProcessOwner(process, user) && process.getSkipSupplierFundAllocation()
-                && ExpenditureTrackingSystem.isSupplierFundAllocationManagerGroupMember(user);
-
+        	&& ExpenditureTrackingSystem.isAcquisitionCentralGroupMember();
     }
 
     @Override

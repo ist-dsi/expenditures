@@ -43,7 +43,7 @@ public class UnsetSkipSupplierFundAllocation extends
     @Override
     public boolean isActive(RegularAcquisitionProcess process, User user) {
         return isUserProcessOwner(process, user) && process.getSkipSupplierFundAllocation().booleanValue()
-                && ExpenditureTrackingSystem.isSupplierFundAllocationManagerGroupMember(user);
+        	&& ExpenditureTrackingSystem.isAcquisitionCentralGroupMember();
     }
 
     @Override
