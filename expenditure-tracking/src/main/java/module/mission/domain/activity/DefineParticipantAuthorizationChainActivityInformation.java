@@ -32,8 +32,12 @@ import java.util.TreeMap;
 import module.mission.domain.Mission;
 import module.mission.domain.MissionFinancer;
 import module.mission.domain.MissionProcess;
+import module.mission.domain.MissionSystem;
 import module.mission.domain.util.AuthorizationChain;
 import module.mission.domain.util.ParticipantAuthorizationChain;
+import module.organization.domain.Accountability;
+import module.organization.domain.OrganizationalModel;
+import module.organization.domain.Party;
 import module.organization.domain.Person;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
@@ -83,6 +87,9 @@ public class DefineParticipantAuthorizationChainActivityInformation extends Part
                         final Unit unit = getFirstValidUnit(missionFinancer.getUnit(), person);
                         temp.addAll(ParticipantAuthorizationChain.getParticipantAuthorizationChains(person, unit.getUnit()));
                     }
+                    if (temp.isEmpty()) {
+                	constructTopLevelAuthorizationChain(temp, person);
+                    }
                     participantAuthorizationChainss.put(person, temp);
                 } else {
                     // teachers, employees, researchers and grant owners should go here.
@@ -92,6 +99,27 @@ public class DefineParticipantAuthorizationChainActivityInformation extends Part
         }
 
         return participantAuthorizationChainss;
+    }
+
+    private void constructTopLevelAuthorizationChain(final Collection<ParticipantAuthorizationChain> temp, final Person person) {
+	if (ParticipantAuthorizationChain.isEmployeeOfInstitution(person)) {
+	    final OrganizationalModel model = MissionSystem.getInstance().getOrganizationalModel();
+	    for (final Party party : model.getPartiesSet()) {
+		if (party.isUnit()) {
+		    final module.organization.domain.Unit unit = (module.organization.domain.Unit) party;
+		    for (final Accountability accountability : unit.getChildAccountabilitiesSet()) {
+			if (accountability.isActiveNow() && model.getAccountabilityTypesSet().contains(accountability.getAccountabilityType())) {
+			    final Party child = accountability.getChild();
+			    if (child.isUnit()) {
+				final module.organization.domain.Unit subUnit = (module.organization.domain.Unit) child;
+				final AuthorizationChain authorizationChain = new AuthorizationChain(subUnit, new AuthorizationChain(unit));
+				temp.add(new ParticipantAuthorizationChain(person, authorizationChain));
+			    }
+			}
+		    }
+		}
+	    }
+	}
     }
 
     private Unit getFirstValidUnit(final Unit unit, final Person person) {
