@@ -1,0 +1,6 @@
+relation MissionProcessPaymentProcess {
+	.pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess playsRole paymentProcess {
+		multiplicity *;
+	}
+	.module.mission.domain.MissionProcess playsRole missionProcess;
+}

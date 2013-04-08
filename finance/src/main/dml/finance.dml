@@ -1,0 +1,81 @@
+package module.finance.domain;
+
+
+valueType pt.ist.bennu.core.domain.util.Address as Address {
+    externalizeWith {
+        String exportAsString();
+    }
+
+    internalizeWith importFromString();
+}
+
+valueType pt.ist.bennu.core.domain.util.Money as Money {
+    externalizeWith {
+        String exportAsString();
+    }
+
+    internalizeWith importFromString();
+}
+
+
+class FinanceSystem {
+}
+
+class Supplier {
+	String giafKey;
+	String name;
+	String abbreviatedName;
+	String fiscalIdentificationCode;
+	String nib;
+	Money supplierLimit;
+
+	Address address; // TODO: campo a remover
+	String phone; // TODO: campo a remover
+	String fax; // TODO: campo a remover
+	String email; // TODO: campo a remover
+}
+
+class SupplierContact {
+	Address address;
+	String phone;
+	String fax;
+	String email;
+}
+
+class Provision {
+}
+
+
+relation MyOrgFinanceSystem {
+	.pt.ist.bennu.core.domain.MyOrg playsRole myOrg;
+	FinanceSystem playsRole financeSystem;
+}
+
+relation FinanceSystemSupplier {
+	FinanceSystem playsRole financeSystem;
+	Supplier playsRole suppliers {
+		multiplicity *;
+	}
+}
+
+relation FinanceSystemProvision {
+	FinanceSystem playsRole financeSystem;
+	Provision playsRole provisions {
+		multiplicity *;
+	}
+}
+
+relation SupplierProvision {
+	Supplier playsRole supplier;
+	Provision playsRole provisions {
+		multiplicity *;
+	}
+}
+
+relation SupplierSupplierContact {
+	Supplier playsRole supplier;
+	SupplierContact playsRole supplierContact {
+		multiplicity *;
+	}
+}
+
