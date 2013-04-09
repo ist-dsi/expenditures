@@ -25,7 +25,7 @@
 package module.finance.domain;
 
 import pt.ist.bennu.core.domain.MyOrg;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * 
@@ -42,7 +42,7 @@ public class FinanceSystem extends FinanceSystem_Base {
         return myOrg.getFinanceSystem();
     }
 
-    @Service
+    @Atomic
     public synchronized static void initialize() {
         final MyOrg myOrg = MyOrg.getInstance();
         if (!myOrg.hasFinanceSystem()) {
