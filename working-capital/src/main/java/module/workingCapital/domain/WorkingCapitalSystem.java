@@ -27,21 +27,22 @@ package module.workingCapital.domain;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeConstants;
-
 import module.organization.domain.Accountability;
 import module.organization.domain.AccountabilityType;
 import module.organization.domain.Person;
 import module.organization.domain.Unit;
 import module.workflow.widgets.ProcessListWidget;
 import module.workingCapital.domain.util.WorkingCapitalPendingProcessCounter;
+
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeConstants;
+
 import pt.ist.bennu.core.domain.ModuleInitializer;
 import pt.ist.bennu.core.domain.MyOrg;
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.domain.VirtualHost;
-import pt.ist.fenixWebFramework.services.Service;
-import dml.runtime.RelationAdapter;
+import pt.ist.fenixframework.Atomic;
+import pt.ist.fenixframework.dml.runtime.RelationAdapter;
 
 /**
  * 
@@ -62,7 +63,7 @@ public class WorkingCapitalSystem extends WorkingCapitalSystem_Base implements M
     }
 
     static {
-        VirtualHost.MyOrgVirtualHost.addListener(new VirtualHostMyOrgRelationListener());
+        VirtualHost.getRelationMyOrgVirtualHost().addListener(new VirtualHostMyOrgRelationListener());
 
         ProcessListWidget.register(new WorkingCapitalPendingProcessCounter());
     }
@@ -88,12 +89,12 @@ public class WorkingCapitalSystem extends WorkingCapitalSystem_Base implements M
         virtualHost.setWorkingCapitalSystem(this);
     }
 
-    @Service
+    @Atomic
     public void resetAcquisitionValueLimit() {
         setAcquisitionValueLimit(null);
     }
 
-    @Service
+    @Atomic
     public static void createSystem(final VirtualHost virtualHost) {
         if (!virtualHost.hasWorkingCapitalSystem() || virtualHost.getWorkingCapitalSystem().getVirtualHostsCount() > 1) {
             new WorkingCapitalSystem(virtualHost);
@@ -142,20 +143,20 @@ public class WorkingCapitalSystem extends WorkingCapitalSystem_Base implements M
     }
 
     @Override
-    @Service
+    @Atomic
     public void init(final MyOrg root) {
         final WorkingCapitalSystem workingCapitalSystem = root.getWorkingCapitalSystem();
         if (workingCapitalSystem != null) {
         }
     }
 
-    @Service
+    @Atomic
     public void setForVirtualHost(final VirtualHost virtualHost) {
         virtualHost.setWorkingCapitalSystem(this);
     }
-    
-    public static boolean isLastMonthForWorkingCapitalTermination(){
-    	return  new DateTime().monthOfYear().get() == DateTimeConstants.DECEMBER;
+
+    public static boolean isLastMonthForWorkingCapitalTermination() {
+        return new DateTime().monthOfYear().get() == DateTimeConstants.DECEMBER;
     }
 
 }

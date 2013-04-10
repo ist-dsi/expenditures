@@ -28,7 +28,7 @@ import java.util.Comparator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * 
@@ -67,7 +67,7 @@ public class AcquisitionClassification extends AcquisitionClassification_Base {
         return result;
     }
 
-    @Service
+    @Atomic
     public void delete() {
         if (!hasAnyWorkingCapitalAcquisitions()) {
             removeWorkingCapitalSystem();
