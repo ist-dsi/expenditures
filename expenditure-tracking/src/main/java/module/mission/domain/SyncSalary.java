@@ -31,17 +31,18 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DecimalFormat;
 
-import jvstm.TransactionalCommand;
 import module.organization.domain.Person;
+import pt.ist.bennu.backend.util.ConnectionManager;
 import pt.ist.dbUtils.ExternalDbOperation;
 import pt.ist.dbUtils.ExternalDbQuery;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * 
  * @author Luis Cruz
  * 
  */
-public class SyncSalary extends Thread implements ServicePredicate {
+public class SyncSalary extends Thread {
 
     private static DecimalFormat employeeNumberFormat = new DecimalFormat("000000");
 
@@ -155,7 +156,6 @@ public class SyncSalary extends Thread implements ServicePredicate {
         this.person = person;
     }
 
-    @Override
     public void execute() {
         final Integer number = getPersonNumber();
         final SalaryReader salaryReader = new SalaryReader(number);
@@ -174,7 +174,7 @@ public class SyncSalary extends Thread implements ServicePredicate {
     }
 
     private Integer getPersonNumberUnwrapped() throws SQLException {
-        final Connection connection = Transaction.getCurrentJdbcConnection();
+        final Connection connection = ConnectionManager.getCurrentSQLConnection();
 
         Statement statementQuery = null;
         ResultSet resultSetQuery = null;
@@ -199,17 +199,10 @@ public class SyncSalary extends Thread implements ServicePredicate {
         }
     }
 
+    @Atomic
     @Override
     public void run() {
-        final SyncSalary syncSalary = this;
-        Transaction.withTransaction(new TransactionalCommand() {
-
-            @Override
-            public void doIt() {
-                ServiceManager.execute(syncSalary);
-            }
-
-        });
+        this.execute();
     }
 
     public static void sync(final Person person) {

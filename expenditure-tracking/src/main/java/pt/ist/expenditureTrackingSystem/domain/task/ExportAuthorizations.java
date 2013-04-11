@@ -35,6 +35,7 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
+import pt.ist.bennu.backend.util.ConnectionManager;
 import pt.ist.bennu.core.domain.VirtualHost;
 import pt.ist.dbUtils.ExternalDbQuery;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
@@ -53,7 +54,7 @@ public abstract class ExportAuthorizations extends ExportAuthorizations_Base {
     private Map<String, String> employees = new HashMap<String, String>();
 
     private void loadEmployees() throws SQLException {
-        final Connection connection = Transaction.getCurrentJdbcConnection();
+        final Connection connection = ConnectionManager.getCurrentSQLConnection();
 
         Statement statementQuery = null;
         ResultSet resultSetQuery = null;
@@ -81,8 +82,8 @@ public abstract class ExportAuthorizations extends ExportAuthorizations_Base {
 
     public static class InsertAuthorizationQuery implements ExternalDbQuery {
 
-        private String employeeNumber;
-        private String costCenterCode;
+        private final String employeeNumber;
+        private final String costCenterCode;
 
         public InsertAuthorizationQuery(String employeeNumber, String costCenterCode) {
             super();
