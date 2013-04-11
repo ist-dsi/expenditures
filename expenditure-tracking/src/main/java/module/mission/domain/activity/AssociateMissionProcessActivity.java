@@ -5,7 +5,7 @@ import module.workflow.activities.ActivityInformation;
 import module.workflow.domain.ActivityLog;
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.util.BundleUtil;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 public class AssociateMissionProcessActivity extends MissionProcessActivity<MissionProcess, AssociateMissionProcessActivityInfo> {
 
@@ -24,7 +24,7 @@ public class AssociateMissionProcessActivity extends MissionProcessActivity<Miss
         return super.isActive(missionProcess, user) && missionProcess.isRequestor(user);
     }
 
-    @Service
+    @Atomic
     @Override
     protected void process(final AssociateMissionProcessActivityInfo activityInfo) {
         activityInfo.getProcess().addAssociatedMissionProcess(activityInfo.getMissionProcessToAssociate());

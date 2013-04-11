@@ -34,7 +34,7 @@ import pt.ist.bennu.core.util.ClassNameBundle;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureWidgetOptions;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 @ClassNameBundle(bundle = "resources/ExpenditureResources", key = "process.title.takenProcesses")
 /**
@@ -46,7 +46,7 @@ import pt.ist.fenixWebFramework.services.Service;
 public class TakenProcessesWidget extends WidgetController {
 
     @Override
-    @Service
+    @Atomic
     protected ExpenditureWidgetOptions getOrCreateOptions(DashBoardWidget widget) {
         ExpenditureWidgetOptions options = (ExpenditureWidgetOptions) widget.getOptions();
         if (options == null) {

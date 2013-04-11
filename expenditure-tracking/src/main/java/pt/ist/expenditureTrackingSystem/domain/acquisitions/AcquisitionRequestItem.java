@@ -209,7 +209,7 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
     public void delete() {
         removeRequest();
         removeExpenditureTrackingSystem();
-        for (; !getUnitItems().isEmpty(); getUnitItems().get(0).delete()) {
+        for (; !getUnitItems().isEmpty(); getUnitItems().iterator().next().delete()) {
             ;
         }
         super.delete();

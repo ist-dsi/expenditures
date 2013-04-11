@@ -24,8 +24,8 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
 
@@ -293,7 +293,7 @@ public class Financer extends Financer_Base {
     }
 
     public boolean hasAllInvoicesAllocated() {
-        List<PaymentProcessInvoice> allocatedInvoices = getAllocatedInvoices();
+        Collection<PaymentProcessInvoice> allocatedInvoices = getAllocatedInvoices();
         for (UnitItem unitItem : getUnitItems()) {
             if (!allocatedInvoices.containsAll(unitItem.getConfirmedInvoices())) {
                 return false;
@@ -310,7 +310,7 @@ public class Financer extends Financer_Base {
     }
 
     public boolean isApproved() {
-        List<UnitItem> unitItems = getUnitItems();
+        Collection<UnitItem> unitItems = getUnitItems();
         for (UnitItem unitItem : unitItems) {
             if (!unitItem.isApproved()) {
                 return false;
@@ -320,7 +320,7 @@ public class Financer extends Financer_Base {
     }
 
     public boolean isAuthorized() {
-        List<UnitItem> unitItems = getUnitItems();
+        Collection<UnitItem> unitItems = getUnitItems();
         for (UnitItem unitItem : unitItems) {
             if (!unitItem.getItemAuthorized()) {
                 return false;
@@ -330,7 +330,7 @@ public class Financer extends Financer_Base {
     }
 
     public boolean isWithInvoicesConfirmed() {
-        List<UnitItem> unitItems = getUnitItems();
+        Collection<UnitItem> unitItems = getUnitItems();
         for (UnitItem unitItem : unitItems) {
             if (!unitItem.isWithAllInvoicesConfirmed()) {
                 return false;

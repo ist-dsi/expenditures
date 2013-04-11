@@ -36,7 +36,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.dto.AuthorizationBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * 
@@ -85,7 +85,7 @@ public class Authorization extends Authorization_Base {
         setMaxAmount(authorizationBean.getMaxAmount() != null ? authorizationBean.getMaxAmount() : Money.ZERO);
     }
 
-    @Service
+    @Atomic
     public void changeUnit(final Unit unit) {
         setUnit(unit);
     }
@@ -105,7 +105,7 @@ public class Authorization extends Authorization_Base {
         return super.getCanDelegate() && isValid();
     }
 
-    @Service
+    @Atomic
     public void revoke() {
         if (!isCurrentUserAbleToRevoke()) {
             throw new DomainException("error.person.not.authorized.to.revoke");
@@ -148,7 +148,7 @@ public class Authorization extends Authorization_Base {
         return loggedPerson != null && isValid() && isPersonAbleToRevokeDelegatedAuthorization(loggedPerson);
     }
 
-    @Service
+    @Atomic
     public void delete() {
         AuthorizationOperation.DELETE.log(this, null);
         for (final DelegatedAuthorization delegatedAuthorization : getDelegatedAuthorizationsSet()) {

@@ -24,7 +24,7 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.search.predicates;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Set;
 
 import module.workflow.domain.ProcessFile;
@@ -66,7 +66,7 @@ public class SimplifiedAcquisitionPredicate extends SearchPredicate {
         final Person person = acquisitionRequest.getRequester();
         AcquisitionProcess acquisitionProcess = acquisitionRequest.getAcquisitionProcess();
 
-        final List<Supplier> suppliers = acquisitionRequest.getSuppliers();
+        final Collection<Supplier> suppliers = acquisitionRequest.getSuppliers();
         final String identification = acquisitionRequest.getAcquisitionProcessId();
         final String acquisitionRequestDocumentID =
                 acquisitionProcess.hasPurchaseOrderDocument() ? acquisitionProcess.getAcquisitionRequestDocumentID() : null;

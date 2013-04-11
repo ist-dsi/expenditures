@@ -26,6 +26,7 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -81,7 +82,7 @@ public abstract class RequestItem extends RequestItem_Base {
     protected void delete() {
         removeCPVReference();
         removeExpenditureTrackingSystem();
-        for (; !getUnitItems().isEmpty(); getUnitItems().get(0).delete()) {
+        for (; !getUnitItems().isEmpty(); getUnitItems().iterator().next().delete()) {
             ;
         }
         for (; !getInvoicesFiles().isEmpty(); getInvoicesFiles().remove(0)) {
@@ -342,7 +343,7 @@ public abstract class RequestItem extends RequestItem_Base {
     }
 
     public boolean isConfirmedForAllInvoices(Person person) {
-        List<PaymentProcessInvoice> allInvoices = getInvoicesFiles();
+        Collection<PaymentProcessInvoice> allInvoices = getInvoicesFiles();
 
         if (allInvoices.isEmpty()) {
             return false;

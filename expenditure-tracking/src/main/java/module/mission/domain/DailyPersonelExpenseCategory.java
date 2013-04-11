@@ -5,7 +5,7 @@ import java.util.Comparator;
 
 import pt.ist.bennu.core.domain.VirtualHost;
 import pt.ist.bennu.core.domain.util.Money;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 public class DailyPersonelExpenseCategory extends DailyPersonelExpenseCategory_Base {
 
@@ -33,7 +33,7 @@ public class DailyPersonelExpenseCategory extends DailyPersonelExpenseCategory_B
         setMinSalaryValue(minSalaryValue);
     }
 
-    @Service
+    @Atomic
     public void delete() {
         removeDailyPersonelExpenseTable();
         removeMissionSystem();

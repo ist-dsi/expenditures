@@ -6,7 +6,7 @@ import module.mission.domain.AccountabilityTypeQueue;
 import module.mission.domain.MissionSystem;
 import module.organization.domain.AccountabilityType;
 import module.workflow.domain.WorkflowQueue;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 public class AccountabilityTypeQueueBean implements Serializable {
 
@@ -29,7 +29,7 @@ public class AccountabilityTypeQueueBean implements Serializable {
         this.workflowQueue = workflowQueue;
     }
 
-    @Service
+    @Atomic
     public AccountabilityTypeQueue create() {
         for (final AccountabilityTypeQueue accountabilityTypeQueue : MissionSystem.getInstance().getAccountabilityTypeQueuesSet()) {
             if (accountabilityTypeQueue.getAccountabilityType() == accountabilityType) {

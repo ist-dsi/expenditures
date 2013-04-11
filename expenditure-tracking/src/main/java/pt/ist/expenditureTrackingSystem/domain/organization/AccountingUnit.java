@@ -26,7 +26,7 @@ package pt.ist.expenditureTrackingSystem.domain.organization;
 
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.dto.AccountingUnitBean;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * 
@@ -40,74 +40,74 @@ public class AccountingUnit extends AccountingUnit_Base {
         setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
     }
 
-    @Service
+    @Atomic
     public static AccountingUnit createNewAccountingUnit(final AccountingUnitBean accountingUnitBean) {
         final AccountingUnit accountingUnit = new AccountingUnit();
         accountingUnit.setName(accountingUnitBean.getName());
         return accountingUnit;
     }
 
-    @Service
+    @Atomic
     @Override
     public void addResponsiblePeople(final Person people) {
         super.addResponsiblePeople(people);
     }
 
-    @Service
+    @Atomic
     @Override
     public void addPeople(final Person people) {
         super.addPeople(people);
     }
 
-    @Service
+    @Atomic
     @Override
     public void addResponsibleProjectAccountants(final Person people) {
         super.addResponsibleProjectAccountants(people);
     }
 
-    @Service
+    @Atomic
     @Override
     public void addProjectAccountants(final Person people) {
         super.addProjectAccountants(people);
     }
 
-    @Service
+    @Atomic
     @Override
     public void addTreasuryMembers(Person treasuryMembers) {
         super.addTreasuryMembers(treasuryMembers);
     }
 
-    @Service
+    @Atomic
     @Override
     public void removeResponsiblePeople(final Person people) {
         super.removeResponsiblePeople(people);
     }
 
-    @Service
+    @Atomic
     @Override
     public void removePeople(final Person people) {
         super.removePeople(people);
     }
 
-    @Service
+    @Atomic
     @Override
     public void removeResponsibleProjectAccountants(final Person people) {
         super.removeResponsibleProjectAccountants(people);
     }
 
-    @Service
+    @Atomic
     @Override
     public void removeProjectAccountants(final Person people) {
         super.removeProjectAccountants(people);
     }
 
-    @Service
+    @Atomic
     @Override
     public void removeTreasuryMembers(Person treasuryMembers) {
         super.removeTreasuryMembers(treasuryMembers);
     }
 
-    @Service
+    @Atomic
     @Override
     public void addUnits(final Unit unit) {
         super.addUnits(unit);

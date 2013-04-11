@@ -45,7 +45,7 @@ import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.domain.VirtualHost;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * 
@@ -106,7 +106,7 @@ public class MissionYear extends MissionYear_Base {
         return findMissionByYearAux(year);
     }
 
-    @Service
+    @Atomic
     public static MissionYear findOrCreateMissionYear(final int year) {
         final MissionYear missionYear = findMissionByYearAux(year);
         return missionYear == null ? new MissionYear(year) : missionYear;

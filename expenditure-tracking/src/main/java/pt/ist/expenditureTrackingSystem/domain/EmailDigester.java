@@ -26,7 +26,7 @@ package pt.ist.expenditureTrackingSystem.domain;
 
 import pt.ist.bennu.core.domain.MyOrg;
 import pt.ist.bennu.core.domain.VirtualHost;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * 
@@ -41,7 +41,7 @@ public class EmailDigester extends EmailDigester_Base {
     }
 
     @Override
-    @Service
+    @Atomic
     public void executeTask() {
         for (final VirtualHost virtualHost : MyOrg.getInstance().getVirtualHostsSet()) {
             if (!virtualHost.hasSystemSender() || !virtualHost.getHostname().startsWith("dot")) {

@@ -28,7 +28,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
@@ -47,7 +46,7 @@ import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.domain.VirtualHost;
 import pt.ist.bennu.core.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * 
@@ -71,7 +70,7 @@ public class MissionSystem extends MissionSystem_Base {
         return virtualHostForThread == null ? null : virtualHostForThread.getMissionSystem();
     }
 
-    @Service
+    @Atomic
     public synchronized static void initialize(VirtualHost virtualHost) {
         if (!virtualHost.hasMissionSystem()) {
             new MissionSystem(virtualHost);
@@ -82,7 +81,7 @@ public class MissionSystem extends MissionSystem_Base {
         return MyOrg.getInstance().getMissionSystem().hasAnyVirtualHost();
     }
 
-    @Service
+    @Atomic
     public static void migrate() {
         System.out.println("Migrating mission stuff...");
         MyOrg myOrg = MyOrg.getInstance();
@@ -108,15 +107,15 @@ public class MissionSystem extends MissionSystem_Base {
     }
 
     public ExpenditureTrackingSystem getExpenditureTrackingSystem() {
-        return getVirtualHost().get(0).getExpenditureTrackingSystem();
+        return getVirtualHost().iterator().next().getExpenditureTrackingSystem();
     }
 
-    public List<pt.ist.expenditureTrackingSystem.domain.organization.Unit> getTopLevelUnitsFromExpenditureSystem() {
+    public Set<pt.ist.expenditureTrackingSystem.domain.organization.Unit> getTopLevelUnitsFromExpenditureSystem() {
         return getExpenditureTrackingSystem().getTopLevelUnits();
     }
 
     public pt.ist.expenditureTrackingSystem.domain.organization.Unit getFirstTopLevelUnitFromExpenditureSystem() {
-        return getExpenditureTrackingSystem().getTopLevelUnits().get(0);
+        return getExpenditureTrackingSystem().getTopLevelUnits().iterator().next();
     }
 
     public Set<AccountabilityType> getAccountabilityTypesThatAuthorize() {
@@ -165,7 +164,7 @@ public class MissionSystem extends MissionSystem_Base {
         return dailyExpenseTableMap.values();
     }
 
-    @Service
+    @Atomic
     @Override
     public void setOrganizationalModel(final OrganizationalModel organizationalModel) {
         super.setOrganizationalModel(organizationalModel);
@@ -200,12 +199,12 @@ public class MissionSystem extends MissionSystem_Base {
         return false;
     }
 
-    @Service
+    @Atomic
     public void addUnitWithResumedAuthorizations(final Unit unit) {
         addUnitsWithResumedAuthorizations(unit);
     }
 
-    @Service
+    @Atomic
     public void removeUnitWithResumedAuthorizations(final Unit unit) {
         removeUnitsWithResumedAuthorizations(unit);
     }
@@ -249,25 +248,25 @@ public class MissionSystem extends MissionSystem_Base {
         return false;
     }
 
-    @Service
+    @Atomic
     @Override
     public void addUsersWhoCanCancelMission(User usersWhoCanCancelMission) {
         super.addUsersWhoCanCancelMission(usersWhoCanCancelMission);
     }
 
-    @Service
+    @Atomic
     @Override
     public void removeUsersWhoCanCancelMission(User usersWhoCanCancelMission) {
         super.removeUsersWhoCanCancelMission(usersWhoCanCancelMission);
     }
 
-    @Service
+    @Atomic
     @Override
     public void addVehicleAuthorizers(User vehicleAuthorizers) {
         super.addVehicleAuthorizers(vehicleAuthorizers);
     }
 
-    @Service
+    @Atomic
     @Override
     public void removeVehicleAuthorizers(User vehicleAuthorizers) {
         super.removeVehicleAuthorizers(vehicleAuthorizers);
@@ -288,13 +287,13 @@ public class MissionSystem extends MissionSystem_Base {
         return b != null && b.booleanValue();
     }
 
-    @Service
+    @Atomic
     public void toggleAllowGrantOwnerEquivalence() {
         final Boolean b = getAllowGrantOwnerEquivalence();
         setAllowGrantOwnerEquivalence(b == null ? Boolean.TRUE : Boolean.valueOf(!b.booleanValue()));
     }
 
-    @Service
+    @Atomic
     public static void massAuthorizeVehicles(Collection<VehiclItem> items) {
         for (final VehiclItem item : items) {
             final Mission mission = item.getMission();

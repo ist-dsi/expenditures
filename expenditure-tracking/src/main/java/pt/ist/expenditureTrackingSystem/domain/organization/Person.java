@@ -57,9 +57,9 @@ import pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationLog;
 import pt.ist.expenditureTrackingSystem.domain.dto.AuthorizationBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreatePersonBean;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
+import pt.ist.fenixframework.dml.runtime.RelationAdapter;
 import pt.ist.fenixframework.plugins.luceneIndexing.IndexableField;
-import dml.runtime.RelationAdapter;
 
 /**
  * 
@@ -115,7 +115,7 @@ public class Person extends Person_Base /* implements Indexable, Searchable */{
     }
 
     static {
-        User.MyOrgUser.addListener(new UserMyOrgListener());
+        User.getRelationMyOrgUser().addListener(new UserMyOrgListener());
     }
 
     protected Person() {
@@ -131,7 +131,7 @@ public class Person extends Person_Base /* implements Indexable, Searchable */{
         setName(username);
     }
 
-    @Service
+    @Atomic
     public static Person createPerson(final CreatePersonBean createPersonBean) {
         final String username = createPersonBean.getUsername();
         User user = User.findByUsername(username);
@@ -141,7 +141,7 @@ public class Person extends Person_Base /* implements Indexable, Searchable */{
         return user.getExpenditurePerson();
     }
 
-    @Service
+    @Atomic
     public void delete() {
         if (hasDashBoard()) {
             getDashBoard().delete();
@@ -156,12 +156,12 @@ public class Person extends Person_Base /* implements Indexable, Searchable */{
         deleteDomainObject();
     }
 
-    @Service
+    @Atomic
     public Authorization createAuthorization(final Unit unit, final String justification) {
         return new Authorization(this, unit, justification);
     }
 
-    @Service
+    @Atomic
     public Authorization createAuthorization(final AuthorizationBean authorizationBean, final String justification) {
         return new Authorization(authorizationBean, justification);
     }
@@ -267,7 +267,7 @@ public class Person extends Person_Base /* implements Indexable, Searchable */{
     }
 
     @Override
-    @Service
+    @Atomic
     public void setDefaultSearch(SavedSearch defaultSearch) {
         super.setDefaultSearch(defaultSearch);
     }
@@ -359,7 +359,7 @@ public class Person extends Person_Base /* implements Indexable, Searchable */{
     }
 */
 
-    // @Service
+    // @Atomic
     // private static void setPersonInUser(final User user) {
     // final Person person = Person.findByUsername(user.getUsername());
     // if (person == null) {

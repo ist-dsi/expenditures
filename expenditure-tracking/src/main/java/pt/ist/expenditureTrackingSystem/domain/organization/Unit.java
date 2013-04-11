@@ -56,7 +56,7 @@ import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationLog;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateUnitBean;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 import pt.ist.fenixframework.plugins.luceneIndexing.IndexableField;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
@@ -173,7 +173,7 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
         unit.delete();
     }
 
-    @Service
+    @Atomic
     public static Unit createNewUnit(final CreateUnitBean createUnitBean) {
         if (createUnitBean.getCostCenter() != null) {
             return new CostCenter(createUnitBean.getParentUnit(), createUnitBean.getName(), createUnitBean.getCostCenter());
@@ -191,7 +191,7 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
         return new Unit(createUnitBean.getParentUnit(), createUnitBean.getName());
     }
 
-    @Service
+    @Atomic
     public static Unit createTopLevelUnit(final module.organization.domain.Unit organizationUnit,
             ExpenditureTrackingSystem expenditureTrackingSystem) {
         Unit newUnit = new Unit();
@@ -201,7 +201,7 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
         return newUnit;
     }
 
-    @Service
+    @Atomic
     public void delete() {
         if (!getAuthorizationsSet().isEmpty()) {
             throw new DomainException("error.cannot.delete.units.which.have.or.had.authorizations");
@@ -607,13 +607,13 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
     }
 
     @Override
-    @Service
+    @Atomic
     public void removeUnit() {
         super.removeUnit();
     }
 
     @Override
-    @Service
+    @Atomic
     public void setUnit(final module.organization.domain.Unit unit) {
         super.setUnit(unit);
     }
@@ -668,18 +668,18 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
     }
 
     @Override
-    @Service
+    @Atomic
     public void addObservers(Person observer) {
         super.addObservers(observer);
     }
 
     @Override
-    @Service
+    @Atomic
     public void removeObservers(Person observer) {
         super.removeObservers(observer);
     }
 
-    @Service
+    @Atomic
     public void toggleDefaultRegeim() {
         final Boolean currentValue = getDefaultRegeimIsCCP();
         final boolean newValue = currentValue == null ? Boolean.TRUE : !currentValue.booleanValue();

@@ -2,7 +2,7 @@ package module.mission.domain;
 
 import module.organization.domain.AccountabilityType;
 import pt.ist.bennu.core.domain.VirtualHost;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 public class MissionAuthorizationAccountabilityType extends MissionAuthorizationAccountabilityType_Base {
 
@@ -33,7 +33,7 @@ public class MissionAuthorizationAccountabilityType extends MissionAuthorization
         return stringBuilder.toString();
     }
 
-    @Service
+    @Atomic
     public void delete() {
         removeAccountabilityType();
         getAccountabilityTypesSet().clear();

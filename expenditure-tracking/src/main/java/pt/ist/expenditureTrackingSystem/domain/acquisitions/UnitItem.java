@@ -25,7 +25,7 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.Collection;
 
 import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.ist.bennu.core.domain.util.Money;
@@ -135,8 +135,8 @@ public class UnitItem extends UnitItem_Base {
     }
 
     public boolean isWithAllInvoicesConfirmed() {
-        List<PaymentProcessInvoice> invoicesFiles = getItem().getInvoicesFiles();
-        List<PaymentProcessInvoice> confirmedInvoices = getConfirmedInvoices();
+        Collection<PaymentProcessInvoice> invoicesFiles = getItem().getInvoicesFiles();
+        Collection<PaymentProcessInvoice> confirmedInvoices = getConfirmedInvoices();
 
         return !invoicesFiles.isEmpty() && confirmedInvoices.containsAll(invoicesFiles);
 

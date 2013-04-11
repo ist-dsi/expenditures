@@ -34,7 +34,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestWithPayment;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
-import dml.runtime.RelationAdapter;
+import pt.ist.fenixframework.dml.runtime.RelationAdapter;
 
 /**
  * 
@@ -44,10 +44,10 @@ import dml.runtime.RelationAdapter;
  */
 public class CostCenter extends CostCenter_Base {
 
-    public static class CostCenterPartyTypeListener extends RelationAdapter<Party, PartyType> {
+    public static class CostCenterPartyTypeListener extends RelationAdapter<PartyType, Party> {
 
         @Override
-        public void afterAdd(final Party party, final PartyType partyType) {
+        public void afterAdd(final PartyType partyType, final Party party) {
             if (party.isUnit() && partyType != null
                     && partyType == ExpenditureTrackingSystem.getInstance().getCostCenterPartyType()) {
                 new CostCenter((module.organization.domain.Unit) party);
@@ -57,7 +57,7 @@ public class CostCenter extends CostCenter_Base {
     }
 
     static {
-        Party.PartyTypeParty.addListener(new CostCenterPartyTypeListener());
+        Party.getRelationPartyTypeParty().addListener(new CostCenterPartyTypeListener());
     }
 
     public CostCenter(final module.organization.domain.Unit unit) {

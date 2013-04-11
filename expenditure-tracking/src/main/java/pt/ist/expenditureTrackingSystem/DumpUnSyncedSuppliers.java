@@ -29,7 +29,7 @@ import java.io.PrintWriter;
 
 import pt.ist.bennu.core.domain.MyOrg;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * 
@@ -56,7 +56,7 @@ public class DumpUnSyncedSuppliers {
         System.out.println("Done.");
     }
 
-    @Service
+    @Atomic
     public static void dump() throws IOException {
         final PrintWriter printWriter = new PrintWriter("/tmp/fornecedores.csv");
         for (final Supplier supplier : MyOrg.getInstance().getSuppliersSet()) {

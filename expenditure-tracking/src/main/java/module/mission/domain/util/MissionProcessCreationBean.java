@@ -38,7 +38,7 @@ import org.joda.time.LocalTime;
 
 import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
 import pt.ist.bennu.core.domain.User;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * 
@@ -113,7 +113,7 @@ public class MissionProcessCreationBean implements Serializable {
         this.isCurrentUserAParticipant = isCurrentUserAParticipant;
     }
 
-    @Service
+    @Atomic
     public MissionProcess createNewMissionProcess() {
         return MissionSystem.getInstance().getCountry() == country ? new NationalMissionProcess(location, daparture, arrival,
                 objective, isCurrentUserAParticipant, grantOwnerEquivalence) : new ForeignMissionProcess(country, location,

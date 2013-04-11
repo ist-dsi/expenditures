@@ -506,8 +506,8 @@ public class SearchPaymentProcessesAction extends BaseAction {
     public ActionForward configurateMySearches(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
 
-        List<SavedSearch> systemSearches = ExpenditureTrackingSystem.getInstance().getSystemSearches();
-        List<SavedSearch> userSearches = getLoggedPerson().getSaveSearches();
+        Set<SavedSearch> systemSearches = ExpenditureTrackingSystem.getInstance().getSystemSearches();
+        Set<SavedSearch> userSearches = getLoggedPerson().getSaveSearches();
         request.setAttribute("systemSearches", systemSearches);
         request.setAttribute("userSearches", userSearches);
 

@@ -59,7 +59,7 @@ public class ProcessPersonnelActivity extends MissionProcessActivity<MissionProc
             throw new DomainException(
                     "Cannot determine which queue to remove because the mission process is associated to several queues.");
         }
-        missionProcess.removeCurrentQueues(missionProcess.getCurrentQueues().get(0));
+        missionProcess.removeCurrentQueues(missionProcess.getCurrentQueues().iterator().next());
     }
 
 }

@@ -30,7 +30,7 @@ import pt.ist.bennu.core.domain.MyOrg;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.ist.bennu.core.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 import pt.ist.fenixframework.plugins.luceneIndexing.IndexableField;
 
 /**
@@ -122,12 +122,12 @@ public class CPVReference extends CPVReference_Base /* implements Indexable, Sea
         return getExpenditureTrackingSystemForPriorities() != null;
     }
 
-    @Service
+    @Atomic
     public void markAsPriority() {
         setExpenditureTrackingSystemForPriorities(ExpenditureTrackingSystem.getInstance());
     }
 
-    @Service
+    @Atomic
     public void unmarkAsPriority() {
         setExpenditureTrackingSystemForPriorities(null);
     }

@@ -48,7 +48,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundRequest
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundableInvoiceFile;
 import pt.ist.expenditureTrackingSystem.domain.announcements.CCPAnnouncement;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateSupplierBean;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 import pt.ist.fenixframework.plugins.luceneIndexing.IndexableField;
 
 /**
@@ -98,7 +98,7 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
     }
 
     @Override
-    @Service
+    @Atomic
     public void delete() {
         if (checkIfCanBeDeleted()) {
             removeMyOrg();
@@ -366,7 +366,7 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
         return getTotalAllocatedByAfterTheFactAcquisitions(AfterTheFactAcquisitionType.REFUND);
     }
 
-    @Service
+    @Atomic
     public static Supplier createNewSupplier(final CreateSupplierBean createSupplierBean) {
         final Supplier supplier =
                 new Supplier(createSupplierBean.getName(), createSupplierBean.getAbbreviatedName(),
@@ -390,7 +390,7 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
         return totalValue.isLessThan(SUPPLIER_LIMIT) && totalValue.isLessThan(getSupplierLimit());
     }
 
-    @Service
+    @Atomic
     public void merge(final Supplier supplier) {
         if (supplier != this) {
             final Set<AcquisitionAfterTheFact> acquisitionAfterTheFacts = supplier.getAcquisitionsAfterTheFactSet();

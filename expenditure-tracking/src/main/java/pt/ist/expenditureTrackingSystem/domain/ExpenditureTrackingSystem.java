@@ -59,10 +59,10 @@ import pt.ist.expenditureTrackingSystem.presentationTier.widgets.TakenProcessesW
 import pt.ist.expenditureTrackingSystem.presentationTier.widgets.UnreadCommentsWidget;
 import pt.ist.expenditureTrackingSystem.util.AquisitionsPendingProcessCounter;
 import pt.ist.expenditureTrackingSystem.util.RefundPendingProcessCounter;
-import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.RequestChecksumFilter;
 import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.RequestChecksumFilter.ChecksumPredicate;
-import dml.runtime.RelationAdapter;
+import pt.ist.fenixframework.Atomic;
+import pt.ist.fenixframework.dml.runtime.RelationAdapter;
 
 /**
  * 
@@ -105,7 +105,7 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
     };
 
     static {
-        VirtualHost.MyOrgVirtualHost.addListener(new VirtualHostMyOrgRelationListener());
+        VirtualHost.getRelationMyOrgVirtualHost().addListener(new VirtualHostMyOrgRelationListener());
 
         ProcessListWidget.register(new AquisitionsPendingProcessCounter());
         ProcessListWidget.register(new RefundPendingProcessCounter());
@@ -152,7 +152,7 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
         checkISTOptions();
     }
 
-    @Service
+    @Atomic
     private static Boolean checkISTOptions() {
         final MyOrg myOrg = MyOrg.getInstance();
         for (final VirtualHost virtualHost : myOrg.getVirtualHostsSet()) {
@@ -171,7 +171,7 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
         return false;
     }
 
-    @Service
+    @Atomic
     private static Boolean migratePeople() {
         final MyOrg myOrg = MyOrg.getInstance();
         if (!myOrg.hasAnyPeopleFromExpenditureTackingSystem()) {
@@ -189,7 +189,7 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
         return Boolean.TRUE;
     }
 
-    @Service
+    @Atomic
     private static Boolean migrateCPVs() {
         final MyOrg myOrg = MyOrg.getInstance();
         if (!myOrg.hasAnyCPVReferences()) {
@@ -207,7 +207,7 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
         return Boolean.TRUE;
     }
 
-    @Service
+    @Atomic
     private static Boolean migrateSuppliers() {
         final MyOrg myOrg = MyOrg.getInstance();
         if (!myOrg.hasAnySuppliers()) {
@@ -225,7 +225,7 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
         return Boolean.TRUE;
     }
 
-    @Service
+    @Atomic
     private static Boolean migrateProcessNumbers() {
         final VirtualHost virtualHostForThread = VirtualHost.getVirtualHostForThread();
         if (virtualHostForThread == null) {
@@ -352,7 +352,7 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
         WidgetRegister.registerWidget(widgetClass, EXPENDITURE_TRACKING_PANEL_PREDICATE);
     }
 
-    @Service
+    @Atomic
     public static void createSystem(final VirtualHost virtualHost) {
         if (!virtualHost.hasExpenditureTrackingSystem() || virtualHost.getExpenditureTrackingSystem().getVirtualHostCount() > 1) {
             new ExpenditureTrackingSystem(virtualHost);
@@ -497,7 +497,7 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
         return classifications;
     }
 
-    @Service
+    @Atomic
     public void saveConfiguration(final String institutionalProcessNumberPrefix, final String institutionalRequestDocumentPrefix,
             final String acquisitionCreationWizardJsp, final SearchProcessValuesArray array,
             final Boolean invoiceAllowedToStartAcquisitionProcess, final Boolean requireFundAllocationPriorToAcquisitionRequest,
@@ -519,7 +519,7 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
         setProcessesNeedToBeReverified(processesNeedToBeReverified);
     }
 
-    @Service
+    @Atomic
     public void setForVirtualHost(final VirtualHost virtualHost) {
         virtualHost.setExpenditureTrackingSystem(this);
     }

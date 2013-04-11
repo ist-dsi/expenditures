@@ -11,7 +11,7 @@ import org.joda.time.LocalDate;
 import pt.ist.bennu.core.domain.VirtualHost;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.ist.bennu.core.domain.util.Money;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 public class DailyPersonelExpenseTable extends DailyPersonelExpenseTable_Base {
 
@@ -101,7 +101,7 @@ public class DailyPersonelExpenseTable extends DailyPersonelExpenseTable_Base {
         return result;
     }
 
-    @Service
+    @Atomic
     public void delete() {
         for (final DailyPersonelExpenseCategory dailyPersonelExpenseCategory : getDailyPersonelExpenseCategoriesSet()) {
             dailyPersonelExpenseCategory.delete();

@@ -2,21 +2,6 @@ package module.mission.domain;
 
 enum module.mission.domain.VehiclItemJustificationMotive as VehiclItemJustificationMotive;
 
-valueType java.math.BigDecimal as BigDecimal {
-    externalizeWith {
-        String toString();
-    }
-}
-
-valueType pt.ist.bennu.core.domain.util.Money as Money {
-    externalizeWith {
-        String exportAsString();
-    }
-
-    internalizeWith importFromString();
-}
-
-
 class MissionSystem {
 	Boolean allowGrantOwnerEquivalence;
 }

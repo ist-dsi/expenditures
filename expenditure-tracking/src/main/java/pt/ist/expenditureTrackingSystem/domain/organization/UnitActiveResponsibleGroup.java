@@ -32,7 +32,7 @@ import pt.ist.bennu.core.domain.groups.PersistentGroup;
 import pt.ist.bennu.core.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * 
@@ -83,7 +83,7 @@ public class UnitActiveResponsibleGroup extends UnitActiveResponsibleGroup_Base 
         return members;
     }
 
-    @Service
+    @Atomic
     public static UnitActiveResponsibleGroup getInstance() {
         final UnitActiveResponsibleGroup group =
                 (UnitActiveResponsibleGroup) PersistentGroup.getSystemGroup(UnitActiveResponsibleGroup.class);

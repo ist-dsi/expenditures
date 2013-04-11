@@ -7,14 +7,14 @@ import jvstm.cps.ConsistencyPredicate;
 import pt.ist.bennu.core.domain.MyOrg;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.ist.bennu.core.util.BundleUtil;
-import dml.runtime.Relation;
-import dml.runtime.RelationAdapter;
+import pt.ist.fenixframework.dml.runtime.Relation;
+import pt.ist.fenixframework.dml.runtime.RelationAdapter;
 
 public class MissionProcessAssociation extends MissionProcessAssociation_Base {
 
     static {
-        MissionProcess.MissionProcessAssociationMissionProcess
-                .addListener(new RelationAdapter<MissionProcess, MissionProcessAssociation>() {
+        MissionProcess.getRelationMissionProcessAssociationMissionProcess().addListener(
+                new RelationAdapter<MissionProcess, MissionProcessAssociation>() {
                     @Override
                     public void afterAdd(Relation<MissionProcess, MissionProcessAssociation> relation, MissionProcess process,
                             MissionProcessAssociation association) {
@@ -25,8 +25,8 @@ public class MissionProcessAssociation extends MissionProcessAssociation_Base {
                     }
                 });
 
-        MissionProcess.MissionProcessAssociationMissionProcess
-                .addListener(new RelationAdapter<MissionProcess, MissionProcessAssociation>() {
+        MissionProcess.getRelationMissionProcessAssociationMissionProcess().addListener(
+                new RelationAdapter<MissionProcess, MissionProcessAssociation>() {
                     @Override
                     public void afterAdd(Relation<MissionProcess, MissionProcessAssociation> relation, MissionProcess process,
                             MissionProcessAssociation association) {
@@ -75,7 +75,7 @@ public class MissionProcessAssociation extends MissionProcessAssociation_Base {
 
     //@ConsistencyPredicate
     public boolean checkAllMissionProcessesOfSameType() {
-        Boolean isGrantOwnerType = getMissionProcesses().get(0).getMission().getGrantOwnerEquivalence();
+        Boolean isGrantOwnerType = getMissionProcesses().iterator().next().getMission().getGrantOwnerEquivalence();
         for (MissionProcess process : getMissionProcesses()) {
             if (!process.getMission().getGrantOwnerEquivalence().equals(isGrantOwnerType)) {
                 return false;

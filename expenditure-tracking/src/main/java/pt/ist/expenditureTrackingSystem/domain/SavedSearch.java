@@ -27,7 +27,7 @@ package pt.ist.expenditureTrackingSystem.domain;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * 
@@ -76,7 +76,7 @@ public class SavedSearch extends SavedSearch_Base {
         return new SearchPaymentProcess(this);
     }
 
-    @Service
+    @Atomic
     public void delete() {
         removeTakenBy();
         removeYear();

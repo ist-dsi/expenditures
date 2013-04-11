@@ -8,44 +8,10 @@ enum pt.ist.expenditureTrackingSystem.domain.acquisitions.StandardAcquisitionPro
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionType as AfterTheFactAcquisitionType;
 enum pt.ist.expenditureTrackingSystem.domain.announcements.AnnouncementProcessStateType as AnnouncementProcessStateType;
 enum pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationType as AuthorizationType;
-enum pt.ist.expenditureTrackingSystem.domain.RoleType as RoleType;
+enum pt.ist.expenditureTrackingSystem.domain.RoleType as ExpendituresRoleType;
 enum pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationOperation as AuthorizationOperation;
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess.ProcessClassification as ProcessClassification;
-enum pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPaymentProcess.SearchProcessValues as SearchProcessValues;
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchProcessValues as SearchProcessValues;
-
-
-
-
-valueType pt.utl.ist.fenix.tools.util.Strings as Strings {
-    externalizeWith {
-        String exportAsString();
-    }
-
-    internalizeWith importFromString();
-}
-
-valueType pt.utl.ist.fenix.tools.util.ByteArray as ByteArray {
-    externalizeWith {
-        bytearray getBytes();
-    }
-}
-
-valueType pt.ist.bennu.core.domain.util.Address as Address {
-    externalizeWith {
-        String exportAsString();
-    }
-
-    internalizeWith importFromString();
-}
-
-valueType pt.ist.bennu.core.domain.util.Money as Money {
-    externalizeWith {
-        String exportAsString();
-    }
-
-    internalizeWith importFromString();
-}
 
 valueType java.math.BigDecimal as BigDecimal {
     externalizeWith {
@@ -364,7 +330,7 @@ class ProcessState implements .pt.ist.bennu.core.domain.VirtualHostAware {
 
 
 class Role implements .pt.ist.bennu.core.domain.VirtualHostAware {
-	RoleType roleType;
+    ExpendituresRoleType roleType;
 }
 
 class DashBoard implements .pt.ist.bennu.core.domain.VirtualHostAware {

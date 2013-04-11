@@ -40,7 +40,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.ProjectFinancer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestWithPayment;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
-import dml.runtime.RelationAdapter;
+import pt.ist.fenixframework.dml.runtime.RelationAdapter;
 
 /**
  * 
@@ -50,10 +50,10 @@ import dml.runtime.RelationAdapter;
  */
 public class Project extends Project_Base {
 
-    public static class ProjectPartyTypeListener extends RelationAdapter<Party, PartyType> {
+    public static class ProjectPartyTypeListener extends RelationAdapter<PartyType, Party> {
 
         @Override
-        public void afterAdd(final Party party, final PartyType partyType) {
+        public void afterAdd(final PartyType partyType, final Party party) {
             if (party.isUnit() && partyType != null && partyType == ExpenditureTrackingSystem.getInstance().getProjectPartyType()) {
                 new Project((module.organization.domain.Unit) party);
             }
@@ -62,7 +62,7 @@ public class Project extends Project_Base {
     }
 
     static {
-        Party.PartyTypeParty.addListener(new ProjectPartyTypeListener());
+        Party.getRelationPartyTypeParty().addListener(new ProjectPartyTypeListener());
     }
 
     public Project(final module.organization.domain.Unit unit) {

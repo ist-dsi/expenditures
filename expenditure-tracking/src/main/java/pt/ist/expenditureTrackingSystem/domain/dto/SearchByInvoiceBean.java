@@ -26,7 +26,7 @@ package pt.ist.expenditureTrackingSystem.domain.dto;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -60,7 +60,7 @@ public class SearchByInvoiceBean implements Serializable {
             return resultsList;
         }
 
-        List<PaymentProcessYear> processesYears = ExpenditureTrackingSystem.getInstance().getPaymentProcessYears();
+        Collection<PaymentProcessYear> processesYears = ExpenditureTrackingSystem.getInstance().getPaymentProcessYears();
 
         for (PaymentProcessYear year : processesYears) {
             for (GenericProcess process : year.getPaymentProcessSet()) {

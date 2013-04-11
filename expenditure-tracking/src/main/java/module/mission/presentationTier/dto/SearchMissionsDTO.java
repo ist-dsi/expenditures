@@ -47,6 +47,7 @@ import org.joda.time.LocalDate;
 
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
+import pt.ist.fenixframework.FenixFramework;
 
 /**
  * 
@@ -66,22 +67,22 @@ public class SearchMissionsDTO extends SearchMissions {
 
     public SearchMissionsDTO(final HttpServletRequest request) {
         setProcessNumber(StringUtils.isEmpty(request.getParameter("processNumber")) ? "" : request.getParameter("processNumber"));
-        setMissionResponsible(StringUtils.isEmpty(request.getParameter("ruOID")) ? null : (Party) Party.fromExternalId(request
-                .getParameter("ruOID")));
-        setPayingUnit(StringUtils.isEmpty(request.getParameter("puOID")) ? null : (Unit) Unit.fromExternalId(request
+        setMissionResponsible(StringUtils.isEmpty(request.getParameter("ruOID")) ? null : (Party) FenixFramework
+                .getDomainObject(request.getParameter("ruOID")));
+        setPayingUnit(StringUtils.isEmpty(request.getParameter("puOID")) ? null : (Unit) FenixFramework.getDomainObject(request
                 .getParameter("puOID")));
         setForeign(StringUtils.isEmpty(request.getParameter("f")) ? null : Boolean.valueOf(request.getParameter("f")));
         setDate(StringUtils.isEmpty(request.getParameter("d")) ? null : new LocalDate(Long.valueOf(request.getParameter("d"))));
         setInterval(StringUtils.isEmpty(request.getParameter("i")) ? null : new Interval(request.getParameter("i")));
-        setRequestingPerson(StringUtils.isEmpty(request.getParameter("rpOID")) ? null : (Person) Person.fromExternalId(request
-                .getParameter("rpOID")));
-        setParticipant(StringUtils.isEmpty(request.getParameter("pOID")) ? null : (Person) Person.fromExternalId(request
+        setRequestingPerson(StringUtils.isEmpty(request.getParameter("rpOID")) ? null : (Person) FenixFramework
+                .getDomainObject(request.getParameter("rpOID")));
+        setParticipant(StringUtils.isEmpty(request.getParameter("pOID")) ? null : (Person) FenixFramework.getDomainObject(request
                 .getParameter("pOID")));
         setPendingStage(StringUtils.isEmpty(request.getParameter("ps")) ? null : MissionStage.valueOf(request.getParameter("ps")));
-        setAccountingUnit(StringUtils.isEmpty(request.getParameter("auOID")) ? null : (AccountingUnit) AccountingUnit
-                .fromExternalId(request.getParameter("auOID")));
-        setParticipantAuthorizationAuthority(StringUtils.isEmpty(request.getParameter("paaOID")) ? null : (Person) Person
-                .fromExternalId(request.getParameter("paaOID")));
+        setAccountingUnit(StringUtils.isEmpty(request.getParameter("auOID")) ? null : (AccountingUnit) FenixFramework
+                .getDomainObject(request.getParameter("auOID")));
+        setParticipantAuthorizationAuthority(StringUtils.isEmpty(request.getParameter("paaOID")) ? null : (Person) FenixFramework
+                .getDomainObject(request.getParameter("paaOID")));
         setFilterCanceledProcesses(Boolean.valueOf(request.getParameter("fc")));
 
         final String sortByParameter = request.getParameter("sortBy");

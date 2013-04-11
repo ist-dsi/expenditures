@@ -4,7 +4,7 @@ import jvstm.cps.ConsistencyPredicate;
 import module.organization.domain.AccountabilityType;
 import module.workflow.domain.WorkflowQueue;
 import pt.ist.bennu.core.domain.VirtualHost;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 public class AccountabilityTypeQueue extends AccountabilityTypeQueue_Base {
 
@@ -19,7 +19,7 @@ public class AccountabilityTypeQueue extends AccountabilityTypeQueue_Base {
         setWorkflowQueue(workflowQueue);
     }
 
-    @Service
+    @Atomic
     public void delete() {
         removeWorkflowQueue();
         removeAccountabilityType();

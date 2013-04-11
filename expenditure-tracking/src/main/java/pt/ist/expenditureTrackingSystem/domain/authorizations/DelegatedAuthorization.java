@@ -30,7 +30,7 @@ import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.ist.bennu.core.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * 
@@ -78,7 +78,7 @@ public class DelegatedAuthorization extends DelegatedAuthorization_Base {
         return getAuthorization().getPerson();
     }
 
-    @Service
+    @Atomic
     public static void delegate(Authorization authorization, Person person, Unit unit, Boolean canDelegate, LocalDate endDate,
             Money maxAmount) {
         new DelegatedAuthorization(person, unit, authorization, canDelegate, endDate, maxAmount);

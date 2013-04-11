@@ -26,8 +26,8 @@ package pt.ist.expenditureTrackingSystem.domain;
 
 import pt.ist.bennu.core.domain.User;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
-import pt.ist.fenixWebFramework.services.Service;
-import dml.runtime.RelationAdapter;
+import pt.ist.fenixframework.Atomic;
+import pt.ist.fenixframework.dml.runtime.RelationAdapter;
 
 /**
  * 
@@ -57,7 +57,7 @@ public class Role extends Role_Base {
     }
 
     static {
-        Role.PersonRole.addListener(new RolePersonListener());
+        Role.getRelationPersonRole().addListener(new RolePersonListener());
     }
 
     public Role(final RoleType type) {
@@ -67,14 +67,14 @@ public class Role extends Role_Base {
         setSystemRole(pt.ist.bennu.core.domain.groups.Role.getRole(type));
     }
 
-    @Service
+    @Atomic
     public static Role createRole(final RoleType type) {
         final Role role = new Role(type);
         role.setSystemRole(pt.ist.bennu.core.domain.groups.Role.getRole(type));
         return role;
     }
 
-    @Service
+    @Atomic
     public static Role getRole(final RoleType roleType) {
         for (final Role role : ExpenditureTrackingSystem.getInstance().getRoles()) {
             if (role.getRoleType().equals(roleType) && role.isConnectedToCurrentHost()) {

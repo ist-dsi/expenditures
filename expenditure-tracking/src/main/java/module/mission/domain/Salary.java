@@ -31,7 +31,7 @@ import module.organization.domain.Party;
 import module.organization.domain.Person;
 import pt.ist.bennu.core.domain.MyOrg;
 import pt.ist.bennu.core.domain.VirtualHost;
-import dml.runtime.RelationAdapter;
+import pt.ist.fenixframework.dml.runtime.RelationAdapter;
 
 /**
  * 
@@ -56,7 +56,7 @@ public class Salary extends Salary_Base {
     }
 
     static {
-        Party.MyOrgParty.addListener(new SalaryPartyMyOrgListener());
+        Party.getRelationMyOrgParty().addListener(new SalaryPartyMyOrgListener());
     }
 
     public Salary() {

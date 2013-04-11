@@ -35,9 +35,6 @@ import jvstm.TransactionalCommand;
 import module.organization.domain.Person;
 import pt.ist.dbUtils.ExternalDbOperation;
 import pt.ist.dbUtils.ExternalDbQuery;
-import pt.ist.fenixWebFramework.services.ServiceManager;
-import pt.ist.fenixWebFramework.services.ServicePredicate;
-import pt.ist.fenixframework.pstm.Transaction;
 
 /**
  * 
