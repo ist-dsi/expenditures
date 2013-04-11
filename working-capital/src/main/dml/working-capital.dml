@@ -1,6 +1,6 @@
 package module.workingCapital.domain;
 
-enum WorkingCapitalInitialization.WorkingCapitalInitializationState as WorkingCapitalInitializationState;
+enum module.workingCapital.domain.WorkingCapitalInitialization.WorkingCapitalInitializationState as WorkingCapitalInitializationState;
 enum module.workingCapital.domain.util.PaymentMethod as PaymentMethod;
 
 class WorkingCapitalSystem {
