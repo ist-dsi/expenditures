@@ -57,7 +57,7 @@ public class WorkingCapitalSystem extends WorkingCapitalSystem_Base implements M
 
         @Override
         public void beforeRemove(VirtualHost vh, MyOrg myorg) {
-            vh.removeWorkingCapitalSystem();
+            vh.setWorkingCapitalSystem(null);
             super.beforeRemove(vh, myorg);
         }
     }
@@ -96,7 +96,7 @@ public class WorkingCapitalSystem extends WorkingCapitalSystem_Base implements M
 
     @Atomic
     public static void createSystem(final VirtualHost virtualHost) {
-        if (!virtualHost.hasWorkingCapitalSystem() || virtualHost.getWorkingCapitalSystem().getVirtualHostsCount() > 1) {
+        if (virtualHost.getWorkingCapitalSystem() == null || virtualHost.getWorkingCapitalSystem().getVirtualHosts().size() > 1) {
             new WorkingCapitalSystem(virtualHost);
         }
     }
@@ -157,6 +157,106 @@ public class WorkingCapitalSystem extends WorkingCapitalSystem_Base implements M
 
     public static boolean isLastMonthForWorkingCapitalTermination() {
         return new DateTime().monthOfYear().get() == DateTimeConstants.DECEMBER;
+    }
+
+    @Deprecated
+    public boolean hasAcquisitionValueLimit() {
+        return getAcquisitionValueLimit() != null;
+    }
+
+    @Deprecated
+    public java.util.Set<module.workingCapital.domain.WorkingCapitalAcquisition> getWorkingCapitalAcquisitions() {
+        return getWorkingCapitalAcquisitionsSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyWorkingCapitalAcquisitions() {
+        return !getWorkingCapitalAcquisitionsSet().isEmpty();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.bennu.core.domain.VirtualHost> getVirtualHosts() {
+        return getVirtualHostsSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyVirtualHosts() {
+        return !getVirtualHostsSet().isEmpty();
+    }
+
+    @Deprecated
+    public java.util.Set<module.workingCapital.domain.WorkingCapitalTransaction> getWorkingCapitalTransactions() {
+        return getWorkingCapitalTransactionsSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyWorkingCapitalTransactions() {
+        return !getWorkingCapitalTransactionsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasMyOrg() {
+        return getMyOrg() != null;
+    }
+
+    @Deprecated
+    public java.util.Set<module.workingCapital.domain.WorkingCapitalInitialization> getWorkingCapitalInitializations() {
+        return getWorkingCapitalInitializationsSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyWorkingCapitalInitializations() {
+        return !getWorkingCapitalInitializationsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasManagingAccountabilityType() {
+        return getManagingAccountabilityType() != null;
+    }
+
+    @Deprecated
+    public java.util.Set<module.workingCapital.domain.WorkingCapitalYear> getWorkingCapitalYears() {
+        return getWorkingCapitalYearsSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyWorkingCapitalYears() {
+        return !getWorkingCapitalYearsSet().isEmpty();
+    }
+
+    @Deprecated
+    public java.util.Set<module.workingCapital.domain.WorkingCapital> getWorkingCapitals() {
+        return getWorkingCapitalsSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyWorkingCapitals() {
+        return !getWorkingCapitalsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasManagementUnit() {
+        return getManagementUnit() != null;
+    }
+
+    @Deprecated
+    public java.util.Set<module.workingCapital.domain.AcquisitionClassification> getAcquisitionClassifications() {
+        return getAcquisitionClassificationsSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyAcquisitionClassifications() {
+        return !getAcquisitionClassificationsSet().isEmpty();
+    }
+
+    @Deprecated
+    public java.util.Set<module.workingCapital.domain.WorkingCapitalRequest> getWorkingCapitalRequests() {
+        return getWorkingCapitalRequestsSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyWorkingCapitalRequests() {
+        return !getWorkingCapitalRequestsSet().isEmpty();
     }
 
 }

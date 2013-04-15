@@ -106,7 +106,7 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
 
     public void unapprove() {
         setAprovalByUnitResponsible(null);
-        removeResponsibleForUnitApproval();
+        setResponsibleForUnitApproval(null);
     }
 
     public void verify(final User user, final Money authorizedAnualValue, final Money maxAuthorizedAnualValue,
@@ -133,7 +133,7 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
 
     public void unverify() {
         setVerificationByAccounting(new DateTime());
-        removeResponsibleForAccountingVerification();
+        setResponsibleForAccountingVerification(null);
         setAuthorizedAnualValue(null);
         setMaxAuthorizedAnualValue(null);
         setFundAllocationId(null);
@@ -151,7 +151,7 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
 
     public void unauthorize() {
         setAuthorizationByUnitResponsible(new DateTime());
-        removeResponsibleForUnitAuthorization();
+        setResponsibleForUnitAuthorization(null);
     }
 
     public boolean isPendingAproval(User user) {
@@ -225,16 +225,121 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
     }
 
     public void delete() {
-        removeWorkingCapital();
-        removeWorkingCapitalSystem();
-        removeRequestor();
-        removeAccountingUnit();
+        setWorkingCapital(null);
+        setWorkingCapitalSystem(null);
+        setRequestor(null);
+        setAccountingUnit(null);
         deleteDomainObject();
     }
 
     @Override
     public boolean isConnectedToCurrentHost() {
         return getWorkingCapitalSystem() == WorkingCapitalSystem.getInstanceForCurrentHost();
+    }
+
+    @Deprecated
+    public boolean hasRequestCreation() {
+        return getRequestCreation() != null;
+    }
+
+    @Deprecated
+    public boolean hasRequestedAnualValue() {
+        return getRequestedAnualValue() != null;
+    }
+
+    @Deprecated
+    public boolean hasAuthorizedAnualValue() {
+        return getAuthorizedAnualValue() != null;
+    }
+
+    @Deprecated
+    public boolean hasMaxAuthorizedAnualValue() {
+        return getMaxAuthorizedAnualValue() != null;
+    }
+
+    @Deprecated
+    public boolean hasFiscalId() {
+        return getFiscalId() != null;
+    }
+
+    @Deprecated
+    public boolean hasInternationalBankAccountNumber() {
+        return getInternationalBankAccountNumber() != null;
+    }
+
+    @Deprecated
+    public boolean hasAprovalByUnitResponsible() {
+        return getAprovalByUnitResponsible() != null;
+    }
+
+    @Deprecated
+    public boolean hasAuthorizationByUnitResponsible() {
+        return getAuthorizationByUnitResponsible() != null;
+    }
+
+    @Deprecated
+    public boolean hasVerificationByAccounting() {
+        return getVerificationByAccounting() != null;
+    }
+
+    @Deprecated
+    public boolean hasState() {
+        return getState() != null;
+    }
+
+    @Deprecated
+    public boolean hasLastSubmission() {
+        return getLastSubmission() != null;
+    }
+
+    @Deprecated
+    public boolean hasRefundRequested() {
+        return getRefundRequested() != null;
+    }
+
+    @Deprecated
+    public boolean hasAcceptedResponsability() {
+        return getAcceptedResponsability() != null;
+    }
+
+    @Deprecated
+    public boolean hasFundAllocationId() {
+        return getFundAllocationId() != null;
+    }
+
+    @Deprecated
+    public boolean hasWorkingCapital() {
+        return getWorkingCapital() != null;
+    }
+
+    @Deprecated
+    public boolean hasResponsibleForAccountingVerification() {
+        return getResponsibleForAccountingVerification() != null;
+    }
+
+    @Deprecated
+    public boolean hasWorkingCapitalSystem() {
+        return getWorkingCapitalSystem() != null;
+    }
+
+    @Deprecated
+    public boolean hasRequestor() {
+        return getRequestor() != null;
+    }
+
+    @Deprecated
+    public boolean hasResponsibleForUnitAuthorization() {
+        return getResponsibleForUnitAuthorization() != null;
+    }
+
+    @Deprecated
+    public boolean hasResponsibleForUnitApproval() {
+        return getResponsibleForUnitApproval() != null;
+    }
+
+    @Deprecated
+    public boolean hasAccountingUnit() {
+        return getAccountingUnit() != null;
     }
 
 }

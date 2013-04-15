@@ -75,4 +75,9 @@ public class ExceptionalWorkingCapitalRefund extends ExceptionalWorkingCapitalRe
         final WorkingCapital workingCapital = getWorkingCapital();
         return workingCapital.getMovementResponsible();
     }
+    @Deprecated
+    public boolean hasCaseDescription() {
+        return getCaseDescription() != null;
+    }
+
 }

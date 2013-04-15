@@ -108,7 +108,7 @@ public class WorkingCapitalAcquisition extends WorkingCapitalAcquisition_Base {
 
     public void unApprove() {
         setApproved(null);
-        removeApprover();
+        setApprover(null);
     }
 
     public void verify(User user) {
@@ -123,7 +123,7 @@ public class WorkingCapitalAcquisition extends WorkingCapitalAcquisition_Base {
 
     public void unVerify() {
         setVerified(null);
-        removeVerifier();
+        setVerifier(null);
     }
 
     public boolean isCanceledOrRejected() {
@@ -158,4 +158,79 @@ public class WorkingCapitalAcquisition extends WorkingCapitalAcquisition_Base {
     public boolean isConnectedToCurrentHost() {
         return getWorkingCapitalSystem() == WorkingCapitalSystem.getInstanceForCurrentHost();
     }
+    @Deprecated
+    public boolean hasDocumentNumber() {
+        return getDocumentNumber() != null;
+    }
+
+    @Deprecated
+    public boolean hasDescription() {
+        return getDescription() != null;
+    }
+
+    @Deprecated
+    public boolean hasValueWithoutVat() {
+        return getValueWithoutVat() != null;
+    }
+
+    @Deprecated
+    public boolean hasApproved() {
+        return getApproved() != null;
+    }
+
+    @Deprecated
+    public boolean hasRejectedApproval() {
+        return getRejectedApproval() != null;
+    }
+
+    @Deprecated
+    public boolean hasVerified() {
+        return getVerified() != null;
+    }
+
+    @Deprecated
+    public boolean hasNotVerified() {
+        return getNotVerified() != null;
+    }
+
+    @Deprecated
+    public boolean hasSubmitedForVerification() {
+        return getSubmitedForVerification() != null;
+    }
+
+    @Deprecated
+    public boolean hasIsCanceled() {
+        return getIsCanceled() != null;
+    }
+
+    @Deprecated
+    public boolean hasWorkingCapitalSystem() {
+        return getWorkingCapitalSystem() != null;
+    }
+
+    @Deprecated
+    public boolean hasWorkingCapitalAcquisitionTransaction() {
+        return getWorkingCapitalAcquisitionTransaction() != null;
+    }
+
+    @Deprecated
+    public boolean hasAcquisitionClassification() {
+        return getAcquisitionClassification() != null;
+    }
+
+    @Deprecated
+    public boolean hasWorkingCapital() {
+        return getWorkingCapital() != null;
+    }
+
+    @Deprecated
+    public boolean hasVerifier() {
+        return getVerifier() != null;
+    }
+
+    @Deprecated
+    public boolean hasApprover() {
+        return getApprover() != null;
+    }
+
 }

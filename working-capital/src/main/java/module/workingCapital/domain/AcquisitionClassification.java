@@ -70,7 +70,7 @@ public class AcquisitionClassification extends AcquisitionClassification_Base {
     @Atomic
     public void delete() {
         if (!hasAnyWorkingCapitalAcquisitions()) {
-            removeWorkingCapitalSystem();
+            setWorkingCapitalSystem(null);
             deleteDomainObject();
         }
     }
@@ -79,4 +79,34 @@ public class AcquisitionClassification extends AcquisitionClassification_Base {
     public boolean isConnectedToCurrentHost() {
         return getWorkingCapitalSystem() == WorkingCapitalSystem.getInstanceForCurrentHost();
     }
+    @Deprecated
+    public boolean hasDescription() {
+        return getDescription() != null;
+    }
+
+    @Deprecated
+    public boolean hasEconomicClassification() {
+        return getEconomicClassification() != null;
+    }
+
+    @Deprecated
+    public boolean hasPocCode() {
+        return getPocCode() != null;
+    }
+
+    @Deprecated
+    public java.util.Set<module.workingCapital.domain.WorkingCapitalAcquisition> getWorkingCapitalAcquisitions() {
+        return getWorkingCapitalAcquisitionsSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyWorkingCapitalAcquisitions() {
+        return !getWorkingCapitalAcquisitionsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasWorkingCapitalSystem() {
+        return getWorkingCapitalSystem() != null;
+    }
+
 }
