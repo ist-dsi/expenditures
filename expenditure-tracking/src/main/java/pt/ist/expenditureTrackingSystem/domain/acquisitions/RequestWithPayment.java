@@ -631,4 +631,34 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
         return true;
     }
 
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer> getFinancers() {
+        return getFinancersSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem> getRequestItems() {
+        return getRequestItemsSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyFinancers() {
+        return !getFinancersSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyRequestItems() {
+        return !getRequestItemsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasRequester() {
+        return getRequester() != null;
+    }
+
+    @Deprecated
+    public boolean hasRequestingUnit() {
+        return getRequestingUnit() != null;
+    }
+
 }

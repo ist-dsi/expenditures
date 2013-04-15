@@ -279,4 +279,14 @@ public class RefundItem extends RefundItem_Base {
         return invoices;
     }
 
+    @Deprecated
+    public boolean hasValueEstimation() {
+        return getValueEstimation() != null;
+    }
+
+    @Deprecated
+    public boolean hasItemNotExecuted() {
+        return getItemNotExecuted() != null;
+    }
+
 }

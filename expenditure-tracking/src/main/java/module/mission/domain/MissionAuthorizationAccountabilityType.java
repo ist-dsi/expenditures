@@ -46,4 +46,24 @@ public class MissionAuthorizationAccountabilityType extends MissionAuthorization
         return getMissionSystem() == VirtualHost.getVirtualHostForThread().getMissionSystem();
     }
 
+    @Deprecated
+    public java.util.Set<module.organization.domain.AccountabilityType> getAccountabilityTypes() {
+        return getAccountabilityTypesSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyAccountabilityTypes() {
+        return !getAccountabilityTypesSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAccountabilityType() {
+        return getAccountabilityType() != null;
+    }
+
+    @Deprecated
+    public boolean hasMissionSystem() {
+        return getMissionSystem() != null;
+    }
+
 }

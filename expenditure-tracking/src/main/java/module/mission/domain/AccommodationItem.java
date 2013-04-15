@@ -58,4 +58,14 @@ public class AccommodationItem extends AccommodationItem_Base {
         accommodationItem.setValue(getValue());
     }
 
+    @Deprecated
+    public boolean hasNumberOfNights() {
+        return getNumberOfNights() != null;
+    }
+
+    @Deprecated
+    public boolean hasValue() {
+        return getValue() != null;
+    }
+
 }

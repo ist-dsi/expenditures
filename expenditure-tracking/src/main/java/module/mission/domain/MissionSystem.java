@@ -305,4 +305,244 @@ public class MissionSystem extends MissionSystem_Base {
             activity.execute(activityInfo);
         }
     }
+    @Deprecated
+    public java.util.Set<module.mission.domain.PersonMissionAuthorization> getPersonMissionAuthorizations() {
+        return getPersonMissionAuthorizationsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.mission.domain.VehiclItemJustification> getVehiclItemJustification() {
+        return getVehiclItemJustificationSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.bennu.core.domain.VirtualHost> getVirtualHost() {
+        return getVirtualHostSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.mission.domain.MissionVersion> getMissionVersions() {
+        return getMissionVersionsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.mission.domain.TemporaryMissionItemEntry> getTemporaryMissionItemEntries() {
+        return getTemporaryMissionItemEntriesSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.mission.domain.MissionAuthorizationAccountabilityType> getMissionAuthorizationAccountabilityTypes() {
+        return getMissionAuthorizationAccountabilityTypesSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.mission.domain.DailyPersonelExpenseTable> getDailyPersonelExpenseTables() {
+        return getDailyPersonelExpenseTablesSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.bennu.core.domain.User> getVehicleAuthorizers() {
+        return getVehicleAuthorizersSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.mission.domain.MissionFinancer> getFinancer() {
+        return getFinancerSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.mission.domain.Mission> getMissions() {
+        return getMissionsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.mission.domain.DailyPersonelExpenseCategory> getDailyPersonelExpenseCategories() {
+        return getDailyPersonelExpenseCategoriesSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.mission.domain.MissionYear> getMissionYear() {
+        return getMissionYearSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.organization.domain.Unit> getUnitsWithResumedAuthorizations() {
+        return getUnitsWithResumedAuthorizationsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.mission.domain.Salary> getSalaries() {
+        return getSalariesSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.mission.domain.MissionProcess> getMissionProcesses() {
+        return getMissionProcessesSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.mission.domain.MissionProcessLateJustification> getMissionProcessLateJustification() {
+        return getMissionProcessLateJustificationSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.mission.domain.MissionChangeDescription> getMissionChangeDescription() {
+        return getMissionChangeDescriptionSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.mission.domain.MissionItemFinancer> getMissionItemFinancers() {
+        return getMissionItemFinancersSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.bennu.core.domain.User> getUsersWhoCanCancelMission() {
+        return getUsersWhoCanCancelMissionSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.mission.domain.MissionItem> getMissionItems() {
+        return getMissionItemsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.mission.domain.AccountabilityTypeQueue> getAccountabilityTypeQueues() {
+        return getAccountabilityTypeQueuesSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.organization.domain.Person> getGovernmentMembers() {
+        return getGovernmentMembersSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyPersonMissionAuthorizations() {
+        return !getPersonMissionAuthorizationsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyVehiclItemJustification() {
+        return !getVehiclItemJustificationSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyVirtualHost() {
+        return !getVirtualHostSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyMissionVersions() {
+        return !getMissionVersionsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyTemporaryMissionItemEntries() {
+        return !getTemporaryMissionItemEntriesSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyMissionAuthorizationAccountabilityTypes() {
+        return !getMissionAuthorizationAccountabilityTypesSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyDailyPersonelExpenseTables() {
+        return !getDailyPersonelExpenseTablesSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyVehicleAuthorizers() {
+        return !getVehicleAuthorizersSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyFinancer() {
+        return !getFinancerSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyMissions() {
+        return !getMissionsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyDailyPersonelExpenseCategories() {
+        return !getDailyPersonelExpenseCategoriesSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyMissionYear() {
+        return !getMissionYearSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyUnitsWithResumedAuthorizations() {
+        return !getUnitsWithResumedAuthorizationsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnySalaries() {
+        return !getSalariesSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyMissionProcesses() {
+        return !getMissionProcessesSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyMissionProcessLateJustification() {
+        return !getMissionProcessLateJustificationSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyMissionChangeDescription() {
+        return !getMissionChangeDescriptionSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyMissionItemFinancers() {
+        return !getMissionItemFinancersSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyUsersWhoCanCancelMission() {
+        return !getUsersWhoCanCancelMissionSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyMissionItems() {
+        return !getMissionItemsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyAccountabilityTypeQueues() {
+        return !getAccountabilityTypeQueuesSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyGovernmentMembers() {
+        return !getGovernmentMembersSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAllowGrantOwnerEquivalence() {
+        return getAllowGrantOwnerEquivalence() != null;
+    }
+
+    @Deprecated
+    public boolean hasMyOrg() {
+        return getMyOrg() != null;
+    }
+
+    @Deprecated
+    public boolean hasOrganizationalModel() {
+        return getOrganizationalModel() != null;
+    }
+
+    @Deprecated
+    public boolean hasCountry() {
+        return getCountry() != null;
+    }
+
 }

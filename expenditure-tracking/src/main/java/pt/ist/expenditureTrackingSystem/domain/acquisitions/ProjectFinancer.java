@@ -257,4 +257,24 @@ public class ProjectFinancer extends ProjectFinancer_Base {
         return result.toString();
     }
 
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessInvoice> getAllocatedInvoicesInProject() {
+        return getAllocatedInvoicesInProjectSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyAllocatedInvoicesInProject() {
+        return !getAllocatedInvoicesInProjectSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasProjectFundAllocationId() {
+        return getProjectFundAllocationId() != null;
+    }
+
+    @Deprecated
+    public boolean hasEffectiveProjectFundAllocationId() {
+        return getEffectiveProjectFundAllocationId() != null;
+    }
+
 }

@@ -222,4 +222,19 @@ public abstract class PersonelExpenseItem extends PersonelExpenseItem_Base {
         return false;
     }
 
+    @Deprecated
+    public boolean hasStart() {
+        return getStart() != null;
+    }
+
+    @Deprecated
+    public boolean hasEnd() {
+        return getEnd() != null;
+    }
+
+    @Deprecated
+    public boolean hasDailyPersonelExpenseCategory() {
+        return getDailyPersonelExpenseCategory() != null;
+    }
+
 }

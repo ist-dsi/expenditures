@@ -373,4 +373,69 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
         return acquisitionProcess.isActive() && acquisitionProcess.isAppiableForYear(year);
     }
 
+    @Deprecated
+    public boolean hasQuantity() {
+        return getQuantity() != null;
+    }
+
+    @Deprecated
+    public boolean hasUnitValue() {
+        return getUnitValue() != null;
+    }
+
+    @Deprecated
+    public boolean hasVatValue() {
+        return getVatValue() != null;
+    }
+
+    @Deprecated
+    public boolean hasAdditionalCostValue() {
+        return getAdditionalCostValue() != null;
+    }
+
+    @Deprecated
+    public boolean hasProposalReference() {
+        return getProposalReference() != null;
+    }
+
+    @Deprecated
+    public boolean hasRecipient() {
+        return getRecipient() != null;
+    }
+
+    @Deprecated
+    public boolean hasRecipientPhone() {
+        return getRecipientPhone() != null;
+    }
+
+    @Deprecated
+    public boolean hasRecipientEmail() {
+        return getRecipientEmail() != null;
+    }
+
+    @Deprecated
+    public boolean hasAddress() {
+        return getAddress() != null;
+    }
+
+    @Deprecated
+    public boolean hasRealQuantity() {
+        return getRealQuantity() != null;
+    }
+
+    @Deprecated
+    public boolean hasRealVatValue() {
+        return getRealVatValue() != null;
+    }
+
+    @Deprecated
+    public boolean hasRealUnitValue() {
+        return getRealUnitValue() != null;
+    }
+
+    @Deprecated
+    public boolean hasRealAdditionalCostValue() {
+        return getRealAdditionalCostValue() != null;
+    }
+
 }

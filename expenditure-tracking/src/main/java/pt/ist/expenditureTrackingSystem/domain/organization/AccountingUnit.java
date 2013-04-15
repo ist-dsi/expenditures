@@ -127,4 +127,104 @@ public class AccountingUnit extends AccountingUnit_Base {
         return getExpenditureTrackingSystem() == ExpenditureTrackingSystem.getInstance();
     }
 
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.organization.Person> getPeople() {
+        return getPeopleSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.organization.Unit> getUnits() {
+        return getUnitsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer> getFinancers() {
+        return getFinancersSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.organization.Person> getTreasuryMembers() {
+        return getTreasuryMembersSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.mission.domain.MissionFinancer> getMissionFinancer() {
+        return getMissionFinancerSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.organization.Person> getResponsibleProjectAccountants() {
+        return getResponsibleProjectAccountantsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.organization.Person> getProjectAccountants() {
+        return getProjectAccountantsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.SavedSearch> getAccountingUnitsSearches() {
+        return getAccountingUnitsSearchesSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.organization.Person> getResponsiblePeople() {
+        return getResponsiblePeopleSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyPeople() {
+        return !getPeopleSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyUnits() {
+        return !getUnitsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyFinancers() {
+        return !getFinancersSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyTreasuryMembers() {
+        return !getTreasuryMembersSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyMissionFinancer() {
+        return !getMissionFinancerSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyResponsibleProjectAccountants() {
+        return !getResponsibleProjectAccountantsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyProjectAccountants() {
+        return !getProjectAccountantsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyAccountingUnitsSearches() {
+        return !getAccountingUnitsSearchesSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyResponsiblePeople() {
+        return !getResponsiblePeopleSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasName() {
+        return getName() != null;
+    }
+
+    @Deprecated
+    public boolean hasExpenditureTrackingSystem() {
+        return getExpenditureTrackingSystem() != null;
+    }
+
 }

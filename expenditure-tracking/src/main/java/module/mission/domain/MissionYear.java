@@ -513,4 +513,29 @@ public class MissionYear extends MissionYear_Base {
         return getMissionSystem() == VirtualHost.getVirtualHostForThread().getMissionSystem();
     }
 
+    @Deprecated
+    public java.util.Set<module.mission.domain.MissionProcess> getMissionProcess() {
+        return getMissionProcessSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyMissionProcess() {
+        return !getMissionProcessSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasYear() {
+        return getYear() != null;
+    }
+
+    @Deprecated
+    public boolean hasCounter() {
+        return getCounter() != null;
+    }
+
+    @Deprecated
+    public boolean hasMissionSystem() {
+        return getMissionSystem() != null;
+    }
+
 }

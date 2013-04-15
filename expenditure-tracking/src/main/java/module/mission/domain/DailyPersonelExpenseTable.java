@@ -147,4 +147,29 @@ public class DailyPersonelExpenseTable extends DailyPersonelExpenseTable_Base {
         return getMissionSystem() == VirtualHost.getVirtualHostForThread().getMissionSystem();
     }
 
+    @Deprecated
+    public java.util.Set<module.mission.domain.DailyPersonelExpenseCategory> getDailyPersonelExpenseCategories() {
+        return getDailyPersonelExpenseCategoriesSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyDailyPersonelExpenseCategories() {
+        return !getDailyPersonelExpenseCategoriesSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAplicableSince() {
+        return getAplicableSince() != null;
+    }
+
+    @Deprecated
+    public boolean hasAplicableToMissionType() {
+        return getAplicableToMissionType() != null;
+    }
+
+    @Deprecated
+    public boolean hasMissionSystem() {
+        return getMissionSystem() != null;
+    }
+
 }

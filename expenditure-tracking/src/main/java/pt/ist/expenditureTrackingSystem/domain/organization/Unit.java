@@ -781,4 +781,144 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
         return person;
     }
 
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.SavedSearch> getPayingUnitSearches() {
+        return getPayingUnitSearchesSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer> getFinancedItems() {
+        return getFinancedItemsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.mission.domain.Mission> getMissions() {
+        return getMissionsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.mission.domain.MissionFinancer> getFinancers() {
+        return getFinancersSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.organization.Person> getObservers() {
+        return getObserversSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.announcements.CCPAnnouncement> getRequestAnnouncements() {
+        return getRequestAnnouncementsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationLog> getAuthorizationLogs() {
+        return getAuthorizationLogsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.SavedSearch> getUnitSearches() {
+        return getUnitSearchesSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.announcements.CCPAnnouncement> getBuyAnnouncements() {
+        return getBuyAnnouncementsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization> getAuthorizations() {
+        return getAuthorizationsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestWithPayment> getRequests() {
+        return getRequestsSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyPayingUnitSearches() {
+        return !getPayingUnitSearchesSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyFinancedItems() {
+        return !getFinancedItemsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyMissions() {
+        return !getMissionsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyFinancers() {
+        return !getFinancersSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyObservers() {
+        return !getObserversSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyRequestAnnouncements() {
+        return !getRequestAnnouncementsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyAuthorizationLogs() {
+        return !getAuthorizationLogsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyUnitSearches() {
+        return !getUnitSearchesSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyBuyAnnouncements() {
+        return !getBuyAnnouncementsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyAuthorizations() {
+        return !getAuthorizationsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyRequests() {
+        return !getRequestsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasDefaultRegeimIsCCP() {
+        return getDefaultRegeimIsCCP() != null;
+    }
+
+    @Deprecated
+    public boolean hasAccountingUnit() {
+        return getAccountingUnit() != null;
+    }
+
+    @Deprecated
+    public boolean hasUnit() {
+        return getUnit() != null;
+    }
+
+    @Deprecated
+    public boolean hasExpenditureTrackingSystemFromTopLevelUnit() {
+        return getExpenditureTrackingSystemFromTopLevelUnit() != null;
+    }
+
+    @Deprecated
+    public boolean hasAccountManager() {
+        return getAccountManager() != null;
+    }
+
+    @Deprecated
+    public boolean hasExpenditureTrackingSystem() {
+        return getExpenditureTrackingSystem() != null;
+    }
+
 }

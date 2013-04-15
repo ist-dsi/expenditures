@@ -155,4 +155,24 @@ public class Salary extends Salary_Base {
         return getMissionSystem() == VirtualHost.getVirtualHostForThread().getMissionSystem();
     }
 
+    @Deprecated
+    public java.util.Set<module.organization.domain.Person> getPeople() {
+        return getPeopleSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyPeople() {
+        return !getPeopleSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasValue() {
+        return getValue() != null;
+    }
+
+    @Deprecated
+    public boolean hasMissionSystem() {
+        return getMissionSystem() != null;
+    }
+
 }

@@ -39,4 +39,9 @@ public class ExpenditureWidgetOptions extends ExpenditureWidgetOptions_Base {
         super();
         setMaxListSize(maxListSize);
     }
+    @Deprecated
+    public boolean hasMaxListSize() {
+        return getMaxListSize() != null;
+    }
+
 }

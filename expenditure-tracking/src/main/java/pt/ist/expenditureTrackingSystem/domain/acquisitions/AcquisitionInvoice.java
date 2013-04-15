@@ -154,4 +154,9 @@ public class AcquisitionInvoice extends AcquisitionInvoice_Base {
         }
     }
 
+    @Deprecated
+    public boolean hasConfirmationReport() {
+        return getConfirmationReport() != null;
+    }
+
 }

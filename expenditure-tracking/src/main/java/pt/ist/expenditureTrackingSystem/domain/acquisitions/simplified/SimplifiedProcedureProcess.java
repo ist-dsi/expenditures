@@ -486,4 +486,9 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
         return request.getGoodsOrServiceClassification();
     }
 
+    @Deprecated
+    public boolean hasProcessClassification() {
+        return getProcessClassification() != null;
+    }
+
 }

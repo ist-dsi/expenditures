@@ -137,4 +137,9 @@ public class AnnouncementProcess extends AnnouncementProcess_Base {
     public boolean isActive() {
         return true;
     }
+    @Deprecated
+    public boolean hasAnnouncement() {
+        return getAnnouncement() != null;
+    }
+
 }

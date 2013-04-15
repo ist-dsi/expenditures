@@ -130,4 +130,14 @@ public class MissionItemProjectFinancer extends MissionItemProjectFinancer_Base 
         super.delete();
     }
 
+    @Deprecated
+    public boolean hasProjectFundAllocationId() {
+        return getProjectFundAllocationId() != null;
+    }
+
+    @Deprecated
+    public boolean hasMissionVersionFromProjectArchive() {
+        return getMissionVersionFromProjectArchive() != null;
+    }
+
 }

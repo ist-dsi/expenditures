@@ -87,4 +87,29 @@ public class DashBoard extends DashBoard_Base {
         return getExpenditureTrackingSystem() == ExpenditureTrackingSystem.getInstance();
     }
 
+    @Deprecated
+    public boolean hasColumn1() {
+        return getColumn1() != null;
+    }
+
+    @Deprecated
+    public boolean hasColumn2() {
+        return getColumn2() != null;
+    }
+
+    @Deprecated
+    public boolean hasColumn3() {
+        return getColumn3() != null;
+    }
+
+    @Deprecated
+    public boolean hasExpenditureTrackingSystem() {
+        return getExpenditureTrackingSystem() != null;
+    }
+
+    @Deprecated
+    public boolean hasPerson() {
+        return getPerson() != null;
+    }
+
 }

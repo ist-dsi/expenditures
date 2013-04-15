@@ -179,4 +179,84 @@ public class Authorization extends Authorization_Base {
         return getExpenditureTrackingSystem() == ExpenditureTrackingSystem.getInstance();
     }
 
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.authorizations.DelegatedAuthorization> getDelegatedAuthorizations() {
+        return getDelegatedAuthorizationsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.mission.domain.MissionFinancer> getAuthorizedMissionFinancers() {
+        return getAuthorizedMissionFinancersSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.mission.domain.Mission> getApprovedMissions() {
+        return getApprovedMissionsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.mission.domain.MissionFinancer> getApprovedMissionFinancers() {
+        return getApprovedMissionFinancersSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyDelegatedAuthorizations() {
+        return !getDelegatedAuthorizationsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyAuthorizedMissionFinancers() {
+        return !getAuthorizedMissionFinancersSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyApprovedMissions() {
+        return !getApprovedMissionsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyApprovedMissionFinancers() {
+        return !getApprovedMissionFinancersSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAuthorizationType() {
+        return getAuthorizationType() != null;
+    }
+
+    @Deprecated
+    public boolean hasCanDelegate() {
+        return getCanDelegate() != null;
+    }
+
+    @Deprecated
+    public boolean hasStartDate() {
+        return getStartDate() != null;
+    }
+
+    @Deprecated
+    public boolean hasEndDate() {
+        return getEndDate() != null;
+    }
+
+    @Deprecated
+    public boolean hasMaxAmount() {
+        return getMaxAmount() != null;
+    }
+
+    @Deprecated
+    public boolean hasPerson() {
+        return getPerson() != null;
+    }
+
+    @Deprecated
+    public boolean hasExpenditureTrackingSystem() {
+        return getExpenditureTrackingSystem() != null;
+    }
+
+    @Deprecated
+    public boolean hasUnit() {
+        return getUnit() != null;
+    }
+
 }

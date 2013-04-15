@@ -98,4 +98,29 @@ public class Role extends Role_Base {
         return getExpenditureTrackingSystem() == ExpenditureTrackingSystem.getInstance();
     }
 
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.organization.Person> getPerson() {
+        return getPersonSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyPerson() {
+        return !getPersonSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasRoleType() {
+        return getRoleType() != null;
+    }
+
+    @Deprecated
+    public boolean hasSystemRole() {
+        return getSystemRole() != null;
+    }
+
+    @Deprecated
+    public boolean hasExpenditureTrackingSystem() {
+        return getExpenditureTrackingSystem() != null;
+    }
+
 }

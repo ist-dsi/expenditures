@@ -81,4 +81,9 @@ public class PurchaseOrderDocument extends PurchaseOrderDocument_Base {
         return genericProcess != null && genericProcess.isConnectedToCurrentHost();
     }
 
+    @Deprecated
+    public boolean hasRequestId() {
+        return getRequestId() != null;
+    }
+
 }

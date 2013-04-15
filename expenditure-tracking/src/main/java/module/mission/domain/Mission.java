@@ -1539,4 +1539,129 @@ public abstract class Mission extends Mission_Base {
         return missionVersion == null ? Collections.<MissionItem> emptySet() : missionVersion.getMissionItems();
     }
 
+    @Deprecated
+    public java.util.Set<module.mission.domain.MissionVersion> getMissionVersions() {
+        return getMissionVersionsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.mission.domain.PersonMissionAuthorization> getPersonMissionAuthorizations() {
+        return getPersonMissionAuthorizationsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.organization.domain.Person> getParticipantes() {
+        return getParticipantesSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.mission.domain.MissionChangeDescription> getMissionChangeDescription() {
+        return getMissionChangeDescriptionSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.organization.domain.Person> getParticipantesWithoutSalary() {
+        return getParticipantesWithoutSalarySet();
+    }
+
+    @Deprecated
+    public boolean hasAnyMissionVersions() {
+        return !getMissionVersionsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyPersonMissionAuthorizations() {
+        return !getPersonMissionAuthorizationsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyParticipantes() {
+        return !getParticipantesSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyMissionChangeDescription() {
+        return !getMissionChangeDescriptionSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyParticipantesWithoutSalary() {
+        return !getParticipantesWithoutSalarySet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasLocation() {
+        return getLocation() != null;
+    }
+
+    @Deprecated
+    public boolean hasObjective() {
+        return getObjective() != null;
+    }
+
+    @Deprecated
+    public boolean hasGrantOwnerEquivalence() {
+        return getGrantOwnerEquivalence() != null;
+    }
+
+    @Deprecated
+    public boolean hasIsApprovedByMissionResponsible() {
+        return getIsApprovedByMissionResponsible() != null;
+    }
+
+    @Deprecated
+    public boolean hasFundAllocationLog() {
+        return getFundAllocationLog() != null;
+    }
+
+    @Deprecated
+    public boolean hasServiceGaranteeInstante() {
+        return getServiceGaranteeInstante() != null;
+    }
+
+    @Deprecated
+    public boolean hasDaparture() {
+        return getDaparture() != null;
+    }
+
+    @Deprecated
+    public boolean hasArrival() {
+        return getArrival() != null;
+    }
+
+    @Deprecated
+    public boolean hasRequestingUnit() {
+        return getRequestingUnit() != null;
+    }
+
+    @Deprecated
+    public boolean hasMissionResponsible() {
+        return getMissionResponsible() != null;
+    }
+
+    @Deprecated
+    public boolean hasRequestingPerson() {
+        return getRequestingPerson() != null;
+    }
+
+    @Deprecated
+    public boolean hasMissionSystem() {
+        return getMissionSystem() != null;
+    }
+
+    @Deprecated
+    public boolean hasApprovalForMissionWithNoFinancers() {
+        return getApprovalForMissionWithNoFinancers() != null;
+    }
+
+    @Deprecated
+    public boolean hasServiceGaranteePerson() {
+        return getServiceGaranteePerson() != null;
+    }
+
+    @Deprecated
+    public boolean hasMissionProcess() {
+        return getMissionProcess() != null;
+    }
+
 }

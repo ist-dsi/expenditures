@@ -685,4 +685,54 @@ public abstract class MissionProcess extends MissionProcess_Base {
             association.delete();
         }
     }
+    @Deprecated
+    public java.util.Set<module.mission.domain.MissionProcessLateJustification> getMissionProcessLateJustifications() {
+        return getMissionProcessLateJustificationsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess> getPaymentProcess() {
+        return getPaymentProcessSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyMissionProcessLateJustifications() {
+        return !getMissionProcessLateJustificationsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyPaymentProcess() {
+        return !getPaymentProcessSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasIsUnderConstruction() {
+        return getIsUnderConstruction() != null;
+    }
+
+    @Deprecated
+    public boolean hasIsCanceled() {
+        return getIsCanceled() != null;
+    }
+
+    @Deprecated
+    public boolean hasMissionYear() {
+        return getMissionYear() != null;
+    }
+
+    @Deprecated
+    public boolean hasMissionProcessAssociation() {
+        return getMissionProcessAssociation() != null;
+    }
+
+    @Deprecated
+    public boolean hasMissionSystem() {
+        return getMissionSystem() != null;
+    }
+
+    @Deprecated
+    public boolean hasMission() {
+        return getMission() != null;
+    }
+
 }

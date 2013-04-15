@@ -59,4 +59,9 @@ public class ForeignMission extends ForeignMission_Base {
         return country == null ? getLocation() : getLocation() + ", " + country.getName().getContent();
     }
 
+    @Deprecated
+    public boolean hasCountry() {
+        return getCountry() != null;
+    }
+
 }

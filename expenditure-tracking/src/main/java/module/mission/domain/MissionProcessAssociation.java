@@ -97,4 +97,19 @@ public class MissionProcessAssociation extends MissionProcessAssociation_Base {
         removeMyOrg();
         deleteDomainObject();
     }
+    @Deprecated
+    public java.util.Set<module.mission.domain.MissionProcess> getMissionProcesses() {
+        return getMissionProcessesSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyMissionProcesses() {
+        return !getMissionProcessesSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasMyOrg() {
+        return getMyOrg() != null;
+    }
+
 }

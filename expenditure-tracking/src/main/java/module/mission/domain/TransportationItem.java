@@ -28,4 +28,14 @@ public abstract class TransportationItem extends TransportationItem_Base {
         transportationItem.setValue(getValue());
     }
 
+    @Deprecated
+    public boolean hasItinerary() {
+        return getItinerary() != null;
+    }
+
+    @Deprecated
+    public boolean hasValue() {
+        return getValue() != null;
+    }
+
 }

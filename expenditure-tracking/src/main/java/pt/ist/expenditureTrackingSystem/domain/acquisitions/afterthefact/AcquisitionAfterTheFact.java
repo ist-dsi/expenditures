@@ -108,4 +108,39 @@ public class AcquisitionAfterTheFact extends AcquisitionAfterTheFact_Base {
         return year == i || year == i - 1 || year == i - 2;
     }
 
+    @Deprecated
+    public boolean hasAfterTheFactAcquisitionType() {
+        return getAfterTheFactAcquisitionType() != null;
+    }
+
+    @Deprecated
+    public boolean hasValue() {
+        return getValue() != null;
+    }
+
+    @Deprecated
+    public boolean hasVatValue() {
+        return getVatValue() != null;
+    }
+
+    @Deprecated
+    public boolean hasDescription() {
+        return getDescription() != null;
+    }
+
+    @Deprecated
+    public boolean hasDeletedState() {
+        return getDeletedState() != null;
+    }
+
+    @Deprecated
+    public boolean hasSupplier() {
+        return getSupplier() != null;
+    }
+
+    @Deprecated
+    public boolean hasAfterTheFactAcquisitionProcess() {
+        return getAfterTheFactAcquisitionProcess() != null;
+    }
+
 }

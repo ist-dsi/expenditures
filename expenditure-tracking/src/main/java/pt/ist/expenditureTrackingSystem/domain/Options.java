@@ -54,4 +54,29 @@ public class Options extends Options_Base {
         return getExpenditureTrackingSystem() == ExpenditureTrackingSystem.getInstance();
     }
 
+    @Deprecated
+    public boolean hasDisplayAuthorizationPending() {
+        return getDisplayAuthorizationPending() != null;
+    }
+
+    @Deprecated
+    public boolean hasRecurseAuthorizationPendingUnits() {
+        return getRecurseAuthorizationPendingUnits() != null;
+    }
+
+    @Deprecated
+    public boolean hasReceiveNotificationsByEmail() {
+        return getReceiveNotificationsByEmail() != null;
+    }
+
+    @Deprecated
+    public boolean hasExpenditureTrackingSystem() {
+        return getExpenditureTrackingSystem() != null;
+    }
+
+    @Deprecated
+    public boolean hasPerson() {
+        return getPerson() != null;
+    }
+
 }

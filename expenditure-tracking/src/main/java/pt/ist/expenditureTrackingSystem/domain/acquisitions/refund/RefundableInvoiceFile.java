@@ -200,4 +200,24 @@ public class RefundableInvoiceFile extends RefundableInvoiceFile_Base {
         return false;
     }
 
+    @Deprecated
+    public boolean hasValue() {
+        return getValue() != null;
+    }
+
+    @Deprecated
+    public boolean hasVatValue() {
+        return getVatValue() != null;
+    }
+
+    @Deprecated
+    public boolean hasRefundableValue() {
+        return getRefundableValue() != null;
+    }
+
+    @Deprecated
+    public boolean hasSupplier() {
+        return getSupplier() != null;
+    }
+
 }

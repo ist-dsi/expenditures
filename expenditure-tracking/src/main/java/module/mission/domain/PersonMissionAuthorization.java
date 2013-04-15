@@ -276,4 +276,49 @@ public class PersonMissionAuthorization extends PersonMissionAuthorization_Base 
     public boolean checkIsConnectedToList() {
         return ((hasMission() && !hasPrevious()) || (!hasMission() && hasPrevious()));
     }
+    @Deprecated
+    public boolean hasAuthorizationDateTime() {
+        return getAuthorizationDateTime() != null;
+    }
+
+    @Deprecated
+    public boolean hasMissionSystem() {
+        return getMissionSystem() != null;
+    }
+
+    @Deprecated
+    public boolean hasSubject() {
+        return getSubject() != null;
+    }
+
+    @Deprecated
+    public boolean hasMission() {
+        return getMission() != null;
+    }
+
+    @Deprecated
+    public boolean hasAuthority() {
+        return getAuthority() != null;
+    }
+
+    @Deprecated
+    public boolean hasDelegatedAuthority() {
+        return getDelegatedAuthority() != null;
+    }
+
+    @Deprecated
+    public boolean hasUnit() {
+        return getUnit() != null;
+    }
+
+    @Deprecated
+    public boolean hasPrevious() {
+        return getPrevious() != null;
+    }
+
+    @Deprecated
+    public boolean hasNext() {
+        return getNext() != null;
+    }
+
 }

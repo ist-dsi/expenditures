@@ -160,4 +160,9 @@ public class AcquisitionProposalDocument extends AcquisitionProposalDocument_Bas
         return genericProcess != null && genericProcess.isConnectedToCurrentHost();
     }
 
+    @Deprecated
+    public boolean hasProposalId() {
+        return getProposalId() != null;
+    }
+
 }

@@ -303,4 +303,9 @@ public class ProjectAcquisitionFundAllocationRequest extends ProjectAcquisitionF
         }
     }
 
+    @Deprecated
+    public boolean hasUnitItem() {
+        return getUnitItem() != null;
+    }
+
 }

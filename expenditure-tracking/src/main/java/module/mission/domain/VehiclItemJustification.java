@@ -21,4 +21,24 @@ public class VehiclItemJustification extends VehiclItemJustification_Base {
         return getMissionSystem() == VirtualHost.getVirtualHostForThread().getMissionSystem();
     }
 
+    @Deprecated
+    public boolean hasMotive() {
+        return getMotive() != null;
+    }
+
+    @Deprecated
+    public boolean hasJustification() {
+        return getJustification() != null;
+    }
+
+    @Deprecated
+    public boolean hasMissionSystem() {
+        return getMissionSystem() != null;
+    }
+
+    @Deprecated
+    public boolean hasVehiclItem() {
+        return getVehiclItem() != null;
+    }
+
 }

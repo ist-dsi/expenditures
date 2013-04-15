@@ -708,4 +708,39 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
         return goodsValue.isGreaterThan(servicesValue) ? AcquisitionItemClassification.GOODS : AcquisitionItemClassification.SERVICES;
     }
 
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.organization.Supplier> getSuppliers() {
+        return getSuppliersSet();
+    }
+
+    @Deprecated
+    public boolean hasAnySuppliers() {
+        return !getSuppliersSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasPaymentReference() {
+        return getPaymentReference() != null;
+    }
+
+    @Deprecated
+    public boolean hasContractSimpleDescription() {
+        return getContractSimpleDescription() != null;
+    }
+
+    @Deprecated
+    public boolean hasSelectedSupplier() {
+        return getSelectedSupplier() != null;
+    }
+
+    @Deprecated
+    public boolean hasAcquisitionProcess() {
+        return getAcquisitionProcess() != null;
+    }
+
+    @Deprecated
+    public boolean hasRefundee() {
+        return getRefundee() != null;
+    }
+
 }

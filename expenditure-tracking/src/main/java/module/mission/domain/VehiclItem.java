@@ -105,4 +105,19 @@ public abstract class VehiclItem extends VehiclItem_Base {
         }
         return false;
     }
+    @Deprecated
+    public boolean hasAuthorized() {
+        return getAuthorized() != null;
+    }
+
+    @Deprecated
+    public boolean hasVehiclItemJustification() {
+        return getVehiclItemJustification() != null;
+    }
+
+    @Deprecated
+    public boolean hasDriver() {
+        return getDriver() != null;
+    }
+
 }

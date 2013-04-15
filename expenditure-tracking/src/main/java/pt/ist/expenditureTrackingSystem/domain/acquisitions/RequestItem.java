@@ -373,4 +373,49 @@ public abstract class RequestItem extends RequestItem_Base {
         return getExpenditureTrackingSystem() == ExpenditureTrackingSystem.getInstance();
     }
 
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessInvoice> getInvoicesFiles() {
+        return getInvoicesFilesSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.acquisitions.UnitItem> getUnitItems() {
+        return getUnitItemsSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyInvoicesFiles() {
+        return !getInvoicesFilesSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyUnitItems() {
+        return !getUnitItemsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasDescription() {
+        return getDescription() != null;
+    }
+
+    @Deprecated
+    public boolean hasClassification() {
+        return getClassification() != null;
+    }
+
+    @Deprecated
+    public boolean hasExpenditureTrackingSystem() {
+        return getExpenditureTrackingSystem() != null;
+    }
+
+    @Deprecated
+    public boolean hasCPVReference() {
+        return getCPVReference() != null;
+    }
+
+    @Deprecated
+    public boolean hasRequest() {
+        return getRequest() != null;
+    }
+
 }

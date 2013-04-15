@@ -618,4 +618,14 @@ public class RefundProcess extends RefundProcess_Base {
         return request.getGoodsOrServiceClassification();
     }
 
+    @Deprecated
+    public boolean hasUnderCCPRegime() {
+        return getUnderCCPRegime() != null;
+    }
+
+    @Deprecated
+    public boolean hasRequest() {
+        return getRequest() != null;
+    }
+
 }

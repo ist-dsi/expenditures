@@ -254,4 +254,14 @@ public class AfterTheFactAcquisitionProcess extends AfterTheFactAcquisitionProce
         return null;
     }
 
+    @Deprecated
+    public boolean hasAcquisitionAfterTheFact() {
+        return getAcquisitionAfterTheFact() != null;
+    }
+
+    @Deprecated
+    public boolean hasImportFile() {
+        return getImportFile() != null;
+    }
+
 }

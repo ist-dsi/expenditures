@@ -46,4 +46,19 @@ public class AccountabilityTypeQueue extends AccountabilityTypeQueue_Base {
     public boolean checkHasWorkflowQueue() {
         return hasWorkflowQueue();
     }
+    @Deprecated
+    public boolean hasWorkflowQueue() {
+        return getWorkflowQueue() != null;
+    }
+
+    @Deprecated
+    public boolean hasAccountabilityType() {
+        return getAccountabilityType() != null;
+    }
+
+    @Deprecated
+    public boolean hasMissionSystem() {
+        return getMissionSystem() != null;
+    }
+
 }

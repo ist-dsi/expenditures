@@ -282,4 +282,39 @@ public abstract class MissionItem extends MissionItem_Base {
         }
         return false;
     }
+    @Deprecated
+    public java.util.Set<module.mission.domain.MissionItemFinancer> getMissionItemFinancers() {
+        return getMissionItemFinancersSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.organization.domain.Person> getPeople() {
+        return getPeopleSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyMissionItemFinancers() {
+        return !getMissionItemFinancersSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyPeople() {
+        return !getPeopleSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasMissionVersion() {
+        return getMissionVersion() != null;
+    }
+
+    @Deprecated
+    public boolean hasTemporaryMissionItemEntry() {
+        return getTemporaryMissionItemEntry() != null;
+    }
+
+    @Deprecated
+    public boolean hasMissionSystem() {
+        return getMissionSystem() != null;
+    }
+
 }

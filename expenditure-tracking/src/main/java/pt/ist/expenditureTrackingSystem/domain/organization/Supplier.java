@@ -460,4 +460,74 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
         return hasAnySupplierContact() ? getSupplierContactIterator().next().getEmail() : super.getEmail();
     }
 
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest> getAcquisitionRequests() {
+        return getAcquisitionRequestsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.SavedSearch> getSupplierSearches() {
+        return getSupplierSearchesSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AcquisitionAfterTheFact> getAcquisitionsAfterTheFact() {
+        return getAcquisitionsAfterTheFactSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundableInvoiceFile> getRefundInvoices() {
+        return getRefundInvoicesSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest> getPossibleAcquisitionRequests() {
+        return getPossibleAcquisitionRequestsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.announcements.CCPAnnouncement> getAnnouncements() {
+        return getAnnouncementsSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyAcquisitionRequests() {
+        return !getAcquisitionRequestsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnySupplierSearches() {
+        return !getSupplierSearchesSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyAcquisitionsAfterTheFact() {
+        return !getAcquisitionsAfterTheFactSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyRefundInvoices() {
+        return !getRefundInvoicesSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyPossibleAcquisitionRequests() {
+        return !getPossibleAcquisitionRequestsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyAnnouncements() {
+        return !getAnnouncementsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasMyOrg() {
+        return getMyOrg() != null;
+    }
+
+    @Deprecated
+    public boolean hasExpenditureTrackingSystem() {
+        return getExpenditureTrackingSystem() != null;
+    }
+
 }

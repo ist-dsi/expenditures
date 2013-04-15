@@ -82,4 +82,19 @@ public class ImportFile extends ImportFile_Base {
         return false;
     }
 
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionProcess> getAfterTheFactAcquisitionProcesses() {
+        return getAfterTheFactAcquisitionProcessesSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyAfterTheFactAcquisitionProcesses() {
+        return !getAfterTheFactAcquisitionProcessesSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasActive() {
+        return getActive() != null;
+    }
+
 }

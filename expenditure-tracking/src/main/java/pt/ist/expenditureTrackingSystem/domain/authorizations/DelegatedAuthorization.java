@@ -95,4 +95,9 @@ public class DelegatedAuthorization extends DelegatedAuthorization_Base {
         super.delete();
     }
 
+    @Deprecated
+    public boolean hasAuthorization() {
+        return getAuthorization() != null;
+    }
+
 }

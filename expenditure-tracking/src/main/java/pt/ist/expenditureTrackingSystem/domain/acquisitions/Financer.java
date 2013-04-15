@@ -414,4 +414,69 @@ public class Financer extends Financer_Base {
         return commitmentNumber != null && !commitmentNumber.isEmpty();
     }
 
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.acquisitions.UnitItem> getUnitItems() {
+        return getUnitItemsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessInvoice> getAllocatedInvoices() {
+        return getAllocatedInvoicesSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyUnitItems() {
+        return !getUnitItemsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyAllocatedInvoices() {
+        return !getAllocatedInvoicesSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasFundAllocationId() {
+        return getFundAllocationId() != null;
+    }
+
+    @Deprecated
+    public boolean hasEffectiveFundAllocationId() {
+        return getEffectiveFundAllocationId() != null;
+    }
+
+    @Deprecated
+    public boolean hasPaymentDiaryNumber() {
+        return getPaymentDiaryNumber() != null;
+    }
+
+    @Deprecated
+    public boolean hasTransactionNumber() {
+        return getTransactionNumber() != null;
+    }
+
+    @Deprecated
+    public boolean hasCommitmentNumber() {
+        return getCommitmentNumber() != null;
+    }
+
+    @Deprecated
+    public boolean hasUnit() {
+        return getUnit() != null;
+    }
+
+    @Deprecated
+    public boolean hasAccountingUnit() {
+        return getAccountingUnit() != null;
+    }
+
+    @Deprecated
+    public boolean hasFundedRequest() {
+        return getFundedRequest() != null;
+    }
+
+    @Deprecated
+    public boolean hasExpenditureTrackingSystem() {
+        return getExpenditureTrackingSystem() != null;
+    }
+
 }

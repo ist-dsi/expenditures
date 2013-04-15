@@ -449,4 +449,264 @@ public class Person extends Person_Base /* implements Indexable, Searchable */{
         return result;
     }
 
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationLog> getAuthorizationLogs() {
+        return getAuthorizationLogsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization> getAuthorizations() {
+        return getAuthorizationsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit> getAccountingUnits() {
+        return getAccountingUnitsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationLog> getAuthorizationLogsForWho() {
+        return getAuthorizationLogsForWhoSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.organization.DeliveryInfo> getDeliveryInfos() {
+        return getDeliveryInfosSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit> getTreasuryAccountingUnits() {
+        return getTreasuryAccountingUnitsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.SavedSearch> getRequestorSearches() {
+        return getRequestorSearchesSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.SavedSearch> getTakenSearches() {
+        return getTakenSearchesSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.ProcessState> getProcessStates() {
+        return getProcessStatesSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.organization.Unit> getObservableUnits() {
+        return getObservableUnitsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestWithPayment> getRequestsWithyPayment() {
+        return getRequestsWithyPaymentSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.SavedSearch> getSaveSearches() {
+        return getSaveSearchesSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.organization.Unit> getUnitForAccountManager() {
+        return getUnitForAccountManagerSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.Role> getRoles() {
+        return getRolesSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest> getRefundedAcquisitionRequests() {
+        return getRefundedAcquisitionRequestsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.SavedSearch> getAccountManagerSearches() {
+        return getAccountManagerSearchesSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit> getResponsibleProjectAccountingUnits() {
+        return getResponsibleProjectAccountingUnitsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit> getProjectAccountingUnits() {
+        return getProjectAccountingUnitsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.announcements.CCPAnnouncement> getAnnouncements() {
+        return getAnnouncementsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit> getResponsibleAccountingUnits() {
+        return getResponsibleAccountingUnitsSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyAuthorizationLogs() {
+        return !getAuthorizationLogsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyAuthorizations() {
+        return !getAuthorizationsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyAccountingUnits() {
+        return !getAccountingUnitsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyAuthorizationLogsForWho() {
+        return !getAuthorizationLogsForWhoSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyDeliveryInfos() {
+        return !getDeliveryInfosSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyTreasuryAccountingUnits() {
+        return !getTreasuryAccountingUnitsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyRequestorSearches() {
+        return !getRequestorSearchesSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyTakenSearches() {
+        return !getTakenSearchesSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyProcessStates() {
+        return !getProcessStatesSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyObservableUnits() {
+        return !getObservableUnitsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyRequestsWithyPayment() {
+        return !getRequestsWithyPaymentSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnySaveSearches() {
+        return !getSaveSearchesSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyUnitForAccountManager() {
+        return !getUnitForAccountManagerSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyRoles() {
+        return !getRolesSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyRefundedAcquisitionRequests() {
+        return !getRefundedAcquisitionRequestsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyAccountManagerSearches() {
+        return !getAccountManagerSearchesSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyResponsibleProjectAccountingUnits() {
+        return !getResponsibleProjectAccountingUnitsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyProjectAccountingUnits() {
+        return !getProjectAccountingUnitsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyAnnouncements() {
+        return !getAnnouncementsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyResponsibleAccountingUnits() {
+        return !getResponsibleAccountingUnitsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasName() {
+        return getName() != null;
+    }
+
+    @Deprecated
+    public boolean hasUsername() {
+        return getUsername() != null;
+    }
+
+    @Deprecated
+    public boolean hasPassword() {
+        return getPassword() != null;
+    }
+
+    @Deprecated
+    public boolean hasEmail() {
+        return getEmail() != null;
+    }
+
+    @Deprecated
+    public boolean hasLogoutDateTime() {
+        return getLogoutDateTime() != null;
+    }
+
+    @Deprecated
+    public boolean hasDefaultSearch() {
+        return getDefaultSearch() != null;
+    }
+
+    @Deprecated
+    public boolean hasExpenditureTrackingSystem() {
+        return getExpenditureTrackingSystem() != null;
+    }
+
+    @Deprecated
+    public boolean hasRefundee() {
+        return getRefundee() != null;
+    }
+
+    @Deprecated
+    public boolean hasDashBoard() {
+        return getDashBoard() != null;
+    }
+
+    @Deprecated
+    public boolean hasMyOrg() {
+        return getMyOrg() != null;
+    }
+
+    @Deprecated
+    public boolean hasOptions() {
+        return getOptions() != null;
+    }
+
+    @Deprecated
+    public boolean hasUser() {
+        return getUser() != null;
+    }
+
 }

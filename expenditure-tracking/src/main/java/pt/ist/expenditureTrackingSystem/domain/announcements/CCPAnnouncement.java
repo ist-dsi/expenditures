@@ -108,4 +108,44 @@ public class CCPAnnouncement extends CCPAnnouncement_Base {
         return Collections.singleton(getBuyingUnit());
     }
 
+    @Deprecated
+    public boolean hasExecutionDays() {
+        return getExecutionDays() != null;
+    }
+
+    @Deprecated
+    public boolean hasExecutionAddress() {
+        return getExecutionAddress() != null;
+    }
+
+    @Deprecated
+    public boolean hasChoiceCriteria() {
+        return getChoiceCriteria() != null;
+    }
+
+    @Deprecated
+    public boolean hasAnnouncementProcess() {
+        return getAnnouncementProcess() != null;
+    }
+
+    @Deprecated
+    public boolean hasRequestingUnit() {
+        return getRequestingUnit() != null;
+    }
+
+    @Deprecated
+    public boolean hasSupplier() {
+        return getSupplier() != null;
+    }
+
+    @Deprecated
+    public boolean hasPublisher() {
+        return getPublisher() != null;
+    }
+
+    @Deprecated
+    public boolean hasBuyingUnit() {
+        return getBuyingUnit() != null;
+    }
+
 }

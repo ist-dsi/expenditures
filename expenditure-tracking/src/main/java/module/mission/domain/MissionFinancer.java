@@ -394,4 +394,49 @@ public class MissionFinancer extends MissionFinancer_Base {
         return getMissionSystem() == VirtualHost.getVirtualHostForThread().getMissionSystem();
     }
 
+    @Deprecated
+    public java.util.Set<module.mission.domain.MissionItemFinancer> getMissionItemFinancers() {
+        return getMissionItemFinancersSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyMissionItemFinancers() {
+        return !getMissionItemFinancersSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasCommitmentNumber() {
+        return getCommitmentNumber() != null;
+    }
+
+    @Deprecated
+    public boolean hasMissionVersion() {
+        return getMissionVersion() != null;
+    }
+
+    @Deprecated
+    public boolean hasUnit() {
+        return getUnit() != null;
+    }
+
+    @Deprecated
+    public boolean hasMissionSystem() {
+        return getMissionSystem() != null;
+    }
+
+    @Deprecated
+    public boolean hasAuthorization() {
+        return getAuthorization() != null;
+    }
+
+    @Deprecated
+    public boolean hasAccountingUnit() {
+        return getAccountingUnit() != null;
+    }
+
+    @Deprecated
+    public boolean hasApproval() {
+        return getApproval() != null;
+    }
+
 }
