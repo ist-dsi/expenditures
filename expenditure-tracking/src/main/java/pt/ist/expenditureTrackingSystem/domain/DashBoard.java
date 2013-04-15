@@ -77,8 +77,8 @@ public class DashBoard extends DashBoard_Base {
     }
 
     public void delete() {
-        removePerson();
-        removeExpenditureTrackingSystem();
+        setPerson(null);
+        setExpenditureTrackingSystem(null);
         deleteDomainObject();
     }
 

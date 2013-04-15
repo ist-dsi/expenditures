@@ -47,10 +47,10 @@ public class MissionItemFinancer extends MissionItemFinancer_Base {
     }
 
     public void delete() {
-        removeMissionVersionFromArchive();
-        removeMissionItem();
-        removeMissionFinancer();
-        removeMissionSystem();
+        setMissionVersionFromArchive(null);
+        setMissionItem(null);
+        setMissionFinancer(null);
+        setMissionSystem(null);
         deleteDomainObject();
     }
 

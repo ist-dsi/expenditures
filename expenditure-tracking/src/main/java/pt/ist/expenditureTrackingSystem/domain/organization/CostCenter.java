@@ -110,7 +110,7 @@ public class CostCenter extends CostCenter_Base {
     @Override
     public boolean isAccountingEmployee(final Person person) {
         final AccountingUnit accountingUnit = getAccountingUnit();
-        return accountingUnit != null && accountingUnit.hasPeople(person);
+        return accountingUnit != null && accountingUnit.getPeopleSet().contains(person);
     }
 
     @Override

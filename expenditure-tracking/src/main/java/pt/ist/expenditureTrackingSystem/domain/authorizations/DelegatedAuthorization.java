@@ -91,7 +91,7 @@ public class DelegatedAuthorization extends DelegatedAuthorization_Base {
 
     @Override
     public void delete() {
-        removeAuthorization();
+        setAuthorization(null);
         super.delete();
     }
 

@@ -102,7 +102,7 @@ public class Person extends Person_Base /* implements Indexable, Searchable */{
 
         @Override
         public void afterAdd(final User user, final MyOrg myOrg) {
-            if (user.hasMyOrg()) {
+            if (user.getMyOrg() != null) {
                 final String username = user.getUsername();
                 Person person = Person.findByUsername(username);
                 if (person == null) {
@@ -149,10 +149,10 @@ public class Person extends Person_Base /* implements Indexable, Searchable */{
         if (hasDefaultSearch()) {
             getDefaultSearch().delete();
         }
-        removeExpenditureTrackingSystem();
+        setExpenditureTrackingSystem(null);
         getRoles().clear();
         getOptions().delete();
-        removeUser();
+        setUser(null);
         deleteDomainObject();
     }
 
@@ -283,7 +283,7 @@ public class Person extends Person_Base /* implements Indexable, Searchable */{
 
     public <T extends WorkflowProcess> List<T> getProcesses(Class<T> classType) {
         List<T> processes = new ArrayList<T>();
-        for (WorkflowProcess process : getUser().getUserProcesses()) {
+        for (WorkflowProcess process : getUser().getUserProcessesSet()) {
             if (classType.isAssignableFrom(process.getClass())) {
                 processes.add((T) process);
             }
@@ -303,7 +303,7 @@ public class Person extends Person_Base /* implements Indexable, Searchable */{
 
     private <T extends WorkflowProcess> Set<T> filterLogs(Predicate predicate) {
         Set<T> processes = new HashSet<T>();
-        for (WorkflowLog log : getUser().getUserLogs()) {
+        for (WorkflowLog log : getUser().getUserLogsSet()) {
             WorkflowProcess process = log.getProcess();
             if (predicate.evaluate(process)) {
                 processes.add((T) process);

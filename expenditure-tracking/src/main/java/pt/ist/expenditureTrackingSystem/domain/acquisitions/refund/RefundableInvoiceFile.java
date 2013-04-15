@@ -78,9 +78,9 @@ public class RefundableInvoiceFile extends RefundableInvoiceFile_Base {
         for (RequestItem item : getRequestItems()) {
             item.clearRealShareValues();
         }
-        removeProcess();
+        setProcess(null);
         getRequestItems().clear();
-        removeSupplier();
+        setSupplier(null);
 
         super.delete();
     }

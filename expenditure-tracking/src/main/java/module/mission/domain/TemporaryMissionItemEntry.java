@@ -22,9 +22,9 @@ public class TemporaryMissionItemEntry extends TemporaryMissionItemEntry_Base {
     }
 
     public void delete() {
-        removeMissionItem();
-        removeUser();
-        removeMissionSystem();
+        setMissionItem(null);
+        setUser(null);
+        setMissionSystem(null);
         deleteDomainObject();
     }
 

@@ -537,10 +537,13 @@ public abstract class MissionProcess extends MissionProcess_Base {
     public boolean isAccessible(final User user) {
         final Person person = user.getPerson();
         final Mission mission = getMission();
-        return isTakenByPerson(user) || getProcessCreator() == user || mission.getRequestingPerson() == person
+        return isTakenByPerson(user)
+                || getProcessCreator() == user
+                || mission.getRequestingPerson() == person
                 || user.hasRoleType(RoleType.MANAGER)
-                || (user.hasExpenditurePerson() && ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user))
-                || (user.hasExpenditurePerson() && ExpenditureTrackingSystem.isAcquisitionsProcessAuditorGroupMember(user))
+                || (user.getExpenditurePerson() != null && ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user))
+                || (user.getExpenditurePerson() != null && ExpenditureTrackingSystem
+                        .isAcquisitionsProcessAuditorGroupMember(user))
                 || (person != null && person.getMissionsSet().contains(mission)) || mission.isParticipantResponsible(person)
                 || mission.isFinancerResponsible(user.getExpenditurePerson())
                 || mission.isFinancerAccountant(user.getExpenditurePerson()) || mission.isPersonelSectionMember(user)
@@ -622,7 +625,7 @@ public abstract class MissionProcess extends MissionProcess_Base {
     }
 
     public void checkForSupportDocuments() {
-        if (getFilesCount() == 0) {
+        if (getFiles().size() == 0) {
             throw new DomainException(BundleUtil.getFormattedStringFromResourceBundle("resources/MissionResources",
                     "error.mission.must.have.a.support.file"));
         }
@@ -681,10 +684,11 @@ public abstract class MissionProcess extends MissionProcess_Base {
 
         MissionProcessAssociation association = getMissionProcessAssociation();
         association.removeMissionProcesses(processToRem);
-        if (association.getMissionProcessesCount() < 2) {
+        if (association.getMissionProcesses().size() < 2) {
             association.delete();
         }
     }
+
     @Deprecated
     public java.util.Set<module.mission.domain.MissionProcessLateJustification> getMissionProcessLateJustifications() {
         return getMissionProcessLateJustificationsSet();
@@ -703,6 +707,11 @@ public abstract class MissionProcess extends MissionProcess_Base {
     @Deprecated
     public boolean hasAnyPaymentProcess() {
         return !getPaymentProcessSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyCurrentQueues() {
+        return !getCurrentQueuesSet().isEmpty();
     }
 
     @Deprecated
@@ -733,6 +742,11 @@ public abstract class MissionProcess extends MissionProcess_Base {
     @Deprecated
     public boolean hasMission() {
         return getMission() != null;
+    }
+
+    @Deprecated
+    public boolean hasCurrentOwner() {
+        return getCurrentOwner() != null;
     }
 
 }

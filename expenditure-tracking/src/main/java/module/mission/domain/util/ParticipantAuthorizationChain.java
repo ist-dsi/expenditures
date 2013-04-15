@@ -174,7 +174,7 @@ public class ParticipantAuthorizationChain implements Serializable {
             if (authorization.isValid()) {
                 final pt.ist.expenditureTrackingSystem.domain.organization.Person authority = authorization.getPerson();
                 final User user = authority.getUser();
-                if (user != null && user.hasPerson()) {
+                if (user != null && user.getPerson() != null) {
                     for (final AccountabilityType accountabilityType : accountabilityTypesThatAuthorize) {
                         unit.addChild(user.getPerson(), accountabilityType, new LocalDate(), null);
                     }

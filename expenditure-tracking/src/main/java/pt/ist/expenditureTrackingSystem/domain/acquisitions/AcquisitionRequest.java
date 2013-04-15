@@ -103,11 +103,11 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     }
 
     public String getFiscalIdentificationCode() {
-        if (getSuppliersCount() == 0) {
+        if (getSuppliers().size() == 0) {
             return null;
         }
         StringBuilder builder = new StringBuilder("");
-        Iterator<Supplier> suppliersIterator = getSuppliersIterator();
+        Iterator<Supplier> suppliersIterator = getSuppliersSet().iterator();
         while (suppliersIterator.hasNext()) {
             builder.append(suppliersIterator.next().getFiscalIdentificationCode());
             if (suppliersIterator.hasNext()) {
@@ -533,12 +533,12 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     }
 
     public Supplier getSupplier() {
-        // if (getSuppliersCount() > 1) {
+        // if (getSuppliers().size() > 1) {
         // throw new
         // DomainException("This method should be used only when 1 supplier is present");
         // }
         //
-        // return getSuppliersCount() == 0 ? null : getSuppliers().get(0);
+        // return getSuppliers().size() == 0 ? null : getSuppliers().get(0);
         return getSelectedSupplier();
     }
 

@@ -124,13 +124,13 @@ public class Project extends Project_Base {
     @Override
     public boolean isProjectAccountingEmployee(final Person person) {
         final AccountingUnit accountingUnit = getAccountingUnit();
-        return accountingUnit != null && accountingUnit.hasProjectAccountants(person);
+        return accountingUnit != null && accountingUnit.getProjectAccountantsSet().contains(person);
     }
 
     @Override
     public boolean isAccountingEmployee(final Person person) {
         final AccountingUnit accountingUnit = getAccountingUnit();
-        return (accountingUnit != null && accountingUnit.hasPeople(person))
+        return (accountingUnit != null && accountingUnit.getPeopleSet().contains(person))
                 || (accountingUnit == null && super.isAccountingEmployee(person));
     }
 
@@ -152,7 +152,7 @@ public class Project extends Project_Base {
                 final Party party = accountability.getChild();
                 if (party.isUnit()) {
                     final module.organization.domain.Unit child = (module.organization.domain.Unit) party;
-                    if (child.hasExpenditureUnit()) {
+                    if (child.getExpenditureUnit() != null) {
                         final Unit unit = child.getExpenditureUnit();
                         if (unit instanceof SubProject) {
                             final SubProject subProject = (SubProject) unit;
@@ -174,7 +174,7 @@ public class Project extends Project_Base {
                 final Party party = accountability.getChild();
                 if (party.isUnit()) {
                     final module.organization.domain.Unit child = (module.organization.domain.Unit) party;
-                    if (child.hasExpenditureUnit()) {
+                    if (child.getExpenditureUnit() != null) {
                         final Unit unit = child.getExpenditureUnit();
                         if (unit instanceof SubProject) {
                             final SubProject subProject = (SubProject) unit;
@@ -193,7 +193,7 @@ public class Project extends Project_Base {
     @Override
     public boolean isAccountingResponsible(Person person) {
         final AccountingUnit accountingUnit = getAccountingUnit();
-        return accountingUnit != null && person != null && accountingUnit.hasResponsibleProjectAccountants(person);
+        return accountingUnit != null && person != null && accountingUnit.getResponsibleProjectAccountantsSet().contains(person);
     }
 
     @Override

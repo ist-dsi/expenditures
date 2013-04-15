@@ -433,7 +433,7 @@ public class MissionYear extends MissionYear_Base {
     public SortedSet<MissionProcess> getAprovalResponsible() {
         final SortedSet<MissionProcess> result = new TreeSet<MissionProcess>(MissionProcess.COMPARATOR_BY_PROCESS_NUMBER);
         final User user = UserView.getCurrentUser();
-        if (user.hasExpenditurePerson()) {
+        if (user.getExpenditurePerson() != null) {
             final Set<Authorization> authorizations = getAuthorizations(user);
             for (final MissionProcess missionProcess : getMissionProcessSet()) {
                 if (!missionProcess.getIsCanceled() && !missionProcess.isArchived()) {
@@ -459,7 +459,7 @@ public class MissionYear extends MissionYear_Base {
     }
 
     private Unit getExpenditureUnit(final Mission mission, final module.organization.domain.Unit unit) {
-        return unit.hasExpenditureUnit() ? unit.getExpenditureUnit() : getExpenditureUnit(mission, unit.getParentUnits()
+        return unit.getExpenditureUnit() != null ? unit.getExpenditureUnit() : getExpenditureUnit(mission, unit.getParentUnits()
                 .iterator().next());
     }
 
@@ -504,7 +504,7 @@ public class MissionYear extends MissionYear_Base {
         if (hasAnyMissionProcess()) {
             throw new Error("cannot.delete.because.mission.process.exist");
         }
-        removeMissionSystem();
+        setMissionSystem(null);
         deleteDomainObject();
     }
 

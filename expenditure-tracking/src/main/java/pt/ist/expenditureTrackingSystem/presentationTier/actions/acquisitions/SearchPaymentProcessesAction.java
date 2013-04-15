@@ -297,7 +297,7 @@ public class SearchPaymentProcessesAction extends BaseAction {
             final AcquisitionItemClassification classification = process.getGoodsOrServiceClassification();
             spreadsheet.addCell(classification == null ? " " : classification.getLocalizedName());
             spreadsheet.addCell(process.getSuppliersDescription());
-            spreadsheet.addCell(process.getRequest().getRequestItemsCount());
+            spreadsheet.addCell(process.getRequest().getRequestItemsSet().size());
             spreadsheet.addCell(process.getProcessStateDescription());
             DateTime date = process.getDateFromLastActivity();
             spreadsheet.addCell((date == null) ? "" : date.getDayOfMonth() + "-" + date.getMonthOfYear() + "-" + date.getYear()

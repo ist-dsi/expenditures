@@ -45,7 +45,7 @@ public class ImportFile extends ImportFile_Base {
     @Override
     @Atomic
     public void delete() {
-        if (getAfterTheFactAcquisitionProcessesCount() > 0) {
+        if (getAfterTheFactAcquisitionProcessesSet().size() > 0) {
             throw new DomainException("exception.domain.ImportFile.cannotDeleteImportFileWithProcesses");
         }
 
@@ -54,7 +54,7 @@ public class ImportFile extends ImportFile_Base {
 
     @Atomic
     public void cancel() {
-        if (getAfterTheFactAcquisitionProcessesCount() == 0) {
+        if (getAfterTheFactAcquisitionProcessesSet().size() == 0) {
             delete();
 
         } else {

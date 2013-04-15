@@ -80,8 +80,8 @@ public abstract class RequestItem extends RequestItem_Base {
     }
 
     protected void delete() {
-        removeCPVReference();
-        removeExpenditureTrackingSystem();
+        setCPVReference(null);
+        setExpenditureTrackingSystem(null);
         for (; !getUnitItems().isEmpty(); getUnitItems().iterator().next().delete()) {
             ;
         }
@@ -139,7 +139,7 @@ public abstract class RequestItem extends RequestItem_Base {
     }
 
     public boolean isPartiallyApproved() {
-        if (getUnitItemsCount() == 0) {
+        if (getUnitItems().size() == 0) {
             return false;
         }
 
@@ -157,7 +157,7 @@ public abstract class RequestItem extends RequestItem_Base {
     }
 
     public boolean isApproved() {
-        if (getUnitItemsCount() == 0) {
+        if (getUnitItems().size() == 0) {
             return false;
         }
         for (final UnitItem unitItem : getUnitItems()) {
@@ -169,7 +169,7 @@ public abstract class RequestItem extends RequestItem_Base {
     }
 
     public boolean isPartiallyAuthorized() {
-        if (getUnitItemsCount() == 0) {
+        if (getUnitItems().size() == 0) {
             return false;
         }
 

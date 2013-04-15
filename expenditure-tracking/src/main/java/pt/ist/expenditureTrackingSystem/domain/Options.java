@@ -44,8 +44,8 @@ public class Options extends Options_Base {
     }
 
     public void delete() {
-        removeExpenditureTrackingSystem();
-        removePerson();
+        setExpenditureTrackingSystem(null);
+        setPerson(null);
         deleteDomainObject();
     }
 

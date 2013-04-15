@@ -110,7 +110,7 @@ public class RefundItem extends RefundItem_Base {
 
     @Override
     public void delete() {
-        removeRequest();
+        setRequest(null);
         super.delete();
     }
 

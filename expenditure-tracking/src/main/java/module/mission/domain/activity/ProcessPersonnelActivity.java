@@ -55,7 +55,7 @@ public class ProcessPersonnelActivity extends MissionProcessActivity<MissionProc
     @Override
     protected void process(final ActivityInformation activityInformation) {
         final MissionProcess missionProcess = (MissionProcess) activityInformation.getProcess();
-        if (missionProcess.getCurrentQueuesCount() > 1) {
+        if (missionProcess.getCurrentQueuesSet().size() > 1) {
             throw new DomainException(
                     "Cannot determine which queue to remove because the mission process is associated to several queues.");
         }

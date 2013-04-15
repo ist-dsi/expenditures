@@ -130,7 +130,7 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
     }
 
     private void createUnitItem() {
-        if (getAcquisitionRequest().getFinancersCount() == 1) {
+        if (getAcquisitionRequest().getFinancers().size() == 1) {
             createUnitItem(getAcquisitionRequest().getFinancers().iterator().next(), getTotalItemValueWithAdditionalCostsAndVat());
         }
     }
@@ -207,8 +207,8 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 
     @Override
     public void delete() {
-        removeRequest();
-        removeExpenditureTrackingSystem();
+        setRequest(null);
+        setExpenditureTrackingSystem(null);
         for (; !getUnitItems().isEmpty(); getUnitItems().iterator().next().delete()) {
             ;
         }

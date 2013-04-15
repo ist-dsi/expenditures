@@ -52,7 +52,7 @@ public class MissionProcessAssociation extends MissionProcessAssociation_Base {
 
     @ConsistencyPredicate
     public boolean checkHasAtLeastTwoMissionProcesses() {
-        return getMissionProcessesCount() >= 2;
+        return getMissionProcessesSet().size() >= 2;
     }
 
     @ConsistencyPredicate
@@ -94,9 +94,10 @@ public class MissionProcessAssociation extends MissionProcessAssociation_Base {
         for (MissionProcess process : getMissionProcesses()) {
             removeMissionProcesses(process);
         }
-        removeMyOrg();
+        setMyOrg(null);
         deleteDomainObject();
     }
+
     @Deprecated
     public java.util.Set<module.mission.domain.MissionProcess> getMissionProcesses() {
         return getMissionProcessesSet();

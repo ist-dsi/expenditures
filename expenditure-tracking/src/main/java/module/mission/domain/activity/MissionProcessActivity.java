@@ -10,7 +10,7 @@ public abstract class MissionProcessActivity<P extends MissionProcess, AI extend
 
     @Override
     public boolean isActive(final P process, final User user) {
-        return !process.hasCurrentOwner() || process.isTakenByCurrentUser();
+        return process.getCurrentOwner() == null || process.isTakenByCurrentUser();
     }
 
 }

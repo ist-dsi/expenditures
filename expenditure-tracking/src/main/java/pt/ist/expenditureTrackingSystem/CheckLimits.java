@@ -62,7 +62,7 @@ public class CheckLimits {
         final ImportFile importFile = FenixFramework.getDomainObject("240518175783");
         System.out.println("Found: " + importFile.getDisplayName() + " - " + importFile.getFilename());
         System.out.println("   isActive ? " + importFile.getActive());
-        System.out.println("   associated processes: " + importFile.getAfterTheFactAcquisitionProcessesCount());
+        System.out.println("   associated processes: " + importFile.getAfterTheFactAcquisitionProcessesSet().size());
 
         for (final AfterTheFactAcquisitionProcess afterTheFactAcquisitionProcess : importFile
                 .getAfterTheFactAcquisitionProcessesSet()) {

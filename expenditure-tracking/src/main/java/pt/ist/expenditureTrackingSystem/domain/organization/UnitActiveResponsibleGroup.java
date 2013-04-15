@@ -61,7 +61,7 @@ public class UnitActiveResponsibleGroup extends UnitActiveResponsibleGroup_Base 
 
     @Override
     public boolean isMember(final User user) {
-        if (user.hasExpenditurePerson()) {
+        if (user.getExpenditurePerson() != null) {
             final Person person = user.getExpenditurePerson();
             for (final Authorization authorization : person.getAuthorizationsSet()) {
                 if (authorization.isValid() && isExpectedUnitType(authorization.getUnit())) {

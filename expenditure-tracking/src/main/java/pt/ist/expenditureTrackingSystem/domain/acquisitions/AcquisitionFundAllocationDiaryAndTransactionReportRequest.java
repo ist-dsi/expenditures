@@ -91,7 +91,7 @@ public class AcquisitionFundAllocationDiaryAndTransactionReportRequest extends
                         request instanceof AcquisitionRequest ? (supplier == null ? null : (hasProposal(request) ? "Proposta" : "Factura")) : (supplier == null ? "Reembolso" : "Factura"),
                         "SUPPLIER_DOC_ID", supplier == null ? null : limitStringSize(getProposalNumber(request), 24), "CPV_ID",
                         cpvReference.getCode(), "CPV_DESCRIPTION", cpvReference.getDescription(), "MOV_DESCRIPTION",
-                        limitStringSize(Integer.toString(item.getUnitItemsCount()) + " - " + item.getDescription(), 4000),
+                        limitStringSize(Integer.toString(item.getUnitItems().size()) + " - " + item.getDescription(), 4000),
                         "MOV_PCT_IVA", unitItem.getVatValue(), "MOV_VALUE", shareValue, "MOV_VALUE_IVA", shareVat,
 //,		    "CALLBACK_URL", getCallbackUrl()
                         "PROCESS_URL", getProcessUrl(process), "GIAF_DIARIO", getDiaryNumber(), "GIAF_NUM_REG",
@@ -126,7 +126,7 @@ public class AcquisitionFundAllocationDiaryAndTransactionReportRequest extends
     @Override
     public void processResultSet(final ResultSet resultSet) throws SQLException {
         registerOnExternalSystem();
-        removeExternalAccountingIntegrationSystemFromPendingResult();
+        setExternalAccountingIntegrationSystemFromPendingResult(null);
     }
 
     @Override
@@ -183,7 +183,7 @@ public class AcquisitionFundAllocationDiaryAndTransactionReportRequest extends
     public void handle(final SQLException e) {
         if (e.getMessage().indexOf("unique") >= 0) {
             registerOnExternalSystem();
-            removeExternalAccountingIntegrationSystemFromPendingResult();
+            setExternalAccountingIntegrationSystemFromPendingResult(null);
         } else {
             super.handle(e);
         }

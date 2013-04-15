@@ -154,9 +154,9 @@ public class Authorization extends Authorization_Base {
         for (final DelegatedAuthorization delegatedAuthorization : getDelegatedAuthorizationsSet()) {
             delegatedAuthorization.delete();
         }
-        removePerson();
-        removeUnit();
-        removeExpenditureTrackingSystem();
+        setPerson(null);
+        setUnit(null);
+        setExpenditureTrackingSystem(null);
         deleteDomainObject();
     }
 

@@ -156,7 +156,7 @@ public class ExpenditureConfigurationAction extends BaseAction {
                 continue;
             }
             Unit unit = (Unit) party;
-            if (unit.hasExpenditureUnit()) {
+            if (unit.getExpenditureUnit() != null) {
                 throw new RuntimeException("error.configuration.organization.already.has.system");
             }
             pt.ist.expenditureTrackingSystem.domain.organization.Unit.createTopLevelUnit(unit, expenditureTrackingSystem);

@@ -35,9 +35,9 @@ public class MissionAuthorizationAccountabilityType extends MissionAuthorization
 
     @Atomic
     public void delete() {
-        removeAccountabilityType();
+        setAccountabilityType(null);
         getAccountabilityTypesSet().clear();
-        removeMissionSystem();
+        setMissionSystem(null);
         deleteDomainObject();
     }
 

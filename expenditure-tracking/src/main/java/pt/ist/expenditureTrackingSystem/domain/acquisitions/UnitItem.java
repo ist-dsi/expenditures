@@ -93,11 +93,11 @@ public class UnitItem extends UnitItem_Base {
     }
 
     public void delete() {
-        removeFinancer();
-        removeItem();
+        setFinancer(null);
+        setItem(null);
         getConfirmedInvoicesSet().clear();
         for (final ProjectAcquisitionFundAllocationRequest request : getProjectAcquisitionFundAllocationRequestSet()) {
-            request.removeUnitItem();
+            request.setUnitItem(null);
         }
         deleteDomainObject();
     }

@@ -44,8 +44,8 @@ public class CreateAcquisitionPurchaseOrderDocumentInformation extends ActivityI
             final WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity) {
         super(process, activity);
         final Supplier supplier = process.getRequest().getSupplier();
-        if (supplier.getSupplierContactCount() == 1) {
-            supplierContact = supplier.getSupplierContactIterator().next();
+        if (supplier.getSupplierContactSet().size() == 1) {
+            supplierContact = supplier.getSupplierContactSet().iterator().next();
         }
     }
 

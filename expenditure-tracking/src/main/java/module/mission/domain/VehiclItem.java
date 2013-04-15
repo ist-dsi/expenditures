@@ -47,7 +47,7 @@ public abstract class VehiclItem extends VehiclItem_Base {
         if (vehiclItemJustification != null) {
             vehiclItemJustification.delete();
         }
-        removeDriver();
+        setDriver(null);
         super.delete();
     }
 
@@ -73,7 +73,7 @@ public abstract class VehiclItem extends VehiclItem_Base {
     @Override
     public void setInfo(final ItemActivityInformation itemActivityInformation) {
         final Mission mission = itemActivityInformation.getProcess().getMission();
-        if (mission.getParticipantesCount() == 1) {
+        if (mission.getParticipantesSet().size() == 1) {
             super.setInfo(itemActivityInformation);
             setDriver(mission.getParticipantes().iterator().next());
         } else {
@@ -105,6 +105,7 @@ public abstract class VehiclItem extends VehiclItem_Base {
         }
         return false;
     }
+
     @Deprecated
     public boolean hasAuthorized() {
         return getAuthorized() != null;

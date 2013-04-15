@@ -78,7 +78,7 @@ public abstract class PersonelExpenseItem extends PersonelExpenseItem_Base {
 
     @Override
     public void delete() {
-        removeDailyPersonelExpenseCategory();
+        setDailyPersonelExpenseCategory(null);
         super.delete();
     }
 
@@ -179,7 +179,7 @@ public abstract class PersonelExpenseItem extends PersonelExpenseItem_Base {
 
     public int getNunberOfLunchesToDiscount(final Person person) {
         int result = 0;
-        if (hasPeople(person)) {
+        if (getPeopleSet().contains(person)) {
             final Mission mission = getMissionVersion().getMission();
             final PersonelExpenseItem firstPersonelExpenseItem = findFirstPersonelExpenseItemFor(mission, person);
             final PersonelExpenseItem lastPersonelExpenseItem = findLastPersonelExpenseItemFor(mission, person);

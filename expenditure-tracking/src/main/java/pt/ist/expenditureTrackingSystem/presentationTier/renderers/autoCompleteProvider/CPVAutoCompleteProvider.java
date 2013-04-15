@@ -46,7 +46,7 @@ public class CPVAutoCompleteProvider implements AutoCompleteProvider {
         List<CPVReference> result = new ArrayList<CPVReference>();
 
         String[] values = value.toLowerCase().split(" ");
-        for (final CPVReference cpvCode : MyOrg.getInstance().getCPVReferences()) {
+        for (final CPVReference cpvCode : MyOrg.getInstance().getCPVReferencesSet()) {
             if (cpvCode.getCode().startsWith(value) || match(cpvCode.getDescription().toLowerCase(), values)) {
                 result.add(cpvCode);
             }

@@ -75,10 +75,10 @@ public class Financer extends Financer_Base {
 
     public void delete() {
         if (checkIfCanDelete()) {
-            removeExpenditureTrackingSystem();
-            removeFundedRequest();
-            removeUnit();
-            removeAccountingUnit();
+            setExpenditureTrackingSystem(null);
+            setFundedRequest(null);
+            setUnit(null);
+            setAccountingUnit(null);
             getAllocatedInvoices().clear();
             deleteDomainObject();
         }
@@ -137,7 +137,7 @@ public class Financer extends Financer_Base {
     }
 
     public boolean isAccountingEmployee(final Person person) {
-        return hasAccountingUnit() && getAccountingUnit().hasPeople(person);
+        return hasAccountingUnit() && getAccountingUnit().getPeopleSet().contains(person);
     }
 
     public boolean isProjectAccountingEmployee(Person person) {
@@ -261,7 +261,7 @@ public class Financer extends Financer_Base {
 
     public boolean isAccountingEmployeeForOnePossibleUnit(Person person) {
         for (AccountingUnit accountingUnit : getCostCenterAccountingUnits()) {
-            if (accountingUnit.hasPeople(person)) {
+            if (accountingUnit.getPeopleSet().contains(person)) {
                 return true;
             }
         }
@@ -432,16 +432,6 @@ public class Financer extends Financer_Base {
     @Deprecated
     public boolean hasAnyAllocatedInvoices() {
         return !getAllocatedInvoicesSet().isEmpty();
-    }
-
-    @Deprecated
-    public boolean hasFundAllocationId() {
-        return getFundAllocationId() != null;
-    }
-
-    @Deprecated
-    public boolean hasEffectiveFundAllocationId() {
-        return getEffectiveFundAllocationId() != null;
     }
 
     @Deprecated

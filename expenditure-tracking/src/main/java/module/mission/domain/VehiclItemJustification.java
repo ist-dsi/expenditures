@@ -11,8 +11,8 @@ public class VehiclItemJustification extends VehiclItemJustification_Base {
     }
 
     public void delete() {
-        removeVehiclItem();
-        removeMissionSystem();
+        setVehiclItem(null);
+        setMissionSystem(null);
         deleteDomainObject();
     }
 

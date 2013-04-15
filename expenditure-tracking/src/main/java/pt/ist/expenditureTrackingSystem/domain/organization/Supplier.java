@@ -101,8 +101,8 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
     @Atomic
     public void delete() {
         if (checkIfCanBeDeleted()) {
-            removeMyOrg();
-            removeExpenditureTrackingSystem();
+            setMyOrg(null);
+            setExpenditureTrackingSystem(null);
             super.delete();
         }
     }
@@ -442,22 +442,22 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
 
     @Override
     public Address getAddress() {
-        return hasAnySupplierContact() ? getSupplierContactIterator().next().getAddress() : super.getAddress();
+        return !getSupplierContactSet().isEmpty() ? getSupplierContactSet().iterator().next().getAddress() : super.getAddress();
     }
 
     @Override
     public String getPhone() {
-        return hasAnySupplierContact() ? getSupplierContactIterator().next().getPhone() : super.getPhone();
+        return !getSupplierContactSet().isEmpty() ? getSupplierContactSet().iterator().next().getPhone() : super.getPhone();
     }
 
     @Override
     public String getFax() {
-        return hasAnySupplierContact() ? getSupplierContactIterator().next().getFax() : super.getFax();
+        return !getSupplierContactSet().isEmpty() ? getSupplierContactSet().iterator().next().getFax() : super.getFax();
     }
 
     @Override
     public String getEmail() {
-        return hasAnySupplierContact() ? getSupplierContactIterator().next().getEmail() : super.getEmail();
+        return !getSupplierContactSet().isEmpty() ? getSupplierContactSet().iterator().next().getEmail() : super.getEmail();
     }
 
     @Deprecated

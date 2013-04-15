@@ -35,8 +35,8 @@ public class DailyPersonelExpenseCategory extends DailyPersonelExpenseCategory_B
 
     @Atomic
     public void delete() {
-        removeDailyPersonelExpenseTable();
-        removeMissionSystem();
+        setDailyPersonelExpenseTable(null);
+        setMissionSystem(null);
         deleteDomainObject();
     }
 

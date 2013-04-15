@@ -51,7 +51,6 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
         super();
     }
 
-    @Override
     public boolean hasAnyRequestItems() {
         return getRequestItems().size() > 0;
     }
@@ -315,7 +314,7 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
     }
 
     public boolean isSubmittedForFundsAllocationByAllResponsibles() {
-        if (getRequestItemsCount() == 0) {
+        if (getRequestItems().size() == 0) {
             return false;
         }
         for (final RequestItem requestItem : getRequestItemsSet()) {
@@ -644,11 +643,6 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
     @Deprecated
     public boolean hasAnyFinancers() {
         return !getFinancersSet().isEmpty();
-    }
-
-    @Deprecated
-    public boolean hasAnyRequestItems() {
-        return !getRequestItemsSet().isEmpty();
     }
 
     @Deprecated

@@ -44,7 +44,7 @@ public class EmailDigester extends EmailDigester_Base {
     @Atomic
     public void executeTask() {
         for (final VirtualHost virtualHost : MyOrg.getInstance().getVirtualHostsSet()) {
-            if (!virtualHost.hasSystemSender() || !virtualHost.getHostname().startsWith("dot")) {
+            if (virtualHost.getSystemSender() == null || !virtualHost.getHostname().startsWith("dot")) {
                 continue;
             }
             try {

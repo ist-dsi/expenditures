@@ -57,7 +57,7 @@ public class MissionSystem extends MissionSystem_Base {
 
     public static MissionSystem getInstance() {
         final VirtualHost virtualHostForThread = VirtualHost.getVirtualHostForThread();
-        if (!virtualHostForThread.hasMissionSystem()) {
+        if (virtualHostForThread.getMissionSystem() == null) {
             initialize(virtualHostForThread);
         }
 
@@ -72,7 +72,7 @@ public class MissionSystem extends MissionSystem_Base {
 
     @Atomic
     public synchronized static void initialize(VirtualHost virtualHost) {
-        if (!virtualHost.hasMissionSystem()) {
+        if (virtualHost.getMissionSystem() == null) {
             new MissionSystem(virtualHost);
         }
     }
@@ -275,7 +275,7 @@ public class MissionSystem extends MissionSystem_Base {
     public static Set<MissionSystem> readAllMissionSystems() {
         Set<MissionSystem> systems = new HashSet<MissionSystem>();
         for (VirtualHost vh : MyOrg.getInstance().getVirtualHosts()) {
-            if (vh.hasMissionSystem()) {
+            if (vh.getMissionSystem() != null) {
                 systems.add(vh.getMissionSystem());
             }
         }
@@ -305,6 +305,7 @@ public class MissionSystem extends MissionSystem_Base {
             activity.execute(activityInfo);
         }
     }
+
     @Deprecated
     public java.util.Set<module.mission.domain.PersonMissionAuthorization> getPersonMissionAuthorizations() {
         return getPersonMissionAuthorizationsSet();

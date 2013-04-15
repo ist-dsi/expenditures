@@ -125,12 +125,12 @@ public class PersonMissionAuthorization extends PersonMissionAuthorization_Base 
         if (hasNext()) {
             getNext().delete();
         }
-        removePrevious();
-        removeSubject();
-        removeUnit();
-        removeMission();
-        removeAuthority();
-        removeMissionSystem();
+        setPrevious(null);
+        setSubject(null);
+        setUnit(null);
+        setMission(null);
+        setAuthority(null);
+        setMissionSystem(null);
         deleteDomainObject();
     }
 
@@ -246,7 +246,7 @@ public class PersonMissionAuthorization extends PersonMissionAuthorization_Base 
         if (hasNext()) {
             getNext().clearAuthorities();
         }
-        removeAuthority();
+        setAuthority(null);
     }
 
     public MissionProcess getMissionProcess() {
@@ -276,6 +276,7 @@ public class PersonMissionAuthorization extends PersonMissionAuthorization_Base 
     public boolean checkIsConnectedToList() {
         return ((hasMission() && !hasPrevious()) || (!hasMission() && hasPrevious()));
     }
+
     @Deprecated
     public boolean hasAuthorizationDateTime() {
         return getAuthorizationDateTime() != null;

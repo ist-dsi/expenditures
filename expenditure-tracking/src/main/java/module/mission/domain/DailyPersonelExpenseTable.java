@@ -106,7 +106,7 @@ public class DailyPersonelExpenseTable extends DailyPersonelExpenseTable_Base {
         for (final DailyPersonelExpenseCategory dailyPersonelExpenseCategory : getDailyPersonelExpenseCategoriesSet()) {
             dailyPersonelExpenseCategory.delete();
         }
-        removeMissionSystem();
+        setMissionSystem(null);
         deleteDomainObject();
     }
 

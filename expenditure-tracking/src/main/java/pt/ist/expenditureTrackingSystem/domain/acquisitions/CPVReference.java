@@ -98,7 +98,7 @@ public class CPVReference extends CPVReference_Base /* implements Indexable, Sea
     }
 
     public static CPVReference getCPVCode(String code) {
-        for (CPVReference reference : MyOrg.getInstance().getCPVReferences()) {
+        for (CPVReference reference : MyOrg.getInstance().getCPVReferencesSet()) {
             if (reference.getCode().equals(code)) {
                 return reference;
             }

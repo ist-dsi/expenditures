@@ -81,12 +81,12 @@ public abstract class MissionItem extends MissionItem_Base {
             missionItemFinancer.delete();
         }
         getPeopleSet().clear();
-        removeMissionVersion();
+        setMissionVersion(null);
         final TemporaryMissionItemEntry temporaryMissionItemEntry = getTemporaryMissionItemEntry();
         if (temporaryMissionItemEntry != null) {
             temporaryMissionItemEntry.delete();
         }
-        removeMissionSystem();
+        setMissionSystem(null);
         deleteDomainObject();
     }
 
@@ -161,7 +161,7 @@ public abstract class MissionItem extends MissionItem_Base {
         final Set<Person> participants = getPeopleSet();
         participants.addAll(people);
         participants.retainAll(people);
-        if (mission.getParticipantesCount() == 1) {
+        if (mission.getParticipantesSet().size() == 1) {
             participants.addAll(mission.getParticipantesSet());
         }
     }
@@ -282,6 +282,7 @@ public abstract class MissionItem extends MissionItem_Base {
         }
         return false;
     }
+
     @Deprecated
     public java.util.Set<module.mission.domain.MissionItemFinancer> getMissionItemFinancers() {
         return getMissionItemFinancersSet();

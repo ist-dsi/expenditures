@@ -169,7 +169,7 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
 
     private void deleteUnit() {
         final module.organization.domain.Unit unit = getUnit();
-        removeUnit();
+        setUnit(null);
         unit.delete();
     }
 
@@ -209,13 +209,13 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
         if (hasAnyFinancedItems()) {
             throw new DomainException("error.cannot.delete.units.which.have.or.had.financedItems");
         }
-        if (getUnit().hasAnyParentAccountabilities()) {
+        if (!getUnit().getParentAccountabilitiesSet().isEmpty()) {
             throw new DomainException("error.cannot.delete.units.which.have.subUnits");
         }
 
-        removeExpenditureTrackingSystemFromTopLevelUnit();
+        setExpenditureTrackingSystemFromTopLevelUnit(null);
         deleteUnit();
-        removeExpenditureTrackingSystem();
+        setExpenditureTrackingSystem(null);
         deleteDomainObject();
     }
 
@@ -230,7 +230,7 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
                 final Party child = accountability.getChild();
                 if (child.isUnit()) {
                     final module.organization.domain.Unit childUnit = (module.organization.domain.Unit) child;
-                    if (childUnit.hasExpenditureUnit()) {
+                    if (childUnit.getExpenditureUnit() != null) {
                         final Unit expenditureUnit = childUnit.getExpenditureUnit();
                         if (expenditureUnit instanceof CostCenter || expenditureUnit instanceof Project) {
                             expenditureUnit.findAcquisitionProcessesPendingAuthorization(result, recurseSubUnits);
@@ -266,7 +266,7 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
             }
             final module.organization.domain.Unit unit = (module.organization.domain.Unit) party;
             LocalDate today = new LocalDate();
-            if (unit.hasExpenditureUnit()) {
+            if (unit.getExpenditureUnit() != null) {
                 for (Authorization authorization : unit.getExpenditureUnit().getAuthorizationsSet()) {
                     if (authorization.isValidFor(today) && authorization.getPerson() == person) {
                         return true;
@@ -325,7 +325,7 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
     public static Authorization findClosestAuthorization(final Party party, final Person person, final Money money) {
         if (party.isUnit()) {
             final module.organization.domain.Unit unit = (module.organization.domain.Unit) party;
-            if (unit.hasExpenditureUnit()) {
+            if (unit.getExpenditureUnit() != null) {
                 for (final Authorization authorization : unit.getExpenditureUnit().getAuthorizationsSet()) {
                     if (authorization.getPerson() == person && authorization.isValid()) {
                         if (authorization.getMaxAmount().isGreaterThanOrEqual(money)) {
@@ -411,7 +411,7 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
                 final Party child = accountability.getChild();
                 if (child.isUnit()) {
                     final module.organization.domain.Unit unit = (module.organization.domain.Unit) child;
-                    if (unit.hasExpenditureUnit() && unit.getExpenditureUnit().hasResponsiblesInUnit()) {
+                    if (unit.getExpenditureUnit() != null && unit.getExpenditureUnit().hasResponsiblesInUnit()) {
                         return true;
                     }
                 }
@@ -421,7 +421,7 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
     }
 
     public boolean hasResponsiblesInUnit() {
-        return getAuthorizationsCount() > 0;
+        return getAuthorizations().size() > 0;
     }
 
     public boolean hasAuthorizationsFor(Person person) {
@@ -482,7 +482,7 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
                 final Party parent = accountability.getParent();
                 if (parent.isUnit()) {
                     final module.organization.domain.Unit parentUnit = (module.organization.domain.Unit) parent;
-                    if (parentUnit.hasExpenditureUnit()) {
+                    if (parentUnit.getExpenditureUnit() != null) {
                         return parentUnit.getExpenditureUnit();
                     }
                     final Unit result = getParentUnit(parentUnit);
@@ -528,7 +528,7 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
                 final Party parent = accountability.getParent();
                 if (parent.isUnit()) {
                     final module.organization.domain.Unit parentUnit = (module.organization.domain.Unit) parent;
-                    if (parentUnit.hasExpenditureUnit()) {
+                    if (parentUnit.getExpenditureUnit() != null) {
                         return true;
                     }
                     final boolean result = hasParentUnit(parentUnit);
@@ -549,7 +549,7 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
     public static AccountingUnit getAccountingUnit(final Party party, final Person person) {
         if (party.isUnit()) {
             final module.organization.domain.Unit unit = (module.organization.domain.Unit) party;
-            if (unit.hasExpenditureUnit()) {
+            if (unit.getExpenditureUnit() != null) {
                 final Unit expenditureUnit = unit.getExpenditureUnit();
                 if (expenditureUnit.hasAccountingUnit()) {
                     return expenditureUnit.getAccountingUnit();
@@ -592,7 +592,7 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
     private static void addAllSubUnits(final List<Unit> result, final Party party) {
         if (party.isUnit()) {
             final module.organization.domain.Unit unit = (module.organization.domain.Unit) party;
-            if (unit.hasExpenditureUnit()) {
+            if (unit.getExpenditureUnit() != null) {
                 result.add(unit.getExpenditureUnit());
             }
 
@@ -606,10 +606,9 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
         }
     }
 
-    @Override
     @Atomic
     public void removeUnit() {
-        super.removeUnit();
+        super.setUnit(null);
     }
 
     @Override
@@ -641,7 +640,7 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
             final Party child = accountability.getChild();
             if (child.isUnit()) {
                 final module.organization.domain.Unit unit = (module.organization.domain.Unit) child;
-                if (unit.hasExpenditureUnit()) {
+                if (unit.getExpenditureUnit() != null) {
                     result.add(unit.getExpenditureUnit());
                 } else {
                     getSubUnitsSet(result, unit);
@@ -659,7 +658,7 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
             final Party child = accountability.getChild();
             if (child.isUnit()) {
                 final module.organization.domain.Unit childUnit = (module.organization.domain.Unit) child;
-                if (childUnit.hasExpenditureUnit()) {
+                if (childUnit.getExpenditureUnit() != null) {
                     return true;
                 }
             }
@@ -719,7 +718,7 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
             final Party child = accountability.getChild();
             if (child.isUnit()) {
                 final module.organization.domain.Unit childUnit = (module.organization.domain.Unit) child;
-                if (childUnit.hasExpenditureUnit()) {
+                if (childUnit.getExpenditureUnit() != null) {
                     childUnit.getExpenditureUnit().evaluateAllProcesses(unitProcessEvaluator, year);
                 } else {
                     evaluateAllProcesses(unitProcessEvaluator, year, childUnit);
@@ -746,7 +745,7 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
 
     public boolean isAccountingResponsible(final Person person) {
         final AccountingUnit accountingUnit = getAccountingUnit();
-        return accountingUnit != null && person != null && accountingUnit.hasResponsiblePeople(person);
+        return accountingUnit != null && person != null && accountingUnit.getResponsiblePeopleSet().contains(person);
     }
 
     public boolean isAccountManager(final Person accountManager) {

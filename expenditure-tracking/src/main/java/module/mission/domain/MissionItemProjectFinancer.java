@@ -126,7 +126,7 @@ public class MissionItemProjectFinancer extends MissionItemProjectFinancer_Base 
 
     @Override
     public void delete() {
-        removeMissionVersionFromProjectArchive();
+        setMissionVersionFromProjectArchive(null);
         super.delete();
     }
 

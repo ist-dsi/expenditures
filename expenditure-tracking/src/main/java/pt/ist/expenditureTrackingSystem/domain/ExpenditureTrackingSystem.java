@@ -81,7 +81,7 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 
         @Override
         public void beforeRemove(VirtualHost vh, MyOrg myorg) {
-            vh.removeExpenditureTrackingSystem();
+            vh.setExpenditureTrackingSystem(null);
             super.beforeRemove(vh, myorg);
         }
     }
@@ -174,7 +174,7 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
     @Atomic
     private static Boolean migratePeople() {
         final MyOrg myOrg = MyOrg.getInstance();
-        if (!myOrg.hasAnyPeopleFromExpenditureTackingSystem()) {
+        if (myOrg.getPeopleFromExpenditureTackingSystemSet().isEmpty()) {
             final long start = System.currentTimeMillis();
             System.out.println("Migrating people..");
             for (final VirtualHost virtualHost : myOrg.getVirtualHostsSet()) {
@@ -192,7 +192,7 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
     @Atomic
     private static Boolean migrateCPVs() {
         final MyOrg myOrg = MyOrg.getInstance();
-        if (!myOrg.hasAnyCPVReferences()) {
+        if (myOrg.getCPVReferencesSet().isEmpty()) {
             final long start = System.currentTimeMillis();
             System.out.println("Migrating cpv references..");
             for (final VirtualHost virtualHost : myOrg.getVirtualHostsSet()) {
@@ -210,7 +210,7 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
     @Atomic
     private static Boolean migrateSuppliers() {
         final MyOrg myOrg = MyOrg.getInstance();
-        if (!myOrg.hasAnySuppliers()) {
+        if (myOrg.getSuppliersSet().isEmpty()) {
             final long start = System.currentTimeMillis();
             System.out.println("Migrating suppliers.");
             for (final VirtualHost virtualHost : myOrg.getVirtualHostsSet()) {
@@ -354,7 +354,8 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 
     @Atomic
     public static void createSystem(final VirtualHost virtualHost) {
-        if (!virtualHost.hasExpenditureTrackingSystem() || virtualHost.getExpenditureTrackingSystem().getVirtualHostCount() > 1) {
+        if (virtualHost.getExpenditureTrackingSystem() == null
+                || virtualHost.getExpenditureTrackingSystem().getVirtualHost().size() > 1) {
             new ExpenditureTrackingSystem(virtualHost);
             initRoles();
         }

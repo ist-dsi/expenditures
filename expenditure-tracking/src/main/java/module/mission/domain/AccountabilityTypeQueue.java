@@ -21,9 +21,9 @@ public class AccountabilityTypeQueue extends AccountabilityTypeQueue_Base {
 
     @Atomic
     public void delete() {
-        removeWorkflowQueue();
-        removeAccountabilityType();
-        removeMissionSystem();
+        setWorkflowQueue(null);
+        setAccountabilityType(null);
+        setMissionSystem(null);
         deleteDomainObject();
     }
 
@@ -46,6 +46,7 @@ public class AccountabilityTypeQueue extends AccountabilityTypeQueue_Base {
     public boolean checkHasWorkflowQueue() {
         return hasWorkflowQueue();
     }
+
     @Deprecated
     public boolean hasWorkflowQueue() {
         return getWorkflowQueue() != null;

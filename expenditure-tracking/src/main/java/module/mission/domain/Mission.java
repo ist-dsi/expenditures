@@ -164,7 +164,7 @@ public abstract class Mission extends Mission_Base {
         final Set<Person> participants = missionItem.getPeopleSet();
         participants.addAll(people);
         participants.retainAll(people);
-        if (getParticipantesCount() == 1) {
+        if (getParticipantesSet().size() == 1) {
             participants.addAll(getParticipantesSet());
         }
 
@@ -218,7 +218,8 @@ public abstract class Mission extends Mission_Base {
     }
 
     private Unit getExpenditureUnit(final module.organization.domain.Unit unit) {
-        return unit.hasExpenditureUnit() ? unit.getExpenditureUnit() : getExpenditureUnit(unit.getParentUnits().iterator().next());
+        return unit.getExpenditureUnit() != null ? unit.getExpenditureUnit() : getExpenditureUnit(unit.getParentUnits()
+                .iterator().next());
     }
 
     public boolean isPendingAuthorizationBy(final User user) {
@@ -468,13 +469,13 @@ public abstract class Mission extends Mission_Base {
         }
         if (getMissionResponsible() == participante) {
             if (hasAnyParticipantes()) {
-                setMissionResponsible(getParticipantesIterator().next());
+                setMissionResponsible(getParticipantesSet().iterator().next());
             } else {
                 setMissionResponsible(null);
             }
         }
 
-        if (getParticipantesCount() == 1) {
+        if (getParticipantesSet().size() == 1) {
             final Person person = (Person) getMissionResponsible();
             for (final MissionItem missionItem : getMissionItemsSet()) {
                 missionItem.addPeople(person);
@@ -579,7 +580,7 @@ public abstract class Mission extends Mission_Base {
 
     public boolean canAuthoriseParticipantActivity() {
         final User currentUser = UserView.getCurrentUser();
-        if (currentUser == null || !currentUser.hasPerson()) {
+        if (currentUser == null || currentUser.getPerson() == null) {
             return false;
         }
 
@@ -593,7 +594,7 @@ public abstract class Mission extends Mission_Base {
 
     public boolean canUnAuthoriseParticipantActivity() {
         final User currentUser = UserView.getCurrentUser();
-        if (currentUser == null || !currentUser.hasPerson()) {
+        if (currentUser == null || currentUser.getPerson() == null) {
             return false;
         }
 
@@ -607,7 +608,7 @@ public abstract class Mission extends Mission_Base {
 
     public boolean canUnAuthoriseSomeParticipantActivity() {
         final User currentUser = UserView.getCurrentUser();
-        if (currentUser == null || !currentUser.hasPerson()) {
+        if (currentUser == null || currentUser.getPerson() == null) {
             return false;
         }
 
@@ -933,7 +934,7 @@ public abstract class Mission extends Mission_Base {
     }
 
     public boolean areAllParticipantsAuthorized() {
-        if (getPersonMissionAuthorizationsCount() == 0) {
+        if (getPersonMissionAuthorizationsSet().size() == 0) {
             return false;
         }
         for (final PersonMissionAuthorization personMissionAuthorization : getPersonMissionAuthorizationsSet()) {
@@ -945,7 +946,7 @@ public abstract class Mission extends Mission_Base {
     }
 
     public boolean areAllParticipantsAuthorizedForPhaseOne() {
-        if (getPersonMissionAuthorizationsCount() == 0) {
+        if (getPersonMissionAuthorizationsSet().size() == 0) {
             return false;
         }
         for (final PersonMissionAuthorization personMissionAuthorization : getPersonMissionAuthorizationsSet()) {
@@ -1155,11 +1156,11 @@ public abstract class Mission extends Mission_Base {
             personMissionAuthorization.clearAuthorities();
         }
         for (final MissionFinancer missionFinancer : getFinancerSet()) {
-            missionFinancer.removeAuthorization();
+            missionFinancer.setAuthorization(null);
             missionFinancer.clearFundAllocations();
-            missionFinancer.removeApproval();
+            missionFinancer.setApproval(null);
         }
-        removeApprovalForMissionWithNoFinancers();
+        setApprovalForMissionWithNoFinancers(null);
         setIsApprovedByMissionResponsible(null);
     }
 
@@ -1217,7 +1218,7 @@ public abstract class Mission extends Mission_Base {
     }
 
     public void migrate() {
-        if (getMissionVersionsCount() == 0) {
+        if (getMissionVersionsSet().size() == 0) {
             final MissionVersion missionVersion = new MissionVersion(this);
             final DateTime firstOperation = findFirstOperations();
             missionVersion.setSinceDateTime(firstOperation);
@@ -1249,7 +1250,7 @@ public abstract class Mission extends Mission_Base {
 
     public int getFinancerCount() {
         final MissionVersion missionVersion = getMissionVersion();
-        return missionVersion.getFinancerCount();
+        return missionVersion.getFinancerSet().size();
     }
 
     public boolean hasAnyFinancer() {
@@ -1264,7 +1265,7 @@ public abstract class Mission extends Mission_Base {
 
     public int getMissionItemsCount() {
         final MissionVersion missionVersion = getMissionVersion();
-        return missionVersion.getMissionItemsCount();
+        return missionVersion.getMissionItemsSet().size();
     }
 
     public boolean hasAnyMissionItems() {

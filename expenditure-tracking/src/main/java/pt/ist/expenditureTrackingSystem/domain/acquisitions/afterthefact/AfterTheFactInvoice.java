@@ -86,7 +86,7 @@ public class AfterTheFactInvoice extends AfterTheFactInvoice_Base {
     @Override
     @Atomic
     public void delete() {
-        removeProcess();
+        setProcess(null);
         super.delete();
     }
 }

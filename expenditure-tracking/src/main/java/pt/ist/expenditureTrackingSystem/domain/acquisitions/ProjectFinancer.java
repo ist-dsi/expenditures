@@ -192,7 +192,7 @@ public class ProjectFinancer extends ProjectFinancer_Base {
     @Override
     public boolean isProjectAccountingEmployeeForOnePossibleUnit(final Person person) {
         for (final AccountingUnit accountingUnit : getAccountingUnits()) {
-            if (accountingUnit.hasPeople(person)) {
+            if (accountingUnit.getPeopleSet().contains(person)) {
                 return true;
             }
         }
@@ -202,7 +202,7 @@ public class ProjectFinancer extends ProjectFinancer_Base {
     @Override
     public boolean isProjectAccountingEmployee(Person person) {
         final AccountingUnit accountingUnit = getAccountingUnit();
-        return accountingUnit == null ? false : accountingUnit.hasProjectAccountants(person);
+        return accountingUnit == null ? false : accountingUnit.getProjectAccountantsSet().contains(person);
     }
 
     @Override

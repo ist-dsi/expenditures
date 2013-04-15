@@ -78,22 +78,22 @@ public class SavedSearch extends SavedSearch_Base {
 
     @Atomic
     public void delete() {
-        removeTakenBy();
-        removeYear();
-        removePayingUnit();
-        removePerson();
-        removeUnit();
-        removeRequestor();
-        removeAccountingUnit();
-        removeAccountManager();
-        removeSupplier();
-        removeCpvReference();
+        setTakenBy(null);
+        setYear(null);
+        setPayingUnit(null);
+        setPerson(null);
+        setUnit(null);
+        setRequestor(null);
+        setAccountingUnit(null);
+        setAccountManager(null);
+        setSupplier(null);
+        setCpvReference(null);
         SavedSearch ownProcessesSearch = MyOwnProcessesSearch.getOwnProcessesSearch();
         for (Person person : getPeople()) {
             person.setDefaultSearch(ownProcessesSearch);
         }
-        removeExpenditureTrackingSystemForSystemSearch();
-        removeExpenditureTrackingSystem();
+        setExpenditureTrackingSystemForSystemSearch(null);
+        setExpenditureTrackingSystem(null);
         deleteDomainObject();
     }
 
