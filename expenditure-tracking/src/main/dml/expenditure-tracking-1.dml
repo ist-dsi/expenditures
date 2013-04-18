@@ -13,12 +13,6 @@ enum pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationOperati
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess.ProcessClassification as ProcessClassification;
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchProcessValues as SearchProcessValues;
 
-valueType java.math.BigDecimal as BigDecimal {
-    externalizeWith {
-        String toString();
-    }
-}
-
 valueType pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchProcessValuesArray as SearchProcessValuesArray {
     externalizeWith {
         String exportAsString();
