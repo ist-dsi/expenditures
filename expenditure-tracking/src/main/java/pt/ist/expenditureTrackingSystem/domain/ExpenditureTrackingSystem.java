@@ -503,7 +503,7 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
             final Boolean invoiceAllowedToStartAcquisitionProcess, final Boolean requireFundAllocationPriorToAcquisitionRequest,
             final Boolean registerDiaryNumbersAndTransactionNumbers, final Money maxValueStartedWithInvoive,
             final Money valueRequireingTopLevelAuthorization, final String documentationUrl, final String documentationLabel,
-            final Boolean requireCommitmentNumber) {
+            final Boolean requireCommitmentNumber, final Boolean processesNeedToBeReverified) {
         setInstitutionalProcessNumberPrefix(institutionalProcessNumberPrefix);
         setInstitutionalRequestDocumentPrefix(institutionalRequestDocumentPrefix);
         setAcquisitionCreationWizardJsp(acquisitionCreationWizardJsp);
@@ -516,6 +516,7 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
         setDocumentationUrl(documentationUrl);
         setDocumentationLabel(documentationLabel);
         setRequireCommitmentNumber(requireCommitmentNumber);
+        setProcessesNeedToBeReverified(processesNeedToBeReverified);
     }
 
     @Service
@@ -536,6 +537,11 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 
     public boolean checkSupplierLimitsByCPV() {
         return getCheckSupplierLimitsByCPV() != null && getCheckSupplierLimitsByCPV().booleanValue();
+    }
+
+    public boolean processesNeedToBeReverified() {
+	final Boolean b = getProcessesNeedToBeReverified();
+	return b != null && b.booleanValue();
     }
 
 }

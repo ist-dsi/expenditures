@@ -109,11 +109,14 @@ public class ExpenditureConfigurationAction extends BaseAction {
         final String requireCommitmentNumberParam = request.getParameter("requireCommitmentNumber");
         final Boolean requireCommitmentNumber = Boolean.valueOf("on".equals(requireCommitmentNumberParam));
 
+        final String processesNeedToBeReverifiedParam = request.getParameter("processesNeedToBeReverified");
+        final Boolean processesNeedToBeReverified = Boolean.valueOf("on".equals(processesNeedToBeReverifiedParam));
+
         ExpenditureTrackingSystem.getInstance().saveConfiguration(institutionalProcessNumberPrefix,
                 institutionalRequestDocumentPrefix, acquisitionCreationWizardJsp, array, invoiceAllowedToStartAcquisitionProcess,
                 requireFundAllocationPriorToAcquisitionRequest, registerDiaryNumbersAndTransactionNumbers,
                 maxValueStartedWithInvoive, valueRequireingTopLevelAuthorization, documentationUrl, documentationLabel,
-                requireCommitmentNumber);
+                requireCommitmentNumber, processesNeedToBeReverified);
 
         return viewConfiguration(mapping, form, request, response);
     }

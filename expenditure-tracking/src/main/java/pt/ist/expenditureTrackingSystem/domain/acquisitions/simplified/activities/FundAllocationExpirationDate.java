@@ -83,6 +83,10 @@ public class FundAllocationExpirationDate extends
         if (ExternalIntegration.isActive()) {
             process.createFundAllocationRequest(false);
         }
+
+        if (ExpenditureTrackingSystem.getInstance().processesNeedToBeReverified()) {
+            process.setProcessNeedsReverification(Boolean.TRUE);
+        }
     }
 
     @Override

@@ -374,4 +374,13 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
         }
     }
 
+    public boolean isReverifiedAfterCommitment() {
+	final Boolean b = getProcessNeedsReverification();
+	return b == null || !b.booleanValue();
+    }
+
+    public void reverifiedAfterCommitment() {
+	setProcessNeedsReverification(Boolean.FALSE);
+    }
+
 }

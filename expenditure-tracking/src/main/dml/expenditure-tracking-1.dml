@@ -78,6 +78,7 @@ class ExpenditureTrackingSystem {
 	String documentationLabel;
 	Boolean checkSupplierLimitsByCPV;
 	String institutionManagementEmail;
+	Boolean processesNeedToBeReverified;
 }
 
 
@@ -322,6 +323,7 @@ class processes.GenericProcess extends .module.workflow.domain.WorkflowProcess i
 		}
 
 			class acquisitions.RegularAcquisitionProcess extends acquisitions.AcquisitionProcess {
+				Boolean processNeedsReverification;
 			}
 			
 			class acquisitions.simplified.SimplifiedProcedureProcess extends acquisitions.RegularAcquisitionProcess {

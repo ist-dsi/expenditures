@@ -279,6 +279,20 @@
 				/>
 			</td>
 		</tr>
+		<tr>
+			<td>
+				<bean:message key="label.configuration.process.flow.processesNeedToBeReverified"
+						bundle="EXPENDITURE_RESOURCES"/>
+			</td>
+			<td>
+				<input type="checkbox" name="processesNeedToBeReverified"
+					<% if (expenditureTrackingSystem.getProcessesNeedToBeReverified() != null
+								&& expenditureTrackingSystem.getProcessesNeedToBeReverified().booleanValue()) {%>
+							checked="checked"
+					<% } %>
+				/>
+			</td>
+		</tr>
 	</table>
 
 	<h4>

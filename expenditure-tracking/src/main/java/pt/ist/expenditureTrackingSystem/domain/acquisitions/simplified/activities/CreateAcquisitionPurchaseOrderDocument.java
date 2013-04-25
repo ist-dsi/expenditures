@@ -63,7 +63,7 @@ public class CreateAcquisitionPurchaseOrderDocument extends
     public boolean isActive(RegularAcquisitionProcess process, User user) {
         return isUserProcessOwner(process, user) && process.getAcquisitionProcessState().isAuthorized()
                 && ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user) && process.getRequest().hasSelectedSupplier()
-                && process.isCommitted();
+                && process.isCommitted() && process.isReverifiedAfterCommitment();
     }
 
     @Override

@@ -60,6 +60,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.G
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.ProjectFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.RemoveFundsPermanentlyAllocated;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.RemovePermanentProjectFunds;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.ReverifiedAfterCommitment;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.UnApprove;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.UnAuthorize;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.CancelAcquisitionRequest;
@@ -166,6 +167,7 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
     static {
         activities.add(new CommitFunds());
         activities.add(new DeleteCommitmentNumber());
+        activities.add(new ReverifiedAfterCommitment());
         activities.add(new CreateAcquisitionPurchaseOrderDocument());
         activities.add(new SendPurchaseOrderToSupplier());
         activities.add(new SkipPurchaseOrderDocument());

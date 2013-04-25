@@ -1,7 +1,7 @@
 /*
- * @(#)SkipPurchaseOrderDocument.java
+ * @(#)ReverifiedAfterCommitment.java
  *
- * Copyright 2009 Instituto Superior Tecnico
+ * Copyright 2013 Instituto Superior Tecnico
  * Founding Authors: Luis Cruz, Nuno Ochoa, Paulo Abrantes
  * 
  *      https://fenix-ashes.ist.utl.pt/
@@ -22,34 +22,39 @@
  *   along with the Expenditure Tracking Module. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
-package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities;
+package pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons;
 
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
+import pt.ist.expenditureTrackingSystem.domain.dto.CommitmentNumberBean;
 
 /**
  * 
  * @author Luis Cruz
- * @author Paulo Abrantes
  * 
  */
-public class SkipPurchaseOrderDocument extends
-        WorkflowActivity<RegularAcquisitionProcess, ActivityInformation<RegularAcquisitionProcess>> {
+public class ReverifiedAfterCommitment extends WorkflowActivity<RegularAcquisitionProcess, ActivityInformation<RegularAcquisitionProcess>> {
 
     @Override
-    public boolean isActive(RegularAcquisitionProcess process, User user) {
+    public boolean isActive(final RegularAcquisitionProcess process, final User user) {
         return isUserProcessOwner(process, user) && process.getAcquisitionProcessState().isAuthorized()
-                && ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user) && !process.hasPurchaseOrderDocument()
-                && process.isCommitted() && process.isReverifiedAfterCommitment();
+                && ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user) && process.getRequest().hasSelectedSupplier()
+                && process.isCommitted() && !process.isReverifiedAfterCommitment();
     }
 
     @Override
-    protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
-        activityInformation.getProcess().processAcquisition();
+    protected void process(final ActivityInformation<RegularAcquisitionProcess> activityInformation) {
+        activityInformation.getProcess().reverifiedAfterCommitment();
+    }
+
+    @Override
+    public ActivityInformation<RegularAcquisitionProcess> getActivityInformation(final RegularAcquisitionProcess process) {
+        return new ActivityInformation<RegularAcquisitionProcess>(process, this);
     }
 
     @Override
