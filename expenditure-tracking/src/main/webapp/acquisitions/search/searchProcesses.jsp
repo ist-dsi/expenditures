@@ -1,3 +1,5 @@
+<%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType"%>
+<%@page import="pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html"%>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-bean" prefix="bean"%>
@@ -97,6 +99,19 @@
 				<bean:message key="link.xlsFileToDownload" bundle="ACQUISITION_RESOURCES"/>
 			</a>
 		</logic:notPresent>
+		<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL_MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL">
+		<%
+		    	final SearchPaymentProcess sb = (SearchPaymentProcess) request.getAttribute("searchBean");
+		    	if (sb.getAcquisitionProcessStateType() != null && sb.getAcquisitionProcessStateType() == AcquisitionProcessStateType.SUBMITTED_FOR_FUNDS_ALLOCATION
+			    		&& ExpenditureTrackingSystem.getInstance().processesNeedToBeReverified()) {
+		%>
+						<html:link page="/acquisitionProcess.do?method=allocateAllPendingFundsToSupplier">
+							<bean:message key="link.allocateAllPendingFundsToSupplier" bundle="ACQUISITION_RESOURCES"/>
+						</html:link>
+		<%
+				}
+		%>
+		</logic:present>
 	</p>
 
 	<p class="mvert05">

@@ -130,7 +130,7 @@ public class SearchPaymentProcessesAction extends BaseAction {
 
     }
 
-    private ActionForward search(final ActionMapping mapping, final HttpServletRequest request, SearchPaymentProcess searchBean,
+    public ActionForward search(final ActionMapping mapping, final HttpServletRequest request, SearchPaymentProcess searchBean,
             boolean advanced) {
 
         return search(mapping, request, searchBean, advanced, false, getComparator(request));
