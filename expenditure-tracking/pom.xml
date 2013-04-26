@@ -10,7 +10,7 @@
 
 	<groupId>pt.ist</groupId>
 	<artifactId>expenditure-tracking</artifactId>
-	<version>1.1-SNAPSHOT</version>
+	<version>1.1.0</version>
 	<packaging>jar</packaging>
 	<name>expenditure-tracking</name>
 
@@ -24,7 +24,7 @@
 		<version.pt.ist.meta.workflow>1.0.0</version.pt.ist.meta.workflow>
 		<version.pt.ist.geography>1.0.0</version.pt.ist.geography>
 		<version.pt.ist.organization>1.0.0</version.pt.ist.organization>
-		<version.pt.ist.finance>1.1-SNAPSHOT</version.pt.ist.finance>
+		<version.pt.ist.finance>1.1.0</version.pt.ist.finance>
 		<version.pt.ist.dashboard>1.0.0</version.pt.ist.dashboard>
 		<version.pt.ist.bennu.vaadin>1.0.0</version.pt.ist.bennu.vaadin>
 		<version.pt.ist.external.accounting.integration>1.0.0</version.pt.ist.external.accounting.integration>
