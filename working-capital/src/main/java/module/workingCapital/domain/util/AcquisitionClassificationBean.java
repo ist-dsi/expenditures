@@ -27,7 +27,7 @@ package module.workingCapital.domain.util;
 import java.io.Serializable;
 
 import module.workingCapital.domain.AcquisitionClassification;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * 
@@ -64,7 +64,7 @@ public class AcquisitionClassificationBean implements Serializable {
         this.pocCode = pocCode;
     }
 
-    @Service
+    @Atomic
     public AcquisitionClassification create() {
         return new AcquisitionClassification(description, economicClassification, pocCode);
     }

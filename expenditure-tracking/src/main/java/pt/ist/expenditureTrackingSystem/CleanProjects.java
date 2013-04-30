@@ -41,7 +41,7 @@ import pt.ist.bennu.core.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 
 /**
@@ -99,7 +99,7 @@ public class CleanProjects {
         System.out.println("Done.");
     }
 
-    @Service
+    @Atomic
     public static void cleanData() throws IOException, SQLException {
         int maintained = 0;
         int deleted = 0;

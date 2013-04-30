@@ -79,4 +79,9 @@ public class AnnouncementProcessState extends AnnouncementProcessState_Base {
         return true;
     }
 
+    @Deprecated
+    public boolean hasAnnouncementProcessStateType() {
+        return getAnnouncementProcessStateType() != null;
+    }
+
 }

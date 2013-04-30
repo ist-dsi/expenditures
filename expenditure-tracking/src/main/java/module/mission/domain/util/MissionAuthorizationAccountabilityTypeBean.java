@@ -6,7 +6,7 @@ import java.util.List;
 
 import module.mission.domain.MissionAuthorizationAccountabilityType;
 import module.organization.domain.AccountabilityType;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 public class MissionAuthorizationAccountabilityTypeBean implements Serializable {
 
@@ -29,7 +29,7 @@ public class MissionAuthorizationAccountabilityTypeBean implements Serializable 
         this.accountabilityTypes = accountabilityTypes;
     }
 
-    @Service
+    @Atomic
     public void createMissionAuthorizationAccountabilityType() {
         if (accountabilityType != null) {
             MissionAuthorizationAccountabilityType missionAuthorizationAccountabilityType =

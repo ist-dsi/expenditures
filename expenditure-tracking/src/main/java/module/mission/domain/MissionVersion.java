@@ -206,4 +206,94 @@ public class MissionVersion extends MissionVersion_Base {
         return getMissionSystem() == VirtualHost.getVirtualHostForThread().getMissionSystem();
     }
 
+    @Deprecated
+    public java.util.Set<module.mission.domain.MissionItem> getMissionItems() {
+        return getMissionItemsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.mission.domain.MissionFinancer> getFinancer() {
+        return getFinancerSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.mission.domain.MissionItemProjectFinancer> getArchivedMissionItemProjectFinancer() {
+        return getArchivedMissionItemProjectFinancerSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.mission.domain.MissionItemFinancer> getArchivedMissionItemFinancer() {
+        return getArchivedMissionItemFinancerSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyMissionItems() {
+        return !getMissionItemsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyFinancer() {
+        return !getFinancerSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyArchivedMissionItemProjectFinancer() {
+        return !getArchivedMissionItemProjectFinancerSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyArchivedMissionItemFinancer() {
+        return !getArchivedMissionItemFinancerSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasSinceDateTime() {
+        return getSinceDateTime() != null;
+    }
+
+    @Deprecated
+    public boolean hasDaparture() {
+        return getDaparture() != null;
+    }
+
+    @Deprecated
+    public boolean hasArrival() {
+        return getArrival() != null;
+    }
+
+    @Deprecated
+    public boolean hasChangesAfterArrival() {
+        return getChangesAfterArrival() != null;
+    }
+
+    @Deprecated
+    public boolean hasSentForTermination() {
+        return getSentForTermination() != null;
+    }
+
+    @Deprecated
+    public boolean hasDescriptionOfChangesAfterArrival() {
+        return getDescriptionOfChangesAfterArrival() != null;
+    }
+
+    @Deprecated
+    public boolean hasIsArchived() {
+        return getIsArchived() != null;
+    }
+
+    @Deprecated
+    public boolean hasMission() {
+        return getMission() != null;
+    }
+
+    @Deprecated
+    public boolean hasMissionSystem() {
+        return getMissionSystem() != null;
+    }
+
+    @Deprecated
+    public boolean hasTerminator() {
+        return getTerminator() != null;
+    }
+
 }

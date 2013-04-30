@@ -130,7 +130,7 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
     }
 
     private void createUnitItem() {
-        if (getAcquisitionRequest().getFinancersCount() == 1) {
+        if (getAcquisitionRequest().getFinancers().size() == 1) {
             createUnitItem(getAcquisitionRequest().getFinancers().iterator().next(), getTotalItemValueWithAdditionalCostsAndVat());
         }
     }
@@ -207,9 +207,9 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 
     @Override
     public void delete() {
-        removeRequest();
-        removeExpenditureTrackingSystem();
-        for (; !getUnitItems().isEmpty(); getUnitItems().get(0).delete()) {
+        setRequest(null);
+        setExpenditureTrackingSystem(null);
+        for (; !getUnitItems().isEmpty(); getUnitItems().iterator().next().delete()) {
             ;
         }
         super.delete();
@@ -371,6 +371,71 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
         final AcquisitionRequest acquisitionRequest = getAcquisitionRequest();
         final AcquisitionProcess acquisitionProcess = acquisitionRequest.getProcess();
         return acquisitionProcess.isActive() && acquisitionProcess.isAppiableForYear(year);
+    }
+
+    @Deprecated
+    public boolean hasQuantity() {
+        return getQuantity() != null;
+    }
+
+    @Deprecated
+    public boolean hasUnitValue() {
+        return getUnitValue() != null;
+    }
+
+    @Deprecated
+    public boolean hasVatValue() {
+        return getVatValue() != null;
+    }
+
+    @Deprecated
+    public boolean hasAdditionalCostValue() {
+        return getAdditionalCostValue() != null;
+    }
+
+    @Deprecated
+    public boolean hasProposalReference() {
+        return getProposalReference() != null;
+    }
+
+    @Deprecated
+    public boolean hasRecipient() {
+        return getRecipient() != null;
+    }
+
+    @Deprecated
+    public boolean hasRecipientPhone() {
+        return getRecipientPhone() != null;
+    }
+
+    @Deprecated
+    public boolean hasRecipientEmail() {
+        return getRecipientEmail() != null;
+    }
+
+    @Deprecated
+    public boolean hasAddress() {
+        return getAddress() != null;
+    }
+
+    @Deprecated
+    public boolean hasRealQuantity() {
+        return getRealQuantity() != null;
+    }
+
+    @Deprecated
+    public boolean hasRealVatValue() {
+        return getRealVatValue() != null;
+    }
+
+    @Deprecated
+    public boolean hasRealUnitValue() {
+        return getRealUnitValue() != null;
+    }
+
+    @Deprecated
+    public boolean hasRealAdditionalCostValue() {
+        return getRealAdditionalCostValue() != null;
     }
 
 }

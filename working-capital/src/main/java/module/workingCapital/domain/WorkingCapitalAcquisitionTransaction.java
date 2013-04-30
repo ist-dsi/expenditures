@@ -200,4 +200,14 @@ public class WorkingCapitalAcquisitionTransaction extends WorkingCapitalAcquisit
         super.resetValue(value);
     }
 
+    @Deprecated
+    public boolean hasWorkingCapitalAcquisitionSubmission() {
+        return getWorkingCapitalAcquisitionSubmission() != null;
+    }
+
+    @Deprecated
+    public boolean hasWorkingCapitalAcquisition() {
+        return getWorkingCapitalAcquisition() != null;
+    }
+
 }

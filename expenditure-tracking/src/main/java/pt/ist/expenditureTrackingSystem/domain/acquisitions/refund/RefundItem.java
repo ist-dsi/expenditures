@@ -26,6 +26,7 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.refund;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
@@ -44,7 +45,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.UnitItem;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * 
@@ -109,7 +110,7 @@ public class RefundItem extends RefundItem_Base {
 
     @Override
     public void delete() {
-        removeRequest();
+        setRequest(null);
         super.delete();
     }
 
@@ -137,7 +138,7 @@ public class RefundItem extends RefundItem_Base {
         createUnitItem(getRequest().addPayingUnit(unit), shareValue);
     }
 
-    @Service
+    @Atomic
     public RefundableInvoiceFile createRefundInvoice(String invoiceNumber, LocalDate invoiceDate, Money value,
             BigDecimal vatValue, Money refundableValue, byte[] invoiceFile, String filename, Supplier supplier,
             WorkflowProcess process) {
@@ -162,7 +163,7 @@ public class RefundItem extends RefundItem_Base {
     }
 
     public Money getValueSpent() {
-        List<PaymentProcessInvoice> invoicesFiles = getInvoicesFiles();
+        Collection<PaymentProcessInvoice> invoicesFiles = getInvoicesFiles();
         if (invoicesFiles.isEmpty()) {
             return null;
         }
@@ -276,6 +277,16 @@ public class RefundItem extends RefundItem_Base {
             invoices.add((RefundableInvoiceFile) invoice);
         }
         return invoices;
+    }
+
+    @Deprecated
+    public boolean hasValueEstimation() {
+        return getValueEstimation() != null;
+    }
+
+    @Deprecated
+    public boolean hasItemNotExecuted() {
+        return getItemNotExecuted() != null;
     }
 
 }

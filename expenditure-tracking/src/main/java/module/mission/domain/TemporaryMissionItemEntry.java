@@ -22,9 +22,9 @@ public class TemporaryMissionItemEntry extends TemporaryMissionItemEntry_Base {
     }
 
     public void delete() {
-        removeMissionItem();
-        removeUser();
-        removeMissionSystem();
+        setMissionItem(null);
+        setUser(null);
+        setMissionSystem(null);
         deleteDomainObject();
     }
 
@@ -49,6 +49,26 @@ public class TemporaryMissionItemEntry extends TemporaryMissionItemEntry_Base {
     @Override
     public boolean isConnectedToCurrentHost() {
         return getMissionSystem() == VirtualHost.getVirtualHostForThread().getMissionSystem();
+    }
+
+    @Deprecated
+    public boolean hasCreated() {
+        return getCreated() != null;
+    }
+
+    @Deprecated
+    public boolean hasMissionSystem() {
+        return getMissionSystem() != null;
+    }
+
+    @Deprecated
+    public boolean hasMissionItem() {
+        return getMissionItem() != null;
+    }
+
+    @Deprecated
+    public boolean hasUser() {
+        return getUser() != null;
     }
 
 }

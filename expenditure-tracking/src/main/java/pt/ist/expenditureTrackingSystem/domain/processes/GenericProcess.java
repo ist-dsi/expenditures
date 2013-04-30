@@ -260,4 +260,24 @@ public abstract class GenericProcess extends GenericProcess_Base {
         return getExpenditureTrackingSystem() == ExpenditureTrackingSystem.getInstance();
     }
 
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.ProcessState> getProcessStates() {
+        return getProcessStatesSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyProcessStates() {
+        return !getProcessStatesSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasCurrentProcessState() {
+        return getCurrentProcessState() != null;
+    }
+
+    @Deprecated
+    public boolean hasExpenditureTrackingSystem() {
+        return getExpenditureTrackingSystem() != null;
+    }
+
 }

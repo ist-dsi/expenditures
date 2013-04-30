@@ -26,6 +26,7 @@ package pt.ist.expenditureTrackingSystem.domain.dto;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import module.mission.domain.MissionProcess;
@@ -103,7 +104,7 @@ public class CreateAcquisitionProcessBean implements Serializable {
         return this.suppliers.isEmpty() ? null : this.suppliers.get(0);
     }
 
-    public void setSuppliers(List<Supplier> suppliers) {
+    public void setSuppliers(Collection<Supplier> suppliers) {
         this.suppliers = new ArrayList<Supplier>();
         for (Supplier supplier : suppliers) {
             this.suppliers.add(supplier);

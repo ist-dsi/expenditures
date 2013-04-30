@@ -107,7 +107,7 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.fenixWebFramework.rendererExtensions.util.IPresentableEnum;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 @ClassNameBundle(bundle = "resources/ExpenditureResources", key = "label.process.acquisition")
 /**
@@ -276,7 +276,7 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
         setProcessClassification(classification);
     }
 
-    @Service
+    @Atomic
     public static SimplifiedProcedureProcess createNewAcquisitionProcess(
             final CreateAcquisitionProcessBean createAcquisitionProcessBean) {
         if (!isCreateNewProcessAvailable()) {
@@ -484,6 +484,11 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
     public AcquisitionItemClassification getGoodsOrServiceClassification() {
         final AcquisitionRequest request = getRequest();
         return request.getGoodsOrServiceClassification();
+    }
+
+    @Deprecated
+    public boolean hasProcessClassification() {
+        return getProcessClassification() != null;
     }
 
 }

@@ -83,4 +83,44 @@ public class PaymentProcessInvoice extends PaymentProcessInvoice_Base {
         getFinancers().clear();
         super.delete();
     }
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.acquisitions.UnitItem> getUnitItems() {
+        return getUnitItemsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.acquisitions.ProjectFinancer> getProjectFinancers() {
+        return getProjectFinancersSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem> getRequestItems() {
+        return getRequestItemsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer> getFinancers() {
+        return getFinancersSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyUnitItems() {
+        return !getUnitItemsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyProjectFinancers() {
+        return !getProjectFinancersSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyRequestItems() {
+        return !getRequestItemsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyFinancers() {
+        return !getFinancersSet().isEmpty();
+    }
+
 }

@@ -44,7 +44,7 @@ public class SupplierContact extends SupplierContact_Base {
     }
 
     public void delete() {
-        removeSupplier();
+        setSupplier(null);
         deleteDomainObject();
     }
 

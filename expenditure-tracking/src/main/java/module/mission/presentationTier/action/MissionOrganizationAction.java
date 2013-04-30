@@ -314,7 +314,7 @@ public class MissionOrganizationAction extends ContextBaseAction {
                     }
                 }
             }
-            if (user.hasExpenditurePerson() && unit.hasExpenditureUnit()) {
+            if (user.getExpenditurePerson() != null && unit.getExpenditureUnit() != null) {
                 if (user.getExpenditurePerson().getObservableUnitsSet().contains(unit.getExpenditureUnit())) {
                     return true;
                 }

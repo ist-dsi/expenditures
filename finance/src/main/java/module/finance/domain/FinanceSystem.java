@@ -25,7 +25,7 @@
 package module.finance.domain;
 
 import pt.ist.bennu.core.domain.MyOrg;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * 
@@ -36,16 +36,16 @@ public class FinanceSystem extends FinanceSystem_Base {
 
     public static FinanceSystem getInstance() {
         final MyOrg myOrg = MyOrg.getInstance();
-        if (!myOrg.hasFinanceSystem()) {
+        if (myOrg.getFinanceSystem() == null) {
             initialize();
         }
         return myOrg.getFinanceSystem();
     }
 
-    @Service
+    @Atomic
     public synchronized static void initialize() {
         final MyOrg myOrg = MyOrg.getInstance();
-        if (!myOrg.hasFinanceSystem()) {
+        if (myOrg.getFinanceSystem() == null) {
             new FinanceSystem(myOrg);
         }
     }
@@ -53,6 +53,16 @@ public class FinanceSystem extends FinanceSystem_Base {
     private FinanceSystem(final MyOrg myOrg) {
         super();
         setMyOrg(myOrg);
+    }
+
+    @Deprecated
+    public java.util.Set<module.finance.domain.Provision> getProvisions() {
+        return getProvisionsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.finance.domain.Supplier> getSuppliers() {
+        return getSuppliersSet();
     }
 
 }

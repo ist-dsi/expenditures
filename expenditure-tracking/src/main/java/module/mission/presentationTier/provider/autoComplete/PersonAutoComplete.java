@@ -16,12 +16,12 @@ public class PersonAutoComplete implements AutoCompleteProvider {
     public Collection getSearchResults(Map<String, String> argsMap, String value, int maxCount) {
         Set<Person> people = new HashSet<Person>();
         String[] values = StringNormalizer.normalize(value).toLowerCase().split(" ");
-        for (Person person : MyOrg.getInstance().getPersons()) {
+        for (Person person : MyOrg.getInstance().getPersonsSet()) {
             final String normalizedName = StringNormalizer.normalize(person.getName()).toLowerCase();
             if (hasMatch(values, normalizedName)) {
                 people.add(person);
             }
-            if (person.hasUser() && person.getUser().getUsername().indexOf(value) >= 0) {
+            if (person.getUser() != null && person.getUser().getUsername().indexOf(value) >= 0) {
                 people.add(person);
             }
         }

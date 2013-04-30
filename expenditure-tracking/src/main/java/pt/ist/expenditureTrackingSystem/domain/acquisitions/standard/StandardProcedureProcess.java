@@ -41,7 +41,7 @@ import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * 
@@ -69,7 +69,7 @@ public class StandardProcedureProcess extends StandardProcedureProcess_Base {
         new AcquisitionRequest(this, suppliers, person);
     }
 
-    @Service
+    @Atomic
     public static StandardProcedureProcess createNewAcquisitionProcess(
             final CreateAcquisitionProcessBean createAcquisitionProcessBean) {
         if (!isCreateNewProcessAvailable()) {

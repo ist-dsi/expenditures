@@ -99,7 +99,7 @@ import pt.ist.expenditureTrackingSystem.domain.dto.CreateRefundProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 @ClassNameBundle(bundle = "resources/ExpenditureResources", key = "label.process.refund")
 /**
@@ -193,7 +193,7 @@ public class RefundProcess extends RefundProcess_Base {
         }
     }
 
-    @Service
+    @Atomic
     public static RefundProcess createNewRefundProcess(CreateRefundProcessBean bean) {
 
         RefundProcess process =
@@ -616,6 +616,16 @@ public class RefundProcess extends RefundProcess_Base {
     public AcquisitionItemClassification getGoodsOrServiceClassification() {
         final RefundRequest request = getRequest();
         return request.getGoodsOrServiceClassification();
+    }
+
+    @Deprecated
+    public boolean hasUnderCCPRegime() {
+        return getUnderCCPRegime() != null;
+    }
+
+    @Deprecated
+    public boolean hasRequest() {
+        return getRequest() != null;
     }
 
 }

@@ -26,7 +26,7 @@ package pt.ist.expenditureTrackingSystem.domain.organization;
 
 import pt.ist.bennu.core.domain.MyOrg;
 import pt.ist.bennu.core.domain.groups.PersistentGroup;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * 
@@ -51,7 +51,7 @@ public class CostCenterActiveResponsiblesGroup extends CostCenterActiveResponsib
         return unit instanceof CostCenter;
     }
 
-    @Service
+    @Atomic
     public static CostCenterActiveResponsiblesGroup getInstance() {
         final CostCenterActiveResponsiblesGroup group =
                 (CostCenterActiveResponsiblesGroup) PersistentGroup.getSystemGroup(CostCenterActiveResponsiblesGroup.class);

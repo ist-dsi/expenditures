@@ -92,4 +92,14 @@ public class Invoice extends Invoice_Base {
         return new InvoiceMetadaResolver();
     }
 
+    @Deprecated
+    public boolean hasInvoiceNumber() {
+        return getInvoiceNumber() != null;
+    }
+
+    @Deprecated
+    public boolean hasInvoiceDate() {
+        return getInvoiceDate() != null;
+    }
+
 }

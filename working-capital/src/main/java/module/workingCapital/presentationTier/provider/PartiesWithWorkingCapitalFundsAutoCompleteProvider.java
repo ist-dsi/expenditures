@@ -42,11 +42,11 @@ public class PartiesWithWorkingCapitalFundsAutoCompleteProvider extends PartiesA
     }
 
     private boolean allowResultUnit(final Unit unit) {
-        return unit.hasExpenditureUnit() && unit.getExpenditureUnit().getWorkingCapitalsCount() > 0;
+        return unit.getExpenditureUnit() != null && unit.getExpenditureUnit().getWorkingCapitalsSet().size() > 0;
     }
 
     private boolean allowResultPerson(final Person person) {
-        return person.getMovementResponsibleWorkingCapitalsCount() > 0;
+        return person.getMovementResponsibleWorkingCapitalsSet().size() > 0;
     }
 
 }

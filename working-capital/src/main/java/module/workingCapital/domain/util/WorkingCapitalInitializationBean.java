@@ -33,7 +33,7 @@ import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * 
@@ -104,7 +104,7 @@ public class WorkingCapitalInitializationBean implements Serializable {
         this.internationalBankAccountNumber = internationalBankAccountNumber;
     }
 
-    @Service
+    @Atomic
     public WorkingCapitalInitialization create() {
         String iban =
                 internationalBankAccountNumber == null || internationalBankAccountNumber.isEmpty()

@@ -5,7 +5,7 @@ import java.util.Comparator;
 
 import pt.ist.bennu.core.domain.VirtualHost;
 import pt.ist.bennu.core.domain.util.Money;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 public class DailyPersonelExpenseCategory extends DailyPersonelExpenseCategory_Base {
 
@@ -33,16 +33,51 @@ public class DailyPersonelExpenseCategory extends DailyPersonelExpenseCategory_B
         setMinSalaryValue(minSalaryValue);
     }
 
-    @Service
+    @Atomic
     public void delete() {
-        removeDailyPersonelExpenseTable();
-        removeMissionSystem();
+        setDailyPersonelExpenseTable(null);
+        setMissionSystem(null);
         deleteDomainObject();
     }
 
     @Override
     public boolean isConnectedToCurrentHost() {
         return getMissionSystem() == VirtualHost.getVirtualHostForThread().getMissionSystem();
+    }
+
+    @Deprecated
+    public java.util.Set<module.mission.domain.PersonelExpenseItem> getPersonelExpenseItems() {
+        return getPersonelExpenseItemsSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyPersonelExpenseItems() {
+        return !getPersonelExpenseItemsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasDescription() {
+        return getDescription() != null;
+    }
+
+    @Deprecated
+    public boolean hasValue() {
+        return getValue() != null;
+    }
+
+    @Deprecated
+    public boolean hasMinSalaryValue() {
+        return getMinSalaryValue() != null;
+    }
+
+    @Deprecated
+    public boolean hasMissionSystem() {
+        return getMissionSystem() != null;
+    }
+
+    @Deprecated
+    public boolean hasDailyPersonelExpenseTable() {
+        return getDailyPersonelExpenseTable() != null;
     }
 
 }

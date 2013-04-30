@@ -6,7 +6,7 @@ import module.mission.domain.DailyPersonelExpenseTable;
 
 import org.joda.time.LocalDate;
 
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 public class DailyPersonelExpenseTableBean implements Serializable {
 
@@ -32,7 +32,7 @@ public class DailyPersonelExpenseTableBean implements Serializable {
         this.aplicableToMissionType = aplicableToMissionType;
     }
 
-    @Service
+    @Atomic
     public DailyPersonelExpenseTable createDailyPersonelExpenseTable() {
         return new DailyPersonelExpenseTable(aplicableSince, aplicableToMissionType);
     }

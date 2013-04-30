@@ -51,12 +51,12 @@ public class FindAndCorrectInconsistentWorkingCapitalTransactions extends WriteC
         out.println();
         out.println("################################################################################################");
         out.println();
-        out.println("Processing " + WorkingCapitalSystem.getInstanceForCurrentHost().getWorkingCapitalsCount()
+        out.println("Processing " + WorkingCapitalSystem.getInstanceForCurrentHost().getWorkingCapitals().size()
                 + " working capitals.");
         for (WorkingCapital workingCapital : WorkingCapitalSystem.getInstanceForCurrentHost().getWorkingCapitals()) {
             isNewWorkingCapital = true;
 
-            if (workingCapital.getWorkingCapitalTransactionsCount() == 0) {
+            if (workingCapital.getWorkingCapitalTransactions().size() == 0) {
                 continue;
             }
 
@@ -304,7 +304,7 @@ public class FindAndCorrectInconsistentWorkingCapitalTransactions extends WriteC
         out.println();
         out.println("Problems found in working capital: " + workingCapital.getUnit().getPresentationName() + " ["
                 + workingCapital.getExternalId() + "]");
-        out.println(workingCapital.getWorkingCapitalTransactionsCount() + " transactions found.");
+        out.println(workingCapital.getWorkingCapitalTransactions().size() + " transactions found.");
 
         isNewWorkingCapital = false;
     }

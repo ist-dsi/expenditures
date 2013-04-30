@@ -125,12 +125,12 @@ public class PersonMissionAuthorization extends PersonMissionAuthorization_Base 
         if (hasNext()) {
             getNext().delete();
         }
-        removePrevious();
-        removeSubject();
-        removeUnit();
-        removeMission();
-        removeAuthority();
-        removeMissionSystem();
+        setPrevious(null);
+        setSubject(null);
+        setUnit(null);
+        setMission(null);
+        setAuthority(null);
+        setMissionSystem(null);
         deleteDomainObject();
     }
 
@@ -246,7 +246,7 @@ public class PersonMissionAuthorization extends PersonMissionAuthorization_Base 
         if (hasNext()) {
             getNext().clearAuthorities();
         }
-        removeAuthority();
+        setAuthority(null);
     }
 
     public MissionProcess getMissionProcess() {
@@ -276,4 +276,50 @@ public class PersonMissionAuthorization extends PersonMissionAuthorization_Base 
     public boolean checkIsConnectedToList() {
         return ((hasMission() && !hasPrevious()) || (!hasMission() && hasPrevious()));
     }
+
+    @Deprecated
+    public boolean hasAuthorizationDateTime() {
+        return getAuthorizationDateTime() != null;
+    }
+
+    @Deprecated
+    public boolean hasMissionSystem() {
+        return getMissionSystem() != null;
+    }
+
+    @Deprecated
+    public boolean hasSubject() {
+        return getSubject() != null;
+    }
+
+    @Deprecated
+    public boolean hasMission() {
+        return getMission() != null;
+    }
+
+    @Deprecated
+    public boolean hasAuthority() {
+        return getAuthority() != null;
+    }
+
+    @Deprecated
+    public boolean hasDelegatedAuthority() {
+        return getDelegatedAuthority() != null;
+    }
+
+    @Deprecated
+    public boolean hasUnit() {
+        return getUnit() != null;
+    }
+
+    @Deprecated
+    public boolean hasPrevious() {
+        return getPrevious() != null;
+    }
+
+    @Deprecated
+    public boolean hasNext() {
+        return getNext() != null;
+    }
+
 }

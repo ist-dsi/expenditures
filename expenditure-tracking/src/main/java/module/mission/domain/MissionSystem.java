@@ -28,7 +28,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
@@ -47,7 +46,7 @@ import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.domain.VirtualHost;
 import pt.ist.bennu.core.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * 
@@ -58,7 +57,7 @@ public class MissionSystem extends MissionSystem_Base {
 
     public static MissionSystem getInstance() {
         final VirtualHost virtualHostForThread = VirtualHost.getVirtualHostForThread();
-        if (!virtualHostForThread.hasMissionSystem()) {
+        if (virtualHostForThread.getMissionSystem() == null) {
             initialize(virtualHostForThread);
         }
 
@@ -71,9 +70,9 @@ public class MissionSystem extends MissionSystem_Base {
         return virtualHostForThread == null ? null : virtualHostForThread.getMissionSystem();
     }
 
-    @Service
+    @Atomic
     public synchronized static void initialize(VirtualHost virtualHost) {
-        if (!virtualHost.hasMissionSystem()) {
+        if (virtualHost.getMissionSystem() == null) {
             new MissionSystem(virtualHost);
         }
     }
@@ -82,7 +81,7 @@ public class MissionSystem extends MissionSystem_Base {
         return MyOrg.getInstance().getMissionSystem().hasAnyVirtualHost();
     }
 
-    @Service
+    @Atomic
     public static void migrate() {
         System.out.println("Migrating mission stuff...");
         MyOrg myOrg = MyOrg.getInstance();
@@ -108,15 +107,15 @@ public class MissionSystem extends MissionSystem_Base {
     }
 
     public ExpenditureTrackingSystem getExpenditureTrackingSystem() {
-        return getVirtualHost().get(0).getExpenditureTrackingSystem();
+        return getVirtualHost().iterator().next().getExpenditureTrackingSystem();
     }
 
-    public List<pt.ist.expenditureTrackingSystem.domain.organization.Unit> getTopLevelUnitsFromExpenditureSystem() {
+    public Set<pt.ist.expenditureTrackingSystem.domain.organization.Unit> getTopLevelUnitsFromExpenditureSystem() {
         return getExpenditureTrackingSystem().getTopLevelUnits();
     }
 
     public pt.ist.expenditureTrackingSystem.domain.organization.Unit getFirstTopLevelUnitFromExpenditureSystem() {
-        return getExpenditureTrackingSystem().getTopLevelUnits().get(0);
+        return getExpenditureTrackingSystem().getTopLevelUnits().iterator().next();
     }
 
     public Set<AccountabilityType> getAccountabilityTypesThatAuthorize() {
@@ -165,7 +164,7 @@ public class MissionSystem extends MissionSystem_Base {
         return dailyExpenseTableMap.values();
     }
 
-    @Service
+    @Atomic
     @Override
     public void setOrganizationalModel(final OrganizationalModel organizationalModel) {
         super.setOrganizationalModel(organizationalModel);
@@ -200,12 +199,12 @@ public class MissionSystem extends MissionSystem_Base {
         return false;
     }
 
-    @Service
+    @Atomic
     public void addUnitWithResumedAuthorizations(final Unit unit) {
         addUnitsWithResumedAuthorizations(unit);
     }
 
-    @Service
+    @Atomic
     public void removeUnitWithResumedAuthorizations(final Unit unit) {
         removeUnitsWithResumedAuthorizations(unit);
     }
@@ -249,25 +248,25 @@ public class MissionSystem extends MissionSystem_Base {
         return false;
     }
 
-    @Service
+    @Atomic
     @Override
     public void addUsersWhoCanCancelMission(User usersWhoCanCancelMission) {
         super.addUsersWhoCanCancelMission(usersWhoCanCancelMission);
     }
 
-    @Service
+    @Atomic
     @Override
     public void removeUsersWhoCanCancelMission(User usersWhoCanCancelMission) {
         super.removeUsersWhoCanCancelMission(usersWhoCanCancelMission);
     }
 
-    @Service
+    @Atomic
     @Override
     public void addVehicleAuthorizers(User vehicleAuthorizers) {
         super.addVehicleAuthorizers(vehicleAuthorizers);
     }
 
-    @Service
+    @Atomic
     @Override
     public void removeVehicleAuthorizers(User vehicleAuthorizers) {
         super.removeVehicleAuthorizers(vehicleAuthorizers);
@@ -276,7 +275,7 @@ public class MissionSystem extends MissionSystem_Base {
     public static Set<MissionSystem> readAllMissionSystems() {
         Set<MissionSystem> systems = new HashSet<MissionSystem>();
         for (VirtualHost vh : MyOrg.getInstance().getVirtualHosts()) {
-            if (vh.hasMissionSystem()) {
+            if (vh.getMissionSystem() != null) {
                 systems.add(vh.getMissionSystem());
             }
         }
@@ -288,13 +287,13 @@ public class MissionSystem extends MissionSystem_Base {
         return b != null && b.booleanValue();
     }
 
-    @Service
+    @Atomic
     public void toggleAllowGrantOwnerEquivalence() {
         final Boolean b = getAllowGrantOwnerEquivalence();
         setAllowGrantOwnerEquivalence(b == null ? Boolean.TRUE : Boolean.valueOf(!b.booleanValue()));
     }
 
-    @Service
+    @Atomic
     public static void massAuthorizeVehicles(Collection<VehiclItem> items) {
         for (final VehiclItem item : items) {
             final Mission mission = item.getMission();
@@ -306,4 +305,245 @@ public class MissionSystem extends MissionSystem_Base {
             activity.execute(activityInfo);
         }
     }
+
+    @Deprecated
+    public java.util.Set<module.mission.domain.PersonMissionAuthorization> getPersonMissionAuthorizations() {
+        return getPersonMissionAuthorizationsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.mission.domain.VehiclItemJustification> getVehiclItemJustification() {
+        return getVehiclItemJustificationSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.bennu.core.domain.VirtualHost> getVirtualHost() {
+        return getVirtualHostSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.mission.domain.MissionVersion> getMissionVersions() {
+        return getMissionVersionsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.mission.domain.TemporaryMissionItemEntry> getTemporaryMissionItemEntries() {
+        return getTemporaryMissionItemEntriesSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.mission.domain.MissionAuthorizationAccountabilityType> getMissionAuthorizationAccountabilityTypes() {
+        return getMissionAuthorizationAccountabilityTypesSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.mission.domain.DailyPersonelExpenseTable> getDailyPersonelExpenseTables() {
+        return getDailyPersonelExpenseTablesSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.bennu.core.domain.User> getVehicleAuthorizers() {
+        return getVehicleAuthorizersSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.mission.domain.MissionFinancer> getFinancer() {
+        return getFinancerSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.mission.domain.Mission> getMissions() {
+        return getMissionsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.mission.domain.DailyPersonelExpenseCategory> getDailyPersonelExpenseCategories() {
+        return getDailyPersonelExpenseCategoriesSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.mission.domain.MissionYear> getMissionYear() {
+        return getMissionYearSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.organization.domain.Unit> getUnitsWithResumedAuthorizations() {
+        return getUnitsWithResumedAuthorizationsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.mission.domain.Salary> getSalaries() {
+        return getSalariesSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.mission.domain.MissionProcess> getMissionProcesses() {
+        return getMissionProcessesSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.mission.domain.MissionProcessLateJustification> getMissionProcessLateJustification() {
+        return getMissionProcessLateJustificationSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.mission.domain.MissionChangeDescription> getMissionChangeDescription() {
+        return getMissionChangeDescriptionSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.mission.domain.MissionItemFinancer> getMissionItemFinancers() {
+        return getMissionItemFinancersSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.bennu.core.domain.User> getUsersWhoCanCancelMission() {
+        return getUsersWhoCanCancelMissionSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.mission.domain.MissionItem> getMissionItems() {
+        return getMissionItemsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.mission.domain.AccountabilityTypeQueue> getAccountabilityTypeQueues() {
+        return getAccountabilityTypeQueuesSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.organization.domain.Person> getGovernmentMembers() {
+        return getGovernmentMembersSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyPersonMissionAuthorizations() {
+        return !getPersonMissionAuthorizationsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyVehiclItemJustification() {
+        return !getVehiclItemJustificationSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyVirtualHost() {
+        return !getVirtualHostSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyMissionVersions() {
+        return !getMissionVersionsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyTemporaryMissionItemEntries() {
+        return !getTemporaryMissionItemEntriesSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyMissionAuthorizationAccountabilityTypes() {
+        return !getMissionAuthorizationAccountabilityTypesSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyDailyPersonelExpenseTables() {
+        return !getDailyPersonelExpenseTablesSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyVehicleAuthorizers() {
+        return !getVehicleAuthorizersSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyFinancer() {
+        return !getFinancerSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyMissions() {
+        return !getMissionsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyDailyPersonelExpenseCategories() {
+        return !getDailyPersonelExpenseCategoriesSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyMissionYear() {
+        return !getMissionYearSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyUnitsWithResumedAuthorizations() {
+        return !getUnitsWithResumedAuthorizationsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnySalaries() {
+        return !getSalariesSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyMissionProcesses() {
+        return !getMissionProcessesSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyMissionProcessLateJustification() {
+        return !getMissionProcessLateJustificationSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyMissionChangeDescription() {
+        return !getMissionChangeDescriptionSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyMissionItemFinancers() {
+        return !getMissionItemFinancersSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyUsersWhoCanCancelMission() {
+        return !getUsersWhoCanCancelMissionSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyMissionItems() {
+        return !getMissionItemsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyAccountabilityTypeQueues() {
+        return !getAccountabilityTypeQueuesSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyGovernmentMembers() {
+        return !getGovernmentMembersSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAllowGrantOwnerEquivalence() {
+        return getAllowGrantOwnerEquivalence() != null;
+    }
+
+    @Deprecated
+    public boolean hasMyOrg() {
+        return getMyOrg() != null;
+    }
+
+    @Deprecated
+    public boolean hasOrganizationalModel() {
+        return getOrganizationalModel() != null;
+    }
+
+    @Deprecated
+    public boolean hasCountry() {
+        return getCountry() != null;
+    }
+
 }

@@ -113,4 +113,9 @@ public class RefundProcessState extends RefundProcessState_Base {
                 || refundProcessStateType == RefundProcessStateType.REFUNDED;
     }
 
+    @Deprecated
+    public boolean hasRefundProcessStateType() {
+        return getRefundProcessStateType() != null;
+    }
+
 }

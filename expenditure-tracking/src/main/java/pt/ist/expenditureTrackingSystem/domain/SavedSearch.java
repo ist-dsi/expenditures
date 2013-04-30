@@ -27,7 +27,7 @@ package pt.ist.expenditureTrackingSystem.domain;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * 
@@ -76,24 +76,24 @@ public class SavedSearch extends SavedSearch_Base {
         return new SearchPaymentProcess(this);
     }
 
-    @Service
+    @Atomic
     public void delete() {
-        removeTakenBy();
-        removeYear();
-        removePayingUnit();
-        removePerson();
-        removeUnit();
-        removeRequestor();
-        removeAccountingUnit();
-        removeAccountManager();
-        removeSupplier();
-        removeCpvReference();
+        setTakenBy(null);
+        setYear(null);
+        setPayingUnit(null);
+        setPerson(null);
+        setUnit(null);
+        setRequestor(null);
+        setAccountingUnit(null);
+        setAccountManager(null);
+        setSupplier(null);
+        setCpvReference(null);
         SavedSearch ownProcessesSearch = MyOwnProcessesSearch.getOwnProcessesSearch();
         for (Person person : getPeople()) {
             person.setDefaultSearch(ownProcessesSearch);
         }
-        removeExpenditureTrackingSystemForSystemSearch();
-        removeExpenditureTrackingSystem();
+        setExpenditureTrackingSystemForSystemSearch(null);
+        setExpenditureTrackingSystem(null);
         deleteDomainObject();
     }
 
@@ -124,6 +124,146 @@ public class SavedSearch extends SavedSearch_Base {
     @Override
     public boolean isConnectedToCurrentHost() {
         return getExpenditureTrackingSystem() == ExpenditureTrackingSystem.getInstance();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.organization.Person> getPeople() {
+        return getPeopleSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyPeople() {
+        return !getPeopleSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasSearchName() {
+        return getSearchName() != null;
+    }
+
+    @Deprecated
+    public boolean hasSearchProcessValues() {
+        return getSearchProcessValues() != null;
+    }
+
+    @Deprecated
+    public boolean hasProcessId() {
+        return getProcessId() != null;
+    }
+
+    @Deprecated
+    public boolean hasPendingOperations() {
+        return getPendingOperations() != null;
+    }
+
+    @Deprecated
+    public boolean hasShowOnlyResponsabilities() {
+        return getShowOnlyResponsabilities() != null;
+    }
+
+    @Deprecated
+    public boolean hasRequestDocumentId() {
+        return getRequestDocumentId() != null;
+    }
+
+    @Deprecated
+    public boolean hasAcquisitionProcessStateType() {
+        return getAcquisitionProcessStateType() != null;
+    }
+
+    @Deprecated
+    public boolean hasRefundProcessStateType() {
+        return getRefundProcessStateType() != null;
+    }
+
+    @Deprecated
+    public boolean hasProposalId() {
+        return getProposalId() != null;
+    }
+
+    @Deprecated
+    public boolean hasShowOnlyAcquisitionsExcludedFromSupplierLimit() {
+        return getShowOnlyAcquisitionsExcludedFromSupplierLimit() != null;
+    }
+
+    @Deprecated
+    public boolean hasShowOnlyAcquisitionsWithAdditionalCosts() {
+        return getShowOnlyAcquisitionsWithAdditionalCosts() != null;
+    }
+
+    @Deprecated
+    public boolean hasRefundeeName() {
+        return getRefundeeName() != null;
+    }
+
+    @Deprecated
+    public boolean hasShowOnlyWithUnreadComments() {
+        return getShowOnlyWithUnreadComments() != null;
+    }
+
+    @Deprecated
+    public boolean hasShowPriorityOnly() {
+        return getShowPriorityOnly() != null;
+    }
+
+    @Deprecated
+    public boolean hasYear() {
+        return getYear() != null;
+    }
+
+    @Deprecated
+    public boolean hasPayingUnit() {
+        return getPayingUnit() != null;
+    }
+
+    @Deprecated
+    public boolean hasExpenditureTrackingSystemForSystemSearch() {
+        return getExpenditureTrackingSystemForSystemSearch() != null;
+    }
+
+    @Deprecated
+    public boolean hasRequestor() {
+        return getRequestor() != null;
+    }
+
+    @Deprecated
+    public boolean hasExpenditureTrackingSystem() {
+        return getExpenditureTrackingSystem() != null;
+    }
+
+    @Deprecated
+    public boolean hasSupplier() {
+        return getSupplier() != null;
+    }
+
+    @Deprecated
+    public boolean hasTakenBy() {
+        return getTakenBy() != null;
+    }
+
+    @Deprecated
+    public boolean hasPerson() {
+        return getPerson() != null;
+    }
+
+    @Deprecated
+    public boolean hasAccountManager() {
+        return getAccountManager() != null;
+    }
+
+    @Deprecated
+    public boolean hasUnit() {
+        return getUnit() != null;
+    }
+
+    @Deprecated
+    public boolean hasCpvReference() {
+        return getCpvReference() != null;
+    }
+
+    @Deprecated
+    public boolean hasAccountingUnit() {
+        return getAccountingUnit() != null;
     }
 
 }

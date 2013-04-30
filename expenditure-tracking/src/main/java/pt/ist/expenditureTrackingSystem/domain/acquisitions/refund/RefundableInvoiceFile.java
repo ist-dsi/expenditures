@@ -26,7 +26,7 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.refund;
 
 import java.math.BigDecimal;
 import java.util.Calendar;
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 
 import module.workflow.domain.ProcessDocumentMetaDataResolver;
@@ -78,9 +78,9 @@ public class RefundableInvoiceFile extends RefundableInvoiceFile_Base {
         for (RequestItem item : getRequestItems()) {
             item.clearRealShareValues();
         }
-        removeProcess();
+        setProcess(null);
         getRequestItems().clear();
-        removeSupplier();
+        setSupplier(null);
 
         super.delete();
     }
@@ -173,7 +173,7 @@ public class RefundableInvoiceFile extends RefundableInvoiceFile_Base {
     }
 
     public RefundItem getRefundItem() {
-        List<RequestItem> items = getRequestItems();
+        Collection<RequestItem> items = getRequestItems();
         if (items.size() > 1) {
             throw new DomainException("acquisitionRequestItem.message.exception.thereShouldBeOnlyOneRefundItemAssociated");
         }
@@ -198,6 +198,26 @@ public class RefundableInvoiceFile extends RefundableInvoiceFile_Base {
             }
         }
         return false;
+    }
+
+    @Deprecated
+    public boolean hasValue() {
+        return getValue() != null;
+    }
+
+    @Deprecated
+    public boolean hasVatValue() {
+        return getVatValue() != null;
+    }
+
+    @Deprecated
+    public boolean hasRefundableValue() {
+        return getRefundableValue() != null;
+    }
+
+    @Deprecated
+    public boolean hasSupplier() {
+        return getSupplier() != null;
     }
 
 }

@@ -27,7 +27,7 @@ package pt.ist.expenditureTrackingSystem.domain;
 import java.io.IOException;
 import java.sql.SQLException;
 
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * 
@@ -50,7 +50,7 @@ public class SyncSuppliers extends SyncSuppliers_Base {
         }
     }
 
-    @Service
+    @Atomic
     private void syncData() throws IOException, SQLException {
         SyncSuppliersAux.syncData();
     }

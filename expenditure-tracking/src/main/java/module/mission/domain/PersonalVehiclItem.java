@@ -52,4 +52,9 @@ public class PersonalVehiclItem extends PersonalVehiclItem_Base {
         return false;
     }
 
+    @Deprecated
+    public boolean hasKms() {
+        return getKms() != null;
+    }
+
 }

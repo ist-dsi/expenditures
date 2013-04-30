@@ -30,4 +30,14 @@ public class OtherMissionItem extends OtherMissionItem_Base {
         otherMissionItem.setValue(getValue());
     }
 
+    @Deprecated
+    public boolean hasDescription() {
+        return getDescription() != null;
+    }
+
+    @Deprecated
+    public boolean hasValue() {
+        return getValue() != null;
+    }
+
 }

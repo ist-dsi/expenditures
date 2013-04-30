@@ -16,11 +16,11 @@ import module.mission.domain.VehiclItem;
 import module.organization.domain.Person;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
-import pt.ist.fenixWebFramework.FenixWebFramework;
-import pt.ist.fenixWebFramework.services.Service;
-import pt.ist.fenixframework.pstm.IllegalWriteException;
-import dml.DomainClass;
-import dml.DomainModel;
+import pt.ist.fenixframework.Atomic;
+import pt.ist.fenixframework.FenixFramework;
+import pt.ist.fenixframework.core.WriteOnReadError;
+import pt.ist.fenixframework.dml.DomainClass;
+import pt.ist.fenixframework.dml.DomainModel;
 
 public class ItemActivityInformation extends ActivityInformation<MissionProcess> implements Serializable {
 
@@ -74,10 +74,10 @@ public class ItemActivityInformation extends ActivityInformation<MissionProcess>
         this.concreteMissionItemType = concreteMissionItemType;
     }
 
-    @Service
-    private MissionItem createNewMissionItem() throws IllegalWriteException {
+    @Atomic
+    private MissionItem createNewMissionItem() {
         final String concreteMissionItemTypeName = concreteMissionItemType.getName();
-        final DomainModel domainModel = FenixWebFramework.getDomainModel();
+        final DomainModel domainModel = FenixFramework.getDomainModel();
         for (final DomainClass domainClass : domainModel.getDomainClasses()) {
             if (domainClass.getFullName().equals(concreteMissionItemTypeName)) {
                 try {
@@ -107,8 +107,8 @@ public class ItemActivityInformation extends ActivityInformation<MissionProcess>
                     throw new Error(e);
                 } catch (InvocationTargetException e) {
                     final Throwable t = e.getCause();
-                    if (t instanceof IllegalWriteException) {
-                        final IllegalWriteException iwe = (IllegalWriteException) t;
+                    if (t instanceof WriteOnReadError) {
+                        final WriteOnReadError iwe = (WriteOnReadError) t;
                         throw iwe;
                     }
                     throw new Error(e);
@@ -120,7 +120,7 @@ public class ItemActivityInformation extends ActivityInformation<MissionProcess>
         return null;
     }
 
-    public void setMissionItem() throws IllegalWriteException {
+    public void setMissionItem() {
         final MissionItem missionItem = getMissionItem();
         if (missionItem == null && concreteMissionItemType != null) {
             setMissionItem(createNewMissionItem());

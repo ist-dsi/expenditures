@@ -60,4 +60,14 @@ public class WorkingCapitalInitializationReenforcement extends WorkingCapitalIni
         setAuthorizedReenforcementValue(null);
     }
 
+    @Deprecated
+    public boolean hasRequestedReenforcementValue() {
+        return getRequestedReenforcementValue() != null;
+    }
+
+    @Deprecated
+    public boolean hasAuthorizedReenforcementValue() {
+        return getAuthorizedReenforcementValue() != null;
+    }
+
 }

@@ -297,7 +297,7 @@ public class SearchPaymentProcessesAction extends BaseAction {
             final AcquisitionItemClassification classification = process.getGoodsOrServiceClassification();
             spreadsheet.addCell(classification == null ? " " : classification.getLocalizedName());
             spreadsheet.addCell(process.getSuppliersDescription());
-            spreadsheet.addCell(process.getRequest().getRequestItemsCount());
+            spreadsheet.addCell(process.getRequest().getRequestItemsSet().size());
             spreadsheet.addCell(process.getProcessStateDescription());
             DateTime date = process.getDateFromLastActivity();
             spreadsheet.addCell((date == null) ? "" : date.getDayOfMonth() + "-" + date.getMonthOfYear() + "-" + date.getYear()
@@ -506,8 +506,8 @@ public class SearchPaymentProcessesAction extends BaseAction {
     public ActionForward configurateMySearches(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
 
-        List<SavedSearch> systemSearches = ExpenditureTrackingSystem.getInstance().getSystemSearches();
-        List<SavedSearch> userSearches = getLoggedPerson().getSaveSearches();
+        Set<SavedSearch> systemSearches = ExpenditureTrackingSystem.getInstance().getSystemSearches();
+        Set<SavedSearch> userSearches = getLoggedPerson().getSaveSearches();
         request.setAttribute("systemSearches", systemSearches);
         request.setAttribute("userSearches", userSearches);
 
