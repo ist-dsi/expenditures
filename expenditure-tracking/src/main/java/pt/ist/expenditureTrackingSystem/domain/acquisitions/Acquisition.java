@@ -45,4 +45,14 @@ public abstract class Acquisition extends Acquisition_Base {
         return getExpenditureTrackingSystem() == ExpenditureTrackingSystem.getInstance();
     }
 
+    @Deprecated
+    public boolean hasExpenditureTrackingSystem() {
+        return getExpenditureTrackingSystem() != null;
+    }
+
+    @Deprecated
+    public boolean hasAnnouncement() {
+        return getAnnouncement() != null;
+    }
+
 }

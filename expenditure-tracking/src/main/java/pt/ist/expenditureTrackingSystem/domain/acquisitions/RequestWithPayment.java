@@ -51,7 +51,6 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
         super();
     }
 
-    @Override
     public boolean hasAnyRequestItems() {
         return getRequestItems().size() > 0;
     }
@@ -315,7 +314,7 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
     }
 
     public boolean isSubmittedForFundsAllocationByAllResponsibles() {
-        if (getRequestItemsCount() == 0) {
+        if (getRequestItems().size() == 0) {
             return false;
         }
         for (final RequestItem requestItem : getRequestItemsSet()) {
@@ -629,6 +628,31 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
 
     public boolean hasProposalDocument() {
         return true;
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer> getFinancers() {
+        return getFinancersSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem> getRequestItems() {
+        return getRequestItemsSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyFinancers() {
+        return !getFinancersSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasRequester() {
+        return getRequester() != null;
+    }
+
+    @Deprecated
+    public boolean hasRequestingUnit() {
+        return getRequestingUnit() != null;
     }
 
 }

@@ -47,4 +47,9 @@ public class OtherTransportationItem extends OtherTransportationItem_Base {
         otherTransportationItem.setTypeOfTransportation(getTypeOfTransportation());
     }
 
+    @Deprecated
+    public boolean hasTypeOfTransportation() {
+        return getTypeOfTransportation() != null;
+    }
+
 }

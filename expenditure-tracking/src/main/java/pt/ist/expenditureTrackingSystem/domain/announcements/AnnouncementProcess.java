@@ -39,7 +39,7 @@ import pt.ist.expenditureTrackingSystem.domain.ProcessState;
 import pt.ist.expenditureTrackingSystem.domain.announcement.AnnouncementProcessState;
 import pt.ist.expenditureTrackingSystem.domain.dto.AnnouncementBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 /*
  * TODO: This should be deleted
@@ -69,7 +69,7 @@ public class AnnouncementProcess extends AnnouncementProcess_Base {
         return getLastAnnouncementProcessState().getAnnouncementProcessStateType();
     }
 
-    @Service
+    @Atomic
     public static AnnouncementProcess createNewAnnouncementProcess(Person publisher, AnnouncementBean announcementBean) {
         if (!isCreateNewProcessAvailable()) {
             throw new DomainException("announcementProcess.message.exception.invalidStateToRun.create");
@@ -137,4 +137,9 @@ public class AnnouncementProcess extends AnnouncementProcess_Base {
     public boolean isActive() {
         return true;
     }
+    @Deprecated
+    public boolean hasAnnouncement() {
+        return getAnnouncement() != null;
+    }
+
 }

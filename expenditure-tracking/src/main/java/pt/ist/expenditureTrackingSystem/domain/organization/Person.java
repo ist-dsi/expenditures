@@ -57,9 +57,9 @@ import pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationLog;
 import pt.ist.expenditureTrackingSystem.domain.dto.AuthorizationBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreatePersonBean;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
+import pt.ist.fenixframework.dml.runtime.RelationAdapter;
 import pt.ist.fenixframework.plugins.luceneIndexing.IndexableField;
-import dml.runtime.RelationAdapter;
 
 /**
  * 
@@ -102,7 +102,7 @@ public class Person extends Person_Base /* implements Indexable, Searchable */{
 
         @Override
         public void afterAdd(final User user, final MyOrg myOrg) {
-            if (user.hasMyOrg()) {
+            if (user.getMyOrg() != null) {
                 final String username = user.getUsername();
                 Person person = Person.findByUsername(username);
                 if (person == null) {
@@ -115,7 +115,7 @@ public class Person extends Person_Base /* implements Indexable, Searchable */{
     }
 
     static {
-        User.MyOrgUser.addListener(new UserMyOrgListener());
+        User.getRelationMyOrgUser().addListener(new UserMyOrgListener());
     }
 
     protected Person() {
@@ -131,7 +131,7 @@ public class Person extends Person_Base /* implements Indexable, Searchable */{
         setName(username);
     }
 
-    @Service
+    @Atomic
     public static Person createPerson(final CreatePersonBean createPersonBean) {
         final String username = createPersonBean.getUsername();
         User user = User.findByUsername(username);
@@ -141,7 +141,7 @@ public class Person extends Person_Base /* implements Indexable, Searchable */{
         return user.getExpenditurePerson();
     }
 
-    @Service
+    @Atomic
     public void delete() {
         if (hasDashBoard()) {
             getDashBoard().delete();
@@ -149,19 +149,19 @@ public class Person extends Person_Base /* implements Indexable, Searchable */{
         if (hasDefaultSearch()) {
             getDefaultSearch().delete();
         }
-        removeExpenditureTrackingSystem();
+        setExpenditureTrackingSystem(null);
         getRoles().clear();
         getOptions().delete();
-        removeUser();
+        setUser(null);
         deleteDomainObject();
     }
 
-    @Service
+    @Atomic
     public Authorization createAuthorization(final Unit unit, final String justification) {
         return new Authorization(this, unit, justification);
     }
 
-    @Service
+    @Atomic
     public Authorization createAuthorization(final AuthorizationBean authorizationBean, final String justification) {
         return new Authorization(authorizationBean, justification);
     }
@@ -267,7 +267,7 @@ public class Person extends Person_Base /* implements Indexable, Searchable */{
     }
 
     @Override
-    @Service
+    @Atomic
     public void setDefaultSearch(SavedSearch defaultSearch) {
         super.setDefaultSearch(defaultSearch);
     }
@@ -283,7 +283,7 @@ public class Person extends Person_Base /* implements Indexable, Searchable */{
 
     public <T extends WorkflowProcess> List<T> getProcesses(Class<T> classType) {
         List<T> processes = new ArrayList<T>();
-        for (WorkflowProcess process : getUser().getUserProcesses()) {
+        for (WorkflowProcess process : getUser().getUserProcessesSet()) {
             if (classType.isAssignableFrom(process.getClass())) {
                 processes.add((T) process);
             }
@@ -303,7 +303,7 @@ public class Person extends Person_Base /* implements Indexable, Searchable */{
 
     private <T extends WorkflowProcess> Set<T> filterLogs(Predicate predicate) {
         Set<T> processes = new HashSet<T>();
-        for (WorkflowLog log : getUser().getUserLogs()) {
+        for (WorkflowLog log : getUser().getUserLogsSet()) {
             WorkflowProcess process = log.getProcess();
             if (predicate.evaluate(process)) {
                 processes.add((T) process);
@@ -359,7 +359,7 @@ public class Person extends Person_Base /* implements Indexable, Searchable */{
     }
 */
 
-    // @Service
+    // @Atomic
     // private static void setPersonInUser(final User user) {
     // final Person person = Person.findByUsername(user.getUsername());
     // if (person == null) {
@@ -447,6 +447,266 @@ public class Person extends Person_Base /* implements Indexable, Searchable */{
             result.add(ExpenditureTrackingSystem.getInstance().getFundCommitmentManagerGroup());
         }
         return result;
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationLog> getAuthorizationLogs() {
+        return getAuthorizationLogsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization> getAuthorizations() {
+        return getAuthorizationsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit> getAccountingUnits() {
+        return getAccountingUnitsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationLog> getAuthorizationLogsForWho() {
+        return getAuthorizationLogsForWhoSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.organization.DeliveryInfo> getDeliveryInfos() {
+        return getDeliveryInfosSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit> getTreasuryAccountingUnits() {
+        return getTreasuryAccountingUnitsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.SavedSearch> getRequestorSearches() {
+        return getRequestorSearchesSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.SavedSearch> getTakenSearches() {
+        return getTakenSearchesSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.ProcessState> getProcessStates() {
+        return getProcessStatesSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.organization.Unit> getObservableUnits() {
+        return getObservableUnitsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestWithPayment> getRequestsWithyPayment() {
+        return getRequestsWithyPaymentSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.SavedSearch> getSaveSearches() {
+        return getSaveSearchesSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.organization.Unit> getUnitForAccountManager() {
+        return getUnitForAccountManagerSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.Role> getRoles() {
+        return getRolesSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest> getRefundedAcquisitionRequests() {
+        return getRefundedAcquisitionRequestsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.SavedSearch> getAccountManagerSearches() {
+        return getAccountManagerSearchesSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit> getResponsibleProjectAccountingUnits() {
+        return getResponsibleProjectAccountingUnitsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit> getProjectAccountingUnits() {
+        return getProjectAccountingUnitsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.announcements.CCPAnnouncement> getAnnouncements() {
+        return getAnnouncementsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit> getResponsibleAccountingUnits() {
+        return getResponsibleAccountingUnitsSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyAuthorizationLogs() {
+        return !getAuthorizationLogsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyAuthorizations() {
+        return !getAuthorizationsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyAccountingUnits() {
+        return !getAccountingUnitsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyAuthorizationLogsForWho() {
+        return !getAuthorizationLogsForWhoSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyDeliveryInfos() {
+        return !getDeliveryInfosSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyTreasuryAccountingUnits() {
+        return !getTreasuryAccountingUnitsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyRequestorSearches() {
+        return !getRequestorSearchesSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyTakenSearches() {
+        return !getTakenSearchesSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyProcessStates() {
+        return !getProcessStatesSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyObservableUnits() {
+        return !getObservableUnitsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyRequestsWithyPayment() {
+        return !getRequestsWithyPaymentSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnySaveSearches() {
+        return !getSaveSearchesSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyUnitForAccountManager() {
+        return !getUnitForAccountManagerSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyRoles() {
+        return !getRolesSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyRefundedAcquisitionRequests() {
+        return !getRefundedAcquisitionRequestsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyAccountManagerSearches() {
+        return !getAccountManagerSearchesSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyResponsibleProjectAccountingUnits() {
+        return !getResponsibleProjectAccountingUnitsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyProjectAccountingUnits() {
+        return !getProjectAccountingUnitsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyAnnouncements() {
+        return !getAnnouncementsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyResponsibleAccountingUnits() {
+        return !getResponsibleAccountingUnitsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasName() {
+        return getName() != null;
+    }
+
+    @Deprecated
+    public boolean hasUsername() {
+        return getUsername() != null;
+    }
+
+    @Deprecated
+    public boolean hasPassword() {
+        return getPassword() != null;
+    }
+
+    @Deprecated
+    public boolean hasEmail() {
+        return getEmail() != null;
+    }
+
+    @Deprecated
+    public boolean hasLogoutDateTime() {
+        return getLogoutDateTime() != null;
+    }
+
+    @Deprecated
+    public boolean hasDefaultSearch() {
+        return getDefaultSearch() != null;
+    }
+
+    @Deprecated
+    public boolean hasExpenditureTrackingSystem() {
+        return getExpenditureTrackingSystem() != null;
+    }
+
+    @Deprecated
+    public boolean hasRefundee() {
+        return getRefundee() != null;
+    }
+
+    @Deprecated
+    public boolean hasDashBoard() {
+        return getDashBoard() != null;
+    }
+
+    @Deprecated
+    public boolean hasMyOrg() {
+        return getMyOrg() != null;
+    }
+
+    @Deprecated
+    public boolean hasOptions() {
+        return getOptions() != null;
+    }
+
+    @Deprecated
+    public boolean hasUser() {
+        return getUser() != null;
     }
 
 }

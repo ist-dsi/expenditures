@@ -204,4 +204,19 @@ public class RefundRequest extends RefundRequest_Base {
         return goods.isGreaterThan(services) ? AcquisitionItemClassification.GOODS : AcquisitionItemClassification.SERVICES;
     }
 
+    @Deprecated
+    public boolean hasPaymentReference() {
+        return getPaymentReference() != null;
+    }
+
+    @Deprecated
+    public boolean hasProcess() {
+        return getProcess() != null;
+    }
+
+    @Deprecated
+    public boolean hasRefundee() {
+        return getRefundee() != null;
+    }
+
 }

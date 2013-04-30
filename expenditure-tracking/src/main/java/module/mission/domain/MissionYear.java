@@ -45,7 +45,7 @@ import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.domain.VirtualHost;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * 
@@ -106,7 +106,7 @@ public class MissionYear extends MissionYear_Base {
         return findMissionByYearAux(year);
     }
 
-    @Service
+    @Atomic
     public static MissionYear findOrCreateMissionYear(final int year) {
         final MissionYear missionYear = findMissionByYearAux(year);
         return missionYear == null ? new MissionYear(year) : missionYear;
@@ -433,7 +433,7 @@ public class MissionYear extends MissionYear_Base {
     public SortedSet<MissionProcess> getAprovalResponsible() {
         final SortedSet<MissionProcess> result = new TreeSet<MissionProcess>(MissionProcess.COMPARATOR_BY_PROCESS_NUMBER);
         final User user = UserView.getCurrentUser();
-        if (user.hasExpenditurePerson()) {
+        if (user.getExpenditurePerson() != null) {
             final Set<Authorization> authorizations = getAuthorizations(user);
             for (final MissionProcess missionProcess : getMissionProcessSet()) {
                 if (!missionProcess.getIsCanceled() && !missionProcess.isArchived()) {
@@ -459,7 +459,7 @@ public class MissionYear extends MissionYear_Base {
     }
 
     private Unit getExpenditureUnit(final Mission mission, final module.organization.domain.Unit unit) {
-        return unit.hasExpenditureUnit() ? unit.getExpenditureUnit() : getExpenditureUnit(mission, unit.getParentUnits()
+        return unit.getExpenditureUnit() != null ? unit.getExpenditureUnit() : getExpenditureUnit(mission, unit.getParentUnits()
                 .iterator().next());
     }
 
@@ -504,13 +504,38 @@ public class MissionYear extends MissionYear_Base {
         if (hasAnyMissionProcess()) {
             throw new Error("cannot.delete.because.mission.process.exist");
         }
-        removeMissionSystem();
+        setMissionSystem(null);
         deleteDomainObject();
     }
 
     @Override
     public boolean isConnectedToCurrentHost() {
         return getMissionSystem() == VirtualHost.getVirtualHostForThread().getMissionSystem();
+    }
+
+    @Deprecated
+    public java.util.Set<module.mission.domain.MissionProcess> getMissionProcess() {
+        return getMissionProcessSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyMissionProcess() {
+        return !getMissionProcessSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasYear() {
+        return getYear() != null;
+    }
+
+    @Deprecated
+    public boolean hasCounter() {
+        return getCounter() != null;
+    }
+
+    @Deprecated
+    public boolean hasMissionSystem() {
+        return getMissionSystem() != null;
     }
 
 }

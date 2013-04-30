@@ -49,7 +49,7 @@ import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.PaymentReferenceBean;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
-import pt.ist.fenixframework.pstm.AbstractDomainObject;
+import pt.ist.fenixframework.FenixFramework;
 
 @Mapping(path = "/expenditureProcesses")
 /**
@@ -171,7 +171,7 @@ public class ExpenditureProcessesAction extends ContextBaseAction {
     public ActionForward itemPostBack(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
             final HttpServletResponse response) {
         CreateAcquisitionRequestItemActivityInformation activityInformation = getRenderedObject("activityBean");
-        WorkflowProcess process = AbstractDomainObject.fromExternalId(request.getParameter("processId"));
+        WorkflowProcess process = FenixFramework.getDomainObject(request.getParameter("processId"));
         RenderUtils.invalidateViewState();
         activityInformation.setRecipient(null);
         activityInformation.setAddress(null);
@@ -191,7 +191,7 @@ public class ExpenditureProcessesAction extends ContextBaseAction {
     public ActionForward itemInvalidInfo(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
             final HttpServletResponse response) {
         CreateAcquisitionRequestItemActivityInformation activityInformation = getRenderedObject("activityBean");
-        WorkflowProcess process = AbstractDomainObject.fromExternalId(request.getParameter("processId"));
+        WorkflowProcess process = FenixFramework.getDomainObject(request.getParameter("processId"));
 
         request.setAttribute("information", activityInformation);
         request.setAttribute("process", process);

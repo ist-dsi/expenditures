@@ -72,4 +72,39 @@ public class PaymentProcessYear extends PaymentProcessYear_Base {
         return getExpenditureTrackingSystem() == ExpenditureTrackingSystem.getInstance();
     }
 
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.SavedSearch> getYearSearches() {
+        return getYearSearchesSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess> getPaymentProcess() {
+        return getPaymentProcessSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyYearSearches() {
+        return !getYearSearchesSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyPaymentProcess() {
+        return !getPaymentProcessSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasYear() {
+        return getYear() != null;
+    }
+
+    @Deprecated
+    public boolean hasCounter() {
+        return getCounter() != null;
+    }
+
+    @Deprecated
+    public boolean hasExpenditureTrackingSystem() {
+        return getExpenditureTrackingSystem() != null;
+    }
+
 }

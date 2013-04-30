@@ -158,4 +158,9 @@ public class AcquisitionProcessState extends AcquisitionProcessState_Base {
                 || isInState(AcquisitionProcessStateType.ACQUISITION_PAYED);
     }
 
+    @Deprecated
+    public boolean hasAcquisitionProcessStateType() {
+        return getAcquisitionProcessStateType() != null;
+    }
+
 }

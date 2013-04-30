@@ -24,8 +24,8 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
 
@@ -75,10 +75,10 @@ public class Financer extends Financer_Base {
 
     public void delete() {
         if (checkIfCanDelete()) {
-            removeExpenditureTrackingSystem();
-            removeFundedRequest();
-            removeUnit();
-            removeAccountingUnit();
+            setExpenditureTrackingSystem(null);
+            setFundedRequest(null);
+            setUnit(null);
+            setAccountingUnit(null);
             getAllocatedInvoices().clear();
             deleteDomainObject();
         }
@@ -137,7 +137,7 @@ public class Financer extends Financer_Base {
     }
 
     public boolean isAccountingEmployee(final Person person) {
-        return hasAccountingUnit() && getAccountingUnit().hasPeople(person);
+        return hasAccountingUnit() && getAccountingUnit().getPeopleSet().contains(person);
     }
 
     public boolean isProjectAccountingEmployee(Person person) {
@@ -261,7 +261,7 @@ public class Financer extends Financer_Base {
 
     public boolean isAccountingEmployeeForOnePossibleUnit(Person person) {
         for (AccountingUnit accountingUnit : getCostCenterAccountingUnits()) {
-            if (accountingUnit.hasPeople(person)) {
+            if (accountingUnit.getPeopleSet().contains(person)) {
                 return true;
             }
         }
@@ -293,7 +293,7 @@ public class Financer extends Financer_Base {
     }
 
     public boolean hasAllInvoicesAllocated() {
-        List<PaymentProcessInvoice> allocatedInvoices = getAllocatedInvoices();
+        Collection<PaymentProcessInvoice> allocatedInvoices = getAllocatedInvoices();
         for (UnitItem unitItem : getUnitItems()) {
             if (!allocatedInvoices.containsAll(unitItem.getConfirmedInvoices())) {
                 return false;
@@ -310,7 +310,7 @@ public class Financer extends Financer_Base {
     }
 
     public boolean isApproved() {
-        List<UnitItem> unitItems = getUnitItems();
+        Collection<UnitItem> unitItems = getUnitItems();
         for (UnitItem unitItem : unitItems) {
             if (!unitItem.isApproved()) {
                 return false;
@@ -320,7 +320,7 @@ public class Financer extends Financer_Base {
     }
 
     public boolean isAuthorized() {
-        List<UnitItem> unitItems = getUnitItems();
+        Collection<UnitItem> unitItems = getUnitItems();
         for (UnitItem unitItem : unitItems) {
             if (!unitItem.getItemAuthorized()) {
                 return false;
@@ -330,7 +330,7 @@ public class Financer extends Financer_Base {
     }
 
     public boolean isWithInvoicesConfirmed() {
-        List<UnitItem> unitItems = getUnitItems();
+        Collection<UnitItem> unitItems = getUnitItems();
         for (UnitItem unitItem : unitItems) {
             if (!unitItem.isWithAllInvoicesConfirmed()) {
                 return false;
@@ -412,6 +412,61 @@ public class Financer extends Financer_Base {
     public boolean isCommitted() {
         final String commitmentNumber = getCommitmentNumber();
         return commitmentNumber != null && !commitmentNumber.isEmpty();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.acquisitions.UnitItem> getUnitItems() {
+        return getUnitItemsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessInvoice> getAllocatedInvoices() {
+        return getAllocatedInvoicesSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyUnitItems() {
+        return !getUnitItemsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyAllocatedInvoices() {
+        return !getAllocatedInvoicesSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasPaymentDiaryNumber() {
+        return getPaymentDiaryNumber() != null;
+    }
+
+    @Deprecated
+    public boolean hasTransactionNumber() {
+        return getTransactionNumber() != null;
+    }
+
+    @Deprecated
+    public boolean hasCommitmentNumber() {
+        return getCommitmentNumber() != null;
+    }
+
+    @Deprecated
+    public boolean hasUnit() {
+        return getUnit() != null;
+    }
+
+    @Deprecated
+    public boolean hasAccountingUnit() {
+        return getAccountingUnit() != null;
+    }
+
+    @Deprecated
+    public boolean hasFundedRequest() {
+        return getFundedRequest() != null;
+    }
+
+    @Deprecated
+    public boolean hasExpenditureTrackingSystem() {
+        return getExpenditureTrackingSystem() != null;
     }
 
 }

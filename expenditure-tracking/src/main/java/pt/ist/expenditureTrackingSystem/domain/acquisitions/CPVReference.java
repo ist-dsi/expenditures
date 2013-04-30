@@ -30,7 +30,7 @@ import pt.ist.bennu.core.domain.MyOrg;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.ist.bennu.core.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 import pt.ist.fenixframework.plugins.luceneIndexing.IndexableField;
 
 /**
@@ -98,7 +98,7 @@ public class CPVReference extends CPVReference_Base /* implements Indexable, Sea
     }
 
     public static CPVReference getCPVCode(String code) {
-        for (CPVReference reference : MyOrg.getInstance().getCPVReferences()) {
+        for (CPVReference reference : MyOrg.getInstance().getCPVReferencesSet()) {
             if (reference.getCode().equals(code)) {
                 return reference;
             }
@@ -122,12 +122,12 @@ public class CPVReference extends CPVReference_Base /* implements Indexable, Sea
         return getExpenditureTrackingSystemForPriorities() != null;
     }
 
-    @Service
+    @Atomic
     public void markAsPriority() {
         setExpenditureTrackingSystemForPriorities(ExpenditureTrackingSystem.getInstance());
     }
 
-    @Service
+    @Atomic
     public void unmarkAsPriority() {
         setExpenditureTrackingSystemForPriorities(null);
     }
@@ -148,4 +148,49 @@ public class CPVReference extends CPVReference_Base /* implements Indexable, Sea
 	return set;
     }
 */
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem> getAcquisitionItems() {
+        return getAcquisitionItemsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.SavedSearch> getSavedSearch() {
+        return getSavedSearchSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyAcquisitionItems() {
+        return !getAcquisitionItemsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnySavedSearch() {
+        return !getSavedSearchSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasCode() {
+        return getCode() != null;
+    }
+
+    @Deprecated
+    public boolean hasDescription() {
+        return getDescription() != null;
+    }
+
+    @Deprecated
+    public boolean hasExpenditureTrackingSystem() {
+        return getExpenditureTrackingSystem() != null;
+    }
+
+    @Deprecated
+    public boolean hasExpenditureTrackingSystemForPriorities() {
+        return getExpenditureTrackingSystemForPriorities() != null;
+    }
+
+    @Deprecated
+    public boolean hasMyOrg() {
+        return getMyOrg() != null;
+    }
+
 }

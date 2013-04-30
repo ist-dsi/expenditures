@@ -47,10 +47,10 @@ public class MissionItemFinancer extends MissionItemFinancer_Base {
     }
 
     public void delete() {
-        removeMissionVersionFromArchive();
-        removeMissionItem();
-        removeMissionFinancer();
-        removeMissionSystem();
+        setMissionVersionFromArchive(null);
+        setMissionItem(null);
+        setMissionFinancer(null);
+        setMissionSystem(null);
         deleteDomainObject();
     }
 
@@ -133,6 +133,36 @@ public class MissionItemFinancer extends MissionItemFinancer_Base {
     @Override
     public boolean isConnectedToCurrentHost() {
         return getMissionSystem() == VirtualHost.getVirtualHostForThread().getMissionSystem();
+    }
+
+    @Deprecated
+    public boolean hasAmount() {
+        return getAmount() != null;
+    }
+
+    @Deprecated
+    public boolean hasFundAllocationId() {
+        return getFundAllocationId() != null;
+    }
+
+    @Deprecated
+    public boolean hasMissionItem() {
+        return getMissionItem() != null;
+    }
+
+    @Deprecated
+    public boolean hasMissionVersionFromArchive() {
+        return getMissionVersionFromArchive() != null;
+    }
+
+    @Deprecated
+    public boolean hasMissionFinancer() {
+        return getMissionFinancer() != null;
+    }
+
+    @Deprecated
+    public boolean hasMissionSystem() {
+        return getMissionSystem() != null;
     }
 
 }

@@ -33,8 +33,8 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTh
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.ImportFile;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.fenixWebFramework.FenixWebFramework;
-import pt.ist.fenixWebFramework.services.Service;
-import pt.ist.fenixframework.pstm.AbstractDomainObject;
+import pt.ist.fenixframework.Atomic;
+import pt.ist.fenixframework.FenixFramework;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 
 /**
@@ -57,12 +57,12 @@ public class CheckLimits {
         System.out.println("Done.");
     }
 
-    @Service
+    @Atomic
     private static void check() {
-        final ImportFile importFile = AbstractDomainObject.fromExternalId("240518175783");
+        final ImportFile importFile = FenixFramework.getDomainObject("240518175783");
         System.out.println("Found: " + importFile.getDisplayName() + " - " + importFile.getFilename());
         System.out.println("   isActive ? " + importFile.getActive());
-        System.out.println("   associated processes: " + importFile.getAfterTheFactAcquisitionProcessesCount());
+        System.out.println("   associated processes: " + importFile.getAfterTheFactAcquisitionProcessesSet().size());
 
         for (final AfterTheFactAcquisitionProcess afterTheFactAcquisitionProcess : importFile
                 .getAfterTheFactAcquisitionProcessesSet()) {

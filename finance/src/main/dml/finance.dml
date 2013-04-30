@@ -1,6 +1,5 @@
 package module.finance.domain;
 
-
 valueType pt.ist.bennu.core.domain.util.Address as Address {
     externalizeWith {
         String exportAsString();
@@ -8,15 +7,6 @@ valueType pt.ist.bennu.core.domain.util.Address as Address {
 
     internalizeWith importFromString();
 }
-
-valueType pt.ist.bennu.core.domain.util.Money as Money {
-    externalizeWith {
-        String exportAsString();
-    }
-
-    internalizeWith importFromString();
-}
-
 
 class FinanceSystem {
 }

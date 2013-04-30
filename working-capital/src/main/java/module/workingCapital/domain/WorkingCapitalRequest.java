@@ -49,7 +49,7 @@ public class WorkingCapitalRequest extends WorkingCapitalRequest_Base {
         setWorkingCapitalSystem(workingCapitalSystem);
         setRequestCreation(new DateTime());
         final User user = UserView.getCurrentUser();
-        if (user == null || !user.hasPerson()) {
+        if (user == null || user.getPerson() == null) {
             throw new Error("error.requester.must.be.specified");
         }
         setWorkingCapitalRequester(user.getPerson());
@@ -88,11 +88,11 @@ public class WorkingCapitalRequest extends WorkingCapitalRequest_Base {
     }
 
     public void delete() {
-        removeWorkingCapital();
-        removeWorkingCapitalPayment();
-        removeWorkingCapitalRequester();
-        removeWorkingCapitalTreasuryProcessor();
-        removeWorkingCapitalSystem();
+        setWorkingCapital(null);
+        setWorkingCapitalPayment(null);
+        setWorkingCapitalRequester(null);
+        setWorkingCapitalTreasuryProcessor(null);
+        setWorkingCapitalSystem(null);
         super.deleteDomainObject();
     }
 
@@ -100,4 +100,50 @@ public class WorkingCapitalRequest extends WorkingCapitalRequest_Base {
     public boolean isConnectedToCurrentHost() {
         return getWorkingCapitalSystem() == WorkingCapitalSystem.getInstanceForCurrentHost();
     }
+
+    @Deprecated
+    public boolean hasRequestCreation() {
+        return getRequestCreation() != null;
+    }
+
+    @Deprecated
+    public boolean hasRequestedValue() {
+        return getRequestedValue() != null;
+    }
+
+    @Deprecated
+    public boolean hasPaymentMethod() {
+        return getPaymentMethod() != null;
+    }
+
+    @Deprecated
+    public boolean hasProcessedByTreasury() {
+        return getProcessedByTreasury() != null;
+    }
+
+    @Deprecated
+    public boolean hasWorkingCapital() {
+        return getWorkingCapital() != null;
+    }
+
+    @Deprecated
+    public boolean hasWorkingCapitalPayment() {
+        return getWorkingCapitalPayment() != null;
+    }
+
+    @Deprecated
+    public boolean hasWorkingCapitalRequester() {
+        return getWorkingCapitalRequester() != null;
+    }
+
+    @Deprecated
+    public boolean hasWorkingCapitalSystem() {
+        return getWorkingCapitalSystem() != null;
+    }
+
+    @Deprecated
+    public boolean hasWorkingCapitalTreasuryProcessor() {
+        return getWorkingCapitalTreasuryProcessor() != null;
+    }
+
 }

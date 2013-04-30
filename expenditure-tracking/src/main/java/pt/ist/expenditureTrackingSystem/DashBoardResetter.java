@@ -34,7 +34,7 @@ import pt.ist.expenditureTrackingSystem.domain.DashBoard;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.fenixWebFramework.FenixWebFramework;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 import pt.utl.ist.fenix.tools.util.Strings;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 
@@ -60,7 +60,7 @@ public class DashBoardResetter {
         System.out.println("Done.");
     }
 
-    @Service
+    @Atomic
     private static void reset() {
         final ExpenditureTrackingSystem expenditureTrackingSystem = ExpenditureTrackingSystem.getInstance();
         for (final Person person : MyOrg.getInstance().getPeopleFromExpenditureTackingSystemSet()) {

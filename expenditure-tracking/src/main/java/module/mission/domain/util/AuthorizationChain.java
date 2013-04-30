@@ -28,7 +28,7 @@ import java.io.Serializable;
 
 import module.mission.domain.MissionSystem;
 import module.organization.domain.Unit;
-import pt.ist.fenixframework.pstm.AbstractDomainObject;
+import pt.ist.fenixframework.FenixFramework;
 
 /**
  * 
@@ -90,7 +90,7 @@ public class AuthorizationChain implements Serializable {
     public static AuthorizationChain importFromString(final String string) {
         AuthorizationChain authorizationChain = null;
         for (final String externalUnitId : string.split("_")) {
-            final Unit unit = AbstractDomainObject.fromExternalId(externalUnitId);
+            final Unit unit = FenixFramework.getDomainObject(externalUnitId);
             AuthorizationChain next = new AuthorizationChain(unit);
             if (authorizationChain == null) {
                 authorizationChain = next;

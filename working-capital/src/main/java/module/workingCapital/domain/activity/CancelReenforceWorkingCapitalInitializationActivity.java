@@ -53,7 +53,7 @@ public class CancelReenforceWorkingCapitalInitializationActivity extends
         return workingCapital.hasMovementResponsible() && workingCapital.getMovementResponsible().getUser() == user
                 && !workingCapital.isCanceledOrRejected() && workingCapitalInitialization != null
                 && workingCapitalInitialization.isPendingAproval() && !workingCapitalInitialization.isCanceledOrRejected()
-                && workingCapital.getWorkingCapitalInitializationsCount() > 1;
+                && workingCapital.getWorkingCapitalInitializations().size() > 1;
     }
 
     @Override

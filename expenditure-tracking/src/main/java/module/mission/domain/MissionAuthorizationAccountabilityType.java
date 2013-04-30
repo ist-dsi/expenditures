@@ -2,7 +2,7 @@ package module.mission.domain;
 
 import module.organization.domain.AccountabilityType;
 import pt.ist.bennu.core.domain.VirtualHost;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 public class MissionAuthorizationAccountabilityType extends MissionAuthorizationAccountabilityType_Base {
 
@@ -33,17 +33,37 @@ public class MissionAuthorizationAccountabilityType extends MissionAuthorization
         return stringBuilder.toString();
     }
 
-    @Service
+    @Atomic
     public void delete() {
-        removeAccountabilityType();
+        setAccountabilityType(null);
         getAccountabilityTypesSet().clear();
-        removeMissionSystem();
+        setMissionSystem(null);
         deleteDomainObject();
     }
 
     @Override
     public boolean isConnectedToCurrentHost() {
         return getMissionSystem() == VirtualHost.getVirtualHostForThread().getMissionSystem();
+    }
+
+    @Deprecated
+    public java.util.Set<module.organization.domain.AccountabilityType> getAccountabilityTypes() {
+        return getAccountabilityTypesSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyAccountabilityTypes() {
+        return !getAccountabilityTypesSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAccountabilityType() {
+        return getAccountabilityType() != null;
+    }
+
+    @Deprecated
+    public boolean hasMissionSystem() {
+        return getMissionSystem() != null;
     }
 
 }

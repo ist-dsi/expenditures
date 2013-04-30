@@ -18,9 +18,9 @@ public class RemoveParticipantActivity extends MissionProcessActivity<MissionPro
     @Override
     public boolean isActive(final MissionProcess missionProcess, final User user) {
         return super.isActive(missionProcess, user) && missionProcess.isUnderConstruction() && missionProcess.isRequestor(user)
-                && missionProcess.getMission().getMissionVersionsCount() == 1
+                && missionProcess.getMission().getMissionVersionsSet().size() == 1
                 && !missionProcess.getMission().getParticipantesSet().isEmpty()
-                && (!missionProcess.hasAnyMissionItems() || missionProcess.getMission().getParticipantesCount() > 1);
+                && (!missionProcess.hasAnyMissionItems() || missionProcess.getMission().getParticipantesSet().size() > 1);
     }
 
     @Override

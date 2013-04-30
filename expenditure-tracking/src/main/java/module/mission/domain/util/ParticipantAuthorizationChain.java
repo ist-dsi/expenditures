@@ -43,7 +43,7 @@ import org.joda.time.LocalDate;
 
 import pt.ist.bennu.core.domain.User;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * 
@@ -168,13 +168,13 @@ public class ParticipantAuthorizationChain implements Serializable {
         return null;
     }
 
-    @Service
+    @Atomic
     private static void createResponsibleForUnit(final Set<AccountabilityType> accountabilityTypesThatAuthorize, final Unit unit) {
         for (final Authorization authorization : unit.getExpenditureUnit().getAuthorizationsSet()) {
             if (authorization.isValid()) {
                 final pt.ist.expenditureTrackingSystem.domain.organization.Person authority = authorization.getPerson();
                 final User user = authority.getUser();
-                if (user != null && user.hasPerson()) {
+                if (user != null && user.getPerson() != null) {
                     for (final AccountabilityType accountabilityType : accountabilityTypesThatAuthorize) {
                         unit.addChild(user.getPerson(), accountabilityType, new LocalDate(), null);
                     }

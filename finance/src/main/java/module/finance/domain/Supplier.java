@@ -47,13 +47,13 @@ public class Supplier extends Supplier_Base {
 
     public void delete() {
         if (checkIfCanBeDeleted()) {
-            removeFinanceSystem();
+            setFinanceSystem(null);
             deleteDomainObject();
         }
     }
 
     protected boolean checkIfCanBeDeleted() {
-        return !hasAnyProvisions();
+        return getProvisionsSet().isEmpty();
     }
 
     public String getPresentationName() {
@@ -120,6 +120,16 @@ public class Supplier extends Supplier_Base {
             }
         }
         return null;
+    }
+
+    @Deprecated
+    public java.util.Set<module.finance.domain.Provision> getProvisions() {
+        return getProvisionsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.finance.domain.SupplierContact> getSupplierContact() {
+        return getSupplierContactSet();
     }
 
 }

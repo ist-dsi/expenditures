@@ -70,10 +70,10 @@ public class FixVehicleItemDrivers extends WriteCustomTask {
                 Mission mission = vehicle.getMissionVersion().getMission();
                 if (!vehicle.hasDriver()) {
                     noDriverVehicles++;
-                    if (vehicle.getPeopleCount() == 1) {
+                    if (vehicle.getPeopleSet().size() == 1) {
                         noDriverVehiclesFixable++;
                         if (PERFORM_CHANGES) {
-                            vehicle.setDriver(vehicle.getPeople().get(0));
+                            vehicle.setDriver(vehicle.getPeople().iterator().next());
                         }
                     } else if ((mission.getMissionResponsible() instanceof Person)
                             && (vehicle.getPeople().contains(mission.getMissionResponsible()))) {
@@ -84,7 +84,7 @@ public class FixVehicleItemDrivers extends WriteCustomTask {
                     } else {
                         noDriverVehiclesFixable++;
                         if (PERFORM_CHANGES) {
-                            vehicle.setDriver(vehicle.getPeople().get(0));
+                            vehicle.setDriver(vehicle.getPeople().iterator().next());
                         }
                     }
                 }

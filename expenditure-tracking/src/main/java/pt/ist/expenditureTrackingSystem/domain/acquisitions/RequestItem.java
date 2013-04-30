@@ -26,6 +26,7 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -79,9 +80,9 @@ public abstract class RequestItem extends RequestItem_Base {
     }
 
     protected void delete() {
-        removeCPVReference();
-        removeExpenditureTrackingSystem();
-        for (; !getUnitItems().isEmpty(); getUnitItems().get(0).delete()) {
+        setCPVReference(null);
+        setExpenditureTrackingSystem(null);
+        for (; !getUnitItems().isEmpty(); getUnitItems().iterator().next().delete()) {
             ;
         }
         for (; !getInvoicesFiles().isEmpty(); getInvoicesFiles().remove(0)) {
@@ -138,7 +139,7 @@ public abstract class RequestItem extends RequestItem_Base {
     }
 
     public boolean isPartiallyApproved() {
-        if (getUnitItemsCount() == 0) {
+        if (getUnitItems().size() == 0) {
             return false;
         }
 
@@ -156,7 +157,7 @@ public abstract class RequestItem extends RequestItem_Base {
     }
 
     public boolean isApproved() {
-        if (getUnitItemsCount() == 0) {
+        if (getUnitItems().size() == 0) {
             return false;
         }
         for (final UnitItem unitItem : getUnitItems()) {
@@ -168,7 +169,7 @@ public abstract class RequestItem extends RequestItem_Base {
     }
 
     public boolean isPartiallyAuthorized() {
-        if (getUnitItemsCount() == 0) {
+        if (getUnitItems().size() == 0) {
             return false;
         }
 
@@ -342,7 +343,7 @@ public abstract class RequestItem extends RequestItem_Base {
     }
 
     public boolean isConfirmedForAllInvoices(Person person) {
-        List<PaymentProcessInvoice> allInvoices = getInvoicesFiles();
+        Collection<PaymentProcessInvoice> allInvoices = getInvoicesFiles();
 
         if (allInvoices.isEmpty()) {
             return false;
@@ -370,6 +371,51 @@ public abstract class RequestItem extends RequestItem_Base {
     @Override
     public boolean isConnectedToCurrentHost() {
         return getExpenditureTrackingSystem() == ExpenditureTrackingSystem.getInstance();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessInvoice> getInvoicesFiles() {
+        return getInvoicesFilesSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.acquisitions.UnitItem> getUnitItems() {
+        return getUnitItemsSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyInvoicesFiles() {
+        return !getInvoicesFilesSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyUnitItems() {
+        return !getUnitItemsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasDescription() {
+        return getDescription() != null;
+    }
+
+    @Deprecated
+    public boolean hasClassification() {
+        return getClassification() != null;
+    }
+
+    @Deprecated
+    public boolean hasExpenditureTrackingSystem() {
+        return getExpenditureTrackingSystem() != null;
+    }
+
+    @Deprecated
+    public boolean hasCPVReference() {
+        return getCPVReference() != null;
+    }
+
+    @Deprecated
+    public boolean hasRequest() {
+        return getRequest() != null;
     }
 
 }

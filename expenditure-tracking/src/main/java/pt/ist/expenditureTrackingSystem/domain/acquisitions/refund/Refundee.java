@@ -73,4 +73,34 @@ public class Refundee extends Refundee_Base {
         return getExpenditureTrackingSystem() == ExpenditureTrackingSystem.getInstance();
     }
 
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundRequest> getRefundRequests() {
+        return getRefundRequestsSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyRefundRequests() {
+        return !getRefundRequestsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasName() {
+        return getName() != null;
+    }
+
+    @Deprecated
+    public boolean hasFiscalCode() {
+        return getFiscalCode() != null;
+    }
+
+    @Deprecated
+    public boolean hasExpenditureTrackingSystem() {
+        return getExpenditureTrackingSystem() != null;
+    }
+
+    @Deprecated
+    public boolean hasPerson() {
+        return getPerson() != null;
+    }
+
 }

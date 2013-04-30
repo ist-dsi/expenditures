@@ -78,4 +78,29 @@ public abstract class ProcessState extends ProcessState_Base {
         return getExpenditureTrackingSystem() == ExpenditureTrackingSystem.getInstance();
     }
 
+    @Deprecated
+    public boolean hasWhenDateTime() {
+        return getWhenDateTime() != null;
+    }
+
+    @Deprecated
+    public boolean hasJustification() {
+        return getJustification() != null;
+    }
+
+    @Deprecated
+    public boolean hasWho() {
+        return getWho() != null;
+    }
+
+    @Deprecated
+    public boolean hasProcess() {
+        return getProcess() != null;
+    }
+
+    @Deprecated
+    public boolean hasExpenditureTrackingSystem() {
+        return getExpenditureTrackingSystem() != null;
+    }
+
 }

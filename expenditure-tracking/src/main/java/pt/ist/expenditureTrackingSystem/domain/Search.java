@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 public abstract class Search<T> implements Serializable {
 
@@ -34,7 +34,7 @@ public abstract class Search<T> implements Serializable {
         return search();
     }
 
-    @Service
+    @Atomic
     public void persistSearch(String name) {
         persist(name);
     }

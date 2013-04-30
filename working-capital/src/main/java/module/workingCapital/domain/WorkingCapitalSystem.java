@@ -27,21 +27,22 @@ package module.workingCapital.domain;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeConstants;
-
 import module.organization.domain.Accountability;
 import module.organization.domain.AccountabilityType;
 import module.organization.domain.Person;
 import module.organization.domain.Unit;
 import module.workflow.widgets.ProcessListWidget;
 import module.workingCapital.domain.util.WorkingCapitalPendingProcessCounter;
+
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeConstants;
+
 import pt.ist.bennu.core.domain.ModuleInitializer;
 import pt.ist.bennu.core.domain.MyOrg;
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.domain.VirtualHost;
-import pt.ist.fenixWebFramework.services.Service;
-import dml.runtime.RelationAdapter;
+import pt.ist.fenixframework.Atomic;
+import pt.ist.fenixframework.dml.runtime.RelationAdapter;
 
 /**
  * 
@@ -56,13 +57,13 @@ public class WorkingCapitalSystem extends WorkingCapitalSystem_Base implements M
 
         @Override
         public void beforeRemove(VirtualHost vh, MyOrg myorg) {
-            vh.removeWorkingCapitalSystem();
+            vh.setWorkingCapitalSystem(null);
             super.beforeRemove(vh, myorg);
         }
     }
 
     static {
-        VirtualHost.MyOrgVirtualHost.addListener(new VirtualHostMyOrgRelationListener());
+        VirtualHost.getRelationMyOrgVirtualHost().addListener(new VirtualHostMyOrgRelationListener());
 
         ProcessListWidget.register(new WorkingCapitalPendingProcessCounter());
     }
@@ -88,14 +89,14 @@ public class WorkingCapitalSystem extends WorkingCapitalSystem_Base implements M
         virtualHost.setWorkingCapitalSystem(this);
     }
 
-    @Service
+    @Atomic
     public void resetAcquisitionValueLimit() {
         setAcquisitionValueLimit(null);
     }
 
-    @Service
+    @Atomic
     public static void createSystem(final VirtualHost virtualHost) {
-        if (!virtualHost.hasWorkingCapitalSystem() || virtualHost.getWorkingCapitalSystem().getVirtualHostsCount() > 1) {
+        if (virtualHost.getWorkingCapitalSystem() == null || virtualHost.getWorkingCapitalSystem().getVirtualHosts().size() > 1) {
             new WorkingCapitalSystem(virtualHost);
         }
     }
@@ -142,20 +143,120 @@ public class WorkingCapitalSystem extends WorkingCapitalSystem_Base implements M
     }
 
     @Override
-    @Service
+    @Atomic
     public void init(final MyOrg root) {
         final WorkingCapitalSystem workingCapitalSystem = root.getWorkingCapitalSystem();
         if (workingCapitalSystem != null) {
         }
     }
 
-    @Service
+    @Atomic
     public void setForVirtualHost(final VirtualHost virtualHost) {
         virtualHost.setWorkingCapitalSystem(this);
     }
-    
-    public static boolean isLastMonthForWorkingCapitalTermination(){
-    	return  new DateTime().monthOfYear().get() == DateTimeConstants.DECEMBER;
+
+    public static boolean isLastMonthForWorkingCapitalTermination() {
+        return new DateTime().monthOfYear().get() == DateTimeConstants.DECEMBER;
+    }
+
+    @Deprecated
+    public boolean hasAcquisitionValueLimit() {
+        return getAcquisitionValueLimit() != null;
+    }
+
+    @Deprecated
+    public java.util.Set<module.workingCapital.domain.WorkingCapitalAcquisition> getWorkingCapitalAcquisitions() {
+        return getWorkingCapitalAcquisitionsSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyWorkingCapitalAcquisitions() {
+        return !getWorkingCapitalAcquisitionsSet().isEmpty();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.bennu.core.domain.VirtualHost> getVirtualHosts() {
+        return getVirtualHostsSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyVirtualHosts() {
+        return !getVirtualHostsSet().isEmpty();
+    }
+
+    @Deprecated
+    public java.util.Set<module.workingCapital.domain.WorkingCapitalTransaction> getWorkingCapitalTransactions() {
+        return getWorkingCapitalTransactionsSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyWorkingCapitalTransactions() {
+        return !getWorkingCapitalTransactionsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasMyOrg() {
+        return getMyOrg() != null;
+    }
+
+    @Deprecated
+    public java.util.Set<module.workingCapital.domain.WorkingCapitalInitialization> getWorkingCapitalInitializations() {
+        return getWorkingCapitalInitializationsSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyWorkingCapitalInitializations() {
+        return !getWorkingCapitalInitializationsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasManagingAccountabilityType() {
+        return getManagingAccountabilityType() != null;
+    }
+
+    @Deprecated
+    public java.util.Set<module.workingCapital.domain.WorkingCapitalYear> getWorkingCapitalYears() {
+        return getWorkingCapitalYearsSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyWorkingCapitalYears() {
+        return !getWorkingCapitalYearsSet().isEmpty();
+    }
+
+    @Deprecated
+    public java.util.Set<module.workingCapital.domain.WorkingCapital> getWorkingCapitals() {
+        return getWorkingCapitalsSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyWorkingCapitals() {
+        return !getWorkingCapitalsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasManagementUnit() {
+        return getManagementUnit() != null;
+    }
+
+    @Deprecated
+    public java.util.Set<module.workingCapital.domain.AcquisitionClassification> getAcquisitionClassifications() {
+        return getAcquisitionClassificationsSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyAcquisitionClassifications() {
+        return !getAcquisitionClassificationsSet().isEmpty();
+    }
+
+    @Deprecated
+    public java.util.Set<module.workingCapital.domain.WorkingCapitalRequest> getWorkingCapitalRequests() {
+        return getWorkingCapitalRequestsSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyWorkingCapitalRequests() {
+        return !getWorkingCapitalRequestsSet().isEmpty();
     }
 
 }

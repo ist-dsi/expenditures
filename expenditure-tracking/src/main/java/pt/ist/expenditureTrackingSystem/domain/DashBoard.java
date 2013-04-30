@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 import pt.utl.ist.fenix.tools.util.Strings;
 
 /**
@@ -46,7 +46,7 @@ public class DashBoard extends DashBoard_Base {
         reset();
     }
 
-    @Service
+    @Atomic
     public void reset() {
         List<String> column1 = new ArrayList<String>();
         List<String> column2 = new ArrayList<String>();
@@ -64,27 +64,52 @@ public class DashBoard extends DashBoard_Base {
         setColumn3(new Strings(column3));
     }
 
-    @Service
+    @Atomic
     public void edit(Strings column1, Strings column2, Strings column3) {
         setColumn1(column1);
         setColumn2(column2);
         setColumn3(column3);
     }
 
-    @Service
+    @Atomic
     public static DashBoard newDashBoard(Person person) {
         return new DashBoard(person);
     }
 
     public void delete() {
-        removePerson();
-        removeExpenditureTrackingSystem();
+        setPerson(null);
+        setExpenditureTrackingSystem(null);
         deleteDomainObject();
     }
 
     @Override
     public boolean isConnectedToCurrentHost() {
         return getExpenditureTrackingSystem() == ExpenditureTrackingSystem.getInstance();
+    }
+
+    @Deprecated
+    public boolean hasColumn1() {
+        return getColumn1() != null;
+    }
+
+    @Deprecated
+    public boolean hasColumn2() {
+        return getColumn2() != null;
+    }
+
+    @Deprecated
+    public boolean hasColumn3() {
+        return getColumn3() != null;
+    }
+
+    @Deprecated
+    public boolean hasExpenditureTrackingSystem() {
+        return getExpenditureTrackingSystem() != null;
+    }
+
+    @Deprecated
+    public boolean hasPerson() {
+        return getPerson() != null;
     }
 
 }

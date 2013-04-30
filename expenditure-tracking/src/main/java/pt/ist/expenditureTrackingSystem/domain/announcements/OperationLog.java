@@ -92,4 +92,9 @@ public class OperationLog extends OperationLog_Base {
         return genericProcess != null && genericProcess.isConnectedToCurrentHost();
     }
 
+    @Deprecated
+    public boolean hasState() {
+        return getState() != null;
+    }
+
 }

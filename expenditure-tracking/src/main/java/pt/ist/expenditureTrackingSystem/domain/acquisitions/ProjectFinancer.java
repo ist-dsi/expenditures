@@ -24,8 +24,8 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
@@ -114,7 +114,7 @@ public class ProjectFinancer extends ProjectFinancer_Base {
 
     @Override
     public boolean hasAllocatedFundsPermanentlyForAllProjectFinancers() {
-        List<PaymentProcessInvoice> allocatedInvoicesInProject = getAllocatedInvoicesInProject();
+        Collection<PaymentProcessInvoice> allocatedInvoicesInProject = getAllocatedInvoicesInProject();
         for (UnitItem unitItem : getUnitItems()) {
             if (!allocatedInvoicesInProject.containsAll(unitItem.getConfirmedInvoices())) {
                 return false;
@@ -125,7 +125,7 @@ public class ProjectFinancer extends ProjectFinancer_Base {
 
     @Override
     public boolean hasAllocatedFundsPermanentlyForAnyProjectFinancers() {
-        List<PaymentProcessInvoice> allocatedInvoicesInProject = getAllocatedInvoicesInProject();
+        Collection<PaymentProcessInvoice> allocatedInvoicesInProject = getAllocatedInvoicesInProject();
         for (UnitItem unitItem : getUnitItems()) {
             if (!allocatedInvoicesInProject.isEmpty() && allocatedInvoicesInProject.containsAll(unitItem.getConfirmedInvoices())) {
                 return true;
@@ -192,7 +192,7 @@ public class ProjectFinancer extends ProjectFinancer_Base {
     @Override
     public boolean isProjectAccountingEmployeeForOnePossibleUnit(final Person person) {
         for (final AccountingUnit accountingUnit : getAccountingUnits()) {
-            if (accountingUnit.hasPeople(person)) {
+            if (accountingUnit.getPeopleSet().contains(person)) {
                 return true;
             }
         }
@@ -202,7 +202,7 @@ public class ProjectFinancer extends ProjectFinancer_Base {
     @Override
     public boolean isProjectAccountingEmployee(Person person) {
         final AccountingUnit accountingUnit = getAccountingUnit();
-        return accountingUnit == null ? false : accountingUnit.hasProjectAccountants(person);
+        return accountingUnit == null ? false : accountingUnit.getProjectAccountantsSet().contains(person);
     }
 
     @Override
@@ -222,7 +222,7 @@ public class ProjectFinancer extends ProjectFinancer_Base {
 
     @Override
     public boolean hasAllInvoicesAllocatedInProject() {
-        List<PaymentProcessInvoice> allocatedInvoices = getAllocatedInvoicesInProject();
+        Collection<PaymentProcessInvoice> allocatedInvoices = getAllocatedInvoicesInProject();
         for (UnitItem unitItem : getUnitItems()) {
             if (!allocatedInvoices.containsAll(unitItem.getConfirmedInvoices())) {
                 return false;
@@ -255,6 +255,26 @@ public class ProjectFinancer extends ProjectFinancer_Base {
             result.append(projectFundAllocationId);
         }
         return result.toString();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessInvoice> getAllocatedInvoicesInProject() {
+        return getAllocatedInvoicesInProjectSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyAllocatedInvoicesInProject() {
+        return !getAllocatedInvoicesInProjectSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasProjectFundAllocationId() {
+        return getProjectFundAllocationId() != null;
+    }
+
+    @Deprecated
+    public boolean hasEffectiveProjectFundAllocationId() {
+        return getEffectiveProjectFundAllocationId() != null;
     }
 
 }

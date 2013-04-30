@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import module.mission.domain.DailyPersonelExpenseCategory;
 import module.mission.domain.DailyPersonelExpenseTable;
 import pt.ist.bennu.core.domain.util.Money;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 public class DailyPersonelExpenseCategoryBean implements Serializable {
 
@@ -51,7 +51,7 @@ public class DailyPersonelExpenseCategoryBean implements Serializable {
         this.minSalaryValue = minSalaryValue;
     }
 
-    @Service
+    @Atomic
     public DailyPersonelExpenseCategory createDailyPersonelExpenseCategory() {
         return dailyPersonelExpenseTable.createDailyPersonelExpenseCategory(description, value, minSalaryValue);
     }

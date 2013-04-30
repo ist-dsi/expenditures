@@ -48,12 +48,13 @@ import module.workflow.domain.ProcessFile;
 import module.workflow.domain.WorkflowLog;
 
 import org.apache.commons.collections.comparators.ComparatorChain;
-import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import pt.ist.bennu.core.domain.util.Money;
 import pt.ist.bennu.core.presentationTier.actions.ContextBaseAction;
@@ -108,7 +109,7 @@ import pt.utl.ist.fenix.tools.util.excel.Spreadsheet.Row;
  */
 public class StatisticsAction extends ContextBaseAction {
 
-    private Logger logger = Logger.getLogger(StatisticsAction.class);
+    private final static Logger logger = LoggerFactory.getLogger(StatisticsAction.class);
 
     public ActionForward showStatistics(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
             final HttpServletResponse response) {

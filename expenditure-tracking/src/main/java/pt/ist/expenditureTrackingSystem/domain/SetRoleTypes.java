@@ -26,7 +26,7 @@ package pt.ist.expenditureTrackingSystem.domain;
 
 import pt.ist.bennu.core.domain.User;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * 
@@ -39,7 +39,7 @@ public class SetRoleTypes extends SetRoleTypes_Base {
         super();
     }
 
-    @Service
+    @Atomic
     @Override
     public void executeTask() {
         for (final RoleType roleType : RoleType.values()) {

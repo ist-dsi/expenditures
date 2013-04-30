@@ -80,4 +80,34 @@ public abstract class Announcement extends Announcement_Base {
         return getExpenditureTrackingSystem() == ExpenditureTrackingSystem.getInstance();
     }
 
+    @Deprecated
+    public boolean hasDescription() {
+        return getDescription() != null;
+    }
+
+    @Deprecated
+    public boolean hasTotalPrice() {
+        return getTotalPrice() != null;
+    }
+
+    @Deprecated
+    public boolean hasCreationDate() {
+        return getCreationDate() != null;
+    }
+
+    @Deprecated
+    public boolean hasActive() {
+        return getActive() != null;
+    }
+
+    @Deprecated
+    public boolean hasExpenditureTrackingSystem() {
+        return getExpenditureTrackingSystem() != null;
+    }
+
+    @Deprecated
+    public boolean hasAcquisition() {
+        return getAcquisition() != null;
+    }
+
 }

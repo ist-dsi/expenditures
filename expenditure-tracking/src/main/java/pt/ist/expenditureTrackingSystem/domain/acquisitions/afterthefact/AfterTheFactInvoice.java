@@ -33,7 +33,7 @@ import module.workflow.util.WorkflowFileUploadBean;
 import pt.ist.bennu.core.util.ClassNameBundle;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Invoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.fileBeans.AfterTheFactInvoiceBean;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 @ClassNameBundle(bundle = "resources/AcquisitionResources")
 /**
@@ -84,9 +84,9 @@ public class AfterTheFactInvoice extends AfterTheFactInvoice_Base {
     }
 
     @Override
-    @Service
+    @Atomic
     public void delete() {
-        removeProcess();
+        setProcess(null);
         super.delete();
     }
 }

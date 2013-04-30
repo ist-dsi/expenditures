@@ -810,7 +810,7 @@ public class OrganizationAction extends BaseAction {
         spreadsheet.setHeader("Reembolsos");
         spreadsheet.setHeader("Por outras Vias");
 
-        for (Supplier supplier : MyOrg.getInstance().getSuppliers()) {
+        for (Supplier supplier : MyOrg.getInstance().getSuppliersSet()) {
             Row row = spreadsheet.addRow();
             row.setCell(supplier.getName());
             row.setCell(supplier.getFiscalIdentificationCode());

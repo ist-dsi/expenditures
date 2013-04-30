@@ -47,4 +47,9 @@ public class OtherPersonelExpenseItem extends OtherPersonelExpenseItem_Base {
         otherPersonelExpenseItem.setValue(getValue());
     }
 
+    @Deprecated
+    public boolean hasValue() {
+        return getValue() != null;
+    }
+
 }

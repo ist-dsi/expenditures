@@ -26,7 +26,7 @@ package pt.ist.expenditureTrackingSystem.domain.organization;
 
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.dto.AccountingUnitBean;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * 
@@ -40,74 +40,74 @@ public class AccountingUnit extends AccountingUnit_Base {
         setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
     }
 
-    @Service
+    @Atomic
     public static AccountingUnit createNewAccountingUnit(final AccountingUnitBean accountingUnitBean) {
         final AccountingUnit accountingUnit = new AccountingUnit();
         accountingUnit.setName(accountingUnitBean.getName());
         return accountingUnit;
     }
 
-    @Service
+    @Atomic
     @Override
     public void addResponsiblePeople(final Person people) {
         super.addResponsiblePeople(people);
     }
 
-    @Service
+    @Atomic
     @Override
     public void addPeople(final Person people) {
         super.addPeople(people);
     }
 
-    @Service
+    @Atomic
     @Override
     public void addResponsibleProjectAccountants(final Person people) {
         super.addResponsibleProjectAccountants(people);
     }
 
-    @Service
+    @Atomic
     @Override
     public void addProjectAccountants(final Person people) {
         super.addProjectAccountants(people);
     }
 
-    @Service
+    @Atomic
     @Override
     public void addTreasuryMembers(Person treasuryMembers) {
         super.addTreasuryMembers(treasuryMembers);
     }
 
-    @Service
+    @Atomic
     @Override
     public void removeResponsiblePeople(final Person people) {
         super.removeResponsiblePeople(people);
     }
 
-    @Service
+    @Atomic
     @Override
     public void removePeople(final Person people) {
         super.removePeople(people);
     }
 
-    @Service
+    @Atomic
     @Override
     public void removeResponsibleProjectAccountants(final Person people) {
         super.removeResponsibleProjectAccountants(people);
     }
 
-    @Service
+    @Atomic
     @Override
     public void removeProjectAccountants(final Person people) {
         super.removeProjectAccountants(people);
     }
 
-    @Service
+    @Atomic
     @Override
     public void removeTreasuryMembers(Person treasuryMembers) {
         super.removeTreasuryMembers(treasuryMembers);
     }
 
-    @Service
+    @Atomic
     @Override
     public void addUnits(final Unit unit) {
         super.addUnits(unit);
@@ -125,6 +125,106 @@ public class AccountingUnit extends AccountingUnit_Base {
     @Override
     public boolean isConnectedToCurrentHost() {
         return getExpenditureTrackingSystem() == ExpenditureTrackingSystem.getInstance();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.organization.Person> getPeople() {
+        return getPeopleSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.organization.Unit> getUnits() {
+        return getUnitsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer> getFinancers() {
+        return getFinancersSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.organization.Person> getTreasuryMembers() {
+        return getTreasuryMembersSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.mission.domain.MissionFinancer> getMissionFinancer() {
+        return getMissionFinancerSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.organization.Person> getResponsibleProjectAccountants() {
+        return getResponsibleProjectAccountantsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.organization.Person> getProjectAccountants() {
+        return getProjectAccountantsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.SavedSearch> getAccountingUnitsSearches() {
+        return getAccountingUnitsSearchesSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.organization.Person> getResponsiblePeople() {
+        return getResponsiblePeopleSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyPeople() {
+        return !getPeopleSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyUnits() {
+        return !getUnitsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyFinancers() {
+        return !getFinancersSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyTreasuryMembers() {
+        return !getTreasuryMembersSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyMissionFinancer() {
+        return !getMissionFinancerSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyResponsibleProjectAccountants() {
+        return !getResponsibleProjectAccountantsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyProjectAccountants() {
+        return !getProjectAccountantsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyAccountingUnitsSearches() {
+        return !getAccountingUnitsSearchesSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyResponsiblePeople() {
+        return !getResponsiblePeopleSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasName() {
+        return getName() != null;
+    }
+
+    @Deprecated
+    public boolean hasExpenditureTrackingSystem() {
+        return getExpenditureTrackingSystem() != null;
     }
 
 }

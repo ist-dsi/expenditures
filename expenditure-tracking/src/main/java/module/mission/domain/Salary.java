@@ -31,7 +31,7 @@ import module.organization.domain.Party;
 import module.organization.domain.Person;
 import pt.ist.bennu.core.domain.MyOrg;
 import pt.ist.bennu.core.domain.VirtualHost;
-import dml.runtime.RelationAdapter;
+import pt.ist.fenixframework.dml.runtime.RelationAdapter;
 
 /**
  * 
@@ -46,8 +46,8 @@ public class Salary extends Salary_Base {
         public void afterRemove(final Party o1, final MyOrg o2) {
             if (o1.isPerson()) {
                 final Person person = (Person) o1;
-                if (person.hasSalary()) {
-                    person.removeSalary();
+                if (person.getSalary() != null) {
+                    person.setSalary(null);
                 }
             }
             super.afterRemove(o1, o2);
@@ -56,7 +56,7 @@ public class Salary extends Salary_Base {
     }
 
     static {
-        Party.MyOrgParty.addListener(new SalaryPartyMyOrgListener());
+        Party.getRelationMyOrgParty().addListener(new SalaryPartyMyOrgListener());
     }
 
     public Salary() {
@@ -98,7 +98,7 @@ public class Salary extends Salary_Base {
         if (person.getMissionSystemFromGovernmentMembership() != null) {
             return dailyPersonelExpenseTable.getMaxDailyPersonelExpenseCategory();
         }
-        final BigDecimal salary = person.hasSalary() ? person.getSalary().getValue() : new BigDecimal(0);
+        final BigDecimal salary = person.getSalary() != null ? person.getSalary().getValue() : new BigDecimal(0);
         DailyPersonelExpenseCategory result = null;
         for (final DailyPersonelExpenseCategory category : dailyPersonelExpenseTable.getDailyPersonelExpenseCategoriesSet()) {
             if (category.getMinSalaryValue().compareTo(salary) <= 0) {
@@ -153,6 +153,26 @@ public class Salary extends Salary_Base {
     @Override
     public boolean isConnectedToCurrentHost() {
         return getMissionSystem() == VirtualHost.getVirtualHostForThread().getMissionSystem();
+    }
+
+    @Deprecated
+    public java.util.Set<module.organization.domain.Person> getPeople() {
+        return getPeopleSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyPeople() {
+        return !getPeopleSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasValue() {
+        return getValue() != null;
+    }
+
+    @Deprecated
+    public boolean hasMissionSystem() {
+        return getMissionSystem() != null;
     }
 
 }

@@ -391,4 +391,14 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
         }
     }
 
+    @Deprecated
+    public boolean hasFundAllocationExpirationDate() {
+        return getFundAllocationExpirationDate() != null;
+    }
+
+    @Deprecated
+    public boolean hasAcquisitionRequest() {
+        return getAcquisitionRequest() != null;
+    }
+
 }

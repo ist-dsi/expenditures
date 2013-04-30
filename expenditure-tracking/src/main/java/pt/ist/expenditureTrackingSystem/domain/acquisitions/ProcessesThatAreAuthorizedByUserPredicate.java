@@ -24,7 +24,7 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
-import java.util.List;
+import java.util.Collection;
 
 import org.apache.commons.collections.Predicate;
 
@@ -40,7 +40,7 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
  */
 public class ProcessesThatAreAuthorizedByUserPredicate implements Predicate {
 
-    private Person person;
+    private final Person person;
 
     public ProcessesThatAreAuthorizedByUserPredicate(Person person) {
         this.person = person;
@@ -52,7 +52,7 @@ public class ProcessesThatAreAuthorizedByUserPredicate implements Predicate {
         if (process.getRequest() == null) {
             return false;
         }
-        final List<Financer> financers = process.getRequest().getFinancers();
+        final Collection<Financer> financers = process.getRequest().getFinancers();
 
         for (final Financer financer : financers) {
             final Unit unit = financer.getUnit();

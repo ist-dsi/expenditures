@@ -63,4 +63,14 @@ public class WorkingCapitalPayment extends WorkingCapitalPayment_Base {
         return true;
     }
 
+    @Deprecated
+    public boolean hasPaymentIdentification() {
+        return getPaymentIdentification() != null;
+    }
+
+    @Deprecated
+    public boolean hasWorkingCapitalRequest() {
+        return getWorkingCapitalRequest() != null;
+    }
+
 }

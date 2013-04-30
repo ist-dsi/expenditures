@@ -41,7 +41,7 @@ import pt.ist.expenditureTrackingSystem.domain.dto.Issue.IssueType;
 import pt.ist.expenditureTrackingSystem.domain.dto.Issue.IssueTypeLevel;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.presentationTier.util.FileUploadBean;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 import pt.utl.ist.fenix.tools.util.StringNormalizer;
 
 /**
@@ -104,7 +104,7 @@ public class AfterTheFactAcquisitionsImportBean extends FileUploadBean implement
         issues.clear();
     }
 
-    @Service
+    @Atomic
     public void importAcquisitions() {
         final String[] lines = getContents().split("\n");
         final ImportFile file = createData ? new ImportFile(getContents().getBytes(), getFilename()) : null;

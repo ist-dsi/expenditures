@@ -563,9 +563,9 @@ public class WorkingCapital extends WorkingCapital_Base {
         if (accountingUnit != null) {
             final Unit unit = getUnit();
             if (unit instanceof Project || unit instanceof SubProject) {
-                return accountingUnit.hasResponsibleProjectAccountants(person);
+                return accountingUnit.getResponsibleProjectAccountantsSet().contains(person);
             }
-            return accountingUnit.hasResponsiblePeople(person);
+            return accountingUnit.getResponsiblePeopleSet().contains(person);
         }
         return false;
     }
@@ -576,9 +576,9 @@ public class WorkingCapital extends WorkingCapital_Base {
         final pt.ist.expenditureTrackingSystem.domain.organization.Person person = user.getExpenditurePerson();
         if (unit != null && accountingUnit != null && person != null) {
             if (unit instanceof Project || unit instanceof SubProject) {
-                return accountingUnit.hasProjectAccountants(person);
+                return accountingUnit.getProjectAccountantsSet().contains(person);
             }
-            return accountingUnit.hasPeople(person);
+            return accountingUnit.getPeopleSet().contains(person);
         }
         return false;
     }
@@ -588,7 +588,7 @@ public class WorkingCapital extends WorkingCapital_Base {
         final AccountingUnit accountingUnit = getAccountingUnit();
         final pt.ist.expenditureTrackingSystem.domain.organization.Person person = user.getExpenditurePerson();
         return unit != null && accountingUnit != null && person != null
-                && (accountingUnit.hasProjectAccountants(person) || accountingUnit.hasPeople(person));
+                && (accountingUnit.getProjectAccountantsSet().contains(person) || accountingUnit.getPeopleSet().contains(person));
     }
 
     public boolean isDirectAccountingEmployee(final User user) {
@@ -597,10 +597,10 @@ public class WorkingCapital extends WorkingCapital_Base {
         final pt.ist.expenditureTrackingSystem.domain.organization.Person person = user.getExpenditurePerson();
         if (unit != null && accountingUnit != null && person != null) {
             if (unit instanceof Project || unit instanceof SubProject) {
-                return accountingUnit.hasProjectAccountants(person)
+                return accountingUnit.getProjectAccountantsSet().contains(person)
                         && (!unit.hasSomeAccountManager() || unit.isAccountManager(person));
             }
-            return accountingUnit.hasPeople(person);
+            return accountingUnit.getPeopleSet().contains(person);
         }
         return false;
     }
@@ -694,6 +694,71 @@ public class WorkingCapital extends WorkingCapital_Base {
     @Override
     public boolean isConnectedToCurrentHost() {
         return getWorkingCapitalSystem() == WorkingCapitalSystem.getInstanceForCurrentHost();
+    }
+
+    @Deprecated
+    public java.util.Set<module.workingCapital.domain.WorkingCapitalInitialization> getWorkingCapitalInitializations() {
+        return getWorkingCapitalInitializationsSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyWorkingCapitalInitializations() {
+        return !getWorkingCapitalInitializationsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasMovementResponsible() {
+        return getMovementResponsible() != null;
+    }
+
+    @Deprecated
+    public java.util.Set<module.workingCapital.domain.WorkingCapitalTransaction> getWorkingCapitalTransactions() {
+        return getWorkingCapitalTransactionsSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyWorkingCapitalTransactions() {
+        return !getWorkingCapitalTransactionsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasUnit() {
+        return getUnit() != null;
+    }
+
+    @Deprecated
+    public boolean hasWorkingCapitalProcess() {
+        return getWorkingCapitalProcess() != null;
+    }
+
+    @Deprecated
+    public boolean hasWorkingCapitalYear() {
+        return getWorkingCapitalYear() != null;
+    }
+
+    @Deprecated
+    public boolean hasWorkingCapitalSystem() {
+        return getWorkingCapitalSystem() != null;
+    }
+
+    @Deprecated
+    public java.util.Set<module.workingCapital.domain.WorkingCapitalRequest> getWorkingCapitalRequests() {
+        return getWorkingCapitalRequestsSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyWorkingCapitalRequests() {
+        return !getWorkingCapitalRequestsSet().isEmpty();
+    }
+
+    @Deprecated
+    public java.util.Set<module.workingCapital.domain.WorkingCapitalAcquisition> getWorkingCapitalAcquisitions() {
+        return getWorkingCapitalAcquisitionsSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyWorkingCapitalAcquisitions() {
+        return !getWorkingCapitalAcquisitionsSet().isEmpty();
     }
 
 }

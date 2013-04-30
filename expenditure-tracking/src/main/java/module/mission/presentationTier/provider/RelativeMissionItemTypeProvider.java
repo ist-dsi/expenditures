@@ -7,11 +7,11 @@ import java.util.TreeSet;
 
 import module.mission.domain.MissionProcess;
 import module.mission.domain.activity.ItemActivityInformation;
-import pt.ist.fenixWebFramework.FenixWebFramework;
 import pt.ist.fenixWebFramework.renderers.DataProvider;
 import pt.ist.fenixWebFramework.renderers.components.converters.Converter;
-import dml.DomainClass;
-import dml.DomainModel;
+import pt.ist.fenixframework.FenixFramework;
+import pt.ist.fenixframework.dml.DomainClass;
+import pt.ist.fenixframework.dml.DomainModel;
 
 public class RelativeMissionItemTypeProvider implements DataProvider {
 
@@ -31,7 +31,7 @@ public class RelativeMissionItemTypeProvider implements DataProvider {
     public Collection<Class> getMissionItemTypes(final Class topLevelMissionItemType) {
         final Set<Class> missionItemTypes = new TreeSet<Class>(TopLevelMissionItemTypeProvider.CLASS_COMPARATOR_BY_NAME);
         if (topLevelMissionItemType != null) {
-            final DomainModel domainModel = FenixWebFramework.getDomainModel();
+            final DomainModel domainModel = FenixFramework.getDomainModel();
             for (final DomainClass domainClass : domainModel.getDomainClasses()) {
                 if (isMissionItemSubclass(topLevelMissionItemType, domainClass)) {
                     try {

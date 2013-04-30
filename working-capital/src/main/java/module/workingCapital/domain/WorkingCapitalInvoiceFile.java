@@ -94,7 +94,12 @@ public class WorkingCapitalInvoiceFile extends WorkingCapitalInvoiceFile_Base {
 
     @Override
     public void delete() {
-        removeTransaction();
+        setTransaction(null);
         super.delete();
     }
+    @Deprecated
+    public boolean hasTransaction() {
+        return getTransaction() != null;
+    }
+
 }

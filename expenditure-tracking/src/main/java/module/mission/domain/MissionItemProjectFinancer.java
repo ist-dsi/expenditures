@@ -126,8 +126,18 @@ public class MissionItemProjectFinancer extends MissionItemProjectFinancer_Base 
 
     @Override
     public void delete() {
-        removeMissionVersionFromProjectArchive();
+        setMissionVersionFromProjectArchive(null);
         super.delete();
+    }
+
+    @Deprecated
+    public boolean hasProjectFundAllocationId() {
+        return getProjectFundAllocationId() != null;
+    }
+
+    @Deprecated
+    public boolean hasMissionVersionFromProjectArchive() {
+        return getMissionVersionFromProjectArchive() != null;
     }
 
 }
