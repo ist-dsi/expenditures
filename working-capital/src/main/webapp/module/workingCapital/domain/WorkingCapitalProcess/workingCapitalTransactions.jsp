@@ -5,6 +5,9 @@
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/fenix-renderers" prefix="fr"%>
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/workflow" prefix="wf"%>
 
+<%@ page import="module.workingCapital.domain.WorkingCapitalAcquisitionSubmission" %>
+<%@ page import="module.workingCapital.domain.ExceptionalWorkingCapitalAcquisitionTransaction" %>
+
 <bean:define id="workingCapital" name="process" property="workingCapital"/>
 
 <h3>
@@ -17,6 +20,15 @@
 	</p>
 </logic:empty>
 
+<style media="screen" type="text/css">
+tr.exceptionalAcquisition {
+	background-color : #FAFFBA
+}
+tr.exceptionalAcquisition td {
+	background-color : #FAFFBA
+}
+
+</style>
 <logic:notEmpty name="workingCapital" property="workingCapitalTransactions">
 	<br/>
 	<table class="tstyle3 width100pc">
@@ -26,21 +38,17 @@
 			</th>
 		</tr>
 		<logic:iterate id="workingCapitalTransaction" name="workingCapital" property="sortedWorkingCapitalTransactions">
+			<% if (workingCapitalTransaction instanceof ExceptionalWorkingCapitalAcquisitionTransaction) { %>
+			<tr class="exceptionalAcquisition">
+			<% } else { %>
 			<tr>
+			<% } %>
 				<bean:define id="workingCapitalTransaction" name="workingCapitalTransaction" toScope="request"/>
-				<jsp:include page="workingCapitalTransactionLine.jsp"/>
+				<jsp:include page="workingCapitalTransactionLine.jsp"/>  
 				<td>
 					<html:link action="/workingCapital.do?method=viewWorkingCapitalTransaction" paramId="workingCapitalTransactionOid" paramName="workingCapitalTransaction" paramProperty="externalId">
 						<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="link.view"/>
 					</html:link>
-					<bean:define id="workingCapitalTransactionOid" type="java.lang.String" name="workingCapitalTransaction" property="externalId"/>
-					<logic:equal name="workingCapitalTransaction" property="acquisition" value="true">
-						<logic:equal name="workingCapitalTransaction" property="pendingApproval" value="true">
-						 	<wf:activityLink processName="process" activityName="EditWorkingCapitalActivity" scope="request" paramName0="workingCapitalAcquisitionTransaction" paramValue0="<%= workingCapitalTransactionOid %>">
-								<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.EditWorkingCapitalActivity"/>
-							</wf:activityLink>
-						</logic:equal>
-					</logic:equal>
 				</td>
 			</tr>
 		</logic:iterate>
