@@ -212,9 +212,11 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
 
             for (WorkingCapitalAcquisition transaction : workingCapitalProcess.getWorkingCapital()
                     .getWorkingCapitalAcquisitionsSet()) {
-                if (transaction.getWorkingCapitalAcquisitionTransaction().isExceptionalAcquisition()) {
-                    return ((ExceptionalWorkingCapitalAcquisitionTransaction) transaction
-                            .getWorkingCapitalAcquisitionTransaction()).isPendingManagementApprovalByUser(user);
+                if (transaction.getWorkingCapitalAcquisitionTransaction().isExceptionalAcquisition()
+                        && ((ExceptionalWorkingCapitalAcquisitionTransaction) transaction
+                                .getWorkingCapitalAcquisitionTransaction()).isPendingManagementApprovalByUser(user)) {
+                    return true;
+
                 }
             }
             return false;
