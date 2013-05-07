@@ -52,8 +52,14 @@ public class WorkingCapitalAcquisition extends WorkingCapitalAcquisition_Base {
         this();
         setWorkingCapital(workingCapital);
         edit(documentNumber, supplier, description, acquisitionClassification, valueWithoutVat);
-        final WorkingCapitalAcquisitionTransaction workingCapitalAcquisitionTransaction =
-                new WorkingCapitalAcquisitionTransaction(this, money);
+        Money limit = getWorkingCapitalSystem().getAcquisitionValueLimit();
+        final WorkingCapitalAcquisitionTransaction workingCapitalAcquisitionTransaction;
+
+        if ((limit != null) && (money.compareTo(limit) == 1)) {
+            workingCapitalAcquisitionTransaction = new ExceptionalWorkingCapitalAcquisitionTransaction(this, money);
+        } else {
+            workingCapitalAcquisitionTransaction = new WorkingCapitalAcquisitionTransaction(this, money);
+        }
         if (invoiceContent != null) {
             WorkingCapitalInvoiceFile workingCapitalInvoiceFile =
                     new WorkingCapitalInvoiceFile(displayName, fileName, invoiceContent, workingCapitalAcquisitionTransaction);
@@ -75,7 +81,13 @@ public class WorkingCapitalAcquisition extends WorkingCapitalAcquisition_Base {
         edit(documentNumber, supplier, description, acquisitionClassification, valueWithoutVat);
         final WorkingCapitalAcquisitionTransaction workingCapitalAcquisitionTransaction =
                 getWorkingCapitalAcquisitionTransaction();
-        workingCapitalAcquisitionTransaction.resetValue(value);
+        Money limit = getWorkingCapitalSystem().getAcquisitionValueLimit();
+        if ((workingCapitalAcquisitionTransaction instanceof ExceptionalWorkingCapitalAcquisitionTransaction) && (limit != null)
+                && (value.compareTo(limit) == 1)) {
+            ((ExceptionalWorkingCapitalAcquisitionTransaction) workingCapitalAcquisitionTransaction).resetValue(value);
+        } else {
+            workingCapitalAcquisitionTransaction.resetValue(value);
+        }
     }
 
     public void edit(String documentNumber, Supplier supplier, String description,

@@ -26,11 +26,15 @@ package module.workingCapital.domain.activity;
 
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
+import module.workingCapital.domain.ExceptionalWorkingCapitalAcquisitionTransaction;
 import module.workingCapital.domain.WorkingCapital;
 import module.workingCapital.domain.WorkingCapitalAcquisition;
 import module.workingCapital.domain.WorkingCapitalAcquisitionTransaction;
 import module.workingCapital.domain.WorkingCapitalProcess;
+import module.workingCapital.domain.WorkingCapitalSystem;
 import pt.ist.bennu.core.domain.User;
+import pt.ist.bennu.core.domain.exceptions.DomainException;
+import pt.ist.bennu.core.domain.util.Money;
 import pt.ist.bennu.core.util.BundleUtil;
 import pt.ist.bennu.core.util.InputStreamUtil;
 
@@ -60,27 +64,30 @@ public class EditWorkingCapitalActivity extends WorkflowActivity<WorkingCapitalP
     protected void process(final EditWorkingCapitalActivityInformation activityInformation) {
         final WorkingCapitalAcquisitionTransaction workingCapitalAcquisitionTransaction =
                 activityInformation.getWorkingCapitalAcquisitionTransaction();
-        if (workingCapitalAcquisitionTransaction.isPendingApproval()) {
-            final WorkingCapitalAcquisition workingCapitalAcquisition =
-                    workingCapitalAcquisitionTransaction.getWorkingCapitalAcquisition();
-
-            if (activityInformation.getInputStream() != null) {
-                String displayName = activityInformation.getDisplayName();
-                if (displayName == null) {
-                    displayName = activityInformation.getFilename();
-                }
-                workingCapitalAcquisition.edit(activityInformation.getDocumentNumber(), activityInformation.getSupplier(),
-                        activityInformation.getDescription(), activityInformation.getAcquisitionClassification(),
-                        activityInformation.getValueWithoutVat(), activityInformation.getMoney(),
-                        InputStreamUtil.consumeInputStream(activityInformation.getInputStream()), displayName,
-                        activityInformation.getFilename());
-            } else {
-                workingCapitalAcquisition.edit(activityInformation.getDocumentNumber(), activityInformation.getSupplier(),
-                        activityInformation.getDescription(), activityInformation.getAcquisitionClassification(),
-                        activityInformation.getValueWithoutVat(), activityInformation.getMoney());
-            }
-
+        boolean isExceptional = workingCapitalAcquisitionTransaction instanceof ExceptionalWorkingCapitalAcquisitionTransaction;
+        if (!((!isExceptional && workingCapitalAcquisitionTransaction.isPendingApproval()) || (isExceptional && ((ExceptionalWorkingCapitalAcquisitionTransaction) workingCapitalAcquisitionTransaction)
+                .isPendingManagementApproval()))) {
+            throw new DomainException("expense.already.approved.cant.edit");
         }
+        final WorkingCapitalAcquisition workingCapitalAcquisition =
+                workingCapitalAcquisitionTransaction.getWorkingCapitalAcquisition();
+
+        if (activityInformation.getInputStream() != null) {
+            String displayName = activityInformation.getDisplayName();
+            if (displayName == null) {
+                displayName = activityInformation.getFilename();
+            }
+            workingCapitalAcquisition.edit(activityInformation.getDocumentNumber(), activityInformation.getSupplier(),
+                    activityInformation.getDescription(), activityInformation.getAcquisitionClassification(),
+                    activityInformation.getValueWithoutVat(), activityInformation.getMoney(),
+                    InputStreamUtil.consumeInputStream(activityInformation.getInputStream()), displayName,
+                    activityInformation.getFilename());
+        } else {
+            workingCapitalAcquisition.edit(activityInformation.getDocumentNumber(), activityInformation.getSupplier(),
+                    activityInformation.getDescription(), activityInformation.getAcquisitionClassification(),
+                    activityInformation.getValueWithoutVat(), activityInformation.getMoney());
+        }
+
     }
 
     @Override
@@ -91,6 +98,27 @@ public class EditWorkingCapitalActivity extends WorkflowActivity<WorkingCapitalP
     @Override
     public boolean isVisible() {
         return false;
+    }
+
+    @Override
+    public String getUsedBundle() {
+        return "resources/WorkingCapitalResources";
+    }
+
+    @Override
+    protected String[] getArgumentsDescription(EditWorkingCapitalActivityInformation activityInformation) {
+        String[] args = new String[1];
+        Money limit = WorkingCapitalSystem.getInstanceForCurrentHost().getAcquisitionValueLimit();
+        Money value = activityInformation.getMoney();
+        if ((limit != null) && (value.compareTo(limit) == 1)) {
+            args[0] =
+                    "(" + BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources", "label.exceptional") + ", "
+                            + BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources", "label.limit") + " = "
+                            + limit.getValue().toString() + ")";
+        } else {
+            args[0] = "";
+        }
+        return args;
     }
 
     @Override

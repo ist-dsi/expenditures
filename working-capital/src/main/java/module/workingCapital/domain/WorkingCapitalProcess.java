@@ -47,6 +47,7 @@ import module.workflow.widgets.UnreadCommentsWidget;
 import module.workingCapital.domain.activity.AcceptResponsabilityForWorkingCapitalActivity;
 import module.workingCapital.domain.activity.AllocateFundsActivity;
 import module.workingCapital.domain.activity.ApproveActivity;
+import module.workingCapital.domain.activity.ApproveExceptionalWorkingCapitalAcquisitionActivity;
 import module.workingCapital.domain.activity.ApproveWorkingCapitalAcquisitionActivity;
 import module.workingCapital.domain.activity.AuthorizeActivity;
 import module.workingCapital.domain.activity.CancelReenforceWorkingCapitalInitializationActivity;
@@ -151,6 +152,7 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base implements
         activitiesAux.add(new ReenforceWorkingCapitalInitializationActivity());
         activitiesAux.add(new CancelReenforceWorkingCapitalInitializationActivity());
         activitiesAux.add(new ExceptionalCapitalRestitutionActivity());
+        activitiesAux.add(new ApproveExceptionalWorkingCapitalAcquisitionActivity());
         activities = Collections.unmodifiableList(activitiesAux);
 
         UnreadCommentsWidget.register(new WorkflowCommentCounter(WorkingCapitalProcess.class));
