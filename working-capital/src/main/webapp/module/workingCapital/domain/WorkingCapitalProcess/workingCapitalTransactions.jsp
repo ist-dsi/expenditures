@@ -1,3 +1,4 @@
+<%@page import="module.workingCapital.domain.WorkingCapitalTransaction"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html"%>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-bean" prefix="bean"%>
@@ -38,7 +39,7 @@ tr.exceptionalAcquisition td {
 			</th>
 		</tr>
 		<logic:iterate id="workingCapitalTransaction" name="workingCapital" property="sortedWorkingCapitalTransactions">
-			<% if (workingCapitalTransaction instanceof ExceptionalWorkingCapitalAcquisitionTransaction) { %>
+			<% if (((WorkingCapitalTransaction) workingCapitalTransaction).isExceptionalAcquisition()) { %>
 			<tr class="exceptionalAcquisition">
 			<% } else { %>
 			<tr>

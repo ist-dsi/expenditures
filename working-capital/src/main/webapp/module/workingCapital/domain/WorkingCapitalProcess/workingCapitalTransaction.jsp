@@ -235,7 +235,7 @@
 				</tr>
 				
 				<bean:define id="workingCapitalTransaction" name="workingCapitalTransaction" type="module.workingCapital.domain.WorkingCapitalTransaction"/>
-				<% if (workingCapitalTransaction instanceof ExceptionalWorkingCapitalAcquisitionTransaction) { %>
+				<% if (workingCapitalTransaction.isExceptionalAcquisition()) { %>
 					<tr>
 						<td class="aleft">
 							<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.acquisition.approvalByManagementCouncil"/>
@@ -244,8 +244,13 @@
 							<logic:equal name="workingCapitalTransaction" property="pendingManagementApproval" value="true">
 								<wf:activityLink processName="process" activityName="ApproveExceptionalWorkingCapitalAcquisitionActivity" scope="request" paramName0="workingCapitalTransaction" paramValue0="<%= workingCapitalTransactionOid %>">
 									<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.ApproveExceptionalWorkingCapitalAcquisitionActivity"/>
+								</wf:activityLink>	
+								&nbsp;&nbsp;&nbsp;
+								<wf:activityLink processName="process" activityName="RejectExceptionalWorkingCapitalAcquisitionActivity" scope="request" paramName0="workingCapitalTransaction" paramValue0="<%= workingCapitalTransactionOid %>">
+									<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.RejectExceptionalWorkingCapitalAcquisitionActivity"/>
 								</wf:activityLink>
 								&nbsp;&nbsp;&nbsp;
+
 							</logic:equal>
 						</td>
 						<td>
@@ -358,7 +363,7 @@
 		
 	</p>
 	<logic:equal name="workingCapitalTransaction" property="acquisition" value="true">
-			<% if (workingCapitalTransaction instanceof ExceptionalWorkingCapitalAcquisitionTransaction) { %>
+			<% if (workingCapitalTransaction.isExceptionalAcquisition()) { %>
 				<logic:equal name="workingCapitalTransaction" property="pendingManagementApproval" value="true">
 					 <wf:activityLink processName="process" activityName="CancelWorkingCapitalAcquisitionActivity" scope="request" paramName0="workingCapitalTransaction" paramValue0="<%= workingCapitalTransactionOid %>">
 						<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.CancelWorkingCapitalAcquisitionActivity"/>

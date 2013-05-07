@@ -31,11 +31,17 @@ public class ExceptionalWorkingCapitalAcquisitionTransaction extends Exceptional
     }
 
     public boolean isPendingManagementApproval() {
-        return (getManagementApprover() == null) && !isApproved();
+        return (getApprovalByManagement() == null) && !isCanceledOrRejected();
+    }
+
+    public boolean isPendingManagementApprovalByUser(User user) {
+        final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstanceForCurrentHost();
+        final Accountability accountability = workingCapitalSystem.getManagementAccountability(user);
+        return isPendingManagementApproval() && accountability != null;
     }
 
     public boolean isManagementApproved() {
-        return getManagementApprover() != null;
+        return getApprovalByManagement() != null;
     }
 
     public void approveByManagement(final User user) {
@@ -45,6 +51,18 @@ public class ExceptionalWorkingCapitalAcquisitionTransaction extends Exceptional
             throw new DomainException("error.person.cannot.authorize.expense", user.getPerson().getName());
         }
         setApprovalByManagement(new DateTime());
+        setManagementApprover(accountability);
+    }
+
+    public void rejectByManagement(final User user) {
+        final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstanceForCurrentHost();
+        final Accountability accountability = workingCapitalSystem.getManagementAccountability(user);
+        if (accountability == null) {
+            throw new DomainException("error.person.cannot.authorize.expense", user.getPerson().getName());
+        }
+        final WorkingCapitalAcquisition workingCapitalAcquisition = getWorkingCapitalAcquisition();
+        reject(user);
+        setRejectByManagement(new DateTime());
         setManagementApprover(accountability);
     }
 
@@ -65,13 +83,26 @@ public class ExceptionalWorkingCapitalAcquisitionTransaction extends Exceptional
     @Override
     public void reject(final User user) {
         super.reject(user);
-        final WorkingCapitalAcquisition workingCapitalAcquisition = getWorkingCapitalAcquisition();
-        workingCapitalAcquisition.reject(user);
     }
 
     @Override
     public void addValue(final Money value) {
         super.addUncheckedValue(value);
+    }
+
+    @Override
+    public DateTime getRejectByManagement() {
+        return super.getRejectByManagement();
+    }
+
+    @Override
+    public boolean isExceptionalAcquisition() {
+        return true;
+    }
+
+    @Override
+    public boolean isCanceledOrRejected() {
+        return super.isCanceledOrRejected() || getRejectByManagement() != null;
     }
 
     @Override

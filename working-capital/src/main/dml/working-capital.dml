@@ -94,6 +94,7 @@ class WorkingCapitalTransaction implements .pt.ist.bennu.core.domain.VirtualHost
 	
 	class ExceptionalWorkingCapitalAcquisitionTransaction extends WorkingCapitalAcquisitionTransaction {
 		DateTime approvalByManagement;
+		DateTime rejectByManagement;
 	}
 
 class WorkingCapitalInvoiceFile extends .module.workflow.domain.ProcessFile {

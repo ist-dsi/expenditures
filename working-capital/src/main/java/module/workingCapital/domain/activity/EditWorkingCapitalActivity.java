@@ -45,8 +45,8 @@ import pt.ist.bennu.core.util.InputStreamUtil;
  * @author Luis Cruz
  * 
  */
-public class EditWorkingCapitalActivity extends WorkflowActivity<WorkingCapitalProcess, EditWorkingCapitalActivityInformation> {
 
+public class EditWorkingCapitalActivity extends WorkflowActivity<WorkingCapitalProcess, EditWorkingCapitalActivityInformation> {
     @Override
     public String getLocalizedName() {
         return BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources", "activity."
@@ -56,21 +56,28 @@ public class EditWorkingCapitalActivity extends WorkflowActivity<WorkingCapitalP
     @Override
     public boolean isActive(final WorkingCapitalProcess workingCapitalProcess, final User user) {
         final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
-        return workingCapital.hasMovementResponsible() && workingCapital.getMovementResponsible().getUser() == user
+        return workingCapital.getMovementResponsible() != null && workingCapital.getMovementResponsible().getUser() == user
                 && !workingCapital.isCanceledOrRejected();
+    }
+
+    public boolean isRegularAndApproved(WorkingCapitalAcquisitionTransaction workingCapitalAcquisitionTransaction) {
+        return !workingCapitalAcquisitionTransaction.isExceptionalAcquisition()
+                && workingCapitalAcquisitionTransaction.isApproved();
+    }
+
+    public boolean isExceptionalAndManagementApproved(WorkingCapitalAcquisitionTransaction workingCapitalAcquisitionTransaction) {
+        return workingCapitalAcquisitionTransaction.isExceptionalAcquisition()
+                && ((ExceptionalWorkingCapitalAcquisitionTransaction) workingCapitalAcquisitionTransaction)
+                        .isManagementApproved();
     }
 
     @Override
     protected void process(final EditWorkingCapitalActivityInformation activityInformation) {
-        final WorkingCapitalAcquisitionTransaction workingCapitalAcquisitionTransaction =
-                activityInformation.getWorkingCapitalAcquisitionTransaction();
-        boolean isExceptional = workingCapitalAcquisitionTransaction instanceof ExceptionalWorkingCapitalAcquisitionTransaction;
-        if (!((!isExceptional && workingCapitalAcquisitionTransaction.isPendingApproval()) || (isExceptional && ((ExceptionalWorkingCapitalAcquisitionTransaction) workingCapitalAcquisitionTransaction)
-                .isPendingManagementApproval()))) {
+        final WorkingCapitalAcquisitionTransaction transaction = activityInformation.getWorkingCapitalAcquisitionTransaction();
+        if (isRegularAndApproved(transaction) || isExceptionalAndManagementApproved(transaction)) {
             throw new DomainException("expense.already.approved.cant.edit");
         }
-        final WorkingCapitalAcquisition workingCapitalAcquisition =
-                workingCapitalAcquisitionTransaction.getWorkingCapitalAcquisition();
+        final WorkingCapitalAcquisition workingCapitalAcquisition = transaction.getWorkingCapitalAcquisition();
 
         if (activityInformation.getInputStream() != null) {
             String displayName = activityInformation.getDisplayName();
