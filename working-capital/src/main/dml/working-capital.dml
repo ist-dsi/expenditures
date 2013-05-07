@@ -91,6 +91,11 @@ class WorkingCapitalTransaction implements .pt.ist.bennu.core.domain.VirtualHost
 	class ExceptionalWorkingCapitalRefund extends WorkingCapitalTransaction {
 		String caseDescription;
 	}
+	
+	class ExceptionalWorkingCapitalAcquisitionTransaction extends WorkingCapitalAcquisitionTransaction {
+		DateTime approvalByManagement;
+		DateTime rejectByManagement;
+	}
 
 class WorkingCapitalInvoiceFile extends .module.workflow.domain.ProcessFile {
 }
@@ -317,7 +322,12 @@ relation WorkingCapitalAcquisitionApprover {
 		multiplicity *;
 	}
 }
-
+relation ExceptionalWorkingCapitalAcquisitionTransactionManagementApprover {
+	.module.organization.domain.Accountability playsRole managementApprover;
+	ExceptionalWorkingCapitalAcquisitionTransaction playsRole exceptionalWorkingCapitalAcquisitionTransactionFromApprover {
+		multiplicity *;
+	}
+}
 relation WorkingCapitalAcquisitionVerifier {
 	.module.organization.domain.Person playsRole verifier;
 	WorkingCapitalAcquisition playsRole workingCapitalAcquisitionsFromVerifier {

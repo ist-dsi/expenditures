@@ -31,6 +31,7 @@ import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.ist.bennu.core.domain.util.Money;
 import pt.ist.bennu.core.util.BundleUtil;
+import pt.ist.fenixframework.consistencyPredicates.ConsistencyPredicate;
 
 /**
  * 
@@ -188,6 +189,19 @@ public class WorkingCapitalAcquisitionTransaction extends WorkingCapitalAcquisit
                     "error.acquisition.limit.exceeded"));
         }
         super.addValue(value);
+    }
+
+    void addUncheckedValue(final Money value) {
+        super.addValue(value);
+    }
+
+    void resetUncheckedValue(final Money value) {
+        super.resetValue(value);
+    }
+
+    @ConsistencyPredicate
+    public boolean checkHasInvoice() {
+        return getInvoice() != null;
     }
 
     @Override

@@ -206,9 +206,22 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
 
         @Override
         boolean shouldAdd(WorkingCapitalProcess workingCapitalProcess, User user) {
-            return workingCapitalProcess.isPendingAuthorization(user);
-        }
+            if (workingCapitalProcess.isPendingAuthorization(user)) {
+                return true;
+            }
 
+            for (WorkingCapitalAcquisition transaction : workingCapitalProcess.getWorkingCapital()
+                    .getWorkingCapitalAcquisitionsSet()) {
+                if (transaction.getWorkingCapitalAcquisitionTransaction().isExceptionalAcquisition()
+                        && ((ExceptionalWorkingCapitalAcquisitionTransaction) transaction
+                                .getWorkingCapitalAcquisitionTransaction()).isPendingManagementApprovalByUser(user)) {
+                    return true;
+
+                }
+            }
+            return false;
+
+        }
     }
 
     public SortedSet<WorkingCapitalProcess> getPendingAuthorization() {
