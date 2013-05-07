@@ -1,3 +1,4 @@
+<%@page import="module.workingCapital.domain.WorkingCapitalTransaction"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html"%>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-bean" prefix="bean"%>
@@ -6,6 +7,8 @@
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/workflow" prefix="wf"%>
 
 <%@ page import="module.workingCapital.domain.WorkingCapitalAcquisitionSubmission" %>
+<%@ page import="module.workingCapital.domain.ExceptionalWorkingCapitalAcquisitionTransaction" %>
+
 
 <jsp:include page="shortBody.jsp"/>
 
@@ -190,6 +193,7 @@
 	<h3>
 		<bean:message key="label.module.workingCapital.acquisition.details" bundle="WORKING_CAPITAL_RESOURCES"/>
 	</h3>
+		<bean:define id="workingCapitalTransactionOid" type="java.lang.String" name="workingCapitalTransaction" property="externalId"/>
 	<div class="infobox mtop1 mbottom1">
 		<fr:view name="workingCapitalTransaction" property="workingCapitalAcquisition">
 			<fr:schema type="module.workingCapital.domain.WorkingCapitalTransaction" bundle="WORKING_CAPITAL_RESOURCES">
@@ -215,12 +219,12 @@
 		</logic:present>
 	</div>
 	
-	<logic:notEmpty name="workingCapitalTransaction" property="workingCapitalAcquisition.approver">
-		
 		<table class="tstyle3 mtop1 mbottom1 width100pc" >
 				<tr>
 					<th>
 						<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.operation.description"/>
+					</th>
+					<th> 
 					</th>
 					<th>
 						<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.operation.date"/>
@@ -229,9 +233,68 @@
 						<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.operation.executor"/>
 					</th>
 				</tr>
+				
+				<bean:define id="workingCapitalTransaction" name="workingCapitalTransaction" type="module.workingCapital.domain.WorkingCapitalTransaction"/>
+				<% if (workingCapitalTransaction.isExceptionalAcquisition()) { %>
+					<tr>
+						<td class="aleft">
+							<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.acquisition.approvalByManagementCouncil"/>
+						</td>
+						<td>
+							<logic:equal name="workingCapitalTransaction" property="pendingManagementApproval" value="true">
+								<wf:activityLink processName="process" activityName="ApproveExceptionalWorkingCapitalAcquisitionActivity" scope="request" paramName0="workingCapitalTransaction" paramValue0="<%= workingCapitalTransactionOid %>">
+									<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.ApproveExceptionalWorkingCapitalAcquisitionActivity"/>
+								</wf:activityLink>	
+								&nbsp;&nbsp;&nbsp;
+								<wf:activityLink processName="process" activityName="RejectExceptionalWorkingCapitalAcquisitionActivity" scope="request" paramName0="workingCapitalTransaction" paramValue0="<%= workingCapitalTransactionOid %>">
+									<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.RejectExceptionalWorkingCapitalAcquisitionActivity"/>
+								</wf:activityLink>
+								&nbsp;&nbsp;&nbsp;
+
+							</logic:equal>
+						</td>
+						<td>
+						<logic:equal name="workingCapitalTransaction" property="managementApproved" value="true">
+							<fr:view name="workingCapitalTransaction" property="approvalByManagement"/>
+						</logic:equal>
+						<logic:equal name="workingCapitalTransaction" property="managementApproved" value="false">
+							-
+						</logic:equal>
+						</td>
+						<td>
+						<logic:equal name="workingCapitalTransaction" property="managementApproved" value="true">
+							<fr:view name="workingCapitalTransaction" property="managementApprover.child.name"/>
+						</logic:equal>
+						<logic:equal name="workingCapitalTransaction" property="managementApproved" value="false">
+							-
+						</logic:equal>
+						</td>
+					</tr>
+				<% } %>
+				
 				<tr>
 					<td class="aleft">
 						<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.initialization.aprovalByUnitResponsible"/>
+					</td>
+					<td>
+						<logic:equal name="workingCapitalTransaction" property="pendingApproval" value="true">
+							<wf:activityLink processName="process" activityName="ApproveWorkingCapitalAcquisitionActivity" scope="request" paramName0="workingCapitalTransaction" paramValue0="<%= workingCapitalTransactionOid %>">
+								<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.ApproveWorkingCapitalAcquisitionActivity"/>
+							</wf:activityLink>
+							&nbsp;&nbsp;&nbsp;
+							<wf:activityLink processName="process" activityName="RejectWorkingCapitalAcquisitionActivity" scope="request" paramName0="workingCapitalTransaction" paramValue0="<%= workingCapitalTransactionOid %>">
+								<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.RejectWorkingCapitalAcquisitionActivity"/>
+							</wf:activityLink>
+							&nbsp;&nbsp;&nbsp;
+						</logic:equal>
+						<logic:equal name="workingCapitalTransaction" property="approved" value="true">
+							<logic:notPresent name="workingCapitalTransaction" property="workingCapitalAcquisition.submitedForVerification">
+								<wf:activityLink processName="process" activityName="UnApproveWorkingCapitalAcquisitionActivity" scope="request" paramName0="workingCapitalTransaction" paramValue0="<%= workingCapitalTransactionOid %>">
+									<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.UnApproveWorkingCapitalAcquisitionActivity"/>
+								</wf:activityLink>
+								&nbsp;&nbsp;&nbsp;
+							</logic:notPresent>
+						</logic:equal>
 					</td>
 					<td>
 					<logic:equal name="workingCapitalTransaction" property="approved" value="true">
@@ -250,9 +313,34 @@
 					</logic:equal>
 					</td>
 				</tr>
+				
 				<tr>
 					<td class="aleft">
 						<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.acquisition.verifier"/>
+					</td>
+					<td>
+						<logic:equal name="workingCapitalTransaction" property="pendingVerification" value="true">
+							<wf:activityLink processName="process" activityName="VerifyWorkingCapitalAcquisitionActivity" scope="request" paramName0="workingCapitalTransaction" paramValue0="<%= workingCapitalTransactionOid %>">
+								<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.VerifyWorkingCapitalAcquisitionActivity"/>
+							</wf:activityLink>
+							&nbsp;&nbsp;&nbsp;
+							<wf:activityLink processName="process" activityName="RejectVerifyWorkingCapitalAcquisitionActivity" scope="request" paramName0="workingCapitalTransaction" paramValue0="<%= workingCapitalTransactionOid %>">
+								<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.RejectVerifyWorkingCapitalAcquisitionActivity"/>
+							</wf:activityLink>
+							&nbsp;&nbsp;&nbsp;
+							<wf:activityLink processName="process" activityName="CorrectWorkingCapitalAcquisitionClassificationActivity" scope="request" paramName0="workingCapitalAcquisitionTransaction" paramValue0="<%= workingCapitalTransactionOid %>">
+								<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.CorrectWorkingCapitalAcquisitionClassificationActivity"/>
+							</wf:activityLink>
+							&nbsp;&nbsp;&nbsp;
+						</logic:equal>
+						<logic:equal name="workingCapitalTransaction" property="paymentRequested" value="false">
+							<logic:equal name="workingCapitalTransaction" property="verified" value="true">
+								<wf:activityLink processName="process" activityName="UnVerifyWorkingCapitalAcquisitionActivity" scope="request" paramName0="workingCapitalTransaction" paramValue0="<%= workingCapitalTransactionOid %>">
+									<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.UnVerifyWorkingCapitalAcquisitionActivity"/>
+								</wf:activityLink>
+								&nbsp;&nbsp;&nbsp;
+							</logic:equal>
+						</logic:equal>
 					</td>
 					<td>
 					<logic:equal name="workingCapitalTransaction" property="verified" value="true">
@@ -273,60 +361,31 @@
 				</tr>
 			</table>
 		
-	</logic:notEmpty>
 	</p>
-	<bean:define id="workingCapitalTransactionOid" type="java.lang.String" name="workingCapitalTransaction" property="externalId"/>
 	<logic:equal name="workingCapitalTransaction" property="acquisition" value="true">
-		<logic:equal name="workingCapitalTransaction" property="pendingApproval" value="true">
-			 <wf:activityLink processName="process" activityName="CancelWorkingCapitalAcquisitionActivity" scope="request" paramName0="workingCapitalTransaction" paramValue0="<%= workingCapitalTransactionOid %>">
-				<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.CancelWorkingCapitalAcquisitionActivity"/>
-			</wf:activityLink>
-			&nbsp;&nbsp;&nbsp;
-			 <wf:activityLink processName="process" activityName="EditWorkingCapitalActivity" scope="request" paramName0="workingCapitalAcquisitionTransaction" paramValue0="<%= workingCapitalTransactionOid %>">
-				<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.EditWorkingCapitalActivity"/>
-			</wf:activityLink>
-			&nbsp;&nbsp;&nbsp;
-		</logic:equal>
-	</logic:equal>
-	<logic:equal name="workingCapitalTransaction" property="pendingApproval" value="true">
-		<wf:activityLink processName="process" activityName="ApproveWorkingCapitalAcquisitionActivity" scope="request" paramName0="workingCapitalTransaction" paramValue0="<%= workingCapitalTransactionOid %>">
-			<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.ApproveWorkingCapitalAcquisitionActivity"/>
-		</wf:activityLink>
-		&nbsp;&nbsp;&nbsp;
-		<wf:activityLink processName="process" activityName="RejectWorkingCapitalAcquisitionActivity" scope="request" paramName0="workingCapitalTransaction" paramValue0="<%= workingCapitalTransactionOid %>">
-			<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.RejectWorkingCapitalAcquisitionActivity"/>
-		</wf:activityLink>
-		&nbsp;&nbsp;&nbsp;
-	</logic:equal>
-	<logic:equal name="workingCapitalTransaction" property="approved" value="true">
-		<logic:notPresent name="workingCapitalTransaction" property="workingCapitalAcquisition.submitedForVerification">
-			<wf:activityLink processName="process" activityName="UnApproveWorkingCapitalAcquisitionActivity" scope="request" paramName0="workingCapitalTransaction" paramValue0="<%= workingCapitalTransactionOid %>">
-				<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.UnApproveWorkingCapitalAcquisitionActivity"/>
-			</wf:activityLink>
-			&nbsp;&nbsp;&nbsp;
-		</logic:notPresent>
-	</logic:equal>
-	<logic:equal name="workingCapitalTransaction" property="pendingVerification" value="true">
-		<wf:activityLink processName="process" activityName="VerifyWorkingCapitalAcquisitionActivity" scope="request" paramName0="workingCapitalTransaction" paramValue0="<%= workingCapitalTransactionOid %>">
-			<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.VerifyWorkingCapitalAcquisitionActivity"/>
-		</wf:activityLink>
-		&nbsp;&nbsp;&nbsp;
-		<wf:activityLink processName="process" activityName="RejectVerifyWorkingCapitalAcquisitionActivity" scope="request" paramName0="workingCapitalTransaction" paramValue0="<%= workingCapitalTransactionOid %>">
-			<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.RejectVerifyWorkingCapitalAcquisitionActivity"/>
-		</wf:activityLink>
-		&nbsp;&nbsp;&nbsp;
-		<wf:activityLink processName="process" activityName="CorrectWorkingCapitalAcquisitionClassificationActivity" scope="request" paramName0="workingCapitalAcquisitionTransaction" paramValue0="<%= workingCapitalTransactionOid %>">
-			<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.CorrectWorkingCapitalAcquisitionClassificationActivity"/>
-		</wf:activityLink>
-		&nbsp;&nbsp;&nbsp;
-	</logic:equal>
-	<logic:equal name="workingCapitalTransaction" property="paymentRequested" value="false">
-		<logic:equal name="workingCapitalTransaction" property="verified" value="true">
-			<wf:activityLink processName="process" activityName="UnVerifyWorkingCapitalAcquisitionActivity" scope="request" paramName0="workingCapitalTransaction" paramValue0="<%= workingCapitalTransactionOid %>">
-				<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.UnVerifyWorkingCapitalAcquisitionActivity"/>
-			</wf:activityLink>
-			&nbsp;&nbsp;&nbsp;
-		</logic:equal>
+			<% if (workingCapitalTransaction.isExceptionalAcquisition()) { %>
+				<logic:equal name="workingCapitalTransaction" property="pendingManagementApproval" value="true">
+					 <wf:activityLink processName="process" activityName="CancelWorkingCapitalAcquisitionActivity" scope="request" paramName0="workingCapitalTransaction" paramValue0="<%= workingCapitalTransactionOid %>">
+						<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.CancelWorkingCapitalAcquisitionActivity"/>
+					</wf:activityLink>
+					&nbsp;&nbsp;&nbsp;
+					 <wf:activityLink processName="process" activityName="EditWorkingCapitalActivity" scope="request" paramName0="workingCapitalAcquisitionTransaction" paramValue0="<%= workingCapitalTransactionOid %>">
+						<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.EditWorkingCapitalActivity"/>
+					</wf:activityLink>
+					&nbsp;&nbsp;&nbsp;
+				</logic:equal>
+			<% } else { %>
+				<logic:equal name="workingCapitalTransaction" property="pendingApproval" value="true">
+					 <wf:activityLink processName="process" activityName="CancelWorkingCapitalAcquisitionActivity" scope="request" paramName0="workingCapitalTransaction" paramValue0="<%= workingCapitalTransactionOid %>">
+						<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.CancelWorkingCapitalAcquisitionActivity"/>
+					</wf:activityLink>
+					&nbsp;&nbsp;&nbsp;
+					 <wf:activityLink processName="process" activityName="EditWorkingCapitalActivity" scope="request" paramName0="workingCapitalAcquisitionTransaction" paramValue0="<%= workingCapitalTransactionOid %>">
+						<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.EditWorkingCapitalActivity"/>
+					</wf:activityLink>
+					&nbsp;&nbsp;&nbsp;
+				</logic:equal>
+			<% } %>
 	</logic:equal>
 </logic:equal>
 

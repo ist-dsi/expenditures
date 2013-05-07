@@ -47,6 +47,7 @@ import module.workflow.widgets.UnreadCommentsWidget;
 import module.workingCapital.domain.activity.AcceptResponsabilityForWorkingCapitalActivity;
 import module.workingCapital.domain.activity.AllocateFundsActivity;
 import module.workingCapital.domain.activity.ApproveActivity;
+import module.workingCapital.domain.activity.ApproveExceptionalWorkingCapitalAcquisitionActivity;
 import module.workingCapital.domain.activity.ApproveWorkingCapitalAcquisitionActivity;
 import module.workingCapital.domain.activity.AuthorizeActivity;
 import module.workingCapital.domain.activity.CancelReenforceWorkingCapitalInitializationActivity;
@@ -61,6 +62,7 @@ import module.workingCapital.domain.activity.PayCapitalActivity;
 import module.workingCapital.domain.activity.ReenforceWorkingCapitalInitializationActivity;
 import module.workingCapital.domain.activity.RegisterCapitalRefundActivity;
 import module.workingCapital.domain.activity.RegisterWorkingCapitalAcquisitionActivity;
+import module.workingCapital.domain.activity.RejectExceptionalWorkingCapitalAcquisitionActivity;
 import module.workingCapital.domain.activity.RejectVerifyWorkingCapitalAcquisitionActivity;
 import module.workingCapital.domain.activity.RejectWorkingCapitalAcquisitionActivity;
 import module.workingCapital.domain.activity.RejectWorkingCapitalInitializationActivity;
@@ -151,6 +153,8 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base implements
         activitiesAux.add(new ReenforceWorkingCapitalInitializationActivity());
         activitiesAux.add(new CancelReenforceWorkingCapitalInitializationActivity());
         activitiesAux.add(new ExceptionalCapitalRestitutionActivity());
+        activitiesAux.add(new ApproveExceptionalWorkingCapitalAcquisitionActivity());
+        activitiesAux.add(new RejectExceptionalWorkingCapitalAcquisitionActivity());
         activities = Collections.unmodifiableList(activitiesAux);
 
         UnreadCommentsWidget.register(new WorkflowCommentCounter(WorkingCapitalProcess.class));
