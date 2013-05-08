@@ -29,7 +29,9 @@ import module.workflow.activities.WorkflowActivity;
 import module.workingCapital.domain.WorkingCapital;
 import module.workingCapital.domain.WorkingCapitalAcquisition;
 import module.workingCapital.domain.WorkingCapitalProcess;
+import module.workingCapital.domain.WorkingCapitalSystem;
 import pt.ist.bennu.core.domain.User;
+import pt.ist.bennu.core.domain.util.Money;
 import pt.ist.bennu.core.util.BundleUtil;
 import pt.ist.bennu.core.util.InputStreamUtil;
 
@@ -82,4 +84,29 @@ public class RegisterWorkingCapitalAcquisitionActivity extends
         return false;
     }
 
+    @Override
+    public boolean isDefaultInputInterfaceUsed() {
+        return false;
+    }
+
+    @Override
+    public String getUsedBundle() {
+        return "resources/WorkingCapitalResources";
+    }
+
+    @Override
+    protected String[] getArgumentsDescription(RegisterWorkingCapitalAcquisitionActivityInformation activityInformation) {
+        String[] args = new String[1];
+        Money limit = WorkingCapitalSystem.getInstanceForCurrentHost().getAcquisitionValueLimit();
+        Money value = activityInformation.getMoney();
+        if ((limit != null) && (value.compareTo(limit) == 1)) {
+            args[0] =
+                    "(" + BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources", "label.exceptional") + ", "
+                            + BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources", "label.limit") + " = "
+                            + limit.getValue().toString() + ")";
+            return args;
+        } else {
+            return null;
+        }
+    }
 }

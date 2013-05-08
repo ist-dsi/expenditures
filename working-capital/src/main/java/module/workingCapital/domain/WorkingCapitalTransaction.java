@@ -131,6 +131,10 @@ public class WorkingCapitalTransaction extends WorkingCapitalTransaction_Base {
         return false;
     }
 
+    public boolean isExceptionalAcquisition() {
+        return false;
+    }
+
     public boolean isExceptionalRefund() {
         return false;
     }
@@ -232,6 +236,7 @@ public class WorkingCapitalTransaction extends WorkingCapitalTransaction_Base {
     public boolean isConnectedToCurrentHost() {
         return getWorkingCapitalSystem() == WorkingCapitalSystem.getInstanceForCurrentHost();
     }
+
     @Deprecated
     public boolean hasNumber() {
         return getNumber() != null;
