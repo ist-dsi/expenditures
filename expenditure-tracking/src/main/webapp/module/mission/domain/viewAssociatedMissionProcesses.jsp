@@ -19,7 +19,7 @@
 		<logic:iterate id="associatedProcess" name="process" property="associatedMissionProcesses" type="module.mission.domain.MissionProcess">
 		<li>
 			<a href="<%=
-					"https://" + associatedProcess.getMissionSystem().getVirtualHost().get(0).getHostname()
+					"https://" + associatedProcess.getMissionSystem().getVirtualHostSet().iterator().next().getHostname()
 					+ "/ForwardToProcess/" + associatedProcess.getExternalId()
 					%>">
 				<bean:write name="associatedProcess" property="processIdentification"/></a>
