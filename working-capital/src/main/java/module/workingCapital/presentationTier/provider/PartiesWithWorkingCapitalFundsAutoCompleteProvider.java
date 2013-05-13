@@ -28,6 +28,7 @@ import module.organization.domain.Party;
 import module.organization.domain.Person;
 import module.organization.domain.Unit;
 import module.organization.presentationTier.renderers.providers.PartiesAutoCompleteProvider;
+import pt.ist.bennu.core.domain.VirtualHost;
 
 /**
  * 
@@ -42,11 +43,26 @@ public class PartiesWithWorkingCapitalFundsAutoCompleteProvider extends PartiesA
     }
 
     private boolean allowResultUnit(final Unit unit) {
-        return unit.getExpenditureUnit() != null && unit.getExpenditureUnit().getWorkingCapitalsSet().size() > 0;
+        if (unit.getExpenditureUnit() != null && unit.getExpenditureUnit().getWorkingCapitalsSet().size() > 0) {
+            for (pt.ist.expenditureTrackingSystem.domain.organization.Unit expendituresUnit : VirtualHost
+                    .getVirtualHostForThread().getExpenditureTrackingSystem().getUnitsSet()) {
+                if (expendituresUnit.getUnit().equals(unit)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private boolean allowResultPerson(final Person person) {
-        return person.getMovementResponsibleWorkingCapitalsSet().size() > 0;
+        if (person.getMovementResponsibleWorkingCapitalsSet().size() > 0) {
+            for (pt.ist.expenditureTrackingSystem.domain.organization.Person expendituresPerson : VirtualHost
+                    .getVirtualHostForThread().getExpenditureTrackingSystem().getPeopleSet()) {
+                if (expendituresPerson.getUser() != null && expendituresPerson.getUser().getPerson().equals(person)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
-
 }
