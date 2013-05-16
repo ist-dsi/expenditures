@@ -48,8 +48,8 @@
 			<td width="15%">
 				<bean:message bundle="MISSION_RESOURCES" key="label.mission.duration"/>
 			</td>
-			<td width="30%">
-				<fr:view name="process" property="mission.daparture"/> - <fr:view name="process" property="mission.arrival"/>
+			<td width="30%" style="white-space: nowrap;">
+				<fr:view name="process" property="mission.daparture"/> - <fr:view name="process" property="mission.arrival"/>  (<fr:view name="process" property="mission.durationInDays" /> <bean:message bundle="MISSION_RESOURCES" key="label.module.mission.front.page.list.days"/>)
 			</td>
 		</tr>
 		<tr>
