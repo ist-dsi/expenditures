@@ -9,7 +9,23 @@
 <div class="infobox">
 	<table>
 		<tr>
-			<td width="20%">
+			<td width="20%">	
+				<span class="processNumber">
+					<bean:message bundle="MISSION_RESOURCES" key="title.mission.process"/>:
+				</span>
+			</td>
+			<td width="35%">
+				<bean:write name="process" property="processIdentification"/>
+			</td>
+			<td width="15%">
+				<bean:message bundle="MISSION_RESOURCES" key="label.mission.location"/>
+			</td>
+			<td width="30%">
+				<fr:view name="process" property="mission.location"/>, <logic:present name="process" property="mission.country"><fr:view name="process" property="mission.country.name"/></logic:present>
+			</td>
+		</tr>
+		<tr>
+		<td width="20%">
 				<bean:message bundle="MISSION_RESOURCES" key="label.mission.requester.unit"/>
 			</td>
 			<td width="35%">
@@ -40,10 +56,10 @@
 		</tr>
 		<tr>
 			<td width="20%">
-				<bean:message bundle="MISSION_RESOURCES" key="label.mission.location"/>
+				<bean:message bundle="MISSION_RESOURCES" key="label.mission.value"/>
 			</td>
 			<td width="35%">
-				<fr:view name="process" property="mission.location"/>, <logic:present name="process" property="mission.country"><fr:view name="process" property="mission.country.name"/></logic:present>
+				<fr:view name="process" property="mission.value"/>
 			</td>
 			<td width="15%">
 				<bean:message bundle="MISSION_RESOURCES" key="label.mission.duration"/>
@@ -58,14 +74,6 @@
 			</td>
 			<td colspan="3">
 				<fr:view name="process" property="mission.objective"/>
-			</td>
-		</tr>
-		<tr>
-			<td width="20%">
-				<bean:message bundle="MISSION_RESOURCES" key="label.mission.value"/>
-			</td>
-			<td colspan="3">
-				<fr:view name="process" property="mission.value"/>
 			</td>
 		</tr>
 		<jsp:include page="viewMissionQueue.jsp"/>

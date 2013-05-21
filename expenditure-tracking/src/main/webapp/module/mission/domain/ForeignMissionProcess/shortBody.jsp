@@ -5,7 +5,3 @@
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/fenix-renderers" prefix="fr"%>
 
 <jsp:include page="summary.jsp"/>
-
-<html:link page="/workflowProcessManagement.do?method=viewProcess" paramId="processId" paramName="process" paramProperty="externalId">
-	« <bean:message key="link.back" bundle="MISSION_RESOURCES"/>
-</html:link>
