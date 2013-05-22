@@ -347,9 +347,9 @@ $P{supplierContact}.getAddress().getCountry())
 				</staticText>
 				<staticText>
 					<reportElement
-						x="330"
+						x="350"
 						y="242"
-						width="100"
+						width="80"
 						height="16"
 						key="staticText-20"/>
 					<box></box>
@@ -862,11 +862,11 @@ Fax 218 417 717]]></text>
 						x="9"
 						y="71"
 						width="141"
-						height="13"
+						height="26"
 						key="staticText-29"/>
 					<box></box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="8"/>
+						<font size="8" isStrikeThrough="false" />
 					</textElement>
 				<text><![CDATA[(Responsável da Central de Compras)]]></text>
 				</staticText>

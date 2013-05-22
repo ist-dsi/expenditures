@@ -116,7 +116,7 @@ public class CreateAcquisitionPurchaseOrderDocument extends
         try {
             final VirtualHost virtualHost = VirtualHost.getVirtualHostForThread();
             final String documentName =
-                    virtualHost.getExpenditureTrackingSystem().getRequireCommitmentNumber() ? "/reports/acquisitionRequestDocument.jasper" : "/reports/acquisitionRequestPurchaseOrder.jasper";
+                    virtualHost.getExpenditureTrackingSystem().isCommitmentNumberRequired() ? "/reports/acquisitionRequestDocument.jasper" : "/reports/acquisitionRequestPurchaseOrder.jasper";
             byte[] byteArray =
                     ReportUtils.exportToPdfFileAsByteArray(documentName, paramMap, resourceBundle, acquisitionRequestItemBeans);
             return byteArray;
