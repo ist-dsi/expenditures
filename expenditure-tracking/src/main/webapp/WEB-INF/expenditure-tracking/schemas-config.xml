@@ -2342,7 +2342,7 @@ bundle="ACQUISITION_RESOURCES">
 		<property name="size" value="50"/>
 	</slot>
 	<slot name="filterCanceledProcesses" key="label.mission.filterCanceledProcesses"/>
-	<slot name="pendingStage" key="label.mission.pending.stage">
+	<slot name="pendingState" key="label.mission.pending.state">
 		<property name="format" value="${localizedName}" />
 	</slot>
 	<slot name="participantAuthorizationAuthority" layout="autoComplete" key="label.mission.participantAuthorizationAuthority">

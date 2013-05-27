@@ -3,14 +3,14 @@ package module.mission.domain.util;
 import pt.ist.bennu.core.util.BundleUtil;
 import pt.ist.fenixWebFramework.rendererExtensions.util.IPresentableEnum;
 
-public enum MissionStage implements IPresentableEnum {
+public enum MissionState implements IPresentableEnum {
 
     PROCESS_APPROVAL, VEHICLE_APPROVAL, FUND_ALLOCATION, PARTICIPATION_AUTHORIZATION, EXPENSE_AUTHORIZATION,
     PERSONEL_INFORMATION_PROCESSING, ARCHIVED;
 
     private static final String BUNDLE = "resources.MissionResources";
-    private static final String KEY_PREFIX = "label.MissionStage.";
-    private static final String KEY_PREFIX_DESCRIPTION = "label.MissionStage.description.";
+    private static final String KEY_PREFIX = "label.MissionState.";
+    private static final String KEY_PREFIX_DESCRIPTION = "label.MissionState.description.";
 
     @Override
     public String getLocalizedName() {

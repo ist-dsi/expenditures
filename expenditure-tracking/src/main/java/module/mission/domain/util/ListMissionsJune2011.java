@@ -65,32 +65,32 @@ public class ListMissionsJune2011 extends ReadCustomTask {
             out.print(process.getCreationDate().getYear() + "/" + process.getCreationDate().getMonthOfYear() + "/"
                     + process.getCreationDate().getDayOfMonth() + "\t");
 
-            Map<MissionStage, MissionStateProgress> stages = process.getMissionStateView().getMissionStateProgress();
+            Map<MissionState, MissionStateProgress> states = process.getMissionStateView().getMissionStateProgress();
 
-            out.print(stages.get(MissionStage.PROCESS_APPROVAL).getLocalizedName());
+            out.print(states.get(MissionState.PROCESS_APPROVAL).getLocalizedName());
             out.print("\t");
 
-            if (stages.get(MissionStage.FUND_ALLOCATION) != null) {
-                out.print(stages.get(MissionStage.FUND_ALLOCATION).getLocalizedName());
+            if (states.get(MissionState.FUND_ALLOCATION) != null) {
+                out.print(states.get(MissionState.FUND_ALLOCATION).getLocalizedName());
             } else {
                 out.print("N/A");
             }
             out.print("\t");
 
-            out.print(stages.get(MissionStage.PARTICIPATION_AUTHORIZATION).getLocalizedName());
+            out.print(states.get(MissionState.PARTICIPATION_AUTHORIZATION).getLocalizedName());
             out.print("\t");
 
-            if (stages.get(MissionStage.EXPENSE_AUTHORIZATION) != null) {
-                out.print(stages.get(MissionStage.EXPENSE_AUTHORIZATION).getLocalizedName());
+            if (states.get(MissionState.EXPENSE_AUTHORIZATION) != null) {
+                out.print(states.get(MissionState.EXPENSE_AUTHORIZATION).getLocalizedName());
             } else {
                 out.print("N/A");
             }
             out.print("\t");
 
-            out.print(stages.get(MissionStage.PERSONEL_INFORMATION_PROCESSING).getLocalizedName());
+            out.print(states.get(MissionState.PERSONEL_INFORMATION_PROCESSING).getLocalizedName());
             out.print("\t");
 
-            out.print(stages.get(MissionStage.ARCHIVED).getLocalizedName());
+            out.print(states.get(MissionState.ARCHIVED).getLocalizedName());
             out.print("\t");
 
             out.print(BundleUtil.getStringFromResourceBundle("resources/MissionResources", "label."

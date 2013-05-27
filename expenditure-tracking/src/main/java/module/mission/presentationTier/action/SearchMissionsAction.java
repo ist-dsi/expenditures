@@ -36,9 +36,9 @@ import javax.servlet.http.HttpServletResponse;
 import module.mission.domain.Mission;
 import module.mission.domain.MissionFinancer;
 import module.mission.domain.MissionProcess;
-import module.mission.domain.util.MissionStage;
-import module.mission.domain.util.MissionStateView;
+import module.mission.domain.util.MissionState;
 import module.mission.domain.util.MissionStateProgress;
+import module.mission.domain.util.MissionStateView;
 import module.mission.presentationTier.dto.SearchMissionsDTO;
 import module.organization.domain.Person;
 
@@ -123,7 +123,7 @@ public class SearchMissionsAction extends ContextBaseAction {
         spreadsheet.setHeader(getMissionsMessage("label.mission.participants"));
         spreadsheet.setHeader(getMissionsMessage("label.mission.inactiveSince"));
         spreadsheet.setHeader(getMissionsMessage("label.mission.canceled"));
-        addMissionStageHeaders(spreadsheet);
+        addMissionStateHeaders(spreadsheet);
 
         for (final Mission mission : searchResult) {
             final MissionProcess missionProcess = mission.getMissionProcess();
@@ -150,7 +150,7 @@ public class SearchMissionsAction extends ContextBaseAction {
             final DateTime lastActivity = missionProcess.getDateFromLastActivity();
             row.setCell(lastActivity == null ? "" : lastActivity.toString("yyyy-MM-dd HH:mm"));
             row.setCell(getExpendituresMessage(missionProcess.isCanceled() ? "button.yes" : "button.no"));
-            addMissionStageContent(row, missionProcess);
+            addMissionStateContent(row, missionProcess);
         }
 
         try {
@@ -163,17 +163,17 @@ public class SearchMissionsAction extends ContextBaseAction {
         return null;
     }
 
-    private void addMissionStageHeaders(Spreadsheet spreadsheet) {
-        for (MissionStage stage : MissionStage.values()) {
-            spreadsheet.setHeader(stage.getLocalizedName());
+    private void addMissionStateHeaders(Spreadsheet spreadsheet) {
+        for (MissionState state : MissionState.values()) {
+            spreadsheet.setHeader(state.getLocalizedName());
         }
     }
 
-    private void addMissionStageContent(Row row, MissionProcess process) {
+    private void addMissionStateContent(Row row, MissionProcess process) {
         MissionStateView stateView = new MissionStateView(process);
-        Map<MissionStage, MissionStateProgress> stateProgress = stateView.getMissionStateProgress();
-        for (MissionStage stage : MissionStage.values()) {
-            MissionStateProgress progress = stateProgress.get(stage);
+        Map<MissionState, MissionStateProgress> stateProgress = stateView.getMissionStateProgress();
+        for (MissionState state : MissionState.values()) {
+            MissionStateProgress progress = stateProgress.get(state);
             if (progress == null) {
                 row.setCell("-");
             } else {

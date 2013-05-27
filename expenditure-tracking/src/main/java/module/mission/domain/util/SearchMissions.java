@@ -162,7 +162,7 @@ public class SearchMissions extends Search<Mission> {
     private Person participant;
     private Person accountManager;
     private Boolean filterCanceledProcesses = Boolean.TRUE;
-    private MissionStage pendingStage;
+    private MissionState pendingState;
     private Person participantAuthorizationAuthority;
 
     @Override
@@ -221,7 +221,7 @@ public class SearchMissions extends Search<Mission> {
                     && matchRequestingPersonCriteria(mission.getRequestingPerson()) && matchParticipantCriteria(mission)
                     && matchParticipantAuthorizationAuthorityCriteria(mission) && matchAccountManagerCriteria(mission)
                     && matchCanceledCriteria(mission) && mission.getMissionProcess().isAccessibleToCurrentUser()
-                    && matchStage(mission);
+                    && matchState(mission);
         }
 
         private boolean matchCanceledCriteria(final Mission mission) {
@@ -269,12 +269,12 @@ public class SearchMissions extends Search<Mission> {
             return interval == null || interval.contains(mission.getDaparture()) || interval.contains(mission.getArrival());
         }
 
-        private boolean matchStage(final Mission mission) {
-            if (pendingStage == null) {
+        private boolean matchState(final Mission mission) {
+            if (pendingState == null) {
                 return true;
             }
             final MissionStateView missionStateView = new MissionStateView(mission.getMissionProcess());
-            final MissionStateProgress stateProgress = missionStateView.getMissionStateProgress().get(pendingStage);
+            final MissionStateProgress stateProgress = missionStateView.getMissionStateProgress().get(pendingState);
             return stateProgress == MissionStateProgress.PENDING;
         }
 
@@ -413,12 +413,12 @@ public class SearchMissions extends Search<Mission> {
         this.interval = interval;
     }
 
-    public MissionStage getPendingStage() {
-        return pendingStage;
+    public MissionState getPendingState() {
+        return pendingState;
     }
 
-    public void setPendingStage(MissionStage pendingStage) {
-        this.pendingStage = pendingStage;
+    public void setPendingState(MissionState pendingState) {
+        this.pendingState = pendingState;
     }
 
     public Person getParticipantAuthorizationAuthority() {

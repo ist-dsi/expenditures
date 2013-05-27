@@ -33,7 +33,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import module.mission.domain.Mission;
-import module.mission.domain.util.MissionStage;
+import module.mission.domain.util.MissionState;
 import module.mission.domain.util.SearchMissions;
 import module.organization.domain.Party;
 import module.organization.domain.Person;
@@ -78,7 +78,7 @@ public class SearchMissionsDTO extends SearchMissions {
                 .getDomainObject(request.getParameter("rpOID")));
         setParticipant(StringUtils.isEmpty(request.getParameter("pOID")) ? null : (Person) FenixFramework.getDomainObject(request
                 .getParameter("pOID")));
-        setPendingStage(StringUtils.isEmpty(request.getParameter("ps")) ? null : MissionStage.valueOf(request.getParameter("ps")));
+        setPendingState(StringUtils.isEmpty(request.getParameter("ps")) ? null : MissionState.valueOf(request.getParameter("ps")));
         setAccountingUnit(StringUtils.isEmpty(request.getParameter("auOID")) ? null : (AccountingUnit) FenixFramework
                 .getDomainObject(request.getParameter("auOID")));
         setParticipantAuthorizationAuthority(StringUtils.isEmpty(request.getParameter("paaOID")) ? null : (Person) FenixFramework
@@ -118,7 +118,7 @@ public class SearchMissionsDTO extends SearchMissions {
                 "processNumber=%s&ruOID=%s&puOID=%s&f=%s&d=%s&i=%s&rpOID=%s&pOID=%s&ps=%s&auOID=%s&paaOID=%s&fc=%s",
                 getProcessNumber(), getRequestingUnitParameter(), getPayingUnitParameter(), getForeignParameter(),
                 getDateParameter(), getIntervalParameter(), getRequestingPersonParameter(), getParticipantParameter(),
-                getPendingStageParameter(), getAccountingUnitParameter(), getParticipantAuthorizationAuthorityParameter(),
+                getPendingStateParameter(), getAccountingUnitParameter(), getParticipantAuthorizationAuthorityParameter(),
                 getFilterCanceledProcesses()).toString();
     }
 
@@ -171,9 +171,9 @@ public class SearchMissionsDTO extends SearchMissions {
         return getParticipantAuthorizationAuthority() != null ? getParticipantAuthorizationAuthority().getExternalId() : StringUtils.EMPTY;
     }
 
-    private String getPendingStageParameter() {
-        final MissionStage pendingStage = getPendingStage();
-        return pendingStage == null ? StringUtils.EMPTY : pendingStage.name();
+    private String getPendingStateParameter() {
+        final MissionState pendingState = getPendingState();
+        return pendingState == null ? StringUtils.EMPTY : pendingState.name();
     }
 
 }

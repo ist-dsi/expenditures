@@ -73,47 +73,47 @@ public class PersistHelp extends WriteCustomTask {
         addP(processSummaryBody, "text.help.content.processSummary.paragraph1");
         processSummaryBody.append("<blockquote>");
         {
-            addH3(processSummaryBody, "text.help.content.processSummary.stage1.title");
-            addH3(processSummaryBody, "text.help.content.processSummary.stage2.title");
-            addP(processSummaryBody, "text.help.content.processSummary.stage2.content");
-            addH3(processSummaryBody, "text.help.content.processSummary.stage3.title");
+            addH3(processSummaryBody, "text.help.content.processSummary.state1.title");
+            addH3(processSummaryBody, "text.help.content.processSummary.state2.title");
+            addP(processSummaryBody, "text.help.content.processSummary.state2.content");
+            addH3(processSummaryBody, "text.help.content.processSummary.state3.title");
             processSummaryBody.append("<p>");
             {
-                add(processSummaryBody, "text.help.content.processSummary.stage3.paragraph1");
+                add(processSummaryBody, "text.help.content.processSummary.state3.paragraph1");
                 processSummaryBody.append("<blockquote>");
                 {
                     processSummaryBody.append("<ul>");
                     {
-                        addLI(processSummaryBody, "text.help.content.processSummary.stage3.paragraph1.subList1");
-                        addLI(processSummaryBody, "text.help.content.processSummary.stage3.paragraph1.subList2");
+                        addLI(processSummaryBody, "text.help.content.processSummary.state3.paragraph1.subList1");
+                        addLI(processSummaryBody, "text.help.content.processSummary.state3.paragraph1.subList2");
                     }
                     processSummaryBody.append("</ul>");
                 }
                 processSummaryBody.append("</blockquote>");
             }
             processSummaryBody.append("</p>");
-            addH3(processSummaryBody, "text.help.content.processSummary.stage4.title");
+            addH3(processSummaryBody, "text.help.content.processSummary.state4.title");
             processSummaryBody.append("<p>");
             {
-                add(processSummaryBody, "text.help.content.processSummary.stage4.paragraph1");
+                add(processSummaryBody, "text.help.content.processSummary.state4.paragraph1");
                 processSummaryBody.append("<blockquote>");
                 {
                     processSummaryBody.append("<ul>");
                     {
-                        addLI(processSummaryBody, "text.help.content.processSummary.stage4.paragraph1.subList1");
-                        addLI(processSummaryBody, "text.help.content.processSummary.stage4.paragraph1.subList2");
+                        addLI(processSummaryBody, "text.help.content.processSummary.state4.paragraph1.subList1");
+                        addLI(processSummaryBody, "text.help.content.processSummary.state4.paragraph1.subList2");
                     }
                     processSummaryBody.append("</ul>");
                 }
                 processSummaryBody.append("</blockquote>");
             }
             processSummaryBody.append("</p>");
-            addH3(processSummaryBody, "text.help.content.processSummary.stage5.title");
-            addP(processSummaryBody, "text.help.content.processSummary.stage5.paragraph1");
-            addP(processSummaryBody, "text.help.content.processSummary.stage5.paragraph2");
-            addH3(processSummaryBody, "text.help.content.processSummary.stage6.title");
-            addP(processSummaryBody, "text.help.content.processSummary.stage6.paragraph1");
-            addP(processSummaryBody, "text.help.content.processSummary.stage6.paragraph2");
+            addH3(processSummaryBody, "text.help.content.processSummary.state5.title");
+            addP(processSummaryBody, "text.help.content.processSummary.state5.paragraph1");
+            addP(processSummaryBody, "text.help.content.processSummary.state5.paragraph2");
+            addH3(processSummaryBody, "text.help.content.processSummary.state6.title");
+            addP(processSummaryBody, "text.help.content.processSummary.state6.paragraph1");
+            addP(processSummaryBody, "text.help.content.processSummary.state6.paragraph2");
         }
         processSummaryBody.append("</blockquote>");
         addP(processSummaryBody, "text.help.content.processSummary.paragraph2");

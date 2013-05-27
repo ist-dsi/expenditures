@@ -44,29 +44,29 @@ public class MissionStateView {
         this.missionProcess = missionProcess;
     }
 
-    public SortedMap<MissionStage, MissionStateProgress> getMissionStateProgress() {
-        final SortedMap<MissionStage, MissionStateProgress> result = new TreeMap<MissionStage, MissionStateProgress>();
+    public SortedMap<MissionState, MissionStateProgress> getMissionStateProgress() {
+        final SortedMap<MissionState, MissionStateProgress> result = new TreeMap<MissionState, MissionStateProgress>();
         final Mission mission = missionProcess.getMission();
 
-        result.put(MissionStage.PROCESS_APPROVAL, getApprovalState());
+        result.put(MissionState.PROCESS_APPROVAL, getApprovalState());
 
         if (mission.hasAnyMissionItems()) {
             if (mission.hasAnyVehicleItems()) {
-                result.put(MissionStage.VEHICLE_APPROVAL, getVehicleApprovalState());
+                result.put(MissionState.VEHICLE_APPROVAL, getVehicleApprovalState());
             }
 
-            result.put(MissionStage.FUND_ALLOCATION, getFundAllocationState());
+            result.put(MissionState.FUND_ALLOCATION, getFundAllocationState());
         }
 
-        result.put(MissionStage.PARTICIPATION_AUTHORIZATION, getParticipationAuthorizationState());
+        result.put(MissionState.PARTICIPATION_AUTHORIZATION, getParticipationAuthorizationState());
 
         if (mission.hasAnyMissionItems()) {
-            result.put(MissionStage.EXPENSE_AUTHORIZATION, getExpenseAuthorizationState());
+            result.put(MissionState.EXPENSE_AUTHORIZATION, getExpenseAuthorizationState());
         }
 
-        result.put(MissionStage.PERSONEL_INFORMATION_PROCESSING, getPersonelInformationProcessingState());
+        result.put(MissionState.PERSONEL_INFORMATION_PROCESSING, getPersonelInformationProcessingState());
 
-        result.put(MissionStage.ARCHIVED, getArchivedState());
+        result.put(MissionState.ARCHIVED, getArchivedState());
 
         return result;
     }

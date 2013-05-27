@@ -14,7 +14,7 @@
 			<table style="border-collapse: separate; border-spacing: 10px;">
 				<tr>
 					<logic:iterate id="entry" name="missionStateView" property="missionStateProgress">
-						<bean:define id="missionStage" name="entry" property="key" type="module.mission.domain.util.MissionStage"/>
+						<bean:define id="missionState" name="entry" property="key" type="module.mission.domain.util.MissionState"/>
 						<bean:define id="missionStateProgress" name="entry" property="value" type="module.mission.domain.util.MissionStateProgress"/>
 
 						<%
@@ -25,8 +25,8 @@
 						        colorStyle = "background-color: #F6E3CE; border-color: #B45F04;";
 					    	}
 						%>
-						<td style="<%=colorStyle + "border-style: solid; border-width: thin; width: 120px; padding: 5px; border-radius: 2em; -moz-border-radius: 2em;"%>" align="center" title="<%=missionStage.getLocalizedDescription()%>">
-							<%=missionStage.getLocalizedName()%>
+						<td style="<%=colorStyle + "border-style: solid; border-width: thin; width: 120px; padding: 5px; border-radius: 2em; -moz-border-radius: 2em;"%>" align="center" title="<%=missionState.getLocalizedDescription()%>">
+							<%=missionState.getLocalizedName()%>
 						</td>
 					</logic:iterate>
 				</tr>
@@ -39,7 +39,7 @@
 				<tr>
 					<td align="center">
 						<strong>
-							<bean:message bundle="MISSION_RESOURCES" key="label.mission.stage.view.legend"/>
+							<bean:message bundle="MISSION_RESOURCES" key="label.mission.state.view.label"/>
 						</strong>
 					</td>
 					<td style="border-style: solid; border-width: thin; width: 12px; padding: 5px; border-radius: 2em; -moz-border-radius: 2em;">
