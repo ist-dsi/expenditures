@@ -128,7 +128,6 @@ public class MissionParticipationMap extends CustomComponent implements Embedded
                 MissionSystem.getMessage("label.select.accountabilityTypes"));
 
         private ContextForm() {
-            Language currentLanguage = Language.getLanguage();
             setWriteThrough(false);
 
             yearMonthField.setValue(new DateTime(year, month, 1, 0, 0, 0, 0).toDate());
@@ -143,7 +142,7 @@ public class MissionParticipationMap extends CustomComponent implements Embedded
             for (final AccountabilityType accountabilityType : accountabilityTypes) {
                 final Item item = accountabilityTypesField.addItem(accountabilityType);
                 final Property itemProperty = item.getItemProperty("name");
-                itemProperty.setValue(accountabilityType.getName().getContent(currentLanguage));
+                itemProperty.setValue(accountabilityType.getName().getContent(Language.getLanguage()));
             }
             accountabilityTypesField.setRows(accountabilityTypes.size());
             accountabilityTypesField.setNullSelectionAllowed(false);
