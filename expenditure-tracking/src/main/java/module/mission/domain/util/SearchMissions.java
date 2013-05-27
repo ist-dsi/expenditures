@@ -274,8 +274,8 @@ public class SearchMissions extends Search<Mission> {
                 return true;
             }
             final MissionStageView missionStageView = new MissionStageView(mission.getMissionProcess());
-            final MissionStageState missionStageState = missionStageView.getMissionStageStates().get(pendingStage);
-            return missionStageState == MissionStageState.UNDER_WAY;
+            final MissionStateProgress stateProgress = missionStageView.getMissionStateProgress().get(pendingStage);
+            return stateProgress == MissionStateProgress.PENDING;
         }
 
         private boolean matchMissionTypeCriteria(Mission mission) {

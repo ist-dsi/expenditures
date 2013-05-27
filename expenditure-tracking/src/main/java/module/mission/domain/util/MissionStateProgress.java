@@ -3,12 +3,12 @@ package module.mission.domain.util;
 import pt.ist.bennu.core.util.BundleUtil;
 import pt.ist.fenixWebFramework.rendererExtensions.util.IPresentableEnum;
 
-public enum MissionStageState implements IPresentableEnum {
+public enum MissionStateProgress implements IPresentableEnum {
 
-    NOT_YET_UNDER_WAY, UNDER_WAY, COMPLETED;
+    IDLE, PENDING, COMPLETED;
 
     private static final String BUNDLE = "resources.MissionResources";
-    private static final String KEY_PREFIX = "label.MissionStageState.";
+    private static final String KEY_PREFIX = "label.MissionStateProgress.";
 
     @Override
     public String getLocalizedName() {
