@@ -28,6 +28,8 @@
 			<fr:property name="classes" value="form"/>
 			<fr:property name="columnClasses" value=",,tderror"/>
 		</fr:layout>
+		
+		<fr:destination name="cancel" path='<%="/workflowProcessManagement.do?method=viewProcess&processId=" + processId%>'/>
 	</fr:edit>
 </div>
 
