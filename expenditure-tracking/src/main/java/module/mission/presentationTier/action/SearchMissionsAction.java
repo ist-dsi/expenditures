@@ -37,7 +37,7 @@ import module.mission.domain.Mission;
 import module.mission.domain.MissionFinancer;
 import module.mission.domain.MissionProcess;
 import module.mission.domain.util.MissionStage;
-import module.mission.domain.util.MissionStageView;
+import module.mission.domain.util.MissionStateView;
 import module.mission.domain.util.MissionStateProgress;
 import module.mission.presentationTier.dto.SearchMissionsDTO;
 import module.organization.domain.Person;
@@ -170,8 +170,8 @@ public class SearchMissionsAction extends ContextBaseAction {
     }
 
     private void addMissionStageContent(Row row, MissionProcess process) {
-        MissionStageView stageView = new MissionStageView(process);
-        Map<MissionStage, MissionStateProgress> stateProgress = stageView.getMissionStateProgress();
+        MissionStateView stateView = new MissionStateView(process);
+        Map<MissionStage, MissionStateProgress> stateProgress = stateView.getMissionStateProgress();
         for (MissionStage stage : MissionStage.values()) {
             MissionStateProgress progress = stateProgress.get(stage);
             if (progress == null) {

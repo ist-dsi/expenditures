@@ -65,7 +65,7 @@ public class ListMissionsJune2011 extends ReadCustomTask {
             out.print(process.getCreationDate().getYear() + "/" + process.getCreationDate().getMonthOfYear() + "/"
                     + process.getCreationDate().getDayOfMonth() + "\t");
 
-            Map<MissionStage, MissionStateProgress> stages = process.getMissionStageView().getMissionStateProgress();
+            Map<MissionStage, MissionStateProgress> stages = process.getMissionStateView().getMissionStateProgress();
 
             out.print(stages.get(MissionStage.PROCESS_APPROVAL).getLocalizedName());
             out.print("\t");

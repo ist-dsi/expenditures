@@ -34,7 +34,7 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import module.mission.domain.util.MissionStageView;
+import module.mission.domain.util.MissionStateView;
 import module.organization.domain.Accountability;
 import module.organization.domain.AccountabilityType;
 import module.organization.domain.Person;
@@ -507,8 +507,8 @@ public abstract class MissionProcess extends MissionProcess_Base {
         return getMission().isAuthorized();
     }
 
-    public MissionStageView getMissionStageView() {
-        return new MissionStageView(this);
+    public MissionStateView getMissionStateView() {
+        return new MissionStateView(this);
     }
 
     public boolean isAccountingEmployee(final pt.ist.expenditureTrackingSystem.domain.organization.Person expenditurePerson) {

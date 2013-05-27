@@ -12,7 +12,7 @@
 
 <jsp:include page="processMessages.jsp"/>
 
-<jsp:include page="processStageView.jsp"/>
+<jsp:include page="processStateView.jsp"/>
 
 <jsp:include page="listFinancers.jsp"/>
 

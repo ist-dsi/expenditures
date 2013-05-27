@@ -273,8 +273,8 @@ public class SearchMissions extends Search<Mission> {
             if (pendingStage == null) {
                 return true;
             }
-            final MissionStageView missionStageView = new MissionStageView(mission.getMissionProcess());
-            final MissionStateProgress stateProgress = missionStageView.getMissionStateProgress().get(pendingStage);
+            final MissionStateView missionStateView = new MissionStateView(mission.getMissionProcess());
+            final MissionStateProgress stateProgress = missionStateView.getMissionStateProgress().get(pendingStage);
             return stateProgress == MissionStateProgress.PENDING;
         }
 

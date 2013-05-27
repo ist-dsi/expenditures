@@ -1,5 +1,5 @@
 /*
- * @(#)MissionStageView.java
+ * @(#)MissionStateView.java
  *
  * Copyright 2011 Instituto Superior Tecnico
  * Founding Authors: Luis Cruz, Nuno Ochoa, Paulo Abrantes
@@ -36,11 +36,11 @@ import module.mission.domain.MissionProcess;
  * @author Luis Cruz
  * 
  */
-public class MissionStageView {
+public class MissionStateView {
 
     private final MissionProcess missionProcess;
 
-    public MissionStageView(final MissionProcess missionProcess) {
+    public MissionStateView(final MissionProcess missionProcess) {
         this.missionProcess = missionProcess;
     }
 

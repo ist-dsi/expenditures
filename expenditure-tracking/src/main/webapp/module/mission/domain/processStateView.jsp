@@ -6,14 +6,14 @@
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/workflow" prefix="wf"%>
 <%@page import="module.mission.domain.util.MissionStateProgress"%>
 
-<bean:define id="missionStageView" name="process" property="missionStageView" type="module.mission.domain.util.MissionStageView"/>
+<bean:define id="missionStateView" name="process" property="missionStateView" type="module.mission.domain.util.MissionStateView"/>
 
 <table style="text-align: center; width: 100%;">
 	<tr>
 		<td align="center">
 			<table style="border-collapse: separate; border-spacing: 10px;">
 				<tr>
-					<logic:iterate id="entry" name="missionStageView" property="missionStateProgress">
+					<logic:iterate id="entry" name="missionStateView" property="missionStateProgress">
 						<bean:define id="missionStage" name="entry" property="key" type="module.mission.domain.util.MissionStage"/>
 						<bean:define id="missionStateProgress" name="entry" property="value" type="module.mission.domain.util.MissionStateProgress"/>
 
