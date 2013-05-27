@@ -91,12 +91,16 @@ public class AcquisitionFundAllocationDiaryAndTransactionReportRequest extends
                         request instanceof AcquisitionRequest ? (supplier == null ? null : (hasProposal(request) ? "Proposta" : "Factura")) : (supplier == null ? "Reembolso" : "Factura"),
                         "SUPPLIER_DOC_ID", supplier == null ? null : limitStringSize(getProposalNumber(request), 24), "CPV_ID",
                         cpvReference.getCode(), "CPV_DESCRIPTION", cpvReference.getDescription(), "MOV_DESCRIPTION",
-                        limitStringSize(Integer.toString(item.getUnitItems().size()) + " - " + item.getDescription(), 4000),
+                        sanitize(limitStringSize(Integer.toString(item.getUnitItems().size())) + " - " + item.getDescription(), 4000),
                         "MOV_PCT_IVA", unitItem.getVatValue(), "MOV_VALUE", shareValue, "MOV_VALUE_IVA", shareVat,
 //,		    "CALLBACK_URL", getCallbackUrl()
                         "PROCESS_URL", getProcessUrl(process), "GIAF_DIARIO", getDiaryNumber(), "GIAF_NUM_REG",
                         getTransactionNumber(), };
         return insertQuery(insertArgs);
+    }
+
+    private String sanitize(final String s) {
+	return s.replace('\n', ' ');
     }
 
     public String getProjectId(final Unit unit) {
