@@ -55,6 +55,7 @@ import pt.ist.fenixframework.FenixFramework;
 import pt.ist.vaadinframework.annotation.EmbeddedComponent;
 import pt.ist.vaadinframework.ui.EmbeddedComponentContainer;
 import pt.utl.ist.fenix.tools.util.excel.Spreadsheet;
+import pt.utl.ist.fenix.tools.util.i18n.Language;
 
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
@@ -70,6 +71,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.InlineDateField;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.ListSelect;
+import com.vaadin.ui.Select;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window.Notification;
 import com.vaadin.ui.themes.BaseTheme;
@@ -133,12 +135,14 @@ public class MissionParticipationMap extends CustomComponent implements Embedded
             addField("yearMonth", yearMonthField);
 
             accountabilityTypesField.addContainerProperty("name", String.class, null);
+            accountabilityTypesField.setItemCaptionMode(Select.ITEM_CAPTION_MODE_PROPERTY);
+            accountabilityTypesField.setItemCaptionPropertyId("name");
             final Set<AccountabilityType> accountabilityTypes =
                     MissionSystem.getInstance().getAccountabilityTypesRequireingAuthorization();
             for (final AccountabilityType accountabilityType : accountabilityTypes) {
                 final Item item = accountabilityTypesField.addItem(accountabilityType);
                 final Property itemProperty = item.getItemProperty("name");
-                itemProperty.setValue(accountabilityType.getName().toString());
+                itemProperty.setValue(accountabilityType.getName().getContent(Language.getLanguage()));
             }
             accountabilityTypesField.setRows(accountabilityTypes.size());
             accountabilityTypesField.setNullSelectionAllowed(false);
