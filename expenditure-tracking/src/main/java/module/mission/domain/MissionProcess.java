@@ -492,7 +492,7 @@ public abstract class MissionProcess extends MissionProcess_Base {
     }
 
     public boolean isCanceled() {
-        return getIsCanceled().booleanValue();
+        return getIsCanceled() == null || getIsCanceled().booleanValue();
     }
 
     public String getPresentationName() {

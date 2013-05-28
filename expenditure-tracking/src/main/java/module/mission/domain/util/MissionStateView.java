@@ -45,104 +45,165 @@ public class MissionStateView {
     }
 
     public SortedMap<MissionState, MissionStateProgress> getMissionStateProgress() {
-        final SortedMap<MissionState, MissionStateProgress> result = new TreeMap<MissionState, MissionStateProgress>();
+        final SortedMap<MissionState, MissionStateProgress> stateProgress = new TreeMap<MissionState, MissionStateProgress>();
         final Mission mission = missionProcess.getMission();
 
-        result.put(MissionState.PROCESS_APPROVAL, getApprovalState());
+        stateProgress.put(MissionState.PROCESS_APPROVAL, getProcessApprovalStateProgress());
 
         if (mission.hasAnyMissionItems()) {
             if (mission.hasAnyVehicleItems()) {
-                result.put(MissionState.VEHICLE_APPROVAL, getVehicleApprovalState());
+                stateProgress.put(MissionState.VEHICLE_APPROVAL, getVehicleApprovalStateProgress());
             }
 
-            result.put(MissionState.FUND_ALLOCATION, getFundAllocationState());
+            stateProgress.put(MissionState.FUND_ALLOCATION, getFundAllocationStateProgress());
         }
 
-        result.put(MissionState.PARTICIPATION_AUTHORIZATION, getParticipationAuthorizationState());
+        stateProgress.put(MissionState.PARTICIPATION_AUTHORIZATION, getParticipationAuthorizationStateProgress());
 
         if (mission.hasAnyMissionItems()) {
-            result.put(MissionState.EXPENSE_AUTHORIZATION, getExpenseAuthorizationState());
+            stateProgress.put(MissionState.EXPENSE_AUTHORIZATION, getExpenseAuthorizationStateProgress());
         }
 
-        result.put(MissionState.PERSONEL_INFORMATION_PROCESSING, getPersonelInformationProcessingState());
+        stateProgress.put(MissionState.PERSONEL_INFORMATION_PROCESSING, getPersonelInformationProcessingStateProgress());
 
-        result.put(MissionState.ARCHIVED, getArchivedState());
+        stateProgress.put(MissionState.ARCHIVED, getArchivedStateProgress());
 
-        return result;
+        return stateProgress;
     }
 
-    protected MissionStateProgress getApprovalState() {
-        return missionProcess.isApprovedByResponsible() ? MissionStateProgress.COMPLETED : getApprovalStateUnderConstruction();
-    }
-
-    protected MissionStateProgress getApprovalStateUnderConstruction() {
-        return !missionProcess.isUnderConstruction() && !missionProcess.getIsCanceled() ? MissionStateProgress.PENDING : MissionStateProgress.IDLE;
-    }
-
-    protected MissionStateProgress getVehicleApprovalState() {
-        if (getApprovalState() != MissionStateProgress.COMPLETED) {
-            return MissionStateProgress.IDLE;
-        }
-        if (getParticipationAuthorizationState() == MissionStateProgress.COMPLETED) {
+    protected MissionStateProgress getProcessApprovalStateProgress() {
+        if (missionProcess.isApprovedByResponsible()) {
             return MissionStateProgress.COMPLETED;
         }
+        if (missionProcess.isUnderConstruction() || missionProcess.isCanceled()) {
+            return MissionStateProgress.IDLE;
+        }
+        return MissionStateProgress.PENDING;
+    }
+
+    protected MissionStateProgress getVehicleApprovalStateProgress() {
+        // depends on ProcessApproval
+        if (getProcessApprovalStateProgress() != MissionStateProgress.COMPLETED) {
+            return MissionStateProgress.IDLE;
+        }
+
+        // is no longer needed after ParticipationAuthorization
+        if (getParticipationAuthorizationStateProgress() == MissionStateProgress.COMPLETED) {
+            return MissionStateProgress.COMPLETED;
+        }
+
         if (missionProcess.getMission().areAllVehicleItemsAuthorized()) {
             return MissionStateProgress.COMPLETED;
         }
         return MissionStateProgress.PENDING;
     }
 
-    protected MissionStateProgress getFundAllocationState() {
-        if (getApprovalState() != MissionStateProgress.COMPLETED) {
+    protected MissionStateProgress getFundAllocationStateProgress() {
+        // this should not be here? (dependency on VehicleApproval should be enough)
+        if (getProcessApprovalStateProgress() != MissionStateProgress.COMPLETED) {
             return MissionStateProgress.IDLE;
         }
 
-        if (getVehicleApprovalState() == MissionStateProgress.PENDING) {
+        // depends on VehicleApproval
+        if (getVehicleApprovalStateProgress() == MissionStateProgress.PENDING) {
             return MissionStateProgress.IDLE;
         }
 
-        if (missionProcess.getIsCanceled().booleanValue()) {
-            return missionProcess.hasAnyAllocatedFunds() || missionProcess.hasAnyAllocatedProjectFunds() ? MissionStateProgress.PENDING : MissionStateProgress.IDLE;
+        // fund allocations of canceled mission processes must be removed
+        if (missionProcess.isCanceled()) {
+            if (missionProcess.hasAnyAllocatedFunds() || missionProcess.hasAnyAllocatedProjectFunds()) {
+                return MissionStateProgress.PENDING;
+            }
+            return MissionStateProgress.IDLE;
         }
-        return missionProcess.hasAllAllocatedFunds() && missionProcess.hasAllCommitmentNumbers()
-                && (!missionProcess.hasAnyProjectFinancer() || missionProcess.hasAllAllocatedProjectFunds()) ? MissionStateProgress.COMPLETED : MissionStateProgress.PENDING;
+
+        if (missionProcess.hasAllAllocatedFunds() && missionProcess.hasAllCommitmentNumbers()
+                && (!missionProcess.hasAnyProjectFinancer() || missionProcess.hasAllAllocatedProjectFunds())) {
+            return MissionStateProgress.COMPLETED;
+        }
+
+        return MissionStateProgress.PENDING;
     }
 
-    protected MissionStateProgress getParticipationAuthorizationState() {
-        return missionProcess.isApproved()
-                && (!missionProcess.getMission().hasAnyFinancer() || (missionProcess.hasAllAllocatedFunds() && missionProcess
-                        .hasAllCommitmentNumbers())) ? getParticipationAuthorizationStateForApproved() : MissionStateProgress.IDLE;
+    protected MissionStateProgress getParticipationAuthorizationStateProgress() {
+        // this should not be here? (dependency on FundAllocation should be enough)
+        if (!missionProcess.isApproved()) {
+            return MissionStateProgress.IDLE;
+        }
+
+        // depends on FundAllocation ???
+        if (missionProcess.hasAnyMissionItems()
+                && (!missionProcess.hasAllAllocatedFunds() || !missionProcess.hasAllCommitmentNumbers())) {
+            return MissionStateProgress.IDLE;
+        }
+
+        // this should not be here? (dependency on FundAllocation should be enough)
+        if (missionProcess.isCanceled()) {
+            return MissionStateProgress.IDLE;
+        }
+
+        if (missionProcess.areAllParticipantsAuthorized()) {
+            return MissionStateProgress.COMPLETED;
+        }
+        return MissionStateProgress.PENDING;
     }
 
-    private MissionStateProgress getParticipationAuthorizationStateForApproved() {
-        return missionProcess.isCanceled() ? MissionStateProgress.IDLE : (missionProcess.areAllParticipantsAuthorized() ? MissionStateProgress.COMPLETED : MissionStateProgress.PENDING);
+    protected MissionStateProgress getExpenseAuthorizationStateProgress() {
+        // this should not be here? (dependency on ParticipationAuthorization should be enough)
+        if (missionProcess.isCanceled()) {
+            return MissionStateProgress.IDLE;
+        }
+        // this should not be here? (dependency on ParticipationAuthorization should be enough)
+        if (!missionProcess.isApproved()) {
+            return MissionStateProgress.IDLE;
+        }
+        // this should not be here? (dependency on ParticipationAuthorization should be enough)
+        if (!missionProcess.hasAllAllocatedFunds()) {
+            return MissionStateProgress.IDLE;
+        }
+
+        // depends on ParticipationAuthorization ???
+        if (!missionProcess.areAllParticipantsAuthorized()) {
+            return MissionStateProgress.IDLE;
+        }
+
+        if (missionProcess.isAuthorized()) {
+            return MissionStateProgress.COMPLETED;
+        }
+
+        return MissionStateProgress.PENDING;
     }
 
-    protected MissionStateProgress getExpenseAuthorizationState() {
-        return !missionProcess.isCanceled() && missionProcess.isApproved() && missionProcess.hasAllAllocatedFunds()
-                && missionProcess.areAllParticipantsAuthorized() ? getExpenseAuthorizationStateCompletedOrUnderWay() : MissionStateProgress.IDLE;
+    protected MissionStateProgress getPersonelInformationProcessingStateProgress() {
+        // this should not be here? (dependency on ExpenseAuthorization should be enough)
+        if (!missionProcess.areAllParticipantsAuthorized()) {
+            return MissionStateProgress.IDLE;
+        }
+
+        // depends on ExpenseAuthorization ??? (second if clause should be removed, redundant with ExpenseAuthorization)
+        if (!missionProcess.isAuthorized() && !missionProcess.hasNoItemsAndParticipantesAreAuthorized()) {
+            return MissionStateProgress.IDLE;
+        }
+
+        if (!missionProcess.getCurrentQueuesSet().isEmpty()) {
+            return MissionStateProgress.PENDING;
+        }
+
+        // this should not be here? (dependency on ExpenseAuthorization should be enough)
+        if (missionProcess.isCanceled()) {
+            return MissionStateProgress.IDLE;
+        }
+
+        return MissionStateProgress.COMPLETED;
     }
 
-    private MissionStateProgress getExpenseAuthorizationStateCompletedOrUnderWay() {
-        return missionProcess.isAuthorized() ? MissionStateProgress.COMPLETED : MissionStateProgress.PENDING;
+    protected MissionStateProgress getArchivedStateProgress() {
+        if (!missionProcess.isTerminated()) {
+            return MissionStateProgress.IDLE;
+        }
+        if (missionProcess.isArchived()) {
+            return MissionStateProgress.COMPLETED;
+        }
+        return MissionStateProgress.PENDING;
     }
-
-    protected MissionStateProgress getPersonelInformationProcessingState() {
-        return missionProcess.areAllParticipantsAuthorized()
-                && (missionProcess.isAuthorized() || missionProcess.hasNoItemsAndParticipantesAreAuthorized()) ? getPersonelInformationProcessingStateForAuthorizedParticipantes() : MissionStateProgress.IDLE;
-    }
-
-    protected MissionStateProgress getPersonelInformationProcessingStateForAuthorizedParticipantes() {
-        return missionProcess.hasAnyCurrentQueues() ? MissionStateProgress.PENDING : (missionProcess.getIsCanceled()
-                .booleanValue() ? MissionStateProgress.IDLE : MissionStateProgress.COMPLETED);
-    }
-
-    protected MissionStateProgress getArchivedState() {
-        return missionProcess.isTerminated() ? getTerminatedArchivedState() : MissionStateProgress.IDLE;
-    }
-
-    protected MissionStateProgress getTerminatedArchivedState() {
-        return missionProcess.isArchived() ? MissionStateProgress.COMPLETED : MissionStateProgress.PENDING;
-    }
-
 }
