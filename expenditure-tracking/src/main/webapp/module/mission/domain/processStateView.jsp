@@ -6,22 +6,18 @@
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/workflow" prefix="wf"%>
 <%@page import="module.mission.domain.util.MissionStateProgress"%>
 
-<bean:define id="missionStateView" name="process" property="missionStateView" type="module.mission.domain.util.MissionStateView"/>
-
 <table style="text-align: center; width: 100%;">
 	<tr>
 		<td align="center">
 			<table style="border-collapse: separate; border-spacing: 10px;">
 				<tr>
-					<logic:iterate id="entry" name="missionStateView" property="missionStateProgress">
-						<bean:define id="missionState" name="entry" property="key" type="module.mission.domain.util.MissionState"/>
-						<bean:define id="missionStateProgress" name="entry" property="value" type="module.mission.domain.util.MissionStateProgress"/>
-
+					<bean:define id="process" name="process" type="module.mission.domain.MissionProcess"/>
+					<logic:iterate id="missionState" name="process" property="missionStates" type="module.mission.domain.util.MissionState">
 						<%
 						    String colorStyle = "";
-					    	if (missionStateProgress == MissionStateProgress.COMPLETED) {
+					    	if (missionState.getStateProgress(process) == MissionStateProgress.COMPLETED) {
 						        colorStyle = "background-color: #CEF6CE; border-color: #04B404;";
-					    	} else if (missionStateProgress == MissionStateProgress.PENDING) {
+					    	} else if (missionState.getStateProgress(process) == MissionStateProgress.PENDING) {
 						        colorStyle = "background-color: #F6E3CE; border-color: #B45F04;";
 					    	}
 						%>

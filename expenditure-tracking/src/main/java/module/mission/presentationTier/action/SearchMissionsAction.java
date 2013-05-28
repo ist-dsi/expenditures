@@ -27,7 +27,6 @@ package module.mission.presentationTier.action;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -37,8 +36,6 @@ import module.mission.domain.Mission;
 import module.mission.domain.MissionFinancer;
 import module.mission.domain.MissionProcess;
 import module.mission.domain.util.MissionState;
-import module.mission.domain.util.MissionStateProgress;
-import module.mission.domain.util.MissionStateView;
 import module.mission.presentationTier.dto.SearchMissionsDTO;
 import module.organization.domain.Person;
 
@@ -170,14 +167,11 @@ public class SearchMissionsAction extends ContextBaseAction {
     }
 
     private void addMissionStateContent(Row row, MissionProcess process) {
-        MissionStateView stateView = new MissionStateView(process);
-        Map<MissionState, MissionStateProgress> stateProgress = stateView.getMissionStateProgress();
         for (MissionState state : MissionState.values()) {
-            MissionStateProgress progress = stateProgress.get(state);
-            if (progress == null) {
+            if (!state.isValidForProcess(process)) {
                 row.setCell("-");
             } else {
-                row.setCell(progress.getLocalizedName());
+                row.setCell(state.getStateProgress(process).getLocalizedName());
             }
         }
     }

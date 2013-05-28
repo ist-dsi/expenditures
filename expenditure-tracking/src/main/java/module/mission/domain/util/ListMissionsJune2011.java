@@ -24,7 +24,6 @@
  */
 package module.mission.domain.util;
 
-import java.util.Map;
 import java.util.TreeSet;
 
 import module.mission.domain.Mission;
@@ -54,7 +53,7 @@ public class ListMissionsJune2011 extends ReadCustomTask {
 
         TreeSet<Mission> missions =
                 new TreeSet<Mission>(ComparatorUtils.reversedComparator(Mission.COMPARATOR_BY_PROCESS_IDENTIFICATION));
-        missions.addAll(MissionSystem.getInstance().getMissions());
+        missions.addAll(MissionSystem.getInstance().getMissionsSet());
         for (final Mission mission : missions) {
             MissionProcess process = mission.getMissionProcess();
             if ((process.isCanceled()) || (process.getCreationDate().isAfter(limitDate))) {
@@ -65,32 +64,30 @@ public class ListMissionsJune2011 extends ReadCustomTask {
             out.print(process.getCreationDate().getYear() + "/" + process.getCreationDate().getMonthOfYear() + "/"
                     + process.getCreationDate().getDayOfMonth() + "\t");
 
-            Map<MissionState, MissionStateProgress> states = process.getMissionStateView().getMissionStateProgress();
-
-            out.print(states.get(MissionState.PROCESS_APPROVAL).getLocalizedName());
+            out.print(MissionState.PROCESS_APPROVAL.getStateProgress(process).getLocalizedName());
             out.print("\t");
 
-            if (states.get(MissionState.FUND_ALLOCATION) != null) {
-                out.print(states.get(MissionState.FUND_ALLOCATION).getLocalizedName());
+            if (MissionState.FUND_ALLOCATION.isValidForProcess(process)) {
+                out.print(MissionState.FUND_ALLOCATION.getStateProgress(process).getLocalizedName());
             } else {
                 out.print("N/A");
             }
             out.print("\t");
 
-            out.print(states.get(MissionState.PARTICIPATION_AUTHORIZATION).getLocalizedName());
+            out.print(MissionState.PARTICIPATION_AUTHORIZATION.getStateProgress(process).getLocalizedName());
             out.print("\t");
 
-            if (states.get(MissionState.EXPENSE_AUTHORIZATION) != null) {
-                out.print(states.get(MissionState.EXPENSE_AUTHORIZATION).getLocalizedName());
+            if (MissionState.EXPENSE_AUTHORIZATION.isValidForProcess(process)) {
+                out.print(MissionState.EXPENSE_AUTHORIZATION.getStateProgress(process).getLocalizedName());
             } else {
                 out.print("N/A");
             }
             out.print("\t");
 
-            out.print(states.get(MissionState.PERSONEL_INFORMATION_PROCESSING).getLocalizedName());
+            out.print(MissionState.PERSONEL_INFORMATION_PROCESSING.getStateProgress(process).getLocalizedName());
             out.print("\t");
 
-            out.print(states.get(MissionState.ARCHIVED).getLocalizedName());
+            out.print(MissionState.ARCHIVED.getStateProgress(process).getLocalizedName());
             out.print("\t");
 
             out.print(BundleUtil.getStringFromResourceBundle("resources/MissionResources", "label."
