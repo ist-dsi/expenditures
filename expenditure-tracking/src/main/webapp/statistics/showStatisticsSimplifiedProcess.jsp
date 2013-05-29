@@ -8,7 +8,6 @@
 
 <fr:edit id="yearBean"
 		name="yearBean"
-		schema="pt.ist.expenditureTrackingSystem.presentationTier.actions.statistics.YearBean"
 		action="statistics.do?method=showSimplifiedProcessStatistics">
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="form"/>
