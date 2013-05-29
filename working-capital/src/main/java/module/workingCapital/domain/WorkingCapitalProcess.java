@@ -207,9 +207,9 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base implements
     public boolean isAccessible(final User user) {
         final WorkingCapital workingCapital = getWorkingCapital();
         return user != null
-                && user.hasPerson()
+                && user.getPerson() != null
                 && (user.hasRoleType(RoleType.MANAGER)
-                        || (user.hasExpenditurePerson() && ExpenditureTrackingSystem
+                        || (user.getExpenditurePerson() != null && ExpenditureTrackingSystem
                                 .isAcquisitionsProcessAuditorGroupMember(user))
                         || (workingCapital.hasMovementResponsible() && user.getPerson() == workingCapital
                                 .getMovementResponsible()) || workingCapital.isRequester(user)
@@ -318,4 +318,10 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base implements
     public WorkingCapitalSystem getWorkingCapitalSystem() {
         return getWorkingCapital().getWorkingCapitalSystem();
     }
+
+    @Deprecated
+    public boolean hasWorkingCapital() {
+        return getWorkingCapital() != null;
+    }
+
 }

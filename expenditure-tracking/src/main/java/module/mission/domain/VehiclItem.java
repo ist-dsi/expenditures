@@ -27,7 +27,7 @@ package module.mission.domain;
 import jvstm.cps.ConsistencyPredicate;
 import module.mission.domain.activity.ItemActivityInformation;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * 
@@ -47,7 +47,7 @@ public abstract class VehiclItem extends VehiclItem_Base {
         if (vehiclItemJustification != null) {
             vehiclItemJustification.delete();
         }
-        removeDriver();
+        setDriver(null);
         super.delete();
     }
 
@@ -60,12 +60,12 @@ public abstract class VehiclItem extends VehiclItem_Base {
         return getAuthorized() != null && getAuthorized();
     }
 
-    @Service
+    @Atomic
     public void authorize() {
         setAuthorized(true);
     }
 
-    @Service
+    @Atomic
     public void unauthorize() {
         setAuthorized(false);
     }
@@ -73,9 +73,9 @@ public abstract class VehiclItem extends VehiclItem_Base {
     @Override
     public void setInfo(final ItemActivityInformation itemActivityInformation) {
         final Mission mission = itemActivityInformation.getProcess().getMission();
-        if (mission.getParticipantesCount() == 1) {
+        if (mission.getParticipantesSet().size() == 1) {
             super.setInfo(itemActivityInformation);
-            setDriver(mission.getParticipantes().get(0));
+            setDriver(mission.getParticipantes().iterator().next());
         } else {
             if (itemActivityInformation.getDriver() == null) {
                 throw new DomainException("A vehicle item must have a driver");
@@ -105,4 +105,20 @@ public abstract class VehiclItem extends VehiclItem_Base {
         }
         return false;
     }
+
+    @Deprecated
+    public boolean hasAuthorized() {
+        return getAuthorized() != null;
+    }
+
+    @Deprecated
+    public boolean hasVehiclItemJustification() {
+        return getVehiclItemJustification() != null;
+    }
+
+    @Deprecated
+    public boolean hasDriver() {
+        return getDriver() != null;
+    }
+
 }

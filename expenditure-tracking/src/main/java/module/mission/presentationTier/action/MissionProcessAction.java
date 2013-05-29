@@ -60,7 +60,7 @@ import pt.ist.bennu.core.presentationTier.actions.ContextBaseAction;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 import pt.ist.fenixWebFramework.servlets.functionalities.Functionality;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
-import pt.ist.fenixframework.pstm.AbstractDomainObject;
+import pt.ist.fenixframework.FenixFramework;
 
 @Mapping(path = "/missionProcess")
 /**
@@ -233,7 +233,7 @@ public class MissionProcessAction extends ContextBaseAction {
         final Set<PersonMissionAuthorization> personMissionAuthorizations = new HashSet<PersonMissionAuthorization>();
         for (final String personMissionAuthorizationId : personMissionAuthorizationIds) {
             final PersonMissionAuthorization personMissionAuthorization =
-                    AbstractDomainObject.fromExternalId(personMissionAuthorizationId);
+                    FenixFramework.getDomainObject(personMissionAuthorizationId);
             personMissionAuthorizations.add(personMissionAuthorization);
         }
         AuthorizeDislocationService.authorizeDislocation(personMissionAuthorizations);
@@ -246,7 +246,7 @@ public class MissionProcessAction extends ContextBaseAction {
         final String[] vehicleItemIds = request.getParameterValues("vehicleItemIds");
         final Set<VehiclItem> vehicleItems = new HashSet<VehiclItem>();
         for (final String id : vehicleItemIds) {
-            final VehiclItem vehicleItem = AbstractDomainObject.fromExternalId(id);
+            final VehiclItem vehicleItem = FenixFramework.getDomainObject(id);
             vehicleItems.add(vehicleItem);
         }
         MissionSystem.massAuthorizeVehicles(vehicleItems);

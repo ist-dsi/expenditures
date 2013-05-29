@@ -33,7 +33,7 @@ import pt.ist.bennu.core.domain.groups.UserGroup;
 import pt.ist.bennu.core.domain.scheduler.WriteCustomTask;
 import pt.ist.bennu.core.util.BundleUtil;
 import pt.ist.bennu.vaadin.domain.contents.VaadinNode;
-import pt.ist.fenixframework.pstm.AbstractDomainObject;
+import pt.ist.fenixframework.FenixFramework;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
 /**
@@ -45,9 +45,9 @@ public class PersistHelp extends WriteCustomTask {
 
     @Override
     protected void doService() {
-        final VirtualHost virtualHost = AbstractDomainObject.fromExternalId("395136991834");
-        //final Node node = AbstractDomainObject.fromExternalId("335007455097");
-        final Node node = AbstractDomainObject.fromExternalId("335007455097");
+        final VirtualHost virtualHost = FenixFramework.getDomainObject("395136991834");
+        //final Node node = FenixFramework.getDomainObject("335007455097");
+        final Node node = FenixFramework.getDomainObject("335007455097");
 
         final Page page = Page.createNewPage();
 

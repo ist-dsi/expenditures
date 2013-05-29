@@ -25,7 +25,7 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.Collection;
 
 import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.ist.bennu.core.domain.util.Money;
@@ -93,11 +93,11 @@ public class UnitItem extends UnitItem_Base {
     }
 
     public void delete() {
-        removeFinancer();
-        removeItem();
+        setFinancer(null);
+        setItem(null);
         getConfirmedInvoicesSet().clear();
         for (final ProjectAcquisitionFundAllocationRequest request : getProjectAcquisitionFundAllocationRequestSet()) {
-            request.removeUnitItem();
+            request.setUnitItem(null);
         }
         deleteDomainObject();
     }
@@ -135,8 +135,8 @@ public class UnitItem extends UnitItem_Base {
     }
 
     public boolean isWithAllInvoicesConfirmed() {
-        List<PaymentProcessInvoice> invoicesFiles = getItem().getInvoicesFiles();
-        List<PaymentProcessInvoice> confirmedInvoices = getConfirmedInvoices();
+        Collection<PaymentProcessInvoice> invoicesFiles = getItem().getInvoicesFiles();
+        Collection<PaymentProcessInvoice> confirmedInvoices = getConfirmedInvoices();
 
         return !invoicesFiles.isEmpty() && confirmedInvoices.containsAll(invoicesFiles);
 
@@ -165,6 +165,71 @@ public class UnitItem extends UnitItem_Base {
                 request.cancelFundAllocationRequest();
             }
         }
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessInvoice> getConfirmedInvoices() {
+        return getConfirmedInvoicesSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.acquisitions.ProjectAcquisitionFundAllocationRequest> getProjectAcquisitionFundAllocationRequest() {
+        return getProjectAcquisitionFundAllocationRequestSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionFundAllocationDiaryAndTransactionReportRequest> getAcquisitionFundAllocationDiaryAndTransactionReportRequest() {
+        return getAcquisitionFundAllocationDiaryAndTransactionReportRequestSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyConfirmedInvoices() {
+        return !getConfirmedInvoicesSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyProjectAcquisitionFundAllocationRequest() {
+        return !getProjectAcquisitionFundAllocationRequestSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyAcquisitionFundAllocationDiaryAndTransactionReportRequest() {
+        return !getAcquisitionFundAllocationDiaryAndTransactionReportRequestSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasSubmitedForFundsAllocation() {
+        return getSubmitedForFundsAllocation() != null;
+    }
+
+    @Deprecated
+    public boolean hasItemAuthorized() {
+        return getItemAuthorized() != null;
+    }
+
+    @Deprecated
+    public boolean hasInvoiceConfirmed() {
+        return getInvoiceConfirmed() != null;
+    }
+
+    @Deprecated
+    public boolean hasShareValue() {
+        return getShareValue() != null;
+    }
+
+    @Deprecated
+    public boolean hasRealShareValue() {
+        return getRealShareValue() != null;
+    }
+
+    @Deprecated
+    public boolean hasFinancer() {
+        return getFinancer() != null;
+    }
+
+    @Deprecated
+    public boolean hasItem() {
+        return getItem() != null;
     }
 
 }

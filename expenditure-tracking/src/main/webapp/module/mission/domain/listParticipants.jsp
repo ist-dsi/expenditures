@@ -58,7 +58,7 @@
 							    if (accountability.isActiveNow() && accountability.isValid() && type == accountability.getAccountabilityType()) {
 									final Unit unit = (Unit) accountability.getParent();
 									hasEmployer = true;
-									if (unit == MissionSystem.getInstance().getOrganizationalModel().getPartiesIterator().next()) {
+									if (unit == MissionSystem.getInstance().getOrganizationalModel().getPartiesSet().iterator().next()) {
 									%>
 										<%= unit.getAcronym() %>
 									<%

@@ -48,7 +48,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundRequest
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundableInvoiceFile;
 import pt.ist.expenditureTrackingSystem.domain.announcements.CCPAnnouncement;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateSupplierBean;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 import pt.ist.fenixframework.plugins.luceneIndexing.IndexableField;
 
 /**
@@ -98,11 +98,11 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
     }
 
     @Override
-    @Service
+    @Atomic
     public void delete() {
         if (checkIfCanBeDeleted()) {
-            removeMyOrg();
-            removeExpenditureTrackingSystem();
+            setMyOrg(null);
+            setExpenditureTrackingSystem(null);
             super.delete();
         }
     }
@@ -366,7 +366,7 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
         return getTotalAllocatedByAfterTheFactAcquisitions(AfterTheFactAcquisitionType.REFUND);
     }
 
-    @Service
+    @Atomic
     public static Supplier createNewSupplier(final CreateSupplierBean createSupplierBean) {
         final Supplier supplier =
                 new Supplier(createSupplierBean.getName(), createSupplierBean.getAbbreviatedName(),
@@ -390,7 +390,7 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
         return totalValue.isLessThan(SUPPLIER_LIMIT) && totalValue.isLessThan(getSupplierLimit());
     }
 
-    @Service
+    @Atomic
     public void merge(final Supplier supplier) {
         if (supplier != this) {
             final Set<AcquisitionAfterTheFact> acquisitionAfterTheFacts = supplier.getAcquisitionsAfterTheFactSet();
@@ -442,22 +442,92 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
 
     @Override
     public Address getAddress() {
-        return hasAnySupplierContact() ? getSupplierContactIterator().next().getAddress() : super.getAddress();
+        return !getSupplierContactSet().isEmpty() ? getSupplierContactSet().iterator().next().getAddress() : super.getAddress();
     }
 
     @Override
     public String getPhone() {
-        return hasAnySupplierContact() ? getSupplierContactIterator().next().getPhone() : super.getPhone();
+        return !getSupplierContactSet().isEmpty() ? getSupplierContactSet().iterator().next().getPhone() : super.getPhone();
     }
 
     @Override
     public String getFax() {
-        return hasAnySupplierContact() ? getSupplierContactIterator().next().getFax() : super.getFax();
+        return !getSupplierContactSet().isEmpty() ? getSupplierContactSet().iterator().next().getFax() : super.getFax();
     }
 
     @Override
     public String getEmail() {
-        return hasAnySupplierContact() ? getSupplierContactIterator().next().getEmail() : super.getEmail();
+        return !getSupplierContactSet().isEmpty() ? getSupplierContactSet().iterator().next().getEmail() : super.getEmail();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest> getAcquisitionRequests() {
+        return getAcquisitionRequestsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.SavedSearch> getSupplierSearches() {
+        return getSupplierSearchesSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AcquisitionAfterTheFact> getAcquisitionsAfterTheFact() {
+        return getAcquisitionsAfterTheFactSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundableInvoiceFile> getRefundInvoices() {
+        return getRefundInvoicesSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest> getPossibleAcquisitionRequests() {
+        return getPossibleAcquisitionRequestsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.announcements.CCPAnnouncement> getAnnouncements() {
+        return getAnnouncementsSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyAcquisitionRequests() {
+        return !getAcquisitionRequestsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnySupplierSearches() {
+        return !getSupplierSearchesSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyAcquisitionsAfterTheFact() {
+        return !getAcquisitionsAfterTheFactSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyRefundInvoices() {
+        return !getRefundInvoicesSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyPossibleAcquisitionRequests() {
+        return !getPossibleAcquisitionRequestsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyAnnouncements() {
+        return !getAnnouncementsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasMyOrg() {
+        return getMyOrg() != null;
+    }
+
+    @Deprecated
+    public boolean hasExpenditureTrackingSystem() {
+        return getExpenditureTrackingSystem() != null;
     }
 
 }

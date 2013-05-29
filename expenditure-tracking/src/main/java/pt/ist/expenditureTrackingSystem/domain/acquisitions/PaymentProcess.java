@@ -443,11 +443,11 @@ public abstract class PaymentProcess extends PaymentProcess_Base implements HasP
     }
 
     public boolean isObserver(Person person) {
-        if (getRequest().getRequestingUnit().hasObservers(person)) {
+        if (getRequest().getRequestingUnit().getObserversSet().contains(person)) {
             return true;
         }
         for (Unit unit : getPayingUnits()) {
-            if (unit.hasObservers(person)) {
+            if (unit.getObserversSet().contains(person)) {
                 return true;
             }
         }
@@ -522,5 +522,25 @@ public abstract class PaymentProcess extends PaymentProcess_Base implements HasP
     }
 
     public abstract AcquisitionItemClassification getGoodsOrServiceClassification();
+
+    @Deprecated
+    public boolean hasAcquisitionProcessNumber() {
+        return getAcquisitionProcessNumber() != null;
+    }
+
+    @Deprecated
+    public boolean hasSkipSupplierFundAllocation() {
+        return getSkipSupplierFundAllocation() != null;
+    }
+
+    @Deprecated
+    public boolean hasPaymentProcessYear() {
+        return getPaymentProcessYear() != null;
+    }
+
+    @Deprecated
+    public boolean hasMissionProcess() {
+        return getMissionProcess() != null;
+    }
 
 }

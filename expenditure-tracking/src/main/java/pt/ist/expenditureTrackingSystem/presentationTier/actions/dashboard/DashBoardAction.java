@@ -53,9 +53,9 @@ import pt.ist.expenditureTrackingSystem.presentationTier.widgets.PendingRefundWi
 import pt.ist.expenditureTrackingSystem.presentationTier.widgets.PendingSimplifiedWidget;
 import pt.ist.expenditureTrackingSystem.presentationTier.widgets.TakenProcessesWidget;
 import pt.ist.expenditureTrackingSystem.presentationTier.widgets.UnreadCommentsWidget;
-import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixWebFramework.servlets.functionalities.CreateNodeAction;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
+import pt.ist.fenixframework.Atomic;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
@@ -83,7 +83,7 @@ public class DashBoardAction extends ContextBaseAction {
         return DashBoardManagementAction.forwardToDashBoard(panel, request);
     }
 
-    @Service
+    @Atomic
     private DashBoardPanel createDashBoardPanel(User user) {
         ExpenditureUserDashBoardPanel expenditureUserDashBoardPanel = new ExpenditureUserDashBoardPanel(dashBoardTitle, user);
         expenditureUserDashBoardPanel.addWidgetToColumn(0, new DashBoardWidget(UnreadCommentsWidget.class));

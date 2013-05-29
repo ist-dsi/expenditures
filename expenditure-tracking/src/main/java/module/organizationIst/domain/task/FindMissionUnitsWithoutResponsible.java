@@ -36,7 +36,7 @@ import pt.ist.bennu.core.domain.scheduler.ReadCustomTask;
 import pt.ist.bennu.core.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
-import pt.ist.fenixframework.pstm.AbstractDomainObject;
+import pt.ist.fenixframework.FenixFramework;
 
 /**
  * 
@@ -176,25 +176,25 @@ public class FindMissionUnitsWithoutResponsible extends ReadCustomTask {
     }
 
     private void init() {
-        missionsOrganizationalModel = AbstractDomainObject.fromExternalId(MISSIONS_ORGANIZATIONAL_MODEL_OID);
+        missionsOrganizationalModel = FenixFramework.getDomainObject(MISSIONS_ORGANIZATIONAL_MODEL_OID);
 
-        missionAccType = AbstractDomainObject.fromExternalId(MISSIONS_ACCOUNTABILITY_TYPE_OID);
+        missionAccType = FenixFramework.getDomainObject(MISSIONS_ACCOUNTABILITY_TYPE_OID);
 
-        AccountabilityType personnelType = AbstractDomainObject.fromExternalId(PERSONNEL_ACCOUNTABILITY_TYPE_OID);
-        AccountabilityType teacherPersonnelType = AbstractDomainObject.fromExternalId(TEACHER_PERSONNEL_ACCOUNTABILITY_TYPE_OID);
+        AccountabilityType personnelType = FenixFramework.getDomainObject(PERSONNEL_ACCOUNTABILITY_TYPE_OID);
+        AccountabilityType teacherPersonnelType = FenixFramework.getDomainObject(TEACHER_PERSONNEL_ACCOUNTABILITY_TYPE_OID);
         AccountabilityType investigatorPersonnelType =
-                AbstractDomainObject.fromExternalId(INVESTIGATOR_PERSONNEL_ACCOUNTABILITY_TYPE_OID);
+                FenixFramework.getDomainObject(INVESTIGATOR_PERSONNEL_ACCOUNTABILITY_TYPE_OID);
         personnelTypeList.add(personnelType);
         personnelTypeList.add(teacherPersonnelType);
         personnelTypeList.add(investigatorPersonnelType);
 
-        AccountabilityType responsibleType = AbstractDomainObject.fromExternalId(RESPONSIBLE_ACCOUNTABILITY_TYPE_OID);
+        AccountabilityType responsibleType = FenixFramework.getDomainObject(RESPONSIBLE_ACCOUNTABILITY_TYPE_OID);
         AccountabilityType teacherResponsibleType =
-                AbstractDomainObject.fromExternalId(TEACHER_RESPONSIBLE_ACCOUNTABILITY_TYPE_OID);
+                FenixFramework.getDomainObject(TEACHER_RESPONSIBLE_ACCOUNTABILITY_TYPE_OID);
         responsibleTypeList.add(responsibleType);
         responsibleTypeList.add(teacherResponsibleType);
 
-        academicUnitsUnit = AbstractDomainObject.fromExternalId(ACADEMIC_UNITS_PARTY_OID);
+        academicUnitsUnit = FenixFramework.getDomainObject(ACADEMIC_UNITS_PARTY_OID);
     }
 
     private void printResults() {

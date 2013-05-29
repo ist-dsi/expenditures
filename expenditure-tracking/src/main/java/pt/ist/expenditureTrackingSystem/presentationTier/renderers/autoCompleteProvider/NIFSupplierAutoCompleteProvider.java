@@ -48,7 +48,7 @@ public class NIFSupplierAutoCompleteProvider implements AutoCompleteProvider {
         final String[] input = value.split(" ");
         StringNormalizer.normalize(input);
 
-        for (final Supplier supplier : MyOrg.getInstance().getSuppliers()) {
+        for (final Supplier supplier : MyOrg.getInstance().getSuppliersSet()) {
             if (supplier.getFiscalIdentificationCode().startsWith(value)) {
                 addResult(result, supplier);
             } else {

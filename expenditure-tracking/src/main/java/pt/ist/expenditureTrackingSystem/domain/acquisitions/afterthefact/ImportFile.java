@@ -25,7 +25,7 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact;
 
 import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * 
@@ -43,18 +43,18 @@ public class ImportFile extends ImportFile_Base {
     }
 
     @Override
-    @Service
+    @Atomic
     public void delete() {
-        if (getAfterTheFactAcquisitionProcessesCount() > 0) {
+        if (getAfterTheFactAcquisitionProcessesSet().size() > 0) {
             throw new DomainException("exception.domain.ImportFile.cannotDeleteImportFileWithProcesses");
         }
 
         deleteDomainObject();
     }
 
-    @Service
+    @Atomic
     public void cancel() {
-        if (getAfterTheFactAcquisitionProcessesCount() == 0) {
+        if (getAfterTheFactAcquisitionProcessesSet().size() == 0) {
             delete();
 
         } else {
@@ -65,7 +65,7 @@ public class ImportFile extends ImportFile_Base {
         }
     }
 
-    @Service
+    @Atomic
     public void reenable() {
         setActive(Boolean.TRUE);
         for (AfterTheFactAcquisitionProcess process : getAfterTheFactAcquisitionProcesses()) {
@@ -80,6 +80,21 @@ public class ImportFile extends ImportFile_Base {
             return process != null && process.isConnectedToCurrentHost();
         }
         return false;
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionProcess> getAfterTheFactAcquisitionProcesses() {
+        return getAfterTheFactAcquisitionProcessesSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyAfterTheFactAcquisitionProcesses() {
+        return !getAfterTheFactAcquisitionProcessesSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasActive() {
+        return getActive() != null;
     }
 
 }

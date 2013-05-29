@@ -64,7 +64,7 @@ public class EmailDigesterUtil {
         for (Person person : getPeopleToProcess()) {
 
             final User user = person.getUser();
-            if (user.hasPerson() && user.hasExpenditurePerson()) {
+            if (user.getPerson() != null && user.getExpenditurePerson() != null) {
                 final UserView userView = Authenticate.authenticate(user);
                 pt.ist.fenixWebFramework.security.UserView.setUser(userView);
 
@@ -248,15 +248,15 @@ public class EmailDigesterUtil {
         for (final MissionProcess missionProcess : missionYear.getMissionProcessSet()) {
             final Mission mission = missionProcess.getMission();
             final module.organization.domain.Person requestingPerson = mission.getRequestingPerson();
-            if (requestingPerson != null && requestingPerson.getUser().hasExpenditurePerson()) {
+            if (requestingPerson != null && requestingPerson.getUser().getExpenditurePerson() != null) {
                 people.add(requestingPerson.getUser().getExpenditurePerson());
             }
             final Party missionResponsible = mission.getMissionResponsible();
             if (missionResponsible != null && missionResponsible.isPerson()) {
                 final module.organization.domain.Person missionPerson = (module.organization.domain.Person) missionResponsible;
-                if (missionPerson.hasUser()) {
+                if (missionPerson.getUser() != null) {
                     final User user = missionPerson.getUser();
-                    if (user != null && user.hasExpenditurePerson()) {
+                    if (user != null && user.getExpenditurePerson() != null) {
                         final Person person = user.getExpenditurePerson();
                         if (person.getOptions().getReceiveNotificationsByEmail()) {
                             people.add(person);

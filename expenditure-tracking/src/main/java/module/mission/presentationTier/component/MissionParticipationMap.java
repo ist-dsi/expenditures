@@ -51,7 +51,7 @@ import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
-import pt.ist.fenixframework.pstm.AbstractDomainObject;
+import pt.ist.fenixframework.FenixFramework;
 import pt.ist.vaadinframework.annotation.EmbeddedComponent;
 import pt.ist.vaadinframework.ui.EmbeddedComponentContainer;
 import pt.utl.ist.fenix.tools.util.excel.Spreadsheet;
@@ -211,7 +211,7 @@ public class MissionParticipationMap extends CustomComponent implements Embedded
         final String yearArg = arguments.get("year");
         final String monthArg = arguments.get("month");
 
-        unit = AbstractDomainObject.fromExternalId(unitOID);
+        unit = FenixFramework.getDomainObject(unitOID);
 
         if (unit == null) {
             return;

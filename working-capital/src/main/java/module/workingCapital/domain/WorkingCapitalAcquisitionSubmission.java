@@ -89,4 +89,24 @@ public class WorkingCapitalAcquisitionSubmission extends WorkingCapitalAcquisiti
         setValue(getValue().subtract(accumulatedValue));
     }
 
+    @Deprecated
+    public boolean hasPaymentRequired() {
+        return getPaymentRequired() != null;
+    }
+
+    @Deprecated
+    public boolean hasDocument() {
+        return getDocument() != null;
+    }
+
+    @Deprecated
+    public java.util.Set<module.workingCapital.domain.WorkingCapitalAcquisitionTransaction> getWorkingCapitalAcquisitionTransactions() {
+        return getWorkingCapitalAcquisitionTransactionsSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyWorkingCapitalAcquisitionTransactions() {
+        return !getWorkingCapitalAcquisitionTransactionsSet().isEmpty();
+    }
+
 }

@@ -73,10 +73,10 @@ public class MissionFinancer extends MissionFinancer_Base {
         for (final MissionItemFinancer missionItemFinancer : getMissionItemFinancersSet()) {
             missionItemFinancer.delete();
         }
-        removeMissionVersion();
-        removeUnit();
-        removeMissionSystem();
-        removeAccountingUnit();
+        setMissionVersion(null);
+        setUnit(null);
+        setMissionSystem(null);
+        setAccountingUnit(null);
         deleteDomainObject();
     }
 
@@ -151,13 +151,13 @@ public class MissionFinancer extends MissionFinancer_Base {
 
     public void unapprove(final User user) {
         if (hasApproval() && canApprove(user)) {
-            removeApproval();
+            setApproval(null);
         }
     }
 
     public void unauthorize(final User user) {
         if (hasAuthorization() && canAuthorize(user)) {
-            removeAuthorization();
+            setAuthorization(null);
         }
     }
 
@@ -228,7 +228,8 @@ public class MissionFinancer extends MissionFinancer_Base {
     }
 
     public boolean canAllocateFunds(final Person person) {
-        return person != null && hasAccountingUnit() && getAccountingUnit().hasPeople(person.getUser().getExpenditurePerson());
+        return person != null && hasAccountingUnit()
+                && getAccountingUnit().getPeopleSet().contains(person.getUser().getExpenditurePerson());
     }
 
     public boolean isAccountManager(final Person person) {
@@ -244,7 +245,7 @@ public class MissionFinancer extends MissionFinancer_Base {
 
     public boolean canAllocateProjectFunds(final Person person) {
         return person != null && hasAccountingUnit()
-                && getAccountingUnit().hasProjectAccountants(person.getUser().getExpenditurePerson())
+                && getAccountingUnit().getProjectAccountantsSet().contains(person.getUser().getExpenditurePerson())
                 && hasPendingProjectFundAllocations();
     }
 
@@ -322,7 +323,7 @@ public class MissionFinancer extends MissionFinancer_Base {
     }
 
     public void unAllocateProjectFunds(Person person) {
-        if (getAccountingUnit().hasProjectAccountants(person.getUser().getExpenditurePerson())) {
+        if (getAccountingUnit().getProjectAccountantsSet().contains(person.getUser().getExpenditurePerson())) {
             for (final MissionItemFinancer missionItemFinancer : getMissionItemFinancersSet()) {
                 if (missionItemFinancer instanceof MissionItemProjectFinancer) {
                     final MissionItemProjectFinancer missionItemProjectFinancer =
@@ -392,6 +393,51 @@ public class MissionFinancer extends MissionFinancer_Base {
     @Override
     public boolean isConnectedToCurrentHost() {
         return getMissionSystem() == VirtualHost.getVirtualHostForThread().getMissionSystem();
+    }
+
+    @Deprecated
+    public java.util.Set<module.mission.domain.MissionItemFinancer> getMissionItemFinancers() {
+        return getMissionItemFinancersSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyMissionItemFinancers() {
+        return !getMissionItemFinancersSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasCommitmentNumber() {
+        return getCommitmentNumber() != null;
+    }
+
+    @Deprecated
+    public boolean hasMissionVersion() {
+        return getMissionVersion() != null;
+    }
+
+    @Deprecated
+    public boolean hasUnit() {
+        return getUnit() != null;
+    }
+
+    @Deprecated
+    public boolean hasMissionSystem() {
+        return getMissionSystem() != null;
+    }
+
+    @Deprecated
+    public boolean hasAuthorization() {
+        return getAuthorization() != null;
+    }
+
+    @Deprecated
+    public boolean hasAccountingUnit() {
+        return getAccountingUnit() != null;
+    }
+
+    @Deprecated
+    public boolean hasApproval() {
+        return getApproval() != null;
     }
 
 }

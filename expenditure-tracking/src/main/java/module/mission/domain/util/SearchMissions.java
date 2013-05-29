@@ -28,7 +28,6 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 import module.mission.domain.ForeignMission;
@@ -284,7 +283,7 @@ public class SearchMissions extends Search<Mission> {
                     || (foreign != null && foreign.booleanValue() && mission instanceof ForeignMission);
         }
 
-        private boolean matchPayingUnitCriteria(List<MissionFinancer> financers) {
+        private boolean matchPayingUnitCriteria(Collection<MissionFinancer> financers) {
             if (payingUnit == null) {
                 return true;
             }
@@ -298,7 +297,7 @@ public class SearchMissions extends Search<Mission> {
             return false;
         }
 
-        private boolean matchAccountingUnitCriteria(List<MissionFinancer> financers) {
+        private boolean matchAccountingUnitCriteria(Collection<MissionFinancer> financers) {
             if (getAccountingUnit() == null) {
                 return true;
             }

@@ -75,7 +75,7 @@ public class ProjectAcquisitionFundAllocationRequest extends ProjectAcquisitionF
 
     @Override
     public void registerFundAllocation(final String fundAllocationNumber, final String operatorUsername) {
-        if (hasCancelFundAllocationRequest()) {
+        if (getCancelFundAllocationRequest() != null) {
             throw new DomainException("error.cannot.allocate.funds.because.request.has.been.canceled");
         }
 
@@ -121,7 +121,7 @@ public class ProjectAcquisitionFundAllocationRequest extends ProjectAcquisitionF
             super.registerFundAllocation(fundAllocationNumber, operatorUsername);
         } catch (final NotActiveActivityException ex) {
             setExternalSystemFromManuallyForwardedProcesses(getExternalAccountingIntegrationSystemFromPendingResult());
-            removeExternalAccountingIntegrationSystemFromPendingResult();
+            setExternalAccountingIntegrationSystemFromPendingResult(null);
         } catch (final ActivityException ex) {
             ex.printStackTrace();
         }
@@ -170,7 +170,7 @@ public class ProjectAcquisitionFundAllocationRequest extends ProjectAcquisitionF
                             "SUPPLIER_DOC_ID", supplier == null ? null : limitStringSize(getProposalNumber(request), 24),
                             "CPV_ID", cpvReference.getCode(), "CPV_DESCRIPTION", cpvReference.getDescription(),
                             "MOV_DESCRIPTION",
-                            limitStringSize(Integer.toString(item.getUnitItemsCount()) + " - " + item.getDescription(), 4000),
+                            limitStringSize(Integer.toString(item.getUnitItems().size()) + " - " + item.getDescription(), 4000),
                             "MOV_PCT_IVA", unitItem.getVatValue(), "MOV_VALUE", shareValue, "MOV_VALUE_IVA", shareVat,
 //,		    "CALLBACK_URL", getCallbackUrl()
                             "PROCESS_URL", getProcessUrl(process) };
@@ -301,6 +301,11 @@ public class ProjectAcquisitionFundAllocationRequest extends ProjectAcquisitionF
         } else {
             super.handle(e);
         }
+    }
+
+    @Deprecated
+    public boolean hasUnitItem() {
+        return getUnitItem() != null;
     }
 
 }

@@ -37,4 +37,29 @@ public class MissionProcessLateJustification extends MissionProcessLateJustifica
         return getMissionSystem() == VirtualHost.getVirtualHostForThread().getMissionSystem();
     }
 
+    @Deprecated
+    public boolean hasJustification() {
+        return getJustification() != null;
+    }
+
+    @Deprecated
+    public boolean hasJustificationDateTime() {
+        return getJustificationDateTime() != null;
+    }
+
+    @Deprecated
+    public boolean hasMissionProcess() {
+        return getMissionProcess() != null;
+    }
+
+    @Deprecated
+    public boolean hasMissionSystem() {
+        return getMissionSystem() != null;
+    }
+
+    @Deprecated
+    public boolean hasPerson() {
+        return getPerson() != null;
+    }
+
 }

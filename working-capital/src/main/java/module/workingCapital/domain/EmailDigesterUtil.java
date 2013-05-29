@@ -64,7 +64,7 @@ public class EmailDigesterUtil {
         for (Person person : getPeopleToProcess()) {
 
             final User user = person.getUser();
-            if (user.hasPerson() && user.hasExpenditurePerson()) {
+            if (user.getPerson() != null && user.getExpenditurePerson() != null) {
                 final UserView userView = Authenticate.authenticate(user);
                 pt.ist.fenixWebFramework.security.UserView.setUser(userView);
 
@@ -233,9 +233,9 @@ public class EmailDigesterUtil {
     private static void addMovementResponsibles(final Set<Person> people, final WorkingCapitalYear workingCapitalYear) {
         for (final WorkingCapital workingCapital : workingCapitalYear.getWorkingCapitalsSet()) {
             final module.organization.domain.Person movementResponsible = workingCapital.getMovementResponsible();
-            if (movementResponsible.hasUser()) {
+            if (movementResponsible.getUser() != null) {
                 final User user = movementResponsible.getUser();
-                if (user.hasExpenditurePerson()) {
+                if (user.getExpenditurePerson() != null) {
                     final Person person = user.getExpenditurePerson();
                     if (person.getOptions().getReceiveNotificationsByEmail()) {
                         people.add(person);

@@ -283,7 +283,7 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
         final SortedSet<WorkingCapitalProcess> result =
                 new TreeSet<WorkingCapitalProcess>(WorkingCapitalProcess.COMPARATOR_BY_UNIT_NAME);
         final User user = UserView.getCurrentUser();
-        if (user.hasExpenditurePerson()) {
+        if (user.getExpenditurePerson() != null) {
             final Set<Authorization> authorizations = getAuthorizations(user);
             if (!authorizations.isEmpty()) {
                 for (final WorkingCapital workingCapital : getWorkingCapitalsSet()) {
@@ -355,7 +355,7 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
             final Party child = accountability.getChild();
             if (child.isUnit()) {
                 final Unit childUnit = (Unit) child;
-                if (childUnit.hasExpenditureUnit()) {
+                if (childUnit.getExpenditureUnit() != null) {
                     final pt.ist.expenditureTrackingSystem.domain.organization.Unit expenditureUnit =
                             childUnit.getExpenditureUnit();
                     if (!hasValidAuthorization(expenditureUnit)) {
@@ -384,7 +384,7 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
         final User user = UserView.getCurrentUser();
         final SortedSet<WorkingCapitalProcess> result =
                 new TreeSet<WorkingCapitalProcess>(WorkingCapitalProcess.COMPARATOR_BY_UNIT_NAME);
-        if (unit.hasExpenditureUnit()) {
+        if (unit.getExpenditureUnit() != null) {
             for (final WorkingCapital workingCapital : unit.getExpenditureUnit().getWorkingCapitalsSet()) {
                 if (workingCapital.getWorkingCapitalYear() == this /* && workingCapital.isAvailable(user) */) {
                     final WorkingCapitalProcess workingCapitalProcess = workingCapital.getWorkingCapitalProcess();
@@ -444,6 +444,26 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
     @Override
     public boolean isConnectedToCurrentHost() {
         return getWorkingCapitalSystem() == WorkingCapitalSystem.getInstanceForCurrentHost();
+    }
+
+    @Deprecated
+    public boolean hasYear() {
+        return getYear() != null;
+    }
+
+    @Deprecated
+    public boolean hasWorkingCapitalSystem() {
+        return getWorkingCapitalSystem() != null;
+    }
+
+    @Deprecated
+    public java.util.Set<module.workingCapital.domain.WorkingCapital> getWorkingCapitals() {
+        return getWorkingCapitalsSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyWorkingCapitals() {
+        return !getWorkingCapitalsSet().isEmpty();
     }
 
 }

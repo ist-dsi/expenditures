@@ -36,7 +36,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.dto.AuthorizationBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * 
@@ -85,7 +85,7 @@ public class Authorization extends Authorization_Base {
         setMaxAmount(authorizationBean.getMaxAmount() != null ? authorizationBean.getMaxAmount() : Money.ZERO);
     }
 
-    @Service
+    @Atomic
     public void changeUnit(final Unit unit) {
         setUnit(unit);
     }
@@ -105,7 +105,7 @@ public class Authorization extends Authorization_Base {
         return super.getCanDelegate() && isValid();
     }
 
-    @Service
+    @Atomic
     public void revoke() {
         if (!isCurrentUserAbleToRevoke()) {
             throw new DomainException("error.person.not.authorized.to.revoke");
@@ -148,15 +148,15 @@ public class Authorization extends Authorization_Base {
         return loggedPerson != null && isValid() && isPersonAbleToRevokeDelegatedAuthorization(loggedPerson);
     }
 
-    @Service
+    @Atomic
     public void delete() {
         AuthorizationOperation.DELETE.log(this, null);
         for (final DelegatedAuthorization delegatedAuthorization : getDelegatedAuthorizationsSet()) {
             delegatedAuthorization.delete();
         }
-        removePerson();
-        removeUnit();
-        removeExpenditureTrackingSystem();
+        setPerson(null);
+        setUnit(null);
+        setExpenditureTrackingSystem(null);
         deleteDomainObject();
     }
 
@@ -177,6 +177,86 @@ public class Authorization extends Authorization_Base {
     @Override
     public boolean isConnectedToCurrentHost() {
         return getExpenditureTrackingSystem() == ExpenditureTrackingSystem.getInstance();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.authorizations.DelegatedAuthorization> getDelegatedAuthorizations() {
+        return getDelegatedAuthorizationsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.mission.domain.MissionFinancer> getAuthorizedMissionFinancers() {
+        return getAuthorizedMissionFinancersSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.mission.domain.Mission> getApprovedMissions() {
+        return getApprovedMissionsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.mission.domain.MissionFinancer> getApprovedMissionFinancers() {
+        return getApprovedMissionFinancersSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyDelegatedAuthorizations() {
+        return !getDelegatedAuthorizationsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyAuthorizedMissionFinancers() {
+        return !getAuthorizedMissionFinancersSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyApprovedMissions() {
+        return !getApprovedMissionsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyApprovedMissionFinancers() {
+        return !getApprovedMissionFinancersSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAuthorizationType() {
+        return getAuthorizationType() != null;
+    }
+
+    @Deprecated
+    public boolean hasCanDelegate() {
+        return getCanDelegate() != null;
+    }
+
+    @Deprecated
+    public boolean hasStartDate() {
+        return getStartDate() != null;
+    }
+
+    @Deprecated
+    public boolean hasEndDate() {
+        return getEndDate() != null;
+    }
+
+    @Deprecated
+    public boolean hasMaxAmount() {
+        return getMaxAmount() != null;
+    }
+
+    @Deprecated
+    public boolean hasPerson() {
+        return getPerson() != null;
+    }
+
+    @Deprecated
+    public boolean hasExpenditureTrackingSystem() {
+        return getExpenditureTrackingSystem() != null;
+    }
+
+    @Deprecated
+    public boolean hasUnit() {
+        return getUnit() != null;
     }
 
 }

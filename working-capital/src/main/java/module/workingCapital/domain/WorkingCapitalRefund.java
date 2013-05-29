@@ -87,4 +87,9 @@ public class WorkingCapitalRefund extends WorkingCapitalRefund_Base {
         return getPreviousTransaction().getBalance();
     }
 
+    @Deprecated
+    public boolean hasPaymentMethod() {
+        return getPaymentMethod() != null;
+    }
+
 }

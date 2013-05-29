@@ -56,7 +56,7 @@ import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationLog;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateUnitBean;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 import pt.ist.fenixframework.plugins.luceneIndexing.IndexableField;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
@@ -169,11 +169,11 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
 
     private void deleteUnit() {
         final module.organization.domain.Unit unit = getUnit();
-        removeUnit();
+        setUnit(null);
         unit.delete();
     }
 
-    @Service
+    @Atomic
     public static Unit createNewUnit(final CreateUnitBean createUnitBean) {
         if (createUnitBean.getCostCenter() != null) {
             return new CostCenter(createUnitBean.getParentUnit(), createUnitBean.getName(), createUnitBean.getCostCenter());
@@ -191,7 +191,7 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
         return new Unit(createUnitBean.getParentUnit(), createUnitBean.getName());
     }
 
-    @Service
+    @Atomic
     public static Unit createTopLevelUnit(final module.organization.domain.Unit organizationUnit,
             ExpenditureTrackingSystem expenditureTrackingSystem) {
         Unit newUnit = new Unit();
@@ -201,7 +201,7 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
         return newUnit;
     }
 
-    @Service
+    @Atomic
     public void delete() {
         if (!getAuthorizationsSet().isEmpty()) {
             throw new DomainException("error.cannot.delete.units.which.have.or.had.authorizations");
@@ -209,13 +209,13 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
         if (hasAnyFinancedItems()) {
             throw new DomainException("error.cannot.delete.units.which.have.or.had.financedItems");
         }
-        if (getUnit().hasAnyParentAccountabilities()) {
+        if (!getUnit().getParentAccountabilitiesSet().isEmpty()) {
             throw new DomainException("error.cannot.delete.units.which.have.subUnits");
         }
 
-        removeExpenditureTrackingSystemFromTopLevelUnit();
+        setExpenditureTrackingSystemFromTopLevelUnit(null);
         deleteUnit();
-        removeExpenditureTrackingSystem();
+        setExpenditureTrackingSystem(null);
         deleteDomainObject();
     }
 
@@ -230,7 +230,7 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
                 final Party child = accountability.getChild();
                 if (child.isUnit()) {
                     final module.organization.domain.Unit childUnit = (module.organization.domain.Unit) child;
-                    if (childUnit.hasExpenditureUnit()) {
+                    if (childUnit.getExpenditureUnit() != null) {
                         final Unit expenditureUnit = childUnit.getExpenditureUnit();
                         if (expenditureUnit instanceof CostCenter || expenditureUnit instanceof Project) {
                             expenditureUnit.findAcquisitionProcessesPendingAuthorization(result, recurseSubUnits);
@@ -266,7 +266,7 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
             }
             final module.organization.domain.Unit unit = (module.organization.domain.Unit) party;
             LocalDate today = new LocalDate();
-            if (unit.hasExpenditureUnit()) {
+            if (unit.getExpenditureUnit() != null) {
                 for (Authorization authorization : unit.getExpenditureUnit().getAuthorizationsSet()) {
                     if (authorization.isValidFor(today) && authorization.getPerson() == person) {
                         return true;
@@ -325,7 +325,7 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
     public static Authorization findClosestAuthorization(final Party party, final Person person, final Money money) {
         if (party.isUnit()) {
             final module.organization.domain.Unit unit = (module.organization.domain.Unit) party;
-            if (unit.hasExpenditureUnit()) {
+            if (unit.getExpenditureUnit() != null) {
                 for (final Authorization authorization : unit.getExpenditureUnit().getAuthorizationsSet()) {
                     if (authorization.getPerson() == person && authorization.isValid()) {
                         if (authorization.getMaxAmount().isGreaterThanOrEqual(money)) {
@@ -411,7 +411,7 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
                 final Party child = accountability.getChild();
                 if (child.isUnit()) {
                     final module.organization.domain.Unit unit = (module.organization.domain.Unit) child;
-                    if (unit.hasExpenditureUnit() && unit.getExpenditureUnit().hasResponsiblesInUnit()) {
+                    if (unit.getExpenditureUnit() != null && unit.getExpenditureUnit().hasResponsiblesInUnit()) {
                         return true;
                     }
                 }
@@ -421,7 +421,7 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
     }
 
     public boolean hasResponsiblesInUnit() {
-        return getAuthorizationsCount() > 0;
+        return getAuthorizations().size() > 0;
     }
 
     public boolean hasAuthorizationsFor(Person person) {
@@ -482,7 +482,7 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
                 final Party parent = accountability.getParent();
                 if (parent.isUnit()) {
                     final module.organization.domain.Unit parentUnit = (module.organization.domain.Unit) parent;
-                    if (parentUnit.hasExpenditureUnit()) {
+                    if (parentUnit.getExpenditureUnit() != null) {
                         return parentUnit.getExpenditureUnit();
                     }
                     final Unit result = getParentUnit(parentUnit);
@@ -528,7 +528,7 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
                 final Party parent = accountability.getParent();
                 if (parent.isUnit()) {
                     final module.organization.domain.Unit parentUnit = (module.organization.domain.Unit) parent;
-                    if (parentUnit.hasExpenditureUnit()) {
+                    if (parentUnit.getExpenditureUnit() != null) {
                         return true;
                     }
                     final boolean result = hasParentUnit(parentUnit);
@@ -549,7 +549,7 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
     public static AccountingUnit getAccountingUnit(final Party party, final Person person) {
         if (party.isUnit()) {
             final module.organization.domain.Unit unit = (module.organization.domain.Unit) party;
-            if (unit.hasExpenditureUnit()) {
+            if (unit.getExpenditureUnit() != null) {
                 final Unit expenditureUnit = unit.getExpenditureUnit();
                 if (expenditureUnit.hasAccountingUnit()) {
                     return expenditureUnit.getAccountingUnit();
@@ -592,7 +592,7 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
     private static void addAllSubUnits(final List<Unit> result, final Party party) {
         if (party.isUnit()) {
             final module.organization.domain.Unit unit = (module.organization.domain.Unit) party;
-            if (unit.hasExpenditureUnit()) {
+            if (unit.getExpenditureUnit() != null) {
                 result.add(unit.getExpenditureUnit());
             }
 
@@ -606,14 +606,13 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
         }
     }
 
-    @Override
-    @Service
+    @Atomic
     public void removeUnit() {
-        super.removeUnit();
+        super.setUnit(null);
     }
 
     @Override
-    @Service
+    @Atomic
     public void setUnit(final module.organization.domain.Unit unit) {
         super.setUnit(unit);
     }
@@ -641,7 +640,7 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
             final Party child = accountability.getChild();
             if (child.isUnit()) {
                 final module.organization.domain.Unit unit = (module.organization.domain.Unit) child;
-                if (unit.hasExpenditureUnit()) {
+                if (unit.getExpenditureUnit() != null) {
                     result.add(unit.getExpenditureUnit());
                 } else {
                     getSubUnitsSet(result, unit);
@@ -659,7 +658,7 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
             final Party child = accountability.getChild();
             if (child.isUnit()) {
                 final module.organization.domain.Unit childUnit = (module.organization.domain.Unit) child;
-                if (childUnit.hasExpenditureUnit()) {
+                if (childUnit.getExpenditureUnit() != null) {
                     return true;
                 }
             }
@@ -668,18 +667,18 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
     }
 
     @Override
-    @Service
+    @Atomic
     public void addObservers(Person observer) {
         super.addObservers(observer);
     }
 
     @Override
-    @Service
+    @Atomic
     public void removeObservers(Person observer) {
         super.removeObservers(observer);
     }
 
-    @Service
+    @Atomic
     public void toggleDefaultRegeim() {
         final Boolean currentValue = getDefaultRegeimIsCCP();
         final boolean newValue = currentValue == null ? Boolean.TRUE : !currentValue.booleanValue();
@@ -719,7 +718,7 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
             final Party child = accountability.getChild();
             if (child.isUnit()) {
                 final module.organization.domain.Unit childUnit = (module.organization.domain.Unit) child;
-                if (childUnit.hasExpenditureUnit()) {
+                if (childUnit.getExpenditureUnit() != null) {
                     childUnit.getExpenditureUnit().evaluateAllProcesses(unitProcessEvaluator, year);
                 } else {
                     evaluateAllProcesses(unitProcessEvaluator, year, childUnit);
@@ -746,7 +745,7 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
 
     public boolean isAccountingResponsible(final Person person) {
         final AccountingUnit accountingUnit = getAccountingUnit();
-        return accountingUnit != null && person != null && accountingUnit.hasResponsiblePeople(person);
+        return accountingUnit != null && person != null && accountingUnit.getResponsiblePeopleSet().contains(person);
     }
 
     public boolean isAccountManager(final Person accountManager) {
@@ -779,6 +778,146 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
             return parentUnit == null ? null : parentUnit.getAccountManager();
         }
         return person;
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.SavedSearch> getPayingUnitSearches() {
+        return getPayingUnitSearchesSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer> getFinancedItems() {
+        return getFinancedItemsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.mission.domain.Mission> getMissions() {
+        return getMissionsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.mission.domain.MissionFinancer> getFinancers() {
+        return getFinancersSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.organization.Person> getObservers() {
+        return getObserversSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.announcements.CCPAnnouncement> getRequestAnnouncements() {
+        return getRequestAnnouncementsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationLog> getAuthorizationLogs() {
+        return getAuthorizationLogsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.SavedSearch> getUnitSearches() {
+        return getUnitSearchesSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.announcements.CCPAnnouncement> getBuyAnnouncements() {
+        return getBuyAnnouncementsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization> getAuthorizations() {
+        return getAuthorizationsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestWithPayment> getRequests() {
+        return getRequestsSet();
+    }
+
+    @Deprecated
+    public boolean hasAnyPayingUnitSearches() {
+        return !getPayingUnitSearchesSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyFinancedItems() {
+        return !getFinancedItemsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyMissions() {
+        return !getMissionsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyFinancers() {
+        return !getFinancersSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyObservers() {
+        return !getObserversSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyRequestAnnouncements() {
+        return !getRequestAnnouncementsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyAuthorizationLogs() {
+        return !getAuthorizationLogsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyUnitSearches() {
+        return !getUnitSearchesSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyBuyAnnouncements() {
+        return !getBuyAnnouncementsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyAuthorizations() {
+        return !getAuthorizationsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasAnyRequests() {
+        return !getRequestsSet().isEmpty();
+    }
+
+    @Deprecated
+    public boolean hasDefaultRegeimIsCCP() {
+        return getDefaultRegeimIsCCP() != null;
+    }
+
+    @Deprecated
+    public boolean hasAccountingUnit() {
+        return getAccountingUnit() != null;
+    }
+
+    @Deprecated
+    public boolean hasUnit() {
+        return getUnit() != null;
+    }
+
+    @Deprecated
+    public boolean hasExpenditureTrackingSystemFromTopLevelUnit() {
+        return getExpenditureTrackingSystemFromTopLevelUnit() != null;
+    }
+
+    @Deprecated
+    public boolean hasAccountManager() {
+        return getAccountManager() != null;
+    }
+
+    @Deprecated
+    public boolean hasExpenditureTrackingSystem() {
+        return getExpenditureTrackingSystem() != null;
     }
 
 }

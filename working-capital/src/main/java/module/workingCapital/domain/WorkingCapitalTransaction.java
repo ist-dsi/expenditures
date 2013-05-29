@@ -72,7 +72,7 @@ public class WorkingCapitalTransaction extends WorkingCapitalTransaction_Base {
     @Override
     public void setWorkingCapital(final WorkingCapital workingCapital) {
         final WorkingCapitalTransaction workingCapitalTransaction = workingCapital.getLastTransaction();
-        int count = workingCapital.getWorkingCapitalTransactionsCount();
+        int count = workingCapital.getWorkingCapitalTransactions().size();
         super.setWorkingCapital(workingCapital);
         setNumber(Integer.valueOf(count + 1));
         setValue(Money.ZERO);
@@ -232,4 +232,54 @@ public class WorkingCapitalTransaction extends WorkingCapitalTransaction_Base {
     public boolean isConnectedToCurrentHost() {
         return getWorkingCapitalSystem() == WorkingCapitalSystem.getInstanceForCurrentHost();
     }
+    @Deprecated
+    public boolean hasNumber() {
+        return getNumber() != null;
+    }
+
+    @Deprecated
+    public boolean hasTransationInstant() {
+        return getTransationInstant() != null;
+    }
+
+    @Deprecated
+    public boolean hasValue() {
+        return getValue() != null;
+    }
+
+    @Deprecated
+    public boolean hasAccumulatedValue() {
+        return getAccumulatedValue() != null;
+    }
+
+    @Deprecated
+    public boolean hasBalance() {
+        return getBalance() != null;
+    }
+
+    @Deprecated
+    public boolean hasDebt() {
+        return getDebt() != null;
+    }
+
+    @Deprecated
+    public boolean hasWorkingCapital() {
+        return getWorkingCapital() != null;
+    }
+
+    @Deprecated
+    public boolean hasWorkingCapitalSystem() {
+        return getWorkingCapitalSystem() != null;
+    }
+
+    @Deprecated
+    public boolean hasInvoice() {
+        return getInvoice() != null;
+    }
+
+    @Deprecated
+    public boolean hasPerson() {
+        return getPerson() != null;
+    }
+
 }

@@ -72,4 +72,9 @@ public class WorkingCapitalAcquisitionSubmissionDocument extends WorkingCapitalA
 
     }
 
+    @Deprecated
+    public boolean hasTransaction() {
+        return getTransaction() != null;
+    }
+
 }

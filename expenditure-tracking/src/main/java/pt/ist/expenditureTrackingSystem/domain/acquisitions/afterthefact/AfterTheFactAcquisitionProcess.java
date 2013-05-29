@@ -52,7 +52,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.activit
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.activities.EditAfterTheFactProcessActivityInformation.AfterTheFactAcquisitionProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 @ClassNameBundle(bundle = "resources/ExpenditureResources", key = "label.process.afterTheFactAcquisition")
 /**
@@ -79,7 +79,7 @@ public class AfterTheFactAcquisitionProcess extends AfterTheFactAcquisitionProce
     private static final ThreadLocal<AfterTheFactAcquisitionProcessBean> threadLocal =
             new ThreadLocal<AfterTheFactAcquisitionProcessBean>();
 
-    @Service
+    @Atomic
     public static AfterTheFactAcquisitionProcess createNewAfterTheFactAcquisitionProcess(
             AfterTheFactAcquisitionProcessBean afterTheFactAcquisitionProcessBean) {
         threadLocal.set(afterTheFactAcquisitionProcessBean);
@@ -252,6 +252,16 @@ public class AfterTheFactAcquisitionProcess extends AfterTheFactAcquisitionProce
     @Override
     public AcquisitionItemClassification getGoodsOrServiceClassification() {
         return null;
+    }
+
+    @Deprecated
+    public boolean hasAcquisitionAfterTheFact() {
+        return getAcquisitionAfterTheFact() != null;
+    }
+
+    @Deprecated
+    public boolean hasImportFile() {
+        return getImportFile() != null;
     }
 
 }
