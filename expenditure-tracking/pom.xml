@@ -4,7 +4,7 @@
     <parent>
         <groupId>pt.ist</groupId>
         <artifactId>bennu-project</artifactId>
-        <version>1.1.0-rc2</version>
+        <version>1.1.0</version>
         <relativePath />
     </parent>
 
@@ -15,22 +15,22 @@
     <name>expenditure-tracking</name>
 
     <properties>
-        <version.pt.ist.bennu.core>1.1.0-rc2</version.pt.ist.bennu.core>
-        <version.pt.ist.lucene>1.1.0-rc2</version.pt.ist.lucene>
-        <version.pt.ist.email.dispatch>1.1.0-rc2</version.pt.ist.email.dispatch>
-        <version.pt.ist.content>1.1.0-rc2</version.pt.ist.content>
-        <version.pt.ist.file.support>1.1.0-rc2</version.pt.ist.file.support>
-        <version.pt.ist.workflow>1.1.0-rc2</version.pt.ist.workflow>
-        <version.pt.ist.meta.workflow>1.1.0-rc2</version.pt.ist.meta.workflow>
-        <version.pt.ist.geography>1.1.0-rc2</version.pt.ist.geography>
-        <version.pt.ist.organization>1.1.0-rc2</version.pt.ist.organization>
-        <version.pt.ist.dashboard>1.1.0-rc2</version.pt.ist.dashboard>
-        <version.pt.ist.bennu.vaadin>1.1.0-rc2</version.pt.ist.bennu.vaadin>
-        <version.pt.ist.external.accounting.integration>1.2.0-rc2</version.pt.ist.external.accounting.integration>
-        <version.pt.ist.db.utils>1.1.0-rc2</version.pt.ist.db.utils>
-        <version.pt.ist.web.service.utils>1.1.0-rc2</version.pt.ist.web.service.utils>
-        <version.pt.ist.scheduler>1.1.0-rc2</version.pt.ist.scheduler>
-        <version.pt.ist.messaging>1.1.0-rc2</version.pt.ist.messaging>
+        <version.pt.ist.bennu.core>1.1.0</version.pt.ist.bennu.core>
+        <version.pt.ist.lucene>1.1.0</version.pt.ist.lucene>
+        <version.pt.ist.email.dispatch>1.1.0</version.pt.ist.email.dispatch>
+        <version.pt.ist.content>1.1.0</version.pt.ist.content>
+        <version.pt.ist.file.support>1.1.0</version.pt.ist.file.support>
+        <version.pt.ist.workflow>1.1.0</version.pt.ist.workflow>
+        <version.pt.ist.meta.workflow>1.1.0</version.pt.ist.meta.workflow>
+        <version.pt.ist.geography>1.1.0</version.pt.ist.geography>
+        <version.pt.ist.organization>1.1.0</version.pt.ist.organization>
+        <version.pt.ist.dashboard>1.1.0</version.pt.ist.dashboard>
+        <version.pt.ist.bennu.vaadin>1.1.0</version.pt.ist.bennu.vaadin>
+        <version.pt.ist.external.accounting.integration>1.2.0</version.pt.ist.external.accounting.integration>
+        <version.pt.ist.db.utils>1.1.0</version.pt.ist.db.utils>
+        <version.pt.ist.web.service.utils>1.1.0</version.pt.ist.web.service.utils>
+        <version.pt.ist.scheduler>1.1.0</version.pt.ist.scheduler>
+        <version.pt.ist.messaging>1.1.0</version.pt.ist.messaging>
     </properties>
 
     <build>

@@ -4,7 +4,7 @@
     <parent>
         <groupId>pt.ist</groupId>
         <artifactId>bennu-project</artifactId>
-        <version>1.1.0-rc2</version>
+        <version>1.1.0</version>
         <relativePath />
     </parent>
 
@@ -15,10 +15,10 @@
     <name>working-capital</name>
 
     <properties>
-        <version.pt.ist.bennu.core>1.1.0-rc2</version.pt.ist.bennu.core>
-        <version.pt.ist.workflow>1.1.0-rc2</version.pt.ist.workflow>
-        <version.pt.ist.scheduler>1.1.0-rc2</version.pt.ist.scheduler>
-        <version.pt.ist.messaging>1.1.0-rc2</version.pt.ist.messaging>
+        <version.pt.ist.bennu.core>1.1.0</version.pt.ist.bennu.core>
+        <version.pt.ist.workflow>1.1.0</version.pt.ist.workflow>
+        <version.pt.ist.scheduler>1.1.0</version.pt.ist.scheduler>
+        <version.pt.ist.messaging>1.1.0</version.pt.ist.messaging>
     </properties>
 
     <build>
