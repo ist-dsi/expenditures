@@ -10,7 +10,7 @@
 
     <groupId>pt.ist</groupId>
     <artifactId>expenditure-tracking</artifactId>
-    <version>1.3.0-SNAPSHOT</version>
+    <version>1.3.0</version>
     <packaging>jar</packaging>
     <name>expenditure-tracking</name>
 
@@ -20,8 +20,8 @@
         <version.pt.ist.email.dispatch>1.1.0</version.pt.ist.email.dispatch>
         <version.pt.ist.content>1.1.0</version.pt.ist.content>
         <version.pt.ist.file.support>1.1.0</version.pt.ist.file.support>
-        <version.pt.ist.workflow>1.1.0</version.pt.ist.workflow>
-        <version.pt.ist.meta.workflow>1.1.0</version.pt.ist.meta.workflow>
+        <version.pt.ist.workflow>1.1.1</version.pt.ist.workflow>
+        <version.pt.ist.meta.workflow>1.1.1</version.pt.ist.meta.workflow>
         <version.pt.ist.geography>1.1.0</version.pt.ist.geography>
         <version.pt.ist.organization>1.1.0</version.pt.ist.organization>
         <version.pt.ist.dashboard>1.1.0</version.pt.ist.dashboard>
