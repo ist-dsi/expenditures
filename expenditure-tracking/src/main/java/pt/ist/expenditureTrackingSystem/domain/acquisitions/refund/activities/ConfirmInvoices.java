@@ -42,6 +42,7 @@ public class ConfirmInvoices extends WorkflowActivity<RefundProcess, ActivityInf
     public boolean isActive(RefundProcess process, User user) {
         Person person = user.getExpenditurePerson();
         return isUserProcessOwner(process, user)
+                && process.isActive()
                 && process.isRealValueFullyAttributedToUnits()
                 && ((process.isAccountingEmployee(person) && !process.hasProjectsAsPayingUnits()) || (process
                         .isProjectAccountingEmployee(person) && process.hasProjectsAsPayingUnits()))

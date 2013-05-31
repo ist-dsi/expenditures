@@ -541,8 +541,16 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
     }
 
     public boolean processesNeedToBeReverified() {
-	final Boolean b = getProcessesNeedToBeReverified();
-	return b != null && b.booleanValue();
+        final Boolean b = getProcessesNeedToBeReverified();
+        return b != null && b.booleanValue();
+    }
+
+    public boolean isCommitmentNumberRequired() {
+        if (getRequireCommitmentNumber() == null) {
+            return false;
+        } else {
+            return getRequireCommitmentNumber();
+        }
     }
 
     @Deprecated

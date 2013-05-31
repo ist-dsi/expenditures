@@ -34,7 +34,7 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import module.mission.domain.util.MissionStageView;
+import module.mission.domain.util.MissionState;
 import module.organization.domain.Accountability;
 import module.organization.domain.AccountabilityType;
 import module.organization.domain.Person;
@@ -316,11 +316,15 @@ public abstract class MissionProcess extends MissionProcess_Base {
     }
 
     public boolean hasAnyParticipantes() {
-        return getMission().hasAnyParticipantes();
+        return !getMission().getParticipantesSet().isEmpty();
     }
 
     public boolean hasAnyMissionItems() {
         return getMission().hasAnyMissionItems();
+    }
+
+    public boolean hasAnyVehicleItems() {
+        return getMission().hasAnyVehicleItems();
     }
 
     public boolean hasAnyAllocatedProjectFunds() {
@@ -492,7 +496,7 @@ public abstract class MissionProcess extends MissionProcess_Base {
     }
 
     public boolean isCanceled() {
-        return getIsCanceled().booleanValue();
+        return getIsCanceled() == null || getIsCanceled().booleanValue();
     }
 
     public String getPresentationName() {
@@ -507,8 +511,14 @@ public abstract class MissionProcess extends MissionProcess_Base {
         return getMission().isAuthorized();
     }
 
-    public MissionStageView getMissionStageView() {
-        return new MissionStageView(this);
+    public List<MissionState> getMissionStates() {
+        List<MissionState> validStates = new ArrayList<MissionState>();
+        for (MissionState state : MissionState.values()) {
+            if (state.isRequired(this)) {
+                validStates.add(state);
+            }
+        }
+        return validStates;
     }
 
     public boolean isAccountingEmployee(final pt.ist.expenditureTrackingSystem.domain.organization.Person expenditurePerson) {

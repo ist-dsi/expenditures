@@ -122,11 +122,12 @@
 				</image>
 				<staticText>
 					<reportElement
-						x="349"
+						x="326"
 						y="218"
-						width="80"
+						width="103"
 						height="16"
-						key="staticText-20"/>
+						key="staticText-20"
+						isPrintWhenDetailOverflows="true"/>
 					<box></box>
 					<textElement textAlignment="Right">
 						<font pdfFontName="Helvetica-Oblique" isItalic="true"/>
@@ -320,9 +321,9 @@ $P{supplierContact}.getAddress().getCountry())
 				</staticText>
 				<staticText>
 					<reportElement
-						x="350"
+						x="326"
 						y="242"
-						width="80"
+						width="104"
 						height="16"
 						key="staticText-20"/>
 					<box></box>
@@ -582,7 +583,7 @@ Entrega]]></text>
 					<textElement textAlignment="Right">
 						<font/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA["Processo:" + $P{acquisitionRequest}.getAcquisitionProcessId() + " - Requisição: " + $P{requestID}.toString() + " - Pág. " + $V{PAGE_NUMBER} + " de "]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Processo: " + $P{acquisitionRequest}.getAcquisitionProcessId() + " - Requisição: " + $P{requestID}.toString() + " - Pág. " + $V{PAGE_NUMBER} + " de "]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Report" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -748,7 +749,7 @@ Fax 218 417 717]]></text>
 					<textElement textAlignment="Right">
 						<font/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA["Processo:" + $P{acquisitionRequest}.getAcquisitionProcessId() + " - Requisição: " + $P{requestID}.toString() + " - Pág. " + $V{PAGE_NUMBER} + " de " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Processo: " + $P{acquisitionRequest}.getAcquisitionProcessId() + " - Requisição: " + $P{requestID}.toString() + " - Pág. " + $V{PAGE_NUMBER} + " de " + $V{PAGE_NUMBER}]]></textFieldExpression>
 				</textField>
 				<line direction="TopDown">
 					<reportElement
@@ -856,6 +857,19 @@ Fax 218 417 717]]></text>
 						<font size="8"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA["Contr. Nº " + $P{institutionSocialSecurityNumber} + "\nCAE " + $P{cae}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Report" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="507"
+						y="169"
+						width="40"
+						height="18"
+						key="textField-30"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["" + $V{PAGE_NUMBER} + ""]]></textFieldExpression>
 				</textField>
 			</band>
 		</lastPageFooter>

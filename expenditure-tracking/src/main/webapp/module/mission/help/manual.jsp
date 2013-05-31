@@ -85,33 +85,33 @@
 <h2><a name="processSummary"></a>2. <bean:message bundle="MISSION_RESOURCES" key="text.help.title.processSummary"/></h2>
 <p><bean:message bundle="MISSION_RESOURCES" key="text.help.content.processSummary.paragraph1"/></p>
 <blockquote>
-	<h3><bean:message bundle="MISSION_RESOURCES" key="text.help.content.processSummary.stage1.title"/></h3>
-	<h3><bean:message bundle="MISSION_RESOURCES" key="text.help.content.processSummary.stage2.title"/></h3>
-	<p><bean:message bundle="MISSION_RESOURCES" key="text.help.content.processSummary.stage2.content"/></p>
-	<h3><bean:message bundle="MISSION_RESOURCES" key="text.help.content.processSummary.stage3.title"/></h3>
+	<h3><bean:message bundle="MISSION_RESOURCES" key="text.help.content.processSummary.state1.title"/></h3>
+	<h3><bean:message bundle="MISSION_RESOURCES" key="text.help.content.processSummary.state2.title"/></h3>
+	<p><bean:message bundle="MISSION_RESOURCES" key="text.help.content.processSummary.state2.content"/></p>
+	<h3><bean:message bundle="MISSION_RESOURCES" key="text.help.content.processSummary.state3.title"/></h3>
 	<p>
-		<bean:message bundle="MISSION_RESOURCES" key="text.help.content.processSummary.stage3.paragraph1"/>
+		<bean:message bundle="MISSION_RESOURCES" key="text.help.content.processSummary.state3.paragraph1"/>
 		<blockquote>
 			<ul>
-				<li><bean:message bundle="MISSION_RESOURCES" key="text.help.content.processSummary.stage3.paragraph1.subList1"/></li>
-				<li><bean:message bundle="MISSION_RESOURCES" key="text.help.content.processSummary.stage3.paragraph1.subList2"/></li>
+				<li><bean:message bundle="MISSION_RESOURCES" key="text.help.content.processSummary.state3.paragraph1.subList1"/></li>
+				<li><bean:message bundle="MISSION_RESOURCES" key="text.help.content.processSummary.state3.paragraph1.subList2"/></li>
 			</ul>
 		</blockquote>
 	</p>
-	<h3><bean:message bundle="MISSION_RESOURCES" key="text.help.content.processSummary.stage4.title"/></h3>
+	<h3><bean:message bundle="MISSION_RESOURCES" key="text.help.content.processSummary.state4.title"/></h3>
 	<p>
-		<bean:message bundle="MISSION_RESOURCES" key="text.help.content.processSummary.stage4.paragraph1"/>
+		<bean:message bundle="MISSION_RESOURCES" key="text.help.content.processSummary.state4.paragraph1"/>
 		<ol type="a">
-			<li><bean:message bundle="MISSION_RESOURCES" key="text.help.content.processSummary.stage4.paragraph1.subList1"/></li>
-			<li><bean:message bundle="MISSION_RESOURCES" key="text.help.content.processSummary.stage4.paragraph1.subList2"/></li>
+			<li><bean:message bundle="MISSION_RESOURCES" key="text.help.content.processSummary.state4.paragraph1.subList1"/></li>
+			<li><bean:message bundle="MISSION_RESOURCES" key="text.help.content.processSummary.state4.paragraph1.subList2"/></li>
 		</ol>
 	</p>
-	<h3><bean:message bundle="MISSION_RESOURCES" key="text.help.content.processSummary.stage5.title"/></h3>
-	<p><bean:message bundle="MISSION_RESOURCES" key="text.help.content.processSummary.stage5.paragraph1"/></p>
-	<p><bean:message bundle="MISSION_RESOURCES" key="text.help.content.processSummary.stage5.paragraph2"/></p>
-	<h3><bean:message bundle="MISSION_RESOURCES" key="text.help.content.processSummary.stage6.title"/></h3>
-	<p><bean:message bundle="MISSION_RESOURCES" key="text.help.content.processSummary.stage6.paragraph1"/></p>
-	<p><bean:message bundle="MISSION_RESOURCES" key="text.help.content.processSummary.stage6.paragraph2"/></p>
+	<h3><bean:message bundle="MISSION_RESOURCES" key="text.help.content.processSummary.state5.title"/></h3>
+	<p><bean:message bundle="MISSION_RESOURCES" key="text.help.content.processSummary.state5.paragraph1"/></p>
+	<p><bean:message bundle="MISSION_RESOURCES" key="text.help.content.processSummary.state5.paragraph2"/></p>
+	<h3><bean:message bundle="MISSION_RESOURCES" key="text.help.content.processSummary.state6.title"/></h3>
+	<p><bean:message bundle="MISSION_RESOURCES" key="text.help.content.processSummary.state6.paragraph1"/></p>
+	<p><bean:message bundle="MISSION_RESOURCES" key="text.help.content.processSummary.state6.paragraph2"/></p>
 </blockquote>
 <p><bean:message bundle="MISSION_RESOURCES" key="text.help.content.processSummary.paragraph2"/></p>
 

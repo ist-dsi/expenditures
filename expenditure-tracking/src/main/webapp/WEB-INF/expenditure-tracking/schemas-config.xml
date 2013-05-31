@@ -589,7 +589,7 @@
 	type="pt.ist.expenditureTrackingSystem.presentationTier.util.FileUploadBean"
 	bundle="ACQUISITION_RESOURCES">
 	<slot name="inputStream" key="acquisitionProcess.label.acquisitionRequestDocument"
-		bundle="ACQUISITION_RESOURCES">
+		bundle="ACQUISITION_RESOURCES" required="true">
 		<property name="fileNameSlot" value="filename" />
 		<property name="size" value="30" />
 	</slot>
@@ -603,7 +603,7 @@
 		<property name="size" value="50" />
 	</slot>
 	<slot name="inputStream" key="acquisitionProcess.label.document"
-		bundle="ACQUISITION_RESOURCES">
+		bundle="ACQUISITION_RESOURCES" required="true">
 		<property name="fileNameSlot" value="filename" />
 		<property name="size" value="50" />
 	</slot>
@@ -1396,7 +1396,7 @@
 	<slot name="proposalID" key="acquisitionProcess.label.proposalID.optional"
 		bundle="ACQUISITION_RESOURCES"
 		required="true" />
-	<slot name="inputStream" key="label.document" bundle="WORKFLOW_RESOURCES">
+	<slot name="inputStream" key="label.document" bundle="WORKFLOW_RESOURCES" required="true">
 		<property name="fileNameSlot" value="filename" />
 		<property name="size" value="50" />
 	</slot>
@@ -2342,7 +2342,7 @@ bundle="ACQUISITION_RESOURCES">
 		<property name="size" value="50"/>
 	</slot>
 	<slot name="filterCanceledProcesses" key="label.mission.filterCanceledProcesses"/>
-	<slot name="pendingStage" key="label.mission.pending.stage">
+	<slot name="pendingState" key="label.mission.pending.state">
 		<property name="format" value="${localizedName}" />
 	</slot>
 	<slot name="participantAuthorizationAuthority" layout="autoComplete" key="label.mission.participantAuthorizationAuthority">

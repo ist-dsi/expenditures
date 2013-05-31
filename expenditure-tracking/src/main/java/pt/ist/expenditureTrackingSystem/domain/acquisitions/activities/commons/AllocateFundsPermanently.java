@@ -51,6 +51,7 @@ public class AllocateFundsPermanently<P extends PaymentProcess> extends
         final ExpenditureTrackingSystem instance = ExpenditureTrackingSystem.getInstance();
         return process.isAccountingEmployee(user.getExpenditurePerson())
                 && isUserProcessOwner(process, user)
+                && process.isActive()
                 && (process.hasAllocatedFundsPermanentlyForAllProjectFinancers() || (instance
                         .getRequireFundAllocationPriorToAcquisitionRequest() != null && !instance
                         .getRequireFundAllocationPriorToAcquisitionRequest())) && !process.isAllocatedPermanently()
