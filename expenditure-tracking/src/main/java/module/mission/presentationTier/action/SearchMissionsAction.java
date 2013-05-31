@@ -168,7 +168,7 @@ public class SearchMissionsAction extends ContextBaseAction {
 
     private void addMissionStateContent(Row row, MissionProcess process) {
         for (MissionState state : MissionState.values()) {
-            if (!state.isValidForProcess(process)) {
+            if (!state.isRequired(process)) {
                 row.setCell("-");
             } else {
                 row.setCell(state.getStateProgress(process).getLocalizedName());

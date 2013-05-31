@@ -514,7 +514,7 @@ public abstract class MissionProcess extends MissionProcess_Base {
     public List<MissionState> getMissionStates() {
         List<MissionState> validStates = new ArrayList<MissionState>();
         for (MissionState state : MissionState.values()) {
-            if (state.isValidForProcess(this)) {
+            if (state.isRequired(this)) {
                 validStates.add(state);
             }
         }

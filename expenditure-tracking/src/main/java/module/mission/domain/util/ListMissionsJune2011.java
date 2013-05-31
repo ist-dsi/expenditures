@@ -67,7 +67,7 @@ public class ListMissionsJune2011 extends ReadCustomTask {
             out.print(MissionState.PROCESS_APPROVAL.getStateProgress(process).getLocalizedName());
             out.print("\t");
 
-            if (MissionState.FUND_ALLOCATION.isValidForProcess(process)) {
+            if (MissionState.FUND_ALLOCATION.isRequired(process)) {
                 out.print(MissionState.FUND_ALLOCATION.getStateProgress(process).getLocalizedName());
             } else {
                 out.print("N/A");
@@ -77,14 +77,14 @@ public class ListMissionsJune2011 extends ReadCustomTask {
             out.print(MissionState.PARTICIPATION_AUTHORIZATION.getStateProgress(process).getLocalizedName());
             out.print("\t");
 
-            if (MissionState.EXPENSE_AUTHORIZATION.isValidForProcess(process)) {
+            if (MissionState.EXPENSE_AUTHORIZATION.isRequired(process)) {
                 out.print(MissionState.EXPENSE_AUTHORIZATION.getStateProgress(process).getLocalizedName());
             } else {
                 out.print("N/A");
             }
             out.print("\t");
 
-            out.print(MissionState.PERSONEL_INFORMATION_PROCESSING.getStateProgress(process).getLocalizedName());
+            out.print(MissionState.PERSONAL_INFORMATION_PROCESSING.getStateProgress(process).getLocalizedName());
             out.print("\t");
 
             out.print(MissionState.ARCHIVED.getStateProgress(process).getLocalizedName());
