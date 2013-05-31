@@ -16,7 +16,7 @@
 
     <properties>
         <version.pt.ist.bennu.core>1.1.0</version.pt.ist.bennu.core>
-        <version.pt.ist.workflow>1.1.0</version.pt.ist.workflow>
+        <version.pt.ist.workflow>1.1.1</version.pt.ist.workflow>
         <version.pt.ist.scheduler>1.1.0</version.pt.ist.scheduler>
         <version.pt.ist.messaging>1.1.0</version.pt.ist.messaging>
     </properties>
