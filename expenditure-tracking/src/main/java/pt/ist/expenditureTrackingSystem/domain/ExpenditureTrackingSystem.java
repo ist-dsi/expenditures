@@ -24,6 +24,7 @@
  */
 package pt.ist.expenditureTrackingSystem.domain;
 
+import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -551,6 +552,7 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
         } else {
             return getRequireCommitmentNumber();
         }
+
     }
 
     @Deprecated
@@ -958,4 +960,19 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
         return getSubProjectPartyType() != null;
     }
 
+    public interface InfoProvider {
+        public String getTitle();
+
+        public Map<String, String> getLinks(String page, Object object);
+    }
+
+    static private InfoProvider infoProvider;
+
+    static public void registerInfoProvider(InfoProvider aInfoProvider) {
+        infoProvider = aInfoProvider;
+    }
+
+    static public InfoProvider getInfoProvider() {
+        return infoProvider;
+    }
 }
