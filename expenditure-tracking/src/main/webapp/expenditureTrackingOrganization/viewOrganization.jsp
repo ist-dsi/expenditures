@@ -1,8 +1,15 @@
+<%@page import="pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem.InfoProvider"%>
+<%@page import="pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html" %>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-bean" prefix="bean" %>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-logic" prefix="logic" %>
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/fenix-renderers" prefix="fr" %>
+<%@page import="pt.ist.bennu.core.domain.User"%>
+<%@page import="pt.ist.expenditureTrackingSystem.domain.organization.Unit"%>
+<%@page import="java.util.Map"%>
+
+
 
 <h2><bean:message key="title.viewOrganization" bundle="EXPENDITURE_RESOURCES"/></h2>
 
@@ -288,3 +295,26 @@
 	</logic:notEmpty>
 </logic:present>
 
+ <%
+ 	ExpenditureTrackingSystem.InfoProvider infoProvider = ExpenditureTrackingSystem.getInfoProvider();
+ 	if(infoProvider != null){
+ 	   final Unit unit = (Unit) request.getAttribute("unit");
+ 	   Map<String, String> links = infoProvider.getLinks("viewOrganization.jsp", unit);
+ 	   if(links != null){      
+		  %>
+ 	      <h3 class="mtop15 mbottom05"><%=infoProvider.getTitle() %></h3>
+ 	      <%
+ 	      for(Map.Entry<String, String> entry : links.entrySet()){
+ 	         String linkTitle = entry.getKey();
+ 	         String link = entry.getValue();
+ 	        %>
+ 	        <p>
+ 	        <html:link page="<%=link%>">
+				<%=linkTitle%>
+			</html:link>
+			</p>
+ 	        <%     
+ 	      }
+ 	   }
+ 	}
+%>
