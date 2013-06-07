@@ -45,6 +45,7 @@ public class AllocateProjectFundsPermanently<P extends PaymentProcess> extends
     public boolean isActive(P process, User user) {
         return process.isProjectAccountingEmployee(user.getExpenditurePerson())
                 && isUserProcessOwner(process, user)
+                && process.isActive()
                 && !process.hasAllocatedFundsPermanentlyForAllProjectFinancers()
                 && ((!process.hasAllInvoicesAllocatedInProject() && process.getRequest().hasProposalDocument()) || (ExpenditureTrackingSystem
                         .isInvoiceAllowedToStartAcquisitionProcess() && process.isInvoiceConfirmed() && !process.getRequest()
