@@ -386,6 +386,20 @@ public abstract class MissionProcess extends MissionProcess_Base {
         }
     }
 
+    public boolean isInProcessParticipantInformationQueue() {
+        Collection<WorkflowQueue> processParticipantInformationQueues = new ArrayList<WorkflowQueue>();
+        for (AccountabilityTypeQueue accTypeQueue : MissionSystem.getInstance().getAccountabilityTypeQueuesSet()) {
+            processParticipantInformationQueues.add(accTypeQueue.getWorkflowQueue());
+        }
+
+        for (WorkflowQueue currentQueue : getCurrentQueuesSet()) {
+            if (processParticipantInformationQueues.contains(currentQueue)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void setProcessParticipantInformationQueue() {
         if (getMission().allParticipantsAreAuthorized()) {
             addToProcessParticipantInformationQueue();

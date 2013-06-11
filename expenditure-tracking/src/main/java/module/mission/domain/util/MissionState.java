@@ -133,7 +133,7 @@ public enum MissionState implements IPresentableEnum {
                 return MissionStateProgress.IDLE;
             }
 
-            if (missionProcess.getCurrentQueuesSet().isEmpty()) {
+            if (!missionProcess.isInProcessParticipantInformationQueue()) {
                 return MissionStateProgress.COMPLETED;
             }
 
