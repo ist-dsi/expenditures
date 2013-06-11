@@ -529,7 +529,6 @@ public abstract class Mission extends Mission_Base {
         if (!hasMissionResponsible()) {
             setMissionResponsible(person);
         }
-        SyncSalary.sync(person);
     }
 
     public boolean areAllPrevisionaryCostsAreDistributed() {
