@@ -33,6 +33,7 @@ import module.workflow.util.WorkflowFileUploadBean;
 
 import org.joda.time.LocalDate;
 
+import pt.ist.bennu.core.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
@@ -103,6 +104,12 @@ public class InvoiceFileBean extends WorkflowFileUploadBean {
 
     public void setHasMoreInvoices(Boolean hasMoreInvoices) {
         this.hasMoreInvoices = hasMoreInvoices;
+        if (hasMoreInvoices) {
+            setExtraArguments(BundleUtil.getStringFromResourceBundle("resources/AcquisitionResources",
+                    "acquisitionProcess.label.invoice.partial"));
+        } else {
+            setExtraArguments("");
+        }
     }
 
     public InvoiceFileBean(WorkflowProcess process) {
