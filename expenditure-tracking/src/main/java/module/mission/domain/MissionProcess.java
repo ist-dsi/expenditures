@@ -424,8 +424,7 @@ public abstract class MissionProcess extends MissionProcess_Base {
 
     public void removeFromParticipantInformationQueues() {
         for (final AccountabilityTypeQueue accountabilityTypeQueue : MissionSystem.getInstance().getAccountabilityTypeQueuesSet()) {
-            final WorkflowQueue workflowQueue = accountabilityTypeQueue.getWorkflowQueue();
-            removeCurrentQueues(workflowQueue);
+            removeCurrentQueues(accountabilityTypeQueue.getWorkflowQueue());
         }
     }
 
