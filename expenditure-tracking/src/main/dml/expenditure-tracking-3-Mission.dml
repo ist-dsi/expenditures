@@ -16,6 +16,7 @@ class Mission implements .pt.ist.bennu.core.domain.VirtualHostAware {
 	String objective;
 	Boolean grantOwnerEquivalence;
 	Boolean isApprovedByMissionResponsible;
+	boolean isPersonalInformationProcessed;
 	String fundAllocationLog;
 	DateTime serviceGaranteeInstante;
 

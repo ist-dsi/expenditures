@@ -44,13 +44,14 @@ public class UnProcessPersonnelActivity extends MissionProcessActivity<MissionPr
     @Override
     public boolean isActive(final MissionProcess missionProcess, final User user) {
         return super.isActive(missionProcess, user) && !missionProcess.hasAnyCurrentQueues()
-                && missionProcess.areAllParticipantsAuthorized() && missionProcess.isCurrentUserAbleToAccessQueueHistory();
+                && missionProcess.areAllParticipantsAuthorized() && missionProcess.isCurrentUserAbleToAccessQueueHistory()
+                && missionProcess.isPersonalInformationProcessed();
     }
 
     @Override
     protected void process(final ActivityInformation<MissionProcess> activityInformation) {
         final MissionProcess missionProcess = activityInformation.getProcess();
-        missionProcess.setProcessParticipantInformationQueue();
+        missionProcess.addToProcessParticipantInformationQueues();
     }
 
 }

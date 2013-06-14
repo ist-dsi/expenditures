@@ -95,6 +95,7 @@ public abstract class Mission extends Mission_Base {
         final Person person = user == null ? null : user.getPerson();
         setRequestingPerson(person);
         new MissionVersion(this);
+        setIsPersonalInformationProcessed(false);
     }
 
     protected void setMissionInformation(final String location, final DateTime daparture, final DateTime arrival,
@@ -346,6 +347,10 @@ public abstract class Mission extends Mission_Base {
 
     protected boolean isVehicleAuthorizationNeeded() {
         return !areAllParticipantsAuthorized();
+    }
+
+    public boolean isPersonalInformationProcessed() {
+        return getIsPersonalInformationProcessed();
     }
 
     public boolean areAllVehicleItemsAuthorized() {

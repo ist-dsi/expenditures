@@ -68,7 +68,7 @@ public class CancelProcessActivity extends MissionProcessActivity<MissionProcess
         }
 
         missionProcess.cancel();
-        missionProcess.addToProcessParticipantInformationQueue();
+        missionProcess.addToProcessParticipantInformationQueues();
     }
 
     private boolean hasConnectedPaymentProcess(final MissionProcess missionProcess) {

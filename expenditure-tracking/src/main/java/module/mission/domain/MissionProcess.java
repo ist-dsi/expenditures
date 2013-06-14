@@ -230,6 +230,14 @@ public abstract class MissionProcess extends MissionProcess_Base {
         return getMission().isPendingDirectAuthorizationBy(user);
     }
 
+    public boolean isPersonalInformationProcessed() {
+        return getMission().isPersonalInformationProcessed();
+    }
+
+    public boolean isPersonalInformationProcessingNeeded() {
+        return !getProcessParticipantInformationQueues().isEmpty();
+    }
+
     public boolean canRemoveApproval(final User user) {
         return getMission().canRemoveApproval(user);
     }
@@ -386,28 +394,14 @@ public abstract class MissionProcess extends MissionProcess_Base {
         }
     }
 
-    public boolean isInProcessParticipantInformationQueue() {
-        Collection<WorkflowQueue> processParticipantInformationQueues = new ArrayList<WorkflowQueue>();
-        for (AccountabilityTypeQueue accTypeQueue : MissionSystem.getInstance().getAccountabilityTypeQueuesSet()) {
-            processParticipantInformationQueues.add(accTypeQueue.getWorkflowQueue());
-        }
-
-        for (WorkflowQueue currentQueue : getCurrentQueuesSet()) {
-            if (processParticipantInformationQueues.contains(currentQueue)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public void setProcessParticipantInformationQueue() {
-        if (getMission().allParticipantsAreAuthorized()) {
-            addToProcessParticipantInformationQueue();
-            notifyAllParticipants();
+    public void addToProcessParticipantInformationQueues() {
+        for (WorkflowQueue workflowQueue : getProcessParticipantInformationQueues()) {
+            addCurrentQueues(workflowQueue);
+            getMission().setIsPersonalInformationProcessed(false);
         }
     }
 
-    public void addToProcessParticipantInformationQueue() {
+    public Collection<WorkflowQueue> getProcessParticipantInformationQueues() {
         final Set<AccountabilityType> accountabilityTypes = new HashSet<AccountabilityType>();
         for (final Person person : getMission().getParticipantesSet()) {
             for (final Accountability accountability : person.getParentAccountabilitiesSet()) {
@@ -417,12 +411,15 @@ public abstract class MissionProcess extends MissionProcess_Base {
                 }
             }
         }
+
+        Collection<WorkflowQueue> processParticipantInformationQueues = new HashSet<WorkflowQueue>();
         for (final AccountabilityTypeQueue accountabilityTypeQueue : MissionSystem.getInstance().getAccountabilityTypeQueuesSet()) {
             if (accountabilityTypes.contains(accountabilityTypeQueue.getAccountabilityType())) {
-                final WorkflowQueue workflowQueue = accountabilityTypeQueue.getWorkflowQueue();
-                addCurrentQueues(workflowQueue);
+                processParticipantInformationQueues.add(accountabilityTypeQueue.getWorkflowQueue());
             }
         }
+
+        return processParticipantInformationQueues;
     }
 
     public void removeFromParticipantInformationQueues() {

@@ -49,7 +49,7 @@ public class ProcessPersonnelActivity extends MissionProcessActivity<MissionProc
                 //&& !missionProcess.getIsCanceled().booleanValue()
                 && missionProcess.hasAnyCurrentQueues() && missionProcess.isCurrentUserAbleToAccessAnyQueues()
                 && (missionProcess.isAuthorized() || missionProcess.hasNoItemsAndParticipantesAreAuthorized())
-                && missionProcess.areAllParticipantsAuthorized();
+                && missionProcess.areAllParticipantsAuthorized() && !missionProcess.isPersonalInformationProcessed();
     }
 
     @Override
@@ -60,6 +60,7 @@ public class ProcessPersonnelActivity extends MissionProcessActivity<MissionProc
                     "Cannot determine which queue to remove because the mission process is associated to several queues.");
         }
         missionProcess.removeCurrentQueues(missionProcess.getCurrentQueues().iterator().next());
+        missionProcess.getMission().setIsPersonalInformationProcessed(true);
     }
 
 }
