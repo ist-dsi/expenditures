@@ -6,7 +6,7 @@ import pt.ist.fenixWebFramework.rendererExtensions.util.IPresentableEnum;
 
 public enum MissionState implements IPresentableEnum {
 
-    PROCESS_APPROVAL {
+    APPROVAL {
         @Override
         public MissionStateProgress getStateProgress(MissionProcess missionProcess) {
             if (missionProcess.isApprovedByResponsible()) {
@@ -27,7 +27,7 @@ public enum MissionState implements IPresentableEnum {
 
         @Override
         public MissionStateProgress getStateProgress(MissionProcess missionProcess) {
-            if (!PROCESS_APPROVAL.isCompleted(missionProcess)) {
+            if (!APPROVAL.isCompleted(missionProcess)) {
                 return MissionStateProgress.IDLE;
             }
 
