@@ -63,6 +63,10 @@ public enum MissionState implements IPresentableEnum {
                 return MissionStateProgress.IDLE;
             }
 
+            if (!isRequired(missionProcess)) {
+                return MissionStateProgress.COMPLETED;
+            }
+
             if (missionProcess.isCanceled()) {
                 if (!missionProcess.hasAnyAllocatedFunds() && !missionProcess.hasAnyAllocatedProjectFunds()) {
                     return MissionStateProgress.IDLE;
@@ -70,9 +74,6 @@ public enum MissionState implements IPresentableEnum {
                 return MissionStateProgress.PENDING;
             }
 
-            if (!isRequired(missionProcess)) {
-                return MissionStateProgress.COMPLETED;
-            }
             if (missionProcess.hasAllAllocatedFunds() && missionProcess.hasAllCommitmentNumbers()
                     && (!missionProcess.hasAnyProjectFinancer() || missionProcess.hasAllAllocatedProjectFunds())) {
                 return MissionStateProgress.COMPLETED;
