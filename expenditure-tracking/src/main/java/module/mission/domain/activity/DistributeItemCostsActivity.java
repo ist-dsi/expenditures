@@ -17,11 +17,7 @@ public class DistributeItemCostsActivity extends MissionProcessActivity<MissionP
     public boolean isActive(final MissionProcess missionProcess, final User user) {
         return super.isActive(missionProcess, user) && missionProcess.getMission().hasAnyMissionItems()
                 && missionProcess.getMission().getFinancerSet().size() > 1
-                && ((missionProcess.isUnderConstruction() && missionProcess.isRequestor(user))
-//			|| (missionProcess.isTerminatedWithChanges()
-//				&& !missionProcess.isArchived()
-//				&& missionProcess.canArchiveMission())
-                );
+                && ((missionProcess.isUnderConstruction() && missionProcess.isRequestor(user)));
     }
 
     @Override

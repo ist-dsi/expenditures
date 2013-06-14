@@ -58,7 +58,6 @@ public class SubmitForApprovalByManagerOrManagementCouncilActivity extends
     @Override
     protected void process(final ActivityInformation<MissionProcess> activityInformation) {
         final MissionProcess missionProcess = activityInformation.getProcess();
-        //missionProcess.checkForAnyOverlappingParticipations();
         missionProcess.checkForSupportDocuments();
         missionProcess.setIsUnderConstruction(Boolean.FALSE);
     }

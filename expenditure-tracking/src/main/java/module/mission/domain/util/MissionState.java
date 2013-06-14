@@ -187,5 +187,13 @@ public enum MissionState implements IPresentableEnum {
         return getStateProgress(missionProcess) == MissionStateProgress.COMPLETED;
     }
 
+    public boolean isPending(MissionProcess missionProcess) {
+        return getStateProgress(missionProcess) == MissionStateProgress.PENDING;
+    }
+
+    public boolean isIdle(MissionProcess missionProcess) {
+        return getStateProgress(missionProcess) == MissionStateProgress.IDLE;
+    }
+
     public abstract MissionStateProgress getStateProgress(MissionProcess missionProcess);
 }

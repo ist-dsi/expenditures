@@ -43,7 +43,6 @@ public class RejectProcessActivity extends CancelProcessActivity {
     @Override
     public boolean isActive(final MissionProcess missionProcess, final User user) {
         return !missionProcess.isCanceled()
-        // && missionProcess.isUnderConstruction()
                 && (missionProcess.canAuthoriseParticipantActivity() || missionProcess.isPendingAuthorizationBy(user));
     }
 

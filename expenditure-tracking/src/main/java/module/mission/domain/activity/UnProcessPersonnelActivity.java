@@ -25,6 +25,7 @@
 package module.mission.domain.activity;
 
 import module.mission.domain.MissionProcess;
+import module.mission.domain.util.MissionState;
 import module.workflow.activities.ActivityInformation;
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.util.BundleUtil;
@@ -43,9 +44,8 @@ public class UnProcessPersonnelActivity extends MissionProcessActivity<MissionPr
 
     @Override
     public boolean isActive(final MissionProcess missionProcess, final User user) {
-        return super.isActive(missionProcess, user) && !missionProcess.hasAnyCurrentQueues()
-                && missionProcess.areAllParticipantsAuthorized() && missionProcess.isCurrentUserAbleToAccessQueueHistory()
-                && missionProcess.isPersonalInformationProcessed();
+        return super.isActive(missionProcess, user) && missionProcess.isCurrentUserAbleToAccessQueueHistory()
+                && MissionState.PERSONAL_INFORMATION_PROCESSING.isCompleted(missionProcess);
     }
 
     @Override

@@ -51,8 +51,6 @@ public class CancelProcessActivity extends MissionProcessActivity<MissionProcess
     @Override
     public boolean isActive(final MissionProcess missionProcess, final User user) {
         return super.isActive(missionProcess, user)
-                && !missionProcess.isCanceled()
-                // && missionProcess.isUnderConstruction()
                 && (missionProcess.isRequestor(user) || user.hasRoleType(RoleType.MANAGER) || MissionSystem.getInstance()
                         .getUsersWhoCanCancelMissionSet().contains(user));
     }

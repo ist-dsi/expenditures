@@ -25,6 +25,7 @@
 package module.mission.domain.activity;
 
 import module.mission.domain.MissionProcess;
+import module.mission.domain.util.MissionState;
 import module.workflow.activities.ActivityInformation;
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
@@ -45,11 +46,8 @@ public class ProcessPersonnelActivity extends MissionProcessActivity<MissionProc
 
     @Override
     public boolean isActive(final MissionProcess missionProcess, final User user) {
-        return super.isActive(missionProcess, user)
-                //&& !missionProcess.getIsCanceled().booleanValue()
-                && missionProcess.hasAnyCurrentQueues() && missionProcess.isCurrentUserAbleToAccessAnyQueues()
-                && (missionProcess.isAuthorized() || missionProcess.hasNoItemsAndParticipantesAreAuthorized())
-                && missionProcess.areAllParticipantsAuthorized() && !missionProcess.isPersonalInformationProcessed();
+        return super.isActive(missionProcess, user) && missionProcess.isCurrentUserAbleToAccessAnyQueues()
+                && MissionState.PERSONAL_INFORMATION_PROCESSING.isPending(missionProcess);
     }
 
     @Override
