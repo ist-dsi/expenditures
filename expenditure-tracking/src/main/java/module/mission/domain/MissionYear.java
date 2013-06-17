@@ -33,6 +33,7 @@ import java.util.TreeSet;
 
 import module.mission.domain.util.MissionAuthorizationMap;
 import module.mission.domain.util.MissionPendingProcessCounter;
+import module.mission.domain.util.MissionState;
 import module.organization.domain.Party;
 import module.organization.domain.Person;
 import module.workflow.domain.WorkflowProcess;
@@ -269,10 +270,10 @@ public class MissionYear extends MissionYear_Base {
 
         @Override
         boolean shouldAdd(final MissionProcess missionProcess, final User user) {
-            return (!missionProcess.hasCurrentOwner() || missionProcess.isTakenByCurrentUser())
-                    && (missionProcess.hasAnyCurrentQueues() && missionProcess.isCurrentUserAbleToAccessAnyQueues()
-                            && (missionProcess.isAuthorized() || missionProcess.hasNoItemsAndParticipantesAreAuthorized()) && missionProcess
-                                .areAllParticipantsAuthorized()) || missionProcess.isReadyForMissionTermination(user)
+            return (missionProcess.getCurrentOwner() == null || missionProcess.isTakenByCurrentUser())
+                    && missionProcess.isCurrentUserAbleToAccessAnyQueues()
+                    && MissionState.PERSONAL_INFORMATION_PROCESSING.isPending(missionProcess)
+                    || missionProcess.isReadyForMissionTermination(user)
                     || (missionProcess.isTerminated() && !missionProcess.isArchived() && missionProcess.canArchiveMission());
         }
 
@@ -363,10 +364,9 @@ public class MissionYear extends MissionYear_Base {
         return new MissionProcessSearch() {
             @Override
             boolean shouldAdd(final MissionProcess missionProcess, final User user) {
-                return (!missionProcess.hasCurrentOwner() || missionProcess.isTakenByCurrentUser())
-                        && (missionProcess.hasAnyCurrentQueues() && missionProcess.isCurrentUserAbleToAccessAnyQueues()
-                                && (missionProcess.isAuthorized() || missionProcess.hasNoItemsAndParticipantesAreAuthorized()) && missionProcess
-                                    .areAllParticipantsAuthorized())
+                return (missionProcess.getCurrentOwner() == null || missionProcess.isTakenByCurrentUser())
+                        && missionProcess.isCurrentUserAbleToAccessAnyQueues()
+                        && MissionState.PERSONAL_INFORMATION_PROCESSING.isPending(missionProcess)
                         || missionProcess.isReadyForMissionTermination(user)
                         || (missionProcess.isTerminated() && !missionProcess.isArchived() && missionProcess
                                 .canArchiveMissionDirect());
