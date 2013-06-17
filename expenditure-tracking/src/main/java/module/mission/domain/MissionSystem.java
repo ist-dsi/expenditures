@@ -35,6 +35,7 @@ import java.util.TreeSet;
 
 import module.mission.domain.activity.AuthorizeVehicleItemActivity;
 import module.mission.domain.activity.ItemActivityInformation;
+import module.mission.domain.util.MigratePersonalInformationProcessedSlot;
 import module.organization.domain.Accountability;
 import module.organization.domain.AccountabilityType;
 import module.organization.domain.OrganizationalModel;
@@ -61,11 +62,8 @@ public class MissionSystem extends MissionSystem_Base {
             initialize(virtualHostForThread);
         }
 
-        // The following code is some migration stuff; it only has to run once.
-        // TODO: Afterwards, this code can be been deleted.
-        if (!isMigrated()) {
-            migrate();
-        }
+        //Temporary migration code that should be removed on the next major version
+        MigratePersonalInformationProcessedSlot.migrate();
 
         return virtualHostForThread == null ? null : virtualHostForThread.getMissionSystem();
     }
@@ -77,33 +75,14 @@ public class MissionSystem extends MissionSystem_Base {
         }
     }
 
-    private static boolean isMigrated() {
-        return MyOrg.getInstance().getMissionSystem().hasAnyVirtualHost();
-    }
-
-    @Atomic
-    public static void migrate() {
-        System.out.println("Migrating mission stuff...");
-        MyOrg myOrg = MyOrg.getInstance();
-        VirtualHost comprasHost = null;
-        VirtualHost dotHost = null;
-        for (VirtualHost vHost : myOrg.getVirtualHosts()) {
-            if (vHost.getExternalId().equals("395136991233")) {
-                comprasHost = vHost;
-            } else if (vHost.getExternalId().equals("395136991834")) {
-                dotHost = vHost;
-            }
-        }
-        if (comprasHost == null || dotHost == null) {
-            throw new RuntimeException("Mission migration error: dot or compras VirtualHosts not found");
-        }
-        myOrg.getMissionSystem().addVirtualHost(comprasHost);
-        myOrg.getMissionSystem().addVirtualHost(dotHost);
-    }
-
     private MissionSystem(final VirtualHost virtualHost) {
         super();
         addVirtualHost(virtualHost);
+        setIsPersonalInformationProcessedSlotMigrated(true);
+    }
+
+    public boolean isPersonalInformationProcessedSlotMigrated() {
+        return getIsPersonalInformationProcessedSlotMigrated();
     }
 
     public ExpenditureTrackingSystem getExpenditureTrackingSystem() {

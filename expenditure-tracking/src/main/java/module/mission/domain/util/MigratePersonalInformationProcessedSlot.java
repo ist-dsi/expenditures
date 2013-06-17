@@ -31,9 +31,13 @@ import module.mission.domain.AccountabilityTypeQueue;
 import module.mission.domain.MissionProcess;
 import module.mission.domain.MissionSystem;
 import module.workflow.domain.WorkflowQueue;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import pt.ist.bennu.core.domain.MyOrg;
 import pt.ist.bennu.core.domain.VirtualHost;
-import pt.ist.bennu.core.domain.scheduler.WriteCustomTask;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * 
@@ -42,36 +46,48 @@ import pt.ist.bennu.core.domain.scheduler.WriteCustomTask;
  * @author João Neves
  * 
  */
-public class InitSlotPersonalInformationProcessed extends WriteCustomTask {
+public class MigratePersonalInformationProcessedSlot {
 
-    private final static boolean PERFORM_CHANGES = false;
+    private static final Logger logger = LoggerFactory.getLogger(MigratePersonalInformationProcessedSlot.class);
 
-    @Override
-    protected void doService() {
+    private static final Object staticLock = new Object();
 
+    private static boolean isMigrationInProgress = false;
+
+    public static void migrate() {
+        if (!isMigrationInProgress) {
+            synchronized (staticLock) {
+                if (!isMigrationInProgress) {
+                    isMigrationInProgress = true;
+                    migrateForAllVirtualHosts();
+                    isMigrationInProgress = false;
+                }
+            }
+        }
+    }
+
+    @Atomic
+    private static void migrateForAllVirtualHosts() {
         for (VirtualHost vHost : MyOrg.getInstance().getVirtualHosts()) {
-            try {
-                VirtualHost.setVirtualHostForThread(vHost);
-                initSlotsForCurrentVirtualHost();
-            } finally {
-                VirtualHost.releaseVirtualHostFromThread();
+            if (!vHost.getMissionSystem().isPersonalInformationProcessedSlotMigrated()) {
+                logger.info("Migrating Personal Information Processed Slot for VirtualHost: " + vHost.getHostname());
+                migrate(vHost.getMissionSystem());
+                logger.info("Finished migrating Personal Information Processed Slot for VirtualHost: " + vHost.getHostname());
             }
         }
     }
 
-    public void initSlotsForCurrentVirtualHost() {
-        for (MissionProcess process : MissionSystem.getInstance().getMissionProcessesSet()) {
-            boolean alreadyProcessed = wasPersonalInformationAlreadyProcessed(process);
-            if (PERFORM_CHANGES) {
-                process.getMission().setIsPersonalInformationProcessed(alreadyProcessed);
-            }
+    private static void migrate(MissionSystem system) {
+        for (MissionProcess process : system.getMissionProcessesSet()) {
+            process.getMission().setIsPersonalInformationProcessed(wasPersonalInformationAlreadyProcessed(process));
         }
+        system.setIsPersonalInformationProcessedSlotMigrated(true);
     }
 
-    private boolean wasPersonalInformationAlreadyProcessed(MissionProcess process) {
+    private static boolean wasPersonalInformationAlreadyProcessed(MissionProcess process) {
         if (!process.isPersonalInformationProcessingNeeded()) {
             if (!process.getCurrentQueuesSet().isEmpty()) {
-                System.out.println("WARNING: Process " + process.getProcessNumber()
+                logger.warn("Process " + process.getProcessNumber()
                         + " does not need personal information processing, but is in a queue");
             }
             return false;
@@ -79,7 +95,7 @@ public class InitSlotPersonalInformationProcessed extends WriteCustomTask {
 
         if (!wasInAllProcessParticipantInformationQueues(process)) {
             if (process.getQueueHistorySet().size() > 1) {
-                System.out.println("WARNING: Process " + process.getProcessNumber() + " has more than one queue in history");
+                logger.warn("Process " + process.getProcessNumber() + " has more than one queue in history");
             }
             return false;
         }
@@ -92,18 +108,18 @@ public class InitSlotPersonalInformationProcessed extends WriteCustomTask {
         }
 
         if (process.getQueueHistorySet().size() == 0) {
-            System.out.println("WARNING: Process " + process.getProcessNumber()
-                    + " is already processed but has no queues in history");
+            logger.warn("Process " + process.getProcessNumber() + " is already processed but has no queues in history");
         }
         if (process.hasAnyMissionItems() && !process.isAuthorized()) {
-            System.out.println("WARNING: Process " + process.getProcessNumber()
+            logger.warn("Process " + process.getProcessNumber()
                     + " is already processed but not all mission items are authorized");
         }
         return true;
     }
 
     private static boolean isInAnyProcessParticipantInformationQueue(MissionProcess process) {
-        Collection<WorkflowQueue> processParticipantInformationQueues = getAllProcessParticipantInformationQueues();
+        Collection<WorkflowQueue> processParticipantInformationQueues =
+                getAllProcessParticipantInformationQueues(process.getMissionSystem());
 
         for (WorkflowQueue currentQueue : process.getCurrentQueuesSet()) {
             if (processParticipantInformationQueues.contains(currentQueue)) {
@@ -113,9 +129,9 @@ public class InitSlotPersonalInformationProcessed extends WriteCustomTask {
         return false;
     }
 
-    public static Collection<WorkflowQueue> getAllProcessParticipantInformationQueues() {
+    public static Collection<WorkflowQueue> getAllProcessParticipantInformationQueues(MissionSystem system) {
         Collection<WorkflowQueue> processParticipantInformationQueues = new ArrayList<WorkflowQueue>();
-        for (AccountabilityTypeQueue accTypeQueue : MissionSystem.getInstance().getAccountabilityTypeQueuesSet()) {
+        for (AccountabilityTypeQueue accTypeQueue : system.getAccountabilityTypeQueuesSet()) {
             processParticipantInformationQueues.add(accTypeQueue.getWorkflowQueue());
         }
 

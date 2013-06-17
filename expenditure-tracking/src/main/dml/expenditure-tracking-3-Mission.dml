@@ -4,6 +4,7 @@ enum module.mission.domain.VehiclItemJustificationMotive as VehiclItemJustificat
 
 class MissionSystem {
 	Boolean allowGrantOwnerEquivalence;
+	boolean isPersonalInformationProcessedSlotMigrated;
 }
 
 
