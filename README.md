@@ -13,11 +13,27 @@ Current	workflow processes are: acquisitions and working capital management.
 
 ### v1.4.0
 
-	Removed IST specific code for synchronizing  salary information.
-	Incorporated external-accounting-integration module.
-	Added support for external provider when viewing a unit.
-	Other bug fixes and some code cleanup.
+#### New Features
 
+	[Missions] Added a new VERIFICATION MissionState to every MissionProcess. Added an activity to verify a process, and another activity to revert the verification.
+	[Missions] Added a VerificiationQueue with the people that can verify processes. These people can view a list of verification-pending processes in the Missions front page. They receive email notifications with the verification-pending processes.
+	[Missions] Added migration code to set old processes automatically as verified in certain cases.
+	Added support for external provider when viewing a unit.
+	
+#### Enhancements
+	
+	[Missions] Changed the logic of the MissionYear's MissionProcessSearch to not use workflowQueues, but the MissionStates instead
+	[Missions] Removed from all Mission activities preconditions, the references to workflowQueues under the presumption that the only possible queue is the personalInformationProcessing
+	[Missions] Added automatic migration for the new Personal Information Processed slot
+	[Missions] Added a new slot Mission.isPersonalInformationProcessed to help determine the state of processing for each process
+	Incorporated external-accounting-integration module.
+	Removed IST specific code for synchronizing  salary information.
+	
+#### Bug Fixes
+
+	[Missions] Corrected a problem with the calculation of the MissionState for canceled MissionProcesses with no items
+ 	[Expenditures] Prevented the AllocateProjectFundsPermanently activity from running in canceled processes
+	Other bug fixes and some code cleanup.
 
 ### v1.3.0
 
