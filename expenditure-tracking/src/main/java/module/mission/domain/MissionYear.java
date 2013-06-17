@@ -271,9 +271,8 @@ public class MissionYear extends MissionYear_Base {
         @Override
         boolean shouldAdd(final MissionProcess missionProcess, final User user) {
             return (missionProcess.getCurrentOwner() == null || missionProcess.isTakenByCurrentUser())
-                    && missionProcess.isCurrentUserAbleToAccessAnyQueues()
-                    && MissionState.PERSONAL_INFORMATION_PROCESSING.isPending(missionProcess)
-                    || missionProcess.isReadyForMissionTermination(user)
+                    && (missionProcess.isCurrentUserAbleToAccessAnyQueues() && MissionState.PERSONAL_INFORMATION_PROCESSING
+                            .isPending(missionProcess)) || missionProcess.isReadyForMissionTermination(user)
                     || (missionProcess.isTerminated() && !missionProcess.isArchived() && missionProcess.canArchiveMission());
         }
 
@@ -365,8 +364,8 @@ public class MissionYear extends MissionYear_Base {
             @Override
             boolean shouldAdd(final MissionProcess missionProcess, final User user) {
                 return (missionProcess.getCurrentOwner() == null || missionProcess.isTakenByCurrentUser())
-                        && missionProcess.isCurrentUserAbleToAccessAnyQueues()
-                        && MissionState.PERSONAL_INFORMATION_PROCESSING.isPending(missionProcess)
+                        && (missionProcess.isCurrentUserAbleToAccessAnyQueues() && MissionState.PERSONAL_INFORMATION_PROCESSING
+                                .isPending(missionProcess))
                         || missionProcess.isReadyForMissionTermination(user)
                         || (missionProcess.isTerminated() && !missionProcess.isArchived() && missionProcess
                                 .canArchiveMissionDirect());
