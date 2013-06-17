@@ -25,6 +25,7 @@ public class UnApproveActivity extends MissionProcessActivity<MissionProcess, Ac
         final MissionProcess missionProcess = (MissionProcess) activityInformation.getProcess();
         final User user = UserView.getCurrentUser();
         missionProcess.unapprove(user);
+        missionProcess.removeFromVerificationQueue();
     }
 
 }

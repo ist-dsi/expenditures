@@ -36,6 +36,7 @@ import java.util.TreeSet;
 import module.mission.domain.activity.AuthorizeVehicleItemActivity;
 import module.mission.domain.activity.ItemActivityInformation;
 import module.mission.domain.util.MigratePersonalInformationProcessedSlot;
+import module.mission.domain.util.MigrateVerifiedSlot;
 import module.organization.domain.Accountability;
 import module.organization.domain.AccountabilityType;
 import module.organization.domain.OrganizationalModel;
@@ -56,16 +57,30 @@ import pt.ist.fenixframework.Atomic;
  */
 public class MissionSystem extends MissionSystem_Base {
 
+    private static boolean isMigrationInProgress = false;
+
     public static MissionSystem getInstance() {
         final VirtualHost virtualHostForThread = VirtualHost.getVirtualHostForThread();
         if (virtualHostForThread.getMissionSystem() == null) {
             initialize(virtualHostForThread);
         }
 
-        //Temporary migration code that should be removed on the next major version
-        MigratePersonalInformationProcessedSlot.migrate();
+        migrate();
 
         return virtualHostForThread == null ? null : virtualHostForThread.getMissionSystem();
+    }
+
+    private static void migrate() {
+        if (!isMigrationInProgress) {
+            synchronized (MissionSystem.class) {
+                if (!isMigrationInProgress) {
+                    isMigrationInProgress = true;
+                    MigratePersonalInformationProcessedSlot.migrateForAllVirtualHosts();
+                    MigrateVerifiedSlot.migrateForAllVirtualHosts();
+                    isMigrationInProgress = false;
+                }
+            }
+        }
     }
 
     @Atomic
@@ -79,10 +94,19 @@ public class MissionSystem extends MissionSystem_Base {
         super();
         addVirtualHost(virtualHost);
         setIsPersonalInformationProcessedSlotMigrated(true);
+        setIsVerifiedSlotMigrated(true);
     }
 
     public boolean isPersonalInformationProcessedSlotMigrated() {
         return getIsPersonalInformationProcessedSlotMigrated();
+    }
+
+    public boolean isVerifiedSlotMigrated() {
+        return getIsVerifiedSlotMigrated();
+    }
+
+    public static boolean canUserVerifyProcesses(User user) {
+        return getInstance().getVerificationQueue().isUserAbleToAccessQueue(user);
     }
 
     public ExpenditureTrackingSystem getExpenditureTrackingSystem() {

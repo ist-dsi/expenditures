@@ -96,6 +96,7 @@ public abstract class Mission extends Mission_Base {
         setRequestingPerson(person);
         new MissionVersion(this);
         setIsPersonalInformationProcessed(false);
+        setIsVerified(false);
     }
 
     protected void setMissionInformation(final String location, final DateTime daparture, final DateTime arrival,
@@ -242,7 +243,6 @@ public abstract class Mission extends Mission_Base {
     }
 
     public void approve(final User user) {
-//	if (getFinancerCount() == 0 && getMissionItemsCount() == 0) {
         final Party missionResponsible = getMissionResponsible();
         if (missionResponsible.isPerson()) {
             setIsApprovedByMissionResponsible(Boolean.TRUE);
@@ -253,11 +253,6 @@ public abstract class Mission extends Mission_Base {
                 setApprovalForMissionWithNoFinancers(authorization);
             }
         }
-//	} else {
-//	    for (final MissionFinancer financer : getFinancerSet()) {
-//		financer.approve(user);
-//	    }
-//	}
 
         setServiceGaranteePerson(user.getPerson());
         setServiceGaranteeInstante(new DateTime());
@@ -325,24 +320,15 @@ public abstract class Mission extends Mission_Base {
     }
 
     public boolean isApprovedByResponsible() {
-        // If you uncomment the commented code the approver is each of the paying units responsible (if there are paying units)...
-        // if the code is commented the approver is simply the first participant.
-        //		if (getFinancerCount() == 0 && getMissionItemsCount() == 0) {
         return getIsApprovedByMissionResponsible() != null && getIsApprovedByMissionResponsible();
-        //		} else if (getFinancerCount() == 0 || getMissionItemsCount() == 0) {
-        //		    return false;
-        //		} else {
-        //		    for (final MissionFinancer financer : getFinancerSet()) {
-        //			if (!financer.hasApproval()) {
-        //			    return false;
-        //			}
-        //		    }
-        //		    return true;
-        //		}
     }
 
     public boolean isApproved() {
-        return isApprovedByResponsible() && (areAllVehicleItemsAuthorized() || !isVehicleAuthorizationNeeded());
+        return isApprovedByResponsible() && isVerified() && (areAllVehicleItemsAuthorized() || !isVehicleAuthorizationNeeded());
+    }
+
+    public boolean isVerified() {
+        return getIsVerified();
     }
 
     protected boolean isVehicleAuthorizationNeeded() {

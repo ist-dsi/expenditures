@@ -270,6 +270,10 @@ public abstract class MissionProcess extends MissionProcess_Base {
         return getMission().isApproved();
     }
 
+    public boolean isVerified() {
+        return getMission().isVerified();
+    }
+
     public boolean hasAllAllocatedFunds() {
         return getMission().hasAllAllocatedFunds();
     }
@@ -392,6 +396,26 @@ public abstract class MissionProcess extends MissionProcess_Base {
                                 "resources/MissionResources", "label.email.mission.participation.authorized.body"));
             }
         }
+    }
+
+    public void addToVerificationQueue() {
+        MissionSystem system = MissionSystem.getInstance();
+        WorkflowQueue verificationQueue = MissionSystem.getInstance().getVerificationQueue();
+        if (verificationQueue == null) {
+            throw new DomainException("MissionSystem: " + system.getVirtualHostSet().iterator().next().getHostname()
+                    + " has no verification queue configured!");
+        }
+        addCurrentQueues(verificationQueue);
+    }
+
+    public void removeFromVerificationQueue() {
+        MissionSystem system = MissionSystem.getInstance();
+        WorkflowQueue verificationQueue = MissionSystem.getInstance().getVerificationQueue();
+        if (verificationQueue == null) {
+            throw new DomainException("MissionSystem: " + system.getVirtualHostSet().iterator().next().getHostname()
+                    + " has no verification queue configured!");
+        }
+        removeCurrentQueues(verificationQueue);
     }
 
     public void addToProcessParticipantInformationQueues() {

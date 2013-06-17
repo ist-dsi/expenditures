@@ -270,12 +270,24 @@ public class MissionYear extends MissionYear_Base {
 
         @Override
         boolean shouldAdd(final MissionProcess missionProcess, final User user) {
-            return (missionProcess.getCurrentOwner() == null || missionProcess.isTakenByCurrentUser())
-                    && (missionProcess.isCurrentUserAbleToAccessAnyQueues() && MissionState.PERSONAL_INFORMATION_PROCESSING
-                            .isPending(missionProcess)) || missionProcess.isReadyForMissionTermination(user)
-                    || (missionProcess.isTerminated() && !missionProcess.isArchived() && missionProcess.canArchiveMission());
+            if (missionProcess.getCurrentOwner() != null && !missionProcess.isTakenByCurrentUser()) {
+                return false;
+            }
+            if (missionProcess.isCurrentUserAbleToAccessAnyQueues()
+                    && MissionState.PERSONAL_INFORMATION_PROCESSING.isPending(missionProcess)) {
+                return true;
+            }
+            if (missionProcess.isCurrentUserAbleToAccessAnyQueues() && MissionState.VERIFICATION.isPending(missionProcess)) {
+                return true;
+            }
+            if (missionProcess.isReadyForMissionTermination(user)) {
+                return true;
+            }
+            if (missionProcess.isTerminated() && !missionProcess.isArchived() && missionProcess.canArchiveMission()) {
+                return true;
+            }
+            return false;
         }
-
     }
 
     public SortedSet<MissionProcess> getPendingAproval() {
@@ -360,17 +372,30 @@ public class MissionYear extends MissionYear_Base {
     }
 
     public SortedSet<MissionProcess> getPendingDirectProcessingPersonelInformation() {
-        return new MissionProcessSearch() {
+        MissionProcessSearch search = new MissionProcessSearch() {
             @Override
             boolean shouldAdd(final MissionProcess missionProcess, final User user) {
-                return (missionProcess.getCurrentOwner() == null || missionProcess.isTakenByCurrentUser())
-                        && (missionProcess.isCurrentUserAbleToAccessAnyQueues() && MissionState.PERSONAL_INFORMATION_PROCESSING
-                                .isPending(missionProcess))
-                        || missionProcess.isReadyForMissionTermination(user)
-                        || (missionProcess.isTerminated() && !missionProcess.isArchived() && missionProcess
-                                .canArchiveMissionDirect());
+                if (missionProcess.getCurrentOwner() != null && !missionProcess.isTakenByCurrentUser()) {
+                    return false;
+                }
+                if (missionProcess.isCurrentUserAbleToAccessAnyQueues()
+                        && MissionState.PERSONAL_INFORMATION_PROCESSING.isPending(missionProcess)) {
+                    return true;
+                }
+                if (missionProcess.isCurrentUserAbleToAccessAnyQueues() && MissionState.VERIFICATION.isPending(missionProcess)) {
+                    return true;
+                }
+
+                if (missionProcess.isReadyForMissionTermination(user)) {
+                    return true;
+                }
+                if (missionProcess.isTerminated() && !missionProcess.isArchived() && missionProcess.canArchiveMissionDirect()) {
+                    return true;
+                }
+                return false;
             }
-        }.search();
+        };
+        return search.search();
     }
 
     public SortedSet<MissionProcess> getRequested() {

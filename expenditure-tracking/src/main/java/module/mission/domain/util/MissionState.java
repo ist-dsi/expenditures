@@ -19,6 +19,24 @@ public enum MissionState implements IPresentableEnum {
         }
     },
 
+    VERIFICATION {
+        @Override
+        public MissionStateProgress getStateProgress(MissionProcess missionProcess) {
+            if (!APPROVAL.isCompleted(missionProcess)) {
+                return MissionStateProgress.IDLE;
+            }
+
+            if (missionProcess.isVerified()) {
+                return MissionStateProgress.COMPLETED;
+            }
+
+            if (missionProcess.isCanceled()) {
+                return MissionStateProgress.IDLE;
+            }
+            return MissionStateProgress.PENDING;
+        }
+    },
+
     VEHICLE_APPROVAL {
         @Override
         public boolean isRequired(MissionProcess missionProcess) {
@@ -27,7 +45,7 @@ public enum MissionState implements IPresentableEnum {
 
         @Override
         public MissionStateProgress getStateProgress(MissionProcess missionProcess) {
-            if (!APPROVAL.isCompleted(missionProcess)) {
+            if (!VERIFICATION.isCompleted(missionProcess)) {
                 return MissionStateProgress.IDLE;
             }
 

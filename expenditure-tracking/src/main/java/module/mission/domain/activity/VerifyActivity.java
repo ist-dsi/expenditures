@@ -1,5 +1,5 @@
 /*
- * @(#)ApproveActivity.java
+ * @(#)VerifyActivity.java
  *
  * Copyright 2010 Instituto Superior Tecnico
  * Founding Authors: Luis Cruz, Nuno Ochoa, Paulo Abrantes
@@ -25,17 +25,18 @@
 package module.mission.domain.activity;
 
 import module.mission.domain.MissionProcess;
+import module.mission.domain.MissionSystem;
+import module.mission.domain.util.MissionState;
 import module.workflow.activities.ActivityInformation;
-import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.util.BundleUtil;
 
 /**
  * 
- * @author Luis Cruz
+ * @author João Neves
  * 
  */
-public class ApproveActivity extends MissionProcessActivity<MissionProcess, LateJustificationActivityInformation> {
+public class VerifyActivity extends MissionProcessActivity<MissionProcess, ActivityInformation<MissionProcess>> {
 
     @Override
     public String getLocalizedName() {
@@ -44,35 +45,14 @@ public class ApproveActivity extends MissionProcessActivity<MissionProcess, Late
 
     @Override
     public boolean isActive(final MissionProcess missionProcess, final User user) {
-        return super.isActive(missionProcess, user) && !missionProcess.isUnderConstruction() && !missionProcess.getIsCanceled()
-                && missionProcess.isPendingApprovalBy(user);
+        return super.isActive(missionProcess, user) && MissionState.VERIFICATION.isPending(missionProcess)
+                && MissionSystem.canUserVerifyProcesses(user);
     }
 
     @Override
-    protected void process(final LateJustificationActivityInformation activityInformation) {
-        final MissionProcess missionProcess = activityInformation.getProcess();
-        final User user = UserView.getCurrentUser();
-        missionProcess.approve(user);
-        if (!missionProcess.isOnTime()) {
-            missionProcess.justifyLateSubmission(activityInformation.getJustification());
-        }
-        missionProcess.addToVerificationQueue();
+    protected void process(final ActivityInformation<MissionProcess> activityInformation) {
+        MissionProcess process = activityInformation.getProcess();
+        process.getMission().setIsVerified(true);
+        process.removeFromVerificationQueue();
     }
-
-    @Override
-    public ActivityInformation<MissionProcess> getActivityInformation(MissionProcess process) {
-        return new LateJustificationActivityInformation(process, this);
-    }
-
-    @Override
-    public boolean isConfirmationNeeded(final MissionProcess process) {
-        return true;
-    }
-
-    @Override
-    public String getLocalizedConfirmationMessage() {
-        return BundleUtil.getFormattedStringFromResourceBundle("resources/MissionResources",
-                "label.module.mission.approve.confirm.service.is.assured");
-    }
-
 }

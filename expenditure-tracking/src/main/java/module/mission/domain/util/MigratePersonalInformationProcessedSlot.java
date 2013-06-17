@@ -1,5 +1,5 @@
 /*
- * @(#)InitSlotPersonalInformationProcessed.java
+ * @(#)MigratePersonalInformationProcessedSlot.java
  *
  * Copyright 2011 Instituto Superior Tecnico
  * Founding Authors: Luis Cruz, Nuno Ochoa, Paulo Abrantes
@@ -50,28 +50,14 @@ public class MigratePersonalInformationProcessedSlot {
 
     private static final Logger logger = LoggerFactory.getLogger(MigratePersonalInformationProcessedSlot.class);
 
-    private static final Object staticLock = new Object();
-
-    private static boolean isMigrationInProgress = false;
-
-    public static void migrate() {
-        if (!isMigrationInProgress) {
-            synchronized (staticLock) {
-                if (!isMigrationInProgress) {
-                    isMigrationInProgress = true;
-                    migrateForAllVirtualHosts();
-                    isMigrationInProgress = false;
-                }
-            }
-        }
-    }
-
     @Atomic
-    private static void migrateForAllVirtualHosts() {
-        for (VirtualHost vHost : MyOrg.getInstance().getVirtualHosts()) {
-            if (!vHost.getMissionSystem().isPersonalInformationProcessedSlotMigrated()) {
+    public static void migrateForAllVirtualHosts() {
+        for (VirtualHost vHost : MyOrg.getInstance().getVirtualHostsSet()) {
+            MissionSystem system = vHost.getMissionSystem();
+            if (system != null && !system.isPersonalInformationProcessedSlotMigrated()) {
                 logger.info("Migrating Personal Information Processed Slot for VirtualHost: " + vHost.getHostname());
-                migrate(vHost.getMissionSystem());
+                migrate(system);
+                system.setIsPersonalInformationProcessedSlotMigrated(true);
                 logger.info("Finished migrating Personal Information Processed Slot for VirtualHost: " + vHost.getHostname());
             }
         }
@@ -81,7 +67,6 @@ public class MigratePersonalInformationProcessedSlot {
         for (MissionProcess process : system.getMissionProcessesSet()) {
             process.getMission().setIsPersonalInformationProcessed(wasPersonalInformationAlreadyProcessed(process));
         }
-        system.setIsPersonalInformationProcessedSlotMigrated(true);
     }
 
     private static boolean wasPersonalInformationAlreadyProcessed(MissionProcess process) {
