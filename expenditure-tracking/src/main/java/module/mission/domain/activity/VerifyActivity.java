@@ -1,7 +1,7 @@
 /*
- * @(#)ProcessCanceledPersonnelActivity.java
+ * @(#)VerifyActivity.java
  *
- * Copyright 2011 Instituto Superior Tecnico
+ * Copyright 2010 Instituto Superior Tecnico
  * Founding Authors: Luis Cruz, Nuno Ochoa, Paulo Abrantes
  * 
  *      https://fenix-ashes.ist.utl.pt/
@@ -25,16 +25,18 @@
 package module.mission.domain.activity;
 
 import module.mission.domain.MissionProcess;
+import module.mission.domain.MissionSystem;
+import module.mission.domain.util.MissionState;
+import module.workflow.activities.ActivityInformation;
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.util.BundleUtil;
 
 /**
  * 
  * @author João Neves
- * @author Luis Cruz
  * 
  */
-public class ProcessCanceledPersonnelActivity extends ProcessPersonnelActivity {
+public class VerifyActivity extends MissionProcessActivity<MissionProcess, ActivityInformation<MissionProcess>> {
 
     @Override
     public String getLocalizedName() {
@@ -43,6 +45,14 @@ public class ProcessCanceledPersonnelActivity extends ProcessPersonnelActivity {
 
     @Override
     public boolean isActive(final MissionProcess missionProcess, final User user) {
-        return super.isActive(missionProcess, user) && missionProcess.getIsCanceled().booleanValue();
+        return super.isActive(missionProcess, user) && MissionState.VERIFICATION.isPending(missionProcess)
+                && MissionSystem.canUserVerifyProcesses(user);
+    }
+
+    @Override
+    protected void process(final ActivityInformation<MissionProcess> activityInformation) {
+        MissionProcess process = activityInformation.getProcess();
+        process.getMission().setIsVerified(true);
+        process.removeFromVerificationQueue();
     }
 }

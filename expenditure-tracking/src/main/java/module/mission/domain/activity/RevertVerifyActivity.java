@@ -1,7 +1,7 @@
 /*
- * @(#)ProcessCanceledPersonnelActivity.java
+ * @(#)RevertVerifyActivity.java
  *
- * Copyright 2011 Instituto Superior Tecnico
+ * Copyright 2010 Instituto Superior Tecnico
  * Founding Authors: Luis Cruz, Nuno Ochoa, Paulo Abrantes
  * 
  *      https://fenix-ashes.ist.utl.pt/
@@ -25,16 +25,18 @@
 package module.mission.domain.activity;
 
 import module.mission.domain.MissionProcess;
+import module.mission.domain.MissionSystem;
+import module.mission.domain.util.MissionState;
+import module.workflow.activities.ActivityInformation;
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.util.BundleUtil;
 
 /**
  * 
  * @author João Neves
- * @author Luis Cruz
  * 
  */
-public class ProcessCanceledPersonnelActivity extends ProcessPersonnelActivity {
+public class RevertVerifyActivity extends MissionProcessActivity<MissionProcess, ActivityInformation<MissionProcess>> {
 
     @Override
     public String getLocalizedName() {
@@ -43,6 +45,25 @@ public class ProcessCanceledPersonnelActivity extends ProcessPersonnelActivity {
 
     @Override
     public boolean isActive(final MissionProcess missionProcess, final User user) {
-        return super.isActive(missionProcess, user) && missionProcess.getIsCanceled().booleanValue();
+        if (!super.isActive(missionProcess, user)) {
+            return false;
+        }
+        if (!MissionSystem.canUserVerifyProcesses(user)) {
+            return false;
+        }
+        if (MissionState.VEHICLE_APPROVAL.isRequired(missionProcess)) {
+            return MissionState.VEHICLE_APPROVAL.isPending(missionProcess);
+        } else if (MissionState.FUND_ALLOCATION.isRequired(missionProcess)) {
+            return MissionState.FUND_ALLOCATION.isPending(missionProcess) && !missionProcess.isCanceled();
+        } else {
+            return MissionState.PARTICIPATION_AUTHORIZATION.isPending(missionProcess);
+        }
+    }
+
+    @Override
+    protected void process(final ActivityInformation<MissionProcess> activityInformation) {
+        MissionProcess process = activityInformation.getProcess();
+        process.getMission().setIsVerified(false);
+        process.addToVerificationQueue();
     }
 }

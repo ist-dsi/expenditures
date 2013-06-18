@@ -1,8 +1,12 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@page import="pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem.InfoProvider"%>
+<%@page import="pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem"%>
+<%@page import="pt.ist.expenditureTrackingSystem.domain.organization.Person"%>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html" %>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-bean" prefix="bean" %>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-logic" prefix="logic" %>
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/fenix-renderers" prefix="fr" %>
+<%@page import="java.util.Map"%>
 
 <h2><bean:message key="user.label.view" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/> <bean:write name="person" property="username"/></h2>
 
@@ -497,3 +501,27 @@
 		<em><bean:message key="accountingUnit.message.person.not.associated" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>.</em>
 	</p>
 </logic:empty>
+
+<%
+ 	ExpenditureTrackingSystem.InfoProvider infoProvider = ExpenditureTrackingSystem.getInfoProvider();
+ 	if(infoProvider != null){
+ 	   final Person person = (Person) request.getAttribute("person");
+ 	   Map<String, String> links = infoProvider.getLinks("viewPerson.jsp", person);
+ 	   if(links != null){      
+		  %>
+ 	      <h3 class="mtop15 mbottom05"><%=infoProvider.getTitle() %></h3>
+ 	      <%
+ 	      for(Map.Entry<String, String> entry : links.entrySet()){
+ 	         String linkTitle = entry.getKey();
+ 	         String link = entry.getValue();
+ 	        %>
+ 	        <p>
+ 	        <html:link page="<%=link%>">
+				<%=linkTitle%>
+			</html:link>
+			</p>
+ 	        <%     
+ 	      }
+ 	   }
+ 	}
+%>

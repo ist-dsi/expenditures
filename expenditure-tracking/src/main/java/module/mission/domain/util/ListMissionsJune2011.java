@@ -64,7 +64,7 @@ public class ListMissionsJune2011 extends ReadCustomTask {
             out.print(process.getCreationDate().getYear() + "/" + process.getCreationDate().getMonthOfYear() + "/"
                     + process.getCreationDate().getDayOfMonth() + "\t");
 
-            out.print(MissionState.PROCESS_APPROVAL.getStateProgress(process).getLocalizedName());
+            out.print(MissionState.APPROVAL.getStateProgress(process).getLocalizedName());
             out.print("\t");
 
             if (MissionState.FUND_ALLOCATION.isRequired(process)) {

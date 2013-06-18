@@ -35,6 +35,8 @@ import java.util.TreeSet;
 
 import module.mission.domain.activity.AuthorizeVehicleItemActivity;
 import module.mission.domain.activity.ItemActivityInformation;
+import module.mission.domain.util.MigratePersonalInformationProcessedSlot;
+import module.mission.domain.util.MigrateVerifiedSlot;
 import module.organization.domain.Accountability;
 import module.organization.domain.AccountabilityType;
 import module.organization.domain.OrganizationalModel;
@@ -55,19 +57,30 @@ import pt.ist.fenixframework.Atomic;
  */
 public class MissionSystem extends MissionSystem_Base {
 
+    private static boolean isMigrationInProgress = false;
+
     public static MissionSystem getInstance() {
         final VirtualHost virtualHostForThread = VirtualHost.getVirtualHostForThread();
         if (virtualHostForThread.getMissionSystem() == null) {
             initialize(virtualHostForThread);
         }
 
-        // The following code is some migration stuff; it only has to run once.
-        // TODO: Afterwards, this code can be been deleted.
-        if (!isMigrated()) {
-            migrate();
-        }
+        migrate();
 
         return virtualHostForThread == null ? null : virtualHostForThread.getMissionSystem();
+    }
+
+    private static void migrate() {
+        if (!isMigrationInProgress) {
+            synchronized (MissionSystem.class) {
+                if (!isMigrationInProgress) {
+                    isMigrationInProgress = true;
+                    MigratePersonalInformationProcessedSlot.migrateForAllVirtualHosts();
+                    MigrateVerifiedSlot.migrateForAllVirtualHosts();
+                    isMigrationInProgress = false;
+                }
+            }
+        }
     }
 
     @Atomic
@@ -77,33 +90,23 @@ public class MissionSystem extends MissionSystem_Base {
         }
     }
 
-    private static boolean isMigrated() {
-        return MyOrg.getInstance().getMissionSystem().hasAnyVirtualHost();
-    }
-
-    @Atomic
-    public static void migrate() {
-        System.out.println("Migrating mission stuff...");
-        MyOrg myOrg = MyOrg.getInstance();
-        VirtualHost comprasHost = null;
-        VirtualHost dotHost = null;
-        for (VirtualHost vHost : myOrg.getVirtualHosts()) {
-            if (vHost.getExternalId().equals("395136991233")) {
-                comprasHost = vHost;
-            } else if (vHost.getExternalId().equals("395136991834")) {
-                dotHost = vHost;
-            }
-        }
-        if (comprasHost == null || dotHost == null) {
-            throw new RuntimeException("Mission migration error: dot or compras VirtualHosts not found");
-        }
-        myOrg.getMissionSystem().addVirtualHost(comprasHost);
-        myOrg.getMissionSystem().addVirtualHost(dotHost);
-    }
-
     private MissionSystem(final VirtualHost virtualHost) {
         super();
         addVirtualHost(virtualHost);
+        setIsPersonalInformationProcessedSlotMigrated(true);
+        setIsVerifiedSlotMigrated(true);
+    }
+
+    public boolean isPersonalInformationProcessedSlotMigrated() {
+        return getIsPersonalInformationProcessedSlotMigrated();
+    }
+
+    public boolean isVerifiedSlotMigrated() {
+        return getIsVerifiedSlotMigrated();
+    }
+
+    public static boolean canUserVerifyProcesses(User user) {
+        return getInstance().getVerificationQueue().isUserAbleToAccessQueue(user);
     }
 
     public ExpenditureTrackingSystem getExpenditureTrackingSystem() {

@@ -16,11 +16,7 @@ public class UpdateForeignMissionDetailsActivity extends
 
     @Override
     public boolean isActive(final MissionProcess missionProcess, final User user) {
-        return super.isActive(missionProcess, user) && (missionProcess.isUnderConstruction() && missionProcess.isRequestor(user)
-//		|| (missionProcess.isTerminatedWithChanges()
-//			&& !missionProcess.isArchived()
-//			&& missionProcess.canArchiveMission())
-                );
+        return super.isActive(missionProcess, user) && (missionProcess.isUnderConstruction() && missionProcess.isRequestor(user));
     }
 
     @Override

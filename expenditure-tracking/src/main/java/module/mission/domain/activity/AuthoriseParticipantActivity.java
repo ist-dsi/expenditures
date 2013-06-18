@@ -63,10 +63,13 @@ public class AuthoriseParticipantActivity extends MissionProcessActivity<Mission
         final Person person = user.getPerson();
         personMissionAuthorization.setAuthority(person);
         final MissionProcess missionProcess = authoriseParticipantActivityInformation.getProcess();
-        missionProcess.setProcessParticipantInformationQueue();
+
         final Mission mission = missionProcess.getMission();
         if (mission.allParticipantsAreAuthorized()) {
             missionProcess.notifyAllParticipants();
+            if (!mission.hasAnyMissionItems()) {
+                missionProcess.addToProcessParticipantInformationQueues();
+            }
         }
     }
 

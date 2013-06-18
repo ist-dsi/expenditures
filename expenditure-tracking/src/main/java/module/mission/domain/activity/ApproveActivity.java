@@ -56,6 +56,7 @@ public class ApproveActivity extends MissionProcessActivity<MissionProcess, Late
         if (!missionProcess.isOnTime()) {
             missionProcess.justifyLateSubmission(activityInformation.getJustification());
         }
+        missionProcess.addToVerificationQueue();
     }
 
     @Override

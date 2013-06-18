@@ -55,6 +55,7 @@ import module.mission.domain.activity.RemoveItemActivity;
 import module.mission.domain.activity.RemoveParticipantActivity;
 import module.mission.domain.activity.RevertMissionForEditingActivity;
 import module.mission.domain.activity.RevertTerminationActivity;
+import module.mission.domain.activity.RevertVerifyActivity;
 import module.mission.domain.activity.SendForProcessTerminationActivity;
 import module.mission.domain.activity.SendForProcessTerminationWithChangesActivity;
 import module.mission.domain.activity.SubmitForApprovalActivity;
@@ -71,6 +72,7 @@ import module.mission.domain.activity.UnCommitFundsActivity;
 import module.mission.domain.activity.UnProcessPersonnelActivity;
 import module.mission.domain.activity.UnSubmitForApprovalActivity;
 import module.mission.domain.activity.UpdateMissionDetailsActivity;
+import module.mission.domain.activity.VerifyActivity;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.GiveProcess;
 import module.workflow.activities.ReleaseProcess;
@@ -113,6 +115,8 @@ public class NationalMissionProcess extends NationalMissionProcess_Base {
         activitiesAux.add(new UnSubmitForApprovalActivity());
         activitiesAux.add(new ApproveActivity());
         activitiesAux.add(new UnApproveActivity());
+        activitiesAux.add(new VerifyActivity());
+        activitiesAux.add(new RevertVerifyActivity());
         activitiesAux.add(new AssociateMissionProcessActivity());
         activitiesAux.add(new DisassociateMissionProcessActivity());
 

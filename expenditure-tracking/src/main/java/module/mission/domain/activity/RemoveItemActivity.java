@@ -16,11 +16,7 @@ public class RemoveItemActivity extends MissionProcessActivity<MissionProcess, R
     @Override
     public boolean isActive(final MissionProcess missionProcess, final User user) {
         return super.isActive(missionProcess, user) && missionProcess.getMission().hasAnyMissionItems()
-                && ((missionProcess.isUnderConstruction() && missionProcess.isRequestor(user))
-//			|| (missionProcess.isTerminatedWithChanges()
-//				&& !missionProcess.isArchived()
-//				&& missionProcess.canArchiveMission())
-                );
+                && ((missionProcess.isUnderConstruction() && missionProcess.isRequestor(user)));
     }
 
     @Override

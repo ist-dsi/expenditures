@@ -34,7 +34,7 @@ public class ArchiveItemActivity extends MissionProcessActivity<MissionProcess, 
         if (areAllMissionItemFinancersArchived(missionVersion)) {
             missionVersion.setIsArchived(Boolean.TRUE);
             if (missionVersion.getChangesAfterArrival().booleanValue()) {
-                process.setProcessParticipantInformationQueue();
+                process.addToProcessParticipantInformationQueues();
             }
         }
     }

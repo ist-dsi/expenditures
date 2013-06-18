@@ -4,8 +4,9 @@ enum module.mission.domain.VehiclItemJustificationMotive as VehiclItemJustificat
 
 class MissionSystem {
 	Boolean allowGrantOwnerEquivalence;
+	boolean isPersonalInformationProcessedSlotMigrated;
+	boolean isVerifiedSlotMigrated;
 }
-
 
 class MissionFinancer implements .pt.ist.bennu.core.domain.VirtualHostAware {
 	String commitmentNumber;
@@ -16,6 +17,8 @@ class Mission implements .pt.ist.bennu.core.domain.VirtualHostAware {
 	String objective;
 	Boolean grantOwnerEquivalence;
 	Boolean isApprovedByMissionResponsible;
+	boolean isPersonalInformationProcessed;
+	boolean isVerified;
 	String fundAllocationLog;
 	DateTime serviceGaranteeInstante;
 
@@ -667,7 +670,7 @@ relation MissionFinancerAccountingUnit {
 }
 
 relation MissionSystemUsersWhoCanCancelMission {
-	MissionSystem playsRole missionSystemFromUsersWhoCanCancel  {
+	MissionSystem playsRole missionSystemFromUsersWhoCanCancel {
 		multiplicity *;
 	}
 	.pt.ist.bennu.core.domain.User playsRole usersWhoCanCancelMission {
@@ -676,10 +679,15 @@ relation MissionSystemUsersWhoCanCancelMission {
 }
 
 relation MissionSystemVehicleAuthorizers {
-	MissionSystem playsRole missionSystemFromVehicleAuthorizers  {
+	MissionSystem playsRole missionSystemFromVehicleAuthorizers {
 		multiplicity *;
 	}
 	.pt.ist.bennu.core.domain.User playsRole vehicleAuthorizers {
 		multiplicity *;
 	}
+}
+
+relation MissionSystemVerificationQueue {
+	MissionSystem playsRole missionSystem;
+	.module.workflow.domain.WorkflowQueue playsRole verificationQueue;
 }
