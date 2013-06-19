@@ -52,9 +52,6 @@ public class MigrateVerifiedSlot {
         for (VirtualHost vHost : MyOrg.getInstance().getVirtualHostsSet()) {
             MissionSystem system = vHost.getMissionSystem();
             if (system != null && !system.isVerifiedSlotMigrated()) {
-        	if (system.getVerificationQueue() == null) {
-        	    system.setVerificationQueue(findVerificationQueueForSystem(system));
-        	}
                 if (system.getMissionProcessesSet().isEmpty()) {
                     logger.info("Migrating Verified Slot for VirtualHost: " + vHost.getHostname());
                     system.setIsVerifiedSlotMigrated(true);
@@ -70,18 +67,6 @@ public class MigrateVerifiedSlot {
                 }
             }
         }
-    }
-
-    private static WorkflowQueue findVerificationQueueForSystem(final MissionSystem system) {
-	WorkflowQueue result = null;
-	for (final AccountabilityTypeQueue atQueue : system.getAccountabilityTypeQueuesSet()) {
-	    if (result == null) {
-		result = atQueue.getWorkflowQueue();
-	    } else if (result != atQueue.getWorkflowQueue()) {
-		return null;
-	    }
-	}
-	return result;
     }
 
     private static void migrate(MissionSystem system) {
