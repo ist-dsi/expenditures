@@ -34,7 +34,7 @@ import pt.ist.bennu.core.util.BundleUtil;
  * @author Luis Cruz
  * 
  */
-public class ProcessCanceledPersonnelActivity extends ProcessPersonnelActivity {
+public class ProcessCanceledPersonnelActivity extends ProcessPersonalInformation {
 
     @Override
     public String getLocalizedName() {
@@ -43,6 +43,6 @@ public class ProcessCanceledPersonnelActivity extends ProcessPersonnelActivity {
 
     @Override
     public boolean isActive(final MissionProcess missionProcess, final User user) {
-        return super.isActive(missionProcess, user) && missionProcess.getIsCanceled().booleanValue();
+        return super.isActive(missionProcess, user) && missionProcess.isCanceled();
     }
 }
