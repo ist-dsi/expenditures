@@ -3,6 +3,7 @@ package module.mission.domain.activity;
 import module.mission.domain.MissionFinancer;
 import module.mission.domain.MissionProcess;
 import module.mission.domain.activity.CommitFundsActivityInformation.MissionFinancerCommitFundAllocationBean;
+import module.mission.domain.util.MissionState;
 import module.workflow.activities.ActivityInformation;
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.util.BundleUtil;
@@ -16,8 +17,8 @@ public class CommitFundsActivity extends MissionProcessActivity<MissionProcess, 
 
     @Override
     public boolean isActive(final MissionProcess missionProcess, final User user) {
-        return super.isActive(missionProcess, user) && !missionProcess.getIsCanceled().booleanValue()
-                && missionProcess.getMission().hasAnyFinancer() && missionProcess.hasAllAllocatedFunds()
+        return super.isActive(missionProcess, user) && MissionState.FUND_ALLOCATION.isPending(missionProcess)
+                && !missionProcess.isCanceled() && missionProcess.hasAllAllocatedFunds()
                 && !missionProcess.hasAllCommitmentNumbers() && missionProcess.isAccountingEmployee(user.getExpenditurePerson());
     }
 
