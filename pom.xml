@@ -10,14 +10,14 @@
 
     <artifactId>expenditures</artifactId>
     <name>Bennu Expenditures</name>
-    <version>1.4.0</version>
+    <version>1.4.1</version>
     <packaging>pom</packaging>
 
     <scm>
         <connection>scm:git:git@github.com:ist-dsi/expenditures.git</connection>
         <developerConnection>scm:git:git@github.com:ist-dsi/expenditures.git</developerConnection>
         <url>http://ist-dsi.github.io/expenditures</url>
-        <tag>HEAD</tag>
+        <tag>v1.4.1</tag>
     </scm>
 
     <modules>

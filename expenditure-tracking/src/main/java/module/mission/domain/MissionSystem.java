@@ -42,6 +42,7 @@ import module.organization.domain.AccountabilityType;
 import module.organization.domain.OrganizationalModel;
 import module.organization.domain.Party;
 import module.organization.domain.Unit;
+import module.workflow.domain.WorkflowQueue;
 import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
 import pt.ist.bennu.core.domain.MyOrg;
 import pt.ist.bennu.core.domain.User;
@@ -106,7 +107,8 @@ public class MissionSystem extends MissionSystem_Base {
     }
 
     public static boolean canUserVerifyProcesses(User user) {
-        return getInstance().getVerificationQueue().isUserAbleToAccessQueue(user);
+        WorkflowQueue verificationQueue = getInstance().getVerificationQueue();
+        return (verificationQueue != null) ? verificationQueue.isUserAbleToAccessQueue(user) : false;
     }
 
     public ExpenditureTrackingSystem getExpenditureTrackingSystem() {
