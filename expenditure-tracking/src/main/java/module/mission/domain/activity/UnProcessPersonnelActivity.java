@@ -52,6 +52,7 @@ public class UnProcessPersonnelActivity extends MissionProcessActivity<MissionPr
     protected void process(final ActivityInformation<MissionProcess> activityInformation) {
         final MissionProcess missionProcess = activityInformation.getProcess();
         missionProcess.addToProcessParticipantInformationQueues();
+        missionProcess.getMission().setIsPersonalInformationProcessed(false);
     }
 
 }

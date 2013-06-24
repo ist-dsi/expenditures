@@ -1,5 +1,5 @@
 /*
- * @(#)ProcessPersonnelActivity.java
+ * @(#)ProcessPersonalInformationActivity.java
  *
  * Copyright 2011 Instituto Superior Tecnico
  * Founding Authors: Luis Cruz, Nuno Ochoa, Paulo Abrantes
@@ -30,7 +30,7 @@ import module.workflow.activities.ActivityInformation;
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
 
-public abstract class ProcessPersonalInformation extends
+public abstract class ProcessPersonalInformationActivity extends
         MissionProcessActivity<MissionProcess, ActivityInformation<MissionProcess>> {
 
     @Override

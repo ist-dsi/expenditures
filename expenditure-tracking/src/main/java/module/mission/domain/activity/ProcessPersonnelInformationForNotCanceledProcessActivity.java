@@ -1,5 +1,5 @@
 /*
- * @(#)ProcessCanceledPersonnelActivity.java
+ * @(#)ProcessPersonnelInformationForNotCanceledProcessActivity.java
  *
  * Copyright 2011 Instituto Superior Tecnico
  * Founding Authors: Luis Cruz, Nuno Ochoa, Paulo Abrantes
@@ -34,7 +34,7 @@ import pt.ist.bennu.core.util.BundleUtil;
  * @author Luis Cruz
  * 
  */
-public class ProcessCanceledPersonnelActivity extends ProcessPersonalInformation {
+public class ProcessPersonnelInformationForNotCanceledProcessActivity extends ProcessPersonalInformationActivity {
 
     @Override
     public String getLocalizedName() {
@@ -43,6 +43,6 @@ public class ProcessCanceledPersonnelActivity extends ProcessPersonalInformation
 
     @Override
     public boolean isActive(final MissionProcess missionProcess, final User user) {
-        return super.isActive(missionProcess, user) && missionProcess.isCanceled();
+        return super.isActive(missionProcess, user) && !missionProcess.isCanceled();
     }
 }
