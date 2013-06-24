@@ -28,7 +28,7 @@ public class UnCommitFundsActivity extends MissionProcessActivity<MissionProcess
         if (!missionProcess.hasCommitmentNumber()) {
             return false;
         }
-        if (missionProcess.hasAnyAuthorization()) {
+        if (missionProcess.hasAnyAuthorizedParticipants()) {
             return false;
         }
         return missionProcess.isAccountingEmployee(user.getExpenditurePerson());
