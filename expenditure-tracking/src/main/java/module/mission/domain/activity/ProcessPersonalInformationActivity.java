@@ -1,5 +1,5 @@
 /*
- * @(#)ProcessCanceledPersonnelActivity.java
+ * @(#)ProcessPersonalInformationActivity.java
  *
  * Copyright 2011 Instituto Superior Tecnico
  * Founding Authors: Luis Cruz, Nuno Ochoa, Paulo Abrantes
@@ -25,24 +25,31 @@
 package module.mission.domain.activity;
 
 import module.mission.domain.MissionProcess;
+import module.mission.domain.util.MissionState;
+import module.workflow.activities.ActivityInformation;
 import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.util.BundleUtil;
+import pt.ist.bennu.core.domain.exceptions.DomainException;
 
-/**
- * 
- * @author João Neves
- * @author Luis Cruz
- * 
- */
-public class ProcessCanceledPersonnelActivity extends ProcessPersonnelActivity {
+public abstract class ProcessPersonalInformationActivity extends
+        MissionProcessActivity<MissionProcess, ActivityInformation<MissionProcess>> {
 
     @Override
-    public String getLocalizedName() {
-        return BundleUtil.getStringFromResourceBundle("resources/MissionResources", "activity." + getClass().getSimpleName());
-    }
+    public abstract String getLocalizedName();
 
     @Override
     public boolean isActive(final MissionProcess missionProcess, final User user) {
-        return super.isActive(missionProcess, user) && missionProcess.getIsCanceled().booleanValue();
+        return super.isActive(missionProcess, user) && missionProcess.isCurrentUserAbleToAccessAnyQueues()
+                && MissionState.PERSONAL_INFORMATION_PROCESSING.isPending(missionProcess);
+    }
+
+    @Override
+    protected void process(final ActivityInformation activityInformation) {
+        final MissionProcess missionProcess = (MissionProcess) activityInformation.getProcess();
+        if (missionProcess.getCurrentQueuesSet().size() > 1) {
+            throw new DomainException(
+                    "Cannot determine which queue to remove because the mission process is associated to several queues.");
+        }
+        missionProcess.removeCurrentQueues(missionProcess.getCurrentQueues().iterator().next());
+        missionProcess.getMission().setIsPersonalInformationProcessed(true);
     }
 }

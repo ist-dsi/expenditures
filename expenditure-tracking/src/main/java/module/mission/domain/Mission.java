@@ -1140,20 +1140,6 @@ public abstract class Mission extends Mission_Base {
         return false;
     }
 
-    public void revertMissionForEditing(final String description) {
-        new MissionChangeDescription(this, description);
-        for (final PersonMissionAuthorization personMissionAuthorization : getPersonMissionAuthorizationsSet()) {
-            personMissionAuthorization.clearAuthorities();
-        }
-        for (final MissionFinancer missionFinancer : getFinancerSet()) {
-            missionFinancer.setAuthorization(null);
-            missionFinancer.clearFundAllocations();
-            missionFinancer.setApproval(null);
-        }
-        setApprovalForMissionWithNoFinancers(null);
-        setIsApprovedByMissionResponsible(null);
-    }
-
     public SortedSet<MissionChangeDescription> getSortedMissionChangeDescriptions() {
         final SortedSet<MissionChangeDescription> result =
                 new TreeSet<MissionChangeDescription>(MissionChangeDescription.COMPARATOR_BY_WHEN);

@@ -1,5 +1,5 @@
 /*
- * @(#)UnProcessPersonnelActivity.java
+ * @(#)ProcessPersonnelInformationForNotCanceledProcessActivity.java
  *
  * Copyright 2011 Instituto Superior Tecnico
  * Founding Authors: Luis Cruz, Nuno Ochoa, Paulo Abrantes
@@ -25,17 +25,16 @@
 package module.mission.domain.activity;
 
 import module.mission.domain.MissionProcess;
-import module.mission.domain.util.MissionState;
-import module.workflow.activities.ActivityInformation;
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.util.BundleUtil;
 
 /**
  * 
  * @author João Neves
+ * @author Luis Cruz
  * 
  */
-public class UnProcessPersonnelActivity extends MissionProcessActivity<MissionProcess, ActivityInformation<MissionProcess>> {
+public class ProcessPersonnelInformationForNotCanceledProcessActivity extends ProcessPersonalInformationActivity {
 
     @Override
     public String getLocalizedName() {
@@ -44,15 +43,6 @@ public class UnProcessPersonnelActivity extends MissionProcessActivity<MissionPr
 
     @Override
     public boolean isActive(final MissionProcess missionProcess, final User user) {
-        return super.isActive(missionProcess, user) && missionProcess.isCurrentUserAbleToAccessQueueHistory()
-                && MissionState.PERSONAL_INFORMATION_PROCESSING.isCompleted(missionProcess);
+        return super.isActive(missionProcess, user) && !missionProcess.isCanceled();
     }
-
-    @Override
-    protected void process(final ActivityInformation<MissionProcess> activityInformation) {
-        final MissionProcess missionProcess = activityInformation.getProcess();
-        missionProcess.addToProcessParticipantInformationQueues();
-        missionProcess.getMission().setIsPersonalInformationProcessed(false);
-    }
-
 }
