@@ -24,10 +24,8 @@
  */
 package module.mission.domain.util;
 
-import module.mission.domain.AccountabilityTypeQueue;
 import module.mission.domain.MissionProcess;
 import module.mission.domain.MissionSystem;
-import module.workflow.domain.WorkflowQueue;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,23 +47,31 @@ public class MigrateVerifiedSlot {
 
     @Atomic
     public static void migrateForAllVirtualHosts() {
-        for (VirtualHost vHost : MyOrg.getInstance().getVirtualHostsSet()) {
-            MissionSystem system = vHost.getMissionSystem();
-            if (system != null && !system.isVerifiedSlotMigrated()) {
-                if (system.getMissionProcessesSet().isEmpty()) {
-                    logger.info("Migrating Verified Slot for VirtualHost: " + vHost.getHostname());
-                    system.setIsVerifiedSlotMigrated(true);
-                    logger.info("Finished migrating Verified Slot for VirtualHost: " + vHost.getHostname());
-                } else if (system.getVerificationQueue() == null) {
-                    logger.warn("Cannot migrate Verified Slot for VirtualHost: "
-                            + system.getVirtualHostSet().iterator().next().getHostname() + " - NO VERIFICATION QUEUE CONFIGURED!");
-                } else {
-                    logger.info("Migrating Verified Slot for VirtualHost: " + vHost.getHostname());
-                    migrate(system);
-                    system.setIsVerifiedSlotMigrated(true);
-                    logger.info("Finished migrating Verified Slot for VirtualHost: " + vHost.getHostname());
+        VirtualHost originalVirtualHost = VirtualHost.getVirtualHostForThread();
+        try {
+            for (VirtualHost vHost : MyOrg.getInstance().getVirtualHostsSet()) {
+                VirtualHost.setVirtualHostForThread(vHost);
+                MissionSystem system = vHost.getMissionSystem();
+                if (system != null && !system.isVerifiedSlotMigrated()) {
+                    if (system.getMissionProcessesSet().isEmpty()) {
+                        logger.info("Migrating Verified Slot for VirtualHost: " + vHost.getHostname());
+                        system.setIsVerifiedSlotMigrated(true);
+                        logger.info("Finished migrating Verified Slot for VirtualHost: " + vHost.getHostname());
+                    } else if (system.getVerificationQueue() == null) {
+                        logger.warn("Cannot migrate Verified Slot for VirtualHost: "
+                                + system.getVirtualHostSet().iterator().next().getHostname()
+                                + " - NO VERIFICATION QUEUE CONFIGURED!");
+                    } else {
+                        logger.info("Migrating Verified Slot for VirtualHost: " + vHost.getHostname());
+                        migrate(system);
+                        system.setIsVerifiedSlotMigrated(true);
+                        logger.info("Finished migrating Verified Slot for VirtualHost: " + vHost.getHostname());
+                    }
                 }
             }
+        } finally {
+            VirtualHost.setVirtualHostForThread(originalVirtualHost);
+
         }
     }
 

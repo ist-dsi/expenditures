@@ -52,14 +52,20 @@ public class MigratePersonalInformationProcessedSlot {
 
     @Atomic
     public static void migrateForAllVirtualHosts() {
-        for (VirtualHost vHost : MyOrg.getInstance().getVirtualHostsSet()) {
-            MissionSystem system = vHost.getMissionSystem();
-            if (system != null && !system.isPersonalInformationProcessedSlotMigrated()) {
-                logger.info("Migrating Personal Information Processed Slot for VirtualHost: " + vHost.getHostname());
-                migrate(system);
-                system.setIsPersonalInformationProcessedSlotMigrated(true);
-                logger.info("Finished migrating Personal Information Processed Slot for VirtualHost: " + vHost.getHostname());
+        VirtualHost originalVirtualHost = VirtualHost.getVirtualHostForThread();
+        try {
+            for (VirtualHost vHost : MyOrg.getInstance().getVirtualHostsSet()) {
+                VirtualHost.setVirtualHostForThread(vHost);
+                MissionSystem system = vHost.getMissionSystem();
+                if (system != null && !system.isPersonalInformationProcessedSlotMigrated()) {
+                    logger.info("Migrating Personal Information Processed Slot for VirtualHost: " + vHost.getHostname());
+                    migrate(system);
+                    system.setIsPersonalInformationProcessedSlotMigrated(true);
+                    logger.info("Finished migrating Personal Information Processed Slot for VirtualHost: " + vHost.getHostname());
+                }
             }
+        } finally {
+            VirtualHost.setVirtualHostForThread(originalVirtualHost);
         }
     }
 
