@@ -36,6 +36,7 @@ import java.util.TreeSet;
 import module.mission.domain.activity.AuthorizeVehicleItemActivity;
 import module.mission.domain.activity.ItemActivityInformation;
 import module.mission.domain.util.MigratePersonalInformationProcessedSlot;
+import module.mission.domain.util.MigrateVehicleItemAuthorizations;
 import module.mission.domain.util.MigrateVerifiedSlot;
 import module.organization.domain.Accountability;
 import module.organization.domain.AccountabilityType;
@@ -78,6 +79,7 @@ public class MissionSystem extends MissionSystem_Base {
                     isMigrationInProgress = true;
                     MigratePersonalInformationProcessedSlot.migrateForAllVirtualHosts();
                     MigrateVerifiedSlot.migrateForAllVirtualHosts();
+                    MigrateVehicleItemAuthorizations.migrateForAllVirtualHosts();
                     isMigrationInProgress = false;
                 }
             }
@@ -96,6 +98,7 @@ public class MissionSystem extends MissionSystem_Base {
         addVirtualHost(virtualHost);
         setIsPersonalInformationProcessedSlotMigrated(true);
         setIsVerifiedSlotMigrated(true);
+        setIsVehicleItemAuthorizationMigrated(false);
     }
 
     public boolean isPersonalInformationProcessedSlotMigrated() {
@@ -104,6 +107,10 @@ public class MissionSystem extends MissionSystem_Base {
 
     public boolean isVerifiedSlotMigrated() {
         return getIsVerifiedSlotMigrated();
+    }
+
+    public boolean isVehicleItemAuthorizationMigrated() {
+        return getIsVehicleItemAuthorizationMigrated();
     }
 
     public static boolean canUserVerifyProcesses(User user) {
