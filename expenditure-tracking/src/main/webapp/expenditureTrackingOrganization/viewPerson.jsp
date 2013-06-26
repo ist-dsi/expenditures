@@ -288,31 +288,43 @@
 </logic:present>
 
 
+<a id="myAuthorizations"> <!-- placeholder --> </a>
 <h3 class="mtop2 mbottom05"><bean:message key="authorizations.label.person.responsible" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/></h3>
 <bean:define id="authorizations" name="person" property="authorizations"/>
 <logic:notEmpty name="authorizations">
-	<fr:view name="authorizations"
-			schema="viewAuthorizations">
-		<fr:layout name="tabular">
-			<fr:property name="classes" value="tstyle2"/>
-			<fr:property name="columnClasses" value="aleft,,,,aright nowrap,"/>
-			<fr:property name="linkGroupSeparator" value=" | "/> 
-
-			<fr:property name="link(view)" value="/expenditureTrackingOrganization.do?method=viewAuthorization"/>
-			<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
-			<fr:property name="key(view)" value="link.view"/>
-			<fr:property name="param(view)" value="externalId/authorizationOid"/>
-			<fr:property name="order(view)" value="1"/>
-			
-			<fr:property name="counter(observers)" value="(${unit.observersCount})"/>
-			<fr:property name="link(observers)" value="/expenditureTrackingOrganization.do?method=manageObservers"/>
-			<fr:property name="bundle(observers)" value="EXPENDITURE_ORGANIZATION_RESOURCES"/>
-			<fr:property name="key(observers)" value="label.observers"/>
-			<fr:property name="param(observers)" value="unit.externalId/unitOid"/>
-			<fr:property name="order(observers)" value="2"/>
-			<fr:property name="visibleIf(observers)" value="validAndIsCurrentUserResponsible"/>
-		</fr:layout>
-	</fr:view>
+	<table class="tstyle2">
+		<tr>
+			<th><bean:message key="label.unit" bundle="EXPENDITURE_RESOURCES"/></th>
+			<th><bean:message key="authorizations.label.maxAmount" bundle="EXPENDITURE_RESOURCES"/></th>
+			<th><bean:message key="authorizations.label.startDate" bundle="EXPENDITURE_RESOURCES"/></th>
+			<th><bean:message key="authorizations.label.endDate" bundle="EXPENDITURE_RESOURCES"/></th>
+			<th><bean:message key="authorizations.label.canDelegate" bundle="EXPENDITURE_RESOURCES"/></th>
+			<th></th>
+		</tr>
+		<logic:iterate id="authorization" name="authorizations">
+			<tr>
+				<td style="text-align: left;">
+					<html:link styleClass="secondaryLink" page="/expenditureTrackingOrganization.do?method=viewOrganization" paramId="unitOid" paramName="authorization" paramProperty="unit.externalId">
+						<fr:view name="authorization" property="unit.presentationName"/>
+					</html:link>
+				</td>
+				<td><fr:view name="authorization" property="maxAmount"/></td>
+				<td><logic:present name="authorization" property="startDate"><fr:view name="authorization" property="startDate"/></logic:present></td>
+				<td><logic:present name="authorization" property="endDate"><fr:view name="authorization" property="endDate"/></logic:present></td>
+				<td><fr:view name="authorization" property="canDelegate"/></td>
+				<td>
+					<html:link action="/expenditureTrackingOrganization.do?method=viewAuthorization" paramId="authorizationOid" paramName="authorization" paramProperty="externalId">
+						<bean:message key="link.view" bundle="EXPENDITURE_RESOURCES"/>
+					</html:link>
+					<logic:equal name="authorization" property="validAndIsCurrentUserResponsible" value="true">
+						<html:link action="/expenditureTrackingOrganization.do?method=manageObservers" paramId="unitOid" paramName="authorization" paramProperty="unit.externalId">
+							<bean:message key="label.observers" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+						</html:link>
+					</logic:equal>
+				</td>
+			</tr>
+		</logic:iterate>
+	</table>
 </logic:notEmpty>
 <logic:empty name="authorizations">
 	<p>

@@ -66,10 +66,22 @@
 	</logic:present>
 </logic:present>
 
-
+<style>
+<!--
+	div.unitbox {
+		margin: 10px 0 10px 0;
+		background: #fff;
+		background: #f5f5f5;
+	}
+	div.unitbox div {
+		margin: 0 10px 0 10px;
+		padding: 5px 0px 5px 0px;
+	}
+-->
+</style>
 
 <logic:present name="unit">
-	<div class="infobox">
+	<div class="unitbox col2-1"><div>
 		<table>
 			<tr style="text-align: left;">
 				<th>
@@ -89,6 +101,18 @@
 					</strong>
 				</td>
 			</tr>
+			<logic:present name="unit" property="parentUnit">
+				<tr style="text-align: left;">
+					<th>
+						<bean:message key="unit.title.superior.unit" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+					</th>
+					<td>
+						<html:link styleClass="secondaryLink" action="/expenditureTrackingOrganization.do?method=viewOrganization" paramId="unitOid" paramName="unit" paramProperty="parentUnit.externalId">
+							<bean:write name="unit" property="parentUnit.presentationName"/>
+						</html:link>
+					</td>
+				</tr>
+			</logic:present>
 			<logic:present name="unit" property="accountManager">
 				<tr style="text-align: left;">
 					<th>
@@ -103,7 +127,36 @@
 				</tr>
 			</logic:present>
 		</table>
-	</div>
+	</div></div>
+				<div class="unitbox col2-2"><div>
+					 <%
+ 						ExpenditureTrackingSystem.InfoProvider infoProvider = ExpenditureTrackingSystem.getInfoProvider();
+ 						if(infoProvider != null){
+ 	   						final Unit unit = (Unit) request.getAttribute("unit");
+ 	   						Map<String, String> links = infoProvider.getLinks("viewOrganization.jsp", unit);
+ 	   						if(links != null){      
+		  						%>
+ 	      						<h4><%=infoProvider.getTitle() %></h4>
+ 	      						<ul>
+ 	      						<%
+ 	      						for(Map.Entry<String, String> entry : links.entrySet()){
+ 	         						String linkTitle = entry.getKey();
+ 	         						String link = entry.getValue();
+ 	        						%>
+ 	        						<li>
+ 	        							<html:link page="<%=link%>">
+											<%=linkTitle%>
+										</html:link>
+									</li>
+ 	        						<%     
+ 	      						}
+ 	      						%>
+ 	      						</ul>
+ 	      						<%
+ 	   						}
+ 						}
+					%>
+				</div></div>
 
 	<p class="mtop05">
 		<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
@@ -238,12 +291,6 @@
 			<bean:message key="label.noAssociatedPeople" bundle="EXPENDITURE_RESOURCES"/>
 		</em></p>
 	</logic:empty>
-
-	<logic:present name="unit" property="parentUnit">
-		<h3 class="mtop15 mbottom05"><bean:message key="unit.title.superior.unit" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/></h3>
-		<bean:define id="unitToDisplay" toScope="request" name="unit" property="parentUnit"/>
-		<jsp:include page="unitLine.jsp" flush="false"/>
-	</logic:present>
 </logic:present>
 
 <logic:present name="units">
@@ -294,27 +341,3 @@
 		</fr:view>
 	</logic:notEmpty>
 </logic:present>
-
- <%
- 	ExpenditureTrackingSystem.InfoProvider infoProvider = ExpenditureTrackingSystem.getInfoProvider();
- 	if(infoProvider != null){
- 	   final Unit unit = (Unit) request.getAttribute("unit");
- 	   Map<String, String> links = infoProvider.getLinks("viewOrganization.jsp", unit);
- 	   if(links != null){      
-		  %>
- 	      <h3 class="mtop15 mbottom05"><%=infoProvider.getTitle() %></h3>
- 	      <%
- 	      for(Map.Entry<String, String> entry : links.entrySet()){
- 	         String linkTitle = entry.getKey();
- 	         String link = entry.getValue();
- 	        %>
- 	        <p>
- 	        <html:link page="<%=link%>">
-				<%=linkTitle%>
-			</html:link>
-			</p>
- 	        <%     
- 	      }
- 	   }
- 	}
-%>
