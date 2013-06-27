@@ -51,8 +51,8 @@ public class RevertVerifyActivity extends MissionProcessActivity<MissionProcess,
         if (!MissionSystem.canUserVerifyProcesses(user)) {
             return false;
         }
-        if (MissionState.VEHICLE_APPROVAL.isRequired(missionProcess)) {
-            return MissionState.VEHICLE_APPROVAL.isPending(missionProcess);
+        if (MissionState.VEHICLE_AUTHORIZATION.isRequired(missionProcess)) {
+            return MissionState.VEHICLE_AUTHORIZATION.isPending(missionProcess);
         } else if (MissionState.FUND_ALLOCATION.isRequired(missionProcess)) {
             return MissionState.FUND_ALLOCATION.isPending(missionProcess) && !missionProcess.isCanceled();
         } else {
