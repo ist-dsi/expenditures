@@ -7,18 +7,43 @@
 <bean:define id="workingCapital" name="process" property="workingCapital"/>
 
 <div class="infobox mtop1 mbottom1">
-	<fr:view name="workingCapital">
-		<fr:schema bundle="WORKING_CAPITAL_RESOURCES" type="module.workingCapital.domain.WorkingCapital">
-			<fr:slot name="unit.presentationName" key="label.module.workingCapital"/>
-			<fr:slot name="workingCapitalInitialization.requestCreation" key="label.module.workingCapital.requestingDate"/>
-			<fr:slot name="workingCapitalInitialization.requestor.name"  key="label.module.workingCapital.requester"/>
-			<logic:present name="workingCapital" property="movementResponsible">
-				<fr:slot name="movementResponsible.name" key="label.module.workingCapital.movementResponsible"/>
-			</logic:present>
-		</fr:schema>
-		<fr:layout name="tabular">
-				<fr:property name="columnClasses" value="aleft,,"/>
-		</fr:layout>
-	</fr:view>
-
+	<table>
+		<tr>
+			<td>
+				<bean:message key="label.module.workingCapital" bundle="WORKING_CAPITAL_RESOURCES" />:&nbsp;
+			</td>
+			<td class="aleft">
+				<bean:define id="unitOID" name="workingCapital" property="unit.externalId" type="java.lang.String"/>
+				<html:link styleClass="secondaryLink" page="<%= "/expenditureTrackingOrganization.do?method=viewOrganization&unitOid=" + unitOID%>" target="_blank">
+					<bean:write name="workingCapital" property="unit.presentationName"/>
+				</html:link>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<bean:message key="label.module.workingCapital.requestingDate" bundle="WORKING_CAPITAL_RESOURCES" />:&nbsp;
+			</td>
+			<td class="aleft">
+				<fr:view name="workingCapital" property="workingCapitalInitialization.requestCreation"/>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<bean:message key="label.module.workingCapital.requester" bundle="WORKING_CAPITAL_RESOURCES" />:&nbsp;
+			</td>
+			<td class="aleft">
+				<bean:write name="workingCapital" property="workingCapitalInitialization.requestor.name"/>
+			</td>
+		</tr>
+		<logic:present name="workingCapital" property="movementResponsible">
+			<tr>
+				<td>
+					<bean:message key="label.module.workingCapital.movementResponsible" bundle="WORKING_CAPITAL_RESOURCES" />:&nbsp;
+				</td>
+				<td class="aleft">
+					<bean:write name="workingCapital" property="movementResponsible.name"/>
+				</td>
+			</tr>
+		</logic:present>
+	</table>
 </div>

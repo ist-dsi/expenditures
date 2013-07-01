@@ -94,7 +94,6 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
 
     public void approve(final Person person) {
         final WorkingCapital workingCapital = getWorkingCapital();
-        //final Money requestedAnualValue = getRequestedAnualValue();
         final Money valueForAuthorization = Money.ZERO;
         final Authorization authorization = workingCapital.findUnitResponsible(person, valueForAuthorization);
         if (authorization == null) {
