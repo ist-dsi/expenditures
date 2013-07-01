@@ -76,20 +76,25 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
     public WorkingCapitalInitialization(final Integer year, final Unit unit, final Person person,
             final Money requestedAnualValue, final String fiscalId, final String internationalBankAccountNumber) {
         this();
+        for (WorkingCapital workingCapital : unit.getWorkingCapitalsSet()) {
+            WorkingCapitalInitialization initialization = workingCapital.getWorkingCapitalInitialization();
+            if (initialization != null && initialization.isOpen()) {
+                throw new DomainException("message.open.working.capital.exists.for.unit");
+            }
+        }
+
         WorkingCapital workingCapital = WorkingCapital.find(year, unit);
         if (workingCapital == null) {
             workingCapital = new WorkingCapital(year, unit, person);
-        } else {
-            final WorkingCapitalInitialization workingCapitalInitialization = workingCapital.getWorkingCapitalInitialization();
-            if (workingCapitalInitialization != null && !workingCapitalInitialization.isCanceledOrRejected()
-                    && !workingCapital.isRefunded()) {
-                throw new DomainException("message.working.capital.exists.for.year.and.unit");
-            }
         }
         setWorkingCapital(workingCapital);
         setRequestedAnualValue(requestedAnualValue);
         setFiscalId(fiscalId);
         setInternationalBankAccountNumber(internationalBankAccountNumber);
+    }
+
+    public boolean isOpen() {
+        return !isCanceledOrRejected() && !getWorkingCapital().isRefunded();
     }
 
     public void approve(final Person person) {
