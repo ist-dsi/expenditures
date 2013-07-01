@@ -27,8 +27,8 @@ package module.mission.domain.activity;
 import module.mission.domain.MissionProcess;
 import module.mission.domain.util.MissionState;
 import module.workflow.activities.ActivityInformation;
+import module.workflow.domain.WorkflowQueue;
 import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.domain.exceptions.DomainException;
 
 public abstract class ProcessPersonalInformationActivity extends
         MissionProcessActivity<MissionProcess, ActivityInformation<MissionProcess>> {
@@ -45,11 +45,13 @@ public abstract class ProcessPersonalInformationActivity extends
     @Override
     protected void process(final ActivityInformation activityInformation) {
         final MissionProcess missionProcess = (MissionProcess) activityInformation.getProcess();
-        if (missionProcess.getCurrentQueuesSet().size() > 1) {
-            throw new DomainException(
-                    "Cannot determine which queue to remove because the mission process is associated to several queues.");
+        for (WorkflowQueue queue : missionProcess.getCurrentQueuesSet()) {
+            if (queue.isCurrentUserAbleToAccessQueue()) {
+                missionProcess.removeCurrentQueues(queue);
+            }
         }
-        missionProcess.removeCurrentQueues(missionProcess.getCurrentQueues().iterator().next());
-        missionProcess.getMission().setIsPersonalInformationProcessed(true);
+        if (missionProcess.getCurrentQueuesSet().size() == 0) {
+            missionProcess.getMission().setIsPersonalInformationProcessed(true);
+        }
     }
 }
