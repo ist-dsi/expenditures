@@ -76,11 +76,14 @@ public class MissionSystem extends MissionSystem_Base {
         if (!isMigrationInProgress) {
             synchronized (MissionSystem.class) {
                 if (!isMigrationInProgress) {
-                    isMigrationInProgress = true;
-                    MigratePersonalInformationProcessedSlot.migrateForAllVirtualHosts();
-                    MigrateVerifiedSlot.migrateForAllVirtualHosts();
-                    MigrateVehicleItemAuthorizations.migrateForAllVirtualHosts();
-                    isMigrationInProgress = false;
+                    try {
+                        isMigrationInProgress = true;
+                        MigratePersonalInformationProcessedSlot.migrateForAllVirtualHosts();
+                        MigrateVerifiedSlot.migrateForAllVirtualHosts();
+                        MigrateVehicleItemAuthorizations.migrateForAllVirtualHosts();
+                    } finally {
+                        isMigrationInProgress = false;
+                    }
                 }
             }
         }
