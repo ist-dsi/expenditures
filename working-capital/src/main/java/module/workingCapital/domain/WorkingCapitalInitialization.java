@@ -24,6 +24,7 @@
  */
 package module.workingCapital.domain;
 
+import java.util.Calendar;
 import java.util.Comparator;
 
 import module.organization.domain.Accountability;
@@ -76,11 +77,11 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
     public WorkingCapitalInitialization(final Integer year, final Unit unit, final Person person,
             final Money requestedAnualValue, final String fiscalId, final String internationalBankAccountNumber) {
         this();
-        for (WorkingCapital workingCapital : unit.getWorkingCapitalsSet()) {
-            WorkingCapitalInitialization initialization = workingCapital.getWorkingCapitalInitialization();
-            if (initialization != null && initialization.isOpen()) {
-                throw new DomainException("message.open.working.capital.exists.for.unit");
-            }
+        if (hasAnotherOpenWorkingCapital(unit)) {
+            throw new DomainException("message.open.working.capital.exists.for.unit");
+        }
+        if (isRequestorOfAnotherOpenWorkingCapitalFromPreviousYears(person)) {
+            throw new DomainException("message.requestor.of.open.working.capital.from.previous.years");
         }
 
         WorkingCapital workingCapital = WorkingCapital.find(year, unit);
@@ -91,6 +92,35 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
         setRequestedAnualValue(requestedAnualValue);
         setFiscalId(fiscalId);
         setInternationalBankAccountNumber(internationalBankAccountNumber);
+    }
+
+    private boolean hasAnotherOpenWorkingCapital(Unit unit) {
+        for (WorkingCapital workingCapital : unit.getWorkingCapitalsSet()) {
+            WorkingCapitalInitialization initialization = workingCapital.getWorkingCapitalInitialization();
+            if (initialization == this) {
+                continue;
+            }
+            if (initialization != null && initialization.isOpen()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isRequestorOfAnotherOpenWorkingCapitalFromPreviousYears(Person requestor) {
+        for (WorkingCapitalInitialization initialization : requestor.getRequestedWorkingCapitalInitializationsSet()) {
+            if (initialization == this) {
+                continue;
+            }
+            if (initialization.getWorkingCapital().getWorkingCapitalYear().getYear()
+                    .equals(Integer.valueOf(Calendar.getInstance().get(Calendar.YEAR)))) {
+                continue;
+            }
+            if (initialization.isOpen()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean isOpen() {
