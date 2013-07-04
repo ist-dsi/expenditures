@@ -36,6 +36,7 @@ import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.ist.bennu.core.domain.util.Money;
+import pt.ist.bennu.core.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
@@ -80,8 +81,12 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
         if (hasAnotherOpenWorkingCapital(unit)) {
             throw new DomainException("message.open.working.capital.exists.for.unit");
         }
-        if (isRequestorOfAnotherOpenWorkingCapitalFromPreviousYears(person)) {
+        if (isRequestorOfAnotherOpenWorkingCapitalFromPreviousYears()) {
             throw new DomainException("message.requestor.of.open.working.capital.from.previous.years");
+        }
+        if (isMovementResponsibleOfAnotherOpenWorkingCapitalFromPreviousYears(person)) {
+            throw new DomainException(BundleUtil.getFormattedStringFromResourceBundle("resources/WorkingCapitalResources",
+                    "message.movement.responsible.of.open.working.capital.from.previous.years", person.getName()));
         }
 
         WorkingCapital workingCapital = WorkingCapital.find(year, unit);
@@ -107,13 +112,32 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
         return false;
     }
 
-    private boolean isRequestorOfAnotherOpenWorkingCapitalFromPreviousYears(Person requestor) {
-        for (WorkingCapitalInitialization initialization : requestor.getRequestedWorkingCapitalInitializationsSet()) {
+    private boolean isRequestorOfAnotherOpenWorkingCapitalFromPreviousYears() {
+        for (WorkingCapitalInitialization initialization : UserView.getCurrentUser().getPerson()
+                .getRequestedWorkingCapitalInitializationsSet()) {
             if (initialization == this) {
                 continue;
             }
             if (initialization.getWorkingCapital().getWorkingCapitalYear().getYear()
                     .equals(Integer.valueOf(Calendar.getInstance().get(Calendar.YEAR)))) {
+                continue;
+            }
+            if (initialization.isOpen()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isMovementResponsibleOfAnotherOpenWorkingCapitalFromPreviousYears(Person person) {
+        for (WorkingCapital workingCapital : person.getMovementResponsibleWorkingCapitalsSet()) {
+            if (workingCapital == getWorkingCapital()) {
+                continue;
+            }
+            WorkingCapitalInitialization initialization = workingCapital.getWorkingCapitalInitialization();
+            if (initialization == null
+                    || initialization.getWorkingCapital().getWorkingCapitalYear().getYear()
+                            .equals(Integer.valueOf(Calendar.getInstance().get(Calendar.YEAR)))) {
                 continue;
             }
             if (initialization.isOpen()) {
