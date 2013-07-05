@@ -41,6 +41,9 @@ class Invoice {
 	LocalDate paymentLimit;
 }
 
+class InvoiceFile extends .pt.ist.fenixframework.plugins.fileSupport.domain.GenericFile {
+}
+
 class InvoiceEntry {
 	Money value;
 	Boolean verified;
@@ -143,6 +146,15 @@ relation AccountInvoice {
 	}
 	Invoice playsRole invoice {
 		multiplicity *;
+	}
+}
+
+relation InvoiceFileInvoice {
+	InvoiceFile playsRole invoiceFile {
+		multiplicity 1..1;
+	}
+	Invoice playsRole invoice {
+		multiplicity 1..1;
 	}
 }
 

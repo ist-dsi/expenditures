@@ -27,14 +27,14 @@ package module.internalBilling.presentationTier.action;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import module.internalBilling.domain.InternalBillingSystem;
+
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import pt.ist.bennu.core.domain.RoleType;
 import pt.ist.bennu.core.domain.VirtualHost;
-import pt.ist.bennu.core.domain.contents.ActionNode;
-import pt.ist.bennu.core.domain.contents.LinkNode;
 import pt.ist.bennu.core.domain.contents.Node;
 import pt.ist.bennu.core.domain.groups.Role;
 import pt.ist.bennu.core.domain.groups.UserGroup;
@@ -51,14 +51,19 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 @Mapping(path = "/internalBillingInterfaceCreationAction")
 public class InterfaceCreationAction extends ContextBaseAction {
 
-    @CreateNodeAction(bundle = "INTERNAL_BILLING_RESOURCES", key = "add.node.internalBilling.interface", groupKey = "label.module.internalBilling")
+    @CreateNodeAction(bundle = "INTERNAL_BILLING_RESOURCES", key = "add.node.internalBilling.interface",
+            groupKey = "label.module.internalBilling")
     public final ActionForward createAnnouncmentNodes(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) throws Exception {
         final VirtualHost virtualHost = getDomainObject(request, "virtualHostToManageId");
         final Node node = getDomainObject(request, "parentOfNodesToManageId");
 
-        VaadinNode.createVaadinNode(virtualHost, node, "resources.InternalBillingResources", "label.module.internalBilling",
-                "InternalBilling", UserGroup.getInstance());
+        VaadinNode home =
+                VaadinNode.createVaadinNode(virtualHost, node, InternalBillingSystem.getBundleName(),
+                        "label.module.internalBilling", "InternalBilling", UserGroup.getInstance());
+
+        VaadinNode.createVaadinNode(virtualHost, home, InternalBillingSystem.getBundleName(), "label.link.manageAccount",
+                "ManageAccount", Role.getRole(RoleType.MANAGER));
 
         return forwardToMuneConfiguration(request, virtualHost, node);
     }
