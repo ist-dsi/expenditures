@@ -25,7 +25,10 @@
 package module.workingCapital.domain;
 
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Set;
 
 import module.organization.domain.Accountability;
 import module.organization.domain.Person;
@@ -88,6 +91,12 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
             throw new DomainException(BundleUtil.getFormattedStringFromResourceBundle("resources/WorkingCapitalResources",
                     "message.movement.responsible.of.open.working.capital.from.previous.years", person.getName()));
         }
+        pt.ist.expenditureTrackingSystem.domain.organization.Person responsible =
+                getDirectUnitResponsibleOfAnotherOpenWorkingCapitalFromPreviousYears(unit);
+        if (responsible != null) {
+            throw new DomainException(BundleUtil.getFormattedStringFromResourceBundle("resources/WorkingCapitalResources",
+                    "message.unit.responsible.of.open.working.capital.from.previous.years", responsible.getName()));
+        }
 
         WorkingCapital workingCapital = WorkingCapital.find(year, unit);
         if (workingCapital == null) {
@@ -102,10 +111,14 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
     private boolean hasAnotherOpenWorkingCapital(Unit unit) {
         for (WorkingCapital workingCapital : unit.getWorkingCapitalsSet()) {
             WorkingCapitalInitialization initialization = workingCapital.getWorkingCapitalInitialization();
+            if (initialization == null) {
+                continue;
+            }
             if (initialization == this) {
                 continue;
             }
-            if (initialization != null && initialization.isOpen()) {
+
+            if (initialization.isOpen()) {
                 return true;
             }
         }
@@ -135,9 +148,74 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
                 continue;
             }
             WorkingCapitalInitialization initialization = workingCapital.getWorkingCapitalInitialization();
-            if (initialization == null
-                    || initialization.getWorkingCapital().getWorkingCapitalYear().getYear()
-                            .equals(Integer.valueOf(Calendar.getInstance().get(Calendar.YEAR)))) {
+            if (initialization == null) {
+                continue;
+            }
+            if (initialization.getWorkingCapital().getWorkingCapitalYear().getYear()
+                    .equals(Integer.valueOf(Calendar.getInstance().get(Calendar.YEAR)))) {
+                continue;
+            }
+            if (initialization.isOpen()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private pt.ist.expenditureTrackingSystem.domain.organization.Person getDirectUnitResponsibleOfAnotherOpenWorkingCapitalFromPreviousYears(
+            Unit unit) {
+        for (pt.ist.expenditureTrackingSystem.domain.organization.Person responsible : getUnitResponsibles(unit)) {
+            if (isDirectUnitResponsibleOfAnotherOpenWorkingCapitalFromPreviousYears(responsible)) {
+                return responsible;
+            }
+        }
+        return null;
+    }
+
+    private static Collection<pt.ist.expenditureTrackingSystem.domain.organization.Person> getUnitResponsibles(Unit unit) {
+        Set<pt.ist.expenditureTrackingSystem.domain.organization.Person> responsibles =
+                new HashSet<pt.ist.expenditureTrackingSystem.domain.organization.Person>();
+        for (Authorization authorization : unit.getAuthorizationsSet()) {
+            if (authorization.isValid()) {
+                responsibles.add(authorization.getPerson());
+            }
+        }
+        return responsibles;
+    }
+
+    private boolean isDirectUnitResponsibleOfAnotherOpenWorkingCapitalFromPreviousYears(
+            pt.ist.expenditureTrackingSystem.domain.organization.Person responsible) {
+        for (Unit unit : getResponsibleUnits(responsible)) {
+            if (hasAnotherOpenWorkingCapitalFromPreviousYears(unit)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static Collection<Unit> getResponsibleUnits(pt.ist.expenditureTrackingSystem.domain.organization.Person responsible) {
+        Set<Unit> responsibleUnits = new HashSet<Unit>();
+        for (Authorization authorization : responsible.getAuthorizationsSet()) {
+            if (authorization.isValid()) {
+                responsibleUnits.add(authorization.getUnit());
+            }
+        }
+        return responsibleUnits;
+    }
+
+    private boolean hasAnotherOpenWorkingCapitalFromPreviousYears(Unit unit) {
+        for (WorkingCapital workingCapital : unit.getWorkingCapitalsSet()) {
+
+            WorkingCapitalInitialization initialization = workingCapital.getWorkingCapitalInitialization();
+            if (initialization == null) {
+                continue;
+            }
+            if (initialization.getWorkingCapital().getWorkingCapitalYear().getYear()
+                    .equals(Integer.valueOf(Calendar.getInstance().get(Calendar.YEAR)))) {
+                continue;
+            }
+
+            if (initialization == this) {
                 continue;
             }
             if (initialization.isOpen()) {
