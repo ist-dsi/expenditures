@@ -1,5 +1,6 @@
 package module.internalBilling.presentationTier.pages;
 
+import java.io.File;
 import java.util.Date;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -13,6 +14,7 @@ import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
 import org.vaadin.easyuploads.UploadField;
+import org.vaadin.easyuploads.UploadField.FieldType;
 
 import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.ist.fenixframework.FenixFramework;
@@ -25,6 +27,7 @@ import pt.ist.vaadinframework.ui.EmbeddedComponentContainer;
 import pt.ist.vaadinframework.ui.TransactionalForm;
 
 import com.vaadin.data.Item;
+import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -154,15 +157,47 @@ public class AddInvoice extends CustomComponent implements EmbeddedComponentCont
         final TransactionalForm form = new TransactionalForm(bundleName);
 
         form.setFormFieldFactory(new InvoiceFieldFactory(bundleName));
-        UploadField field = new UploadField();
+        final UploadField fileField = new UploadField() {
+
+            {
+                setFieldType(FieldType.FILE);
+                setImmediate(true);
+            }
+
+            @Override
+            protected String getDisplayDetails() {
+                return getLastFileName();
+            }
+
+            @Override
+            public void setValue(Object newValue) {
+                super.setValue(newValue);
+                fireValueChange();
+            }
+        };
+        fileField.setFieldType(FieldType.FILE);
+        fileField.setCaption("Ficheiro");
+
         form.setCaption(bundle.getString("label.invoice.add"));
         form.setItemDataSource(new DomainItem<Invoice>(Invoice.class));
         form.setVisibleItemProperties(new String[] { "number", "interval", "invoiceDate", "paymentLimit" });
-        form.addField("file", field);
+        form.addField("file", fileField);
         form.setImmediate(Boolean.TRUE);
         layout.addComponent(form);
 
-        Button addInvoiceButton = new Button(bundle.getString("label.invoice.add"));
+        final Button addInvoiceButton = new Button(bundle.getString("label.invoice.add"));
+        addInvoiceButton.setEnabled(false);
+
+        fileField.addListener(new ValueChangeListener() {
+
+            @Override
+            public void valueChange(com.vaadin.data.Property.ValueChangeEvent event) {
+                Object value = event.getProperty().getValue();
+                addInvoiceButton.setEnabled(value != null);
+            }
+
+        });
+
         addInvoiceButton.addListener(new ClickListener() {
             @Override
             public void buttonClick(ClickEvent event) {
@@ -185,6 +220,7 @@ public class AddInvoice extends CustomComponent implements EmbeddedComponentCont
 
             private void createInvoice(TransactionalForm form) {
                 Interval interval = (Interval) form.getField("interval").getValue();
+                File file = (File) fileField.getValue();
             }
 
         });
