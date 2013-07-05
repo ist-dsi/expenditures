@@ -1,5 +1,5 @@
 /*
- * @(#)MigrateVerifiedSlot.java
+ * @(#)MigrateVehicleItemAuthorizations.java
  *
  * Copyright 2011 Instituto Superior Tecnico
  * Founding Authors: Luis Cruz, Nuno Ochoa, Paulo Abrantes
@@ -26,6 +26,7 @@ package module.mission.domain.util;
 
 import module.mission.domain.MissionProcess;
 import module.mission.domain.MissionSystem;
+import module.mission.domain.VehiclItem;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,14 +37,12 @@ import pt.ist.fenixframework.Atomic;
 
 /**
  * 
- * This should take about 2 minutes to run.
- * 
  * @author João Neves
  * 
  */
-public class MigrateVerifiedSlot {
+public class MigrateVehicleItemAuthorizations {
 
-    private static final Logger logger = LoggerFactory.getLogger(MigrateVerifiedSlot.class);
+    private static final Logger logger = LoggerFactory.getLogger(MigrateVehicleItemAuthorizations.class);
 
     @Atomic
     public static void migrateForAllVirtualHosts() {
@@ -52,21 +51,11 @@ public class MigrateVerifiedSlot {
             for (VirtualHost vHost : MyOrg.getInstance().getVirtualHostsSet()) {
                 VirtualHost.setVirtualHostForThread(vHost);
                 MissionSystem system = vHost.getMissionSystem();
-                if (system != null && !system.isVerifiedSlotMigrated()) {
-                    if (system.getMissionProcessesSet().isEmpty()) {
-                        logger.info("Migrating Verified Slot for VirtualHost: " + vHost.getHostname());
-                        system.setIsVerifiedSlotMigrated(true);
-                        logger.info("Finished migrating Verified Slot for VirtualHost: " + vHost.getHostname());
-                    } else if (system.getVerificationQueue() == null) {
-                        logger.warn("Cannot migrate Verified Slot for VirtualHost: "
-                                + system.getVirtualHostSet().iterator().next().getHostname()
-                                + " - NO VERIFICATION QUEUE CONFIGURED!");
-                    } else {
-                        logger.info("Migrating Verified Slot for VirtualHost: " + vHost.getHostname());
-                        migrate(system);
-                        system.setIsVerifiedSlotMigrated(true);
-                        logger.info("Finished migrating Verified Slot for VirtualHost: " + vHost.getHostname());
-                    }
+                if (system != null && !system.isVehicleItemAuthorizationMigrated()) {
+                    logger.info("Migrating Vehicle Item Authorization Slot for VirtualHost: " + vHost.getHostname());
+                    migrate(system);
+                    system.setIsVehicleItemAuthorizationMigrated(true);
+                    logger.info("Finished migrating Vehicle Item Authorization Slot for VirtualHost: " + vHost.getHostname());
                 }
             }
         } finally {
@@ -77,14 +66,29 @@ public class MigrateVerifiedSlot {
 
     private static void migrate(MissionSystem system) {
         for (MissionProcess process : system.getMissionProcessesSet()) {
-            process.getMission().setIsVerified(wasProcessAlreadyVerified(process));
-            if (MissionState.VERIFICATION.isPending(process)) {
-                process.addToVerificationQueue();
+            if (process.getMission().hasAnyVehicleItems() && !areAllVehicleItemsAuthorized(process)
+                    && wereVehiclesAlreadyAuthorized(process)) {
+                authorizeAllVehicles(process);
             }
         }
     }
 
-    private static boolean wasProcessAlreadyVerified(MissionProcess process) {
+    private static boolean areAllVehicleItemsAuthorized(MissionProcess process) {
+        for (VehiclItem vehicleItem : process.getMission().getVehicleItems()) {
+            if (!vehicleItem.isAuthorized()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static boolean wereVehiclesAlreadyAuthorized(MissionProcess process) {
         return process.areAllParticipantsAuthorized();
+    }
+
+    private static void authorizeAllVehicles(MissionProcess process) {
+        for (VehiclItem vehicleItem : process.getMission().getVehicleItems()) {
+            vehicleItem.authorize();
+        }
     }
 }

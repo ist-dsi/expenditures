@@ -52,6 +52,7 @@ import pt.ist.expenditureTrackingSystem.presentationTier.actions.organization.Or
 import pt.ist.expenditureTrackingSystem.presentationTier.widgets.ActivateEmailNotificationWidget;
 import pt.ist.expenditureTrackingSystem.presentationTier.widgets.MyProcessesWidget;
 import pt.ist.expenditureTrackingSystem.presentationTier.widgets.MySearchesWidget;
+import pt.ist.expenditureTrackingSystem.presentationTier.widgets.MyUnitsWidget;
 import pt.ist.expenditureTrackingSystem.presentationTier.widgets.PendingRefundWidget;
 import pt.ist.expenditureTrackingSystem.presentationTier.widgets.PendingSimplifiedWidget;
 import pt.ist.expenditureTrackingSystem.presentationTier.widgets.PrioritiesWidget;
@@ -111,6 +112,7 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
         ProcessListWidget.register(new AquisitionsPendingProcessCounter());
         ProcessListWidget.register(new RefundPendingProcessCounter());
 
+        registerWidget(MyUnitsWidget.class);
         registerWidget(MySearchesWidget.class);
         registerWidget(UnreadCommentsWidget.class);
         registerWidget(TakenProcessesWidget.class);

@@ -1,3 +1,4 @@
+<%@page import="module.workingCapital.domain.WorkingCapitalInitializationReenforcement"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html"%>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-bean" prefix="bean"%>
@@ -18,47 +19,153 @@
 <bean:define id="workingCapitalInitializationOid" type="java.lang.String" name="workingCapitalInitialization" property="externalId"/>
 
 <div class="infobox col2-1">
-	<fr:view name="workingCapital" property="workingCapitalInitialization">
-		<fr:schema bundle="WORKING_CAPITAL_RESOURCES"  type="module.workingCapital.domain.WorkingCapitalInitialization">
-			<fr:slot name="workingCapital.accountingUnit.name" key="label.module.workingCapital.initialization.accountingUnit"/>
-			<fr:slot name="requestCreation" key="label.module.workingCapital.requestingDate"/>
-			<fr:slot name="requestor.name"  key="label.module.workingCapital.requester"/>
-			<logic:present name="workingCapital" property="movementResponsible">
-				<fr:slot name="workingCapital.movementResponsible.name" key="label.module.workingCapital.movementResponsible"/>
-			</logic:present>
-			<fr:slot name="fiscalId"  key="label.module.workingCapital.fiscalId"/>
-			<fr:slot name="internationalBankAccountNumber"  key="label.module.workingCapital.internationalBankAccountNumber"/>
-			<fr:slot name="fundAllocationId" key="label.module.workingCapital.fundAllocationId"/>
-			<fr:slot name="requestedAnualValue" key="label.module.workingCapital.requestedAnualValue.requested"/>
-			<fr:slot name="requestedAnualValue.roundedValue" layout="format" key="label.module.workingCapital.requestedMonthlyValue.requested">
-				<fr:property name="format" value="<%= workingCapitalInitialization.getRequestedAnualValue().divideAndRound(new BigDecimal(6)).toFormatString() %>"/>
-			</fr:slot>
-			<fr:slot name="authorizedAnualValue"  key="label.module.workingCapital.authorizedAnualValue" layout="null-as-label">
-				<fr:property name="subLayout" value=""/>
-				<fr:property name="classes" value="bold"/>
-			</fr:slot>
-			<fr:slot name="maxAuthorizedAnualValue"  key="label.module.workingCapital.maxAuthorizedAnualValue" layout="null-as-label">
-				<fr:property name="subLayout" value=""/>
-			</fr:slot>
-			<logic:present name="workingCapital" property="workingCapitalInitialization.lastSubmission">
-				<fr:slot name="lastSubmission" key="label.module.workingCapital.initialization.lastSubmission"/>
-			</logic:present>
-			<logic:present name="workingCapital" property="workingCapitalInitialization.refundRequested">
-				<fr:slot name="refundRequested" key="label.module.workingCapital.initialization.refundRequested"/>
-			</logic:present>
-			<logic:equal name="workingCapital" property="workingCapitalInitialization.class.name" value="module.workingCapital.domain.WorkingCapitalInitializationReenforcement">
-				<fr:slot name="requestedReenforcementValue" key="label.module.workingCapital.initialization.requestedReenforcementValue"/>
-				<fr:slot name="authorizedReenforcementValue" key="label.module.workingCapital.initialization.authorizedReenforcementValue" layout="null-as-label">
-					<fr:property name="subLayout" value=""/>
-					<fr:property name="classes" value="bold"/>
-				</fr:slot>
-			</logic:equal>
-		</fr:schema>
-		<fr:layout name="tabular">
-			<fr:property name="classes" value="process-info mbottom0"/>
-			<fr:property name="columnClasses" value="aleft width215px,,"/>
-		</fr:layout>
-	</fr:view>
+	<table class="process-info mbottom0">
+		<tr>
+			<td class="width215px">
+				<bean:message key="label.module.workingCapital" bundle="WORKING_CAPITAL_RESOURCES" />:&nbsp;
+			</td>
+			<td>
+				<bean:define id="unitOID" name="workingCapital" property="unit.externalId" type="java.lang.String"/>
+				<html:link styleClass="secondaryLink" page="<%= "/expenditureTrackingOrganization.do?method=viewOrganization&unitOid=" + unitOID%>" target="_blank">
+					<bean:write name="workingCapital" property="unit.presentationName"/>
+				</html:link>
+			</td>
+		</tr>
+		<tr>
+			<td class="width215px">
+				<bean:message key="label.module.workingCapital.initialization.accountingUnit" bundle="WORKING_CAPITAL_RESOURCES" />:&nbsp;
+			</td>
+			<td>
+				<bean:write name="workingCapital" property="accountingUnit.name"/>
+			</td>
+		</tr>
+		<tr>
+			<td class="width215px">
+				<bean:message key="label.module.workingCapital.requestingDate" bundle="WORKING_CAPITAL_RESOURCES" />:&nbsp;
+			</td>
+			<td>
+				<fr:view name="workingCapitalInitialization" property="requestCreation"/>
+			</td>
+		</tr>
+		<tr>
+			<td class="width215px">
+				<bean:message key="label.module.workingCapital.requester" bundle="WORKING_CAPITAL_RESOURCES" />:&nbsp;
+			</td>
+			<td>
+				<bean:write name="workingCapitalInitialization" property="requestor.name"/>
+			</td>
+		</tr>
+		<logic:present name="workingCapital" property="movementResponsible">
+			<tr>
+				<td class="width215px">
+					<bean:message key="label.module.workingCapital.movementResponsible" bundle="WORKING_CAPITAL_RESOURCES" />:&nbsp;
+				</td>
+				<td>
+					<bean:write name="workingCapital" property="movementResponsible.name"/>
+				</td>
+			</tr>
+		</logic:present>
+		<tr>
+			<td class="width215px">
+				<bean:message key="label.module.workingCapital.fiscalId" bundle="WORKING_CAPITAL_RESOURCES" />:&nbsp;
+			</td>
+			<td>
+				<bean:write name="workingCapitalInitialization" property="fiscalId"/>
+			</td>
+		</tr>
+		<tr>
+			<td class="width215px">
+				<bean:message key="label.module.workingCapital.internationalBankAccountNumber" bundle="WORKING_CAPITAL_RESOURCES" />:&nbsp;
+			</td>
+			<td>
+				<bean:write name="workingCapitalInitialization" property="internationalBankAccountNumber"/>
+			</td>
+		</tr>
+		<tr>
+			<td class="width215px">
+				<bean:message key="label.module.workingCapital.fundAllocationId" bundle="WORKING_CAPITAL_RESOURCES" />:&nbsp;
+			</td>
+			<td>
+				<bean:write name="workingCapitalInitialization" property="fundAllocationId"/>
+			</td>
+		</tr>
+		<tr>
+			<td class="width215px">
+				<bean:message key="label.module.workingCapital.requestedAnualValue.requested" bundle="WORKING_CAPITAL_RESOURCES" />:&nbsp;
+			</td>
+			<td>
+				<fr:view name="workingCapitalInitialization" property="requestedAnualValue"/>
+			</td>
+		</tr>
+		<tr>
+			<td class="width215px">
+				<bean:message key="label.module.workingCapital.requestedMonthlyValue.requested" bundle="WORKING_CAPITAL_RESOURCES" />:&nbsp;
+			</td>
+			<td>
+				<%= workingCapitalInitialization.getRequestedAnualValue().divideAndRound(new BigDecimal(6)).toFormatString() %>
+			</td>
+		</tr>
+		<tr>
+			<td class="width215px">
+				<bean:message key="label.module.workingCapital.authorizedAnualValue" bundle="WORKING_CAPITAL_RESOURCES" />:&nbsp;
+			</td>
+			<td class="bold">
+				<% if (workingCapitalInitialization.getAuthorizedAnualValue() != null) { %>
+					<fr:view name="workingCapitalInitialization" property="authorizedAnualValue"/>
+				<% } %>
+			</td>
+		</tr>
+		<tr>
+			<td class="width215px">
+				<bean:message key="label.module.workingCapital.maxAuthorizedAnualValue" bundle="WORKING_CAPITAL_RESOURCES" />:&nbsp;
+			</td>
+			<td>
+				<% if (workingCapitalInitialization.getMaxAuthorizedAnualValue() != null) { %>
+					<fr:view name="workingCapitalInitialization" property="maxAuthorizedAnualValue"/>
+				<% } %>
+			</td>
+		</tr>
+		<logic:present name="workingCapitalInitialization" property="lastSubmission">
+			<tr>
+				<td class="width215px">
+					<bean:message key="label.module.workingCapital.initialization.lastSubmission" bundle="WORKING_CAPITAL_RESOURCES" />:&nbsp;
+				</td>
+				<td>
+					<fr:view name="workingCapitalInitialization" property="lastSubmission"/>
+				</td>
+			</tr>
+		</logic:present>
+		<logic:present name="workingCapitalInitialization" property="refundRequested">
+			<tr>
+				<td class="width215px">
+					<bean:message key="label.module.workingCapital.initialization.refundRequested" bundle="WORKING_CAPITAL_RESOURCES" />:&nbsp;
+				</td>
+				<td>
+					<fr:view name="workingCapitalInitialization" property="refundRequested"/>
+				</td>
+			</tr>
+		</logic:present>
+		<logic:equal name="workingCapitalInitialization" property="class.name" value="module.workingCapital.domain.WorkingCapitalInitializationReenforcement">
+			<tr>
+				<td class="width215px">
+					<bean:message key="label.module.workingCapital.initialization.requestedReenforcementValue" bundle="WORKING_CAPITAL_RESOURCES" />:&nbsp;
+				</td>
+				<td>
+					<fr:view name="workingCapitalInitialization" property="requestedReenforcementValue"/>
+				</td>
+			</tr>
+			<tr>
+				<td class="width215px">
+					<bean:message key="label.module.workingCapital.initialization.authorizedReenforcementValue" bundle="WORKING_CAPITAL_RESOURCES" />:&nbsp;
+				</td>
+				<td class="bold">
+					<% if (((WorkingCapitalInitializationReenforcement) workingCapitalInitialization).getAuthorizedReenforcementValue() != null) { %>
+						<fr:view name="workingCapitalInitialization" property="authorizedReenforcementValue"/>
+					<% } %>
+				</td>
+			</tr>
+		</logic:equal>
+	</table>
 	<wf:activityLink processName="process" activityName="EditInitializationActivity" scope="request" paramName0="workingCapitalInitialization" paramValue0="<%= workingCapitalInitializationOid %>">
 		<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.EditInitializationActivity"/>
 	</wf:activityLink>

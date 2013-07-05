@@ -96,7 +96,8 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
 
         @Override
         public int compare(final Unit unit1, Unit unit2) {
-            return unit1.getPresentationName().compareTo(unit2.getPresentationName());
+            int c = unit1.getPresentationName().compareTo(unit2.getPresentationName());
+            return c == 0 ? unit1.getExternalId().compareTo(unit2.getExternalId()) : c;
         }
 
     };

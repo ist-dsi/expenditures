@@ -8,7 +8,7 @@
 	<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.front.page"/>
 </h2>
 
-<html:messages id="message" message="true" bundle="COFFEE_RESOURCES">
+<html:messages id="message" message="true">
 	<span class="error0"> <bean:write name="message" /> </span>
 	<br />
 </html:messages>

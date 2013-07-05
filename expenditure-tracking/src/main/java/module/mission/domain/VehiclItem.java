@@ -39,6 +39,7 @@ public abstract class VehiclItem extends VehiclItem_Base {
     public VehiclItem() {
         super();
         new VehiclItemJustification(this);
+        setAuthorized(false);
     }
 
     @Override

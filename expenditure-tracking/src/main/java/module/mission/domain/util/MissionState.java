@@ -37,7 +37,7 @@ public enum MissionState implements IPresentableEnum {
         }
     },
 
-    VEHICLE_APPROVAL {
+    VEHICLE_AUTHORIZATION {
         @Override
         public boolean isRequired(MissionProcess missionProcess) {
             return missionProcess.hasAnyVehicleItems();
@@ -56,12 +56,6 @@ public enum MissionState implements IPresentableEnum {
                 return MissionStateProgress.COMPLETED;
             }
 
-            // is no longer needed after ParticipationAuthorization
-            // PARTICIPATION_AUTHORIZATION State cannot be use to avoid a circular dependency
-            if (missionProcess.areAllParticipantsAuthorized()) {
-                return MissionStateProgress.COMPLETED;
-            }
-
             if (missionProcess.isCanceled()) {
                 return MissionStateProgress.IDLE;
             }
@@ -77,7 +71,7 @@ public enum MissionState implements IPresentableEnum {
 
         @Override
         public MissionStateProgress getStateProgress(MissionProcess missionProcess) {
-            if (!VEHICLE_APPROVAL.isCompleted(missionProcess)) {
+            if (!VEHICLE_AUTHORIZATION.isCompleted(missionProcess)) {
                 return MissionStateProgress.IDLE;
             }
 

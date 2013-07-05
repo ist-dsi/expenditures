@@ -24,7 +24,11 @@
  */
 package module.workingCapital.domain;
 
+import java.util.Calendar;
+import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Set;
 
 import module.organization.domain.Accountability;
 import module.organization.domain.Person;
@@ -35,6 +39,7 @@ import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.ist.bennu.core.domain.util.Money;
+import pt.ist.bennu.core.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
@@ -76,15 +81,26 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
     public WorkingCapitalInitialization(final Integer year, final Unit unit, final Person person,
             final Money requestedAnualValue, final String fiscalId, final String internationalBankAccountNumber) {
         this();
+        if (hasAnotherOpenWorkingCapital(unit)) {
+            throw new DomainException("message.open.working.capital.exists.for.unit");
+        }
+        if (isRequestorOfAnotherOpenWorkingCapitalFromPreviousYears()) {
+            throw new DomainException("message.requestor.of.open.working.capital.from.previous.years");
+        }
+        if (isMovementResponsibleOfAnotherOpenWorkingCapitalFromPreviousYears(person)) {
+            throw new DomainException(BundleUtil.getFormattedStringFromResourceBundle("resources/WorkingCapitalResources",
+                    "message.movement.responsible.of.open.working.capital.from.previous.years", person.getName()));
+        }
+        pt.ist.expenditureTrackingSystem.domain.organization.Person responsible =
+                getDirectUnitResponsibleOfAnotherOpenWorkingCapitalFromPreviousYears(unit);
+        if (responsible != null) {
+            throw new DomainException(BundleUtil.getFormattedStringFromResourceBundle("resources/WorkingCapitalResources",
+                    "message.unit.responsible.of.open.working.capital.from.previous.years", responsible.getName()));
+        }
+
         WorkingCapital workingCapital = WorkingCapital.find(year, unit);
         if (workingCapital == null) {
             workingCapital = new WorkingCapital(year, unit, person);
-        } else {
-            final WorkingCapitalInitialization workingCapitalInitialization = workingCapital.getWorkingCapitalInitialization();
-            if (workingCapitalInitialization != null && !workingCapitalInitialization.isCanceledOrRejected()
-                    && !workingCapital.isRefunded()) {
-                throw new DomainException("message.working.capital.exists.for.year.and.unit");
-            }
         }
         setWorkingCapital(workingCapital);
         setRequestedAnualValue(requestedAnualValue);
@@ -92,9 +108,129 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
         setInternationalBankAccountNumber(internationalBankAccountNumber);
     }
 
+    private boolean hasAnotherOpenWorkingCapital(Unit unit) {
+        for (WorkingCapital workingCapital : unit.getWorkingCapitalsSet()) {
+            WorkingCapitalInitialization initialization = workingCapital.getWorkingCapitalInitialization();
+            if (initialization == null) {
+                continue;
+            }
+            if (initialization == this) {
+                continue;
+            }
+
+            if (initialization.isOpen()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isRequestorOfAnotherOpenWorkingCapitalFromPreviousYears() {
+        for (WorkingCapitalInitialization initialization : UserView.getCurrentUser().getPerson()
+                .getRequestedWorkingCapitalInitializationsSet()) {
+            if (initialization == this) {
+                continue;
+            }
+            if (initialization.getWorkingCapital().getWorkingCapitalYear().getYear()
+                    .equals(Integer.valueOf(Calendar.getInstance().get(Calendar.YEAR)))) {
+                continue;
+            }
+            if (initialization.isOpen()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isMovementResponsibleOfAnotherOpenWorkingCapitalFromPreviousYears(Person person) {
+        for (WorkingCapital workingCapital : person.getMovementResponsibleWorkingCapitalsSet()) {
+            if (workingCapital == getWorkingCapital()) {
+                continue;
+            }
+            WorkingCapitalInitialization initialization = workingCapital.getWorkingCapitalInitialization();
+            if (initialization == null) {
+                continue;
+            }
+            if (initialization.getWorkingCapital().getWorkingCapitalYear().getYear()
+                    .equals(Integer.valueOf(Calendar.getInstance().get(Calendar.YEAR)))) {
+                continue;
+            }
+            if (initialization.isOpen()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private pt.ist.expenditureTrackingSystem.domain.organization.Person getDirectUnitResponsibleOfAnotherOpenWorkingCapitalFromPreviousYears(
+            Unit unit) {
+        for (pt.ist.expenditureTrackingSystem.domain.organization.Person responsible : getUnitResponsibles(unit)) {
+            if (isDirectUnitResponsibleOfAnotherOpenWorkingCapitalFromPreviousYears(responsible)) {
+                return responsible;
+            }
+        }
+        return null;
+    }
+
+    private static Collection<pt.ist.expenditureTrackingSystem.domain.organization.Person> getUnitResponsibles(Unit unit) {
+        Set<pt.ist.expenditureTrackingSystem.domain.organization.Person> responsibles =
+                new HashSet<pt.ist.expenditureTrackingSystem.domain.organization.Person>();
+        for (Authorization authorization : unit.getAuthorizationsSet()) {
+            if (authorization.isValid()) {
+                responsibles.add(authorization.getPerson());
+            }
+        }
+        return responsibles;
+    }
+
+    private boolean isDirectUnitResponsibleOfAnotherOpenWorkingCapitalFromPreviousYears(
+            pt.ist.expenditureTrackingSystem.domain.organization.Person responsible) {
+        for (Unit unit : getResponsibleUnits(responsible)) {
+            if (hasAnotherOpenWorkingCapitalFromPreviousYears(unit)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static Collection<Unit> getResponsibleUnits(pt.ist.expenditureTrackingSystem.domain.organization.Person responsible) {
+        Set<Unit> responsibleUnits = new HashSet<Unit>();
+        for (Authorization authorization : responsible.getAuthorizationsSet()) {
+            if (authorization.isValid()) {
+                responsibleUnits.add(authorization.getUnit());
+            }
+        }
+        return responsibleUnits;
+    }
+
+    private boolean hasAnotherOpenWorkingCapitalFromPreviousYears(Unit unit) {
+        for (WorkingCapital workingCapital : unit.getWorkingCapitalsSet()) {
+
+            WorkingCapitalInitialization initialization = workingCapital.getWorkingCapitalInitialization();
+            if (initialization == null) {
+                continue;
+            }
+            if (initialization.getWorkingCapital().getWorkingCapitalYear().getYear()
+                    .equals(Integer.valueOf(Calendar.getInstance().get(Calendar.YEAR)))) {
+                continue;
+            }
+
+            if (initialization == this) {
+                continue;
+            }
+            if (initialization.isOpen()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isOpen() {
+        return !isCanceledOrRejected() && !getWorkingCapital().isRefunded();
+    }
+
     public void approve(final Person person) {
         final WorkingCapital workingCapital = getWorkingCapital();
-        //final Money requestedAnualValue = getRequestedAnualValue();
         final Money valueForAuthorization = Money.ZERO;
         final Authorization authorization = workingCapital.findUnitResponsible(person, valueForAuthorization);
         if (authorization == null) {
