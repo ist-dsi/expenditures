@@ -41,51 +41,43 @@
 			<bean:message key="label.supplier" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 		</h3>
 		<p>
-			<bean:message key="supplier.label.fiscalCode" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
-			:
+			<bean:message key="supplier.label.fiscalCode" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>:
 			<span style="font-weight: bold;">
 				<bean:write name="supplier" property="fiscalIdentificationCode"/>
 			</span>
 			&nbsp;&nbsp;&nbsp;
-			<bean:message key="supplier.label.name" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
-			:
+			<bean:message key="supplier.label.name" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>:
 			<span style="font-weight: bold;">
 				<bean:write name="supplier" property="name"/>
 			</span>
 			&nbsp;&nbsp;&nbsp;
-			<bean:message key="supplier.label.abbreviatedName" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
-			:
+			<bean:message key="supplier.label.abbreviatedName" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>:
 			<bean:write name="supplier" property="abbreviatedName"/>
 		</p>
 		<p>
-			<bean:message key="supplier.soft.limit" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
-			:
+			<bean:message key="supplier.soft.limit" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>:
 			<span style="font-weight: bold;">
 				<%= supplier.getSupplierLimit().toFormatString() %>
 			</span>
 			&nbsp;&nbsp;&nbsp;
-			<bean:message key="supplier.label.nib" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
-			:
+			<bean:message key="supplier.label.nib" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>:
 			<bean:write name="supplier" property="nib"/>
 			&nbsp;&nbsp;&nbsp;
 			<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL_MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL,pt.ist.expenditureTrackingSystem.domain.RoleType.SUPPLIER_MANAGER">
 				<logic:present name="supplierBean" property="supplier.giafKey">
 					<logic:notEmpty name="supplierBean" property="supplier.giafKey">
-						<bean:message key="label.supplier.giaf.key" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
-						:
+						<bean:message key="label.supplier.giaf.key" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>:
 						<bean:write name="supplierBean" property="supplier.giafKey"/>
 					</logic:notEmpty>
 					<logic:empty name="supplierBean" property="supplier.giafKey">
 						<font color="red">
-							<bean:message key="label.supplier.giaf.key.does.not.exist" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
-							:
+							<bean:message key="label.supplier.giaf.key.does.not.exist" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>:
 						</font>
 					</logic:empty>
 				</logic:present>
 				<logic:notPresent name="supplierBean" property="supplier.giafKey">
 					<font color="red">
-						<bean:message key="label.supplier.giaf.key.does.not.exist" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
-						:
+						<bean:message key="label.supplier.giaf.key.does.not.exist" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>:
 					</font>
 				</logic:notPresent>
 			</logic:present>

@@ -37,6 +37,7 @@ import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.SavedSearch;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
@@ -227,9 +228,11 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
                     final boolean hasBeenAllocatedPermanently =
                             acquisitionProcess.getAcquisitionProcessState().hasBeenAllocatedPermanently();
                     for (final RequestItem requestItem : acquisitionRequest.getRequestItemsSet()) {
+                        AcquisitionRequestItem acqRequestItem = (AcquisitionRequestItem) requestItem;
                         final CPVReference cpvReference = requestItem.getCPVReference();
                         final Money valueToAdd =
-                                hasBeenAllocatedPermanently ? requestItem.getTotalRealAssigned() : requestItem.getTotalAssigned();
+                                hasBeenAllocatedPermanently ? acqRequestItem.getTotalRealValue() : acqRequestItem
+                                        .getTotalItemValue();
                         if (!result.containsKey(cpvReference)) {
                             result.put(cpvReference, valueToAdd);
                         } else {
@@ -308,13 +311,11 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
                     if (refundProcess.hasFundsAllocatedPermanently()) {
                         for (final PaymentProcessInvoice paymentProcessInvoice : refundRequest.getInvoices()) {
                             final RefundableInvoiceFile refundableInvoiceFile = (RefundableInvoiceFile) paymentProcessInvoice;
-                            final Money valueToAdd = refundableInvoiceFile.getRefundableValue();
-                            result = result.add(valueToAdd);
+                            result = result.add(refundableInvoiceFile.getRefundableValue());
                         }
                     } else {
                         for (final RefundItem refundItem : refundRequest.getRefundItemsSet()) {
-                            final Money valueToAdd = refundItem.getValueEstimation();
-                            result = result.add(valueToAdd);
+                            result = result.add(refundItem.getValueEstimation());
                         }
                     }
                 }
