@@ -1,3 +1,4 @@
+<%@page import="java.util.Map"%>
 <%@page import="pt.ist.bennu.core.domain.util.Money"%>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference"%>
 <%@page import="java.util.Map.Entry"%>
@@ -171,15 +172,24 @@
 					<bean:message key="label.cvpReferences.description" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 				</th>
 				<th>
-					<bean:message key="label.value" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+					<bean:message key="label.value.confirmed" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+				</th>
+				<th>
+					<bean:message key="label.value" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>*
 				</th>
 			</tr>
 		<%
 			Money total = Money.ZERO;
-			for (final Entry<CPVReference, Money> entry : supplier.getAllocationsByCPVReference().entrySet()) {
+			Money totalConfirmed = Money.ZERO;
+			Map<CPVReference, Money> confirmedValues = supplier.getAllocationsByCPVReference();
+			for (final Entry<CPVReference, Money> entry : supplier.getUnconfirmedAllocationsByCPVReference().entrySet()) {
 			    final CPVReference cpvReference = entry.getKey();
 			    final Money value = entry.getValue();
+			    Money confirmedValue = confirmedValues.get(cpvReference);
 			    total = total.add(value);
+			    if (confirmedValue != null) {
+			    	totalConfirmed = totalConfirmed.add(confirmedValue);
+			    }
 		%>
 			<tr>
 				<td style="text-align: left;">
@@ -187,6 +197,9 @@
 				</td>
 				<td style="text-align: left;">
 					<%= cpvReference == null ? "" : cpvReference.getDescription() %>
+				</td>
+				<td style="text-align: right;">
+					<%= (confirmedValue != null) ? confirmedValue.toFormatString() : "-" %>
 				</td>
 				<td style="text-align: right;">
 					<%= value.toFormatString() %>
@@ -198,11 +211,30 @@
 					<bean:message key="label.total" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 				</td>
 				<td style="text-align: right;">
+					<%= totalConfirmed.toFormatString() %>
+				</td>
+				<td style="text-align: right;">
 					<%= total.toFormatString() %>
 				</td>
 			</tr>
+			<tr>
+				<th>
+					<bean:message key="label.cvpReferences.code" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+				</th>
+				<th>
+					<bean:message key="label.cvpReferences.description" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+				</th>
+				<th>
+					<bean:message key="label.value.confirmed" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+				</th>
+				<th>
+					<bean:message key="label.value" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>*
+				</th>
+			</tr>
 		</table>
+		 * <bean:message key="label.value.unconfirmed.details" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 
+		<br/>
 		<br/>
 		<h4 style="background: #EEE; padding: 5px 10px 5px 10px; margin: -5px -10px 0 -10px;">
 			<bean:message key="label.supplier.manually.registered.allocations" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>

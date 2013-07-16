@@ -218,40 +218,38 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
         return result;
     }
 
-    public Map<CPVReference, Money> getAllocationsByCPVReference() {
-        final SortedMap<CPVReference, Money> result = new TreeMap<CPVReference, Money>(CPVReference.COMPARATOR_BY_CODE);
+    public Map<CPVReference, Money> getUnconfirmedAllocationsByCPVReference() {
+        final SortedMap<CPVReference, Money> result = new TreeMap<CPVReference, Money>(CPVReference.COMPARATOR_BY_CODE) {
+            @Override
+            public Money put(CPVReference cpvReference, Money value) {
+                if (!containsKey(cpvReference)) {
+                    return super.put(cpvReference, value);
+                } else {
+                    return super.put(cpvReference, get(cpvReference).add(value));
+                }
+            }
+        };
 
         for (final AcquisitionRequest acquisitionRequest : getAcquisitionRequestsSet()) {
             if (acquisitionRequest.isInAllocationPeriod()) {
                 final AcquisitionProcess acquisitionProcess = acquisitionRequest.getAcquisitionProcess();
-                if (acquisitionProcess.isActive() && acquisitionProcess.isAllocatedToSupplier()) {
-                    final boolean hasBeenAllocatedPermanently =
-                            acquisitionProcess.getAcquisitionProcessState().hasBeenAllocatedPermanently();
+                if (acquisitionProcess.isActive() && !acquisitionProcess.getShouldSkipSupplierFundAllocation()) {
                     for (final RequestItem requestItem : acquisitionRequest.getRequestItemsSet()) {
                         AcquisitionRequestItem acqRequestItem = (AcquisitionRequestItem) requestItem;
-                        final CPVReference cpvReference = requestItem.getCPVReference();
-                        final Money valueToAdd =
-                                hasBeenAllocatedPermanently ? acqRequestItem.getTotalRealValue() : acqRequestItem
-                                        .getTotalItemValue();
-                        if (!result.containsKey(cpvReference)) {
-                            result.put(cpvReference, valueToAdd);
+                        final Money valueToAdd;
+                        if (acquisitionProcess.getAcquisitionProcessState().hasBeenAllocatedPermanently()) {
+                            valueToAdd = acqRequestItem.getTotalRealValue();
                         } else {
-                            result.put(cpvReference, result.get(cpvReference).add(valueToAdd));
+                            valueToAdd = acqRequestItem.getTotalItemValue();
                         }
+                        result.put(requestItem.getCPVReference(), valueToAdd);
                     }
                 }
             }
         }
         for (final AcquisitionAfterTheFact acquisitionAfterTheFact : getAcquisitionsAfterTheFactSet()) {
-            if (acquisitionAfterTheFact.isInAllocationPeriod()) {
-                if (!acquisitionAfterTheFact.getDeletedState().booleanValue()) {
-                    final Money valueToAdd = acquisitionAfterTheFact.getValue();
-                    if (!result.containsKey(null)) {
-                        result.put(null, valueToAdd);
-                    } else {
-                        result.put(null, result.get(null).add(valueToAdd));
-                    }
-                }
+            if (acquisitionAfterTheFact.isInAllocationPeriod() && !acquisitionAfterTheFact.getDeletedState().booleanValue()) {
+                result.put(null, acquisitionAfterTheFact.getValue());
             }
         }
         for (final RefundableInvoiceFile refundInvoice : getRefundInvoicesSet()) {
@@ -264,24 +262,71 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
                             final RefundableInvoiceFile refundableInvoiceFile = (RefundableInvoiceFile) paymentProcessInvoice;
                             for (final RequestItem requestItem : refundableInvoiceFile.getRequestItemsSet()) {
                                 final RefundItem refundItem = (RefundItem) requestItem;
-                                final CPVReference cpvReference = refundItem.getCPVReference();
-                                final Money valueToAdd = refundableInvoiceFile.getRefundableValue();
-                                if (!result.containsKey(cpvReference)) {
-                                    result.put(cpvReference, valueToAdd);
-                                } else {
-                                    result.put(cpvReference, result.get(cpvReference).add(valueToAdd));
-                                }
+                                result.put(refundItem.getCPVReference(), refundableInvoiceFile.getRefundableValue());
                             }
                         }
                     } else {
                         for (final RefundItem refundItem : refundRequest.getRefundItemsSet()) {
-                            final CPVReference cpvReference = refundItem.getCPVReference();
-                            final Money valueToAdd = refundItem.getValueEstimation();
-                            if (!result.containsKey(cpvReference)) {
-                                result.put(cpvReference, valueToAdd);
-                            } else {
-                                result.put(cpvReference, result.get(cpvReference).add(valueToAdd));
+                            result.put(refundItem.getCPVReference(), refundItem.getValueEstimation());
+                        }
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+
+    public Map<CPVReference, Money> getAllocationsByCPVReference() {
+        final SortedMap<CPVReference, Money> result = new TreeMap<CPVReference, Money>(CPVReference.COMPARATOR_BY_CODE) {
+            @Override
+            public Money put(CPVReference cpvReference, Money value) {
+                if (!containsKey(cpvReference)) {
+                    return super.put(cpvReference, value);
+                } else {
+                    return super.put(cpvReference, get(cpvReference).add(value));
+                }
+            }
+        };
+
+        for (final AcquisitionRequest acquisitionRequest : getAcquisitionRequestsSet()) {
+            if (acquisitionRequest.isInAllocationPeriod()) {
+                final AcquisitionProcess acquisitionProcess = acquisitionRequest.getAcquisitionProcess();
+                if (acquisitionProcess.isActive() && acquisitionProcess.isAllocatedToSupplier()) {
+                    for (final RequestItem requestItem : acquisitionRequest.getRequestItemsSet()) {
+                        AcquisitionRequestItem acqRequestItem = (AcquisitionRequestItem) requestItem;
+                        final Money valueToAdd;
+                        if (acquisitionProcess.getAcquisitionProcessState().hasBeenAllocatedPermanently()) {
+                            valueToAdd = acqRequestItem.getTotalRealValue();
+                        } else {
+                            valueToAdd = acqRequestItem.getTotalItemValue();
+                        }
+                        result.put(requestItem.getCPVReference(), valueToAdd);
+                    }
+                }
+            }
+        }
+        for (final AcquisitionAfterTheFact acquisitionAfterTheFact : getAcquisitionsAfterTheFactSet()) {
+            if (acquisitionAfterTheFact.isInAllocationPeriod() && !acquisitionAfterTheFact.getDeletedState().booleanValue()) {
+                result.put(null, acquisitionAfterTheFact.getValue());
+            }
+        }
+        for (final RefundableInvoiceFile refundInvoice : getRefundInvoicesSet()) {
+            if (refundInvoice.isInAllocationPeriod()) {
+                final RefundProcess refundProcess = refundInvoice.getRefundItem().getRequest().getProcess();
+                if (refundProcess.isActive() && !refundProcess.getShouldSkipSupplierFundAllocation()) {
+                    final RefundRequest refundRequest = refundProcess.getRequest();
+                    if (refundProcess.hasFundsAllocatedPermanently()) {
+                        for (final PaymentProcessInvoice paymentProcessInvoice : refundRequest.getInvoices()) {
+                            final RefundableInvoiceFile refundableInvoiceFile = (RefundableInvoiceFile) paymentProcessInvoice;
+                            for (final RequestItem requestItem : refundableInvoiceFile.getRequestItemsSet()) {
+                                final RefundItem refundItem = (RefundItem) requestItem;
+                                result.put(refundItem.getCPVReference(), refundableInvoiceFile.getRefundableValue());
                             }
+                        }
+                    } else {
+                        for (final RefundItem refundItem : refundRequest.getRefundItemsSet()) {
+                            result.put(refundItem.getCPVReference(), refundItem.getValueEstimation());
                         }
                     }
                 }
