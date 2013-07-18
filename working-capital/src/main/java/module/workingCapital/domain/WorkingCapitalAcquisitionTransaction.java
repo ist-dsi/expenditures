@@ -24,6 +24,9 @@
  */
 package module.workingCapital.domain;
 
+import module.workflow.domain.WorkflowProcess;
+import module.workingCapital.domain.util.WorkingCapitalTransactionFileUploadBean;
+
 import org.joda.time.DateTime;
 
 import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
@@ -31,6 +34,7 @@ import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.ist.bennu.core.domain.util.Money;
 import pt.ist.bennu.core.util.BundleUtil;
+import pt.ist.fenixframework.Atomic;
 import pt.ist.fenixframework.consistencyPredicates.ConsistencyPredicate;
 
 /**
@@ -222,6 +226,29 @@ public class WorkingCapitalAcquisitionTransaction extends WorkingCapitalAcquisit
     @Deprecated
     public boolean hasWorkingCapitalAcquisition() {
         return getWorkingCapitalAcquisition() != null;
+    }
+
+    @Atomic
+    public TransactionFile addFile(String displayName, String filename, byte[] consumeInputStream,
+            WorkingCapitalTransactionFileUploadBean bean) throws Exception {
+        if (displayName == null) {
+            displayName = filename;
+        }
+        TransactionFile file = new TransactionFile(displayName, filename, consumeInputStream, this);
+        getWorkingCapital().getWorkingCapitalProcess().addFiles(file);
+        return file;
+    }
+
+    public void addFiles(TransactionFile file) {
+        file.setWorkingCapitalTransaction(this);
+        getWorkingCapital().getWorkingCapitalProcess().addFiles(file);
+    }
+
+    @Atomic
+    public void removeFiles(TransactionFile file) {
+        WorkflowProcess process = getWorkingCapital().getWorkingCapitalProcess();
+        process.removeFiles(file);
+        removeTransactionFile(file);
     }
 
 }
