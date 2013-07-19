@@ -84,6 +84,7 @@ public class SearchMissionsDTO extends SearchMissions {
         setParticipantAuthorizationAuthority(StringUtils.isEmpty(request.getParameter("paaOID")) ? null : (Person) FenixFramework
                 .getDomainObject(request.getParameter("paaOID")));
         setFilterCanceledProcesses(Boolean.valueOf(request.getParameter("fc")));
+        setFilterTakenProcesses(Boolean.valueOf(request.getParameter("ft")));
 
         final String sortByParameter = request.getParameter("sortBy");
         if (!StringUtils.isEmpty(sortByParameter) && sortByParameter.indexOf('=') != -1) {
@@ -115,11 +116,11 @@ public class SearchMissionsDTO extends SearchMissions {
 
     public String getRequestParameters() {
         return new Formatter().format(
-                "processNumber=%s&ruOID=%s&puOID=%s&f=%s&d=%s&i=%s&rpOID=%s&pOID=%s&ps=%s&auOID=%s&paaOID=%s&fc=%s",
+                "processNumber=%s&ruOID=%s&puOID=%s&f=%s&d=%s&i=%s&rpOID=%s&pOID=%s&ps=%s&auOID=%s&paaOID=%s&fc=%s&ft=%s",
                 getProcessNumber(), getRequestingUnitParameter(), getPayingUnitParameter(), getForeignParameter(),
                 getDateParameter(), getIntervalParameter(), getRequestingPersonParameter(), getParticipantParameter(),
                 getPendingStateParameter(), getAccountingUnitParameter(), getParticipantAuthorizationAuthorityParameter(),
-                getFilterCanceledProcesses()).toString();
+                getFilterCanceledProcesses(), getFilterTakenProcesses()).toString();
     }
 
     public String getRequestParametersWithSort() {

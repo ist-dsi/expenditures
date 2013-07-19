@@ -162,6 +162,7 @@ public class SearchMissions extends Search<Mission> {
     private Person participant;
     private Person accountManager;
     private Boolean filterCanceledProcesses = Boolean.TRUE;
+    private boolean filterTakenProcesses = false;
     private MissionState pendingState;
     private Person participantAuthorizationAuthority;
 
@@ -220,13 +221,17 @@ public class SearchMissions extends Search<Mission> {
                     && matchMissionTypeCriteria(mission) && matchDateCriteria(mission) && matchIntervalCriteria(mission)
                     && matchRequestingPersonCriteria(mission.getRequestingPerson()) && matchParticipantCriteria(mission)
                     && matchParticipantAuthorizationAuthorityCriteria(mission) && matchAccountManagerCriteria(mission)
-                    && matchCanceledCriteria(mission) && mission.getMissionProcess().isAccessibleToCurrentUser()
-                    && matchState(mission);
+                    && matchCanceledCriteria(mission) && matchTakenCriteria(mission)
+                    && mission.getMissionProcess().isAccessibleToCurrentUser() && matchState(mission);
         }
 
         private boolean matchCanceledCriteria(final Mission mission) {
             return filterCanceledProcesses == null || !filterCanceledProcesses.booleanValue()
                     || !mission.getMissionProcess().isProcessCanceled();
+        }
+
+        private boolean matchTakenCriteria(final Mission mission) {
+            return !filterTakenProcesses || mission.getMissionProcess().getCurrentOwner() == null;
         }
 
         private boolean matchProcessNumberCriteria(final Mission mission) {
@@ -377,6 +382,14 @@ public class SearchMissions extends Search<Mission> {
 
     public void setFilterCanceledProcesses(Boolean filterCanceledProcesses) {
         this.filterCanceledProcesses = filterCanceledProcesses;
+    }
+
+    public boolean getFilterTakenProcesses() {
+        return filterTakenProcesses;
+    }
+
+    public void setFilterTakenProcesses(boolean filterTakenProcesses) {
+        this.filterTakenProcesses = filterTakenProcesses;
     }
 
     public Party getMissionResponsible() {
