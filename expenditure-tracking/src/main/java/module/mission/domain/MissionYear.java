@@ -164,9 +164,19 @@ public class MissionYear extends MissionYear_Base {
 
         @Override
         boolean shouldAdd(final MissionProcess missionProcess, final User user) {
-            return (!missionProcess.hasCurrentOwner() || missionProcess.isTakenByCurrentUser())
-                    && !missionProcess.isUnderConstruction() && !missionProcess.getIsCanceled()
-                    && missionProcess.isPendingApprovalBy(user);
+            if (missionProcess.getCurrentOwner() != null && !missionProcess.isTakenByCurrentUser()) {
+                return false;
+            }
+            if (missionProcess.isUnderConstruction() || missionProcess.getIsCanceled()) {
+                return false;
+            }
+            if (missionProcess.isPendingApprovalBy(user)) {
+                return true;
+            }
+            if (missionProcess.isCurrentUserAbleToAccessAnyQueues() && MissionState.VERIFICATION.isPending(missionProcess)) {
+                return true;
+            }
+            return false;
         }
 
     }
@@ -182,7 +192,7 @@ public class MissionYear extends MissionYear_Base {
 
         @Override
         boolean shouldAdd(final MissionProcess missionProcess, final User user) {
-            if (!MissionSystem.getInstance().getVehicleAuthorizers().contains(user)) {
+            if (!MissionSystem.getInstance().getVehicleAuthorizersSet().contains(user)) {
                 return false;
             }
             if (missionProcess.isCanceled()) {
@@ -191,7 +201,7 @@ public class MissionYear extends MissionYear_Base {
             if (!missionProcess.isApprovedByResponsible()) {
                 return false;
             }
-            if (missionProcess.hasCurrentOwner() && !missionProcess.isTakenByCurrentUser()) {
+            if (missionProcess.getCurrentOwner() != null && !missionProcess.isTakenByCurrentUser()) {
                 return false;
             }
 
@@ -275,9 +285,6 @@ public class MissionYear extends MissionYear_Base {
             }
             if (missionProcess.isCurrentUserAbleToAccessAnyQueues()
                     && MissionState.PERSONAL_INFORMATION_PROCESSING.isPending(missionProcess)) {
-                return true;
-            }
-            if (missionProcess.isCurrentUserAbleToAccessAnyQueues() && MissionState.VERIFICATION.isPending(missionProcess)) {
                 return true;
             }
             if (missionProcess.isReadyForMissionTermination(user)) {
