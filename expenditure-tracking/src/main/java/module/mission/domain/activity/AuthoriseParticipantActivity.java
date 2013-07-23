@@ -27,7 +27,6 @@ package module.mission.domain.activity;
 import module.mission.domain.Mission;
 import module.mission.domain.MissionProcess;
 import module.mission.domain.PersonMissionAuthorization;
-import module.organization.domain.Person;
 import module.workflow.activities.ActivityInformation;
 import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
 import pt.ist.bennu.core.domain.User;
@@ -46,7 +45,7 @@ public class AuthoriseParticipantActivity extends MissionProcessActivity<Mission
     }
 
     @Override
-    public boolean isActive(final MissionProcess missionProcess, final User user) {
+    public boolean isActive(MissionProcess missionProcess, User user) {
         return super.isActive(missionProcess, user)
                 && !missionProcess.getIsCanceled()
                 && missionProcess.isApproved()
@@ -56,15 +55,13 @@ public class AuthoriseParticipantActivity extends MissionProcessActivity<Mission
     }
 
     @Override
-    protected void process(final AuthoriseParticipantActivityInformation authoriseParticipantActivityInformation) {
-        final PersonMissionAuthorization personMissionAuthorization =
+    protected void process(AuthoriseParticipantActivityInformation authoriseParticipantActivityInformation) {
+        PersonMissionAuthorization personMissionAuthorization =
                 authoriseParticipantActivityInformation.getPersonMissionAuthorization();
-        final User user = UserView.getCurrentUser();
-        final Person person = user.getPerson();
-        personMissionAuthorization.setAuthority(person);
-        final MissionProcess missionProcess = authoriseParticipantActivityInformation.getProcess();
+        personMissionAuthorization.setAuthority(UserView.getCurrentUser().getPerson());
 
-        final Mission mission = missionProcess.getMission();
+        MissionProcess missionProcess = authoriseParticipantActivityInformation.getProcess();
+        Mission mission = missionProcess.getMission();
         if (mission.allParticipantsAreAuthorized()) {
             missionProcess.notifyAllParticipants();
             if (!mission.hasAnyMissionItems()) {
@@ -74,7 +71,7 @@ public class AuthoriseParticipantActivity extends MissionProcessActivity<Mission
     }
 
     @Override
-    public ActivityInformation<MissionProcess> getActivityInformation(final MissionProcess process) {
+    public ActivityInformation<MissionProcess> getActivityInformation(MissionProcess process) {
         return new AuthoriseParticipantActivityInformation(process, this);
     }
 

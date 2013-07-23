@@ -247,6 +247,7 @@ public class PersonMissionAuthorization extends PersonMissionAuthorization_Base 
             getNext().clearAuthorities();
         }
         setAuthority(null);
+        setDelegatedAuthority((FunctionDelegation) null);
     }
 
     public MissionProcess getMissionProcess() {

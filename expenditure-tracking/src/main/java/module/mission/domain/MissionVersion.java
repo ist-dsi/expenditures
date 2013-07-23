@@ -41,7 +41,7 @@ import pt.ist.bennu.core.domain.VirtualHost;
  */
 public class MissionVersion extends MissionVersion_Base {
 
-    MissionVersion(final Mission mission) {
+    public MissionVersion(final Mission mission) {
         final MissionVersion previous = mission.getMissionVersion();
 
         setSinceDateTime(new DateTime());
