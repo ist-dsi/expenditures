@@ -94,6 +94,7 @@ public abstract class VehiclItem extends VehiclItem_Base {
         final VehiclItem vehiclItem = (VehiclItem) missionItem;
         vehiclItem.setVehiclItemJustification(getVehiclItemJustification());
         vehiclItem.setDriver(getDriver());
+        vehiclItem.setAuthorized(getAuthorized());
     }
 
     @ConsistencyPredicate
