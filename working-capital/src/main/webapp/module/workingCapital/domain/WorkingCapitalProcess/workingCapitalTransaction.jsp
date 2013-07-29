@@ -8,6 +8,8 @@
 
 <%@ page import="module.workingCapital.domain.WorkingCapitalAcquisitionSubmission" %>
 <%@ page import="module.workingCapital.domain.ExceptionalWorkingCapitalAcquisitionTransaction" %>
+<%@ page import="module.workingCapital.domain.WorkingCapitalAcquisitionTransaction" %>
+<%@ page import="module.workflow.domain.ProcessFile" %>
 
 
 <jsp:include page="shortBody.jsp"/>
@@ -188,36 +190,131 @@
 </logic:equal>
 
 <logic:equal name="workingCapitalTransaction" property="acquisition" value="true">
-
 	<p class="mtop15 mbottom15">
+	<logic:equal name="process" property="fileSupportAvailable" value="true">
+		<div id="fileAccessLoggedConfirmation" style="display:none; cursor: default"> 
+		        <h3><bean:message key="label.fileAccess.logged.confirmMessage" bundle="WORKFLOW_RESOURCES" /></h3> 
+		        <%-- TODO joanutne: localize Sim e Não --%>
+		        <input type="button" id="yes" value="Sim" /> 
+		        <input type="button" id="no" value="Não" /> 
+		</div>
+		<td class="gutter"></td>
+
+
+			<div class="infobox1 col2-2">
+				<h3><bean:message key="label.other.documents" bundle="WORKING_CAPITAL_RESOURCES"/> <!--<a href="">(9)</a>--></h3>
+				<div>
+					<bean:define id="transactionId" name="workingCapitalTransaction" property="externalId" />
+					<fr:view name="workingCapitalTransaction">
+						<fr:layout name="transactionFiles">
+							<fr:property name="classes" value=""/>
+						</fr:layout>
+					</fr:view>
+					<table class="structural mvert0">
+						<tr>
+							<logic:equal name="process" property="fileEditionAllowed" value="true">
+								<td class="aright">
+
+									<form action="<%= request.getContextPath() + "/workingCapitalTransaction.do" %>" method="post">
+										<input type="hidden" name="method" value="fileUpload"/>
+										<input type="hidden" name="processId" value="<%= processId %>"/>
+										<bean:define id="workingCapitalTransactionId" name="workingCapitalTransaction" property="externalId" />
+										<input type="hidden" name="transactionId" value="<%= workingCapitalTransactionId %>" />
+										
+										<html:submit><bean:message key="link.uploadFile" bundle="WORKFLOW_RESOURCES"/></html:submit>
+									</form>
+								</td>
+							</logic:equal>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<!-- infobox1 -->
+	</logic:equal>
+	
 	<h3>
 		<bean:message key="label.module.workingCapital.acquisition.details" bundle="WORKING_CAPITAL_RESOURCES"/>
 	</h3>
 		<bean:define id="workingCapitalTransactionOid" type="java.lang.String" name="workingCapitalTransaction" property="externalId"/>
-	<div class="infobox mtop1 mbottom1">
-		<fr:view name="workingCapitalTransaction" property="workingCapitalAcquisition">
-			<fr:schema type="module.workingCapital.domain.WorkingCapitalTransaction" bundle="WORKING_CAPITAL_RESOURCES">
-				<fr:slot name="supplier.presentationName" key="label.module.workingCapital.acquisition.supplier"/>
-				<fr:slot name="documentNumber" key="label.module.workingCapital.acquisition.documentNumber"/>
-				<fr:slot name="description" key="label.module.workingCapital.acquisition.description"/>
-				<fr:slot name="acquisitionClassification.description" key="label.module.workingCapital.acquisition.acquisitionClassification"/>
-				<fr:slot name="acquisitionClassification.economicClassification" key="label.module.workingCapital.configuration.acquisition.classifications.economicClassification"/>
-				<fr:slot name="acquisitionClassification.pocCode" key="label.module.workingCapital.configuration.acquisition.classifications.pocCode"/>
-				<fr:slot name="valueWithoutVat" key="label.module.workingCapital.acquisition.valueWithoutVat"/>
-				<fr:slot name="workingCapitalAcquisitionTransaction.value" key="label.module.workingCapital.acquisition.money"/>
-			</fr:schema>
-			<fr:layout name="tabular">
-			</fr:layout>
-		</fr:view>
-		<logic:present name="workingCapitalTransaction" property="invoice">
-			<bean:define id="url">/workflowProcessManagement.do?method=downloadFile&amp;processId=<bean:write name="workingCapitalTransaction" property="workingCapital.workingCapitalProcess.externalId"/></bean:define>
-			<blockquote>
-				<html:link action="<%= url %>" paramId="fileId" paramName="workingCapitalTransaction" paramProperty="invoice.externalId">
-					<bean:write name="workingCapitalTransaction" property="invoice.filename"/>
-				</html:link>
-			</blockquote>
-		</logic:present>
-	</div>
+		<div class="infobox mtop1 mbottom1">
+		<table>
+			<tr><th scope="row">
+					<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.acquisition.supplier"/>:
+				</th><td>
+					<span>
+						<fr:view name="workingCapitalTransaction" property="workingCapitalAcquisition.supplier.presentationName"/>
+					</span>
+				</td>
+			</tr>
+			<tr><th scope="row">
+					<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.acquisition.documentNumber"/>:
+				</th><td>
+					<span>
+						<fr:view name="workingCapitalTransaction" property="workingCapitalAcquisition.documentNumber"/>
+					</span>
+				</td>
+			</tr>
+			<tr><th scope="row">
+					<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.acquisition.description"/>:
+				</th><td>
+					<span>
+						<fr:view name="workingCapitalTransaction" property="workingCapitalAcquisition.description"/>
+					</span>
+				</td>
+			</tr>
+			<tr><th scope="row">
+					<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.acquisition.acquisitionClassification"/>:
+				</th><td>
+					<span>
+						<fr:view name="workingCapitalTransaction" property="workingCapitalAcquisition.acquisitionClassification.description"/>
+					</span>
+				</td>
+			</tr>
+			<tr><th scope="row">
+					<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.configuration.acquisition.classifications.economicClassification"/>:
+				</th><td>
+					<fr:view name="workingCapitalTransaction" property="workingCapitalAcquisition.acquisitionClassification.economicClassification"/>
+				</td>
+			</tr>
+			<tr><th scope="row">
+					<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.configuration.acquisition.classifications.pocCode"/>:
+				</th><td>
+					<span>
+						<fr:view name="workingCapitalTransaction" property="workingCapitalAcquisition.acquisitionClassification.pocCode"/>
+					</span>
+				</td>
+			</tr>
+			<tr><th scope="row">
+					<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.acquisition.valueWithoutVat"/>:
+				</th><td>
+					<span>
+						<fr:view name="workingCapitalTransaction" property="workingCapitalAcquisition.valueWithoutVat"/>
+					</span>
+				</td>
+			</tr>
+			<tr><th scope="row">
+					<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.acquisition.money"/>:
+				</th><td>
+					<span>
+						<fr:view name="workingCapitalTransaction" property="workingCapitalAcquisition.workingCapitalAcquisitionTransaction.value" />
+					</span>
+				</td>
+			<logic:present name="workingCapitalTransaction" property="invoice">
+				<bean:define id="url">/workflowProcessManagement.do?method=downloadFile&amp;processId=<bean:write name="workingCapitalTransaction" property="workingCapital.workingCapitalProcess.externalId"/></bean:define>
+				<tr><th scope="row">
+						<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.acquisition.invoice"/>:
+					</th><td>
+						<span>
+							<html:link action="<%= url %>" paramId="fileId" paramName="workingCapitalTransaction" paramProperty="invoice.externalId">
+								<bean:write name="workingCapitalTransaction" property="invoice.filename"/>
+							</html:link>
+						</span>
+					</td>
+				</tr>
+			</logic:present>
+		</table>
+		</div>
+	
 	
 		<table class="tstyle3 mtop1 mbottom1 width100pc" >
 				<tr>

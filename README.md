@@ -10,6 +10,28 @@ Current	workflow processes are: acquisitions and working capital management.
 
 ### On Develop
 
+### v1.6.0
+
+#### New Features
+
+    [Missions] The RevertMissionForEditingActivity can now be processed until a mission process is sent for termination. It now removes all participant authorizations, commitment numbers, and any queues that the process is on. It also creates a new MissionVersion to keep the old process information intact.
+    [Missions] Added a new parameter to the SearchMissions functionality to filter taken processes
+    [WorkingCapital] Added other file uploads to acquisition transactions
+    [Expenditures] Added to the table of supplier fund allocations, a new column with the unconfirmed funds.
+
+#### Enhancements
+
+    [Missions] Added a consistency predicate to guarantee that all VehicleItemJustifications have one VehicleItem
+    [Missions] The MissionSearch of the MissionYear now shows the processes that are pending verification in the pendingApproval category
+
+#### Bug Fixes
+
+    [Missions] Corrected a problem with the replication of VehicleItemJustification over different MissionVersions.
+    [Missions] Corrected a problem with the creation of a new MissionVersion object that did not correctly replicate the authorized slot of VehicleItems
+    [Expenditures] Corrected a problem which allowed to RevertSkipPurchaseOrderDocument on a process with already attached invoices.
+    [Working Capital] Prevented NPE in Parties auto-complete provider
+    [Expenditures] Corrected a presentation problem in the allocated funds of a supplier that showed incorrect values.
+
 ### v1.5.0
 
 #### New Features

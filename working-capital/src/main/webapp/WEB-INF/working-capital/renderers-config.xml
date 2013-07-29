@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE renderers-config SYSTEM "../fenix-renderers-config.dtd" []>
+<renderers-config>
+
+<renderer type="module.workingCapital.domain.WorkingCapitalTransaction" layout="transactionFiles"
+	class="module.workingCapital.presentationTier.renderers.WorkingCapitalTransactionFiles">
+
+	<property name="downloadFormat"
+		value="/workflowProcessManagement.do?method=downloadFile&amp;fileId=${externalId}&amp;processId=${process.externalId}" />
+	<property name="removeFormat"
+		value="/workingCapitalTransaction.do?method=removeFile&amp;fileId=${externalId}&amp;processId=${process.externalId}&amp;transactionId=${workingCapitalTransaction.externalId}" />
+	<property name="imageFile" value=""/>
+</renderer>
+</renderers-config>

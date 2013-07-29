@@ -25,6 +25,7 @@
 package module.mission.domain;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +42,15 @@ import pt.ist.bennu.core.domain.VirtualHost;
  */
 public class MissionVersion extends MissionVersion_Base {
 
-    MissionVersion(final Mission mission) {
+    public static final Comparator<MissionVersion> COMPARATOR_BY_OLDEST_SINCE = new Comparator<MissionVersion>() {
+
+        @Override
+        public int compare(MissionVersion mv1, MissionVersion mv2) {
+            return mv1.getSinceDateTime().isBefore(mv2.getSinceDateTime()) ? -1 : 1;
+        }
+    };
+
+    public MissionVersion(final Mission mission) {
         final MissionVersion previous = mission.getMissionVersion();
 
         setSinceDateTime(new DateTime());

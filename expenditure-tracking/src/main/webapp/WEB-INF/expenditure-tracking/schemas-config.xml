@@ -2296,64 +2296,6 @@ bundle="ACQUISITION_RESOURCES">
 	<slot name="allFundAllocationId" key="label.mission.financer.fundAllocationId"/>
 </schema>
 
-<schema name="module.mission.search.default" type="module.mission.domain.util.SearchMissions" bundle="MISSION_RESOURCES">
-	<slot name="processNumber" key="label.mission.processNumber"/>
-	<slot name="missionResponsible" layout="autoComplete" key="label.mission.requester.unit">
-        <property name="labelField" value="name"/>
-		<property name="format" value="${name} (${user.username})"/>
-		<property name="minChars" value="3"/>		
-		<property name="args" value="provider=module.mission.presentationTier.provider.autoComplete.PersonAutoComplete"/>
-		<property name="size" value="50"/>
-	</slot>
-	<slot name="payingUnit" layout="autoComplete" key="label.mission.financer">
-        <property name="labelField" value="presentationName"/>
-		<property name="format" value="${presentationName}"/>
-		<property name="minChars" value="3"/>		
-		<property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.UnitAutoCompleteProvider"/>
-		<property name="classes" value="inputsize300px"/>
-	</slot>
-	<slot name="accountingUnit" layout="menu-select" key="label.mission.financer.accounting.unit">
-		<property name="providerClass" value="pt.ist.expenditureTrackingSystem.presentationTier.renderers.dataProvider.AccountingUnitProvider"/>
-		<property name="format" value="${name}" />
-	</slot>	
-	<slot name="national" key="label.mission.national"/>
-	<slot name="foreign" key="label.mission.foreign"/>
-	<slot name="date" key="label.mission.date" layout="picker" />
-	<slot name="interval" key="label.mission.interval" layout="picker" />
-	<slot name="requestingPerson" layout="autoComplete" key="label.mission.requester.person">
-        <property name="labelField" value="name"/>
-		<property name="format" value="${name} (${user.username})"/>
-		<property name="minChars" value="3"/>		
-		<property name="args" value="provider=module.mission.presentationTier.provider.autoComplete.PersonAutoComplete"/>
-		<property name="size" value="50"/>
-	</slot>
-	<slot name="participant" layout="autoComplete" key="label.mission.participant">
-        <property name="labelField" value="name"/>
-		<property name="format" value="${name} (${user.username})"/>
-		<property name="minChars" value="3"/>		
-		<property name="args" value="provider=module.mission.presentationTier.provider.autoComplete.PersonAutoComplete"/>
-		<property name="size" value="50"/>
-	</slot>
-	<slot name="accountManager" layout="autoComplete" key="label.mission.accountManager">
-        <property name="labelField" value="name"/>
-		<property name="format" value="${name} (${user.username})"/>
-		<property name="minChars" value="3"/>		
-		<property name="args" value="provider=module.mission.presentationTier.provider.autoComplete.PersonAutoComplete"/>
-		<property name="size" value="50"/>
-	</slot>
-	<slot name="filterCanceledProcesses" key="label.mission.filterCanceledProcesses"/>
-	<slot name="pendingState" key="label.mission.pending.state">
-		<property name="format" value="${localizedName}" />
-	</slot>
-	<slot name="participantAuthorizationAuthority" layout="autoComplete" key="label.mission.participantAuthorizationAuthority">
-        <property name="labelField" value="name"/>
-		<property name="format" value="${name} (${user.username})"/>
-		<property name="minChars" value="3"/>		
-		<property name="args" value="provider=module.mission.presentationTier.provider.autoComplete.PersonAutoComplete"/>
-		<property name="size" value="50"/>
-	</slot>
-</schema>
-
 <schema name="accountabilityType-name" type="module.organization.domain.AccountabilityType" bundle="MISSION_RESOURCES">
 	<slot name="name.content"/>
 </schema>

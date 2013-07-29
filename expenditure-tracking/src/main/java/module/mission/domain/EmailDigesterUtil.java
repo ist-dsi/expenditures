@@ -124,7 +124,7 @@ public class EmailDigesterUtil {
                                     body.append(takenByUserCount);
                                 }
                                 if (pendingApprovalCount > 0) {
-                                    body.append("\n\tPendentes de Aprovação\t");
+                                    body.append("\n\tPendentes de Aprovação / Verificação\t");
                                     body.append(pendingApprovalCount);
                                 }
                                 if (pendingVehicleAuthorizationCount > 0) {

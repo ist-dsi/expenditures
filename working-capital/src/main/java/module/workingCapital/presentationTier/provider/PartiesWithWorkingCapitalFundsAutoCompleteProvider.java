@@ -58,7 +58,7 @@ public class PartiesWithWorkingCapitalFundsAutoCompleteProvider extends PartiesA
         if (person.getMovementResponsibleWorkingCapitalsSet().size() > 0) {
             for (pt.ist.expenditureTrackingSystem.domain.organization.Person expendituresPerson : VirtualHost
                     .getVirtualHostForThread().getExpenditureTrackingSystem().getPeopleSet()) {
-                if (expendituresPerson.getUser() != null && expendituresPerson.getUser().getPerson().equals(person)) {
+                if (expendituresPerson.getUser() != null && person.equals(expendituresPerson.getUser().getPerson())) {
                     return true;
                 }
             }

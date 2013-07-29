@@ -106,6 +106,19 @@ class WorkingCapitalAcquisitionSubmissionDocument extends .module.workflow.domai
 class EmailDigester extends .pt.ist.bennu.core.domain.scheduler.Task {
 }
 
+class TransactionFile extends .module.workflow.domain.ProcessFile {
+
+}
+
+relation WorkingCapitalAcquisitionTransactionFiles { 
+	WorkingCapitalTransaction playsRole workingCapitalTransaction{
+		multiplicity 0..1;
+	}
+	TransactionFile playsRole transactionFile { 
+		multiplicity *;
+	} 
+} 
+
 relation VirtualHostWorkingCapitalSystem {
 	WorkingCapitalSystem playsRole workingCapitalSystem;
 	.pt.ist.bennu.core.domain.VirtualHost playsRole virtualHosts {

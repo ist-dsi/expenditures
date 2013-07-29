@@ -43,7 +43,8 @@ public class RevertSkipPurchaseOrderDocument extends
     @Override
     public boolean isActive(RegularAcquisitionProcess process, User user) {
         return isUserProcessOwner(process, user) && ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user)
-                && process.getAcquisitionProcessState().isProcessed() && !process.hasPurchaseOrderDocument();
+                && process.getAcquisitionProcessState().isProcessed() && !process.hasPurchaseOrderDocument()
+                && !process.hasInvoiceFile();
     }
 
     @Override
