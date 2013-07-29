@@ -92,7 +92,7 @@ public abstract class VehiclItem extends VehiclItem_Base {
     protected void setNewVersionInformation(final MissionItem missionItem) {
         super.setNewVersionInformation(missionItem);
         final VehiclItem vehiclItem = (VehiclItem) missionItem;
-        vehiclItem.setVehiclItemJustification(getVehiclItemJustification());
+        vehiclItem.setVehiclItemJustification(getVehiclItemJustification().createCopy());
         vehiclItem.setDriver(getDriver());
         vehiclItem.setAuthorized(getAuthorized());
     }

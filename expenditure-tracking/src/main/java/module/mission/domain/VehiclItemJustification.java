@@ -4,6 +4,10 @@ import pt.ist.bennu.core.domain.VirtualHost;
 
 public class VehiclItemJustification extends VehiclItemJustification_Base {
 
+    private VehiclItemJustification() {
+        super();
+    }
+
     public VehiclItemJustification(final VehiclItem vehiclItem) {
         super();
         setMissionSystem(MissionSystem.getInstance());
@@ -14,6 +18,14 @@ public class VehiclItemJustification extends VehiclItemJustification_Base {
         setVehiclItem(null);
         setMissionSystem(null);
         deleteDomainObject();
+    }
+
+    public VehiclItemJustification createCopy() {
+        VehiclItemJustification newJustification = new VehiclItemJustification();
+        newJustification.setJustification(getJustification());
+        newJustification.setMissionSystem(getMissionSystem());
+        newJustification.setMotive(getMotive());
+        return newJustification;
     }
 
     @Override
