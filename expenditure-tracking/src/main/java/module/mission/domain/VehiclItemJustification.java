@@ -1,12 +1,9 @@
 package module.mission.domain;
 
 import pt.ist.bennu.core.domain.VirtualHost;
+import pt.ist.fenixframework.consistencyPredicates.ConsistencyPredicate;
 
 public class VehiclItemJustification extends VehiclItemJustification_Base {
-
-    private VehiclItemJustification() {
-        super();
-    }
 
     public VehiclItemJustification(final VehiclItem vehiclItem) {
         super();
@@ -20,12 +17,14 @@ public class VehiclItemJustification extends VehiclItemJustification_Base {
         deleteDomainObject();
     }
 
-    public VehiclItemJustification createCopy() {
-        VehiclItemJustification newJustification = new VehiclItemJustification();
-        newJustification.setJustification(getJustification());
-        newJustification.setMissionSystem(getMissionSystem());
-        newJustification.setMotive(getMotive());
-        return newJustification;
+    public void copy(VehiclItemJustification justificationToWrite) {
+        justificationToWrite.setJustification(getJustification());
+        justificationToWrite.setMotive(getMotive());
+    }
+
+    @ConsistencyPredicate
+    public boolean checkHasVehicleItem() {
+        return getVehiclItem() != null;
     }
 
     @Override
