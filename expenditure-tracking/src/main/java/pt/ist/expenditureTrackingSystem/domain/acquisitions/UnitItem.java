@@ -108,7 +108,7 @@ public class UnitItem extends UnitItem_Base {
             Money totalAmount = getItem().getRealValue();
             Money currentAssignedValue = getItem().getTotalRealAssigned();
 
-            if (currentAssignedValue.addAndRound(realShareValue).isGreaterThan(totalAmount.round())) {
+            if (currentAssignedValue.add(realShareValue).round().isGreaterThan(totalAmount.round())) {
                 throw new DomainException("unitItem.message.exception.cannotASsignMoreThanTotalAmount",
                         DomainException.getResourceFor("resources/AcquisitionResources"));
             }
