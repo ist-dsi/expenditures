@@ -71,19 +71,19 @@ public enum MissionState implements IPresentableEnum {
 
         @Override
         public MissionStateProgress getStateProgress(MissionProcess missionProcess) {
+            if (missionProcess.isCanceled()) {
+                if (!missionProcess.hasAnyAllocatedFunds() && !missionProcess.hasAnyAllocatedProjectFunds()) {
+                    return MissionStateProgress.IDLE;
+                }
+                return MissionStateProgress.PENDING;
+            }
+
             if (!VEHICLE_AUTHORIZATION.isCompleted(missionProcess)) {
                 return MissionStateProgress.IDLE;
             }
 
             if (!isRequired(missionProcess)) {
                 return MissionStateProgress.COMPLETED;
-            }
-
-            if (missionProcess.isCanceled()) {
-                if (!missionProcess.hasAnyAllocatedFunds() && !missionProcess.hasAnyAllocatedProjectFunds()) {
-                    return MissionStateProgress.IDLE;
-                }
-                return MissionStateProgress.PENDING;
             }
 
             if (missionProcess.hasAllAllocatedFunds() && missionProcess.hasAllCommitmentNumbers()

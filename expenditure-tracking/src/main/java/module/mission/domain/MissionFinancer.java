@@ -202,7 +202,7 @@ public class MissionFinancer extends MissionFinancer_Base {
         return false;
     }
 
-    public boolean hasAllocatedProjectFunds() {
+    public boolean hasAllAllocatedProjectFunds() {
         if (!hasAnyMissionItemProjectFinancers()) {
             return false;
         }

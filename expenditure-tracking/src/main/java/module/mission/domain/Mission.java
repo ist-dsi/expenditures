@@ -369,7 +369,7 @@ public abstract class Mission extends Mission_Base {
             return false;
         }
         for (final MissionFinancer financer : getFinancerSet()) {
-            if (financer.isProjectFinancer() && !financer.hasAllocatedProjectFunds()) {
+            if (financer.isProjectFinancer() && !financer.hasAllAllocatedProjectFunds()) {
                 return false;
             }
         }
@@ -398,7 +398,7 @@ public abstract class Mission extends Mission_Base {
 
     public boolean hasAnyAllocatedProjectFunds() {
         for (final MissionFinancer financer : getFinancerSet()) {
-            if (financer.hasAllocatedProjectFunds()) {
+            if (financer.hasAllAllocatedProjectFunds()) {
                 return true;
             }
         }
