@@ -218,6 +218,22 @@ public class MissionFinancer extends MissionFinancer_Base {
         return true;
     }
 
+    public boolean hasAnyAllocatedProjectFunds() {
+        if (!hasAnyMissionItemProjectFinancers()) {
+            return false;
+        }
+        for (final MissionItemFinancer missionItemFinancer : getMissionItemFinancersSet()) {
+            if (missionItemFinancer instanceof MissionItemProjectFinancer) {
+                final MissionItemProjectFinancer missionItemProjectFinancer = (MissionItemProjectFinancer) missionItemFinancer;
+                final Money amount = missionItemProjectFinancer.getAmount();
+                if (amount != null && amount.isPositive() && missionItemProjectFinancer.getProjectFundAllocationId() != null) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public boolean hasAnyMissionItemProjectFinancers() {
         for (final MissionItemFinancer missionItemFinancer : getMissionItemFinancersSet()) {
             if (missionItemFinancer instanceof MissionItemProjectFinancer) {

@@ -398,7 +398,7 @@ public abstract class Mission extends Mission_Base {
 
     public boolean hasAnyAllocatedProjectFunds() {
         for (final MissionFinancer financer : getFinancerSet()) {
-            if (financer.hasAllAllocatedProjectFunds()) {
+            if (financer.hasAnyAllocatedProjectFunds()) {
                 return true;
             }
         }
