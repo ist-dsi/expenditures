@@ -43,9 +43,9 @@ public class ApproveExceptionalWorkingCapitalAcquisitionActivity extends
     }
 
     @Override
-    public boolean isActive(final WorkingCapitalProcess process, final User user) {
-        final Accountability accountability = process.getWorkingCapitalSystem().getManagementAccountability(user);
-        final WorkingCapital workingCapital = process.getWorkingCapital();
+    public boolean isActive(WorkingCapitalProcess process, User user) {
+        Accountability accountability = process.getWorkingCapitalSystem().getManagementAccountability(user);
+        WorkingCapital workingCapital = process.getWorkingCapital();
         if (accountability != null && !workingCapital.isCanceledOrRejected() && workingCapital.hasAcquisitionPendingApproval()) {
             return true;
         }
@@ -53,14 +53,14 @@ public class ApproveExceptionalWorkingCapitalAcquisitionActivity extends
     }
 
     @Override
-    protected void process(final WorkingCapitalTransactionInformation activityInformation) {
-        final ExceptionalWorkingCapitalAcquisitionTransaction workingCapitalTransaction =
+    protected void process(WorkingCapitalTransactionInformation activityInformation) {
+        ExceptionalWorkingCapitalAcquisitionTransaction workingCapitalTransaction =
                 (ExceptionalWorkingCapitalAcquisitionTransaction) activityInformation.getWorkingCapitalTransaction();
         workingCapitalTransaction.approveByManagement(getLoggedPerson());
     }
 
     @Override
-    public ActivityInformation<WorkingCapitalProcess> getActivityInformation(final WorkingCapitalProcess process) {
+    public ActivityInformation<WorkingCapitalProcess> getActivityInformation(WorkingCapitalProcess process) {
         return new WorkingCapitalTransactionInformation(process, this);
     }
 
@@ -71,7 +71,7 @@ public class ApproveExceptionalWorkingCapitalAcquisitionActivity extends
 
     @Override
     public boolean isUserAwarenessNeeded(WorkingCapitalProcess process, User user) {
-        final WorkingCapital workingCapital = process.getWorkingCapital();
+        WorkingCapital workingCapital = process.getWorkingCapital();
         return !workingCapital.isCanceledOrRejected() && workingCapital.hasAcquisitionPendingDirectApproval(user);
     }
 

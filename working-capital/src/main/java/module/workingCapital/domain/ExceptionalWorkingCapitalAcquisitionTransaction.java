@@ -27,7 +27,7 @@ public class ExceptionalWorkingCapitalAcquisitionTransaction extends Exceptional
     @Override
     public boolean isApproved() {
         final WorkingCapitalAcquisition workingCapitalAcquisition = getWorkingCapitalAcquisition();
-        return workingCapitalAcquisition.getApproved() != null;
+        return (workingCapitalAcquisition.getApproved() != null) && isManagementApproved();
     }
 
     public boolean isPendingManagementApproval() {
