@@ -46,7 +46,8 @@ public class ApproveExceptionalWorkingCapitalAcquisitionActivity extends
     public boolean isActive(WorkingCapitalProcess process, User user) {
         Accountability accountability = process.getWorkingCapitalSystem().getManagementAccountability(user);
         WorkingCapital workingCapital = process.getWorkingCapital();
-        if (accountability != null && !workingCapital.isCanceledOrRejected() && workingCapital.hasAcquisitionPendingApproval()) {
+        if (accountability != null && !workingCapital.isCanceledOrRejected()
+                && workingCapital.hasAnyExceptionalAcquisitionPendingManagementApproval()) {
             return true;
         }
         return false;

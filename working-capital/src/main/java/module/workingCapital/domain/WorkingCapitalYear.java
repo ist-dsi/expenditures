@@ -210,17 +210,11 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
                 return true;
             }
 
-            for (WorkingCapitalAcquisition transaction : workingCapitalProcess.getWorkingCapital()
-                    .getWorkingCapitalAcquisitionsSet()) {
-                if (transaction.getWorkingCapitalAcquisitionTransaction().isExceptionalAcquisition()
-                        && ((ExceptionalWorkingCapitalAcquisitionTransaction) transaction
-                                .getWorkingCapitalAcquisitionTransaction()).isPendingManagementApprovalByUser(user)) {
-                    return true;
-
-                }
+            if ((WorkingCapitalSystem.getInstanceForCurrentHost().getManagementAccountability(user) != null)
+                    && (workingCapitalProcess.getWorkingCapital().hasAnyExceptionalAcquisitionPendingManagementApproval())) {
+                return true;
             }
             return false;
-
         }
     }
 

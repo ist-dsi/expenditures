@@ -314,6 +314,21 @@ public class WorkingCapital extends WorkingCapital_Base {
         return true;
     }
 
+    public boolean hasAnyExceptionalAcquisitionPendingManagementApproval() {
+        for (WorkingCapitalAcquisition workingCapitalAcquisition : getWorkingCapitalAcquisitionsSet()) {
+            WorkingCapitalTransaction workingCapitalTransaction =
+                    workingCapitalAcquisition.getWorkingCapitalAcquisitionTransaction();
+            if (workingCapitalTransaction.isExceptionalAcquisition()) {
+                ExceptionalWorkingCapitalAcquisitionTransaction exceptionalTransaction =
+                        (ExceptionalWorkingCapitalAcquisitionTransaction) workingCapitalTransaction;
+                if (exceptionalTransaction.isPendingManagementApproval()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public boolean hasAcquisitionPendingApproval() {
         for (WorkingCapitalAcquisition workingCapitalAcquisition : getWorkingCapitalAcquisitionsSet()) {
             WorkingCapitalTransaction workingCapitalTransaction =

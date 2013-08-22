@@ -34,12 +34,6 @@ public class ExceptionalWorkingCapitalAcquisitionTransaction extends Exceptional
         return (getApprovalByManagement() == null) && !isCanceledOrRejected();
     }
 
-    public boolean isPendingManagementApprovalByUser(User user) {
-        final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstanceForCurrentHost();
-        final Accountability accountability = workingCapitalSystem.getManagementAccountability(user);
-        return isPendingManagementApproval() && accountability != null;
-    }
-
     public boolean isManagementApproved() {
         return getApprovalByManagement() != null;
     }
