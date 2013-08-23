@@ -23,11 +23,26 @@
 <br/>
 <br/>
 
+<bean:define id="workingCapitalTransaction" name="workingCapitalTransaction" type="module.workingCapital.domain.WorkingCapitalTransaction" />
+<style media="screen" type="text/css">
+tr.exceptionalAcquisition {
+	background-color : #FAFFBA
+}
+tr.exceptionalAcquisition td {
+	background-color : #FAFFBA
+}
+</style>
+
 <table class="tstyle3 width100pc">
 	<tr>
 		<jsp:include page="workingCapitalTransactionLineHeader.jsp"/>
 	</tr>
+	
+	<% if (((WorkingCapitalTransaction) workingCapitalTransaction).isExceptionalAcquisition()) { %>
+	<tr class="exceptionalAcquisition">
+	<% } else { %>
 	<tr>
+	<% } %>
 		<jsp:include page="workingCapitalTransactionLine.jsp"/>
 	</tr>
 </table>
@@ -331,7 +346,6 @@
 					</th>
 				</tr>
 				
-				<bean:define id="workingCapitalTransaction" name="workingCapitalTransaction" type="module.workingCapital.domain.WorkingCapitalTransaction"/>
 				<% if (workingCapitalTransaction.isExceptionalAcquisition()) { %>
 					<tr>
 						<td class="aleft">

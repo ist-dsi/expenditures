@@ -292,20 +292,46 @@ public class WorkingCapital extends WorkingCapital_Base {
     }
 
     public SortedSet<WorkingCapitalTransaction> getSortedWorkingCapitalTransactions() {
-        final SortedSet<WorkingCapitalTransaction> result =
+        SortedSet<WorkingCapitalTransaction> result =
                 new TreeSet<WorkingCapitalTransaction>(WorkingCapitalTransaction.COMPARATOR_BY_NUMBER);
         result.addAll(getWorkingCapitalTransactionsSet());
         return result;
     }
 
     public Money getBalance() {
-        final WorkingCapitalTransaction workingCapitalTransaction = getLastTransaction();
+        WorkingCapitalTransaction workingCapitalTransaction = getLastTransaction();
         return workingCapitalTransaction == null ? Money.ZERO : workingCapitalTransaction.getBalance();
     }
 
+    public boolean areAllAcquisitionsApproved() {
+        for (WorkingCapitalAcquisition workingCapitalAcquisition : getWorkingCapitalAcquisitionsSet()) {
+            WorkingCapitalTransaction workingCapitalTransaction =
+                    workingCapitalAcquisition.getWorkingCapitalAcquisitionTransaction();
+            if (!workingCapitalTransaction.isApproved()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean hasAnyExceptionalAcquisitionPendingManagementApproval() {
+        for (WorkingCapitalAcquisition workingCapitalAcquisition : getWorkingCapitalAcquisitionsSet()) {
+            WorkingCapitalTransaction workingCapitalTransaction =
+                    workingCapitalAcquisition.getWorkingCapitalAcquisitionTransaction();
+            if (workingCapitalTransaction.isExceptionalAcquisition()) {
+                ExceptionalWorkingCapitalAcquisitionTransaction exceptionalTransaction =
+                        (ExceptionalWorkingCapitalAcquisitionTransaction) workingCapitalTransaction;
+                if (exceptionalTransaction.isPendingManagementApproval()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public boolean hasAcquisitionPendingApproval() {
-        for (final WorkingCapitalAcquisition workingCapitalAcquisition : getWorkingCapitalAcquisitionsSet()) {
-            final WorkingCapitalTransaction workingCapitalTransaction =
+        for (WorkingCapitalAcquisition workingCapitalAcquisition : getWorkingCapitalAcquisitionsSet()) {
+            WorkingCapitalTransaction workingCapitalTransaction =
                     workingCapitalAcquisition.getWorkingCapitalAcquisitionTransaction();
             if (workingCapitalTransaction.isPendingApproval()) {
                 return true;
@@ -314,19 +340,19 @@ public class WorkingCapital extends WorkingCapital_Base {
         return false;
     }
 
-    public boolean hasAcquisitionPendingApproval(final User user) {
-        final Money valueForAuthorization = Money.ZERO;
+    public boolean hasAcquisitionPendingApproval(User user) {
+        Money valueForAuthorization = Money.ZERO;
         return hasAcquisitionPendingApproval() && findUnitResponsible(user.getPerson(), valueForAuthorization) != null;
     }
 
-    public boolean hasAcquisitionPendingDirectApproval(final User user) {
-        final Money valueForAuthorization = Money.ZERO;
+    public boolean hasAcquisitionPendingDirectApproval(User user) {
+        Money valueForAuthorization = Money.ZERO;
         return hasAcquisitionPendingApproval() && findDirectUnitResponsible(user.getPerson(), valueForAuthorization) != null;
     }
 
     public boolean hasAcquisitionPendingVerification() {
-        for (final WorkingCapitalAcquisition workingCapitalAcquisition : getWorkingCapitalAcquisitionsSet()) {
-            final WorkingCapitalTransaction workingCapitalTransaction =
+        for (WorkingCapitalAcquisition workingCapitalAcquisition : getWorkingCapitalAcquisitionsSet()) {
+            WorkingCapitalTransaction workingCapitalTransaction =
                     workingCapitalAcquisition.getWorkingCapitalAcquisitionTransaction();
             if (workingCapitalTransaction.isPendingVerification()) {
                 return true;

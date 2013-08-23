@@ -27,17 +27,11 @@ public class ExceptionalWorkingCapitalAcquisitionTransaction extends Exceptional
     @Override
     public boolean isApproved() {
         final WorkingCapitalAcquisition workingCapitalAcquisition = getWorkingCapitalAcquisition();
-        return workingCapitalAcquisition.getApproved() != null;
+        return (workingCapitalAcquisition.getApproved() != null) && isManagementApproved();
     }
 
     public boolean isPendingManagementApproval() {
         return (getApprovalByManagement() == null) && !isCanceledOrRejected();
-    }
-
-    public boolean isPendingManagementApprovalByUser(User user) {
-        final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstanceForCurrentHost();
-        final Accountability accountability = workingCapitalSystem.getManagementAccountability(user);
-        return isPendingManagementApproval() && accountability != null;
     }
 
     public boolean isManagementApproved() {
