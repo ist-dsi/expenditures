@@ -181,7 +181,9 @@ public class ProjectFinancer extends ProjectFinancer_Base {
 
     public Set<AccountingUnit> getAccountingUnits() {
         Set<AccountingUnit> res = new HashSet<AccountingUnit>();
-        res.add(getUnit().getAccountingUnit());
+        if (getUnit().getAccountingUnit() != null) {
+            res.add(getUnit().getAccountingUnit());
+        }
         final AccountingUnit accountingUnit = AccountingUnit.readAccountingUnitByUnitName("10");
         if (accountingUnit != null) {
             res.add(accountingUnit);
