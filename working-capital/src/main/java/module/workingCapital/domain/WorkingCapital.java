@@ -307,7 +307,7 @@ public class WorkingCapital extends WorkingCapital_Base {
         for (WorkingCapitalAcquisition workingCapitalAcquisition : getWorkingCapitalAcquisitionsSet()) {
             WorkingCapitalTransaction workingCapitalTransaction =
                     workingCapitalAcquisition.getWorkingCapitalAcquisitionTransaction();
-            if (!workingCapitalTransaction.isApproved()) {
+            if (!workingCapitalTransaction.isCanceledOrRejected() && !workingCapitalTransaction.isApproved()) {
                 return false;
             }
         }
