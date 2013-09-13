@@ -57,8 +57,11 @@ import org.joda.time.LocalDate;
 import pt.ist.bennu.core.domain.util.Money;
 import pt.ist.bennu.core.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.ProcessState;
 import pt.ist.expenditureTrackingSystem.domain.SavedSearch;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionItemClassification;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
@@ -67,14 +70,15 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Invoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.Approve;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.Authorize;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchProcessValues;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SubmitForFundAllocation;
-import pt.ist.expenditureTrackingSystem.domain.announcements.OperationLog;
 import pt.ist.expenditureTrackingSystem.domain.dto.PayingUnitTotalBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.UserSearchBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.VariantBean;
@@ -266,7 +270,7 @@ public class SearchPaymentProcessesAction extends BaseAction {
         filename = filename.replace(' ', '_');
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-disposition", "attachment; filename=" + filename + ".xls");
-        final StyledExcelSpreadsheet spreadsheet = new StyledExcelSpreadsheet(filename);
+        StyledExcelSpreadsheet spreadsheet = new StyledExcelSpreadsheet(filename);
         try {
             ServletOutputStream writer = response.getOutputStream();
             fillXlsInfo(processes, spreadsheet, writer);
@@ -294,11 +298,16 @@ public class SearchPaymentProcessesAction extends BaseAction {
 
             spreadsheet.addCell(process.getAcquisitionProcessId());
             spreadsheet.addCell(process.getTypeShortDescription());
-            final AcquisitionItemClassification classification = process.getGoodsOrServiceClassification();
+            AcquisitionItemClassification classification = process.getGoodsOrServiceClassification();
             spreadsheet.addCell(classification == null ? " " : classification.getLocalizedName());
             spreadsheet.addCell(process.getSuppliersDescription());
             spreadsheet.addCell(process.getRequest().getRequestItemsSet().size());
             spreadsheet.addCell(process.getProcessStateDescription());
+            DateTime time = new DateTime();
+            if (process.getPaymentProcessYear().getYear() != time.getYear()) {
+                time = new DateTime(process.getPaymentProcessYear().getYear().intValue(), 12, 31, 23, 59, 59, 0);
+            }
+            spreadsheet.addCell(describeState(process, time));
             DateTime date = process.getDateFromLastActivity();
             spreadsheet.addCell((date == null) ? "" : date.getDayOfMonth() + "-" + date.getMonthOfYear() + "-" + date.getYear()
                     + " " + date.getHourOfDay() + ":" + date.getMinuteOfHour());
@@ -407,37 +416,64 @@ public class SearchPaymentProcessesAction extends BaseAction {
             spreadsheet.addCell(invoiceDate == null ? " " : invoiceDate.toString("yyyy-MM-dd"));
             spreadsheet.addCell(invoiceValue.toFormatString());
 
-            final DateTime creationDate = process.getCreationDate();
+            DateTime creationDate = process.getCreationDate();
             spreadsheet.addCell(creationDate == null ? " " : creationDate.toString("yyyy-MM-dd"));
-            final SortedSet<WorkflowLog> executionLogsSet = new TreeSet<WorkflowLog>(WorkflowLog.COMPARATOR_BY_WHEN_REVERSED);
+            SortedSet<WorkflowLog> executionLogsSet = new TreeSet<WorkflowLog>(WorkflowLog.COMPARATOR_BY_WHEN_REVERSED);
             executionLogsSet.addAll(process.getExecutionLogsSet());
-            final DateTime approvalDate = getApprovalDate(process, executionLogsSet);
+            DateTime approvalDate = getApprovalDate(process, executionLogsSet);
             spreadsheet.addCell(approvalDate == null ? " " : approvalDate.toString("yyyy-MM-dd"));
-            final DateTime authorizationDate = getAuthorizationDate(process, executionLogsSet);
+            DateTime authorizationDate = getAuthorizationDate(process, executionLogsSet);
             spreadsheet.addCell(authorizationDate == null ? " " : authorizationDate.toString("yyyy-MM-dd"));
         }
     }
 
-    private DateTime getApprovalDate(final PaymentProcess process, final SortedSet<WorkflowLog> executionLogsSet) {
-        for (final WorkflowLog log : executionLogsSet) {
+    private String describeState(PaymentProcess process, DateTime time) {
+        if (time != new DateTime()) {
+            DateTime lastLogInstant = process.getDateFromLastActivity();
+            if (lastLogInstant != null && lastLogInstant.isAfter(time)) {
+                if (process instanceof RefundProcess) {
+                    RefundProcessState processState = findProcessState(process, time);
+                    return processState == null ? "???" : processState.getLocalizedName();
+                }
+                if (process instanceof AcquisitionProcess) {
+                    AcquisitionProcessState processState = findProcessState(process, time);
+                    return processState == null ? "???" : processState.getLocalizedName();
+                }
+            }
+        }
+        return process.getProcessStateName();
+    }
+
+    private <StateType extends ProcessState> StateType findProcessState(PaymentProcess process, DateTime time) {
+        ProcessState result = null;
+        for (ProcessState processState : process.getProcessStatesSet()) {
+            DateTime when = processState.getWhenDateTime();
+            if (when.getYear() == process.getPaymentProcessYear().getYear()
+                    && (result == null || when.isAfter(result.getWhenDateTime()))) {
+                result = processState;
+            }
+        }
+        return (StateType) result;
+    }
+
+    private DateTime getApprovalDate(PaymentProcess process, SortedSet<WorkflowLog> executionLogsSet) {
+        for (WorkflowLog log : executionLogsSet) {
             if (log instanceof ActivityLog) {
-                final ActivityLog activityLog = (ActivityLog) log;
+                ActivityLog activityLog = (ActivityLog) log;
                 if (SubmitForFundAllocation.class.getSimpleName().equals(activityLog.getOperation())
                         || Approve.class.getSimpleName().equals(activityLog.getOperation())) {
                     return log.getWhenOperationWasRan();
                 }
-            }
-            if (log instanceof OperationLog) {
             }
         }
 
         return null;
     }
 
-    private DateTime getAuthorizationDate(final PaymentProcess process, final SortedSet<WorkflowLog> executionLogsSet) {
-        for (final WorkflowLog log : executionLogsSet) {
+    private DateTime getAuthorizationDate(PaymentProcess process, SortedSet<WorkflowLog> executionLogsSet) {
+        for (WorkflowLog log : executionLogsSet) {
             if (log instanceof ActivityLog) {
-                final ActivityLog activityLog = (ActivityLog) log;
+                ActivityLog activityLog = (ActivityLog) log;
                 if (Authorize.class.getSimpleName().equals(activityLog.getOperation())) {
                     return log.getWhenOperationWasRan();
                 }
@@ -467,6 +503,7 @@ public class SearchPaymentProcessesAction extends BaseAction {
         spreadsheet.addHeader(getExpenditureResourceMessage("label.suppliersDescription"));
         spreadsheet.addHeader(getExpenditureResourceMessage("label.itemsCount"));
         spreadsheet.addHeader(getExpenditureResourceMessage("label.process.state.description"));
+        spreadsheet.addHeader(getExpenditureResourceMessage("label.processState.atEndOfYear"));
         spreadsheet.addHeader(getExpenditureResourceMessage("label.inactiveSince"));
         spreadsheet.addHeader(getExpenditureResourceMessage("label.requesterName"));
         spreadsheet.addHeader(getAcquisitionResourceMessage("acquisitionProcess.label.requestingUnit"));
