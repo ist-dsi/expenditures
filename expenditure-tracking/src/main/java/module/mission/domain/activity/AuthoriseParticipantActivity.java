@@ -27,6 +27,7 @@ package module.mission.domain.activity;
 import module.mission.domain.Mission;
 import module.mission.domain.MissionProcess;
 import module.mission.domain.PersonMissionAuthorization;
+import module.mission.domain.util.MissionState;
 import module.workflow.activities.ActivityInformation;
 import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
 import pt.ist.bennu.core.domain.User;
@@ -46,12 +47,14 @@ public class AuthoriseParticipantActivity extends MissionProcessActivity<Mission
 
     @Override
     public boolean isActive(MissionProcess missionProcess, User user) {
-        return super.isActive(missionProcess, user)
-                && !missionProcess.getIsCanceled()
-                && missionProcess.isApproved()
-                && missionProcess.canAuthoriseParticipantActivity()
-                && (!missionProcess.getMission().hasAnyFinancer() || (missionProcess.hasAllAllocatedFunds() && missionProcess
-                        .hasAllCommitmentNumbers()));
+        if (!super.isActive(missionProcess, user)) {
+            return false;
+        }
+        if (!MissionState.PARTICIPATION_AUTHORIZATION.isPending(missionProcess)) {
+            return false;
+        }
+
+        return missionProcess.canAuthoriseParticipantActivity();
     }
 
     @Override
