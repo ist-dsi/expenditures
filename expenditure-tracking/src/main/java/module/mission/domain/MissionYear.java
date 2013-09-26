@@ -221,16 +221,24 @@ public class MissionYear extends MissionYear_Base {
 
         @Override
         boolean shouldAdd(final MissionProcess missionProcess, final User user) {
-            return (!missionProcess.hasCurrentOwner() || missionProcess.isTakenByCurrentUser())
-                    && missionProcess.isApproved()
-                    && !missionProcess.getIsCanceled()
-                    && ((missionProcess.isPendingParticipantAuthorisationBy(user) && (!missionProcess.getMission()
-                            .hasAnyFinancer() || (missionProcess.hasAllAllocatedFunds() && missionProcess
-                            .hasAllCommitmentNumbers()))) || (//missionProcess.areAllParticipantsAuthorizedForPhaseOne()
-                    missionProcess.areAllParticipantsAuthorized() && missionProcess.hasAllAllocatedFunds() && missionProcess
-                                .isPendingDirectAuthorizationBy(user)));
-        }
+            if (missionProcess.hasCurrentOwner() && !missionProcess.isTakenByCurrentUser()) {
+                return false;
+            }
+            if (!missionProcess.isApproved()) {
+                return false;
+            }
+            if (missionProcess.getIsCanceled()) {
+                return false;
+            }
 
+            if (missionProcess.isPendingParticipantAuthorisationBy(user)
+                    && MissionState.PARTICIPATION_AUTHORIZATION.isPending(missionProcess)) {
+                return true;
+            }
+
+            return (missionProcess.areAllParticipantsAuthorized() && missionProcess.hasAllAllocatedFunds() && missionProcess
+                    .isPendingDirectAuthorizationBy(user));
+        }
     }
 
     private class PendingFundAllocationSearch extends MissionProcessSearch {

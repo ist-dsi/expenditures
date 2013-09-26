@@ -79,13 +79,13 @@ public class MissionAuthorizationMap implements Serializable {
 
     private void findPersonMissionAuthorizations() {
         for (int i = 0; i < levelsForUser.length; i++) {
-            final Unit unit = levelsForUser[i];
+            Unit unit = levelsForUser[i];
             if (unit != null) {
                 personMissionAuthorizations[i] =
                         new TreeSet<PersonMissionAuthorization>(PersonMissionAuthorization.COMPARATOR_BY_PROCESS_NUMBER);
-                for (final PersonMissionAuthorization personMissionAuthorization : unit.getPersonMissionAuthorizationSet()) {
-                    final Mission mission = personMissionAuthorization.getAssociatedMission();
-                    final MissionProcess missionProcess = mission.getMissionProcess();
+                for (PersonMissionAuthorization personMissionAuthorization : unit.getPersonMissionAuthorizationSet()) {
+                    Mission mission = personMissionAuthorization.getAssociatedMission();
+                    MissionProcess missionProcess = mission.getMissionProcess();
                     if (!personMissionAuthorization.hasAuthority()
                             && !personMissionAuthorization.hasDelegatedAuthority()
 
@@ -93,19 +93,10 @@ public class MissionAuthorizationMap implements Serializable {
                                     .getPrevious().hasAuthority() || personMissionAuthorization.getPrevious()
                                     .hasDelegatedAuthority())))
 
-                            && missionProcess.isApproved()
                             && missionProcess.canAuthoriseParticipantActivity()
-                            && (!missionProcess.getMission().hasAnyFinancer() || (missionProcess.hasAllAllocatedFunds() && missionProcess
-                                    .hasAllCommitmentNumbers()))
 
-                            && !personMissionAuthorization.getMissionProcess().isCanceled()
-                            && !personMissionAuthorization.isProcessTakenByOtherUser()
-                            && (personMissionAuthorization.getMissionProcess().hasAllAllocatedFunds() || !personMissionAuthorization
-                                    .getMissionProcess().getMission().hasAnyFinancer())
-                    /**
-                     * && personMissionAuthorization.isAvailableForAuthorization()
-                     */
-                    ) {
+                            && MissionState.PARTICIPATION_AUTHORIZATION.isPending(missionProcess)
+                            && !personMissionAuthorization.isProcessTakenByOtherUser()) {
                         personMissionAuthorizations[i].add(personMissionAuthorization);
                     }
                 }
