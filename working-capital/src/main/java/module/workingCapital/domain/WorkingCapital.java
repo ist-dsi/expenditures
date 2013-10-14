@@ -26,13 +26,16 @@ package module.workingCapital.domain;
 
 import java.util.Collections;
 import java.util.Set;
+import java.util.SortedMap;
 import java.util.SortedSet;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 import module.organization.domain.Person;
 import module.workflow.util.PresentableProcessState;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
@@ -785,6 +788,35 @@ public class WorkingCapital extends WorkingCapital_Base {
     @Deprecated
     public boolean hasAnyWorkingCapitalAcquisitions() {
         return !getWorkingCapitalAcquisitionsSet().isEmpty();
+    }
+
+    public SortedMap<Person, Set<Authorization>> getSortedAuthorizations() {
+	final SortedMap<Person, Set<Authorization>> authorizations = new TreeMap<Person, Set<Authorization>>(Person.COMPARATOR_BY_NAME);
+	collectAuthorizations(authorizations, getUnit());
+	return authorizations;
+    }
+
+    private void collectAuthorizations(final SortedMap<Person, Set<Authorization>> authorizations, final Unit unit) {
+	for (final Authorization authorization : unit.getAuthorizationsSet()) {
+	    int year = getWorkingCapitalYear().getYear().intValue();
+	    final LocalDate begin = authorization.getStartDate();
+	    final LocalDate end = authorization.getEndDate();
+	    if ((end != null && end.getYear() < year)
+		    || begin != null && begin.getYear() > year) {
+		continue;
+	    }
+	    final Person person = authorization.getPerson().getUser().getPerson();
+	    if (!authorizations.containsKey(person)) {
+		authorizations.put(person, new TreeSet<Authorization>(Authorization.COMPARATOR_BY_NAME_AND_DATE));
+	    }
+	    authorizations.get(person).add(authorization);
+	}
+	if (authorizations.isEmpty()) {
+	    final Unit parent = unit.getParentUnit();
+	    if (parent != null) {
+		collectAuthorizations(authorizations, parent);
+	    }
+	}
     }
 
 }

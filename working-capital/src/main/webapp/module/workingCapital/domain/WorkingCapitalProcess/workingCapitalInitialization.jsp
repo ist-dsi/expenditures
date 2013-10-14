@@ -1,3 +1,9 @@
+<%@page import="org.joda.time.LocalDate"%>
+<%@page import="java.util.Map.Entry"%>
+<%@page import="pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization"%>
+<%@page import="java.util.Set"%>
+<%@page import="module.organization.domain.Person"%>
+<%@page import="java.util.SortedMap"%>
 <%@page import="module.workingCapital.domain.WorkingCapitalInitializationReenforcement"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html"%>
@@ -8,7 +14,7 @@
 
 <%@ page import="java.math.BigDecimal" %>
 
-<bean:define id="workingCapital" name="process" property="workingCapital"/>
+<bean:define id="workingCapital" name="process" property="workingCapital" type="module.workingCapital.domain.WorkingCapital"/>
 
 <h3>
 	<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.initialization"/>
@@ -29,6 +35,48 @@
 				<html:link styleClass="secondaryLink" page="<%= "/expenditureTrackingOrganization.do?method=viewOrganization&unitOid=" + unitOID%>" target="_blank">
 					<bean:write name="workingCapital" property="unit.presentationName"/>
 				</html:link>
+			</td>
+		</tr>
+		<tr>
+			<td class="width215px">
+				<bean:message key="label.module.workingCapital.unit.responsible" bundle="WORKING_CAPITAL_RESOURCES" />:&nbsp;
+			</td>
+			<td>
+				<%
+					final SortedMap<Person, Set<Authorization>> authorizations = workingCapital.getSortedAuthorizations();
+					if (!authorizations.isEmpty()) {
+				%>
+						<ul style="padding: 0px 0 0px 16px;">
+				<%
+							for (final Entry<Person, Set<Authorization>> entry : authorizations.entrySet()) {
+							    final StringBuilder builder = new StringBuilder();
+							    for (final Authorization authorization : entry.getValue()) {
+									if (builder.length() > 0) {
+									    builder.append("; ");
+									}
+									final LocalDate start = authorization.getStartDate();
+									final LocalDate end = authorization.getEndDate();
+									if (start != null) {
+									    builder.append(start.toString("yyyy-MM-dd"));
+									}
+									builder.append(" - ");
+									if (end != null) {
+									    builder.append(end.toString("yyyy-MM-dd"));
+									}
+							    }
+				%>
+								<li title="<%= builder.toString() %>">
+									<html:link styleClass="secondaryLink" page="<%= "/expenditureTrackingOrganization.do?method=viewPerson&personOid=" + entry.getKey().getUser().getExpenditurePerson().getExternalId() %>" target="_blank">
+										<%= entry.getKey().getName() %>
+									</html:link>
+								</li>
+				<%
+							}
+				%>
+						</ul>
+				<%
+					}
+				%>
 			</td>
 		</tr>
 		<tr>
