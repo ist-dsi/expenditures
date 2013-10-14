@@ -173,13 +173,17 @@
 				<% } %>
 			</td>
 		</tr>
-		<logic:equal name="workingCapitalInitialization" property="class.name" value="module.workingCapital.domain.WorkingCapitalInitializationReenforcement">
+		<logic:iterate id="someInit" name="workingCapital" property="sortedWorkingCapitalInitializations">
+			<% if (someInit instanceof WorkingCapitalInitializationReenforcement) { %>
 			<tr>
 				<td class="width215px">
 					<bean:message key="label.module.workingCapital.initialization.requestedReenforcementValue" bundle="WORKING_CAPITAL_RESOURCES" />:&nbsp;
 				</td>
 				<td>
-					<fr:view name="workingCapitalInitialization" property="requestedReenforcementValue"/>
+					<fr:view name="someInit" property="requestedReenforcementValue"/>
+					<span style="color: gray;">
+						<fr:view name="someInit" property="requestCreation"/>
+					</span>
 				</td>
 			</tr>
 			<tr>
@@ -187,12 +191,16 @@
 					<bean:message key="label.module.workingCapital.initialization.authorizedReenforcementValue" bundle="WORKING_CAPITAL_RESOURCES" />:&nbsp;
 				</td>
 				<td class="bold">
-					<% if (((WorkingCapitalInitializationReenforcement) workingCapitalInitialization).getAuthorizedReenforcementValue() != null) { %>
-						<fr:view name="workingCapitalInitialization" property="authorizedReenforcementValue"/>
+					<% if (((WorkingCapitalInitializationReenforcement) someInit).getAuthorizedReenforcementValue() != null) { %>
+						<fr:view name="someInit" property="authorizedReenforcementValue"/>
+						<span style="color: gray;">
+							<fr:view name="someInit" property="authorizationByUnitResponsible"/>
+						</span>
 					<% } %>
 				</td>
 			</tr>
-		</logic:equal>
+			<% } %>
+		</logic:iterate>
 		<logic:present name="workingCapitalInitialization" property="lastSubmission">
 			<tr>
 				<td class="width215px">
