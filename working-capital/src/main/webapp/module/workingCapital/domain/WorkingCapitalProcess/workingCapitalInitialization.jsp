@@ -173,26 +173,6 @@
 				<% } %>
 			</td>
 		</tr>
-		<logic:present name="workingCapitalInitialization" property="lastSubmission">
-			<tr>
-				<td class="width215px">
-					<bean:message key="label.module.workingCapital.initialization.lastSubmission" bundle="WORKING_CAPITAL_RESOURCES" />:&nbsp;
-				</td>
-				<td>
-					<fr:view name="workingCapitalInitialization" property="lastSubmission"/>
-				</td>
-			</tr>
-		</logic:present>
-		<logic:present name="workingCapitalInitialization" property="refundRequested">
-			<tr>
-				<td class="width215px">
-					<bean:message key="label.module.workingCapital.initialization.refundRequested" bundle="WORKING_CAPITAL_RESOURCES" />:&nbsp;
-				</td>
-				<td>
-					<fr:view name="workingCapitalInitialization" property="refundRequested"/>
-				</td>
-			</tr>
-		</logic:present>
 		<logic:equal name="workingCapitalInitialization" property="class.name" value="module.workingCapital.domain.WorkingCapitalInitializationReenforcement">
 			<tr>
 				<td class="width215px">
@@ -213,6 +193,26 @@
 				</td>
 			</tr>
 		</logic:equal>
+		<logic:present name="workingCapitalInitialization" property="lastSubmission">
+			<tr>
+				<td class="width215px">
+					<bean:message key="label.module.workingCapital.initialization.lastSubmission" bundle="WORKING_CAPITAL_RESOURCES" />:&nbsp;
+				</td>
+				<td>
+					<fr:view name="workingCapitalInitialization" property="lastSubmission"/>
+				</td>
+			</tr>
+		</logic:present>
+		<logic:present name="workingCapitalInitialization" property="refundRequested">
+			<tr>
+				<td class="width215px">
+					<bean:message key="label.module.workingCapital.initialization.refundRequested" bundle="WORKING_CAPITAL_RESOURCES" />:&nbsp;
+				</td>
+				<td>
+					<fr:view name="workingCapitalInitialization" property="refundRequested"/>
+				</td>
+			</tr>
+		</logic:present>
 	</table>
 	<wf:activityLink processName="process" activityName="EditInitializationActivity" scope="request" paramName0="workingCapitalInitialization" paramValue0="<%= workingCapitalInitializationOid %>">
 		<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.EditInitializationActivity"/>
