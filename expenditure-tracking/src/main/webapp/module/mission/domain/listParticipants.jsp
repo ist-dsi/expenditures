@@ -1,6 +1,5 @@
 <%@page import="module.organization.domain.AccountabilityType"%>
 <%@page import="module.mission.domain.MissionSystem"%>
-<%@page import="module.organizationIst.domain.IstAccountabilityType"%>
 <%@page import="module.organization.domain.Unit"%>
 <%@page import="module.organization.domain.Accountability"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
@@ -9,7 +8,6 @@
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-logic" prefix="logic"%>
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/fenix-renderers" prefix="fr"%>
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/workflow" prefix="wf"%>
-<%@page import="module.organizationIst.domain.OrganizationIstSystem"%>
 <%@page import="module.mission.domain.Salary"%>
 <%@page import="module.organization.domain.Person"%>
 
@@ -34,6 +32,7 @@
 				<tr>
 					<%
 						int chainSize = process.getPersonAuthorizationChainSize(person);
+						final String aliasses = MissionSystem.getUserAliasProvider().getUserAliases(person);
 					%>
 					<td rowspan="<%= Integer.toString(chainSize + 5) %>">
 						<bean:define id="url" type="java.lang.String">https://fenix.ist.utl.pt/publico/retrievePersonalPhoto.do?method=retrieveByUUID&amp;contentContextPath_PATH=/homepage&amp;uuid=<bean:write name="person" property="user.username"/></bean:define>
@@ -41,7 +40,7 @@
 					</td>
 					<td colspan="4">
 						<html:link styleClass="secondaryLink" page="/missionOrganization.do?method=showPersonById" paramId="personId" paramName="person" paramProperty="externalId">
-							<fr:view name="person" property="name"/> (<%= OrganizationIstSystem.getInstance().getUserAliasses(person) %>)
+							<fr:view name="person" property="name"/> <%= aliasses == null ? "" : "(" + aliasses + ")" %>
 						</html:link>
 						<wf:activityLink processName="process" activityName="RemoveParticipantActivity" scope="request" paramName0="person" paramValue0="<%= personOID %>">
 							<bean:message bundle="MYORG_RESOURCES" key="link.remove"/>
@@ -50,10 +49,10 @@
 				</tr>
 				<tr>
 					<td colspan="4">
-						Entidade Patronal: 
+						<bean:message bundle="MISSION_RESOURCES" key="label.employment.entity"/>:
 						<%
 							boolean hasEmployer = false;
-							final AccountabilityType type = IstAccountabilityType.EMPLOYMENT.readAccountabilityType();
+							final AccountabilityType type = MissionSystem.getInstance().getEmploymentAccountabilityType();
 							for (final Accountability accountability : ((module.organization.domain.Person) person).getParentAccountabilitiesSet()) {
 							    if (accountability.isActiveNow() && accountability.isValid() && type == accountability.getAccountabilityType()) {
 									final Unit unit = (Unit) accountability.getParent();
@@ -74,7 +73,8 @@
 							if (!hasEmployer) {
 						%>
 								<span style="color: red;">
-									Não Tem Entidade Patronal.
+									<bean:message bundle="MISSION_RESOURCES" key="label.employment.entity.none"/>
+									
 								</span>
 						<%
 							}

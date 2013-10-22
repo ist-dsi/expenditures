@@ -38,10 +38,12 @@ import module.mission.domain.activity.ItemActivityInformation;
 import module.mission.domain.util.MigratePersonalInformationProcessedSlot;
 import module.mission.domain.util.MigrateVehicleItemAuthorizations;
 import module.mission.domain.util.MigrateVerifiedSlot;
+import module.mission.domain.util.UserAliasProvider;
 import module.organization.domain.Accountability;
 import module.organization.domain.AccountabilityType;
 import module.organization.domain.OrganizationalModel;
 import module.organization.domain.Party;
+import module.organization.domain.Person;
 import module.organization.domain.Unit;
 import module.workflow.domain.WorkflowQueue;
 import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
@@ -60,6 +62,15 @@ import pt.ist.fenixframework.Atomic;
 public class MissionSystem extends MissionSystem_Base {
 
     private static boolean isMigrationInProgress = false;
+
+    private static UserAliasProvider userAliasProvider = new UserAliasProvider() {
+
+        @Override
+        public String getUserAliases(final Person person) {
+            return person.getUser().getUsername();
+        }
+
+    };
 
     public static MissionSystem getInstance() {
         final VirtualHost virtualHostForThread = VirtualHost.getVirtualHostForThread();
@@ -559,6 +570,14 @@ public class MissionSystem extends MissionSystem_Base {
     @Deprecated
     public boolean hasCountry() {
         return getCountry() != null;
+    }
+
+    public static UserAliasProvider getUserAliasProvider() {
+	return userAliasProvider;
+    }
+
+    public static void setUserAliasProvider(final UserAliasProvider userAliasProvider) {
+	MissionSystem.userAliasProvider = userAliasProvider;
     }
 
 }
