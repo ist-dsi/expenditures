@@ -1,3 +1,4 @@
+<%@page import="pt.ist.expenditureTrackingSystem.util.PhotoTool"%>
 <%@page import="module.organization.domain.AccountabilityType"%>
 <%@page import="module.mission.domain.MissionSystem"%>
 <%@page import="module.organization.domain.Unit"%>
@@ -35,8 +36,8 @@
 						final String aliasses = MissionSystem.getUserAliasProvider().getUserAliases(person);
 					%>
 					<td rowspan="<%= Integer.toString(chainSize + 5) %>">
-						<bean:define id="url" type="java.lang.String">https://fenix.ist.utl.pt/publico/retrievePersonalPhoto.do?method=retrieveByUUID&amp;contentContextPath_PATH=/homepage&amp;uuid=<bean:write name="person" property="user.username"/></bean:define>
-						<img src="<%= url %>">
+						<bean:define id="username" type="java.lang.String" name="person" property="user.username"/>
+						<img src="<%= PhotoTool.getPhotoUrl(username, request.getContextPath()) %>"/>
 					</td>
 					<td colspan="4">
 						<html:link styleClass="secondaryLink" page="/missionOrganization.do?method=showPersonById" paramId="personId" paramName="person" paramProperty="externalId">

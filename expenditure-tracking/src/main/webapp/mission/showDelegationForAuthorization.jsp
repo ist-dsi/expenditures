@@ -1,3 +1,4 @@
+<%@page import="pt.ist.expenditureTrackingSystem.util.PhotoTool"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html"%>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-bean" prefix="bean"%>
@@ -56,8 +57,8 @@
 			<bean:define id="childAccountability" name="functionDelegation" property="accountabilityDelegatee" type="module.organization.domain.Accountability"/>
 			<tr>
 				<td>
-					<bean:define id="url" type="java.lang.String">https://fenix.ist.utl.pt/publico/retrievePersonalPhoto.do?method=retrieveByUUID&amp;contentContextPath_PATH=/homepage&amp;uuid=<bean:write name="childAccountability" property="child.user.username"/></bean:define>
-					<img src="<%= url %>">
+					<bean:define id="username" type="java.lang.String" name="childAccountability" property="child.user.username"/>
+					<img src="<%= PhotoTool.getPhotoUrl(username, request.getContextPath()) %>">
 				</td>
 				<td>
 					<html:link styleClass="secondaryLink" page="/missionOrganization.do?method=showPersonById" paramId="personId" paramName="childAccountability" paramProperty="child.externalId">

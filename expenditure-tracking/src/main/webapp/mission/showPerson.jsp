@@ -1,3 +1,4 @@
+<%@page import="pt.ist.expenditureTrackingSystem.util.PhotoTool"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html"%>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-bean" prefix="bean"%>
@@ -26,8 +27,8 @@
 				</table>
 			</td>
 			<td style="text-align: right;">
-				<html:img src="https://fenix.ist.utl.pt/publico/retrievePersonalPhoto.do?method=retrieveByUUID&amp;contentContextPath_PATH=/homepage"
-					paramId="uuid" paramName="person" paramProperty="user.username"
+				<bean:define id="username" type="java.lang.String" name="person" property="user.username"/>
+				<html:img src="<%= PhotoTool.getPhotoUrl(username, request.getContextPath()) %>"
 					align="middle" styleClass="float: right; border: 1px solid #aaa; padding: 3px;" />
 			</td>
 		</tr>
