@@ -806,10 +806,12 @@ public class WorkingCapital extends WorkingCapital_Base {
 		continue;
 	    }
 	    final Person person = authorization.getPerson().getUser().getPerson();
-	    if (!authorizations.containsKey(person)) {
-		authorizations.put(person, new TreeSet<Authorization>(Authorization.COMPARATOR_BY_NAME_AND_DATE));
+	    if (person != null) {
+		if (!authorizations.containsKey(person)) {
+		    authorizations.put(person, new TreeSet<Authorization>(Authorization.COMPARATOR_BY_NAME_AND_DATE));
+		}
+		authorizations.get(person).add(authorization);
 	    }
-	    authorizations.get(person).add(authorization);
 	}
 	if (authorizations.isEmpty()) {
 	    final Unit parent = unit.getParentUnit();
