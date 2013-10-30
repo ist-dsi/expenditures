@@ -289,7 +289,7 @@
 </logic:present>
 
 
-<a id="myAuthorizations"> <!-- placeholder --> </a>
+<a id="myAuthorizations" href="#myAuthorizations"> <!-- placeholder --> </a>
 <h3 class="mtop2 mbottom05"><bean:message key="authorizations.label.person.responsible" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/></h3>
 <bean:define id="authorizations" name="person" property="authorizations"/>
 <logic:notEmpty name="authorizations">
