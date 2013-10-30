@@ -131,10 +131,7 @@
 </logic:notEmpty>
 
 
-
 <br/>
-
-
 
 <h3><bean:message key="missionConfiguration.verificationQueue" bundle="MISSION_RESOURCES"/></h3>
 <fr:form id="missionSystemVerificationQueueForm">
@@ -144,6 +141,28 @@
 	        	<fr:property name="providerClass" value="module.workflow.presentationTier.provider.WorkflowQueueProvider" />
 	        	<fr:property name="eachSchema" value="workflowQueue-name"/>
 	        	<fr:property name="eachLayout" value="values"/>
+	        	<fr:property name="classes" value="nobullet noindent"/>
+	        	<fr:property name="sortBy" value="name"/>
+				<fr:property name="saveOptions" value="true"/>
+	    	</fr:slot>
+		</fr:schema>
+		<fr:layout name="tabular">
+			<fr:property name="classes" value="form listInsideClear" />
+			<fr:property name="columnClasses" value="width100px,,tderror" />
+		</fr:layout>
+	</fr:edit>
+</fr:form>
+
+
+<br/>
+
+<h3><bean:message key="missionConfiguration.selectEmploymentAccountabilityType" bundle="MISSION_RESOURCES"/></h3>
+<fr:form id="missionSystemEmploymentAccountabilityTypeForm">
+	<fr:edit id="missionSystemEmploymentAccountabilityType" name="missionSystem">
+		<fr:schema type="module.mission.domain.MissionSystem" bundle="MISSION_RESOURCES">
+	    	<fr:slot name="employmentAccountabilityType" layout="menu-select-postback" key="label.accountabilityType" bundle="MISSION_RESOURCES">
+	        	<fr:property name="providerClass" value="module.mission.presentationTier.provider.MissionAccountabilityTypeEmploymentProvider" />
+	        	<fr:property name="format" value="${name}" />
 	        	<fr:property name="classes" value="nobullet noindent"/>
 	        	<fr:property name="sortBy" value="name"/>
 				<fr:property name="saveOptions" value="true"/>

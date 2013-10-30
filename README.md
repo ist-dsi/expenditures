@@ -10,6 +10,15 @@ Current	workflow processes are: acquisitions and working capital management.
 
 ### On Develop
 
+### v1.7.0
+
+    [Missions] Remove IST specific code from multiple artifacts.
+    [Working Capital] Display all refunding requests on first page.
+    [Working Capital] Display responsible for unit of workflow information section.
+    [Working Capital] Extend the xls export feature to contain transaction information.
+    Bug Fix: fixed html format on view person page.
+    Bug Fix: fixed NullPointerException from SyncSalary code.
+
 ### v1.6.0
 
 #### New Features

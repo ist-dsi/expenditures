@@ -692,3 +692,8 @@ relation MissionSystemVerificationQueue {
 	MissionSystem playsRole missionSystem;
 	.module.workflow.domain.WorkflowQueue playsRole verificationQueue;
 }
+
+relation MissionSystemEmploymentAccountabilityType {
+	MissionSystem playsRole missionSystemFromEmploymentAccountabilityType;
+	.module.organization.domain.AccountabilityType playsRole employmentAccountabilityType;
+}

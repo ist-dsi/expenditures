@@ -1,11 +1,11 @@
+<%@page import="pt.ist.expenditureTrackingSystem.util.PhotoTool"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html"%>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-bean" prefix="bean"%>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-logic" prefix="logic"%>
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/fenix-renderers" prefix="fr"%>
-
 <%@page import="module.organization.domain.Person"%>
-<%@page import="module.organizationIst.domain.OrganizationIstSystem"%>
+<%@page import="module.mission.domain.MissionSystem"%>
 
 <div class="infobox">
 	<table style="width: 100%;">
@@ -18,7 +18,7 @@
 					</tr>
 					<tr>
 						<td><bean:message bundle="MISSION_RESOURCES" key="label.organization.usernames"/></td>
-						<td><%= OrganizationIstSystem.getInstance().getUserAliasses((Person) request.getAttribute("person")) %></td>
+						<td><%= MissionSystem.getUserAliasProvider().getUserAliases((Person) request.getAttribute("person")) %></td>
 					</tr>
 					<tr>
 						<td><bean:message bundle="MISSION_RESOURCES" key="label.organization.email"/></td>
@@ -27,8 +27,8 @@
 				</table>
 			</td>
 			<td style="text-align: right;">
-				<html:img src="https://fenix.ist.utl.pt/publico/retrievePersonalPhoto.do?method=retrieveByUUID&amp;contentContextPath_PATH=/homepage"
-					paramId="uuid" paramName="person" paramProperty="user.username"
+				<bean:define id="username" type="java.lang.String" name="person" property="user.username"/>
+				<html:img src="<%= PhotoTool.getPhotoUrl(username, request.getContextPath()) %>"
 					align="middle" styleClass="float: right; border: 1px solid #aaa; padding: 3px;" />
 			</td>
 		</tr>
