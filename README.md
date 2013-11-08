@@ -10,6 +10,9 @@ Current	workflow processes are: acquisitions and working capital management.
 
 ### On Develop
 
+    [Missions] Fixed wrong cardinality on MissionSystemEmploymentAccountabilityType relation.
+    [Working Capital] Fixed error accessing funds that have not been authorized.
+
 ### v1.7.0
 
     [Missions] Remove IST specific code from multiple artifacts.

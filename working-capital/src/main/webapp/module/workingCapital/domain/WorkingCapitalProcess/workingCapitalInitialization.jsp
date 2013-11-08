@@ -193,9 +193,11 @@
 				<td class="bold">
 					<% if (((WorkingCapitalInitializationReenforcement) someInit).getAuthorizedReenforcementValue() != null) { %>
 						<fr:view name="someInit" property="authorizedReenforcementValue"/>
-						<span style="color: gray;">
-							<fr:view name="someInit" property="authorizationByUnitResponsible"/>
-						</span>
+						<% if (((WorkingCapitalInitializationReenforcement) someInit).getAuthorizationByUnitResponsible() != null) { %>
+							<span style="color: gray;">
+								<fr:view name="someInit" property="authorizationByUnitResponsible"/>
+							</span>
+						<% } %>
 					<% } %>
 				</td>
 			</tr>
