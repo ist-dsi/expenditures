@@ -694,6 +694,8 @@ relation MissionSystemVerificationQueue {
 }
 
 relation MissionSystemEmploymentAccountabilityType {
-	MissionSystem playsRole missionSystemFromEmploymentAccountabilityType;
+	MissionSystem playsRole missionSystemFromEmploymentAccountabilityType {
+		multiplicity *;
+	}
 	.module.organization.domain.AccountabilityType playsRole employmentAccountabilityType;
 }
