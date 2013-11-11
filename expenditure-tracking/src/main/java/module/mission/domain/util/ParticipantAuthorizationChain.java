@@ -205,9 +205,9 @@ public class ParticipantAuthorizationChain implements Serializable {
     }
 
     public static boolean isEmployeeOfInstitution(final Person person) {
-        final OrganizationalModel model = MissionSystem.getInstance().getOrganizationalModel();
-        // TODO: Remove this hard-coded hack. It should be configured in the mission system
-        final AccountabilityType employeeType = AccountabilityType.readBy("Employment");
+	final MissionSystem system = MissionSystem.getInstance();
+        final OrganizationalModel model = system.getOrganizationalModel();
+        final AccountabilityType employeeType = system.getEmploymentAccountabilityType();
         for (final Accountability accountability : person.getParentAccountabilitiesSet()) {
             final AccountabilityType accountabilityType = accountability.getAccountabilityType();
             if (accountabilityType == employeeType && model.getPartiesSet().contains(accountability.getParent())) {
