@@ -9,7 +9,6 @@
 <%@page import="pt.ist.bennu.core.domain.MyOrg"%>
 <%@page import="pt.ist.bennu.core.domain.User"%>
 <%@page import="module.organization.domain.AccountabilityType"%>
-<%@page import="module.organizationIst.domain.IstAccountabilityType"%>
 <%@page import="java.util.Collections"%>
 <%@page import="module.mission.domain.MissionSystem"%>
 <%@page import="java.util.Set"%><tr>
@@ -61,7 +60,6 @@
 				final User user = User.findByUsername("ist11791");
 				final MissionSystem instance = MissionSystem.getInstance();
 				final Set<AccountabilityType> accountabilityTypes = instance.getAccountabilityTypesThatAuthorize();
-				//final AccountabilityType accountabilityType = IstAccountabilityType.PERSONNEL_RESPONSIBLE_MISSIONS.readAccountabilityType();
 				
 				final boolean hasChild = personMissionAuthorizationX.getUnit().hasChildAccountabilityIncludingAncestry(accountabilityTypes, user.getPerson());
 				final boolean hasNext = personMissionAuthorizationX.hasNext();
