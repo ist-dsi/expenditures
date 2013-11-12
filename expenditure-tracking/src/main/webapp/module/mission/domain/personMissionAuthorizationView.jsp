@@ -1,3 +1,5 @@
+<%@page import="module.organization.domain.Person"%>
+<%@page import="module.organization.domain.Party"%>
 <%@page import="module.mission.domain.PersonMissionAuthorization"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html"%>
@@ -9,7 +11,6 @@
 <%@page import="pt.ist.bennu.core.domain.MyOrg"%>
 <%@page import="pt.ist.bennu.core.domain.User"%>
 <%@page import="module.organization.domain.AccountabilityType"%>
-<%@page import="module.organizationIst.domain.IstAccountabilityType"%>
 <%@page import="java.util.Collections"%>
 <%@page import="module.mission.domain.MissionSystem"%>
 <%@page import="java.util.Set"%><tr>
@@ -58,12 +59,20 @@
 		</td>
 		<td>
 			<%
-				final User user = User.findByUsername("ist11791");
 				final MissionSystem instance = MissionSystem.getInstance();
 				final Set<AccountabilityType> accountabilityTypes = instance.getAccountabilityTypesThatAuthorize();
-				//final AccountabilityType accountabilityType = IstAccountabilityType.PERSONNEL_RESPONSIBLE_MISSIONS.readAccountabilityType();
 				
-				final boolean hasChild = personMissionAuthorizationX.getUnit().hasChildAccountabilityIncludingAncestry(accountabilityTypes, user.getPerson());
+				boolean hasChild = false;
+				for (final Party party : instance.getOrganizationalModel().getPartiesSet()) {
+				    if (party.isUnit()) {
+						for (final Person person : party.getChildPersons(accountabilityTypes)) {
+						    if (personMissionAuthorizationX.getUnit().hasChildAccountabilityIncludingAncestry(accountabilityTypes, person)) {
+								hasChild = true;
+						    }
+						}
+				    }
+				}
+
 				final boolean hasNext = personMissionAuthorizationX.hasNext();
 				final boolean hasNextAthority = hasNext && (personMissionAuthorizationX.getNext().hasAuthority() || personMissionAuthorizationX.getNext().hasDelegatedAuthority());
 				final boolean result = hasAuthority && hasChild && (!hasNext || !hasNextAthority);
