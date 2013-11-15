@@ -159,7 +159,7 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
 
     public void setParentUnit(final Unit parentUnit) {
 	final ExpenditureTrackingSystem system = ExpenditureTrackingSystem.getInstance();
-	setExpenditureTrackingSystemFromTopLevelUnit(parentUnit == null ? system : null);
+	setExpenditureTrackingSystemFromTopLevelUnit(parentUnit == null && getParentUnit() == null ? system : null);
 
 	final module.organization.domain.Unit realtUnit = getUnit();
 	final module.organization.domain.Unit realParentUnit = parentUnit == null ? null : parentUnit.getUnit();
