@@ -430,7 +430,8 @@ public class WorkingCapitalAction extends ContextBaseAction {
 		addCell(getLocalizedMessate("label.module.workingCapital.transaction.number"), transaction.getNumber());
 		addCell(getLocalizedMessate("WorkingCapitalProcessState.CANCELED"),
 			transaction.isCanceledOrRejected() ? getLocalizedMessate("label.yes") : getLocalizedMessate("label.no"));
-		addCell(getLocalizedMessate("label.module.workingCapital.transaction.description"), transaction.getDescription());
+		addCell(getLocalizedMessate("label.module.workingCapital.transaction.description") + " "
+			+ getLocalizedMessate("label.module.workingCapital.transaction.number"), transaction.getDescription());
 		addCell(getLocalizedMessate("label.module.workingCapital.transaction.approval"), approvalLabel(transaction));
 		addCell(getLocalizedMessate("label.module.workingCapital.transaction.verification"),
 			verificationLabel(transaction));
@@ -442,6 +443,20 @@ public class WorkingCapitalAction extends ContextBaseAction {
 			.toFormatString());
 		addCell(getLocalizedMessate("label.module.workingCapital.transaction.debt"), transaction.getDebt()
 			.toFormatString());
+
+		if (transaction.isAcquisition()) {
+		    final WorkingCapitalAcquisitionTransaction acquisitionTx = (WorkingCapitalAcquisitionTransaction) transaction;
+		    final WorkingCapitalAcquisition acquisition = acquisitionTx.getWorkingCapitalAcquisition();
+		    final AcquisitionClassification acquisitionClassification = acquisition.getAcquisitionClassification();
+		    final String economicClassification = acquisitionClassification.getEconomicClassification();
+		    final String pocCode = acquisitionClassification.getPocCode();
+		    addCell(getLocalizedMessate("label.module.workingCapital.configuration.acquisition.classifications.economicClassification"),
+			    economicClassification);
+		    addCell(getLocalizedMessate("label.module.workingCapital.configuration.acquisition.classifications.pocCode"),
+			    pocCode);
+		    addCell(getLocalizedMessate("label.module.workingCapital.configuration.acquisition.classifications.description"),
+			    acquisition.getDescription());
+		}
 	    }
 
 	    private Object verificationLabel(final WorkingCapitalTransaction transaction) {
