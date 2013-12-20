@@ -8,10 +8,11 @@ Current	workflow processes are: acquisitions and working capital management.
 ---
 ## Change Logs:
 
-### On Develop
+### v1.8.0
 
     [Missions] Fixed wrong cardinality on MissionSystemEmploymentAccountabilityType relation.
     [Working Capital] Fixed error accessing funds that have not been authorized.
+    [Working Capital] Send notifications close to the end of the year to terminate all open working capital processes.
 
 ### v1.7.0
 
