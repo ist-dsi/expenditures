@@ -8,6 +8,10 @@ Current	workflow processes are: acquisitions and working capital management.
 ---
 ## Change Logs:
 
+### On Develop
+    Updated dependency of workflow module to 1.2.1.
+
+
 ### v1.8.0
 
     [Missions] Fixed wrong cardinality on MissionSystemEmploymentAccountabilityType relation.
