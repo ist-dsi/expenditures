@@ -14,7 +14,7 @@
 	<div class="mbottom2">
 	
 		<p>
-			<html:link styleClass="secondaryLink" page="/expenditureTrackingOrganization.do?method=viewPerson" paramId="personOid" paramName="person" paramProperty="externalId">
+			<html:link styleClass="secondaryLink" page="/expenditureTrackingOrganization.do?method=viewPerson" paramId="personOid" paramName="person" paramProperty="user.expenditurePerson.externalId">
 				<b><fr:view name="person" property="name"/></b>
 			</html:link>
 		</p>

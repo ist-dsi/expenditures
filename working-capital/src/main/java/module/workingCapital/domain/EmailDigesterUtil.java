@@ -30,7 +30,10 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.SortedSet;
 
+import module.workflow.util.PresentableProcessState;
+
 import org.jfree.data.time.Month;
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 import pt.ist.bennu.core.applicationTier.Authenticate;
@@ -59,6 +62,7 @@ public class EmailDigesterUtil {
 
     public static void executeTask() {
         final VirtualHost virtualHost = VirtualHost.getVirtualHostForThread();
+        final DateTime now = new DateTime();
 
         Language.setLocale(Language.getDefaultLocale());
         for (Person person : getPeopleToProcess()) {
@@ -166,6 +170,36 @@ public class EmailDigesterUtil {
                             System.out.println("Unable to lookup email address for: " + person.getUsername());
                             // skip this person... keep going to next.
                         }
+                    }
+
+                    for (final WorkingCapital workingCapital : user.getPerson().getMovementResponsibleWorkingCapitalsSet()) {
+                	final Integer year = workingCapital.getWorkingCapitalYear().getYear();
+                	if (year.intValue() < now.getYear() || (year.intValue() == now.getYear() && now.getMonthOfYear() == 12) && now.getDayOfMonth() > 15) {
+                	    final WorkingCapitalProcess process = workingCapital.getWorkingCapitalProcess();
+                	    final PresentableProcessState state = workingCapital.getPresentableAcquisitionProcessState();
+                	    if (state == WorkingCapitalProcessState.WORKING_CAPITAL_AVAILABLE) {
+                                final Sender sender = virtualHost.getSystemSender();
+                                final PersistentGroup group = SingleUserGroup.getOrCreateGroup(person.getUser());
+
+                                final StringBuilder body =
+                                        new StringBuilder("Caro utilizador, possui um processo de fundos de maneio pendente de terminação ");
+                                body.append(virtualHost.getApplicationSubTitle().getContent());
+                                body.append(", em https://");
+                                body.append(virtualHost.getHostname());
+                                body.append("/.\n");
+                                body.append("O processo em questão é o ");
+                                body.append(workingCapital.getUnit().getPresentationName());
+                                body.append(" - Ano ");
+                                body.append(year);
+                                body.append(".\n");
+                                body.append("Deverá regularizar o fundo assim que possível de acordo com o regulamento e legislação em vigor.");
+                                body.append(".\n");
+
+                                new Message(sender, Collections.EMPTY_SET, Collections.singleton(group), Collections.EMPTY_SET,
+                                        Collections.EMPTY_SET, null, "Processos Por Terminar - Fundos de Maneio", body.toString(),
+                                        null);
+                	    }
+                	}
                     }
                 } finally {
                     pt.ist.fenixWebFramework.security.UserView.setUser(null);
