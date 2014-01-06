@@ -89,7 +89,7 @@ public abstract class ExternalRequest extends ExternalRequest_Base implements Ex
                 builder.append("null");
             } else {
                 builder.append('\'');
-                builder.append(string.replace('\'', '"'));
+                builder.append(string.replace('\'', '"').replace('\n', ' '));
                 builder.append('\'');
             }
         } else if (object instanceof Money) {
