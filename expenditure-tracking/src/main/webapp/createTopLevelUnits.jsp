@@ -1,3 +1,4 @@
+<%@page import="pt.ist.fenixframework.FenixFramework"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html" %>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-bean" prefix="bean" %>
@@ -9,8 +10,6 @@
 <%@page import="pt.ist.expenditureTrackingSystem.domain.organization.Unit"%>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem"%>
 <%@page import="pt.ist.bennu.core.domain.VirtualHost"%>
-
-<%@page import="pt.ist.fenixframework.pstm.AbstractDomainObject"%>
 
 <logic:messagesPresent property="message" message="true">
 	<div class="error1">
@@ -24,7 +23,7 @@
 <%
 	final VirtualHost currentVirtualHost = VirtualHost.getVirtualHostForThread();
 	final ExpenditureTrackingSystem currentExpenditureTrackingSystem = currentVirtualHost.getExpenditureTrackingSystem();
-	final ExpenditureTrackingSystem chosenExpenditureTrackingSystem = ExpenditureTrackingSystem.fromExternalId(systemId);
+	final ExpenditureTrackingSystem chosenExpenditureTrackingSystem = FenixFramework.getDomainObject(systemId);
 %>
 
 <h2><bean:message key="link.topBar.configuration.virtual.hosts.title" bundle="EXPENDITURE_RESOURCES"/></h2>
@@ -79,7 +78,8 @@
 <logic:notEmpty name="organizationalModels">
 	<chart:orgChart id="organizationalModel" name="organizationalModelChart" type="java.lang.Object">
 		<div class="orgTBox orgTBoxLight">
-			<html:link action="<%= "/expenditureConfiguration.do?method=createTopLevelUnits&systemId=" + systemId + "&organizationalModelOid=" + ((AbstractDomainObject) organizationalModel).getExternalId() %>">
+			<bean:define id="orgModelOID" name="organizationalModel" property="externalId" type="java.lang.String"/>
+			<html:link action="<%= "/expenditureConfiguration.do?method=createTopLevelUnits&systemId=" + systemId + "&organizationalModelOid=" + orgModelOID %>">
 				<bean:write name="organizationalModel" property="name.content"/>
 			</html:link>
 		</div>
