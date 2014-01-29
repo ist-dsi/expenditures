@@ -9,8 +9,14 @@ Current	workflow processes are: acquisitions and working capital management.
 ## Change Logs:
 
 ### On Develop
-    Updated dependency of workflow module to 1.2.1.
 
+### v1.8.2
+    Updated dependency of workflow module to 1.2.1.
+    Bug Fix: Replaced lost references from AbstractDomainObject to FenixFramework.
+    Added plugable section to project interface.
+
+### v1.8.1
+    Bug Fix: Sanitize queries that are sent to MGP database.
 
 ### v1.8.0
 
