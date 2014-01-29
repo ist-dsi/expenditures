@@ -199,40 +199,46 @@
  						ExpenditureTrackingSystem.InfoProvider genericInfoProvider = ExpenditureTrackingSystem.getInfoProvider();
  						if(genericInfoProvider != null && genericInfoProvider instanceof ProjectReportsInfoProvider){
  	   						final Unit unit = (Unit) request.getAttribute("unit");
- 	   						if(!unit.isActive()){ %>
- 	   							<h3 class="mtop15 mbottom05"><bean:message key="label.summaryNotAvailable" bundle="EXPENDITURE_RESOURCES"/></h3>
- 	   						<% } else {
- 	   						ProjectReportsInfoProvider projectInfoProvider = (ProjectReportsInfoProvider) genericInfoProvider;
- 	   						List<List<String>> summary;
- 	   						summary = projectInfoProvider.getSummary("viewOrganization.jsp", unit);
- 	   						if(summary != null){%>
-								<h3 class="mtop15 mbottom05"><bean:message key="label.summary" bundle="EXPENDITURE_RESOURCES"/></h3>
- 	   						    <table class="tstyle2 mtop05">
-									<tr>
-										<th>
-										</th>
+ 	   						if(unit.isProject()) {
+	 	   						if(!unit.isActive()){ %>
+	 	   							<h3 class="mtop15 mbottom05"><bean:message key="label.summaryNotAvailable" bundle="EXPENDITURE_RESOURCES"/></h3>
+	 	   						<% } else {
+	 	   						ProjectReportsInfoProvider projectInfoProvider = (ProjectReportsInfoProvider) genericInfoProvider;
+	 	   						List<List<String>> summary;
+	 	   						summary = projectInfoProvider.getSummary("viewOrganization.jsp", unit);
+	 	   						int i;
+	 	   						if(summary != null || summary.get(0).size()>0){%>
+									<h3 class="mtop15 mbottom05"><bean:message key="label.summary" bundle="EXPENDITURE_RESOURCES"/></h3>
+	 	   						    <table class="tstyle2 mtop05">
+										<tr>
+											<th>
+											</th>
+											<%for(i = 0; i<summary.get(0).size(); i++){
+		 	         							String title = summary.get(0).get(i);
+		 	        							%>
+	 	        								<th>
+	 	        									<%=title%>
+	 	        								</th>
+	 	        							<% } %>
+										</tr>
+										<tr>
 										<th>
 											<bean:message bundle="EXPENDITURE_RESOURCES" key="label.value"/>
 										</th>
-									</tr>
-	 	      						<% for(int i = 0; i<summary.get(0).size(); i++){
-	 	         							String title = summary.get(0).get(i);
-	 	         							String value = summary.get(1).get(i);
-	 	        							%>
-	 	        							<tr>
- 	        								<td>
- 	        									<%=title%>
- 	        								</td>
- 	        								<td>
- 	        									<%=value%>
- 	        								</td>
-										</tr>
- 	        						<%     
- 	      						} %>
-							</table>
- 	      				<%	}
- 							}
- 						}
+		 	      						<% for(i = 0; i<summary.get(0).size(); i++){
+		 	         							String value = summary.get(1).get(i);
+		 	        							%>
+	 	        								<td>
+	 	        									<%=value%>
+	 	        								</td>
+	 	        						<%     
+	 	      						} %>
+	 	      						</tr>
+								</table>
+	 	      				<%	}
+	 							}
+	 						}
+	 					}
 					%>
 	</logic:notEmpty>
 
