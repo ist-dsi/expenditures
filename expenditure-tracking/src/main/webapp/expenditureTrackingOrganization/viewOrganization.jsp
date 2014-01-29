@@ -8,6 +8,9 @@
 <%@page import="pt.ist.bennu.core.domain.User"%>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.organization.Unit"%>
 <%@page import="java.util.Map"%>
+<%@page import="java.util.List"%>
+<%@page import="module.projects.presentationTier.servlet.ProjectsInitializer.ProjectReportsInfoProvider"%>
+
 
 
 
@@ -131,6 +134,7 @@
 				<div class="unitbox col2-2"><div>
 					 <%
  						ExpenditureTrackingSystem.InfoProvider infoProvider = ExpenditureTrackingSystem.getInfoProvider();
+ 						System.out.println(infoProvider);
  						if(infoProvider != null){
  	   						final Unit unit = (Unit) request.getAttribute("unit");
  	   						Map<String, String> links = infoProvider.getLinks("viewOrganization.jsp", unit);
@@ -190,12 +194,53 @@
 		</html:link>
 	</logic:present>
 
+	<logic:notEmpty name="unit" property="authorizations">
+		<%
+ 						ExpenditureTrackingSystem.InfoProvider genericInfoProvider = ExpenditureTrackingSystem.getInfoProvider();
+ 						if(genericInfoProvider != null && genericInfoProvider instanceof ProjectReportsInfoProvider){
+ 	   						final Unit unit = (Unit) request.getAttribute("unit");
+ 	   						if(!unit.isActive()){ %>
+ 	   							<h3 class="mtop15 mbottom05"><bean:message key="label.summaryNotAvailable" bundle="EXPENDITURE_RESOURCES"/></h3>
+ 	   						<% } else {
+ 	   						ProjectReportsInfoProvider projectInfoProvider = (ProjectReportsInfoProvider) genericInfoProvider;
+ 	   						List<List<String>> summary;
+ 	   						summary = projectInfoProvider.getSummary("viewOrganization.jsp", unit);
+ 	   						if(summary != null){%>
+								<h3 class="mtop15 mbottom05"><bean:message key="label.summary" bundle="EXPENDITURE_RESOURCES"/></h3>
+ 	   						    <table class="tstyle2 mtop05">
+									<tr>
+										<th>
+										</th>
+										<th>
+											<bean:message bundle="EXPENDITURE_RESOURCES" key="label.value"/>
+										</th>
+									</tr>
+	 	      						<% for(int i = 0; i<summary.get(0).size(); i++){
+	 	         							String title = summary.get(0).get(i);
+	 	         							String value = summary.get(1).get(i);
+	 	        							%>
+	 	        							<tr>
+ 	        								<td>
+ 	        									<%=title%>
+ 	        								</td>
+ 	        								<td>
+ 	        									<%=value%>
+ 	        								</td>
+										</tr>
+ 	        						<%     
+ 	      						} %>
+							</table>
+ 	      				<%	}
+ 							}
+ 						}
+					%>
+	</logic:notEmpty>
+
 	<h3 class="mtop15 mbottom05"><bean:message key="authorizations.label.responsibles" bundle="EXPENDITURE_RESOURCES"/></h3>
 	<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.AQUISITIONS_UNIT_MANAGER">
 		<html:link action="/expenditureTrackingOrganization.do?method=prepareCreateAuthorizationUnitWithoutPerson" paramId="unitOid" paramName="unit" paramProperty="externalId">
 			<bean:message key="label.add.authorization" bundle="EXPENDITURE_RESOURCES"/>
 		</html:link>
-		|
 	</logic:present>
 	<html:link action="/expenditureTrackingOrganization.do?method=viewAuthorizationLogs" paramId="unitOid" paramName="unit" paramProperty="externalId">
 		<bean:message key="authorizations.link.logs" bundle="EXPENDITURE_RESOURCES"/>
