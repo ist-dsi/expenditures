@@ -211,8 +211,6 @@
 									<h3 class="mtop15 mbottom05"><bean:message key="label.summary" bundle="EXPENDITURE_RESOURCES"/></h3>
 	 	   						    <table class="tstyle2 mtop05">
 										<tr>
-											<th>
-											</th>
 											<%for(i = 0; i<summary.get(0).size(); i++){
 		 	         							String title = summary.get(0).get(i);
 		 	        							%>
@@ -222,9 +220,6 @@
 	 	        							<% } %>
 										</tr>
 										<tr>
-										<th>
-											<bean:message bundle="EXPENDITURE_RESOURCES" key="label.value"/>
-										</th>
 		 	      						<% for(i = 0; i<summary.get(0).size(); i++){
 		 	         							String value = summary.get(1).get(i);
 		 	        							%>
