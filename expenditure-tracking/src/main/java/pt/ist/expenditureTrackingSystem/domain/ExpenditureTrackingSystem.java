@@ -24,6 +24,7 @@
  */
 package pt.ist.expenditureTrackingSystem.domain;
 
+import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -966,6 +967,8 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
         public String getTitle();
 
         public Map<String, String> getLinks(String page, Object object);
+
+        public List<List<String>> getSummary(String page, Object object);
     }
 
     static private InfoProvider infoProvider;
