@@ -10,7 +10,7 @@
 
     <groupId>pt.ist</groupId>
     <artifactId>finance</artifactId>
-    <version>1.8.3</version>
+    <version>1.8.4</version>
     <packaging>jar</packaging>
     <name>finance</name>
 

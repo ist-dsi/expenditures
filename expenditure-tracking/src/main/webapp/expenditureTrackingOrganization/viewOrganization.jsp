@@ -9,7 +9,6 @@
 <%@page import="pt.ist.expenditureTrackingSystem.domain.organization.Unit"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.util.List"%>
-<%@page import="module.projects.presentationTier.servlet.ProjectsInitializer.ProjectReportsInfoProvider"%>
 
 
 
@@ -197,15 +196,13 @@
 	<logic:notEmpty name="unit" property="authorizations">
 		<%
  						ExpenditureTrackingSystem.InfoProvider genericInfoProvider = ExpenditureTrackingSystem.getInfoProvider();
- 						if(genericInfoProvider != null && genericInfoProvider instanceof ProjectReportsInfoProvider){
+ 						if (genericInfoProvider != null) {
  	   						final Unit unit = (Unit) request.getAttribute("unit");
  	   						if(unit.isProject()) {
 	 	   						if(!unit.isActive()){ %>
 	 	   							<h3 class="mtop15 mbottom05"><bean:message key="label.summaryNotAvailable" bundle="EXPENDITURE_RESOURCES"/></h3>
 	 	   						<% } else {
-	 	   						ProjectReportsInfoProvider projectInfoProvider = (ProjectReportsInfoProvider) genericInfoProvider;
-	 	   						List<List<String>> summary;
-	 	   						summary = projectInfoProvider.getSummary("viewOrganization.jsp", unit);
+	 	   						List<List<String>> summary = genericInfoProvider.getSummary("viewOrganization.jsp", unit);
 	 	   						int i;
 	 	   						if(summary != null || summary.get(0).size()>0){%>
 									<h3 class="mtop15 mbottom05"><bean:message key="label.summary" bundle="EXPENDITURE_RESOURCES"/></h3>
