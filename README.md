@@ -10,6 +10,12 @@ Current	workflow processes are: acquisitions and working capital management.
 
 ### On Develop
 
+### v1.8.4
+    Fixed compile issue due to the introduction of an undeclared dependency.
+
+### v1.8.3
+    Added improvments to projects summary table when viewing projects.
+
 ### v1.8.2
     Updated dependency of workflow module to 1.2.1.
     Bug Fix: Replaced lost references from AbstractDomainObject to FenixFramework.
