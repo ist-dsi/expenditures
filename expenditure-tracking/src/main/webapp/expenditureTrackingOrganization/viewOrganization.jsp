@@ -72,6 +72,7 @@
 <style>
 <!--
 	div.unitbox {
+		width: 49%;
 		margin: 10px 0 10px 0;
 		background: #fff;
 		background: #f5f5f5;
