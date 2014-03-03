@@ -68,8 +68,14 @@ import pt.ist.expenditureTrackingSystem.domain.SyncSuppliersAux.SupplierReader;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AcquisitionAfterTheFact;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundItem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundRequest;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundableInvoiceFile;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationLog;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.DelegatedAuthorization;
@@ -997,7 +1003,7 @@ public class OrganizationAction extends BaseAction {
         Money totalForSupplier = Money.ZERO;
 
         for (final AcquisitionAfterTheFact acquisitionAfterTheFact : supplier.getAcquisitionsAfterTheFactSet()) {
-            if (!acquisitionAfterTheFact.getDeletedState().booleanValue()) {
+            if (!acquisitionAfterTheFact.getDeletedState().booleanValue() && acquisitionAfterTheFact.isInAllocationPeriod()) {
                 final Money value = acquisitionAfterTheFact.getValue();
                 totalForSupplierLimit = totalForSupplierLimit.add(value);
                 totalForSupplier = totalForSupplier.add(value);
@@ -1012,19 +1018,66 @@ public class OrganizationAction extends BaseAction {
         }
 
         for (final AcquisitionRequest acquisitionRequest : supplier.getAcquisitionRequestsSet()) {
-            final AcquisitionProcess acquisitionProcess = acquisitionRequest.getAcquisitionProcess();
-            if (acquisitionProcess.isActive() && acquisitionProcess.isAllocatedToSupplier()) {
-                final Money forSupplierLimit = acquisitionRequest.getCurrentSupplierAllocationValue();
-                final Money currentValue = acquisitionRequest.getCurrentTotalValue();
-                totalForSupplierLimit = totalForSupplierLimit.add(forSupplierLimit);
-                totalForSupplier = totalForSupplier.add(currentValue);
+            if (acquisitionRequest.isInAllocationPeriod()) {
+        	final AcquisitionProcess acquisitionProcess = acquisitionRequest.getAcquisitionProcess();
+        	if (acquisitionProcess.isActive() && acquisitionProcess.isAllocatedToSupplier()) {
+                    Money forSupplierLimit = Money.ZERO;
+                    Money currentValue = Money.ZERO;
+                    final boolean hasBeenAllocatedPermanently =
+                            acquisitionProcess.getAcquisitionProcessState().hasBeenAllocatedPermanently();
+                    for (final RequestItem requestItem : acquisitionRequest.getRequestItemsSet()) {
+                            final Money valueToAdd =
+                                    hasBeenAllocatedPermanently ? requestItem.getTotalRealAssigned() : requestItem
+                                            .getTotalAssigned();
+                            if (acquisitionRequest.getCurrentSupplierAllocationValue().isPositive()) {
+                        	forSupplierLimit = forSupplierLimit.add(valueToAdd);
+                            }
+                            currentValue = currentValue.add(valueToAdd);
 
-                final Row row = spreadsheet.addRow();
-                row.setCell(acquisitionRequest.getAcquisitionProcessId());
-                row.setCell(acquisitionRequest.getClass().getSimpleName());
-                row.setCell(forSupplierLimit.toFormatString());
-                row.setCell(acquisitionRequest.getCurrentTotalVatValue().toFormatString());
-                row.setCell(currentValue.toFormatString());
+                    }
+                    totalForSupplierLimit = totalForSupplierLimit.add(forSupplierLimit);
+                    totalForSupplier = totalForSupplier.add(currentValue);
+
+                    final Row row = spreadsheet.addRow();
+                    row.setCell(acquisitionRequest.getAcquisitionProcessId());
+                    row.setCell(acquisitionRequest.getClass().getSimpleName());
+                    row.setCell(forSupplierLimit.toFormatString());
+                    row.setCell(acquisitionRequest.getCurrentTotalVatValue().toFormatString());
+                    row.setCell(currentValue.toFormatString());
+        	}
+            }
+        }
+
+        for (final RefundableInvoiceFile invoiceFile : supplier.getRefundInvoicesSet()) {
+            if (invoiceFile.isInAllocationPeriod()) {
+                final RefundProcess refundProcess = invoiceFile.getRefundItem().getRequest().getProcess();
+                if (refundProcess.isActive() && !refundProcess.getShouldSkipSupplierFundAllocation()) {
+                    final RefundRequest refundRequest = refundProcess.getRequest();
+                    Money refundableValue = Money.ZERO;
+                    if (refundProcess.hasFundsAllocatedPermanently()) {
+                	for (final PaymentProcessInvoice paymentProcessInvoice : refundRequest.getInvoices()) {
+                	    final RefundableInvoiceFile refundableInvoiceFile = (RefundableInvoiceFile) paymentProcessInvoice;
+                	    for (final RequestItem requestItem : refundableInvoiceFile.getRequestItemsSet()) {
+                		final RefundItem refundItem = (RefundItem) requestItem;
+                		refundableValue = refundableValue.add(invoiceFile.getRefundableValue());
+                	    }
+                	}
+                    } else {
+                	for (final RefundItem refundItem : refundRequest.getRefundItemsSet()) {
+                            refundableValue = refundableValue.add(refundItem.getValueEstimation());
+
+                	}
+                    }
+                    totalForSupplierLimit = totalForSupplierLimit.add(refundableValue);
+                    totalForSupplier = totalForSupplier.add(refundableValue);
+
+                    final Row row = spreadsheet.addRow();
+                    row.setCell(refundProcess.getProcessNumber());
+                    row.setCell(refundProcess.getClass().getSimpleName());
+                    row.setCell(refundableValue.toFormatString());
+                    row.setCell(Money.ZERO.toFormatString());
+                    row.setCell(refundableValue.toFormatString());
+                }
             }
         }
 
