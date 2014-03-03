@@ -98,7 +98,9 @@
 								<% if (process.getMission().getWithSalary((module.organization.domain.Person) person)) { %>
 									<bean:message bundle="MISSION_RESOURCES" key="label.mission.participant.with.salary"/>:
 								<% } else { %>
-									<bean:message bundle="MISSION_RESOURCES" key="label.mission.participant.without.salary"/>:
+									<span style="color: red;">
+										<bean:message bundle="MISSION_RESOURCES" key="label.mission.participant.without.salary"/>:
+									</span>
 								<% } %>
 								<wf:activityLink processName="process" activityName="TogleParticipantSalaryActivity" scope="request" paramName0="person" paramValue0="<%= personOID %>">
 									<bean:message bundle="MISSION_RESOURCES" key="label.change"/>

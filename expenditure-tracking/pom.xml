@@ -10,7 +10,7 @@
 
     <groupId>pt.ist</groupId>
     <artifactId>expenditure-tracking</artifactId>
-    <version>1.8.4</version>
+    <version>1.8.5</version>
     <packaging>jar</packaging>
     <name>expenditure-tracking</name>
 
@@ -24,7 +24,7 @@
         <version.pt.ist.geography>1.1.0</version.pt.ist.geography>
         <version.pt.ist.organization>1.1.0</version.pt.ist.organization>
         <version.pt.ist.dashboard>1.1.0</version.pt.ist.dashboard>
-        <version.pt.ist.bennu.vaadin>1.1.0</version.pt.ist.bennu.vaadin>
+        <version.pt.ist.bennu.vaadin>1.1.1</version.pt.ist.bennu.vaadin>
         <version.pt.ist.db.utils>1.1.0</version.pt.ist.db.utils>
         <version.pt.ist.web.service.utils>1.1.0</version.pt.ist.web.service.utils>
         <version.pt.ist.scheduler>1.1.0</version.pt.ist.scheduler>
