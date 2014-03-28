@@ -161,7 +161,7 @@ public class SearchMissions extends Search<Mission> {
     private Person requestingPerson;
     private Person participant;
     private Person accountManager;
-    private Boolean filterCanceledProcesses = Boolean.TRUE;
+    private Boolean filterCanceledProcesses = Boolean.FALSE;
     private boolean filterTakenProcesses = false;
     private MissionState pendingState;
     private Person participantAuthorizationAuthority;
