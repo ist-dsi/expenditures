@@ -999,6 +999,7 @@ public abstract class Mission extends Mission_Base {
     }
 
     private boolean isPendingParticipantAuthorisationBy(Person person, PersonMissionAuthorization personMissionAuthorization) {
+    	final AccountabilityType workingAccountabilityType = personMissionAuthorization.getWorkingAccountabilityType();
         final LocalDate now = new LocalDate();
         for (PersonMissionAuthorization p = personMissionAuthorization; p != null; p = p.getNext()) {
             if (p.isAvailableForAuthorization() && !p.hasAuthority() && !p.hasDelegatedAuthority()) {
@@ -1006,7 +1007,7 @@ public abstract class Mission extends Mission_Base {
                 for (final Accountability accountability : unit.getChildAccountabilitiesSet()) {
                     if (accountability.isActive(now)) {
                         final AccountabilityType accountabilityType = accountability.getAccountabilityType();
-                        if (accountability.getChild() == person && isResponsibleAccountabilityType(accountabilityType)) {
+                        if (accountability.getChild() == person && isResponsibleAccountabilityType(accountabilityType, workingAccountabilityType)) {
                             return true;
                         }
                     }
@@ -1018,11 +1019,12 @@ public abstract class Mission extends Mission_Base {
         return false;
     }
 
-    private boolean isResponsibleAccountabilityType(final AccountabilityType accountabilityType) {
+    private boolean isResponsibleAccountabilityType(final AccountabilityType accountabilityType, final AccountabilityType workingAccountabilityType) {
         final MissionSystem missionSystem = MissionSystem.getInstance();
         for (final MissionAuthorizationAccountabilityType missionAuthorizationAccountabilityType : missionSystem
                 .getMissionAuthorizationAccountabilityTypesSet()) {
-            if (missionAuthorizationAccountabilityType.getAccountabilityTypesSet().contains(accountabilityType)) {
+        	if (missionAuthorizationAccountabilityType.getAccountabilityType() == workingAccountabilityType
+        			&& missionAuthorizationAccountabilityType.getAccountabilityTypesSet().contains(accountabilityType)) {
                 return true;
             }
         }
