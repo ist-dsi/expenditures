@@ -34,6 +34,8 @@ import module.workflow.domain.WorkflowProcess;
 import org.joda.time.LocalDate;
 
 import pt.ist.bennu.core.domain.util.Money;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionItemClassification;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AcquisitionAfterTheFact;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionType;
@@ -55,6 +57,8 @@ public class EditAfterTheFactProcessActivityInformation extends ActivityInformat
         private AfterTheFactAcquisitionProcess afterTheFactAcquisitionProcess;
         private String description;
         private Integer year = Integer.valueOf(new LocalDate().getYear());
+        private AcquisitionItemClassification classification;
+        private CPVReference cpvReference;
 
         public AfterTheFactAcquisitionProcessBean() {
 
@@ -69,6 +73,24 @@ public class EditAfterTheFactProcessActivityInformation extends ActivityInformat
             setVatValue(acquisitionAfterTheFact.getVatValue());
             setDescription(acquisitionAfterTheFact.getDescription());
             setYear(acquisitionAfterTheFact.getAfterTheFactAcquisitionProcess().getYear());
+            setClassification(acquisitionAfterTheFact.getClassification());
+            setCpvReference(acquisitionAfterTheFact.getCpvReference());
+        }
+
+        public CPVReference getCpvReference() {
+            return cpvReference;
+        }
+
+        public void setCpvReference(CPVReference cpvReference) {
+            this.cpvReference = cpvReference;
+        }
+
+        public AcquisitionItemClassification getClassification() {
+            return classification;
+        }
+
+        public void setClassification(AcquisitionItemClassification classification) {
+            this.classification = classification;
         }
 
         public void setSupplier(Supplier supplier) {
@@ -196,6 +218,14 @@ public class EditAfterTheFactProcessActivityInformation extends ActivityInformat
     public boolean hasAllneededInfo() {
         return isForwardedFromInput() && getYear() != null && getAfterTheFactAcquisitionType() != null && getSupplier() != null
                 && getValue() != null && getVatValue() != null;
+    }
+
+    public CPVReference getCpvReference() {
+        return this.bean.getCpvReference();
+    }
+
+    public AcquisitionItemClassification getClassification() {
+        return this.bean.getClassification();
     }
 
 }

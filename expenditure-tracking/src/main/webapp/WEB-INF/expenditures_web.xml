@@ -163,6 +163,19 @@
         <servlet-class>pt.ist.expenditureTrackingSystem.presentationTier.servlets.ajax.ExpendituresAutoCompleteServlet</servlet-class>
         <load-on-startup>2</load-on-startup>
     </servlet>
+    <servlet>
+        <servlet-name>ExpenditureAPI</servlet-name>
+        <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+        <init-param>
+            <param-name>com.sun.jersey.config.property.packages</param-name>
+            <param-value>module.webservice.api</param-value>
+        </init-param>
+        <load-on-startup>3</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ExpenditureAPI</servlet-name>
+        <url-pattern>/api/expenditures-tracking/v1/*</url-pattern>
+    </servlet-mapping>
     
     
     <!-- Servlet Mapping -->

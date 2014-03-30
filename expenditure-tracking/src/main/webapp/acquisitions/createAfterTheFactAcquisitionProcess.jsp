@@ -5,6 +5,12 @@
 
 <h2><bean:message key="link.sideBar.afterTheFactAcquisitionProcess.create" bundle="EXPENDITURE_RESOURCES"/></h2>
 
+<logic:equal name="limitExceded" value="true" >
+					<font color="red">
+						<bean:message key="label.supplier.giaf.key.does.not.exist" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>:
+					</font>
+</logic:equal>
+
 <fr:edit id="afterTheFactAcquisitionProcessBean"
 		name="afterTheFactAcquisitionProcessBean"
 		schema="activityInformation.EditAfterTheFactAcquisition"

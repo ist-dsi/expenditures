@@ -129,6 +129,11 @@
             <artifactId>tomcat-jsp-api</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+			<groupId>org.fenixedu</groupId>
+			<artifactId>fenixedu-commons</artifactId>
+			<version>1.0.0</version>
+		</dependency>
     </dependencies>
 
     <repositories>

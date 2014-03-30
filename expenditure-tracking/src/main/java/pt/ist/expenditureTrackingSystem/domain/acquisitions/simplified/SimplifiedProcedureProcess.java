@@ -265,7 +265,9 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
     protected SimplifiedProcedureProcess(ProcessClassification classification, List<Supplier> suppliers, Person person) {
         super();
         inGenesis();
+        System.out.println("Creating aquisition request ");
         AcquisitionRequest acquisitionRequest = new AcquisitionRequest(this, suppliers, person);
+        System.out.println("Created aquisition request Suppliers size =" + suppliers.size());
         if (suppliers.size() == 0) {
             throw new DomainException("acquisitionProcess.message.exception.needsMoreSuppliers",
                     DomainException.getResourceFor("resources/AcquisitionResources"));
@@ -273,6 +275,7 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
         if (suppliers.size() == 1) {
             acquisitionRequest.setSelectedSupplier(suppliers.get(0));
         }
+        System.out.println("Setting process classification");
         setProcessClassification(classification);
     }
 
@@ -285,13 +288,18 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
         SimplifiedProcedureProcess process =
                 new SimplifiedProcedureProcess(createAcquisitionProcessBean.getClassification(),
                         createAcquisitionProcessBean.getSuppliers(), createAcquisitionProcessBean.getRequester());
+        System.out.println("Line 288 ");
         AcquisitionRequest acquisitionRequest = process.getAcquisitionRequest();
+        System.out.println("Line 290 ");
         acquisitionRequest.setRequestingUnit(createAcquisitionProcessBean.getRequestingUnit());
+        System.out.println("Line 292 ");
         acquisitionRequest.setContractSimpleDescription(createAcquisitionProcessBean.getContractSimpleDescription());
+        System.out.println("Line 294 ");
         if (createAcquisitionProcessBean.isRequestUnitPayingUnit()) {
             final Unit unit = createAcquisitionProcessBean.getRequestingUnit();
             acquisitionRequest.addFinancers(unit.finance(acquisitionRequest));
         }
+        System.out.println("Line 299 ");
         if (createAcquisitionProcessBean.isForMission()) {
             if (createAcquisitionProcessBean.getMissionProcess() == null) {
                 throw new DomainException("mission.process.is.mandatory",

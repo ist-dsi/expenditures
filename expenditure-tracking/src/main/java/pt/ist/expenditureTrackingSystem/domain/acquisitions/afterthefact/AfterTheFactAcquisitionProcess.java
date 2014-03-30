@@ -86,7 +86,8 @@ public class AfterTheFactAcquisitionProcess extends AfterTheFactAcquisitionProce
         final AfterTheFactAcquisitionProcess afterTheFactAcquisitionProcess = new AfterTheFactAcquisitionProcess();
         afterTheFactAcquisitionProcess.edit(afterTheFactAcquisitionProcessBean.getAfterTheFactAcquisitionType(),
                 afterTheFactAcquisitionProcessBean.getValue(), afterTheFactAcquisitionProcessBean.getVatValue(),
-                afterTheFactAcquisitionProcessBean.getSupplier(), afterTheFactAcquisitionProcessBean.getDescription());
+                afterTheFactAcquisitionProcessBean.getSupplier(), afterTheFactAcquisitionProcessBean.getDescription(),
+                afterTheFactAcquisitionProcessBean.getCpvReference(), afterTheFactAcquisitionProcessBean.getClassification());
         final Person loggedPerson = Person.getLoggedPerson();
         new LabelLog(afterTheFactAcquisitionProcess, loggedPerson.getUser(), "label."
                 + afterTheFactAcquisitionProcess.getClass().getName() + ".Create", "resources/AcquisitionResources");
@@ -98,9 +99,10 @@ public class AfterTheFactAcquisitionProcess extends AfterTheFactAcquisitionProce
         return threadLocal.get().getYear().intValue();
     }
 
-    public void edit(AfterTheFactAcquisitionType type, Money value, BigDecimal vatValue, Supplier supplier, String description) {
+    public void edit(AfterTheFactAcquisitionType type, Money value, BigDecimal vatValue, Supplier supplier, String description,
+            CPVReference cpvReference, AcquisitionItemClassification classification) {
         final AcquisitionAfterTheFact acquisitionAfterTheFact = getAcquisitionAfterTheFact();
-        acquisitionAfterTheFact.edit(type, value, vatValue, supplier, description);
+        acquisitionAfterTheFact.edit(type, value, vatValue, supplier, description, cpvReference, classification);
     }
 
     public void delete() {
