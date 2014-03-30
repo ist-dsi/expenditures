@@ -24,6 +24,15 @@
  */
 package module.mission.domain;
 
+import java.math.BigDecimal;
+
+import module.organization.domain.Person;
+
+import org.joda.time.Days;
+import org.joda.time.LocalDate;
+
+import pt.ist.bennu.core.domain.util.Money;
+
 /**
  * 
  * @author Luis Cruz
@@ -51,5 +60,182 @@ public class OtherPersonelExpenseItem extends OtherPersonelExpenseItem_Base {
     public boolean hasValue() {
         return getValue() != null;
     }
+
+    @Override
+    public boolean isConsistent() {
+    	return super.isConsistent() && doesNotExceedMaximumPossiblePersonelExpenseValue();
+    }
+
+	private boolean doesNotExceedMaximumPossiblePersonelExpenseValue() {
+		final Money value = getValue();
+		final MockPersonelExpenseItem mock = getMissionVersion().getMission().getAccommodationItems().isEmpty() ?
+				new MockFullPersonelExpenseItem(this) : new MockWithAccommodationPersonelExpenseItem(this);
+		return value.isLessThanOrEqual(mock.getValue());
+	}
+
+	public static abstract class MockPersonelExpenseItem {
+
+		final OtherPersonelExpenseItem missionItem;
+
+	    public MockPersonelExpenseItem(final OtherPersonelExpenseItem missionItem) {
+	    	this.missionItem = missionItem;
+		}
+
+		public Money getValue() {
+	        return Money.ZERO;
+	    }
+
+	    public int calculateNumberOfDays() {
+	        final LocalDate startDate = missionItem.getStart().toLocalDate();
+	        final LocalDate endDate = missionItem.getEnd().toLocalDate().plusDays(1);
+	        return Days.daysBetween(startDate, endDate).getDays();
+	    }
+
+	    public double getWeightedExpenseFactor() {
+	        return getExpenseFactor();
+	    }
+
+	    public double getExpenseFactor() {
+	        double result = 0.0;
+	        for (final Person person : missionItem.getPeopleSet()) {
+	            result += getExpenseFactor(person);
+	        }
+	        return result;
+	    }
+
+	    public double getExpenseFactor(final Person person) {
+	        double result = 0.0;
+	        if (missionItem.getPeopleSet().contains(person)) {
+	            final Mission mission = missionItem.getMissionVersion().getMission();
+	            final PersonelExpenseItem firstPersonelExpenseItem = findFirstPersonelExpenseItemFor(mission, person);
+	            final PersonelExpenseItem lastPersonelExpenseItem = findLastPersonelExpenseItemFor(mission, person);
+	            int numberOfDays = calculateNumberOfDays();
+	            if (missionItem == firstPersonelExpenseItem) {
+	                numberOfDays--;
+	                result += mission.getFirstDayPersonelDayExpensePercentage(missionItem);
+	            }
+	            if (missionItem == lastPersonelExpenseItem && numberOfDays > 0) {
+	                numberOfDays--;
+	                result += mission.getLastDayPersonelDayExpensePercentage(missionItem);
+	            }
+	            result += numberOfDays;
+	        }
+	        return result;
+	    }
+
+	    private static PersonelExpenseItem findFirstPersonelExpenseItemFor(final Mission mission, final Person person) {
+	        PersonelExpenseItem result = null;
+	        for (final MissionItem missionItem : mission.getMissionItemsSet()) {
+	            if (missionItem.isPersonelExpenseItem()) {
+	                final PersonelExpenseItem personelExpenseItem = (PersonelExpenseItem) missionItem;
+	                if (personelExpenseItem.getPeopleSet().contains(person)) {
+	                    if (result == null || personelExpenseItem.getStart().isBefore(result.getStart())) {
+	                        result = personelExpenseItem;
+	                    }
+	                }
+	            }
+	        }
+	        return result;
+	    }
+
+	    private static PersonelExpenseItem findLastPersonelExpenseItemFor(final Mission mission, final Person person) {
+	        PersonelExpenseItem result = null;
+	        for (final MissionItem missionItem : mission.getMissionItemsSet()) {
+	            if (missionItem.isPersonelExpenseItem()) {
+	                final PersonelExpenseItem personelExpenseItem = (PersonelExpenseItem) missionItem;
+	                if (personelExpenseItem.getPeopleSet().contains(person)) {
+	                    if (result == null || personelExpenseItem.getStart().isAfter(result.getStart())) {
+	                        result = personelExpenseItem;
+	                    }
+	                }
+	            }
+	        }
+	        return result;
+	    }
+
+	}
+
+	public static class MockFullPersonelExpenseItem extends MockPersonelExpenseItem {
+
+	    public MockFullPersonelExpenseItem(final OtherPersonelExpenseItem missionItem) {
+	    	super(missionItem);
+		}
+
+		@Override
+	    public Money getValue() {
+	        final DailyPersonelExpenseCategory dailyPersonelExpenseCategory = missionItem.getDailyPersonelExpenseCategory();
+	        final double expenseFactor = getWeightedExpenseFactor();
+	        return dailyPersonelExpenseCategory.getValue().multiplyAndRound(new BigDecimal(expenseFactor));
+	    }
+
+	}
+
+	public static class MockNoPersonelExpenseItem extends MockPersonelExpenseItem {
+
+	    public MockNoPersonelExpenseItem(final OtherPersonelExpenseItem missionItem) {
+	    	super(missionItem);
+		}
+
+	}
+
+	public static class MockWithAccommodationPersonelExpenseItem extends MockPersonelExpenseItem {
+
+	    public MockWithAccommodationPersonelExpenseItem(final OtherPersonelExpenseItem missionItem) {
+	    	super(missionItem);
+		}
+
+	    @Override
+	    public double getWeightedExpenseFactor() {
+	        return getExpenseFactor() * 0.7;
+	    }
+
+	    @Override
+	    public Money getValue() {
+	        final DailyPersonelExpenseCategory dailyPersonelExpenseCategory = missionItem.getDailyPersonelExpenseCategory();
+	        final double expenseFactor = getWeightedExpenseFactor();
+	        return dailyPersonelExpenseCategory.getValue().multiplyAndRound(new BigDecimal(expenseFactor));
+	    }
+
+	}
+
+	public class MockWithAccommodationAndOneMealPersonelExpenseItem extends MockWithAccommodationPersonelExpenseItem {
+
+	    public MockWithAccommodationAndOneMealPersonelExpenseItem(final OtherPersonelExpenseItem missionItem) {
+	    	super(missionItem);
+		}
+
+	    @Override
+	    public double getWeightedExpenseFactor() {
+	        return getExpenseFactor() * 0.4;
+	    }
+
+	    @Override
+	    public Money getValue() {
+	        final DailyPersonelExpenseCategory dailyPersonelExpenseCategory = missionItem.getDailyPersonelExpenseCategory();
+	        final double expenseFactor = getWeightedExpenseFactor();
+	        return dailyPersonelExpenseCategory.getValue().multiplyAndRound(new BigDecimal(expenseFactor));
+	    }
+
+	}
+
+	public class MockWithAccommodationAndTwoMealsPersonelExpenseItem extends MockWithAccommodationPersonelExpenseItem {
+
+	    public MockWithAccommodationAndTwoMealsPersonelExpenseItem(final OtherPersonelExpenseItem missionItem) {
+	    	super(missionItem);
+		}
+
+	    @Override
+	    public double getWeightedExpenseFactor() {
+	        return getExpenseFactor() * 0.2;
+	    }
+
+	    @Override
+	    public Money getValue() {
+	        final DailyPersonelExpenseCategory dailyPersonelExpenseCategory = missionItem.getDailyPersonelExpenseCategory();
+	        final double expenseFactor = getWeightedExpenseFactor();
+	        return dailyPersonelExpenseCategory.getValue().multiplyAndRound(new BigDecimal(expenseFactor));
+	    }
+
+	}
 
 }

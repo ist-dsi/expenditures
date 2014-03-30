@@ -182,18 +182,6 @@
 		</logic:equal>
 	</p>
 
-	<logic:equal name="unit" property="defaultRegeimIsCCP" value="true">
-		<bean:message key="label.unit.default.regeim.is.ccp" bundle="EXPENDITURE_RESOURCES"/>
-	</logic:equal>
-	<logic:equal name="unit" property="defaultRegeimIsCCP" value="false">
-		<bean:message key="label.unit.default.regeim.is.not.ccp" bundle="EXPENDITURE_RESOURCES"/>
-	</logic:equal>
-	<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.AQUISITIONS_UNIT_MANAGER">
-		<html:link action="/expenditureTrackingOrganization.do?method=changeDefaultRegeimIsCCP" paramId="unitOid" paramName="unit" paramProperty="externalId">
-			<bean:message key="label.unit.default.regeim.toggle" bundle="EXPENDITURE_RESOURCES"/>
-		</html:link>
-	</logic:present>
-
 	<logic:notEmpty name="unit" property="authorizations">
 		<%
  						ExpenditureTrackingSystem.InfoProvider genericInfoProvider = ExpenditureTrackingSystem.getInfoProvider();
