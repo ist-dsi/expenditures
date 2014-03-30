@@ -66,7 +66,7 @@ public class OtherPersonelExpenseItem extends OtherPersonelExpenseItem_Base {
     	return super.isConsistent() && doesNotExceedMaximumPossiblePersonelExpenseValue();
     }
 
-	private boolean doesNotExceedMaximumPossiblePersonelExpenseValue() {
+	public boolean doesNotExceedMaximumPossiblePersonelExpenseValue() {
 		final Money value = getValue();
 		final MockPersonelExpenseItem mock = getMissionVersion().getMission().getAccommodationItems().isEmpty() ?
 				new MockFullPersonelExpenseItem(this) : new MockWithAccommodationPersonelExpenseItem(this);

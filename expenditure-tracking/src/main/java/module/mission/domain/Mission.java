@@ -790,8 +790,15 @@ public abstract class Mission extends Mission_Base {
         // Check mission items individually
         for (final MissionItem missionItem : getMissionItemsSet()) {
             if (!missionItem.isConsistent()) {
-                result.add(BundleUtil.getFormattedStringFromResourceBundle("resources/MissionResources",
-                        "message.mission.item.not.consistent", missionItem.getLocalizedName()));
+                if (missionItem instanceof OtherPersonelExpenseItem
+                		&& !((OtherPersonelExpenseItem) missionItem)
+                			.doesNotExceedMaximumPossiblePersonelExpenseValue()) {
+                    result.add(BundleUtil.getFormattedStringFromResourceBundle("resources/MissionResources",
+                            "message.mission.item.other.personel.expense.exceeds.max.value", missionItem.getLocalizedName()));                	
+                } else {
+                	result.add(BundleUtil.getFormattedStringFromResourceBundle("resources/MissionResources",
+                			"message.mission.item.not.consistent", missionItem.getLocalizedName()));                	
+                }
             }
         }
 
