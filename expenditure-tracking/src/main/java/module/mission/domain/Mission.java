@@ -1030,7 +1030,8 @@ public abstract class Mission extends Mission_Base {
         final MissionSystem missionSystem = MissionSystem.getInstance();
         for (final MissionAuthorizationAccountabilityType missionAuthorizationAccountabilityType : missionSystem
                 .getMissionAuthorizationAccountabilityTypesSet()) {
-        	if (missionAuthorizationAccountabilityType.getAccountabilityType() == workingAccountabilityType
+        	if ((missionAuthorizationAccountabilityType.getAccountabilityType() == workingAccountabilityType
+        			|| workingAccountabilityType == null)
         			&& missionAuthorizationAccountabilityType.getAccountabilityTypesSet().contains(accountabilityType)) {
                 return true;
             }

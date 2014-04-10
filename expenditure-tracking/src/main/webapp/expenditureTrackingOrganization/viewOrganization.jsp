@@ -193,7 +193,7 @@
 	 	   						<% } else {
 	 	   						List<List<String>> summary = genericInfoProvider.getSummary("viewOrganization.jsp", unit);
 	 	   						int i;
-	 	   						if(summary != null || summary.get(0).size()>0){%>
+	 	   						if(summary != null && summary.get(0).size()>0){%>
 									<h3 class="mtop15 mbottom05"><bean:message key="label.summary" bundle="EXPENDITURE_RESOURCES"/></h3>
 	 	   						    <table class="tstyle2 mtop05">
 										<tr>
