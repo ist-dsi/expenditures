@@ -309,7 +309,7 @@ public class PersistHelp extends WriteCustomTask {
     private void setImage(final Section section, final String imagePath) {
         final StringBuilder stringBuilder = new StringBuilder(section.getContents().getContent());
         stringBuilder.append("<p align=\"center\"");
-        stringBuilder.append("<img src=\"https://dot.ist.utl.pt");
+        stringBuilder.append("<img src=\"https://dot.tecnico.ulisboa.pt");
         stringBuilder.append(imagePath);
         stringBuilder.append("\">");
         stringBuilder.append("</p>\n");

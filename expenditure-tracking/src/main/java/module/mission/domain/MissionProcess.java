@@ -119,7 +119,7 @@ public abstract class MissionProcess extends MissionProcess_Base {
 
                     final StringBuilder body = new StringBuilder("Caro utilizador, foi-lhe passado o processo de missão ");
                     body.append(missionProcess.getProcessIdentification());
-                    body.append(", que pode ser consultado em http://dot.ist.utl.pt/.");
+                    body.append(", que pode ser consultado em http://dot.tecnico.ulisboa.pt/.");
                     if (currentPerson != null) {
                         body.append(" A passagem do processo foi efectuado por ");
                         body.append(currentPerson.getName());

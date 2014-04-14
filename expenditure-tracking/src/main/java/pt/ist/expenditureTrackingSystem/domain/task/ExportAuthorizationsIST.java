@@ -33,7 +33,7 @@ public class ExportAuthorizationsIST extends ExportAuthorizationsIST_Base {
 
     @Override
     public String getVirtualHost() {
-        return "dot.ist.utl.pt";
+        return "dot.tecnico.ulisboa.pt";
     }
 
     @Override

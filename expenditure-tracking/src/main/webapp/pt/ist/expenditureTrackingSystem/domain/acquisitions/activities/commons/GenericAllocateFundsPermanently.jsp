@@ -42,7 +42,7 @@
 			<h4 class="dinline"><fr:view name="financerBean" property="financer.unit.presentationName"/></h4>
 <%
 	if (!(VirtualHost.getVirtualHostForThread() != null
-			&& VirtualHost.getVirtualHostForThread().getHostname().equals("dot.ist-id.ist.utl.pt")
+			&& VirtualHost.getVirtualHostForThread().getHostname().equals("dot.ist-id.tecnico.ulisboa.pt")
 			&& !name.equals("AllocateProjectFundsPermanently"))) {
 %>
 			<span style="padding-left: 1em;">(<bean:message key="financer.label.fundAllocation.identification" bundle="ACQUISITION_RESOURCES"/>: <fr:view name="financerBean" property="fundAllocationId" type="java.lang.String"/>)</span>

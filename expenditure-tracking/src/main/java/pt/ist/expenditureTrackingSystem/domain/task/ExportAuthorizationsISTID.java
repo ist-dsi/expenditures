@@ -42,7 +42,7 @@ public class ExportAuthorizationsISTID extends ExportAuthorizationsISTID_Base {
 
     @Override
     protected String getVirtualHost() {
-        return "dot.ist-id.ist.utl.pt";
+        return "dot.ist-id.tecnico.ulisboa.pt";
     }
 
 }

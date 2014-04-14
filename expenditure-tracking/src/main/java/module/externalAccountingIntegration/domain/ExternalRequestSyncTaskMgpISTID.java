@@ -42,7 +42,7 @@ public class ExternalRequestSyncTaskMgpISTID extends ExternalRequestSyncTaskMgpI
 
     @Override
     protected String getVirtualHostName() {
-        return "dot.ist-id.ist.utl.pt";
+        return "dot.ist-id.tecnico.ulisboa.pt";
     }
 
 }

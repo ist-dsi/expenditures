@@ -39,7 +39,7 @@ public class ExternalIntegration {
     }
 
     private static boolean isActive(final String hostname) {
-        return "dot.ist-id.ist.utl.pt".equals(hostname) || "dot.adist.ist.utl.pt".equals(hostname);
+        return "dot.ist-id.tecnico.ulisboa.pt".equals(hostname) || "dot.adist.tecnico.ulisboa.pt".equals(hostname);
     }
 
 }

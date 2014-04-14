@@ -25,7 +25,7 @@ public class DumpWorkingCapitalInformation extends WriteCustomTask {
         spreadsheet.setHeader("Valor em Caixa Atribuido");
 
         for (final VirtualHost virtualHost : MyOrg.getInstance().getVirtualHostsSet()) {
-            if (virtualHost.getHostname().equals("dot.ist.utl.pt")) {
+            if (virtualHost.getHostname().equals("dot.tecnico.ulisboa.pt")) {
                 final WorkingCapitalSystem workingCapitalSystem = virtualHost.getWorkingCapitalSystem();
                 for (final WorkingCapitalYear workingCapitalYear : workingCapitalSystem.getWorkingCapitalYearsSet()) {
                     for (final WorkingCapital workingCapital : workingCapitalYear.getWorkingCapitalsSet()) {

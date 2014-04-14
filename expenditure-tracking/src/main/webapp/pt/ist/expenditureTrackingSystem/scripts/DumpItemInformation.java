@@ -28,7 +28,7 @@ public class DumpItemInformation extends WriteCustomTask {
     @Override
     protected void doService() {
 	try {
-	    VirtualHost.setVirtualHostForThread("dot.ist.utl.pt");
+	    VirtualHost.setVirtualHostForThread("dot.tecnico.ulisboa.pt");
 	    doStuff();
 	} finally {
 	    VirtualHost.releaseVirtualHostFromThread();
