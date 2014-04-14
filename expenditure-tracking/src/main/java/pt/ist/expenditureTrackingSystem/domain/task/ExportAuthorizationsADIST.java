@@ -42,6 +42,6 @@ public class ExportAuthorizationsADIST extends ExportAuthorizationsADIST_Base {
 
     @Override
     protected String getVirtualHost() {
-        return "dot.adist.ist.utl.pt";
+        return "dot.adist.tecnico.ulisboa.pt";
     }
 }

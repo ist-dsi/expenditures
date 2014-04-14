@@ -162,7 +162,7 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
         for (final VirtualHost virtualHost : myOrg.getVirtualHostsSet()) {
             final ExpenditureTrackingSystem ets = virtualHost.getExpenditureTrackingSystem();
             if (ets != null) {
-                if (virtualHost.getHostname().equals("dot.ist.utl.pt") || virtualHost.getHostname().equals("compras.ist.utl.pt")) {
+                if (virtualHost.getHostname().equals("dot.tecnico.ulisboa.pt") || virtualHost.getHostname().equals("compras.ist.utl.pt")) {
                     ets.setRequireFundAllocationPriorToAcquisitionRequest(Boolean.TRUE);
                     ets.setRegisterDiaryNumbersAndTransactionNumbers(Boolean.FALSE);
                     ets.setRequireCommitmentNumber(Boolean.TRUE);
