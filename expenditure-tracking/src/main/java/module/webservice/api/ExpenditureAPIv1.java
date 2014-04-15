@@ -70,7 +70,7 @@ public class ExpenditureAPIv1 {
     @GET
     @Produces(JSON_UTF8)
     @Path("suppliers")
-    public String suppliers(@QueryParam("userID") String userID, @QueryParam("token") String token) {
+    public String suppliers(@QueryParam("userID") String userID, @QueryParam("access_token") String access_token) {
         checkToken(token);
         Set<Supplier> suppliers = MyOrg.getInstance().getSuppliersSet();
         JsonArray toReturn = new JsonArray();
@@ -125,9 +125,9 @@ public class ExpenditureAPIv1 {
     public String allocateFunds(@QueryParam("supplierID") String supplierID, @QueryParam("value") String value,
             @QueryParam("valueVat") String valueVAT, @QueryParam("cpvCode") String cpvcode,
             @QueryParam("goodsOrService") String goodsOrServices, @QueryParam("description") String description,
-            @QueryParam("userID") String userID, @QueryParam("token") String token) {
+            @QueryParam("userID") String userID, @QueryParam("access_token") String access_token) {
 
-        checkToken(token);
+        checkToken(access_token);
         login(User.findByUsername(userID));
         try {
 
@@ -185,8 +185,8 @@ public class ExpenditureAPIv1 {
     @Produces(JSON_UTF8)
     @Path("cancelFundAllocation")
     public String cancelFundAllocation(@QueryParam("processID") String processID, @QueryParam("userID") String userID,
-            @QueryParam("token") String token) {
-        checkToken(token);
+            @QueryParam("access_token") String access_token) {
+        checkToken(access_token);
         login(User.findByUsername(userID));
         try {
             WorkflowSystem ws = WorkflowSystem.getInstance();
