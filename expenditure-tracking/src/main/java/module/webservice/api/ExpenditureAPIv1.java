@@ -71,7 +71,7 @@ public class ExpenditureAPIv1 {
     @Produces(JSON_UTF8)
     @Path("suppliers")
     public String suppliers(@QueryParam("userID") String userID, @QueryParam("access_token") String access_token) {
-        checkToken(token);
+        checkToken(access_token);
         Set<Supplier> suppliers = MyOrg.getInstance().getSuppliersSet();
         JsonArray toReturn = new JsonArray();
         for (Supplier supplier : suppliers) {
