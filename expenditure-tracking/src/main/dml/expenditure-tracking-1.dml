@@ -59,6 +59,7 @@ class acquisitions.Acquisition implements .pt.ist.bennu.core.domain.VirtualHostA
 		BigDecimal vatValue;
 		String description;
 		Boolean deletedState;
+		AcquisitionItemClassification classification;
 	}
 
 	class acquisitions.AcquisitionRequest extends acquisitions.RequestWithPayment {
@@ -721,6 +722,13 @@ relation AcquisitionAfterTheFactSupplier {
 		multiplicity *;
 	}
 	organization.Supplier playsRole supplier;
+}
+
+relation AcquisitionAfterTheFactCpvReference {
+	acquisitions.afterthefact.AcquisitionAfterTheFact playsRole acquisitionsAfterTheFact {
+		multiplicity *;
+	}
+	acquisitions.CPVReference playsRole cpvReference;
 }
 
 relation ExpenditureTrackingSystemAnnouncement {

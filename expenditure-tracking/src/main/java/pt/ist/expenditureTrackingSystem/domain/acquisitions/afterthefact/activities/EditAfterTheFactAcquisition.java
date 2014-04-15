@@ -61,7 +61,8 @@ public class EditAfterTheFactAcquisition extends
     protected void process(EditAfterTheFactProcessActivityInformation activityInformation) {
         activityInformation.getProcess().edit(activityInformation.getAfterTheFactAcquisitionType(),
                 activityInformation.getValue(), activityInformation.getVatValue(), activityInformation.getSupplier(),
-                activityInformation.getDescription());
+                activityInformation.getDescription(), activityInformation.getCpvReference(),
+                activityInformation.getClassification());
     }
 
     @Override
