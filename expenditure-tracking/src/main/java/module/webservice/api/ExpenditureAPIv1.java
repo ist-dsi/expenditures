@@ -223,7 +223,7 @@ public class ExpenditureAPIv1 {
 
     private void checkToken(String token) {
         String storedToken = PropertiesManager.getProperty("expenditures.api.token");
-        if (!token.equals(storedToken)) {
+        if (!storedToken.equals(token)) {
             throw newApplicationError(Status.FORBIDDEN, "can't access resource", "you're not able to use this service");
         }
 
