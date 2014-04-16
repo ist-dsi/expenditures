@@ -73,6 +73,7 @@ public class AfterTheFactAcquisitionProcessAction extends BaseAction {
                     AfterTheFactAcquisitionProcess.createNewAfterTheFactAcquisitionProcess(afterTheFactAcquisitionProcessBean);
         } catch (DomainException e) {
             addMessage(request, e.getMessage());
+            request.setAttribute("limitExceded", true);
             return prepareCreateAfterTheFactAcquisitionProcess(mapping, form, request, response);
         }
         return ProcessManagement.forwardToProcess(afterTheFactAcquisitionProcess);

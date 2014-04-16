@@ -31,6 +31,8 @@ import org.joda.time.LocalDate;
 
 import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.ist.bennu.core.domain.util.Money;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionItemClassification;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 
 /**
@@ -50,10 +52,17 @@ public class AcquisitionAfterTheFact extends AcquisitionAfterTheFact_Base {
     public void edit(AfterTheFactAcquisitionType type, Money value, BigDecimal vatValue, Supplier supplier, String description) {
         setDeletedState(Boolean.FALSE);
         setAfterTheFactAcquisitionType(type);
+        setSupplier(supplier);
         setValue(value);
         setVatValue(vatValue);
-        setSupplier(supplier);
         setDescription(description);
+    }
+
+    public void edit(AfterTheFactAcquisitionType type, Money value, BigDecimal vatValue, Supplier supplier, String description,
+            CPVReference cpvReference, AcquisitionItemClassification classification) {
+        edit(type, value, vatValue, supplier, description);
+        setClassification(classification);
+        setCpvReference(cpvReference);
     }
 
     public void delete() {
