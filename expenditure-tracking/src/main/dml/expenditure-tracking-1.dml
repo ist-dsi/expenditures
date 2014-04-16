@@ -39,6 +39,8 @@ class ExpenditureTrackingSystem {
 	Boolean checkSupplierLimitsByCPV;
 	String institutionManagementEmail;
 	Boolean processesNeedToBeReverified;
+	String createSupplierUrl;
+	String createSupplierLabel;
 }
 
 

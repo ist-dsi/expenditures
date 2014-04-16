@@ -61,10 +61,14 @@
 			</fr:layout>
 		</fr:edit>
 	</logic:equal>
+	<p>
+		<bean:message key="label.message.create.suppliers.instructions" bundle="ACQUISITION_RESOURCES"
+				arg0="<%= ExpenditureTrackingSystem.getInstance().getCreateSupplierUrl() %>"
+				arg1="<%= ExpenditureTrackingSystem.getInstance().getCreateSupplierLabel() %>"
+		/>
+	</p>
 	<bean:define id="type" name="acquisitionProcessBean" property="classification"/>
-	
 	<bean:define id="schema" value="<%= "createAcquisitionRequest." + type %>"/>
-	
 	<fr:edit id="acquisitionProcessBean"
 			name="acquisitionProcessBean"
 			type="pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean"

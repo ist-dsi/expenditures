@@ -81,6 +81,9 @@ public class ExpenditureConfigurationAction extends BaseAction {
         final String documentationUrl = request.getParameter("documentationUrl");
         final String documentationLabel = request.getParameter("documentationLabel");
 
+        final String createSupplierUrl = request.getParameter("createSupplierUrl");
+        final String createSupplierLabel = request.getParameter("createSupplierLabel");
+        
         final String invoiceAllowedToStartAcquisitionProcessParam =
                 request.getParameter("invoiceAllowedToStartAcquisitionProcess");
         final Boolean invoiceAllowedToStartAcquisitionProcess =
@@ -116,7 +119,7 @@ public class ExpenditureConfigurationAction extends BaseAction {
                 institutionalRequestDocumentPrefix, acquisitionCreationWizardJsp, array, invoiceAllowedToStartAcquisitionProcess,
                 requireFundAllocationPriorToAcquisitionRequest, registerDiaryNumbersAndTransactionNumbers,
                 maxValueStartedWithInvoive, valueRequireingTopLevelAuthorization, documentationUrl, documentationLabel,
-                requireCommitmentNumber, processesNeedToBeReverified);
+                requireCommitmentNumber, processesNeedToBeReverified, createSupplierUrl, createSupplierLabel);
 
         return viewConfiguration(mapping, form, request, response);
     }

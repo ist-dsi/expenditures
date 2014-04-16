@@ -508,7 +508,8 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
             final Boolean invoiceAllowedToStartAcquisitionProcess, final Boolean requireFundAllocationPriorToAcquisitionRequest,
             final Boolean registerDiaryNumbersAndTransactionNumbers, final Money maxValueStartedWithInvoive,
             final Money valueRequireingTopLevelAuthorization, final String documentationUrl, final String documentationLabel,
-            final Boolean requireCommitmentNumber, final Boolean processesNeedToBeReverified) {
+            final Boolean requireCommitmentNumber, final Boolean processesNeedToBeReverified, final String createSupplierUrl,
+            final String createSupplierLabel) {
         setInstitutionalProcessNumberPrefix(institutionalProcessNumberPrefix);
         setInstitutionalRequestDocumentPrefix(institutionalRequestDocumentPrefix);
         setAcquisitionCreationWizardJsp(acquisitionCreationWizardJsp);
@@ -522,6 +523,8 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
         setDocumentationLabel(documentationLabel);
         setRequireCommitmentNumber(requireCommitmentNumber);
         setProcessesNeedToBeReverified(processesNeedToBeReverified);
+        setCreateSupplierUrl(createSupplierUrl);
+        setCreateSupplierLabel(createSupplierLabel);
     }
 
     @Atomic

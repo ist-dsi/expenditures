@@ -20,7 +20,7 @@
 	<bean:message key="acquisitionProcess.message.note" bundle="ACQUISITION_RESOURCES"
 		arg0="<%= ExpenditureTrackingSystem.getInstance().getTopLevelUnitsSet().iterator().next().getUnit().getAcronym() %>"
 		arg1="<%= ExpenditureTrackingSystem.getInstance().getDocumentationUrl() %>"
-		arg2="<%= pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem.getInstance().getDocumentationLabel() %>"/>
+		arg2="<%= ExpenditureTrackingSystem.getInstance().getDocumentationLabel() %>"/>
 </div>
 
 <p class="mtop15 mbottom05"><strong><fr:view name="acquisitionProcessBean" property="classification"/></strong></p>
@@ -88,6 +88,12 @@
 			</fr:layout>
 		</fr:edit>
 	</logic:equal>
+	<p>
+		<bean:message key="label.message.create.suppliers.instructions" bundle="ACQUISITION_RESOURCES"
+				arg0="<%= ExpenditureTrackingSystem.getInstance().getCreateSupplierUrl() %>"
+				arg1="<%= ExpenditureTrackingSystem.getInstance().getCreateSupplierLabel() %>"
+		/>
+	</p>	
 	<fr:edit id="acquisitionProcessBean" name="acquisitionProcessBean"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean"
 		schema="createStandardAcquistion.selectRequester">
