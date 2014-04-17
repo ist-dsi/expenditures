@@ -10,7 +10,7 @@
 
     <groupId>pt.ist</groupId>
     <artifactId>expenditure-tracking</artifactId>
-    <version>1.8.9</version>
+    <version>1.8.10</version>
     <packaging>jar</packaging>
     <name>expenditure-tracking</name>
 
@@ -129,6 +129,11 @@
             <artifactId>tomcat-jsp-api</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+			<groupId>org.fenixedu</groupId>
+			<artifactId>fenixedu-commons</artifactId>
+			<version>1.0.0</version>
+		</dependency>
     </dependencies>
 
     <repositories>

@@ -313,12 +313,36 @@
 		</tr>
 		<tr>
 			<td>
-				<bean:message key="label.pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.CommitFunds" bundle="ACQUISITION_RESOURCES"/>
+				<bean:message key="label.configuration.process.documentation.documentationLabel" bundle="EXPENDITURE_RESOURCES"/>
 			</td>
 			<td>
 				<input type="text" name="documentationLabel" size="50"
 					<% if (expenditureTrackingSystem.getDocumentationLabel() != null) {%>
 							value="<%= expenditureTrackingSystem.getDocumentationLabel() %>"
+					<% } %>
+						/>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<bean:message key="label.configuration.process.documentation.createSupplierUrl" bundle="EXPENDITURE_RESOURCES"/>
+			</td>
+			<td>
+				<input type="text" name="createSupplierUrl" size="50"
+					<% if (expenditureTrackingSystem.getCreateSupplierUrl() != null) {%>
+							value="<%= expenditureTrackingSystem.getCreateSupplierUrl() %>"
+					<% } %>
+						/>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<bean:message key="label.configuration.process.documentation.createSupplierLabel" bundle="EXPENDITURE_RESOURCES"/>
+			</td>
+			<td>
+				<input type="text" name="createSupplierLabel" size="50"
+					<% if (expenditureTrackingSystem.getCreateSupplierLabel() != null) {%>
+							value="<%= expenditureTrackingSystem.getCreateSupplierLabel() %>"
 					<% } %>
 						/>
 			</td>
