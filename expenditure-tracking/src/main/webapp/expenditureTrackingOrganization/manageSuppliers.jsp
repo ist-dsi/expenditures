@@ -206,15 +206,30 @@
 				</td>
 			</tr>				
 		<% } %>
+			<% final Money allocated = supplier.getAllocated(); %>
+			<tr>
+				<td style="text-align: left;">
+					
+				</td>
+				<td style="text-align: left;">
+					<bean:message key="label.working.capital.allocations" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+				</td>
+				<td style="text-align: right;">
+					<%= allocated.toFormatString() %>
+				</td>
+				<td style="text-align: right;">
+					<%= allocated.toFormatString() %>
+				</td>
+			</tr>
 			<tr style=" font-weight: bold;">
 				<td style="text-align: left;" colspan="2">
 					<bean:message key="label.total" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 				</td>
 				<td style="text-align: right;">
-					<%= totalConfirmed.toFormatString() %>
+					<%= totalConfirmed.add(allocated).toFormatString() %>
 				</td>
 				<td style="text-align: right;">
-					<%= total.toFormatString() %>
+					<%= total.add(allocated).toFormatString() %>
 				</td>
 			</tr>
 			<tr>
