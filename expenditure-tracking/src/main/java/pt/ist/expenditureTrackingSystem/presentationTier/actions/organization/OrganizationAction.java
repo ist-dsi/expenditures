@@ -67,6 +67,7 @@ import pt.ist.expenditureTrackingSystem.domain.SyncSuppliersAux.SupplierMap;
 import pt.ist.expenditureTrackingSystem.domain.SyncSuppliersAux.SupplierReader;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
@@ -1019,22 +1020,21 @@ public class OrganizationAction extends BaseAction {
 
         for (final AcquisitionRequest acquisitionRequest : supplier.getAcquisitionRequestsSet()) {
             if (acquisitionRequest.isInAllocationPeriod()) {
-        	final AcquisitionProcess acquisitionProcess = acquisitionRequest.getAcquisitionProcess();
-        	if (acquisitionProcess.isActive() && acquisitionProcess.isAllocatedToSupplier()) {
+                final AcquisitionProcess acquisitionProcess = acquisitionRequest.getAcquisitionProcess();
+                if (acquisitionProcess.isActive() && acquisitionProcess.isAllocatedToSupplier()) {
                     Money forSupplierLimit = Money.ZERO;
                     Money currentValue = Money.ZERO;
-                    final boolean hasBeenAllocatedPermanently =
-                            acquisitionProcess.getAcquisitionProcessState().hasBeenAllocatedPermanently();
                     for (final RequestItem requestItem : acquisitionRequest.getRequestItemsSet()) {
-                            final Money valueToAdd =
-                                    hasBeenAllocatedPermanently ? requestItem.getTotalRealAssigned() : requestItem
-                                            .getTotalAssigned();
-                            if (acquisitionRequest.getCurrentSupplierAllocationValue().isPositive()) {
-                        	forSupplierLimit = forSupplierLimit.add(valueToAdd);
-                            }
-                            currentValue = currentValue.add(valueToAdd);
-
+                        AcquisitionRequestItem acqRequestItem = (AcquisitionRequestItem) requestItem;
+                        if (acquisitionProcess.getAcquisitionProcessState().hasBeenAllocatedPermanently()) {
+                            forSupplierLimit = forSupplierLimit.add(acqRequestItem.getTotalRealValue());
+                            currentValue = currentValue.add(acqRequestItem.getTotalRealValueWithAdditionalCostsAndVat());
+                        } else {
+                            forSupplierLimit = forSupplierLimit.add(acqRequestItem.getTotalItemValue());
+                            currentValue = currentValue.add(acqRequestItem.getTotalItemValueWithAdditionalCostsAndVat());
+                        }
                     }
+
                     totalForSupplierLimit = totalForSupplierLimit.add(forSupplierLimit);
                     totalForSupplier = totalForSupplier.add(currentValue);
 
@@ -1044,7 +1044,7 @@ public class OrganizationAction extends BaseAction {
                     row.setCell(forSupplierLimit.toFormatString());
                     row.setCell(acquisitionRequest.getCurrentTotalVatValue().toFormatString());
                     row.setCell(currentValue.toFormatString());
-        	}
+                }
             }
         }
 
@@ -1055,18 +1055,15 @@ public class OrganizationAction extends BaseAction {
                     final RefundRequest refundRequest = refundProcess.getRequest();
                     Money refundableValue = Money.ZERO;
                     if (refundProcess.hasFundsAllocatedPermanently()) {
-                	for (final PaymentProcessInvoice paymentProcessInvoice : refundRequest.getInvoices()) {
-                	    final RefundableInvoiceFile refundableInvoiceFile = (RefundableInvoiceFile) paymentProcessInvoice;
-                	    for (final RequestItem requestItem : refundableInvoiceFile.getRequestItemsSet()) {
-                		final RefundItem refundItem = (RefundItem) requestItem;
-                		refundableValue = refundableValue.add(invoiceFile.getRefundableValue());
-                	    }
-                	}
+                        for (final PaymentProcessInvoice paymentProcessInvoice : refundRequest.getInvoices()) {
+                            final RefundableInvoiceFile refundableInvoiceFile = (RefundableInvoiceFile) paymentProcessInvoice;
+                            refundableValue = refundableValue.add(refundableInvoiceFile.getRefundableValue());
+                        }
                     } else {
-                	for (final RefundItem refundItem : refundRequest.getRefundItemsSet()) {
+                        for (final RefundItem refundItem : refundRequest.getRefundItemsSet()) {
                             refundableValue = refundableValue.add(refundItem.getValueEstimation());
 
-                	}
+                        }
                     }
                     totalForSupplierLimit = totalForSupplierLimit.add(refundableValue);
                     totalForSupplier = totalForSupplier.add(refundableValue);
