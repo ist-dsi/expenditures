@@ -224,8 +224,16 @@ public class EditAfterTheFactProcessActivityInformation extends ActivityInformat
         return this.bean.getCpvReference();
     }
 
+    public void setCpvReference(CPVReference cpvReference) {
+        this.bean.setCpvReference(cpvReference);
+    }
+
     public AcquisitionItemClassification getClassification() {
         return this.bean.getClassification();
+    }
+
+    public void setClassification(AcquisitionItemClassification classification) {
+        this.bean.setClassification(classification);
     }
 
 }
