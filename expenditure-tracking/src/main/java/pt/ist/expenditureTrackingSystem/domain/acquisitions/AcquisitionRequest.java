@@ -743,4 +743,13 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
         return getRefundee() != null;
     }
 
+    public boolean hasRequestItemForCPV(final CPVReference cpvReference) {
+        for (final RequestItem requestItem : getRequestItemsSet()) {
+            if (requestItem.getCPVReference() == cpvReference) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
