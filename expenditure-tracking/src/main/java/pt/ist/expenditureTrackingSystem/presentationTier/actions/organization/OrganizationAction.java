@@ -30,8 +30,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -69,11 +72,10 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessInvoice;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AcquisitionAfterTheFact;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundableInvoiceFile;
@@ -96,6 +98,8 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.organization.UserAcquisitionProcessStatistics;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.BaseAction;
+import pt.ist.expenditureTrackingSystem.presentationTier.actions.organization.util.AcquisitionForSupplierAndCPVBean;
+import pt.ist.expenditureTrackingSystem.presentationTier.actions.organization.util.RefundForSupplierAndCPVBean;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 import pt.utl.ist.fenix.tools.util.excel.ExcelStyle;
@@ -1048,34 +1052,45 @@ public class OrganizationAction extends BaseAction {
             }
         }
 
+        final Map<RefundProcess, Money> refundValueMap = new HashMap<RefundProcess, Money>();
+        final Map<RefundProcess, Money> vatMap = new HashMap<RefundProcess, Money>();
+        final Map<RefundProcess, Money> totalValueMap = new HashMap<RefundProcess, Money>();
+
         for (final RefundableInvoiceFile invoiceFile : supplier.getRefundInvoicesSet()) {
             if (invoiceFile.isInAllocationPeriod()) {
                 final RefundProcess refundProcess = invoiceFile.getRefundItem().getRequest().getProcess();
                 if (refundProcess.isActive() && !refundProcess.getShouldSkipSupplierFundAllocation()) {
                     final RefundRequest refundRequest = refundProcess.getRequest();
-                    Money refundableValue = Money.ZERO;
-                    if (refundProcess.hasFundsAllocatedPermanently()) {
-                        for (final PaymentProcessInvoice paymentProcessInvoice : refundRequest.getInvoices()) {
-                            final RefundableInvoiceFile refundableInvoiceFile = (RefundableInvoiceFile) paymentProcessInvoice;
-                            refundableValue = refundableValue.add(refundableInvoiceFile.getRefundableValue());
-                        }
-                    } else {
-                        for (final RefundItem refundItem : refundRequest.getRefundItemsSet()) {
-                            refundableValue = refundableValue.add(refundItem.getValueEstimation());
 
-                        }
+                    if (!refundValueMap.containsKey(refundProcess)) {
+                        refundValueMap.put(refundProcess, Money.ZERO);
+                        vatMap.put(refundProcess, Money.ZERO);
+                        totalValueMap.put(refundProcess, Money.ZERO);
                     }
-                    totalForSupplierLimit = totalForSupplierLimit.add(refundableValue);
-                    totalForSupplier = totalForSupplier.add(refundableValue);
 
-                    final Row row = spreadsheet.addRow();
-                    row.setCell(refundProcess.getProcessNumber());
-                    row.setCell(refundProcess.getClass().getSimpleName());
-                    row.setCell(refundableValue.toFormatString());
-                    row.setCell(Money.ZERO.toFormatString());
-                    row.setCell(refundableValue.toFormatString());
+                    refundValueMap.put(refundProcess, refundValueMap.get(refundProcess).add(invoiceFile.getRefundableValue()));
+                    vatMap.put(refundProcess, vatMap.get(refundProcess).add(invoiceFile.getValueWithVat().subtract(invoiceFile.getValue())));
+                    totalValueMap.put(refundProcess, totalValueMap.get(refundProcess).add(invoiceFile.getValueWithVat()));
                 }
             }
+        }
+
+        for (final Entry<RefundProcess, Money> entry : refundValueMap.entrySet()) {
+            final RefundProcess refundProcess = entry.getKey();
+
+            final Money refundableValue = entry.getValue();
+            final Money vatValue = vatMap.get(refundProcess);
+            final Money totalValue = totalValueMap.get(refundProcess);
+
+            totalForSupplierLimit = totalForSupplierLimit.add(refundableValue);
+            totalForSupplier = totalForSupplier.add(totalValue);
+
+            final Row row = spreadsheet.addRow();
+            row.setCell(refundProcess.getProcessNumber());
+            row.setCell(refundProcess.getClass().getSimpleName());
+            row.setCell(refundableValue.toFormatString());
+            row.setCell(vatValue.toFormatString());
+            row.setCell(totalValue.toFormatString());
         }
 
         spreadsheet.addRow();
@@ -1087,6 +1102,58 @@ public class OrganizationAction extends BaseAction {
         row.setCell(totalForSupplier.toFormatString());
 
         return spreadsheet;
+    }
+
+    public final ActionForward viewSupplierProcessesByCPV(final ActionMapping mapping, final ActionForm form,
+            final HttpServletRequest request, final HttpServletResponse response) {
+
+        final Supplier supplier = getDomainObject(request, "supplierOID");
+        final CPVReference cpvReference = getDomainObject(request, "cpvReferenceOID");
+
+        request.setAttribute("supplier", supplier);
+        request.setAttribute("cpvReference", cpvReference);
+
+        // supplier.getAllocationsByCPVReference();
+        // supplier.getUnconfirmedAllocationsByCPVReference();
+
+        final SortedSet<AcquisitionForSupplierAndCPVBean> acquisitionBeans = new TreeSet<AcquisitionForSupplierAndCPVBean>();
+        for (final AcquisitionRequest acquisitionRequest : supplier.getAcquisitionRequestsSet()) {
+            if (acquisitionRequest.isInAllocationPeriod()) {
+                final AcquisitionProcess acquisitionProcess = acquisitionRequest.getAcquisitionProcess();
+                if (acquisitionProcess.isActive() && acquisitionRequest.hasRequestItemForCPV(cpvReference)) {
+                    acquisitionBeans.add(new AcquisitionForSupplierAndCPVBean(supplier, cpvReference, acquisitionProcess));
+                }
+            }
+        }
+        request.setAttribute("acquisitionBeans", acquisitionBeans);
+
+        final SortedSet<RefundForSupplierAndCPVBean> refundBeans = new TreeSet<RefundForSupplierAndCPVBean>();
+        // download
+        for (final RefundableInvoiceFile invoiceFile : supplier.getRefundInvoicesSet()) {
+            if (invoiceFile.isInAllocationPeriod() && invoiceFile.getRefundItem().getCPVReference() == cpvReference) {
+                final RefundProcess refundProcess = invoiceFile.getRefundItem().getRequest().getProcess();
+                if (refundProcess.isActive()) {
+                    refundBeans.add(new RefundForSupplierAndCPVBean(supplier, cpvReference, refundProcess));
+                }
+            }
+        }
+        request.setAttribute("refundBeans", refundBeans);
+
+        final SortedSet<AcquisitionAfterTheFact> afterTheFactProcesses = new TreeSet<AcquisitionAfterTheFact>(new Comparator<AcquisitionAfterTheFact>() {
+            @Override
+            public int compare(AcquisitionAfterTheFact o1, AcquisitionAfterTheFact o2) {
+                return PaymentProcess.COMPARATOR_BY_YEAR_AND_ACQUISITION_PROCESS_NUMBER.compare(o1.getAfterTheFactAcquisitionProcess(), o2.getAfterTheFactAcquisitionProcess());
+            }
+        });
+        for (final AcquisitionAfterTheFact acquisitionAfterTheFact : supplier.getAcquisitionsAfterTheFactSet()) {
+            if (acquisitionAfterTheFact.isInAllocationPeriod() && !acquisitionAfterTheFact.getDeletedState().booleanValue()
+                    && acquisitionAfterTheFact.getCpvReference() == cpvReference) {
+                afterTheFactProcesses.add(acquisitionAfterTheFact);
+            }
+        }
+        request.setAttribute("afterTheFactProcesses", afterTheFactProcesses);
+
+        return forward(request, "/expenditureTrackingOrganization/viewSupplierProcessesByCPV.jsp");
     }
 
     public final ActionForward managePriorityCPVs(final ActionMapping mapping, final ActionForm form,

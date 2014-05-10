@@ -191,27 +191,10 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
             }
         }
         for (final RefundableInvoiceFile refundInvoice : getRefundInvoicesSet()) {
-            if (refundInvoice.isInAllocationPeriod()) {
+            if (refundInvoice.isInAllocationPeriod() && refundInvoice.getRefundItem().getCPVReference().getCode().equals(cpvReference.getCode())) {
                 final RefundProcess refundProcess = refundInvoice.getRefundItem().getRequest().getProcess();
                 if (refundProcess.isActive() && !refundProcess.getShouldSkipSupplierFundAllocation()) {
-                    final RefundRequest refundRequest = refundProcess.getRequest();
-                    if (refundProcess.hasFundsAllocatedPermanently()) {
-                        for (final PaymentProcessInvoice paymentProcessInvoice : refundRequest.getInvoices()) {
-                            final RefundableInvoiceFile refundableInvoiceFile = (RefundableInvoiceFile) paymentProcessInvoice;
-                            for (final RequestItem requestItem : refundableInvoiceFile.getRequestItemsSet()) {
-                                final RefundItem refundItem = (RefundItem) requestItem;
-                                if (refundItem.getCPVReference().getCode().equals(cpvReference.getCode())) {
-                                    result = result.add(refundableInvoiceFile.getRefundableValue());
-                                }
-                            }
-                        }
-                    } else {
-                        for (final RefundItem refundItem : refundRequest.getRefundItemsSet()) {
-                            if (refundItem.getCPVReference().getCode().equals(cpvReference.getCode())) {
-                                result = result.add(refundItem.getValueEstimation());
-                            }
-                        }
-                    }
+                    result = result.add(refundInvoice.getRefundableValue());
                 }
             }
         }
@@ -249,27 +232,14 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
         }
         for (final AcquisitionAfterTheFact acquisitionAfterTheFact : getAcquisitionsAfterTheFactSet()) {
             if (acquisitionAfterTheFact.isInAllocationPeriod() && !acquisitionAfterTheFact.getDeletedState().booleanValue()) {
-                result.put(null, acquisitionAfterTheFact.getValue());
+                result.put(acquisitionAfterTheFact.getCpvReference(), acquisitionAfterTheFact.getValue());
             }
         }
         for (final RefundableInvoiceFile refundInvoice : getRefundInvoicesSet()) {
             if (refundInvoice.isInAllocationPeriod()) {
                 final RefundProcess refundProcess = refundInvoice.getRefundItem().getRequest().getProcess();
                 if (refundProcess.isActive() && !refundProcess.getShouldSkipSupplierFundAllocation()) {
-                    final RefundRequest refundRequest = refundProcess.getRequest();
-                    if (refundProcess.hasFundsAllocatedPermanently()) {
-                        for (final PaymentProcessInvoice paymentProcessInvoice : refundRequest.getInvoices()) {
-                            final RefundableInvoiceFile refundableInvoiceFile = (RefundableInvoiceFile) paymentProcessInvoice;
-                            for (final RequestItem requestItem : refundableInvoiceFile.getRequestItemsSet()) {
-                                final RefundItem refundItem = (RefundItem) requestItem;
-                                result.put(refundItem.getCPVReference(), refundableInvoiceFile.getRefundableValue());
-                            }
-                        }
-                    } else {
-                        for (final RefundItem refundItem : refundRequest.getRefundItemsSet()) {
-                            result.put(refundItem.getCPVReference(), refundItem.getValueEstimation());
-                        }
-                    }
+                    result.put(refundInvoice.getRefundItem().getCPVReference(), refundInvoice.getRefundableValue());
                 }
             }
         }
@@ -308,27 +278,14 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
         }
         for (final AcquisitionAfterTheFact acquisitionAfterTheFact : getAcquisitionsAfterTheFactSet()) {
             if (acquisitionAfterTheFact.isInAllocationPeriod() && !acquisitionAfterTheFact.getDeletedState().booleanValue()) {
-                result.put(null, acquisitionAfterTheFact.getValue());
+                result.put(acquisitionAfterTheFact.getCpvReference(), acquisitionAfterTheFact.getValue());
             }
         }
         for (final RefundableInvoiceFile refundInvoice : getRefundInvoicesSet()) {
             if (refundInvoice.isInAllocationPeriod()) {
                 final RefundProcess refundProcess = refundInvoice.getRefundItem().getRequest().getProcess();
                 if (refundProcess.isActive() && !refundProcess.getShouldSkipSupplierFundAllocation()) {
-                    final RefundRequest refundRequest = refundProcess.getRequest();
-                    if (refundProcess.hasFundsAllocatedPermanently()) {
-                        for (final PaymentProcessInvoice paymentProcessInvoice : refundRequest.getInvoices()) {
-                            final RefundableInvoiceFile refundableInvoiceFile = (RefundableInvoiceFile) paymentProcessInvoice;
-                            for (final RequestItem requestItem : refundableInvoiceFile.getRequestItemsSet()) {
-                                final RefundItem refundItem = (RefundItem) requestItem;
-                                result.put(refundItem.getCPVReference(), refundableInvoiceFile.getRefundableValue());
-                            }
-                        }
-                    } else {
-                        for (final RefundItem refundItem : refundRequest.getRefundItemsSet()) {
-                            result.put(refundItem.getCPVReference(), refundItem.getValueEstimation());
-                        }
-                    }
+                    result.put(refundInvoice.getRefundItem().getCPVReference(), refundInvoice.getRefundableValue());
                 }
             }
         }
@@ -338,7 +295,7 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
 
     @Deprecated
     public Money getSoftTotalAllocated() {
-        Money result = Money.ZERO;
+        Money result = getAllocated();
         result = result.add(getTotalAllocatedByAcquisitionProcesses(true));
 
         for (final AcquisitionAfterTheFact acquisitionAfterTheFact : getAcquisitionsAfterTheFactSet()) {
@@ -352,17 +309,7 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
             if (refundInvoice.isInAllocationPeriod()) {
                 final RefundProcess refundProcess = refundInvoice.getRefundItem().getRequest().getProcess();
                 if (refundProcess.isActive() && !refundProcess.getShouldSkipSupplierFundAllocation()) {
-                    final RefundRequest refundRequest = refundProcess.getRequest();
-                    if (refundProcess.hasFundsAllocatedPermanently()) {
-                        for (final PaymentProcessInvoice paymentProcessInvoice : refundRequest.getInvoices()) {
-                            final RefundableInvoiceFile refundableInvoiceFile = (RefundableInvoiceFile) paymentProcessInvoice;
-                            result = result.add(refundableInvoiceFile.getRefundableValue());
-                        }
-                    } else {
-                        for (final RefundItem refundItem : refundRequest.getRefundItemsSet()) {
-                            result = result.add(refundItem.getValueEstimation());
-                        }
-                    }
+                    result = result.add(refundInvoice.getRefundableValue());
                 }
             }
         }

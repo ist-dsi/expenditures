@@ -177,6 +177,8 @@
 				<th>
 					<bean:message key="label.value" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>*
 				</th>
+				<th>
+				</th>
 			</tr>
 		<%
 			Money total = Money.ZERO;
@@ -204,6 +206,19 @@
 				<td style="text-align: right;">
 					<%= value.toFormatString() %>
 				</td>
+				<td>
+					<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL_MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL,pt.ist.expenditureTrackingSystem.domain.RoleType.SUPPLIER_MANAGER">
+						<% if (cpvReference != null) { %>
+							<html:link action='<%= "/expenditureTrackingOrganization.do?method=viewSupplierProcessesByCPV&supplierOID=" + supplierOID + "&cpvReferenceOID=" + cpvReference.getExternalId() %>'>
+								<bean:message key="label.view.processes" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+							</html:link>
+						<% } else { %>
+							<html:link action='<%= "/expenditureTrackingOrganization.do?method=viewSupplierProcessesByCPV&supplierOID=" + supplierOID %>'>
+								<bean:message key="label.view.processes" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+							</html:link>
+						<% } %>
+					</logic:present>
+				</td>
 			</tr>				
 		<% } %>
 			<% final Money allocated = supplier.getAllocated(); %>
@@ -220,6 +235,8 @@
 				<td style="text-align: right;">
 					<%= allocated.toFormatString() %>
 				</td>
+				<td>
+				</td>
 			</tr>
 			<tr style=" font-weight: bold;">
 				<td style="text-align: left;" colspan="2">
@@ -230,6 +247,8 @@
 				</td>
 				<td style="text-align: right;">
 					<%= total.add(allocated).toFormatString() %>
+				</td>
+				<td>
 				</td>
 			</tr>
 			<tr>
@@ -244,6 +263,8 @@
 				</th>
 				<th>
 					<bean:message key="label.value" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>*
+				</th>
+				<th>
 				</th>
 			</tr>
 		</table>

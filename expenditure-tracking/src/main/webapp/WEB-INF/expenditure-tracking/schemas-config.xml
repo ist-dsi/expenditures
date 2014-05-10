@@ -2062,6 +2062,16 @@
 			bundle="EXPENDITURE_ORGANIZATION_RESOURCES" />
 		<slot name="name" key="unit.label.name" bundle="EXPENDITURE_ORGANIZATION_RESOURCES" />
 	</schema>
+	
+	<schema name="projectList"
+		type="pt.ist.expenditureTrackingSystem.domain.organization.Unit"
+		bundle="EXPENDITURE_ORGANIZATION_RESOURCES">
+		<slot name="type" key="unit.label.type" bundle="EXPENDITURE_ORGANIZATION_RESOURCES" />
+		<slot name="shortIdentifier" key="unit.label.shortIdentifier"
+			bundle="EXPENDITURE_ORGANIZATION_RESOURCES" />
+		<slot name="name" key="unit.label.name" bundle="EXPENDITURE_ORGANIZATION_RESOURCES" />
+		<slot name="active" key="unit.label.active" bundle="EXPENDITURE_ORGANIZATION_RESOURCES" />
+	</schema>
 
 	<schema name="accountingUnits"
 		type="pt.ist.expenditureTrackingSystem.domain.organization.Unit"

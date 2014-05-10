@@ -84,7 +84,20 @@
 </style>
 
 <logic:present name="unit">
-	<div class="unitbox col2-1"><div>
+
+<% ExpenditureTrackingSystem.InfoProvider infoProvider = ExpenditureTrackingSystem.getInfoProvider();
+	Map<String, String> links = null; 
+	Unit unit = null;
+ 						if(infoProvider != null){
+ 	   						unit = (Unit) request.getAttribute("unit");
+ 	   						links = infoProvider.getLinks("viewOrganization.jsp", unit);
+ 	   						if(links != null && !links.isEmpty()){ 
+ 	   						  %> <div class="unitbox col2-1"><div> <%
+ 	   						} else {
+ 	   						     %> <div class="unitbox col1-1"><div> <%
+ 	   						}
+ 	   					} 
+ 	   					%>	
 		<table>
 			<tr style="text-align: left;">
 				<th>
@@ -131,15 +144,13 @@
 			</logic:present>
 		</table>
 	</div></div>
-				<div class="unitbox col2-2"><div>
 					 <%
- 						ExpenditureTrackingSystem.InfoProvider infoProvider = ExpenditureTrackingSystem.getInfoProvider();
- 						System.out.println(infoProvider);
  						if(infoProvider != null){
- 	   						final Unit unit = (Unit) request.getAttribute("unit");
- 	   						Map<String, String> links = infoProvider.getLinks("viewOrganization.jsp", unit);
- 	   						if(links != null){      
+ 	   						unit = (Unit) request.getAttribute("unit");
+ 	   						links = infoProvider.getLinks("viewOrganization.jsp", unit);
+ 	   						if(links != null && !links.isEmpty()){      
 		  						%>
+								<div class="unitbox col2-2"><div>
  	      						<h4><%=infoProvider.getTitle() %></h4>
  	      						<ul>
  	      						<%
@@ -156,11 +167,11 @@
  	      						}
  	      						%>
  	      						</ul>
+								</div></div>
  	      						<%
- 	   						}
+ 	   						} 
  						}
 					%>
-				</div></div>
 
 	<p class="mtop05">
 		<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
@@ -182,11 +193,10 @@
 		</logic:equal>
 	</p>
 
-	<logic:notEmpty name="unit" property="authorizations">
+	<logic:equal name="unit" property="project" value="true">
 		<%
  						ExpenditureTrackingSystem.InfoProvider genericInfoProvider = ExpenditureTrackingSystem.getInfoProvider();
  						if (genericInfoProvider != null) {
- 	   						final Unit unit = (Unit) request.getAttribute("unit");
  	   						if(unit.isProject()) {
 	 	   						if(!unit.isActive()){ %>
 	 	   							<h3 class="mtop15 mbottom05"><bean:message key="label.summaryNotAvailable" bundle="EXPENDITURE_RESOURCES"/></h3>
@@ -221,7 +231,7 @@
 	 						}
 	 					}
 					%>
-	</logic:notEmpty>
+	</logic:equal>
 
 	<h3 class="mtop15 mbottom05"><bean:message key="authorizations.label.responsibles" bundle="EXPENDITURE_RESOURCES"/></h3>
 	<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.AQUISITIONS_UNIT_MANAGER">
