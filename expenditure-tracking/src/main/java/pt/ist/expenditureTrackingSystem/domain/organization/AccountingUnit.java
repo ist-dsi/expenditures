@@ -24,6 +24,8 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.organization;
 
+import java.util.HashSet;
+
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.dto.AccountingUnitBean;
 import pt.ist.fenixframework.Atomic;
@@ -120,6 +122,26 @@ public class AccountingUnit extends AccountingUnit_Base {
             }
         }
         return null;
+    }
+
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.organization.Unit> getProjects() {
+        java.util.Set<Unit> set = new HashSet<Unit>();
+        for (Unit unit : getUnitsSet()) {
+            if (unit.isProject()) {
+                set.add(unit);
+            }
+        }
+        return set;
+    }
+
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.organization.Unit> getCostCenters() {
+        java.util.Set<Unit> set = new HashSet<Unit>();
+        for (Unit unit : getUnitsSet()) {
+            if (!unit.isProject()) { // project || cost center
+                set.add(unit);
+            }
+        }
+        return set;
     }
 
     @Override
