@@ -7,6 +7,12 @@
 
 <h2><bean:message key="title.mission.process.new" bundle="MISSION_RESOURCES"/></h2>
 
+<div class="infobox_warning">
+	<p>
+		<bean:message key="label.mission.check.supplier.limit.warning" bundle="MISSION_RESOURCES"/>
+	</p>
+</div>
+
 <p class="mvert05">
 	<bean:message key="label.mission.selectProcessType" bundle="MISSION_RESOURCES"/>:
 </p>
