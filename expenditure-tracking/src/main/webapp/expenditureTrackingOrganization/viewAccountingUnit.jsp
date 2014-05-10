@@ -3,6 +3,35 @@
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-bean" prefix="bean" %>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-logic" prefix="logic" %>
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/fenix-renderers" prefix="fr" %>
+<%@page import="pt.ist.expenditureTrackingSystem.domain.organization.Project" %>
+<script type="text/javascript">
+function inactiveEntities(func) {
+	$('.filterableInactiveProjectsTable').each(function(index) {
+		$(this).children().children().each(function(tableRowIndex) {
+			if(tableRowIndex > 0) {
+				var active = $(this).find('td:eq(3)').html().trim(); 
+				if(active == "Não" || active == "No") {
+					func($(this));
+				}
+			}
+		});
+	});
+}
+
+function toggleInactive(elem){
+	if( $('#toggleInactiveChbox').attr('checked')) {
+		elem.show();
+	} else {
+		elem.hide();
+	}
+}
+</script>
+<script type="text/javascript">
+$(function() {
+	inactiveEntities(toggleInactive);
+});
+</script>
+
 
 <h2><bean:message key="title.accounting.unit" bundle="EXPENDITURE_RESOURCES"/> <bean:write name="accountingUnit" property="name"/></h2>
 
@@ -162,11 +191,14 @@
 	</p>
 </logic:empty>
 <logic:notEmpty name="accountingUnit" property="projects">
+<label for="toggleInactiveChbox">
+<bean:message key="accountingUnit.message.projects.showInactive" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/> </label>
+<input style="vertical-align: bottom;" type="checkbox" name="toggleInactive" id="toggleInactiveChbox" onclick="inactiveEntities(toggleInactive)">
 	<fr:view name="accountingUnit" property="projects"
-			schema="unitList">
+			schema="projectList">
 		<fr:layout name="tabular">
-			<fr:property name="classes" value="tstyle2 mtop05"/>
-			<fr:property name="columnClasses" value=",,aleft,,,"/>
+			<fr:property name="classes" value="tstyle2 mtop05 filterableInactiveProjectsTable"/>
+			<fr:property name="columnClasses" value=",number,aleft,,,"/>
 			<fr:property name="sortBy" value="name=asc"/>
 			<fr:property name="link(view)" value="/expenditureTrackingOrganization.do?method=viewOrganization"/>
 			<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
