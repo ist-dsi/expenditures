@@ -47,4 +47,13 @@ public enum AcquisitionItemClassification implements IPresentableEnum {
         return resourceBundle.getString(this.getClass().getSimpleName() + "." + name());
     }
 
+    public static AcquisitionItemClassification fromString(final String value) {
+        for (final AcquisitionItemClassification classification : values()) {
+            if (classification.name().equalsIgnoreCase(value) || classification.getLocalizedName().equalsIgnoreCase(value)) {
+                return classification;
+            }
+        }
+        return null;
+    }
+
 }

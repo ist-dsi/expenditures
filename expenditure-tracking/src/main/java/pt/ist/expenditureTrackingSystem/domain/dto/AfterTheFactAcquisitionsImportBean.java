@@ -33,6 +33,8 @@ import org.joda.time.LocalDate;
 
 import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.ist.bennu.core.domain.util.Money;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionItemClassification;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.ImportFile;
@@ -127,7 +129,17 @@ public class AfterTheFactAcquisitionsImportBean extends FileUploadBean implement
                         }
                     }
                     final String description = cleanup(parts[2]);
-                    final String valueString = cleanup(parts[3]);
+                    final String cpvString = cleanup(parts[3]);
+                    final CPVReference cpvReference = CPVReference.getCPVCode(cpvString);
+                    if (cpvReference == null) {
+                        registerIssue(IssueType.CPV_DOES_NOT_EXIST, i);
+                    }
+                    final String natureString = cleanup(parts[4]);
+                    final AcquisitionItemClassification classification = AcquisitionItemClassification.fromString(natureString);
+                    if (classification == null) {
+                        registerIssue(IssueType.NATURE_DOES_NOT_EXIST, i);
+                    }
+                    final String valueString = cleanup(parts[5]);
                     Money value;
                     try {
                         value = new Money(valueString.replace('.', 'X').replaceAll("X", "").replace(',', '.'));
@@ -138,7 +150,7 @@ public class AfterTheFactAcquisitionsImportBean extends FileUploadBean implement
                         value = null;
                         registerIssue(IssueType.BAD_MONEY_VALUE_FORMAT, i, valueString);
                     }
-                    String vatValueString = parts.length > 4 ? cleanup(parts[4]) : "0";
+                    String vatValueString = parts.length > 4 ? cleanup(parts[6]) : "0";
                     if (vatValueString.isEmpty()) {
                         vatValueString = "0";
                     }
@@ -153,7 +165,7 @@ public class AfterTheFactAcquisitionsImportBean extends FileUploadBean implement
                         if (supplier.isFundAllocationAllowed(value)) {
                             if (createData) {
                                 try {
-                                    importAcquisition(supplier, description, value, vatValue, file);
+                                    importAcquisition(supplier, description, cpvReference, classification, value, vatValue, file);
                                 } catch (DomainException e) {
                                     registerIssue(IssueType.CANNOT_ALLOCATE_MONEY_TO_SUPPLIER, i, supplierNif, supplierName,
                                             valueString);
@@ -184,12 +196,14 @@ public class AfterTheFactAcquisitionsImportBean extends FileUploadBean implement
     public static class ImportError extends Error {
     }
 
-    public void importAcquisition(final Supplier supplier, final String description, final Money value,
-            final BigDecimal vatValue, ImportFile file) {
+    public void importAcquisition(final Supplier supplier, final String description, final CPVReference cpvReference,
+            final AcquisitionItemClassification classification, final Money value, final BigDecimal vatValue, ImportFile file) {
         final AfterTheFactAcquisitionProcessBean afterTheFactAcquisitionProcessBean = new AfterTheFactAcquisitionProcessBean();
         afterTheFactAcquisitionProcessBean.setAfterTheFactAcquisitionType(getAfterTheFactAcquisitionType());
         afterTheFactAcquisitionProcessBean.setDescription(description);
         afterTheFactAcquisitionProcessBean.setSupplier(supplier);
+        afterTheFactAcquisitionProcessBean.setCpvReference(cpvReference);
+        afterTheFactAcquisitionProcessBean.setClassification(classification);
         afterTheFactAcquisitionProcessBean.setValue(value);
         afterTheFactAcquisitionProcessBean.setVatValue(vatValue);
         afterTheFactAcquisitionProcessBean.setYear(year);
