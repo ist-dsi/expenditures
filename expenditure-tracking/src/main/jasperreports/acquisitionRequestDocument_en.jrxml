@@ -57,7 +57,7 @@
 						height="10"
 						key="subreport-2"/>
 					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{deliveryLocals})]]></dataSourceExpression>
-					<subreportExpression  class="java.lang.String"><![CDATA["reports/acquisitionRequestDeliveryLocals.jasper"]]></subreportExpression>
+					<subreportExpression  class="java.lang.String"><![CDATA["reports/acquisitionRequestDeliveryLocals_en.jasper"]]></subreportExpression>
 				</subreport>
 			</band>
 			</groupFooter>
@@ -91,7 +91,7 @@
 					<textElement verticalAlignment="Middle">
 						<font pdfFontName="Helvetica-BoldOblique" isBold="true" isItalic="true"/>
 					</textElement>
-				<text><![CDATA[Requisição Externa nº:]]></text>
+				<text><![CDATA[Purchase Order nº:]]></text>
 				</staticText>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -132,7 +132,7 @@
 					<textElement textAlignment="Right">
 						<font pdfFontName="Helvetica-Oblique" isItalic="true"/>
 					</textElement>
-				<text><![CDATA[Nº Contribuinte:]]></text>
+				<text><![CDATA[VAT Number:]]></text>
 				</staticText>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -158,7 +158,7 @@
 					<textElement verticalAlignment="Middle">
 						<font pdfFontName="Helvetica-BoldOblique" isBold="true" isItalic="true"/>
 					</textElement>
-				<text><![CDATA[Data :]]></text>
+				<text><![CDATA[Date :]]></text>
 				</staticText>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -184,7 +184,7 @@
 					<textElement verticalAlignment="Middle">
 						<font pdfFontName="Helvetica-BoldOblique" isBold="true" isItalic="true"/>
 					</textElement>
-				<text><![CDATA[Nº Compromisso:]]></text>
+				<text><![CDATA[Commitment Nº:]]></text>
 				</staticText>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -223,7 +223,7 @@
 					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font pdfFontName="Helvetica-Oblique" isItalic="true"/>
 					</textElement>
-				<text><![CDATA[Processado por:]]></text>
+				<text><![CDATA[Processed by:]]></text>
 				</staticText>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -254,7 +254,7 @@ $P{acquisitionRequest}.getProcess().getAcquisitionProposalDocument().getProposal
 					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font pdfFontName="Helvetica-Oblique" isItalic="true"/>
 					</textElement>
-				<text><![CDATA[Vossa Proposta Nº:]]></text>
+				<text><![CDATA[Your Proposal Nº:]]></text>
 				</staticText>
 				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -316,7 +316,7 @@ $P{supplierContact}.getAddress().getCountry())
 					<textElement verticalAlignment="Middle">
 						<font pdfFontName="Helvetica-BoldOblique" isBold="true" isItalic="true"/>
 					</textElement>
-				<text><![CDATA[Processo nº:]]></text>
+				<text><![CDATA[Process nº:]]></text>
 				</staticText>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -343,7 +343,7 @@ $P{supplierContact}.getAddress().getCountry())
 					<textElement textAlignment="Left" verticalAlignment="Top" lineSpacing="1_1_2">
 						<font size="12"/>
 					</textElement>
-				<text><![CDATA[Central de Compras]]></text>
+				<text><![CDATA[Procurement Division]]></text>
 				</staticText>
 				<staticText>
 					<reportElement
@@ -391,7 +391,7 @@ $P{supplierContact}.getAddress().getCountry())
 					<textElement verticalAlignment="Middle">
 						<font/>
 					</textElement>
-				<text><![CDATA[Referência]]></text>
+				<text><![CDATA[Reference]]></text>
 				</staticText>
 				<staticText>
 					<reportElement
@@ -404,7 +404,7 @@ $P{supplierContact}.getAddress().getCountry())
 					<textElement verticalAlignment="Middle">
 						<font/>
 					</textElement>
-				<text><![CDATA[Descrição]]></text>
+				<text><![CDATA[Description]]></text>
 				</staticText>
 				<staticText>
 					<reportElement
@@ -430,7 +430,7 @@ $P{supplierContact}.getAddress().getCountry())
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font/>
 					</textElement>
-				<text><![CDATA[P. Unitário(€)]]></text>
+				<text><![CDATA[Unit Price(€)]]></text>
 				</staticText>
 				<line direction="TopDown">
 					<reportElement
@@ -454,7 +454,7 @@ $P{supplierContact}.getAddress().getCountry())
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font/>
 					</textElement>
-				<text><![CDATA[IVA (%)]]></text>
+				<text><![CDATA[VAT (%)]]></text>
 				</staticText>
 				<staticText>
 					<reportElement
@@ -480,8 +480,8 @@ $P{supplierContact}.getAddress().getCountry())
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="6"/>
 					</textElement>
-				<text><![CDATA[Local
-Entrega]]></text>
+				<text><![CDATA[Dispatch
+Address]]></text>
 				</staticText>
 				<line direction="TopDown">
 					<reportElement
@@ -609,7 +609,7 @@ Entrega]]></text>
 					<textElement textAlignment="Right">
 						<font/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA["Processo: " + $P{acquisitionRequest}.getAcquisitionProcessId() + " - Requisição: " + $P{requestID}.toString() + " - Pág. " + $V{PAGE_NUMBER} + " de "]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Process: " + $P{acquisitionRequest}.getAcquisitionProcessId() + " - P. Order: " + $P{requestID}.toString() + " - Page " + $V{PAGE_NUMBER} + " of "]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Report" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -697,7 +697,7 @@ Fax 218 417 717]]></text>
 					<textElement textAlignment="Right">
 						<font pdfFontName="Helvetica-Oblique" isItalic="true"/>
 					</textElement>
-				<text><![CDATA[Ilíquido]]></text>
+				<text><![CDATA[Gross]]></text>
 				</staticText>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -723,7 +723,7 @@ Fax 218 417 717]]></text>
 					<textElement textAlignment="Right">
 						<font pdfFontName="Helvetica-Oblique" isItalic="true"/>
 					</textElement>
-				<text><![CDATA[IVA]]></text>
+				<text><![CDATA[VAT]]></text>
 				</staticText>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -821,7 +821,7 @@ Fax 218 417 717]]></text>
 					<textElement>
 						<font size="8"/>
 					</textElement>
-				<text><![CDATA[Cabimentos:]]></text>
+				<text><![CDATA[Fund Allocations:]]></text>
 				</staticText>
 				<line direction="TopDown">
 					<reportElement
@@ -843,7 +843,7 @@ Fax 218 417 717]]></text>
 					<textElement textAlignment="Center" verticalAlignment="Top">
 						<font size="10"/>
 					</textElement>
-				<text><![CDATA[A Encomenda deverá ser acompanhada por Factura ou Guia, a ser entregue na Central de Compras do Instituto Superior Técnico, na qual deverá constar o número da nossa nota de encomenda (Nº de Requisição Externa), sob pena de não ser efectuado o pagamento.]]></text>
+				<text><![CDATA[Delivery of the items must be accompanied by an invoice, which must be sent to the procurement office of Instituto Superior Técnico, and must contain our purchase order number. Failure to comply may result in no payment of the ordered goods or services.]]></text>
 				</staticText>
 				<subreport  isUsingCache="true">
 					<reportElement
@@ -868,7 +868,7 @@ Fax 218 417 717]]></text>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="8" isStrikeThrough="false" />
 					</textElement>
-				<text><![CDATA[(Responsável da Central de Compras)]]></text>
+				<text><![CDATA[(Chief Procurement Officer)]]></text>
 				</staticText>
 				<staticText>
 					<reportElement
@@ -926,7 +926,7 @@ Fax 218 417 717]]></text>
 					<textElement textAlignment="Right">
 						<font/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA["Processo: " + $P{acquisitionRequest}.getAcquisitionProcessId() + " - Requisição: " + $P{requestID}.toString() + " - Pág. " + $V{PAGE_NUMBER} + " de " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Process: " + $P{acquisitionRequest}.getAcquisitionProcessId() + " - P. Order: " + $P{requestID}.toString() + " - Page " + $V{PAGE_NUMBER} + " of " + $V{PAGE_NUMBER}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Report" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement

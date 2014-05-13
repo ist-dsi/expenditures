@@ -10,7 +10,7 @@
 
     <artifactId>expenditures</artifactId>
     <name>Bennu Expenditures</name>
-    <version>1.8.12</version>
+    <version>1.8.13</version>
     <packaging>pom</packaging>
 
     <scm>

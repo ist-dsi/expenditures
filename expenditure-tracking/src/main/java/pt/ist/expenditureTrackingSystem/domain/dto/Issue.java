@@ -9,8 +9,20 @@ public class Issue implements Serializable {
     }
 
     public static enum IssueType {
-        EMPTY_LINE(IssueTypeLevel.WARNING), WRONG_NUMBER_LINE_COLUMNS(IssueTypeLevel.ERROR), SUPPLIER_DOES_NOT_EXIST(
-                IssueTypeLevel.ERROR), BAD_MONEY_VALUE_FORMAT(IssueTypeLevel.ERROR), BAD_VAT_VALUE_FORMAT(IssueTypeLevel.ERROR),
+        EMPTY_LINE(IssueTypeLevel.WARNING),
+
+        WRONG_NUMBER_LINE_COLUMNS(IssueTypeLevel.ERROR),
+
+        SUPPLIER_DOES_NOT_EXIST(IssueTypeLevel.ERROR),
+
+        CPV_DOES_NOT_EXIST(IssueTypeLevel.ERROR),
+
+        NATURE_DOES_NOT_EXIST(IssueTypeLevel.ERROR),
+
+        BAD_MONEY_VALUE_FORMAT(IssueTypeLevel.ERROR),
+
+        BAD_VAT_VALUE_FORMAT(IssueTypeLevel.ERROR),
+
         CANNOT_ALLOCATE_MONEY_TO_SUPPLIER(IssueTypeLevel.ERROR);
 
         private IssueTypeLevel issueTypeLevel;

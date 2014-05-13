@@ -46,6 +46,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PurchaseOrderDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
+import pt.utl.ist.fenix.tools.util.i18n.Language;
 
 /**
  * 
@@ -115,8 +116,11 @@ public class CreateAcquisitionPurchaseOrderDocument extends
         final ResourceBundle resourceBundle = ResourceBundle.getBundle("resources/AcquisitionResources");
         try {
             final VirtualHost virtualHost = VirtualHost.getVirtualHostForThread();
+            final Language language = Language.getLanguage();
+            final String local_suffix = language == null ? "" : "_" + language.name();
             final String documentName =
-                    virtualHost.getExpenditureTrackingSystem().isCommitmentNumberRequired() ? "/reports/acquisitionRequestDocument.jasper" : "/reports/acquisitionRequestPurchaseOrder.jasper";
+                    virtualHost.getExpenditureTrackingSystem().isCommitmentNumberRequired() ? "/reports/acquisitionRequestDocument"
+                            + local_suffix + ".jasper" : "/reports/acquisitionRequestPurchaseOrder" + local_suffix + ".jasper";
             byte[] byteArray =
                     ReportUtils.exportToPdfFileAsByteArray(documentName, paramMap, resourceBundle, acquisitionRequestItemBeans);
             return byteArray;

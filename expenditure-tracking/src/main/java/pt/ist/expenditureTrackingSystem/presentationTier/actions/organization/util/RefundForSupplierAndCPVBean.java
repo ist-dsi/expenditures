@@ -38,7 +38,7 @@ public class RefundForSupplierAndCPVBean implements Comparable<RefundForSupplier
             final RefundProcess refundProcess = invoiceFile.getRefundItem().getRequest().getProcess();
             if (refundProcess == this.refundProcess) {
                 final RefundItem refundItem = invoiceFile.getRefundItem();
-                if (refundItem.getCPVReference() == cpvReference) {
+                if (refundItem.getCPVReference().getCode().equals(cpvReference.getCode())) {
                     result = result.add(invoiceFile.getRefundableValue());
                 }
             }
