@@ -56,7 +56,7 @@
 						height="10"
 						key="subreport-2"/>
 					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{deliveryLocals})]]></dataSourceExpression>
-					<subreportExpression  class="java.lang.String"><![CDATA["reports/acquisitionRequestDeliveryLocals.jasper"]]></subreportExpression>
+					<subreportExpression  class="java.lang.String"><![CDATA["reports/acquisitionRequestDeliveryLocals_pt.jasper"]]></subreportExpression>
 				</subreport>
 			</band>
 			</groupFooter>
@@ -798,7 +798,7 @@ Fax 218 417 717]]></text>
 					<textElement textAlignment="Center" verticalAlignment="Top">
 						<font size="10"/>
 					</textElement>
-				<text><![CDATA[A Encomenda deverá ser acompanhada por Factura ou Guia, a ser entregue na Central de Compras do Instituto Superior Técnico, na qual deverá constar o número da nossa nota de encomenda (Nº de Requisição Externa), sob pena de não ser efectuado o pagamento.]]></text>
+				<text><![CDATA[YYYA Encomenda deverá ser acompanhada por Factura ou Guia, a ser entregue na Central de Compras do Instituto Superior Técnico, na qual deverá constar o número da nossa nota de encomenda (Nº de Requisição Externa), sob pena de não ser efectuado o pagamento.]]></text>
 				</staticText>
 				<staticText>
 					<reportElement
