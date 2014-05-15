@@ -699,3 +699,10 @@ relation MissionSystemEmploymentAccountabilityType {
 	}
 	.module.organization.domain.AccountabilityType playsRole employmentAccountabilityType;
 }
+
+relation MissionSystemSupplier {
+	MissionSystem playsRole missionSystem {
+		multiplicity *;
+	}
+	.pt.ist.expenditureTrackingSystem.domain.organization.Supplier playsRole mandatorySupplier;
+}

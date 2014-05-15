@@ -30,6 +30,7 @@ import java.util.Collection;
 import java.util.List;
 
 import module.mission.domain.MissionProcess;
+import module.mission.domain.MissionSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
@@ -56,6 +57,7 @@ public class CreateAcquisitionProcessBean implements Serializable {
     private Supplier supplierToAdd;
     private ProcessClassification classification;
     private String simpleDescription;
+    private boolean isUnderMandatorySupplierScope;
 
     public CreateAcquisitionProcessBean(ProcessClassification classification) {
         setRequestingUnit(null);
@@ -63,6 +65,7 @@ public class CreateAcquisitionProcessBean implements Serializable {
         setSupplierToAdd(null);
         setRequestUnitPayingUnit(true);
         setClassification(classification);
+        setUnderMandatorySupplierScope(false);
     }
 
     public CreateAcquisitionProcessBean(AcquisitionRequest acquisitionRequest) {
@@ -188,6 +191,28 @@ public class CreateAcquisitionProcessBean implements Serializable {
 
     public void setContractSimpleDescription(String simpleDescription) {
         this.simpleDescription = simpleDescription;
+    }
+
+    public boolean isUnderMandatorySupplierScope() {
+        return isUnderMandatorySupplierScope;
+    }
+
+    public boolean getIsUnderMandatorySupplierScope() {
+        return isUnderMandatorySupplierScope;
+    }
+
+    public void setIsUnderMandatorySupplierScope(boolean isUnderMandatorySupplierScope) {
+        setUnderMandatorySupplierScope(isUnderMandatorySupplierScope);
+    }
+
+    public void setUnderMandatorySupplierScope(boolean isUnderMandatorySupplierScope) {
+        this.isUnderMandatorySupplierScope = isUnderMandatorySupplierScope;
+        if (isUnderMandatorySupplierScope) {
+            final Supplier supplier = MissionSystem.getInstance().getMandatorySupplier();
+            if (supplier != null) {
+                setSupplier(supplier);            
+            }
+        }
     }
 
 }
