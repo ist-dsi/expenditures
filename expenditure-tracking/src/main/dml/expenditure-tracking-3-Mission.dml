@@ -4,9 +4,6 @@ enum module.mission.domain.VehiclItemJustificationMotive as VehiclItemJustificat
 
 class MissionSystem {
 	Boolean allowGrantOwnerEquivalence;
-	boolean isPersonalInformationProcessedSlotMigrated;
-	boolean isVerifiedSlotMigrated;
-	boolean isVehicleItemAuthorizationMigrated;
 }
 
 class MissionFinancer implements .pt.ist.bennu.core.domain.VirtualHostAware {
