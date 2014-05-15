@@ -123,14 +123,6 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
         return getYear() + "/" + getAcquisitionProcessNumber();
     }
 
-    @Override
-    public void migrateProcessNumber() {
-        final ExpenditureTrackingSystem instance = getExpenditureTrackingSystem();
-        if (!getProcessNumber().startsWith(instance.getInstitutionalProcessNumberPrefix())) {
-            setProcessNumber(constructProcessNumber());
-        }
-    }
-
     public boolean isAvailableForCurrentUser() {
         final Person loggedPerson = getLoggedPerson();
         return loggedPerson != null && isAvailableForPerson(loggedPerson);
