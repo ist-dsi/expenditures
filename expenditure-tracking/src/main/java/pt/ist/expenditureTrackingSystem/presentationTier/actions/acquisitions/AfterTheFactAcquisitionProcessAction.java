@@ -28,6 +28,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -38,7 +40,12 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.Acquisition;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AcquisitionAfterTheFact;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.ImportFile;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.activities.EditAfterTheFactProcessActivityInformation.AfterTheFactAcquisitionProcessBean;
@@ -148,6 +155,32 @@ public class AfterTheFactAcquisitionProcessAction extends BaseAction {
         file.reenable();
 
         return listImports(mapping, form, request, response);
+    }
+
+    public ActionForward listImportsMadeByExternalUsers(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+            final HttpServletResponse response) {
+        AfterTheFactAcquisitionsImportBean afterTheFactAcquisitionsImportBean = getRenderedObject("afterTheFactAcquisitionsImportBean");
+        if (afterTheFactAcquisitionsImportBean == null) {
+            afterTheFactAcquisitionsImportBean = new AfterTheFactAcquisitionsImportBean();
+        }
+        request.setAttribute("afterTheFactAcquisitionsImportBean", afterTheFactAcquisitionsImportBean);
+
+        final Set<AfterTheFactAcquisitionProcess> afterTheFactAcquisitionProcesses = new TreeSet<>(PaymentProcess.COMPARATOR_BY_YEAR_AND_ACQUISITION_PROCESS_NUMBER);
+        for (final Acquisition acquisition : ExpenditureTrackingSystem.getInstance().getAcquisitionsSet()) {
+            if (acquisition instanceof AcquisitionAfterTheFact) {
+                final AcquisitionAfterTheFact afterTheFact = (AcquisitionAfterTheFact) acquisition;
+                final AfterTheFactAcquisitionProcess process = afterTheFact.getAfterTheFactAcquisitionProcess();
+                if (process.getYear().intValue() == afterTheFactAcquisitionsImportBean.getYear().intValue()) {
+                    final User creator = afterTheFact.getAfterTheFactAcquisitionProcess().getProcessCreator();
+                    if (!ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(creator)) {
+                        afterTheFactAcquisitionProcesses.add(afterTheFact.getAfterTheFactAcquisitionProcess());
+                    }
+                }
+            }
+        }
+        request.setAttribute("afterTheFactAcquisitionProcesses", afterTheFactAcquisitionProcesses);
+
+        return forward(request, "/acquisitions/listImportsMadeByExternalUsers.jsp");
     }
 
 }
