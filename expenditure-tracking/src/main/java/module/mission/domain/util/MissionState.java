@@ -147,18 +147,29 @@ public enum MissionState implements IPresentableEnum {
 
         @Override
         public MissionStateProgress getStateProgress(MissionProcess missionProcess) {
-            if (!EXPENSE_AUTHORIZATION.isCompleted(missionProcess)) {
-                return MissionStateProgress.IDLE;
-            }
+            if (missionProcess.isCanceled()) {
+                if (!isRequired(missionProcess)) {
+                    return MissionStateProgress.COMPLETED;
+                }
+                if (missionProcess.isPersonalInformationProcessed()) {
+                    return MissionStateProgress.COMPLETED;
+                }
 
-            if (!isRequired(missionProcess)) {
-                return MissionStateProgress.COMPLETED;
-            }
-            if (missionProcess.isPersonalInformationProcessed()) {
-                return MissionStateProgress.COMPLETED;
-            }
+                return MissionStateProgress.PENDING;
+            } else {
+                if (!EXPENSE_AUTHORIZATION.isCompleted(missionProcess)) {
+                    return MissionStateProgress.IDLE;
+                }
 
-            return MissionStateProgress.PENDING;
+                if (!isRequired(missionProcess)) {
+                    return MissionStateProgress.COMPLETED;
+                }
+                if (missionProcess.isPersonalInformationProcessed()) {
+                    return MissionStateProgress.COMPLETED;
+                }
+
+                return MissionStateProgress.PENDING;
+            }
         }
     },
 
