@@ -505,8 +505,6 @@ public abstract class PaymentProcess extends PaymentProcess_Base implements HasP
 
     public abstract Set<CPVReference> getCPVReferences();
 
-    public abstract void migrateProcessNumber();
-
     public String getAccountingUnitsAsString() {
         final StringBuilder builder = new StringBuilder();
         for (final Financer financer : getFinancersWithFundsAllocated()) {

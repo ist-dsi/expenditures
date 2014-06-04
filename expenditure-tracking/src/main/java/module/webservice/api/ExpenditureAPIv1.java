@@ -230,6 +230,9 @@ public class ExpenditureAPIv1 {
     }
 
     private void login(User user) {
+        if (user == null) {
+            throw newApplicationError(Status.BAD_REQUEST, "no user found", "a user valid user must be specified");
+        }
         final UserView userView = Authenticate.authenticate(user);
         pt.ist.fenixWebFramework.security.UserView.setUser(userView);
     }

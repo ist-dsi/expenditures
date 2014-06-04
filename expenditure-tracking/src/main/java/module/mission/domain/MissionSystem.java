@@ -35,9 +35,6 @@ import java.util.TreeSet;
 
 import module.mission.domain.activity.AuthorizeVehicleItemActivity;
 import module.mission.domain.activity.ItemActivityInformation;
-import module.mission.domain.util.MigratePersonalInformationProcessedSlot;
-import module.mission.domain.util.MigrateVehicleItemAuthorizations;
-import module.mission.domain.util.MigrateVerifiedSlot;
 import module.mission.domain.util.UserAliasProvider;
 import module.organization.domain.Accountability;
 import module.organization.domain.AccountabilityType;
@@ -61,8 +58,6 @@ import pt.ist.fenixframework.Atomic;
  */
 public class MissionSystem extends MissionSystem_Base {
 
-    private static boolean isMigrationInProgress = false;
-
     private static UserAliasProvider userAliasProvider = new UserAliasProvider() {
 
         @Override
@@ -77,27 +72,7 @@ public class MissionSystem extends MissionSystem_Base {
         if (virtualHostForThread.getMissionSystem() == null) {
             initialize(virtualHostForThread);
         }
-
-        migrate();
-
         return virtualHostForThread == null ? null : virtualHostForThread.getMissionSystem();
-    }
-
-    private static void migrate() {
-        if (!isMigrationInProgress) {
-            synchronized (MissionSystem.class) {
-                if (!isMigrationInProgress) {
-                    try {
-                        isMigrationInProgress = true;
-                        MigratePersonalInformationProcessedSlot.migrateForAllVirtualHosts();
-                        MigrateVerifiedSlot.migrateForAllVirtualHosts();
-                        MigrateVehicleItemAuthorizations.migrateForAllVirtualHosts();
-                    } finally {
-                        isMigrationInProgress = false;
-                    }
-                }
-            }
-        }
     }
 
     @Atomic
@@ -110,21 +85,6 @@ public class MissionSystem extends MissionSystem_Base {
     private MissionSystem(final VirtualHost virtualHost) {
         super();
         addVirtualHost(virtualHost);
-        setIsPersonalInformationProcessedSlotMigrated(true);
-        setIsVerifiedSlotMigrated(true);
-        setIsVehicleItemAuthorizationMigrated(false);
-    }
-
-    public boolean isPersonalInformationProcessedSlotMigrated() {
-        return getIsPersonalInformationProcessedSlotMigrated();
-    }
-
-    public boolean isVerifiedSlotMigrated() {
-        return getIsVerifiedSlotMigrated();
-    }
-
-    public boolean isVehicleItemAuthorizationMigrated() {
-        return getIsVehicleItemAuthorizationMigrated();
     }
 
     public static boolean canUserVerifyProcesses(User user) {

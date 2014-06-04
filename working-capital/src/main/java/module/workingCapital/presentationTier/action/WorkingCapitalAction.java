@@ -26,6 +26,8 @@ package module.workingCapital.presentationTier.action;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -74,6 +76,7 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 import pt.utl.ist.fenix.tools.spreadsheet.SheetData;
 import pt.utl.ist.fenix.tools.spreadsheet.SpreadsheetBuilder;
 import pt.utl.ist.fenix.tools.spreadsheet.WorkbookExportFormat;
+import pt.utl.ist.fenix.tools.spreadsheet.converters.CellConverter;
 
 @Mapping(path = "/workingCapital")
 /**
@@ -345,16 +348,15 @@ public class WorkingCapitalAction extends ContextBaseAction {
                         initialization.getInternationalBankAccountNumber());
                 addCell(getLocalizedMessate("label.module.workingCapital.fundAllocationId"), initialization.getFundAllocationId());
                 final Money requestedAnualValue = initialization.getRequestedAnualValue();
-                addCell(getLocalizedMessate("label.module.workingCapital.requestedAnualValue.requested"),
-                        requestedAnualValue.toFormatString());
-                addCell(getLocalizedMessate("label.module.workingCapital.requestedMonthlyValue.requested"), requestedAnualValue
-                        .divideAndRound(new BigDecimal(6)).toFormatString());
+                addCell(getLocalizedMessate("label.module.workingCapital.requestedAnualValue.requested"), requestedAnualValue);
+                addCell(getLocalizedMessate("label.module.workingCapital.requestedMonthlyValue.requested"),
+                        requestedAnualValue.divideAndRound(new BigDecimal(6)));
                 final Money authorizedAnualValue = initialization.getAuthorizedAnualValue();
                 addCell(getLocalizedMessate("label.module.workingCapital.authorizedAnualValue"),
-                        authorizedAnualValue == null ? "" : authorizedAnualValue.toFormatString());
+                        authorizedAnualValue == null ? "" : authorizedAnualValue);
                 final Money maxAuthorizedAnualValue = initialization.getMaxAuthorizedAnualValue();
                 addCell(getLocalizedMessate("label.module.workingCapital.maxAuthorizedAnualValue"),
-                        maxAuthorizedAnualValue == null ? "" : maxAuthorizedAnualValue.toFormatString());
+                        maxAuthorizedAnualValue == null ? "" : maxAuthorizedAnualValue);
                 final DateTime lastSubmission = initialization.getLastSubmission();
                 addCell(getLocalizedMessate("label.module.workingCapital.initialization.lastSubmission"),
                         lastSubmission == null ? "" : lastSubmission.toString("yyyy-MM-dd"));
@@ -364,13 +366,14 @@ public class WorkingCapitalAction extends ContextBaseAction {
 
                 final WorkingCapitalTransaction lastTransaction = workingCapital.getLastTransaction();
                 if (lastTransaction == null) {
-                    addCell(getLocalizedMessate("label.module.workingCapital.transaction.accumulatedValue"), Money.ZERO.toFormatString());
-                    addCell(getLocalizedMessate("label.module.workingCapital.transaction.balance"), Money.ZERO.toFormatString());
-                    addCell(getLocalizedMessate("label.module.workingCapital.transaction.debt"), Money.ZERO.toFormatString());                    
+                    addCell(getLocalizedMessate("label.module.workingCapital.transaction.accumulatedValue"), Money.ZERO);
+                    addCell(getLocalizedMessate("label.module.workingCapital.transaction.balance"), Money.ZERO);
+                    addCell(getLocalizedMessate("label.module.workingCapital.transaction.debt"), Money.ZERO);
                 } else {
-                    addCell(getLocalizedMessate("label.module.workingCapital.transaction.accumulatedValue"), lastTransaction.getAccumulatedValue().toFormatString());
-                    addCell(getLocalizedMessate("label.module.workingCapital.transaction.balance"), lastTransaction.getBalance().toFormatString());
-                    addCell(getLocalizedMessate("label.module.workingCapital.transaction.debt"), lastTransaction.getDebt().toFormatString());
+                    addCell(getLocalizedMessate("label.module.workingCapital.transaction.accumulatedValue"),
+                            lastTransaction.getAccumulatedValue());
+                    addCell(getLocalizedMessate("label.module.workingCapital.transaction.balance"), lastTransaction.getBalance());
+                    addCell(getLocalizedMessate("label.module.workingCapital.transaction.debt"), lastTransaction.getDebt());
                 }
 
                 for (final AcquisitionClassification classification : WorkingCapitalSystem.getInstance()
@@ -381,7 +384,7 @@ public class WorkingCapitalAction extends ContextBaseAction {
 
                     final Money value = calculateValueForClassification(workingCapital, classification);
 
-                    addCell(key, value.toFormatString());
+                    addCell(key, value);
                 }
 
             }
@@ -422,6 +425,16 @@ public class WorkingCapitalAction extends ContextBaseAction {
 
         final LocalDate currentLocalDate = new LocalDate();
         final SpreadsheetBuilder builder = new SpreadsheetBuilder();
+        builder.addConverter(Money.class, new CellConverter() {
+
+            @Override
+            public Object convert(final Object source) {
+                final Money money = (Money) source;
+                return money == null ? null : new Double(money.getValue().round(new MathContext(2, RoundingMode.HALF_EVEN)).doubleValue());
+            }
+
+        });
+
         builder.addSheet(getLocalizedMessate("label.module.workingCapital") + " " + year + " - " + currentLocalDate.toString(),
                 sheetData);
 
@@ -447,14 +460,11 @@ public class WorkingCapitalAction extends ContextBaseAction {
                 addCell(getLocalizedMessate("label.module.workingCapital.transaction.approval"), approvalLabel(transaction));
                 addCell(getLocalizedMessate("label.module.workingCapital.transaction.verification"),
                         verificationLabel(transaction));
-                addCell(getLocalizedMessate("label.module.workingCapital.transaction.value"), transaction.getValue()
-                        .toFormatString());
-                addCell(getLocalizedMessate("label.module.workingCapital.transaction.accumulatedValue"), transaction
-                        .getAccumulatedValue().toFormatString());
-                addCell(getLocalizedMessate("label.module.workingCapital.transaction.balance"), transaction.getBalance()
-                        .toFormatString());
-                addCell(getLocalizedMessate("label.module.workingCapital.transaction.debt"), transaction.getDebt()
-                        .toFormatString());
+                addCell(getLocalizedMessate("label.module.workingCapital.transaction.value"), transaction.getValue());
+                addCell(getLocalizedMessate("label.module.workingCapital.transaction.accumulatedValue"),
+                        transaction.getAccumulatedValue());
+                addCell(getLocalizedMessate("label.module.workingCapital.transaction.balance"), transaction.getBalance());
+                addCell(getLocalizedMessate("label.module.workingCapital.transaction.debt"), transaction.getDebt());
 
                 if (transaction.isAcquisition()) {
                     final WorkingCapitalAcquisitionTransaction acquisitionTx = (WorkingCapitalAcquisitionTransaction) transaction;

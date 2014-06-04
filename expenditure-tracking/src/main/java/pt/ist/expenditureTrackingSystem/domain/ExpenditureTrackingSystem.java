@@ -128,130 +128,9 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
         OrganizationModelAction.partyViewHookManager.register(new ExpendituresView());
     }
 
-    private static boolean isInitialized = false;
-
     public static ExpenditureTrackingSystem getInstance() {
-        if (!isInitialized) {
-            if (initialize()) {
-                callInitScripts();
-            }
-        }
         final VirtualHost virtualHostForThread = VirtualHost.getVirtualHostForThread();
         return virtualHostForThread == null ? null : virtualHostForThread.getExpenditureTrackingSystem();
-    }
-
-    private static synchronized boolean initialize() {
-        if (!isInitialized) {
-            isInitialized = true;
-            return true;
-        }
-        return false;
-    }
-
-    private static void callInitScripts() {
-        migrateProcessNumbers();
-        migrateSuppliers();
-        migrateCPVs();
-        migratePeople();
-        checkISTOptions();
-    }
-
-    @Atomic
-    private static Boolean checkISTOptions() {
-        final MyOrg myOrg = MyOrg.getInstance();
-        for (final VirtualHost virtualHost : myOrg.getVirtualHostsSet()) {
-            final ExpenditureTrackingSystem ets = virtualHost.getExpenditureTrackingSystem();
-            if (ets != null) {
-                if (virtualHost.getHostname().equals("dot.tecnico.ulisboa.pt") || virtualHost.getHostname().equals("compras.ist.utl.pt")) {
-                    ets.setRequireFundAllocationPriorToAcquisitionRequest(Boolean.TRUE);
-                    ets.setRegisterDiaryNumbersAndTransactionNumbers(Boolean.FALSE);
-                    ets.setRequireCommitmentNumber(Boolean.TRUE);
-                } else {
-                    ets.setRegisterDiaryNumbersAndTransactionNumbers(Boolean.TRUE);
-                    ets.setRequireCommitmentNumber(Boolean.FALSE);
-                }
-            }
-        }
-        return false;
-    }
-
-    @Atomic
-    private static Boolean migratePeople() {
-        final MyOrg myOrg = MyOrg.getInstance();
-        if (myOrg.getPeopleFromExpenditureTackingSystemSet().isEmpty()) {
-            final long start = System.currentTimeMillis();
-            System.out.println("Migrating people..");
-            for (final VirtualHost virtualHost : myOrg.getVirtualHostsSet()) {
-                final ExpenditureTrackingSystem ets = virtualHost.getExpenditureTrackingSystem();
-                if (ets != null) {
-                    myOrg.getPeopleFromExpenditureTackingSystemSet().addAll(ets.getPeopleSet());
-                }
-            }
-            final long end = System.currentTimeMillis();
-            System.out.println("Completed migration in: " + (end - start) + "ms.");
-        }
-        return Boolean.TRUE;
-    }
-
-    @Atomic
-    private static Boolean migrateCPVs() {
-        final MyOrg myOrg = MyOrg.getInstance();
-        if (myOrg.getCPVReferencesSet().isEmpty()) {
-            final long start = System.currentTimeMillis();
-            System.out.println("Migrating cpv references..");
-            for (final VirtualHost virtualHost : myOrg.getVirtualHostsSet()) {
-                final ExpenditureTrackingSystem ets = virtualHost.getExpenditureTrackingSystem();
-                if (ets != null) {
-                    myOrg.getCPVReferencesSet().addAll(ets.getCPVReferencesSet());
-                }
-            }
-            final long end = System.currentTimeMillis();
-            System.out.println("Completed migration in: " + (end - start) + "ms.");
-        }
-        return Boolean.TRUE;
-    }
-
-    @Atomic
-    private static Boolean migrateSuppliers() {
-        final MyOrg myOrg = MyOrg.getInstance();
-        if (myOrg.getSuppliersSet().isEmpty()) {
-            final long start = System.currentTimeMillis();
-            System.out.println("Migrating suppliers.");
-            for (final VirtualHost virtualHost : myOrg.getVirtualHostsSet()) {
-                final ExpenditureTrackingSystem ets = virtualHost.getExpenditureTrackingSystem();
-                if (ets != null) {
-                    myOrg.getSuppliersSet().addAll(ets.getSuppliersSet());
-                }
-            }
-            final long end = System.currentTimeMillis();
-            System.out.println("Completed migration in: " + (end - start) + "ms.");
-        }
-        return Boolean.TRUE;
-    }
-
-    @Atomic
-    private static Boolean migrateProcessNumbers() {
-        final VirtualHost virtualHostForThread = VirtualHost.getVirtualHostForThread();
-        if (virtualHostForThread == null) {
-            return Boolean.FALSE;
-        }
-        final ExpenditureTrackingSystem expenditureTrackingSystem = virtualHostForThread.getExpenditureTrackingSystem();
-        if (expenditureTrackingSystem == null) {
-            return Boolean.FALSE;
-        }
-        final String prefix = expenditureTrackingSystem.getInstitutionalProcessNumberPrefix();
-        if (prefix != null && !prefix.isEmpty()) {
-            final long start = System.currentTimeMillis();
-            System.out.println("Migrating acquisition process numbers.");
-            for (final PaymentProcessYear paymentProcessYear : expenditureTrackingSystem.getPaymentProcessYearsSet()) {
-                for (final PaymentProcess paymentProcess : paymentProcessYear.getPaymentProcessSet()) {
-                    paymentProcess.migrateProcessNumber();
-                }
-            }
-            final long end = System.currentTimeMillis();
-            System.out.println("Completed migration in: " + (end - start) + "ms.");
-        }
-        return Boolean.TRUE;
     }
 
     private static void registerChecksumFilterException() {
@@ -301,6 +180,9 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 //	for (final Person person : getPeopleSet()) {
 //	    person.setDefaultSearch(savedSearch);
 //	}
+
+        setRegisterDiaryNumbersAndTransactionNumbers(Boolean.TRUE);
+        setRequireCommitmentNumber(Boolean.FALSE);
 
         setAcquisitionCentralGroup(pt.ist.bennu.core.domain.groups.Role.getRole(RoleType.ACQUISITION_CENTRAL));
 

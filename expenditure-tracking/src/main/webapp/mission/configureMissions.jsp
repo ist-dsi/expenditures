@@ -289,3 +289,25 @@
 		</fr:layout>
 	</fr:view>
 </logic:notEmpty>
+
+<h3><bean:message key="label.mission.missionConfiguration.mandatorySupplier" bundle="MISSION_RESOURCES"/></h3>
+
+<fr:form id="missionSystemMandatorySupplierForm">
+	<fr:edit id="missionSystemMandatorySupplier" name="missionSystem">
+		<fr:schema type="module.mission.domain.MissionSystem" bundle="MISSION_RESOURCES">
+			<fr:slot name="mandatorySupplier" layout="autoComplete" key="label.supplier"
+				bundle="EXPENDITURE_RESOURCES">
+				<fr:property name="labelField" value="presentationName" />
+				<fr:property name="format" value="${presentationName}" />
+				<fr:property name="minChars" value="1" />
+				<fr:property name="args"
+					value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.NIFSupplierAutoCompleteProvider" />
+				<fr:property name="size" value="60" />
+			</fr:slot>
+		</fr:schema>
+		<fr:layout name="tabular">
+			<fr:property name="classes" value="form mtop05 mbottom1"/>
+			<fr:property name="columnClasses" value=",,tderror"/>
+		</fr:layout>
+	</fr:edit>
+</fr:form>

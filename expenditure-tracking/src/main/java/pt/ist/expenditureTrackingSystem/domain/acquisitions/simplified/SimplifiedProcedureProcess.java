@@ -27,6 +27,7 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified;
 import java.util.ArrayList;
 import java.util.List;
 
+import module.mission.domain.MissionSystem;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.ReleaseProcess;
 import module.workflow.activities.StealProcess;
@@ -282,6 +283,11 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
         if (!isCreateNewProcessAvailable()) {
             throw new DomainException("acquisitionProcess.message.exception.invalidStateToRun.create");
         }
+        if (createAcquisitionProcessBean.isUnderMandatorySupplierScope()
+                && createAcquisitionProcessBean.getSupplier() != MissionSystem.getInstance().getMandatorySupplier()) {
+            throw new DomainException("acquisitionProcess.message.exception.manditory.supplier.for.this.scope",
+                    DomainException.getResourceFor("resources/AcquisitionResources"));
+        }
         SimplifiedProcedureProcess process =
                 new SimplifiedProcedureProcess(createAcquisitionProcessBean.getClassification(),
                         createAcquisitionProcessBean.getSuppliers(), createAcquisitionProcessBean.getRequester());
@@ -298,6 +304,10 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
                         DomainException.getResourceFor("resources/AcquisitionResources"));
             }
             process.setMissionProcess(createAcquisitionProcessBean.getMissionProcess());
+        }
+        if (createAcquisitionProcessBean.isUnderMandatorySupplierScope()
+                && createAcquisitionProcessBean.getSupplier() == MissionSystem.getInstance().getMandatorySupplier()) {
+            process.skipSupplierFundAllocation();
         }
 
         return process;

@@ -185,14 +185,6 @@ public class RefundProcess extends RefundProcess_Base {
         return getYear() + "/" + getAcquisitionProcessNumber();
     }
 
-    @Override
-    public void migrateProcessNumber() {
-        final ExpenditureTrackingSystem instance = getExpenditureTrackingSystem();
-        if (!getProcessNumber().startsWith(instance.getInstitutionalProcessNumberPrefix())) {
-            setProcessNumber(constructProcessNumber());
-        }
-    }
-
     @Atomic
     public static RefundProcess createNewRefundProcess(CreateRefundProcessBean bean) {
 

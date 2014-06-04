@@ -24,5 +24,10 @@
 				<bean:message key="link.sideBar.listAfterTheFactAcquisitions" bundle="EXPENDITURE_RESOURCES"/>
 			</html:link>
 		</li>
+		<li>
+			<html:link action="/acquisitionAfterTheFactAcquisitionProcess.do?method=listImportsMadeByExternalUsers">
+				<bean:message key="link.sideBar.listImportsMadeByExternalUsers" bundle="EXPENDITURE_RESOURCES"/>
+			</html:link>
+		</li>
 	</ul>
 </div>
