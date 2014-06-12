@@ -300,6 +300,10 @@ public abstract class PaymentProcess extends PaymentProcess_Base implements HasP
         return false;
     }
 
+    public void skitToAuthorizedState() {
+        authorize();
+    }
+
     public void authorizeBy(final Person person) {
         getRequest().authorizeBy(person);
         if (getRequest().isAuthorizedByAllResponsibles()) {

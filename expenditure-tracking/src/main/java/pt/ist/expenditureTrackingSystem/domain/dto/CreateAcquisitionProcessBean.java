@@ -208,9 +208,10 @@ public class CreateAcquisitionProcessBean implements Serializable {
     public void setUnderMandatorySupplierScope(boolean isUnderMandatorySupplierScope) {
         this.isUnderMandatorySupplierScope = isUnderMandatorySupplierScope;
         if (isUnderMandatorySupplierScope) {
-            final Supplier supplier = MissionSystem.getInstance().getMandatorySupplier();
-            if (supplier != null) {
-                setSupplier(supplier);            
+            final MissionSystem system = MissionSystem.getInstance();
+            // If there is only 1 mandatory supplier then help out the user and fill this in automatically
+            if (system.getMandatorySupplierSet().size() == 1) {
+                setSupplier(system.getMandatorySupplierSet().iterator().next());
             }
         }
     }

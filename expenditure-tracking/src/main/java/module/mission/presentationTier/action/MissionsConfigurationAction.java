@@ -21,6 +21,8 @@ import org.apache.struts.action.ActionMapping;
 
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.presentationTier.actions.ContextBaseAction;
+import pt.ist.expenditureTrackingSystem.domain.dto.SupplierBean;
+import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
 @Mapping(path = "/configureMissions")
@@ -38,6 +40,7 @@ public class MissionsConfigurationAction extends ContextBaseAction {
             final HttpServletResponse response) {
         final MissionSystem missionSystem = MissionSystem.getInstance();
         request.setAttribute("missionSystem", missionSystem);
+        request.setAttribute("supplierBean", new SupplierBean());
         return forward(request, "/mission/configureMissions.jsp");
     }
 
@@ -240,6 +243,26 @@ public class MissionsConfigurationAction extends ContextBaseAction {
             final HttpServletRequest request, final HttpServletResponse response) {
         final User user = getDomainObject(request, "userOid");
         MissionSystem.getInstance().removeVehicleAuthorizers(user);
+        return prepare(mapping, form, request, response);
+    }
+
+    public ActionForward addMandatorySupplier(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+            final HttpServletResponse response) {
+        final SupplierBean supplierBean = getRenderedObject("missionSystemMandatorySupplier");
+        if (supplierBean != null && supplierBean.getSupplier() != null) {
+            final MissionSystem missionSystem = MissionSystem.getInstance();
+            missionSystem.addMandatorySupplierService(supplierBean.getSupplier());
+        }
+        return prepare(mapping, form, request, response);
+    }
+
+    public ActionForward removeMandatorySupplier(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+            final HttpServletResponse response) {
+        final Supplier supplier = getDomainObject(request, "supplierOid");
+        if (supplier != null) {
+            final MissionSystem missionSystem = MissionSystem.getInstance();
+            missionSystem.removeMandatorySupplierService(supplier);
+        }
         return prepare(mapping, form, request, response);
     }
 

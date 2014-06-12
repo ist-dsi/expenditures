@@ -79,6 +79,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activitie
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.EditSimpleContractDescription;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ExceptionalChangeRequestingPerson;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.FundAllocationExpirationDate;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.FundAllocationExpirationDateAndPurchaseOrderDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.JumpToProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.LockInvoiceReceiving;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.PayAcquisition;
@@ -180,6 +181,7 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
         activities.add(new RejectAcquisitionProcess());
         activities.add(new UnApprove<RegularAcquisitionProcess>());
         activities.add(new FundAllocationExpirationDate());
+        activities.add(new FundAllocationExpirationDateAndPurchaseOrderDocument());
         activities.add(new RevertProcessNotConfirmmingFundAllocationExpirationDate());
         activities.add(new RevertToInvoiceConfirmation());
         activities.add(new Authorize<RegularAcquisitionProcess>());
@@ -284,7 +286,7 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
             throw new DomainException("acquisitionProcess.message.exception.invalidStateToRun.create");
         }
         if (createAcquisitionProcessBean.isUnderMandatorySupplierScope()
-                && createAcquisitionProcessBean.getSupplier() != MissionSystem.getInstance().getMandatorySupplier()) {
+                && !MissionSystem.getInstance().getMandatorySupplierSet().contains(createAcquisitionProcessBean.getSupplier())) {
             throw new DomainException("acquisitionProcess.message.exception.manditory.supplier.for.this.scope",
                     DomainException.getResourceFor("resources/AcquisitionResources"));
         }
@@ -306,7 +308,7 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
             process.setMissionProcess(createAcquisitionProcessBean.getMissionProcess());
         }
         if (createAcquisitionProcessBean.isUnderMandatorySupplierScope()
-                && createAcquisitionProcessBean.getSupplier() == MissionSystem.getInstance().getMandatorySupplier()) {
+                && MissionSystem.getInstance().getMandatorySupplierSet().contains(createAcquisitionProcessBean.getSupplier())) {
             process.skipSupplierFundAllocation();
         }
 

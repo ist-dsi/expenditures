@@ -292,11 +292,10 @@
 
 <h3><bean:message key="label.mission.missionConfiguration.mandatorySupplier" bundle="MISSION_RESOURCES"/></h3>
 
-<fr:form id="missionSystemMandatorySupplierForm">
-	<fr:edit id="missionSystemMandatorySupplier" name="missionSystem">
-		<fr:schema type="module.mission.domain.MissionSystem" bundle="MISSION_RESOURCES">
-			<fr:slot name="mandatorySupplier" layout="autoComplete" key="label.supplier"
-				bundle="EXPENDITURE_RESOURCES">
+<fr:form id="missionSystemMandatorySupplierForm" action="/configureMissions.do?method=addMandatorySupplier">
+	<fr:edit id="missionSystemMandatorySupplier" name="supplierBean">
+		<fr:schema type="pt.ist.expenditureTrackingSystem.domain.dto.SupplierBean" bundle="MISSION_RESOURCES">
+			<fr:slot name="supplier" layout="autoComplete" key="label.supplier" bundle="EXPENDITURE_RESOURCES">
 				<fr:property name="labelField" value="presentationName" />
 				<fr:property name="format" value="${presentationName}" />
 				<fr:property name="minChars" value="1" />
@@ -311,3 +310,16 @@
 		</fr:layout>
 	</fr:edit>
 </fr:form>
+
+<fr:view name="missionSystem" property="mandatorySupplierSet">
+	<fr:schema type="pt.ist.expenditureTrackingSystem.domain.organization.Supplier" bundle="MISSION_RESOURCES">
+		<fr:slot name="presentationName" key="label.supplier" bundle="EXPENDITURE_RESOURCES"/>
+	</fr:schema>
+	<fr:layout name="tabular">
+		<fr:property name="classes" value="tview1"/>
+		<fr:property name="linkFormat(remove)" value="/configureMissions.do?method=removeMandatorySupplier&supplierOid=${externalId}"/>
+		<fr:property name="bundle(remove)" value="MISSION_RESOURCES"/>
+		<fr:property name="key(remove)" value="label.mission.missionConfiguration.vehicle.authorizers.remove"/>
+		<fr:property name="order(remove)" value="1"/>
+	</fr:layout>
+</fr:view>

@@ -49,6 +49,7 @@ import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.domain.VirtualHost;
 import pt.ist.bennu.core.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.fenixframework.Atomic;
 
 /**
@@ -538,6 +539,16 @@ public class MissionSystem extends MissionSystem_Base {
 
     public static void setUserAliasProvider(final UserAliasProvider userAliasProvider) {
 	MissionSystem.userAliasProvider = userAliasProvider;
+    }
+
+    @Atomic
+    public void addMandatorySupplierService(final Supplier supplier) {
+        addMandatorySupplier(supplier);
+    }
+
+    @Atomic
+    public void removeMandatorySupplierService(final Supplier supplier) {
+        removeMandatorySupplier(supplier);
     }
 
 }

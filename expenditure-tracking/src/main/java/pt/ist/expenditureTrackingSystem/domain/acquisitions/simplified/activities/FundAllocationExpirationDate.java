@@ -43,7 +43,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionPr
  * 
  */
 public class FundAllocationExpirationDate extends
-        WorkflowActivity<RegularAcquisitionProcess, ActivityInformation<RegularAcquisitionProcess>> {
+        WorkflowActivity<RegularAcquisitionProcess, CreateAcquisitionPurchaseOrderDocumentInformation> {
 
     public static class FundAllocationNotAllowedException extends DomainException {
 
@@ -66,7 +66,7 @@ public class FundAllocationExpirationDate extends
     }
 
     @Override
-    protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
+    protected void process(CreateAcquisitionPurchaseOrderDocumentInformation activityInformation) {
         RegularAcquisitionProcess process = activityInformation.getProcess();
         if (process.getAcquisitionRequest().isSubmittedForFundsAllocationByAllResponsibles()) {
             if (!process.getShouldSkipSupplierFundAllocation()) {
@@ -97,6 +97,11 @@ public class FundAllocationExpirationDate extends
     @Override
     public String getUsedBundle() {
         return "resources/AcquisitionResources";
+    }
+
+    @Override
+    public ActivityInformation<RegularAcquisitionProcess> getActivityInformation(RegularAcquisitionProcess process) {
+        return new CreateAcquisitionPurchaseOrderDocumentInformation(process, this);
     }
 
 }
