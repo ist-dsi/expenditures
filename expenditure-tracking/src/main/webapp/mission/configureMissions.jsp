@@ -323,3 +323,13 @@
 		<fr:property name="order(remove)" value="1"/>
 	</fr:layout>
 </fr:view>
+
+<fr:edit id="missionSystemMandatorySupplierErrorMessage" name="missionSystem">
+	<fr:schema type="module.mission.domain.MissionSystem" bundle="MISSION_RESOURCES">
+		<fr:slot name="mandatorySupplierNotUsedErrorMessageArg" key="label.mission.system.mandatory.supplier.error.message.arg" bundle="MISSION_RESOURCES"/>
+	</fr:schema>
+	<fr:layout name="tabular">
+		<fr:property name="classes" value="form mtop05 mbottom1"/>
+		<fr:property name="columnClasses" value=",,tderror"/>
+	</fr:layout>
+</fr:edit>

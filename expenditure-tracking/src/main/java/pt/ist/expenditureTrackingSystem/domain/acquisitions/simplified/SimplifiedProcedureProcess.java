@@ -288,7 +288,8 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
         if (createAcquisitionProcessBean.isUnderMandatorySupplierScope()
                 && !MissionSystem.getInstance().getMandatorySupplierSet().contains(createAcquisitionProcessBean.getSupplier())) {
             throw new DomainException("acquisitionProcess.message.exception.manditory.supplier.for.this.scope",
-                    DomainException.getResourceFor("resources/AcquisitionResources"));
+                    DomainException.getResourceFor("resources/AcquisitionResources"),
+                    MissionSystem.getInstance().getMandatorySupplierNotUsedErrorMessageArg());
         }
         SimplifiedProcedureProcess process =
                 new SimplifiedProcedureProcess(createAcquisitionProcessBean.getClassification(),
