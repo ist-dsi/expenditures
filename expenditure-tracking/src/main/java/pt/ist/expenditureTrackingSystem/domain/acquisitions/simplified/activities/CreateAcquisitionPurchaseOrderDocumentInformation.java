@@ -51,7 +51,8 @@ public class CreateAcquisitionPurchaseOrderDocumentInformation extends ActivityI
 
     @Override
     public boolean hasAllneededInfo() {
-        return super.hasAllneededInfo() && supplierContact != null;
+        return getActivity().getClass() == FundAllocationExpirationDate.class
+                || (super.hasAllneededInfo() && supplierContact != null);
     }
 
     public SupplierContact getSupplierContact() {

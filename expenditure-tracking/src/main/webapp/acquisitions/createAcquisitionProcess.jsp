@@ -31,7 +31,7 @@
    				<fr:slot name="isForMission" key="label.aquisition.process.create.is.for.mission" layout="radio-postback">
     				<fr:property name="classes" value="liinline"/>
    				</fr:slot>
-   				<% if (MissionSystem.getInstance().getMandatorySupplier() != null) { %>
+   				<% if (!MissionSystem.getInstance().getMandatorySupplierSet().isEmpty()) { %>
    					<fr:slot name="isUnderMandatorySupplierScope" key="label.aquisition.process.create.for.mission.is.under.mandatory.supplier.scope" layout="radio-postback">
    						<fr:property name="classes" value="liinline"/>
 					</fr:slot>

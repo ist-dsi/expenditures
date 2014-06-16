@@ -35,6 +35,7 @@ import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import net.sf.jasperreports.engine.JRException;
 import pt.ist.bennu.core._development.PropertiesManager;
+import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.domain.VirtualHost;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
@@ -69,6 +70,10 @@ public class CreateAcquisitionPurchaseOrderDocument extends
 
     @Override
     protected void process(CreateAcquisitionPurchaseOrderDocumentInformation activityInformation) {
+        createPurchaseOrderDocument(activityInformation);
+    }
+
+    static void createPurchaseOrderDocument(final CreateAcquisitionPurchaseOrderDocumentInformation activityInformation) {
         RegularAcquisitionProcess process = activityInformation.getProcess();
         String requestID = process.getAcquisitionRequestDocumentID();
         byte[] file =
@@ -96,13 +101,13 @@ public class CreateAcquisitionPurchaseOrderDocument extends
         return !process.getFiles(PurchaseOrderDocument.class).isEmpty();
     }
 
-    protected byte[] createPurchaseOrderDocument(final AcquisitionRequest acquisitionRequest, final String requestID,
+    static private byte[] createPurchaseOrderDocument(final AcquisitionRequest acquisitionRequest, final String requestID,
             final SupplierContact supplierContact) {
         final Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("acquisitionRequest", acquisitionRequest);
         paramMap.put("supplierContact", supplierContact);
         paramMap.put("requestID", requestID);
-        paramMap.put("responsibleName", getLoggedPerson().getExpenditurePerson().getName());
+        paramMap.put("responsibleName", UserView.getCurrentUser().getExpenditurePerson().getName());
         DeliveryLocalList deliveryLocalList = new DeliveryLocalList();
         List<AcquisitionRequestItemBean> acquisitionRequestItemBeans = new ArrayList<AcquisitionRequestItemBean>();
         createBeansLists(acquisitionRequest, deliveryLocalList, acquisitionRequestItemBeans);
@@ -131,7 +136,7 @@ public class CreateAcquisitionPurchaseOrderDocument extends
 
     }
 
-    private void createBeansLists(AcquisitionRequest acquisitionRequest, DeliveryLocalList deliveryLocalList,
+    static private void createBeansLists(AcquisitionRequest acquisitionRequest, DeliveryLocalList deliveryLocalList,
             List<AcquisitionRequestItemBean> acquisitionRequestItemBeans) {
         for (AcquisitionRequestItem acquisitionRequestItem : acquisitionRequest.getOrderedRequestItemsSet()) {
             DeliveryLocal deliveryLocal =

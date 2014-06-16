@@ -4,6 +4,7 @@ enum module.mission.domain.VehiclItemJustificationMotive as VehiclItemJustificat
 
 class MissionSystem {
 	Boolean allowGrantOwnerEquivalence;
+	String mandatorySupplierNotUsedErrorMessageArg;
 }
 
 class MissionFinancer implements .pt.ist.bennu.core.domain.VirtualHostAware {
@@ -701,5 +702,7 @@ relation MissionSystemSupplier {
 	MissionSystem playsRole missionSystem {
 		multiplicity *;
 	}
-	.pt.ist.expenditureTrackingSystem.domain.organization.Supplier playsRole mandatorySupplier;
+	.pt.ist.expenditureTrackingSystem.domain.organization.Supplier playsRole mandatorySupplier {
+		multiplicity *;
+	}
 }

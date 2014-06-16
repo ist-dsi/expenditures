@@ -28,6 +28,7 @@ import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.util.BundleUtil;
+import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
@@ -43,12 +44,7 @@ public class ChangeProcessClassification extends
     @Override
     public boolean isActive(SimplifiedProcedureProcess process, User user) {
         Person loggedPerson = user.getExpenditurePerson();
-        return loggedPerson != null
-                && (loggedPerson.getUsername().equals("ist23742") || loggedPerson.getUsername().equals("ist24439"));
-//	return loggedPerson == process.getRequestor()
-//		&& process.getAcquisitionProcessState().isInGenesis()
-//		&& ExpenditureTrackingSystem.getInstance()
-//			.getAllowdProcessClassifications(SimplifiedProcedureProcess.class).size() > 1;
+        return loggedPerson != null && loggedPerson.hasRoleType(RoleType.FUND_COMMITMENT_MANAGER);
     }
 
     @Override
