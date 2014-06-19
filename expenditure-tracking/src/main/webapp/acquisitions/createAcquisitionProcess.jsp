@@ -87,6 +87,7 @@
 </fr:form>
 
 <logic:equal name="type" value="CCP">
+<logic:notEqual name="acquisitionProcessBean" property="isUnderMandatorySupplierScope" value="true">
 	<script type="text/javascript">
 		$("input[id$='supplier_AutoComplete']").change(function() {
 					<%= "$.getJSON(\"" + request.getContextPath() + "/acquisitionSimplifiedProcedureProcess.do?method=checkSupplierLimit&supplierOid=\" + $(this).attr('value'),function(data, textStatus) {dealWith(data)})" %>
@@ -124,6 +125,7 @@
 			}
 		}	
 	</script>
+</logic:notEqual>
 </logic:equal>
 
 	

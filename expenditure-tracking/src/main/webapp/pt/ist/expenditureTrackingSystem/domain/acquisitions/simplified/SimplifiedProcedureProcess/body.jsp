@@ -1,3 +1,5 @@
+<%@page import="module.mission.domain.MissionSystem"%>
+<%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html" %>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-bean" prefix="bean" %>
@@ -88,6 +90,16 @@
 				<td>
 					<bean:message key="label.skipingSupplierFundAllocation" bundle="EXPENDITURE_RESOURCES"/>: 
 					<fr:view name="process" property="skipSupplierFundAllocation"/>
+					<%
+						final SimplifiedProcedureProcess spp = (SimplifiedProcedureProcess) request.getAttribute("process");
+						if (spp.getSkipSupplierFundAllocation() != null && spp.getSkipSupplierFundAllocation()
+						        && spp.getAcquisitionRequest().getSupplier() != null
+						        && MissionSystem.getInstance().getMandatorySupplierSet().contains(spp.getAcquisitionRequest().getSupplier())) {
+					%>
+							<bean:message key="label.acquisition.process.under.eSPAP" bundle="EXPENDITURE_RESOURCES"/>
+					<%
+						}
+					%>
 				</td>
 			</tr>
 		</table>
