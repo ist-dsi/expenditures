@@ -10,7 +10,7 @@
 
     <groupId>pt.ist</groupId>
     <artifactId>working-capital</artifactId>
-    <version>1.9.0</version>
+    <version>1.9.1</version>
     <packaging>jar</packaging>
     <name>working-capital</name>
 
