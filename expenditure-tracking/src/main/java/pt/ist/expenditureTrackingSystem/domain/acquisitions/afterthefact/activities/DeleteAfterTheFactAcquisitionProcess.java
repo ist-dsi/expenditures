@@ -49,7 +49,7 @@ public class DeleteAfterTheFactAcquisitionProcess extends
 
         return loggedPerson != null
                 && ((ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user) || ExpenditureTrackingSystem
-                        .isAcquisitionCentralManagerGroupMember(user)))
+                        .isAcquisitionCentralManagerGroupMember(user)) || process.getProcessCreator().equals(user))
                 && !acquisitionAfterTheFact.getDeletedState().booleanValue();
     }
 
