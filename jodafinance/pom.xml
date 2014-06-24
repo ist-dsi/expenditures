@@ -3,7 +3,7 @@
 
     <groupId>pt.ist</groupId>
     <artifactId>jodafinance</artifactId>
-    <version>1.9.1</version>
+    <version>1.9.2</version>
     <packaging>jar</packaging>
 
     <name>jodafinance</name>
