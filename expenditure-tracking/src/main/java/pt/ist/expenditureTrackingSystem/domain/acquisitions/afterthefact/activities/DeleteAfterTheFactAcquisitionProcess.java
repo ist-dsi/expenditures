@@ -48,8 +48,9 @@ public class DeleteAfterTheFactAcquisitionProcess extends
         final AcquisitionAfterTheFact acquisitionAfterTheFact = process.getAcquisitionAfterTheFact();
 
         return loggedPerson != null
-                && ((ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user) || ExpenditureTrackingSystem
-                        .isAcquisitionCentralManagerGroupMember(user)))
+                && ((ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user)
+                	|| ExpenditureTrackingSystem.isAcquisitionCentralManagerGroupMember(user)
+                	|| process.getProcessCreator() == loggedPerson.getUser()))
                 && !acquisitionAfterTheFact.getDeletedState().booleanValue();
     }
 
