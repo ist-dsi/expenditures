@@ -45,7 +45,6 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess.A
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess.ProcessClassification;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.fileBeans.AcquisitionProposalDocumentFileBean;
-import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 
 @ClassNameBundle(bundle = "resources/AcquisitionResources")
 /**
@@ -156,11 +155,17 @@ public class AcquisitionProposalDocument extends AcquisitionProposalDocument_Bas
 
     @Override
     public boolean isConnectedToCurrentHost() {
-        final GenericProcess genericProcess = (GenericProcess) getProcess();
-        return genericProcess != null && genericProcess.isConnectedToCurrentHost();
+        final WorkflowProcess genericProcess = getProcess();
+        return (genericProcess != null && genericProcess.isConnectedToCurrentHost())
+        			|| isDeletedProcessConnectedToCurrentHost();
     }
 
-    @Deprecated
+    private boolean isDeletedProcessConnectedToCurrentHost() {
+    	final WorkflowProcess process = getProcessWithDeleteFile();
+    	return process != null && process.isConnectedToCurrentHost();
+	}
+
+	@Deprecated
     public boolean hasProposalId() {
         return getProposalId() != null;
     }

@@ -100,8 +100,14 @@ public class CreditNoteDocument extends CreditNoteDocument_Base {
 
     @Override
     public boolean isConnectedToCurrentHost() {
-        final GenericProcess genericProcess = (GenericProcess) getProcess();
-        return genericProcess != null && genericProcess.isConnectedToCurrentHost();
+        final WorkflowProcess genericProcess = getProcess();
+        return (genericProcess != null && genericProcess.isConnectedToCurrentHost())
+        			|| isDeletedProcessConnectedToCurrentHost();
     }
+
+    private boolean isDeletedProcessConnectedToCurrentHost() {
+    	final WorkflowProcess process = getProcessWithDeleteFile();
+    	return process != null && process.isConnectedToCurrentHost();
+	}
 
 }

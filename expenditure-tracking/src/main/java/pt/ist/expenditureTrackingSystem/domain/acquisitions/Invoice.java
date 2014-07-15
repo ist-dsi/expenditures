@@ -32,6 +32,7 @@ import module.workflow.domain.AbstractWFDocsGroup;
 import module.workflow.domain.ProcessDocumentMetaDataResolver;
 import module.workflow.domain.ProcessFile;
 import module.workflow.domain.WFDocsDefaultWriteGroup;
+import module.workflow.domain.WorkflowProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess.AcquisitionProcessBasedMetadataResolver;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 
@@ -59,9 +60,15 @@ public class Invoice extends Invoice_Base {
 
     @Override
     public boolean isConnectedToCurrentHost() {
-        final GenericProcess genericProcess = (GenericProcess) getProcess();
-        return genericProcess != null && genericProcess.isConnectedToCurrentHost();
+        final WorkflowProcess genericProcess = getProcess();
+        return (genericProcess != null && genericProcess.isConnectedToCurrentHost())
+        			|| isDeletedProcessConnectedToCurrentHost();
     }
+
+    private boolean isDeletedProcessConnectedToCurrentHost() {
+    	final WorkflowProcess process = getProcessWithDeleteFile();
+    	return process != null && process.isConnectedToCurrentHost();
+	}
 
     public static class InvoiceMetadaResolver extends AcquisitionProcessBasedMetadataResolver<Invoice> {
         public static final String INVOICE_NUMBER = "Número da factura";
