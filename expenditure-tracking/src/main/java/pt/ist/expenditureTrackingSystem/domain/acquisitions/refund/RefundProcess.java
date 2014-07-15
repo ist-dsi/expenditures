@@ -477,7 +477,10 @@ public class RefundProcess extends RefundProcess_Base {
     public Set<Supplier> getSuppliers() {
         Set<Supplier> suppliers = new HashSet<Supplier>();
         for (RefundableInvoiceFile invoice : getRefundableInvoices()) {
-            suppliers.add(invoice.getSupplier());
+        	final Supplier supplier = invoice.getSupplier();
+        	if (supplier != null) {
+        		suppliers.add(supplier);
+        	}
         }
         return suppliers;
     }
