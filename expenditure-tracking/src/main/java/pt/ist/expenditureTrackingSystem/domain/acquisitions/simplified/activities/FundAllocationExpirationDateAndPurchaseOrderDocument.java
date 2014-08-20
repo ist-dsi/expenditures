@@ -8,6 +8,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.ProjectFinancer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
+import pt.ist.expenditureTrackingSystem.domain.organization.SubProject;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 
@@ -53,11 +54,12 @@ public class FundAllocationExpirationDateAndPurchaseOrderDocument extends FundAl
 
     private Financer findFinancer(final RegularAcquisitionProcess process, final Unit unit) {
         for (final Financer financer : process.getRequest().getFinancersSet()) {
-            if (financer.getUnit() == unit) {
+        	final Unit funit = financer.getUnit();
+            if (funit == unit || (funit instanceof SubProject && funit.getParentUnit() == unit)) {
                 return financer;
             }
         }
-        return null;
+        return unit instanceof SubProject ? findFinancer(process, unit.getParentUnit()) : null;
     }
 
     @Override
