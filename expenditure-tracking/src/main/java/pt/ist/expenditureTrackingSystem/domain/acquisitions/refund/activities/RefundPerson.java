@@ -43,8 +43,8 @@ public class RefundPerson extends WorkflowActivity<RefundProcess, RefundPersonAc
     @Override
     public boolean isActive(RefundProcess process, User user) {
         Person person = user.getExpenditurePerson();
-        return (ExpenditureTrackingSystem.isTreasuryMemberGroupMember(user) || process.isTreasuryMember(person))
-                && isUserProcessOwner(process, user) && process.hasFundsAllocatedPermanently() && !process.isPayed();
+        return !process.isPayed() && isUserProcessOwner(process, user) && process.hasFundsAllocatedPermanently()
+                && (ExpenditureTrackingSystem.isTreasuryMemberGroupMember(user) || process.isTreasuryMember(person));
     }
 
     @Override

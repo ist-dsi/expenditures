@@ -45,6 +45,8 @@ public class SetSkipSupplierFundAllocation extends
     @Override
     public boolean isActive(RegularAcquisitionProcess process, User user) {
         return isUserProcessOwner(process, user)
+                && process.isActive()
+                && !process.isPayed()
                 && !process.getShouldSkipSupplierFundAllocation().booleanValue()
                 && (process instanceof SimplifiedProcedureProcess && ((SimplifiedProcedureProcess) process)
                         .getProcessClassification().isCCP())

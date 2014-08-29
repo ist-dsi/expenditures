@@ -231,8 +231,8 @@ public class MissionYear extends MissionYear_Base {
                 return false;
             }
 
-            if (missionProcess.isPendingParticipantAuthorisationBy(user)
-                    && MissionState.PARTICIPATION_AUTHORIZATION.isPending(missionProcess)) {
+            if (MissionState.PARTICIPATION_AUTHORIZATION.isPending(missionProcess)
+                    && missionProcess.isPendingParticipantAuthorisationBy(user)) {
                 return true;
             }
 

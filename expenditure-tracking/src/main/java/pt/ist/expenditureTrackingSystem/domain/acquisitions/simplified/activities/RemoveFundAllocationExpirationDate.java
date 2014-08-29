@@ -63,7 +63,8 @@ public class RemoveFundAllocationExpirationDate extends
     @Override
     public boolean isActive(RegularAcquisitionProcess process, User user) {
         Person person = user.getExpenditurePerson();
-        return isUserProcessOwner(process, user)
+        return process.isActive()
+                && isUserProcessOwner(process, user)
                 && (checkActiveConditions(process) || checkCanceledConditions(process))
                 && !process.hasAnyAllocatedFunds()
                 && ((process.isAccountingEmployee(person) && !hasAnyAssociatedProject(process))

@@ -74,8 +74,9 @@ public class Project extends Project_Base {
         super();
         createRealUnit(this, parentUnit, ExpenditureTrackingSystem.getInstance().getProjectPartyType(), projectCode, name);
 
-        // TODO : After this object is refactored to retrieve the name and parent from the real unit,
-        //        the following three lines may be deleted.
+        // TODO : After this object is refactored to retrieve the name and
+        // parent from the real unit,
+        // the following three lines may be deleted.
         setName(name);
         setProjectCode(projectCode);
         setParentUnit(parentUnit);
@@ -124,13 +125,13 @@ public class Project extends Project_Base {
     @Override
     public boolean isProjectAccountingEmployee(final Person person) {
         final AccountingUnit accountingUnit = getAccountingUnit();
-        return accountingUnit != null && accountingUnit.getProjectAccountantsSet().contains(person);
+        return accountingUnit != null && person != null && person.getProjectAccountingUnitsSet().contains(accountingUnit);
     }
 
     @Override
     public boolean isAccountingEmployee(final Person person) {
         final AccountingUnit accountingUnit = getAccountingUnit();
-        return (accountingUnit != null && accountingUnit.getPeopleSet().contains(person))
+        return (accountingUnit != null && person != null && person.getAccountingUnitsSet().contains(accountingUnit))
                 || (accountingUnit == null && super.isAccountingEmployee(person));
     }
 
@@ -193,7 +194,7 @@ public class Project extends Project_Base {
     @Override
     public boolean isAccountingResponsible(Person person) {
         final AccountingUnit accountingUnit = getAccountingUnit();
-        return accountingUnit != null && person != null && accountingUnit.getResponsibleProjectAccountantsSet().contains(person);
+        return accountingUnit != null && person != null && person.getResponsibleProjectAccountingUnitsSet().contains(accountingUnit);
     }
 
     @Override
@@ -204,8 +205,8 @@ public class Project extends Project_Base {
     public boolean isOpen() {
         final AccountabilityType accountabilityType =
                 ExpenditureTrackingSystem.getInstance().getOrganizationalAccountabilityType();
-        for (final Accountability accountability : getUnit().getParentAccountabilitiesSet()) {
-            if (accountability.getAccountabilityType() == accountabilityType && accountability.isActiveNow()) {
+        for (final Accountability accountability : getUnit().getAllParentAccountabilities()) {
+            if (!accountability.isErased() && accountability.getAccountabilityType() == accountabilityType && accountability.isActiveNow()) {
                 return true;
             }
         }

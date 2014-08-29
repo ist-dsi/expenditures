@@ -486,9 +486,10 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
     }
 
     private static Unit getParentUnit(final module.organization.domain.Unit unit) {
-        for (final Accountability accountability : unit.getParentAccountabilitiesSet()) {
-            if (accountability.getAccountabilityType() == ExpenditureTrackingSystem.getInstance()
-                    .getOrganizationalAccountabilityType() && accountability.isActiveNow()) {
+        for (final Accountability accountability : unit.getAllParentAccountabilities()) {
+            if (!accountability.isErased()
+                    && accountability.getAccountabilityType() == ExpenditureTrackingSystem.getInstance()
+                            .getOrganizationalAccountabilityType() && accountability.isActiveNow()) {
                 final Party parent = accountability.getParent();
                 if (parent.isUnit()) {
                     final module.organization.domain.Unit parentUnit = (module.organization.domain.Unit) parent;
@@ -506,9 +507,10 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
     }
 
     private static Unit getParentUnitSafe(final module.organization.domain.Unit unit) {
-        for (final Accountability accountability : unit.getParentAccountabilitiesSet()) {
-            if (accountability.getAccountabilityType() == ExpenditureTrackingSystem.getInstance()
-                    .getOrganizationalAccountabilityType()) {
+        for (final Accountability accountability : unit.getAllParentAccountabilities()) {
+            if (!accountability.isErased()
+                    && accountability.getAccountabilityType() == ExpenditureTrackingSystem.getInstance()
+                            .getOrganizationalAccountabilityType()) {
                 final Party parent = accountability.getParent();
                 if (parent.isUnit()) {
                     final module.organization.domain.Unit parentUnit = (module.organization.domain.Unit) parent;

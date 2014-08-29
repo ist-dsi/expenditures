@@ -44,7 +44,8 @@ public class ChangeProcessClassification extends
     @Override
     public boolean isActive(SimplifiedProcedureProcess process, User user) {
         Person loggedPerson = user.getExpenditurePerson();
-        return loggedPerson != null && loggedPerson.hasRoleType(RoleType.FUND_COMMITMENT_MANAGER);
+        return loggedPerson != null && !process.isPayed() && process.isActive()
+                && loggedPerson.hasRoleType(RoleType.FUND_COMMITMENT_MANAGER);
     }
 
     @Override

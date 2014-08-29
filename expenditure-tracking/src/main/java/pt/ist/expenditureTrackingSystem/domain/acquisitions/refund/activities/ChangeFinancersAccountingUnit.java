@@ -40,7 +40,7 @@ public class ChangeFinancersAccountingUnit extends AbstractChangeFinancersAccoun
     @Override
     public boolean isActive(RefundProcess process, User user) {
         Person person = user.getExpenditurePerson();
-        return isUserProcessOwner(process, user)
+        return process.isActive() && isUserProcessOwner(process, user)
                 && process.isPendingFundAllocation()
                 && (process.isAccountingEmployeeForOnePossibleUnit(person) || process
                         .isProjectAccountingEmployeeForOnePossibleUnit(person))

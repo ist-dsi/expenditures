@@ -44,10 +44,12 @@ public class UnconfirmInvoices extends WorkflowActivity<RefundProcess, ActivityI
     public boolean isActive(RefundProcess process, User user) {
         Person person = user.getExpenditurePerson();
         return isUserProcessOwner(process, user)
+                && process.isActive()
+                && !process.isPayed()
+                && !process.getRequest().getConfirmedInvoices().isEmpty()
                 && process.isRealValueFullyAttributedToUnits()
                 && ((process.isAccountingEmployee(person) && !process.hasProjectsAsPayingUnits()) || (process
                         .isProjectAccountingEmployee(person) && process.hasProjectsAsPayingUnits()))
-                && !process.getRequest().getConfirmedInvoices().isEmpty()
                 && ((process.hasProjectsAsPayingUnits() && !process.getRequest()
                         .hasAllocatedFundsPermanentlyForAnyProjectFinancer()) || (!process.hasProjectsAsPayingUnits() && !process
                         .getRequest().hasAnyEffectiveFundAllocationId()));

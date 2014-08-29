@@ -42,8 +42,9 @@ public class FundAllocation<P extends PaymentProcess> extends WorkflowActivity<P
     @Override
     public boolean isActive(P process, User user) {
         Person person = user.getExpenditurePerson();
-        return process.isAccountingEmployee(person) && isUserProcessOwner(process, user) && process.isPendingFundAllocation()
-                && process.hasAllocatedFundsForAllProjectFinancers() && !process.hasAllFundAllocationId(person)
+        return process.isActive() && isUserProcessOwner(process, user) && process.isPendingFundAllocation()
+                && process.isAccountingEmployee(person) && process.hasAllocatedFundsForAllProjectFinancers()
+                && !process.hasAllFundAllocationId(person)
                 && (!process.hasMissionProcess() || process.getMissionProcess().hasAllAllocatedFunds());
     }
 

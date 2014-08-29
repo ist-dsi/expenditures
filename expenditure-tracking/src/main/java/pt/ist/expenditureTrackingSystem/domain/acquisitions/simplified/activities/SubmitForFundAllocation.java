@@ -69,7 +69,7 @@ public class SubmitForFundAllocation extends
     @Override
     public boolean isUserAwarenessNeeded(final RegularAcquisitionProcess process, final User user) {
         final Person person = user.getExpenditurePerson();
-        if (person.hasAnyValidAuthorization()) {
+        if (process.isPendingApproval() && person.hasAnyValidAuthorization()) {
             for (final RequestItem requestItem : process.getRequest().getRequestItemsSet()) {
                 for (final UnitItem unitItem : requestItem.getUnitItemsSet()) {
                     final Unit unit = unitItem.getUnit();
