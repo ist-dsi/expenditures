@@ -344,7 +344,7 @@
 			<fr:layout name="tabular">
 				<fr:property name="classes" value="tstyle2 mtop05"/>
 				<fr:property name="columnClasses" value=",,aleft,"/>
-				<fr:property name="sortBy" value="name=asc"/>
+				<fr:property name="sortBy" value="shortIdentifier=asc"/>
 				<fr:property name="link(view)" value="/expenditureTrackingOrganization.do?method=viewOrganization"/>
 				<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
 				<fr:property name="key(view)" value="link.view"/>
