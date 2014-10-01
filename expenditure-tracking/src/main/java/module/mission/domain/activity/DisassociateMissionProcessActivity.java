@@ -1,6 +1,7 @@
 package module.mission.domain.activity;
 
 import module.mission.domain.MissionProcess;
+import module.mission.domain.RemoteMissionProcess;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.domain.ActivityLog;
 import pt.ist.bennu.core.domain.User;
@@ -8,7 +9,7 @@ import pt.ist.bennu.core.util.BundleUtil;
 import pt.ist.fenixframework.Atomic;
 
 public class DisassociateMissionProcessActivity extends
-        MissionProcessActivity<MissionProcess, AssociateMissionProcessActivityInfo> {
+        MissionProcessActivity<MissionProcess, DisassociateMissionProcessActivityInfo> {
 
     @Override
     public String getLocalizedName() {
@@ -27,23 +28,18 @@ public class DisassociateMissionProcessActivity extends
 
     @Atomic
     @Override
-    protected void process(final AssociateMissionProcessActivityInfo activityInfo) {
-        activityInfo.getProcess().removeAssociatedMissionProcess(activityInfo.getMissionProcessToAssociate());
+    protected void process(final DisassociateMissionProcessActivityInfo activityInfo) {
+        activityInfo.getProcess().removeAssociatedMissionProcess(activityInfo.getRemoteMissionProcess(), activityInfo.isConnect());
     }
 
     @Override
-    public ActivityInformation<MissionProcess> getActivityInformation(final MissionProcess process) {
-        return new AssociateMissionProcessActivityInfo(process, this);
+    public DisassociateMissionProcessActivityInfo getActivityInformation(final MissionProcess process) {
+        return new DisassociateMissionProcessActivityInfo(process, this);
     }
 
     @Override
     protected ActivityLog logExecution(MissionProcess thisProcess, String operationName, User user,
-            AssociateMissionProcessActivityInfo activityInfo, String... argumentsDescription) {
-
-        for (MissionProcess otherProcess : thisProcess.getAssociatedMissionProcesses()) {
-            super.logExecution(otherProcess, operationName, user, activityInfo, argumentsDescription);
-        }
-
+            DisassociateMissionProcessActivityInfo activityInfo, String... argumentsDescription) {
         return super.logExecution(thisProcess, operationName, user, activityInfo, argumentsDescription);
     }
 
@@ -53,14 +49,15 @@ public class DisassociateMissionProcessActivity extends
     }
 
     @Override
-    protected String[] getArgumentsDescription(AssociateMissionProcessActivityInfo activityInformation) {
-        MissionProcess processToAssociate = activityInformation.getMissionProcessToAssociate();
-        String alreadyAssociatedProcessIds = processToAssociate.getProcessIdentification();
-        if (processToAssociate.hasMissionProcessAssociation()) {
-            for (MissionProcess otherAssociatedProcess : processToAssociate.getAssociatedMissionProcesses()) {
-                alreadyAssociatedProcessIds += ", " + otherAssociatedProcess.getProcessIdentification();
+    protected String[] getArgumentsDescription(DisassociateMissionProcessActivityInfo activityInformation) {
+        final RemoteMissionProcess remoteMissionProcess = activityInformation.getRemoteMissionProcess();
+        final StringBuilder builder = new StringBuilder();
+        for (final RemoteMissionProcess otherRemoteMissionProcess : activityInformation.getProcess().getRemoteMissionProcessSet()) {
+            if (builder.length() > 0) {
+                builder.append(", ");
             }
+            builder.append(otherRemoteMissionProcess.getProcessNumber());
         }
-        return new String[] { processToAssociate.getProcessIdentification(), alreadyAssociatedProcessIds };
+        return new String[] { remoteMissionProcess.getProcessNumber(), builder.toString() };
     }
 }

@@ -5,12 +5,16 @@ import java.util.Set;
 
 import module.mission.domain.MissionProcess;
 import module.mission.domain.MissionSystem;
+import module.mission.domain.RemoteMissionSystem;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 
 public class AssociateMissionProcessActivityInfo extends ActivityInformation<MissionProcess> implements Serializable {
 
-    private MissionProcess missionProcessToAssociate;
+    private RemoteMissionSystem remoteMissionSystem;
+    private String processNumber;
+    private String externalId;
+    private boolean connect = true;
 
     public AssociateMissionProcessActivityInfo(final MissionProcess missionProcess,
             final WorkflowActivity<MissionProcess, ? extends ActivityInformation<MissionProcess>> activity) {
@@ -23,14 +27,39 @@ public class AssociateMissionProcessActivityInfo extends ActivityInformation<Mis
 
     @Override
     public boolean hasAllneededInfo() {
-        return getMissionProcessToAssociate() != null;
+        return remoteMissionSystem != null && processNumber != null && !processNumber.isEmpty();
     }
 
-    public MissionProcess getMissionProcessToAssociate() {
-        return missionProcessToAssociate;
+    public String getProcessNumber() {
+        return processNumber;
     }
 
-    public void setMissionProcessToAssociate(MissionProcess missionProcessToAssociate) {
-        this.missionProcessToAssociate = missionProcessToAssociate;
+    public void setProcessNumber(String processNumber) {
+        this.processNumber = processNumber;
     }
+
+    public RemoteMissionSystem getRemoteMissionSystem() {
+        return remoteMissionSystem;
+    }
+
+    public void setRemoteMissionSystem(RemoteMissionSystem remoteMissionSystem) {
+        this.remoteMissionSystem = remoteMissionSystem;
+    }
+
+    public boolean isConnect() {
+        return connect;
+    }
+
+    public void setConnect(boolean connect) {
+        this.connect = connect;
+    }
+
+    public String getExternalId() {
+        return externalId;
+    }
+
+    public void setExternalId(String externalId) {
+        this.externalId = externalId;
+    }
+
 }

@@ -15,6 +15,15 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import module.finance.domain.SupplierContact;
+import module.mission.domain.Mission;
+import module.mission.domain.MissionProcess;
+import module.mission.domain.RemoteMissionProcess;
+import module.mission.domain.RemoteMissionSystem;
+import module.mission.domain.activity.AssociateMissionProcessActivity;
+import module.mission.domain.activity.AssociateMissionProcessActivityInfo;
+import module.mission.domain.activity.DisassociateMissionProcessActivity;
+import module.mission.domain.activity.DisassociateMissionProcessActivityInfo;
+import module.mission.domain.util.SearchMissions;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.WorkflowProcess;
@@ -221,12 +230,101 @@ public class ExpenditureAPIv1 {
         }
     }
 
+    @POST
+    @Produces(JSON_UTF8)
+    @Path("connectMissionProcess")
+    public String connectMissionProcess(@QueryParam("processNumber") String processNumber,
+            @QueryParam("externalId") String externalId,
+            @QueryParam("hostname") String hostname,
+            @QueryParam("remoteProcessNumber") String remoteProcessNumber,
+            @QueryParam("username") String username,
+            @QueryParam("access_token") String access_token) {
+
+        checkToken(access_token);
+        login(User.findByUsername(username));
+        try {
+            final SearchMissions search = new SearchMissions();
+            search.setProcessNumber(remoteProcessNumber);
+            final Set<Mission> missions = search.search();
+            if (missions.size() != 1) {
+                throw newApplicationError(Status.BAD_REQUEST, "bad_request", "Bad process number: " + remoteProcessNumber);
+            } else {
+                final Mission mission = missions.iterator().next();
+                final MissionProcess missionProcess = mission.getMissionProcess();
+
+                final RemoteMissionSystem remoteMissionSystem = RemoteMissionSystem.find(hostname);
+                if (remoteMissionSystem == null) {
+                    throw newApplicationError(Status.NOT_ACCEPTABLE, "not_acceptable", "Host not allowed to connect to processes.");
+                }
+
+                final AssociateMissionProcessActivity activity = (AssociateMissionProcessActivity) missionProcess.getActivity(AssociateMissionProcessActivity.class);
+                final AssociateMissionProcessActivityInfo information = activity.getActivityInformation(missionProcess);
+                information.setProcessNumber(processNumber);
+                information.setExternalId(externalId);
+                information.setRemoteMissionSystem(remoteMissionSystem);
+                information.setConnect(false);
+                activity.execute(information);
+
+                final JsonObject obj = new JsonObject();
+                obj.addProperty("processID", missionProcess.getProcessNumber());
+                obj.addProperty("externalId", missionProcess.getExternalId());
+                return gson.toJson(obj);
+            }
+        } finally {
+            logout();
+        }
+    }
+
+    @POST
+    @Produces(JSON_UTF8)
+    @Path("disconnectMissionProcess")
+    public String disconnectMissionProcess(@QueryParam("processNumber") String processNumber,
+            @QueryParam("hostname") String hostname,
+            @QueryParam("remoteProcessNumber") String remoteProcessNumber,
+            @QueryParam("username") String username,
+            @QueryParam("access_token") String access_token) {
+
+        checkToken(access_token);
+        login(User.findByUsername(username));
+        try {
+            final SearchMissions search = new SearchMissions();
+            search.setProcessNumber(remoteProcessNumber);
+            final Set<Mission> missions = search.search();
+            if (missions.size() != 1) {
+                throw newApplicationError(Status.BAD_REQUEST, "bad_request", "Bad process number: " + remoteProcessNumber);
+            } else {
+                final Mission mission = missions.iterator().next();
+                final MissionProcess missionProcess = mission.getMissionProcess();
+
+                final RemoteMissionSystem remoteMissionSystem = RemoteMissionSystem.find(hostname);
+                if (remoteMissionSystem == null) {
+                    throw newApplicationError(Status.NOT_ACCEPTABLE, "not_acceptable", "Host not allowed to connect to processes.");
+                }
+
+                for (final RemoteMissionProcess remoteMissionProcess : missionProcess.getRemoteMissionProcessSet()) {
+                    if (remoteMissionProcess.getRemoteMissionSystem() == remoteMissionSystem && remoteMissionProcess.getProcessNumber().equals(processNumber)) {
+                        final DisassociateMissionProcessActivity activity = (DisassociateMissionProcessActivity) missionProcess.getActivity(DisassociateMissionProcessActivity.class);
+                        final DisassociateMissionProcessActivityInfo information = activity.getActivityInformation(missionProcess);
+                        information.setRemoteMissionProcess(remoteMissionProcess);
+                        information.setConnect(false);
+                        activity.execute(information);
+                    }
+                }
+
+                final JsonObject obj = new JsonObject();
+                obj.addProperty("status", "OK");
+                return gson.toJson(obj);
+            }
+        } finally {
+            logout();
+        }
+    }
+
     private void checkToken(String token) {
         String storedToken = PropertiesManager.getProperty("expenditures.api.token");
         if (!storedToken.equals(token)) {
             throw newApplicationError(Status.FORBIDDEN, "can't access resource", "you're not able to use this service");
         }
-
     }
 
     private void login(User user) {
@@ -247,4 +345,5 @@ public class ExpenditureAPIv1 {
         errorObject.put("description", description);
         return new WebApplicationException(Response.status(status).entity(errorObject.toJSONString()).build());
     }
+
 }

@@ -699,38 +699,31 @@ public abstract class MissionProcess extends MissionProcess_Base {
         return associatedProcesses;
     }
 
-    public void addAssociatedMissionProcess(MissionProcess processToAdd) {
-        if (getAssociatedMissionProcesses().contains(processToAdd)) {
-            throw new DomainException(BundleUtil.getStringFromResourceBundle("resources/MissionResources",
-                    "error.cannot.associate.MissionProcesses.already.associated"));
-        }
-        if (hasMissionProcessAssociation() && processToAdd.hasMissionProcessAssociation()) {
-            throw new DomainException(BundleUtil.getStringFromResourceBundle("resources/MissionResources",
-                    "error.cannot.merge.MissionProcessAssociations"));
+    public void addAssociatedMissionProcess(final RemoteMissionSystem remoteMissionSystem, final String processNumber,
+            final String externalId, boolean connect) {
+        for (final RemoteMissionProcess remoteProcess : getRemoteMissionProcessSet()) {
+            if (remoteProcess.getRemoteMissionSystem() == remoteMissionSystem) {
+                if (remoteProcess.getProcessNumber().equalsIgnoreCase(processNumber)) {
+                    throw new DomainException(BundleUtil.getStringFromResourceBundle("resources/MissionResources",
+                            "error.cannot.associate.MissionProcesses.already.associated"));
+                } else {
+                    throw new DomainException(BundleUtil.getStringFromResourceBundle("resources/MissionResources",
+                            "error.cannot.associate.MissionProcesses.from.same.system"));
+                }
+            }
         }
 
-        if (hasMissionProcessAssociation()) {
-            getMissionProcessAssociation().addMissionProcesses(processToAdd);
-        } else if (processToAdd.hasMissionProcessAssociation()) {
-            processToAdd.getMissionProcessAssociation().addMissionProcesses(this);
-        } else {
-            new MissionProcessAssociation(this, processToAdd);
+        final RemoteMissionProcess remoteMissionProcess = new RemoteMissionProcess(this, remoteMissionSystem, processNumber, externalId);
+        if (connect) {
+            remoteMissionProcess.connect();
         }
     }
 
-    public void removeAssociatedMissionProcess(MissionProcess processToRem) {
-        if (processToRem == this) {
-            throw new DomainException("error.cannot.remove.MissionProcesses.this");
+    public void removeAssociatedMissionProcess(final RemoteMissionProcess remoteMissionProcess, final boolean disconnect) {
+        if (disconnect) {
+            remoteMissionProcess.disconnect();
         }
-        if (!hasMissionProcessAssociation()) {
-            return;
-        }
-
-        MissionProcessAssociation association = getMissionProcessAssociation();
-        association.removeMissionProcesses(processToRem);
-        if (association.getMissionProcesses().size() < 2) {
-            association.delete();
-        }
+        remoteMissionProcess.delete();
     }
 
     @Deprecated

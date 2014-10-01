@@ -2228,17 +2228,13 @@
 	<schema name="activityInformation.AssociateMissionProcessActivity"
 		type="module.mission.domain.activity.AssociateMissionProcessActivityInfo"
 		bundle="MISSION_RESOURCES">
-		<slot name="missionProcessToAssociate" key="label.process.number"
-			layout="autoComplete" required="true">
-			<property name="args"
-				value="provider=module.mission.presentationTier.provider.MissionProcessFromOtherSystemsProvider" />
-			<property name="labelField" value="processIdentification" />
-			<property name="format" value="${processIdentification}" />
-			<property name="classes" value="inputsize100px" />
-			<property name="minChars" value="1" />
-			<property name="sortBy" value="processIdentification" />
+		<slot name="remoteMissionSystem" layout="menu-select" key="label.remoteMissionSystem" bundle="WORKFLOW_RESOURCES">
+			<property name="providerClass"
+				value="module.mission.presentationTier.provider.RemoteMissionSystemProvider" />
+			<property name="format" value="${name}" />
 			<property name="saveOptions" value="true" />
 		</slot>
+		<slot name="processNumber" key="label.process.number" required="true"/>
 	</schema>
 
 	<schema name="activityInformation.ParticipantActivityInformation"

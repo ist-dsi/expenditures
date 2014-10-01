@@ -7,6 +7,14 @@ class MissionSystem {
 	String mandatorySupplierNotUsedErrorMessageArg;
 }
 
+class RemoteMissionSystem {
+	String name;
+	String hostname;
+	String connectUrl;
+	String disconnectUrl;
+	String processUrl;
+}
+
 class MissionFinancer implements .pt.ist.bennu.core.domain.VirtualHostAware {
 	String commitmentNumber;
 }
@@ -139,7 +147,12 @@ class MissionProcess extends .module.workflow.domain.WorkflowProcess implements 
 
 	class NationalMissionProcess extends MissionProcess {
 	}
-	
+
+class RemoteMissionProcess {
+	String processNumber;
+	String remoteOid;
+}
+
 class MissionProcessAssociation implements .pt.ist.bennu.core.domain.VirtualHostAware {
 }
 
@@ -703,6 +716,27 @@ relation MissionSystemSupplier {
 		multiplicity *;
 	}
 	.pt.ist.expenditureTrackingSystem.domain.organization.Supplier playsRole mandatorySupplier {
+		multiplicity *;
+	}
+}
+
+relation MissionSystemRemoteMissionSystem {
+	MissionSystem playsRole missionSystem;
+	RemoteMissionSystem playsRole remoteMissionSystem {
+		multiplicity *;
+	}
+}
+
+relation MissionProcessRemoteMissionProcess {
+	MissionProcess playsRole missionProcess;
+	RemoteMissionProcess playsRole remoteMissionProcess {
+		multiplicity *;
+	}
+}
+
+relation RemoteMissionSystemRemoteMissionProcess {
+	RemoteMissionSystem playsRole remoteMissionSystem;
+	RemoteMissionProcess playsRole remoteMissionProcess {
 		multiplicity *;
 	}
 }
