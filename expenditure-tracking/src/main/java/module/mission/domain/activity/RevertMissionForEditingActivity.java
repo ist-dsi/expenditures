@@ -22,7 +22,8 @@ public class RevertMissionForEditingActivity extends
     @Override
     public boolean isActive(MissionProcess missionProcess, User user) {
         return super.isActive(missionProcess, user) && !missionProcess.isUnderConstruction() && !missionProcess.isCanceled()
-                && missionProcess.isRequestor(user) && !missionProcess.getMission().getMissionVersion().isTerminated();
+                && missionProcess.isRequestor(user) && !missionProcess.getMission().getMissionVersion().isTerminated()
+                && !missionProcess.isPersonalInformationProcessed();
     }
 
     @Override
