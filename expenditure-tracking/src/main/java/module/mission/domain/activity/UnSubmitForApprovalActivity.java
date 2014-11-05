@@ -16,7 +16,7 @@ public class UnSubmitForApprovalActivity extends MissionProcessActivity<MissionP
     public boolean isActive(final MissionProcess missionProcess, final User user) {
         return super.isActive(missionProcess, user) && !missionProcess.isUnderConstruction()
                 && !missionProcess.isProcessCanceled() && missionProcess.isRequestor(user) && !missionProcess.hasAnyAproval()
-                && !missionProcess.isApproved();
+                && !missionProcess.isApprovedByResponsible();
     }
 
     @Override

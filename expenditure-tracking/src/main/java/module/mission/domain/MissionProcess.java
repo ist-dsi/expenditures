@@ -786,4 +786,8 @@ public abstract class MissionProcess extends MissionProcess_Base {
         return getCurrentOwner() != null;
     }
 
+    public boolean participantsBelongToInstitution() {
+        return getMission().participantsBelongToInstitution();
+    }
+
 }

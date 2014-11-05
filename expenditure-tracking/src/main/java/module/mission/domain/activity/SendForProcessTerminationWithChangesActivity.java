@@ -24,6 +24,7 @@
  */
 package module.mission.domain.activity;
 
+import module.mission.domain.Mission;
 import module.mission.domain.MissionProcess;
 import module.workflow.activities.ActivityInformation;
 import pt.ist.bennu.core.domain.User;
@@ -51,6 +52,12 @@ public class SendForProcessTerminationWithChangesActivity extends
     protected void process(final SendForProcessTerminationWithChangesActivityInformation activityInformation) {
         final MissionProcess missionProcess = activityInformation.getProcess();
         missionProcess.sendForProcessTermination(activityInformation.getDescriptionOfChangesAfterArrival());
+
+        final Mission mission = missionProcess.getMission();
+        if (!mission.hasAnyMissionItems()) {
+            missionProcess.addToProcessParticipantInformationQueues();
+            mission.getMissionVersion().setIsArchived(Boolean.TRUE);
+        }
     }
 
     @Override

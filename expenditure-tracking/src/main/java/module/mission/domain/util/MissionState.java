@@ -1,6 +1,8 @@
 package module.mission.domain.util;
 
+import module.mission.domain.AccountabilityTypeQueue;
 import module.mission.domain.MissionProcess;
+import module.mission.domain.MissionSystem;
 import pt.ist.bennu.core.util.BundleUtil;
 import pt.ist.fenixWebFramework.rendererExtensions.util.IPresentableEnum;
 
@@ -139,46 +141,12 @@ public enum MissionState implements IPresentableEnum {
         }
     },
 
-    PERSONAL_INFORMATION_PROCESSING {
+    ARCHIVED {
         @Override
         public boolean isRequired(MissionProcess missionProcess) {
-            return missionProcess.isPersonalInformationProcessingNeeded();
+            return missionProcess.hasAnyMissionItems();
         }
 
-        @Override
-        public MissionStateProgress getStateProgress(MissionProcess missionProcess) {
-            if (missionProcess.isCanceled()) {
-                if (!missionProcess.areAllParticipantsAuthorized()
-                        || (missionProcess.getMission().hasAnyMissionItems() && !missionProcess.getMission().isAuthorized())) {
-                    return MissionStateProgress.IDLE;
-                }
-
-                if (!isRequired(missionProcess)) {
-                    return MissionStateProgress.COMPLETED;
-                }
-                if (missionProcess.isPersonalInformationProcessed()) {
-                    return MissionStateProgress.COMPLETED;
-                }
-
-                return MissionStateProgress.PENDING;
-            } else {
-                if (!EXPENSE_AUTHORIZATION.isCompleted(missionProcess)) {
-                    return MissionStateProgress.IDLE;
-                }
-
-                if (!isRequired(missionProcess)) {
-                    return MissionStateProgress.COMPLETED;
-                }
-                if (missionProcess.isPersonalInformationProcessed()) {
-                    return MissionStateProgress.COMPLETED;
-                }
-
-                return MissionStateProgress.PENDING;
-            }
-        }
-    },
-
-    ARCHIVED {
         @Override
         public MissionStateProgress getStateProgress(MissionProcess missionProcess) {
             if (missionProcess.isArchived()) {
@@ -190,7 +158,60 @@ public enum MissionState implements IPresentableEnum {
             }
             return MissionStateProgress.PENDING;
         }
-    };
+    },
+
+    PERSONAL_INFORMATION_PROCESSING {
+        @Override
+        public boolean isRequired(MissionProcess missionProcess) {
+            return missionProcess.participantsBelongToInstitution();
+            //return missionProcess.isPersonalInformationProcessingNeeded();
+        }
+
+        @Override
+        public MissionStateProgress getStateProgress(MissionProcess missionProcess) {
+            if (missionProcess.isPersonalInformationProcessed()) {
+                return MissionStateProgress.COMPLETED;
+            }
+
+            for (final AccountabilityTypeQueue queue : MissionSystem.getInstance().getAccountabilityTypeQueuesSet()) {
+                if (missionProcess.getCurrentQueuesSet().contains(queue.getWorkflowQueue())) {
+                    return MissionStateProgress.PENDING;
+                }
+            }
+            return MissionStateProgress.IDLE;
+
+//            if (missionProcess.isCanceled()) {
+//                if (!missionProcess.areAllParticipantsAuthorized()
+//                        || (missionProcess.getMission().hasAnyMissionItems() && !missionProcess.getMission().isAuthorized())) {
+//                    return MissionStateProgress.IDLE;
+//                }
+//
+//                if (!isRequired(missionProcess)) {
+//                    return MissionStateProgress.COMPLETED;
+//                }
+//                if (missionProcess.isPersonalInformationProcessed()) {
+//                    return MissionStateProgress.COMPLETED;
+//                }
+//
+//                return MissionStateProgress.PENDING;
+//            } else {
+//                if (!EXPENSE_AUTHORIZATION.isCompleted(missionProcess)) {
+//                    return MissionStateProgress.IDLE;
+//                }
+//
+//                if (!isRequired(missionProcess)) {
+//                    return MissionStateProgress.COMPLETED;
+//                }
+//                if (missionProcess.isPersonalInformationProcessed()) {
+//                    return MissionStateProgress.COMPLETED;
+//                }
+//
+//                return MissionStateProgress.PENDING;
+//            }
+        }
+    }
+
+    ;
 
     private static final String BUNDLE = "resources.MissionResources";
     private static final String KEY_PREFIX = "label.MissionState.";

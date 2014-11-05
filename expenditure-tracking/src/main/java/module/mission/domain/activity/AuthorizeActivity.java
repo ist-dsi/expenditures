@@ -52,7 +52,7 @@ public class AuthorizeActivity extends MissionProcessActivity<MissionProcess, Ac
     protected void process(final ActivityInformation activityInformation) {
         final MissionProcess missionProcess = (MissionProcess) activityInformation.getProcess();
         missionProcess.authorize(UserView.getCurrentUser());
-        missionProcess.addToProcessParticipantInformationQueues();
+        // missionProcess.addToProcessParticipantInformationQueues();
     }
 
 }

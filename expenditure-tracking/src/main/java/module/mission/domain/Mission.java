@@ -1651,4 +1651,13 @@ public abstract class Mission extends Mission_Base {
         return getMissionProcess() != null;
     }
 
+    public boolean participantsBelongToInstitution() {
+        for (final Person person : getParticipantesSet()) {
+            if (hasAnyCurrentRelationToInstitution(person)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
