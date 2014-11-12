@@ -5,6 +5,7 @@ enum module.mission.domain.VehiclItemJustificationMotive as VehiclItemJustificat
 class MissionSystem {
 	Boolean allowGrantOwnerEquivalence;
 	String mandatorySupplierNotUsedErrorMessageArg;
+	Boolean useWorkingPlaceAuthorizationChain;
 }
 
 class RemoteMissionSystem {

@@ -78,7 +78,7 @@ public class DefineParticipantAuthorizationChainActivityInformation extends Part
             if (selected == null || selected == person) {
                 final Collection<ParticipantAuthorizationChain> participantAuthorizationChain =
                         ParticipantAuthorizationChain.getParticipantAuthorizationChains(person);
-                if (participantAuthorizationChain.isEmpty()) {
+                if (participantAuthorizationChain.isEmpty() || !MissionSystem.getInstance().useWorkingPlaceAuthorizationChain()) {
                     // this case if for students and other ad-hoc cases.
                     final MissionProcess missionProcess = getProcess();
                     final Mission mission = missionProcess.getMission();
@@ -88,7 +88,7 @@ public class DefineParticipantAuthorizationChainActivityInformation extends Part
                         temp.addAll(ParticipantAuthorizationChain.getParticipantAuthorizationChains(person, unit.getUnit()));
                     }
                     if (temp.isEmpty()) {
-                	constructTopLevelAuthorizationChain(temp, person);
+                        constructTopLevelAuthorizationChain(temp, person);
                     }
                     participantAuthorizationChainss.put(person, temp);
                 } else {
@@ -102,24 +102,26 @@ public class DefineParticipantAuthorizationChainActivityInformation extends Part
     }
 
     private void constructTopLevelAuthorizationChain(final Collection<ParticipantAuthorizationChain> temp, final Person person) {
-	if (ParticipantAuthorizationChain.isEmployeeOfInstitution(person)) {
-	    final OrganizationalModel model = MissionSystem.getInstance().getOrganizationalModel();
-	    for (final Party party : model.getPartiesSet()) {
-		if (party.isUnit()) {
-		    final module.organization.domain.Unit unit = (module.organization.domain.Unit) party;
-		    for (final Accountability accountability : unit.getChildAccountabilitiesSet()) {
-			if (accountability.isActiveNow() && model.getAccountabilityTypesSet().contains(accountability.getAccountabilityType())) {
-			    final Party child = accountability.getChild();
-			    if (child.isUnit()) {
-				final module.organization.domain.Unit subUnit = (module.organization.domain.Unit) child;
-				final AuthorizationChain authorizationChain = new AuthorizationChain(subUnit, new AuthorizationChain(unit));
-				temp.add(new ParticipantAuthorizationChain(person, authorizationChain));
-			    }
-			}
-		    }
-		}
-	    }
-	}
+        if (ParticipantAuthorizationChain.isEmployeeOfInstitution(person)) {
+            final OrganizationalModel model = MissionSystem.getInstance().getOrganizationalModel();
+            for (final Party party : model.getPartiesSet()) {
+                if (party.isUnit()) {
+                    final module.organization.domain.Unit unit = (module.organization.domain.Unit) party;
+                    for (final Accountability accountability : unit.getChildAccountabilitiesSet()) {
+                        if (accountability.isActiveNow()
+                                && model.getAccountabilityTypesSet().contains(accountability.getAccountabilityType())) {
+                            final Party child = accountability.getChild();
+                            if (child.isUnit()) {
+                                final module.organization.domain.Unit subUnit = (module.organization.domain.Unit) child;
+                                final AuthorizationChain authorizationChain =
+                                        new AuthorizationChain(subUnit, new AuthorizationChain(unit));
+                                temp.add(new ParticipantAuthorizationChain(person, authorizationChain));
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private Unit getFirstValidUnit(final Unit unit, final Person person) {

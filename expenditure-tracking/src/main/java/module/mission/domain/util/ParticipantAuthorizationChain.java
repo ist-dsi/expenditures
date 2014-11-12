@@ -106,7 +106,7 @@ public class ParticipantAuthorizationChain implements Serializable {
     }
 
     public static Collection<ParticipantAuthorizationChain> getParticipantAuthorizationChains(final Person person) {
-        if (!isEmployeeOfInstitution(person)) {
+        if (!isEmployeeOfInstitution(person) || !MissionSystem.getInstance().useWorkingPlaceAuthorizationChain()) {
             return Collections.emptySet();
         }
         final Collection<Accountability> parentAccountabilities =

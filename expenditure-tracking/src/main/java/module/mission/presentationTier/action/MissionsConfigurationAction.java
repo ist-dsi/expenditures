@@ -224,6 +224,13 @@ public class MissionsConfigurationAction extends ContextBaseAction {
         return prepare(mapping, form, request, response);
     }
 
+    public ActionForward togleUseWorkingPlaceAuthorizationChain(final ActionMapping mapping, final ActionForm form,
+            final HttpServletRequest request, final HttpServletResponse response) {
+        final MissionSystem missionSystem = MissionSystem.getInstance();
+        missionSystem.togleUseWorkingPlaceAuthorizationChain();
+        return prepare(mapping, form, request, response);
+    }
+
     public ActionForward prepareAddVehicleAuthorizer(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
         return forward(request, "/mission/addVehicleAuthorizer.jsp");

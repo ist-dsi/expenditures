@@ -281,6 +281,12 @@ public class MissionSystem extends MissionSystem_Base {
     }
 
     @Atomic
+    public void togleUseWorkingPlaceAuthorizationChain() {
+        final Boolean b = getUseWorkingPlaceAuthorizationChain();
+        setUseWorkingPlaceAuthorizationChain(b == null ? Boolean.TRUE : Boolean.valueOf(!b.booleanValue()));
+    }
+
+    @Atomic
     public static void massAuthorizeVehicles(Collection<VehiclItem> items) {
         for (final VehiclItem item : items) {
             final Mission mission = item.getMission();
@@ -549,6 +555,10 @@ public class MissionSystem extends MissionSystem_Base {
     @Atomic
     public void removeMandatorySupplierService(final Supplier supplier) {
         removeMandatorySupplier(supplier);
+    }
+
+    public boolean useWorkingPlaceAuthorizationChain() {
+        return getUseWorkingPlaceAuthorizationChain() != null && getUseWorkingPlaceAuthorizationChain().booleanValue();
     }
 
 }

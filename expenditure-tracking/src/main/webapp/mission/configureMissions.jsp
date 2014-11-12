@@ -84,6 +84,7 @@
 	</logic:notEmpty>
 </logic:present>
 
+<br/>
 
 <form action="<%= request.getContextPath() + "/configureMissions.do" %>" method="post">
 	<html:hidden property="method" value="togleAllowGrantOwnerMissionProcessNature"/>
@@ -92,6 +93,24 @@
 
 	<input type="checkbox" name="allowGrantOwnerEquivalence"
 		<% if (MissionSystem.getInstance().allowGrantOwnerEquivalence()) {%>
+				checked="checked"
+		<% } %>
+	/>
+
+	<html:submit styleClass="inputbutton">
+		<bean:message key="renderers.form.submit.name" bundle="RENDERER_RESOURCES"/>
+	</html:submit>
+</form>
+
+<br/>
+
+<form action="<%= request.getContextPath() + "/configureMissions.do" %>" method="post">
+	<html:hidden property="method" value="togleUseWorkingPlaceAuthorizationChain"/>
+
+	<bean:message key="label.configuration.useWorkingPlaceAuthorizationChain" bundle="MISSION_RESOURCES"/>
+
+	<input type="checkbox" name="useWorkingPlaceAuthorizationChain"
+		<% if (MissionSystem.getInstance().useWorkingPlaceAuthorizationChain()) {%>
 				checked="checked"
 		<% } %>
 	/>
