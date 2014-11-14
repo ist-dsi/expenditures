@@ -53,7 +53,8 @@ public class CancelProcessActivity extends MissionProcessActivity<MissionProcess
         return super.isActive(missionProcess, user)
                 && !missionProcess.isCanceled()
                 && (missionProcess.isRequestor(user) || user.hasRoleType(RoleType.MANAGER) || MissionSystem.getInstance()
-                        .getUsersWhoCanCancelMissionSet().contains(user));
+                        .getUsersWhoCanCancelMissionSet().contains(user))
+                && !missionProcess.isPersonalInformationProcessed();
     }
 
     @Override
@@ -67,7 +68,7 @@ public class CancelProcessActivity extends MissionProcessActivity<MissionProcess
         }
 
         missionProcess.cancel();
-        missionProcess.addToProcessParticipantInformationQueues();
+        // missionProcess.addToProcessParticipantInformationQueues();
     }
 
     private boolean hasConnectedPaymentProcess(final MissionProcess missionProcess) {
