@@ -51,7 +51,7 @@ public class Refundee extends Refundee_Base {
 
     public String getRefundeePresentation() {
         Person person = getPerson();
-        return person == null ? getName() + " (" + getFiscalCode() + ")" : person.getName() + " (" + person.getUsername() + ")";
+        return person == null ? getName() + " (" + getFiscalCode() + ")" : person.getUser().getPerson().getName() + " (" + person.getUsername() + ")";
     }
 
     public static Refundee getExternalRefundee(String name, String fiscalCode) {
